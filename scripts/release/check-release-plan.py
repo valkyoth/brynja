@@ -22,6 +22,55 @@ FIELDS = (
     "Exit criteria:",
 )
 
+# Public-operation closure is required before executable downstream use.
+API_CLOSURE_EDGES = (
+    ("v0.33.9", "v0.38.0"),
+    ("v0.33.9", "v0.46.63"),
+    ("v0.33.9", "v0.60.6"),
+    ("v0.45.16", "v0.50.0"),
+    ("v0.45.18", "v0.138.0"),
+    ("v0.48.2", "v0.49.0"),
+    ("v0.49.7", "v0.50.0"),
+    ("v0.97.1", "v0.98.0"),
+    ("v0.119.3", "v0.122.1"),
+    ("v0.122.2", "v0.122.3"),
+    ("v0.122.3", "v0.123.0"),
+    ("v0.167.5", "v0.168.0"),
+    ("v0.167.7", "v0.168.7"),
+    ("v0.176.2", "v0.178.2"),
+    ("v0.181.1", "v0.182.0"),
+)
+
+API_SCOPE_CONTRACTS = {
+    "v0.33.3": ("brynja-encoding-der", "compatibility re-exports"),
+    "v0.33.9": ("encode/decode", "independent encodings", "hardened"),
+    "v0.45.15": ("signing and verification", "DER"),
+    "v0.45.17": ("static", "single-use ephemeral", "protocol-domain"),
+    "v0.48.2": ("encode/decode", "typed-secret"),
+    "v0.49.7": ("import/export", "independent-tool"),
+    "v0.60.11": ("non-executable", "v0.122.1"),
+    "v0.60.13": ("without executing unavailable", "v0.122.2"),
+    "v0.97.0": ("parsing and encoding", "received-byte"),
+    "v0.167.3": ("secret-bearing unkeyed BLAKE2b", "typed secret"),
+    "v0.168.0": ("v0.167.5 BLAKE2b", "H-prime"),
+    "v0.168.7": ("v0.167.7 AES-CMAC", "seal/open"),
+    "v0.176.2": ("export", "typed-secret unprotected", "import"),
+    "v0.181.1": ("public package", "complete safe operation directions"),
+}
+
+
+def validate_api_closure(entries: list[tuple[str, str, str]]) -> None:
+    positions = {version: index for index, (version, _, _) in enumerate(entries)}
+    scopes = {version: scope for version, _, scope in entries}
+    for prerequisite, consumer in API_CLOSURE_EDGES:
+        if prerequisite not in positions or consumer not in positions:
+            raise ValueError("public API closure references a missing milestone")
+        if positions[prerequisite] >= positions[consumer]:
+            raise ValueError(f"{consumer} precedes public API prerequisite {prerequisite}")
+    for version, tokens in API_SCOPE_CONTRACTS.items():
+        if any(token not in scopes.get(version, "") for token in tokens):
+            raise ValueError(f"{version} lost its public API operation-direction contract")
+
 INTERNAL_EXIT = (
     "`{version} development milestone reached. Commit the verified scope, "
     "obtain green GitHub and CodeQL, then create the signed tag without a "
@@ -57,15 +106,16 @@ def expected_versions() -> list[str]:
         30: (1, 2),
         31: (1, 2, 3),
         32: (1, 2),
-        33: (1, 2),
+        33: tuple(range(1, 10)),
         35: (1, 2),
         38: (1, 2),
         41: (1, 2),
         44: (1, 2),
-        45: tuple(range(1, 15)),
+        45: tuple(range(1, 19)),
         46: tuple(range(1, 94)),
         47: (1,),
-        49: (1, 2, 3, 4),
+        48: (1, 2),
+        49: tuple(range(1, 8)),
         57: (1,),
         58: (1, 2, 3),
         60: tuple(range(1, 16)),
@@ -74,10 +124,12 @@ def expected_versions() -> list[str]:
         83: (1, 2),
         90: (1,),
         92: (1, 2, 3, 4, 5, 6),
+        97: (1,),
         99: (1,),
         111: (1,),
         114: (1, 2),
         119: (1, 2, 3),
+        122: (1, 2, 3),
         123: (1,),
         124: (1, 2, 3, 4, 5),
         126: (1, 2, 3, 4, 5),
@@ -96,18 +148,19 @@ def expected_versions() -> list[str]:
         163: (1,),
         164: (1, 2),
         166: (1, 2),
-        167: (1,),
+        167: tuple(range(1, 8)),
         168: tuple(range(1, 11)),
         169: tuple(range(1, 16)),
         171: (1, 2),
         172: (1,),
         173: (1, 2),
         174: (1,),
-        176: (1,),
+        176: (1, 2),
         177: (1,),
         178: (1, 2),
         179: (1, 2, 3),
         180: tuple(range(1, 25)),
+        181: (1,),
     }
     versions = []
     for number in range(1, 186):
@@ -175,6 +228,7 @@ def has_concrete_detail(section: str, start: str, end: str) -> bool:
 
 def validate(release_path: Path, version_path: Path) -> None:
     entries = version_entries(version_path)
+    validate_api_closure(entries)
     text = release_path.read_text(encoding="utf-8")
     matches = list(HEADING.finditer(text))
     versions = [match.group(1) for match in matches]

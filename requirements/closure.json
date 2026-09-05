@@ -1478,6 +1478,83 @@
       "version": "0.33.2"
     },
     {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Extract the existing DER reader and ASN.1 values into one zero-external-dependency no_std brynja-encoding-der leaf with compatibility re-exports from brynja-pki; freeze an authenticated X.680/X.690 and errata type/rule inventory, public codec profiles, exact resource limits and paired-operation owners before any encoder or cryptographic consumer is added.",
+      "source_ids": [],
+      "title": "DER Ownership And Type-Coverage Foundation",
+      "version": "0.33.3"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Implement public checked DER encoded-length measurement and tag-length-value writing in brynja-encoding-der with all tag classes, high-tag numbers, minimal definite lengths, caller-owned buffers, exact completion and unchanged public output on failure; pair every emitted frame with the existing strict reader without yet claiming complete typed DER values.",
+      "source_ids": [],
+      "title": "Transactional DER Length And Framing Writer",
+      "version": "0.33.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Complete paired public encoding and decoding for DER BOOLEAN, INTEGER, ENUMERATED, NULL, BIT STRING, OCTET STRING, OBJECT IDENTIFIER and RELATIVE-OID values using canonical byte representations, caller-owned buffers, checked lengths and exact type identity without machine-integer truncation.",
+      "source_ids": [],
+      "title": "Canonical DER Basic Value Codecs",
+      "version": "0.33.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Complete the remaining authenticated DER universal value codecs, including REAL, character-string families, object descriptors, time/date/duration and IRI forms where defined by the admitted ASN.1 edition, with matching strict decoders and canonical writers; close the full type inventory without substituting unchecked bytes or platform floating-point approximations.",
+      "source_ids": [],
+      "title": "Canonical DER Extended Value Codecs",
+      "version": "0.33.6"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Implement bounded public schema-aware DER SEQUENCE, SET, SEQUENCE OF, SET OF, CHOICE, explicit and implicit tags, OPTIONAL and DEFAULT handling plus remaining structured universal forms over the shared leaf; enforce exact canonical ordering, schema constraints and byte preservation for signed objects in both directions.",
+      "source_ids": [],
+      "title": "Schema-Aware Constructed DER Codecs",
+      "version": "0.33.7"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Add explicit hardened DER serialization profiles that clear every Brynja-owned secret temporary and partial output, transfer completed private encodings only into typed secret-owned destinations, and retain transactional public-output behavior; reuse the mandatory core clearing boundary and optional sanitization adapter only under its admitted contract.",
+      "source_ids": [],
+      "title": "Hardened DER Secret-Output Ownership",
+      "version": "0.33.8"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Close the standalone DER chain with package-external encode/decode fixtures for every admitted universal type and schema rule, ordinary and hardened output, exact independent encodings, canonical round trips, malformed input and bounded failure; block ECDSA signature encoding, key containers and PKIX generation until the shared leaf passes.",
+      "source_ids": [],
+      "title": "Complete DER Public Codec Acceptance",
+      "version": "0.33.9"
+    },
+    {
       "boundary": null,
       "requirement_ids": [],
       "scope": "Implement X25519 field encoding, canonical decoding policy, clamping, fixed Montgomery ladder, and low-order input handling, with full-width or explicitly reduced-width ladder and exceptional-input proof harnesses introduced beside the implementation.",
@@ -1504,7 +1581,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement unbiased ephemeral input generation, no private-key reuse, imported public and private consistency policy, all-zero shared-secret rejection, immediate scalar destruction, and provider-token binding to group, connection, and transcript.",
+      "scope": "Implement unbiased ephemeral input generation, no ephemeral private-key reuse, imported public and private consistency policy, all-zero shared-secret rejection, immediate scalar destruction, and provider-token binding to group, connection, and transcript; reusable static agreement remains a separately typed v0.45.17-v0.45.18 profile.",
       "source_ids": [
         "nist:NIST.FIPS.186-5.pdf",
         "nist:NIST.SP.800-186.pdf",
@@ -1598,7 +1675,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement P-256 ECDSA signing and verification, strict encoding, low-S policy decision, and deterministic and randomized nonce policy using the secure-random contract.",
+      "scope": "Implement P-256 ECDSA signing and verification, strict fixed-width and shared v0.33.9 DER signature encoding/decoding, low-S policy decision, and deterministic and randomized nonce policy using the secure-random contract.",
       "source_ids": [
         "nist:NIST.FIPS.186-5.pdf",
         "nist:NIST.SP.800-186.pdf",
@@ -1692,7 +1769,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement P-384 ECDSA signing and verification with strict encoding, nonce policy, vectors, per-target side-channel evidence, and independent review.",
+      "scope": "Implement P-384 ECDSA signing and verification with strict fixed-width and shared v0.33.9 DER signature encoding/decoding, nonce policy, vectors, per-target side-channel evidence, and independent review.",
       "source_ids": [
         "nist:NIST.FIPS.186-5.pdf",
         "nist:NIST.SP.800-186.pdf",
@@ -1788,7 +1865,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement blinded fixed-schedule first-party RSA-PSS private operations for strictly validated imported keys, with CRT consistency, fault detection, immediate blinding and intermediate destruction, and external-signer support; v1 does not generate RSA keys.",
+      "scope": "Implement blinded fixed-schedule first-party RSA-PSS private operations for strictly validated imported keys, with CRT consistency, fault detection, immediate blinding and intermediate destruction, and external-signer support; key generation is deferred from this milestone to v0.46.55, not excluded from v1.",
       "source_ids": [
         "nist:NIST.FIPS.186-5.pdf",
         "nist:NIST.SP.800-186.pdf",
@@ -2010,6 +2087,50 @@
       "source_ids": [],
       "title": "P-521 Public API Usability Acceptance",
       "version": "0.45.14"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Complete reusable P-521 ECDSA signing and verification over the existing P-521 arithmetic with deterministic and randomized nonce policy, digest/prehash handling, canonical fixed-width and DER signatures, key generation/import/export, low-S policy, cleanup and a frozen portable public fixture.",
+      "source_ids": [],
+      "title": "Complete P-521 ECDSA",
+      "version": "0.45.15"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Rerun the frozen P-521 ECDSA fixture through portable and every eligible existing P-521 backend, qualifying signature-specific timing, nonce, fault and cleanup behavior before admission; close P-521 signing and verification explicitly before TLS, PKIX and OpenPGP consumers.",
+      "source_ids": [],
+      "title": "P-521 Signature Cross-Backend Acceptance",
+      "version": "0.45.16"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Add explicitly selected reusable static key-agreement profiles for X25519, X448, P-256, P-384 and P-521 beside the existing single-use ephemeral owners, with validated import/generation, typed secret export where authorized, peer validation, public-key derivation and protocol-domain-separated lifecycle for later HPKE and OpenPGP consumers.",
+      "source_ids": [],
+      "title": "Reusable Static Key-Agreement Ownership",
+      "version": "0.45.17"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Close public static and ephemeral agreement profiles through packaged role-aware workflows and every eligible admitted backend before HPKE, key containers or OpenPGP reuse the owners; preserve single-use ephemeral guarantees and explicit longer-lived static-key policy.",
+      "source_ids": [],
+      "title": "Static And Ephemeral Agreement Acceptance",
+      "version": "0.45.18"
     },
     {
       "boundary": null,
@@ -2709,7 +2830,7 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete PBES2, every admitted PBKDF2 PRF and encryption scheme, strict parameters and limits, plus EncryptedPrivateKeyInfo import/export with canonical DER, uniform password failures, caller workspaces, cleanup, vectors, and public APIs.",
+      "scope": "Implement complete PBES2, every admitted PBKDF2 PRF and encryption scheme, strict parameters and limits, plus EncryptedPrivateKeyInfo import/export using the accepted v0.33.9 DER codecs and hardened output owner, uniform password failures, caller workspaces, cleanup, vectors, and public APIs.",
       "source_ids": [],
       "title": "Complete PBES2 And EncryptedPrivateKeyInfo",
       "version": "0.46.63"
@@ -3039,7 +3160,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Regenerate the transitive register from every authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT, and SNP source; block v0.47.0 unless every assigned capability and every send, receive, generation, import, export, and parameter direction has a complete owner and acceptance evidence, with only reserved, unassigned, forbidden, lawfully unavailable, or source-blocked entries rejected.",
+      "scope": "Regenerate the transitive register from every authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT, and SNP source; block v0.47.0 unless every capability consumed by the completed substrate has full operation-direction acceptance and every later capability has an exact earlier-than-consumer implementation and acceptance owner, with no forward implementation dependency or unnumbered gap.",
       "source_ids": [],
       "title": "Complete Registered Algorithm Closure Gate",
       "version": "0.46.93"
@@ -3071,7 +3192,7 @@
       "requirement_ids": [
         "BRY-REQ-ENC-0003"
       ],
-      "scope": "Using only the v0.47.1-admitted Base64 boundary, implement bounded strict PEM armor plus certificate-chain containers with label, count, size, whitespace, trailing-data, canonical-encoding, and resource policies; retain a documented non-admission path rather than weakening `no_std` or allocation-free guarantees.",
+      "scope": "Using only the v0.47.1-admitted Base64 boundary, implement bounded strict PEM decoding plus certificate-chain containers with label, count, size, whitespace, trailing-data, canonical-encoding, and resource policies; retain a documented non-admission path rather than weakening no_std or allocation-free guarantees, and keep the bidirectional PEM family In progress until v0.48.1-v0.48.2 encoding and acceptance.",
       "source_ids": [
         "iana:smi-numbers",
         "itu:ITU-T.X.690-202102.pdf",
@@ -3081,13 +3202,35 @@
         "rfc:7468",
         "rfc:8017"
       ],
-      "title": "PEM Base64 And Chain Containers",
+      "title": "Bounded PEM Decoding And Chain Containers",
       "version": "0.48.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Implement bounded public PEM encoding over the exact admitted Base64 boundary and existing PEM labels/containers, with canonical output formatting, streaming completion, caller buffers, certificate-chain generation and explicit typed-secret private-key output; do not add another Base64 implementation.",
+      "source_ids": [],
+      "title": "Transactional PEM Encoding",
+      "version": "0.48.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Close bounded PEM encode/decode and admitted Base64 transformations with packaged public fixtures across labels, single and chain containers, streaming, canonical generation, strict parsing, malformed inputs and ordinary versus typed-secret output before private-key container integration.",
+      "source_ids": [],
+      "title": "PEM And Base64 Public Round-Trip Acceptance",
+      "version": "0.48.2"
     },
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement bounded PKCS #8 PrivateKeyInfo and OneAsymmetricKey import and export with strict version, algorithm and parameter binding, optional public-key consistency, canonical DER, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.",
+      "scope": "Implement bounded PKCS #8 PrivateKeyInfo and OneAsymmetricKey import and export using the v0.33.9 shared DER codecs and hardened output owner, with strict version, algorithm and parameter binding, optional public-key consistency, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.",
       "source_ids": [
         "itu:ITU-T.X.690-202102.pdf",
         "itu:ITU-T.X.690-202109-Err1.pdf",
@@ -3141,6 +3284,39 @@
       "source_ids": [],
       "title": "Private-Key Container Public API Usability Acceptance",
       "version": "0.49.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Implement standalone public SubjectPublicKeyInfo import/export over the shared DER leaf for every already admitted key family, with exact AlgorithmIdentifier and parameter policy, BIT STRING framing, key validation and modern versus legacy selection independently of X.509 certificate issuance.",
+      "source_ids": [],
+      "title": "Reusable SubjectPublicKeyInfo Codecs",
+      "version": "0.49.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Complete public raw-key and PKCS1 RSAPublicKey import/export profiles alongside SubjectPublicKeyInfo, reusing existing SEC1 point and RFC 7748/8032 raw encodings with explicitly typed format selection, canonical constraints and no format guessing.",
+      "source_ids": [],
+      "title": "Algorithm-Specific Public-Key Format APIs",
+      "version": "0.49.6"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Close SPKI and algorithm-specific public-key import/export with packaged independent-tool round trips, exact encodings, validation-state separation, malformed-input and policy isolation tests; require later algorithm-profile additions to extend this fixture before claiming complete key-format support.",
+      "source_ids": [],
+      "title": "Public-Key Container Acceptance",
+      "version": "0.49.7"
     },
     {
       "boundary": null,
@@ -3533,7 +3709,7 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement bounded public signed-object generation, canonical DER assembly, serial and extension construction, exact AlgorithmIdentifier binding, caller-owned signer, entropy, time and storage effects, transactional output, cleanup, and reusable issuance proof harnesses without yet combining every object type.",
+      "scope": "Implement bounded public signed-object generation using the existing v0.33.9 DER writer and schema codecs, serial and extension construction, exact AlgorithmIdentifier binding, caller-owned signer, entropy, time and storage effects, transactional output, cleanup, and reusable issuance proof harnesses without duplicating DER or yet combining every object type.",
       "source_ids": [],
       "title": "PKIX Canonical Issuance Foundation",
       "version": "0.60.6"
@@ -3588,9 +3764,9 @@
         "BRY-REQ-PKIX-0010",
         "BRY-REQ-PQPKIX-0046"
       ],
-      "scope": "Implement the authenticated unsigned X.509 profile with explicit non-authentication types plus complete RFC 9935 ML-KEM public-key and certificate profiles, exact parameters and encodings, malformed and substitution rejection, round trips, and public APIs.",
+      "scope": "Implement the authenticated unsigned X.509 profile with explicit non-authentication types and RFC 9935 ML-KEM public-key/certificate encoding and decoding, exact parameter binding, malformed/substitution rejection and public format round trips; keep ML-KEM material structurally typed and non-executable until v0.119.3 and v0.122.1, without implying a KEM is a signature.",
       "source_ids": [],
-      "title": "Complete Unsigned X509 And ML-KEM PKIX Profiles",
+      "title": "Unsigned X509 And Structural ML-KEM PKIX Profiles",
       "version": "0.60.11"
     },
     {
@@ -3610,9 +3786,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement every finalized authenticated SLH-DSA and hybrid PKIX AlgorithmIdentifier, public-key, certificate, CRL, OCSP, request, issuance, and validation profile available to the source closure with exact parameter sets, encodings, constraints, round trips, and public APIs.",
+      "scope": "Implement finalized authenticated SLH-DSA PKIX key, certificate, CRL, OCSP, request, issuance and validation profiles over the complete v0.46 owners; inventory hybrid profile authorities and structural encodings without executing unavailable component algorithms, and assign complete executable hybrid integration to v0.122.2.",
       "source_ids": [],
-      "title": "Complete SLH-DSA And Hybrid PKIX Profiles",
+      "title": "SLH-DSA And Structural Hybrid PKIX Profiles",
       "version": "0.60.13"
     },
     {
@@ -3621,9 +3797,9 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned, classical, regional, PQ, hybrid, and legacy profiles through packaged public fixtures and at least two independent toolchains where available, verifying every direction, malformed and policy failure, bounded resources, cleanup, reuse, and isolation.",
+      "scope": "Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned, classical, regional, implemented PQ-signature and legacy profiles through packaged public fixtures and at least two independent toolchains where available; test ML-KEM/hybrid structural codecs without claiming their later executable operation closure, which belongs to v0.122.1-v0.122.3.",
       "source_ids": [],
-      "title": "Complete PKIX Public Usability And Interoperability Acceptance",
+      "title": "Pre-PQ-Integration PKIX Public Acceptance",
       "version": "0.60.14"
     },
     {
@@ -3632,9 +3808,9 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Independently audit and cleanly retest the complete modern, optional, regional, PQ, hybrid, and legacy PKI surface, including generation/validation symmetry, encrypted containers, constraints, trust separation, resource ceilings, external signer effects, and every public compatibility claim before TLS consumes it.",
+      "scope": "Independently audit and cleanly retest every presently executable modern, optional, regional, PQ-signature and legacy PKI profile, including generation/validation symmetry, encrypted containers, constraints, trust separation, resource ceilings and external signer effects; block premature ML-KEM or hybrid execution and require v0.122.3 before complete extended-PKIX claims.",
       "source_ids": [],
-      "title": "Complete PKI Audit And Remediation Gate",
+      "title": "Pre-PQ-Integration PKI Audit And Remediation Gate",
       "version": "0.60.15"
     },
     {
@@ -4802,7 +4978,7 @@
       "requirement_ids": [
         "BRY-REQ-QUIC-0097"
       ],
-      "scope": "Implement bounded syntactic transport-parameter parsing and transcript binding while exposing typed values for QUIC-owned semantic enforcement.",
+      "scope": "Implement bounded syntactic transport-parameter parsing and encoding for the QUIC/TLS boundary with typed values, exact received-byte transcript binding, caller-owned semantic enforcement, checked output and role/version policy; expose both directions and close them through v0.97.1 without implementing QUIC packet processing.",
       "source_ids": [
         "rfc:9000",
         "rfc:9001",
@@ -4811,6 +4987,17 @@
       ],
       "title": "QUIC Transport Parameters",
       "version": "0.97.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Close the QUIC/TLS integration's public transport-parameter parsing and encoding with exact role/version-aware wire fixtures, checked lengths, duplicate handling and transcript-byte preservation while leaving transport semantics, packet protection and network I/O with the caller's QUIC stack.",
+      "source_ids": [],
+      "title": "QUIC Transport-Parameter Codec Acceptance",
+      "version": "0.97.1"
     },
     {
       "boundary": null,
@@ -5292,6 +5479,39 @@
       ],
       "title": "PQ Standards And Audit Gate",
       "version": "0.122.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "After complete v0.119.3 ML-KEM acceptance and the PQ standards gate, bind the earlier ML-KEM PKIX encodings to real key generation, validation, import/export and encapsulation/decapsulation consumers; exercise RFC 9935 profiles without treating a KEM as a signature or certificate trust decision.",
+      "source_ids": [],
+      "title": "Executable ML-KEM PKIX Integration",
+      "version": "0.122.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Complete every authenticated hybrid PKIX key and signature profile only after all of its component algorithms and profile authorities are admitted; reuse v0.60.13 structural dispositions and exact primitive owners with distinct encoding, validation, generation and operation semantics and no inferred mapping from TLS hybrid groups.",
+      "source_ids": [],
+      "title": "Executable Hybrid PKIX Integration",
+      "version": "0.122.2"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Reconcile the earlier PKIX format and signature acceptance with the now-complete ML-KEM and every authenticated hybrid profile; require packaged generation, import/export, issuance and applicable cryptographic operations across all admitted PKIX families before FIPS architecture and final complete-PKIX claims.",
+      "source_ids": [],
+      "title": "Complete PQ PKIX Cross-Family Acceptance",
+      "version": "0.122.3"
     },
     {
       "boundary": {
@@ -6462,7 +6682,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement secret-key packet protection framing, checksum and AEAD integrity states, protected-material lifetime, locked and unlocked representations, uniform password and corruption failures, caller-owned workspaces and immediate destruction; prohibit clear secret export and defer every S2K or cipher use to admitted providers.",
+      "scope": "Implement secret-key packet protection framing, checksum and AEAD integrity states, protected-material lifetime, locked and unlocked representations, uniform password and corruption failures, caller-owned workspaces and immediate destruction; prohibit implicit clear secret export, defer every S2K or cipher use to admitted providers, and reserve explicit protected/unprotected key export for v0.176.2.",
       "source_ids": [],
       "title": "OpenPGP Secret-Key Protection Envelope",
       "version": "0.167.1"
@@ -6470,10 +6690,76 @@
     {
       "boundary": {
         "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Implement the complete RFC 7693 sequential BLAKE2b byte-oriented hash and keyed mode in a reusable first-party no_std brynja-hash-blake2 leaf before Argon2, with all admitted digest/key lengths, one-shot and streaming APIs, exact counters, final-block behavior and official/independent vectors.",
+      "source_ids": [],
+      "title": "Complete Reusable BLAKE2b",
+      "version": "0.167.2"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Complete secret-bearing unkeyed BLAKE2b ownership over the same compression implementation for Argon2 password-derived preprocessing, with sealed states, typed secret outputs, exact variable digest lengths and complete internal cleanup independent of optional adapters.",
+      "source_ids": [],
+      "title": "Hardened Unkeyed BLAKE2b Profiles",
+      "version": "0.167.3"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Freeze a package-external fixture for sequential BLAKE2b ordinary, keyed and hardened unkeyed profiles with all digest/key lengths, real streamed data, exact independent outputs, typed output and cleanup; make the accepted owner the sole BLAKE2b dependency of Argon2.",
+      "source_ids": [],
+      "title": "BLAKE2b Portable Public Acceptance",
+      "version": "0.167.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Qualify optional first-party BLAKE2b acceleration only after portable acceptance, replay the unchanged fixture through portable and every admitted backend, and close the exact sequential BLAKE2b profiles before Argon2 uses them; retain explicit scalar-only or unadmitted dispositions where hardware or cleanup evidence is unavailable.",
+      "source_ids": [],
+      "title": "BLAKE2b Backend And Final Acceptance",
+      "version": "0.167.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Implement standalone AES-CMAC generation and constant-time verification over all admitted AES key widths with exact subkey derivation, complete/partial/empty final blocks, tag-length policy, byte and canonical arbitrary-bit one-shot and streaming APIs and hardened cleanup before EAX composes its domain-separated OMAC operations.",
+      "source_ids": [],
+      "title": "Complete Reusable AES-CMAC",
+      "version": "0.167.6"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Close AES-CMAC generation and verification through packaged public fixtures and every admitted underlying AES backend, preserving constant-time verification, exact tag policy and complete state cleanup; require EAX to reuse this accepted owner.",
+      "source_ids": [],
+      "title": "AES-CMAC Public And Backend Acceptance",
+      "version": "0.167.7"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement complete RFC 9106 Argon2i version 0x13 in first-party Rust, including the shared block and indexing foundation, lanes, segments, passes, memory rounding, variable output, caller workspace, parameter and overflow bounds, KATs, proofs, data-independent access claims, cancellation, cleanup, and public APIs.",
+      "scope": "Implement complete RFC 9106 Argon2i version 0x13 in first-party Rust using only the accepted hardened v0.167.5 BLAKE2b owner, including exact H-prime variable-length hashing, the shared block and indexing foundation, lanes, segments, passes, memory rounding, caller workspace, bounds, KATs, proofs, data-independent access claims, cancellation, cleanup, and public APIs.",
       "source_ids": [],
       "title": "Complete First-Party Argon2i",
       "version": "0.168.0"
@@ -6550,7 +6836,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party EAX over every admitted AES width with exact nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and standalone public API behavior.",
+      "scope": "Implement complete first-party EAX over every admitted AES width using the accepted v0.167.7 AES-CMAC owner for exact domain-separated OMAC processing, with nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and standalone public seal/open APIs.",
       "source_ids": [],
       "title": "Complete First-Party EAX",
       "version": "0.168.7"
@@ -6902,7 +7188,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement transactional bounded certificate and keyring import, duplicate and conflict handling, self-signature selection, update and revocation merge, rollback resistance, provenance and application policy hooks; keep keyserver retrieval, WKD, DNS, TOFU and Web-of-Trust decisions caller-owned and impossible to activate implicitly.",
+      "scope": "Implement transactional bounded certificate and keyring import, duplicate and conflict handling, self-signature selection, update and revocation merge, rollback resistance, provenance and application policy hooks; pair import with v0.176.2 explicit export while keeping keyserver retrieval, WKD, DNS, TOFU and Web-of-Trust decisions caller-owned and impossible to activate implicitly.",
       "source_ids": [],
       "title": "OpenPGP Keyring Import, Merge, And Trust Boundary",
       "version": "0.176.0"
@@ -6917,6 +7203,17 @@
       "source_ids": [],
       "title": "OpenPGP Key Generation, Rotation, Expiration, And Revocation",
       "version": "0.176.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly explicit DER universal/schema codecs, public key and PEM formats, P-521 signatures, BLAKE2b, AES-CMAC, PQ PKIX integrations and OpenPGP exports require exact authenticated standards, editions, errata, rights and per-direction requirements before implementation. Earlier protocol or family coverage never implicitly admits their full standalone surface."
+      },
+      "requirement_ids": [],
+      "scope": "Implement explicit public-certificate, secret-key and keyring export paired with existing import and merge APIs, including binary and armored output, protected-key export and a separately authorized typed-secret unprotected export profile; preserve exact authenticated packets, modern/legacy policy and caller-owned storage.",
+      "source_ids": [],
+      "title": "OpenPGP Public And Secret-Key Export",
+      "version": "0.176.2"
     },
     {
       "boundary": {
@@ -7439,6 +7736,17 @@
       "source_ids": [],
       "title": "Integrated TLS And OpenPGP Package Freeze",
       "version": "0.181.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These operation-direction, shared ownership, portable and cross-backend acceptance gates derive security, packaging and lifecycle invariants from the exact earlier normative implementation owners. They require executable public evidence and introduce no independent standards authority."
+      },
+      "requirement_ids": [],
+      "scope": "Before the integrated release rehearsal, reconcile every promised primitive, construction, codec, container and protocol role with its implemented public package, complete safe operation directions and exact acceptance evidence; block 1.0 if any reusable capability is only accessible through private protocol code or a one-sided adapter.",
+      "source_ids": [],
+      "title": "Whole-Project Public Operation-Direction Closure",
+      "version": "0.181.1"
     },
     {
       "boundary": {

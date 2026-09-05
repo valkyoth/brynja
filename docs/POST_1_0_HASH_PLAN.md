@@ -203,12 +203,12 @@ check value, byte/bit order, augmentation rule, and canonical name.
 
 | Inventory item | Planned home and disposition |
 | --- | --- |
-| Keyed BLAKE2 | `brynja-hash-blake2`; typed keyed mode, never confused with HMAC |
+| Keyed BLAKE2 | Reuse the pre-1.0 sequential BLAKE2b keyed owner from v0.167.2-v0.167.5; later BLAKE2 variants remain separately typed, never confused with HMAC |
 | Keyed BLAKE3 | `brynja-hash-blake3`; keyed and derive-key modes separated |
 | HMAC | Reuse the complete pre-1.0 `brynja-mac-hmac`; post-1.0 work may add only independently admitted hash adapters or convenience facades |
 | KMAC | Reuse the complete pre-1.0 `brynja-mac-kmac` KMAC128/KMAC256 and KMACXOF128/KMACXOF256 owner; post-1.0 catalogue crates may only re-export it |
 | Keyed MD6 | `brynja-legacy-hash-md6` or research depending security review |
-| OMAC/CMAC | `brynja-mac-cmac`; exact block-cipher and tag parameters |
+| OMAC/CMAC | Reuse pre-1.0 `brynja-mac-cmac` AES-CMAC from v0.167.6-v0.167.7; additional block-cipher profiles require their own admission |
 | PMAC | `brynja-mac-pmac`; separately reviewed construction |
 | Poly1305-AES | `brynja-legacy-mac-poly1305-aes`; never replace modern Poly1305 use |
 | SipHash | `brynja-mac-siphash`; PRF/hash-table defense, not collision-resistant digest |
@@ -221,7 +221,7 @@ check value, byte/bit order, augmentation rule, and canonical name.
 | Inventory item | Planned home and disposition |
 | --- | --- |
 | BLAKE-256 and BLAKE-512 | `brynja-hash-blake`; historical but not automatically insecure |
-| BLAKE2s, BLAKE2b, BLAKE2X | `brynja-hash-blake2`; modern family with each parameter tree explicit |
+| BLAKE2s, BLAKE2b, BLAKE2X | `brynja-hash-blake2`; sequential BLAKE2b is already assigned pre-1.0 at v0.167.2-v0.167.5 for Argon2 and must be reused; BLAKE2s, BLAKE2X and independent tree/parallel profiles remain later additions |
 | BLAKE3 | `brynja-hash-blake3`; hash, XOF, keyed, derive-key, and tree modes separated |
 | ECOH | Research or legacy after source/security review |
 | FSB | Research/NIST-competition history; no modern facade by default |
@@ -346,6 +346,9 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
 - Confirm complete AES-128/192/256 forward and inverse operations, GCM/GMAC,
   RFC 7748/8032 curves, HPKE modes, Argon2d/i/id, OCB3 and EAX remain reused by
   any catalogue-facing adapters instead of gaining parallel implementations.
+- Reuse the pre-1.0 sequential BLAKE2b ordinary, keyed and hardened owners
+  required by Argon2, plus the reusable AES-CMAC owner required by EAX;
+  neither may be hidden inside a protocol or implemented again here.
 - Confirm `brynja-crypto`, TLS, PKI, ML-KEM, and FIPS consume those exact
   symbols rather than private copies.
 - Freeze the compression/permutation boundary so later variants reuse the
@@ -368,7 +371,8 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
 - Re-export or adapt the already complete pre-1.0 SHA-2 and FIPS 202 families;
   do not create a second implementation or defer a named standardized member.
 - Reuse the complete pre-1.0 SP 800-185 family; add TurboSHAKE/KangarooTwelve,
-  Ascon, BLAKE2, BLAKE3, and other admitted modern families one at a time.
+  Ascon, the remaining BLAKE2 variants, BLAKE3, and other admitted modern
+  families one at a time; reuse the pre-1.0 sequential BLAKE2b owner.
 - Separate fixed digest, XOF, keyed, derive-key, personalization,
   customization, salt, tree, and parallel modes with typed parameters.
 - Require official KATs, independent differentials, every padding/rate/tree
@@ -377,8 +381,8 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
 
 ### 6. MAC Families
 
-- Reuse the complete pre-1.0 HMAC, KMAC, Poly1305, and GMAC owners; keep future
-  CMAC, PMAC, SipHash, HighwayHash, UMAC, and VMAC in MAC packages even when
+- Reuse the complete pre-1.0 HMAC, KMAC, Poly1305, GMAC and AES-CMAC owners;
+  keep additional CMAC profiles, PMAC, SipHash, HighwayHash, UMAC, and VMAC in MAC packages even when
   the catalogue calls them keyed hashes.
 - Type keys, nonces, one-time-key consumption, tag sizes, verification, and
   truncation policy; comparisons are constant-time.

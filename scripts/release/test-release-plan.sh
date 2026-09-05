@@ -79,3 +79,39 @@ if python3 scripts/release/check-release-plan.py "$release_tmp" "$version_tmp" >
     echo "release plan validator accepted a missing sanitization milestone" >&2
     exit 1
 fi
+
+python3 - <<'PY'
+import importlib.util
+from pathlib import Path
+
+spec = importlib.util.spec_from_file_location("release_plan", "scripts/release/check-release-plan.py")
+plan = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(plan)
+entries = plan.version_entries(Path("docs/VERSION_PLAN.md"))
+plan.validate_api_closure(entries)
+
+def rejected(candidate):
+    try:
+        plan.validate_api_closure(candidate)
+    except ValueError:
+        return
+    raise AssertionError("operation-direction validator accepted a regression")
+
+cases = 0
+for prerequisite, consumer in plan.API_CLOSURE_EDGES:
+    rejected([row for row in entries if row[0] != prerequisite])
+    moved = list(entries)
+    left = next(i for i, row in enumerate(moved) if row[0] == prerequisite)
+    right = next(i for i, row in enumerate(moved) if row[0] == consumer)
+    moved[left], moved[right] = moved[right], moved[left]
+    rejected(moved)
+    cases += 2
+
+for version, tokens in plan.API_SCOPE_CONTRACTS.items():
+    for token in tokens:
+        # Mutate the shared scope, as if BOTH plans had weakened together.
+        rejected([(v, title, scope.replace(token, "omitted")) if v == version
+                  else (v, title, scope) for v, title, scope in entries])
+        cases += 1
+print(f"public API roadmap closure rejects {cases} dependency and paired-operation regressions")
+PY

@@ -1,5 +1,13 @@
 # Current Status
 
+The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
+explicit DER, format, key-role and prerequisite closure without changing any
+current implementation claim. Standalone DER encode/decode completion is
+planned for v0.33.9. Current generated planning coverage is 555 non-RC rows
+(556 milestones including the release candidate), 130 authorities, 4,459
+surfaces and 172 requirements; numerical summaries in the historical v0.3.x
+implementation narrative below describe those earlier passes.
+
 Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 portable SP 800-185 acceptance is implemented and awaiting pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource

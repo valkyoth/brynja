@@ -188,6 +188,27 @@ path remains visibly candidate, rejected or scalar-only.
 
 ## Required Milestone Contract
 
+Operation-direction audit: [ROADMAP_API_COMPLETENESS_AUDIT.md](ROADMAP_API_COMPLETENESS_AUDIT.md)
+records the shared DER, format, key-role and prerequisite corrections. The
+standalone DER codec closes at v0.33.9, before ECDSA signature and private-key
+format consumers; v0.60.6 reuses it for PKIX issuance, not a second writer.
+
+Every promised codec, container and protocol role must name both producer and
+consumer APIs where the standard defines them: encode/decode, encrypt/decrypt,
+seal/open, sign/verify, wrap/unwrap, encapsulate/decapsulate, import/export and
+send/receive. A hash, XOF, KDF or random generator does not acquire an inverse
+operation. Public syntax validity, mathematical key validity and application
+trust remain distinct. Non-exportable external handles and forbidden protocol
+directions receive explicit dispositions rather than fake inverse APIs.
+
+An implementation prerequisite and its portable acceptance must precede the
+first executable consumer. Future structural encodings may precede their
+algorithm only with non-executable types and a named later integration gate.
+Round trips supplement, never replace, independent known encodings or outputs;
+paired bugs must not be able to validate each other. A Complete codec claim
+requires its declared type/rule inventory in both directions, while a protocol
+integration cannot silently substitute for a reusable standalone public API.
+
 Every section contains Status, Plan scope, Goal, Deliverables, Verification, and
 Exit criteria. Repository checks are additive and one stop never admits adjacent
 capability.
@@ -2020,7 +2041,8 @@ Exit criteria:
 
 ## Phase 1: First-Party Cryptography, Identity Formats, And PKI
 
-Import-only RSA and exact AEAD caller-buffer behavior precede audit gates.
+Early imported-key RSA, later complete RSA generation, reusable DER codecs and
+exact AEAD caller-buffer behavior precede their respective audit gates.
 
 ### v0.22.0 - SHA-256
 
@@ -4848,6 +4870,202 @@ Exit criteria:
   implementation work;
 - `v0.33.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.33.3 - DER Ownership And Type-Coverage Foundation
+
+Status: planned
+
+Plan scope: Extract the existing DER reader and ASN.1 values into one zero-external-dependency no_std brynja-encoding-der leaf with compatibility re-exports from brynja-pki; freeze an authenticated X.680/X.690 and errata type/rule inventory, public codec profiles, exact resource limits and paired-operation owners before any encoder or cryptographic consumer is added.
+
+Goal:
+
+Deliver der ownership and type-coverage foundation as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Preserve existing public reader behavior and errors through re-exports; crypto may depend on the leaf, never on PKI, and no ASN.1 or DER algorithm is copied.
+- Map every DER-applicable universal value category, tagging and schema rule to the following implementation stops; admit missing authority editions and rights before implementation, with no generic complete-DER claim for opaque unchecked values.
+- Separate ordinary public-data codecs, borrowed input, hardened secret serialization, schema description and protocol semantics; keep ASN.1 compiler generation, BER/CER and unrelated transfer syntaxes outside the DER claim.
+
+Verification:
+
+- Run existing v0.20/v0.21 vectors and malformed corpora unchanged through the leaf and compatibility paths.
+- Compile package-external reader consumers on the Rust and no_std target matrix; reject reversed PKI-to-crypto dependencies and duplicate codec symbols.
+- Test inventory omissions, unsupported-versus-invalid distinctions, limits, signed-byte preservation and attempted promotion of unchecked values.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.33.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.4 - Transactional DER Length And Framing Writer
+
+Status: planned
+
+Plan scope: Implement public checked DER encoded-length measurement and tag-length-value writing in brynja-encoding-der with all tag classes, high-tag numbers, minimal definite lengths, caller-owned buffers, exact completion and unchanged public output on failure; pair every emitted frame with the existing strict reader without yet claiming complete typed DER values.
+
+Goal:
+
+Deliver transactional der length and framing writer as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Provide exact-size preflight and bounded writer APIs with checked arithmetic, explicit capacity/work limits and no allocation, recursion, hidden buffering or infallible growth.
+- Preserve source/destination aliasing safety, reject partial overlap where the API can express it, and forbid indefinite lengths and nonminimal headers.
+- Define length-plan consistency and complete-consumption rules; streaming uses admitted known lengths or caller-owned bounded staging, never unchecked backpatching.
+
+Verification:
+
+- Check authoritative tag and length encodings plus both read/write directions across short/long boundaries and high-tag forms.
+- Reject truncation, overflows, undersized destinations, trailing frames, length-plan drift and malformed nested lengths without output mutation.
+- Run public consumer fixtures, fuzz/mutation cases, bounds proofs and no_std/package checks before typed value writers consume framing.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.33.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.5 - Canonical DER Basic Value Codecs
+
+Status: planned
+
+Plan scope: Complete paired public encoding and decoding for DER BOOLEAN, INTEGER, ENUMERATED, NULL, BIT STRING, OCTET STRING, OBJECT IDENTIFIER and RELATIVE-OID values using canonical byte representations, caller-owned buffers, checked lengths and exact type identity without machine-integer truncation.
+
+Goal:
+
+Deliver canonical der basic value codecs as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Reuse the existing ASN.1 validation rules and add missing basic values instead of implementing separate permissive writer-side validation.
+- Support arbitrarily sized values within explicit caller budgets, signed minimal integers, canonical unused bits, OID arc constraints and bounded base-128 arithmetic.
+- Expose byte and typed representations with explicit normalizing construction versus strict wire decoding; never silently reinterpret one universal tag as another.
+
+Verification:
+
+- Use independent exact encodings in both directions; round trips alone do not count as correctness evidence.
+- Exercise integer sign boundaries, oversized OID arcs, invalid enum representations, BIT STRING tails, empty/null distinctions and capacity failures.
+- Run packaged public examples, malformed corpora, property tests, work/overflow proofs and current reader compatibility tests.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.33.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.6 - Canonical DER Extended Value Codecs
+
+Status: planned
+
+Plan scope: Complete the remaining authenticated DER universal value codecs, including REAL, character-string families, object descriptors, time/date/duration and IRI forms where defined by the admitted ASN.1 edition, with matching strict decoders and canonical writers; close the full type inventory without substituting unchecked bytes or platform floating-point approximations.
+
+Goal:
+
+Deliver canonical der extended value codecs as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Split independent value families into small source modules and further tagged patches if the authenticated inventory exceeds a review-sized stop.
+- Specify exact REAL representation, normalization and special-value rules using bounded integer/byte operations; validate each string repertoire and time canonicalization under its own tag.
+- Bind edition-specific value forms to exact authority sections and matching positive/negative fixtures; an unimplemented type blocks the complete-DER gate rather than being silently labeled malformed.
+
+Verification:
+
+- Compare canonical encodings against authoritative fixtures and an independent process implementation where available.
+- Test noncanonical REAL encodings, character/repertoire violations, time precision/zones, malformed IRI forms and resource exhaustion.
+- Exercise all value categories through packaged encode/decode examples and retain an explicit source/evidence disposition for every inventory entry.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.33.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.7 - Schema-Aware Constructed DER Codecs
+
+Status: planned
+
+Plan scope: Implement bounded public schema-aware DER SEQUENCE, SET, SEQUENCE OF, SET OF, CHOICE, explicit and implicit tags, OPTIONAL and DEFAULT handling plus remaining structured universal forms over the shared leaf; enforce exact canonical ordering, schema constraints and byte preservation for signed objects in both directions.
+
+Goal:
+
+Deliver schema-aware constructed der codecs as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Use caller-owned schema descriptors and traversal workspace, bounded nesting and item counts, without recursive allocation or an ASN.1 compiler dependency.
+- Distinguish SET component ordering from SET OF encoded-octet ordering, omit DEFAULT values correctly, validate CHOICE/tag ambiguity and bind open types to explicit schemas.
+- Model EXTERNAL, EMBEDDED PDV and CHARACTER STRING where the admitted type inventory requires them; opaque extension preservation never asserts semantic or canonical validation.
+
+Verification:
+
+- Test exact independent nested encodings, canonical re-encoding of admitted DER, explicit/implicit tagging, defaults and every structured inventory entry.
+- Reject duplicate/missing fields, invalid ordering, unknown critical schema choices, excessive depth, sorting-work exhaustion and trailing content.
+- Verify original signed input bytes remain available and are never silently replaced by normalized bytes during signature verification.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.33.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.8 - Hardened DER Secret-Output Ownership
+
+Status: planned
+
+Plan scope: Add explicit hardened DER serialization profiles that clear every Brynja-owned secret temporary and partial output, transfer completed private encodings only into typed secret-owned destinations, and retain transactional public-output behavior; reuse the mandatory core clearing boundary and optional sanitization adapter only under its admitted contract.
+
+Goal:
+
+Deliver hardened der secret-output ownership as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Inventory length, sorting, nesting and output staging that can contain private-key material; seal secret-bearing capabilities and prohibit implicit Clone, formatting or public declassification.
+- Cover success, failure, cancellation, replacement, recoverable unwind and Drop; an output error either leaves the destination unchanged or clears the complete designated secret destination.
+- Treat key lengths and encoded shape as explicit public metadata or separately admitted secret-sensitive policy; expose no claim of constant-time DER for arbitrary hidden lengths, registers or OS memory.
+
+Verification:
+
+- Run public and typed-secret consumer fixtures with sentinel output, forced failures, partial writes, unwind and adjacent-cleanup-failure cases.
+- Verify private output and all owned staging cleanup in MIR, LLVM IR and assembly across supported compiler/target evidence profiles.
+- Test ordinary/hardened type separation, compile-fail forgery/reuse cases and core versus selected sanitization behavior.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.33.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.9 - Complete DER Public Codec Acceptance
+
+Status: planned
+
+Plan scope: Close the standalone DER chain with package-external encode/decode fixtures for every admitted universal type and schema rule, ordinary and hardened output, exact independent encodings, canonical round trips, malformed input and bounded failure; block ECDSA signature encoding, key containers and PKIX generation until the shared leaf passes.
+
+Goal:
+
+Deliver complete der public codec acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Expose one documented command for real structured-data and secret-container examples using only public leaf and brynja-pki compatibility APIs.
+- Reconcile every X.690 DER type/rule inventory entry with a usable paired codec, package path, authority and evidence; support required DER rules completely without claiming an ASN.1 compiler or BER/CER implementation.
+- Record a scalar-only codec disposition, combine portable and final acceptance here, and update implementation tables only after all earlier DER stops and this gate pass.
+
+Verification:
+
+- Check decode(encode(value)) semantically and encode(decode(canonical_der)) byte-for-byte, plus independent known encodings to catch mutually compensating bugs.
+- Run schema, length, ordering, signed-byte, ordinary/hardened, failure-atomicity, no_std and package-compatibility regressions.
+- Complete parser/writer differential fuzzing, cleanup and resource evidence and a dedicated pentest; any failed type or direction blocks downstream consumers.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.33.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.34.0 - X25519 Field And Ladder
 
 Status: planned
@@ -4881,7 +5099,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement unbiased ephemeral input generation, no private-key reuse, imported public and private consistency policy, all-zero shared-secret rejection, immediate scalar destruction, and provider-token binding to group, connection, and transcript.
+Plan scope: Implement unbiased ephemeral input generation, no ephemeral private-key reuse, imported public and private consistency policy, all-zero shared-secret rejection, immediate scalar destruction, and provider-token binding to group, connection, and transcript; reusable static agreement remains a separately typed v0.45.17-v0.45.18 profile.
 
 Goal: complete the **X25519 ECDH Lifecycle** implementation stop without admitting or
 claiming adjacent capability.
@@ -5019,7 +5237,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement P-256 ECDSA signing and verification, strict encoding, low-S policy decision, and deterministic and randomized nonce policy using the secure-random contract.
+Plan scope: Implement P-256 ECDSA signing and verification, strict fixed-width and shared v0.33.9 DER signature encoding/decoding, low-S policy decision, and deterministic and randomized nonce policy using the secure-random contract.
 
 Goal: complete the **P-256 ECDSA** implementation stop without admitting or
 claiming adjacent capability.
@@ -5157,7 +5375,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement P-384 ECDSA signing and verification with strict encoding, nonce policy, vectors, per-target side-channel evidence, and independent review.
+Plan scope: Implement P-384 ECDSA signing and verification with strict fixed-width and shared v0.33.9 DER signature encoding/decoding, nonce policy, vectors, per-target side-channel evidence, and independent review.
 
 Goal: complete the **P-384 ECDSA** implementation stop without admitting or
 claiming adjacent capability.
@@ -5295,7 +5513,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement blinded fixed-schedule first-party RSA-PSS private operations for strictly validated imported keys, with CRT consistency, fault detection, immediate blinding and intermediate destruction, and external-signer support; v1 does not generate RSA keys.
+Plan scope: Implement blinded fixed-schedule first-party RSA-PSS private operations for strictly validated imported keys, with CRT consistency, fault detection, immediate blinding and intermediate destruction, and external-signer support; key generation is deferred from this milestone to v0.46.55, not excluded from v1.
 
 Goal: complete the **RSA-PSS Private Operations** implementation stop without admitting or
 claiming adjacent capability.
@@ -5910,6 +6128,118 @@ Exit criteria:
 - the named capability works through its declared public boundary, all residual
   gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+### v0.45.15 - Complete P-521 ECDSA
+
+Status: planned
+
+Plan scope: Complete reusable P-521 ECDSA signing and verification over the existing P-521 arithmetic with deterministic and randomized nonce policy, digest/prehash handling, canonical fixed-width and DER signatures, key generation/import/export, low-S policy, cleanup and a frozen portable public fixture.
+
+Goal:
+
+Deliver complete p-521 ecdsa as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Reuse P-521 group/scalar owners and the v0.33.9 DER codec rather than duplicating either; keep P-521 signatures distinct from ECDH keys and operations.
+- Bind digest truncation, scalar ranges, nonce rejection, fault checks and modern versus compatibility policy to authenticated standards.
+- Expose ordinary message and explicitly typed prehash sign/verify operations with caller entropy/external signer integration and full private-state cleanup.
+
+Verification:
+
+- Run official and independent signing/verifying vectors, wrong-message/key tests, malformed DER, zero/out-of-range scalars and nonce/fault cases.
+- Freeze a package-external portable fixture with real messages, both signature encodings and exact key lifecycle tests before any accelerated signature route.
+- Verify constant-time secret operations, emitted-code destruction, no_std installation and public API misuse rejection.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.45.15 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.16 - P-521 Signature Cross-Backend Acceptance
+
+Status: planned
+
+Plan scope: Rerun the frozen P-521 ECDSA fixture through portable and every eligible existing P-521 backend, qualifying signature-specific timing, nonce, fault and cleanup behavior before admission; close P-521 signing and verification explicitly before TLS, PKIX and OpenPGP consumers.
+
+Goal:
+
+Deliver p-521 signature cross-backend acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Do not treat ECDH acceleration evidence as automatic signature admission; record exact signing/verifying backend dispositions and quarantine failures.
+- Exercise message/prehash modes, both signature encodings, import/export and external-key paths without changing the portable contract.
+- Keep earlier ECDH-only acceptance accurately scoped and update the wider P-521 completion claim only after this signature gate passes.
+
+Verification:
+
+- Compare scalar and admitted-backend known answers, tamper rejection and malformed-key/signature behavior.
+- Refresh every affected native, side-channel, proof and cleanup artifact after relevant code changes; unavailable acceleration remains unadmitted.
+- Run packaged consumers, dependency isolation, documentation examples and an exceptional cryptographic pentest.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.45.16 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.17 - Reusable Static Key-Agreement Ownership
+
+Status: planned
+
+Plan scope: Add explicitly selected reusable static key-agreement profiles for X25519, X448, P-256, P-384 and P-521 beside the existing single-use ephemeral owners, with validated import/generation, typed secret export where authorized, peer validation, public-key derivation and protocol-domain-separated lifecycle for later HPKE and OpenPGP consumers.
+
+Goal:
+
+Deliver reusable static key-agreement ownership as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Never turn an ephemeral key into a reusable key by resetting state or relaxing its consumption rule; use distinct sealed ownership types and exact protocol/use policy.
+- Require low-order/all-zero or point validation on every peer operation, explicit operation budgets and error behavior, no cross-protocol key reuse, and non-exportable external-key handling.
+- Preserve secret cleanup on replacement, cancellation, failure and Drop while documenting longer static-key lifetimes, compromise consequences and absence of automatic forward secrecy.
+
+Verification:
+
+- Run cross-party agreement vectors through imported/generated static keys and verify byte equality with the mathematical ephemeral operation.
+- Reject wrong group, wrong role/domain, invalid peers, exhausted handles, forged lifecycle capabilities and implicit ephemeral reuse.
+- Freeze package-external static-key fixtures and verify constant-time arithmetic, owned-state cleanup, no_std and provider composition.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.45.17 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.18 - Static And Ephemeral Agreement Acceptance
+
+Status: planned
+
+Plan scope: Close public static and ephemeral agreement profiles through packaged role-aware workflows and every eligible admitted backend before HPKE, key containers or OpenPGP reuse the owners; preserve single-use ephemeral guarantees and explicit longer-lived static-key policy.
+
+Goal:
+
+Deliver static and ephemeral agreement acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Replay the v0.45.17 fixture with exact key import/export and non-exportable-handle dispositions.
+- Keep key agreement distinct from encryption, authentication and complete protocol execution; caller protocol context remains mandatory.
+- Require future finite-field or regional agreement families to extend the same role/lifecycle inventory and acceptance contract at their own closing milestones.
+
+Verification:
+
+- Test repeated authorized static agreements, rejected ephemeral reuse, peer substitution, cross-protocol/domain misuse and terminal cleanup.
+- Compare scalar and eligible admitted backends with independent vectors and both peer roles.
+- Complete lifecycle, provider, package, no_std and exceptional cryptographic pentest evidence before declaring these reusable profiles complete.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.45.18 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.46.0 - Version-One Algorithm And Transitive Completeness Register
 
 Status: planned
@@ -8119,7 +8449,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement complete PBES2, every admitted PBKDF2 PRF and encryption scheme, strict parameters and limits, plus EncryptedPrivateKeyInfo import/export with canonical DER, uniform password failures, caller workspaces, cleanup, vectors, and public APIs.
+Plan scope: Implement complete PBES2, every admitted PBKDF2 PRF and encryption scheme, strict parameters and limits, plus EncryptedPrivateKeyInfo import/export using the accepted v0.33.9 DER codecs and hardened output owner, uniform password failures, caller workspaces, cleanup, vectors, and public APIs.
 
 Goal: close the **Complete PBES2 And EncryptedPrivateKeyInfo** review unit completely without absorbing another
 algorithm identity, construction family, acceleration gate, or usability gate.
@@ -9169,7 +9499,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Regenerate the transitive register from every authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT, and SNP source; block v0.47.0 unless every assigned capability and every send, receive, generation, import, export, and parameter direction has a complete owner and acceptance evidence, with only reserved, unassigned, forbidden, lawfully unavailable, or source-blocked entries rejected.
+Plan scope: Regenerate the transitive register from every authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT, and SNP source; block v0.47.0 unless every capability consumed by the completed substrate has full operation-direction acceptance and every later capability has an exact earlier-than-consumer implementation and acceptance owner, with no forward implementation dependency or unnumbered gap.
 
 Goal: close the **Complete Registered Algorithm Closure Gate** review unit completely without absorbing another
 algorithm identity, construction family, acceleration gate, or usability gate.
@@ -9254,40 +9584,101 @@ Exit criteria:
 - the exact admitted boundary and its non-admitted alternatives are machine-readable, fail closed and narrow enough for later PEM and OpenPGP armor reuse;
 - `v0.47.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.48.0 - PEM Base64 And Chain Containers
+### v0.48.0 - Bounded PEM Decoding And Chain Containers
 
 Status: planned
 
-Plan scope: Using only the v0.47.1-admitted Base64 boundary, implement bounded strict PEM armor plus certificate-chain containers with label, count, size, whitespace, trailing-data, canonical-encoding, and resource policies; retain a documented non-admission path rather than weakening `no_std` or allocation-free guarantees.
+Plan scope: Using only the v0.47.1-admitted Base64 boundary, implement bounded strict PEM decoding plus certificate-chain containers with label, count, size, whitespace, trailing-data, canonical-encoding, and resource policies; retain a documented non-admission path rather than weakening no_std or allocation-free guarantees, and keep the bidirectional PEM family In progress until v0.48.1-v0.48.2 encoding and acceptance.
 
-Goal: complete the **PEM Base64 And Chain Containers** implementation stop without admitting or
-claiming adjacent capability.
+Goal: deliver a standalone strict PEM reader; do not claim certificate trust,
+private-key validity or complete bidirectional PEM until the paired writer
+and acceptance gate are complete.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- bind parsing to exact bytes and explicit normalization, CT, algorithm, trust, time, secret-arena, size, depth, count, path, and work policy;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- Parse admitted labels, Base64 bodies and single/chain boundaries using the
+  one admitted Base64 owner with exact input consumption and caller buffers.
+- Bound line, whitespace, block, decoded-size and work limits; keep protected
+  private material in a typed secret destination and reject ambiguous labels.
+- Document canonical versus accepted text forms, strict trailing-data policy,
+  dependency isolation and the v0.48.1 writer dependency for full codec use.
 
 Verification:
 
-- run standards vectors, malformed key and certificate corpora, truncation, path, constraint, policy, revocation, CT, differential, selection, and exhaustion tests;
-- test ambiguity, cycles, cross-signing, stale status, disqualified logs, duplicate SCTs, operator diversity, log updates, and unavailable verifier state;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- Decode authoritative and independently generated certificate, key and chain
+  fixtures; malformed framing must not be confused with cryptographic validity.
+- Test wrong labels, bad Base64 tails, excess whitespace, missing boundaries,
+  truncation, capacity failures, hostile block counts and partial secret cleanup.
+- Run packaged public consumers, parser fuzzing, no_std, resource, dependency,
+  compiler cleanup and exceptional hostile-parser pentest checks.
 
 Exit criteria:
 
-- identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
+- The exact PEM reader profile has public correctness and failure evidence;
+  the combined encode/decode capability remains In progress until v0.48.2.
 - `v0.48.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.48.1 - Transactional PEM Encoding
+
+Status: planned
+
+Plan scope: Implement bounded public PEM encoding over the exact admitted Base64 boundary and existing PEM labels/containers, with canonical output formatting, streaming completion, caller buffers, certificate-chain generation and explicit typed-secret private-key output; do not add another Base64 implementation.
+
+Goal:
+
+Deliver transactional pem encoding as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Separate PEM framing from the shared DER owner and cryptographic key semantics; support each promised label in both directions.
+- Preflight lengths and limits, retain deterministic line endings/wrapping, and never output headers or partial secret encodings on a failed operation.
+- Provide ordinary and protected-output APIs with clear ownership, cleanup and explicit rejection of mismatched labels or unsupported legacy envelopes.
+
+Verification:
+
+- Compare exact expected PEM examples and independently produced files, not only self-round-trips.
+- Test empty/multiple blocks, label mismatches, line boundaries, trailing input, capacity failures and secret cleanup.
+- Exercise public encoder/decoder consumers with and without optional features on supported Rust/no_std profiles.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.48.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.48.2 - PEM And Base64 Public Round-Trip Acceptance
+
+Status: planned
+
+Plan scope: Close bounded PEM encode/decode and admitted Base64 transformations with packaged public fixtures across labels, single and chain containers, streaming, canonical generation, strict parsing, malformed inputs and ordinary versus typed-secret output before private-key container integration.
+
+Goal:
+
+Deliver pem and base64 public round-trip acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Publish one runnable encode/decode command using only Brynja's selected public packages; keep unadmitted Base64 profiles visibly unavailable.
+- Retain input-consumption and canonical-output policy without requiring noncanonical accepted text to re-encode byte-identically.
+- Record caller-owned storage, zeroization, no_std and dependency isolation; no PEM success confers certificate trust or key validity.
+
+Verification:
+
+- Use authoritative or independent PEM artifacts, semantic round trips and exact canonical output fixtures.
+- Mutate labels, boundaries, lengths, whitespace, block counts, truncation and Base64 canonical bits.
+- Run allocation/resource, secret-output, package and parser pentest gates before marking the codec complete.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.48.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.49.0 - Complete PKCS8 Unencrypted Private-Key Containers
 
 Status: planned
 
-Plan scope: Implement bounded PKCS #8 PrivateKeyInfo and OneAsymmetricKey import and export with strict version, algorithm and parameter binding, optional public-key consistency, canonical DER, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.
+Plan scope: Implement bounded PKCS #8 PrivateKeyInfo and OneAsymmetricKey import and export using the v0.33.9 shared DER codecs and hardened output owner, with strict version, algorithm and parameter binding, optional public-key consistency, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.
 
 Goal: complete the **Complete PKCS8 Unencrypted Private-Key Containers** boundary without conflating another container
 format, encryption layer, key family, or downstream acceptance gate.
@@ -9452,6 +9843,90 @@ Exit criteria:
 - the named container capability is publicly usable and no later row inherits
   hidden format, cryptography, direction, or cleanup work;
 - `v0.49.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+### v0.49.5 - Reusable SubjectPublicKeyInfo Codecs
+
+Status: planned
+
+Plan scope: Implement standalone public SubjectPublicKeyInfo import/export over the shared DER leaf for every already admitted key family, with exact AlgorithmIdentifier and parameter policy, BIT STRING framing, key validation and modern versus legacy selection independently of X.509 certificate issuance.
+
+Goal:
+
+Deliver reusable subjectpublickeyinfo codecs as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Reuse exact key owners and raw serialization functions; PKI containers add no new arithmetic or duplicate key codecs.
+- Distinguish syntactically decoded public material, algorithm-bound validated keys and trusted identities; later PQ/hybrid profiles extend this same owner only after their prerequisites.
+- Support canonical DER and the selected PUBLIC KEY PEM wrapper with checked caller buffers and transactional errors.
+
+Verification:
+
+- Run independent RFC/key-format fixtures and public import/export through every already admitted family.
+- Reject algorithm/parameter substitution, invalid points or moduli, malformed bit tails, trailing bytes and policy-crossing legacy keys.
+- Exercise no_std/package use and cross-check exported keys with independent process tools without linking their libraries.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.49.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.49.6 - Algorithm-Specific Public-Key Format APIs
+
+Status: planned
+
+Plan scope: Complete public raw-key and PKCS1 RSAPublicKey import/export profiles alongside SubjectPublicKeyInfo, reusing existing SEC1 point and RFC 7748/8032 raw encodings with explicitly typed format selection, canonical constraints and no format guessing.
+
+Goal:
+
+Deliver algorithm-specific public-key format apis as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Expose existing raw serialization through one documented format inventory rather than rewriting curve or RSA encoders.
+- Separate RSA PUBLIC KEY from PUBLIC KEY PEM labels, compressed/uncompressed point policy and fixed-width raw key identities.
+- Require full input consumption, public mathematical validation where the format supplies it and uniform bounded conversion failures.
+
+Verification:
+
+- Test exact independent encodings and round trips between each admitted raw/PKCS1/SPKI representation.
+- Reject wrong format, wrong curve, wrong lengths, ambiguous label selection, padding/trailing bytes and key substitution.
+- Run downstream consumers without certificates, private keys or implicit trust stores, plus no_std resource and package checks.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.49.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.49.7 - Public-Key Container Acceptance
+
+Status: planned
+
+Plan scope: Close SPKI and algorithm-specific public-key import/export with packaged independent-tool round trips, exact encodings, validation-state separation, malformed-input and policy isolation tests; require later algorithm-profile additions to extend this fixture before claiming complete key-format support.
+
+Goal:
+
+Deliver public-key container acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Document the public codec crate/API for every supported key representation and conversion direction.
+- Test generated and imported keys through existing cryptographic operations as well as format round trips; serialization alone never establishes algorithm usability.
+- Freeze the fixture for later PKIX, raw-public-key and PQ/hybrid consumers; preserve private-key output ownership from v0.49.4.
+
+Verification:
+
+- Import independently generated keys, export them, and use independent tools to verify the same key identity and operation result.
+- Exercise malformed DER/PEM/raw keys, algorithm confusion, capacity failures and modern/legacy graph separation.
+- Run parser fuzzing, public package examples, Rust/target checks and a dedicated format pentest.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.49.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.50.0 - X.509 Decoder
 
 Status: planned
@@ -10096,7 +10571,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement bounded public signed-object generation, canonical DER assembly, serial and extension construction, exact AlgorithmIdentifier binding, caller-owned signer, entropy, time and storage effects, transactional output, cleanup, and reusable issuance proof harnesses without yet combining every object type.
+Plan scope: Implement bounded public signed-object generation using the existing v0.33.9 DER writer and schema codecs, serial and extension construction, exact AlgorithmIdentifier binding, caller-owned signer, entropy, time and storage effects, transactional output, cleanup, and reusable issuance proof harnesses without duplicating DER or yet combining every object type.
 
 Goal: close the **PKIX Canonical Issuance Foundation** unit without merging another profile family,
 object direction, issuance surface, interoperability gate, or audit gate.
@@ -10267,13 +10742,13 @@ Exit criteria:
   hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.11 - Complete Unsigned X509 And ML-KEM PKIX Profiles
+### v0.60.11 - Unsigned X509 And Structural ML-KEM PKIX Profiles
 
 Status: planned
 
-Plan scope: Implement the authenticated unsigned X.509 profile with explicit non-authentication types plus complete RFC 9935 ML-KEM public-key and certificate profiles, exact parameters and encodings, malformed and substitution rejection, round trips, and public APIs.
+Plan scope: Implement the authenticated unsigned X.509 profile with explicit non-authentication types and RFC 9935 ML-KEM public-key/certificate encoding and decoding, exact parameter binding, malformed/substitution rejection and public format round trips; keep ML-KEM material structurally typed and non-executable until v0.119.3 and v0.122.1, without implying a KEM is a signature.
 
-Goal: close the **Complete Unsigned X509 And ML-KEM PKIX Profiles** unit without merging another profile family,
+Goal: close the **Unsigned X509 And Structural ML-KEM PKIX Profiles** unit without merging another profile family,
 object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
@@ -10337,13 +10812,13 @@ Exit criteria:
   hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.13 - Complete SLH-DSA And Hybrid PKIX Profiles
+### v0.60.13 - SLH-DSA And Structural Hybrid PKIX Profiles
 
 Status: planned
 
-Plan scope: Implement every finalized authenticated SLH-DSA and hybrid PKIX AlgorithmIdentifier, public-key, certificate, CRL, OCSP, request, issuance, and validation profile available to the source closure with exact parameter sets, encodings, constraints, round trips, and public APIs.
+Plan scope: Implement finalized authenticated SLH-DSA PKIX key, certificate, CRL, OCSP, request, issuance and validation profiles over the complete v0.46 owners; inventory hybrid profile authorities and structural encodings without executing unavailable component algorithms, and assign complete executable hybrid integration to v0.122.2.
 
-Goal: close the **Complete SLH-DSA And Hybrid PKIX Profiles** unit without merging another profile family,
+Goal: close the **SLH-DSA And Structural Hybrid PKIX Profiles** unit without merging another profile family,
 object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
@@ -10372,13 +10847,13 @@ Exit criteria:
   hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.14 - Complete PKIX Public Usability And Interoperability Acceptance
+### v0.60.14 - Pre-PQ-Integration PKIX Public Acceptance
 
 Status: planned
 
-Plan scope: Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned, classical, regional, PQ, hybrid, and legacy profiles through packaged public fixtures and at least two independent toolchains where available, verifying every direction, malformed and policy failure, bounded resources, cleanup, reuse, and isolation.
+Plan scope: Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned, classical, regional, implemented PQ-signature and legacy profiles through packaged public fixtures and at least two independent toolchains where available; test ML-KEM/hybrid structural codecs without claiming their later executable operation closure, which belongs to v0.122.1-v0.122.3.
 
-Goal: close the **Complete PKIX Public Usability And Interoperability Acceptance** unit without merging another profile family,
+Goal: close the **Pre-PQ-Integration PKIX Public Acceptance** unit without merging another profile family,
 object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
@@ -10407,13 +10882,13 @@ Exit criteria:
   hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.15 - Complete PKI Audit And Remediation Gate
+### v0.60.15 - Pre-PQ-Integration PKI Audit And Remediation Gate
 
 Status: planned
 
-Plan scope: Independently audit and cleanly retest the complete modern, optional, regional, PQ, hybrid, and legacy PKI surface, including generation/validation symmetry, encrypted containers, constraints, trust separation, resource ceilings, external signer effects, and every public compatibility claim before TLS consumes it.
+Plan scope: Independently audit and cleanly retest every presently executable modern, optional, regional, PQ-signature and legacy PKI profile, including generation/validation symmetry, encrypted containers, constraints, trust separation, resource ceilings and external signer effects; block premature ML-KEM or hybrid execution and require v0.122.3 before complete extended-PKIX claims.
 
-Goal: close the **Complete PKI Audit And Remediation Gate** unit without merging another profile family,
+Goal: close the **Pre-PQ-Integration PKI Audit And Remediation Gate** unit without merging another profile family,
 object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
@@ -11917,7 +12392,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement bounded syntactic transport-parameter parsing and transcript binding while exposing typed values for QUIC-owned semantic enforcement.
+Plan scope: Implement bounded syntactic transport-parameter parsing and encoding for the QUIC/TLS boundary with typed values, exact received-byte transcript binding, caller-owned semantic enforcement, checked output and role/version policy; expose both directions and close them through v0.97.1 without implementing QUIC packet processing.
 
 Goal: complete the **QUIC Transport Parameters** implementation stop without admitting or
 claiming adjacent capability.
@@ -11941,6 +12416,34 @@ Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
 - `v0.97.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.97.1 - QUIC Transport-Parameter Codec Acceptance
+
+Status: planned
+
+Plan scope: Close the QUIC/TLS integration's public transport-parameter parsing and encoding with exact role/version-aware wire fixtures, checked lengths, duplicate handling and transcript-byte preservation while leaving transport semantics, packet protection and network I/O with the caller's QUIC stack.
+
+Goal:
+
+Deliver quic transport-parameter codec acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Expose both receive parsing and send construction to independent transport implementations without introducing a full QUIC engine.
+- Separate preserved received bytes from canonical generated bytes so transcript authentication never uses silent normalization.
+- Document unknown/reserved/private parameter disposition and resource limits in both directions.
+
+Verification:
+
+- Compare independent peer encodings, legal nonminimal representations where permitted, canonical generated output and semantic round trips.
+- Reject duplicate or truncated values, oversized lengths, illegal role usage and unknown critical conditions only where the standard defines them.
+- Run a package-external client/server handshake integration fixture, no_std resource tests and parser pentest.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.97.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.98.0 - QUIC Sans-I/O Handshake
 
@@ -12864,6 +13367,90 @@ Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
 - `v0.122.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.122.1 - Executable ML-KEM PKIX Integration
+
+Status: planned
+
+Plan scope: After complete v0.119.3 ML-KEM acceptance and the PQ standards gate, bind the earlier ML-KEM PKIX encodings to real key generation, validation, import/export and encapsulation/decapsulation consumers; exercise RFC 9935 profiles without treating a KEM as a signature or certificate trust decision.
+
+Goal:
+
+Deliver executable ml-kem pkix integration as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Reuse the v0.60.11 structural codec and exact ML-KEM key owner with no second implementation.
+- Extend the v0.49.7 public-key and v0.60.14 PKIX fixtures with real key operations, certificate issuer signatures and typed recipient roles.
+- Distinguish syntactically valid encoded keys from executable validated keys and caller trust; require explicit algorithm parameters and no fallback.
+
+Verification:
+
+- Run independent key/certificate encodings plus complete keygen/import/export/encapsulation/decapsulation interoperability.
+- Reject substitution, mismatched parameter sets, malformed keys/ciphertexts and forged validation-state transitions.
+- Refresh no_std, cleanup, provider, PKIX and isolation evidence and complete a focused cryptographic integration pentest.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.122.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.122.2 - Executable Hybrid PKIX Integration
+
+Status: planned
+
+Plan scope: Complete every authenticated hybrid PKIX key and signature profile only after all of its component algorithms and profile authorities are admitted; reuse v0.60.13 structural dispositions and exact primitive owners with distinct encoding, validation, generation and operation semantics and no inferred mapping from TLS hybrid groups.
+
+Goal:
+
+Deliver executable hybrid pkix integration as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Enumerate exact hybrid PKIX standards and parameter profiles; a draft or absent mapping remains source-blocked rather than implemented by convention.
+- Add each independent profile as a review-sized child milestone if the authenticated inventory cannot fit this stop.
+- Bind all component validation, failure and output states without partial-success fallback or implicit cross-protocol key reuse.
+
+Verification:
+
+- Run profile-specific authoritative vectors and independent format and operation interoperability where an authenticated profile exists.
+- Test component swapping, omission, mixed contexts, malformed encodings and unsupported-profile failure.
+- Require public key-format acceptance, cleanup, no_std and a dedicated integration pentest; publish an explicit no-admitted-profile disposition if applicable.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.122.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.122.3 - Complete PQ PKIX Cross-Family Acceptance
+
+Status: planned
+
+Plan scope: Reconcile the earlier PKIX format and signature acceptance with the now-complete ML-KEM and every authenticated hybrid profile; require packaged generation, import/export, issuance and applicable cryptographic operations across all admitted PKIX families before FIPS architecture and final complete-PKIX claims.
+
+Goal:
+
+Deliver complete pq pkix cross-family acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Replay the frozen v0.49.7 and v0.60.14 contracts with their added PQ profiles and exact source/algorithm identities.
+- Keep classical/regional/legacy/PQ claims separate and record source-blocked mappings without inventing algorithms.
+- Require full operation-direction and dependency closure, including negative external-key, provider and trust transitions.
+
+Verification:
+
+- Run independent-tool key and certificate workflows, not only codec self-round-trips.
+- Repeat affected crypto, PKI, policy, cleanup, no_std and package regressions.
+- Complete a cumulative PKIX/PQ integration audit and pentest before treating the extended PKIX surface as complete.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.122.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ## Phase 4: FIPS Module Instantiation, Validation, And TLS Profile
 
@@ -16039,7 +16626,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement secret-key packet protection framing, checksum and AEAD integrity states, protected-material lifetime, locked and unlocked representations, uniform password and corruption failures, caller-owned workspaces and immediate destruction; prohibit clear secret export and defer every S2K or cipher use to admitted providers.
+Plan scope: Implement secret-key packet protection framing, checksum and AEAD integrity states, protected-material lifetime, locked and unlocked representations, uniform password and corruption failures, caller-owned workspaces and immediate destruction; prohibit implicit clear secret export, defer every S2K or cipher use to admitted providers, and reserve explicit protected/unprotected key export for v0.176.2.
 
 Goal: freeze private-key custody and failure semantics before password
 derivation or decryption algorithms are connected.
@@ -16061,11 +16648,179 @@ Exit criteria:
 - protected secret material has a complete custody contract and cannot be exposed by a partial or unauthenticated transition;
 - `v0.167.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.167.2 - Complete Reusable BLAKE2b
+
+Status: planned
+
+Plan scope: Implement the complete RFC 7693 sequential BLAKE2b byte-oriented hash and keyed mode in a reusable first-party no_std brynja-hash-blake2 leaf before Argon2, with all admitted digest/key lengths, one-shot and streaming APIs, exact counters, final-block behavior and official/independent vectors.
+
+Goal:
+
+Deliver complete reusable blake2b as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Keep BLAKE2b distinct from BLAKE2s, BLAKE2X and parallel/tree variants; none is implied by the sequential BLAKE2b claim.
+- Provide a secret-owning keyed API from its first introduction with mandatory state, key-block and schedule destruction; ordinary unkeyed states retain explicit public-data scope.
+- Use bounded caller output and exact parameter identities; no hidden OpenPGP-private hash implementation or third-party crypto dependency.
+
+Verification:
+
+- Test every digest/key length boundary, empty and exact-block inputs, last-block counters and irregular streaming against independent known answers.
+- Reject invalid parameters before output mutation and test keyed-state lifetime, errors, unwind and Drop.
+- Run portable public consumers, proofs, emitted-code cleanup and no_std/package isolation before any Argon2 binding.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.167.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.167.3 - Hardened Unkeyed BLAKE2b Profiles
+
+Status: planned
+
+Plan scope: Complete secret-bearing unkeyed BLAKE2b ownership over the same compression implementation for Argon2 password-derived preprocessing, with sealed states, typed secret outputs, exact variable digest lengths and complete internal cleanup independent of optional adapters.
+
+Goal:
+
+Deliver hardened unkeyed blake2b profiles as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Separate an unkeyed algorithm from a public-data input policy; Argon2 must not use ordinary non-erasing hash state.
+- Inventory message blocks, counters, chaining state, schedules and output staging on every lifecycle path.
+- Expose explicit public declassification only through a consuming operation; no Clone, state export or accelerated hardened route without equivalent cleanup evidence.
+
+Verification:
+
+- Compare ordinary and hardened mathematical outputs across the complete sequential BLAKE2b domain.
+- Test secret destination clearing, lifecycle failures, unwind, public-output atomicity and compile-fail capability forgery.
+- Inspect MIR/LLVM/assembly cleanup and run dynamic analysis on the exact Argon2-reusable state paths.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.167.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.167.4 - BLAKE2b Portable Public Acceptance
+
+Status: planned
+
+Plan scope: Freeze a package-external fixture for sequential BLAKE2b ordinary, keyed and hardened unkeyed profiles with all digest/key lengths, real streamed data, exact independent outputs, typed output and cleanup; make the accepted owner the sole BLAKE2b dependency of Argon2.
+
+Goal:
+
+Deliver blake2b portable public acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Publish one command covering every named BLAKE2b public profile without exposing raw compression or private fields.
+- Bind arbitrary output lengths to digest identity rather than truncating a fixed 64-byte digest.
+- Keep the family entry precisely named BLAKE2b and In progress pending backend disposition; do not promote the entire future BLAKE2 family.
+
+Verification:
+
+- Use independent keyed/unkeyed vectors plus streaming, counter, final-block and malformed-parameter cases.
+- Run secret lifecycle, caller-buffer, package-external, Rust and no_std tests.
+- Complete portable correctness and cleanup evidence before acceleration, including a cryptographic pentest.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.167.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.167.5 - BLAKE2b Backend And Final Acceptance
+
+Status: planned
+
+Plan scope: Qualify optional first-party BLAKE2b acceleration only after portable acceptance, replay the unchanged fixture through portable and every admitted backend, and close the exact sequential BLAKE2b profiles before Argon2 uses them; retain explicit scalar-only or unadmitted dispositions where hardware or cleanup evidence is unavailable.
+
+Goal:
+
+Deliver blake2b backend and final acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Reuse established CPU capability, migration, KAT, quarantine and dispatch boundaries for x86_64, AArch64 and qualifying RISC-V.
+- Do not admit hardened acceleration using ordinary-state evidence; preserve every output-length and keyed parameter identity.
+- Mark only the completed sequential BLAKE2b scope Fully implemented after exact-source evidence and public acceptance.
+
+Verification:
+
+- Run scalar differentials, independent known answers, forced paths, unsupported backends and every profile's cleanup tests.
+- Collect native performance/timing and emitted-code evidence where admission is proposed; QEMU cannot substitute for native claims.
+- Refresh affected evidence after any change and obtain clean cryptographic pentest before consumer binding.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.167.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.167.6 - Complete Reusable AES-CMAC
+
+Status: planned
+
+Plan scope: Implement standalone AES-CMAC generation and constant-time verification over all admitted AES key widths with exact subkey derivation, complete/partial/empty final blocks, tag-length policy, byte and canonical arbitrary-bit one-shot and streaming APIs and hardened cleanup before EAX composes its domain-separated OMAC operations.
+
+Goal:
+
+Deliver complete reusable aes-cmac as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Own the construction once in a reusable first-party MAC leaf; EAX may supply its specified domain prefixes but never a private duplicate CMAC.
+- Separate tags, keys and protocol truncation policy, enforce key lifecycle and prohibit raw unauthenticated tag comparison in secret-bearing consumers.
+- Reuse admitted AES symbols with exact ordinary/hardened backend qualification and no automatic FIPS approval.
+
+Verification:
+
+- Run official and independent AES-CMAC vectors, empty/full/partial block cases, tag tampering and bounded truncation.
+- Exercise streaming partitions, invalid keys/lengths, cleanup on every exit and affine finalization.
+- Freeze a portable public fixture and pass proofs, compiler evidence, no_std and package checks before EAX integration.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.167.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.167.7 - AES-CMAC Public And Backend Acceptance
+
+Status: planned
+
+Plan scope: Close AES-CMAC generation and verification through packaged public fixtures and every admitted underlying AES backend, preserving constant-time verification, exact tag policy and complete state cleanup; require EAX to reuse this accepted owner.
+
+Goal:
+
+Deliver aes-cmac public and backend acceptance as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Provide a real public authenticate/verify example with no EAX or OpenPGP dependency.
+- Replay identical portable fixtures on admitted backends and reject unavailable forced routes.
+- Keep CMAC, KMAC, HMAC and unkeyed hashes type-distinct and record exact independent-review/FIPS status.
+
+Verification:
+
+- Compare independent vectors and tampered tags across all AES widths and message partitions.
+- Run output, lifecycle, truncation, quarantine, no_std and package-isolation regressions.
+- Refresh affected AES/MAC evidence and obtain clean cryptographic pentest before dependent composition.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.167.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.168.0 - Complete First-Party Argon2i
 
 Status: planned
 
-Plan scope: Implement complete RFC 9106 Argon2i version 0x13 in first-party Rust, including the shared block and indexing foundation, lanes, segments, passes, memory rounding, variable output, caller workspace, parameter and overflow bounds, KATs, proofs, data-independent access claims, cancellation, cleanup, and public APIs.
+Plan scope: Implement complete RFC 9106 Argon2i version 0x13 in first-party Rust using only the accepted hardened v0.167.5 BLAKE2b owner, including exact H-prime variable-length hashing, the shared block and indexing foundation, lanes, segments, passes, memory rounding, caller workspace, bounds, KATs, proofs, data-independent access claims, cancellation, cleanup, and public APIs.
 
 Goal: close the **Complete First-Party Argon2i** unit without merging another password KDF,
 AEAD construction, OpenPGP profile, acceleration, or usability gate.
@@ -16317,7 +17072,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement complete first-party EAX over every admitted AES width with exact nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and standalone public API behavior.
+Plan scope: Implement complete first-party EAX over every admitted AES width using the accepted v0.167.7 AES-CMAC owner for exact domain-separated OMAC processing, with nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and standalone public seal/open APIs.
 
 Goal: close the **Complete First-Party EAX** unit without merging another password KDF,
 AEAD construction, OpenPGP profile, acceleration, or usability gate.
@@ -17175,7 +17930,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement transactional bounded certificate and keyring import, duplicate and conflict handling, self-signature selection, update and revocation merge, rollback resistance, provenance and application policy hooks; keep keyserver retrieval, WKD, DNS, TOFU and Web-of-Trust decisions caller-owned and impossible to activate implicitly.
+Plan scope: Implement transactional bounded certificate and keyring import, duplicate and conflict handling, self-signature selection, update and revocation merge, rollback resistance, provenance and application policy hooks; pair import with v0.176.2 explicit export while keeping keyserver retrieval, WKD, DNS, TOFU and Web-of-Trust decisions caller-owned and impossible to activate implicitly.
 
 Goal: make local key material updates deterministic without turning storage or
 network discovery into hidden trust authority.
@@ -17222,6 +17977,34 @@ Exit criteria:
 
 - modern keys can be created, rotated and revoked through recoverable, bounded workflows with explicit custody responsibilities;
 - `v0.176.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.176.2 - OpenPGP Public And Secret-Key Export
+
+Status: planned
+
+Plan scope: Implement explicit public-certificate, secret-key and keyring export paired with existing import and merge APIs, including binary and armored output, protected-key export and a separately authorized typed-secret unprotected export profile; preserve exact authenticated packets, modern/legacy policy and caller-owned storage.
+
+Goal:
+
+Deliver openpgp public and secret-key export as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Keep encrypted export the ordinary secret-key workflow; unprotected export requires an explicit capability and secret-owned destination with no implicit formatting or logging.
+- Never export private material from non-exportable external handles; report that restriction explicitly while allowing their public-key export.
+- Retain packet signatures, identity and version semantics; keyring export does not create application trust or silently drop required bindings.
+
+Verification:
+
+- Import independent artifacts, export them and re-import/operate using an independent OpenPGP implementation.
+- Test protected/unprotected policy, binary/armor paths, passphrase failure, packet selection, capacity, cancellation and complete private-output cleanup.
+- Extend v0.178.2's client fixture and obtain a dedicated secret-export pentest before resource/interoperability closure.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.176.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.177.0 - OpenPGP External-Key And Sanitization Integration
 
@@ -18012,6 +18795,34 @@ Exit criteria:
 
 - the integrated graph is frozen while TLS and OpenPGP retain independent authority and failure boundaries;
 - `v0.181.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.181.1 - Whole-Project Public Operation-Direction Closure
+
+Status: planned
+
+Plan scope: Before the integrated release rehearsal, reconcile every promised primitive, construction, codec, container and protocol role with its implemented public package, complete safe operation directions and exact acceptance evidence; block 1.0 if any reusable capability is only accessible through private protocol code or a one-sided adapter.
+
+Goal:
+
+Deliver whole-project public operation-direction closure as a separately usable, review-sized boundary with exact ownership and evidence before its named consumers.
+
+Deliverables:
+
+- Generate the final operation inventory from the API-profile, source and protocol-surface registers; name pairs such as encode/decode, seal/open, sign/verify, wrap/unwrap, encapsulate/decapsulate, import/export and send/receive only where semantically valid.
+- Record noninvertible hashes/KDFs, caller-owned transport/trust, non-exportable handles and standard-forbidden directions explicitly instead of inventing reverse APIs or hiding missing work.
+- Verify earliest-consumer ordering and single shared implementation; unresolved requirements receive new review-sized milestones before the release candidate, never a blanket completion claim.
+
+Verification:
+
+- Run package-external workflows in each valid direction, including independent known answers rather than self-round-trips alone.
+- Exercise modern and explicit legacy selection, hostile input, failures, secret ownership, no_std and optional-adapter isolation.
+- Complete a whole-project completeness pentest and owner review of the public capability tables before the v0.182.0 rehearsal.
+
+Exit criteria:
+
+- The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
+- Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
+- `v0.181.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.182.0 - Integrated Clean-Room Release Rehearsal
 

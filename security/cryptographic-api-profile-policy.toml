@@ -1106,7 +1106,7 @@ sha256 = "07fe5d150de04af55f7459e9672adce7e93b051570214162939726820b0830e8"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/engine.rs"
-sha256 = "ca5b936e6efe39e59ebcab809393fb7b733ec08da00400be312a2bc09bd899c5"
+sha256 = "dd642f6211c6f38d9d1c0769478ec31e66c4cc1bf41f24b5ae0cc1c16a75f971"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/hardened.rs"
@@ -1138,7 +1138,7 @@ sha256 = "6796277ff737147ff0a36c17c7589649905f0a3a159ecdbc7b6dd947fbd01cf1"
 
 [[reviewed-source]]
 path = "scripts/sha1/check-sha1-codegen.sh"
-sha256 = "4e45c1587ec38f047230ee2a0dbf48f30101d50998df8fd16892d8a66c8badd2"
+sha256 = "6840869e0e91ac4e2ebd348d554bf19f62f375d0dfbcc6a2fccd86a92705fe98"
 
 [[reviewed-source]]
 path = "scripts/sha1/check-sha1.py"

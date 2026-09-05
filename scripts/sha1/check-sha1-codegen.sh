@@ -14,6 +14,10 @@ for extension in ('mir', 'll', 's'):
     paths = list(root.rglob('brynja_legacy_sha1-*.' + extension))
     assert len(paths) == 1, (extension, paths)
     text = paths[0].read_text()
+    # MIR can retain unused diagnostic constants even with assertions disabled.
+    # They must not reach optimized LLVM IR or emitted machine code.
+    if extension != 'mir':
+        assert 'offset invariant' not in text, 'debug invariant retained in release code'
     assert 'Sha1Owner' in text and 'wipe' in text, extension
     if extension == 'mir':
         import re

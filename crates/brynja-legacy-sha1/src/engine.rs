@@ -16,6 +16,7 @@ pub(crate) fn update(owner: &mut Sha1Owner, input: &[u8]) -> Result<(), Sha1Erro
     let length = admit_bytes(owner.bits(), input.len())?;
     for byte in input {
         let offset = owner.buffered();
+        debug_assert!(offset < owner.block.len(), "SHA-1 update offset invariant");
         if let Some(destination) = owner.block.get_mut(offset) {
             *destination = *byte;
         }
@@ -47,6 +48,7 @@ pub(crate) fn finish_bytes(owner: &mut Sha1Owner) {
 fn finish_padding(owner: &mut Sha1Owner, partial: Option<(u8, u8)>, total: u64) {
     let (last, valid) = partial.unwrap_or((0, 0));
     let offset = owner.buffered();
+    debug_assert!(offset < owner.block.len(), "SHA-1 padding offset invariant");
     if let Some(destination) = owner.block.get_mut(offset) {
         *destination = last | (0x80_u8 >> valid);
     }
@@ -70,6 +72,71 @@ fn finish_padding(owner: &mut Sha1Owner, partial: Option<(u8, u8)>, total: u64) 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[cfg(debug_assertions)]
+    extern crate std;
+
+    #[cfg(debug_assertions)]
+    #[test]
+    fn invalid_update_offsets_trip_before_mutation() {
+        for count in 64..=u8::MAX {
+            let mut owner = Sha1Owner::new();
+            owner.buffered = [count];
+            let before = owner.chaining_state;
+            let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let _ = update(&mut owner, &[0xa5]);
+            }));
+            assert!(result.is_err(), "invalid offset {count} was silent");
+            assert_eq!(owner.chaining_state, before);
+            assert_eq!(owner.block, [0; 64]);
+            assert_eq!(owner.schedule, [0; 320]);
+            assert_eq!(owner.buffered, [count]);
+            assert_eq!(owner.bits(), 0);
+        }
+    }
+
+    #[cfg(debug_assertions)]
+    #[test]
+    fn invalid_padding_offsets_trip_before_mutation() {
+        for count in 64..=u8::MAX {
+            for partial in [None, Some((0xa0, 3))] {
+                let mut owner = Sha1Owner::new();
+                owner.buffered = [count];
+                let before = owner.chaining_state;
+                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    finish_padding(&mut owner, partial, 3);
+                }));
+                assert!(result.is_err(), "invalid offset {count} was silent");
+                assert_eq!(owner.chaining_state, before);
+                assert_eq!(owner.block, [0; 64]);
+                assert_eq!(owner.schedule, [0; 320]);
+                assert_eq!(owner.output_staging, [0; 20]);
+                assert_eq!(owner.buffered, [count]);
+            }
+        }
+    }
+
+    #[test]
+    fn every_valid_offset_survives_absorption_and_padding() {
+        for length in 0..=128 {
+            let mut owner = Sha1Owner::new();
+            for _ in 0..length {
+                assert_eq!(update(&mut owner, &[0xa5]), Ok(()));
+                assert!(owner.buffered() < 64);
+            }
+            assert_eq!(owner.buffered(), length % 64);
+            for valid in 0..8 {
+                let mut padded = Sha1Owner::new();
+                let input = [0xa5; 128];
+                let input = input.get(..length).unwrap_or_default();
+                assert_eq!(input.len(), length);
+                assert_eq!(update(&mut padded, input), Ok(()));
+                let total = padded.bits() + u64::from(valid);
+                finish_padding(&mut padded, Some((0, valid)), total);
+                assert_eq!(padded.buffered(), 0);
+            }
+        }
+    }
 
     #[test]
     fn exhaustion_rejects_before_any_state_mutation() {

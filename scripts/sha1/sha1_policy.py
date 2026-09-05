@@ -41,6 +41,11 @@ def validate(root=ROOT, hashes=True):
         if re.search(r'\b(unsafe\s*\{|extern|alloc::|std::|Vec|Box|static\s+mut)|\.(unwrap|expect)\(|\b(panic|unimplemented|todo)!', production):
             raise ValueError('SHA-1 unsafe, hosted or panic surface')
     owner = (src / 'owner.rs').read_text()
+    engine = re.sub(r'\s+', '', (src / 'engine.rs').read_text().split('#[cfg(test)]')[0])
+    for operation in ('update', 'padding'):
+        guard = re.sub(r'\s+', '', f'debug_assert!(offset < owner.block.len(), "SHA-1 {operation} offset invariant");')
+        if engine.count(guard + 'ifletSome(destination)=owner.block.get_mut(offset)') != 1:
+            raise ValueError(f'SHA-1 {operation} buffer invariant guard missing or misplaced')
     for region in REGIONS:
         if f'clear_owned_region(&mut self.{region})' not in owner:
             raise ValueError('SHA-1 private region is not cleared')

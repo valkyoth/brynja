@@ -10,6 +10,12 @@ def main():
     mutations = [
         (policy.CRATE + 'src/engine.rs', '.checked_add(additional)', '.wrapping_add(additional)'),
         (policy.CRATE + 'src/engine.rs', 'if offset >= 56', 'if offset > 56'),
+        (policy.CRATE + 'src/engine.rs', 'debug_assert!(offset < owner.block.len(), "SHA-1 update offset invariant");', ''),
+        (policy.CRATE + 'src/engine.rs', 'debug_assert!(offset < owner.block.len(), "SHA-1 padding offset invariant");', ''),
+        (policy.CRATE + 'src/engine.rs', 'offset < owner.block.len()', 'offset <= owner.block.len()'),
+        (policy.CRATE + 'src/engine.rs',
+         'debug_assert!(offset < owner.block.len(), "SHA-1 update offset invariant");\n        if let Some(destination) = owner.block.get_mut(offset) {',
+         'if let Some(destination) = owner.block.get_mut(offset) {\n            debug_assert!(offset < owner.block.len(), "SHA-1 update offset invariant");'),
         (policy.CRATE + 'src/ordinary.rs', 'pub fn finalize(mut self)', 'pub fn finalize(&mut self)'),
         (policy.CRATE + 'src/hardened.rs', 'HardenedSha1State: sealed::Sealed', 'HardenedSha1State'),
         (policy.CRATE + 'src/compress.rs', 'b.rotate_left(30)', 'b.rotate_left(29)'),

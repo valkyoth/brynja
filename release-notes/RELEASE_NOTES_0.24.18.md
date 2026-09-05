@@ -39,6 +39,20 @@ disposition and final-family acceptance passes. No named independent review
 or FIPS validation is claimed. Rust 1.90.0–1.98.1 compatibility remains required;
 latest stable default checks use 1.98.1, while Kani uses its declared older Rust.
 
+## Pentest hardening
+
+The supplied review identified two Low/informational observations, not an
+exploitable SHA-1 defect. Debug builds now assert the private buffer-offset
+invariant before absorption and padding writes. Regression tests inject all
+invalid byte offsets and cover valid block boundaries; release-code inspection
+checks that these debug diagnostics are absent when debug assertions are off.
+Cleanup itself remains non-panicking. This is a development diagnostic, not
+release-mode detection of corrupted private state.
+
+Byte-at-a-time absorption remains linear and unchanged. Bulk-copy optimization
+is deferred to performance work with measurement and equivalent cleanup tests;
+no throughput improvement or CPU admission is claimed here.
+
 ## Release conditions
 
 Exceptional pentest, local release check, report commit, green GitHub/CodeQL,

@@ -1,6 +1,6 @@
 [sha256]
 "crates/brynja-legacy-sha1/src/compress.rs" = "07fe5d150de04af55f7459e9672adce7e93b051570214162939726820b0830e8"
-"crates/brynja-legacy-sha1/src/engine.rs" = "ca5b936e6efe39e59ebcab809393fb7b733ec08da00400be312a2bc09bd899c5"
+"crates/brynja-legacy-sha1/src/engine.rs" = "dd642f6211c6f38d9d1c0769478ec31e66c4cc1bf41f24b5ae0cc1c16a75f971"
 "crates/brynja-legacy-sha1/src/hardened.rs" = "d3a87dcb6c94242a07200710f0ea09cbc218fa60e34b9a9715360f5eb4054c46"
 "crates/brynja-legacy-sha1/src/lib.rs" = "4ace7675fdb5c553a3a67e3e85dc12ced82e2eca1086ede5e2f0ff9113781e05"
 "crates/brynja-legacy-sha1/src/ordinary.rs" = "7f01b517da3d220bbc84eb56a19512bbf2551a4b5b427a4200923c8fbd348fac"
@@ -15,5 +15,5 @@
 "assurance/sha1-public-api/src/lib.rs" = "4ff9916a0676fc4d8c93e670eed95b5b4ff1f5b1459bd8a1730486da91f864e9"
 "assurance/sha1-public-api/src/main.rs" = "f0b75a5c55d3e453272da908f0765836200de095bb4631c277c850329675d18c"
 "scripts/sha1/check-sha1-differential.py" = "c52ba52012205fa99981e495da25bcab92ba26ae92c88f841def06b8563bef1d"
-"scripts/sha1/check-sha1-codegen.sh" = "4e45c1587ec38f047230ee2a0dbf48f30101d50998df8fd16892d8a66c8badd2"
+"scripts/sha1/check-sha1-codegen.sh" = "6840869e0e91ac4e2ebd348d554bf19f62f375d0dfbcc6a2fccd86a92705fe98"
 "scripts/sha1/check-sha1-package.py" = "95c16f1499aeb31c3717a1846934bb788a50b85e8fb589056e187d08d6f7d98c"

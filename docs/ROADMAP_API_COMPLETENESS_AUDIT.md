@@ -11,11 +11,12 @@ PKIX issuance consume it. The existing v0.20.0 reader and v0.21.0 value APIs
 remain accurately described as implemented foundations, not a complete
 bidirectional codec. No defect in those implementations is asserted here.
 
-The review checked the 528 existing ordered milestones for public-operation
-directions, standalone versus protocol-only ownership, prerequisites and
-acceptance placement. It adds 28 review-sized stops, producing **556 ordered
-milestones**, including the release candidate. The generated requirements
-closure contains **555 non-RC rows**, 130 locked authorities, 4,459 registered
+The initial operation-direction review expanded 528 stops to 556. The subsequent
+catalogue consolidation adds 630 stops, producing **1186 ordered milestones**,
+including the release candidate. It maps all 104 original hash inventory rows,
+reuses existing owners, brings SSL1 provenance research before 1.0 and moves
+final integration/audit after the catalogue. The generated requirements
+closure contains **1185 non-RC rows**, 130 locked authorities, 4,459 registered
 surfaces and 172 requirements. Newly planned capabilities remain fenced by
 explicit authority admission; these counts do not mean their standards or
 implementations have already been reviewed.
@@ -42,7 +43,7 @@ current algorithm status, dependency, CPU admission or release cadence changes.
 | OpenPGP client acceptance promised export but had no equally explicit implementation owner | v0.176.2 public/protected-secret and explicitly authorized typed-secret unprotected export, paired with import; non-exportable handles stay non-exportable |
 | Early RSA wording incorrectly said v1 would not generate keys | v0.44.0 now defers generation only until the already planned v0.46.55 owner |
 | An early substrate gate could demand algorithms intentionally scheduled much later | v0.46.93 distinguishes completed consumer dependencies from explicitly numbered later owners; no executable forward dependency is permitted |
-| A late protocol integration could conceal an unfinished standalone direction | v0.181.1 whole-project public-operation closure before integrated release rehearsal |
+| A late protocol integration could conceal an unfinished standalone direction | v0.281.1 whole-project public-operation closure before integrated release rehearsal |
 
 The DER rule/type inventory is derived from authenticated ASN.1 and DER
 authorities, including edition-specific rules and errata. DER is not shorthand
@@ -90,7 +91,7 @@ test does not establish correct EAX composition.
 | Ecosystem and platform adapters | Host effects and framework traits remain optional downstream boundaries; adapter convenience cannot replace a missing core operation or add native cryptography. |
 | OpenPGP | Packet, key, sign/verify, encrypt/decrypt, wrap/unwrap, armor and both compression directions are assigned; explicit key export and primitive prerequisites are added above. Application trust, storage and discovery remain caller-owned. |
 | Named legacy protocols | Both client/server and applicable send/receive operations remain scheduled through v0.180.24, with dangerous selection and source-rights blockers rather than silent modern fallback. |
-| Final product | v0.181.1 checks the complete public operation inventory, followed by integrated rehearsal, external audit, remediation and exact-candidate gates. |
+| Final product | v0.281.1 checks the complete public operation inventory, followed by integrated rehearsal, external audit, remediation and exact-candidate gates. |
 
 ## Enforcement And Follow-Up
 
@@ -114,9 +115,19 @@ remain separate throughout.
 
 ## Validation Of This Planning Change
 
-- Both plans: 556 matching, ordered and scope-locked sections.
+- Both plans: 1186 matching, ordered and scope-locked sections.
+- Catalogue: every one of 104 inherited inventory rows maps to named owners;
+  93 family sequences and their source/API/lifecycle/acceptance boundaries are
+  checked, including reuse instead of duplicate SHA, MAC and password owners.
+- Prerequisites: corrected SHA-512/t reuse to v0.23.2 and bound MDC to complete
+  DES acceptance at v0.46.18; Threefish, scrypt internals and research arithmetic
+  precede their consumers. Missing newly authenticated dependencies require
+  explicit child patches before implementation, never private partial copies.
+- Regression coverage: 416 catalogue-specific negative fixtures reject lost
+  inventory mappings, missing API stages, late prerequisites, weakened paired
+  scopes, classification escape and backend work preceding portable acceptance.
 - Operation-direction and prerequisite regression suite: 61 negative cases.
-- Requirements: deterministic regeneration, 555 non-RC rows, and all 22
+- Requirements: deterministic regeneration, 1185 non-RC rows, and all 22
   residual-closure tests pass after updating the frozen count for added rows.
 - Complete `scripts/checks.sh`, both hash acceptance bindings, documentation
   links, committed SBOM comparison and `git diff --check`: pass.

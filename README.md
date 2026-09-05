@@ -151,7 +151,7 @@ depend on TLS or pull the complete crypto graph. This direction prevents both
 duplicate SHA implementations and a standalone hash user acquiring every
 Brynja algorithm.
 
-The final pre-1.0 phase adds `brynja-openpgp-core`,
+A later pre-1.0 phase adds `brynja-openpgp-core`,
 `brynja-openpgp-armor`, and `brynja-openpgp`. Packet framing, certificates,
 keys, signatures, encryption, compression, trust policy, and deprecated
 compatibility remain separate review boundaries. The plan includes exact
@@ -164,15 +164,16 @@ plan to duplicate: v0.47.1 will audit the latest stable first-party
 `base64-ng` family and admit only an exact-pinned, allocation-free `no_std`
 edge suitable for PEM and OpenPGP armor.
 
-After `1.0.0`, Brynja may expand into separately selectable modern, legacy,
-utility, and research hashing families. Checksums and MACs remain distinct from
-cryptographic hashes, legacy algorithms remain visibly isolated, and the main
-facade will never gain an `all-hashes` feature. The versionless
-[post-1.0 hashing plan](https://github.com/valkyoth/brynja/blob/main/docs/POST_1_0_HASH_PLAN.md)
-contains the full candidate inventory, missing families, crate graph,
-implementation order, and security gates. It is planning only: no listed
-algorithm is implemented, admitted, independently verified, or FIPS validated
-by appearing there.
+Before `1.0.0`, the roadmap also includes separately selectable modern, legacy,
+utility and research hashing families, MACs, checksums, password hashing,
+field/ZK hashes and perceptual profiles. The
+[unified release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md#unified-catalogue-scope-and-api-contracts)
+assigns complete APIs, internal cleanup, real-use tests and final evidence gates;
+the [scope register](docs/CATALOGUE_SCOPE_REGISTER.json) maps every catalogue
+entry to its versions and existing or new owner. Small family crates keep the
+dependency graph selective: the main facade never gains an `all-hashes` feature.
+This is planned scope, not an implementation, security, independent-review or
+FIPS claim. Unavailable RISC-V native/community qualification remains post-1.0.
 
 The signed `0.22.2` development milestone added an isolated first-party RV64
 Zknh compression candidate beside the x86_64 SHA and AArch64 SHA2 candidates
@@ -1088,7 +1089,7 @@ selected set in dependency order and publishes the facade last.
 | `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
 | Other repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
 
-See the [legacy protocol plan](https://github.com/valkyoth/brynja/blob/main/docs/LEGACY_PROTOCOL_PLAN.md)
+See the [unified legacy release line](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md#complete-named-legacy-package-release-line)
 for the complete pre-1.0 implementation, warning, containment, audit, and
 pentest line required for every named obsolete protocol.
 

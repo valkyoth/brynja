@@ -7,6 +7,8 @@ import re
 import sys
 from pathlib import Path
 
+import catalogue_plan
+
 VERSION = r"(?:0\.[0-9]+\.[0-9]+|1\.0\.0(?:-rc\.[0-9]+)?)"
 HEADING = re.compile(rf"^### (v{VERSION}) - (.+)$", re.MULTILINE)
 VERSION_ROW = re.compile(
@@ -38,7 +40,7 @@ API_CLOSURE_EDGES = (
     ("v0.167.5", "v0.168.0"),
     ("v0.167.7", "v0.168.7"),
     ("v0.176.2", "v0.178.2"),
-    ("v0.181.1", "v0.182.0"),
+    ("v0.281.1", "v0.282.0"),
 )
 
 API_SCOPE_CONTRACTS = {
@@ -55,7 +57,7 @@ API_SCOPE_CONTRACTS = {
     "v0.168.0": ("v0.167.5 BLAKE2b", "H-prime"),
     "v0.168.7": ("v0.167.7 AES-CMAC", "seal/open"),
     "v0.176.2": ("export", "typed-secret unprotected", "import"),
-    "v0.181.1": ("public package", "complete safe operation directions"),
+    "v0.281.1": ("public package", "complete safe operation directions"),
 }
 
 
@@ -160,10 +162,109 @@ def expected_versions() -> list[str]:
         178: (1, 2),
         179: (1, 2, 3),
         180: tuple(range(1, 25)),
-        181: (1,),
+        181: tuple(range(1, 6)),
+        182: tuple(range(1, 9)),
+        183: tuple(range(1, 8)),
+        184: tuple(range(1, 6)),
+        185: tuple(range(1, 6)),
+        186: tuple(range(1, 6)),
+        187: tuple(range(1, 6)),
+        188: tuple(range(1, 6)),
+        189: tuple(range(1, 6)),
+        190: tuple(range(1, 6)),
+        191: tuple(range(1, 6)),
+        192: tuple(range(1, 9)),
+        193: tuple(range(1, 8)),
+        194: tuple(range(1, 7)),
+        195: tuple(range(1, 8)),
+        196: tuple(range(1, 10)),
+        197: tuple(range(1, 6)),
+        198: tuple(range(1, 6)),
+        199: tuple(range(1, 6)),
+        200: tuple(range(1, 6)),
+        201: tuple(range(1, 6)),
+        202: tuple(range(1, 6)),
+        203: tuple(range(1, 8)),
+        204: tuple(range(1, 6)),
+        205: tuple(range(1, 6)),
+        206: tuple(range(1, 6)),
+        207: tuple(range(1, 6)),
+        208: tuple(range(1, 6)),
+        209: tuple(range(1, 6)),
+        210: tuple(range(1, 6)),
+        211: tuple(range(1, 6)),
+        212: tuple(range(1, 6)),
+        213: tuple(range(1, 6)),
+        214: tuple(range(1, 6)),
+        215: tuple(range(1, 6)),
+        216: tuple(range(1, 6)),
+        217: tuple(range(1, 6)),
+        218: tuple(range(1, 7)),
+        219: tuple(range(1, 6)),
+        220: tuple(range(1, 8)),
+        221: tuple(range(1, 7)),
+        222: tuple(range(1, 9)),
+        223: tuple(range(1, 7)),
+        224: tuple(range(1, 8)),
+        225: tuple(range(1, 8)),
+        226: tuple(range(1, 6)),
+        227: tuple(range(1, 6)),
+        228: tuple(range(1, 7)),
+        229: tuple(range(1, 6)),
+        230: tuple(range(1, 10)),
+        231: tuple(range(1, 6)),
+        232: tuple(range(1, 6)),
+        233: tuple(range(1, 6)),
+        234: tuple(range(1, 6)),
+        235: tuple(range(1, 6)),
+        236: tuple(range(1, 6)),
+        237: tuple(range(1, 6)),
+        238: tuple(range(1, 6)),
+        239: tuple(range(1, 6)),
+        240: tuple(range(1, 6)),
+        241: tuple(range(1, 7)),
+        242: tuple(range(1, 6)),
+        243: tuple(range(1, 8)),
+        244: tuple(range(1, 8)),
+        245: tuple(range(1, 7)),
+        246: tuple(range(1, 6)),
+        247: tuple(range(1, 6)),
+        248: tuple(range(1, 6)),
+        249: tuple(range(1, 7)),
+        250: tuple(range(1, 7)),
+        251: tuple(range(1, 6)),
+        252: tuple(range(1, 6)),
+        253: tuple(range(1, 6)),
+        254: tuple(range(1, 8)),
+        255: tuple(range(1, 6)),
+        256: tuple(range(1, 6)),
+        257: tuple(range(1, 8)),
+        258: tuple(range(1, 7)),
+        259: tuple(range(1, 6)),
+        260: tuple(range(1, 6)),
+        261: tuple(range(1, 6)),
+        262: tuple(range(1, 8)),
+        263: tuple(range(1, 6)),
+        264: tuple(range(1, 8)),
+        265: tuple(range(1, 6)),
+        266: tuple(range(1, 7)),
+        267: tuple(range(1, 6)),
+        268: tuple(range(1, 5)),
+        269: tuple(range(1, 5)),
+        270: tuple(range(1, 5)),
+        271: tuple(range(1, 7)),
+        272: tuple(range(1, 5)),
+        273: tuple(range(1, 6)),
+        274: tuple(range(1, 8)),
+        275: tuple(range(1, 4)),
+        276: tuple(range(1, 2)),
+        277: tuple(range(1, 2)),
+        278: tuple(range(1, 2)),
+        279: tuple(range(1, 2)),
+        281: (1,),
     }
     versions = []
-    for number in range(1, 186):
+    for number in range(1, 286):
         versions.append(f"v0.{number}.0")
         versions.extend(
             f"v0.{number}.{patch}" for patch in patch_releases.get(number, ())
@@ -229,6 +330,7 @@ def has_concrete_detail(section: str, start: str, end: str) -> bool:
 def validate(release_path: Path, version_path: Path) -> None:
     entries = version_entries(version_path)
     validate_api_closure(entries)
+    catalogue_plan.validate(entries)
     text = release_path.read_text(encoding="utf-8")
     matches = list(HEADING.finditer(text))
     versions = [match.group(1) for match in matches]

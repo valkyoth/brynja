@@ -8,6 +8,7 @@ trap 'rm -f "$release_tmp" "$version_tmp"' EXIT HUP INT TERM
 cp docs/RELEASE_PLAN.md "$release_tmp"
 cp docs/VERSION_PLAN.md "$version_tmp"
 python3 scripts/release/check-release-plan.py "$release_tmp" "$version_tmp"
+python3 scripts/release/test-catalogue-plan.py
 
 sed -i '0,/Status: planned/{/Status: planned/d;}' "$release_tmp"
 if python3 scripts/release/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
@@ -82,8 +83,10 @@ fi
 
 python3 - <<'PY'
 import importlib.util
+import sys
 from pathlib import Path
 
+sys.path.insert(0, "scripts/release")
 spec = importlib.util.spec_from_file_location("release_plan", "scripts/release/check-release-plan.py")
 plan = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(plan)

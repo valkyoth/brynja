@@ -74,15 +74,17 @@ effects. `brynja-openpgp-armor` owns only armor framing over the admitted
 Base64 boundary. `brynja-openpgp` owns modern Sans-I/O message and key-lifecycle
 engines and depends on exact reusable primitive packages; it never depends on
 TLS, PKI path validation, platform implementations, or a global trust store.
-Deprecated algorithms, when independently justified for read, decrypt, or
-verify interoperability, live in optional `brynja-openpgp-legacy`; it cannot
-enter the modern facade, defaults, FIPS artifacts, or generate weak material.
+Deprecated algorithms, when independently justified for explicit compatibility,
+live in optional `brynja-openpgp-legacy`; complete authenticated generation and
+verification directions require dangerous compatibility policy. They cannot
+enter the modern facade, defaults or FIPS artifacts.
 `brynja-legacy-sha1` owns one complete streaming and fixed-message SHA-1
 implementation with conspicuous collision-resistance warnings. It is not a
 modern hash family and never enters `brynja`, defaults, TLS, PKIX, general hash
-or FIPS graphs. Before 1.0, only `brynja-openpgp-legacy` may depend on it and
-only for exact v4 fingerprint/key-ID derivation. A later legacy protocol or
-post-1.0 legacy hash facade may reuse that exact implementation only after its
+or FIPS graphs. Each legacy OpenPGP, protocol or standalone hash consumer
+requires its own exact numbered profile admission, including v4 fingerprint
+derivation and other authenticated legacy uses. A legacy hash facade may reuse
+that exact implementation before 1.0 only after its
 own numbered consumer-specific admission, graph review, cryptographic audit
 and pentest; no consumer may create a second SHA-1 implementation.
 OpenPGP structural and cryptographic validity never implies Web-of-Trust or
@@ -95,9 +97,11 @@ first hash implementation, `brynja-hash-core` owns only fixed-output and XOF
 interfaces, `brynja-hash-sha2` owns SHA-2, `brynja-hash-sha3` owns SHA-3 and
 SHAKE, and `brynja-mac-hmac` owns HMAC. `brynja-crypto` consumes those exact
 symbols and owns provider contracts, compositions, and scalar primitives not
-yet split into a narrower reviewed family. This prepares the versionless
-[post-1.0 hashing plan](POST_1_0_HASH_PLAN.md) without adding the future facade
-or catalogue to the v1 graph.
+yet split into a narrower reviewed family. The
+[unified pre-1.0 catalogue plan](RELEASE_PLAN.md#unified-catalogue-scope-and-api-contracts)
+adds independently selectable families, not a catalogue-wide facade dependency.
+Mandatory hardened-state cleanup may use exact first-party owner dependencies;
+the optional sanitization adapter never makes internal cleanup optional.
 
 `brynja-crypto-cpu` is an optional zero-dependency `no_std` package for
 separately reviewed, hashed ISA kernels, compile-time selection, capability

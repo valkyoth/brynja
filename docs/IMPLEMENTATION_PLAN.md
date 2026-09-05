@@ -51,8 +51,9 @@ claim.
   state machines, caches, ticket keys, and connection paths.
 - Every authenticated standardized capability attached to a named pre-1.0
   modern or legacy protocol is implemented completely for every defined role,
-  direction, parameter, and operation before 1.0. Only wholly standalone
-  historical work with no such integration edge may remain post-1.0.
+  direction, parameter, and operation before 1.0. The entire former standalone
+  hash and legacy inventory is also pre-1.0; only unavailable RISC-V native
+  qualification retains its separate post-1.0 campaign.
 - Every legacy implementation package uses the
   `brynja-legacy-<protocol>` prefix so manifests, lockfiles, SBOMs, and
   policy tools expose the risk without requiring feature inspection.
@@ -154,8 +155,12 @@ Before cryptographic implementation begins, SHA-2 is assigned to
 `brynja-mac-hmac`; `brynja-hash-core` owns only their narrow interfaces.
 `brynja-crypto` owns provider contracts, compositions, and scalar primitives
 that do not yet justify a smaller family, and consumes the exact family symbols
-rather than copying them. The post-1.0 standalone hashing expansion is
-described in [POST_1_0_HASH_PLAN.md](POST_1_0_HASH_PLAN.md).
+rather than copying them. The complete pre-1.0 catalogue expansion is assigned
+v0.181.0-v0.280.0 in the
+[unified release plan](RELEASE_PLAN.md#unified-catalogue-scope-and-api-contracts).
+The [scope register](CATALOGUE_SCOPE_REGISTER.json) maps all 104 inherited
+inventory rows, exact family contracts, prerequisite owners and acceptance
+steps; final whole-project gates follow at v0.281.0-v0.285.0.
 
 `brynja-crypto-cpu` is an optional downstream `no_std` implementation package:
 it may contain only separately admitted ISA kernels, static

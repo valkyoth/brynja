@@ -3,8 +3,10 @@
 The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any
 current implementation claim. Standalone DER encode/decode completion is
-planned for v0.33.9. Current generated planning coverage is 555 non-RC rows
-(556 milestones including the release candidate), 130 authorities, 4,459
+planned for v0.33.9. The former standalone hash and legacy plans are now
+consolidated into the pre-1.0 roadmap, with final release gates through v0.285.0.
+Current generated planning coverage is 1185 non-RC rows
+(1186 milestones including the release candidate), 130 authorities, 4,459
 surfaces and 172 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 

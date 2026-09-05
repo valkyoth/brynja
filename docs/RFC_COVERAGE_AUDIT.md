@@ -32,9 +32,11 @@ owner milestones, and 485 surfaces. v0.3.5 contains 51 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
 authorities, 182 reviewed normative sections, and 792 formerly uncovered
 surfaces.
-The complete closure covers 130 currently locked authorities, 555 ordered
+The complete closure covers 130 currently locked authorities, 1185 ordered
 non-RC roadmap rows, 4,459 currently registered surfaces, and 172 stable
-requirements. The OpenPGP-phase rows are
+requirements. Catalogue additions have explicit per-family planned authority
+admission; adding roadmap rows does not admit new standards or implementations.
+The OpenPGP-phase rows are
 explicitly fenced as planned-authority admission: v0.163.0 must authenticate
 RFC 9580, its obsoleted lineage, referenced algorithm and compression sources,
 errata, and the OpenPGP Parameters registry and then generate exact requirement

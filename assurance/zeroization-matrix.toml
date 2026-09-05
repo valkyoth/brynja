@@ -38,7 +38,7 @@ targets = [
 ]
 
 [dynamic]
-toolchain = "nightly-2026-09-04"
+toolchain = "nightly-2026-09-05"
 execution = "local-pre-tag"
 miri = true
 miri_policy = "focused-internal-complete-public"

@@ -8,7 +8,7 @@ planned for v0.33.9. Current generated planning coverage is 555 non-RC rows
 surfaces and 172 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 portable SP 800-185 acceptance is implemented and awaiting pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 portable SP 800-185 acceptance passed owner-reported retest and is awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -110,7 +110,11 @@ KMAC production-versus-conformance policy, exact tuple item streaming,
 ParallelHash `B` limits and caller-scheduled leaves, one real package-owned
 input, all three public package layers, Rust 1.90.0–1.98.1, and every declared
 bare-metal target form one reviewed-hash-locked contract. Portable acceptance
-passes. The overall SP 800-185 family remains **In progress** pending v0.24.17
+passes. Its live hardened outputs are now compared exactly before cleanup;
+42 executable corruption cases and 26 policy mutations reject regressions.
+The owner reports a green retest of `f007c809c8aadedd12917a8ae05083615292262a`;
+the [v0.24.16 report](../security/pentest/v0.24.16.md) records `PASS`/`PASS`
+with zero open findings. The overall SP 800-185 family remains **In progress** pending v0.24.17
 backend, native-parallel, timing, performance, and final evidence disposition.
 It also
 has bounded DER tag-length-value framing

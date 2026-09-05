@@ -847,8 +847,8 @@ output classification. All official NIST cSHAKE examples, exact SHAKE
 equivalence for empty N/S, a 480-case independent arbitrary-bit oracle, bounded
 malformed-input rejection, package-external `no_std` consumers, sanitizer,
 focused Miri and twenty cumulative Kani bounds are bound into policy. The
-wider SP 800-185 family remains **In progress** pending KMAC, TupleHash,
-ParallelHash and final combined acceptance; cSHAKE is not independently
+wider SP 800-185 family remained **In progress** at v0.24.12 pending KMAC,
+TupleHash, ParallelHash and combined acceptance; cSHAKE is not independently
 verified or FIPS 140-3 validated. Its initial exceptional assessment found one
 Medium hardened metadata-remanence gap; the remediation moves both metadata
 values into the registered clearing owner, covers all thirteen regions in
@@ -938,9 +938,10 @@ Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.15`; the current internal `0.24.16`
 portable SP 800-185 acceptance candidate selects no crates.io publication. The
-[exceptional pentest report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.15.md)
-records `PASS`/`PASS` with zero open findings after both native-executor
-resource-control gaps were remediated. v0.24.16 changes assurance and
+[current pentest report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.16.md)
+records `PASS`/`PASS` with zero open findings after the hardened live-output
+acceptance gap was remediated and the owner reported a green retest. The
+report-bearing candidate awaits green GitHub and CodeQL. v0.24.16 changes assurance and
 documentation rather than cryptographic implementation and retains the same
 independent-review and FIPS limitations.
 The published

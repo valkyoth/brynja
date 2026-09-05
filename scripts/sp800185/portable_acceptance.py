@@ -178,7 +178,7 @@ def validate(root: Path = ROOT, check_hashes: bool = True) -> None:
         require(loaded[relative], "portable acceptance passed at v0.24.16", "public status")
     require(
         loaded[Path("docs/RELEASE_PLAN.md")],
-        "### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance\n\nStatus: awaiting pentest",
+        "### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance\n\nStatus: awaiting green CI",
         "release-plan status",
     )
     checks = loaded[Path("scripts/checks.sh")]

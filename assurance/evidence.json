@@ -8,8 +8,8 @@
   "inputs": {
     ".github/workflows/ci.yml": "a163343d5a5f72fb1b0341e613352c294682598a707121261e6423f251f6336a",
     "Cargo.toml": "799a99532b7b27c05338cb09aece853d03a59b2127cfbe1d5399602ff9de0ea6",
-    "assurance/policy.toml": "8a53dc9fec342c25b82cb04f90fbdf3102451c1ae6ca4efc125cb5c40671afae",
-    "assurance/zeroization-matrix.toml": "a90d4960b79d3ba13ee0f885f257e83027bc2c72d237761ba027adbb09b430c3",
+    "assurance/policy.toml": "ad064f6585e898dabbb4c2a5cee12329f3be14e74b075f877eab08518820b7fa",
+    "assurance/zeroization-matrix.toml": "13b3bcaee009a2540d3b9842711cfad7a5050f584d7e6cba16a643e6280f02df",
     "crates/brynja-core/Cargo.toml": "096f0e0ac8caf49da8820894ecec821f18c56b6576be37bdb8f5f84a23e58253",
     "crates/brynja-core/src/secret_memory.rs": "f5f4743353c7fb5afb6a85f0f8481827f7dac3ae910fd17df9da46248583d2c7",
     "crates/brynja-core/src/secret_memory_volatile.rs": "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217",
@@ -70,15 +70,15 @@
     "scripts/zeroization/check-tag-miri.sh": "3daeaf71064d6b3f54bb28ee0c08a59c55f54f12ece4b158f0ca6394a1f813bc",
     "scripts/zeroization/check-zeroization-codegen.sh": "aa1310d6366c248b2fad069d674aef2ac8a9ed297a16e2c40ca332d4c6acc8d9",
     "scripts/zeroization/check-zeroization-evidence.py": "d11f63a46fcdeb3a48bb6606227b07223958f14033928c181fe55d4ab6112457",
-    "scripts/zeroization/check-zeroization-miri.sh": "46de1b53f40f62a40dbd14676d26fb3adf6f505c337dadcf4689da8b1fb53ed9",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "3da0a8119ae2e262d1b0e8d566cd72b08d7d2d557a2085f5097d98762b25dc2e",
+    "scripts/zeroization/check-zeroization-miri.sh": "0ca3bec5c3fe0abbb002ac4e7d7427160e4324b150fc6ea8d6535acfa2a7dfc0",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "d27ad7c90f0707294f8bc683b0b6381e9ddb2f481d341ba0f2fb4b69221fa060",
     "scripts/zeroization/miri_scope.py": "61d458b9891caa895698be092f10ab2a046efa26b010edb8d3a94439149aeee9",
     "scripts/zeroization/test-miri-scope.py": "95a14c51a03aba8af416402d5bcf83f9ea67d54d688f3bee5a7829679d5aac12",
     "scripts/zeroization/test-zeroization-evidence.py": "751ad86b17549d13b4ba3544caec04e4b1f6d8cad674c4a2b24b7593721a8a98",
-    "scripts/zeroization/zeroization_evidence.py": "6f327938d7572163a97216b889a987ad96dcfd6b6fbf1d830e2c93f2157e805d"
+    "scripts/zeroization/zeroization_evidence.py": "075fb43d5cc0374dab648759a375a2579e6e0f0afbb7f1285d6cd4676b01ae06"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "8a53dc9fec342c25b82cb04f90fbdf3102451c1ae6ca4efc125cb5c40671afae",
+  "policy_sha256": "ad064f6585e898dabbb4c2a5cee12329f3be14e74b075f877eab08518820b7fa",
   "schema": 1,
   "tools": [
     {
@@ -105,16 +105,16 @@
     {
       "id": "miri",
       "owner": "0.11.0",
-      "revision": "a69a63265cfd9e006d43137f98301b8d274ad4c9",
+      "revision": "0ed41eb4142dda2df61eb1145a312c1a9d62eb56",
       "source_kind": "rustup-component",
-      "version": "nightly-2026-09-04"
+      "version": "nightly-2026-09-05"
     },
     {
       "id": "rust-sanitizers",
       "owner": "0.11.0",
-      "revision": "a69a63265cfd9e006d43137f98301b8d274ad4c9",
+      "revision": "0ed41eb4142dda2df61eb1145a312c1a9d62eb56",
       "source_kind": "rust-toolchain",
-      "version": "nightly-2026-09-04"
+      "version": "nightly-2026-09-05"
     }
   ]
 }

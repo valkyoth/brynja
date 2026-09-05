@@ -143,7 +143,11 @@ def main() -> int:
         ),
         (fixture / "src/main.rs", "independently verified: NO", "independently verified: YES"),
         (Path("README.md"), "portable acceptance passed at v0.24.16", "portable acceptance pending"),
-        (Path("docs/RELEASE_PLAN.md"), "Status: awaiting pentest", "Status: released"),
+        (
+            Path("docs/RELEASE_PLAN.md"),
+            "### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance\n\nStatus: awaiting green CI",
+            "### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance\n\nStatus: released",
+        ),
         (Path("scripts/checks.sh"), "python3 scripts/sp800185/check-portable-acceptance.py", "true"),
         (Path(".github/workflows/ci.yml"), "assurance/sp800185-public-api/Cargo.toml", "assurance/cshake-public-api/Cargo.toml"),
     )

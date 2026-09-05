@@ -1,6 +1,6 @@
 # Brynja 0.24.16 Release Notes
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 ## Summary
 
@@ -81,6 +81,21 @@ unadmitted backend and parallel execution disposition.
   validation, and it still has no usable TLS or certificate-validation engine.
 
 ## Release Process
+
+Release reconciliation updates the local Miri/sanitizer evidence toolchain to
+`nightly-2026-09-05`, Rust revision
+`0ed41eb4142dda2df61eb1145a312c1a9d62eb56`, as required by the online freshness
+gate. Production Rust remains 1.98.1 with MSRV 1.90.0; no production dependency
+or cryptographic implementation changed. Documentation distinguishes the
+published 0.20.0 checkpoint from the repository-only 0.24.16 APIs.
+
+The repository owner reports a green retest of remediation commit
+`f007c809c8aadedd12917a8ae05083615292262a`. The permanent
+[pentest report](../security/pentest/v0.24.16.md) records `PASS`/`PASS` and zero
+open findings, preserving the Medium live-output assurance finding and its
+regression tests. This does not constitute named independent cryptographic
+verification. The final report-bearing commit still needs green GitHub and
+CodeQL and explicit tag authorization.
 
 Version 0.24.16 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It selects zero crates for crates.io publication.

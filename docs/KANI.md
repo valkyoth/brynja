@@ -1,6 +1,6 @@
 # Kani Verification Policy
 
-Status: v0.24.15 SHA-2, FIPS 202, KMAC, TupleHash, and ParallelHash policy harnesses admitted
+Status: v0.24.18 legacy SHA-1, SHA-2, FIPS 202, KMAC, TupleHash, and ParallelHash policy harnesses admitted
 
 Brynja builds, tests, and releases on the active stable Rust toolchain. Kani is
 compiler-integration-sensitive and therefore uses a separately documented
@@ -25,6 +25,8 @@ compatible pairing, following the same model as `base64-ng`.
   classification and fixed-tag bit-length acceptance; two TupleHash harnesses
   cover item reservations and encoding boundaries, and one ParallelHash
   harness covers exact leaf-count division over its admitted symbolic domain.
+  One legacy SHA-1 harness proves both acceptance and the exact returned sum
+  for every pair of u64 current/additional bit lengths against u128 arithmetic.
 
 Updating Brynja's active stable compiler does not imply that the installed Kani
 release supports that compiler. Kani evidence records its verifier/compiler
@@ -32,7 +34,7 @@ pair separately from the crate build matrix. The crate MSRV is never lowered
 or the release compiler held back merely to accommodate Kani.
 
 `scripts/assurance/check-kani.sh` verifies this policy, the installed pairing,
-the exact twenty-five-harness inventory, and all proof results when the verifier is available.
+the exact twenty-six-harness inventory, and all proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
 The SHA-2 harnesses prove only their stated checked byte/bit-length,
@@ -45,6 +47,13 @@ decomposition, canonical shapes and low-bit masks are exact, and each of the
 prove permutation equivalence,
 digest correctness, collision resistance, constant-time machine code, backend
 equivalence, or independent cryptographic verification.
+
+The SHA-1 harness is
+`engine::proofs::sha1_bit_exhaustion_matches_wide_arithmetic` in
+`brynja-legacy-sha1`. Run `rustup run 1.90.0 cargo kani -p brynja-legacy-sha1`
+to check it independently. This full-width arithmetic proof does not prove
+SHA-1 compression correctness, collision resistance, cleanup, or protocol
+admission. SHA-1 remains a collision-broken, explicitly isolated legacy hash.
 
 ## Admission And Claims
 

@@ -1,7 +1,7 @@
 [workspace]
 
 [package]
-name = "brynja-cshake-public-api-fixture"
+name = "brynja-sp800185-public-api-fixture"
 version = "0.0.0"
 edition = "2024"
 rust-version = "1.90"
@@ -10,7 +10,10 @@ publish = false
 [dependencies]
 brynja = { path = "../../crates/brynja", version = "=0.24.16", default-features = false }
 brynja-crypto = { path = "../../crates/brynja-crypto", version = "=0.1.2", default-features = false }
+brynja-hash-parallel = { path = "../../crates/brynja-hash-parallel", version = "=0.1.0", default-features = false }
 brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", version = "=0.1.0", default-features = false }
+brynja-hash-tuple = { path = "../../crates/brynja-hash-tuple", version = "=0.1.0", default-features = false }
+brynja-mac-kmac = { path = "../../crates/brynja-mac-kmac", version = "=0.1.0", default-features = false, features = ["conformance-testing"] }
 
 [lints.rust]
 unsafe_code = "forbid"

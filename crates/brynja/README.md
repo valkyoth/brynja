@@ -141,7 +141,7 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
-| SP 800-185 family | 🚧 In progress — all named functions implemented; portable and cross-backend final acceptance pending | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
+| SP 800-185 family | 🚧 In progress — all named functions implemented; portable acceptance passed at v0.24.16, cross-backend final acceptance pending | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
 
 ### Modern Message Authentication
 

@@ -29,10 +29,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "brynja-crypto-cpu"
-version = "0.1.1"
-
-[[package]]
 name = "brynja-hash-core"
 version = "0.1.0"
 
@@ -49,7 +45,6 @@ name = "brynja-hash-sha2"
 version = "0.1.0"
 dependencies = [
  "brynja-core",
- "brynja-crypto-cpu",
  "brynja-hash-core",
 ]
 
@@ -92,11 +87,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "brynja-sha2-public-api-fixture"
+name = "brynja-sp800185-public-api-fixture"
 version = "0.0.0"
 dependencies = [
  "brynja",
- "brynja-hash-sha2",
+ "brynja-crypto",
+ "brynja-hash-parallel",
+ "brynja-hash-sha3",
+ "brynja-hash-tuple",
+ "brynja-mac-kmac",
 ]
 
 [[package]]

@@ -94,6 +94,8 @@ cargo clippy --locked --manifest-path assurance/parallelhash-public-api/Cargo.to
 cargo test --locked --manifest-path assurance/parallelhash-std-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/parallelhash-std-public-api/Cargo.toml \
   --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
+python3 scripts/sp800185/check-portable-acceptance.py
+python3 scripts/sp800185/test-portable-acceptance.py
 python3 scripts/hash/check-final-acceptance.py
 python3 scripts/hash/test-final-acceptance.py
 scripts/sha2/check-sha256-cpu-codegen.sh

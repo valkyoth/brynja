@@ -1,0 +1,2 @@
+Brynja SP 800-185 portable acceptance exercises a real package-owned data file.
+Its partitions cross ordinary streaming, XOF, tuple, and parallel leaf boundaries.

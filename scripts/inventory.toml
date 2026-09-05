@@ -66,6 +66,10 @@ purpose = "SHA-2 implementation, public acceptance, and architecture-specific ev
 extensions = [".py", ".sh"]
 purpose = "SHA-3 and SHAKE implementation, public acceptance, and differential evidence"
 
+[category.sp800185]
+extensions = [".py", ".toml"]
+purpose = "Combined portable SP 800-185 public API acceptance and closure policy"
+
 [category.tuplehash]
 extensions = [".py", ".sh"]
 purpose = "TupleHash and TupleHashXOF implementation, package acceptance, and differential evidence"

@@ -1,19 +1,19 @@
 [release]
-version = "0.24.15"
-milestone = "0.24.15"
+version = "0.24.16"
+milestone = "0.24.16"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "The new ParallelHash128/256 and ParallelHashXOF128/256 constructions, caller-scheduled secret leaf ownership, and bounded native worker adapter change cryptographic and concurrency boundaries and require an exceptional assessment before the signed development tag."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.24.14"
-version = "0.24.15"
-change = "code"
+previous_version = "0.24.15"
+version = "0.24.16"
+change = "metadata"
 publish = false
-reason = "Advance the internal facade with all four complete ParallelHash/ParallelHashXOF constructions across the new portable leaf and facade surfaces; no crate is published."
+reason = "Advance the internal facade after package-external portable acceptance covers all fourteen SP 800-185 identities; implementation source is unchanged and no crate is published."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"

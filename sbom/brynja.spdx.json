@@ -1,20 +1,20 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-04T13:56:41Z",
+    "created": "2026-09-05T06:28:37Z",
     "creators": [
       "Tool: cargo-sbom-v0.10.0"
     ]
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://spdx.org/spdxdocs/brynja-edbb64b8-925c-4b6b-9cea-bdbdb4cc2807",
+  "documentNamespace": "https://spdx.org/spdxdocs/brynja-7f9e9a4e-4bfd-4364-9c6b-d455565b9904",
   "files": [
     {
       "SPDXID": "SPDXRef-File-brynja",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -28,7 +28,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -42,7 +42,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -56,7 +56,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -70,7 +70,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -84,7 +84,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -98,7 +98,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -112,7 +112,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -126,7 +126,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -140,7 +140,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -154,7 +154,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -168,7 +168,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -182,7 +182,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -196,7 +196,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -210,7 +210,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -224,7 +224,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -238,7 +238,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -252,7 +252,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -266,7 +266,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -280,7 +280,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -294,7 +294,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -308,7 +308,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -322,7 +322,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -336,7 +336,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -350,7 +350,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -364,7 +364,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -378,7 +378,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -392,7 +392,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -406,7 +406,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -420,7 +420,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -434,7 +434,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -448,7 +448,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -462,7 +462,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -476,7 +476,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -490,7 +490,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "903ccb4d7efeb8fc5fc3f07813ccc6e7ce9977de"
+          "checksumValue": "18d607a78a64c521c7e57ae6da4c6fd88e630a08"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -503,73 +503,23 @@
   "name": "brynja",
   "packages": [
     {
-      "SPDXID": "SPDXRef-Package-brynja-hash-core-0.1.0",
-      "description": "Small no_std fixed-output hash interfaces for Brynja",
+      "SPDXID": "SPDXRef-Package-brynja-legacy-snp-0.1.0",
+      "description": "Explicitly legacy and insecure SNP interoperability boundary",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-hash-core",
+      "name": "brynja-legacy-snp",
       "versionInfo": "0.1.0"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-legacy-ssl2-0.1.0",
-      "description": "Explicitly legacy and insecure SSL 2.0 interoperability boundary",
+      "SPDXID": "SPDXRef-Package-brynja-research-ssl1-0.1.0",
+      "description": "Research-only SSL 1.0 reconstruction boundary",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-legacy-ssl2",
-      "versionInfo": "0.1.0"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-quic-tls-0.1.8",
-      "description": "QUIC TLS handshake integration for Brynja",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-quic-tls",
-      "versionInfo": "0.1.8"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-crypto-cpu-std-0.1.1",
-      "description": "Opt-in host CPU-detection boundary for Brynja cryptography",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-crypto-cpu-std",
-      "versionInfo": "0.1.1"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-tls13-0.1.8",
-      "description": "Version-specific TLS 1.3 stream engine for Brynja",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-tls13",
-      "versionInfo": "0.1.8"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-dtls-0.1.8",
-      "description": "Modern DTLS state machines for Brynja",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-dtls",
-      "versionInfo": "0.1.8"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-legacy-wtls-0.1.0",
-      "description": "Explicitly legacy and insecure WTLS interoperability boundary",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-legacy-wtls",
+      "name": "brynja-research-ssl1",
       "versionInfo": "0.1.0"
     },
     {
@@ -583,13 +533,23 @@
       "versionInfo": "0.9.0"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-hash-sha2-0.1.0",
-      "description": "First-party no_std SHA-2 implementations for Brynja",
+      "SPDXID": "SPDXRef-Package-brynja-crypto-cpu-0.1.1",
+      "description": "Optional no_std CPU acceleration boundary for Brynja cryptography",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-hash-sha2",
+      "name": "brynja-crypto-cpu",
+      "versionInfo": "0.1.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-hash-parallel-std-0.1.0",
+      "description": "Optional bounded std executor for Brynja ParallelHash",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-hash-parallel-std",
       "versionInfo": "0.1.0"
     },
     {
@@ -603,34 +563,24 @@
       "versionInfo": "0.1.8"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-tls13-handshake-0.1.8",
-      "description": "Record-independent TLS 1.3 handshake engine for Brynja",
+      "SPDXID": "SPDXRef-Package-brynja-0.24.16",
+      "description": "Security-first no_std cryptography and secure-protocol facade",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-tls13-handshake",
+      "name": "brynja",
+      "versionInfo": "0.24.16"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-quic-tls-0.1.8",
+      "description": "QUIC TLS handshake integration for Brynja",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-quic-tls",
       "versionInfo": "0.1.8"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-mac-kmac-0.1.0",
-      "description": "First-party no_std KMAC and KMACXOF implementations for Brynja",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-mac-kmac",
-      "versionInfo": "0.1.0"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-pki-0.2.0",
-      "description": "Bounded DER framing and future first-party PKI for Brynja",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-pki",
-      "versionInfo": "0.2.0"
     },
     {
       "SPDXID": "SPDXRef-Package-brynja-tls12-0.1.8",
@@ -643,34 +593,44 @@
       "versionInfo": "0.1.8"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-legacy-tls11-0.1.0",
-      "description": "Explicitly legacy and insecure TLS 1.1 interoperability boundary",
+      "SPDXID": "SPDXRef-Package-brynja-legacy-ssl2-0.1.0",
+      "description": "Explicitly legacy and insecure SSL 2.0 interoperability boundary",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-legacy-tls11",
+      "name": "brynja-legacy-ssl2",
       "versionInfo": "0.1.0"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-protocol-0.1.0",
-      "description": "Shared no_std wire framing for Brynja secure protocols",
+      "SPDXID": "SPDXRef-Package-brynja-legacy-ssl3-0.1.0",
+      "description": "Explicitly legacy and insecure SSL 3.0 interoperability boundary",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-protocol",
+      "name": "brynja-legacy-ssl3",
       "versionInfo": "0.1.0"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-legacy-0.1.0",
-      "description": "Explicit facade for isolated legacy transport-security protocols",
+      "SPDXID": "SPDXRef-Package-brynja-test-support-0.1.0",
+      "description": "Repository-only test support for Brynja",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-legacy",
+      "name": "brynja-test-support",
       "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-platform-0.1.8",
+      "description": "Explicit platform integration traits for Brynja",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-platform",
+      "versionInfo": "0.1.8"
     },
     {
       "SPDXID": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
@@ -683,26 +643,6 @@
       "versionInfo": "0.1.0"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-legacy-snp-0.1.0",
-      "description": "Explicitly legacy and insecure SNP interoperability boundary",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-legacy-snp",
-      "versionInfo": "0.1.0"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-hash-tuple-0.1.0",
-      "description": "First-party no_std TupleHash and TupleHashXOF implementations for Brynja",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-hash-tuple",
-      "versionInfo": "0.1.0"
-    },
-    {
       "SPDXID": "SPDXRef-Package-brynja-proofs-0.1.0",
       "description": "Repository-only formal proof harnesses for Brynja",
       "downloadLocation": "NONE",
@@ -710,6 +650,16 @@
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
       "name": "brynja-proofs",
+      "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-legacy-tls11-0.1.0",
+      "description": "Explicitly legacy and insecure TLS 1.1 interoperability boundary",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-legacy-tls11",
       "versionInfo": "0.1.0"
     },
     {
@@ -740,13 +690,33 @@
       "versionInfo": "2.0.4"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-xtask-0.1.0",
-      "description": "Repository-only maintenance tasks for Brynja",
+      "SPDXID": "SPDXRef-Package-brynja-legacy-wtls-0.1.0",
+      "description": "Explicitly legacy and insecure WTLS interoperability boundary",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-xtask",
+      "name": "brynja-legacy-wtls",
+      "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-pki-0.2.0",
+      "description": "Bounded DER framing and future first-party PKI for Brynja",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-pki",
+      "versionInfo": "0.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-legacy-0.1.0",
+      "description": "Explicit facade for isolated legacy transport-security protocols",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-legacy",
       "versionInfo": "0.1.0"
     },
     {
@@ -760,54 +730,24 @@
       "versionInfo": "0.1.1"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-platform-0.1.8",
-      "description": "Explicit platform integration traits for Brynja",
+      "SPDXID": "SPDXRef-Package-brynja-hash-tuple-0.1.0",
+      "description": "First-party no_std TupleHash and TupleHashXOF implementations for Brynja",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-platform",
-      "versionInfo": "0.1.8"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-legacy-ssl3-0.1.0",
-      "description": "Explicitly legacy and insecure SSL 3.0 interoperability boundary",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-legacy-ssl3",
+      "name": "brynja-hash-tuple",
       "versionInfo": "0.1.0"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-test-support-0.1.0",
-      "description": "Repository-only test support for Brynja",
+      "SPDXID": "SPDXRef-Package-brynja-protocol-0.1.0",
+      "description": "Shared no_std wire framing for Brynja secure protocols",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-test-support",
+      "name": "brynja-protocol",
       "versionInfo": "0.1.0"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-hash-parallel-std-0.1.0",
-      "description": "Optional bounded std executor for Brynja ParallelHash",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-hash-parallel-std",
-      "versionInfo": "0.1.0"
-    },
-    {
-      "SPDXID": "SPDXRef-Package-brynja-0.24.15",
-      "description": "Security-first no_std cryptography and secure-protocol facade",
-      "downloadLocation": "NONE",
-      "homepage": "https://github.com/valkyoth/brynja",
-      "licenseConcluded": "MIT OR Apache-2.0",
-      "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja",
-      "versionInfo": "0.24.15"
     },
     {
       "SPDXID": "SPDXRef-Package-brynja-legacy-tls10-0.1.0",
@@ -820,14 +760,24 @@
       "versionInfo": "0.1.0"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-research-ssl1-0.1.0",
-      "description": "Research-only SSL 1.0 reconstruction boundary",
+      "SPDXID": "SPDXRef-Package-brynja-mac-kmac-0.1.0",
+      "description": "First-party no_std KMAC and KMACXOF implementations for Brynja",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-research-ssl1",
+      "name": "brynja-mac-kmac",
       "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-dtls-0.1.8",
+      "description": "Modern DTLS state machines for Brynja",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-dtls",
+      "versionInfo": "0.1.8"
     },
     {
       "SPDXID": "SPDXRef-Package-brynja-interop-0.1.0",
@@ -840,14 +790,34 @@
       "versionInfo": "0.1.0"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-crypto-cpu-0.1.1",
-      "description": "Optional no_std CPU acceleration boundary for Brynja cryptography",
+      "SPDXID": "SPDXRef-Package-brynja-hash-core-0.1.0",
+      "description": "Small no_std fixed-output hash interfaces for Brynja",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-crypto-cpu",
-      "versionInfo": "0.1.1"
+      "name": "brynja-hash-core",
+      "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-hash-parallel-0.1.0",
+      "description": "First-party no_std ParallelHash and ParallelHashXOF implementations for Brynja",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-hash-parallel",
+      "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-hash-sha2-0.1.0",
+      "description": "First-party no_std SHA-2 implementations for Brynja",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-hash-sha2",
+      "versionInfo": "0.1.0"
     },
     {
       "SPDXID": "SPDXRef-Package-brynja-crypto-0.1.2",
@@ -860,46 +830,76 @@
       "versionInfo": "0.1.2"
     },
     {
-      "SPDXID": "SPDXRef-Package-brynja-hash-parallel-0.1.0",
-      "description": "First-party no_std ParallelHash and ParallelHashXOF implementations for Brynja",
+      "SPDXID": "SPDXRef-Package-brynja-tls13-handshake-0.1.8",
+      "description": "Record-independent TLS 1.3 handshake engine for Brynja",
       "downloadLocation": "NONE",
       "homepage": "https://github.com/valkyoth/brynja",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
-      "name": "brynja-hash-parallel",
+      "name": "brynja-tls13-handshake",
+      "versionInfo": "0.1.8"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-crypto-cpu-std-0.1.1",
+      "description": "Opt-in host CPU-detection boundary for Brynja cryptography",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-crypto-cpu-std",
+      "versionInfo": "0.1.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-tls13-0.1.8",
+      "description": "Version-specific TLS 1.3 stream engine for Brynja",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-tls13",
+      "versionInfo": "0.1.8"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-brynja-xtask-0.1.0",
+      "description": "Repository-only maintenance tasks for Brynja",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/brynja",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "brynja-xtask",
       "versionInfo": "0.1.0"
     }
   ],
   "relationships": [
     {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls-0.1.8"
+    },
+    {
       "relatedSpdxElement": "SPDXRef-Package-brynja-quic-tls-0.1.8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-0.24.16"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-mac-kmac-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-handshake-0.1.8",
       "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_quic_tls"
+      "spdxElementId": "SPDXRef-File-brynja_tls13_handshake"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-wtls-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_legacy_wtls"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls13-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-dtls-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_core"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-tuple-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_hash_tuple"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-snp-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+      "spdxElementId": "SPDXRef-Package-brynja-mac-kmac-0.1.0"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-handshake-0.1.8",
@@ -907,29 +907,219 @@
       "spdxElementId": "SPDXRef-Package-brynja-tls13-0.1.8"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-wtls-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_crypto"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_snp",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_hash_sha3"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_hash_sha3",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-dtls-0.1.8",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.24.15"
+      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_tls11",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-test-support-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_test_support"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-hash-parallel-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls12-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_mac_kmac",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-quic-tls-0.1.8",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_quic_tls"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_legacy",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_protocol"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-parallel-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_hash_parallel"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-research-ssl1-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_research_ssl1"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_test_support",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
       "spdxElementId": "SPDXRef-Package-brynja-hash-tuple-0.1.0"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-core-0.1.0",
+      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_ssl3",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
       "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_hash_core"
+      "spdxElementId": "SPDXRef-File-brynja_pki"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-sanitization-0.1.1",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_sanitization"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_legacy"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-ssl2-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-hash-parallel-std-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-cpu-0.1.1",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-crypto-cpu-std-0.1.1"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-ssl3-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_legacy_ssl3"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-quic-tls-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls13-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_platform",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls13-handshake-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-snp-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_legacy_snp"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_tls13_handshake",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-mac-kmac-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_mac_kmac"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-proofs-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_proofs"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-core-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-hash-sha2-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-tls11-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-dtls-0.1.8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-0.24.16"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_tls13",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-tls-0.1.8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-0.24.16"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha2-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-crypto-cpu-std-0.1.1"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-sanitization-0.1.1"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_xtask",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-tls11-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_legacy_tls11"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls12-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-tuple-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_hash_tuple"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
@@ -942,74 +1132,39 @@
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_crypto_cpu",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
+      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-dtls-0.1.8"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_quic_tls",
+      "relatedSpdxElement": "SPDXRef-File-brynja_protocol",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-sanitization-0.1.1"
+      "spdxElementId": "SPDXRef-Package-brynja-protocol-0.1.0"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls13-handshake-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-wtls-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_legacy_wtls"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-platform-0.1.8",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_platform"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.24.15"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_hash_parallel_std",
+      "relatedSpdxElement": "SPDXRef-File-brynja_crypto_cpu",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls12-0.1.8"
+      "spdxElementId": "SPDXRef-Package-brynja-0.24.16"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-parallel-0.1.0",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-parallel-std-0.1.0"
+      "spdxElementId": "SPDXRef-Package-brynja-hash-sha2-0.1.0"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_hash_parallel",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha2-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_hash_sha2"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-ssl3-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_legacy_ssl3"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_platform",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
+      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-dtls-0.1.8"
     },
     {
       "relatedSpdxElement": "SPDXRef-File-brynja_hash_sha2",
@@ -1017,9 +1172,89 @@
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-snp-0.1.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.24.15"
+      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-pct-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-pct-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_legacy_pct"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-cpu-0.1.1",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_crypto_cpu"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-dtls-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-0.1.8",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_tls13"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-platform-0.1.8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-0.24.16"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-0.1.8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_tls",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls13-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls13-0.1.8"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_core"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-wtls-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-hash-tuple-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-platform-0.1.8",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_platform"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_crypto",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_tls12",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
@@ -1027,17 +1262,32 @@
       "spdxElementId": "SPDXRef-Package-brynja-hash-parallel-0.1.0"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-platform-0.1.8",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-ssl3-0.1.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.24.15"
+      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-parallel-std-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_hash_parallel_std"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha2-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-pki-0.2.0"
+      "spdxElementId": "SPDXRef-Package-brynja-tls12-0.1.8"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_hash_core",
+      "relatedSpdxElement": "SPDXRef-File-brynja_hash_parallel",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_hash_parallel_std",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
@@ -1047,74 +1297,19 @@
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_tls10",
+      "relatedSpdxElement": "SPDXRef-File-brynja_proofs",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-interop-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_interop"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-cpu-0.1.1",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-sha2-0.1.0"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls13-handshake-0.1.8"
+      "spdxElementId": "SPDXRef-Package-brynja-hash-sha3-0.1.0"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls12-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_crypto",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha2-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-crypto-cpu-std-0.1.1"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-sanitization-0.1.1",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-ssl2-0.1.0",
       "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_sanitization"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-quic-tls-0.1.8",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.24.15"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-cpu-0.1.1",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-crypto-cpu-std-0.1.1"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-dtls-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-protocol-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_pct",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
+      "spdxElementId": "SPDXRef-File-brynja_legacy_ssl2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-sanitization-2.0.4",
@@ -1122,94 +1317,19 @@
       "spdxElementId": "SPDXRef-Package-brynja-sanitization-0.1.1"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_mac_kmac",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_test_support",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-parallel-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_core",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_proofs",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-tls12-0.1.8",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-pct-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-research-ssl1-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_research_ssl1"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-parallel-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-ssl3-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-0.1.8",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_tls13"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-mac-kmac-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_wtls",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-parallel-std-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_hash_parallel_std"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_crypto_cpu_std",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-tls10-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
-    },
-    {
       "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-cpu-0.1.1",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_crypto_cpu"
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-hash-sha2-0.1.0"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-snp-0.1.0",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha2-0.1.0",
       "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_legacy_snp"
+      "spdxElementId": "SPDXRef-File-brynja_hash_sha2"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_quic_tls",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
       "relatedSpdxElement": "SPDXRef-File-brynja_sanitization",
@@ -1217,134 +1337,9 @@
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-0.24.15",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-core-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-sha3-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-tls11-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_legacy_tls11"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_tls12",
+      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_wtls",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_xtask",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls13-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-sha3-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_tls11",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_tls",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_hash_sha3",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_hash_sha3"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-pct-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_legacy_pct"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-tls12-0.1.8",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_tls12"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-parallel-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_hash_parallel"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-mac-kmac-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_mac_kmac"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_protocol",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_dtls",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-tls11-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-dtls-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_protocol"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-xtask-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_xtask"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-test-support-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_test_support"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-cpu-std-0.1.1",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_crypto_cpu_std"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls12-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-tls-0.1.8",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.24.15"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-tls10-0.1.0",
@@ -1352,29 +1347,79 @@
       "spdxElementId": "SPDXRef-File-brynja_legacy_tls10"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-tls12-0.1.8",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-tuple-0.1.0"
+      "spdxElementId": "SPDXRef-Package-brynja-tls-0.1.8"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-platform-0.1.8"
+      "spdxElementId": "SPDXRef-Package-brynja-tls13-handshake-0.1.8"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-quic-tls-0.1.8"
+      "relatedSpdxElement": "SPDXRef-Package-brynja-0.24.16",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_ssl3",
+      "relatedSpdxElement": "SPDXRef-File-brynja_crypto_cpu_std",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-proofs-0.1.0",
+      "relatedSpdxElement": "SPDXRef-File-brynja",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_hash_core",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-parallel-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_tls10",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-tls12-0.1.8",
       "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_proofs"
+      "spdxElementId": "SPDXRef-File-brynja_tls12"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-tls10-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-0.24.16"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-interop-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_interop"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_snp",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-tls-0.1.8",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_tls"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_core",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
       "relatedSpdxElement": "SPDXRef-File-brynja_research_ssl1",
@@ -1382,29 +1427,24 @@
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_legacy"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha2-0.1.0",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
+      "spdxElementId": "SPDXRef-Package-brynja-0.24.16"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-handshake-0.1.8",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-core-0.1.0",
       "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_tls13_handshake"
+      "spdxElementId": "SPDXRef-File-brynja_hash_core"
     },
     {
-      "relatedSpdxElement": "SPDXRef-File-brynja_hash_tuple",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-cpu-std-0.1.1",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_crypto_cpu_std"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-brynja_legacy_pct",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.24.15"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-hash-tuple-0.1.0",
@@ -1412,14 +1452,9 @@
       "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-core-0.1.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls13-handshake-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls12-0.1.8"
+      "spdxElementId": "SPDXRef-Package-brynja-hash-sha3-0.1.0"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-hash-sha3-0.1.0",
@@ -1429,12 +1464,7 @@
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls13-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-handshake-0.1.8",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-quic-tls-0.1.8"
+      "spdxElementId": "SPDXRef-Package-brynja-0.24.16"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-dtls-0.1.8",
@@ -1442,34 +1472,14 @@
       "spdxElementId": "SPDXRef-File-brynja_dtls"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-parallel-std-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-sha2-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-mac-kmac-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-crypto-0.1.2"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_legacy",
+      "relatedSpdxElement": "SPDXRef-File-brynja_hash_tuple",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-0.1.8",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls-0.1.8"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_tls13",
-      "relationshipType": "DESCRIBES",
-      "spdxElementId": "SPDXRef-DOCUMENT"
+      "relatedSpdxElement": "SPDXRef-Package-brynja-xtask-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-brynja_xtask"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
@@ -1478,53 +1488,43 @@
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.1.2",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_crypto"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-tls-0.1.8",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_tls"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-ssl2-0.1.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_legacy_ssl2"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-legacy-ssl2-0.1.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-legacy-0.1.0"
+      "spdxElementId": "SPDXRef-Package-brynja-tls13-handshake-0.1.8"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-core-0.1.0",
-      "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-hash-sha2-0.1.0"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-File-brynja_tls13_handshake",
+      "relatedSpdxElement": "SPDXRef-File-brynja_dtls",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-tls-0.1.8"
+      "spdxElementId": "SPDXRef-Package-brynja-platform-0.1.8"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.0",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-tls13-handshake-0.1.8",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.24.15"
-    },
-    {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
-      "relationshipType": "GENERATED_FROM",
-      "spdxElementId": "SPDXRef-File-brynja_pki"
+      "spdxElementId": "SPDXRef-Package-brynja-quic-tls-0.1.8"
     },
     {
       "relatedSpdxElement": "SPDXRef-File-brynja_pki",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-hash-parallel-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-hash-parallel-std-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.9.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-pki-0.2.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.2.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-brynja-tls12-0.1.8"
     }
   ],
   "spdxVersion": "SPDX-2.3"

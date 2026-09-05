@@ -61,6 +61,10 @@ all four ParallelHash/ParallelHashXOF identities with exact `B` and leaf-count
 encoding, allocation-free sequential streaming, arbitrary-bit final leaves,
 hardened output, indexed caller scheduling, ordered collection, and a separate
 bounded `std` executor;
+one frozen package-external portable acceptance contract across all fourteen
+SP 800-185 identities, their official outputs, ordinary and hardened profiles,
+streaming, arbitrary-bit, zero-length, exact-item, scheduled-leaf, real-data,
+Rust-version, and declared bare-metal paths;
 the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
@@ -79,4 +83,6 @@ four ParallelHash/ParallelHashXOF identities, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release
-status.
+status. The derived SP 800-185 family remains In progress until v0.24.17
+replays the frozen portable contract through every backend and parallel
+execution disposition on final unchanged source.

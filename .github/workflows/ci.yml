@@ -129,6 +129,8 @@ jobs:
         run: cargo +${{ matrix.rust }} test --quiet --locked --manifest-path assurance/cshake-public-api/Cargo.toml
       - name: Run combined hash final acceptance
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/hash-final-acceptance/Cargo.toml
+      - name: Run portable SP 800-185 public API acceptance
+        run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sp800185-public-api/Cargo.toml
       - name: Verify zeroization emitted code
         run: scripts/zeroization/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
       - name: Verify constant-time emitted code
@@ -170,6 +172,8 @@ jobs:
         run: cargo check --locked --manifest-path assurance/cshake-public-api/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Check combined hash final acceptance fixture
         run: cargo check --locked --manifest-path assurance/hash-final-acceptance/Cargo.toml --lib --target ${{ matrix.target }}
+      - name: Check portable SP 800-185 public API fixture
+        run: cargo check --locked --manifest-path assurance/sp800185-public-api/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Verify zeroization emitted code
         run: scripts/zeroization/check-zeroization-codegen.sh 1.98.1 "${{ matrix.target }}"
       - name: Verify constant-time emitted code

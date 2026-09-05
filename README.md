@@ -69,7 +69,7 @@ SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE25
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
-| SP 800-185 family | 🚧 In progress — all named functions implemented; portable and cross-backend final acceptance pending | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
+| SP 800-185 family | 🚧 In progress — all named functions implemented; portable acceptance passed at v0.24.16, cross-backend final acceptance pending | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
 
 ### Modern Message Authentication
 
@@ -905,7 +905,7 @@ records `PASS`/`PASS` with zero open findings after the focused retest of the
 later exact `sanitization 2.0.4` dependency delta also found no Critical,
 High, or Medium issue.
 
-The internal `0.24.15` candidate adds complete ParallelHash128,
+Signed `0.24.15` adds complete ParallelHash128,
 ParallelHash256, ParallelHashXOF128, and ParallelHashXOF256 in the
 allocation-free `no_std` `brynja-hash-parallel` leaf. The caller-selected
 workspace length is the exact positive `B`; empty, partial, multi-leaf,
@@ -922,16 +922,27 @@ than create an executor per request. All twelve official NIST examples
 pass. ParallelHash is implemented but neither independently verified nor FIPS
 140-3 validated; combined family acceptance remains at v0.24.16-v0.24.17.
 
+The internal `0.24.16` candidate freezes one package-external `no_std`
+consumer contract across all fourteen cSHAKE, KMAC/KMACXOF,
+TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF identities. It checks
+one exact official output per identity plus ordinary, hardened, streaming,
+incremental-XOF, arbitrary-bit, zero-length, misuse, real-data, exact tuple
+item, and caller-scheduled leaf paths. The same fixture is required across Rust
+1.90.0–1.98.1 and every declared bare-metal target. Portable acceptance has
+passed; the overall SP 800-185 family remains **In progress** until the frozen
+contract passes final backend and native-parallel disposition at v0.24.17.
+
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.14`; the current internal `0.24.15`
-ParallelHash/ParallelHashXOF candidate selects no crates.io publication. Its
+milestones continue through `0.24.15`; the current internal `0.24.16`
+portable SP 800-185 acceptance candidate selects no crates.io publication. The
 [exceptional pentest report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.15.md)
 records `PASS`/`PASS` with zero open findings after both native-executor
-resource-control gaps were remediated; the report-bearing candidate now awaits
-green hosted checks before tag authorization.
+resource-control gaps were remediated. v0.24.16 changes assurance and
+documentation rather than cryptographic implementation and retains the same
+independent-review and FIPS limitations.
 The published
 dependency is:
 
@@ -1040,7 +1051,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.15 exposes cumulative foundations, complete SHA-2, SHA-3/SHAKE, cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF APIs; optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
+| `brynja` | Modern production facade | Internal v0.24.16 exposes cumulative foundations and the same complete named hash/MAC APIs with portable SP 800-185 acceptance; optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted |

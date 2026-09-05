@@ -3433,7 +3433,7 @@ Exit criteria:
 
 ### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Freeze and pass package-external fixtures for all fourteen named cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF and ParallelHash/ParallelHashXOF instances through ordinary and hardened secret-bearing one-shot, streaming, incremental squeeze, forced portable, arbitrary-bit-tail and representative real-data paths; verify N, S, K, tuple boundaries, B, L, zero-length cases, exact official examples, no_std package use, complete internal cleanup and misuse failures while keeping the derived family In progress.
 

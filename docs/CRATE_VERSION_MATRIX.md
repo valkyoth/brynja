@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.14 signed; v0.24.15 ParallelHash/ParallelHashXOF report-bearing candidate awaits green hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 portable SP 800-185 acceptance is implemented and awaiting pentest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.15`. `brynja-hash-core 0.1.0`,
+advances to internal `0.24.16`. `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit
 interfaces and correct portable implementations of all six FIPS 180-4 SHA-2
 algorithms, and unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented
@@ -32,8 +32,8 @@ repository-only API-profile register closes 132 semantic capabilities across
 22 dimensions and inventories eight current, five registered capability, plus
 73 planned secret owners with exact per-operation information-flow contracts,
 compiler-checked owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.1. The facade version advances and the ParallelHash leaf
-builds over the existing hardened cSHAKE owner; all support-package versions remain
+under Rust 1.90.0 and 1.98.1. The facade version advances after portable SP 800-185
+package-external acceptance; all support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
 
@@ -288,7 +288,7 @@ FIPS validation remain later work. Zero crates are selected for publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.24.15` | no | Internal complete ParallelHash milestone; all four ParallelHash/ParallelHashXOF sequential, arbitrary-bit, hardened, and scheduled profiles are implemented, the wider SP 800-185 family remains in progress, and v0.20.0 remains published |
+| `brynja` | `0.24.16` | no | Internal portable SP 800-185 acceptance milestone; all fourteen named functions pass one frozen no_std consumer contract, the family remains in progress through v0.24.17, and v0.20.0 remains published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output/XOF interfaces and canonical borrowed bit strings |
 | `brynja-hash-sha2` | `0.1.0` | no | Unpublished fully implemented six-algorithm FIPS 180-4 ordinary and hardened byte/arbitrary-bit APIs, forced ordinary candidate routes, compiler-resistant cleanup evidence, and combined package-external acceptance |

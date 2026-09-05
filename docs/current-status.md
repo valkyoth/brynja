@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.14 signed; v0.24.15 ParallelHash/ParallelHashXOF report-bearing candidate awaits green hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 portable SP 800-185 acceptance is implemented and awaiting pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -73,7 +73,7 @@ delta reached the same conclusion. The
 [permanent report](../security/pentest/v0.24.14.md) records `PASS`/`PASS` with
 zero open findings.
 
-The v0.24.15 candidate adds all four SP 800-185 ParallelHash and
+Signed v0.24.15 adds all four SP 800-185 ParallelHash and
 ParallelHashXOF identities in `brynja-hash-parallel`. Its portable path is
 allocation-free `no_std`; caller workspace length selects positive `B`, and
 the exact hardened cSHAKE owner performs every leaf and final-node operation.
@@ -93,6 +93,17 @@ and executor-wide concurrency resource-control gaps. Both are remediated, and
 the exact final candidate passed retest. The
 [permanent report](../security/pentest/v0.24.15.md) records `PASS`/`PASS` with
 zero open findings while preserving the cumulative v0.25.0 assessment.
+The v0.24.16 candidate adds no cryptographic implementation. It freezes one
+package-external `no_std` fixture across all fourteen cSHAKE, KMAC/KMACXOF,
+TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF identities. Fourteen
+exact official outputs, every hardened identity profile, irregular streaming,
+incremental XOF output, canonical arbitrary-bit tails, zero-length boundaries,
+KMAC production-versus-conformance policy, exact tuple item streaming,
+ParallelHash `B` limits and caller-scheduled leaves, one real package-owned
+input, all three public package layers, Rust 1.90.0–1.98.1, and every declared
+bare-metal target form one reviewed-hash-locked contract. Portable acceptance
+passes. The overall SP 800-185 family remains **In progress** pending v0.24.17
+backend, native-parallel, timing, performance, and final evidence disposition.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no

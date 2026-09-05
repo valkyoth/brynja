@@ -18,4 +18,6 @@ for toolchain in "${toolchains[@]}"; do
         --manifest-path assurance/cshake-public-api/Cargo.toml
     cargo "+$toolchain" run --quiet --locked \
         --manifest-path assurance/hash-final-acceptance/Cargo.toml
+    cargo "+$toolchain" run --quiet --locked \
+        --manifest-path assurance/sp800185-public-api/Cargo.toml
 done

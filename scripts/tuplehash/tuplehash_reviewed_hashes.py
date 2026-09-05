@@ -14,7 +14,7 @@ REVIEWED_HASHES = {
     "crates/brynja-hash-tuple/tests/api.rs": "17496966efafd49bc57d882d68c4d68e345251eb7bcdbe8153c5b0c2cbb0dd67",
     "crates/brynja-hash-tuple/tests/official_vectors.rs": "8cbb13c168530dad1dc732cd2923c693bcf4323a701e1a92c186e33acffc1a65",
     "assurance/tuplehash-public-api/src/lib.rs": "49ce2027bcbda7941947c04d697c2d8efa7e50d5f5d23ed01b4f5aeb4be91484",
-    "assurance/tuplehash-public-api/Cargo.toml": "b6196033b4c50ed2a7e687c436c9f81e05992b1ae62c5ff405096496332d539a",
+    "assurance/tuplehash-public-api/Cargo.toml": "5ad8f7941636b7d80a5506130af085e7d17fce37acdf6fd2adfaed79cc64be30",
     "assurance/tuplehash-differential/src/main.rs": "69f191e3c084462588fed2bebc8919f0429283c4f66f3efb4bb75fe1e6636e77",
     "assurance/tuplehash-differential/Cargo.toml": "7d74909bff19ad708bc84ecef40170ba0125b23c176a218c59f454da6c056201",
     "scripts/tuplehash/check-tuplehash-differential.py": "6be3bfd93a3d7fb2dd9fc2a051d5de2d564a9ec99d1688255b950e6efe6db1ec",

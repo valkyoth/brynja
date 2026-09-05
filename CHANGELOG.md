@@ -5,6 +5,15 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add the v0.24.16 frozen package-external `no_std` SP 800-185 acceptance
+  fixture covering all fourteen cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF,
+  and ParallelHash/ParallelHashXOF identities across official, streaming,
+  arbitrary-bit, hardened-cleanup, misuse, real-data, facade, Rust-matrix, and
+  bare-metal paths while retaining the family-level In-progress status until
+  v0.24.17.
+
 ### Fixed
 
 - Keep the architecture-specific Keccak differential reference test out of

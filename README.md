@@ -940,8 +940,9 @@ The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.16`; the current internal `0.24.17`
 SP 800-185 execution-acceptance candidate selects no crates.io publication.
 It reruns the frozen portable contract and compares sequential, caller-scheduled
-and threaded ParallelHash. Pentest and reviewed native-evidence disposition
-remain pending; the family stays **In progress**. No production cryptography
+and threaded ParallelHash. The owner-supplied pentest passed with no findings;
+reviewed native evidence and final release checks remain pending. The family
+stays **In progress**. No production cryptography
 or backend admission changes. See the
 [final acceptance procedure](https://github.com/valkyoth/brynja/blob/main/docs/sp800185-final-acceptance.md).
 The published

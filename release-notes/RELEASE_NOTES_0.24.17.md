@@ -1,6 +1,6 @@
 # Brynja 0.24.17 Release Notes
 
-Status: awaiting pentest and reviewed native-evidence disposition
+Status: pentest passed; awaiting reviewed native evidence and final release checks
 
 ## Summary
 
@@ -40,8 +40,10 @@ cleanup codegen, package contents, source policies and dependency isolation.
 
 See [the reproducible procedure and closure checklist](../docs/sp800185-final-acceptance.md)
 for exact native commands, benchmark limitations and required dispositions.
-Native reports, pentest, final local release checks and GitHub/CodeQL remain
-release prerequisites, not results implied by this release-notes document.
+The owner-supplied review of v0.24.16 through c58711b reports no Critical, High,
+Medium or Low findings; the permanent pentest report records PASS. Native
+reports, final local release checks and GitHub/CodeQL remain prerequisites,
+not results implied by the clean security assessment.
 
 No new cryptographic primitive, secret owner, unsafe boundary, production
 dependency, provider effect or backend integration is introduced. Existing

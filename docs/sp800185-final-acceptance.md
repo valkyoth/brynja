@@ -1,6 +1,6 @@
 # SP 800-185 Final Execution Acceptance — v0.24.17
 
-Status: implementation ready for pentest; reviewed native evidence pending.
+Status: owner-supplied pentest PASS; reviewed native evidence and final release checks pending.
 
 This milestone adds assurance tooling, not cryptographic implementation. The
 combined family remains **In progress** until the evidence below is reviewed.
@@ -106,7 +106,7 @@ silently dropping them or weakening the threshold.
 
 ## Final closure checklist
 
-- [ ] Independent user pentest and any remediation retest recorded.
+- [x] Owner-supplied pentest PASS recorded for c58711b; no findings or remediation.
 - [ ] Same-commit AMD, Apple M2 and AWS AArch64 execution reports reviewed;
       Intel and RISC-V results or explicit unavailability dispositions recorded.
 - [ ] CPU candidates remain unadmitted; no cleanup-qualified accelerated

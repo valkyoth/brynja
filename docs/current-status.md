@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 172 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.16 signed; v0.24.17 awaits pentest and reviewed native evidence
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.16 signed; v0.24.17 pentest passed, native evidence and final release checks pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -131,6 +131,9 @@ privacy-minimized native capture. The original portable Rust/input contract
 and all production cryptography remain unchanged. CPU candidates remain
 unadmitted; the family table is deliberately not promoted before the
 [native-evidence checklist](sp800185-final-acceptance.md) is complete.
+The owner-supplied review of v0.24.16 through c58711b found no Critical, High,
+Medium or Low findings. This is a security-assessment PASS, not final native
+acceptance or permission to tag; M2/AWS reports are still outstanding.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no

@@ -10,28 +10,22 @@ import sys
 import tempfile
 from pathlib import Path
 
-
 VALIDATOR = Path(__file__).with_name("validate-workspace-metadata.py")
-
 
 def package(document: dict, name: str) -> dict:
     return next(item for item in document["packages"] if item["name"] == name)
 
-
 def package_id(document: dict, name: str) -> str:
     return package(document, name)["id"]
-
 
 def node(document: dict, name: str) -> dict:
     identifier = package_id(document, name)
     return next(item for item in document["resolve"]["nodes"] if item["id"] == identifier)
 
-
 def dependency(document: dict, owner: str, name: str) -> dict:
     return next(
         item for item in package(document, owner)["dependencies"] if item["name"] == name
     )
-
 
 def validator_result(
     document: dict,
@@ -53,7 +47,6 @@ def validator_result(
             text=True,
         )
 
-
 def require_rejection(
     document: dict,
     mode: str,
@@ -68,7 +61,6 @@ def require_rejection(
             f"{label} did not report {expected!r}: {result.stderr.strip()}"
         )
 
-
 def metadata(*options: str) -> dict:
     return json.loads(
         subprocess.check_output(
@@ -77,14 +69,12 @@ def metadata(*options: str) -> dict:
         )
     )
 
-
 def graph_dependency(document: dict, owner: str, dependency_name: str) -> dict:
     return {
         "name": dependency_name.replace("-", "_"),
         "pkg": package_id(document, dependency_name),
         "dep_kinds": [{"kind": None, "target": None}],
     }
-
 
 def test_baselines(no_default: dict, all_features: dict) -> None:
     for document, mode in (
@@ -96,7 +86,6 @@ def test_baselines(no_default: dict, all_features: dict) -> None:
             raise AssertionError(
                 f"workspace validator rejected {mode}: {accepted.stderr}"
             )
-
 
 def test_inventory_and_names(baseline: dict) -> None:
     ambiguous = copy.deepcopy(baseline)
@@ -126,7 +115,6 @@ def test_inventory_and_names(baseline: dict) -> None:
         "external packages entered",
         "an unclassified workspace package",
     )
-
 
 def test_manifest_classes(baseline: dict) -> None:
     published_legacy = copy.deepcopy(baseline)
@@ -491,8 +479,17 @@ def main() -> int:
     test_feature_contracts(all_features)
     test_resolved_isolation(all_features, no_default)
     test_keylog_isolation(all_features)
+    for modern in ("brynja", "brynja-crypto", "brynja-pki", "brynja-core"):
+        smuggled = copy.deepcopy(all_features)
+        node(smuggled, modern)["deps"].append(
+            graph_dependency(smuggled, modern, "brynja-legacy-sha1")
+        )
+        require_rejection(
+            smuggled, "all-features", "resolved all-features dependency graph drifted",
+            f"SHA-1 smuggled into {modern}",
+        )
     reject_invalid_and_exhausted(all_features)
-    print("workspace policy rejects 33 package-class, external-admission, and feature-graph regressions")
+    print("workspace policy rejects 37 package-class, external-admission, and feature-graph regressions")
     return 0
 
 

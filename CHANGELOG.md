@@ -15,6 +15,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- v0.24.18 complete isolated portable legacy SHA-1 byte/bit streaming and
+  one-shot APIs, sealed hardened ownership, six-region cleanup, official
+  vectors, differential/downstream tests and dynamic/compiler proof bindings.
+  Exceptional pentest is pending; no modern facade edge or publication.
+
 - Complete v0.24.17 SP 800-185 final acceptance with same-commit AMD, Intel,
   AWS ARM and Apple M2 observations, complete local release evidence and an
   explicit RISC-V coverage limitation. Mark all fourteen SP 800-185 identities

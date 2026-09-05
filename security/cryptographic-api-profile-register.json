@@ -2483,6 +2483,143 @@
       "api": {
         "backend": {
           "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "bit-input": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "buffers": {
+          "disposition": "caller-owned",
+          "owner": "0.24.15"
+        },
+        "byte-input": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "cancellation": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "clone": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "export": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "extendable-output": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "fixed-output": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "generation": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "hosted-adapter": {
+          "disposition": "optional-isolated",
+          "owner": "0.24.15"
+        },
+        "import": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "incremental-state": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "no-std": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "one-shot": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "operation-direction": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "overlap": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "ownership": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "provider": {
+          "disposition": "required",
+          "owner": "0.24.18"
+        },
+        "reset": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "snapshot": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "verification": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        }
+      },
+      "code_target": "crates/brynja-legacy-sha1/src/lib.rs#Sha1",
+      "consumer_links": [
+        "consumer:construction",
+        "consumer:protocol",
+        "consumer:provider"
+      ],
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "explicit_rejections": [
+        "copy-secret-state",
+        "clone-secret-state",
+        "format-secret-state",
+        "serialize-secret-state",
+        "raw-secret-state-access",
+        "snapshot-secret-state",
+        "reset-secret-into-ordinary-state",
+        "downstream-hardened-marker-implementation",
+        "downstream-hardened-marker-forgery",
+        "optional-only-core-cleanup",
+        "partial-secret-output-without-clearing",
+        "unreviewed-secret-accelerated-backend",
+        "implicit-secret-output-declassification",
+        "unsafe-convenience-api",
+        "nonstandard-convenience-api"
+      ],
+      "id": "algorithm.sha1",
+      "normative_sources": [
+        "nist:NIST.FIPS.180-4.pdf"
+      ],
+      "operations": {
+        "hardened-derived-output": {
+          "output_classification": "typed-secret-owned",
+          "partial_failure_policy": "clear-complete-secret-destination",
+          "verification": "not-applicable"
+        },
+        "public-digest": {
+          "output_classification": "explicit-public-declassification",
+          "partial_failure_policy": "unchanged-destination",
+          "verification": "not-applicable"
+        }
+      },
+      "ordinary_hardened_separation": "required",
+      "owner": "0.24.18",
+      "profile": "fixed-hash",
+      "test_target": "scripts/sha1/check-sha1.py#main"
+    },
+    {
+      "api": {
+        "backend": {
+          "disposition": "required",
           "owner": "0.22.0"
         },
         "bit-input": {
@@ -23847,7 +23984,7 @@
       ]
     }
   ],
-  "policy_sha256": "4dcd0d4ae565197fddd462f936619e6aa18e53413000d09f696becea950d34ae",
+  "policy_sha256": "22ef775f1b21d9e2f075b60697920b34e058984d940c41705380f999a9371c9e",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",
@@ -23963,6 +24100,64 @@
       "temporaries": [
         "leaf-digest:secret-derived-clearing-owner",
         "encoded-length:secret-derived",
+        "borrowed-input:caller-owned-copy-risk",
+        "typed-output:caller-owned"
+      ]
+    },
+    {
+      "capability": "algorithm.sha1",
+      "cleanup_callers": [
+        "crates/brynja-legacy-sha1/src/owner.rs#brynja_legacy_sha1::owner::Sha1Owner::drop"
+      ],
+      "evidence": [
+        "crates/brynja-legacy-sha1/tests/api.rs",
+        "assurance/sha1-public-api/src/lib.rs",
+        "scripts/sha1/check-sha1.py",
+        "scripts/sha1/check-sha1-codegen.sh"
+      ],
+      "fields": [
+        "chaining_state:secret-derived",
+        "block:secret-copy",
+        "schedule:secret-derived",
+        "message_length:secret-derived",
+        "buffered:secret-derived",
+        "output_staging:secret-derived"
+      ],
+      "id": "registered.algorithm.sha1",
+      "lifecycle_edges": [
+        "creation",
+        "success",
+        "error",
+        "cancellation",
+        "replacement",
+        "rekey",
+        "failed-construction",
+        "recoverable-unwind",
+        "drop"
+      ],
+      "output_classification": "typed-secret-owned",
+      "partial_failure_policy": "clear-complete-secret-destination",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "sanitization_symbol": "crates/brynja-legacy-sha1/src/owner.rs#brynja_legacy_sha1::Sha1Owner::wipe",
+      "state": "registered",
+      "storage": "crate-owned-fixed",
+      "symbol": "crates/brynja-legacy-sha1/src/owner.rs#brynja_legacy_sha1::owner::Sha1Owner",
+      "temporaries": [
+        "round-scalars:register-copy-risk",
+        "length-encoding:compiler-copy-risk",
         "borrowed-input:caller-owned-copy-risk",
         "typed-output:caller-owned"
       ]
@@ -24169,5 +24364,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "b3ce0df81c44e62824f5d62f37935efc73cd18e454ff0b92c226e83815a4dcc1"
+  "surface_register_sha256": "0536cfec3fa7b4ac6c391ca9803175f0e12da8268dc5c32cf04ea6d3a638cd7e"
 }

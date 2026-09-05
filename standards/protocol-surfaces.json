@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "b7fad97d3c0dfee9944911a2d13124fa581ddc4ba33fe0332895523cc040bf5c",
+  "policy_sha256": "5323364ad77c618a2ae82a7853044b5fad66bb19828cce36f2b2bc52b5175a97",
   "schema": 2,
   "source_ledger_sha256": "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac",
   "surfaces": [
@@ -208,6 +208,19 @@
       "owner": "0.44.0",
       "rationale": "RSA-PSS verification and bounded RSA arithmetic remain future work before any private operation.",
       "test_target": "tests/surface/primitives.rs#rsa"
+    },
+    {
+      "code_target": "crates/brynja-legacy-sha1/src/lib.rs#Sha1",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.sha1",
+      "kind": "semantic",
+      "normative_sources": [
+        "nist:NIST.FIPS.180-4.pdf"
+      ],
+      "owner": "0.24.18",
+      "rationale": "Complete portable byte/bit SHA-1 exists only in the explicit collision-broken legacy leaf with sealed hardened ownership; no modern facade, generic-hash, TLS, PKIX or FIPS edge is admitted. Final consumer and acceleration acceptance remain later milestones.",
+      "test_target": "scripts/sha1/check-sha1.py#main"
     },
     {
       "code_target": "crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED",

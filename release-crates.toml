@@ -1,19 +1,26 @@
 [release]
-version = "0.24.17"
-milestone = "0.24.17"
+version = "0.24.18"
+milestone = "0.24.18"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "New legacy SHA-1 cryptography and secret-bearing state require an exceptional pentest before tagging."
 
 [crates."brynja"]
-previous_version = "0.24.16"
-version = "0.24.17"
+previous_version = "0.24.17"
+version = "0.24.18"
 change = "metadata"
 publish = false
-reason = "Advance the internal facade for SP 800-185 parallel execution acceptance and native evidence collection; production cryptography is unchanged and no crate is published."
+reason = "Advance only internal facade metadata for the isolated legacy SHA-1 milestone; no modern SHA-1 edge and no publication."
+
+[crates."brynja-legacy-sha1"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Implement the complete isolated legacy SHA-1 leaf with ordinary and hardened byte/bit APIs; retain it unpublished until reviewed checkpoint admission."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"

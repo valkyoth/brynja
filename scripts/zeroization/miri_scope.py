@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GROUPS = ("core", "sanitization", "sha2", "sha3", "kmac", "tuplehash", "parallelhash")
+GROUPS = ("core", "sanitization", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash")
 FULL_EXACT = {
     "Cargo.lock",
     "Cargo.toml",
@@ -26,6 +26,7 @@ GROUP_PREFIXES = {
         "crates/brynja-sanitization/",
         "scripts/sanitization/",
     ),
+    "sha1": ("crates/brynja-legacy-sha1/", "crates/brynja-hash-core/", "assurance/sha1-", "scripts/sha1/"),
     "sha2": (
         "assurance/sha2-",
         "crates/brynja-hash-core/",
@@ -56,8 +57,9 @@ GROUP_PREFIXES = {
     ),
 }
 DOWNSTREAM = {
-    "core": {"sanitization", "sha2", "sha3", "kmac", "tuplehash", "parallelhash"},
+    "core": {"sanitization", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash"},
     "sanitization": set(),
+    "sha1": set(),
     "sha2": set(),
     "sha3": {"kmac", "tuplehash", "parallelhash"},
     "kmac": set(),
@@ -122,7 +124,7 @@ def validate_repository() -> None:
     runner = (ROOT / "scripts/zeroization/check-zeroization-miri.sh").read_text()
     tag_runner = (ROOT / "scripts/zeroization/check-tag-miri.sh").read_text()
     tag_gate = (ROOT / "scripts/tag_gate.sh").read_text()
-    literal = "all_groups=(core sanitization sha2 sha3 kmac tuplehash parallelhash)"
+    literal = "all_groups=(core sanitization sha1 sha2 sha3 kmac tuplehash parallelhash)"
     if runner.count(literal) != 1:
         raise MiriScopeError("Miri runner group inventory drifted")
     for group in GROUPS:

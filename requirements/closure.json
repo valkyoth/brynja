@@ -984,11 +984,10 @@
       "version": "0.24.17"
     },
     {
-      "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
-      },
-      "requirement_ids": [],
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0018"
+      ],
       "scope": "Implement complete byte and canonical arbitrary-bit streaming and one-shot SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, ordinary and hardened secret-bearing states, official vectors, checked bit exhaustion, complete internal sanitization, public consumer APIs and conspicuous collision warnings; add no modern facade, default, TLS, PKIX, FIPS or general-hash edge, and require later HMAC, HKDF and OpenPGP consumers to use separately typed admission without reimplementation.",
       "source_ids": [],
       "title": "Complete First-Party Legacy SHA-1",
@@ -24276,6 +24275,17 @@
     },
     {
       "decision_ids": [
+        "algorithm.sha1"
+      ],
+      "id": "BRY-REQ-CRYPTO-0018",
+      "lifecycle": "implemented",
+      "owner": "0.24.18",
+      "source_ids": [
+        "nist:NIST.FIPS.180-4.pdf"
+      ]
+    },
+    {
+      "decision_ids": [
         "protocol.certificate-transparency"
       ],
       "id": "BRY-REQ-CT-0001",
@@ -26783,7 +26793,8 @@
         "0.31.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-CRYPTO-0001"
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0018"
       ],
       "sha256": "0455b406d89648d20cbde375561e19c245b9815e894164c2670772e3d54deb82"
     },
@@ -29583,6 +29594,12 @@
       "id": "algorithm.rsa",
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0011"
+      ]
+    },
+    {
+      "id": "algorithm.sha1",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0018"
       ]
     },
     {

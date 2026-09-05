@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Canonical v0.24.15 owner identities and operation-flow contracts."""
+"""Canonical owner identities and operation-flow contracts."""
+
+import legacy_sha1_owner_contract
 
 CURRENT_OWNER_SYMBOLS = {
     "adapter.sanitized-secret": "crates/brynja-sanitization/src/lib.rs#SanitizedSecret",
@@ -486,3 +488,8 @@ REVIEWED_SOURCE_PATHS = {
     "scripts/sha3/sha3_hardened.py",
     "scripts/sha3/test-sha3-hardened.py",
 }
+
+legacy_sha1_owner_contract.register(
+    REGISTERED_OWNER_CONTRACTS, REGISTERED_OWNER_COMPILER_TESTS,
+    REGISTERED_CALLER_MIR_HEADERS, REGISTERED_SANITIZER_MIR_IDENTITIES, REVIEWED_SOURCE_PATHS,
+)

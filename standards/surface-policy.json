@@ -895,6 +895,20 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-legacy-sha1/src/lib.rs#Sha1",
+        "disposition": "implemented",
+        "domain": "cryptography",
+        "owner": "0.24.18",
+        "rationale": "Complete portable byte/bit SHA-1 exists only in the explicit collision-broken legacy leaf with sealed hardened ownership; no modern facade, generic-hash, TLS, PKIX or FIPS edge is admitted. Final consumer and acceleration acceptance remain later milestones.",
+        "sources": [
+          "nist:NIST.FIPS.180-4.pdf"
+        ],
+        "test_target": "scripts/sha1/check-sha1.py#main"
+      },
+      "id": "algorithm.sha1"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED",
         "disposition": "implemented",
         "domain": "cryptography",

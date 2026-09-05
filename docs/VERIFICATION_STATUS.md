@@ -45,7 +45,7 @@ certificate-bound operational-environment claim.
 | `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |
 | Future `brynja-openpgp-core` / `brynja-openpgp-armor` / `brynja-openpgp` | RFC 9580 packet, armor, certificate, key, signature, encryption, compression, and message processing | ❌ Not implemented or verified |
 | Future `brynja-openpgp-legacy` | Explicitly isolated deprecated OpenPGP read, decrypt, or verify compatibility | ❌ Not implemented or verified |
-| Future `brynja-legacy-sha1` | Complete isolated SHA-1 implementation for explicit legacy compatibility | ❌ Not implemented or verified |
+| `brynja-legacy-sha1` | Portable ordinary/hardened byte/bit SHA-1; collision-broken legacy compatibility | ❌ Not verified |
 | Future `brynja-legacy-md5` | Complete isolated MD5 implementation for explicit legacy compatibility | ❌ Not implemented or verified |
 | `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |
 | `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |

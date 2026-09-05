@@ -13,11 +13,17 @@ current implementation claim. Standalone DER encode/decode completion is
 planned for v0.34.6. The former standalone hash and legacy plans are now
 consolidated into the pre-1.0 roadmap, with final release gates through v0.480.0.
 Current generated planning coverage is 2003 non-RC rows
-(2004 milestones including the release candidate), 130 authorities, 4,459
-surfaces and 172 requirements; numerical summaries in the historical v0.3.x
+(2004 milestones including the release candidate), 130 authorities, 4,460
+surfaces and 173 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.16 signed; v0.24.17 pentest, native evidence and local release checks passed; awaiting green GitHub/CodeQL
+Status: v0.20.0 published; milestones through v0.24.17 signed; v0.24.18 legacy SHA-1 implementation candidate awaiting exceptional pentest
+
+The v0.24.18 candidate adds complete ordinary and hardened byte/arbitrary-bit
+SHA-1 in the unpublished `brynja-legacy-sha1` leaf. It is collision-broken,
+not independently verified, not FIPS validated, and never reexported by the
+modern facade. Final family acceptance remains v0.24.20–v0.24.23; SHA-1 stays
+In progress. See [the SHA-1 assurance contract](legacy-sha1.md).
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional

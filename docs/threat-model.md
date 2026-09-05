@@ -35,6 +35,15 @@ use-after-failure. Assurance infrastructure additionally assumes hostile
 corpora and adapters that hang, crash, flood output, emit malformed or
 noncanonical results, disagree silently, attempt shell or capability escape,
 or exploit a verifier/toolchain mismatch to create a false proof claim.
+Legacy SHA-1 callers may mistake a complete implementation or hardened memory
+for restored collision resistance or implicit protocol admission. The isolated
+leaf must not enter modern defaults; future legacy constructions need separate
+typed admission. Attackers may supply noncanonical tails, exhaust the bit
+counter, reuse finalized state, forge hardened capabilities, induce output
+failure, or target private scratch during unwind. Mandatory owned-region
+cleanup and closed consuming APIs address those paths, not compiler-created,
+register, platform, or caller copies. See [the SHA-1 boundary](legacy-sha1.md).
+
 Foundation-domain attackers additionally try to overflow or underflow numeric
 state, force platform-width truncation, confuse item counts with byte lengths,
 wrap sequence numbers or epochs, select accidental unlimited defaults, mutate

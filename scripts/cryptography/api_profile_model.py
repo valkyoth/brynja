@@ -289,7 +289,7 @@ def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str
         fail("explicit unsafe or nonstandard rejections are incomplete")
     validate_cleanup(policy, root)
     semantic = {row["id"]: row for row in surfaces["surfaces"] if row["kind"] == "semantic"}
-    if len(semantic) != 132:
+    if len(semantic) != 133:
         fail("semantic capability count drifted")
     for name, profile in policy["profile"].items():
         validate_profile(name, profile, set(dimensions), policy)

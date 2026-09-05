@@ -48,6 +48,9 @@ def run_profile(*arguments: str) -> tuple[int, list[str]]:
             assert target
             targets.add(target)
             commands.append(command)
+            arguments = command.split()
+            if "--" in arguments:
+                assert arguments.index("--target") < arguments.index("--")
         assert len(targets) <= 1
         return result.returncode, commands
 
@@ -68,7 +71,7 @@ def main() -> int:
     expect(
         ["crates/brynja-hash-core/src/lib.rs"],
         full=False,
-        groups=("sha2", "sha3", "kmac", "tuplehash", "parallelhash"),
+        groups=("sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash"),
     )
     expect(
         ["crates/brynja-core/src/secret_memory.rs"],
@@ -80,6 +83,7 @@ def main() -> int:
         full=False,
         groups=("sanitization",),
     )
+    expect(["crates/brynja-legacy-sha1/src/lib.rs"], full=False, groups=("sha1",))
     expect(["Cargo.lock"], full=True, groups=miri_scope.GROUPS)
     expect(
         ["scripts/zeroization/check-zeroization-miri.sh"],
@@ -89,11 +93,11 @@ def main() -> int:
     expect(["../escape"], full=True, groups=miri_scope.GROUPS)
 
     status, commands = run_profile("--focused")
-    assert status == 0 and len(commands) == 7
+    assert status == 0 and len(commands) == 8
     status, commands = run_profile(
         "--focused", "sha3", "kmac", "tuplehash", "parallelhash"
     )
-    assert status == 0 and len(commands) == 16
+    assert status == 0 and len(commands) == 17
     assert sum("-p brynja-hash-sha3" in command for command in commands) == 9
     assert sum("-p brynja-mac-kmac" in command for command in commands) == 1
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
@@ -102,7 +106,7 @@ def main() -> int:
     assert status == 0 and len(commands) == 10
     assert all("brynja-hash-sha2" in command for command in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 25
+    assert status == 0 and len(commands) == 27
     status, commands = run_profile("--group", "unknown")
     assert status == 2 and not commands
     print(

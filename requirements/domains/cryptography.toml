@@ -287,3 +287,20 @@ work_bound = "Sequential absorb work is linear in checked input and output bits 
 evidence_gap = "All four ParallelHash identities have official-example, arbitrary-bit differential, package-external, sequential-versus-scheduled, bounded native-executor, cleanup, proof, Miri, sanitizer, no_std, and mutation evidence; combined SP 800-185 acceptance, independent cryptographic review, and FIPS 140-3 validation remain incomplete."
 residual = "Outputs remain non-approved; scheduler callers own plan-to-result association and resource policy; compiler-created copies, registers, caches, dumps, swap, aborts, forced termination, physical attacks, and caller-owned copies remain outside portable crate cleanup guarantees."
 mapping_rationale = "ParallelHash is separately represented so its complete sequential and scheduling APIs can be admitted without falsely completing the broader SP 800-185 family before combined portable and backend acceptance."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0018"
+owner = "0.24.18"
+lifecycle = "implemented"
+revision = 1
+decision_ids = ["algorithm.sha1"]
+sources = [{ id = "nist:NIST.FIPS.180-4.pdf", authority_role = "current" }]
+statement = "Complete isolated legacy SHA-1 preserves the FIPS 180-4 bit domain, IV, 80-round schedule, padding and 160-bit output with separate sealed hardened ownership and mandatory private-region cleanup."
+invariants = ["constant-time", "resource-bound", "side-channel", "work-bound", "key-lifecycle"]
+target = "crates/brynja-legacy-sha1/src/lib.rs#Sha1"
+positive_test = "scripts/sha1/check-sha1.py#main"
+negative_test = "scripts/sha1/test-sha1.py#main"
+work_bound = "Linear input work; fixed 80-round compression and six fixed owned regions; checked less-than-2^64 bit admission."
+evidence_gap = "Portable byte/bit/hardened vectors, differential, downstream and cleanup evidence are required now; final family acceptance and acceleration disposition remain v0.24.20 through v0.24.23. No independent review or FIPS validation."
+residual = "SHA-1 is collision-broken. No modern default or protocol admission follows from implementation or memory cleanup; compiler/register/platform/caller copies remain outside the clearing claim."
+mapping_rationale = "FIPS 180-4 defines the historical function; this explicit legacy leaf does not admit its security use."

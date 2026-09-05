@@ -30,8 +30,8 @@ harnesses="$(
         wc -l |
         tr -d ' '
 )"
-test "$harnesses" = "25" || {
-    echo "Kani policy: expected exactly twenty-five admitted SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash harnesses, found ${harnesses}" >&2
+test "$harnesses" = "26" || {
+    echo "Kani policy: expected exactly twenty-six admitted SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash harnesses, found ${harnesses}" >&2
     exit 1
 }
 
@@ -50,14 +50,15 @@ expected_harness_files="$(printf '%s\n' \
     crates/brynja-hash-sha3/src/sp800185.rs \
     crates/brynja-hash-sha3/src/sponge.rs \
     crates/brynja-hash-tuple/src/lib.rs \
+    crates/brynja-legacy-sha1/src/engine.rs \
     crates/brynja-mac-kmac/src/policy.rs)"
 test "$confined_harnesses" = "$expected_harness_files" || {
-    echo "Kani policy: admitted harnesses escaped the reviewed SHA-2/SHA-3/KMAC/TupleHash/ParallelHash leaf crates" >&2
+    echo "Kani policy: admitted harnesses escaped the reviewed SHA-1/SHA-2/SHA-3/KMAC/TupleHash/ParallelHash leaf crates" >&2
     exit 1
 }
 
 if [ "$mode" = "--policy-only" ]; then
-    echo "Kani policy: twenty-five portable SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds are inventoried; full proofs are local tag-gate evidence"
+    echo "Kani policy: twenty-six portable SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds are inventoried; full proofs are local tag-gate evidence"
     exit 0
 fi
 
@@ -90,9 +91,10 @@ test "$installed" = "cargo-kani ${kani_version}" || {
     exit 1
 }
 
+rustup run "$kani_toolchain" cargo kani -p brynja-legacy-sha1
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha3
 rustup run "$kani_toolchain" cargo kani -p brynja-mac-kmac
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-tuple
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-parallel
-echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; twenty-five SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds passed"
+echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; twenty-six SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds passed"

@@ -46,12 +46,12 @@ def validation_fixture() -> tuple[dict, dict, set[str], dict, dict, set[str]]:
 def test_current_repository() -> None:
     ledger, register, versions = inputs()
     requirements, coverage, _digest = domain.build(ledger, register, versions)
-    assert len(requirements) == 38
+    assert len(requirements) == 39
     assert coverage["authority_count"] == 56
     assert coverage["mapped_normative_section_count"] == 352
     assert coverage["excluded_normative_section_count"] == 12
     assert coverage["normative_section_count"] == 364
-    assert coverage["surface_count"] == 3330
+    assert coverage["surface_count"] == 3331
     assert standards.json_bytes(coverage) == lib.DOMAIN_COVERAGE.read_bytes()
 
 

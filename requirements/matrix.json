@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "7a69ea2fec6d56cc7ee114fb1986d215882e67bd295e7a95e277dd6821b39e84",
-  "domain_policy_sha256": "916a64c330eb4a326b3d74b813d4a899c980dfd68b7048151050ad75d6e933d2",
-  "policy_sha256": "f940f4f7d0e1e8dc41347f792b2b5bcaa54dea20f417da3cddfa3523989cbf72",
+  "closure_policy_sha256": "2bb8c5c89158da4655f4c916a5e49be9881878976c515f48df6b00350398e74a",
+  "domain_policy_sha256": "961a5ce3e297d3d04b11869392310b630dde322b7a6fb6ca4eec071dbb006a2c",
+  "policy_sha256": "0961e207fb753ff662aaf8d059437bd74231532ce76db07fd154a1bb65141e9a",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3455,6 +3455,78 @@
         }
       ],
       "work_bound": "Sequential absorb work is linear in checked input and output bits with caller-selected positive B and fixed workspace; scheduled and optional std execution use an exact checked leaf count, bounded workers, fallible allocation, and ordered linear collection."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "algorithm.sha1"
+      ],
+      "deviation_rationale": null,
+      "domain": "cryptography",
+      "evidence": [],
+      "evidence_gap": "Portable byte/bit/hardened vectors, differential, downstream and cleanup evidence are required now; final family acceptance and acceleration disposition remain v0.24.20 through v0.24.23. No independent review or FIPS validation.",
+      "id": "BRY-REQ-CRYPTO-0018",
+      "invariants": [
+        "constant-time",
+        "resource-bound",
+        "side-channel",
+        "work-bound",
+        "key-lifecycle"
+      ],
+      "lifecycle": "implemented",
+      "mapping_rationale": "FIPS 180-4 defines the historical function; this explicit legacy leaf does not admit its security use.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.24.18",
+      "profile": "crypto-encoding-pkix",
+      "residual": "SHA-1 is collision-broken. No modern default or protocol admission follows from implementation or memory cleanup; compiler/register/platform/caller copies remain outside the clearing claim.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "symmetric"
+          ],
+          "id": "nist:NIST.FIPS.180-4.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.22.0",
+            "0.23.0",
+            "0.24.0",
+            "0.25.0",
+            "0.26.0",
+            "0.27.0",
+            "0.28.0",
+            "0.29.0",
+            "0.30.0",
+            "0.31.0"
+          ],
+          "role": "sha2",
+          "sha256": "0455b406d89648d20cbde375561e19c245b9815e894164c2670772e3d54deb82"
+        }
+      ],
+      "statement": "Complete isolated legacy SHA-1 preserves the FIPS 180-4 bit domain, IV, 80-round schedule, padding and 160-bit output with separate sealed hardened ownership and mandatory private-region cleanup.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "crates/brynja-legacy-sha1/src/lib.rs#Sha1"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "scripts/sha1/check-sha1.py#main"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "scripts/sha1/test-sha1.py#main"
+        }
+      ],
+      "work_bound": "Linear input work; fixed 80-round compression and six fixed owned regions; checked less-than-2^64 bit admission."
     },
     {
       "applicability": "apply",
@@ -30511,9 +30583,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "01d2739ab6fd961cb157cf7cf289d747191ff5658adf0d6112d291c36ae301ee",
+  "residual_policy_sha256": "44e20a8ed948648ab65722d13652d0082504814ceff5d6b830b3c852ad098aaa",
   "schema": 5,
   "source_ledger_sha256": "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac",
-  "surface_register_sha256": "b3ce0df81c44e62824f5d62f37935efc73cd18e454ff0b92c226e83815a4dcc1",
-  "transport_policy_sha256": "a625a0fbf4cf41d2738e1f8a4075857264fadc290ca085b03c8d086cd952b9fb"
+  "surface_register_sha256": "0536cfec3fa7b4ac6c391ca9803175f0e12da8268dc5c32cf04ea6d3a638cd7e",
+  "transport_policy_sha256": "4e6f299d2add8061c9e8d2fd88b60634b76d180b8948ee7ea81eba126738dbc2"
 }

@@ -1,5 +1,16 @@
 # Security Controls
 
+## Isolated legacy SHA-1
+
+v0.24.18 adds only a direct legacy leaf, never a modern default, facade,
+protocol or FIPS edge. Collision warnings accompany every public entry point.
+Ordinary and sealed hardened APIs share one six-region clearing owner; typed
+secret output and explicit public declassification are distinct. Private-state
+Drop, consuming failures, checked length, canonical bit tails, complete output
+clearing, exact compiler cleanup flow, official vectors, independent bit oracle
+and bounded assurance input are policy checked. Hash-table completion remains
+pending the later final family acceptance. See [SHA-1 assurance](legacy-sha1.md).
+
 ## Conformance-fixture isolation
 
 The standalone `assurance/sp800185-public-api` workspace explicitly enables

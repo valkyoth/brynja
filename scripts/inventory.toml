@@ -62,6 +62,10 @@ purpose = "Sanitization dependency and compiler-artifact assurance"
 extensions = [".py", ".sh"]
 purpose = "SHA-2 implementation, public acceptance, and architecture-specific evidence"
 
+[category.sha1]
+extensions = [".py", ".sh", ".toml"]
+purpose = "Isolated legacy SHA-1 conformance, cleanup, package acceptance, and differential assurance"
+
 [category.sha3]
 extensions = [".py", ".sh"]
 purpose = "SHA-3 and SHAKE implementation, public acceptance, and differential evidence"

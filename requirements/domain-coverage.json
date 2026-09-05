@@ -59,7 +59,8 @@
         "0.31.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-CRYPTO-0001"
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0018"
       ],
       "role": "sha2",
       "sha256": "0455b406d89648d20cbde375561e19c245b9815e894164c2670772e3d54deb82"
@@ -5591,10 +5592,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "916a64c330eb4a326b3d74b813d4a899c980dfd68b7048151050ad75d6e933d2",
-  "requirement_count": 38,
+  "policy_sha256": "961a5ce3e297d3d04b11869392310b630dde322b7a6fb6ca4eec071dbb006a2c",
+  "requirement_count": 39,
   "schema": 1,
-  "surface_count": 3330,
+  "surface_count": 3331,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5700,6 +5701,14 @@
       "id": "algorithm.rsa",
       "owner": "0.44.0",
       "requirement_id": "BRY-REQ-CRYPTO-0011"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.sha1",
+      "owner": "0.24.18",
+      "requirement_id": "BRY-REQ-CRYPTO-0018"
     },
     {
       "coverage": "requirement",

@@ -46,6 +46,12 @@ python3 scripts/pki/check-der-reader.py
 python3 scripts/pki/test-der-reader.py
 python3 scripts/pki/check-asn1-values.py
 python3 scripts/pki/test-asn1-values.py
+python3 scripts/sha1/check-sha1.py
+python3 scripts/sha1/test-sha1.py
+python3 scripts/sha1/check-sha1-differential.py
+python3 scripts/sha1/check-sha1-package.py
+scripts/sha1/check-sha1-codegen.sh
+cargo test --locked --manifest-path assurance/sha1-public-api/Cargo.toml
 python3 scripts/sha2/check-sha256.py
 python3 scripts/sha2/test-sha256.py
 python3 scripts/sha2/check-sha256-public-api.py

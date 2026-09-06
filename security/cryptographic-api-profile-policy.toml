@@ -1163,11 +1163,11 @@ sha256 = "38272dd62d5ff5966f7a70219d555dcbca496dc1de87d66208e3d2bab0642570"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/compress.rs"
-sha256 = "bc81e51525eada99860fd052bfa33c7b206c5c5968565dd7019225774b2d4d88"
+sha256 = "324e7dba2d3eefbea2fb280ce5a38858e00dfbf1c23ca407b07d4320035677c9"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/engine.rs"
-sha256 = "4b5bb8a55ff61e159ce47bb44c704911aa99770e22b3c6909e7bd41d233d3457"
+sha256 = "8cef857e7f6a5955ecf54c4c01496fddc366dcb92d0da96c15443b57a8578dbe"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/hardened.rs"
@@ -1175,7 +1175,7 @@ sha256 = "b997fd50ff27e4dab2bf4201517138ef6c991d02333dbc4e13fa8606cfa74334"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/lib.rs"
-sha256 = "21cd5de4ac5f140d373501b48e4a47fb00a5b0a115bac583dbabf5f0a025c7fe"
+sha256 = "d0ea88fc981ed4e9018919c1ee06ed0ee415509ccb5ead57d3aa4528fd9e2736"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/ordinary.rs"
@@ -1199,8 +1199,8 @@ sha256 = "674901a6079cac1f73dbdb7f0e9331be1079b6d72d6e06d01050e7d124a72559"
 
 [[reviewed-source]]
 path = "scripts/md5/check-md5-codegen.sh"
-sha256 = "76e741e1e775435dbb5cbc01b4fcef2f4f5ee544ed6d5dc8cc5648151f91922b"
+sha256 = "c8945b170a10b772cf1dc3ae338f934f9748c072af65fc6f8c34a6aa0f43a8e8"
 
 [[reviewed-source]]
 path = "scripts/md5/check-md5.py"
-sha256 = "a0acdd82529893d055ff9a71b578aaf516f5cf20a37fe4db8588fbbe41482d95"
+sha256 = "8b5cefc83ce6ae7854fd9a6b74cd1d37ee3f7faa736b1babd7bc65f3571a69b5"

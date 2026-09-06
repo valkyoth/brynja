@@ -16,16 +16,21 @@ def main():
         except ValueError: continue
         raise AssertionError('accepted corrupt or incomplete RFC vector selection')
     mutations = [
+        ('scripts/md5/check-md5.py', "'--release',", ''),
+        ('scripts/md5/check-md5.py', "'--lib', 'invalid_'", "'--lib', 'unmatched_filter'"),
+        (policy.CRATE + 'src/engine.rs', 'fn invalid_update_offsets_trip_before_mutation()', '#[cfg(debug_assertions)]\n    fn invalid_update_offsets_trip_before_mutation()'),
         (policy.CRATE + 'src/engine.rs', 'current: u128', 'current: u64'),
         (policy.CRATE + 'src/engine.rs', '.zip([0, 8, 16, 24, 32, 40, 48, 56])', '.zip([56, 48, 40, 32, 24, 16, 8, 0])'),
         (policy.CRATE + 'src/engine.rs', '.checked_add(additional)', '.wrapping_add(additional)'),
         (policy.CRATE + 'src/engine.rs', 'if offset >= 56', 'if offset > 56'),
-        (policy.CRATE + 'src/engine.rs', 'debug_assert!(offset < owner.block.len(), "MD5 update offset invariant");', ''),
-        (policy.CRATE + 'src/engine.rs', 'debug_assert!(offset < owner.block.len(), "MD5 padding offset invariant");', ''),
+        (policy.CRATE + 'src/engine.rs', 'assert!(offset < owner.block.len(), "MD5 update offset invariant");', ''),
+        (policy.CRATE + 'src/engine.rs', 'assert!(offset < owner.block.len(), "MD5 padding offset invariant");', ''),
+        (policy.CRATE + 'src/engine.rs', 'assert!(offset < owner.block.len(), "MD5 update offset invariant");', 'debug_assert!(offset < owner.block.len(), "MD5 update offset invariant");'),
+        (policy.CRATE + 'src/engine.rs', 'assert!(offset < owner.block.len(), "MD5 padding offset invariant");', 'debug_assert!(offset < owner.block.len(), "MD5 padding offset invariant");'),
         (policy.CRATE + 'src/engine.rs', 'offset < owner.block.len()', 'offset <= owner.block.len()'),
         (policy.CRATE + 'src/engine.rs',
-         'debug_assert!(offset < owner.block.len(), "MD5 update offset invariant");\n        if let Some(destination) = owner.block.get_mut(offset) {',
-         'if let Some(destination) = owner.block.get_mut(offset) {\n            debug_assert!(offset < owner.block.len(), "MD5 update offset invariant");'),
+         'assert!(offset < owner.block.len(), "MD5 update offset invariant");\n        if let Some(destination) = owner.block.get_mut(offset) {',
+         'if let Some(destination) = owner.block.get_mut(offset) {\n            assert!(offset < owner.block.len(), "MD5 update offset invariant");'),
         (policy.CRATE + 'src/ordinary.rs', 'pub fn finalize(mut self)', 'pub fn finalize(&mut self)'),
         (policy.CRATE + 'src/hardened.rs', 'HardenedMd5State: sealed::Sealed', 'HardenedMd5State'),
         (policy.CRATE + 'src/compress.rs', '.rotate_left(shift)', '.rotate_right(shift)'),
@@ -40,7 +45,8 @@ def main():
             shutil.copytree(policy.ROOT / policy.CRATE, root / policy.CRATE)
             for source in ('scripts/checks.sh', 'scripts/zeroization/check-zeroization-miri.sh',
                            'scripts/zeroization/check-zeroization-sanitizer.sh', 'scripts/ci/check-rust-version-matrix.sh',
-                           'scripts/assurance/check-bare-metal.sh', 'scripts/assurance/check-kani.sh'):
+                           'scripts/assurance/check-bare-metal.sh', 'scripts/assurance/check-kani.sh',
+                           'scripts/md5/check-md5.py'):
                 target = root / source
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(policy.ROOT / source, target)

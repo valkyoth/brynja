@@ -23,6 +23,7 @@ BOUND = [CRATE + 'src/' + name for name in FILES] + [
     'assurance/md5-public-api/src/lib.rs', 'assurance/md5-public-api/src/main.rs',
     'scripts/md5/check-md5-differential.py', 'scripts/md5/check-md5-codegen.sh',
     'scripts/md5/check-md5-package.py',
+    'scripts/md5/check-md5.py',
 ]
 
 
@@ -52,9 +53,13 @@ def validate(root=ROOT, hashes=True):
         if re.search(r'\b(unsafe\s*\{|extern|alloc::|std::|Vec|Box|static\s+mut)|\.(unwrap|expect)\(|\b(panic|unimplemented|todo)!', production):
             raise ValueError('MD5 unsafe, hosted or panic surface')
     owner = (src / 'owner.rs').read_text()
+    if '#[cfg(debug_assertions)]' in (src / 'engine.rs').read_text():
+        raise ValueError('MD5 invariant regression tests must also run in release')
     engine = re.sub(r'\s+', '', (src / 'engine.rs').read_text().split('#[cfg(test)]')[0])
     for operation in ('update', 'padding'):
-        guard = re.sub(r'\s+', '', f'debug_assert!(offset < owner.block.len(), "MD5 {operation} offset invariant");')
+        guard = re.sub(r'\s+', '', f'assert!(offset < owner.block.len(), "MD5 {operation} offset invariant");')
+        if 'debug_'+guard in engine:
+            raise ValueError('MD5 buffer guard must remain active in release')
         if engine.count(guard + 'ifletSome(destination)=owner.block.get_mut(offset)') != 1:
             raise ValueError(f'MD5 {operation} buffer invariant guard missing or misplaced')
     for region in REGIONS:
@@ -63,6 +68,10 @@ def validate(root=ROOT, hashes=True):
     manifest = tomllib.loads((root / CRATE / 'Cargo.toml').read_text())
     if set(manifest['dependencies']) != {'brynja-core', 'brynja-hash-core'} or manifest['features'] != {'default': []}:
         raise ValueError('MD5 dependency or feature boundary')
+    checker = (root / 'scripts/md5/check-md5.py').read_text()
+    for token in ("'--release'", "'--lib', 'invalid_'", 'check=True', 'timeout=120'):
+        if token not in checker:
+            raise ValueError('MD5 optimized invariant tests must remain in the gate')
     for path, token in (
         ('scripts/checks.sh', 'python3 scripts/md5/check-md5.py'),
         ('scripts/zeroization/check-zeroization-miri.sh', 'run_miri -p brynja-legacy-md5'),

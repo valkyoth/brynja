@@ -16,7 +16,7 @@ pub(crate) fn update(owner: &mut Md5Owner, input: &[u8]) -> Result<(), Md5Error>
     let length = admit_bytes(owner.bits(), input.len())?;
     for byte in input {
         let offset = owner.buffered();
-        debug_assert!(offset < owner.block.len(), "MD5 update offset invariant");
+        assert!(offset < owner.block.len(), "MD5 update offset invariant");
         if let Some(destination) = owner.block.get_mut(offset) {
             *destination = *byte;
         }
@@ -48,7 +48,7 @@ pub(crate) fn finish_bytes(owner: &mut Md5Owner) {
 fn finish_padding(owner: &mut Md5Owner, partial: Option<(u8, u8)>, total: u128) {
     let (last, valid) = partial.unwrap_or((0, 0));
     let offset = owner.buffered();
-    debug_assert!(offset < owner.block.len(), "MD5 padding offset invariant");
+    assert!(offset < owner.block.len(), "MD5 padding offset invariant");
     if let Some(destination) = owner.block.get_mut(offset) {
         *destination = last | (0x80_u8 >> valid);
     }
@@ -111,10 +111,8 @@ mod tests {
         );
     }
 
-    #[cfg(debug_assertions)]
     extern crate std;
 
-    #[cfg(debug_assertions)]
     #[test]
     fn invalid_update_offsets_trip_before_mutation() {
         for count in 64..=u8::MAX {
@@ -132,7 +130,6 @@ mod tests {
         }
     }
 
-    #[cfg(debug_assertions)]
     #[test]
     fn invalid_padding_offsets_trip_before_mutation() {
         for count in 64..=u8::MAX {

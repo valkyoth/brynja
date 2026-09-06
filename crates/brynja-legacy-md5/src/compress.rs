@@ -129,6 +129,7 @@ fn add(bytes: &mut [u8], index: usize, value: u32) {
         .take(4)
         .zip([0, 8, 16, 24])
     {
+        // Masking proves conversion succeeds; the fallback is unreachable.
         *byte = u8::try_from((value >> shift) & 0xff).unwrap_or(0);
     }
 }

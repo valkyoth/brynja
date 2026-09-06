@@ -45,7 +45,24 @@ MD5 remains **In progress** through frozen portable acceptance, SIMD work and
 final-family disposition in v0.24.20–v0.24.23. Rust 1.90.0–1.98.1 compatibility
 is retained; Kani uses its separately documented older verifier toolchain.
 
-## Release conditions
+## Pentest remediation
+
+The supplied assessment reports one Low defensive-buffer finding and two
+informational observations. Both buffer invariants are now always-on; a
+violation panics before a write rather than silently skipping it in release.
+Valid public APIs cannot construct an invalid offset. Cleanup remains
+non-panicking, but aborting panics retain the documented no-Drop limitation.
+All invalid byte offsets are tested in debug and optimized builds, and the
+regular MD5 gate runs the optimized fault-injection tests. Mutations reject
+removed, misplaced, weakened or debug-only guards and lost release coverage.
+
+Caller integration guidance now explicitly requires cumulative message-size,
+rate/deadline and bounded-chunk policies. No arbitrary algorithm ceiling is
+added. The masked-byte conversion's unreachable fallback is explained in a
+comment; the arithmetic and public API are unchanged. Focused retest remains
+required after these changes.
+
+## Candidate verification and release conditions
 
 Local candidate verification passed: complete repository gate, twelve stable
 Rust lanes, bare-metal/platform compilation, official RFC vectors, independent

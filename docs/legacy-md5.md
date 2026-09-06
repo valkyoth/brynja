@@ -43,8 +43,18 @@ Compression reads the block directly, without a separate schedule allocation
 or copy. Mandatory `brynja-core` compiler-resistant clearing destroys the
 source-owned regions on Drop, cancellation, consuming errors and recoverable
 unwind; block storage is also cleared between blocks. Cleanup does not require
-the optional sanitization adapter and remains non-panicking. Debug buffer
-invariants detect impossible private offsets before writes in development.
+the optional sanitization adapter and remains non-panicking. Always-on buffer
+invariants detect impossible private offsets before writes in every build.
+Valid public APIs cannot construct an invalid offset. A violated invariant
+panics rather than producing a corrupted digest; abort builds terminate without
+Drop, while unwind builds retain normal owner destruction. This diagnostic is
+not a guarantee against arbitrary physical corruption or memory-unsafety elsewhere.
+
+The u128 counter is an arithmetic representation bound, not an operational
+budget. Integrators must cap cumulative message size before absorption, enforce
+rate/deadline limits, and use bounded chunks for hostile streaming inputs.
+Per-call limits alone do not bound an entire message. The primitive is synchronous
+and does not implement scheduling, cancellation deadlines or protocol admission.
 
 No claim covers registers, compiler-created copies/spills, caches, moves,
 swap, dumps, DMA, caller copies, `mem::forget`, abort, termination or power

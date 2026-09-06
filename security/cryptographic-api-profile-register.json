@@ -24122,7 +24122,7 @@
       ]
     }
   ],
-  "policy_sha256": "a7690b3b6154933232a67376afe5e256a5b03c4a4f6f07845240d04d74d963e8",
+  "policy_sha256": "8a56484fb6b14c6be3a3cea2b1fcb4db76fb98a2af75476f3b80b7a96c41bddb",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",

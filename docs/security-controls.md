@@ -8,8 +8,10 @@ requires typed secret ownership or explicit public declassification. Checked
 u128 accounting preserves RFC 1321's low-64 little-endian length rule beyond
 2^64 bits. RFC vectors, independent bit comparisons, pre-mutation errors,
 Drop/unwind cleanup, compiler contracts and modern-graph injection tests cover
-the boundary. MD5 stays collision-broken and In progress until later family
-acceptance. See [MD5 assurance](legacy-md5.md).
+the boundary. Always-on buffer guards fail before writes on impossible private
+state, with fault injection in debug and optimized builds. MD5 stays
+collision-broken and In progress until later family acceptance. See
+[MD5 assurance](legacy-md5.md).
 
 ## Isolated legacy SHA-1
 
@@ -95,4 +97,4 @@ Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 
 | GitHub protection | Active machine-checked main ruleset requires signed linear history, review and CodeQL while retaining explicit accountable owner/admin bypass |
 | CI | Read-only permissions, full-SHA action pins, explicit installation of all three OS-less targets before the ordinary repository gate, live release-control verification, Clippy enforcement for both all-feature and no-default-feature configurations, stage-aware acceptance of development milestones without scheduled reports, and fail-closed PASS/PASS or remediation-stage RETEST REQUIRED/PENDING validation whenever a current report exists |
 | CodeQL | GitHub Default setup; no advanced workflow |
-| Panic posture | Panics are forbidden by workspace lint; release builds retain overflow checks and abort if an otherwise unreachable panic occurs, accepting process termination as the final fail-closed response rather than permitting recovery from a violated invariant |
+| Panic posture | Explicit `panic!`, `unwrap()` and `expect()` are forbidden by workspace lint; this is not proof that assertions or bounds checks cannot panic. Release builds retain overflow checks and abort if an otherwise unreachable panic occurs, accepting process termination as the final fail-closed response rather than permitting recovery from a violated invariant. MD5's private buffer guards are always-on assertions; valid public APIs cannot construct a violating offset |

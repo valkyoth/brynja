@@ -12,6 +12,16 @@
 //! copies, registers, spills, caches, caller copies, abort and `mem::forget` remain
 //! outside that guarantee. No independent cryptographic review or FIPS validation.
 //!
+//! # Integration limits and internal invariants
+//! Processing is linear in input length; the u128 counter is not a work budget.
+//! Callers handling hostile streams must cap cumulative message bytes, apply
+//! rate/deadline limits and use bounded chunks before calling `update`.
+//! This synchronous primitive does not implement protocol or scheduling policy.
+//! Private buffer invariants are checked in every build. A violated invariant
+//! panics before the write instead of emitting a silently corrupted digest;
+//! valid public API use cannot construct that state. Cleanup remains non-panicking,
+//! but an aborting panic does not run Drop and retains the stated abort limits.
+//!
 //! ```
 //! use brynja_legacy_md5::{Md5, md5};
 //! let mut state = Md5::new();

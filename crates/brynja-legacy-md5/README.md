@@ -73,6 +73,16 @@ messages exceeding 2^64 bits. This API checks a u128 bit counter and rejects
 lengths beyond u128::MAX; this is a representability limit, not an RFC limit.
 Capacity probes and failed updates do not mutate state. Digests are exactly 16 bytes.
 
+Processing cost is linear in input length. The u128 accounting limit is not
+an operational work budget: callers must cap cumulative attacker-controlled
+message size, enforce rate/deadline limits and use bounded chunks before
+calling `update`. This synchronous primitive does not enforce protocol policy.
+
+Private buffer invariants are checked in debug and release builds. A violated
+invariant panics before the write, never silently emitting a corrupted digest.
+Valid public APIs cannot construct that state. Cleanup remains non-panicking;
+an aborting panic does not run Drop and carries the abort limitations below.
+
 ## Confidential input and owned cleanup
 
 Use `HardenedMd5`, not an ordinary public-digest API, for confidential input

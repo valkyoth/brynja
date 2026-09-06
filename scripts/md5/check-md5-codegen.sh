@@ -14,10 +14,10 @@ for extension in ('mir', 'll', 's'):
     paths = list(root.rglob('brynja_legacy_md5-*.' + extension))
     assert len(paths) == 1, (extension, paths)
     text = paths[0].read_text()
-    # MIR can retain unused diagnostic constants even with assertions disabled.
-    # They must not reach optimized LLVM IR or emitted machine code.
-    if extension != 'mir':
-        assert 'offset invariant' not in text, 'debug invariant retained in release code'
+    # These private-state guards are intentionally active in release builds.
+    # Fault-injection release tests exercise their pre-write failure behavior.
+    for operation in ('update', 'padding'):
+        assert f'MD5 {operation} offset invariant' in text, 'release invariant guard missing'
     assert 'Md5Owner' in text and 'wipe' in text, extension
     if extension == 'mir':
         import re

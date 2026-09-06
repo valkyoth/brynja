@@ -63,6 +63,7 @@ python3 scripts/zeroization/test-miri-scope.py
 python3 scripts/zeroization/test-scope-inputs.py
 ```
 
-For this acceptance-only candidate the full group is `legacy`; the underlying
-SHA-1/MD5 implementations have not changed. Old primitives receive smoke
-coverage. A future edit to either primitive expands the selected closure.
+The initial acceptance-only candidate selected `legacy`. Its pentest follow-up
+changes SHA-1's private guards and correctly expands the full selection to
+`sha1 legacy`; MD5 and unrelated owners still receive smoke. A future edit to
+either primitive likewise expands the selected closure.

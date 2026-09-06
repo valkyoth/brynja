@@ -14,10 +14,10 @@ for extension in ('mir', 'll', 's'):
     paths = list(root.rglob('brynja_legacy_sha1-*.' + extension))
     assert len(paths) == 1, (extension, paths)
     text = paths[0].read_text()
-    # MIR can retain unused diagnostic constants even with assertions disabled.
-    # They must not reach optimized LLVM IR or emitted machine code.
-    if extension != 'mir':
-        assert 'offset invariant' not in text, 'debug invariant retained in release code'
+    # Diagnostic presence is not a control-flow proof: optimized fault tests
+    # and the source policy separately enforce the pre-write assertion order.
+    for operation in ('update', 'padding'):
+        assert f'SHA-1 {operation} offset invariant' in text, 'release invariant guard missing'
     assert 'Sha1Owner' in text and 'wipe' in text, extension
     if extension == 'mir':
         import re

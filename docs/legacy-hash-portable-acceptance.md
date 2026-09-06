@@ -17,7 +17,9 @@ cargo run --locked --offline --manifest-path assurance/legacy-hash-public-api/Ca
 
 The dependency-external library is `no_std`, with only exact first-party SHA-1
 and MD5 dependencies. Its binary is a test-only hosted launcher, not a shipping
-crate. No production Rust or algorithm changed at this milestone. The corpus
+crate. The initial candidate changed no algorithm; its pentest follow-up makes
+SHA-1's two private offset guards always-on, matching MD5. No valid-input digest
+or public API changes. The reviewed source freeze includes this remediation. The corpus
 includes real UTF-8 text and archive-index JSON files, empty/abc messages,
 all final bit widths and representative 447/448/449/511/512/513/1023-bit
 boundaries. `src/vectors.rs` freezes expectations from the separately composed

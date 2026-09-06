@@ -32,6 +32,8 @@ too_many_arguments = "forbid"
 [profile.release]
 overflow-checks = true
 panic = "abort"
+# Repository evidence profile only. Cargo ignores dependency profiles; the
+# consuming workspace owns panic strategy. See docs/panic-strategy.md.
 codegen-units = 1
 lto = "fat"
 

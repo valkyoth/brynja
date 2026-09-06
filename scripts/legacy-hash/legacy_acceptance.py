@@ -17,6 +17,7 @@ FILES = [f'{FIXTURE}/{name}' for name in (
     'legacy_acceptance.py', 'check-legacy-acceptance.py', 'check-legacy-package.py',
     'test-legacy-acceptance.py', 'check-legacy-isolation.py',
     'check-legacy-vectors.py',
+    'check-panic-profiles.py',
 )]
 
 
@@ -62,6 +63,7 @@ def validate(root=ROOT, hashes=True):
     for path, token in (
         ('scripts/checks.sh', 'python3 scripts/legacy-hash/check-legacy-acceptance.py'),
         ('scripts/checks.sh', 'python3 scripts/legacy-hash/test-legacy-acceptance.py'),
+        ('scripts/legacy-hash/check-legacy-acceptance.py', "policy.execute('python3', 'scripts/legacy-hash/check-panic-profiles.py', timeout=600)"),
         ('scripts/ci/check-rust-version-matrix.sh', FIXTURE + '/Cargo.toml'),
         ('scripts/assurance/check-bare-metal.sh', FIXTURE + '/Cargo.toml'),
         ('scripts/zeroization/check-zeroization-miri.sh', FIXTURE + '/Cargo.toml'),

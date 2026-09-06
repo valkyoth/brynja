@@ -100,6 +100,13 @@ This uses mandatory `brynja-core` compiler-resistant clearing; the optional
 cancellation and recoverable unwinding all destroy that owner. A failed
 update retains the unchanged live state until retry or destruction.
 
+Private buffer offset guards are always-on, including optimized builds. An
+impossible internal offset panics before a write, not after a fabricated digest.
+Safe public input cannot construct such an offset. The consuming workspace
+chooses unwind or abort: Brynja's repository profile is not inherited by
+dependencies. Aborting does not run Drop. See the
+[panic strategy](https://github.com/valkyoth/brynja/blob/main/docs/panic-strategy.md).
+
 No guarantee covers registers, compiler-created copies/spills, caches, moves,
 swap, DMA, dumps, `mem::forget`, abort, termination, power loss, or caller-owned
 input/output copies. No pinned/locked memory or accelerated execution exists.

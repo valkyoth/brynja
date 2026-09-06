@@ -22,6 +22,7 @@ def main():
         ('crates/brynja-legacy-md5/src/hardened.rs', 'collisions', 'digests'),
         ('crates/brynja-legacy-sha1/src/ordinary.rs', 'collision', 'digest'),
         ('scripts/checks.sh', 'python3 scripts/legacy-hash/check-legacy-acceptance.py', 'true'),
+        ('scripts/legacy-hash/check-legacy-acceptance.py', "policy.execute('python3', 'scripts/legacy-hash/check-panic-profiles.py', timeout=600)", 'pass'),
     ]
     gates = ['.github/workflows/ci.yml', 'scripts/checks.sh', 'scripts/ci/check-rust-version-matrix.sh',
              'scripts/assurance/check-bare-metal.sh', 'scripts/zeroization/check-zeroization-miri.sh',
@@ -74,7 +75,7 @@ def main():
             except ValueError:
                 continue
             raise AssertionError('unsafe archive accepted')
-    print('Legacy acceptance rejects 8 structural corruptions, changed real-file output, and 8 unsafe archives')
+    print('Legacy acceptance rejects 9 structural corruptions, changed real-file output, and 8 unsafe archives')
 
 
 if __name__ == '__main__':

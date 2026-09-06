@@ -45,6 +45,11 @@ on an optional feature or the external sanitization adapter.
 Source-owned regions clear on Drop through `brynja_core::clear_owned_region`;
 compression clears its block, schedule and buffered count between blocks.
 Recoverable unwind and early cancellation run the same non-panicking Drop.
+Private update/padding offset guards are always-on in debug and release; an
+invalid offset panics before writing instead of silently dropping input. Safe
+public APIs cannot create this state. The consuming application's panic
+strategy controls unwind versus abort; our repository profile does not force
+downstream settings. See [panic strategy](panic-strategy.md).
 Update errors retain unchanged live state until the caller drops or retries.
 No physical-copy, register, compiler spill/copy, cache, DMA, locked-memory,
 swap, dump, abort, termination, forget, or caller-copy erasure is promised.

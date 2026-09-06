@@ -1119,7 +1119,7 @@ sha256 = "07fe5d150de04af55f7459e9672adce7e93b051570214162939726820b0830e8"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/engine.rs"
-sha256 = "dd642f6211c6f38d9d1c0769478ec31e66c4cc1bf41f24b5ae0cc1c16a75f971"
+sha256 = "c158bb3c7d97f0dc4f5ec3e6dc053b997d48395f983c0474308ce5a0b90cb379"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/hardened.rs"
@@ -1151,11 +1151,11 @@ sha256 = "6796277ff737147ff0a36c17c7589649905f0a3a159ecdbc7b6dd947fbd01cf1"
 
 [[reviewed-source]]
 path = "scripts/sha1/check-sha1-codegen.sh"
-sha256 = "6840869e0e91ac4e2ebd348d554bf19f62f375d0dfbcc6a2fccd86a92705fe98"
+sha256 = "76cb6d5422e778139afb15d6f9d99e951bbaababfd322b7b6470e64790894ec2"
 
 [[reviewed-source]]
 path = "scripts/sha1/check-sha1.py"
-sha256 = "9408ab60c26f04b7a153719bd4eb083b32669c76e1565b85fd8b24af06b37fb1"
+sha256 = "c07aca76bd52348759f339401c1ce51f3ec5efb7a23f5a2ed872947845f3f308"
 
 [[reviewed-source]]
 path = "assurance/md5-public-api/src/lib.rs"

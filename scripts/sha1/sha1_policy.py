@@ -23,6 +23,7 @@ BOUND = [CRATE + 'src/' + name for name in FILES] + [
     'assurance/sha1-public-api/src/lib.rs', 'assurance/sha1-public-api/src/main.rs',
     'scripts/sha1/check-sha1-differential.py', 'scripts/sha1/check-sha1-codegen.sh',
     'scripts/sha1/check-sha1-package.py',
+    'scripts/sha1/check-sha1.py',
 ]
 
 
@@ -41,9 +42,13 @@ def validate(root=ROOT, hashes=True):
         if re.search(r'\b(unsafe\s*\{|extern|alloc::|std::|Vec|Box|static\s+mut)|\.(unwrap|expect)\(|\b(panic|unimplemented|todo)!', production):
             raise ValueError('SHA-1 unsafe, hosted or panic surface')
     owner = (src / 'owner.rs').read_text()
+    if '#[cfg(debug_assertions)]' in (src / 'engine.rs').read_text():
+        raise ValueError('SHA-1 invariant regression tests must also run in release')
     engine = re.sub(r'\s+', '', (src / 'engine.rs').read_text().split('#[cfg(test)]')[0])
     for operation in ('update', 'padding'):
-        guard = re.sub(r'\s+', '', f'debug_assert!(offset < owner.block.len(), "SHA-1 {operation} offset invariant");')
+        guard = re.sub(r'\s+', '', f'assert!(offset < owner.block.len(), "SHA-1 {operation} offset invariant");')
+        if 'debug_' + guard in engine:
+            raise ValueError('SHA-1 buffer guard must remain active in release')
         if engine.count(guard + 'ifletSome(destination)=owner.block.get_mut(offset)') != 1:
             raise ValueError(f'SHA-1 {operation} buffer invariant guard missing or misplaced')
     for region in REGIONS:
@@ -53,6 +58,10 @@ def validate(root=ROOT, hashes=True):
     if set(manifest['dependencies']) != {'brynja-core', 'brynja-hash-core'} or manifest['features'] != {'default': []}:
         raise ValueError('SHA-1 dependency or feature boundary')
     for path, token in (
+        ('scripts/sha1/check-sha1.py', "'--release'"),
+        ('scripts/sha1/check-sha1.py', "'--lib', 'invalid_'"),
+        ('scripts/sha1/check-sha1.py', 'check=True'),
+        ('scripts/sha1/check-sha1.py', 'timeout=120'),
         ('scripts/checks.sh', 'python3 scripts/sha1/check-sha1.py'),
         ('scripts/zeroization/check-zeroization-miri.sh', 'run_miri -p brynja-legacy-sha1'),
         ('scripts/zeroization/check-zeroization-sanitizer.sh', '-p brynja-legacy-sha1'),

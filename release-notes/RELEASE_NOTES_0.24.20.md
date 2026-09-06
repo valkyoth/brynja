@@ -1,11 +1,12 @@
 # Brynja 0.24.20 Release Notes
 
-Status: implemented; local candidate verification PASS; exceptional pentest pending
+Status: pentest finding remediated; local remediation verification PASS; exceptional retest pending
 
 ## Summary
 
 Freeze the portable SHA-1/MD5 consumer boundary before acceleration, and improve
-impact-selected Miri coverage. No production Rust, algorithm, external dependency
+impact-selected Miri coverage. A pentest follow-up enforces SHA-1's private buffer
+invariants in release as well as debug. No valid-input digest, external dependency
 or backend admission changes. The facade advances to internal 0.24.20; all
 crates, including changed support crates, remain unselected for publication.
 
@@ -40,7 +41,8 @@ SHA-1 and MD5 are collision-broken legacy compatibility algorithms, not modern
 authentication, signatures or password hashing. They remain outside the modern
 facade, TLS, PKIX and FIPS graphs. Both rows remain **In progress** until the
 v0.24.21–v0.24.23 acceleration and final evidence disposition. No new AWS or
-Apple hardware evidence is needed for this unchanged portable implementation.
+Apple hardware evidence is needed for this portable-only boundary; SHA-1's
+affected portable tests and compiler evidence are rerun after its guard fix.
 
 Hardened owners clear their documented source-owned memory; this does not erase
 registers, compiler copies/spills, caches, swap, dumps, DMA or caller copies, and
@@ -60,6 +62,17 @@ and non-admission tests, stage-selected Miri, ASan (without LeakSanitizer), all
 27 Kani harnesses, advisory/tooling checks and zero-publication dry-run. The
 final focused Miri test execution totals about three minutes on the local host;
 full groups remain unchanged and required for affected/public-checkpoint work.
+
+These results describe the initial candidate. The supplied Medium defense-in-
+depth finding is remediated by always-on SHA-1 pre-write assertions and optimized
+fault tests, matching MD5. Mutation checks reject lost or debug-only guards and
+lost optimized execution; emitted-code checks now require both diagnostics.
+The permanent report records remediation reruns separately. Retest is required.
+
+The local release `panic = "abort"` profile is **not inherited by consumers**.
+Actual downstream default/unwind/abort release builds and unwind owner-cleanup
+checks pass. Applications select their panic strategy; abort does not run Drop.
+See [panic strategy](../docs/panic-strategy.md).
 
 Record completed local verification in the report, obtain the exceptional
 pentest, then commit its disposition and wait for green GitHub/CodeQL. Tag only

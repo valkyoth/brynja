@@ -17,6 +17,7 @@ def main():
     else:
         policy.execute('python3', 'scripts/legacy-hash/check-legacy-package.py', timeout=300)
         policy.execute('python3', 'scripts/legacy-hash/check-legacy-isolation.py', timeout=300)
+        policy.execute('python3', 'scripts/legacy-hash/check-panic-profiles.py', timeout=600)
     print('Frozen SHA-1/MD5 portable reference and mandatory acceptance gates: PASS')
 
 

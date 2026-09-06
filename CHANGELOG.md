@@ -2,6 +2,10 @@
 
 ## 0.24.20 candidate
 
+- Pentest remediation makes SHA-1's private offset guards always-on, with debug
+  and optimized fault regressions matching MD5. Downstream panic strategy remains
+  application-owned; default/unwind/abort release consumer checks document this.
+
 - Freeze portable SHA-1/MD5 ordinary/hardened byte/bit downstream acceptance,
   real packaged consumers and modern/legacy rejection tests; retain In progress
   status until v0.24.23. No production algorithm changes or crates.io upload.

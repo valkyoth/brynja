@@ -13,11 +13,11 @@ current implementation claim. Standalone DER encode/decode completion is
 planned for v0.34.6. The former standalone hash and legacy plans are now
 consolidated into the pre-1.0 roadmap, with final release gates through v0.480.0.
 Current generated planning coverage is 2003 non-RC rows
-(2004 milestones including the release candidate), 130 authorities, 4,460
-surfaces and 173 requirements; numerical summaries in the historical v0.3.x
+(2004 milestones including the release candidate), 131 authorities, 4,461
+surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.18 signed; v0.24.19 portable legacy MD5 candidate awaiting exceptional pentest
+Status: v0.20.0 published; milestones through v0.24.18 signed; v0.24.19 portable legacy MD5 exceptional retest and local release checks passed; awaiting green GitHub/CodeQL and owner tag approval
 
 The v0.24.19 candidate adds ordinary and hardened MD5 byte/arbitrary-bit
 APIs in unpublished `brynja-legacy-md5`. It remains isolated from modern

@@ -1,6 +1,6 @@
 # Brynja 0.24.19 Release Notes
 
-Status: implementation candidate; exceptional pentest pending
+Status: exceptional pentest, remediation retest and local release checks PASS; awaiting green GitHub/CodeQL and owner tag approval
 
 ## Summary
 
@@ -59,8 +59,8 @@ removed, misplaced, weakened or debug-only guards and lost release coverage.
 Caller integration guidance now explicitly requires cumulative message-size,
 rate/deadline and bounded-chunk policies. No arbitrary algorithm ceiling is
 added. The masked-byte conversion's unreachable fallback is explained in a
-comment; the arithmetic and public API are unchanged. Focused retest remains
-required after these changes.
+comment; the arithmetic and public API are unchanged. The owner-supplied
+focused retest passed with no substantiated Critical, High or Medium findings.
 
 ## Candidate verification and release conditions
 
@@ -70,9 +70,17 @@ bit oracle, packaged consumer, MD5 Miri/ASan, u128 Kani proof, exact compiler
 owner contracts, advisory and tooling-freshness checks. See the permanent
 report for exact scope and exclusions. This is not independent review.
 
-New crypto/secret ownership requires an exceptional pentest, then a complete
-local release check, report commit, green GitHub/CodeQL and explicit owner
-permission to tag. Candidate preparation does not tag, push or publish.
+The exceptional pentest, remediation retest and complete local release checks
+have passed. The current stage selector required full Miri coverage: all nine
+groups passed on nightly-2026-09-06. The complete AddressSanitizer wrapper
+passed with leak detection disabled for the environment's ptrace restriction;
+all 27 Kani harnesses passed on their pinned verifier. No LeakSanitizer result,
+new independent cryptographic review or FIPS validation is inferred.
+
+The remaining release sequence is the report commit, green GitHub/CodeQL and
+explicit owner permission to tag. This internal milestone selects zero crates
+for publication; release preparation does not push or tag. Workflow changes
+are deferred until after v0.24.19 is tagged, for use from v0.24.20.
 
 See [MD5 assurance](../docs/legacy-md5.md) and
 [pentest report](../security/pentest/v0.24.19.md).

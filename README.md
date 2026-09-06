@@ -947,7 +947,7 @@ The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.18`; the current internal `0.24.19`
 candidate adds the separate complete portable `brynja-legacy-md5` leaf.
 It has ordinary and hardened byte/bit APIs, but is collision-broken, unpublished
-and never enabled by the modern facade. Exceptional MD5 pentest is pending; final
+and never enabled by the modern facade. Exceptional MD5 retest passed; final
 SHA-1/MD5 family acceptance remains later in 0.24.x. SP 800-185 remains **Fully
 implemented** after signed v0.24.17 acceptance; CPU backends remain unadmitted.
 See the [MD5 contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5.md).

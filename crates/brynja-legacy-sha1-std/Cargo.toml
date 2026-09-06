@@ -1,0 +1,20 @@
+[package]
+name = "brynja-legacy-sha1-std"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Opt-in host detection and fail-closed selection for legacy SHA-1"
+publish = ["crates-io"]
+
+[features]
+default = []
+
+[dependencies]
+brynja-legacy-sha1 = { path = "../brynja-legacy-sha1", version = "=0.1.0", features = ["cpu"] }
+
+[lints]
+workspace = true

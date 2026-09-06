@@ -11,6 +11,7 @@ LIMIT = 4 * 1024 * 1024
 PACKAGES = {
     'brynja-core': 'core', 'brynja-sanitization': 'sanitization',
     'brynja-legacy-md5': 'md5', 'brynja-legacy-sha1': 'sha1',
+    'brynja-legacy-sha1-std': 'sha1',
     'brynja-hash-sha2': 'sha2', 'brynja-hash-sha3': 'sha3',
     'brynja-mac-kmac': 'kmac', 'brynja-hash-tuple': 'tuplehash',
     'brynja-hash-parallel': 'parallelhash',

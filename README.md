@@ -944,9 +944,9 @@ and native-parallel disposition at v0.24.17; SP 800-185 is **Fully implemented**
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.19`; the current internal `0.24.20`
-candidate freezes package-external SHA-1/MD5 portable acceptance and improves
-focused assurance selection. Both legacy leaves have ordinary and hardened
+milestones continue through `0.24.20`; the current internal `0.24.21`
+candidate adds isolated SHA-1 CPU candidates and opt-in host observation.
+All SHA-1 candidates remain unadmitted; hardened SHA-1 remains portable. Both legacy leaves have ordinary and hardened
 byte/bit APIs, but are collision-broken, unpublished and absent from the modern facade; final
 SHA-1/MD5 family acceptance remains later in 0.24.x. SP 800-185 remains **Fully
 implemented** after signed v0.24.17 acceptance; CPU backends remain unadmitted.
@@ -1087,6 +1087,7 @@ selected set in dependency order and publishes the facade last.
 | `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Portable implementation present at v0.24.18, frozen acceptance at v0.24.20, SHA-instruction acceleration at v0.24.21, and final cross-backend closure at v0.24.23; OpenPGP consumers receive separate reviews at v0.225.1, v0.225.2, v0.226.0, and v0.230.2 |
 | `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Portable implementation at v0.24.19, frozen acceptance at v0.24.20, multi-buffer SIMD at v0.24.22, and final cross-backend closure at v0.24.23 solely before isolated HMAC-MD5 compatibility |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
+| `brynja-legacy-sha1-std` | Optional legacy SHA-1 host observation and portable fallback | v0.1.0 candidate at v0.24.21; unpublished, no admitted acceleration, required mode fails closed, absent from modern and FIPS graphs |
 | Future `brynja-platform-security` | Optional `no_std` protected-region contract and typed enforcement evidence | Planned at v0.174.1; never performs hidden OS effects |
 | Future `brynja-platform-security-std` | Optional Linux, Android, Windows, macOS, iOS, and BSD protected-memory providers | Planned at v0.174.2-v0.174.5; outside every default graph |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published; current source exact-pins `sanitization 2.0.4`; absent from facade and FIPS graphs |
@@ -1128,7 +1129,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
 | External crates | Rejected unless a numbered admission freezes an exact minimal graph; planned `base64-ng` use is encoding-only and future rustls/Tokio API dependencies remain isolated |
 | First-party companion crates | Exact `sanitization 2.0.4` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
-| Unsafe Rust | Nine exact source-hash-bound modules admit the v0.11 volatile clearer plus SHA-256/Keccak attestations, x86 SHA/AVX2 Keccak, AArch64 SHA2/SHA-512/SHA3 Keccak, RV64 Zknh inline assembly, and std detector boundaries; every other site is mechanically forbidden |
+| Unsafe Rust | Twelve exact source-hash-bound modules confine the v0.11 volatile clearer plus SHA-256/Keccak attestations, x86 SHA/AVX2 Keccak, AArch64 SHA2/SHA-512/SHA3 Keccak, RV64 Zknh inline assembly, std detector, and isolated legacy SHA-1 session/x86/AArch64 candidate boundaries; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |
 | FIPS 140-3 status | Planned Level 1 software-module path; not validated |

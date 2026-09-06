@@ -55,6 +55,7 @@ COMPONENT_ROWS = (
     "| Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |",
 )
 SCOPED_ROWS = {
+    Path("crates/brynja-legacy-sha1-std/README.md"): "| SHA-1 | In progress through v0.24.23 | ❌ Not independently verified |",
     Path("crates/brynja-core/README.md"): "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
     Path("crates/brynja-crypto/README.md"): "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     Path("crates/brynja-crypto-cpu/README.md"): "| x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |",

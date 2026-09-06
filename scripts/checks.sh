@@ -57,6 +57,9 @@ scripts/md5/check-md5-codegen.sh
 cargo test --locked --manifest-path assurance/md5-public-api/Cargo.toml
 python3 scripts/sha1/check-sha1.py
 python3 scripts/sha1/test-sha1.py
+python3 scripts/sha1/check-sha1-cpu.py
+python3 scripts/sha1/test-sha1-cpu.py
+scripts/sha1/check-sha1-cpu-codegen.sh
 python3 scripts/sha1/check-sha1-differential.py
 python3 scripts/sha1/check-sha1-package.py
 scripts/sha1/check-sha1-codegen.sh

@@ -34,6 +34,7 @@ file beneath a Cargo `target/` directory, regardless of workspace depth.
 | `release/` | Release selection, pentest freshness, SBOM, GitHub controls, and historical release gates |
 | `repository/` | Workspace, source, documentation, shell, cryptography-origin, status, and script-layout policy |
 | `sanitization/` | Sanitization dependency admission and optimized-code checks |
+| `sha1/` | Isolated legacy SHA-1 portable/CPU policy, differential, package, compiler, QEMU and native-capture checks |
 | `sha2/` | SHA-2 source policy, public acceptance, CPU code generation, QEMU, and native capture scripts |
 | `sha3/` | SHA-3/SHAKE source policy, differential evidence, and frozen public acceptance scripts |
 | `sp800185/` | Combined portable and hosted SP 800-185 acceptance, parallel execution comparisons, frozen-contract policy and reviewed native capture |

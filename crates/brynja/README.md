@@ -35,7 +35,7 @@ All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged a
 
 ## Add The Crate
 
-Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.20** APIs.
+Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.21** APIs.
 For published foundation APIs: `cargo add brynja --no-default-features`.
 For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
 
@@ -195,6 +195,6 @@ FIPS validation is a separate official claim from implementation and independent
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |
 | `brynja-tls12`, `brynja-tls13`, `brynja-dtls`, `brynja-quic-tls` | Separately reviewable modern protocol engines |
-| `brynja-legacy-*` | Explicitly isolated obsolete-protocol compatibility |
+| `brynja-legacy-*` | Isolated obsolete protocols, SHA-1/MD5 and opt-in SHA-1 host detection |
 
 More: [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md), [threat model](https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md), [verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md), and [security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md). Licensed under either Apache-2.0 or MIT, at your option.

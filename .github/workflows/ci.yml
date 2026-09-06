@@ -167,7 +167,7 @@ jobs:
       - name: Install Rust target
         run: rustup target add ${{ matrix.target }}
       - name: Check complete no_std workspace
-        run: cargo check --workspace --exclude brynja-crypto-cpu-std --exclude brynja-hash-parallel-std --all-features --target ${{ matrix.target }}
+        run: cargo check --workspace --exclude brynja-crypto-cpu-std --exclude brynja-hash-parallel-std --exclude brynja-legacy-sha1-std --all-features --target ${{ matrix.target }}
       - name: Check CPU admission fixture
         run: cargo check --manifest-path assurance/cpu-admission-fixture/Cargo.toml --target ${{ matrix.target }}
       - name: Check SHA-256 public API fixture

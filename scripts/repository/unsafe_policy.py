@@ -9,6 +9,9 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("a1e9bdbcbdab90db33b6b8e44f6cb68d9f7f6424c9b4cd70d5c94a818ea10a54", 3, 1, 3),
+    Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"): ("4421dbaf14b05b7dd9480d32ae6319134f5785ff5347ba7ec74751d5aa80a583", 1, 1, 1),
+    Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"): ("440373ba1279dd55d991b285eceb83157238b6217ad1c5e125f4bc7ffc704473", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_volatile.rs"): (
         "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217",
         1,
@@ -121,7 +124,7 @@ def validate_allowed(
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
     elif relative.name in {
-        "x86_sha.rs", "aarch64_sha2.rs", "riscv64_zknh.rs",
+        "x86_sha.rs", "aarch64_sha2.rs", "riscv64_zknh.rs", "x86_sha1.rs", "aarch64_sha1.rs",
         "x86_avx2_keccak.rs", "aarch64_sha3_keccak.rs",
     }:
         if "#[target_feature" not in text or "core::arch" not in text:

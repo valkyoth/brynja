@@ -12,7 +12,8 @@ fi
 
 while IFS= read -r source; do
     if [[ "$source" == "crates/brynja-crypto-cpu-std/src/lib.rs" || \
-          "$source" == "crates/brynja-hash-parallel-std/src/lib.rs" ]]; then
+          "$source" == "crates/brynja-hash-parallel-std/src/lib.rs" || \
+          "$source" == "crates/brynja-legacy-sha1-std/src/lib.rs" ]]; then
         if grep -q '#!\[no_std\]' "$source"; then
             echo "opt-in host adapter must remain an explicit std crate: $source" >&2
             exit 1

@@ -124,3 +124,14 @@ compile-fail ownership checks and compiler cleanup evidence.
 - [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md)
 
 Rust 1.90.0–1.98.1; default validation on 1.98.1. MIT OR Apache-2.0.
+
+## Opt-in CPU candidates (v0.24.21)
+
+The `cpu` feature adds isolated x86/x86_64 SHA and AArch64 SHA1 candidates,
+`Sha1BackendSession`, and consuming `AcceleratedSha1` byte/bit streaming APIs.
+Ordinary builds reject all candidates before instructions execute. Hardware
+schedules/registers/spills are not cleanup-qualified; accelerated types are for
+public data only and cannot implement the sealed hardened capability.
+`HardenedSha1` remains portable. The separate `brynja-legacy-sha1-std` adapter
+reports capabilities and portable fallback; required acceleration fails closed.
+See [acceleration and capture instructions](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-acceleration.md).

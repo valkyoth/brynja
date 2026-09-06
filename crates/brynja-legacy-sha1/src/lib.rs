@@ -24,11 +24,18 @@
 #![no_std]
 
 mod compress;
+#[cfg(feature = "cpu")]
+mod cpu;
 mod engine;
 mod hardened;
 mod ordinary;
 mod output;
 mod owner;
+
+#[cfg(feature = "cpu")]
+pub use cpu::{
+    AcceleratedSha1, Sha1Backend, Sha1BackendError, Sha1BackendHealth, Sha1BackendSession,
+};
 
 pub use brynja_hash_core::{BitString, BitStringError};
 pub use hardened::{HardenedSha1, HardenedSha1State};

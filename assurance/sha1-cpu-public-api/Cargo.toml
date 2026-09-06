@@ -1,0 +1,16 @@
+[package]
+name = "brynja-sha1-cpu-public-api-fixture"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", version = "=0.1.0", default-features = false, features = ["cpu"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+[lints.clippy]
+unwrap_used = "forbid"
+expect_used = "forbid"

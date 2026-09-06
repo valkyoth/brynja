@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.24.21 candidate
+
+- Add first-party x86/x86_64 SHA and AArch64 SHA1 schedule/round kernels behind
+  the legacy SHA-1 leaf's opt-in `cpu` feature, with distinct KAT-gated,
+  revalidated, quarantining sessions and consuming ordinary byte/bit APIs.
+- Add the separate `brynja-legacy-sha1-std` observation/fallback adapter; required
+  acceleration fails closed. No modern, FIPS or hardened acceleration edge.
+- Replay frozen portable consumer vectors and NIST vectors on candidates; add
+  compiler, QEMU, failure, mutation and native-capture tooling. Native review and
+  exceptional pentest remain pending; no crate is selected for publication.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.21.md).
+
 ## 0.24.20 candidate
 
 - Record the owner's green exceptional remediation retest of `354fa6c`, with

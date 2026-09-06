@@ -1,0 +1,14 @@
+[admission]
+x86-sha1 = "unadmitted"
+aarch64-sha1 = "unadmitted"
+riscv = "scalar-only"
+hardened = "portable-only"
+
+[evidence]
+milestone = "0.24.21"
+status = "pending-pentest-and-exact-commit-native-capture"
+native_lanes = ["amd-x86_64", "intel-x86_64", "apple-m2-aarch64", "aws-aarch64"]
+qemu = "supplemental-correctness-only"
+missing = ["reviewed-native-correctness", "migration-safe-execution-authority", "native-performance-and-side-channel-review", "accelerated-cleanup-qualification"]
+independent_review = false
+fips_validated = false

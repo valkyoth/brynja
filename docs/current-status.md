@@ -17,9 +17,13 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance implemented; exceptional pentest, SHA-1 private-guard remediation retest and full local release gate PASS; awaiting green GitHub/CodeQL
+Status: v0.20.0 published; milestones through v0.24.20 signed; v0.24.21 SHA-1 CPU candidates implemented and unadmitted; local verification passed; exceptional pentest and reviewed native evidence pending
 
-The v0.24.20 candidate freezes public-API real-file, bit, lifecycle, package and
+The current candidate adds opt-in legacy SHA-1 instruction kernels and a separate
+host-observation adapter, with required mode failing closed and hardened SHA-1
+remaining portable. See [the acceleration contract](legacy-sha1-acceleration.md).
+
+The v0.24.20 milestone freezes public-API real-file, bit, lifecycle, package and
 modern-isolation acceptance for both legacy hashes. Semantic Miri scope keeps
 version-only metadata out of global reruns while preserving changed-owner,
 dependent-consumer and public-checkpoint evidence. See

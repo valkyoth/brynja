@@ -1,12 +1,13 @@
 # Unsafe Rust Policy
 
-Status: nine exact source-hash-bound modules approved; every other unsafe site forbidden
+Status: twelve exact source-hash-bound exceptions inventoried; three legacy SHA-1 candidate modules await exceptional pentest; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only nine exact modules: the private core volatile clearer; the
+Rust in only twelve exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
-RV64 Zknh kernel; and the opt-in standard-library runtime detector. Each
+RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
+isolated legacy SHA-1 session/x86/AArch64 candidate modules. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every
@@ -154,3 +155,13 @@ invariants, Miri, emitted-code, target, and external-review evidence are
 recorded in the admission artifact. Approval applies only to the separately
 selected `brynja-sanitization` adapter and does not authorize additional unsafe
 code or replace Brynja's mandatory v0.11.0 primitive.
+
+## v0.24.21 legacy SHA-1 candidates
+
+Three additional hash-bound exception modules live only under
+`crates/brynja-legacy-sha1/src/cpu`: `session.rs`, `x86_sha1.rs`, and
+`aarch64_sha1.rs`. The session owns the documented external execution authority
+and guards private exact-width intrinsic entrypoints. Local load/store safety
+comments cover the fixed live arrays. No modern CPU crate changes. All candidates
+remain unadmitted, hardened SHA-1 stays portable, and a feature check alone is
+not a migration-safe authority. See [the contract](legacy-sha1-acceleration.md).

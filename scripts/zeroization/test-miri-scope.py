@@ -111,7 +111,9 @@ def main() -> int:
     assert status == 0 and len(commands) == 10
     assert all("brynja-hash-sha2" in command for command in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 30
+    assert status == 0 and len(commands) == 32
+    assert sum('quarantined_model_clears_all_regions_without_instructions' in c for c in commands) == 1
+    assert sum('--features cpu --test cpu' in c for c in commands) == 1
     status, commands = run_profile("--group", "unknown")
     assert status == 2 and not commands
     print(

@@ -45,6 +45,8 @@ quick_sha1() {
 
 full_sha1() {
     run_miri -p brynja-legacy-sha1 --lib
+    run_miri -p brynja-legacy-sha1 --features cpu --lib quarantined_model_clears_all_regions_without_instructions
+    run_miri -p brynja-legacy-sha1 --features cpu --test cpu
     run_miri -p brynja-legacy-sha1 --test api -- --skip standard_byte_vectors_and_million_a --skip official_nist_vectors_ordinary_hardened_and_streamed
 }
 

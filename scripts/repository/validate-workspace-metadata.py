@@ -191,8 +191,10 @@ def validate_dependencies(
             raise ValueError(f"{name} optionality drifted for {dependency_name}")
         allowed_features = (
             ["cpu"]
-            if name == "brynja-crypto-cpu-std"
-            and dependency_name == "brynja-hash-sha2"
+            if (name, dependency_name) in {
+                ("brynja-crypto-cpu-std", "brynja-hash-sha2"),
+                ("brynja-legacy-sha1-std", "brynja-legacy-sha1"),
+            }
             else []
         )
         if dependency.get("features") != allowed_features:
@@ -301,6 +303,10 @@ def validate_resolved_mode(
             # in the no-default-features metadata run. Facade isolation is
             # checked below after removing that unrelated root's unification.
             expected_dependencies.add("brynja-crypto-cpu")
+            expected_features.add("cpu")
+        if name == "brynja-legacy-sha1":
+            # Explicit hosted legacy workspace root enables only the local
+            # cpu feature; it adds no dependency to the portable leaf.
             expected_features.add("cpu")
         package_id = names[name]
         actual_dependencies = {

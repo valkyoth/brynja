@@ -157,7 +157,7 @@ class = "legacy-engine"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-core"]
 optional = {}
-features = ["cpu"]
+features = ["cpu", "cpu-evidence"]
 
 [packages.brynja-legacy-pct]
 class = "legacy-engine"

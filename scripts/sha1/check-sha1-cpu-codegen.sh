@@ -5,9 +5,9 @@ trap 'rm -rf -- "$temporary"' EXIT
 for compiler in 1.90.0 1.98.1; do
     for target in x86_64-unknown-linux-gnu aarch64-unknown-linux-gnu; do
         output="$temporary/$compiler-$target"
-        CARGO_TARGET_DIR="$output" RUSTFLAGS='--cfg brynja_cpu_evidence' \
+        CARGO_TARGET_DIR="$output" RUSTFLAGS='--cfg brynja_sha1_cpu_evidence' \
             cargo "+$compiler" rustc --locked --release -p brynja-legacy-sha1 \
-            --features cpu --target "$target" --lib -- --emit=asm
+            --features cpu,cpu-evidence --target "$target" --lib -- --emit=asm
         mapfile -t files < <(find "$output" -name '*.s' -type f)
         test "${#files[@]}" -eq 1
         if test "$target" = x86_64-unknown-linux-gnu; then

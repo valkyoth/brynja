@@ -18,8 +18,10 @@ BOUND = [CPU + name for name in SOURCES] + [
     'scripts/sha1/cpu_policy.py', 'scripts/sha1/check-sha1-cpu.py',
     'scripts/sha1/test-sha1-cpu.py', 'scripts/sha1/check-sha1-cpu-codegen.sh',
     'scripts/sha1/test-sha1-native-capture.py',
+    'scripts/sha1/test-sha1-evidence-builds.py',
     'scripts/sha1/check-sha1-cpu-qemu.sh', 'scripts/sha1/capture-sha1-cpu-native.py',
     'docs/legacy-sha1-acceleration.md', 'security/sha1-cpu-admissions.toml',
+    '.github/CONTRIBUTING.md', 'scripts/README.md',
 ]
 
 def require(source, token):
@@ -37,7 +39,7 @@ def validate(root=ROOT, hashes=True):
     session, stream, identity = (sources[CPU+n] for n in ('session.rs','stream.rs','mod.rs'))
     require((root/'crates/brynja-legacy-sha1/src/lib.rs').read_text(), '#[cfg(feature = "cpu")] mod cpu;')
     if 'pub mod' in identity: raise ValueError('kernel module became public')
-    for token in ('if !backend.is_admitted() && !cfg!(any(test, brynja_cpu_evidence))',
+    for token in ('if !backend.is_admitted() && !cfg!(any(test, all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)))',
                   'return Err(Sha1BackendError::NotAdmitted)', 'require_architecture(backend)?',
                   'if !revalidate(backend)', 'session.compress(&mut state, &block)?',
                   'if state != expected', 'session.healthy.set(false)',
@@ -47,6 +49,13 @@ def validate(root=ROOT, hashes=True):
                   '#[cfg(all(target_arch = "aarch64", target_endian = "little"))]'):
         require(session,token)
     require(identity,'pub const fn is_admitted(self) -> bool { false }')
+    require(sources['scripts/sha1/check-sha1-cpu.py'], "'scripts/sha1/test-sha1-evidence-builds.py'")
+    if 'brynja_cpu_evidence' in session:
+        raise ValueError('shared evidence cfg must not enable legacy SHA-1')
+    require(sources['.github/CONTRIBUTING.md'], 'Never persist `--cfg brynja_cpu_evidence` or `--cfg brynja_sha1_cpu_evidence`')
+    require(sources['scripts/README.md'], 'Do not deploy evidence binaries.')
+    require(sources['docs/legacy-sha1-acceleration.md'], 'Cargo feature unification')
+    require(sources['docs/legacy-sha1-acceleration.md'], 'Plain byte slices cannot prove that input is public.')
     require(session,'if !(self.revalidate)(self.backend) { self.healthy.set(false); return Err(Sha1BackendError::MissingFeatures); }')
     require(identity,'&["sse2", "sha"]')
     require(identity,'&["neon", "sha2"]')

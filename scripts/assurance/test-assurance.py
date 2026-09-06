@@ -196,6 +196,16 @@ def test_tool_in_cargo_manifest_fails() -> None:
         )
 
 
+def test_sha1_evidence_cfg_inventory_is_exact() -> None:
+    manifest = (ROOT / "Cargo.toml").read_text(encoding="utf-8")
+    tools = assurance.read_policy()["tools"]
+    assurance.validate_manifest_text(manifest, tools, "Cargo.toml")
+    for replacement in ("cfg(unreviewed_evidence)", "cfg(brynja_cpu_evidence)"):
+        broken = manifest.replace("cfg(brynja_sha1_cpu_evidence)", replacement)
+        with fails_with("workspace assurance check-cfg admission drifted"):
+            assurance.validate_manifest_text(broken, tools, "Cargo.toml")
+
+
 def test_rust_target_probe_is_time_bounded() -> None:
     targets = "\n".join(assurance.TARGETS)
     with mock.patch.object(

@@ -134,4 +134,10 @@ schedules/registers/spills are not cleanup-qualified; accelerated types are for
 public data only and cannot implement the sealed hardened capability.
 `HardenedSha1` remains portable. The separate `brynja-legacy-sha1-std` adapter
 reports capabilities and portable fallback; required acceleration fails closed.
+Feature unification can expose CPU types, not authorize execution. Dedicated
+non-production evidence requires both `cpu-evidence` and the separate
+`brynja_sha1_cpu_evidence` cfg; the older shared evidence cfg cannot enable it.
+Never persist evidence flags in an application's build environment. A plain
+slice does not classify its contents: callers must not pass secrets to the
+ordinary accelerated API. Use the sealed hardened API for confidential inputs.
 See [acceleration and capture instructions](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-acceleration.md).

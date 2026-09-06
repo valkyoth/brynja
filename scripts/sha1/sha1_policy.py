@@ -55,7 +55,7 @@ def validate(root=ROOT, hashes=True):
         if f'clear_owned_region(&mut self.{region})' not in owner:
             raise ValueError('SHA-1 private region is not cleared')
     manifest = tomllib.loads((root / CRATE / 'Cargo.toml').read_text())
-    if set(manifest['dependencies']) != {'brynja-core', 'brynja-hash-core'} or manifest['features'] != {'default': [], 'cpu': []}:
+    if set(manifest['dependencies']) != {'brynja-core', 'brynja-hash-core'} or manifest['features'] != {'default': [], 'cpu': [], 'cpu-evidence': []}:
         raise ValueError('SHA-1 dependency or feature boundary')
     for path, token in (
         ('scripts/sha1/check-sha1.py', "'--release'"),

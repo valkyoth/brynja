@@ -13,6 +13,8 @@ publish = ["crates-io"]
 [features]
 default = []
 cpu = []
+# Non-production evidence only; inert without the separate SHA-1-specific cfg.
+cpu-evidence = []
 
 [dependencies]
 brynja-core = { workspace = true }

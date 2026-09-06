@@ -48,7 +48,7 @@ and unsupported targets remain scalar-only. Rust 1.90.0–1.98.1 is retained.
 ## Local verification
 
 The repository gate, twelve-version Rust matrix, three bare-metal targets,
-packaged portable/CPU/host consumers, strict Clippy, 26 candidate-policy mutation
+packaged portable/CPU/host consumers, strict Clippy, 34 candidate-policy mutation
 cases and native-capture rejection tests pass. Forced local AMD and supplemental
 AArch64 QEMU runs pass the frozen/NIST corpus and eight kernel/lifecycle groups.
 32-bit x86 QEMU groups also pass on both compiler endpoints. Emitted-instruction
@@ -61,6 +61,14 @@ These are local implementation checks, not independent review or native admissio
 Current tooling, RustSec, dependency-policy and committed SBOM checks pass.
 
 ## Release workflow
+
+The first pentest identified a Medium shared-build-cfg risk and two lower-
+severity API caveats. SHA-1 evidence now requires its dedicated cfg AND the
+non-default `cpu-evidence` feature; a shared flag or feature unification cannot
+enable it alone. Five optimized negative build combinations, dedicated positive
+controls and additional policy mutations cover this remediation. Persistent
+evidence flags and secret input to ordinary accelerated APIs remain prohibited.
+The owner retest is pending; no backend was admitted.
 
 Complete local checks, request an exceptional pentest, address any findings and
 collect/review exact-commit native observations on AMD/Intel/M2/AWS Arm where

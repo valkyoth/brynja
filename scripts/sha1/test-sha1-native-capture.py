@@ -47,7 +47,7 @@ class CaptureTests(unittest.TestCase):
                         calls['commit'] += 1
                         return 'b'*40 if failure == 'recommit' and calls['commit'] > 1 else 'a'*40
                     if command[0] == 'rustc': return 'rustc 1.98.1'
-                    self.assertEqual(env['RUSTFLAGS'],'--cfg brynja_cpu_evidence -C target-feature=+sse2,+sha')
+                    self.assertEqual(env['RUSTFLAGS'],'--cfg brynja_sha1_cpu_evidence -C target-feature=+sse2,+sha')
                     self.assertNotIn('CARGO_ENCODED_RUSTFLAGS',env)
                     if failure == 'source': (root/'source').write_text('changed')
                     if failure == 'incomplete': return 'PASS'

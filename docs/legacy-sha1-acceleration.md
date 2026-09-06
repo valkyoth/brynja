@@ -18,6 +18,17 @@ Its opportunistic byte/bit and streaming APIs fall back to portable SHA-1;
 required acceleration fails closed. It cannot mint an execution capability.
 All new packages remain unpublished until an explicitly selected checkpoint.
 
+Cargo feature unification means the hosted adapter's `cpu` dependency can expose
+accelerated types to other consumers of the same leaf instance. Visibility is
+not execution authority: the adapter never enables `cpu-evidence`, and ordinary
+builds still reject candidates. Selecting all features also grants no admission.
+
+Plain byte slices cannot prove that input is public. Direct callers must keep
+secrets out of `AcceleratedSha1`; only the sealed hardened capability enforces
+composition with secret-bearing constructions. An explicit public-data marker
+may be considered before production admission, but a marker would be an assertion
+by the caller, not proof of secrecy classification or cleanup.
+
 | Candidate | Compiler features | Current disposition |
 | --- | --- | --- |
 | x86/x86_64 SHA-1 | `sha,sse2` | Unadmitted |
@@ -35,8 +46,10 @@ schedule and round instructions. See Rust's
 ## Authority and cleanup limits
 
 Production builds reject candidates before startup KAT or instruction use.
-Tests and explicitly non-production `brynja_cpu_evidence` builds can force them
-only with exact static features or an external execution authority. The direct
+Unit tests and explicitly non-production builds using BOTH `cpu-evidence` and
+`brynja_sha1_cpu_evidence` can force them only with exact static features or an
+external execution authority. The shared `brynja_cpu_evidence` flag is ignored
+by this leaf even when all features are enabled. The direct
 KAT executes the actual kernel. KAT failure and lost-feature revalidation latch
 session quarantine. Every buffered update/finalization and block revalidates;
 backend failure clears the operation's owned regions and prevents continuation.

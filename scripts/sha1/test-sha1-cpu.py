@@ -9,6 +9,14 @@ def main():
     policy.validate()
     c = policy.CPU
     cases = [
+        (c+'session.rs', 'all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)', 'brynja_sha1_cpu_evidence'),
+        (c+'session.rs', 'brynja_sha1_cpu_evidence', 'brynja_cpu_evidence'),
+        (c+'session.rs', 'all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)', 'feature = "cpu-evidence"'),
+        ('scripts/sha1/check-sha1-cpu.py', "['python3','scripts/sha1/test-sha1-evidence-builds.py'],", ''),
+        ('.github/CONTRIBUTING.md', 'Never persist', 'Persist'),
+        ('scripts/README.md', 'Do not deploy evidence binaries.', ''),
+        ('docs/legacy-sha1-acceleration.md', 'Cargo feature unification', ''),
+        ('docs/legacy-sha1-acceleration.md', 'Plain byte slices cannot prove that input is public.', ''),
         (c+'session.rs','!backend.is_admitted()', 'backend.is_admitted()'),
         (c+'session.rs','return Err(Sha1BackendError::NotAdmitted)', 'return Err(Sha1BackendError::MissingFeatures)'),
         (c+'session.rs','require_architecture(backend)?;', ''),

@@ -7,7 +7,7 @@ publish = false
 [workspace]
 
 [dependencies]
-brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", version = "=0.1.0", default-features = false, features = ["cpu"] }
+brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", version = "=0.1.0", default-features = false, features = ["cpu", "cpu-evidence"] }
 
 [lints.rust]
 unsafe_code = "forbid"

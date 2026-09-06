@@ -48,7 +48,7 @@ def capture(args):
     hashes = {p:hashlib.sha256((policy.ROOT/p).read_bytes()).hexdigest() for p in policy.BOUND}
     cpu, features = host(args.lane)
     compiler = run(['rustc','+1.98.1','--version','--verbose'])
-    env = dict(os.environ,RUSTFLAGS=f'--cfg brynja_cpu_evidence -C target-feature={features}')
+    env = dict(os.environ,RUSTFLAGS=f'--cfg brynja_sha1_cpu_evidence -C target-feature={features}')
     env.pop('CARGO_ENCODED_RUSTFLAGS',None)
     transcript = run(['cargo','+1.98.1','run','--locked','--offline','--release','--manifest-path',
                       'assurance/sha1-cpu-public-api/Cargo.toml','--','--benchmark'],env)

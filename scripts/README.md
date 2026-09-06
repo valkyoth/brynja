@@ -17,6 +17,15 @@ nested categories, duplicate basenames, missing categories, and unsupported
 file types. `repository/check-tracked-build-artifacts.py` rejects every tracked
 file beneath a Cargo `target/` directory, regardless of workspace depth.
 
+## Evidence-build environment safety
+
+Evidence cfgs belong only to individual dedicated script invocations. Never
+export `brynja_cpu_evidence` or `brynja_sha1_cpu_evidence` flags into persistent
+shell/workspace/CI environments: Cargo propagates compiler flags to dependencies.
+Do not deploy evidence binaries. Legacy SHA-1 additionally requires the opt-in
+`cpu-evidence` feature and its own cfg; `cpu`, all features, or the shared cfg
+alone never admit it. See [contributor guidance](../.github/CONTRIBUTING.md).
+
 ## Directories
 
 | Directory | Ownership |

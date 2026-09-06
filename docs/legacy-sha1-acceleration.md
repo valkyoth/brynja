@@ -106,5 +106,9 @@ the capture rejects dirty/changing commits, source drift, wrong backend output,
 and attempts to overwrite an existing artifact. These checks are regression-tested.
 They do not authenticate cloud ownership or establish migration/side-channel
 safety. These captures are operator-self-attested observations, not admission.
-Any implementation change requires affected captures to be rerun. AWS/M2
-access and reviewed native dispositions remain release preparation work.
+Any implementation change requires affected captures to be rerun. The
+[v0.24.21 report](../security/pentest/v0.24.21.md) records reviewed AMD, Intel,
+M2 Pro and AWS Arm observations, exact source commits and artifact checksums.
+All four lanes passed as self-attested candidate observations; the candidates
+remain unadmitted pending authenticated native correctness, migration-safe
+authority, performance/side-channel review and accelerated cleanup qualification.

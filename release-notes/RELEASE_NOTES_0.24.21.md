@@ -1,6 +1,6 @@
 # Brynja 0.24.21 Release Notes
 
-Status: exceptional retest and local release checks PASS; reviewed native evidence and green GitHub/CodeQL pending
+Status: exceptional retest and local release checks PASS; four native candidate dispositions reviewed; awaiting green GitHub/CodeQL
 
 ## Scope and deliverables
 
@@ -82,12 +82,13 @@ an external-binary reproduction and a mutation restoring the old test exception
 cover this follow-up. The owner confirmed a clean retest of exact signed
 commit `f03a68aa862c06c2acf6609b61c16f46a43ba632` on 2026-09-06.
 
-Local release checks passed. Collect/review exact-commit native observations
-on AMD/Intel/M2/AWS Arm where available. The local AMD and owner-supplied M2 Pro
-captures passed review as self-attested correctness observations; Intel and
-AWS Arm captures remain pending. No remote lane is claimed unavailable
-or complete without its disposition. Commit the report,
-wait for green GitHub/CodeQL and explicit owner tag permission. Zero crates are
+Local release checks passed. AMD, Intel Xeon, M2 Pro and AWS Arm Neoverse-V1
+native captures passed review as self-attested correctness and exploratory
+benchmark observations. Both AWS jobs also passed eight forced kernel/lifecycle
+groups and ordinary-build rejection; captures and logs are retained locally.
+This completes the native disposition for this unadmitted milestone, not
+authenticated provenance, migration safety, side-channel or cleanup approval.
+Wait for green GitHub/CodeQL and explicit owner tag permission. Zero crates are
 selected for upload at this internal milestone.
 
 See [the API/evidence contract](../docs/legacy-sha1-acceleration.md) and

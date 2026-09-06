@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.20 signed; v0.24.21 SHA-1 CPU candidates implemented and unadmitted; exceptional retest and local release checks PASS; reviewed native evidence and green GitHub/CodeQL pending
+Status: v0.20.0 published; milestones through v0.24.20 signed; v0.24.21 SHA-1 CPU candidates implemented and unadmitted; exceptional retest and local release checks PASS; all four native candidate dispositions reviewed; awaiting green GitHub/CodeQL
 
 The current candidate adds opt-in legacy SHA-1 instruction kernels and a separate
 host-observation adapter, with required mode failing closed and hardened SHA-1

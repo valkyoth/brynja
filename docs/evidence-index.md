@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; through v0.24.20 signed; v0.24.21 legacy SHA-1 CPU exceptional retest and local release checks passed; reviewed native evidence and green GitHub/CodeQL pending
+Status: v0.20.0 published; through v0.24.20 signed; v0.24.21 legacy SHA-1 CPU exceptional retest and local release checks passed; all four native candidate dispositions reviewed; awaiting green GitHub/CodeQL
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -8,7 +8,7 @@ consistent in the same commit.
 
 | Evidence | Authority or scope | Enforcement |
 | --- | --- | --- |
-| `assurance/sha1-cpu-public-api`, `scripts/sha1`, `security/sha1-cpu-admissions.toml`, `security/pentest/v0.24.21.md` | v0.24.21 isolated SHA-1 instruction candidates and optional host adapter | Frozen/NIST and arbitrary-state differential replay, AMD execution and supplemental Arm/32-bit x86 QEMU, endpoint code generation, Miri failure model/admission rejection, ASan, packaged consumers and 35 policy mutations; exceptional retest of f03a68a passed; source-bound AMD and M2 Pro native observations reviewed as self-attested correctness evidence; candidates remain unadmitted, hardened SHA-1 portable, Intel/AWS Arm capture and complete native review pending |
+| `assurance/sha1-cpu-public-api`, `scripts/sha1`, `security/sha1-cpu-admissions.toml`, `security/pentest/v0.24.21.md` | v0.24.21 isolated SHA-1 instruction candidates and optional host adapter | Frozen/NIST and arbitrary-state differential replay, native AMD/Intel/M2 Pro/AWS Arm observations and supplemental Arm/32-bit x86 QEMU, endpoint code generation, Miri failure model/admission rejection, ASan, packaged consumers and 35 policy mutations; exceptional retest of f03a68a passed; all four source-bound native dispositions reviewed as self-attested correctness evidence; candidates remain unadmitted and hardened SHA-1 portable; no authenticated provenance, migration, side-channel or accelerated cleanup approval |
 | `assurance/legacy-hash-public-api`, `scripts/legacy-hash/legacy-reviewed.toml` | v0.24.20 frozen portable ordinary/hardened byte/bit SHA-1 and MD5 consumer; still collision-broken and In progress | Forty independently recomputed digests, actual package replay, compiler-positive-controlled non-admission, corpus/archive mutations, twelve Rust lanes, no_std, bounded Miri and ASan; no production algorithm change or backend admission |
 | `scripts/zeroization/{miri_scope,scope_inputs}.py`, `docs/focused-assurance.md` | Semantic impact selection from signed baseline, including dirty/deleted/untracked candidates | Positive/broken lock-graph, manifest, digest-map, runner, baseline and execution tests; full changed-owner/dependent groups, unchanged-owner smoke, all full groups at public checkpoints |
 | `rfc/SOURCES`, `rfc/SHA256SUMS`, `rfc/rfc*.txt` | Exact RFC Editor source bytes and reviewed roles | `scripts/standards/verify-rfcs.sh` |

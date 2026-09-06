@@ -1,6 +1,6 @@
 # Brynja 0.24.20 Release Notes
 
-Status: exceptional pentest and remediation retest PASS; preparing final local release checks before GitHub/CodeQL
+Status: exceptional pentest, remediation retest and full local release gate PASS; awaiting green GitHub/CodeQL
 
 ## Summary
 

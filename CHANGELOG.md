@@ -4,6 +4,9 @@
 
 - Record the owner's green exceptional remediation retest of `354fa6c`, with
   zero open findings. This internal milestone selects zero crates for upload.
+- Complete the full local release gate on signed `adb3c72`, including affected
+  Miri groups, unchanged-group smoke, AddressSanitizer and all 27 Kani harnesses;
+  record the result before waiting for GitHub/CodeQL and owner tag permission.
 - Pentest remediation makes SHA-1's private offset guards always-on, with debug
   and optimized fault regressions matching MD5. Downstream panic strategy remains
   application-owned; default/unwind/abort release consumer checks document this.

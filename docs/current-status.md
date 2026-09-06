@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance implemented; exceptional pentest and SHA-1 private-guard remediation retest pass, preparing final release checks before GitHub/CodeQL
+Status: v0.20.0 published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance implemented; exceptional pentest, SHA-1 private-guard remediation retest and full local release gate PASS; awaiting green GitHub/CodeQL
 
 The v0.24.20 candidate freezes public-API real-file, bit, lifecycle, package and
 modern-isolation acceptance for both legacy hashes. Semantic Miri scope keeps

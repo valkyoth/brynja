@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 signed and published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance and focused assurance passed exceptional pentest and remediation retest; final release checks precede GitHub/CodeQL
+Status: v0.20.0 signed and published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance and focused assurance passed exceptional pentest, remediation retest and full local release gate; awaiting green GitHub/CodeQL
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

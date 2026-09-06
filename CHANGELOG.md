@@ -2,6 +2,8 @@
 
 ## 0.24.20 candidate
 
+- Record the owner's green exceptional remediation retest of `354fa6c`, with
+  zero open findings. This internal milestone selects zero crates for upload.
 - Pentest remediation makes SHA-1's private offset guards always-on, with debug
   and optimized fault regressions matching MD5. Downstream panic strategy remains
   application-owned; default/unwind/abort release consumer checks document this.

@@ -1,6 +1,6 @@
 # Brynja 0.24.20 Release Notes
 
-Status: pentest finding remediated; local remediation verification PASS; exceptional retest pending
+Status: exceptional pentest and remediation retest PASS; preparing final local release checks before GitHub/CodeQL
 
 ## Summary
 
@@ -60,20 +60,22 @@ Local verification passes: complete repository gate, all twelve Rust lanes,
 bare-metal targets, independent frozen digests, actual package replay, mutation
 and non-admission tests, stage-selected Miri, ASan (without LeakSanitizer), all
 27 Kani harnesses, advisory/tooling checks and zero-publication dry-run. The
-final focused Miri test execution totals about three minutes on the local host;
-full groups remain unchanged and required for affected/public-checkpoint work.
+initial focused Miri test execution totaled about three minutes on the local
+host. The subsequent SHA-1 guard change correctly required the full affected
+SHA-1 suite as well; this is not a three-minute claim for that remediation run.
 
 These results describe the initial candidate. The supplied Medium defense-in-
 depth finding is remediated by always-on SHA-1 pre-write assertions and optimized
 fault tests, matching MD5. Mutation checks reject lost or debug-only guards and
 lost optimized execution; emitted-code checks now require both diagnostics.
-The permanent report records remediation reruns separately. Retest is required.
+The permanent report records remediation reruns separately. The owner confirmed
+the green retest of signed remediation commit `354fa6c` with no open findings.
 
 The local release `panic = "abort"` profile is **not inherited by consumers**.
 Actual downstream default/unwind/abort release builds and unwind owner-cleanup
 checks pass. Applications select their panic strategy; abort does not run Drop.
 See [panic strategy](../docs/panic-strategy.md).
 
-Record completed local verification in the report, obtain the exceptional
-pentest, then commit its disposition and wait for green GitHub/CodeQL. Tag only
+Record completed local verification and the green exceptional retest in the
+report, commit its disposition and wait for green GitHub/CodeQL. Tag only
 with explicit owner approval. This milestone publishes zero crates.

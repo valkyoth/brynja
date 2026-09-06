@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance implemented; SHA-1 private-guard pentest remediation and local checks pass, awaiting retest
+Status: v0.20.0 published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance implemented; exceptional pentest and SHA-1 private-guard remediation retest pass, preparing final release checks before GitHub/CodeQL
 
 The v0.24.20 candidate freezes public-API real-file, bit, lifecycle, package and
 modern-isolation acceptance for both legacy hashes. Semantic Miri scope keeps
@@ -29,7 +29,8 @@ dependent-consumer and public-checkpoint evidence. See
 The candidate's pentest follow-up makes SHA-1's private buffer guards always-on
 in optimized builds, matching MD5, without changing valid-input digests. The
 library does not force abort on applications: their workspace owns the panic
-profile. See [panic strategy](panic-strategy.md) and the pending retest report.
+profile. See [panic strategy](panic-strategy.md) and the
+[green retest report](../security/pentest/v0.24.20.md).
 
 The signed v0.24.19 milestone adds ordinary and hardened MD5 byte/arbitrary-bit
 APIs in unpublished `brynja-legacy-md5`. It remains isolated from modern

@@ -948,6 +948,39 @@
         "planned:negative:scripts/sha1/test-sha1.py#main"
       ]
     },
+    "BRY-REQ-CRYPTO-0019": {
+      "authority_roles": [
+        "legacy"
+      ],
+      "decisions": [
+        "algorithm.md5"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "resource-bound",
+        "side-channel",
+        "work-bound",
+        "key-lifecycle"
+      ],
+      "owners": [
+        "0.24.19"
+      ],
+      "sources": [
+        "rfc:1321",
+        "rfc:6151"
+      ],
+      "targets": [
+        "actual-symbol:crates/brynja-legacy-md5/src/lib.rs#Md5"
+      ],
+      "tests": [
+        "planned:positive:scripts/md5/check-md5.py#main",
+        "planned:negative:scripts/md5/test-md5.py#main"
+      ]
+    },
     "BRY-REQ-CT-0001": {
       "authority_roles": [
         "compatibility",
@@ -6383,6 +6416,7 @@
         "BRY-REQ-TESTING-0010"
       ],
       "legacy": [
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-LEGACY-0100",
         "BRY-REQ-LEGACY-0300",
         "BRY-REQ-LEGACY-0800"
@@ -6424,6 +6458,9 @@
       ],
       "algorithm.legacy-pkcs1-client-signature": [
         "BRY-REQ-TLS13-0046"
+      ],
+      "algorithm.md5": [
+        "BRY-REQ-CRYPTO-0019"
       ],
       "algorithm.ml-kem": [
         "BRY-REQ-PQ-0117"
@@ -9134,6 +9171,7 @@
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-PQ-0117"
       ],
       "ct": [
@@ -9379,7 +9417,8 @@
         "BRY-REQ-CRYPTO-0012",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0018"
+        "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0019"
       ],
       "failure-atomicity": [
         "BRY-REQ-CRYPTO-0002",
@@ -9401,6 +9440,7 @@
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
@@ -9448,6 +9488,7 @@
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -9601,6 +9642,7 @@
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
         "BRY-REQ-ENTROPY-1241",
@@ -9889,6 +9931,7 @@
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -10364,6 +10407,9 @@
       "0.24.18": [
         "BRY-REQ-CRYPTO-0018"
       ],
+      "0.24.19": [
+        "BRY-REQ-CRYPTO-0019"
+      ],
       "0.24.2": [
         "BRY-REQ-CRYPTO-0002"
       ],
@@ -10616,6 +10662,9 @@
       "rfc:10024#4.2": [
         "BRY-REQ-HYB-0001"
       ],
+      "rfc:1321": [
+        "BRY-REQ-CRYPTO-0019"
+      ],
       "rfc:2104": [
         "BRY-REQ-CRYPTO-0003"
       ],
@@ -10732,6 +10781,7 @@
         "BRY-REQ-LEGACY-0300"
       ],
       "rfc:6151": [
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-LEGACY-0800"
       ],
       "rfc:6176": [
@@ -11091,6 +11141,9 @@
       ],
       "actual-symbol:crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0016"
+      ],
+      "actual-symbol:crates/brynja-legacy-md5/src/lib.rs#Md5": [
+        "BRY-REQ-CRYPTO-0019"
       ],
       "actual-symbol:crates/brynja-legacy-sha1/src/lib.rs#Sha1": [
         "BRY-REQ-CRYPTO-0018"
@@ -11609,6 +11662,9 @@
       "planned:negative:scripts/kmac/test-kmac.py#main": [
         "BRY-REQ-CRYPTO-0015"
       ],
+      "planned:negative:scripts/md5/test-md5.py#main": [
+        "BRY-REQ-CRYPTO-0019"
+      ],
       "planned:negative:scripts/parallelhash/test-parallelhash.py#main": [
         "BRY-REQ-CRYPTO-0017"
       ],
@@ -12026,6 +12082,9 @@
       ],
       "planned:positive:scripts/kmac/check-kmac.py#main": [
         "BRY-REQ-CRYPTO-0015"
+      ],
+      "planned:positive:scripts/md5/check-md5.py#main": [
+        "BRY-REQ-CRYPTO-0019"
       ],
       "planned:positive:scripts/parallelhash/check-parallelhash.py#main": [
         "BRY-REQ-CRYPTO-0017"

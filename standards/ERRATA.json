@@ -1,6 +1,97 @@
 {
-  "checked_at": "2026-09-03",
+  "checked_at": "2026-09-06",
   "records": [
+    {
+      "date_reported": "2001-01-19",
+      "disposition": "apply",
+      "id": 550,
+      "implementation": "planned:v0.24.19",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 1321,
+      "section": "-",
+      "security": "Apply the verified technical correction when extracting requirements for planned:v0.24.19; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid550/"
+    },
+    {
+      "date_reported": "2002-06-14",
+      "disposition": "apply",
+      "id": 551,
+      "implementation": "planned:v0.24.19",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 1321,
+      "section": "3.4",
+      "security": "Apply the verified technical correction when extracting requirements for planned:v0.24.19; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid551/"
+    },
+    {
+      "date_reported": "2000-04-12",
+      "disposition": "apply",
+      "id": 552,
+      "implementation": "planned:v0.24.19",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 1321,
+      "section": "3.4",
+      "security": "Apply the verified technical correction when extracting requirements for planned:v0.24.19; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid552/"
+    },
+    {
+      "date_reported": "2006-11-15",
+      "disposition": "apply",
+      "id": 553,
+      "implementation": "planned:v0.24.19",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 1321,
+      "section": "-",
+      "security": "Apply the verified technical correction when extracting requirements for planned:v0.24.19; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid553/"
+    },
+    {
+      "date_reported": "2002-06-14",
+      "disposition": "apply",
+      "id": 585,
+      "implementation": "planned:v0.24.19",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 1321,
+      "section": "3.4",
+      "security": "Apply the verified technical correction when extracting requirements for planned:v0.24.19; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid585/"
+    },
+    {
+      "date_reported": "2020-05-29",
+      "disposition": "track-not-applied",
+      "id": 6193,
+      "implementation": "planned:v0.24.19",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 1321,
+      "section": "A.4",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against planned:v0.24.19 and recheck official status before dependent implementation and release.",
+      "status": "Held for Document Update",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid6193/"
+    },
+    {
+      "date_reported": "2024-02-19",
+      "disposition": "not-applicable",
+      "id": 7814,
+      "implementation": "not-applicable:rfc-editor-rejected",
+      "rationale": "Rejected erratum does not alter requirements.",
+      "rfc": 1321,
+      "section": "-",
+      "security": "Do not alter normative behavior for this rejected technical report; retain it to prevent accidental admission.",
+      "status": "Rejected",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid7814/"
+    },
     {
       "date_reported": "2005-06-23",
       "disposition": "apply",
@@ -3825,6 +3916,7 @@
     }
   ],
   "reviewed_rfcs": [
+    1321,
     2104,
     2119,
     2246,

@@ -480,16 +480,17 @@ def main() -> int:
     test_resolved_isolation(all_features, no_default)
     test_keylog_isolation(all_features)
     for modern in ("brynja", "brynja-crypto", "brynja-pki", "brynja-core"):
-        smuggled = copy.deepcopy(all_features)
-        node(smuggled, modern)["deps"].append(
-            graph_dependency(smuggled, modern, "brynja-legacy-sha1")
-        )
-        require_rejection(
-            smuggled, "all-features", "resolved all-features dependency graph drifted",
-            f"SHA-1 smuggled into {modern}",
-        )
+        for legacy in ("brynja-legacy-sha1", "brynja-legacy-md5"):
+            smuggled = copy.deepcopy(all_features)
+            node(smuggled, modern)["deps"].append(
+                graph_dependency(smuggled, modern, legacy)
+            )
+            require_rejection(
+                smuggled, "all-features", "resolved all-features dependency graph drifted",
+                f"{legacy} smuggled into {modern}",
+            )
     reject_invalid_and_exhausted(all_features)
-    print("workspace policy rejects 37 package-class, external-admission, and feature-graph regressions")
+    print("workspace policy rejects 41 package-class, external-admission, and feature-graph regressions")
     return 0
 
 

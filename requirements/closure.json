@@ -994,24 +994,26 @@
       "version": "0.24.18"
     },
     {
-      "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
-      },
-      "requirement_ids": [],
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0019"
+      ],
       "scope": "Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including byte and canonical arbitrary-bit one-shot and streaming input, padding, little-endian bit length, ordinary and hardened secret-bearing states, complete internal sanitization, official and independent vectors, checked exhaustion and public compatibility APIs with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade or FIPS use.",
-      "source_ids": [],
+      "source_ids": [
+        "rfc:1321",
+        "rfc:6151"
+      ],
       "title": "Complete First-Party Legacy MD5",
       "version": "0.24.19"
     },
     {
-      "boundary": {
-        "class": "internal-security-design",
-        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
-      },
+      "boundary": null,
       "requirement_ids": [],
       "scope": "Freeze package-external no_std fixtures and package archives for every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile; run representative real files, authoritative and independent digests, streaming partitions, exhaustion, cleanup and isolation failures through forced portable paths, prove collision warnings and modern-versus-legacy dependency, feature, type and symbol separation, and keep both legacy families In progress until acceleration and final cross-backend evidence pass.",
-      "source_ids": [],
+      "source_ids": [
+        "rfc:1321",
+        "rfc:6151"
+      ],
       "title": "Legacy SHA-1 And MD5 Portable Public API Acceptance",
       "version": "0.24.20"
     },
@@ -1027,24 +1029,24 @@
       "version": "0.24.21"
     },
     {
-      "boundary": {
-        "class": "internal-security-design",
-        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
-      },
+      "boundary": null,
       "requirement_ids": [],
       "scope": "After v0.24.20, implement first-party allocation-free MD5 multi-buffer candidates that process independent messages through exact x86_64 AVX2 and, when separately justified, AVX-512 bundles plus AArch64 NEON and qualifying ratified RISC-V Vector bundles; expose bounded caller-owned batch lanes without pretending single-stream MD5 has dedicated hardware acceleration, preserve scalar semantics for uneven tails and unsupported targets, and require lane-permutation, mixed-length, inactive-lane, KAT, differential, quarantine, native performance, timing, emitted-code, failure-atomicity and hardened lane/register/spill cleanup evidence before admission.",
-      "source_ids": [],
+      "source_ids": [
+        "rfc:1321",
+        "rfc:6151"
+      ],
       "title": "MD5 Multi-Buffer SIMD Acceleration",
       "version": "0.24.22"
     },
     {
-      "boundary": {
-        "class": "internal-security-design",
-        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
-      },
+      "boundary": null,
       "requirement_ids": [],
       "scope": "Rerun the byte-identical v0.24.20 package-external fixtures on the exact final source through portable, every admitted SHA-1 backend, every admitted MD5 batch width, scalar tails, unavailable-required and quarantined routes; collect current AMD/Intel, Apple/AWS Arm and qualifying RISC-V or explicit unsupported evidence, repeat every affected proof, sanitizer, cleanup, timing, KAT, package and differential artifact after any code change, and only then mark the isolated legacy SHA-1 and MD5 families Fully implemented while retaining collision-insecure, non-default, independently-unverified and non-FIPS status.",
-      "source_ids": [],
+      "source_ids": [
+        "rfc:1321",
+        "rfc:6151"
+      ],
       "title": "Legacy SHA-1 And MD5 Cross-Backend Final Acceptance",
       "version": "0.24.23"
     },
@@ -24286,6 +24288,18 @@
     },
     {
       "decision_ids": [
+        "algorithm.md5"
+      ],
+      "id": "BRY-REQ-CRYPTO-0019",
+      "lifecycle": "implemented",
+      "owner": "0.24.19",
+      "source_ids": [
+        "rfc:1321",
+        "rfc:6151"
+      ]
+    },
+    {
+      "decision_ids": [
         "protocol.certificate-transparency"
       ],
       "id": "BRY-REQ-CT-0001",
@@ -27124,6 +27138,19 @@
       "sha256": "5efcfacef53549ec4ff57450dfec28085b34cf3f34d829c541c0ddbe19230dfe"
     },
     {
+      "id": "rfc:1321",
+      "milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23"
+      ],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0019"
+      ],
+      "sha256": "284a79d148400d9cd2a423211d1103b5cef0fb9256a4cbe6d7ebe5197c3149dd"
+    },
+    {
       "id": "rfc:2104",
       "milestones": [
         "0.22.0",
@@ -27778,6 +27805,10 @@
     {
       "id": "rfc:6151",
       "milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23",
         "0.240.0",
         "0.241.0",
         "0.241.1",
@@ -27804,6 +27835,7 @@
         "0.249.0"
       ],
       "requirement_ids": [
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-LEGACY-0800"
       ],
       "sha256": "4e5599d99a0d335560c0a47a959e91469ee47d49edcd224aa2b7b0b0a6b8588d"
@@ -29576,6 +29608,12 @@
       "id": "algorithm.legacy-pkcs1-client-signature",
       "requirement_ids": [
         "BRY-REQ-TLS13-0046"
+      ]
+    },
+    {
+      "id": "algorithm.md5",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0019"
       ]
     },
     {

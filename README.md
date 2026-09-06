@@ -93,7 +93,7 @@ legacy crate dependency even after implementation.
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | SHA-1 | 🚧 In progress — v0.24.18–v0.24.23 | `brynja-legacy-sha1` | ❌ Not independently verified |
-| MD5 | 🗓 Planned — v0.24.19–v0.24.23 | `brynja-legacy-md5` | ❌ Not independently verified |
+| MD5 | 🚧 In progress — v0.24.19–v0.24.23 | `brynja-legacy-md5` | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -145,6 +145,7 @@ instead of copying it.
 | Boundary | Responsibility |
 | --- | --- |
 | `brynja-legacy-sha1` | Isolated collision-broken legacy SHA-1; portable byte/bit and hardened APIs, final acceptance pending |
+| `brynja-legacy-md5` | Isolated collision-broken legacy MD5; portable byte/bit and hardened APIs, final acceptance pending |
 | `brynja-hash-core` | Small fixed-output and XOF interfaces; no algorithm or protocol |
 | `brynja-hash-sha2` / `brynja-hash-sha3` | Portable family implementations reused by standalone callers and Brynja protocols |
 | `brynja-mac-hmac` | Keyed HMAC construction with MAC-specific types and verification |
@@ -943,13 +944,13 @@ and native-parallel disposition at v0.24.17; SP 800-185 is **Fully implemented**
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.17`; the current internal `0.24.18`
-candidate adds the separate complete portable `brynja-legacy-sha1` leaf.
+milestones continue through `0.24.18`; the current internal `0.24.19`
+candidate adds the separate complete portable `brynja-legacy-md5` leaf.
 It has ordinary and hardened byte/bit APIs, but is collision-broken, unpublished
-and never enabled by the modern facade. Exceptional pentest and retest passed; final
-SHA-1 family acceptance remains later in 0.24.x. SP 800-185 remains **Fully
+and never enabled by the modern facade. Exceptional MD5 pentest is pending; final
+SHA-1/MD5 family acceptance remains later in 0.24.x. SP 800-185 remains **Fully
 implemented** after signed v0.24.17 acceptance; CPU backends remain unadmitted.
-See the [SHA-1 contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1.md).
+See the [MD5 contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5.md).
 The published
 dependency is:
 
@@ -1058,7 +1059,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.18 keeps modern APIs unchanged; SHA-1 is a separate legacy leaf, CPU candidates remain unadmitted, and no TLS engine exists |
+| `brynja` | Modern production facade | Internal v0.24.19 keeps modern APIs unchanged; SHA-1 and MD5 are separate legacy leaves, CPU candidates remain unadmitted, and no TLS engine exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted |
@@ -1084,7 +1085,7 @@ selected set in dependency order and publishes the facade last.
 | Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.239.0 |
 | Future `brynja-openpgp-legacy` | Complete deprecated-algorithm and historical-key compatibility with no modern facade edge | Required before 1.0 and separately isolated |
 | `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Portable implementation present at v0.24.18, frozen acceptance at v0.24.20, SHA-instruction acceleration at v0.24.21, and final cross-backend closure at v0.24.23; OpenPGP consumers receive separate reviews at v0.225.1, v0.225.2, v0.226.0, and v0.230.2 |
-| Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Portable implementation at v0.24.19, frozen acceptance at v0.24.20, multi-buffer SIMD at v0.24.22, and final cross-backend closure at v0.24.23 solely before isolated HMAC-MD5 compatibility |
+| `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Portable implementation at v0.24.19, frozen acceptance at v0.24.20, multi-buffer SIMD at v0.24.22, and final cross-backend closure at v0.24.23 solely before isolated HMAC-MD5 compatibility |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | Future `brynja-platform-security` | Optional `no_std` protected-region contract and typed enforcement evidence | Planned at v0.174.1; never performs hidden OS effects |
 | Future `brynja-platform-security-std` | Optional Linux, Android, Windows, macOS, iOS, and BSD protected-memory providers | Planned at v0.174.2-v0.174.5; outside every default graph |

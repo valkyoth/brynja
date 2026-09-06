@@ -46,6 +46,12 @@ python3 scripts/pki/check-der-reader.py
 python3 scripts/pki/test-der-reader.py
 python3 scripts/pki/check-asn1-values.py
 python3 scripts/pki/test-asn1-values.py
+python3 scripts/md5/check-md5.py
+python3 scripts/md5/test-md5.py
+python3 scripts/md5/check-md5-differential.py
+python3 scripts/md5/check-md5-package.py
+scripts/md5/check-md5-codegen.sh
+cargo test --locked --manifest-path assurance/md5-public-api/Cargo.toml
 python3 scripts/sha1/check-sha1.py
 python3 scripts/sha1/test-sha1.py
 python3 scripts/sha1/check-sha1-differential.py

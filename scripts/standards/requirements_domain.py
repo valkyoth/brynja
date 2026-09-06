@@ -19,6 +19,7 @@ POLICY_FILES = (
 SOURCE_DOMAINS = {
     "ct",
     "key-containers",
+    "legacy-md5",
     "ocsp",
     "pkix",
     "public-key",
@@ -27,7 +28,7 @@ SOURCE_DOMAINS = {
     "symmetric",
 }
 SURFACE_DOMAINS = {"cryptography", "ct", "ocsp", "pki", "pkix"}
-AUTHORITY_ROLES = {"compatibility", "current", "evidence"}
+AUTHORITY_ROLES = {"compatibility", "current", "evidence", "legacy"}
 CONFIG = bundle.Config(
     scope=SCOPE,
     policy_files=POLICY_FILES,

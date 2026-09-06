@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "2bb8c5c89158da4655f4c916a5e49be9881878976c515f48df6b00350398e74a",
-  "domain_policy_sha256": "961a5ce3e297d3d04b11869392310b630dde322b7a6fb6ca4eec071dbb006a2c",
-  "policy_sha256": "0961e207fb753ff662aaf8d059437bd74231532ce76db07fd154a1bb65141e9a",
+  "closure_policy_sha256": "4a4fce2cb6ce03277238951bf3da6d41b321197144b8cf263100588ebc3e0d4f",
+  "domain_policy_sha256": "e95b882e9c52a9cbeab40c1236860aaabeff2e95cc63e8cd6c9f7941dd2b4384",
+  "policy_sha256": "661a0b678eeb955daaefd4f7f1ed990034f7ef96bccee46a00215fefe276c6cc",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3527,6 +3527,151 @@
         }
       ],
       "work_bound": "Linear input work; fixed 80-round compression and six fixed owned regions; checked less-than-2^64 bit admission."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "algorithm.md5"
+      ],
+      "deviation_rationale": null,
+      "domain": "cryptography",
+      "evidence": [],
+      "evidence_gap": "Portable byte/bit/hardened vectors, differential, downstream and cleanup evidence are required now; frozen portable acceptance, SIMD disposition and final family acceptance remain v0.24.20 through v0.24.23. No independent review or FIPS validation.",
+      "id": "BRY-REQ-CRYPTO-0019",
+      "invariants": [
+        "constant-time",
+        "resource-bound",
+        "side-channel",
+        "work-bound",
+        "key-lifecycle"
+      ],
+      "lifecycle": "implemented",
+      "mapping_rationale": "RFC 1321 defines the historical function and RFC 6151 constrains its use; this isolated first-party leaf does not import the RFC C implementation or enable modern protocol defaults.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.24.19",
+      "profile": "crypto-encoding-pkix",
+      "residual": "MD5 is collision- and chosen-prefix-broken. Memory cleanup does not admit security use. Registers, compiler copies, platform and caller copies remain outside the clearing claim; no CPU route is present.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "legacy",
+          "domains": [
+            "legacy-md5"
+          ],
+          "errata": [
+            {
+              "disposition": "apply",
+              "id": 550,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 551,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 552,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 553,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 585,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 6193,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 7814,
+              "status": "Rejected"
+            }
+          ],
+          "id": "rfc:1321",
+          "kind": "rfc",
+          "milestones": [
+            "0.24.19",
+            "0.24.20",
+            "0.24.22",
+            "0.24.23"
+          ],
+          "sha256": "284a79d148400d9cd2a423211d1103b5cef0fb9256a4cbe6d7ebe5197c3149dd",
+          "status": "INFORMATIONAL"
+        },
+        {
+          "authority_role": "legacy",
+          "domains": [
+            "legacy",
+            "legacy-md5"
+          ],
+          "errata": [],
+          "id": "rfc:6151",
+          "kind": "rfc",
+          "milestones": [
+            "0.24.19",
+            "0.24.20",
+            "0.24.22",
+            "0.24.23",
+            "0.240.0",
+            "0.241.0",
+            "0.241.1",
+            "0.241.2",
+            "0.242.0",
+            "0.242.1",
+            "0.242.2",
+            "0.243.0",
+            "0.243.1",
+            "0.243.2",
+            "0.244.0",
+            "0.244.1",
+            "0.244.2",
+            "0.245.0",
+            "0.245.1",
+            "0.245.2",
+            "0.246.0",
+            "0.246.1",
+            "0.246.2",
+            "0.247.0",
+            "0.247.1",
+            "0.248.0",
+            "0.248.1",
+            "0.249.0"
+          ],
+          "sha256": "4e5599d99a0d335560c0a47a959e91469ee47d49edcd224aa2b7b0b0a6b8588d",
+          "status": "INFORMATIONAL"
+        }
+      ],
+      "statement": "Complete isolated legacy MD5 preserves RFC 1321 rounds, IV, MSB-first bit padding, little-endian words and 128-bit output; length padding uses the low 64 bits even beyond 2^64, while this API admits a checked u128 representability domain. RFC 6151 prevents modern security admission.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "crates/brynja-legacy-md5/src/lib.rs#Md5"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "scripts/md5/check-md5.py#main"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "scripts/md5/test-md5.py#main"
+        }
+      ],
+      "work_bound": "Linear input work; fixed 64-step compression and five fixed owned regions; checked u128 bit accounting and fixed 16-byte output."
     },
     {
       "applicability": "apply",
@@ -11975,7 +12120,7 @@
       "owner": "0.240.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -12001,12 +12146,17 @@
         {
           "authority_role": "legacy",
           "domains": [
-            "legacy"
+            "legacy",
+            "legacy-md5"
           ],
           "errata": [],
           "id": "rfc:6151",
           "kind": "rfc",
           "milestones": [
+            "0.24.19",
+            "0.24.20",
+            "0.24.22",
+            "0.24.23",
             "0.240.0",
             "0.241.0",
             "0.241.1",
@@ -30583,9 +30733,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "44e20a8ed948648ab65722d13652d0082504814ceff5d6b830b3c852ad098aaa",
+  "residual_policy_sha256": "3dff35a3a76733a0ce6c3f4c53e2f2aef6378eef26f277eaf05cd799c40a4220",
   "schema": 5,
-  "source_ledger_sha256": "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac",
-  "surface_register_sha256": "0536cfec3fa7b4ac6c391ca9803175f0e12da8268dc5c32cf04ea6d3a638cd7e",
-  "transport_policy_sha256": "4e6f299d2add8061c9e8d2fd88b60634b76d180b8948ee7ea81eba126738dbc2"
+  "source_ledger_sha256": "915169e86b0a434935032680fe90cc57fe3e0027220a86776ef43b951a0d56d3",
+  "surface_register_sha256": "d71679458014d1eba14ac630e24610859b9b7e67195ed03e37bd094767c1d1fc",
+  "transport_policy_sha256": "cd014ac0cc67227341a1adc8deb057f039182d076409ec4a39ec182ef212d190"
 }

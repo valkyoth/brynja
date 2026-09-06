@@ -1,6 +1,6 @@
 # Kani Verification Policy
 
-Status: v0.24.18 legacy SHA-1, SHA-2, FIPS 202, KMAC, TupleHash, and ParallelHash policy harnesses admitted
+Status: v0.24.19 legacy MD5/SHA-1, SHA-2, FIPS 202, KMAC, TupleHash, and ParallelHash policy harnesses admitted
 
 Brynja builds, tests, and releases on the active stable Rust toolchain. Kani is
 compiler-integration-sensitive and therefore uses a separately documented
@@ -34,7 +34,7 @@ pair separately from the crate build matrix. The crate MSRV is never lowered
 or the release compiler held back merely to accommodate Kani.
 
 `scripts/assurance/check-kani.sh` verifies this policy, the installed pairing,
-the exact twenty-six-harness inventory, and all proof results when the verifier is available.
+the exact twenty-seven-harness inventory, and all proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
 The SHA-2 harnesses prove only their stated checked byte/bit-length,
@@ -54,6 +54,11 @@ The SHA-1 harness is
 to check it independently. This full-width arithmetic proof does not prove
 SHA-1 compression correctness, collision resistance, cleanup, or protocol
 admission. SHA-1 remains a collision-broken, explicitly isolated legacy hash.
+
+The MD5 harness `engine::proofs::md5_bit_exhaustion_matches_carry` checks
+all u128 current/additional bit pairs against overflowing addition. It proves
+admission and the returned sum, not compression or erasure. Run
+`rustup run 1.90.0 cargo kani -p brynja-legacy-md5` for this isolated proof.
 
 ## Admission And Claims
 

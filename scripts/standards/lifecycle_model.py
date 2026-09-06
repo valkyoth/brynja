@@ -267,8 +267,8 @@ def validate_register(register: dict, policy: dict | None = None) -> None:
         raise LifecycleError("authority lifecycle register requires schema 1")
     rows = register.get("authorities", [])
     ids = [row.get("id") for row in rows]
-    if ids != sorted(ids) or len(ids) != len(set(ids)) or len(ids) != 130:
-        raise LifecycleError("authority lifecycle register requires 130 unique ordered authorities")
+    if ids != sorted(ids) or len(ids) != len(set(ids)) or len(ids) != 131:
+        raise LifecycleError("authority lifecycle register requires 131 unique ordered authorities")
     upstream = set(policy["monitor"]["allowed_upstream_states"])
     brynja = set(policy["monitor"]["allowed_brynja_states"])
     dispositions = set(policy["monitor"]["allowed_dispositions"])

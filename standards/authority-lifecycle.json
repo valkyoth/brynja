@@ -1115,6 +1115,78 @@
     {
       "affected_evidence": [],
       "affected_milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23"
+      ],
+      "affected_requirements": [
+        "BRY-REQ-CRYPTO-0019"
+      ],
+      "affected_symbols": [
+        "crates/brynja-legacy-md5/src/lib.rs#Md5"
+      ],
+      "brynja_state": "legacy-only",
+      "content_sha256": "284a79d148400d9cd2a423211d1103b5cef0fb9256a4cbe6d7ebe5197c3149dd",
+      "content_url": "https://www.rfc-editor.org/rfc/rfc1321.txt",
+      "edition": "The MD5 Message-Digest Algorithm",
+      "id": "rfc:1321",
+      "landing_channel": "rfc-index-projection",
+      "landing_url": "https://www.rfc-editor.org/info/rfc1321",
+      "last_successful_observation": "2026-08-31",
+      "metadata": {
+        "current_status": "INFORMATIONAL",
+        "errata": [
+          {
+            "disposition": "apply",
+            "id": 550,
+            "status": "Verified"
+          },
+          {
+            "disposition": "apply",
+            "id": 551,
+            "status": "Verified"
+          },
+          {
+            "disposition": "apply",
+            "id": 552,
+            "status": "Verified"
+          },
+          {
+            "disposition": "apply",
+            "id": 553,
+            "status": "Verified"
+          },
+          {
+            "disposition": "apply",
+            "id": 585,
+            "status": "Verified"
+          },
+          {
+            "disposition": "track-not-applied",
+            "id": 6193,
+            "status": "Held for Document Update"
+          },
+          {
+            "disposition": "not-applicable",
+            "id": 7814,
+            "status": "Rejected"
+          }
+        ],
+        "updated_by": [
+          6151
+        ]
+      },
+      "planning_notices": [],
+      "publisher": "RFC Editor",
+      "replacements": [],
+      "reviewed_disposition": "baseline",
+      "reviewed_impact": "Initial final-publication baseline; observed metadata or byte drift requires human impact review and cannot authorize implementation.",
+      "upstream_state": "final"
+    },
+    {
+      "affected_evidence": [],
+      "affected_milestones": [
         "0.22.0",
         "0.23.0",
         "0.24.0",
@@ -3277,6 +3349,10 @@
     {
       "affected_evidence": [],
       "affected_milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23",
         "0.240.0",
         "0.241.0",
         "0.241.1",
@@ -3303,9 +3379,11 @@
         "0.249.0"
       ],
       "affected_requirements": [
+        "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-LEGACY-0800"
       ],
       "affected_symbols": [
+        "crates/brynja-legacy-md5/src/lib.rs#Md5",
         "crates/brynja-legacy/src/lib.rs"
       ],
       "brynja_state": "legacy-only",
@@ -7466,5 +7544,5 @@
   "policy_sha256": "40fbbf9915be2b5202f3c1a8311a76e7c389345164753d1ef3dc0d9eadd42d80",
   "reviews_sha256": "59b5427cc8e2ec8c25ea2fbc0a9e194620af66b9cf8160b6218b7827facf36c2",
   "schema": 1,
-  "source_ledger_sha256": "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac"
+  "source_ledger_sha256": "915169e86b0a434935032680fe90cc57fe3e0027220a86776ef43b951a0d56d3"
 }

@@ -81,7 +81,7 @@ def validate(root: Path) -> None:
     if tuple(matrix["exclusions"].get("values", ())) != EXCLUSIONS:
         fail("zeroization claim exclusions drifted")
     if matrix["dynamic"] != {
-        "toolchain": "nightly-2026-09-05",
+        "toolchain": "nightly-2026-09-06",
         "execution": "local-pre-tag",
         "miri": True,
         "miri_policy": "focused-internal-complete-public",

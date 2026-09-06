@@ -304,3 +304,20 @@ work_bound = "Linear input work; fixed 80-round compression and six fixed owned 
 evidence_gap = "Portable byte/bit/hardened vectors, differential, downstream and cleanup evidence are required now; final family acceptance and acceleration disposition remain v0.24.20 through v0.24.23. No independent review or FIPS validation."
 residual = "SHA-1 is collision-broken. No modern default or protocol admission follows from implementation or memory cleanup; compiler/register/platform/caller copies remain outside the clearing claim."
 mapping_rationale = "FIPS 180-4 defines the historical function; this explicit legacy leaf does not admit its security use."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0019"
+owner = "0.24.19"
+lifecycle = "implemented"
+revision = 1
+decision_ids = ["algorithm.md5"]
+sources = [{ id = "rfc:1321", authority_role = "legacy" }, { id = "rfc:6151", authority_role = "legacy" }]
+statement = "Complete isolated legacy MD5 preserves RFC 1321 rounds, IV, MSB-first bit padding, little-endian words and 128-bit output; length padding uses the low 64 bits even beyond 2^64, while this API admits a checked u128 representability domain. RFC 6151 prevents modern security admission."
+invariants = ["constant-time", "resource-bound", "side-channel", "work-bound", "key-lifecycle"]
+target = "crates/brynja-legacy-md5/src/lib.rs#Md5"
+positive_test = "scripts/md5/check-md5.py#main"
+negative_test = "scripts/md5/test-md5.py#main"
+work_bound = "Linear input work; fixed 64-step compression and five fixed owned regions; checked u128 bit accounting and fixed 16-byte output."
+evidence_gap = "Portable byte/bit/hardened vectors, differential, downstream and cleanup evidence are required now; frozen portable acceptance, SIMD disposition and final family acceptance remain v0.24.20 through v0.24.23. No independent review or FIPS validation."
+residual = "MD5 is collision- and chosen-prefix-broken. Memory cleanup does not admit security use. Registers, compiler copies, platform and caller copies remain outside the clearing claim; no CPU route is present."
+mapping_rationale = "RFC 1321 defines the historical function and RFC 6151 constrains its use; this isolated first-party leaf does not import the RFC C implementation or enable modern protocol defaults."

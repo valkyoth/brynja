@@ -62,6 +62,22 @@
       "updated_by": [],
       "updates": []
     },
+    "1321": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "April",
+        "year": "1992"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "The MD5 Message-Digest Algorithm",
+      "updated_by": [
+        6151
+      ],
+      "updates": []
+    },
     "2104": {
       "current_status": "INFORMATIONAL",
       "date": {

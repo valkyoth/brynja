@@ -15,6 +15,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- v0.24.19 isolated portable MD5 with ordinary/hardened byte/bit streaming,
+  checked u128 accounting and RFC low-64 little-endian padding, five mandatory
+  private clearing regions, bounded independent oracle and packaged consumer.
+  MD5 remains collision-broken, In progress, and absent from modern defaults.
+
 - v0.24.18 complete isolated portable legacy SHA-1 byte/bit streaming and
   one-shot APIs, sealed hardened ownership, six-region cleanup, official
   vectors, differential/downstream tests and dynamic/compiler proof bindings.

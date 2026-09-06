@@ -259,10 +259,10 @@ def main() -> int:
     first = model.build_register(policy, surfaces)
     second = model.build_register(policy, surfaces)
     assert model.json_bytes(first) == model.json_bytes(second)
-    assert len(first["capabilities"]) == 133
+    assert len(first["capabilities"]) == 134
     assert len(first["api_dimensions"]) == 22
     assert len(first["current_secret_owners"]) == 8
-    assert len(first["registered_secret_owners"]) == 6
+    assert len(first["registered_secret_owners"]) == 7
     assert len(first["planned_secret_owners"]) == 73
     assert all(len(row["api"]) == 22 for row in first["capabilities"])
     assert all(row["consumer_links"] for row in first["capabilities"])
@@ -273,6 +273,7 @@ def main() -> int:
     assert all("symbol" not in row and "sanitization_symbol" not in row for row in first["planned_secret_owners"])
     assert [owner["id"] for owner in first["registered_secret_owners"]] == [
         "registered.algorithm.kmac",
+        "registered.algorithm.md5",
         "registered.algorithm.parallelhash",
         "registered.algorithm.sha1",
         "registered.algorithm.sha2",

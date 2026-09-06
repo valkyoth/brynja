@@ -350,6 +350,25 @@
       "status": "PROPOSED STANDARD"
     },
     {
+      "authority_role": "legacy",
+      "domains": [
+        "legacy-md5"
+      ],
+      "id": "rfc:1321",
+      "milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23"
+      ],
+      "normative_sections": [],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0019"
+      ],
+      "sha256": "284a79d148400d9cd2a423211d1103b5cef0fb9256a4cbe6d7ebe5197c3149dd",
+      "status": "INFORMATIONAL"
+    },
+    {
       "authority_role": "current",
       "domains": [
         "symmetric"
@@ -2684,6 +2703,50 @@
       ],
       "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
       "status": "PROPOSED STANDARD"
+    },
+    {
+      "authority_role": "legacy",
+      "domains": [
+        "legacy",
+        "legacy-md5"
+      ],
+      "id": "rfc:6151",
+      "milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23",
+        "0.240.0",
+        "0.241.0",
+        "0.241.1",
+        "0.241.2",
+        "0.242.0",
+        "0.242.1",
+        "0.242.2",
+        "0.243.0",
+        "0.243.1",
+        "0.243.2",
+        "0.244.0",
+        "0.244.1",
+        "0.244.2",
+        "0.245.0",
+        "0.245.1",
+        "0.245.2",
+        "0.246.0",
+        "0.246.1",
+        "0.246.2",
+        "0.247.0",
+        "0.247.1",
+        "0.248.0",
+        "0.248.1",
+        "0.249.0"
+      ],
+      "normative_sections": [],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0019"
+      ],
+      "sha256": "4e5599d99a0d335560c0a47a959e91469ee47d49edcd224aa2b7b0b0a6b8588d",
+      "status": "INFORMATIONAL"
     },
     {
       "authority_role": "current",
@@ -5588,14 +5651,14 @@
       "sha256": "442a3ac8b63ad1ce34f9563d4ea85ee6d1115d129e0b458890937a1175a72973"
     }
   ],
-  "authority_count": 56,
+  "authority_count": 58,
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "961a5ce3e297d3d04b11869392310b630dde322b7a6fb6ca4eec071dbb006a2c",
-  "requirement_count": 39,
+  "policy_sha256": "e95b882e9c52a9cbeab40c1236860aaabeff2e95cc63e8cd6c9f7941dd2b4384",
+  "requirement_count": 40,
   "schema": 1,
-  "surface_count": 3331,
+  "surface_count": 3332,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5676,6 +5739,14 @@
       "id": "algorithm.kmac",
       "owner": "0.24.13",
       "requirement_id": "BRY-REQ-CRYPTO-0015"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.md5",
+      "owner": "0.24.19",
+      "requirement_id": "BRY-REQ-CRYPTO-0019"
     },
     {
       "coverage": "deferred",

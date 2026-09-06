@@ -134,11 +134,11 @@
     }
   ],
   "integrity": {
-    "errata_sha256": "2e0ff0b36232ded22a18a343834012099ee6db5efbd6650af25e34b3096e61d3",
+    "errata_sha256": "b0de1c34f0c47e1017207af8c6b603e3dd9fdf16674f547a2dfd78fdd131b95a",
     "local_source_manifest_sha256": "f190d5e517abd86880b0ce9cf8dd2377f54892502ead8c882e861099d1122ab1",
     "pin_provenance": "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.188.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh. On 2026-08-09 the official IANA XML and its SHA-256 were independently retrieved and reviewed: the TLS ExtensionType registry update dated 2026-08-07 adds only the `snifq/1` SNIF over QUIC ALPN entry referencing provisional draft-zubov-snif-05; it remains caller-owned at v0.178.0 and does not admit draft authority or runtime code. The DNS Parameters update dated 2026-08-04 changes only three existing references from drafts to RFC 10029 and RFC 10023, adds no allocation, remains caller-owned at v0.188.0, and does not admit either RFC into Brynja protocol scope. On 2026-08-11 final Standards Track RFC 10024 and the official TLS Parameters XML were independently retrieved and reviewed: the registry changes only the three final ECDHE-ML-KEM group and two obsoleted Kyber draft references from draft metadata to RFC 10024. RFC 10024 has no reported errata and adding it changes no existing errata record. The former admission blocker is resolved for planned v0.164.0 implementation; no protocol code is admitted at this refresh. Later on 2026-08-11 the official DNS Parameters XML added only the `_x402` TXT underscored service name referencing provisional draft-hawkins-x402-dns-discovery-01; it remains caller-owned at v0.188.0, does not admit draft authority or runtime code, and is included only to preserve complete registry coverage. The later 2026-08-11 TLS ExtensionType update allocates certificate type value 4 to C509 Certificate under provisional draft-ietf-cose-cbor-encoded-cert-20 and moves the unassigned range start to 5; the allocation remains future work, the draft is not admitted as normative authority, and no runtime code is admitted by this refresh. On 2026-08-17 the official final SP 800-185 publication page and PDF were reviewed and the exact PDF was pinned for pre-1.0 cSHAKE, KMAC, TupleHash and ParallelHash planning; NIST's 2025 decision to revise the document remains an explicit lifecycle-monitor input and admits no unpublished revision text. Later on 2026-08-17 verified editorial RFC 9954 erratum 9136 was retrieved and reviewed: it corrects two TLS 1.3 section references from 4.2.8 to 4.3.8, changes no normative hybrid-key-exchange behavior, remains an explicit implementation input for planned v0.161.0, and admits no runtime code in this refresh.",
-    "rfc_index_projection_sha256": "de78e7827eb0e96f9a0c0437ab0194d5b524fc93d5bede66d16c778e98c02a13",
-    "rfc_source_manifest_sha256": "d50c3a39d1ac35aa12c9ce0554b2cdb41fd4d2d1b4ed055b872635afb2b0255c"
+    "rfc_index_projection_sha256": "1b4edc189d8c9685742472ec15d50e11dc54bf5241047daaf6a3289648b036aa",
+    "rfc_source_manifest_sha256": "ca947d661d554543368299716bd408f6d7ad17cd2e558083901751c246fd9df5"
   },
   "local_authorities": [
     {
@@ -635,6 +635,69 @@
     }
   ],
   "rfcs": [
+    {
+      "domains": [
+        "legacy-md5"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 550,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 551,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 552,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 553,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 585,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 6193,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 7814,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "legacy",
+      "milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23"
+      ],
+      "number": 1321,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          6151
+        ],
+        "updates": []
+      },
+      "role": "md5-legacy-algorithm",
+      "sha256": "284a79d148400d9cd2a423211d1103b5cef0fb9256a4cbe6d7ebe5197c3149dd",
+      "status": "INFORMATIONAL",
+      "title": "The MD5 Message-Digest Algorithm",
+      "url": "https://www.rfc-editor.org/rfc/rfc1321.txt"
+    },
     {
       "domains": [
         "symmetric"
@@ -2536,11 +2599,16 @@
     },
     {
       "domains": [
-        "legacy"
+        "legacy",
+        "legacy-md5"
       ],
       "errata": [],
       "lifecycle": "legacy",
       "milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23",
         "0.240.0",
         "0.241.0",
         "0.241.1",

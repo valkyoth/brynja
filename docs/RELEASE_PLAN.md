@@ -3669,7 +3669,7 @@ Exit criteria:
 
 ### v0.24.18 - Complete First-Party Legacy SHA-1
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Implement complete byte and canonical arbitrary-bit streaming and one-shot SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, ordinary and hardened secret-bearing states, official vectors, checked bit exhaustion, complete internal sanitization, public consumer APIs and conspicuous collision warnings; add no modern facade, default, TLS, PKIX, FIPS or general-hash edge, and require later HMAC, HKDF and OpenPGP consumers to use separately typed admission without reimplementation.
 
@@ -3708,7 +3708,7 @@ Exit criteria:
 
 ### v0.24.19 - Complete First-Party Legacy MD5
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including byte and canonical arbitrary-bit one-shot and streaming input, padding, little-endian bit length, ordinary and hardened secret-bearing states, complete internal sanitization, official and independent vectors, checked exhaustion and public compatibility APIs with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade or FIPS use.
 

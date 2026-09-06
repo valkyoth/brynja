@@ -35,7 +35,7 @@ All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged a
 
 ## Add The Crate
 
-Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.18** APIs.
+Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.19** APIs.
 For published foundation APIs: `cargo add brynja --no-default-features`.
 For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
 
@@ -157,7 +157,7 @@ KMACXOF128, and KMACXOF256.
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | SHA-1 | 🚧 In progress — v0.24.18–v0.24.23 | `brynja-legacy-sha1` | ❌ Not independently verified |
-| MD5 | 🗓 Planned — v0.24.19–v0.24.23 | `brynja-legacy-md5` | ❌ Not independently verified |
+| MD5 | 🚧 In progress — v0.24.19–v0.24.23 | `brynja-legacy-md5` | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 

@@ -9,6 +9,8 @@ for toolchain in "${toolchains[@]}"; do
     cargo "+$toolchain" check --workspace --all-features
     cargo "+$toolchain" check --manifest-path assurance/cpu-admission-fixture/Cargo.toml
     cargo "+$toolchain" test --locked --manifest-path assurance/sha1-public-api/Cargo.toml --lib
+    cargo "+$toolchain" test --locked -p brynja-legacy-md5
+    cargo "+$toolchain" test --locked --manifest-path assurance/md5-public-api/Cargo.toml --lib
     cargo "+$toolchain" test --locked -p brynja-legacy-sha1
     cargo "+$toolchain" run --quiet --locked \
         --manifest-path assurance/sha256-public-api/Cargo.toml

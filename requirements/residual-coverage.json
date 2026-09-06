@@ -596,12 +596,17 @@
     {
       "authority_role": "legacy",
       "domains": [
-        "legacy"
+        "legacy",
+        "legacy-md5"
       ],
       "errata": [],
       "id": "rfc:6151",
       "kind": "rfc",
       "milestones": [
+        "0.24.19",
+        "0.24.20",
+        "0.24.22",
+        "0.24.23",
         "0.240.0",
         "0.241.0",
         "0.241.1",
@@ -2620,7 +2625,7 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "44e20a8ed948648ab65722d13652d0082504814ceff5d6b830b3c852ad098aaa",
+  "policy_sha256": "3dff35a3a76733a0ce6c3f4c53e2f2aef6378eef26f277eaf05cd799c40a4220",
   "requirement_count": 51,
   "schema": 1,
   "surface_count": 792,

@@ -1,4 +1,5 @@
 # number URL role
+1321 https://www.rfc-editor.org/rfc/rfc1321.txt md5-legacy-algorithm
 2104 https://www.rfc-editor.org/rfc/rfc2104.txt hmac
 2119 https://www.rfc-editor.org/rfc/rfc2119.txt normative-language
 2246 https://www.rfc-editor.org/rfc/rfc2246.txt tls-10-legacy

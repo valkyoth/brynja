@@ -17,9 +17,16 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 173 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.17 signed; v0.24.18 legacy SHA-1 candidate passed exceptional retest; release-check evidence is tracked in the pentest report and green GitHub/CodeQL is required before tagging
+Status: v0.20.0 published; milestones through v0.24.18 signed; v0.24.19 portable legacy MD5 candidate awaiting exceptional pentest
 
-The v0.24.18 candidate adds complete ordinary and hardened byte/arbitrary-bit
+The v0.24.19 candidate adds ordinary and hardened MD5 byte/arbitrary-bit
+APIs in unpublished `brynja-legacy-md5`. It remains isolated from modern
+defaults, collision-broken, unverified and not FIPS validated. Five mandatory
+private clearing regions and typed secret output accompany the portable API.
+MD5 stays In progress through the later acceptance/SIMD disposition chain.
+See [the MD5 assurance contract](legacy-md5.md).
+
+The signed v0.24.18 milestone adds complete ordinary and hardened byte/arbitrary-bit
 SHA-1 in the unpublished `brynja-legacy-sha1` leaf. It is collision-broken,
 not independently verified, not FIPS validated, and never reexported by the
 modern facade. Final family acceptance remains v0.24.20–v0.24.23; SHA-1 stays

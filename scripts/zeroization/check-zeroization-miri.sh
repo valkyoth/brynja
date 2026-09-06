@@ -8,7 +8,7 @@ run_miri() {
     CARGO_HOME="$miri_cache/cargo" \
         CARGO_TARGET_DIR="$miri_cache/target" \
         XDG_CACHE_HOME="$miri_cache" \
-        cargo +nightly-2026-09-05 miri test \
+        cargo +nightly-2026-09-06 miri test \
         --target x86_64-unknown-linux-gnu "$@"
 }
 
@@ -28,6 +28,15 @@ quick_sanitization() {
 
 full_sanitization() {
     run_miri -p brynja-sanitization --test behavior
+}
+
+quick_md5() {
+    run_miri -p brynja-legacy-md5 --test api output_failures_are_atomic_or_clear_complete_secret_destination
+}
+
+full_md5() {
+    run_miri -p brynja-legacy-md5 --lib
+    run_miri -p brynja-legacy-md5 --test api -- --skip standard_byte_vectors_and_million_a --skip official_rfc_vectors_ordinary_hardened_and_streamed
 }
 
 quick_sha1() {
@@ -120,7 +129,7 @@ full_parallelhash() {
     run_miri -p brynja-hash-parallel --tests
 }
 
-all_groups=(core sanitization sha1 sha2 sha3 kmac tuplehash parallelhash)
+all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash)
 mode="${1:---full}"
 shift || true
 

@@ -8,8 +8,8 @@
   "inputs": {
     ".github/workflows/ci.yml": "9b5ed1a139641356c6267b0190486786de40f1c549c7d3dd2fb750dfcfee29ed",
     "Cargo.toml": "799a99532b7b27c05338cb09aece853d03a59b2127cfbe1d5399602ff9de0ea6",
-    "assurance/policy.toml": "ad064f6585e898dabbb4c2a5cee12329f3be14e74b075f877eab08518820b7fa",
-    "assurance/zeroization-matrix.toml": "13b3bcaee009a2540d3b9842711cfad7a5050f584d7e6cba16a643e6280f02df",
+    "assurance/policy.toml": "a8b0c5a7f6f235cf66dd95e255a245330ef7df01419f3d72571fbb49374dac0f",
+    "assurance/zeroization-matrix.toml": "a6abc25698f67fe5ac664df92bb1ff4ad8aa24bb42e8b8f04ac17d67ff4d185b",
     "crates/brynja-core/Cargo.toml": "096f0e0ac8caf49da8820894ecec821f18c56b6576be37bdb8f5f84a23e58253",
     "crates/brynja-core/src/secret_memory.rs": "f5f4743353c7fb5afb6a85f0f8481827f7dac3ae910fd17df9da46248583d2c7",
     "crates/brynja-core/src/secret_memory_volatile.rs": "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217",
@@ -25,6 +25,7 @@
     "crates/brynja-hash-sha3/Cargo.toml": "bf0467a994e4fa3a879e9e66dc2cda39e12738e7073f1bff96c008704bda3408",
     "crates/brynja-hash-tuple/Cargo.toml": "9a598b8b5541e70e8d4c71d2926fa616eff140522565076ddb7285e001ad9b65",
     "crates/brynja-interop/Cargo.toml": "5105aaaf822e07c68949c8a1672ffec3dc959c86d1069753a148257468de98cd",
+    "crates/brynja-legacy-md5/Cargo.toml": "56539a872f530d9b074035dcb7ae55c4adf07b37a137ce0b25294d1bc515f04d",
     "crates/brynja-legacy-pct/Cargo.toml": "f7d938e341441f901c069b75f5270385d1d036b186e458100c94a106da2c39bc",
     "crates/brynja-legacy-sha1/Cargo.toml": "3e12c4a4fef6c4fa582b84fd90ceb4baff7bfb066f6b568712a2965484114be1",
     "crates/brynja-legacy-snp/Cargo.toml": "6371419a6dc6ab58c6937e26831394ca49b6d268fe3caecc29da384260854406",
@@ -48,8 +49,8 @@
     "crates/brynja-tls13-handshake/Cargo.toml": "dad35b0372b66ff6de7b8acde30936f4cddebdeee4ba11bfd863dd43f9f3c912",
     "crates/brynja-tls13/Cargo.toml": "834c18870265af6def85f905bd6da6f6ea60379f2e41899248174fa9d66bf4e8",
     "crates/brynja-xtask/Cargo.toml": "e178b328289b523b7dc0a9d994cf5409ae54a44ba4198092c520ee45f1247d50",
-    "crates/brynja/Cargo.toml": "7cd3013946b4331f08be144c4de4ca9d27475b36313a9a35a67903ac08a6ec6e",
-    "docs/KANI.md": "c62ac3399d1b69242efacb285c4e3117f84eae6aed37f7d6b4b9a7585165cd5e",
+    "crates/brynja/Cargo.toml": "f46b87c914698b3047603fd895f83ab1b0d37d98c59882c8a9006aabd035452a",
+    "docs/KANI.md": "9129f87cfb001981931100a56da3c4a15af049ed2eda5e9bbac89939c91c21cf",
     "docs/unsafe-policy.md": "fff23b0080fc4598d00b98826ef4e5952d874bf054aa934fa9b50e0ad9371a23",
     "rust-toolchain.toml": "85db324345b7937c49ea2ac8b962d741f710719f4f751cab809985cbe6afbe3c",
     "scripts/assurance/assurance-fixture-adapter.py": "84c6fd76d5d4be111696a314f792c4ee2c4898a97f5cc4125b16e8eb9f8a0dda",
@@ -61,8 +62,8 @@
     "scripts/assurance/assurance_process_tests.py": "ff8c5d781e235e4d3a1ca0722ad640b3dece5246dadac3bde571fd21ffb18ab1",
     "scripts/assurance/assurance_process_tree.py": "73eb16d00f46d2835962c1986664c46009a24f1626749f5142746add154225ef",
     "scripts/assurance/check-assurance.py": "617b4a35ba7f95ac37405a4a5bfae216a65eed79a212d232cb0ec7e1d3aa90b7",
-    "scripts/assurance/check-bare-metal.sh": "c415c099c44175e904541563bafe0aa25d5f86f7050486c7cc74a3b1e21f4f40",
-    "scripts/assurance/check-kani.sh": "3da9988d5ad90badd876c65ce45ae204850f4294ce44c0f1920b6ee21d7232b5",
+    "scripts/assurance/check-bare-metal.sh": "5795c3631464d8369d816cbb542680c8790a91cbf01e286e16a5a0e3c7a64876",
+    "scripts/assurance/check-kani.sh": "2228e118d041744dd2c25f29855ea6c4ae2edcc67eeee76a558cc7b265095ac8",
     "scripts/assurance/test-assurance.py": "51b23ee42f32b95c542d6016bacafce89fe0219e27a6632804baaae82ba1a1e0",
     "scripts/repository/check-unsafe-policy.py": "7afef330f28d78eab1028cb0dd074e80c2fca3f4ab44528469d7001bde32028d",
     "scripts/repository/test-unsafe-policy.py": "56b7bd95b73e6df10ca9c86be0bcbee08c3f0490fd59693bfcd9d9ee579a5c9a",
@@ -71,15 +72,15 @@
     "scripts/zeroization/check-tag-miri.sh": "3daeaf71064d6b3f54bb28ee0c08a59c55f54f12ece4b158f0ca6394a1f813bc",
     "scripts/zeroization/check-zeroization-codegen.sh": "aa1310d6366c248b2fad069d674aef2ac8a9ed297a16e2c40ca332d4c6acc8d9",
     "scripts/zeroization/check-zeroization-evidence.py": "d11f63a46fcdeb3a48bb6606227b07223958f14033928c181fe55d4ab6112457",
-    "scripts/zeroization/check-zeroization-miri.sh": "3690f70b630507d2926f2fb43b6b735b4c6f2192a59d0880d5bfb6e79817eccf",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "9b11e95b8827a55af67e92591b8331072f9a5c5e870b4b8ea49ea93616822d48",
-    "scripts/zeroization/miri_scope.py": "73389ef70e3dbc600105cdfd6f5a44a789dc0557ee59adefb4e51adf99393b8a",
-    "scripts/zeroization/test-miri-scope.py": "87223b7c4c1805ed8a014b7641f9ea07500ce950e56713163f792b3a8531c5ba",
+    "scripts/zeroization/check-zeroization-miri.sh": "1ae0a6bc4b8c4ba6c8b6cbc9733e9daee41ff6a5a8b3ea870c4e75532f40d17c",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "32066ecc547021b6ca2937ff8c21c0b08c7cf82a3a61d38591c30437d1ef52ce",
+    "scripts/zeroization/miri_scope.py": "92ea5fe03fdb270b2b181556604bd0b9d12b5353c66211b48ae9478e9c4a54c0",
+    "scripts/zeroization/test-miri-scope.py": "ab4b4019ab1c39620bff21ecd1cac8e889f2c13043723dbf19e862338c917837",
     "scripts/zeroization/test-zeroization-evidence.py": "751ad86b17549d13b4ba3544caec04e4b1f6d8cad674c4a2b24b7593721a8a98",
-    "scripts/zeroization/zeroization_evidence.py": "075fb43d5cc0374dab648759a375a2579e6e0f0afbb7f1285d6cd4676b01ae06"
+    "scripts/zeroization/zeroization_evidence.py": "8b6c14c4b13618cb0d515a20f7640f4081fb57836f2d08674021b21aed0ff9c3"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "ad064f6585e898dabbb4c2a5cee12329f3be14e74b075f877eab08518820b7fa",
+  "policy_sha256": "a8b0c5a7f6f235cf66dd95e255a245330ef7df01419f3d72571fbb49374dac0f",
   "schema": 1,
   "tools": [
     {
@@ -106,16 +107,16 @@
     {
       "id": "miri",
       "owner": "0.11.0",
-      "revision": "0ed41eb4142dda2df61eb1145a312c1a9d62eb56",
+      "revision": "f248f4038796913873f11ca65b1b901e311c8dae",
       "source_kind": "rustup-component",
-      "version": "nightly-2026-09-05"
+      "version": "nightly-2026-09-06"
     },
     {
       "id": "rust-sanitizers",
       "owner": "0.11.0",
-      "revision": "0ed41eb4142dda2df61eb1145a312c1a9d62eb56",
+      "revision": "f248f4038796913873f11ca65b1b901e311c8dae",
       "source_kind": "rust-toolchain",
-      "version": "nightly-2026-09-05"
+      "version": "nightly-2026-09-06"
     }
   ]
 }

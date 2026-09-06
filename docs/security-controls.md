@@ -1,5 +1,16 @@
 # Security Controls
 
+## Isolated legacy MD5
+
+v0.24.19 adds a separate no_std MD5 leaf, with no modern facade, protocol or
+FIPS edge. Both API profiles clear five source-owned regions; hardened output
+requires typed secret ownership or explicit public declassification. Checked
+u128 accounting preserves RFC 1321's low-64 little-endian length rule beyond
+2^64 bits. RFC vectors, independent bit comparisons, pre-mutation errors,
+Drop/unwind cleanup, compiler contracts and modern-graph injection tests cover
+the boundary. MD5 stays collision-broken and In progress until later family
+acceptance. See [MD5 assurance](legacy-md5.md).
+
 ## Isolated legacy SHA-1
 
 v0.24.18 adds only a direct legacy leaf, never a modern default, facade,

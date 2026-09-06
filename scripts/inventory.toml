@@ -30,6 +30,10 @@ purpose = "Provider and security-foundation contract policies and tests"
 extensions = [".py", ".sh", ".toml"]
 purpose = "Cross-family hash final acceptance and closure policy"
 
+[category.md5]
+extensions = [".py", ".sh", ".toml"]
+purpose = "Isolated legacy MD5 conformance, cleanup, downstream and source-policy checks"
+
 [category.kmac]
 extensions = [".py", ".sh"]
 purpose = "KMAC and KMACXOF implementation, package acceptance, and differential evidence"

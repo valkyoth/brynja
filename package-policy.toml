@@ -140,6 +140,12 @@ publish = "blocked"
 required = []
 optional = { pct = "brynja-legacy-pct", snp = "brynja-legacy-snp", ssl2 = "brynja-legacy-ssl2", ssl3 = "brynja-legacy-ssl3", tls10 = "brynja-legacy-tls10", tls11 = "brynja-legacy-tls11", wtls = "brynja-legacy-wtls" }
 
+[packages.brynja-legacy-md5]
+class = "legacy-engine"
+publish = "crates-io"
+required = ["brynja-core", "brynja-hash-core"]
+optional = {}
+
 [packages.brynja-legacy-sha1]
 class = "legacy-engine"
 publish = "crates-io"

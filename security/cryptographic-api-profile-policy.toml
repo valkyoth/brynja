@@ -1,4 +1,17 @@
 [[registered-secret-owner]]
+id = "registered.algorithm.md5"
+capability = "algorithm.md5"
+symbol = "crates/brynja-legacy-md5/src/owner.rs#brynja_legacy_md5::owner::Md5Owner"
+fields = ["chaining_state:secret-derived", "block:secret-copy", "message_length:secret-derived", "buffered:secret-derived", "output_staging:secret-derived"]
+temporaries = ["round-scalars:register-copy-risk", "length-encoding:compiler-copy-risk", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
+sanitization_symbol = "crates/brynja-legacy-md5/src/owner.rs#brynja_legacy_md5::Md5Owner::wipe"
+cleanup_callers = ["crates/brynja-legacy-md5/src/owner.rs#brynja_legacy_md5::owner::Md5Owner::drop"]
+evidence = ["crates/brynja-legacy-md5/tests/api.rs", "assurance/md5-public-api/src/lib.rs", "scripts/md5/check-md5.py", "scripts/md5/check-md5-codegen.sh"]
+storage = "crate-owned-fixed"
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+
+[[registered-secret-owner]]
 id = "registered.algorithm.sha1"
 capability = "algorithm.sha1"
 symbol = "crates/brynja-legacy-sha1/src/owner.rs#brynja_legacy_sha1::owner::Sha1Owner"
@@ -79,7 +92,7 @@ partial_failure_policy = "clear-complete-secret-destination"
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "0536cfec3fa7b4ac6c391ca9803175f0e12da8268dc5c32cf04ea6d3a638cd7e"
+surface_register_sha256 = "d71679458014d1eba14ac630e24610859b9b7e67195ed03e37bd094767c1d1fc"
 
 [api]
 dimensions = [
@@ -586,7 +599,7 @@ secret_output_classification = "typed-secret-owned"
 
 [[assignment]]
 profile = "fixed-hash"
-ids = ["algorithm.sha1", "algorithm.sha2"]
+ids = ["algorithm.md5", "algorithm.sha1", "algorithm.sha2"]
 
 [[assignment]]
 profile = "hash-xof-family"
@@ -926,11 +939,11 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "c54e0f61795bf1860e89e7f9f602eb709f2348e46a5f39ba52fac3c3ed8635bd"
+sha256 = "719037cd686b033eff396f5b13ed0e5e58b626de57fecc3f1a65d0b7fda8efb1"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "4506a0bd165b3e9fe8f3ddace98943fbb274d5dbf1ecc618758eb7fba6879110"
+sha256 = "0e7f4164e2cb8c056d6f6c3088adb150fc2e23c02322f41929c35dc9483723d6"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -950,7 +963,7 @@ sha256 = "72de8365ab67239c24fb1a1271838fc6484a6acb3a9da43eb1b42e00a97262da"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "26bf29ba5fe8bcaea1916919830b02f09fe675372cdd55191b80490abea34a91"
+sha256 = "8f0a8cfa79051733adb9dbf5123a224104d23984f9b1103dfa1a8d43fc317ce9"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"
@@ -1143,3 +1156,51 @@ sha256 = "6840869e0e91ac4e2ebd348d554bf19f62f375d0dfbcc6a2fccd86a92705fe98"
 [[reviewed-source]]
 path = "scripts/sha1/check-sha1.py"
 sha256 = "9408ab60c26f04b7a153719bd4eb083b32669c76e1565b85fd8b24af06b37fb1"
+
+[[reviewed-source]]
+path = "assurance/md5-public-api/src/lib.rs"
+sha256 = "38272dd62d5ff5966f7a70219d555dcbca496dc1de87d66208e3d2bab0642570"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-md5/src/compress.rs"
+sha256 = "bc81e51525eada99860fd052bfa33c7b206c5c5968565dd7019225774b2d4d88"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-md5/src/engine.rs"
+sha256 = "4b5bb8a55ff61e159ce47bb44c704911aa99770e22b3c6909e7bd41d233d3457"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-md5/src/hardened.rs"
+sha256 = "b997fd50ff27e4dab2bf4201517138ef6c991d02333dbc4e13fa8606cfa74334"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-md5/src/lib.rs"
+sha256 = "21cd5de4ac5f140d373501b48e4a47fb00a5b0a115bac583dbabf5f0a025c7fe"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-md5/src/ordinary.rs"
+sha256 = "b78605d0a26a689b5d0bfdf13f41f6f949e9c0cb1dc06445241aec82df4ffab2"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-md5/src/output.rs"
+sha256 = "4b9fd996f05dfb4509728fdca8ea3457340932316d95300e8de47d472733dfa8"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-md5/src/owner.rs"
+sha256 = "1e1f9b2ad97d42b0d52fd04de473180a41ada8d6f52c154075f2ea7217b29947"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-md5/tests/api.rs"
+sha256 = "80d4cb9c851b4dabac57feb6d6e3364a663badf5f2bafe2e9133ec636f7742e8"
+
+[[reviewed-source]]
+path = "scripts/cryptography/legacy_md5_owner_contract.py"
+sha256 = "674901a6079cac1f73dbdb7f0e9331be1079b6d72d6e06d01050e7d124a72559"
+
+[[reviewed-source]]
+path = "scripts/md5/check-md5-codegen.sh"
+sha256 = "76e741e1e775435dbb5cbc01b4fcef2f4f5ee544ed6d5dc8cc5648151f91922b"
+
+[[reviewed-source]]
+path = "scripts/md5/check-md5.py"
+sha256 = "a0acdd82529893d055ff9a71b578aaf516f5cf20a37fe4db8588fbbe41482d95"

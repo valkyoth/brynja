@@ -1,0 +1,21 @@
+[package]
+name = "brynja-legacy-md5"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "First-party no_std legacy MD5 with explicit hardened ownership; collision-broken"
+publish = ["crates-io"]
+
+[features]
+default = []
+
+[dependencies]
+brynja-core = { workspace = true }
+brynja-hash-core = { workspace = true }
+
+[lints]
+workspace = true

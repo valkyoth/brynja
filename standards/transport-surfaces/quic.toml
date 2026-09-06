@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac"
+source_ledger_sha256 = "915169e86b0a434935032680fe90cc57fe3e0027220a86776ef43b951a0d56d3"
 
 [[surface]]
 id = "boundary.quic.encryption-level-ownership"

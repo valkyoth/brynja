@@ -111,7 +111,7 @@ def test() -> None:
     register = model.build_register(policy)
     model.validate_register(register, policy)
     reviews_policy.validate_reviews(model.load_json(model.REVIEWS))
-    assert len(register["authorities"]) == 130
+    assert len(register["authorities"]) == 131
     assert {row["id"].split(":", 1)[0] for row in register["authorities"]} == {
         "iana", "itu", "nist", "rfc", "riscv"
     }
@@ -120,7 +120,7 @@ def test() -> None:
 
     broken = copy.deepcopy(register)
     broken["authorities"].append(copy.deepcopy(broken["authorities"][0]))
-    rejects(lambda: model.validate_register(broken, policy), "130 unique ordered")
+    rejects(lambda: model.validate_register(broken, policy), "131 unique ordered")
     for field, value, message in (
         ("upstream_state", "invented", "invalid lifecycle state"),
         ("brynja_state", "automatic-modern", "invalid lifecycle state"),

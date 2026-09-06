@@ -4,6 +4,10 @@ use crate::{AcceleratedSha1, BitString, Sha1, owner::Sha1Owner, sha1, sha1_bits}
 fn session() -> Option<Sha1BackendSession> {
     compiled_backend()?;
     let result = Sha1BackendSession::for_compiled_target();
+    if !cfg!(all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)) {
+        assert_eq!(result.err(), Some(Sha1BackendError::NotAdmitted));
+        return None;
+    }
     assert!(result.is_ok());
     let session = result.ok()?;
     assert_eq!(session.health(), Sha1BackendHealth::Healthy);
@@ -145,9 +149,10 @@ fn byte_bit_and_irregular_streams_match_portable() {
 
 #[test]
 fn corrupted_kat_and_lost_features_are_permanent() {
-    let Some(backend) = compiled_backend() else {
+    let Some(mut session) = session() else {
         return;
     };
+    let backend = session.backend();
     let bad = Sha1BackendSession::construct(backend, compiled_features, [0; 5]);
     assert!(bad.is_ok());
     let Ok(bad) = bad else {
@@ -160,9 +165,6 @@ fn corrupted_kat_and_lost_features_are_permanent() {
         Err(Sha1BackendError::Quarantined)
     );
     assert_eq!(state, IV);
-    let Some(mut session) = session() else {
-        return;
-    };
     session.revalidate = |_| false;
     assert_eq!(
         session.compress(&mut state, &[0; 64]),
@@ -188,9 +190,14 @@ fn architecture_and_missing_features_reject_before_startup() {
         Some(Sha1BackendError::WrongArchitecture)
     );
     if let Some(backend) = compiled_backend() {
+        let expected = if cfg!(all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)) {
+            Sha1BackendError::MissingFeatures
+        } else {
+            Sha1BackendError::NotAdmitted
+        };
         assert_eq!(
             Sha1BackendSession::construct(backend, |_| false, ABC).err(),
-            Some(Sha1BackendError::MissingFeatures)
+            Some(expected)
         );
     }
 }

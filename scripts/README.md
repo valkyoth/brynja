@@ -24,7 +24,9 @@ export `brynja_cpu_evidence` or `brynja_sha1_cpu_evidence` flags into persistent
 shell/workspace/CI environments: Cargo propagates compiler flags to dependencies.
 Do not deploy evidence binaries. Legacy SHA-1 additionally requires the opt-in
 `cpu-evidence` feature and its own cfg; `cpu`, all features, or the shared cfg
-alone never admit it. See [contributor guidance](../.github/CONTRIBUTING.md).
+alone never admit it. `cfg(test)` is not an admission key either: executable
+SHA-1 kernel tests use the same two-key gate. See
+[contributor guidance](../.github/CONTRIBUTING.md).
 
 ## Directories
 

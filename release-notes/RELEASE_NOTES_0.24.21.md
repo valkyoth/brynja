@@ -48,7 +48,7 @@ and unsupported targets remain scalar-only. Rust 1.90.0–1.98.1 is retained.
 ## Local verification
 
 The repository gate, twelve-version Rust matrix, three bare-metal targets,
-packaged portable/CPU/host consumers, strict Clippy, 34 candidate-policy mutation
+packaged portable/CPU/host consumers, strict Clippy, 35 candidate-policy mutation
 cases and native-capture rejection tests pass. Forced local AMD and supplemental
 AArch64 QEMU runs pass the frozen/NIST corpus and eight kernel/lifecycle groups.
 32-bit x86 QEMU groups also pass on both compiler endpoints. Emitted-instruction
@@ -69,6 +69,12 @@ enable it alone. Five optimized negative build combinations, dedicated positive
 controls and additional policy mutations cover this remediation. Persistent
 evidence flags and secret input to ordinary accelerated APIs remain prohibited.
 The owner retest is pending; no backend was admitted.
+
+A subsequent retest identified `cfg(test)` as an independent admission bypass.
+That exception is removed: kernel unit tests now require the same two evidence
+keys as all other executable consumers. Seven optimized rejection combinations,
+an external-binary reproduction and a mutation restoring the old test exception
+cover this follow-up; its owner retest is still required.
 
 Complete local checks, request an exceptional pentest, address any findings and
 collect/review exact-commit native observations on AMD/Intel/M2/AWS Arm where

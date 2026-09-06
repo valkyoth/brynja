@@ -34,7 +34,8 @@ separate outputs; never deploy their binaries or copy their environment into
 application builds. A green evidence job is not backend admission.
 
 Legacy SHA-1 requires BOTH its `cpu-evidence` feature and the distinct
-`brynja_sha1_cpu_evidence` cfg outside unit tests. Its hosted adapter enables
+`brynja_sha1_cpu_evidence` cfg, including in executable unit tests. `cfg(test)`
+alone grants no execution permission. Its hosted adapter enables
 only `cpu`. The older shared `brynja_cpu_evidence` cfg cannot enable SHA-1,
 even with all features. This safeguard is not a sandbox against intentional
 build changes, and does not change the older modern-backend evidence gates.

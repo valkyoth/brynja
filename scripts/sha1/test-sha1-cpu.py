@@ -9,6 +9,7 @@ def main():
     policy.validate()
     c = policy.CPU
     cases = [
+        (c+'session.rs', 'cfg!(all(feature = "cpu-evidence", brynja_sha1_cpu_evidence))', 'cfg!(any(test, all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)))'),
         (c+'session.rs', 'all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)', 'brynja_sha1_cpu_evidence'),
         (c+'session.rs', 'brynja_sha1_cpu_evidence', 'brynja_cpu_evidence'),
         (c+'session.rs', 'all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)', 'feature = "cpu-evidence"'),

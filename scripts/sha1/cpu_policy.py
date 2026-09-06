@@ -39,7 +39,7 @@ def validate(root=ROOT, hashes=True):
     session, stream, identity = (sources[CPU+n] for n in ('session.rs','stream.rs','mod.rs'))
     require((root/'crates/brynja-legacy-sha1/src/lib.rs').read_text(), '#[cfg(feature = "cpu")] mod cpu;')
     if 'pub mod' in identity: raise ValueError('kernel module became public')
-    for token in ('if !backend.is_admitted() && !cfg!(any(test, all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)))',
+    for token in ('if !backend.is_admitted() && !cfg!(all(feature = "cpu-evidence", brynja_sha1_cpu_evidence))',
                   'return Err(Sha1BackendError::NotAdmitted)', 'require_architecture(backend)?',
                   'if !revalidate(backend)', 'session.compress(&mut state, &block)?',
                   'if state != expected', 'session.healthy.set(false)',

@@ -31,7 +31,12 @@ fn selected() -> Option<Sha1BackendSession> {
         Ok(session) => Some(session),
         Err(Sha1BackendError::MissingFeatures) => None,
         Err(error) => {
-            assert_eq!(error, Sha1BackendError::MissingFeatures);
+            let expected = if cfg!(all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)) {
+                Sha1BackendError::MissingFeatures
+            } else {
+                Sha1BackendError::NotAdmitted
+            };
+            assert_eq!(error, expected);
             None
         }
     }

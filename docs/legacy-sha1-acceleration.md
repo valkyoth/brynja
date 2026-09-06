@@ -46,9 +46,11 @@ schedule and round instructions. See Rust's
 ## Authority and cleanup limits
 
 Production builds reject candidates before startup KAT or instruction use.
-Unit tests and explicitly non-production builds using BOTH `cpu-evidence` and
-`brynja_sha1_cpu_evidence` can force them only with exact static features or an
-external execution authority. The shared `brynja_cpu_evidence` flag is ignored
+All execution, including kernel unit tests, requires BOTH `cpu-evidence` and
+`brynja_sha1_cpu_evidence` plus exact static features or an external execution
+authority. `cfg(test)` alone never bypasses admission; the private test-only
+quarantine model is permanently unhealthy and cannot execute a kernel.
+The shared `brynja_cpu_evidence` flag is ignored
 by this leaf even when all features are enabled. The direct
 KAT executes the actual kernel. KAT failure and lost-feature revalidation latch
 session quarantine. Every buffered update/finalization and block revalidates;

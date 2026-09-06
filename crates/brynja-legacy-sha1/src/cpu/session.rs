@@ -58,11 +58,7 @@ impl Sha1BackendSession {
         expected: [u32; 5],
     ) -> Result<Self, Sha1BackendError> {
         require_architecture(backend)?;
-        if !backend.is_admitted()
-            && !cfg!(any(
-                test,
-                all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)
-            ))
+        if !backend.is_admitted() && !cfg!(all(feature = "cpu-evidence", brynja_sha1_cpu_evidence))
         {
             return Err(Sha1BackendError::NotAdmitted);
         }

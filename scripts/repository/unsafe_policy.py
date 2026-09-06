@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
-    Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("590959ee6b8bb6284ab7572c70931378728f71f6db288d53dcd7fcd7dca92d1d", 3, 1, 3),
+    Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("b730cac693b98f45317f682a06d51f1feb8e13b3dec4e5994dca16a04a1f08a8", 3, 1, 3),
     Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"): ("4421dbaf14b05b7dd9480d32ae6319134f5785ff5347ba7ec74751d5aa80a583", 1, 1, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"): ("440373ba1279dd55d991b285eceb83157238b6217ad1c5e125f4bc7ffc704473", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_volatile.rs"): (

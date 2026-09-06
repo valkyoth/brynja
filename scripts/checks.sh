@@ -10,6 +10,7 @@ scripts/repository/check_shell_syntax.sh
 scripts/repository/test-shell-syntax.sh
 python3 scripts/zeroization/miri_scope.py --check
 python3 scripts/zeroization/test-miri-scope.py
+python3 scripts/zeroization/test-scope-inputs.py
 python3 scripts/repository/check-unsafe-policy.py
 python3 scripts/repository/test-unsafe-policy.py
 python3 scripts/repository/check-first-party-rust-crypto.py
@@ -47,6 +48,8 @@ python3 scripts/pki/test-der-reader.py
 python3 scripts/pki/check-asn1-values.py
 python3 scripts/pki/test-asn1-values.py
 python3 scripts/md5/check-md5.py
+python3 scripts/legacy-hash/check-legacy-acceptance.py
+python3 scripts/legacy-hash/test-legacy-acceptance.py
 python3 scripts/md5/test-md5.py
 python3 scripts/md5/check-md5-differential.py
 python3 scripts/md5/check-md5-package.py

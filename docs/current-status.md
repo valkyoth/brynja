@@ -17,9 +17,16 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.18 signed; v0.24.19 portable legacy MD5 exceptional retest and local release checks passed; awaiting green GitHub/CodeQL and owner tag approval
+Status: v0.20.0 published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance and focused assurance implemented, local candidate checks pass, awaiting pentest
 
-The v0.24.19 candidate adds ordinary and hardened MD5 byte/arbitrary-bit
+The v0.24.20 candidate freezes public-API real-file, bit, lifecycle, package and
+modern-isolation acceptance for both legacy hashes. Semantic Miri scope keeps
+version-only metadata out of global reruns while preserving changed-owner,
+dependent-consumer and public-checkpoint evidence. See
+[portable acceptance](legacy-hash-portable-acceptance.md) and
+[focused assurance](focused-assurance.md).
+
+The signed v0.24.19 milestone adds ordinary and hardened MD5 byte/arbitrary-bit
 APIs in unpublished `brynja-legacy-md5`. It remains isolated from modern
 defaults, collision-broken, unverified and not FIPS validated. Five mandatory
 private clearing regions and typed secret output accompany the portable API.
@@ -552,9 +559,11 @@ independent cryptographic review, or FIPS validation.
 
 The mandatory local pre-tag gate runs bounded Miri smoke coverage for every
 registered group and complete Miri coverage for each changed group plus its
-downstream dependency closure. Shared toolchain, root manifest, lockfile,
-zeroization-matrix, or Miri-control changes force the complete suite, and every
-public crates.io checkpoint always runs every registered Miri group. Full
+downstream dependency closure. From v0.24.20, semantic lockfile and manifest
+classification avoids replaying unchanged owners for local version bumps;
+shared runtime, compiler, ambiguous or unknown implementation changes still
+force complete coverage. Every public crates.io checkpoint always runs every
+registered Miri group. See [focused assurance](focused-assurance.md). Full
 AddressSanitizer and Kani evidence remains mandatory at every tag. Bounded
 GitHub CI validates exact pins, scripts, coverage bindings, mutations, and
 emitted-code evidence without rerunning the long dynamic suites, whose hardened

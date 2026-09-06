@@ -71,7 +71,7 @@ def main() -> int:
     expect(
         ["crates/brynja-hash-core/src/lib.rs"],
         full=False,
-        groups=("md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash"),
+        groups=("md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy"),
     )
     expect(
         ["crates/brynja-core/src/secret_memory.rs"],
@@ -83,8 +83,10 @@ def main() -> int:
         full=False,
         groups=("sanitization",),
     )
-    expect(["crates/brynja-legacy-sha1/src/lib.rs"], full=False, groups=("sha1",))
-    expect(["crates/brynja-legacy-md5/src/lib.rs"], full=False, groups=("md5",))
+    expect(["crates/brynja-legacy-sha1/src/lib.rs"], full=False, groups=("sha1", "legacy"))
+    expect(["crates/brynja-legacy-md5/src/lib.rs"], full=False, groups=("md5", "legacy"))
+    expect(["assurance/legacy-hash-public-api/src/lib.rs"], full=False, groups=("legacy",))
+    expect(["crates/unknown/src/lib.rs"], full=True, groups=miri_scope.GROUPS)
     expect(["Cargo.lock"], full=True, groups=miri_scope.GROUPS)
     expect(
         ["scripts/zeroization/check-zeroization-miri.sh"],
@@ -94,11 +96,13 @@ def main() -> int:
     expect(["../escape"], full=True, groups=miri_scope.GROUPS)
 
     status, commands = run_profile("--focused")
-    assert status == 0 and len(commands) == 9
+    assert status == 0 and len(commands) == 10
+    assert sum('secret_output_is_cleared_when_ownership_ends' in c for c in commands) == 1
+    assert sum('abandoned_or_incomplete_items_fail_closed' in c for c in commands) == 1
     status, commands = run_profile(
         "--focused", "sha3", "kmac", "tuplehash", "parallelhash"
     )
-    assert status == 0 and len(commands) == 18
+    assert status == 0 and len(commands) == 19
     assert sum("-p brynja-hash-sha3" in command for command in commands) == 9
     assert sum("-p brynja-mac-kmac" in command for command in commands) == 1
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
@@ -107,7 +111,7 @@ def main() -> int:
     assert status == 0 and len(commands) == 10
     assert all("brynja-hash-sha2" in command for command in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 29
+    assert status == 0 and len(commands) == 30
     status, commands = run_profile("--group", "unknown")
     assert status == 2 and not commands
     print(

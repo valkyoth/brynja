@@ -1,0 +1,4 @@
+Brynja legacy interoperability corpus.
+SHA-1 and MD5 are collision-broken, not choices for new cryptographic security.
+This public text is a reproducible file-hashing fixture, not secret material.
+UTF-8: Brynja protects no network connection yet; blåbär and 日本語 remain bytes.

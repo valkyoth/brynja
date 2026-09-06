@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 portable SP 800-185 acceptance is implemented and awaiting pentest
+Status: v0.20.0 signed and published; milestones through v0.24.19 signed; v0.24.20 portable legacy acceptance and focused assurance awaiting pentest
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -8,6 +8,8 @@ consistent in the same commit.
 
 | Evidence | Authority or scope | Enforcement |
 | --- | --- | --- |
+| `assurance/legacy-hash-public-api`, `scripts/legacy-hash/legacy-reviewed.toml` | v0.24.20 frozen portable ordinary/hardened byte/bit SHA-1 and MD5 consumer; still collision-broken and In progress | Forty independently recomputed digests, actual package replay, compiler-positive-controlled non-admission, corpus/archive mutations, twelve Rust lanes, no_std, bounded Miri and ASan; no production algorithm change or backend admission |
+| `scripts/zeroization/{miri_scope,scope_inputs}.py`, `docs/focused-assurance.md` | Semantic impact selection from signed baseline, including dirty/deleted/untracked candidates | Positive/broken lock-graph, manifest, digest-map, runner, baseline and execution tests; full changed-owner/dependent groups, unchanged-owner smoke, all full groups at public checkpoints |
 | `rfc/SOURCES`, `rfc/SHA256SUMS`, `rfc/rfc*.txt` | Exact RFC Editor source bytes and reviewed roles | `scripts/standards/verify-rfcs.sh` |
 | `references/LOCAL_SOURCES`, `references/LOCAL_SHA256SUMS` | Local-only NIST, ITU, and RISC-V authority bytes and roles | `scripts/standards/verify-local-references.sh` |
 | `standards/source-policy.toml` | Lifecycle, domain, milestone, registry, closure-exclusion, admission, independent hash-pin, and pin-provenance policy | `scripts/standards/check-standards-ledger.py` |

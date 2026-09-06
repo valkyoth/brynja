@@ -1,0 +1,19 @@
+[package]
+name = "brynja-legacy-hash-public-api-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", version = "=0.1.0", default-features = false }
+brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", version = "=0.1.0", default-features = false }
+
+[workspace]
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+unwrap_used = "forbid"
+expect_used = "forbid"

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.24.20 candidate
+
+- Freeze portable SHA-1/MD5 ordinary/hardened byte/bit downstream acceptance,
+  real packaged consumers and modern/legacy rejection tests; retain In progress
+  status until v0.24.23. No production algorithm changes or crates.io upload.
+- Select long Miri groups by semantic implementation/dependency impact; smoke
+  unchanged owners and retain every full group at public crates.io checkpoints.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.20.md).
+
 All notable changes to Brynja will be documented here. The format follows
 Keep a Changelog and Semantic Versioning.
 

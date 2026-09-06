@@ -6,6 +6,10 @@ entrypoints = ["checks.sh", "tag_gate.sh"]
 extensions = [".py", ".sh"]
 purpose = "Shared bounded assurance runners, bare-metal gates, and proof orchestration"
 
+[category.legacy-hash]
+extensions = [".py", ".toml"]
+purpose = "Frozen legacy SHA-1/MD5 portable consumer, package and isolation acceptance"
+
 [category.ci]
 extensions = [".lock", ".sh"]
 purpose = "Pinned CI tools and Rust-version matrix checks"

@@ -944,10 +944,10 @@ and native-parallel disposition at v0.24.17; SP 800-185 is **Fully implemented**
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.18`; the current internal `0.24.19`
-candidate adds the separate complete portable `brynja-legacy-md5` leaf.
-It has ordinary and hardened byte/bit APIs, but is collision-broken, unpublished
-and never enabled by the modern facade. Exceptional MD5 retest passed; final
+milestones continue through `0.24.19`; the current internal `0.24.20`
+candidate freezes package-external SHA-1/MD5 portable acceptance and improves
+focused assurance selection. Both legacy leaves have ordinary and hardened
+byte/bit APIs, but are collision-broken, unpublished and absent from the modern facade; final
 SHA-1/MD5 family acceptance remains later in 0.24.x. SP 800-185 remains **Fully
 implemented** after signed v0.24.17 acceptance; CPU backends remain unadmitted.
 See the [MD5 contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5.md).
@@ -1059,7 +1059,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.19 keeps modern APIs unchanged; SHA-1 and MD5 are separate legacy leaves, CPU candidates remain unadmitted, and no TLS engine exists |
+| `brynja` | Modern production facade | Internal v0.24.20 keeps modern APIs unchanged; SHA-1 and MD5 are separate legacy leaves, CPU candidates remain unadmitted, and no TLS engine exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted |
@@ -1239,8 +1239,11 @@ require no scheduled pentest, exceptional development milestones require their
 PASS report without publication, and public checkpoints require their
 cumulative PASS report. Every tag runs local Miri smoke coverage for all
 registered groups plus complete coverage for changed groups and their
-downstream closure; public crates.io checkpoints and shared assurance changes
-force every group. Full AddressSanitizer and Kani also execute locally in that
+downstream closure; public crates.io checkpoints and unknown or shared runtime
+impacts force every group. Version-only local pins, registered isolated fixtures
+and documentation do not force global Miri. See the
+[focused assurance policy](https://github.com/valkyoth/brynja/blob/main/docs/focused-assurance.md).
+Full AddressSanitizer and bounded Kani checks also execute locally in that
 pre-tag gate. Ordinary GitHub CI checks their pinned scripts, declared coverage,
 scope selection, mutation resistance, and emitted-code evidence but does not
 rerun the long dynamic suites, whose runtime exceeds the bounded hosted-CI

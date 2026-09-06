@@ -466,9 +466,13 @@ all files, and wait for green GitHub and CodeQL before the user authorizes the
 signed tag. Development milestones stop there without crates.io publication.
 Their tag gate runs bounded Miri smoke coverage for every registered assurance
 group and complete Miri coverage for changed groups plus their downstream
-dependency closure. Shared toolchain, manifest, lockfile, or Miri-policy changes
-fail closed to complete coverage. Every public checkpoint that can publish to
-crates.io always runs the complete registered Miri suite.
+dependency closure. From v0.24.20, semantic lock/manifest classification exempts
+local version-only updates and uses both old/new dependency graphs; shared
+runtime/compiler and unknown implementation impacts still fail closed. Updated
+smoke cases run as smoke, while full-campaign changes select the affected full
+groups. See [focused assurance](focused-assurance.md) for exact rules and tests.
+Every public checkpoint that can publish to crates.io always runs the complete
+registered Miri suite. Full local ASan and bounded Kani remain required.
 At each scheduled or exceptional public checkpoint, ask the user for a
 backwards-looking pentest of every change after the prior public tag through the
 current candidate. Keep that report current while findings are fixed and

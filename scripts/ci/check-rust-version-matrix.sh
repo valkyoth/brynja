@@ -11,6 +11,7 @@ for toolchain in "${toolchains[@]}"; do
     cargo "+$toolchain" test --locked --manifest-path assurance/sha1-public-api/Cargo.toml --lib
     cargo "+$toolchain" test --locked -p brynja-legacy-md5
     cargo "+$toolchain" test --locked --manifest-path assurance/md5-public-api/Cargo.toml --lib
+    cargo "+$toolchain" test --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib
     cargo "+$toolchain" test --locked -p brynja-legacy-sha1
     cargo "+$toolchain" run --quiet --locked \
         --manifest-path assurance/sha256-public-api/Cargo.toml

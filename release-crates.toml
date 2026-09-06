@@ -1,19 +1,19 @@
 [release]
-version = "0.24.19"
-milestone = "0.24.19"
+version = "0.24.20"
+milestone = "0.24.20"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "New legacy MD5 cryptography and secret-bearing state require an exceptional pentest before tagging."
+exception_reason = "Portable legacy acceptance and security-sensitive assurance scope selection require an exceptional pentest before tagging."
 
 [crates."brynja"]
-previous_version = "0.24.18"
-version = "0.24.19"
+previous_version = "0.24.19"
+version = "0.24.20"
 change = "metadata"
 publish = false
-reason = "Advance only internal facade metadata for the isolated legacy MD5 milestone; no modern MD5 edge and no publication."
+reason = "Advance internal facade metadata for frozen legacy portable acceptance and focused assurance; no production API or publication change."
 
 [crates."brynja-legacy-md5"]
 previous_version = "unpublished"

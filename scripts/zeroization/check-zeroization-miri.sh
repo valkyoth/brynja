@@ -102,7 +102,7 @@ full_sha3() {
 
 quick_kmac() {
     run_miri --manifest-path crates/brynja-mac-kmac/Cargo.toml \
-        --test api domain_substitution_changes_outputs_and_fixed_is_not_xof_prefix
+        --test api secret_output_is_cleared_when_ownership_ends
 }
 
 full_kmac() {
@@ -111,7 +111,7 @@ full_kmac() {
 
 quick_tuplehash() {
     run_miri --manifest-path crates/brynja-hash-tuple/Cargo.toml \
-        --test api tuple_boundaries_order_and_empty_items_are_distinct
+        --test api abandoned_or_incomplete_items_fail_closed
 }
 
 full_tuplehash() {
@@ -129,7 +129,17 @@ full_parallelhash() {
     run_miri -p brynja-hash-parallel --tests
 }
 
-all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash)
+quick_legacy() {
+    run_miri --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib dynamic_lifecycle_smoke
+}
+
+full_legacy() {
+    # Wide vectors and file partitions run natively; interpret the bounded
+    # package-external lifecycle case, as for other selected full groups.
+    run_miri --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib dynamic_
+}
+
+all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy)
 mode="${1:---full}"
 shift || true
 

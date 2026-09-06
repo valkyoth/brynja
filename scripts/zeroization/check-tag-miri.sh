@@ -15,7 +15,7 @@ case "$stage" in
         ;;
     internal)
         if ! base="$({
-            git describe --tags --first-parent --match "v[0-9]*" --abbrev=0 HEAD^
+            git describe --tags --first-parent --match "v[0-9]*" --abbrev=0 HEAD
         } 2>/dev/null)"; then
             echo "tag gate: no prior signed-tag boundary; requiring complete Miri evidence"
             "$miri_runner" --full

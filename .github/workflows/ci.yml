@@ -71,6 +71,8 @@ jobs:
         run: scripts/ci/ci_install_rust.sh
       - name: Test workspace
         run: cargo test --workspace --all-features
+      - name: Test frozen portable legacy consumer
+        run: cargo test --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml
       - name: Exercise detected SHA-256 candidate without granting admission
         env:
           BRYNJA_CPU_EVIDENCE_EXPECTED_BACKEND: ${{ matrix.expected_backend }}
@@ -135,6 +137,8 @@ jobs:
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sp800185-public-api/Cargo.toml
       - name: Run SP 800-185 parallel execution acceptance
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sp800185-final/Cargo.toml
+      - name: Test frozen portable legacy consumer
+        run: cargo +${{ matrix.rust }} test --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml
       - name: Verify zeroization emitted code
         run: scripts/zeroization/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
       - name: Verify constant-time emitted code
@@ -178,6 +182,8 @@ jobs:
         run: cargo check --locked --manifest-path assurance/hash-final-acceptance/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Check portable SP 800-185 public API fixture
         run: cargo check --locked --manifest-path assurance/sp800185-public-api/Cargo.toml --lib --target ${{ matrix.target }}
+      - name: Check frozen portable legacy consumer
+        run: cargo check --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Verify zeroization emitted code
         run: scripts/zeroization/check-zeroization-codegen.sh 1.98.1 "${{ matrix.target }}"
       - name: Verify constant-time emitted code

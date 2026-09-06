@@ -435,7 +435,7 @@
       "version": "0.24.20",
       "title": "Legacy SHA-1 And MD5 Portable Public API Acceptance",
       "requires": [],
-      "scope_sha256": "45a69cf32ee7b4a3f98961bee55f5f10a2385687754382a7e40a659f4ac54ec3"
+      "scope_sha256": "d2fb4a175728d15effb544c82c481a047e5ede754423974ab5bb269944cb4c15"
     },
     {
       "id": "0.24.21",

@@ -3708,7 +3708,7 @@ Exit criteria:
 
 ### v0.24.19 - Complete First-Party Legacy MD5
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including byte and canonical arbitrary-bit one-shot and streaming input, padding, little-endian bit length, ordinary and hardened secret-bearing states, complete internal sanitization, official and independent vectors, checked exhaustion and public compatibility APIs with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade or FIPS use.
 
@@ -3747,12 +3747,21 @@ Exit criteria:
 
 ### v0.24.20 - Legacy SHA-1 And MD5 Portable Public API Acceptance
 
-Status: planned
+Status: awaiting pentest
 
-Plan scope: Freeze package-external no_std fixtures and package archives for every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile; run representative real files, authoritative and independent digests, streaming partitions, exhaustion, cleanup and isolation failures through forced portable paths, prove collision warnings and modern-versus-legacy dependency, feature, type and symbol separation, and keep both legacy families In progress until acceleration and final cross-backend evidence pass.
+Plan scope: Freeze package-external no_std fixtures and package archives for every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile; run representative real files, authoritative and independent digests, streaming partitions, exhaustion, cleanup and isolation failures through forced portable paths, prove collision warnings and modern-versus-legacy dependency, feature, type and symbol separation, and keep both legacy families In progress until acceleration and final cross-backend evidence pass. Add semantic impact-selected Miri with signed dirty-tree scope, complete changed-owner/dependent groups, bounded unchanged-owner smoke, and mandatory full public-checkpoint coverage.
 
 Goal: freeze a complete consumer-visible portable reference before any legacy
 CPU backend is implemented or admitted.
+
+Additional owner-approved scope: repair focused assurance selection. Version-only
+local lock/manifest changes and isolated fixture additions must not rerun all
+finished implementations. Test changed owners and dependent consumers fully,
+run bounded smoke coverage for unaffected owners, and preserve complete Miri
+at crates.io checkpoints or unknown/shared runtime impacts. Semantic selection
+must cover staged, unstaged, deleted and untracked files from a signed ancestor.
+Keep the ordinary workspace, security, dependency, sanitizer and bounded Kani
+checks; coverage policy changes require explicit regression tests and review.
 
 Deliverables:
 

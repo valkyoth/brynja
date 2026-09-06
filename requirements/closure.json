@@ -1009,7 +1009,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Freeze package-external no_std fixtures and package archives for every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile; run representative real files, authoritative and independent digests, streaming partitions, exhaustion, cleanup and isolation failures through forced portable paths, prove collision warnings and modern-versus-legacy dependency, feature, type and symbol separation, and keep both legacy families In progress until acceleration and final cross-backend evidence pass.",
+      "scope": "Freeze package-external no_std fixtures and package archives for every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile; run representative real files, authoritative and independent digests, streaming partitions, exhaustion, cleanup and isolation failures through forced portable paths, prove collision warnings and modern-versus-legacy dependency, feature, type and symbol separation, and keep both legacy families In progress until acceleration and final cross-backend evidence pass. Add semantic impact-selected Miri with signed dirty-tree scope, complete changed-owner/dependent groups, bounded unchanged-owner smoke, and mandatory full public-checkpoint coverage.",
       "source_ids": [
         "rfc:1321",
         "rfc:6151"

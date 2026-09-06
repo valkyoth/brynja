@@ -47,6 +47,12 @@ is retained; Kani uses its separately documented older verifier toolchain.
 
 ## Release conditions
 
+Local candidate verification passed: complete repository gate, twelve stable
+Rust lanes, bare-metal/platform compilation, official RFC vectors, independent
+bit oracle, packaged consumer, MD5 Miri/ASan, u128 Kani proof, exact compiler
+owner contracts, advisory and tooling-freshness checks. See the permanent
+report for exact scope and exclusions. This is not independent review.
+
 New crypto/secret ownership requires an exceptional pentest, then a complete
 local release check, report commit, green GitHub/CodeQL and explicit owner
 permission to tag. Candidate preparation does not tag, push or publish.

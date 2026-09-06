@@ -3747,7 +3747,7 @@ Exit criteria:
 
 ### v0.24.20 - Legacy SHA-1 And MD5 Portable Public API Acceptance
 
-Status: exceptional pentest and remediation retest PASS; final release checks before GitHub/CodeQL
+Status: awaiting green CI
 
 Plan scope: Freeze package-external no_std fixtures and package archives for every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile; run representative real files, authoritative and independent digests, streaming partitions, exhaustion, cleanup and isolation failures through forced portable paths, prove collision warnings and modern-versus-legacy dependency, feature, type and symbol separation, and keep both legacy families In progress until acceleration and final cross-backend evidence pass. Add semantic impact-selected Miri with signed dirty-tree scope, complete changed-owner/dependent groups, bounded unchanged-owner smoke, and mandatory full public-checkpoint coverage.
 

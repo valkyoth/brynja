@@ -83,8 +83,9 @@ cover this follow-up. The owner confirmed a clean retest of exact signed
 commit `f03a68aa862c06c2acf6609b61c16f46a43ba632` on 2026-09-06.
 
 Local release checks passed. Collect/review exact-commit native observations
-on AMD/Intel/M2/AWS Arm where available. The local AMD capture passed; Intel,
-M2 and AWS Arm captures remain pending. No remote lane is claimed unavailable
+on AMD/Intel/M2/AWS Arm where available. The local AMD and owner-supplied M2 Pro
+captures passed review as self-attested correctness observations; Intel and
+AWS Arm captures remain pending. No remote lane is claimed unavailable
 or complete without its disposition. Commit the report,
 wait for green GitHub/CodeQL and explicit owner tag permission. Zero crates are
 selected for upload at this internal milestone.

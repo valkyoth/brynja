@@ -3798,7 +3798,10 @@ Exit criteria:
 
 ### v0.24.21 - SHA-1 CPU Acceleration
 
-Status: awaiting pentest
+Status: awaiting green CI
+
+The exceptional retest and local release checks passed. Reviewed native evidence
+remains a release-preparation requirement; this status does not authorize a tag.
 
 Plan scope: After the frozen v0.24.20 portable boundary is green, implement isolated first-party SHA-1 compression candidates for exact x86/x86_64 SHA-extension and AArch64 SHA1 feature bundles, with no_std static selection and opt-in std runtime detection; require forced-path KATs, scalar differentials, migration-safe feature revalidation, quarantine, emitted-code, AMD/Intel and Apple/AWS Arm native correctness, performance and timing evidence, cleanup-qualified hardened dispatch, and an explicit scalar-only disposition for RISC-V or any target without a ratified toolchain-expressible SHA-1 facility.
 

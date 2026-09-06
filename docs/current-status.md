@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.20 signed; v0.24.21 SHA-1 CPU candidates implemented and unadmitted; local verification passed; exceptional pentest and reviewed native evidence pending
+Status: v0.20.0 published; milestones through v0.24.20 signed; v0.24.21 SHA-1 CPU candidates implemented and unadmitted; exceptional retest and local release checks PASS; reviewed native evidence and green GitHub/CodeQL pending
 
 The current candidate adds opt-in legacy SHA-1 instruction kernels and a separate
 host-observation adapter, with required mode failing closed and hardened SHA-1
@@ -30,7 +30,7 @@ dependent-consumer and public-checkpoint evidence. See
 [portable acceptance](legacy-hash-portable-acceptance.md) and
 [focused assurance](focused-assurance.md).
 
-The candidate's pentest follow-up makes SHA-1's private buffer guards always-on
+The v0.24.20 pentest follow-up makes SHA-1's private buffer guards always-on
 in optimized builds, matching MD5, without changing valid-input digests. The
 library does not force abort on applications: their workspace owns the panic
 profile. See [panic strategy](panic-strategy.md) and the

@@ -6,7 +6,7 @@ hardened = "portable-only"
 
 [evidence]
 milestone = "0.24.21"
-status = "pending-pentest-and-exact-commit-native-capture"
+status = "pentest-pass-native-review-pending"
 native_lanes = ["amd-x86_64", "intel-x86_64", "apple-m2-aarch64", "aws-aarch64"]
 qemu = "supplemental-correctness-only"
 missing = ["reviewed-native-correctness", "migration-safe-execution-authority", "native-performance-and-side-channel-review", "accelerated-cleanup-qualification"]

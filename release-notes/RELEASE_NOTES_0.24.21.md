@@ -1,6 +1,6 @@
 # Brynja 0.24.21 Release Notes
 
-Status: implementation candidate; exceptional pentest and reviewed native evidence pending
+Status: exceptional retest and local release checks PASS; reviewed native evidence and green GitHub/CodeQL pending
 
 ## Scope and deliverables
 
@@ -60,6 +60,11 @@ tests pass AddressSanitizer with leak detection disabled for this environment.
 These are local implementation checks, not independent review or native admission.
 Current tooling, RustSec, dependency-policy and committed SBOM checks pass.
 
+The final local release selection also passes all ten full Miri groups and
+all 27 inventoried Kani bounds. Miri groups ran independently with isolated
+caches, retaining the full selection required by the shared assurance change.
+No instruction-kernel proof or native backend admission follows from this.
+
 ## Release workflow
 
 The first pentest identified a Medium shared-build-cfg risk and two lower-
@@ -68,17 +73,19 @@ non-default `cpu-evidence` feature; a shared flag or feature unification cannot
 enable it alone. Five optimized negative build combinations, dedicated positive
 controls and additional policy mutations cover this remediation. Persistent
 evidence flags and secret input to ordinary accelerated APIs remain prohibited.
-The owner retest is pending; no backend was admitted.
+The subsequent retest below required one further fix; no backend was admitted.
 
 A subsequent retest identified `cfg(test)` as an independent admission bypass.
 That exception is removed: kernel unit tests now require the same two evidence
 keys as all other executable consumers. Seven optimized rejection combinations,
 an external-binary reproduction and a mutation restoring the old test exception
-cover this follow-up; its owner retest is still required.
+cover this follow-up. The owner confirmed a clean retest of exact signed
+commit `f03a68aa862c06c2acf6609b61c16f46a43ba632` on 2026-09-06.
 
-Complete local checks, request an exceptional pentest, address any findings and
-collect/review exact-commit native observations on AMD/Intel/M2/AWS Arm where
-available. Record unsupported/unavailable lanes honestly. Commit the report,
+Local release checks passed. Collect/review exact-commit native observations
+on AMD/Intel/M2/AWS Arm where available. The local AMD capture passed; Intel,
+M2 and AWS Arm captures remain pending. No remote lane is claimed unavailable
+or complete without its disposition. Commit the report,
 wait for green GitHub/CodeQL and explicit owner tag permission. Zero crates are
 selected for upload at this internal milestone.
 

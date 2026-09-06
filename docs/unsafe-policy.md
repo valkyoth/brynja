@@ -1,6 +1,6 @@
 # Unsafe Rust Policy
 
-Status: twelve exact source-hash-bound exceptions inventoried; three legacy SHA-1 candidate modules await exceptional pentest; every other unsafe site forbidden
+Status: twelve exact source-hash-bound exceptions inventoried; three legacy SHA-1 candidate modules passed exceptional retest and remain unadmitted; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
 Rust in only twelve exact modules: the private core volatile clearer; the

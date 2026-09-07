@@ -3798,11 +3798,11 @@ Exit criteria:
 
 ### v0.24.21 - SHA-1 CPU Acceleration
 
-Status: awaiting green CI
+Status: released
 
 The exceptional retest and local release checks passed. AMD, Intel, M2 and AWS
 Arm observations have reviewed unadmitted dispositions; no backend admission
-follows. Green GitHub/CodeQL and explicit owner tag permission remain required.
+follows. Green GitHub/CodeQL and explicit owner tag permission were obtained.
 
 Plan scope: After the frozen v0.24.20 portable boundary is green, implement isolated first-party SHA-1 compression candidates for exact x86/x86_64 SHA-extension and AArch64 SHA1 feature bundles, with no_std static selection and opt-in std runtime detection; require forced-path KATs, scalar differentials, migration-safe feature revalidation, quarantine, emitted-code, AMD/Intel and Apple/AWS Arm native correctness, performance and timing evidence, cleanup-qualified hardened dispatch, and an explicit scalar-only disposition for RISC-V or any target without a ratified toolchain-expressible SHA-1 facility.
 
@@ -3848,7 +3848,7 @@ Exit criteria:
 
 ### v0.24.22 - MD5 Multi-Buffer SIMD Acceleration
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: After v0.24.20, implement first-party allocation-free MD5 multi-buffer candidates that process independent messages through exact x86_64 AVX2 and, when separately justified, AVX-512 bundles plus AArch64 NEON and qualifying ratified RISC-V Vector bundles; expose bounded caller-owned batch lanes without pretending single-stream MD5 has dedicated hardware acceleration, preserve scalar semantics for uneven tails and unsupported targets, and require lane-permutation, mixed-length, inactive-lane, KAT, differential, quarantine, native performance, timing, emitted-code, failure-atomicity and hardened lane/register/spill cleanup evidence before admission.
 

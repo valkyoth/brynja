@@ -100,3 +100,10 @@ supports progress checks and retries, clones the exact clean commit remotely,
 retrieves each result, and unlocks aggregation only after local validation.
 That database is orchestration state, never evidence; exact-source bundles and
 the complete validated aggregate are the release boundary.
+
+MD5 batch/SIMD assurance is grouped under `scripts/md5/`: the `check-md5-cpu.py`
+entry point runs production rejection, packaged batch consumers and native-capture
+regressions. `check-md5-cpu-qemu.sh` and `check-md5-cpu-codegen.sh` cover forced
+Arm correctness and compiler endpoints. `capture-md5-cpu-native.py` collects
+exact-commit non-authorizing native observations. Never persist
+`--cfg brynja_md5_cpu_evidence` or deploy its evidence binaries.

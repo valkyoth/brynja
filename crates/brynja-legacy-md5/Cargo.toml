@@ -12,6 +12,9 @@ publish = ["crates-io"]
 
 [features]
 default = []
+batch = []
+cpu = ["batch"]
+cpu-evidence = []
 
 [dependencies]
 brynja-core = { workspace = true }

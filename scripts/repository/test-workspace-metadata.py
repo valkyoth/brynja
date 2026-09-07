@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import copy
+import md5_workspace_fixtures
 import json
 import subprocess
 import sys
@@ -86,6 +87,7 @@ def test_baselines(no_default: dict, all_features: dict) -> None:
             raise AssertionError(
                 f"workspace validator rejected {mode}: {accepted.stderr}"
             )
+    md5_workspace_fixtures.check(no_default, all_features, package, node, require_rejection)
 
 def test_inventory_and_names(baseline: dict) -> None:
     ambiguous = copy.deepcopy(baseline)
@@ -490,7 +492,7 @@ def main() -> int:
                 f"{legacy} smuggled into {modern}",
             )
     reject_invalid_and_exhausted(all_features)
-    print("workspace policy rejects 41 package-class, external-admission, and feature-graph regressions")
+    print("workspace policy rejects 44 package-class, external-admission, and feature-graph regressions")
     return 0
 
 

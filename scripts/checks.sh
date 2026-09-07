@@ -48,6 +48,9 @@ python3 scripts/pki/test-der-reader.py
 python3 scripts/pki/check-asn1-values.py
 python3 scripts/pki/test-asn1-values.py
 python3 scripts/md5/check-md5.py
+python3 scripts/md5/check-md5-cpu.py
+python3 scripts/md5/test-md5-cpu.py
+scripts/md5/check-md5-cpu-codegen.sh
 python3 scripts/legacy-hash/check-legacy-acceptance.py
 python3 scripts/legacy-hash/test-legacy-acceptance.py
 python3 scripts/md5/test-md5.py

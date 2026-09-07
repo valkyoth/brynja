@@ -261,7 +261,7 @@ def validate_workflow(workflow: str) -> None:
     if workflow.count(install) != 1:
         fail("CI bare-metal target installation drifted")
     command = (
-        "run: cargo check --workspace --exclude brynja-crypto-cpu-std --exclude brynja-hash-parallel-std --exclude brynja-legacy-sha1-std "
+        "run: cargo check --workspace --exclude brynja-crypto-cpu-std --exclude brynja-hash-parallel-std --exclude brynja-legacy-sha1-std --exclude brynja-legacy-md5-std "
         "--all-features --target ${{ matrix.target }}"
     )
     if workflow.count(command) != 1:
@@ -288,7 +288,7 @@ def validate_manifest_text(contents: str, tools: list[dict], label: str) -> None
     if label == "Cargo.toml":
         admitted_cfg = (
             "unexpected_cfgs = { level = \"warn\", "
-            "check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)', 'cfg(brynja_sha1_cpu_evidence)'] }"
+            "check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)', 'cfg(brynja_sha1_cpu_evidence)', 'cfg(brynja_md5_cpu_evidence)'] }"
         )
         if lowered.count(admitted_cfg) != 1:
             fail("workspace assurance check-cfg admission drifted")

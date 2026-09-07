@@ -40,6 +40,18 @@ mod ordinary;
 mod output;
 mod owner;
 
+#[cfg(feature = "batch")]
+mod batch;
+#[cfg(feature = "cpu")]
+mod cpu;
+
+#[cfg(feature = "batch")]
+pub use batch::{
+    HardenedMd5Batch, MAX_BATCH_LANES, Md5Batch, Md5BatchControl, Md5BatchError, Md5BatchReport,
+};
+#[cfg(feature = "cpu")]
+pub use cpu::{Md5Backend, Md5BackendError, Md5BackendHealth, Md5BackendSession};
+
 pub use brynja_hash_core::{BitString, BitStringError};
 pub use hardened::{HardenedMd5, HardenedMd5State};
 pub use ordinary::{Md5, md5, md5_bits};

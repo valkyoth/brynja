@@ -194,6 +194,7 @@ def validate_dependencies(
             if (name, dependency_name) in {
                 ("brynja-crypto-cpu-std", "brynja-hash-sha2"),
                 ("brynja-legacy-sha1-std", "brynja-legacy-sha1"),
+                ("brynja-legacy-md5-std", "brynja-legacy-md5"),
             }
             else []
         )
@@ -218,6 +219,10 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         }
     )
     expected.update({feature: [] for feature in entry.get("features", [])})
+    if name == "brynja-legacy-md5":
+        # The reviewed CPU surface includes the bounded portable batch API;
+        # neither feature implies the separate non-production evidence key.
+        expected["cpu"] = ["batch"]
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")
 
@@ -308,6 +313,10 @@ def validate_resolved_mode(
             # Explicit hosted legacy workspace root enables only the local
             # cpu feature; it adds no dependency to the portable leaf.
             expected_features.add("cpu")
+        if name == "brynja-legacy-md5":
+            # The separate hosted root enables CPU visibility and its bounded
+            # batch prerequisite, never the evidence-execution feature.
+            expected_features.update(("cpu", "batch"))
         package_id = names[name]
         actual_dependencies = {
             packages_by_id[dependency_id]["name"]

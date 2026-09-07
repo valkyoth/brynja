@@ -8,7 +8,7 @@ run_miri() {
     CARGO_HOME="$miri_cache/cargo" \
         CARGO_TARGET_DIR="$miri_cache/target" \
         XDG_CACHE_HOME="$miri_cache" \
-        cargo +nightly-2026-09-06 miri test \
+        cargo +nightly-2026-09-07 miri test \
         --target x86_64-unknown-linux-gnu "$@"
 }
 
@@ -35,7 +35,8 @@ quick_md5() {
 }
 
 full_md5() {
-    run_miri -p brynja-legacy-md5 --lib
+    run_miri -p brynja-legacy-md5 --features cpu --lib
+    run_miri -p brynja-legacy-md5 --features cpu --test cpu
     run_miri -p brynja-legacy-md5 --test api -- --skip standard_byte_vectors_and_million_a --skip official_rfc_vectors_ordinary_hardened_and_streamed
 }
 

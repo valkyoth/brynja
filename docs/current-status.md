@@ -17,9 +17,13 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.20 signed; v0.24.21 SHA-1 CPU candidates implemented and unadmitted; exceptional retest and local release checks PASS; all four native candidate dispositions reviewed; awaiting green GitHub/CodeQL
+Status: v0.20.0 published; milestones through v0.24.21 signed; v0.24.22 MD5 batch/SIMD candidates implemented and unadmitted; local verification passed; exceptional pentest and native disposition pending.
 
-The current candidate adds opt-in legacy SHA-1 instruction kernels and a separate
+The current candidate adds bounded ordinary/hardened MD5 batch APIs, unadmitted
+AVX2/NEON multi-buffer kernels and an optional host-observation adapter. Hardened
+batches remain portable-only. See [the MD5 acceleration contract](legacy-md5-acceleration.md).
+
+The signed v0.24.21 milestone adds opt-in legacy SHA-1 instruction kernels and a separate
 host-observation adapter, with required mode failing closed and hardened SHA-1
 remaining portable. See [the acceleration contract](legacy-sha1-acceleration.md).
 

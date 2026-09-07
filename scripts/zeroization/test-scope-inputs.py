@@ -60,7 +60,7 @@ def semantic_tests():
     assert inputs.verifier_only(a, a.replace(b'old', b'new'))
     assert not inputs.verifier_only(a, a.replace(b'miri', b'kani'))
     runner = (scope.ROOT / 'scripts/zeroization/check-zeroization-miri.sh').read_bytes()
-    assert inputs.runner_groups(runner, runner.replace(b'nightly-2026-09-06', b'nightly-2026-09-07')) == set()
+    assert inputs.runner_groups(runner, runner.replace(b'nightly-2026-09-07', b'nightly-2026-09-07')) == set()
     assert inputs.runner_groups(runner, runner.replace(b'quick_md5() {', b'quick_md5() {\n    # reviewed smoke')) == set()
     assert inputs.runner_groups(runner, runner.replace(b'full_md5() {', b'full_md5() {\n    # reviewed full')) == {'md5'}
     rejected(lambda: inputs.runner_groups(runner, runner.replace(b'run_miri() {', b'run_miri() {\n    false')))

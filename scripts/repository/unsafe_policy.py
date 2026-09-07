@@ -9,6 +9,9 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-legacy-md5/src/cpu/session.rs"): ("2b44d0e84f477a79cc0dfec007dab0fbf7e9c0ea6577d4759f0f46c537562a9f", 3, 1, 3),
+    Path("crates/brynja-legacy-md5/src/cpu/x86_avx2_md5.rs"): ("ed6bc494e363fc24256b835b5d4ee52b0785f4d46028a5bdb7ca8446d597ea8e", 1, 1, 1),
+    Path("crates/brynja-legacy-md5/src/cpu/aarch64_neon_md5.rs"): ("95266c29fe1ce486477bf32d5276dc8f241cb3d57c1ce2dedfe8d8f335199651", 1, 1, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("b730cac693b98f45317f682a06d51f1feb8e13b3dec4e5994dca16a04a1f08a8", 3, 1, 3),
     Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"): ("4421dbaf14b05b7dd9480d32ae6319134f5785ff5347ba7ec74751d5aa80a583", 1, 1, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"): ("440373ba1279dd55d991b285eceb83157238b6217ad1c5e125f4bc7ffc704473", 3, 1, 3),
@@ -125,7 +128,7 @@ def validate_allowed(
             fail("volatile loop must retain its final compiler barrier")
     elif relative.name in {
         "x86_sha.rs", "aarch64_sha2.rs", "riscv64_zknh.rs", "x86_sha1.rs", "aarch64_sha1.rs",
-        "x86_avx2_keccak.rs", "aarch64_sha3_keccak.rs",
+        "x86_avx2_keccak.rs", "aarch64_sha3_keccak.rs", "x86_avx2_md5.rs", "aarch64_neon_md5.rs",
     }:
         if "#[target_feature" not in text or "core::arch" not in text:
             fail(f"CPU kernel lost its intrinsic boundary: {relative}")

@@ -1,0 +1,20 @@
+[package]
+name = "brynja-legacy-md5-std"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Opt-in host detection and fail-closed selection for legacy MD5"
+publish = ["crates-io"]
+
+[features]
+default = []
+
+[dependencies]
+brynja-legacy-md5 = { path = "../brynja-legacy-md5", version = "=0.1.0", features = ["cpu"] }
+
+[lints]
+workspace = true

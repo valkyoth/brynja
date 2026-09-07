@@ -11,7 +11,12 @@ RECORD = {
                    'borrowed-input:caller-owned-copy-risk', 'typed-output:caller-owned'],
     'sanitization_symbol': WIPE, 'cleanup_callers': [DROP],
     'evidence': ['crates/brynja-legacy-md5/tests/api.rs', 'assurance/md5-public-api/src/lib.rs',
-                 'scripts/md5/check-md5.py', 'scripts/md5/check-md5-codegen.sh'],
+                 'scripts/md5/check-md5.py', 'scripts/md5/check-md5-codegen.sh',
+                 'crates/brynja-legacy-md5/src/batch/mod.rs',
+                 'crates/brynja-legacy-md5/src/batch/owner.rs',
+                 'crates/brynja-legacy-md5/src/batch/control.rs',
+                 'crates/brynja-legacy-md5/src/batch/tests.rs',
+                 'assurance/md5-cpu-public-api/src/packaged.rs'],
     'storage': 'crate-owned-fixed', 'output_classification': 'typed-secret-owned',
     'partial_failure_policy': 'clear-complete-secret-destination',
 }

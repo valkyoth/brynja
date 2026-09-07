@@ -1,0 +1,18 @@
+schema = 1
+milestone = "0.24.22"
+
+[admission]
+x86_64-avx2 = "unadmitted"
+aarch64-neon = "unadmitted"
+avx512 = "not-implemented"
+riscv-vector = "not-implemented"
+hardened = "portable-only"
+
+[residual]
+native_correctness = "pending exact-commit AMD, Intel, Apple M2 and AWS Arm captures"
+migration_safety = "unproven; neither non-Send nor a feature callback prevents migration"
+performance = "preliminary local comparisons only; no universal speedup claim"
+side_channels = "pending independent review; lengths and lane activity are public"
+secret_simd_cleanup = "not qualified; no hardened SIMD entry point"
+independent_review = false
+fips_validated = false

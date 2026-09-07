@@ -66,7 +66,7 @@ def validate(root=ROOT, hashes=True):
         if f'clear_owned_region(&mut self.{region})' not in owner:
             raise ValueError('MD5 private region is not cleared')
     manifest = tomllib.loads((root / CRATE / 'Cargo.toml').read_text())
-    if set(manifest['dependencies']) != {'brynja-core', 'brynja-hash-core'} or manifest['features'] != {'default': []}:
+    if set(manifest['dependencies']) != {'brynja-core', 'brynja-hash-core'} or manifest['features'] != {'default': [], 'batch': [], 'cpu': ['batch'], 'cpu-evidence': []}:
         raise ValueError('MD5 dependency or feature boundary')
     checker = (root / 'scripts/md5/check-md5.py').read_text()
     for token in ("'--release'", "'--lib', 'invalid_'", 'check=True', 'timeout=120'):

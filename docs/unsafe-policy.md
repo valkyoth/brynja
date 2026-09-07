@@ -1,13 +1,13 @@
 # Unsafe Rust Policy
 
-Status: twelve exact source-hash-bound exceptions inventoried; three legacy SHA-1 candidate modules passed exceptional retest and remain unadmitted; every other unsafe site forbidden
+Status: fifteen exact source-hash-bound exceptions inventoried; three new legacy MD5 candidate modules await exceptional review and remain unadmitted; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only twelve exact modules: the private core volatile clearer; the
+Rust in only fifteen exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
-isolated legacy SHA-1 session/x86/AArch64 candidate modules. Each
+isolated legacy SHA-1 and MD5 session/x86/AArch64 candidate modules. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every
@@ -165,3 +165,13 @@ and guards private exact-width intrinsic entrypoints. Local load/store safety
 comments cover the fixed live arrays. No modern CPU crate changes. All candidates
 remain unadmitted, hardened SHA-1 stays portable, and a feature check alone is
 not a migration-safe authority. See [the contract](legacy-sha1-acceleration.md).
+
+## v0.24.22 legacy MD5 candidates
+
+Three additional private modules contain the session authority and fixed-width
+AVX2/NEON loads/stores. Arrays have exact initialized widths; no untrusted pointer
+or buffer length enters a kernel. Fixed transposition/round indices are public.
+Only ordinary public-data batches can use the session; hardened batches compose
+the existing clearing MD5 owners and have no instruction route. Unique two-key
+evidence gating has no cfg(test) exception. Native records, QEMU and benchmarks
+cannot admit execution. See [MD5 acceleration](legacy-md5-acceleration.md).

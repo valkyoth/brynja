@@ -24122,7 +24122,7 @@
       ]
     }
   ],
-  "policy_sha256": "d730bfceb89c3c6f8e91645ba90f0b6b68e7ee636725de775aa1c3cf0d973a03",
+  "policy_sha256": "6116dfa0cd3aa6a6a1fa4113c3cdb45dc97049e05e678c2f20b33977d6eb2e24",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",
@@ -24193,7 +24193,12 @@
         "crates/brynja-legacy-md5/tests/api.rs",
         "assurance/md5-public-api/src/lib.rs",
         "scripts/md5/check-md5.py",
-        "scripts/md5/check-md5-codegen.sh"
+        "scripts/md5/check-md5-codegen.sh",
+        "crates/brynja-legacy-md5/src/batch/mod.rs",
+        "crates/brynja-legacy-md5/src/batch/owner.rs",
+        "crates/brynja-legacy-md5/src/batch/control.rs",
+        "crates/brynja-legacy-md5/src/batch/tests.rs",
+        "assurance/md5-cpu-public-api/src/packaged.rs"
       ],
       "fields": [
         "chaining_state:secret-derived",

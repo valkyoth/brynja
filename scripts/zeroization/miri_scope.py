@@ -29,7 +29,7 @@ GROUP_PREFIXES = {
         "crates/brynja-sanitization/",
         "scripts/sanitization/",
     ),
-    "md5": ("crates/brynja-legacy-md5/", "crates/brynja-hash-core/", "assurance/md5-", "scripts/md5/"),
+    "md5": ("crates/brynja-legacy-md5/", "crates/brynja-legacy-md5-std/", "crates/brynja-hash-core/", "assurance/md5-", "scripts/md5/"),
     "sha1": ("crates/brynja-legacy-sha1/", "crates/brynja-legacy-sha1-std/", "crates/brynja-hash-core/", "assurance/sha1-", "scripts/sha1/"),
     "legacy": ("assurance/legacy-hash-", "scripts/legacy-hash/"),
     "sha2": (

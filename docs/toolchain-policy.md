@@ -30,7 +30,7 @@ crate MSRV, hold back stable Rust, or turn policy-only status into proof.
 
 `assurance/policy.toml` additionally pins Kani, AFL++, honggfuzz, Miri, and
 sanitizers by exact source revision. Miri and sanitizers use the latest
-available `nightly-2026-09-06` at Rust revision `f248f4038796913873f11ca65b1b901e311c8dae`.
+available `nightly-2026-09-07` at Rust revision `f248f4038796913873f11ca65b1b901e311c8dae`.
 These tools are external to Cargo
 manifests. Ordinary builds do not download or execute them; each owning
 milestone must recheck upstream state and record exact campaign evidence.

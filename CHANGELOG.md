@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.24.22 candidate
+
+- Add eight-slot transactional MD5 batches with bounded work/cancellation and
+  distinct portable hardened ownership, plus unadmitted x86_64 AVX2 and AArch64
+  NEON multi-message candidates behind opt-in CPU features.
+- Add `brynja-legacy-md5-std` host observation and portable fallback; required
+  acceleration fails closed. No modern or hardened SIMD route is admitted.
+- Add frozen-corpus, mixed-lane, instruction, ownership, package, negative-build
+  and native capture checks. Exceptional pentest and native disposition pending;
+  no crate selected for publication. See [release notes](release-notes/RELEASE_NOTES_0.24.22.md).
+
 ## 0.24.21 candidate
 
 - Add first-party x86/x86_64 SHA and AArch64 SHA1 schedule/round kernels behind

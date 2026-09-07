@@ -13,6 +13,12 @@ publish = "crates-io"
 required = ["brynja-legacy-sha1"]
 optional = {}
 
+[packages.brynja-legacy-md5-std]
+class = "host-adapter"
+publish = "crates-io"
+required = ["brynja-legacy-md5"]
+optional = {}
+
 [packages.brynja-core]
 class = "modern-shared"
 publish = "crates-io"
@@ -151,6 +157,7 @@ class = "legacy-engine"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-core"]
 optional = {}
+features = ["batch", "cpu", "cpu-evidence"]
 
 [packages.brynja-legacy-sha1]
 class = "legacy-engine"

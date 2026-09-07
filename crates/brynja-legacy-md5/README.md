@@ -130,3 +130,34 @@ compile-fail ownership checks and compiler cleanup evidence.
 - [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md)
 
 Rust 1.90.0–1.98.1; default validation on 1.98.1. MIT OR Apache-2.0.
+
+## Bounded batches and SIMD candidates (v0.24.22)
+
+Enable `batch` for consuming `Md5Batch` / `HardenedMd5Batch` with eight ordered,
+caller-owned slots and explicit compression budgets/cancellation. Inactive slots
+are distinct from empty messages. Public output commits atomically; secret output
+is one clearing 128-byte owner. All hardened processing remains portable.
+
+Enable `cpu` for unadmitted eight-lane x86_64 AVX2 and four-lane AArch64 NEON
+candidate sessions. Production builds cannot execute them. Cargo feature
+unification exposes types, not execution permission. A separate optional
+`brynja-legacy-md5-std` reports host features, uses portable fallback and rejects
+required acceleration. SIMD is for public independent messages, not single-stream
+acceleration; AVX-512 and RISC-V Vector remain unimplemented pending qualification.
+
+```rust
+# #[cfg(feature = "batch")] {
+use brynja_legacy_md5::{BitString, Md5Batch, Md5BatchControl};
+let mut inputs = [None; 8];
+inputs[0] = Some(BitString::new(b"abc", 8).map_err(|_| "invalid bits")?);
+let mut output = [[0; 16]; 8];
+let report = Md5Batch::new().digest(&inputs, &mut output, &mut Md5BatchControl::new(1))
+    .map_err(|_| "batch rejected")?;
+assert_eq!(report.active_lanes, 1);
+assert_eq!(report.vector_blocks, 0);
+# }
+# Ok::<(), &'static str>(())
+```
+
+MD5 remains **In progress** until v0.24.23 final disposition.
+See [batch ownership and evidence](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-acceleration.md).

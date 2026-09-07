@@ -1,6 +1,6 @@
 # MD5 multi-buffer SIMD contract
 
-Status: v0.24.22 implementation candidate; supplied pentest clean, native evidence pending.
+Status: v0.24.22 implementation candidate; supplied pentest clean, four native captures reviewed; final release checks pending.
 MD5 remains **In progress** until the v0.24.23 final cross-backend disposition.
 It is collision-broken, not independently cryptographically verified, and not
 FIPS validated. Faster legacy compatibility does not repair MD5's security.
@@ -109,3 +109,9 @@ unchanged committed sources, checks every enumerated Linux CPU's features,
 rejects overwrites and emits no hostname. Return the JSON for reviewed disposition.
 Native records remain operator-self-attested and do not admit a backend. No
 new RISC-V vector or AVX-512 hardware claim is made by this milestone.
+
+The [v0.24.22 native archive](../assurance/md5-observations/v0.24.22/README.md)
+preserves passing AMD, Intel, Apple M2 Pro and AWS Arm captures at exact
+commit `95d1d6b56282621e742b425aa08988d9568d3e84`. Its result disposition
+does not qualify migration-safe authority, constant-time behavior or secret
+SIMD cleanup. Both instruction candidates remain unadmitted.

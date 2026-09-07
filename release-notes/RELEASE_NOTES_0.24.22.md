@@ -1,6 +1,6 @@
 # Brynja 0.24.22 Release Notes
 
-Status: locally verified implementation candidate; supplied exceptional pentest clean; native evidence disposition and final release checks pending
+Status: locally verified implementation candidate; supplied exceptional pentest clean; four native captures reviewed; final release checks pending
 
 ## Scope and deliverables
 
@@ -76,9 +76,15 @@ Completed on 2026-09-07:
 - Release selection check and dry run: zero packages selected for publication.
 
 These are local automated checks, not an independent cryptographic review.
-Exact-commit native records are collected after the owner pentest; QEMU never
-substitutes for native performance/timing approval. Both candidates remain
-unadmitted regardless of these results.
+Exact-commit native records were collected after the owner pentest. AMD, Intel,
+Apple M2 Pro and AWS Arm passed the bounded correctness and exploratory
+benchmark campaign at `95d1d6b56282621e742b425aa08988d9568d3e84`; their original
+JSON and review limits are in the
+[native archive](../assurance/md5-observations/v0.24.22/README.md). The Mac
+report is owner-supplied; its separate kernel/session unit suite is not claimed.
+QEMU never substitutes for native performance/timing approval. Neither these
+measurements nor their review establishes constant-time or migration safety;
+both candidates remain unadmitted regardless of the passing results.
 
 ## Release workflow
 

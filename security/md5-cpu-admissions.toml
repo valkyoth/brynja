@@ -9,9 +9,9 @@ riscv-vector = "not-implemented"
 hardened = "portable-only"
 
 [residual]
-native_correctness = "pending exact-commit AMD, Intel, Apple M2 and AWS Arm captures"
+native_correctness = "bounded AMD, Intel, Apple M2 Pro and AWS Arm captures passed at 95d1d6b5; see assurance/md5-observations/v0.24.22/README.md; not admission"
 migration_safety = "unproven; neither non-Send nor a feature callback prevents migration"
-performance = "preliminary local comparisons only; no universal speedup claim"
+performance = "nine exploratory native benchmark rows per registered lane; no universal speedup or constant-time claim"
 side_channels = "pending independent review; lengths and lane activity are public"
 secret_simd_cleanup = "not qualified; no hardened SIMD entry point"
 independent_review = false

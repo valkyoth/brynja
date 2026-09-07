@@ -23,6 +23,12 @@ and hardened outputs, complete secret-output destruction, cancellation, budget
 failure, recoverable unwind and both optional host adapters. Required
 acceleration fails closed. No source-level access to private kernels is used.
 
+The fixture's inputs and expected hashes are public frozen test vectors, even
+when exercised through a typed secret owner. Its fixed-width result comparison
+uses Brynja's own `ConstantTimeEq`, without copying the borrowed output or adding
+`subtle`. Regression tests cover all 128 mismatch positions and invalid widths;
+they test functional behavior, not a new independent timing certification.
+
 The library also compiles without default features on bare-metal targets;
 only the optional `host` feature requires std. No production crate or public
 cryptographic algorithm changes for this milestone, and no third-party runtime
@@ -74,6 +80,32 @@ and full output clearing; unchanged owners receive their registered smoke tests.
 All full owner campaigns passed before v0.24.22 and remain tied to that checked
 source and verifier. Public checkpoints still renew all full groups. Compiler,
 Kani, sanitizer, differential and source-policy checks remain required.
+
+## Unwind and filesystem trust boundaries
+
+Secret cleanup follows Rust destruction during normal scope exit and recoverable
+unwinding; callers do not have to install `catch_unwind` to activate it. Tests
+catch panics only so they can inspect the output afterwards. Both a cancellation
+callback panic and a neighboring destructor initiating unwind are exercised.
+The inspected MD5 owner and output-guard Drops call the existing first-party
+clearing boundary without allocating or invoking user callbacks. MD5's fixed
+regions are nonempty, so the clearing helper's empty-region error cannot arise
+here; no result is unwrapped. Its isolated volatile primitive remains a reviewed unsafe
+exception; this does not introduce unsafe code in MD5 owner destruction.
+
+A second panic during unwinding can abort the process. This is **not** safe
+from a memory-remanence perspective: remaining cleanup is not guaranteed.
+Abort, forced termination and unrelated failing destructors remain deployment
+limitations, not circumstances this portable crate can override.
+
+The Python acceptance checker requires a trusted, quiescent checkout. Its
+portable symlink/path checks are not a sandbox against another process racing
+the filesystem. The actual read is bounded as well as the initial file-size
+check, including growth-after-check tests and cross-platform newline tests.
+Do not execute it over a checkout concurrently writable by untrusted users;
+isolate such workers or use an immutable input snapshot. `O_NOFOLLOW` on the
+final file alone would not protect changing parent directories or all supported
+platforms, so no complete TOCTOU-containment claim is made.
 
 Ordinary hash state must not own secrets. Hardened owners clear their inaccessible
 state, but caller copies, moves, compiler copies, registers/spills, caches,

@@ -14,6 +14,7 @@ version = "0.1.0"
 name = "brynja-legacy-hash-final-fixture"
 version = "0.0.0"
 dependencies = [
+ "brynja-core",
  "brynja-legacy-hash-public-api-fixture",
  "brynja-legacy-md5",
  "brynja-legacy-md5-std",

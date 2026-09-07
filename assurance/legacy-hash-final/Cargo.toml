@@ -12,6 +12,7 @@ default = ["host"]
 host = ["dep:brynja-legacy-sha1-std", "dep:brynja-legacy-md5-std"]
 
 [dependencies]
+brynja-core = { path = "../../crates/brynja-core", version = "=0.9.0", default-features = false }
 brynja-legacy-hash-public-api-fixture = { path = "../legacy-hash-public-api" }
 brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", version = "=0.1.0", default-features = false, features = ["cpu"] }
 brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", version = "=0.1.0", default-features = false, features = ["cpu"] }

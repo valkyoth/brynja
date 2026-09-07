@@ -2,6 +2,8 @@
 """Mutation rejection for frozen legacy closure, claims and native reuse."""
 import shutil
 import tempfile
+import io
+from unittest.mock import patch
 from pathlib import Path
 import legacy_final_acceptance as policy
 
@@ -27,7 +29,10 @@ def main():
         (policy.FIXTURE + '/Cargo.toml', 'unsafe_code = "forbid"', 'unsafe_code = "allow"'),
         (policy.FIXTURE + '/src/lib.rs', 'comparisons != 160', 'comparisons != 159'),
         (policy.FIXTURE + '/src/lib.rs', 'brynja_legacy_hash_public_api_fixture::acceptance()', '()'),
-        (policy.FIXTURE + '/src/batch.rs', 'secret.expose() != wanted.as_flattened()', 'false'),
+        (policy.FIXTURE + '/src/batch.rs', '!output_matches(secret.expose(), wanted.as_flattened())?', 'false'),
+        (policy.FIXTURE + '/src/batch.rs', 'Ok(actual.ct_eq(expected).expose_public())', 'Ok(actual == expected)'),
+        (policy.FIXTURE + '/src/lib.rs', 'fn dynamic_neighbor_drop_unwind_clears_live_secret_output()', 'fn omitted_neighbor_unwind()'),
+        (policy.FIXTURE + '/src/lib.rs', 'fn dynamic_full_width_comparison_rejects_every_mismatch()', 'fn omitted_comparison()'),
         (policy.FIXTURE + '/src/batch.rs', 'output != [[0; 16]; 8]', 'false'),
     ]
     for path in ('scripts/checks.sh', 'scripts/ci/check-rust-version-matrix.sh',
@@ -50,6 +55,25 @@ def main():
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(policy.ROOT / path, destination)
         policy.validate(root)
+        # Simulate growth after the path's size check, without huge allocation.
+        (root / 'read-bound.txt').write_bytes(b'old')
+        with patch.object(policy, 'MAX_INPUT_BYTES', 1024):
+            stream = io.BytesIO(b'x' * 4096)
+            with patch.object(stream, 'read', wraps=stream.read) as actual_read, \
+                    patch.object(Path, 'open', return_value=stream) as opened:
+                try:
+                    policy.read(root, 'read-bound.txt')
+                except ValueError:
+                    pass
+                else:
+                    raise AssertionError('accepted growth past the actual-read bound')
+                opened.assert_called_once_with('rb')
+                actual_read.assert_called_once_with(1025)
+        with patch.object(policy, 'MAX_INPUT_BYTES', 4), \
+                patch.object(Path, 'open', return_value=io.BytesIO(b'x\r\nz')):
+            assert policy.read(root, 'read-bound.txt') == 'x\nz'
+        with patch.object(Path, 'open', return_value=io.BytesIO(b'a\r\nb\rc\n')):
+            assert policy.read(root, policy.FIXTURE + '/Cargo.lock') == 'a\nb\nc\n'
         for invalid in ('../outside', str(root / policy.CLAIMS)):
             try:
                 policy.read(root, invalid)

@@ -1,6 +1,6 @@
 # Brynja 0.24.23 Release Notes
 
-Status: implementation candidate; local verification passed; owner pentest pending
+Status: implementation candidate; follow-up local verification passed; owner retest pending
 
 ## Scope
 
@@ -46,7 +46,7 @@ Completed locally:
   because this environment's ptrace restrictions prevent LeakSanitizer.
 - Supplemental AArch64 SHA-1/MD5 forced-path QEMU correctness; this does not
   authorize acceleration or replace native evidence.
-- Thirty final-acceptance mutations plus input-path boundary regressions;
+- Thirty-three final-acceptance mutations plus input-path/read-boundary regressions;
   34 release-policy tests; full roadmap/readiness and semantic Miri regressions.
 - Current tooling/admission checks, RustSec audit, cargo-deny and SBOM checks;
   publisher check/dry run confirms zero crates selected.
@@ -57,6 +57,15 @@ review-hash filename now receives the same tested digest-only classification
 as other inventories; changing its coverage keys still selects its full group.
 
 ## Limits and release flow
+
+The supplied follow-up assessment contained three Low/informational observations,
+not active exploits. The public-vector fixture now uses first-party fixed-width
+comparison and tests every mismatch position; a neighboring destructor unwind
+test supplements callback panic coverage. The Python reader bounds its actual
+read and explicitly requires a trusted, non-concurrently-mutated checkout.
+The permanent report records all dispositions; owner retest remains pending.
+No production Rust or external dependency changed. The fixture adds an explicit
+edge to the same `brynja-core` version it already used transitively.
 
 SHA-1 and MD5 remain collision-broken, isolated and unsuitable for new security
 designs. Ordinary states must not own secrets. Hardened state cleanup does not

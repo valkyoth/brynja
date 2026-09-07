@@ -5,6 +5,7 @@ from pathlib import Path
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
+MAX_INPUT_BYTES = 4 * 1024 * 1024
 FIXTURE = 'assurance/legacy-hash-final'
 FROZEN = 'scripts/legacy-hash/frozen-v02420.toml'
 SNAPSHOT = 'scripts/legacy-hash/native-source-snapshot.toml'
@@ -28,7 +29,7 @@ def read(root, path):
     if relative.is_absolute() or '..' in relative.parts:
         raise ValueError('acceptance input must stay within the repository')
     file = root / path
-    if root.is_symlink() or file.is_symlink() or not file.is_file() or file.stat().st_size > 4 * 1024 * 1024:
+    if root.is_symlink() or file.is_symlink() or not file.is_file() or file.stat().st_size > MAX_INPUT_BYTES:
         raise ValueError('missing, symlinked or oversized acceptance input: ' + path)
     # Inspect repository-owned ancestors only. macOS may expose its trusted
     # temporary directory through /var -> /private/var above the chosen root.
@@ -37,8 +38,15 @@ def read(root, path):
         if parent.is_symlink():
             raise ValueError('symlinked acceptance parent: ' + path)
         parent = parent.parent
-    # Source/control text normalizes CRLF just like existing checkout policies.
-    return file.read_text(encoding='utf-8')
+    # Trusted, quiescent checkout required: these portable path checks do not
+    # contain hostile concurrent filesystem mutation. Bound the actual read
+    # too, so growth after stat cannot cause an unbounded allocation.
+    with file.open('rb') as stream:
+        raw = stream.read(MAX_INPUT_BYTES + 1)
+    if len(raw) > MAX_INPUT_BYTES:
+        raise ValueError('acceptance input grew beyond the read bound: ' + path)
+    # Match read_text's universal newline normalization on all supported hosts.
+    return raw.decode('utf-8').replace('\r\n', '\n').replace('\r', '\n')
 
 
 def sha(text):
@@ -131,7 +139,7 @@ def validate(root=ROOT, hashes=True):
     manifest = tomllib.loads(read(root, FIXTURE + '/Cargo.toml'))
     if manifest['package']['publish'] is not False or manifest['lints']['rust']['unsafe_code'] != 'forbid':
         raise ValueError('final fixture publication/unsafe boundary changed')
-    if set(manifest['dependencies']) != {'brynja-legacy-hash-public-api-fixture',
+    if set(manifest['dependencies']) != {'brynja-core', 'brynja-legacy-hash-public-api-fixture',
         'brynja-legacy-sha1', 'brynja-legacy-md5', 'brynja-legacy-sha1-std', 'brynja-legacy-md5-std'}:
         raise ValueError('final fixture acquired an unexpected dependency')
     if 'source =' in read(root, FIXTURE + '/Cargo.lock'):
@@ -148,7 +156,10 @@ def validate(root=ROOT, hashes=True):
         (FIXTURE + '/src/lib.rs', 'comparisons != 160'),
         (FIXTURE + '/src/main.rs', 'RuntimeSha1Backend::required().is_ok()'),
         (FIXTURE + '/src/main.rs', 'RuntimeMd5Backend::required().is_ok()'),
-        (FIXTURE + '/src/batch.rs', 'secret.expose() != wanted.as_flattened()'),
+        (FIXTURE + '/src/batch.rs', '!output_matches(secret.expose(), wanted.as_flattened())?'),
+        (FIXTURE + '/src/batch.rs', 'Ok(actual.ct_eq(expected).expose_public())'),
+        (FIXTURE + '/src/lib.rs', 'fn dynamic_neighbor_drop_unwind_clears_live_secret_output()'),
+        (FIXTURE + '/src/lib.rs', 'fn dynamic_full_width_comparison_rejects_every_mismatch()'),
         (FIXTURE + '/src/batch.rs', 'output != [[0; 16]; 8]'),
     ):
         if token not in read(root, path):

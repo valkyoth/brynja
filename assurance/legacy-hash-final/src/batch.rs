@@ -37,7 +37,10 @@ pub fn check(data: &[u8], width: u8, expected: &[u8]) -> Result<usize, &'static 
             let (secret, report) = HardenedMd5Batch::new()
                 .digest_secret(&inputs, &mut output, &mut Md5BatchControl::new(8192))
                 .map_err(|_| "secret batch failed")?;
-            if secret.expose() != wanted.as_flattened() || report.vector_blocks != 0 {
+            // These are public frozen vectors, not authentication inputs. Use
+            // the first-party fixed-width comparator even in this example.
+            if !output_matches(secret.expose(), wanted.as_flattened())? || report.vector_blocks != 0
+            {
                 return Err("secret batch differs");
             }
         }
@@ -47,6 +50,14 @@ pub fn check(data: &[u8], width: u8, expected: &[u8]) -> Result<usize, &'static 
         comparisons += 1;
     }
     Ok(comparisons)
+}
+
+pub fn output_matches(actual: &[u8], expected: &[u8]) -> Result<bool, &'static str> {
+    // Borrow arrays rather than copying potentially secret-derived bytes.
+    // Length is public; expose only the complete comparison decision.
+    let actual: &[u8; 128] = actual.try_into().map_err(|_| "actual batch width")?;
+    let expected: &[u8; 128] = expected.try_into().map_err(|_| "expected batch width")?;
+    Ok(actual.ct_eq(expected).expose_public())
 }
 
 pub fn failures() -> Result<(), &'static str> {
@@ -92,3 +103,4 @@ pub fn failures() -> Result<(), &'static str> {
     }
     Ok(())
 }
+use brynja_core::ConstantTimeEq;

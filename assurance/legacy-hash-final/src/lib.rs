@@ -67,6 +67,53 @@ mod tests {
     }
 
     #[test]
+    fn dynamic_full_width_comparison_rejects_every_mismatch() {
+        let expected = [0xa5; 128];
+        assert_eq!(super::batch::output_matches(&expected, &expected), Ok(true));
+        for index in 0..128 {
+            let mut actual = expected;
+            actual[index] ^= 1;
+            assert_eq!(super::batch::output_matches(&actual, &expected), Ok(false));
+        }
+        for length in [0, 16, 127, 129] {
+            let data = [0xa5; 129];
+            assert!(super::batch::output_matches(&data[..length], &expected).is_err());
+            assert!(super::batch::output_matches(&expected, &data[..length]).is_err());
+        }
+    }
+
+    #[test]
+    fn dynamic_neighbor_drop_unwind_clears_live_secret_output() {
+        use brynja_legacy_md5::{BitString, HardenedMd5Batch, Md5BatchControl};
+        struct PanickingNeighbor;
+        impl Drop for PanickingNeighbor {
+            fn drop(&mut self) {
+                panic!("neighbor destructor initiates recoverable unwind");
+            }
+        }
+        let mut output = [[0xa5; 16]; 8];
+        let input = BitString::new(b"a", 8).ok();
+        assert!(input.is_some());
+        let mut held_nonzero_result = false;
+        let caught = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let result = HardenedMd5Batch::new().digest_secret(
+                &[input; 8],
+                &mut output,
+                &mut Md5BatchControl::new(32),
+            );
+            held_nonzero_result = result
+                .as_ref()
+                .is_ok_and(|(secret, _)| secret.expose().iter().any(|byte| *byte != 0));
+            // Dropped before `result`, so the secret owner is destroyed while
+            // unwinding. catch_unwind only lets this test inspect the outcome.
+            let _neighbor = PanickingNeighbor;
+        }));
+        assert!(caught.is_err());
+        assert!(held_nonzero_result);
+        assert_eq!(output, [[0; 16]; 8]);
+    }
+
+    #[test]
     fn dynamic_batch_unwind_clears_complete_secret_output() {
         use brynja_legacy_md5::{BitString, HardenedMd5Batch, Md5BatchControl};
         let input = BitString::new(b"a", 8).ok();

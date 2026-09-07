@@ -935,6 +935,18 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-hash-sha2/src/lib.rs#Sha512T",
+        "disposition": "future-work",
+        "domain": "cryptography",
+        "owner": "0.24.24",
+        "rationale": "General SHA-512/t has an authenticated FIPS 180-4 section 5.3.6 parameter and API contract, separate from the six implemented named SHA-2 identities. All 510 mathematical t values remain unimplemented general APIs, default-off, without protocol admission or arbitrary-t FIPS approval; implementation and final evidence are v0.24.25 through v0.24.29.",
+        "sources": ["nist:NIST.FIPS.180-4.pdf"],
+        "test_target": "scripts/sha2/check-sha512-t-contract.py#main"
+      },
+      "id": "algorithm.sha512-t"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED",
         "disposition": "implemented",
         "domain": "cryptography",

@@ -397,10 +397,12 @@
       ],
       "affected_requirements": [
         "BRY-REQ-CRYPTO-0001",
-        "BRY-REQ-CRYPTO-0018"
+        "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0020"
       ],
       "affected_symbols": [
         "crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED",
+        "crates/brynja-hash-sha2/src/lib.rs#Sha512T",
         "crates/brynja-legacy-sha1/src/lib.rs#Sha1"
       ],
       "brynja_state": "current",

@@ -123,7 +123,7 @@
 "crates/brynja-legacy-sha1/src/owner.rs" = "50360bf20b114052132d8acfb1fac9890f2572c5c591947319f111eaa65d86b8"
 "docs/legacy-hash-final-acceptance.md" = "0e57507f4f512ef2023c13a3164f933b4b98bbbe0900e5f6fe8930b75c74e4c5"
 "scripts/assurance/check-bare-metal.sh" = "c4ff129aaff46f43d6d0ff348cdcbc5542c11490aa192d994bf75cdb1cec5170"
-"scripts/checks.sh" = "3cd294995d7ea3d4e4bd2a78a6b8af5714c6ba7321041ec75fde81304a9f5fa9"
+"scripts/checks.sh" = "6ecc1bf648e3f25146e242803b7bd5df8708bbf9b6753e71b35738f68d4a5f43"
 "scripts/ci/check-rust-version-matrix.sh" = "4d444879789fac9059d1377ab5179d6af5c36538eb6d289f6303afded975732a"
 "scripts/legacy-hash/check-legacy-final-acceptance.py" = "f450bd63085dce1bdf66339ad5bdad336312808f7f827dd273e63095459c228a"
 "scripts/legacy-hash/final_batch_mutations.py" = "7467a12a88543c74436cf50c9e60473f951c989b32bb8afc209453576135c023"

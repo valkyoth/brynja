@@ -66,6 +66,7 @@ SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE25
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
+| General SHA-512/t extension | 🚧 In progress — authority/API contract only | `brynja-hash-sha2` (planned opt-in) | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
@@ -946,9 +947,9 @@ and native-parallel disposition at v0.24.17; SP 800-185 is **Fully implemented**
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.22`; the current internal `0.24.23`
-candidate closes the frozen legacy public acceptance and updates future public
-checkpoints to each fifth minor series' registered closing patch.
+milestones continue through `0.24.23`; the current internal `0.24.24`
+candidate freezes the [general SHA-512/t authority and API contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
+Its new general APIs remain unimplemented until subsequent steps; named SHA-2 stays complete.
 All SHA-1 and MD5 candidates remain unadmitted; hardened legacy execution remains portable. Both legacy leaves have ordinary and hardened
 byte/bit APIs and completed v0.24.23 public acceptance, but remain collision-broken,
 unpublished and absent from the modern facade. SP 800-185 remains **Fully
@@ -1062,7 +1063,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.23 keeps modern APIs unchanged; SHA-1 and MD5 are separate legacy leaves, CPU candidates remain unadmitted, and no TLS engine exists |
+| `brynja` | Modern production facade | Internal v0.24.24 keeps modern APIs unchanged; general SHA-512/t is contract-only, legacy leaves stay separate, CPU candidates remain unadmitted, and no TLS engine exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted |

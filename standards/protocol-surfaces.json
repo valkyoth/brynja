@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "41042f8111cbfb284ea552f7cab2d2b2a4c33cc72634083a920d761f2df3007a",
+  "policy_sha256": "af72a0dd604fb53c68fc0dde1c2ef6b6039be8728502d59335c8b17d5c373c37",
   "schema": 2,
   "source_ledger_sha256": "915169e86b0a434935032680fe90cc57fe3e0027220a86776ef43b951a0d56d3",
   "surfaces": [
@@ -261,6 +261,19 @@
       "owner": "0.24.2",
       "rationale": "The private Keccak-f[1600] owner and all six FIPS 202 SHA-3/SHAKE identities are fully implemented across ordinary byte, canonical arbitrary-bit, hardened public/secret, fixed-output and incremental-XOF profiles with two explicitly unadmitted CPU candidates.",
       "test_target": "scripts/hash/check-final-acceptance.py#main"
+    },
+    {
+      "code_target": "crates/brynja-hash-sha2/src/lib.rs#Sha512T",
+      "disposition": "future-work",
+      "domain": "cryptography",
+      "id": "algorithm.sha512-t",
+      "kind": "semantic",
+      "normative_sources": [
+        "nist:NIST.FIPS.180-4.pdf"
+      ],
+      "owner": "0.24.24",
+      "rationale": "General SHA-512/t has an authenticated FIPS 180-4 section 5.3.6 parameter and API contract, separate from the six implemented named SHA-2 identities. All 510 mathematical t values remain unimplemented general APIs, default-off, without protocol admission or arbitrary-t FIPS approval; implementation and final evidence are v0.24.25 through v0.24.29.",
+      "test_target": "scripts/sha2/check-sha512-t-contract.py#main"
     },
     {
       "code_target": "crates/brynja-hash-sha3/src/sp800_185.rs",

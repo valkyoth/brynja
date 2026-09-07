@@ -70,6 +70,8 @@ python3 scripts/sha1/check-sha1-package.py
 scripts/sha1/check-sha1-codegen.sh
 cargo test --locked --manifest-path assurance/sha1-public-api/Cargo.toml
 python3 scripts/sha2/check-sha256.py
+python3 scripts/sha2/check-sha512-t-contract.py
+python3 scripts/sha2/test-sha512-t-contract.py
 python3 scripts/sha2/test-sha256.py
 python3 scripts/sha2/check-sha256-public-api.py
 python3 scripts/sha2/test-sha256-public-api.py

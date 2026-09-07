@@ -1,0 +1,71 @@
+schema = 1
+milestone = "0.24.24"
+state = "contract-only"
+owner = "brynja-hash-sha2"
+feature = "general-sha512-t"
+default_enabled = false
+facade_export = false
+independently_verified = false
+fips_validated = false
+cpu_admitted = false
+documentation = "docs/sha512-t-contract.md"
+
+[authority]
+id = "nist:NIST.FIPS.180-4.pdf"
+edition = "August 2015"
+reviewed = "2026-09-07"
+url = "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf"
+sha256 = "0455b406d89648d20cbde375561e19c245b9815e894164c2670772e3d54deb82"
+sections = ["3.1", "3.2", "4.1.3", "4.2.3", "5.1.2", "5.2.2", "5.3.5", "5.3.6", "5.3.6.1", "5.3.6.2", "6.4", "6.6", "6.7"]
+distribution = "local-only"
+errata = "No separate correction listed on the official landing page at review; revision announced 2023-03-07, recheck on drift and before freeze."
+
+[parameters]
+minimum = 1
+maximum = 511
+excluded = [384]
+count = 510
+input_integer_bits = 16
+label_prefix = "SHA-512/"
+label_decimal = "shortest-ascii-no-leading-zero"
+iv_mask = "a5a5a5a5a5a5a5a5"
+output_order = "msb-first"
+unused_bits = "low-zero"
+approved_named_values = [224, 256]
+general_approval = false
+
+[profiles]
+ordinary = "public-data-only"
+hardened = "sealed-mandatory-owned-cleanup"
+secret_output = "affine-exact-length-typed-owner"
+secret_error = "clear-entire-destination"
+public_error = "no-partial-output"
+update_error = "reject-before-mutation"
+finalization = "consuming-on-success-and-error"
+input_bits = "stream-bytes-then-consuming-canonical-msb-tail"
+message_limit = "less-than-2^128-bits"
+work = "one-iv-block-linear-absorb-one-or-two-final-blocks-error-clear-linear-destination"
+cancel = "between-bounded-update-calls"
+cleanup = ["success", "rejection", "cancellation", "recoverable-unwind", "drop"]
+residuals = ["forget", "abort", "double-panic-abort", "termination", "power-loss", "registers", "compiler-copies", "spills", "caches", "swap", "dumps", "dma", "caller-copies"]
+
+[operations]
+parameter = "0.24.25"
+public_digest = "0.24.25"
+ordinary_state = "0.24.26"
+ordinary_finish = "0.24.26"
+ordinary_one_shot = "0.24.26"
+hardened_state = "0.24.26"
+hardened_public_finish = "0.24.26"
+hardened_secret_finish = "0.24.26"
+hardened_one_shot = "0.24.26"
+secret_output_access = "0.24.26"
+cancel = "0.24.26"
+
+[evidence]
+current = "contract-model-only"
+iv_oracle = "0.24.25"
+digest_oracle = "0.24.26"
+lifecycle = "0.24.27"
+package_acceptance = "0.24.28"
+final_evidence = "0.24.29"

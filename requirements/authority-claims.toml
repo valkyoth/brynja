@@ -503,8 +503,8 @@ rationale = "TLS 1.2 exporter execution receives its own complete profile and pu
 
 [[plan_boundary]]
 class = "planned-authority-admission"
-versions = ["0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29"]
-rationale = "The General SHA-512/t expansion is planned, not admitted or implemented. Its exact authority, errata, rights, every parameter/operation and dependency must be mapped from docs/ROADMAP_EXPANSION_REGISTER.json into normative requirements before implementation; nearby algorithms or existing protocol authority do not confer coverage."
+versions = ["0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29"]
+rationale = "General SHA-512/t authority and the complete parameter/API contract are mapped explicitly at v0.24.24 through BRY-REQ-CRYPTO-0020 and requirements/sha512-t-contract.toml. These later steps still require actual per-operation implementation, cleanup and final evidence; contract admission does not imply cryptographic approval or completed APIs."
 
 [[plan_boundary]]
 class = "planned-authority-admission"

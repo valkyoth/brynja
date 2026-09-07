@@ -3036,6 +3036,141 @@
     {
       "api": {
         "backend": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "bit-input": {
+          "disposition": "required",
+          "owner": "0.24.26"
+        },
+        "buffers": {
+          "disposition": "caller-owned",
+          "owner": "0.24.15"
+        },
+        "byte-input": {
+          "disposition": "required",
+          "owner": "0.24.26"
+        },
+        "cancellation": {
+          "disposition": "required",
+          "owner": "0.24.27"
+        },
+        "clone": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "export": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "extendable-output": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "fixed-output": {
+          "disposition": "required",
+          "owner": "0.24.25"
+        },
+        "generation": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "hosted-adapter": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "import": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "incremental-state": {
+          "disposition": "required",
+          "owner": "0.24.26"
+        },
+        "no-std": {
+          "disposition": "required",
+          "owner": "0.24.28"
+        },
+        "one-shot": {
+          "disposition": "required",
+          "owner": "0.24.26"
+        },
+        "operation-direction": {
+          "disposition": "required",
+          "owner": "0.24.26"
+        },
+        "overlap": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "ownership": {
+          "disposition": "required",
+          "owner": "0.24.27"
+        },
+        "provider": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "reset": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "snapshot": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "verification": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        }
+      },
+      "code_target": "crates/brynja-hash-sha2/src/lib.rs#Sha512T",
+      "consumer_links": [
+        "consumer:construction"
+      ],
+      "disposition": "future-work",
+      "domain": "cryptography",
+      "explicit_rejections": [
+        "copy-secret-state",
+        "clone-secret-state",
+        "format-secret-state",
+        "serialize-secret-state",
+        "raw-secret-state-access",
+        "snapshot-secret-state",
+        "reset-secret-into-ordinary-state",
+        "downstream-hardened-marker-implementation",
+        "downstream-hardened-marker-forgery",
+        "optional-only-core-cleanup",
+        "partial-secret-output-without-clearing",
+        "unreviewed-secret-accelerated-backend",
+        "implicit-secret-output-declassification",
+        "unsafe-convenience-api",
+        "nonstandard-convenience-api"
+      ],
+      "id": "algorithm.sha512-t",
+      "normative_sources": [
+        "nist:NIST.FIPS.180-4.pdf"
+      ],
+      "operations": {
+        "hardened-derived-output": {
+          "output_classification": "typed-secret-owned",
+          "partial_failure_policy": "clear-complete-secret-destination",
+          "verification": "not-applicable"
+        },
+        "public-digest": {
+          "output_classification": "explicit-public-declassification",
+          "partial_failure_policy": "unchanged-destination",
+          "verification": "not-applicable"
+        }
+      },
+      "ordinary_hardened_separation": "required",
+      "owner": "0.24.24",
+      "profile": "general-sha512-t",
+      "test_target": "scripts/sha2/check-sha512-t-contract.py#main"
+    },
+    {
+      "api": {
+        "backend": {
           "disposition": "required",
           "owner": "0.24.12"
         },
@@ -20230,6 +20365,67 @@
       ]
     },
     {
+      "capability": "algorithm.sha512-t",
+      "evidence": [
+        "scripts/sha2/check-sha512-t-contract.py#main",
+        "scripts/zeroization/check-zeroization-codegen.sh"
+      ],
+      "fields": [
+        "chaining-state",
+        "partial-input",
+        "message-length",
+        "phase"
+      ],
+      "id": "planned.algorithm.sha512-t",
+      "lifecycle_edges": [
+        "creation",
+        "success",
+        "error",
+        "cancellation",
+        "replacement",
+        "rekey",
+        "failed-construction",
+        "recoverable-unwind",
+        "drop"
+      ],
+      "operations": {
+        "hardened-derived-output": {
+          "output_classification": "typed-secret-owned",
+          "partial_failure_policy": "clear-complete-secret-destination",
+          "verification": "not-applicable"
+        },
+        "public-digest": {
+          "output_classification": "explicit-public-declassification",
+          "partial_failure_policy": "unchanged-destination",
+          "verification": "not-applicable"
+        }
+      },
+      "owner": "0.24.27",
+      "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
+      "planned_implementation_target": "crates/brynja-hash-sha2/src/lib.rs#Sha512T",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "state": "planned",
+      "temporaries": [
+        "message-schedule",
+        "block-copy",
+        "padding-block",
+        "output-staging"
+      ]
+    },
+    {
       "capability": "algorithm.sp800-185",
       "evidence": [
         "tests/surface/primitives.rs#sp800_185",
@@ -24122,7 +24318,7 @@
       ]
     }
   ],
-  "policy_sha256": "6116dfa0cd3aa6a6a1fa4113c3cdb45dc97049e05e678c2f20b33977d6eb2e24",
+  "policy_sha256": "d4415669a4d877ae24393fb96b6f85e1633b823d4487b02ab2e98016eafd766f",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",
@@ -24564,5 +24760,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "d71679458014d1eba14ac630e24610859b9b7e67195ed03e37bd094767c1d1fc"
+  "surface_register_sha256": "7ac5c60f6d5a42ac990b1a921834403175545ba07e483c241d6d8c1d659cb230"
 }

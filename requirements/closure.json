@@ -1051,11 +1051,10 @@
       "version": "0.24.23"
     },
     {
-      "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "The General SHA-512/t expansion is planned, not admitted or implemented. Its exact authority, errata, rights, every parameter/operation and dependency must be mapped from docs/ROADMAP_EXPANSION_REGISTER.json into normative requirements before implementation; nearby algorithms or existing protocol authority do not confer coverage."
-      },
-      "requirement_ids": [],
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0020"
+      ],
       "scope": "Authenticate FIPS 180-4 section 5.3.6; freeze the complete General SHA-512/t parameter/operation matrix, exact source revision, rights and errata, API roles and package boundary for `brynja-hash-sha2`; no missing profile may silently become an unsupported placeholder.",
       "source_ids": [],
       "title": "General SHA-512/t - Authority And Public API Contract",
@@ -1064,7 +1063,7 @@
     {
       "boundary": {
         "class": "planned-authority-admission",
-        "rationale": "The General SHA-512/t expansion is planned, not admitted or implemented. Its exact authority, errata, rights, every parameter/operation and dependency must be mapped from docs/ROADMAP_EXPANSION_REGISTER.json into normative requirements before implementation; nearby algorithms or existing protocol authority do not confer coverage."
+        "rationale": "General SHA-512/t authority and the complete parameter/API contract are mapped explicitly at v0.24.24 through BRY-REQ-CRYPTO-0020 and requirements/sha512-t-contract.toml. These later steps still require actual per-operation implementation, cleanup and final evidence; contract admission does not imply cryptographic approval or completed APIs."
       },
       "requirement_ids": [],
       "scope": "Implement validated positive t below 512 except 384, exact decimal IV-generation label and typed arbitrary-bit digest output distinct from named /224 and /256 in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation.",
@@ -1075,7 +1074,7 @@
     {
       "boundary": {
         "class": "planned-authority-admission",
-        "rationale": "The General SHA-512/t expansion is planned, not admitted or implemented. Its exact authority, errata, rights, every parameter/operation and dependency must be mapped from docs/ROADMAP_EXPANSION_REGISTER.json into normative requirements before implementation; nearby algorithms or existing protocol authority do not confer coverage."
+        "rationale": "General SHA-512/t authority and the complete parameter/API contract are mapped explicitly at v0.24.24 through BRY-REQ-CRYPTO-0020 and requirements/sha512-t-contract.toml. These later steps still require actual per-operation implementation, cleanup and final evidence; contract admission does not imply cryptographic approval or completed APIs."
       },
       "requirement_ids": [],
       "scope": "Implement ordinary and hardened incremental/one-shot byte and bit-input APIs with canonical unused output bits and explicit short-digest security limits in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation.",
@@ -1086,7 +1085,7 @@
     {
       "boundary": {
         "class": "planned-authority-admission",
-        "rationale": "The General SHA-512/t expansion is planned, not admitted or implemented. Its exact authority, errata, rights, every parameter/operation and dependency must be mapped from docs/ROADMAP_EXPANSION_REGISTER.json into normative requirements before implementation; nearby algorithms or existing protocol authority do not confer coverage."
+        "rationale": "General SHA-512/t authority and the complete parameter/API contract are mapped explicitly at v0.24.24 through BRY-REQ-CRYPTO-0020 and requirements/sha512-t-contract.toml. These later steps still require actual per-operation implementation, cleanup and final evidence; contract admission does not imply cryptographic approval or completed APIs."
       },
       "requirement_ids": [],
       "scope": "Close General SHA-512/t private-state, temporary and typed-output ownership in `brynja-hash-sha2` across success, rejection, cancellation, recoverable unwind and Drop; use the existing mandatory compiler-resistant sanitization boundary, sealed capabilities and explicit declassification without optional-feature cleanup.",
@@ -1097,7 +1096,7 @@
     {
       "boundary": {
         "class": "planned-authority-admission",
-        "rationale": "The General SHA-512/t expansion is planned, not admitted or implemented. Its exact authority, errata, rights, every parameter/operation and dependency must be mapped from docs/ROADMAP_EXPANSION_REGISTER.json into normative requirements before implementation; nearby algorithms or existing protocol authority do not confer coverage."
+        "rationale": "General SHA-512/t authority and the complete parameter/API contract are mapped explicitly at v0.24.24 through BRY-REQ-CRYPTO-0020 and requirements/sha512-t-contract.toml. These later steps still require actual per-operation implementation, cleanup and final evidence; contract admission does not imply cryptographic approval or completed APIs."
       },
       "requirement_ids": [],
       "scope": "Freeze runnable package-external General SHA-512/t acceptance covering every admitted parameter, public operation direction and ordinary/hardened profile in `brynja-hash-sha2` with independent known answers, not only self-round-trips; exercise independent IV/digest oracle across every allowed t, invalid t and named-identity cross-checks, bit padding, secret cleanup and no implied FIPS approval of arbitrary t.",
@@ -1108,7 +1107,7 @@
     {
       "boundary": {
         "class": "planned-authority-admission",
-        "rationale": "The General SHA-512/t expansion is planned, not admitted or implemented. Its exact authority, errata, rights, every parameter/operation and dependency must be mapped from docs/ROADMAP_EXPANSION_REGISTER.json into normative requirements before implementation; nearby algorithms or existing protocol authority do not confer coverage."
+        "rationale": "General SHA-512/t authority and the complete parameter/API contract are mapped explicitly at v0.24.24 through BRY-REQ-CRYPTO-0020 and requirements/sha512-t-contract.toml. These later steps still require actual per-operation implementation, cleanup and final evidence; contract admission does not imply cryptographic approval or completed APIs."
       },
       "requirement_ids": [],
       "scope": "Rerun the frozen General SHA-512/t public fixture and complete exact-source correctness, cleanup, side-channel, resource and cross-target evidence for `brynja-hash-sha2`; record scalar-only support or independently admitted acceleration honestly, close every promised operation and require exceptional pentest disposition before updating implementation status.",
@@ -24300,6 +24299,17 @@
     },
     {
       "decision_ids": [
+        "algorithm.sha512-t"
+      ],
+      "id": "BRY-REQ-CRYPTO-0020",
+      "lifecycle": "planned",
+      "owner": "0.24.24",
+      "source_ids": [
+        "nist:NIST.FIPS.180-4.pdf"
+      ]
+    },
+    {
+      "decision_ids": [
         "protocol.certificate-transparency"
       ],
       "id": "BRY-REQ-CT-0001",
@@ -26808,7 +26818,8 @@
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0001",
-        "BRY-REQ-CRYPTO-0018"
+        "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0020"
       ],
       "sha256": "0455b406d89648d20cbde375561e19c245b9815e894164c2670772e3d54deb82"
     },
@@ -29650,6 +29661,12 @@
       "id": "algorithm.sha3-shake",
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0002"
+      ]
+    },
+    {
+      "id": "algorithm.sha512-t",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0020"
       ]
     },
     {

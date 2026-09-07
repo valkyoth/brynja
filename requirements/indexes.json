@@ -981,6 +981,40 @@
         "planned:negative:scripts/md5/test-md5.py#main"
       ]
     },
+    "BRY-REQ-CRYPTO-0020": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.sha512-t"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "work-bound"
+      ],
+      "owners": [
+        "0.24.24"
+      ],
+      "sources": [
+        "nist:NIST.FIPS.180-4.pdf"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#Sha512T"
+      ],
+      "tests": [
+        "planned:positive:scripts/sha2/check-sha512-t-contract.py#main",
+        "planned:negative:scripts/sha2/test-sha512-t-contract.py#main"
+      ]
+    },
     "BRY-REQ-CT-0001": {
       "authority_roles": [
         "compatibility",
@@ -6278,6 +6312,7 @@
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -6479,6 +6514,9 @@
       ],
       "algorithm.sha3-shake": [
         "BRY-REQ-CRYPTO-0002"
+      ],
+      "algorithm.sha512-t": [
+        "BRY-REQ-CRYPTO-0020"
       ],
       "algorithm.sp800-185": [
         "BRY-REQ-CRYPTO-0014"
@@ -9172,6 +9210,7 @@
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-PQ-0117"
       ],
       "ct": [
@@ -9367,6 +9406,7 @@
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-LEGACY-0100",
         "BRY-REQ-LEGACY-0300",
@@ -9390,6 +9430,7 @@
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CT-0001",
         "BRY-REQ-ENC-0001",
         "BRY-REQ-ENC-0002",
@@ -9427,6 +9468,7 @@
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-TLS-0005"
       ],
       "key-lifecycle": [
@@ -9441,6 +9483,7 @@
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
@@ -9489,6 +9532,7 @@
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -9643,6 +9687,7 @@
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
         "BRY-REQ-ENTROPY-1241",
@@ -9932,6 +9977,7 @@
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
+        "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -10413,6 +10459,9 @@
       "0.24.2": [
         "BRY-REQ-CRYPTO-0002"
       ],
+      "0.24.24": [
+        "BRY-REQ-CRYPTO-0020"
+      ],
       "0.240.0": [
         "BRY-REQ-LEGACY-0800",
         "BRY-REQ-LEGACYSSL1-0800"
@@ -10598,7 +10647,8 @@
       ],
       "nist:NIST.FIPS.180-4.pdf": [
         "BRY-REQ-CRYPTO-0001",
-        "BRY-REQ-CRYPTO-0018"
+        "BRY-REQ-CRYPTO-0018",
+        "BRY-REQ-CRYPTO-0020"
       ],
       "nist:NIST.FIPS.186-5.pdf": [
         "BRY-REQ-CRYPTO-0010"
@@ -11325,6 +11375,9 @@
       "planned-symbol:crates/brynja-fips-module/src/rbg.rs": [
         "BRY-REQ-ENTROPY-1242"
       ],
+      "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#Sha512T": [
+        "BRY-REQ-CRYPTO-0020"
+      ],
       "planned-symbol:crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185": [
         "BRY-REQ-CRYPTO-0014"
       ],
@@ -11670,6 +11723,9 @@
       ],
       "planned:negative:scripts/sha1/test-sha1.py#main": [
         "BRY-REQ-CRYPTO-0018"
+      ],
+      "planned:negative:scripts/sha2/test-sha512-t-contract.py#main": [
+        "BRY-REQ-CRYPTO-0020"
       ],
       "planned:negative:scripts/tuplehash/test-tuplehash.py#main": [
         "BRY-REQ-CRYPTO-0016"
@@ -12091,6 +12147,9 @@
       ],
       "planned:positive:scripts/sha1/check-sha1.py#main": [
         "BRY-REQ-CRYPTO-0018"
+      ],
+      "planned:positive:scripts/sha2/check-sha512-t-contract.py#main": [
+        "BRY-REQ-CRYPTO-0020"
       ],
       "planned:positive:scripts/tuplehash/check-tuplehash.py#main": [
         "BRY-REQ-CRYPTO-0016"

@@ -259,11 +259,11 @@ def main() -> int:
     first = model.build_register(policy, surfaces)
     second = model.build_register(policy, surfaces)
     assert model.json_bytes(first) == model.json_bytes(second)
-    assert len(first["capabilities"]) == 134
+    assert len(first["capabilities"]) == 135
     assert len(first["api_dimensions"]) == 22
     assert len(first["current_secret_owners"]) == 8
     assert len(first["registered_secret_owners"]) == 7
-    assert len(first["planned_secret_owners"]) == 73
+    assert len(first["planned_secret_owners"]) == 74
     assert all(len(row["api"]) == 22 for row in first["capabilities"])
     assert all(row["consumer_links"] for row in first["capabilities"])
     assert all(row["explicit_rejections"] == list(model.REJECTIONS) for row in first["capabilities"])
@@ -325,10 +325,10 @@ def main() -> int:
                     f"operation {operation} information flow drifted",
                 )
                 downgraded += 1
-    assert downgraded == 22
+    assert downgraded == 23
     print(
         "cryptographic API-profile policy rejects twenty-five structural "
-        "regressions and twenty-two secret-output downgrades"
+        "regressions and twenty-three secret-output downgrades"
     )
     return 0
 

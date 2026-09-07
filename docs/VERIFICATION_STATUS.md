@@ -1,5 +1,9 @@
 # Component Verification Status
 
+General SHA-512/t is a separate **In progress** extension: v0.24.24 freezes
+its [authority/API contract](sha512-t-contract.md), not callable general APIs.
+The six named SHA-2 identities remain fully implemented and unverified.
+
 This document preserves Brynja's crate-level assurance inventory. It answers
 which internal package owns a security-sensitive scope; it does not claim
 that every listed scope is implemented or that an internal boundary is a

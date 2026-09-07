@@ -92,7 +92,7 @@ partial_failure_policy = "clear-complete-secret-destination"
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "d71679458014d1eba14ac630e24610859b9b7e67195ed03e37bd094767c1d1fc"
+surface_register_sha256 = "7ac5c60f6d5a42ac990b1a921834403175545ba07e483c241d6d8c1d659cb230"
 
 [api]
 dimensions = [
@@ -221,6 +221,27 @@ partial_failure_policy = "unchanged-destination"
 verification = "not-applicable"
 
 [profile.fixed-hash.operations.hardened-derived-output]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.general-sha512-t]
+kind = "primitive"
+secret_template = "hardened-hash"
+required = ["operation-direction", "byte-input", "bit-input", "one-shot", "incremental-state", "fixed-output", "ownership", "no-std", "cancellation"]
+forbidden = ["extendable-output", "verification", "import", "export", "generation", "reset", "clone", "snapshot", "provider", "backend", "hosted-adapter"]
+caller_owned = ["buffers"]
+not_applicable = ["overlap"]
+optional_isolated = []
+internal_only = []
+consumers = ["consumer:construction"]
+
+[profile.general-sha512-t.operations.public-digest]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.general-sha512-t.operations.hardened-derived-output]
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 verification = "not-applicable"
@@ -602,6 +623,10 @@ profile = "fixed-hash"
 ids = ["algorithm.md5", "algorithm.sha1", "algorithm.sha2"]
 
 [[assignment]]
+profile = "general-sha512-t"
+ids = ["algorithm.sha512-t"]
+
+[[assignment]]
 profile = "hash-xof-family"
 ids = ["algorithm.parallelhash", "algorithm.sha3-shake", "algorithm.tuplehash"]
 
@@ -689,12 +714,24 @@ bit-input = "0.24.7"
 ownership = "0.24.8"
 hosted-adapter = "0.24.8"
 
+[completion-overrides."algorithm.sha512-t"]
+operation-direction = "0.24.26"
+byte-input = "0.24.26"
+bit-input = "0.24.26"
+one-shot = "0.24.26"
+incremental-state = "0.24.26"
+fixed-output = "0.24.25"
+ownership = "0.24.27"
+no-std = "0.24.28"
+cancellation = "0.24.27"
+
 [completion-overrides."algorithm.sha3-shake"]
 bit-input = "0.24.9"
 ownership = "0.24.10"
 hosted-adapter = "0.24.10"
 
 [secret-owner-overrides]
+"algorithm.sha512-t" = "0.24.27"
 "algorithm.sha2" = "0.24.8"
 "algorithm.sha3-shake" = "0.24.10"
 "algorithm.kmac" = "0.24.13"
@@ -939,11 +976,11 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "719037cd686b033eff396f5b13ed0e5e58b626de57fecc3f1a65d0b7fda8efb1"
+sha256 = "f426679f5ede12aae7858428ae57e39ef15f507d53c40b65aaccd30ef54cd4f4"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "0e7f4164e2cb8c056d6f6c3088adb150fc2e23c02322f41929c35dc9483723d6"
+sha256 = "c8d2b235478c797e1e7b8fd41bdd3e1e2da71e17e14ee30517342ef4418bb704"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -963,7 +1000,7 @@ sha256 = "72de8365ab67239c24fb1a1271838fc6484a6acb3a9da43eb1b42e00a97262da"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "8f0a8cfa79051733adb9dbf5123a224104d23984f9b1103dfa1a8d43fc317ce9"
+sha256 = "0f7c30d0fbe8553d4d6560f01bf32f432a4ecdc7cd3078cc88c3d09834618c13"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"

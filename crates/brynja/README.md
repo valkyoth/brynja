@@ -35,7 +35,7 @@ All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged a
 
 ## Add The Crate
 
-Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.23** APIs.
+Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.24** APIs.
 For published foundation APIs: `cargo add brynja --no-default-features`.
 For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
 
@@ -85,7 +85,6 @@ assert_eq!(digest.as_bytes().len(), 32);
 
 let mut shake128 = [0_u8; 32];
 brynja::crypto::shake128(b"abc", &mut shake128).unwrap();
-
 ```
 
 These are FIPS 202 SHA-3 functions, not raw Keccak. Ordinary states are for
@@ -138,6 +137,7 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
+| General SHA-512/t extension | 🚧 In progress — authority/API contract only | `brynja-hash-sha2` (planned opt-in) | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |

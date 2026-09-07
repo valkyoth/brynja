@@ -3912,7 +3912,7 @@ Exit criteria:
 
 ### v0.24.23 - Legacy SHA-1 And MD5 Cross-Backend Final Acceptance
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Rerun the byte-identical v0.24.20 package-external fixtures on the exact final source through portable, every admitted SHA-1 backend, every admitted MD5 batch width, scalar tails, unavailable-required and quarantined routes; collect current AMD/Intel, Apple/AWS Arm and qualifying RISC-V or explicit unsupported evidence, repeat every affected proof, sanitizer, cleanup, timing, KAT, package and differential artifact after any code change, and only then mark the isolated legacy SHA-1 and MD5 families Fully implemented while retaining collision-insecure, non-default, independently-unverified and non-FIPS status.
 
@@ -3958,7 +3958,13 @@ Exit criteria:
 
 ### v0.24.24 - General SHA-512/t - Authority And Public API Contract
 
-Status: planned
+Status: awaiting pentest
+
+The authority and complete per-parameter API contract are recorded in
+[sha512-t-contract.md](sha512-t-contract.md) and
+`requirements/sha512-t-contract.toml`. This step tests admission/model behavior,
+not a new general digest implementation. Actual APIs and oracle/cleanup evidence
+remain v0.24.25–v0.24.29; all six existing named SHA-2 identities are unchanged.
 
 Plan scope: Authenticate FIPS 180-4 section 5.3.6; freeze the complete General SHA-512/t parameter/operation matrix, exact source revision, rights and errata, API roles and package boundary for `brynja-hash-sha2`; no missing profile may silently become an unsupported placeholder.
 

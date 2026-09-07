@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.24.24 candidate
+
+- Freeze the complete general SHA-512/t authority and ordinary/hardened API
+  contract, all 510 mathematical parameter values and explicit future evidence
+  gates. Add exhaustive parameter-model and fail-closed admission tests.
+- Add separate normative requirements and In progress status without changing
+  the six named SHA-2 implementations, production APIs or CPU admission.
+- Internal metadata only; no crates selected for publication. Owner pentest
+  required. See [release notes](release-notes/RELEASE_NOTES_0.24.24.md).
+
 ## 0.24.23 candidate
 
 - Complete final SHA-1/MD5 acceptance using the unchanged v0.24.20 public

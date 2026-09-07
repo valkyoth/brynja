@@ -157,10 +157,10 @@ def validate_profile(name: str, profile: dict, dimensions: set[str], policy: dic
     secret_template = profile["secret_template"]
     if secret_template != "none" and assigned["ownership"] != "required":
         fail(f"profile {name} must require hardened ownership")
-    if name in {"fixed-hash", "hash-xof-family", "keyed-construction"}:
+    if name in {"fixed-hash", "general-sha512-t", "hash-xof-family", "keyed-construction"}:
         if assigned["byte-input"] != "required" or assigned["bit-input"] != "required":
             fail(f"profile {name} must cover byte and bit input")
-    if name == "fixed-hash" and assigned["fixed-output"] != "required":
+    if name in {"fixed-hash", "general-sha512-t"} and assigned["fixed-output"] != "required":
         fail("fixed hash profile must require fixed output")
     if name == "hash-xof-family" and (
         assigned["fixed-output"] != "required"
@@ -289,7 +289,7 @@ def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str
         fail("explicit unsafe or nonstandard rejections are incomplete")
     validate_cleanup(policy, root)
     semantic = {row["id"]: row for row in surfaces["surfaces"] if row["kind"] == "semantic"}
-    if len(semantic) != 134:
+    if len(semantic) != 135:
         fail("semantic capability count drifted")
     for name, profile in policy["profile"].items():
         validate_profile(name, profile, set(dimensions), policy)

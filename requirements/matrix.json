@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "4a4fce2cb6ce03277238951bf3da6d41b321197144b8cf263100588ebc3e0d4f",
-  "domain_policy_sha256": "e95b882e9c52a9cbeab40c1236860aaabeff2e95cc63e8cd6c9f7941dd2b4384",
-  "policy_sha256": "661a0b678eeb955daaefd4f7f1ed990034f7ef96bccee46a00215fefe276c6cc",
+  "closure_policy_sha256": "248b374037768f6474f31b062f0fc6882e45701e1ea05bd041a1869c9df319f6",
+  "domain_policy_sha256": "e679e013e3d9785d5bcc347de3f323bd78b210b3b65ee2c6ff332cc62aac18a5",
+  "policy_sha256": "d3f483ea7ea3051f8e9a4dba15961d630d02590db8c0dcaee6223c6dae36b826",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3672,6 +3672,80 @@
         }
       ],
       "work_bound": "Linear input work; fixed 64-step compression and five fixed owned regions; checked u128 bit accounting and fixed 16-byte output."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "algorithm.sha512-t"
+      ],
+      "deviation_rationale": null,
+      "domain": "cryptography",
+      "evidence": [],
+      "evidence_gap": "v0.24.24 authenticates the source and tests the contract model only. Actual general parameter/digest, ordinary/hardened, byte/bit, cleanup and package APIs plus independent all-t IV/digest oracles remain v0.24.25 through v0.24.29.",
+      "id": "BRY-REQ-CRYPTO-0020",
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "work-bound"
+      ],
+      "lifecycle": "planned",
+      "mapping_rationale": "FIPS 180-4 section 5.3.6 and its SHA-512 dependencies directly govern this distinct general construction; docs/sha512-t-contract.md pins exact sections, source bytes, rights, errata observation and all API/lifecycle obligations.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.24.24",
+      "profile": "crypto-encoding-pkix",
+      "residual": "Arbitrary t has no implied FIPS or protocol approval and short digests have weak security bounds. No general implementation, independent cryptographic review, CPU admission or register/platform/caller-copy erasure is claimed.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "symmetric"
+          ],
+          "id": "nist:NIST.FIPS.180-4.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.22.0",
+            "0.23.0",
+            "0.24.0",
+            "0.25.0",
+            "0.26.0",
+            "0.27.0",
+            "0.28.0",
+            "0.29.0",
+            "0.30.0",
+            "0.31.0"
+          ],
+          "role": "sha2",
+          "sha256": "0455b406d89648d20cbde375561e19c245b9815e894164c2670772e3d54deb82"
+        }
+      ],
+      "statement": "General SHA-512/t must implement every positive t below 512 except 384, exact shortest-decimal IV generation, leftmost MSB-first output and all ordinary/hardened byte/bit operations in requirements/sha512-t-contract.toml, without inheriting named SHA-2 or protocol approval.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "planned-symbol",
+          "target": "crates/brynja-hash-sha2/src/lib.rs#Sha512T"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "scripts/sha2/check-sha512-t-contract.py#main"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "scripts/sha2/test-sha512-t-contract.py#main"
+        }
+      ],
+      "work_bound": "The frozen contract requires one IV block, linear caller-bounded input updates, one or two final blocks, fixed workspace and no hidden allocation."
     },
     {
       "applicability": "apply",
@@ -30733,9 +30807,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "3dff35a3a76733a0ce6c3f4c53e2f2aef6378eef26f277eaf05cd799c40a4220",
+  "residual_policy_sha256": "6c331acfc2882e3ac458c5713e5dec27cf74dd0db7f3f4ac29d770f64b886c35",
   "schema": 5,
   "source_ledger_sha256": "915169e86b0a434935032680fe90cc57fe3e0027220a86776ef43b951a0d56d3",
-  "surface_register_sha256": "d71679458014d1eba14ac630e24610859b9b7e67195ed03e37bd094767c1d1fc",
-  "transport_policy_sha256": "cd014ac0cc67227341a1adc8deb057f039182d076409ec4a39ec182ef212d190"
+  "surface_register_sha256": "7ac5c60f6d5a42ac990b1a921834403175545ba07e483c241d6d8c1d659cb230",
+  "transport_policy_sha256": "ada1f23bd9f43c83f46650821e64150c75e4b7e699bdffbc1a7bf57ab3b0aeee"
 }

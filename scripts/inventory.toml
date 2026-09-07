@@ -67,7 +67,7 @@ extensions = [".py", ".sh"]
 purpose = "Sanitization dependency and compiler-artifact assurance"
 
 [category.sha2]
-extensions = [".py", ".sh"]
+extensions = [".py", ".sh", ".toml"]
 purpose = "SHA-2 implementation, public acceptance, and architecture-specific evidence"
 
 [category.sha1]

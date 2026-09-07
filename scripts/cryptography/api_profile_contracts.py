@@ -359,6 +359,10 @@ OPERATION_CONTRACTS = {
         "hardened-derived-output": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),
         "public-digest": ("explicit-public-declassification", "unchanged-destination", "not-applicable"),
     },
+    "general-sha512-t": {
+        "hardened-derived-output": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),
+        "public-digest": ("explicit-public-declassification", "unchanged-destination", "not-applicable"),
+    },
     "hash-xof-family": {
         "hardened-secret-output": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),
         "public-fixed-output": ("explicit-public-declassification", "unchanged-destination", "not-applicable"),

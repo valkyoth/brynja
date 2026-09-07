@@ -13,14 +13,15 @@ current implementation claim. Standalone DER encode/decode completion is
 planned for v0.34.6. The former standalone hash and legacy plans are now
 consolidated into the pre-1.0 roadmap, with final release gates through v0.480.0.
 Current generated planning coverage is 2003 non-RC rows
-(2004 milestones including the release candidate), 131 authorities, 4,461
-surfaces and 174 requirements; numerical summaries in the historical v0.3.x
+(2004 milestones including the release candidate), 131 authorities, 4,462
+surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.22 signed; v0.24.23 legacy final acceptance candidate has a green owner retest. See its permanent pentest report for final local gate and CI status. No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.23 signed; v0.24.24 general SHA-512/t authority/API contract awaits owner pentest. No CPU backend is admitted.
 
-The current candidate closes ordinary/hardened SHA-1/MD5 byte/bit and batch
-public acceptance using the frozen v0.24.20 contract. See
+The current candidate freezes the [general SHA-512/t contract](sha512-t-contract.md),
+not new callable hash APIs. v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
+and batch public acceptance using the frozen v0.24.20 contract. See
 [final legacy acceptance](legacy-hash-final-acceptance.md). All instruction
 candidates remain unadmitted and hardened execution remains portable-only.
 Public checkpoints now use explicit closing patches: v0.25.2, v0.30.2 and the

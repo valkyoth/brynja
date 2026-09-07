@@ -25,6 +25,11 @@
 
 # brynja-hash-sha2
 
+The separate general SHA-512/t extension is **In progress**: v0.24.24 freezes
+its [authority and public API contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
+It has no callable general API or feature yet; implementation and final evidence
+are v0.24.25–v0.24.29. The six named SHA-2 identities below remain unchanged.
+
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
 crate provides correct portable byte-oriented one-shot and streaming APIs for
 all six FIPS 180-4 SHA-2 algorithms. The optional `cpu` feature added at v0.22.1 and extended

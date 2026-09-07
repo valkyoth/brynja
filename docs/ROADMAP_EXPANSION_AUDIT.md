@@ -71,8 +71,9 @@ Portable external consumer tests come before optional backend work and final
 evidence. A scalar-only implementation can be complete; acceleration cannot be
 claimed from compilation or QEMU. New unsafe, parsers, authentication, secrets,
 durable state and trust boundaries retain exceptional pentest triggers.
-Scheduled publication remains every fifth minor .0, including intervening
-patches in the cumulative delta. RISC-V native/community qualification is the
+Scheduled publication uses the explicitly registered closing patch of every fifth
+minor series from v0.25.x onward, including all intervening patches in the
+cumulative delta. See [the checkpoint register](../scripts/release/checkpoints.toml). RISC-V native/community qualification is the
 only explicitly retained post-1.0 work from these inventories.
 
 ## Important corrections and authoritative anchors

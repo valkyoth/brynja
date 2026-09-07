@@ -51,7 +51,7 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 
 | Algorithm | Implementation | Independent verification |
 | --- | --- | --- |
-| SHA-1 | In progress through v0.24.23 | ❌ Not independently verified |
+| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 
 SHA-1 is unsuitable for new signatures, authentication or password hashing.
 This adapter handles public data only; confidential legacy data requires the

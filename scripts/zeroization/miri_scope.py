@@ -160,7 +160,12 @@ def select_repository(base: str, root: Path = ROOT) -> tuple[bool, tuple[str, ..
                     data = after if after is not None else before
                     workspace = scope_inputs.snapshot(root, base, 'Cargo.lock')[index]
                     manifest = scope_inputs.snapshot(root, base, path[:-4] + 'toml')[index]
-                    scope_inputs.fixture_lock(data, workspace, manifest)
+                    consumer = None
+                    if path == 'assurance/legacy-hash-final/Cargo.lock':
+                        consumer = tuple(scope_inputs.snapshot(root, base, p)[index] for p in (
+                            'assurance/legacy-hash-public-api/Cargo.lock',
+                            'assurance/legacy-hash-public-api/Cargo.toml'))
+                    scope_inputs.fixture_lock(data, workspace, manifest, consumer)
                     if not any(path.startswith(p) for ps in GROUP_PREFIXES.values() for p in ps):
                         raise ValueError('unclassified fixture lock')
                     retained.append(path)
@@ -174,7 +179,7 @@ def select_repository(base: str, root: Path = ROOT) -> tuple[bool, tuple[str, ..
                 continue
             elif path == 'assurance/zeroization-matrix.toml' and scope_inputs.matrix_verifier_only(before, after):
                 continue
-            elif path.endswith(('-reviewed.toml', '-hashes.toml')) and before is not None and after is not None and scope_inputs.hash_binding_only(before, after):
+            elif (path.endswith(('-reviewed.toml', '-hashes.toml')) or path == 'scripts/sha1/reviewed.toml') and before is not None and after is not None and scope_inputs.hash_binding_only(before, after):
                 continue
             elif path in orchestration:
                 # Coverage orchestration has mandatory structural and execution

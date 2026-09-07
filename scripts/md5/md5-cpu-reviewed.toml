@@ -16,7 +16,7 @@
 "crates/brynja-legacy-md5/tests/cpu.rs" = "74d78545cfc46db1ae22bde52db315fa551426e22a845169a1b21f498bae4d8f"
 "crates/brynja-legacy-md5-std/Cargo.toml" = "c47210dd490c06accd71d7fcd68fb8f929326096080c15dd8ea6147ddc926729"
 "crates/brynja-legacy-md5-std/src/lib.rs" = "a9a1e567275b506ed933e3c91d15c29920a63364c6436397935450ade3b03f41"
-"crates/brynja-legacy-md5-std/README.md" = "234258d34c7b1ca255082dc8a3c5fd868e55125cafb4e1e9bbe8d194111f1875"
+"crates/brynja-legacy-md5-std/README.md" = "99a7cbdee3a0b77d51bcbe98da006ceeb1b595990a88db486a9a4e2ecb9a7289"
 "assurance/md5-cpu-public-api/Cargo.toml" = "98e839513792537326c0c3e778830394d97c96f630123410e37d258ff3bc160b"
 "assurance/md5-cpu-public-api/Cargo.lock" = "23a7d8736fc0ecffe2a3aecd0535b4a7ad4181d68928d02163804abe91422e51"
 "assurance/md5-cpu-public-api/src/main.rs" = "8381d7beaf13a1687c6120bc01e6c9a4ef20d79ae8b216d01a46af11403f602d"

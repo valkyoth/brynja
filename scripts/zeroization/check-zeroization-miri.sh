@@ -140,6 +140,7 @@ full_legacy() {
     # Wide vectors and file partitions run natively; interpret the bounded
     # package-external lifecycle case, as for other selected full groups.
     run_miri --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib dynamic_
+    run_miri --manifest-path assurance/legacy-hash-final/Cargo.toml --no-default-features --lib dynamic_
 }
 
 all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy)

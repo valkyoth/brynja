@@ -1,8 +1,9 @@
 # Legacy SHA-1 implementation and assurance
 
 v0.24.18 implements the complete portable SHA-1 primitive in the separate
-`brynja-legacy-sha1` leaf. Final family acceptance remains v0.24.20–v0.24.23;
-acceleration is not implemented here. The family remains **In progress**.
+`brynja-legacy-sha1` leaf. [Final public acceptance](legacy-hash-final-acceptance.md)
+at v0.24.23 completes the ordinary/hardened byte/bit family. Later optional
+instruction candidates remain unadmitted; no independent or FIPS review is claimed.
 
 ## Normative boundary
 

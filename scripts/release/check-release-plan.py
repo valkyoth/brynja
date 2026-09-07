@@ -10,6 +10,7 @@ from pathlib import Path
 import catalogue_plan
 import expansion_plan
 import roadmap_schedule
+from checkpoint_policy import is_checkpoint
 
 VERSION = r"(?:0\.[0-9]+\.[0-9]+|1\.0\.0(?:-rc\.[0-9]+)?)"
 HEADING = re.compile(rf"^### (v{VERSION}) - (.+)$", re.MULTILINE)
@@ -100,16 +101,7 @@ def expected_versions() -> list[str]:
 
 def is_scheduled_checkpoint(version: str) -> bool:
     """Classify public checkpoints after the historical v0.10.0 boundary."""
-    if version.startswith("v1."):
-        return True
-    major, minor, patch = version.removeprefix("v").split(".")
-    if major != "0":
-        raise ValueError(f"unsupported release-plan version: {version}")
-    minor_number = int(minor)
-    patch_number = int(patch)
-    if minor_number <= 10:
-        return True
-    return patch_number == 0 and minor_number % 5 == 0
+    return is_checkpoint(version.removeprefix("v"))
 
 
 def expected_exit(version: str) -> str:

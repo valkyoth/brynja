@@ -16,6 +16,7 @@ PACKAGES = {
     'brynja-mac-kmac': 'kmac', 'brynja-hash-tuple': 'tuplehash',
     'brynja-hash-parallel': 'parallelhash',
     'brynja-legacy-hash-public-api-fixture': 'legacy',
+    'brynja-legacy-hash-final-fixture': 'legacy',
 }
 
 
@@ -180,7 +181,8 @@ def hash_binding_only(before: bytes | None, after: bytes | None) -> bool:
     return scrub(document(before)) == scrub(document(after))
 
 
-def fixture_lock(data: bytes, workspace: bytes, manifest: bytes) -> None:
+def fixture_lock(data: bytes, workspace: bytes, manifest: bytes,
+                 consumer: tuple[bytes, bytes] | None = None) -> None:
     parsed = document(data)
     if set(parsed) != {'version', 'package'} or parsed['version'] != 4:
         raise ValueError('unknown fixture lock schema')
@@ -188,6 +190,16 @@ def fixture_lock(data: bytes, workspace: bytes, manifest: bytes) -> None:
     if package.get('publish') is not False or not package['name'].endswith('-fixture'):
         raise ValueError('not an unpublished assurance fixture')
     packages = document(workspace)['package']
+    if consumer is not None:
+        nested_lock, nested_manifest = consumer
+        # Authenticate the registered nested consumer against the workspace
+        # first. It cannot introduce another external/local runtime dependency.
+        fixture_lock(nested_lock, workspace, nested_manifest)
+        nested_name = document(nested_manifest)['package']['name']
+        if nested_name not in PACKAGES or any(p['name'] == nested_name for p in packages):
+            raise ValueError('unclassified or ambiguous nested fixture')
+        nested = [p for p in document(nested_lock)['package'] if p['name'] == nested_name]
+        packages = packages + nested
     names = [p['name'] for p in parsed['package']]
     if len(names) != len(set(names)) or names.count(package['name']) != 1:
         raise ValueError('duplicate or missing fixture package')

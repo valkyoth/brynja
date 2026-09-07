@@ -13,6 +13,7 @@ for toolchain in "${toolchains[@]}"; do
     cargo "+$toolchain" test --locked -p brynja-legacy-md5 --all-features
     cargo "+$toolchain" test --locked --manifest-path assurance/md5-public-api/Cargo.toml --lib
     cargo "+$toolchain" test --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib
+    cargo "+$toolchain" run --locked --manifest-path assurance/legacy-hash-final/Cargo.toml
     cargo "+$toolchain" test --locked -p brynja-legacy-sha1
     cargo "+$toolchain" test --locked -p brynja-legacy-sha1 --features cpu --test cpu
     cargo "+$toolchain" test --locked -p brynja-legacy-sha1-std

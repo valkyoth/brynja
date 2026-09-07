@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: milestones through v0.24.17 signed; v0.24.18 isolated legacy SHA-1 candidate passed exceptional retest; v0.20.0 remains published
+Status: milestones through v0.24.22 signed; v0.24.23 final legacy acceptance candidate; v0.20.0 remains published
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.18`. `brynja-hash-core 0.1.0`,
+advances to internal `0.24.23`. `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit
 interfaces and correct portable implementations of all six FIPS 180-4 SHA-2
 algorithms, and unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented
@@ -27,19 +27,21 @@ derived family passed final v0.24.17 acceptance. Published
 AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
 the separate opt-in x86/AArch64 host detector and runtime selection API while
 RISC-V automatic detection remains disabled. Supporting manifest
-versions remain unchanged until the v0.25.0 public checkpoint. The new
-repository-only API-profile register closes 133 semantic capabilities across
-22 dimensions and inventories eight current, six registered capability, plus
+versions remain unchanged until the v0.25.2 public checkpoint. The new
+repository-only API-profile register closes 134 semantic capabilities across
+22 dimensions and inventories eight current, seven registered capability, plus
 73 planned secret owners with exact per-operation information-flow contracts,
 compiler-checked owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.1. The facade version advances for isolated legacy SHA-1; all previously existing support-package versions remain
+under Rust 1.90.0 and 1.98.1. The facade version advances for final legacy acceptance; all previously existing support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
 
-New unpublished `brynja-legacy-sha1 0.1.0` implements the complete portable
-legacy primitive and mandatory private-state cleanup, with no modern facade,
-TLS, PKIX or FIPS edge. Exceptional pentest and retest passed. The SHA-1 family
-remains In progress until the later portable/accelerated final acceptance.
+Unpublished `brynja-legacy-sha1 0.1.0` and `brynja-legacy-md5 0.1.0` complete
+ordinary/hardened byte/bit public acceptance at v0.24.23, including MD5 batches
+and optional host fallback adapters. All four CPU candidates remain unadmitted,
+and neither primitive gains a modern facade, TLS, PKIX or FIPS edge. Historical
+implementation pentests passed; this final acceptance candidate awaits its own
+owner assessment. See [final legacy acceptance](legacy-hash-final-acceptance.md).
 
 The initial exceptional v0.24.12 assessment found one Medium metadata-
 remanence gap in hardened cSHAKE. Its discriminator and setup-length fields now
@@ -146,7 +148,7 @@ schema-validation and independent-review cautions remain explicit. The stage
 is signed and selects no crates.io publication. The v0.22.0 stage adds the
 first executable cryptographic primitive: portable SHA-256 in two new leaf
 packages, reused through `brynja-crypto` and the facade. It requires an
-exceptional pentest before tagging, remains unpublished until the v0.25.0
+exceptional pentest before tagging, remains unpublished until the v0.25.2
 checkpoint, and makes no independent-review or FIPS-validation claim. Its
 assessment found no vulnerability, required no source remediation, and records
 `PASS`/`PASS` with zero open findings. The report retains the future requirement
@@ -181,7 +183,7 @@ version or selecting a crates.io publication. Its voluntary repository-owner
 assessment and retest through exact signed candidate
 `399c9e7c5092d755dfbc22a3adf5500f85a8877e` passed with zero open findings and
 required no cryptographic source remediation. It remains an internal tag in the
-scheduled v0.20.0-to-v0.25.0 cumulative range.
+scheduled v0.20.0-to-v0.25.2 cumulative range.
 The v0.23.0 stage adds complete portable SHA-224 with its distinct FIPS 180-4
 initial value, exact 28-byte output, one-shot and streaming APIs, checked
 length domain, official vectors, Monte Carlo evidence, exhaustive split and
@@ -190,7 +192,7 @@ exceptional repository-owner assessment and retest of exact signed candidate
 `8877bda1e697db98e77637d82bdc0d0d6ecad237` passed with zero open findings
 and required no remediation. It remains an internal tag, selects no crates.io
 publication, makes no independent-review or FIPS-validation claim, and stays
-inside the scheduled v0.20.0-to-v0.25.0 cumulative range.
+inside the scheduled v0.20.0-to-v0.25.2 cumulative range.
 The v0.23.1 stage adds complete portable SHA-384 and SHA-512 over one private
 80-round 64-bit compression owner and one private 128-byte buffered state. It
 exposes exact distinct IVs, checked 128-bit length accounting, typed one-shot
@@ -237,7 +239,7 @@ packages.
 The voluntary repository-owner assessment of exact signed v0.23.4 candidate
 `7864a8f3a8766d16fc9bb2ea89893351f29aa842` records `PASS`/`PASS` with zero
 open findings and no remediation. It does not alter the zero-package
-selection or replace the scheduled cumulative v0.25.0 assessment.
+selection or replace the scheduled cumulative v0.25.2 assessment.
 
 The v0.24.0 stage creates unpublished `brynja-hash-sha3 0.1.0` with one
 private safe-Rust Keccak-f[1600] owner and complete portable SHA3-224 and
@@ -305,7 +307,7 @@ FIPS validation remain later work. Zero crates are selected for publication.
 | `brynja-crypto` | `0.1.2` | no | Published version retained while unpublished source also reexports complete cSHAKE, SP 800-185 encodings, and all KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF constructions |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five SHA-2 plus two Keccak candidates remain unadmitted; x86 SHA-512 and RISC-V Keccak are scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |
-| `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |
+| `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.2 |
 | `brynja-protocol` | `0.1.0` | no | Published shared TLS/DTLS record-envelope boundary |
 | `brynja-platform`, `brynja-tls13-handshake`, `brynja-tls12`, `brynja-tls13`, `brynja-tls`, `brynja-dtls`, `brynja-quic-tls` | `0.1.8` | no | Published versions retained; README metadata only |
 | `brynja-legacy` and obsolete-protocol engines | `0.1.0` | no | Explicit legacy protocol isolation boundaries; the implemented SHA-1 leaf is listed separately above |

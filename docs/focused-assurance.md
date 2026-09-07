@@ -50,6 +50,14 @@ previous full evidence remains explicitly tied to its old verifier and is not
 silently relabelled. The next public checkpoint renews the complete evidence.
 Production compiler changes remain a full-suite trigger.
 
+The v0.24.23 final legacy fixture composes the frozen v0.24.20 consumer.
+Its lockfile may include that one explicitly registered, unpublished fixture
+only after the nested manifest and lock graph are checked against the workspace.
+Unknown nested packages, changed dependency identities and ambiguous entries
+fail closed. This selects the complete `legacy` group, including the new
+consumer's destruction/unwind tests, while unchanged primitive owners receive
+smoke. It does not relabel previous full campaigns as fresh executions.
+
 The registry and dependent-consumer map must be extended when a new algorithm
 or construction is introduced. Unknown native/Rust files are never assumed
 unrelated. Exceptional pentests, independent-review limits and the committed

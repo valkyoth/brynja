@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.24.23 candidate
+
+- Complete final SHA-1/MD5 acceptance using the unchanged v0.24.20 public
+  contract, 160 MD5 batch/mask comparisons, hardened lifecycle checks and host
+  fallback/rejection tests. Mark portable APIs fully implemented; keep every
+  accelerated backend unadmitted and collision/security/FIPS limits explicit.
+- Preserve original MD5 native captures and unchanged-source bindings. SHA-1
+  retains historical signed review only; its private raw captures are unavailable.
+- Register public checkpoints at each fifth minor's planned closing patch,
+  starting with v0.25.2 and v0.30.2. Historical checkpoints remain immutable;
+  later-added patches cannot silently shift publication. This internal version
+  selects zero crates for publication and awaits the owner's pentest.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.23.md).
+
 ## 0.24.22 candidate
 
 - Complete the local release checks, including all ten full Miri groups,

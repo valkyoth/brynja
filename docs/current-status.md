@@ -17,11 +17,15 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.21 signed; v0.24.22 MD5 batch/SIMD candidates implemented and unadmitted; final local release checks passed; supplied pentest clean; all four native captures reviewed; awaiting green GitHub/CodeQL and owner tag permission.
+Status: v0.20.0 published; milestones through v0.24.22 signed; v0.24.23 legacy final acceptance candidate implemented and locally verified; owner pentest pending. No CPU backend is admitted.
 
-The current candidate adds bounded ordinary/hardened MD5 batch APIs, unadmitted
-AVX2/NEON multi-buffer kernels and an optional host-observation adapter. Hardened
-batches remain portable-only. See [the MD5 acceleration contract](legacy-md5-acceleration.md).
+The current candidate closes ordinary/hardened SHA-1/MD5 byte/bit and batch
+public acceptance using the frozen v0.24.20 contract. See
+[final legacy acceptance](legacy-hash-final-acceptance.md). All instruction
+candidates remain unadmitted and hardened execution remains portable-only.
+Public checkpoints now use explicit closing patches: v0.25.2, v0.30.2 and the
+[registered successors](../scripts/release/checkpoints.toml). Earlier milestone
+narratives below describe their status at the time, not today's status tables.
 
 The signed v0.24.21 milestone adds opt-in legacy SHA-1 instruction kernels and a separate
 host-observation adapter, with required mode failing closed and hardened SHA-1
@@ -44,14 +48,14 @@ The signed v0.24.19 milestone adds ordinary and hardened MD5 byte/arbitrary-bit
 APIs in unpublished `brynja-legacy-md5`. It remains isolated from modern
 defaults, collision-broken, unverified and not FIPS validated. Five mandatory
 private clearing regions and typed secret output accompany the portable API.
-MD5 stays In progress through the later acceptance/SIMD disposition chain.
+MD5 stayed In progress through the acceptance/SIMD chain; v0.24.23 closes its public acceptance.
 See [the MD5 assurance contract](legacy-md5.md).
 
 The signed v0.24.18 milestone adds complete ordinary and hardened byte/arbitrary-bit
 SHA-1 in the unpublished `brynja-legacy-sha1` leaf. It is collision-broken,
 not independently verified, not FIPS validated, and never reexported by the
-modern facade. Final family acceptance remains v0.24.20–v0.24.23; SHA-1 stays
-In progress. See [the SHA-1 assurance contract](legacy-sha1.md).
+modern facade. Final family acceptance remains v0.24.20–v0.24.23; SHA-1 stayed
+In progress until v0.24.23 public closure. See [the SHA-1 assurance contract](legacy-sha1.md).
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -268,7 +272,7 @@ The voluntary repository-owner assessment and retest through exact signed
 candidate `399c9e7c5092d755dfbc22a3adf5500f85a8877e` passed with zero open
 findings and required no cryptographic source remediation. The permanent report
 is committed with the signed tag, and the complete delta remains in the
-scheduled v0.25.0 assessment.
+scheduled v0.25.2 assessment.
 
 Signed v0.23.0 added complete
 portable SHA-224 with its distinct FIPS 180-4 initial value, exact 28-byte
@@ -283,7 +287,7 @@ with `PASS`/`PASS`, zero open findings, and no remediation. Ordinary SHA-224
 state makes no secret-remanence cleanup claim; SHA-224 acceleration,
 independent cryptographic review, and FIPS 140-3 validation remain absent. The
 milestone selected zero crates.io packages, passed GitHub and CodeQL, and is
-signed. It remains in the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
+signed. It remains in the scheduled v0.20.0-to-v0.25.2 cumulative assessment.
 
 Signed internal v0.23.1 added one private allocation-free
 `no_std` 80-round `u64` compression owner and one private 128-byte buffered
@@ -353,7 +357,7 @@ implementation candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842`
 reported no finding and required no remediation. The permanent report records
 `PASS`/`PASS` with zero open findings. This does not admit an accelerated
 backend, establish independent cryptographic review or FIPS validation, or
-replace the scheduled cumulative v0.20.0-to-v0.25.0 assessment. The complete
+replace the scheduled cumulative v0.20.0-to-v0.25.2 assessment. The complete
 local release check and hosted GitHub/CodeQL passed before the signed tag.
 
 The facade now advances to internal `0.24.0`. New unpublished
@@ -411,7 +415,7 @@ second retest of exact candidate
 The signed tag passed green GitHub and CodeQL. This does not establish
 independent cryptographic review or FIPS validation, complete later family-
 acceptance gates, select a crate for publication, or replace the scheduled
-v0.20.0-to-v0.25.0 cumulative assessment.
+v0.20.0-to-v0.25.2 cumulative assessment.
 
 The facade now advances to internal `0.24.3`. A standalone downstream
 `no_std` consumer exercises every SHA-3 and SHAKE identity through only the
@@ -542,7 +546,7 @@ The exceptional assessment of exact v0.24.9 implementation candidate
 `3f6669f670472cea4f2a162e545db456ee368530` reported no Critical, High, or
 Medium finding. The permanent report records `PASS`/`PASS`, zero open findings,
 and no remediation. This does not replace the scheduled cumulative
-v0.20.0-to-v0.25.0 assessment, independent cryptographic review, or FIPS
+v0.20.0-to-v0.25.2 assessment, independent cryptographic review, or FIPS
 validation.
 
 The v0.24.10 implementation adds distinct sealed hardened states for all four
@@ -568,7 +572,7 @@ remediation candidate `b3232116a66f908524d859aa40d1b1ab8e31f913` uses bounded
 scalar conversions and registered staging, covers every partial secret output
 width, and adds development/release MIR and LLVM regression gates. The
 repository-owner retest passed with `PASS`/`PASS` and zero open findings. This
-does not replace the scheduled cumulative v0.20.0-to-v0.25.0 assessment,
+does not replace the scheduled cumulative v0.20.0-to-v0.25.2 assessment,
 independent cryptographic review, or FIPS validation.
 
 The mandatory local pre-tag gate runs bounded Miri smoke coverage for every
@@ -689,7 +693,7 @@ no source remediation. Its permanent report records `PASS`/`PASS`, zero open
 findings, and the warning that canonical sequence framing is not
 schema-specific validation. The tag awaits green GitHub and CodeQL. It selects
 zero crates.io publication and remains inside the future
-v0.20.0-to-v0.25.0 cumulative assessment.
+v0.20.0-to-v0.25.2 cumulative assessment.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

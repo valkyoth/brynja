@@ -31,7 +31,7 @@ First-party, allocation-free `no_std` legacy SHA-1 for explicit compatibility.
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA-1 | 🚧 In progress — portable APIs implemented; final acceptance pending | ❌ Not independently verified |
+| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -141,3 +141,8 @@ Never persist evidence flags in an application's build environment. A plain
 slice does not classify its contents: callers must not pass secrets to the
 ordinary accelerated API. Use the sealed hardened API for confidential inputs.
 See [acceleration and capture instructions](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-acceleration.md).
+
+Final ordinary/hardened byte/bit and execution-route dispositions are documented in
+[legacy final acceptance](https://github.com/valkyoth/brynja/blob/main/docs/legacy-hash-final-acceptance.md).
+Fully implemented does not mean collision-resistant, recommended, independently
+verified, FIPS validated, or admitted for accelerated execution.

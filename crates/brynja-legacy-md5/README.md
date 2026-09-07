@@ -31,7 +31,7 @@ First-party, allocation-free `no_std` legacy MD5 for explicit compatibility.
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| MD5 | 🚧 In progress — portable APIs implemented; final acceptance pending | ❌ Not independently verified |
+| MD5 | ✅ Fully implemented | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -159,5 +159,10 @@ assert_eq!(report.vector_blocks, 0);
 # Ok::<(), &'static str>(())
 ```
 
-MD5 remains **In progress** until v0.24.23 final disposition.
+MD5 public acceptance is complete at v0.24.23; CPU candidates remain unadmitted.
 See [batch ownership and evidence](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-acceleration.md).
+
+Final ordinary/hardened byte/bit and execution-route dispositions are documented in
+[legacy final acceptance](https://github.com/valkyoth/brynja/blob/main/docs/legacy-hash-final-acceptance.md).
+Fully implemented does not mean collision-resistant, recommended, independently
+verified, FIPS validated, or admitted for accelerated execution.

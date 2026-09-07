@@ -53,6 +53,8 @@ python3 scripts/md5/test-md5-cpu.py
 scripts/md5/check-md5-cpu-codegen.sh
 python3 scripts/legacy-hash/check-legacy-acceptance.py
 python3 scripts/legacy-hash/test-legacy-acceptance.py
+python3 scripts/legacy-hash/check-legacy-final-acceptance.py
+python3 scripts/legacy-hash/test-legacy-final-acceptance.py
 python3 scripts/md5/test-md5.py
 python3 scripts/md5/check-md5-differential.py
 python3 scripts/md5/check-md5-package.py

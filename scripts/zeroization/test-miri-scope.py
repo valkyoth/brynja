@@ -86,6 +86,7 @@ def main() -> int:
     expect(["crates/brynja-legacy-sha1/src/lib.rs"], full=False, groups=("sha1", "legacy"))
     expect(["crates/brynja-legacy-md5/src/lib.rs"], full=False, groups=("md5", "legacy"))
     expect(["assurance/legacy-hash-public-api/src/lib.rs"], full=False, groups=("legacy",))
+    expect(["assurance/legacy-hash-final/src/lib.rs"], full=False, groups=("legacy",))
     expect(["crates/unknown/src/lib.rs"], full=True, groups=miri_scope.GROUPS)
     expect(["Cargo.lock"], full=True, groups=miri_scope.GROUPS)
     expect(
@@ -111,7 +112,8 @@ def main() -> int:
     assert status == 0 and len(commands) == 10
     assert all("brynja-hash-sha2" in command for command in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 33
+    assert status == 0 and len(commands) == 34
+    assert sum('assurance/legacy-hash-final/Cargo.toml --no-default-features --lib dynamic_' in c for c in commands) == 1
     assert sum('quarantined_model_clears_all_regions_without_instructions' in c for c in commands) == 1
     assert sum('--features cpu --test cpu' in c for c in commands) == 2
     status, commands = run_profile("--group", "unknown")

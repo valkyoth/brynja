@@ -1,8 +1,9 @@
 # Legacy MD5 implementation and assurance
 
 v0.24.19 implements portable MD5 in the isolated `brynja-legacy-md5` leaf.
-Final family acceptance remains v0.24.20–v0.24.23. The family remains
-**In progress**; this milestone supplies no SIMD or CPU admission.
+[Final public acceptance](legacy-hash-final-acceptance.md) at v0.24.23 completes
+the ordinary/hardened byte/bit and bounded batch family. Optional SIMD
+candidates remain unadmitted; no independent or FIPS review is claimed.
 
 ## Normative boundary
 

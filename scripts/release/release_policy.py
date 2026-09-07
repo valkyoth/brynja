@@ -9,6 +9,7 @@ import subprocess
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
+from checkpoint_policy import is_checkpoint
 
 from release_change_policy import (
     REPOSITORY_ONLY,
@@ -134,9 +135,7 @@ def milestone_class(raw: str) -> str:
         raise RuntimeError(f"unsupported roadmap major version: {raw}")
     if version.minor <= 10:
         return "public"
-    if version.patch == 0 and version.minor % 5 == 0:
-        return "public"
-    return "internal"
+    return "public" if is_checkpoint(raw) else "internal"
 
 
 def roadmap_range(baseline: str, milestone: str) -> list[str]:

@@ -57,7 +57,7 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 
 | Algorithm | Implementation | Independent verification |
 | --- | --- | --- |
-| MD5 | In progress through v0.24.23 | ❌ Not independently verified |
+| MD5 | ✅ Fully implemented | ❌ Not independently verified |
 
 MD5 is collision-broken. Do not use it for new authentication, signatures or
 password hashing. Public data only; use the leaf's portable hardened batch

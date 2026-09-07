@@ -70,6 +70,20 @@ def semantic_tests():
     fixture.pop('version_unused')
     fixture['version'] = '0.0.0'
     inputs.fixture_lock(lock([core, fixture]), old, manifest)
+    nested_name = 'brynja-legacy-hash-public-api-fixture'
+    nested = package(nested_name, ['brynja-core'])
+    nested_manifest = ('[package]\nname="' + nested_name + '"\nversion="0.1.0"\npublish=false\n').encode()
+    outer = dict(fixture, name='brynja-legacy-hash-final-fixture', dependencies=[nested_name])
+    outer_manifest = manifest.replace(b'public-api-fixture', b'final-fixture')
+    nested_lock = lock([core, nested])
+    inputs.fixture_lock(lock([core, nested, outer]), old, outer_manifest, (nested_lock, nested_manifest))
+    rejected(lambda: inputs.fixture_lock(lock([core, nested, outer]), old, outer_manifest))
+    rejected(lambda: inputs.fixture_lock(lock([core, nested, outer]), old, outer_manifest,
+        (lock([dict(core, version='9'), nested]), nested_manifest)))
+    rejected(lambda: inputs.fixture_lock(lock([core, nested, outer]), old, outer_manifest,
+        (lock([core, nested, nested]), nested_manifest)))
+    rejected(lambda: inputs.fixture_lock(lock([core, nested, outer]), old, outer_manifest,
+        (lock([core, dict(nested, dependencies=['missing'])]), nested_manifest)))
     for altered in (lock([core, fixture, fixture]), lock([dict(core, version='9'), fixture]),
                     lock([core, dict(fixture, dependencies=['missing'])])):
         rejected(lambda: inputs.fixture_lock(altered, old, manifest))
@@ -105,6 +119,10 @@ def git_tests():
         source = root / 'crates/brynja-hash-sha3/src/lib.rs'
         source.parent.mkdir(parents=True)
         source.write_text('// baseline\n')
+        reviewed = root / 'scripts/sha1/reviewed.toml'
+        reviewed.parent.mkdir(parents=True)
+        digest = '[files]\n"README.md"="' + 'a' * 64 + '"\n'
+        reviewed.write_text(digest)
         (root / 'Cargo.lock').write_bytes(lock([package('brynja-core')]))
         git('add', '.')
         git('commit', '-qm', 'baseline')
@@ -116,6 +134,13 @@ def git_tests():
             return b'' if args[0] == 'verify-tag' else real(path, *args)
         with patch.object(inputs, 'git', authenticated):
             assert scope.select_repository('v0.24.19', root) == (False, ())
+            reviewed.write_text(digest.replace('a' * 64, 'b' * 64))
+            assert scope.select_repository('v0.24.19', root) == (False, ())
+            reviewed.write_text(digest.replace('README.md', 'src/lib.rs'))
+            assert scope.select_repository('v0.24.19', root) == (False, ('sha1', 'legacy'))
+            reviewed.write_text(digest.replace('a' * 64, 'a' * 63))
+            assert scope.select_repository('v0.24.19', root) == (False, ('sha1', 'legacy'))
+            reviewed.write_text(digest)
             (root / 'Cargo.lock').write_bytes(b'package="bad"\nversion=4')
             assert scope.select_repository('v0.24.19', root)[0]
             (root / 'Cargo.lock').write_bytes(lock([package('brynja-core')]))

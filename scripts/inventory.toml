@@ -55,7 +55,7 @@ extensions = [".py"]
 purpose = "Protocol framing and state-machine policy and tests"
 
 [category.release]
-extensions = [".py", ".sh"]
+extensions = [".py", ".sh", ".toml"]
 purpose = "Release, pentest, publication, SBOM, and GitHub-control tooling"
 
 [category.repository]

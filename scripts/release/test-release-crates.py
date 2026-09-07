@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import release_policy as policy  # noqa: E402
 import release_crates as publisher  # noqa: E402
 import release_train_tests as train_tests  # noqa: E402
+import checkpoint_tests  # noqa: E402
 
 
 def entry(
@@ -406,6 +407,7 @@ def test_package_roots_exclude_new_internal_dependencies() -> None:
 
 def run_tests() -> None:
     tests = (
+        checkpoint_tests.run_tests,
         test_current_repository_plan,
         test_facade_always_publishes_at_release_version,
         train_tests.test_internal_facade_advances_without_publication,

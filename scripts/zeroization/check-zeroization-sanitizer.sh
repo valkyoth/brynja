@@ -2,6 +2,10 @@
 set -euo pipefail
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-07 test \
+    --manifest-path assurance/legacy-hash-final/Cargo.toml \
+    --lib --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-07 test \
     -p brynja-legacy-sha1 --features cpu --lib --test cpu \
     --target x86_64-unknown-linux-gnu
 

@@ -92,8 +92,8 @@ legacy crate dependency even after implementation.
 
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
-| SHA-1 | 🚧 In progress — v0.24.18–v0.24.23 | `brynja-legacy-sha1` | ❌ Not independently verified |
-| MD5 | 🚧 In progress — v0.24.19–v0.24.23 | `brynja-legacy-md5` | ❌ Not independently verified |
+| SHA-1 | ✅ Fully implemented | `brynja-legacy-sha1` | ❌ Not independently verified |
+| MD5 | ✅ Fully implemented | `brynja-legacy-md5` | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -397,7 +397,7 @@ Medium finding. The
 [permanent exceptional report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.8.md)
 records `PASS`/`PASS`, zero open findings, and no remediation. This does not
 replace independent cryptographic review, FIPS validation, or the scheduled
-v0.20.0-to-v0.25.0 cumulative assessment.
+v0.20.0-to-v0.25.2 cumulative assessment.
 
 The signed internal `0.24.9` milestone completes the FIPS 202 arbitrary-bit domain
 for all four SHA-3 digests and both SHAKE XOFs. A distinct
@@ -419,7 +419,7 @@ records `PASS`/`PASS`, zero open findings, and no Critical, High, or Medium
 finding for exact implementation candidate
 `3f6669f670472cea4f2a162e545db456ee368530`. No remediation was required. The
 assessment does not replace independent cryptographic review, FIPS validation,
-or the scheduled cumulative v0.20.0-to-v0.25.0 assessment.
+or the scheduled cumulative v0.20.0-to-v0.25.2 assessment.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
@@ -435,7 +435,7 @@ The voluntary repository-owner assessment of exact signed v0.23.4
 implementation candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842`
 reported no finding and required no remediation. Its permanent report records
 `PASS`/`PASS` with zero open findings. This does not replace the scheduled
-cumulative v0.20.0-to-v0.25.0 assessment or alter the zero-crate publication
+cumulative v0.20.0-to-v0.25.2 assessment or alter the zero-crate publication
 selection.
 
 RISC-V testing follows an exact-feature policy. The registered native host is
@@ -710,8 +710,10 @@ Pentests look backwards over the complete change range between public
 checkpoints. The v0.15.0 assessment covered all changes after signed public tag
 v0.10.0 through v0.15.0. The v0.20.0 assessment covered all changes after
 v0.15.0 through v0.20.0. The next scheduled assessment covers every change
-after v0.20.0 through v0.25.0, and the same pattern continues every fifth
-minor version. Each checkpoint report records
+after v0.20.0 through v0.25.2, and the same pattern continues every fifth
+minor series at its explicitly registered closing patch (next v0.30.2).
+The [checkpoint register](https://github.com/valkyoth/brynja/blob/main/scripts/release/checkpoints.toml)
+is fixed by review: later-added patches do not silently move it. Each checkpoint report records
 its previous public tag as `Baseline`
 and names both ends of the reviewed range in `Scope`. Material security changes
 can require an earlier exceptional pentest; that does not weaken the next
@@ -748,13 +750,13 @@ delta and required no source remediation. Its permanent `PASS`/`PASS` report
 retains the essential boundary: canonical sequence framing is not
 schema-specific validation, and X.509, cryptography, independent review, and
 FIPS validation remain absent. The v0.21.0 delta remains included in the
-scheduled v0.20.0-to-v0.25.0 assessment.
+scheduled v0.20.0-to-v0.25.2 assessment.
 
 The exceptional v0.22.0 assessment found no vulnerability in the portable
 SHA-256 delta and required no source remediation. Its permanent `PASS`/`PASS`
 report records zero open findings and preserves the future secret-state
 cleanup requirement before HMAC or other keyed processing. The v0.22.0 delta
-remains included in the scheduled v0.20.0-to-v0.25.0 assessment.
+remains included in the scheduled v0.20.0-to-v0.25.2 assessment.
 
 The exceptional v0.22.1 assessment and final retest found no open
 vulnerability in the SHA-256 acceleration delta. Exact signed commit
@@ -762,7 +764,7 @@ vulnerability in the SHA-256 acceleration delta. Exact signed commit
 Its private four-lane candidate observations do not admit either v0.22.1 backend or
 replace authenticated native, CPU-migration, performance, side-channel,
 independent-review, or FIPS evidence. The v0.22.1 delta remains included in
-the scheduled v0.20.0-to-v0.25.0 assessment.
+the scheduled v0.20.0-to-v0.25.2 assessment.
 
 The v0.22.2 RV64 `Zknh` candidate is implemented but unadmitted. Rust 1.90.0
 and 1.98.1 emitted all four required scalar SHA-256 instructions and the QEMU
@@ -788,7 +790,7 @@ signed implementation and CI-correction commit
 `399c9e7c5092d755dfbc22a3adf5500f85a8877e` found no vulnerability, required
 no cryptographic source remediation, and records `PASS`/`PASS` with zero open
 findings. This remains an internal tag with zero crates.io publication; its
-complete delta is still covered again by the scheduled v0.20.0-to-v0.25.0
+complete delta is still covered again by the scheduled v0.20.0-to-v0.25.2
 cumulative assessment.
 
 The exceptional v0.23.0 repository-owner assessment and retest of exact signed
@@ -796,14 +798,14 @@ SHA-224 implementation candidate
 `8877bda1e697db98e77637d82bdc0d0d6ecad237` found no vulnerability, required
 no remediation, and records `PASS`/`PASS` with zero open findings. It remains
 an internal tag with zero crates.io publication and remains covered again by
-the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
+the scheduled v0.20.0-to-v0.25.2 cumulative assessment.
 
 The exceptional v0.23.1 repository-owner assessment of exact signed
 SHA-384/SHA-512 implementation candidate
 `22c1dcdc7594a34bc14b53b42d1d56f7aa66047b` found no vulnerability, required
 no remediation, and records `PASS`/`PASS` with zero open findings. It remains
 an internal tag with zero crates.io publication and remains covered again by
-the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
+the scheduled v0.20.0-to-v0.25.2 cumulative assessment.
 
 The internal `0.24.10` release candidate adds distinct sealed hardened states
 for all four SHA-3 digests and both SHAKE XOFs. A byte-backed private owner
@@ -944,11 +946,12 @@ and native-parallel disposition at v0.24.17; SP 800-185 is **Fully implemented**
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.21`; the current internal `0.24.22`
-candidate adds bounded MD5 batches, isolated AVX2/NEON candidates and opt-in host observation.
+milestones continue through `0.24.22`; the current internal `0.24.23`
+candidate closes the frozen legacy public acceptance and updates future public
+checkpoints to each fifth minor series' registered closing patch.
 All SHA-1 and MD5 candidates remain unadmitted; hardened legacy execution remains portable. Both legacy leaves have ordinary and hardened
-byte/bit APIs, but are collision-broken, unpublished and absent from the modern facade; final
-SHA-1/MD5 family acceptance remains later in 0.24.x. SP 800-185 remains **Fully
+byte/bit APIs and completed v0.24.23 public acceptance, but remain collision-broken,
+unpublished and absent from the modern facade. SP 800-185 remains **Fully
 implemented** after signed v0.24.17 acceptance; CPU backends remain unadmitted.
 See the [MD5 contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5.md).
 The published
@@ -1059,7 +1062,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.22 keeps modern APIs unchanged; SHA-1 and MD5 are separate legacy leaves, CPU candidates remain unadmitted, and no TLS engine exists |
+| `brynja` | Modern production facade | Internal v0.24.23 keeps modern APIs unchanged; SHA-1 and MD5 are separate legacy leaves, CPU candidates remain unadmitted, and no TLS engine exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted |

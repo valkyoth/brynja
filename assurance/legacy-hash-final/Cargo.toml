@@ -1,0 +1,32 @@
+[package]
+name = "brynja-legacy-hash-final-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[features]
+default = ["host"]
+host = ["dep:brynja-legacy-sha1-std", "dep:brynja-legacy-md5-std"]
+
+[dependencies]
+brynja-legacy-hash-public-api-fixture = { path = "../legacy-hash-public-api" }
+brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", version = "=0.1.0", default-features = false, features = ["cpu"] }
+brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", version = "=0.1.0", default-features = false, features = ["cpu"] }
+brynja-legacy-sha1-std = { path = "../../crates/brynja-legacy-sha1-std", version = "=0.1.0", optional = true }
+brynja-legacy-md5-std = { path = "../../crates/brynja-legacy-md5-std", version = "=0.1.0", optional = true }
+
+[[bin]]
+name = "brynja-legacy-hash-final-fixture"
+path = "src/main.rs"
+required-features = ["host"]
+
+[lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
+
+[lints.clippy]
+unwrap_used = "forbid"
+expect_used = "forbid"

@@ -39,10 +39,10 @@ SHA-1 kernel tests use the same two-key gate. See
 | `cryptography/` | Cross-algorithm API-profile, secret-state closure, and composition checks |
 | `foundations/` | Provider, entropy, clock, pending-operation, FIPS-state, security-outcome, and security-event contracts |
 | `hash/` | Cross-family hash final acceptance and closure policy |
-| `legacy-hash/` | Frozen SHA-1/MD5 portable consumer, real-file, package and isolation acceptance |
+| `legacy-hash/` | Frozen SHA-1/MD5 consumer, final batch/lifecycle acceptance, historical native-source bindings and isolated implementation claims |
 | `pki/` | DER and canonical ASN.1 policy and regression checks |
 | `protocols/` | Protocol framing and state-machine assurance scripts |
-| `release/` | Release selection, pentest freshness, SBOM, GitHub controls, and historical release gates |
+| `release/` | Explicit closing-patch checkpoint register, release selection, pentest freshness, SBOM, GitHub controls, and historical release gates |
 | `repository/` | Workspace, source, documentation, shell, cryptography-origin, status, and script-layout policy |
 | `sanitization/` | Sanitization dependency admission and optimized-code checks |
 | `sha1/` | Isolated legacy SHA-1 portable/CPU policy, differential, package, compiler, QEMU and native-capture checks |
@@ -80,12 +80,14 @@ rerun under the normal exact-commit rule.
 
 Every internal tag runs one bounded Miri smoke case for each registered group
 and the complete suite for every group affected by changes since the previous
-signed tag, including downstream groups. Root manifests, the lockfile, release
-Rust, the zeroization matrix, or Miri-control changes fail closed to the full
-suite. Every public stage that can publish to crates.io always runs all groups.
+signed tag, including downstream groups. Semantic dependency changes select
+affected consumers; local version/hash-binding-only changes do not invalidate
+unchanged implementations. Unknown runtime/compiler impact fails closed to the
+full suite. Every public stage that can publish to crates.io always runs all
+groups. See [focused assurance](../docs/focused-assurance.md) for exact rules.
 
 The current groups are `core`, `sanitization`, `sha2`, `sha3`, `kmac`,
-`tuplehash`, and `parallelhash`.
+`tuplehash`, `parallelhash`, `sha1`, `md5`, and `legacy`.
 `zeroization/check-zeroization-miri.sh --group GROUP` is a shard entry point so
 the groups can later run concurrently on isolated headless workers. Shard
 results are not yet accepted by the tag gate: a future aggregator must bind

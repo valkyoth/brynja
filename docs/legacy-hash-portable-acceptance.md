@@ -5,7 +5,9 @@ family, independent cryptographic review or FIPS validation. Both algorithms
 are collision-broken. Clearing their state does not repair collision resistance.
 Neither is a password hash, signature scheme, certificate validator or MAC.
 Modern/default, TLS, PKIX and FIPS graphs cannot select these legacy leaves.
-Both verification rows remain **In progress** until v0.24.23 disposition.
+Both verification rows stayed **In progress** until v0.24.23
+[final acceptance](legacy-hash-final-acceptance.md). The frozen fixture remains
+byte-identical, including its historical status text.
 
 Run the complete public consumer and package/isolation checks:
 

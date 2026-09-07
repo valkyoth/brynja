@@ -262,11 +262,15 @@ Generated standards scope and upstream dependency direction precede implementati
 Beginning after the signed `v0.10.0` tag, every row advances the `brynja`
 manifest and receives its ordinary signed `vX.Y.Z` tag after the complete
 automated gate and green GitHub and CodeQL. Scheduled public pentest and
-crates.io checkpoints occur every fifth minor version (`v0.15.0`, `v0.20.0`,
-and so on); patch rows remain tagged development milestones inside their
-existing range. Each checkpoint pentests backwards over all changes after the
+crates.io checkpoints occur every fifth minor series. Historical `v0.15.0` and
+`v0.20.0` stay fixed; future checkpoints use the explicitly planned closing
+patch in [checkpoints.toml](../scripts/release/checkpoints.toml), beginning
+`v0.25.2` and `v0.30.2`. Other patch rows remain tagged development milestones.
+A later added patch does not silently move a registered checkpoint. Each
+checkpoint pentests backwards over all changes after the
 previous public tag through the new candidate: v0.10.0 to v0.15.0, then
-v0.15.0 to v0.20.0, and so forth. Exceptional pentest and early-release
+v0.15.0 to v0.20.0, then v0.20.0 to v0.25.2 and v0.25.2 to v0.30.2.
+Exceptional pentest and early-release
 triggers, `v1.0.0-rc.1`, and `v1.0.0` are defined by
 [RELEASE_PLAN.md](RELEASE_PLAN.md). Supporting crates retain independent SemVer.
 

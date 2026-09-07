@@ -96,3 +96,12 @@ checks and reviewed same-commit AMD, Intel, AWS ARM and Apple M2 observations.
 All backend and parallel execution routes have passing or explicit unadmitted
 dispositions. No CPU backend admission, independent verification or FIPS
 validation follows from this acceptance.
+
+## Legacy final public acceptance
+
+SHA-1 and MD5 completed their ordinary/hardened byte/bit, streaming/one-shot,
+batch where applicable, and host fallback/rejection acceptance at v0.24.23.
+See [the final evidence boundary](legacy-hash-final-acceptance.md) and its
+[machine-readable claims](../assurance/legacy-hash-final/claims.toml). All four
+CPU candidates remain unadmitted. Collision resistance, independent review,
+FIPS validation and secret-bearing acceleration are not claimed.

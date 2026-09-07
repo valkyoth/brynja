@@ -229,11 +229,13 @@ Milestone classification is mechanical and fail-closed:
 
 - `v0.1.0` through `v0.10.0`, including their historical patch milestones,
   retain the original per-milestone release process;
-- after `v0.10.0`, `v0.N.0` is a scheduled public release checkpoint when
-  `N` is divisible by five: `v0.15.0`, `v0.20.0`, and so on through
-  `v0.208.0`;
+- published `v0.15.0` and `v0.20.0` retain their original immutable boundaries;
+- from the `v0.25.x` series onward, each minor divisible by five publishes at
+  its explicitly registered planned closing patch: first `v0.25.2`, then
+  `v0.30.2`, and the entries through `v0.480.0` in
+  [checkpoints.toml](../scripts/release/checkpoints.toml);
 - every other `v0` milestone after `v0.10.0`, including patch-numbered roadmap
-  rows such as `v0.11.1`, is a tagged development milestone; and
+  rows other than the registered checkpoint, is a tagged development milestone; and
 - `v1.0.0-rc.1` and `v1.0.0` are always public release checkpoints.
 
 A development milestone completes its exact scope, tests, evidence,
@@ -254,6 +256,15 @@ changes after `v0.15.0` through
 `v0.20.0`, and so on. The public `brynja` crate may therefore jump directly
 from `0.10.0` to `0.15.0`; intervening tags identify tested source milestones,
 not crates.io releases.
+
+The next cumulative ranges are `(v0.20.0, v0.25.2]` and
+`(v0.25.2, v0.30.2]`: include all changes after the previous public tag through
+the named closing patch. The register is explicit, not a dynamic maximum-patch
+calculation. Adding `v0.25.3` later does not move `v0.25.2`; that new stop belongs
+to the following range unless a reviewed exceptional release is approved.
+Changing a planned checkpoint requires an explicit policy and roadmap review;
+never rewrite published tags. Completion of one minor series does not imply
+that every wider family or protocol is complete; the status tables remain authoritative.
 
 Repository tooling mechanically classifies the current milestone, requires the
 facade version to equal every tag, rejects non-empty publication selections for
@@ -3848,7 +3859,7 @@ Exit criteria:
 
 ### v0.24.22 - MD5 Multi-Buffer SIMD Acceleration
 
-Status: awaiting green CI
+Status: released
 
 The supplied exceptional pentest is clean. All four native captures have
 reviewed bounded dispositions and all required local release checks passed,
@@ -3901,7 +3912,7 @@ Exit criteria:
 
 ### v0.24.23 - Legacy SHA-1 And MD5 Cross-Backend Final Acceptance
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Rerun the byte-identical v0.24.20 package-external fixtures on the exact final source through portable, every admitted SHA-1 backend, every admitted MD5 batch width, scalar tails, unavailable-required and quarantined routes; collect current AMD/Intel, Apple/AWS Arm and qualifying RISC-V or explicit unsupported evidence, repeat every affected proof, sanitizer, cleanup, timing, KAT, package and differential artifact after any code change, and only then mark the isolated legacy SHA-1 and MD5 families Fully implemented while retaining collision-insecure, non-default, independently-unverified and non-FIPS status.
 
@@ -4147,7 +4158,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.25.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.25.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.1 - Isolated HMAC-SHA-1 And HMAC-MD5 Compatibility
 
@@ -4203,7 +4214,7 @@ Verification:
 Exit criteria:
 
 - no named HMAC profile or public usability requirement remains incomplete;
-- `v0.25.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.25.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.26.0 - Complete HKDF And TLS Labels
 
@@ -4803,7 +4814,7 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.30.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.30.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.30.1 - ChaCha20 CPU Acceleration
 
@@ -4881,7 +4892,7 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.30.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.30.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.31.0 - Complete Poly1305
 
@@ -6823,7 +6834,7 @@ Exit criteria:
 
 - The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
 - Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
-- `v0.50.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.50.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.50.1 - Static And Ephemeral Agreement Acceptance
 
@@ -6851,7 +6862,7 @@ Exit criteria:
 
 - The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
 - Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
-- `v0.50.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.50.1 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.51.0 - Version-One Algorithm And Transitive Completeness Register
 
@@ -7096,7 +7107,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.55.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.55.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.55.1 - Complete Legacy DSA Signing Verification And Acceptance
 
@@ -7131,7 +7142,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.55.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.55.1 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.56.0 - Complete Legacy ElGamal Parameters And Keys
 
@@ -8756,7 +8767,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.75.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.75.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.75.1 - Complete GOST Agreement And KDF Composition
 
@@ -8826,7 +8837,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.75.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.75.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.76.0 - Complete RSA-PSS Signing And Verification
 
@@ -9386,7 +9397,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.80.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.80.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.80.1 - Complete ZLIB Codec
 
@@ -9456,7 +9467,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.80.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.80.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.81.0 - Complete Brotli Family
 
@@ -9771,7 +9782,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.85.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.85.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.85.1 - Complete ML-DSA-65
 
@@ -9901,7 +9912,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.85.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.85.4 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.86.0 - Complete SLH-DSA SHA2-128 Parameter Sets
 
@@ -10359,7 +10370,7 @@ Exit criteria:
 
 - the named container capability is publicly usable and no later row inherits
   hidden format, cryptography, direction, or cleanup work;
-- `v0.90.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.90.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.90.1 - Complete SEC1 EC Private-Key Containers
 
@@ -10578,7 +10589,7 @@ Exit criteria:
 
 - The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
 - Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
-- `v0.90.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.90.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.91.0 - X.509 Decoder
 
@@ -11008,7 +11019,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.100.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.100.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.100.1 - Certificate Transparency verification - Authority And Public API Contract
 
@@ -11176,7 +11187,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.100.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.100.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.101.0 - Modern PKI Audit Gate
 
@@ -12208,7 +12219,7 @@ Exit criteria:
 
 - external PSKs are confined to TLS 1.3-derived profiles, require DHE, and
   cannot silently fall back or enter hardened TLS 1.2 or DTLS 1.2;
-- `v0.120.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.120.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.120.1 - External PSK Importer And Domain Separation
 
@@ -12278,7 +12289,7 @@ Exit criteria:
 - every admitted external PSK has reviewable strength, provenance, role, peer,
   domain, lifetime, and destruction policy with no silent group or combined-
   certificate mode;
-- `v0.120.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.120.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.121.0 - Zero-RTT
 
@@ -13732,7 +13743,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.155.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.155.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.155.1 - DTLS Return Routability Check
 
@@ -13768,7 +13779,7 @@ Exit criteria:
 
 - every CID path change is either validated by the selected RFC 9853 procedure
   or remains bound to the prior path without application-data leakage;
-- `v0.155.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.155.1 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.156.0 - DTLS 1.3 State Machines
 
@@ -14929,7 +14940,7 @@ Exit criteria:
 - conditional testing and the permanent module error state are complete,
   irreversible, shared by all sessions, impossible to bypass through fresh
   session construction, and never misused for connection policy;
-- `v0.175.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.175.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.175.1 - Module Integrity And Pre-Operational Self-Tests
 
@@ -14969,7 +14980,7 @@ Exit criteria:
 - complete-image integrity and pre-operational tests block every service until
   success, alone issue the exact module-owned attestation required by execution
   and approved status, and fail deterministically under every injected fault;
-- `v0.175.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.175.1 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.176.0 - FIPS Observational Security Event Integration
 
@@ -15216,7 +15227,7 @@ Exit criteria:
 
 - evaluation is complete for the submitted identity, every finding is recorded,
   and no validation claim has been made;
-- `v0.180.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.180.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.180.1 - FIPS Evaluation Remediation And Clean Retest
 
@@ -15282,7 +15293,7 @@ Exit criteria:
 
 - only the exact issued module can carry the exact permitted certificate-bound
   claim, and all other builds fail closed to a non-validated status;
-- `v0.180.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.180.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.181.0 - Boundary And Package Audit
 
@@ -18151,7 +18162,7 @@ Verification:
 Exit criteria:
 
 - every authenticated historical capability is complete and conspicuously isolated, while reserved, forbidden, source-blocked and unauthenticated claims remain absent and no legacy capability can be negotiated or selected by the modern facade;
-- `v0.225.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.225.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.225.1 - OpenPGP Legacy SHA-1 Consumer Admission Review
 
@@ -18208,7 +18219,7 @@ Verification:
 Exit criteria:
 
 - v4 fingerprints interoperate through one exact legacy edge while SHA-1 signing, generation and every unauthorized consumer remain impossible;
-- `v0.225.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.225.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.226.0 - OpenPGP CFB And Protected Secret-Key Compatibility
 
@@ -18548,7 +18559,7 @@ Verification:
 Exit criteria:
 
 - session keys cannot escape before one exact recipient path is fully authenticated and policy-approved;
-- `v0.230.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.230.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.230.1 - OpenPGP V2 SEIPD Chunked AEAD
 
@@ -18600,7 +18611,7 @@ Verification:
 Exit criteria:
 
 - v1 SEIPD compatibility is complete, whole-message authenticated before release and unable to become an implicit alternative to modern v2 SEIPD;
-- `v0.230.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.230.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.231.0 - OpenPGP Signed, One-Pass, And Detached Messages
 
@@ -18840,7 +18851,7 @@ Verification:
 Exit criteria:
 
 - imported key material changes only through an explicit atomic plan and never acquires identity trust automatically;
-- `v0.235.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.235.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.235.1 - OpenPGP Key Generation, Rotation, Expiration, And Revocation
 
@@ -18894,7 +18905,7 @@ Exit criteria:
 
 - The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
 - Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
-- `v0.235.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.235.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.236.0 - OpenPGP External-Key And Sanitization Integration
 
@@ -19448,7 +19459,7 @@ Verification:
 Exit criteria:
 
 - SSL 2.0 is either completely source-backed and implemented or absent as a production capability;
-- `v0.245.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.245.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.245.1 - Complete SSL 2.0 Suites Credentials And Operations
 
@@ -19490,7 +19501,7 @@ Verification:
 Exit criteria:
 
 - SSL 2.0 has no unresolved critical or high implementation finding and no fallback path;
-- `v0.245.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.245.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.246.0 - Complete WTLS Codec And State Machines
 
@@ -19683,7 +19694,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.250.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.250.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.250.1 - Semantic Domains And Minimal Family Package Contracts
 
@@ -19808,7 +19819,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.250.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.250.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.251.0 - Threefish Authority Parameters And Public Cipher Contract
 
@@ -20408,7 +20419,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.255.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.255.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.255.1 - Internet checksum - Complete Internet checksum
 
@@ -20533,7 +20544,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.255.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.255.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.256.0 - Fletcher - Authority And API Freeze
 
@@ -21158,7 +21169,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.260.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.260.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.260.1 - Tabulation - Complete Tabulation hashing
 
@@ -21283,7 +21294,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.260.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.260.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.261.0 - Zobrist - Authority And API Freeze
 
@@ -22058,7 +22069,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.265.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.265.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.265.1 - Jenkins - Complete one-at-a-time
 
@@ -22233,7 +22244,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.265.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.265.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.266.0 - Murmur - Authority And API Freeze
 
@@ -22958,7 +22969,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.270.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.270.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.270.1 - FarmHash - Complete FarmHash
 
@@ -23083,7 +23094,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.270.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.270.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.271.0 - MetroHash - Authority And API Freeze
 
@@ -23758,7 +23769,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.275.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.275.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.275.1 - GxHash - Complete GxHash
 
@@ -23883,7 +23894,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.275.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.275.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.276.0 - OSDB - Authority And API Freeze
 
@@ -24508,7 +24519,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.280.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.280.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.280.1 - SeaHash - Complete SeaHash
 
@@ -24633,7 +24644,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.280.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.280.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.281.0 - FxHash - Authority And API Freeze
 
@@ -25258,7 +25269,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.285.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.285.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.285.1 - PolymurHash - Complete PolymurHash
 
@@ -25383,7 +25394,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.285.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.285.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.286.0 - MumHash - Authority And API Freeze
 
@@ -26033,7 +26044,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.290.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.290.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.290.1 - BLAKE2 tree profiles - Complete parameterized BLAKE2b/s node APIs
 
@@ -26208,7 +26219,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.290.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.290.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.291.0 - BLAKE2X - Authority And API Freeze
 
@@ -27008,7 +27019,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.295.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.295.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.295.1 - Ascon - Complete Ascon-Hash256
 
@@ -27183,7 +27194,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.295.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.295.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.296.0 - Grostl - Authority And API Freeze
 
@@ -27833,7 +27844,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.300.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.300.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.300.1 - Skein - Complete UBI and Skein-256
 
@@ -28058,7 +28069,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.300.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.300.9 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.301.0 - Whirlpool - Authority And API Freeze
 
@@ -28683,7 +28694,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.305.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.305.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.305.1 - ECOH - Complete ECOH
 
@@ -28808,7 +28819,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.305.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.305.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.306.0 - FSB - Authority And API Freeze
 
@@ -29433,7 +29444,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.310.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.310.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.310.1 - VSH - Complete VSH
 
@@ -29558,7 +29569,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.310.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.310.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.311.0 - MD4 and SHA-0 - Authority And API Freeze
 
@@ -30308,7 +30319,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.315.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.315.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.315.1 - RIPEMD extensions - Complete original RIPEMD and RIPEMD-128
 
@@ -30458,7 +30469,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.315.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.315.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.316.0 - Snefru - Authority And API Freeze
 
@@ -31108,7 +31119,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.320.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.320.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.320.1 - MASH - Complete MASH-1
 
@@ -31258,7 +31269,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.320.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.320.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.321.0 - N-Hash - Authority And API Freeze
 
@@ -31933,7 +31944,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.325.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.325.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.325.1 - HighwayHash - Complete HighwayHash
 
@@ -32058,7 +32069,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.325.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.325.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.326.0 - PMAC - Authority And API Freeze
 
@@ -32758,7 +32769,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.330.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.330.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.330.1 - CMAC extension profiles - Complete OMAC; CMAC additional block-cipher profiles
 
@@ -32883,7 +32894,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.330.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.330.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.331.0 - HMAC catalogue adapters - Authority And API Freeze
 
@@ -33608,7 +33619,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.335.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.335.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.335.1 - Balloon - Complete Balloon
 
@@ -33733,7 +33744,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.335.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.335.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.336.0 - Poseidon - Authority And API Freeze
 
@@ -34333,7 +34344,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.340.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.340.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.340.1 - Sinsemilla - Complete Sinsemilla
 
@@ -34433,7 +34444,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.340.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.340.4 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.341.0 - Perceptual image hashes - Authority And API Freeze
 
@@ -35108,7 +35119,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.345.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.345.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.345.1 - SSL1 provenance - Complete SSL 1.0 research
 
@@ -35183,7 +35194,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.345.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.345.3 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.346.0 - Complete Catalogue Reuse And Consumer Closure
 
@@ -36136,7 +36147,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.355.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.355.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.355.1 - Salsa20 and XSalsa20 - Full Salsa20/20
 
@@ -36304,7 +36315,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.355.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.355.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.356.0 - AES key wrap with padding - Authority And Public API Contract
 
@@ -37004,7 +37015,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.360.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.360.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.360.1 - XChaCha20-Poly1305 - HChaCha20
 
@@ -37144,7 +37155,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.360.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.360.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.361.0 - XTS-AES - Authority And Public API Contract
 
@@ -37872,7 +37883,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.365.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.365.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.365.1 - SP 800-56C derivation - One-step hash/HMAC/KMAC key derivation
 
@@ -38012,7 +38023,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.365.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.365.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.366.0 - Durable nonce and one-time state - Authority And Public API Contract
 
@@ -38796,7 +38807,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.370.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.370.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.370.1 - Checksum manifests and multi-hash tools - Canonical typed manifest encode/decode and one-pass selected multi-digest create/verify
 
@@ -38936,7 +38947,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.370.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.370.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.371.0 - secp256k1 - Authority And Public API Contract
 
@@ -39692,7 +39703,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.375.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.375.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.375.1 - Binary and Koblitz curves - Complete binary r/k curve arithmetic, point decompression, infinity/subgroup checks and authenticated parameter registry
 
@@ -39860,7 +39871,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.375.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.375.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.376.0 - BLS12-381 pairing substrate - Authority And Public API Contract
 
@@ -40588,7 +40599,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.380.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.380.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.380.1 - OPAQUE - Registration request/response/upload, envelope recovery and server record import/export
 
@@ -40756,7 +40767,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.380.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.380.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.381.0 - SPAKE2 - Authority And Public API Contract
 
@@ -41484,7 +41495,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.385.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.385.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.385.1 - Threshold key establishment - Authenticated round codecs, verifiable contribution exchange and complaint/disqualification transitions
 
@@ -41624,7 +41635,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.385.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.385.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.386.0 - FROST threshold signatures - Authority And Public API Contract
 
@@ -42380,7 +42391,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.390.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.390.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.390.1 - XMSS and XMSSMT - WOTS+, L-tree and XMSS key generation/sign/verify
 
@@ -42548,7 +42559,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.390.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.390.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.391.0 - FN-DSA and Falcon profiles - Authority And Public API Contract
 
@@ -43304,7 +43315,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.395.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.395.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.395.1 - CAST6 - CAST6 key expansion and complete encrypt/decrypt
 
@@ -43444,7 +43455,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.395.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.395.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.396.0 - TEA - Authority And Public API Contract
 
@@ -44144,7 +44155,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.400.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.400.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.400.1 - Skipjack - Skipjack key expansion and complete encrypt/decrypt
 
@@ -44284,7 +44295,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.400.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.400.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.401.0 - Noekeon - Authority And Public API Contract
 
@@ -44984,7 +44995,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.405.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.405.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.405.1 - LEA - LEA key expansion and complete encrypt/decrypt
 
@@ -45124,7 +45135,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.405.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.405.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.406.0 - HIGHT - Authority And Public API Contract
 
@@ -45824,7 +45835,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.410.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.410.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.410.1 - Rabbit - Complete Rabbit initialization and keystream generation
 
@@ -45964,7 +45975,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.410.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.410.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.411.0 - HC-128 - Authority And Public API Contract
 
@@ -46664,7 +46675,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.415.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.415.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.415.1 - Grain - Complete Grain initialization and keystream generation
 
@@ -46804,7 +46815,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.415.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.415.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.416.0 - SNOW - Authority And Public API Contract
 
@@ -47504,7 +47515,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.420.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.420.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.420.1 - Shabal - All named Shabal 224/256/384/512-bit submission profiles
 
@@ -47644,7 +47655,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.420.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.420.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.421.0 - Luffa - Authority And Public API Contract
 
@@ -48344,7 +48355,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.425.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.425.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.425.1 - SHAvite-3 - All named SHAvite-3 224/256/384/512-bit submission profiles
 
@@ -48484,7 +48495,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.425.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.425.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.426.0 - SIMD - Authority And Public API Contract
 
@@ -49212,7 +49223,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.430.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.430.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.430.1 - TLSH - TLSH digest generation and incremental input
 
@@ -49352,7 +49363,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.430.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.430.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.431.0 - ssdeep - Authority And Public API Contract
 
@@ -50052,7 +50063,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.435.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.435.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.435.1 - Paillier - Key generation, validate/import/export and probabilistic encrypt/decrypt
 
@@ -50192,7 +50203,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.435.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.435.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.436.0 - Proof transcript and circuit substrate - Authority And Public API Contract
 
@@ -50892,7 +50903,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.440.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.440.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.440.1 - Lattice HE arithmetic - Polynomial ring/RNS/NTT arithmetic, gadget decomposition and checked parameter/security estimators
 
@@ -51032,7 +51043,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.440.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.440.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.441.0 - BFV - Authority And Public API Contract
 
@@ -51844,7 +51855,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.445.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.445.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.445.1 - Oblivious transfer - Base 1-out-of-2 OT sender/receiver roles
 
@@ -51984,7 +51995,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.445.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.445.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.446.0 - Garbled-circuit two-party computation - Authority And Public API Contract
 
@@ -52796,7 +52807,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.450.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.450.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.450.1 - CMS encrypted recipients - EnvelopedData and EncryptedData create/parse/encrypt/decrypt
 
@@ -52964,7 +52975,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.450.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.450.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.451.0 - PKCS12 PFX - Authority And Public API Contract
 
@@ -53720,7 +53731,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.455.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.455.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.455.1 - COSE encryption and tokens - Encrypt/Encrypt0 seal/open, all admitted recipient modes and canonical security-context binding
 
@@ -53860,7 +53871,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.455.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.455.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.456.0 - SSH transport - Authority And Public API Contract
 
@@ -54672,7 +54683,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.460.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.460.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.460.1 - WireGuard handshake - Exact Noise_IKpsk2 handshake messages, static identities, timestamps, MAC1/MAC2 and cookie exchange
 
@@ -54812,7 +54823,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.460.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.460.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.461.0 - WireGuard tunnel - Authority And Public API Contract
 
@@ -55596,7 +55607,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.465.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.465.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.465.1 - SRTP and SRTCP - RTP/RTCP protected packet parse/write, key derivation, rollover counters and SSRC-bound contexts
 
@@ -55764,7 +55775,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.465.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.465.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.466.0 - EDHOC - Authority And Public API Contract
 
@@ -56576,7 +56587,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.470.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.470.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.470.1 - IPsec ESP and AH - Transport/tunnel IPv4/IPv6 ESP protect/unprotect
 
@@ -56744,7 +56755,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.470.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.470.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.471.0 - IPsec policy and integration - Authority And Public API Contract
 

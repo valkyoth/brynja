@@ -1,10 +1,13 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; through v0.24.23 signed; v0.24.24 general SHA-512/t authority/API contract awaits owner review. All CPU backends remain unadmitted.
+Status: v0.20.0 published; through v0.24.23 signed; v0.24.24 general SHA-512/t authority/API contract passed owner review and awaits green GitHub/CodeQL before tagging. All CPU backends remain unadmitted.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are
 not actual general digest, cleanup or native evidence.
+
+The [v0.24.24 pentest report](../security/pentest/v0.24.24.md) records the
+owner-supplied assessment of `b73ea22173ef` and local release verification.
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

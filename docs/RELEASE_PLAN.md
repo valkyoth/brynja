@@ -3958,7 +3958,7 @@ Exit criteria:
 
 ### v0.24.24 - General SHA-512/t - Authority And Public API Contract
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 The authority and complete per-parameter API contract are recorded in
 [sha512-t-contract.md](sha512-t-contract.md) and

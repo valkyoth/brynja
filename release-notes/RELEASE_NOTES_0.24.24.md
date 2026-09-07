@@ -1,6 +1,6 @@
 # Brynja 0.24.24 Release Notes
 
-Status: implementation candidate; owner pentest required before tagging
+Status: owner pentest PASS; awaiting green GitHub/CodeQL and explicit tag permission
 
 ## Scope
 
@@ -30,8 +30,17 @@ Local candidate checks passed: exhaustive contract/model and mutation tests,
 all repository gate components (including a successful resumed standards tail
 after metadata refresh), workspace tests/Clippy/docs/packages, twelve compiler
 lanes, three bare-metal targets, current tooling/dependency admission, RustSec,
-cargo-deny, SBOM and a fresh authority-lifecycle observation. No new general
-hash Miri, Kani, sanitizer or native-evidence campaign is claimed.
+cargo-deny, SBOM and a fresh authority-lifecycle observation.
+
+The owner assessment of `b73ea22173ef` passed with zero open findings. Final
+local release checks passed: the complete repository gate, compiler/target and
+QEMU checks, all ten full Miri groups, all 29 Kani harnesses, AddressSanitizer,
+fresh dependency/tooling and authority checks, and publication-policy tests.
+LeakSanitizer was disabled for the environment's ptrace restriction. Miri used
+the existing group interface concurrently; the report identifies completed
+groups and the intentionally stopped duplicate sequential work. These are
+regressions over existing implementations, not execution evidence for the
+unimplemented general SHA-512/t API. No new native admission is claimed.
 
 See [the contract](../docs/sha512-t-contract.md) for precise scope and
 [the current pentest report](../security/pentest/v0.24.24.md) for completed
@@ -44,5 +53,6 @@ unadmitted; no independent cryptographic review or FIPS validation is claimed.
 The contract requires mandatory sealed cleanup but retains all documented
 register, compiler-copy, platform, abort and caller-copy residuals.
 
-After the owner pentest, record its disposition, complete local release checks,
-commit, wait for green GitHub/CodeQL and explicit owner tag permission.
+Commit the completed report and release metadata, then wait for green
+GitHub/CodeQL and explicit owner tag permission. No crate is selected for
+publication; the next scheduled public checkpoint remains v0.25.2.

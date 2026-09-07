@@ -8,7 +8,8 @@
 - Add separate normative requirements and In progress status without changing
   the six named SHA-2 implementations, production APIs or CPU admission.
 - Internal metadata only; no crates selected for publication. Owner pentest
-  required. See [release notes](release-notes/RELEASE_NOTES_0.24.24.md).
+  passed with zero open findings; GitHub/CodeQL pending before tagging.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.24.md).
 
 ## 0.24.23 candidate
 

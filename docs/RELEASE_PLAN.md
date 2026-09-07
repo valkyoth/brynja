@@ -3912,7 +3912,7 @@ Exit criteria:
 
 ### v0.24.23 - Legacy SHA-1 And MD5 Cross-Backend Final Acceptance
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Rerun the byte-identical v0.24.20 package-external fixtures on the exact final source through portable, every admitted SHA-1 backend, every admitted MD5 batch width, scalar tails, unavailable-required and quarantined routes; collect current AMD/Intel, Apple/AWS Arm and qualifying RISC-V or explicit unsupported evidence, repeat every affected proof, sanitizer, cleanup, timing, KAT, package and differential artifact after any code change, and only then mark the isolated legacy SHA-1 and MD5 families Fully implemented while retaining collision-insecure, non-default, independently-unverified and non-FIPS status.
 

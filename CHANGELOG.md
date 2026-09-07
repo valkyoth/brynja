@@ -11,7 +11,8 @@
 - Register public checkpoints at each fifth minor's planned closing patch,
   starting with v0.25.2 and v0.30.2. Historical checkpoints remain immutable;
   later-added patches cannot silently shift publication. This internal version
-  selects zero crates for publication and awaits the owner's pentest.
+  selects zero crates for publication; owner retest and local release checks
+  passed. Green GitHub/CodeQL and owner permission remain required for tagging.
   See [release notes](release-notes/RELEASE_NOTES_0.24.23.md).
 
 ## 0.24.22 candidate

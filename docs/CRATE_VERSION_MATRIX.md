@@ -40,8 +40,8 @@ Unpublished `brynja-legacy-sha1 0.1.0` and `brynja-legacy-md5 0.1.0` complete
 ordinary/hardened byte/bit public acceptance at v0.24.23, including MD5 batches
 and optional host fallback adapters. All four CPU candidates remain unadmitted,
 and neither primitive gains a modern facade, TLS, PKIX or FIPS edge. Historical
-implementation pentests passed; this final acceptance candidate awaits its own
-owner assessment. See [final legacy acceptance](legacy-hash-final-acceptance.md).
+implementation pentests and this candidate's owner retest passed.
+See [final legacy acceptance](legacy-hash-final-acceptance.md).
 
 The initial exceptional v0.24.12 assessment found one Medium metadata-
 remanence gap in hardened cSHAKE. Its discriminator and setup-length fields now

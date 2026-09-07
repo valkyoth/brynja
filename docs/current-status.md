@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.22 signed; v0.24.23 legacy final acceptance candidate implemented and locally verified; owner pentest pending. No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.22 signed; v0.24.23 legacy final acceptance candidate has a green owner retest. See its permanent pentest report for final local gate and CI status. No CPU backend is admitted.
 
 The current candidate closes ordinary/hardened SHA-1/MD5 byte/bit and batch
 public acceptance using the frozen v0.24.20 contract. See

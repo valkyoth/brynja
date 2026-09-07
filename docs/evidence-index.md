@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; through v0.24.22 signed; v0.24.23 final legacy acceptance candidate awaits owner pentest. All CPU backends remain unadmitted.
+Status: v0.20.0 published; through v0.24.22 signed; v0.24.23 final legacy acceptance candidate has a green owner retest; final release/CI status is recorded in its permanent report. All CPU backends remain unadmitted.
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

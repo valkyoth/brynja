@@ -1,6 +1,6 @@
 # Brynja 0.24.23 Release Notes
 
-Status: implementation candidate; follow-up local verification passed; owner retest pending
+Status: owner retest and local release checks passed; awaiting green GitHub/CodeQL; no tag or publication
 
 ## Scope
 
@@ -65,7 +65,7 @@ not active exploits. The public-vector fixture now uses first-party fixed-width
 comparison and tests every mismatch position; a neighboring destructor unwind
 test supplements callback panic coverage. The Python reader bounds its actual
 read and explicitly requires a trusted, non-concurrently-mutated checkout.
-The permanent report records all dispositions; owner retest remains pending.
+The permanent report records all dispositions and the owner's green retest.
 The next supplied assessment identified a non-blocking stale-output test gap.
 All three batch paths now start with independently incorrect output bytes;
 hardened-public results also check their execution report. Compiled mutations
@@ -83,5 +83,6 @@ All instruction candidates stay unadmitted. Neither QEMU nor historical native
 observations establish migration safety or hardened SIMD cleanup. RISC-V legacy
 acceleration and MD5 AVX-512 remain unimplemented and explicitly unsupported.
 
-Complete local checks, obtain the owner pentest, commit its disposition, then
-wait for green GitHub/CodeQL and explicit owner permission before tagging.
+The owner retest and local release checks passed; the permanent report records
+the renewed evidence and its limits. Commit this disposition, then wait for
+green GitHub/CodeQL and explicit owner permission before tagging.

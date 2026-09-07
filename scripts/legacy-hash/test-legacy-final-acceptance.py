@@ -6,6 +6,7 @@ import io
 from unittest.mock import patch
 from pathlib import Path
 import legacy_final_acceptance as policy
+import final_batch_mutations
 
 
 def main():
@@ -34,6 +35,9 @@ def main():
         (policy.FIXTURE + '/src/lib.rs', 'fn dynamic_neighbor_drop_unwind_clears_live_secret_output()', 'fn omitted_neighbor_unwind()'),
         (policy.FIXTURE + '/src/lib.rs', 'fn dynamic_full_width_comparison_rejects_every_mismatch()', 'fn omitted_comparison()'),
         (policy.FIXTURE + '/src/batch.rs', 'output != [[0; 16]; 8]', 'false'),
+        (policy.FIXTURE + '/src/batch.rs', 'wanted.map(|lane| lane.map(|byte| !byte))', 'wanted'),
+        ('scripts/legacy-hash/test-legacy-final-acceptance.py', 'final_batch_mutations.run_tests()', '()'),
+        ('scripts/legacy-hash/test-legacy-final-acceptance.py', '\n    final_batch_mutations.run_tests()\n', '\n    pass\n'),
     ]
     for path in ('scripts/checks.sh', 'scripts/ci/check-rust-version-matrix.sh',
                  'scripts/assurance/check-bare-metal.sh', '.github/workflows/ci.yml',
@@ -112,6 +116,7 @@ def main():
             finally:
                 file.write_text(original, encoding='utf-8')
     print(f'Final legacy acceptance rejects {len(mutations)} frozen, source, claim, route and coverage regressions')
+    final_batch_mutations.run_tests()
 
 
 if __name__ == '__main__':

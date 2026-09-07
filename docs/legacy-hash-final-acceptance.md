@@ -23,6 +23,15 @@ and hardened outputs, complete secret-output destruction, cancellation, budget
 failure, recoverable unwind and both optional host adapters. Required
 acceleration fails closed. No source-level access to private kernels is used.
 
+Before each ordinary, hardened-public and hardened-secret batch call, every
+destination byte is initialized to the complement of its expected result,
+including inactive lanes. Thus an earlier successful path cannot supply the
+answer for a later no-op. Hardened-public execution also checks that no vector
+blocks were reported. The mutation suite compiles disposable consumers in debug
+and release: no-op, partial-write and false-route mutants must fail the actual
+acceptance test, while the original stale-buffer weakness is reproduced as a
+positive counter-control. Production crates and frozen vectors are never edited.
+
 The fixture's inputs and expected hashes are public frozen test vectors, even
 when exercised through a typed secret owner. Its fixed-width result comparison
 uses Brynja's own `ConstantTimeEq`, without copying the borrowed output or adding

@@ -1,5 +1,6 @@
 """Frozen consumer and explicitly non-authorizing final SHA-1/MD5 closure."""
 import hashlib
+import ast
 import json
 from pathlib import Path
 import tomllib
@@ -64,7 +65,8 @@ def inventory(root=ROOT):
     files.update(FIXTURE + '/' + name for name in ('Cargo.toml', 'Cargo.lock',
         'src/lib.rs', 'src/main.rs', 'src/batch.rs'))
     files.update('scripts/legacy-hash/' + name for name in (
-        'legacy_final_acceptance.py', 'check-legacy-final-acceptance.py', 'test-legacy-final-acceptance.py'))
+        'legacy_final_acceptance.py', 'check-legacy-final-acceptance.py', 'test-legacy-final-acceptance.py',
+        'final_batch_mutations.py'))
     for package in PACKAGES:
         base = root / 'crates' / package
         files.add(f'crates/{package}/Cargo.toml')
@@ -144,9 +146,18 @@ def validate(root=ROOT, hashes=True):
         raise ValueError('final fixture acquired an unexpected dependency')
     if 'source =' in read(root, FIXTURE + '/Cargo.lock'):
         raise ValueError('final fixture acquired an external dependency')
+    batch = read(root, FIXTURE + '/src/batch.rs')
+    if batch.count('output = wanted.map(|lane| lane.map(|byte| !byte));') != 3:
+        raise ValueError('each batch profile must overwrite independently poisoned output')
+    tests = ast.parse(read(root, 'scripts/legacy-hash/test-legacy-final-acceptance.py'))
+    entry = [node for node in tests.body if isinstance(node, ast.FunctionDef) and node.name == 'main']
+    required_call = ast.parse('final_batch_mutations.run_tests()').body[0]
+    if len(entry) != 1 or not entry[0].body or ast.dump(entry[0].body[-1]) != ast.dump(required_call):
+        raise ValueError('compiled batch mutations must execute at the end of the test entry point')
     for path, token in (
         ('scripts/checks.sh', 'python3 scripts/legacy-hash/check-legacy-final-acceptance.py'),
         ('scripts/checks.sh', 'python3 scripts/legacy-hash/test-legacy-final-acceptance.py'),
+        ('scripts/legacy-hash/test-legacy-final-acceptance.py', 'final_batch_mutations.run_tests()'),
         ('scripts/ci/check-rust-version-matrix.sh', FIXTURE + '/Cargo.toml'),
         ('scripts/assurance/check-bare-metal.sh', FIXTURE + '/Cargo.toml'),
         ('.github/workflows/ci.yml', FIXTURE + '/Cargo.toml'),

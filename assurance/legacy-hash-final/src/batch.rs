@@ -1,3 +1,4 @@
+use brynja_core::ConstantTimeEq;
 use brynja_legacy_md5::{
     BitString, HardenedMd5Batch, Md5Batch, Md5BatchControl, Md5BatchError, PublicDeclassification,
 };
@@ -15,14 +16,16 @@ pub fn check(data: &[u8], width: u8, expected: &[u8]) -> Result<usize, &'static 
                 *digest = expected;
             }
         }
-        let mut output = [[0xa5; 16]; 8];
+        let mut output = wanted.map(|lane| lane.map(|byte| !byte));
         let report = Md5Batch::new()
             .digest(&inputs, &mut output, &mut Md5BatchControl::new(8192))
             .map_err(|_| "portable batch failed")?;
         if output != wanted || report.vector_blocks != 0 {
             return Err("batch lane order, inactive output or portable execution differs");
         }
-        HardenedMd5Batch::new()
+        // Every path must overwrite deliberately incorrect bytes independently.
+        output = wanted.map(|lane| lane.map(|byte| !byte));
+        let report = HardenedMd5Batch::new()
             .digest_public(
                 &inputs,
                 &mut output,
@@ -30,9 +33,10 @@ pub fn check(data: &[u8], width: u8, expected: &[u8]) -> Result<usize, &'static 
                 PublicDeclassification::acknowledge(),
             )
             .map_err(|_| "hardened public batch failed")?;
-        if output != wanted {
+        if output != wanted || report.vector_blocks != 0 {
             return Err("hardened batch differs");
         }
+        output = wanted.map(|lane| lane.map(|byte| !byte));
         {
             let (secret, report) = HardenedMd5Batch::new()
                 .digest_secret(&inputs, &mut output, &mut Md5BatchControl::new(8192))
@@ -103,4 +107,3 @@ pub fn failures() -> Result<(), &'static str> {
     }
     Ok(())
 }
-use brynja_core::ConstantTimeEq;

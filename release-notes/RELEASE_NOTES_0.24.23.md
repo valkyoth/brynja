@@ -46,7 +46,9 @@ Completed locally:
   because this environment's ptrace restrictions prevent LeakSanitizer.
 - Supplemental AArch64 SHA-1/MD5 forced-path QEMU correctness; this does not
   authorize acceleration or replace native evidence.
-- Thirty-three final-acceptance mutations plus input-path/read-boundary regressions;
+- Thirty-six final-acceptance policy mutations plus input-path/read-boundary
+  regressions and compiled debug/release batch no-op, partial-write and
+  false-route mutations with positive controls;
   34 release-policy tests; full roadmap/readiness and semantic Miri regressions.
 - Current tooling/admission checks, RustSec audit, cargo-deny and SBOM checks;
   publisher check/dry run confirms zero crates selected.
@@ -64,6 +66,10 @@ comparison and tests every mismatch position; a neighboring destructor unwind
 test supplements callback panic coverage. The Python reader bounds its actual
 read and explicitly requires a trusted, non-concurrently-mutated checkout.
 The permanent report records all dispositions; owner retest remains pending.
+The next supplied assessment identified a non-blocking stale-output test gap.
+All three batch paths now start with independently incorrect output bytes;
+hardened-public results also check their execution report. Compiled mutations
+prove the corrected test rejects missing writes, including inactive lanes.
 No production Rust or external dependency changed. The fixture adds an explicit
 edge to the same `brynja-core` version it already used transitively.
 

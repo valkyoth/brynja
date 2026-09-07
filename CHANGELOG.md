@@ -2,6 +2,9 @@
 
 ## 0.24.22 candidate
 
+- Complete the local release checks, including all ten full Miri groups,
+  all 29 Kani harnesses, AddressSanitizer and the compiler/target matrix;
+  retain the clean report before waiting for green GitHub/CodeQL.
 - Re-review and exact-pin optional sanitization 2.1.0 with no upstream features
   or transitive dependencies; retain adapter/core/FIPS isolation.
 
@@ -11,8 +14,10 @@
 - Add `brynja-legacy-md5-std` host observation and portable fallback; required
   acceleration fails closed. No modern or hardened SIMD route is admitted.
 - Add frozen-corpus, mixed-lane, instruction, ownership, package, negative-build
-  and native capture checks. Exceptional pentest and native disposition pending;
-  no crate selected for publication. See [release notes](release-notes/RELEASE_NOTES_0.24.22.md).
+  and native capture checks. The supplied exceptional pentest is clean and all
+  four native captures have reviewed bounded dispositions; neither SIMD backend
+  is admitted. No crate is selected for publication.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.22.md).
 
 ## 0.24.21 candidate
 

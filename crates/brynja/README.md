@@ -195,6 +195,6 @@ FIPS validation is a separate official claim from implementation and independent
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |
 | `brynja-tls12`, `brynja-tls13`, `brynja-dtls`, `brynja-quic-tls` | Separately reviewable modern protocol engines |
-| `brynja-legacy-*` | Isolated obsolete protocols, SHA-1/MD5 and opt-in SHA-1 host detection |
+| `brynja-legacy-*` | Isolated obsolete protocols, SHA-1/MD5 and optional SHA-1/MD5 host-observation adapters |
 
 More: [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md), [threat model](https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md), [verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md), and [security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md). Licensed under either Apache-2.0 or MIT, at your option.

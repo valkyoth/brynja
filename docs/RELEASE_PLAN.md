@@ -3848,7 +3848,12 @@ Exit criteria:
 
 ### v0.24.22 - MD5 Multi-Buffer SIMD Acceleration
 
-Status: awaiting pentest
+Status: awaiting green CI
+
+The supplied exceptional pentest is clean. All four native captures have
+reviewed bounded dispositions and all required local release checks passed,
+including full registered Miri coverage and all 29 Kani harnesses. Both SIMD
+backends remain unadmitted; no crate is selected for publication.
 
 Plan scope: After v0.24.20, implement first-party allocation-free MD5 multi-buffer candidates that process independent messages through exact x86_64 AVX2 and, when separately justified, AVX-512 bundles plus AArch64 NEON and qualifying ratified RISC-V Vector bundles; expose bounded caller-owned batch lanes without pretending single-stream MD5 has dedicated hardware acceleration, preserve scalar semantics for uneven tails and unsupported targets, and require lane-permutation, mixed-length, inactive-lane, KAT, differential, quarantine, native performance, timing, emitted-code, failure-atomicity and hardened lane/register/spill cleanup evidence before admission.
 

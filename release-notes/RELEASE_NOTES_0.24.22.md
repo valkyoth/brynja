@@ -1,6 +1,6 @@
 # Brynja 0.24.22 Release Notes
 
-Status: locally verified implementation candidate; supplied exceptional pentest clean; four native captures reviewed; final release checks pending
+Status: final local release checks passed; supplied exceptional pentest clean; four native captures reviewed; awaiting green GitHub/CodeQL and owner tag permission
 
 ## Scope and deliverables
 
@@ -58,14 +58,20 @@ Completed on 2026-09-07:
 - Eight rejected evidence-build configurations plus an external `cfg(test)`
   consumer on both compiler endpoints; packaged batch/host/secret consumers,
   36 MD5 CPU policy mutations and 44 workspace-policy regressions.
-- All three MD5 Kani harnesses, including the two new full-width work-budget
-  proofs. The repository inventories 29 harnesses; this is not a claim that all
-  29 were rerun for this milestone.
+- All 29 registered Kani harnesses rerun successfully, including all three MD5
+  harnesses and the two new full-width work-budget proofs. Kani uses its pinned
+  0.67.0 verifier with Rust 1.90.0, independently of the stable build compiler.
 - Full focused MD5 Miri group on nightly-2026-09-07, including portable batch
   lifecycle, all active masks, budgets, cancellation and recoverable unwinding.
   Miri does not execute the ISA candidates. AddressSanitizer additionally
   passes the actual AVX2 library suite; LeakSanitizer is disabled because the
-  local environment's ptrace restrictions prevent its execution.
+  local environment's ptrace restrictions prevent its execution. The final
+  release pass also reran the complete registered AddressSanitizer wrapper.
+- Final stage-aware Miri run: all ten registered full groups passed on
+  nightly-2026-09-07. The isolated sanitization admission fixture's changed
+  registry dependency has no classified consumer, so the selector conservatively
+  required full coverage. This run includes the SHA-1, SHA-2, SHA-3/SHAKE, KMAC,
+  TupleHash, ParallelHash and legacy-consumer campaigns, not just MD5.
 - Rust 1.90.0/1.98.1 emitted AVX2/NEON instruction checks and the existing MD5
   owner MIR/LLVM/assembly cleanup checks. Hardened batches compose those same
   registered clearing owners, not a new SIMD secret-state representation.
@@ -89,6 +95,8 @@ both candidates remain unadmitted regardless of the passing results.
 ## Release workflow
 
 The new low-level code triggers an exceptional pentest before any signed tag.
-After clean retest and local release checks, commit the report and wait for
-green GitHub/CodeQL plus explicit owner tag permission. No crates.io publication
+The clean assessment and all local tag-gate components are complete against
+signed `7971ca7f`; the final documentation/checksum-only reconciliation is
+validated separately. Commit the report and wait for green GitHub/CodeQL plus
+explicit owner tag permission. No crates.io publication
 is scheduled at v0.24.22; the next ordinary public checkpoint is v0.25.0.

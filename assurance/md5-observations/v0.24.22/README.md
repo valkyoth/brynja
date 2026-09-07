@@ -73,8 +73,8 @@ elapsed-time observations, not stable throughput promises or a constant-time
 test. They do not establish general performance, migration-safe feature
 authority, register/spill erasure or secret-bearing acceleration safety.
 
-Collection and bounded result disposition are complete. The final release
-checks, green GitHub/CodeQL and explicit owner tag permission remain outstanding.
+Collection, bounded result disposition and final local release checks are
+complete. Green GitHub/CodeQL and explicit owner tag permission remain outstanding.
 AVX-512 and RISC-V Vector have no implementation in this milestone; no native evidence
 for either is claimed. The existing scalar fallback and admission restrictions
 remain unchanged.

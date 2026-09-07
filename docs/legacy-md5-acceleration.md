@@ -1,6 +1,6 @@
 # MD5 multi-buffer SIMD contract
 
-Status: v0.24.22 implementation candidate; supplied pentest clean, four native captures reviewed; final release checks pending.
+Status: v0.24.22 implementation candidate; supplied pentest clean, four native captures reviewed; final local release checks passed; awaiting green GitHub/CodeQL and owner tag permission.
 MD5 remains **In progress** until the v0.24.23 final cross-backend disposition.
 It is collision-broken, not independently cryptographically verified, and not
 FIPS validated. Faster legacy compatibility does not repair MD5's security.

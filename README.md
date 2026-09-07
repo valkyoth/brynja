@@ -652,7 +652,7 @@ independent cryptographic review, or guarantee for an arbitrary downstream
 composition. Version `0.11.2` implemented the
 separately selected, protocol-neutral
 `brynja-sanitization 0.1.0` adapter admitted at v0.11.1. It exact-pins
-first-party `sanitization 2.0.4`, disables every upstream feature, activates no
+first-party `sanitization 2.1.0`, disables every upstream feature, activates no
 transitive package, owns opaque fixed-size wrappers, and provides only explicit
 copies to and from Brynja's caller-owned regions. It is absent from every
 facade, engine, default feature, and FIPS module closure. Brynja's v0.11.0
@@ -997,7 +997,7 @@ selected set in dependency order and publishes the facade last.
   depend only on the exact pure-Rust ecosystem API they implement, in separate
   lockfiles and graphs that can never enter or be enabled by `brynja`.
 - Version `0.11.2` implements one separately selected
-  `brynja-sanitization` adapter over admitted exact `sanitization 2.0.4`. It
+  `brynja-sanitization` adapter over admitted exact `sanitization 2.1.0`. It
   uses an exact pin with default features disabled,
   never activates `zeroize`, and is not a dependency or feature of a facade,
   protocol engine, legacy engine, or FIPS module.
@@ -1091,7 +1091,7 @@ selected set in dependency order and publishes the facade last.
 | `brynja-legacy-sha1-std` | Optional legacy SHA-1 host observation and portable fallback | v0.1.0 candidate at v0.24.21; unpublished, no admitted acceleration, required mode fails closed, absent from modern and FIPS graphs |
 | Future `brynja-platform-security` | Optional `no_std` protected-region contract and typed enforcement evidence | Planned at v0.174.1; never performs hidden OS effects |
 | Future `brynja-platform-security-std` | Optional Linux, Android, Windows, macOS, iOS, and BSD protected-memory providers | Planned at v0.174.2-v0.174.5; outside every default graph |
-| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published; current source exact-pins `sanitization 2.0.4`; absent from facade and FIPS graphs |
+| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published; current source exact-pins `sanitization 2.1.0`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | Complete TLS 1.2/1.1/1.0, DTLS 1.2/1.0, SSL, WTLS, PCT, and SNP compatibility with independent package policy | Boundaries exist; complete v0.240.0-v0.249.0 implementation chains are required before 1.0 |
 | `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
@@ -1129,7 +1129,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Default target | `no_std` |
 | Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
 | External crates | Rejected unless a numbered admission freezes an exact minimal graph; planned `base64-ng` use is encoding-only and future rustls/Tokio API dependencies remain isolated |
-| First-party companion crates | Exact `sanitization 2.0.4` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
+| First-party companion crates | Exact `sanitization 2.1.0` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
 | Unsafe Rust | Fifteen exact source-hash-bound modules confine the v0.11 volatile clearer plus SHA-256/Keccak attestations, x86 SHA/AVX2 Keccak, AArch64 SHA2/SHA-512/SHA3 Keccak, RV64 Zknh inline assembly, std detector, and isolated legacy SHA-1 and MD5 session/x86/AArch64 candidate boundaries; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |

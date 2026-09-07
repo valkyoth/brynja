@@ -1,0 +1,155 @@
+[schema]
+version = 1
+milestone = "0.24.22"
+reviewed_on = "2026-09-07"
+
+[decision]
+status = "admitted-for-v0.11.2-adapter-only"
+production_graph_changed = true
+adapter = "brynja-sanitization"
+adapter_milestone = "0.11.2"
+legacy_adapter = "rejected"
+fips_boundary = "excluded"
+
+[package]
+name = "sanitization"
+version = "2.1.0"
+registry = "https://crates.io"
+repository = "https://github.com/valkyoth/sanitization"
+release_tag = "v2.1.0"
+source_commit_sha1 = "a3032977ebed2f704687da1a900f9921102351b4"
+reviewed_code_commit_sha1 = "2ab1c6fcadb5482bbfb223d92492daae0d9c607c"
+package_sha256 = "0c395c5164295d69016c014a3c2dd69d28a84b7e89ba971c1e81b17acc41e411"
+license = "MIT OR Apache-2.0"
+edition = "2021"
+rust_version = "1.90"
+no_std = true
+build_script = false
+native_links = false
+
+[selection]
+default_features = false
+features = []
+direct_runtime_dependencies = []
+resolved_runtime_packages = ["sanitization"]
+prohibited_packages = ["zeroize", "sanitization-derive", "serde", "subtle"]
+prohibited_features = [
+  "alloc",
+  "asm-compare",
+  "cache-flush",
+  "canary-check",
+  "derive",
+  "guard-pages",
+  "hardware-secrets",
+  "memory-lock",
+  "multi-pass-clear",
+  "page-seal",
+  "profile-guarded-native",
+  "profile-hardened-linux",
+  "profile-hardened-native",
+  "random-canary",
+  "register-scrub",
+  "require-fork-exclusion",
+  "serde",
+  "split-secret",
+  "std",
+  "strict-canary-check",
+  "strict-compare",
+  "subtle-interop",
+  "wasm-compat",
+  "zeroize-interop",
+]
+
+[unsafe_inventory]
+selected_feature_tcb_files = ["src/wipe_backend.rs", "src/owned.rs"]
+selected_feature_tcb_sha256 = [
+  "src/owned.rs:a159daa45728fa63e6a42a16bfb8bb5d099f7e6fd05338b7393f3f105fbf2491",
+  "src/wipe_backend.rs:f4389de86ad4a1c72961cc1141cdc9f2f55f564bf54b419a30a0138868e5289a",
+]
+previous_selected_feature_tcb_version = "2.0.4"
+previous_selected_feature_tcb_sha256 = [
+  "src/owned.rs:769a1386cf42ff5645fb7af70472ade67a737dceb97cdd897226deffaf1de76f",
+  "src/wipe_backend.rs:359691633b0b84d3b7f9a0f667a1391277831b399edeb969bdd6d40b49e7603b",
+]
+selected_feature_boundaries = [
+  "wipe_backend volatile erasure and zero-valid primitive marker",
+  "owned::consume_once atomic exclusive-access implementation",
+  "wipe_backend::erase_str exclusive UTF-8-preserving byte view; not exposed by the adapter",
+]
+disabled_feature_tcb_files = [
+  "src/canary.rs",
+  "src/mapped/guard_pages.rs",
+  "src/mapped/memory_lock_native.rs",
+  "src/mapped/memory_lock_wasm.rs",
+  "src/platform.rs",
+]
+local_unsafe_authorized = false
+
+[verification]
+compilers = [
+  "1.90.0",
+  "1.91.0",
+  "1.92.0",
+  "1.93.0",
+  "1.94.0",
+  "1.95.0",
+  "1.96.0",
+  "1.96.1",
+  "1.97.0",
+  "1.97.1",
+  "1.98.0",
+  "1.98.1",
+]
+targets = [
+  "x86_64-unknown-linux-gnu",
+  "x86_64-pc-windows-msvc",
+  "x86_64-unknown-freebsd",
+  "x86_64-apple-darwin",
+  "aarch64-linux-android",
+  "aarch64-apple-ios",
+  "thumbv7em-none-eabi",
+  "riscv32imac-unknown-none-elf",
+  "x86_64-unknown-none",
+]
+additional_compile_only_targets = ["wasm32-unknown-unknown"]
+upstream_pentest = "security/pentest/v2.1.0.md: PASS on 2026-09-06; upstream report, not Brynja verification"
+advisory_result = "cargo audit: zero advisories on 2026-09-07"
+policy_result = "cargo deny advisories/bans/licenses/sources: pass on 2026-09-07"
+codegen_evidence = "local adapter endpoint MIR/LLVM IR/assembly checks; reviewed 2.0.4-to-2.1.0 TCB additions, existing SecretBytes byte-erasure path unchanged"
+candidate_fixture = "assurance/sanitization-admission"
+
+[adapter_boundary]
+owned_wrapper = "SanitizedSecret<N>"
+upstream_storage = "sanitization::SecretBytes<N>"
+explicit_dependency_selection = true
+implicit_conversions = false
+foreign_trait_implementations = false
+facade_feature = false
+engine_dependency = false
+default_activation = false
+modern_and_legacy_shared = true
+core_destruction_remains_authoritative = true
+non_empty_storage = true
+source_failure_type = "closed payload-free brynja-owned SourceFailure"
+
+[rereview]
+conditions = [
+  "new sanitization release or package checksum",
+  "source commit, license, MSRV, feature, dependency, unsafe, target, advisory, or guarantee drift",
+  "any selected feature or default-feature activation",
+  "any facade, engine, legacy engine, default feature, or FIPS-module dependency path",
+  "any new conversion, ownership, allocation, or destruction behavior",
+  "any upstream security finding affecting the selected package",
+]
+failure_action = "withhold or remove brynja-sanitization without changing brynja-core destruction"
+
+[residual_risk]
+items = [
+  "independent upstream review is not a Brynja review or FIPS validation",
+  "unsafe upstream code remains an inherited adapter trusted-computing-base boundary",
+  "drop does not run after abort, forced termination, mem::forget, or equivalent lifecycle bypass",
+  "Rust moves, compiler spills, registers, caches, DMA, dumps, swap, hibernation, privileged inspection, and physical attacks remain outside the ordinary-RAM wipe claim",
+  "WASM volatile erasure has weaker runtime semantics than native volatile stores",
+  "Miri and Kani evidence does not prove native OS behavior, real concurrency, or universal emitted code",
+  "the optional adapter cannot satisfy or imply FIPS SSP destruction or certificate coverage",
+]

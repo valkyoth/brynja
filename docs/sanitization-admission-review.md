@@ -3,44 +3,55 @@
 Status: admitted only for conditional implementation of the separately selected
 `brynja-sanitization` package at v0.11.2; no Brynja production dependency graph
 edge outside that adapter is authorized. The exact dependency was re-reviewed
-and advanced at v0.24.14.
+and advanced at v0.24.22.
 
-Checked: 2026-09-04.
+Checked: 2026-09-07.
 
 ## Decision
 
-Brynja admits the crates.io release `sanitization 2.0.4` as the sole candidate
+Brynja admits the crates.io release `sanitization 2.1.0` as the sole candidate
 for a protocol-neutral downstream adapter. The future adapter must exact-pin
 that release, disable default features, select no features, and use
 adapter-owned wrapper types. One adapter will serve modern and legacy callers;
 `brynja-legacy-sanitization` is rejected because secret-memory destruction has
 no irreducible legacy-only semantics.
 
-The v0.24.14 re-review advances only the adapter's exact dependency from 2.0.3
-to 2.0.4. A source comparison confirms that the no-feature selected TCB files
-`src/owned.rs` and `src/wipe_backend.rs` are byte-identical between those
-archives. The upstream patch changes optional mapped-memory protection and
-assurance tooling which remain disabled by this admission. This decision does
-not authorize another unsafe block in Brynja or replace the mandatory
-`brynja-core` destruction primitive.
+The v0.24.22 re-review advances the adapter's exact dependency from 2.0.4
+to 2.1.0. Unlike the previous patch update, the admitted no-feature TCB files
+`src/owned.rs` and `src/wipe_backend.rs` are **not byte-identical**. The
+reviewed additions provide `str` sanitization and an exclusive mutable byte
+view that replaces UTF-8 with valid NUL bytes. New allocation-enabled String
+helpers preserve allocation provenance and UTF-8 during clearing; allocation
+and multi-pass features remain disabled here. The new `str` comparison is
+also outside the adapter's exposed surface.
+
+The existing `SecretBytes<N>` implementation and its byte-erasure path are
+unchanged. No string, boxed-storage, secrecy, derive, zeroize, or other companion
+API is exposed or activated by Brynja. The added always-compiled string unsafe
+boundary is nevertheless included in the inherited TCB review and new source
+hashes; the previous 2.0.4 hashes remain recorded separately. This decision
+does not authorize another unsafe block in Brynja or replace mandatory
+`brynja-core` destruction. The upstream signed tag and published archive bind
+the reviewed sources; the upstream report is evidence input, not independent
+verification of Brynja. This dependency delta requires the owner pentest.
 
 | Property | Reviewed value |
 | --- | --- |
-| Package | `sanitization 2.0.4` from crates.io |
-| Latest stable check | `2.0.4` on 2026-09-04 |
-| Release source commit | `0f95eec55aa16562be9dc3a08ee60a043d7a0da8` |
-| Externally reviewed code commit | `d5a7c9e46889e1b0a2e0ad7e7651219aa07bbc2e` |
-| Package SHA-256 | `f6c00771cb2e89cc08c486588aa5b462190634313f8885fbdc375de33ee84612` |
+| Package | `sanitization 2.1.0` from crates.io |
+| Latest stable check | `2.1.0` on 2026-09-07 |
+| Release source commit | `a3032977ebed2f704687da1a900f9921102351b4` |
+| Externally reviewed code commit | `2ab1c6fcadb5482bbfb223d92492daae0d9c607c` |
+| Package SHA-256 | `0c395c5164295d69016c014a3c2dd69d28a84b7e89ba971c1e81b17acc41e411` |
 | License | MIT OR Apache-2.0 |
 | Rust / edition | Rust 1.90, edition 2021 |
 | Runtime model | `no_std`, no allocator, no build script, no native link |
 | Selected Cargo features | none; default features disabled |
-| Activated runtime graph | only `sanitization 2.0.4`; no transitive package |
-| Advisory result | no RustSec advisory found on 2026-09-04 |
-| Upstream independent pentest | PASS, 2026-09-04, zero open findings |
+| Activated runtime graph | only `sanitization 2.1.0`; no transitive package |
+| Advisory result | no RustSec advisory found on 2026-09-07 |
+| Upstream reported pentest | PASS, 2026-09-06, zero open findings; not a Brynja review |
 
 The machine-readable authority for these values is
-`security/dependency-admissions/sanitization-2.0.4.toml`. The package hash is
+`security/dependency-admissions/sanitization-2.1.0.toml`. The package hash is
 both the crates.io index checksum and the SHA-256 of the downloaded `.crate`
 archive. Its `.cargo_vcs_info.json` binds the archive to the release source
 commit above.
@@ -50,7 +61,7 @@ commit above.
 The admitted manifest form is exactly:
 
 ```toml
-sanitization = { version = "=2.0.4", default-features = false }
+sanitization = { version = "=2.1.0", default-features = false }
 ```
 
 Cargo metadata and the isolated lockfile resolve one runtime package and no
@@ -103,8 +114,8 @@ Brynja engine remain governed by `brynja-core`'s v0.11.0 owner and destruction
 contract.
 
 Upstream evidence includes MIR/LLVM IR/assembly inspection, Miri, bounded Kani
-harnesses, native tests, target-specific evidence, and the independent 2.0.4
-pentest. The 2.0.4 upstream review covers the full 2.0.3-to-2.0.4 delta and has
+harnesses, native tests, target-specific evidence, and the independent 2.1.0
+pentest. The 2.1.0 upstream review covers the full 2.0.4-to-2.1.0 delta and has
 no open finding. Those are useful inputs, not proof of all compilers, runtimes,
 targets, hardware behavior, or Brynja integration.
 

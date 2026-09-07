@@ -24,7 +24,8 @@ Status: locally verified implementation candidate; exceptional pentest and nativ
 The modern facade only advances to 0.24.22. Neither it nor any changed support
 crate is selected for crates.io publication at this internal milestone. The
 new adapter remains unpublished 0.1.0. No third-party dependency is introduced;
-the existing optional sanitization 2.0.4 admission is unchanged. The Rust
+the optional adapter advances its exact sanitization pin from 2.0.4 to 2.1.0
+after source/admission review, with all upstream features still disabled. The Rust
 1.90.0–1.98.1 support contract and no_std leaf remain intact.
 
 ## Security and evidence limits
@@ -70,7 +71,8 @@ Completed on 2026-09-07:
   registered clearing owners, not a new SIMD secret-state representation.
 - Current tooling/advisory checks, cargo-audit, cargo-deny and matching SBOM.
   Dynamic-analysis tooling advances to nightly-2026-09-07; stable remains
-  Rust 1.98.1 and sanitization remains exact-pinned 2.0.4.
+  Rust 1.98.1. The follow-up sanitization 2.1.0 admission includes refreshed
+  source/archive hashes and targeted adapter checks; no new dependency is activated.
 - Release selection check and dry run: zero packages selected for publication.
 
 These are local automated checks, not an independent cryptographic review.

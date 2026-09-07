@@ -7,7 +7,7 @@
   "harness_protocol": "brynja-stdin-json-v1",
   "inputs": {
     ".github/workflows/ci.yml": "71d7333a0809988258eb80601734c3e11aa50267ace5acdf8e34e5de0c283590",
-    "Cargo.toml": "d457ee98f91c754cfd6249de6c3d06427f73825ebd268fb62931cb36e3c41fc0",
+    "Cargo.toml": "f3d0a5d8366b15047dbdbd7bca6403dbe43e96fc21d50b1e9d0127059e791c1b",
     "assurance/policy.toml": "852d04a81d957d9515c27ce5a7ec7035ca41aa01cd0b09e732aebe490879e989",
     "assurance/zeroization-matrix.toml": "dd460c14b7f2f190d56d627540a0765fde6bfc2e5d06a331c238632c05f14b82",
     "crates/brynja-core/Cargo.toml": "096f0e0ac8caf49da8820894ecec821f18c56b6576be37bdb8f5f84a23e58253",
@@ -53,7 +53,7 @@
     "crates/brynja-xtask/Cargo.toml": "e178b328289b523b7dc0a9d994cf5409ae54a44ba4198092c520ee45f1247d50",
     "crates/brynja/Cargo.toml": "3a22f86bac7832c883c90114222136f26e4f09f86eee0f6bd723c71f541b85bb",
     "docs/KANI.md": "7a524d9c455fe2008f06f3bceed7d476cbed2c34e5d623db4484c11c99cf1b31",
-    "docs/unsafe-policy.md": "f15072fe135321fae85ac2dbab5ff9565ed3924efbbb4ce8c0dfbd2d2c59365b",
+    "docs/unsafe-policy.md": "727be029b20cf628c714dbd31830cda8970ebd5551a0f415870b82ef1b1993af",
     "rust-toolchain.toml": "85db324345b7937c49ea2ac8b962d741f710719f4f751cab809985cbe6afbe3c",
     "scripts/assurance/assurance-fixture-adapter.py": "84c6fd76d5d4be111696a314f792c4ee2c4898a97f5cc4125b16e8eb9f8a0dda",
     "scripts/assurance/assurance_differential.py": "11ad4265f99eab4f7ca7d575b310e30e82592a07406cb21010b6254bad623031",

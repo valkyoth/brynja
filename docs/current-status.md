@@ -1023,7 +1023,7 @@ Version 0.11.0 adds the owned-memory zeroization primitive:
 
 Version 0.11.1 completes the sanitization adapter admission review:
 
-- the latest stable first-party release is pinned as `sanitization 2.0.4`,
+- the latest stable first-party release is pinned as `sanitization 2.1.0`,
   source commit `ffcb211cd931c6966b2e767ce5edffa4b47c4f07`, package SHA-256
   `75e43f2762b31232062e8ba7bfbdfcbd33c80c43bf7a306a7e195c3c4f734e0f`,
   Rust 1.90, and MIT OR Apache-2.0;
@@ -1053,7 +1053,7 @@ Version 0.11.1 completes the sanitization adapter admission review:
 Version 0.11.2 implements the admitted optional adapter:
 
 - `brynja-sanitization 0.1.0` is a separately publishable `no_std` package
-  with exact `sanitization 2.0.4`, default features disabled, and no resolved
+  with exact `sanitization 2.1.0`, default features disabled, and no resolved
   transitive package;
 - `SanitizedSecret<N>` owns upstream fixed storage behind a non-copyable,
   non-converting wrapper with redacted `Debug`, closure-scoped inspection,
@@ -1409,7 +1409,7 @@ carry machine-checked blocked lifecycles and exact blocker targets until source
 provenance and rights are authenticated. FIPS validation
 milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 
-`brynja-sanitization` now uses exact `sanitization 2.0.4` only under the frozen
+`brynja-sanitization` now uses exact `sanitization 2.1.0` only under the frozen
 adapter boundary. Any source, package, feature, dependency, unsafe, advisory,
 target, guarantee, ownership, engine, facade, or FIPS-boundary drift forces
 re-review and fail-closed withholding or removal.

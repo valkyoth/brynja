@@ -13,15 +13,19 @@ from pathlib import Path, PurePosixPath
 from urllib.parse import urlparse
 
 
-RECORD = Path("security/dependency-admissions/sanitization-2.0.4.toml")
+RECORD = Path("security/dependency-admissions/sanitization-2.1.0.toml")
 DOCUMENT = Path("docs/sanitization-admission-review.md")
 CANDIDATE = Path("assurance/sanitization-admission")
 PACKAGE = "sanitization"
-VERSION = "2.0.4"
-SOURCE_COMMIT = "0f95eec55aa16562be9dc3a08ee60a043d7a0da8"
-REVIEWED_COMMIT = "d5a7c9e46889e1b0a2e0ad7e7651219aa07bbc2e"
-PACKAGE_SHA256 = "f6c00771cb2e89cc08c486588aa5b462190634313f8885fbdc375de33ee84612"
+VERSION = "2.1.0"
+SOURCE_COMMIT = "a3032977ebed2f704687da1a900f9921102351b4"
+REVIEWED_COMMIT = "2ab1c6fcadb5482bbfb223d92492daae0d9c607c"
+PACKAGE_SHA256 = "0c395c5164295d69016c014a3c2dd69d28a84b7e89ba971c1e81b17acc41e411"
 SELECTED_TCB_SHA256 = [
+    "src/owned.rs:a159daa45728fa63e6a42a16bfb8bb5d099f7e6fd05338b7393f3f105fbf2491",
+    "src/wipe_backend.rs:f4389de86ad4a1c72961cc1141cdc9f2f55f564bf54b419a30a0138868e5289a",
+]
+PREVIOUS_SELECTED_TCB_SHA256 = [
     "src/owned.rs:769a1386cf42ff5645fb7af70472ade67a737dceb97cdd897226deffaf1de76f",
     "src/wipe_backend.rs:359691633b0b84d3b7f9a0f667a1391277831b399edeb969bdd6d40b49e7603b",
 ]
@@ -92,12 +96,12 @@ def validate_record(root: Path) -> dict:
     rereview = table(data, "rereview")
     residual = table(data, "residual_risk")
 
-    require(schema == {"version": 1, "milestone": "0.24.14", "reviewed_on": "2026-09-04"},
+    require(schema == {"version": 1, "milestone": "0.24.22", "reviewed_on": "2026-09-07"},
             "admission schema or review date drift")
     require(decision.get("status") == "admitted-for-v0.11.2-adapter-only",
             "admission must be adapter-only")
     require(decision.get("production_graph_changed") is True,
-            "v0.24.14 must record the exact dependency update")
+            "v0.24.22 must record the exact dependency update")
     require(decision.get("adapter") == "brynja-sanitization",
             "protocol-neutral adapter name drift")
     require(decision.get("legacy_adapter") == "rejected",
@@ -110,7 +114,7 @@ def validate_record(root: Path) -> dict:
         "version": VERSION,
         "registry": "https://crates.io",
         "repository": "https://github.com/valkyoth/sanitization",
-        "release_tag": "v2.0.4",
+        "release_tag": "v2.1.0",
         "source_commit_sha1": SOURCE_COMMIT,
         "reviewed_code_commit_sha1": REVIEWED_COMMIT,
         "package_sha256": PACKAGE_SHA256,
@@ -139,10 +143,10 @@ def validate_record(root: Path) -> dict:
             {"src/wipe_backend.rs", "src/owned.rs"}, "selected unsafe inventory drift")
     require(unsafe.get("selected_feature_tcb_sha256") == SELECTED_TCB_SHA256,
             "selected TCB hash inventory drift")
-    require(unsafe.get("previous_selected_feature_tcb_version") == "2.0.3",
+    require(unsafe.get("previous_selected_feature_tcb_version") == "2.0.4",
             "selected TCB comparison baseline drift")
-    require(unsafe.get("previous_selected_feature_tcb_sha256") == SELECTED_TCB_SHA256,
-            "selected TCB changed from the 2.0.3 admission")
+    require(unsafe.get("previous_selected_feature_tcb_sha256") == PREVIOUS_SELECTED_TCB_SHA256,
+            "previous selected TCB baseline changed from the 2.0.4 admission")
     require(unsafe.get("local_unsafe_authorized") is False,
             "dependency admission cannot authorize local unsafe")
     require(verification.get("compilers") == COMPILERS, "compiler evidence matrix drift")
@@ -227,7 +231,7 @@ def validate_production_state(root: Path) -> None:
     dependency = table(adapter, "dependencies").get(PACKAGE)
     require(dependency == {"workspace": True}, "adapter dependency selection drift")
     workspace_dependency = table(read_toml(root / "Cargo.toml"), "workspace").get("dependencies", {}).get(PACKAGE)
-    require(workspace_dependency == {"version": "=2.0.4", "default-features": False},
+    require(workspace_dependency == {"version": "=2.1.0", "default-features": False},
             "workspace sanitization dependency selection drift")
     packages = read_toml(root / "Cargo.lock").get("package", [])
     selected = [entry for entry in packages if entry.get("name") == PACKAGE]
@@ -251,7 +255,7 @@ def validate_candidate(root: Path) -> None:
             "candidate must remain unpublished")
     require(package.get("rust-version") == "1.90", "candidate MSRV drift")
     dependency = table(manifest, "dependencies").get(PACKAGE)
-    require(dependency == {"version": "=2.0.4", "default-features": False},
+    require(dependency == {"version": "=2.1.0", "default-features": False},
             "candidate dependency selection drift")
 
     lock = read_toml(root / CANDIDATE / "Cargo.lock").get("package", [])

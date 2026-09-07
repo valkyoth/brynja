@@ -237,7 +237,7 @@ def test_dependency_contracts(baseline: dict) -> None:
     require_rejection(
         wrong_admitted_pin,
         "all-features",
-        "must pin sanitization to =2.0.4",
+        "must pin sanitization to =2.1.0",
         "a floating sanitization adapter pin",
     )
 

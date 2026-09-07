@@ -2,6 +2,9 @@
 
 ## 0.24.22 candidate
 
+- Re-review and exact-pin optional sanitization 2.1.0 with no upstream features
+  or transitive dependencies; retain adapter/core/FIPS isolation.
+
 - Add eight-slot transactional MD5 batches with bounded work/cancellation and
   distinct portable hardened ownership, plus unadmitted x86_64 AVX2 and AArch64
   NEON multi-message candidates behind opt-in CPU features.

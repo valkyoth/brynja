@@ -277,6 +277,6 @@ version = "0.1.0"
 
 [[package]]
 name = "sanitization"
-version = "2.0.4"
+version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6c00771cb2e89cc08c486588aa5b462190634313f8885fbdc375de33ee84612"
+checksum = "0c395c5164295d69016c014a3c2dd69d28a84b7e89ba971c1e81b17acc41e411"

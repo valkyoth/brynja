@@ -33,5 +33,5 @@
 "scripts/md5/check-md5-cpu-qemu.sh" = "95d15e69f8b8e19354dcd024d9d3009b5854426737f85df528f6dd86c5ba0b9b"
 "scripts/md5/capture-md5-cpu-native.py" = "6ce0115ea5ff68e1bce90873d4dfe060d19b88844f40f3e1ab788ffd928d538c"
 "scripts/md5/test-md5-native-capture.py" = "6bd54083bf0b33cfae1711a2aa69ffdfc066047e14e4ad31caf8758344fd0a84"
-"docs/legacy-md5-acceleration.md" = "08b1c0c1361b95858c97f4db3646d8c5622929be2d5f8cc13fdce5acdacc1f9b"
+"docs/legacy-md5-acceleration.md" = "54bb0b81e43b50511ae40350fa8638a963bbc6904df6b9403b05dc23f2439141"
 "security/md5-cpu-admissions.toml" = "6e5688d1ff6cbc64d5e8b1b3e63779c412d7b34cdcd3ad488a64c139208f23d1"

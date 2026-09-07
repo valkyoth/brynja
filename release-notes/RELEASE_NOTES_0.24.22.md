@@ -1,6 +1,6 @@
 # Brynja 0.24.22 Release Notes
 
-Status: locally verified implementation candidate; exceptional pentest and native evidence disposition pending
+Status: locally verified implementation candidate; supplied exceptional pentest clean; native evidence disposition and final release checks pending
 
 ## Scope and deliverables
 

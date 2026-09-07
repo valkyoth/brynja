@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 174 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.21 signed; v0.24.22 MD5 batch/SIMD candidates implemented and unadmitted; local verification passed; exceptional pentest and native disposition pending.
+Status: v0.20.0 published; milestones through v0.24.21 signed; v0.24.22 MD5 batch/SIMD candidates implemented and unadmitted; local verification passed; supplied pentest clean; native disposition and final release checks pending.
 
 The current candidate adds bounded ordinary/hardened MD5 batch APIs, unadmitted
 AVX2/NEON multi-buffer kernels and an optional host-observation adapter. Hardened

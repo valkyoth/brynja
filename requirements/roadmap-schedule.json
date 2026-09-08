@@ -513,12 +513,238 @@
       "scope_sha256": "3390a2ab8fed53defdb42cc93570e68a8264450ee25927eceddca44f8369993f"
     },
     {
+      "id": "0.24.30",
+      "version": "0.24.30",
+      "title": "Opt-In Acceleration Availability Contract",
+      "requires": [
+        "0.24.29"
+      ],
+      "scope_sha256": "27c20a13e81175ebd7e9d56a4709f79fb9a2f2601db4a3a38a6fdf2d27b48b52"
+    },
+    {
+      "id": "0.24.31",
+      "version": "0.24.31",
+      "title": "Static CPU Execution Authority",
+      "requires": [
+        "0.24.30"
+      ],
+      "scope_sha256": "3fd88f3ebded9979eeea24dd52d54066541ade05a445e90297c73ea92c95b519"
+    },
+    {
+      "id": "0.24.32",
+      "version": "0.24.32",
+      "title": "Hosted Runtime Feature Safety",
+      "requires": [
+        "0.24.31"
+      ],
+      "scope_sha256": "e7b5c18e1c2cebc0bdb4718c79796ee53312994e1028ac9357f6f69ea14e049d"
+    },
+    {
+      "id": "0.24.33",
+      "version": "0.24.33",
+      "title": "SHA-2 Ordinary Acceleration Reachability",
+      "requires": [
+        "0.24.32"
+      ],
+      "scope_sha256": "acb5340f1bde229a85959200f7de3eb9271b44b1c39e16dd3469af1dc8a59f73"
+    },
+    {
+      "id": "0.24.34",
+      "version": "0.24.34",
+      "title": "SHA-2 Hardened Accelerated Owners",
+      "requires": [
+        "0.24.33"
+      ],
+      "scope_sha256": "cccaaf69c7b031c1cdaaaeeb5e85ddcb3e3066b732a78c09caee57c3a377eb8f"
+    },
+    {
+      "id": "0.24.35",
+      "version": "0.24.35",
+      "title": "SHA-3 And SHAKE Ordinary CPU Integration",
+      "requires": [
+        "0.24.34"
+      ],
+      "scope_sha256": "df80404a1855414e7360b8022252cc40a5585a14a47a433bcbaf8069310a4c3f"
+    },
+    {
+      "id": "0.24.36",
+      "version": "0.24.36",
+      "title": "cSHAKE CPU And Hosted Sponge APIs",
+      "requires": [
+        "0.24.35"
+      ],
+      "scope_sha256": "66f1ebaf26c5cec8915f7abf5a99287b36e0cfa9c6163defa1b4a62a121ee2ae"
+    },
+    {
+      "id": "0.24.37",
+      "version": "0.24.37",
+      "title": "Hardened Keccak Acceleration",
+      "requires": [
+        "0.24.36"
+      ],
+      "scope_sha256": "860b7d8cf7d1825af7f88cf801207eebf5e9d92611dda4dbe40aaf0449b555f5"
+    },
+    {
+      "id": "0.24.38",
+      "version": "0.24.38",
+      "title": "KMAC Accelerated Public Operations",
+      "requires": [
+        "0.24.37"
+      ],
+      "scope_sha256": "4abbbf73db9fce8788177748fe7518227312074ba53b6c75a2ca53c2be8ca38f"
+    },
+    {
+      "id": "0.24.39",
+      "version": "0.24.39",
+      "title": "TupleHash Accelerated Public Operations",
+      "requires": [
+        "0.24.38"
+      ],
+      "scope_sha256": "a2cbb14a61ceb5739e4df4286794b14cef1ac88ce399ba35bc5f4843cd50c6b7"
+    },
+    {
+      "id": "0.24.40",
+      "version": "0.24.40",
+      "title": "ParallelHash Accelerated Scheduling",
+      "requires": [
+        "0.24.39"
+      ],
+      "scope_sha256": "a7558282e6b809458c201924cb292fadafe784fe5b299eb417a2add24eda1b98"
+    },
+    {
+      "id": "0.24.41",
+      "version": "0.24.41",
+      "title": "Legacy SHA-1 Operational Acceleration",
+      "requires": [
+        "0.24.40"
+      ],
+      "scope_sha256": "00941e442698486728b0843e213db2f4059cc2e2c2e63d7810ab752471cb7254"
+    },
+    {
+      "id": "0.24.42",
+      "version": "0.24.42",
+      "title": "Legacy SHA-1 Hardened Acceleration",
+      "requires": [
+        "0.24.41"
+      ],
+      "scope_sha256": "ab7e790a11460f144953aae5d19ca3250039d7e72bd960db8e07e97903c69d65"
+    },
+    {
+      "id": "0.24.43",
+      "version": "0.24.43",
+      "title": "MD5 Batch SIMD Operational Routing",
+      "requires": [
+        "0.24.42"
+      ],
+      "scope_sha256": "6da5c56dac3815f3b695e15ac432c966b0998b71002d3f469fff1372cc6a6d0a"
+    },
+    {
+      "id": "0.24.44",
+      "version": "0.24.44",
+      "title": "MD5 Hardened Batch SIMD",
+      "requires": [
+        "0.24.43"
+      ],
+      "scope_sha256": "464db711be136b6b4065985c97eb975f6ec555e2ed72b155ce42bff5eaa99d83"
+    },
+    {
+      "id": "0.24.45",
+      "version": "0.24.45",
+      "title": "SHA-224 And SHA-256 Multi-Buffer SIMD",
+      "requires": [
+        "0.24.44"
+      ],
+      "scope_sha256": "5c1f805af31f4a8d3f68c1e1d82f25b15926887c3d9c715fdde257a694bd56ef"
+    },
+    {
+      "id": "0.24.46",
+      "version": "0.24.46",
+      "title": "SHA-512 Family Multi-Buffer SIMD",
+      "requires": [
+        "0.24.45"
+      ],
+      "scope_sha256": "9cd709c474e20e42d1e65c18d40db91b88927f2549766fe60214ba541b0e5c82"
+    },
+    {
+      "id": "0.24.47",
+      "version": "0.24.47",
+      "title": "Keccak Multi-Buffer SIMD",
+      "requires": [
+        "0.24.46"
+      ],
+      "scope_sha256": "a35500a25a228ef66f0c5bfbd05542e40eaac7a73a1b79460ad9716e4bda96c2"
+    },
+    {
+      "id": "0.24.48",
+      "version": "0.24.48",
+      "title": "Hardened Multi-Buffer Hash Owners",
+      "requires": [
+        "0.24.47"
+      ],
+      "scope_sha256": "3ab3f24c49d0ba5ee7293dfb9b5208b9451a7584755e3cf1b6329598923ac6c6"
+    },
+    {
+      "id": "0.24.49",
+      "version": "0.24.49",
+      "title": "x86 Dedicated SHA-512 Backend",
+      "requires": [
+        "0.24.48"
+      ],
+      "scope_sha256": "95d002ab0edebe3385447e30961b53bf9c19c8a49e3f22f820fe35bfe9e58988"
+    },
+    {
+      "id": "0.24.50",
+      "version": "0.24.50",
+      "title": "RISC-V Explicit Experimental Execution",
+      "requires": [
+        "0.24.49"
+      ],
+      "scope_sha256": "399aca82f7baa4a1f6e328c0c689499025e60bd051f84444ecd0ff5dc18e06d9"
+    },
+    {
+      "id": "0.24.51",
+      "version": "0.24.51",
+      "title": "Facade Features And Package Reachability",
+      "requires": [
+        "0.24.50"
+      ],
+      "scope_sha256": "407f2ee925a0a1fe6c2f977985c042df09ba6c47b333ab02376bc33051421e57"
+    },
+    {
+      "id": "0.24.52",
+      "version": "0.24.52",
+      "title": "Acceleration Public Consumer Acceptance",
+      "requires": [
+        "0.24.51"
+      ],
+      "scope_sha256": "b94fd4c855014a96a70ed3c0014930a7fb6f64a5180cf586c566fa0414f0011b"
+    },
+    {
+      "id": "0.24.53",
+      "version": "0.24.53",
+      "title": "Acceleration Native Evidence Sweep",
+      "requires": [
+        "0.24.52"
+      ],
+      "scope_sha256": "a3956da527eb25c41108933ccad320c8a32bb7e4c06be0771476d8df05da20eb"
+    },
+    {
+      "id": "0.24.54",
+      "version": "0.24.54",
+      "title": "Opt-In Acceleration Final Closure",
+      "requires": [
+        "0.24.53"
+      ],
+      "scope_sha256": "78ebfbb7655f0b507e6508c20e2794e393dd6e9fc634078029a92ffab26f4de3"
+    },
+    {
       "id": "0.25.0",
       "version": "0.25.0",
       "title": "Complete Generic HMAC Construction",
       "requires": [
         "0.24.11",
-        "0.24.17"
+        "0.24.17",
+        "0.24.54"
       ],
       "scope_sha256": "711f3bd1c4a742f024490be45a37547ab105092c65ac22fb74bec3cced16961a"
     },
@@ -18437,5 +18663,5 @@
       "disposition": "Import/merge is the present operation; the family cannot claim bidirectional closure before explicit export acceptance."
     }
   ],
-  "audited_graph_sha256": "306ebd510895826673c0abd18a1e6966383c28b7a4a721028f5645f33a3b8de9"
+  "audited_graph_sha256": "18fcd640bef09e91213bdc18e2813f66fa5078c4f94813baf372b5230ee4cca1"
 }

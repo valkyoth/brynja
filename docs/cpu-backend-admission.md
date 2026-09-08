@@ -2,6 +2,19 @@
 
 Status: v0.24.4 has five SHA-2 and two Keccak candidates; zero backend admissions
 
+## Planned operational-policy replacement
+
+The [opt-in usability audit](ACCELERATION_USABILITY_AUDIT.md) supersedes this
+document's blanket admission requirement as the design for v0.24.30 onward.
+Tested, execution-safe public acceleration must not depend on independent
+cryptographic review, FIPS validation or a new authenticated-lane service.
+Those are separate assurance/validation claims. The old implementation lock and
+historical evidence records below remain unchanged until the numbered
+replacement passes its tests; this planning amendment does not enable kernels.
+Missing CPU support, failed KATs, unsafe dispatch and incomplete owned-secret
+cleanup still block the affected route. Explicit experimental QEMU-tested
+static use is distinct from native qualification.
+
 ## Purpose
 
 Brynja admits an optimized CPU backend because one exact implementation is

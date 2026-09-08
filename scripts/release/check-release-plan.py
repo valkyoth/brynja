@@ -7,6 +7,7 @@ import re
 import sys
 from pathlib import Path
 
+import acceleration_plan
 import catalogue_plan
 import expansion_plan
 import roadmap_schedule
@@ -151,6 +152,7 @@ def validate(release_path: Path, version_path: Path) -> None:
     expansion_plan.validate(entries)
     roadmap_schedule.validate(entries)
     text = release_path.read_text(encoding="utf-8")
+    acceleration_plan.validate(entries, text, version_path.read_text(encoding="utf-8"))
     matches = list(HEADING.finditer(text))
     versions = [match.group(1) for match in matches]
     expected = [version for version, _title, _scope in entries]

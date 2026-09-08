@@ -4,6 +4,10 @@ Historical review: numerical results below describe the earlier ordering pass.
 The current expansion and final gate positions are recorded in
 [ROADMAP_EXPANSION_AUDIT.md](ROADMAP_EXPANSION_AUDIT.md).
 
+The later [acceleration usability backfill](ACCELERATION_USABILITY_AUDIT.md)
+adds v0.24.30–v0.24.54 before HMAC with explicit prerequisite edges. It does
+not renumber existing milestones or change the v0.25.2 publishing checkpoint.
+
 Date: 2026-09-05. Baseline: `dbe6f4b`.
 This is a planning review, not an implementation or cryptographic assessment.
 

@@ -32,6 +32,13 @@ independent cryptographic review and FIPS validation stay negative.
 
 ## Release and residual limits
 
+The owner clarified optional acceleration availability: project-owned tests
+and evidence must allow usable routes without requiring independent review or
+FIPS certification. The [usability audit](../docs/ACCELERATION_USABILITY_AUDIT.md)
+adds detailed v0.24.30–v0.24.54 backfills before HMAC, with static/runtime safety,
+hardened ownership, missing batch/kernels, package acceptance and final evidence.
+This planning amendment changes no cryptographic code or admission state.
+
 The facade version becomes internal 0.24.29. Support versions and dependencies
 are unchanged; all crates remain non-publishing. The next scheduled public
 checkpoint remains v0.25.2. No TLS engine or CPU admission is introduced.

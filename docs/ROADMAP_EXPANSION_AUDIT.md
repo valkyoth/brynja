@@ -4,6 +4,12 @@ Date: 2026-09-05. Baseline: `b3c92ce`. Planning only; no cryptographic code or c
 
 ## Result and sequence
 
+The counts immediately below describe the 2026-09-05 expansion. The
+[2026-09-08 acceleration usability audit](ACCELERATION_USABILITY_AUDIT.md)
+adds 25 pre-HMAC stops, v0.24.30–v0.24.54. The current totals are **2029**
+milestones, **111** public checkpoints and **1918** development tags; the
+126-family expansion register and its historical identities remain unchanged.
+
 All five groups from the gap review now have explicit owners in both
 [VERSION_PLAN.md](VERSION_PLAN.md) and [RELEASE_PLAN.md](RELEASE_PLAN.md).
 The [expansion register](ROADMAP_EXPANSION_REGISTER.json) binds 126 family/API

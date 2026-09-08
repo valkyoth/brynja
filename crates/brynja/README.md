@@ -35,9 +35,9 @@ All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged a
 
 ## Add The Crate
 
-Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.29** APIs.
-For published foundation APIs: `cargo add brynja --no-default-features`.
-For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
+CPU/SIMD candidates are not yet usable in ordinary downstream builds. The [opt-in acceleration plan](https://github.com/valkyoth/brynja/blob/main/docs/ACCELERATION_USABILITY_AUDIT.md) adds optional routes before HMAC while retaining portable defaults and separate independent-review/FIPS claims.
+
+Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.29** APIs. For published foundation APIs: `cargo add brynja --no-default-features`. For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
 
 ## Examples
 
@@ -145,8 +145,7 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 
 ### Modern Message Authentication
 
-The complete KMAC/KMACXOF family here comprises KMAC128, KMAC256,
-KMACXOF128, and KMACXOF256.
+The complete KMAC/KMACXOF family here comprises KMAC128, KMAC256, KMACXOF128, and KMACXOF256.
 
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
@@ -182,6 +181,7 @@ FIPS validation is a separate official claim from implementation and independent
 | FIPS 140-3 cryptographic module | ❌ Not implemented | Future `brynja-fips-module`, `brynja-fips` | ❌ Not FIPS validated |
 
 ## Workspace
+
 | Package | Purpose |
 | --- | --- |
 | `brynja` | Modern curated facade |

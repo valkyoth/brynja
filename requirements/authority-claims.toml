@@ -1135,3 +1135,8 @@ rationale = "The WebAuthn relying-party verification expansion is planned, not a
 class = "internal-security-design"
 versions = ["0.475.0"]
 rationale = "This complete expansion integration and pentest checkpoint reconciles each admitted source, API, evidence and dependency owner; it supplies no substitute normative authority and cannot close unimplemented research or protocol operations by omission."
+
+[[plan_boundary]]
+class = "planned-authority-admission"
+versions = ["0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34", "0.24.35", "0.24.36", "0.24.37", "0.24.38", "0.24.39", "0.24.40", "0.24.41", "0.24.42", "0.24.43", "0.24.44", "0.24.45", "0.24.46", "0.24.47", "0.24.48", "0.24.49", "0.24.50", "0.24.51", "0.24.52", "0.24.53", "0.24.54"]
+rationale = "The opt-in acceleration usability backfill is planned, not runtime activation or cryptographic approval. Before each implementation, bind its exact Rust intrinsic/target-feature and platform CPU/OS-state authorities, algorithm requirements, owned-secret lifecycle and public API profiles; existing algorithm vectors do not establish missing runtime dispatch, SIMD, native measurement or cleanup coverage."

@@ -60,6 +60,12 @@ independent cryptographic or protocol verification.
 
 ### Modern Hash Functions
 
+Acceleration is a separate capability from portable algorithm completion.
+Currently, CPU/SIMD candidates are not selectable in ordinary downstream
+builds. The [opt-in acceleration plan](https://github.com/valkyoth/brynja/blob/main/docs/ACCELERATION_USABILITY_AUDIT.md)
+adds usable default-off routes before HMAC; portable operation remains the
+default. Independent review and FIPS status will remain separate from availability.
+
 SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256;
 SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256.
 

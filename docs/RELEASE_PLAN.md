@@ -190,11 +190,39 @@ in the optional first-party `no_std` backend package; standard-library runtime
 detection lives in a separate opt-in adapter. An acceleration milestone cannot
 start until its release notes and evidence index point to the preceding tagged
 portable-acceptance boundary and frozen fixture. Exact feature evidence, direct
-KATs, health and quarantine, scalar differentials, native AMD, Intel, Apple
-and AWS Arm measurements, qualifying RISC-V evidence, per-compiler emitted
-code and side-channel results, and explicit FIPS disposition precede
-activation. QEMU and cross-builds are supplemental. An unavailable or slower
-path remains visibly candidate, rejected or scalar-only.
+KATs, health and quarantine, scalar differentials, per-compiler emitted code,
+owned-secret cleanup and explicit qualification dispositions precede activation.
+Native AMD, Intel, Apple and AWS Arm measurements qualify only the tested
+environments. A slower path may remain explicitly selectable while preferred
+selection uses scalar. QEMU and cross-builds never establish native performance.
+
+Independent cryptographic review and FIPS validation are not prerequisites for
+ordinary opt-in acceleration. Operational availability, experimental/emulated
+coverage, native evidence, independent review and FIPS validation are separate
+claims; failed KATs, unsupported instructions and missing owned-secret cleanup
+still block the affected route. Portable defaults remain available. Cargo
+features select implementations, not proof of CPU support. No public route may
+require repository-only evidence cfgs or an independent attestation service.
+
+The [acceleration usability audit](ACCELERATION_USABILITY_AUDIT.md) assigns
+v0.24.30–v0.24.54 to existing-family backfills before HMAC. This is planned work,
+not activation of the current candidates. Future family design must inventory
+dedicated instructions, single-state SIMD, independent-message SIMD, hosted
+threading and ordinary/hardened public profiles. Add review-sized numbered
+patches before final family acceptance whenever a useful promised profile does
+not fit its implementation row; record an explicit measured/not-applicable or
+hardware-unavailable disposition instead of claiming every algorithm requires
+every ISA. The later performance gate is a regression gate, not the first point
+at which earlier completed acceleration becomes usable. Final acceptance must
+exercise real package-external opt-in routes, not pass by skipping all backends.
+
+Freeze usable consumer tests before the final native sweep; rerun affected
+evidence after relevant source, dispatch, cleanup, toolchain or dependency
+changes. Self-reported project evidence must bind source, binary, environment,
+commands and results without claiming independent verification. Native results
+are required for native performance claims; explicitly experimental static
+routes may carry QEMU-only correctness evidence with no native qualification.
+Validated-module restrictions remain certificate- and environment-specific.
 
 ## Required Milestone Contract
 
@@ -4145,6 +4173,681 @@ Exit criteria:
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
 - `v0.24.29 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.30 - Opt-In Acceleration Availability Contract
+
+Status: planned
+
+Plan scope: Separate operational availability, native measurement, independent review and FIPS validation; specify default-off features, Portable/Prefer/Require selection, exact backend identity, typed unsupported/quarantined errors and public package reachability without evidence-only cfgs.
+
+Goal: Freeze one non-authorizing status vocabulary and feature/API contract for core, hosted and legacy consumers.
+
+Deliverables:
+
+- Complete v0.24.29 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Replace the unconditional candidate lock with a reviewed operational-readiness policy; neither third-party sign-off nor a FIPS certificate is required for ordinary tested use. Retain historical evidence and validation claims separately.
+- Specify allocation-free static selection and separate opt-in hosted runtime selection. Portable never dispatches; Prefer reports fallback; Require never silently falls back, including when a streaming session loses health.
+- Inventory every current kernel, feature, symbol, algorithm identity and ordinary/hardened profile; retain old unadmitted behavior until the corresponding activation implementation and tests land.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Reject forged readiness, reviewer/FIPS auto-promotion, hidden fallback and evidence-cfg-only public availability in policy mutations.
+- Compile proposed downstream API examples and feature graphs without making any existing backend operational in this contract-only step.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.30 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.31 - Static CPU Execution Authority
+
+Status: planned
+
+Plan scope: Implement no_std static execution authority for reviewed backends using complete compiler target-feature bundles, real startup KATs, health generations and fail-closed session construction; distinguish software readiness from independent review and FIPS status.
+
+Goal: Make static opt-in construction usable under an explicit executable target contract.
+
+Deliverables:
+
+- Complete v0.24.30 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Confine construction to the exact architecture and full feature bundle; Cargo features select code but do not establish CPU support. Inventory SIMD register and OS-state prerequisites.
+- Bind every call to a healthy capability and generation; preserve unsupported-target rejection and quarantine. Remove evidence-only dependence only for reviewed, operationally ready kernels.
+- Document that a target-specialized binary requires compatible CPUs throughout execution. Never reinterpret !Send/!Sync or a caller boolean as migration protection.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Run missing-feature and unhealthy-KAT negative binaries before instruction entry, plus positive packaged no_std callers on supported native or explicitly emulated targets.
+- Mutate full-bundle checks, KAT entry and generation checks; prove each bypass fails without executing unsupported instructions.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.31 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.32 - Hosted Runtime Feature Safety
+
+Status: planned
+
+Plan scope: Implement separate std runtime execution-authority adapters with platform-supported CPU and OS-state detection, documented scheduler/VM migration assumptions and observable fallback; never require a hosted dependency in no_std cores.
+
+Goal: Make runtime selection sound on each promised hosted platform before connecting hash APIs.
+
+Deliverables:
+
+- Complete v0.24.31 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Audit Linux/Android AArch64 HWCAP, macOS/iOS supported feature APIs, Windows and BSD detection guarantees, and x86 AVX OS-state checks using primary platform sources.
+- Use supported system-wide feature guarantees where available. Where guarantees are absent, retain safe portable mode and explicit target-specialized use; isolate any reviewed affinity/platform adapter rather than trusting thread-local CPUID alone.
+- Implement portable, preferred and required selection reports without machine names, secrets, network access, startup threads or mandatory process-global changes.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Inject detector and affinity failures, heterogeneous CPU masks, unavailable OS state, re-selection and quarantine; verify exact error/fallback behavior.
+- Exercise native AMD, Intel, AWS Arm and Apple M2 where available; compile other platform adapters and do not claim execution where only cross-compilation exists.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.32 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.33 - SHA-2 Ordinary Acceleration Reachability
+
+Status: planned
+
+Plan scope: Connect all six named SHA-2 identities and all 510 general SHA-512/t parameters to operational static and hosted backends through complete byte/bit one-shot and streaming public APIs, with portable, preferred and required routes.
+
+Goal: Remove the observed always-scalar hosted SHA-512 gap without weakening digest identity or length checks.
+
+Deliverables:
+
+- Complete v0.24.32 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Complete hosted SHA-384/512, named /224 and /256 and general-t update/finalization APIs; keep derived IVs and distinct digest types exact.
+- Preserve consuming bit tails, checked length admission before mutation, partial-block buffering and required-route quarantine semantics.
+- Expose route reporting which distinguishes accelerated compression from portable padding/IV work; document accepted small-input behavior rather than advertising all work as SIMD.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Replay official vectors, all 4590 general-t oracle cases, irregular streaming, every padding boundary and all supported runtime/static routes through packaged consumers.
+- Compile no-op, scalar-substitution, wrong-IV and false-route mutants; reject consuming-state reuse and errors that mutate live state.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.33 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.34 - SHA-2 Hardened Accelerated Owners
+
+Status: planned
+
+Plan scope: Implement secret-bearing SHA-2 acceleration for existing instruction backends with sealed owner-backed scratch, complete owned-region destruction, typed secret output and byte/bit APIs for named identities and general SHA-512/t.
+
+Goal: Allow real keyed consumers to request acceleration without routing secrets through ordinary states.
+
+Deliverables:
+
+- Complete v0.24.33 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Own schedules, vector staging, chaining words, block copies and digest staging within hardened lifetimes; use existing reviewed clearing primitives and register each region.
+- Preserve non-Copy/non-Clone ownership, explicit declassification, secret-destination clearing, public-output atomicity and error/cancellation/unwind/Drop cleanup.
+- Keep a backend unavailable for hardened use if its source-owned cleanup contract is incomplete; registers, compiler copies and spills remain accurately bounded residuals, not impossible total-erasure prerequisites.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Run per-region destructor observations and compiled cleanup mutants under debug/release, Miri where supported, sanitizers and compiler-endpoint MIR/LLVM/assembly inspection.
+- Compare ordinary, hardened-portable and hardened-accelerated outputs across all identities, bit tails, failures and general-t widths; reject any ordinary-state import on secret paths.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.34 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.35 - SHA-3 And SHAKE Ordinary CPU Integration
+
+Status: planned
+
+Plan scope: Connect all four SHA-3 hashes and both SHAKE XOFs to existing AVX2 and AArch64 SHA3 Keccak kernels with default-off leaf features, static/hosted selection and ordinary byte/bit absorbing and squeezing APIs.
+
+Goal: Turn the isolated Keccak kernels into public algorithm routes.
+
+Deliverables:
+
+- Complete v0.24.34 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Route each complete permutation through the selected healthy backend while preserving suffixes, rate collisions, canonical partial bytes and consuming bit transitions.
+- Support fixed digest and incremental multi-squeeze output with exact route identity; session failure cannot silently switch a required reader.
+- Keep portable constructors and default graphs unchanged and distinguish this single-state vectorized permutation from multi-message SIMD.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Replay FIPS 202 byte/bit vectors, independent Keccak differentials, rate-boundary collisions and cross-permutation output through package-only consumers.
+- Inject permutation no-ops, wrong suffixes and false backend reports; test reader failure before public output mutation.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.35 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.36 - cSHAKE CPU And Hosted Sponge APIs
+
+Status: planned
+
+Plan scope: Expose accelerated cSHAKE128/256 byte/bit, customization, function-name, one-shot and incremental XOF operations, and complete hosted adapters for the ordinary SHA-3/SHAKE/cSHAKE family.
+
+Goal: Finish public sponge-family routing without changing domain separation.
+
+Deliverables:
+
+- Complete v0.24.35 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Keep empty N/S equivalence to SHAKE and nonempty cSHAKE framing exact; thread selected backend identity through bytepad and all absorb/squeeze transitions.
+- Use borrowed or caller-owned bounded state without introducing allocation in leaves; keep hosted imports downstream and optional.
+- Give required acceleration explicit typed failure and observable fallback in preferred mode across initialization, streaming and output.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Replay SP 800-185 vectors, all customization and bit-length boundaries, SHAKE equivalence and independent differential outputs.
+- Run packaged leaf and hosted examples on supported targets; mutate bytepad, backend loss and scalar substitution during squeeze.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.36 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.37 - Hardened Keccak Acceleration
+
+Status: planned
+
+Plan scope: Implement sealed hardened accelerated SHA-3/SHAKE/cSHAKE absorb and reader owners with owner-backed permutation scratch, mandatory destruction and explicit public versus typed-secret output.
+
+Goal: Provide a genuine secret-safe accelerated sponge boundary for existing constructions.
+
+Deliverables:
+
+- Complete v0.24.36 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Audit both Keccak kernels for owned lanes, vector staging, permutation temporaries, suffix state and squeeze output; refactor scratch ownership instead of erasing only the outer sponge.
+- Preserve in-place absorbing-to-squeezing transitions, consuming finalization and complete cleanup on initialization failure, cancellation, unwind and Drop.
+- Expose only backends meeting the declared owned-memory contract; document register/cache/spill limitations and prohibit ordinary-state detours.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Use output-clearing, cancellation and destructor probes plus compiled region-removal mutants for every backend and owner transition.
+- Run byte/bit differentials and exact compiler-endpoint cleanup/code-generation evidence; test no_std and negative ownership/trait compilation.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.37 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.38 - KMAC Accelerated Public Operations
+
+Status: planned
+
+Plan scope: Route all four KMAC/KMACXOF identities through the hardened accelerated cSHAKE boundary, including keyed initialization, byte/bit messages, fixed tags, verification and incremental typed-secret XOF output.
+
+Goal: Make acceleration selectable for KMAC without ordinary secret storage.
+
+Deliverables:
+
+- Complete v0.24.37 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Expose explicit portable/preferred/required construction using hardened execution capabilities; retain key/domain/output-length separation.
+- Preserve consuming fixed-tag finalization, constant-time verification, wrong-length rejection, secret output classification and complete private-state cleanup.
+- Document backend reuse and key ownership without global defaults or key-bearing selection reports.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Replay official KMAC examples and independent byte/bit campaigns through all public operations and available backends.
+- Test invalid tags, output lengths, failing KATs, interrupted XOF, unwind and cleanup mutants; inspect constant-work verification and emitted destruction.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.38 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.39 - TupleHash Accelerated Public Operations
+
+Status: planned
+
+Plan scope: Integrate all four TupleHash/TupleHashXOF identities with hardened CPU-backed cSHAKE while preserving exact item writers, byte/bit tuples, fixed and extendable outputs and explicit output ownership.
+
+Goal: Make tuple framing and affine item ownership work unchanged with accelerated permutation.
+
+Deliverables:
+
+- Complete v0.24.38 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Bind each writer and reader to the selected owner and health generation; forbid incomplete items, excess bits and reuse after consuming finalization.
+- Expose ordinary-public and secret-bearing profiles through their correct existing owners and default-off CPU selection.
+- Retain tuple order, encoded lengths and fixed-versus-XOF suffix identity under every backend and failure.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Replay NIST vectors, arbitrary-bit tuple differentials, empty versus empty-item distinctions and irregular writer partitions.
+- Test backend loss mid-item, poisoned destinations, incomplete-item Drop/unwind and all owned-region cleanup using real public consumers.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.39 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.40 - ParallelHash Accelerated Scheduling
+
+Status: planned
+
+Plan scope: Connect all four ParallelHash identities to hardened accelerated leaf/root hashing and bounded serial, caller-scheduled and optional std-threaded APIs, preserving work budgets and worker-result provenance.
+
+Goal: Combine hardware execution with existing parallel APIs without confusing threads and SIMD.
+
+Deliverables:
+
+- Complete v0.24.39 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Make per-worker backend selection and root selection explicit; a worker result remains bound to its identity, index, length and generation.
+- Retain bounded caller-owned buffers, cancellation, outstanding-job limits, deterministic ordered combination and secret cleanup of worker/root/output state.
+- Avoid unbounded nested thread pools and silent required-to-portable workers; report threaded and instruction execution independently.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Compare sequential, scheduled and threaded results for all block sizes and identity variants across portable and accelerated workers.
+- Inject reordered/duplicate/stale results, worker errors, cancellation and cleanup failures; verify output atomicity and bounded work under mixed routes.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.40 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.41 - Legacy SHA-1 Operational Acceleration
+
+Status: planned
+
+Plan scope: Enable reviewed x86 SHA and AArch64 SHA1 static and hosted ordinary SHA-1 byte/bit streaming and one-shot APIs with explicit legacy-only dependency and feature paths.
+
+Goal: Make the existing SHA-1 candidates usable without exposing legacy algorithms from the modern facade.
+
+Deliverables:
+
+- Complete v0.24.40 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Replace the observational-only hosted selector with real execution authority and explicit required/preferred modes.
+- Retain SHA-1 identity, padding and checked length bounds and disclose collision weakness independently of performance.
+- Keep every modern, TLS-default, PKIX-default and FIPS-approved graph free from automatic SHA-1 selection.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Replay all NIST bit/byte vectors, million-byte and independent differential cases through packaged legacy-only consumers.
+- Test unavailable features, false reports, quarantined sessions and modern graph isolation, including Cargo feature unification.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.41 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.42 - Legacy SHA-1 Hardened Acceleration
+
+Status: planned
+
+Plan scope: Add hardened secret-bearing SHA-1 CPU operations with owned scratch destruction and typed output while retaining separate legacy-only eligibility and collision warnings.
+
+Goal: Allow later HMAC-SHA-1 compatibility to reuse a complete accelerated hardened owner.
+
+Deliverables:
+
+- Complete v0.24.41 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Register every accelerated schedule, block, lane and digest staging region and clear it through the reviewed destruction boundary.
+- Preserve ordinary/hardened separation, consuming bit tails, cancellation and public/secret destination semantics.
+- Make hosted and static profiles explicit; acceleration cannot imply modern security or FIPS service approval.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Compare hardened scalar and accelerated byte/bit outputs and test error, Drop and recoverable-unwind cleanup for each region.
+- Run compiled cleanup mutants, ownership-negative consumers and endpoint emitted-code checks plus legacy graph isolation.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.42 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.43 - MD5 Batch SIMD Operational Routing
+
+Status: planned
+
+Plan scope: Make existing AVX2 eight-lane and AArch64 NEON four-lane MD5 batch backends reachable from ordinary legacy no_std and hosted APIs with explicit selection and accurate per-batch route reporting.
+
+Goal: Replace the hosted MD5 always-portable selector with usable bounded SIMD.
+
+Deliverables:
+
+- Complete v0.24.42 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Specify complete batches, empty/inactive lanes, unequal message lengths, arbitrary-bit final tails and deterministic result ordering.
+- Report scalar suffix and padding work honestly; required SIMD rejects an ineligible workload before output mutation rather than silently claiming vector execution.
+- Retain single-message portable MD5, bounded caller-owned lane arrays and strict modern/legacy isolation.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Replay independent MD5 byte/bit oracles over lane permutations, unequal lengths and poisoned output buffers.
+- Reject no-op/partial-write/scalar-substitution/report-forgery mutants and test unsupported features, quarantine and exact SIMD block counters.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.43 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.44 - MD5 Hardened Batch SIMD
+
+Status: planned
+
+Plan scope: Implement hardened MD5 SIMD batches with affine per-lane owners, complete vector staging destruction, typed secret outputs and explicit hosted/static selection.
+
+Goal: Extend the existing portable hardened batch without exposing secrets to ordinary SIMD scratch.
+
+Deliverables:
+
+- Complete v0.24.43 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Own packed lanes, schedule words, message staging, partial tails and output staging and clear all active and inactive storage on every lifecycle exit.
+- Define batch-wide failure atomicity and cleanup for partly completed lanes, cancellation, reuse prevention and unwind.
+- Keep batch dimensions public and bounded and preserve collision warnings and isolation from modern approved services.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Use mixed public/secret misuse negatives, inactive-lane poisoning, cancellation and compiled cleanup mutants in downstream fixtures.
+- Compare every lane against hardened portable MD5 and inspect generated destruction for both SIMD kernels and supported compiler endpoints.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.44 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.45 - SHA-224 And SHA-256 Multi-Buffer SIMD
+
+Status: planned
+
+Plan scope: Implement bounded independent-message SHA-224/256 SIMD batching with first-party x86 AVX2 and AArch64 NEON backends, distinct from dedicated single-stream SHA instructions.
+
+Goal: Offer useful batch parallelism where dedicated SHA instructions are absent or independent work benefits.
+
+Deliverables:
+
+- Complete v0.24.44 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Freeze caller-owned batch shapes, per-lane algorithm identity, unequal lengths, bit tails, lane ordering and maximum work; keep the initial SIMD profile ordinary/public.
+- Implement review-sized architecture modules and scalar tail handling; dispatch by measured workload rather than assuming wider SIMD always wins.
+- Document target feature bundles and compare dedicated-instruction sequential batches against SIMD; record any no-benefit backend instead of making unsupported speedup claims.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Run vector lane permutations, inactive lanes, all padding boundaries and independent SHA-2 oracle comparisons with poisoned outputs.
+- Prove actual vector execution with compiled substitution mutants and measure native throughput/latency on AMD, Intel and Arm where the exact features exist.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.45 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.46 - SHA-512 Family Multi-Buffer SIMD
+
+Status: planned
+
+Plan scope: Implement bounded ordinary SHA-384/512, named SHA-512/224 and /256 and general SHA-512/t independent-message SIMD batches over x86 AVX2 and AArch64 NEON.
+
+Goal: Provide SHA-512-family vector opportunities independently of dedicated SHA-512 instructions.
+
+Deliverables:
+
+- Complete v0.24.45 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Keep validated t and distinct IV/digest identity per lane, explicit digest widths and canonical bit outputs; do not truncate a generic SHA-512 result in place of derived-IV hashing.
+- Preserve checked 128-bit accounting, unequal lengths, bounded batch ownership and scalar partial-lane handling.
+- Expose explicit batch-only routes and workload eligibility; a single stream is not advertised as parallel independent-message hashing.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Replay all 510 valid t values with lane mixing, named-identity cross-checks, bit tails, malformed widths and poisoned destination rejection.
+- Test feature failure, quarantine, actual vector routing and public package usability; collect native comparison data against dedicated/scalar paths.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.46 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.47 - Keccak Multi-Buffer SIMD
+
+Status: planned
+
+Plan scope: Implement bounded ordinary independent-state Keccak SIMD batches and public SHA-3/SHAKE/cSHAKE batch APIs over x86 AVX2 and AArch64 NEON, separate from existing single-state accelerated permutations.
+
+Goal: Expose independent-message vectorization without changing sponge domains.
+
+Deliverables:
+
+- Complete v0.24.46 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Support per-lane rates, suffixes, byte/bit input and finite requested XOF output with checked work bounds and explicit incompatible-lane grouping.
+- Keep scratch caller-owned and batch sizes public; preserve output ordering, inactive-lane handling and scalar tail semantics.
+- Differentiate this API from ParallelHash tree hashing and std threading; benchmark combinations before selecting a preferred route.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Compare all FIPS 202 and cSHAKE identities against independent oracles under lane reorder, mixed lengths and cross-permutation output.
+- Inject stale/no-op/partial-write and false-vector routes; test oversized output/work rejection before mutation and normal packaged execution.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.47 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.48 - Hardened Multi-Buffer Hash Owners
+
+Status: planned
+
+Plan scope: Add hardened ownership to the new SHA-2 and Keccak batch APIs and integrate eligible batched leaves into ParallelHash without losing secret classification or bounded scheduling.
+
+Goal: Close the secret-bearing profile of new batch backends before downstream keyed use.
+
+Deliverables:
+
+- Complete v0.24.47 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Use sealed non-cloneable lane owners and typed destinations; inventory vector packing, per-lane metadata, schedules, root staging and partial-output storage.
+- Implement all-region cleanup on success, failed batch admission, mid-batch health loss, cancellation, unwind and Drop; preserve public-output atomicity.
+- Keep KMAC/TupleHash item semantics distinct from independent-message batches and keep required backends fail-closed in nested consumers.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Test each family and architecture separately with destructor probes, inactive-lane cleanup and compiled omission mutants; split into more patch stops if the owner work exceeds one review.
+- Compare hardened scalar/SIMD results, verify package ownership negatives and inspect MIR/LLVM/assembly cleanup across affected targets and compiler endpoints.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.48 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.49 - x86 Dedicated SHA-512 Backend
+
+Status: planned
+
+Plan scope: Implement a first-party x86_64 SHA-512 instruction backend with the exact sha512 and avx/OS-state bundle, Rust 1.90 compatibility, public SHA-512-family routing and explicitly measured or emulator-only evidence.
+
+Goal: Fill the missing dedicated x86 SHA-512 kernel without inferring support from SHA-NI or a cloud instance name.
+
+Deliverables:
+
+- Complete v0.24.48 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Add isolated intrinsic kernels and real KATs for SHA-384/512, named variants and all valid general t; register required features and code-generation symbols.
+- Connect ordinary APIs and add hardened owner-backed scratch before claiming the hardened profile; retain AVX2/scalar routes on older AMD/Intel hardware.
+- Probe actual available machines; absence of native SHA-512 support is an explicit experimental/emulated disposition, not invented qualification or a blocker on unrelated measured backends.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Verify endpoint compilation and emitted SHA-512 instructions, arbitrary initial-state compression differentials and all general-t public cases.
+- Run missing-feature and OS-state negatives, quarantined KATs and compiled route mutants; collect native performance/timing only on a genuinely qualifying CPU.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.49 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.50 - RISC-V Explicit Experimental Execution
+
+Status: planned
+
+Plan scope: Make existing RV64 Zknh SHA-2 candidates usable through explicit default-off target-specialized experimental APIs with QEMU correctness evidence, truthful no-native-qualification status and no automatic runtime dispatch.
+
+Goal: Permit deliberate supported-ISA use without pretending the available non-Zknh cloud server qualifies.
+
+Deliverables:
+
+- Complete v0.24.49 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Require complete compiler-declared target features and healthy sessions; preserve portability on generic RV64 and keep unqualified hardened paths disabled until owned-cleanup checks pass.
+- Publish exact emulator version/model, compiler, corpus and limitations; independent review and native measurements remain separate status axes.
+- Record RVV/Zvknha/Zvknhb and vectorized legacy/hash opportunities as separately numbered future work before implementation; retain post-1.0 community native qualification where hardware is unavailable.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Execute SHA-224/256 and every SHA-512 identity/general t under explicit QEMU models, rejecting generic RV64 and malformed feature configurations.
+- Run code-generation, quarantine, no-fallback and packaged public API tests; use the existing real RISC-V host only for instructions it actually supports.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.50 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.51 - Facade Features And Package Reachability
+
+Status: planned
+
+Plan scope: Expose completed modern acceleration through explicit no_std facade features and separate hosted companion packages; expose legacy acceleration only from explicitly selected legacy crates and preserve independent publishing.
+
+Goal: Ensure users can install and select the real routes without repository-only switches.
+
+Deliverables:
+
+- Complete v0.24.50 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Complete feature forwarding for byte/bit, streaming, fixed/XOF, general-t and batch profiles; ordinary Cargo features never imply CPU support or FIPS approval.
+- Document leaf-only, modern facade, hosted preferred/required and legacy-only examples, plus forced portable deployment and no global default.
+- Verify package includes, exact dependency closure, rustdoc cfgs, MSRV and no unintended std/external/legacy edges; keep the next publication checkpoint at v0.25.2.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Build unpacked crate archives in fresh downstream projects without cfg(test), evidence cfgs, dev-dependencies or private symbols.
+- Test default/no-default/all relevant feature combinations and Cargo feature unification; verify release dry-run cannot publish an intermediate v0.24 tag.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.51 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.52 - Acceleration Public Consumer Acceptance
+
+Status: planned
+
+Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.
+
+Goal: Demonstrate actual consumer usability before expensive final evidence collection.
+
+Deliverables:
+
+- Complete v0.24.51 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Use official/independent expected outputs on representative real data; require actual instruction/vector counters in assurance observations without changing production outputs.
+- Exercise default portable, explicitly preferred and required routes plus unsupported/quarantined cases; mark experimental RISC-V and other unmeasured routes separately.
+- Freeze source, package and fixture identities; reject blanket skipping of every accelerated route on a capable qualifying test lane.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Run compiled no-op, scalar-only, partial-write, wrong-report and cleanup mutants; require secret/public destination guarantees and all ownership-negative examples.
+- Repeat host and no_std consumers under supported compiler endpoints and applicable full matrix; validate every documented feature command.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.52 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.53 - Acceleration Native Evidence Sweep
+
+Status: planned
+
+Plan scope: Collect exact-source native correctness, performance, timing and resource observations after frozen consumer acceptance on available AMD, qualifying Intel, AWS Arm and Apple M2 machines; keep QEMU and unavailable ISA claims separate.
+
+Goal: Publish reproducible project-owned evidence sufficient for ordinary opt-in availability without pretending it is independent verification.
+
+Deliverables:
+
+- Complete v0.24.52 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Bind commit, selected package graph, compiler, build flags, CPU/OS features, command, result and artifact digests; remove private host names, addresses and keys.
+- Run per-backend KAT/differentials, workload-sensitive single/batch/thread benchmarks and relevant side-channel/cleanup observations; report regressions and scalar-preferred thresholds honestly.
+- Use scoped/local and headless shards for lengthy evidence; reuse old records only with an explicit unchanged implementation/dependency/compiler disposition. Changed routes get fresh captures.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Validate manifest integrity, exact binary/source binding and failed/incomplete-run rejection; do not require a new remote-attestation infrastructure for self-reported project evidence.
+- Invalidate affected observations when any implementation, toolchain, dispatch, cleanup or fixture change alters the tested claim; never relabel emulator timing as native.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.53 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.54 - Opt-In Acceleration Final Closure
+
+Status: planned
+
+Plan scope: Close the acceleration backfill before HMAC with operational public APIs, complete profile and evidence dispositions, default-portable examples and separate implementation, acceleration, independent-review and FIPS status.
+
+Goal: Finish the pre-HMAC availability audit with no hidden candidate-only route represented as usable.
+
+Deliverables:
+
+- Complete v0.24.53 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Resolve every inventory row to implemented opt-in, explicitly experimental opt-in, or a concrete numbered follow-up for unavailable hardware/no justified optimization; no blanket unadmitted disposition may hide an implemented promised route.
+- Update leaf/facade README examples and status tables without changing portable mathematical completion or claiming speedups/secret guarantees beyond evidence.
+- Apply the same contract to every later hash, MAC, cipher, arithmetic/PQC implementation and protocol consumer; new relevant optimizations receive review-sized child milestones before their final family closure.
+- Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
+
+Verification:
+
+- Rerun frozen public acceptance after native dispositions and all changed-scope security checks; require a fresh owner pentest/retest for operational/unsafe/secret trust changes.
+- Check the entire dependency-ordered plan, current feature graph, publish selection and documentation consistency; retain full gates at public checkpoints and impact-scoped expensive tests elsewhere.
+- Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
+
+Exit criteria:
+
+- Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
+- `v0.24.54 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - Complete Generic HMAC Construction
 

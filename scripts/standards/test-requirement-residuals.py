@@ -128,7 +128,10 @@ def test_current_residual_repository() -> None:
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 131
-    assert len(artifact["plans"]) == 2003
+    assert len(artifact["plans"]) == 2028
+    plans = {plan["version"]: plan for plan in artifact["plans"]}
+    for patch in range(30, 55):
+        assert plans[f"0.24.{patch}"]["boundary"]["class"] == "planned-authority-admission"
     assert len(artifact["surfaces"]) == 4462
     assert len(artifact["requirements"]) == 175
     assert len(artifact["local_rights"]) == 18

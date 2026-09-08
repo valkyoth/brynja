@@ -951,8 +951,9 @@ milestones continue through `0.24.25`; the current internal `0.24.26`
 candidate implements opt-in ordinary/hardened byte/bit hashing and typed secret
 outputs under the [general SHA-512/t contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
 General SHA-512/t remains **In progress** through final v0.24.29 acceptance;
-the six named SHA-2 algorithms stay complete. This candidate awaits owner
-pentest and is not yet tagged or published.
+the six named SHA-2 algorithms stay complete. The owner retest is green;
+release checks and green GitHub/CodeQL are required before tagging. This
+candidate is not yet tagged or published.
 All SHA-1 and MD5 candidates remain unadmitted; hardened legacy execution remains portable. Both legacy leaves have ordinary and hardened
 byte/bit APIs and completed v0.24.23 public acceptance, but remain collision-broken,
 unpublished and absent from the modern facade. SP 800-185 remains **Fully

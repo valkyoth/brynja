@@ -1,7 +1,7 @@
 # General SHA-512/t authority and public API contract
 
 Status: v0.24.26 implements ordinary/hardened byte/bit hashing for every valid t,
-typed secret outputs and explicit declassification; awaiting owner pentest.
+typed secret outputs and explicit declassification; owner pentest/retest PASS.
 The six named SHA-2 functions remain complete and unchanged. This extension
 is a separate row, closing only at v0.24.29. No CPU backend is admitted.
 

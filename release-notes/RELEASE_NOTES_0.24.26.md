@@ -1,12 +1,13 @@
 # Brynja 0.24.26 Release Notes
 
-Status: implementation and repository checks PASS; awaiting final owner sign-off
+Status: owner pentest/retest and local release verification PASS; awaiting green GitHub/CodeQL and explicit tag permission
 
 The supplied review of `908842f6` identified no defect requiring remediation.
 Its informational notes are dispositioned in the permanent pentest report;
 declassification intent, caller input budgets and sanitizer limitations are
-clarified without changing Rust, CI or the release flow. Final owner sign-off
-and release checks remain pending.
+clarified without changing Rust, CI or the release flow. The subsequent review
+through `61c056b4` reports zero Critical, High or Medium findings. Local release
+checks, green GitHub/CodeQL and explicit tag permission remain separate gates.
 
 ## Scope
 
@@ -48,6 +49,14 @@ existing owner checks retain the eight clearing calls in MIR/LLVM/assembly.
 Scoped Miri/ASan coverage is registered for the new API. Actual completed runs
 are recorded in the [candidate report](../security/pentest/v0.24.26.md).
 
+Post-retest release verification passes the complete repository gate, twelve
+supported compiler lanes, feature-specific downstream and bare-metal checks,
+QEMU campaigns, all ten full Miri groups, AddressSanitizer and all 29 existing
+bounded Kani harnesses. LeakSanitizer is excluded under the documented local
+ptrace restriction. Current standards, tools, dependency admission, RustSec,
+cargo-deny, SBOM, documentation and publisher-policy checks also pass. These
+results do not establish whole-construction proofs or independent verification.
+
 ## Limits and release flow
 
 General SHA-512/t remains **In progress**: v0.24.27–v0.24.29 retain lifecycle,
@@ -64,6 +73,6 @@ invalid secret destination sizes (clearing is linear in destination size).
 
 The facade advances to 0.24.26 without reexporting the extension. Support-crate
 versions and sanitization 2.1.0 remain unchanged. Zero crates are selected for
-publication; the next scheduled checkpoint is v0.25.2. Obtain exceptional owner
-pentest/retest, complete release checks, commit the report, wait for green
-GitHub/CodeQL and explicit tag permission.
+publication; the next scheduled checkpoint is v0.25.2. Exceptional owner
+pentest/retest and local release checks are complete. Commit the report, then
+wait for green GitHub/CodeQL and explicit tag permission.

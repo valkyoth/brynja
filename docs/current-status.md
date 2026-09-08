@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.25 signed; v0.24.26 ordinary/hardened general SHA-512/t hashing awaits owner pentest. See the [candidate report](../security/pentest/v0.24.26.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.25 signed; v0.24.26 ordinary/hardened general SHA-512/t hashing has a green owner retest and awaits release handoff, green GitHub/CodeQL and explicit tag permission. See the [candidate report](../security/pentest/v0.24.26.md). No CPU backend is admitted.
 
 The current candidate implements [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs behind an explicit default-off leaf feature. General family

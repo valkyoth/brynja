@@ -1,6 +1,10 @@
 //! Downstream no_std consumer of general ordinary and hardened SHA-512/t.
 #![no_std]
 
+pub mod acceptance;
+mod boundaries;
+mod corpus;
+
 use brynja_hash_sha2::{Sha512TBits, Sha512TDigest, Sha512TError};
 
 /// Import a public result from another implementation with exact identity.

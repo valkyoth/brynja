@@ -1,6 +1,6 @@
 schema = 1
-milestone = "0.24.27"
-state = "secret-lifecycle-closure"
+milestone = "0.24.28"
+state = "portable-public-acceptance"
 owner = "brynja-hash-sha2"
 feature = "general-sha512-t"
 default_enabled = false
@@ -63,7 +63,7 @@ secret_output_access = "0.24.26"
 cancel = "0.24.26"
 
 [evidence]
-current = "all-t-hashing-and-instrumented-secret-lifecycle-closure"
+current = "all-t-hashing-lifecycle-and-packaged-public-acceptance"
 iv_oracle = "0.24.25"
 digest_oracle = "0.24.26"
 lifecycle = "0.24.27"

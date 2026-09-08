@@ -7,6 +7,8 @@ for toolchain in "${toolchains[@]}"; do
         rustup toolchain install "$toolchain" --profile minimal
     fi
     cargo "+$toolchain" check --workspace --all-features
+    cargo "+$toolchain" run --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml \
+        < crates/brynja-hash-sha2/tests/vectors/general-sha512-t-digest.txt
     cargo "+$toolchain" check --manifest-path assurance/cpu-admission-fixture/Cargo.toml
     cargo "+$toolchain" test --locked --manifest-path assurance/sha1-public-api/Cargo.toml --lib
     cargo "+$toolchain" test --locked -p brynja-legacy-md5-std

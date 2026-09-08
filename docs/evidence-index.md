@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; milestones through v0.24.26 signed; v0.24.27 lifecycle closure has green owner pentest/retest and local release checks; awaiting green GitHub/CodeQL and explicit tag permission. See the [candidate report](../security/pentest/v0.24.27.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.27 signed; v0.24.28 portable public acceptance awaits owner pentest. See the [candidate report](../security/pentest/v0.24.28.md). No CPU backend is admitted.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are
@@ -10,7 +10,9 @@ plus the downstream `assurance/general-sha512-t` no_std consumer. v0.24.26 adds 
 hashing, typed secret output, ownership misuse and emitted cleanup checks.
 v0.24.27 adds the [lifecycle inventory](sha512-t-lifecycle.md), all-width
 destination tests and debug/release live-storage destructor mutation evidence.
-See the [candidate report](../security/pentest/v0.24.27.md) for actual coverage.
+v0.24.28 freezes [package-external acceptance](sha512-t-public-acceptance.md)
+over all parameters, output routes and bounded malformed-input controls.
+See the [candidate report](../security/pentest/v0.24.28.md) for actual coverage.
 
 The [v0.24.24 pentest report](../security/pentest/v0.24.24.md) records the
 owner-supplied assessment of `b73ea22173ef` and local release verification.

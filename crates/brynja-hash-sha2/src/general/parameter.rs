@@ -41,7 +41,7 @@ impl Sha512TBits {
         self.0
     }
 
-    /// Exact public or future secret digest destination width: ceil(t/8).
+    /// Exact public or secret digest destination width: ceil(t/8).
     #[must_use]
     pub const fn output_bytes(self) -> usize {
         self.0.div_ceil(8) as usize
@@ -76,7 +76,7 @@ impl Sha512TBits {
     /// label under the XOR-modified IV. Uses fixed stack storage, no global
     /// cache, allocation, caller-supplied IV, or CPU backend. All temporaries
     /// depend only on public t and are not zeroized. These are initial words,
-    /// **not a message digest**. General hashing APIs are not yet provided.
+    /// **not a message digest**. Use `Sha512T` or `HardenedSha512T` to hash messages.
     #[must_use]
     pub fn initial_words(self) -> [u64; 8] {
         iv::derive(self)

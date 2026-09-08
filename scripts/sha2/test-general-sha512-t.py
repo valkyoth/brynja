@@ -10,9 +10,13 @@ from unittest.mock import patch
 import general_sha512_t_policy as policy
 import general_sha512_t_cleanup as cleanup
 import general_sha512_t_lifecycle as lifecycle
+import general_sha512_t_acceptance as acceptance
 
 
 class GeneralTests(unittest.TestCase):
+    def test_packaged_public_acceptance_and_regressions(self):
+        acceptance.run(regressions=True)
+
     def test_actual_destructors_and_each_missing_owned_clear(self):
         lifecycle.run(mutations=True)
 
@@ -107,6 +111,11 @@ class GeneralTests(unittest.TestCase):
     def test_feature_claim_and_coverage_mutations(self):
         original = policy.read
         cases = [
+            ("scripts/zeroization/check-zeroization-miri.sh", "    run_miri --manifest-path assurance/general-sha512-t/Cargo.toml --lib", "    # omitted"),
+            ("scripts/ci/check-rust-version-matrix.sh", 'cargo "+$toolchain" run --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml', 'cargo "+$toolchain" check'),
+            ("scripts/assurance/check-bare-metal.sh", 'cargo check --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml --lib --target "$target"', 'true'),
+            ("scripts/sha2/check-general-sha512-t.py", "    acceptance.run()", "    # omitted"),
+            ("scripts/sha2/test-general-sha512-t.py", "        acceptance.run(regressions=True)", "        pass"),
             ("scripts/zeroization/check-zeroization-miri.sh", "        dynamic_lifecycle_", "        missing_test"),
             ("scripts/sha2/check-general-sha512-t.py", "    lifecycle.run()", "    # omitted"),
             (policy.PREFIX + "hardened.rs", "        guard.write(", "        let _ = Sha512TDigest::computed(self.parameter, &self.owner.output_staging);\n        guard.write("),

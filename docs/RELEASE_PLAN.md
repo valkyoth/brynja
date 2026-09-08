@@ -4062,7 +4062,7 @@ Exit criteria:
 
 ### v0.24.27 - General SHA-512/t - Secret Lifecycle And Failure Closure
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Close General SHA-512/t private-state, temporary and typed-output ownership in `brynja-hash-sha2` across success, rejection, cancellation, recoverable unwind and Drop; use the existing mandatory compiler-resistant sanitization boundary, sealed capabilities and explicit declassification without optional-feature cleanup.
 
@@ -4090,7 +4090,7 @@ Exit criteria:
 
 ### v0.24.28 - General SHA-512/t - Portable Public API Acceptance
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Freeze runnable package-external General SHA-512/t acceptance covering every admitted parameter, public operation direction and ordinary/hardened profile in `brynja-hash-sha2` with independent known answers, not only self-round-trips; exercise independent IV/digest oracle across every allowed t, invalid t and named-identity cross-checks, bit padding, secret cleanup and no implied FIPS approval of arbitrary t.
 

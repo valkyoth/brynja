@@ -11,6 +11,7 @@ while IFS= read -r target; do
     cargo check --workspace --exclude brynja-crypto-cpu-std \
         --exclude brynja-hash-parallel-std --exclude brynja-legacy-sha1-std --exclude brynja-legacy-md5-std --all-features --target "$target"
     cargo check --manifest-path assurance/cpu-admission-fixture/Cargo.toml --target "$target"
+    cargo check --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml --lib --target "$target"
     cargo check --locked --manifest-path assurance/sha256-public-api/Cargo.toml \
         --lib --target "$target"
     cargo check --locked --manifest-path assurance/md5-public-api/Cargo.toml --lib --target "$target"

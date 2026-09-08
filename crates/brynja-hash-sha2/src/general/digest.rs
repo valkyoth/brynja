@@ -5,7 +5,7 @@ use super::{Sha512TBits, Sha512TError};
 /// Importing bytes does not compute or verify a hash. This value never owns
 /// confidential input: copies, formatting and ordinary (not constant-time)
 /// equality are allowed. Callers must explicitly declassify secret material
-/// before import. A future secret digest has a different, non-copyable owner.
+/// before import. `Sha512TSecretDigest` is the separate, non-copyable secret owner.
 /// Equality and Hash bind t even when two rounded byte encodings match.
 /// No implicit conversion to a named /224 or /256 digest is provided.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]

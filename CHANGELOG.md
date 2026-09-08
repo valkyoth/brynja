@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.24.28 candidate
+
+- Freeze a runnable no_std consumer over all 510 parameters and 4590 independent
+  byte/bit cases, ordinary/hardened routes, typed output and failure boundaries.
+- Replay against extracted Cargo packages in an isolated offline closure;
+  enforce malformed-corpus, ownership and compiled-mutation negative controls.
+- No production algorithm or dependency changes; general family remains In
+  progress until v0.24.29. Owner pentest pending; no crates selected to publish.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.28.md).
+
 ## 0.24.27 candidate
 
 - Close the general SHA-512/t lifecycle evidence over the unchanged portable

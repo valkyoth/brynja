@@ -35,6 +35,12 @@ BOUND = PRODUCTION + (
     "scripts/sha2/general_sha512_t_lifecycle.py",
     "crates/brynja-hash-sha2/tests/general_hash/lifecycle.rs",
     "docs/sha512-t-lifecycle.md",
+    "assurance/general-sha512-t/src/acceptance.rs",
+    "assurance/general-sha512-t/src/boundaries.rs",
+    "assurance/general-sha512-t/src/corpus.rs",
+    "assurance/general-sha512-t/src/main.rs",
+    "scripts/sha2/general_sha512_t_acceptance.py",
+    "docs/sha512-t-public-acceptance.md",
 )
 
 
@@ -79,6 +85,15 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
         raise ValueError("general lifecycle Miri coverage is absent")
     if "lifecycle.run()" not in read(root, "scripts/sha2/check-general-sha512-t.py"):
         raise ValueError("general destructor probe is absent")
+    for path, token in (
+        ("scripts/sha2/check-general-sha512-t.py", "    acceptance.run()"),
+        ("scripts/sha2/test-general-sha512-t.py", "        acceptance.run(regressions=True)"),
+        ("scripts/zeroization/check-zeroization-miri.sh", "    run_miri --manifest-path assurance/general-sha512-t/Cargo.toml --lib"),
+        ("scripts/ci/check-rust-version-matrix.sh", 'cargo "+$toolchain" run --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml'),
+        ("scripts/assurance/check-bare-metal.sh", 'cargo check --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml --lib --target "$target"'),
+    ):
+        if token not in read(root, path):
+            raise ValueError("packaged general acceptance gate is absent")
     for path in (PREFIX + "hardened.rs", PREFIX + "secret.rs", PREFIX + "one_shot.rs"):
         if "from_bytes(" in read(root, path):
             raise ValueError("secret paths must not use public importer")

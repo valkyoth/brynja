@@ -1,7 +1,7 @@
-# Reviewed v0.24.24 authority/API contract, not implementation evidence.
+# Reviewed general SHA-512/t API contract; hashing still planned.
 [files]
-"requirements/sha512-t-contract.toml" = "6721bdb40a633ce4dc7ec3832d7512ce010e9c713b368294c4556beafd15875d"
-"docs/sha512-t-contract.md" = "35dd14e3025913c6693c434b76a2dad65f89cbf7e86c673385a1910814ae3d74"
-"scripts/sha2/sha512_t_contract.py" = "0f3efac7c4ca5e9911d08c212f2915766da4d76da35d096a59e690e549c2d4df"
-"scripts/sha2/check-sha512-t-contract.py" = "5010a0096ca38d633e3869d53338198fde514e37bb152bb3dd70a0e19fff0972"
+"requirements/sha512-t-contract.toml" = "1ee54da3235c3c14eeff7a125d229c67555b4007064fe7c18bf9c4af7f9b149f"
+"docs/sha512-t-contract.md" = "865762712279afc6352a3fbf0b915d31977a15718313ccdd20612fe62bea923a"
+"scripts/sha2/sha512_t_contract.py" = "0af34a4a32cb599d1361282c2dc28c54f36b9cea1e0e351d967797c89916ce68"
+"scripts/sha2/check-sha512-t-contract.py" = "4d02a1488d9bc1cb2b6e61feb6a8441b2cf7d40404e8b11470581dd11a85a3d1"
 "scripts/sha2/test-sha512-t-contract.py" = "1c99eb67c307233a7e656c0ce49e9a07d0b325fecc376eb39fe8b6222b66bcf7"

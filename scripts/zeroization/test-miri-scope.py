@@ -109,10 +109,11 @@ def main() -> int:
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
     assert sum("-p brynja-hash-parallel" in command for command in commands) == 1
     status, commands = run_profile("--group", "sha2")
-    assert status == 0 and len(commands) == 10
+    assert status == 0 and len(commands) == 11
+    assert sum('--features general-sha512-t --test general bounded_public_api_smoke' in c for c in commands) == 1
     assert all("brynja-hash-sha2" in command for command in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 34
+    assert status == 0 and len(commands) == 35
     assert sum('assurance/legacy-hash-final/Cargo.toml --no-default-features --lib dynamic_' in c for c in commands) == 1
     assert sum('quarantined_model_clears_all_regions_without_instructions' in c for c in commands) == 1
     assert sum('--features cpu --test cpu' in c for c in commands) == 2

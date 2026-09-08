@@ -1,7 +1,8 @@
 # Component Verification Status
 
-General SHA-512/t is a separate **In progress** extension: v0.24.24 freezes
-its [authority/API contract](sha512-t-contract.md), not callable general APIs.
+General SHA-512/t is a separate **In progress** extension: v0.24.25 implements
+public parameter/digest values and IV generation under the
+[authority/API contract](sha512-t-contract.md), not general message hashing.
 The six named SHA-2 identities remain fully implemented and unverified.
 
 This document preserves Brynja's crate-level assurance inventory. It answers

@@ -17,10 +17,11 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.23 signed; v0.24.24 general SHA-512/t authority/API contract passed owner pentest and awaits green GitHub/CodeQL before tagging. No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.24 signed; v0.24.25 general SHA-512/t parameter, IV and public digest candidate awaits owner pentest. No CPU backend is admitted.
 
-The current candidate freezes the [general SHA-512/t contract](sha512-t-contract.md),
-not new callable hash APIs. v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
+The current candidate implements [general SHA-512/t](sha512-t-contract.md) value
+and IV APIs behind an explicit default-off leaf feature, not message hashing.
+v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
 and batch public acceptance using the frozen v0.24.20 contract. See
 [final legacy acceptance](legacy-hash-final-acceptance.md). All instruction
 candidates remain unadmitted and hardened execution remains portable-only.

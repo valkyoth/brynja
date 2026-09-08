@@ -1,0 +1,36 @@
+//! Downstream no_std consumer of the v0.24.25 public descriptor APIs.
+#![no_std]
+
+use brynja_hash_sha2::{Sha512TBits, Sha512TDigest, Sha512TError};
+
+/// Import a public result from another implementation with exact identity.
+pub fn import_public(t: u16, bytes: &[u8]) -> Result<Sha512TDigest, Sha512TError> {
+    Sha512TDigest::from_bytes(Sha512TBits::new(t)?, bytes)
+}
+
+/// Read public IV material for diagnostics; this is not message hashing.
+pub fn initial_words(t: u16) -> Result<[u64; 8], Sha512TError> {
+    Ok(Sha512TBits::new(t)?.initial_words())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn downstream_parameter_and_digest_are_usable() -> Result<(), Sha512TError> {
+        let digest = import_public(9, &[0xa5, 0x80])?;
+        assert_eq!(digest.parameter().bits(), 9);
+        assert_eq!(digest.as_bytes(), &[0xa5, 0x80]);
+        assert_eq!(
+            import_public(9, &[0xa5, 1]),
+            Err(Sha512TError::NonCanonicalOutput)
+        );
+        assert_eq!(
+            import_public(384, &[0; 48]),
+            Err(Sha512TError::InvalidParameter)
+        );
+        assert_ne!(initial_words(9)?, initial_words(10)?);
+        Ok(())
+    }
+}

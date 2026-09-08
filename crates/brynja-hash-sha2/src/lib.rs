@@ -15,6 +15,8 @@ mod compress;
 mod compress64;
 mod digest;
 mod error;
+#[cfg(feature = "general-sha512-t")]
+mod general;
 mod hardened;
 mod sha224;
 mod sha256;
@@ -40,6 +42,8 @@ pub use digest::{
 pub use error::{
     Sha224Error, Sha256Error, Sha384Error, Sha512_224Error, Sha512_256Error, Sha512Error,
 };
+#[cfg(feature = "general-sha512-t")]
+pub use general::{Sha512TBits, Sha512TDigest, Sha512TError};
 pub use hardened::{
     HardenedSha2Error, HardenedSha2State, HardenedSha224, HardenedSha256, HardenedSha384,
     HardenedSha512, HardenedSha512_224, HardenedSha512_256, PublicDeclassification,

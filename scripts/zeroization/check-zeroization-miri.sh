@@ -8,7 +8,7 @@ run_miri() {
     CARGO_HOME="$miri_cache/cargo" \
         CARGO_TARGET_DIR="$miri_cache/target" \
         XDG_CACHE_HOME="$miri_cache" \
-        cargo +nightly-2026-09-07 miri test \
+        cargo +nightly-2026-09-08 miri test \
         --target x86_64-unknown-linux-gnu "$@"
 }
 
@@ -57,6 +57,10 @@ quick_sha2() {
 }
 
 full_sha2() {
+    # General parameter/IV APIs contain public data only; full all-t oracle
+    # and canonicalization campaigns run natively, this case checks memory use.
+    run_miri -p brynja-hash-sha2 --features general-sha512-t --test general \
+        bounded_public_api_smoke
     run_miri -p brynja-hash-sha2 --test sha224 \
         official_short_and_long_vectors_match_fips_and_nist_cavp
     run_miri -p brynja-hash-sha2 --test sha224 \

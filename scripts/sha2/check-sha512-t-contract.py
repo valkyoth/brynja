@@ -15,7 +15,7 @@ def main() -> int:
     if len({contract.descriptor(t)[0] for t in valid}) != 510:
         raise ValueError("incomplete parameter descriptors")
     print("General SHA-512/t contract: PASS; 510 parameter descriptors, 11 operation groups")
-    print("Contract model only; general Rust APIs/oracles pending v0.24.25–0.24.29; no FIPS/CPU admission")
+    print("Contract model gate; Rust value/IV evidence is separate; hashing pending v0.24.26–0.24.29; no FIPS/CPU admission")
     return 0
 
 

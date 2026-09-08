@@ -66,7 +66,7 @@ SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE25
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
-| General SHA-512/t extension | 🚧 In progress — authority/API contract only | `brynja-hash-sha2` (planned opt-in) | ❌ Not independently verified |
+| General SHA-512/t extension | 🚧 In progress — parameter/IV APIs; hashing pending | `brynja-hash-sha2` (opt-in) | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |

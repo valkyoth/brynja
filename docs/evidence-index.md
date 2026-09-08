@@ -1,10 +1,13 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; through v0.24.23 signed; v0.24.24 general SHA-512/t authority/API contract passed owner review and awaits green GitHub/CodeQL before tagging. All CPU backends remain unadmitted.
+Status: v0.20.0 published; through v0.24.24 signed; v0.24.25 general SHA-512/t value/IV candidate awaits owner review. All CPU backends remain unadmitted.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are
-not actual general digest, cleanup or native evidence.
+not actual general digest, cleanup or native evidence. v0.24.25 separately adds
+Rust parameter/digest-value tests and an all-510 IV oracle in `scripts/sha2`,
+plus the downstream `assurance/general-sha512-t` no_std consumer. Neither
+computes a general message digest or introduces secret-bearing processing.
 
 The [v0.24.24 pentest report](../security/pentest/v0.24.24.md) records the
 owner-supplied assessment of `b73ea22173ef` and local release verification.

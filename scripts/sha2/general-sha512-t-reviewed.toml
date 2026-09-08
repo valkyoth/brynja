@@ -1,0 +1,16 @@
+# v0.24.25 public descriptor and IV implementation review.
+[files]
+"crates/brynja-hash-sha2/src/general/mod.rs" = "5cfe8e3cff35d7dce714ec10022d667a15167c1032b158bea84247564b1b8d4e"
+"crates/brynja-hash-sha2/src/general/parameter.rs" = "12ae4c879033d9637dd3575f2e155ec6f6d0b1b61c821271be4e4598c96ad012"
+"crates/brynja-hash-sha2/src/general/iv.rs" = "54e46a9e0c4604c92ccaba9135f45889cda41521ba82404a88eff3e186d1d7a5"
+"crates/brynja-hash-sha2/src/general/digest.rs" = "9e0867770e0d6b395156792d0e9100f3cf3948194cef5798f711339aa27bdf28"
+"crates/brynja-hash-sha2/tests/general.rs" = "a7d7e26e39518c540ad235cab85e62518026c8b0e5c2426a20bc3b9eb31f75c5"
+"crates/brynja-hash-sha2/tests/vectors/general-sha512-t-iv.txt" = "288affa3ef81d6135e3b6f06d99741f17bc630e9e74f07ced12ca9ecf7d576cf"
+"crates/brynja-hash-sha2/src/compress64.rs" = "962e2a6701ffbaba7204ed3c2d0e9d804d581582d8ccec90dd3cc413f61e4e6a"
+"assurance/general-sha512-t/Cargo.toml" = "8cccd61e25ba83d0b89e85c67dd66b41859841da5fdb9835360cfcca63f4f877"
+"assurance/general-sha512-t/Cargo.lock" = "b3863c77914df96e8587b8d9476be4383425c7675ddaa0e83a037c5de9675a97"
+"assurance/general-sha512-t/src/lib.rs" = "9e561d17e21f895af66676272d6ff193d20e803da6d0f4f303f361c2f6215e4b"
+"scripts/sha2/sha512_t_iv_oracle.py" = "a45df7d1ab7988c8de7507fc34bf0f6707fc15fda530e7c47c0ddf8f7733c215"
+"scripts/sha2/general_sha512_t_policy.py" = "a6b75b45dd4fb2fb1aaa5976280212108b142373239a0d79c6ac7cd8779d70d0"
+"scripts/sha2/check-general-sha512-t.py" = "fb6489b0492417246b6997439d48c0d891eb70af0b5a55400ca99f87c5a630f6"
+"scripts/sha2/test-general-sha512-t.py" = "f9ed3d3cc26588bc0df059c0ee781a9bb4142e0d7c250c1a7bc5be368d241499"

@@ -25,10 +25,30 @@
 
 # brynja-hash-sha2
 
-The separate general SHA-512/t extension is **In progress**: v0.24.24 freezes
+The separate general SHA-512/t extension is **In progress**: v0.24.25 implements
+validated parameters, canonical public digest imports and exact IV generation,
+behind the default-off `general-sha512-t` leaf feature. It follows
 its [authority and public API contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
-It has no callable general API or feature yet; implementation and final evidence
-are v0.24.25–v0.24.29. The six named SHA-2 identities below remain unchanged.
+It does not yet hash messages; ordinary/hardened hashing and final evidence
+remain v0.24.26–v0.24.29. The six named SHA-2 identities below remain unchanged.
+
+```rust
+use brynja_hash_sha2::{Sha512TBits, Sha512TDigest};
+let parameter = Sha512TBits::new(9)?;
+let mut label = [0; 11];
+let length = parameter.write_iv_label(&mut label)?;
+assert_eq!(&label[..length], b"SHA-512/9");
+// Import an already PUBLIC digest from another implementation, not a message.
+let digest = Sha512TDigest::from_bytes(parameter, &[0xab, 0x80])?;
+assert_eq!(digest.parameter().bits(), 9);
+# Ok::<(), brynja_hash_sha2::Sha512TError>(())
+```
+
+Enable `features = ["general-sha512-t"]` for this example. Value import and IV
+diagnostics are not authentication, message hashing, FIPS approval or secret
+ownership. Public values are copyable and are not zeroized. Equality includes t
+but is not constant-time verification. General and named digest types remain
+distinct; short t values have weak collision/preimage security bounds.
 
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
 crate provides correct portable byte-oriented one-shot and streaming APIs for

@@ -3958,7 +3958,7 @@ Exit criteria:
 
 ### v0.24.24 - General SHA-512/t - Authority And Public API Contract
 
-Status: awaiting green CI
+Status: released
 
 The authority and complete per-parameter API contract are recorded in
 [sha512-t-contract.md](sha512-t-contract.md) and
@@ -3992,7 +3992,13 @@ Exit criteria:
 
 ### v0.24.25 - General SHA-512/t - Validated positive t below 512 except 384, exact decimal IV-generation label and typed arbitrary-bit digest output distinct from named /224 and /256
 
-Status: planned
+Status: awaiting pentest
+
+The explicit `general-sha512-t` leaf feature implements `Sha512TBits`, public
+IV label/word diagnostics and canonical `Sha512TDigest` import/access. All 510
+IVs are compared with a separate oracle. These APIs process public metadata and
+public digest values only; no secret state is owned. Actual ordinary/hardened
+message hashing remains v0.24.26, with lifecycle and acceptance through v0.24.29.
 
 Plan scope: Implement validated positive t below 512 except 384, exact decimal IV-generation label and typed arbitrary-bit digest output distinct from named /224 and /256 in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation.
 

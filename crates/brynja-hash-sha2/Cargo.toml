@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+general-sha512-t = []
 cpu = ["dep:brynja-crypto-cpu"]
 
 [dependencies]

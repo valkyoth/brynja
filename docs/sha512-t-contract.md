@@ -1,6 +1,7 @@
 # General SHA-512/t authority and public API contract
 
-Status: v0.24.24 admission contract; **not an implemented general hash API**.
+Status: v0.24.25 parameter, IV and public digest values implemented;
+**not an implemented general message-hashing API**.
 The six named SHA-2 functions remain complete and unchanged. This extension
 is a separate row, closing only at v0.24.29. No CPU backend is admitted.
 
@@ -53,7 +54,7 @@ Short outputs have correspondingly weak generic collision/preimage bounds
 ## Package and selection
 
 Use `brynja-hash-sha2`, not another compression crate or duplicated engine.
-Plan an explicit default-off `general-sha512-t` feature in that leaf. No modern
+Use the explicit default-off `general-sha512-t` feature in that leaf. No modern
 facade reexport or protocol selection occurs implicitly. If a facade adapter
 is later added it must forward that explicit feature and preserve the identity.
 The leaf remains allocation-independent no_std, Rust 1.90.0 through the current
@@ -62,7 +63,8 @@ No third-party dependency, new unsafe boundary or hardware session is needed.
 
 ## Public API matrix
 
-Names and signatures below are the frozen design, **not callable examples**.
+Names and signatures below are the frozen design. Only the v0.24.25 value/IV
+rows are callable now; all v0.24.26 rows remain planned, not stubs.
 Any necessary contract change must update the machine register and tests with
 an explicit review; implementations must not expose stubs for missing rows.
 All parameter values have every row below. The ordinary profile is public-data
@@ -71,7 +73,9 @@ only; hardened ownership is mandatory for confidential input or derived state.
 | Operation | Planned surface | Due |
 | --- | --- | --- |
 | Parameter admission | `Sha512TBits::new(u16) -> Result<Self, Sha512TError>`; `bits()`, `output_bytes()` | 0.24.25 |
+| Public IV diagnostics | `write_iv_label(self, &mut [u8]) -> Result<usize, Sha512TError>`; `initial_words(self) -> [u64; 8]` | 0.24.25 |
 | Public digest | `Sha512TDigest::parameter()`, `as_bytes()` | 0.24.25 |
+| Public digest import | `Sha512TDigest::from_bytes(parameter, &[u8]) -> Result<Self, Sha512TError>`; `AsRef<[u8]>` | 0.24.25 |
 | Ordinary state | `Sha512T::new(Sha512TBits)`, `update(&mut self, &[u8]) -> Result<(), Sha512TError>` | 0.24.26 |
 | Ordinary finish | `finalize(self)`, `finalize_bits(self, BitString)` -> typed public digest result | 0.24.26 |
 | Ordinary one-shot | `sha512_t(parameter, &[u8])`, `sha512_t_bits(parameter, BitString)` -> typed public digest result | 0.24.26 |
@@ -83,6 +87,16 @@ only; hardened ownership is mandatory for confidential input or derived state.
 | Explicit cancellation | `HardenedSha512T::cancel(self)`; ordinary cancellation is consuming Drop | 0.24.26 |
 
 One-shot argument order is parameter, message, then destination when secret.
+The v0.24.25 contract refinement makes the value APIs externally usable before
+hashing exists: exact-width **public** digest import rejects nonzero unused low
+bits rather than masking them; `TryFrom<u16>` repeats checked admission. Import
+does not verify or compute a hash. Labels write 9..=11 bytes, preserving the
+entire destination on insufficient capacity and any trailing bytes on success.
+IV diagnostics return public derived initial words, not arbitrary-state import
+or message hashing. Both need only fixed workspace and no secret cleanup:
+the input is public t, never a key, confidential input or prior hash state.
+These additions remain subject to the v0.24.25 owner pentest.
+
 Hardened public one-shot calls additionally require a final
 `PublicDeclassification` argument, using the existing explicit acknowledgement.
 Hardened public and secret functions have the same checked error type. No reset,
@@ -155,6 +169,9 @@ The machine register is `requirements/sha512-t-contract.toml`. Its current
 tests exhaust all 65,536 u16 inputs, the 510 allowed parameter descriptors,
 labels, rounded widths and masks, and reject altered authority/domain/API
 claims. These are **contract-model tests**, not Rust SHA-512/t digest evidence.
+v0.24.25 additionally executes all 510 IVs against a separate Python oracle
+whose constants are derived from integer square/cube roots of primes, plus
+exhaustive Rust parameter/canonical-digest tests and a downstream no_std fixture.
 The existing named-IV derivation test remains a useful unchanged cross-check.
 
 - v0.24.25: actual Rust parameter/digest APIs, exact IV generation; independent

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.24.25 candidate
+
+- Add default-off leaf-only general SHA-512/t parameter, public IV diagnostic
+  and canonical public digest value APIs; all 510 IVs match a separate oracle.
+- Bind exhaustive admission/canonicalization, downstream no_std, compile-fail
+  identity, policy and dynamic-analysis coverage. No message hasher or secret
+  owner is added; general SHA-512/t remains In progress through v0.24.29.
+- Advance facade metadata without reexports or publication; support versions
+  stay unchanged. Owner pentest is required before tagging.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.25.md).
+
 ## 0.24.24 candidate
 
 - Freeze the complete general SHA-512/t authority and ordinary/hardened API

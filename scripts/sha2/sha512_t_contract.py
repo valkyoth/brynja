@@ -56,7 +56,7 @@ def validate_model(contract: dict) -> None:
     if json.dumps(contract.get("parameters"), sort_keys=True) != json.dumps(expected_parameters, sort_keys=True):
         raise ValueError("parameter contract changed")
     for key, value in {
-        "schema": 1, "milestone": "0.24.24", "state": "contract-only",
+        "schema": 1, "milestone": "0.24.25", "state": "parameter-iv-digest-only",
         "owner": "brynja-hash-sha2", "feature": "general-sha512-t",
         "documentation": DOC, "default_enabled": False,
         "facade_export": False, "independently_verified": False,
@@ -125,7 +125,7 @@ def validate(root: Path = ROOT) -> dict:
 
 def write_review() -> None:
     validate_model(tomllib.loads(read(ROOT, CONTRACT).decode()))
-    lines = ["# Reviewed v0.24.24 authority/API contract, not implementation evidence.", "[files]"]
+    lines = ["# Reviewed general SHA-512/t API contract; hashing still planned.", "[files]"]
     for path in BOUND:
         lines.append(f'"{path}" = "{hashlib.sha256(read(ROOT, path)).hexdigest()}"')
     (ROOT / REVIEW).write_text("\n".join(lines) + "\n", encoding="utf-8")

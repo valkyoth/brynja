@@ -5,7 +5,7 @@ domain = "cryptography"
 id = "BRY-REQ-CRYPTO-0020"
 owner = "0.24.24"
 lifecycle = "planned"
-revision = 1
+revision = 2
 decision_ids = ["algorithm.sha512-t"]
 sources = [{ id = "nist:NIST.FIPS.180-4.pdf", authority_role = "current" }]
 statement = "General SHA-512/t must implement every positive t below 512 except 384, exact shortest-decimal IV generation, leftmost MSB-first output and all ordinary/hardened byte/bit operations in requirements/sha512-t-contract.toml, without inheriting named SHA-2 or protocol approval."
@@ -14,7 +14,7 @@ target = "crates/brynja-hash-sha2/src/lib.rs#Sha512T"
 positive_test = "scripts/sha2/check-sha512-t-contract.py#main"
 negative_test = "scripts/sha2/test-sha512-t-contract.py#main"
 work_bound = "The frozen contract requires one IV block, linear caller-bounded input updates, one or two final blocks, fixed workspace and no hidden allocation."
-evidence_gap = "v0.24.24 authenticates the source and tests the contract model only. Actual general parameter/digest, ordinary/hardened, byte/bit, cleanup and package APIs plus independent all-t IV/digest oracles remain v0.24.25 through v0.24.29."
+evidence_gap = "v0.24.24 authenticates the source and tests the contract model. v0.24.25 implements public parameter/digest-value admission and IV generation with an independent all-510 IV oracle. Ordinary/hardened byte/bit message hashing, secret cleanup, digest oracles and full package acceptance remain v0.24.26 through v0.24.29."
 residual = "Arbitrary t has no implied FIPS or protocol approval and short digests have weak security bounds. No general implementation, independent cryptographic review, CPU admission or register/platform/caller-copy erasure is claimed."
 mapping_rationale = "FIPS 180-4 section 5.3.6 and its SHA-512 dependencies directly govern this distinct general construction; docs/sha512-t-contract.md pins exact sections, source bytes, rights, errata observation and all API/lifecycle obligations."
 

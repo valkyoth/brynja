@@ -418,6 +418,7 @@ def validate_packages(root: Path) -> None:
     if core.get("features") != {"default": []}:
         fail("hash core feature boundary changed")
     if manifest.get("features") != {
+        "general-sha512-t": [],
         "default": [],
         "cpu": ["dep:brynja-crypto-cpu"],
     }:
@@ -436,6 +437,7 @@ def validate_packages(root: Path) -> None:
             "publish": "crates-io",
             "required": ["brynja-core", "brynja-hash-core"],
             "optional": {"cpu": "brynja-crypto-cpu"},
+            "features": ["general-sha512-t"],
         },
     }
     for name, entry in expected.items():

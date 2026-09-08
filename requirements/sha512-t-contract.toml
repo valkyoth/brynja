@@ -1,6 +1,6 @@
 schema = 1
-milestone = "0.24.24"
-state = "contract-only"
+milestone = "0.24.25"
+state = "parameter-iv-digest-only"
 owner = "brynja-hash-sha2"
 feature = "general-sha512-t"
 default_enabled = false
@@ -63,7 +63,7 @@ secret_output_access = "0.24.26"
 cancel = "0.24.26"
 
 [evidence]
-current = "contract-model-only"
+current = "contract-model-and-rust-parameter-public-digest-all-t-iv"
 iv_oracle = "0.24.25"
 digest_oracle = "0.24.26"
 lifecycle = "0.24.27"

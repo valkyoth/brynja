@@ -1,19 +1,19 @@
 [release]
-version = "0.24.24"
-milestone = "0.24.24"
+version = "0.24.25"
+milestone = "0.24.25"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "General SHA-512/t authority and secret-output API contract require owner review before implementation."
+exception_reason = "General SHA-512/t parameter, IV generation and public digest admission require owner review before tagging."
 
 [crates."brynja"]
-previous_version = "0.24.23"
-version = "0.24.24"
+previous_version = "0.24.24"
+version = "0.24.25"
 change = "metadata"
 publish = false
-reason = "Advance facade metadata for the general SHA-512/t authority/API contract; no production API, feature or dependency change, and no publication."
+reason = "Advance facade metadata for explicit leaf-only general SHA-512/t value and IV APIs; no facade reexport or publication."
 
 [crates."brynja-legacy-md5"]
 previous_version = "unpublished"

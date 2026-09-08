@@ -60,6 +60,13 @@ later implementations use one reviewed mechanism.
 
 ## Adding Or Moving A Script
 
+General SHA-512/t value/IV checks are in `sha2/check-general-sha512-t.py`
+and `sha2/test-general-sha512-t.py`. The independent prime-root IV oracle is
+`sha2/sha512_t_iv_oracle.py`; `--write` deliberately refreshes its fixed corpus
+for review, while normal invocation compares it. These are parameter/public
+digest and IV checks, not evidence for the future general message hasher.
+
+
 1. Choose the owning directory in `inventory.toml`; add a new category there
    first if the responsibility is genuinely distinct.
 2. Keep helper modules beside the checks that import them. Do not create a

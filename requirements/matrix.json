@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "248b374037768f6474f31b062f0fc6882e45701e1ea05bd041a1869c9df319f6",
-  "domain_policy_sha256": "e679e013e3d9785d5bcc347de3f323bd78b210b3b65ee2c6ff332cc62aac18a5",
+  "domain_policy_sha256": "2e5a792162692faf969ffc82b78ef791584b14a8e398642c77b9226527773049",
   "policy_sha256": "d3f483ea7ea3051f8e9a4dba15961d630d02590db8c0dcaee6223c6dae36b826",
   "requirements": [
     {
@@ -3682,7 +3682,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "v0.24.24 authenticates the source and tests the contract model only. Actual general parameter/digest, ordinary/hardened, byte/bit, cleanup and package APIs plus independent all-t IV/digest oracles remain v0.24.25 through v0.24.29.",
+      "evidence_gap": "v0.24.24 authenticates the source and tests the contract model. v0.24.25 implements public parameter/digest-value admission and IV generation with an independent all-510 IV oracle. Ordinary/hardened byte/bit message hashing, secret cleanup, digest oracles and full package acceptance remain v0.24.26 through v0.24.29.",
       "id": "BRY-REQ-CRYPTO-0020",
       "invariants": [
         "algorithm-admission",
@@ -3699,7 +3699,7 @@
       "owner": "0.24.24",
       "profile": "crypto-encoding-pkix",
       "residual": "Arbitrary t has no implied FIPS or protocol approval and short digests have weak security bounds. No general implementation, independent cryptographic review, CPU admission or register/platform/caller-copy erasure is claimed.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {

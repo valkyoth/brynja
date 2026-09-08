@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; milestones through v0.24.27 signed; v0.24.28 portable public acceptance awaits owner pentest. See the [candidate report](../security/pentest/v0.24.28.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.27 signed; v0.24.28 portable public acceptance has a clean owner retest and awaits green GitHub/CodeQL and tag authorization. See the [candidate report](../security/pentest/v0.24.28.md). No CPU backend is admitted.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are

@@ -1,6 +1,6 @@
 # Brynja v0.24.28
 
-Status: implementation candidate; low-severity arithmetic hardening fixed, awaiting owner retest.
+Status: owner retest and local release checks PASS; awaiting green GitHub/CodeQL and tag authorization.
 
 ## Scope
 
@@ -42,6 +42,6 @@ typed secret owner implicitly.
 
 The facade advances to internal 0.24.28; support versions stay unchanged and
 every package remains `publish = false` in the release selection. The next
-scheduled crates.io checkpoint is v0.25.2. After owner pentest/retest, complete
-release checks, commit its PASS report, wait for green GitHub/CodeQL and obtain
+scheduled crates.io checkpoint is v0.25.2. Owner retest and local release checks
+are green. Commit the PASS report, wait for green GitHub/CodeQL and obtain
 explicit tag permission. Do not tag, push or publish this candidate early.

@@ -4090,7 +4090,7 @@ Exit criteria:
 
 ### v0.24.28 - General SHA-512/t - Portable Public API Acceptance
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Freeze runnable package-external General SHA-512/t acceptance covering every admitted parameter, public operation direction and ordinary/hardened profile in `brynja-hash-sha2` with independent known answers, not only self-round-trips; exercise independent IV/digest oracle across every allowed t, invalid t and named-identity cross-checks, bit padding, secret cleanup and no implied FIPS approval of arbitrary t.
 

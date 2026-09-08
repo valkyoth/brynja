@@ -66,7 +66,7 @@ SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE25
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
-| General SHA-512/t extension | 🚧 In progress — parameter/IV APIs; hashing pending | `brynja-hash-sha2` (opt-in) | ❌ Not independently verified |
+| General SHA-512/t extension | 🚧 In progress — ordinary/hardened hashing; final evidence pending | `brynja-hash-sha2` (opt-in) | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
@@ -145,8 +145,8 @@ instead of copying it.
 
 | Boundary | Responsibility |
 | --- | --- |
-| `brynja-legacy-sha1` | Isolated collision-broken legacy SHA-1; portable byte/bit and hardened APIs, final acceptance pending |
-| `brynja-legacy-md5` | Isolated collision-broken legacy MD5; portable byte/bit and hardened APIs, final acceptance pending |
+| `brynja-legacy-sha1` | Isolated collision-broken legacy SHA-1; portable byte/bit and hardened APIs, v0.24.23 public acceptance complete |
+| `brynja-legacy-md5` | Isolated collision-broken legacy MD5; portable byte/bit and hardened APIs, v0.24.23 public acceptance complete |
 | `brynja-hash-core` | Small fixed-output and XOF interfaces; no algorithm or protocol |
 | `brynja-hash-sha2` / `brynja-hash-sha3` | Portable family implementations reused by standalone callers and Brynja protocols |
 | `brynja-mac-hmac` | Keyed HMAC construction with MAC-specific types and verification |
@@ -951,7 +951,7 @@ milestones continue through `0.24.27`; the current internal `0.24.28`
 candidate freezes package-external public acceptance for opt-in ordinary/hardened hashing and typed secret
 outputs under the [general SHA-512/t contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
 General SHA-512/t remains **In progress** through final v0.24.29 acceptance;
-the six named SHA-2 algorithms stay complete. The owner pentest is pending;
+the six named SHA-2 algorithms stay complete. The owner pentest/retest is green;
 release checks and green GitHub/CodeQL are required before tagging. This candidate
 is not tagged or published.
 All SHA-1 and MD5 candidates remain unadmitted; hardened legacy execution remains portable. Both legacy leaves have ordinary and hardened

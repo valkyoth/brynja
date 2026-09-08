@@ -9,7 +9,8 @@
 - Close a low-severity local length-arithmetic hardening gap in named hardened
   SHA-2 finalizers, preserving valid digests and secret-error clearing.
 - No dependency changes; general family remains In progress until v0.24.29.
-  Owner retest pending; no crates selected to publish.
+  Owner retest PASS; no crates selected to publish. Await green GitHub/CodeQL
+  and explicit tag authorization.
   See [release notes](release-notes/RELEASE_NOTES_0.24.28.md).
 
 ## 0.24.27 candidate

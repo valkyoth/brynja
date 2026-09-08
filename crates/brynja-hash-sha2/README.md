@@ -209,6 +209,15 @@ The default feature set always remains portable scalar SHA-2. The same static
 session model is available as `Sha512BackendSession` for SHA-384, SHA-512,
 SHA-512/224, and SHA-512/256 on exact qualifying targets.
 
+With both `general-sha512-t` and `cpu`, v0.24.29 also exposes
+`sha512_t_with_backend`, `sha512_t_bits_with_backend`, and
+`Sha512T::{update_with_backend, finalize_with_backend, finalize_bits_with_backend}`.
+They retain the parameter-specific digest identity, never silently fall back
+on backend errors, and consume state on finalization. IV derivation remains
+portable. These are ordinary public-data APIs; hardened states have no CPU
+route. Sessions still return `None` in normal builds because candidates remain
+unadmitted. See the [CPU integration and evidence instructions](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-cpu-evidence.md).
+
 Run the repository-owned downstream acceptance from a clean checkout with:
 
 ```bash

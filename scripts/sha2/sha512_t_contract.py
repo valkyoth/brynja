@@ -56,7 +56,7 @@ def validate_model(contract: dict) -> None:
     if json.dumps(contract.get("parameters"), sort_keys=True) != json.dumps(expected_parameters, sort_keys=True):
         raise ValueError("parameter contract changed")
     for key, value in {
-        "schema": 1, "milestone": "0.24.29", "state": "final-scalar-evidence",
+        "schema": 1, "milestone": "0.24.29", "state": "final-evidence-and-ordinary-cpu-integration",
         "owner": "brynja-hash-sha2", "feature": "general-sha512-t",
         "documentation": DOC, "default_enabled": False,
         "facade_export": False, "independently_verified": False,
@@ -69,6 +69,7 @@ def validate_model(contract: dict) -> None:
         "hardened_state", "hardened_public_finish", "hardened_secret_finish",
         "hardened_one_shot", "secret_output_access", "cancel")}
     expected_operations.update(parameter="0.24.25", public_digest="0.24.25")
+    expected_operations.update(ordinary_cpu_update="0.24.29", ordinary_cpu_finish="0.24.29", ordinary_cpu_one_shot="0.24.29")
     if contract.get("operations") != expected_operations:
         raise ValueError("incomplete operation matrix")
     expected_lifecycle = {
@@ -132,7 +133,8 @@ def validate(root: Path = ROOT) -> dict:
     api = tomllib.loads(read(root, "security/cryptographic-api-profile-policy.toml").decode())
     profile = api["profile"]["general-sha512-t"]
     if (not {"cancellation", "ownership", "byte-input", "bit-input", "fixed-output"} <= set(profile["required"])
-            or not {"backend", "provider", "hosted-adapter"} <= set(profile["forbidden"])
+            or not {"provider", "hosted-adapter"} <= set(profile["forbidden"])
+            or profile["optional_isolated"] != ["backend"]
             or api["secret-owner-overrides"].get("algorithm.sha512-t") != "0.24.26"):
         raise ValueError("general SHA-512/t profile differs from contract")
     return contract

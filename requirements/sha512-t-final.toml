@@ -1,6 +1,7 @@
 schema = 1
 milestone = "0.24.29"
-implementation = "portable-only"
+implementation = "portable-with-unadmitted-ordinary-cpu"
+native_disposition = "required-after-fresh-pentest"
 independent_review = false
 fips_validated = false
 cpu_admitted = false

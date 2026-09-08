@@ -3036,7 +3036,7 @@
     {
       "api": {
         "backend": {
-          "disposition": "forbidden",
+          "disposition": "optional-isolated",
           "owner": "0.24.15"
         },
         "bit-input": {
@@ -24257,7 +24257,7 @@
       ]
     }
   ],
-  "policy_sha256": "a4fbde2bf6a42a719588b8df690247e3299664fd124f08775740932dcd7d8d36",
+  "policy_sha256": "9224d10a59428f1e37e2703ad75ad6df75522aa1694eec5218f76951ee234e52",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",

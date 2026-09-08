@@ -76,7 +76,7 @@
     "scripts/zeroization/check-zeroization-evidence.py": "d11f63a46fcdeb3a48bb6606227b07223958f14033928c181fe55d4ab6112457",
     "scripts/zeroization/check-zeroization-miri.sh": "bd8792dc451696abedcb2f4ca5e2b143ac8489ed4ff264c5cb657803d2926138",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "683f16d95bfcfcbf807dda50f2825738b64aa1d8f71814a93a7625a28015d433",
-    "scripts/zeroization/miri_scope.py": "83501b3fd43b3b40cfbf2e6ce89099a0a09030e5c189444184c2b3ccbd9237d9",
+    "scripts/zeroization/miri_scope.py": "3857ff482d58b5cbf230d3ebb7b7ebd0f64a7694937b2212f2b5aef52224833f",
     "scripts/zeroization/test-miri-scope.py": "52ebf110d137ad3a946fc39a4e6b03e28348f570f4b7d1b9b27ac30a29165482",
     "scripts/zeroization/test-zeroization-evidence.py": "751ad86b17549d13b4ba3544caec04e4b1f6d8cad674c4a2b24b7593721a8a98",
     "scripts/zeroization/zeroization_evidence.py": "4d45ee007e13c28bbf26c61a0ba0adea4ee2191973ab65f0d8332939a18c0db9"

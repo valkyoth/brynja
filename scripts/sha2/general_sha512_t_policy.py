@@ -10,7 +10,7 @@ import sha512_t_contract as contract
 ROOT = contract.ROOT
 REVIEW = "scripts/sha2/general-sha512-t-reviewed.toml"
 PREFIX = "crates/brynja-hash-sha2/src/general/"
-PRODUCTION = tuple(PREFIX + name for name in ("mod.rs", "parameter.rs", "iv.rs", "digest.rs", "ordinary.rs", "hardened.rs", "secret.rs", "one_shot.rs"))
+PRODUCTION = tuple(PREFIX + name for name in ("mod.rs", "parameter.rs", "iv.rs", "digest.rs", "ordinary.rs", "hardened.rs", "secret.rs", "one_shot.rs", "cpu.rs"))
 BOUND = PRODUCTION + (
     "crates/brynja-hash-sha2/tests/general.rs",
     "crates/brynja-hash-sha2/tests/vectors/general-sha512-t-iv.txt",
@@ -51,6 +51,15 @@ BOUND = PRODUCTION + (
     "assurance/general-sha512-t/work_probe.rs",
     "scripts/sha2/general_sha512_t_work.py",
     "scripts/sha2/general_sha512_t_final.py",
+    "scripts/sha2/general_sha512_t_cpu.py",
+    "scripts/sha2/capture-general-sha512-t-native.py",
+    "scripts/sha2/test-general-sha512-t-cpu.py",
+    "scripts/sha2/check-sha256-cpu-qemu.sh",
+    "assurance/general-sha512-t-cpu/Cargo.toml",
+    "assurance/general-sha512-t-cpu/Cargo.lock",
+    "assurance/general-sha512-t-cpu/src/lib.rs",
+    "assurance/general-sha512-t-cpu/src/main.rs",
+    "docs/sha512-t-cpu-evidence.md",
 )
 
 
@@ -68,13 +77,26 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
             raise ValueError("general source exceeds 500 lines")
         code = "\n".join(line.split("//")[0] for line in text.splitlines())
         for token in ("unsafe", 'extern "C"', "alloc::", "std::", "unwrap()", "expect(",
-                      "panic!", "static mut", "target_feature", "asm!", "brynja_crypto_cpu"):
+                      "panic!", "static mut", "target_feature", "asm!"):
             if token in code:
                 raise ValueError(f"general public-only boundary crossed: {name}: {token}")
+        if name != PREFIX + "cpu.rs" and ("brynja_crypto_cpu" in code or "Sha512BackendSession" in code):
+            raise ValueError("CPU dependency escaped ordinary CPU wrapper")
+    cpu = sources[PREFIX + "cpu.rs"]
+    if "impl Hardened" in cpu or "HardenedSha2Owner" in cpu:
+        raise ValueError("hardened acceleration is not qualified")
+    for token in (".update_with_backend(input, backend)", ".finalize_with_backend(backend)",
+                  ".finalize_bits_with_backend(input, backend)", "map_err(Sha512TAcceleratedError::Backend)"):
+        if token not in cpu:
+            raise ValueError("explicit CPU route/failure boundary missing")
+    if '#[cfg(feature = "cpu")]\nmod cpu;' not in sources[PREFIX + "mod.rs"]:
+        raise ValueError("CPU wrapper escaped optional feature")
     manifest = tomllib.loads(read(root, "crates/brynja-hash-sha2/Cargo.toml"))
     if manifest["features"] != {"default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": []}:
         raise ValueError("general feature must be explicit and dependency-free")
     library = read(root, "crates/brynja-hash-sha2/src/lib.rs")
+    if '#[cfg(all(feature = "general-sha512-t", feature = "cpu"))]\npub use general::{' not in library:
+        raise ValueError("CPU public exports escaped dual feature gate")
     for token in ('#[cfg(feature = "general-sha512-t")]\nmod general;',
                   '#[cfg(feature = "general-sha512-t")]\npub use general::{Sha512TBits, Sha512TDigest, Sha512TError};'):
         if token not in library:
@@ -89,6 +111,8 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
         ("assurance/general-sha512-t/profile.rs", "brynja_general_sha512_t_consumer::resources::check()"),
         ("scripts/zeroization/check-zeroization-sanitizer.sh", "--manifest-path assurance/general-sha512-t/Cargo.toml"),
         ("scripts/zeroization/check-zeroization-sanitizer.sh", "--bin general-sha512-t-profile --target x86_64-unknown-linux-gnu"),
+        ("scripts/sha2/check-sha256-cpu-qemu.sh", "python3 scripts/sha2/general_sha512_t_cpu.py"),
+        ("scripts/checks.sh", "python3 scripts/sha2/test-general-sha512-t-cpu.py"),
     ):
         if token not in read(root, path):
             raise ValueError("final work/resource evidence is absent")
@@ -143,7 +167,7 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
 
 def write_review() -> None:
     validate(hashes=False)
-    lines = ["# v0.24.29 general hashing final scalar evidence review.", "[files]"]
+    lines = ["# v0.24.29 general hashing scalar and unadmitted CPU integration review.", "[files]"]
     for path in BOUND:
         lines.append(f'"{path}" = "{hashlib.sha256(contract.read(ROOT, path)).hexdigest()}"')
     (ROOT / REVIEW).write_text("\n".join(lines) + "\n", encoding="utf-8")

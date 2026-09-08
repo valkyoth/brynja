@@ -1110,7 +1110,7 @@
         "rationale": "General SHA-512/t authority/contract and value/IV preparation at v0.24.24\u2013v0.24.25 feed the implemented v0.24.26 hashing requirement BRY-REQ-CRYPTO-0020. Later steps still require expanded lifecycle, frozen public acceptance and final evidence; implemented hashing does not imply completed family acceptance or cryptographic approval."
       },
       "requirement_ids": [],
-      "scope": "Rerun the frozen General SHA-512/t public fixture and complete exact-source correctness, cleanup, side-channel, resource and cross-target evidence for `brynja-hash-sha2`; record scalar-only support or independently admitted acceleration honestly, close every promised operation and require exceptional pentest disposition before updating implementation status.",
+      "scope": "Rerun the frozen General SHA-512/t public fixture and complete exact-source correctness, cleanup, side-channel, resource and cross-target evidence for `brynja-hash-sha2`; add explicit ordinary byte/bit and streaming CPU APIs over existing unadmitted AArch64 SHA-512 and RV64 Zknh candidates, keep hardened paths portable-only, and require fresh exceptional pentest plus reviewed AWS Arm/Mac native evidence disposition before implementation closure without granting CPU admission.",
       "source_ids": [],
       "title": "General SHA-512/t - Final Evidence And Usability Closure",
       "version": "0.24.29"

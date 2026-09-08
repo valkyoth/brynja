@@ -2,10 +2,11 @@ use super::{Sha512TBits, Sha512TDigest, Sha512TError};
 use crate::{BitString, sha512_state::Sha512State};
 
 /// Portable general SHA-512/t for public data. Internal memory is not erased.
-/// Use `HardenedSha512T` for confidential input. No CPU route is selected.
+/// Use `HardenedSha512T` for confidential input. Default operations select no CPU
+/// route; explicit ordinary CPU methods require the additional `cpu` feature.
 pub struct Sha512T {
-    parameter: Sha512TBits,
-    state: Sha512State,
+    pub(super) parameter: Sha512TBits,
+    pub(super) state: Sha512State,
 }
 
 impl Sha512T {
@@ -64,7 +65,10 @@ impl Sha512T {
     }
 }
 
-fn render(parameter: Sha512TBits, words: [u64; 8]) -> Result<Sha512TDigest, Sha512TError> {
+pub(super) fn render(
+    parameter: Sha512TBits,
+    words: [u64; 8],
+) -> Result<Sha512TDigest, Sha512TError> {
     let mut bytes = [0; 64];
     for (slot, word) in bytes.chunks_exact_mut(8).zip(words) {
         slot.copy_from_slice(&word.to_be_bytes());

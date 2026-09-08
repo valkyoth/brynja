@@ -1,9 +1,11 @@
-# General SHA-512/t final scalar evidence
+# General SHA-512/t final evidence
 
 v0.24.29 completes the implementation evidence over the v0.24.28 frozen
 [public consumer](sha512-t-public-acceptance.md). Status remains **In progress**
-until the exceptional owner pentest/retest passes. No accelerated backend,
-facade reexport, new hash API or third-party dependency is added.
+until the exceptional owner pentest/retest and native evidence disposition pass.
+The ordinary [CPU API integration](sha512-t-cpu-evidence.md) reuses existing
+unadmitted SHA-512 kernels. No facade reexport or third-party dependency is added;
+hardened operations and default ordinary APIs remain portable-only.
 
 ## Reproduce the closure
 
@@ -73,10 +75,11 @@ required where applicable. No new general-algorithm-wide formal proof is claimed
 The local sanitizer wrapper explicitly runs the consumer library (including
 its resource checks) and the hosted profile; source-policy tests reject removing
 that coverage. Full dynamic analysis stays local, not in bounded GitHub CI.
-No AWS/Mac recapture is needed for scalar-only closure. CPU acceleration and
-especially RISC-V native qualification remain separately unadmitted.
+Fresh AWS Arm/Mac capture is required for the new ordinary CPU integration after
+the fresh owner pentest; follow the [capture instructions](sha512-t-cpu-evidence.md).
+CPU admission and especially RISC-V native qualification remain separate.
 
-After all these checks and a clean exceptional pentest, update the general
+After all these checks, reviewed native evidence disposition and a clean exceptional pentest, update the general
 SHA-512/t implementation row to Fully implemented (portable). Keep independent
 cryptographic review and FIPS validation negative. Short t has correspondingly
 short collision/preimage strength; implementing general t does not approve it

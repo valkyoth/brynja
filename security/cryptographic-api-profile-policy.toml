@@ -242,10 +242,10 @@ verification = "not-applicable"
 kind = "primitive"
 secret_template = "hardened-hash"
 required = ["operation-direction", "byte-input", "bit-input", "one-shot", "incremental-state", "fixed-output", "ownership", "no-std", "cancellation"]
-forbidden = ["extendable-output", "verification", "import", "export", "generation", "reset", "clone", "snapshot", "provider", "backend", "hosted-adapter"]
+forbidden = ["extendable-output", "verification", "import", "export", "generation", "reset", "clone", "snapshot", "provider", "hosted-adapter"]
 caller_owned = ["buffers"]
 not_applicable = ["overlap"]
-optional_isolated = []
+optional_isolated = ["backend"]
 internal_only = []
 consumers = ["consumer:construction"]
 

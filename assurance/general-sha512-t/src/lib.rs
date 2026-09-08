@@ -6,6 +6,15 @@ mod boundaries;
 mod corpus;
 pub mod resources;
 
+/// Visit exactly the frozen corpus rows. The visitor must validate its own
+/// outputs; successful parsing by itself is not cryptographic acceptance.
+pub fn visit_corpus<F>(input: &str, visitor: F) -> Result<usize, acceptance::Error>
+where
+    F: FnMut(u16, usize, &[u8], &[u8]) -> Result<(), acceptance::Error>,
+{
+    corpus::visit(input, visitor)
+}
+
 use brynja_hash_sha2::{Sha512TBits, Sha512TDigest, Sha512TError};
 
 /// Import a public result from another implementation with exact identity.

@@ -25,6 +25,13 @@ fn hex(text: &str, storage: &mut [u8]) -> Result<usize, Error> {
 }
 
 pub(crate) fn run(corpus: &str) -> Result<usize, Error> {
+    visit(corpus, check_case)
+}
+
+pub(crate) fn visit<F>(corpus: &str, mut check: F) -> Result<usize, Error>
+where
+    F: FnMut(u16, usize, &[u8], &[u8]) -> Result<(), Error>,
+{
     if corpus.len() > 3_000_000 {
         return Err(Error::Corpus);
     }
@@ -54,10 +61,13 @@ pub(crate) fn run(corpus: &str) -> Result<usize, Error> {
             let mut expected = [0; 64];
             let m = hex(fields.next().ok_or(Error::Corpus)?, &mut message)?;
             let n = hex(fields.next().ok_or(Error::Corpus)?, &mut expected)?;
+            if m != bits.div_ceil(8) || n != usize::from(t).div_ceil(8) {
+                return Err(Error::Corpus);
+            }
             if fields.next().is_some() {
                 return Err(Error::Corpus);
             }
-            check_case(
+            check(
                 t,
                 bits,
                 message.get(..m).ok_or(Error::Corpus)?,
@@ -75,6 +85,36 @@ pub(crate) fn run(corpus: &str) -> Result<usize, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn visitors_never_receive_mismatched_message_or_digest_widths() {
+        for input in ["1 0 aa 80", "1 0 - -", "1 0 - aabb"] {
+            let mut calls = 0;
+            assert!(
+                visit(input, |_, _, _, _| {
+                    calls += 1;
+                    Ok(())
+                })
+                .is_err()
+            );
+            assert_eq!(calls, 0);
+        }
+        for corpus in [
+            "1 0 - 80\n1 24 - 00",
+            "1 0 - 80\n1 24 00 00",
+            "1 0 - 80\n1 24 0000 00",
+            "1 0 - 80\n1 24 00000000 00",
+        ] {
+            let mut calls = 0;
+            assert!(
+                visit(corpus, |_, _, _, _| {
+                    calls += 1;
+                    Ok(())
+                })
+                .is_err()
+            );
+            assert_eq!(calls, 1);
+        }
+    }
     #[test]
     fn malformed_input_is_rejected() {
         for input in [

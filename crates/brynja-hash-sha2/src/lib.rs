@@ -17,6 +17,9 @@ mod digest;
 mod error;
 #[cfg(feature = "general-sha512-t")]
 mod general;
+
+#[cfg(all(feature = "general-sha512-t", feature = "cpu"))]
+pub use general::{Sha512TAcceleratedError, sha512_t_bits_with_backend, sha512_t_with_backend};
 mod hardened;
 mod sha224;
 mod sha256;

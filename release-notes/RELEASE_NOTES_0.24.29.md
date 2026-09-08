@@ -1,10 +1,14 @@
 # Brynja v0.24.29
 
-Status: implementation candidate; exceptional owner pentest required.
+Status: implementation candidate; fresh exceptional owner pentest and native evidence disposition required.
 
-## General SHA-512/t final scalar evidence
+## General SHA-512/t final evidence and ordinary CPU integration
 
-No production cryptography changes. This final implementation pass replays the
+The ordinary general SHA-512/t API now exposes explicit CPU byte/bit one-shot,
+update and consuming finalization operations under both optional features. It
+reuses existing AArch64 SHA-512 and RV64 Zknh kernels; no kernel, unsafe code,
+admission or hardened CPU path is added. IV derivation remains portable.
+This final implementation pass also replays the
 frozen all-510-parameter, 4590-case package-external ordinary/hardened byte/bit
 consumer and retains the lifecycle, compiler-cleanup and negative controls.
 
@@ -22,7 +26,8 @@ consumer and retains the lifecycle, compiler-cleanup and negative controls.
 
 See [commands, coverage and limits](../docs/sha512-t-final-evidence.md).
 General SHA-512/t remains **In progress** until the final exceptional pentest
-passes. Then its portable implementation row can become Fully implemented;
+and reviewed native AWS Arm/Mac evidence disposition pass. Then its portable
+implementation row can become Fully implemented;
 independent cryptographic review and FIPS validation stay negative.
 
 ## Release and residual limits

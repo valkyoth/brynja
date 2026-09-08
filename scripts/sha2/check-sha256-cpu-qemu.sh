@@ -54,3 +54,4 @@ RUSTFLAGS="--cfg brynja_cpu_evidence -C target-feature=+zknh -C linker=$riscv_li
     --target riscv64gc-unknown-linux-gnu
 
 echo "AArch64 SHA2/SHA512 and RISC-V Zknh candidates match all six SHA-2 identities under supplemental QEMU execution"
+python3 scripts/sha2/general_sha512_t_cpu.py

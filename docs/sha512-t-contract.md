@@ -5,7 +5,9 @@ typed secret outputs and explicit declassification. v0.24.27 closes the
 [secret lifecycle evidence](sha512-t-lifecycle.md); the owner pentest/retest is green.
 v0.24.28 freezes [portable public acceptance](sha512-t-public-acceptance.md)
 against extracted packages; its owner pentest/retest is green.
-v0.24.29 adds [final scalar work/resource/profile evidence](sha512-t-final-evidence.md);
+v0.24.29 adds [final work/resource/profile evidence](sha512-t-final-evidence.md)
+and [ordinary explicit CPU APIs](sha512-t-cpu-evidence.md), with fresh pentest
+and native AWS Arm/Mac evidence disposition required before closure;
 its exceptional owner review is pending. Do not mark the family complete yet.
 The six named SHA-2 functions remain complete and unchanged. This extension
 is a separate row, closing only at v0.24.29. No CPU backend is admitted.
@@ -64,11 +66,13 @@ facade reexport or protocol selection occurs implicitly. If a facade adapter
 is later added it must forward that explicit feature and preserve the identity.
 The leaf remains allocation-independent no_std, Rust 1.90.0 through the current
 default, first-party Rust only, with source files no larger than 500 lines.
-No third-party dependency, new unsafe boundary or hardware session is needed.
+Portable operations need no hardware session. The optional ordinary CPU
+operations reuse an existing session; no third-party dependency or new unsafe
+boundary is introduced. Hardened operations remain portable-only.
 
 ## Public API matrix
 
-Names and signatures below have been callable since v0.24.26.
+Names and signatures below are callable from their listed milestone.
 Any necessary contract change must update the machine register and tests with
 an explicit review; implementations must not expose stubs for missing rows.
 All parameter values have every row below. The ordinary profile is public-data
@@ -83,6 +87,9 @@ only; hardened ownership is mandatory for confidential input or derived state.
 | Ordinary state | `Sha512T::new(Sha512TBits)`, `update(&mut self, &[u8]) -> Result<(), Sha512TError>` | 0.24.26 |
 | Ordinary finish | `finalize(self)`, `finalize_bits(self, BitString)` -> typed public digest result | 0.24.26 |
 | Ordinary one-shot | `sha512_t(parameter, &[u8])`, `sha512_t_bits(parameter, BitString)` -> typed public digest result | 0.24.26 |
+| Ordinary CPU update | `update_with_backend(&mut self, &[u8], &Sha512BackendSession)` -> `Result<(), Sha512TAcceleratedError>` | 0.24.29 |
+| Ordinary CPU finish | `finalize_with_backend(self, &session)`, `finalize_bits_with_backend(self, BitString, &session)` -> parameter-typed public digest result | 0.24.29 |
+| Ordinary CPU one-shot | `sha512_t_with_backend(parameter, &[u8], &session)`, `sha512_t_bits_with_backend(parameter, BitString, &session)` -> parameter-typed public digest result | 0.24.29 |
 | Hardened state | `HardenedSha512T::new(parameter)`, `update(&mut self, &[u8])` | 0.24.26 |
 | Explicit public finish | `finalize_public(self, PublicDeclassification)`, `finalize_bits_public(self, BitString, PublicDeclassification)` -> typed public digest result | 0.24.26 |
 | Secret finish | `finalize_secret(self, &mut [u8])`, `finalize_bits_secret(self, BitString, &mut [u8])` -> secret digest owner result | 0.24.26 |
@@ -212,8 +219,10 @@ The existing mandatory SHA-2 owner is reused; IV derivation sees only public t.
 - v0.24.28: frozen package-external no_std fixture, all rows, every t, malformed
   destinations, canonical output, feature isolation, real consumer examples.
 - v0.24.29: rerun that same fixture on final source, affected Miri/Kani/ASan,
-  constant-work/cleanup and performance evidence, native unsupported/admission
-  disposition and exceptional pentest. Only then mark general SHA-512/t complete.
+  constant-work/cleanup and performance evidence; add ordinary CPU API integration,
+  all-t forced execution and quarantine controls, then fresh exceptional pentest
+  and reviewed AWS Arm/Mac evidence disposition. Only then mark general
+  SHA-512/t complete; no CPU admission or hardened acceleration is implied.
 
 No oracle, compiler proof, sanitizer, native timing or cleanup execution for
 unimplemented general APIs is claimed at v0.24.24. Existing full named SHA-2

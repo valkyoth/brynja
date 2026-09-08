@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.24.29"
-state = "final-scalar-evidence"
+state = "final-evidence-and-ordinary-cpu-integration"
 owner = "brynja-hash-sha2"
 feature = "general-sha512-t"
 default_enabled = false
@@ -61,9 +61,12 @@ hardened_secret_finish = "0.24.26"
 hardened_one_shot = "0.24.26"
 secret_output_access = "0.24.26"
 cancel = "0.24.26"
+ordinary_cpu_update = "0.24.29"
+ordinary_cpu_finish = "0.24.29"
+ordinary_cpu_one_shot = "0.24.29"
 
 [evidence]
-current = "all-t-hashing-lifecycle-package-and-final-scalar-evidence"
+current = "all-t-hashing-lifecycle-package-scalar-and-unadmitted-ordinary-cpu-evidence"
 iv_oracle = "0.24.25"
 digest_oracle = "0.24.26"
 lifecycle = "0.24.27"

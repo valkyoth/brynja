@@ -34,6 +34,7 @@ GROUP_PREFIXES = {
     "legacy": ("assurance/legacy-hash-", "scripts/legacy-hash/"),
     "sha2": (
         "assurance/general-sha512-t/",
+        "assurance/general-sha512-t-cpu/",
         "assurance/hash-final-acceptance/",
         "assurance/sha2-",
         "crates/brynja-hash-core/",

@@ -54,7 +54,8 @@ def fingerprint():
 def validate_declaration():
     import tomllib
     data = tomllib.loads((ROOT / DECLARATION).read_text())
-    expected = dict(schema=1, milestone="0.24.29", implementation="portable-only",
+    expected = dict(schema=1, milestone="0.24.29", implementation="portable-with-unadmitted-ordinary-cpu",
+                    native_disposition="required-after-fresh-pentest",
                     independent_review=False, fips_validated=False, cpu_admitted=False,
                     pentest="required-before-completion", parameters=510, oracle_cases=4590,
                     work_cases_per_profile=12240, work_profiles=["debug", "release"],

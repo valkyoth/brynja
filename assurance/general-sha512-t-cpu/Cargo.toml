@@ -1,0 +1,21 @@
+[workspace]
+
+[package]
+name = "brynja-general-sha512-t-cpu-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", default-features = false, features = ["general-sha512-t", "cpu"] }
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", default-features = false }
+brynja-general-sha512-t-consumer = { path = "../general-sha512-t" }
+
+[lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
+
+[lints.clippy]
+unwrap_used = "forbid"
+expect_used = "forbid"

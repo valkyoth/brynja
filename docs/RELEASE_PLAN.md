@@ -4120,7 +4120,9 @@ Exit criteria:
 
 Status: awaiting pentest
 
-Plan scope: Rerun the frozen General SHA-512/t public fixture and complete exact-source correctness, cleanup, side-channel, resource and cross-target evidence for `brynja-hash-sha2`; record scalar-only support or independently admitted acceleration honestly, close every promised operation and require exceptional pentest disposition before updating implementation status.
+Plan scope: Rerun the frozen General SHA-512/t public fixture and complete exact-source correctness, cleanup, side-channel, resource and cross-target evidence for `brynja-hash-sha2`; add explicit ordinary byte/bit and streaming CPU APIs over existing unadmitted AArch64 SHA-512 and RV64 Zknh candidates, keep hardened paths portable-only, and require fresh exceptional pentest plus reviewed AWS Arm/Mac native evidence disposition before implementation closure without granting CPU admission.
+
+CPU integration acceptance: exercise all 510 parameters and 4590 independent vectors through byte/bit one-shot, update and consuming finalization in debug/release; require normal-build non-admission, injected-KAT quarantine, unchanged rejected-update state, compiled no-fallback mutants and consuming/hardened compile-fail controls. After a fresh owner pentest, capture exact-source AWS Arm and Apple M2 observations with `scripts/sha2/capture-general-sha512-t-native.py`. Record x86 portable-only and RV64 QEMU-only limitations; ordinary acceleration never confers hardened cleanup, migration safety, independent review or FIPS approval.
 
 Goal: deliver this bounded General SHA-512/t step over accepted prerequisites v0.24.28, without claiming unfinished neighboring operations.
 

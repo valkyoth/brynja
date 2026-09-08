@@ -8,6 +8,11 @@ mod ordinary;
 mod parameter;
 mod secret;
 
+#[cfg(feature = "cpu")]
+mod cpu;
+#[cfg(feature = "cpu")]
+pub use cpu::{Sha512TAcceleratedError, sha512_t_bits_with_backend, sha512_t_with_backend};
+
 pub use digest::Sha512TDigest;
 pub use hardened::HardenedSha512T;
 pub use one_shot::{

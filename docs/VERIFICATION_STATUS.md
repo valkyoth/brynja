@@ -3,7 +3,7 @@
 General SHA-512/t is a separate **In progress** extension: v0.24.26 implements
 ordinary/hardened byte/bit hashing and typed secret output under the
 [authority/API contract](sha512-t-contract.md); final family closure is v0.24.29.
-The [final scalar evidence candidate](sha512-t-final-evidence.md) retains that
+The [final scalar and ordinary CPU evidence candidate](sha512-t-final-evidence.md) retains that
 status until its exceptional owner pentest/retest passes.
 The six named SHA-2 identities remain fully implemented and unverified.
 

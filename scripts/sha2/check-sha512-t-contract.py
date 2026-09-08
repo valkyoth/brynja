@@ -14,7 +14,7 @@ def main() -> int:
     valid = [t for t in range(1, 512) if t != 384]
     if len({contract.descriptor(t)[0] for t in valid}) != 510:
         raise ValueError("incomplete parameter descriptors")
-    print("General SHA-512/t contract: PASS; 510 parameter descriptors, 11 operation groups")
+    print("General SHA-512/t contract: PASS; 510 parameter descriptors, 14 operation groups")
     print("Contract model gate; hashing/lifecycle/package execution is separate; final closure pending v0.24.29; no FIPS/CPU admission")
     return 0
 

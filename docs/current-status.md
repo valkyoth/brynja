@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 final scalar SHA-512/t evidence awaits exceptional owner pentest. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 final SHA-512/t evidence and ordinary CPU integration await fresh exceptional owner pentest and AWS Arm/Mac evidence disposition. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
 
 The current candidate implements [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs behind an explicit default-off leaf feature. General family

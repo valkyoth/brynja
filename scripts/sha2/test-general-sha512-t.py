@@ -188,6 +188,11 @@ class GeneralTests(unittest.TestCase):
     def test_feature_claim_and_coverage_mutations(self):
         original = policy.read
         cases = [
+            (policy.PREFIX + "mod.rs", '#[cfg(feature = "cpu")]\nmod cpu;', 'mod cpu;'),
+            (policy.PREFIX + "cpu.rs", '.update_with_backend(input, backend)', '.update(input)'),
+            (policy.PREFIX + "hardened.rs", 'use super::', 'use brynja_crypto_cpu::Sha512BackendSession;\nuse super::'),
+            ("scripts/sha2/check-sha256-cpu-qemu.sh", "python3 scripts/sha2/general_sha512_t_cpu.py", "# omitted"),
+            ("scripts/checks.sh", "python3 scripts/sha2/test-general-sha512-t-cpu.py", "# omitted"),
             ("scripts/zeroization/check-zeroization-sanitizer.sh", "--manifest-path assurance/general-sha512-t/Cargo.toml", "--manifest-path unrelated/Cargo.toml"),
             ("scripts/zeroization/check-zeroization-sanitizer.sh", "--bin general-sha512-t-profile --target x86_64-unknown-linux-gnu", "--bin unrelated --target x86_64-unknown-linux-gnu"),
             ("scripts/sha2/check-general-sha512-t.py", "    final.run()", "    # omitted"),
@@ -229,6 +234,7 @@ class GeneralTests(unittest.TestCase):
                         '[dependencies]\nbrynja-hash-sha2 = { path = "' + str(dep) + '", default-features = false FEATURES }\n')
             cases = (
                 (False, "use brynja_hash_sha2::Sha512TBits;", "E0432"),
+                (True, "use brynja_hash_sha2::sha512_t_with_backend;", "E0432"),
                 (True, "const BAD: brynja_hash_sha2::Sha512TBits = brynja_hash_sha2::Sha512TBits(384);", "E0423"),
                 (True, "fn convert(d: brynja_hash_sha2::Sha512TDigest) -> brynja_hash_sha2::Sha512_224Digest { d }", "E0308"),
                 (True, "fn copy(s: brynja_hash_sha2::HardenedSha512T) { let _a=s; let _b=s; }", "E0382"),

@@ -73,6 +73,12 @@ Mandatory clearing covers the existing eight SHA-2 owner regions, including
 schedule, buffered input and staging; it does not promise erasure of registers,
 compiler copies/spills, caches, dumps, swap, aborts or caller-created copies.
 
+`PublicDeclassification::acknowledge()` is available to any caller: it records
+intent in code, not runtime authorization or access control. Applications own
+disclosure policy, auditing and the handling of explicitly borrowed secret bytes.
+For untrusted streams, also enforce total input limits, time budgets and rate
+limits at ingestion; the hash's mathematical length limit is not a DoS budget.
+
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
 crate provides correct portable byte-oriented one-shot and streaming APIs for
 all six FIPS 180-4 SHA-2 algorithms. The optional `cpu` feature added at v0.22.1 and extended

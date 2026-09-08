@@ -99,6 +99,11 @@ These value operations passed the v0.24.25 owner pentest; hashing is a new scope
 
 Hardened public one-shot calls additionally require a final
 `PublicDeclassification` argument, using the existing explicit acknowledgement.
+Anyone can construct that acknowledgement. It makes the public conversion
+deliberate at the call site; it is not access control, caller authentication,
+an audit log or a runtime authorization check. It prevents implicit typed
+conversion, not misuse of explicitly exposed secret bytes. Applications own
+their disclosure policy and any authorization or audit requirements.
 Hardened public and secret functions have the same checked error type. No reset,
 clone, serialization, raw state/IV import or implicit secret digest export is
 promised. No XOF, decode or decryption exists for this fixed one-way hash.
@@ -165,6 +170,9 @@ and may cancel between calls. One-shot work is explicitly synchronous and
 linear; no mid-call interruption guarantee is made. Work depends on public
 input length and t, not secret contents. Include output length and identity in
 application policy; this API is not a general authentication construction.
+Network-facing callers must enforce their own total input limits, time budgets
+and rate limits at ingestion. The FIPS message-length ceiling is an algorithm
+bound, not a practical denial-of-service limit.
 
 ## Required evidence and stage boundaries
 

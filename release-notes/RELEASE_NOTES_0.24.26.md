@@ -1,6 +1,12 @@
 # Brynja 0.24.26 Release Notes
 
-Status: implementation and repository checks PASS; awaiting owner pentest
+Status: implementation and repository checks PASS; awaiting final owner sign-off
+
+The supplied review of `908842f6` identified no defect requiring remediation.
+Its informational notes are dispositioned in the permanent pentest report;
+declassification intent, caller input budgets and sanitizer limitations are
+clarified without changing Rust, CI or the release flow. Final owner sign-off
+and release checks remain pending.
 
 ## Scope
 

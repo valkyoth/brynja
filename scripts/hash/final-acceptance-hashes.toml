@@ -21,7 +21,7 @@
 ".github/workflows/ci.yml" = "9965b59dbb23a8394baca8fd1768aa61b3fbfa3d0c728befd978be8435841a88"
 "README.md" = "758fc4531d30932027b09fe1032be53e4556a6ab4db6ca96325387fe285ab639"
 "crates/brynja/README.md" = "b21dcf84634f87a973545703cf3dd965198abbcd8f4dcd494b366696de19b244"
-"crates/brynja-hash-sha2/README.md" = "6d391cd1a1e22640fdff0a4088b0d32285e8be0bb246847115aea292681d0b1a"
+"crates/brynja-hash-sha2/README.md" = "c5e6f797de8d96be170c8fac67e4a5f7a4cb1492cfe4515da675a0af8a9a2133"
 "crates/brynja-hash-sha3/README.md" = "77eadf3e2bb196ba0d8d21f2f71acf2388718ec9a09d5ad072d1b92eab21aa5d"
 "docs/VERIFICATION_STATUS.md" = "3fb68678141c1a412941e853271ebed87aee83b56f58a47ffd6b6f6a8137b4c6"
 "docs/current-status.md" = "17c3d6f4154acba61adfad6604d67ad786e6db7b66abfd202bfb2f4aa8040d74"

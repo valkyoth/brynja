@@ -57,6 +57,7 @@ quick_sha2() {
 }
 
 full_sha2() {
+    run_miri -p brynja-hash-sha2 --lib hardened::tests::checked_length_
     run_miri --manifest-path assurance/general-sha512-t/Cargo.toml --lib
     run_miri -p brynja-hash-sha2 --features general-sha512-t --test general_hash --lib \
         dynamic_lifecycle_

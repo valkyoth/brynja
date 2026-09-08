@@ -14,6 +14,7 @@ OUTPUT = Path("crates/brynja-hash-sha2/src/hardened/output.rs")
 STATE32 = Path("crates/brynja-hash-sha2/src/hardened/state32.rs")
 STATE64 = Path("crates/brynja-hash-sha2/src/hardened/state64.rs")
 TEST = Path("crates/brynja-hash-sha2/tests/hardened.rs")
+LENGTH_TEST = Path("crates/brynja-hash-sha2/src/hardened/tests.rs")
 LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
 CHECKS = Path("scripts/checks.sh")
@@ -24,7 +25,7 @@ FIXTURE_LIB = Path("assurance/sha2-hardened-api/src/lib.rs")
 MIRI = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 FILES = (
-    OWNER, API, OUTPUT, STATE32, STATE64, TEST, LIB, CRYPTO, CHECKS, CODEGEN,
+    OWNER, API, OUTPUT, STATE32, STATE64, TEST, LENGTH_TEST, LIB, CRYPTO, CHECKS, CODEGEN,
     FIXTURE_MANIFEST, FIXTURE_LOCK, FIXTURE_LIB, MIRI, SANITIZER,
 )
 
@@ -65,6 +66,11 @@ def validate(root: Path = ROOT) -> None:
     require(owner, "impl Drop for HardenedSha2Owner", "terminal cleanup")
     require(owner, "self.wipe();", "terminal cleanup")
     api = loaded[API]
+    if "wrapping_mul" in api or api.count(".checked_mul(8)") != 4:
+        fail("named byte finalizers require four locally checked bit lengths")
+    require(api, "#[cfg(test)]\nmod tests;", "synthetic length regressions")
+    for identity in ("sha224", "sha256", "sha384", "sha512", "sha512_224", "sha512_256"):
+        require(loaded[LENGTH_TEST], f"checked_length_{identity}", "finalizer length coverage")
     for identity in (
         "HardenedSha224", "HardenedSha256", "HardenedSha384",
         "HardenedSha512", "HardenedSha512_224", "HardenedSha512_256",
@@ -105,11 +111,13 @@ def validate(root: Path = ROOT) -> None:
     require(loaded[FIXTURE_LIB], "#![no_std]", "downstream no_std fixture")
     require(loaded[FIXTURE_LIB], "exercise_all", "downstream all-identity fixture")
     require(loaded[MIRI], "--test hardened", "Miri hardened-state coverage")
+    require(loaded[MIRI], "--lib hardened::tests::checked_length_", "Miri local finalizer arithmetic")
     require(loaded[SANITIZER], "--test hardened", "sanitizer hardened-state coverage")
 
 
 def run_acceptance() -> str:
     commands = (
+        ["cargo", "test", "--locked", "-p", "brynja-hash-sha2", "--lib", "hardened::tests::checked_length_"],
         ["cargo", "test", "--locked", "-p", "brynja-hash-sha2", "--test", "hardened"],
         ["cargo", "test", "--locked", "--manifest-path", str(FIXTURE_MANIFEST)],
         [

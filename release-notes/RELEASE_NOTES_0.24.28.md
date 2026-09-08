@@ -1,12 +1,13 @@
 # Brynja v0.24.28
 
-Status: implementation candidate; awaiting owner pentest.
+Status: implementation candidate; low-severity arithmetic hardening fixed, awaiting owner retest.
 
 ## Scope
 
 General SHA-512/t portable public API acceptance over signed v0.24.27.
-No production cryptographic behavior, runtime dependency, CPU admission or
-facade API changes. Stale SHA-512/t parameter and digest documentation sentences are
+No runtime dependency, CPU admission or facade API changes. Pentest remediation
+adds local checked byte-to-bit conversions to all six named hardened SHA-2
+finalizers; valid input results are unchanged. Stale SHA-512/t parameter and digest documentation sentences are
 corrected to acknowledge the existing hashing and secret-output APIs.
 
 - Runnable no_std consumer exercises all 510 valid t and 4590 independent byte
@@ -19,6 +20,12 @@ corrected to acknowledge the existing hashing and secret-output APIs.
 - Debug/release malformed-corpus rejection, external ownership/type compile
   failures, and six compiled package IV/cleanup mutations.
 - CI toolchain and bare-metal scripts now explicitly include this consumer.
+- A reported low-severity defense-in-depth gap is closed at four macro call
+  sites: over-limit internal lengths return `MessageTooLong`, public output
+  stays untouched, and secret destinations are cleared on rejection. Existing
+  update limits already made these states unreachable through public APIs.
+  Six synthetic boundary tests and twelve compiled arithmetic/cleanup mutants
+  cover both widths, all six identities and debug/release execution.
 
 See [runnable commands and operation coverage](../docs/sha512-t-public-acceptance.md).
 General SHA-512/t stays **In progress** pending v0.24.29 final evidence. The six

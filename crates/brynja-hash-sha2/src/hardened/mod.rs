@@ -4,6 +4,8 @@ mod output;
 mod owner;
 mod state32;
 mod state64;
+#[cfg(test)]
+mod tests;
 
 use brynja_core::OwnedSecretRegion;
 
@@ -118,7 +120,11 @@ macro_rules! hardened32 {
                 if destination.len() != $output {
                     return Err(HardenedSha2Error::OutputLength);
                 }
-                let bits = self.owner.message_bytes32().wrapping_mul(8);
+                let bits = self
+                    .owner
+                    .message_bytes32()
+                    .checked_mul(8)
+                    .ok_or(HardenedSha2Error::MessageTooLong)?;
                 self.owner.finalize32(None, bits, $output);
                 let output = self
                     .owner
@@ -132,7 +138,15 @@ macro_rules! hardened32 {
                 mut self,
                 destination: &'output mut [u8],
             ) -> Result<OwnedSecretRegion<'output>, HardenedSha2Error> {
-                let bits = self.owner.message_bytes32().wrapping_mul(8);
+                let bits = match self.owner.message_bytes32().checked_mul(8) {
+                    Some(bits) => bits,
+                    None => {
+                        return Err(clear_failed_secret_output(
+                            destination,
+                            HardenedSha2Error::MessageTooLong,
+                        ));
+                    }
+                };
                 self.owner.finalize32(None, bits, $output);
                 let output = match self.owner.staged($output) {
                     Some(output) => output,
@@ -281,7 +295,11 @@ macro_rules! hardened64 {
                 if destination.len() != $output {
                     return Err(HardenedSha2Error::OutputLength);
                 }
-                let bits = self.owner.message_bytes64().wrapping_mul(8);
+                let bits = self
+                    .owner
+                    .message_bytes64()
+                    .checked_mul(8)
+                    .ok_or(HardenedSha2Error::MessageTooLong)?;
                 self.owner.finalize64(None, bits, $output);
                 let output = self
                     .owner
@@ -295,7 +313,15 @@ macro_rules! hardened64 {
                 mut self,
                 destination: &'output mut [u8],
             ) -> Result<OwnedSecretRegion<'output>, HardenedSha2Error> {
-                let bits = self.owner.message_bytes64().wrapping_mul(8);
+                let bits = match self.owner.message_bytes64().checked_mul(8) {
+                    Some(bits) => bits,
+                    None => {
+                        return Err(clear_failed_secret_output(
+                            destination,
+                            HardenedSha2Error::MessageTooLong,
+                        ));
+                    }
+                };
                 self.owner.finalize64(None, bits, $output);
                 let output = match self.owner.staged($output) {
                     Some(output) => output,

@@ -23,6 +23,9 @@ python3 scripts/constant-time/check-constant-time-evidence.py
 python3 scripts/constant-time/test-constant-time-evidence.py
 python3 scripts/cryptography/check-api-profiles.py
 python3 scripts/cryptography/test-api-profiles.py
+python3 scripts/cpu/check-acceleration-availability.py
+python3 scripts/cpu/test-acceleration-availability.py
+cargo test --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml
 python3 scripts/cryptography/test-mir-cleanup-flow.py
 python3 scripts/cryptography/test-secret-owner-compiler.py
 python3 scripts/cryptography/check-secret-owner-compiler.py

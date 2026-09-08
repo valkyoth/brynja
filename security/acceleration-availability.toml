@@ -1,0 +1,351 @@
+# v0.24.30 normative future-readiness contract. NOT execution authority.
+schema = 1
+milestone = "0.24.30"
+state = "contract-only-zero-activations"
+historical_runtime_gate = "security/cpu-backend-admissions.toml"
+default_mode = "Portable"
+modes = ["Portable", "Prefer", "Require"]
+report_fields = ["kernel", "algorithm", "profile", "workload", "route", "fallback_reason", "scalar_tail_blocks", "vector_blocks", "host_workers"]
+operational_inputs = ["first-party-correctness", "normal-public-api-acceptance", "complete-target-and-os-contract", "startup-kat-and-health", "exact-profile-cleanup", "failure-atomicity", "package-feature-isolation"]
+non_authorizing_observations = ["native-measurements", "independent-review", "fips-validation", "performance"]
+independent_review_required_for_ordinary_use = false
+fips_certificate_required_for_ordinary_use = false
+evidence_cfg_is_public_availability = false
+cargo_feature_is_cpu_authority = false
+safe_boolean_is_cpu_authority = false
+hidden_fallback = false
+midstream_loss = "terminal-for-prefer-and-require"
+kat_failure = "quarantine-no-fallback"
+output_failure = "public-preserved-or-secret-destination-cleared"
+scope = "first-party-rust-no-std-portable-default-opt-in-host-and-legacy"
+future_policy = "reviewed-code-change-and-project-tests-never-a-boolean-flip"
+
+[[kernels]]
+id = "sha256-x86"
+variant = "X86Sha256"
+owner = "brynja-crypto-cpu"
+source = "crates/brynja-crypto-cpu/src/x86_sha.rs"
+symbol = "compress"
+architecture = "x86_64"
+compiler_features = ["sha"]
+baseline_features = ["sse2"]
+operating_state = "complete-isa-bundle-register-state-and-compatible-scheduling"
+workload = "dedicated-instructions"
+lanes = 1
+ordinary_activation = "0.24.33"
+hardened_activation = "0.24.34"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "sha256-arm"
+variant = "ArmSha256"
+owner = "brynja-crypto-cpu"
+source = "crates/brynja-crypto-cpu/src/aarch64_sha2.rs"
+symbol = "compress"
+architecture = "aarch64"
+compiler_features = ["neon","sha2"]
+baseline_features = []
+operating_state = "complete-isa-bundle-register-state-and-compatible-scheduling"
+workload = "dedicated-instructions"
+lanes = 1
+ordinary_activation = "0.24.33"
+hardened_activation = "0.24.34"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "sha256-rv64"
+variant = "RvSha256"
+owner = "brynja-crypto-cpu"
+source = "crates/brynja-crypto-cpu/src/riscv64_zknh.rs"
+symbol = "compress"
+architecture = "riscv64"
+compiler_features = ["zknh"]
+baseline_features = []
+operating_state = "zknh-on-every-eligible-hart"
+workload = "dedicated-instructions"
+lanes = 1
+ordinary_activation = "0.24.50"
+hardened_activation = "not-scheduled-portable-only"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-only-no-hardened-rv64-claim"
+native_measurements = "none-qemu-only"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "sha512-arm"
+variant = "ArmSha512"
+owner = "brynja-crypto-cpu"
+source = "crates/brynja-crypto-cpu/src/aarch64_sha2.rs"
+symbol = "compress512"
+architecture = "aarch64"
+compiler_features = ["neon","sha3"]
+baseline_features = []
+operating_state = "complete-isa-bundle-register-state-and-compatible-scheduling"
+workload = "dedicated-instructions"
+lanes = 1
+ordinary_activation = "0.24.33"
+hardened_activation = "0.24.34"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "sha512-rv64"
+variant = "RvSha512"
+owner = "brynja-crypto-cpu"
+source = "crates/brynja-crypto-cpu/src/riscv64_zknh.rs"
+symbol = "compress512"
+architecture = "riscv64"
+compiler_features = ["zknh"]
+baseline_features = []
+operating_state = "zknh-on-every-eligible-hart"
+workload = "dedicated-instructions"
+lanes = 1
+ordinary_activation = "0.24.50"
+hardened_activation = "not-scheduled-portable-only"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-only-no-hardened-rv64-claim"
+native_measurements = "none-qemu-only"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "keccak-x86"
+variant = "X86Keccak"
+owner = "brynja-crypto-cpu"
+source = "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs"
+symbol = "permute"
+architecture = "x86_64"
+compiler_features = ["avx2"]
+baseline_features = []
+operating_state = "osxsave-xcr0-xmm-ymm-and-compatible-scheduling"
+workload = "single-state-simd"
+lanes = 1
+ordinary_activation = "0.24.35"
+hardened_activation = "0.24.37"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "keccak-arm"
+variant = "ArmKeccak"
+owner = "brynja-crypto-cpu"
+source = "crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs"
+symbol = "permute"
+architecture = "aarch64"
+compiler_features = ["neon","sha3"]
+baseline_features = []
+operating_state = "complete-isa-bundle-register-state-and-compatible-scheduling"
+workload = "dedicated-instructions"
+lanes = 1
+ordinary_activation = "0.24.35"
+hardened_activation = "0.24.37"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "sha1-x86"
+variant = "LegacyX86Sha1"
+owner = "brynja-legacy-sha1"
+source = "crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"
+symbol = "compress"
+architecture = "x86,x86_64"
+compiler_features = ["sha","sse2"]
+baseline_features = []
+operating_state = "complete-isa-bundle-register-state-and-compatible-scheduling"
+workload = "dedicated-instructions"
+lanes = 1
+ordinary_activation = "0.24.41"
+hardened_activation = "0.24.42"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "sha1-arm"
+variant = "LegacyArmSha1"
+owner = "brynja-legacy-sha1"
+source = "crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"
+symbol = "compress"
+architecture = "aarch64-little-endian"
+compiler_features = ["neon","sha2"]
+baseline_features = []
+operating_state = "complete-isa-bundle-register-state-and-compatible-scheduling"
+workload = "dedicated-instructions"
+lanes = 1
+ordinary_activation = "0.24.41"
+hardened_activation = "0.24.42"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "md5-x86"
+variant = "LegacyX86Md5x8"
+owner = "brynja-legacy-md5"
+source = "crates/brynja-legacy-md5/src/cpu/x86_avx2_md5.rs"
+symbol = "compress"
+architecture = "x86_64"
+compiler_features = ["avx2"]
+baseline_features = []
+operating_state = "osxsave-xcr0-xmm-ymm-and-compatible-scheduling"
+workload = "independent-message-simd"
+lanes = 8
+ordinary_activation = "0.24.43"
+hardened_activation = "0.24.44"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[kernels]]
+id = "md5-arm"
+variant = "LegacyArmMd5x4"
+owner = "brynja-legacy-md5"
+source = "crates/brynja-legacy-md5/src/cpu/aarch64_neon_md5.rs"
+symbol = "compress"
+architecture = "aarch64-little-endian"
+compiler_features = ["neon"]
+baseline_features = []
+operating_state = "complete-isa-bundle-register-state-and-compatible-scheduling"
+workload = "independent-message-simd"
+lanes = 4
+ordinary_activation = "0.24.43"
+hardened_activation = "0.24.44"
+ordinary_operational = false
+hardened_operational = false
+hardened_disposition = "portable-until-equivalent-owner-evidence"
+native_measurements = "correctness-observations-not-operational-authority"
+independent_review = false
+fips_validated = false
+
+[[families]]
+id = "sha256"
+algorithms = ["SHA-224","SHA-256"]
+kernels = ["sha256-x86","sha256-arm","sha256-rv64"]
+owner = "brynja-hash-sha2"
+current_feature = "cpu"
+ordinary_activation = "0.24.33"
+hardened_activation = "0.24.34"
+current_gap = "explicit-candidate-api"
+public_operational = false
+
+[[families]]
+id = "sha512"
+algorithms = ["SHA-384","SHA-512","SHA-512/224","SHA-512/256","SHA-512/t"]
+kernels = ["sha512-arm","sha512-rv64"]
+owner = "brynja-hash-sha2"
+current_feature = "cpu (+ general-sha512-t for arbitrary t)"
+ordinary_activation = "0.24.33"
+hardened_activation = "0.24.34"
+current_gap = "explicit-candidate-api"
+public_operational = false
+
+[[families]]
+id = "sponge"
+algorithms = ["SHA3-224","SHA3-256","SHA3-384","SHA3-512","SHAKE128","SHAKE256"]
+kernels = ["keccak-x86","keccak-arm"]
+owner = "brynja-hash-sha3"
+current_feature = "none (planned cpu)"
+ordinary_activation = "0.24.35"
+hardened_activation = "0.24.37"
+current_gap = "no-sponge-integration"
+public_operational = false
+
+[[families]]
+id = "cshake"
+algorithms = ["cSHAKE128","cSHAKE256"]
+kernels = ["keccak-x86","keccak-arm"]
+owner = "brynja-hash-sha3"
+current_feature = "none (planned cpu)"
+ordinary_activation = "0.24.36"
+hardened_activation = "0.24.37"
+current_gap = "no-sponge-integration"
+public_operational = false
+
+[[families]]
+id = "kmac"
+algorithms = ["KMAC128","KMAC256","KMACXOF128","KMACXOF256"]
+kernels = ["keccak-x86","keccak-arm"]
+owner = "brynja-mac-kmac"
+current_feature = "none (planned cpu)"
+ordinary_activation = "0.24.38"
+hardened_activation = "0.24.38"
+current_gap = "no-keyed-integration"
+public_operational = false
+
+[[families]]
+id = "tuple"
+algorithms = ["TupleHash128","TupleHash256","TupleHashXOF128","TupleHashXOF256"]
+kernels = ["keccak-x86","keccak-arm"]
+owner = "brynja-hash-tuple"
+current_feature = "none (planned cpu)"
+ordinary_activation = "0.24.39"
+hardened_activation = "0.24.39"
+current_gap = "no-construction-integration"
+public_operational = false
+
+[[families]]
+id = "parallel"
+algorithms = ["ParallelHash128","ParallelHash256","ParallelHashXOF128","ParallelHashXOF256"]
+kernels = ["keccak-x86","keccak-arm"]
+owner = "brynja-hash-parallel"
+current_feature = "none (planned cpu)"
+ordinary_activation = "0.24.40"
+hardened_activation = "0.24.40"
+current_gap = "threads-and-caller-scheduling-are-not-simd"
+public_operational = false
+
+[[families]]
+id = "sha1"
+algorithms = ["SHA-1"]
+kernels = ["sha1-x86","sha1-arm"]
+owner = "brynja-legacy-sha1"
+current_feature = "cpu"
+ordinary_activation = "0.24.41"
+hardened_activation = "0.24.42"
+current_gap = "isolated-explicit-candidate-api"
+public_operational = false
+
+[[families]]
+id = "md5"
+algorithms = ["MD5"]
+kernels = ["md5-x86","md5-arm"]
+owner = "brynja-legacy-md5"
+current_feature = "cpu (implies batch)"
+ordinary_activation = "0.24.43"
+hardened_activation = "0.24.44"
+current_gap = "isolated-explicit-batch-candidate-api"
+public_operational = false

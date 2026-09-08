@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 final scalar SHA-512/t evidence awaits exceptional owner pentest. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.29 signed; v0.24.30 acceleration availability contract awaits exceptional pentest. See the [candidate report](../security/pentest/v0.24.30.md). No CPU backend is admitted.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.29`. General SHA-512/t has callable ordinary/hardened
+advances to internal `0.24.30`. General SHA-512/t has callable ordinary/hardened
 byte/bit hashing behind an explicit leaf feature; all support crate
 versions remain unchanged.
 `brynja-hash-core 0.1.0`,
@@ -35,7 +35,7 @@ repository-only API-profile register covers 135 semantic capabilities across
 22 dimensions and inventories eight current, eight registered capability, plus
 73 planned secret owners with exact per-operation information-flow contracts,
 compiler-checked owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.1. The facade version advances for general SHA-512/t lifecycle closure; all previously existing support-package versions remain
+under Rust 1.90.0 and 1.98.1. The facade version advances for the acceleration availability contract; all previously existing support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
 

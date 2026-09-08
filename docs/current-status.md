@@ -17,10 +17,10 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 has a green scoped owner pentest, archived AWS Arm/Mac evidence disposition and passing final local release checks. Awaiting green GitHub/CodeQL and explicit tag approval. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.29 signed; v0.24.30 freezes the [acceleration availability contract](acceleration-availability.md) and awaits exceptional pentest. See the [candidate report](../security/pentest/v0.24.30.md). No production Rust changes or CPU backend activations.
 
-The current candidate implements [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
-byte/bit hashing APIs behind an explicit default-off leaf feature. General family
+Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
+byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family
 portable closure is complete at v0.24.29; no independent verification or FIPS validation is claimed.
 v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
 and batch public acceptance using the frozen v0.24.20 contract. See

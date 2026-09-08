@@ -1,0 +1,21 @@
+[workspace]
+
+[package]
+name = "brynja-acceleration-contract-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
+missing_docs = "deny"
+
+[lints.clippy]
+panic = "forbid"
+unwrap_used = "forbid"
+expect_used = "forbid"
+indexing_slicing = "forbid"
+arithmetic_side_effects = "forbid"

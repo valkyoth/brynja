@@ -37,7 +37,7 @@ All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged a
 
 CPU/SIMD candidates are not yet usable in ordinary downstream builds. The [opt-in acceleration plan](https://github.com/valkyoth/brynja/blob/main/docs/ACCELERATION_USABILITY_AUDIT.md) adds optional routes before HMAC while retaining portable defaults and separate independent-review/FIPS claims.
 
-Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.29** APIs. For published foundation APIs: `cargo add brynja --no-default-features`. For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
+Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.30** APIs. For published foundation APIs: `cargo add brynja --no-default-features`. For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
 
 ## Examples
 

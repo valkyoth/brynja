@@ -4146,7 +4146,7 @@ Exit criteria:
 
 ### v0.24.29 - General SHA-512/t - Final Evidence And Usability Closure
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Rerun the frozen General SHA-512/t public fixture and complete exact-source correctness, cleanup, side-channel, resource and cross-target evidence for `brynja-hash-sha2`; add explicit ordinary byte/bit and streaming CPU APIs over existing unadmitted AArch64 SHA-512 and RV64 Zknh candidates, keep hardened paths portable-only, and require fresh exceptional pentest plus reviewed AWS Arm/Mac native evidence disposition before implementation closure without granting CPU admission.
 
@@ -4176,7 +4176,12 @@ Exit criteria:
 
 ### v0.24.30 - Opt-In Acceleration Availability Contract
 
-Status: planned
+Status: awaiting pentest
+
+Implementation: [availability contract](acceleration-availability.md), exact
+kernel/family inventory and dependency-free executable selection model. This
+step changes no production Rust or backend admission; activation remains a
+separate reviewed implementation, beginning at v0.24.31.
 
 Plan scope: Separate operational availability, native measurement, independent review and FIPS validation; specify default-off features, Portable/Prefer/Require selection, exact backend identity, typed unsupported/quarantined errors and public package reachability without evidence-only cfgs.
 

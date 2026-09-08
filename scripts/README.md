@@ -30,6 +30,11 @@ SHA-1 kernel tests use the same two-key gate. See
 
 ## Directories
 
+`cpu/check-acceleration-availability.py` validates the v0.24.30 contract-only
+kernel/family inventory. Its companion tests compile selection-model mutants;
+they do not execute or authorize CPU kernels. See the
+[availability contract](../docs/acceleration-availability.md).
+
 | Directory | Ownership |
 | --- | --- |
 | `assurance/` | Shared bounded runners, mutation and differential harnesses, bare-metal checks, and Kani orchestration |

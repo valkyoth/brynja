@@ -953,9 +953,9 @@ and native-parallel disposition at v0.24.17; SP 800-185 is **Fully implemented**
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.28`; the current internal `0.24.29`
-candidate adds final work/resource/performance evidence and explicit ordinary CPU integration for opt-in hashing and typed secret
-outputs under the [general SHA-512/t contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
+milestones continue through `0.24.29`; the current internal `0.24.30`
+candidate freezes the [opt-in acceleration availability contract](https://github.com/valkyoth/brynja/blob/main/docs/acceleration-availability.md)
+and executable selection model. No production API or CPU admission changes.
 General SHA-512/t's portable ordinary/hardened APIs are **Fully implemented**
 after v0.24.29 acceptance, the scoped owner pentest and
 [AWS Arm/Mac evidence disposition](https://github.com/valkyoth/brynja/blob/main/assurance/sha512-t-observations/v0.24.29/README.md).
@@ -1075,7 +1075,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.29 keeps facade APIs unchanged; general SHA-512/t ordinary/hardened hashing is leaf-only, legacy leaves stay separate, CPU candidates remain unadmitted, and no TLS engine exists |
+| `brynja` | Modern production facade | Internal v0.24.30 keeps facade APIs unchanged; the acceleration availability contract enables no backend, general SHA-512/t remains leaf-only, legacy leaves stay separate, and no TLS engine exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted. Default-off general SHA-512/t ordinary/hardened byte/bit hashing and typed secret outputs complete portable family acceptance at v0.24.29 |

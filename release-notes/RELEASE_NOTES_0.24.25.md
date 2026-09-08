@@ -1,6 +1,6 @@
 # Brynja 0.24.25 Release Notes
 
-Status: implementation candidate; owner pentest required before tagging
+Status: owner pentest/retest PASS; final local release checks in progress
 
 ## Scope
 
@@ -38,7 +38,7 @@ Eight compiled mutants must execute and fail assertions, including equality
 that ignores the parameter. Verification-only Miri/sanitizer pins advance to
 nightly-2026-09-08; production Rust stays 1.98.1 with MSRV 1.90.0.
 See the [pentest report](../security/pentest/v0.24.25.md) for actual completed
-local checks and pending owner assessment; tests are not independent review.
+local checks and the owner-supplied green retest; tests are not independent review.
 
 ## Limits and release flow
 

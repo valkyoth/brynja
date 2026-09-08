@@ -72,7 +72,9 @@ cannot satisfy an operational acceleration promise.
   No hardened RV64 or RVV claim is scheduled by this inventory.
 
 The inventory names the current exact symbols, compiler features, existing leaf
-features and activation versions. SHA-2 ordinary/hardened activation is
+features and activation versions. Family dates do not promise every kernel:
+each route must also satisfy its kernel's activation and profile disposition,
+including RV64's later experimental-only stop. SHA-2 ordinary/hardened activation is
 v0.24.33/.34; SHA-3/SHAKE, cSHAKE and hardened Keccak are .35/.36/.37;
 KMAC, TupleHash and ParallelHash integration is .38/.39/.40. Legacy SHA-1 uses
 .41/.42 and MD5 .43/.44. Missing multi-message kernels, x86 SHA-512, package

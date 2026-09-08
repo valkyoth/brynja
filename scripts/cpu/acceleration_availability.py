@@ -16,6 +16,7 @@ OWNERS = (
 )
 BOUND = (
     POLICY, "security/cpu-backend-admissions.toml", "docs/acceleration-availability.md",
+    "security/sha1-cpu-admissions.toml", "security/md5-cpu-admissions.toml",
     "scripts/cpu/acceleration_availability.py",
     "scripts/cpu/check-acceleration-availability.py",
     "scripts/cpu/test-acceleration-availability.py",

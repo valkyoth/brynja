@@ -1,6 +1,6 @@
 # Brynja 0.24.27 Release Notes
 
-Status: candidate; awaiting owner pentest
+Status: owner pentest/retest and local release verification PASS; awaiting green GitHub/CodeQL and explicit tag permission
 
 ## Scope
 
@@ -35,6 +35,15 @@ declassification clears the old owner after creating the deliberate public copy.
 Actual completed checks and limitations are recorded in the
 [candidate pentest report](../security/pentest/v0.24.27.md). The observer only
 exists in a temporary assurance copy; it is not shipped in the production crate.
+The owner's assessment through `18df648f` found no Critical, High or Medium
+security findings and required no remediation.
+
+Post-assessment release checks pass: complete repository gate, twelve-compiler
+workspace and feature-specific matrices, bare-metal and QEMU checks, stage-aware
+Miri (full SHA-2 plus other-family smoke checks), full AddressSanitizer wrapper
+and all 29 existing bounded Kani harnesses. LeakSanitizer remains excluded under
+the disclosed local ptrace restriction. Standards, tool/dependency freshness,
+RustSec, cargo-deny, SBOM, documentation and publisher-policy checks also pass.
 
 ## Limits and release flow
 
@@ -48,6 +57,6 @@ copies. Forget, abort, double-panic termination and power loss can prevent Drop.
 
 Facade version 0.24.27 advances for this internal milestone; all support versions
 and sanitization 2.1.0 stay unchanged. Zero crates publish. The next scheduled
-crates.io checkpoint remains v0.25.2. Obtain exceptional pentest/retest, complete
-release checks, commit the report, wait for green GitHub/CodeQL and explicit tag
-permission. This candidate does not change that release flow.
+crates.io checkpoint remains v0.25.2. Exceptional pentest/retest and local release
+checks are complete. Commit the report, then wait for green GitHub/CodeQL and
+explicit tag permission. This candidate does not change that release flow.

@@ -8,7 +8,7 @@
 - Add a live-storage destructor probe with debug/release clearing and ownership
   mutations, plus scoped Miri/ASan coverage and an explicit storage inventory.
 - No new API, dependency, CPU admission or publication. Family completion remains
-  v0.24.29; owner pentest is pending. See [release notes](release-notes/RELEASE_NOTES_0.24.27.md).
+  v0.24.29; owner pentest/retest is green. See [release notes](release-notes/RELEASE_NOTES_0.24.27.md).
 
 ## 0.24.26
 

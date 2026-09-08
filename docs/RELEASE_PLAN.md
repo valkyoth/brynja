@@ -4028,12 +4028,15 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement ordinary and hardened incremental/one-shot byte and bit-input APIs with canonical unused output bits and explicit short-digest security limits in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation.
+Plan scope: Implement ordinary and hardened incremental/one-shot byte and bit-input APIs with canonical unused output bits and explicit short-digest security limits in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation. Secret-producing paths return non-copyable zeroizing owners, never import through `Sha512TDigest::from_bytes`, and require explicit declassification before public conversion.
 
 Goal: deliver this bounded General SHA-512/t step over accepted prerequisites v0.24.25, without claiming unfinished neighboring operations.
 
 Deliverables:
 
+- Preserve `Sha512TDigest::from_bytes` as an explicitly public-data importer, not a secret-classification mechanism: arbitrary `&[u8]` cannot prove confidentiality or declassification at the type level. Document the caller's classification responsibility without claiming compiler-enforced secrecy for raw slices.
+- Make every secret-producing incremental/one-shot byte and bit-input path return a parameter-bound, non-Copy, non-Clone, zeroizing hardened output owner (or write into an equivalent typed secret-owned destination). Never stage secret output through `Sha512TDigest` or its `from_bytes` constructor. Hardened ownership capabilities remain sealed; no implicit `From`/`Into`, public-byte `AsRef`/`Deref`, formatting or ordinary equality may silently cross this boundary.
+- Require a deliberately named, explicit declassification operation before a secret result becomes a public digest; bind t and canonical unused bits, clear the consumed secret owner, and document that the resulting public copies are no longer erased. Secret-output failures clear the entire destination; public-output failures remain atomic. Enforce this separation in v0.24.26 itself, not only the later v0.24.27 lifecycle closure.
 - Implement or freeze exactly the Plan scope in `brynja-hash-sha2`; use FIPS 180-4 section 5.3.6 as the source-admission starting point, pin the exact version/errata and rights, and add every normative dependency to the source ledger before code.
 - Maintain a per-parameter operation matrix for Implement validated positive t below 512 except 384, exact decimal IV-generation label and typed arbitrary-bit digest output distinct from named /224 and /256. Implement ordinary and hardened incremental/one-shot byte and bit-input APIs with canonical unused output bits and explicit short-digest security limits; split any growing independent profile into an additional numbered stop before implementation, never hide it behind a blanket family label.
 - Keep first-party Rust crypto, no_std core, default-off family selection, no unreviewed third-party crates and sub-500-line source modules; optional hosted IO, tooling and deployment policy remain downstream. Existing reviewed sanitization primitives are mandatory for inaccessible owned secrets, not an optional adapter.
@@ -4044,12 +4047,15 @@ Verification:
 - Exercise independent IV/digest oracle across every allowed t, invalid t and named-identity cross-checks, bit padding, secret cleanup and no implied FIPS approval of arbitrary t; include public API positive and adversarial examples for every operation completed by this step.
 - Run applicable vectors, independent differential/property/fuzz tests, compile-fail ownership tests, scoped Miri/Kani/sanitizers and emitted cleanup/constant-work checks with explicit coverage limits; rerun the full required suite at publication checkpoints.
 - Check prerequisites v0.24.25, package-external no_std use, Rust 1.90.0 through the current default supported toolchain, source/dependency policy, SBOM, README examples and modern/legacy/research graph isolation.
+- Add package-external compile-fail cases for copying/cloning hardened results, forging hardened capabilities, implicit secret-to-public conversion, passing a secret owner directly to `from_bytes`, and reuse after consuming declassification. Positive tests cover ordinary public import and deliberate declassification for byte-aligned and partial-bit parameters.
+- Trace and regression-test every secret-producing route to reject public-digest staging, including one-shot, incremental, byte and bit finalization. Verify owner/destination cleanup on success, error, recoverable unwind and Drop with scoped dynamic analysis and emitted-code evidence; declassification preserves t/canonical bits while clearing the former secret owner. Do not mistake documentation or a constructor-name check alone for end-to-end ownership evidence.
 - Complete portable public acceptance before optional accelerated execution or final evidence; native ISA admission remains separately reviewed, QEMU never proves native timing and post-1.0 RISC-V native qualification remains explicit.
 
 Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
+- Secret-producing APIs ship only with the typed-owner/declassification and cleanup checks above passing; a documented public importer is not a substitute for hardened output ownership.
 - `v0.24.26 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.24.27 - General SHA-512/t - Secret Lifecycle And Failure Closure

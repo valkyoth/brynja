@@ -40,7 +40,7 @@
           "version": "0.24.26",
           "title": "General SHA-512/t - Ordinary and hardened incremental/one-shot byte and bit-input APIs",
           "stage": "implementation",
-          "scope_sha256": "e9bd8ccb2ea5e4cd07939baaa794f3047ba2d7eb3ae2973e0ef30f9987bea4d3"
+          "scope_sha256": "df86e899a3c2ef831d9e65398d20d7965231b4779c9833ce1899cf8307d93545"
         },
         {
           "version": "0.24.27",

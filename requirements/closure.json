@@ -1077,7 +1077,7 @@
         "rationale": "General SHA-512/t authority and the complete parameter/API contract are mapped explicitly at v0.24.24 through BRY-REQ-CRYPTO-0020 and requirements/sha512-t-contract.toml. These later steps still require actual per-operation implementation, cleanup and final evidence; contract admission does not imply cryptographic approval or completed APIs."
       },
       "requirement_ids": [],
-      "scope": "Implement ordinary and hardened incremental/one-shot byte and bit-input APIs with canonical unused output bits and explicit short-digest security limits in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation.",
+      "scope": "Implement ordinary and hardened incremental/one-shot byte and bit-input APIs with canonical unused output bits and explicit short-digest security limits in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation. Secret-producing paths return non-copyable zeroizing owners, never import through `Sha512TDigest::from_bytes`, and require explicit declassification before public conversion.",
       "source_ids": [],
       "title": "General SHA-512/t - Ordinary and hardened incremental/one-shot byte and bit-input APIs",
       "version": "0.24.26"

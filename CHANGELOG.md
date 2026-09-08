@@ -1,6 +1,17 @@
 # Changelog
 
-## 0.24.25 candidate
+## 0.24.26 candidate
+
+- Implement all 510 general SHA-512/t ordinary/hardened byte/bit hashing APIs,
+  typed secret output and consuming explicit declassification in the default-off
+  leaf feature. Reuse existing portable compression and mandatory SHA-2 cleanup.
+- Add 4,590 independent digest comparisons, downstream ownership misuse tests,
+  output-failure/unwind tests and endpoint emitted cleanup checks.
+- General SHA-512/t remains In progress; no CPU admission, FIPS claim, external
+  dependency change or crates.io publication. Owner pentest is pending.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.26.md).
+
+## 0.24.25
 
 - Add default-off leaf-only general SHA-512/t parameter, public IV diagnostic
   and canonical public digest value APIs; all 510 IVs match a separate oracle.

@@ -57,6 +57,10 @@ quick_sha2() {
 }
 
 full_sha2() {
+    run_miri -p brynja-hash-sha2 --features general-sha512-t --test general_hash \
+        dynamic_general_secret_lifecycle
+    run_miri -p brynja-hash-sha2 --features general-sha512-t --test general_hash \
+        unwind_clears_secret_destination
     # General parameter/IV APIs contain public data only; full all-t oracle
     # and canonicalization campaigns run natively, this case checks memory use.
     run_miri -p brynja-hash-sha2 --features general-sha512-t --test general \

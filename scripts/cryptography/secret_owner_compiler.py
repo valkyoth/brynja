@@ -188,6 +188,19 @@ def compiler_inventory(
         fail("registered compiler identity coverage differs")
     used_tests = {name for names in CONTRACT_TESTS.values() for name in names}
     for owner_id, contract in registry.items():
+        # General SHA-512/t uses the identical SHA-2 storage owner, not another
+        # implementation. Require exact storage/cleanup identity before sharing
+        # its existing compiler proof; general consumers have a separate gate.
+        if owner_id == "registered.algorithm.sha512-t":
+            canonical = registry.get("registered.algorithm.sha2", {})
+            if set(contract) != {"record"} or set(canonical) != {"record"}:
+                fail("general SHA-512/t shared owner contract is missing")
+            ignored = {"capability", "evidence"}
+            if ({k: v for k, v in contract["record"].items() if k not in ignored}
+                    != {k: v for k, v in canonical["record"].items() if k not in ignored}
+                    or contract != contracts.REGISTERED_OWNER_CONTRACTS[owner_id]):
+                fail("general SHA-512/t shared owner differs from SHA-2")
+            continue
         if set(contract) != REGISTERED_CONTRACT_KEYS:
             fail(f"registered compiler contract has invalid keys: {owner_id}")
         record = contract["record"]

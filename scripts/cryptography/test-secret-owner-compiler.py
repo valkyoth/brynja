@@ -23,6 +23,14 @@ def rejects_inventory(registry: dict, tests: dict, headers: dict, sanitizers: di
 
 
 def main() -> int:
+    compiler.compiler_inventory()
+    for field, value in (("fields", ["wrong:secret"]), ("evidence", []),
+                         ("cleanup_callers", []), ("storage", "external")):
+        registry = copy.deepcopy(compiler.contracts.REGISTERED_OWNER_CONTRACTS)
+        registry["registered.algorithm.sha512-t"]["record"][field] = value
+        rejects_inventory(registry, compiler.contracts.REGISTERED_OWNER_COMPILER_TESTS,
+                          compiler.contracts.REGISTERED_CALLER_MIR_HEADERS,
+                          compiler.contracts.REGISTERED_SANITIZER_MIR_IDENTITIES)
     assert compiler.mir_callable_identity("fixture_package::module::Owner::<N>::wipe(") == (
         ["fixture_package", "module", "Owner"], "wipe",
     )

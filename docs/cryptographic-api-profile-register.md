@@ -5,8 +5,8 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 - Capabilities: **135**
 - API dimensions per capability: **22**
 - Current secret owners: **8**
-- Registered capability owners: **7**
-- Planned secret owners: **74**
+- Registered capability owners: **8**
+- Planned secret owners: **73**
 
 ## Profile Coverage
 
@@ -31,8 +31,8 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 
 | Disposition | Capabilities |
 | --- | ---: |
-| `future-work` | 118 |
-| `implemented` | 12 |
+| `future-work` | 117 |
+| `implemented` | 13 |
 | `intentionally-rejected` | 1 |
 | `legacy-only` | 3 |
 | `safely-ignored` | 1 |

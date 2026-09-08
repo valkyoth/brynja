@@ -64,13 +64,13 @@ def test_current_repository() -> None:
         for surface in register["surfaces"]
         if surface["disposition"] == "implemented"
     }
-    assert len(implemented) == 74
+    assert len(implemented) == 75
     assert all(
         surface_id.startswith("iana.tls-parameters.tls-parameters-5")
         or surface_id.startswith("iana.tls-parameters.tls-parameters-6")
         or surface_id
         in {
-            "algorithm.kmac", "algorithm.md5", "algorithm.parallelhash", "algorithm.sha1", "algorithm.sha2", "algorithm.sha3-shake", "algorithm.tuplehash",
+            "algorithm.kmac", "algorithm.md5", "algorithm.parallelhash", "algorithm.sha1", "algorithm.sha2", "algorithm.sha3-shake", "algorithm.sha512-t", "algorithm.tuplehash",
             "facility.sslkeylogfile.test-support",
             "facility.entropy.secure-random-contract",
             "format.asn1.values", "format.der.framing", "state.tls.secret-lifetime",

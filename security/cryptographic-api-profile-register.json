@@ -3053,7 +3053,7 @@
         },
         "cancellation": {
           "disposition": "required",
-          "owner": "0.24.27"
+          "owner": "0.24.26"
         },
         "clone": {
           "disposition": "forbidden",
@@ -3105,7 +3105,7 @@
         },
         "ownership": {
           "disposition": "required",
-          "owner": "0.24.27"
+          "owner": "0.24.26"
         },
         "provider": {
           "disposition": "forbidden",
@@ -3128,7 +3128,7 @@
       "consumer_links": [
         "consumer:construction"
       ],
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "explicit_rejections": [
         "copy-secret-state",
@@ -3164,9 +3164,9 @@
         }
       },
       "ordinary_hardened_separation": "required",
-      "owner": "0.24.24",
+      "owner": "0.24.26",
       "profile": "general-sha512-t",
-      "test_target": "scripts/sha2/check-sha512-t-contract.py#main"
+      "test_target": "scripts/sha2/check-general-sha512-t.py#main"
     },
     {
       "api": {
@@ -20365,67 +20365,6 @@
       ]
     },
     {
-      "capability": "algorithm.sha512-t",
-      "evidence": [
-        "scripts/sha2/check-sha512-t-contract.py#main",
-        "scripts/zeroization/check-zeroization-codegen.sh"
-      ],
-      "fields": [
-        "chaining-state",
-        "partial-input",
-        "message-length",
-        "phase"
-      ],
-      "id": "planned.algorithm.sha512-t",
-      "lifecycle_edges": [
-        "creation",
-        "success",
-        "error",
-        "cancellation",
-        "replacement",
-        "rekey",
-        "failed-construction",
-        "recoverable-unwind",
-        "drop"
-      ],
-      "operations": {
-        "hardened-derived-output": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
-          "verification": "not-applicable"
-        },
-        "public-digest": {
-          "output_classification": "explicit-public-declassification",
-          "partial_failure_policy": "unchanged-destination",
-          "verification": "not-applicable"
-        }
-      },
-      "owner": "0.24.27",
-      "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-hash-sha2/src/lib.rs#Sha512T",
-      "residual_risks": [
-        "mem-forget",
-        "process-abort",
-        "forced-termination",
-        "power-loss",
-        "register-copies",
-        "cpu-caches",
-        "compiler-created-copies",
-        "crash-dumps",
-        "suspend-images",
-        "os-swap-and-paging",
-        "dma-visible-copies",
-        "physical-memory-remanence"
-      ],
-      "state": "planned",
-      "temporaries": [
-        "message-schedule",
-        "block-copy",
-        "padding-block",
-        "output-staging"
-      ]
-    },
-    {
       "capability": "algorithm.sp800-185",
       "evidence": [
         "tests/surface/primitives.rs#sp800_185",
@@ -24318,7 +24257,7 @@
       ]
     }
   ],
-  "policy_sha256": "d4415669a4d877ae24393fb96b6f85e1633b823d4487b02ab2e98016eafd766f",
+  "policy_sha256": "5fd41731ddfd9e453fc8209f4f899dc4645acedd57a9bd9cd822fbdb7c251c41",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",
@@ -24686,6 +24625,67 @@
       ]
     },
     {
+      "capability": "algorithm.sha512-t",
+      "cleanup_callers": [
+        "crates/brynja-hash-sha2/src/hardened/owner.rs#brynja_hash_sha2::owner::HardenedSha2Owner::drop"
+      ],
+      "evidence": [
+        "crates/brynja-hash-sha2/tests/hardened.rs",
+        "assurance/sha2-hardened-api/src/lib.rs",
+        "scripts/zeroization/check-zeroization-codegen.sh",
+        "scripts/sha2/check-sha2-hardened.py",
+        "crates/brynja-hash-sha2/tests/general_hash.rs",
+        "scripts/sha2/check-general-sha512-t.py"
+      ],
+      "fields": [
+        "chaining_state:secret-derived",
+        "partial_input:secret",
+        "message_length:secret-derived",
+        "phase:secret-derived",
+        "message_schedule:secret-derived",
+        "block_copy:secret-copy",
+        "padding_block:secret-copy",
+        "output_staging:secret-derived"
+      ],
+      "id": "registered.algorithm.sha512-t",
+      "lifecycle_edges": [
+        "creation",
+        "success",
+        "error",
+        "cancellation",
+        "replacement",
+        "rekey",
+        "failed-construction",
+        "recoverable-unwind",
+        "drop"
+      ],
+      "output_classification": "typed-secret-owned",
+      "partial_failure_policy": "clear-complete-secret-destination",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "sanitization_symbol": "crates/brynja-hash-sha2/src/hardened/owner.rs#brynja_hash_sha2::HardenedSha2Owner::wipe",
+      "state": "registered",
+      "storage": "crate-owned-fixed",
+      "symbol": "crates/brynja-hash-sha2/src/hardened/owner.rs#brynja_hash_sha2::owner::HardenedSha2Owner",
+      "temporaries": [
+        "round-scalars:register-copy-risk",
+        "borrowed-input:caller-owned-copy-risk",
+        "typed-output:caller-owned"
+      ]
+    },
+    {
       "capability": "algorithm.tuplehash",
       "cleanup_callers": [
         "crates/brynja-hash-tuple/src/core_state.rs#brynja_hash_tuple::core_state::TupleCore::drop"
@@ -24760,5 +24760,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "7ac5c60f6d5a42ac990b1a921834403175545ba07e483c241d6d8c1d659cb230"
+  "surface_register_sha256": "d2da3116e86eae276084b512bfd5cd1a32fad259e3b8c585d040e0741b5d3813"
 }

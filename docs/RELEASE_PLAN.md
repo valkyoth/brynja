@@ -3992,10 +3992,9 @@ Exit criteria:
 
 ### v0.24.25 - General SHA-512/t - Validated positive t below 512 except 384, exact decimal IV-generation label and typed arbitrary-bit digest output distinct from named /224 and /256
 
-Status: awaiting green CI
+Status: released
 
-Owner pentest/retest is PASS. Complete the recorded local release checks and
-obtain green GitHub/CodeQL plus explicit owner permission before tagging.
+Owner pentest/retest and release checks passed; signed v0.24.25 is pushed.
 
 The explicit `general-sha512-t` leaf feature implements `Sha512TBits`, public
 IV label/word diagnostics and canonical `Sha512TDigest` import/access. All 510
@@ -4029,7 +4028,7 @@ Exit criteria:
 
 ### v0.24.26 - General SHA-512/t - Ordinary and hardened incremental/one-shot byte and bit-input APIs
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement ordinary and hardened incremental/one-shot byte and bit-input APIs with canonical unused output bits and explicit short-digest security limits in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation. Secret-producing paths return non-copyable zeroizing owners, never import through `Sha512TDigest::from_bytes`, and require explicit declassification before public conversion.
 

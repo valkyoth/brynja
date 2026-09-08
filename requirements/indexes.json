@@ -1002,17 +1002,17 @@
         "work-bound"
       ],
       "owners": [
-        "0.24.24"
+        "0.24.26"
       ],
       "sources": [
         "nist:NIST.FIPS.180-4.pdf"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#Sha512T"
+        "actual-symbol:crates/brynja-hash-sha2/src/lib.rs#Sha512T"
       ],
       "tests": [
-        "planned:positive:scripts/sha2/check-sha512-t-contract.py#main",
-        "planned:negative:scripts/sha2/test-sha512-t-contract.py#main"
+        "planned:positive:scripts/sha2/check-general-sha512-t.py#main",
+        "planned:negative:scripts/sha2/test-general-sha512-t.py#main"
       ]
     },
     "BRY-REQ-CT-0001": {
@@ -10459,7 +10459,7 @@
       "0.24.2": [
         "BRY-REQ-CRYPTO-0002"
       ],
-      "0.24.24": [
+      "0.24.26": [
         "BRY-REQ-CRYPTO-0020"
       ],
       "0.240.0": [
@@ -11186,6 +11186,9 @@
       "actual-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0001"
       ],
+      "actual-symbol:crates/brynja-hash-sha2/src/lib.rs#Sha512T": [
+        "BRY-REQ-CRYPTO-0020"
+      ],
       "actual-symbol:crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0002"
       ],
@@ -11374,9 +11377,6 @@
       ],
       "planned-symbol:crates/brynja-fips-module/src/rbg.rs": [
         "BRY-REQ-ENTROPY-1242"
-      ],
-      "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#Sha512T": [
-        "BRY-REQ-CRYPTO-0020"
       ],
       "planned-symbol:crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185": [
         "BRY-REQ-CRYPTO-0014"
@@ -11724,7 +11724,7 @@
       "planned:negative:scripts/sha1/test-sha1.py#main": [
         "BRY-REQ-CRYPTO-0018"
       ],
-      "planned:negative:scripts/sha2/test-sha512-t-contract.py#main": [
+      "planned:negative:scripts/sha2/test-general-sha512-t.py#main": [
         "BRY-REQ-CRYPTO-0020"
       ],
       "planned:negative:scripts/tuplehash/test-tuplehash.py#main": [
@@ -12148,7 +12148,7 @@
       "planned:positive:scripts/sha1/check-sha1.py#main": [
         "BRY-REQ-CRYPTO-0018"
       ],
-      "planned:positive:scripts/sha2/check-sha512-t-contract.py#main": [
+      "planned:positive:scripts/sha2/check-general-sha512-t.py#main": [
         "BRY-REQ-CRYPTO-0020"
       ],
       "planned:positive:scripts/tuplehash/check-tuplehash.py#main": [

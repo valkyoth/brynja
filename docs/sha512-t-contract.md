@@ -1,7 +1,7 @@
 # General SHA-512/t authority and public API contract
 
-Status: v0.24.25 parameter, IV and public digest values implemented;
-**not an implemented general message-hashing API**.
+Status: v0.24.26 implements ordinary/hardened byte/bit hashing for every valid t,
+typed secret outputs and explicit declassification; awaiting owner pentest.
 The six named SHA-2 functions remain complete and unchanged. This extension
 is a separate row, closing only at v0.24.29. No CPU backend is admitted.
 
@@ -63,14 +63,13 @@ No third-party dependency, new unsafe boundary or hardware session is needed.
 
 ## Public API matrix
 
-Names and signatures below are the frozen design. Only the v0.24.25 value/IV
-rows are callable now; all v0.24.26 rows remain planned, not stubs.
+Names and signatures below are callable in the v0.24.26 candidate.
 Any necessary contract change must update the machine register and tests with
 an explicit review; implementations must not expose stubs for missing rows.
 All parameter values have every row below. The ordinary profile is public-data
 only; hardened ownership is mandatory for confidential input or derived state.
 
-| Operation | Planned surface | Due |
+| Operation | Public surface | Introduced |
 | --- | --- | --- |
 | Parameter admission | `Sha512TBits::new(u16) -> Result<Self, Sha512TError>`; `bits()`, `output_bytes()` | 0.24.25 |
 | Public IV diagnostics | `write_iv_label(self, &mut [u8]) -> Result<usize, Sha512TError>`; `initial_words(self) -> [u64; 8]` | 0.24.25 |
@@ -84,6 +83,7 @@ only; hardened ownership is mandatory for confidential input or derived state.
 | Secret finish | `finalize_secret(self, &mut [u8])`, `finalize_bits_secret(self, BitString, &mut [u8])` -> secret digest owner result | 0.24.26 |
 | Hardened one-shot | `hardened_sha512_t_public`, `hardened_sha512_t_bits_public`, `hardened_sha512_t_secret`, `hardened_sha512_t_bits_secret` | 0.24.26 |
 | Secret output access | `Sha512TSecretDigest::parameter()`, borrowed `as_bytes()`; Drop clears entire destination | 0.24.26 |
+| Secret declassification | Consuming `Sha512TSecretDigest::declassify(self, PublicDeclassification)` -> public digest result; clears consumed storage | 0.24.26 |
 | Explicit cancellation | `HardenedSha512T::cancel(self)`; ordinary cancellation is consuming Drop | 0.24.26 |
 
 One-shot argument order is parameter, message, then destination when secret.
@@ -95,12 +95,12 @@ entire destination on insufficient capacity and any trailing bytes on success.
 IV diagnostics return public derived initial words, not arbitrary-state import
 or message hashing. Both need only fixed workspace and no secret cleanup:
 the input is public t, never a key, confidential input or prior hash state.
-These additions remain subject to the v0.24.25 owner pentest.
+These value operations passed the v0.24.25 owner pentest; hashing is a new scope.
 
 Hardened public one-shot calls additionally require a final
 `PublicDeclassification` argument, using the existing explicit acknowledgement.
 Hardened public and secret functions have the same checked error type. No reset,
-clone, serialization, raw state/IV import or fallible secret digest export is
+clone, serialization, raw state/IV import or implicit secret digest export is
 promised. No XOF, decode or decryption exists for this fixed one-way hash.
 Complete bytes stream through update; consuming finalization accepts the
 remaining canonical `BitString`, containing zero or more complete bytes and
@@ -122,7 +122,10 @@ secret-region owner and the validated parameter. Require destination length
 exactly `ceil(t/8)`, rejecting both short and oversized buffers. On **every**
 secret-output error, clear the entire supplied destination, even when its
 length is invalid; guard it before any other fallible action. Success exposes
-only a borrowed canonical byte view and retains classification until Drop.
+only a borrowed canonical byte view and retains classification until Drop or
+explicit consuming declassification. The latter makes a public copy and clears
+the original destination. Raw borrowed bytes cannot enforce information flow;
+copying them requires the caller to preserve their confidentiality and cleanup.
 Safe exclusive borrows prevent input/output aliasing. Caller-created copies
 and source inputs remain the caller's responsibility.
 
@@ -173,6 +176,15 @@ v0.24.25 additionally executes all 510 IVs against a separate Python oracle
 whose constants are derived from integer square/cube roots of primes, plus
 exhaustive Rust parameter/canonical-digest tests and a downstream no_std fixture.
 The existing named-IV derivation test remains a useful unchanged cross-check.
+
+v0.24.26 adds 4,590 independent digest comparisons across all 510 parameters,
+ordinary/hardened incremental and one-shot APIs, canonical bit tails, typed
+secret output, compiler-rejected misuse, and all eight shared SHA-2 owner regions.
+The source-bound emitted-code check covers consuming public/secret finalizers
+and declassification on normal and recoverable-unwind paths on Rust 1.90.0 and
+1.98.1 in debug/release. Double-panic termination remains an explicit exclusion.
+This is scoped evidence, not a proof of every compiler-created copy or register.
+The existing mandatory SHA-2 owner is reused; IV derivation sees only public t.
 
 - v0.24.25: actual Rust parameter/digest APIs, exact IV generation; independent
   IV oracle across all 510 t, invalid values, named IVs and short labels.

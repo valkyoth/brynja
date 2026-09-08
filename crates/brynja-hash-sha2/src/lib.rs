@@ -43,6 +43,12 @@ pub use error::{
     Sha224Error, Sha256Error, Sha384Error, Sha512_224Error, Sha512_256Error, Sha512Error,
 };
 #[cfg(feature = "general-sha512-t")]
+pub use general::{
+    HardenedSha512T, Sha512T, Sha512TSecretDigest, hardened_sha512_t_bits_public,
+    hardened_sha512_t_bits_secret, hardened_sha512_t_public, hardened_sha512_t_secret, sha512_t,
+    sha512_t_bits,
+};
+#[cfg(feature = "general-sha512-t")]
 pub use general::{Sha512TBits, Sha512TDigest, Sha512TError};
 pub use hardened::{
     HardenedSha2Error, HardenedSha2State, HardenedSha224, HardenedSha256, HardenedSha384,

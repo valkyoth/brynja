@@ -1,17 +1,18 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; through v0.24.24 signed; v0.24.25 general SHA-512/t value/IV candidate has an owner-reported green retest and awaits green GitHub/CodeQL and explicit tag permission. Its report below records local release-check results. All CPU backends remain unadmitted.
+Status: v0.20.0 published; through v0.24.25 signed; v0.24.26 awaits owner pentest. All CPU backends remain unadmitted.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are
 not actual general digest, cleanup or native evidence. v0.24.25 separately adds
 Rust parameter/digest-value tests and an all-510 IV oracle in `scripts/sha2`,
-plus the downstream `assurance/general-sha512-t` no_std consumer. Neither
-computes a general message digest or introduces secret-bearing processing.
+plus the downstream `assurance/general-sha512-t` no_std consumer. v0.24.26 adds a 4,590-case all-parameter digest oracle, ordinary/hardened
+hashing, typed secret output, ownership misuse and emitted cleanup checks.
+See the [candidate report](../security/pentest/v0.24.26.md) for actual coverage.
 
 The [v0.24.24 pentest report](../security/pentest/v0.24.24.md) records the
 owner-supplied assessment of `b73ea22173ef` and local release verification.
-The [v0.24.25 report](../security/pentest/v0.24.25.md) records the current
+The [v0.24.25 report](../security/pentest/v0.24.25.md) records the previous
 owner-supplied green retest and distinguishes completed checks from pending
 release work; it does not establish independent cryptographic verification.
 

@@ -11,7 +11,9 @@ use crate::{BitString, sha224, sha256, sha384, sha512, sha512_t};
 
 pub use output::{HardenedSha2Error, PublicDeclassification};
 use output::{clear_failed_secret_output, write_public, write_secret};
-use owner::HardenedSha2Owner;
+pub(crate) use owner::HardenedSha2Owner;
+#[cfg(feature = "general-sha512-t")]
+pub(crate) use state64::finalize_bits_length64;
 
 mod sealed {
     pub trait Registered {}
@@ -48,6 +50,11 @@ mod sealed {
 /// let _ordinary = brynja_hash_sha2::Sha256::from(hardened);
 /// ```
 pub trait HardenedSha2State: sealed::Registered {}
+
+#[cfg(feature = "general-sha512-t")]
+impl sealed::Registered for crate::general::HardenedSha512T {}
+#[cfg(feature = "general-sha512-t")]
+impl HardenedSha2State for crate::general::HardenedSha512T {}
 
 macro_rules! hardened32 {
     ($name:ident, $initial:expr, $output:expr, $label:literal) => {

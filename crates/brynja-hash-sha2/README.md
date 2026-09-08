@@ -25,12 +25,14 @@
 
 # brynja-hash-sha2
 
-The separate general SHA-512/t extension is **In progress**: v0.24.25 implements
-validated parameters, canonical public digest imports and exact IV generation,
+The separate general SHA-512/t extension is **In progress**: v0.24.26 implements
+ordinary/hardened incremental and one-shot byte/bit hashing for all 510 valid t,
 behind the default-off `general-sha512-t` leaf feature. It follows
 its [authority and public API contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
-It does not yet hash messages; ordinary/hardened hashing and final evidence
-remain v0.24.26–v0.24.29. The six named SHA-2 identities below remain unchanged.
+Typed secret output clears on Drop or explicit consuming declassification;
+every secret-output error clears the entire destination. Final lifecycle,
+package and family closure remain v0.24.27–v0.24.29. The six named SHA-2
+identities below remain unchanged.
 
 ```rust
 use brynja_hash_sha2::{Sha512TBits, Sha512TDigest};
@@ -49,6 +51,27 @@ diagnostics are not authentication, message hashing, FIPS approval or secret
 ownership. Public values are copyable and are not zeroized. Equality includes t
 but is not constant-time verification. General and named digest types remain
 distinct; short t values have weak collision/preimage security bounds.
+
+```rust
+use brynja_hash_sha2::{Sha512TBits, sha512_t, hardened_sha512_t_secret,
+    PublicDeclassification};
+let parameter = Sha512TBits::new(9)?;
+let ordinary = sha512_t(parameter, b"abc")?; // Public input only.
+let mut destination = [0; 2]; // Exactly ceil(t / 8) bytes.
+let secret = hardened_sha512_t_secret(parameter, b"abc", &mut destination)?;
+let public = secret.declassify(PublicDeclassification::acknowledge())?;
+assert_eq!(public, ordinary);
+assert_eq!(destination, [0; 2]);
+# Ok::<(), brynja_hash_sha2::Sha512TError>(())
+```
+
+For confidential input use `HardenedSha512T` or the hardened one-shot APIs,
+never ordinary `Sha512T` or `Sha512TDigest::from_bytes`. Secret processing does
+not stage through a public digest; only explicit declassification creates one.
+Borrowing secret bytes does not make copies public or erase caller-owned inputs.
+Mandatory clearing covers the existing eight SHA-2 owner regions, including
+schedule, buffered input and staging; it does not promise erasure of registers,
+compiler copies/spills, caches, dumps, swap, aborts or caller-created copies.
 
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
 crate provides correct portable byte-oriented one-shot and streaming APIs for

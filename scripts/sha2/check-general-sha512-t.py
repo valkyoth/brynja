@@ -5,6 +5,8 @@ import subprocess
 
 import general_sha512_t_policy as policy
 import sha512_t_iv_oracle as oracle
+import sha512_t_digest_oracle as digest_oracle
+import general_sha512_t_cleanup as cleanup
 
 
 def main() -> int:
@@ -16,15 +18,18 @@ def main() -> int:
     policy.validate()
     if policy.contract.read(policy.ROOT, str(oracle.VECTORS.relative_to(policy.ROOT))) != oracle.render():
         raise ValueError("general IV oracle mismatch")
+    if policy.contract.read(policy.ROOT, str(digest_oracle.CORPUS.relative_to(policy.ROOT))) != digest_oracle.render():
+        raise ValueError("general digest oracle mismatch")
     commands = (
-        ["cargo", "test", "--locked", "--offline", "-p", "brynja-hash-sha2", "--features", "general-sha512-t", "--test", "general"],
+        ["cargo", "test", "--locked", "--offline", "-p", "brynja-hash-sha2", "--features", "general-sha512-t", "--test", "general", "--test", "general_hash"],
         ["cargo", "test", "--locked", "--offline", "-p", "brynja-hash-sha2", "--features", "general-sha512-t", "--lib", "general::"],
         ["cargo", "test", "--locked", "--offline", "--manifest-path", "assurance/general-sha512-t/Cargo.toml"],
     )
     for command in commands:
         subprocess.run(command, cwd=policy.ROOT, check=True, timeout=180)
+    cleanup.main()
     print("General SHA-512/t public descriptors and all-510 IV oracle: PASS")
-    print("No general message hashing, secret-input API, CPU admission or FIPS validation")
+    print("Ordinary/hardened byte/bit hashing: PASS; no CPU admission or FIPS validation")
     return 0
 
 

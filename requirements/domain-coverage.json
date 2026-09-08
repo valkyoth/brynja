@@ -5656,7 +5656,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "2e5a792162692faf969ffc82b78ef791584b14a8e398642c77b9226527773049",
+  "policy_sha256": "f1a000a421e7f00b0bd58a903f7782c9ed5bafac6f1f81e840cc246ae99daa15",
   "requirement_count": 41,
   "schema": 1,
   "surface_count": 3333,
@@ -5800,10 +5800,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.sha512-t",
-      "owner": "0.24.24",
+      "owner": "0.24.26",
       "requirement_id": "BRY-REQ-CRYPTO-0020"
     },
     {

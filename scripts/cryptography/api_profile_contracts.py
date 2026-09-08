@@ -260,6 +260,8 @@ PARALLELHASH_OWNER_RECORD = {
 # Registration cannot define its own proof. Separate maps bind its compiler
 # test, exact caller identity, and resolved sanitizer target.
 REGISTERED_OWNER_CONTRACTS = {
+    "registered.algorithm.sha512-t": {"record": {**SHA2_OWNER_RECORD, "capability": "algorithm.sha512-t",
+        "evidence": SHA2_OWNER_RECORD["evidence"][:-1] + ["crates/brynja-hash-sha2/tests/general_hash.rs", "scripts/sha2/check-general-sha512-t.py"]}},
     "registered.algorithm.sha2": {"record": SHA2_OWNER_RECORD},
     "registered.algorithm.sha3-shake": {"record": SHA3_OWNER_RECORD},
     "registered.algorithm.kmac": {"record": KMAC_OWNER_RECORD},

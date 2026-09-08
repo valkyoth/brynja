@@ -56,7 +56,7 @@ def validate_model(contract: dict) -> None:
     if json.dumps(contract.get("parameters"), sort_keys=True) != json.dumps(expected_parameters, sort_keys=True):
         raise ValueError("parameter contract changed")
     for key, value in {
-        "schema": 1, "milestone": "0.24.25", "state": "parameter-iv-digest-only",
+        "schema": 1, "milestone": "0.24.26", "state": "ordinary-hardened-byte-bit-hashing",
         "owner": "brynja-hash-sha2", "feature": "general-sha512-t",
         "documentation": DOC, "default_enabled": False,
         "facade_export": False, "independently_verified": False,
@@ -109,23 +109,23 @@ def validate(root: Path = ROOT) -> dict:
     requirements = tomllib.loads(read(root, "requirements/domains/cryptography.toml").decode())
     rows = [entry for entry in requirements["requirement"]
             if entry["id"] == "BRY-REQ-CRYPTO-0020"]
-    if (len(rows) != 1 or rows[0]["lifecycle"] != "planned"
-            or rows[0]["owner"] != "0.24.24"
+    if (len(rows) != 1 or rows[0]["lifecycle"] != "implemented"
+            or rows[0]["owner"] != "0.24.26"
             or rows[0]["decision_ids"] != ["algorithm.sha512-t"]
             or rows[0]["sources"] != [{"id": contract["authority"]["id"], "authority_role": "current"}]):
-        raise ValueError("contract-only requirement overstated or missing")
+        raise ValueError("general hashing requirement misclassified or missing")
     api = tomllib.loads(read(root, "security/cryptographic-api-profile-policy.toml").decode())
     profile = api["profile"]["general-sha512-t"]
     if (not {"cancellation", "ownership", "byte-input", "bit-input", "fixed-output"} <= set(profile["required"])
             or not {"backend", "provider", "hosted-adapter"} <= set(profile["forbidden"])
-            or api["secret-owner-overrides"].get("algorithm.sha512-t") != "0.24.27"):
+            or api["secret-owner-overrides"].get("algorithm.sha512-t") != "0.24.26"):
         raise ValueError("general SHA-512/t profile differs from contract")
     return contract
 
 
 def write_review() -> None:
     validate_model(tomllib.loads(read(ROOT, CONTRACT).decode()))
-    lines = ["# Reviewed general SHA-512/t API contract; hashing still planned.", "[files]"]
+    lines = ["# Reviewed general SHA-512/t API contract; final family closure pending.", "[files]"]
     for path in BOUND:
         lines.append(f'"{path}" = "{hashlib.sha256(read(ROOT, path)).hexdigest()}"')
     (ROOT / REVIEW).write_text("\n".join(lines) + "\n", encoding="utf-8")

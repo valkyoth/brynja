@@ -262,8 +262,8 @@ def main() -> int:
     assert len(first["capabilities"]) == 135
     assert len(first["api_dimensions"]) == 22
     assert len(first["current_secret_owners"]) == 8
-    assert len(first["registered_secret_owners"]) == 7
-    assert len(first["planned_secret_owners"]) == 74
+    assert len(first["registered_secret_owners"]) == 8
+    assert len(first["planned_secret_owners"]) == 73
     assert all(len(row["api"]) == 22 for row in first["capabilities"])
     assert all(row["consumer_links"] for row in first["capabilities"])
     assert all(row["explicit_rejections"] == list(model.REJECTIONS) for row in first["capabilities"])
@@ -278,6 +278,7 @@ def main() -> int:
         "registered.algorithm.sha1",
         "registered.algorithm.sha2",
         "registered.algorithm.sha3-shake",
+        "registered.algorithm.sha512-t",
         "registered.algorithm.tuplehash",
     ]
     assert first["capabilities"][0]["operations"]

@@ -15,6 +15,20 @@ pub struct Sha512TDigest {
 }
 
 impl Sha512TDigest {
+    // Only ordinary results or explicitly declassified bytes enter here.
+    pub(super) fn computed(parameter: Sha512TBits, bytes: &[u8]) -> Result<Self, Sha512TError> {
+        let source = bytes
+            .get(..parameter.output_bytes())
+            .ok_or(Sha512TError::OutputLength)?;
+        let mut storage = [0; 64];
+        for (slot, byte) in storage.iter_mut().zip(source) {
+            *slot = *byte;
+        }
+        if let Some(last) = storage.get_mut(parameter.output_bytes().saturating_sub(1)) {
+            *last &= parameter.last_byte_mask();
+        }
+        Ok(Self { parameter, storage })
+    }
     /// Imports an exact-width public digest, rejecting noncanonical low bits.
     ///
     /// Does not truncate, mask malformed input, or modify caller storage.

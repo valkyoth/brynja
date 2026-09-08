@@ -41,10 +41,16 @@ def rotate(n: int, k: int) -> int:
     return (n >> k | n << (64 - k)) & MASK
 
 
-def hash_bytes(message: bytes, initial: list[int]) -> list[int]:
+def hash_bytes(message: bytes, initial: list[int], bit_length: int | None = None) -> list[int]:
     # Only fixed in-process corpora are supplied; this is not a streaming API.
-    data = message + b"\x80"
-    data += bytes((112 - len(data)) % 128) + (len(message) * 8).to_bytes(16, "big")
+    bits = len(message) * 8 if bit_length is None else bit_length
+    if bits < 0 or (bits + 7) // 8 != len(message):
+        raise ValueError("invalid oracle bit length")
+    tail = bits % 8
+    if tail and message[-1] & ((1 << (8 - tail)) - 1):
+        raise ValueError("noncanonical oracle message")
+    data = (message[:-1] + bytes([message[-1] | (0x80 >> tail)])) if tail else message + b"\x80"
+    data += bytes((112 - len(data)) % 128) + bits.to_bytes(16, "big")
     state = initial.copy()
     for offset in range(0, len(data), 128):
         schedule = [int.from_bytes(data[i:i + 8], "big") for i in range(offset, offset + 128, 8)]

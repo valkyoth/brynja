@@ -1,4 +1,4 @@
-"""v0.24.25 public parameter/IV/digest boundary, not a general message hasher."""
+"""General SHA-512/t default-off ordinary/hardened ownership boundary."""
 from __future__ import annotations
 
 import hashlib
@@ -10,7 +10,7 @@ import sha512_t_contract as contract
 ROOT = contract.ROOT
 REVIEW = "scripts/sha2/general-sha512-t-reviewed.toml"
 PREFIX = "crates/brynja-hash-sha2/src/general/"
-PRODUCTION = tuple(PREFIX + name for name in ("mod.rs", "parameter.rs", "iv.rs", "digest.rs"))
+PRODUCTION = tuple(PREFIX + name for name in ("mod.rs", "parameter.rs", "iv.rs", "digest.rs", "ordinary.rs", "hardened.rs", "secret.rs", "one_shot.rs"))
 BOUND = PRODUCTION + (
     "crates/brynja-hash-sha2/tests/general.rs",
     "crates/brynja-hash-sha2/tests/vectors/general-sha512-t-iv.txt",
@@ -22,6 +22,16 @@ BOUND = PRODUCTION + (
     "scripts/sha2/general_sha512_t_policy.py",
     "scripts/sha2/check-general-sha512-t.py",
     "scripts/sha2/test-general-sha512-t.py",
+    "scripts/sha2/sha512_t_digest_oracle.py",
+    "crates/brynja-hash-sha2/tests/general_hash.rs",
+    "crates/brynja-hash-sha2/tests/vectors/general-sha512-t-digest.txt",
+    "crates/brynja-hash-sha2/src/hardened/owner.rs",
+    "crates/brynja-hash-sha2/src/hardened/mod.rs",
+    "crates/brynja-hash-sha2/src/hardened/state64.rs",
+    "crates/brynja-hash-sha2/src/hardened/compress64.rs",
+    "crates/brynja-hash-sha2/src/sha512_state.rs",
+    PREFIX + "hardened/tests.rs",
+    "scripts/sha2/general_sha512_t_cleanup.py",
 )
 
 
@@ -32,7 +42,7 @@ def read(root: Path, name: str) -> str:
 def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
     sources = {name: read(root, name) for name in PRODUCTION}
     actual = {str(p.relative_to(root)) for p in (root / PREFIX).rglob("*.rs")}
-    if actual != set(PRODUCTION):
+    if actual != set(PRODUCTION) | {PREFIX + "hardened/tests.rs"}:
         raise ValueError("general source inventory changed")
     for name, text in sources.items():
         if len(text.splitlines()) > 500:
@@ -60,6 +70,26 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
     for path in ("scripts/zeroization/check-zeroization-miri.sh", "scripts/zeroization/check-zeroization-sanitizer.sh"):
         if "-p brynja-hash-sha2 --features general-sha512-t --test general" not in read(root, path):
             raise ValueError("general dynamic-analysis coverage is absent")
+        if "--test general_hash" not in read(root, path):
+            raise ValueError("general hashing dynamic-analysis coverage is absent")
+    for path in (PREFIX + "hardened.rs", PREFIX + "secret.rs", PREFIX + "one_shot.rs"):
+        if "from_bytes(" in read(root, path):
+            raise ValueError("secret paths must not use public importer")
+    hard = sources[PREFIX + "hardened.rs"]
+    if "owner: HardenedSha2Owner" not in hard or "SecretRegionInitialization" not in hard:
+        raise ValueError("mandatory hardened/output owner missing")
+    # On the reviewed source, public digest construction has exactly three
+    # callers: ordinary output and the two explicit declassification boundaries.
+    # In particular, finish_secret and one-shot secret routes must not stage one.
+    public_finish = hard.partition("    fn finish_public(")[2].partition("    pub(super) fn finish_secret")[0]
+    secret = sources[PREFIX + "secret.rs"]
+    declassification = secret.partition("    pub fn declassify(")[2].partition("// This guard")[0]
+    if (hard.count("Sha512TDigest::computed(") != 1
+            or public_finish.count("Sha512TDigest::computed(") != 1
+            or secret.count("Sha512TDigest::computed(") != 1
+            or declassification.count("Sha512TDigest::computed(") != 1
+            or "Sha512TDigest::computed(" in sources[PREFIX + "one_shot.rs"]):
+        raise ValueError("public digest staging escaped explicit declassification")
     if hashes:
         reviewed = tomllib.loads(read(root, REVIEW))
         if set(reviewed) != {"files"} or set(reviewed["files"]) != set(BOUND):
@@ -72,7 +102,7 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
 
 def write_review() -> None:
     validate(hashes=False)
-    lines = ["# v0.24.25 public descriptor and IV implementation review.", "[files]"]
+    lines = ["# v0.24.26 ordinary/hardened hashing implementation review.", "[files]"]
     for path in BOUND:
         lines.append(f'"{path}" = "{hashlib.sha256(contract.read(ROOT, path)).hexdigest()}"')
     (ROOT / REVIEW).write_text("\n".join(lines) + "\n", encoding="utf-8")

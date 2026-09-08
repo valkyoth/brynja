@@ -95,8 +95,8 @@ class ContractTests(unittest.TestCase):
     def test_profile_and_requirement_binding(self):
         original = policy.read
         cases = (
-            ("requirements/domains/cryptography.toml", 'owner = "0.24.24"', 'owner = "0.24.25"'),
-            ("security/cryptographic-api-profile-policy.toml", '"algorithm.sha512-t" = "0.24.27"', '"algorithm.sha512-t" = "0.24.24"'),
+            ("requirements/domains/cryptography.toml", 'owner = "0.24.26"', 'owner = "0.24.25"'),
+            ("security/cryptographic-api-profile-policy.toml", '"algorithm.sha512-t" = "0.24.26"', '"algorithm.sha512-t" = "0.24.24"'),
             ("security/cryptographic-api-profile-policy.toml", '"no-std", "cancellation"', '"no-std"'),
         )
         for path, old, new in cases:

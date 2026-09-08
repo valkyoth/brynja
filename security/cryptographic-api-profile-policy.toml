@@ -38,6 +38,19 @@ output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 
 [[registered-secret-owner]]
+capability = "algorithm.sha512-t"
+id = "registered.algorithm.sha512-t"
+symbol = "crates/brynja-hash-sha2/src/hardened/owner.rs#brynja_hash_sha2::owner::HardenedSha2Owner"
+fields = ["chaining_state:secret-derived", "partial_input:secret", "message_length:secret-derived", "phase:secret-derived", "message_schedule:secret-derived", "block_copy:secret-copy", "padding_block:secret-copy", "output_staging:secret-derived"]
+temporaries = ["round-scalars:register-copy-risk", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
+sanitization_symbol = "crates/brynja-hash-sha2/src/hardened/owner.rs#brynja_hash_sha2::HardenedSha2Owner::wipe"
+cleanup_callers = ["crates/brynja-hash-sha2/src/hardened/owner.rs#brynja_hash_sha2::owner::HardenedSha2Owner::drop"]
+evidence = ["crates/brynja-hash-sha2/tests/hardened.rs", "assurance/sha2-hardened-api/src/lib.rs", "scripts/zeroization/check-zeroization-codegen.sh", "scripts/sha2/check-sha2-hardened.py", "crates/brynja-hash-sha2/tests/general_hash.rs", "scripts/sha2/check-general-sha512-t.py"]
+storage = "crate-owned-fixed"
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+
+[[registered-secret-owner]]
 capability = "algorithm.sha3-shake"
 id = "registered.algorithm.sha3-shake"
 symbol = "crates/brynja-hash-sha3/src/hardened/owner.rs#brynja_hash_sha3::owner::HardenedFips202Owner"
@@ -92,7 +105,7 @@ partial_failure_policy = "clear-complete-secret-destination"
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "7ac5c60f6d5a42ac990b1a921834403175545ba07e483c241d6d8c1d659cb230"
+surface_register_sha256 = "d2da3116e86eae276084b512bfd5cd1a32fad259e3b8c585d040e0741b5d3813"
 
 [api]
 dimensions = [
@@ -721,9 +734,9 @@ bit-input = "0.24.26"
 one-shot = "0.24.26"
 incremental-state = "0.24.26"
 fixed-output = "0.24.25"
-ownership = "0.24.27"
+ownership = "0.24.26"
 no-std = "0.24.28"
-cancellation = "0.24.27"
+cancellation = "0.24.26"
 
 [completion-overrides."algorithm.sha3-shake"]
 bit-input = "0.24.9"
@@ -731,7 +744,7 @@ ownership = "0.24.10"
 hosted-adapter = "0.24.10"
 
 [secret-owner-overrides]
-"algorithm.sha512-t" = "0.24.27"
+"algorithm.sha512-t" = "0.24.26"
 "algorithm.sha2" = "0.24.8"
 "algorithm.sha3-shake" = "0.24.10"
 "algorithm.kmac" = "0.24.13"
@@ -976,7 +989,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "f426679f5ede12aae7858428ae57e39ef15f507d53c40b65aaccd30ef54cd4f4"
+sha256 = "24fa6cb4bbbec6ea9ea7579d548bdba6426cc6a450a805536c7e29cba6e65a13"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
@@ -996,11 +1009,11 @@ sha256 = "cb0232fd04dd0644fc56c7f226346db0e5834dbd2d8540a15c893f0186606d32"
 
 [[reviewed-source]]
 path = "scripts/cryptography/secret_owner_compiler.py"
-sha256 = "72de8365ab67239c24fb1a1271838fc6484a6acb3a9da43eb1b42e00a97262da"
+sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "0f7c30d0fbe8553d4d6560f01bf32f432a4ecdc7cd3078cc88c3d09834618c13"
+sha256 = "0c7ba5d7d77d9ea689331b0c8260886ffb214b9b684be61303adb21d80504885"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"
@@ -1008,7 +1021,7 @@ sha256 = "6de66954611072ac70b03542246a5de5a39587f994525a5000297fb7a06c290c"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-secret-owner-compiler.py"
-sha256 = "5d4c3ce3db7800da7963c35b157cc637366821ef8aafd078e2652782c91fa19c"
+sha256 = "ef88c1a65c9982c15e82727a06639038bfe1785bace50ddc33323edb0c94a01f"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/hardened/compress32.rs"
@@ -1020,7 +1033,7 @@ sha256 = "300af80705a2c7744f52a87b095f96cc2e1b7b5ec3d6fed22c1abb956c55e95e"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/hardened/mod.rs"
-sha256 = "55d78c1817459a9825018467f282dcd551b2c28d9537f222ff7683b251c9b48f"
+sha256 = "48c29449f959c3c94eb9c7ecb609d92b4b92869c7e145b2db9e0a7713ee73acd"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/hardened/output.rs"

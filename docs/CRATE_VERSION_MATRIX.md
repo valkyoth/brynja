@@ -1,10 +1,10 @@
 # Crate Version Matrix
 
-Status: milestones through v0.24.24 signed; v0.24.25 general SHA-512/t value/IV candidate has an owner-reported green retest and awaits green GitHub/CodeQL and explicit tag permission; v0.20.0 remains published. The [pentest report](../security/pentest/v0.24.25.md) records local release-check results.
+Status: milestones through v0.24.25 signed; v0.24.26 awaits owner pentest; v0.20.0 remains published. See the [candidate report](../security/pentest/v0.24.26.md).
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.25`. General SHA-512/t has callable value and IV
-APIs behind an explicit leaf feature, not message hashing; all support crate
+advances to internal `0.24.26`. General SHA-512/t has callable ordinary/hardened
+byte/bit hashing behind an explicit leaf feature; all support crate
 versions remain unchanged.
 `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit

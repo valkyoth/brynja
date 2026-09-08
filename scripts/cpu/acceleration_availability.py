@@ -99,7 +99,8 @@ def validate(root: Path = ROOT) -> None:
     policy = tomllib.loads(read(root, POLICY).decode())
     check_inventory(policy, root)
     reviewed = json.loads(read(root, REVIEW))
-    if reviewed != {"schema": 1, "milestone": "0.24.30", "sha256": snapshot(root)}:
+    expected = {"schema": 1, "milestone": "0.24.30", "sha256": snapshot(root)}
+    if json.dumps(reviewed, sort_keys=True) != json.dumps(expected, sort_keys=True):
         raise ValueError("availability contract/source closure changed; reopen review")
 
 

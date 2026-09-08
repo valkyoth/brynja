@@ -62,8 +62,17 @@ def policy_mutations() -> int:
         try:
             contract.validate(root)
         except ValueError:
-            return len(mutations) + 1
-        raise AssertionError("accepted source drift")
+            pass
+        else:
+            raise AssertionError("accepted source drift")
+        source.write_bytes(contract.read(contract.ROOT, f"{contract.FIXTURE}/src/selection.rs"))
+        review = root / contract.REVIEW
+        review.write_text(review.read_text().replace('"schema": 1', '"schema": true', 1))
+        try:
+            contract.validate(root)
+        except ValueError:
+            return len(mutations) + 2
+        raise AssertionError("accepted boolean review schema as integer")
 
 
 def compiled_mutations() -> int:

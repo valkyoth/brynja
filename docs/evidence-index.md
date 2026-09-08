@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 final scalar SHA-512/t evidence awaits exceptional owner pentest. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 has an owner-supplied green Critical/High-threshold assessment and reviewed M2/AWS Arm correctness captures. Final release checks remain pending. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are
@@ -17,6 +17,12 @@ v0.24.29 adds [final scalar work/resource/performance evidence](sha512-t-final-e
 and its [exceptional review record](../security/pentest/v0.24.29.md). This includes
 an exact-source local artifact, real shortened-round mutants and bounded hosted
 profiling, not CPU admission, a total-stack bound or a constant-time proof.
+
+The [v0.24.29 native archive](../assurance/sha512-t-observations/v0.24.29/README.md)
+preserves exact-source Apple M2 and AWS Arm JSON, both with all 510 t and 4590
+cases in debug/release plus normal-build and quarantine rejection. These are
+operator/project-owned observations, not independently authenticated evidence,
+FIPS validation, hardened acceleration or a general native support approval.
 
 The [v0.24.24 pentest report](../security/pentest/v0.24.24.md) records the
 owner-supplied assessment of `b73ea22173ef` and local release verification.

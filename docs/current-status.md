@@ -12,16 +12,16 @@ explicit DER, format, key-role and prerequisite closure without changing any
 current implementation claim. Standalone DER encode/decode completion is
 planned for v0.34.6. The former standalone hash and legacy plans are now
 consolidated into the pre-1.0 roadmap, with final release gates through v0.480.0.
-Current generated planning coverage is 2003 non-RC rows
-(2004 milestones including the release candidate), 131 authorities, 4,462
+Current generated planning coverage is 2028 non-RC rows
+(2029 milestones including the release candidate), 131 authorities, 4,462
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 final SHA-512/t evidence and ordinary CPU integration await fresh exceptional owner pentest and AWS Arm/Mac evidence disposition. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 has a green scoped owner pentest, archived AWS Arm/Mac evidence disposition and passing final local release checks. Awaiting green GitHub/CodeQL and explicit tag approval. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
 
 The current candidate implements [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs behind an explicit default-off leaf feature. General family
-closure remains v0.24.29; no independent verification or FIPS validation is claimed.
+portable closure is complete at v0.24.29; no independent verification or FIPS validation is claimed.
 v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
 and batch public acceptance using the frozen v0.24.20 contract. See
 [final legacy acceptance](legacy-hash-final-acceptance.md). All instruction

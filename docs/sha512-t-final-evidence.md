@@ -1,8 +1,9 @@
 # General SHA-512/t final evidence
 
 v0.24.29 completes the implementation evidence over the v0.24.28 frozen
-[public consumer](sha512-t-public-acceptance.md). Status remains **In progress**
-until the exceptional owner pentest/retest and native evidence disposition pass.
+[public consumer](sha512-t-public-acceptance.md). Portable ordinary/hardened
+status is **Fully implemented**, with the scoped owner pentest and reviewed
+[native observations](../assurance/sha512-t-observations/v0.24.29/README.md) recorded.
 The ordinary [CPU API integration](sha512-t-cpu-evidence.md) reuses existing
 unadmitted SHA-512 kernels. No facade reexport or third-party dependency is added;
 hardened operations and default ordinary APIs remain portable-only.
@@ -75,12 +76,13 @@ required where applicable. No new general-algorithm-wide formal proof is claimed
 The local sanitizer wrapper explicitly runs the consumer library (including
 its resource checks) and the hosted profile; source-policy tests reject removing
 that coverage. Full dynamic analysis stays local, not in bounded GitHub CI.
-Fresh AWS Arm/Mac capture is required for the new ordinary CPU integration after
-the fresh owner pentest; follow the [capture instructions](sha512-t-cpu-evidence.md).
+AWS Arm/Mac captures completed against reviewed commit `5c7ec3bd`; see the
+archive above and [capture instructions](sha512-t-cpu-evidence.md). Final status
+documentation does not alter their source bindings or imply a new native run.
 CPU admission and especially RISC-V native qualification remain separate.
 
-After all these checks, reviewed native evidence disposition and a clean exceptional pentest, update the general
-SHA-512/t implementation row to Fully implemented (portable). Keep independent
+The completed acceptance, reviewed native evidence disposition and scoped exceptional pentest
+close the general SHA-512/t implementation row as Fully implemented (portable). Keep independent
 cryptographic review and FIPS validation negative. Short t has correspondingly
 short collision/preimage strength; implementing general t does not approve it
 for a protocol or an approved FIPS service.

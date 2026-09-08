@@ -55,7 +55,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add default-off general SHA-512/t ordinary/hardened byte/bit hashing and typed secret output; final family closure remains pending and no crate is published."
+reason = "Complete default-off general SHA-512/t portable ordinary/hardened byte/bit hashing and typed secret output acceptance; CPU candidates remain unadmitted and no crate is published."
 
 [crates."brynja-hash-sha3"]
 previous_version = "unpublished"

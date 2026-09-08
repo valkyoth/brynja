@@ -5,7 +5,7 @@ domain = "cryptography"
 id = "BRY-REQ-CRYPTO-0020"
 owner = "0.24.26"
 lifecycle = "implemented"
-revision = 6
+revision = 7
 decision_ids = ["algorithm.sha512-t"]
 sources = [{ id = "nist:NIST.FIPS.180-4.pdf", authority_role = "current" }]
 statement = "General SHA-512/t must implement every positive t below 512 except 384, exact shortest-decimal IV generation, leftmost MSB-first output and all ordinary/hardened byte/bit operations in requirements/sha512-t-contract.toml, without inheriting named SHA-2 or protocol approval."
@@ -14,8 +14,8 @@ target = "crates/brynja-hash-sha2/src/lib.rs#Sha512T"
 positive_test = "scripts/sha2/check-general-sha512-t.py#main"
 negative_test = "scripts/sha2/test-general-sha512-t.py#main"
 work_bound = "The frozen contract requires one IV block, linear caller-bounded input updates, one or two final blocks, fixed workspace and no hidden allocation."
-evidence_gap = "v0.24.26 implements ordinary/hardened byte/bit hashing with all-510 IV and 4590 digest oracle cases; v0.24.27 adds lifecycle and destructor evidence; v0.24.28 freezes package-external acceptance. v0.24.29 adds exact-source scalar work, object-storage, local profiling and ordinary explicit CPU integration; fresh exceptional owner pentest and reviewed AWS Arm/Mac evidence disposition remain pending before family completion. Hardened paths remain portable-only and RV64 qualification is QEMU-only."
-residual = "Arbitrary t has no implied FIPS or protocol approval and short digests have weak security bounds. No final family acceptance, independent cryptographic review, CPU admission or register/platform/caller-copy erasure is claimed."
+evidence_gap = "v0.24.26 implements ordinary/hardened byte/bit hashing with all-510 IV and 4590 digest oracle cases; v0.24.27 adds lifecycle and destructor evidence; v0.24.28 freezes package-external acceptance. v0.24.29 closes portable acceptance with exact-source scalar work, object-storage, local profiling, scoped owner pentest and archived AWS Arm/Mac correctness observations for ordinary CPU integration. Candidates remain unadmitted; hardened paths remain portable-only and RV64 qualification is QEMU-only. No independent cryptographic review, FIPS validation or universal machine-level side-channel/erasure proof is claimed."
+residual = "Arbitrary t has no implied FIPS or protocol approval and short digests have weak security bounds. Portable family acceptance does not establish independent cryptographic review, CPU admission or register/platform/caller-copy erasure."
 mapping_rationale = "FIPS 180-4 section 5.3.6 and its SHA-512 dependencies directly govern this distinct general construction; docs/sha512-t-contract.md pins exact sections, source bytes, rights, errata observation and all API/lifecycle obligations."
 
 [[requirement]]

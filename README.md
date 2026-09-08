@@ -72,7 +72,7 @@ SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE25
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
-| General SHA-512/t extension | 🚧 In progress — ordinary/hardened hashing; final evidence pending | `brynja-hash-sha2` (opt-in) | ❌ Not independently verified |
+| General SHA-512/t extension (portable) | ✅ Fully implemented | `brynja-hash-sha2` (opt-in) | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
@@ -956,11 +956,12 @@ The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.28`; the current internal `0.24.29`
 candidate adds final work/resource/performance evidence and explicit ordinary CPU integration for opt-in hashing and typed secret
 outputs under the [general SHA-512/t contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
-General SHA-512/t remains **In progress** through final v0.24.29 acceptance;
-the six named SHA-2 algorithms stay complete. The v0.24.29 fresh owner pentest and
-[AWS Arm/Mac evidence disposition](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-cpu-evidence.md) are pending;
-release checks and green GitHub/CodeQL are required before tagging. This candidate
-is not tagged or published.
+General SHA-512/t's portable ordinary/hardened APIs are **Fully implemented**
+after v0.24.29 acceptance, the scoped owner pentest and
+[AWS Arm/Mac evidence disposition](https://github.com/valkyoth/brynja/blob/main/assurance/sha512-t-observations/v0.24.29/README.md).
+CPU candidates remain unadmitted; opt-in usable acceleration is the next planned
+chain. Green GitHub/CodeQL and explicit approval are required before tagging.
+This candidate is not tagged or published.
 All SHA-1 and MD5 candidates remain unadmitted; hardened legacy execution remains portable. Both legacy leaves have ordinary and hardened
 byte/bit APIs and completed v0.24.23 public acceptance, but remain collision-broken,
 unpublished and absent from the modern facade. SP 800-185 remains **Fully
@@ -1077,7 +1078,7 @@ selected set in dependency order and publishes the facade last.
 | `brynja` | Modern production facade | Internal v0.24.29 keeps facade APIs unchanged; general SHA-512/t ordinary/hardened hashing is leaf-only, legacy leaves stay separate, CPU candidates remain unadmitted, and no TLS engine exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
-| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted. Default-off general SHA-512/t adds ordinary/hardened byte/bit hashing and typed secret outputs; final family acceptance remains pending |
+| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted. Default-off general SHA-512/t ordinary/hardened byte/bit hashing and typed secret outputs complete portable family acceptance at v0.24.29 |
 | `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, and SP 800-185 encoding foundations | v0.1.0 contains all six fully implemented FIPS 202 functions plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary and hardened byte/arbitrary-bit APIs; both CPU candidates remain unadmitted, and the wider SP 800-185 family passed final acceptance at v0.24.17 |
 | `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | v0.1.0 implemented internally at v0.24.13; unpublished until a public checkpoint, independently unverified, and not FIPS validated |
 | `brynja-hash-tuple` | Complete TupleHash128/256 and TupleHashXOF128/256 with structural item boundaries and hardened ownership | v0.1.0 implemented internally at v0.24.14; unpublished until a public checkpoint, independently unverified, and not FIPS validated |

@@ -1,10 +1,11 @@
 # Component Verification Status
 
-General SHA-512/t is a separate **In progress** extension: v0.24.26 implements
+General SHA-512/t is a separate **Fully implemented** portable extension: v0.24.26 implements
 ordinary/hardened byte/bit hashing and typed secret output under the
 [authority/API contract](sha512-t-contract.md); final family closure is v0.24.29.
-The [final scalar and ordinary CPU evidence candidate](sha512-t-final-evidence.md) retains that
-status until its exceptional owner pentest/retest passes.
+The [final scalar and ordinary CPU evidence](sha512-t-final-evidence.md), scoped
+owner pentest and archived native observations close portable acceptance.
+CPU candidates remain unadmitted; this does not grant independent verification.
 The six named SHA-2 identities remain fully implemented and unverified.
 
 This document preserves Brynja's crate-level assurance inventory. It answers

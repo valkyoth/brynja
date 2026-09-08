@@ -4146,7 +4146,7 @@ Exit criteria:
 
 ### v0.24.29 - General SHA-512/t - Final Evidence And Usability Closure
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Rerun the frozen General SHA-512/t public fixture and complete exact-source correctness, cleanup, side-channel, resource and cross-target evidence for `brynja-hash-sha2`; add explicit ordinary byte/bit and streaming CPU APIs over existing unadmitted AArch64 SHA-512 and RV64 Zknh candidates, keep hardened paths portable-only, and require fresh exceptional pentest plus reviewed AWS Arm/Mac native evidence disposition before implementation closure without granting CPU admission.
 

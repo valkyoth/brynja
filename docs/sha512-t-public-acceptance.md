@@ -2,9 +2,10 @@
 
 v0.24.28 freezes a runnable consumer of the default-off `general-sha512-t`
 feature in `brynja-hash-sha2`. It adds no production algorithm or facade API.
-The family remains **In progress** until v0.24.29 final evidence closure.
-The [final evidence candidate](sha512-t-final-evidence.md) reuses this corpus
-and adds work, storage and local performance checks; owner pentest is pending.
+Portable family acceptance closes at v0.24.29.
+The [final evidence](sha512-t-final-evidence.md) reuses this corpus and adds work,
+storage and local performance checks, a green scoped owner pentest and reviewed
+native correctness observations. CPU candidates remain unadmitted.
 
 ## Run it yourself
 

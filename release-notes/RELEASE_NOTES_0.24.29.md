@@ -1,6 +1,6 @@
 # Brynja v0.24.29
 
-Status: implementation candidate; fresh exceptional owner pentest and native evidence disposition required.
+Status: scoped owner pentest PASS; native evidence archived; final local release checks PASS. Awaiting green GitHub/CodeQL and explicit tag approval. Not tagged or published.
 
 ## General SHA-512/t final evidence and ordinary CPU integration
 
@@ -25,10 +25,12 @@ consumer and retains the lifecycle, compiler-cleanup and negative controls.
   invalid durations and instrumentation drift are rejected by regression tests.
 
 See [commands, coverage and limits](../docs/sha512-t-final-evidence.md).
-General SHA-512/t remains **In progress** until the final exceptional pentest
-and reviewed native AWS Arm/Mac evidence disposition pass. Then its portable
-implementation row can become Fully implemented;
-independent cryptographic review and FIPS validation stay negative.
+General SHA-512/t's portable ordinary/hardened implementation is **Fully
+implemented** after final acceptance, the scoped exceptional pentest and reviewed
+[native AWS Arm/Mac observations](../assurance/sha512-t-observations/v0.24.29/README.md).
+The supplied review reports no confirmed Critical/High findings; Medium/Low
+were outside its reporting threshold. Independent cryptographic review and
+FIPS validation stay negative, and CPU candidates remain unadmitted.
 
 ## Release and residual limits
 
@@ -49,6 +51,5 @@ memory, not registers, compiler copies/spills, caches, swap, dumps, DMA, abort,
 forget, termination or caller-created copies. No classified-deployment claim.
 
 Actual completed checks are in the [pentest report](../security/pentest/v0.24.29.md).
-Commit the candidate for owner review, obtain a clean exceptional pentest,
-finish release checks and commit the PASS report, wait for green GitHub/CodeQL,
+Commit the completed release checks and PASS report, wait for green GitHub/CodeQL,
 then obtain explicit tag permission. Do not publish this internal milestone.

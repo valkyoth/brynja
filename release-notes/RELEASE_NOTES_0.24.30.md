@@ -22,6 +22,9 @@ The facade version advances to 0.24.30; support versions stay unchanged.
 - Add an unpublished dependency-free no_std executable model with exhaustive
   selection tests, consuming ownership examples and compiled negative controls.
   Its public constructor cannot enable any candidate, and it hashes no data.
+- Pentest remediation adds dedicated strict all-target Clippy to the repository
+  gate for this standalone fixture, with driver-removal and five compiled lint
+  regressions. No production Rust or tagging/publication rules change.
 
 See the [contract and commands](../docs/acceleration-availability.md) and
 [implementation/review record](../security/pentest/v0.24.30.md).

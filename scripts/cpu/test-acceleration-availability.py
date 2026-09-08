@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import json
 from pathlib import Path
 import shutil
 import subprocess
@@ -115,11 +116,83 @@ def compiled_mutations() -> int:
         return len(mutations) * 2
 
 
+def gate_mutations() -> int:
+    """Check missing/weakened commands without relying on stale hash rejection."""
+    original = contract.read(contract.ROOT, contract.CHECKS).decode().replace("\\\n", " ")
+    original = "\n".join(" ".join(line.split()) for line in original.splitlines())
+    command = contract.CLIPPY_COMMAND
+    mutations = (
+        "", "# " + command,
+        command.replace("cargo clippy", "cargo check"),
+        command.replace(f"--manifest-path {contract.FIXTURE}/Cargo.toml", "--workspace"),
+        command.replace("--all-targets ", ""),
+        command.replace("-D warnings", "-A warnings"),
+    )
+    if command not in original:
+        raise AssertionError("stale gate mutations")
+    with tempfile.TemporaryDirectory(prefix="brynja-availability-gate-") as tmp:
+        root = Path(tmp)
+        path = root / contract.CHECKS
+        path.parent.mkdir()
+        path.write_text(original)
+        contract.check_gate(root)
+        for replacement in mutations:
+            path.write_text(original.replace(command, replacement, 1))
+            try:
+                contract.check_gate(root)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError(f"accepted weakened gate: {replacement}")
+    return len(mutations)
+
+
+def lint_mutations() -> int:
+    """Each forbidden pattern must compile with rustc, then fail its own Clippy lint."""
+    mutations = {
+        "panic": 'pub fn lint_probe() { panic!("probe"); }',
+        "unwrap_used": 'pub fn lint_probe(value: Option<u8>) -> u8 { value.unwrap() }',
+        "expect_used": 'pub fn lint_probe(value: Option<u8>) -> u8 { value.expect("probe") }',
+        "indexing_slicing": 'pub fn lint_probe(value: &[u8], index: usize) -> u8 { value[index] }',
+        "arithmetic_side_effects": 'pub fn lint_probe(left: u8, right: u8) -> u8 { left + right }',
+    }
+    with tempfile.TemporaryDirectory(prefix="brynja-availability-lints-") as tmp:
+        root = Path(tmp)
+        shutil.copytree(contract.ROOT / contract.FIXTURE / "src", root / "src")
+        for name in ("Cargo.toml", "Cargo.lock"):
+            shutil.copyfile(contract.ROOT / contract.FIXTURE / name, root / name)
+        source = root / "src/lib.rs"
+        original = source.read_text()
+        clippy = ["cargo", "clippy", "--locked", "--offline", "--all-targets",
+                  "--message-format=json", "--", "-D", "warnings"]
+        positive = run(clippy, root)
+        if positive.returncode:
+            raise AssertionError(positive.stdout + positive.stderr)
+        for lint, body in mutations.items():
+            source.write_text(original + "\n/// Lint regression probe; never executed.\n" + body + "\n")
+            compiled = run(["cargo", "check", "--locked", "--offline", "--lib"], root)
+            if compiled.returncode:
+                raise AssertionError("lint mutant failed rustc:\n" + compiled.stderr)
+            result = run(clippy, root)
+            errors = set()
+            for line in result.stdout.splitlines():
+                diagnostic = json.loads(line)
+                message = diagnostic.get("message", {})
+                if message.get("level") == "error" and message.get("code"):
+                    errors.add(message["code"]["code"])
+            if result.returncode == 0 or f"clippy::{lint}" not in errors:
+                raise AssertionError(f"lint mutant not rejected by {lint}:\n{result.stdout}\n{result.stderr}")
+    return len(mutations)
+
+
 def main() -> int:
     contract.validate()
     policies = policy_mutations()
     compiled = compiled_mutations()
+    gates = gate_mutations()
+    lints = lint_mutations()
     print(f"Acceleration contract rejects {policies} policy/source and {compiled} compiled regressions")
+    print(f"Dedicated Clippy gate rejects {gates} driver regressions and {lints} compiled forbidden patterns")
     return 0
 
 

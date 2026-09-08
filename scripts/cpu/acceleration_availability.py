@@ -10,11 +10,14 @@ ROOT = Path(__file__).resolve().parents[2]
 POLICY = "security/acceleration-availability.toml"
 REVIEW = "security/acceleration-availability-reviewed.json"
 FIXTURE = "assurance/acceleration-contract"
+CHECKS = "scripts/checks.sh"
+CLIPPY_COMMAND = f"cargo clippy --locked --offline --manifest-path {FIXTURE}/Cargo.toml --all-targets -- -D warnings"
 OWNERS = (
     "brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-legacy-sha1",
     "brynja-legacy-sha1-std", "brynja-legacy-md5", "brynja-legacy-md5-std",
 )
 BOUND = (
+    CHECKS,
     POLICY, "security/cpu-backend-admissions.toml", "docs/acceleration-availability.md",
     "security/sha1-cpu-admissions.toml", "security/md5-cpu-admissions.toml",
     "scripts/cpu/acceleration_availability.py",
@@ -52,7 +55,26 @@ def snapshot(root: Path) -> dict:
     return {name: hashlib.sha256(read(root, name)).hexdigest() for name in paths(root)}
 
 
+def check_gate(root: Path) -> None:
+    """Require the reviewed literal commands, not a whole-workspace substitute.
+
+    This is a structural check for the linear repository driver, not a shell
+    interpreter. The driver's full contents are also bound by the review hash.
+    """
+    commands = {
+        " ".join(line.split())
+        for line in read(root, CHECKS).decode().replace("\\\n", " ").splitlines()
+    }
+    required = (
+        f"cargo test --locked --offline --manifest-path {FIXTURE}/Cargo.toml",
+        CLIPPY_COMMAND,
+    )
+    if not all(command in commands for command in required):
+        raise ValueError("acceleration fixture requires dedicated test and strict all-target Clippy gates")
+
+
 def check_inventory(policy: dict, root: Path) -> None:
+    check_gate(root)
     for key, value in {
         "schema": 1, "milestone": "0.24.30", "state": "contract-only-zero-activations",
         "default_mode": "Portable", "modes": ["Portable", "Prefer", "Require"],

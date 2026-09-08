@@ -103,6 +103,10 @@ cargo test --locked --offline --manifest-path assurance/acceleration-contract/Ca
 The checker binds the reviewed contract and complete inventoried owner sources.
 Mutation tests reject claim promotion and source drift. Compiled model mutants
 must compile and then fail behavior tests (compiler failure is not a pass).
+The repository driver runs dedicated all-target Clippy with warnings denied for
+this standalone workspace. Structural regressions reject removal or weakening
+of that command; five rustc-valid mutants must each fail their specific declared
+Clippy security lint. Root-workspace Clippy alone does not cover this fixture.
 Doctests reject forged/private ownership and finalized reuse. These tests are
 not cryptographic correctness, timing, native qualification or FIPS evidence.
 Activation requires new implementation and evidence; historical captures are

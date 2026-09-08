@@ -26,6 +26,8 @@ python3 scripts/cryptography/test-api-profiles.py
 python3 scripts/cpu/check-acceleration-availability.py
 python3 scripts/cpu/test-acceleration-availability.py
 cargo test --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml
+cargo clippy --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml \
+  --all-targets -- -D warnings
 python3 scripts/cryptography/test-mir-cleanup-flow.py
 python3 scripts/cryptography/test-secret-owner-compiler.py
 python3 scripts/cryptography/check-secret-owner-compiler.py

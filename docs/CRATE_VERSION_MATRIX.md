@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: milestones through v0.24.24 signed; v0.24.25 general SHA-512/t value/IV candidate has an owner-reported green retest and awaits release-check completion, green GitHub/CodeQL and explicit tag permission; v0.20.0 remains published
+Status: milestones through v0.24.24 signed; v0.24.25 general SHA-512/t value/IV candidate has an owner-reported green retest and awaits green GitHub/CodeQL and explicit tag permission; v0.20.0 remains published. The [pentest report](../security/pentest/v0.24.25.md) records local release-check results.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.25`. General SHA-512/t has callable value and IV

@@ -1,6 +1,6 @@
 # Brynja 0.24.25 Release Notes
 
-Status: owner pentest/retest PASS; final local release checks in progress
+Status: owner pentest/retest and local release checks PASS; awaiting green GitHub/CodeQL and explicit tag permission
 
 ## Scope
 
@@ -39,6 +39,16 @@ that ignores the parameter. Verification-only Miri/sanitizer pins advance to
 nightly-2026-09-08; production Rust stays 1.98.1 with MSRV 1.90.0.
 See the [pentest report](../security/pentest/v0.24.25.md) for actual completed
 local checks and the owner-supplied green retest; tests are not independent review.
+
+Post-pentest release checks passed: the complete repository gate, twelve Rust
+compiler lanes, bare-metal and QEMU campaigns, all ten local full Miri groups,
+AddressSanitizer, all 29 registered Kani harnesses, current dependency/tooling
+and authority checks, documentation/package checks, SBOM and publication policy.
+LeakSanitizer was excluded because of the environment's ptrace restriction.
+Miri groups ran concurrently on this workstation using the existing group
+entry points; no remote evidence aggregation or native backend admission is
+claimed. Post-review changes only update documentation and current hash-bound
+metadata; no Rust implementation or dependency selection changed.
 
 ## Limits and release flow
 

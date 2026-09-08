@@ -3992,7 +3992,10 @@ Exit criteria:
 
 ### v0.24.25 - General SHA-512/t - Validated positive t below 512 except 384, exact decimal IV-generation label and typed arbitrary-bit digest output distinct from named /224 and /256
 
-Status: owner pentest/retest PASS; awaiting release-check completion, green GitHub/CodeQL and explicit tag permission
+Status: awaiting green CI
+
+Owner pentest/retest is PASS. Complete the recorded local release checks and
+obtain green GitHub/CodeQL plus explicit owner permission before tagging.
 
 The explicit `general-sha512-t` leaf feature implements `Sha512TBits`, public
 IV label/word diagnostics and canonical `Sha512TDigest` import/access. All 510

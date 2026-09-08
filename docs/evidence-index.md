@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; through v0.24.24 signed; v0.24.25 general SHA-512/t value/IV candidate has an owner-reported green retest and awaits release-check completion, green GitHub/CodeQL and explicit tag permission. All CPU backends remain unadmitted.
+Status: v0.20.0 published; through v0.24.24 signed; v0.24.25 general SHA-512/t value/IV candidate has an owner-reported green retest and awaits green GitHub/CodeQL and explicit tag permission. Its report below records local release-check results. All CPU backends remain unadmitted.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are

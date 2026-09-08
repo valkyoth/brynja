@@ -8,7 +8,8 @@
   identity, policy and dynamic-analysis coverage. No message hasher or secret
   owner is added; general SHA-512/t remains In progress through v0.24.29.
 - Advance facade metadata without reexports or publication; support versions
-  stay unchanged. Owner pentest is required before tagging.
+  stay unchanged. Owner pentest/retest passed with no serious findings;
+  GitHub/CodeQL and explicit owner permission remain required before tagging.
   See [release notes](release-notes/RELEASE_NOTES_0.24.25.md).
 
 ## 0.24.24 candidate

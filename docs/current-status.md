@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.24 signed; v0.24.25 general SHA-512/t parameter, IV and public digest candidate has an owner-reported green retest and awaits release-check completion, green GitHub/CodeQL and explicit tag permission. No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.24 signed; v0.24.25 general SHA-512/t parameter, IV and public digest candidate has an owner-reported green retest and awaits green GitHub/CodeQL and explicit tag permission. Its [pentest report](../security/pentest/v0.24.25.md) records local release-check results. No CPU backend is admitted.
 
 The current candidate implements [general SHA-512/t](sha512-t-contract.md) value
 and IV APIs behind an explicit default-off leaf feature, not message hashing.

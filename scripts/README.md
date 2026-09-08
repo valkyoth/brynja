@@ -99,7 +99,8 @@ full suite. Every public stage that can publish to crates.io always runs all
 groups. See [focused assurance](../docs/focused-assurance.md) for exact rules.
 
 The current groups are `core`, `sanitization`, `sha2`, `sha3`, `kmac`,
-`tuplehash`, `parallelhash`, `sha1`, `md5`, and `legacy`.
+`tuplehash`, `parallelhash`, `sha1`, `md5`, `legacy`, and `acceleration`
+(the isolated, dependency-free acceleration contract model).
 `zeroization/check-zeroization-miri.sh --group GROUP` is a shard entry point so
 the groups can later run concurrently on isolated headless workers. Shard
 results are not yet accepted by the tag gate: a future aggregator must bind

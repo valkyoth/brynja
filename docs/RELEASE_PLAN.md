@@ -4176,7 +4176,7 @@ Exit criteria:
 
 ### v0.24.30 - Opt-In Acceleration Availability Contract
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation: [availability contract](acceleration-availability.md), exact
 kernel/family inventory and dependency-free executable selection model. This

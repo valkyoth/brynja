@@ -1,6 +1,6 @@
 # Brynja v0.24.30
 
-Status: implementation candidate; exceptional pentest pending. Not tagged or published.
+Status: exceptional owner pentest and remediation retest PASS. Final local release verification is recorded in the pentest report; green GitHub/CodeQL and explicit tagging permission remain required. Not tagged or published.
 
 ## Opt-in acceleration availability contract
 
@@ -25,6 +25,11 @@ The facade version advances to 0.24.30; support versions stay unchanged.
 - Pentest remediation adds dedicated strict all-target Clippy to the repository
   gate for this standalone fixture, with driver-removal and five compiled lint
   regressions. No production Rust or tagging/publication rules change.
+- Register the isolated contract's own full Miri group. Internal milestones
+  run that group when affected and smoke tests for unchanged families; public
+  checkpoints still run every full group. Dependency or unknown-impact changes
+  remain fail-closed. This fixes an unnecessary full-suite selection, not a
+  cryptographic implementation or admission change.
 
 See the [contract and commands](../docs/acceleration-availability.md) and
 [implementation/review record](../security/pentest/v0.24.30.md).

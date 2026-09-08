@@ -64,6 +64,12 @@ def semantic_tests():
     assert inputs.runner_groups(runner, runner.replace(b'nightly-2026-09-08', b'nightly-2026-09-09')) == set()
     assert inputs.runner_groups(runner, runner.replace(b'quick_md5() {', b'quick_md5() {\n    # reviewed smoke')) == set()
     assert inputs.runner_groups(runner, runner.replace(b'full_md5() {', b'full_md5() {\n    # reviewed full')) == {'md5'}
+    # Adding the registered model leaves all existing full campaign bodies intact.
+    start = runner.index(b'quick_acceleration() {')
+    end = runner.index(b'all_groups=', start)
+    previous = (runner[:start] + runner[end:]).replace(b'legacy acceleration)', b'legacy)')
+    assert inputs.runner_groups(previous, runner) == {'acceleration'}
+    rejected(lambda: inputs.runner_groups(runner, previous))
     rejected(lambda: inputs.runner_groups(runner, runner.replace(b'run_miri() {', b'run_miri() {\n    false')))
     rejected(lambda: inputs.runner_groups(runner, runner.replace(b'set -euo pipefail', b'set -u')))
     manifest = b'[package]\nname="brynja-legacy-hash-public-api-fixture"\nversion="0.0.0"\npublish=false\n'
@@ -135,6 +141,29 @@ def git_tests():
             return b'' if args[0] == 'verify-tag' else real(path, *args)
         with patch.object(inputs, 'git', authenticated):
             assert scope.select_repository('v0.24.19', root) == (False, ())
+            contract = root / 'assurance/acceleration-contract'
+            contract.mkdir(parents=True)
+            manifest = (scope.ROOT / 'assurance/acceleration-contract/Cargo.toml').read_bytes()
+            model_lock = (scope.ROOT / 'assurance/acceleration-contract/Cargo.lock').read_bytes()
+            (contract / 'Cargo.toml').write_bytes(manifest)
+            (contract / 'Cargo.lock').write_bytes(model_lock)
+            model_source = contract / 'src/lib.rs'
+            model_source.parent.mkdir()
+            model_source.write_text('// new isolated model\n')
+            assert scope.select_repository('v0.24.19', root) == (False, ('acceleration',))
+            for table in ('dependencies', 'dev-dependencies', 'build-dependencies',
+                          'target.x86_64-unknown-linux-gnu.dependencies'):
+                (contract / 'Cargo.toml').write_bytes(manifest + f'\n[{table}]\nunknown="1"\n'.encode())
+                assert scope.select_repository('v0.24.19', root)[0]
+            (contract / 'Cargo.toml').write_bytes(manifest)
+            for bad in (b'version=3\npackage=[]', model_lock + b'\n[[package]]\nname="unknown"\nversion="1"',
+                        model_lock.replace(b'0.0.0', b'9.0.0')):
+                (contract / 'Cargo.lock').write_bytes(bad)
+                assert scope.select_repository('v0.24.19', root)[0]
+            (contract / 'Cargo.lock').unlink()
+            assert scope.select_repository('v0.24.19', root)[0]
+            (contract / 'Cargo.toml').unlink()
+            model_source.unlink()
             reviewed.write_text(digest.replace('a' * 64, 'b' * 64))
             assert scope.select_repository('v0.24.19', root) == (False, ())
             reviewed.write_text(digest.replace('README.md', 'src/lib.rs'))
@@ -167,7 +196,22 @@ def git_tests():
             assert scope.select_repository('v9.9.9', root)[0]
 
 
+def contract_tests():
+    manifest = (scope.ROOT / 'assurance/acceleration-contract/Cargo.toml').read_bytes()
+    model_lock = (scope.ROOT / 'assurance/acceleration-contract/Cargo.lock').read_bytes()
+    inputs.isolated_contract(model_lock, manifest)
+    for before, after in ((None, manifest), (model_lock, None),
+                          (model_lock, manifest.replace(b'publish = false', b'publish = true')),
+                          (model_lock, manifest.replace(b'0.0.0', b'1.0.0'))):
+        rejected(lambda: inputs.isolated_contract(before, after))
+    assert inputs.lock_groups(model_lock, model_lock.replace(b'0.0.0', b'0.0.1')) == set()
+    # An unknown fixture path still fails closed even when its lock is valid.
+    assert scope.select(['assurance/unknown/Cargo.toml'])[0]
+    assert scope.select(['assurance/unknown/src/lib.rs'])[0]
+
+
 if __name__ == '__main__':
     semantic_tests()
     git_tests()
+    contract_tests()
     print('Semantic Miri scope: versions, closures, removals, malformed inputs, dirty/untracked code and baseline failures PASS')

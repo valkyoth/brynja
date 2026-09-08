@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 published; milestones through v0.24.29 signed; v0.24.30 acceleration availability contract awaits exceptional pentest. See the [candidate report](../security/pentest/v0.24.30.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.29 signed; v0.24.30 acceleration availability contract has a green owner pentest/retest. See the [release verification report](../security/pentest/v0.24.30.md); green GitHub/CodeQL and explicit tag approval remain required. No CPU backend is admitted.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.30`. General SHA-512/t has callable ordinary/hardened

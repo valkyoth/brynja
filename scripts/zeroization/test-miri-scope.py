@@ -15,7 +15,7 @@ def expect(paths: list[str], *, full: bool, groups: tuple[str, ...]) -> None:
     assert miri_scope.select(paths) == (full, groups)
 
 
-def run_profile(*arguments: str) -> tuple[int, list[str]]:
+def run_profile(*arguments: str, fail_match: str = "") -> tuple[int, list[str]]:
     with tempfile.TemporaryDirectory(prefix="brynja-miri-profile-") as temporary:
         root = Path(temporary)
         binary = root / "cargo"
@@ -23,13 +23,17 @@ def run_profile(*arguments: str) -> tuple[int, list[str]]:
         binary.write_text(
             "#!/bin/sh\n"
             "printf '%s\\t%s\\n' \"$CARGO_TARGET_DIR\" \"$*\" "
-            '>> \"$BRYNJA_MIRI_TRACE\"\n',
+            '>> \"$BRYNJA_MIRI_TRACE\"\n'
+            'if test -n "$BRYNJA_MIRI_FAIL"; then\n'
+            '    case "$*" in *"$BRYNJA_MIRI_FAIL"*) exit 42;; esac\n'
+            'fi\n',
             encoding="utf-8",
         )
         binary.chmod(0o700)
         environment = os.environ.copy()
         environment["PATH"] = f"{root}:{environment['PATH']}"
         environment["BRYNJA_MIRI_TRACE"] = str(trace)
+        environment["BRYNJA_MIRI_FAIL"] = fail_match
         result = subprocess.run(
             [str(miri_scope.ROOT / "scripts/zeroization/check-zeroization-miri.sh"), *arguments],
             cwd=miri_scope.ROOT,
@@ -77,7 +81,7 @@ def main() -> int:
     expect(
         ["crates/brynja-core/src/secret_memory.rs"],
         full=False,
-        groups=miri_scope.GROUPS,
+        groups=tuple(group for group in miri_scope.GROUPS if group != "acceleration"),
     )
     expect(
         ["crates/brynja-sanitization/src/lib.rs"],
@@ -88,6 +92,7 @@ def main() -> int:
     expect(["crates/brynja-legacy-md5/src/lib.rs"], full=False, groups=("md5", "legacy"))
     expect(["assurance/legacy-hash-public-api/src/lib.rs"], full=False, groups=("legacy",))
     expect(["assurance/legacy-hash-final/src/lib.rs"], full=False, groups=("legacy",))
+    expect(["assurance/acceleration-contract/src/lib.rs"], full=False, groups=("acceleration",))
     expect(["crates/unknown/src/lib.rs"], full=True, groups=miri_scope.GROUPS)
     expect(["Cargo.lock"], full=True, groups=miri_scope.GROUPS)
     expect(
@@ -98,13 +103,20 @@ def main() -> int:
     expect(["../escape"], full=True, groups=miri_scope.GROUPS)
 
     status, commands = run_profile("--focused")
-    assert status == 0 and len(commands) == 10
+    assert status == 0 and len(commands) == 11
+    assert sum('public_model_never_activates_current_kernels' in c for c in commands) == 1
+    status, focused = run_profile("--focused", "acceleration")
+    assert status == 0 and len(focused) == 11
+    assert sum(c.endswith('assurance/acceleration-contract/Cargo.toml --lib') for c in focused) == 1
+    assert not any('public_model_never_activates_current_kernels' in c for c in focused)
+    assert [c for c in commands if 'acceleration-contract' not in c] == [
+        c for c in focused if 'acceleration-contract' not in c]
     assert sum('secret_output_is_cleared_when_ownership_ends' in c for c in commands) == 1
     assert sum('abandoned_or_incomplete_items_fail_closed' in c for c in commands) == 1
     status, commands = run_profile(
         "--focused", "sha3", "kmac", "tuplehash", "parallelhash"
     )
-    assert status == 0 and len(commands) == 19
+    assert status == 0 and len(commands) == 20
     assert sum("-p brynja-hash-sha3" in command for command in commands) == 9
     assert sum("-p brynja-mac-kmac" in command for command in commands) == 1
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
@@ -117,12 +129,16 @@ def main() -> int:
     assert sum("assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands) == 1
     assert all("brynja-hash-sha2" in c or "assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 40
+    assert status == 0 and len(commands) == 41
+    assert sum(c.endswith('assurance/acceleration-contract/Cargo.toml --lib') for c in commands) == 1
     assert sum('assurance/legacy-hash-final/Cargo.toml --no-default-features --lib dynamic_' in c for c in commands) == 1
     assert sum('quarantined_model_clears_all_regions_without_instructions' in c for c in commands) == 1
     assert sum('--features cpu --test cpu' in c for c in commands) == 2
     status, commands = run_profile("--group", "unknown")
     assert status == 2 and not commands
+    for fail_match in ('acceleration-contract/Cargo.toml', 'direct_clear_covers_every_byte'):
+        status, commands = run_profile("--focused", "acceleration", fail_match=fail_match)
+        assert status == 42 and fail_match in commands[-1]
     print(
         "Miri scope rejects global drift and validates focused, full, and shard execution"
     )

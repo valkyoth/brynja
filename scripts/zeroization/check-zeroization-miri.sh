@@ -155,7 +155,15 @@ full_legacy() {
     run_miri --manifest-path assurance/legacy-hash-final/Cargo.toml --no-default-features --lib dynamic_
 }
 
-all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy)
+quick_acceleration() {
+    run_miri --manifest-path assurance/acceleration-contract/Cargo.toml --lib public_model_never_activates_current_kernels
+}
+
+full_acceleration() {
+    run_miri --manifest-path assurance/acceleration-contract/Cargo.toml --lib
+}
+
+all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy acceleration)
 mode="${1:---full}"
 shift || true
 

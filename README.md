@@ -955,7 +955,9 @@ Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.29`; the current internal `0.24.30`
 candidate freezes the [opt-in acceleration availability contract](https://github.com/valkyoth/brynja/blob/main/docs/acceleration-availability.md)
-and executable selection model. No production API or CPU admission changes.
+and executable selection model. Its owner pentest/retest passed; local release
+verification is recorded in the [report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.30.md).
+No production API or CPU admission changes.
 General SHA-512/t's portable ordinary/hardened APIs are **Fully implemented**
 after v0.24.29 acceptance, the scoped owner pentest and
 [AWS Arm/Mac evidence disposition](https://github.com/valkyoth/brynja/blob/main/assurance/sha512-t-observations/v0.24.29/README.md).

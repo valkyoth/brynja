@@ -9,6 +9,7 @@ from pathlib import Path
 
 LIMIT = 4 * 1024 * 1024
 PACKAGES = {
+    'brynja-acceleration-contract-fixture': 'acceleration',
     'brynja-core': 'core', 'brynja-sanitization': 'sanitization',
     'brynja-legacy-md5': 'md5', 'brynja-legacy-sha1': 'sha1',
     'brynja-legacy-sha1-std': 'sha1', 'brynja-legacy-md5-std': 'md5',
@@ -211,6 +212,24 @@ def fixture_lock(data: bytes, workspace: bytes, manifest: bytes,
                 raise ValueError('invalid fixture identity or edge')
         elif entry not in packages:
             raise ValueError('fixture lock changes dependency closure')
+
+
+def isolated_contract(data: bytes | None, manifest: bytes | None) -> None:
+    """A dependency-free model has no cryptographic consumer edges to traverse."""
+    parsed, config = document(data), document(manifest)
+    identity = config['package']
+    if (identity.get('name') != 'brynja-acceleration-contract-fixture'
+            or identity.get('publish') is not False
+            or parsed != {'version': 4, 'package': [
+                {'name': identity['name'], 'version': identity['version']}]}):
+        raise ValueError('acceleration contract is no longer an isolated fixture')
+    def dependencies(value):
+        if isinstance(value, dict):
+            return any((key.endswith('dependencies') and bool(child)) or dependencies(child)
+                       for key, child in value.items())
+        return False
+    if dependencies(config):
+        raise ValueError('acceleration contract gained manifest dependencies')
 
 
 def runner_groups(before: bytes | None, after: bytes | None) -> set[str]:

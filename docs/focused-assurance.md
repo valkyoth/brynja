@@ -63,6 +63,16 @@ or construction is introduced. Unknown native/Rust files are never assumed
 unrelated. Exceptional pentests, independent-review limits and the committed
 report -> green GitHub/CodeQL -> owner-approved signed tag flow are unchanged.
 
+The v0.24.30 dependency-free acceleration contract has its own `acceleration`
+group. Its complete selection/quarantine model runs under Miri when changed;
+the ten unchanged groups run their existing smoke cases. Both baseline and
+candidate manifest/lockfile must confirm the unpublished, dependency-free
+fixture identity. A new dependency (including target-specific or development
+dependencies), malformed graph, or missing manifest/lockfile forces full
+coverage until its impact is reviewed. Public checkpoints include this group
+in the complete suite. Registering this fixture does not admit a CPU backend
+or treat historical cryptographic evidence as a new execution.
+
 Inspect and test selection without launching Miri:
 
 ```sh

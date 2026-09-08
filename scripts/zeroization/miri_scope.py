@@ -12,7 +12,7 @@ import scope_inputs
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GROUPS = ("core", "sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy")
+GROUPS = ("core", "sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "acceleration")
 FULL_EXACT = {
     "Cargo.lock",
     "Cargo.toml",
@@ -23,6 +23,7 @@ FULL_EXACT = {
 }
 FULL_PREFIXES = ("scripts/zeroization/", ".cargo/")
 GROUP_PREFIXES = {
+    "acceleration": ("assurance/acceleration-contract/",),
     "core": ("crates/brynja-core/",),
     "sanitization": (
         "assurance/sanitization-admission/",
@@ -66,6 +67,7 @@ GROUP_PREFIXES = {
     ),
 }
 DOWNSTREAM = {
+    "acceleration": set(),
     "core": {"sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy"},
     "sanitization": set(),
     "md5": {"legacy"},
@@ -127,6 +129,11 @@ def select_repository(base: str, root: Path = ROOT) -> tuple[bool, tuple[str, ..
             raise ValueError('invalid baseline tag')
         scope_inputs.git(root, 'verify-tag', base)
         scope_inputs.git(root, 'merge-base', '--is-ancestor', base, 'HEAD')
+        contract_locks = scope_inputs.snapshot(root, base, 'assurance/acceleration-contract/Cargo.lock')
+        contract_manifests = scope_inputs.snapshot(root, base, 'assurance/acceleration-contract/Cargo.toml')
+        for lock, manifest in zip(contract_locks, contract_manifests):
+            if lock is not None or manifest is not None:
+                scope_inputs.isolated_contract(lock, manifest)
         paths = scope_inputs.git(root, 'diff', '--name-only', '-z', '--no-renames', base).split(b'\0')
         paths += scope_inputs.git(root, 'ls-files', '--others', '--exclude-standard', '-z').split(b'\0')
         affected: set[str] = set()
@@ -205,7 +212,7 @@ def validate_repository() -> None:
     runner = (ROOT / "scripts/zeroization/check-zeroization-miri.sh").read_text()
     tag_runner = (ROOT / "scripts/zeroization/check-tag-miri.sh").read_text()
     tag_gate = (ROOT / "scripts/tag_gate.sh").read_text()
-    literal = "all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy)"
+    literal = "all_groups=(" + " ".join(GROUPS) + ")"
     if runner.count(literal) != 1:
         raise MiriScopeError("Miri runner group inventory drifted")
     for group in GROUPS:

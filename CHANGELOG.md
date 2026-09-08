@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.24.28 candidate
+## 0.24.29 candidate
+
+- Replay final scalar general SHA-512/t public acceptance and add instrumented
+  block/round work, fixed object-storage bounds and local performance evidence.
+- Keep all 510 parameters, ordinary/hardened byte/bit routes and existing
+  cleanup/ownership negatives; no production cryptography or dependency change.
+- Exceptional owner pentest pending; family status stays In progress until
+  that gate passes. No crates selected for publication.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.29.md).
+
+## 0.24.28
 
 - Freeze a runnable no_std consumer over all 510 parameters and 4590 independent
   byte/bit cases, ordinary/hardened routes, typed output and failure boundaries.

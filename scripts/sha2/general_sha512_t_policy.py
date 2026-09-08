@@ -44,6 +44,13 @@ BOUND = PRODUCTION + (
     "assurance/general-sha512-t/src/main.rs",
     "scripts/sha2/general_sha512_t_acceptance.py",
     "docs/sha512-t-public-acceptance.md",
+    "docs/sha512-t-final-evidence.md",
+    "requirements/sha512-t-final.toml",
+    "assurance/general-sha512-t/src/resources.rs",
+    "assurance/general-sha512-t/profile.rs",
+    "assurance/general-sha512-t/work_probe.rs",
+    "scripts/sha2/general_sha512_t_work.py",
+    "scripts/sha2/general_sha512_t_final.py",
 )
 
 
@@ -76,6 +83,15 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
         if "Sha512TBits" in read(root, path) or "general-sha512-t" in read(root, path):
             raise ValueError("general capability was implicitly reexported")
     gates = read(root, "scripts/checks.sh").splitlines()
+    for path, token in (
+        ("scripts/sha2/check-general-sha512-t.py", "    final.run()"),
+        ("scripts/sha2/test-general-sha512-t.py", "        work.run(mutations=True)"),
+        ("assurance/general-sha512-t/profile.rs", "brynja_general_sha512_t_consumer::resources::check()"),
+        ("scripts/zeroization/check-zeroization-sanitizer.sh", "--manifest-path assurance/general-sha512-t/Cargo.toml"),
+        ("scripts/zeroization/check-zeroization-sanitizer.sh", "--bin general-sha512-t-profile --target x86_64-unknown-linux-gnu"),
+    ):
+        if token not in read(root, path):
+            raise ValueError("final work/resource evidence is absent")
     for name in ("check-general-sha512-t.py", "test-general-sha512-t.py"):
         if f"python3 scripts/sha2/{name}" not in gates:
             raise ValueError("general gate is absent")
@@ -127,7 +143,7 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
 
 def write_review() -> None:
     validate(hashes=False)
-    lines = ["# v0.24.27 general hashing lifecycle closure review.", "[files]"]
+    lines = ["# v0.24.29 general hashing final scalar evidence review.", "[files]"]
     for path in BOUND:
         lines.append(f'"{path}" = "{hashlib.sha256(contract.read(ROOT, path)).hexdigest()}"')
     (ROOT / REVIEW).write_text("\n".join(lines) + "\n", encoding="utf-8")

@@ -20,7 +20,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("General SHA-512/t portable public acceptance: PASS");
     println!("parameters: 510; independent cases: {count}");
     println!("ordinary/hardened byte/bit one-shot and streaming: PASS");
-    println!("package-external evidence; scalar only; final closure: pending v0.24.29");
+    println!(
+        "package-external evidence; scalar only; family status: see docs/sha512-t-final-evidence.md"
+    );
     println!("independently verified: NO; FIPS validated: NO");
     Ok(())
 }

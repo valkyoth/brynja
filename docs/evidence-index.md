@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; milestones through v0.24.27 signed; v0.24.28 portable public acceptance has a clean owner retest and awaits green GitHub/CodeQL and tag authorization. See the [candidate report](../security/pentest/v0.24.28.md). No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.28 signed; v0.24.29 final scalar SHA-512/t evidence awaits exceptional owner pentest. See the [candidate report](../security/pentest/v0.24.29.md). No CPU backend is admitted.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are
@@ -13,6 +13,10 @@ destination tests and debug/release live-storage destructor mutation evidence.
 v0.24.28 freezes [package-external acceptance](sha512-t-public-acceptance.md)
 over all parameters, output routes and bounded malformed-input controls.
 See the [candidate report](../security/pentest/v0.24.28.md) for actual coverage.
+v0.24.29 adds [final scalar work/resource/performance evidence](sha512-t-final-evidence.md)
+and its [exceptional review record](../security/pentest/v0.24.29.md). This includes
+an exact-source local artifact, real shortened-round mutants and bounded hosted
+profiling, not CPU admission, a total-stack bound or a constant-time proof.
 
 The [v0.24.24 pentest report](../security/pentest/v0.24.24.md) records the
 owner-supplied assessment of `b73ea22173ef` and local release verification.

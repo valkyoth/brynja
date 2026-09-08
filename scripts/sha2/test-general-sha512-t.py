@@ -11,9 +11,86 @@ import general_sha512_t_policy as policy
 import general_sha512_t_cleanup as cleanup
 import general_sha512_t_lifecycle as lifecycle
 import general_sha512_t_acceptance as acceptance
+import general_sha512_t_final as final
+import general_sha512_t_work as work
 
 
 class GeneralTests(unittest.TestCase):
+    def test_profile_rejects_unrecognized_arguments(self):
+        result = subprocess.run(["cargo", "run", "--locked", "--offline", "--release", "--manifest-path",
+                                 "assurance/general-sha512-t/Cargo.toml", "--bin", "general-sha512-t-profile",
+                                 "--", "--unexpected"], cwd=policy.ROOT, capture_output=True, timeout=120)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(b"profile takes no arguments", result.stderr)
+
+    def test_artifact_write_is_complete_and_rejects_symlinks(self):
+        import json
+        with tempfile.TemporaryDirectory(prefix="brynja-final-artifact-") as directory:
+            root = Path(directory)
+            path = root / "target" / "evidence.json"
+            final.write_artifact(path, {"test": 1})
+            final.write_artifact(path, {"test": 2})
+            self.assertEqual(json.loads(path.read_text()), {"test": 2})
+            link = path.parent / "link.json"
+            try:
+                link.symlink_to(path)
+            except OSError:
+                self.skipTest("platform does not permit creating test symlinks")
+            with self.assertRaises(ValueError):
+                final.write_artifact(link, {"test": 3})
+            directory_link = root / "linked-target"
+            directory_link.symlink_to(path.parent, target_is_directory=True)
+            with self.assertRaises(ValueError):
+                final.write_artifact(directory_link / "evidence.json", {"test": 4})
+            self.assertEqual(json.loads(path.read_text()), {"test": 2})
+            self.assertEqual({p.name for p in path.parent.iterdir()}, {"evidence.json", "link.json"})
+
+    def test_final_work_hooks_are_required_by_real_executions(self):
+        work.run(mutations=True)
+
+    def test_final_profile_inventory_and_false_claims(self):
+        final.validate_declaration()
+        rows = [f"t={t} bytes={n} pattern={p} samples=9 operations=8 ordinary_median_ns=42 hardened_median_ns=84"
+                for t, n, p in final.EXPECTED]
+        valid = "\n".join(rows + list(final.FOOTERS)) + "\n"
+        self.assertEqual(len(final.parse_profile(valid)), 50)
+        for invalid in ("", valid + rows[0], valid.replace(rows[0] + "\n", "", 1),
+                        valid.replace(rows[1], rows[0], 1), valid.replace("t=511", "t=384"),
+                        valid.replace("samples=9", "samples=0"), valid.replace("_ns=42", "_ns=0"),
+                        valid.replace("_ns=42", "_ns=9999999999999999"),
+                        valid.replace("not a constant-time proof", "constant-time proven"),
+                        valid.replace("scalar-only", "CPU admitted")):
+            with self.assertRaises(ValueError):
+                final.parse_profile(invalid)
+        for bad in ("", "needle needle"):
+            with self.assertRaises(ValueError):
+                work.replace_once(bad, "needle", "new")
+
+    def test_final_declaration_does_not_grant_approval(self):
+        original = (final.ROOT / final.DECLARATION).read_text()
+        with tempfile.TemporaryDirectory(prefix="brynja-final-declaration-") as directory:
+            root = Path(directory)
+            path = root / final.DECLARATION
+            path.parent.mkdir()
+            path.write_text(original)
+            with patch.object(final, "ROOT", root):
+                final.validate_declaration()
+                for before, after in (
+                    ("cpu_admitted = false", "cpu_admitted = true"),
+                    ("independent_review = false", "independent_review = true"),
+                    ("fips_validated = false", "fips_validated = true"),
+                    ("timing_proof = false", "timing_proof = true"),
+                    ("object_limits_are_stack_limits = false", "object_limits_are_stack_limits = true"),
+                    ("parameters = 510", "parameters = true"),
+                    ("oracle_cases = 4590", "oracle_cases = 0"),
+                    ("pentest = \"required-before-completion\"", "pentest = \"not-required\""),
+                    ("performance_rows = 50", "performance_rows = 49"),
+                ):
+                    self.assertIn(before, original)
+                    path.write_text(original.replace(before, after))
+                    with self.assertRaises(ValueError):
+                        final.validate_declaration()
+
     def test_packaged_public_acceptance_and_regressions(self):
         acceptance.run(regressions=True)
 
@@ -111,6 +188,11 @@ class GeneralTests(unittest.TestCase):
     def test_feature_claim_and_coverage_mutations(self):
         original = policy.read
         cases = [
+            ("scripts/zeroization/check-zeroization-sanitizer.sh", "--manifest-path assurance/general-sha512-t/Cargo.toml", "--manifest-path unrelated/Cargo.toml"),
+            ("scripts/zeroization/check-zeroization-sanitizer.sh", "--bin general-sha512-t-profile --target x86_64-unknown-linux-gnu", "--bin unrelated --target x86_64-unknown-linux-gnu"),
+            ("scripts/sha2/check-general-sha512-t.py", "    final.run()", "    # omitted"),
+            ("scripts/sha2/test-general-sha512-t.py", "        work.run(mutations=True)", "        pass"),
+            ("assurance/general-sha512-t/profile.rs", "brynja_general_sha512_t_consumer::resources::check()", "Ok::<(), ()>(())"),
             ("scripts/zeroization/check-zeroization-miri.sh", "    run_miri --manifest-path assurance/general-sha512-t/Cargo.toml --lib", "    # omitted"),
             ("scripts/ci/check-rust-version-matrix.sh", 'cargo "+$toolchain" run --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml', 'cargo "+$toolchain" check'),
             ("scripts/assurance/check-bare-metal.sh", 'cargo check --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml --lib --target "$target"', 'true'),

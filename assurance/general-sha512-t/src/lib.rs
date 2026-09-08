@@ -4,6 +4,7 @@
 pub mod acceptance;
 mod boundaries;
 mod corpus;
+pub mod resources;
 
 use brynja_hash_sha2::{Sha512TBits, Sha512TDigest, Sha512TError};
 

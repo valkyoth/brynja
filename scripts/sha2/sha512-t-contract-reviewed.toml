@@ -1,7 +1,7 @@
 # Reviewed general SHA-512/t API contract; final family closure pending.
 [files]
-"requirements/sha512-t-contract.toml" = "7b2b62d2bbf9c1113a5ee9a38c285132b2ccea0676c626e954b2982ff223bd59"
-"docs/sha512-t-contract.md" = "1383ae298f0473e381f8fe10e14873a532152a285a76ba057ebfe486a525b64d"
-"scripts/sha2/sha512_t_contract.py" = "96eb745af804dfa9476999716351a6640107f8e7a0513cc9ec61cc96f44b7adc"
+"requirements/sha512-t-contract.toml" = "eeec429f3c9d27e02918bed78c61cb38fba3663ebce51768b6885c7b0c645b4a"
+"docs/sha512-t-contract.md" = "b10389a97067232eb82eac5632e894efb8b1b8a691a9574ee73be4c12f4b864d"
+"scripts/sha2/sha512_t_contract.py" = "8c76c4a4bae02d489ffeb780447c1488a9ec5bcda74e2bdf88d51afa2f0ea59a"
 "scripts/sha2/check-sha512-t-contract.py" = "6ce9be79c5ec1d67bddbc254ca756e83d8d070f8d5566856da268ba23da9130f"
 "scripts/sha2/test-sha512-t-contract.py" = "be032a72637f798bc95f27606971f33f21883748179fdde8b73be8077df313a0"

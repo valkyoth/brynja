@@ -4090,7 +4090,7 @@ Exit criteria:
 
 ### v0.24.28 - General SHA-512/t - Portable Public API Acceptance
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Freeze runnable package-external General SHA-512/t acceptance covering every admitted parameter, public operation direction and ordinary/hardened profile in `brynja-hash-sha2` with independent known answers, not only self-round-trips; exercise independent IV/digest oracle across every allowed t, invalid t and named-identity cross-checks, bit padding, secret cleanup and no implied FIPS approval of arbitrary t.
 
@@ -4118,7 +4118,7 @@ Exit criteria:
 
 ### v0.24.29 - General SHA-512/t - Final Evidence And Usability Closure
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Rerun the frozen General SHA-512/t public fixture and complete exact-source correctness, cleanup, side-channel, resource and cross-target evidence for `brynja-hash-sha2`; record scalar-only support or independently admitted acceleration honestly, close every promised operation and require exceptional pentest disposition before updating implementation status.
 

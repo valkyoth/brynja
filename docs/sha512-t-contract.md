@@ -5,6 +5,8 @@ typed secret outputs and explicit declassification. v0.24.27 closes the
 [secret lifecycle evidence](sha512-t-lifecycle.md); the owner pentest/retest is green.
 v0.24.28 freezes [portable public acceptance](sha512-t-public-acceptance.md)
 against extracted packages; its owner pentest/retest is green.
+v0.24.29 adds [final scalar work/resource/profile evidence](sha512-t-final-evidence.md);
+its exceptional owner review is pending. Do not mark the family complete yet.
 The six named SHA-2 functions remain complete and unchanged. This extension
 is a separate row, closing only at v0.24.29. No CPU backend is admitted.
 

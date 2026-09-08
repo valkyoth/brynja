@@ -132,7 +132,7 @@
 "scripts/legacy-hash/native-source-snapshot.toml" = "a4203f895840b395f23274c5f296394f9123d65e73be387ea73e59f3be4768e7"
 "scripts/legacy-hash/test-legacy-final-acceptance.py" = "fd97236e3642264d5e373b3928227a320387de5f33807ced5f24ddc09aa065e2"
 "scripts/zeroization/check-zeroization-miri.sh" = "bd8792dc451696abedcb2f4ca5e2b143ac8489ed4ff264c5cb657803d2926138"
-"scripts/zeroization/check-zeroization-sanitizer.sh" = "4a14d0463d76facc70b5bf973f15fb430c55db9ec214914bff3f4ba11486a2ad"
+"scripts/zeroization/check-zeroization-sanitizer.sh" = "683f16d95bfcfcbf807dda50f2825738b64aa1d8f71814a93a7625a28015d433"
 "security/md5-cpu-admissions.toml" = "8df4c0efd63648322195dd007183be02b13c960ab1e8f659fee17435b276f191"
 "security/pentest/v0.24.21.md" = "fc88e0d698a1d694f28e921311584b90cbb2aa7dd89494be9ac4e73945b83763"
 "security/sha1-cpu-admissions.toml" = "2f9ac87460e163e8bbf74a742422d9c3943aa704a7e30a5ef658c39014d47710"

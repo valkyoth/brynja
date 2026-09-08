@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "145d52a98dcd0f37542589655a0ab80a89cce8b0a53b02d18bdc5a2e28eaa1a8",
-  "domain_policy_sha256": "1a80d8cbfd9da3fbc2b44bae877afb388fc4de4b6417a3f7ac229b085637b237",
+  "domain_policy_sha256": "2eb9b13655d5a87b3ab763dd8e54d3a72b02b6ab2a921506d36e11fe1201c86c",
   "policy_sha256": "ba047e93e502f91398c23da269bfa990f3cef71ac031262f1a49de830db464ef",
   "requirements": [
     {
@@ -3682,7 +3682,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "v0.24.26 implements ordinary/hardened byte/bit hashing and typed secret output with all-510 IV and 4590 digest oracle cases. v0.24.27 adds all-width destinations, transactional state snapshots, unwind and debug/release destructor mutation evidence. Frozen package acceptance and final family evidence remain v0.24.28 through v0.24.29.",
+      "evidence_gap": "v0.24.26 implements ordinary/hardened byte/bit hashing with all-510 IV and 4590 digest oracle cases; v0.24.27 adds lifecycle and destructor evidence; v0.24.28 freezes package-external acceptance. v0.24.29 adds exact-source scalar work, object-storage and local performance evidence; exceptional owner pentest remains pending before family completion.",
       "id": "BRY-REQ-CRYPTO-0020",
       "invariants": [
         "algorithm-admission",
@@ -3699,7 +3699,7 @@
       "owner": "0.24.26",
       "profile": "crypto-encoding-pkix",
       "residual": "Arbitrary t has no implied FIPS or protocol approval and short digests have weak security bounds. No final family acceptance, independent cryptographic review, CPU admission or register/platform/caller-copy erasure is claimed.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {

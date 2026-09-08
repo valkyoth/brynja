@@ -25,7 +25,9 @@
 
 # brynja-hash-sha2
 
-The separate general SHA-512/t extension is **In progress**: v0.24.28 adds
+The separate general SHA-512/t extension is **In progress**: v0.24.29 adds
+[final scalar evidence](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-final-evidence.md)
+and awaits exceptional owner review. It reuses v0.24.28's
 runnable [package-external public acceptance](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-public-acceptance.md)
 over the unchanged v0.24.26 implementation of
 ordinary/hardened incremental and one-shot byte/bit hashing for all 510 valid t,
@@ -33,7 +35,7 @@ behind the default-off `general-sha512-t` leaf feature. It follows
 its [authority and public API contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
 Typed secret output clears on Drop or explicit consuming declassification;
 every secret-output error clears the entire destination. Expanded lifecycle
-evidence is in v0.24.27; v0.24.28 freezes portable package acceptance and final family closure remains v0.24.29. The six named SHA-2
+evidence is in v0.24.27; final family closure requires the v0.24.29 clean pentest. The six named SHA-2
 identities below remain unchanged.
 
 ```rust

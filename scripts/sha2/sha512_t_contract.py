@@ -40,7 +40,7 @@ def validate_model(contract: dict) -> None:
     expected_keys = {
         "schema", "milestone", "state", "owner", "feature", "default_enabled",
         "facade_export", "independently_verified", "fips_validated", "cpu_admitted",
-        "documentation", "authority", "parameters", "profiles", "operations", "evidence",
+        "documentation", "authority", "parameters", "profiles", "operations", "evidence", "lifecycle",
     }
     if set(contract) != expected_keys:
         raise ValueError("unknown or missing contract fields")
@@ -56,7 +56,7 @@ def validate_model(contract: dict) -> None:
     if json.dumps(contract.get("parameters"), sort_keys=True) != json.dumps(expected_parameters, sort_keys=True):
         raise ValueError("parameter contract changed")
     for key, value in {
-        "schema": 1, "milestone": "0.24.26", "state": "ordinary-hardened-byte-bit-hashing",
+        "schema": 1, "milestone": "0.24.27", "state": "secret-lifecycle-closure",
         "owner": "brynja-hash-sha2", "feature": "general-sha512-t",
         "documentation": DOC, "default_enabled": False,
         "facade_export": False, "independently_verified": False,
@@ -71,6 +71,21 @@ def validate_model(contract: dict) -> None:
     expected_operations.update(parameter="0.24.25", public_digest="0.24.25")
     if contract.get("operations") != expected_operations:
         raise ValueError("incomplete operation matrix")
+    expected_lifecycle = {
+        "documentation": "docs/sha512-t-lifecycle.md",
+        "borrowed_rejection": "preserve-all-1170-owned-bytes",
+        "consuming_exit": "drop-on-success-error-cancel-recoverable-unwind",
+        "destination": "exact-width-affine-owner-clear-entire-region",
+        "declassification": "explicit-consuming-public-copy-clears-original",
+        "public_metadata": ["t", "iv", "iv-label", "message-length", "phase"],
+        "borrowed_input": "caller-owned-never-cleared",
+        "transient_values": "no-register-spill-or-compiler-copy-erasure-claim",
+        "regions": dict(chaining_state=64, partial_input=128, message_length=16,
+                        phase=2, message_schedule=640, block_copy=128,
+                        padding_block=128, output_staging=64),
+    }
+    if json.dumps(contract.get("lifecycle"), sort_keys=True) != json.dumps(expected_lifecycle, sort_keys=True):
+        raise ValueError("secret lifecycle inventory or disposition changed")
     authority = contract["authority"]
     if set(authority) != {"id", "edition", "reviewed", "url", "sha256", "sections", "distribution", "errata"}:
         raise ValueError("unknown or missing authority fields")

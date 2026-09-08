@@ -1,6 +1,6 @@
 schema = 1
-milestone = "0.24.26"
-state = "ordinary-hardened-byte-bit-hashing"
+milestone = "0.24.27"
+state = "secret-lifecycle-closure"
 owner = "brynja-hash-sha2"
 feature = "general-sha512-t"
 default_enabled = false
@@ -63,9 +63,29 @@ secret_output_access = "0.24.26"
 cancel = "0.24.26"
 
 [evidence]
-current = "all-t-iv-and-digest-oracle-ordinary-hardened-byte-bit-ownership"
+current = "all-t-hashing-and-instrumented-secret-lifecycle-closure"
 iv_oracle = "0.24.25"
 digest_oracle = "0.24.26"
 lifecycle = "0.24.27"
 package_acceptance = "0.24.28"
 final_evidence = "0.24.29"
+
+[lifecycle]
+documentation = "docs/sha512-t-lifecycle.md"
+borrowed_rejection = "preserve-all-1170-owned-bytes"
+consuming_exit = "drop-on-success-error-cancel-recoverable-unwind"
+destination = "exact-width-affine-owner-clear-entire-region"
+declassification = "explicit-consuming-public-copy-clears-original"
+public_metadata = ["t", "iv", "iv-label", "message-length", "phase"]
+borrowed_input = "caller-owned-never-cleared"
+transient_values = "no-register-spill-or-compiler-copy-erasure-claim"
+
+[lifecycle.regions]
+chaining_state = 64
+partial_input = 128
+message_length = 16
+phase = 2
+message_schedule = 640
+block_copy = 128
+padding_block = 128
+output_staging = 64

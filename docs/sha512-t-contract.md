@@ -1,7 +1,8 @@
 # General SHA-512/t authority and public API contract
 
 Status: v0.24.26 implements ordinary/hardened byte/bit hashing for every valid t,
-typed secret outputs and explicit declassification; owner pentest/retest PASS.
+typed secret outputs and explicit declassification. v0.24.27 closes the
+[secret lifecycle evidence](sha512-t-lifecycle.md) and awaits owner pentest.
 The six named SHA-2 functions remain complete and unchanged. This extension
 is a separate row, closing only at v0.24.29. No CPU backend is admitted.
 
@@ -63,7 +64,7 @@ No third-party dependency, new unsafe boundary or hardware session is needed.
 
 ## Public API matrix
 
-Names and signatures below are callable in the v0.24.26 candidate.
+Names and signatures below have been callable since v0.24.26.
 Any necessary contract change must update the machine register and tests with
 an explicit review; implementations must not expose stubs for missing rows.
 All parameter values have every row below. The ordinary profile is public-data
@@ -151,8 +152,11 @@ depend only on public t but must not accidentally retain a prior secret buffer.
 Use the existing mandatory compiler-resistant clearing primitive from
 `brynja-core`; never make internal cleanup depend on optional
 `brynja-sanitization` or caller access to private state. Hardened capability
-traits are sealed. Clearance applies on success, rejection, cancel, recoverable
-unwind and Drop; destructors remain non-panicking around adjacent cleanup.
+traits are sealed. Clearance applies at consuming success/rejection, cancel,
+recoverable unwind and Drop; borrowed update/preflight rejection instead retains
+the entire live state unchanged. Destructors remain non-panicking around adjacent
+cleanup. The [lifecycle inventory](sha512-t-lifecycle.md) distinguishes owned
+regions from borrowed input, public metadata and transient/register values.
 
 Mem::forget, abort/double-panic abort, forced termination, power loss, registers,
 compiler-created copies/spills, caches, swap, dumps, DMA and movable caller

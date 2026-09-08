@@ -2,6 +2,11 @@
 #![cfg(feature = "general-sha512-t")]
 use brynja_hash_sha2::*;
 
+mod general_hash {
+    use super::*;
+    mod lifecycle;
+}
+
 fn auth() -> PublicDeclassification {
     PublicDeclassification::acknowledge()
 }

@@ -54,6 +54,7 @@ class ContractTests(unittest.TestCase):
             ("approved_named_values", [224, 256, 511]), ("general_approval", True),
             ("minimum", True))]
         mutations += [("operations", key, "0.24.24") for key in contract["operations"]]
+        mutations += [("lifecycle", key, "omitted") for key in contract["lifecycle"]]
         mutations += [("authority", "distribution", "redistributable"),
                       ("authority", "sha256", "0" * 64)]
         for section, key, value in mutations:

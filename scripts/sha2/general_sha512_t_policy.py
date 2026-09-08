@@ -32,6 +32,9 @@ BOUND = PRODUCTION + (
     "crates/brynja-hash-sha2/src/sha512_state.rs",
     PREFIX + "hardened/tests.rs",
     "scripts/sha2/general_sha512_t_cleanup.py",
+    "scripts/sha2/general_sha512_t_lifecycle.py",
+    "crates/brynja-hash-sha2/tests/general_hash/lifecycle.rs",
+    "docs/sha512-t-lifecycle.md",
 )
 
 
@@ -72,6 +75,10 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
             raise ValueError("general dynamic-analysis coverage is absent")
         if "--test general_hash" not in read(root, path):
             raise ValueError("general hashing dynamic-analysis coverage is absent")
+    if "        dynamic_lifecycle_" not in read(root, "scripts/zeroization/check-zeroization-miri.sh"):
+        raise ValueError("general lifecycle Miri coverage is absent")
+    if "lifecycle.run()" not in read(root, "scripts/sha2/check-general-sha512-t.py"):
+        raise ValueError("general destructor probe is absent")
     for path in (PREFIX + "hardened.rs", PREFIX + "secret.rs", PREFIX + "one_shot.rs"):
         if "from_bytes(" in read(root, path):
             raise ValueError("secret paths must not use public importer")
@@ -102,7 +109,7 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
 
 def write_review() -> None:
     validate(hashes=False)
-    lines = ["# v0.24.26 ordinary/hardened hashing implementation review.", "[files]"]
+    lines = ["# v0.24.27 general hashing lifecycle closure review.", "[files]"]
     for path in BOUND:
         lines.append(f'"{path}" = "{hashlib.sha256(contract.read(ROOT, path)).hexdigest()}"')
     (ROOT / REVIEW).write_text("\n".join(lines) + "\n", encoding="utf-8")

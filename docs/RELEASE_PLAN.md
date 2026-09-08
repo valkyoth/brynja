@@ -4028,7 +4028,7 @@ Exit criteria:
 
 ### v0.24.26 - General SHA-512/t - Ordinary and hardened incremental/one-shot byte and bit-input APIs
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Implement ordinary and hardened incremental/one-shot byte and bit-input APIs with canonical unused output bits and explicit short-digest security limits in `brynja-hash-sha2` with usable no_std public APIs, checked caller-workspace bounds and mandatory secret-owned cleanup from first implementation. Secret-producing paths return non-copyable zeroizing owners, never import through `Sha512TDigest::from_bytes`, and require explicit declassification before public conversion.
 
@@ -4062,7 +4062,7 @@ Exit criteria:
 
 ### v0.24.27 - General SHA-512/t - Secret Lifecycle And Failure Closure
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Close General SHA-512/t private-state, temporary and typed-output ownership in `brynja-hash-sha2` across success, rejection, cancellation, recoverable unwind and Drop; use the existing mandatory compiler-resistant sanitization boundary, sealed capabilities and explicit declassification without optional-feature cleanup.
 

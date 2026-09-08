@@ -2,7 +2,7 @@
 set -euo pipefail
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-08 test \
-    -p brynja-hash-sha2 --features general-sha512-t --test general_hash \
+    -p brynja-hash-sha2 --features general-sha512-t --test general_hash --lib \
     --target x86_64-unknown-linux-gnu
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-08 test \

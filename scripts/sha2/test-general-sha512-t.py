@@ -9,9 +9,13 @@ from unittest.mock import patch
 
 import general_sha512_t_policy as policy
 import general_sha512_t_cleanup as cleanup
+import general_sha512_t_lifecycle as lifecycle
 
 
 class GeneralTests(unittest.TestCase):
+    def test_actual_destructors_and_each_missing_owned_clear(self):
+        lifecycle.run(mutations=True)
+
     def test_cleanup_control_flow_rejects_missing_or_wrong_owner(self):
         valid = '''fn f(_1: Owner) {
     bb0: {
@@ -103,6 +107,8 @@ class GeneralTests(unittest.TestCase):
     def test_feature_claim_and_coverage_mutations(self):
         original = policy.read
         cases = [
+            ("scripts/zeroization/check-zeroization-miri.sh", "        dynamic_lifecycle_", "        missing_test"),
+            ("scripts/sha2/check-general-sha512-t.py", "    lifecycle.run()", "    # omitted"),
             (policy.PREFIX + "hardened.rs", "        guard.write(", "        let _ = Sha512TDigest::computed(self.parameter, &self.owner.output_staging);\n        guard.write("),
             ("crates/brynja-hash-sha2/Cargo.toml", "default = []", 'default = ["general-sha512-t"]'),
             ("crates/brynja-hash-sha2/Cargo.toml", "general-sha512-t = []", 'general-sha512-t = ["cpu"]'),

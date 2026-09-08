@@ -7,6 +7,7 @@ import general_sha512_t_policy as policy
 import sha512_t_iv_oracle as oracle
 import sha512_t_digest_oracle as digest_oracle
 import general_sha512_t_cleanup as cleanup
+import general_sha512_t_lifecycle as lifecycle
 
 
 def main() -> int:
@@ -28,6 +29,7 @@ def main() -> int:
     for command in commands:
         subprocess.run(command, cwd=policy.ROOT, check=True, timeout=180)
     cleanup.main()
+    lifecycle.run()
     print("General SHA-512/t public descriptors and all-510 IV oracle: PASS")
     print("Ordinary/hardened byte/bit hashing: PASS; no CPU admission or FIPS validation")
     return 0

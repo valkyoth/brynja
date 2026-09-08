@@ -57,6 +57,8 @@ quick_sha2() {
 }
 
 full_sha2() {
+    run_miri -p brynja-hash-sha2 --features general-sha512-t --test general_hash --lib \
+        dynamic_lifecycle_
     run_miri -p brynja-hash-sha2 --features general-sha512-t --test general_hash \
         dynamic_general_secret_lifecycle
     run_miri -p brynja-hash-sha2 --features general-sha512-t --test general_hash \

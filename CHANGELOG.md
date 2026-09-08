@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.24.26 candidate
+## 0.24.27 candidate
+
+- Close the general SHA-512/t lifecycle evidence over the unchanged portable
+  implementation: transactional rejection, consuming cleanup, all secret routes,
+  all-parameter destination bounds, unwind and explicit declassification.
+- Add a live-storage destructor probe with debug/release clearing and ownership
+  mutations, plus scoped Miri/ASan coverage and an explicit storage inventory.
+- No new API, dependency, CPU admission or publication. Family completion remains
+  v0.24.29; owner pentest is pending. See [release notes](release-notes/RELEASE_NOTES_0.24.27.md).
+
+## 0.24.26
 
 - Implement all 510 general SHA-512/t ordinary/hardened byte/bit hashing APIs,
   typed secret output and consuming explicit declassification in the default-off

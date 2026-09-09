@@ -9,6 +9,12 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-crypto-cpu/src/runtime_execution/mod.rs"): (
+        "88aef4e68817eb39bdeb13d67390432dbf6c734337e38a908b37c7a1e4e0a189", 0, 1, 0,
+    ),
+    Path("crates/brynja-crypto-cpu-std/src/execution/platform.rs"): (
+        "ba6795225520a56f9934eea0372a927dc18d8583d49df7101bf17cb7b5e2298c", 1, 0, 1,
+    ),
     Path("crates/brynja-legacy-md5/src/cpu/session.rs"): ("2b44d0e84f477a79cc0dfec007dab0fbf7e9c0ea6577d4759f0f46c537562a9f", 3, 1, 3),
     Path("crates/brynja-legacy-md5/src/cpu/x86_avx2_md5.rs"): ("ed6bc494e363fc24256b835b5d4ee52b0785f4d46028a5bdb7ca8446d597ea8e", 1, 1, 1),
     Path("crates/brynja-legacy-md5/src/cpu/aarch64_neon_md5.rs"): ("95266c29fe1ce486477bf32d5276dc8f241cb3d57c1ce2dedfe8d8f335199651", 1, 1, 1),
@@ -140,3 +146,9 @@ def validate_allowed(
     elif relative.name == "runtime_detection.rs":
         if "is_x86_feature_detected!" not in text or "from_runtime_detection" not in text:
             fail("runtime detector lost its reviewed attestation boundary")
+    elif relative == Path("crates/brynja-crypto-cpu/src/runtime_execution/mod.rs"):
+        if "pub unsafe fn from_platform(kernel: Kernel)" not in text or "EVERY CPU" not in text:
+            fail("runtime owner lost its lifetime-wide platform obligation")
+    elif relative == Path("crates/brynja-crypto-cpu-std/src/execution/platform.rs"):
+        if "availability(kernel).map_err" not in text or "KernelAuthority::from_platform(kernel)" not in text:
+            fail("hosted permit lost its private platform recheck")

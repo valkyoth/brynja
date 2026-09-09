@@ -23,7 +23,7 @@ REVIEW = ROOT / 'security/static-cpu-execution-reviewed.json'
 def validate(write=False):
     static_execution_docs.validate(ROOT)
     manifest = tomllib.loads((CPU / 'Cargo.toml').read_text())
-    if manifest.get('features') != {'default': [], 'static-execution': []} or manifest.get('dependencies'):
+    if manifest.get('features') != {'default': [], 'static-execution': [], 'runtime-execution': ['static-execution']} or manifest.get('dependencies'):
         raise RuntimeError('static CPU boundary must be default-off and dependency-free')
     library = (CPU / 'src/lib.rs').read_text()
     if '#[cfg(feature = "static-execution")]\npub mod static_execution;' not in library:

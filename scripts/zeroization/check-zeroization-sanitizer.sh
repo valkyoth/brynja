@@ -2,6 +2,13 @@
 set -euo pipefail
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-09 test \
+    -p brynja-crypto-cpu --features runtime-execution --lib runtime_execution \
+    --target x86_64-unknown-linux-gnu
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-09 test \
+    -p brynja-crypto-cpu-std --features runtime-execution --lib execution \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-09 test \
     -p brynja-crypto-cpu --features static-execution --lib static_authority \
     --target x86_64-unknown-linux-gnu
 

@@ -80,13 +80,14 @@ class = "cpu-backend"
 publish = "crates-io"
 required = []
 optional = {}
-features = ["static-execution"]
+features = ["static-execution", "runtime-execution"]
 
 [packages.brynja-crypto-cpu-std]
 class = "host-adapter"
 publish = "crates-io"
 required = ["brynja-crypto-cpu", "brynja-hash-sha2"]
 optional = {}
+features = ["runtime-execution"]
 
 [packages.brynja-pki]
 class = "modern-shared"

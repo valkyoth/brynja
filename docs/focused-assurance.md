@@ -74,7 +74,8 @@ in the complete suite. Registering this fixture does not admit a CPU backend
 or treat historical cryptographic evidence as a new execution.
 
 The `static_cpu` group covers the raw static execution-authority module and
-its normal downstream fixture. Miri checks non-instruction lifecycle behavior;
+its normal downstream fixture, plus the separate runtime owner and hosted
+selection lifecycle. Miri checks non-instruction lifecycle behavior;
 native/QEMU package runs separately exercise actual kernels. Changes elsewhere
 in the shared CPU crate remain conservatively unclassified and select full
 coverage until a reviewed consumer-dependency classification is available.

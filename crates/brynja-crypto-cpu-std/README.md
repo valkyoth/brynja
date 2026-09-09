@@ -25,6 +25,24 @@
 
 # brynja-crypto-cpu-std
 
+## Explicit hosted execution
+
+The repository's default-off `runtime-execution` feature exposes
+`execution::{Authority, Kernel, Mode}` for ordinary raw SHA-256/SHA-512 and
+Keccak operations. Portable never probes; Prefer reports fallback reasons;
+Require errors when a complete platform guarantee is unavailable. Supported
+AArch64 system feature APIs can authorize execution after a direct KAT.
+Generic x86 and unreviewed platforms remain portable/error; current-core
+CPUID alone is not migration authority. KAT failure quarantines without fallback.
+
+This new API is not in the previously published 0.1.1 artifact. It remains
+separate from the historical high-level adapters described below, from
+hardened secret processing, and from Brynja's default/facade dependency graph.
+See [the hosted execution contract](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
+for exact feature bundles, platform assumptions and runnable package acceptance.
+
+## Historical hash adapters
+
 `brynja-crypto-cpu-std` is the separate opt-in host detector and SHA-2
 dispatch-reporting adapter. It uses the standard library's architecture feature macros,
 depends only on `brynja-crypto-cpu` and `brynja-hash-sha2`, and is selected
@@ -45,8 +63,9 @@ SHA-512/224, and SHA-512/256 until admission. x86_64 SHA-512 is intentionally
 scalar, and required SHA-512-family acceleration fails closed.
 
 Internal v0.24.4 adds x86_64 AVX2 and AArch64 SHA3 Keccak candidates only to
-the lower `no_std` package and repository evidence fixture. This adapter does
-not yet expose or detect them because neither candidate is admitted. Public
+the lower `no_std` package and repository evidence fixture. This adapter
+does not expose them through its historical hash adapters. The separate raw
+`execution` API above now detects supported hosted routes. Public
 SHA-3/SHAKE remains portable, and a later reviewed admission must add runtime
 detection and reporting without silently changing this crate's selection.
 

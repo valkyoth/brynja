@@ -145,10 +145,52 @@ status = "supplemental-aarch64-execution-evidence"
 sha256 = "7fc48e128bbc57fff4f81c59818aa26c6b8ed54a94a84a18a2307958bcaf8046"
 
 [[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/execution/features.rs"
+status = "complete-hosted-feature-bundles"
+sha256 = "eeed2b69bbf6f5eebe6b4368bef4bfff4694ba7da071bc6bd9862c9a89d2d962"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/runtime_execution/mod.rs"
+status = "ordinary-runtime-authority"
+sha256 = "88aef4e68817eb39bdeb13d67390432dbf6c734337e38a908b37c7a1e4e0a189"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/runtime_execution/operations.rs"
+status = "runtime-kat-and-operation-routing"
+sha256 = "e68172c35a3a1b0372c0200e99b429653a6982636dd1dfe5bbb0a09092411589"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/runtime_execution/tests.rs"
+status = "runtime-authority-tests"
+sha256 = "4adc618be46f28a3b81848df6d53c60ee7709dee25a3f7b87316ba6a0bc81bd3"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/execution/mod.rs"
+status = "hosted-execution-selection"
+sha256 = "1179603429b51e96a5797608e86057906bf0e711d5864d0fdb786d2c6d1d3695"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/execution/platform.rs"
+status = "system-feature-proof-boundary"
+sha256 = "ba6795225520a56f9934eea0372a927dc18d8583d49df7101bf17cb7b5e2298c"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/execution/tests.rs"
+status = "hosted-execution-tests"
+sha256 = "10065c85ee8332e1e9f8bdf230382ed193371eccb8bb76f16aa615e724f732b7"
+
+[[sources]]
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "4b3227de8aa53dfea7b9e4c67b3b69261b62cd93db9d4dd92bd78d97e7ea0e8b"
+sha256 = "0547b5d717c8f8489dcd3fe7b9436866412fc54f702965a62986c715a8c14e4c"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -220,7 +262,7 @@ sha256 = "7fafd5d7d568bd13c7c77ffbedc2d053cd41f1e0ce0cefb7161fb5efc455089d"
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "19262f9c2cf9427b6fd27da0022f17d17f69860bf64ead25ddba0129a56cf633"
+sha256 = "af3f6b8c8b14f78a6087da7558a694ecfd17ed66d005c1bd6e56a997981ef746"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

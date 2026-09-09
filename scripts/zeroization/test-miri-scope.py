@@ -132,11 +132,14 @@ def main() -> int:
     assert sum("assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands) == 1
     assert all("brynja-hash-sha2" in c or "assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 43
+    assert status == 0 and len(commands) == 46
     assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1
     assert sum(c.endswith('assurance/static-cpu-execution/Cargo.toml --lib') for c in commands) == 1
     status, static_commands = run_profile('--group', 'static_cpu')
-    assert status == 0 and len(static_commands) == 2
+    assert status == 0 and len(static_commands) == 5
+    assert sum(c.endswith('assurance/hosted-cpu-execution/Cargo.toml --lib') for c in static_commands) == 1
+    assert sum(c.endswith('--features runtime-execution --lib runtime_execution') for c in static_commands) == 1
+    assert sum(c.endswith('--features runtime-execution --lib execution') for c in static_commands) == 1
     assert sum(c.endswith('assurance/acceleration-contract/Cargo.toml --lib') for c in commands) == 1
     assert sum('assurance/legacy-hash-final/Cargo.toml --no-default-features --lib dynamic_' in c for c in commands) == 1
     assert sum('quarantined_model_clears_all_regions_without_instructions' in c for c in commands) == 1

@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "625649ef00360d19edf19c5a4973e9016b0c9b447d40a10fb36e8833de150d31"
+EXPECTED_POLICY_SHA256 = "ca0efd4bca8d36bc7e1a8a09290dc25172834425662288a7c00f68355b57e825"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,13 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/runtime_execution/mod.rs"): "ordinary-runtime-authority",
+    (CPU, "src/runtime_execution/operations.rs"): "runtime-kat-and-operation-routing",
+    (CPU, "src/runtime_execution/tests.rs"): "runtime-authority-tests",
+    (DETECTOR, "src/execution/mod.rs"): "hosted-execution-selection",
+    (DETECTOR, "src/execution/features.rs"): "complete-hosted-feature-bundles",
+    (DETECTOR, "src/execution/platform.rs"): "system-feature-proof-boundary",
+    (DETECTOR, "src/execution/tests.rs"): "hosted-execution-tests",
     (CPU, "src/static_execution/mod.rs"): "ordinary-static-authority",
     (CPU, "src/static_execution/kernel.rs"): "complete-static-feature-bundles",
     (CPU, "src/static_execution/operations.rs"): "static-kat-and-operation-routing",
@@ -222,9 +229,9 @@ def validate_packages(root: Path) -> None:
     cpu = manifest(root, CPU)
     detector = manifest(root, DETECTOR)
     sha2 = manifest(root, SHA2)
-    if cpu.get("features") != {"default": [], "static-execution": []} or cpu.get("dependencies"):
+    if cpu.get("features") != {"default": [], "static-execution": [], "runtime-execution": ["static-execution"]} or cpu.get("dependencies"):
         fail("no_std CPU package must retain zero dependencies")
-    if detector.get("features") != {"default": []}:
+    if detector.get("features") != {"default": [], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"]}:
         fail("host detector default feature set drifted")
     if set(detector.get("dependencies", {})) != {CPU, SHA2}:
         fail("host detector dependency boundary drifted")

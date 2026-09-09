@@ -8,6 +8,9 @@
 mod runtime_detection;
 mod sha512_runtime;
 
+#[cfg(feature = "runtime-execution")]
+pub mod execution;
+
 pub use sha512_runtime::{
     RuntimeSha512Backend, RuntimeSha512Error, RuntimeSha512Report, RuntimeSha512Selection,
 };

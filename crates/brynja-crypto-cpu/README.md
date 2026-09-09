@@ -25,6 +25,13 @@
 
 # brynja-crypto-cpu
 
+The additional default-off `runtime-execution` feature exposes a low-level
+platform-proof owner for ordinary raw kernels. Most hosted callers should use
+the safe optional `brynja-crypto-cpu-std::execution` adapter instead. Its exact
+system-feature, migration, KAT and quarantine contract is documented in
+[hosted execution](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md).
+This does not activate historical hash dispatch or hardened secret processing.
+
 `brynja-crypto-cpu` is the optional, zero-dependency, `no_std` package for
 separately reviewed first-party ISA kernels and static selection. Version
 0.1.1 now contains isolated SHA-256-family candidates for x86_64 SHA,
@@ -50,8 +57,9 @@ The new default-off `static-execution` feature exposes
 `static_execution::{Authority, Kernel, Session}` for ordinary public-data
 compression/permutation. It does not change existing hash constructors or
 hosted detection. The unpublished implementation candidate supports x86 SHA-256,
-AVX2 Keccak and Arm SHA-256/SHA-512/SHA3 Keccak. The owner retest and local
-release checks passed; GitHub/CodeQL is next. See the [review record](../../security/pentest/v0.24.31.md).
+AVX2 Keccak and Arm SHA-256/SHA-512/SHA3 Keccak. This static authority passed
+owner retest, local checks and GitHub/CodeQL before its signed development tag.
+See the [review record](../../security/pentest/v0.24.31.md).
 
 Every constructor requires the complete compiler target-feature bundle before
 running the actual kernel KAT. A quarantined owner cannot issue sessions.
@@ -63,8 +71,9 @@ The executable must run exclusively on compatible CPUs with required OS
 register state, including migration and virtualization. Static compilation is
 not runtime detection; `!Send`/`!Sync` is not migration protection. This API
 does not clean secret schedules or input: do not use it for keys, passwords,
-HMAC or other confidential state. Hardened, hosted and family-level APIs are
-separate upcoming work. RISC-V and legacy kernels are not activated here.
+HMAC or other confidential state. Hosted authority is a separate opt-in API
+described above; hardened and family-level integration remain upcoming work.
+RISC-V and legacy kernels are not activated here.
 
 See the [static execution guide](https://github.com/valkyoth/brynja/blob/main/docs/static-cpu-execution.md)
 for exact bundles, error behavior, deployment limits and examples.

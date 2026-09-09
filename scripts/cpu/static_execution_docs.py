@@ -22,7 +22,7 @@ CLAIMS = (
 def validate(root):
     texts = {name: (root / name).read_text(encoding='utf-8') for name in FILES}
     features = tomllib.loads(texts[MANIFEST]).get('features')
-    if features != {'default': [], 'static-execution': []}:
+    if features != {'default': [], 'static-execution': [], 'runtime-execution': ['static-execution']}:
         raise ValueError('documented static feature no longer matches the manifest')
     if '#[cfg(feature = "static-execution")]\npub mod static_execution;' not in texts[LIBRARY]:
         raise ValueError('documented static module no longer matches its public gate')
@@ -59,8 +59,8 @@ def regressions(root):
     # Replace normalized text in disposable copies; source hashes are not used
     # here, so each test must fail for a semantic contract discrepancy.
     cases += [
-        (DOCS[0], 'Status: fifteen exact', 'Status: nine exact'),
-        (DOCS[0], 'Rust in only fifteen exact', 'Rust in only nine exact'),
+        (DOCS[0], 'Status: seventeen exact', 'Status: nine exact'),
+        (DOCS[0], 'Rust in only seventeen exact', 'Rust in only nine exact'),
         (DOCS[2], 'source-hash-bound module inventory', 'exactly nine modules'),
         (MANIFEST, 'default = []', 'default = ["static-execution"]'),
         (LIBRARY, 'pub mod static_execution;', 'mod static_execution;'),

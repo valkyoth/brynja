@@ -1,19 +1,19 @@
 [release]
-version = "0.24.31"
-milestone = "0.24.31"
+version = "0.24.32"
+milestone = "0.24.32"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "Static execution authority, real kernel startup tests and revocation require exceptional security review."
+exception_reason = "Hosted execution authority and lifetime-wide CPU/OS feature guarantees require exceptional security review."
 
 [crates."brynja"]
-previous_version = "0.24.30"
-version = "0.24.31"
+previous_version = "0.24.31"
+version = "0.24.32"
 change = "metadata"
 publish = false
-reason = "Advance facade metadata for opt-in no_std static CPU authority; high-level hash routes remain unchanged and no publication."
+reason = "Advance facade metadata for default-off hosted execution authority; high-level hash routes remain unchanged and no publication."
 
 [crates."brynja-legacy-md5"]
 previous_version = "unpublished"
@@ -97,14 +97,14 @@ previous_version = "0.1.1"
 version = "0.1.1"
 change = "code"
 publish = false
-reason = "Retain published metadata 0.1.1 while implementing default-off static ordinary CPU authority for five modern kernels; no hosted, hardened, legacy or RISC-V activation."
+reason = "Retain published metadata 0.1.1 while adding a default-off platform-proof runtime owner alongside static authority; no hardened, legacy or RISC-V activation."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.1.1"
 version = "0.1.1"
 change = "code"
 publish = false
-reason = "Retain published 0.1.1 while extending honest family reporting and scalar fallback; all candidates remain unadmitted and RISC-V automatic detection stays disabled."
+reason = "Retain published metadata 0.1.1 while adding default-off hosted raw execution through reviewed AArch64 system interfaces; historical hash adapters and RISC-V automatic detection stay unchanged."
 
 [crates."brynja-pki"]
 previous_version = "0.2.0"

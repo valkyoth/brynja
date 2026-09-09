@@ -1,6 +1,6 @@
 # Brynja v0.24.31
 
-Status: owner retest and local release checks passed; documentation findings corrected; awaiting green GitHub/CodeQL.
+Status: released as a signed development tag after owner approval and green GitHub/CodeQL; no crates.io publication.
 
 ## Static CPU execution authority
 

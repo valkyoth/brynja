@@ -1,13 +1,14 @@
 # Unsafe Rust Policy
 
-Status: fifteen exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventeen exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only fifteen exact modules: the private core volatile clearer; the
+Rust in only seventeen exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
-isolated legacy SHA-1 and MD5 session/x86/AArch64 candidate modules. Each
+isolated legacy SHA-1 and MD5 session/x86/AArch64 candidate modules; plus the
+runtime owner constructor and its private hosted platform bridge. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every
@@ -56,6 +57,23 @@ hardened, legacy and RISC-V activation are not granted by this feature.
 Neither native observations nor a KAT establish independent review, FIPS
 validation, migration safety or secret erasure. The full deployment and
 ownership contract is in [static CPU execution](static-cpu-execution.md).
+
+## v0.24.32 Hosted Runtime Execution
+
+The default-off `runtime-execution` feature adds one low-level platform-proof
+constructor and one private hosted call site. The safe hosted adapter authorizes
+only complete AArch64 feature bundles through the reviewed system interfaces;
+generic x86 and unreviewed platforms never gain authority from current-core flags.
+The core constructor has a lifetime-wide CPU/OS/migration safety obligation.
+No feature bool, report or downstream trait implementation can call it safely.
+Actual kernel startup tests precede sessions; quarantine never triggers fallback.
+No new pointer operation, foreign call, assembly or cryptographic kernel is added.
+Necessity: platform detection lives in the optional std crate while kernels remain
+dependency-free no_std. Moving detection into the core or trusting safe booleans
+would violate those boundaries. The two small source-hash-bound modules are the
+reviewed bridge, not blanket permission for hosted low-level code.
+See [hosted CPU execution](hosted-cpu-execution.md) for the platform audit,
+unsupported-platform disposition and exceptional pentest requirements.
 
 ## v0.22.2 RISC-V Zknh Inline-Assembly Exception
 

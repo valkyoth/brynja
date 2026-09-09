@@ -219,6 +219,10 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         }
     )
     expected.update({feature: [] for feature in entry.get("features", [])})
+    if name == "brynja-crypto-cpu":
+        expected["runtime-execution"] = ["static-execution"]
+    if name == "brynja-crypto-cpu-std":
+        expected["runtime-execution"] = ["brynja-crypto-cpu/runtime-execution"]
     if name == "brynja-legacy-md5":
         # The reviewed CPU surface includes the bounded portable batch API;
         # neither feature implies the separate non-production evidence key.

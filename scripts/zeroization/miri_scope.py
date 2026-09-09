@@ -23,7 +23,10 @@ FULL_EXACT = {
 }
 FULL_PREFIXES = ("scripts/zeroization/", ".cargo/")
 GROUP_PREFIXES = {
-    "static_cpu": ("assurance/static-cpu-execution/", "crates/brynja-crypto-cpu/src/static_execution/"),
+    "static_cpu": ("assurance/static-cpu-execution/", "assurance/hosted-cpu-execution/",
+                   "crates/brynja-crypto-cpu/src/static_execution/",
+                   "crates/brynja-crypto-cpu/src/runtime_execution/",
+                   "crates/brynja-crypto-cpu-std/src/execution/"),
     "acceleration": ("assurance/acceleration-contract/",),
     "core": ("crates/brynja-core/",),
     "sanitization": (

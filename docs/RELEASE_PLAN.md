@@ -4208,7 +4208,7 @@ Exit criteria:
 
 ### v0.24.31 - Static CPU Execution Authority
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Implement no_std static execution authority for reviewed backends using complete compiler target-feature bundles, real startup KATs, health generations and fail-closed session construction; distinguish software readiness from independent review and FIPS status.
 
@@ -4235,7 +4235,7 @@ Exit criteria:
 
 ### v0.24.32 - Hosted Runtime Feature Safety
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement separate std runtime execution-authority adapters with platform-supported CPU and OS-state detection, documented scheduler/VM migration assumptions and observable fallback; never require a hosted dependency in no_std cores.
 

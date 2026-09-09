@@ -168,6 +168,9 @@ quick_static_cpu() {
 }
 
 full_static_cpu() {
+    run_miri -p brynja-crypto-cpu --features runtime-execution --lib runtime_execution
+    run_miri -p brynja-crypto-cpu-std --features runtime-execution --lib execution
+    run_miri --manifest-path assurance/hosted-cpu-execution/Cargo.toml --lib
     run_miri -p brynja-crypto-cpu --features static-execution --lib static_authority
     run_miri --manifest-path assurance/static-cpu-execution/Cargo.toml --lib
 }

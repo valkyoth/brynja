@@ -29,6 +29,7 @@ python3 scripts/cryptography/test-api-profiles.py
 python3 scripts/cpu/check-acceleration-availability.py
 python3 scripts/cpu/test-acceleration-availability.py
 python3 scripts/cpu/check-static-execution.py
+python3 scripts/cpu/check-hosted-execution.py
 cargo test --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml
 cargo clippy --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml \
   --all-targets -- -D warnings

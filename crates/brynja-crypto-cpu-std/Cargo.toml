@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+runtime-execution = ["brynja-crypto-cpu/runtime-execution"]
 
 [dependencies]
 brynja-crypto-cpu = { workspace = true }

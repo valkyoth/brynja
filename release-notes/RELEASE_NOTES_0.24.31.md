@@ -29,6 +29,9 @@ Status: owner retest and local release checks passed; documentation findings cor
 - Refresh the Miri/AddressSanitizer verifier to `nightly-2026-09-09` and add a
   scoped `static_cpu` memory-test group. Stable Rust remains `1.98.1`, with
   compatibility from `1.90.0`; no runtime dependency is upgraded.
+- Bootstrap the locked workspace dependencies before offline package gates.
+  A clean-Cargo-home regression reproduces the missing optional `sanitization`
+  index entry and verifies packaging after the fetch without changing the lock.
 
 See [static CPU execution](../docs/static-cpu-execution.md) for API and exact
 platform prerequisites. The crate facade advances to 0.24.31; support package

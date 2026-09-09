@@ -11,6 +11,13 @@ Only two executable entry points live directly in this directory:
 - `scripts/tag_gate.sh vX.Y.Z` adds tag-only, online, matrix, SBOM, release,
   stage-aware local Miri, full AddressSanitizer, and required local proof gates.
 
+The repository gate first runs `cargo fetch --locked` to prepare the exact
+workspace dependencies for its offline package consumers. Even a dependency-free
+leaf can trigger workspace lockfile resolution during packaging. Run
+`python3 scripts/repository/test-offline-bootstrap.py --cold-cache` to reproduce
+the missing-cache failure and verify the locked bootstrap with a fresh Cargo
+home; ordinary CI runs only the cheap ordering/lock regression tests.
+
 `inventory.toml` is the machine-readable directory register.
 `repository/check-script-layout.py` rejects unknown root files, unknown or
 nested categories, duplicate basenames, missing categories, and unsupported

@@ -15,7 +15,7 @@
 "scripts/sha3/check-sha3-bit-differential.py" = "c796b542560131229a7ea933c94de944d687856fc84be678ef7e4238c2fb07da"
 "scripts/sha2/check-sha2-hardened-codegen.sh" = "ac67c581b2bb49323c85a0f5752511c30b55fa27891f24b486b6186d2b94e67e"
 "scripts/sha3/check-sha3-hardened-codegen.sh" = "ac7ba7f28a80f2fa05acc27aaf1bb252f84546eac895126d19d913706ba782df"
-"scripts/checks.sh" = "04003d4da037a2e90efe065af15a6e532df93d43100856fb590c57a491ef6d0f"
+"scripts/checks.sh" = "158106e2c6d3ed3a58d999686c01e81c2933bab057ee1a5b62512c9f44c88975"
 "scripts/ci/check-rust-version-matrix.sh" = "f9e4be477b60aba93bcf119851f070c6c16741895a7c5e850b0879f365a7cf1d"
 "scripts/assurance/check-bare-metal.sh" = "4cae003df12d834e8fa3d31e878a7004ed0e69022ef900c8bb007578f26aaf0b"
 ".github/workflows/ci.yml" = "9965b59dbb23a8394baca8fd1768aa61b3fbfa3d0c728befd978be8435841a88"

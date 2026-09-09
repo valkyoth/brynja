@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 set -eu
 
+cargo fetch --locked
+python3 scripts/repository/test-offline-bootstrap.py
+
 cargo fmt --all --check
 python3 scripts/repository/check-script-layout.py
 python3 scripts/repository/test-script-layout.py

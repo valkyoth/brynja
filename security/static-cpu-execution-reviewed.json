@@ -16,14 +16,14 @@
     "crates/brynja-crypto-cpu/src/sha512.rs": "5bf3bc62b69c41661cd0482e9644a2293460a38c70bd95d1bff75f4f4cdb412a",
     "crates/brynja-crypto-cpu/src/sha512_schedule.rs": "3643e358f27bc5e9f4416525a9e9f43ab26063e700e80b3cb91da44bdddc5f6f",
     "crates/brynja-crypto-cpu/src/static_execution/kernel.rs": "699932c8474d316478d190bb6ea0fd88f4462e1a5bac1062e7cc2e5a83013f0a",
-    "crates/brynja-crypto-cpu/src/static_execution/mod.rs": "549adb47dd19118d9456d7aac24316107c935f9d47cadd9545735eb13383096c",
+    "crates/brynja-crypto-cpu/src/static_execution/mod.rs": "e37de267e2f517462dc52f00c2d2ccd4b520fcb3614f3af6f30cf4371e73f805",
     "crates/brynja-crypto-cpu/src/static_execution/operations.rs": "fc937974058fd6212e04f4eb1064100737d695645595f029553f495ac908d30c",
-    "crates/brynja-crypto-cpu/src/static_execution/tests.rs": "537b6cde0e8672c2262bcd1d985845e87b59e61755f079cfdff3c47f31cececd",
+    "crates/brynja-crypto-cpu/src/static_execution/tests.rs": "1b5a5223fbb340400e15bcfb182687c41cfbe13d4130c5268a94054799dcd64d",
     "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs": "8f917e7ff784bb75646c526914de27e3b4eb8b15cc82b8a471edc0af1221d5b3",
     "crates/brynja-crypto-cpu/src/x86_sha.rs": "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28",
-    "docs/static-cpu-execution.md": "c8b482b42dcd5285f8f7c4fde9488669a8222419ebc5d51e17e79fab7248eb8f",
+    "docs/static-cpu-execution.md": "7e019d5ff76aef81abd9a5e3b6e8345ce8e19a14c27f3ea1db12bcc89d1fb278",
     "scripts/checks.sh": "04003d4da037a2e90efe065af15a6e532df93d43100856fb590c57a491ef6d0f",
-    "scripts/cpu/check-static-execution.py": "1fb4c118c5846d2c3cf44ffb6895c500624f8270b8642841d6702ffbb02c34cb",
+    "scripts/cpu/check-static-execution.py": "552a6f93b753d5026076f7e74fc3891801f6b7b71024cefec9a805ef98079d02",
     "scripts/zeroization/check-zeroization-miri.sh": "c2b0343d6f8c431db8134879ca1b6eac7ac09494e1ebce5904f7dac7c05fdc25",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "ac8c4566cc6988034096c6bda2b60c32b65ddd3b160879f8fbd3ecd4da696a73"
   }

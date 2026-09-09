@@ -381,7 +381,7 @@ abi_preconditions = ["riscv64", "no-ratified-keccak-instruction-in-pinned-author
 package = "brynja-crypto-cpu"
 path = "src/static_execution/mod.rs"
 status = "ordinary-static-authority"
-sha256 = "549adb47dd19118d9456d7aac24316107c935f9d47cadd9545735eb13383096c"
+sha256 = "e37de267e2f517462dc52f00c2d2ccd4b520fcb3614f3af6f30cf4371e73f805"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -399,4 +399,4 @@ sha256 = "fc937974058fd6212e04f4eb1064100737d695645595f029553f495ac908d30c"
 package = "brynja-crypto-cpu"
 path = "src/static_execution/tests.rs"
 status = "static-authority-tests"
-sha256 = "537b6cde0e8672c2262bcd1d985845e87b59e61755f079cfdff3c47f31cececd"
+sha256 = "1b5a5223fbb340400e15bcfb182687c41cfbe13d4130c5268a94054799dcd64d"

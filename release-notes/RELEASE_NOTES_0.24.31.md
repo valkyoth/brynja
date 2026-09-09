@@ -13,6 +13,9 @@ Status: implementation candidate; exceptional owner pentest required.
 - Keep testing and failed-KAT owners non-executable; quarantine invalidates
   every sibling session. Wrong operation, stale generation and unhealthy
   authority errors occur before caller-state mutation.
+- Distinguish internal startup-incomplete `NotReady` from permanent
+  `Quarantined` errors. Regression tests cover every kernel, both health
+  states and matching/stale generations without executing instructions.
 - Provide ordinary raw block/permutation APIs only. No hardened, hosted,
   legacy or RISC-V activation; existing high-level hash routes stay unchanged.
 - Add normal extracted-package downstream vectors and lifecycle tests,

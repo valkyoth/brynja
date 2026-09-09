@@ -39,6 +39,12 @@ quarantined authority; `session()` rejects it. The owner cannot be reset or
 cloned. Generations progress from testing (1) to tested (2), and once to
 explicitly quarantined (3), without wraparound.
 
+The internal `Testing` state rejects sessions and operations with `NotReady`,
+distinct from permanent `Quarantined` failure. Both reject before generation,
+feature checks or caller-buffer mutation. Construction remains synchronous:
+public callers never receive an owner still in `Testing`. This distinction
+does not introduce asynchronous startup, retries or a reset mechanism.
+
 Sessions borrow the exact owner and generation. Every operation checks health,
 generation, full compiler bundle and operation identity before state mutation.
 `quarantine()` invalidates all sibling sessions irreversibly; repeated calls

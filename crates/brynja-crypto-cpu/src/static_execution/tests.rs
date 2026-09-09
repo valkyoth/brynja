@@ -94,24 +94,21 @@ fn static_authority_real_kats_and_operations() -> Result<(), Error> {
         owner.quarantine();
         assert_eq!(owner.report().generation, 3);
         assert_eq!(owner.session().err(), Some(Error::Quarantined));
-        rejected_outputs(&session);
+        rejected_outputs(&session, Error::Quarantined);
     }
     Ok(())
 }
 
-fn rejected_outputs(session: &Session<'_>) {
+fn rejected_outputs(session: &Session<'_>, expected: Error) {
     let mut small = [42; 8];
     let mut large = [42; 8];
     let mut lanes = [42; 25];
-    assert_eq!(
-        session.compress_sha256(&mut small, &[0; 64]),
-        Err(Error::Quarantined)
-    );
+    assert_eq!(session.compress_sha256(&mut small, &[0; 64]), Err(expected));
     assert_eq!(
         session.compress_sha512(&mut large, &[0; 128]),
-        Err(Error::Quarantined)
+        Err(expected)
     );
-    assert_eq!(session.permute_keccak(&mut lanes), Err(Error::Quarantined));
+    assert_eq!(session.permute_keccak(&mut lanes), Err(expected));
     assert_eq!(small, [42; 8]);
     assert_eq!(large, [42; 8]);
     assert_eq!(lanes, [42; 25]);
@@ -126,14 +123,17 @@ fn static_authority_failed_startup_never_issues_session() {
         generation: core::cell::Cell::new(1),
         thread_bound: core::marker::PhantomData,
     };
-    assert_eq!(owner.session().err(), Some(Error::Quarantined));
+    assert_eq!(owner.session().err(), Some(Error::NotReady));
     owner.complete_startup(false);
     assert_eq!(owner.report().health, Health::Quarantined);
     assert_eq!(owner.session().err(), Some(Error::Quarantined));
-    rejected_outputs(&Session {
-        owner: &owner,
-        generation: 2,
-    });
+    rejected_outputs(
+        &Session {
+            owner: &owner,
+            generation: 2,
+        },
+        Error::Quarantined,
+    );
     owner.quarantine();
     assert_eq!(owner.report().generation, 2);
 }
@@ -168,4 +168,34 @@ fn static_authority_stale_generation_precedes_instruction_entry() {
     assert_eq!(small, [42; 8]);
     assert_eq!(large, [42; 8]);
     assert_eq!(lanes, [42; 25]);
+}
+
+#[test]
+fn static_authority_testing_is_distinct_and_never_mutates_outputs() {
+    // Private lifecycle models only: neither state permits kernel entry.
+    for kernel in Kernel::ALL {
+        for (health, expected) in [
+            (Health::Testing, Error::NotReady),
+            (Health::Quarantined, Error::Quarantined),
+        ] {
+            let owner = Authority {
+                kernel,
+                health: core::cell::Cell::new(health),
+                generation: core::cell::Cell::new(1),
+                thread_bound: core::marker::PhantomData,
+            };
+            assert_eq!(owner.session().err(), Some(expected));
+            for generation in [0, 1, 2, 3, u64::MAX] {
+                rejected_outputs(
+                    &Session {
+                        owner: &owner,
+                        generation,
+                    },
+                    expected,
+                );
+                assert_eq!(owner.report().health, health);
+                assert_eq!(owner.report().generation, 1);
+            }
+        }
+    }
 }

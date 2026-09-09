@@ -23,6 +23,9 @@ pub enum Error {
     MissingTargetFeatures,
     /// The operation does not match the authority's kernel.
     WrongOperation,
+    /// Startup testing is incomplete; no session or operation is permitted.
+    /// Synchronous public construction never exposes this internal state.
+    NotReady,
     /// Startup testing failed or the owner was permanently invalidated.
     Quarantined,
     /// The borrowed session no longer matches its owner's health generation.
@@ -135,8 +138,10 @@ impl Authority {
     }
 
     fn check(&self, generation: u64) -> Result<(), Error> {
-        if self.health.get() != Health::Healthy {
-            return Err(Error::Quarantined);
+        match self.health.get() {
+            Health::Healthy => {}
+            Health::Testing => return Err(Error::NotReady),
+            Health::Quarantined => return Err(Error::Quarantined),
         }
         if self.generation.get() != generation {
             return Err(Error::StaleGeneration);

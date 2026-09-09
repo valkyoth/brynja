@@ -159,7 +159,9 @@ def mutations(cpu):
     original = path.read_text()
     # All run without extra ISA: lifecycle model failures precede instructions.
     pairs = [
-        ('self.health.get() != Health::Healthy', 'false'),
+        ('Health::Testing => return Err(Error::NotReady),', 'Health::Testing => {}'),
+        ('Health::Testing => return Err(Error::NotReady),', 'Health::Testing => return Err(Error::Quarantined),'),
+        ('Health::Quarantined => return Err(Error::Quarantined),', 'Health::Quarantined => {}'),
         ('Health::Quarantined\n        });', 'Health::Healthy\n        });'),
         ('self.generation.get() != generation', 'false'),
     ]

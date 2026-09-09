@@ -12,6 +12,7 @@ import subprocess
 import tarfile
 import tempfile
 import tomllib
+import static_execution_docs
 
 ROOT = Path(__file__).resolve().parents[2]
 CPU = ROOT / 'crates/brynja-crypto-cpu'
@@ -20,6 +21,7 @@ REVIEW = ROOT / 'security/static-cpu-execution-reviewed.json'
 
 
 def validate(write=False):
+    static_execution_docs.validate(ROOT)
     manifest = tomllib.loads((CPU / 'Cargo.toml').read_text())
     if manifest.get('features') != {'default': [], 'static-execution': []} or manifest.get('dependencies'):
         raise RuntimeError('static CPU boundary must be default-off and dependency-free')
@@ -38,7 +40,8 @@ def validate(write=False):
     inputs = [*sorted((CPU / 'src').rglob('*.rs')), CPU / 'Cargo.toml',
               *sorted((FIXTURE / 'src').rglob('*.rs')), FIXTURE / 'Cargo.toml', FIXTURE / 'Cargo.lock',
               Path(__file__), ROOT / 'scripts/checks.sh', ROOT / 'docs/static-cpu-execution.md',
-              *memory_scripts]
+              *memory_scripts, *(ROOT / name for name in static_execution_docs.FILES),
+              ROOT / 'scripts/cpu/static_execution_docs.py']
     expected = {'milestone': '0.24.31', 'sha256': {str(p.relative_to(ROOT)):
         hashlib.sha256(p.read_bytes().replace(b'\r\n', b'\n')).hexdigest() for p in inputs}}
     if write:
@@ -203,6 +206,7 @@ def main():
     parser.add_argument('--policy-only', action='store_true')
     args = parser.parse_args()
     validate(args.write_review)
+    static_execution_docs.regressions(ROOT)
     if args.write_review or args.policy_only:
         print('Static execution source binding: PASS')
         return

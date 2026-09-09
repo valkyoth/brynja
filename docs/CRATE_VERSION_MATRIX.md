@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 published; milestones through v0.24.30 signed. v0.24.31 adds default-off [static CPU authority](static-cpu-execution.md); exceptional pentest is pending. No publication is selected, and ordinary hash-family and hosted dispatch remain unchanged.
+Status: v0.20.0 published; milestones through v0.24.30 signed. v0.24.31 adds default-off [static CPU authority](static-cpu-execution.md); owner retest and final local release checks passed, awaiting green GitHub/CodeQL. No publication is selected, and ordinary hash-family and hosted dispatch remain unchanged.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.31`. General SHA-512/t has callable ordinary/hardened

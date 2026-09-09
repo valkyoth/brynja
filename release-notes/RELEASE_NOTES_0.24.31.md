@@ -1,6 +1,6 @@
 # Brynja v0.24.31
 
-Status: implementation candidate; exceptional owner pentest required.
+Status: owner retest and local release checks passed; documentation findings corrected; awaiting green GitHub/CodeQL.
 
 ## Static CPU execution authority
 
@@ -22,6 +22,10 @@ Status: implementation candidate; exceptional owner pentest required.
   compiled negative controls, compiler endpoint and Arm QEMU execution checks.
 - Refocus the GitHub README on capabilities, architecture, usability and
   security boundaries. Individual release history stays in docs and reports.
+- Reconcile the normative security documents with the five callable opt-in
+  raw kernels, without claiming high-level hash dispatch is activated. Bind
+  these statements to the public feature/module and authoritative unsafe
+  inventory, with 24 semantic documentation regression tests.
 - Refresh the Miri/AddressSanitizer verifier to `nightly-2026-09-09` and add a
   scoped `static_cpu` memory-test group. Stable Rust remains `1.98.1`, with
   compatibility from `1.90.0`; no runtime dependency is upgraded.
@@ -44,6 +48,12 @@ input. Hardened accelerated ownership remains subsequent work. Native AMD
 execution and AArch64 QEMU are not independent cryptographic review, native
 Arm qualification, comprehensive side-channel proof or FIPS validation.
 
-Complete the exceptional pentest and affected checks, commit the report, wait
-for green GitHub/CodeQL and request explicit tag approval. No tag or publication
-is authorized by implementation tests alone.
+Big-endian AArch64 execution and Windows/macOS behavior remain unverified.
+`NotReady` and `StaleGeneration` describe defensive internal states; neither
+is currently observable through the safe public synchronous lifecycle.
+
+The exceptional owner retest and local release checks passed, including all
+twelve registered full Miri groups and 29 Kani proofs. See the [release review
+record](../security/pentest/v0.24.31.md) for coverage and limitations. Commit the
+report with the candidate, wait for green GitHub/CodeQL and request explicit
+tag approval. No tag or publication is authorized by implementation tests alone.

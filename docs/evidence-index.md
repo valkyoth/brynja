@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; milestones through v0.24.30 signed. v0.24.31 adds [static CPU execution authority](static-cpu-execution.md), normal-package tests and exact-source bindings. Exceptional pentest is pending. Native AMD and supplemental Arm QEMU results do not establish independent review, hosted migration safety or FIPS validation.
+Status: v0.20.0 published; milestones through v0.24.30 signed. v0.24.31 adds [static CPU execution authority](static-cpu-execution.md), normal-package tests and exact-source bindings. Owner retest and final local release checks passed, awaiting green GitHub/CodeQL. Native AMD and supplemental Arm QEMU results do not establish independent review, hosted migration safety or FIPS validation.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are

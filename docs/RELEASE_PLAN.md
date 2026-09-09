@@ -4208,7 +4208,7 @@ Exit criteria:
 
 ### v0.24.31 - Static CPU Execution Authority
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Implement no_std static execution authority for reviewed backends using complete compiler target-feature bundles, real startup KATs, health generations and fail-closed session construction; distinguish software readiness from independent review and FIPS status.
 

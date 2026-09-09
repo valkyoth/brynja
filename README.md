@@ -61,7 +61,7 @@ independent cryptographic or protocol verification.
 ### Modern Hash Functions
 
 Acceleration is separate from portable algorithm completion. Default hash APIs
-remain portable. Opt-in static CPU authority is being implemented; hosted and
+remain portable. Opt-in raw static CPU authority is available; hosted and
 family-level acceleration are not yet generally usable. See the
 [acceleration guide](docs/static-cpu-execution.md) for exact supported routes and
 deployment requirements. Independent review and FIPS status are separate claims.

@@ -503,11 +503,23 @@ padding boundaries and irregular chunking, while emitted-code checks require
 the intended instructions. Exact-commit native correctness and emitted-code
 observations also pass on M2 and AWS Arm; AMD and observed-feature AWS Intel
 pass the SHA-256-family routes. x86_64 SHA-512 remains scalar-only rather than
-treating AVX2 or AVX-512 presence as evidence. All five candidates remain
-unadmitted: emulator results, target-feature compilation, performance on a
-different CPU, or a healthy KAT cannot authorize ordinary execution. Native
+treating AVX2 or AVX-512 presence as evidence. The original high-level/detection
+routes remain unadmitted. The v0.24.31 static authority separately allows
+ordinary raw execution under its complete executable/platform contract;
+an emulator result, measurement on another CPU or healthy KAT alone is not
+that contract. Native
 performance, CPU migration, side-channel, register/spill erasure, independent
 review, and FIPS validation remain explicit residuals.
+
+The default-off `static-execution` feature exposes five ordinary raw kernels:
+x86 SHA-256, x86 AVX2 Keccak, Arm SHA-256, Arm SHA-512 and Arm SHA3 Keccak.
+`static_execution::Authority` requires the complete compiler feature bundle,
+the specialized executable platform contract and a direct kernel KAT.
+Default hash constructors remain portable. The new surface is not high-level
+hash dispatch, hosted runtime detection, hardened processing or a grant for
+legacy/RISC-V execution. Every eligible CPU and the OS vector state must stay
+compatible throughout execution; a Cargo feature or non-Send owner does not
+enforce that deployment. See [static CPU execution](static-cpu-execution.md).
 v0.23.4 treats public usability and package completeness as hostile boundaries.
 One standalone `no_std` consumer can reach all six algorithms only through
 documented leaf and facade APIs, compares independent expectations over varied

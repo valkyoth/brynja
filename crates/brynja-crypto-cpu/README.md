@@ -50,7 +50,8 @@ The new default-off `static-execution` feature exposes
 `static_execution::{Authority, Kernel, Session}` for ordinary public-data
 compression/permutation. It does not change existing hash constructors or
 hosted detection. The unpublished implementation candidate supports x86 SHA-256,
-AVX2 Keccak and Arm SHA-256/SHA-512/SHA3 Keccak; exceptional pentest is pending.
+AVX2 Keccak and Arm SHA-256/SHA-512/SHA3 Keccak. The owner retest and local
+release checks passed; GitHub/CodeQL is next. See the [review record](../../security/pentest/v0.24.31.md).
 
 Every constructor requires the complete compiler target-feature bundle before
 running the actual kernel KAT. A quarantined owner cannot issue sessions.
@@ -96,7 +97,7 @@ pentesting do not by themselves constitute independent verification.
 
 | Component | Cryptographic scope | Independently verified |
 | --- | --- | --- |
-| Explicit static authority | Five ordinary kernels under complete compiler/platform contract; candidate pending pentest | ❌ Not independently verified; not FIPS validated |
+| Explicit static authority | Five opt-in ordinary kernels under complete compiler/platform contract | ❌ Not independently verified; not FIPS validated |
 | x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |
 | AArch64 SHA-256 candidate | NEON/SHA2 compression | ❌ Implemented but unadmitted and not independently verified |
 | RV64 SHA-256 candidate | Zknh scalar-crypto compression | ❌ Implemented but unadmitted and not independently verified |

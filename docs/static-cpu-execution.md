@@ -1,6 +1,6 @@
 # Static CPU execution
 
-Status: v0.24.31 implementation candidate; exceptional pentest required.
+Status: v0.24.31 owner retest and local release checks passed; documentation findings corrected; awaiting green GitHub/CodeQL.
 
 `brynja-crypto-cpu` provides `static_execution::{Authority, Kernel, Session}`
 behind its default-off `static-execution` feature. This is an ordinary
@@ -44,6 +44,11 @@ distinct from permanent `Quarantined` failure. Both reject before generation,
 feature checks or caller-buffer mutation. Construction remains synchronous:
 public callers never receive an owner still in `Testing`. This distinction
 does not introduce asynchronous startup, retries or a reset mechanism.
+
+`StaleGeneration` is also an internal defensive distinction: the only public
+generation-changing transition is quarantine, and `Quarantined` takes
+precedence. Safe public callers cannot currently observe `NotReady` or
+`StaleGeneration`; tests construct private lifecycle models to cover them.
 
 Sessions borrow the exact owner and generation. Every operation checks health,
 generation, full compiler bundle and operation identity before state mutation.
@@ -93,3 +98,9 @@ QEMU is not native Arm, side-channel or migration evidence. No fresh AWS or
 Apple native capture is claimed here. RISC-V and legacy execution are not
 enabled by this API. Independent cryptographic review and FIPS validation
 remain absent, and no cryptographic kernel algorithm is changed in this step.
+
+The architecture gate also accepts big-endian AArch64, but this release has
+no big-endian execution evidence. That target is unverified, not known-broken
+or natively qualified. Windows/macOS execution, heterogeneous migration,
+feature withdrawal and machine-level side-channel evidence are likewise not
+established by the current AMD-native and little-endian Arm-QEMU observations.

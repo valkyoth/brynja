@@ -1,6 +1,6 @@
 # Unsafe Rust Policy
 
-Status: fifteen exact source-hash-bound exceptions inventoried; three new legacy MD5 candidate modules await exceptional review and remain unadmitted; every other unsafe site forbidden
+Status: fifteen exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
 Rust in only fifteen exact modules: the private core volatile clearer; the
@@ -28,18 +28,34 @@ Version 0.24.4 adds exact first-party x86_64 AVX2 and AArch64 SHA3
 Keccak-f[1600] candidates. The x86 module owns fixed-width AVX2 intrinsics; the
 AArch64 module owns the architecture's `eor3`, `rax1`, and `bcax` intrinsic
 path. `keccak.rs` owns the associated attestation constructor but no unsafe
-block. Both kernels accept fixed arrays, execute fixed 24-round work, and are
-reachable only through architecture-checked, thread-bound, direct-KAT-gated
-evidence sessions. They contain no FFI, external assembly, native object,
+block. Both kernels accept fixed arrays and execute fixed 24-round work. They
+were originally exposed through architecture-checked, thread-bound, direct-KAT-gated
+evidence sessions. The v0.24.31 static authority below also exposes ordinary
+raw execution. They contain no FFI, external assembly, native object,
 build script, allocation, I/O, or pointer-length public API.
 
-Both candidates remain unadmitted. Supplemental QEMU and emitted-instruction
+Both remain unadmitted through the original high-level/detection routes.
+Supplemental QEMU and emitted-instruction
 evidence cannot establish native correctness, CPU-migration safety,
 performance, side-channel behavior, secret-state erasure, independent
 cryptographic verification, or FIPS validation. RISC-V remains scalar-only
 for Keccak because the pinned ratified authorities contain no qualifying
-route. Any admission is a separately reviewed architectural change, never a
+route. Any additional activation is a reviewed architectural change, never a
 source-hash-only edit.
+
+## v0.24.31 Ordinary Static Execution
+
+The default-off `static-execution` feature exposes five ordinary raw kernels:
+x86 SHA-256, x86 AVX2 Keccak, Arm SHA-256, Arm SHA-512 and Arm SHA3 Keccak.
+`static_execution::Authority` requires the complete compiler feature bundle,
+the specialized executable platform contract and a direct kernel KAT.
+Sessions recheck owner health and generation before mutation. This is an
+explicit reachability amendment, not a new unsafe-module allowance.
+Default hash constructors remain portable. High-level hash dispatch, hosted,
+hardened, legacy and RISC-V activation are not granted by this feature.
+Neither native observations nor a KAT establish independent review, FIPS
+validation, migration safety or secret erasure. The full deployment and
+ownership contract is in [static CPU execution](static-cpu-execution.md).
 
 ## v0.22.2 RISC-V Zknh Inline-Assembly Exception
 
@@ -86,9 +102,10 @@ session that checks architecture, runs a direct KAT, records a health
 generation, and permanently quarantines a bad answer. They use no external
 assembly or ABI. Static selection requires complete compile-time features;
 runtime selection requires the complete reviewed detector result. The
-implementations make no register/spill erasure claim. Both remain unadmitted
-and unreachable from ordinary execution until native evidence is complete;
-cross-compilation or QEMU alone cannot authorize them. Approval never extends
+implementations make no register/spill erasure claim. Their original
+high-level/detection routes remain unadmitted; the v0.24.31 amendment above
+separately permits ordinary raw static execution. Cross-compilation or QEMU
+alone does not establish a compatible deployment. Approval never extends
 to another primitive, architecture, symbol, feature bundle, or compiler path.
 
 ## v0.11.0 Volatile-Store Exception

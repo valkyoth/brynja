@@ -1,4 +1,4 @@
-use super::{Authority, Error, Health, Kernel, Session};
+use super::{Authority, Error, Health, Kernel, PublicData, Session};
 
 #[test]
 fn static_authority_rejects_incomplete_bundles_before_startup() {
@@ -49,33 +49,40 @@ fn static_authority_real_kats_and_operations() -> Result<(), Error> {
         match kernel {
             Kernel::X86Sha256 | Kernel::ArmSha256 => {
                 let mut state = crate::sha256::initial_state();
-                session.compress_sha256(&mut state, &crate::sha256::abc_block())?;
+                session.compress_sha256(
+                    PublicData::new(&mut state),
+                    PublicData::new(&crate::sha256::abc_block()),
+                )?;
                 assert_eq!(state, crate::sha256::abc_digest_state());
                 let mut wrong = [42; 25];
                 assert_eq!(
-                    session.permute_keccak(&mut wrong),
+                    session.permute_keccak(PublicData::new(&mut wrong)),
                     Err(Error::WrongOperation)
                 );
                 assert_eq!(wrong, [42; 25]);
             }
             Kernel::ArmSha512 => {
                 let mut state = crate::sha512::initial_state();
-                session.compress_sha512(&mut state, &crate::sha512::abc_block())?;
+                session.compress_sha512(
+                    PublicData::new(&mut state),
+                    PublicData::new(&crate::sha512::abc_block()),
+                )?;
                 assert_eq!(state, crate::sha512::abc_digest_state());
                 let mut wrong = [42; 8];
                 assert_eq!(
-                    session.compress_sha256(&mut wrong, &[0; 64]),
+                    session.compress_sha256(PublicData::new(&mut wrong), PublicData::new(&[0; 64])),
                     Err(Error::WrongOperation)
                 );
                 assert_eq!(wrong, [42; 8]);
             }
             Kernel::X86Keccak | Kernel::ArmKeccak => {
                 let mut state = [0; 25];
-                session.permute_keccak(&mut state)?;
+                session.permute_keccak(PublicData::new(&mut state))?;
                 assert_eq!(state, crate::keccak_constants::ZERO_STATE_RESULT);
                 let mut wrong = [42; 8];
                 assert_eq!(
-                    session.compress_sha512(&mut wrong, &[0; 128]),
+                    session
+                        .compress_sha512(PublicData::new(&mut wrong), PublicData::new(&[0; 128])),
                     Err(Error::WrongOperation)
                 );
                 assert_eq!(wrong, [42; 8]);
@@ -86,7 +93,7 @@ fn static_authority_real_kats_and_operations() -> Result<(), Error> {
             generation: 1,
         };
         assert_eq!(
-            stale.permute_keccak(&mut [0; 25]),
+            stale.permute_keccak(PublicData::new(&mut [0; 25])),
             Err(Error::StaleGeneration)
         );
         owner.quarantine();
@@ -103,12 +110,18 @@ fn rejected_outputs(session: &Session<'_>, expected: Error) {
     let mut small = [42; 8];
     let mut large = [42; 8];
     let mut lanes = [42; 25];
-    assert_eq!(session.compress_sha256(&mut small, &[0; 64]), Err(expected));
     assert_eq!(
-        session.compress_sha512(&mut large, &[0; 128]),
+        session.compress_sha256(PublicData::new(&mut small), PublicData::new(&[0; 64])),
         Err(expected)
     );
-    assert_eq!(session.permute_keccak(&mut lanes), Err(expected));
+    assert_eq!(
+        session.compress_sha512(PublicData::new(&mut large), PublicData::new(&[0; 128])),
+        Err(expected)
+    );
+    assert_eq!(
+        session.permute_keccak(PublicData::new(&mut lanes)),
+        Err(expected)
+    );
     assert_eq!(small, [42; 8]);
     assert_eq!(large, [42; 8]);
     assert_eq!(lanes, [42; 25]);
@@ -154,15 +167,15 @@ fn static_authority_stale_generation_precedes_instruction_entry() {
     let mut large = [42; 8];
     let mut lanes = [42; 25];
     assert_eq!(
-        stale.compress_sha256(&mut small, &[0; 64]),
+        stale.compress_sha256(PublicData::new(&mut small), PublicData::new(&[0; 64])),
         Err(Error::StaleGeneration)
     );
     assert_eq!(
-        stale.compress_sha512(&mut large, &[0; 128]),
+        stale.compress_sha512(PublicData::new(&mut large), PublicData::new(&[0; 128])),
         Err(Error::StaleGeneration)
     );
     assert_eq!(
-        stale.permute_keccak(&mut lanes),
+        stale.permute_keccak(PublicData::new(&mut lanes)),
         Err(Error::StaleGeneration)
     );
     assert_eq!(small, [42; 8]);

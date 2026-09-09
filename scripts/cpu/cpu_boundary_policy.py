@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "ca0efd4bca8d36bc7e1a8a09290dc25172834425662288a7c00f68355b57e825"
+EXPECTED_POLICY_SHA256 = "72d09a561c44c01ae91d38788633f0f14a834bbce2f64818855d307bb5fdc95a"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -35,6 +35,7 @@ SOURCE_STATUS = {
     (DETECTOR, "src/execution/tests.rs"): "hosted-execution-tests",
     (CPU, "src/static_execution/mod.rs"): "ordinary-static-authority",
     (CPU, "src/static_execution/kernel.rs"): "complete-static-feature-bundles",
+    (CPU, "src/static_execution/public_data.rs"): "explicit-public-data-classification",
     (CPU, "src/static_execution/operations.rs"): "static-kat-and-operation-routing",
     (CPU, "src/static_execution/tests.rs"): "static-authority-tests",
     (CPU, "src/lib.rs"): "boundary-only",

@@ -7,7 +7,9 @@
 //! `brynja_crypto_cpu::static_execution`. No affinity or global policy changes.
 
 use brynja_crypto_cpu::runtime_execution::Authority as KernelAuthority;
-pub use brynja_crypto_cpu::runtime_execution::{Error as KernelError, Health, Kernel, Session};
+pub use brynja_crypto_cpu::runtime_execution::{
+    Error as KernelError, Health, Kernel, PublicData, Session,
+};
 
 #[cfg(any(target_arch = "x86_64", target_arch = "aarch64", test))]
 mod features;
@@ -18,7 +20,8 @@ mod platform;
 pub enum Mode {
     /// Do not probe or execute a kernel. The consumer performs portable work.
     Portable,
-    /// Select acceleration if authorized; otherwise report a portable route.
+    /// Fall back only for pre-execution unavailability. Kernel failures never
+    /// authorize fallback, including failed startup tests and quarantine.
     Prefer,
     /// Reject unavailable acceleration rather than silently choosing portable.
     Require,
@@ -96,6 +99,14 @@ impl Authority {
     /// A startup failure retains a quarantined owner, never a fallback route;
     /// [`Self::session`] then returns an error even in preferred mode.
     pub fn new(kernel: Kernel, mode: Mode) -> Result<Self, Error> {
+        Self::select(kernel, mode, || platform::construct(kernel))
+    }
+
+    fn select(
+        kernel: Kernel,
+        mode: Mode,
+        construct: impl FnOnce() -> Result<KernelAuthority, Error>,
+    ) -> Result<Self, Error> {
         if mode == Mode::Portable {
             return Ok(Self {
                 kernel,
@@ -103,11 +114,12 @@ impl Authority {
                 owner: None,
             });
         }
-        let route = choose(mode, platform::availability(kernel))?;
-        let owner = if route == Route::Accelerated {
-            Some(platform::construct(kernel).map_err(Error::Kernel)?)
-        } else {
-            None
+        // Selection and authorization share one private availability decision.
+        // Only pre-instruction unavailability can choose a portable fallback.
+        let (route, owner) = match construct() {
+            Ok(owner) => (Route::Accelerated, Some(owner)),
+            Err(Error::Unavailable(reason)) => (choose(mode, Err(reason))?, None),
+            Err(error) => return Err(error),
         };
         Ok(Self {
             kernel,

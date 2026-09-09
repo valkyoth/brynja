@@ -1,7 +1,7 @@
 #![no_std]
 //! Downstream static-kernel acceptance; no evidence cfg or private imports.
 
-use brynja_crypto_cpu::static_execution::{Authority, Error, Health, Kernel};
+use brynja_crypto_cpu::static_execution::{Authority, Error, Health, Kernel, PublicData};
 
 /// Execute direct known vectors and permanent revocation using public APIs.
 pub fn exercise() -> Result<usize, Error> {
@@ -26,7 +26,7 @@ pub fn exercise() -> Result<usize, Error> {
                 block[2] = b'c';
                 block[3] = 0x80;
                 block[63] = 24;
-                first.compress_sha256(&mut state, &block)?;
+                first.compress_sha256(PublicData::new(&mut state), PublicData::new(&block))?;
                 assert_eq!(
                     state,
                     [
@@ -52,7 +52,7 @@ pub fn exercise() -> Result<usize, Error> {
                 block[2] = b'c';
                 block[3] = 0x80;
                 block[127] = 24;
-                first.compress_sha512(&mut state, &block)?;
+                first.compress_sha512(PublicData::new(&mut state), PublicData::new(&block))?;
                 assert_eq!(
                     state,
                     [
@@ -69,7 +69,7 @@ pub fn exercise() -> Result<usize, Error> {
             }
             Kernel::X86Keccak | Kernel::ArmKeccak => {
                 let mut lanes = [0; 25];
-                first.permute_keccak(&mut lanes)?;
+                first.permute_keccak(PublicData::new(&mut lanes))?;
                 assert_eq!(
                     lanes,
                     [
@@ -110,14 +110,17 @@ pub fn exercise() -> Result<usize, Error> {
             let mut large = [42; 8];
             let mut lanes = [42; 25];
             assert_eq!(
-                session.compress_sha256(&mut small, &[0; 64]),
+                session.compress_sha256(PublicData::new(&mut small), PublicData::new(&[0; 64])),
                 Err(Error::Quarantined)
             );
             assert_eq!(
-                session.compress_sha512(&mut large, &[0; 128]),
+                session.compress_sha512(PublicData::new(&mut large), PublicData::new(&[0; 128])),
                 Err(Error::Quarantined)
             );
-            assert_eq!(session.permute_keccak(&mut lanes), Err(Error::Quarantined));
+            assert_eq!(
+                session.permute_keccak(PublicData::new(&mut lanes)),
+                Err(Error::Quarantined)
+            );
             assert_eq!(small, [42; 8]);
             assert_eq!(large, [42; 8]);
             assert_eq!(lanes, [42; 25]);

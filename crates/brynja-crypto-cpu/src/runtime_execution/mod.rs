@@ -6,7 +6,7 @@
 
 #![allow(unsafe_code)]
 
-pub use crate::static_execution::{Error, Health, Kernel, Report};
+pub use crate::static_execution::{Error, Health, Kernel, PublicData, Report};
 use core::{cell::Cell, marker::PhantomData};
 
 mod operations;
@@ -25,6 +25,10 @@ mod operations;
 /// fn send<T: Send>() {}
 /// send::<Authority>();
 /// ```
+/// Operations are synchronous and invoke no caller callbacks. These owners
+/// are not signal-handler or async-reentrant interfaces; do not reenter an
+/// operation through a signal handler or hook. Sequential same-thread calls
+/// and explicit quarantine between calls are supported.
 pub struct Authority {
     kernel: Kernel,
     health: Cell<Health>,
@@ -125,21 +129,29 @@ impl Session<'_> {
     }
 
     /// Compresses one SHA-256 block after checking owner health and identity.
-    pub fn compress_sha256(&self, state: &mut [u32; 8], block: &[u8; 64]) -> Result<(), Error> {
+    pub fn compress_sha256(
+        &self,
+        state: PublicData<&mut [u32; 8]>,
+        block: PublicData<&[u8; 64]>,
+    ) -> Result<(), Error> {
         self.owner.check(self.generation)?;
-        operations::sha256(self.owner.kernel, state, block)
+        operations::sha256(self.owner.kernel, state.into_inner(), block.into_inner())
     }
 
     /// Compresses one SHA-512-family block; padding belongs to the consumer.
-    pub fn compress_sha512(&self, state: &mut [u64; 8], block: &[u8; 128]) -> Result<(), Error> {
+    pub fn compress_sha512(
+        &self,
+        state: PublicData<&mut [u64; 8]>,
+        block: PublicData<&[u8; 128]>,
+    ) -> Result<(), Error> {
         self.owner.check(self.generation)?;
-        operations::sha512(self.owner.kernel, state, block)
+        operations::sha512(self.owner.kernel, state.into_inner(), block.into_inner())
     }
 
     /// Executes `Keccak-f[1600]`, not an entire SHA-3/SHAKE construction.
-    pub fn permute_keccak(&self, state: &mut [u64; 25]) -> Result<(), Error> {
+    pub fn permute_keccak(&self, state: PublicData<&mut [u64; 25]>) -> Result<(), Error> {
         self.owner.check(self.generation)?;
-        operations::keccak(self.owner.kernel, state)
+        operations::keccak(self.owner.kernel, state.into_inner())
     }
 }
 

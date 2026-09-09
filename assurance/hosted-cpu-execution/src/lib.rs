@@ -1,6 +1,6 @@
 //! Downstream ordinary hosted-authority acceptance; no evidence cfg or secret.
 use brynja_crypto_cpu_std::execution::{
-    Authority, Error, Health, Kernel, KernelError, Mode, Route,
+    Authority, Error, Health, Kernel, KernelError, Mode, PublicData, Route,
 };
 
 /// Exercises each available kernel owner and verifies quarantine is terminal.
@@ -29,20 +29,25 @@ pub fn validate() -> Result<usize, Error> {
                     Kernel::X86Sha256 | Kernel::ArmSha256 => {
                         let mut state = [0; 8];
                         session
-                            .compress_sha256(&mut state, &[0; 64])
+                            .compress_sha256(PublicData::new(&mut state), PublicData::new(&[0; 64]))
                             .map_err(Error::Kernel)?;
                         assert_ne!(state, [0; 8]);
                     }
                     Kernel::ArmSha512 => {
                         let mut state = [0; 8];
                         session
-                            .compress_sha512(&mut state, &[0; 128])
+                            .compress_sha512(
+                                PublicData::new(&mut state),
+                                PublicData::new(&[0; 128]),
+                            )
                             .map_err(Error::Kernel)?;
                         assert_ne!(state, [0; 8]);
                     }
                     Kernel::X86Keccak | Kernel::ArmKeccak => {
                         let mut state = [0; 25];
-                        session.permute_keccak(&mut state).map_err(Error::Kernel)?;
+                        session
+                            .permute_keccak(PublicData::new(&mut state))
+                            .map_err(Error::Kernel)?;
                         assert_eq!(state[0], 0xf125_8f79_40e1_dde7);
                     }
                     _ => return Err(Error::Kernel(KernelError::WrongOperation)),
@@ -51,7 +56,7 @@ pub fn validate() -> Result<usize, Error> {
                 assert_eq!(owner.report().health, Some(Health::Quarantined));
                 let mut state = [37; 25];
                 assert_eq!(
-                    session.permute_keccak(&mut state),
+                    session.permute_keccak(PublicData::new(&mut state)),
                     Err(KernelError::Quarantined)
                 );
                 assert_eq!(state, [37; 25]);

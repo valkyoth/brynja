@@ -10,10 +10,10 @@ from pathlib import Path
 
 ALLOWED = {
     Path("crates/brynja-crypto-cpu/src/runtime_execution/mod.rs"): (
-        "88aef4e68817eb39bdeb13d67390432dbf6c734337e38a908b37c7a1e4e0a189", 0, 1, 0,
+        "dd4bfdde0243e6bf5f96d25799fbec5220d6bf0a4c9c9ba7fb9f2fec90b62a19", 0, 1, 0,
     ),
     Path("crates/brynja-crypto-cpu-std/src/execution/platform.rs"): (
-        "ba6795225520a56f9934eea0372a927dc18d8583d49df7101bf17cb7b5e2298c", 1, 0, 1,
+        "867dcd77de44aeb70de8c2df48d8613adabbad93e69c0f4b94d945796122612c", 1, 0, 1,
     ),
     Path("crates/brynja-legacy-md5/src/cpu/session.rs"): ("2b44d0e84f477a79cc0dfec007dab0fbf7e9c0ea6577d4759f0f46c537562a9f", 3, 1, 3),
     Path("crates/brynja-legacy-md5/src/cpu/x86_avx2_md5.rs"): ("ed6bc494e363fc24256b835b5d4ee52b0785f4d46028a5bdb7ca8446d597ea8e", 1, 1, 1),

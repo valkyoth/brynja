@@ -34,6 +34,9 @@ Require errors when a complete platform guarantee is unavailable. Supported
 AArch64 system feature APIs can authorize execution after a direct KAT.
 Generic x86 and unreviewed platforms remain portable/error; current-core
 CPUID alone is not migration authority. KAT failure quarantines without fallback.
+Raw state and blocks require `execution::PublicData::new(...)` classification.
+This records caller intent, not proof of public provenance or an erasure claim.
+Prefer only falls back for pre-execution unavailability, never kernel errors.
 
 This new API is not in the previously published 0.1.1 artifact. It remains
 separate from the historical high-level adapters described below, from

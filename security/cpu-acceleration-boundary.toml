@@ -154,7 +154,7 @@ sha256 = "eeed2b69bbf6f5eebe6b4368bef4bfff4694ba7da071bc6bd9862c9a89d2d962"
 package = "brynja-crypto-cpu"
 path = "src/runtime_execution/mod.rs"
 status = "ordinary-runtime-authority"
-sha256 = "88aef4e68817eb39bdeb13d67390432dbf6c734337e38a908b37c7a1e4e0a189"
+sha256 = "dd4bfdde0243e6bf5f96d25799fbec5220d6bf0a4c9c9ba7fb9f2fec90b62a19"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -166,25 +166,25 @@ sha256 = "e68172c35a3a1b0372c0200e99b429653a6982636dd1dfe5bbb0a09092411589"
 package = "brynja-crypto-cpu"
 path = "src/runtime_execution/tests.rs"
 status = "runtime-authority-tests"
-sha256 = "4adc618be46f28a3b81848df6d53c60ee7709dee25a3f7b87316ba6a0bc81bd3"
+sha256 = "cb76ec068e059ff6ef6e5477c1a96e764251833d1e3a9b62855f97740a00c72a"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/execution/mod.rs"
 status = "hosted-execution-selection"
-sha256 = "1179603429b51e96a5797608e86057906bf0e711d5864d0fdb786d2c6d1d3695"
+sha256 = "012d2edce7498f2293129c504daefdacc0f255f255354d47a531525cae58b983"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/execution/platform.rs"
 status = "system-feature-proof-boundary"
-sha256 = "ba6795225520a56f9934eea0372a927dc18d8583d49df7101bf17cb7b5e2298c"
+sha256 = "867dcd77de44aeb70de8c2df48d8613adabbad93e69c0f4b94d945796122612c"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/execution/tests.rs"
 status = "hosted-execution-tests"
-sha256 = "10065c85ee8332e1e9f8bdf230382ed193371eccb8bb76f16aa615e724f732b7"
+sha256 = "cb30ca0fbc0945f710992887b7e2afafbe630e2137bf69605639b0d82eef4ca0"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -423,7 +423,7 @@ abi_preconditions = ["riscv64", "no-ratified-keccak-instruction-in-pinned-author
 package = "brynja-crypto-cpu"
 path = "src/static_execution/mod.rs"
 status = "ordinary-static-authority"
-sha256 = "e37de267e2f517462dc52f00c2d2ccd4b520fcb3614f3af6f30cf4371e73f805"
+sha256 = "6a366bc163774110a522cd59530955c11f3f7ec5a3d7110ae9278dae1e38868a"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -441,4 +441,10 @@ sha256 = "fc937974058fd6212e04f4eb1064100737d695645595f029553f495ac908d30c"
 package = "brynja-crypto-cpu"
 path = "src/static_execution/tests.rs"
 status = "static-authority-tests"
-sha256 = "1b5a5223fbb340400e15bcfb182687c41cfbe13d4130c5268a94054799dcd64d"
+sha256 = "83217fdd0ff6df7bb49035992ab4b70899718e7bdbe3f400adbca55a992400fe"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/static_execution/public_data.rs"
+status = "explicit-public-data-classification"
+sha256 = "6a7bf22e99a50c19ae6df16b87dada92fcf0d50da7961adbeb1d891c3fa288a8"

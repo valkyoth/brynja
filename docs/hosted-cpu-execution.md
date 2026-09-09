@@ -37,6 +37,21 @@ Session errors preserve every input state word. Reports contain no machine name,
 network data, environment identifier or secret. Detection starts no thread and
 changes no process affinity, signal handler or global crypto configuration.
 
+Selection uses one private availability decision at the permit-construction
+boundary. `Prefer` is not a promise to conceal all errors: only a typed
+pre-execution `Unavailable` result permits fallback. Kernel construction errors
+and failed startup health never authorize a portable retry.
+
+Every raw state and compression block must be explicitly classified with
+`PublicData::new(...)`, for example
+`session.permute_keccak(PublicData::new(&mut public_lanes))`. The same marker is
+required by static sessions and re-exported by all three execution modules.
+It borrows buffers without adding state copies. This is a caller attestation,
+not proof of secrecy absence or an erasing owner. Never classify keys, passwords,
+HMAC/KDF intermediates or confidential inputs this way. No implicit conversion
+from raw buffers or hardened states is provided. Future high-level ordinary
+integration must keep these explicit call sites separate from hardened paths.
+
 ## Platform audit and availability
 
 The standard-library source shipped with Rust **1.90.0 and 1.98.1** was inspected
@@ -91,6 +106,12 @@ for that owner; fresh construction is independent and cannot repair old sessions
 This is NOT a process-wide failure latch or FIPS module session. Static, hosted,
 historical evidence-admission and hardened capabilities remain distinct.
 No register/spill/cache/stack erasure or secret-bearing execution is claimed.
+
+Operations are synchronous and call no user callbacks. These owners are not
+signal-handler or async-reentrant APIs; do not reenter a running operation from
+a handler or hook. Sequential calls and quarantine between calls are supported.
+Thread-bound ownership alone is not a reentrancy guard. Future callback-driven
+integration requires a separate lifecycle review before adding such entry points.
 
 ## Reproducible checks and evidence
 

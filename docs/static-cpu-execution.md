@@ -1,5 +1,11 @@
 # Static CPU execution
 
+Raw sessions require explicit `PublicData::new(...)` classification of both
+state and input blocks. This is a visible caller attestation, not proof that
+bytes are non-secret and not an erasing owner. Never classify secret-derived
+material this way. Operations are synchronous without caller callbacks; signal
+handlers and async-reentrant entry into a running owner are unsupported.
+
 Status: v0.24.31 owner retest and local release checks passed; documentation findings corrected; awaiting green GitHub/CodeQL.
 
 `brynja-crypto-cpu` provides `static_execution::{Authority, Kernel, Session}`
@@ -70,12 +76,12 @@ For a target-specialized x86 SHA executable, compile with
 platform meets the full contract. Equivalent Arm and AVX2 bundles are above.
 
 ```rust
-use brynja_crypto_cpu::static_execution::{Authority, Error, Kernel};
+use brynja_crypto_cpu::static_execution::{PublicData, Authority, Error, Kernel};
 
 fn compress_public_block(state: &mut [u32; 8], block: &[u8; 64]) -> Result<(), Error> {
     let authority = Authority::new(Kernel::X86Sha256)?;
     let session = authority.session()?;
-    session.compress_sha256(state, block)
+    session.compress_sha256(PublicData::new(state), PublicData::new(block))
 }
 ```
 

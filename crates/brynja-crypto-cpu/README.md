@@ -31,6 +31,9 @@ the safe optional `brynja-crypto-cpu-std::execution` adapter instead. Its exact
 system-feature, migration, KAT and quarantine contract is documented in
 [hosted execution](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md).
 This does not activate historical hash dispatch or hardened secret processing.
+Static and hosted raw sessions require explicit `PublicData::new(...)` markers
+for public state and blocks. These record caller intent, not proof that the
+bytes contain no secrets; they do not provide cleanup or hardened ownership.
 
 `brynja-crypto-cpu` is the optional, zero-dependency, `no_std` package for
 separately reviewed first-party ISA kernels and static selection. Version

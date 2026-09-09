@@ -23,6 +23,12 @@ adapter evidence pending. No tag or crates.io publication authorized.
   QEMU execution without evidence cfg or target-feature specialization.
 - Extend focused CPU-owner Miri/ASan coverage; leave unchanged algorithm
   evidence separate from the newly reviewed hosted authority boundary.
+- Pentest hardening: require explicit borrowed `PublicData` classification at
+  static and hosted raw kernel calls, with packaged compile-negative tests for
+  every state/block argument. This marker cannot establish data provenance.
+- Make availability selection a single private permit-boundary decision.
+  Regression tests preserve exact Prefer/Require dispositions without masking
+  kernel errors or quarantined startup health. Document non-reentrant use.
 
 See [the complete hosted contract](../docs/hosted-cpu-execution.md) for platform
 sources, usage, repeatable checks and limitations. The facade advances to

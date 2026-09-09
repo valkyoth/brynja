@@ -4272,6 +4272,7 @@ Deliverables:
 
 - Complete v0.24.32 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Complete hosted SHA-384/512, named /224 and /256 and general-t update/finalization APIs; keep derived IVs and distinct digest types exact.
+- Preserve explicit `PublicData` classification at ordinary raw-kernel call sites; never route hardened owners or HMAC/KDF secret-derived state through these non-erasing sessions. The marker records caller intent, not a cryptographic proof of public provenance.
 - Preserve consuming bit tails, checked length admission before mutation, partial-block buffering and required-route quarantine semantics.
 - Expose route reporting which distinguishes accelerated compression from portable padding/IV work; document accepted small-input behavior rather than advertising all work as SIMD.
 - Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.

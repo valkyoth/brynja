@@ -69,7 +69,7 @@
     "scripts/assurance/test-assurance.py": "990d1ba4afa6a3e8091bb2af871518939cf09184b0ab1046adeb4343fbba0bcc",
     "scripts/repository/check-unsafe-policy.py": "cfe34b3b904ef540a605b10460063487d871e33a389f0ef0079b96e475d23e10",
     "scripts/repository/test-unsafe-policy.py": "56b7bd95b73e6df10ca9c86be0bcbee08c3f0490fd59693bfcd9d9ee579a5c9a",
-    "scripts/repository/unsafe_policy.py": "cd8f5db8b3157840e24484645aeb6122564efac3e0065b1d3b046c288617359f",
+    "scripts/repository/unsafe_policy.py": "8c0ac3dfba24ec4c9962a91ce17c55853474be8188bb6f81c86e05d77541116c",
     "scripts/tag_gate.sh": "ef71c4b9a13e7501642e6e26915c79dec853fcc26c9d5d4c4433b33324afd96c",
     "scripts/zeroization/check-tag-miri.sh": "ab59ce664d4d3bcd0bfd8f802a3aed427806fce36d95110f1d5d7a310c7518f0",
     "scripts/zeroization/check-zeroization-codegen.sh": "aa1310d6366c248b2fad069d674aef2ac8a9ed297a16e2c40ca332d4c6acc8d9",

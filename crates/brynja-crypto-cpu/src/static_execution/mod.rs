@@ -10,6 +10,8 @@
 use core::{cell::Cell, marker::PhantomData};
 
 mod kernel;
+mod public_data;
+pub use public_data::PublicData;
 mod operations;
 pub use kernel::Kernel;
 
@@ -76,6 +78,10 @@ pub struct Report {
 /// fn require_clone<T: Clone>() {}
 /// require_clone::<Authority>();
 /// ```
+/// Operations are synchronous and invoke no caller callbacks. These owners
+/// are not signal-handler or async-reentrant interfaces; do not reenter an
+/// operation through a signal handler or hook. Sequential same-thread calls
+/// and explicit quarantine between calls are supported.
 pub struct Authority {
     kernel: Kernel,
     health: Cell<Health>,
@@ -174,21 +180,29 @@ impl Session<'_> {
     }
 
     /// Compresses one SHA-256 block. Errors preserve the complete state.
-    pub fn compress_sha256(&self, state: &mut [u32; 8], block: &[u8; 64]) -> Result<(), Error> {
+    pub fn compress_sha256(
+        &self,
+        state: PublicData<&mut [u32; 8]>,
+        block: PublicData<&[u8; 64]>,
+    ) -> Result<(), Error> {
         self.owner.check(self.generation)?;
-        operations::sha256(self.owner.kernel, state, block)
+        operations::sha256(self.owner.kernel, state.into_inner(), block.into_inner())
     }
 
     /// Compresses one SHA-512-family block. Errors preserve the complete state.
-    pub fn compress_sha512(&self, state: &mut [u64; 8], block: &[u8; 128]) -> Result<(), Error> {
+    pub fn compress_sha512(
+        &self,
+        state: PublicData<&mut [u64; 8]>,
+        block: PublicData<&[u8; 128]>,
+    ) -> Result<(), Error> {
         self.owner.check(self.generation)?;
-        operations::sha512(self.owner.kernel, state, block)
+        operations::sha512(self.owner.kernel, state.into_inner(), block.into_inner())
     }
 
     /// Permutes a complete `Keccak-f[1600]` state. Errors preserve every lane.
-    pub fn permute_keccak(&self, state: &mut [u64; 25]) -> Result<(), Error> {
+    pub fn permute_keccak(&self, state: PublicData<&mut [u64; 25]>) -> Result<(), Error> {
         self.owner.check(self.generation)?;
-        operations::keccak(self.owner.kernel, state)
+        operations::keccak(self.owner.kernel, state.into_inner())
     }
 }
 

@@ -114,6 +114,10 @@ def compiled_mutations(workspace, env):
         (owner, 'self.generation.get() != generation', 'false'),
         (owner, 'Health::Quarantined\n        });', 'Health::Healthy\n        });'),
         (host, 'mode == Mode::Prefer', 'mode == Mode::Require'),
+        (host, 'Err(error) => return Err(error),',
+         'Err(_) => (Route::PortableFallback(Unavailable::MissingFeaturesOrOsState), None),'),
+        (host, 'Err(Error::Unavailable(reason)) => (choose(mode, Err(reason))?, None),',
+         'Err(Error::Unavailable(reason)) => return Err(Error::Unavailable(reason)),'),
         (platform, 'if !architecture {', 'if false {'),
         (platform, 'if !features {', 'if false {'),
         (platform, 'if !migration {', 'if false {'),
@@ -148,9 +152,9 @@ def operational_mutations(workspace, env, extra):
     command = ['cargo', 'test', '--offline', '-p', HOST, '--features', 'runtime-execution',
                '--lib', *extra]
     original = owner.read_text()
-    for call in ('operations::sha256(self.owner.kernel, state, block)',
-                 'operations::sha512(self.owner.kernel, state, block)',
-                 'operations::keccak(self.owner.kernel, state)'):
+    for call in ('operations::sha256(self.owner.kernel, state.into_inner(), block.into_inner())',
+                 'operations::sha512(self.owner.kernel, state.into_inner(), block.into_inner())',
+                 'operations::keccak(self.owner.kernel, state.into_inner())'):
         if original.count(call) != 1:
             raise ValueError('stale operational no-op mutant')
         try:
@@ -196,6 +200,37 @@ fn injected_failed_kat_retains_quarantine_without_fallback() -> Result<(), Error
     print('Generic Arm execution rejects three operational no-ops and a KAT-entry bypass')
 
 
+def classification_negatives(consumer, env, extra):
+    """Real downstream type failures: each state AND block must be classified."""
+    manifest = consumer / 'Cargo.toml'
+    library = consumer / 'src/lib.rs'
+    old_manifest, old_library = manifest.read_text(), library.read_text()
+    # The extracted CPU package is already in patch.crates-io.
+    addition = f'{CPU} = {{ version = "=0.1.1", features = ["runtime-execution"] }}\n'
+    checks = [
+        'session.compress_sha256(&mut [0; 8], PublicData::new(&[0; 64]))',
+        'session.compress_sha256(PublicData::new(&mut [0; 8]), &[0; 64])',
+        'session.compress_sha512(&mut [0; 8], PublicData::new(&[0; 128]))',
+        'session.compress_sha512(PublicData::new(&mut [0; 8]), &[0; 128])',
+        'session.permute_keccak(&mut [0; 25])',
+    ]
+    try:
+        manifest.write_text(old_manifest.replace('[dependencies]\n', '[dependencies]\n' + addition))
+        for module in ('static_execution', 'runtime_execution'):
+            for call in checks:
+                library.write_text(f'''use brynja_crypto_cpu::{module}::{{Session, PublicData}};
+pub fn classification_probe(session: &Session<'_>) {{ let _ = {call}; }}
+''')
+                result = run(['cargo', 'check', '--lib', '--offline', *extra], consumer, env,
+                             success=False)
+                if 'error[E0308]' not in result.stderr or 'PublicData' not in result.stderr:
+                    raise ValueError('raw-data rejection failed for an unrelated reason')
+    finally:
+        manifest.write_text(old_manifest)
+        library.write_text(old_library)
+    print('Ten packaged raw-state/block classification bypasses rejected')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--write-review', action='store_true')
@@ -229,6 +264,7 @@ def main():
         print(result.stdout, end='')
         run(['cargo', 'clippy', '--offline', '--all-targets', *extra, '--',
              '-A', 'clippy::chunks_exact_to_as_chunks', '-D', 'warnings'], consumer, env)
+        classification_negatives(consumer, env, extra)
         if not args.qemu:
             compiled_mutations(workspace, env)
         else:

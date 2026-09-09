@@ -1,6 +1,60 @@
 use super::*;
 
 #[test]
+fn permit_boundary_failures_obey_mode_without_hiding_kernel_errors() -> Result<(), Error> {
+    use core::cell::Cell;
+    let calls = Cell::new(0);
+    for mode in [Mode::Portable, Mode::Prefer, Mode::Require] {
+        for reason in [
+            Unavailable::WrongArchitecture,
+            Unavailable::MissingFeaturesOrOsState,
+            Unavailable::MissingMigrationGuarantee,
+        ] {
+            calls.set(0);
+            let result = Authority::select(Kernel::ArmSha256, mode, || {
+                calls.set(calls.get() + 1);
+                Err(Error::Unavailable(reason))
+            });
+            assert_eq!(calls.get(), usize::from(mode != Mode::Portable));
+            match mode {
+                Mode::Portable => assert_eq!(result?.report().route, Route::PortableRequested),
+                Mode::Prefer => {
+                    let owner = result?;
+                    assert_eq!(owner.report().route, Route::PortableFallback(reason));
+                    assert_eq!(owner.report().health, None);
+                    assert!(owner.session()?.is_none());
+                }
+                Mode::Require => {
+                    assert!(matches!(result, Err(Error::Unavailable(r)) if r == reason))
+                }
+            }
+        }
+        for error in [
+            KernelError::WrongArchitecture,
+            KernelError::MissingTargetFeatures,
+            KernelError::WrongOperation,
+            KernelError::NotReady,
+            KernelError::Quarantined,
+            KernelError::StaleGeneration,
+        ] {
+            calls.set(0);
+            let result = Authority::select(Kernel::ArmSha256, mode, || {
+                calls.set(calls.get() + 1);
+                Err(Error::Kernel(error))
+            });
+            if mode == Mode::Portable {
+                assert_eq!(calls.get(), 0);
+                assert_eq!(result?.report().route, Route::PortableRequested);
+            } else {
+                assert_eq!(calls.get(), 1);
+                assert!(matches!(result, Err(Error::Kernel(e)) if e == error));
+            }
+        }
+    }
+    Ok(())
+}
+
+#[test]
 fn mode_matrix_is_explicit_and_fail_closed() {
     for reason in [
         Unavailable::WrongArchitecture,
@@ -66,7 +120,7 @@ fn real_platform_selection_and_direct_operations() -> Result<(), Error> {
                 assert_eq!(owner.report().health, Some(Health::Quarantined));
                 let mut untouched = [19; 25];
                 assert_eq!(
-                    session.permute_keccak(&mut untouched),
+                    session.permute_keccak(PublicData::new(&mut untouched)),
                     Err(KernelError::Quarantined)
                 );
                 assert_eq!(untouched, [19; 25]);
@@ -124,7 +178,7 @@ fn exercise(session: &Session<'_>, kernel: Kernel) -> Result<(), Error> {
             block[..4].copy_from_slice(&[b'a', b'b', b'c', 0x80]);
             block[63] = 24;
             session
-                .compress_sha256(&mut state, &block)
+                .compress_sha256(PublicData::new(&mut state), PublicData::new(&block))
                 .map_err(Error::Kernel)?;
             assert_eq!(
                 state,
@@ -155,7 +209,7 @@ fn exercise(session: &Session<'_>, kernel: Kernel) -> Result<(), Error> {
             block[..4].copy_from_slice(&[b'a', b'b', b'c', 0x80]);
             block[127] = 24;
             session
-                .compress_sha512(&mut state, &block)
+                .compress_sha512(PublicData::new(&mut state), PublicData::new(&block))
                 .map_err(Error::Kernel)?;
             assert_eq!(
                 state,
@@ -173,7 +227,9 @@ fn exercise(session: &Session<'_>, kernel: Kernel) -> Result<(), Error> {
         }
         Kernel::ArmKeccak | Kernel::X86Keccak => {
             let mut state = [0; 25];
-            session.permute_keccak(&mut state).map_err(Error::Kernel)?;
+            session
+                .permute_keccak(PublicData::new(&mut state))
+                .map_err(Error::Kernel)?;
             assert_eq!(state[0], 0xf125_8f79_40e1_dde7);
             assert_eq!(state[24], 0xeaf1_ff7b_5cec_a249);
         }
@@ -182,7 +238,7 @@ fn exercise(session: &Session<'_>, kernel: Kernel) -> Result<(), Error> {
     let mut state = [31; 8];
     if kernel != Kernel::ArmSha512 {
         assert_eq!(
-            session.compress_sha512(&mut state, &[0; 128]),
+            session.compress_sha512(PublicData::new(&mut state), PublicData::new(&[0; 128])),
             Err(KernelError::WrongOperation)
         );
         assert_eq!(state, [31; 8]);

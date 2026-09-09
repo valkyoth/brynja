@@ -3,7 +3,7 @@
 
 #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 use super::features::Features;
-use super::{Kernel, KernelAuthority, KernelError, Unavailable};
+use super::{Error, Kernel, KernelAuthority, Unavailable};
 
 pub(super) fn availability(kernel: Kernel) -> Result<(), Unavailable> {
     let (architecture, features) = detected(kernel);
@@ -65,17 +65,17 @@ fn detected(kernel: Kernel) -> (bool, bool) {
     (false, false)
 }
 
-pub(super) fn construct(kernel: Kernel) -> Result<KernelAuthority, KernelError> {
-    // Recheck the private platform predicate at the actual permit boundary;
+pub(super) fn construct(kernel: Kernel) -> Result<KernelAuthority, Error> {
+    // The single availability decision is made at the actual permit boundary;
     // neither a diagnostic report nor choose() can authorize instructions.
-    availability(kernel).map_err(|_| KernelError::MissingTargetFeatures)?;
+    availability(kernel).map_err(Error::Unavailable)?;
     // SAFETY: Only the allowlisted AArch64 system-feature APIs plus the complete
     // Rust feature bundle pass availability(). Their OS ABI supplies the common
     // schedulable-CPU baseline and register-state support, including hotplug.
     // A conforming OS/hypervisor must preserve that process ABI on VM migration.
     // CPUID-only x86, unknown/BSD platforms and missing features cannot pass.
     // See docs/hosted-cpu-execution.md for the audited standard-library sources.
-    unsafe { KernelAuthority::from_platform(kernel) }
+    unsafe { KernelAuthority::from_platform(kernel) }.map_err(Error::Kernel)
 }
 
 #[cfg(test)]
@@ -107,10 +107,10 @@ mod tests {
     #[test]
     fn unavailable_platform_cannot_construct_even_through_private_entry() {
         for kernel in Kernel::ALL {
-            if availability(kernel).is_err() {
+            if let Err(reason) = availability(kernel) {
                 assert!(matches!(
                     construct(kernel),
-                    Err(KernelError::MissingTargetFeatures)
+                    Err(Error::Unavailable(actual)) if actual == reason
                 ));
             }
         }

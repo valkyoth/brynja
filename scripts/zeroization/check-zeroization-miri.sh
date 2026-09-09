@@ -8,7 +8,7 @@ run_miri() {
     CARGO_HOME="$miri_cache/cargo" \
         CARGO_TARGET_DIR="$miri_cache/target" \
         XDG_CACHE_HOME="$miri_cache" \
-        cargo +nightly-2026-09-08 miri test \
+        cargo +nightly-2026-09-09 miri test \
         --target x86_64-unknown-linux-gnu "$@"
 }
 
@@ -163,7 +163,16 @@ full_acceleration() {
     run_miri --manifest-path assurance/acceleration-contract/Cargo.toml --lib
 }
 
-all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy acceleration)
+quick_static_cpu() {
+    run_miri -p brynja-crypto-cpu --features static-execution --lib static_authority_failed_startup
+}
+
+full_static_cpu() {
+    run_miri -p brynja-crypto-cpu --features static-execution --lib static_authority
+    run_miri --manifest-path assurance/static-cpu-execution/Cargo.toml --lib
+}
+
+all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy acceleration static_cpu)
 mode="${1:---full}"
 shift || true
 

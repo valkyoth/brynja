@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import copy
+import cpu_workspace_fixtures
 import md5_workspace_fixtures
 import json
 import subprocess
@@ -274,35 +275,7 @@ def test_dependency_contracts(baseline: dict) -> None:
 
 
 def test_feature_contracts(baseline: dict) -> None:
-    modern_feature = copy.deepcopy(baseline)
-    package(modern_feature, "brynja")["features"]["legacy-ssl2"] = [
-        "dep:brynja-legacy-ssl2"
-    ]
-    require_rejection(
-        modern_feature,
-        "all-features",
-        "feature policy differs",
-        "legacy feature smuggling through the modern facade",
-    )
-
-    default_feature = copy.deepcopy(baseline)
-    package(default_feature, "brynja")["features"]["default"] = ["dtls"]
-    require_rejection(
-        default_feature,
-        "all-features",
-        "feature policy differs",
-        "a non-empty default feature",
-    )
-
-    missing_conformance_gate = copy.deepcopy(baseline)
-    features = package(missing_conformance_gate, "brynja-mac-kmac")["features"]
-    del features["conformance-testing"]
-    require_rejection(
-        missing_conformance_gate,
-        "all-features",
-        "feature policy differs",
-        "missing KMAC conformance feature gate",
-    )
+    cpu_workspace_fixtures.check(baseline, package, require_rejection)
 
 
 def test_resolved_isolation(all_features: dict, no_default: dict) -> None:
@@ -492,7 +465,7 @@ def main() -> int:
                 f"{legacy} smuggled into {modern}",
             )
     reject_invalid_and_exhausted(all_features)
-    print("workspace policy rejects 44 package-class, external-admission, and feature-graph regressions")
+    print("workspace policy rejects 46 package-class, external-admission, and feature-graph regressions")
     return 0
 
 

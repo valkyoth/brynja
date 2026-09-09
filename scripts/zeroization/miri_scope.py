@@ -12,7 +12,7 @@ import scope_inputs
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GROUPS = ("core", "sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "acceleration")
+GROUPS = ("core", "sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "acceleration", "static_cpu")
 FULL_EXACT = {
     "Cargo.lock",
     "Cargo.toml",
@@ -23,6 +23,7 @@ FULL_EXACT = {
 }
 FULL_PREFIXES = ("scripts/zeroization/", ".cargo/")
 GROUP_PREFIXES = {
+    "static_cpu": ("assurance/static-cpu-execution/", "crates/brynja-crypto-cpu/src/static_execution/"),
     "acceleration": ("assurance/acceleration-contract/",),
     "core": ("crates/brynja-core/",),
     "sanitization": (
@@ -67,6 +68,9 @@ GROUP_PREFIXES = {
     ),
 }
 DOWNSTREAM = {
+    # Static authority currently has no high-level hash consumer. Other CPU
+    # source/manifest edits remain unclassified and conservatively select all.
+    "static_cpu": set(),
     "acceleration": set(),
     "core": {"sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy"},
     "sanitization": set(),

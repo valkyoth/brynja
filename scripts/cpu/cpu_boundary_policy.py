@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "81a39466da6c1509c974d974586465c1ecb73019907b0bf14733a47d7fca66ec"
+EXPECTED_POLICY_SHA256 = "7bafe8180441b934247c7c2401f03378370fa29eb84d0f01dc27cc77683924ca"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,10 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/static_execution/mod.rs"): "ordinary-static-authority",
+    (CPU, "src/static_execution/kernel.rs"): "complete-static-feature-bundles",
+    (CPU, "src/static_execution/operations.rs"): "static-kat-and-operation-routing",
+    (CPU, "src/static_execution/tests.rs"): "static-authority-tests",
     (CPU, "src/lib.rs"): "boundary-only",
     (CPU, "src/sha256.rs"): "safe-session-and-attestation-boundary",
     (CPU, "src/sha256_schedule.rs"): "portable-message-schedule",
@@ -218,7 +222,7 @@ def validate_packages(root: Path) -> None:
     cpu = manifest(root, CPU)
     detector = manifest(root, DETECTOR)
     sha2 = manifest(root, SHA2)
-    if cpu.get("features") != {"default": []} or cpu.get("dependencies"):
+    if cpu.get("features") != {"default": [], "static-execution": []} or cpu.get("dependencies"):
         fail("no_std CPU package must retain zero dependencies")
     if detector.get("features") != {"default": []}:
         fail("host detector default feature set drifted")
@@ -269,7 +273,7 @@ def validate_sources(root: Path, policy: dict) -> None:
     actual = {
         (name, str(path.relative_to(root / "crates" / name)))
         for name in (CPU, DETECTOR)
-        for path in (root / "crates" / name / "src").glob("*.rs")
+        for path in (root / "crates" / name / "src").rglob("*.rs")
     }
     if actual != set(SOURCE_STATUS):
         fail("unreviewed source entered CPU packages")

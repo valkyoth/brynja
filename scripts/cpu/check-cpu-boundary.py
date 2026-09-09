@@ -8,4 +8,4 @@ import cpu_boundary_policy
 
 if __name__ == "__main__":
     cpu_boundary_policy.validate(Path("."))
-    print("CPU boundary implements five SHA-2 and two Keccak candidates, records x86 SHA-512 and RISC-V Keccak scalar-only, and admits zero pending native evidence")
+    print("Original CPU candidate dispatch: seven kernels, zero admissions; opt-in raw static authority is checked separately")

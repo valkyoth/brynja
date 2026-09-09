@@ -60,14 +60,14 @@ def semantic_tests():
     assert inputs.verifier_only(a, a.replace(b'old', b'new'))
     assert not inputs.verifier_only(a, a.replace(b'miri', b'kani'))
     runner = (scope.ROOT / 'scripts/zeroization/check-zeroization-miri.sh').read_bytes()
-    assert b'nightly-2026-09-08' in runner
-    assert inputs.runner_groups(runner, runner.replace(b'nightly-2026-09-08', b'nightly-2026-09-09')) == set()
+    assert b'nightly-2026-09-09' in runner
+    assert inputs.runner_groups(runner, runner.replace(b'nightly-2026-09-09', b'nightly-2026-09-10')) == set()
     assert inputs.runner_groups(runner, runner.replace(b'quick_md5() {', b'quick_md5() {\n    # reviewed smoke')) == set()
     assert inputs.runner_groups(runner, runner.replace(b'full_md5() {', b'full_md5() {\n    # reviewed full')) == {'md5'}
     # Adding the registered model leaves all existing full campaign bodies intact.
     start = runner.index(b'quick_acceleration() {')
-    end = runner.index(b'all_groups=', start)
-    previous = (runner[:start] + runner[end:]).replace(b'legacy acceleration)', b'legacy)')
+    end = runner.index(b'quick_static_cpu()', start)
+    previous = (runner[:start] + runner[end:]).replace(b'legacy acceleration static_cpu)', b'legacy static_cpu)')
     assert inputs.runner_groups(previous, runner) == {'acceleration'}
     rejected(lambda: inputs.runner_groups(runner, previous))
     rejected(lambda: inputs.runner_groups(runner, runner.replace(b'run_miri() {', b'run_miri() {\n    false')))

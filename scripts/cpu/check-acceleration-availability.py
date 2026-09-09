@@ -11,7 +11,7 @@ def main() -> int:
     if args.write_review:
         contract.write_review()
     contract.validate()
-    print("Acceleration availability contract: PASS; 11 kernels, 29 identities, zero activations")
+    print("Acceleration availability contract: PASS; 11 kernels, 29 identities, zero high-level family activations")
     return 0
 
 

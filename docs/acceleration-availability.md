@@ -1,9 +1,11 @@
 # Opt-in acceleration availability contract
 
-Status: v0.24.30 contract only. **No backend becomes operational in this version.**
-The portable implementations and historical evidence remain unchanged. Actual
-static authority starts at v0.24.31, hosted selection at v0.24.32, and per-family
-activation/acceptance follows the [release plan](RELEASE_PLAN.md).
+Status: the v0.24.30 contract remains the normative family-integration model.
+The v0.24.31 [static authority API](static-cpu-execution.md) now implements
+ordinary low-level execution for five modern kernels under a specialized
+executable contract. The inventory's existing operational flags describe
+high-level family activation, not this new raw authority surface. Hosted
+selection starts at v0.24.32; family activation follows the release plan.
 
 ## Independent status axes
 
@@ -62,7 +64,8 @@ cannot satisfy an operational acceleration promise.
 - Modern facade features must never admit legacy crates. Legacy SHA-1 and MD5
   retain separate explicit package selection and collision-weakness warnings.
 - Operational APIs must compile and execute from normal extracted packages,
-  without repository evidence cfgs. Present candidate APIs do not meet that gate.
+  without repository evidence cfgs. The new raw static API meets this package
+  gate; the original high-level candidate APIs still do not.
 - Hardened ownership is sealed, affine and mandatory, with equivalent cleanup
   for lanes, temporaries, metadata, outputs and every lifecycle exit. Ordinary
   acceleration does not approve hardened execution. Unsupported hardened routes

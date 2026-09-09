@@ -4176,7 +4176,7 @@ Exit criteria:
 
 ### v0.24.30 - Opt-In Acceleration Availability Contract
 
-Status: awaiting green CI
+Status: released
 
 Implementation: [availability contract](acceleration-availability.md), exact
 kernel/family inventory and dependency-free executable selection model. This
@@ -4208,7 +4208,7 @@ Exit criteria:
 
 ### v0.24.31 - Static CPU Execution Authority
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement no_std static execution authority for reviewed backends using complete compiler target-feature bundles, real startup KATs, health generations and fail-closed session construction; distinguish software readiness from independent review and FIPS status.
 

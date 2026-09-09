@@ -81,7 +81,7 @@ def main() -> int:
     expect(
         ["crates/brynja-core/src/secret_memory.rs"],
         full=False,
-        groups=tuple(group for group in miri_scope.GROUPS if group != "acceleration"),
+        groups=tuple(group for group in miri_scope.GROUPS if group not in ("acceleration", "static_cpu")),
     )
     expect(
         ["crates/brynja-sanitization/src/lib.rs"],
@@ -93,6 +93,9 @@ def main() -> int:
     expect(["assurance/legacy-hash-public-api/src/lib.rs"], full=False, groups=("legacy",))
     expect(["assurance/legacy-hash-final/src/lib.rs"], full=False, groups=("legacy",))
     expect(["assurance/acceleration-contract/src/lib.rs"], full=False, groups=("acceleration",))
+    expect(["assurance/static-cpu-execution/src/lib.rs"], full=False, groups=("static_cpu",))
+    expect(["crates/brynja-crypto-cpu/src/static_execution/mod.rs"], full=False, groups=("static_cpu",))
+    expect(["crates/brynja-crypto-cpu/src/x86_sha.rs"], full=True, groups=miri_scope.GROUPS)
     expect(["crates/unknown/src/lib.rs"], full=True, groups=miri_scope.GROUPS)
     expect(["Cargo.lock"], full=True, groups=miri_scope.GROUPS)
     expect(
@@ -103,10 +106,10 @@ def main() -> int:
     expect(["../escape"], full=True, groups=miri_scope.GROUPS)
 
     status, commands = run_profile("--focused")
-    assert status == 0 and len(commands) == 11
+    assert status == 0 and len(commands) == 12
     assert sum('public_model_never_activates_current_kernels' in c for c in commands) == 1
     status, focused = run_profile("--focused", "acceleration")
-    assert status == 0 and len(focused) == 11
+    assert status == 0 and len(focused) == 12
     assert sum(c.endswith('assurance/acceleration-contract/Cargo.toml --lib') for c in focused) == 1
     assert not any('public_model_never_activates_current_kernels' in c for c in focused)
     assert [c for c in commands if 'acceleration-contract' not in c] == [
@@ -116,7 +119,7 @@ def main() -> int:
     status, commands = run_profile(
         "--focused", "sha3", "kmac", "tuplehash", "parallelhash"
     )
-    assert status == 0 and len(commands) == 20
+    assert status == 0 and len(commands) == 21
     assert sum("-p brynja-hash-sha3" in command for command in commands) == 9
     assert sum("-p brynja-mac-kmac" in command for command in commands) == 1
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
@@ -129,7 +132,11 @@ def main() -> int:
     assert sum("assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands) == 1
     assert all("brynja-hash-sha2" in c or "assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 41
+    assert status == 0 and len(commands) == 43
+    assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1
+    assert sum(c.endswith('assurance/static-cpu-execution/Cargo.toml --lib') for c in commands) == 1
+    status, static_commands = run_profile('--group', 'static_cpu')
+    assert status == 0 and len(static_commands) == 2
     assert sum(c.endswith('assurance/acceleration-contract/Cargo.toml --lib') for c in commands) == 1
     assert sum('assurance/legacy-hash-final/Cargo.toml --no-default-features --lib dynamic_' in c for c in commands) == 1
     assert sum('quarantined_model_clears_all_regions_without_instructions' in c for c in commands) == 1

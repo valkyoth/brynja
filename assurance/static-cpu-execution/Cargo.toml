@@ -1,0 +1,19 @@
+[workspace]
+
+[package]
+name = "brynja-static-cpu-execution-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", version = "=0.1.1", default-features = false, features = ["static-execution"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+unwrap_used = "forbid"
+expect_used = "forbid"

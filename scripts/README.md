@@ -35,6 +35,13 @@ kernel/family inventory. Its companion tests compile selection-model mutants;
 they do not execute or authorize CPU kernels. See the
 [availability contract](../docs/acceleration-availability.md).
 
+`cpu/check-static-execution.py` tests the opt-in raw static authority from
+normal extracted packages, including default-off imports and compiled failure
+mutants. `--native-x86` requires the operator to confirm the SHA/AVX2 platform
+contract; `--qemu` adds supplemental Arm execution. See the
+[static execution contract](../docs/static-cpu-execution.md). The dedicated
+Miri group is `scripts/zeroization/check-zeroization-miri.sh --group static_cpu`.
+
 | Directory | Ownership |
 | --- | --- |
 | `assurance/` | Shared bounded runners, mutation and differential harnesses, bare-metal checks, and Kani orchestration |
@@ -99,8 +106,9 @@ full suite. Every public stage that can publish to crates.io always runs all
 groups. See [focused assurance](../docs/focused-assurance.md) for exact rules.
 
 The current groups are `core`, `sanitization`, `sha2`, `sha3`, `kmac`,
-`tuplehash`, `parallelhash`, `sha1`, `md5`, `legacy`, and `acceleration`
-(the isolated, dependency-free acceleration contract model).
+`tuplehash`, `parallelhash`, `sha1`, `md5`, `legacy`, `acceleration`
+(the isolated, dependency-free contract model), and `static_cpu`
+(the raw static authority lifecycle and downstream fixture).
 `zeroization/check-zeroization-miri.sh --group GROUP` is a shard entry point so
 the groups can later run concurrently on isolated headless workers. Shard
 results are not yet accepted by the tag gate: a future aggregator must bind

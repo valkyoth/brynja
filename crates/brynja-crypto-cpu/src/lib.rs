@@ -8,6 +8,9 @@
 
 #![no_std]
 
+#[cfg(feature = "static-execution")]
+pub mod static_execution;
+
 mod keccak;
 mod keccak_constants;
 mod sha256;

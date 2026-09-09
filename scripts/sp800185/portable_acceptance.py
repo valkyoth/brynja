@@ -109,7 +109,7 @@ def validate(root: Path = ROOT, check_hashes: bool = True) -> None:
     dependencies = manifest.get("dependencies", {})
     if set(dependencies) != expected_dependencies:
         fail("portable fixture dependency closure changed")
-    if dependencies["brynja"].get("version") != "=0.24.30":
+    if dependencies["brynja"].get("version") != "=0.24.31":
         fail("portable fixture main-facade version changed")
     if dependencies["brynja-mac-kmac"].get("features") != ["conformance-testing"]:
         fail("portable fixture lost exact KMAC conformance coverage")
@@ -175,8 +175,9 @@ def validate(root: Path = ROOT, check_hashes: bool = True) -> None:
         require(report, token, "portable runnable report")
     for relative in (Path("README.md"), Path("crates/brynja/README.md")):
         require(loaded[relative], "SP 800-185 family | ✅ Fully implemented", "public status")
-        require(loaded[relative], "portable acceptance passed at v0.24.16", "public status")
-        require(loaded[relative], "final acceptance passed at v0.24.17", "public status")
+        rows = [line for line in loaded[relative].splitlines() if line.startswith("| SP 800-185 family |")]
+        if len(rows) != 1 or not rows[0].endswith("| ❌ Not independently verified |"):
+            fail("SP 800-185 row must retain its own independent-review limitation")
     require(
         loaded[Path("docs/RELEASE_PLAN.md")],
         "### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance\n\nStatus: released",

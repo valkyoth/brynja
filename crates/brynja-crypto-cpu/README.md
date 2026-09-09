@@ -34,15 +34,39 @@ x86_64 AVX2 and AArch64 SHA3 Keccak-f[1600] candidates for later SHA-3/SHAKE
 dispatch. Portable hash crates continue to own public streaming state,
 padding, length accounting, finalization, and scalar fallback.
 
-All seven candidates are deliberately unadmitted while commit-bound native
+The old session/detection routes remain unadmitted while their complete native
 evidence is incomplete. x86_64 SHA-512 is a reviewed scalar-only decision;
 RISC-V Keccak is also scalar-only because the pinned ratified authorities have
 no qualifying Keccak instruction route. AVX2, SHA3, or AVX-512 availability
-alone does not authorize a backend. Ordinary construction therefore cannot execute
-any kernel: static selection returns `None`, runtime-attested construction
+alone does not authorize a backend. Construction through those old APIs cannot execute
+any kernel: their static selection returns `None`, runtime-attested construction
 returns `NotAdmitted`, opportunistic host use falls back to scalar, and
 required acceleration fails closed. Evidence builds can directly exercise a
 candidate only through the repository-only `brynja_cpu_evidence` configuration.
+
+## Explicit Static Execution
+
+The new default-off `static-execution` feature exposes
+`static_execution::{Authority, Kernel, Session}` for ordinary public-data
+compression/permutation. It does not change existing hash constructors or
+hosted detection. The unpublished implementation candidate supports x86 SHA-256,
+AVX2 Keccak and Arm SHA-256/SHA-512/SHA3 Keccak; exceptional pentest is pending.
+
+Every constructor requires the complete compiler target-feature bundle before
+running the actual kernel KAT. A quarantined owner cannot issue sessions.
+Sessions borrow the owner and generation; quarantine revokes all siblings and
+all operation errors preserve caller state. No clone/reset or safe boolean
+attestation can create authority. Reports are diagnostics only.
+
+The executable must run exclusively on compatible CPUs with required OS
+register state, including migration and virtualization. Static compilation is
+not runtime detection; `!Send`/`!Sync` is not migration protection. This API
+does not clean secret schedules or input: do not use it for keys, passwords,
+HMAC or other confidential state. Hardened, hosted and family-level APIs are
+separate upcoming work. RISC-V and legacy kernels are not activated here.
+
+See the [static execution guide](https://github.com/valkyoth/brynja/blob/main/docs/static-cpu-execution.md)
+for exact bundles, error behavior, deployment limits and examples.
 
 The registered RISC-V host lacks `Zknh`, `Zvknha`, and `Zvknhb`. The RV64
 candidate is therefore QEMU/codegen-only until qualifying real hardware is
@@ -51,11 +75,11 @@ The host remains useful for native scalar and exact-feature tests it really
 supports, and a post-v1.0.0 community campaign will seek broader hardware
 coverage without treating submitted observations as backend admission.
 
-Every backend session is caller-owned and thread-bound. Construction checks
-the architecture, runs a direct `abc` known-answer test, reports its exact
-backend and health generation, and permanently quarantines that session after
-a bad answer. The safe compression surfaces accept exactly one 64-byte or
-128-byte block.
+Execution authority is caller-owned and thread-bound. Successful construction
+requires the relevant preconditions and a direct known-answer test: `abc` for
+SHA compression, or the full zero-state permutation for Keccak. A bad answer
+quarantines that owner. Compression accepts exactly one 64-byte or 128-byte
+block; Keccak accepts exactly 25 lanes.
 The package does not detect CPU features, allocate, perform I/O, use foreign
 code or external assembly, own a global registry, promise register erasure, or
 claim FIPS validation. The RV64 candidates contain six separately approved
@@ -72,6 +96,7 @@ pentesting do not by themselves constitute independent verification.
 
 | Component | Cryptographic scope | Independently verified |
 | --- | --- | --- |
+| Explicit static authority | Five ordinary kernels under complete compiler/platform contract; candidate pending pentest | ❌ Not independently verified; not FIPS validated |
 | x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |
 | AArch64 SHA-256 candidate | NEON/SHA2 compression | ❌ Implemented but unadmitted and not independently verified |
 | RV64 SHA-256 candidate | Zknh scalar-crypto compression | ❌ Implemented but unadmitted and not independently verified |

@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+static-execution = []
 
 [lints]
 workspace = true

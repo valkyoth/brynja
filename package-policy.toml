@@ -80,6 +80,7 @@ class = "cpu-backend"
 publish = "crates-io"
 required = []
 optional = {}
+features = ["static-execution"]
 
 [packages.brynja-crypto-cpu-std]
 class = "host-adapter"

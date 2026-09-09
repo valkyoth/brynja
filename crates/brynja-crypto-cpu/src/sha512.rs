@@ -225,7 +225,7 @@ fn compress_direct(
     Err(Sha512BackendError::WrongArchitecture)
 }
 
-const fn initial_state() -> [u64; 8] {
+pub(crate) const fn initial_state() -> [u64; 8] {
     [
         0x6a09_e667_f3bc_c908,
         0xbb67_ae85_84ca_a73b,
@@ -238,7 +238,7 @@ const fn initial_state() -> [u64; 8] {
     ]
 }
 
-const fn abc_digest_state() -> [u64; 8] {
+pub(crate) const fn abc_digest_state() -> [u64; 8] {
     [
         0xddaf_35a1_9361_7aba,
         0xcc41_7349_ae20_4131,
@@ -251,7 +251,7 @@ const fn abc_digest_state() -> [u64; 8] {
     ]
 }
 
-const fn abc_block() -> [u8; 128] {
+pub(crate) const fn abc_block() -> [u8; 128] {
     let mut block = [0_u8; 128];
     block[0] = b'a';
     block[1] = b'b';

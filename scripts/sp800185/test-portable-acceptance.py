@@ -142,9 +142,9 @@ def main() -> int:
             "let plan = ParallelHash128Plan::new",
         ),
         (fixture / "src/main.rs", "independently verified: NO", "independently verified: YES"),
-        (Path("README.md"), "portable acceptance passed at v0.24.16", "portable acceptance pending"),
+        (Path("README.md"), "`brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified", "`brynja-hash-tuple`, `brynja-hash-parallel` | ✅ Independently verified"),
         (Path("README.md"), "SP 800-185 family | ✅ Fully implemented", "SP 800-185 family | 🚧 In progress"),
-        (Path("crates/brynja/README.md"), "final acceptance passed at v0.24.17", "final acceptance pending"),
+        (Path("crates/brynja/README.md"), "SP 800-185 family | ✅ Fully implemented", "SP 800-185 family | 🚧 In progress"),
         (
             Path("docs/RELEASE_PLAN.md"),
             "### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance\n\nStatus: released",

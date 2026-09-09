@@ -4,6 +4,9 @@ milestone = "0.24.4"
 status = "sha2-and-keccak-candidates-with-scalar-decisions"
 
 [limits]
+# These counts govern the original candidate/session dispatch paths. The
+# default-off raw static_execution API has its own reviewed source closure in
+# static-cpu-execution-reviewed.json and does not alter these old admissions.
 maximum_source_lines = 500
 implemented_backend_count = 7
 active_backend_count = 0
@@ -145,13 +148,13 @@ sha256 = "7fc48e128bbc57fff4f81c59818aa26c6b8ed54a94a84a18a2307958bcaf8046"
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "695c9df5a48c416da4c6a2605157bccd0d0a6d0c41f6b8d66df1359400223d15"
+sha256 = "4b3227de8aa53dfea7b9e4c67b3b69261b62cd93db9d4dd92bd78d97e7ea0e8b"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/sha256.rs"
 status = "safe-session-and-attestation-boundary"
-sha256 = "f2a3232d2eb204192e181bd4f526730b744fef175b24892d1018211c4682e1cc"
+sha256 = "31e899058bbb2b2c5d5e43908fcf5a5e61862fa2f3f5a5df73eb1e6f1c63dd44"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -163,7 +166,7 @@ sha256 = "4737d9abde63ca18911dbaf514f28b4995af115586e608c0e66b998d28b1dc3c"
 package = "brynja-crypto-cpu"
 path = "src/sha512.rs"
 status = "static-session-and-kat-boundary"
-sha256 = "8f694ee692fd36f9db66d808c4e9ac5de35983381d31c262c7a03d7f8120372a"
+sha256 = "5bf3bc62b69c41661cd0482e9644a2293460a38c70bd95d1bff75f4f4cdb412a"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -373,3 +376,27 @@ sha256 = "absent"
 low_level_allowed = false
 instructions = []
 abi_preconditions = ["riscv64", "no-ratified-keccak-instruction-in-pinned-authorities"]
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/static_execution/mod.rs"
+status = "ordinary-static-authority"
+sha256 = "549adb47dd19118d9456d7aac24316107c935f9d47cadd9545735eb13383096c"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/static_execution/kernel.rs"
+status = "complete-static-feature-bundles"
+sha256 = "699932c8474d316478d190bb6ea0fd88f4462e1a5bac1062e7cc2e5a83013f0a"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/static_execution/operations.rs"
+status = "static-kat-and-operation-routing"
+sha256 = "fc937974058fd6212e04f4eb1064100737d695645595f029553f495ac908d30c"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/static_execution/tests.rs"
+status = "static-authority-tests"
+sha256 = "537b6cde0e8672c2262bcd1d985845e87b59e61755f079cfdff3c47f31cececd"

@@ -22,7 +22,7 @@ ALLOWED = {
         1,
     ),
     Path("crates/brynja-crypto-cpu/src/sha256.rs"): (
-        "f2a3232d2eb204192e181bd4f526730b744fef175b24892d1018211c4682e1cc", 0, 2, 0,
+        "31e899058bbb2b2c5d5e43908fcf5a5e61862fa2f3f5a5df73eb1e6f1c63dd44", 0, 2, 0,
     ),
     Path("crates/brynja-crypto-cpu/src/x86_sha.rs"): (
         "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28", 2, 1, 2,

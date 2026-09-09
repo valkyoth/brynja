@@ -65,13 +65,19 @@ report -> green GitHub/CodeQL -> owner-approved signed tag flow are unchanged.
 
 The v0.24.30 dependency-free acceleration contract has its own `acceleration`
 group. Its complete selection/quarantine model runs under Miri when changed;
-the ten unchanged groups run their existing smoke cases. Both baseline and
+the unchanged groups run their existing smoke cases. Both baseline and
 candidate manifest/lockfile must confirm the unpublished, dependency-free
 fixture identity. A new dependency (including target-specific or development
 dependencies), malformed graph, or missing manifest/lockfile forces full
 coverage until its impact is reviewed. Public checkpoints include this group
 in the complete suite. Registering this fixture does not admit a CPU backend
 or treat historical cryptographic evidence as a new execution.
+
+The `static_cpu` group covers the raw static execution-authority module and
+its normal downstream fixture. Miri checks non-instruction lifecycle behavior;
+native/QEMU package runs separately exercise actual kernels. Changes elsewhere
+in the shared CPU crate remain conservatively unclassified and select full
+coverage until a reviewed consumer-dependency classification is available.
 
 Inspect and test selection without launching Miri:
 

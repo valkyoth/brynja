@@ -31,7 +31,7 @@ def fixture(root: Path) -> None:
     for manifest in sorted((ROOT / "crates").glob("*/Cargo.toml")):
         copy_file(root, manifest.relative_to(ROOT))
     for package in (policy.CPU, policy.DETECTOR):
-        for source in sorted((ROOT / "crates" / package / "src").glob("*.rs")):
+        for source in sorted((ROOT / "crates" / package / "src").rglob("*.rs")):
             copy_file(root, source.relative_to(ROOT))
 
 

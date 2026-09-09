@@ -1,0 +1,30 @@
+{
+  "milestone": "0.24.31",
+  "sha256": {
+    "assurance/static-cpu-execution/Cargo.lock": "cc154cd6722528445f1b30637d1ac967bac2730abea9eaca8fbd1fcf3f6fe24f",
+    "assurance/static-cpu-execution/Cargo.toml": "32fa1023273547186cc8b4fb883e1f9953a86ef0454c9b742d75979abaf1440c",
+    "assurance/static-cpu-execution/src/lib.rs": "50a3a05b0a92d8e0399822f975947a76c152c1b4fd27151cf9d578a7a4549c11",
+    "crates/brynja-crypto-cpu/Cargo.toml": "48ca59c57d8b33bf1c375b0ad2f02acbc17ed59195187e174e70d546bfea3c27",
+    "crates/brynja-crypto-cpu/src/aarch64_sha2.rs": "b2c38b0d8fa13e3010fa3a0f85753505d8e994c00327da1bdf8651fd6f5e3353",
+    "crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs": "7fafd5d7d568bd13c7c77ffbedc2d053cd41f1e0ce0cefb7161fb5efc455089d",
+    "crates/brynja-crypto-cpu/src/keccak.rs": "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a",
+    "crates/brynja-crypto-cpu/src/keccak_constants.rs": "a1c1eb54418629305e71fe458d70b6e0ebb3e4fded9d60f898bc0fd09db2fc14",
+    "crates/brynja-crypto-cpu/src/lib.rs": "4b3227de8aa53dfea7b9e4c67b3b69261b62cd93db9d4dd92bd78d97e7ea0e8b",
+    "crates/brynja-crypto-cpu/src/riscv64_zknh.rs": "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619",
+    "crates/brynja-crypto-cpu/src/sha256.rs": "31e899058bbb2b2c5d5e43908fcf5a5e61862fa2f3f5a5df73eb1e6f1c63dd44",
+    "crates/brynja-crypto-cpu/src/sha256_schedule.rs": "4737d9abde63ca18911dbaf514f28b4995af115586e608c0e66b998d28b1dc3c",
+    "crates/brynja-crypto-cpu/src/sha512.rs": "5bf3bc62b69c41661cd0482e9644a2293460a38c70bd95d1bff75f4f4cdb412a",
+    "crates/brynja-crypto-cpu/src/sha512_schedule.rs": "3643e358f27bc5e9f4416525a9e9f43ab26063e700e80b3cb91da44bdddc5f6f",
+    "crates/brynja-crypto-cpu/src/static_execution/kernel.rs": "699932c8474d316478d190bb6ea0fd88f4462e1a5bac1062e7cc2e5a83013f0a",
+    "crates/brynja-crypto-cpu/src/static_execution/mod.rs": "549adb47dd19118d9456d7aac24316107c935f9d47cadd9545735eb13383096c",
+    "crates/brynja-crypto-cpu/src/static_execution/operations.rs": "fc937974058fd6212e04f4eb1064100737d695645595f029553f495ac908d30c",
+    "crates/brynja-crypto-cpu/src/static_execution/tests.rs": "537b6cde0e8672c2262bcd1d985845e87b59e61755f079cfdff3c47f31cececd",
+    "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs": "8f917e7ff784bb75646c526914de27e3b4eb8b15cc82b8a471edc0af1221d5b3",
+    "crates/brynja-crypto-cpu/src/x86_sha.rs": "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28",
+    "docs/static-cpu-execution.md": "c8b482b42dcd5285f8f7c4fde9488669a8222419ebc5d51e17e79fab7248eb8f",
+    "scripts/checks.sh": "04003d4da037a2e90efe065af15a6e532df93d43100856fb590c57a491ef6d0f",
+    "scripts/cpu/check-static-execution.py": "1fb4c118c5846d2c3cf44ffb6895c500624f8270b8642841d6702ffbb02c34cb",
+    "scripts/zeroization/check-zeroization-miri.sh": "c2b0343d6f8c431db8134879ca1b6eac7ac09494e1ebce5904f7dac7c05fdc25",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "ac8c4566cc6988034096c6bda2b60c32b65ddd3b160879f8fbd3ecd4da696a73"
+  }
+}

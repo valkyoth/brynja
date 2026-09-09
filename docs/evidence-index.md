@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; milestones through v0.24.29 signed. v0.24.30 adds the [non-authorizing acceleration contract](acceleration-availability.md), inventory and executable selection tests, not cryptographic or native evidence. Its [exceptional pentest and retest](../security/pentest/v0.24.30.md) pass; the same report records final local release verification. Green GitHub/CodeQL and explicit tag approval remain required. No CPU backend is admitted.
+Status: v0.20.0 published; milestones through v0.24.30 signed. v0.24.31 adds [static CPU execution authority](static-cpu-execution.md), normal-package tests and exact-source bindings. Exceptional pentest is pending. Native AMD and supplemental Arm QEMU results do not establish independent review, hosted migration safety or FIPS validation.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are

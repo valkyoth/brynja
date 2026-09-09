@@ -9,6 +9,7 @@ from pathlib import Path
 
 LIMIT = 4 * 1024 * 1024
 PACKAGES = {
+    'brynja-static-cpu-execution-fixture': 'static_cpu',
     'brynja-acceleration-contract-fixture': 'acceleration',
     'brynja-core': 'core', 'brynja-sanitization': 'sanitization',
     'brynja-legacy-md5': 'md5', 'brynja-legacy-sha1': 'sha1',

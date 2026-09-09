@@ -1,7 +1,9 @@
 # Hosted CPU execution authority
 
-v0.24.32 implementation candidate; exceptional owner pentest and fresh native
-adapter evidence remain pending. Independent cryptographic verification: NO.
+v0.24.32 implementation candidate; owner retest and fresh native observations
+passed on 0c6cee49. Final release checks remain pending. See the
+[native archive](../assurance/hosted-cpu-observations/v0.24.32/README.md).
+Independent cryptographic verification: NO.
 FIPS validation: NO. This is ordinary public-data raw kernel execution, not
 hardened hashing or a complete hash API. High-level integration follows in
 v0.24.33; the original admission-gated hash adapters are unchanged.
@@ -132,8 +134,8 @@ AArch64 musl binary with NO target-feature flags or evidence cfg and requires
 three operational routes. Emulation is not native evidence or timing assurance.
 The focused Miri/ASan owner suites do not claim to emulate CPU intrinsics.
 
-Native AMD verifies safe unsupported-host disposition. Fresh Intel, AWS Arm and
-Apple M2 captures must record the exact source commit, Rust version, commands,
+Native AMD verifies safe unsupported-host disposition. Intel, AWS Arm and
+Apple M2 captures record the exact source commit, Rust version, commands,
 selected routes and test outcomes after the exceptional pentest. Earlier kernel
 evidence does not certify this new hosted authorization layer. Windows, Android,
 iOS and BSD cross-compilation is not native execution evidence. No current

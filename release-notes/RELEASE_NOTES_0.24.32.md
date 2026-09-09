@@ -1,7 +1,7 @@
 # Brynja v0.24.32
 
-Status: implementation candidate; exceptional owner pentest and fresh native
-adapter evidence pending. No tag or crates.io publication authorized.
+Status: owner retest and fresh native observations passed on 0c6cee49;
+final local release checks pending. No tag or crates.io publication authorized.
 
 ## Hosted runtime feature safety
 
@@ -49,6 +49,9 @@ compiler reports unavailable rather than bypassing detection. Generic x86
 requires a future reviewed hosted scheduler adapter or the existing explicit
 target-specialized static API; no affinity change is forced on callers.
 
-QEMU and cross-compilation are not native measurements. Fresh Intel, AWS Arm
-and Apple M2 evidence for this adapter remains pending after pentest. No
+QEMU and cross-compilation are not native measurements. Fresh Intel, AWS Arm,
+Apple M2 and local AMD observations are in the
+[native archive](../assurance/hosted-cpu-observations/v0.24.32/README.md).
+Arm/Mac each executed three hosted kernels; Intel/AMD verified safe fallback.
+The observations do not establish heterogeneous-CPU or VM migration safety. No
 independent cryptographic review or FIPS validation is claimed.

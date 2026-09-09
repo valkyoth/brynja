@@ -1,7 +1,8 @@
 # Hosted CPU execution authority
 
 v0.24.32 implementation candidate; owner retest and fresh native observations
-passed on 0c6cee49. Final release checks remain pending. See the
+passed on 0c6cee49. Final local release checks passed; awaiting green GitHub/CodeQL
+and explicit owner tag approval. See the
 [native archive](../assurance/hosted-cpu-observations/v0.24.32/README.md).
 Independent cryptographic verification: NO.
 FIPS validation: NO. This is ordinary public-data raw kernel execution, not

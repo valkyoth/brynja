@@ -1,6 +1,6 @@
 # Brynja v0.24.29
 
-Status: scoped owner pentest PASS; native evidence archived; final local release checks PASS. Awaiting green GitHub/CodeQL and explicit tag approval. Not tagged or published.
+Status: released as a signed development tag after owner approval and green GitHub/CodeQL; no crates.io publication. Scoped owner review, native observations and local release checks are recorded below.
 
 ## General SHA-512/t final evidence and ordinary CPU integration
 

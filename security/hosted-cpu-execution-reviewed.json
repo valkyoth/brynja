@@ -34,7 +34,7 @@
     "crates/brynja-crypto-cpu/src/static_execution/tests.rs": "83217fdd0ff6df7bb49035992ab4b70899718e7bdbe3f400adbca55a992400fe",
     "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs": "8f917e7ff784bb75646c526914de27e3b4eb8b15cc82b8a471edc0af1221d5b3",
     "crates/brynja-crypto-cpu/src/x86_sha.rs": "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28",
-    "docs/hosted-cpu-execution.md": "4550feb9352219a3c41c8bb995abaff8ed4e37608aacf864abfc79ded780af94",
+    "docs/hosted-cpu-execution.md": "12b7951b93fad01a6ccd48a338dfd39c011729c2626d0f64313d6d48c1dbce92",
     "scripts/checks.sh": "827c516538d5c3d87f0f86d1b45d7245ecae3b9a069eb6a757e4cd596dbaa0ef",
     "scripts/cpu/check-hosted-execution.py": "46adb70a92a6b9f95cc289b5fd6fc02e371c9369447e1460f293d29ca27da2a0",
     "scripts/repository/unsafe_policy.py": "8c0ac3dfba24ec4c9962a91ce17c55853474be8188bb6f81c86e05d77541116c",

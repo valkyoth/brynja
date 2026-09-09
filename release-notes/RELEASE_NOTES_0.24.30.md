@@ -1,6 +1,6 @@
 # Brynja v0.24.30
 
-Status: exceptional owner pentest and remediation retest PASS. Final local release verification is recorded in the pentest report; green GitHub/CodeQL and explicit tagging permission remain required. Not tagged or published.
+Status: released as a signed development tag after owner approval and green GitHub/CodeQL; no crates.io publication. Exceptional owner pentest, remediation retest and final local release verification are recorded in the pentest report.
 
 ## Opt-in acceleration availability contract
 

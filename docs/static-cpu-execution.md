@@ -6,7 +6,7 @@ bytes are non-secret and not an erasing owner. Never classify secret-derived
 material this way. Operations are synchronous without caller callbacks; signal
 handlers and async-reentrant entry into a running owner are unsupported.
 
-Status: v0.24.31 owner retest and local release checks passed; documentation findings corrected; awaiting green GitHub/CodeQL.
+Status: v0.24.31 is signed. v0.24.32 adds explicit PublicData classification to raw calls; high-level and hardened hash acceleration remain separate work.
 
 `brynja-crypto-cpu` provides `static_execution::{Authority, Kernel, Session}`
 behind its default-off `static-execution` feature. This is an ordinary

@@ -42,7 +42,7 @@ workspace boundary is not a restriction on downstream opt-in.
 
 ## Control inventory
 
-Status: v0.20.0 published; milestones through v0.24.30 signed; v0.24.31 owner retest and local release checks passed, awaiting green GitHub/CodeQL
+Status: v0.20.0 published; milestones through v0.24.31 signed; v0.24.32 owner retest, native observations and final local release checks passed; awaiting green GitHub/CodeQL
 
 | Control | Foundation enforcement |
 | --- | --- |

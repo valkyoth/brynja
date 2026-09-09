@@ -55,5 +55,7 @@ register/spill erasure or hardened execution is established. PublicData remains
 a caller classification, not proof that bytes are non-secret. Intel/AMD fallback
 does not demonstrate acceleration on those platforms, nor change static support.
 
-Final local release checks, green GitHub/CodeQL and explicit owner tag approval
-are still required. This internal milestone publishes no crates.
+Final local release checks passed and are recorded in the
+[release report](../../../security/pentest/v0.24.32.md#final-release-verification).
+Green GitHub/CodeQL and explicit owner tag approval are still required.
+This internal milestone publishes no crates.

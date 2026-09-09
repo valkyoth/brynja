@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.31 signed. v0.24.32 adds [default-off hosted CPU execution authority](hosted-cpu-execution.md). Implementation checks are underway; exceptional pentest and fresh native adapter evidence remain pending. High-level hash integration, hardened, legacy and RISC-V activation remain separate work.
+Status: v0.20.0 published; milestones through v0.24.31 signed. v0.24.32 adds [default-off hosted CPU execution authority](hosted-cpu-execution.md). Owner retest, fresh native observations and final local release checks passed; awaiting green GitHub/CodeQL. High-level hash integration, hardened, legacy and RISC-V activation remain separate work.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

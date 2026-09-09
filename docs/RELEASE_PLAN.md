@@ -4235,7 +4235,7 @@ Exit criteria:
 
 ### v0.24.32 - Hosted Runtime Feature Safety
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Implement separate std runtime execution-authority adapters with platform-supported CPU and OS-state detection, documented scheduler/VM migration assumptions and observable fallback; never require a hosted dependency in no_std cores.
 

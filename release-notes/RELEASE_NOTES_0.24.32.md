@@ -1,7 +1,8 @@
 # Brynja v0.24.32
 
 Status: owner retest and fresh native observations passed on 0c6cee49;
-final local release checks pending. No tag or crates.io publication authorized.
+final local release checks passed. Awaiting green GitHub/CodeQL and explicit
+owner tag approval. No tag or crates.io publication authorized.
 
 ## Hosted runtime feature safety
 
@@ -34,6 +35,12 @@ See [the complete hosted contract](../docs/hosted-cpu-execution.md) for platform
 sources, usage, repeatable checks and limitations. The facade advances to
 0.24.32; support crates retain their current versions until publication.
 Every release publication flag stays false; the next checkpoint is v0.25.2.
+
+The [final verification report](../security/pentest/v0.24.32.md#final-release-verification)
+records the repository gate, twelve-compiler matrix, full registered Miri
+coverage, AddressSanitizer, all 29 Kani harnesses, native observations and
+publication-policy checks. Release finalization changes documentation and its
+bindings only; it does not change the reviewed Rust or dependency graph.
 
 ## Boundaries
 

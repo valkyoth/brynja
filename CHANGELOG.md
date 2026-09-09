@@ -1,13 +1,42 @@
 # Changelog
 
-## 0.24.29 candidate
+## 0.24.32 candidate
+
+- Add default-off hosted raw CPU execution authority with complete platform
+  feature bundles, explicit Portable/Prefer/Require routes, startup KATs and
+  irreversible owner-local quarantine. Generic x86 retains safe fallback.
+- Require explicit PublicData classification for static and hosted raw state
+  and blocks; preserve separation from hardened and high-level hashing APIs.
+- Owner retest and four-lane native observations passed. No crates are selected
+  for publication. See [release notes](release-notes/RELEASE_NOTES_0.24.32.md).
+
+## 0.24.31
+
+- Add opt-in no_std static raw execution authority for five x86/Arm kernels,
+  exact compiler feature bundles, direct KATs and borrowed revocable sessions.
+- Add packaged acceptance, semantic documentation checks and scoped lifecycle
+  tests; bootstrap locked dependencies before offline CI package checks.
+- Signed development milestone; no publication.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.31.md).
+
+## 0.24.30
+
+- Freeze the explicit acceleration availability contract and eleven-kernel
+  inventory, with isolated executable selection and ownership models.
+- Add mutation-tested standalone Clippy enforcement and scoped model Miri.
+  No production cryptography or backend activation changed.
+- Signed development milestone; no publication.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.30.md).
+
+## 0.24.29
 
 - Replay final scalar general SHA-512/t public acceptance and add instrumented
   block/round work, fixed object-storage bounds and local performance evidence.
-- Keep all 510 parameters, ordinary/hardened byte/bit routes and existing
-  cleanup/ownership negatives; no production cryptography or dependency change.
-- Exceptional owner pentest pending; family status stays In progress until
-  that gate passes. No crates selected for publication.
+- Keep all 510 parameters and ordinary/hardened byte/bit routes; add ordinary
+  CPU integration over existing admission-gated Arm/RISC-V kernels without
+  admitting them or changing hardened execution.
+- Complete portable general-family acceptance, scoped owner review and fresh
+  Arm/Mac observations. Signed development milestone; no publication.
   See [release notes](release-notes/RELEASE_NOTES_0.24.29.md).
 
 ## 0.24.28

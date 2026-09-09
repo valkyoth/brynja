@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 published; milestones through v0.24.31 signed. v0.24.32 adds default-off [hosted execution authority](hosted-cpu-execution.md); exceptional pentest and fresh native adapter evidence remain pending. No publication is selected and high-level hash-family dispatch remains unchanged.
+Status: v0.20.0 published; milestones through v0.24.31 signed. v0.24.32 adds default-off [hosted execution authority](hosted-cpu-execution.md); owner retest, fresh native observations and final release checks passed, awaiting green GitHub/CodeQL. No publication is selected and high-level hash-family dispatch remains unchanged.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.32`. General SHA-512/t has callable ordinary/hardened
@@ -25,17 +25,18 @@ ParallelHash128/ParallelHash256 and ParallelHashXOF128/ParallelHashXOF256
 sequential, hardened, arbitrary-bit, and caller-scheduled APIs. Its separate
 `brynja-hash-parallel-std 0.1.0` adapter provides explicit worker/leaf-budgeted native execution and
 is excluded from defaults, facades, bare-metal, and FIPS graphs; the wider
-derived family passed final v0.24.17 acceptance. Published
-`brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
-AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
-the separate opt-in x86/AArch64 host detector and runtime selection API while
-RISC-V automatic detection remains disabled. Supporting manifest
+derived family passed final v0.24.17 acceptance. Repository source for
+`brynja-crypto-cpu 0.1.1` retains the historical admission-gated candidates and
+adds separate default-off static/runtime raw execution authority;
+`brynja-crypto-cpu-std 0.1.1` adds platform-limited hosted selection. These new
+APIs are not present in the previously published 0.1.1 artifacts. RISC-V automatic
+detection remains disabled. Supporting manifest
 versions remain unchanged until the v0.25.2 public checkpoint. The new
 repository-only API-profile register covers 135 semantic capabilities across
 22 dimensions and inventories eight current, eight registered capability, plus
 73 planned secret owners with exact per-operation information-flow contracts,
 compiler-checked owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.1. The facade version advances for the acceleration availability contract; all previously existing support-package versions remain
+under Rust 1.90.0 and 1.98.1. The facade version advances for hosted execution authority; all previously existing support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
 

@@ -1,7 +1,8 @@
 # Brynja v0.24.33
 
-Status: implementation candidate; exceptional owner pentest and fresh native
-family-level evidence pending. Not tagged or published.
+Status: implementation candidate; owner review and fresh native functional
+collection passed. Final release verification and GitHub/CodeQL pending.
+Not tagged or published.
 
 ## Complete ordinary SHA-2 acceleration
 
@@ -52,3 +53,13 @@ compilers, no_std and repository policy must pass. Collect fresh native family
 observations after a clean exceptional pentest: older raw-kernel evidence alone
 does not prove this integration. Commit the actual report, await green GitHub
 and CodeQL, then obtain explicit owner tagging permission. No publication here.
+
+## Collected native observations
+
+The [four-lane archive](../assurance/sha2-execution-observations/v0.24.33/README.md)
+records Apple M2 Pro and AWS Neoverse-V1 hosted/static SHA-256 and SHA-512,
+plus Intel Xeon 8488C and AMD 9950X3D static SHA-224/256. Wide hashing remains
+portable on x86; generic hosted Require rejects and Prefer falls back there.
+Every successful mode passed 240 named and 4,590 general-t cases. These are
+functional observations, not migration, side-channel, independent-review or
+FIPS qualification. No production code changed during collection.

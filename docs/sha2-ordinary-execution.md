@@ -1,7 +1,8 @@
 # Complete ordinary SHA-2 execution
 
-Status: v0.24.33 implementation candidate; exceptional owner pentest and fresh
-native family-level observations required before tagging. No publication.
+Status: v0.24.33 implementation candidate; owner review and
+[native family observations](../assurance/sha2-execution-observations/v0.24.33/README.md)
+passed. Final release verification and GitHub/CodeQL remain pending. No publication.
 
 All six named SHA-2 identities and all 510 valid general SHA-512/t parameters
 have byte/bit one-shot and streaming APIs in `brynja_hash_sha2::execution`.

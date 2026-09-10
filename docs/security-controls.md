@@ -42,7 +42,7 @@ workspace boundary is not a restriction on downstream opt-in.
 
 ## Control inventory
 
-Status: v0.20.0 published; milestones through v0.24.32 signed. v0.24.33 adds complete default-off [ordinary SHA-2 execution](sha2-ordinary-execution.md) for static and hosted authorities. Exceptional owner pentest and fresh native family observations remain pending. No publication; hardened acceleration stays separate.
+Status: v0.20.0 published; milestones through v0.24.32 signed. v0.24.33 adds complete default-off [ordinary SHA-2 execution](sha2-ordinary-execution.md) for static and hosted authorities. Owner review and [native functional collection](../assurance/sha2-execution-observations/v0.24.33/README.md) passed; final release verification and GitHub/CodeQL remain pending. No publication; hardened acceleration stays separate.
 
 | Control | Foundation enforcement |
 | --- | --- |

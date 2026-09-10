@@ -4262,7 +4262,7 @@ Exit criteria:
 
 ### v0.24.33 - SHA-2 Ordinary Acceleration Reachability
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Connect all six named SHA-2 identities and all 510 general SHA-512/t parameters to operational static and hosted backends through complete byte/bit one-shot and streaming public APIs, with portable, preferred and required routes.
 

@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.32 signed. v0.24.33 adds complete default-off [ordinary SHA-2 execution](sha2-ordinary-execution.md) for static and hosted authorities. Exceptional owner pentest and fresh native family observations remain pending. No publication; hardened acceleration stays separate.
+Status: v0.20.0 published; milestones through v0.24.32 signed. v0.24.33 adds complete default-off [ordinary SHA-2 execution](sha2-ordinary-execution.md) for static and hosted authorities. Owner review and [native functional collection](../assurance/sha2-execution-observations/v0.24.33/README.md) passed; final release verification and GitHub/CodeQL remain pending. No publication; hardened acceleration stays separate.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

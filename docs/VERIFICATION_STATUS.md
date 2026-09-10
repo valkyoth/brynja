@@ -43,6 +43,11 @@ FIPS validation is a separate official claim. Brynja has no FIPS 140-3
 validation, certificate, validated module, approved security policy, or
 certificate-bound operational-environment claim.
 
+Default-off [ordinary SHA-3/SHAKE execution](sha3-ordinary-execution.md) is now
+implemented separately from portable constructors. Its exceptional review and
+fresh high-level native observations are pending; portable algorithm completion
+does not establish acceleration qualification.
+
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |

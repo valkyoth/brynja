@@ -743,6 +743,8 @@ backend = "0.24.33"
 hosted-adapter = "0.24.33"
 
 [completion-overrides."algorithm.sha3-shake"]
+backend = "0.24.35"
+buffers = "0.24.35"
 bit-input = "0.24.9"
 ownership = "0.24.10"
 hosted-adapter = "0.24.10"

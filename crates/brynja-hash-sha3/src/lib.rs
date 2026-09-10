@@ -12,6 +12,8 @@ mod bit_string;
 mod cshake;
 mod digest;
 mod error;
+#[cfg(feature = "static-execution")]
+pub mod execution;
 mod hardened;
 mod keccak;
 mod sha3_224;

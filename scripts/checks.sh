@@ -118,6 +118,8 @@ python3 scripts/sha3/check-cshake-differential.py
 cargo test --locked --manifest-path assurance/cshake-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/cshake-public-api/Cargo.toml --all-targets -- -D warnings
 python3 scripts/sha3/check-sha3-public-api.py
+python3 scripts/sha3/check-sha3-execution.py
+cargo clippy --locked --offline --manifest-path assurance/sha3-execution/Cargo.toml --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
 python3 scripts/sha3/test-sha3-public-api.py
 python3 scripts/sha3/check-sha3-hardened.py
 python3 scripts/sha3/test-sha3-hardened.py

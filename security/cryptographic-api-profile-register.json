@@ -2895,7 +2895,7 @@
       "api": {
         "backend": {
           "disposition": "required",
-          "owner": "0.24.2"
+          "owner": "0.24.35"
         },
         "bit-input": {
           "disposition": "required",
@@ -2903,7 +2903,7 @@
         },
         "buffers": {
           "disposition": "caller-owned",
-          "owner": "0.24.15"
+          "owner": "0.24.35"
         },
         "byte-input": {
           "disposition": "required",
@@ -24257,7 +24257,7 @@
       ]
     }
   ],
-  "policy_sha256": "eedf4a17d9c0c07aab90ab8895cd7b10d0d26df13c497731a10ad7d45e03c50e",
+  "policy_sha256": "4f6fd35fd07693b5d85bb1ef997571aae9dc114130d72d86d48fd4a23551360b",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",

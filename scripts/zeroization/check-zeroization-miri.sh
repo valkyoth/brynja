@@ -105,6 +105,8 @@ quick_sha3() {
 }
 
 full_sha3() {
+    run_miri -p brynja-hash-sha3 --features static-execution --lib execution
+    run_miri -p brynja-hash-sha3 --features static-execution --test execution execution_smoke
     run_miri -p brynja-hash-sha3 --lib \
         final_bit_output_clears_the_exact_reader_source
     run_miri -p brynja-hash-sha3 --lib \

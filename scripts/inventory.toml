@@ -75,7 +75,7 @@ extensions = [".py", ".sh", ".toml"]
 purpose = "Isolated legacy SHA-1 conformance, cleanup, package acceptance, and differential assurance"
 
 [category.sha3]
-extensions = [".py", ".sh"]
+extensions = [".py", ".sh", ".toml"]
 purpose = "SHA-3 and SHAKE implementation, public acceptance, and differential evidence"
 
 [category.sp800185]

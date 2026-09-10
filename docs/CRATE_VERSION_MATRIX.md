@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 published; milestones through v0.24.33 signed. v0.24.34 is in progress, starting with [impact-selected verification and full-run approval](focused-assurance.md). Hardened SHA-2 acceleration remains pending; no new secret-bearing CPU API or publication is claimed.
+Status: v0.20.0 published; milestones through v0.24.34 signed. v0.24.35 adds default-off [ordinary SHA-3/SHAKE execution](sha3-ordinary-execution.md); exceptional review and native collection are pending. Hardened SHA-2 execution is retained. No publication is selected.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.33`. General SHA-512/t has callable ordinary/hardened

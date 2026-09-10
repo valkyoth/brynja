@@ -12,10 +12,14 @@ publish = ["crates-io"]
 
 [features]
 default = []
+cpu = ["dep:brynja-crypto-cpu"]
+static-execution = ["cpu", "brynja-crypto-cpu/static-execution"]
+runtime-execution = ["static-execution", "brynja-crypto-cpu/runtime-execution"]
 
 [dependencies]
 brynja-core = { workspace = true }
 brynja-hash-core = { workspace = true }
+brynja-crypto-cpu = { workspace = true, optional = true }
 
 [lints]
 workspace = true

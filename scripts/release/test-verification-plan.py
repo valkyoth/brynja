@@ -89,6 +89,15 @@ def selection_tests() -> None:
 
 def miri_dependency_tests():
     raw = (plans.ROOT / 'Cargo.lock').read_bytes()
+    # SHA-3 now consumes CPU authorities. Current CPU changes must select it.
+    assert 'sha3' in plans.scope.closure(
+        {'static_cpu'}, downstream=miri_dependencies.graph(raw, raw))
+    # Retain a pre-integration fixture to prove when portable reuse is sound.
+    start = raw.index(b'name = "brynja-hash-sha3"\n')
+    end = raw.index(b'[[package]]', start)
+    record = raw[start:end]
+    assert record.count(b' "brynja-crypto-cpu",\n') == 1
+    raw = raw[:start] + record.replace(b' "brynja-crypto-cpu",\n', b'') + raw[end:]
     edges = miri_dependencies.graph(raw, raw)
     assert plans.scope.closure({'static_cpu'}, downstream=edges) == ('sha2', 'static_cpu')
     assert plans.scope.closure({'sha3'}, downstream=edges) == ('sha3', 'kmac', 'tuplehash', 'parallelhash')

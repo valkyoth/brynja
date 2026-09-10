@@ -1,19 +1,19 @@
 [release]
-version = "0.24.34"
-milestone = "0.24.34"
+version = "0.24.35"
+milestone = "0.24.35"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34", "0.24.35"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "Hardened SHA-2 acceleration and impact-selected verification require exceptional security review before tagging."
+exception_reason = "Ordinary SHA-3/SHAKE accelerated absorbing and squeezing require exceptional security review before tagging."
 
 [crates."brynja"]
-previous_version = "0.24.33"
-version = "0.24.34"
+previous_version = "0.24.34"
+version = "0.24.35"
 change = "metadata"
 publish = false
-reason = "Start v0.24.34 with approval-aware incremental verification, followed by hardened SHA-2 acceleration; no publication."
+reason = "Implement default-off ordinary SHA-3/SHAKE execution in its leaf; retain portable facade defaults and no publication."
 
 [crates."brynja-legacy-md5"]
 previous_version = "unpublished"
@@ -62,7 +62,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Retain the unpublished SHA-3 leaf version while adding complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary, arbitrary-bit, streaming, incremental-output and hardened APIs without publication."
+reason = "Connect all four SHA-3 hashes and both SHAKE XOFs to explicit ordinary static/hosted Keccak routes without changing portable/hardened constructors or publishing."
 
 [crates."brynja-mac-kmac"]
 previous_version = "unpublished"

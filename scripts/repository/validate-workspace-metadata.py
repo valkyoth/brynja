@@ -226,6 +226,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["runtime-execution"] = ["brynja-crypto-cpu/runtime-execution"]
     if name == "brynja-hash-sha2":
         expected["hardened-execution"] = ["static-execution", "brynja-crypto-cpu/hardened-execution"]
+    if name in {"brynja-hash-sha2", "brynja-hash-sha3"}:
         expected["static-execution"] = ["cpu", "brynja-crypto-cpu/static-execution"]
         expected["runtime-execution"] = ["static-execution", "brynja-crypto-cpu/runtime-execution"]
     if name == "brynja-legacy-md5":
@@ -341,6 +342,7 @@ def validate_resolved_mode(
 
     modern_edges = {package_id: set(dependencies) for package_id, dependencies in edges.items()}
     modern_edges[names["brynja-hash-sha2"]].discard(names["brynja-crypto-cpu"])
+    modern_edges[names["brynja-hash-sha3"]].discard(names["brynja-crypto-cpu"])
     modern = reachable_names("brynja", names, packages_by_id, modern_edges)
     if any(policy[name]["class"] not in MODERN_CLASSES for name in modern):
         raise ValueError("modern facade reaches a non-modern package class")
@@ -396,13 +398,16 @@ def validate_resolved_mode(
     parallel_executor = reachable_names(
         "brynja-hash-parallel-std", names, packages_by_id, edges
     )
-    if parallel_executor != {
+    expected_parallel_executor = {
         "brynja-core",
         "brynja-hash-parallel",
         "brynja-hash-parallel-std",
         "brynja-hash-core",
         "brynja-hash-sha3",
-    }:
+    }
+    if mode == "all-features":
+        expected_parallel_executor.add("brynja-crypto-cpu")
+    if parallel_executor != expected_parallel_executor:
         raise ValueError("ParallelHash std executor package graph drifted")
     if {"brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-parallel-std"}.intersection(modern):
         raise ValueError("modern facade must remain independent of host adapter packages")

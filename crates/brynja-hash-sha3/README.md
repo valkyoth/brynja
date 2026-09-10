@@ -45,6 +45,16 @@ constructions in the separate `brynja-hash-tuple` leaf. The wider SP 800-185
 family passed final acceptance at v0.24.17 and is fully implemented. CPU
 candidates remain unadmitted; independent review and FIPS validation remain absent.
 
+Separate default-off `static-execution` / `runtime-execution` features expose
+`execution::{Sha3_224, Sha3_256, Sha3_384, Sha3_512, Shake128, Shake256}` with
+operational Keccak routes. These are ordinary public-data-only owners, not
+hardened state. Reader convenience calls stage at most 168 bytes on the stack;
+caller-scratch APIs support arbitrary-sized transactional output without
+allocation. Every failure preserves the destination and retained reader state.
+See [selection, streaming and scratch examples](https://github.com/valkyoth/brynja/blob/main/docs/sha3-ordinary-execution.md).
+New high-level native observations and exceptional review are pending; portable
+completion does not certify acceleration, independent review or FIPS validation.
+
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};
 

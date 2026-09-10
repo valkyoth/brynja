@@ -344,7 +344,9 @@ def validate(root: Path) -> None:
         "borrowing_reader_never_extracts_the_absorbing_owner",
     ):
         require(miri, token, "SHA-3 Miri coverage")
-    if miri.count("-p brynja-hash-sha3") != 7:
+    require(miri, "--features static-execution --lib execution", "execution Miri faults")
+    require(miri, "--features static-execution --test execution execution_smoke", "execution Miri smoke")
+    if miri.count("-p brynja-hash-sha3") != 9:
         fail("SHA-3 Miri package coverage changed")
     sanitizer = read(root, SANITIZER_SCRIPT)
     require(
@@ -352,7 +354,8 @@ def validate(root: Path) -> None:
         "-p brynja-hash-sha3 \\\n    --tests \\\n    --target x86_64-unknown-linux-gnu",
         "SHA-3 AddressSanitizer command",
     )
-    if sanitizer.count("-p brynja-hash-sha3") != 3:
+    require(sanitizer, "--features static-execution --lib --test execution", "execution ASan coverage")
+    if sanitizer.count("-p brynja-hash-sha3") != 4:
         fail("SHA-3 AddressSanitizer package coverage changed")
 
     differential_fixture = read(root, DIFFERENTIAL_FIXTURE)
@@ -459,6 +462,7 @@ def validate(root: Path) -> None:
     if manifest.get("dependencies") != {
         "brynja-core": {"workspace": True},
         "brynja-hash-core": {"workspace": True},
+        "brynja-crypto-cpu": {"workspace": True, "optional": True},
     }:
         fail("SHA-3 dependency boundary changed")
     crypto = tomllib.loads(read(root, CRYPTO_MANIFEST))
@@ -470,7 +474,8 @@ def validate(root: Path) -> None:
         "class": "modern-shared",
         "publish": "crates-io",
         "required": ["brynja-core", "brynja-hash-core"],
-        "optional": {},
+        "optional": {"cpu": "brynja-crypto-cpu"},
+        "features": ["static-execution", "runtime-execution"],
     }:
         fail("SHA-3 package classification changed")
 

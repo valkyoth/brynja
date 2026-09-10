@@ -4290,7 +4290,7 @@ Exit criteria:
 
 ### v0.24.34 - SHA-2 Hardened Accelerated Owners
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: Implement secret-bearing SHA-2 acceleration for existing instruction backends with sealed owner-backed scratch, complete owned-region destruction, typed secret output and byte/bit APIs for named identities and general SHA-512/t.
 
@@ -4319,7 +4319,7 @@ Exit criteria:
 
 ### v0.24.35 - SHA-3 And SHAKE Ordinary CPU Integration
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Connect all four SHA-3 hashes and both SHAKE XOFs to existing AVX2 and AArch64 SHA3 Keccak kernels with default-off leaf features, static/hosted selection and ordinary byte/bit absorbing and squeezing APIs.
 
@@ -4330,6 +4330,7 @@ Deliverables:
 - Complete v0.24.34 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Route each complete permutation through the selected healthy backend while preserving suffixes, rate collisions, canonical partial bytes and consuming bit transitions.
 - Support fixed digest and incremental multi-squeeze output with exact route identity; session failure cannot silently switch a required reader.
+- Provide bounded stack-scratch convenience reads and arbitrary-sized caller-scratch reads so failure preserves both public output and reader without allocation or replay; document scratch ownership and test late permutation errors.
 - Keep portable constructors and default graphs unchanged and distinguish this single-state vectorized permutation from multi-message SIMD.
 - Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
 

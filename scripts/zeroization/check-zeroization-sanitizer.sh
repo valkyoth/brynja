@@ -119,6 +119,10 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
     --target x86_64-unknown-linux-gnu
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
+    -p brynja-hash-sha3 --features static-execution --lib --test execution \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
     -p brynja-mac-kmac \
     --tests \
     --target x86_64-unknown-linux-gnu

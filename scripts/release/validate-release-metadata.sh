@@ -331,3 +331,6 @@ if step not in workflow:
     raise SystemExit("live release-control step requires step-scoped GH_TOKEN")
 '
 test "$(git ls-files PENTEST.md)" = ""
+
+python3 scripts/release/check-acceptance-metadata.py
+python3 scripts/release/test-acceptance-metadata.py

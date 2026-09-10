@@ -246,20 +246,11 @@ compiler or make a policy check a proof. See [Kani evidence](docs/KANI.md).
 
 | Rust toolchain | Required evidence |
 | --- | --- |
-| `1.90.0` | Workspace all-feature compatibility check |
-| `1.91.0` | Workspace all-feature compatibility check |
-| `1.92.0` | Workspace all-feature compatibility check |
-| `1.93.0` | Workspace all-feature compatibility check |
-| `1.94.0` | Workspace all-feature compatibility check |
-| `1.95.0` | Workspace all-feature compatibility check |
-| `1.96.0` | Workspace all-feature compatibility check |
-| `1.96.1` | Workspace all-feature compatibility check |
-| `1.97.0` | Workspace all-feature compatibility check |
-| `1.97.1` | Workspace all-feature compatibility check |
-| `1.98.0` | Workspace all-feature compatibility check |
+| `1.90.0`–`1.98.0` | Workspace all-feature compatibility check |
 | `1.98.1` | Full format, lint, test, platform, policy, docs, package, and security gate |
 
-Patch releases are listed individually when included in the supported matrix.
+The exact tested compiler versions, including selected patch releases, remain
+listed in [the Rust matrix](scripts/ci/check-rust-version-matrix.sh).
 Compiler evidence does not imply timing safety or independent verification.
 
 ## Checks

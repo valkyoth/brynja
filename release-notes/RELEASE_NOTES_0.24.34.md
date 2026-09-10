@@ -99,6 +99,13 @@ source span. Its exact MIR registry pin now matches line 83, with a fast
 source-span regression and successful Rust 1.90.0/1.98.1 compiler cleanup checks.
 No production code, cleanup proof requirement or native capture input changed.
 
+Final CI metadata correction: refreshed the separate SHA-2/SHA-3 README hash
+bindings after documentation edits. Release metadata validation now checks all
+five acceptance hash closures, with stale-README regression tests and no Rust
+campaign execution. SHA-2/SHA-3 public and packaged acceptance passed again.
+The GitHub README groups Rust 1.90.0–1.98.0 into one compatibility row and keeps
+1.98.1 separate; the exact tested compiler matrix is unchanged.
+
 Erasure claims exclude registers, compiler-created copies/spills, caches,
 swap, crash dumps, DMA, abort, forced termination, `mem::forget` and caller
 inputs/copies. No FIPS, independent-review or military-deployment claim is made.

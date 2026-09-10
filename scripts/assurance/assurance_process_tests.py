@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import os
 import subprocess
 import sys
@@ -146,7 +147,12 @@ def assert_cleanup_bounded(started: float, execution_timeout: float) -> None:
     assert time.monotonic() - started < maximum
 
 
-def check_cleanup_failure(timed_out: bool, overflow: bool, reap_fails: bool) -> None:
+def check_cleanup_failure(
+    timed_out: bool,
+    overflow: bool,
+    reap_fails: bool,
+    clock_readings: tuple[float, float] = (0.0, 0.0),
+) -> None:
     process = Mock()
     process.wait.side_effect = [
         subprocess.TimeoutExpired("fixture", 0.05) if timed_out else 0,
@@ -174,6 +180,7 @@ def check_cleanup_failure(timed_out: bool, overflow: bool, reap_fails: bool) -> 
         patch.object(process_runner, "ProcessTree", return_value=tree),
         patch.object(process_runner.threading, "Thread", side_effect=readers),
         patch.object(process_runner.threading, "Event", return_value=overflow_event),
+        patch.object(process_runner.time, "monotonic", side_effect=clock_readings),
     ):
         try:
             run_fixture("descendant-timeout", 0.05, 1024)
@@ -187,7 +194,12 @@ def check_cleanup_failure(timed_out: bool, overflow: bool, reap_fails: bool) -> 
     tree.close.assert_called_once_with()
     assert process.wait.call_count == 2
     first_wait, reap_wait = process.wait.call_args_list
-    assert 0 <= first_wait.kwargs["timeout"] <= 0.05
+    deadline = clock_readings[0] + 0.05
+    remaining = first_wait.kwargs["timeout"]
+    assert remaining == max(0.0, deadline - clock_readings[1])
+    # Equal clock ticks can expose rounding when adding a short timeout to a
+    # large clock origin. Allow one representable deadline step, not CI slack.
+    assert 0 <= remaining <= 0.05 + math.ulp(deadline)
     assert reap_wait.kwargs == {"timeout": process_runner.CLEANUP_WAIT_SECONDS}
     for reader in readers:
         reader.start.assert_called_once_with()
@@ -209,6 +221,18 @@ def test_cleanup_retains_timeout_overflow_and_containment_failures() -> None:
         for overflow in (False, True):
             for reap_fails in (False, True):
                 check_cleanup_failure(timed_out, overflow, reap_fails)
+
+
+def test_cleanup_deadline_handles_clock_rounding_and_expiry() -> None:
+    origin = 1_000_000.0
+    assert (origin + 0.05) - origin > 0.05  # Reproduce the former strict-bound failure.
+    for elapsed in (0.0, 0.025, 0.05, 0.1):
+        for timed_out in (False, True):
+            for overflow in (False, True):
+                for reap_fails in (False, True):
+                    check_cleanup_failure(
+                        timed_out, overflow, reap_fails, (origin, origin + elapsed),
+                    )
 
 
 def test_cooperative_descendant_cannot_survive_termination() -> None:

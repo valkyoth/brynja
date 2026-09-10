@@ -85,3 +85,8 @@ descendant-test deadlines include the existing bounded cleanup waits. Cleanup
 still fails closed; deterministic regressions cover delayed readers and reaping.
 No cryptographic code or native evidence changed. The macOS GitHub rerun remains
 required before tagging.
+
+The cleanup regression also uses a controlled clock and rounding-aware deadline
+assertions after Windows CI exposed a floating-point edge case. Equal clock
+ticks and elapsed/expired deadlines are covered deterministically; the process
+runner and its cleanup bounds are unchanged by this follow-up.

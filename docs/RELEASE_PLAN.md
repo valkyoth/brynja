@@ -4319,12 +4319,14 @@ Exit criteria:
 
 ### v0.24.35 - SHA-3 And SHAKE Ordinary CPU Integration
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Progress: the owner-supplied retest of `010fb9ba` is PASS at its stated
 Critical/High threshold. Native Mac/AWS functional evidence is collected on
-byte-identical source. This coarse pre-release status remains until the final
-gate is complete; another source retest is not requested for evidence-only updates.
+byte-identical source. The required impact-selected local release gate passed,
+including selected Miri/ASan/Kani and the supported compiler matrix. Green
+GitHub/CodeQL and explicit tag permission remain pending; evidence-only record
+updates do not request another source retest.
 
 Plan scope: Connect all four SHA-3 hashes and both SHAKE XOFs to existing AVX2 and AArch64 SHA3 Keccak kernels with default-off leaf features, static/hosted selection and ordinary byte/bit absorbing and squeezing APIs.
 

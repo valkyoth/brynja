@@ -74,6 +74,6 @@ Hosted routes retain their OS/hypervisor feature-contract requirements; static
 builds require compatible features on every CPU where they may execute.
 
 The APIs remain public-data-only and non-erasing. No hardened acceleration,
-independent cryptographic review or FIPS validation is inferred. The final local
-release gate, green GitHub/CodeQL and explicit tagging permission remain pending.
+independent cryptographic review or FIPS validation is inferred. Required local
+release checks passed; green GitHub/CodeQL and explicit tagging permission remain pending.
 This internal milestone selects zero crates.io publications.

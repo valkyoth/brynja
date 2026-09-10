@@ -1,8 +1,8 @@
 # Brynja v0.24.35
 
-Status: implementation, focused verification, owner-supplied exceptional
-retest and native Mac/AWS functional collection passed. The final release gate
-remains pending. Not tag-ready.
+Status: implementation, owner-supplied exceptional retest, native Mac/AWS
+functional collection and required impact-selected release checks passed.
+Awaiting green GitHub/CodeQL and explicit tagging permission.
 
 ## SHA-3 and SHAKE ordinary CPU integration
 
@@ -35,12 +35,14 @@ passed on Apple M2 Pro, AWS Neoverse-V1 and Intel Xeon 8488C with byte-identical
 reviewed source. Intel hosted Require remains a typed rejection; its static
 AVX2 route passed. These are functional results, not migration or side-channel qualification.
 
-Implementation checks passed: the impact-selected repository gate (its final
-metadata tail resumed after documentation corrections), all-feature/default
+Final checks passed: the impact-selected repository gate, all-feature/default
 tests, package consumers and compiled mutations, native AMD AVX2, supplemental
-AArch64 QEMU static/hosted execution, targeted Miri/ASan, the ten existing SHA-3
-Kani proofs, Rust 1.90.0 compatibility/bare-metal checks, emitted instructions
-under Rust 1.90.0/1.98.1 and fresh tooling/dependency checks. No CPU-instruction
+AArch64 QEMU static/hosted execution, selected ASan and complete Miri suites for
+SHA-3/KMAC/TupleHash/ParallelHash, their inventoried Kani proofs, the twelve
+registered compiler checks from Rust 1.90.0 through 1.98.1, bare-metal checks,
+emitted instructions under Rust 1.90.0/1.98.1 and fresh tooling/dependency checks.
+The advisory scan was retried after a sandbox cache-lock restriction; the
+remaining gate stages resumed and passed. No CPU-instruction
 proof or new full supported-platform qualification is implied.
 
 The facade advances to 0.24.35 with no crates.io publication; the next public

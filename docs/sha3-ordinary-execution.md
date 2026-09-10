@@ -92,7 +92,7 @@ The owner-supplied retest of `010fb9ba` passed at its stated Critical/High thres
 Subsequent [native Mac/AWS observations](../assurance/sha3-execution-observations/v0.24.35/README.md)
 passed on byte-identical source: Apple M2 Pro and AWS Arm static/hosted routes,
 and Intel AVX2 static execution with expected hosted rejection. No old kernel-only
-observation is presented as a fresh run of these high-level APIs. The final local
-release gate and GitHub/CodeQL remain pending.
+observation is presented as a fresh run of these high-level APIs. Required local
+release checks passed; green GitHub/CodeQL and explicit tagging permission remain pending.
 No named independent cryptographic verification, side-channel certification,
 FIPS validation, CPU-register erasure or military suitability is claimed.

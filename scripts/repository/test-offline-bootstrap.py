@@ -11,6 +11,19 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def validate(driver):
+    if '# BEGIN VERIFICATION CATALOG' in driver:
+        header, driver = driver.split('# BEGIN VERIFICATION CATALOG', 1)
+        expected = '''#!/usr/bin/env sh
+set -eu
+
+if test "${1:-}" != "--full-catalog"; then
+    exec python3 scripts/release/run-verification.py repository "$@"
+fi
+shift
+test "$#" -eq 0'''
+        if header.strip() != expected:
+            raise ValueError('unreviewed incremental repository entrypoint')
+        driver = 'set -eu\n' + driver
     commands = [line.strip() for line in driver.splitlines()
                 if line.strip() and not line.lstrip().startswith('#')]
     if commands[:3] != ['set -eu', 'cargo fetch --locked',

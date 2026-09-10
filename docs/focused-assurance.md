@@ -1,94 +1,91 @@
-# Focused assurance from v0.24.20
+# Impact-selected verification from v0.24.34
 
-The long Miri suite is selected by impact, not by whether a version number or
-lockfile byte changed. This is an execution policy, not independent verification.
-The normal repository gate, workspace tests, Clippy, documentation, security
-policies, dependency checks and emitted-code checks remain mandatory. The
-currently bounded AddressSanitizer and Kani suites remain required local checks;
-this change targets the long interpreted Miri campaigns, not removal of cheap
-regression coverage. Hosted CI retains its bounded checks and CodeQL Default.
+The repository and local release gates select expensive campaigns by affected
+implementation, dependency, fixture and verifier inputs. A short native workspace
+build/test/lint baseline and repository/release integrity checks remain mandatory.
+This is project-owned testing, not independent cryptographic verification.
 
-| Change | Miri execution |
+| Change | Expensive verification |
 | --- | --- |
-| Public crates.io checkpoint | Every registered full group |
-| Documentation, local version-only pins | Smoke for each registered group |
-| MD5 or SHA-1 source | Changed primitive plus legacy consumer; smoke elsewhere |
-| SHA-3 source | SHA-3, KMAC, TupleHash, ParallelHash; smoke elsewhere |
-| Shared core or unknown runtime/compiler impact | Full affected closure, or all groups if classification is uncertain |
-| Isolated new consumer fixture | That fixture's full group; smoke on unchanged dependencies |
-| Registry dependency version/checksum/edge | Consumers reached through both old and new lock graphs; unknown consumers force all groups |
+| SHA-2 source or its consumer fixture | SHA-2 and affected integrations |
+| MD5 or SHA-1 source | Changed primitive and legacy consumer |
+| Shared Keccak/SHA-3 source | SHA-3, KMAC, TupleHash and ParallelHash |
+| Shared core/CPU authority | Registered affected consumers, including SHA-2 |
+| Documentation or local version-only change | Metadata checks; reuse unchanged cryptographic campaigns |
+| Verifier change | Explain the affected verifier evidence; require approval for unexpected broad renewal |
+| Public crates.io checkpoint | Complete registered suite, automatically |
+| Unclassified, malformed or unauthenticated scope | Stop before expensive execution; release verification is incomplete |
 
-`scripts/zeroization/check-tag-miri.sh internal` selects the nearest signed
-ancestor tag at HEAD, including dirty candidate work. The selector includes
-staged, unstaged, deleted, renamed and nonignored untracked files. Invalid or
-unsigned/nonancestor baselines, unreadable/symlinked inputs, unsupported lock
-schemas, ambiguous package identities and unknown Rust/native source fail
-closed to full coverage. Full coverage still means the documented registered
-campaigns, not every possible input or a mathematical correctness proof.
+## Inspect before running
 
-Lockfile classification ignores **local package versions only**, retaining
-registry versions/checksums and dependency edges. Both graphs are traversed so
-removed dependencies cannot hide consumers. Local-path manifest version pins
-are metadata only when all other fields are identical; registry manifest
-versions are not exempt. Three enumerated consumer policy files may update
-only their exact facade-version literals without invalidating crypto evidence.
-Named source-digest maps and TOML hash inventories can rebind hashes without
-rerunning unrelated owners: the changed source paths are independently selected,
-and mandatory source-policy gates still verify the bindings. Map keys, control
-flow, test-vector literals and non-digest values do not receive this exemption.
-
-Changes to named full-group bodies select those groups. Updated smoke cases
-run as smoke, which every focused invocation already requires. KMAC smoke
-checks secret-output lifetime; TupleHash smoke checks abandoned-item failure,
-not their much larger domain-separation campaigns. Those campaigns remain in
-the unchanged full groups. Shared execution-helper
-or unrecognized runner changes remain full-suite triggers. Adding registered
-groups does not invalidate old groups. Reviewed coverage-orchestration changes
-run their full structural and executable regression tests, not every old hash
-input. Miri/sanitizer nightly-pin-only updates run smoke under the new verifier;
-previous full evidence remains explicitly tied to its old verifier and is not
-silently relabelled. The next public checkpoint renews the complete evidence.
-Production compiler changes remain a full-suite trigger.
-
-The v0.24.23 final legacy fixture composes the frozen v0.24.20 consumer.
-Its lockfile may include that one explicitly registered, unpublished fixture
-only after the nested manifest and lock graph are checked against the workspace.
-Unknown nested packages, changed dependency identities and ambiguous entries
-fail closed. This selects the complete `legacy` group, including the new
-consumer's destruction/unwind tests, while unchanged primitive owners receive
-smoke. It does not relabel previous full campaigns as fresh executions.
-
-The registry and dependent-consumer map must be extended when a new algorithm
-or construction is introduced. Unknown native/Rust files are never assumed
-unrelated. Exceptional pentests, independent-review limits and the committed
-report -> green GitHub/CodeQL -> owner-approved signed tag flow are unchanged.
-
-The v0.24.30 dependency-free acceleration contract has its own `acceleration`
-group. Its complete selection/quarantine model runs under Miri when changed;
-the unchanged groups run their existing smoke cases. Both baseline and
-candidate manifest/lockfile must confirm the unpublished, dependency-free
-fixture identity. A new dependency (including target-specific or development
-dependencies), malformed graph, or missing manifest/lockfile forces full
-coverage until its impact is reviewed. Public checkpoints include this group
-in the complete suite. Registering this fixture does not admit a CPU backend
-or treat historical cryptographic evidence as a new execution.
-
-The `static_cpu` group covers the raw static execution-authority module and
-its normal downstream fixture, plus the separate runtime owner and hosted
-selection lifecycle. Miri checks non-instruction lifecycle behavior;
-native/QEMU package runs separately exercise actual kernels. Changes elsewhere
-in the shared CPU crate remain conservatively unclassified and select full
-coverage until a reviewed consumer-dependency classification is available.
-
-Inspect and test selection without launching Miri:
+Run this read-only command to see the selected groups, uncertainty reasons and
+exact plan fingerprint:
 
 ```sh
-python3 scripts/zeroization/miri_scope.py --base v0.24.19
-python3 scripts/zeroization/test-miri-scope.py
-python3 scripts/zeroization/test-scope-inputs.py
+python3 scripts/release/run-verification.py plan --check
 ```
 
-The initial acceptance-only candidate selected `legacy`. Its pentest follow-up
-changes SHA-1's private guards and correctly expands the full selection to
-`sha1 legacy`; MD5 and unrelated owners still receive smoke. A future edit to
-either primitive likewise expands the selected closure.
+An uncertain internal plan exits with code 3 and `scope review required`.
+The coding agent must explain why, which suites would run and any credible
+runtime estimate, then ask the owner whether to correct classification or approve
+the full run. No approval means stop, not skip and not PASS. Automated CI cannot
+ask interactively: it reports the blocker and stops.
+
+After explicit owner approval, use the fingerprint printed for that exact plan:
+
+```sh
+scripts/tag_gate.sh v0.24.34 --approve-full PLAN_FINGERPRINT
+```
+
+Approval is not a permission to release or publish. A different HEAD, changed
+input or relevant build environment invalidates the fingerprint. Do not invent
+approval or reuse a stale token. Public checkpoints need no exceptional full-run
+approval because complete verification is the scheduled policy.
+
+For an exceptional CI rerun, the repository owner can set the Actions variable
+`BRYNJA_FULL_VERIFICATION_APPROVAL` to the fingerprint printed by that failed CI
+plan, then rerun the job. Remove it afterward: a stale nonempty value is rejected.
+Local and CI plans have different HEAD/build environments and must not share
+approval tokens. Fixing the classification is preferable when scope is knowable.
+
+## Execution
+
+- `scripts/checks.sh`: selected repository checks, plus the cheap shared baseline.
+- `scripts/tag_gate.sh vX.Y.Z`: approve scope first, then repository, selected
+  native/QEMU, compiler-matrix, sanitizer, Miri and Kani checks, online authority
+  and dependency checks, SBOM, committed report and release readiness.
+- `scripts/ci/check-rust-version-matrix.sh`: the same affected selection across
+  the twelve registered compiler versions.
+- `scripts/zeroization/check-zeroization-miri.sh --selected sha2`: the exact
+  selected group, with no interpreter smoke run of unrelated families.
+- `scripts/checks.sh --full-catalog` and
+  `scripts/ci/check-rust-version-matrix.sh --full-catalog`: explicit full
+  diagnostic runs, not the default incremental release workflow. Do not invoke
+  them to bypass a requested scope review.
+
+The full shell catalogs remain the canonical command inventory. The incremental
+dispatcher accepts only their reviewed straight-line grammar and validates every
+command owner before running the first command. Unknown syntax/owners stop
+planning. It never treats a failed or unclassified command as successful evidence.
+The catalog and dispatcher tests must evolve together.
+
+## Evidence boundaries
+
+Selection compares staged, unstaged, deleted, renamed and nonignored untracked
+inputs against an authenticated signed ancestor. At a clean tagged checkout it
+uses the preceding tag; dirty new work after a tag uses that current tag.
+Old and new dependency graphs are considered so removed edges cannot hide
+consumers. A fixture may remove optional workspace dependency edges, but cannot
+change package identities, versions, registry checksums or add unexpected edges.
+The explicitly registered SHA-2 nested consumer is checked recursively.
+
+Version-only local pins and exact digest rebinding do not imply changed algorithms.
+Reused evidence remains attached to its original source, verifier, compiler,
+features and target: reuse never becomes a claim of a fresh run. Native correctness
+does not prove timing, migration, register erasure or FIPS validation.
+
+New algorithms, shared consumers and command families must be registered with
+negative selection/dispatch tests before relying on incremental verification.
+Unknown scope is never assumed unrelated. The normal flow remains implementation,
+required pentest, local verification, committed report, green GitHub/CodeQL,
+then owner-approved signed tag. This workflow does not publish intermediate tags.

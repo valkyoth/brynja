@@ -314,7 +314,7 @@ def validate_repository(policy: dict) -> None:
     if install in workflow:
         fail("ordinary CI must not install the full Miri evidence toolchain")
     tag_gate = (ROOT / "scripts" / "tag_gate.sh").read_text(encoding="utf-8")
-    dynamic = ("scripts/zeroization/check-tag-miri.sh", "scripts/zeroization/check-zeroization-sanitizer.sh")
+    dynamic = ("scripts/zeroization/check-tag-miri.sh", "python3 scripts/release/run-verification.py asan")
     if any(tag_gate.count(command) != 1 for command in dynamic):
         fail("local tag gate dynamic-analysis binding drifted")
     rust_targets = set(
@@ -381,20 +381,21 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "scripts" / "assurance" / "assurance_process.py",
         ROOT / "scripts" / "assurance" / "assurance_process_tree.py",
         ROOT / "scripts" / "assurance" / "assurance_process_tests.py",
-        ROOT / "scripts" / "assurance" / "assurance_policy.py",
-        ROOT / "scripts" / "assurance" / "assurance-fixture-adapter.py",
-        ROOT / "scripts" / "assurance" / "test-assurance.py",
-        ROOT / "scripts" / "assurance" / "check-assurance.py",
-        ROOT / "scripts" / "assurance" / "check-bare-metal.sh",
-        ROOT / "scripts" / "assurance" / "check-kani.sh",
+        *(ROOT / "scripts/assurance" / name for name in (
+            "assurance_policy.py", "assurance-fixture-adapter.py", "test-assurance.py",
+            "check-assurance.py", "check-bare-metal.sh", "check-kani.sh")),
         ROOT / "scripts" / "tag_gate.sh",
-        ROOT / "scripts" / "repository" / "unsafe_policy.py",
-        ROOT / "scripts" / "repository" / "check-unsafe-policy.py",
-        ROOT / "scripts" / "repository" / "test-unsafe-policy.py",
-        ROOT / "scripts" / "zeroization" / "zeroization_evidence.py",
-        ROOT / "scripts" / "zeroization" / "check-zeroization-codegen.sh",
-        ROOT / "scripts" / "zeroization" / "check-zeroization-evidence.py",
-        ROOT / "scripts" / "zeroization" / "test-zeroization-evidence.py",
+        *(ROOT / "scripts/release" / name for name in (
+            "run-verification.py", "verification_plan.py",
+            "verification_commands.py", "test-verification-plan.py")),
+        ROOT / "scripts/zeroization/scope_inputs.py",
+        ROOT / "security/release-signers",
+        ROOT / "docs/focused-assurance.md",
+        *(ROOT / "scripts/repository" / name for name in (
+            "unsafe_policy.py", "check-unsafe-policy.py", "test-unsafe-policy.py")),
+        *(ROOT / "scripts/zeroization" / name for name in (
+            "zeroization_evidence.py", "check-zeroization-codegen.sh",
+            "check-zeroization-evidence.py", "test-zeroization-evidence.py")),
         *(ROOT / "scripts" / "zeroization" / name for name in ("miri_scope.py", "test-miri-scope.py", "check-tag-miri.sh")),
         ROOT / "scripts" / "zeroization" / "check-zeroization-miri.sh",
         ROOT / "scripts" / "zeroization" / "check-zeroization-sanitizer.sh",
@@ -420,9 +421,7 @@ def build_evidence(policy: dict | None = None) -> dict:
 
 
 def json_bytes(value: object) -> bytes:
-    return (
-        json.dumps(value, indent=2, sort_keys=True, ensure_ascii=True) + "\n"
-    ).encode()
+    return (json.dumps(value, indent=2, sort_keys=True, ensure_ascii=True) + "\n").encode()
 
 
 def network_check(policy: dict) -> None:

@@ -22,29 +22,33 @@ FULL_EXACT = {
     "scripts/tag_gate.sh",
 }
 FULL_PREFIXES = ("scripts/zeroization/", ".cargo/")
+BASE_SCRIPT_PREFIXES = tuple("scripts/" + category + "/" for category in (
+    "repository", "release", "assurance", "ci", "standards", "pki", "protocols"))
 GROUP_PREFIXES = {
     "static_cpu": ("assurance/static-cpu-execution/", "assurance/hosted-cpu-execution/",
-                   "crates/brynja-crypto-cpu/src/static_execution/",
-                   "crates/brynja-crypto-cpu/src/runtime_execution/",
-                   "crates/brynja-crypto-cpu-std/src/execution/"),
+                   "assurance/cpu-admission-fixture/", "scripts/cpu/",
+                   "security/cpu-", "security/acceleration-availability.toml",
+                   "crates/brynja-crypto-cpu/", "crates/brynja-crypto-cpu-std/"),
     "acceleration": ("assurance/acceleration-contract/",),
-    "core": ("crates/brynja-core/",),
+    "core": ("crates/brynja-core/", "scripts/foundations/", "scripts/constant-time/", "scripts/cryptography/"),
     "sanitization": (
         "assurance/sanitization-admission/",
         "crates/brynja-sanitization/",
         "scripts/sanitization/",
+        "security/dependency-admissions/",
     ),
-    "md5": ("crates/brynja-legacy-md5/", "crates/brynja-legacy-md5-std/", "crates/brynja-hash-core/", "assurance/md5-", "scripts/md5/"),
-    "sha1": ("crates/brynja-legacy-sha1/", "crates/brynja-legacy-sha1-std/", "crates/brynja-hash-core/", "assurance/sha1-", "scripts/sha1/"),
+    "md5": ("crates/brynja-legacy-md5/", "crates/brynja-legacy-md5-std/", "crates/brynja-hash-core/", "assurance/md5-", "scripts/md5/", "security/md5-"),
+    "sha1": ("crates/brynja-legacy-sha1/", "crates/brynja-legacy-sha1-std/", "crates/brynja-hash-core/", "assurance/sha1-", "scripts/sha1/", "security/sha1-"),
     "legacy": ("assurance/legacy-hash-", "scripts/legacy-hash/"),
     "sha2": (
         "assurance/general-sha512-t/",
         "assurance/general-sha512-t-cpu/",
         "assurance/hash-final-acceptance/",
         "assurance/sha2-",
+        "assurance/sha256-",
         "crates/brynja-hash-core/",
         "crates/brynja-hash-sha2/",
-        "scripts/sha2/",
+        "scripts/sha2/", "scripts/hash/",
     ),
     "sha3": (
         "assurance/hash-final-acceptance/", "assurance/sp800185-", "scripts/sp800185/",
@@ -52,7 +56,7 @@ GROUP_PREFIXES = {
         "assurance/sha3-",
         "crates/brynja-hash-core/",
         "crates/brynja-hash-sha3/",
-        "scripts/sha3/",
+        "scripts/sha3/", "scripts/hash/",
     ),
     "kmac": (
         "assurance/kmac-",
@@ -67,13 +71,14 @@ GROUP_PREFIXES = {
     "parallelhash": (
         "assurance/parallelhash-",
         "crates/brynja-hash-parallel/",
+        "crates/brynja-hash-parallel-std/",
         "scripts/parallelhash/",
     ),
 }
 DOWNSTREAM = {
-    # Static authority currently has no high-level hash consumer. Other CPU
-    # source/manifest edits remain unclassified and conservatively select all.
-    "static_cpu": set(),
+    # SHA-2 now consumes operational CPU authorities. Recheck both sides of
+    # this integration; SHA-3 still only has its separately tested candidates.
+    "static_cpu": {"sha2", "sha3"},
     "acceleration": set(),
     "core": {"sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy"},
     "sanitization": set(),
@@ -110,6 +115,10 @@ def select(paths: list[str]) -> tuple[bool, tuple[str, ...]]:
         for group, prefixes in GROUP_PREFIXES.items():
             if path.startswith(prefixes):
                 selected.add(group)
+        if (path.endswith(('.py', '.sh')) and not path.startswith(BASE_SCRIPT_PREFIXES)
+                and path != 'scripts/checks.sh'
+                and not any(path.startswith(p) for ps in GROUP_PREFIXES.values() for p in ps)):
+            return True, GROUPS
         if path.endswith(('.rs', '.c', '.cc', '.cpp', '.h', '.hpp', '.s', '.S', '.asm', 'Cargo.toml')) and not any(
             path.startswith(prefix) for prefixes in GROUP_PREFIXES.values() for prefix in prefixes
         ):
@@ -129,7 +138,9 @@ def closure(selected: set[str]) -> tuple[str, ...]:
     return tuple(group for group in GROUPS if group in selected)
 
 
-def select_repository(base: str, root: Path = ROOT) -> tuple[bool, tuple[str, ...]]:
+def select_repository(
+    base: str, root: Path = ROOT, *, issues: list[str] | None = None,
+) -> tuple[bool, tuple[str, ...]]:
     """Semantic metadata classification; unknown or malformed inputs fail closed."""
     try:
         if not re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?', base):
@@ -146,6 +157,7 @@ def select_repository(base: str, root: Path = ROOT) -> tuple[bool, tuple[str, ..
         affected: set[str] = set()
         retained = []
         orchestration = {
+            'security/release-signers',
             'scripts/zeroization/miri_scope.py', 'scripts/zeroization/scope_inputs.py',
             'scripts/zeroization/test-miri-scope.py', 'scripts/zeroization/test-scope-inputs.py',
             'scripts/zeroization/check-tag-miri.sh', 'scripts/tag_gate.sh',
@@ -181,6 +193,10 @@ def select_repository(base: str, root: Path = ROOT) -> tuple[bool, tuple[str, ..
                         consumer = tuple(scope_inputs.snapshot(root, base, p)[index] for p in (
                             'assurance/legacy-hash-public-api/Cargo.lock',
                             'assurance/legacy-hash-public-api/Cargo.toml'))
+                    elif path == 'assurance/sha2-execution/Cargo.lock':
+                        consumer = tuple(scope_inputs.snapshot(root, base, p)[index] for p in (
+                            'assurance/general-sha512-t/Cargo.lock',
+                            'assurance/general-sha512-t/Cargo.toml'))
                     scope_inputs.fixture_lock(data, workspace, manifest, consumer)
                     if not any(path.startswith(p) for ps in GROUP_PREFIXES.values() for p in ps):
                         raise ValueError('unclassified fixture lock')
@@ -207,10 +223,14 @@ def select_repository(base: str, root: Path = ROOT) -> tuple[bool, tuple[str, ..
                 retained.append(path)
         full, groups = select(retained)
         if full:
+            if issues is not None:
+                issues.extend(f"broad or unclassified input: {p}" for p in retained if select([p])[0])
             return True, GROUPS
         affected.update(groups)
         return False, closure(affected)
     except (OSError, ValueError, SyntaxError, KeyError, TypeError, AttributeError, subprocess.SubprocessError) as error:
+        if issues is not None:
+            issues.append(str(error))
         print(f'Miri scope requires full coverage: {error}', file=sys.stderr)
         return True, GROUPS
 
@@ -228,15 +248,10 @@ def validate_repository() -> None:
                 raise MiriScopeError(f"missing {profile} Miri group: {group}")
     if tag_gate.count('scripts/zeroization/check-tag-miri.sh "$stage"') != 1:
         raise MiriScopeError("tag gate focused-Miri binding drifted")
-    if tag_runner.count('"$miri_runner" --full') != 4:
-        raise MiriScopeError("tag Miri runner lost a complete-suite boundary")
-    if tag_runner.count('"$miri_runner" --focused "${groups[@]}"') != 1:
-        raise MiriScopeError("tag Miri runner lost its focused-suite boundary")
-    describe = 'git describe --tags --first-parent --match "v[0-9]*" --abbrev=0 HEAD'
-    if tag_runner.count(describe) != 1:
-        raise MiriScopeError("tag Miri runner lost its signed-tag baseline")
-    if tag_runner.count('git verify-tag "$base"') != 1:
-        raise MiriScopeError("tag Miri runner no longer authenticates its baseline")
+    if tag_runner.count('exec python3 scripts/release/run-verification.py miri') != 1:
+        raise MiriScopeError("tag Miri runner lost the approval-aware planner")
+    if tag_gate.count('python3 scripts/release/run-verification.py plan --check') != 1:
+        raise MiriScopeError("tag gate lost pre-execution scope approval")
 
 
 def main() -> int:

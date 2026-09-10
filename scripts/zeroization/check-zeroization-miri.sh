@@ -194,6 +194,13 @@ case "$mode" in
     --focused)
         selected=" $* "
         ;;
+    --selected)
+        test "$#" -gt 0 || {
+            echo "--selected requires at least one reviewed group" >&2
+            exit 2
+        }
+        selected=" $* "
+        ;;
     --group)
         test "$#" -eq 1 || {
             echo "--group requires exactly one group name" >&2
@@ -202,7 +209,7 @@ case "$mode" in
         selected=" $1 "
         ;;
     *)
-        echo "usage: $0 --full | --focused [groups...] | --group group" >&2
+        echo "usage: $0 --full | --focused [groups...] | --selected groups... | --group group" >&2
         exit 2
         ;;
 esac

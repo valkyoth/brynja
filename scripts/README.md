@@ -7,9 +7,13 @@ one growing flat directory.
 
 Only two executable entry points live directly in this directory:
 
-- `scripts/checks.sh` runs the ordinary complete repository gate.
+- `scripts/checks.sh` runs impact-selected expensive checks and the cheap repository baseline.
 - `scripts/tag_gate.sh vX.Y.Z` adds tag-only, online, matrix, SBOM, release,
-  stage-aware local Miri, full AddressSanitizer, and required local proof gates.
+  impact-selected local Miri, AddressSanitizer, and required local proof gates.
+
+Start with `python3 scripts/release/run-verification.py plan --check`. Uncertain
+scope stops before expensive work and requires owner approval tied to the exact
+plan; public checkpoints still run everything. See [focused assurance](../docs/focused-assurance.md).
 
 The repository gate first runs `cargo fetch --locked` to prepare the exact
 workspace dependencies for its offline package consumers. Even a dependency-free

@@ -4298,6 +4298,8 @@ Goal: Allow real keyed consumers to request acceleration without routing secrets
 
 Deliverables:
 
+- First replace unconditional expensive release campaigns with one impact-selected verification plan. Include old/new dependency edges, native/compiler/verifier inputs, supported fixtures and changed test drivers. Print selected/reused suites and their reasons before execution.
+- Unknown scope must stop before expensive checks and require owner approval tied to that exact plan; CI fails with scope-review-required rather than silently running everything or passing. Public crates.io checkpoints retain the complete suite. Test the planner and dispatchers against omitted consumers, malformed inputs and stale approval.
 - Complete v0.24.33 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Own schedules, vector staging, chaining words, block copies and digest staging within hardened lifetimes; use existing reviewed clearing primitives and register each region.
 - Preserve non-Copy/non-Clone ownership, explicit declassification, secret-destination clearing, public-output atomicity and error/cancellation/unwind/Drop cleanup.

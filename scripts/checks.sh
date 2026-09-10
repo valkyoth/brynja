@@ -1,8 +1,16 @@
 #!/usr/bin/env sh
 set -eu
 
+if test "${1:-}" != "--full-catalog"; then
+    exec python3 scripts/release/run-verification.py repository "$@"
+fi
+shift
+test "$#" -eq 0
+
+# BEGIN VERIFICATION CATALOG
 cargo fetch --locked
 python3 scripts/repository/test-offline-bootstrap.py
+python3 scripts/release/test-verification-plan.py
 
 cargo fmt --all --check
 python3 scripts/repository/check-script-layout.py
@@ -28,6 +36,8 @@ python3 scripts/cryptography/check-api-profiles.py
 python3 scripts/cryptography/test-api-profiles.py
 python3 scripts/cpu/check-acceleration-availability.py
 python3 scripts/cpu/test-acceleration-availability.py
+python3 scripts/cpu/check-static-execution.py --policy-only
+python3 scripts/cpu/check-hosted-execution.py --policy-only
 python3 scripts/cpu/check-static-execution.py
 python3 scripts/cpu/check-hosted-execution.py
 cargo test --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml

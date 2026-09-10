@@ -93,9 +93,10 @@ def main() -> int:
     expect(["assurance/legacy-hash-public-api/src/lib.rs"], full=False, groups=("legacy",))
     expect(["assurance/legacy-hash-final/src/lib.rs"], full=False, groups=("legacy",))
     expect(["assurance/acceleration-contract/src/lib.rs"], full=False, groups=("acceleration",))
-    expect(["assurance/static-cpu-execution/src/lib.rs"], full=False, groups=("static_cpu",))
-    expect(["crates/brynja-crypto-cpu/src/static_execution/mod.rs"], full=False, groups=("static_cpu",))
-    expect(["crates/brynja-crypto-cpu/src/x86_sha.rs"], full=True, groups=miri_scope.GROUPS)
+    cpu_groups = ("sha2", "sha3", "kmac", "tuplehash", "parallelhash", "static_cpu")
+    expect(["assurance/static-cpu-execution/src/lib.rs"], full=False, groups=cpu_groups)
+    expect(["crates/brynja-crypto-cpu/src/static_execution/mod.rs"], full=False, groups=cpu_groups)
+    expect(["crates/brynja-crypto-cpu/src/x86_sha.rs"], full=False, groups=cpu_groups)
     expect(["crates/unknown/src/lib.rs"], full=True, groups=miri_scope.GROUPS)
     expect(["Cargo.lock"], full=True, groups=miri_scope.GROUPS)
     expect(
@@ -133,6 +134,10 @@ def main() -> int:
     assert sum('--features general-sha512-t --test general bounded_public_api_smoke' in c for c in commands) == 1
     assert sum("assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands) == 1
     assert all("brynja-hash-sha2" in c or "assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands)
+    status, selected_commands = run_profile("--selected", "sha2")
+    assert status == 0 and selected_commands == commands
+    status, selected_commands = run_profile("--selected")
+    assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
     assert status == 0 and len(commands) == 48
     assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1

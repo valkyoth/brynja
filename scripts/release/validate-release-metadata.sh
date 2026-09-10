@@ -303,10 +303,10 @@ if grep -q -- '--write-freshness' .github/workflows/standards-lifecycle.yml; the
     echo "scheduled lifecycle workflow must not write repository freshness state" >&2
     exit 1
 fi
-grep -q 'scripts/assurance/check-kani.sh --required' scripts/tag_gate.sh
+grep -q 'python3 scripts/release/run-verification.py kani' scripts/tag_gate.sh
 grep -q 'scripts/zeroization/check-tag-miri.sh "$stage"' scripts/tag_gate.sh
-grep -q '"$miri_runner" --full' scripts/zeroization/check-tag-miri.sh
-grep -q '"$miri_runner" --focused "${groups\[@\]}"' scripts/zeroization/check-tag-miri.sh
+grep -q 'exec python3 scripts/release/run-verification.py miri' scripts/zeroization/check-tag-miri.sh
+grep -q 'python3 scripts/release/run-verification.py plan --check' scripts/tag_gate.sh
 if grep -q 'run: scripts/release/validate-current-pentest.sh' .github/workflows/ci.yml; then
     echo "ordinary CI must not enforce pentest freshness; tag and release gates own it" >&2
     exit 1

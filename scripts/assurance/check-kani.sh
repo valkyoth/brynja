@@ -2,6 +2,20 @@
 set -eu
 
 mode="${1:---run}"
+selected_groups="all"
+if test "$mode" = "--required-groups"; then
+    shift
+    test "$#" -gt 0 || { echo "--required-groups requires groups" >&2; exit 2; }
+    for group in "$@"; do
+        case "$group" in
+            core|sanitization|md5|sha1|sha2|sha3|kmac|tuplehash|parallelhash|legacy|acceleration|static_cpu) ;;
+            *) echo "unknown Kani group: $group" >&2; exit 2 ;;
+        esac
+    done
+    selected_groups=" $* "
+    set -- --required
+    mode="--required"
+fi
 if [ "$#" -gt 1 ] || {
     [ "$mode" != "--policy-only" ] &&
         [ "$mode" != "--required" ] &&
@@ -93,11 +107,29 @@ test "$installed" = "cargo-kani ${kani_version}" || {
     exit 1
 }
 
-rustup run "$kani_toolchain" cargo kani -p brynja-legacy-md5 --features batch
-rustup run "$kani_toolchain" cargo kani -p brynja-legacy-sha1
-rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2
-rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha3
-rustup run "$kani_toolchain" cargo kani -p brynja-mac-kmac
-rustup run "$kani_toolchain" cargo kani -p brynja-hash-tuple
-rustup run "$kani_toolchain" cargo kani -p brynja-hash-parallel
-echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; twenty-nine MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds passed"
+selected() {
+    test "$selected_groups" = all && return 0
+    case "$selected_groups" in *" $1 "*) return 0 ;; *) return 1 ;; esac
+}
+if selected md5; then
+    rustup run "$kani_toolchain" cargo kani -p brynja-legacy-md5 --features batch
+fi
+if selected sha1; then
+    rustup run "$kani_toolchain" cargo kani -p brynja-legacy-sha1
+fi
+if selected sha2; then
+    rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2
+fi
+if selected sha3; then
+    rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha3
+fi
+if selected kmac; then
+    rustup run "$kani_toolchain" cargo kani -p brynja-mac-kmac
+fi
+if selected tuplehash; then
+    rustup run "$kani_toolchain" cargo kani -p brynja-hash-tuple
+fi
+if selected parallelhash; then
+    rustup run "$kani_toolchain" cargo kani -p brynja-hash-parallel
+fi
+echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; selected groups passed: ${selected_groups} (29 harnesses inventoried globally)"

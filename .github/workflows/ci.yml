@@ -22,6 +22,10 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+      - name: Explain verification scope before expensive checks
+        env:
+          BRYNJA_FULL_VERIFICATION_APPROVAL: ${{ vars.BRYNJA_FULL_VERIFICATION_APPROVAL }}
+        run: python3 scripts/release/run-verification.py plan --check
       - name: Install Rust toolchain
         run: rustup show
       - name: Install OS-less Rust targets
@@ -35,6 +39,8 @@ jobs:
       - name: Install security and SBOM tools
         run: scripts/ci/install-ci-tools.sh
       - name: Run repository gate
+        env:
+          BRYNJA_FULL_VERIFICATION_APPROVAL: ${{ vars.BRYNJA_FULL_VERIFICATION_APPROVAL }}
         run: scripts/checks.sh
       - name: Validate protected release controls
         env:

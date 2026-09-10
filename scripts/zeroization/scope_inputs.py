@@ -9,6 +9,10 @@ from pathlib import Path
 
 LIMIT = 4 * 1024 * 1024
 PACKAGES = {
+    'brynja-general-sha512-t-consumer': 'sha2',
+    'brynja-sha2-execution-fixture': 'sha2',
+    'brynja-crypto-cpu': 'static_cpu',
+    'brynja-crypto-cpu-std': 'static_cpu',
     'brynja-hosted-cpu-execution-fixture': 'static_cpu',
     'brynja-static-cpu-execution-fixture': 'static_cpu',
     'brynja-acceleration-contract-fixture': 'acceleration',
@@ -24,7 +28,13 @@ PACKAGES = {
 
 
 def git(root: Path, *args: str) -> bytes:
-    return subprocess.check_output(['git', *args], cwd=root, timeout=30)
+    options = []
+    signers = root / 'security/release-signers'
+    if args and args[0] == 'verify-tag' and signers.exists():
+        if signers.is_symlink() or not signers.is_file():
+            raise ValueError('release signer inventory is not a regular file')
+        options = ['-c', 'gpg.ssh.allowedSignersFile=' + str(signers)]
+    return subprocess.check_output(['git', *options, *args], cwd=root, timeout=30)
 
 
 def snapshot(root: Path, base: str, path: str) -> tuple[bytes | None, bytes | None]:
@@ -190,7 +200,8 @@ def fixture_lock(data: bytes, workspace: bytes, manifest: bytes,
     if set(parsed) != {'version', 'package'} or parsed['version'] != 4:
         raise ValueError('unknown fixture lock schema')
     package = document(manifest)['package']
-    if package.get('publish') is not False or not package['name'].endswith('-fixture'):
+    registered_consumer = package['name'] == 'brynja-general-sha512-t-consumer'
+    if package.get('publish') is not False or not (package['name'].endswith('-fixture') or registered_consumer):
         raise ValueError('not an unpublished assurance fixture')
     packages = document(workspace)['package']
     if consumer is not None:
@@ -207,13 +218,25 @@ def fixture_lock(data: bytes, workspace: bytes, manifest: bytes,
     if len(names) != len(set(names)) or names.count(package['name']) != 1:
         raise ValueError('duplicate or missing fixture package')
     for entry in parsed['package']:
+        dependencies = entry.get('dependencies', [])
+        if (not isinstance(dependencies, list) or any(not isinstance(d, str) for d in dependencies)
+                or len(dependencies) != len(set(dependencies))
+                or not set(dependencies) <= set(names) - {entry['name']}):
+            raise ValueError('invalid fixture dependency edge')
         if entry['name'] == package['name']:
             if (set(entry) - {'name', 'version', 'dependencies'}
                     or entry['version'] != package['version']
                     or not set(entry.get('dependencies', [])) <= set(names) - {package['name']}):
                 raise ValueError('invalid fixture identity or edge')
         elif entry not in packages:
-            raise ValueError('fixture lock changes dependency closure')
+            # Disabling optional features can remove edges from a fixture lock.
+            # Package identity/version/source/checksum and every retained edge
+            # must still match the workspace; no new pin is admitted here.
+            identity = {k: v for k, v in entry.items() if k != 'dependencies'}
+            matches = [p for p in packages if
+                       {k: v for k, v in p.items() if k != 'dependencies'} == identity]
+            if len(matches) != 1 or not set(dependencies) <= set(matches[0].get('dependencies', [])):
+                raise ValueError('fixture lock changes dependency closure')
 
 
 def isolated_contract(data: bytes | None, manifest: bytes | None) -> None:
@@ -259,6 +282,18 @@ def runner_groups(before: bytes | None, after: bytes | None) -> set[str]:
         inventories.append(set(groups))
     def shell_body(shell):
         shell = re.sub(r'^all_groups=.*$', 'all_groups=REGISTERED', shell, flags=re.M)
+        # Reviewed dispatch-only addition. Full campaign/helper bodies are
+        # still compared separately; execution tests prove no unselected calls.
+        selected_mode = '''    --selected)
+        test "$#" -gt 0 || {
+            echo "--selected requires at least one reviewed group" >&2
+            exit 2
+        }
+        selected=" $* "
+        ;;
+'''
+        shell = shell.replace(selected_mode, '')
+        shell = shell.replace(' | --selected groups...', '')
         return re.sub(r'\n(?:[ \t]*\n)+', '\n', shell).strip()
     if (not inventories[0] <= inventories[1] or not old.keys() <= new.keys()
             or shell_body(old_shell) != shell_body(new_shell)):

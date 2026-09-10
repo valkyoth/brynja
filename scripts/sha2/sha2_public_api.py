@@ -52,8 +52,8 @@ FILES = (
     WORKFLOW,
 )
 EXPECTED_SHA256 = {
-    MANIFEST: "849a4ad985629521d4b04f211ed2c4ee863db3d5269f9d6d9bc40a4052c8c408",
-    LOCK: "b29c066acdd32f3630f92ea820c877a14d7becbd8c18d652b1cb9336f241d123",
+    MANIFEST: "265bb0b078e174945f916f133b82b1e0b3657807840afdffe8cb71e8b5be152b",
+    LOCK: "1266fee29238ebee18f60953562f52c6d30b65aea3137a6f567060960571f383",
     LIB: "436b9262248d811103f88fd88004bbee101cef72e56130d1c24b207b437ebbe7",
     ALGORITHMS: "f5c798334508de76015c92f2929dee7b51e7b76a61fe3bc353bf67e4677a1e63",
     BIT_INPUTS: "8f882911914e82ce7dfef7713296a696f5d3966ea9f55ee9d0cdda8dfb65812d",
@@ -74,13 +74,13 @@ EXPECTED_SHA256 = {
     DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
     FACADE_LIB: "dfa6311a5a73bed4547611739752052e8e98c30de7c8cd9536d1b0d0ebad8deb",
     LEAF_README: "1d2f5d0fcae7f8b8cf68b7de3baac784aec9b435d96eee566116ca87a7115c82",
-    FACADE_README: "1bf66e76c8d94337950fd5600253d3dce7fd2164ed9dd16d661ba1a896a400c9",
+    FACADE_README: "c73f54801ea99f3ce1fba2384baa9fabb97ff3bfa9f9a26e0c9820b703607f84",
     CHECK_SCRIPT: "38306f0daa5d4b180b47bc6714bc66bc402afd2f29c820ca9f3db2cad9476778",
     TEST_SCRIPT: "6588778e5237d28f14c8ba146b113142418e644010b39113657bba8b723ba7fa",
-    CHECKS: "5f553f9fcddde7143de1876411822a572865360edeefed745fd78ed3dfefe153",
-    RUST_MATRIX: "c1c88f88846bd9f3470ea46c98e34d9e52afc6a10129340e0d68ab8f10d702bd",
+    CHECKS: "8cfbc118dcddea1d30b70bff8057ca59a0969da775ffb8e5a801db84512a2c5b",
+    RUST_MATRIX: "fec9a6ba60d2fdf016a5248760c332024085ecad2febfdeae5c8dd6ca7cc109f",
     BARE_METAL: "4cae003df12d834e8fa3d31e878a7004ed0e69022ef900c8bb007578f26aaf0b",
-    WORKFLOW: "9965b59dbb23a8394baca8fd1768aa61b3fbfa3d0c728befd978be8435841a88",
+    WORKFLOW: "2cfd4d6e8d859e1f2c4ce0092f260cf520333b2dcbb06c62aa0f39c8da78fc27",
 }
 ALGORITHMS_NAMES = ("SHA-224", "SHA-256", "SHA-384", "SHA-512", "SHA-512/224", "SHA-512/256")
 PACKAGES = (
@@ -124,7 +124,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.33", ("src/lib.rs",)),
+    ("brynja", "0.24.34", ("src/lib.rs",)),
 )
 
 
@@ -162,7 +162,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.33", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.34", "default-features": False},
         "brynja-hash-sha2": {
             "path": "../../crates/brynja-hash-sha2", "version": "=0.1.0",
             "default-features": False, "features": ["cpu"],

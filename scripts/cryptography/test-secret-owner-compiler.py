@@ -353,6 +353,19 @@ def main() -> int:
     for wrong_header in wrong_headers:
         broken = {record["cleanup_callers"][0]: [wrong_header]}
         rejects_inventory(registry, tests, broken, sanitizers)
+    # Catch a moved Drop impl before expensive compiler evidence. Keep the
+    # exact owner/path/signature match; never broaden MIR identity matching.
+    source = "crates/brynja-hash-sha2/src/hardened/owner.rs"
+    declaration = "impl Drop for HardenedSha2Owner {"
+    locations = [number for number, line in enumerate(
+        (compiler.ROOT / source).read_text().splitlines(), 1
+    ) if line == declaration]
+    assert len(locations) == 1
+    line = locations[0]
+    end_column = len(declaration.removesuffix(" {")) + 1
+    expected = (f"fn owner::<impl at {source}:{line}:1: {line}:{end_column}>::"
+                "drop(_1: &mut HardenedSha2Owner) -> () {")
+    assert compiler.contracts.REGISTERED_CALLER_MIR_HEADERS[compiler.contracts.SHA2_DROP] == [expected]
     print(
         "secret-owner MIR evidence rejects nineteen identity, target, data-flow, and dominance "
         "regressions plus twenty-two registered identity, namespace, and coverage bypasses"

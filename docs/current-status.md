@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.33 signed. v0.24.34 implements [impact-selected verification](focused-assurance.md) and [hardened SHA-2 execution](sha2-hardened-execution.md). Local acceptance is complete; exceptional pentest and fresh native Arm/Mac evidence remain pending. No publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.33 signed. v0.24.34 implements [impact-selected verification](focused-assurance.md) and [hardened SHA-2 execution](sha2-hardened-execution.md). The exceptional retest passed and matching native Intel, Arm and Mac evidence is archived; final release review and green GitHub remain required before tagging. No publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

@@ -307,7 +307,7 @@ REGISTERED_OWNER_COMPILER_TESTS = {
 }
 REGISTERED_CALLER_MIR_HEADERS = {
     SHA2_DROP: [
-        "fn owner::<impl at crates/brynja-hash-sha2/src/hardened/owner.rs:78:1: 78:32>::"
+        "fn owner::<impl at crates/brynja-hash-sha2/src/hardened/owner.rs:83:1: 83:32>::"
         "drop(_1: &mut HardenedSha2Owner) -> () {"
     ],
     SHA3_DROP: [

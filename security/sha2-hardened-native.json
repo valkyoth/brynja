@@ -1,5 +1,24 @@
 {
   "schema": 1,
-  "capture_commit": null,
-  "lanes": {}
+  "capture_commit": "10c8bdfaccc2ec5aa6274db6e4267b714fd22421",
+  "lanes": {
+    "linux-x86_64": {
+      "artifact": "assurance/sha2-hardened-native/linux-x86_64.json",
+      "sha256": "8a1d855738b46b018765821c510b42302e933479676883521b0cf5cf15a8e1df",
+      "cpu": "Intel(R) Xeon(R) Platinum 8488C",
+      "reviewed": true
+    },
+    "linux-aarch64": {
+      "artifact": "assurance/sha2-hardened-native/linux-aarch64.json",
+      "sha256": "ada877473957e04ed276fe03bacf5989aab51a6b964ec52b4e07b053286c903e",
+      "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd40; CPU revision : 1",
+      "reviewed": true
+    },
+    "apple-aarch64": {
+      "artifact": "assurance/sha2-hardened-native/apple-aarch64.json",
+      "sha256": "5577fcd31ebd917290d4797312d6cd227a689166b0ff8b324758128d6409a632",
+      "cpu": "Apple M2 Pro",
+      "reviewed": true
+    }
+  }
 }

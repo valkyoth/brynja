@@ -102,7 +102,7 @@
     "crates/brynja-hash-sha2/src/sha512_256.rs": "d824f3bb67940e9c461da359bca2d0d64641b315d4410e006da8d831a00ae04f",
     "crates/brynja-hash-sha2/src/sha512_state.rs": "621cda9793ff1f489533101cbdad23da26bd467a2909faa1e3c2fc334ebc0d10",
     "crates/brynja-hash-sha2/src/sha512_t.rs": "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
-    "docs/sha2-hardened-execution.md": "49c17f323a6153e849050a7c080e5d3f8704fa18f1b37f940955831284120a0f",
+    "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
     "package-policy.toml": "b0663c340196635d2b8cfeed130c7a6d0709f48fa3963e580d87388a04e02db4",
     "scripts/checks.sh": "66b4e9e6cdd928bc8490a167ff20c8f59efe14d341e428ca31f1c75f6a3314bd",
     "scripts/sha2/capture-sha2-hardened-native.py": "50cd60bc595fa44c85c8424863757aa61dd7cb6d930eb127f7bad4fc9f013ad4",

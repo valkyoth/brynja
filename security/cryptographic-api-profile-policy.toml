@@ -993,7 +993,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "24fa6cb4bbbec6ea9ea7579d548bdba6426cc6a450a805536c7e29cba6e65a13"
+sha256 = "63164b1268532679904cf219096879decbed0a66011ca16f14d91aaed2b0c337"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
@@ -1025,7 +1025,7 @@ sha256 = "6de66954611072ac70b03542246a5de5a39587f994525a5000297fb7a06c290c"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-secret-owner-compiler.py"
-sha256 = "ef88c1a65c9982c15e82727a06639038bfe1785bace50ddc33323edb0c94a01f"
+sha256 = "7ef6ed7f851c2efb77c92dcb5257f9dace4a0dc25519dc1c4de6f5ec48288797"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/hardened/compress32.rs"

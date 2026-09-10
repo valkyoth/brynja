@@ -3,9 +3,10 @@
 The opt-in `brynja-hash-sha2/hardened-execution` feature provides complete
 secret-bearing SHA-2 hashing through a separate erasing execution owner. It
 does not change ordinary constructors, defaults or their public-data contract.
-The implementation is under v0.24.34 review; new native Arm/Mac evidence and
-the exceptional pentest are pending. No independent cryptographic review or
-FIPS validation is claimed.
+The v0.24.34 exceptional retest passed; matching native Linux x86, Linux Arm
+and Apple Arm observations are [archived](../assurance/sha2-hardened-native/README.md).
+Final release review and GitHub checks remain separate requirements. No
+independent cryptographic review or FIPS validation is claimed.
 
 ## API and supported routes
 
@@ -102,9 +103,9 @@ route; older ordinary-kernel captures do not qualify these new secret kernels.
 
 The tag gate calls `check-sha2-hardened-native-evidence.py` before expensive
 verification. Missing qualification blocks tagging, not ordinary CI. The checked
-index `security/sha2-hardened-native.json` remains pending until fresh reviewed
-observations exist for Linux x86_64 (SHA-256), Linux Arm (SHA-256/SHA-512) and
-Apple Arm (SHA-256/SHA-512). This covers all named identities and general t on
+index `security/sha2-hardened-native.json` records reviewed observations for
+Linux x86_64 (SHA-256), Linux Arm (SHA-256/SHA-512) and Apple Arm
+(SHA-256/SHA-512), captured at `10c8bdfa`. This covers all named identities and general t on
 the relevant kernels; x86 wide hashing remains explicitly portable.
 
 After the owner retest, use one clean committed checkout on each native machine.

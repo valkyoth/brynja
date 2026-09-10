@@ -1,6 +1,6 @@
 # Brynja v0.24.34
 
-Status: exceptional retest passed; native collection and final review pending.
+Status: exceptional retest passed; native evidence archived; final review pending.
 
 ## Verification workflow first
 
@@ -32,7 +32,7 @@ checks hardware first and requires the actual 512-block kernel execution marker.
 The corrected nine-test run passed on the local AMD host. The tag gate now
 requires reviewed, commit/source/route-bound native Linux x86, Linux Arm and
 Apple Arm artifacts. Missing captures block tagging but not ordinary CI;
-the owner retest passed and native collection remains pending. No production kernel logic changed.
+the owner retest passed and all three native lanes are now archived. No production kernel logic changed.
 
 Pentest follow-up: the private buffer-length setter now rejects oversized
 lengths before mutation and every caller propagates failure. Boundary, retained
@@ -76,11 +76,19 @@ portable harnesses do not prove the new CPU kernels. The initial over-broad
 Miri run was stopped after dependency isolation was established; the final
 SHA-2/CPU selection completed successfully. Repository checks passed, with the
 metadata tail resumed after correcting the roadmap status label. The new kernel
-bodies passed the exceptional retest; fresh native artifacts are still required
-before tagging. A Linux Arm CPU-identity whitespace bug discovered during
-collection was fixed with a tabbed-field capture regression; all lanes will
-be recollected against the corrected capture source. The post-pentest final
-release check remains a separate step.
+bodies passed the exceptional retest. A Linux Arm CPU-identity whitespace bug
+discovered during collection was fixed with a tabbed-field capture regression.
+All three lanes were recollected at `10c8bdfa`: Intel Xeon Platinum 8488C,
+AWS Neoverse V1 and Apple M2 Pro. Each applicable portable/static/hosted route
+passed 240 named and 4,590 general-t cases; kernel markers confirm 512 block
+comparisons per supported hardened kernel. The [archived evidence](../assurance/sha2-hardened-native/README.md)
+binds all 170 tested inputs; the Mac account path is redacted. The post-pentest
+final release check remains a separate step.
+
+CI follow-up: the defensive buffer-length change shifted the SHA-2 Drop impl
+source span. Its exact MIR registry pin now matches line 83, with a fast
+source-span regression and successful Rust 1.90.0/1.98.1 compiler cleanup checks.
+No production code, cleanup proof requirement or native capture input changed.
 
 Erasure claims exclude registers, compiler-created copies/spills, caches,
 swap, crash dumps, DMA, abort, forced termination, `mem::forget` and caller

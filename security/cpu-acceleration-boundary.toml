@@ -160,7 +160,7 @@ sha256 = "52e225e0d1525b15c58e6dba33f01aa08e2e679058debb90884f26650bd9b92c"
 package = "brynja-crypto-cpu"
 path = "src/hardened_execution/tests.rs"
 status = "hardened-kernel-and-lifecycle-tests"
-sha256 = "6dd9a4a9d32ae8dffdaaf59491d86fa0da846983aeea5cd57c50d294628c679c"
+sha256 = "3909e211ba642c53140811e4707511b8093b2047f5720faa190fcde7cc82d213"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

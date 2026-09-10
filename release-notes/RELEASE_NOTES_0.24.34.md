@@ -26,6 +26,14 @@ rerun for this tooling-only pass. This is not the final v0.24.34 release check.
 
 ## Hardened SHA-2 execution
 
+Second pentest follow-up: generic ASan ownership tests could skip the x86
+instruction kernel. A separate mandatory native SHA-NI/SSE2 ASan runner now
+checks hardware first and requires the actual 512-block kernel execution marker.
+The corrected nine-test run passed on the local AMD host. The tag gate now
+requires reviewed, commit/source/route-bound native Linux x86, Linux Arm and
+Apple Arm artifacts. Missing captures block tagging but not ordinary CI;
+collection and owner retest remain pending. No production kernel logic changed.
+
 Pentest follow-up: the private buffer-length setter now rejects oversized
 lengths before mutation and every caller propagates failure. Boundary, retained
 state cleanup and compiled reset/bounds mutations prevent regression. Arm

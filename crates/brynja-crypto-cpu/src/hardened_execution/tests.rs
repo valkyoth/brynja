@@ -124,6 +124,7 @@ fn hardened_kernel_matches_ordinary_and_clears_every_operation() -> Result<(), s
                     .all(|b| *b == 0)
             );
         }
+        std::println!("\nHARDENED_KERNEL_EXECUTION: {kernel:?}; blocks=512");
         owner.quarantine();
         let mut state = [0xa5; 64];
         assert_eq!(

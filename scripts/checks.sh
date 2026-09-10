@@ -102,6 +102,7 @@ python3 scripts/sha2/check-sha2-hardened-execution.py --policy-only
 python3 scripts/sha2/check-sha2-hardened-execution.py
 python3 scripts/sha2/check-sha2-hardened-execution-codegen.py
 python3 scripts/sha2/test-sha2-hardened-execution.py
+python3 scripts/sha2/test-sha2-hardened-native.py
 python3 scripts/sha2/test-sha256-public-api.py
 python3 scripts/sha2/check-sha2-public-api.py
 python3 scripts/sha2/test-sha2-public-api.py

@@ -97,3 +97,49 @@ instructions that Miri cannot interpret. The release impact selector also
 includes consumers of the changed shared CPU package, not unrelated legacy
 hashes. Native evidence must identify the exact reviewed source and operational
 route; older ordinary-kernel captures do not qualify these new secret kernels.
+
+## Required native evidence before tagging
+
+The tag gate calls `check-sha2-hardened-native-evidence.py` before expensive
+verification. Missing qualification blocks tagging, not ordinary CI. The checked
+index `security/sha2-hardened-native.json` remains pending until fresh reviewed
+observations exist for Linux x86_64 (SHA-256), Linux Arm (SHA-256/SHA-512) and
+Apple Arm (SHA-256/SHA-512). This covers all named identities and general t on
+the relevant kernels; x86 wide hashing remains explicitly portable.
+
+After the owner retest, use one clean committed checkout on each native machine.
+Fetch the root and `assurance/sha2-hardened-execution/Cargo.toml` locked graphs
+once online, then capture offline. Example for Apple (create `target` first):
+
+```sh
+python3 scripts/sha2/capture-sha2-hardened-native.py apple-aarch64 target/hardened-native.json --attest-native
+```
+
+Linux lanes are `linux-x86_64` and `linux-aarch64`. The operator must confirm
+native execution, not QEMU. The capture checks compiler/host identity, verifies
+hardware before static entry, runs complete portable/static and applicable
+hosted consumers, and requires actual hardened-kernel execution markers plus
+successful startup KAT/differential tests. It refuses an existing output file.
+
+Review the JSONs, retain them under `assurance/sha2-hardened-native/`, then update
+the index with their common `capture_commit` and, per lane, `artifact`, normalized
+LF-byte `sha256`, exact reviewed `cpu` identity and `reviewed: true`. These fields
+are an explicit owner review, not automatic admission. The validator checks
+each artifact, all required lanes/routes/results, captured source and vector
+hashes, and that the capture commit is an ancestor of release HEAD. Later
+report/evidence-only commits are allowed only while the tested closure remains
+identical. The root lock hash covers the selected dependency graph, so unrelated
+facade version-only changes do not require recollection. Changed tested inputs
+do require fresh matching evidence. Use `--commit HEAD_HASH` to additionally
+assert the exact current release HEAD; passing an older commit is rejected.
+
+Local ASan has a separate required `check-sha2-hardened-asan.py` step. It checks
+SHA-NI/SSE2 on every reported Linux x86 CPU before enabling the instructions,
+rejects inherited build/sanitizer overrides, and rejects a successful test run
+without the actual kernel marker. Missing hardware blocks that step; it is not
+recorded as a sanitizer PASS. Generic ownership-only ASan remains separate.
+
+These are owner-reviewed native observations, not remote attestation. They do
+not prove scheduling/hotplug/VM-migration safety, side-channel resistance,
+physical erasure, independent cryptographic review or FIPS validation. Those
+deployment limits remain explicit even after this functional gate passes.

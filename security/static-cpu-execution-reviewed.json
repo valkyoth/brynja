@@ -9,7 +9,7 @@
     "crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs": "7fafd5d7d568bd13c7c77ffbedc2d053cd41f1e0ce0cefb7161fb5efc455089d",
     "crates/brynja-crypto-cpu/src/hardened_execution/mod.rs": "2c438ebd34e2abe4f8ebcd8886616892b9d9128e455e36f4df9bf63d6add4b93",
     "crates/brynja-crypto-cpu/src/hardened_execution/scratch.rs": "52e225e0d1525b15c58e6dba33f01aa08e2e679058debb90884f26650bd9b92c",
-    "crates/brynja-crypto-cpu/src/hardened_execution/tests.rs": "6dd9a4a9d32ae8dffdaaf59491d86fa0da846983aeea5cd57c50d294628c679c",
+    "crates/brynja-crypto-cpu/src/hardened_execution/tests.rs": "3909e211ba642c53140811e4707511b8093b2047f5720faa190fcde7cc82d213",
     "crates/brynja-crypto-cpu/src/keccak.rs": "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a",
     "crates/brynja-crypto-cpu/src/keccak_constants.rs": "a1c1eb54418629305e71fe458d70b6e0ebb3e4fded9d60f898bc0fd09db2fc14",
     "crates/brynja-crypto-cpu/src/lib.rs": "91b9b91cffce1974d920f094ddc8e558e69b3009ff034adc7c7f3b504409ca51",
@@ -32,11 +32,11 @@
     "docs/static-cpu-execution.md": "19c94d69a609a3ef81d799ddfe6792db8d357beda43ac7220d55b9f31aa753f1",
     "docs/threat-model.md": "1afdc271715461a57e859104ccf6e29bc9f653598991724c0fc2d23232fb1c8e",
     "docs/unsafe-policy.md": "b60abd07527505fb94b4e0558d850b8f7a521ad96aa0e6460f2e8936d60ded29",
-    "scripts/checks.sh": "c7e2743937fb2c867af8bf623746970a2eef3e9baf934d7606346ca3dfed3136",
+    "scripts/checks.sh": "66b4e9e6cdd928bc8490a167ff20c8f59efe14d341e428ca31f1c75f6a3314bd",
     "scripts/cpu/check-static-execution.py": "56d8d04058d1e8adc182cf5b0f4ac844cca501a4315437beadc5782563b51448",
     "scripts/cpu/static_execution_docs.py": "f1402b2873fda28b65c48c62b2f8b77ef7376d307ef8ef8c361662cd3310ebfe",
     "scripts/repository/unsafe_policy.py": "5dc055cfd3cd7765d35c5ca92af29a986e24f5cdd4212f4fa4b7d29e96d88a4a",
     "scripts/zeroization/check-zeroization-miri.sh": "39849b61f8c3bf03acfade9f89c3b16806df2d327125cffec1cf537bc4e5533a",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "abfeb9e4aa7b75d3238edd971604f639d031744a4e76b519809f14c70ae1e567"
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "04a9379a637ac68fb91caae459b76d0e8a593118e47bc8adb2f83a0c0d992684"
   }
 }

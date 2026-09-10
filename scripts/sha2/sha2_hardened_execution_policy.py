@@ -59,6 +59,14 @@ def validate(root=ROOT, write=False):
     require('--lib hardened_execution::engine::tests' in miri and '--lib hardened_execution::tests::output_owner_clears_during_recoverable_unwind' in miri, 'Miri lifecycle')
     require('-p brynja-crypto-cpu --features hardened-execution --lib hardened_execution' in miri, 'Miri scratch')
     require('--all-features --lib hardened_execution' in read(root, 'scripts/zeroization/check-zeroization-sanitizer.sh'), 'ASan scope')
+    require('\npython3 scripts/sha2/check-sha2-hardened-asan.py\n' in
+            read(root, 'scripts/zeroization/check-zeroization-sanitizer.sh'), 'native ASan gate')
+    require("FLAGS = '-Zsanitizer=address -C target-feature=+sha,+sse2'" in
+            read(root, 'scripts/sha2/hardened_native_host.py'), 'ASan actual kernel flags')
+    require('python3 scripts/release/run-verification.py plan --check\n'
+            'python3 scripts/sha2/check-sha2-hardened-native-evidence.py\nverify() {' in
+            read(root, 'scripts/tag_gate.sh'), 'mandatory pre-tag native evidence')
+    require('python3 scripts/sha2/test-sha2-hardened-native.py' in driver, 'native gate regressions')
     paths = set()
     for directory in (CPU + '/src', HASH + '/src', 'assurance/sha2-hardened-execution/src'):
         for path in (root / directory).rglob('*.rs'):
@@ -75,6 +83,11 @@ def validate(root=ROOT, write=False):
     paths.update(path.relative_to(root) for path in (root / 'scripts/sha2').glob('*hardened-execution*.py'))
     paths.add(Path('scripts/sha2/sha2_hardened_execution_policy.py'))
     paths.add(Path('scripts/sha2/sha2_hardened_cleanup_mutants.py'))
+    for name in ('scripts/tag_gate.sh', 'scripts/sha2/hardened_native_host.py',
+                 'scripts/sha2/hardened_native_evidence.py', 'scripts/sha2/check-sha2-hardened-asan.py',
+                 'scripts/sha2/check-sha2-hardened-native-evidence.py',
+                 'scripts/sha2/capture-sha2-hardened-native.py', 'scripts/sha2/test-sha2-hardened-native.py'):
+        paths.add(Path(name))
     expected = {'version': '0.24.34', 'regions': REGIONS,
                 'residuals': ['registers', 'compiler-copies', 'spills', 'caches', 'swap', 'dumps', 'abort', 'forget', 'caller-copies'],
                 'sha256': {str(path).replace('\\', '/'): hashlib.sha256(read(root, path).encode()).hexdigest() for path in sorted(paths)}}
@@ -101,6 +114,9 @@ def regressions():
                   (f'{HASH}/src/hardened_execution/engine.rs', '*self.failed = true;', '*self.failed = false;'),
                   (f'{HASH}/src/lib.rs', '#[cfg(feature = "hardened-execution")]', '#[cfg(feature = "cpu")]'),
                   ('scripts/checks.sh', 'python3 scripts/sha2/check-sha2-hardened-execution-codegen.py', '# removed')]
+        cases += [('scripts/tag_gate.sh', 'python3 scripts/sha2/check-sha2-hardened-native-evidence.py', '# omitted'),
+                  ('scripts/zeroization/check-zeroization-sanitizer.sh', 'python3 scripts/sha2/check-sha2-hardened-asan.py', '# omitted'),
+                  ('scripts/sha2/hardened_native_host.py', '+sha,+sse2', '+sse2')]
         for name, before, after in cases:
             path = root / name
             original = path.read_text()

@@ -88,7 +88,10 @@ faults exercise failure atomicity. The native fixture is reproducible with:
 Modes are `portable`, `prefer`, `static` and `hosted`. Static mode requires the
 matching compiler flags and actual CPU support; hosted required mode can reject
 unsupported deployments. Supplemental QEMU is not native platform evidence.
-New native Mac/Arm/Intel observations follow the exceptional pentest; no old
+The owner-supplied retest of `010fb9ba` passed at its stated Critical/High threshold.
+Fresh native AArch64 static/hosted observations remain required before the final
+release gate; the retest's AVX2 results do not establish native Arm correctness.
+New native Mac/Arm/Intel observations follow that retest; no old
 kernel-only observation is presented as a fresh run of these high-level APIs.
 No named independent cryptographic verification, side-channel certification,
 FIPS validation, CPU-register erasure or military suitability is claimed.

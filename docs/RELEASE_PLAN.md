@@ -4321,6 +4321,11 @@ Exit criteria:
 
 Status: awaiting pentest
 
+Progress: the owner-supplied retest of `010fb9ba` is PASS at its stated
+Critical/High threshold. This coarse pre-release status remains until native
+AArch64 execution evidence and the final gate are complete; another source
+retest is not requested merely for this documentation update.
+
 Plan scope: Connect all four SHA-3 hashes and both SHAKE XOFs to existing AVX2 and AArch64 SHA3 Keccak kernels with default-off leaf features, static/hosted selection and ordinary byte/bit absorbing and squeezing APIs.
 
 Goal: Turn the isolated Keccak kernels into public algorithm routes.

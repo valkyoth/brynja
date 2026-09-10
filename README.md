@@ -66,7 +66,7 @@ adds default-off complete hash APIs over static and platform-limited hosted
 authority. Separate [hardened SHA-2 execution](docs/sha2-hardened-execution.md)
 adds erasing owners and typed secret outputs. [Ordinary SHA-3/SHAKE execution](docs/sha3-ordinary-execution.md)
 connects explicit CPU routes to complete public-data hashing and XOF APIs;
-its exceptional review and native collection are pending. Further family integration remains planned.
+its owner retest passed; native AArch64 collection and the final gate remain pending. Further family integration remains planned.
 See the [acceleration guide](docs/static-cpu-execution.md) for supported routes and
 deployment requirements. Independent review and FIPS status are separate claims.
 

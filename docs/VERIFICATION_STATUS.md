@@ -15,8 +15,8 @@ adds complete default-off hashing through those authorities for all six named
 identities and all 510 general-t parameters. Its owner review and
 [native functional observations](../assurance/sha2-execution-observations/v0.24.33/README.md)
 passed; the v0.24.33 tag is signed. The separate v0.24.34
-[hardened SHA-2 execution](sha2-hardened-execution.md) is under review, with
-fresh native Arm/Mac evidence and exceptional pentest pending. Default hardened
+[hardened SHA-2 execution](sha2-hardened-execution.md) has its committed native
+evidence and owner retest; its tag is signed. Default hardened
 constructors remain portable; enabling
 ordinary execution does not confer independent verification or FIPS validation.
 
@@ -44,8 +44,8 @@ validation, certificate, validated module, approved security policy, or
 certificate-bound operational-environment claim.
 
 Default-off [ordinary SHA-3/SHAKE execution](sha3-ordinary-execution.md) is now
-implemented separately from portable constructors. Its exceptional review and
-fresh high-level native observations are pending; portable algorithm completion
+implemented separately from portable constructors. Its owner retest passed;
+fresh high-level native AArch64 observations and the final gate are pending. Portable algorithm completion
 does not establish acceleration qualification.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |

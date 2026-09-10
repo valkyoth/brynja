@@ -1,7 +1,8 @@
 # Brynja v0.24.35
 
-Status: implementation and focused verification passed; exceptional pentest
-and native high-level execution collection remain pending. Not tag-ready.
+Status: implementation, focused verification and owner-supplied exceptional
+retest passed. Native high-level AArch64 collection and the final release gate
+remain pending. Not tag-ready.
 
 ## SHA-3 and SHAKE ordinary CPU integration
 
@@ -24,6 +25,12 @@ and native high-level execution collection remain pending. Not tag-ready.
   single-state vectorized permutation does not claim multi-message SIMD.
 
 See [API usage, routes and evidence](../docs/sha3-ordinary-execution.md).
+
+The [fresh security retest](../security/pentest/v0.24.35.md) reviewed through
+`010fb9ba` and found no confirmed Critical or High vulnerability. It independently
+compared 3,152 portable/native AVX2 results, with its oracle cross-checked against
+NIST vectors and hashlib. Its Critical/High threshold is not an exhaustive
+all-severity assurance claim. Native Arm execution remains outstanding.
 
 Implementation checks passed: the impact-selected repository gate (its final
 metadata tail resumed after documentation corrections), all-feature/default

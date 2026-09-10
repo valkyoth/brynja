@@ -158,6 +158,9 @@ def select_repository(
         affected: set[str] = set()
         retained = []
         orchestration = {
+            # Tests of the compiler checker, not runtime or Miri input. These
+            # and the actual compiler gate are mandatory baseline commands.
+            'scripts/cryptography/test-secret-owner-compiler.py',
             'security/release-signers',
             'scripts/zeroization/miri_scope.py', 'scripts/zeroization/scope_inputs.py',
             'scripts/zeroization/test-miri-scope.py', 'scripts/zeroization/test-scope-inputs.py',
@@ -175,7 +178,9 @@ def select_repository(
             if path.endswith('.md'):
                 continue
             before, after = scope_inputs.snapshot(root, base, path)
-            if path in {'scripts/sha2/sha2_public_api.py', 'scripts/sha3/sha3_public_api.py',
+            if path == 'scripts/cryptography/api_profile_contracts.py' and scope_inputs.mir_spans_only(before, after):
+                continue
+            elif path in {'scripts/sha2/sha2_public_api.py', 'scripts/sha3/sha3_public_api.py',
                         'scripts/sp800185/portable_acceptance.py'}:
                 manifests = scope_inputs.snapshot(root, base, 'crates/brynja/Cargo.toml')
                 versions = [scope_inputs.document(m)['package']['version'] for m in manifests]

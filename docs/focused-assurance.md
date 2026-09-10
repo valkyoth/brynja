@@ -87,6 +87,14 @@ SHA-3 changes still select those consumers. Missing or malformed dependency proo
 requires scope review; public checkpoints still run every Miri group.
 
 Version-only local pins and exact digest rebinding do not imply changed algorithms.
+Numeric source-span corrections inside the registered MIR caller-header table
+also do not change runtime code. The selector compares both Python syntax trees,
+ignoring only those numeric spans in that exact table. Changed paths, owners,
+cleanup targets, contracts or executable Python retain broad verification;
+malformed inputs remain fail-closed. The actual compiler/MIR gate, its regression
+tests and API-profile checks are mandatory even with no selected crypto groups.
+Editing the compiler checker's regression test alone does not renew unrelated
+Miri/ASan/Kani evidence. Real checker or shared implementation changes still do.
 Reused evidence remains attached to its original source, verifier, compiler,
 features and target: reuse never becomes a claim of a fresh run. Native correctness
 does not prove timing, migration, register erasure or FIPS validation.

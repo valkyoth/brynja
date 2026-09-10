@@ -22,6 +22,11 @@ DIRECTORIES = {
 }
 BASE_DIRECTORIES = {"repository", "release", "assurance", "ci", "standards", "pki", "protocols"}
 BASE_COMMANDS = {
+    "python3 scripts/cryptography/test-mir-cleanup-flow.py",
+    "python3 scripts/cryptography/test-secret-owner-compiler.py",
+    "python3 scripts/cryptography/check-secret-owner-compiler.py",
+    "python3 scripts/cryptography/check-api-profiles.py",
+    "python3 scripts/cryptography/test-api-profiles.py",
     "python3 scripts/zeroization/check-zeroization-evidence.py",
     "python3 scripts/zeroization/test-zeroization-evidence.py",
     "python3 scripts/sha2/check-sha2-hardened-execution.py --policy-only",

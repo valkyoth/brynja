@@ -58,6 +58,9 @@ def selection_tests() -> None:
     for name in ('check-zeroization-evidence.py', 'test-zeroization-evidence.py'):
         assert 'python3 scripts/zeroization/' + name in commands.selected(catalog, [])
     assert commands.selected(catalog, [], full=True) == catalog
+    for name in ('test-mir-cleanup-flow', 'test-secret-owner-compiler',
+                 'check-secret-owner-compiler', 'check-api-profiles', 'test-api-profiles'):
+        assert 'python3 scripts/cryptography/' + name + '.py' in commands.selected(catalog, [])
     assert commands.owners("python3 scripts/kmac/check-kmac.py") == {"kmac"}
     # Never infer 'unchanged' from an unregistered script/package/command.
     for command in ("python3 scripts/new/new.py", "cargo test -p unknown",

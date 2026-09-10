@@ -65,6 +65,31 @@ def document(data: bytes | None) -> dict:
     return tomllib.loads(data.decode('utf-8'))
 
 
+def mir_spans_only(before: bytes | None, after: bytes | None) -> bool:
+    """Ignore only numeric locations in the exact registered MIR header table.
+
+    The compiler/identity checks still run. Changes to owners, callees, source
+    paths, contracts or executable Python retain broad consumer verification.
+    """
+    if before is None or after is None:
+        return False
+    trees = []
+    for raw in (before, after):
+        tree = ast.parse(raw.decode('utf-8'))
+        tables = [node for node in tree.body if isinstance(node, ast.Assign)
+                  and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)
+                  and node.targets[0].id == 'REGISTERED_CALLER_MIR_HEADERS']
+        if len(tables) != 1 or not isinstance(tables[0].value, ast.Dict):
+            return False
+        for node in ast.walk(tables[0].value):
+            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                node.value = re.sub(
+                    r'(?<=\.rs):[0-9]+:[0-9]+: [0-9]+:[0-9]+(?=>::)',
+                    ':SPAN', node.value)
+        trees.append(ast.dump(tree, include_attributes=False))
+    return trees[0] == trees[1]
+
+
 def lock_groups(before: bytes | None, after: bytes | None) -> set[str]:
     """Ignore only local versions, not registry versions/checksums or graph edges."""
     graphs = []

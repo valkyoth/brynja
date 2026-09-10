@@ -196,6 +196,35 @@ def git_tests():
             assert scope.select_repository('v9.9.9', root)[0]
 
 
+def mir_span_tests():
+    raw = (scope.ROOT / 'scripts/cryptography/api_profile_contracts.py').read_bytes()
+    moved = raw.replace(b'owner.rs:83:1: 83:32', b'owner.rs:78:1: 78:32')
+    assert moved != raw
+    assert inputs.mir_spans_only(raw, moved)
+    assert inputs.mir_spans_only(moved, raw)
+    for bad in (None, raw.replace(b'REGISTERED_CALLER_MIR_HEADERS =', b'OTHER ='),
+                raw.replace(b'owner.rs:83', b'other.rs:83'),
+                raw.replace(b'drop(_1: &mut HardenedSha2Owner)', b'drop(_1: &mut OtherOwner)'),
+                raw.replace(b'HardenedSha2Owner::wipe(', b'HardenedSha2Owner::skip('),
+                raw.replace(b'output_staging:secret-derived', b'output_staging:public'),
+                raw + b'\nperform_extra_work()\n',
+                raw + b'\nREGISTERED_CALLER_MIR_HEADERS = {}\n'):
+        assert not inputs.mir_spans_only(raw, bad)
+    # End-to-end repository selection, including malformed and removed inputs.
+    path = 'scripts/cryptography/api_profile_contracts.py'
+    def git(_root, *args):
+        return path.encode() if args[0] == 'diff' else b''
+    def selected(after):
+        with patch.object(inputs, 'git', side_effect=git), patch.object(
+                inputs, 'snapshot', side_effect=lambda r, b, p: (raw, after) if p == path else (None, None)):
+            return scope.select_repository('v0.24.33')
+    assert selected(moved) == (False, ())
+    for bad in (None, raw + b'\nperform_extra_work()\n'):
+        full, groups = selected(bad)
+        assert 'core' in groups and 'md5' in groups and 'sha3' in groups
+    assert selected(b'broken Python =')[0]
+
+
 def contract_tests():
     manifest = (scope.ROOT / 'assurance/acceleration-contract/Cargo.toml').read_bytes()
     model_lock = (scope.ROOT / 'assurance/acceleration-contract/Cargo.lock').read_bytes()
@@ -214,4 +243,5 @@ if __name__ == '__main__':
     semantic_tests()
     git_tests()
     contract_tests()
+    mir_span_tests()
     print('Semantic Miri scope: versions, closures, removals, malformed inputs, dirty/untracked code and baseline failures PASS')

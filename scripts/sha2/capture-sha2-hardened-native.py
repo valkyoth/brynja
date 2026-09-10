@@ -28,7 +28,7 @@ def capture(lane, output):
             cpu = stream.read(evidence.LIMIT + 1)
         require(len(cpu) <= evidence.LIMIT, 'CPU identity exceeds bound')
         # Exclude hostnames, serial numbers and addresses from archived identity.
-        identity = '; '.join(sorted({line.strip() for line in cpu.splitlines()
+        identity = '; '.join(sorted({' '.join(line.split()) for line in cpu.splitlines()
                                     if line.startswith(('CPU implementer', 'CPU architecture', 'CPU part', 'CPU revision'))}))
     require(bool(identity), 'missing native CPU identity')
     before = evidence.sources(host.ROOT)

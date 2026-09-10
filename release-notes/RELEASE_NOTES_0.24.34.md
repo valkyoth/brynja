@@ -1,6 +1,6 @@
 # Brynja v0.24.34
 
-Status: implemented; awaiting exceptional pentest and fresh native evidence.
+Status: exceptional retest passed; native collection and final review pending.
 
 ## Verification workflow first
 
@@ -32,13 +32,13 @@ checks hardware first and requires the actual 512-block kernel execution marker.
 The corrected nine-test run passed on the local AMD host. The tag gate now
 requires reviewed, commit/source/route-bound native Linux x86, Linux Arm and
 Apple Arm artifacts. Missing captures block tagging but not ordinary CI;
-collection and owner retest remain pending. No production kernel logic changed.
+the owner retest passed and native collection remains pending. No production kernel logic changed.
 
 Pentest follow-up: the private buffer-length setter now rejects oversized
 lengths before mutation and every caller propagates failure. Boundary, retained
 state cleanup and compiled reset/bounds mutations prevent regression. Arm
 secret-kernel comments explain the required endian conversions; their logic is
-unchanged. Both Low findings are fixed locally; owner retest is pending.
+unchanged. Both Low findings are fixed and the owner retest passed.
 
 - Adds default-off `hardened-execution` leaf features and complete named
   SHA-224/256/384/512, SHA-512/224, SHA-512/256 and general SHA-512/t byte/bit
@@ -76,8 +76,11 @@ portable harnesses do not prove the new CPU kernels. The initial over-broad
 Miri run was stopped after dependency isolation was established; the final
 SHA-2/CPU selection completed successfully. Repository checks passed, with the
 metadata tail resumed after correcting the roadmap status label. The new kernel
-bodies need a fresh exceptional pentest and native Arm/Mac evidence before
-tagging; the post-pentest final release check remains a separate step.
+bodies passed the exceptional retest; fresh native artifacts are still required
+before tagging. A Linux Arm CPU-identity whitespace bug discovered during
+collection was fixed with a tabbed-field capture regression; all lanes will
+be recollected against the corrected capture source. The post-pentest final
+release check remains a separate step.
 
 Erasure claims exclude registers, compiler-created copies/spills, caches,
 swap, crash dumps, DMA, abort, forced termination, `mem::forget` and caller

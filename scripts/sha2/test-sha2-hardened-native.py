@@ -7,7 +7,7 @@ import json
 import os
 from pathlib import Path
 import tempfile
-from unittest.mock import patch
+from unittest.mock import mock_open, patch
 import hardened_native_evidence as evidence
 import hardened_native_host as host
 
@@ -182,6 +182,34 @@ def capture_tests():
             rejected(lambda: module.capture('apple-aarch64', Path(directory) / 'bad.json'))
             assert not any('RUSTFLAGS' in env for _, env in calls)
             assert not (Path(directory) / 'bad.json').exists()
+    # Linux /proc/cpuinfo separates fields with tabs. Normalize identity only;
+    # the artifact validator must continue rejecting embedded control bytes.
+    record = artifact('linux-aarch64', commit, sources)
+    cpuinfo = ('CPU implementer\t: 0x41\nCPU architecture: 8\n'
+               'CPU part\t: 0xd40\nCPU revision\t: 1\n'
+               'CPU part\t: 0xd40\nSerial\t: private-serial\n')
+    with tempfile.TemporaryDirectory(prefix='brynja-linux-capture-test-') as directory:
+        output = Path(directory) / 'capture.json'
+        real_open = Path.open
+
+        def open_cpu(path, *args, **kwargs):
+            if str(path) == '/proc/cpuinfo':
+                return mock_open(read_data=cpuinfo)()
+            return real_open(path, *args, **kwargs)
+
+        with patch.object(module.platform, 'system', return_value='Linux'), \
+                patch.object(module.platform, 'machine', return_value='aarch64'), \
+                patch.object(Path, 'open', open_cpu), \
+                patch.object(host, 'clean_environment', return_value={}), \
+                patch.object(host, 'execute', side_effect=execute), \
+                patch.object(evidence, 'sources', return_value=sources), \
+                patch.object(evidence, 'git', side_effect=lambda r, *a: commit.encode() if a[0] == 'rev-parse' else b''):
+            module.capture('linux-aarch64', output)
+            captured = evidence.document(output.read_bytes())
+            assert captured['cpu'] == 'CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd40; CPU revision : 1'
+            evidence.validate_record(captured, 'linux-aarch64', commit, sources)
+            captured['cpu'] += '\t'
+            rejected(lambda: evidence.validate_record(captured, 'linux-aarch64', commit, sources))
     # Facade version-only churn does not hide a changed selected dependency.
     raw = (evidence.ROOT / 'Cargo.lock').read_bytes()
     import tomllib

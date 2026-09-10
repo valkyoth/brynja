@@ -25,7 +25,7 @@
     "crates/brynja-crypto-cpu/src/static_execution/tests.rs": "83217fdd0ff6df7bb49035992ab4b70899718e7bdbe3f400adbca55a992400fe",
     "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs": "8f917e7ff784bb75646c526914de27e3b4eb8b15cc82b8a471edc0af1221d5b3",
     "crates/brynja-crypto-cpu/src/x86_sha.rs": "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28",
-    "docs/security-controls.md": "5120bcb0515ef340db3eddc9f26d329ce930e3335b8ff8edf730b9951f05ee8e",
+    "docs/security-controls.md": "65b953e7be8790c9023a05c7f8873c38731eb018666f7a7f0e781e0556100f0c",
     "docs/static-cpu-execution.md": "19c94d69a609a3ef81d799ddfe6792db8d357beda43ac7220d55b9f31aa753f1",
     "docs/threat-model.md": "1afdc271715461a57e859104ccf6e29bc9f653598991724c0fc2d23232fb1c8e",
     "docs/unsafe-policy.md": "70512e8e022e4dac174faece89a2e9da71a309edb98601122347835dc8c9eeb5",

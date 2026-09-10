@@ -14,7 +14,8 @@ v0.24.31/.32. The v0.24.33 [ordinary SHA-2 integration](sha2-ordinary-execution.
 adds complete default-off hashing through those authorities for all six named
 identities and all 510 general-t parameters. Its owner review and
 [native functional observations](../assurance/sha2-execution-observations/v0.24.33/README.md)
-passed; final release checks remain pending. Hardened hashes remain portable; enabling
+passed; final local release checks passed. GitHub/CodeQL and tagging remain pending.
+Hardened hashes remain portable; enabling
 ordinary execution does not confer independent verification or FIPS validation.
 
 This document preserves Brynja's crate-level assurance inventory. It answers

@@ -1,7 +1,8 @@
 # Brynja v0.24.33
 
 Status: implementation candidate; owner review and fresh native functional
-collection passed. Final release verification and GitHub/CodeQL pending.
+collection and final local release verification passed. Awaiting green
+GitHub/CodeQL and explicit tagging permission.
 Not tagged or published.
 
 ## Complete ordinary SHA-2 acceleration
@@ -63,3 +64,17 @@ portable on x86; generic hosted Require rejects and Prefer falls back there.
 Every successful mode passed 240 named and 4,590 general-t cases. These are
 functional observations, not migration, side-channel, independent-review or
 FIPS qualification. No production code changed during collection.
+
+## Final local release verification
+
+The complete local gate passed on `fb719ad8`: repository and package checks,
+all twelve supported compiler lanes, bare-metal/QEMU checks, emitted-code
+evidence, current standards/tooling/dependency controls, full AddressSanitizer,
+all twelve Miri groups, and all 29 inventoried Kani harnesses. Miri selected
+full coverage conservatively because the new standalone fixture lockfile
+changed its dependency closure; no required check was skipped.
+
+The pentest records PASS with zero open findings. Publication policy and the
+dry run select zero crates; all 39 publication flags remain false. Final
+status/hash-binding updates are documentation-only and checked separately.
+The next crates.io checkpoint remains v0.25.2. No tag or publication was made.

@@ -69,5 +69,5 @@ The APIs remain public-data-only and non-erasing; hardened acceleration and
 RISC-V operational support are separate work. No independent verification or
 FIPS validation is claimed. The owner review and collection dispositions are
 recorded in [the pentest report](../../../security/pentest/v0.24.33.md).
-Final release verification, green GitHub/CodeQL and explicit tagging permission
-remain required. This internal milestone publishes no crates.
+Final local release verification passed. Green GitHub/CodeQL and explicit
+tagging permission remain required. This internal milestone publishes no crates.

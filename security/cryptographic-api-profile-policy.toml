@@ -725,7 +725,9 @@ prefixes = ["boundary.", "facility.", "state."]
 [completion-overrides."algorithm.sha2"]
 bit-input = "0.24.7"
 ownership = "0.24.8"
-hosted-adapter = "0.24.8"
+# Ordinary operational execution; hardened acceleration remains v0.24.34.
+backend = "0.24.33"
+hosted-adapter = "0.24.33"
 
 [completion-overrides."algorithm.sha512-t"]
 operation-direction = "0.24.26"
@@ -737,6 +739,8 @@ fixed-output = "0.24.25"
 ownership = "0.24.26"
 no-std = "0.24.28"
 cancellation = "0.24.26"
+backend = "0.24.33"
+hosted-adapter = "0.24.33"
 
 [completion-overrides."algorithm.sha3-shake"]
 bit-input = "0.24.9"
@@ -889,15 +893,15 @@ sha256 = "703e9a71e001e8f49d14c641f88f9a84b94373ac7fbbc935284a920373c60584"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/sha224.rs"
-sha256 = "1fcc186a42fcf5ce69c325472235acb86800287b76499ffc7ae661f8fc871354"
+sha256 = "c9ab24aa6428539109215bc639a38e555bba19ba1ad1c6fe3e2a241187c8f6b5"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/sha256.rs"
-sha256 = "7e0290354efef3e5a3a163afcf66de61e2fb3f55955489efb0540d179661ae49"
+sha256 = "7e7608615c9bc80703f0711230453d9390df70e06ce71bb61310179c71d9d701"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/sha512_state.rs"
-sha256 = "fcc2acb2cd57592af6ed5f2f5c265cb871a783fee55dc568af9c6ad4524d9211"
+sha256 = "621cda9793ff1f489533101cbdad23da26bd467a2909faa1e3c2fc334ebc0d10"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/sponge.rs"
@@ -1013,7 +1017,7 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "0c7ba5d7d77d9ea689331b0c8260886ffb214b9b684be61303adb21d80504885"
+sha256 = "db5b41767b08bc1fa74f3c80f2931dc0ea6f73111d91172d7edc6aa789f6b133"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"

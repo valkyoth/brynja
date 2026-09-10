@@ -8,6 +8,14 @@ owner pentest and archived native observations close portable acceptance.
 CPU candidates remain unadmitted; this does not grant independent verification.
 The six named SHA-2 identities remain fully implemented and unverified.
 
+The original admission-gated candidate interfaces below are distinct from the
+new operational authorities. Static and hosted raw execution shipped in
+v0.24.31/.32. The v0.24.33 [ordinary SHA-2 integration](sha2-ordinary-execution.md)
+adds complete default-off hashing through those authorities for all six named
+identities and all 510 general-t parameters. Its owner pentest and fresh native
+family observations are pending. Hardened hashes remain portable; enabling
+ordinary execution does not confer independent verification or FIPS validation.
+
 This document preserves Brynja's crate-level assurance inventory. It answers
 which internal package owns a security-sensitive scope; it does not claim
 that every listed scope is implemented or that an internal boundary is a

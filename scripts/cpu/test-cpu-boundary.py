@@ -157,6 +157,16 @@ def test() -> None:
         require_rejection(root, "optional CPU feature")
         reset(root)
 
+        for before, after in (
+            ('default = []', 'default = ["static-execution"]'),
+            ('static-execution = ["cpu", "brynja-crypto-cpu/static-execution"]', 'static-execution = []'),
+            ('runtime-execution = ["static-execution", "brynja-crypto-cpu/runtime-execution"]', 'runtime-execution = []'),
+            ('runtime-execution = ["static-execution", "brynja-crypto-cpu/runtime-execution"]', 'runtime-execution = ["brynja-crypto-cpu/runtime-execution"]'),
+        ):
+            replace(sha2, before, after)
+            require_rejection(root, "optional CPU feature")
+            reset(root)
+
         facade = root / "crates/brynja/Cargo.toml"
         replace(
             facade,
@@ -182,4 +192,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("CPU boundary rejects twenty package, source, dispatch, and admission regressions")
+    print("CPU boundary rejects twenty-four package, source, dispatch, and admission regressions")

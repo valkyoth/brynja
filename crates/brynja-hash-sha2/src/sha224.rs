@@ -1,5 +1,15 @@
 use brynja_hash_core::{FixedOutput, Update};
 
+#[cfg(feature = "static-execution")]
+crate::execution::impl_engine!(
+    Sha224,
+    u64,
+    crate::Sha224Digest,
+    checked_bit_length_u64,
+    compress32,
+    false
+);
+
 use crate::{BitString, Sha224Digest, Sha224Error, bit_input, compress::compress};
 
 #[cfg(feature = "cpu")]

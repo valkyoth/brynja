@@ -92,7 +92,9 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
     if '#[cfg(feature = "cpu")]\nmod cpu;' not in sources[PREFIX + "mod.rs"]:
         raise ValueError("CPU wrapper escaped optional feature")
     manifest = tomllib.loads(read(root, "crates/brynja-hash-sha2/Cargo.toml"))
-    if manifest["features"] != {"default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": []}:
+    if manifest["features"] != {"default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],
+                               "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],
+                               "runtime-execution": ["static-execution", "brynja-crypto-cpu/runtime-execution"]}:
         raise ValueError("general feature must be explicit and dependency-free")
     library = read(root, "crates/brynja-hash-sha2/src/lib.rs")
     if '#[cfg(all(feature = "general-sha512-t", feature = "cpu"))]\npub use general::{' not in library:

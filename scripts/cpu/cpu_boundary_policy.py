@@ -236,7 +236,11 @@ def validate_packages(root: Path) -> None:
         fail("host detector default feature set drifted")
     if set(detector.get("dependencies", {})) != {CPU, SHA2}:
         fail("host detector dependency boundary drifted")
-    if sha2.get("features") != {"default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": []}:
+    if sha2.get("features") != {
+        "default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],
+        "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],
+        "runtime-execution": ["static-execution", "brynja-crypto-cpu/runtime-execution"],
+    }:
         fail("SHA-2 optional CPU feature drifted")
     if set(sha2.get("dependencies", {})) != {"brynja-core", "brynja-hash-core", CPU}:
         fail("SHA-2 CPU dependency boundary drifted")

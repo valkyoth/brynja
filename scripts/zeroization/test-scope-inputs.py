@@ -60,8 +60,8 @@ def semantic_tests():
     assert inputs.verifier_only(a, a.replace(b'old', b'new'))
     assert not inputs.verifier_only(a, a.replace(b'miri', b'kani'))
     runner = (scope.ROOT / 'scripts/zeroization/check-zeroization-miri.sh').read_bytes()
-    assert b'nightly-2026-09-09' in runner
-    assert inputs.runner_groups(runner, runner.replace(b'nightly-2026-09-09', b'nightly-2026-09-10')) == set()
+    assert b'nightly-2026-09-10' in runner
+    assert inputs.runner_groups(runner, runner.replace(b'nightly-2026-09-10', b'nightly-2026-09-10')) == set()
     assert inputs.runner_groups(runner, runner.replace(b'quick_md5() {', b'quick_md5() {\n    # reviewed smoke')) == set()
     assert inputs.runner_groups(runner, runner.replace(b'full_md5() {', b'full_md5() {\n    # reviewed full')) == {'md5'}
     # Adding the registered model leaves all existing full campaign bodies intact.

@@ -2758,7 +2758,7 @@
       "api": {
         "backend": {
           "disposition": "required",
-          "owner": "0.22.0"
+          "owner": "0.24.33"
         },
         "bit-input": {
           "disposition": "required",
@@ -2798,7 +2798,7 @@
         },
         "hosted-adapter": {
           "disposition": "optional-isolated",
-          "owner": "0.24.8"
+          "owner": "0.24.33"
         },
         "import": {
           "disposition": "forbidden",
@@ -3037,7 +3037,7 @@
       "api": {
         "backend": {
           "disposition": "optional-isolated",
-          "owner": "0.24.15"
+          "owner": "0.24.33"
         },
         "bit-input": {
           "disposition": "required",
@@ -3077,7 +3077,7 @@
         },
         "hosted-adapter": {
           "disposition": "forbidden",
-          "owner": "0.24.15"
+          "owner": "0.24.33"
         },
         "import": {
           "disposition": "forbidden",
@@ -24257,7 +24257,7 @@
       ]
     }
   ],
-  "policy_sha256": "9224d10a59428f1e37e2703ad75ad6df75522aa1694eec5218f76951ee234e52",
+  "policy_sha256": "0356d66f96ad1771b23090d2c6b45a9286facaa2aacf096ad5b59d2eb5d4d5c4",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",

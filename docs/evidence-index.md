@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; milestones through v0.24.31 signed. v0.24.32 adds [hosted CPU execution authority](hosted-cpu-execution.md), packaged consumers and source bindings. Owner retest and [fresh native observations](../assurance/hosted-cpu-observations/v0.24.32/README.md) passed on 0c6cee49; final local release checks passed; awaiting green GitHub/CodeQL. Native observations and QEMU do not establish migration qualification, independent review or FIPS validation.
+Status: v0.20.0 published; milestones through v0.24.32 signed. v0.24.33 adds complete default-off [ordinary SHA-2 execution](sha2-ordinary-execution.md) for static and hosted authorities. Exceptional owner pentest and fresh native family observations remain pending. No publication; hardened acceleration stays separate.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are

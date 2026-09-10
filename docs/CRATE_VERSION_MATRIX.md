@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 published; milestones through v0.24.31 signed. v0.24.32 adds default-off [hosted execution authority](hosted-cpu-execution.md); owner retest, fresh native observations and final release checks passed, awaiting green GitHub/CodeQL. No publication is selected and high-level hash-family dispatch remains unchanged.
+Status: v0.20.0 published; milestones through v0.24.32 signed. v0.24.33 adds complete default-off [ordinary SHA-2 execution](sha2-ordinary-execution.md) for static and hosted authorities. Exceptional owner pentest and fresh native family observations remain pending. No publication; hardened acceleration stays separate.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.32`. General SHA-512/t has callable ordinary/hardened
+advances to internal `0.24.33`. General SHA-512/t has callable ordinary/hardened
 byte/bit hashing behind an explicit leaf feature; all support crate
 versions remain unchanged.
 `brynja-hash-core 0.1.0`,
@@ -36,7 +36,7 @@ repository-only API-profile register covers 135 semantic capabilities across
 22 dimensions and inventories eight current, eight registered capability, plus
 73 planned secret owners with exact per-operation information-flow contracts,
 compiler-checked owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.1. The facade version advances for hosted execution authority; all previously existing support-package versions remain
+under Rust 1.90.0 and 1.98.1. The facade version advances for complete ordinary SHA-2 execution; all previously existing support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
 

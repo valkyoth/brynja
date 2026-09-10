@@ -125,14 +125,16 @@ def main() -> int:
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
     assert sum("-p brynja-hash-parallel" in command for command in commands) == 1
     status, commands = run_profile("--group", "sha2")
-    assert status == 0 and len(commands) == 16
+    assert status == 0 and len(commands) == 18
+    assert sum('--lib execution_transaction' in c for c in commands) == 1
+    assert sum('--test execution bounded_execution_lifecycle_smoke' in c for c in commands) == 1
     assert sum('--lib hardened::tests::checked_length_' in c for c in commands) == 1
     assert sum('--test general_hash --lib dynamic_lifecycle_' in c for c in commands) == 1
     assert sum('--features general-sha512-t --test general bounded_public_api_smoke' in c for c in commands) == 1
     assert sum("assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands) == 1
     assert all("brynja-hash-sha2" in c or "assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 46
+    assert status == 0 and len(commands) == 48
     assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1
     assert sum(c.endswith('assurance/static-cpu-execution/Cargo.toml --lib') for c in commands) == 1
     status, static_commands = run_profile('--group', 'static_cpu')

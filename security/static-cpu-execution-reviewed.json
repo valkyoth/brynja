@@ -25,15 +25,15 @@
     "crates/brynja-crypto-cpu/src/static_execution/tests.rs": "83217fdd0ff6df7bb49035992ab4b70899718e7bdbe3f400adbca55a992400fe",
     "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs": "8f917e7ff784bb75646c526914de27e3b4eb8b15cc82b8a471edc0af1221d5b3",
     "crates/brynja-crypto-cpu/src/x86_sha.rs": "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28",
-    "docs/security-controls.md": "c7d399fb3686412a32679d772a4e684e123e038ab52707c36d8856f97ffbf2b5",
+    "docs/security-controls.md": "708a59122480cdfc2e8b5d5abc54a0fb45271a1605aadb52f15e4cd1f94e129a",
     "docs/static-cpu-execution.md": "19c94d69a609a3ef81d799ddfe6792db8d357beda43ac7220d55b9f31aa753f1",
     "docs/threat-model.md": "1afdc271715461a57e859104ccf6e29bc9f653598991724c0fc2d23232fb1c8e",
     "docs/unsafe-policy.md": "70512e8e022e4dac174faece89a2e9da71a309edb98601122347835dc8c9eeb5",
-    "scripts/checks.sh": "827c516538d5c3d87f0f86d1b45d7245ecae3b9a069eb6a757e4cd596dbaa0ef",
+    "scripts/checks.sh": "5f553f9fcddde7143de1876411822a572865360edeefed745fd78ed3dfefe153",
     "scripts/cpu/check-static-execution.py": "415390bffd81f4214294c1ae718afc33b6ca05a7e1f15bbb2e89fb48d0d7af8a",
     "scripts/cpu/static_execution_docs.py": "5594f56710c15aac8dd57c4851b2be19cd75b226fd281f1bdf702be0a73b282c",
     "scripts/repository/unsafe_policy.py": "8c0ac3dfba24ec4c9962a91ce17c55853474be8188bb6f81c86e05d77541116c",
-    "scripts/zeroization/check-zeroization-miri.sh": "5ccad336670a7cb658b3d6c3ac21b8c05d50b31af33988af94ed14ca5e002d25",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "643a89def550226c83892c251c67c3016b9b98157aa2992fbbb635edfe196f84"
+    "scripts/zeroization/check-zeroization-miri.sh": "c3c8874b4c097b44bbc4a718f6be5322098092a8ee5ab59652aa0b21a5c03b9e",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "abe8f6958c2ba9678dc9da3a40cc976fcb694e17e78313e62050744a5da83a2a"
   }
 }

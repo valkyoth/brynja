@@ -4235,7 +4235,7 @@ Exit criteria:
 
 ### v0.24.32 - Hosted Runtime Feature Safety
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Implement separate std runtime execution-authority adapters with platform-supported CPU and OS-state detection, documented scheduler/VM migration assumptions and observable fallback; never require a hosted dependency in no_std cores.
 
@@ -4262,7 +4262,7 @@ Exit criteria:
 
 ### v0.24.33 - SHA-2 Ordinary Acceleration Reachability
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Connect all six named SHA-2 identities and all 510 general SHA-512/t parameters to operational static and hosted backends through complete byte/bit one-shot and streaming public APIs, with portable, preferred and required routes.
 

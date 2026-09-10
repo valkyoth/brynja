@@ -61,10 +61,10 @@ independent cryptographic or protocol verification.
 ### Modern Hash Functions
 
 Acceleration is separate from portable algorithm completion. Default hash APIs
-remain portable. Opt-in raw static CPU authority and platform-limited
-[hosted authority](docs/hosted-cpu-execution.md) are available; family-level
-acceleration is not yet generally usable. See the
-[acceleration guide](docs/static-cpu-execution.md) for exact supported routes and
+remain portable. [Ordinary SHA-2 execution](docs/sha2-ordinary-execution.md)
+adds default-off complete hash APIs over static and platform-limited hosted
+authority. Hardened and other hash-family integration remain separate work.
+See the [acceleration guide](docs/static-cpu-execution.md) for supported routes and
 deployment requirements. Independent review and FIPS status are separate claims.
 
 SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256;

@@ -1,5 +1,15 @@
 use crate::{BitString, bit_input, compress64::compress};
 
+#[cfg(feature = "static-execution")]
+crate::execution::impl_engine!(
+    Sha512State,
+    u128,
+    [u64; 8],
+    checked_bit_length_u128,
+    compress64,
+    true
+);
+
 #[cfg(feature = "cpu")]
 use brynja_crypto_cpu::{Sha512BackendError, Sha512BackendSession};
 

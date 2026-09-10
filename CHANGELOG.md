@@ -1,6 +1,14 @@
 # Changelog
 
-## 0.24.32 candidate
+## 0.24.33 candidate
+
+- Add complete opt-in ordinary SHA-2 static/hosted execution, including all
+  general-t values, byte/bit streams and exact digest/work reporting.
+- Preserve portable defaults, first-party no_std boundaries and separate
+  hardened processing. Exceptional pentest and fresh native evidence pending.
+- No crates selected for publication. See [release notes](release-notes/RELEASE_NOTES_0.24.33.md).
+
+## 0.24.32
 
 - Add default-off hosted raw CPU execution authority with complete platform
   feature bundles, explicit Portable/Prefer/Require routes, startup KATs and

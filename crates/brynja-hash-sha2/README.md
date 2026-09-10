@@ -25,6 +25,15 @@
 
 # brynja-hash-sha2
 
+Complete ordinary byte/bit SHA-2 execution is additionally available through
+default-off `static-execution` and `runtime-execution` features in
+`brynja_hash_sha2::execution`. All six named hashes and all 510 general-t values
+have one-shot and consuming streaming APIs, transactional updates and explicit
+route/work reports. See [usage and deployment boundaries](https://github.com/valkyoth/brynja/blob/main/docs/sha2-ordinary-execution.md).
+Defaults remain portable; these non-erasing APIs must not process secrets.
+Hardened acceleration remains separate work. Historical admission-gated methods
+below are retained; the new execution API does not change their admission flags.
+
 The separate general SHA-512/t extension is **Fully implemented** for portable
 ordinary/hardened APIs: v0.24.29 completes
 [final scalar evidence](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-final-evidence.md)

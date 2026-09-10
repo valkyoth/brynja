@@ -16,7 +16,7 @@ pub struct Sha512TDigest {
 
 impl Sha512TDigest {
     // Only ordinary results or explicitly declassified bytes enter here.
-    pub(super) fn computed(parameter: Sha512TBits, bytes: &[u8]) -> Result<Self, Sha512TError> {
+    pub(crate) fn computed(parameter: Sha512TBits, bytes: &[u8]) -> Result<Self, Sha512TError> {
         let source = bytes
             .get(..parameter.output_bytes())
             .ok_or(Sha512TError::OutputLength)?;

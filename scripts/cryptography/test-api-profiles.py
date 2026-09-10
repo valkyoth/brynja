@@ -285,6 +285,9 @@ def main() -> int:
     hashes = {row["id"]: row for row in first["capabilities"]}
     assert hashes["algorithm.sha2"]["api"]["bit-input"]["owner"] == "0.24.7"
     assert hashes["algorithm.sha2"]["api"]["ownership"]["owner"] == "0.24.8"
+    for capability in ("algorithm.sha2", "algorithm.sha512-t"):
+        for dimension in ("backend", "hosted-adapter"):
+            assert hashes[capability]["api"][dimension]["owner"] == "0.24.33"
     assert hashes["algorithm.sha3-shake"]["api"]["bit-input"]["owner"] == "0.24.9"
     assert hashes["algorithm.sha3-shake"]["api"]["ownership"]["owner"] == "0.24.10"
     model.validate_cleanup(policy, model.ROOT, adapter_available=False)

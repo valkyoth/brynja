@@ -15,6 +15,8 @@ mod compress;
 mod compress64;
 mod digest;
 mod error;
+#[cfg(feature = "static-execution")]
+pub mod execution;
 #[cfg(feature = "general-sha512-t")]
 mod general;
 

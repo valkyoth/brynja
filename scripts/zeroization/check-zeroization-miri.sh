@@ -8,7 +8,7 @@ run_miri() {
     CARGO_HOME="$miri_cache/cargo" \
         CARGO_TARGET_DIR="$miri_cache/target" \
         XDG_CACHE_HOME="$miri_cache" \
-        cargo +nightly-2026-09-09 miri test \
+        cargo +nightly-2026-09-10 miri test \
         --target x86_64-unknown-linux-gnu "$@"
 }
 
@@ -57,6 +57,10 @@ quick_sha2() {
 }
 
 full_sha2() {
+    run_miri -p brynja-hash-sha2 --features runtime-execution,general-sha512-t \
+        --lib execution_transaction
+    run_miri -p brynja-hash-sha2 --features runtime-execution,general-sha512-t \
+        --test execution bounded_execution_lifecycle_smoke
     run_miri -p brynja-hash-sha2 --lib hardened::tests::checked_length_
     run_miri --manifest-path assurance/general-sha512-t/Cargo.toml --lib
     run_miri -p brynja-hash-sha2 --features general-sha512-t --test general_hash --lib \

@@ -48,7 +48,9 @@ candidates remain unadmitted; independent review and FIPS validation remain abse
 Separate default-off `static-execution` / `runtime-execution` features expose
 `execution::{Sha3_224, Sha3_256, Sha3_384, Sha3_512, Shake128, Shake256}` with
 operational Keccak routes. These are ordinary public-data-only owners, not
-hardened state. Reader convenience calls stage at most 168 bytes on the stack;
+hardened state. Every input requires explicit `execution::Public::new(bytes)`
+or `execution::PublicBits::new(bits)` classification; markers cannot prove secrecy.
+Reader convenience calls stage at most 168 bytes on the stack;
 caller-scratch APIs support arbitrary-sized transactional output without
 allocation. Every failure preserves the destination and retained reader state.
 See [selection, streaming and scratch examples](https://github.com/valkyoth/brynja/blob/main/docs/sha3-ordinary-execution.md).

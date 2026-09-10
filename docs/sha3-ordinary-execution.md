@@ -25,11 +25,11 @@ Generic x86 hosted detection remains unavailable where migration safety is not
 established; use a target-specialized binary when its deployment permits it.
 
 ```rust
-use brynja_hash_sha3::execution::{Execution, Sha3_256, Shake128};
+use brynja_hash_sha3::execution::{Execution, Public, Sha3_256, Shake128};
 
-let result = Sha3_256::hash(Execution::portable(), b"public file contents")?;
+let result = Sha3_256::hash(Execution::portable(), Public::new(b"public file contents"))?;
 let mut state = Shake128::new(Execution::portable())?;
-state.update(b"public input")?;
+state.update(Public::new(b"public input"))?;
 let mut reader = state.finalize_xof()?;
 let mut output = [0_u8; 512];
 let mut scratch = [0_u8; 512];
@@ -48,7 +48,11 @@ All fixed identities expose `new`, `update`, `finalize`, `finalize_bits`, `hash`
 and `hash_bits`, preserving their distinct digest types and FIPS 202 domains.
 SHAKE exposes consuming byte/bit finalization into its corresponding reader,
 one-shot caller-scratch APIs and incremental byte output. Canonical inputs use
-`Fips202BitString`, with valid bits in the low end of the final byte. Consuming
+`PublicBits::new(Fips202BitString)`, with valid bits in the low end of the final byte.
+Byte inputs require `Public::new(bytes)`. Neither accepts implicit conversion:
+callers must explicitly classify each input as public. These markers cannot
+prove data is non-secret and do not authorize wrapping confidential inputs.
+Consuming
 final-bit output uses `Fips202Output` and clears unused high bits. Empty messages
 and empty outputs are valid. No state reset, cloning or post-finalization reuse.
 
@@ -66,6 +70,10 @@ fallible operation follows the final output commit. Even empty requests check
 health. Owners/readers are thread-bound, borrowed and non-cloneable. This does
 not stop OS migration; the platform/compiler deployment contract still applies.
 Dropping an ordinary state cancels it but does not erase its memory.
+
+Bit-length preflights round up to include a partial backing byte. Input and output
+execution enforce the same admission bound; reported byte counts retain their
+documented meaning of complete bytes, excluding the final partial byte.
 
 ## Evidence and limitations
 

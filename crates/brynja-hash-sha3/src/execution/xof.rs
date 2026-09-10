@@ -1,4 +1,4 @@
-use super::{Error, Execution, INLINE_OUTPUT_BYTES, Report, engine::State};
+use super::{Error, Execution, INLINE_OUTPUT_BYTES, Public, PublicBits, Report, engine::State};
 use crate::{Fips202BitString, Fips202Output};
 
 macro_rules! xof {
@@ -36,20 +36,20 @@ macro_rules! xof {
                 self.state.report
             }
             /// Transactional absorption; empty updates still reject lost health.
-            pub fn update(&mut self, input: &[u8]) -> Result<(), Error> {
-                self.state.update(&self.execution, input)
+            pub fn update(&mut self, input: Public<'_>) -> Result<(), Error> {
+                self.state.update(&self.execution, input.0)
             }
             /// Consumes absorption, including padding, into one affine XOF reader.
             pub fn finalize_xof(self) -> Result<$reader<'a>, Error> {
                 let bits = Fips202BitString::new(&[], 0).map_err(|_| Error::LengthOverflow)?;
-                self.finalize_bits_xof(bits)
+                self.finalize_bits_xof(PublicBits::new(bits))
             }
             /// Consumes an LSB-first final bit tail; no later absorption is possible.
             pub fn finalize_bits_xof(
                 mut self,
-                input: Fips202BitString<'_>,
+                input: PublicBits<'_>,
             ) -> Result<$reader<'a>, Error> {
-                self.state.finish(&self.execution, input, 0x1f, 5)?;
+                self.state.finish(&self.execution, input.0, 0x1f, 5)?;
                 Ok($reader {
                     state: self.state,
                     execution: self.execution,
@@ -59,7 +59,7 @@ macro_rules! xof {
             /// On failure the destination is unchanged; scratch may be modified.
             pub fn hash_with_scratch(
                 execution: Execution<'a>,
-                input: &[u8],
+                input: Public<'_>,
                 output: &mut [u8],
                 scratch: &mut [u8],
             ) -> Result<Report, Error> {
@@ -75,7 +75,7 @@ macro_rules! xof {
             /// One-shot canonical bit input/output, including empty outputs.
             pub fn hash_bits_with_scratch(
                 execution: Execution<'a>,
-                input: Fips202BitString<'_>,
+                input: PublicBits<'_>,
                 output: Fips202Output<'_>,
                 scratch: &mut [u8],
             ) -> Result<Report, Error> {

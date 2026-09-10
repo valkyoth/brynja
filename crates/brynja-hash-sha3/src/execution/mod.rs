@@ -10,15 +10,15 @@
 //! Scratch itself may be modified on failure; it must contain public data only.
 //!
 //! ```
-//! use brynja_hash_sha3::execution::{Execution, Sha3_256};
-//! let output = Sha3_256::hash(Execution::portable(), b"abc").unwrap();
+//! use brynja_hash_sha3::execution::{Execution, Public, Sha3_256};
+//! let output = Sha3_256::hash(Execution::portable(), Public::new(b"abc")).unwrap();
 //! assert_eq!(output.digest, brynja_hash_sha3::sha3_256(b"abc").unwrap());
 //! ```
 //! ```compile_fail,E0382
-//! use brynja_hash_sha3::execution::{Execution, Shake128};
+//! use brynja_hash_sha3::execution::{Execution, Public, Shake128};
 //! let mut state = Shake128::new(Execution::portable()).unwrap();
 //! let _ = state.finalize_xof();
-//! state.update(b"late").unwrap();
+//! state.update(Public::new(b"late")).unwrap();
 //! ```
 //! ```compile_fail,E0277
 //! fn send<T: Send>() {}
@@ -38,6 +38,35 @@ pub use brynja_crypto_cpu::static_execution::Kernel;
 pub use fixed::{Sha3_224, Sha3_256, Sha3_384, Sha3_512};
 pub use route::{Execution, Mode, Route, StaticSelection};
 pub use xof::{Shake128, Shake128Reader, Shake256, Shake256Reader};
+
+/// Explicit caller classification of bytes as public, non-secret-derived data.
+/// This marker cannot inspect or prove secrecy. Never wrap keys, passwords,
+/// MAC/KDF intermediates or other confidential material; use hardened APIs.
+/// No implicit conversion is provided, so every input call site is explicit.
+#[derive(Clone, Copy)]
+pub struct Public<'a>(&'a [u8]);
+
+impl<'a> Public<'a> {
+    /// Asserts that these bytes may enter a non-erasing ordinary state.
+    #[must_use]
+    pub const fn new(bytes: &'a [u8]) -> Self {
+        Self(bytes)
+    }
+}
+
+/// Explicit public-data classification of an already validated FIPS 202 bit string.
+/// Canonical bit encoding does not imply public data: the caller must classify it.
+/// Like [`Public`], this is an assertion, not automatic secrecy enforcement.
+#[derive(Clone, Copy)]
+pub struct PublicBits<'a>(crate::Fips202BitString<'a>);
+
+impl<'a> PublicBits<'a> {
+    /// Asserts that all valid bits may enter a non-erasing ordinary state.
+    #[must_use]
+    pub const fn new(bits: crate::Fips202BitString<'a>) -> Self {
+        Self(bits)
+    }
+}
 
 /// Maximum bytes accepted by a reader's stack-scratch convenience method.
 /// Use `squeeze_with_scratch` for larger single transactional requests.

@@ -1,4 +1,4 @@
-use super::{Error, Execution, Output, Report, engine::State};
+use super::{Error, Execution, Output, Public, PublicBits, Report, engine::State};
 use crate::Fips202BitString;
 
 macro_rules! fixed {
@@ -38,20 +38,20 @@ macro_rules! fixed {
                 self.state.report
             }
             /// Transactionally absorbs public bytes. Empty updates check health too.
-            pub fn update(&mut self, input: &[u8]) -> Result<(), Error> {
-                self.state.update(&self.execution, input)
+            pub fn update(&mut self, input: Public<'_>) -> Result<(), Error> {
+                self.state.update(&self.execution, input.0)
             }
             /// Consumes the stream and computes suffix/padding on its selected route.
             pub fn finalize(self) -> Result<Output<crate::$digest>, Error> {
                 let bits = Fips202BitString::new(&[], 0).map_err(|_| Error::LengthOverflow)?;
-                self.finalize_bits(bits)
+                self.finalize_bits(PublicBits::new(bits))
             }
             /// Consuming canonical LSB-first tail; updates cannot follow a partial byte.
             pub fn finalize_bits(
                 mut self,
-                input: Fips202BitString<'_>,
+                input: PublicBits<'_>,
             ) -> Result<Output<crate::$digest>, Error> {
-                self.state.finish(&self.execution, input, 0x06, 3)?;
+                self.state.finish(&self.execution, input.0, 0x06, 3)?;
                 Ok(Output {
                     digest: crate::$digest::from_bytes(self.state.digest::<$size>()),
                     report: self.state.report,
@@ -60,7 +60,7 @@ macro_rules! fixed {
             /// Complete-byte one-shot hashing of public data.
             pub fn hash(
                 execution: Execution<'a>,
-                input: &[u8],
+                input: Public<'_>,
             ) -> Result<Output<crate::$digest>, Error> {
                 let mut state = Self::new(execution)?;
                 state.update(input)?;
@@ -69,7 +69,7 @@ macro_rules! fixed {
             /// Arbitrary-bit one-shot hashing of public data.
             pub fn hash_bits(
                 execution: Execution<'a>,
-                input: Fips202BitString<'_>,
+                input: PublicBits<'_>,
             ) -> Result<Output<crate::$digest>, Error> {
                 Self::new(execution)?.finalize_bits(input)
             }

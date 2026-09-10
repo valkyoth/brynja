@@ -73,11 +73,77 @@ def package(destination, env):
     return consumer, roots
 
 
+def classification_regressions(consumer, env):
+    main = consumer / 'src/main.rs'
+    original = main.read_text()
+    setup = ('let mut h = api::NAME::new(api::Execution::portable()).unwrap(); '
+             'let bits = brynja_hash_sha3::Fips202BitString::new(b"x", 8).unwrap(); '
+             'let mut output = [0; 1]; let mut scratch = [0; 1]; '
+             'let dest = brynja_hash_sha3::Fips202Output::new(&mut output, 8).unwrap(); ')
+    cases = []
+    for name in ('Sha3_224', 'Sha3_256', 'Sha3_384', 'Sha3_512', 'Shake128', 'Shake256'):
+        calls = [('h.update(INPUT)', 'b"x"', 'api::Public::new(b"x")')]
+        if name.startswith('Sha3_'):
+            calls += [('api::NAME::hash(api::Execution::portable(), INPUT)', 'b"x"', 'api::Public::new(b"x")'),
+                      ('h.finalize_bits(INPUT)', 'bits', 'api::PublicBits::new(bits)'),
+                      ('api::NAME::hash_bits(api::Execution::portable(), INPUT)', 'bits', 'api::PublicBits::new(bits)')]
+        else:
+            calls += [('api::NAME::hash_with_scratch(api::Execution::portable(), INPUT, &mut output, &mut scratch)', 'b"x"', 'api::Public::new(b"x")'),
+                      ('h.finalize_bits_xof(INPUT)', 'bits', 'api::PublicBits::new(bits)'),
+                      ('api::NAME::hash_bits_with_scratch(api::Execution::portable(), INPUT, dest, &mut scratch)', 'bits', 'api::PublicBits::new(bits)')]
+        for call, raw, classified in calls:
+            cases.append((setup.replace('NAME', name), call.replace('NAME', name), raw, classified))
+    try:
+        for prelude, call, raw, classified in cases:
+            for value, accepted in ((raw, False), (classified, True)):
+                main.write_text(original + '\nfn classification() {' + prelude +
+                                'let _ = ' + call.replace('INPUT', value) + ';}\n')
+                result = run(['cargo', 'check', '--offline'], consumer, env, accepted)
+                if not accepted and 'error[E0308]' not in result.stderr:
+                    raise ValueError('classification negative failed for wrong reason: ' + result.stderr)
+        for snippet, diagnostic in (
+            ('let _: api::Public = (&b"x"[..]).into();', 'E0277'),
+            ('let _: api::PublicBits = brynja_hash_sha3::Fips202BitString::new(b"x", 8).unwrap().into();', 'E0277'),
+            ('let _ = api::Public(b"x");', 'E0603'),
+            ('let _ = api::PublicBits(brynja_hash_sha3::Fips202BitString::new(b"x", 8).unwrap());', 'E0603'),
+        ):
+            main.write_text(original + '\nfn forbidden() {' + snippet + '}\n')
+            result = run(['cargo', 'check', '--offline'], consumer, env, False)
+            if f'error[{diagnostic}]' not in result.stderr:
+                raise ValueError('marker boundary failed for wrong reason: ' + result.stderr)
+    finally:
+        main.write_text(original)
+    print('24 raw-input rejections with 24 explicit-marker controls and four marker bypass rejections: PASS')
+
+
+def boundary_regressions(consumer, roots, env):
+    leaf = roots['brynja-hash-sha3']
+    path = leaf / 'src/execution/engine.rs'
+    original = path.read_text()
+    for before, after, test in (
+        ('bits.div_ceil(8)', '(bits / 8)', 'bit_preflight_includes_each_partial_backing_byte'),
+        ('Self::check_bytes(self.output_bytes, output.len() as u128)?;', '',
+         'partial_execution_matches_preflight_without_mutating_on_overflow'),
+    ):
+        if before not in original:
+            raise ValueError('missing boundary mutation site')
+        try:
+            path.write_text(original.replace(before, after))
+            for profile in ([], ['--release']):
+                result = run(['cargo', 'test', '--offline', '-p', 'brynja-hash-sha3',
+                              '--lib', *profile, test], consumer, env, False)
+                if 'test result: FAILED' not in result.stdout:
+                    raise ValueError('boundary mutant did not execute: ' + result.stderr)
+        finally:
+            path.write_text(original)
+    print('Four compiled bit-preflight/output-admission regressions: PASS')
+
+
 def regressions(consumer, roots, env):
     main = consumer / 'src/main.rs'
     original = main.read_text()
     for snippet, diagnostic in (
-        ('let mut h = api::Shake128::new(api::Execution::portable()).unwrap(); let _ = h.finalize_xof(); h.update(b"x").unwrap();', 'E0382'),
+        ('let mut h = api::Shake128::new(api::Execution::portable()).unwrap(); let _ = h.finalize_xof(); h.update(api::Public::new(b"x")).unwrap();', 'E0382'),
         ('fn send<T: Send>() {} send::<api::Shake128Reader>();', 'E0277'),
         ('fn sync<T: Sync>() {} sync::<api::Sha3_256>();', 'E0277'),
         ('let h = api::Sha3_256::new(api::Execution::portable()).unwrap(); let _ = h.clone();', 'E0599'),
@@ -94,8 +160,8 @@ def regressions(consumer, roots, env):
     leaf = roots['brynja-hash-sha3'] / 'src/execution'
     for filename, before, after in (
         ('route.rs', 'crate::keccak::permute(state)', '{ let _ = state; }'),
-        ('fixed.rs', 'input, 0x06, 3', 'input, 0x1f, 5'),
-        ('xof.rs', 'input, 0x1f, 5', 'input, 0x06, 3'),
+        ('fixed.rs', 'input.0, 0x06, 3', 'input.0, 0x1f, 5'),
+        ('xof.rs', 'input.0, 0x1f, 5', 'input.0, 0x06, 3'),
         ('engine.rs', 'output.copy_from_slice(scratch);', 'let _ = output;'),
         ('engine.rs', '*self = candidate;', 'let _ = candidate;'),
         ('engine.rs', 'count.checked_add(1)', 'count.checked_add(0)'),
@@ -130,6 +196,8 @@ def main():
         for mode in ('portable', 'prefer'):
             result = run(['cargo', 'run', '--offline', '--', mode], consumer, env)
             print(result.stdout, end='')
+        classification_regressions(consumer, env)
+        boundary_regressions(consumer, roots, env)
         regressions(consumer, roots, env)
 
 

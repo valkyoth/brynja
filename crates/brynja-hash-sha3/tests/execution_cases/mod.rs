@@ -55,7 +55,7 @@ pub fn run<'a>(execution: impl Fn() -> Result<api::Execution<'a>>) -> Result<usi
         expected.truncate(out_bits.div_ceil(8));
         macro_rules! fixed {
             ($name:ident) => {{
-                let result = api::$name::hash_bits(execution()?, input)?;
+                let result = api::$name::hash_bits(execution()?, api::PublicBits::new(input))?;
                 ensure(result.digest.as_bytes().as_slice() == expected)?;
                 ensure(result.report.route == execution()?.route())?;
                 ensure(result.report.padding_permutations >= 1)?;
@@ -67,8 +67,12 @@ pub fn run<'a>(execution: impl Fn() -> Result<api::Execution<'a>>) -> Result<usi
                 let mut scratch = vec![0; output.len()];
                 let dest =
                     Fips202Output::new(&mut output, valid(out_bits)).map_err(|_| "output")?;
-                let report =
-                    api::$name::hash_bits_with_scratch(execution()?, input, dest, &mut scratch)?;
+                let report = api::$name::hash_bits_with_scratch(
+                    execution()?,
+                    api::PublicBits::new(input),
+                    dest,
+                    &mut scratch,
+                )?;
                 ensure(output == expected)?;
                 ensure(report.route == execution()?.route())?;
             }};
@@ -114,7 +118,7 @@ pub fn run<'a>(execution: impl Fn() -> Result<api::Execution<'a>>) -> Result<usi
                     };
                     let mut stream = api::$name::new(execution()?)?;
                     for chunk in message.get(..complete).ok_or("complete input")?.chunks(13) {
-                        stream.update(chunk)?;
+                        stream.update(api::Public::new(chunk))?;
                     }
                     ensure(stream.message_bytes() == complete as u128)?;
                     let remaining = Fips202BitString::new(
@@ -122,7 +126,7 @@ pub fn run<'a>(execution: impl Fn() -> Result<api::Execution<'a>>) -> Result<usi
                         if complete == length { 0 } else { tail },
                     )
                     .map_err(|_| "remaining")?;
-                    let result = stream.finalize_bits(remaining)?;
+                    let result = stream.finalize_bits(api::PublicBits::new(remaining))?;
                     ensure(result.digest == expected)?;
                     ensure(result.report.route == execution()?.route())?;
                     ensure(result.report.absorb_permutations == (complete / $rate) as u128)?;
@@ -141,7 +145,8 @@ pub fn run<'a>(execution: impl Fn() -> Result<api::Execution<'a>>) -> Result<usi
                         Fips202Output::new(&mut expected, tail).map_err(|_| "dest")?,
                     )
                     .map_err(|_| "portable XOF")?;
-                    let mut reader = api::$name::new(execution()?)?.finalize_bits_xof(bits)?;
+                    let mut reader = api::$name::new(execution()?)?
+                        .finalize_bits_xof(api::PublicBits::new(bits))?;
                     let before = reader.report();
                     let mut rejected = [0xa5; 169];
                     ensure(reader.squeeze(&mut rejected) == Err(api::Error::ScratchTooSmall))?;

@@ -31,7 +31,7 @@ impl<const RATE: usize> State<RATE> {
     }
 
     pub(super) fn check_bits(current: u128, bits: u128) -> Result<(), Error> {
-        Self::check_bytes(current, bits / 8).map(|_| ())
+        Self::check_bytes(current, bits.div_ceil(8)).map(|_| ())
     }
 
     pub(super) fn update(&mut self, execution: &Execution<'_>, input: &[u8]) -> Result<(), Error> {
@@ -129,6 +129,9 @@ impl<const RATE: usize> State<RATE> {
             .get_mut(..output.len())
             .ok_or(Error::ScratchTooSmall)?;
         let partial = !output.is_empty() && valid < 8;
+        // Admission includes the partial backing byte, matching check_bits.
+        // The public counter continues to report only complete output bytes.
+        Self::check_bytes(self.output_bytes, output.len() as u128)?;
         let complete = if partial {
             output.len().saturating_sub(1)
         } else {
@@ -161,6 +164,89 @@ impl<const RATE: usize> State<RATE> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn bit_preflight_includes_each_partial_backing_byte() {
+        for current in [0, 1, u128::MAX / 2, u128::MAX - 2, u128::MAX - 1, u128::MAX] {
+            for bits in (0..=24).chain([u128::MAX - 7, u128::MAX]) {
+                let bytes = (bits / 8) + u128::from(bits % 8 != 0);
+                let expected = current
+                    .checked_add(bytes)
+                    .map(|_| ())
+                    .ok_or(Error::LengthOverflow);
+                assert_eq!(State::<136>::check_bits(current, bits), expected);
+            }
+        }
+    }
+
+    #[test]
+    fn partial_execution_matches_preflight_without_mutating_on_overflow()
+    -> Result<(), crate::Fips202BitsError> {
+        use crate::Fips202BitsError::LengthOverflow;
+        let execution = Execution::portable();
+        for size in 1..=2 {
+            for valid in 1..=8 {
+                let bytes = [0; 2];
+                let input = Fips202BitString::new(bytes.get(..size).ok_or(LengthOverflow)?, valid)?;
+                let mut state = State::<136>::new(execution.route());
+                state.message_bytes = u128::MAX - (size as u128 - 1);
+                let before = state.clone();
+                assert_eq!(
+                    State::<136>::check_bits(state.message_bytes, input.bit_len() as u128),
+                    Err(Error::LengthOverflow)
+                );
+                for (suffix, width) in [(0x06, 3), (0x1f, 5)] {
+                    assert_eq!(
+                        state.finish(&execution, input, suffix, width),
+                        Err(Error::LengthOverflow)
+                    );
+                    assert_eq!(state.lanes, before.lanes);
+                    assert_eq!(state.position, before.position);
+                    assert_eq!(state.message_bytes, before.message_bytes);
+                    assert_eq!(state.report, before.report);
+                }
+                state.output_bytes = state.message_bytes;
+                let mut output = [0xa5; 2];
+                let mut scratch = [0x5a; 2];
+                assert_eq!(
+                    state.squeeze(
+                        &execution,
+                        output.get_mut(..size).ok_or(LengthOverflow)?,
+                        scratch.get_mut(..size).ok_or(LengthOverflow)?,
+                        valid
+                    ),
+                    Err(Error::LengthOverflow)
+                );
+                assert_eq!(output, [0xa5; 2]);
+                assert_eq!(scratch, [0x5a; 2]);
+                assert_eq!(state.output_bytes, state.message_bytes);
+                assert_eq!(state.lanes, before.lanes);
+                assert_eq!(state.position, before.position);
+                assert_eq!(state.report, before.report);
+                // At the adjacent admitted boundary, both preflight and execution succeed.
+                state.output_bytes -= 1;
+                assert!(
+                    State::<136>::check_bits(state.output_bytes, input.bit_len() as u128).is_ok()
+                );
+                assert!(
+                    state
+                        .squeeze(
+                            &execution,
+                            output.get_mut(..size).ok_or(LengthOverflow)?,
+                            scratch.get_mut(..size).ok_or(LengthOverflow)?,
+                            valid
+                        )
+                        .is_ok()
+                );
+                assert_eq!(
+                    state.output_bytes,
+                    if valid < 8 { u128::MAX - 1 } else { u128::MAX }
+                );
+                assert_eq!(output[0], 0);
+            }
+        }
+        Ok(())
+    }
 
     #[test]
     fn late_permutation_failure_does_not_commit_absorb_or_output() {

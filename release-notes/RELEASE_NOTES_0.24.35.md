@@ -15,6 +15,11 @@ and native high-level execution collection remain pending. Not tag-ready.
   methods provide arbitrary-sized transactional reads without allocation.
 - No new unsafe code, instruction kernel or third-party dependency. The optional
   first-party CPU edge leaves portable defaults and hardened APIs unchanged.
+- Pentest remediation requires explicit `Public`/`PublicBits` input classification
+  at every execution API boundary, including consuming bit tails. These caller
+  assertions are not secrecy proofs; confidential input still requires hardened APIs.
+- Partial-bit preflights and actual output admission include the final backing
+  byte, with near-limit failure atomicity and compiled mutation regressions.
 - cSHAKE CPU integration and hardened Keccak remain later milestones. This
   single-state vectorized permutation does not claim multi-message SIMD.
 

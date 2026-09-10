@@ -1,6 +1,6 @@
 # Brynja v0.24.34
 
-Status: exceptional retest passed; native evidence archived; final review pending.
+Status: exceptional retest and final local checks passed; awaiting green GitHub before tagging.
 
 ## Verification workflow first
 
@@ -84,6 +84,15 @@ passed 240 named and 4,590 general-t cases; kernel markers confirm 512 block
 comparisons per supported hardened kernel. The [archived evidence](../assurance/sha2-hardened-native/README.md)
 binds all 170 tested inputs; the Mac account path is redacted. The post-pentest
 final release check remains a separate step.
+
+Final local verification completed on 2026-09-10: selected repository acceptance,
+bare-metal and supplemental QEMU checks, twelve-version Rust compatibility,
+AddressSanitizer (including actual SHA-NI hardened execution), SHA-2/CPU Miri,
+selected Kani proofs, current standards/tooling/dependency checks, SBOM and
+release policy all passed. The native index remains bound to `10c8bdfa`.
+Documentation-hash corrections were checked by resuming the failed acceptance
+step, without restarting completed cryptographic campaigns. The release script
+selects zero crates and refuses publication for this internal milestone.
 
 CI follow-up: the defensive buffer-length change shifted the SHA-2 Drop impl
 source span. Its exact MIR registry pin now matches line 83, with a fast

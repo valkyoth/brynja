@@ -79,6 +79,13 @@ consumers. A fixture may remove optional workspace dependency edges, but cannot
 change package identities, versions, registry checksums or add unexpected edges.
 The explicitly registered SHA-2 nested consumer is checked recursively.
 
+Miri uses a separate dependency closure from native CPU integration tests. A CPU
+change does not rerun portable SHA-3, KMAC, TupleHash or ParallelHash ownership
+suites when both baseline and current lock graphs prove those crates have no CPU
+dependency. A new or removed CPU edge retains the broader checks. Shared core or
+SHA-3 changes still select those consumers. Missing or malformed dependency proof
+requires scope review; public checkpoints still run every Miri group.
+
 Version-only local pins and exact digest rebinding do not imply changed algorithms.
 Reused evidence remains attached to its original source, verifier, compiler,
 features and target: reuse never becomes a claim of a fresh run. Native correctness

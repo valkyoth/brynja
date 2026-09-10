@@ -1,13 +1,13 @@
 # Hosted CPU execution authority
 
-v0.24.32 implementation candidate; owner retest and fresh native observations
-passed on 0c6cee49. Final local release checks passed; awaiting green GitHub/CodeQL
-and explicit owner tag approval. See the
+v0.24.32 is signed; owner retest and fresh native observations
+passed on 0c6cee49. See the
 [native archive](../assurance/hosted-cpu-observations/v0.24.32/README.md).
 Independent cryptographic verification: NO.
 FIPS validation: NO. This is ordinary public-data raw kernel execution, not
-hardened hashing or a complete hash API. High-level integration follows in
-v0.24.33; the original admission-gated hash adapters are unchanged.
+hardened hashing or a complete hash API. High-level ordinary integration shipped
+in v0.24.33. A separate [hardened SHA-2 owner](sha2-hardened-execution.md) is under
+v0.24.34 review; the original admission-gated hash adapters are unchanged.
 
 ## Opt-in API
 
@@ -15,7 +15,8 @@ Add `brynja-crypto-cpu-std` with its default-off `runtime-execution` feature.
 Support-package version numbers stay at 0.1.1 until the next public checkpoint;
 the current implementation is available from this repository, not the existing
 published 0.1.1 artifact. The `brynja` facade does not acquire this dependency.
-The CPU leaf remains zero-dependency `no_std`. Runtime opt-in also exposes the
+The CPU leaf remains `no_std`; only the separate default-off hardened feature
+adds the first-party core clearing dependency. Runtime opt-in also exposes the
 separate static-execution module; it does not enable compiler target features.
 
 ```rust

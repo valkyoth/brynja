@@ -82,7 +82,7 @@ impl Sha512TBits {
         iv::derive(self)
     }
 
-    pub(super) const fn last_byte_mask(self) -> u8 {
+    pub(crate) const fn last_byte_mask(self) -> u8 {
         0xff_u8 << (8_u16.saturating_sub(self.0 % 8) % 8)
     }
 }

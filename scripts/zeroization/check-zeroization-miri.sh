@@ -57,6 +57,10 @@ quick_sha2() {
 }
 
 full_sha2() {
+    run_miri -p brynja-hash-sha2 --features hardened-execution,general-sha512-t \
+        --lib hardened_execution::engine::tests
+    run_miri -p brynja-hash-sha2 --features hardened-execution,general-sha512-t \
+        --lib hardened_execution::tests::output_owner_clears_during_recoverable_unwind
     run_miri -p brynja-hash-sha2 --features runtime-execution,general-sha512-t \
         --lib execution_transaction
     run_miri -p brynja-hash-sha2 --features runtime-execution,general-sha512-t \
@@ -172,6 +176,7 @@ quick_static_cpu() {
 }
 
 full_static_cpu() {
+    run_miri -p brynja-crypto-cpu --features hardened-execution --lib hardened_execution
     run_miri -p brynja-crypto-cpu --features runtime-execution --lib runtime_execution
     run_miri -p brynja-crypto-cpu-std --features runtime-execution --lib execution
     run_miri --manifest-path assurance/hosted-cpu-execution/Cargo.toml --lib

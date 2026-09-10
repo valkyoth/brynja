@@ -35,7 +35,7 @@ Static and hosted raw sessions require explicit `PublicData::new(...)` markers
 for public state and blocks. These record caller intent, not proof that the
 bytes contain no secrets; they do not provide cleanup or hardened ownership.
 
-`brynja-crypto-cpu` is the optional, zero-dependency, `no_std` package for
+`brynja-crypto-cpu` is the optional `no_std` package for
 separately reviewed first-party ISA kernels and static selection. Version
 0.1.1 now contains isolated SHA-256-family candidates for x86_64 SHA,
 AArch64 SHA2, and RV64 Zknh instructions plus SHA-512-family candidates for
@@ -125,3 +125,17 @@ cumulative pentest, remediation retest, and hosted gates recorded
 `PASS`/`PASS` with zero open findings. The project-wide
 first-party Rust, `no_std`, source-size, platform, FIPS, and unsafe-code
 policies apply here.
+
+## Hardened execution
+
+The default-off `hardened-execution` feature adds a separate secret-bearing
+SHA-2 execution owner with mandatory private-state and CPU-scratch cleanup.
+It supports explicit portable, static instruction and (with `runtime-execution`)
+hosted routes. Ordinary constructors and their public-data restriction are unchanged.
+The CPU crate gains only an optional first-party `brynja-core` clearing dependency;
+the feature does not pull in std or an external crypto implementation.
+
+See [hardened SHA-2 APIs and cleanup boundaries](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md).
+The new implementation is under review; native Arm/Mac evidence and pentest are
+pending. Register/spill erasure, independent verification and FIPS validation are
+not claimed.

@@ -2,6 +2,10 @@
 set -euo pipefail
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
+    -p brynja-hash-sha2 -p brynja-crypto-cpu --all-features --lib hardened_execution \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
     -p brynja-hash-sha2 --features runtime-execution,general-sha512-t --test execution \
     --target x86_64-unknown-linux-gnu
 
@@ -133,7 +137,17 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
     --target x86_64-unknown-linux-gnu
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
-    -p brynja-hash-parallel-std -p brynja-legacy-sha1 -p brynja-legacy-md5 \
+    -p brynja-hash-parallel-std \
+    --tests \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
+    -p brynja-legacy-sha1 \
+    --tests \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-10 test \
+    -p brynja-legacy-md5 \
     --tests \
     --target x86_64-unknown-linux-gnu
 

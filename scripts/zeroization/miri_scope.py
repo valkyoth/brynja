@@ -104,7 +104,7 @@ def normalized(path: str) -> str | None:
     return value
 
 
-def select(paths: list[str]) -> tuple[bool, tuple[str, ...]]:
+def select(paths: list[str], *, downstream=None) -> tuple[bool, tuple[str, ...]]:
     selected: set[str] = set()
     for raw in paths:
         path = normalized(raw)
@@ -124,22 +124,23 @@ def select(paths: list[str]) -> tuple[bool, tuple[str, ...]]:
         ):
             return True, GROUPS
 
-    return False, closure(selected)
+    return False, closure(selected, downstream=downstream)
 
 
-def closure(selected: set[str]) -> tuple[str, ...]:
+def closure(selected: set[str], *, downstream=None) -> tuple[str, ...]:
+    downstream = DOWNSTREAM if downstream is None else downstream
     selected = set(selected)
     pending = list(selected)
     while pending:
         group = pending.pop()
-        for dependent in DOWNSTREAM[group] - selected:
+        for dependent in downstream[group] - selected:
             selected.add(dependent)
             pending.append(dependent)
     return tuple(group for group in GROUPS if group in selected)
 
 
 def select_repository(
-    base: str, root: Path = ROOT, *, issues: list[str] | None = None,
+    base: str, root: Path = ROOT, *, issues: list[str] | None = None, downstream=None,
 ) -> tuple[bool, tuple[str, ...]]:
     """Semantic metadata classification; unknown or malformed inputs fail closed."""
     try:
@@ -162,6 +163,10 @@ def select_repository(
             'scripts/zeroization/test-miri-scope.py', 'scripts/zeroization/test-scope-inputs.py',
             'scripts/zeroization/check-tag-miri.sh', 'scripts/tag_gate.sh',
             'scripts/zeroization/check-zeroization-sanitizer.sh',
+            # These inspect evidence configuration, not the executed memory
+            # checker or its command catalog. Repository regressions always run.
+            'scripts/zeroization/zeroization_evidence.py',
+            'scripts/zeroization/test-zeroization-evidence.py',
         }
         for encoded in set(paths) - {b''}:
             path = encoded.decode('utf-8')
@@ -193,7 +198,7 @@ def select_repository(
                         consumer = tuple(scope_inputs.snapshot(root, base, p)[index] for p in (
                             'assurance/legacy-hash-public-api/Cargo.lock',
                             'assurance/legacy-hash-public-api/Cargo.toml'))
-                    elif path == 'assurance/sha2-execution/Cargo.lock':
+                    elif path in {'assurance/sha2-execution/Cargo.lock', 'assurance/sha2-hardened-execution/Cargo.lock'}:
                         consumer = tuple(scope_inputs.snapshot(root, base, p)[index] for p in (
                             'assurance/general-sha512-t/Cargo.lock',
                             'assurance/general-sha512-t/Cargo.toml'))
@@ -221,13 +226,13 @@ def select_repository(
                 continue
             else:
                 retained.append(path)
-        full, groups = select(retained)
+        full, groups = select(retained, downstream=downstream)
         if full:
             if issues is not None:
                 issues.extend(f"broad or unclassified input: {p}" for p in retained if select([p])[0])
             return True, GROUPS
         affected.update(groups)
-        return False, closure(affected)
+        return False, closure(affected, downstream=downstream)
     except (OSError, ValueError, SyntaxError, KeyError, TypeError, AttributeError, subprocess.SubprocessError) as error:
         if issues is not None:
             issues.append(str(error))

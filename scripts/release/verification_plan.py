@@ -14,6 +14,7 @@ BUILD_ENV_PREFIXES = ("RUST", "CARGO_", "CC", "CXX", "MIRI", "KANI", "ASAN_", "L
 sys.path.insert(0, str(ROOT / "scripts/zeroization"))
 import miri_scope as scope
 import scope_inputs as inputs
+import miri_dependencies
 
 
 def changed_paths(root: Path, base: str) -> list[str]:
@@ -92,7 +93,12 @@ def build(root: Path = ROOT, base: str | None = None) -> dict:
     full, groups = scope.select_repository(base, root, issues=issues)
     paths = changed_paths(root, base)
     verifier_groups = {name: list(groups) for name in ("miri", "asan", "kani")}
+    miri_full, miri_groups = miri_dependencies.select(root, base, issues)
+    verifier_groups['miri'] = list(miri_groups)
+    full = full or miri_full
     reasons = []
+    if set(miri_groups) != set(groups):
+        reasons.append('Miri uses portable owner dependency closures in both lock graphs; native CPU integration checks retain their wider scope')
     for path in paths:
         relevant = set(scope.select([path])[1]).intersection(groups)
         reasons.append(f"{path}: {', '.join(sorted(relevant)) or 'metadata/orchestration: repository checks'}")

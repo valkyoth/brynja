@@ -1,5 +1,5 @@
-mod compress32;
-mod compress64;
+pub(crate) mod compress32;
+pub(crate) mod compress64;
 mod output;
 mod owner;
 mod state32;
@@ -17,7 +17,7 @@ pub(crate) use owner::HardenedSha2Owner;
 #[cfg(feature = "general-sha512-t")]
 pub(crate) use state64::finalize_bits_length64;
 
-mod sealed {
+pub(crate) mod sealed {
     pub trait Registered {}
 }
 

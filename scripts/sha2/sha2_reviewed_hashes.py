@@ -3,7 +3,7 @@
 SOURCE_HASHES = {
     "crates/brynja-hash-core/src/lib.rs": "3704c2c069e65d9e3b0bb0f83cae484fc36ff41e7ddccc8075e787bb46980814",
     "crates/brynja-hash-core/src/bit_string.rs": "0b5c23c4a789cef43a3bf913c5d75c0beb1fb16bcc89036b7f1431e7b1af0fd8",
-    "crates/brynja-hash-sha2/src/lib.rs": "e56b8eeafb782074b2dd8fec09c52f303a7883c10806d1d503c275cdb81f6f19",
+    "crates/brynja-hash-sha2/src/lib.rs": "993fed6e3f9d6a7e68bba8f6ed253d2a5877d886d8ca08ae2e295033ca67b241",
     "crates/brynja-hash-sha2/src/bit_api.rs": "007b960b0d869dcd6abb5bcb7f13397dfd9a41e45fdb38f13ab684782f6f662d",
     "crates/brynja-hash-sha2/src/bit_input.rs": "eccb31f3ebc8056bc7f51319483002c27feddf76203cc7bb7a3d0d073fc9e16a",
     "crates/brynja-hash-sha2/src/compress.rs": "06545885d59a72980005de38bcf75f422621c87c262ca1243905a80fd7a5d353",
@@ -35,7 +35,7 @@ TEST_HASHES = {
     "assurance/sha2-bit-differential/Cargo.lock": "81b71c99c04ce21079a5426446cb8ebf00e179329c30bfc5ea59c5406771fce4",
     "assurance/sha2-bit-differential/src/main.rs": "72a6459c642c353fc64687e5fd29ba3e25f427c756e87ab79d3b940848b99752",
     "scripts/sha2/check-sha2-bit-differential.py": "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",
-    "scripts/zeroization/check-zeroization-miri.sh": "ec499fca10ce118c4171b865343d069babe0d3051749b9bdfa6d1eced6d120e0",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "abe8f6958c2ba9678dc9da3a40cc976fcb694e17e78313e62050744a5da83a2a",
+    "scripts/zeroization/check-zeroization-miri.sh": "75822bf463adaa6b51229256cc11cae8e77c337a2d80b8f69e960c6d15164526",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "abfeb9e4aa7b75d3238edd971604f639d031744a4e76b519809f14c70ae1e567",
     "scripts/sha2/sha2_test_policy.py": "df2cbbc5f4eeb588859b14447918f0f85cbd3cb2c97f10a39b267271903f1968",
 }

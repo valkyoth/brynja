@@ -31,7 +31,8 @@ default-off `static-execution` and `runtime-execution` features in
 have one-shot and consuming streaming APIs, transactional updates and explicit
 route/work reports. See [usage and deployment boundaries](https://github.com/valkyoth/brynja/blob/main/docs/sha2-ordinary-execution.md).
 Defaults remain portable; these non-erasing APIs must not process secrets.
-Hardened acceleration remains separate work. Historical admission-gated methods
+The separate `hardened-execution` feature is under review; see the hardened
+execution section below. Historical admission-gated methods
 below are retained; the new execution API does not change their admission flags.
 
 The separate general SHA-512/t extension is **Fully implemented** for portable
@@ -272,3 +273,17 @@ See the [full project documentation](https://github.com/valkyoth/brynja),
 and [verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
 Licensed under either Apache-2.0 or MIT, at your option.
+
+## Hardened execution
+
+The default-off `hardened-execution` feature adds a separate secret-bearing
+SHA-2 execution owner with mandatory private-state and CPU-scratch cleanup.
+It supports explicit portable, static instruction and (with `runtime-execution`)
+hosted routes. Ordinary constructors and their public-data restriction are unchanged.
+The CPU crate gains only an optional first-party `brynja-core` clearing dependency;
+the feature does not pull in std or an external crypto implementation.
+
+See [hardened SHA-2 APIs and cleanup boundaries](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md).
+The new implementation is under review; native Arm/Mac evidence and pentest are
+pending. Register/spill erasure, independent verification and FIPS validation are
+not claimed.

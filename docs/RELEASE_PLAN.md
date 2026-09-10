@@ -4290,7 +4290,7 @@ Exit criteria:
 
 ### v0.24.34 - SHA-2 Hardened Accelerated Owners
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement secret-bearing SHA-2 acceleration for existing instruction backends with sealed owner-backed scratch, complete owned-region destruction, typed secret output and byte/bit APIs for named identities and general SHA-512/t.
 

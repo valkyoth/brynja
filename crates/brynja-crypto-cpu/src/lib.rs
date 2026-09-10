@@ -14,6 +14,9 @@ pub mod static_execution;
 #[cfg(feature = "runtime-execution")]
 pub mod runtime_execution;
 
+#[cfg(feature = "hardened-execution")]
+pub mod hardened_execution;
+
 mod keccak;
 mod keccak_constants;
 mod sha256;

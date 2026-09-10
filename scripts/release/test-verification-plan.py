@@ -14,6 +14,7 @@ from unittest.mock import patch
 
 import verification_commands as commands
 import verification_plan as plans
+import miri_dependencies
 
 
 def rejects(function, *args) -> None:
@@ -54,6 +55,8 @@ def selection_tests() -> None:
     assert "python3 scripts/md5/check-md5-differential.py" not in selected
     assert "python3 scripts/sha3/check-sha3-bit-differential.py" not in selected
     assert "python3 scripts/release/test-verification-plan.py" in selected
+    for name in ('check-zeroization-evidence.py', 'test-zeroization-evidence.py'):
+        assert 'python3 scripts/zeroization/' + name in commands.selected(catalog, [])
     assert commands.selected(catalog, [], full=True) == catalog
     assert commands.owners("python3 scripts/kmac/check-kmac.py") == {"kmac"}
     # Never infer 'unchanged' from an unregistered script/package/command.
@@ -71,9 +74,42 @@ def selection_tests() -> None:
     assert "md5" in plans.scope.select(["security/md5-cpu-admissions.toml"])[1]
     assert "sha1" in plans.scope.select(["security/sha1-cpu-admissions.toml"])[1]
     assert "static_cpu" in plans.scope.select(["security/cpu-backend-admissions.toml"])[1]
+    sanitizer = commands.catalog(plans.ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
+    for group in ('sha2', 'sha3', 'parallelhash', 'static_cpu'):
+        chosen = commands.selected(sanitizer, [group])
+        assert not any('brynja-legacy-' in command for command in chosen)
+    assert any('brynja-legacy-md5' in command for command in commands.selected(sanitizer, ['md5']))
     assert "sha3" in plans.scope.select(["scripts/hash/final-acceptance.py"])[1]
     assert plans.scope.select(["assurance/unregistered/oracle.py"])[0]
     assert plans.scope.select(["scripts/unregistered/check.py"])[0]
+
+
+def miri_dependency_tests():
+    raw = (plans.ROOT / 'Cargo.lock').read_bytes()
+    edges = miri_dependencies.graph(raw, raw)
+    assert plans.scope.closure({'static_cpu'}, downstream=edges) == ('sha2', 'static_cpu')
+    assert plans.scope.closure({'sha3'}, downstream=edges) == ('sha3', 'kmac', 'tuplehash', 'parallelhash')
+    assert 'sha3' in plans.scope.closure({'core'}, downstream=edges)
+    import tomllib
+    data = tomllib.loads(raw.decode())
+    # Add a new optional-or-required CPU edge through each portable family.
+    for name in miri_dependencies.PORTABLE_ROOTS:
+        needle = ('name = "' + name + '"\n').encode()
+        start = raw.index(needle)
+        end = raw.find(b'[[package]]', start)
+        record = raw[start:end]
+        assert b'dependencies = [' in record
+        changed = raw[:start] + record.replace(b'dependencies = [', b'dependencies = [\n "brynja-crypto-cpu",', 1) + raw[end:]
+        for before, after in ((raw, changed), (changed, raw)):
+            assert 'sha3' in plans.scope.closure({'static_cpu'}, downstream=miri_dependencies.graph(before, after))
+    rejects(miri_dependencies.graph, raw, raw.replace(b'name = "brynja-hash-sha3"', b'name = "missing-root"'))
+    rejects(miri_dependencies.graph, raw, b'broken TOML =')
+    for broken in (None, b'broken TOML ='):
+        issues = []
+        with patch.object(miri_dependencies.inputs, 'snapshot', return_value=(raw, broken)):
+            full, groups = miri_dependencies.select(plans.ROOT, 'v0.24.33', issues)
+        assert full and groups == plans.scope.GROUPS and issues
+    assert data['version'] == 4
 
 
 def parser_tests() -> None:
@@ -227,6 +263,7 @@ else:
 def main() -> None:
     approval_tests()
     selection_tests()
+    miri_dependency_tests()
     parser_tests()
     runner_tests()
     nested_fixture_tests()

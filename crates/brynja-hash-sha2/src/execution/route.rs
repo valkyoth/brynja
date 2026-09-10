@@ -71,6 +71,18 @@ impl StaticSelection {
         })
     }
 
+    /// Borrows the same selection through the separate erasing SHA-2 kernels.
+    /// A failed hardened startup KAT never becomes a portable fallback.
+    #[cfg(feature = "hardened-execution")]
+    pub fn hardened_execution(
+        &self,
+    ) -> Result<crate::hardened_execution::Execution<'_>, crate::hardened_execution::Error> {
+        match &self.owner {
+            Some(owner) => crate::hardened_execution::Execution::from_static(owner),
+            None => Ok(crate::hardened_execution::Execution::fallback(self.route)),
+        }
+    }
+
     /// Irreversibly invalidates this selected accelerated owner and all streams.
     pub fn quarantine(&self) {
         if let Some(owner) = &self.owner {

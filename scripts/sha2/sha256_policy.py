@@ -423,6 +423,7 @@ def validate_packages(root: Path) -> None:
         "cpu": ["dep:brynja-crypto-cpu"],
         "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],
         "runtime-execution": ["static-execution", "brynja-crypto-cpu/runtime-execution"],
+        "hardened-execution": ["static-execution", "brynja-crypto-cpu/hardened-execution"],
     }:
         fail("SHA-2 feature boundary changed")
 
@@ -439,7 +440,7 @@ def validate_packages(root: Path) -> None:
             "publish": "crates-io",
             "required": ["brynja-core", "brynja-hash-core"],
             "optional": {"cpu": "brynja-crypto-cpu"},
-            "features": ["general-sha512-t", "static-execution", "runtime-execution"],
+            "features": ["general-sha512-t", "static-execution", "runtime-execution", "hardened-execution"],
         },
     }
     for name, entry in expected.items():

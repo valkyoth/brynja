@@ -126,7 +126,9 @@ def main() -> int:
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
     assert sum("-p brynja-hash-parallel" in command for command in commands) == 1
     status, commands = run_profile("--group", "sha2")
-    assert status == 0 and len(commands) == 18
+    assert status == 0 and len(commands) == 20
+    assert sum('--lib hardened_execution::engine::tests' in c for c in commands) == 1
+    assert sum('--lib hardened_execution::tests::output_owner_clears_during_recoverable_unwind' in c for c in commands) == 1
     assert sum('--lib execution_transaction' in c for c in commands) == 1
     assert sum('--test execution bounded_execution_lifecycle_smoke' in c for c in commands) == 1
     assert sum('--lib hardened::tests::checked_length_' in c for c in commands) == 1
@@ -139,11 +141,12 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 48
+    assert status == 0 and len(commands) == 51
     assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1
     assert sum(c.endswith('assurance/static-cpu-execution/Cargo.toml --lib') for c in commands) == 1
     status, static_commands = run_profile('--group', 'static_cpu')
-    assert status == 0 and len(static_commands) == 5
+    assert status == 0 and len(static_commands) == 6
+    assert sum('--features hardened-execution --lib hardened_execution' in c for c in static_commands) == 1
     assert sum(c.endswith('assurance/hosted-cpu-execution/Cargo.toml --lib') for c in static_commands) == 1
     assert sum(c.endswith('--features runtime-execution --lib runtime_execution') for c in static_commands) == 1
     assert sum(c.endswith('--features runtime-execution --lib execution') for c in static_commands) == 1

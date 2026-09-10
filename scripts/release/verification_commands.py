@@ -22,6 +22,9 @@ DIRECTORIES = {
 }
 BASE_DIRECTORIES = {"repository", "release", "assurance", "ci", "standards", "pki", "protocols"}
 BASE_COMMANDS = {
+    "python3 scripts/zeroization/check-zeroization-evidence.py",
+    "python3 scripts/zeroization/test-zeroization-evidence.py",
+    "python3 scripts/sha2/check-sha2-hardened-execution.py --policy-only",
     "python3 scripts/cpu/check-static-execution.py --policy-only",
     "python3 scripts/cpu/check-hosted-execution.py --policy-only",
     "python3 scripts/cpu/check-acceleration-availability.py",

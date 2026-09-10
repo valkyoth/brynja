@@ -14,6 +14,10 @@ publish = ["crates-io"]
 default = []
 static-execution = []
 runtime-execution = ["static-execution"]
+hardened-execution = ["static-execution", "dep:brynja-core"]
+
+[dependencies]
+brynja-core = { workspace = true, optional = true }
 
 [lints]
 workspace = true

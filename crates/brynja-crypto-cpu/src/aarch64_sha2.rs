@@ -16,6 +16,177 @@ pub(crate) fn compress(state: &mut [u32; 8], block: &[u8; 64]) {
     unsafe { compress_sha2(state, block) }
 }
 
+#[cfg(feature = "hardened-execution")]
+pub(crate) fn compress_secret(
+    state: &mut [u8; 64],
+    block: &[u8; 128],
+    scratch: &mut crate::hardened_execution::scratch::Scratch,
+) {
+    // SAFETY: Sealed session checks complete NEON/SHA2 platform authority.
+    // The scratch owner is aligned and every load/store stays in its 64 bytes.
+    unsafe { secret_sha256(state, block, scratch) }
+}
+
+#[cfg(feature = "hardened-execution")]
+#[target_feature(enable = "sha2")]
+unsafe fn secret_sha256(
+    state: &mut [u8; 64],
+    block: &[u8; 128],
+    scratch: &mut crate::hardened_execution::scratch::Scratch,
+) {
+    use crate::hardened_execution::scratch::{read32, write32};
+    scratch.expand32(block);
+    for i in 0..8 {
+        write32(&mut scratch.vectors, i, read32(state, i).to_be());
+    }
+    // SAFETY: Fixed offsets 0/16 each read sixteen bytes of aligned owner data.
+    let (mut abcd, mut efgh) = unsafe {
+        (
+            vld1q_u32(scratch.vectors.as_ptr().cast()),
+            vld1q_u32(scratch.vectors.as_ptr().add(16).cast()),
+        )
+    };
+    let saved_abcd = abcd;
+    let saved_efgh = efgh;
+    for (chunk, constants) in ROUND_CONSTANTS.as_chunks::<4>().0.iter().enumerate() {
+        let round = chunk.saturating_mul(4);
+        for (j, constant) in constants.iter().enumerate() {
+            let value = read32(&scratch.schedule, round.saturating_add(j)).wrapping_add(*constant);
+            write32(
+                &mut scratch.vectors,
+                8_usize.saturating_add(j),
+                value.to_be(),
+            );
+        }
+        // SAFETY: One complete aligned sixteen-byte vector at offset 32.
+        let wk = unsafe { vld1q_u32(scratch.vectors.as_ptr().add(32).cast()) };
+        let previous = abcd;
+        abcd = vsha256hq_u32(abcd, efgh, wk);
+        efgh = vsha256h2q_u32(efgh, previous, wk);
+    }
+    // SAFETY: Exclusive aligned owner stores at offsets 0/16 stay in bounds.
+    unsafe {
+        vst1q_u32(
+            scratch.vectors.as_mut_ptr().cast(),
+            vaddq_u32(abcd, saved_abcd),
+        );
+        vst1q_u32(
+            scratch.vectors.as_mut_ptr().add(16).cast(),
+            vaddq_u32(efgh, saved_efgh),
+        );
+    }
+    for i in 0..8 {
+        let value = read32(&scratch.vectors, i);
+        write32(
+            state,
+            i,
+            if cfg!(target_endian = "little") {
+                value.swap_bytes()
+            } else {
+                value
+            },
+        );
+    }
+}
+
+#[cfg(feature = "hardened-execution")]
+pub(crate) fn compress512_secret(
+    state: &mut [u8; 64],
+    block: &[u8; 128],
+    scratch: &mut crate::hardened_execution::scratch::Scratch,
+) {
+    // SAFETY: Sealed session checks complete NEON/SHA3/SHA512 authority and
+    // every vector access is confined to the aligned scratch owner.
+    unsafe { secret_sha512(state, block, scratch) }
+}
+
+#[cfg(feature = "hardened-execution")]
+#[target_feature(enable = "sha3")]
+unsafe fn secret_sha512(
+    state: &mut [u8; 64],
+    block: &[u8; 128],
+    scratch: &mut crate::hardened_execution::scratch::Scratch,
+) {
+    use crate::hardened_execution::scratch::{read64, write64};
+    scratch.expand64(block);
+    for i in 0..8 {
+        write64(&mut scratch.vectors, i, read64(state, i).to_be());
+    }
+    // SAFETY: Four aligned two-word loads cover precisely 64 owned bytes.
+    let (mut ab, mut cd, mut ef, mut gh) = unsafe {
+        (
+            vld1q_u64(scratch.vectors.as_ptr().cast()),
+            vld1q_u64(scratch.vectors.as_ptr().add(16).cast()),
+            vld1q_u64(scratch.vectors.as_ptr().add(32).cast()),
+            vld1q_u64(scratch.vectors.as_ptr().add(48).cast()),
+        )
+    };
+    let (saved_ab, saved_cd, saved_ef, saved_gh) = (ab, cd, ef, gh);
+    for (pair, constants) in ROUND_CONSTANTS_512.as_chunks::<2>().0.iter().enumerate() {
+        for (j, constant) in constants.iter().enumerate() {
+            let value = read64(&scratch.schedule, pair.saturating_mul(2).saturating_add(j))
+                .wrapping_add(*constant);
+            write64(&mut scratch.vectors, j, value.to_be());
+        }
+        // SAFETY: One aligned sixteen-byte input vector in the scratch owner.
+        let initial = unsafe { vld1q_u64(scratch.vectors.as_ptr().cast()) };
+        match pair % 4 {
+            0 => {
+                let sum = vaddq_u64(vextq_u64::<1>(initial, initial), gh);
+                let mid = vsha512hq_u64(sum, vextq_u64::<1>(ef, gh), vextq_u64::<1>(cd, ef));
+                gh = vsha512h2q_u64(mid, cd, ab);
+                cd = vaddq_u64(cd, mid);
+            }
+            1 => {
+                let sum = vaddq_u64(vextq_u64::<1>(initial, initial), ef);
+                let mid = vsha512hq_u64(sum, vextq_u64::<1>(cd, ef), vextq_u64::<1>(ab, cd));
+                ef = vsha512h2q_u64(mid, ab, gh);
+                ab = vaddq_u64(ab, mid);
+            }
+            2 => {
+                let sum = vaddq_u64(vextq_u64::<1>(initial, initial), cd);
+                let mid = vsha512hq_u64(sum, vextq_u64::<1>(ab, cd), vextq_u64::<1>(gh, ab));
+                cd = vsha512h2q_u64(mid, gh, ef);
+                gh = vaddq_u64(gh, mid);
+            }
+            _ => {
+                let sum = vaddq_u64(vextq_u64::<1>(initial, initial), ab);
+                let mid = vsha512hq_u64(sum, vextq_u64::<1>(gh, ab), vextq_u64::<1>(ef, gh));
+                ab = vsha512h2q_u64(mid, ef, cd);
+                ef = vaddq_u64(ef, mid);
+            }
+        }
+    }
+    // SAFETY: Four aligned, exclusive sixteen-byte stores cover this owner.
+    unsafe {
+        vst1q_u64(scratch.vectors.as_mut_ptr().cast(), vaddq_u64(ab, saved_ab));
+        vst1q_u64(
+            scratch.vectors.as_mut_ptr().add(16).cast(),
+            vaddq_u64(cd, saved_cd),
+        );
+        vst1q_u64(
+            scratch.vectors.as_mut_ptr().add(32).cast(),
+            vaddq_u64(ef, saved_ef),
+        );
+        vst1q_u64(
+            scratch.vectors.as_mut_ptr().add(48).cast(),
+            vaddq_u64(gh, saved_gh),
+        );
+    }
+    for i in 0..8 {
+        let value = read64(&scratch.vectors, i);
+        write64(
+            state,
+            i,
+            if cfg!(target_endian = "little") {
+                value.swap_bytes()
+            } else {
+                value
+            },
+        );
+    }
+}
+
 #[target_feature(enable = "sha2")]
 unsafe fn compress_sha2(state: &mut [u32; 8], block: &[u8; 64]) {
     let schedule = expanded(block);

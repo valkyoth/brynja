@@ -9,6 +9,9 @@
 
 #![no_std]
 
+#[cfg(feature = "hardened-execution")]
+pub mod hardened_execution;
+
 mod bit_api;
 mod bit_input;
 mod compress;

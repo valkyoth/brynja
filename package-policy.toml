@@ -42,7 +42,7 @@ class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-core"]
 optional = { cpu = "brynja-crypto-cpu" }
-features = ["general-sha512-t", "static-execution", "runtime-execution"]
+features = ["general-sha512-t", "static-execution", "runtime-execution", "hardened-execution"]
 
 [packages.brynja-hash-sha3]
 class = "modern-shared"
@@ -79,7 +79,7 @@ features = ["conformance-testing"]
 class = "cpu-backend"
 publish = "crates-io"
 required = []
-optional = {}
+optional = { hardened-execution = "brynja-core" }
 features = ["static-execution", "runtime-execution"]
 
 [packages.brynja-crypto-cpu-std]

@@ -145,6 +145,24 @@ status = "supplemental-aarch64-execution-evidence"
 sha256 = "7fc48e128bbc57fff4f81c59818aa26c6b8ed54a94a84a18a2307958bcaf8046"
 
 [[sources]]
+package = "brynja-crypto-cpu"
+path = "src/hardened_execution/mod.rs"
+status = "hardened-authority-and-operation-cleanup"
+sha256 = "2c438ebd34e2abe4f8ebcd8886616892b9d9128e455e36f4df9bf63d6add4b93"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/hardened_execution/scratch.rs"
+status = "hardened-owner-backed-kernel-scratch"
+sha256 = "52e225e0d1525b15c58e6dba33f01aa08e2e679058debb90884f26650bd9b92c"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/hardened_execution/tests.rs"
+status = "hardened-kernel-and-lifecycle-tests"
+sha256 = "6dd9a4a9d32ae8dffdaaf59491d86fa0da846983aeea5cd57c50d294628c679c"
+
+[[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/execution/features.rs"
 status = "complete-hosted-feature-bundles"
@@ -154,7 +172,7 @@ sha256 = "eeed2b69bbf6f5eebe6b4368bef4bfff4694ba7da071bc6bd9862c9a89d2d962"
 package = "brynja-crypto-cpu"
 path = "src/runtime_execution/mod.rs"
 status = "ordinary-runtime-authority"
-sha256 = "dd4bfdde0243e6bf5f96d25799fbec5220d6bf0a4c9c9ba7fb9f2fec90b62a19"
+sha256 = "afa23e33c7da3b54aedf939bf2f2224e87ade560e46286a1d14af73f6eb1148b"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -190,7 +208,7 @@ sha256 = "cb30ca0fbc0945f710992887b7e2afafbe630e2137bf69605639b0d82eef4ca0"
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "0547b5d717c8f8489dcd3fe7b9436866412fc54f702965a62986c715a8c14e4c"
+sha256 = "91b9b91cffce1974d920f094ddc8e558e69b3009ff034adc7c7f3b504409ca51"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -214,7 +232,7 @@ sha256 = "5bf3bc62b69c41661cd0482e9644a2293460a38c70bd95d1bff75f4f4cdb412a"
 package = "brynja-crypto-cpu"
 path = "src/sha512_schedule.rs"
 status = "portable-message-schedule"
-sha256 = "3643e358f27bc5e9f4416525a9e9f43ab26063e700e80b3cb91da44bdddc5f6f"
+sha256 = "596d5e595ee89bfef4373469ebd9881596ec4164c96b32a1b081b6c24ddb6122"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -232,13 +250,13 @@ sha256 = "a1c1eb54418629305e71fe458d70b6e0ebb3e4fded9d60f898bc0fd09db2fc14"
 package = "brynja-crypto-cpu"
 path = "src/x86_sha.rs"
 status = "implemented-unadmitted-candidate-kernel"
-sha256 = "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28"
+sha256 = "9519e6f2feb7ff836f56bee2d72b5259ebaf057f08928d89f555e97ade5cd7c0"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-candidate-kernel"
-sha256 = "b2c38b0d8fa13e3010fa3a0f85753505d8e994c00327da1bdf8651fd6f5e3353"
+sha256 = "1fd8fa9ed0db87af087c6951581f890b94ebd9add28bff42647c79c4b0dd013d"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -282,7 +300,7 @@ identity = "X86Sha"
 architecture = "x86_64"
 module = "src/x86_sha.rs"
 status = "implemented-unadmitted-native-correctness-observed"
-sha256 = "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28"
+sha256 = "9519e6f2feb7ff836f56bee2d72b5259ebaf057f08928d89f555e97ade5cd7c0"
 low_level_allowed = true
 instructions = ["sha"]
 abi_preconditions = ["x86_64", "sha-usable-on-current-logical-cpu"]
@@ -337,7 +355,7 @@ identity = "Aarch64Sha2"
 architecture = "aarch64"
 module = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-native-correctness-observed"
-sha256 = "b2c38b0d8fa13e3010fa3a0f85753505d8e994c00327da1bdf8651fd6f5e3353"
+sha256 = "1fd8fa9ed0db87af087c6951581f890b94ebd9add28bff42647c79c4b0dd013d"
 low_level_allowed = true
 instructions = ["neon", "sha2"]
 abi_preconditions = ["aarch64", "neon-and-sha2-usable-on-current-logical-cpu"]
@@ -348,7 +366,7 @@ identity = "Aarch64Sha512"
 architecture = "aarch64"
 module = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-native-correctness-observed"
-sha256 = "b2c38b0d8fa13e3010fa3a0f85753505d8e994c00327da1bdf8651fd6f5e3353"
+sha256 = "1fd8fa9ed0db87af087c6951581f890b94ebd9add28bff42647c79c4b0dd013d"
 low_level_allowed = true
 instructions = ["neon", "sha3"]
 abi_preconditions = ["aarch64", "neon-and-sha3-usable-on-current-logical-cpu"]
@@ -423,7 +441,7 @@ abi_preconditions = ["riscv64", "no-ratified-keccak-instruction-in-pinned-author
 package = "brynja-crypto-cpu"
 path = "src/static_execution/mod.rs"
 status = "ordinary-static-authority"
-sha256 = "6a366bc163774110a522cd59530955c11f3f7ec5a3d7110ae9278dae1e38868a"
+sha256 = "f2ada0005350b3518bd835fe8488248b760f0a1b1bc11f1b395db05101bf3993"
 
 [[sources]]
 package = "brynja-crypto-cpu"

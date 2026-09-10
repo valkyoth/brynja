@@ -11,6 +11,7 @@ LIMIT = 4 * 1024 * 1024
 PACKAGES = {
     'brynja-general-sha512-t-consumer': 'sha2',
     'brynja-sha2-execution-fixture': 'sha2',
+    'brynja-sha2-hardened-execution-fixture': 'sha2',
     'brynja-crypto-cpu': 'static_cpu',
     'brynja-crypto-cpu-std': 'static_cpu',
     'brynja-hosted-cpu-execution-fixture': 'static_cpu',
@@ -22,6 +23,7 @@ PACKAGES = {
     'brynja-hash-sha2': 'sha2', 'brynja-hash-sha3': 'sha3',
     'brynja-mac-kmac': 'kmac', 'brynja-hash-tuple': 'tuplehash',
     'brynja-hash-parallel': 'parallelhash',
+    'brynja-hash-parallel-std': 'parallelhash',
     'brynja-legacy-hash-public-api-fixture': 'legacy',
     'brynja-legacy-hash-final-fixture': 'legacy',
 }

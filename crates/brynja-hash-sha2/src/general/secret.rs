@@ -10,7 +10,7 @@ pub struct Sha512TSecretDigest<'a> {
     region: OwnedSecretRegion<'a>,
 }
 impl<'a> Sha512TSecretDigest<'a> {
-    pub(super) fn from_region(parameter: Sha512TBits, region: OwnedSecretRegion<'a>) -> Self {
+    pub(crate) fn from_region(parameter: Sha512TBits, region: OwnedSecretRegion<'a>) -> Self {
         Self { parameter, region }
     }
     /// Exact public parameter; does not reveal secret bytes.

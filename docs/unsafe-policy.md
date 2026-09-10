@@ -44,6 +44,26 @@ for Keccak because the pinned ratified authorities contain no qualifying
 route. Any additional activation is a reviewed architectural change, never a
 source-hash-only edit.
 
+## v0.24.34 Hardened SHA-2 Scratch
+
+Separate secret-bearing functions in the existing x86 SHA and AArch64 SHA2
+exception modules use owner-backed schedule/vector storage. No additional
+unsafe module, foreign implementation or platform detector is added. Necessity:
+the ordinary kernels' source-owned stack arrays cannot satisfy hardened cleanup;
+reusing them for secrets would violate the documented API separation. Portable
+hardened compression remains the safe explicit alternative.
+
+The new kernels receive fixed `[u8; 64]` state and `[u8; 128]` blocks. Vector
+loads/stores use fixed in-bounds offsets, unaligned operations where applicable,
+and the aligned scratch owner. Full static/hosted authority and a direct
+hardened KAT precede entry; incomplete operations quarantine the owner. The
+private scratch guard clears both owned regions after each operation and on
+recoverable unwind; the outer hash clears its eight owned regions on terminal
+paths. Exact unsafe block/item counts and source hashes bind this amendment.
+Native Arm/Mac review and exceptional pentest remain pending. Registers,
+compiler copies/spills, caches and platform storage are not erased by this claim.
+See [the complete hardened boundary](sha2-hardened-execution.md).
+
 ## v0.24.31 Ordinary Static Execution
 
 The default-off `static-execution` feature exposes five ordinary raw kernels:
@@ -69,7 +89,8 @@ No feature bool, report or downstream trait implementation can call it safely.
 Actual kernel startup tests precede sessions; quarantine never triggers fallback.
 No new pointer operation, foreign call, assembly or cryptographic kernel is added.
 Necessity: platform detection lives in the optional std crate while kernels remain
-dependency-free no_std. Moving detection into the core or trusting safe booleans
+no_std (the separate hardened feature alone adds the first-party clearing owner).
+Moving detection into the core or trusting safe booleans
 would violate those boundaries. The two small source-hash-bound modules are the
 reviewed bridge, not blanket permission for hosted low-level code.
 See [hosted CPU execution](hosted-cpu-execution.md) for the platform audit,

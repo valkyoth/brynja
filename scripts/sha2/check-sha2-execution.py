@@ -43,7 +43,7 @@ def validate():
         raise ValueError('packaged execution gate missing')
 
 
-def package(destination, env):
+def package(destination, env, fixture_name='sha2-execution'):
     # Only trusted project-owned paths and Cargo archives are handled here.
     workspace = destination / 'workspace'
     workspace.mkdir()
@@ -63,13 +63,13 @@ def package(destination, env):
         with tarfile.open(archive) as bundle:
             bundle.extractall(destination / 'packages', filter='data')
         roots[name] = destination / 'packages' / f'{name}-{version}'
-    for name in ('sha2-execution', 'general-sha512-t'):
+    for name in (fixture_name, 'general-sha512-t'):
         shutil.copytree(ROOT / 'assurance' / name, destination / 'assurance' / name,
                         ignore=shutil.ignore_patterns('target'))
     # include_str! reads the same committed, bounded official/oracle corpora.
     shutil.copytree(ROOT / 'crates/brynja-hash-sha2/tests/vectors',
                     destination / 'crates/brynja-hash-sha2/tests/vectors')
-    for name in ('sha2-execution', 'general-sha512-t'):
+    for name in (fixture_name, 'general-sha512-t'):
         path = destination / 'assurance' / name / 'Cargo.toml'
         text = path.read_text()
         for package_name, root in roots.items():
@@ -77,7 +77,7 @@ def package(destination, env):
         text += '\n[patch.crates-io]\n' + '\n'.join(
             f'{package_name} = {{ path = "{root.as_posix()}" }}' for package_name, root in roots.items())
         path.write_text(text + '\n')
-    return destination / FIXTURE, roots
+    return destination / 'assurance' / fixture_name, roots
 
 
 def negatives(consumer, env):

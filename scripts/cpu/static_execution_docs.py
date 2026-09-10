@@ -22,7 +22,8 @@ CLAIMS = (
 def validate(root):
     texts = {name: (root / name).read_text(encoding='utf-8') for name in FILES}
     features = tomllib.loads(texts[MANIFEST]).get('features')
-    if features != {'default': [], 'static-execution': [], 'runtime-execution': ['static-execution']}:
+    if features != {'default': [], 'static-execution': [], 'runtime-execution': ['static-execution'],
+                    'hardened-execution': ['static-execution', 'dep:brynja-core']}:
         raise ValueError('documented static feature no longer matches the manifest')
     if '#[cfg(feature = "static-execution")]\npub mod static_execution;' not in texts[LIBRARY]:
         raise ValueError('documented static module no longer matches its public gate')

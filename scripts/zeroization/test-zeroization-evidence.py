@@ -20,6 +20,8 @@ def copy_fixture(destination: Path) -> None:
         Path("scripts/checks.sh"),
         Path("scripts/tag_gate.sh"),
         Path("scripts/zeroization/check-tag-miri.sh"),
+        Path("scripts/release/verification_plan.py"),
+        Path("scripts/release/run-verification.py"),
     ):
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -70,13 +72,13 @@ def test() -> None:
         require_rejection(root, "local tag gate")
         copy_fixture(root)
 
-        tag_miri = root / "scripts/zeroization/check-tag-miri.sh"
-        replace(tag_miri, '"$miri_runner" --full', "true")
+        planner = root / "scripts/release/verification_plan.py"
+        replace(planner, 'verifier_groups = {name: list(scope.GROUPS) for name in verifier_groups}', "verifier_groups = {}")
         require_rejection(root, "complete Miri evidence")
         copy_fixture(root)
 
-        tag_miri = root / "scripts/zeroization/check-tag-miri.sh"
-        replace(tag_miri, '"$miri_runner" --focused "${groups[@]}"', "true")
+        runner = root / "scripts/release/run-verification.py"
+        replace(runner, 'execute("scripts/zeroization/check-zeroization-miri.sh --selected " + " ".join(groups))', "pass")
         require_rejection(root, "focused Miri evidence")
         copy_fixture(root)
 

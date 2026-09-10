@@ -135,12 +135,9 @@ def test() -> None:
         reset(root)
 
         cpu_manifest = root / "crates/brynja-crypto-cpu/Cargo.toml"
-        cpu_manifest.write_text(
-            cpu_manifest.read_text(encoding="utf-8")
-            + "\n[dependencies]\nbrynja-core = { workspace = true }\n",
-            encoding="utf-8",
-        )
-        require_rejection(root, "zero dependencies")
+        cpu_manifest.write_text(cpu_manifest.read_text(encoding="utf-8").replace(
+            'workspace = true, optional = true', 'workspace = true'), encoding="utf-8")
+        require_rejection(root, "opt-in first-party clearing dependency")
         reset(root)
 
         detector = root / "crates/brynja-crypto-cpu-std/Cargo.toml"

@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "72d09a561c44c01ae91d38788633f0f14a834bbce2f64818855d307bb5fdc95a"
+EXPECTED_POLICY_SHA256 = "2750d940440973fd63232b96c1018bfd53824a8785c6eda1d7b6902dead1e100"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,9 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/hardened_execution/mod.rs"): "hardened-authority-and-operation-cleanup",
+    (CPU, "src/hardened_execution/scratch.rs"): "hardened-owner-backed-kernel-scratch",
+    (CPU, "src/hardened_execution/tests.rs"): "hardened-kernel-and-lifecycle-tests",
     (CPU, "src/runtime_execution/mod.rs"): "ordinary-runtime-authority",
     (CPU, "src/runtime_execution/operations.rs"): "runtime-kat-and-operation-routing",
     (CPU, "src/runtime_execution/tests.rs"): "runtime-authority-tests",
@@ -230,8 +233,10 @@ def validate_packages(root: Path) -> None:
     cpu = manifest(root, CPU)
     detector = manifest(root, DETECTOR)
     sha2 = manifest(root, SHA2)
-    if cpu.get("features") != {"default": [], "static-execution": [], "runtime-execution": ["static-execution"]} or cpu.get("dependencies"):
-        fail("no_std CPU package must retain zero dependencies")
+    if cpu.get("features") != {"default": [], "static-execution": [], "runtime-execution": ["static-execution"],
+            "hardened-execution": ["static-execution", "dep:brynja-core"]} or cpu.get("dependencies") != {
+                "brynja-core": {"workspace": True, "optional": True}}:
+        fail("no_std CPU package permits only its opt-in first-party clearing dependency")
     if detector.get("features") != {"default": [], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"]}:
         fail("host detector default feature set drifted")
     if set(detector.get("dependencies", {})) != {CPU, SHA2}:
@@ -240,6 +245,7 @@ def validate_packages(root: Path) -> None:
         "default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],
         "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],
         "runtime-execution": ["static-execution", "brynja-crypto-cpu/runtime-execution"],
+        "hardened-execution": ["static-execution", "brynja-crypto-cpu/hardened-execution"],
     }:
         fail("SHA-2 optional CPU feature drifted")
     if set(sha2.get("dependencies", {})) != {"brynja-core", "brynja-hash-core", CPU}:

@@ -63,7 +63,9 @@ independent cryptographic or protocol verification.
 Acceleration is separate from portable algorithm completion. Default hash APIs
 remain portable. [Ordinary SHA-2 execution](docs/sha2-ordinary-execution.md)
 adds default-off complete hash APIs over static and platform-limited hosted
-authority. Hardened and other hash-family integration remain separate work.
+authority. Separate [hardened SHA-2 execution](docs/sha2-hardened-execution.md)
+adds erasing owners and typed secret outputs under review; other hash-family
+integration remains planned.
 See the [acceleration guide](docs/static-cpu-execution.md) for supported routes and
 deployment requirements. Independent review and FIPS status are separate claims.
 

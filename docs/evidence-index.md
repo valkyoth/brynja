@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 published; milestones through v0.24.33 signed. v0.24.34 is in progress, starting with [impact-selected verification and full-run approval](focused-assurance.md). Hardened SHA-2 acceleration remains pending; no new secret-bearing CPU API or publication is claimed.
+Status: v0.20.0 published; milestones through v0.24.33 signed. v0.24.34 implements [impact-selected verification](focused-assurance.md) and [hardened SHA-2 execution](sha2-hardened-execution.md). Local acceptance is complete; exceptional pentest and fresh native Arm/Mac evidence remain pending. No publication, independent verification or FIPS validation is claimed.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and
 `requirements/sha512-t-contract.toml`; its exhaustive parameter/model tests are

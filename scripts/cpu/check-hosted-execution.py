@@ -26,9 +26,10 @@ def validate(write=False):
     manifests = {name: tomllib.loads((ROOT / 'crates' / name / 'Cargo.toml').read_text())
                  for name in (CPU, HOST)}
     if manifests[CPU].get('features') != {
-            'default': [], 'static-execution': [], 'runtime-execution': ['static-execution']}:
+            'default': [], 'static-execution': [], 'runtime-execution': ['static-execution'],
+            'hardened-execution': ['static-execution', 'dep:brynja-core']}:
         raise ValueError('CPU execution features changed')
-    if manifests[CPU].get('dependencies') or manifests[HOST].get('features') != {
+    if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {
             'default': [], 'runtime-execution': ['brynja-crypto-cpu/runtime-execution']}:
         raise ValueError('hosted execution must remain default-off and isolated')
     for owner, module in ((CPU, 'runtime_execution'), (HOST, 'execution')):

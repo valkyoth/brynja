@@ -88,17 +88,18 @@ pub(crate) fn expanded(block: &[u8; 128]) -> [u64; 80] {
             *word = u64::from_be_bytes([*a, *b, *c, *d, *e, *f, *g, *h]);
         }
     }
-    for index in 16..80 {
-        let first = words[index - 2].rotate_right(19)
-            ^ words[index - 2].rotate_right(61)
-            ^ (words[index - 2] >> 6);
-        let third = words[index - 15].rotate_right(1)
-            ^ words[index - 15].rotate_right(8)
-            ^ (words[index - 15] >> 7);
-        words[index] = first
-            .wrapping_add(words[index - 7])
+    for index in 16_usize..80 {
+        let x = words.get(index.saturating_sub(2)).copied().unwrap_or(0);
+        let y = words.get(index.saturating_sub(15)).copied().unwrap_or(0);
+        let first = x.rotate_right(19) ^ x.rotate_right(61) ^ (x >> 6);
+        let third = y.rotate_right(1) ^ y.rotate_right(8) ^ (y >> 7);
+        let value = first
+            .wrapping_add(words.get(index.saturating_sub(7)).copied().unwrap_or(0))
             .wrapping_add(third)
-            .wrapping_add(words[index - 16]);
+            .wrapping_add(words.get(index.saturating_sub(16)).copied().unwrap_or(0));
+        if let Some(word) = words.get_mut(index) {
+            *word = value;
+        }
     }
     words
 }

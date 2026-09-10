@@ -221,9 +221,11 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-crypto-cpu":
         expected["runtime-execution"] = ["static-execution"]
+        expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
         expected["runtime-execution"] = ["brynja-crypto-cpu/runtime-execution"]
     if name == "brynja-hash-sha2":
+        expected["hardened-execution"] = ["static-execution", "brynja-crypto-cpu/hardened-execution"]
         expected["static-execution"] = ["cpu", "brynja-crypto-cpu/static-execution"]
         expected["runtime-execution"] = ["static-execution", "brynja-crypto-cpu/runtime-execution"]
     if name == "brynja-legacy-md5":
@@ -377,8 +379,11 @@ def validate_resolved_mode(
     if edges.get(sanitization_id, set()):
         raise ValueError("sanitization activated a transitive package")
     cpu = reachable_names("brynja-crypto-cpu", names, packages_by_id, edges)
-    if cpu != {"brynja-crypto-cpu"}:
-        raise ValueError("no_std CPU backend package gained a dependency")
+    expected_cpu = {"brynja-crypto-cpu"}
+    if mode == "all-features":
+        expected_cpu.add("brynja-core")
+    if cpu != expected_cpu:
+        raise ValueError("CPU all-feature closure must contain only its first-party clearing owner")
     detector = reachable_names("brynja-crypto-cpu-std", names, packages_by_id, edges)
     if detector != {
         "brynja-core",

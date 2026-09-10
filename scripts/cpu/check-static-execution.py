@@ -23,8 +23,10 @@ REVIEW = ROOT / 'security/static-cpu-execution-reviewed.json'
 def validate(write=False):
     static_execution_docs.validate(ROOT)
     manifest = tomllib.loads((CPU / 'Cargo.toml').read_text())
-    if manifest.get('features') != {'default': [], 'static-execution': [], 'runtime-execution': ['static-execution']} or manifest.get('dependencies'):
-        raise RuntimeError('static CPU boundary must be default-off and dependency-free')
+    if manifest.get('features') != {'default': [], 'static-execution': [], 'runtime-execution': ['static-execution'],
+            'hardened-execution': ['static-execution', 'dep:brynja-core']} or manifest.get('dependencies') != {
+                'brynja-core': {'workspace': True, 'optional': True}}:
+        raise RuntimeError('static CPU boundary permits only the opt-in first-party clearing owner')
     library = (CPU / 'src/lib.rs').read_text()
     if '#[cfg(feature = "static-execution")]\npub mod static_execution;' not in library:
         raise RuntimeError('static module lost its explicit feature gate')
@@ -72,12 +74,20 @@ def package(root):
     env = environment()
     env['CARGO_TARGET_DIR'] = str(root / 'build')
     run(['cargo', 'package', '--locked', '--offline', '--allow-dirty', '--no-verify',
-         '-p', 'brynja-crypto-cpu'], env=env)
+         '-p', 'brynja-core', '-p', 'brynja-crypto-cpu'], env=env)
     archive = root / 'build/package/brynja-crypto-cpu-0.1.1.crate'
     # Input is the just-built local Cargo artifact, never a remote corpus.
     with tarfile.open(archive) as bundle:
         bundle.extractall(root / 'package', filter='data')
-    return root / 'package/brynja-crypto-cpu-0.1.1'
+    core_version = tomllib.loads((ROOT / 'crates/brynja-core/Cargo.toml').read_text())['package']['version']
+    with tarfile.open(root / 'build/package' / f'brynja-core-{core_version}.crate') as bundle:
+        bundle.extractall(root / 'package', filter='data')
+    cpu = root / 'package/brynja-crypto-cpu-0.1.1'
+    core = root / 'package' / f'brynja-core-{core_version}'
+    manifest = cpu / 'Cargo.toml'
+    manifest.write_text(manifest.read_text() + '\n[patch.crates-io]\nbrynja-core = { path = "' + core.as_posix() + '" }\n')
+    run(['cargo', 'generate-lockfile', '--offline'], cwd=cpu, env=env)
+    return cpu
 
 
 def check_package(root, cpu, *, flags='', target=None, runner=None):
@@ -85,12 +95,17 @@ def check_package(root, cpu, *, flags='', target=None, runner=None):
     consumer.mkdir(exist_ok=True)
     shutil.copytree(FIXTURE / 'src', consumer / 'src', dirs_exist_ok=True)
     manifest = (FIXTURE / 'Cargo.toml').read_text().replace('../../crates/brynja-crypto-cpu', cpu.as_posix())
+    core = next((root / 'package').glob('brynja-core-*'))
+    manifest += '\n[patch.crates-io]\nbrynja-core = { path = "' + core.as_posix() + '" }\n'
     (consumer / 'Cargo.toml').write_text(manifest)
     shutil.copyfile(FIXTURE / 'Cargo.lock', consumer / 'Cargo.lock')
     env = environment(flags)
     if runner:
         env['CARGO_TARGET_' + target.upper().replace('-', '_') + '_RUNNER'] = runner
     extra = ['--target', target] if target else []
+    # The trusted packaged closure adds an unused optional local patch record.
+    # Assemble its lock once offline, then keep --locked on actual checks.
+    run(['cargo', 'generate-lockfile', '--offline'], cwd=consumer, env=env)
     if not flags:
         # A normal downstream crate cannot access the module without opting in.
         manifest_path = consumer / 'Cargo.toml'
@@ -102,7 +117,7 @@ def check_package(root, cpu, *, flags='', target=None, runner=None):
             result = run(['cargo', 'check', '--locked', '--offline'], cwd=consumer,
                          env=env, success=False)
             if 'unresolved import' not in result.stderr or 'static_execution' not in result.stderr:
-                raise RuntimeError('default-off import failed for an unrelated reason')
+                raise RuntimeError('default-off import failed for an unrelated reason:\n' + result.stderr)
         finally:
             manifest_path.write_text(manifest)
     for profile in ([], ['--release']):

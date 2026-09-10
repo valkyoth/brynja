@@ -123,6 +123,17 @@ pub struct Session<'a> {
 }
 
 impl Session<'_> {
+    #[cfg(feature = "hardened-execution")]
+    pub(crate) fn check_hardened(&self) -> Result<Kernel, Error> {
+        self.owner.check(self.generation)?;
+        Ok(self.owner.kernel)
+    }
+
+    #[cfg(feature = "hardened-execution")]
+    pub(crate) fn quarantine_hardened(&self) {
+        self.owner.quarantine();
+    }
+
     /// Current owner health; this observation cannot authorize execution.
     pub fn report(&self) -> Report {
         self.owner.report()

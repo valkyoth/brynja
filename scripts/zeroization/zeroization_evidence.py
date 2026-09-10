@@ -127,14 +127,18 @@ def validate(root: Path) -> None:
     tag_gate = (root / "scripts/tag_gate.sh").read_text(encoding="utf-8")
     for command in (
         "scripts/zeroization/check-tag-miri.sh",
-        "scripts/zeroization/check-zeroization-sanitizer.sh",
+        "python3 scripts/release/run-verification.py asan",
     ):
         if tag_gate.count(command) != 1:
             fail("local tag gate omits pinned zeroization dynamic analysis")
     tag_miri = (root / "scripts/zeroization/check-tag-miri.sh").read_text(
         encoding="utf-8"
     )
-    if tag_miri.count('"$miri_runner" --full') != 4:
+    if tag_miri.count('exec python3 scripts/release/run-verification.py miri') != 1:
+        fail("local tag gate omits impact-selected Miri evidence")
+    planner = (root / "scripts/release/verification_plan.py").read_text(encoding="utf-8")
+    runner = (root / "scripts/release/run-verification.py").read_text(encoding="utf-8")
+    if 'verifier_groups = {name: list(scope.GROUPS) for name in verifier_groups}' not in planner:
         fail("public checkpoint no longer requires complete Miri evidence")
-    if tag_miri.count('"$miri_runner" --focused "${groups[@]}"') != 1:
+    if 'execute("scripts/zeroization/check-zeroization-miri.sh --selected " + " ".join(groups))' not in runner:
         fail("internal tag no longer requires focused Miri evidence")

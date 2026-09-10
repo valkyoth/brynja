@@ -34,7 +34,7 @@ ALLOWED = {
         "9519e6f2feb7ff836f56bee2d72b5259ebaf057f08928d89f555e97ade5cd7c0", 4, 2, 4,
     ),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2.rs"): (
-        "1fd8fa9ed0db87af087c6951581f890b94ebd9add28bff42647c79c4b0dd013d", 16, 4, 16,
+        "b2155beb8d38b74e1d215ae6dcae2dc4b24a8a0286aed3a02ddb1d503c61e797", 16, 4, 16,
     ),
     Path("crates/brynja-crypto-cpu/src/riscv64_zknh.rs"): (
         "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619", 8, 2, 8,

@@ -49,8 +49,13 @@ impl HardenedSha2Owner {
         usize::from(self.phase[1])
     }
 
-    pub(crate) fn set_buffer_len(&mut self, length: usize) {
-        self.phase[1] = u8::try_from(length).unwrap_or(0);
+    pub(crate) fn set_buffer_len(&mut self, length: usize) -> Result<(), ()> {
+        // Reject the storage invariant before mutation, not just u8 overflow.
+        if length > self.partial_input.len() {
+            return Err(());
+        }
+        self.phase[1] = u8::try_from(length).map_err(|_| ())?;
+        Ok(())
     }
 
     pub(crate) fn staged(&self, length: usize) -> Option<&[u8]> {
@@ -84,6 +89,23 @@ impl Drop for HardenedSha2Owner {
 #[cfg(test)]
 pub(crate) mod assurance_contract {
     use super::HardenedSha2Owner;
+
+    #[test]
+    fn buffer_length_rejects_invalid_values_without_mutation() {
+        let mut owner = HardenedSha2Owner::new64([1; 8]);
+        owner.partial_input.fill(0xa5);
+        for length in 0..=128 {
+            assert_eq!(owner.set_buffer_len(length), Ok(()));
+            assert_eq!(owner.buffer_len(), length);
+        }
+        assert_eq!(owner.set_buffer_len(63), Ok(()));
+        let phase = owner.phase;
+        for length in [129, 255, 256, 257, usize::MAX] {
+            assert_eq!(owner.set_buffer_len(length), Err(()));
+            assert_eq!(owner.phase, phase);
+            assert_eq!(owner.partial_input, [0xa5; 128]);
+        }
+    }
 
     #[test]
     fn registered_algorithm_sha2_owner_contract_is_compiler_checked() {

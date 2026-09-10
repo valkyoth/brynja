@@ -53,7 +53,10 @@ fn synthetic_length_and_work_exhaustion_reject_before_mutation() -> Result<(), E
         } else {
             engine.owner.message_length[..8].copy_from_slice(&(u64::MAX / 8).to_be_bytes());
         }
-        engine.owner.set_buffer_len(if wide { 127 } else { 63 });
+        engine
+            .owner
+            .set_buffer_len(if wide { 127 } else { 63 })
+            .map_err(|_| Error::Failed)?;
         let before = engine.owner.message_length;
         assert_eq!(engine.update(&[0]), Err(Error::MessageTooLong));
         assert_eq!(engine.owner.message_length, before);
@@ -65,6 +68,26 @@ fn synthetic_length_and_work_exhaustion_reject_before_mutation() -> Result<(), E
         assert_eq!(engine.update(&[0]), Err(Error::MessageTooLong));
         assert!(!engine.failed);
         assert_eq!(engine.report.message_blocks, u128::MAX);
+    }
+    Ok(())
+}
+
+#[test]
+fn invalid_buffer_invariant_fails_and_clears_retained_stream() -> Result<(), Error> {
+    for wide in [false, true] {
+        let mut engine = Engine::new(
+            HardenedSha2Owner::new64([1; 8]),
+            Execution::portable(),
+            wide,
+            false,
+        )?;
+        // Fault injection: safe callers cannot create this invalid owner.
+        engine.owner.phase[1] = 129;
+        engine.owner.partial_input.fill(0xa5);
+        assert_eq!(engine.update(&[1]), Err(Error::Failed));
+        assert!(engine.failed);
+        assert!(cleared(&engine.owner));
+        assert_eq!(engine.update(&[]), Err(Error::Failed));
     }
     Ok(())
 }

@@ -8,12 +8,18 @@ fn set32(owner: &mut HardenedSha2Owner, bytes: u64) {
     if let Some(destination) = owner.message_length.get_mut(..8) {
         destination.copy_from_slice(&bytes.to_be_bytes());
     }
-    owner.set_buffer_len(usize::try_from(bytes % 64).unwrap_or(0));
+    assert_eq!(
+        owner.set_buffer_len(usize::try_from(bytes % 64).unwrap_or(0)),
+        Ok(())
+    );
 }
 
 fn set64(owner: &mut HardenedSha2Owner, bytes: u128) {
     owner.message_length = bytes.to_be_bytes();
-    owner.set_buffer_len(usize::try_from(bytes % 128).unwrap_or(0));
+    assert_eq!(
+        owner.set_buffer_len(usize::try_from(bytes % 128).unwrap_or(0)),
+        Ok(())
+    );
 }
 
 macro_rules! finalization_case {

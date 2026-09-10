@@ -131,7 +131,7 @@
 "scripts/legacy-hash/legacy_final_acceptance.py" = "395512207a1982370ba40c2f5d0fa047b85e5fb907877b6487ced2fc7e7b0b8b"
 "scripts/legacy-hash/native-source-snapshot.toml" = "a4203f895840b395f23274c5f296394f9123d65e73be387ea73e59f3be4768e7"
 "scripts/legacy-hash/test-legacy-final-acceptance.py" = "fd97236e3642264d5e373b3928227a320387de5f33807ced5f24ddc09aa065e2"
-"scripts/zeroization/check-zeroization-miri.sh" = "75822bf463adaa6b51229256cc11cae8e77c337a2d80b8f69e960c6d15164526"
+"scripts/zeroization/check-zeroization-miri.sh" = "39849b61f8c3bf03acfade9f89c3b16806df2d327125cffec1cf537bc4e5533a"
 "scripts/zeroization/check-zeroization-sanitizer.sh" = "abfeb9e4aa7b75d3238edd971604f639d031744a4e76b519809f14c70ae1e567"
 "security/md5-cpu-admissions.toml" = "8df4c0efd63648322195dd007183be02b13c960ab1e8f659fee17435b276f191"
 "security/pentest/v0.24.21.md" = "fc88e0d698a1d694f28e921311584b90cbb2aa7dd89494be9ac4e73945b83763"

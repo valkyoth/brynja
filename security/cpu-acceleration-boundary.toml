@@ -256,7 +256,7 @@ sha256 = "9519e6f2feb7ff836f56bee2d72b5259ebaf057f08928d89f555e97ade5cd7c0"
 package = "brynja-crypto-cpu"
 path = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-candidate-kernel"
-sha256 = "1fd8fa9ed0db87af087c6951581f890b94ebd9add28bff42647c79c4b0dd013d"
+sha256 = "b2155beb8d38b74e1d215ae6dcae2dc4b24a8a0286aed3a02ddb1d503c61e797"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -355,7 +355,7 @@ identity = "Aarch64Sha2"
 architecture = "aarch64"
 module = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-native-correctness-observed"
-sha256 = "1fd8fa9ed0db87af087c6951581f890b94ebd9add28bff42647c79c4b0dd013d"
+sha256 = "b2155beb8d38b74e1d215ae6dcae2dc4b24a8a0286aed3a02ddb1d503c61e797"
 low_level_allowed = true
 instructions = ["neon", "sha2"]
 abi_preconditions = ["aarch64", "neon-and-sha2-usable-on-current-logical-cpu"]
@@ -366,7 +366,7 @@ identity = "Aarch64Sha512"
 architecture = "aarch64"
 module = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-native-correctness-observed"
-sha256 = "1fd8fa9ed0db87af087c6951581f890b94ebd9add28bff42647c79c4b0dd013d"
+sha256 = "b2155beb8d38b74e1d215ae6dcae2dc4b24a8a0286aed3a02ddb1d503c61e797"
 low_level_allowed = true
 instructions = ["neon", "sha3"]
 abi_preconditions = ["aarch64", "neon-and-sha3-usable-on-current-logical-cpu"]

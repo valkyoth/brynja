@@ -126,7 +126,8 @@ def main() -> int:
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
     assert sum("-p brynja-hash-parallel" in command for command in commands) == 1
     status, commands = run_profile("--group", "sha2")
-    assert status == 0 and len(commands) == 20
+    assert status == 0 and len(commands) == 21
+    assert sum('buffer_length_rejects_invalid_values_without_mutation' in c for c in commands) == 1
     assert sum('--lib hardened_execution::engine::tests' in c for c in commands) == 1
     assert sum('--lib hardened_execution::tests::output_owner_clears_during_recoverable_unwind' in c for c in commands) == 1
     assert sum('--lib execution_transaction' in c for c in commands) == 1
@@ -141,7 +142,7 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 51
+    assert status == 0 and len(commands) == 52
     assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1
     assert sum(c.endswith('assurance/static-cpu-execution/Cargo.toml --lib') for c in commands) == 1
     status, static_commands = run_profile('--group', 'static_cpu')

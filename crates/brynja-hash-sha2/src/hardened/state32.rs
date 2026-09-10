@@ -47,7 +47,7 @@ impl HardenedSha2Owner {
                 destination.copy_from_slice(source);
             }
             remaining = remaining.get(copied..).unwrap_or_default();
-            self.set_buffer_len(end);
+            self.set_buffer_len(end)?;
             if end == BLOCK_BYTES {
                 if let (Some(destination), Some(source)) = (
                     self.block_copy.get_mut(..BLOCK_BYTES),
@@ -58,7 +58,7 @@ impl HardenedSha2Owner {
                 compress32::compress(self);
                 self.wipe_compression_scratch();
                 let _ = clear_owned_region(&mut self.partial_input);
-                self.set_buffer_len(0);
+                self.set_buffer_len(0)?;
             } else {
                 write_length(&mut self.message_length, new_length);
                 return Ok(());
@@ -76,7 +76,7 @@ impl HardenedSha2Owner {
         if let Some(destination) = self.partial_input.get_mut(..tail.len()) {
             destination.copy_from_slice(tail);
         }
-        self.set_buffer_len(tail.len());
+        self.set_buffer_len(tail.len())?;
         write_length(&mut self.message_length, new_length);
         Ok(())
     }

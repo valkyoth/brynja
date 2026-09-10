@@ -108,7 +108,7 @@ impl<'a> Engine<'a> {
                 .get_mut(offset..end)
                 .ok_or(Error::Failed)?
                 .copy_from_slice(remaining.get(..copied).ok_or(Error::Failed)?);
-            guard.owner.set_buffer_len(end);
+            guard.owner.set_buffer_len(end).map_err(|_| Error::Failed)?;
             remaining = remaining.get(copied..).ok_or(Error::Failed)?;
             if guard.owner.buffer_len() == block_bytes {
                 copy_prefix(
@@ -123,7 +123,7 @@ impl<'a> Engine<'a> {
                     .checked_add(1)
                     .ok_or(Error::MessageTooLong)?;
                 let _ = clear_owned_region(&mut guard.owner.partial_input);
-                guard.owner.set_buffer_len(0);
+                guard.owner.set_buffer_len(0).map_err(|_| Error::Failed)?;
             }
         }
         if self.wide {

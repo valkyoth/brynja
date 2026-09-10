@@ -37,6 +37,8 @@ unsafe fn secret_sha256(
     use crate::hardened_execution::scratch::{read32, write32};
     scratch.expand32(block);
     for i in 0..8 {
+        // write32 encodes BE bytes; .to_be() first makes that a native-endian
+        // word in memory for vld1q_u32. Neither conversion is redundant.
         write32(&mut scratch.vectors, i, read32(state, i).to_be());
     }
     // SAFETY: Fixed offsets 0/16 each read sixteen bytes of aligned owner data.
@@ -52,6 +54,7 @@ unsafe fn secret_sha256(
         let round = chunk.saturating_mul(4);
         for (j, constant) in constants.iter().enumerate() {
             let value = read32(&scratch.schedule, round.saturating_add(j)).wrapping_add(*constant);
+            // The same BE-writer/native-load bridge applies to round words.
             write32(
                 &mut scratch.vectors,
                 8_usize.saturating_add(j),
@@ -77,6 +80,8 @@ unsafe fn secret_sha256(
     }
     for i in 0..8 {
         let value = read32(&scratch.vectors, i);
+        // vst1q_u32 stored native bytes; undo read32's BE interpretation
+        // before writing the external big-endian chaining state.
         write32(
             state,
             i,
@@ -110,6 +115,8 @@ unsafe fn secret_sha512(
     use crate::hardened_execution::scratch::{read64, write64};
     scratch.expand64(block);
     for i in 0..8 {
+        // write64 encodes BE bytes; .to_be() first makes that a native-endian
+        // word in memory for vld1q_u64. Neither conversion is redundant.
         write64(&mut scratch.vectors, i, read64(state, i).to_be());
     }
     // SAFETY: Four aligned two-word loads cover precisely 64 owned bytes.
@@ -126,6 +133,7 @@ unsafe fn secret_sha512(
         for (j, constant) in constants.iter().enumerate() {
             let value = read64(&scratch.schedule, pair.saturating_mul(2).saturating_add(j))
                 .wrapping_add(*constant);
+            // The same BE-writer/native-load bridge applies to round words.
             write64(&mut scratch.vectors, j, value.to_be());
         }
         // SAFETY: One aligned sixteen-byte input vector in the scratch owner.
@@ -175,6 +183,8 @@ unsafe fn secret_sha512(
     }
     for i in 0..8 {
         let value = read64(&scratch.vectors, i);
+        // vst1q_u64 stored native bytes; undo read64's BE interpretation
+        // before writing the external big-endian chaining state.
         write64(
             state,
             i,

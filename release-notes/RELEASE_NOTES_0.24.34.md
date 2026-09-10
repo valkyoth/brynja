@@ -26,6 +26,12 @@ rerun for this tooling-only pass. This is not the final v0.24.34 release check.
 
 ## Hardened SHA-2 execution
 
+Pentest follow-up: the private buffer-length setter now rejects oversized
+lengths before mutation and every caller propagates failure. Boundary, retained
+state cleanup and compiled reset/bounds mutations prevent regression. Arm
+secret-kernel comments explain the required endian conversions; their logic is
+unchanged. Both Low findings are fixed locally; owner retest is pending.
+
 - Adds default-off `hardened-execution` leaf features and complete named
   SHA-224/256/384/512, SHA-512/224, SHA-512/256 and general SHA-512/t byte/bit
   streaming, one-shot, cancellation, preflight and consuming-output APIs.

@@ -41,10 +41,36 @@ def exercise(roots, env, run):
                     if 'live Drop region ' + field not in result.stdout:
                         raise ValueError('cleanup mutant failed without live observation: ' + result.stderr)
                     path.write_text(instrumented)
+            if package == 'brynja-hash-sha2':
+                buffer_invariant_mutants(root, path, env, run)
         finally:
             path.write_text(original)
             manifest.write_text(old_manifest)
     print('Ten live owned regions observed on Drop; twenty compiled clearing mutants rejected')
+
+
+def buffer_invariant_mutants(root, path, env, run):
+    original = path.read_text()
+    marker = 'if length > self.partial_input.len() {\n            return Err(());'
+    if original.count(marker) != 1:
+        raise ValueError('stale buffer invariant mutant')
+    try:
+        for profile in ([], ['--release']):
+            command = ['cargo', 'test', '--offline', '--all-features', '--lib', *profile,
+                       'buffer_length_rejects_invalid_values_without_mutation']
+            result = run(command, root, env)
+            if '1 passed' not in result.stdout:
+                raise ValueError('buffer invariant positive control did not run')
+            for replacement in ('if false {\n            return Err(());',
+                                'if length > self.partial_input.len() {\n            self.phase[1] = 0; return Err(());'):
+                path.write_text(original.replace(marker, replacement))
+                result = run(command, root, env, success=False)
+                if 'test result: FAILED' not in result.stdout:
+                    raise ValueError('buffer invariant mutant failed before runtime')
+                path.write_text(original)
+    finally:
+        path.write_text(original)
+    print('Four compiled buffer-bound/reset mutants rejected in debug/release')
 
 
 def kernel_faults(consumer, roots, env, run, extra, mode):

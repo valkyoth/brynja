@@ -17,7 +17,7 @@
     "crates/brynja-crypto-cpu-std/src/runtime_detection.rs": "f80399ec92f54a4a7deaf5588e729908a1f730549f30de5bdfdc826c6cb31de5",
     "crates/brynja-crypto-cpu-std/src/sha512_runtime.rs": "89bf759912dda76506023b9f05fc2550136854746e295c02b1bff6c20f6d4694",
     "crates/brynja-crypto-cpu/Cargo.toml": "7f66a404da5a6831222bf77f95c6e3f27766485f3fb49b67f3f8bef285e3103e",
-    "crates/brynja-crypto-cpu/src/aarch64_sha2.rs": "1fd8fa9ed0db87af087c6951581f890b94ebd9add28bff42647c79c4b0dd013d",
+    "crates/brynja-crypto-cpu/src/aarch64_sha2.rs": "b2155beb8d38b74e1d215ae6dcae2dc4b24a8a0286aed3a02ddb1d503c61e797",
     "crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs": "7fafd5d7d568bd13c7c77ffbedc2d053cd41f1e0ce0cefb7161fb5efc455089d",
     "crates/brynja-crypto-cpu/src/hardened_execution/mod.rs": "2c438ebd34e2abe4f8ebcd8886616892b9d9128e455e36f4df9bf63d6add4b93",
     "crates/brynja-crypto-cpu/src/hardened_execution/scratch.rs": "52e225e0d1525b15c58e6dba33f01aa08e2e679058debb90884f26650bd9b92c",

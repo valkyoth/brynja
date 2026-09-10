@@ -78,3 +78,10 @@ The pentest records PASS with zero open findings. Publication policy and the
 dry run select zero crates; all 39 publication flags remain false. Final
 status/hash-binding updates are documentation-only and checked separately.
 The next crates.io checkpoint remains v0.25.2. No tag or publication was made.
+
+The subsequent macOS CI timeout regression is corrected in assurance tooling:
+failed cleanup retains the original timeout/overflow diagnostics, and native
+descendant-test deadlines include the existing bounded cleanup waits. Cleanup
+still fails closed; deterministic regressions cover delayed readers and reaping.
+No cryptographic code or native evidence changed. The macOS GitHub rerun remains
+required before tagging.

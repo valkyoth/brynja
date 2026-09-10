@@ -17,6 +17,22 @@ from assurance_process_tree import (
 )
 
 
+CLEANUP_WAIT_SECONDS = 1.0
+
+
+def _cleanup_failure(
+    detail: str, timed_out: bool, overflow: threading.Event,
+) -> RuntimeError:
+    """Keep the execution failure visible without hiding failed cleanup."""
+    causes = []
+    if timed_out:
+        causes.append("assurance process timed out")
+    if overflow.is_set():
+        causes.append("assurance process exceeded output bound")
+    causes.append(detail)
+    return RuntimeError("; ".join(causes))
+
+
 @dataclass(frozen=True)
 class ProcessResult:
     """Bounded process result."""
@@ -113,13 +129,17 @@ def run_bounded(
             finally:
                 tree.kill()
             try:
-                process.wait(timeout=1)
+                process.wait(timeout=CLEANUP_WAIT_SECONDS)
             except subprocess.TimeoutExpired as error:
-                raise RuntimeError("assurance process tree would not terminate") from error
+                raise _cleanup_failure(
+                    "assurance process tree would not terminate", timed_out, overflow,
+                ) from error
             for thread in threads:
-                thread.join(timeout=1)
+                thread.join(timeout=CLEANUP_WAIT_SECONDS)
             if any(thread.is_alive() for thread in threads):
-                raise RuntimeError("assurance process tree kept an output stream open")
+                raise _cleanup_failure(
+                    "assurance process tree kept an output stream open", timed_out, overflow,
+                )
             if timed_out:
                 raise RuntimeError("assurance process timed out")
             if overflow.is_set():
@@ -130,7 +150,7 @@ def run_bounded(
         finally:
             tree.kill()
             for thread in threads:
-                thread.join(timeout=1)
+                thread.join(timeout=CLEANUP_WAIT_SECONDS)
             if not any(thread.is_alive() for thread in threads):
                 process.stdout.close()
                 process.stderr.close()

@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import os
+import subprocess
 import sys
 import tempfile
 import time
 from contextlib import contextmanager
 from pathlib import Path
+from unittest.mock import Mock, patch
 
+import assurance_process as process_runner
 import assurance_process_tree as process_tree
 from assurance_process import run_bounded
 
@@ -119,21 +122,93 @@ def test_parent_exit_with_descendant_pipe_is_bounded() -> None:
     started = time.monotonic()
     result = run_fixture("descendant-hold", 0.2, 1024)
     assert result.returncode == 0
-    assert time.monotonic() - started < 1
+    assert_cleanup_bounded(started, 0.2)
 
 
 def test_descendant_timeout_is_bounded() -> None:
     started = time.monotonic()
     with fails_with("timed out"):
         run_fixture("descendant-timeout", 0.05, 1024)
-    assert time.monotonic() - started < 1
+    assert_cleanup_bounded(started, 0.05)
 
 
 def test_descendant_output_is_bounded() -> None:
     started = time.monotonic()
     with fails_with("exceeded output bound"):
         run_fixture("descendant-flood", 1, 64)
-    assert time.monotonic() - started < 1
+    assert_cleanup_bounded(started, 1)
+
+
+def assert_cleanup_bounded(started: float, execution_timeout: float) -> None:
+    # One reap wait, two initial reader joins, two final reader joins. Startup
+    # and CI scheduling get modest slack; execution and cleanup stay bounded.
+    maximum = execution_timeout + 5 * process_runner.CLEANUP_WAIT_SECONDS + 2
+    assert time.monotonic() - started < maximum
+
+
+def check_cleanup_failure(timed_out: bool, overflow: bool, reap_fails: bool) -> None:
+    process = Mock()
+    process.wait.side_effect = [
+        subprocess.TimeoutExpired("fixture", 0.05) if timed_out else 0,
+        subprocess.TimeoutExpired("fixture", 1) if reap_fails else 0,
+    ]
+    tree = Mock()
+    readers = [Mock(), Mock()]
+    for reader in readers:
+        reader.is_alive.return_value = not reap_fails
+    overflow_event = Mock()
+    overflow_event.is_set.return_value = overflow
+    causes = []
+    if timed_out:
+        causes.append("assurance process timed out")
+    if overflow:
+        causes.append("assurance process exceeded output bound")
+    causes.append(
+        "assurance process tree would not terminate" if reap_fails else
+        "assurance process tree kept an output stream open"
+    )
+    # Deterministically reproduce delayed pipe EOF/reaping on any host. The
+    # fake readers start no threads and the fake process launches no child.
+    with (
+        patch.object(process_runner.subprocess, "Popen", return_value=process),
+        patch.object(process_runner, "ProcessTree", return_value=tree),
+        patch.object(process_runner.threading, "Thread", side_effect=readers),
+        patch.object(process_runner.threading, "Event", return_value=overflow_event),
+    ):
+        try:
+            run_fixture("descendant-timeout", 0.05, 1024)
+        except RuntimeError as error:
+            assert str(error) == "; ".join(causes), str(error)
+            if reap_fails:
+                assert isinstance(error.__cause__, subprocess.TimeoutExpired)
+        else:
+            raise AssertionError("cleanup failure must never return success")
+    assert tree.kill.call_count == 2
+    tree.close.assert_called_once_with()
+    assert process.wait.call_count == 2
+    first_wait, reap_wait = process.wait.call_args_list
+    assert 0 <= first_wait.kwargs["timeout"] <= 0.05
+    assert reap_wait.kwargs == {"timeout": process_runner.CLEANUP_WAIT_SECONDS}
+    for reader in readers:
+        reader.start.assert_called_once_with()
+        assert reader.join.call_count == (1 if reap_fails else 2)
+        assert all(
+            call.kwargs == {"timeout": process_runner.CLEANUP_WAIT_SECONDS}
+            for call in reader.join.call_args_list
+        )
+    for pipe in (process.stdout, process.stderr):
+        if reap_fails:
+            pipe.close.assert_called_once_with()
+        else:
+            # Closing a buffered stream still held by a reader can block.
+            pipe.close.assert_not_called()
+
+
+def test_cleanup_retains_timeout_overflow_and_containment_failures() -> None:
+    for timed_out in (False, True):
+        for overflow in (False, True):
+            for reap_fails in (False, True):
+                check_cleanup_failure(timed_out, overflow, reap_fails)
 
 
 def test_cooperative_descendant_cannot_survive_termination() -> None:

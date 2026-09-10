@@ -54,7 +54,7 @@ Reader convenience calls stage at most 168 bytes on the stack;
 caller-scratch APIs support arbitrary-sized transactional output without
 allocation. Every failure preserves the destination and retained reader state.
 See [selection, streaming and scratch examples](https://github.com/valkyoth/brynja/blob/main/docs/sha3-ordinary-execution.md).
-Owner retest passed; native AArch64 observations and the final gate are pending. Portable
+Owner retest and native Mac/AWS functional observations passed; the final gate is pending. Portable
 completion does not certify acceleration, independent review or FIPS validation.
 
 ```rust

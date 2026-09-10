@@ -89,9 +89,10 @@ Modes are `portable`, `prefer`, `static` and `hosted`. Static mode requires the
 matching compiler flags and actual CPU support; hosted required mode can reject
 unsupported deployments. Supplemental QEMU is not native platform evidence.
 The owner-supplied retest of `010fb9ba` passed at its stated Critical/High threshold.
-Fresh native AArch64 static/hosted observations remain required before the final
-release gate; the retest's AVX2 results do not establish native Arm correctness.
-New native Mac/Arm/Intel observations follow that retest; no old
-kernel-only observation is presented as a fresh run of these high-level APIs.
+Subsequent [native Mac/AWS observations](../assurance/sha3-execution-observations/v0.24.35/README.md)
+passed on byte-identical source: Apple M2 Pro and AWS Arm static/hosted routes,
+and Intel AVX2 static execution with expected hosted rejection. No old kernel-only
+observation is presented as a fresh run of these high-level APIs. The final local
+release gate and GitHub/CodeQL remain pending.
 No named independent cryptographic verification, side-channel certification,
 FIPS validation, CPU-register erasure or military suitability is claimed.

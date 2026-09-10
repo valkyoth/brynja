@@ -1,8 +1,8 @@
 # Brynja v0.24.35
 
-Status: implementation, focused verification and owner-supplied exceptional
-retest passed. Native high-level AArch64 collection and the final release gate
-remain pending. Not tag-ready.
+Status: implementation, focused verification, owner-supplied exceptional
+retest and native Mac/AWS functional collection passed. The final release gate
+remains pending. Not tag-ready.
 
 ## SHA-3 and SHAKE ordinary CPU integration
 
@@ -30,7 +30,10 @@ The [fresh security retest](../security/pentest/v0.24.35.md) reviewed through
 `010fb9ba` and found no confirmed Critical or High vulnerability. It independently
 compared 3,152 portable/native AVX2 results, with its oracle cross-checked against
 NIST vectors and hashlib. Its Critical/High threshold is not an exhaustive
-all-severity assurance claim. Native Arm execution remains outstanding.
+all-severity assurance claim. Subsequent [native observations](../assurance/sha3-execution-observations/v0.24.35/README.md)
+passed on Apple M2 Pro, AWS Neoverse-V1 and Intel Xeon 8488C with byte-identical
+reviewed source. Intel hosted Require remains a typed rejection; its static
+AVX2 route passed. These are functional results, not migration or side-channel qualification.
 
 Implementation checks passed: the impact-selected repository gate (its final
 metadata tail resumed after documentation corrections), all-feature/default

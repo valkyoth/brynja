@@ -45,7 +45,7 @@ certificate-bound operational-environment claim.
 
 Default-off [ordinary SHA-3/SHAKE execution](sha3-ordinary-execution.md) is now
 implemented separately from portable constructors. Its owner retest passed;
-fresh high-level native AArch64 observations and the final gate are pending. Portable algorithm completion
+native Mac/AWS functional observations are archived, while the final gate is pending. Portable algorithm completion
 does not establish acceleration qualification.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |

@@ -136,6 +136,6 @@ The CPU crate gains only an optional first-party `brynja-core` clearing dependen
 the feature does not pull in std or an external crypto implementation.
 
 See [hardened SHA-2 APIs and cleanup boundaries](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md).
-The new implementation is under review; native Arm/Mac evidence and pentest are
-pending. Register/spill erasure, independent verification and FIPS validation are
-not claimed.
+The exceptional retest passed and matching native Intel, Arm and Mac evidence
+is archived. Register/spill erasure, independent verification and FIPS validation
+are not claimed. Release approval remains separate from these functional results.

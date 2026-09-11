@@ -1,7 +1,7 @@
 # Brynja v0.24.37
 
-Status: implementation, focused assurance and exceptional retest complete;
-awaiting fresh native qualification and final release verification.
+Status: implementation, focused assurance, exceptional retest and three-platform
+native collection complete; awaiting final release verification.
 
 See the [hardened Keccak working guide](../docs/hardened-keccak-execution.md).
 
@@ -46,8 +46,12 @@ primitive and lifecycle tests. Existing native records were not rewritten to
 claim coverage of this new code. The tag gate requires reviewed Intel, Linux
 Arm and Apple Arm hardened Keccak records before allowing a tag.
 
-After a clean exceptional pentest, collect fresh native Intel, Arm and Mac
-evidence and complete the release review before waiting for GitHub/CodeQL.
+Fresh hardened Keccak and refreshed hardened SHA-2 records passed on Intel Xeon
+Platinum 8488C, AWS Arm Neoverse-V1 and Apple M2 Pro at `463ebf9a`.
+Both native indices bind the six reviewed artifacts to the exact capture commit,
+compiler, CPU, source closure and execution results. These project-owned records
+do not establish independent verification, side-channel or migration guarantees.
+Complete the release review before waiting for final GitHub/CodeQL approval.
 This milestone selects zero crates.io packages. The next public checkpoint
 remains v0.25.2.
 
@@ -69,4 +73,4 @@ This CI-only follow-up does not change the native-capture input closure.
 Native capture follow-up: use libtest `--show-output` so execution markers remain
 standalone lines instead of sharing the serialized test-name prefix. Real Rust
 formatter regressions retain strict marker validation. No production Rust changed;
-collect Keccak evidence using the corrected capture-tool revision.
+all six new records use the corrected capture-tool revision `463ebf9a`.

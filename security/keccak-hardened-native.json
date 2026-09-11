@@ -1,5 +1,24 @@
 {
   "schema": 1,
-  "capture_commit": null,
-  "lanes": {}
+  "capture_commit": "463ebf9a37ac61f7be89f1efa5fd4bd71f6e0696",
+  "lanes": {
+    "linux-x86_64": {
+      "artifact": "assurance/keccak-hardened-native/linux-x86_64-v02437.json",
+      "sha256": "617b24de8fad7ce12f7a4ccd01b5ae90714627969f646574cfcbec4926ccf70a",
+      "cpu": "model name : Intel(R) Xeon(R) Platinum 8488C",
+      "reviewed": true
+    },
+    "linux-aarch64": {
+      "artifact": "assurance/keccak-hardened-native/linux-aarch64-v02437.json",
+      "sha256": "87407a3c3e3fb261e2d0eee3327ca8ae88fbf42b81fd5f298136f223c192d54f",
+      "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd40; CPU revision : 1",
+      "reviewed": true
+    },
+    "apple-aarch64": {
+      "artifact": "assurance/keccak-hardened-native/apple-aarch64-v02437.json",
+      "sha256": "7828f2430e5577e22b6cdda3a14e93de2c880e001e0ea61c03727087de5e5219",
+      "cpu": "Apple M2 Pro",
+      "reviewed": true
+    }
+  }
 }

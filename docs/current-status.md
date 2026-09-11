@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.36 signed. The v0.24.37 hardened Keccak candidate implements opt-in erasing permutation scratch and SHA-3/SHAKE/cSHAKE absorbing/reader owners. Focused package, lifecycle, compiler cleanup, Miri/ASan and native AMD/emulated Arm checks pass. Exceptional pentest, fresh three-platform native qualification and final release verification remain pending. No publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.36 signed. The v0.24.37 hardened Keccak candidate implements opt-in erasing permutation scratch and SHA-3/SHAKE/cSHAKE absorbing/reader owners. Focused package, lifecycle, compiler cleanup, Miri/ASan and native AMD/emulated Arm checks pass. Exceptional retest and fresh Intel/Linux Arm/Apple Arm native collection are complete; final release verification remains pending. No publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

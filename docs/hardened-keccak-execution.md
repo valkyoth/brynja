@@ -1,7 +1,7 @@
 # Hardened Keccak execution
 
-Status: v0.24.37 implementation and focused assurance complete;
-exceptional pentest and native qualification remain pending.
+Status: v0.24.37 implementation, focused assurance, exceptional retest and
+three-platform native collection complete; final release verification is pending.
 
 The default-off `hardened-execution` feature in `brynja-hash-sha3` exposes
 `hardened_execution::{Sha3_224, Sha3_256, Sha3_384, Sha3_512, Shake128,
@@ -109,8 +109,14 @@ Miri checks owned-memory clearing, not architecture intrinsics. Cross-crate
 unwind edges remain in emitted code; no compiler-proven `nounwind` claim is made.
 Affected repository checks supplement these focused campaigns; final release
 verification is separate and follows the exceptional retest and native collection.
-After a clean exceptional pentest, collect fresh native Intel, Arm and Mac evidence for the exact candidate.
-Do not reuse previous ordinary Keccak captures as hardened evidence.
+Fresh hardened Keccak and refreshed hardened SHA-2 captures passed on Intel Xeon
+Platinum 8488C, AWS Arm Neoverse-V1 and Apple M2 Pro at commit
+`463ebf9a37ac61f7be89f1efa5fd4bd71f6e0696`. Reviewed records are indexed in
+[`security/keccak-hardened-native.json`](../security/keccak-hardened-native.json)
+and [`security/sha2-hardened-native.json`](../security/sha2-hardened-native.json).
+These are project-owned functional/lifecycle observations, not independent review,
+side-channel approval or proof of safety across every CPU/VM migration. Previous
+ordinary Keccak captures are not reused as hardened evidence.
 
 The packaged native campaign also executes a bounded operation-sequence property
 test for SHAKE128/256 and cSHAKE128/256. It varies input data, one-byte and irregular

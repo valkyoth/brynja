@@ -3486,6 +3486,19 @@
       "url": "https://errata.rfc-editor.org/eid7539/"
     },
     {
+      "date_reported": "2026-09-09",
+      "disposition": "track-not-applied",
+      "id": 9169,
+      "implementation": "boundary:v0.138.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 9002,
+      "section": "Appendix A.8",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against boundary:v0.138.0 and recheck official status before dependent implementation and release.",
+      "status": "Reported",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9169/"
+    },
+    {
       "date_reported": "2024-07-25",
       "disposition": "track-not-applied",
       "id": 8047,

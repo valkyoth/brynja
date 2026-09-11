@@ -56,3 +56,11 @@ Development verification completed:
 
 This internal milestone publishes no crates. All selections stay `publish = false`;
 the next crates.io checkpoint remains v0.25.2.
+
+The final live standards check detected newly reported RFC 9002 erratum 9169.
+It is tracked, not applied, under the existing caller-owned QUIC recovery
+boundary. The metadata refresh changes no cryptographic implementation or
+native evidence. The owner-approved planner correction gives the generated
+protocol register an exact-path eight-MiB cap while retaining the four-MiB
+code/lockfile cap, mandatory metadata checks and fail-closed behavior. Scoped
+KMAC verification is selected again; no unapproved full sweep was started.

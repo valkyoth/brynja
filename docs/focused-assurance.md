@@ -97,6 +97,15 @@ SHA-3 changes still select those consumers. Missing or malformed dependency proo
 requires scope review; public checkpoints still run every Miri group.
 
 Version-only local pins and exact digest rebinding do not imply changed algorithms.
+The generated `standards/protocol-surfaces.json` has an explicit 8 MiB scope-read
+cap because the complete registry exceeds the ordinary 4 MiB source/TOML cap.
+This exact-path allowance does not change its metadata classification or exempt
+it from mandatory standards/schema/reproducibility checks. Code, locks and other
+JSON retain their existing cap. Both baseline and current inputs remain bounded
+and regular-file checked; an exceeded cap still requires scope review. Metadata
+content remains bound into the plan fingerprint. A concurrent crypto change
+still selects its affected campaigns; public checkpoints still run the full suite.
+
 Numeric source-span corrections inside the registered MIR caller-header table
 also do not change runtime code. The selector compares both Python syntax trees,
 ignoring only those numeric spans in that exact table. Changed paths, owners,

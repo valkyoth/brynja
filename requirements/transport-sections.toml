@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "bc7313aa95bb9007d4c8af8ed33032c8ff859455b1ac4e07ad3cde8e3d292b39"
+source_ledger_sha256 = "e7f036acf65df4aa3466372a5b8d0a07e239520e820b377ae517de7bdd625321"
 
 [revisions]
 "BRY-REQ-TLS12-0832" = 2
@@ -28,7 +28,7 @@ source_ledger_sha256 = "bc7313aa95bb9007d4c8af8ed33032c8ff859455b1ac4e07ad3cde8e
 "BRY-REQ-QUIC-0098" = 3
 "BRY-REQ-QUIC-0099" = 3
 "BRY-REQ-QUIC-0100" = 3
-"BRY-REQ-QUIC-0101" = 3
+"BRY-REQ-QUIC-0101" = 4
 "BRY-REQ-QUIC-0991" = 3
 "BRY-REQ-TLS-0005" = 10
 "BRY-REQ-TLS-0010" = 7

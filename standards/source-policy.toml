@@ -10,7 +10,8 @@ registry_pin_provenance = "On 2026-09-11 the official IANA TLS Parameters XML an
 rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
 rfc_index_sha256 = "1b4edc189d8c9685742472ec15d50e11dc54bf5241047daaf6a3289648b036aa"
 errata = "https://errata.rfc-editor.org/search/"
-errata_sha256 = "b0de1c34f0c47e1017207af8c6b603e3dd9fdf16674f547a2dfd78fdd131b95a"
+errata_sha256 = "2ff2644327e887e38b09cc3a195b5edec3b6cc047a28b1e898cd6b61712d4c74"
+errata_pin_provenance = "On 2026-09-11 the v0.24.38 release gate detected newly reported technical RFC 9002 erratum 9169 (reported 2026-09-09). The official record proposes excluding zero loss_time entries when selecting a pending deadline in Appendix A.8 pseudocode. It remains Reported, unverified and track-not-applied under the existing caller-owned QUIC recovery boundary. The other 301 records are unchanged. This metadata refresh changes no KMAC implementation, protocol requirement, runtime code, CPU admission or cryptographic evidence."
 
 [lifecycle]
 compatibility = [5077, 5246, 6347, 6961, 6962, 7507, 7627, 8422]

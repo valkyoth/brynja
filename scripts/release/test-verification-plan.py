@@ -55,6 +55,10 @@ def selection_tests() -> None:
     assert "python3 scripts/md5/check-md5-differential.py" not in selected
     assert "python3 scripts/sha3/check-sha3-bit-differential.py" not in selected
     assert "python3 scripts/release/test-verification-plan.py" in selected
+    # Large generated metadata is never an exemption from its validators.
+    for name in ('check-protocol-surfaces', 'test-protocol-surfaces',
+                 'check-standards-ledger', 'check-requirements'):
+        assert 'python3 scripts/standards/' + name + '.py' in commands.selected(catalog, [])
     for name in ('check-zeroization-evidence.py', 'test-zeroization-evidence.py'):
         assert 'python3 scripts/zeroization/' + name in commands.selected(catalog, [])
     assert commands.selected(catalog, [], full=True) == catalog

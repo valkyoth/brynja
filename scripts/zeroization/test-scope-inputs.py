@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Semantic scope, dirty-tree, deletion and untrusted-baseline regressions."""
 import json
+import os
 import subprocess
 import tempfile
 from pathlib import Path
@@ -133,6 +134,11 @@ def git_tests():
         digest = '[files]\n"README.md"="' + 'a' * 64 + '"\n'
         reviewed.write_text(digest)
         (root / 'Cargo.lock').write_bytes(lock([package('brynja-core')]))
+        registry = root / 'standards/protocol-surfaces.json'
+        registry.parent.mkdir()
+        large_register = json.dumps({'padding': 'a' * inputs.LIMIT}).encode()
+        assert inputs.LIMIT < len(large_register) < inputs.GENERATED_REGISTER_LIMIT
+        registry.write_bytes(large_register)
         git('add', '.')
         git('commit', '-qm', 'baseline')
         git('tag', '-a', 'v0.24.19', '-m', 'unsigned fixture baseline')
@@ -143,6 +149,17 @@ def git_tests():
             return b'' if args[0] == 'verify-tag' else real(path, *args)
         with patch.object(inputs, 'git', authenticated):
             assert scope.select_repository('v0.24.19', root) == (False, ())
+            registry.write_bytes(large_register.replace(b'aaa', b'bbb', 1))
+            assert scope.select_repository('v0.24.19', root) == (False, ())
+            with patch.object(inputs, 'GENERATED_REGISTER_LIMIT', inputs.LIMIT):
+                issues = []
+                assert scope.select_repository('v0.24.19', root, issues=issues)[0]
+                assert issues == ['baseline input exceeds bound: standards/protocol-surfaces.json']
+            source.write_text('// changed crypto with large metadata\n')
+            assert scope.select_repository('v0.24.19', root) == (
+                False, ('sha3', 'kmac', 'tuplehash', 'parallelhash'))
+            source.write_text('// baseline\n')
+            registry.write_bytes(large_register)
             contract = root / 'assurance/acceleration-contract'
             contract.mkdir(parents=True)
             manifest = (scope.ROOT / 'assurance/acceleration-contract/Cargo.toml').read_bytes()
@@ -241,9 +258,45 @@ def contract_tests():
     assert scope.select(['assurance/unknown/src/lib.rs'])[0]
 
 
+def generated_register_bounds_tests():
+    assert inputs.GENERATED_REGISTERS == {'standards/protocol-surfaces.json'}
+    assert inputs.LIMIT == 4 * 1024 * 1024
+    assert inputs.GENERATED_REGISTER_LIMIT == 8 * 1024 * 1024
+    with tempfile.TemporaryDirectory(prefix='brynja-register-bounds-') as temporary:
+        root = Path(temporary)
+        registry = root / 'standards/protocol-surfaces.json'
+        registry.parent.mkdir()
+        def git(_root, *args):
+            if args[0] == 'ls-tree':
+                return b'100644 blob object\tfile\0'
+            return b'8' if args[0] == 'cat-file' else b'x' * 8
+        with (patch.object(inputs, 'LIMIT', 4),
+              patch.object(inputs, 'GENERATED_REGISTER_LIMIT', 8),
+              patch.object(inputs, 'git', side_effect=git)):
+            registry.write_bytes(b'x' * 8)
+            assert inputs.snapshot(root, 'base', 'standards/protocol-surfaces.json') == (b'x' * 8, b'x' * 8)
+            # Exact path only: code, locks, and lookalike metadata retain 4 MiB.
+            for path in ('Cargo.lock', 'crates/brynja-mac-kmac/src/lib.rs',
+                         'standards/other.json', 'standards/protocol-surfaces.json.rs'):
+                rejected(lambda: inputs.snapshot(root, 'base', path))
+            registry.write_bytes(b'x' * 9)
+            rejected(lambda: inputs.snapshot(root, 'base', 'standards/protocol-surfaces.json'))
+            registry.write_bytes(b'x' * 8)
+            with patch.object(inputs, 'git', side_effect=lambda r, *a: b'9' if a[0] == 'cat-file' else git(r, *a)):
+                rejected(lambda: inputs.snapshot(root, 'base', 'standards/protocol-surfaces.json'))
+            # Recheck the actual Git output, not just its advertised size.
+            with patch.object(inputs, 'git', side_effect=lambda r, *a: b'x' * 9 if a[0] == 'show' else git(r, *a)):
+                rejected(lambda: inputs.snapshot(root, 'base', 'standards/protocol-surfaces.json'))
+            if os.name != 'nt':
+                registry.unlink()
+                registry.symlink_to(root / 'missing')
+                rejected(lambda: inputs.snapshot(root, 'base', 'standards/protocol-surfaces.json'))
+
+
 if __name__ == '__main__':
     semantic_tests()
     git_tests()
     contract_tests()
     mir_span_tests()
+    generated_register_bounds_tests()
     print('Semantic Miri scope: versions, closures, removals, malformed inputs, dirty/untracked code and baseline failures PASS')

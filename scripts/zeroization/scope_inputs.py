@@ -8,6 +8,11 @@ import ast
 from pathlib import Path
 
 LIMIT = 4 * 1024 * 1024
+# This generated registry already exceeds the source/TOML cap. It is metadata,
+# independently reproduced by the mandatory protocol-surface repository gate.
+# Do not raise the limit for code, locks, policy inputs, or arbitrary JSON.
+GENERATED_REGISTER_LIMIT = 8 * 1024 * 1024
+GENERATED_REGISTERS = frozenset({'standards/protocol-surfaces.json'})
 PACKAGES = {
     'brynja-general-sha512-t-consumer': 'sha2',
     'brynja-sha2-execution-fixture': 'sha2',
@@ -40,22 +45,23 @@ def git(root: Path, *args: str) -> bytes:
 
 
 def snapshot(root: Path, base: str, path: str) -> tuple[bytes | None, bytes | None]:
+    limit = GENERATED_REGISTER_LIMIT if path in GENERATED_REGISTERS else LIMIT
     entry = git(root, 'ls-tree', '-z', base, '--', path)
     before = None
     if entry:
         if not entry.startswith(b'100644 blob ') and not entry.startswith(b'100755 blob '):
             raise ValueError('baseline input is not a regular file')
-        if int(git(root, 'cat-file', '-s', f'{base}:{path}')) > LIMIT:
-            raise ValueError('baseline input exceeds bound')
+        if int(git(root, 'cat-file', '-s', f'{base}:{path}')) > limit:
+            raise ValueError(f'baseline input exceeds bound: {path}')
         before = git(root, 'show', f'{base}:{path}')
     file = root / path
     if file.is_symlink() or any(parent.is_symlink() for parent in file.parents if parent != root):
         raise ValueError('scope input is symlinked')
-    if file.is_file() and file.stat().st_size > LIMIT:
-        raise ValueError('worktree input exceeds bound')
+    if file.is_file() and file.stat().st_size > limit:
+        raise ValueError(f'worktree input exceeds bound: {path}')
     after = file.read_bytes() if file.is_file() else None
-    if any(value is not None and len(value) > LIMIT for value in (before, after)):
-        raise ValueError('scope input exceeds bound')
+    if any(value is not None and len(value) > limit for value in (before, after)):
+        raise ValueError(f'scope input exceeds bound: {path}')
     return before, after
 
 

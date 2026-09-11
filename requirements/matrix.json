@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "adf5b68fd30f522917e0e5506c164aed1032df53c26a4be349d28113b8c51188",
-  "domain_policy_sha256": "66e64e8fcfdc886c39dd6a78f83c8757d30994e4afe5a427dbfdfffd8d52eb77",
-  "policy_sha256": "4af95408e977829e9c29acb39544a86b327aad7642d39d6973a04b6db9113960",
+  "domain_policy_sha256": "223c70a7c3f72e4271709fa047862c531ddbfdc4b48ee417af9f24a992ccd2ab",
+  "policy_sha256": "fd9c1068754c3e664f826384c4dd6c6ad989bc5056894160da7c463790015a13",
   "requirements": [
     {
       "applicability": "delegate",
@@ -19703,7 +19703,7 @@
       "owner": "0.145.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -19934,6 +19934,11 @@
               "disposition": "apply",
               "id": 7539,
               "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9169,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9002",
@@ -30807,9 +30812,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "bd9afa8eae6cdb2017f8dc7568410d15627f9d8a1c2cbf6c3309f3fbe62baadd",
+  "residual_policy_sha256": "ba3d2e6299b1394ddd33cac06d5a1912ed6a34b21d3d2dd23ac87e4883b5077c",
   "schema": 5,
-  "source_ledger_sha256": "bc7313aa95bb9007d4c8af8ed33032c8ff859455b1ac4e07ad3cde8e3d292b39",
-  "surface_register_sha256": "5543d09d9a87f732b78b8b592dff7a6573e4e4fd22f959419d5128b44bdde84a",
-  "transport_policy_sha256": "b373f7b489d694f135829fdca37f0b640140007edf6cb40cfef05b6a9877a416"
+  "source_ledger_sha256": "e7f036acf65df4aa3466372a5b8d0a07e239520e820b377ae517de7bdd625321",
+  "surface_register_sha256": "3e66503ffefca585308e6048e26a96c576790a947de557e0881fa0e0b84a4467",
+  "transport_policy_sha256": "142abc8846499c37e6d032a2b2ae4abbbc4cc501514b6ebfc65b0a58e49cb123"
 }

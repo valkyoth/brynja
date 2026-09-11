@@ -2,7 +2,8 @@
 
 v0.24.38 implements all four KMAC/KMACXOF execution APIs; exceptional pentest
 and retest passed. Fresh three-platform native collection passed at `3578aeac`;
-final release qualification remains pending. Existing
+final scoped local release qualification passed. GitHub/CodeQL on the final
+release-check commit remains required before tagging. Existing
 portable family completion is unchanged. No independent cryptographic review,
 FIPS validation, performance improvement or deployment approval is claimed.
 

@@ -1,7 +1,7 @@
 # Brynja v0.24.38
 
 Status: implemented; exceptional pentest/retest and three-platform native KMAC
-collection PASS; awaiting final release/GitHub/CodeQL checks.
+collection and final scoped local release checks PASS; awaiting GitHub/CodeQL.
 
 Adds default-off `brynja_mac_kmac::execution` APIs for KMAC128/256 and
 KMACXOF128/256 over explicitly selected portable or authorized hardened cSHAKE.
@@ -34,7 +34,8 @@ Low/informational notes addressed with no new issues. The
 Rust 1.98.1. Each route passed 268 official/oracle cases; each platform passed
 four lifecycle tests and the 1,024-permutation actual-kernel check. Intel covered
 portable/preferred-absence/static/preferred execution; both Arm platforms also
-covered required hosted execution. Final release qualification remains pending.
+covered required hosted execution. Final local qualification passed; GitHub/CodeQL
+on the final release-check commit remains required before tagging.
 
 Development verification completed:
 
@@ -56,6 +57,15 @@ Development verification completed:
 
 This internal milestone publishes no crates. All selections stay `publish = false`;
 the next crates.io checkpoint remains v0.25.2.
+
+Final local verification on signed `0acb47ca` passed the repository gate,
+compiler compatibility matrix, native evidence validation, live standards and
+dependency checks, SBOM and release readiness, selected KMAC AddressSanitizer,
+all 23 selected KMAC Miri tests and both KMAC Kani harnesses. Cargo Audit required
+resuming outside the sandbox because its cache lock was read-only; it then passed,
+and all remaining commands completed on the same clean commit. No unrelated
+full cryptographic sweep was run. See the [final verification
+record](../security/pentest/v0.24.38.md#final-local-release-verification).
 
 The final live standards check detected newly reported RFC 9002 erratum 9169.
 It is tracked, not applied, under the existing caller-owned QUIC recovery

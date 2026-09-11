@@ -83,7 +83,7 @@
     "scripts/zeroization/check-zeroization-sanitizer.sh": "4b8e09ba1ddb2b0beff496e1b5b1dfc06c6d517cc1a488c144a29b8b94b0fdf9",
     "scripts/zeroization/miri_scope.py": "ebd74c8d49482c4cef28898968c2b3f6f51486f7dfe1bc65624a499a0a629a00",
     "scripts/zeroization/scope_inputs.py": "5d49b7813c399669385e3e53285b1d802df42eeb5019c9d70f5c33b253dd285b",
-    "scripts/zeroization/test-miri-scope.py": "9f671493bc6c102d451d8c44bbc24729d99798ede91f049f4edb68a38e17f508",
+    "scripts/zeroization/test-miri-scope.py": "8cda4b209933d6182eba17017edd6053bfb18e9b36d80acc8bc0019e9e5f25f4",
     "scripts/zeroization/test-zeroization-evidence.py": "96968fbf617be0ffa53ab7d7e20fad3448be1f479fd0f176fc639d51794bf902",
     "scripts/zeroization/zeroization_evidence.py": "33553f322656ab6ed172f0884944dc06a5c31159ee6bc45f5a322e7dd6453053",
     "security/release-signers": "79c6c8982cd2d4624f11ba6019d3cdd58e14843ba4298be3d085f3ae084b37eb"

@@ -105,7 +105,7 @@ partial_failure_policy = "clear-complete-secret-destination"
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "d2da3116e86eae276084b512bfd5cd1a32fad259e3b8c585d040e0741b5d3813"
+surface_register_sha256 = "5543d09d9a87f732b78b8b592dff7a6573e4e4fd22f959419d5128b44bdde84a"
 
 [api]
 dimensions = [

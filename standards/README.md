@@ -98,6 +98,10 @@ python3 scripts/standards/test-requirement-lifecycles.py
 python3 scripts/standards/test-requirement-sections.py
 python3 scripts/standards/test-requirement-history.py
 python3 scripts/standards/test-requirement-residuals.py
+python3 scripts/cryptography/check-api-profiles.py
+python3 scripts/cryptography/test-api-profiles.py
+python3 scripts/release/check-acceptance-metadata.py
+python3 scripts/release/test-acceptance-metadata.py
 ```
 
 The checker fails on non-HTTPS or unallowlisted URLs, redirects outside the
@@ -169,7 +173,12 @@ in dependency order:
    changed, without changing their scope merely to accept new metadata.
 3. Run `python3 scripts/standards/check-requirements.py --write` and review all
    generated source, classification, and requirement diffs.
-4. Run every offline check above and recheck downstream acceptance metadata.
+4. Review and update the surface-register binding in
+   `security/cryptographic-api-profile-policy.toml`, then run
+   `python3 scripts/cryptography/check-api-profiles.py --write`. Confirm that
+   capability and secret-owner semantics change only when explicitly reviewed.
+   Refresh the affected combined-acceptance hash pin after reviewing this diff.
+5. Run every offline check above and recheck downstream acceptance metadata.
    Commit the complete chain together with the reviewed upstream evidence.
 
 If the online preflight discovers drift late in a release sweep, earlier

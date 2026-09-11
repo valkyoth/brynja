@@ -256,7 +256,7 @@
         "crates/brynja-tls13/src/cipher_suite.rs#TLS_AES_128_GCM_SHA256"
       ],
       "brynja_state": "current",
-      "content_sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+      "content_sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
       "content_url": "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml",
       "edition": "Transport Layer Security (TLS) Parameters",
       "id": "iana:tls-parameters",
@@ -265,7 +265,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "2005-08-23",
-        "updated": "2026-08-10"
+        "updated": "2026-09-10"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -7546,5 +7546,5 @@
   "policy_sha256": "40fbbf9915be2b5202f3c1a8311a76e7c389345164753d1ef3dc0d9eadd42d80",
   "reviews_sha256": "59b5427cc8e2ec8c25ea2fbc0a9e194620af66b9cf8160b6218b7827facf36c2",
   "schema": 1,
-  "source_ledger_sha256": "915169e86b0a434935032680fe90cc57fe3e0027220a86776ef43b951a0d56d3"
+  "source_ledger_sha256": "bc7313aa95bb9007d4c8af8ed33032c8ff859455b1ac4e07ad3cde8e3d292b39"
 }

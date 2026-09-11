@@ -171,7 +171,7 @@
     "crates/brynja-hash-tuple/tests/api.rs": "17496966efafd49bc57d882d68c4d68e345251eb7bcdbe8153c5b0c2cbb0dd67",
     "crates/brynja-hash-tuple/tests/execution.rs": "7709df62259035f025ae0ac68ab84865a7bd657593a3df115b8f8599ff076834",
     "crates/brynja-hash-tuple/tests/official_vectors.rs": "8cbb13c168530dad1dc732cd2923c693bcf4323a701e1a92c186e33acffc1a65",
-    "docs/tuplehash-accelerated-execution.md": "6e2d46611960fe19b252c82880ec7fd3c0a3750aca9166f1ca7a84510bae2def",
+    "docs/tuplehash-accelerated-execution.md": "90bb61fc927eda892c5e2e704af03004f36b7d6e2eb926b9ea79ed5fa8641b49",
     "scripts/checks.sh": "4dc220c348b6fd8347660433f1ebf91521f002b622ab787733c03905c4bbc657",
     "scripts/cryptography/mir_cleanup_flow.py": "9b56316d6bf2a02c85cb4bcd75c2fab00a2442b49332bda1852f6d91012a2dc4",
     "scripts/sha3/check-cshake-differential.py": "0e936f96b8a8bb7295055694cf751353207c83d78f5fad95c7184e9148c16d39",

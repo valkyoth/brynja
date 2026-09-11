@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.38 signed. The v0.24.39 implementation adds default-off TupleHash/TupleHashXOF execution with separate public and hardened owners, exact item writers and exclusively borrowed XOF readers. See [TupleHash execution](tuplehash-accelerated-execution.md). Focused development checks, the owner-supplied retest and Intel/Linux Arm/Apple Arm native collection passed; final release checks are pending. No publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.38 signed. The v0.24.39 implementation adds default-off TupleHash/TupleHashXOF execution with separate public and hardened owners, exact item writers and exclusively borrowed XOF readers. See [TupleHash execution](tuplehash-accelerated-execution.md). Focused development checks, the owner-supplied retest, Intel/Linux Arm/Apple Arm native collection and the final scoped local release gate passed; awaiting green GitHub/CodeQL before tagging. No publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

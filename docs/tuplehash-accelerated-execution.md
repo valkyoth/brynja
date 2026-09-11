@@ -1,7 +1,8 @@
 # TupleHash accelerated operations
 
 Status: v0.24.39 implemented; focused development verification, owner-supplied
-retest and three-platform native collection passed. Final release gates pending.
+retest, three-platform native collection and final scoped local release gate
+passed. Awaiting green GitHub/CodeQL before tagging.
 This is not independent cryptographic verification or FIPS validation.
 
 The default-off `brynja_hash_tuple::execution` module implements TupleHash128,

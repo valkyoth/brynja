@@ -4456,7 +4456,7 @@ Exit criteria:
 
 Status: awaiting green CI
 
-Implementation, focused development verification, owner-supplied green retest and reviewed three-platform native collection completed. Final scoped release checks and green GitHub/CodeQL remain required before tagging.
+Implementation, focused development verification, owner-supplied green retest, reviewed three-platform native collection and the final scoped local release gate completed. Green GitHub/CodeQL remains required before tagging.
 
 Plan scope: Integrate all four TupleHash/TupleHashXOF identities with hardened CPU-backed cSHAKE while preserving exact item writers, byte/bit tuples, fixed and extendable outputs and explicit output ownership.
 
@@ -4489,24 +4489,35 @@ Plan scope: Connect all four ParallelHash identities to hardened accelerated lea
 
 Goal: Combine hardware execution with existing parallel APIs without confusing threads and SIMD.
 
+Additional v0.24.40 scope: Deliver a detached local/remote verification runner so long Miri, sanitizer, Kani and release checks can finish without an active Codex conversation. This work supplements, and must not replace or defer, the ParallelHash acceleration deliverables above.
+
 Deliverables:
 
 - Complete v0.24.39 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Make per-worker backend selection and root selection explicit; a worker result remains bound to its identity, index, length and generation.
 - Retain bounded caller-owned buffers, cancellation, outstanding-job limits, deterministic ordered combination and secret cleanup of worker/root/output state.
 - Avoid unbounded nested thread pools and silent required-to-portable workers; report threaded and instruction execution independently.
+- Provide documented start, status, collect and cancel commands for a detached runner. A run must survive closing the invoking terminal, disconnecting SSH and ending/restarting the assistant conversation; never rely on an assistant-owned terminal session for durability. Support the local Linux/AWS workflow and manual macOS collection, with explicit supported-platform prerequisites and fail-closed unsupported-platform errors.
+- Reuse the existing affected-suite planner, signed baseline checks, public-checkpoint full coverage and explicit approval for uncertain/full scope. Freeze the exact plan, approval fingerprint where applicable, commands and source inputs before starting; detachment must neither broaden scope nor skip required coverage. Do not combine changed code with results from an earlier snapshot.
+- Persist a bounded, machine-readable run manifest containing a unique run ID, commit and source hashes, plan fingerprint, compiler/target/tool versions, selected commands, start/end timestamps, per-command exit status, log hashes and an overall completion state. Preserve raw logs outside the source checkout and write terminal results atomically; a log ending in PASS is never sufficient evidence of completion.
+- Keep runner lifecycle separate from release authority: pending, failed, interrupted, cancelled and timed-out runs cannot be imported as successful. Review and validate collected results against the current source closure before the release gate consumes them. Any reuse after documentation-only changes must be explicitly justified by unchanged verifier inputs; changed tools, configuration or implementation invalidate the affected evidence.
+- Bound log storage, elapsed time, subprocess trees and worker concurrency; cancellation must stop descendants and preserve an honest partial record. Refuse duplicate active run IDs, existing-output overwrites, symlink/path escapes and credential-bearing environment capture. Prefer serial default execution with configurable independent shards and resource budgets; never change process-wide settings or auto-publish/tag on completion.
+- Document the operator hand-off: prepare/freeze source, start once, close Codex if desired, wait for a local completion notification or check status manually, then supply the result directory to a resumed conversation. The assistant validates results and resumes only the remaining release steps, without polling throughout the long run or repeating already-qualified commands.
 - Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
 
 Verification:
 
 - Compare sequential, scheduled and threaded results for all block sizes and identity variants across portable and accelerated workers.
 - Inject reordered/duplicate/stale results, worker errors, cancellation and cleanup failures; verify output atomicity and bounded work under mixed routes.
+- Test detached survival after parent/terminal/SSH loss, successful and failed commands, timeout/cancellation with surviving descendants, disk-full/log-limit failures, missing or truncated artifacts, duplicate run IDs, tampered exit codes/log hashes, source/tool/plan drift, stale approvals and out-of-order shard completion. Include real subprocess tests and negative import tests; no failure may become a PASS or authorize a release.
+- Run at least one real selected Miri campaign through the detached workflow, end the initiating session, collect its completed artifact in a fresh session and verify identical required coverage to the existing foreground gate. Record elapsed runtime and resource usage, and demonstrate that resuming the release neither reruns valid evidence nor silently accepts missing evidence.
 - Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
 
 Exit criteria:
 
 - Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
 - `v0.24.40 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- Both original ParallelHash acceleration acceptance and detached-runner end-to-end acceptance must pass. The runner changes orchestration only, not cryptographic assurance thresholds, independent-verification/FIPS claims, or the requirement for green GitHub before a signed tag.
 
 ### v0.24.41 - Legacy SHA-1 Operational Acceleration
 

@@ -1,7 +1,8 @@
 # Brynja v0.24.39
 
 Status: implemented; focused development verification and owner-supplied retest
-passed. Three-platform native collection passed; final release qualification pending.
+passed. Three-platform native collection and the final scoped local release gate
+passed; awaiting green GitHub/CodeQL before tagging.
 
 Adds default-off `brynja_hash_tuple::execution` APIs for all four TupleHash and
 TupleHashXOF identities. Separate public/unkeyed and hardened owners retain exact
@@ -58,3 +59,17 @@ Focused development results:
 
 This internal milestone publishes no crates. All release selections remain
 `publish = false`; the next crates.io checkpoint remains v0.25.2.
+
+Final local qualification passed `scripts/tag_gate.sh v0.24.39` on the
+`5f804073` implementation/evidence state. The planner selected TupleHash only
+for specialized verification; shared repository, compiler, bare-metal, standards,
+dependency, native-evidence and release-policy checks also passed. Full selected
+TupleHash Miri coverage and both Kani harnesses completed without failures.
+The complete gate took approximately 58 minutes by host log timestamps; the
+long-running execution Miri test dominated. In-interpreter test timing is not
+used as host wall-clock evidence.
+
+At the owner's request, v0.24.40 additionally plans a detached verification
+runner with durable result manifests and validated resumption, without removing
+its original ParallelHash acceleration work. This planning and result-recording
+follow-up changes no implementation or native capture input.

@@ -152,7 +152,7 @@
     "crates/brynja-hash-sha3/src/sponge.rs": "1f5e3b66d5de98cf9bcdec12aa867b9b5b74a8835acbe0f12ea56ba3dc46b3dd",
     "crates/brynja-hash-sha3/tests/hardened_execution.rs": "f74dda865da5f9be960d15712bfeba3d5a41ae892322aa6595f605b4a255ba35",
     "crates/brynja-hash-sha3/tests/keccak_properties/mod.rs": "7c441598ee1a0254b4c98d98a6c648ccc02045a2dcfd61470d7f96d183720be5",
-    "docs/hardened-keccak-execution.md": "a9a3ce2848bf1c8a8262996c6570225448ccd948c467cb8fb7345f52f6f4a7d2",
+    "docs/hardened-keccak-execution.md": "d6a61c082045026d8d690b0cbcb8965276b5dfb5e7b089cc8914f78edc4fd7dd",
     "scripts/checks.sh": "d22b39ba596111c074eb30fef30dbef7cc2b99902d43c93e85ea4643033774ba",
     "scripts/sha3/capture-keccak-hardened-native.py": "9fe3556c0afa7414fdb9ebda2d7126f599be6feaae393649b0d87ccbd6a81e9e",
     "scripts/sha3/check-keccak-hardened-asan.py": "dea0b642f2788de9473289d8608e6b7522ec526f3da570a4a503805d0c869963",

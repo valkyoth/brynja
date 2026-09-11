@@ -1,7 +1,8 @@
 # Brynja v0.24.37
 
 Status: implementation, focused assurance, exceptional retest and three-platform
-native collection complete; awaiting final release verification.
+native collection and required local release verification complete; awaiting
+final GitHub/CodeQL approval before tagging.
 
 See the [hardened Keccak working guide](../docs/hardened-keccak-execution.md).
 
@@ -51,7 +52,12 @@ Platinum 8488C, AWS Arm Neoverse-V1 and Apple M2 Pro at `463ebf9a`.
 Both native indices bind the six reviewed artifacts to the exact capture commit,
 compiler, CPU, source closure and execution results. These project-owned records
 do not establish independent verification, side-channel or migration guarantees.
-Complete the release review before waiting for final GitHub/CodeQL approval.
+The final local gate passed on `738ddbae`: selected repository/native/QEMU checks,
+Rust 1.90.0 through 1.98.1 compiler coverage, AddressSanitizer, Miri, Kani,
+online standards/dependency/tool checks, release controls, packaging and SBOM.
+Only release records and documentation were updated afterward; tested Rust,
+dependencies, verifier commands and native capture inputs remain unchanged.
+Wait for final GitHub/CodeQL approval before tagging.
 This milestone selects zero crates.io packages. The next public checkpoint
 remains v0.25.2.
 

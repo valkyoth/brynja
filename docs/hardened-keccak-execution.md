@@ -1,7 +1,8 @@
 # Hardened Keccak execution
 
 Status: v0.24.37 implementation, focused assurance, exceptional retest and
-three-platform native collection complete; final release verification is pending.
+three-platform native collection and required local release verification complete;
+awaiting final GitHub/CodeQL approval before tagging.
 
 The default-off `hardened-execution` feature in `brynja-hash-sha3` exposes
 `hardened_execution::{Sha3_224, Sha3_256, Sha3_384, Sha3_512, Shake128,
@@ -108,7 +109,8 @@ region-removal mutants. MIR/LLVM/assembly checks cover compiler endpoints
 Miri checks owned-memory clearing, not architecture intrinsics. Cross-crate
 unwind edges remain in emitted code; no compiler-proven `nounwind` claim is made.
 Affected repository checks supplement these focused campaigns; final release
-verification is separate and follows the exceptional retest and native collection.
+verification followed the exceptional retest and native collection and passed on
+`738ddbae`, including the selected Miri/Kani groups and AddressSanitizer checks.
 Fresh hardened Keccak and refreshed hardened SHA-2 captures passed on Intel Xeon
 Platinum 8488C, AWS Arm Neoverse-V1 and Apple M2 Pro at commit
 `463ebf9a37ac61f7be89f1efa5fd4bd71f6e0696`. Reviewed records are indexed in

@@ -48,6 +48,12 @@ implemented separately from portable constructors. Its owner retest passed;
 native Mac/AWS functional observations are archived and required local release checks passed. Portable algorithm completion
 does not establish acceleration qualification.
 
+Separate [hardened Keccak execution](hardened-keccak-execution.md) provides
+default-off erasing SHA-3/SHAKE/cSHAKE owners and typed secret outputs. Its owner
+retest, committed native Intel/Linux Arm/Apple Arm observations and required
+local release checks passed. Default constructors stay portable. This does not
+establish independent verification, register/spill erasure or FIPS validation.
+
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |

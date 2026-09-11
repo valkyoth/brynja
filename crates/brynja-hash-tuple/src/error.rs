@@ -20,6 +20,8 @@ pub enum TupleHashError {
     #[cfg(feature = "hardened-execution")]
     AccelerationUnavailable,
     /// The selected backend failed; never authorizes portable fallback.
+    /// Wrapped errors describe fixed failure categories, not CPU identifiers,
+    /// microcode revisions, input bytes, or secret state.
     #[cfg(feature = "hardened-execution")]
     Execution(brynja_hash_sha3::hardened_execution::Error),
 }

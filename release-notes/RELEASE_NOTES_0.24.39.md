@@ -1,7 +1,7 @@
 # Brynja v0.24.39
 
-Status: implemented; focused development verification passed, exceptional pentest
-and release qualification pending.
+Status: implemented; focused development verification and owner-supplied retest
+passed. Native collection and release qualification pending.
 
 Adds default-off `brynja_hash_tuple::execution` APIs for all four TupleHash and
 TupleHashXOF identities. Separate public/unkeyed and hardened owners retain exact
@@ -36,11 +36,11 @@ independent cryptographic verification nor FIPS validation.
 
 Focused development results:
 
-- 20 unit/integration/vector tests and 55 compile-fail ownership doctests;
+- 21 unit/integration/vector tests and 55 compile-fail ownership doctests;
   strict scoped Clippy and Rust 1.90 bare-metal `no_std` compilation.
 - 268 official/independent oracle cases per portable, absent-preferred, native
   AMD AVX2 static/preferred and emulated Arm hosted/static/preferred route.
-- Packaged consumer: 68 ownership/classification rejections, 20 compiled
+- Packaged consumer: 68 ownership/classification rejections, 24 compiled
   debug/release cleanup mutants and eight compiled algorithm mutants.
 - 141 semantic execution-policy and 87 native-format/schema regressions.
 - MIR/LLVM/assembly owned-region clearing on Rust 1.90.0 and 1.98.1 for x86-64

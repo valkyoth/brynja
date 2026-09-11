@@ -4,7 +4,7 @@
 REVIEWED_HASHES = {
     "crates/brynja-hash-tuple/src/backend.rs": "845400daa8451df50a08d98c7c45e7660a19d17a4e3216e87b2abe59af75eae9",
     "crates/brynja-hash-tuple/src/core_state.rs": "e97474a5bfa9aecd4df814f2c4bbb044f7f1c8b5a549fe4ca8e1be16ba93ba41",
-    "crates/brynja-hash-tuple/src/error.rs": "f4bceee6947f70bbf1cc688acd8e24fff51225864d8776b9fbc191e02827cd65",
+    "crates/brynja-hash-tuple/src/error.rs": "c058acd39fa889ca81e5cc5d6e4dc4d9ba98f0e9bf460e7cfd3d7265a747c1a4",
     "crates/brynja-hash-tuple/src/fixed.rs": "400c9d0aa90fb04f8f50ac73136aa0053eb7f06375b73991af505d03b7d30d75",
     "crates/brynja-hash-tuple/src/item.rs": "b712ae3f2baaf30251ac00d4436dddf62e64fdd66fac22c7dcc170e0c9db5514",
     "crates/brynja-hash-tuple/src/lib.rs": "c7cd5d90d98c32c18a907cd022076d4b00974f2f0c44a49f02f00751ef965c7e",

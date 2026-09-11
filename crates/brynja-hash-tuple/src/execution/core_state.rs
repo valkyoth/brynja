@@ -94,10 +94,15 @@ impl<'a> Core<'a> {
         let prefix = SecretEncodedInteger::left(bits)?;
         let bytes = prefix.as_bytes()?;
         let prefix_bits = super::output::byte_bits(bytes.len())?;
+        // Pre-flight the eventual total (prefix + complete declared item) before
+        // absorption. Only the prefix is committed below; fragment() accounts
+        // for body bits as they arrive. This is not a redundant prefix check.
         core.input_bits()
             .checked_add(prefix_bits)
             .and_then(|n| n.checked_add(bits))
             .ok_or(Error::MessageTooLong)?;
+        // Reserve capacity for eventual completion without counting an item
+        // until its exact declared body has been supplied to complete().
         core.item_count()
             .checked_add(1)
             .ok_or(Error::MessageTooLong)?;

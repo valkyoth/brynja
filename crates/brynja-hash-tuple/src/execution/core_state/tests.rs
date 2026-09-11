@@ -28,6 +28,38 @@ fn metadata_cleanup_covers_every_owned_region() -> Result<(), Error> {
 }
 
 #[test]
+fn begin_preflights_the_complete_item_but_commits_only_its_prefix() -> Result<(), Error> {
+    for wide in [false, true] {
+        // left_encode(8) occupies 16 bits. The prefix fits in both cases,
+        // but the complete eight-bit item only fits at the exact boundary.
+        for overflow in [false, true] {
+            let mut core = Core::new(Mode::Portable, wide, super::super::bits(b"")?)?;
+            let initial = u128::MAX - 24 + u128::from(overflow);
+            core.metadata.input_bits = initial.to_le_bytes();
+            if overflow {
+                assert_eq!(core.begin(8), Err(Error::MessageTooLong));
+                cleared(&core);
+                assert_eq!(core.begin(0), Err(Error::StateConsumed));
+            } else {
+                core.begin(8)?;
+                assert_eq!(core.input_bits(), initial + 16);
+                assert_eq!(core.remaining_bits(), 8);
+                assert_eq!(core.item_count(), 0);
+                core.fragment(super::super::bits(b"x")?)?;
+                assert_eq!(core.input_bits(), u128::MAX);
+                assert_eq!(core.remaining_bits(), 0);
+                assert_eq!(core.item_count(), 0);
+                core.complete()?;
+                assert_eq!(core.item_count(), 1);
+                core.cancel();
+                cleared(&core);
+            }
+        }
+    }
+    Ok(())
+}
+
+#[test]
 fn overflow_and_incomplete_operations_erase_metadata() -> Result<(), Error> {
     for case in 0..4 {
         let mut core = Core::new(Mode::Portable, false, super::super::bits(b"")?)?;

@@ -73,6 +73,11 @@ def mutations(consumer, roots, env):
         for field in ('pending', 'used', 'items', 'remaining', 'input_bits', 'output_bits', 'phase', 'staging')
     ]
     cases += [
+        ('core_state.rs', '.and_then(|n| n.checked_add(bits))', '',
+         'begin_preflights_the_complete_item_but_commits_only_its_prefix'),
+        ('core_state.rs', 'write_counter(&mut core.metadata.input_bits, total)?;\n        write_counter(&mut core.metadata.remaining, bits)?;',
+         'write_counter(&mut core.metadata.input_bits, total + bits)?;\n        write_counter(&mut core.metadata.remaining, bits)?;',
+         'begin_preflights_the_complete_item_but_commits_only_its_prefix'),
         ('core_state.rs', 'if !self.completed {', 'if self.completed {', 'operation_guard_clears_on_early_return'),
         ('core_state.rs', 'let _ = clear_owned_region(bytes);', '', 'output_overflow_clears_secrets'),
     ]

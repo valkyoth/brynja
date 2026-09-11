@@ -24,6 +24,8 @@ empty N/S is exactly SHAKE; otherwise the prefix is
 Arbitrary-bit X/N/S use canonical FIPS 202 low-bit-first representation.
 Every prefix, message, padding and squeeze permutation uses the retained route.
 No backend error, including a prefix failure, authorizes a scalar retry.
+Captured backend errors retain their identity. An otherwise unclassified shared
+prefix-encoding failure is `Error::PrefixEncoding`, not a guessed length overflow.
 
 `setup_bytes` reports encoded prefix capacity; `message_bytes` excludes it.
 `Report::absorb_permutations` includes prefix permutations. Byte/bit preflights

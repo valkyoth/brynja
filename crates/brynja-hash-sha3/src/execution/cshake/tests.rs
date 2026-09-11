@@ -1,6 +1,35 @@
 use super::*;
 
 #[test]
+fn prefix_encoding_errors_do_not_claim_length_overflow() -> Result<(), crate::Fips202BitsError> {
+    let empty = Fips202BitString::new(&[], 0)?;
+    let name = Fips202BitString::new(b"N", 8)?;
+    for rate in [0, 1, 135, 137, 167, 169, usize::MAX] {
+        let mut called = false;
+        let result = absorb_cshake_prefix(rate, name, empty, |_| {
+            called = true;
+            Ok(())
+        })
+        .map_err(|()| prefix_error(None));
+        assert_eq!(result, Err(Error::PrefixEncoding));
+        assert!(!called);
+    }
+    for error in [
+        Error::LengthOverflow,
+        Error::Backend(brynja_crypto_cpu::static_execution::Error::Quarantined),
+    ] {
+        let mut captured = None;
+        let result = absorb_cshake_prefix(168, name, empty, |_| {
+            captured = Some(error);
+            Err(())
+        })
+        .map_err(|()| prefix_error(captured));
+        assert_eq!(result, Err(error));
+    }
+    Ok(())
+}
+
+#[test]
 fn prefix_and_padding_faults_preserve_typed_errors() {
     for budget in 0..3 {
         // Large N forces multiple setup permutations; no owner may escape on error.

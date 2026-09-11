@@ -1,6 +1,25 @@
 use super::*;
 
 #[test]
+fn wrong_architecture_keccak_never_acquires_hosted_authority() {
+    for (kernel, matching_architecture) in [
+        (host::Kernel::ArmKeccak, cfg!(target_arch = "aarch64")),
+        (host::Kernel::X86Keccak, cfg!(target_arch = "x86_64")),
+    ] {
+        if matching_architecture {
+            continue;
+        }
+        assert!(matches!(
+            host::Authority::new(kernel, Mode::Require),
+            Err(host::Error::Unavailable(Unavailable::WrongArchitecture))
+        ));
+        let preferred = host::Authority::new(kernel, Mode::Prefer);
+        assert!(matches!(preferred, Ok(owner) if owner.report().route
+            == Route::PortableFallback(Unavailable::WrongArchitecture)));
+    }
+}
+
+#[test]
 fn hosted_sponge_error_never_authorizes_portable_fallback() {
     for error in [
         host::Error::Kernel(host::KernelError::Quarantined),

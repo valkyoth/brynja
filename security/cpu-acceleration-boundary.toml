@@ -471,10 +471,10 @@ sha256 = "6a7bf22e99a50c19ae6df16b87dada92fcf0d50da7961adbeb1d891c3fa288a8"
 package = "brynja-crypto-cpu-std"
 path = "src/sponge.rs"
 status = "opt-in-ordinary-sponge-adapter"
-sha256 = "a5e390f8cb8a67d2d2fa93251b10a4d24b6ae238eb9359cbc937cfe5e690f641"
+sha256 = "2f002bd2983762c82706b5fcb905e7bb435213001b8e8017eaf69ee12fb92d82"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/sponge/tests.rs"
 status = "ordinary-sponge-adapter-tests"
-sha256 = "209f518b5fc3047134d511aa19c3dcd8848058f26a1b10402f28bbf76fe3dcdc"
+sha256 = "a5b427fb4eaf9613ec1f29cd5120eb25567c01645e6b01e41273a67c2f9d421a"

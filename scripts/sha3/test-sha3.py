@@ -109,6 +109,7 @@ def main() -> int:
     reject("SHA-3 Miri test inventory", lambda root: replace(root, policy.MIRI_SCRIPT, "sha3_384 sha3_512", "sha3_384"))
     reject("SHAKE Miri test inventory", lambda root: replace(root, policy.MIRI_SCRIPT, "shake128 shake256", "shake128"))
     reject("SHA-3 sanitizer package", lambda root: replace(root, policy.SANITIZER_SCRIPT, "-p brynja-hash-sha3", "-p brynja-hash-sha2"))
+    reject("cSHAKE execution sanitizer target", lambda root: replace(root, policy.SANITIZER_SCRIPT, "--test cshake_execution", "--test execution"))
     reject(
         "SHA-3 sanitizer test targets",
         lambda root: replace(
@@ -129,7 +130,7 @@ def main() -> int:
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects sixty-seven boundary, permutation, padding, SP 800-185, cSHAKE, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
+    print("portable SHA-3 policy rejects sixty-eight boundary, permutation, padding, SP 800-185, cSHAKE, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
     return 0
 
 

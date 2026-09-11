@@ -19,6 +19,10 @@ fresh native collection, approved full release checks and green GitHub/CodeQL ar
   SHA-3/SHAKE/cSHAKE algorithms. Portable/preferred/required selection is explicit.
 - No new third-party dependency, unsafe code, kernel or implicit acceleration.
   Default `no_std` leaves, facade and protocol graphs stay unchanged.
+- Pentest remediation distinguishes an unclassified prefix-encoding failure
+  (`PrefixEncoding`) from an actual backend or overflow error. Regression tests
+  and compiled mutants preserve error identity; wrong-architecture hosted
+  rejection is documented and tested without changing platform authority.
 
 See the [API and evidence guide](../docs/cshake-ordinary-execution.md).
 

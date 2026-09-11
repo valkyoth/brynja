@@ -80,6 +80,9 @@ pub const INLINE_OUTPUT_BYTES: usize = 168;
 pub enum Error {
     /// Public message, output or successful-work accounting would overflow.
     LengthOverflow,
+    /// cSHAKE prefix encoding failed independently of the execution backend.
+    /// This does not assert that the cause was a length overflow.
+    PrefixEncoding,
     /// Supplied scratch is shorter than the requested destination.
     ScratchTooSmall,
     /// Kernel selection, startup, quarantine or operation failed.

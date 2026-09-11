@@ -355,7 +355,8 @@ def validate(root: Path) -> None:
         "SHA-3 AddressSanitizer command",
     )
     require(sanitizer, "--features static-execution --lib --test execution", "execution ASan coverage")
-    if sanitizer.count("-p brynja-hash-sha3") != 4:
+    require(sanitizer, "-p brynja-hash-sha3 --features static-execution --test cshake_execution", "cSHAKE execution ASan coverage")
+    if sanitizer.count("-p brynja-hash-sha3") != 5:
         fail("SHA-3 AddressSanitizer package coverage changed")
 
     differential_fixture = read(root, DIFFERENTIAL_FIXTURE)

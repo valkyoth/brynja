@@ -64,6 +64,10 @@ impl Sponge {
         let kernel = if cfg!(target_arch = "aarch64") {
             host::Kernel::ArmKeccak
         } else {
+            // X86Keccak is only an unavailable placeholder on other targets.
+            // execution::platform::detected authorizes it solely on x86_64:
+            // Require rejects WrongArchitecture, Prefer reports that fallback,
+            // and Portable never probes. Adding an ISA must update both sites.
             host::Kernel::X86Keccak
         };
         Ok(Self {

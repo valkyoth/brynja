@@ -53,7 +53,8 @@ def run(consumer, roots, env, execute):
         ('cshake.rs', 'function_name.0,', 'customization.0,', None),
         ('cshake.rs', 'setup_bytes = state.message_bytes', 'setup_bytes = 0', None),
         ('cshake.rs', 'state.update(&execution, bytes)', 'state.update(&Execution::portable(), bytes)', 'prefix_and_padding_faults_preserve_typed_errors'),
-        ('cshake.rs', 'backend_error.unwrap_or(Error::LengthOverflow)', 'Error::LengthOverflow', 'prefix_and_padding_faults_preserve_typed_errors'),
+        ('cshake.rs', 'prefix_error(backend_error))?', 'Error::LengthOverflow)?', 'prefix_and_padding_faults_preserve_typed_errors'),
+        ('cshake.rs', 'backend_error.unwrap_or(Error::PrefixEncoding)', 'backend_error.unwrap_or(Error::LengthOverflow)', 'prefix_encoding_errors_do_not_claim_length_overflow'),
         ('engine.rs', 'candidate.permute(execution, 2)?;', 'candidate.permute(&Execution::portable(), 2)?;', 'cshake_faults_keep_public_output_atomic'),
     )
     for filename, before, after, test in mutants:
@@ -83,4 +84,4 @@ def run(consumer, roots, env, execute):
                 raise ValueError('hosted fallback mutant failed before execution:\n' + result.stdout + result.stderr)
     finally:
         host.write_text(original)
-    print('cSHAKE/hosted: sixteen debug/release algorithm, route and error mutants rejected')
+    print('cSHAKE/hosted: eighteen debug/release algorithm, route and error mutants rejected')

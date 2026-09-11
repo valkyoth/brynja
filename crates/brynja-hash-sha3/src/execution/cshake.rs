@@ -7,6 +7,13 @@ fn bits(input: Public<'_>) -> Result<PublicBits<'_>, Error> {
         .map_err(|_| Error::LengthOverflow)
 }
 
+// The shared encoder's unit error includes invariant/rate failures, not just
+// arithmetic overflow. Preserve a captured execution error verbatim; otherwise
+// report encoding failure without guessing its cause.
+fn prefix_error(backend_error: Option<Error>) -> Error {
+    backend_error.unwrap_or(Error::PrefixEncoding)
+}
+
 macro_rules! cshake {
     ($name:ident, $reader:ident, $inner:ident, $rate:literal) => {
         /// Non-erasing public-data cSHAKE state on one retained execution route.
@@ -43,7 +50,7 @@ macro_rules! cshake {
                             backend_error = Some(error);
                         })
                     })
-                    .map_err(|()| backend_error.unwrap_or(Error::LengthOverflow))?;
+                    .map_err(|()| prefix_error(backend_error))?;
                 let setup_bytes = state.message_bytes;
                 Ok(Self {
                     state,

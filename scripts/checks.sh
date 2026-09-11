@@ -137,6 +137,12 @@ python3 scripts/kmac/test-kmac.py
 python3 scripts/kmac/check-kmac-differential.py
 scripts/kmac/check-kmac-conformance-gate.sh
 scripts/kmac/check-kmac-codegen.sh
+python3 scripts/kmac/check-kmac-execution.py
+python3 scripts/kmac/check-kmac-execution-package.py
+python3 scripts/kmac/check-kmac-execution-codegen.py
+python3 scripts/kmac/test-kmac-execution-policy.py
+python3 scripts/kmac/test-kmac-execution-native.py
+cargo clippy --locked --offline --manifest-path assurance/kmac-execution/Cargo.toml --all-targets -- -D warnings
 cargo test --locked --manifest-path assurance/kmac-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/kmac-public-api/Cargo.toml --all-targets -- -D warnings
 python3 scripts/tuplehash/check-tuplehash.py

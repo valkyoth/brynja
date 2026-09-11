@@ -4386,15 +4386,13 @@ Exit criteria:
 
 ### v0.24.37 - Hardened Keccak Acceleration
 
-Status: awaiting pentest
+Status: released
 
 Progress: owner-backed AVX2/AArch64 permutation scratch and affine hardened
-SHA-3/SHAKE/cSHAKE absorbing/reader APIs are implemented in the working tree.
-Native AMD and emulated Arm kernel comparisons, high-level byte/bit and lifecycle
-tests, packaged ownership negatives, live destructor mutants, endpoint compiler
-cleanup checks, targeted Miri/ASan and no_std compilation pass. Source policies
-and default-off feature closures include the new owners. Exceptional pentest,
-fresh native qualification and final release verification remain required.
+SHA-3/SHAKE/cSHAKE absorbing/reader APIs shipped in the signed milestone.
+Exceptional retest, Intel/Linux Arm/Apple Arm native collection, local release
+verification and GitHub/CodeQL checks passed. Independent cryptographic review
+and FIPS validation remain separate, unclaimed qualifications.
 
 Plan scope: Implement sealed hardened accelerated SHA-3/SHAKE/cSHAKE absorb and reader owners with owner-backed permutation scratch, mandatory destruction and explicit public versus typed-secret output.
 
@@ -4421,7 +4419,14 @@ Exit criteria:
 
 ### v0.24.38 - KMAC Accelerated Public Operations
 
-Status: planned
+Status: awaiting pentest
+
+Progress: default-off hardened KMAC/KMACXOF execution owners, explicit selection,
+consuming fixed outputs and exclusively borrowed XOF readers are implemented.
+Independent bit-level, packaged ownership, cleanup mutation and compiler checks
+cover the new paths. Exceptional pentest, fresh three-platform native KMAC
+collection and final release verification remain pending. See
+[the working API guide](kmac-accelerated-execution.md).
 
 Plan scope: Route all four KMAC/KMACXOF identities through the hardened accelerated cSHAKE boundary, including keyed initialization, byte/bit messages, fixed tags, verification and incremental typed-secret XOF output.
 

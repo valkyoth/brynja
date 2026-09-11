@@ -5,7 +5,18 @@ use crate::{backend::CshakeState, error::KmacError};
 
 const MAX_RATE: usize = 168;
 
-pub(crate) fn absorb_key<S: CshakeState>(
+/// Private absorb port shared by portable and capability-bound hardened owners.
+pub(crate) trait Absorb {
+    fn absorb(&mut self, input: &[u8]) -> Result<(), KmacError>;
+}
+
+impl<S: CshakeState> Absorb for S {
+    fn absorb(&mut self, input: &[u8]) -> Result<(), KmacError> {
+        self.update(input).map_err(KmacError::from)
+    }
+}
+
+pub(crate) fn absorb_key<S: Absorb>(
     state: &mut S,
     key: Fips202BitString<'_>,
     rate: usize,
@@ -77,12 +88,7 @@ pub(crate) fn append_right_encode<S: CshakeState>(
     final_message: Option<Fips202BitString<'_>>,
     output_bits: u128,
 ) -> Result<S::Reader, KmacError> {
-    let mut packer = SecretPacker::new(state);
-    if let Some(message) = final_message {
-        packer.push_bit_string(message)?;
-    }
-    packer.push_bytes(right_encode_u128(output_bits).as_bytes())?;
-    let tail = packer.finish_bits();
+    let tail = append_suffix(state, final_message, output_bits)?;
     match tail {
         Some(tail) => {
             let input = Fips202BitString::new(tail.as_bytes(), tail.valid())
@@ -95,14 +101,27 @@ pub(crate) fn append_right_encode<S: CshakeState>(
     }
 }
 
-struct SecretPacker<'state, S: CshakeState> {
+pub(crate) fn append_suffix<S: Absorb>(
+    state: &mut S,
+    final_message: Option<Fips202BitString<'_>>,
+    output_bits: u128,
+) -> Result<Option<SecretTail>, KmacError> {
+    let mut packer = SecretPacker::new(state);
+    if let Some(message) = final_message {
+        packer.push_bit_string(message)?;
+    }
+    packer.push_bytes(right_encode_u128(output_bits).as_bytes())?;
+    Ok(packer.finish_bits())
+}
+
+struct SecretPacker<'state, S: Absorb> {
     state: &'state mut S,
     pending: [u8; 1],
     used: [u8; 1],
     emitted: [u8; core::mem::size_of::<usize>()],
 }
 
-impl<'state, S: CshakeState> SecretPacker<'state, S> {
+impl<'state, S: Absorb> SecretPacker<'state, S> {
     fn new(state: &'state mut S) -> Self {
         Self {
             state,
@@ -132,7 +151,7 @@ impl<'state, S: CshakeState> SecretPacker<'state, S> {
 
     fn push_bytes(&mut self, input: &[u8]) -> Result<(), KmacError> {
         if self.used() == 0 {
-            self.state.update(input).map_err(KmacError::from)?;
+            self.state.absorb(input)?;
             let emitted = self
                 .emitted()
                 .checked_add(input.len())
@@ -197,7 +216,7 @@ impl<'state, S: CshakeState> SecretPacker<'state, S> {
     }
 
     fn flush(&mut self) -> Result<(), KmacError> {
-        self.state.update(&self.pending).map_err(KmacError::from)?;
+        self.state.absorb(&self.pending)?;
         let emitted = self
             .emitted()
             .checked_add(1)
@@ -227,7 +246,7 @@ impl<'state, S: CshakeState> SecretPacker<'state, S> {
     }
 }
 
-impl<S: CshakeState> Drop for SecretPacker<'_, S> {
+impl<S: Absorb> Drop for SecretPacker<'_, S> {
     fn drop(&mut self) {
         let _ = clear_owned_region(&mut self.pending);
         let _ = clear_owned_region(&mut self.used);
@@ -235,7 +254,7 @@ impl<S: CshakeState> Drop for SecretPacker<'_, S> {
     }
 }
 
-struct SecretTail {
+pub(crate) struct SecretTail {
     byte: [u8; 1],
     valid: [u8; 1],
 }
@@ -248,11 +267,11 @@ impl SecretTail {
         }
     }
 
-    const fn as_bytes(&self) -> &[u8] {
+    pub(crate) const fn as_bytes(&self) -> &[u8] {
         &self.byte
     }
 
-    fn valid(&self) -> u8 {
+    pub(crate) fn valid(&self) -> u8 {
         self.valid.first().copied().unwrap_or_default()
     }
 }

@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.36 signed. The v0.24.37 hardened Keccak candidate implements opt-in erasing permutation scratch and SHA-3/SHAKE/cSHAKE absorbing/reader owners. Exceptional retest, fresh Intel/Linux Arm/Apple Arm native collection and required local release verification passed, including the selected Miri/ASan/Kani suites. Awaiting final GitHub/CodeQL approval before tagging. No publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.37 signed. The v0.24.38 candidate adds default-off KMAC/KMACXOF operations over portable or authorized hardened cSHAKE. Fixed tags consume their owner; incremental readers exclusively borrow and clear the original source. See [KMAC execution](kmac-accelerated-execution.md). Exceptional pentest, fresh native KMAC evidence, final release verification and GitHub/CodeQL approval remain pending. No publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

@@ -137,6 +137,8 @@ quick_kmac() {
 
 full_kmac() {
     run_miri -p brynja-mac-kmac --tests
+    run_miri -p brynja-mac-kmac --features hardened-execution --lib execution
+    run_miri -p brynja-mac-kmac --features hardened-execution --test execution
 }
 
 quick_tuplehash() {

@@ -25,6 +25,11 @@
 
 # brynja-mac-kmac
 
+Optional `hardened-execution` and `runtime-execution` features expose selectable
+KMAC/KMACXOF APIs under `execution`; defaults remain portable. The new keyed
+acceleration is awaiting exceptional pentest and fresh native qualification.
+See the [working API and memory boundary](../../docs/kmac-accelerated-execution.md).
+
 First-party, allocation-free `no_std` implementations of KMAC128, KMAC256,
 KMACXOF128, and KMACXOF256 from NIST SP 800-185. All keyed state is owned by
 Brynja's hardened cSHAKE implementation and compiler-resistantly clears every

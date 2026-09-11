@@ -121,7 +121,7 @@ def validate(root: Path) -> None:
         "clear_owned_region(&mut self.used)",
         "clear_owned_region(&mut self.emitted)",
         "impl Drop for SecretEncodedInteger",
-        "impl<S: CshakeState> Drop for SecretPacker",
+        "impl<S: Absorb> Drop for SecretPacker",
         "fn as_bytes(&self) -> Result<&[u8], KmacError>",
         "self.bytes.get(..length).ok_or(KmacError::SecretMemory)",
         "corrupt_encoded_width_fails_closed",
@@ -174,6 +174,8 @@ def validate(root: Path) -> None:
     manifest = tomllib.loads(loaded[MANIFEST])
     if manifest.get("features") != {
         "default": [], "conformance-testing": [],
+        "hardened-execution": ["brynja-hash-sha3/hardened-execution"],
+        "runtime-execution": ["hardened-execution", "brynja-hash-sha3/runtime-execution"],
     }:
         fail("KMAC feature surface changed")
     if manifest.get("dependencies") != {
@@ -185,7 +187,7 @@ def validate(root: Path) -> None:
     if package != {
         "class": "modern-shared", "publish": "crates-io",
         "required": ["brynja-core", "brynja-hash-sha3"], "optional": {},
-        "features": ["conformance-testing"],
+        "features": ["conformance-testing", "hardened-execution", "runtime-execution"],
     }:
         fail("KMAC package classification changed")
 
@@ -244,6 +246,7 @@ def validate(root: Path) -> None:
         "-p brynja-mac-kmac \\\n    --tests \\\n    --target x86_64-unknown-linux-gnu",
         "KMAC AddressSanitizer command",
     )
+    require(loaded[MIRI], "run_miri -p brynja-mac-kmac --tests\n", "portable KMAC Miri command")
     for path, expected_hash in HASHES.items():
         actual_hash = hashlib.sha256((root / path).read_bytes()).hexdigest()
         if actual_hash != expected_hash:

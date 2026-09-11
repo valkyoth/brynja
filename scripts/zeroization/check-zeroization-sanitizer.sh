@@ -136,6 +136,12 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
     --target x86_64-unknown-linux-gnu
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
+    -p brynja-mac-kmac --features hardened-execution --lib --test execution \
+    --target x86_64-unknown-linux-gnu
+
+python3 scripts/kmac/check-kmac-execution.py --asan
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
     -p brynja-hash-tuple \
     --test api \
     forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch \

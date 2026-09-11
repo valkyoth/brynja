@@ -89,6 +89,17 @@ def test_baselines(no_default: dict, all_features: dict) -> None:
                 f"workspace validator rejected {mode}: {accepted.stderr}"
             )
     md5_workspace_fixtures.check(no_default, all_features, package, node, require_rejection)
+    for feature, replacement in (
+        ("default", ["hardened-execution"]),
+        ("default", ["runtime-execution"]),
+        ("hardened-execution", []),
+        ("hardened-execution", ["brynja-hash-sha3/static-execution"]),
+        ("runtime-execution", ["brynja-hash-sha3/runtime-execution"]),
+    ):
+        changed = copy.deepcopy(all_features)
+        package(changed, "brynja-mac-kmac")["features"][feature] = replacement
+        require_rejection(changed, "all-features", "feature policy differs",
+                          "a weakened or default-on KMAC execution feature closure")
     for replacement in ([], ["static-execution"], ["brynja-crypto-cpu/runtime-execution"]):
         changed = copy.deepcopy(all_features)
         package(changed, "brynja-hash-sha3")["features"]["hardened-execution"] = replacement

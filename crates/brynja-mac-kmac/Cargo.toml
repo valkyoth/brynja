@@ -13,6 +13,8 @@ publish = ["crates-io"]
 [features]
 default = []
 conformance-testing = []
+hardened-execution = ["brynja-hash-sha3/hardened-execution"]
+runtime-execution = ["hardened-execution", "brynja-hash-sha3/runtime-execution"]
 
 [dependencies]
 brynja-core = { workspace = true }

@@ -234,6 +234,9 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         # The reviewed CPU surface includes the bounded portable batch API;
         # neither feature implies the separate non-production evidence key.
         expected["cpu"] = ["batch"]
+    if name == "brynja-mac-kmac":
+        expected["hardened-execution"] = ["brynja-hash-sha3/hardened-execution"]
+        expected["runtime-execution"] = ["hardened-execution", "brynja-hash-sha3/runtime-execution"]
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")
 

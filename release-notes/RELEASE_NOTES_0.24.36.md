@@ -39,6 +39,9 @@ all 29 Kani harnesses, repository/package policies, current dependency advisorie
 SBOM and official standards freshness. Reference-only IANA metadata and two
 stale assurance-inventory labels were corrected and regression-tested; no
 cryptographic source or native input changed after the clean retest/capture.
+CI then caught stale downstream bindings from the late IANA refresh. The complete
+surface/requirements metadata chain was repaired and its full regression suite
+rerun; six requirement revisions record source-hash changes without scope changes.
 
 Ordinary execution remains public-data-only and non-erasing. Hardened Keccak
 acceleration is a later milestone. Previous native kernel/high-level observations

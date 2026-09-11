@@ -89,11 +89,15 @@ python3 scripts/standards/check-authority-lifecycle.py
 python3 scripts/standards/test-authority-lifecycle.py
 python3 scripts/standards/check-protocol-surfaces.py
 python3 scripts/standards/test-protocol-surfaces.py
+python3 scripts/standards/test-surface-security.py
 python3 scripts/standards/check-requirements.py
 python3 scripts/standards/test-requirements.py
 python3 scripts/standards/test-requirement-domains.py
 python3 scripts/standards/test-requirement-transports.py
 python3 scripts/standards/test-requirement-lifecycles.py
+python3 scripts/standards/test-requirement-sections.py
+python3 scripts/standards/test-requirement-history.py
+python3 scripts/standards/test-requirement-residuals.py
 ```
 
 The checker fails on non-HTTPS or unallowlisted URLs, redirects outside the
@@ -153,6 +157,25 @@ upstream channel; manually update the policy pin and its provenance; then run
 `--write`, review the semantic and byte diff, regenerate the ledger, pass all
 tests, and commit the pin plus evidence together. The same pin-first process
 applies to new RFC, NIST, and ITU source bytes.
+
+A refreshed ledger also invalidates downstream bindings. Complete the refresh
+in dependency order:
+
+1. Review and update the ledger hash in `surface-policy.json` and every
+   `transport-surfaces/*.toml`, then run
+   `python3 scripts/standards/check-protocol-surfaces.py --write`.
+2. Review and update ledger and surface-register bindings in the requirement
+   policies. Increment the revisions of requirements whose pinned sources
+   changed, without changing their scope merely to accept new metadata.
+3. Run `python3 scripts/standards/check-requirements.py --write` and review all
+   generated source, classification, and requirement diffs.
+4. Run every offline check above and recheck downstream acceptance metadata.
+   Commit the complete chain together with the reviewed upstream evidence.
+
+If the online preflight discovers drift late in a release sweep, earlier
+standards checks do not cover the refreshed artifacts: rerun this complete
+metadata chain before reporting completion. Metadata-only repairs do not by
+themselves require repeating unchanged cryptographic or native campaigns.
 
 An RFC errata HTTP 200 response is valid only when it contains recognized
 errata records or exactly one official `No matching errata found.` marker.

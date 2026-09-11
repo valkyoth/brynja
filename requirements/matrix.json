@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "adf5b68fd30f522917e0e5506c164aed1032df53c26a4be349d28113b8c51188",
-  "domain_policy_sha256": "424505c78c2799b643f79d0e8031e43be7613d75f7e533de1aae885321d1e949",
-  "policy_sha256": "ba047e93e502f91398c23da269bfa990f3cef71ac031262f1a49de830db464ef",
+  "domain_policy_sha256": "66e64e8fcfdc886c39dd6a78f83c8757d30994e4afe5a427dbfdfffd8d52eb77",
+  "policy_sha256": "4af95408e977829e9c29acb39544a86b327aad7642d39d6973a04b6db9113960",
   "requirements": [
     {
       "applicability": "delegate",
@@ -11338,7 +11338,7 @@
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -11359,7 +11359,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
+          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
         },
         {
           "authority_role": "exclusion",
@@ -12194,7 +12194,7 @@
       "owner": "0.240.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {
@@ -12215,7 +12215,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
+          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
         },
         {
           "authority_role": "legacy",
@@ -12428,7 +12428,7 @@
       "owner": "0.196.3",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -12449,7 +12449,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
+          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
         }
       ],
       "statement": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
@@ -20459,7 +20459,7 @@
       "owner": "0.155.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -20499,7 +20499,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
+          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
         }
       ],
       "statement": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
@@ -20547,7 +20547,7 @@
       "owner": "0.155.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -20568,7 +20568,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
+          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
         }
       ],
       "statement": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
@@ -21054,7 +21054,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.111.0",
       "residual": "The registry assignment is necessary but does not replace cipher-suite, key-schedule, AEAD, transcript, or interoperability evidence.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "source": {
         "collection": "tls-parameters",
@@ -21062,7 +21062,7 @@
         "kind": "iana",
         "record_sha256": "02ae68b04d095bc13817c02fc9f27d4d3e3f90b6dff7bd86b8544060b0e031b0",
         "registry": "tls-parameters-4",
-        "snapshot_sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "snapshot_sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "surface_id": "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
       },
       "statement": "TLS_AES_128_GCM_SHA256 remains an explicitly planned TLS 1.3 cipher suite with exact registry identity.",
@@ -30807,9 +30807,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "47d2da04650fcdda9c405a7af57e6a63c8c3014665ec3df8755084b0d9baf68c",
+  "residual_policy_sha256": "bd9afa8eae6cdb2017f8dc7568410d15627f9d8a1c2cbf6c3309f3fbe62baadd",
   "schema": 5,
-  "source_ledger_sha256": "915169e86b0a434935032680fe90cc57fe3e0027220a86776ef43b951a0d56d3",
-  "surface_register_sha256": "d2da3116e86eae276084b512bfd5cd1a32fad259e3b8c585d040e0741b5d3813",
-  "transport_policy_sha256": "774846ff7ff80e04b0e9f0a778a80279a78ea7606a4ab9f8adde6c3a06db5358"
+  "source_ledger_sha256": "bc7313aa95bb9007d4c8af8ed33032c8ff859455b1ac4e07ad3cde8e3d292b39",
+  "surface_register_sha256": "5543d09d9a87f732b78b8b592dff7a6573e4e4fd22f959419d5128b44bdde84a",
+  "transport_policy_sha256": "b373f7b489d694f135829fdca37f0b640140007edf6cb40cfef05b6a9877a416"
 }

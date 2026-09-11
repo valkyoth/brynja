@@ -1,7 +1,7 @@
 {
-  "policy_sha256": "467fda164d18f6ba82d7f289708c2105ebcfab818232cbd2cd6914a16379f516",
+  "policy_sha256": "bd7acf09381a47aaccf245fcb7bbe102513e28e03a04c0236a3140c226e12adb",
   "schema": 2,
-  "source_ledger_sha256": "915169e86b0a434935032680fe90cc57fe3e0027220a86776ef43b951a0d56d3",
+  "source_ledger_sha256": "bc7313aa95bb9007d4c8af8ed33032c8ff859455b1ac4e07ad3cde8e3d292b39",
   "surfaces": [
     {
       "code_target": "crates/brynja-crypto/src/aes.rs",
@@ -94497,7 +94497,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "authorization-data",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS Authorization Data Formats"
       },
       "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
@@ -94816,7 +94816,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "exporter-labels",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS Exporter Labels"
       },
       "test_target": "tests/surface/exporter_labels.rs#registry"
@@ -96163,7 +96163,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "heartbeat-message-types",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS Heartbeat Message Types"
       },
       "test_target": "tests/surface/heartbeat.rs#registry"
@@ -96335,7 +96335,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "heartbeat-modes",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS Heartbeat Modes"
       },
       "test_target": "tests/surface/heartbeat.rs#registry"
@@ -96507,7 +96507,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-kdf-ids",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS KDF Identifiers"
       },
       "test_target": "tests/surface/algorithms.rs#registry"
@@ -96689,7 +96689,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-10",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS EC Curve Types"
       },
       "test_target": "tests/surface/legacy_registry.rs#isolation"
@@ -96891,7 +96891,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-12",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS Supplemental Data Formats (SupplementalDataType)"
       },
       "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
@@ -97052,7 +97052,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-14",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS UserMappingType Values"
       },
       "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
@@ -97183,7 +97183,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-16",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS SignatureAlgorithm"
       },
       "test_target": "tests/surface/legacy_registry.rs#isolation"
@@ -97670,7 +97670,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-18",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS HashAlgorithm"
       },
       "test_target": "tests/surface/legacy_registry.rs#isolation"
@@ -98111,7 +98111,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-2",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS ClientCertificateType Identifiers"
       },
       "test_target": "tests/surface/legacy_registry.rs#isolation"
@@ -98771,7 +98771,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-4",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS Cipher Suites"
       },
       "test_target": "tests/surface/algorithms.rs#registry"
@@ -115185,7 +115185,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-5",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS ContentType"
       },
       "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
@@ -115614,7 +115614,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-6",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS Alerts"
       },
       "test_target": "crates/brynja-core/tests/alerts.rs#registry"
@@ -117260,7 +117260,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-7",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS HandshakeType"
       },
       "test_target": "tests/surface/handshake_types.rs#registry"
@@ -118287,7 +118287,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-8",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS Supported Groups"
       },
       "test_target": "tests/surface/algorithms.rs#registry"
@@ -119103,7 +119103,7 @@
         },
         "references": [
           {
-            "data": "draft-connolly-tls-mlkem-key-agreement-05",
+            "data": "RFC-ietf-tls-mlkem-10",
             "type": "draft"
           }
         ]
@@ -119140,7 +119140,7 @@
         },
         "references": [
           {
-            "data": "draft-connolly-tls-mlkem-key-agreement-05",
+            "data": "RFC-ietf-tls-mlkem-10",
             "type": "draft"
           }
         ]
@@ -119213,7 +119213,7 @@
         },
         "references": [
           {
-            "data": "draft-connolly-tls-mlkem-key-agreement-05",
+            "data": "RFC-ietf-tls-mlkem-10",
             "type": "draft"
           }
         ]
@@ -121797,7 +121797,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-9",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS EC Point Formats"
       },
       "test_target": "tests/surface/legacy_registry.rs#isolation"
@@ -121974,7 +121974,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-pskkeyexchangemode",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS PskKeyExchangeMode"
       },
       "test_target": "tests/surface/psk_modes.rs#registry"
@@ -122123,7 +122123,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-rrc-message-types",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS RRC Message Types"
       },
       "test_target": "tests/requirements/dtls_routability.rs#registry"
@@ -122312,7 +122312,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-signaturescheme",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS SignatureScheme"
       },
       "test_target": "tests/surface/algorithms.rs#registry"
@@ -139913,7 +139913,7 @@
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-sslkeylogfile-labels",
-        "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
+        "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
         "title": "TLS SSLKEYLOGFILE Labels"
       },
       "test_target": "crates/brynja-test-support/tests/keylog.rs#every_pinned_label_encodes_one_exact_line"

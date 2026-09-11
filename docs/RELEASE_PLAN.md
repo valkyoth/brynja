@@ -4355,8 +4355,9 @@ Status: awaiting green CI
 
 Progress: the candidate implements ordinary cSHAKE128/256 and default-off hosted
 sponge constructors. Focused implementation verification and the owner-supplied
-exceptional pentest/retest passed. Fresh native observations and final release checks remain pending.
-The owner approved the full gate required by the nightly verifier update after native collection succeeds.
+exceptional pentest/retest passed. Fresh native observations passed on Intel,
+AWS Arm and Mac M2. The owner-approved full gate required by the nightly
+verifier update is next; final release verification remains pending.
 
 Plan scope: Expose accelerated cSHAKE128/256 byte/bit, customization, function-name, one-shot and incremental XOF operations, and complete hosted adapters for the ordinary SHA-3/SHAKE/cSHAKE family.
 

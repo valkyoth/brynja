@@ -97,9 +97,10 @@ matching target features and actual hardware. Compiled negative/mutation tests
 cover input classification, ownership, prefix errors, lost routing and scalar
 substitution. Supplemental QEMU cannot substitute for native observations.
 
-The owner-supplied exceptional pentest/retest passed; fresh native cSHAKE/hosted
-collection remains a release prerequisite. Adding the optional hosted dependency changes that
-package's build closure, so the existing strict SHA-2 hardened native gate also
-requires a refreshed collection; its previous artifacts are not rewritten.
+The owner-supplied exceptional pentest/retest and [native cSHAKE/hosted
+collection](../assurance/cshake-execution-observations/v0.24.36/README.md) passed.
+The optional hosted dependency changes its package's build closure, so the
+strict SHA-2 hardened native gate also received refreshed observations on all
+three hosts; previous artifacts are preserved. Full release verification is pending.
 No independent cryptographic review, side-channel certification, migration
 qualification, FIPS validation or secret-erasure guarantee is claimed.

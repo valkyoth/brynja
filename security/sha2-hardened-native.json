@@ -1,24 +1,24 @@
 {
-  "schema": 1,
-  "capture_commit": "10c8bdfaccc2ec5aa6274db6e4267b714fd22421",
+  "capture_commit": "b6595c8e5e100014f68651e0ab6a974f2dd239af",
   "lanes": {
-    "linux-x86_64": {
-      "artifact": "assurance/sha2-hardened-native/linux-x86_64.json",
-      "sha256": "8a1d855738b46b018765821c510b42302e933479676883521b0cf5cf15a8e1df",
-      "cpu": "Intel(R) Xeon(R) Platinum 8488C",
-      "reviewed": true
+    "apple-aarch64": {
+      "artifact": "assurance/sha2-hardened-native/apple-aarch64-v02436.json",
+      "cpu": "Apple M2 Pro",
+      "reviewed": true,
+      "sha256": "690e26cf076c9d3fd09cea55e1ca1445a24758c275e675ef58c6ed0c1ab857df"
     },
     "linux-aarch64": {
-      "artifact": "assurance/sha2-hardened-native/linux-aarch64.json",
-      "sha256": "ada877473957e04ed276fe03bacf5989aab51a6b964ec52b4e07b053286c903e",
+      "artifact": "assurance/sha2-hardened-native/linux-aarch64-v02436.json",
       "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd40; CPU revision : 1",
-      "reviewed": true
+      "reviewed": true,
+      "sha256": "b7a03a1b6436ccdd80c8cb078c94fcedddf279c3724660bdd1ada883a87b7d65"
     },
-    "apple-aarch64": {
-      "artifact": "assurance/sha2-hardened-native/apple-aarch64.json",
-      "sha256": "5577fcd31ebd917290d4797312d6cd227a689166b0ff8b324758128d6409a632",
-      "cpu": "Apple M2 Pro",
-      "reviewed": true
+    "linux-x86_64": {
+      "artifact": "assurance/sha2-hardened-native/linux-x86_64-v02436.json",
+      "cpu": "Intel(R) Xeon(R) Platinum 8488C",
+      "reviewed": true,
+      "sha256": "9ff98f2c8f155bc8027dcfb98d5e73da0e74de44da33392a6b963f127b8c2620"
     }
-  }
+  },
+  "schema": 1
 }

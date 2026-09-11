@@ -1,8 +1,8 @@
 # Brynja v0.24.36
 
-Status: implementation, focused verification and owner-supplied exceptional
-pentest/retest complete. Fresh native collection, approved full release checks
-and green GitHub/CodeQL are pending. This candidate is not yet tag-ready.
+Status: implementation, focused verification, owner-supplied exceptional
+pentest/retest and three-host native collection complete. The approved full
+release sweep and green GitHub/CodeQL are pending. This candidate is not yet tag-ready.
 
 ## cSHAKE CPU and hosted sponge APIs
 
@@ -38,8 +38,8 @@ native collection succeeds. No full-gate PASS is claimed yet.
 
 Ordinary execution remains public-data-only and non-erasing. Hardened Keccak
 acceleration is a later milestone. Previous native kernel/high-level observations
-do not count as fresh cSHAKE execution evidence. The new hosted package closure
-also requires refreshing the strict SHA-2 hardened native records before tagging.
+do not count as fresh cSHAKE execution evidence. [New cSHAKE observations](../assurance/cshake-execution-observations/v0.24.36/README.md)
+and refreshed strict SHA-2 hardened records now cover Intel, AWS Arm and Mac M2.
 
 The facade advances to 0.24.36, with **zero crates.io publications** selected.
 The next public checkpoint remains v0.25.2. There is no independent cryptographic

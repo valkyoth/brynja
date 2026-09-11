@@ -4454,7 +4454,9 @@ Exit criteria:
 
 ### v0.24.39 - TupleHash Accelerated Public Operations
 
-Status: planned
+Status: awaiting pentest
+
+Implementation and focused development verification completed; exceptional owner pentest, fresh native qualification and final release checks remain pending.
 
 Plan scope: Integrate all four TupleHash/TupleHashXOF identities with hardened CPU-backed cSHAKE while preserving exact item writers, byte/bit tuples, fixed and extendable outputs and explicit output ownership.
 

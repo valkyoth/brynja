@@ -16,6 +16,9 @@ mod output;
 mod secret_encoding;
 mod xof;
 
+#[cfg(feature = "hardened-execution")]
+pub mod execution;
+
 pub use brynja_hash_sha3::{Fips202BitString, Fips202BitsError, Fips202Output};
 pub use error::TupleHashError;
 pub use fixed::{HardenedTupleHash128, HardenedTupleHash256, TupleHash128, TupleHash256};

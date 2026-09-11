@@ -96,10 +96,11 @@ def test_baselines(no_default: dict, all_features: dict) -> None:
         ("hardened-execution", ["brynja-hash-sha3/static-execution"]),
         ("runtime-execution", ["brynja-hash-sha3/runtime-execution"]),
     ):
-        changed = copy.deepcopy(all_features)
-        package(changed, "brynja-mac-kmac")["features"][feature] = replacement
-        require_rejection(changed, "all-features", "feature policy differs",
-                          "a weakened or default-on KMAC execution feature closure")
+        for name in ("brynja-mac-kmac", "brynja-hash-tuple"):
+            changed = copy.deepcopy(all_features)
+            package(changed, name)["features"][feature] = replacement
+            require_rejection(changed, "all-features", "feature policy differs",
+                              f"a weakened or default-on {name} execution feature closure")
     for replacement in ([], ["static-execution"], ["brynja-crypto-cpu/runtime-execution"]):
         changed = copy.deepcopy(all_features)
         package(changed, "brynja-hash-sha3")["features"]["hardened-execution"] = replacement
@@ -481,7 +482,7 @@ def main() -> int:
                 f"{legacy} smuggled into {modern}",
             )
     reject_invalid_and_exhausted(all_features)
-    print("workspace policy rejects 46 package-class, external-admission, and feature-graph regressions")
+    print("workspace policy rejects 51 package-class, external-admission, and feature-graph regressions")
     return 0
 
 

@@ -1,0 +1,20 @@
+[workspace]
+
+[package]
+name = "brynja-tuplehash-execution-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-hash-tuple = { path = "../../crates/brynja-hash-tuple", default-features = false, features = ["runtime-execution"] }
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", default-features = false, features = ["hardened-execution", "runtime-execution"] }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", default-features = false, features = ["runtime-execution"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"

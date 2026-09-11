@@ -16,6 +16,19 @@ pub enum TupleHashError {
     SecretMemory,
     /// The underlying state was already consumed.
     StateConsumed,
+    /// Required acceleration authority was not supplied.
+    #[cfg(feature = "hardened-execution")]
+    AccelerationUnavailable,
+    /// The selected backend failed; never authorizes portable fallback.
+    #[cfg(feature = "hardened-execution")]
+    Execution(brynja_hash_sha3::hardened_execution::Error),
+}
+
+#[cfg(feature = "hardened-execution")]
+impl From<brynja_hash_sha3::hardened_execution::Error> for TupleHashError {
+    fn from(error: brynja_hash_sha3::hardened_execution::Error) -> Self {
+        Self::Execution(error)
+    }
 }
 
 impl From<brynja_hash_sha3::HardenedSha3Error> for TupleHashError {

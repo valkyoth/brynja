@@ -169,7 +169,9 @@ def validate(root: Path) -> None:
     require(output, "HardenedSha3SecretOutput", "typed secret output")
 
     manifest = tomllib.loads(loaded[MANIFEST])
-    if manifest.get("features") != {"default": []}:
+    if manifest.get("features") != {"default": [],
+        "hardened-execution": ["brynja-hash-sha3/hardened-execution"],
+        "runtime-execution": ["hardened-execution", "brynja-hash-sha3/runtime-execution"]}:
         fail("TupleHash feature boundary changed")
     if manifest.get("dependencies") != {
         "brynja-core": {"workspace": True},
@@ -225,9 +227,9 @@ def validate(root: Path) -> None:
         (README, "no third-party dependency"),
     ):
         require(loaded[path], token, "TupleHash evidence closure")
-    if loaded[MIRI].count("-p brynja-hash-tuple") != 2:
+    if loaded[MIRI].count("-p brynja-hash-tuple") != 4:
         fail("TupleHash Miri command inventory changed")
-    if loaded[SANITIZER].count("-p brynja-hash-tuple") != 2:
+    if loaded[SANITIZER].count("-p brynja-hash-tuple") != 3:
         fail("TupleHash sanitizer command inventory changed")
     for path, expected_hash in HASHES.items():
         if hashlib.sha256((root / path).read_bytes()).hexdigest() != expected_hash:

@@ -141,6 +141,12 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
 
 python3 scripts/kmac/check-kmac-execution.py --asan
 
+python3 scripts/tuplehash/check-tuplehash-execution.py --asan
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
+    -p brynja-hash-tuple --features hardened-execution --lib --test execution \
+    --target x86_64-unknown-linux-gnu
+
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
     -p brynja-hash-tuple \
     --test api \

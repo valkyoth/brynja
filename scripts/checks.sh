@@ -148,6 +148,12 @@ cargo clippy --locked --manifest-path assurance/kmac-public-api/Cargo.toml --all
 python3 scripts/tuplehash/check-tuplehash.py
 python3 scripts/tuplehash/test-tuplehash.py
 python3 scripts/tuplehash/check-tuplehash-differential.py
+python3 scripts/tuplehash/check-tuplehash-execution.py
+python3 scripts/tuplehash/check-tuplehash-execution-package.py
+python3 scripts/tuplehash/check-tuplehash-execution-codegen.py
+python3 scripts/tuplehash/test-tuplehash-execution-policy.py
+python3 scripts/tuplehash/test-tuplehash-execution-native.py
+cargo clippy --locked --offline --manifest-path assurance/tuplehash-execution/Cargo.toml --all-targets -- -D warnings
 scripts/tuplehash/check-tuplehash-codegen.sh
 cargo test --locked --manifest-path assurance/tuplehash-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/tuplehash-public-api/Cargo.toml \

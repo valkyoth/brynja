@@ -147,6 +147,8 @@ quick_tuplehash() {
 }
 
 full_tuplehash() {
+    run_miri -p brynja-hash-tuple --features hardened-execution --lib execution
+    run_miri -p brynja-hash-tuple --features hardened-execution --test execution
     run_miri -p brynja-hash-tuple --test api \
         forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch
     run_miri -p brynja-hash-tuple --tests

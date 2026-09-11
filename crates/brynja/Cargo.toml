@@ -1,6 +1,6 @@
 [package]
 name = "brynja"
-version = "0.24.38"
+version = "0.24.39"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

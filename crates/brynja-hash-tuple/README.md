@@ -59,6 +59,21 @@ and failure latch before output or a borrowing reader is returned; observable
 `item_count()` is consequently zero after the finalization borrow ends.
 Caller-owned inputs and copied outputs remain the caller's responsibility.
 
+## Optional accelerated execution
+
+The default-off `hardened-execution` feature adds `execution::TupleHash128/256`,
+`execution::TupleHashXof128/256` and separate `Hardened*` variants over authorized
+hardened cSHAKE. `runtime-execution` additionally forwards hosted support; the
+leaf remains `no_std`. Existing portable constructors and facade defaults stay
+unchanged. The new execution APIs are undergoing v0.24.39 qualification.
+
+Execution fixed finalizers consume their state; item writers and XOF readers
+exclusively borrow it. Preferred selection only falls back when no authority
+was supplied. Secret outputs remain typed, public declassification is explicit,
+and failed operations clear owned state without switching backends. See the
+[execution API and security guide](../../docs/tuplehash-accelerated-execution.md)
+for output scratch, platform requirements and honest clearing limitations.
+
 ## Cryptography Verification Status
 
 | Function family | Implemented | Independently verified | FIPS 140-3 validated |

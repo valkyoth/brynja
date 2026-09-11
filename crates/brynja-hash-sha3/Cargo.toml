@@ -15,6 +15,7 @@ default = []
 cpu = ["dep:brynja-crypto-cpu"]
 static-execution = ["cpu", "brynja-crypto-cpu/static-execution"]
 runtime-execution = ["static-execution", "brynja-crypto-cpu/runtime-execution"]
+hardened-execution = ["static-execution", "brynja-crypto-cpu/hardened-execution"]
 
 [dependencies]
 brynja-core = { workspace = true }

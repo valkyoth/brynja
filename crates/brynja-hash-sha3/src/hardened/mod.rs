@@ -1,3 +1,5 @@
+#[cfg(feature = "hardened-execution")]
+pub mod accelerated;
 mod cshake;
 mod fixed;
 mod output;

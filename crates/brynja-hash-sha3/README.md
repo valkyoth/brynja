@@ -60,8 +60,16 @@ completion does not certify acceleration, independent review or FIPS validation.
 The cSHAKE execution candidate adds `execution::{Cshake128, Cshake256}` with
 byte/bit message, name and customization inputs, retained routes and transactional
 incremental output. All inputs require `Public`/`PublicBits` classification.
-Its exceptional review and fresh native collection remain pending.
+Its exceptional review and native collection passed for the signed ordinary
+execution milestone; those observations do not qualify new hardened execution.
 See [cSHAKE and optional hosted sponge APIs](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md).
+
+The separate default-off `hardened-execution` feature exposes affine accelerated
+SHA-3/SHAKE/cSHAKE owners with private erasing permutation scratch, explicit
+public declassification, and typed secret output. It does not change portable
+defaults or automatically enable acceleration in KMAC or other constructions.
+Fresh exceptional review and native qualification are still required for this
+new implementation. See [hardened Keccak APIs and limitations](https://github.com/valkyoth/brynja/blob/main/docs/hardened-keccak-execution.md).
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};

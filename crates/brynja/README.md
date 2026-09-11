@@ -37,7 +37,7 @@ All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged a
 
 Default hash APIs remain portable. Separate CPU packages expose default-off raw static and platform-limited [hosted execution authority](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md). Opt-in leaf features provide complete ordinary SHA-2, [SHA-3/SHAKE](https://github.com/valkyoth/brynja/blob/main/docs/sha3-ordinary-execution.md) and [cSHAKE execution](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md); separate [hardened SHA-2 execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md) owns secret-bearing state. These paths have project-owned retest and native functional evidence, not independent verification or FIPS validation. See the [acceleration plan](https://github.com/valkyoth/brynja/blob/main/docs/ACCELERATION_USABILITY_AUDIT.md) for later families and the linked guides for exact platform restrictions.
 
-Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.36** APIs. For published foundation APIs: `cargo add brynja --no-default-features`. For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
+Crates.io supplies **0.20.0**; the hash/MAC examples below require this repository's unpublished **0.24.37** APIs. For published foundation APIs: `cargo add brynja --no-default-features`. For unreleased APIs from a local checkout: `cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features`.
 
 ## Examples
 

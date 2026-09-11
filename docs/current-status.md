@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.35 signed. The v0.24.36 [cSHAKE and hosted sponge candidate](cshake-ordinary-execution.md) adds opt-in ordinary execution and hosted constructors without changing portable defaults. Exceptional pentest/retest, fresh three-host native collection and the owner-approved full local verification sweep passed. Tagging awaits green GitHub/CodeQL and owner permission. No publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.36 signed. The v0.24.37 hardened Keccak candidate implements opt-in erasing permutation scratch and SHA-3/SHAKE/cSHAKE absorbing/reader owners. Focused package, lifecycle, compiler cleanup, Miri/ASan and native AMD/emulated Arm checks pass. Exceptional pentest, fresh three-platform native qualification and final release verification remain pending. No publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

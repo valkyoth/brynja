@@ -15,6 +15,7 @@ python3 scripts/sha2/check-sha2-hardened-native-evidence.py
 verify() {
     python3 scripts/release/run-verification.py command -- "$@"
 }
+python3 scripts/sha3/check-keccak-hardened-native.py
 
 scripts/checks.sh
 scripts/assurance/check-bare-metal.sh

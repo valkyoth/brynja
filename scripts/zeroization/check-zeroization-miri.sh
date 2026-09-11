@@ -105,6 +105,9 @@ quick_sha3() {
 }
 
 full_sha3() {
+    run_miri -p brynja-hash-sha3 --features hardened-execution --lib hardened::accelerated::reader::tests
+    run_miri -p brynja-hash-sha3 --features hardened-execution --lib hardened::accelerated::engine::tests::every_memory_region_is_explicitly_cleared
+    run_miri -p brynja-crypto-cpu --features hardened-execution --lib hardened_execution::keccak::tests::all_seven_regions_clear
     run_miri -p brynja-hash-sha3 --features static-execution --lib execution
     run_miri -p brynja-crypto-cpu-std --features sponge-execution --lib sponge::tests::portable_sponge
     run_miri -p brynja-hash-sha3 --features static-execution --test execution execution_smoke

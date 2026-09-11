@@ -15,6 +15,8 @@ mod error;
 #[cfg(feature = "static-execution")]
 pub mod execution;
 mod hardened;
+#[cfg(feature = "hardened-execution")]
+pub use hardened::accelerated as hardened_execution;
 mod keccak;
 mod sha3_224;
 mod sha3_256;

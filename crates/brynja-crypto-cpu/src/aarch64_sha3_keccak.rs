@@ -114,3 +114,37 @@ fn store2(vector: uint64x2_t) -> [u64; 2] {
     unsafe { vst1q_u64(words.as_mut_ptr(), vector) };
     words
 }
+
+#[cfg(feature = "hardened-execution")]
+pub(crate) fn permute_secret(
+    scratch: &mut crate::hardened_execution::keccak_scratch::KeccakScratch,
+) {
+    // SAFETY: The private dispatcher requires complete NEON/SHA3 authority.
+    // Every vector accesses the first 16 initialized bytes of an owned array.
+    unsafe { permute_secret_sha3(scratch) }
+}
+
+#[cfg(feature = "hardened-execution")]
+#[target_feature(enable = "sha3")]
+unsafe fn permute_secret_sha3(s: &mut crate::hardened_execution::keccak_scratch::KeccakScratch) {
+    for constant in ROUND_CONSTANTS {
+        s.theta_rho_pi();
+        for row in 0..5 {
+            for first in [0, 2] {
+                s.stage_chi(row, first, 2);
+                // SAFETY: Each source/destination owns 32 bytes; these unaligned
+                // loads/stores use only its first 16 bytes and never alias writes.
+                unsafe {
+                    let current = vld1q_u64(s.current.as_ptr().cast());
+                    let next = vld1q_u64(s.next.as_ptr().cast());
+                    let following = vld1q_u64(s.following.as_ptr().cast());
+                    let result = vbcaxq_u64(current, following, next);
+                    vst1q_u64(s.current.as_mut_ptr().cast(), result);
+                }
+                s.commit_chi(row, first, 2);
+            }
+            s.last_chi(row);
+        }
+        s.iota(constant);
+    }
+}

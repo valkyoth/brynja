@@ -346,7 +346,7 @@ def validate(root: Path) -> None:
         require(miri, token, "SHA-3 Miri coverage")
     require(miri, "--features static-execution --lib execution", "execution Miri faults")
     require(miri, "--features static-execution --test execution execution_smoke", "execution Miri smoke")
-    if miri.count("-p brynja-hash-sha3") != 9:
+    if miri.count("-p brynja-hash-sha3") != 11:
         fail("SHA-3 Miri package coverage changed")
     sanitizer = read(root, SANITIZER_SCRIPT)
     require(
@@ -476,7 +476,7 @@ def validate(root: Path) -> None:
         "publish": "crates-io",
         "required": ["brynja-core", "brynja-hash-core"],
         "optional": {"cpu": "brynja-crypto-cpu"},
-        "features": ["static-execution", "runtime-execution"],
+        "features": ["static-execution", "runtime-execution", "hardened-execution"],
     }:
         fail("SHA-3 package classification changed")
 

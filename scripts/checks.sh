@@ -123,6 +123,10 @@ python3 scripts/sha3/cshake_execution_vectors.py
 cargo clippy --locked --offline --manifest-path assurance/sha3-execution/Cargo.toml --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
 python3 scripts/sha3/test-sha3-public-api.py
 python3 scripts/sha3/check-sha3-hardened.py
+python3 scripts/sha3/check-keccak-hardened.py
+python3 scripts/sha3/check-keccak-hardened-codegen.py
+python3 scripts/sha3/test-keccak-hardened.py --compiled
+python3 scripts/sha3/test-keccak-hardened-native.py
 python3 scripts/sha3/test-sha3-hardened.py
 scripts/sha3/check-sha3-hardened-codegen.sh
 scripts/sha3/check-sha3-cpu-codegen.sh

@@ -4351,14 +4351,15 @@ Exit criteria:
 
 ### v0.24.36 - cSHAKE CPU And Hosted Sponge APIs
 
-Status: awaiting green CI
+Status: released
 
 Progress: the candidate implements ordinary cSHAKE128/256 and default-off hosted
 sponge constructors. Focused implementation verification and the owner-supplied
 exceptional pentest/retest passed. Fresh native observations passed on Intel,
 AWS Arm and Mac M2. The owner-approved full local gate required by the nightly
 verifier update passed, including full Miri/ASan and all 29 Kani harnesses.
-Tagging awaits green GitHub/CodeQL and explicit owner permission.
+GitHub/CodeQL passed for `17fd36b6`; signed tag `v0.24.36` was pushed with
+owner permission. No crates were selected for publication.
 
 Plan scope: Expose accelerated cSHAKE128/256 byte/bit, customization, function-name, one-shot and incremental XOF operations, and complete hosted adapters for the ordinary SHA-3/SHAKE/cSHAKE family.
 
@@ -4385,7 +4386,15 @@ Exit criteria:
 
 ### v0.24.37 - Hardened Keccak Acceleration
 
-Status: planned
+Status: awaiting pentest
+
+Progress: owner-backed AVX2/AArch64 permutation scratch and affine hardened
+SHA-3/SHAKE/cSHAKE absorbing/reader APIs are implemented in the working tree.
+Native AMD and emulated Arm kernel comparisons, high-level byte/bit and lifecycle
+tests, packaged ownership negatives, live destructor mutants, endpoint compiler
+cleanup checks, targeted Miri/ASan and no_std compilation pass. Source policies
+and default-off feature closures include the new owners. Exceptional pentest,
+fresh native qualification and final release verification remain required.
 
 Plan scope: Implement sealed hardened accelerated SHA-3/SHAKE/cSHAKE absorb and reader owners with owner-backed permutation scratch, mandatory destruction and explicit public versus typed-secret output.
 

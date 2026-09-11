@@ -8,6 +8,8 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
+OPERATION = r'^fn hardened_execution::<impl at [^\n]*?/hardened_execution/mod[.]rs:[^\n]*>::drop\(_1: &mut (?:hardened_execution::)?Operation<'
+SCRATCH_WIPE = r'7Scratch4wipe'
 
 
 def require(value, label):
@@ -30,7 +32,7 @@ def check(cpu, sha2):
     require(scratch.count('= clear_owned_region(') == 2, 'two complete CPU scratch regions')
     require('[u8; 640]' in scratch and '[u8; 64]' in scratch, 'scratch region widths')
     require('Scratch::wipe' in one_body(cpu['mir'], r'^fn scratch::.*::drop\('), 'scratch Drop')
-    operation = one_body(cpu['mir'], r'^fn hardened_execution::.*::drop\(.*&mut Operation')
+    operation = one_body(cpu['mir'], OPERATION)
     require('Scratch::wipe' in operation and 'quarantine' in operation, 'operation guard')
     update = one_body(sha2['mir'], r'^fn hardened_execution::engine::.*::drop\(')
     require('HardenedSha2Owner::wipe' in update and 'const true' in update, 'update unwind failure guard')
@@ -43,7 +45,7 @@ def check(cpu, sha2):
         require('HardenedSha2Owner' in sha2[extension] and 'wipe' in sha2[extension], 'emitted hash owner ' + extension)
     # LLVM must preserve calls for both exact memory extents, not only symbols.
     bodies = re.findall(r'^define [\s\S]*?^}', cpu['ll'], re.M)
-    wipes = [body for body in bodies if re.search(r'Scratch.*wipe', body.splitlines()[0])]
+    wipes = [body for body in bodies if re.search(SCRATCH_WIPE, body.splitlines()[0])]
     require(len(wipes) == 1, 'unique LLVM scratch wipe')
     for width in (640, 64):
         require(re.search(r'call .*clear_owned_region.*i(?:32|64)[^\n]*\b' + str(width) + r'\)', wipes[0]), 'LLVM clear width ' + str(width))

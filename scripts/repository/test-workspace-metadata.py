@@ -89,6 +89,11 @@ def test_baselines(no_default: dict, all_features: dict) -> None:
                 f"workspace validator rejected {mode}: {accepted.stderr}"
             )
     md5_workspace_fixtures.check(no_default, all_features, package, node, require_rejection)
+    for replacement in ([], ["static-execution"], ["brynja-crypto-cpu/runtime-execution"]):
+        changed = copy.deepcopy(all_features)
+        package(changed, "brynja-hash-sha3")["features"]["hardened-execution"] = replacement
+        require_rejection(changed, "all-features", "feature policy differs",
+                          "a weakened hardened Keccak feature closure")
 
 def test_inventory_and_names(baseline: dict) -> None:
     ambiguous = copy.deepcopy(baseline)

@@ -1,13 +1,17 @@
-//! Opt-in secret-bearing SHA-2 compression with owner-backed temporary storage.
+//! Opt-in secret-bearing SHA-2 compression and Keccak permutation scratch.
 //!
 //! This is a raw block API, not a complete hash. State and block are borrowed
 //! caller-owned secret buffers; the caller must clear them. Private schedule and
 //! vector staging clear after every operation, on unwind and on Drop. No claim
 //! covers register values, compiler-created copies/spills, caches or aborts.
-//! Prefer complete hardened hash APIs in `brynja-hash-sha2`.
+//! Prefer complete hardened hash APIs in `brynja-hash-sha2` and
+//! `brynja-hash-sha3`. The new Keccak route is under v0.24.37 qualification.
 
+mod keccak;
+pub(crate) mod keccak_scratch;
 pub(crate) mod scratch;
 use crate::static_execution::{self as raw, Error, Kernel, Report};
+pub use keccak::KeccakSession;
 use scratch::Scratch;
 
 enum Route<'a> {

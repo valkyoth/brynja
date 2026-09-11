@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "c803046d15ce2f335454013889c8ff6303c952b25522d3caeb71494dd5e5317d"
+EXPECTED_POLICY_SHA256 = "a51833ece5f24f25457d45f84d354a85b30c526312d6ffcff1301c2ceb7c2ef9"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,9 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/hardened_execution/keccak.rs"): "hardened-keccak-authority-and-cleanup",
+    (CPU, "src/hardened_execution/keccak_scratch.rs"): "hardened-keccak-owned-scratch",
+    (CPU, "src/hardened_execution/keccak/tests.rs"): "hardened-keccak-lifecycle-tests",
     (CPU, "src/hardened_execution/mod.rs"): "hardened-authority-and-operation-cleanup",
     (CPU, "src/hardened_execution/scratch.rs"): "hardened-owner-backed-kernel-scratch",
     (CPU, "src/hardened_execution/tests.rs"): "hardened-kernel-and-lifecycle-tests",

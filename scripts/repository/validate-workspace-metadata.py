@@ -225,7 +225,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-crypto-cpu-std":
         expected["runtime-execution"] = ["brynja-crypto-cpu/runtime-execution"]
         expected["sponge-execution"] = ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"]
-    if name == "brynja-hash-sha2":
+    if name in {"brynja-hash-sha2", "brynja-hash-sha3"}:
         expected["hardened-execution"] = ["static-execution", "brynja-crypto-cpu/hardened-execution"]
     if name in {"brynja-hash-sha2", "brynja-hash-sha3"}:
         expected["static-execution"] = ["cpu", "brynja-crypto-cpu/static-execution"]

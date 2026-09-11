@@ -109,3 +109,35 @@ fn store4(vector: __m256i) -> [u64; 4] {
     unsafe { _mm256_storeu_si256(words.as_mut_ptr().cast::<__m256i>(), vector) };
     words
 }
+
+#[cfg(feature = "hardened-execution")]
+pub(crate) fn permute_secret(
+    scratch: &mut crate::hardened_execution::keccak_scratch::KeccakScratch,
+) {
+    // SAFETY: Only the private hardened dispatcher calls this entry, after the
+    // complete AVX2 authority check. Every access is an exact live 32-byte field.
+    unsafe { permute_secret_avx2(scratch) }
+}
+
+#[cfg(feature = "hardened-execution")]
+#[target_feature(enable = "avx2")]
+unsafe fn permute_secret_avx2(s: &mut crate::hardened_execution::keccak_scratch::KeccakScratch) {
+    for constant in ROUND_CONSTANTS {
+        s.theta_rho_pi();
+        for row in 0..5 {
+            s.stage_chi(row, 0, 4);
+            // SAFETY: The three arrays each own 32 live initialized bytes;
+            // unaligned intrinsics access exactly that extent, without aliasing.
+            unsafe {
+                let current = _mm256_loadu_si256(s.current.as_ptr().cast());
+                let next = _mm256_loadu_si256(s.next.as_ptr().cast());
+                let following = _mm256_loadu_si256(s.following.as_ptr().cast());
+                let result = _mm256_xor_si256(current, _mm256_andnot_si256(next, following));
+                _mm256_storeu_si256(s.current.as_mut_ptr().cast(), result);
+            }
+            s.commit_chi(row, 0, 4);
+            s.last_chi(row);
+        }
+        s.iota(constant);
+    }
+}

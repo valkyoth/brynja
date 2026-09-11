@@ -4419,13 +4419,14 @@ Exit criteria:
 
 ### v0.24.38 - KMAC Accelerated Public Operations
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Progress: default-off hardened KMAC/KMACXOF execution owners, explicit selection,
 consuming fixed outputs and exclusively borrowed XOF readers are implemented.
 Independent bit-level, packaged ownership, cleanup mutation and compiler checks
-cover the new paths. Exceptional pentest, fresh three-platform native KMAC
-collection and final release verification remain pending. See
+cover the new paths. Exceptional pentest/retest passed. Fresh three-platform
+native KMAC collection and final release verification remain blocking prerequisites
+before final GitHub/CodeQL approval and tagging. See
 [the working API guide](kmac-accelerated-execution.md).
 
 Plan scope: Route all four KMAC/KMACXOF identities through the hardened accelerated cSHAKE boundary, including keyed initialization, byte/bit messages, fixed tags, verification and incremental typed-secret XOF output.

@@ -1,6 +1,6 @@
 # Brynja v0.24.38
 
-Status: implemented; awaiting exceptional pentest, fresh native KMAC evidence
+Status: implemented; exceptional pentest/retest PASS; awaiting fresh native KMAC evidence
 and final release/GitHub/CodeQL checks.
 
 Adds default-off `brynja_mac_kmac::execution` APIs for KMAC128/256 and
@@ -26,6 +26,11 @@ reads, invalid tags/widths, quarantine, ownership negatives, compiled cleanup
 mutants, compiler evidence and scoped Miri/ASan. Fresh Intel/Linux Arm/Apple Arm
 KMAC evidence must follow retest before final release checking. Older Keccak-only
 records cannot qualify the new keyed high-level KMAC APIs.
+
+The [owner-supplied retest](../security/pentest/v0.24.38.md) confirms both
+Low/informational notes addressed with no new issues. Release preflight accepts
+the existing SHA-2/Keccak native records but stops at the empty KMAC evidence
+index; final release qualification must follow fresh three-platform collection.
 
 Development verification completed:
 

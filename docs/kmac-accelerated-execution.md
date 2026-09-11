@@ -1,7 +1,7 @@
 # KMAC accelerated operations
 
-v0.24.38 implements all four KMAC/KMACXOF execution APIs; exceptional pentest,
-fresh native collection and final release qualification remain pending. Existing
+v0.24.38 implements all four KMAC/KMACXOF execution APIs; exceptional pentest
+and retest passed. Fresh native collection and final release qualification remain pending. Existing
 portable family completion is unchanged. No independent cryptographic review,
 FIPS validation, performance improvement or deployment approval is claimed.
 

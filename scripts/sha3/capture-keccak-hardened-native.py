@@ -8,6 +8,15 @@ import sys
 import keccak_hardened_native as evidence
 
 
+def kernel_command():
+    # libtest's nocapture mode can append stdout to its unterminated test-name
+    # prefix. Captured successful output gives markers their own complete lines.
+    return [
+        'cargo', '+1.98.1', 'test', '--locked', '--offline', '-p', 'brynja-crypto-cpu',
+        '--features', 'hardened-execution', '--lib', 'hardened_execution::keccak::tests',
+        '--', '--show-output', '--test-threads=1']
+
+
 def capture(lane, output):
     host, shared = evidence.host, evidence.shared
     env = host.clean_environment()
@@ -42,10 +51,7 @@ def capture(lane, output):
     results = {'package': host.execute([sys.executable, 'scripts/sha3/check-keccak-hardened.py', option], env)}
     static_env = dict(env, RUSTFLAGS='-C target-feature=' +
                       ('+avx2' if kernel == 'X86Keccak' else '+neon,+sha2,+sha3'))
-    results['kernel_tests'] = host.execute([
-        'cargo', '+1.98.1', 'test', '--locked', '--offline', '-p', 'brynja-crypto-cpu',
-        '--features', 'hardened-execution', '--lib', 'hardened_execution::keccak::tests',
-        '--', '--nocapture', '--test-threads=1'], static_env)
+    results['kernel_tests'] = host.execute(kernel_command(), static_env)
     results = {name: text.replace(str(evidence.ROOT), '<checkout>')
                for name, text in results.items()}
     record = {'schema': 1, 'commit': commit, 'lane': lane, 'target': target, 'kernel': kernel,

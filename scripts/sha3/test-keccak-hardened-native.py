@@ -1,7 +1,60 @@
 #!/usr/bin/env python3
 """Reject fabricated, incomplete, misbound and cross-lane native records."""
 import copy
+import importlib.util
+import os
+from pathlib import Path
+import subprocess
+import tempfile
 import keccak_hardened_native as evidence
+
+
+def libtest_output():
+    """Exercise the real libtest formatter, not only hand-written log fixtures."""
+    path = Path(__file__).with_name('capture-keccak-hardened-native.py')
+    spec = importlib.util.spec_from_file_location('capture', path)
+    capture = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(capture)
+    command = capture.kernel_command()
+    options = command[command.index('--') + 1:]
+    assert options == ['--show-output', '--test-threads=1']
+    assert 'host.execute(kernel_command(), static_env)' in path.read_text()
+    with tempfile.TemporaryDirectory(prefix='brynja-libtest-format-') as temporary:
+        root = Path(temporary)
+        source = root / 'formatter.rs'
+        executable = root / ('formatter.exe' if os.name == 'nt' else 'formatter')
+        source.write_text('''
+#[test] fn execution() {
+    println!("HARDENED_KECCAK_EXECUTION: {}; permutations=1024",
+             std::env::var("BRYNJA_FORMAT_TEST_KERNEL").unwrap());
+}
+#[test] fn cleanup() {}
+#[test] fn quarantine() {}
+#[test] fn ownership() {}
+''')
+        subprocess.run(['rustc', '+1.98.1', '--test', str(source), '-o', str(executable)],
+                       check=True, capture_output=True, text=True, timeout=60)
+        for lane in evidence.LANES:
+            value = record(lane)
+            env = dict(os.environ, BRYNJA_FORMAT_TEST_KERNEL=value['kernel'])
+            for threads in (1, 2):
+                run_options = [options[0], f'--test-threads={threads}']
+                output = subprocess.run([str(executable), *run_options], env=env,
+                    check=True, capture_output=True, text=True, timeout=30).stdout
+                value['results']['kernel_tests'] = output
+                evidence.record_check(value, lane, 'a' * 40, {'test-only.rs': 'b' * 64})
+            # Reproduce the old serialized output: its marker shares the test
+            # prefix. It must remain rejected rather than loosening the parser.
+            output = subprocess.run([str(executable), '--nocapture', '--test-threads=1'], env=env,
+                check=True, capture_output=True, text=True, timeout=30).stdout
+            value['results']['kernel_tests'] = output
+            try:
+                evidence.record_check(value, lane, 'a' * 40, {'test-only.rs': 'b' * 64})
+            except ValueError:
+                pass
+            else:
+                raise AssertionError('prefixed execution marker was accepted')
+    print('Real libtest output: captured markers pass; prefixed nocapture markers remain rejected')
 
 
 def record(lane):
@@ -59,6 +112,7 @@ def main():
         raise AssertionError('duplicate JSON accepted')
     gate = (evidence.ROOT / 'scripts/tag_gate.sh').read_text()
     assert '\npython3 scripts/sha3/check-keccak-hardened-native.py\n' in gate
+    libtest_output()
     print(f'Hardened Keccak native schema/identity/source/results rejects {count} regressions')
 
 

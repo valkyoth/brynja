@@ -65,3 +65,8 @@ approval fingerprint. Known scope retains affected checks; uncertain scope warns
 and runs the shared baseline, without granting release approval or marking
 deferred verification passed. Tagging retains all local approval/evidence gates.
 This CI-only follow-up does not change the native-capture input closure.
+
+Native capture follow-up: use libtest `--show-output` so execution markers remain
+standalone lines instead of sharing the serialized test-name prefix. Real Rust
+formatter regressions retain strict marker validation. No production Rust changed;
+collect Keccak evidence using the corrected capture-tool revision.

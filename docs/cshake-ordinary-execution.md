@@ -101,6 +101,8 @@ The owner-supplied exceptional pentest/retest and [native cSHAKE/hosted
 collection](../assurance/cshake-execution-observations/v0.24.36/README.md) passed.
 The optional hosted dependency changes its package's build closure, so the
 strict SHA-2 hardened native gate also received refreshed observations on all
-three hosts; previous artifacts are preserved. Full release verification is pending.
+three hosts; previous artifacts are preserved. Full local release verification
+passed, including the compiler matrix, full Miri/ASan and all 29 Kani harnesses.
+Tagging awaits green GitHub/CodeQL and explicit owner permission.
 No independent cryptographic review, side-channel certification, migration
 qualification, FIPS validation or secret-erasure guarantee is claimed.

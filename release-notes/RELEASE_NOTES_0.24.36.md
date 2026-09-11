@@ -1,8 +1,8 @@
 # Brynja v0.24.36
 
 Status: implementation, focused verification, owner-supplied exceptional
-pentest/retest and three-host native collection complete. The approved full
-release sweep and green GitHub/CodeQL are pending. This candidate is not yet tag-ready.
+pentest/retest, three-host native collection and the approved full local
+release sweep complete. Tagging awaits green GitHub/CodeQL and explicit owner permission.
 
 ## cSHAKE CPU and hosted sponge APIs
 
@@ -33,8 +33,12 @@ and ownership negatives, compiled algorithm/route/error mutants, native AVX2,
 supplemental AArch64 QEMU, focused Miri/ASan and Rust 1.90 compatibility.
 The freshness gate advanced Miri/ASan to `nightly-2026-09-11`; stable Rust remains
 1.98.1 and Kani's verifier host remains 1.90.0. This tool update requires explicit
-owner approval before the full gate; that approval is now granted for after
-native collection succeeds. No full-gate PASS is claimed yet.
+owner approval before the full gate; the approved sweep after native collection
+passed. It covered the Rust 1.90.0–1.98.1 matrix, full Miri/AddressSanitizer,
+all 29 Kani harnesses, repository/package policies, current dependency advisories,
+SBOM and official standards freshness. Reference-only IANA metadata and two
+stale assurance-inventory labels were corrected and regression-tested; no
+cryptographic source or native input changed after the clean retest/capture.
 
 Ordinary execution remains public-data-only and non-erasing. Hardened Keccak
 acceleration is a later milestone. Previous native kernel/high-level observations

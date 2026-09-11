@@ -68,7 +68,7 @@ adds erasing owners and typed secret outputs. [Ordinary SHA-3/SHAKE execution](d
 connects explicit CPU routes to complete public-data hashing and XOF APIs;
 its owner retest and [native functional collection](assurance/sha3-execution-observations/v0.24.35/README.md) passed. Further family integration remains planned.
 The [cSHAKE and hosted sponge candidate](docs/cshake-ordinary-execution.md) extends
-this opt-in public-data surface; its exceptional retest and [native collection](assurance/cshake-execution-observations/v0.24.36/README.md) passed. Final release verification remains pending.
+this opt-in public-data surface; its exceptional retest, [native collection](assurance/cshake-execution-observations/v0.24.36/README.md) and full local release verification passed. Tagging awaits green GitHub and CodeQL.
 See the [acceleration guide](docs/static-cpu-execution.md) for supported routes and
 deployment requirements. Independent review and FIPS status are separate claims.
 

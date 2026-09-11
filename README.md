@@ -67,6 +67,8 @@ authority. Separate [hardened SHA-2 execution](docs/sha2-hardened-execution.md)
 adds erasing owners and typed secret outputs. [Ordinary SHA-3/SHAKE execution](docs/sha3-ordinary-execution.md)
 connects explicit CPU routes to complete public-data hashing and XOF APIs;
 its owner retest and [native functional collection](assurance/sha3-execution-observations/v0.24.35/README.md) passed. Further family integration remains planned.
+The [cSHAKE and hosted sponge candidate](docs/cshake-ordinary-execution.md) extends
+this opt-in public-data surface; its exceptional review and native collection are pending.
 See the [acceleration guide](docs/static-cpu-execution.md) for supported routes and
 deployment requirements. Independent review and FIPS status are separate claims.
 

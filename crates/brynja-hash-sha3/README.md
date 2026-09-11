@@ -54,8 +54,14 @@ Reader convenience calls stage at most 168 bytes on the stack;
 caller-scratch APIs support arbitrary-sized transactional output without
 allocation. Every failure preserves the destination and retained reader state.
 See [selection, streaming and scratch examples](https://github.com/valkyoth/brynja/blob/main/docs/sha3-ordinary-execution.md).
-Owner retest, native Mac/AWS functional observations and required local release checks passed. Portable
+The SHA-3/SHAKE owner retest, native Mac/AWS observations and local release checks passed. Portable
 completion does not certify acceleration, independent review or FIPS validation.
+
+The cSHAKE execution candidate adds `execution::{Cshake128, Cshake256}` with
+byte/bit message, name and customization inputs, retained routes and transactional
+incremental output. All inputs require `Public`/`PublicBits` classification.
+Its exceptional review and fresh native collection remain pending.
+See [cSHAKE and optional hosted sponge APIs](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md).
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};

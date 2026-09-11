@@ -1,6 +1,8 @@
 #[path = "../../../crates/brynja-hash-sha3/tests/execution_cases/mod.rs"]
 mod cases;
-use brynja_crypto_cpu_std::execution as hosted;
+#[path = "../../../crates/brynja-hash-sha3/tests/cshake_execution_cases/mod.rs"]
+mod cshake_cases;
+use brynja_crypto_cpu_std::sponge as hosted;
 use brynja_hash_sha3::execution as api;
 
 fn run() -> Result<(), Box<dyn std::error::Error>> {
@@ -20,8 +22,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
             api::Mode::Portable
         },
     )?;
-    let host = hosted::Authority::new(
-        kernel,
+    let host = hosted::Sponge::new(
         match mode.as_str() {
             "hosted" => hosted::Mode::Require,
             "prefer" => hosted::Mode::Prefer,
@@ -34,16 +35,11 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         if mode == "static" {
             return Ok(selection.execution()?);
         }
-        match host
-            .session()
-            .map_err(|error| format!("hosted session: {error:?}"))?
-        {
-            Some(session) => Ok(api::Execution::from_runtime(session)?),
-            None => Ok(api::Execution::portable()),
-        }
+        Ok(host.execution()?)
     };
     let selected = route()?.route();
     let count = cases::run(route)?;
+    let cshake_count = cshake_cases::run(route)?;
     // Verify live owner loss also invalidates a reader before any output write.
     let mut reader = api::Shake128::new(route()?)?.finalize_xof()?;
     if matches!(selected, api::Route::Static(_) | api::Route::Runtime(_)) {
@@ -59,6 +55,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
     println!("SHA-3/SHAKE ordinary execution: PASS; cases={count}; route={selected:?}");
+    println!("cSHAKE ordinary execution: PASS; cases={cshake_count}; route={selected:?}");
     println!("hosted selection: {:?}", host.report().route);
     println!("public-only; independently verified: NO; FIPS validated: NO");
     Ok(())

@@ -4319,14 +4319,11 @@ Exit criteria:
 
 ### v0.24.35 - SHA-3 And SHAKE Ordinary CPU Integration
 
-Status: awaiting green CI
+Status: released
 
-Progress: the owner-supplied retest of `010fb9ba` is PASS at its stated
-Critical/High threshold. Native Mac/AWS functional evidence is collected on
-byte-identical source. The required impact-selected local release gate passed,
-including selected Miri/ASan/Kani and the supported compiler matrix. Green
-GitHub/CodeQL and explicit tag permission remain pending; evidence-only record
-updates do not request another source retest.
+Progress: owner retest and native Mac/AWS functional evidence passed, followed
+by the required local gate and owner-confirmed green GitHub/CodeQL. Signed
+`v0.24.35` points to `c78a46d3`. No crates were published.
 
 Plan scope: Connect all four SHA-3 hashes and both SHAKE XOFs to existing AVX2 and AArch64 SHA3 Keccak kernels with default-off leaf features, static/hosted selection and ordinary byte/bit absorbing and squeezing APIs.
 
@@ -4354,7 +4351,12 @@ Exit criteria:
 
 ### v0.24.36 - cSHAKE CPU And Hosted Sponge APIs
 
-Status: planned
+Status: awaiting pentest
+
+Progress: the candidate implements ordinary cSHAKE128/256 and default-off hosted
+sponge constructors. Focused implementation verification passed. Exceptional
+owner pentest, fresh native observations and final release checks remain pending.
+The nightly verifier update requires owner approval before the full gate.
 
 Plan scope: Expose accelerated cSHAKE128/256 byte/bit, customization, function-name, one-shot and incremental XOF operations, and complete hosted adapters for the ordinary SHA-3/SHAKE/cSHAKE family.
 

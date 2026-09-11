@@ -8,7 +8,7 @@ run_miri() {
     CARGO_HOME="$miri_cache/cargo" \
         CARGO_TARGET_DIR="$miri_cache/target" \
         XDG_CACHE_HOME="$miri_cache" \
-        cargo +nightly-2026-09-10 miri test \
+        cargo +nightly-2026-09-11 miri test \
         --target x86_64-unknown-linux-gnu "$@"
 }
 
@@ -106,6 +106,7 @@ quick_sha3() {
 
 full_sha3() {
     run_miri -p brynja-hash-sha3 --features static-execution --lib execution
+    run_miri -p brynja-crypto-cpu-std --features sponge-execution --lib sponge::tests::portable_sponge
     run_miri -p brynja-hash-sha3 --features static-execution --test execution execution_smoke
     run_miri -p brynja-hash-sha3 --lib \
         final_bit_output_clears_the_exact_reader_source

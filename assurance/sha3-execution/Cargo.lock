@@ -16,6 +16,7 @@ version = "0.1.1"
 dependencies = [
  "brynja-crypto-cpu",
  "brynja-hash-sha2",
+ "brynja-hash-sha3",
 ]
 
 [[package]]

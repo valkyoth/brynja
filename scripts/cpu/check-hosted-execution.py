@@ -16,7 +16,7 @@ import tomllib
 ROOT = Path(__file__).resolve().parents[2]
 CPU = 'brynja-crypto-cpu'
 HOST = 'brynja-crypto-cpu-std'
-PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-hash-sha2', CPU, HOST)
+PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-hash-sha2', 'brynja-hash-sha3', CPU, HOST)
 FIXTURE = 'assurance/hosted-cpu-execution'
 REVIEW = ROOT / 'security/hosted-cpu-execution-reviewed.json'
 COMMAND = 'python3 scripts/cpu/check-hosted-execution.py'
@@ -30,7 +30,8 @@ def validate(write=False):
             'hardened-execution': ['static-execution', 'dep:brynja-core']}:
         raise ValueError('CPU execution features changed')
     if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {
-            'default': [], 'runtime-execution': ['brynja-crypto-cpu/runtime-execution']}:
+            'default': [], 'runtime-execution': ['brynja-crypto-cpu/runtime-execution'],
+            'sponge-execution': ['runtime-execution', 'dep:brynja-hash-sha3', 'brynja-hash-sha3/runtime-execution']}:
         raise ValueError('hosted execution must remain default-off and isolated')
     for owner, module in ((CPU, 'runtime_execution'), (HOST, 'execution')):
         source = (ROOT / 'crates' / owner / 'src/lib.rs').read_text()

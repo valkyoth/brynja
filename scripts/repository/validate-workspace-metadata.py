@@ -224,6 +224,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
         expected["runtime-execution"] = ["brynja-crypto-cpu/runtime-execution"]
+        expected["sponge-execution"] = ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"]
     if name == "brynja-hash-sha2":
         expected["hardened-execution"] = ["static-execution", "brynja-crypto-cpu/hardened-execution"]
     if name in {"brynja-hash-sha2", "brynja-hash-sha3"}:
@@ -387,13 +388,16 @@ def validate_resolved_mode(
     if cpu != expected_cpu:
         raise ValueError("CPU all-feature closure must contain only its first-party clearing owner")
     detector = reachable_names("brynja-crypto-cpu-std", names, packages_by_id, edges)
-    if detector != {
+    expected_detector = {
         "brynja-core",
         "brynja-crypto-cpu",
         "brynja-crypto-cpu-std",
         "brynja-hash-core",
         "brynja-hash-sha2",
-    }:
+    }
+    if mode == "all-features":
+        expected_detector.add("brynja-hash-sha3")
+    if detector != expected_detector:
         raise ValueError("host CPU detector package graph drifted")
     parallel_executor = reachable_names(
         "brynja-hash-parallel-std", names, packages_by_id, edges

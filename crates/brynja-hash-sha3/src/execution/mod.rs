@@ -1,4 +1,4 @@
-//! Opt-in, non-erasing SHA-3/SHAKE execution for public data only.
+//! Opt-in, non-erasing SHA-3/SHAKE/cSHAKE execution for public data only.
 //!
 //! The default APIs stay portable. Every permutation, including suffix/padding
 //! and incremental squeeze, uses one retained route. No failure-driven fallback.
@@ -29,12 +29,14 @@
 //! let _ = HardenedShake128::new(Execution::portable());
 //! ```
 
+mod cshake;
 mod engine;
 mod fixed;
 mod route;
 mod xof;
 
 pub use brynja_crypto_cpu::static_execution::Kernel;
+pub use cshake::{Cshake128, Cshake128Reader, Cshake256, Cshake256Reader};
 pub use fixed::{Sha3_224, Sha3_256, Sha3_384, Sha3_512};
 pub use route::{Execution, Mode, Route, StaticSelection};
 pub use xof::{Shake128, Shake128Reader, Shake256, Shake256Reader};
@@ -102,7 +104,7 @@ impl core::error::Error for Error {}
 pub struct Report {
     /// Immutable selected route.
     pub route: Route,
-    /// Complete message blocks, excluding padding.
+    /// Complete absorbed blocks, including cSHAKE setup but excluding final padding.
     pub absorb_permutations: u128,
     /// Final suffix and pad10*1 permutations.
     pub padding_permutations: u128,

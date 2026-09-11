@@ -120,7 +120,8 @@ def main() -> int:
     status, commands = run_profile(
         "--focused", "sha3", "kmac", "tuplehash", "parallelhash"
     )
-    assert status == 0 and len(commands) == 23
+    assert status == 0 and len(commands) == 24
+    assert sum('--features sponge-execution --lib sponge::tests::portable_sponge' in c for c in commands) == 1
     assert any('--features static-execution --lib execution' in command for command in commands)
     assert any('--features static-execution --test execution execution_smoke' in command for command in commands)
     assert sum("-p brynja-hash-sha3" in command for command in commands) == 11
@@ -144,7 +145,8 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 54
+    assert status == 0 and len(commands) == 55
+    assert sum('--features sponge-execution --lib sponge::tests::portable_sponge' in c for c in commands) == 1
     assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1
     assert sum(c.endswith('assurance/static-cpu-execution/Cargo.toml --lib') for c in commands) == 1
     status, static_commands = run_profile('--group', 'static_cpu')

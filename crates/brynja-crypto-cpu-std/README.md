@@ -44,11 +44,22 @@ hardened secret processing, and from Brynja's default/facade dependency graph.
 See [the hosted execution contract](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
 for exact feature bundles, platform assumptions and runnable package acceptance.
 
-## Historical hash adapters
+## Ordinary sponge adapters
+
+Enable default-off `sponge-execution` to use `sponge::{Sponge, Mode, Public, PublicBits}`.
+`Sponge` provides caller-owned, borrowing constructors for all four SHA-3 hashes,
+both SHAKE strengths and cSHAKE128/256 with byte/arbitrary-bit N/S. Its optional
+first-party SHA-3 dependency does not enter facade/default graphs. Prefer reports
+pre-execution fallback; Require fails closed. Kernel errors never select scalar
+execution. All data must be public; these owners are not erasing or secret-safe.
+This candidate still requires exceptional review and fresh native collection.
+See [complete examples and limits](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md).
+
+## Historical SHA-2 adapters
 
 `brynja-crypto-cpu-std` is the separate opt-in host detector and SHA-2
 dispatch-reporting adapter. It uses the standard library's architecture feature macros,
-depends only on `brynja-crypto-cpu` and `brynja-hash-sha2`, and is selected
+depends by default only on `brynja-crypto-cpu` and `brynja-hash-sha2`, and is selected
 directly by host applications. It never enters Brynja defaults, protocol
 engines, bare-metal graphs, or a FIPS validated-module artifact.
 
@@ -69,8 +80,8 @@ Internal v0.24.4 adds x86_64 AVX2 and AArch64 SHA3 Keccak candidates only to
 the lower `no_std` package and repository evidence fixture. This adapter
 does not expose them through its historical hash adapters. The separate raw
 `execution` API above now detects supported hosted routes. Public
-SHA-3/SHAKE remains portable, and a later reviewed admission must add runtime
-detection and reporting without silently changing this crate's selection.
+SHA-3/SHAKE default constructors remain portable; the new optional sponge
+adapter above provides explicit ordinary execution without changing those defaults.
 
 The x86_64, AArch64, and RV64 Zknh SHA-2 kernels remain unadmitted in v0.23.3
 pending complete authenticated admission evidence. Non-authorizing native

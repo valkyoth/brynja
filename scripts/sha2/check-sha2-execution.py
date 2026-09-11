@@ -14,7 +14,7 @@ import sha2_execution_faults
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = 'assurance/sha2-execution'
 PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-crypto-cpu',
-            'brynja-hash-sha2', 'brynja-crypto-cpu-std')
+            'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-crypto-cpu-std')
 REVIEW = ROOT / 'scripts/sha2/sha2-execution-reviewed.toml'
 
 

@@ -9,7 +9,7 @@ publish = false
 
 [dependencies]
 brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", version = "=0.1.0", features = ["runtime-execution"] }
-brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", version = "=0.1.1", features = ["runtime-execution"] }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", version = "=0.1.1", features = ["sponge-execution"] }
 
 [lints.rust]
 unsafe_code = "forbid"

@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.34 signed. v0.24.35 adds [ordinary SHA-3/SHAKE execution](sha3-ordinary-execution.md) with explicit static/hosted routes. The [owner-supplied retest](../security/pentest/v0.24.35.md), [native Mac/AWS functional collection](../assurance/sha3-execution-observations/v0.24.35/README.md) and required impact-selected local release checks passed. Awaiting green GitHub/CodeQL. Hardened SHA-2 execution and its archived native observations remain unchanged. No publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.35 signed. The v0.24.36 [cSHAKE and hosted sponge candidate](cshake-ordinary-execution.md) adds opt-in ordinary execution and hosted constructors without changing portable defaults. Focused implementation checks passed; full-gate approval after the verifier update, exceptional pentest, fresh native collection and final release checks remain pending. No publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

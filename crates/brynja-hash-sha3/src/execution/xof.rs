@@ -90,7 +90,10 @@ macro_rules! xof {
             state: State<$rate>,
             execution: Execution<'a>,
         }
-        impl $reader<'_> {
+        impl<'a> $reader<'a> {
+            pub(super) fn from_state(state: State<$rate>, execution: Execution<'a>) -> Self {
+                Self { state, execution }
+            }
             /// Complete output bytes committed successfully so far.
             #[must_use]
             pub const fn output_bytes(&self) -> u128 {

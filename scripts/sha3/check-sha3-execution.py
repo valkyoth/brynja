@@ -9,6 +9,7 @@ import subprocess
 import tarfile
 import tempfile
 import tomllib
+import cshake_execution_regressions
 
 ROOT = Path(__file__).resolve().parents[2]
 REVIEW = ROOT / 'scripts/sha3/sha3-execution-reviewed.toml'
@@ -25,7 +26,7 @@ def run(args, cwd, env, success=True):
 
 def validate():
     source = ROOT / 'crates/brynja-hash-sha3/src/execution'
-    for path in source.glob('*.rs'):
+    for path in source.rglob('*.rs'):
         text = path.read_text()
         code = '\n'.join(line.split('//')[0] for line in text.splitlines())
         if len(text.splitlines()) > 500 or any(token in code for token in
@@ -37,9 +38,18 @@ def validate():
             raise ValueError(f'SHA-3 execution source changed; review {name}')
     gate = (ROOT / 'scripts/checks.sh').read_text().replace('\\\n', ' ')
     for command in ('python3 scripts/sha3/check-sha3-execution.py',
+                    'python3 scripts/sha3/cshake_execution_vectors.py',
                     'cargo clippy --locked --offline --manifest-path assurance/sha3-execution/Cargo.toml'):
         if command not in gate:
             raise ValueError('SHA-3 execution gate missing: ' + command)
+    for path, command in (
+        ('scripts/zeroization/check-zeroization-miri.sh', '-p brynja-hash-sha3 --features static-execution --lib execution'),
+        ('scripts/zeroization/check-zeroization-miri.sh', '-p brynja-crypto-cpu-std --features sponge-execution --lib sponge::tests::portable_sponge'),
+        ('scripts/zeroization/check-zeroization-sanitizer.sh', '-p brynja-hash-sha3 --features static-execution --test cshake_execution'),
+        ('scripts/zeroization/check-zeroization-sanitizer.sh', '-p brynja-crypto-cpu-std --features sponge-execution --lib sponge'),
+    ):
+        if command not in (ROOT / path).read_text():
+            raise ValueError('cSHAKE/hosted dynamic analysis missing: ' + path)
 
 
 def package(destination, env):
@@ -199,6 +209,7 @@ def main():
         classification_regressions(consumer, env)
         boundary_regressions(consumer, roots, env)
         regressions(consumer, roots, env)
+        cshake_execution_regressions.run(consumer, roots, env, run)
 
 
 if __name__ == '__main__':

@@ -747,7 +747,7 @@ backend = "0.24.35"
 buffers = "0.24.35"
 bit-input = "0.24.9"
 ownership = "0.24.10"
-hosted-adapter = "0.24.10"
+hosted-adapter = "0.24.36"
 
 [secret-owner-overrides]
 "algorithm.sha512-t" = "0.24.26"

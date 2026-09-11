@@ -44,7 +44,7 @@ def x86_host():
 
 
 def asan_command():
-    return ['cargo', '+nightly-2026-09-10', 'test', '--locked', '--offline',
+    return ['cargo', '+nightly-2026-09-11', 'test', '--locked', '--offline',
             '-p', 'brynja-hash-sha2', '-p', 'brynja-crypto-cpu', '--all-features',
             '--lib', 'hardened_execution', '--target', 'x86_64-unknown-linux-gnu',
             '--', '--nocapture', '--test-threads=1']

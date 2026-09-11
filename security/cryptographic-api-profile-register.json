@@ -2935,7 +2935,7 @@
         },
         "hosted-adapter": {
           "disposition": "optional-isolated",
-          "owner": "0.24.10"
+          "owner": "0.24.36"
         },
         "import": {
           "disposition": "forbidden",
@@ -24257,7 +24257,7 @@
       ]
     }
   ],
-  "policy_sha256": "4f6fd35fd07693b5d85bb1ef997571aae9dc114130d72d86d48fd4a23551360b",
+  "policy_sha256": "8d516e3aa44e37cf990d68675041be96224eab7d30cd22f4beea6e5c82f6d5bc",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",

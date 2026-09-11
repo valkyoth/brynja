@@ -9,7 +9,7 @@
     ".github/workflows/ci.yml": "434f16066192e45c6156432eedb86455cd4ddd20c1fa6e84d1a55a0b0253c2c6",
     "Cargo.toml": "f3d0a5d8366b15047dbdbd7bca6403dbe43e96fc21d50b1e9d0127059e791c1b",
     "assurance/policy.toml": "7c6a7d259ce666c0bb0b1ea4097e7a4ff417705fb8324f39ebad1753d57c4994",
-    "assurance/zeroization-matrix.toml": "a2ffa930783b7d22b9972c9df7b95ddb07766efefbe94abd7cc6ba41a952f311",
+    "assurance/zeroization-matrix.toml": "b0bc1a1da931a6e892e62dabc955963f84923bf603ddca639c4341ec83e31ee3",
     "crates/brynja-core/Cargo.toml": "096f0e0ac8caf49da8820894ecec821f18c56b6576be37bdb8f5f84a23e58253",
     "crates/brynja-core/src/secret_memory.rs": "f5f4743353c7fb5afb6a85f0f8481827f7dac3ae910fd17df9da46248583d2c7",
     "crates/brynja-core/src/secret_memory_volatile.rs": "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217",

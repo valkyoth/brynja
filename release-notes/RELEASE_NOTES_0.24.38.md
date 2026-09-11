@@ -1,7 +1,7 @@
 # Brynja v0.24.38
 
-Status: implemented; exceptional pentest/retest PASS; awaiting fresh native KMAC evidence
-and final release/GitHub/CodeQL checks.
+Status: implemented; exceptional pentest/retest and three-platform native KMAC
+collection PASS; awaiting final release/GitHub/CodeQL checks.
 
 Adds default-off `brynja_mac_kmac::execution` APIs for KMAC128/256 and
 KMACXOF128/256 over explicitly selected portable or authorized hardened cSHAKE.
@@ -24,13 +24,17 @@ not independent cryptographic review, side-channel approval or FIPS validation.
 Required checks include official and independent bit-level cases, mixed XOF
 reads, invalid tags/widths, quarantine, ownership negatives, compiled cleanup
 mutants, compiler evidence and scoped Miri/ASan. Fresh Intel/Linux Arm/Apple Arm
-KMAC evidence must follow retest before final release checking. Older Keccak-only
-records cannot qualify the new keyed high-level KMAC APIs.
+KMAC evidence was collected after retest at `3578aeac` and reviewed. Older
+Keccak-only records were not substituted for these keyed high-level KMAC APIs.
 
 The [owner-supplied retest](../security/pentest/v0.24.38.md) confirms both
-Low/informational notes addressed with no new issues. Release preflight accepts
-the existing SHA-2/Keccak native records but stops at the empty KMAC evidence
-index; final release qualification must follow fresh three-platform collection.
+Low/informational notes addressed with no new issues. The
+[native index](../security/kmac-execution-native.json) binds Intel Xeon Platinum
+8488C, AWS Arm Neoverse-V1 and Apple M2 Pro records to 267 source inputs and
+Rust 1.98.1. Each route passed 268 official/oracle cases; each platform passed
+four lifecycle tests and the 1,024-permutation actual-kernel check. Intel covered
+portable/preferred-absence/static/preferred execution; both Arm platforms also
+covered required hosted execution. Final release qualification remains pending.
 
 Development verification completed:
 

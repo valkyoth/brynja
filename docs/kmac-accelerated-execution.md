@@ -1,7 +1,8 @@
 # KMAC accelerated operations
 
 v0.24.38 implements all four KMAC/KMACXOF execution APIs; exceptional pentest
-and retest passed. Fresh native collection and final release qualification remain pending. Existing
+and retest passed. Fresh three-platform native collection passed at `3578aeac`;
+final release qualification remains pending. Existing
 portable family completion is unchanged. No independent cryptographic review,
 FIPS validation, performance improvement or deployment approval is claimed.
 
@@ -94,5 +95,9 @@ streaming and output lifecycle comparisons. `--native-x86` validates AVX2 before
 static execution; `--native-arm` runs hosted required mode before specializing.
 The package checker rejects ownership and cleanup mutants. The codegen checker
 covers MIR/LLVM/assembly on Rust 1.90.0 and 1.98.1. Miri and native ASan are
-separate evidence. Fresh three-platform KMAC collection follows a clean retest;
-older Keccak-only artifacts cannot qualify these new keyed high-level paths.
+separate evidence. The [native index](../security/kmac-execution-native.json)
+records fresh three-platform KMAC collection after the clean retest; older
+Keccak-only artifacts were not substituted for these new keyed high-level paths.
+All three platforms passed 268 cases per selected route and the actual-kernel
+and clearing/quarantine tests. These are project-owned functional observations,
+not independent verification or a platform-wide erasure/side-channel guarantee.

@@ -27,7 +27,8 @@
 
 Optional `hardened-execution` and `runtime-execution` features expose selectable
 KMAC/KMACXOF APIs under `execution`; defaults remain portable. The new keyed
-acceleration passed its exceptional pentest/retest and awaits fresh native qualification.
+acceleration passed its exceptional pentest/retest and three-platform native
+functional collection; final release qualification remains pending.
 See the [working API and memory boundary](../../docs/kmac-accelerated-execution.md).
 
 First-party, allocation-free `no_std` implementations of KMAC128, KMAC256,

@@ -97,8 +97,8 @@ matching target features and actual hardware. Compiled negative/mutation tests
 cover input classification, ownership, prefix errors, lost routing and scalar
 substitution. Supplemental QEMU cannot substitute for native observations.
 
-Exceptional owner pentest and fresh native cSHAKE/hosted collection remain
-release prerequisites. Adding the optional hosted dependency changes that
+The owner-supplied exceptional pentest/retest passed; fresh native cSHAKE/hosted
+collection remains a release prerequisite. Adding the optional hosted dependency changes that
 package's build closure, so the existing strict SHA-2 hardened native gate also
 requires a refreshed collection; its previous artifacts are not rewritten.
 No independent cryptographic review, side-channel certification, migration

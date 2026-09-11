@@ -4351,12 +4351,12 @@ Exit criteria:
 
 ### v0.24.36 - cSHAKE CPU And Hosted Sponge APIs
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Progress: the candidate implements ordinary cSHAKE128/256 and default-off hosted
-sponge constructors. Focused implementation verification passed. Exceptional
-owner pentest, fresh native observations and final release checks remain pending.
-The nightly verifier update requires owner approval before the full gate.
+sponge constructors. Focused implementation verification and the owner-supplied
+exceptional pentest/retest passed. Fresh native observations and final release checks remain pending.
+The owner approved the full gate required by the nightly verifier update after native collection succeeds.
 
 Plan scope: Expose accelerated cSHAKE128/256 byte/bit, customization, function-name, one-shot and incremental XOF operations, and complete hosted adapters for the ordinary SHA-3/SHAKE/cSHAKE family.
 

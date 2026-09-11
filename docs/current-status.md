@@ -17,7 +17,7 @@ Current generated planning coverage is 2028 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.35 signed. The v0.24.36 [cSHAKE and hosted sponge candidate](cshake-ordinary-execution.md) adds opt-in ordinary execution and hosted constructors without changing portable defaults. Focused implementation checks passed; full-gate approval after the verifier update, exceptional pentest, fresh native collection and final release checks remain pending. No publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.35 signed. The v0.24.36 [cSHAKE and hosted sponge candidate](cshake-ordinary-execution.md) adds opt-in ordinary execution and hosted constructors without changing portable defaults. Focused implementation checks and exceptional pentest/retest passed. Fresh native collection remains pending; the owner approved the full verification sweep after collection. No publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

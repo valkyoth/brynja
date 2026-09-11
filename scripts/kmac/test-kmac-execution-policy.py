@@ -10,6 +10,9 @@ def main():
     policy.semantic(policy.ROOT)
     cases = [(policy.SOURCE + name, token, 'REMOVED')
              for name, tokens in policy.TOKENS.items() for token in tokens]
+    cases += [(policy.SOURCE + 'mod.rs', case, '') for case in policy.DOC_CASES]
+    cases += [(policy.CRATE + '/src/packer.rs', 'fn ' + test + '()', 'fn removed()')
+              for test in policy.PACKER_TESTS]
     cases += [(policy.SOURCE + 'core_state.rs', 'clear_owned_region(&mut self.' + field + ')', 'Ok(())')
               for field in policy.REGIONS]
     cases += [(policy.CRATE + '/Cargo.toml', 'default = []', 'default = ["hardened-execution"]'),

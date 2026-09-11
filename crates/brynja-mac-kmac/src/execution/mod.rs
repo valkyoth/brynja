@@ -7,6 +7,133 @@
 //! reopen absorption. Owners are sealed, non-cloneable and thread-bound.
 //! Caller inputs, compiler copies/registers/spills and platform storage remain
 //! outside the source-owned memory clearing guarantee. No FIPS claim is made.
+//!
+//! Ownership invariants are checked independently for every public owner/reader.
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Send>() {}
+//! require::<brynja_mac_kmac::execution::Kmac128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Sync>() {}
+//! require::<brynja_mac_kmac::execution::Kmac128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Copy>() {}
+//! require::<brynja_mac_kmac::execution::Kmac128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Clone>() {}
+//! require::<brynja_mac_kmac::execution::Kmac128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: core::fmt::Debug>() {}
+//! require::<brynja_mac_kmac::execution::Kmac128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Send>() {}
+//! require::<brynja_mac_kmac::execution::Kmac256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Sync>() {}
+//! require::<brynja_mac_kmac::execution::Kmac256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Copy>() {}
+//! require::<brynja_mac_kmac::execution::Kmac256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Clone>() {}
+//! require::<brynja_mac_kmac::execution::Kmac256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: core::fmt::Debug>() {}
+//! require::<brynja_mac_kmac::execution::Kmac256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Send>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Sync>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Copy>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Clone>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: core::fmt::Debug>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof128<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Send>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Sync>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Copy>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Clone>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: core::fmt::Debug>() {}
+//! require::<brynja_mac_kmac::execution::KmacXof256<'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Send>() {}
+//! require::<brynja_mac_kmac::execution::Reader<'static, 'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Sync>() {}
+//! require::<brynja_mac_kmac::execution::Reader<'static, 'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Copy>() {}
+//! require::<brynja_mac_kmac::execution::Reader<'static, 'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: Clone>() {}
+//! require::<brynja_mac_kmac::execution::Reader<'static, 'static>>();
+//! ```
+//!
+//! ```compile_fail,E0277
+//! fn require<T: core::fmt::Debug>() {}
+//! require::<brynja_mac_kmac::execution::Reader<'static, 'static>>();
+//! ```
 
 mod backend;
 mod core_state;

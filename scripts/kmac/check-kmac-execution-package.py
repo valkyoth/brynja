@@ -64,6 +64,9 @@ def mutations(consumer, roots, env):
     manifest.write_text(manifest.read_text() + '\n[workspace]\n[patch.crates-io]\n' +
         '\n'.join(f'{name}={{path="{path.as_posix()}"}}' for name, path in roots.items()) + '\n')
     cases = (
+        ('../packer.rs', 'self.state.absorb(input)?;',
+         'for byte in input { self.state.absorb(core::slice::from_ref(byte))?; }',
+         'large_final_chunks_keep_bulk_absorption'),
         ('core_state.rs', 'let _ = clear_owned_region(&mut self.phase);', '', 'every_metadata_region'),
         ('core_state.rs', 'let _ = clear_owned_region(&mut self.key_class);', '', 'every_metadata_region'),
         ('core_state.rs', 'let _ = clear_owned_region(&mut self.message_bytes);', '', 'every_metadata_region'),

@@ -54,6 +54,16 @@ clears the original inline source; forgetting a reader cannot reopen absorption.
 Partial message bits are accepted only at finalization. Bit strings use FIPS 202
 LSB-first packing and output unused high bits are cleared.
 
+Final message chunks need not be small: each complete-byte prefix is absorbed
+in bulk, even when the final byte is partial. Only the following `right_encode`
+trailer (at most 17 bytes) takes the misaligned byte-by-byte path. Large keys
+likewise retain bulk absorption. Instrumented tests bound absorption calls;
+adding alignment padding before the trailer would change the defined message.
+
+All five owner/reader types have individual compile-fail rustdoc checks for
+Send, Sync, Copy, Clone and Debug. The packaged-consumer gate independently
+checks those traits plus authority, sealing and consuming/borrowed transitions.
+
 Defaults require full-strength keys (128/256 bits) and fixed tags. Explicit
 `conformance-testing` permits exact standard domains, including empty keys and
 short/empty output, without an approval claim.

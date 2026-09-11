@@ -33,6 +33,12 @@ TOKENS = {
                   'difference.is_zero()', '.checked_mul(8)'),
 }
 REGIONS = {'message_bytes': 16, 'output_bits': 16, 'phase': 1, 'key_class': 1}
+DOC_TYPES = ("Kmac128<'static>", "Kmac256<'static>", "KmacXof128<'static>",
+             "KmacXof256<'static>", "Reader<'static, 'static>")
+DOC_CASES = tuple(f'//! ```compile_fail,E0277\n//! fn require<T: {bound}>() {{}}\n'
+                 f'//! require::<brynja_mac_kmac::execution::{name}>();\n//! ```'
+                 for name in DOC_TYPES for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'))
+PACKER_TESTS = ('large_final_chunks_keep_bulk_absorption', 'large_partial_keys_keep_bulk_absorption')
 
 
 def require(value, label):
@@ -48,6 +54,10 @@ def read(root, name):
 
 
 def semantic(root):
+    for case in DOC_CASES:
+        require(case in read(root, SOURCE + 'mod.rs'), 'public owner rustdoc invariant')
+    for test in PACKER_TESTS:
+        require('fn ' + test + '()' in read(root, CRATE + '/src/packer.rs'), 'bulk absorption regression')
     require({p.relative_to(root / SOURCE).as_posix() for p in (root / SOURCE).rglob('*.rs')} == set(FILES), 'complete source inventory')
     for name in FILES:
         text = read(root, SOURCE + name)

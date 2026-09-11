@@ -29,15 +29,16 @@ records cannot qualify the new keyed high-level KMAC APIs.
 
 Development verification completed:
 
-- 22 KMAC unit/integration tests; strict scoped Clippy and Rust 1.90 bare-metal
+- 24 KMAC unit/integration tests and 25 ownership compile-fail doctests;
+  strict scoped Clippy and Rust 1.90 bare-metal
   `no_std` compilation with the opt-in hardened feature.
 - 12 official NIST examples plus 256 independent arbitrary-bit cases per route,
   with additional streamed secret, mixed XOF, verification and quarantine checks.
   Native AMD AVX2 and emulated Arm hosted/static routes pass. QEMU is not native
   Arm qualification.
-- 36 packaged ownership negatives, 14 compiled debug/release cleanup/overflow
+- 36 packaged ownership negatives, 16 compiled debug/release cleanup/overflow/bulk
   mutants and eight algorithm/verification mutants; the guide example compiles.
-- 58 semantic policy regressions and 87 native-record/formatter regressions.
+- 85 semantic policy regressions and 87 native-record/formatter regressions.
 - MIR/LLVM/assembly cleanup checks on Rust 1.90.0 and 1.98.1 for x86-64 and Arm.
 - Four focused owned-memory Miri cases and one public secret-output lifecycle
   case; native AVX2 AddressSanitizer oracle/lifecycle campaign; both existing

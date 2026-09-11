@@ -106,6 +106,9 @@ pub(crate) fn append_suffix<S: Absorb>(
     final_message: Option<Fips202BitString<'_>>,
     output_bits: u128,
 ) -> Result<Option<SecretTail>, KmacError> {
+    // A fresh packer bulk-absorbs the entire complete-byte message prefix.
+    // Only right_encode (at most 17 bytes for u128) follows a partial byte.
+    // Do not flush to alignment here: that would insert bits into the message.
     let mut packer = SecretPacker::new(state);
     if let Some(message) = final_message {
         packer.push_bit_string(message)?;
@@ -285,8 +288,80 @@ impl Drop for SecretTail {
 
 #[cfg(test)]
 mod tests {
-    use super::SecretEncodedInteger;
+    use super::{Absorb, SecretEncodedInteger, absorb_key, append_suffix};
     use crate::KmacError;
+    use brynja_hash_sha3::{Fips202BitString, right_encode_u128};
+
+    #[derive(Default)]
+    struct AbsorbCalls {
+        lengths: [usize; 32],
+        count: usize,
+    }
+    impl Absorb for AbsorbCalls {
+        fn absorb(&mut self, input: &[u8]) -> Result<(), KmacError> {
+            let slot = self
+                .lengths
+                .get_mut(self.count)
+                .ok_or(KmacError::MessageTooLong)?;
+            *slot = input.len();
+            self.count = self.count.checked_add(1).ok_or(KmacError::MessageTooLong)?;
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn large_final_chunks_keep_bulk_absorption() -> Result<(), KmacError> {
+        let bytes = [0_u8; 4097];
+        for size in [1, 168, 4097] {
+            for valid in 1..=8 {
+                for bits in [0, 255, 256, u128::MAX] {
+                    let prefix = bytes.get(..size).ok_or(KmacError::MessageTooLong)?;
+                    let input = Fips202BitString::new(prefix, valid)
+                        .map_err(|_| KmacError::InvalidBitString)?;
+                    let mut calls = AbsorbCalls::default();
+                    let tail = append_suffix(&mut calls, Some(input), bits)?;
+                    let trailer = right_encode_u128(bits);
+                    if valid == 8 {
+                        assert_eq!(calls.count, 2);
+                        assert_eq!(&calls.lengths[..2], &[size, trailer.as_bytes().len()]);
+                        assert!(tail.is_none());
+                    } else {
+                        assert_eq!(calls.lengths[0], size - 1);
+                        assert_eq!(calls.count, 1 + trailer.as_bytes().len());
+                        assert!(calls.count <= 18);
+                        let singles = calls
+                            .lengths
+                            .get(1..calls.count)
+                            .ok_or(KmacError::MessageTooLong)?;
+                        assert!(singles.iter().all(|n| *n == 1));
+                        assert_eq!(tail.as_ref().map(|t| t.valid()), Some(valid));
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn large_partial_keys_keep_bulk_absorption() -> Result<(), KmacError> {
+        let bytes = [0_u8; 4097];
+        for rate in [136, 168] {
+            for valid in 1..=8 {
+                let key = Fips202BitString::new(&bytes, valid)
+                    .map_err(|_| KmacError::InvalidBitString)?;
+                let mut calls = AbsorbCalls::default();
+                absorb_key(&mut calls, key, rate)?;
+                assert_eq!(calls.lengths[2], if valid == 8 { 4097 } else { 4096 });
+                assert!(calls.count <= 5);
+                let emitted = calls
+                    .lengths
+                    .get(..calls.count)
+                    .ok_or(KmacError::MessageTooLong)?;
+                assert_eq!(emitted.iter().sum::<usize>() % rate, 0);
+            }
+        }
+        Ok(())
+    }
 
     #[test]
     fn corrupt_encoded_width_fails_closed() {

@@ -23,9 +23,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Explain verification scope before expensive checks
-        env:
-          BRYNJA_FULL_VERIFICATION_APPROVAL: ${{ vars.BRYNJA_FULL_VERIFICATION_APPROVAL }}
-        run: python3 scripts/release/run-verification.py plan --check
+        run: python3 scripts/release/run-verification.py plan --check --ci
       - name: Install Rust toolchain
         run: rustup show
       - name: Install OS-less Rust targets
@@ -38,10 +36,8 @@ jobs:
           --target aarch64-unknown-linux-gnu,riscv64gc-unknown-linux-gnu
       - name: Install security and SBOM tools
         run: scripts/ci/install-ci-tools.sh
-      - name: Run repository gate
-        env:
-          BRYNJA_FULL_VERIFICATION_APPROVAL: ${{ vars.BRYNJA_FULL_VERIFICATION_APPROVAL }}
-        run: scripts/checks.sh
+      - name: Run repository CI checks
+        run: scripts/checks.sh --ci
       - name: Validate protected release controls
         env:
           GH_TOKEN: ${{ github.token }}

@@ -18,7 +18,7 @@
 "scripts/checks.sh" = "d22b39ba596111c074eb30fef30dbef7cc2b99902d43c93e85ea4643033774ba"
 "scripts/ci/check-rust-version-matrix.sh" = "fec9a6ba60d2fdf016a5248760c332024085ecad2febfdeae5c8dd6ca7cc109f"
 "scripts/assurance/check-bare-metal.sh" = "4cae003df12d834e8fa3d31e878a7004ed0e69022ef900c8bb007578f26aaf0b"
-".github/workflows/ci.yml" = "434f16066192e45c6156432eedb86455cd4ddd20c1fa6e84d1a55a0b0253c2c6"
+".github/workflows/ci.yml" = "fbe4867022c9e615ff351d45fde750fbb95e4809ab983d70bcba19fcbde4af3d"
 "README.md" = "049e3961edcf9c0027a0e59bd661e733bd0a8e909a3d742cccd7457a40060c04"
 "crates/brynja/README.md" = "d2e5a0bbc6ea01e8f674faf6cb8aa14e1da62331f9650d439267f1208b6135e4"
 "crates/brynja-hash-sha2/README.md" = "3115c4eebc84a8f2422f3af8a7df8ec229497d085f9c3dd20ec2e863de4f4e2c"

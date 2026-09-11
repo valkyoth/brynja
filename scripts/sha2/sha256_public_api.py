@@ -55,7 +55,7 @@ EXPECTED_SHA256 = {
     CHECKS: "d22b39ba596111c074eb30fef30dbef7cc2b99902d43c93e85ea4643033774ba",
     RUST_MATRIX: "fec9a6ba60d2fdf016a5248760c332024085ecad2febfdeae5c8dd6ca7cc109f",
     BARE_METAL: "4cae003df12d834e8fa3d31e878a7004ed0e69022ef900c8bb007578f26aaf0b",
-    WORKFLOW: "434f16066192e45c6156432eedb86455cd4ddd20c1fa6e84d1a55a0b0253c2c6",
+    WORKFLOW: "fbe4867022c9e615ff351d45fde750fbb95e4809ab983d70bcba19fcbde4af3d",
 }
 PACKAGES = (
     ("brynja-core", "0.9.0", ("src/lib.rs",)),

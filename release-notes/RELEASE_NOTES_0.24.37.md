@@ -1,7 +1,7 @@
 # Brynja v0.24.37
 
-Status: implementation and focused assurance complete; awaiting exceptional
-pentest, fresh native qualification and final release verification.
+Status: implementation, focused assurance and exceptional retest complete;
+awaiting fresh native qualification and final release verification.
 
 See the [hardened Keccak working guide](../docs/hardened-keccak-execution.md).
 
@@ -57,5 +57,11 @@ caller state and retains cleanup/quarantine. Boundary tests and compiled mutants
 cover that behavior. A bounded, replayable SHAKE/cSHAKE operation-sequence property
 campaign now runs in packaged native checks and is required by native evidence.
 Existing all-feature CI doctests and 54 packaged ownership checks already cover
-the reported non-Send/non-Clone concern. These changes require a fresh retest;
-the supplied assessment of the earlier commit is not approval of this revision.
+the reported non-Send/non-Clone concern. The owner supplied a clean retest of
+8b4b88ba confirming all three findings resolved and no new vulnerabilities.
+
+Ordinary CI now uses explicit diagnostic entrypoints instead of a saved release
+approval fingerprint. Known scope retains affected checks; uncertain scope warns
+and runs the shared baseline, without granting release approval or marking
+deferred verification passed. Tagging retains all local approval/evidence gates.
+This CI-only follow-up does not change the native-capture input closure.

@@ -37,11 +37,14 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("phase", choices=("plan", "repository", "asan", "miri", "kani", "matrix", "command"))
     parser.add_argument("--base")
-    parser.add_argument("--approve-full", default=os.environ.get("BRYNJA_FULL_VERIFICATION_APPROVAL") or None)
+    parser.add_argument("--approve-full")
+    parser.add_argument("--ci", action="store_true", help="repository diagnostics only; never authorize release verification")
     parser.add_argument("--check", action="store_true", help="plan only; never run tests")
     args, extra = parser.parse_known_args()
     if extra and args.phase != "command":
         parser.error("unexpected verification arguments")
+    if args.ci and (args.phase not in ("plan", "repository") or args.approve_full):
+        parser.error("--ci is only for plan/repository diagnostics, without release approval")
     try:
         plan = plans.build(base=args.base)
         print(plans.explain(plan), flush=True)
@@ -51,16 +54,23 @@ def main() -> int:
         sanitizer_catalog = commands.catalog(plans.ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
         commands.selected(sanitizer_catalog, list(plans.scope.GROUPS), full=True)
         matrix_catalog = commands.matrix_commands()
-        plans.authorize(plan, args.approve_full)
+        if args.ci:
+            print("CI diagnostics only: release approval is not consumed or granted.", flush=True)
+            if plan["approval_required"]:
+                print("::warning::Release scope requires owner review; CI runs the shared repository baseline only. Specialized verification is deferred, not passed.", flush=True)
+        else:
+            plans.authorize(plan, args.approve_full or os.environ.get("BRYNJA_FULL_VERIFICATION_APPROVAL") or None)
         if args.phase == "plan" or args.check:
             return 0
-        full = plan["stage"] == "public" or plan["approval_required"]
-        groups = list(plans.scope.GROUPS) if full else plan["groups"]
+        full = not args.ci and (plan["stage"] == "public" or plan["approval_required"])
+        groups = ([] if args.ci and plan["approval_required"] else
+                  list(plans.scope.GROUPS) if full else plan["groups"])
         if args.phase == "repository":
             chosen = commands.selected(catalog, groups, full=full)
             for command in catalog:
                 if command not in chosen:
-                    print("REUSE (unchanged input closure): " + command, flush=True)
+                    label = "DEFERRED (release scope unresolved)" if args.ci and plan["approval_required"] else "REUSE (unchanged input closure)"
+                    print(label + ": " + command, flush=True)
             for command in chosen:
                 execute(command)
         elif args.phase == "command":
@@ -103,7 +113,8 @@ def main() -> int:
         print(str(error), file=sys.stderr)
         return 3
     except (ValueError, KeyError, TypeError, OSError, subprocess.SubprocessError) as error:
-        print(f"verification planning/execution failed; release remains incomplete: {error}", file=sys.stderr)
+        context = "CI diagnostic checks failed" if args.ci else "verification planning/execution failed; release remains incomplete"
+        print(f"{context}: {error}", file=sys.stderr)
         return 1
 
 

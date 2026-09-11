@@ -28,8 +28,8 @@ python3 scripts/release/run-verification.py plan --check
 An uncertain internal plan exits with code 3 and `scope review required`.
 The coding agent must explain why, which suites would run and any credible
 runtime estimate, then ask the owner whether to correct classification or approve
-the full run. No approval means stop, not skip and not PASS. Automated CI cannot
-ask interactively: it reports the blocker and stops.
+the full run. No approval means release verification stops, not skips or passes.
+Ordinary CI uses a separate diagnostic mode described below.
 
 After explicit owner approval, use the fingerprint printed for that exact plan:
 
@@ -42,11 +42,21 @@ input or relevant build environment invalidates the fingerprint. Do not invent
 approval or reuse a stale token. Public checkpoints need no exceptional full-run
 approval because complete verification is the scheduled policy.
 
-For an exceptional CI rerun, the repository owner can set the Actions variable
-`BRYNJA_FULL_VERIFICATION_APPROVAL` to the fingerprint printed by that failed CI
-plan, then rerun the job. Remove it afterward: a stale nonempty value is rejected.
-Local and CI plans have different HEAD/build environments and must not share
-approval tokens. Fixing the classification is preferable when scope is knowable.
+Ordinary push/PR CI runs `plan --check --ci` and `scripts/checks.sh --ci`.
+It neither reads the Actions approval variable nor consumes or grants release
+approval. A stale repository variable cannot block those checks. Known scope
+runs the affected repository checks plus the shared build/test/lint/policy
+baseline. Uncertain scope emits a warning and runs only that shared baseline;
+specialized campaigns are explicitly **deferred**, not represented as reused
+or passed. Unknown command syntax and actual check failures still fail CI.
+The existing host and compiler compatibility jobs continue independently.
+
+`--ci` is accepted only for plan/repository diagnostics, never for Miri, ASan,
+Kani, compiler-matrix or arbitrary command execution. It produces no release
+receipt. The local release/tag gate does not use this mode: uncertain scope still
+requires exact owner approval, and public checkpoints retain complete verification.
+Pentest/native evidence and release-readiness checks remain release requirements,
+not prerequisites for ordinary code checks or GitHub CodeQL scanning.
 
 ## Execution
 

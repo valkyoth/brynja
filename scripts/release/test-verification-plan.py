@@ -141,12 +141,12 @@ def runner_tests() -> None:
     spec.loader.exec_module(runner)
     executed = []
 
-    def run(phase, plan, *args):
+    def run(phase, plan, *args, environment=None):
         executed.clear()
         with (patch.object(runner.plans, "build", return_value=plan),
               patch.object(runner.sys, "argv", ["runner", phase, *args]),
               patch.object(runner, "execute", side_effect=lambda *c: executed.append(c)),
-              patch.dict(runner.os.environ, {}, clear=True),
+              patch.dict(runner.os.environ, environment or {}, clear=True),
               contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO())):
             return runner.main()
 
@@ -172,8 +172,42 @@ def runner_tests() -> None:
     assert any("md5-differential" in c[0] for c in executed)
     with patch.object(commands, "matrix_commands", side_effect=ValueError("unknown matrix")):
         assert run("repository", sample()) == 1 and not executed
+        assert run("repository", sample(), "--ci") == 1 and not executed
     with patch.object(commands, "catalog", side_effect=ValueError("unknown sanitizer")):
         assert run("repository", sample()) == 1 and not executed
+        assert run("repository", sample(), "--ci") == 1 and not executed
+    # CI must ignore stale repository variables, never grant release approval,
+    # and never turn unresolved scope into an automatic full campaign.
+    stale = {"BRYNJA_FULL_VERIFICATION_APPROVAL": "b" * 64}
+    assert run("plan", sample(groups=("sha2",)), "--check", "--ci", environment=stale) == 0
+    assert not executed
+    assert run("repository", sample(groups=("sha2",)), "--ci", environment=stale) == 0
+    assert any("sha2-execution" in c[0] for c in executed)
+    assert not any("md5-differential" in c[0] for c in executed)
+    for public in (False, True):
+        assert run("repository", sample(blocked=True, public=public, groups=plans.scope.GROUPS),
+                   "--ci", environment=stale) == 0
+        assert [c[0] for c in executed] == commands.selected(commands.repository_commands(), [])
+        assert any("cargo test --workspace --all-features" == c[0] for c in executed)
+        assert not any("check-zeroization-miri.sh" in c[0] or "--required-groups" in c[0] for c in executed)
+    # A CI invocation cannot leak authorization into later release execution.
+    assert run("repository", sample(blocked=True), environment=stale) == 1 and not executed
+    assert run("repository", sample(blocked=True)) == 3 and not executed
+    for phase, extra in (("asan", ()), ("miri", ()), ("kani", ()), ("matrix", ()),
+                         ("command", ()), ("repository", ("--approve-full", "a" * 64))):
+        try:
+            run(phase, sample(), "--ci", *extra)
+        except SystemExit as error:
+            assert error.code == 2 and not executed
+        else:
+            raise AssertionError("CI option admitted a release-only operation")
+    with patch.object(runner, "execute", side_effect=subprocess.CalledProcessError(1, "test")):
+        # The run helper mocks execution; check real main separately so failed
+        # tests remain failures, not diagnostic success or evidence reuse.
+        with (patch.object(runner.plans, "build", return_value=sample()),
+              patch.object(runner.sys, "argv", ["runner", "repository", "--ci"]),
+              contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO())):
+            assert runner.main() == 1
     executed.clear()
     with (patch.object(runner.subprocess, "check_output", return_value="1.90.0-x86_64-unknown-linux-gnu (default)\n"),
           patch.object(runner, "execute", side_effect=executed.append)):
@@ -196,15 +230,17 @@ def nested_fixture_tests() -> None:
 
 
 def entrypoint_tests() -> None:
-    # Retain both operator preflight and CI's noninteractive approval channel.
+    # Release preflight and ordinary CI are distinct entrypoints.
     tag = (plans.ROOT / "scripts/tag_gate.sh").read_text()
     preflight = "python3 scripts/release/run-verification.py plan --check"
     assert tag.index(preflight) < tag.index("\nscripts/checks.sh")
     for phase in ("asan", "kani"):
         assert f"python3 scripts/release/run-verification.py {phase}" in tag
     ci = (plans.ROOT / ".github/workflows/ci.yml").read_text()
-    assert ci.index(preflight) < ci.index("- name: Install Rust toolchain")
-    assert ci.count("BRYNJA_FULL_VERIFICATION_APPROVAL: ${{ vars.BRYNJA_FULL_VERIFICATION_APPROVAL }}") == 2
+    assert ci.index(preflight + " --ci") < ci.index("- name: Install Rust toolchain")
+    assert "BRYNJA_FULL_VERIFICATION_APPROVAL" not in ci
+    assert "run: scripts/checks.sh --ci\n" in ci
+    assert "--ci" not in tag
     assert "exec python3 scripts/release/run-verification.py repository" in (plans.ROOT / "scripts/checks.sh").read_text()
 
 

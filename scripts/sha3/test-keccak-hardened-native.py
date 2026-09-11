@@ -8,6 +8,7 @@ def record(lane):
     target, kernel = evidence.LANES[lane]
     package = '\n'.join((
         'Packaged hardened Keccak public API: PASS',
+        'Hardened Keccak operation properties: PASS; seed=17037; cases=64; identities=4',
         'Hardened Keccak packaged ownership rejects 54 bypasses',
         'Hardened Keccak packaged accelerated byte/bit/lifecycle tests: PASS',
         *(['Hardened Keccak hosted Arm execution: PASS; kernel=ArmKeccak'] if kernel == 'ArmKeccak' else [])))

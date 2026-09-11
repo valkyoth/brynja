@@ -20,6 +20,9 @@ theta, rearranged lanes, current vector, next vector and following vector.
 Hardened entry executes its own zero-state KAT. Caller state is committed only
 after successful permutation; scratch clears on success, error, recoverable
 unwind and Drop. An interrupted kernel operation quarantines its authority.
+Private scratch reads, writes and chi coordinates return a typed error on an
+invalid index. Such an invariant failure clears scratch, quarantines authority
+and preserves caller state; it cannot silently substitute zero or skip a write.
 The new kernels use AVX2 or AArch64 SHA3 instructions for chi, with scalar
 theta/rho/pi over owned scratch. A speedup is not claimed before measurement.
 
@@ -108,6 +111,28 @@ Affected repository checks supplement these focused campaigns; final release
 verification is separate and follows the exceptional retest and native collection.
 After a clean exceptional pentest, collect fresh native Intel, Arm and Mac evidence for the exact candidate.
 Do not reuse previous ordinary Keccak captures as hardened evidence.
+
+The packaged native campaign also executes a bounded operation-sequence property
+test for SHAKE128/256 and cSHAKE128/256. It varies input data, one-byte and irregular
+updates, empty operations, partial message/customization/output bits, repeated
+phase transitions, cancellation, and mixed public/secret reads across rates.
+Successful output is compared with the separate portable implementation; errors
+must clear secret destinations, preserve public destinations and remain terminal.
+The normal campaign uses seed 17037 and 64 scenarios per identity in debug/release;
+the native artifact validator requires its execution marker, not only a compiled test.
+This is reproducible randomized property testing, not coverage-guided fuzzing or
+proof of all possible sequences. For a longer local run on an AVX2-capable host:
+
+```sh
+BRYNJA_KECCAK_PROPERTY_SEED=17037 BRYNJA_KECCAK_PROPERTY_CASES=4096 RUSTFLAGS="-C target-feature=+avx2" cargo +1.98.1 test --locked --offline --release -p brynja-hash-sha3 --features hardened-execution --test hardened_execution replayable_operation_sequences -- --nocapture
+```
+
+Use `-C target-feature=+neon,+sha2,+sha3` only on a qualified Arm host. Seeds are
+nonzero u64 values; case counts are bounded to 1..=65536. Failures print seed/case
+for replay. Longer campaigns stay local/native rather than extending ordinary CI.
+The existing all-feature workspace CI test executes CPU doctests, including the
+Keccak non-Send/non-Clone checks. Separately, the repository gate compiles the
+54 packaged ownership negatives, covering Send, Sync, Copy, Clone and Debug.
 
 Capture with `python3 scripts/sha3/capture-keccak-hardened-native.py LANE OUTPUT --attest-native`
 from a clean committed checkout, using `linux-x86_64`, `linux-aarch64` or

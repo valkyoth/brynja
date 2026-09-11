@@ -1,6 +1,8 @@
 //! Hardened native execution, portable equivalence and output ownership tests.
 #![cfg(feature = "hardened-execution")]
 
+mod keccak_properties;
+
 use brynja_crypto_cpu::static_execution::{Authority, Kernel};
 use brynja_hash_sha3::{
     self as portable, Fips202BitString, Fips202Output, hardened_execution as cpu,

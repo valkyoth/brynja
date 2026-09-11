@@ -105,13 +105,11 @@ impl Drop for Operation<'_, '_> {
 fn dispatch(kernel: Kernel, scratch: &mut KeccakScratch) -> Result<(), Error> {
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86Keccak {
-        crate::x86_avx2_keccak::permute_secret(scratch);
-        return Ok(());
+        return crate::x86_avx2_keccak::permute_secret(scratch);
     }
     #[cfg(target_arch = "aarch64")]
     if kernel == Kernel::ArmKeccak {
-        crate::aarch64_sha3_keccak::permute_secret(scratch);
-        return Ok(());
+        return crate::aarch64_sha3_keccak::permute_secret(scratch);
     }
     let _ = (kernel, scratch);
     Err(Error::WrongOperation)

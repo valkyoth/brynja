@@ -29,6 +29,8 @@ ordinary.run = pinned_run
 
 def environment(destination):
     env = dict(os.environ, CARGO_TARGET_DIR=str(destination / 'target'))
+    env['BRYNJA_KECCAK_PROPERTY_SEED'] = '17037'
+    env['BRYNJA_KECCAK_PROPERTY_CASES'] = '64'
     for name in ('RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'RUSTDOCFLAGS', 'CARGO_BUILD_TARGET'):
         env.pop(name, None)
     return env
@@ -49,6 +51,7 @@ def package(destination, env):
     (consumer / 'Cargo.toml').write_text(manifest)
     (consumer / 'src/lib.rs').write_text('pub use brynja_hash_sha3::hardened_execution as api;\n')
     shutil.copyfile(roots['brynja-hash-sha3'] / 'tests/hardened_execution.rs', consumer / 'tests/api.rs')
+    shutil.copytree(roots['brynja-hash-sha3'] / 'tests/keccak_properties', consumer / 'tests/keccak_properties')
     return consumer, roots
 
 
@@ -124,9 +127,16 @@ def main():
             for profile in ([], ['--release']):
                 result = ordinary.run(['cargo', 'test', '--offline', *profile, *target,
                                        '--test', 'api', '--', '--nocapture'], consumer, env)
-                policy.require('4 passed; 0 failed' in result.stdout, 'complete packaged execution')
+                property_result(result.stdout)
+                policy.require('5 passed; 0 failed' in result.stdout, 'complete packaged execution')
             print('Hardened Keccak packaged accelerated byte/bit/lifecycle tests: PASS')
     print('Packaged hardened Keccak public API: PASS')
+
+
+def property_result(output):
+    policy.require('Hardened Keccak operation properties: PASS; seed=17037; cases=64; identities=4' in
+                   output.splitlines(), 'executed operation-sequence properties')
+    print('Hardened Keccak operation properties: PASS; seed=17037; cases=64; identities=4')
 
 
 def hosted(consumer, env, target):
@@ -150,8 +160,9 @@ fn session(owner: &Authority) -> Result<cpu::KeccakSession<'_>, String> {
     try:
         path.write_text(updated)
         result = ordinary.run(['cargo', 'test', '--offline', '--release', *target,
-                               '--test', 'api'], consumer, env)
-        policy.require('4 passed; 0 failed' in result.stdout, 'complete hosted execution')
+                               '--test', 'api', '--', '--nocapture'], consumer, env)
+        property_result(result.stdout)
+        policy.require('5 passed; 0 failed' in result.stdout, 'complete hosted execution')
     finally:
         path.write_text(original)
     print('Hardened Keccak hosted Arm execution: PASS; kernel=ArmKeccak')

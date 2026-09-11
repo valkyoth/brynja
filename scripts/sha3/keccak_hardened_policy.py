@@ -37,6 +37,9 @@ def semantic(root):
             require(f'clear_owned_region(&mut self.{field})' in source, 'region clearing: ' + field)
         require('impl Drop for ' in source and 'self.wipe();' in source, 'owner destruction')
     checks = {
+        SCRATCH: ('fn read(bytes: &[u8], index: usize) -> Result<u64, Error>',
+                  'fn write(bytes: &mut [u8], index: usize, value: u64) -> Result<(), Error>',
+                  '.ok_or(Error::Quarantined)?;', 'check_chi(row, first, width)?;'),
         CPU + '/src/hardened_execution/keccak.rs': (
             'session.permute(core::hint::black_box(&mut state))?',
             'if !correct {', 'session.route.quarantine();',
@@ -99,6 +102,7 @@ def validate(root=ROOT, write=False):
         paths.add(Path(package + '/Cargo.toml'))
         paths.update(path.relative_to(root) for path in (root / package / 'src').rglob('*.rs'))
     paths.add(Path(HASH + '/tests/hardened_execution.rs'))
+    paths.update(path.relative_to(root) for path in (root / HASH / 'tests/keccak_properties').rglob('*.rs'))
     paths.update(path.relative_to(root) for path in (root / 'scripts/sha3').glob('*keccak-hardened*.py'))
     paths.add(Path('scripts/sha3/keccak_hardened_policy.py'))
     paths.add(Path('scripts/sha3/keccak_hardened_native.py'))

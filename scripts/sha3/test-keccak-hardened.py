@@ -16,6 +16,8 @@ def semantic():
     cases = [(path, f'clear_owned_region(&mut self.{field})', 'Ok::<(), ()>(())')
              for path, fields in policy.REGIONS.items() for field in fields]
     cases += [
+        (policy.SCRATCH, '.ok_or(Error::Quarantined)?;', '.ok_or(Error::WrongOperation)?;'),
+        (policy.SCRATCH, 'check_chi(row, first, width)?;', 'let _ = (row, first, width);'),
         (policy.CPU + '/src/hardened_execution/keccak.rs', 'if !correct {', 'if false {'),
         (policy.CPU + '/src/hardened_execution/keccak.rs', 'self.check()?;', 'let _ = self;'),
         (policy.ENGINE, 'self.failed = true;', 'self.failed = false;'),
@@ -86,7 +88,26 @@ def compiled():
                     policy.require('live Drop region ' + field in result.stdout, 'live destructor rejection')
             finally:
                 path.write_text(original)
+        root = roots['brynja-crypto-cpu']
+        path = root / 'src/hardened_execution/keccak_scratch.rs'
+        original = path.read_text()
+        for before, after in (
+            ('    let mut value = 0_u64;', '    if index >= bytes.len() / 8 { return Ok(0); }\n    let mut value = 0_u64;'),
+            ('    let word = bytes\n        .as_chunks_mut', '    if index >= bytes.len() / 8 { return Ok(()); }\n    let word = bytes\n        .as_chunks_mut'),
+        ):
+            policy.require(original.count(before) == 1, 'exact scratch boundary mutant')
+            try:
+                path.write_text(original.replace(before, after))
+                for profile in ([], ['--release']):
+                    result = acceptance.ordinary.run(['cargo', 'test', '--offline', '--manifest-path',
+                        str(root / 'Cargo.toml'), '--features', 'hardened-execution', '--lib',
+                        'hardened_execution::keccak::tests::all_seven_regions_clear', *profile], root, env, success=False)
+                    policy.require('assertion `left == right` failed' in result.stdout,
+                                   'scratch boundary runtime rejection')
+            finally:
+                path.write_text(original)
     print('Hardened Keccak rejects 22 compiled debug/release region-removal mutants')
+    print('Hardened Keccak rejects four compiled debug/release silent-index mutants')
 
 
 def main():

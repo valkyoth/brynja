@@ -61,6 +61,7 @@ def record_check(record, lane, commit, expected):
     for text in results.values():
         require(isinstance(text, str) and len(text) < 65536, 'Keccak output bound')
     for marker in ('Packaged hardened Keccak public API: PASS',
+                   'Hardened Keccak operation properties: PASS; seed=17037; cases=64; identities=4',
                    'Hardened Keccak packaged ownership rejects 54 bypasses',
                    'Hardened Keccak packaged accelerated byte/bit/lifecycle tests: PASS'):
         require(marker in results['package'].splitlines(), 'Keccak package execution')

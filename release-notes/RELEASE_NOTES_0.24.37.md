@@ -32,7 +32,7 @@ Additional development verification completed:
   transactional public-output and typed secret-output checks.
 - 54 packaged ownership/classification negatives and 22 compiled debug/release
   region-removal mutants with live Drop observation of eleven owned regions.
-- 17 semantic policy regressions and 84 native-record tamper regressions.
+- 19 semantic policy regressions and 87 native-record tamper regressions.
 - MIR/LLVM/assembly clearing checks at Rust 1.90.0 and 1.98.1 on x86-64 and Arm;
   focused native AVX2 AddressSanitizer and Miri owned-memory/staging tests.
 - Static AVX2 and static/hosted Arm packaged execution; Arm uses QEMU here,
@@ -50,3 +50,12 @@ After a clean exceptional pentest, collect fresh native Intel, Arm and Mac
 evidence and complete the release review before waiting for GitHub/CodeQL.
 This milestone selects zero crates.io packages. The next public checkpoint
 remains v0.25.2.
+
+Pentest hardening follow-up: scratch indexing now returns a typed failure instead
+of silently substituting zero or omitting a write. Error propagation preserves
+caller state and retains cleanup/quarantine. Boundary tests and compiled mutants
+cover that behavior. A bounded, replayable SHAKE/cSHAKE operation-sequence property
+campaign now runs in packaged native checks and is required by native evidence.
+Existing all-feature CI doctests and 54 packaged ownership checks already cover
+the reported non-Send/non-Clone concern. These changes require a fresh retest;
+the supplied assessment of the earlier commit is not approval of this revision.

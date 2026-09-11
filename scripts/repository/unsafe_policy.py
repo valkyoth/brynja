@@ -43,10 +43,10 @@ ALLOWED = {
         "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a", 0, 1, 0,
     ),
     Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs"): (
-        "89d6dc678ec14c24d7df3bedde7fc8f069cbcf062bec288c7dca43ac77958f46", 5, 2, 5,
+        "adc8b9f184e60c7ef8d47aa3133b51e10f9eb757a5444382393e6c0feb800598", 5, 2, 5,
     ),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs"): (
-        "d051a37df2ae3e5340d07e54a78fe2962739ffe00e2488a51f8382066c509799", 5, 2, 5,
+        "f0b1d27f9de27ac2a3877777bfdfaab3c08f36336065c2d072a35408420099e1", 5, 2, 5,
     ),
     Path("crates/brynja-crypto-cpu-std/src/runtime_detection.rs"): (
         "f80399ec92f54a4a7deaf5588e729908a1f730549f30de5bdfdc826c6cb31de5", 1, 0, 1,

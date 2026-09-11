@@ -1,7 +1,7 @@
 # Brynja v0.24.39
 
 Status: implemented; focused development verification and owner-supplied retest
-passed. Native collection and release qualification pending.
+passed. Three-platform native collection passed; final release qualification pending.
 
 Adds default-off `brynja_hash_tuple::execution` APIs for all four TupleHash and
 TupleHashXOF identities. Separate public/unkeyed and hardened owners retain exact
@@ -33,6 +33,13 @@ substitute for fresh three-platform TupleHash collection after pentest.
 Exceptional owner pentest, native evidence review, final scoped release checks
 and green GitHub/CodeQL remain mandatory before tagging. This is neither
 independent cryptographic verification nor FIPS validation.
+
+The owner retest and native collection are complete. The native index preserves
+unmodified Intel Xeon Platinum 8488C, AWS Neoverse-V1 and Apple M2 Pro artifacts
+at `11e632ceeed37d54844e1cbcb42b5f13688f3f72`, with all 268 source bindings
+checked. Each selected mode passed 268 cases (four modes on Intel, five on Arm),
+plus four lifecycle tests and 1,024 actual Keccak permutations per platform.
+Final scoped release checks and green GitHub/CodeQL are not granted by this result.
 
 Focused development results:
 

@@ -1,7 +1,7 @@
 # TupleHash accelerated operations
 
-Status: v0.24.39 implemented; focused development verification passed.
-Exceptional owner pentest, fresh native evidence and release gates are pending.
+Status: v0.24.39 implemented; focused development verification, owner-supplied
+retest and three-platform native collection passed. Final release gates pending.
 This is not independent cryptographic verification or FIPS validation.
 
 The default-off `brynja_hash_tuple::execution` module implements TupleHash128,
@@ -120,3 +120,12 @@ Native execution is explicit: `--native-x86` or `--native-arm`.
 `--qemu` provides emulated Arm testing only. Fresh Linux x86-64, Linux Arm64
 and Apple Arm64 TupleHash evidence must be collected after a clean pentest;
 old KMAC/cSHAKE evidence does not qualify these new tuple ownership paths.
+
+The reviewed collection at `11e632ceeed37d54844e1cbcb42b5f13688f3f72`
+is registered in [the native index](../security/tuplehash-execution-native.json).
+Intel Xeon Platinum 8488C passed four execution modes; AWS Neoverse-V1 and
+Apple M2 Pro passed five, including hosted execution. Each mode checked 268
+official/independent cases, and each platform passed four kernel lifecycle tests
+and 1,024 actual accelerated permutations under Rust 1.98.1. These are
+project-owned functional observations, not side-channel, migration-safety,
+register/spill-erasure or independent certification evidence.

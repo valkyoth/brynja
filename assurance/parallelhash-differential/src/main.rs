@@ -4,10 +4,14 @@ use std::{
     io::{self, Read as _},
 };
 
+use brynja_hash_parallel::Fips202BitString;
+#[cfg(not(feature = "execution"))]
 use brynja_hash_parallel::{
-    Fips202BitString, Fips202Output, ParallelHash128, ParallelHash256, ParallelHashXof128,
-    ParallelHashXof256,
+    Fips202Output, ParallelHash128, ParallelHash256, ParallelHashXof128, ParallelHashXof256,
 };
+
+#[cfg(feature = "execution")]
+mod execution;
 
 const MAX_CAMPAIGN_BYTES: u64 = 1024 * 1024;
 const MAX_CASES: usize = 512;
@@ -58,12 +62,23 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
     let output_bytes = output_bits.saturating_add(7) / 8;
     let mut output = bounded_vec(output_bytes, line, "output allocation failed")?;
     let mut workspace = bounded_vec(block_size, line, "workspace allocation failed")?;
+    #[cfg(not(feature = "execution"))]
     run(
         algorithm,
         custom,
         input_bits,
         output_bits,
         &mut workspace,
+        &mut output,
+        line,
+    )?;
+    #[cfg(feature = "execution")]
+    execution::run(
+        algorithm,
+        custom,
+        input_bits,
+        output_bits,
+        block_size,
         &mut output,
         line,
     )?;
@@ -75,6 +90,7 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
     Ok(())
 }
 
+#[cfg(not(feature = "execution"))]
 fn run(
     algorithm: &str,
     custom: Fips202BitString<'_>,
@@ -112,16 +128,27 @@ fn run(
 
 fn bounded_vec(length: usize, line: usize, message: &str) -> Result<Vec<u8>, io::Error> {
     let mut value = Vec::new();
-    value.try_reserve_exact(length).map_err(|_| invalid(line, message))?;
+    value
+        .try_reserve_exact(length)
+        .map_err(|_| invalid(line, message))?;
     value.resize(length, 0);
     Ok(value)
 }
 
-fn destination<'a>(bytes: &'a mut [u8], valid: u8, line: usize) -> Result<Fips202Output<'a>, io::Error> {
+#[cfg(not(feature = "execution"))]
+fn destination<'a>(
+    bytes: &'a mut [u8],
+    valid: u8,
+    line: usize,
+) -> Result<Fips202Output<'a>, io::Error> {
     Fips202Output::new(bytes, valid).map_err(|_| invalid(line, "output shape rejected"))
 }
 
-fn bit_string<'a>(bytes: &'a [u8], bits: usize, line: usize) -> Result<Fips202BitString<'a>, io::Error> {
+fn bit_string<'a>(
+    bytes: &'a [u8],
+    bits: usize,
+    line: usize,
+) -> Result<Fips202BitString<'a>, io::Error> {
     if bytes.len() != bits.saturating_add(7) / 8 {
         return Err(invalid(line, "bit string length mismatch"));
     }
@@ -149,9 +176,13 @@ fn decode(field: Option<&str>, line: usize) -> Result<Vec<u8>, io::Error> {
         return Err(invalid(line, "invalid hex length"));
     }
     let mut output = bounded_vec(0, line, "field allocation failed")?;
-    output.try_reserve_exact(value.len() / 2).map_err(|_| invalid(line, "field allocation failed"))?;
+    output
+        .try_reserve_exact(value.len() / 2)
+        .map_err(|_| invalid(line, "field allocation failed"))?;
     for pair in value.as_bytes().chunks_exact(2) {
-        let [high, low] = pair else { return Err(invalid(line, "invalid hex pair")); };
+        let [high, low] = pair else {
+            return Err(invalid(line, "invalid hex pair"));
+        };
         output.push(nibble(*high, line)?.wrapping_shl(4) | nibble(*low, line)?);
     }
     Ok(output)
@@ -166,13 +197,25 @@ fn nibble(value: u8, line: usize) -> Result<u8, io::Error> {
 }
 
 fn valid_bits(bits: usize) -> u8 {
-    if bits == 0 { 0 } else { u8::try_from((bits - 1) % 8).unwrap_or(7) + 1 }
+    if bits == 0 {
+        0
+    } else {
+        u8::try_from((bits - 1) % 8).unwrap_or(7) + 1
+    }
 }
 
 fn append_hex(output: &mut String, bytes: &[u8]) -> Result<(), io::Error> {
-    output.try_reserve(bytes.len().checked_mul(2).ok_or_else(|| invalid(0, "hex length overflow"))?)
+    output
+        .try_reserve(
+            bytes
+                .len()
+                .checked_mul(2)
+                .ok_or_else(|| invalid(0, "hex length overflow"))?,
+        )
         .map_err(|_| invalid(0, "hex allocation failed"))?;
-    for byte in bytes { write!(output, "{byte:02x}").map_err(io::Error::other)?; }
+    for byte in bytes {
+        write!(output, "{byte:02x}").map_err(io::Error::other)?;
+    }
     Ok(())
 }
 
@@ -181,5 +224,8 @@ fn required<'a>(value: Option<&'a str>, line: usize, label: &str) -> Result<&'a 
 }
 
 fn invalid(line: usize, message: &str) -> io::Error {
-    io::Error::new(io::ErrorKind::InvalidData, format!("line {}: {message}", line.saturating_add(1)))
+    io::Error::new(
+        io::ErrorKind::InvalidData,
+        format!("line {}: {message}", line.saturating_add(1)),
+    )
 }

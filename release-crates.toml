@@ -1,19 +1,19 @@
 [release]
-version = "0.24.39"
-milestone = "0.24.39"
+version = "0.24.40"
+milestone = "0.24.40"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34", "0.24.35", "0.24.36", "0.24.37", "0.24.38", "0.24.39"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34", "0.24.35", "0.24.36", "0.24.37", "0.24.38", "0.24.39", "0.24.40"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "New TupleHash/TupleHashXOF execution, exact item writers and secret-output lifecycle paths require exceptional pentest and fresh native TupleHash evidence before tagging."
+exception_reason = "New ParallelHash execution, worker authority, secret-output lifecycle and detached evidence import require exceptional pentest and fresh native ParallelHash evidence before tagging."
 
 [crates."brynja"]
-previous_version = "0.24.38"
-version = "0.24.39"
+previous_version = "0.24.39"
+version = "0.24.40"
 change = "metadata"
 publish = false
-reason = "Implement opt-in public and hardened TupleHash execution; retain portable facade defaults and no publication."
+reason = "Develop ParallelHash accelerated scheduling, detached verification and crate-specific README examples; preserve portable facade defaults and no publication."
 
 [crates."brynja-legacy-md5"]
 previous_version = "unpublished"

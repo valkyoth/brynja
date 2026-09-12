@@ -25,265 +25,105 @@
 
 # brynja-hash-sha2
 
-Complete ordinary byte/bit SHA-2 execution is additionally available through
-default-off `static-execution` and `runtime-execution` features in
-`brynja_hash_sha2::execution`. All six named hashes and all 510 general-t values
-have one-shot and consuming streaming APIs, transactional updates and explicit
-route/work reports. See [usage and deployment boundaries](https://github.com/valkyoth/brynja/blob/main/docs/sha2-ordinary-execution.md).
-Defaults remain portable; these non-erasing APIs must not process secrets.
-The separate `hardened-execution` feature has matching native evidence; see the hardened
-execution section below. Historical admission-gated methods
-below are retained; the new execution API does not change their admission flags.
-
-The separate general SHA-512/t extension is **Fully implemented** for portable
-ordinary/hardened APIs: v0.24.29 completes
-[final scalar evidence](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-final-evidence.md)
-and records the scoped owner review and native correctness observations. It reuses v0.24.28's
-runnable [package-external public acceptance](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-public-acceptance.md)
-over the unchanged v0.24.26 implementation of
-ordinary/hardened incremental and one-shot byte/bit hashing for all 510 valid t,
-behind the default-off `general-sha512-t` leaf feature. It follows
-its [authority and public API contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
-Typed secret output clears on Drop or explicit consuming declassification;
-every secret-output error clears the entire destination. Expanded lifecycle
-evidence is in v0.24.27; v0.24.29 closes portable family acceptance. CPU candidates
-remain unadmitted; independent review and FIPS validation remain absent. The six named SHA-2
-identities below remain unchanged.
-
-```rust
-use brynja_hash_sha2::{Sha512TBits, Sha512TDigest};
-let parameter = Sha512TBits::new(9)?;
-let mut label = [0; 11];
-let length = parameter.write_iv_label(&mut label)?;
-assert_eq!(&label[..length], b"SHA-512/9");
-// Import an already PUBLIC digest from another implementation, not a message.
-let digest = Sha512TDigest::from_bytes(parameter, &[0xab, 0x80])?;
-assert_eq!(digest.parameter().bits(), 9);
-# Ok::<(), brynja_hash_sha2::Sha512TError>(())
-```
-
-Enable `features = ["general-sha512-t"]` for this example. Value import and IV
-diagnostics are not authentication, message hashing, FIPS approval or secret
-ownership. Public values are copyable and are not zeroized. Equality includes t
-but is not constant-time verification. General and named digest types remain
-distinct; short t values have weak collision/preimage security bounds.
-
-```rust
-use brynja_hash_sha2::{Sha512TBits, sha512_t, hardened_sha512_t_secret,
-    PublicDeclassification};
-let parameter = Sha512TBits::new(9)?;
-let ordinary = sha512_t(parameter, b"abc")?; // Public input only.
-let mut destination = [0; 2]; // Exactly ceil(t / 8) bytes.
-let secret = hardened_sha512_t_secret(parameter, b"abc", &mut destination)?;
-let public = secret.declassify(PublicDeclassification::acknowledge())?;
-assert_eq!(public, ordinary);
-assert_eq!(destination, [0; 2]);
-# Ok::<(), brynja_hash_sha2::Sha512TError>(())
-```
-
-For confidential input use `HardenedSha512T` or the hardened one-shot APIs,
-never ordinary `Sha512T` or `Sha512TDigest::from_bytes`. Secret processing does
-not stage through a public digest; only explicit declassification creates one.
-Borrowing secret bytes does not make copies public or erase caller-owned inputs.
-Mandatory clearing covers the existing eight SHA-2 owner regions, including
-schedule, buffered input and staging; it does not promise erasure of registers,
-compiler copies/spills, caches, dumps, swap, aborts or caller-created copies.
-
-`PublicDeclassification::acknowledge()` is available to any caller: it records
-intent in code, not runtime authorization or access control. Applications own
-disclosure policy, auditing and the handling of explicitly borrowed secret bytes.
-For untrusted streams, also enforce total input limits, time budgets and rate
-limits at ingestion; the hash's mathematical length limit is not a DoS budget.
-
-First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
-crate provides correct portable byte-oriented one-shot and streaming APIs for
-all six FIPS 180-4 SHA-2 algorithms. The optional `cpu` feature added at v0.22.1 and extended
-with the unadmitted RV64 Zknh candidate at v0.22.2 accepts an
-already tested `brynja-crypto-cpu` session without changing scalar ownership.
-Its x86_64, AArch64, and RISC-V candidates remain unadmitted pending native
-evidence. The v0.22.3 packaged downstream acceptance closes the complete
-public SHA-256 chain. v0.23.0 adds complete portable SHA-224, v0.23.1 adds
-complete portable SHA-384 and SHA-512, and v0.23.2 completes SHA-512/224 and
-SHA-512/256 with exact FIPS SHA-512/t IV derivation.
-v0.23.3 extends the forced backend API to SHA-224 and all four SHA-512-family
-identities. AArch64 SHA-512 and RV64 Zknh SHA-512 candidates remain
-unadmitted; x86_64 SHA-512 remains an explicit scalar-only decision. v0.23.4
-closes byte-oriented family usability with source and separately packaged
-downstream acceptance through only documented public APIs. v0.24.7 adds the
-complete FIPS 180-4 arbitrary-bit input domain to all six identities through
-canonical one-shot and consuming incremental final-tail APIs. The wider family
-is **Fully implemented** after the combined downstream acceptance at v0.24.11.
-v0.24.8 adds distinct hardened states for all six identities, complete
-source-declared internal sanitization, explicit public declassification, and
-typed secret output.
-
-## Example
-
-```rust
-use brynja_hash_sha2::{
-    BitString, Sha224, Sha256, Sha384, Sha512, Sha512_224, Sha512_256,
-    sha224, sha256, sha256_bits, sha384, sha512, sha512_224, sha512_256,
-};
-
-let sha224_one_shot = sha224(b"abc").unwrap();
-let one_shot = sha256(b"abc").unwrap();
-let sha384_one_shot = sha384(b"abc").unwrap();
-let sha512_one_shot = sha512(b"abc").unwrap();
-let sha512_224_one_shot = sha512_224(b"abc").unwrap();
-let sha512_256_one_shot = sha512_256(b"abc").unwrap();
-
-let mut sha224_streaming = Sha224::new();
-sha224_streaming.update(b"a").unwrap();
-sha224_streaming.update(b"bc").unwrap();
-assert_eq!(sha224_streaming.finalize(), sha224_one_shot);
-
-let mut streaming = Sha256::new();
-streaming.update(b"a").unwrap();
-streaming.update(b"bc").unwrap();
-assert_eq!(streaming.finalize(), one_shot);
-
-let mut sha384_streaming = Sha384::new();
-sha384_streaming.update(b"abc").unwrap();
-assert_eq!(sha384_streaming.finalize(), sha384_one_shot);
-
-let mut sha512_streaming = Sha512::new();
-sha512_streaming.update(b"abc").unwrap();
-assert_eq!(sha512_streaming.finalize(), sha512_one_shot);
-
-let mut sha512_224_streaming = Sha512_224::new();
-sha512_224_streaming.update(b"abc").unwrap();
-assert_eq!(sha512_224_streaming.finalize(), sha512_224_one_shot);
-
-let mut sha512_256_streaming = Sha512_256::new();
-sha512_256_streaming.update(b"abc").unwrap();
-assert_eq!(sha512_256_streaming.finalize(), sha512_256_one_shot);
-
-// Canonical arbitrary-bit inputs use the high bits of their final byte.
-let three_bits = BitString::new(&[0b0110_0000], 3).unwrap();
-let bit_digest = sha256_bits(three_bits).unwrap();
-assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
-```
-
-Incremental callers absorb any complete-byte prefix with `update`, then pass
-one canonical final byte or byte-aligned suffix to the consuming
-`finalize_bits` method. Consuming the state makes repeated tails and absorption
-after a partial tail unrepresentable in safe Rust.
-
-Secret-bearing callers use a distinct hardened state rather than an ordinary
-state:
-
-```rust
-use brynja_hash_sha2::{HardenedSha256, PublicDeclassification};
-
-let mut state = HardenedSha256::new();
-state.update(b"secret-derived input").unwrap();
-let mut digest = [0_u8; 32];
-state
-    .finalize_public(&mut digest, PublicDeclassification::acknowledge())
-    .unwrap();
-```
-
-`finalize_secret` instead returns a typed `OwnedSecretRegion` over the caller's
-destination, which is cleared when dropped. Hardened states are sealed,
-non-cloneable, non-formattable, non-resettable, and portable-only. They clear
-every Brynja-owned source-declared state and scratch region on normal exits,
-errors, `Drop`, and recoverable unwinding. The exact claim excludes registers,
-caches, compiler-created copies, dumps, `mem::forget`, abort, forced
-termination, suspend images, power loss, and physical-memory attacks.
-
-Callers with external file or stream metadata can preflight the checked FIPS
-message-length domain without allocating or mutating the state:
-
-```rust
-use brynja_hash_sha2::Sha256;
-
-let state = Sha256::new();
-state.check_additional_bytes(4_294_967_296).unwrap();
-```
-
-Static `no_std` callers may explicitly request a compile-time-proven backend:
-
-```rust
-# #[cfg(feature = "cpu")]
-# {
-use brynja_hash_sha2::{Sha256BackendSession, sha256_with_backend};
-
-if let Some(backend) = Sha256BackendSession::for_compiled_target() {
-    let digest = sha256_with_backend(b"abc", &backend)?;
-    assert_eq!(digest.as_bytes().len(), 32);
-}
-# }
-# Ok::<(), brynja_hash_sha2::Sha256AcceleratedError>(())
-```
-
-Until native admission evidence is accepted, the constructor returns `None`.
-The default feature set always remains portable scalar SHA-2. The same static
-session model is available as `Sha512BackendSession` for SHA-384, SHA-512,
-SHA-512/224, and SHA-512/256 on exact qualifying targets.
-
-With both `general-sha512-t` and `cpu`, v0.24.29 also exposes
-`sha512_t_with_backend`, `sha512_t_bits_with_backend`, and
-`Sha512T::{update_with_backend, finalize_with_backend, finalize_bits_with_backend}`.
-They retain the parameter-specific digest identity, never silently fall back
-on backend errors, and consume state on finalization. IV derivation remains
-portable. These are ordinary public-data APIs; hardened states have no CPU
-route. Sessions still return `None` in normal builds because candidates remain
-unadmitted. See the [CPU integration and evidence instructions](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-cpu-evidence.md).
-
-Run the repository-owned downstream acceptance from a clean checkout with:
-
-```bash
-python3 scripts/sha2/check-sha2-public-api.py
-```
-
-It uses only ordinary public package APIs and repeats the run from assembled
-Cargo package contents. It needs no network or private test hook.
+First-party, allocation-free `no_std` SHA-2: SHA-224, SHA-256, SHA-384,
+SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 
 ## Cryptography Verification Status
 
-All six portable FIPS 180-4 SHA-2 algorithms are implemented through v0.23.2,
-and v0.23.3 adds complete forced candidate APIs while keeping every backend
-unadmitted pending native evidence. v0.23.4 completes packaged downstream
-byte-oriented family acceptance. v0.24.7 completes the canonical arbitrary-bit
-input APIs, and v0.24.8 completes all six hardened secret-bearing state APIs.
-Final combined acceptance passes at v0.24.11, so the expanded family is fully
-implemented. Independent cryptographic review and FIPS validation remain absent.
-No code in this crate has been independently reviewed. A component only moves
-from ❌ to ✅ when a named independent reviewer signs off and linked evidence
-identifies the reviewed implementation. Project tests, CI, Kani, Miri,
-fuzzing, and pentesting do not by themselves constitute independent
-verification.
-
-| Algorithm | Implementation chain | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
+| General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |
+| Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |
 
-These are unkeyed hashes. Digest equality is not MAC verification,
-authentication, password hashing, or a signature check. Brynja makes no FIPS
-140-3 validation claim. Ordinary SHA-2 states are intended for unkeyed hashing
-and do not guarantee erasure of remnants when their input contains secrets. A
-caller cannot erase private working state, schedules, or buffered input. The
-distinct hardened profiles use Brynja's admitted sanitization mechanism for
-every owned chaining state, partial buffer, schedule, block copy, temporary,
-and terminal path; HMAC and every future secret-derived consumer must use
-those owners.
+These implementations follow FIPS 180-4. That algorithm standard is not
+FIPS 140-3 validation: Brynja has no validated module or named independent
+cryptographic review.
 
-See the [full project documentation](https://github.com/valkyoth/brynja),
-[release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md),
-and [verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
+## Use
 
-Licensed under either Apache-2.0 or MIT, at your option.
+The APIs documented here include unpublished workspace functionality. From a
+local checkout, without maintaining a dependency version in this example:
 
-## Hardened execution
+```sh
+cargo add brynja-hash-sha2 --path /path/to/brynja/crates/brynja-hash-sha2 --no-default-features
+```
 
-The default-off `hardened-execution` feature adds a separate secret-bearing
-SHA-2 execution owner with mandatory private-state and CPU-scratch cleanup.
-It supports explicit portable, static instruction and (with `runtime-execution`)
-hosted routes. Ordinary constructors and their public-data restriction are unchanged.
-The CPU crate gains only an optional first-party `brynja-core` clearing dependency;
-the feature does not pull in std or an external crypto implementation.
+Hash public bytes in one call or incrementally:
 
-See [hardened SHA-2 APIs and cleanup boundaries](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md).
-The exceptional retest passed and matching native Intel, Arm and Mac evidence
-is archived. Register/spill erasure, independent verification and FIPS validation
-are not claimed. Release approval remains separate from these functional results.
+```rust
+use brynja_hash_sha2::{Sha256, sha256};
+let expected = sha256(b"abc").unwrap();
+let mut hash = Sha256::new();
+hash.update(b"a").unwrap();
+hash.update(b"bc").unwrap();
+assert_eq!(hash.finalize(), expected);
+```
+
+Arbitrary-bit input uses the high bits of the final byte; unused low bits must
+be zero. Streaming accepts complete bytes until consuming `finalize_bits`.
+
+```rust
+use brynja_hash_sha2::{BitString, sha256_bits};
+let bits = BitString::new(&[0b0110_0000], 3).unwrap();
+assert_eq!(&sha256_bits(bits).unwrap().as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
+```
+
+Use a hardened owner when input or output is confidential:
+
+```rust
+use brynja_hash_sha2::HardenedSha256;
+let mut destination = [0; 32];
+{
+    let mut hash = HardenedSha256::new();
+    hash.update(b"confidential input").unwrap();
+    let secret = hash.finalize_secret(&mut destination).unwrap();
+    assert_eq!(secret.expose().len(), 32);
+}
+assert_eq!(destination, [0; 32]);
+```
+
+Enable `general-sha512-t` for `Sha512TBits`, `Sha512T`,
+`HardenedSha512T` and their byte/bit one-shot APIs. Valid t values are
+1..=511 excluding 384; small t provides correspondingly weak security.
+Parameters remain part of digest identity. `Sha512TDigest::from_bytes`
+imports an already public digest, not a message or secret; hardened paths
+return secret owners, never implicitly pass through that public importer.
+See the [general-t API contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-t-contract.md).
+
+## Hardware and SIMD
+
+Defaults remain portable and do not probe the CPU.
+
+| Feature | Reachable API | Supported execution |
+| --- | --- | --- |
+| `static-execution` | `execution`, public data only | x86-64 SHA instructions for SHA-224/256; AArch64 SHA2/SHA-512 |
+| `runtime-execution` | `execution` with hosted authority | Qualifying AArch64 system-wide feature guarantees |
+| `hardened-execution` | Separate erasing execution owners | Static routes above; hosted routes with `runtime-execution` |
+| `cpu` | Historical candidate sessions | Unadmitted; not an operational acceleration route |
+
+x86-64 SHA-512 is portable; no separate AVX2/AVX-512 multi-message SHA-2
+backend is provided. RISC-V Zknh candidates are QEMU/codegen-tested, not
+enabled for production execution. Static binaries require compatible CPUs and
+OS state throughout scheduling and migration. A current-core feature probe
+alone is not sufficient hosted authority.
+
+See [ordinary execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-ordinary-execution.md)
+and [hardened execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md)
+for authority construction, exact features, route reports and failure handling.
+
+## Security boundaries
+
+Ordinary states do not zeroize private state and must not process secrets.
+Hardened owners clear source-declared state, buffers, schedules and scratch;
+typed secret destinations clear on failure and Drop. Public output requires
+explicit declassification. That acknowledgment records caller intent, not
+access control.
+
+Callers own input/output copies and ingestion work limits. Cleanup does not
+guarantee erasure of registers, compiler copies/spills, caches, dumps, swap,
+forgotten owners, aborts or forced termination. A raw hash or ordinary digest
+equality is not authentication, MAC verification or password hashing.
+
+[Verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
+MIT OR Apache-2.0.

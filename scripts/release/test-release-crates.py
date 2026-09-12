@@ -323,6 +323,19 @@ def test_dependency_order_is_checked() -> None:
     )
 
 
+def test_parallelhash_test_dependencies_are_publishable_first() -> None:
+    plan = public_plan()
+    fixture = packages()
+    fixture["brynja-hash-parallel"]["dependencies"] = [
+        {"name": "brynja-crypto-cpu-std", "req": "=0.3.0", "kind": "dev"}
+    ]
+    policy.verify_repository(fixture, plan)
+    fixture["brynja-hash-parallel"]["dependencies"][0]["name"] = "brynja-hash-parallel-std"
+    assert_fails(
+        "appears later in PUBLISH_ORDER", policy.verify_repository, fixture, plan,
+    )
+
+
 def test_release_candidates_parse_structurally() -> None:
     assert str(policy.parse_version("1.0.0-rc.1")) == "1.0.0-rc.1"
     assert_fails(

@@ -25,29 +25,37 @@
 
 # brynja-proofs
 
-`brynja-proofs` is a narrowly scoped Brynja workspace package. In `0.1.0` it
-establishes a compile-time boundary only; it does not provide a working TLS,
-cryptographic, PKI, platform, or legacy-protocol implementation.
+Repository proof-harness package. This package currently establishes a compile-time workspace
+boundary only; it does not provide the planned implementation.
 
 ## Cryptography Verification Status
 
-This repository-only crate does not implement cryptographic or protocol code,
-so it has no component status row. A Kani or other formal proof may establish
-only its precisely stated property and bounds; it does not independently
-verify a component. Only a named independent reviewer and linked review
-evidence can change a component's independent-verification status.
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| Repository proof-harness package | ❌ Not implemented | ❌ No |
 
-Most application users will eventually depend on the modern facade:
+This is repository tooling, not a cryptographic library. Passing a test or a
+bounded formal proof does not independently verify a cryptographic component.
 
-```toml
-[dependencies]
-brynja = "0.1"
+## Current use
+
+No operational tooling API is available here, so there is no application
+integration example yet. To check the package boundary from the repository:
+
+```sh
+cargo test --locked -p brynja-proofs
 ```
 
-This package is currently marked `publish = false`. Publication requires the
-version-specific deliverables, verification, documentation, a current
-committed PASS pentest report, and green GitHub checks in the
-[release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+## Hardware and SIMD
+
+No hardware acceleration or SIMD implementation is exposed here. Future
+engines will consume explicitly selected first-party crypto backends; they
+must not imply that a CPU feature report authorizes execution.
+
+This package is currently unpublished (`publish = false`). Its boundary is
+not a release-readiness or publication claim.
+
+[Implementation roadmap](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
+· [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md).
+MIT OR Apache-2.0.

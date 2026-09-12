@@ -6,32 +6,37 @@ Date: 2026-09-05. Baseline: `b3c92ce`. Planning only; no cryptographic code or c
 
 The counts immediately below describe the 2026-09-05 expansion. The
 [2026-09-08 acceleration usability audit](ACCELERATION_USABILITY_AUDIT.md)
-adds 25 pre-HMAC stops, v0.24.30–v0.24.54. The current totals are **2029**
-milestones, **111** public checkpoints and **1918** development tags; the
-126-family expansion register and its historical identities remain unchanged.
+adds 25 pre-HMAC stops, v0.24.30–v0.24.54. The subsequent
+[reusable cryptography plan](CRYPTO_REUSE_PLAN.md) adds 129 stops across
+15 new family/API contracts and strengthens two existing backend chains.
+Current totals are **2158** milestones, **114** public checkpoints and
+**2044** development tags, with **141** expansion families. Historical stable
+capability identities are preserved; only distant, unstarted versions move.
 
 All five groups from the gap review now have explicit owners in both
 [VERSION_PLAN.md](VERSION_PLAN.md) and [RELEASE_PLAN.md](RELEASE_PLAN.md).
-The [expansion register](ROADMAP_EXPANSION_REGISTER.json) binds 126 family/API
-contracts and their prerequisites; the original 104-row catalogue inventory
-remains intact. There are **802 new stops**, **2004 total milestones**,
-**111 public checkpoints** and **1893 tagged development milestones**.
-The final pre-RC gate moves to **v0.480.0**. This is not a package version bump.
+The [expansion register](ROADMAP_EXPANSION_REGISTER.json) originally bound 126
+family/API contracts; the original 104-row catalogue inventory remains intact.
+The original September 5 pass added **802 stops**, giving **2004 milestones**,
+**111 public checkpoints** and **1893 development milestones** at that time.
+The final pre-RC gate moves to **v0.495.0**. This is not a package version bump.
 
-- Existing v0.24.0–v0.24.23 identities are unchanged; next work is still v0.24.17.
+- Existing v0.24.x identities are unchanged; v0.24.17 was next at the original review.
 - General SHA-512/t is v0.24.24–v0.24.29, before HMAC/catalogue consumers.
   The original named /224 and /256 APIs are not reclassified as incorrect.
 - CT signature and proof verification is v0.100.1–v0.100.6 before the next audit.
 - Added primitives, constructions, API backfills and research families occupy
-  v0.351–v0.447. Formats occupy v0.448–v0.455.
-- Larger protocols are deliberately last, v0.456–v0.474, followed by complete
-  expansion integration at v0.475.0 and the preserved final gates v0.476–v0.480.
+  v0.351–v0.461. Formats occupy v0.462–v0.469, followed by standalone library
+  public API closure at v0.470.x; no external repository migration is required.
+- Larger protocols are deliberately last, v0.471–v0.489, followed by complete
+  expansion integration at v0.490.0 and the final gates v0.491–v0.495.
   Each larger protocol needs an explicit retain/remove scope decision before
   work. For now it is included: removal requires a reviewed roadmap change,
   consumer/dependency reconciliation and revised completeness claims.
 - Every new family has admission, bounded implementation, lifecycle, runnable
-  portable public acceptance and final evidence stages. New families have at
-  most seven stops; future family size remains capped by the schedule validator.
+  portable public acceptance and final evidence stages. The crypto-reuse
+  additions include explicit hardware and SIMD steps before final evidence;
+  each family stays within the twelve-stop schedule limit.
   Discovery of substantial profile complexity requires another numbered stop
   *before* coding, not a larger unreviewed implementation commit.
 
@@ -151,103 +156,103 @@ APIs; 4 covers obscure/legacy/research families; 5 covers formats and protocols.
 | 1 | Binary and Koblitz curves | v0.375.0–v0.375.6 | `brynja-legacy-ec-binary` |
 | 4 | BLS12-381 pairing substrate | v0.376.0–v0.376.5 | `brynja-research-pairing` |
 | 2 | Hash to field and curve | v0.377.0–v0.377.6 | `brynja-crypto-hash-to-curve` |
-| 2 | ristretto255 and decaf448 | v0.378.0–v0.378.5 | `brynja-crypto-prime-groups` |
-| 2 | OPRF VOPRF and POPRF | v0.379.0–v0.379.5 | `brynja-oprf` |
-| 2 | OPAQUE | v0.380.0–v0.380.6 | `brynja-pake-opaque` |
-| 2 | SPAKE2 | v0.381.0–v0.381.5 | `brynja-pake-spake2` |
-| 2 | SPAKE2+ | v0.382.0–v0.382.5 | `brynja-pake-spake2plus` |
-| 2 | HOTP and TOTP | v0.383.0–v0.383.6 | `brynja-auth-otp` |
-| 4 | Verifiable secret sharing | v0.384.0–v0.384.5 | `brynja-research-vss` |
-| 4 | Threshold key establishment | v0.385.0–v0.385.5 | `brynja-research-dkg` |
-| 2 | FROST threshold signatures | v0.386.0–v0.386.6 | `brynja-crypto-frost` |
-| 2 | Verifiable random functions | v0.387.0–v0.387.5 | `brynja-crypto-vrf` |
-| 2 | RSA blind signatures | v0.388.0–v0.388.5 | `brynja-crypto-rsa-blind` |
-| 2 | LMS and HSS | v0.389.0–v0.389.6 | `brynja-sign-lms` |
-| 2 | XMSS and XMSSMT | v0.390.0–v0.390.6 | `brynja-sign-xmss` |
-| 2 | FN-DSA and Falcon profiles | v0.391.0–v0.391.6 | `brynja-research-fn-dsa` |
-| 2 | HQC | v0.392.0–v0.392.6 | `brynja-research-kem-hqc` |
-| 4 | Serpent | v0.393.0–v0.393.5 | `brynja-legacy-cipher-serpent` |
-| 4 | RC6 | v0.394.0–v0.394.5 | `brynja-legacy-cipher-rc6` |
-| 4 | CAST6 | v0.395.0–v0.395.5 | `brynja-legacy-cipher-cast6` |
-| 4 | TEA | v0.396.0–v0.396.5 | `brynja-legacy-cipher-tea` |
-| 4 | XTEA | v0.397.0–v0.397.5 | `brynja-legacy-cipher-xtea` |
-| 4 | XXTEA | v0.398.0–v0.398.5 | `brynja-legacy-cipher-xxtea` |
-| 4 | SAFER | v0.399.0–v0.399.5 | `brynja-legacy-cipher-safer` |
-| 4 | Skipjack | v0.400.0–v0.400.5 | `brynja-legacy-cipher-skipjack` |
-| 4 | Noekeon | v0.401.0–v0.401.5 | `brynja-legacy-cipher-noekeon` |
-| 4 | SHACAL-2 | v0.402.0–v0.402.5 | `brynja-legacy-cipher-shacal-2` |
-| 4 | CLEFIA | v0.403.0–v0.403.5 | `brynja-legacy-cipher-clefia` |
-| 4 | Kalyna | v0.404.0–v0.404.5 | `brynja-legacy-cipher-kalyna` |
-| 4 | LEA | v0.405.0–v0.405.5 | `brynja-legacy-cipher-lea` |
-| 4 | HIGHT | v0.406.0–v0.406.5 | `brynja-legacy-cipher-hight` |
-| 4 | PRESENT | v0.407.0–v0.407.5 | `brynja-legacy-cipher-present` |
-| 4 | MISTY1 | v0.408.0–v0.408.5 | `brynja-legacy-cipher-misty1` |
-| 4 | KASUMI | v0.409.0–v0.409.5 | `brynja-legacy-cipher-kasumi` |
-| 4 | Rabbit | v0.410.0–v0.410.5 | `brynja-legacy-stream-rabbit` |
-| 4 | HC-128 | v0.411.0–v0.411.5 | `brynja-legacy-stream-hc-128` |
-| 4 | HC-256 | v0.412.0–v0.412.5 | `brynja-legacy-stream-hc-256` |
-| 4 | SOSEMANUK | v0.413.0–v0.413.5 | `brynja-legacy-stream-sosemanuk` |
-| 4 | Trivium | v0.414.0–v0.414.5 | `brynja-legacy-stream-trivium` |
-| 4 | Grain | v0.415.0–v0.415.5 | `brynja-legacy-stream-grain` |
-| 4 | SNOW | v0.416.0–v0.416.5 | `brynja-legacy-stream-snow` |
-| 4 | ZUC | v0.417.0–v0.417.5 | `brynja-legacy-stream-zuc` |
-| 4 | Cellular confidentiality and integrity | v0.418.0–v0.418.5 | `brynja-legacy-cellular` |
-| 4 | CubeHash | v0.419.0–v0.419.5 | `brynja-legacy-hash-cubehash` |
-| 4 | Shabal | v0.420.0–v0.420.5 | `brynja-legacy-hash-shabal` |
-| 4 | Luffa | v0.421.0–v0.421.5 | `brynja-legacy-hash-luffa` |
-| 4 | Fugue | v0.422.0–v0.422.5 | `brynja-legacy-hash-fugue` |
-| 4 | Hamsi | v0.423.0–v0.423.5 | `brynja-legacy-hash-hamsi` |
-| 4 | ECHO | v0.424.0–v0.424.5 | `brynja-legacy-hash-echo` |
-| 4 | SHAvite-3 | v0.425.0–v0.425.5 | `brynja-legacy-hash-shavite-3` |
-| 4 | SIMD | v0.426.0–v0.426.5 | `brynja-legacy-hash-simd` |
-| 4 | BMW | v0.427.0–v0.427.5 | `brynja-legacy-hash-bmw` |
-| 4 | yescrypt | v0.428.0–v0.428.5 | `brynja-password-yescrypt` |
-| 4 | Unix crypt compatibility | v0.429.0–v0.429.6 | `brynja-legacy-password-crypt` |
-| 4 | TLSH | v0.430.0–v0.430.5 | `brynja-similarity-tlsh` |
-| 4 | ssdeep | v0.431.0–v0.431.5 | `brynja-similarity-ssdeep` |
-| 4 | sdhash | v0.432.0–v0.432.5 | `brynja-similarity-sdhash` |
-| 4 | BLS signatures | v0.433.0–v0.433.5 | `brynja-research-sign-bls` |
-| 4 | Commitment schemes | v0.434.0–v0.434.5 | `brynja-research-commitment` |
-| 4 | Paillier | v0.435.0–v0.435.5 | `brynja-research-paillier` |
-| 4 | Proof transcript and circuit substrate | v0.436.0–v0.436.5 | `brynja-research-proof-core` |
-| 4 | Groth16 | v0.437.0–v0.437.5 | `brynja-research-zk-groth16` |
-| 4 | Bulletproofs | v0.438.0–v0.438.5 | `brynja-research-zk-bulletproofs` |
-| 4 | PLONK | v0.439.0–v0.439.5 | `brynja-research-zk-plonk` |
-| 4 | Lattice HE arithmetic | v0.440.0–v0.440.5 | `brynja-research-he-core` |
-| 4 | BFV | v0.441.0–v0.441.6 | `brynja-research-he-bfv` |
-| 4 | BGV | v0.442.0–v0.442.6 | `brynja-research-he-bgv` |
-| 4 | CKKS | v0.443.0–v0.443.6 | `brynja-research-he-ckks` |
-| 4 | TFHE | v0.444.0–v0.444.6 | `brynja-research-he-tfhe` |
-| 4 | Oblivious transfer | v0.445.0–v0.445.5 | `brynja-research-ot` |
-| 4 | Garbled-circuit two-party computation | v0.446.0–v0.446.6 | `brynja-research-mpc-2pc` |
-| 4 | Arithmetic MPC | v0.447.0–v0.447.6 | `brynja-research-mpc-arithmetic` |
-| 5 | Bounded JSON and CBOR codecs | v0.448.0–v0.448.6 | `brynja-encoding` |
-| 5 | CMS signed and authenticated containers | v0.449.0–v0.449.6 | `brynja-cms` |
-| 5 | CMS encrypted recipients | v0.450.0–v0.450.6 | `brynja-cms` |
-| 5 | PKCS12 PFX | v0.451.0–v0.451.6 | `brynja-pkcs12` |
-| 5 | JOSE keys and signatures | v0.452.0–v0.452.6 | `brynja-jose` |
-| 5 | JOSE encryption | v0.453.0–v0.453.5 | `brynja-jose` |
-| 5 | COSE keys signatures and MACs | v0.454.0–v0.454.5 | `brynja-cose` |
-| 5 | COSE encryption and tokens | v0.455.0–v0.455.5 | `brynja-cose` |
-| 5 | SSH transport | v0.456.0–v0.456.6 | `brynja-ssh` |
-| 5 | SSH authentication and key formats | v0.457.0–v0.457.6 | `brynja-ssh` |
-| 5 | SSH connection services | v0.458.0–v0.458.6 | `brynja-ssh` |
-| 5 | Noise framework | v0.459.0–v0.459.6 | `brynja-noise` |
-| 5 | WireGuard handshake | v0.460.0–v0.460.5 | `brynja-wireguard` |
-| 5 | WireGuard tunnel | v0.461.0–v0.461.6 | `brynja-wireguard` |
-| 5 | MLS tree and key packages | v0.462.0–v0.462.5 | `brynja-mls` |
-| 5 | MLS group transitions | v0.463.0–v0.463.6 | `brynja-mls` |
-| 5 | MLS messaging and lifecycle | v0.464.0–v0.464.6 | `brynja-mls` |
-| 5 | SRTP and SRTCP | v0.465.0–v0.465.6 | `brynja-srtp` |
-| 5 | EDHOC | v0.466.0–v0.466.6 | `brynja-edhoc` |
-| 5 | OSCORE | v0.467.0–v0.467.6 | `brynja-oscore` |
-| 5 | IKEv2 negotiation and authentication | v0.468.0–v0.468.6 | `brynja-ikev2` |
-| 5 | IKEv2 lifecycle | v0.469.0–v0.469.6 | `brynja-ikev2` |
-| 5 | IPsec ESP and AH | v0.470.0–v0.470.6 | `brynja-ipsec` |
-| 5 | IPsec policy and integration | v0.471.0–v0.471.6 | `brynja-ipsec` |
-| 5 | S-MIME | v0.472.0–v0.472.6 | `brynja-smime` |
-| 5 | Timestamping | v0.473.0–v0.473.5 | `brynja-timestamp` |
-| 5 | WebAuthn relying-party verification | v0.474.0–v0.474.6 | `brynja-webauthn` |
+| 2 | ristretto255 and decaf448 | v0.392.0–v0.392.5 | `brynja-crypto-prime-groups` |
+| 2 | OPRF VOPRF and POPRF | v0.393.0–v0.393.5 | `brynja-oprf` |
+| 2 | OPAQUE | v0.394.0–v0.394.6 | `brynja-pake-opaque` |
+| 2 | SPAKE2 | v0.395.0–v0.395.5 | `brynja-pake-spake2` |
+| 2 | SPAKE2+ | v0.396.0–v0.396.5 | `brynja-pake-spake2plus` |
+| 2 | HOTP and TOTP | v0.397.0–v0.397.6 | `brynja-auth-otp` |
+| 4 | Verifiable secret sharing | v0.398.0–v0.398.5 | `brynja-research-vss` |
+| 4 | Threshold key establishment | v0.399.0–v0.399.5 | `brynja-research-dkg` |
+| 2 | FROST threshold signatures | v0.400.0–v0.400.6 | `brynja-crypto-frost` |
+| 2 | Verifiable random functions | v0.401.0–v0.401.5 | `brynja-crypto-vrf` |
+| 2 | RSA blind signatures | v0.402.0–v0.402.5 | `brynja-crypto-rsa-blind` |
+| 2 | LMS and HSS | v0.403.0–v0.403.6 | `brynja-sign-lms` |
+| 2 | XMSS and XMSSMT | v0.404.0–v0.404.6 | `brynja-sign-xmss` |
+| 2 | FN-DSA and Falcon profiles | v0.405.0–v0.405.6 | `brynja-research-fn-dsa` |
+| 2 | HQC | v0.406.0–v0.406.6 | `brynja-research-kem-hqc` |
+| 4 | Serpent | v0.407.0–v0.407.5 | `brynja-legacy-cipher-serpent` |
+| 4 | RC6 | v0.408.0–v0.408.5 | `brynja-legacy-cipher-rc6` |
+| 4 | CAST6 | v0.409.0–v0.409.5 | `brynja-legacy-cipher-cast6` |
+| 4 | TEA | v0.410.0–v0.410.5 | `brynja-legacy-cipher-tea` |
+| 4 | XTEA | v0.411.0–v0.411.5 | `brynja-legacy-cipher-xtea` |
+| 4 | XXTEA | v0.412.0–v0.412.5 | `brynja-legacy-cipher-xxtea` |
+| 4 | SAFER | v0.413.0–v0.413.5 | `brynja-legacy-cipher-safer` |
+| 4 | Skipjack | v0.414.0–v0.414.5 | `brynja-legacy-cipher-skipjack` |
+| 4 | Noekeon | v0.415.0–v0.415.5 | `brynja-legacy-cipher-noekeon` |
+| 4 | SHACAL-2 | v0.416.0–v0.416.5 | `brynja-legacy-cipher-shacal-2` |
+| 4 | CLEFIA | v0.417.0–v0.417.5 | `brynja-legacy-cipher-clefia` |
+| 4 | Kalyna | v0.418.0–v0.418.5 | `brynja-legacy-cipher-kalyna` |
+| 4 | LEA | v0.419.0–v0.419.5 | `brynja-legacy-cipher-lea` |
+| 4 | HIGHT | v0.420.0–v0.420.5 | `brynja-legacy-cipher-hight` |
+| 4 | PRESENT | v0.421.0–v0.421.5 | `brynja-legacy-cipher-present` |
+| 4 | MISTY1 | v0.422.0–v0.422.5 | `brynja-legacy-cipher-misty1` |
+| 4 | KASUMI | v0.423.0–v0.423.5 | `brynja-legacy-cipher-kasumi` |
+| 4 | Rabbit | v0.424.0–v0.424.5 | `brynja-legacy-stream-rabbit` |
+| 4 | HC-128 | v0.425.0–v0.425.5 | `brynja-legacy-stream-hc-128` |
+| 4 | HC-256 | v0.426.0–v0.426.5 | `brynja-legacy-stream-hc-256` |
+| 4 | SOSEMANUK | v0.427.0–v0.427.5 | `brynja-legacy-stream-sosemanuk` |
+| 4 | Trivium | v0.428.0–v0.428.5 | `brynja-legacy-stream-trivium` |
+| 4 | Grain | v0.429.0–v0.429.5 | `brynja-legacy-stream-grain` |
+| 4 | SNOW | v0.430.0–v0.430.5 | `brynja-legacy-stream-snow` |
+| 4 | ZUC | v0.431.0–v0.431.5 | `brynja-legacy-stream-zuc` |
+| 4 | Cellular confidentiality and integrity | v0.432.0–v0.432.5 | `brynja-legacy-cellular` |
+| 4 | CubeHash | v0.433.0–v0.433.5 | `brynja-legacy-hash-cubehash` |
+| 4 | Shabal | v0.434.0–v0.434.5 | `brynja-legacy-hash-shabal` |
+| 4 | Luffa | v0.435.0–v0.435.5 | `brynja-legacy-hash-luffa` |
+| 4 | Fugue | v0.436.0–v0.436.5 | `brynja-legacy-hash-fugue` |
+| 4 | Hamsi | v0.437.0–v0.437.5 | `brynja-legacy-hash-hamsi` |
+| 4 | ECHO | v0.438.0–v0.438.5 | `brynja-legacy-hash-echo` |
+| 4 | SHAvite-3 | v0.439.0–v0.439.5 | `brynja-legacy-hash-shavite-3` |
+| 4 | SIMD | v0.440.0–v0.440.5 | `brynja-legacy-hash-simd` |
+| 4 | BMW | v0.441.0–v0.441.5 | `brynja-legacy-hash-bmw` |
+| 4 | yescrypt | v0.442.0–v0.442.5 | `brynja-password-yescrypt` |
+| 4 | Unix crypt compatibility | v0.443.0–v0.443.6 | `brynja-legacy-password-crypt` |
+| 4 | TLSH | v0.444.0–v0.444.5 | `brynja-similarity-tlsh` |
+| 4 | ssdeep | v0.445.0–v0.445.5 | `brynja-similarity-ssdeep` |
+| 4 | sdhash | v0.446.0–v0.446.5 | `brynja-similarity-sdhash` |
+| 4 | BLS signatures | v0.447.0–v0.447.7 | `brynja-research-sign-bls` |
+| 4 | Commitment schemes | v0.448.0–v0.448.7 | `brynja-research-commitment` |
+| 4 | Paillier | v0.449.0–v0.449.5 | `brynja-research-paillier` |
+| 4 | Proof transcript and circuit substrate | v0.450.0–v0.450.5 | `brynja-research-proof-core` |
+| 4 | Groth16 | v0.451.0–v0.451.5 | `brynja-research-zk-groth16` |
+| 4 | Bulletproofs | v0.452.0–v0.452.5 | `brynja-research-zk-bulletproofs` |
+| 4 | PLONK | v0.453.0–v0.453.5 | `brynja-research-zk-plonk` |
+| 4 | Lattice HE arithmetic | v0.454.0–v0.454.5 | `brynja-research-he-core` |
+| 4 | BFV | v0.455.0–v0.455.6 | `brynja-research-he-bfv` |
+| 4 | BGV | v0.456.0–v0.456.6 | `brynja-research-he-bgv` |
+| 4 | CKKS | v0.457.0–v0.457.6 | `brynja-research-he-ckks` |
+| 4 | TFHE | v0.458.0–v0.458.6 | `brynja-research-he-tfhe` |
+| 4 | Oblivious transfer | v0.459.0–v0.459.5 | `brynja-research-ot` |
+| 4 | Garbled-circuit two-party computation | v0.460.0–v0.460.6 | `brynja-research-mpc-2pc` |
+| 4 | Arithmetic MPC | v0.461.0–v0.461.6 | `brynja-research-mpc-arithmetic` |
+| 5 | Bounded JSON and CBOR codecs | v0.462.0–v0.462.6 | `brynja-encoding` |
+| 5 | CMS signed and authenticated containers | v0.463.0–v0.463.6 | `brynja-cms` |
+| 5 | CMS encrypted recipients | v0.464.0–v0.464.6 | `brynja-cms` |
+| 5 | PKCS12 PFX | v0.465.0–v0.465.6 | `brynja-pkcs12` |
+| 5 | JOSE keys and signatures | v0.466.0–v0.466.6 | `brynja-jose` |
+| 5 | JOSE encryption | v0.467.0–v0.467.5 | `brynja-jose` |
+| 5 | COSE keys signatures and MACs | v0.468.0–v0.468.5 | `brynja-cose` |
+| 5 | COSE encryption and tokens | v0.469.0–v0.469.5 | `brynja-cose` |
+| 5 | SSH transport | v0.471.0–v0.471.6 | `brynja-ssh` |
+| 5 | SSH authentication and key formats | v0.472.0–v0.472.6 | `brynja-ssh` |
+| 5 | SSH connection services | v0.473.0–v0.473.6 | `brynja-ssh` |
+| 5 | Noise framework | v0.474.0–v0.474.6 | `brynja-noise` |
+| 5 | WireGuard handshake | v0.475.0–v0.475.5 | `brynja-wireguard` |
+| 5 | WireGuard tunnel | v0.476.0–v0.476.6 | `brynja-wireguard` |
+| 5 | MLS tree and key packages | v0.477.0–v0.477.5 | `brynja-mls` |
+| 5 | MLS group transitions | v0.478.0–v0.478.6 | `brynja-mls` |
+| 5 | MLS messaging and lifecycle | v0.479.0–v0.479.6 | `brynja-mls` |
+| 5 | SRTP and SRTCP | v0.480.0–v0.480.6 | `brynja-srtp` |
+| 5 | EDHOC | v0.481.0–v0.481.6 | `brynja-edhoc` |
+| 5 | OSCORE | v0.482.0–v0.482.6 | `brynja-oscore` |
+| 5 | IKEv2 negotiation and authentication | v0.483.0–v0.483.6 | `brynja-ikev2` |
+| 5 | IKEv2 lifecycle | v0.484.0–v0.484.6 | `brynja-ikev2` |
+| 5 | IPsec ESP and AH | v0.485.0–v0.485.6 | `brynja-ipsec` |
+| 5 | IPsec policy and integration | v0.486.0–v0.486.6 | `brynja-ipsec` |
+| 5 | S-MIME | v0.487.0–v0.487.6 | `brynja-smime` |
+| 5 | Timestamping | v0.488.0–v0.488.5 | `brynja-timestamp` |
+| 5 | WebAuthn relying-party verification | v0.489.0–v0.489.6 | `brynja-webauthn` |
 
 ## Validation and limitations
 

@@ -48,8 +48,8 @@ Later HMAC/HKDF/OpenPGP integrations need separately typed legacy admission.
 
 ## Use
 
-The leaf is currently unpublished `0.1.0`; v0.24.19 is an internal repository
-milestone, not a crates.io release. Depend directly on this path when testing.
+The leaf is currently unpublished. Depend directly on this checkout path for
+explicit legacy compatibility testing.
 
 ```toml
 [dependencies]
@@ -115,7 +115,8 @@ update retains the unchanged live state until retry or destruction.
 
 No guarantee covers registers, compiler-created copies/spills, caches, moves,
 swap, DMA, dumps, `mem::forget`, abort, termination, power loss, or caller-owned
-input/output copies. No pinned/locked memory or accelerated execution exists.
+input/output copies. No pinned/locked memory is supplied. Production execution remains portable;
+separate candidates are described below.
 
 ## Verification and links
 
@@ -129,9 +130,9 @@ compile-fail ownership checks and compiler cleanup evidence.
 - [Roadmap](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
 - [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md)
 
-Rust 1.90.0–1.98.1; default validation on 1.98.1. MIT OR Apache-2.0.
+See the workspace toolchain policy for supported Rust versions. MIT OR Apache-2.0.
 
-## Bounded batches and SIMD candidates (v0.24.22)
+## Hardware, SIMD and bounded batches
 
 Enable `batch` for consuming `Md5Batch` / `HardenedMd5Batch` with eight ordered,
 caller-owned slots and explicit compression budgets/cancellation. Inactive slots
@@ -159,7 +160,7 @@ assert_eq!(report.vector_blocks, 0);
 # Ok::<(), &'static str>(())
 ```
 
-MD5 public acceptance is complete at v0.24.23; CPU candidates remain unadmitted.
+Portable MD5 public acceptance is complete; CPU candidates remain unadmitted.
 See [batch ownership and evidence](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-acceleration.md).
 
 Final ordinary/hardened byte/bit and execution-route dispositions are documented in

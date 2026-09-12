@@ -16,6 +16,9 @@ mod output;
 mod scheduled;
 mod xof;
 
+#[cfg(feature = "hardened-execution")]
+pub mod execution;
+
 pub use brynja_hash_sha3::{Fips202BitString, Fips202BitsError, Fips202Output};
 pub use error::ParallelHashError;
 pub use fixed::{

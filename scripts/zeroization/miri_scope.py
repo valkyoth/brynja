@@ -153,6 +153,11 @@ def select_repository(
         for lock, manifest in zip(contract_locks, contract_manifests):
             if lock is not None or manifest is not None:
                 scope_inputs.isolated_contract(lock, manifest)
+        readme_paths = ('assurance/crate-readmes/Cargo.toml', 'assurance/crate-readmes/Cargo.lock',
+                        'assurance/crate-readmes/src/lib.rs')
+        readme_inputs = [scope_inputs.snapshot(root, base, path) for path in (*readme_paths, 'Cargo.lock')]
+        for values in zip(*readme_inputs):
+            scope_inputs.readme_fixture(*values)
         paths = scope_inputs.git(root, 'diff', '--name-only', '-z', '--no-renames', base).split(b'\0')
         paths += scope_inputs.git(root, 'ls-files', '--others', '--exclude-standard', '-z').split(b'\0')
         affected: set[str] = set()
@@ -177,6 +182,8 @@ def select_repository(
                 raise ValueError('noncanonical change path')
             if path.endswith('.md'):
                 continue
+            if path in readme_paths:
+                continue  # Entire data-only wrapper and graph validated above.
             before, after = scope_inputs.snapshot(root, base, path)
             if path == 'scripts/cryptography/api_profile_contracts.py' and scope_inputs.mir_spans_only(before, after):
                 continue
@@ -191,7 +198,21 @@ def select_repository(
                           'scripts/parallelhash/parallelhash_reviewed_hashes.py'} and scope_inputs.python_bindings_only(before, after):
                 continue
             elif path.endswith('Cargo.lock'):
-                if (before is None or after is None) and path != 'Cargo.lock':
+                if path == 'assurance/parallelhash-differential/Cargo.lock':
+                    # This oracle newly imports existing CPU packages. Those
+                    # additional lock rows are not changes to the CPU sources.
+                    # Check both snapshots against their corresponding real
+                    # workspace graph; graph/source changes there are still
+                    # classified independently, including external pin drift.
+                    manifests = scope_inputs.snapshot(root, base, path[:-4] + 'toml')
+                    workspaces = scope_inputs.snapshot(root, base, 'Cargo.lock')
+                    for lock, manifest, workspace in zip((before, after), manifests, workspaces):
+                        if lock is not None or manifest is not None:
+                            if scope_inputs.document(manifest)['package']['name'] != 'brynja-parallelhash-differential-fixture':
+                                raise ValueError('ParallelHash oracle identity changed')
+                            scope_inputs.fixture_lock(lock, workspace, manifest)
+                    retained.append(path)
+                elif (before is None or after is None) and path != 'Cargo.lock':
                     # Added/removed fixture locks must be a subset of the
                     # corresponding workspace lock; they cannot conceal a pin.
                     index = 1 if after is not None else 0

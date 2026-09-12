@@ -10,7 +10,11 @@ test "$#" -eq 0
 # BEGIN VERIFICATION CATALOG
 cargo fetch --locked
 python3 scripts/repository/test-offline-bootstrap.py
+python3 scripts/repository/check-crate-readmes.py
+python3 scripts/repository/test-crate-readmes.py
+cargo test --locked --offline --manifest-path assurance/crate-readmes/Cargo.toml --doc
 python3 scripts/release/test-verification-plan.py
+python3 scripts/release/test-detached-verification.py
 
 cargo fmt --all --check
 python3 scripts/repository/check-script-layout.py
@@ -160,7 +164,14 @@ cargo clippy --locked --manifest-path assurance/tuplehash-public-api/Cargo.toml 
   --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
 python3 scripts/parallelhash/check-parallelhash.py
 python3 scripts/parallelhash/test-parallelhash.py
+python3 scripts/parallelhash/test-parallelhash-execution-native.py
 python3 scripts/parallelhash/check-parallelhash-differential.py
+python3 scripts/parallelhash/check-parallelhash-execution-differential.py
+python3 scripts/parallelhash/check-parallelhash-execution-package.py
+cargo test --locked --offline --manifest-path assurance/parallelhash-differential/Cargo.toml --features execution --doc
+python3 scripts/parallelhash/check-parallelhash-execution-codegen.py --toolchain 1.90.0
+python3 scripts/parallelhash/check-parallelhash-execution-codegen.py --toolchain 1.98.1
+cargo clippy --locked --offline --manifest-path assurance/parallelhash-differential/Cargo.toml --all-features --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 cargo test --locked --manifest-path assurance/parallelhash-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/parallelhash-public-api/Cargo.toml \
   --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings

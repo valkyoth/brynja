@@ -11,13 +11,15 @@ The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any
 current implementation claim. Standalone DER encode/decode completion is
 planned for v0.34.6. The former standalone hash and legacy plans are now
-consolidated into the pre-1.0 roadmap, with final release gates through v0.480.0.
-Current generated planning coverage is 2028 non-RC rows
-(2029 milestones including the release candidate), 131 authorities, 4,462
+consolidated into the pre-1.0 roadmap, with final release gates through v0.495.0.
+The [reusable cryptography additions](CRYPTO_REUSE_PLAN.md) cover standalone
+Brynja APIs, hardware/SIMD and error-preserving usability, not work in `eth`.
+Current generated planning coverage is 2157 non-RC rows
+(2158 milestones including the release candidate), 131 authorities, 4,462
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.38 signed. The v0.24.39 implementation adds default-off TupleHash/TupleHashXOF execution with separate public and hardened owners, exact item writers and exclusively borrowed XOF readers. See [TupleHash execution](tuplehash-accelerated-execution.md). Focused development checks, the owner-supplied retest, Intel/Linux Arm/Apple Arm native collection and the final scoped local release gate passed; awaiting green GitHub/CodeQL before tagging. No publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.39 signed. Development of v0.24.40 adds default-off [ParallelHash execution](parallelhash-execution.md), a [detached verification runner](detached-verification.md), and capability-focused crate READMEs with compiled examples. Scoped development checks and local detached Miri/Kani collection/reuse passed; exceptional pentest, native collection and final release qualification remain pending. The signed v0.24.39 baseline is d0b8a784. No new crates.io publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

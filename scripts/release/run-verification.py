@@ -7,6 +7,7 @@ import os
 import shlex
 import subprocess
 import sys
+from pathlib import Path
 
 import verification_commands as commands
 import verification_plan as plans
@@ -40,12 +41,20 @@ def main() -> int:
     parser.add_argument("--approve-full")
     parser.add_argument("--ci", action="store_true", help="repository diagnostics only; never authorize release verification")
     parser.add_argument("--check", action="store_true", help="plan only; never run tests")
+    parser.add_argument("--detached-job", type=Path)
+    parser.add_argument("--detached-receipt")
     args, extra = parser.parse_known_args()
     if extra and args.phase != "command":
         parser.error("unexpected verification arguments")
     if args.ci and (args.phase not in ("plan", "repository") or args.approve_full):
         parser.error("--ci is only for plan/repository diagnostics, without release approval")
     try:
+        job = args.detached_job or os.environ.get("BRYNJA_DETACHED_JOB")
+        receipt = args.detached_receipt or os.environ.get("BRYNJA_DETACHED_RECEIPT")
+        if bool(job) != bool(receipt):
+            raise ValueError("detached reuse requires both a job directory and its launch receipt")
+        if args.ci and (job or receipt):
+            raise ValueError("CI diagnostics cannot consume local detached release evidence")
         plan = plans.build(base=args.base)
         print(plans.explain(plan), flush=True)
         # Validate ALL command ownership before starting even the first test.
@@ -62,6 +71,14 @@ def main() -> int:
             plans.authorize(plan, args.approve_full or os.environ.get("BRYNJA_FULL_VERIFICATION_APPROVAL") or None)
         if args.phase == "plan" or args.check:
             return 0
+        if job:
+            import detached_reuse
+            requested = extra[1:] if extra and extra[0] == "--" else extra
+            if detached_reuse.completed(Path(job), receipt, plans.ROOT, plan, args.phase,
+                                        shlex.join(requested) if requested else None):
+                print(f"REUSE (validated detached snapshot): {args.phase}; receipt={receipt}", flush=True)
+                return 0
+            print(f"Detached job does not cover {args.phase}; executing remaining required work.", flush=True)
         full = not args.ci and (plan["stage"] == "public" or plan["approval_required"])
         groups = ([] if args.ci and plan["approval_required"] else
                   list(plans.scope.GROUPS) if full else plan["groups"])

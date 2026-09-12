@@ -44,7 +44,7 @@ API_CLOSURE_EDGES = (
     ("v0.216.3", "v0.218.0"),
     ("v0.217.1", "v0.221.0"),
     ("v0.235.2", "v0.237.2"),
-    ("v0.476.1", "v0.477.0"),
+    ("v0.491.1", "v0.492.0"),
 )
 
 API_SCOPE_CONTRACTS = {
@@ -62,7 +62,7 @@ API_SCOPE_CONTRACTS = {
     "v0.221.0": ("v0.217.1 AES-CMAC", "seal/open"),
     "v0.235.2": ("export", "typed-secret unprotected", "import"),
     "v0.197.0": ("scheduled before this stop", "unchecked cryptographic internals", "reviewed public hash"),
-    "v0.476.1": ("public package", "complete safe operation directions"),
+    "v0.491.1": ("public package", "complete safe operation directions"),
 }
 
 
@@ -188,6 +188,7 @@ def validate(release_path: Path, version_path: Path) -> None:
         status_lines = [line for line in section.splitlines() if line.startswith("Status:")]
         if status_lines[0] not in (
             "Status: planned",
+            "Status: in progress",
             "Status: awaiting pentest",
             "Status: awaiting green CI",
             "Status: released",

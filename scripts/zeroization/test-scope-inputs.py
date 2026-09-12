@@ -46,6 +46,12 @@ def semantic_tests():
     assert inputs.lock_groups(before, after) == {'sanitization'}
     assert inputs.lock_groups(before, lock([dict(dependency, checksum='b'), adapter, core, md5])) == {'sanitization'}
     sha3 = package('brynja-hash-sha3', ['brynja-core'])
+    parallel_fixture = package('brynja-parallelhash-differential-fixture', ['brynja-core'])
+    assert inputs.lock_groups(lock([core, parallel_fixture]),
+                              lock([core, sha3, dict(parallel_fixture, dependencies=['brynja-hash-sha3'])])) == {'sha3', 'parallelhash'}
+    assert inputs.lock_groups(lock([core, sha3, dict(parallel_fixture, dependencies=['brynja-hash-sha3'])]),
+                              lock([core, parallel_fixture])) == {'sha3', 'parallelhash'}
+    rejected(lambda: inputs.lock_groups(lock([core]), lock([core, dict(parallel_fixture, name='unknown-fixture')])))
     kmac = package('brynja-mac-kmac', ['brynja-hash-sha3'])
     assert inputs.lock_groups(lock([core, sha3, kmac]), lock([core, dict(sha3, dependencies=[]), kmac])) == {'sha3', 'kmac'}
     for invalid in (None, b'', b'version=3\npackage=[]', lock([core, core]),
@@ -293,10 +299,79 @@ def generated_register_bounds_tests():
                 rejected(lambda: inputs.snapshot(root, 'base', 'standards/protocol-surfaces.json'))
 
 
+def readme_wrapper_tests():
+    paths = ('assurance/crate-readmes/Cargo.toml', 'assurance/crate-readmes/Cargo.lock',
+             'assurance/crate-readmes/src/lib.rs', 'Cargo.lock')
+    values = tuple((scope.ROOT / path).read_bytes() for path in paths)
+    inputs.readme_fixture(*values)
+    inputs.readme_fixture(None, None, None, values[-1])
+    mutations = (
+        (0, b'publish = false', b'publish = true'),
+        (0, b'edition = "2024"', b'edition = "2021"'),
+        (0, b'default-features = false', b'default-features = true'),
+        (0, b'features = ["static-execution"]', b'features = ["cpu-evidence"]'),
+        (0, b'../../crates/brynja-core', b'../../other/brynja-core'),
+        (1, b'"sanitization"', b'"foreign-crypto"'),
+        (2, b'#![forbid(unsafe_code)]', b'#![allow(unsafe_code)]'),
+        (2, b'/README.md', b'/src/lib.rs'),
+        (2, b'pub struct BrynjaCore;', b'pub fn unexpected() {}'),
+    )
+    for index, before, after in mutations:
+        changed = list(values)
+        assert before in changed[index]
+        changed[index] = changed[index].replace(before, after, 1)
+        rejected(lambda: inputs.readme_fixture(*changed))
+    for index in range(3):
+        changed = list(values)
+        changed[index] = None
+        rejected(lambda: inputs.readme_fixture(*changed))
+    rejected(lambda: inputs.readme_fixture(values[0] + b'\n[build-dependencies]\n', *values[1:]))
+    rejected(lambda: inputs.readme_fixture(*values[:2], values[2] + b'fn hidden() {}\n', values[3]))
+    print('README-only scope rejects 14 code, graph, feature and partial-fixture regressions')
+
+
+def oracle_lock_tests():
+    path = 'assurance/parallelhash-differential/Cargo.lock'
+    manifest_path = path[:-4] + 'toml'
+    name = 'brynja-parallelhash-differential-fixture'
+    base_packages = [package('brynja-core'), package('brynja-crypto-cpu', ['brynja-core']),
+                     package('brynja-hash-parallel', ['brynja-core'])]
+    workspace = lock(base_packages)
+    old = lock([base_packages[0], base_packages[2], package(name, ['brynja-hash-parallel'])])
+    new = lock([*base_packages, package(name, ['brynja-hash-parallel', 'brynja-crypto-cpu'])])
+    manifest = ('[package]\nname="' + name + '"\nversion="0.1.0"\npublish=false\n').encode()
+    def select(changes=None, extra=()):
+        snapshots = {path: (old, new), manifest_path: (manifest, manifest),
+                     'Cargo.lock': (workspace, workspace)}
+        snapshots.update(changes or {})
+        def git(_root, *args):
+            return '\0'.join([path, *extra]).encode() if args[0] == 'diff' else b''
+        with patch.object(inputs, 'git', side_effect=git), patch.object(
+                inputs, 'snapshot', side_effect=lambda r, b, p: snapshots.get(p, (None, None))):
+            return scope.select_repository('v0.24.39')
+    assert select() == (False, ('parallelhash',))
+    assert select(extra=('crates/brynja-crypto-cpu/src/lib.rs',)) == (
+        False, ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'static_cpu'))
+    # Both additions and removals of a valid fixture remain its owner scope.
+    assert select({path: (new, old)}) == (False, ('parallelhash',))
+    for bad in (None, new.replace(b'0.1.0', b'9.9.9'),
+                new.replace(b'brynja-crypto-cpu', b'foreign-code'),
+                new + b'\n[[package]]\nname="unknown"\nversion="1"\n'):
+        assert select({path: (old, bad)})[0]
+        assert select({path: (bad, new)})[0]
+    assert select({manifest_path: (manifest, manifest.replace(b'publish=false', b'publish=true'))})[0]
+    assert select({manifest_path: (manifest, manifest.replace(name.encode(), b'other-fixture'))})[0]
+    changed = workspace.replace(b'name = "brynja-crypto-cpu"', b'name = "brynja-crypto-cpu"\nchecksum="bad"')
+    assert select({'Cargo.lock': (workspace, changed)})[0]
+    print('Oracle lock scope retains owner checks and rejects 11 pin/identity/missing-graph regressions')
+
+
 if __name__ == '__main__':
     semantic_tests()
     git_tests()
     contract_tests()
     mir_span_tests()
     generated_register_bounds_tests()
+    readme_wrapper_tests()
+    oracle_lock_tests()
     print('Semantic Miri scope: versions, closures, removals, malformed inputs, dirty/untracked code and baseline failures PASS')

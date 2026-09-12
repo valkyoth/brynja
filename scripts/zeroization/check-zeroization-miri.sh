@@ -160,7 +160,12 @@ quick_parallelhash() {
 }
 
 full_parallelhash() {
+    run_miri -p brynja-hash-parallel --features hardened-execution --test execution_stream -- --skip irregular_updates_and_terminal_bits_match_planned_execution
     run_miri -p brynja-hash-parallel --tests
+    run_miri -p brynja-hash-parallel --features hardened-execution --lib execution
+    run_miri -p brynja-hash-parallel --features hardened-execution --test execution \
+        -- --skip all_identities_bits_blocks_and_outputs_match_portable
+    run_miri -p brynja-hash-parallel-std --features runtime-execution --lib execution
 }
 
 quick_legacy() {

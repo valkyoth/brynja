@@ -25,38 +25,54 @@
 
 # brynja-protocol
 
-`brynja-protocol 0.1.0` is Brynja's shared allocation-free TLS and DTLS
-record-envelope boundary. An already selected typed `WirePolicy` controls the
-parser: record bytes cannot select, downgrade, or fall back to another protocol
-version. Parsers borrow input, preserve legacy-version and unknown content-type
-bytes where permitted, and reject malformed lengths before exposing a record.
-Encoders preflight caller buffers and leave them unchanged on failure.
-
-The boundary covers TLS 1.2 and TLS 1.3 plaintext/ciphertext envelopes, DTLS
-1.2 plaintext/ciphertext envelopes, and DTLS 1.3 plaintext and unified
-ciphertext headers. TLS 1.3 and DTLS 1.3 legacy-version handling follows RFC
-9846. RFC 6520 Heartbeat content and extension negotiation are rejected in
-every modern profile. TLS 1.3 application data is categorically rejected from
-unprotected wire records during both parsing and construction; it remains
-available only through the separate post-decryption inner-content classifier.
-
-This crate does not negotiate versions, decrypt or authenticate records,
-reconstruct DTLS sequence numbers, enforce replay policy, process handshakes,
-perform I/O, allocate, implement cryptography, or provide a TLS/DTLS engine.
-Version `0.1.0` was published at v0.20.0. Its v0.19.0 initial High
-cleartext-exposure finding passed repository-owner remediation retest with zero
-open findings. The scheduled v0.15.0-to-v0.20.0 assessment and its DER
-remediation retest record `PASS`/`PASS` with zero open findings.
+Allocation-free `no_std` TLS and DTLS record-envelope parsing and encoding.
+An explicit typed wire policy selects the protocol; input bytes cannot choose
+a downgrade or fallback.
 
 ## Cryptography Verification Status
 
-No protocol code in this crate has been independently reviewed. Project tests,
-CI, fuzzing, formal tools, and pentesting do not by themselves constitute
-independent protocol verification.
-
-| Component | Protocol scope | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| `brynja-protocol` | TLS and DTLS record-envelope parsing and encoding | ❌ Not verified |
+| TLS 1.2/1.3 record-envelope parsing and encoding | ✅ Implemented | ❌ No |
+| DTLS 1.2/1.3 record-envelope parsing and encoding | ✅ Implemented | ❌ No |
+| Handshake, record encryption and authenticated connections | ❌ Not implemented | ❌ No |
 
-The project-wide first-party Rust, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+These are framing utilities, not a TLS/DTLS engine or FIPS-validated module.
+
+## Use
+
+```sh
+cargo add brynja-protocol brynja-core --no-default-features
+```
+
+For unpublished changes use the matching local checkout paths.
+
+```rust
+use brynja_core::ProtocolVersion;
+use brynja_protocol::{ContentType, TlsPlaintext, WirePolicy};
+let wire = [22, 3, 3, 0, 3, 1, 2, 3];
+let policy = WirePolicy::for_version(ProtocolVersion::Tls13);
+let (record, rest) = TlsPlaintext::parse(policy, &wire).unwrap();
+assert_eq!(record.content_type(), ContentType::Handshake);
+assert_eq!(record.fragment(), &[1, 2, 3]);
+assert!(rest.is_empty());
+```
+
+Parsers borrow input and validate lengths before returning a record. Encoders
+preflight complete caller buffers and preserve them on failure. TLS 1.3 and
+DTLS 1.3 legacy-version handling follows RFC 9846; permitted unknown
+content-type bytes remain explicit rather than selecting another protocol.
+
+Modern profiles reject RFC 6520 Heartbeat. TLS 1.3 unprotected application
+data is rejected on parse and construction; application content classification
+belongs to the distinct post-decryption inner-content API.
+
+## Hardware and SIMD
+
+None. Framing uses portable Rust and performs no cryptography. Callers supply
+policy, I/O, authentication, decryption, handshake processing, replay handling,
+DTLS sequence reconstruction and application resource limits.
+
+[Protocol API](https://github.com/valkyoth/brynja/tree/main/crates/brynja-protocol/src)
+· [Verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
+MIT OR Apache-2.0.

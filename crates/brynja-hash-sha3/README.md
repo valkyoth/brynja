@@ -25,140 +25,111 @@
 
 # brynja-hash-sha3
 
-First-party, allocation-free `no_std` SHA-3 and SHAKE family ownership for
-Brynja. Version 0.1.0 provides correct portable byte-oriented and canonical
-arbitrary-bit implementations of all six FIPS 202 functions through distinct
-fixed-output SHA-3 and extendable-output SHAKE APIs over one private
-Keccak-f[1600] permutation. SHAKE also supports standards-valid output lengths
-that do not end on a byte boundary. Version 0.24.10 of the repository also
-adds distinct hardened states for secret-derived inputs and outputs with
-compiler-resistant cleanup of all source-declared owned regions. Final combined
-package-external acceptance passed at v0.24.11; independent cryptographic
-review and FIPS 140-3 validation remain absent. Repository milestone v0.24.12
-adds the complete SP 800-185 encoding foundation plus cSHAKE128 and cSHAKE256
-with byte and arbitrary-bit function names, customization, messages and output;
-repository milestone v0.24.13 builds all four KMAC/KMACXOF constructions over
-the hardened cSHAKE owner in the separate `brynja-mac-kmac` leaf, using an
-in-place reader transition that clears the exact vacated source owner.
-Repository milestone v0.24.14 adds all four TupleHash/TupleHashXOF
-constructions in the separate `brynja-hash-tuple` leaf. The wider SP 800-185
-family passed final acceptance at v0.24.17 and is fully implemented. CPU
-candidates remain unadmitted; independent review and FIPS validation remain absent.
-
-Separate default-off `static-execution` / `runtime-execution` features expose
-`execution::{Sha3_224, Sha3_256, Sha3_384, Sha3_512, Shake128, Shake256}` with
-operational Keccak routes. These are ordinary public-data-only owners, not
-hardened state. Every input requires explicit `execution::Public::new(bytes)`
-or `execution::PublicBits::new(bits)` classification; markers cannot prove secrecy.
-Reader convenience calls stage at most 168 bytes on the stack;
-caller-scratch APIs support arbitrary-sized transactional output without
-allocation. Every failure preserves the destination and retained reader state.
-See [selection, streaming and scratch examples](https://github.com/valkyoth/brynja/blob/main/docs/sha3-ordinary-execution.md).
-The SHA-3/SHAKE owner retest, native Mac/AWS observations and local release checks passed. Portable
-completion does not certify acceleration, independent review or FIPS validation.
-
-The cSHAKE execution candidate adds `execution::{Cshake128, Cshake256}` with
-byte/bit message, name and customization inputs, retained routes and transactional
-incremental output. All inputs require `Public`/`PublicBits` classification.
-Its exceptional review and native collection passed for the signed ordinary
-execution milestone; those observations do not qualify new hardened execution.
-See [cSHAKE and optional hosted sponge APIs](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md).
-
-The separate default-off `hardened-execution` feature exposes affine accelerated
-SHA-3/SHAKE/cSHAKE owners with private erasing permutation scratch, explicit
-public declassification, and typed secret output. It does not change portable
-defaults or automatically enable acceleration in KMAC or other constructions.
-Fresh exceptional review and native qualification are still required for this
-new implementation. See [hardened Keccak APIs and limitations](https://github.com/valkyoth/brynja/blob/main/docs/hardened-keccak-execution.md).
-
-```rust
-use brynja_hash_sha3::{Sha3_256, sha3_256};
-
-let one_shot = sha3_256(b"abc").unwrap();
-let mut streaming = Sha3_256::new();
-streaming.update(b"a").unwrap();
-streaming.update(b"bc").unwrap();
-assert_eq!(streaming.finalize(), one_shot);
-
-let mut xof = [0_u8; 64];
-brynja_hash_sha3::shake256(b"abc", &mut xof).unwrap();
-assert_eq!(xof.len(), 64);
-
-// FIPS 202 bit strings store valid tail bits at the low end of the byte.
-let bits = brynja_hash_sha3::Fips202BitString::new(&[0b0001_0011], 5).unwrap();
-let bit_digest = brynja_hash_sha3::sha3_256_bits(bits).unwrap();
-assert_eq!(bit_digest.as_bytes().len(), 32);
-
-// Request exactly 100 bits of SHAKE output: 12 bytes plus 4 low bits.
-let mut output = [0xff_u8; 13];
-let destination = brynja_hash_sha3::Fips202Output::new(&mut output, 4).unwrap();
-brynja_hash_sha3::shake128_bits(bits, destination).unwrap();
-assert_eq!(output[12] & 0xf0, 0);
-
-let mut customized = [0_u8; 32];
-brynja_hash_sha3::cshake128(
-    &[0, 1, 2, 3],
-    b"",
-    b"Email Signature",
-    &mut customized,
-).unwrap();
-assert_eq!(&customized[..4], &[0xc1, 0xc3, 0x69, 0x25]);
-```
-
-These APIs are unkeyed hashes, not authentication, MACs, password hashing, or
-raw Keccak. Ordinary states do not promise erasure of input remnants or
-private working state. This also applies to ordinary cSHAKE. Secret-derived
-uses must select the distinct `HardenedSha3_*`, `HardenedShake*`, or
-`HardenedCshake*` states, explicitly declassify public
-output or retain typed secret output, and let the owner clear Brynja-owned
-lanes, buffers, counters, suffix/padding/squeeze staging, and permutation
-scratch on every terminal path. Scalar fixed-count lane/counter conversion and
-registered partial-output staging avoid source-created secret byte arrays
-outside that owner. Callers remain responsible for buffers and copies they
-own. The public-but-hidden composition bridge used by other Brynja leaves is
-fail-closed: extracting a reader or explicitly wiping its source permanently
-vacates that wrapper, and every later preflight, update, or finalization call
-returns `StateConsumed`. It can never reinterpret the cleared replacement as
-a fresh SHAKE state or cross a domain-separation boundary.
-
-```rust
-use brynja_hash_sha3::{HardenedSha3_256, Sha3PublicDeclassification};
-
-let mut state = HardenedSha3_256::new();
-state.update(b"secret-derived input").unwrap();
-let mut digest = [0_u8; 32];
-state
-    .finalize_public(&mut digest, Sha3PublicDeclassification::acknowledge())
-    .unwrap();
-```
-
-The exceptional v0.24.0 assessment found one High tracked-build-artifact issue
-in the repository differential harness, not an algorithm error. All generated
-artifacts were removed, the harness now builds in a fresh isolated target, and
-independent remediation retest passed with zero open findings. This remains
-pentest evidence rather than independent cryptographic verification.
+First-party, allocation-free `no_std` SHA-3, SHAKE and cSHAKE over Brynja's
+Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 
 ## Cryptography Verification Status
 
-| Hash | Implemented | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA3-224 | ✅ Implemented | ❌ Not independently verified |
-| SHA3-256 | ✅ Implemented | ❌ Not independently verified |
-| SHA3-384 | ✅ Implemented | ❌ Not independently verified |
-| SHA3-512 | ✅ Implemented | ❌ Not independently verified |
-| SHAKE128 | ✅ Implemented | ❌ Not independently verified |
-| SHAKE256 | ✅ Implemented | ❌ Not independently verified |
-| Arbitrary-bit FIPS 202 messages and SHAKE output | ✅ Implemented | ❌ Not independently verified |
-| Hardened SHA-3/SHAKE secret-bearing states | ✅ Implemented | ❌ Not independently verified |
-| Complete SHA-3/SHAKE family, including final combined acceptance | ✅ Fully implemented | ❌ Not independently verified |
-| SP 800-185 encodings (`left_encode`, `right_encode`, `encode_string`, `bytepad`) | ✅ Implemented | ❌ Not independently verified |
-| cSHAKE128 and cSHAKE256 | ✅ Implemented | ❌ Not independently verified |
-| TupleHash128/256 and TupleHashXOF128/256 | ✅ Fully implemented | ❌ Not independently verified |
-| Complete SP 800-185 family | ✅ Fully implemented | ❌ Not independently verified |
+| SHA3-224/256/384/512 and SHAKE128/256 | ✅ Fully implemented | ❌ No |
+| Byte/bit input and arbitrary-bit SHAKE output | ✅ Fully implemented | ❌ No |
+| cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |
+| Hardened states and classified outputs | ✅ Implemented | ❌ No |
+| Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
 
-Only a named independent reviewer and linked review evidence can change the
-independent status. Project tests, CI, Kani, Miri, fuzzing, and pentests do not
-by themselves constitute independent cryptographic verification.
+FIPS 202 and SP 800-185 specify these algorithms; they do not confer FIPS
+140-3 validation. Brynja has no named independent cryptographic review or FIPS
+validation. KMAC, TupleHash and ParallelHash live in their own leaf crates,
+not as separate algorithms implemented in this crate.
 
-The project-wide first-party-Rust, no-third-party-crates, `no_std`, 500-line
-source-file, portability, and modern/legacy isolation policies apply here.
+## Use
+
+These APIs include unpublished workspace functionality. Use a local checkout:
+
+```sh
+cargo add brynja-hash-sha3 --path /path/to/brynja/crates/brynja-hash-sha3 --no-default-features
+```
+
+```rust
+use brynja_hash_sha3::{Sha3_256, sha3_256};
+let mut hash = Sha3_256::new();
+hash.update(b"a").unwrap();
+hash.update(b"bc").unwrap();
+assert_eq!(hash.finalize(), sha3_256(b"abc").unwrap());
+
+let mut output = [0; 64];
+brynja_hash_sha3::shake256(b"abc", &mut output).unwrap();
+```
+
+Unlike SHA-2's bit representation, FIPS 202 stores meaningful tail bits in the
+low end of the final byte. Output clears unused high bits.
+
+```rust
+use brynja_hash_sha3::{Fips202BitString, Fips202Output, shake128_bits};
+let input = Fips202BitString::new(&[0b0001_0011], 5).unwrap();
+let mut output = [0xff; 13];
+let destination = Fips202Output::new(&mut output, 4).unwrap();
+shake128_bits(input, destination).unwrap(); // Exactly 100 output bits.
+assert_eq!(output[12] & 0xf0, 0);
+```
+
+cSHAKE supports explicit function-name and customization domains. Empty name
+and customization give exactly SHAKE.
+
+```rust
+let mut output = [0; 32];
+brynja_hash_sha3::cshake128(&[0, 1, 2, 3], b"", b"Email Signature", &mut output).unwrap();
+assert_eq!(&output[..4], &[0xc1, 0xc3, 0x69, 0x25]);
+```
+
+For secret-bearing input, use `HardenedSha3_*`, `HardenedShake*` or
+`HardenedCshake*`, not the ordinary examples above:
+
+```rust
+use brynja_hash_sha3::HardenedSha3_256;
+let mut output = [0; 32];
+{
+    let mut hash = HardenedSha3_256::new();
+    hash.update(b"confidential input").unwrap();
+    let secret = hash.finalize_secret(&mut output).unwrap();
+    assert_eq!(secret.expose().len(), 32);
+}
+assert_eq!(output, [0; 32]);
+```
+
+## Hardware and SIMD
+
+Defaults are portable. Default-off `static-execution` adds ordinary
+`execution::Sha3_*`, `Shake*` and `Cshake*`; `runtime-execution`
+adds hosted selection. `hardened-execution` enables separate affine
+secret-bearing execution owners with private clearing permutation scratch.
+
+x86-64 supports AVX2 Keccak; AArch64 supports SHA3/NEON instructions.
+Static execution requires the complete compiler feature bundle and a
+compatible deployment. Hosted execution requires supported AArch64
+system-wide feature guarantees; generic x86 hosted requests fall back before
+execution or fail when required. RISC-V Keccak and AVX-512 are not implemented.
+
+Ordinary execution requires explicit `Public`/`PublicBits` input markers;
+these record intent, not proof that bytes are public. Caller scratch supports
+allocation-free transactional output. Kernel failures do not silently select
+another backend.
+
+- [Ordinary SHA-3/SHAKE](https://github.com/valkyoth/brynja/blob/main/docs/sha3-ordinary-execution.md)
+- [Ordinary cSHAKE and hosted sponge](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md)
+- [Hardened Keccak execution](https://github.com/valkyoth/brynja/blob/main/docs/hardened-keccak-execution.md)
+
+## Security boundaries
+
+Ordinary hash/XOF states do not erase private input remnants. Hardened owners
+clear source-declared lanes, counters, staging and scratch on terminal paths;
+secret destinations clear on failure and Drop, while public output requires
+explicit declassification. Consumed or wiped construction owners cannot reopen
+as fresh SHAKE states. Callers remain responsible for their buffers and copies.
+
+No erasure guarantee covers registers, compiler copies/spills, caches, dumps,
+swap, forgotten owners, abort or termination. SHA-3 is not raw Keccak, a MAC,
+password hashing or an authentication protocol.
+
+MIT OR Apache-2.0.

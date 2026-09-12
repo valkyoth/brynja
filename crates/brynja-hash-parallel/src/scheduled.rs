@@ -410,7 +410,7 @@ pub(crate) fn leaf_count(bit_length: usize, block_size: usize) -> Result<u128, P
     u128::try_from(leaves).map_err(|_| ParallelHashError::MessageTooLong)
 }
 
-fn leaf_slice<'a>(
+pub(crate) fn leaf_slice<'a>(
     input: Fips202BitString<'a>,
     block_size: usize,
     leaves: u128,

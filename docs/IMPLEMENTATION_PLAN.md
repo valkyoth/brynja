@@ -162,7 +162,9 @@ The [scope register](CATALOGUE_SCOPE_REGISTER.json) maps all 104 inherited
 inventory rows, exact family contracts, prerequisite owners and acceptance
 steps. The [five-part expansion](ROADMAP_EXPANSION_AUDIT.md) additionally
 assigns missing families and API backfills, then formats and the larger
-protocols at the end. Final whole-project gates follow at v0.476.0-v0.480.0.
+protocols at the end. The [reusable cryptography plan](CRYPTO_REUSE_PLAN.md)
+adds complete standalone APIs without requiring changes to consumers such as
+`eth`. Final whole-project gates follow at v0.491.0-v0.495.0.
 
 `brynja-crypto-cpu` is an optional downstream `no_std` implementation package:
 it may contain only separately admitted ISA kernels, static

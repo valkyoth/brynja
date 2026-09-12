@@ -1,0 +1,53 @@
+[package]
+name = "brynja-crate-readme-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[features]
+default = ["batch"]
+batch = []
+
+[dependencies]
+brynja-core = { path = "../../crates/brynja-core", default-features = false }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", default-features = false, features = ["runtime-execution"] }
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", default-features = false, features = ["static-execution"] }
+brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false }
+brynja-dtls = { path = "../../crates/brynja-dtls", default-features = false }
+brynja-hash-core = { path = "../../crates/brynja-hash-core", default-features = false }
+brynja-hash-parallel-std = { path = "../../crates/brynja-hash-parallel-std", default-features = false, features = ["runtime-execution"] }
+brynja-hash-parallel = { path = "../../crates/brynja-hash-parallel", default-features = false, features = ["runtime-execution"] }
+brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", default-features = false }
+brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", default-features = false }
+brynja-hash-tuple = { path = "../../crates/brynja-hash-tuple", default-features = false }
+brynja-interop = { path = "../../crates/brynja-interop", default-features = false }
+brynja-legacy-md5-std = { path = "../../crates/brynja-legacy-md5-std", default-features = false }
+brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", default-features = false, features = ["batch"] }
+brynja-legacy-pct = { path = "../../crates/brynja-legacy-pct", default-features = false }
+brynja-legacy-sha1-std = { path = "../../crates/brynja-legacy-sha1-std", default-features = false }
+brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", default-features = false }
+brynja-legacy-snp = { path = "../../crates/brynja-legacy-snp", default-features = false }
+brynja-legacy-ssl2 = { path = "../../crates/brynja-legacy-ssl2", default-features = false }
+brynja-legacy-ssl3 = { path = "../../crates/brynja-legacy-ssl3", default-features = false }
+brynja-legacy-tls10 = { path = "../../crates/brynja-legacy-tls10", default-features = false }
+brynja-legacy-tls11 = { path = "../../crates/brynja-legacy-tls11", default-features = false }
+brynja-legacy-wtls = { path = "../../crates/brynja-legacy-wtls", default-features = false }
+brynja-legacy = { path = "../../crates/brynja-legacy", default-features = false }
+brynja-mac-kmac = { path = "../../crates/brynja-mac-kmac", default-features = false }
+brynja-pki = { path = "../../crates/brynja-pki", default-features = false }
+brynja-platform = { path = "../../crates/brynja-platform", default-features = false }
+brynja-proofs = { path = "../../crates/brynja-proofs", default-features = false }
+brynja-protocol = { path = "../../crates/brynja-protocol", default-features = false }
+brynja-quic-tls = { path = "../../crates/brynja-quic-tls", default-features = false }
+brynja-research-ssl1 = { path = "../../crates/brynja-research-ssl1", default-features = false }
+brynja-sanitization = { path = "../../crates/brynja-sanitization", default-features = false }
+brynja-test-support = { path = "../../crates/brynja-test-support", default-features = false }
+brynja-tls = { path = "../../crates/brynja-tls", default-features = false }
+brynja-tls12 = { path = "../../crates/brynja-tls12", default-features = false }
+brynja-tls13-handshake = { path = "../../crates/brynja-tls13-handshake", default-features = false }
+brynja-tls13 = { path = "../../crates/brynja-tls13", default-features = false }
+brynja-xtask = { path = "../../crates/brynja-xtask", default-features = false }
+brynja = { path = "../../crates/brynja", default-features = false }

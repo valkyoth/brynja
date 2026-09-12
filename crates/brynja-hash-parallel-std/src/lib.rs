@@ -17,6 +17,9 @@ use brynja_hash_parallel::{
 
 mod worker;
 
+#[cfg(feature = "runtime-execution")]
+pub mod execution;
+
 use worker::{ensure_live, execute128, execute256};
 
 /// Cooperative cancellation shared with one or more executor calls.

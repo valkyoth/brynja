@@ -25,47 +25,40 @@
 
 # brynja-test-support
 
-`brynja-test-support` is a narrowly scoped, permanently unpublished Brynja
-workspace package. In `0.1.0` it provides the RFC 9850 key-log line encoder,
-a deterministic fault-injecting implementation of the v0.14 secure-random
-engine contract, and scripted wall and monotonic sources for the v0.15 typed
-clock contract. The random fixture exercises retryable, permanent,
-partial-write, underfill, reseed, and destruction paths. The clock fixtures
-exercise exact observations, explicit unavailability, exhaustion, equal ticks,
-and rollback. They are intentionally predictable and must never be used as
-production randomness or time sources.
-
-All ten pinned IANA labels and LF, CRLF, and CR line endings are explicit.
-Writes preflight the complete line and preserve the complete output buffer on
-every capacity or input rejection. Deterministic engine state is cleared on
-uninstantiation and drop.
-
-Only `brynja-core` is a dependency of this crate. No production package depends
-on this crate, and workspace policy rejects any
-normal, optional, feature, target, or resolved production-graph edge to it. It
-does not provide TLS, cryptography, PKI, a platform provider, or a legacy
-protocol implementation, production entropy source, or production clock.
-Key-log output reveals
-traffic secrets by design and is therefore prohibited from every production
-package and feature.
+Permanently unpublished, repository-only `no_std` fixtures. These predictable
+helpers must never enter production dependency graphs.
 
 ## Cryptography Verification Status
 
-This repository-only crate does not implement cryptographic or protocol code,
-so it has no component status row. Fixtures, vectors, and test harnesses do
-not independently verify a component. Only a named independent reviewer and
-linked review evidence can change a component's independent-verification
-status.
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| RFC 9850 diagnostic key-log encoder | ✅ Test-only | ❌ No |
+| Deterministic fault-injecting random engine | ✅ Test-only | ❌ No |
+| Scripted wall and monotonic clocks | ✅ Test-only | ❌ No |
+| Production randomness, clocks or secure protocols | ❌ Not provided | Not applicable |
 
-Most application users will eventually depend on the modern facade:
+Fixture success is not independent cryptographic verification or certification.
 
-```toml
-[dependencies]
-brynja = "0.20"
+## Repository use
+
+```sh
+cargo test --locked -p brynja-test-support
 ```
 
-This package is marked `publish = false` permanently. It is repository-only
-test infrastructure and is not part of any crates.io publication set.
+Random fixtures exercise retry, failure, partial writes, underfill, reseed and
+destruction. Clock fixtures exercise unavailable observations, exhaustion and
+rollback. Never use deterministic fixtures for real keys, nonces or security
+deadlines.
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+The key-log encoder covers pinned IANA labels and LF/CRLF/CR endings. It
+preflights complete output and preserves buffers on rejection. Key logging
+discloses traffic secrets by design; the helper is prohibited from every
+production package and feature, regardless of whether logging is enabled.
+
+## Hardware and SIMD
+
+None. This package supplies predictable test inputs and fault behavior, not a
+crypto backend or performance implementation. It depends only on
+`brynja-core` and remains `publish = false`.
+
+MIT OR Apache-2.0.

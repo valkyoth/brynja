@@ -120,7 +120,7 @@ def main() -> int:
     status, commands = run_profile(
         "--focused", "sha3", "kmac", "tuplehash", "parallelhash"
     )
-    assert status == 0 and len(commands) == 31
+    assert status == 0 and len(commands) == 35
     assert sum('hardened_execution::keccak::tests::all_seven_regions_clear' in c for c in commands) == 1
     assert sum('hardened::accelerated::engine::tests::every_memory_region_is_explicitly_cleared' in c for c in commands) == 1
     assert sum('--features sponge-execution --lib sponge::tests::portable_sponge' in c for c in commands) == 1
@@ -133,7 +133,16 @@ def main() -> int:
     assert sum("-p brynja-hash-tuple" in command for command in commands) == 4
     assert sum('--features hardened-execution --lib execution' in c and 'brynja-hash-tuple' in c for c in commands) == 1
     assert sum('--features hardened-execution --test execution' in c and 'brynja-hash-tuple' in c for c in commands) == 1
-    assert sum("-p brynja-hash-parallel" in command for command in commands) == 1
+    parallel = [c.split(" -p ", 1)[1] for c in commands if "-p brynja-hash-parallel" in c]
+    assert parallel == [
+        "brynja-hash-parallel --features hardened-execution --test execution_stream -- --skip irregular_updates_and_terminal_bits_match_planned_execution",
+        "brynja-hash-parallel --tests",
+        "brynja-hash-parallel --features hardened-execution --lib execution",
+        "brynja-hash-parallel --features hardened-execution --test execution -- --skip all_identities_bits_blocks_and_outputs_match_portable",
+        "brynja-hash-parallel-std --features runtime-execution --lib execution",
+    ]
+    status, selected_parallel = run_profile("--selected", "parallelhash")
+    assert status == 0 and [c.split(" -p ", 1)[1] for c in selected_parallel] == parallel
     status, commands = run_profile("--group", "sha2")
     assert status == 0 and len(commands) == 21
     assert sum('buffer_length_rejects_invalid_values_without_mutation' in c for c in commands) == 1
@@ -151,7 +160,8 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 62
+    assert status == 0 and len(commands) == 66
+    assert [c.split(" -p ", 1)[1] for c in commands if "-p brynja-hash-parallel" in c] == parallel
     assert sum('--features sponge-execution --lib sponge::tests::portable_sponge' in c for c in commands) == 1
     assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1
     assert sum(c.endswith('assurance/static-cpu-execution/Cargo.toml --lib') for c in commands) == 1

@@ -25,43 +25,49 @@
 
 # brynja-sanitization
 
-`brynja-sanitization 0.1.1` is a separately selected, `no_std`, downstream
-secret-storage adapter. It wraps exact `sanitization 2.1.0` with default
-features disabled and no activated transitive package. It is not enabled by
-`brynja`, any TLS or DTLS engine, any default or all-features build, or the
-future FIPS validated-module closure.
-
-The adapter exposes one opaque, fixed-size, non-copyable owner with redacted
-debugging, closure-scoped inspection, transactional replacement, explicit
-clear, and named copies to and from `brynja-core` owned regions. Rich source
-errors cannot cross its boundary. Modern and legacy callers use the same
-protocol-neutral type; there is no legacy-specific adapter.
-
-The package was implemented at Brynja v0.11.2. Dependency-pin version `0.1.1`
-was published at v0.20.0 after the cumulative pentest, remediation retest, and
-hosted release gates recorded `PASS`/`PASS`
-with zero open findings.
-
-```toml
-[dependencies]
-brynja-sanitization = { version = "0.1", default-features = false }
-```
-
-Downstream users may select published `0.1.1`.
+Optional `no_std` secret-storage adapter around the separately admitted
+`sanitization` package. Its exact dependency and disabled default features are
+recorded in Cargo metadata and the admission review, not a README version pin.
 
 ## Cryptography Verification Status
 
-This package is pre-1.0 and has not been independently reviewed. A component
-only moves from ❌ to ✅ when a named independent reviewer signs off and linked
-review evidence is recorded. Project tests, CI, Kani, Miri, fuzzing,
-code-generation inspection, pentesting, or upstream review are evidence, but
-not independent verification or certification. It does not implement TLS,
-cryptography, PKI, or a FIPS validated module.
-
-| Component | Scope | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |
+| Fixed-size secret ownership and explicit Brynja-region copies | ✅ Implemented | ❌ No |
+| TLS, hash/cipher algorithms or a FIPS module | Not provided | Not applicable |
 
-The exact upstream package identity, unsafe inventory, verification evidence,
-residual risks, and fail-closed re-review triggers are recorded in the
-[admission review](https://github.com/valkyoth/brynja/blob/main/docs/sanitization-admission-review.md).
+No named independent review or FIPS validation is claimed. This adapter is
+not a facade/default dependency or a future validated-module component.
+It is not required for Brynja's internal mandatory `brynja-core` clearing.
+
+## Use
+
+For the published adapter:
+
+```sh
+cargo add brynja-sanitization --no-default-features
+```
+
+Use a local path for the current checkout's admitted dependency update.
+
+```rust
+use brynja_sanitization::SanitizedSecret;
+let secret = SanitizedSecret::<4>::try_from_fn(|index| index as u8).unwrap();
+assert_eq!(secret.inspect(|bytes| bytes.len()), 4);
+secret.clear();
+```
+
+The owner is non-copyable with redacted debugging, closure-scoped inspection,
+transactional replacement and explicit clearing. Named methods copy to/from
+`brynja-core` secret regions; copies are never implicit. Rich source errors
+cannot cross the boundary. Inspection can create caller-owned copies, which
+the adapter cannot erase.
+
+## Hardware and SIMD
+
+No hash/cipher acceleration is provided. Clearing is a memory-lifecycle
+operation, not cryptographic SIMD. Registers, compiler copies, caches, swap,
+dumps, forgotten owners, abort and forced termination are outside the guarantee.
+
+See the [dependency admission and residual risks](https://github.com/valkyoth/brynja/blob/main/docs/sanitization-admission-review.md).
+MIT OR Apache-2.0.

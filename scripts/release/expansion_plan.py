@@ -8,7 +8,7 @@ from pathlib import Path
 import roadmap_schedule
 
 REGISTER = Path(__file__).resolve().parents[2] / "docs/ROADMAP_EXPANSION_REGISTER.json"
-REGISTER_SHA256 = "3e408a86cfcc42020aa87b2f33b61368e531577819debfaa3f7d0e11a15d034d"
+REGISTER_SHA256 = "e14c51005bd45166c5fa0ceecce09e140f1b78a8d0640d1a252f2aa0831435b4"
 DOMAINS = {"crypto", "legacy", "research", "password", "utility", "format", "protocol"}
 
 
@@ -27,7 +27,7 @@ def validate(entries, data=None, schedule=None):
     if data["schema"] != 1 or data["groups"] != [1, 2, 3, 4, 5]:
         raise ValueError("expansion groups or schema changed")
     families = data["families"]
-    if len(families) != 126 or len({f["name"] for f in families}) != 126:
+    if len(families) != 141 or len({f["name"] for f in families}) != 141:
         raise ValueError("missing or duplicate expansion family")
     positions = {v.removeprefix("v"): i for i, (v, _, _) in enumerate(entries)}
     scopes = {v.removeprefix("v"): (t, s) for v, t, s in entries}
@@ -45,10 +45,17 @@ def validate(entries, data=None, schedule=None):
                 raise ValueError("legacy/research expansion owner escaped isolation")
         milestones = family["milestones"]
         stages = [m["stage"] for m in milestones]
+        backend_stages = family.get("backend_stages", [])
+        if backend_stages not in ([], ["hardware", "simd"]):
+            raise ValueError("expansion hardware/SIMD stages missing or reordered")
         if stages != (["admission"] + ["implementation"] * len(family["operations"])
-                      + ["lifecycle", "portable-acceptance", "final-acceptance"]):
+                      + ["lifecycle", "portable-acceptance"]
+                      + backend_stages + ["final-acceptance"]):
             raise ValueError("expansion operation or acceptance stage missing/reordered")
         versions = [m["version"] for m in milestones]
+        if any(scheduled.get(v, {}).get("id", "").startswith("crypto-reuse:")
+               for v in versions) and backend_stages != ["hardware", "simd"]:
+            raise ValueError("reusable crypto family lost explicit acceleration closure")
         indices = [positions.get(v, -1) for v in versions]
         if -1 in indices or indices != sorted(set(indices)) or len(versions) > 12:
             raise ValueError("expansion family order or review size changed")
@@ -75,12 +82,16 @@ def validate(entries, data=None, schedule=None):
                     raise ValueError("expansion operation is absent from implementation")
         if family["authority"] not in scopes[versions[0]][1]:
             raise ValueError("expansion authority is absent from admission")
-        if family["tests"] not in scopes[versions[-2]][1]:
+        portable = next(m["version"] for m in milestones
+                        if m["stage"] == "portable-acceptance")
+        if family["tests"] not in scopes[portable][1]:
             raise ValueError("expansion acceptance lost its specific test contract")
-    expected_owned = {v for v in positions if v.startswith("0.") and
-        (351 <= int(v.split(".")[1]) <= 474 or
-         v in {f"0.24.{i}" for i in range(24, 30)} or
-         v in {f"0.100.{i}" for i in range(1, 7)})}
+    expected_owned = {r["version"] for r in schedule["milestones"]
+        if r["id"].startswith("crypto-reuse:") or (
+            r["id"].startswith("expansion:") and
+            351 <= int(r["id"].split(":")[1].split(".")[1]) <= 474)}
+    expected_owned |= {f"0.24.{i}" for i in range(24, 30)}
+    expected_owned |= {f"0.100.{i}" for i in range(1, 7)}
     if owned != expected_owned:
         raise ValueError("expansion contains unowned or missing milestones")
     integrated = scheduled[data["final_integration"]]

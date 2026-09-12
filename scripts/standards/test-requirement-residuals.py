@@ -128,10 +128,16 @@ def test_current_residual_repository() -> None:
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 131
-    assert len(artifact["plans"]) == 2028
+    assert len(artifact["plans"]) == 2157
     plans = {plan["version"]: plan for plan in artifact["plans"]}
     for patch in range(30, 55):
         assert plans[f"0.24.{patch}"]["boundary"]["class"] == "planned-authority-admission"
+    # The reusable-cryptography expansion must retain an authority boundary
+    # at every implementation and acceptance stop, not just add version rows.
+    last_patches = {378: 8, 379: 8, 380: 7, 381: 8, 388: 8, 470: 8}
+    for minor in (*range(378, 392), 470):
+        for patch in range(last_patches.get(minor, 7) + 1):
+            assert plans[f"0.{minor}.{patch}"]["boundary"]["class"] == "planned-authority-admission"
     assert len(artifact["surfaces"]) == 4462
     assert len(artifact["requirements"]) == 175
     assert len(artifact["local_rights"]) == 18

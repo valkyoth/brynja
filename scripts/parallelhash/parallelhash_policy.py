@@ -17,9 +17,19 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "output.rs", "scheduled.rs", "xof.rs",
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
+EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
+    "backend.rs", "binding.rs", "collector.rs", "collector/tests.rs", "encoding.rs", "mod.rs",
+    "ownership.rs", "plan.rs", "stream.rs", "stream_output.rs", "stream/tests.rs",
+))
+STD_EXECUTION = tuple(STD / "src/execution" / name for name in (
+    "mod.rs", "selection.rs", "worker.rs", "tests.rs", "worker/tests.rs",
+))
 TESTS = (
     PORTABLE / "tests/api.rs", PORTABLE / "tests/official_vectors.rs",
     STD / "tests/executor.rs",
+    PORTABLE / "tests/execution.rs", PORTABLE / "tests/execution_vectors/mod.rs",
+    PORTABLE / "tests/execution_stream.rs",
+    STD / "tests/execution.rs",
 )
 MANIFESTS = (PORTABLE / "Cargo.toml", STD / "Cargo.toml")
 PUBLIC = (
@@ -32,6 +42,17 @@ DIFFERENTIAL = (
     Path("assurance/parallelhash-differential/Cargo.toml"),
     Path("assurance/parallelhash-differential/src/main.rs"),
     Path("scripts/parallelhash/check-parallelhash-differential.py"),
+    Path("assurance/parallelhash-differential/src/execution.rs"),
+    Path("assurance/parallelhash-differential/src/lib.rs"),
+    PORTABLE / "README.md", STD / "README.md",
+    Path("scripts/parallelhash/check-parallelhash-execution-differential.py"),
+    Path("scripts/parallelhash/check-parallelhash-execution-package.py"),
+    Path("scripts/parallelhash/check-parallelhash-execution-codegen.py"),
+    Path("scripts/parallelhash/parallelhash_cleanup.py"),
+    Path("scripts/parallelhash/parallelhash_execution_native.py"),
+    Path("scripts/parallelhash/capture-parallelhash-execution-native.py"),
+    Path("scripts/parallelhash/check-parallelhash-execution-native.py"),
+    Path("scripts/parallelhash/test-parallelhash-execution-native.py"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -40,8 +61,9 @@ SUPPORT = (
     Path("scripts/zeroization/check-zeroization-sanitizer.sh"),
     Path("scripts/assurance/check-kani.sh"),
 )
-FILES = (*SOURCES, *STD_SOURCES, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL, *SUPPORT)
-HASHED = (*SOURCES, *STD_SOURCES, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL)
+OWNER_INVENTORY = Path("docs/parallelhash-execution.md")
+FILES = (*SOURCES, *STD_SOURCES, *EXECUTION, *STD_EXECUTION, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL, *SUPPORT, OWNER_INVENTORY)
+HASHED = (*SOURCES, *STD_SOURCES, *EXECUTION, *STD_EXECUTION, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL)
 HASHES = {Path(path): digest for path, digest in parallelhash_reviewed_hashes.REVIEWED_HASHES.items()}
 
 
@@ -69,17 +91,23 @@ def require(text: str, token: str, label: str) -> None:
 
 
 def validate(root: Path) -> None:
-    expected_sources = {root / path for path in SOURCES}
-    if set((root / PORTABLE / "src").glob("*.rs")) != expected_sources:
+    expected_sources = {root / path for path in (*SOURCES, *EXECUTION)}
+    if set((root / PORTABLE / "src").rglob("*.rs")) != expected_sources:
         fail("portable ParallelHash source inventory changed")
-    expected_std_sources = {root / path for path in STD_SOURCES}
-    if set((root / STD / "src").glob("*.rs")) != expected_std_sources:
+    expected_std_sources = {root / path for path in (*STD_SOURCES, *STD_EXECUTION)}
+    if set((root / STD / "src").rglob("*.rs")) != expected_std_sources:
         fail("std ParallelHash source inventory changed")
     loaded = {path: read(root, path) for path in FILES}
+    for owner in ("`backend::State`", "`Collector` metadata", "`Stream` workspace and metadata",
+                  "`Encoded`", "`Leaf` / worker output", "`Clear` / output staging",
+                  "`Reader` / `StreamReader`", "std `worker::Storage`"):
+        require(loaded[OWNER_INVENTORY], owner, "execution secret-region inventory")
+    require(loaded[STD / "src/execution/worker/tests.rs"],
+            "storage_clear_visits_every_byte_of_every_live_slot", "std slot clearing test")
     if set(HASHES) != set(HASHED):
         fail("ParallelHash reviewed hash inventory changed")
 
-    production = "\n".join(loaded[path] for path in SOURCES)
+    production = "\n".join(loaded[path] for path in (*SOURCES, *EXECUTION))
     for forbidden in (
         "unsafe", 'extern "C"', "std::", "alloc::", "Vec<", "Box<",
         "static mut", "Atomic", "thread_local", "core::arch", "asm!",
@@ -123,17 +151,33 @@ def validate(root: Path) -> None:
         require(xof, name, "XOF identities")
 
     portable_manifest = tomllib.loads(loaded[MANIFESTS[0]])
-    if portable_manifest.get("features") != {"default": []}:
+    if portable_manifest.get("features") != {
+        "default": [],
+        "hardened-execution": ["brynja-hash-sha3/hardened-execution"],
+        "runtime-execution": ["hardened-execution", "brynja-hash-sha3/runtime-execution"],
+    }:
         fail("portable feature boundary changed")
+    if portable_manifest.get("dev-dependencies") != {
+        "brynja-crypto-cpu": {"workspace": True, "features": ["hardened-execution"]},
+        "brynja-crypto-cpu-std": {"workspace": True, "features": ["runtime-execution"]},
+    }:
+        fail("execution test-only authority dependencies changed")
     if portable_manifest.get("dependencies") != {
         "brynja-core": {"workspace": True},
         "brynja-hash-sha3": {"workspace": True},
     }:
         fail("portable dependency boundary changed")
     std_manifest = tomllib.loads(loaded[MANIFESTS[1]])
+    if std_manifest.get("features") != {
+        "default": [],
+        "runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "dep:brynja-crypto-cpu"],
+    }:
+        fail("std execution must remain explicitly opt-in")
     if std_manifest.get("dependencies") != {
         "brynja-core": {"workspace": True},
         "brynja-hash-parallel": {"workspace": True},
+        "brynja-crypto-cpu-std": {"workspace": True, "optional": True, "features": ["runtime-execution"]},
+        "brynja-crypto-cpu": {"workspace": True, "optional": True, "features": ["hardened-execution"]},
     }:
         fail("std executor dependency boundary changed")
     std_source = "\n".join(loaded[path] for path in STD_SOURCES)
@@ -194,11 +238,30 @@ def validate(root: Path) -> None:
         (SUPPORT[0], "PARALLEL_HASH_IMPLEMENTED: bool = true"),
         (SUPPORT[1], "four ParallelHash identities"),
         (SUPPORT[3], "scripts/parallelhash/check-parallelhash-differential.py"),
-        (SUPPORT[4], "-p brynja-hash-parallel"),
+        (SUPPORT[4], "run_miri -p brynja-hash-parallel --tests"),
         (SUPPORT[5], "-p brynja-hash-parallel-std"),
         (SUPPORT[6], "cargo kani -p brynja-hash-parallel"),
     ):
         require(loaded[path], token, "ParallelHash evidence closure")
+    for command in (
+        "python3 scripts/parallelhash/check-parallelhash-execution-differential.py",
+        "python3 scripts/parallelhash/check-parallelhash-execution-package.py",
+        "cargo test --locked --offline --manifest-path assurance/parallelhash-differential/Cargo.toml --features execution --doc",
+        "python3 scripts/parallelhash/check-parallelhash-execution-codegen.py --toolchain 1.90.0",
+        "python3 scripts/parallelhash/check-parallelhash-execution-codegen.py --toolchain 1.98.1",
+        "cargo clippy --locked --offline --manifest-path assurance/parallelhash-differential/Cargo.toml --all-features --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks",
+    ):
+        require(loaded[SUPPORT[3]], command, "execution repository gate")
+    for command in (
+        "run_miri -p brynja-hash-parallel --features hardened-execution --lib execution",
+        "run_miri -p brynja-hash-parallel --features hardened-execution --test execution",
+        "run_miri -p brynja-hash-parallel --features hardened-execution --test execution_stream",
+        "run_miri -p brynja-hash-parallel-std --features runtime-execution --lib execution",
+    ):
+        require(loaded[SUPPORT[4]], command, "execution Miri gate")
+    sanitizer = " ".join(loaded[SUPPORT[5]].replace("\\\n", " ").split())
+    for package in ("brynja-hash-parallel", "brynja-hash-parallel-std"):
+        require(sanitizer, f"-p {package} --features runtime-execution --tests", "execution ASan gate")
     for path, digest in HASHES.items():
         if hashlib.sha256((root / path).read_bytes()).hexdigest() != digest:
             fail(f"ParallelHash reviewed source changed: {path}")

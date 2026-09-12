@@ -25,39 +25,40 @@
 
 # brynja-platform
 
-`brynja-platform 0.1.8` repins its exact `brynja-core 0.9.0` dependency. It
-remains a compile-time boundary only and does not provide a working TLS,
-cryptographic, PKI, platform, or legacy-protocol implementation.
+Platform entropy, clocks and deployment adapters. This package currently establishes a compile-time workspace
+boundary only; it does not provide the planned implementation.
 
-Brynja v0.13.0 freezes provider capabilities, opaque handles, caller limits,
-destruction duties, and version-neutral request metadata upstream in
-`brynja-core`. Future platform effects implement those upstream contracts
-downstream; this crate does not redefine them, register a fallback provider, or
-claim entropy, time, storage, path, pending-operation, or FIPS functionality.
-Brynja v0.13.1 additionally freezes the upstream CPU-backend evidence, health,
-dispatch, quarantine, and policy contract. This platform crate still supplies
-no CPU detection or activation evidence and cannot manufacture backend
-authority.
-Brynja v0.16.0 freezes the upstream pending-operation effect and authoritative
-destruction lifecycle. This package supplies no pending provider, external-key
-store, accelerator driver, completion assertion, or cleanup implementation.
-Brynja v0.17.0 freezes the upstream FIPS-aware provider architecture. This
-package cannot classify module services, complete module self-tests, provide
-an operational-environment identity, or turn platform evidence into a FIPS
-claim; any later implementation must enter through separately reviewed exact
-module contracts.
+## Cryptography Verification Status
 
-Most application users will eventually depend on the modern facade:
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| Platform entropy, clocks and deployment adapters | ❌ Not implemented | ❌ No |
 
-```toml
-[dependencies]
-brynja = "0.20"
+There is no named independent cryptographic or protocol review and no FIPS
+140-3 validation. A package compiling is not evidence of a working engine.
+
+## Current use
+
+No operational protocol or platform API is available here, so there is no application
+integration example yet. To check the package boundary from the repository:
+
+```sh
+cargo test --locked -p brynja-platform
 ```
 
-Version `0.1.8` was published at v0.20.0 after the cumulative pentest,
-remediation retest, and hosted checks recorded
-`PASS`/`PASS` with zero open findings. It is governed by the
-[release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
+Typed upstream contracts exist in `brynja-core`; no OS RNG, clock, memory-locking
+or dump-policy implementation is supplied by this package.
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+
+## Hardware and SIMD
+
+No hardware acceleration or SIMD implementation is exposed here. Future
+engines will consume explicitly selected first-party crypto backends; they
+must not imply that a CPU feature report authorizes execution.
+
+Published boundary packages do not imply operational implementation. Check the
+capability table above before selecting this crate for an application.
+
+[Implementation roadmap](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
+· [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md).
+MIT OR Apache-2.0.

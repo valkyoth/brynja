@@ -25,35 +25,38 @@
 
 # brynja-research-ssl1
 
-`brynja-research-ssl1` is an unpublished reconstruction and
-provenance-research boundary. It can never expose a secure transport API,
-accept production credentials, or be published by default. In `0.1.0` it
-establishes the compile-time boundary only.
+SSL 1.0 provenance reconstruction. This package currently establishes a compile-time workspace
+boundary only; it does not provide the planned implementation.
 
 ## Cryptography Verification Status
 
-No reconstructed SSL 1.0 code in this crate has been independently reviewed.
-This component only moves from ❌ to ✅ when a named independent reviewer signs
-off and the evidence is linked from its status entry. Project tests, CI, Kani,
-Miri, fuzzing, and pentesting do not by themselves constitute independent
-verification. Independent verification could never authorize a secure
-transport claim for this research crate.
-
-| Component | Protocol scope | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
+| SSL 1.0 provenance reconstruction | ❌ Not implemented | ❌ No |
 
-The component is not implemented yet.
+There is no named independent cryptographic or protocol review and no FIPS
+140-3 validation. A package compiling is not evidence of a working engine.
 
-Most application users will eventually depend on the modern facade:
+## Current use
 
-```toml
-[dependencies]
-brynja = "0.1"
+No operational protocol or platform API is available here, so there is no application
+integration example yet. To check the package boundary from the repository:
+
+```sh
+cargo test --locked -p brynja-research-ssl1
 ```
 
-This package is permanently marked `publish = false`. No release-plan milestone
-authorizes publication or a secure transport claim.
+Research only: never accept production credentials, expose a secure transport
+API or claim that historical reconstruction makes SSL 1.0 secure. This package
+is permanently unpublished.
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+
+## Hardware and SIMD
+
+No hardware acceleration or SIMD implementation is exposed here. Future
+engines will consume explicitly selected first-party crypto backends; they
+must not imply that a CPU feature report authorizes execution.
+
+[Implementation roadmap](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
+· [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md).
+MIT OR Apache-2.0.

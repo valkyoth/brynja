@@ -25,114 +25,66 @@
 
 # brynja-crypto-cpu-std
 
-## Explicit hosted execution
-
-The repository's default-off `runtime-execution` feature exposes
-`execution::{Authority, Kernel, Mode}` for ordinary raw SHA-256/SHA-512 and
-Keccak operations. Portable never probes; Prefer reports fallback reasons;
-Require errors when a complete platform guarantee is unavailable. Supported
-AArch64 system feature APIs can authorize execution after a direct KAT.
-Generic x86 and unreviewed platforms remain portable/error; current-core
-CPUID alone is not migration authority. KAT failure quarantines without fallback.
-Raw state and blocks require `execution::PublicData::new(...)` classification.
-This records caller intent, not proof of public provenance or an erasure claim.
-Prefer only falls back for pre-execution unavailability, never kernel errors.
-
-This new API is not in the previously published 0.1.1 artifact. It remains
-separate from the historical high-level adapters described below, from
-hardened secret processing, and from Brynja's default/facade dependency graph.
-See [the hosted execution contract](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
-for exact feature bundles, platform assumptions and runnable package acceptance.
-
-## Ordinary sponge adapters
-
-Enable default-off `sponge-execution` to use `sponge::{Sponge, Mode, Public, PublicBits}`.
-`Sponge` provides caller-owned, borrowing constructors for all four SHA-3 hashes,
-both SHAKE strengths and cSHAKE128/256 with byte/arbitrary-bit N/S. Its optional
-first-party SHA-3 dependency does not enter facade/default graphs. Prefer reports
-pre-execution fallback; Require fails closed. Kernel errors never select scalar
-execution. All data must be public; these owners are not erasing or secret-safe.
-This candidate still requires exceptional review and fresh native collection.
-See [complete examples and limits](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md).
-
-## Historical SHA-2 adapters
-
-`brynja-crypto-cpu-std` is the separate opt-in host detector and SHA-2
-dispatch-reporting adapter. It uses the standard library's architecture feature macros,
-depends by default only on `brynja-crypto-cpu` and `brynja-hash-sha2`, and is selected
-directly by host applications. It never enters Brynja defaults, protocol
-engines, bare-metal graphs, or a FIPS validated-module artifact.
-
-`RuntimeSha256Backend::opportunistic()` detects an exact supported feature
-bundle once, runs the backend's startup KAT, and otherwise retains portable
-scalar SHA-256. `RuntimeSha256Backend::required()` never silently falls back.
-Reports distinguish accelerated execution from unavailable hardware,
-unadmitted candidate code, and quarantine. No global default or hidden
-initialization is installed.
-
-`RuntimeSha256Backend` also owns SHA-224 selection because both algorithms use
-the same exact compression kernel. `RuntimeSha512Backend` reports AArch64
-SHA-512 candidate availability and retains scalar SHA-384, SHA-512,
-SHA-512/224, and SHA-512/256 until admission. x86_64 SHA-512 is intentionally
-scalar, and required SHA-512-family acceleration fails closed.
-
-Internal v0.24.4 adds x86_64 AVX2 and AArch64 SHA3 Keccak candidates only to
-the lower `no_std` package and repository evidence fixture. This adapter
-does not expose them through its historical hash adapters. The separate raw
-`execution` API above now detects supported hosted routes. Public
-SHA-3/SHAKE default constructors remain portable; the new optional sponge
-adapter above provides explicit ordinary execution without changing those defaults.
-
-The x86_64, AArch64, and RV64 Zknh SHA-2 kernels remain unadmitted in v0.23.3
-pending complete authenticated admission evidence. Non-authorizing native
-correctness observations exist for AMD, Intel, Apple M2, and AWS Arm; the
-registered RISC-V host lacks the required SHA extensions. This adapter detects
-only the stable x86_64 and AArch64
-feature bundles; RISC-V automatic detection stays intentionally disabled, so ordinary runtime selection reports
-`ScalarBackendUnadmitted` on qualifying machines. QEMU and cross-compilation
-can supplement instruction and portability evidence but cannot establish a
-native admission claim. The registered RISC-V host lacks the required SHA
-extensions, so this candidate is explicitly QEMU/codegen-only there. Brynja
-will seek additional exact-feature native observations through a reproducible
-post-v1.0.0 community campaign, while retaining the normal authenticated
-admission gates.
-
-## Example
-
-```rust
-use brynja_crypto_cpu_std::{RuntimeSha256Backend, RuntimeSha256Selection};
-
-let backend = RuntimeSha256Backend::opportunistic();
-let digest = backend.hash(b"abc")?;
-let report = backend.report();
-
-assert_eq!(digest.as_bytes().len(), 32);
-assert!(matches!(
-    report.selection(),
-    RuntimeSha256Selection::ScalarNoFeature
-        | RuntimeSha256Selection::ScalarBackendUnadmitted
-));
-# Ok::<(), brynja_crypto_cpu_std::RuntimeSha256Error>(())
-```
-
-Applications that require acceleration use `RuntimeSha256Backend::required()`
-and handle `RequiredAccelerationUnavailable` rather than receiving scalar
-output.
+Optional hosted feature observation and CPU authority for Brynja.
+This adapter uses `std`; portable algorithm leaves remain `no_std`.
+It is not automatically installed or added to facade/default graphs.
 
 ## Cryptography Verification Status
 
-No cryptographic or dispatch code in this crate has been independently
-reviewed. A component only moves from ❌ to ✅ when a named independent reviewer
-signs off and the evidence is linked. Project tests, CI, Kani, Miri, fuzzing,
-and pentesting do not by themselves constitute independent verification.
-
-| Component | Cryptographic scope | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA-256 host detection and dispatch | x86_64 SHA and AArch64 NEON/SHA2 selection, explicit scalar fallback, and no automatic RISC-V activation | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |
-| SHA-512-family host reporting | AArch64 NEON/SHA-512 observation, explicit scalar fallback, x86 scalar-only decision, and no automatic RISC-V activation | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |
+| Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |
+| Explicit hosted raw execution | ✅ Opt-in, qualifying AArch64 only | ❌ No |
+| Ordinary SHA-3/SHAKE/cSHAKE sponge adapters | ✅ Opt-in, public data only | ❌ No |
 
-Version `0.1.1`, with its exact CPU-boundary dependency update, was published
-at v0.20.0 after the cumulative pentest, remediation retest, and hosted gates
-recorded `PASS`/`PASS` with zero open findings. The project-wide
-first-party Rust, dependency, source-size, platform, FIPS, and low-level-code
-policies apply here.
+No named independent cryptographic review or FIPS 140-3 validation is claimed.
+
+## Use
+
+The explicit execution APIs require the unpublished checkout:
+
+```sh
+cargo add brynja-crypto-cpu-std --path /path/to/brynja/crates/brynja-crypto-cpu-std --no-default-features --features runtime-execution
+```
+
+```rust
+use brynja_crypto_cpu_std::execution::{Authority, Kernel, Mode, Route};
+let owner = Authority::new(Kernel::ArmSha256, Mode::Portable).unwrap();
+assert_eq!(owner.report().route, Route::PortableRequested);
+assert!(owner.session().unwrap().is_none());
+```
+
+`Portable` never probes; the caller performs portable work. `Prefer`
+reports pre-execution fallback reasons. `Require` rejects unavailable
+acceleration. Failed KATs and quarantined sessions never authorize fallback.
+
+Enable `sponge-execution` for borrowing `sponge::Sponge` constructors for
+all four SHA-3 hashes, both SHAKE strengths and cSHAKE128/256. They accept
+explicitly public byte/bit inputs and preserve transactional output. They are
+not secret-erasing owners.
+
+## Hardware and SIMD
+
+Hosted execution uses qualifying AArch64 system-wide feature APIs for
+SHA2/SHA-512/SHA3 kernels. Generic x86 and unreviewed platforms cannot derive
+migration authority from current-core CPUID; required hosted execution fails
+closed. Target-specialized x86-64 SHA/AVX2 binaries can instead use the
+separate static API under its deployment contract.
+
+The historical `RuntimeSha256Backend` and `RuntimeSha512Backend` adapters
+remain distinct: observation does not admit their candidates, opportunistic
+use stays portable, and required acceleration errors. They must not be
+confused with the explicit `execution` authority. No automatic RISC-V
+activation or global affinity/process-policy change occurs.
+
+## Security boundaries
+
+Raw state and blocks require `PublicData`; ordinary sponge input requires
+`Public`/`PublicBits`. These markers record intent, not data-provenance
+proof or clearing. Secret-bearing algorithms use separate hardened owners
+from their leaf crates. Borrowed authority remains thread-bound and revocable;
+copied health reports cannot create sessions.
+
+[Hosted contract](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
+· [Sponge examples](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md).
+MIT OR Apache-2.0.

@@ -96,12 +96,16 @@ def miri_dependency_tests():
     # SHA-3 now consumes CPU authorities. Current CPU changes must select it.
     assert 'sha3' in plans.scope.closure(
         {'static_cpu'}, downstream=miri_dependencies.graph(raw, raw))
-    # Retain a pre-integration fixture to prove when portable reuse is sound.
-    start = raw.index(b'name = "brynja-hash-sha3"\n')
-    end = raw.index(b'[[package]]', start)
-    record = raw[start:end]
-    assert record.count(b' "brynja-crypto-cpu",\n') == 1
-    raw = raw[:start] + record.replace(b' "brynja-crypto-cpu",\n', b'') + raw[end:]
+    # Construct an explicitly pre-integration graph. Removing only SHA-3's
+    # edge no longer models portable-only owners: ParallelHash now has its
+    # own optional hosted edge and CPU test dependencies.
+    for name in miri_dependencies.PORTABLE_ROOTS:
+        start = raw.index(('name = "' + name + '"\n').encode())
+        end = raw.find(b'[[package]]', start)
+        end = len(raw) if end < 0 else end
+        record = raw[start:end]
+        portable = record.replace(b' "brynja-crypto-cpu",\n', b'').replace(b' "brynja-crypto-cpu-std",\n', b'')
+        raw = raw[:start] + portable + raw[end:]
     edges = miri_dependencies.graph(raw, raw)
     assert plans.scope.closure({'static_cpu'}, downstream=edges) == ('sha2', 'static_cpu')
     assert plans.scope.closure({'sha3'}, downstream=edges) == ('sha3', 'kmac', 'tuplehash', 'parallelhash')

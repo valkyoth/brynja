@@ -36,6 +36,7 @@ BASE_COMMANDS = {
     "python3 scripts/cpu/test-acceleration-availability.py",
     "cargo test --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml",
     "cargo clippy --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml --all-targets -- -D warnings",
+    "cargo test --locked --offline --manifest-path assurance/crate-readmes/Cargo.toml --doc",
 }
 
 

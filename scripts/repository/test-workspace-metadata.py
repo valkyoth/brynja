@@ -6,6 +6,7 @@ from __future__ import annotations
 import copy
 import cpu_workspace_fixtures
 import md5_workspace_fixtures
+import parallelhash_workspace_fixtures
 import json
 import subprocess
 import sys
@@ -465,6 +466,7 @@ def main() -> int:
     no_default = metadata("--no-default-features")
     all_features = metadata("--all-features")
     test_baselines(no_default, all_features)
+    parallelhash_workspace_fixtures.check(no_default, all_features, package, node, dependency, require_rejection)
     test_inventory_and_names(all_features)
     test_manifest_classes(all_features)
     test_dependency_contracts(all_features)

@@ -7,6 +7,7 @@ import argparse
 import json
 import tomllib
 from pathlib import Path
+import parallelhash_workspace_policy as execution_policy
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -73,7 +74,7 @@ def load_policy() -> dict[str, dict]:
             raise ValueError(f"{name} has malformed dependency policy")
         if "default" in features or set(features).intersection(optional):
             raise ValueError(f"{name} has ambiguous standalone feature policy")
-        dependencies = required + list(optional.values())
+        dependencies = required + execution_policy.optional_names(entry) + execution_policy.dev_names(name, entry)
         if len(dependencies) != len(set(dependencies)):
             raise ValueError(f"{name} repeats a dependency")
         if name in dependencies:
@@ -163,8 +164,9 @@ def validate_dependencies(
     packages: dict[str, dict],
 ) -> None:
     required = set(entry["required"])
-    optional = set(entry["optional"].values())
-    expected = required | optional
+    optional = set(execution_policy.optional_names(entry))
+    development = set(execution_policy.dev_names(name, entry))
+    expected = required | optional | development
     dependencies = package.get("dependencies", [])
     actual = {dependency["name"] for dependency in dependencies}
     if actual != expected:
@@ -185,8 +187,9 @@ def validate_dependencies(
                 raise ValueError(f"admitted external path override: {dependency_name}")
         elif dependency.get("source") is not None or dependency.get("path") is None:
             raise ValueError(f"external dependency: {name} -> {dependency_name}")
-        if dependency.get("kind") is not None or dependency.get("target") is not None:
-            raise ValueError(f"{name} has a non-production dependency")
+        kind = "dev" if dependency_name in development else None
+        if dependency.get("kind") != kind or dependency.get("target") is not None:
+            raise ValueError(f"{name} dependency kind/target drifted")
         if dependency.get("optional") != (dependency_name in optional):
             raise ValueError(f"{name} optionality drifted for {dependency_name}")
         allowed_features = (
@@ -198,6 +201,9 @@ def validate_dependencies(
             }
             else []
         )
+        admitted = execution_policy.direct_features(name, dependency_name)
+        if admitted is not None:
+            allowed_features = admitted
         if dependency.get("features") != allowed_features:
             raise ValueError(f"{name} directly enables features on {dependency_name}")
         if dependency.get("uses_default_features") is not (not external):
@@ -214,7 +220,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     expected = {"default": []}
     expected.update(
         {
-            feature: [f"dep:{dependency}"]
+            feature: [f"dep:{name}" for name in execution_policy.feature_dependencies(dependency)]
             for feature, dependency in entry["optional"].items()
         }
     )
@@ -234,9 +240,12 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         # The reviewed CPU surface includes the bounded portable batch API;
         # neither feature implies the separate non-production evidence key.
         expected["cpu"] = ["batch"]
-    if name in {"brynja-mac-kmac", "brynja-hash-tuple"}:
+    if name in {"brynja-mac-kmac", "brynja-hash-tuple", "brynja-hash-parallel"}:
         expected["hardened-execution"] = ["brynja-hash-sha3/hardened-execution"]
         expected["runtime-execution"] = ["hardened-execution", "brynja-hash-sha3/runtime-execution"]
+    if name == "brynja-hash-parallel-std":
+        expected["runtime-execution"] = ["brynja-hash-parallel/runtime-execution",
+                                        "dep:brynja-crypto-cpu-std", "dep:brynja-crypto-cpu"]
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")
 
@@ -311,10 +320,10 @@ def validate_resolved_mode(
     nodes = {node["id"]: node for node in document["resolve"]["nodes"]}
     for name, package in packages.items():
         entry = policy[name]
-        expected_dependencies = set(entry["required"])
+        expected_dependencies = set(entry["required"]) | set(execution_policy.dev_names(name, entry))
         expected_features: set[str] = set()
         if mode == "all-features":
-            expected_dependencies.update(entry["optional"].values())
+            expected_dependencies.update(execution_policy.optional_names(entry))
             expected_features.update(package["features"])
         if name == "brynja-hash-sha2":
             # Cargo metadata resolves all workspace members together. The host
@@ -331,6 +340,11 @@ def validate_resolved_mode(
             # The separate hosted root enables CPU visibility and its bounded
             # batch prerequisite, never the evidence-execution feature.
             expected_features.update(("cpu", "batch"))
+        if mode == "no-default-features" and name == "brynja-crypto-cpu":
+            expected_dependencies.add("brynja-core")
+            expected_features.update(("hardened-execution", "static-execution", "runtime-execution"))
+        if mode == "no-default-features" and name == "brynja-crypto-cpu-std":
+            expected_features.add("runtime-execution")
         package_id = names[name]
         actual_dependencies = {
             packages_by_id[dependency_id]["name"]
@@ -344,7 +358,8 @@ def validate_resolved_mode(
         if actual_features != expected_features:
             raise ValueError(f"{name} resolved {mode} feature set drifted")
 
-    modern_edges = {package_id: set(dependencies) for package_id, dependencies in edges.items()}
+    production = execution_policy.production_edges(document, packages, names, policy)
+    modern_edges = {identity: set(deps) for identity, deps in production.items()}
     modern_edges[names["brynja-hash-sha2"]].discard(names["brynja-crypto-cpu"])
     modern_edges[names["brynja-hash-sha3"]].discard(names["brynja-crypto-cpu"])
     modern = reachable_names("brynja", names, packages_by_id, modern_edges)
@@ -385,9 +400,9 @@ def validate_resolved_mode(
     if edges.get(sanitization_id, set()):
         raise ValueError("sanitization activated a transitive package")
     cpu = reachable_names("brynja-crypto-cpu", names, packages_by_id, edges)
-    expected_cpu = {"brynja-crypto-cpu"}
-    if mode == "all-features":
-        expected_cpu.add("brynja-core")
+    # The admitted ParallelHash test root unifies hardened CPU features even
+    # in workspace no-default metadata; production manifests stay default-off.
+    expected_cpu = {"brynja-crypto-cpu", "brynja-core"}
     if cpu != expected_cpu:
         raise ValueError("CPU all-feature closure must contain only its first-party clearing owner")
     detector = reachable_names("brynja-crypto-cpu-std", names, packages_by_id, edges)
@@ -403,7 +418,7 @@ def validate_resolved_mode(
     if detector != expected_detector:
         raise ValueError("host CPU detector package graph drifted")
     parallel_executor = reachable_names(
-        "brynja-hash-parallel-std", names, packages_by_id, edges
+        "brynja-hash-parallel-std", names, packages_by_id, production
     )
     expected_parallel_executor = {
         "brynja-core",
@@ -413,7 +428,7 @@ def validate_resolved_mode(
         "brynja-hash-sha3",
     }
     if mode == "all-features":
-        expected_parallel_executor.add("brynja-crypto-cpu")
+        expected_parallel_executor.update(("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha2"))
     if parallel_executor != expected_parallel_executor:
         raise ValueError("ParallelHash std executor package graph drifted")
     if {"brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-parallel-std"}.intersection(modern):

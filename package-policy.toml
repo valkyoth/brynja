@@ -62,12 +62,14 @@ class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-sha3"]
 optional = {}
+dev = ["brynja-crypto-cpu", "brynja-crypto-cpu-std"]
+features = ["hardened-execution", "runtime-execution"]
 
 [packages.brynja-hash-parallel-std]
 class = "host-adapter"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-parallel"]
-optional = {}
+optional = { runtime-execution = ["brynja-crypto-cpu-std", "brynja-crypto-cpu"] }
 
 [packages.brynja-mac-kmac]
 class = "modern-shared"

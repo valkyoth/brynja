@@ -54,44 +54,7 @@ COMPONENT_ROWS = (
     "| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |",
     "| Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |",
 )
-SCOPED_ROWS = {
-    Path("crates/brynja-legacy-md5-std/README.md"): "| MD5 | ✅ Fully implemented | ❌ Not independently verified |",
-    Path("crates/brynja-legacy-sha1-std/README.md"): "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |",
-    Path("crates/brynja-core/README.md"): "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
-    Path("crates/brynja-crypto/README.md"): "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
-    Path("crates/brynja-crypto-cpu/README.md"): "| x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |",
-    Path("crates/brynja-crypto-cpu-std/README.md"): "| SHA-256 host detection and dispatch | x86_64 SHA and AArch64 NEON/SHA2 selection, explicit scalar fallback, and no automatic RISC-V activation | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |",
-    Path("crates/brynja-hash-sha2/README.md"): "| SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |",
-    Path("crates/brynja-hash-sha3/README.md"): "| Complete SHA-3/SHAKE family, including final combined acceptance | ✅ Fully implemented | ❌ Not independently verified |",
-    Path("crates/brynja-mac-kmac/README.md"): "| KMAC128 | ✅ Implemented | ❌ Not independently verified |",
-    Path("crates/brynja-hash-tuple/README.md"): "| TupleHash / TupleHashXOF | ✅ Fully implemented | ❌ No | ❌ No |",
-    Path("crates/brynja-hash-parallel/README.md"): "| ParallelHash / ParallelHashXOF | ✅ Fully implemented | ❌ No | ❌ No |",
-    Path("crates/brynja-pki/README.md"): "| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |",
-    Path("crates/brynja-tls/README.md"): "| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |",
-    Path("crates/brynja-tls12/README.md"): "| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |",
-    Path("crates/brynja-tls13/README.md"): "| `brynja-tls13` | TLS 1.3 stream record and protocol engine | ❌ Not verified |",
-    Path("crates/brynja-tls13-handshake/README.md"): "| `brynja-tls13-handshake` | Record-independent TLS 1.3 handshake engine | ❌ Not verified |",
-    Path("crates/brynja-quic-tls/README.md"): "| `brynja-quic-tls` | QUIC/TLS handshake integration | ❌ Not verified |",
-    Path("crates/brynja-dtls/README.md"): "| `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |",
-    Path("crates/brynja-sanitization/README.md"): "| `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |",
-    Path("crates/brynja-legacy-sha1/README.md"): "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |",
-    Path("crates/brynja-legacy-md5/README.md"): "| MD5 | ✅ Fully implemented | ❌ Not independently verified |",
-    Path("crates/brynja-legacy/README.md"): "| `brynja-legacy` | Opt-in obsolete-protocol facade and isolation boundary | ❌ Not verified |",
-    Path("crates/brynja-legacy-pct/README.md"): "| `brynja-legacy-pct` | PCT controlled-interoperability engine | ❌ Not verified |",
-    Path("crates/brynja-legacy-snp/README.md"): "| `brynja-legacy-snp` | SNP controlled-interoperability engine | ❌ Not verified |",
-    Path("crates/brynja-legacy-ssl2/README.md"): "| `brynja-legacy-ssl2` | SSL 2.0 controlled-interoperability engine | ❌ Not verified |",
-    Path("crates/brynja-legacy-ssl3/README.md"): "| `brynja-legacy-ssl3` | SSL 3.0 controlled-interoperability engine | ❌ Not verified |",
-    Path("crates/brynja-legacy-tls10/README.md"): "| `brynja-legacy-tls10` | TLS 1.0 controlled-interoperability engine | ❌ Not verified |",
-    Path("crates/brynja-legacy-tls11/README.md"): "| `brynja-legacy-tls11` | TLS 1.1 controlled-interoperability engine | ❌ Not verified |",
-    Path("crates/brynja-legacy-wtls/README.md"): "| `brynja-legacy-wtls` | WTLS controlled-interoperability engine | ❌ Not verified |",
-    Path("crates/brynja-research-ssl1/README.md"): "| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |",
-}
-SUPPORT_NOTES = (
-    Path("crates/brynja-hash-core/README.md"),
-    Path("crates/brynja-interop/README.md"),
-    Path("crates/brynja-proofs/README.md"),
-    Path("crates/brynja-test-support/README.md"),
-)
+from crate_status_rows import ROWS as CRATE_ROWS
 VERIFIED = re.compile(
     r"^✅ Independently verified by [^[]+ — \[[^]]+\]\([^)]+\)$"
 )
@@ -238,6 +201,27 @@ def validate_readme_split(root_readme: bytes, crate_readme: bytes) -> None:
         )
 
 
+def validate_crate_document(path: Path, text: str) -> None:
+    """Bind concise tables to reviewed capabilities, without repeated walls of text."""
+    section = section_from(text)
+    rows = [line for line in section.splitlines() if line.startswith("|")]
+    if len(rows) < 3 or rows[0] not in (
+        "| Capability | Implemented | Independently verified |",
+        "| Hash | Implemented | Independently verified |",
+        "| Algorithm | Implemented | Independently verified |",
+    ) or rows[1] != "| --- | --- | --- |":
+        raise VerificationStatusError(f"{path}: missing capability/status table")
+    expected = CRATE_ROWS.get(path.as_posix())
+    if expected is None or rows[2:] != expected:
+        raise VerificationStatusError(f"{path}: capability status changed; reopen review")
+    for row in rows[2:]:
+        cells = [cell.strip() for cell in row.strip("|").split("|")]
+        if len(cells) != 3 or "✅" in cells[0]:
+            raise VerificationStatusError(f"{path}: malformed capability row")
+        if cells[-1] not in ("❌ No", "❌ Not independently verified", "Not applicable"):
+            raise VerificationStatusError(f"{path}: independent review claim is not admitted")
+
+
 def check(root: Path) -> None:
     for path in ROOT_READMES:
         validate_document(path, (root / path).read_text(encoding="utf-8"), ROOT_ROWS)
@@ -245,10 +229,14 @@ def check(root: Path) -> None:
         COMPONENT_DOCUMENT,
         (root / COMPONENT_DOCUMENT).read_text(encoding="utf-8"),
     )
-    for path, row in SCOPED_ROWS.items():
-        validate_document(path, (root / path).read_text(encoding="utf-8"), (row,))
-    for path in SUPPORT_NOTES:
-        validate_support_document(path, (root / path).read_text(encoding="utf-8"))
+    expected = {path.parent.relative_to(root).as_posix() + "/README.md"
+                for path in (root / "crates").glob("*/Cargo.toml")
+                if path.parent.name != "brynja"}
+    if set(CRATE_ROWS) != expected:
+        raise VerificationStatusError("crate capability inventory differs from manifests")
+    for name in CRATE_ROWS:
+        path = Path(name)
+        validate_crate_document(path, (root / path).read_text(encoding="utf-8"))
     validate_readme_split(
         (root / ROOT_READMES[0]).read_bytes(),
         (root / ROOT_READMES[1]).read_bytes(),

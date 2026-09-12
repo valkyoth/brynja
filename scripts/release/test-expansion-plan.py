@@ -34,7 +34,7 @@ def main():
         changed["families"][i]["milestones"].pop(-2)
         reject(changed)
         changed = copy.deepcopy(data)
-        changed["families"][i]["requires"] = ["0.480.0"]
+        changed["families"][i]["requires"] = ["0.495.0"]
         reject(changed)
         final = family["milestones"][-1]["version"]
         reject(data, [(v, t, s + " omitted operation") if v == "v" + final else (v,t,s) for v,t,s in entries])
@@ -43,16 +43,27 @@ def main():
         record = next(r for r in schedule["milestones"] if r["version"] == final)
         record["requires"] = []
         reject(data, schedule=schedule)
+        if family.get("backend_stages"):
+            for stages in ([], ["simd", "hardware"], ["hardware"]):
+                changed = copy.deepcopy(data)
+                changed["families"][i]["backend_stages"] = stages
+                reject(changed)
+            # No closure may silently omit a distinct executable backend step.
+            changed = copy.deepcopy(data)
+            changed["families"][i]["milestones"] = [
+                m for m in changed["families"][i]["milestones"]
+                if m["stage"] != "hardware"]
+            reject(changed)
     changed = copy.deepcopy(data)
     changed["families"].pop()
     reject(changed)
     changed = copy.deepcopy(data)
-    changed["first_large_protocol"] = "0.475.0"
+    changed["first_large_protocol"] = "0.490.0"
     reject(changed)
     schedule = expansion_plan.roadmap_schedule.read()
-    next(r for r in schedule["milestones"] if r["version"] == "0.475.0")["requires"].pop()
+    next(r for r in schedule["milestones"] if r["version"] == "0.490.0")["requires"].pop()
     reject(data, schedule=schedule)
-    print(f"five-part expansion covers 126 families and rejects {cases} API/source/order regressions")
+    print(f"five-part expansion covers 141 families and rejects {cases} API/source/order regressions")
     return 0
 
 

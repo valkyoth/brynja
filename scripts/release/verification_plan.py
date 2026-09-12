@@ -100,8 +100,17 @@ def build(root: Path = ROOT, base: str | None = None) -> dict:
     if set(miri_groups) != set(groups):
         reasons.append('Miri uses portable owner dependency closures in both lock graphs; native CPU integration checks retain their wider scope')
     for path in paths:
-        relevant = set(scope.select([path])[1]).intersection(groups)
-        reasons.append(f"{path}: {', '.join(sorted(relevant)) or 'metadata/orchestration: repository checks'}")
+        if path.endswith('.md') or path.startswith('assurance/crate-readmes/'):
+            label = 'documentation: baseline README/example checks; not a production-code change'
+        else:
+            broad, selected = scope.select([path])
+            relevant = set(selected).intersection(groups)
+            # A raw path cannot explain semantic treatment of a lock, manifest
+            # or scope driver. Do not falsely attribute every selected family
+            # to orchestration which select_repository has already examined.
+            label = ('semantic input/orchestration: see resolved scope above' if broad else
+                     ', '.join(sorted(relevant)) or 'metadata/orchestration: repository checks')
+        reasons.append(f"{path}: {label}")
     before, after = inputs.snapshot(root, base, "assurance/policy.toml")
     if before is not None and after is not None:
         old = {p["id"]: p for p in inputs.document(before)["tools"]}

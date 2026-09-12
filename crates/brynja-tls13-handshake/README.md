@@ -25,35 +25,40 @@
 
 # brynja-tls13-handshake
 
-`brynja-tls13-handshake` is the record-independent TLS 1.3 handshake boundary
-shared by stream TLS and QUIC. Version `0.1.8` repins its exact v0.20
-dependency graph; it does not provide a working protocol implementation.
+Shared TLS 1.3 handshake state machine. This package currently establishes a compile-time workspace
+boundary only; it does not provide the planned implementation.
 
 ## Cryptography Verification Status
 
-No protocol code in this crate has been independently reviewed. This component
-only moves from ❌ to ✅ when a named independent reviewer signs off and the
-evidence is linked from its status entry. Project tests, CI, Kani, Miri,
-fuzzing, and pentesting do not by themselves constitute independent
-verification.
-
-| Component | Protocol scope | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| `brynja-tls13-handshake` | Record-independent TLS 1.3 handshake engine | ❌ Not verified |
+| Shared TLS 1.3 handshake state machine | ❌ Not implemented | ❌ No |
 
-The component is not implemented yet.
+There is no named independent cryptographic or protocol review and no FIPS
+140-3 validation. A package compiling is not evidence of a working engine.
 
-Most application users will eventually depend on the evergreen facade:
+## Current use
 
-```toml
-[dependencies]
-brynja = "0.20"
+No operational protocol or platform API is available here, so there is no application
+integration example yet. To check the package boundary from the repository:
+
+```sh
+cargo test --locked -p brynja-tls13-handshake
 ```
 
-Version `0.1.8` was published at v0.20.0 after the cumulative pentest,
-remediation retest, and hosted checks recorded `PASS`/`PASS`
-with zero open findings. It is governed by the
-[release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
+For implemented record-envelope parsing and encoding, see
+[`brynja-protocol`](https://github.com/valkyoth/brynja/tree/main/crates/brynja-protocol).
+That framing utility does not authenticate, encrypt or establish connections.
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+## Hardware and SIMD
+
+No hardware acceleration or SIMD implementation is exposed here. Future
+engines will consume explicitly selected first-party crypto backends; they
+must not imply that a CPU feature report authorizes execution.
+
+Published boundary packages do not imply operational implementation. Check the
+capability table above before selecting this crate for an application.
+
+[Implementation roadmap](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
+· [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md).
+MIT OR Apache-2.0.

@@ -29,6 +29,7 @@ PACKAGES = {
     'brynja-mac-kmac': 'kmac', 'brynja-hash-tuple': 'tuplehash',
     'brynja-hash-parallel': 'parallelhash',
     'brynja-hash-parallel-std': 'parallelhash',
+    'brynja-parallelhash-differential-fixture': 'parallelhash',
     'brynja-legacy-hash-public-api-fixture': 'legacy',
     'brynja-legacy-hash-final-fixture': 'legacy',
 }
@@ -146,6 +147,60 @@ def lock_groups(before: bytes | None, after: bytes | None) -> set[str]:
             if not reached.intersection(PACKAGES):
                 raise ValueError('external change without classified consumer')
     return {group for name, group in PACKAGES.items() if name in affected}
+
+
+def readme_fixture(manifest, lock, source, workspace_lock):
+    """A doc-only wrapper is orchestration, not another crypto implementation.
+
+    Validate its complete shape and graph, not merely its directory name.
+    README examples already run as baseline rustdoc tests; changed production
+    sources, features and workspace dependencies are classified independently.
+    """
+    if manifest is None and lock is None and source is None:
+        return
+    data = document(manifest)
+    if (set(data) != {'package', 'workspace', 'features', 'dependencies'} or
+            data['package'] != {'name': 'brynja-crate-readme-fixture', 'version': '0.0.0',
+                                'edition': '2024', 'rust-version': '1.90', 'publish': False} or
+            data['workspace'] != {} or data['features'] != {'default': ['batch'], 'batch': []}):
+        raise ValueError('README fixture is not an isolated documentation wrapper')
+    workspace = document(workspace_lock)
+    rows = {row['name']: row for row in workspace['package']}
+    if len(rows) != len(workspace['package']):
+        raise ValueError('ambiguous README workspace dependencies')
+    names = sorted(name for name, row in rows.items() if 'source' not in row)
+    features = {'brynja-hash-parallel': ['runtime-execution'],
+                'brynja-hash-parallel-std': ['runtime-execution'],
+                'brynja-crypto-cpu': ['static-execution'],
+                'brynja-crypto-cpu-std': ['runtime-execution'], 'brynja-legacy-md5': ['batch']}
+    expected = {name: {'path': '../../crates/' + name, 'default-features': False,
+                      **({'features': features[name]} if name in features else {})} for name in names}
+    if data['dependencies'] != expected:
+        raise ValueError('README fixture dependency/feature boundary changed')
+    parsed_lock = document(lock)
+    packages = {row['name']: row for row in parsed_lock['package']}
+    wrapper = packages.pop('brynja-crate-readme-fixture', None)
+    def same_identity_subset_edges(name):
+        original, selected = dict(rows[name]), dict(packages[name])
+        original_edges = original.pop('dependencies', [])
+        selected_edges = selected.pop('dependencies', [])
+        # A downstream fixture omits disabled optional and dev-only edges.
+        # Package identities/checksums must remain exact; Cargo --locked also
+        # verifies that this subset resolves the frozen manifest features.
+        return (selected == original and isinstance(selected_edges, list) and
+                len(selected_edges) == len(set(selected_edges)) and
+                set(selected_edges) <= set(original_edges))
+    if (set(parsed_lock) != {'version', 'package'} or parsed_lock['version'] != 4 or
+            len(packages) + 1 != len(parsed_lock['package']) or set(packages) != set(rows) or
+            not all(same_identity_subset_edges(name) for name in rows) or
+            wrapper != {'name': 'brynja-crate-readme-fixture', 'version': '0.0.0', 'dependencies': names}):
+        raise ValueError('README fixture lock differs from workspace dependencies')
+    expected_source = '//! Executable examples from every crate README; repository-only documentation tests.\n#![forbid(unsafe_code)]\n\n'
+    for name in sorted(names, key=lambda name: f'crates/{name}/README.md'):
+        title = ''.join(part[0].upper() + part[1:] for part in name.split('-'))
+        expected_source += f'#[doc = include_str!("../../../crates/{name}/README.md")]\npub struct {title};\n\n'
+    if source is None or source.decode().replace('\r\n', '\n') != expected_source.rstrip() + '\n':
+        raise ValueError('README fixture contains code beyond documentation wrappers')
 
 
 def version_only(before: bytes | None, after: bytes | None) -> bool:

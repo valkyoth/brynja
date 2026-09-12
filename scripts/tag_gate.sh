@@ -18,6 +18,7 @@ verify() {
 python3 scripts/sha3/check-keccak-hardened-native.py
 python3 scripts/kmac/check-kmac-execution-native.py
 python3 scripts/tuplehash/check-tuplehash-execution-native.py
+python3 scripts/parallelhash/check-parallelhash-execution-native.py
 
 scripts/checks.sh
 scripts/assurance/check-bare-metal.sh

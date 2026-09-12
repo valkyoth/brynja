@@ -25,34 +25,50 @@
 
 # brynja-hash-core
 
-Small allocation-free `no_std` interfaces shared by Brynja fixed-output hash
-and extendable-output implementations. This crate contains no algorithm,
-runtime dispatch, I/O, or protocol code.
-
-It also owns the canonical borrowed `BitString` representation shared by
-bit-oriented hash APIs. Message bits are most-significant-bit first, the valid
-width of the final byte is explicit, and unused low bits must be zero, so one
-mathematical bit string has one accepted representation.
+Small allocation-free `no_std` interfaces shared by fixed-output and
+extendable-output hash implementations. No hash algorithm, runtime dispatch,
+I/O or protocol is implemented in this crate.
 
 ## Cryptography Verification Status
 
-This crate does not implement cryptographic or protocol code. Only a named
-independent reviewer and linked review evidence can change an implementing
-component's status. Interface tests are not independent verification.
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| Incremental hash and XOF interfaces | ✅ Implemented | ❌ No |
+| Canonical borrowed MSB-first bit strings | ✅ Implemented | ❌ No |
+| Cryptographic algorithms | Not this crate's responsibility | Not applicable |
 
-## Interfaces
+Interface tests are not independent cryptographic verification or FIPS validation.
 
-- `Update` absorbs a complete byte slice or reports the implementation's
-  closed error without partial acceptance.
-- `FixedOutput` consumes an incremental state and returns its
-  algorithm-specific digest value.
-- `ExtendableOutput` consumes an absorbing state and returns a distinct XOF
-  reader, so callers cannot absorb after squeezing starts.
-- `XofReader` incrementally fills complete caller-owned output slices.
-- `BitString` validates an allocation-free exact-length bit string and can
-  separate its complete-byte prefix from an optional final partial byte.
+## Use
 
-See the [full project documentation](https://github.com/valkyoth/brynja) and
-[verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
+Use this unpublished workspace interface package directly only when composing
+or implementing compatible APIs:
 
-Licensed under either Apache-2.0 or MIT, at your option.
+```sh
+cargo add brynja-hash-core --path /path/to/brynja/crates/brynja-hash-core --no-default-features
+```
+
+```rust
+use brynja_hash_core::BitString;
+let bits = BitString::new(&[0b0110_0000], 3).unwrap();
+assert_eq!(bits.bit_len(), 3);
+assert_eq!(bits.split(), (&[][..], Some((0b0110_0000, 3))));
+assert!(BitString::new(&[0b0110_0001], 3).is_err());
+```
+
+Empty strings use zero valid tail bits; nonempty byte-aligned strings use
+eight. SHA-3's FIPS 202 low-bit convention uses the different descriptor
+provided by `brynja-hash-sha3`, not this MSB-first type.
+
+- `Update` absorbs a complete byte slice or returns a closed error.
+- `FixedOutput` consumes a state into its algorithm-specific digest.
+- `ExtendableOutput` consumes absorption into a distinct reader.
+- `XofReader` fills incremental output slices.
+
+## Hardware and SIMD
+
+None: these are backend-neutral interfaces. Select acceleration and hardened
+ownership through the implementing leaf; an interface or borrowed bit string
+does not itself zeroize storage or establish secret provenance.
+
+MIT OR Apache-2.0.

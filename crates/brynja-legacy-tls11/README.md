@@ -25,36 +25,43 @@
 
 # brynja-legacy-tls11
 
-`brynja-legacy-tls11` is an explicitly legacy and insecure TLS 1.1
-controlled-interoperability boundary. It must never be used for new deployments
-or general network endpoints. In `0.1.0` it establishes a compile-time boundary
-only and does not implement TLS 1.1.
+TLS 1.1 controlled interoperability. This package currently establishes a compile-time workspace
+boundary only; it does not provide the planned implementation.
 
 ## Cryptography Verification Status
 
-No TLS 1.1 code in this crate has been independently reviewed. This component
-only moves from ❌ to ✅ when a named independent reviewer signs off and the
-evidence is linked from its status entry. Project tests, CI, Kani, Miri,
-fuzzing, and pentesting do not by themselves constitute independent
-verification. Independent verification would not make TLS 1.1 secure.
-
-| Component | Protocol scope | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| `brynja-legacy-tls11` | TLS 1.1 controlled-interoperability engine | ❌ Not verified |
+| TLS 1.1 controlled interoperability | ❌ Not implemented | ❌ No |
 
-The component is not implemented yet.
+There is no named independent cryptographic or protocol review and no FIPS
+140-3 validation. A package compiling is not evidence of a working engine.
 
-Most application users will eventually depend on the modern facade:
+## Current use
 
-```toml
-[dependencies]
-brynja = "0.1"
+No operational protocol or platform API is available here, so there is no application
+integration example yet. To check the package boundary from the repository:
+
+```sh
+cargo test --locked -p brynja-legacy-tls11
 ```
 
-This package is currently marked `publish = false`. Publication requires the
-version-specific deliverables, verification, documentation, a current
-committed PASS pentest report, and green GitHub checks in the
-[release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
+This explicitly isolated legacy boundary must not be used for new deployments
+or general network endpoints. It is absent from the modern facade's defaults.
+Independent review would not make an obsolete protocol secure. SHA-1 and MD5
+are separate implemented leaves; their availability does not implement these
+protocol engines.
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+
+## Hardware and SIMD
+
+No hardware acceleration or SIMD implementation is exposed here. Future
+engines will consume explicitly selected first-party crypto backends; they
+must not imply that a CPU feature report authorizes execution.
+
+This package is currently unpublished (`publish = false`). Its boundary is
+not a release-readiness or publication claim.
+
+[Implementation roadmap](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
+· [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md).
+MIT OR Apache-2.0.

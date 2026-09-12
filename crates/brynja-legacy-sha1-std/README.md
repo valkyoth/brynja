@@ -28,11 +28,31 @@
 Optional hosted CPU detection for the isolated, collision-broken SHA-1 leaf.
 This crate is not a default or modern-facade dependency. The leaf stays `no_std`.
 
+## Cryptography Verification Status
+
+No named independent reviewer has verified this component. Passing tests, CI,
+Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
+
+| Algorithm | Implemented | Independently verified |
+| --- | --- | --- |
+| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
+
+## Hardware and SIMD
+
 No SHA-1 backend is admitted. Detection only reports possible hardware:
 opportunistic calls use portable SHA-1; `required()` fails closed. A thread-local
 feature check does not establish migration safety. This adapter deliberately
 cannot turn a feature report into an instruction-execution capability, even in
 evidence builds. Safe runtime acceleration awaits reviewed execution authority.
+
+## Use
+
+This adapter is unpublished. For a local checkout:
+
+```sh
+cargo add brynja-legacy-sha1-std --path /path/to/brynja/crates/brynja-legacy-sha1-std
+cargo add brynja-legacy-sha1 --path /path/to/brynja/crates/brynja-legacy-sha1
+```
 
 ```rust
 use brynja_legacy_sha1_std::RuntimeSha1Backend;
@@ -44,19 +64,10 @@ assert!(RuntimeSha1Backend::required().is_err());
 # Ok::<(), brynja_legacy_sha1::Sha1Error>(())
 ```
 
-## Cryptography Verification Status
-
-No named independent reviewer has verified this component. Passing tests, CI,
-Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
-
-| Algorithm | Implementation | Independent verification |
-| --- | --- | --- |
-| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
-
 SHA-1 is unsuitable for new signatures, authentication or password hashing.
 This adapter handles public data only; confidential legacy data requires the
 leaf's portable hardened owner. No FIPS validation or accelerated cleanup claim.
-Rust 1.90.0–1.98.1; MIT OR Apache-2.0; zero third-party dependencies.
+MIT OR Apache-2.0; zero third-party dependencies.
 
 See [SHA-1 acceleration](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-acceleration.md)
 for evidence restrictions and the native capture procedure.

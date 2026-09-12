@@ -4,6 +4,9 @@ use brynja_hash_parallel::{
     parallel_hash_xof128, parallel_hash_xof256, parallel_hash128, parallel_hash256,
 };
 
+#[cfg(feature = "hardened-execution")]
+mod execution_vectors;
+
 const SHORT: [u8; 24] = [
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
     0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
@@ -102,6 +105,11 @@ fn check128(customized: bool, long: bool, expected: &str) {
         Ok(())
     );
     assert_hex(&output, expected);
+    #[cfg(feature = "hardened-execution")]
+    assert_eq!(
+        execution_vectors::check(0, input, block, custom(customized), expected),
+        Ok(())
+    );
 }
 
 fn check256(customized: bool, long: bool, expected: &str) {
@@ -114,6 +122,11 @@ fn check256(customized: bool, long: bool, expected: &str) {
         Ok(())
     );
     assert_hex(&output, expected);
+    #[cfg(feature = "hardened-execution")]
+    assert_eq!(
+        execution_vectors::check(1, input, block, custom(customized), expected),
+        Ok(())
+    );
 }
 
 fn check_xof128(customized: bool, long: bool, expected: &str) {
@@ -126,6 +139,11 @@ fn check_xof128(customized: bool, long: bool, expected: &str) {
         Ok(())
     );
     assert_hex(&output, expected);
+    #[cfg(feature = "hardened-execution")]
+    assert_eq!(
+        execution_vectors::check(2, input, block, custom(customized), expected),
+        Ok(())
+    );
 }
 
 fn check_xof256(customized: bool, long: bool, expected: &str) {
@@ -138,6 +156,11 @@ fn check_xof256(customized: bool, long: bool, expected: &str) {
         Ok(())
     );
     assert_hex(&output, expected);
+    #[cfg(feature = "hardened-execution")]
+    assert_eq!(
+        execution_vectors::check(3, input, block, custom(customized), expected),
+        Ok(())
+    );
 }
 
 fn assert_hex(actual: &[u8], expected: &str) {

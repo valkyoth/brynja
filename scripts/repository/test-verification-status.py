@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+from unittest.mock import patch
 
 
 SCRIPT = Path(__file__).with_name("check-verification-status.py")
@@ -69,7 +70,49 @@ def must_fail(text: str, expected: str) -> None:
         raise AssertionError(f"fixture unexpectedly passed: {expected}")
 
 
+def crate_tables() -> None:
+    root = SCRIPT.resolve().parents[2]
+    mutations = 0
+    for name, rows in MODULE.CRATE_ROWS.items():
+        path = Path(name)
+        text = (root / path).read_text()
+        MODULE.validate_crate_document(path, text)
+        first = rows[0]
+        cells = [cell.strip() for cell in first.strip("|").split("|")]
+        for changed in (
+            text.replace(MODULE.HEADING, "## Status"),
+            text.replace(first, ""),
+            text.replace(first, first + "\n" + first),
+            text.replace(first, "| Invented capability | ✅ Fully implemented | ❌ No |"),
+            text.replace(first, f"| {cells[0]} | ✅ Verified | {cells[-1]} |"),
+            text.replace(first, f"| {cells[0]} | {cells[1]} | ✅ Verified |"),
+            text.replace(first, f"| {cells[0]} | {cells[1]} | ✅ FIPS validated |"),
+            text.replace(first, f"| {cells[0]} | {cells[1]} | ✅ Independently verified by CI — [tests](tests) |"),
+            text.replace(first, first.replace(cells[1], "✅ Fully implemented"
+                         if cells[1] != "✅ Fully implemented" else "🚧 In progress", 1)),
+            text.replace("| Independently verified |", "| Internal tests |", 1),
+        ):
+            try:
+                MODULE.validate_crate_document(path, changed)
+            except MODULE.VerificationStatusError:
+                mutations += 1
+            else:
+                raise AssertionError(f"unreviewed capability/status mutation accepted: {path}")
+    for removed in MODULE.CRATE_ROWS:
+        altered = dict(MODULE.CRATE_ROWS)
+        del altered[removed]
+        with patch.object(MODULE, "CRATE_ROWS", altered):
+            try:
+                MODULE.check(root)
+            except MODULE.VerificationStatusError as error:
+                assert "inventory" in str(error), error
+            else:
+                raise AssertionError(f"missing crate status inventory accepted: {removed}")
+    print(f"Crate status tables reject {mutations} claim/table and 38 inventory regressions")
+
+
 def main() -> int:
+    crate_tables()
     MODULE.validate_document(Path("fixture.md"), BASE, (ROW,))
     MODULE.validate_document(Path("README.md"), ROOT, (ROW,))
     must_fail(BASE.replace(MODULE.HEADING, "## Status"), "heading")

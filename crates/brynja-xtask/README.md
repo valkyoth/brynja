@@ -25,22 +25,37 @@
 
 # brynja-xtask
 
-`brynja-xtask` is a narrowly scoped Brynja workspace package. In `0.1.0` it
-establishes a compile-time boundary only; it does not provide a working TLS,
-cryptographic, PKI, platform, or legacy-protocol implementation.
+Repository task-helper package. This package currently establishes a compile-time workspace
+boundary only; it does not provide the planned implementation.
 
-Most application users will eventually depend on the modern facade:
+## Cryptography Verification Status
 
-```toml
-[dependencies]
-brynja = "0.1"
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| Repository task-helper package | ❌ Not implemented | ❌ No |
+
+This is repository tooling, not a cryptographic library. Passing a test or a
+bounded formal proof does not independently verify a cryptographic component.
+
+## Current use
+
+No operational tooling API is available here, so there is no application
+integration example yet. To check the package boundary from the repository:
+
+```sh
+cargo test --locked -p brynja-xtask
 ```
 
-This package is currently marked `publish = false`. Publication requires the
-version-specific deliverables, verification, documentation, a current
-committed PASS pentest report, and green GitHub checks in the
-[release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+## Hardware and SIMD
 
+No hardware acceleration or SIMD implementation is exposed here. Future
+engines will consume explicitly selected first-party crypto backends; they
+must not imply that a CPU feature report authorizes execution.
+
+This package is currently unpublished (`publish = false`). Its boundary is
+not a release-readiness or publication claim.
+
+[Implementation roadmap](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
+· [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md).
+MIT OR Apache-2.0.

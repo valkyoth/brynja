@@ -4,7 +4,21 @@ version = "0.0.0"
 edition = "2024"
 publish = false
 
+[features]
+default = []
+execution = ["brynja-hash-parallel/runtime-execution", "dep:brynja-hash-parallel-std", "dep:brynja-crypto-cpu-std", "dep:brynja-crypto-cpu"]
+
 [dependencies]
 brynja-hash-parallel = { path = "../../crates/brynja-hash-parallel" }
+brynja-hash-parallel-std = { path = "../../crates/brynja-hash-parallel-std", optional = true, features = ["runtime-execution"] }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", optional = true, features = ["runtime-execution"] }
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", optional = true, features = ["hardened-execution"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
 
 [workspace]

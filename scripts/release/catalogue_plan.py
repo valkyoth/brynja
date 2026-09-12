@@ -115,9 +115,9 @@ def validate(entries, register=None):
         title, scope = scopes.get(record["version"], (None, ""))
         if title != record["title"] or hashlib.sha256(scope.encode()).hexdigest() != record["scope_sha256"]:
             raise ValueError("catalogue plan scope differs from reviewed API register")
-    for a, b in (("0.348.1", "0.476.0"), ("0.350.0", "0.476.0"),
-                 ("0.476.1", "0.477.0"), ("0.477.0", "0.478.0"),
-                 ("0.478.0", "0.479.0"), ("0.479.0", "0.480.0"),
-                 ("0.480.0", "1.0.0-rc.1")):
+    for a, b in (("0.348.1", "0.491.0"), ("0.350.0", "0.491.0"),
+                 ("0.491.1", "0.492.0"), ("0.492.0", "0.493.0"),
+                 ("0.493.0", "0.494.0"), ("0.494.0", "0.495.0"),
+                 ("0.495.0", "1.0.0-rc.1")):
         if a not in positions or b not in positions or positions[a] >= positions[b]:
             raise ValueError("final production gate precedes expanded scope")

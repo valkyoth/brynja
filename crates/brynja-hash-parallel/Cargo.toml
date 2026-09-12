@@ -12,10 +12,16 @@ publish = ["crates-io"]
 
 [features]
 default = []
+hardened-execution = ["brynja-hash-sha3/hardened-execution"]
+runtime-execution = ["hardened-execution", "brynja-hash-sha3/runtime-execution"]
 
 [dependencies]
 brynja-core = { workspace = true }
 brynja-hash-sha3 = { workspace = true }
+
+[dev-dependencies]
+brynja-crypto-cpu = { workspace = true, features = ["hardened-execution"] }
+brynja-crypto-cpu-std = { workspace = true, features = ["runtime-execution"] }
 
 [lints]
 workspace = true

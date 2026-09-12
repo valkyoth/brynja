@@ -56,7 +56,21 @@ def main() -> int:
     reject("sanitizer", Path("scripts/zeroization/check-zeroization-sanitizer.sh"), "-p brynja-hash-parallel-std", "-p missing-parallelhash-std")
     reject("proof", Path("scripts/assurance/check-kani.sh"), "cargo kani -p brynja-hash-parallel", "cargo kani -p missing-parallelhash")
     reject("dependency", Path("crates/brynja-hash-parallel/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", 'foreign = "1"')
-    print("ParallelHash policy rejects eighteen domain, encoding, lifecycle, cleanup, scheduling, evidence, test, and dependency regressions")
+    reject("execution-default", Path("crates/brynja-hash-parallel/Cargo.toml"), "default = []", 'default = ["hardened-execution"]')
+    reject("std-execution-default", Path("crates/brynja-hash-parallel-std/Cargo.toml"), "default = []", 'default = ["runtime-execution"]')
+    reject("execution-oracle-gate", Path("scripts/checks.sh"), "python3 scripts/parallelhash/check-parallelhash-execution-differential.py", "removed-execution-oracle")
+    reject("execution-package-gate", Path("scripts/checks.sh"), "python3 scripts/parallelhash/check-parallelhash-execution-package.py", "removed-execution-package")
+    reject("execution-codegen-msrv", Path("scripts/checks.sh"), "python3 scripts/parallelhash/check-parallelhash-execution-codegen.py --toolchain 1.90.0", "removed-execution-codegen")
+    reject("execution-codegen-current", Path("scripts/checks.sh"), "python3 scripts/parallelhash/check-parallelhash-execution-codegen.py --toolchain 1.98.1", "removed-execution-codegen")
+    reject("stream-miri", Path("scripts/zeroization/check-zeroization-miri.sh"), "run_miri -p brynja-hash-parallel --features hardened-execution --test execution_stream", "removed-stream-miri")
+    reject("execution-clippy", Path("scripts/checks.sh"), "cargo clippy --locked --offline --manifest-path assurance/parallelhash-differential/Cargo.toml --all-features --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks", "removed-execution-clippy")
+    reject("execution-miri", Path("scripts/zeroization/check-zeroization-miri.sh"), "run_miri -p brynja-hash-parallel --features hardened-execution --lib execution", "removed-execution-miri")
+    reject("execution-thread-miri", Path("scripts/zeroization/check-zeroization-miri.sh"), "run_miri -p brynja-hash-parallel-std --features runtime-execution --lib execution", "removed-threaded-miri")
+    reject("execution-asan", Path("scripts/zeroization/check-zeroization-sanitizer.sh"), "    -p brynja-hash-parallel \\\n    --features runtime-execution", "    -p brynja-hash-parallel \\\n    --features disabled")
+    reject("owner-inventory", Path("docs/parallelhash-execution.md"), "std `worker::Storage`", "omitted")
+    reject("storage-test", Path("crates/brynja-hash-parallel-std/src/execution/worker/tests.rs"),
+           "storage_clear_visits_every_byte_of_every_live_slot", "omitted")
+    print("ParallelHash policy rejects thirty-one domain, encoding, lifecycle, cleanup, scheduling, evidence, test, and dependency regressions")
     return 0
 
 

@@ -25,100 +25,72 @@
 
 # brynja-crypto
 
-`brynja-crypto` is Brynja's protocol-facing cryptographic provider, policy,
-and composition boundary. Future reusable leaf crates own individual hash,
-XOF, and MAC families; `brynja-crypto` consumes their exact implementations
-and combines them with AEAD, KDF, RSA, ECC, provider, and cryptographic policy
-for protocol callers. The
-dependency direction is always from `brynja-crypto` to the leaf families, never
-back toward TLS or the full cryptographic graph.
-
-The current internal workspace reexports all six complete portable FIPS 180-4
-SHA-2 byte and canonical arbitrary-bit implementations from
-`brynja-hash-sha2`, including distinct hardened secret-bearing states, plus all
-six complete portable FIPS 202 SHA-3 and SHAKE ordinary and hardened byte and
-arbitrary-bit message functions and arbitrary-bit SHAKE output from
-`brynja-hash-sha3`. The same leaf now supplies complete SP 800-185 encodings
-and cSHAKE128/cSHAKE256 ordinary and hardened APIs, plus complete KMAC128,
-KMAC256, KMACXOF128, and KMACXOF256 default strength-enforcing APIs from
-`brynja-mac-kmac`, and complete TupleHash128, TupleHash256, TupleHashXOF128,
-and TupleHashXOF256 APIs from `brynja-hash-tuple`. Exact weak/short KMAC
-conformance entry points require the leaf's
-explicit assurance feature. Its broader provider effects, AEADs,
-KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
-remain unimplemented.
+Brynja's `no_std`, protocol-facing cryptographic composition and policy
+boundary. Reusable leaf crates implement algorithms; this crate reexports
+their APIs without making each leaf depend on the entire crypto or TLS graph.
 
 ## Cryptography Verification Status
 
-No cryptographic code in this crate has been independently reviewed. This
-component only moves from ❌ to ✅ when a named independent reviewer signs off
-and the evidence is linked from its status entry. Project tests, CI, Kani,
-Miri, fuzzing, and pentesting do not by themselves constitute independent
-verification.
-
-| Component | Cryptographic scope | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
+| All six named SHA-2 and all six SHA-3/SHAKE functions | ✅ Fully implemented, reexported | ❌ No |
+| cSHAKE, KMAC/KMACXOF, TupleHash and ParallelHash families | ✅ Fully implemented, reexported | ❌ No |
+| AEAD, KDF, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
 
-All six SHA-2 algorithms, all six FIPS 202 functions, both cSHAKE strengths,
-all four KMAC/KMACXOF constructions, and all four TupleHash/TupleHashXOF
-constructions are usable through
-this component; the remaining planned composition layer is not implemented
-yet. Ordinary unkeyed hash and XOF states do not guarantee erasure of secret-
-input remnants or private internal state. SHA-2 and SHA-3/SHAKE secret-bearing
-consumers must use their distinct hardened state APIs with explicit public or
-typed-secret output classification.
+Named hashes and SP 800-185 constructions are usable; the broader planned
+cryptographic composition layer is not complete. No independent cryptographic
+review or FIPS 140-3 validation is claimed.
+
+## Use
+
+The hash/MAC APIs below require this unpublished checkout, not an older
+published foundation-only package:
+
+```sh
+cargo add brynja-crypto --path /path/to/brynja/crates/brynja-crypto --no-default-features
+```
 
 ```rust
-let bit_input = brynja_crypto::BitString::new(&[0b0110_0000], 3).unwrap();
-let bit_digest = brynja_crypto::sha256_bits(bit_input).unwrap();
-let shorter = brynja_crypto::sha224(b"abc").unwrap();
 let digest = brynja_crypto::sha256(b"abc").unwrap();
-let wider = brynja_crypto::sha384(b"abc").unwrap();
-let widest = brynja_crypto::sha512(b"abc").unwrap();
-let truncated_224 = brynja_crypto::sha512_224(b"abc").unwrap();
-let truncated_256 = brynja_crypto::sha512_256(b"abc").unwrap();
-let sha3_224 = brynja_crypto::sha3_224(b"abc").unwrap();
-let sha3_256 = brynja_crypto::sha3_256(b"abc").unwrap();
-let sha3_384 = brynja_crypto::sha3_384(b"abc").unwrap();
-let sha3_512 = brynja_crypto::sha3_512(b"abc").unwrap();
-let mut shake128 = [0_u8; 32];
-let mut shake256 = [0_u8; 64];
-brynja_crypto::shake128(b"abc", &mut shake128).unwrap();
-brynja_crypto::shake256(b"abc", &mut shake256).unwrap();
-let mut cshake128 = [0_u8; 32];
-brynja_crypto::cshake128(&[0, 1, 2, 3], b"", b"Email Signature", &mut cshake128).unwrap();
-let key = [0x42_u8; 32];
-let mut tag_bytes = [0_u8; 32];
-let tag = brynja_crypto::kmac128(&key, b"message", b"application", &mut tag_bytes).unwrap();
-assert!(tag.verify_candidate(tag.as_bytes()).expose_public());
-assert_eq!(shorter.as_bytes().len(), 28);
-assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
 assert_eq!(digest.as_bytes().len(), 32);
-assert_eq!(wider.as_bytes().len(), 48);
-assert_eq!(widest.as_bytes().len(), 64);
-assert_eq!(truncated_224.as_bytes().len(), 28);
-assert_eq!(truncated_256.as_bytes().len(), 32);
-assert_eq!(sha3_224.as_bytes().len(), 28);
-assert_eq!(sha3_256.as_bytes().len(), 32);
-assert_eq!(sha3_384.as_bytes().len(), 48);
-assert_eq!(sha3_512.as_bytes().len(), 64);
-assert_eq!(shake128.len(), 32);
-assert_eq!(shake256.len(), 64);
-assert_eq!(&cshake128[..4], &[0xc1, 0xc3, 0x69, 0x25]);
+let mut customized = [0; 32];
+brynja_crypto::cshake128(&[0, 1, 2, 3], b"", b"Email Signature", &mut customized).unwrap();
+assert_eq!(&customized[..4], &[0xc1, 0xc3, 0x69, 0x25]);
 ```
 
-Most application users will eventually depend on the modern facade:
+Use distinct hardened states for confidential data:
 
-```toml
-[dependencies]
-brynja = "0.20"
+```rust
+let mut output = [0; 32];
+{
+    let mut hash = brynja_crypto::HardenedSha256::new();
+    hash.update(b"confidential input").unwrap();
+    let secret = hash.finalize_secret(&mut output).unwrap();
+    assert_eq!(secret.expose().len(), 32);
+}
+assert_eq!(output, [0; 32]);
 ```
 
-Version `0.1.2`, exact-pinned to `brynja-core 0.9.0`, was published at
-v0.20.0 after the cumulative pentest, remediation retest, and hosted gates
-recorded `PASS`/`PASS` with zero open findings under the
-[release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
+## Hardware and SIMD
 
-The project-wide first-party-cryptography, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+This composition facade defaults to portable APIs and owns no ISA kernels.
+Select optional acceleration through the algorithm leaves and CPU authority
+crates. x86-64 SHA/AVX2 and AArch64 SHA2/SHA-512/SHA3 support is
+algorithm- and API-specific, not a global switch. Features do not authorize
+unsupported instructions or silently route secret state through ordinary kernels.
+
+## Boundaries
+
+Ordinary unkeyed hash/XOF states do not guarantee erasure of private input
+remnants. Hardened owners clear source-declared internal regions and classify
+outputs as public or typed secret; callers retain responsibility for their
+buffers and copies. Registers, compiler copies/spills, caches, dumps, swap,
+forgotten owners and terminated processes remain outside the guarantee.
+
+General SHA-512/t is a leaf opt-in extension, not a named SHA-2 facade identity.
+Legacy SHA-1/MD5 and legacy protocols remain outside this modern composition
+graph. `brynja-crypto` is not a replacement TLS engine or certificate validator.
+
+[Facade examples](https://github.com/valkyoth/brynja/tree/main/crates/brynja)
+· [Leaf architecture](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
+MIT OR Apache-2.0.

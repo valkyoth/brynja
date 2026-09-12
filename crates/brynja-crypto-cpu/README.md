@@ -25,117 +25,79 @@
 
 # brynja-crypto-cpu
 
-The additional default-off `runtime-execution` feature exposes a low-level
-platform-proof owner for ordinary raw kernels. Most hosted callers should use
-the safe optional `brynja-crypto-cpu-std::execution` adapter instead. Its exact
-system-feature, migration, KAT and quarantine contract is documented in
-[hosted execution](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md).
-This does not activate historical hash dispatch or hardened secret processing.
-Static and hosted raw sessions require explicit `PublicData::new(...)` markers
-for public state and blocks. These record caller intent, not proof that the
-bytes contain no secrets; they do not provide cleanup or hardened ownership.
-
-`brynja-crypto-cpu` is the optional `no_std` package for
-separately reviewed first-party ISA kernels and static selection. Version
-0.1.1 now contains isolated SHA-256-family candidates for x86_64 SHA,
-AArch64 SHA2, and RV64 Zknh instructions plus SHA-512-family candidates for
-AArch64 SHA-512 and RV64 Zknh instructions. Internal v0.24.4 source also adds
-x86_64 AVX2 and AArch64 SHA3 Keccak-f[1600] candidates for later SHA-3/SHAKE
-dispatch. Portable hash crates continue to own public streaming state,
-padding, length accounting, finalization, and scalar fallback.
-
-The old session/detection routes remain unadmitted while their complete native
-evidence is incomplete. x86_64 SHA-512 is a reviewed scalar-only decision;
-RISC-V Keccak is also scalar-only because the pinned ratified authorities have
-no qualifying Keccak instruction route. AVX2, SHA3, or AVX-512 availability
-alone does not authorize a backend. Construction through those old APIs cannot execute
-any kernel: their static selection returns `None`, runtime-attested construction
-returns `NotAdmitted`, opportunistic host use falls back to scalar, and
-required acceleration fails closed. Evidence builds can directly exercise a
-candidate only through the repository-only `brynja_cpu_evidence` configuration.
-
-## Explicit Static Execution
-
-The new default-off `static-execution` feature exposes
-`static_execution::{Authority, Kernel, Session}` for ordinary public-data
-compression/permutation. It does not change existing hash constructors or
-hosted detection. The unpublished implementation candidate supports x86 SHA-256,
-AVX2 Keccak and Arm SHA-256/SHA-512/SHA3 Keccak. This static authority passed
-owner retest, local checks and GitHub/CodeQL before its signed development tag.
-See the [review record](../../security/pentest/v0.24.31.md).
-
-Every constructor requires the complete compiler target-feature bundle before
-running the actual kernel KAT. A quarantined owner cannot issue sessions.
-Sessions borrow the owner and generation; quarantine revokes all siblings and
-all operation errors preserve caller state. No clone/reset or safe boolean
-attestation can create authority. Reports are diagnostics only.
-
-The executable must run exclusively on compatible CPUs with required OS
-register state, including migration and virtualization. Static compilation is
-not runtime detection; `!Send`/`!Sync` is not migration protection. This API
-does not clean secret schedules or input: do not use it for keys, passwords,
-HMAC or other confidential state. Hosted authority is a separate opt-in API
-described above; hardened and family-level integration remain upcoming work.
-RISC-V and legacy kernels are not activated here.
-
-See the [static execution guide](https://github.com/valkyoth/brynja/blob/main/docs/static-cpu-execution.md)
-for exact bundles, error behavior, deployment limits and examples.
-
-The registered RISC-V host lacks `Zknh`, `Zvknha`, and `Zvknhb`. The RV64
-candidate is therefore QEMU/codegen-only until qualifying real hardware is
-available; generic RV64, RVV, or bit-manipulation support cannot qualify it.
-The host remains useful for native scalar and exact-feature tests it really
-supports, and a post-v1.0.0 community campaign will seek broader hardware
-coverage without treating submitted observations as backend admission.
-
-Execution authority is caller-owned and thread-bound. Successful construction
-requires the relevant preconditions and a direct known-answer test: `abc` for
-SHA compression, or the full zero-state permutation for Keccak. A bad answer
-quarantines that owner. Compression accepts exactly one 64-byte or 128-byte
-block; Keccak accepts exactly 25 lanes.
-The package does not detect CPU features, allocate, perform I/O, use foreign
-code or external assembly, own a global registry, promise register erasure, or
-claim FIPS validation. The RV64 candidates contain six separately approved
-register-only first-party Rust inline-assembly statements across SHA-256 and
-SHA-512 operations. They cannot be an implicit dependency of a protocol
-engine or default feature.
+Optional, allocation-free `no_std` first-party CPU kernels and execution
+authority. Complete hash framing, padding and streaming belong to algorithm
+leaves; raw compression or permutation is not a complete hash API.
 
 ## Cryptography Verification Status
 
-No cryptographic code in this crate has been independently reviewed. A
-component only moves from ❌ to ✅ when a named independent reviewer signs off
-and the evidence is linked. Project tests, CI, Kani, Miri, fuzzing, and
-pentesting do not by themselves constitute independent verification.
-
-| Component | Cryptographic scope | Independently verified |
+| Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Explicit static authority | Five opt-in ordinary kernels under complete compiler/platform contract | ❌ Not independently verified; not FIPS validated |
-| x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |
-| AArch64 SHA-256 candidate | NEON/SHA2 compression | ❌ Implemented but unadmitted and not independently verified |
-| RV64 SHA-256 candidate | Zknh scalar-crypto compression | ❌ Implemented but unadmitted and not independently verified |
-| x86_64 SHA-512 family | Scalar-only decision; no admitted instruction kernel | ❌ No accelerated implementation claimed |
-| AArch64 SHA-512 candidate | NEON/SHA-512 compression | ❌ Implemented but unadmitted and not independently verified |
-| RV64 SHA-512 candidate | Zknh scalar-crypto compression | ❌ Implemented but unadmitted and not independently verified |
-| x86_64 Keccak candidate | AVX2 Keccak-f[1600] permutation | ❌ Implemented but unadmitted and not independently verified |
-| AArch64 Keccak candidate | NEON/SHA3 Keccak-f[1600] permutation | ❌ Implemented but unadmitted and not independently verified |
-| RISC-V Keccak | Scalar-only decision; no qualifying ratified instruction route in pinned authorities | ❌ No accelerated implementation claimed |
+| Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |
+| Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |
+| Low-level hosted-authority boundary | ✅ Platform proof required | ❌ No |
+| Hardened SHA-2 and Keccak sessions with clearing scratch | ✅ Opt-in | ❌ No |
+| RISC-V Zknh SHA-256/SHA-512 candidates | 🚧 QEMU/codegen only; unadmitted | ❌ No |
 
-Metadata version `0.1.1` was published at v0.20.0 after the committed
-cumulative pentest, remediation retest, and hosted gates recorded
-`PASS`/`PASS` with zero open findings. The project-wide
-first-party Rust, `no_std`, source-size, platform, FIPS, and unsafe-code
-policies apply here.
+No independent cryptographic review, side-channel certification or FIPS
+140-3 validation is claimed.
 
-## Hardened execution
+## Use
 
-The default-off `hardened-execution` feature adds a separate secret-bearing
-SHA-2 execution owner with mandatory private-state and CPU-scratch cleanup.
-It supports explicit portable, static instruction and (with `runtime-execution`)
-hosted routes. Ordinary constructors and their public-data restriction are unchanged.
-The CPU crate gains only an optional first-party `brynja-core` clearing dependency;
-the feature does not pull in std or an external crypto implementation.
+Current execution APIs are unpublished workspace functionality:
 
-See [hardened SHA-2 APIs and cleanup boundaries](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md).
-The exceptional retest passed and matching native Intel, Arm and Mac evidence
-is archived. Register/spill erasure, independent verification and FIPS validation
-are not claimed. Release approval remains separate from these functional results.
+```sh
+cargo add brynja-crypto-cpu --path /path/to/brynja/crates/brynja-crypto-cpu --no-default-features --features static-execution
+```
+
+Inspect a target-specialized authority, handling unsupported targets explicitly:
+
+```rust
+use brynja_crypto_cpu::static_execution::{Authority, Kernel};
+if let Ok(owner) = Authority::new(Kernel::X86Sha256) {
+    let _session = owner.session().unwrap();
+    assert_eq!(owner.report().kernel, Kernel::X86Sha256);
+}
+```
+
+This does not itself hash a message. Prefer an algorithm leaf for complete
+operations. The example executes a startup KAT only when the complete target
+bundle is compiled; the deployment must uphold that bundle on every CPU
+the process can run on.
+
+## Hardware and SIMD selection
+
+- `static-execution`: explicit ordinary raw sessions for x86-64 SHA and
+  AVX2 Keccak, or AArch64 SHA2/SHA-512/SHA3 with required NEON support.
+- `runtime-execution`: low-level platform-proof boundary. Hosted applications
+  normally use `brynja-crypto-cpu-std::execution`, not their own assertions.
+- `hardened-execution`: separate secret-bearing sessions whose private
+  source-declared permutation/compression scratch is cleared.
+- Historical candidate sessions remain unadmitted; feature unification does
+  not activate them. Repository evidence flags are not application APIs.
+
+x86-64 SHA-512 and RISC-V Keccak have no operational instruction backend here.
+RISC-V SHA candidates require exact Zknh instructions; generic RV64, RVV or
+bit manipulation cannot substitute for them. No AVX-512 backend is provided.
+
+## Safety and ownership
+
+Static compilation is not runtime detection. Compatible CPUs, OS register
+state, scheduling and VM migration are deployment preconditions. `!Send`/
+`!Sync` does not prevent OS migration. No CPU probing, I/O, global registry,
+foreign implementation or external assembly module is used here.
+
+Authorities own health and generation; sessions borrow them. Startup tests
+exercise actual kernels. Quarantine revokes sibling sessions; reports cannot
+mint authority. Failure is owner-local, not a process-wide FIPS error latch.
+
+Raw operations require `PublicData` markers. They record caller intent, not
+proof of secrecy, and do not erase secret schedules or state. Do not use raw
+ordinary kernels for keys, passwords, HMAC or KDF intermediates. Hardened
+sessions are distinct and do not guarantee register, compiler-spill, cache,
+dump, swap or abort-time erasure.
+
+[Static execution](https://github.com/valkyoth/brynja/blob/main/docs/static-cpu-execution.md)
+· [Hosted execution](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
+· [Hardened Keccak](https://github.com/valkyoth/brynja/blob/main/docs/hardened-keccak-execution.md).
+MIT OR Apache-2.0.

@@ -128,6 +128,11 @@ PACKAGES = (
 )
 
 
+# Cargo must resolve development dependencies while packaging even though the
+# public consumer never enables this std adapter. Keep its runtime lock separate.
+PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.1.1", ("src/lib.rs",)))
+
+
 class AcceptancePolicyError(RuntimeError):
     """The complete SHA-2 acceptance boundary differs from policy."""
 
@@ -295,11 +300,11 @@ def isolated_package_workspace(destination: Path) -> Path:
     workspace = destination / "package-workspace"
     crates = workspace / "crates"
     crates.mkdir(parents=True)
-    for name, _version, _required in PACKAGES:
+    for name, _version, _required in PACKAGING_PACKAGES:
         shutil.copytree(ROOT / "crates" / name, crates / name)
     dependencies = "\n".join(
         f'{name} = {{ path = "crates/{name}", version = "={version}" }}'
-        for name, version, _required in PACKAGES if name != "brynja"
+        for name, version, _required in PACKAGING_PACKAGES if name != "brynja"
     )
     manifest = f'''[workspace]
 members = ["crates/*"]
@@ -344,7 +349,7 @@ def package_roots(destination: Path) -> dict[str, Path]:
     environment["CARGO_HOME"] = str(destination / "empty-cargo-home")
     environment["CARGO_TARGET_DIR"] = str(target)
     command = ["cargo", "package"]
-    for name, _version, _required in PACKAGES:
+    for name, _version, _required in PACKAGING_PACKAGES:
         command.extend(("-p", name))
     command.extend(("--allow-dirty", "--no-verify", "--offline"))
     result = subprocess.run(command, cwd=workspace, env=environment, check=False, text=True,
@@ -354,7 +359,7 @@ def package_roots(destination: Path) -> dict[str, Path]:
     roots = {}
     packages = destination / "packages"
     packages.mkdir()
-    for name, version, required in PACKAGES:
+    for name, version, required in PACKAGING_PACKAGES:
         archive = target / "package" / f"{name}-{version}.crate"
         if not archive.is_file():
             fail(f"missing package archive: {archive}")

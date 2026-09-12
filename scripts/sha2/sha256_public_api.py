@@ -51,7 +51,7 @@ EXPECTED_SHA256 = {
     SHA256_SOURCE: "7e7608615c9bc80703f0711230453d9390df70e06ce71bb61310179c71d9d701",
     SHA256_TEST: "c3eebf6ae0202321f72ddc131691720c94709e5281f905a5bd7d0fe4a603a3d1",
     CHECK_SCRIPT: "d424a02dcfc778f83ccf8004fc23c9456bd71a759ece3235bdb56f1f0f02ad9d",
-    TEST_SCRIPT: "10155923e8769cd405c2e9eaa813c02b50f665daacadfc2da3a90f9dc7f9ab7f",
+    TEST_SCRIPT: "0c56798dc24c229a2bfbd80364931c3c04d26c5c8d277bcd6ed1e82bcab11a6b",
     CHECKS: "e0f510644d15466e62f36e90cf789a31060656ace3bae6c15f8a34d08bbb98ba",
     RUST_MATRIX: "fec9a6ba60d2fdf016a5248760c332024085ecad2febfdeae5c8dd6ca7cc109f",
     BARE_METAL: "4cae003df12d834e8fa3d31e878a7004ed0e69022ef900c8bb007578f26aaf0b",
@@ -128,6 +128,11 @@ PACKAGES = (
     ),
     ("brynja-crypto", "0.1.2", ("src/lib.rs",)),
 )
+
+
+# Cargo must resolve development dependencies while packaging even though the
+# public consumer never enables this std adapter. Keep its runtime lock separate.
+PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.1.1", ("src/lib.rs",)))
 
 
 class AcceptancePolicyError(RuntimeError):
@@ -313,7 +318,7 @@ def isolated_package_workspace(destination: Path) -> Path:
     workspace = destination / "package-workspace"
     crates = workspace / "crates"
     crates.mkdir(parents=True)
-    for name, _version, _required in PACKAGES:
+    for name, _version, _required in PACKAGING_PACKAGES:
         shutil.copytree(ROOT / "crates" / name, crates / name)
 
     manifest = """[workspace]
@@ -355,6 +360,7 @@ brynja-hash-parallel = { path = "crates/brynja-hash-parallel", version = "=0.1.0
 brynja-hash-tuple = { path = "crates/brynja-hash-tuple", version = "=0.1.0" }
 brynja-mac-kmac = { path = "crates/brynja-mac-kmac", version = "=0.1.0" }
 brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.1" }
+brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.1" }
 """
     (workspace / "Cargo.toml").write_text(manifest, encoding="utf-8")
     return workspace
@@ -367,7 +373,7 @@ def package_roots(destination: Path) -> dict[str, Path]:
     environment["CARGO_HOME"] = str(destination / "empty-cargo-home")
     environment["CARGO_TARGET_DIR"] = str(target)
     command = ["cargo", "package"]
-    for name, _version, _required in PACKAGES:
+    for name, _version, _required in PACKAGING_PACKAGES:
         command.extend(("-p", name))
     command.extend(("--allow-dirty", "--no-verify", "--offline"))
     result = subprocess.run(
@@ -384,7 +390,7 @@ def package_roots(destination: Path) -> dict[str, Path]:
         fail(f"could not package SHA-256 closure:\n{result.stdout}")
 
     roots: dict[str, Path] = {}
-    for name, version, required in PACKAGES:
+    for name, version, required in PACKAGING_PACKAGES:
         archive = target / "package" / f"{name}-{version}.crate"
         if not archive.is_file():
             fail(f"missing package archive: {archive}")

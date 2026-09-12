@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import tempfile
+import sys
 from pathlib import Path
 
 import sha256_public_api as acceptance
@@ -26,8 +27,26 @@ def run_mutation(label: str, old: str, new: str, success: bool = False) -> None:
         )
 
 
+def check_packaging_development_dependency() -> None:
+    import sha2_public_api
+    sys.path.insert(0, str(acceptance.ROOT / "scripts/sha3"))
+    import sha3_public_api
+    for module in (acceptance, sha2_public_api, sha3_public_api):
+        with tempfile.TemporaryDirectory(prefix="brynja-package-dev-edge-") as temporary:
+            workspace = module.isolated_package_workspace(Path(temporary))
+            manifest = workspace / "Cargo.toml"
+            command = ["cargo", "metadata", "--offline", "--no-deps", "--format-version", "1"]
+            module.run(command, cwd=workspace)
+            line = 'brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.1" }'
+            replace(manifest, line, "")
+            result = module.run(command, cwd=workspace, success=False)
+            assert 'dependency.brynja-crypto-cpu-std` was not found' in result.stdout, result.stdout
+    print("Three isolated packagers reject missing inherited CPU-std development edges")
+
+
 def main() -> int:
     acceptance.validate_repository()
+    check_packaging_development_dependency()
     run_mutation(
         "digest",
         "a8f34a54459e9655229bb554c15ebb87f89a0bfbc600da8eb56999422fc0487f",

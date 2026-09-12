@@ -68,6 +68,26 @@ that root exclusively; it cannot authorize a sibling root. Ordinary collector
 finalization rejects streaming bindings, even if the work limit is satisfied.
 This is an internal completion invariant, not a new public API or secret owner.
 
+### Executor poisoning is permanent and fail-closed
+
+Both the portable `ParallelHashExecutor` and `execution::Executor` reject
+subsequent operations with their respective `WorkerPanicked` error if the
+calling thread unwinds while holding the operation gate. The poisoned instance
+has no reset or automatic recovery API. Ordinary concurrent-use rejection is
+different: it returns `ResourceExhausted` or `Resource`, respectively, without
+poisoning the instance.
+
+Spawned-worker panics are joined and translated into typed errors; they do not
+by themselves unwind the gate-holding caller. This is not a promise that a
+future defect can never panic. If caller-thread unwinding does occur, fail-closed
+poisoning prevents accidental reuse of that instance. Application-level recovery
+must assess the cause rather than blindly retry with a newly created executor.
+
+The portable `poisoned_operation_gate_fails_closed` test and execution
+`poisoned_permit_is_terminal_and_still_clears_destinations` test inject caller-side
+unwinding while holding the gate. The latter also checks repeated failure,
+unchanged public output, cleared public scratch and cleared secret destinations.
+
 ## Execution owner inventory
 
 The execution layer composes the existing sealed hardened cSHAKE/Keccak

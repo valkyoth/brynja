@@ -65,8 +65,11 @@ The release-tooling follow-up preserves dated nightly identity verification
 while reporting newer daily nightlies separately, with an explicit strict
 maintenance check. A narrowly checked TupleHash native carry-forward permits
 only the consumer fixture's facade-version pin and its reviewed digest change;
-all native code and original three-platform artifacts remain bound. These
-tooling changes require focused retest before final release sign-off.
+all native code and original three-platform artifacts remain bound. The
+user-requested project-owned tooling retest passed, including fault injection
+against the validators and the real shell fallback control flow. An invalid-pin
+regression was added without changing the existing guard. Current-snapshot
+qualification and GitHub checks remain separate release requirements.
 
 All 39 crate READMEs now focus on capability/independent-review tables,
 hardware/SIMD availability, limitations and usable API examples rather than

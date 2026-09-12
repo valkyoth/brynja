@@ -178,8 +178,9 @@ cryptographic verification or FIPS validation. Schema regression fixtures remain
 separate from real records.
 
 The Linux remote detached-runner hand-off passed, alongside the README audit
-and local Miri/Kani/ASan collection/reuse. Still required: focused review of the
-release-tooling follow-up and the final release gate on the reviewed source.
+and local Miri/Kani/ASan collection/reuse. The user-requested project-owned
+release-tooling retest passed. Still required: the final release gate on the
+reviewed source.
 These observations do not replace those remaining release checks.
 
 Owned cleanup cannot guarantee erasure of registers, compiler-created copies,

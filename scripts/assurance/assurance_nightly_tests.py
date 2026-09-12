@@ -18,6 +18,14 @@ def test_frozen_nightly_identity_and_update_notification() -> None:
                 f'available = {str(available).lower()}\n').encode()
     dated = document(version[8:], revision)
     latest = document('2099-01-01', 'a' * 40)
+    for invalid_version in ('latest', 'nightly-not-a-date'):
+        changed = copy.deepcopy(policy)
+        for tool in changed['tools']:
+            tool['version'] = invalid_version
+        with mock.patch.object(assurance.urllib.request, 'urlopen') as network:
+            with fails_with('invalid frozen nightly date'):
+                assurance.network_check(changed)
+            network.assert_not_called()
     calls = []
     def fetch(url, timeout):
         calls.append(url)

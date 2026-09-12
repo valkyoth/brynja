@@ -1,6 +1,6 @@
 # ParallelHash execution
 
-Status: **development implementation ready for exceptional pentesting, not
+Status: **exceptional pentest and remediation retest passed, not
 release-qualified**. Scoped repository, compiler-cleanup, packaged/adversarial,
 Miri and AddressSanitizer development checks passed. Native acceptance and
 final release checks remain required. Independent-review/FIPS claims are unchanged.
@@ -137,7 +137,7 @@ Native capture tooling requires source-bound Linux x86-64, Linux AArch64 and
 Apple AArch64 records. The empty index deliberately blocks tagging; simulated
 record/schema tests never populate it. Native collection follows pentesting.
 
-Still required: exceptional pentest, reviewed native source-bound evidence,
+Still required: reviewed native source-bound evidence,
 remote hand-off qualification and the final release gate on the reviewed source.
 The README audit and local detached Miri/shard/reuse acceptance are complete;
 they do not replace those remaining release checks.

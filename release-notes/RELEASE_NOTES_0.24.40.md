@@ -1,9 +1,8 @@
 # Brynja v0.24.40
 
-Status: development implementation ready for exceptional pentesting, not yet
+Status: exceptional pentest and remediation retest passed; not yet
 release-qualified. Scoped development gates and local detached real-campaign
-acceptance passed. Exceptional pentest, native collection and final release
-qualification remain pending.
+acceptance passed. Native collection and final release qualification remain pending.
 
 ## ParallelHash execution
 
@@ -25,7 +24,8 @@ completion. Finalization now requires an unforgeable, root-bound completed-input
 loan, checked against pending storage and the exact expected leaf count. Compiled
 bypass probes and executable mutants cover the invariant. The public API had
 already flushed correctly; the fix prevents an accidental internal shortcut.
-A green owner retest is still required; no PASS is inferred from local testing.
+The owner-supplied retest of `7d101cb7` closed the finding with no new issues.
+That verdict is recorded separately from project-owned tests and native evidence.
 
 Errors and recoverable unwind clear owned root, leaf, metadata and output
 staging. Public-output errors are transactional; secret-output errors clear

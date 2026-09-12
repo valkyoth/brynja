@@ -19,7 +19,7 @@ Current generated planning coverage is 2157 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.39 signed. Development of v0.24.40 adds default-off [ParallelHash execution](parallelhash-execution.md), a [detached verification runner](detached-verification.md), and capability-focused crate READMEs with compiled examples. Scoped development checks, local detached Miri/Kani collection/reuse and the exceptional owner pentest/retest passed; native collection and final release qualification remain pending. The signed v0.24.39 baseline is d0b8a784. No new crates.io publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.39 signed. Development of v0.24.40 adds default-off [ParallelHash execution](parallelhash-execution.md), a [detached verification runner](detached-verification.md), and capability-focused crate READMEs with compiled examples. Scoped development checks, local detached Miri/Kani collection/reuse, the exceptional owner pentest/retest and reviewed three-platform native ParallelHash collection passed; remote detached-runner hand-off and final release qualification remain pending. The signed v0.24.39 baseline is d0b8a784. No new crates.io publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

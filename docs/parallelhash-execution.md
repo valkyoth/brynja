@@ -2,8 +2,10 @@
 
 Status: **exceptional pentest and remediation retest passed, not
 release-qualified**. Scoped repository, compiler-cleanup, packaged/adversarial,
-Miri and AddressSanitizer development checks passed. Native acceptance and
-final release checks remain required. Independent-review/FIPS claims are unchanged.
+Miri and AddressSanitizer development checks passed. Final release checks
+remain required. The three native lanes below have now
+passed capture and source-bound artifact review. Independent-review/FIPS claims
+are unchanged.
 
 ## API boundaries
 
@@ -111,7 +113,7 @@ python3 scripts/parallelhash/check-parallelhash-execution-differential.py
 
 Preferred routes may be portable. `--native` additionally requires accelerated
 roots and all nonempty leaves, but a passing command alone is not a reviewed
-native evidence artifact. Matching-platform capture/review remains pending.
+native evidence artifact. Reviewed matching-platform artifacts are recorded below.
 
 The development campaigns completed 3,584 independent comparisons (256 cases
 across seven modes, debug and release). A separate local AMD AVX2 campaign
@@ -133,12 +135,30 @@ matrix, all-feature/default-off workspace checks and package checks passed.
 This is development evidence, not the final release gate. Unavailable preferred
 routes do not count as accelerated execution.
 
-Native capture tooling requires source-bound Linux x86-64, Linux AArch64 and
-Apple AArch64 records. The empty index deliberately blocks tagging; simulated
-record/schema tests never populate it. Native collection follows pentesting.
+Native capture followed the green pentest/retest on commit
+`7d101cb78c648c8c433d0c36065b3c8c6b7184fc`. All 309 evidence-bound inputs match
+the current implementation. The [native index](../security/parallelhash-execution-native.json)
+binds the unmodified artifacts, compiler identity, CPU identity, capture commit,
+results and project-owned review. No personal hostname or checkout path is included.
 
-Still required: reviewed native source-bound evidence,
-remote hand-off qualification and the final release gate on the reviewed source.
+| Native lane | CPU | Required acceleration exercised | Oracle comparisons |
+| --- | --- | --- | --- |
+| Linux x86-64 | Intel Xeon Platinum 8488C | Static AVX2 | 8,704 |
+| Linux AArch64 | Arm Neoverse-V1 | Hosted and static Arm Keccak | 13,824 |
+| Apple AArch64 | Apple M2 Pro | Hosted and static Arm Keccak | 13,824 |
+
+Each lane ran debug/release baseline and required-static campaigns; Arm lanes
+also ran required-hosted campaigns. Counts include portable/preferred controls,
+not exclusively accelerated calls. Each lane additionally passed four kernel
+lifecycle tests and the actual-kernel marker for 1,024 permutations. Generic
+x86 hosted execution remains unavailable; this evidence does not change routing.
+The records are native execution observations with operator attestation, not
+remote hardware attestation, migration/side-channel qualification, independent
+cryptographic verification or FIPS validation. Schema regression fixtures remain
+separate from real records.
+
+Still required: remote detached-runner hand-off qualification and the final
+release gate on the reviewed source.
 The README audit and local detached Miri/shard/reuse acceptance are complete;
 they do not replace those remaining release checks.
 

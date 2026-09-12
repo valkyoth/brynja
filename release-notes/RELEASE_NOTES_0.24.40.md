@@ -2,7 +2,8 @@
 
 Status: exceptional pentest and remediation retest passed; not yet
 release-qualified. Scoped development gates and local detached real-campaign
-acceptance passed. Native collection and final release qualification remain pending.
+acceptance passed. Three-platform native ParallelHash collection and artifact
+review passed; final release qualification remains pending.
 
 ## ParallelHash execution
 
@@ -37,8 +38,13 @@ caller's responsibility. CPU scheduling and VM feature stability remain
 deployment requirements.
 
 See [ParallelHash execution](../docs/parallelhash-execution.md) for the tested
-development scope and remaining qualification. The three-platform native
-index is deliberately empty until reviewed collection; tagging fails closed.
+development scope and remaining qualification. The reviewed three-platform
+native index now binds Intel AVX2, AWS Arm and Apple M2 Pro results to
+`7d101cb7`, with unchanged source inputs. Debug/release campaigns passed 8,704
+comparisons on Intel and 13,824 on each Arm lane, including portable controls.
+All lanes additionally passed the four kernel lifecycle tests and the
+1,024-permutation actual-kernel check. These are project-owned native
+observations, not remote attestation, migration assurance or certification.
 
 ## Verification workflow and documentation
 

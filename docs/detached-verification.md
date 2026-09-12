@@ -168,8 +168,9 @@ current development delta selects only ParallelHash for Miri, ASan and Kani.
   local real-campaign shard, collection and phase-reuse acceptance passed.
 - Freeze the final reviewed release source before creating evidence for that
   source. A development acceptance receipt cannot qualify later edits.
-- Finish ParallelHash execution qualification and required native evidence;
-  leaf/root, streaming, scheduled and threaded APIs and regression tests exist.
+- Finish final ParallelHash release qualification; reviewed native evidence now
+  covers Intel AVX2, AWS Arm and Apple M2 Pro on `7d101cb7`. That algorithm
+  capture does not itself qualify the remote detached-verification hand-off.
 - Keep the completed 39-crate README audit and 35 compiled examples in the
   shared baseline checks; documentation alone must not select crypto Miri work.
 

@@ -19,7 +19,7 @@ Current generated planning coverage is 2157 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.40 signed. Development of v0.24.41 adds default-off [ordinary legacy SHA-1 execution](legacy-sha1-execution.md), with static target-feature authority and a separate hosted AArch64 adapter. Exceptional pentest/retest, fresh native qualification and final release checks remain pending. Hardened secret-bearing SHA-1 acceleration remains the next milestone. The signed v0.24.40 baseline is 62f35964. No new crates.io publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.40 signed. Development of v0.24.41 adds default-off [ordinary legacy SHA-1 execution](legacy-sha1-execution.md), with static target-feature authority and a separate hosted AArch64 adapter. Exceptional owner retest and four-lane native observations passed; final release and GitHub checks remain required. Hardened secret-bearing SHA-1 acceleration remains the next milestone. The signed v0.24.40 baseline is 62f35964. No new crates.io publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

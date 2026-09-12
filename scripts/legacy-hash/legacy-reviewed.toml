@@ -8,7 +8,7 @@
 "assurance/legacy-hash-public-api/fixtures/representative.txt" = "7292ed615198b82d82acccb5eac5ef6bca5a2f3ccef7bb9e1726accc9f495f6a"
 "assurance/legacy-hash-public-api/fixtures/archive-index.json" = "a2adff54a3d15b1bba76adb6605e5024b95634ed4899aca2047112da2bb4e369"
 "crates/brynja-legacy-sha1/Cargo.toml" = "7670d7053cef9a5488271b800583aa8f9666c8ef13a55b9fdf84c4d50d205a2e"
-"crates/brynja-legacy-sha1/README.md" = "7968431fe14ae1a7e57b325f27e05c2ef5e4293b0ee6afadea9516f5ad48658a"
+"crates/brynja-legacy-sha1/README.md" = "7b203033a7a2dc60db9cda26f491c9c5e44243a849771f5ae1cc373078757713"
 "crates/brynja-legacy-sha1/src/lib.rs" = "03cfd5b4e5ad72f698cb4e5cb2872a8f4b59e8c2e6bca43147480c254295aa68"
 "crates/brynja-legacy-sha1/src/ordinary.rs" = "7f01b517da3d220bbc84eb56a19512bbf2551a4b5b427a4200923c8fbd348fac"
 "crates/brynja-legacy-sha1/src/hardened.rs" = "d3a87dcb6c94242a07200710f0ea09cbc218fa60e34b9a9715360f5eb4054c46"

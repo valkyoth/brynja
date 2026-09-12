@@ -72,3 +72,9 @@ rewriting evidence. Native correctness does not remove the documented Low
 platform-trust residual: cached OS detection cannot detect a later advertised
 ABI violation. Android, iOS and Windows are not native-qualified by these lanes.
 Final release checks and GitHub checks remain separate requirements.
+
+Release preparation subsequently updates status prose in the operational API
+document and crate READMEs, plus their review hashes. Those edits do not change
+the captured Rust implementations, manifests, compiler, execution commands or
+result checks. Artifacts remain bound to the original commit and are not
+relabeled as a new capture of the documentation-only checkout.

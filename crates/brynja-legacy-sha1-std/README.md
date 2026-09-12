@@ -36,7 +36,7 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
-| Opt-in hosted ordinary acceleration | 🚧 In progress; native qualification pending | ❌ Not independently verified |
+| Opt-in hosted ordinary acceleration | 🚧 In progress; native observations passed, final release checks pending | ❌ Not independently verified |
 
 ## Hardware and SIMD
 
@@ -47,7 +47,8 @@ public data. Supported AArch64 system feature APIs can authorize the SHA1/NEON
 route; generic x86 required mode fails, since current-core CPUID alone cannot
 establish migration safety. Specialized x86 binaries use the leaf's explicit
 static route. No feature report can be converted into an execution authority.
-Fresh operational native qualification remains pending. See the
+Operational native observations passed on Linux and macOS; other supported OS
+lanes and final release checks are not qualified by those observations. See the
 [operational API](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-execution.md)
 for selection, streaming, byte/bit hashing and ownership examples.
 

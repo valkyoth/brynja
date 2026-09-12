@@ -26,7 +26,13 @@ then
 else
     python3 scripts/release/native_metadata_carry_forward.py
 fi
+if
 python3 scripts/parallelhash/check-parallelhash-execution-native.py
+then
+    :
+else
+    python3 scripts/release/native_metadata_carry_forward.py --family parallelhash
+fi
 
 scripts/checks.sh
 scripts/assurance/check-bare-metal.sh

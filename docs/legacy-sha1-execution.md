@@ -1,7 +1,8 @@
 # Ordinary operational legacy SHA-1
 
-Development implementation for v0.24.41; owner pentest and fresh native release
-qualification are pending. SHA-1 is collision-broken. These APIs are not for
+Ordinary operational implementation for v0.24.41; owner retest and four-lane
+[native observations](../assurance/sha1-execution-observations/v0.24.41/README.md)
+passed. Final release checks remain required. SHA-1 is collision-broken. These APIs are not for
 new signatures, certificates, authentication, passwords or confidential data.
 No independent cryptographic verification or FIPS validation is claimed.
 
@@ -89,8 +90,8 @@ Native platform tests establish correctness on the recorded host only. Windows,
 Android and iOS are not native-qualified by Linux or Apple M2 runs.
 
 The remaining Low platform-trust risk is documented, not eliminated by the
-callback. Owner risk acceptance/retest and fresh release evidence remain
-pending; no military/classified deployment qualification is claimed. Deployments
+callback. The clean owner retest retains this residual; recorded native
+observations do not eliminate it. No military/classified deployment qualification is claimed. Deployments
 that cannot rely on their platform's advertised ABI must select portable mode.
 
 [linux-hwcap]: https://docs.kernel.org/arch/arm64/elf_hwcaps.html

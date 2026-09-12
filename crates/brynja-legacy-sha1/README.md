@@ -30,8 +30,8 @@ First-party, allocation-free `no_std` legacy SHA-1 for explicit compatibility.
 Default-off `execution` APIs add ordinary public-data SHA/SSE2 and NEON/SHA1
 instruction routes for target-specialized binaries, with explicit selection,
 streaming, byte/bit one-shot hashing and permanent owner revocation. The separate
-host adapter supplies supported AArch64 system authority. Development native
-qualification is pending; hardened acceleration is not provided. See the
+host adapter supplies supported AArch64 system authority. Native observations
+passed; final release checks remain required and hardened acceleration is not provided. See the
 [operational API](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-execution.md).
 
 ## Cryptography Verification Status
@@ -39,7 +39,7 @@ qualification is pending; hardened acceleration is not provided. See the
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
-| Opt-in ordinary acceleration | 🚧 In progress; native qualification pending | ❌ Not independently verified |
+| Opt-in ordinary acceleration | 🚧 In progress; native observations passed, final release checks pending | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS

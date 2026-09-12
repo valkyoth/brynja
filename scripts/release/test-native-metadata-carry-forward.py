@@ -43,6 +43,9 @@ def sources(root):
 
 
 class CarryForwardTests(unittest.TestCase):
+    family = 'tuplehash'
+    quote = '"'
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='brynja-native-metadata-test-')
         self.addCleanup(self.temp.cleanup)
@@ -55,14 +58,15 @@ class CarryForwardTests(unittest.TestCase):
         write(self.root, review.FACADE, '[package]\nversion = "0.24.39"\n')
         write(self.root, CODE, 'test-only unchanged native input')
         h = review.evidence.hashlib.sha256(old.encode()).hexdigest()
-        write(self.root, review.REVIEW, 'REVIEWED_HASHES = {"' + review.FIXTURE + '": "' + h + '"}\n')
+        q = self.quote
+        write(self.root, review.REVIEW, 'REVIEWED_HASHES = {' + q + review.FIXTURE + q + ': ' + q + h + q + '}\n')
         capture = commit(self.root)
         captured = sources(self.root)
         index = {'schema': 1, 'capture_commit': capture, 'lanes': {}}
         for lane in review.evidence.LANES:
             record = fixture.record(lane)
             record.update(commit=capture, sources=captured)
-            name = 'assurance/tuplehash-execution-native/' + lane + '.json'
+            name = f'assurance/{self.family}-execution-native/' + lane + '.json'
             write(self.root, name, record)
             index['lanes'][lane] = {'artifact': name, 'cpu': record['cpu'], 'reviewed': True,
                 'sha256': review.evidence.hashlib.sha256((self.root / name).read_bytes()).hexdigest()}
@@ -76,14 +80,14 @@ class CarryForwardTests(unittest.TestCase):
 
     def validate(self):
         with patch.object(review.evidence, 'sources', side_effect=sources), contextlib.redirect_stdout(io.StringIO()):
-            review.validate(self.root)
+            review.validate(self.root, self.family)
 
     def test_exact_version_change_preserves_original_records(self):
         self.validate()
 
     def test_code_capture_fixture_and_artifact_mutations_fail(self):
         paths = (CODE, review.REVIEW, review.FIXTURE, review.FACADE,
-                 'assurance/tuplehash-execution-native/linux-x86_64.json')
+                 f'assurance/{self.family}-execution-native/linux-x86_64.json')
         for name in paths:
             with self.subTest(name=name):
                 path = self.root / name
@@ -160,6 +164,32 @@ class CarryForwardTests(unittest.TestCase):
                       '    :\nelse\n    python3 scripts/release/native_metadata_carry_forward.py\nfi', gate)
         checks = (review.ROOT / 'scripts/checks.sh').read_text()
         self.assertIn('python3 scripts/release/test-native-metadata-carry-forward.py\n', checks)
+        self.assertIn('if\npython3 scripts/parallelhash/check-parallelhash-execution-native.py\nthen\n'
+                      '    :\nelse\n    python3 scripts/release/native_metadata_carry_forward.py --family parallelhash\nfi', gate)
+
+
+class ParallelCarryForwardTests(CarryForwardTests):
+    family = 'parallelhash'
+    quote = "'"
+
+    def setUp(self):
+        spec = importlib.util.spec_from_file_location('parallel_native_fixture', review.ROOT /
+            'scripts/parallelhash/test-parallelhash-execution-native.py')
+        parallel_fixture = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(parallel_fixture)
+        for obj, name, value in (
+            (review, 'evidence', review.parallel_evidence),
+            (review, 'REVIEW', 'scripts/parallelhash/parallelhash_reviewed_hashes.py'),
+            (review, 'FIXTURE', 'assurance/parallelhash-public-api/Cargo.toml'),
+        ):
+            replacement = patch.object(obj, name, value)
+            replacement.start()
+            self.addCleanup(replacement.stop)
+        replacement = patch.dict(globals(), fixture=parallel_fixture,
+                                 CODE='crates/brynja-hash-parallel/src/test-only.rs')
+        replacement.start()
+        self.addCleanup(replacement.stop)
+        super().setUp()
 
 
 if __name__ == '__main__':

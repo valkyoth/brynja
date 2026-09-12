@@ -4543,9 +4543,9 @@ Exit criteria:
 
 ### v0.24.41 - Legacy SHA-1 Operational Acceleration
 
-Status: awaiting pentest
+Status: owner retest and native collection passed; awaiting final release checks
 
-See [operational SHA-1](legacy-sha1-execution.md). Exceptional pentest and fresh native qualification remain pending.
+See [operational SHA-1](legacy-sha1-execution.md). The Low platform-trust residual remains disclosed; final release and GitHub checks are required before tagging.
 
 Plan scope: Enable reviewed x86 SHA and AArch64 SHA1 static and hosted ordinary SHA-1 byte/bit streaming and one-shot APIs with explicit legacy-only dependency and feature paths.
 

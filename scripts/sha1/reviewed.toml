@@ -8,7 +8,7 @@
 "crates/brynja-legacy-sha1/src/owner.rs" = "50360bf20b114052132d8acfb1fac9890f2572c5c591947319f111eaa65d86b8"
 "crates/brynja-legacy-sha1/src/execution.rs" = "d9973288c6729823bcdf327f2de09d585b9d5412e40ea9b8356d764524c71e97"
 "crates/brynja-legacy-sha1/Cargo.toml" = "7670d7053cef9a5488271b800583aa8f9666c8ef13a55b9fdf84c4d50d205a2e"
-"crates/brynja-legacy-sha1/README.md" = "7968431fe14ae1a7e57b325f27e05c2ef5e4293b0ee6afadea9516f5ad48658a"
+"crates/brynja-legacy-sha1/README.md" = "7b203033a7a2dc60db9cda26f491c9c5e44243a849771f5ae1cc373078757713"
 "crates/brynja-legacy-sha1/tests/api.rs" = "769b3abdbe623a057af4c71357c179d05fe5898ab3fbb088e787ee9802bfd4fc"
 "crates/brynja-legacy-sha1/tests/vectors/nist.txt" = "72535acd800ab7eea56bbf2587ee63ed5f99b1a597e0cb2f7b28020c54e5e5c0"
 "assurance/sha1-public-api/Cargo.toml" = "83d16c5d9c282cab0671b2509e90304039a02fafa2f289b90fcfa1b2c2664087"

@@ -181,7 +181,7 @@
     "scripts/kmac/test-kmac-execution-policy.py": "5fdc9d07c9d32e0839dcd117224eaad0aafeca74997a2a440a4c94e18c8ef01c",
     "scripts/sha3/check-cshake-differential.py": "0e936f96b8a8bb7295055694cf751353207c83d78f5fad95c7184e9148c16d39",
     "scripts/sha3/check-sha3-bit-differential.py": "c796b542560131229a7ea933c94de944d687856fc84be678ef7e4238c2fb07da",
-    "scripts/tag_gate.sh": "eb66c40848b936d61d6f740932e8ec66922e6955e92da128a7517ffd31b4b61b",
+    "scripts/tag_gate.sh": "af38972eadc027c77e0d8bd1c4d4d9936dececa6397c9736f30e18ff345866a1",
     "scripts/zeroization/check-zeroization-miri.sh": "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"
   },

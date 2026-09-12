@@ -176,7 +176,7 @@
     "scripts/cryptography/mir_cleanup_flow.py": "9b56316d6bf2a02c85cb4bcd75c2fab00a2442b49332bda1852f6d91012a2dc4",
     "scripts/sha3/check-cshake-differential.py": "0e936f96b8a8bb7295055694cf751353207c83d78f5fad95c7184e9148c16d39",
     "scripts/sha3/check-sha3-bit-differential.py": "c796b542560131229a7ea933c94de944d687856fc84be678ef7e4238c2fb07da",
-    "scripts/tag_gate.sh": "eb66c40848b936d61d6f740932e8ec66922e6955e92da128a7517ffd31b4b61b",
+    "scripts/tag_gate.sh": "af38972eadc027c77e0d8bd1c4d4d9936dececa6397c9736f30e18ff345866a1",
     "scripts/tuplehash/capture-tuplehash-execution-native.py": "52aa969a7fc9484bb62053be3c09e15c72acbfe12bc785b1f5be756ca2e37d36",
     "scripts/tuplehash/check-tuplehash-differential.py": "6be3bfd93a3d7fb2dd9fc2a051d5de2d564a9ec99d1688255b950e6efe6db1ec",
     "scripts/tuplehash/check-tuplehash-execution-codegen.py": "1fded03dfb7ea956dd82121bdaa6a787d144f84ba8af9d8186d1d736d022f365",

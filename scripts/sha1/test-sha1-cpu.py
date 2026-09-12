@@ -66,6 +66,9 @@ def main():
         ('scripts/zeroization/check-zeroization-miri.sh', 'run_miri -p brynja-legacy-sha1 --features cpu --test cpu', ''),
         ('scripts/zeroization/check-zeroization-sanitizer.sh', '-p brynja-legacy-sha1 --features cpu --lib --test cpu', '-p brynja-legacy-sha1 --lib'),
     ]
+    for os in ('Linux', 'Android', 'macOS', 'iOS', 'Windows'):
+        cases.append(('docs/legacy-sha1-execution.md', f'| {os} |', '| omitted |'))
+    cases.append(('docs/legacy-sha1-execution.md', 'Cached detection is not live revocation.', 'Detection guarantees live revocation.'))
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-cpu-mutations-') as temp:
         root = Path(temp)
         for path in policy.BOUND + ['scripts/checks.sh','scripts/tag_gate.sh','crates/brynja-legacy-sha1/src/lib.rs', 'scripts/zeroization/check-zeroization-miri.sh', 'scripts/zeroization/check-zeroization-sanitizer.sh']:

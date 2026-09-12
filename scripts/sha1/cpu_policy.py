@@ -81,6 +81,10 @@ def validate(root=ROOT, hashes=True):
     require(operation, 'owner.quarantine();')
     require(sources[ADAPTER+'src/execution/mod.rs'], 'Err(Error::Unavailable(_)) if mode == Mode::Prefer => Ok(Executor::portable()), Err(error) => Err(error),')
     platform = sources[ADAPTER+'src/execution/platform.rs']
+    platform_review = sources['docs/legacy-sha1-execution.md']
+    for os in ('Linux', 'Android', 'macOS', 'iOS', 'Windows'):
+        require(platform_review, f'| {os} |')
+    require(platform_review, 'Cached detection is not live revocation.')
     require(platform, 'availability().map_err(Error::Unavailable)?;')
     require(platform, 'unsafe { Authority::from_platform(Sha1Backend::Aarch64Sha1, revalidate) }')
     require(platform, 'fn revalidate(backend: Sha1Backend) -> bool { backend == Sha1Backend::Aarch64Sha1 && availability().is_ok() }')

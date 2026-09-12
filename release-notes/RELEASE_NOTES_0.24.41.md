@@ -53,3 +53,9 @@ does not replace the deployment's lifetime-long feature guarantee or prove safe
 VM migration. Public-data acknowledgement cannot detect confidential input;
 the ordinary/hardened split and per-boundary health checks remain unchanged.
 An independent owner retest and fresh native collection are still pending.
+
+The follow-up review downgraded the platform-trust finding to a Low residual,
+not a closed issue. The SHA-1 documentation now records all five OS detector
+mappings and their individual trust limits, with six regression checks against
+missing platform justifications or a cached-detection/live-revocation conflation.
+This follow-up changes no production Rust or platform availability.

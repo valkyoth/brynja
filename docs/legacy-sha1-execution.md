@@ -57,10 +57,53 @@ length preflight is atomic, while backend failure destroys retained state.
 | Confidential bytes passed with `PublicData::acknowledge()` | The caller classifies every input, including later streaming chunks. This token neither inspects bytes nor declassifies a secret owner. Ordinary streams do not implement the sealed hardened capability; confidential input requires the separate hardened API. |
 | Repeated health-check overhead | Checks remain at every defensive boundary. The hosted callback reuses standard-library OS capability detection; no syscall-heavy polling, throttling or interval-based authorization is introduced. |
 
-Linux AArch64 exposes instruction availability through its
-[ELF hardware-capability ABI](https://docs.kernel.org/arch/arm64/elf_hwcaps.html).
-The callback is a revocation backstop, **not** a substitute for that platform
-contract. No military/classified deployment qualification is claimed.
+## Platform-specific trust basis
+
+Cached detection is not live revocation. The built-in hosted callback uses
+Rust's process-wide feature cache: calling it again does not re-query the kernel
+or detect a post-construction feature loss. The leaf's callback interface can
+honour a platform provider's revocation signal, and `quarantine()` remains an
+explicit revocation mechanism; neither means the built-in adapter monitors
+migration. The tests inject revocation, not physical CPU-feature loss.
+
+The following mapping was checked against the shipped Rust 1.90.0 and 1.98.1
+sources under `library/std_detect/src/detect/os/`, plus `detect/cache.rs`.
+The five OS names are not interchangeable evidence of a Linux HWCAP contract.
+All rows concern little-endian AArch64 and still require both Rust `neon` and
+`sha2` detection; compiler-enabled target features retain the static binary's
+deployment requirements.
+
+| OS | Detector and justification | Limit of the justification |
+| --- | --- | --- |
+| Linux | `linux/aarch64.rs`: auxiliary-vector HWCAP; Rust's SHA2 bundle requires SHA1, SHA2 and ASIMD. Linux documents system-safe feature exposure across available CPUs. [HWCAP][linux-hwcap], [feature ABI][linux-features]. | Trust in a conforming kernel/hypervisor, not detection of a later ABI violation. |
+| Android | The same Linux detector, including its Exynos 9810 workaround for misreported heterogeneous-core features on older Android. The workaround retains SHA1/SHA2 only with the required ASIMD bundle. [Rust Android handling][rust-linux]. | Known workaround, not a claim that every vendor kernel is correct. Unknown misreporting and nonconforming migration remain deployment risks. |
+| macOS | `darwin/aarch64.rs`: Apple's system `sysctlbyname` ISA queries; Rust combines `FEAT_SHA1`, `FEAT_SHA256` and `AdvSIMD`. [Apple ISA queries][apple-isa], [Rust Darwin mapping][rust-darwin]. | Reliance on Apple's advertised system ISA, not a citation establishing arbitrary VM live-migration safety. |
+| iOS | The same Rust Darwin detector and Apple ISA-query interface as macOS. It does not use Linux HWCAP or a current-core CPU identifier. [Apple ISA queries][apple-isa], [Rust Darwin mapping][rust-darwin]. | Same conforming-system assumption; macOS native observations do not constitute iOS qualification. |
+| Windows | `windows/aarch64.rs`: `IsProcessorFeaturePresent`, documented as a query about the current computer. NEON plus `PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE` supplies the SHA1/SHA2 bundle. [Microsoft feature API][windows-features], [Rust Windows mapping][rust-windows]. | System capability API, not an independently established hotplug/VM-migration guarantee. |
+
+The engineering basis for hosted execution is these OS-supported ISA interfaces
+and their Rust mappings, **conditional on the OS/hypervisor maintaining its
+advertised execution ABI**. In particular, the Apple and Microsoft references
+are not represented as containing Linux's explicit heterogeneous-CPU wording.
+Native platform tests establish correctness on the recorded host only. Windows,
+Android and iOS are not native-qualified by Linux or Apple M2 runs.
+
+The remaining Low platform-trust risk is documented, not eliminated by the
+callback. Owner risk acceptance/retest and fresh release evidence remain
+pending; no military/classified deployment qualification is claimed. Deployments
+that cannot rely on their platform's advertised ABI must select portable mode.
+
+[linux-hwcap]: https://docs.kernel.org/arch/arm64/elf_hwcaps.html
+[linux-features]: https://docs.kernel.org/arch/arm64/cpu-feature-registers.html
+[rust-linux]: https://github.com/rust-lang/rust/blob/1.90.0/library/std_detect/src/detect/os/linux/aarch64.rs
+[apple-isa]: https://developer.apple.com/documentation/kernel/1387446-sysctlbyname/determining_instruction_set_characteristics
+[rust-darwin]: https://github.com/rust-lang/rust/blob/1.90.0/library/std_detect/src/detect/os/darwin/aarch64.rs
+[windows-features]: https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent
+[rust-windows]: https://github.com/rust-lang/rust/blob/1.90.0/library/std_detect/src/detect/os/windows/aarch64.rs
+
+The broader [hosted CPU platform review](hosted-cpu-execution.md#platform-audit-and-availability)
+uses the same detection foundation. This SHA-1 review does not confer new
+qualification on that separate API or on its hardened consumers.
 
 ## Reproducible checks
 

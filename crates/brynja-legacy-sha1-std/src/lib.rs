@@ -1,12 +1,18 @@
 //! Optional host selection for collision-broken legacy SHA-1.
 //!
-//! Detection is observational, not execution authority. No backend is admitted;
+//! The default API is observational, not execution authority. No candidate is admitted;
 //! opportunistic operations use the portable leaf, and required acceleration
 //! fails before hashing. The safe adapter cannot mint the migration authority
 //! needed by the experimental instruction sessions. No global registration,
 //! affinity changes, process policy, allocation or external dependency is added.
+//! The separate default-off `runtime-execution` feature exposes operational
+//! public-data selection in [`execution`], with platform-qualified authority.
 
 use brynja_legacy_sha1::{BitString, Sha1, Sha1Backend, Sha1Error};
+
+/// Explicit operational selection; the default observational API is unchanged.
+#[cfg(feature = "runtime-execution")]
+pub mod execution;
 
 /// Public, non-authorizing reason for portable selection.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

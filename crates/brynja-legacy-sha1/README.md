@@ -27,11 +27,19 @@
 
 First-party, allocation-free `no_std` legacy SHA-1 for explicit compatibility.
 
+Default-off `execution` APIs add ordinary public-data SHA/SSE2 and NEON/SHA1
+instruction routes for target-specialized binaries, with explicit selection,
+streaming, byte/bit one-shot hashing and permanent owner revocation. The separate
+host adapter supplies supported AArch64 system authority. Development native
+qualification is pending; hardened acceleration is not provided. See the
+[operational API](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-execution.md).
+
 ## Cryptography Verification Status
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
+| Opt-in ordinary acceleration | 🚧 In progress; native qualification pending | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -109,8 +117,8 @@ dependencies. Aborting does not run Drop. See the
 
 No guarantee covers registers, compiler-created copies/spills, caches, moves,
 swap, DMA, dumps, `mem::forget`, abort, termination, power loss, or caller-owned
-input/output copies. No pinned/locked memory is supplied. Production execution remains portable;
-separate candidates are described below.
+input/output copies. No pinned/locked memory is supplied. Hardened execution remains portable;
+ordinary operational routes and separate candidates are described below.
 
 ## Verification and links
 
@@ -128,14 +136,23 @@ See the workspace toolchain policy for supported Rust versions. MIT OR Apache-2.
 
 ## Hardware and SIMD
 
+The default-off `execution` feature exposes `execution::Executor` with explicit
+portable, prefer and require modes. Target-specialized binaries can execute
+x86 SHA/SSE2 or AArch64 SHA1/NEON; borrowed streams support byte updates and
+consuming arbitrary-bit finalization. Hosted AArch64 authority is available
+through the adapter's separate `runtime-execution` feature. Generic x86 hosted
+require mode remains unavailable. These are ordinary, public-data-only routes;
+they do not establish hardened cleanup or collision resistance.
+
 The `cpu` feature adds isolated x86/x86_64 SHA and AArch64 SHA1 candidates,
 `Sha1BackendSession`, and consuming `AcceleratedSha1` byte/bit streaming APIs.
-Ordinary builds reject all candidates before instructions execute. Hardware
+The original candidate constructors reject ordinary builds before instructions execute. Hardware
 schedules/registers/spills are not cleanup-qualified; accelerated types are for
 public data only and cannot implement the sealed hardened capability.
 `HardenedSha1` remains portable. The separate `brynja-legacy-sha1-std` adapter
-reports capabilities and portable fallback; required acceleration fails closed.
-Feature unification can expose CPU types, not authorize execution. Dedicated
+retains its default observational API and portable fallback; that API's required
+acceleration fails closed. Its separate operational module is described above.
+Feature unification can expose CPU types, not mint a platform authority. Dedicated
 non-production evidence requires both `cpu-evidence` and the separate
 `brynja_sha1_cpu_evidence` cfg; the older shared evidence cfg cannot enable it.
 Never persist evidence flags in an application's build environment. A plain

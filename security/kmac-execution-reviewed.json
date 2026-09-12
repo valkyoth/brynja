@@ -182,8 +182,8 @@
     "scripts/sha3/check-cshake-differential.py": "0e936f96b8a8bb7295055694cf751353207c83d78f5fad95c7184e9148c16d39",
     "scripts/sha3/check-sha3-bit-differential.py": "c796b542560131229a7ea933c94de944d687856fc84be678ef7e4238c2fb07da",
     "scripts/tag_gate.sh": "eb66c40848b936d61d6f740932e8ec66922e6955e92da128a7517ffd31b4b61b",
-    "scripts/zeroization/check-zeroization-miri.sh": "4b3dea3ce1150aaaded45cb68fc014904f10f9a3123b737c06ff9f4bdfbc8efd",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "c0426c75ff3ad651a1c27daeaf6fec9bef4f45905fdce883dc935121c0ce4ab4"
+    "scripts/zeroization/check-zeroization-miri.sh": "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"
   },
   "status": "implementation-review; native-qualification-pending",
   "version": "0.24.38"

@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CRATE = 'crates/brynja-legacy-sha1/'
-FILES = ('compress.rs', 'engine.rs', 'hardened.rs', 'lib.rs', 'ordinary.rs', 'output.rs', 'owner.rs')
+FILES = ('compress.rs', 'engine.rs', 'hardened.rs', 'lib.rs', 'ordinary.rs', 'output.rs', 'owner.rs', 'execution.rs')
 TOKENS = {
     'lib.rs': ('#![no_std]', 'collision-broken', 'No independent cryptographic review or FIPS validation'),
     'engine.rs': ('current.checked_add(additional)', 'bytes.checked_mul(8)', 'admit_bytes(owner.bits(), input.len())?', 'admit_bits(owner.bits(), additional)?', 'tail.split()', 'if offset >= 56'),
@@ -55,7 +55,7 @@ def validate(root=ROOT, hashes=True):
         if f'clear_owned_region(&mut self.{region})' not in owner:
             raise ValueError('SHA-1 private region is not cleared')
     manifest = tomllib.loads((root / CRATE / 'Cargo.toml').read_text())
-    if set(manifest['dependencies']) != {'brynja-core', 'brynja-hash-core'} or manifest['features'] != {'default': [], 'cpu': [], 'cpu-evidence': []}:
+    if set(manifest['dependencies']) != {'brynja-core', 'brynja-hash-core'} or manifest['features'] != {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu']}:
         raise ValueError('SHA-1 dependency or feature boundary')
     for path, token in (
         ('scripts/sha1/check-sha1.py', "'--release'"),

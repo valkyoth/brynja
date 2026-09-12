@@ -24,5 +24,5 @@
 "scripts/sha3/check-sha3-execution.py" = "5df53f820cb07fd2803e820c86b682985607e58d5c8afd3f404c7650a5fc0ad5"
 "scripts/sha3/cshake_execution_regressions.py" = "49618ad293e423eb0948904bc14cf689815c1c4d06516db068e915d647b0acb6"
 "scripts/sha3/cshake_execution_vectors.py" = "4570dc3f407eea2702cdd100cc0047333be29e8328a3744be7e84ab92d419d99"
-"scripts/zeroization/check-zeroization-miri.sh" = "4b3dea3ce1150aaaded45cb68fc014904f10f9a3123b737c06ff9f4bdfbc8efd"
-"scripts/zeroization/check-zeroization-sanitizer.sh" = "c0426c75ff3ad651a1c27daeaf6fec9bef4f45905fdce883dc935121c0ce4ab4"
+"scripts/zeroization/check-zeroization-miri.sh" = "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1"
+"scripts/zeroization/check-zeroization-sanitizer.sh" = "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"

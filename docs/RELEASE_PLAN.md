@@ -4503,7 +4503,7 @@ Exit criteria:
 
 ### v0.24.40 - ParallelHash Accelerated Scheduling
 
-Status: in progress
+Status: released
 
 Plan scope: Connect all four ParallelHash identities to hardened accelerated leaf/root hashing and bounded serial, caller-scheduled and optional std-threaded APIs, preserving work budgets and worker-result provenance.
 
@@ -4543,7 +4543,9 @@ Exit criteria:
 
 ### v0.24.41 - Legacy SHA-1 Operational Acceleration
 
-Status: planned
+Status: awaiting pentest
+
+See [operational SHA-1](legacy-sha1-execution.md). Exceptional pentest and fresh native qualification remain pending.
 
 Plan scope: Enable reviewed x86 SHA and AArch64 SHA1 static and hosted ordinary SHA-1 byte/bit streaming and one-shot APIs with explicit legacy-only dependency and feature paths.
 

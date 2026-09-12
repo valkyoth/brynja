@@ -166,6 +166,10 @@ def select_repository(
             # Tests of the compiler checker, not runtime or Miri input. These
             # and the actual compiler gate are mandatory baseline commands.
             'scripts/cryptography/test-secret-owner-compiler.py',
+            # Documentation assertions only. check-static-execution --policy-only
+            # is a mandatory baseline command and runs these semantic regressions;
+            # changing a displayed unsafe-module count is not a memory campaign.
+            'scripts/cpu/static_execution_docs.py',
             'security/release-signers',
             'scripts/zeroization/miri_scope.py', 'scripts/zeroization/scope_inputs.py',
             'scripts/zeroization/test-miri-scope.py', 'scripts/zeroization/test-scope-inputs.py',

@@ -6,6 +6,10 @@ python3 scripts/sha2/check-sha2-hardened-asan.py
 python3 scripts/sha3/check-keccak-hardened-asan.py
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
+    -p brynja-legacy-sha1 --features execution --test execution \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
     -p brynja-hash-sha3 --features static-execution --test cshake_execution \
     --target x86_64-unknown-linux-gnu
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \

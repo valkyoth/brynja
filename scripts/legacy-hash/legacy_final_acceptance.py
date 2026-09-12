@@ -10,6 +10,12 @@ MAX_INPUT_BYTES = 4 * 1024 * 1024
 FIXTURE = 'assurance/legacy-hash-final'
 FROZEN = 'scripts/legacy-hash/frozen-v02420.toml'
 SNAPSHOT = 'scripts/legacy-hash/native-source-snapshot.toml'
+SHA1_DELTA = 'scripts/legacy-hash/sha1-operational-delta.toml'
+SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
+    'Cargo.toml', 'src/lib.rs', 'src/cpu/mod.rs', 'src/cpu/session.rs', 'src/cpu/session/tests.rs',
+    'src/execution.rs', 'src/execution/ownership.rs', 'tests/execution.rs')) + tuple(
+    'crates/brynja-legacy-sha1-std/' + name for name in (
+        'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs'))
 HASHES = 'scripts/legacy-hash/final-reviewed.toml'
 CLAIMS = FIXTURE + '/claims.toml'
 PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-legacy-sha1',
@@ -55,7 +61,7 @@ def sha(text):
 
 
 def inventory(root=ROOT):
-    files = set(FROZEN_FILES) | {FROZEN, SNAPSHOT, CLAIMS, 'docs/legacy-hash-final-acceptance.md',
+    files = set(FROZEN_FILES) | set(SHA1_CHANGED) | {FROZEN, SNAPSHOT, SHA1_DELTA, CLAIMS, 'docs/legacy-hash-final-acceptance.md',
         'scripts/checks.sh', 'scripts/ci/check-rust-version-matrix.sh',
         'scripts/assurance/check-bare-metal.sh', '.github/workflows/ci.yml',
         'scripts/zeroization/check-zeroization-miri.sh',
@@ -98,7 +104,17 @@ def validate_native(root):
     if sha(snapshot) != 'a4203f895840b395f23274c5f296394f9123d65e73be387ea73e59f3be4768e7':
         raise ValueError('historical source snapshot changed; reopen evidence review')
     for family, record in tomllib.loads(snapshot).items():
-        expected = record['files']
+        expected = dict(record['files'])
+        if family == 'sha1':
+            # Old captures cover the immutable old snapshot only. The new
+            # authority surface has an explicit, separately reviewed delta;
+            # it needs fresh native qualification, never historical reuse.
+            delta = tomllib.loads(read(root, SHA1_DELTA))
+            if (set(delta) != {'version', 'native', 'files'} or delta['version'] != '0.24.41'
+                or delta['native'] != 'fresh operational evidence required separately'
+                or set(delta['files']) != set(SHA1_CHANGED)):
+                raise ValueError('SHA-1 operational review cannot widen historical evidence')
+            expected.update(delta['files'])
         paths = set()
         for package in ('brynja-core', 'brynja-hash-core', f'brynja-legacy-{family}', f'brynja-legacy-{family}-std'):
             paths.add(f'crates/{package}/Cargo.toml')

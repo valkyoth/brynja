@@ -1,14 +1,15 @@
 # Unsafe Rust Policy
 
-Status: seventeen exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: eighteen exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventeen exact modules: the private core volatile clearer; the
+Rust in only eighteen exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
 isolated legacy SHA-1 and MD5 session/x86/AArch64 candidate modules; plus the
-runtime owner constructor and its private hosted platform bridge. Each
+runtime owner constructor and its private hosted platform bridge; and the
+separate legacy SHA-1 hosted platform bridge. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every
@@ -213,6 +214,16 @@ selected `brynja-sanitization` adapter and does not authorize additional unsafe
 code or replace Brynja's mandatory v0.11.0 primitive.
 
 ## v0.24.21 legacy SHA-1 candidates
+
+The v0.24.41 default-off operational API reuses the reviewed kernels through
+a separate KAT-gated authority. Its additional exact unsafe boundary is
+`crates/brynja-legacy-sha1-std/src/execution/platform.rs`: the allowlisted
+AArch64 platform feature ABI authorizes the leaf's unsafe constructor. A
+current-core x86 CPUID observation cannot authorize hosted execution. Static
+binaries instead require the full deployment-wide target-feature bundle.
+Neither route authorizes secret-bearing input; see the
+[operational contract](legacy-sha1-execution.md). The candidate entry points
+described below retain their original admission gates.
 
 Three additional hash-bound exception modules live only under
 `crates/brynja-legacy-sha1/src/cpu`: `session.rs`, `x86_sha1.rs`, and

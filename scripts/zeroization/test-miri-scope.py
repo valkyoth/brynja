@@ -160,7 +160,8 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 66
+    assert status == 0 and len(commands) == 67
+    assert sum('--features execution --test execution revocation_empty_updates_capacity_and_finalization_fail_closed' in c for c in commands) == 1
     assert [c.split(" -p ", 1)[1] for c in commands if "-p brynja-hash-parallel" in c] == parallel
     assert sum('--features sponge-execution --lib sponge::tests::portable_sponge' in c for c in commands) == 1
     assert sum(c.endswith('--features static-execution --lib static_authority') for c in commands) == 1

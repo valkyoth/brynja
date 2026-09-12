@@ -27,6 +27,8 @@ mod compress;
 #[cfg(feature = "cpu")]
 mod cpu;
 mod engine;
+#[cfg(feature = "execution")]
+pub mod execution;
 mod hardened;
 mod ordinary;
 mod output;

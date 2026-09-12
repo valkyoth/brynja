@@ -45,8 +45,8 @@
     "docs/hosted-cpu-execution.md": "ee95ea12465819e9d071196d39497b7245b94589f3060b3c48e48af960fe978a",
     "scripts/checks.sh": "e0f510644d15466e62f36e90cf789a31060656ace3bae6c15f8a34d08bbb98ba",
     "scripts/cpu/check-hosted-execution.py": "9ef366acd3f421ff5fcf17cc46da25524ddc8ada763e6ac36931e9b7a2d86c60",
-    "scripts/repository/unsafe_policy.py": "5813f7eaf22de6255e0d51a08253d8bf355b320d4e14ca10bc267e3405d938bc",
-    "scripts/zeroization/check-zeroization-miri.sh": "4b3dea3ce1150aaaded45cb68fc014904f10f9a3123b737c06ff9f4bdfbc8efd",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "c0426c75ff3ad651a1c27daeaf6fec9bef4f45905fdce883dc935121c0ce4ab4"
+    "scripts/repository/unsafe_policy.py": "4f88c7631762be65d2fa1058074d0e4b5bb8ca7ff335e0630948c6eb721cb21a",
+    "scripts/zeroization/check-zeroization-miri.sh": "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"
   }
 }

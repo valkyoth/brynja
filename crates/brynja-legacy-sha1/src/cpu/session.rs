@@ -62,6 +62,14 @@ impl Sha1BackendSession {
         {
             return Err(Sha1BackendError::NotAdmitted);
         }
+        Self::startup(backend, revalidate, expected)
+    }
+
+    fn startup(
+        backend: Sha1Backend,
+        revalidate: fn(Sha1Backend) -> bool,
+        expected: [u32; 5],
+    ) -> Result<Self, Sha1BackendError> {
         if !revalidate(backend) {
             return Err(Sha1BackendError::MissingFeatures);
         }
@@ -152,6 +160,64 @@ impl Sha1BackendSession {
         let _ = (state, block);
         self.healthy.set(false);
         Err(Sha1BackendError::WrongArchitecture)
+    }
+}
+
+/// Opt-in operational owner, separate from experimental candidate admission.
+/// Borrowed operations cannot outlive it. Reports cannot mint an owner.
+/// No raw state or compression entry point is exposed through this type.
+#[cfg(feature = "execution")]
+pub struct ExecutionAuthority {
+    session: Sha1BackendSession,
+}
+
+#[cfg(feature = "execution")]
+impl ExecutionAuthority {
+    /// Requires a binary compiled for the complete SHA/SSE2 or SHA1/NEON bundle.
+    /// Deployment must preserve that bundle on every CPU running this binary.
+    pub fn for_compiled_target() -> Result<Self, Sha1BackendError> {
+        let backend = compiled_backend().ok_or(Sha1BackendError::MissingFeatures)?;
+        Self::create(backend, compiled_features)
+    }
+
+    /// Accepts a platform's process-wide execution contract, not a CPU report.
+    ///
+    /// # Safety
+    /// The caller must establish the complete feature bundle on every CPU that
+    /// can execute this owner and its operations, including hotplug and VM
+    /// migration, for their entire lifetime. A current-core CPUID test is not
+    /// sufficient. No input processed with this ordinary owner may be secret.
+    pub unsafe fn from_platform(backend: Sha1Backend) -> Result<Self, Sha1BackendError> {
+        Self::create(backend, |_| true)
+    }
+
+    fn create(
+        backend: Sha1Backend,
+        revalidate: fn(Sha1Backend) -> bool,
+    ) -> Result<Self, Sha1BackendError> {
+        require_architecture(backend)?;
+        let session = Sha1BackendSession::startup(backend, revalidate, ABC)?;
+        session.ensure_healthy()?;
+        Ok(Self { session })
+    }
+
+    /// Current exact kernel identity; not an execution capability.
+    pub const fn backend(&self) -> Sha1Backend {
+        self.session.backend()
+    }
+
+    /// Current irreversible owner health.
+    pub fn health(&self) -> Sha1BackendHealth {
+        self.session.health()
+    }
+
+    /// Permanently revokes this owner and every stream borrowing it.
+    pub fn quarantine(&self) {
+        self.session.healthy.set(false);
+    }
+
+    pub(crate) fn session(&self) -> &Sha1BackendSession {
+        &self.session
     }
 }
 

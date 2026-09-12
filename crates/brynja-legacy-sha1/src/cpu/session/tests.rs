@@ -1,6 +1,42 @@
 use super::*;
 use crate::{AcceleratedSha1, BitString, Sha1, owner::Sha1Owner, sha1, sha1_bits};
 
+#[test]
+#[cfg(feature = "execution")]
+fn operational_startup_and_revalidation_fail_closed() {
+    let backend = if cfg!(target_arch = "aarch64") {
+        Sha1Backend::Aarch64Sha1
+    } else {
+        Sha1Backend::X86Sha
+    };
+    assert!(ExecutionAuthority::create(backend, |_| false).is_err());
+    let Some(backend) = compiled_backend() else {
+        return;
+    };
+    // Static target features authorize this test, not an evidence-only cfg.
+    let failed = Sha1BackendSession::startup(backend, compiled_features, [0; 5]);
+    assert!(failed.is_ok());
+    if let Ok(session) = failed {
+        assert_eq!(session.health(), Sha1BackendHealth::Quarantined);
+        assert!(
+            crate::execution::Executor::with_authority(ExecutionAuthority { session }).is_err()
+        );
+    }
+    let owner = ExecutionAuthority::for_compiled_target();
+    assert!(owner.is_ok());
+    if let Ok(mut owner) = owner {
+        owner.session.revalidate = |_| false;
+        let mut state = IV;
+        assert_eq!(
+            owner.session.compress(&mut state, &[0; 64]),
+            Err(Sha1BackendError::MissingFeatures)
+        );
+        assert_eq!(state, IV);
+        assert_eq!(owner.health(), Sha1BackendHealth::Quarantined);
+        assert!(crate::execution::Executor::with_authority(owner).is_err());
+    }
+}
+
 fn session() -> Option<Sha1BackendSession> {
     compiled_backend()?;
     let result = Sha1BackendSession::for_compiled_target();

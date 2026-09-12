@@ -36,14 +36,20 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
+| Opt-in hosted ordinary acceleration | 🚧 In progress; native qualification pending | ❌ Not independently verified |
 
 ## Hardware and SIMD
 
-No SHA-1 backend is admitted. Detection only reports possible hardware:
-opportunistic calls use portable SHA-1; `required()` fails closed. A thread-local
-feature check does not establish migration safety. This adapter deliberately
-cannot turn a feature report into an instruction-execution capability, even in
-evidence builds. Safe runtime acceleration awaits reviewed execution authority.
+The default `RuntimeSha1Backend` remains observational: opportunistic calls use
+portable SHA-1 and `required()` fails closed. The separate default-off
+`runtime-execution` feature exposes `execution::select(Mode)` for ordinary
+public data. Supported AArch64 system feature APIs can authorize the SHA1/NEON
+route; generic x86 required mode fails, since current-core CPUID alone cannot
+establish migration safety. Specialized x86 binaries use the leaf's explicit
+static route. No feature report can be converted into an execution authority.
+Fresh operational native qualification remains pending. See the
+[operational API](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-execution.md)
+for selection, streaming, byte/bit hashing and ownership examples.
 
 ## Use
 

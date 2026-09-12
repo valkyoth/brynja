@@ -14,7 +14,12 @@ def main():
     for command in (
         ['python3','scripts/sha1/test-sha1-evidence-builds.py'],
         ['python3','scripts/sha1/test-sha1-native-capture.py'],
+        ['python3','scripts/sha1/test-sha1-execution-capture.py'],
         ['python3','scripts/sha1/check-sha1-package.py','--cpu'],
+        ['python3','scripts/sha1/check-sha1-package.py','--execution'],
+        ['cargo','test','--locked','-p','brynja-legacy-sha1','--features','execution','--test','execution','--lib'],
+        ['cargo','test','--locked','-p','brynja-legacy-sha1','--features','execution','--doc'],
+        ['cargo','test','--locked','-p','brynja-legacy-sha1-std','--features','runtime-execution'],
         ['cargo','test','--locked','-p','brynja-legacy-sha1','--features','cpu','--test','cpu'],
         ['cargo','test','--locked','-p','brynja-legacy-sha1','--features','cpu','--lib','cpu::'],
         ['cargo','test','--locked','-p','brynja-legacy-sha1-std'],

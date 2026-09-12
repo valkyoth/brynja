@@ -12,6 +12,7 @@ class = "host-adapter"
 publish = "crates-io"
 required = ["brynja-legacy-sha1"]
 optional = {}
+features = ["runtime-execution"]
 
 [packages.brynja-legacy-md5-std]
 class = "host-adapter"
@@ -170,7 +171,7 @@ class = "legacy-engine"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-core"]
 optional = {}
-features = ["cpu", "cpu-evidence"]
+features = ["cpu", "cpu-evidence", "execution"]
 
 [packages.brynja-legacy-pct]
 class = "legacy-engine"

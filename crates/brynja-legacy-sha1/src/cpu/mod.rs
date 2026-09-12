@@ -5,6 +5,8 @@ mod stream;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod x86_sha1;
 
+#[cfg(feature = "execution")]
+pub use session::ExecutionAuthority;
 pub use session::Sha1BackendSession;
 pub use stream::AcceleratedSha1;
 

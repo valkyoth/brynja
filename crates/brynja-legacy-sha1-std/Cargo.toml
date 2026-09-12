@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+runtime-execution = ["brynja-legacy-sha1/execution"]
 
 [dependencies]
 brynja-legacy-sha1 = { path = "../brynja-legacy-sha1", version = "=0.1.0", features = ["cpu"] }

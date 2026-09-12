@@ -114,7 +114,8 @@ ROWS = {
         "| Cryptographic algorithms | Not this crate's responsibility | Not applicable |"
     ],
     "crates/brynja-legacy-sha1/README.md": [
-        "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |"
+        "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |",
+        "| Opt-in ordinary acceleration | 🚧 In progress; native qualification pending | ❌ Not independently verified |"
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
         "| Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |",
@@ -127,7 +128,8 @@ ROWS = {
         "| Handshake, record encryption and authenticated connections | ❌ Not implemented | ❌ No |"
     ],
     "crates/brynja-legacy-sha1-std/README.md": [
-        "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |"
+        "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |",
+        "| Opt-in hosted ordinary acceleration | 🚧 In progress; native qualification pending | ❌ Not independently verified |"
     ],
     "crates/brynja-dtls/README.md": [
         "| DTLS 1.2/1.3 engines | ❌ Not implemented | ❌ No |"

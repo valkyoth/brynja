@@ -19,7 +19,7 @@ Current generated planning coverage is 2157 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.39 signed. Development of v0.24.40 adds default-off [ParallelHash execution](parallelhash-execution.md), a [detached verification runner](detached-verification.md), and capability-focused crate READMEs with compiled examples. Scoped development checks, local detached Miri/Kani/ASan collection/reuse, the implementation owner pentest/retest, reviewed three-platform native ParallelHash collection and the Linux SSH-disconnect ASan hand-off passed. The user-requested project-owned release-tooling retest also passed; final current-snapshot qualification and GitHub checks remain pending. The signed v0.24.39 baseline is d0b8a784. No new crates.io publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.40 signed. Development of v0.24.41 adds default-off [ordinary legacy SHA-1 execution](legacy-sha1-execution.md), with static target-feature authority and a separate hosted AArch64 adapter. Exceptional pentest/retest, fresh native qualification and final release checks remain pending. Hardened secret-bearing SHA-1 acceleration remains the next milestone. The signed v0.24.40 baseline is 62f35964. No new crates.io publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family
@@ -27,7 +27,7 @@ portable closure is complete at v0.24.29; no independent verification or FIPS va
 v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
 and batch public acceptance using the frozen v0.24.20 contract. See
 [final legacy acceptance](legacy-hash-final-acceptance.md). All instruction
-candidates for those legacy APIs remain unadmitted and hardened legacy execution remains portable-only.
+candidates for those original legacy APIs remain unadmitted and hardened legacy execution remains portable-only. The separate opt-in SHA-1 operational authority is described above; it does not change those candidate gates.
 Public checkpoints now use explicit closing patches: v0.25.2, v0.30.2 and the
 [registered successors](../scripts/release/checkpoints.toml). Earlier milestone
 narratives below describe their status at the time, not today's status tables.

@@ -187,8 +187,8 @@
     "scripts/tuplehash/test-tuplehash-execution-policy.py": "a184759f818bb29d240e7b3899e4683e46d22c70a9993d2b02338351a51384d9",
     "scripts/tuplehash/tuplehash_execution_native.py": "0ca9e45a262d61f5f1e696613015f8eaf53ef691135caf715255e5890a0a5649",
     "scripts/tuplehash/tuplehash_execution_policy.py": "e8a15baa9534a1129e45d1060a4f593d6070bfb1eb11604df02a69cdb2fcd7a6",
-    "scripts/zeroization/check-zeroization-miri.sh": "4b3dea3ce1150aaaded45cb68fc014904f10f9a3123b737c06ff9f4bdfbc8efd",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "c0426c75ff3ad651a1c27daeaf6fec9bef4f45905fdce883dc935121c0ce4ab4"
+    "scripts/zeroization/check-zeroization-miri.sh": "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"
   },
   "status": "implementation-review; native-qualification-pending",
   "version": "0.24.39"

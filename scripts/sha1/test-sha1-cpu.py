@@ -8,7 +8,23 @@ import cpu_policy as policy
 def main():
     policy.validate()
     c = policy.CPU
+    e = 'crates/brynja-legacy-sha1/src/execution.rs'
+    p = policy.ADAPTER+'src/execution/platform.rs'
     cases = [
+        (e, 'self.revoked.set(true);', 'self.revoked.set(false);'),
+        (e, 'owner.quarantine();', ''),
+        (e, 'Err(Sha1BackendError::MissingFeatures) if mode == Mode::Prefer', 'Err(_) if mode == Mode::Prefer'),
+        (e, 'self.state.take();\n            return Err(error);', 'return Err(error);'),
+        (e, 'pub fn finalize(mut self)', 'pub fn finalize(&mut self)'),
+        (e, 'pub fn finalize_bits(mut self,', 'pub fn finalize_bits(&mut self,'),
+        (c+'session.rs', 'let session = Sha1BackendSession::startup(backend, revalidate, ABC)?;\n        session.ensure_healthy()?;', 'let session = Sha1BackendSession::startup(backend, revalidate, ABC)?;'),
+        (p, 'availability().map_err(Error::Unavailable)?;', ''),
+        (p, 'target_os = "windows"', 'target_os = "freebsd"'),
+        (p, '&& std::arch::is_aarch64_feature_detected!("sha2")', ''),
+        (policy.ADAPTER+'src/execution/mod.rs', 'Err(Error::Unavailable(_)) if mode == Mode::Prefer', 'Err(_) if mode == Mode::Prefer'),
+        ('scripts/sha1/check-sha1-cpu.py', "['python3','scripts/sha1/check-sha1-package.py','--execution'],", ''),
+        ('scripts/zeroization/check-zeroization-miri.sh', 'run_miri -p brynja-legacy-sha1 --features execution --test execution revocation_empty_updates_capacity_and_finalization_fail_closed', ''),
+        ('scripts/zeroization/check-zeroization-sanitizer.sh', '-p brynja-legacy-sha1 --features execution --test execution', '-p brynja-legacy-sha1 --test cpu'),
         (c+'session.rs', 'cfg!(all(feature = "cpu-evidence", brynja_sha1_cpu_evidence))', 'cfg!(any(test, all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)))'),
         (c+'session.rs', 'all(feature = "cpu-evidence", brynja_sha1_cpu_evidence)', 'brynja_sha1_cpu_evidence'),
         (c+'session.rs', 'brynja_sha1_cpu_evidence', 'brynja_cpu_evidence'),

@@ -10,6 +10,13 @@ ADAPTER = 'crates/brynja-legacy-sha1-std/'
 SOURCES = ('mod.rs','session.rs','stream.rs','x86_sha1.rs','aarch64_sha1.rs',
            'session/tests.rs','stream/tests.rs')
 BOUND = [CPU + name for name in SOURCES] + [
+    'crates/brynja-legacy-sha1/src/execution.rs',
+    'crates/brynja-legacy-sha1/src/execution/ownership.rs',
+    'crates/brynja-legacy-sha1/tests/execution.rs',
+    ADAPTER+'src/execution/mod.rs', ADAPTER+'src/execution/platform.rs',
+    ADAPTER+'tests/execution.rs', 'docs/legacy-sha1-execution.md',
+    'scripts/sha1/capture-sha1-execution-native.py',
+    'scripts/sha1/test-sha1-execution-capture.py',
     'crates/brynja-legacy-sha1/Cargo.toml', 'crates/brynja-legacy-sha1/tests/cpu.rs',
     ADAPTER+'Cargo.toml', ADAPTER+'src/lib.rs', ADAPTER+'README.md',
     'assurance/sha1-cpu-public-api/Cargo.toml', 'assurance/sha1-cpu-public-api/Cargo.lock',
@@ -49,6 +56,40 @@ def validate(root=ROOT, hashes=True):
                   '#[cfg(all(target_arch = "aarch64", target_endian = "little"))]'):
         require(session,token)
     require(identity,'pub const fn is_admitted(self) -> bool { false }')
+    require(session.split('fn construct(', 1)[1].split('fn startup(', 1)[0], 'require_architecture(backend)?;')
+    for token in ('pub struct ExecutionAuthority', 'pub unsafe fn from_platform',
+                  'let session = Sha1BackendSession::startup(backend, revalidate, ABC)?;',
+                  'session.ensure_healthy()?;', 'require_architecture(backend)?;',
+                  'pub(crate) fn session(&self)'):
+        require(session, token)
+    operation = sources['crates/brynja-legacy-sha1/src/execution.rs']
+    for token in ('pub struct PublicData(())', 'self.executor.ready()?', 'self.state.take()',
+                  'Err(Sha1BackendError::MissingFeatures) if mode == Mode::Prefer',
+                  'pub fn finalize(mut self)', 'pub fn finalize_bits(mut self,'):
+        require(operation, token)
+    create = session.split('fn create(', 1)[1].split('/// Current exact', 1)[0]
+    require(create, 'require_architecture(backend)?; let session = Sha1BackendSession::startup(backend, revalidate, ABC)?; session.ensure_healthy()?; Ok(Self { session })')
+    for method in ('start', 'message_bits', 'check_additional_bits', 'check_additional_bytes', 'finalize', 'finalize_bits'):
+        body = operation.split('pub fn '+method+'(', 1)[1].split('pub fn ', 1)[0]
+        require(body, 'self.ready()?' if method == 'start' else 'self.executor.ready()?')
+    require(operation, 'if let Err(error) = self.executor.ready() { self.state.take(); return Err(error); }')
+    require(operation, 'self.revoked.set(true);')
+    require(operation, 'owner.quarantine();')
+    require(sources[ADAPTER+'src/execution/mod.rs'], 'Err(Error::Unavailable(_)) if mode == Mode::Prefer => Ok(Executor::portable()), Err(error) => Err(error),')
+    platform = sources[ADAPTER+'src/execution/platform.rs']
+    require(platform, 'availability().map_err(Error::Unavailable)?;')
+    require(platform, 'unsafe { Authority::from_platform(Sha1Backend::Aarch64Sha1) }')
+    require(platform, 'if !cfg!(all(target_arch = "aarch64", target_endian = "little", any(target_os = "linux", target_os = "android", target_os = "macos", target_os = "ios", target_os = "windows"))) { return Err(Unavailable::UnsupportedPlatform); }')
+    require(platform, 'std::arch::is_aarch64_feature_detected!("neon") && std::arch::is_aarch64_feature_detected!("sha2")')
+    require(sources['scripts/sha1/check-sha1-cpu.py'], "['python3','scripts/sha1/check-sha1-package.py','--execution']")
+    if 'is_x86_feature_detected!' in platform:
+        raise ValueError('current-core x86 detection cannot establish hosted authority')
+    for path, expected in (
+        ('crates/brynja-legacy-sha1/Cargo.toml', {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu']}),
+        (ADAPTER+'Cargo.toml', {'default': [], 'runtime-execution': ['brynja-legacy-sha1/execution']}),
+    ):
+        if tomllib.loads(sources[path])['features'] != expected:
+            raise ValueError('operational SHA-1 must remain explicit and default-off')
     require(sources['scripts/sha1/check-sha1-cpu.py'], "'scripts/sha1/test-sha1-evidence-builds.py'")
     if 'brynja_cpu_evidence' in session:
         raise ValueError('shared evidence cfg must not enable legacy SHA-1')
@@ -96,6 +137,8 @@ def validate(root=ROOT, hashes=True):
                         ('scripts/tag_gate.sh','scripts/sha1/check-sha1-cpu-qemu.sh'),
                         ('scripts/zeroization/check-zeroization-miri.sh','run_miri -p brynja-legacy-sha1 --features cpu --lib quarantined_model_clears_all_regions_without_instructions'),
                         ('scripts/zeroization/check-zeroization-miri.sh','run_miri -p brynja-legacy-sha1 --features cpu --test cpu'),
+                        ('scripts/zeroization/check-zeroization-miri.sh','run_miri -p brynja-legacy-sha1 --features execution --test execution revocation_empty_updates_capacity_and_finalization_fail_closed'),
+                        ('scripts/zeroization/check-zeroization-sanitizer.sh','-p brynja-legacy-sha1 --features execution --test execution'),
                         ('scripts/zeroization/check-zeroization-sanitizer.sh','-p brynja-legacy-sha1 --features cpu --lib --test cpu')]:
         require((root/path).read_text(),token)
     if hashes:

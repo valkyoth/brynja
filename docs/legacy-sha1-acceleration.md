@@ -1,5 +1,9 @@
 # Legacy SHA-1 instruction candidates (v0.24.21)
 
+This document describes the original evidence-only `cpu` candidate API. The
+separate default-off [operational execution API](legacy-sha1-execution.md) now
+provides normal-build authority and does not change this candidate gate.
+
 SHA-1 remains collision-broken and **In progress** through v0.24.23. This
 milestone adds ordinary public-data hardware candidates, not approved execution.
 No modern facade, TLS, PKIX, FIPS or hardened owner gains a SHA-1 CPU route.

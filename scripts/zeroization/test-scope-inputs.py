@@ -155,6 +155,16 @@ def git_tests():
             return b'' if args[0] == 'verify-tag' else real(path, *args)
         with patch.object(inputs, 'git', authenticated):
             assert scope.select_repository('v0.24.19', root) == (False, ())
+            documentation_test = root / 'scripts/cpu/static_execution_docs.py'
+            documentation_test.parent.mkdir(parents=True)
+            documentation_test.write_text('# documentation-only regression change\n')
+            assert scope.select_repository('v0.24.19', root) == (False, ())
+            runtime = root / 'crates/brynja-crypto-cpu/src/static_execution/mod.rs'
+            runtime.parent.mkdir(parents=True)
+            runtime.write_text('// actual execution boundary change\n')
+            assert 'static_cpu' in scope.select_repository('v0.24.19', root)[1]
+            runtime.unlink()
+            documentation_test.unlink()
             registry.write_bytes(large_register.replace(b'aaa', b'bbb', 1))
             assert scope.select_repository('v0.24.19', root) == (False, ())
             with patch.object(inputs, 'GENERATED_REGISTER_LIMIT', inputs.LIMIT):

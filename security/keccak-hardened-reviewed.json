@@ -164,8 +164,8 @@
     "scripts/sha3/test-keccak-hardened-native.py": "a1ba3eda53c85f18d18d06c0a056bb993c949c3ae75921bc6fe918f78a6eca1e",
     "scripts/sha3/test-keccak-hardened.py": "2f61095b204a30405992e8c577c52a59885465077035cdb9c51eff80bba6b0ff",
     "scripts/tag_gate.sh": "eb66c40848b936d61d6f740932e8ec66922e6955e92da128a7517ffd31b4b61b",
-    "scripts/zeroization/check-zeroization-miri.sh": "c4194bd80c76a3cdd60567d454dfc257859ceced5b472b9cf912b657dc06cfca",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "4b8e09ba1ddb2b0beff496e1b5b1dfc06c6d517cc1a488c144a29b8b94b0fdf9"
+    "scripts/zeroization/check-zeroization-miri.sh": "4b3dea3ce1150aaaded45cb68fc014904f10f9a3123b737c06ff9f4bdfbc8efd",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "c0426c75ff3ad651a1c27daeaf6fec9bef4f45905fdce883dc935121c0ce4ab4"
   },
   "status": "implementation-review; native-qualification-pending",
   "version": "0.24.37"

@@ -15,6 +15,27 @@ def main():
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
+        read_review = metadata.verifier_review
+        for review, key in metadata.VERIFIER_REVIEWS:
+            for script in metadata.VERIFIERS:
+                for missing in (False, True):
+                    hashes = dict(read_review(review, key))
+                    if missing:
+                        del hashes[script]
+                    else:
+                        hashes[script] = '0' * 64
+
+                    def altered(path, selected_key):
+                        return hashes if path == review else read_review(path, selected_key)
+
+                    with patch.object(metadata, 'verifier_review', side_effect=altered):
+                        try:
+                            metadata.check_all()
+                        except ValueError as error:
+                            assert 'verifier review hash drift' in str(error)
+                            assert review in str(error) and script in str(error)
+                        else:
+                            raise AssertionError('missing or stale verifier binding accepted')
         model = metadata.api_profile_model
         for reader, mutate in (
             ('read_policy', lambda value: value['schema'].update(surface_register_sha256='0' * 64)),
@@ -67,6 +88,7 @@ def main():
     for name in ('check', 'test'):
         assert '\npython3 scripts/release/' + name + '-acceptance-metadata.py\n' in gate
     print('Final metadata rejects five stale README bindings and six API-profile regressions without crypto execution')
+    print('Shared verifier preflight rejects 28 stale or missing review bindings without crypto execution')
 
 
 if __name__ == '__main__':

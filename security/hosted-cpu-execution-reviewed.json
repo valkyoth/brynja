@@ -43,7 +43,7 @@
     "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs": "adc8b9f184e60c7ef8d47aa3133b51e10f9eb757a5444382393e6c0feb800598",
     "crates/brynja-crypto-cpu/src/x86_sha.rs": "9519e6f2feb7ff836f56bee2d72b5259ebaf057f08928d89f555e97ade5cd7c0",
     "docs/hosted-cpu-execution.md": "ee95ea12465819e9d071196d39497b7245b94589f3060b3c48e48af960fe978a",
-    "scripts/checks.sh": "50bfc8db38ba7d4c2fa9401fab9e8553d26f6a2e6e0dc8849d6fa2156575e253",
+    "scripts/checks.sh": "e0f510644d15466e62f36e90cf789a31060656ace3bae6c15f8a34d08bbb98ba",
     "scripts/cpu/check-hosted-execution.py": "9ef366acd3f421ff5fcf17cc46da25524ddc8ada763e6ac36931e9b7a2d86c60",
     "scripts/repository/unsafe_policy.py": "5813f7eaf22de6255e0d51a08253d8bf355b320d4e14ca10bc267e3405d938bc",
     "scripts/zeroization/check-zeroization-miri.sh": "4b3dea3ce1150aaaded45cb68fc014904f10f9a3123b737c06ff9f4bdfbc8efd",

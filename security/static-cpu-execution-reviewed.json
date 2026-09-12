@@ -35,7 +35,7 @@
     "docs/static-cpu-execution.md": "19c94d69a609a3ef81d799ddfe6792db8d357beda43ac7220d55b9f31aa753f1",
     "docs/threat-model.md": "1afdc271715461a57e859104ccf6e29bc9f653598991724c0fc2d23232fb1c8e",
     "docs/unsafe-policy.md": "b60abd07527505fb94b4e0558d850b8f7a521ad96aa0e6460f2e8936d60ded29",
-    "scripts/checks.sh": "50bfc8db38ba7d4c2fa9401fab9e8553d26f6a2e6e0dc8849d6fa2156575e253",
+    "scripts/checks.sh": "e0f510644d15466e62f36e90cf789a31060656ace3bae6c15f8a34d08bbb98ba",
     "scripts/cpu/check-static-execution.py": "56d8d04058d1e8adc182cf5b0f4ac844cca501a4315437beadc5782563b51448",
     "scripts/cpu/static_execution_docs.py": "f1402b2873fda28b65c48c62b2f8b77ef7376d307ef8ef8c361662cd3310ebfe",
     "scripts/repository/unsafe_policy.py": "5813f7eaf22de6255e0d51a08253d8bf355b320d4e14ca10bc267e3405d938bc",

@@ -12,8 +12,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--network", action="store_true")
+    parser.add_argument("--require-latest-nightly", action="store_true")
     parser.add_argument("--targets", action="store_true")
     args = parser.parse_args()
+    if args.require_latest_nightly and not args.network:
+        parser.error('--require-latest-nightly requires --network')
 
     policy = assurance.read_policy()
     if args.targets:
@@ -21,7 +24,7 @@ def main() -> int:
             print(target)
         return 0
     if args.network:
-        assurance.network_check(policy)
+        assurance.network_check(policy, require_latest_nightly=args.require_latest_nightly)
     expected = assurance.json_bytes(assurance.build_evidence(policy))
     if args.write:
         assurance.EVIDENCE.write_bytes(expected)

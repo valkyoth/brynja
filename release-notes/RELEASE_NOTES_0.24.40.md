@@ -57,6 +57,16 @@ The real affected Miri/Kani two-shard campaign passed, was collected in a fresh
 invocation and was reused without rerunning either phase. The edited main
 checkout correctly rejected that earlier snapshot's receipt. This development
 demonstration is not final release authorization or remote platform evidence.
+Subsequent candidate-local Miri/Kani/ASan collection and Linux SSH-disconnect
+ASan collection/reuse also passed on `ead83b48`. The exact receipts and resource
+observations are recorded in the detached-runner documentation.
+
+The release-tooling follow-up preserves dated nightly identity verification
+while reporting newer daily nightlies separately, with an explicit strict
+maintenance check. A narrowly checked TupleHash native carry-forward permits
+only the consumer fixture's facade-version pin and its reviewed digest change;
+all native code and original three-platform artifacts remain bound. These
+tooling changes require focused retest before final release sign-off.
 
 All 39 crate READMEs now focus on capability/independent-review tables,
 hardware/SIMD availability, limitations and usable API examples rather than

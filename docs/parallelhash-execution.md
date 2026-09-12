@@ -157,10 +157,10 @@ remote hardware attestation, migration/side-channel qualification, independent
 cryptographic verification or FIPS validation. Schema regression fixtures remain
 separate from real records.
 
-Still required: remote detached-runner hand-off qualification and the final
-release gate on the reviewed source.
-The README audit and local detached Miri/shard/reuse acceptance are complete;
-they do not replace those remaining release checks.
+The Linux remote detached-runner hand-off passed, alongside the README audit
+and local Miri/Kani/ASan collection/reuse. Still required: focused review of the
+release-tooling follow-up and the final release gate on the reviewed source.
+These observations do not replace those remaining release checks.
 
 Owned cleanup cannot guarantee erasure of registers, compiler-created copies,
 spills, caches, crash/suspend images, swap, DMA-visible copies, caller-owned

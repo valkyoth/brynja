@@ -15,6 +15,7 @@ python3 scripts/repository/test-crate-readmes.py
 cargo test --locked --offline --manifest-path assurance/crate-readmes/Cargo.toml --doc
 python3 scripts/release/test-verification-plan.py
 python3 scripts/release/test-detached-verification.py
+python3 scripts/release/test-native-metadata-carry-forward.py
 
 cargo fmt --all --check
 python3 scripts/repository/check-script-layout.py

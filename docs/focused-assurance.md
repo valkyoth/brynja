@@ -79,6 +79,39 @@ command owner before running the first command. Unknown syntax/owners stop
 planning. It never treats a failed or unclassified command as successful evidence.
 The catalog and dispatcher tests must evolve together.
 
+## Frozen nightly qualification
+
+Online release checks validate the pinned nightly's date, Rust revision, Miri
+availability and execution toolchain against its dated official distribution
+manifest. A newer daily nightly is reported, but does not automatically replace
+the compiler used for completed evidence. Upstream identity mismatch, unavailable
+pinned Miri, malformed responses and network failure still stop verification.
+Other verifier release/tag freshness checks remain mandatory and unchanged.
+
+Before the next qualification cycle, explicitly check for nightly updates:
+
+```sh
+python3 scripts/assurance/check-assurance.py --network --require-latest-nightly
+```
+
+This maintenance mode fails if a newer nightly exists. Review and update pins
+before collecting replacement evidence; never relabel older runs as using a
+new compiler. This freeze is not an exemption for known verifier defects.
+
+## TupleHash native metadata carry-forward
+
+The tag gate first applies the unchanged exact-source native validator. Its
+separate fallback permits only the public consumer fixture's exact facade-version
+replacement and the corresponding single reviewed digest replacement. The facade
+versions must match their respective committed manifests. Every other native
+input must match the capture commit. Changed code, features, other review pins,
+capture commands or artifacts are rejected. All three reviewed native lanes and
+their original commit, compiler, CPU and results remain mandatory.
+
+This prevents an unrelated facade version bump from requiring a new hardware
+campaign. It does not turn old observations into a new capture, authorize a
+backend or relax detached-runner snapshot matching.
+
 ## Evidence boundaries
 
 Selection compares staged, unstaged, deleted, renamed and nonignored untracked

@@ -387,7 +387,8 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "scripts" / "tag_gate.sh",
         *(ROOT / "scripts/release" / name for name in (
             "run-verification.py", "verification_plan.py",
-            "verification_commands.py", "test-verification-plan.py")),
+            "verification_commands.py", "test-verification-plan.py",
+            "native_metadata_carry_forward.py", "test-native-metadata-carry-forward.py")),
         ROOT / "scripts/zeroization/scope_inputs.py",
         ROOT / "security/release-signers",
         ROOT / "docs/focused-assurance.md",
@@ -424,7 +425,7 @@ def json_bytes(value: object) -> bytes:
     return (json.dumps(value, indent=2, sort_keys=True, ensure_ascii=True) + "\n").encode()
 
 
-def network_check(policy: dict) -> None:
+def network_check(policy: dict, *, require_latest_nightly: bool = False) -> None:
     for tool in policy["tools"]:
         if tool["source_kind"] != "git-tag":
             continue
@@ -459,29 +460,48 @@ def network_check(policy: dict) -> None:
                 f"{tool['id']} pin is stale: "
                 f"{tool['version']} is not latest {latest}"
             )
-    with urllib.request.urlopen(
-        "https://static.rust-lang.org/dist/channel-rust-nightly.toml",
-        timeout=SUBPROCESS_TIMEOUT_SECONDS,
-    ) as response:
-        nightly_bytes = response.read(MAXIMUM_NIGHTLY_MANIFEST_BYTES + 1)
-    if len(nightly_bytes) > MAXIMUM_NIGHTLY_MANIFEST_BYTES:
-        fail("official Rust nightly manifest exceeds the bounded input limit")
-    nightly_manifest = tomllib.loads(nightly_bytes.decode("utf-8"))
-    nightly_version = f"nightly-{nightly_manifest['date']}"
-    rust_revision = nightly_manifest["pkg"]["rust"]["git_commit_hash"]
-    miri_target = nightly_manifest["pkg"]["miri-preview"]["target"].get(
-        "x86_64-unknown-linux-gnu"
-    )
-    if not miri_target or miri_target.get("available") is not True:
-        fail("latest nightly does not provide Miri for the evidence host")
-    for tool in policy["tools"]:
-        if tool["source_kind"] not in {"rust-toolchain", "rustup-component"}:
-            continue
-        if tool["version"] != nightly_version or tool["revision"] != rust_revision:
-            fail(
-                f"{tool['id']} pin is stale: {tool['version']} does not match "
-                f"latest {nightly_version} at {rust_revision}"
-            )
+    nightly_tools = [tool for tool in policy['tools']
+                     if tool['source_kind'] in {'rust-toolchain', 'rustup-component'}]
+    if not nightly_tools:
+        return
+    pinned = {tool['version'] for tool in nightly_tools}
+    if len(pinned) != 1:
+        fail('nightly verifier pins must share one frozen toolchain')
+    version = next(iter(pinned))
+    if NIGHTLY.fullmatch(version) is None:
+        fail('invalid frozen nightly date')
+
+    def manifest(url):
+        with urllib.request.urlopen(url, timeout=SUBPROCESS_TIMEOUT_SECONDS) as response:
+            raw = response.read(MAXIMUM_NIGHTLY_MANIFEST_BYTES + 1)
+        if len(raw) > MAXIMUM_NIGHTLY_MANIFEST_BYTES:
+            fail('official Rust nightly manifest exceeds the bounded input limit')
+        return tomllib.loads(raw.decode('utf-8'))
+
+    # Reproducibility and upstream identity remain mandatory. A new nightly
+    # does not retroactively invalidate a completed release qualification run.
+    dated = manifest('https://static.rust-lang.org/dist/' + version[8:] +
+                     '/channel-rust-nightly.toml')
+    target = dated['pkg']['miri-preview']['target'].get('x86_64-unknown-linux-gnu')
+    if not target or target.get('available') is not True:
+        fail('frozen nightly does not provide Miri for the evidence host')
+    for tool in nightly_tools:
+        if (version != 'nightly-' + dated['date'] or
+                tool['revision'] != dated['pkg']['rust']['git_commit_hash'] or
+                tool['execution_toolchain'] != version):
+            fail('frozen nightly upstream identity drifted')
+    latest = manifest('https://static.rust-lang.org/dist/channel-rust-nightly.toml')
+    latest_version = 'nightly-' + latest['date']
+    if NIGHTLY.fullmatch(latest_version) is None or latest_version < version:
+        fail('latest nightly manifest is invalid or older than the frozen pin')
+    if latest_version == version:
+        if latest['pkg']['rust']['git_commit_hash'] != dated['pkg']['rust']['git_commit_hash']:
+            fail('latest and dated nightly identities disagree')
+    elif require_latest_nightly:
+        fail(f'nightly update required: pinned {version}, latest {latest_version}')
+    else:
+        print(f'Nightly update available: {latest_version}; release evidence retains '
+              f'verified frozen pin {version}. Review/update before the next qualification cycle.')
 
 
 def version_key(version: str) -> tuple[int, int, int, int]:

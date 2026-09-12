@@ -1,7 +1,7 @@
 # Detached verification
 
-Status: **implemented; local detached Miri/Kani collection and phase reuse
-passed development acceptance. Release qualification remains pending.**
+Status: **implemented; local Miri/Kani/ASan and Linux SSH-disconnect ASan
+collection/reuse passed. Final release qualification remains pending.**
 
 The detached runner is an operator tool for running the existing verification
 commands without leaving a terminal or assistant conversation open. It does
@@ -164,8 +164,8 @@ Production CPU/source/graph changes still select their consumers; malformed,
 foreign or missing dependency records require explicit scope review. The
 current development delta selects only ParallelHash for Miri, ASan and Kani.
 
-- Review the platform-specific remote hand-off during native qualification;
-  local real-campaign shard, collection and phase-reuse acceptance passed.
+- Local real-campaign shard, collection and phase reuse passed; the Linux
+  SSH-disconnect/reconnect hand-off also passed, as recorded below.
 - Freeze the final reviewed release source before creating evidence for that
   source. A development acceptance receipt cannot qualify later edits.
 - Finish final ParallelHash release qualification; reviewed native evidence now
@@ -202,3 +202,26 @@ observations, not a performance promise. Its launch receipt was
 `e1f7e92945e3f563d8a8c6b68e2f689ffed6b8a480f69e51f95abf3f333d009d`.
 This proves the local detached lifecycle and exact-snapshot reuse, not final
 release authorization or native Arm/macOS qualification.
+
+## Release-candidate and remote hand-off observations
+
+On source `ead83b48390bf1deef7fa0b0e2743d978b3a229f`, the local two-shard
+Miri/Kani/ASan run passed all 15 selected commands in 1,405.809 seconds. Collection
+and all three foreground phase reuses passed without rerunning tests. Receipt:
+`210934ea2cd65e4f84e969ef7a014de78236ab6787925cce8462952044cf7537`.
+
+A separate Ubuntu x86-64 host ran the 13 selected ASan commands on that same
+source with two shards/workers. The initiating SSH session closed; fresh SSH
+sessions observed the running job, collected its successful result and consumed
+the ASan phase with `REUSE (validated detached snapshot)`. Runtime was 163.559
+seconds; child maximum RSS was 375,291,904 bytes and runner maximum RSS was
+43,819,008 bytes. This is an observed run, not a sizing guarantee.
+
+- Launch receipt: `fbc4448bfc6ef04a56349a96d8f264506e17ca9ee8f7dbae8db5e2161b937fad`.
+- Result SHA-256: `5b2045dfc5eac2fbfc3635f6111dc474aa5bf129b6880e16ba91ebe743170b36`.
+- All 13 downloaded command-log hashes matched the terminal result after reuse.
+
+This closes the real Linux remote hand-off demonstration, not reboot survival
+or remote Miri execution. Subsequent release-tooling edits require their own
+checks. These receipts still identify the original snapshot; they cannot be
+imported as exact-snapshot evidence for a later commit.

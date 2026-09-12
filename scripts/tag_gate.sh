@@ -17,7 +17,15 @@ verify() {
 }
 python3 scripts/sha3/check-keccak-hardened-native.py
 python3 scripts/kmac/check-kmac-execution-native.py
+# First require exact native equality. A failure is eligible only for the
+# separately checked facade-fixture version-only metadata carry-forward.
+if
 python3 scripts/tuplehash/check-tuplehash-execution-native.py
+then
+    :
+else
+    python3 scripts/release/native_metadata_carry_forward.py
+fi
 python3 scripts/parallelhash/check-parallelhash-execution-native.py
 
 scripts/checks.sh

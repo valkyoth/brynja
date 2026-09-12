@@ -4543,7 +4543,7 @@ Exit criteria:
 
 ### v0.24.41 - Legacy SHA-1 Operational Acceleration
 
-Status: owner retest and native collection passed; awaiting final release checks
+Status: awaiting green CI
 
 See [operational SHA-1](legacy-sha1-execution.md). The Low platform-trust residual remains disclosed; final release and GitHub checks are required before tagging.
 

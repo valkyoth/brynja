@@ -71,3 +71,24 @@ fn output_width_validation_accepts_only_canonical_shapes() {
         }
     }
 }
+
+#[test]
+fn streaming_root_rejects_finalization_without_input_proof() -> Result<(), Error> {
+    for identity in [
+        Identity::ParallelHash128,
+        Identity::ParallelHash256,
+        Identity::ParallelHashXof128,
+        Identity::ParallelHashXof256,
+    ] {
+        let binding = Binding::Streaming {
+            identity,
+            block: 8,
+            limit: 8,
+            workers: super::super::WorkerPolicy::Mixed,
+        };
+        let mut root = Collector::from_binding(binding, Mode::Portable, super::super::bits(&[])?)?;
+        assert!(matches!(root.finish(0, identity.xof()), Err(Error::State)));
+        cleared(&root);
+    }
+    Ok(())
+}

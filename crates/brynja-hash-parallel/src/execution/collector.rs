@@ -168,7 +168,22 @@ impl<'plan, 'input, 'authority> Collector<'plan, 'input, 'authority> {
         let _ = clear_owned_region(&mut self.output_bits);
         let _ = clear_owned_region(&mut self.phase);
     }
-    pub(super) fn finish(&mut self, output_bits: u128, xof: bool) -> Result<(), Error> {
+    fn finish(&mut self, output_bits: u128, xof: bool) -> Result<(), Error> {
+        self.finish_inner(output_bits, xof, false)
+    }
+    pub(super) fn finish_stream(
+        input: super::stream::CompleteInput<'_, 'authority>,
+        output_bits: u128,
+        xof: bool,
+    ) -> Result<(), Error> {
+        input.into_root().finish_inner(output_bits, xof, true)
+    }
+    fn finish_inner(
+        &mut self,
+        output_bits: u128,
+        xof: bool,
+        streaming_complete: bool,
+    ) -> Result<(), Error> {
         let mut guard = Operation {
             root: self,
             complete: false,
@@ -176,7 +191,9 @@ impl<'plan, 'input, 'authority> Collector<'plan, 'input, 'authority> {
         let root = &mut guard.root;
         if root.phase != [1]
             || root.binding.identity().xof() != xof
-            || !root.binding.complete(root.merged_leaves())
+            || !root
+                .binding
+                .complete(root.merged_leaves(), streaming_complete)
         {
             return Err(Error::State);
         }

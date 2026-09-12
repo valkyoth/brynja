@@ -23,6 +23,17 @@ pub struct Stream<'workspace, 'authority> {
     input_bits: [u8; 16],
     limit: u128,
 }
+
+// Only this module can construct the proof, after flushing and checking exact
+// input accounting. Its exclusive root loan cannot authorize a sibling root.
+pub(super) struct CompleteInput<'state, 'authority> {
+    root: &'state mut Collector<'static, 'static, 'authority>,
+}
+impl<'state, 'authority> CompleteInput<'state, 'authority> {
+    pub(super) fn into_root(self) -> &'state mut Collector<'static, 'static, 'authority> {
+        self.root
+    }
+}
 impl<'workspace, 'authority> Stream<'workspace, 'authority> {
     /// Selects the root before input processing. Clears the entire workspace
     /// even on construction failure; neither allocation nor a thread is created.
@@ -184,7 +195,7 @@ impl<'workspace, 'authority> Stream<'workspace, 'authority> {
         &mut self,
         tail: Fips202BitString<'_>,
         mut select: impl FnMut(u128) -> Result<Mode<'worker>, Error>,
-    ) -> Result<(), Error> {
+    ) -> Result<CompleteInput<'_, 'authority>, Error> {
         let mut guard = Operation {
             stream: self,
             complete: false,
@@ -207,7 +218,25 @@ impl<'workspace, 'authority> Stream<'workspace, 'authority> {
             stream.flush(tail.valid_bits_in_last_byte(), &mut select)?;
         }
         stream.input_bits = total.to_le_bytes();
+        stream.check_complete()?;
         guard.complete = true;
+        drop(guard);
+        Ok(CompleteInput {
+            root: &mut self.root,
+        })
+    }
+    fn check_complete(&self) -> Result<(), Error> {
+        let block_bits = u128::try_from(self.workspace.len())
+            .ok()
+            .and_then(|n| n.checked_mul(8))
+            .ok_or(Error::State)?;
+        let total = self.input_bits();
+        let full = total.checked_div(block_bits).ok_or(Error::State)?;
+        let partial = total.checked_rem(block_bits).ok_or(Error::State)? != 0;
+        let expected = full.checked_add(u128::from(partial)).ok_or(Error::State)?;
+        if self.used()? != 0 || self.root.merged_leaves() != expected {
+            return Err(Error::State);
+        }
         Ok(())
     }
     /// Clears the root, pending bytes and input metadata; permanently terminal.

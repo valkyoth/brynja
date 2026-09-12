@@ -1,4 +1,4 @@
-use super::{Clear, Error, Mode, Stream, collector::output_length, stream::Operation};
+use super::{Clear, Collector, Error, Mode, Stream, collector::output_length, stream::Operation};
 use crate::{
     Fips202BitString, ParallelHashPublicDeclassification as Public, ParallelHashSecretOutput,
 };
@@ -33,8 +33,7 @@ impl<'workspace, 'authority> Stream<'workspace, 'authority> {
         if stage.0.len() < output.len() {
             return Err(Error::OutputLength);
         }
-        self.finish_input(tail, select)?;
-        self.root.finish(count, false)?;
+        Collector::finish_stream(self.finish_input(tail, select)?, count, false)?;
         self.root.public(output, valid, stage.0, true)
     }
     /// Consumes fixed secret bytes. Every error clears the complete destination.
@@ -57,8 +56,7 @@ impl<'workspace, 'authority> Stream<'workspace, 'authority> {
     ) -> Result<ParallelHashSecretOutput<'out>, Error> {
         let _ = clear_owned_region(output);
         let count = output_length(output.len(), valid)?;
-        self.finish_input(tail, select)?;
-        self.root.finish(count, false)?;
+        Collector::finish_stream(self.finish_input(tail, select)?, count, false)?;
         self.root.secret(output, valid, true)
     }
     /// Closes byte input and borrows an incremental XOF reader in place.
@@ -78,8 +76,7 @@ impl<'workspace, 'authority> Stream<'workspace, 'authority> {
             stream: self,
             complete: false,
         };
-        guard.stream.finish_input(tail, select)?;
-        guard.stream.root.finish(0, true)?;
+        Collector::finish_stream(guard.stream.finish_input(tail, select)?, 0, true)?;
         // End the guard loan before returning the affine reader. Success remains
         // terminal for absorption and the reader owns cancellation on abandonment.
         guard.complete = true;

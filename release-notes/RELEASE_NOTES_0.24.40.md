@@ -20,6 +20,13 @@ Required-static x86 AVX2 and Arm Keccak execution use thread-local authorities;
 generic x86 hosted execution remains unavailable. Thread width and instruction
 execution are reported separately. No acceleration is enabled by default.
 
+The initial pentest identified a Low defense-in-depth gap in internal streaming
+completion. Finalization now requires an unforgeable, root-bound completed-input
+loan, checked against pending storage and the exact expected leaf count. Compiled
+bypass probes and executable mutants cover the invariant. The public API had
+already flushed correctly; the fix prevents an accidental internal shortcut.
+A green owner retest is still required; no PASS is inferred from local testing.
+
 Errors and recoverable unwind clear owned root, leaf, metadata and output
 staging. Public-output errors are transactional; secret-output errors clear
 their destinations. Finalization consumes fixed owners; exclusive readers

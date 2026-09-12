@@ -59,6 +59,13 @@ keeps the root in place. Errors, cancellation and recoverable unwind clear the
 workspace and terminate the stream. `Plan` remains the complete-input option
 for scheduled workers. No existing API is silently rerouted.
 
+Streaming root finalization requires a private, consuming completed-input token.
+Only the stream module can construct it, after checking an empty pending buffer
+and an exact merged-leaf count of `ceil(input_bits / (8 * B))`. The token loans
+that root exclusively; it cannot authorize a sibling root. Ordinary collector
+finalization rejects streaming bindings, even if the work limit is satisfied.
+This is an internal completion invariant, not a new public API or secret owner.
+
 ## Execution owner inventory
 
 The execution layer composes the existing sealed hardened cSHAKE/Keccak
@@ -110,8 +117,9 @@ The development campaigns completed 3,584 independent comparisons (256 cases
 across seven modes, debug and release). A separate local AMD AVX2 campaign
 included three required-static modes: 5,120 comparisons in total, including
 1,536 required-static comparisons with accelerated roots and nonempty leaves.
-Packaged crate tests rejected fifteen compiled mutations in each profile
-(30 rejections). Twenty ownership compile-fail tests passed. All 35 Rust
+Packaged crate tests rejected nineteen compiled mutations in each profile
+(38 rejections), plus eight compiled completion-token privacy/consumption probes.
+Twenty ownership compile-fail tests passed. All 35 Rust
 examples across the 39 crate READMEs passed on Rust 1.90.0 and 1.98.1.
 Rust 1.90 checked the hosted executor and the hardened leaf on
 `thumbv7em-none-eabi`. MIR/LLVM/assembly cleanup checks passed for x86-64 on

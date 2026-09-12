@@ -39,6 +39,30 @@ def main():
             manifest.write_text(manifest.read_text() + "\n[workspace]\n" + patches)
             for profile in ([], ["--release"]):
                 check(["cargo", "test", "--offline", "--features", "runtime-execution", *profile], roots[name], environment)
+        boundary = roots["brynja-hash-parallel"] / "src/execution/mod.rs"
+        original_boundary = boundary.read_text()
+        for body, code in (
+            ("fn forge(root: &mut super::Collector<'static, 'static, '_>) { "
+             "let _ = super::stream::CompleteInput { root }; }", "E0451"),
+            ("fn bypass(root: &mut super::Collector<'static, 'static, '_>) { "
+             "let _ = root.finish(0, true); }", "E0624"),
+            ("fn bypass(root: &mut super::Collector<'static, 'static, '_>) { "
+             "let _ = root.finish_inner(0, true, true); }", "E0624"),
+            ("fn reuse(input: super::stream::CompleteInput<'_, '_>) { "
+             "let _ = input.into_root(); let _ = input.into_root(); }", "E0382"),
+        ):
+            try:
+                boundary.write_text(original_boundary + "\n#[cfg(test)] mod completion_boundary_probe { " + body + " }\n")
+                for profile in ([], ["--release"]):
+                    result = subprocess.run(
+                        ["cargo", "test", "--offline", "--features", "runtime-execution", *profile, "--lib", "--no-run"],
+                        cwd=roots["brynja-hash-parallel"], env=environment,
+                        text=True, capture_output=True, timeout=300)
+                    if not result.returncode or f"error[{code}]" not in result.stderr:
+                        raise ValueError("completion boundary did not reject " + code + ":\n" + result.stderr)
+            finally:
+                boundary.write_text(original_boundary)
+        print("Streaming completion rejects eight compiled forgery/bypass/reuse probes", flush=True)
         cases = [
             ("brynja-hash-parallel", "src/execution/collector.rs",
              f"let _ = clear_owned_region(&mut self.{field});", "",
@@ -46,6 +70,18 @@ def main():
             for field in ("merged", "accelerated", "output_bits", "phase")
         ]
         cases += [
+            ("brynja-hash-parallel", "src/execution/binding.rs",
+             "streaming_complete && merged <= *limit", "merged <= *limit",
+             ["--lib", "streaming_root_rejects_finalization_without_input_proof"]),
+            ("brynja-hash-parallel", "src/execution/stream.rs",
+             "self.used()? != 0 || self.root.merged_leaves() != expected",
+             "self.root.merged_leaves() != expected",
+             ["--lib", "completion_rejects_pending_bytes_even_when_leaf_count_matches"]),
+            ("brynja-hash-parallel", "src/execution/stream.rs",
+             "self.used()? != 0 || self.root.merged_leaves() != expected", "self.used()? != 0",
+             ["--lib", "completion_mismatched_leaf_count_clears_all_output_paths"]),
+            ("brynja-hash-parallel", "src/execution/stream.rs", "stream.check_complete()?;", "",
+             ["--lib", "completion_mismatched_leaf_count_clears_all_output_paths"]),
             ("brynja-hash-parallel-std", "src/execution/worker.rs",
              "let _ = clear_owned_region(value);", "",
              ["--lib", "storage_clear_visits_every_byte_of_every_live_slot"]),

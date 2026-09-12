@@ -42,10 +42,10 @@ impl<'plan, 'input> Binding<'plan, 'input> {
             Self::Streaming { workers, .. } => *workers,
         }
     }
-    pub(super) fn complete(&self, merged: u128) -> bool {
+    pub(super) fn complete(&self, merged: u128, streaming_complete: bool) -> bool {
         match self {
-            Self::Scheduled(plan) => merged == plan.leaves,
-            Self::Streaming { limit, .. } => merged <= *limit,
+            Self::Scheduled(plan) => !streaming_complete && merged == plan.leaves,
+            Self::Streaming { limit, .. } => streaming_complete && merged <= *limit,
         }
     }
 }

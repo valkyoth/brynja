@@ -37,6 +37,71 @@ fn operational_startup_and_revalidation_fail_closed() {
     }
 }
 
+#[test]
+#[cfg(feature = "execution")]
+fn operational_callback_revokes_live_streams_without_recovery() {
+    extern crate std;
+    use crate::execution::{Error, Executor, PublicData};
+    std::thread_local! {
+        static VALID: Cell<bool> = const { Cell::new(false) };
+        static CALLS: Cell<usize> = const { Cell::new(0) };
+    }
+    fn revalidate(backend: Sha1Backend) -> bool {
+        CALLS.with(|calls| calls.set(calls.get().saturating_add(1)));
+        VALID.with(Cell::get) && compiled_features(backend)
+    }
+    let backend = if cfg!(target_arch = "aarch64") {
+        Sha1Backend::Aarch64Sha1
+    } else {
+        Sha1Backend::X86Sha
+    };
+    // Rejection precedes the KAT: safe even without compiled CPU features.
+    assert!(ExecutionAuthority::create(backend, revalidate).is_err());
+    if require_architecture(backend).is_ok() {
+        assert_eq!(CALLS.with(Cell::get), 1);
+    }
+    let Some(backend) = compiled_backend() else {
+        return;
+    };
+    for operation in 0..3 {
+        VALID.with(|valid| valid.set(true));
+        let authority = ExecutionAuthority::create(backend, revalidate);
+        assert!(authority.is_ok());
+        let Ok(authority) = authority else { return };
+        let executor = Executor::with_authority(authority);
+        assert!(executor.is_ok());
+        let Ok(executor) = executor else { return };
+        let stream = executor.start(PublicData::acknowledge());
+        assert!(stream.is_ok());
+        let Ok(mut stream) = stream else { return };
+        assert_eq!(stream.update(b"abc"), Ok(()));
+        let before = CALLS.with(Cell::get);
+        VALID.with(|valid| valid.set(false));
+        let expected = Err(Error::Backend(Sha1BackendError::MissingFeatures));
+        match operation {
+            0 => {
+                assert_eq!(stream.update(&[0; 64]), expected);
+                assert!(stream.finalize().is_err());
+            }
+            1 => assert_eq!(stream.finalize().map(|_| ()), expected),
+            _ => {
+                let tail = BitString::new(&[0x80], 1);
+                assert!(tail.is_ok());
+                if let Ok(tail) = tail {
+                    assert_eq!(stream.finalize_bits(tail).map(|_| ()), expected);
+                }
+            }
+        }
+        assert_eq!(Some(CALLS.with(Cell::get)), before.checked_add(1));
+        assert_eq!(executor.report().health, Sha1BackendHealth::Quarantined);
+        // Restoration cannot revive an owner or silently select portable code.
+        VALID.with(|valid| valid.set(true));
+        assert!(executor.start(PublicData::acknowledge()).is_err());
+        assert!(executor.hash(b"abc", PublicData::acknowledge()).is_err());
+        assert_eq!(Some(CALLS.with(Cell::get)), before.checked_add(1));
+    }
+}
+
 fn session() -> Option<Sha1BackendSession> {
     compiled_backend()?;
     let result = Sha1BackendSession::for_compiled_target();

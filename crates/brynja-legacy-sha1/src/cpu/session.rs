@@ -187,8 +187,16 @@ impl ExecutionAuthority {
     /// can execute this owner and its operations, including hotplug and VM
     /// migration, for their entire lifetime. A current-core CPUID test is not
     /// sufficient. No input processed with this ordinary owner may be secret.
-    pub unsafe fn from_platform(backend: Sha1Backend) -> Result<Self, Sha1BackendError> {
-        Self::create(backend, |_| true)
+    /// The callback must truthfully report continued authority for the requested
+    /// backend and must not panic. It is checked before startup and operations;
+    /// returning false permanently quarantines this owner. Cached OS feature
+    /// queries cannot detect a broken platform ABI or close a scheduling race;
+    /// this callback does not replace the lifetime-long feature guarantee.
+    pub unsafe fn from_platform(
+        backend: Sha1Backend,
+        revalidate: fn(Sha1Backend) -> bool,
+    ) -> Result<Self, Sha1BackendError> {
+        Self::create(backend, revalidate)
     }
 
     fn create(

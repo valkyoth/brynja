@@ -27,6 +27,10 @@ pub(super) fn availability() -> Result<(), Unavailable> {
     Err(Unavailable::MissingFeatures)
 }
 
+fn revalidate(backend: Sha1Backend) -> bool {
+    backend == Sha1Backend::Aarch64Sha1 && availability().is_ok()
+}
+
 pub(super) fn construct() -> Result<Authority, Error> {
     availability().map_err(Error::Unavailable)?;
     // SAFETY: Only the allowlisted AArch64 system-wide feature APIs and complete
@@ -35,6 +39,8 @@ pub(super) fn construct() -> Result<Authority, Error> {
     // Generic x86 CPUID and unknown platforms cannot reach this boundary.
     // Same platform contract as the modern hosted execution adapter; no secret
     // operations are exposed by this ordinary SHA-1 adapter.
-    unsafe { Authority::from_platform(Sha1Backend::Aarch64Sha1) }
+    // Revalidation retains a revocation hook, not migration/affinity proof:
+    // standard-library feature detection can use cached OS capability results.
+    unsafe { Authority::from_platform(Sha1Backend::Aarch64Sha1, revalidate) }
         .map_err(|error| Error::Execution(error.into()))
 }

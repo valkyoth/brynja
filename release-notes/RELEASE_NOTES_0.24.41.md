@@ -35,7 +35,7 @@ Development verification passed:
   1,135 independent bit-message cases through extracted-package consumers.
 - 19 packaged ownership/classification rejections and four compiled
   debug/release revocation/finalization regressions.
-- 49 SHA-1 policy mutations and nine native-capture rejection tests.
+- 54 SHA-1 policy mutations and nine native-capture rejection tests.
 - Native x86 SHA-NI tests, including AddressSanitizer with explicit SHA/SSE2
   compilation; AArch64 static/hosted QEMU correctness (not native evidence).
 - Scoped SHA-1/legacy Miri and Kani, plus existing SHA-1 emitted-instruction
@@ -46,3 +46,10 @@ source delta is explicitly not fresh native proof. The documentation-only unsafe
 module-count regression remains in mandatory repository checks without selecting
 unrelated Miri campaigns. No release tag, publication, owner pentest result or
 fresh three-platform operational collection is claimed by this development pass.
+
+Pentest follow-up requires a platform revalidation callback instead of an
+always-true hook. A reported loss irreversibly revokes live streams. Revalidation
+does not replace the deployment's lifetime-long feature guarantee or prove safe
+VM migration. Public-data acknowledgement cannot detect confidential input;
+the ordinary/hardened split and per-boundary health checks remain unchanged.
+An independent owner retest and fresh native collection are still pending.

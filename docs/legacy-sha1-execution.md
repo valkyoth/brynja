@@ -17,6 +17,8 @@ protocol dependency graphs do not acquire a SHA-1 dependency.
 - `Authority::for_compiled_target()` requires the complete compile-time bundle.
 - The separate unsafe `Authority::from_platform` boundary requires an external
   process-wide, lifetime-long feature contract. It is not a safe CPUID shortcut.
+  Its mandatory non-panicking revalidator runs before startup and operations;
+  a reported loss permanently quarantines existing streams, without fallback.
 - `brynja_legacy_sha1_std::execution::select(Mode)` uses only the allowlisted
   AArch64 system feature APIs already reviewed for the modern hosted adapter.
 - `Mode::Prefer` falls back only for unavailability before startup. Failed KATs,
@@ -48,6 +50,17 @@ the new APIs must not process secrets. PublicData is a caller acknowledgement,
 not a mechanism for detecting confidential bytes. Borrowed sessions cannot
 outlive their owner. Finalization consumes the operation on success and failure;
 length preflight is atomic, while backend failure destroys retained state.
+
+| Residual risk | Responsibility and boundary |
+| --- | --- |
+| CPU hotplug or VM migration violates advertised process-wide features | The OS/hypervisor must preserve its capability ABI throughout execution. Repeated, potentially cached feature queries do not pin a thread, close a check-to-use race, or prove migration safety. Native correctness tests cannot establish this deployment property. |
+| Confidential bytes passed with `PublicData::acknowledge()` | The caller classifies every input, including later streaming chunks. This token neither inspects bytes nor declassifies a secret owner. Ordinary streams do not implement the sealed hardened capability; confidential input requires the separate hardened API. |
+| Repeated health-check overhead | Checks remain at every defensive boundary. The hosted callback reuses standard-library OS capability detection; no syscall-heavy polling, throttling or interval-based authorization is introduced. |
+
+Linux AArch64 exposes instruction availability through its
+[ELF hardware-capability ABI](https://docs.kernel.org/arch/arm64/elf_hwcaps.html).
+The callback is a revocation backstop, **not** a substitute for that platform
+contract. No military/classified deployment qualification is claimed.
 
 ## Reproducible checks
 

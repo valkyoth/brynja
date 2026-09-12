@@ -18,8 +18,8 @@ ALLOWED = {
     Path("crates/brynja-legacy-md5/src/cpu/session.rs"): ("2b44d0e84f477a79cc0dfec007dab0fbf7e9c0ea6577d4759f0f46c537562a9f", 3, 1, 3),
     Path("crates/brynja-legacy-md5/src/cpu/x86_avx2_md5.rs"): ("ed6bc494e363fc24256b835b5d4ee52b0785f4d46028a5bdb7ca8446d597ea8e", 1, 1, 1),
     Path("crates/brynja-legacy-md5/src/cpu/aarch64_neon_md5.rs"): ("95266c29fe1ce486477bf32d5276dc8f241cb3d57c1ce2dedfe8d8f335199651", 1, 1, 1),
-    Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("3a3c8bbe7482ce4323f1e90fd8df0c5535b79274b20cf63713c1c976e5c12e0e", 3, 2, 3),
-    Path("crates/brynja-legacy-sha1-std/src/execution/platform.rs"): ("c5c271489c9f23dfab68abb3435a1d45d7c2eb8f4c819a8b1dbc0247b702b34c", 1, 0, 1),
+    Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("f9da62a45a1f2f2481bafed46e188f28da4d7c99daec1d73ca15facb62723496", 3, 2, 3),
+    Path("crates/brynja-legacy-sha1-std/src/execution/platform.rs"): ("ce0c81d0d2631eac26d0782b35b078b4969f17cb49cbfd7a7e15edd8414eb36b", 1, 0, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"): ("4421dbaf14b05b7dd9480d32ae6319134f5785ff5347ba7ec74751d5aa80a583", 1, 1, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"): ("440373ba1279dd55d991b285eceb83157238b6217ad1c5e125f4bc7ffc704473", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_volatile.rs"): (

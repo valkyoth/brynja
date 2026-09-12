@@ -38,7 +38,7 @@
     "scripts/checks.sh": "e0f510644d15466e62f36e90cf789a31060656ace3bae6c15f8a34d08bbb98ba",
     "scripts/cpu/check-static-execution.py": "56d8d04058d1e8adc182cf5b0f4ac844cca501a4315437beadc5782563b51448",
     "scripts/cpu/static_execution_docs.py": "ea9116721730b3dacf213c79469e6edeb28f2648c40b52c854eb202c65650856",
-    "scripts/repository/unsafe_policy.py": "4f88c7631762be65d2fa1058074d0e4b5bb8ca7ff335e0630948c6eb721cb21a",
+    "scripts/repository/unsafe_policy.py": "6f0a25128c2648aa161b2816c5dc9398eb624bde2acb67a1ea09d7f4a44dee8a",
     "scripts/zeroization/check-zeroization-miri.sh": "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"
   }

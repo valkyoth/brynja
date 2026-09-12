@@ -11,6 +11,11 @@ def main():
     e = 'crates/brynja-legacy-sha1/src/execution.rs'
     p = policy.ADAPTER+'src/execution/platform.rs'
     cases = [
+        (c+'session/tests.rs', 'fn operational_callback_revokes_live_streams_without_recovery()', 'fn removed_callback_regression()'),
+        (c+'session.rs', 'Self::create(backend, revalidate)', 'Self::create(backend, |_| true)'),
+        (p, 'Sha1Backend::Aarch64Sha1, revalidate)', 'Sha1Backend::Aarch64Sha1, |_| true)'),
+        (p, 'backend == Sha1Backend::Aarch64Sha1 && availability().is_ok()', 'availability().is_ok()'),
+        (p, 'backend == Sha1Backend::Aarch64Sha1 && availability().is_ok()', 'backend == Sha1Backend::Aarch64Sha1'),
         (e, 'self.revoked.set(true);', 'self.revoked.set(false);'),
         (e, 'owner.quarantine();', ''),
         (e, 'Err(Sha1BackendError::MissingFeatures) if mode == Mode::Prefer', 'Err(_) if mode == Mode::Prefer'),

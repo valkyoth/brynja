@@ -68,6 +68,10 @@ def validate(root=ROOT, hashes=True):
                   'pub fn finalize(mut self)', 'pub fn finalize_bits(mut self,'):
         require(operation, token)
     create = session.split('fn create(', 1)[1].split('/// Current exact', 1)[0]
+    platform_constructor = session.split('pub unsafe fn from_platform(', 1)[1].split('fn create(', 1)[0]
+    require(platform_constructor, 'revalidate: fn(Sha1Backend) -> bool,')
+    require(platform_constructor, 'Self::create(backend, revalidate)')
+    require(sources[CPU+'session/tests.rs'], 'fn operational_callback_revokes_live_streams_without_recovery()')
     require(create, 'require_architecture(backend)?; let session = Sha1BackendSession::startup(backend, revalidate, ABC)?; session.ensure_healthy()?; Ok(Self { session })')
     for method in ('start', 'message_bits', 'check_additional_bits', 'check_additional_bytes', 'finalize', 'finalize_bits'):
         body = operation.split('pub fn '+method+'(', 1)[1].split('pub fn ', 1)[0]
@@ -78,7 +82,8 @@ def validate(root=ROOT, hashes=True):
     require(sources[ADAPTER+'src/execution/mod.rs'], 'Err(Error::Unavailable(_)) if mode == Mode::Prefer => Ok(Executor::portable()), Err(error) => Err(error),')
     platform = sources[ADAPTER+'src/execution/platform.rs']
     require(platform, 'availability().map_err(Error::Unavailable)?;')
-    require(platform, 'unsafe { Authority::from_platform(Sha1Backend::Aarch64Sha1) }')
+    require(platform, 'unsafe { Authority::from_platform(Sha1Backend::Aarch64Sha1, revalidate) }')
+    require(platform, 'fn revalidate(backend: Sha1Backend) -> bool { backend == Sha1Backend::Aarch64Sha1 && availability().is_ok() }')
     require(platform, 'if !cfg!(all(target_arch = "aarch64", target_endian = "little", any(target_os = "linux", target_os = "android", target_os = "macos", target_os = "ios", target_os = "windows"))) { return Err(Unavailable::UnsupportedPlatform); }')
     require(platform, 'std::arch::is_aarch64_feature_detected!("neon") && std::arch::is_aarch64_feature_detected!("sha2")')
     require(sources['scripts/sha1/check-sha1-cpu.py'], "['python3','scripts/sha1/check-sha1-package.py','--execution']")

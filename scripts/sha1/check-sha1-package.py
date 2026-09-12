@@ -116,7 +116,7 @@ def ownership_negatives(consumer, environment):
         for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
             cases.append((f'fn check<T: {bound}>() {{}}\nfn use_it() {{ check::<brynja_legacy_sha1::execution::{owner}>(); }}', 'E0277'))
     cases.extend([
-        ('fn check() { let _ = brynja_legacy_sha1::execution::Authority::from_platform(brynja_legacy_sha1::Sha1Backend::X86Sha); }', 'E0133'),
+        ('fn check() { let _ = brynja_legacy_sha1::execution::Authority::from_platform(brynja_legacy_sha1::Sha1Backend::X86Sha, |_| true); }', 'E0133'),
         ('fn check(o: &brynja_legacy_sha1::execution::Authority) { let _ = o.session(); }', 'E0624'),
         ('fn check(o: &brynja_legacy_sha1::execution::Executor) { let _ = o.hash(b"abc"); }', 'E0061'),
         ('fn check(o: brynja_legacy_sha1::execution::Report) { let _ = brynja_legacy_sha1::execution::Executor::with_authority(o); }', 'E0308'),

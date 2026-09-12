@@ -17,5 +17,5 @@
 "assurance/sha1-public-api/src/main.rs" = "f0b75a5c55d3e453272da908f0765836200de095bb4631c277c850329675d18c"
 "scripts/sha1/check-sha1-differential.py" = "c52ba52012205fa99981e495da25bcab92ba26ae92c88f841def06b8563bef1d"
 "scripts/sha1/check-sha1-codegen.sh" = "76cb6d5422e778139afb15d6f9d99e951bbaababfd322b7b6470e64790894ec2"
-"scripts/sha1/check-sha1-package.py" = "943248a34c932165d1bad827d34fafaf94a5b2c6962be0350968b7e72cd854d7"
+"scripts/sha1/check-sha1-package.py" = "745a441ebb659516dcd0d656f08f40be3ac0d90fc6f20e31c2378b5b97640a9e"
 "scripts/sha1/check-sha1.py" = "c07aca76bd52348759f339401c1ce51f3ec5efb7a23f5a2ed872947845f3f308"

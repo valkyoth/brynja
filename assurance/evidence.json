@@ -78,7 +78,7 @@
     "scripts/release/verification_plan.py": "01ca088e9f2944713f4984ced05c2e8464b931b6737f26246570f4049ed2b144",
     "scripts/repository/check-unsafe-policy.py": "6c24c8bebe0dbc5a74c87ac33fc3e6a1af9ca022c29f06136ec98dcf91300d61",
     "scripts/repository/test-unsafe-policy.py": "56b7bd95b73e6df10ca9c86be0bcbee08c3f0490fd59693bfcd9d9ee579a5c9a",
-    "scripts/repository/unsafe_policy.py": "4f88c7631762be65d2fa1058074d0e4b5bb8ca7ff335e0630948c6eb721cb21a",
+    "scripts/repository/unsafe_policy.py": "6f0a25128c2648aa161b2816c5dc9398eb624bde2acb67a1ea09d7f4a44dee8a",
     "scripts/tag_gate.sh": "eb66c40848b936d61d6f740932e8ec66922e6955e92da128a7517ffd31b4b61b",
     "scripts/zeroization/check-tag-miri.sh": "6ef10aa1775e5b31e8c610cd11ee412a622cbc7e7b6e1283a82ed2c1fe317e65",
     "scripts/zeroization/check-zeroization-codegen.sh": "aa1310d6366c248b2fad069d674aef2ac8a9ed297a16e2c40ca332d4c6acc8d9",

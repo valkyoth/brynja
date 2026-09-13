@@ -4,20 +4,12 @@
   "owner_review": "pending",
   "captures": {
     "amd-x86_64": {
-      "path": "assurance/sha1-hardened-observations/v0.24.42/amd-x86_64.json",
-      "sha256": "bd8bbce71029a20f58a450ff2b3c391d28f5942114366551c27dd8e8b22440d4"
-    },
-    "intel-x86_64": {
-      "path": "assurance/sha1-hardened-observations/v0.24.42/intel-x86_64.json",
-      "sha256": "88892759e0907ccb6f0226b4a10996ea225ef7c2ee21d0b1c9257e31ca22758b"
-    },
-    "aws-aarch64": {
-      "path": "assurance/sha1-hardened-observations/v0.24.42/aws-aarch64.json",
-      "sha256": "3629305f4140ccc9153c6c2862127efea623e46504de029b7e875b760e8d670c"
+      "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/amd-x86_64.json",
+      "sha256": "e22a6cb2d2515232db4d1cdb313ff1a2b6998edf053bb83abd16e7b7ca42f0d0"
     },
     "apple-m2-aarch64": {
-      "path": "assurance/sha1-hardened-observations/v0.24.42/apple-m2-aarch64.json",
-      "sha256": "107133082995e8390735ba674481d826f49ccc6b6fbe37b1cc198ce4c026941a"
+      "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/apple-m2-aarch64.json",
+      "sha256": "078fd9684f8c1703bb2d1578738d0400b048d0e4b76ef6890eaad5a72352c054"
     }
   }
 }

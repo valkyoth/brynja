@@ -373,3 +373,4 @@ repository="$(make_fixture stale-tag)"
 )
 
 echo "release readiness enforces the committed-report fix, CI, and tag flow"
+python3 "$(dirname "$source_script")/test-internal-deferral.py"

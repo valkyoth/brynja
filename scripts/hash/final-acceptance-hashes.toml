@@ -24,7 +24,7 @@
 "crates/brynja-hash-sha2/README.md" = "4781700e2915160468eb7644eea481a84311fe0a8913bdcc835dc5cea91e8fd6"
 "crates/brynja-hash-sha3/README.md" = "28f9cd3086d30eb19be050a85626cc4ccc49f0c7569be5e4cd57218bc76b9b8a"
 "docs/VERIFICATION_STATUS.md" = "cbf5fe3c7aa63ff1ebe155980ccb004457824ad1e1a09bf677e543695696aef9"
-"docs/current-status.md" = "aa97032ae74704d59ecc15ac5684b595364a25ea4eb71ac260cfa01e994b1a36"
+"docs/current-status.md" = "ac804b48bc703fad569ba893340efc0b5fbd4f36ac5c3b6e54bd881461e708fb"
 "docs/RELEASE_PLAN.md" = "0801f2eed8a0815ff586edbf46d800d1a4ca1c4f7308c95fcfcabe55f4ad7b6a"
 "release-notes/RELEASE_NOTES_0.24.11.md" = "79eeaca356c2a7fbf800cefc63b833842a02fecac745099133020d3c1c637289"
 "requirements/domains/cryptography.toml" = "5ac4bc25c98bac381f0153383f9eb09e0f2207e8b1115bd45c325886eea484d6"

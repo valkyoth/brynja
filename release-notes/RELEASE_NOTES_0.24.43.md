@@ -1,8 +1,9 @@
 # Brynja v0.24.43
 
 Status: implementation, development checks and four-lane native correctness
-collection complete. The open cleanup finding is deferred to v0.24.44; its
-release-gate disposition and final release/GitHub checks remain outstanding.
+collection complete. The open cleanup finding is deferred to v0.24.44 under an
+explicit owner-approved, source-bound internal-only exception. Final release
+verification and GitHub checks remain required before tagging.
 
 Adds default-off ordinary MD5 batch execution, separate from the unchanged
 unadmitted candidate APIs. AVX2 handles eight independent messages; little-endian
@@ -43,6 +44,13 @@ reviewer explicitly kept this finding open and the owner deferred its remediatio
 to v0.24.44. A stale package-helper review hash was repaired, and
 the final metadata preflight now checks all three MD5 review closures with
 missing/stale-pin regression tests, without rerunning cryptography.
+
+The report retains `Open-Findings: 1` and records `PASS WITH DEFERRAL`, not an
+unconditional clean result. The exception permits only this ordinary-public-data
+finding at this exact reviewed MD5 source closure in internal v0.24.43, with no
+publication. It rejects other versions, findings, source changes and public
+release contexts. Native evidence, final verification and signed-tag controls
+remain mandatory; v0.24.44 must implement and retest the hardened cleanup work.
 
 MD5 remains collision-broken legacy compatibility, absent from the modern
 facade. Nothing claims independent cryptographic verification, side-channel

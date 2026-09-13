@@ -44,10 +44,10 @@ fi
 report="security/pentest/${version}.md"
 if test "$exceptional" = "true"; then
     scripts/release/validate-current-pentest.sh --required
-    echo "${version} has the mandatory exceptional committed PASS pentest report"
+    echo "${version} satisfies exceptional pentest policy (PASS or an explicitly bound internal deferral)"
 elif test -e "$report"; then
     scripts/release/validate-current-pentest.sh --required
-    echo "${version} has an exceptional committed PASS pentest report"
+    echo "${version} satisfies exceptional pentest policy (PASS or an explicitly bound internal deferral)"
 else
     echo "${version} is tag-ready after user-confirmed green GitHub and CodeQL; no scheduled pentest or crates.io publication applies"
 fi

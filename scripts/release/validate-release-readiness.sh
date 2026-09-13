@@ -51,7 +51,11 @@ test "$(field_value Version)" = "$version" ||
 status_value="$(field_value Status)"
 retest_value="$(field_value Retest)"
 pending=false
-if test "$allow_pending" = true &&
+deferred=false
+if test "$status_value" = "PASS WITH DEFERRAL"; then
+    python3 scripts/release/internal_deferral.py "$version" "$publish_tag"
+    deferred=true
+elif test "$allow_pending" = true &&
     test "$status_value" = "RETEST REQUIRED"; then
     pending=true
     test "$retest_value" = "PENDING" ||
@@ -62,8 +66,10 @@ else
     test "$retest_value" = "PASS" ||
         fail "pentest report must record Retest: PASS"
 fi
-test "$(field_value Open-Findings)" = "0" ||
-    fail "pentest report must record Open-Findings: 0"
+if test "$deferred" = false; then
+    test "$(field_value Open-Findings)" = "0" ||
+        fail "pentest report must record Open-Findings: 0"
+fi
 date="$(field_value Date)"
 [[ "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] ||
     fail "pentest report requires Date: YYYY-MM-DD"
@@ -144,7 +150,9 @@ elif git rev-parse -q --verify "refs/tags/${version}" >/dev/null; then
     fail "pre-tag release readiness requires absent tag: ${version}"
 fi
 
-if test "$pending" = true; then
+if test "$deferred" = true; then
+    echo "${version} has an owner-approved internal deferral; one finding remains open, other tag gates still apply"
+elif test "$pending" = true; then
     echo "${version} has a current committed pending-retest report; release remains blocked"
 else
     echo "${version} has a current committed PASS pentest report and is tag-ready"

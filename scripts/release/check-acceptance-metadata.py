@@ -8,7 +8,7 @@ import sys
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
-for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5'):
+for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu'):
     sys.path.insert(0, str(ROOT / 'scripts' / category))
 
 import sha256_public_api
@@ -20,6 +20,7 @@ import api_profile_model
 import md5_policy
 import md5_cpu_policy
 import md5_execution_policy
+import acceleration_availability
 
 
 VERIFIER_REVIEWS = (
@@ -86,8 +87,11 @@ def check_all():
     md5_policy.validate(ROOT)
     md5_cpu_policy.validate(ROOT)
     md5_execution_policy.validate(ROOT)
+    # The cross-family acceleration inventory also binds MD5 source comments.
+    # Check its full current closure, not only each family's local review.
+    acceleration_availability.validate(ROOT)
 
 
 if __name__ == '__main__':
     check_all()
-    print('Shared verifier bindings, API-profile, five acceptance and three MD5 metadata/hash closures: PASS (no crypto rerun)')
+    print('Shared verifier bindings, API-profile, five acceptance, three MD5 and acceleration metadata/hash closures: PASS (no crypto rerun)')

@@ -16,6 +16,30 @@ def main():
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
+        # Reproduce the actual pre-rustdoc MD5 pin that escaped the local-family
+        # checks but failed the cross-family acceleration review in GitHub.
+        contract = metadata.acceleration_availability
+        original_contract_read = contract.read
+        for missing in (False, True):
+            document = json.loads(original_contract_read(metadata.ROOT, contract.REVIEW))
+            source = 'crates/brynja-legacy-md5/src/batch/execution.rs'
+            if missing:
+                del document['sha256'][source]
+            else:
+                document['sha256'][source] = 'f3dd8c62c846520fd6b30045dd9525229c7775974470a9432b3a7ff94aa7729a'
+
+            def stale_acceleration_read(root, name):
+                if name == contract.REVIEW:
+                    return json.dumps(document).encode()
+                return original_contract_read(root, name)
+
+            with patch.object(contract, 'read', side_effect=stale_acceleration_read):
+                try:
+                    metadata.check_all()
+                except ValueError as error:
+                    assert 'availability contract/source closure changed' in str(error)
+                else:
+                    raise AssertionError('stale or missing cross-family acceleration binding accepted')
         # Reproduce the stale shared package-helper pin seen in CI, in each
         # consuming MD5 review. Exercise the real validators, not mocked passes.
         original_read = Path.read_text
@@ -136,6 +160,7 @@ def main():
     print('Final metadata rejects five stale README bindings and six API-profile regressions without crypto execution')
     print('Shared verifier preflight rejects 28 stale or missing review bindings without crypto execution')
     print('Final metadata rejects six stale/missing MD5 package-helper bindings without crypto execution')
+    print('Final metadata rejects the stale MD5 rustdoc acceleration pin and missing binding without crypto execution')
 
 
 if __name__ == '__main__':

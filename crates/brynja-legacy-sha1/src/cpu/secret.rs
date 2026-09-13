@@ -27,6 +27,10 @@ impl Drop for Scratch {
 /// Thread-bound authority for the separately cleanup-qualified SHA-1 kernels.
 /// SHA-1 is collision-broken; this is not modern algorithm or FIPS admission.
 /// No ordinary authority, boolean feature report, or secret state import is accepted.
+/// The historical `Sha1Backend::is_admitted` candidate flag does not authorize
+/// this separate operational API. Complete platform authority, hardened owned
+/// storage, startup KAT and irreversible health are mandatory here. Neither
+/// independent cryptographic verification nor FIPS validation is claimed.
 pub struct Authority {
     backend: Sha1Backend,
     healthy: Cell<bool>,

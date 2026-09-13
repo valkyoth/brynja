@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "version": "0.24.42",
-  "owner_review": "accepted-correctness-with-residuals",
+  "owner_review": "pending",
   "captures": {
     "amd-x86_64": {
       "path": "assurance/sha1-hardened-observations/v0.24.42/amd-x86_64.json",

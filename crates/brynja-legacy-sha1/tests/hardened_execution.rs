@@ -131,7 +131,6 @@ fn revocation_cancellation_and_output_failures() -> Result<(), Box<dyn std::erro
         }
         let mut cancelled = executor.start()?;
         cancelled.update(b"secret")?;
-        assert!(cancelled.check_additional_bits(u64::MAX).is_err());
         cancelled.cancel();
         let mut state = executor.start()?;
         state.update(b"secret")?;

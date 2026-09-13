@@ -3,7 +3,8 @@ use crate::{BitString, HardenedSha1State, PublicDeclassification, Sha1Error, own
 use brynja_core::OwnedSecretRegion;
 
 /// Affine secret-bearing stream. No clone, reset, raw state, ordinary conversion,
-/// secret-derived metadata, Send, Sync, Copy or Debug is exposed.
+/// length/capacity query, Send, Sync, Copy or Debug is exposed. This is not a
+/// length-hiding primitive: work and actual-input errors can depend on length.
 pub struct Stream<'a> {
     pub(super) executor: &'a Executor,
     pub(super) owner: Sha1Owner,
@@ -25,20 +26,6 @@ impl<'a> Stream<'a> {
             return Err(Error::Quarantined);
         }
         self.executor.ready()
-    }
-    /// Checks public additional width; does not reveal a current length counter.
-    pub fn check_additional_bits(&self, bits: u64) -> Result<(), Error> {
-        self.ready()?;
-        crate::engine::admit_bits(self.owner.bits(), bits)
-            .map(|_| ())
-            .map_err(Error::from)
-    }
-    /// Checks public additional width without state mutation.
-    pub fn check_additional_bytes(&self, bytes: usize) -> Result<(), Error> {
-        self.ready()?;
-        crate::engine::admit_bytes(self.owner.bits(), bytes)
-            .map(|_| ())
-            .map_err(Error::from)
     }
     /// Length rejection is atomic. Authority/invariant errors or unwind destroy
     /// state and quarantine the executor; they never authorize portable fallback.

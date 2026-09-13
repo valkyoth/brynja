@@ -64,3 +64,42 @@ fn length_rejection_is_atomic_and_does_not_revoke_siblings() -> Result<(), Error
     assert!(executor.start().is_ok());
     Ok(())
 }
+
+#[test]
+fn internal_bit_admission_retains_exact_domain_and_output_contracts() -> Result<(), Error> {
+    let executor = Executor::portable();
+    for current in [0, 1, 7, 8, 63, 64, 1024, u64::MAX - 7, u64::MAX] {
+        let mut stream = executor.start()?;
+        stream.owner.message_length = current.to_be_bytes();
+        // Only private admission may query synthetic widths. Real public
+        // operations still reject exhausted message domains before mutation.
+        assert!(crate::engine::admit_bits(stream.owner.bits(), u64::MAX - current).is_ok());
+        if current > 0 {
+            assert!(
+                crate::engine::admit_bits(stream.owner.bits(), u64::MAX - current + 1).is_err()
+            );
+        }
+    }
+    for secret in [false, true] {
+        let mut stream = executor.start()?;
+        stream.owner.message_length = u64::MAX.to_be_bytes();
+        let tail = BitString::new(&[0x80], 1).map_err(|_| Sha1Error::MessageTooLong)?;
+        let mut destination = [0xa5; 20];
+        if secret {
+            assert!(stream.finalize_bits_secret(tail, &mut destination).is_err());
+            assert_eq!(destination, [0; 20]);
+        } else {
+            assert_eq!(
+                stream.finalize_bits_public(
+                    tail,
+                    &mut destination,
+                    PublicDeclassification::acknowledge()
+                ),
+                Err(Sha1Error::MessageTooLong.into())
+            );
+            assert_eq!(destination, [0xa5; 20]);
+        }
+    }
+    assert!(executor.start().is_ok());
+    Ok(())
+}

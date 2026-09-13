@@ -38,7 +38,7 @@ def validate_results(results, lane):
     require('SHA1_HOSTED_HARDENED: '+selected in results['hosted'].splitlines(), 'hosted route')
     require(re.search(r'^test result: ok\. 1 passed; 0 failed;', results['hosted'], re.M), 'hosted tests')
     for token in ('Independent hardened SHA-1 oracle: 1135 bit messages, public and secret destinations',
-                  'Packaged hardened ownership/classification negatives: 22 rejected',
+                  'Packaged hardened ownership/classification negatives: 24 rejected',
                   'Hardened output/quarantine/padding compiled mutants: 10 rejected',
                   'Compiled source-owner and scratch cleanup removals: 10 rejected'):
         require(token in results['packaged'].splitlines(), 'packaged '+token)

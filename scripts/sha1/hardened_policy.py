@@ -68,6 +68,10 @@ def validate(root=ROOT, reviewed=True):
     module = read(root, LEAF + 'src/hardened_execution/mod.rs')
     stream = read(root, LEAF + 'src/hardened_execution/stream.rs')
     secret = read(root, LEAF + 'src/cpu/secret.rs')
+    methods = re.findall(r'\bpub\s+(?:(?:const|async)\s+)*fn\s+(\w+)', stream)
+    if sorted(methods) != sorted(('update', 'finalize_public', 'finalize_bits_public',
+                                'finalize_secret', 'finalize_bits_secret', 'cancel')):
+        raise ValueError('hardened stream gained an unreviewed public query or operation')
     for token in ('pub struct Executor', 'Err(Sha1BackendError::MissingFeatures) if mode == Mode::Prefer',
                   'self.revoked.set(true)', 'let mut output = begin_output(destination)?;',
                   'Some(authority) => authority.compress(owner)', 'clear_owned_region(destination)',

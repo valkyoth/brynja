@@ -66,6 +66,8 @@ def negatives(consumer, environment):
         for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
             cases.append((f'fn check<T: {bound}>() {{}}\nfn use_it() {{ check::<brynja_legacy_sha1::hardened_execution::{owner}>(); }}', 'E0277'))
     cases.extend([
+        ('fn use_it(s: &brynja_legacy_sha1::hardened_execution::Stream<\'_>) { let _ = s.check_additional_bits(u64::MAX); }', 'E0599'),
+        ('fn use_it(s: &brynja_legacy_sha1::hardened_execution::Stream<\'_>) { let _ = s.check_additional_bytes(usize::MAX); }', 'E0599'),
         ('struct Fake; impl brynja_legacy_sha1::HardenedSha1State for Fake {}', 'E0277'),
         ('fn use_it(a: brynja_legacy_sha1::execution::Authority) { let _ = brynja_legacy_sha1::hardened_execution::Executor::with_authority(a); }', 'E0308'),
         ('fn use_it(a: brynja_legacy_sha1::hardened_execution::Report) { let _ = brynja_legacy_sha1::hardened_execution::Executor::with_authority(a); }', 'E0308'),

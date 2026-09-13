@@ -26,7 +26,7 @@ def result(lane):
     return dict(hosted='test result: ok. 1 passed; 0 failed;\nSHA1_HOSTED_HARDENED: '+(kernel if arm else 'portable'),
         portable='test result: ok. 4 passed; 0 failed;',
         static=f'test result: ok. 4 passed; 0 failed;\nHARDENED_SHA1_EXECUTION: {kernel}; blocks=512\nSHA1_HARDENED_OPERATIONAL: {kernel}; actual hardened startup and digest passed',
-        packaged='Independent hardened SHA-1 oracle: 1135 bit messages, public and secret destinations\nPackaged hardened ownership/classification negatives: 22 rejected\nHardened output/quarantine/padding compiled mutants: 10 rejected\nCompiled source-owner and scratch cleanup removals: 10 rejected',
+        packaged='Independent hardened SHA-1 oracle: 1135 bit messages, public and secret destinations\nPackaged hardened ownership/classification negatives: 24 rejected\nHardened output/quarantine/padding compiled mutants: 10 rejected\nCompiled source-owner and scratch cleanup removals: 10 rejected',
         codegen=f'Hardened SHA-1 MIR/LLVM/assembly: PASS; 1.98.1; {target}; seven owned regions; no register-erasure claim')
 
 
@@ -42,7 +42,7 @@ def main():
                 try: native.validate_results(changed, lane)
                 except ValueError: count += 1
                 else: raise AssertionError('accepted missing native result: '+key)
-        for original, replacement in (('blocks=512','blocks=0'), ('HARDENED_SHA1_EXECUTION:', 'test prefix HARDENED_SHA1_EXECUTION:'), ('1135', '1134'), ('20 rejected','0 rejected')):
+        for original, replacement in (('blocks=512','blocks=0'), ('HARDENED_SHA1_EXECUTION:', 'test prefix HARDENED_SHA1_EXECUTION:'), ('1135', '1134'), ('24 rejected','22 rejected')):
             changed = {k:v.replace(original, replacement) for k,v in good.items()}
             if changed == good: continue
             try: native.validate_results(changed, lane)

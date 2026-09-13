@@ -48,7 +48,11 @@ impl Sha1Backend {
         }
     }
 
-    /// No candidate has native correctness/migration/timing admission yet.
+    /// Admission of the historical `Sha1BackendSession` candidate API only.
+    /// This is not an availability query for the separate opt-in ordinary or
+    /// hardened execution authorities. Their typed platform/compiled-target
+    /// contracts, startup tests and health checks govern operational execution;
+    /// independent cryptographic review and FIPS status are separate claims.
     pub const fn is_admitted(self) -> bool {
         false
     }

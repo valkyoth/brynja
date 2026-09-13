@@ -11,6 +11,16 @@ The default-off leaf feature `hardened-execution` exposes distinct `Authority`,
 AArch64 system feature contract. SHA-1 remains collision-broken legacy
 compatibility, never a modern default, raw authentication or password hash.
 
+The [normative acceleration contract](acceleration-availability.md) separates
+operational availability from independent verification and FIPS validation.
+`Sha1Backend::is_admitted()` governs the historical `Sha1BackendSession`
+candidate API, not these distinct hardened authorities. That older gate stays
+closed. Operational execution requires the explicit feature, complete static
+or platform authority, hardened storage, actual-kernel startup KAT and health
+checks. Native evidence and exceptional review remain release requirements;
+they are not interchangeable with runtime CPU authority. Ordinary execution
+authority cannot authorize secret processing.
+
 ## Selection and usable APIs
 
 | Selection | Result |
@@ -56,10 +66,18 @@ Byte one-shot `hash_secret` and canonical MSB-first `hash_bits_secret` return
 typed, non-cloneable `OwnedSecretRegion`. `finalize_bits_secret` consumes a
 bit tail after complete-byte updates. Public counterparts require explicit
 `PublicDeclassification`; no implicit ordinary digest import/export exists.
-`check_additional_bytes/bits` checks capacity without exposing the current
-secret-derived length. Messages remain strictly below 2^64 bits, digests 20 bytes.
+The stream deliberately exposes no hypothetical byte/bit capacity queries:
+success/failure at chosen sizes could reveal its retained message length.
+Actual updates and consuming finalization retain internal checked length
+admission before mutation. Messages remain strictly below 2^64 bits, digests 20 bytes.
 `cancel` consumes state. Finalization consumes state on success and error.
 Executor revocation affects every borrowing stream and is irreversible.
+
+This is a secret-memory ownership API, not a traffic-analysis or length-hiding
+primitive. Actual input sizes, processing time and actual-operation errors can
+depend on length. Callers needing length confidentiality must handle padding,
+framing and observable application behavior separately. Existing portable
+`HardenedSha1` capacity APIs are not represented as hiding message lengths.
 
 ## Mandatory ownership and cleanup
 

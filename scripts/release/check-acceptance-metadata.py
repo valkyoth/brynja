@@ -8,7 +8,7 @@ import sys
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
-for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu'):
+for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu', 'parallelhash'):
     sys.path.insert(0, str(ROOT / 'scripts' / category))
 
 import sha256_public_api
@@ -21,6 +21,7 @@ import md5_policy
 import md5_cpu_policy
 import md5_execution_policy
 import acceleration_availability
+import parallelhash_policy
 
 
 VERIFIER_REVIEWS = (
@@ -90,8 +91,10 @@ def check_all():
     # The cross-family acceleration inventory also binds MD5 source comments.
     # Check its full current closure, not only each family's local review.
     acceleration_availability.validate(ROOT)
+    # Its facade fixture pin participates in historical native carry-forward.
+    parallelhash_policy.validate(ROOT)
 
 
 if __name__ == '__main__':
     check_all()
-    print('Shared verifier bindings, API-profile, five acceptance, three MD5 and acceleration metadata/hash closures: PASS (no crypto rerun)')
+    print('Shared verifier bindings, API-profile, five acceptance, three MD5, acceleration and ParallelHash metadata/hash closures: PASS (no crypto rerun)')

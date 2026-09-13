@@ -16,6 +16,21 @@ def main():
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
+        parallel = metadata.parallelhash_policy
+        for missing in (False, True):
+            hashes = dict(parallel.HASHES)
+            fixture = Path('assurance/parallelhash-public-api/Cargo.toml')
+            if missing:
+                del hashes[fixture]
+            else:
+                hashes[fixture] = 'e22082db08e6154420d2d6fc05267e844dc1d767c6c7cd3922e464efe00ad724'
+            with patch.object(parallel, 'HASHES', hashes):
+                try:
+                    metadata.check_all()
+                except parallel.ParallelHashPolicyError:
+                    pass
+                else:
+                    raise AssertionError('stale or missing ParallelHash facade-fixture binding accepted')
         # Reproduce the actual pre-rustdoc MD5 pin that escaped the local-family
         # checks but failed the cross-family acceleration review in GitHub.
         contract = metadata.acceleration_availability
@@ -161,6 +176,7 @@ def main():
     print('Shared verifier preflight rejects 28 stale or missing review bindings without crypto execution')
     print('Final metadata rejects six stale/missing MD5 package-helper bindings without crypto execution')
     print('Final metadata rejects the stale MD5 rustdoc acceleration pin and missing binding without crypto execution')
+    print('Final metadata rejects stale/missing ParallelHash facade-fixture bindings without crypto execution')
 
 
 if __name__ == '__main__':

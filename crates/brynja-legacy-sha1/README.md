@@ -41,7 +41,7 @@ is under qualification. See the
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 | Opt-in ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
-| Opt-in hardened acceleration | 🚧 In progress; qualification pending | ❌ Not independently verified |
+| Opt-in hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -143,7 +143,8 @@ The separate `hardened-execution` feature exposes a secret-bearing
 streams. Static x86 SHA/SSE2 and AArch64 NEON/SHA1 use owner-backed schedule and
 lane storage with mandatory clearing. Its hosted adapter requires the distinct
 `runtime-hardened-execution` feature. Ordinary authority cannot convert to this
-authority. Native qualification and exceptional review remain pending.
+authority. Project-owned native correctness evidence covers AMD, Intel, AWS Arm
+and Apple M2 Pro; it does not establish migration safety or independent verification.
 
 ```rust
 # #[cfg(feature = "hardened-execution")]

@@ -54,6 +54,14 @@ retest, committed native Intel/Linux Arm/Apple Arm observations and required
 local release checks passed. Default constructors stay portable. This does not
 establish independent verification, register/spill erasure or FIPS validation.
 
+Separate [hardened legacy SHA-1 execution](legacy-sha1-hardened-execution.md)
+is implemented with default-off static and hosted authority, seven erased owned
+regions and typed secret outputs. Owner-accepted retest and reviewed AMD, Intel,
+AWS Arm and Apple M2 Pro correctness captures cover the current source closure.
+Final release/GitHub checks remain required. SHA-1 stays collision-broken legacy
+compatibility; this evidence is not independent verification, timing/migration
+proof, physical-copy erasure or FIPS validation.
+
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |

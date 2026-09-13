@@ -1,7 +1,7 @@
 # Brynja v0.24.42
 
-Status: development in progress. Exceptional owner pentest/retest, fresh native
-qualification, final scoped release checks and GitHub checks remain required.
+Status: implementation, owner-accepted exceptional retest and four-lane native
+correctness qualification complete. Final scoped release and GitHub checks remain required.
 These notes do not authorize a tag or publication.
 
 Adds default-off hardened legacy SHA-1 acceleration with distinct authority,
@@ -53,8 +53,10 @@ rejects unreviewed public stream queries. This does not claim traffic-analysis
 resistance or length hiding through actual-input processing time/errors.
 The old candidate-admission flag is explicitly distinguished from the separately
 opted-in operational authorities, as required by the acceleration contract.
-Earlier native records remain historical; the changed source needs fresh review
-and capture before tagging.
+Refreshed AMD, Intel, AWS Arm and Apple M2 Pro captures at `867d3ebc` match the
+current source closure and are archived under
+`assurance/sha1-hardened-observations/v0.24.42/867d3ebc/`. Owner review accepts
+correctness with the documented residual limits; earlier captures are historical.
 
 SHA-1 remains collision-broken and outside modern facade/TLS/PKIX/FIPS graphs.
 No external dependency is introduced. Internal source clearing is not a claim

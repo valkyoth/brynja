@@ -37,7 +37,7 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 | Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
-| Opt-in hosted hardened acceleration | 🚧 In progress; qualification pending | ❌ Not independently verified |
+| Opt-in hosted hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 
 ## Hardware and SIMD
 
@@ -81,7 +81,8 @@ The distinct default-off `runtime-hardened-execution` feature adds
 `hardened_execution::select(Mode)`. It returns a non-cloneable, thread-bound
 executor with typed secret output, explicit public declassification and owned
 scratch clearing. Hosted AArch64 and static leaf x86/Arm routes remain subject
-to the documented lifetime-wide platform contract. Native qualification is pending.
+to the documented lifetime-wide platform contract. Project-owned native correctness
+evidence covers AWS Arm and Apple M2 Pro, not arbitrary hotplug or VM migration.
 
 ```rust
 # #[cfg(feature = "runtime-hardened-execution")]

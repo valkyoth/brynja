@@ -1,7 +1,7 @@
 # Hardened legacy SHA-1 execution
 
-Status: implementation and development assurance in progress; exceptional owner
-pentest/retest and fresh native qualification are required before tagging.
+Status: implemented with owner-accepted exceptional retest and reviewed native
+correctness evidence. Final release and GitHub checks are required before tagging.
 No independent cryptographic review or FIPS validation is claimed.
 
 This is deliberately separate from [ordinary execution](legacy-sha1-execution.md).
@@ -132,7 +132,9 @@ No locked/pinned memory or deployment certification is supplied.
 Native records are operator-self-attested and require owner review. Historical
 ordinary captures cannot qualify these secret kernels. No speedup, timing
 resistance, CPU-migration proof, independent review or FIPS certificate is
-inferred from functional correctness. Fresh qualification is still pending.
+inferred from functional correctness. Reviewed AMD, Intel, AWS Arm and Apple M2
+Pro captures match the current source closure; see the
+[persistent evidence archive](../assurance/sha1-hardened-observations/v0.24.42/867d3ebc/README.md).
 
 With `--nocapture`, generic tests announce when the kernel test skips for missing compiled features.
 Set `BRYNJA_REQUIRE_HARDENED_SHA1=1` in instruction-qualified lanes; the CI,

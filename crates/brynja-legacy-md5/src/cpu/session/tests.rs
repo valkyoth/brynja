@@ -1,5 +1,45 @@
 use super::*;
+#[cfg(feature = "execution")]
+extern crate std;
 use crate::{BitString, Md5Batch, Md5BatchControl, owner::Md5Owner};
+
+#[cfg(feature = "execution")]
+#[test]
+fn operational_kat_and_revocation_remain_fail_closed() {
+    let Some(backend) = compiled_backend() else {
+        return;
+    };
+    let bad = Md5BackendSession::initialize(backend, compiled_features, true);
+    assert!(bad.is_ok_and(|s| s.ensure_healthy() == Err(Md5BackendError::Quarantined)));
+    let authority = ExecutionAuthority::for_compiled_target();
+    assert!(authority.is_ok());
+    if let Ok(mut authority) = authority {
+        authority.session.revalidate = |_| false;
+        assert_eq!(
+            authority.session.ensure_healthy(),
+            Err(Md5BackendError::MissingFeatures)
+        );
+        authority.session.revalidate = compiled_features;
+        assert_eq!(
+            authority.session.ensure_healthy(),
+            Err(Md5BackendError::Quarantined)
+        );
+    }
+}
+
+#[cfg(feature = "execution")]
+#[test]
+fn operational_revalidator_unwind_quarantines_without_instructions() {
+    let mut session = Md5BackendSession::quarantined_model_for_test();
+    session.healthy.set(true);
+    session.revalidate = |_| std::panic::resume_unwind(std::boxed::Box::new("revocation probe"));
+    let result =
+        std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| session.ensure_healthy()));
+    assert!(result.is_err());
+    assert_eq!(session.health(), Md5BackendHealth::Quarantined);
+    session.revalidate = |_| true;
+    assert_eq!(session.ensure_healthy(), Err(Md5BackendError::Quarantined));
+}
 
 fn session() -> Option<Md5BackendSession> {
     compiled_backend()?;

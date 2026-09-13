@@ -14,9 +14,10 @@ CLOSURE = {'brynja-core': '0.9.0', 'brynja-hash-core': '0.1.0', 'brynja-legacy-m
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cpu', action='store_true')
+    parser.add_argument('--execution', action='store_true')
     args = parser.parse_args()
     closure = dict(CLOSURE)
-    if args.cpu: closure['brynja-legacy-md5-std'] = '0.1.0'
+    if args.cpu or args.execution: closure['brynja-legacy-md5-std'] = '0.1.0'
     with tempfile.TemporaryDirectory(prefix='brynja-md5-package-') as temporary:
         root = Path(temporary)
         environment = dict(os.environ, CARGO_TARGET_DIR=str(root / 'target'))
@@ -44,16 +45,24 @@ def main():
         (consumer / 'src').mkdir(parents=True)
         manifest = '[package]\nname="md5-packaged-consumer"\nversion="0.0.0"\nedition="2024"\n[workspace]\n'
         features = ', features=["cpu"]' if args.cpu else ''
+        if args.execution: features = ', features=["execution"]'
         manifest += '[dependencies]\nbrynja-legacy-md5 = { version="=0.1.0", default-features=false'+features+' }\n'
         if args.cpu: manifest += 'brynja-legacy-md5-std = "=0.1.0"\n'
+        if args.execution:
+            manifest += 'brynja-legacy-md5-std = {version="=0.1.0", default-features=false, features=["runtime-execution"]}\n'
+            manifest += '[features]\ndefault=["execution","runtime-execution"]\nexecution=[]\nruntime-execution=[]\n'
         manifest += '[patch.crates-io]\n'
         for package, version in closure.items():
             manifest += f'{package} = {{ path="../unpacked/{package}-{version}" }}\n'
         (consumer / 'Cargo.toml').write_text(manifest)
         source = 'assurance/md5-cpu-public-api/src/packaged.rs' if args.cpu else 'assurance/md5-public-api/src/lib.rs'
         (consumer / 'src/lib.rs').write_bytes((ROOT / source).read_bytes())
+        if args.execution:
+            import execution_package
+            execution_package.prepare(consumer, root)
         subprocess.run(['cargo', 'generate-lockfile', '--offline'], cwd=consumer, env=environment, check=True, timeout=60)
         subprocess.run(['cargo', 'test', '--locked', '--offline'], cwd=consumer, env=environment, check=True, timeout=180)
+        if args.execution: execution_package.check(consumer, root, environment)
     print(f'MD5 packaged closure and external consumer: PASS; cpu={args.cpu}; no upload')
 
 

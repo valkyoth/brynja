@@ -1,5 +1,7 @@
 //! Fixed-capacity lane ownership, portable execution and transactional outputs.
 mod control;
+#[cfg(feature = "execution")]
+pub mod execution;
 mod owner;
 #[cfg(feature = "cpu")]
 mod vector;

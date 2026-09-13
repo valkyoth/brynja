@@ -60,8 +60,8 @@ def regressions(root):
     # Replace normalized text in disposable copies; source hashes are not used
     # here, so each test must fail for a semantic contract discrepancy.
     cases += [
-        (DOCS[0], 'Status: nineteen exact', 'Status: nine exact'),
-        (DOCS[0], 'Rust in only nineteen exact', 'Rust in only nine exact'),
+        (DOCS[0], 'Status: twenty exact', 'Status: nine exact'),
+        (DOCS[0], 'Rust in only twenty exact', 'Rust in only nine exact'),
         (DOCS[2], 'source-hash-bound module inventory', 'exactly nine modules'),
         (MANIFEST, 'default = []', 'default = ["static-execution"]'),
         (LIBRARY, 'pub mod static_execution;', 'mod static_execution;'),

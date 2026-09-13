@@ -4572,7 +4572,7 @@ Exit criteria:
 
 ### v0.24.42 - Legacy SHA-1 Hardened Acceleration
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Add hardened secret-bearing SHA-1 CPU operations with owned scratch destruction and typed output while retaining separate legacy-only eligibility and collision warnings.
 
@@ -4599,7 +4599,7 @@ Exit criteria:
 
 ### v0.24.43 - MD5 Batch SIMD Operational Routing
 
-Status: planned
+Status: in progress
 
 Plan scope: Make existing AVX2 eight-lane and AArch64 NEON four-lane MD5 batch backends reachable from ordinary legacy no_std and hosted APIs with explicit selection and accurate per-batch route reporting.
 

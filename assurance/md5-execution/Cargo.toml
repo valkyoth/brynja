@@ -1,0 +1,21 @@
+[package]
+name = "brynja-md5-execution-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", version = "=0.1.0", default-features = false, features = ["execution"] }
+brynja-legacy-md5-std = { path = "../../crates/brynja-legacy-md5-std", version = "=0.1.0", default-features = false, features = ["runtime-execution"] }
+
+[workspace]
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+unwrap_used = "forbid"
+expect_used = "forbid"
+panic = "forbid"
+indexing_slicing = "forbid"

@@ -240,6 +240,9 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         # The reviewed CPU surface includes the bounded portable batch API;
         # neither feature implies the separate non-production evidence key.
         expected["cpu"] = ["batch"]
+        expected["execution"] = ["cpu"]
+    if name == "brynja-legacy-md5-std":
+        expected["runtime-execution"] = ["brynja-legacy-md5/execution"]
     if name == "brynja-legacy-sha1":
         expected["execution"] = ["cpu"]
         expected["hardened-execution"] = ["cpu"]

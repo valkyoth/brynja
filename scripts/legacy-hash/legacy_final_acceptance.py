@@ -11,6 +11,12 @@ FIXTURE = 'assurance/legacy-hash-final'
 FROZEN = 'scripts/legacy-hash/frozen-v02420.toml'
 SNAPSHOT = 'scripts/legacy-hash/native-source-snapshot.toml'
 SHA1_DELTA = 'scripts/legacy-hash/sha1-operational-delta.toml'
+MD5_DELTA = 'scripts/legacy-hash/md5-operational-delta.toml'
+MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
+    'Cargo.toml', 'src/lib.rs', 'src/cpu/mod.rs', 'src/cpu/session.rs', 'src/cpu/session/tests.rs',
+    'src/batch/mod.rs', 'src/batch/execution.rs', 'src/batch/execution/tests.rs', 'tests/execution.rs')) + tuple(
+    'crates/brynja-legacy-md5-std/' + name for name in (
+        'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs'))
 SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
     'Cargo.toml', 'src/lib.rs', 'src/cpu/mod.rs', 'src/cpu/session.rs', 'src/cpu/session/tests.rs',
     'src/execution.rs', 'src/execution/ownership.rs', 'tests/execution.rs',
@@ -67,7 +73,7 @@ def sha(text):
 
 
 def inventory(root=ROOT):
-    files = set(FROZEN_FILES) | set(SHA1_CHANGED) | {FROZEN, SNAPSHOT, SHA1_DELTA, CLAIMS, 'docs/legacy-hash-final-acceptance.md',
+    files = set(FROZEN_FILES) | set(SHA1_CHANGED) | set(MD5_CHANGED) | {FROZEN, SNAPSHOT, SHA1_DELTA, MD5_DELTA, CLAIMS, 'docs/legacy-hash-final-acceptance.md',
         'scripts/checks.sh', 'scripts/ci/check-rust-version-matrix.sh',
         'scripts/assurance/check-bare-metal.sh', '.github/workflows/ci.yml',
         'scripts/zeroization/check-zeroization-miri.sh',
@@ -121,6 +127,13 @@ def validate_native(root):
                 or set(delta['files']) != set(SHA1_CHANGED)):
                 raise ValueError('SHA-1 operational review cannot widen historical evidence')
             expected.update(delta['files'])
+        if family == 'md5':
+            delta = tomllib.loads(read(root, MD5_DELTA))
+            if (set(delta) != {'version', 'native', 'files'} or delta['version'] != '0.24.43'
+                or delta['native'] != 'fresh operational evidence required separately'
+                or set(delta['files']) != set(MD5_CHANGED)):
+                raise ValueError('MD5 operational review cannot widen historical evidence')
+            expected.update(delta['files'])
         paths = set()
         for package in ('brynja-core', 'brynja-hash-core', f'brynja-legacy-{family}', f'brynja-legacy-{family}-std'):
             paths.add(f'crates/{package}/Cargo.toml')
@@ -144,8 +157,15 @@ def validate_native(root):
             or document['independent_review'] is not False or document['fips_validated'] is not False):
             raise ValueError('native provenance/admission mismatch')
         for path, digest in document['source_sha256'].items():
-            if path.endswith(('.rs', 'Cargo.toml', 'Cargo.lock')) and sha(read(root, path)) != digest:
-                raise ValueError('native implementation changed; recapture or leave scope pending: ' + path)
+            if path.endswith(('.rs', 'Cargo.toml', 'Cargo.lock')):
+                # Historical captures must match the immutable historical map,
+                # never the operational delta. The exact delta above is reviewed
+                # separately and needs fresh observations at its own tag gate.
+                original = tomllib.loads(snapshot)['md5']['files'].get(path)
+                if path in MD5_CHANGED and original != digest:
+                    raise ValueError('native capture does not match historical snapshot: ' + path)
+                if path not in MD5_CHANGED and sha(read(root, path)) != digest:
+                    raise ValueError('native implementation changed outside reviewed delta: ' + path)
 
 
 def validate(root=ROOT, hashes=True):

@@ -10,6 +10,8 @@ mod session;
 #[cfg(target_arch = "x86_64")]
 mod x86_avx2_md5;
 
+#[cfg(feature = "execution")]
+pub use session::ExecutionAuthority;
 pub use session::Md5BackendSession;
 
 /// Independent-message SIMD family; neither a modern nor a FIPS capability.
@@ -43,7 +45,9 @@ impl Md5Backend {
             Self::Aarch64Neon => &["neon"],
         }
     }
-    /// No backend is admitted. Changing this flag is not an admission design.
+    /// Historical candidate-session admission only, not operational availability.
+    /// Separate default-off execution authorities require a complete platform
+    /// contract and startup KAT. This flag never authorizes those APIs.
     pub const fn is_admitted(self) -> bool {
         false
     }

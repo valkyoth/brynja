@@ -1,15 +1,16 @@
 # Unsafe Rust Policy
 
-Status: nineteen exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: twenty exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only nineteen exact modules: the private core volatile clearer; the
+Rust in only twenty exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
 isolated legacy SHA-1 and MD5 session/x86/AArch64 candidate modules; plus the
 runtime owner constructor and its private hosted platform bridge; and the
-separate legacy SHA-1 hosted platform bridge and hardened secret authority. Each
+separate legacy SHA-1 hosted platform bridge and hardened secret authority; and
+the ordinary MD5 hosted platform bridge. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every
@@ -257,3 +258,15 @@ Only ordinary public-data batches can use the session; hardened batches compose
 the existing clearing MD5 owners and have no instruction route. Unique two-key
 evidence gating has no cfg(test) exception. Native records, QEMU and benchmarks
 cannot admit execution. See [MD5 acceleration](legacy-md5-acceleration.md).
+
+## Ordinary MD5 operational authority
+
+The default-off `execution` API imports a distinct lifetime-wide static/platform
+authority through the existing MD5 session module. The old candidate constructor
+still rejects before execution. The new authority executes the real full-width
+startup KAT and exposes no raw session; revalidation failure and unwind quarantine
+before caller-output commit. No kernel arithmetic or pointer boundary changed.
+The separate hosted MD5 platform module has one reviewed unsafe call importing
+the supported AArch64 OS contract. Generic x86 current-core detection is not
+treated as authority. These ordinary APIs require public classification and have
+no hardened output path. See [ordinary MD5 execution](legacy-md5-execution.md).

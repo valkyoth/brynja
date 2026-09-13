@@ -2,6 +2,13 @@
 import copy
 
 def check(no_default, all_features, package, node, reject):
+    for name, feature, wrong in (
+        ("brynja-legacy-md5", "execution", ["cpu-evidence"]),
+        ("brynja-legacy-md5-std", "runtime-execution", []),
+    ):
+        altered = copy.deepcopy(all_features)
+        package(altered, name)["features"][feature] = wrong
+        reject(altered, "all-features", "feature policy differs", "MD5 execution feature boundary changed")
     for features in ([], ["batch", "cpu-evidence"]):
         altered = copy.deepcopy(all_features)
         package(altered, "brynja-legacy-md5")["features"]["cpu"] = features

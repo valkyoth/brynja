@@ -58,9 +58,15 @@ Separate [hardened legacy SHA-1 execution](legacy-sha1-hardened-execution.md)
 is implemented with default-off static and hosted authority, seven erased owned
 regions and typed secret outputs. Owner-accepted retest and reviewed AMD, Intel,
 AWS Arm and Apple M2 Pro correctness captures cover the current source closure.
-Final release/GitHub checks remain required. SHA-1 stays collision-broken legacy
+The v0.24.42 release checks passed and its tag is signed. SHA-1 stays collision-broken legacy
 compatibility; this evidence is not independent verification, timing/migration
 proof, physical-copy erasure or FIPS validation.
+
+Separate [ordinary MD5 batch SIMD execution](legacy-md5-execution.md) is in
+progress. Default-off AVX2/NEON authority and hosted selection expose bounded
+public-data batches with actual-work reports. Portable/hardened defaults and
+old candidate admission are unchanged. Exceptional pentest and fresh four-lane
+native qualification remain pending; hardened MD5 SIMD is not yet implemented.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
@@ -85,7 +91,7 @@ proof, physical-copy erasure or FIPS validation.
 | Future `brynja-openpgp-core` / `brynja-openpgp-armor` / `brynja-openpgp` | RFC 9580 packet, armor, certificate, key, signature, encryption, compression, and message processing | ❌ Not implemented or verified |
 | Future `brynja-openpgp-legacy` | Explicitly isolated deprecated OpenPGP read, decrypt, or verify compatibility | ❌ Not implemented or verified |
 | `brynja-legacy-sha1` | Portable ordinary/hardened byte/bit SHA-1; collision-broken legacy compatibility | ❌ Not verified |
-| `brynja-legacy-md5-std` | Opt-in legacy MD5 host observation and portable batch fallback; no execution authority or admitted route | ❌ Not independently verified |
+| `brynja-legacy-md5-std` | Legacy host observation; separate default-off ordinary SIMD selection in progress, pending native qualification | ❌ Not independently verified |
 | `brynja-legacy-sha1-std` | Opt-in legacy CPU observation and portable fallback; no execution authority or admitted route | ❌ Not independently verified |
 | `brynja-legacy-md5` | Portable ordinary/hardened byte/bit MD5; collision-broken legacy compatibility | ❌ Not verified |
 | `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |

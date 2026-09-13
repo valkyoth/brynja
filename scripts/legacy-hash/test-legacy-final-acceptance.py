@@ -24,6 +24,8 @@ def main():
         (policy.SNAPSHOT, '15faddd', '25faddd'),
         (policy.SHA1_DELTA, 'fresh operational evidence required separately', 'historical evidence is fresh'),
         (policy.SHA1_DELTA, 'src/execution.rs', 'src/engine.rs'),
+        (policy.MD5_DELTA, 'fresh operational evidence required separately', 'historical evidence is fresh'),
+        (policy.MD5_DELTA, 'src/batch/execution.rs', 'src/engine.rs'),
         ('crates/brynja-legacy-sha1/src/execution.rs', 'self.revoked.set(true);', 'self.revoked.set(false);'),
         ('assurance/legacy-hash-public-api/src/vectors.rs', '0xda, 0x39', '0xdb, 0x39'),
         ('crates/brynja-core/Cargo.toml', '0.9.0', '0.9.1'),

@@ -28,7 +28,8 @@ ROWS = {
         "| Repository task-helper package | ❌ Not implemented | ❌ No |"
     ],
     "crates/brynja-legacy-md5/README.md": [
-        "| MD5 | ✅ Fully implemented | ❌ Not independently verified |"
+        "| MD5 | ✅ Fully implemented | ❌ Not independently verified |",
+        "| Ordinary batch AVX2 / NEON execution | 🚧 In progress; native qualification pending | ❌ No |"
     ],
     "crates/brynja-mac-kmac/README.md": [
         "| KMAC128/256 and KMACXOF128/256 | ✅ Fully implemented | ❌ No |",
@@ -39,7 +40,8 @@ ROWS = {
         "| TLS 1.3 engine | ❌ Not implemented | ❌ No |"
     ],
     "crates/brynja-legacy-md5-std/README.md": [
-        "| MD5 | ✅ Fully implemented | ❌ Not independently verified |"
+        "| MD5 | ✅ Fully implemented | ❌ Not independently verified |",
+        "| Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |"
     ],
     "crates/brynja-tls13-handshake/README.md": [
         "| Shared TLS 1.3 handshake state machine | ❌ Not implemented | ❌ No |"

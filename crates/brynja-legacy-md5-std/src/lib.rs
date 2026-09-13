@@ -5,6 +5,11 @@
 //! fails before hashing. The safe adapter cannot mint the migration authority
 //! needed by the experimental instruction sessions. No global registration,
 //! affinity changes, process policy, allocation or external dependency is added.
+//! The separate default-off `execution` module offers operational batches;
+//! the historical observation API below remains portable and unchanged.
+
+#[cfg(feature = "runtime-execution")]
+pub mod execution;
 
 use brynja_legacy_md5::{BitString, Md5, Md5Backend, Md5Error};
 

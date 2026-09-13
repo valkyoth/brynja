@@ -1231,7 +1231,7 @@ sha256 = "b997fd50ff27e4dab2bf4201517138ef6c991d02333dbc4e13fa8606cfa74334"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/lib.rs"
-sha256 = "04582dd0f5d0f33add111a33fdb879be8b2769f9ace0bc088132fa78c410d027"
+sha256 = "24a19491843866ecdb8d9c62455fccc12941c430484ff14bebfad549e2bb6457"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/ordinary.rs"
@@ -1263,7 +1263,7 @@ sha256 = "8b5cefc83ce6ae7854fd9a6b74cd1d37ee3f7faa736b1babd7bc65f3571a69b5"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/batch/mod.rs"
-sha256 = "d73d1ae68232c699fcb48b9c2cf6c1255c06a2a1c129272a57747454db876e8e"
+sha256 = "8c46e75d5b693843b9c2cf5bcb417eccc785b688b44cec756ef0f978f9ed78b5"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/batch/owner.rs"

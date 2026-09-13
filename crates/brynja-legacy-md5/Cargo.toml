@@ -15,6 +15,7 @@ default = []
 batch = []
 cpu = ["batch"]
 cpu-evidence = []
+execution = ["cpu"]
 
 [dependencies]
 brynja-core = { workspace = true }

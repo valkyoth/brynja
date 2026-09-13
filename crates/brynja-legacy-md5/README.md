@@ -32,6 +32,7 @@ First-party, allocation-free `no_std` legacy MD5 for explicit compatibility.
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
+| Ordinary batch AVX2 / NEON execution | 🚧 In progress; native qualification pending | ❌ No |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -115,8 +116,8 @@ update retains the unchanged live state until retry or destruction.
 
 No guarantee covers registers, compiler-created copies/spills, caches, moves,
 swap, DMA, dumps, `mem::forget`, abort, termination, power loss, or caller-owned
-input/output copies. No pinned/locked memory is supplied. Production execution remains portable;
-separate candidates are described below.
+input/output copies. No pinned/locked memory is supplied. Defaults and hardened
+processing remain portable; separate ordinary SIMD APIs are described below.
 
 ## Verification and links
 
@@ -162,6 +163,34 @@ assert_eq!(report.vector_blocks, 0);
 
 Portable MD5 public acceptance is complete; CPU candidates remain unadmitted.
 See [batch ownership and evidence](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-acceleration.md).
+
+The separate default-off `execution` feature exposes ordinary public-data SIMD
+through `execution::Executor`. It supports Portable, Prefer and Require policies,
+static AVX2/NEON authority and an optional hosted adapter. Require needs at least
+one full active group with a common 64-byte message block. Unequal suffixes and
+all padding remain scalar. Reports count actual vector/scalar work; all errors
+preserve output. This does not enable SIMD for hardened state or secret inputs.
+
+```rust
+# #[cfg(feature = "execution")] {
+use brynja_legacy_md5::{BitString, Md5BatchControl};
+use brynja_legacy_md5::execution::{Executor, PublicData};
+let message = [0x41; 128];
+let inputs = [Some(BitString::new(&message, 8).map_err(|_| "bits")?); 8];
+let mut output = [[0; 16]; 8];
+let report = Executor::portable().digest(
+    &inputs, &mut output, &mut Md5BatchControl::new(24), PublicData::acknowledge()
+).map_err(|_| "batch")?;
+assert_eq!(report.vector_width, 0);
+assert_eq!(report.work.scalar_blocks, 24);
+# }
+# Ok::<(), &'static str>(())
+```
+
+Static specialization is an explicit deployment obligation on every schedulable
+CPU, not runtime detection or migration protection. See the
+[ordinary execution contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-execution.md)
+for platform limits, exact grouping rules and pending native qualification.
 
 Final ordinary/hardened byte/bit and execution-route dispositions are documented in
 [legacy final acceptance](https://github.com/valkyoth/brynja/blob/main/docs/legacy-hash-final-acceptance.md).

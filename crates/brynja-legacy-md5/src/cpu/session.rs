@@ -65,6 +65,17 @@ impl Md5BackendSession {
         if !backend.is_admitted() && !cfg!(all(feature = "cpu-evidence", brynja_md5_cpu_evidence)) {
             return Err(Md5BackendError::NotAdmitted);
         }
+        Self::initialize(backend, revalidate, corrupt_kat)
+    }
+
+    // Only candidate admission above or the distinct execution authority below
+    // may enter here. Neither a public report nor a Cargo feature is authority.
+    fn initialize(
+        backend: Md5Backend,
+        revalidate: fn(Md5Backend) -> bool,
+        corrupt_kat: bool,
+    ) -> Result<Self, Md5BackendError> {
+        require_architecture(backend)?;
         if !revalidate(backend) {
             return Err(Md5BackendError::MissingFeatures);
         }
@@ -118,10 +129,13 @@ impl Md5BackendSession {
         if !self.healthy.get() {
             return Err(Md5BackendError::Quarantined);
         }
+        // A callback unwind must never leave an apparently healthy authority.
+        self.healthy.set(false);
         if !(self.revalidate)(self.backend) {
             self.healthy.set(false);
             return Err(Md5BackendError::MissingFeatures);
         }
+        self.healthy.set(true);
         Ok(())
     }
 
@@ -156,6 +170,66 @@ impl Md5BackendSession {
         let _ = (state, block);
         self.healthy.set(false);
         Err(Md5BackendError::WrongArchitecture)
+    }
+}
+
+/// Distinct authority for ordinary PUBLIC legacy MD5 SIMD operations.
+///
+/// Not a hardened owner or a modern-security/FIPS capability. Construction
+/// executes an actual full-width startup KAT; the old candidate gate stays shut.
+/// No raw state/session export is provided. Thread binding does not prevent
+/// migration; the platform contract must cover every schedulable CPU.
+#[cfg(feature = "execution")]
+pub struct ExecutionAuthority {
+    session: Md5BackendSession,
+}
+
+#[cfg(feature = "execution")]
+impl ExecutionAuthority {
+    /// Explicit target specialization. No runtime detection or migration check:
+    /// the complete compiler bundle must hold throughout the binary's lifetime.
+    pub fn for_compiled_target() -> Result<Self, Md5BackendError> {
+        let backend = compiled_backend().ok_or(Md5BackendError::MissingFeatures)?;
+        // SAFETY: Compiling with the entire feature bundle makes it a binary
+        // deployment obligation on every CPU, including after VM migration.
+        unsafe { Self::from_platform(backend, compiled_features) }
+    }
+
+    /// Imports an external lifetime-wide execution authority, not an observation.
+    ///
+    /// # Safety
+    /// The caller must guarantee this backend's complete instruction and OS
+    /// state bundle on EVERY CPU able to run any call, for the owner's lifetime.
+    /// AVX2 includes OS-enabled YMM state. A current-core CPUID, cached boolean,
+    /// affinity alone or a non-Send marker cannot prove that contract. The
+    /// revalidator must uphold it, must not panic, and false revokes permanently.
+    /// Static selection's callback is constant; hosted detection can be cached.
+    pub unsafe fn from_platform(
+        backend: Md5Backend,
+        revalidate: fn(Md5Backend) -> bool,
+    ) -> Result<Self, Md5BackendError> {
+        let session = Md5BackendSession::initialize(backend, revalidate, false)?;
+        session.ensure_healthy()?;
+        Ok(Self { session })
+    }
+
+    /// Non-authorizing selected backend identity.
+    pub const fn backend(&self) -> Md5Backend {
+        self.session.backend()
+    }
+
+    /// Current health; this is a snapshot, not a live platform attestation.
+    pub fn health(&self) -> Md5BackendHealth {
+        self.session.health()
+    }
+
+    /// Permanently revokes this authority.
+    pub fn quarantine(&self) {
+        self.session.healthy.set(false);
+    }
+
+    pub(crate) fn session(&self) -> &Md5BackendSession {
+        &self.session
     }
 }
 

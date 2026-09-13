@@ -45,6 +45,9 @@ mod batch;
 #[cfg(feature = "cpu")]
 mod cpu;
 
+#[cfg(feature = "execution")]
+pub use batch::execution;
+
 #[cfg(feature = "batch")]
 pub use batch::{
     HardenedMd5Batch, MAX_BATCH_LANES, Md5Batch, Md5BatchControl, Md5BatchError, Md5BatchReport,

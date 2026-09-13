@@ -10,7 +10,7 @@ CPU = LEAF+'src/cpu/'
 BATCH = LEAF+'src/batch/'
 ADAPTER = 'crates/brynja-legacy-md5-std/'
 CPU_SOURCES = ('mod.rs','constants.rs','kat.rs','session.rs','session/tests.rs','x86_avx2_md5.rs','aarch64_neon_md5.rs')
-BATCH_SOURCES = ('mod.rs','control.rs','owner.rs','vector.rs','tests.rs')
+BATCH_SOURCES = ('mod.rs','control.rs','owner.rs','vector.rs','tests.rs','execution.rs','execution/tests.rs')
 BOUND = [CPU+p for p in CPU_SOURCES]+[BATCH+p for p in BATCH_SOURCES]+[
     LEAF+'Cargo.toml',LEAF+'src/lib.rs',LEAF+'tests/cpu.rs',
     ADAPTER+'Cargo.toml',ADAPTER+'src/lib.rs',ADAPTER+'README.md',
@@ -89,7 +89,7 @@ def validate(root=ROOT,hashes=True):
         require(sources[BATCH+'vector.rs'],token)
     for name in BATCH_SOURCES:
         text=sources[BATCH+name].split('#[cfg(test)]')[0]
-        if name=='tests.rs': continue
+        if name.endswith('tests.rs') or name == 'execution.rs': continue
         if re.search(r'\b(unsafe|alloc|std|Vec|Box|static)\b|\.(unwrap|expect)\(',text):
             raise ValueError('batch allocation/unchecked/global boundary changed')
     adapter=sources[ADAPTER+'src/lib.rs']

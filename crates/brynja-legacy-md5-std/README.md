@@ -36,6 +36,7 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
+| Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |
 
 ## Hardware and SIMD
 
@@ -43,6 +44,13 @@ No MD5 SIMD candidate is admitted. `opportunistic()` selects the portable leaf;
 `required()` fails closed. CPU detection cannot establish migration-safe
 execution authority, including in evidence builds. No global installation,
 affinity changes or third-party dependency is introduced.
+
+The separate default-off `runtime-execution` feature adds `execution::select`.
+Hosted little-endian AArch64 can use NEON under its supported OS feature contract.
+Generic x86-64 stays portable; explicit AVX2-specialized binaries can use static
+authority. Cached detection does not prove arbitrary hotplug or VM migration
+safety. Ordinary public-data SIMD does not authorize secret processing. Require
+rejects batches without a complete active vector group before work/output mutation.
 
 ## Use
 
@@ -67,6 +75,27 @@ assert_eq!(report.vector_blocks, 0);
 assert!(RuntimeMd5Backend::required().is_err());
 # Ok::<(), Box<dyn std::error::Error>>(())
 ```
+
+With `runtime-execution` explicitly enabled:
+
+```rust
+# #[cfg(feature = "runtime-execution")] {
+use brynja_legacy_md5::{BitString, Md5BatchControl};
+use brynja_legacy_md5_std::execution::{select, Mode, PublicData};
+let executor = select(Mode::Prefer).map_err(|_| "authority")?;
+let message = [0x41; 128];
+let inputs = [Some(BitString::new(&message, 8).map_err(|_| "bits")?); 8];
+let mut output = [[0; 16]; 8];
+let report = executor.digest(&inputs, &mut output, &mut Md5BatchControl::new(24),
+    PublicData::acknowledge()).map_err(|_| "batch")?;
+assert_eq!(report.work.active_lanes, 8);
+assert_eq!(report.work.scalar_blocks + report.work.vector_blocks, 24);
+# }
+# Ok::<(), &'static str>(())
+```
+
+See the [ordinary execution contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-execution.md)
+for authority, ordered batch semantics and pending native evidence.
 
 MD5 is collision-broken. Do not use it for new authentication, signatures or
 password hashing. Public data only; use the leaf's portable hardened batch

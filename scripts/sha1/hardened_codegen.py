@@ -63,7 +63,7 @@ def mir_check(mir, panic='abort'):
         require('drop(' in cleanup and 'resume;' in cleanup, 'dispatch lost unwind cleanup edges')
 
 
-def assembly_function(assembly, tokens):
+def assembly_functions(assembly, tokens):
     # ELF and Mach-O Rust symbols; local labels cannot satisfy a Rust identity.
     labels = list(re.finditer(r'(?m)^(_+(?:R|ZN)[^\s:]+):[^\n]*$', assembly))
     found = []
@@ -71,14 +71,42 @@ def assembly_function(assembly, tokens):
         if all(token in match[1] for token in tokens):
             end = labels[index+1].start() if index+1 < len(labels) else len(assembly)
             found.append(assembly[match.end():end])
+    return found
+
+
+def assembly_function(assembly, tokens):
+    found = assembly_functions(assembly, tokens)
     require(len(found) == 1, 'ambiguous or absent assembly function: ' + repr(tokens))
     return found[0]
+
+
+def kernel_body(assembly, llvm, target):
+    kernel = 'x86_sha1' if target.startswith('x86_64') else 'aarch64_sha1'
+    tokens = ('brynja_legacy_sha1', kernel, 'compress_secret')
+    found = assembly_functions(assembly, tokens)
+    if found:
+        require(len(found) == 1, 'ambiguous hardened kernel')
+        body = found[0]
+    else:
+        # Apple enables SHA1 in the baseline, permitting this private kernel
+        # to inline. Inspect only its secret-authority caller, never the whole
+        # file or the ordinary session. Keep other targets fail-closed.
+        require(target == 'aarch64-apple-darwin', 'absent standalone hardened kernel')
+        tokens = ('brynja_legacy_sha1', '3cpu6secret', '9Authority8compress')
+        body = assembly_function(assembly, tokens)
+        definitions = re.findall(r'^define [^\n]*\{.*?^}', llvm, re.M | re.S)
+        definitions = [part for part in definitions if all(token in part.splitlines()[0] for token in tokens)]
+        require(len(definitions) == 1, 'ambiguous or absent hardened authority LLVM')
+        for instruction in ('sha1c', 'sha1p', 'sha1m', 'sha1h', 'sha1su0', 'sha1su1'):
+            require(re.search(r'\bcall\b[^\n]*@llvm\.aarch64\.crypto\.' + instruction + r'\(', definitions[0]),
+                    'inlined hardened authority omitted LLVM ' + instruction)
+    return body
 
 
 def artifacts_check(mir, llvm, assembly, target, panic='abort'):
     mir_check(mir, panic)
     kernel = 'x86_sha1' if target.startswith('x86_64') else 'aarch64_sha1'
-    body = assembly_function(assembly, ('brynja_legacy_sha1', kernel, 'compress_secret'))
+    body = kernel_body(assembly, llvm, target)
     instructions = ('sha1msg1', 'sha1msg2', 'sha1nexte', 'sha1rnds4') if kernel == 'x86_sha1' else (
         'sha1c', 'sha1p', 'sha1m', 'sha1h', 'sha1su0', 'sha1su1')
     for instruction in instructions:

@@ -7,7 +7,41 @@ import hardened_policy as policy
 import hardened_codegen as codegen
 
 
+def apple_inline_tests():
+    target = 'aarch64-apple-darwin'
+    symbol = '_RNbrynja_legacy_sha13cpu6secret9Authority8compress'
+    instructions = ('sha1c', 'sha1p', 'sha1m', 'sha1h', 'sha1su0', 'sha1su1')
+    assembly = '_' + symbol + ':\n ret\n_RNordinary:\n sha1c.4s q0,s0,v0\n'
+    llvm = 'define void @' + symbol + '() {\n' + ''.join(
+        ' call void @llvm.aarch64.crypto.' + name + '()\n' for name in instructions) + '}\n'
+    assert 'sha1c' not in codegen.kernel_body(assembly, llvm, target)
+    standalone = '_RNbrynja_legacy_sha1aarch64_sha1compress_secret:\n ret\n'
+    assert codegen.kernel_body(standalone, '', target).strip() == 'ret'
+    cases = [
+        (assembly + assembly, llvm, target),
+        (assembly, llvm + llvm, target),
+        (assembly, '', target),
+        (assembly.replace('3cpu6secret', '3cpu7session'), llvm, target),
+        (assembly, llvm.replace('3cpu6secret', '3cpu7session'), target),
+        (assembly, llvm, 'aarch64-unknown-linux-gnu'),
+        (standalone + standalone + assembly, llvm, target),
+        (assembly.replace('_' + symbol + ':', 'Lordinary:'), llvm, target),
+    ]
+    for instruction in instructions:
+        missing = llvm.replace(' call void @llvm.aarch64.crypto.' + instruction + '()\n', '')
+        # An intrinsic in a declaration or unrelated definition is insufficient.
+        donated = missing + 'declare void @llvm.aarch64.crypto.' + instruction + '()\n'
+        donated += 'define void @_RNordinary() {\n call void @llvm.aarch64.crypto.' + instruction + '()\n}\n'
+        cases.append((assembly, donated, target))
+    for asm, ir, triple in cases:
+        try: codegen.kernel_body(asm, ir, triple)
+        except ValueError: pass
+        else: raise AssertionError('Apple inlined-kernel evidence regression survived')
+    print(f'Apple hardened-kernel scoping: two valid layouts; {len(cases)} regressions rejected')
+
+
 def main():
+    apple_inline_tests()
     policy.validate()
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-hardened-policy-') as temporary:
         root = Path(temporary)

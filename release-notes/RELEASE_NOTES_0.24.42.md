@@ -38,6 +38,13 @@ The sanitizer gate now forces leak detection and nonzero ASan/LSan error exits,
 overriding ambient disabling/suppression settings. Missing LSan support fails
 the gate; policy and driver regressions enforce this without a long CI run.
 
+Native collection also exposed Apple's valid inlining of the hardened kernel.
+The compiler checker now scopes evidence to its unique secret-authority caller
+when no standalone kernel exists, requiring the complete instruction set in
+both that caller's LLVM and assembly. Regression tests reject unrelated-function
+evidence and ambiguous symbols; all seven owned-region cleanup checks remain.
+This correction changes assurance tooling only, not production cryptography.
+
 SHA-1 remains collision-broken and outside modern facade/TLS/PKIX/FIPS graphs.
 No external dependency is introduced. Internal source clearing is not a claim
 about registers, spills, compiler copies, caches, dumps, DMA, swap, abort or caller

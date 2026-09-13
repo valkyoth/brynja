@@ -38,6 +38,10 @@ CHECKS={
     ),
     LEAF+'src/batch/execution.rs': (
         'pub struct PublicData(())', 'pub fn with_authority(authority: Authority, mode: Mode)',
+        'Caller-asserted classification ONLY, not verified at runtime.',
+        'confidentiality or zeroization guarantee and does not declassify secrets.',
+        'each SIMD compression, and before output commit.',
+        'the batch: callbacks can revoke authority between these boundaries.',
         'self.ready()?;', 'if self.required && authority.is_none()',
         'if self.required && work.vector_blocks == 0',
         'vector::execute(&mut owner, inputs, control, a.session())',

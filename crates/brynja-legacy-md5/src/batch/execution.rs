@@ -11,10 +11,13 @@ pub use crate::cpu::ExecutionAuthority as Authority;
 use crate::{BitString, Md5Backend, Md5BackendError, Md5BackendHealth};
 use core::cell::Cell;
 
-/// Explicit acknowledgement that every input and its length are public.
+/// Caller-asserted classification ONLY, not verified at runtime.
+/// Every input and its length must already be public. This marker provides no
+/// confidentiality or zeroization guarantee and does not declassify secrets.
 pub struct PublicData(());
 impl PublicData {
-    /// Classification is a caller obligation; this cannot inspect secrets.
+    /// Records caller intent only; this cannot inspect or sanitize secrets.
+    /// Do not use it to route confidential data through ordinary SIMD.
     pub const fn acknowledge() -> Self {
         Self(())
     }
@@ -155,6 +158,9 @@ impl Executor {
     /// Prefer may process an ineligible batch entirely portably and reports None.
     /// Backend loss never permits fallback. Budget/cancellation failures preserve
     /// output but consumed work is not refunded. Callback unwind revokes this owner.
+    /// Health checks intentionally occur at entry, vector-dispatch entry, before
+    /// each SIMD compression, and before output commit. They are not cached for
+    /// the batch: callbacks can revoke authority between these boundaries.
     pub fn digest(
         &self,
         inputs: &[Option<BitString<'_>>; 8],

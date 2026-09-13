@@ -33,6 +33,13 @@ examples passed. These do not replace pending pentest or native qualification.
 Short native x86-64/AArch64 CI jobs require real operational route markers.
 Fresh AMD/Intel/AWS Arm/Apple M2 evidence remains a fail-closed tag prerequisite.
 
+Review follow-up clarifies that `PublicData` records caller intent, not runtime
+confidentiality enforcement, and explains per-boundary revalidation. Ordinary
+SIMD cleanup remains outside this milestone's secret-bearing contract; reviewer
+confirmation is pending. A stale package-helper review hash was repaired, and
+the final metadata preflight now checks all three MD5 review closures with
+missing/stale-pin regression tests, without rerunning cryptography.
+
 MD5 remains collision-broken legacy compatibility, absent from the modern
 facade. Nothing claims independent cryptographic verification, side-channel
 qualification, FIPS validation or military suitability. No new external

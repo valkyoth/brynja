@@ -16,5 +16,5 @@
 "assurance/md5-public-api/src/main.rs" = "0eef345be75087200fe1866167be6724d2f56b443ce3f04118c7de891840c1b3"
 "scripts/md5/check-md5-differential.py" = "f5b66a6d74a1b011a4f8729b3984673c14e0c325d5070a1062a4f9bfa9994741"
 "scripts/md5/check-md5-codegen.sh" = "c8945b170a10b772cf1dc3ae338f934f9748c072af65fc6f8c34a6aa0f43a8e8"
-"scripts/md5/check-md5-package.py" = "c4782eb00cc967140159464795579c4cb5fa1b6dfbd372ac8d2c3f62483d0f74"
+"scripts/md5/check-md5-package.py" = "3e86818ba2c023488c83648ce1b02de7813e6ebc76103e1a53299e237d0ba43b"
 "scripts/md5/check-md5.py" = "8b5cefc83ce6ae7854fd9a6b74cd1d37ee3f7faa736b1babd7bc65f3571a69b5"

@@ -2,6 +2,7 @@
 """Final metadata checks reject stale docs without launching build campaigns."""
 import importlib.util
 import copy
+import json
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -15,6 +16,51 @@ def main():
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
+        # Reproduce the stale shared package-helper pin seen in CI, in each
+        # consuming MD5 review. Exercise the real validators, not mocked passes.
+        original_read = Path.read_text
+        source = 'scripts/md5/check-md5-package.py'
+        for review, key in (
+            ('scripts/md5/md5-reviewed.toml', 'sha256'),
+            ('scripts/md5/md5-cpu-reviewed.toml', 'files'),
+            ('scripts/md5/execution-reviewed.json', 'sha256'),
+        ):
+            for missing in (False, True):
+                hashes = dict(metadata.verifier_review(review, key))
+                if missing:
+                    del hashes[source]
+                else:
+                    hashes[source] = '0' * 64
+                if review.endswith('.json'):
+                    broken = json.dumps({'schema': 1, key: hashes})
+                else:
+                    broken = '[' + key + ']\n' + ''.join(
+                        f'"{name}" = "{value}"\n' for name, value in hashes.items())
+
+                def altered_read(path, *args, **kwargs):
+                    if path == metadata.ROOT / review:
+                        return broken
+                    return original_read(path, *args, **kwargs)
+
+                # Operational JSON uses read_bytes; keep both real read paths
+                # covered without mutating the actual checkout.
+                original_bytes = Path.read_bytes
+
+                def altered_bytes(path):
+                    if path == metadata.ROOT / review:
+                        return broken.encode()
+                    return original_bytes(path)
+
+                with patch.object(Path, 'read_text', altered_read), \
+                        patch.object(Path, 'read_bytes', altered_bytes):
+                    try:
+                        metadata.check_all()
+                    except ValueError as error:
+                        assert any(message in str(error) for message in (
+                            'MD5 reviewed', 'CPU hash', 'CPU source changed',
+                            'MD5 execution reviewed')), str(error)
+                    else:
+                        raise AssertionError('stale or missing MD5 package binding accepted')
         read_review = metadata.verifier_review
         for review, key in metadata.VERIFIER_REVIEWS:
             for script in metadata.VERIFIERS:
@@ -89,6 +135,7 @@ def main():
         assert '\npython3 scripts/release/' + name + '-acceptance-metadata.py\n' in gate
     print('Final metadata rejects five stale README bindings and six API-profile regressions without crypto execution')
     print('Shared verifier preflight rejects 28 stale or missing review bindings without crypto execution')
+    print('Final metadata rejects six stale/missing MD5 package-helper bindings without crypto execution')
 
 
 if __name__ == '__main__':

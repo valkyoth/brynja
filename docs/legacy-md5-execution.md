@@ -33,6 +33,10 @@ compiler proof about arbitrary bytes. There is no secret-output method or
 hardened-owner conversion. SIMD local state, blocks, registers and spills are
 not cleanup-qualified. Use the separate portable hardened APIs for confidential
 legacy compatibility; ordinary SIMD is not a substitute for them.
+The marker neither verifies confidentiality at runtime nor sanitizes or
+declassifies bytes. Clearing some owner fields does not extend that guarantee to
+SIMD scratch. Hardened SIMD needs its own complete lifecycle and compiler-evidence
+work in v0.24.44, not just a best-effort wipe added to this ordinary path.
 
 ## Complete batch contract
 
@@ -60,6 +64,12 @@ Cancelled or budget-rejected work is not refunded. Such failures can be retried
 with fresh batch state; backend failure and callback unwinding revoke authority.
 The final health check occurs before public-output commit, including after the
 last cancellation callback. Callbacks cannot authorize a silent route switch.
+Revalidation is deliberately performed at digest entry, vector-dispatch entry,
+before **each** SIMD compression and before output commit, not merely three
+times per batch. A callback may revoke authority between any two operations;
+caching a successful entry check for the entire batch would lose that protection.
+This adds boundary-check overhead but does not turn cached OS detection into a
+live hardware-migration monitor.
 
 ## Platform authority, not a current-core observation
 

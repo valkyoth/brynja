@@ -8,7 +8,7 @@ import sys
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
-for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography'):
+for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5'):
     sys.path.insert(0, str(ROOT / 'scripts' / category))
 
 import sha256_public_api
@@ -17,6 +17,9 @@ import sha3_public_api
 import final_acceptance
 import portable_acceptance
 import api_profile_model
+import md5_policy
+import md5_cpu_policy
+import md5_execution_policy
 
 
 VERIFIER_REVIEWS = (
@@ -78,8 +81,13 @@ def check_all():
     sha3_public_api.validate_repository(ROOT)
     final_acceptance.validate(ROOT)
     portable_acceptance.validate(ROOT)
+    # These share packaging helpers. Recheck all three review closures after
+    # final packaging/docs edits, without invoking their Rust test drivers.
+    md5_policy.validate(ROOT)
+    md5_cpu_policy.validate(ROOT)
+    md5_execution_policy.validate(ROOT)
 
 
 if __name__ == '__main__':
     check_all()
-    print('Shared verifier bindings, API-profile and all five acceptance metadata/hash closures: PASS (no crypto rerun)')
+    print('Shared verifier bindings, API-profile, five acceptance and three MD5 metadata/hash closures: PASS (no crypto rerun)')

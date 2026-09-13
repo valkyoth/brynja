@@ -1,6 +1,27 @@
 {
   "schema": 1,
   "version": "0.24.43",
-  "owner_review": "pending",
-  "lanes": {}
+  "owner_review": "accepted-correctness-with-residuals",
+  "lanes": {
+    "amd-x86_64": {
+      "artifact": "assurance/md5-execution-observations/v0.24.43/amd-x86_64.json",
+      "sha256": "98a07cbba8f1fdf5b5a5b3b8a0c751c86401cf3912019e08755dcaf12236e79a",
+      "commit": "a86462b3a26f80305445edb875e8cc30f06a05aa"
+    },
+    "intel-x86_64": {
+      "artifact": "assurance/md5-execution-observations/v0.24.43/intel-x86_64.json",
+      "sha256": "f5f4228c54b8832568a6e76d494d74d1ab9d215fc6e871c9dcddfa15346ae040",
+      "commit": "a86462b3a26f80305445edb875e8cc30f06a05aa"
+    },
+    "aws-aarch64": {
+      "artifact": "assurance/md5-execution-observations/v0.24.43/aws-aarch64.json",
+      "sha256": "8bf74f728384ccd753582445f963754849224857e2fbdc3e496a55f3b38fa5c2",
+      "commit": "a86462b3a26f80305445edb875e8cc30f06a05aa"
+    },
+    "apple-m2-aarch64": {
+      "artifact": "assurance/md5-execution-observations/v0.24.43/apple-m2-aarch64.json",
+      "sha256": "870396ce952e11ed11de00dfef4573cd57658e08a24dec09eb424513a5257183",
+      "commit": "a86462b3a26f80305445edb875e8cc30f06a05aa"
+    }
+  }
 }

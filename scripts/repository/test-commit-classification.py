@@ -25,6 +25,15 @@ def must_fail(subject: str, paths: tuple[str, ...]) -> None:
 
 def main() -> int:
     must_fail("fix: close release gap", ("docs/RELEASE_PLAN.md",))
+    release_tooling = (
+        "scripts/release/check-acceptance-metadata.py",
+        "scripts/release/test-acceptance-metadata.py",
+        "security/acceleration-availability-reviewed.json",
+        "security/pentest/v0.24.43.md",
+    )
+    # Actual tooling-only CI regression: keep the rule, use the right subject.
+    must_fail("fix(release): recheck cross-family acceleration review bindings", release_tooling)
+    MODULE.validate("test(release): recheck cross-family acceleration review bindings", release_tooling)
     must_fail(
         "fix: close v0.3.5 pentest gaps",
         ("requirements/coverage.md", "scripts/standards/check-requirements.py"),

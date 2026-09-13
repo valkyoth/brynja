@@ -1,7 +1,8 @@
 # Brynja v0.24.43
 
-Status: implementation and development checks complete. Exceptional pentest/retest, fresh native
-qualification and final release/GitHub checks remain required before tagging.
+Status: implementation, development checks and four-lane native correctness
+collection complete. The open cleanup finding is deferred to v0.24.44; its
+release-gate disposition and final release/GitHub checks remain outstanding.
 
 Adds default-off ordinary MD5 batch execution, separate from the unchanged
 unadmitted candidate APIs. AVX2 handles eight independent messages; little-endian
@@ -29,14 +30,17 @@ oracle, external-package ownership/classification rejection, compiled
 output/accounting mutations, negative native-evidence schemas, scoped Miri,
 actual AVX2 ASan/LSan and NEON QEMU execution. The selected MD5/legacy verifier
 suite, compatibility matrix, scoped repository gate and packaged README
-examples passed. These do not replace pending pentest or native qualification.
+examples passed. These do not replace the separate release checks or finding closure.
 Short native x86-64/AArch64 CI jobs require real operational route markers.
-Fresh AMD/Intel/AWS Arm/Apple M2 evidence remains a fail-closed tag prerequisite.
+Fresh AMD/Intel/AWS Arm/Apple M2 captures at `a86462b3` passed and were reviewed
+for ordinary public-data correctness. The source-bound four-lane evidence index
+is populated; it remains a fail-closed tag prerequisite.
 
 Review follow-up clarifies that `PublicData` records caller intent, not runtime
 confidentiality enforcement, and explains per-boundary revalidation. Ordinary
-SIMD cleanup remains outside this milestone's secret-bearing contract; reviewer
-confirmation is pending. A stale package-helper review hash was repaired, and
+SIMD cleanup remains outside this milestone's secret-bearing contract; the
+reviewer explicitly kept this finding open and the owner deferred its remediation
+to v0.24.44. A stale package-helper review hash was repaired, and
 the final metadata preflight now checks all three MD5 review closures with
 missing/stale-pin regression tests, without rerunning cryptography.
 

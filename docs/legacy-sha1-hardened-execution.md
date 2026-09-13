@@ -28,6 +28,14 @@ macOS, iOS and Windows [detector/trust table](legacy-sha1-execution.md).
 Cached detection is not live revocation. Neither a non-Send owner nor a
 successful native run proves arbitrary hotplug or VM migration safety.
 
+**Static selection performs no runtime detection or migration protection.** Its
+revalidation callback repeats a compile-time constant. Restrict the binary to
+compatible CPUs, prevent incompatible hotplug/live migration, or use the portable
+route. Affinity alone does not constrain a hypervisor's future host CPU. A runtime
+probe also cannot close the scheduling race between checking and executing an
+instruction; platform authorities still require the lifetime-wide OS/deployment
+contract. The hosted detector is cached, not a genuine live revocation mechanism.
+
 ```rust
 use brynja_legacy_sha1::hardened_execution::{Executor, Mode};
 
@@ -95,6 +103,10 @@ No locked/pinned memory or deployment certification is supplied.
   x86-64/AArch64, abort/unwind MIR/LLVM/assembly and actual secret instructions.
 - `scripts/sha1/check-sha1-cpu-qemu.sh`: supplemental Arm static/hosted execution.
 - Scoped SHA-1 Miri and actual SHA-NI AddressSanitizer are separate local gates.
+- Short native Linux x86-64 and AArch64 CI lanes validate the host feature bundle,
+  compile explicit target features, require 512 actual kernel comparisons and
+  accelerated API markers. Missing hardware or flags fails the lane rather than
+  yielding portable success. They do not replace reviewed release captures.
 - `capture-sha1-hardened-native.py`: clean committed AMD, Intel, AWS Arm or Apple
   M2 observations with source hashes, compiler, exact routes, 512 arbitrary
   compression cases, public/secret package tests and compiler cleanup evidence.
@@ -103,3 +115,15 @@ Native records are operator-self-attested and require owner review. Historical
 ordinary captures cannot qualify these secret kernels. No speedup, timing
 resistance, CPU-migration proof, independent review or FIPS certificate is
 inferred from functional correctness. Fresh qualification is still pending.
+
+With `--nocapture`, generic tests announce when the kernel test skips for missing compiled features.
+Set `BRYNJA_REQUIRE_HARDENED_SHA1=1` in instruction-qualified lanes; the CI,
+native-capture, sanitizer and hardened QEMU drivers do this automatically.
+Portable and Miri runs intentionally leave it unset. Regression tests compile
+without the feature bundle and prove that both required kernel/API tests fail.
+
+ASan checks memory-access errors; LeakSanitizer checks unfreed allocations, not
+erasure of stack bytes, registers or compiler copies. These production owners
+use fixed-size storage without heap allocation. Miri leak checks, lifecycle
+tests, compiled cleanup mutants and emitted-code checks address complementary
+properties; no one of these tools proves complete physical secret erasure.

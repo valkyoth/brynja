@@ -12,7 +12,8 @@ TOOLS = ('hardened_policy.py', 'hardened_package.py', 'hardened_codegen.py',
          'check-sha1-hardened.py', 'test-sha1-hardened.py', 'check-sha1-hardened-codegen.py',
          'check-sha1-package.py', 'check-sha1-differential.py', 'hardened_native.py',
          'capture-sha1-hardened-native.py', 'test-sha1-hardened-native.py',
-         'check-sha1-hardened-asan.py', 'capture-sha1-cpu-native.py', 'check-sha1-hardened-native.py')
+         'check-sha1-hardened-asan.py', 'capture-sha1-cpu-native.py', 'check-sha1-hardened-native.py',
+         'check-sha1-hardened-ci.py', 'test-sha1-hardened-ci.py')
 REVIEW = 'scripts/sha1/hardened-reviewed.toml'
 
 
@@ -114,6 +115,24 @@ def validate(root=ROOT, reviewed=True):
                     'python3 scripts/sha1/check-sha1-hardened-codegen.py'):
         require(read(root, 'scripts/checks.sh'), command)
     require(read(root, 'scripts/tag_gate.sh'), 'python3 scripts/sha1/check-sha1-hardened-native.py')
+    for source in (module, secret):
+        require(source, '**No runtime feature detection or migration protection is performed.**')
+    require(read(root, LEAF+'src/cpu/secret/tests.rs'), 'std::env::var_os("BRYNJA_REQUIRE_HARDENED_SHA1").is_none()')
+    require(read(root, LEAF+'tests/hardened_execution.rs'), 'std::env::var_os("BRYNJA_REQUIRE_HARDENED_SHA1").is_none() || compiled')
+    ci = read(root, '.github/workflows/ci.yml').split('  hardened-sha1:\n', 1)[1].split('\n  host:', 1)[0]
+    for token in ('runs-on: ${{ matrix.os }}', 'architecture: x86_64', 'architecture: aarch64',
+                  '- os: ubuntu-latest', '- os: ubuntu-24.04-arm',
+                  'run: python3 scripts/sha1/check-sha1-hardened-ci.py ${{ matrix.architecture }}'):
+        if token not in [line.strip() for line in ci.splitlines()]:
+            raise ValueError('missing active hardened SHA-1 CI setting: '+token)
+    if 'continue-on-error' in ci or re.search(r'^\s+if:', ci, re.M):
+        raise ValueError('required hardened SHA-1 CI lane must not skip or tolerate failure')
+    driver = read(root, 'scripts/sha1/check-sha1-hardened-ci.py')
+    for token in ('native.host.host(lane)', "RUSTFLAGS='-C target-feature='+features",
+                  "BRYNJA_REQUIRE_HARDENED_SHA1='1'", "'--lib'", "'hardened_execution'",
+                  'blocks=512', "'CI accelerated API'"):
+        require(driver, token)
+    require(read(root, 'scripts/sha1/check-sha1-hardened.py'), "'scripts/sha1/test-sha1-hardened-ci.py'")
     require(read(root, 'scripts/zeroization/check-zeroization-miri.sh'), 'run_miri -p brynja-legacy-sha1 --features hardened-execution --lib cpu::secret::tests')
     require(read(root, 'scripts/zeroization/check-zeroization-sanitizer.sh'), 'python3 scripts/sha1/check-sha1-hardened-asan.py')
     if reviewed:

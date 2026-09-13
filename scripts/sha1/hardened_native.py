@@ -18,6 +18,7 @@ def clean_environment():
     for key in ('RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'RUSTDOCFLAGS', 'CARGO_BUILD_TARGET',
                 'CARGO_PROFILE_RELEASE_PANIC', 'CARGO_PROFILE_RELEASE_OPT_LEVEL'):
         env.pop(key, None)
+    env.pop('BRYNJA_REQUIRE_HARDENED_SHA1', None)
     return env
 
 
@@ -51,7 +52,7 @@ def collect(lane, features, env):
     results = {}
     results['hosted'] = host.run(test+['-p', 'brynja-legacy-sha1-std', '--features', 'runtime-hardened-execution', '--test', 'hardened_execution']+ending, env)
     results['portable'] = host.run(test+['-p', 'brynja-legacy-sha1', '--features', 'hardened-execution', '--test', 'hardened_execution']+ending, env)
-    static = dict(env, RUSTFLAGS='-C target-feature='+features)
+    static = dict(env, RUSTFLAGS='-C target-feature='+features, BRYNJA_REQUIRE_HARDENED_SHA1='1')
     results['static'] = host.run(test+['-p', 'brynja-legacy-sha1', '--features', 'hardened-execution', '--lib', '--test', 'hardened_execution']+ending, static)
     results['packaged'] = host.run([sys.executable, 'scripts/sha1/check-sha1-package.py', '--hardened'], static)
     target = 'x86_64-unknown-linux-gnu' if LANES[lane] == 'x86' else 'aarch64-apple-darwin' if lane == 'apple-m2-aarch64' else 'aarch64-unknown-linux-gnu'

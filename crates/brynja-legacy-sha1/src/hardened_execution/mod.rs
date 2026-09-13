@@ -112,6 +112,9 @@ impl Executor {
         })
     }
     /// Explicit static selection; complete target features are deployment duties.
+    /// **No runtime feature detection or migration protection is performed.**
+    /// The callback repeats a compile-time constant. CPU affinity alone is not
+    /// sufficient if hotplug or VM migration can invalidate the feature bundle.
     pub fn for_compiled_target(mode: Mode) -> Result<Self, Error> {
         if mode == Mode::Portable {
             return Ok(Self::portable());

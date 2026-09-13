@@ -29,6 +29,12 @@ Feature-enabled compiler checks cover both supported endpoints, both instruction
 architectures and abort/unwind profiles. Miri and actual-instruction ASan are
 scoped to changed SHA-1 and dependent legacy acceptance, not unrelated hashes.
 
+Pentest follow-up adds short native x86-64/AArch64 CI lanes, explicit required
+hardware-test mode, and compiled missing-feature regressions. The local native
+SHA-NI sanitizer rerun passed with LeakSanitizer enabled (`detect_leaks=1`).
+Static authority documentation explicitly states that its callback is a
+compile-time constant, not runtime detection or migration protection.
+
 SHA-1 remains collision-broken and outside modern facade/TLS/PKIX/FIPS graphs.
 No external dependency is introduced. Internal source clearing is not a claim
 about registers, spills, compiler copies, caches, dumps, DMA, swap, abort or caller

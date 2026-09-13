@@ -15,6 +15,7 @@ def main():
     if not args.policy_only:
         for command in (
             ['python3', 'scripts/sha1/test-sha1-hardened-native.py'],
+            ['python3', 'scripts/sha1/test-sha1-hardened-ci.py'],
             ['cargo', 'test', '--locked', '--offline', '-p', 'brynja-legacy-sha1', '--all-features', '--lib', '--test', 'hardened_execution'],
             ['cargo', 'test', '--locked', '--offline', '-p', 'brynja-legacy-sha1', '--all-features', '--doc'],
             ['cargo', 'test', '--locked', '--offline', '-p', 'brynja-legacy-sha1-std', '--all-features', '--test', 'hardened_execution', '--lib'],

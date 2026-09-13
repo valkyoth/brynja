@@ -11,7 +11,7 @@ def main():
     policy.validate()
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-hardened-policy-') as temporary:
         root = Path(temporary)
-        for relative in set(policy.inventory()) | {'scripts/checks.sh', 'scripts/tag_gate.sh', policy.REVIEW,
+        for relative in set(policy.inventory()) | {'scripts/checks.sh', 'scripts/tag_gate.sh', policy.REVIEW, '.github/workflows/ci.yml',
                 'scripts/zeroization/check-zeroization-miri.sh', 'scripts/zeroization/check-zeroization-sanitizer.sh'}:
             destination = root / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
@@ -29,6 +29,14 @@ def main():
             (policy.LEAF+'src/hardened_execution/ownership.rs', 'need::<Executor>();', 'need::<()>();'),
             (policy.LEAF+'Cargo.toml', 'default = []', 'default = ["hardened-execution"]'),
             ('scripts/checks.sh', 'python3 scripts/sha1/check-sha1-hardened.py', ''),
+            ('.github/workflows/ci.yml', 'architecture: aarch64', 'architecture: unsupported'),
+            ('.github/workflows/ci.yml', 'run: python3 scripts/sha1/check-sha1-hardened-ci.py', 'run: echo'),
+            ('.github/workflows/ci.yml', 'run: python3 scripts/sha1/check-sha1-hardened-ci.py', '# run: python3 scripts/sha1/check-sha1-hardened-ci.py'),
+            ('.github/workflows/ci.yml', '    name: Hardened SHA-1 native', '    continue-on-error: true\n    name: Hardened SHA-1 native'),
+            ('scripts/sha1/check-sha1-hardened-ci.py', "BRYNJA_REQUIRE_HARDENED_SHA1='1'", "UNRELATED_FLAG='1'"),
+            ('scripts/sha1/check-sha1-hardened-ci.py', "RUSTFLAGS='-C target-feature='+features", "RUSTFLAGS=''"),
+            (policy.LEAF+'src/cpu/secret/tests.rs', 'std::env::var_os("BRYNJA_REQUIRE_HARDENED_SHA1").is_none()', 'true'),
+            (policy.LEAF+'src/cpu/secret.rs', '**No runtime feature detection or migration protection is performed.**', 'Features are available.'),
             (policy.LEAF+'src/cpu/x86_sha1.rs', '#[target_feature(enable = "sha,sse2")]\npub(super) unsafe fn compress_secret(', 'pub(super) unsafe fn compress_secret('),
             (policy.LEAF+'src/cpu/aarch64_sha1.rs', '#[target_feature(enable = "neon,sha2")]\npub(super) unsafe fn compress_secret(', 'pub(super) unsafe fn compress_secret('),
         ]

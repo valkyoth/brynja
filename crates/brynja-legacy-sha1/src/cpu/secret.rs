@@ -36,6 +36,10 @@ pub struct Authority {
 impl Authority {
     /// Opts into a binary specialized for the complete instruction bundle.
     /// Deployment must preserve that bundle on every CPU executing the binary.
+    /// **No runtime feature detection or migration protection is performed.**
+    /// Revalidation only repeats a compile-time constant. Restrict scheduling,
+    /// hotplug and migration to compatible CPUs for the entire binary lifetime;
+    /// use portable execution when the deployment cannot guarantee this.
     pub fn for_compiled_target() -> Result<Self, Sha1BackendError> {
         let backend =
             super::session::compiled_backend().ok_or(Sha1BackendError::MissingFeatures)?;

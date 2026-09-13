@@ -88,7 +88,16 @@ fn lane_wipe_and_invalid_views_fail_closed() {
 fn native_hardened_kernel_matches_512_arbitrary_compressions() -> Result<(), Sha1BackendError> {
     let authority = match Authority::for_compiled_target() {
         Ok(authority) => authority,
-        Err(Sha1BackendError::MissingFeatures) => return Ok(()),
+        Err(Sha1BackendError::MissingFeatures) => {
+            assert!(
+                std::env::var_os("BRYNJA_REQUIRE_HARDENED_SHA1").is_none(),
+                "required hardened SHA-1 kernel has no compiled CPU feature bundle"
+            );
+            std::println!(
+                "HARDENED_SHA1_EXECUTION: SKIPPED; portable build, not hardware evidence"
+            );
+            return Ok(());
+        }
         Err(error) => return Err(error),
     };
     let mut seed = 0x5a41_0242_a912_4501_u64;

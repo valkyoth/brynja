@@ -11,6 +11,7 @@ def main():
     _, features = native.host.host(lane)
     env = native.clean_environment()
     env['RUSTFLAGS'] = '-Zsanitizer=address -C target-feature='+features
+    env['BRYNJA_REQUIRE_HARDENED_SHA1'] = '1'
     result = native.host.run(['cargo', '+nightly-2026-09-11', 'test', '--locked', '--offline',
         '-p', 'brynja-legacy-sha1', '--features', 'hardened-execution', '--lib', '--test', 'hardened_execution',
         '--target', 'x86_64-unknown-linux-gnu', '--', '--nocapture', '--test-threads=1'], env)

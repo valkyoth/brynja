@@ -169,6 +169,10 @@ fn required_route_executes_without_candidate_admission() -> Result<(), Box<dyn s
         target_feature = "sha2"
     ));
     assert_eq!(prefer.report().backend.is_some(), compiled);
+    assert!(
+        std::env::var_os("BRYNJA_REQUIRE_HARDENED_SHA1").is_none() || compiled,
+        "required hardened SHA-1 API has no compiled CPU feature bundle"
+    );
     if let Some(backend) = prefer.report().backend {
         assert!(!backend.is_admitted());
         let required = Executor::for_compiled_target(Mode::Require)?;

@@ -54,6 +54,7 @@ def main():
             assert 'brynja_sha1_cpu_evidence' not in env.get('RUSTFLAGS', '')
             if 'check-sha1-package.py' in ' '.join(command):
                 assert '--hardened' in command and 'target-feature=' in env['RUSTFLAGS']
+                assert env['BRYNJA_REQUIRE_HARDENED_SHA1'] == '1'
                 return good['packaged']
             if 'check-sha1-hardened-codegen.py' in ' '.join(command): return good['codegen']
             assert '--locked' in command and '--offline' in command
@@ -62,6 +63,7 @@ def main():
                 return good['hosted']
             if '--lib' in command:
                 assert 'target-feature=' in env['RUSTFLAGS']
+                assert env['BRYNJA_REQUIRE_HARDENED_SHA1'] == '1'
                 return good['static']
             assert 'RUSTFLAGS' not in env
             return good['portable']

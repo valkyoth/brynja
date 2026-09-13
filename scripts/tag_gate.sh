@@ -15,6 +15,7 @@ python3 scripts/sha2/check-sha2-hardened-native-evidence.py
 verify() {
     python3 scripts/release/run-verification.py command -- "$@"
 }
+python3 scripts/sha1/check-sha1-hardened-native.py
 python3 scripts/sha3/check-keccak-hardened-native.py
 python3 scripts/kmac/check-kmac-execution-native.py
 # First require exact native equality. A failure is eligible only for the

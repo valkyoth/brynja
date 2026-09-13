@@ -229,7 +229,7 @@ impl ExecutionAuthority {
     }
 }
 
-fn require_architecture(backend: Sha1Backend) -> Result<(), Sha1BackendError> {
+pub(super) fn require_architecture(backend: Sha1Backend) -> Result<(), Sha1BackendError> {
     match backend {
         Sha1Backend::X86Sha if cfg!(any(target_arch = "x86", target_arch = "x86_64")) => Ok(()),
         Sha1Backend::Aarch64Sha1
@@ -241,11 +241,11 @@ fn require_architecture(backend: Sha1Backend) -> Result<(), Sha1BackendError> {
     }
 }
 
-fn compiled_features(backend: Sha1Backend) -> bool {
+pub(super) fn compiled_features(backend: Sha1Backend) -> bool {
     compiled_backend() == Some(backend)
 }
 
-fn compiled_backend() -> Option<Sha1Backend> {
+pub(super) fn compiled_backend() -> Option<Sha1Backend> {
     if cfg!(all(
         any(target_arch = "x86", target_arch = "x86_64"),
         target_feature = "sse2",

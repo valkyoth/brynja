@@ -1,7 +1,7 @@
 use crate::{BitString, PublicDeclassification, Sha1Error, engine, output, owner::Sha1Owner};
 use brynja_core::OwnedSecretRegion;
 
-mod sealed {
+pub(crate) mod sealed {
     pub trait Sealed {}
 }
 

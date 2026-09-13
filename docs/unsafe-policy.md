@@ -1,15 +1,15 @@
 # Unsafe Rust Policy
 
-Status: eighteen exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: nineteen exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only eighteen exact modules: the private core volatile clearer; the
+Rust in only nineteen exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
 isolated legacy SHA-1 and MD5 session/x86/AArch64 candidate modules; plus the
 runtime owner constructor and its private hosted platform bridge; and the
-separate legacy SHA-1 hosted platform bridge. Each
+separate legacy SHA-1 hosted platform bridge and hardened secret authority. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every
@@ -214,6 +214,21 @@ selected `brynja-sanitization` adapter and does not authorize additional unsafe
 code or replace Brynja's mandatory v0.11.0 primitive.
 
 ## v0.24.21 legacy SHA-1 candidates
+
+The separate v0.24.42 hardened API adds `cpu/secret.rs` as a reviewed exception
+and owner-backed secret functions in the two existing SHA-1 kernel modules.
+Necessity: ordinary vector/schedule temporaries do not satisfy secret cleanup;
+using their public-data authority would erase the profile boundary. Safe
+alternative: `hardened_execution::Executor::portable()` or `HardenedSha1`.
+The distinct authority requires a complete lifetime-wide feature bundle, a
+backend-specific revalidation callback and a KAT through the actual hardened
+kernel. Borrowed exact arrays, checked views, six existing owner regions and
+one additional 16-byte scratch region bound all loads/stores. Failure/unwind
+destroys owned state and permanently quarantines authority. Source, compiled
+cleanup mutants, Miri, native ASan, compiler-endpoint emission and fresh native
+capture are mandatory; independent review remains pending, not claimed.
+See [hardened execution](legacy-sha1-hardened-execution.md). Registers, spills,
+compiler copies and platform storage remain residual risks.
 
 The v0.24.41 default-off operational API reuses the reviewed kernels through
 a separate KAT-gated authority. Its additional exact unsafe boundary is

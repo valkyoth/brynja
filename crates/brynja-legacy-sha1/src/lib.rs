@@ -30,6 +30,8 @@ mod engine;
 #[cfg(feature = "execution")]
 pub mod execution;
 mod hardened;
+#[cfg(feature = "hardened-execution")]
+pub mod hardened_execution;
 mod ordinary;
 mod output;
 mod owner;

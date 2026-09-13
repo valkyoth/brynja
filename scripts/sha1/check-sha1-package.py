@@ -17,9 +17,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cpu', action='store_true')
     parser.add_argument('--execution', action='store_true')
+    parser.add_argument('--hardened', action='store_true')
     args = parser.parse_args()
     closure = dict(CLOSURE)
-    if args.cpu or args.execution: closure['brynja-legacy-sha1-std'] = '0.1.0'
+    if args.cpu or args.execution or args.hardened: closure['brynja-legacy-sha1-std'] = '0.1.0'
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-package-') as temporary:
         root = Path(temporary)
         environment = dict(os.environ, CARGO_TARGET_DIR=str(root / 'target'))
@@ -47,8 +48,12 @@ def main():
         (consumer / 'src').mkdir(parents=True)
         manifest = '[package]\nname="sha1-packaged-consumer"\nversion="0.0.0"\nedition="2024"\n[workspace]\n'
         features = ', features=["execution"]' if args.execution else ', features=["cpu"]' if args.cpu else ''
+        if args.hardened: features = ', features=["execution","hardened-execution"]'
         manifest += '[dependencies]\nbrynja-legacy-sha1 = { version="=0.1.0", default-features=false'+features+' }\n'
-        if args.execution:
+        if args.hardened:
+            manifest += 'brynja-legacy-sha1-std = { version="=0.1.0", default-features=false, features=["runtime-hardened-execution"] }\n'
+            manifest += '[features]\nhardened-execution=[]\nruntime-hardened-execution=[]\n'
+        elif args.execution:
             manifest += 'brynja-legacy-sha1-std = { version="=0.1.0", features=["runtime-execution"] }\n'
             manifest += '[features]\nexecution=[]\n'
         elif args.cpu: manifest += 'brynja-legacy-sha1-std = "=0.1.0"\n'
@@ -58,6 +63,9 @@ def main():
         (consumer / 'Cargo.toml').write_text(manifest)
         source = 'assurance/sha1-cpu-public-api/src/packaged.rs' if args.cpu else 'assurance/sha1-public-api/src/lib.rs'
         (consumer / 'src/lib.rs').write_bytes((ROOT / source).read_bytes())
+        if args.hardened:
+            import hardened_package
+            hardened_package.prepare(ROOT, consumer)
         if args.execution:
             tests = consumer / 'tests'
             (tests / 'vectors').mkdir(parents=True)
@@ -72,7 +80,10 @@ def main():
         if args.execution:
             ownership_negatives(consumer, environment)
             compiled_regressions(consumer, root, environment)
-    print(f'SHA-1 packaged closure and external consumer: PASS; cpu={args.cpu}; execution={args.execution}; no upload')
+        if args.hardened:
+            hardened_package.negatives(consumer, environment)
+            hardened_package.mutants(consumer, root, environment)
+    print(f'SHA-1 packaged closure and external consumer: PASS; cpu={args.cpu}; execution={args.execution}; hardened={args.hardened}; no upload')
 
 
 def write_oracle(destination):

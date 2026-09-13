@@ -31,7 +31,8 @@ Default-off `execution` APIs add ordinary public-data SHA/SSE2 and NEON/SHA1
 instruction routes for target-specialized binaries, with explicit selection,
 streaming, byte/bit one-shot hashing and permanent owner revocation. The separate
 host adapter supplies supported AArch64 system authority. Native observations
-passed; final release checks remain required and hardened acceleration is not provided. See the
+passed for the released ordinary API. Separate default-off hardened execution
+is under qualification. See the
 [operational API](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-execution.md).
 
 ## Cryptography Verification Status
@@ -39,7 +40,8 @@ passed; final release checks remain required and hardened acceleration is not pr
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
-| Opt-in ordinary acceleration | 🚧 In progress; native observations passed, final release checks pending | ❌ Not independently verified |
+| Opt-in ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
+| Opt-in hardened acceleration | 🚧 In progress; qualification pending | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -117,8 +119,8 @@ dependencies. Aborting does not run Drop. See the
 
 No guarantee covers registers, compiler-created copies/spills, caches, moves,
 swap, DMA, dumps, `mem::forget`, abort, termination, power loss, or caller-owned
-input/output copies. No pinned/locked memory is supplied. Hardened execution remains portable;
-ordinary operational routes and separate candidates are described below.
+input/output copies. No pinned/locked memory is supplied. `HardenedSha1` remains
+portable; the separate opt-in hardened executor is described below.
 
 ## Verification and links
 
@@ -135,6 +137,34 @@ compile-fail ownership checks and compiler cleanup evidence.
 See the workspace toolchain policy for supported Rust versions. MIT OR Apache-2.0.
 
 ## Hardware and SIMD
+
+The separate `hardened-execution` feature exposes a secret-bearing
+`hardened_execution::Executor`, with portable/prefer/require modes and borrowing
+streams. Static x86 SHA/SSE2 and AArch64 NEON/SHA1 use owner-backed schedule and
+lane storage with mandatory clearing. Its hosted adapter requires the distinct
+`runtime-hardened-execution` feature. Ordinary authority cannot convert to this
+authority. Native qualification and exceptional review remain pending.
+
+```rust
+# #[cfg(feature = "hardened-execution")]
+# fn example() -> Result<(), brynja_legacy_sha1::hardened_execution::Error> {
+use brynja_legacy_sha1::hardened_execution::{Executor, Mode};
+let owner = Executor::for_compiled_target(Mode::Prefer)?;
+let mut bytes = [0u8; 20];
+let secret = owner.hash_secret(b"legacy confidential input", &mut bytes)?;
+drop(secret);
+assert_eq!(bytes, [0; 20]);
+# Ok(())
+# }
+# #[cfg(feature = "hardened-execution")]
+# example()?;
+# Ok::<(), Box<dyn std::error::Error>>(())
+```
+
+Byte/bit one-shot hashing, streaming, consuming bit-tail finalization,
+explicit public declassification and whole-secret-destination clearing are
+supported. See the [hardened contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-hardened-execution.md)
+for the seven owned regions and platform/cleanup limits.
 
 The default-off `execution` feature exposes `execution::Executor` with explicit
 portable, prefer and require modes. Target-specialized binaries can execute

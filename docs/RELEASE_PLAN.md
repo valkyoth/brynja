@@ -4543,9 +4543,9 @@ Exit criteria:
 
 ### v0.24.41 - Legacy SHA-1 Operational Acceleration
 
-Status: awaiting green CI
+Status: released
 
-See [operational SHA-1](legacy-sha1-execution.md). The Low platform-trust residual remains disclosed; final release and GitHub checks are required before tagging.
+See [operational SHA-1](legacy-sha1-execution.md). Signed at `3132c64a` after owner retest, native collection, final release checks, GitHub CI and CodeQL. The Low platform-trust residual remains disclosed.
 
 Plan scope: Enable reviewed x86 SHA and AArch64 SHA1 static and hosted ordinary SHA-1 byte/bit streaming and one-shot APIs with explicit legacy-only dependency and feature paths.
 
@@ -4572,7 +4572,7 @@ Exit criteria:
 
 ### v0.24.42 - Legacy SHA-1 Hardened Acceleration
 
-Status: planned
+Status: in progress
 
 Plan scope: Add hardened secret-bearing SHA-1 CPU operations with owned scratch destruction and typed output while retaining separate legacy-only eligibility and collision warnings.
 

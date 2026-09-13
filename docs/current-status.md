@@ -19,7 +19,7 @@ Current generated planning coverage is 2157 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.40 signed. Development of v0.24.41 adds default-off [ordinary legacy SHA-1 execution](legacy-sha1-execution.md), with static target-feature authority and a separate hosted AArch64 adapter. Exceptional owner retest and four-lane native observations passed; final release and GitHub checks remain required. Hardened secret-bearing SHA-1 acceleration remains the next milestone. The signed v0.24.40 baseline is 62f35964. No new crates.io publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.41 signed. Development of v0.24.42 adds separate default-off [hardened legacy SHA-1 execution](legacy-sha1-hardened-execution.md), with owner-backed secret schedule/scratch, typed output, static authority and a hosted AArch64 adapter. Exceptional owner retest, fresh native observations and final release/GitHub checks remain pending. The signed v0.24.41 baseline is 3132c64a. No new crates.io publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family
@@ -27,7 +27,7 @@ portable closure is complete at v0.24.29; no independent verification or FIPS va
 v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
 and batch public acceptance using the frozen v0.24.20 contract. See
 [final legacy acceptance](legacy-hash-final-acceptance.md). All instruction
-candidates for those original legacy APIs remain unadmitted and hardened legacy execution remains portable-only. The separate opt-in SHA-1 operational authority is described above; it does not change those candidate gates.
+candidates for those original legacy APIs remain unadmitted. The original hardened owners remain portable; separate opt-in SHA-1 ordinary and hardened operational authorities do not change those candidate gates.
 Public checkpoints now use explicit closing patches: v0.25.2, v0.30.2 and the
 [registered successors](../scripts/release/checkpoints.toml). Earlier milestone
 narratives below describe their status at the time, not today's status tables.

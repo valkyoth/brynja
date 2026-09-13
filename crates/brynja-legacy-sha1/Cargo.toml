@@ -14,6 +14,7 @@ publish = ["crates-io"]
 default = []
 cpu = []
 execution = ["cpu"]
+hardened-execution = ["cpu"]
 # Non-production evidence only; inert without the separate SHA-1-specific cfg.
 cpu-evidence = []
 

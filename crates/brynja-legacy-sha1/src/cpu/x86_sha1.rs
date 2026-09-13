@@ -66,3 +66,123 @@ pub(super) unsafe fn compress(state: &mut [u32; 5], block: &[u8; 64]) {
         e.wrapping_add(final_e),
     ];
 }
+
+/// The schedule and store staging are borrowed from mandatory clearing owners.
+#[cfg(feature = "hardened-execution")]
+#[target_feature(enable = "sha,sse2")]
+pub(super) unsafe fn compress_secret(
+    owner: &mut crate::owner::Sha1Owner,
+    scratch: &mut super::Scratch,
+) -> Result<(), super::Sha1BackendError> {
+    use super::Sha1BackendError as Error;
+    use crate::hardened_execution::storage::{add, read, vector, vector_mut};
+    let mut abcd = _mm_set_epi32(
+        read(&owner.chaining_state, 0)? as i32,
+        read(&owner.chaining_state, 1)? as i32,
+        read(&owner.chaining_state, 2)? as i32,
+        read(&owner.chaining_state, 3)? as i32,
+    );
+    let mut previous = abcd;
+    for group in 0_usize..4 {
+        let input = vector(&owner.block, group)?;
+        let message = _mm_set_epi32(
+            read(input, 0)? as i32,
+            read(input, 1)? as i32,
+            read(input, 2)? as i32,
+            read(input, 3)? as i32,
+        );
+        let destination = vector_mut(&mut owner.schedule, group)?;
+        // SAFETY: Exactly 16 exclusively borrowed writable bytes; unaligned store.
+        unsafe {
+            _mm_storeu_si128(destination.as_mut_ptr().cast(), message);
+        }
+    }
+    for group in 4_usize..20 {
+        let m0 = vector(
+            &owner.schedule,
+            group.checked_sub(4).ok_or(Error::Quarantined)?,
+        )?;
+        let m1 = vector(
+            &owner.schedule,
+            group.checked_sub(3).ok_or(Error::Quarantined)?,
+        )?;
+        let m2 = vector(
+            &owner.schedule,
+            group.checked_sub(2).ok_or(Error::Quarantined)?,
+        )?;
+        let m3 = vector(
+            &owner.schedule,
+            group.checked_sub(1).ok_or(Error::Quarantined)?,
+        )?;
+        // SAFETY: Each source is an initialized exact 16-byte owner subregion.
+        let message = unsafe {
+            _mm_sha1msg2_epu32(
+                _mm_xor_si128(
+                    _mm_sha1msg1_epu32(
+                        _mm_loadu_si128(m0.as_ptr().cast()),
+                        _mm_loadu_si128(m1.as_ptr().cast()),
+                    ),
+                    _mm_loadu_si128(m2.as_ptr().cast()),
+                ),
+                _mm_loadu_si128(m3.as_ptr().cast()),
+            )
+        };
+        let destination = vector_mut(&mut owner.schedule, group)?;
+        // SAFETY: Exactly 16 live exclusive bytes in the source-owned schedule.
+        unsafe {
+            _mm_storeu_si128(destination.as_mut_ptr().cast(), message);
+        }
+    }
+    for group in 0..20 {
+        let source = vector(&owner.schedule, group)?;
+        // SAFETY: Exactly 16 initialized schedule bytes; unaligned load.
+        let message = unsafe { _mm_loadu_si128(source.as_ptr().cast()) };
+        let input = if group == 0 {
+            _mm_add_epi32(
+                message,
+                _mm_set_epi32(read(&owner.chaining_state, 4)? as i32, 0, 0, 0),
+            )
+        } else {
+            _mm_sha1nexte_epu32(previous, message)
+        };
+        previous = abcd;
+        abcd = match group {
+            0..=4 => _mm_sha1rnds4_epu32::<0>(abcd, input),
+            5..=9 => _mm_sha1rnds4_epu32::<1>(abcd, input),
+            10..=14 => _mm_sha1rnds4_epu32::<2>(abcd, input),
+            _ => _mm_sha1rnds4_epu32::<3>(abcd, input),
+        };
+    }
+    // SAFETY: Scratch owns an exact, live, exclusive 16-byte store destination.
+    unsafe {
+        _mm_storeu_si128(scratch.lanes.as_mut_ptr().cast(), abcd);
+    }
+    add(
+        &mut owner.chaining_state,
+        0,
+        read(&scratch.lanes, 3)?.swap_bytes(),
+    )?;
+    add(
+        &mut owner.chaining_state,
+        1,
+        read(&scratch.lanes, 2)?.swap_bytes(),
+    )?;
+    add(
+        &mut owner.chaining_state,
+        2,
+        read(&scratch.lanes, 1)?.swap_bytes(),
+    )?;
+    add(
+        &mut owner.chaining_state,
+        3,
+        read(&scratch.lanes, 0)?.swap_bytes(),
+    )?;
+    add(
+        &mut owner.chaining_state,
+        4,
+        _mm_cvtsi128_si32(_mm_shuffle_epi32::<0xff>(previous))
+            .cast_unsigned()
+            .rotate_left(30),
+    )?;
+    Ok(())
+}

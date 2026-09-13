@@ -14,7 +14,7 @@
 //! # Ok::<(), brynja_legacy_sha1_std::execution::Error>(())
 //! ```
 
-mod platform;
+pub(crate) mod platform;
 pub use brynja_legacy_sha1::execution::{Executor, Mode, PublicData, Stream};
 
 /// Non-authorizing explanation for pre-execution unavailability.

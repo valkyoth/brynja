@@ -1179,11 +1179,11 @@ sha256 = "c158bb3c7d97f0dc4f5ec3e6dc053b997d48395f983c0474308ce5a0b90cb379"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/hardened.rs"
-sha256 = "d3a87dcb6c94242a07200710f0ea09cbc218fa60e34b9a9715360f5eb4054c46"
+sha256 = "d99c2b86452af7c037cdf8bb4e47bd4bde93511a267656dd145e148797f981a4"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/lib.rs"
-sha256 = "03cfd5b4e5ad72f698cb4e5cb2872a8f4b59e8c2e6bca43147480c254295aa68"
+sha256 = "49edf4ca807761b4f5933dfdf4d4446735a5d6f18e9949337cc11c4b50e60035"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/ordinary.rs"

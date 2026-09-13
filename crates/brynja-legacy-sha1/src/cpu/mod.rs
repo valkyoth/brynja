@@ -1,7 +1,18 @@
 #[cfg(all(target_arch = "aarch64", target_endian = "little"))]
 mod aarch64_sha1;
+#[cfg(feature = "hardened-execution")]
+mod secret;
 mod session;
 mod stream;
+#[cfg(feature = "hardened-execution")]
+pub use secret::Authority as HardenedAuthority;
+#[cfg(feature = "hardened-execution")]
+#[cfg(any(
+    target_arch = "x86",
+    target_arch = "x86_64",
+    all(target_arch = "aarch64", target_endian = "little")
+))]
+pub(crate) use secret::Scratch;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod x86_sha1;
 

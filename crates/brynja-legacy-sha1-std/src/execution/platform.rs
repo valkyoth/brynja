@@ -44,3 +44,21 @@ pub(super) fn construct() -> Result<Authority, Error> {
     unsafe { Authority::from_platform(Sha1Backend::Aarch64Sha1, revalidate) }
         .map_err(|error| Error::Execution(error.into()))
 }
+
+#[cfg(feature = "runtime-hardened-execution")]
+pub(crate) fn construct_hardened()
+-> Result<brynja_legacy_sha1::hardened_execution::Authority, crate::hardened_execution::Error> {
+    use crate::hardened_execution::Error;
+    availability().map_err(Error::Unavailable)?;
+    // SAFETY: The same allowlisted AArch64 process-wide NEON/SHA2 contract
+    // used above covers every schedulable CPU for the full owner lifetime.
+    // This separate authority executes only the hardened scratch/owner kernel.
+    // Cached feature detection is not live migration or feature-loss detection.
+    unsafe {
+        brynja_legacy_sha1::hardened_execution::Authority::from_platform(
+            Sha1Backend::Aarch64Sha1,
+            revalidate,
+        )
+    }
+    .map_err(|error| Error::Execution(error.into()))
+}

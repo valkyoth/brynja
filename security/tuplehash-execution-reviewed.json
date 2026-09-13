@@ -172,11 +172,11 @@
     "crates/brynja-hash-tuple/tests/execution.rs": "7709df62259035f025ae0ac68ab84865a7bd657593a3df115b8f8599ff076834",
     "crates/brynja-hash-tuple/tests/official_vectors.rs": "8cbb13c168530dad1dc732cd2923c693bcf4323a701e1a92c186e33acffc1a65",
     "docs/tuplehash-accelerated-execution.md": "90bb61fc927eda892c5e2e704af03004f36b7d6e2eb926b9ea79ed5fa8641b49",
-    "scripts/checks.sh": "e0f510644d15466e62f36e90cf789a31060656ace3bae6c15f8a34d08bbb98ba",
+    "scripts/checks.sh": "10bce05fcf9b72d0281260fe1b02741abc2e713a575502a428087bdc81eb2f23",
     "scripts/cryptography/mir_cleanup_flow.py": "9b56316d6bf2a02c85cb4bcd75c2fab00a2442b49332bda1852f6d91012a2dc4",
     "scripts/sha3/check-cshake-differential.py": "0e936f96b8a8bb7295055694cf751353207c83d78f5fad95c7184e9148c16d39",
     "scripts/sha3/check-sha3-bit-differential.py": "c796b542560131229a7ea933c94de944d687856fc84be678ef7e4238c2fb07da",
-    "scripts/tag_gate.sh": "af38972eadc027c77e0d8bd1c4d4d9936dececa6397c9736f30e18ff345866a1",
+    "scripts/tag_gate.sh": "8b9c53a68583e8f52c5a68a86d2a777c360951155864845e039430818d7e7bf0",
     "scripts/tuplehash/capture-tuplehash-execution-native.py": "52aa969a7fc9484bb62053be3c09e15c72acbfe12bc785b1f5be756ca2e37d36",
     "scripts/tuplehash/check-tuplehash-differential.py": "6be3bfd93a3d7fb2dd9fc2a051d5de2d564a9ec99d1688255b950e6efe6db1ec",
     "scripts/tuplehash/check-tuplehash-execution-codegen.py": "1fded03dfb7ea956dd82121bdaa6a787d144f84ba8af9d8186d1d736d022f365",
@@ -187,8 +187,8 @@
     "scripts/tuplehash/test-tuplehash-execution-policy.py": "a184759f818bb29d240e7b3899e4683e46d22c70a9993d2b02338351a51384d9",
     "scripts/tuplehash/tuplehash_execution_native.py": "0ca9e45a262d61f5f1e696613015f8eaf53ef691135caf715255e5890a0a5649",
     "scripts/tuplehash/tuplehash_execution_policy.py": "e8a15baa9534a1129e45d1060a4f593d6070bfb1eb11604df02a69cdb2fcd7a6",
-    "scripts/zeroization/check-zeroization-miri.sh": "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"
+    "scripts/zeroization/check-zeroization-miri.sh": "dc762c47f82bff105e464bfb30f30f8bcf6f353869d1c30553b30bd254d33195",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "e1cb4555ec83a16c48ed79b83282265c9a063a168f01f3f79cc9f2ead3726db4"
   },
   "status": "implementation-review; native-qualification-pending",
   "version": "0.24.39"

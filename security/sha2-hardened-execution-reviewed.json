@@ -106,8 +106,8 @@
     "crates/brynja-hash-sha2/src/sha512_state.rs": "621cda9793ff1f489533101cbdad23da26bd467a2909faa1e3c2fc334ebc0d10",
     "crates/brynja-hash-sha2/src/sha512_t.rs": "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
-    "package-policy.toml": "6f311de25b6180edd59008d1ff4af333147811405f6c84f5eb64347554f2dbdb",
-    "scripts/checks.sh": "e0f510644d15466e62f36e90cf789a31060656ace3bae6c15f8a34d08bbb98ba",
+    "package-policy.toml": "95925844b429acebdb2f0ff18453998a317b9416797e74f3da1c7bc9dc7455e3",
+    "scripts/checks.sh": "10bce05fcf9b72d0281260fe1b02741abc2e713a575502a428087bdc81eb2f23",
     "scripts/sha2/capture-sha2-hardened-native.py": "50cd60bc595fa44c85c8424863757aa61dd7cb6d930eb127f7bad4fc9f013ad4",
     "scripts/sha2/check-sha2-execution.py": "3d20e641efc386705b9aa770fe2f897e1b881a4f738d7dc9702eb3cf4c184887",
     "scripts/sha2/check-sha2-hardened-asan.py": "c3f92262a67b1229230c6b4b0099137a387011dbc1b5cdadded39c5d32584dc2",
@@ -120,9 +120,9 @@
     "scripts/sha2/sha2_hardened_execution_policy.py": "0b8a738f6b8de8748d6411f38db770f949eba69ffae4be75a1c1137af7367998",
     "scripts/sha2/test-sha2-hardened-execution.py": "7cefa185b58d0def522fdd9fa67939e6ea6caf2e7939033dfd1fd6584c5db8cf",
     "scripts/sha2/test-sha2-hardened-native.py": "619ae2124bf076310c3b88df0280d96139e97b903d5efb2c1b865cead292021e",
-    "scripts/tag_gate.sh": "af38972eadc027c77e0d8bd1c4d4d9936dececa6397c9736f30e18ff345866a1",
-    "scripts/zeroization/check-zeroization-miri.sh": "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"
+    "scripts/tag_gate.sh": "8b9c53a68583e8f52c5a68a86d2a777c360951155864845e039430818d7e7bf0",
+    "scripts/zeroization/check-zeroization-miri.sh": "dc762c47f82bff105e464bfb30f30f8bcf6f353869d1c30553b30bd254d33195",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "e1cb4555ec83a16c48ed79b83282265c9a063a168f01f3f79cc9f2ead3726db4"
   },
   "version": "0.24.34"
 }

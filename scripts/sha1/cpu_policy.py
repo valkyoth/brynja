@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CPU = 'crates/brynja-legacy-sha1/src/cpu/'
 ADAPTER = 'crates/brynja-legacy-sha1-std/'
 SOURCES = ('mod.rs','session.rs','stream.rs','x86_sha1.rs','aarch64_sha1.rs',
-           'session/tests.rs','stream/tests.rs')
+           'session/tests.rs','stream/tests.rs','secret.rs','secret/tests.rs')
 BOUND = [CPU + name for name in SOURCES] + [
     'crates/brynja-legacy-sha1/src/execution.rs',
     'crates/brynja-legacy-sha1/src/execution/ownership.rs',
@@ -85,7 +85,8 @@ def validate(root=ROOT, hashes=True):
     for os in ('Linux', 'Android', 'macOS', 'iOS', 'Windows'):
         require(platform_review, f'| {os} |')
     require(platform_review, 'Cached detection is not live revocation.')
-    require(platform, 'availability().map_err(Error::Unavailable)?;')
+    ordinary_constructor = platform.split('pub(super) fn construct()', 1)[1].split('#[cfg(feature = "runtime-hardened-execution")]', 1)[0]
+    require(ordinary_constructor, 'availability().map_err(Error::Unavailable)?;')
     require(platform, 'unsafe { Authority::from_platform(Sha1Backend::Aarch64Sha1, revalidate) }')
     require(platform, 'fn revalidate(backend: Sha1Backend) -> bool { backend == Sha1Backend::Aarch64Sha1 && availability().is_ok() }')
     require(platform, 'if !cfg!(all(target_arch = "aarch64", target_endian = "little", any(target_os = "linux", target_os = "android", target_os = "macos", target_os = "ios", target_os = "windows"))) { return Err(Unavailable::UnsupportedPlatform); }')
@@ -94,8 +95,8 @@ def validate(root=ROOT, hashes=True):
     if 'is_x86_feature_detected!' in platform:
         raise ValueError('current-core x86 detection cannot establish hosted authority')
     for path, expected in (
-        ('crates/brynja-legacy-sha1/Cargo.toml', {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu']}),
-        (ADAPTER+'Cargo.toml', {'default': [], 'runtime-execution': ['brynja-legacy-sha1/execution']}),
+        ('crates/brynja-legacy-sha1/Cargo.toml', {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu'], 'hardened-execution': ['cpu']}),
+        (ADAPTER+'Cargo.toml', {'default': [], 'runtime-execution': ['brynja-legacy-sha1/execution'], 'runtime-hardened-execution': ['runtime-execution', 'brynja-legacy-sha1/hardened-execution']}),
     ):
         if tomllib.loads(sources[path])['features'] != expected:
             raise ValueError('operational SHA-1 must remain explicit and default-off')
@@ -128,7 +129,7 @@ def validate(root=ROOT, hashes=True):
         ('x86_sha1.rs', ('sha1msg1','sha1msg2','sha1nexte','sha1rnds4'), 'sha,sse2'),
         ('aarch64_sha1.rs', ('vsha1cq','vsha1pq','vsha1mq','vsha1h','vsha1su0q','vsha1su1q'), 'neon,sha2')):
         text = sources[CPU+kernel]
-        require(text,f'#[target_feature(enable = "{features}")]')
+        require(text.split('#[cfg(feature = "hardened-execution")]', 1)[0],f'#[target_feature(enable = "{features}")]')
         for instruction in instructions: require(text,instruction)
         for forbidden in ('get_unchecked', 'extern "', 'asm!', 'alloc::', 'Vec<'):
             if forbidden in text: raise ValueError('kernel gained unreviewed execution boundary')

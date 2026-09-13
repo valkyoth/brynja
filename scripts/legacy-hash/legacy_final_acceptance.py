@@ -13,9 +13,15 @@ SNAPSHOT = 'scripts/legacy-hash/native-source-snapshot.toml'
 SHA1_DELTA = 'scripts/legacy-hash/sha1-operational-delta.toml'
 SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
     'Cargo.toml', 'src/lib.rs', 'src/cpu/mod.rs', 'src/cpu/session.rs', 'src/cpu/session/tests.rs',
-    'src/execution.rs', 'src/execution/ownership.rs', 'tests/execution.rs')) + tuple(
+    'src/execution.rs', 'src/execution/ownership.rs', 'tests/execution.rs',
+    'src/hardened.rs', 'src/cpu/x86_sha1.rs', 'src/cpu/aarch64_sha1.rs',
+    'src/cpu/secret.rs', 'src/cpu/secret/tests.rs', 'src/hardened_execution/mod.rs',
+    'src/hardened_execution/engine.rs', 'src/hardened_execution/storage.rs',
+    'src/hardened_execution/stream.rs', 'src/hardened_execution/stream/tests.rs',
+    'src/hardened_execution/ownership.rs', 'tests/hardened_execution.rs')) + tuple(
     'crates/brynja-legacy-sha1-std/' + name for name in (
-        'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs'))
+        'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs',
+        'src/hardened_execution.rs', 'tests/hardened_execution.rs'))
 HASHES = 'scripts/legacy-hash/final-reviewed.toml'
 CLAIMS = FIXTURE + '/claims.toml'
 PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-legacy-sha1',
@@ -110,7 +116,7 @@ def validate_native(root):
             # authority surface has an explicit, separately reviewed delta;
             # it needs fresh native qualification, never historical reuse.
             delta = tomllib.loads(read(root, SHA1_DELTA))
-            if (set(delta) != {'version', 'native', 'files'} or delta['version'] != '0.24.41'
+            if (set(delta) != {'version', 'native', 'files'} or delta['version'] != '0.24.42'
                 or delta['native'] != 'fresh operational evidence required separately'
                 or set(delta['files']) != set(SHA1_CHANGED)):
                 raise ValueError('SHA-1 operational review cannot widen historical evidence')

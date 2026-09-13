@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-legacy-sha1/src/cpu/secret.rs"): ("c7e2acd5e3460114d6465469b14c8ce7a9e45908d50e60803697718c1a00dcc8", 2, 1, 2),
     Path("crates/brynja-crypto-cpu/src/runtime_execution/mod.rs"): (
         "afa23e33c7da3b54aedf939bf2f2224e87ade560e46286a1d14af73f6eb1148b", 0, 1, 0,
     ),
@@ -18,10 +19,10 @@ ALLOWED = {
     Path("crates/brynja-legacy-md5/src/cpu/session.rs"): ("2b44d0e84f477a79cc0dfec007dab0fbf7e9c0ea6577d4759f0f46c537562a9f", 3, 1, 3),
     Path("crates/brynja-legacy-md5/src/cpu/x86_avx2_md5.rs"): ("ed6bc494e363fc24256b835b5d4ee52b0785f4d46028a5bdb7ca8446d597ea8e", 1, 1, 1),
     Path("crates/brynja-legacy-md5/src/cpu/aarch64_neon_md5.rs"): ("95266c29fe1ce486477bf32d5276dc8f241cb3d57c1ce2dedfe8d8f335199651", 1, 1, 1),
-    Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("f9da62a45a1f2f2481bafed46e188f28da4d7c99daec1d73ca15facb62723496", 3, 2, 3),
-    Path("crates/brynja-legacy-sha1-std/src/execution/platform.rs"): ("ce0c81d0d2631eac26d0782b35b078b4969f17cb49cbfd7a7e15edd8414eb36b", 1, 0, 1),
-    Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"): ("4421dbaf14b05b7dd9480d32ae6319134f5785ff5347ba7ec74751d5aa80a583", 1, 1, 1),
-    Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"): ("440373ba1279dd55d991b285eceb83157238b6217ad1c5e125f4bc7ffc704473", 3, 1, 3),
+    Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("543c1ee7cec6d33c86c67b3dd06011e60417fbbc0cc6e1664fbc6cad39fbad77", 3, 2, 3),
+    Path("crates/brynja-legacy-sha1-std/src/execution/platform.rs"): ("229f0b76150b65dffcea7e51f4e98d085622ee8356f8cd79d54ca51e18c2eea3", 2, 0, 2),
+    Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"): ("118c68887b4b3e60998108c8fb31da574c4dda3eff93b59fe4c0913d12368d2e", 6, 2, 6),
+    Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"): ("674c69df80e8a7a8ae09eebb0fc107dd48083c4c1a9135965cdffb9feb137591", 8, 2, 8),
     Path("crates/brynja-core/src/secret_memory_volatile.rs"): (
         "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217",
         1,

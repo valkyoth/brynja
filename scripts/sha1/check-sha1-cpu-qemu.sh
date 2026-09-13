@@ -15,3 +15,9 @@ cargo test --locked -p brynja-legacy-sha1 --features execution --test execution 
 cargo test --locked -p brynja-legacy-sha1-std --features runtime-execution --test execution \
     --target aarch64-unknown-linux-musl
 echo 'AArch64 ordinary operational SHA-1 static/hosted QEMU: PASS; not native evidence'
+
+cargo test --locked -p brynja-legacy-sha1 --features hardened-execution --test hardened_execution --lib \
+    --target aarch64-unknown-linux-musl
+cargo test --locked -p brynja-legacy-sha1-std --features runtime-hardened-execution --test hardened_execution \
+    --target aarch64-unknown-linux-musl
+echo 'AArch64 hardened operational SHA-1 static/hosted QEMU: PASS; not native evidence'

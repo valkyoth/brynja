@@ -13,6 +13,8 @@ use brynja_legacy_sha1::{BitString, Sha1, Sha1Backend, Sha1Error};
 /// Explicit operational selection; the default observational API is unchanged.
 #[cfg(feature = "runtime-execution")]
 pub mod execution;
+#[cfg(feature = "runtime-hardened-execution")]
+pub mod hardened_execution;
 
 /// Public, non-authorizing reason for portable selection.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

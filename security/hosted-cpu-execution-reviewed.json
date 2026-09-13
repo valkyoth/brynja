@@ -43,10 +43,10 @@
     "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs": "adc8b9f184e60c7ef8d47aa3133b51e10f9eb757a5444382393e6c0feb800598",
     "crates/brynja-crypto-cpu/src/x86_sha.rs": "9519e6f2feb7ff836f56bee2d72b5259ebaf057f08928d89f555e97ade5cd7c0",
     "docs/hosted-cpu-execution.md": "ee95ea12465819e9d071196d39497b7245b94589f3060b3c48e48af960fe978a",
-    "scripts/checks.sh": "e0f510644d15466e62f36e90cf789a31060656ace3bae6c15f8a34d08bbb98ba",
+    "scripts/checks.sh": "10bce05fcf9b72d0281260fe1b02741abc2e713a575502a428087bdc81eb2f23",
     "scripts/cpu/check-hosted-execution.py": "9ef366acd3f421ff5fcf17cc46da25524ddc8ada763e6ac36931e9b7a2d86c60",
-    "scripts/repository/unsafe_policy.py": "6f0a25128c2648aa161b2816c5dc9398eb624bde2acb67a1ea09d7f4a44dee8a",
-    "scripts/zeroization/check-zeroization-miri.sh": "536146ead0ab86008a00c5399dbb2c232f9b9a18b09aed79a5aa71e5d84983e1",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "458e756873d7221596079f69319211dd86a90fcd3b138ff1628550807e20ccee"
+    "scripts/repository/unsafe_policy.py": "b7b32ec23c665b99d3d5b01af6def0b27fd09ad66c37aa466422e0e8c10c8a4d",
+    "scripts/zeroization/check-zeroization-miri.sh": "dc762c47f82bff105e464bfb30f30f8bcf6f353869d1c30553b30bd254d33195",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "e1cb4555ec83a16c48ed79b83282265c9a063a168f01f3f79cc9f2ead3726db4"
   }
 }

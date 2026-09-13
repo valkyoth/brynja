@@ -36,7 +36,8 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
-| Opt-in hosted ordinary acceleration | 🚧 In progress; native observations passed, final release checks pending | ❌ Not independently verified |
+| Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
+| Opt-in hosted hardened acceleration | 🚧 In progress; qualification pending | ❌ Not independently verified |
 
 ## Hardware and SIMD
 
@@ -48,7 +49,7 @@ route; generic x86 required mode fails, since current-core CPUID alone cannot
 establish migration safety. Specialized x86 binaries use the leaf's explicit
 static route. No feature report can be converted into an execution authority.
 Operational native observations passed on Linux and macOS; other supported OS
-lanes and final release checks are not qualified by those observations. See the
+lanes are not qualified by those observations. See the
 [operational API](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-execution.md)
 for selection, streaming, byte/bit hashing and ownership examples.
 
@@ -72,8 +73,32 @@ assert!(RuntimeSha1Backend::required().is_err());
 ```
 
 SHA-1 is unsuitable for new signatures, authentication or password hashing.
-This adapter handles public data only; confidential legacy data requires the
-leaf's portable hardened owner. No FIPS validation or accelerated cleanup claim.
+The observational and ordinary APIs handle public data only. Confidential legacy
+data requires a hardened owner, never a public-data acknowledgement token.
+No FIPS validation is claimed.
+
+The distinct default-off `runtime-hardened-execution` feature adds
+`hardened_execution::select(Mode)`. It returns a non-cloneable, thread-bound
+executor with typed secret output, explicit public declassification and owned
+scratch clearing. Hosted AArch64 and static leaf x86/Arm routes remain subject
+to the documented lifetime-wide platform contract. Native qualification is pending.
+
+```rust
+# #[cfg(feature = "runtime-hardened-execution")]
+# fn example() -> Result<(), Box<dyn std::error::Error>> {
+use brynja_legacy_sha1_std::hardened_execution::{select, Mode};
+let owner = select(Mode::Prefer)?;
+let mut bytes = [0u8; 20];
+drop(owner.hash_secret(b"legacy confidential input", &mut bytes)?);
+assert_eq!(bytes, [0; 20]);
+# Ok(())
+# }
+# #[cfg(feature = "runtime-hardened-execution")]
+# example()?;
+# Ok::<(), Box<dyn std::error::Error>>(())
+```
+
+See the [hardened execution contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-hardened-execution.md).
 MIT OR Apache-2.0; zero third-party dependencies.
 
 See [SHA-1 acceleration](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1-acceleration.md)

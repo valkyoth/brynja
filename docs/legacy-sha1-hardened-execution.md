@@ -127,3 +127,11 @@ erasure of stack bytes, registers or compiler copies. These production owners
 use fixed-size storage without heap allocation. Miri leak checks, lifecycle
 tests, compiled cleanup mutants and emitted-code checks address complementary
 properties; no one of these tools proves complete physical secret erasure.
+
+The SHA-1 sanitizer gate forcibly sets
+`ASAN_OPTIONS=detect_leaks=1:halt_on_error=1:exitcode=1` and
+`LSAN_OPTIONS=exitcode=23`, replacing ambient disabling/suppression settings.
+Leaks, access errors, and unsupported LSan/ptrace configurations fail the child
+process and the gate. There is no ASan-only fallback. Its regression tests are
+part of the normal hardened SHA-1 policy checks, without launching sanitizers
+inside those fast CI policy tests.

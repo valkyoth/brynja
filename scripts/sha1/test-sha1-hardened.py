@@ -29,6 +29,8 @@ def main():
             (policy.LEAF+'src/hardened_execution/ownership.rs', 'need::<Executor>();', 'need::<()>();'),
             (policy.LEAF+'Cargo.toml', 'default = []', 'default = ["hardened-execution"]'),
             ('scripts/checks.sh', 'python3 scripts/sha1/check-sha1-hardened.py', ''),
+            ('scripts/sha1/check-sha1-hardened-asan.py', "env['ASAN_OPTIONS'] = 'detect_leaks=1:halt_on_error=1:exitcode=1'", ''),
+            ('scripts/sha1/check-sha1-hardened-asan.py', "env['LSAN_OPTIONS'] = 'exitcode=23'", "env['LSAN_OPTIONS'] = 'exitcode=0'"),
             ('.github/workflows/ci.yml', 'architecture: aarch64', 'architecture: unsupported'),
             ('.github/workflows/ci.yml', 'run: python3 scripts/sha1/check-sha1-hardened-ci.py', 'run: echo'),
             ('.github/workflows/ci.yml', 'run: python3 scripts/sha1/check-sha1-hardened-ci.py', '# run: python3 scripts/sha1/check-sha1-hardened-ci.py'),

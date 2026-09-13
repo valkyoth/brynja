@@ -13,7 +13,7 @@ TOOLS = ('hardened_policy.py', 'hardened_package.py', 'hardened_codegen.py',
          'check-sha1-package.py', 'check-sha1-differential.py', 'hardened_native.py',
          'capture-sha1-hardened-native.py', 'test-sha1-hardened-native.py',
          'check-sha1-hardened-asan.py', 'capture-sha1-cpu-native.py', 'check-sha1-hardened-native.py',
-         'check-sha1-hardened-ci.py', 'test-sha1-hardened-ci.py')
+         'check-sha1-hardened-ci.py', 'test-sha1-hardened-ci.py', 'test-sha1-hardened-asan.py')
 REVIEW = 'scripts/sha1/hardened-reviewed.toml'
 
 
@@ -133,6 +133,11 @@ def validate(root=ROOT, reviewed=True):
                   'blocks=512', "'CI accelerated API'"):
         require(driver, token)
     require(read(root, 'scripts/sha1/check-sha1-hardened.py'), "'scripts/sha1/test-sha1-hardened-ci.py'")
+    require(read(root, 'scripts/sha1/check-sha1-hardened.py'), "'scripts/sha1/test-sha1-hardened-asan.py'")
+    sanitizer = read(root, 'scripts/sha1/check-sha1-hardened-asan.py')
+    for token in ("env['ASAN_OPTIONS'] = 'detect_leaks=1:halt_on_error=1:exitcode=1'",
+                  "env['LSAN_OPTIONS'] = 'exitcode=23'"):
+        require(sanitizer, token)
     require(read(root, 'scripts/zeroization/check-zeroization-miri.sh'), 'run_miri -p brynja-legacy-sha1 --features hardened-execution --lib cpu::secret::tests')
     require(read(root, 'scripts/zeroization/check-zeroization-sanitizer.sh'), 'python3 scripts/sha1/check-sha1-hardened-asan.py')
     if reviewed:

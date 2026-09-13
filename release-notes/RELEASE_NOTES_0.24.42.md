@@ -34,6 +34,9 @@ hardware-test mode, and compiled missing-feature regressions. The local native
 SHA-NI sanitizer rerun passed with LeakSanitizer enabled (`detect_leaks=1`).
 Static authority documentation explicitly states that its callback is a
 compile-time constant, not runtime detection or migration protection.
+The sanitizer gate now forces leak detection and nonzero ASan/LSan error exits,
+overriding ambient disabling/suppression settings. Missing LSan support fails
+the gate; policy and driver regressions enforce this without a long CI run.
 
 SHA-1 remains collision-broken and outside modern facade/TLS/PKIX/FIPS graphs.
 No external dependency is introduced. Internal source clearing is not a claim

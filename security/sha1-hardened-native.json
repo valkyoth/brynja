@@ -1,8 +1,16 @@
 {
   "schema": 1,
   "version": "0.24.42",
-  "owner_review": "pending",
+  "owner_review": "accepted-correctness-with-residuals",
   "captures": {
+    "intel-x86_64": {
+      "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/intel-x86_64.json",
+      "sha256": "3d4835bc44ab4ee635e86a4a250de93af7371d99b79e890126272e779dea5cbc"
+    },
+    "aws-aarch64": {
+      "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/aws-aarch64.json",
+      "sha256": "18d0fc427e41f7f5e63af8d12a2a223328c022abf12f2ea112b0da311b781e5d"
+    },
     "amd-x86_64": {
       "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/amd-x86_64.json",
       "sha256": "e22a6cb2d2515232db4d1cdb313ff1a2b6998edf053bb83abd16e7b7ca42f0d0"

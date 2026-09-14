@@ -1,8 +1,8 @@
 # SHA-224/256 multibuffer native observations
 
 Capture commit: `fe89ab576c465dd2005a31ca1585b881be8e8921`.
-Status: all four ordinary batch captures reviewed; final release verification
-and refresh of older shared native records remain pending.
+Status: all four ordinary batch captures and fifteen shared native refresh
+records reviewed; final release verification remains pending.
 
 The [index](../security/sha256-batch-native.json) binds the original, unmodified
 JSON bytes. All four records match the same 190-file source snapshot and Rust
@@ -51,10 +51,25 @@ do not advertise the raw mixed-build comparison as an intrinsic algorithm gain.
 No correctness mismatch occurred, and neither kernels nor dispatch were changed
 to collect these observations.
 
-## Remaining release work
+## Shared native refresh
 
-The existing native gates reject older SHA-2, Keccak, KMAC, TupleHash and
+The existing native gates rejected older SHA-2, Keccak, KMAC, TupleHash and
 ParallelHash captures because shared manifest/source inputs changed. The narrow
-facade-version-only carry-forward does not cover these changes. Fresh records
-are needed under the existing rules; SHA-1 and both MD5 native checks still pass.
+facade-version-only carry-forward does not cover these changes. All five suites
+were therefore freshly captured at the commit above on Linux Intel x86_64,
+Linux Neoverse-V1 AArch64 and Apple M2 Pro AArch64. All fifteen records passed
+the existing source, compiler, platform, route and result validators. Original
+JSON bytes are retained alongside historical observations, with SHA-256 hashes
+and reviewed CPU identities in the existing indexes:
+
+- [SHA-2](../security/sha2-hardened-native.json): 186 bound inputs per lane.
+- [Keccak](../security/keccak-hardened-native.json): 235 bound inputs per lane.
+- [KMAC](../security/kmac-execution-native.json): 278 bound inputs per lane.
+- [TupleHash](../security/tuplehash-execution-native.json): 279 bound inputs per lane.
+- [ParallelHash](../security/parallelhash-execution-native.json): 321 bound inputs per lane.
+
+The records include actual hardened kernel execution and the required portable,
+static and applicable hosted oracle/lifecycle coverage. They are project-owned
+native evidence, not independent review, side-channel qualification or FIPS
+validation. Final release verification remains outstanding.
 No gate, approval rule or publication policy is changed by this evidence import.

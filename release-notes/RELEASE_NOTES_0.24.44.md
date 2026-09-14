@@ -11,7 +11,9 @@ ordinary APIs, portable defaults and legacy/modern isolation remain unchanged.
 
 All active/inactive storage clears on normal destruction, errors, cancellation
 and recoverable unwind. Secret destinations clear on failure; public destinations
-are transactional. Failed batches cannot be reused and quarantine their executor.
+are transactional. Failed batches cannot be reused. Request rejection, work limits
+and cancellation preserve executor reuse; backend/integrity failure and unwind
+quarantine it. Consumed work is not refunded.
 Unequal suffixes and all padding remain scalar; reports account actual work.
 Batch dimensions/lengths are public and not traffic-analysis protection.
 

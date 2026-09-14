@@ -19,8 +19,10 @@ and the historical unadmitted candidate APIs are unchanged.
 binary target bundle and an actual lane-distinct KAT through the hardened kernel.
 Prefer permits missing-feature and ineligible-workload fallback only before work.
 Require needs at least one full-width vector invocation. Backend failure never
-silently falls back. Failed batches are consumed and quarantine their executor;
-create a fresh executor for a deliberate retry after a work/cancellation error.
+silently falls back. Failed batches are consumed. Ineligible requests, message
+length rejection, work limits and cancellation preserve executor reuse through
+a new batch; consumed work is not refunded. Backend/integrity failures, explicit
+revocation and unwind remain terminal and quarantine the executor.
 
 Each `executor.batch()` creates eight non-cloneable clearing lane owners.
 `digest_public` consumes the batch and requires `PublicDeclassification`;

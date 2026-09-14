@@ -240,6 +240,27 @@ impl Batch<'_> {
             executor: self.executor,
             complete: false,
         };
+        let result = self.run_inner(inputs, control);
+        // A consumed request is not a failed CPU authority. Only explicitly
+        // classified request failures preserve reuse; unknown failures and
+        // unwinding leave the guard armed and quarantine the executor.
+        guard.complete = matches!(
+            result,
+            Ok(_)
+                | Err(Error::IneligibleWorkload)
+                | Err(Error::Batch(
+                    Md5BatchError::WorkLimit
+                        | Md5BatchError::Cancelled
+                        | Md5BatchError::MessageTooLong
+                ))
+        );
+        result
+    }
+    fn run_inner(
+        &mut self,
+        inputs: &[Option<BitString<'_>>; 8],
+        control: &mut Md5BatchControl<'_>,
+    ) -> Result<Report, Error> {
         self.executor.ready()?;
         let authority = self
             .executor
@@ -260,7 +281,6 @@ impl Batch<'_> {
         let backend = authority
             .filter(|_| work.vector_blocks != 0)
             .map(Authority::backend);
-        guard.complete = true;
         Ok(Report {
             backend,
             vector_width: backend.map_or(0, Md5Backend::lane_width),

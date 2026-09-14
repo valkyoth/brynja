@@ -12,6 +12,25 @@ fn hosted_hardened_selection_and_owned_output() -> Result<(), Box<dyn std::error
     let data = [0xa5; 128];
     let inputs = [Some(BitString::new(&data, 8).map_err(|_| "bits")?); 8];
     let mut public = [[0; 16]; 8];
+    for cancelled in [false, true] {
+        let mut callback = || cancelled;
+        let mut rejected = [[0xa5; 16]; 8];
+        assert!(
+            preferred
+                .batch()
+                .digest_secret(
+                    &inputs,
+                    &mut rejected,
+                    &mut Md5BatchControl::with_cancellation(0, &mut callback),
+                )
+                .is_err()
+        );
+        assert_eq!(rejected, [[0; 16]; 8]);
+        assert_eq!(
+            preferred.health(),
+            brynja_legacy_md5::Md5BackendHealth::Healthy
+        );
+    }
     let report = preferred.batch().digest_public(
         &inputs,
         &mut public,

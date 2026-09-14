@@ -18,7 +18,7 @@
 "crates/brynja-legacy-sha1/src/output.rs" = "2e5c659c25f4c2a4dd93d26bff6de5ca49dfd9a8c9a7ce761476b9b3869d16d7"
 "crates/brynja-legacy-sha1/tests/api.rs" = "769b3abdbe623a057af4c71357c179d05fe5898ab3fbb088e787ee9802bfd4fc"
 "crates/brynja-legacy-md5/Cargo.toml" = "24f3bda7d4db1352ccf8439fed0421988c98e5a66b0d21bd3e4cffbfb62ad481"
-"crates/brynja-legacy-md5/README.md" = "464f617d87ecb932add360ce85c77ec11ce5eb95d4abf28367c10e776c8328a9"
+"crates/brynja-legacy-md5/README.md" = "63c94c5f9919963f63b560ef42352a48f6449fc50ca6dc93c508510fc2495701"
 "crates/brynja-legacy-md5/src/lib.rs" = "46800b0b88a043d3351e7d4606760d70c0323c2a7e9978016fade05f43a48adf"
 "crates/brynja-legacy-md5/src/ordinary.rs" = "b78605d0a26a689b5d0bfdf13f41f6f949e9c0cb1dc06445241aec82df4ffab2"
 "crates/brynja-legacy-md5/src/hardened.rs" = "b997fd50ff27e4dab2bf4201517138ef6c991d02333dbc4e13fa8606cfa74334"

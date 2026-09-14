@@ -12,6 +12,22 @@ fn bounded_portable_cleanup_smoke() -> Result {
     let mut output = [[0xa5; 16]; 8];
     let mut inputs = [None; 8];
     inputs[0] = Some(BitString::new(b"abc", 8).map_err(|_| "bits")?);
+    for cancelled in [false, true] {
+        let mut callback = || cancelled;
+        assert!(
+            executor
+                .batch()
+                .digest_secret(
+                    &inputs,
+                    &mut output,
+                    &mut Md5BatchControl::with_cancellation(0, &mut callback),
+                )
+                .is_err()
+        );
+        assert_eq!(output, [[0; 16]; 8]);
+        assert_eq!(executor.health(), Md5BackendHealth::Healthy);
+        output.fill([0xa5; 16]);
+    }
     let (owned, report) =
         executor
             .batch()
@@ -51,6 +67,35 @@ fn executor() -> core::result::Result<Executor, Box<dyn std::error::Error>> {
         assert!(executor.backend().is_some(), "actual SIMD required");
     }
     Ok(executor)
+}
+
+fn assert_reusable(executor: &Executor) -> Result {
+    assert_eq!(executor.health(), Md5BackendHealth::Healthy);
+    let bytes = [0x36; 128];
+    let inputs = [Some(BitString::new(&bytes, 8).map_err(|_| "bits")?); 8];
+    let expected = [brynja_legacy_md5::md5(&bytes)?; 8];
+    let mut output = expected.map(|lane| lane.map(|byte| !byte));
+    let report = executor.batch().digest_public(
+        &inputs,
+        &mut output,
+        &mut Md5BatchControl::new(24),
+        PublicDeclassification::acknowledge(),
+    )?;
+    assert_eq!(output, expected);
+    output.fill([0xa5; 16]);
+    let (owned, secret_report) =
+        executor
+            .batch()
+            .digest_secret(&inputs, &mut output, &mut Md5BatchControl::new(24))?;
+    assert_eq!(owned.expose(), expected.as_flattened());
+    assert_eq!(report, secret_report);
+    assert_eq!(
+        report.work.vector_blocks,
+        if executor.backend().is_some() { 16 } else { 0 }
+    );
+    drop(owned);
+    assert_eq!(output, [[0; 16]; 8]);
+    Ok(())
 }
 
 #[test]
@@ -180,7 +225,7 @@ fn every_work_failure_clears_secret_and_preserves_public() -> Result {
                 );
                 assert_eq!(output, [[0xa5; 16]; 8]);
             }
-            assert_eq!(executor.health(), Md5BackendHealth::Quarantined);
+            assert_reusable(&executor)?;
         }
     }
     let executor = executor()?;
@@ -259,7 +304,18 @@ fn cancellation_revocation_and_unwind_at_every_boundary() -> Result {
                 if triggered {
                     assert!(!matches!(result, Ok(Ok(_))));
                     assert_eq!(output, [[if secret { 0 } else { 0xa5 }; 16]; 8]);
-                    assert_eq!(executor.health(), Md5BackendHealth::Quarantined);
+                    if action == 0 {
+                        assert_reusable(&executor)?;
+                    } else {
+                        assert_eq!(executor.health(), Md5BackendHealth::Quarantined);
+                        assert!(
+                            executor
+                                .batch()
+                                .digest_secret(&inputs, &mut output, &mut Md5BatchControl::new(24),)
+                                .is_err()
+                        );
+                        assert_eq!(output, [[0; 16]; 8]);
+                    }
                 } else {
                     assert!(matches!(result, Ok(Ok(_))));
                 }
@@ -282,6 +338,21 @@ fn required_empty_work_and_explicit_revocation_fail_before_commit() -> Result {
         );
         assert_eq!(output, [[0; 16]; 8]);
         assert_eq!(control.remaining(), 0);
+        assert_reusable(&executor)?;
+        let mut output = [[0xa5; 16]; 8];
+        assert!(
+            executor
+                .batch()
+                .digest_public(
+                    &[None; 8],
+                    &mut output,
+                    &mut Md5BatchControl::new(0),
+                    PublicDeclassification::acknowledge(),
+                )
+                .is_err()
+        );
+        assert_eq!(output, [[0xa5; 16]; 8]);
+        assert_reusable(&executor)?;
     }
     let executor = Executor::portable();
     let batch = executor.batch();

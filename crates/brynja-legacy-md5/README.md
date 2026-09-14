@@ -171,8 +171,10 @@ See [batch ownership and evidence](https://github.com/valkyoth/brynja/blob/main/
 Enable `hardened-execution` for distinct clearing AVX2/NEON batches. No ordinary
 authority can be converted into a hardened one. `Mode::Prefer` permits portable
 pre-operation fallback; `Mode::Require` rejects workloads with no full SIMD group.
-Lengths, activity masks and work reports are public. Failed batches are consumed
-and quarantine their executor. The ordinary SIMD path remains public-only.
+Lengths, activity masks and work reports are public. Failed batches are consumed.
+Request rejection, work limits and cancellation allow a new batch on the same
+executor without refunding consumed work. Backend/integrity failures and unwind
+quarantine it. The ordinary SIMD path remains public-only.
 
 ```rust
 # #[cfg(feature = "hardened-execution")] {

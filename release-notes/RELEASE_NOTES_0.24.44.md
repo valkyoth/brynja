@@ -1,8 +1,7 @@
 # Brynja v0.24.44
 
-Status: owner-supplied pentest/retest and four hardened native captures passed.
-Refreshed ordinary native qualification, final release checks and GitHub/CodeQL
-remain required before tagging.
+Status: owner-supplied pentest/retest and four ordinary plus four hardened native
+captures passed. Final release checks and GitHub/CodeQL are required before tagging.
 
 Adds separate default-off hardened MD5 batch SIMD: eight-lane x86 AVX2 and
 four-lane little-endian AArch64 NEON, clearing packed state/schedules/round
@@ -41,8 +40,9 @@ Development validation passed (not the final release gate):
 - Workspace all-feature compilation, scoped strict Clippy and crate README checks.
 
 The hardened native index binds fresh AMD, Intel, AWS Arm and Apple M2 captures
-to the reviewed source at 98cdad39. Refreshed ordinary MD5 qualification remains
-pending. Historical captures remain unchanged and cannot qualify the new source
+to the reviewed source at 98cdad39. The ordinary index binds refreshed captures
+at 98cdad39 and metadata-only a20edfcc with the same reviewed source closure.
+Historical captures remain unchanged and cannot qualify the new source
 closure. Native records are self-attested correctness evidence, not independent
 verification or proof of complete physical erasure.
 

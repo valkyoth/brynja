@@ -8,6 +8,9 @@
 
 #![no_std]
 
+#[cfg(feature = "sha256-batch")]
+pub mod sha256_batch;
+
 #[cfg(feature = "static-execution")]
 pub mod static_execution;
 

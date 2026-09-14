@@ -13,14 +13,14 @@ batch = []
 
 [dependencies]
 brynja-core = { path = "../../crates/brynja-core", default-features = false }
-brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", default-features = false, features = ["runtime-execution"] }
-brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", default-features = false, features = ["static-execution"] }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", default-features = false, features = ["runtime-execution", "sha256-batch"] }
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", default-features = false, features = ["static-execution", "sha256-batch"] }
 brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false }
 brynja-dtls = { path = "../../crates/brynja-dtls", default-features = false }
 brynja-hash-core = { path = "../../crates/brynja-hash-core", default-features = false }
 brynja-hash-parallel-std = { path = "../../crates/brynja-hash-parallel-std", default-features = false, features = ["runtime-execution"] }
 brynja-hash-parallel = { path = "../../crates/brynja-hash-parallel", default-features = false, features = ["runtime-execution"] }
-brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", default-features = false }
+brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", default-features = false, features = ["batch-execution"] }
 brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", default-features = false }
 brynja-hash-tuple = { path = "../../crates/brynja-hash-tuple", default-features = false }
 brynja-interop = { path = "../../crates/brynja-interop", default-features = false }

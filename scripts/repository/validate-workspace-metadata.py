@@ -226,13 +226,17 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     )
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-crypto-cpu":
+        expected["sha256-batch"] = ["static-execution"]
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
+        expected["sha256-batch"] = ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"]
         expected["runtime-execution"] = ["brynja-crypto-cpu/runtime-execution"]
         expected["sponge-execution"] = ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"]
     if name in {"brynja-hash-sha2", "brynja-hash-sha3"}:
         expected["hardened-execution"] = ["static-execution", "brynja-crypto-cpu/hardened-execution"]
+    if name == "brynja-hash-sha2":
+        expected["batch-execution"] = ["cpu", "brynja-crypto-cpu/sha256-batch"]
     if name in {"brynja-hash-sha2", "brynja-hash-sha3"}:
         expected["static-execution"] = ["cpu", "brynja-crypto-cpu/static-execution"]
         expected["runtime-execution"] = ["static-execution", "brynja-crypto-cpu/runtime-execution"]

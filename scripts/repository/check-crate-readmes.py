@@ -30,7 +30,7 @@ def validate(root=ROOT):
         first_table = body.index('|')
         if '```' in body and first_table > body.index('```'):
             raise ValueError('capability table must precede examples: ' + str(path))
-        if not ('Hardware' in body or 'SIMD' in body):
+        if not re.search(r'^##[^\n]*\b(?:Hardware|SIMD)\b', body, re.M):
             raise ValueError('missing hardware/SIMD disposition: ' + str(path))
         if re.search(r'\bv0\.\d+(?:\.\d+)?\b', body):
             raise ValueError('release timeline in crate README: ' + str(path))

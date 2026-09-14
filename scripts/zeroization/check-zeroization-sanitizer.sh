@@ -3,6 +3,7 @@ set -euo pipefail
 
 # Verified native SHA-NI host; missing hardware is a blocker, never a skip/PASS.
 python3 scripts/sha2/check-sha2-hardened-asan.py
+python3 scripts/sha2/check-sha256-batch-asan.py
 python3 scripts/sha3/check-keccak-hardened-asan.py
 python3 scripts/sha1/check-sha1-hardened-asan.py
 python3 scripts/md5/check-md5-execution-asan.py

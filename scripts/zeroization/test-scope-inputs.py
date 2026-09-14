@@ -319,7 +319,7 @@ def readme_wrapper_tests():
         (0, b'publish = false', b'publish = true'),
         (0, b'edition = "2024"', b'edition = "2021"'),
         (0, b'default-features = false', b'default-features = true'),
-        (0, b'features = ["static-execution"]', b'features = ["cpu-evidence"]'),
+        (0, b'features = ["static-execution", "sha256-batch"]', b'features = ["cpu-evidence"]'),
         (0, b'../../crates/brynja-core', b'../../other/brynja-core'),
         (1, b'"sanitization"', b'"foreign-crypto"'),
         (2, b'#![forbid(unsafe_code)]', b'#![allow(unsafe_code)]'),

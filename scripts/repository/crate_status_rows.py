@@ -6,6 +6,7 @@ Independent review/FIPS status must never be inferred from internal test results
 
 ROWS = {
     "crates/brynja-crypto-cpu/README.md": [
+        "| Independent-message SHA-224/256 AVX2 / NEON kernels | 🚧 Implemented; qualification pending | ❌ No |",
         "| Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |",
         "| Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |",
         "| Low-level hosted-authority boundary | ✅ Platform proof required | ❌ No |",
@@ -80,6 +81,7 @@ ROWS = {
         "| Production randomness, clocks or secure protocols | ❌ Not provided | Not applicable |"
     ],
     "crates/brynja-hash-sha2/README.md": [
+        "| Independent-message SHA-224/256 AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |",
         "| SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |",
         "| General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |",
         "| Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |"
@@ -123,6 +125,7 @@ ROWS = {
         "| Opt-in hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |"
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
+        "| Hosted independent-message SHA-224/256 batching | 🚧 Implemented; qualification pending | ❌ No |",
         "| Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |",
         "| Explicit hosted raw execution | ✅ Opt-in, qualifying AArch64 only | ❌ No |",
         "| Ordinary SHA-3/SHAKE/cSHAKE sponge adapters | ✅ Opt-in, public data only | ❌ No |"

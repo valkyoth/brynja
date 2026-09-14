@@ -67,6 +67,8 @@ quick_sha2() {
 }
 
 full_sha2() {
+    run_miri -p brynja-hash-sha2 --features batch-execution --test batch bounded_batch_lifecycle_smoke
+    run_miri -p brynja-crypto-cpu --features sha256-batch --lib sha256_batch::tests::failed_revalidation_and_unwind_revoke_before_instruction_entry
     run_miri -p brynja-hash-sha2 --lib buffer_length_rejects_invalid_values_without_mutation
     run_miri -p brynja-hash-sha2 --features hardened-execution,general-sha512-t \
         --lib hardened_execution::engine::tests

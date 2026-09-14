@@ -8,6 +8,9 @@
 mod runtime_detection;
 mod sha512_runtime;
 
+#[cfg(feature = "sha256-batch")]
+pub mod sha256_batch;
+
 #[cfg(feature = "runtime-execution")]
 pub mod execution;
 

@@ -33,6 +33,7 @@ leaves; raw compression or permutation is not a complete hash API.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Independent-message SHA-224/256 AVX2 / NEON kernels | 🚧 Implemented; qualification pending | ❌ No |
 | Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |
 | Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |
 | Low-level hosted-authority boundary | ✅ Platform proof required | ❌ No |
@@ -43,6 +44,21 @@ No independent cryptographic review, side-channel certification or FIPS
 140-3 validation is claimed.
 
 ## Use
+
+The separate default-off `sha256-batch` feature exposes independent-message
+AVX2 (eight lanes) and AArch64 NEON (four lanes) compression. Both raw states and
+blocks require explicit `PublicData` classification; no zeroization is provided.
+Use `brynja-hash-sha2::batch` for complete hashing, padding and transactional output.
+
+```rust
+use brynja_crypto_cpu::sha256_batch::Kernel;
+assert_eq!(Kernel::Avx2.width(), 8);
+assert_eq!(Kernel::Neon.width(), 4);
+// Authority::for_compiled_target requires the complete compiled target bundle.
+// Reports/feature booleans cannot mint a session or platform authority.
+```
+
+See the [batch API and deployment contract](https://github.com/valkyoth/brynja/blob/main/docs/sha256-batch-execution.md).
 
 Current execution APIs are unpublished workspace functionality:
 

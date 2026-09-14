@@ -64,13 +64,19 @@ proof, physical-copy erasure or FIPS validation.
 
 Separate [ordinary MD5 batch SIMD execution](legacy-md5-execution.md) exposes
 default-off AVX2/NEON authority and hosted selection for bounded public-data
-batches with actual-work reports. The v0.24.44 candidate also implements distinct
+batches with actual-work reports. The signed v0.24.44 release also implements distinct
 [hardened MD5 SIMD owners](legacy-md5-hardened-execution.md) with source-owned
 cleanup and typed secret outputs. Its owner-supplied retest and all four native
-lanes for both ordinary and hardened execution passed; final release
-checks remain required. Portable defaults and old candidate admission are
+lanes for both ordinary and hardened execution passed, as did final release
+checks. Portable defaults and old candidate admission are
 unchanged. Neither path is independently cryptographically verified or FIPS
 validated, and hardened ownership does not repair MD5's collision weakness.
+
+The v0.24.45 candidate adds separate, default-off [SHA-224/256 multibuffer
+SIMD](sha256-batch-execution.md) for public data only. AVX2 processes eight
+independent messages and NEON four; owner retest and fresh native qualification
+remain pending. This does not change the verification status of portable SHA-2
+or authorize secret-bearing SIMD use.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |

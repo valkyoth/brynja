@@ -44,8 +44,8 @@ harnesses="$(
         wc -l |
         tr -d ' '
 )"
-test "$harnesses" = "29" || {
-    echo "Kani policy: expected exactly twenty-nine admitted MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash harnesses, found ${harnesses}" >&2
+test "$harnesses" = "30" || {
+    echo "Kani policy: expected exactly thirty admitted MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash harnesses, found ${harnesses}" >&2
     exit 1
 }
 
@@ -55,6 +55,7 @@ confined_harnesses="$(
 )"
 expected_harness_files="$(printf '%s\n' \
     crates/brynja-hash-parallel/src/lib.rs \
+    crates/brynja-hash-sha2/src/batch/control.rs \
     crates/brynja-hash-sha2/src/bit_input.rs \
     crates/brynja-hash-sha2/src/hardened/output.rs \
     crates/brynja-hash-sha2/src/lib.rs \
@@ -74,7 +75,7 @@ test "$confined_harnesses" = "$expected_harness_files" || {
 }
 
 if [ "$mode" = "--policy-only" ]; then
-    echo "Kani policy: twenty-nine portable MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds are inventoried; full proofs are local tag-gate evidence"
+    echo "Kani policy: thirty portable MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds are inventoried; full proofs are local tag-gate evidence"
     exit 0
 fi
 
@@ -118,7 +119,7 @@ if selected sha1; then
     rustup run "$kani_toolchain" cargo kani -p brynja-legacy-sha1
 fi
 if selected sha2; then
-    rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2
+    rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2 --features batch-execution
 fi
 if selected sha3; then
     rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha3
@@ -132,4 +133,4 @@ fi
 if selected parallelhash; then
     rustup run "$kani_toolchain" cargo kani -p brynja-hash-parallel
 fi
-echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; selected groups passed: ${selected_groups} (29 harnesses inventoried globally)"
+echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; selected groups passed: ${selected_groups} (30 harnesses inventoried globally)"

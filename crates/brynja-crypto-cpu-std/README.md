@@ -33,6 +33,7 @@ It is not automatically installed or added to facade/default graphs.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Hosted independent-message SHA-224/256 batching | 🚧 Implemented; qualification pending | ❌ No |
 | Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |
 | Explicit hosted raw execution | ✅ Opt-in, qualifying AArch64 only | ❌ No |
 | Ordinary SHA-3/SHAKE/cSHAKE sponge adapters | ✅ Opt-in, public data only | ❌ No |
@@ -40,6 +41,25 @@ It is not automatically installed or added to facade/default graphs.
 No named independent cryptographic review or FIPS 140-3 validation is claimed.
 
 ## Use
+
+Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
+adapter. Portable selection never probes; Require fails on unqualified platforms
+and Prefer only falls back before execution, never after a backend failure.
+
+```rust
+use brynja_crypto_cpu_std::sha256_batch::{Authority, Mode};
+let owner = Authority::new(Mode::Portable).map_err(|e| format!("{e:?}"))?;
+assert_eq!(owner.kernel().map_err(|e| format!("{e:?}"))?, None);
+let executor = owner.executor(1).map_err(|e| format!("{e:?}"))?;
+// Use executor.digest with public, mixed-identity eight-slot batches.
+drop(executor);
+# Ok::<(), String>(())
+```
+
+AVX2 uses eight lanes in a target-specialized executable; allowlisted AArch64
+NEON uses four. Generic x86 current-core detection does not authorize migration.
+Neither the state nor vector scratch is zeroized. See the
+[batch contract](https://github.com/valkyoth/brynja/blob/main/docs/sha256-batch-execution.md).
 
 The explicit execution APIs require the unpublished checkout:
 

@@ -171,8 +171,9 @@ def readme_fixture(manifest, lock, source, workspace_lock):
     names = sorted(name for name, row in rows.items() if 'source' not in row)
     features = {'brynja-hash-parallel': ['runtime-execution'],
                 'brynja-hash-parallel-std': ['runtime-execution'],
-                'brynja-crypto-cpu': ['static-execution'],
-                'brynja-crypto-cpu-std': ['runtime-execution'], 'brynja-legacy-md5': ['batch']}
+                'brynja-crypto-cpu': ['static-execution', 'sha256-batch'],
+                'brynja-crypto-cpu-std': ['runtime-execution', 'sha256-batch'],
+                'brynja-hash-sha2': ['batch-execution'], 'brynja-legacy-md5': ['batch']}
     expected = {name: {'path': '../../crates/' + name, 'default-features': False,
                       **({'features': features[name]} if name in features else {})} for name in names}
     if data['dependencies'] != expected:

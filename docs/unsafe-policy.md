@@ -1,16 +1,18 @@
 # Unsafe Rust Policy
 
-Status: twenty-four exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: twenty-eight exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only twenty-four exact modules: the private core volatile clearer; the
+Rust in only twenty-eight exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
 isolated legacy SHA-1 and MD5 session/x86/AArch64 candidate modules; plus the
 runtime owner constructor and its private hosted platform bridge; and the
 separate legacy SHA-1 hosted platform bridge and hardened secret authority; and
-the ordinary MD5 hosted platform bridge. Each
+the ordinary MD5 hosted platform bridge; the hardened MD5 authority and kernels;
+and the ordinary SHA-224/256 batch platform import, AVX2/NEON kernels and hosted
+bridge. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every

@@ -19,7 +19,7 @@ Current generated planning coverage is 2157 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.43 signed. The v0.24.44 candidate adds distinct default-off [hardened MD5 batch SIMD](legacy-md5-hardened-execution.md), clearing packed storage, affine batches, typed secret outputs and static/hosted selection. The supplied retest and all four native lanes for both ordinary and hardened execution passed; final release verification and GitHub checks remain required before tagging. The cleanup deferral is addressed within the documented source-owned contract, not by claiming register/platform erasure or making ordinary SIMD secret-safe. The signed v0.24.43 baseline is 4640d7c7. No crates.io publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.44 signed. The v0.24.45 candidate adds default-off [independent-message SHA-224/256 SIMD](sha256-batch-execution.md), with mixed identities, bounded work, bit tails and transactional public outputs. Native AVX2 and emulated NEON development checks are not fresh multi-platform qualification: exceptional pentest and native AMD/Intel/Arm/Apple evidence remain pending. Ordinary SIMD is public-only and does not zeroize. The signed v0.24.44 baseline is 4f8fde56. No crates.io publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

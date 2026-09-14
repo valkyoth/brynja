@@ -144,7 +144,7 @@ def main() -> int:
     status, selected_parallel = run_profile("--selected", "parallelhash")
     assert status == 0 and [c.split(" -p ", 1)[1] for c in selected_parallel] == parallel
     status, commands = run_profile("--group", "sha2")
-    assert status == 0 and len(commands) == 21
+    assert status == 0 and len(commands) == 23
     assert sum('buffer_length_rejects_invalid_values_without_mutation' in c for c in commands) == 1
     assert sum('--lib hardened_execution::engine::tests' in c for c in commands) == 1
     assert sum('--lib hardened_execution::tests::output_owner_clears_during_recoverable_unwind' in c for c in commands) == 1
@@ -154,13 +154,15 @@ def main() -> int:
     assert sum('--test general_hash --lib dynamic_lifecycle_' in c for c in commands) == 1
     assert sum('--features general-sha512-t --test general bounded_public_api_smoke' in c for c in commands) == 1
     assert sum("assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands) == 1
-    assert all("brynja-hash-sha2" in c or "assurance/general-sha512-t/Cargo.toml --lib" in c for c in commands)
+    assert sum('sha256_batch::tests::failed_revalidation_and_unwind_revoke_before_instruction_entry' in c for c in commands) == 1
+    assert sum('--test batch bounded_batch_lifecycle_smoke' in c for c in commands) == 1
+    assert all("brynja-hash-sha2" in c or "assurance/general-sha512-t/Cargo.toml --lib" in c or 'sha256_batch::tests::failed_revalidation_and_unwind_revoke_before_instruction_entry' in c for c in commands)
     status, selected_commands = run_profile("--selected", "sha2")
     assert status == 0 and selected_commands == commands
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 76
+    assert status == 0 and len(commands) == 78
     for suffix in ('--lib cpu::scratch::tests', '--lib cpu::secret::tests',
                    '--test hardened_execution bounded_portable_cleanup_smoke'):
         assert sum('brynja-legacy-md5 --features hardened-execution ' + suffix in c for c in commands) == 1

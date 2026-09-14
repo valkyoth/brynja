@@ -32,6 +32,7 @@ SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Independent-message SHA-224/256 AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
 | General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |
 | Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |
@@ -41,6 +42,32 @@ FIPS 140-3 validation: Brynja has no validated module or named independent
 cryptographic review.
 
 ## Use
+
+For bounded public-data batching, enable `batch-execution`. AVX2 handles eight
+independent messages and NEON four; mixed SHA-224/256 identities, inactive slots
+and unequal bit lengths retain their order. Output commits atomically. Ordinary
+SIMD is not zeroizing and must not receive confidential input. Example portable
+batch (the same shape is accepted by a session-backed executor):
+
+```rust
+use brynja_hash_sha2::{BitString, batch::{Algorithm, Control, Executor, Input, PublicData}};
+let bits = BitString::new(b"abc", 8).map_err(|e| format!("{e:?}"))?;
+let mut inputs = [None; 8];
+inputs[0] = Some(Input::new(Algorithm::Sha224, bits));
+inputs[1] = Some(Input::new(Algorithm::Sha256, bits));
+let mut output = [None; 8];
+let mut cancelled = || false;
+let mut control = Control::new(2, &mut cancelled);
+let report = Executor::portable().digest(PublicData::new(&inputs), &mut output, &mut control)
+    .map_err(|e| format!("{e:?}"))?;
+assert_eq!(report.scalar_blocks, 2);
+assert_eq!(report.vector_calls, 0);
+assert!(output[0].is_some() && output[1].is_some() && output[2].is_none());
+# Ok::<(), String>(())
+```
+
+For explicit target/platform authority and workload thresholds, see the
+[batch execution contract](https://github.com/valkyoth/brynja/blob/main/docs/sha256-batch-execution.md).
 
 The APIs documented here include unpublished workspace functionality. From a
 local checkout, without maintaining a dependency version in this example:

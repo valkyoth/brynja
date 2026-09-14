@@ -12,6 +12,7 @@ for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu
     sys.path.insert(0, str(ROOT / 'scripts' / category))
 
 import sha256_public_api
+import sha256_batch_policy
 import sha2_public_api
 import sha3_public_api
 import final_acceptance
@@ -80,6 +81,7 @@ def check_all():
     # Reuse the exact host-CI validators, including their complete hash checks.
     # Do not call execute_acceptance/run_fixture/package_roots here.
     sha256_public_api.validate_repository(ROOT)
+    sha256_batch_policy.validate(ROOT)
     sha2_public_api.validate_repository(ROOT)
     sha3_public_api.validate_repository(ROOT)
     final_acceptance.validate(ROOT)

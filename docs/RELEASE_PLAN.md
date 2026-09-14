@@ -4629,10 +4629,10 @@ Exit criteria:
 
 ### v0.24.44 - MD5 Hardened Batch SIMD
 
-Status: awaiting pentest
+Status: released
 
-Exceptional retest, source-bound native collection and final release checks are
-required before tagging.
+Exceptional retest, source-bound native collection and final release checks
+passed. Signed tag `v0.24.44` identifies commit `4f8fde56`; no crates were published.
 
 Plan scope: Implement hardened MD5 SIMD batches with affine per-lane owners, complete vector staging destruction, typed secret outputs and explicit hosted/static selection.
 
@@ -4659,7 +4659,10 @@ Exit criteria:
 
 ### v0.24.45 - SHA-224 And SHA-256 Multi-Buffer SIMD
 
-Status: planned
+Status: awaiting pentest
+
+Ordinary AVX2/NEON implementation and development acceptance are in place;
+exceptional pentest and fresh native qualification remain pending.
 
 Plan scope: Implement bounded independent-message SHA-224/256 SIMD batching with first-party x86 AVX2 and AArch64 NEON backends, distinct from dedicated single-stream SHA instructions.
 

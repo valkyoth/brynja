@@ -1,14 +1,26 @@
 #[cfg(all(target_arch = "aarch64", target_endian = "little"))]
 mod aarch64_neon_md5;
+#[cfg(all(
+    feature = "hardened-execution",
+    target_arch = "aarch64",
+    target_endian = "little"
+))]
+mod arm_secret;
 #[cfg(any(
     target_arch = "x86_64",
     all(target_arch = "aarch64", target_endian = "little")
 ))]
 mod constants;
 mod kat;
+#[cfg(feature = "hardened-execution")]
+pub(crate) mod scratch;
+#[cfg(feature = "hardened-execution")]
+pub(crate) mod secret;
 mod session;
 #[cfg(target_arch = "x86_64")]
 mod x86_avx2_md5;
+#[cfg(all(feature = "hardened-execution", target_arch = "x86_64"))]
+mod x86_secret;
 
 #[cfg(feature = "execution")]
 pub use session::ExecutionAuthority;

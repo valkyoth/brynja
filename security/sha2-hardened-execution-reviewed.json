@@ -107,7 +107,7 @@
     "crates/brynja-hash-sha2/src/sha512_t.rs": "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
     "package-policy.toml": "95925844b429acebdb2f0ff18453998a317b9416797e74f3da1c7bc9dc7455e3",
-    "scripts/checks.sh": "0ad699da65388e3ffa1f754401a6ca6c6dd39573ef5c7e566a35d8dfa31ccddf",
+    "scripts/checks.sh": "b6ef8ea01423e003f5139ec8f5df32a4eb9c76e854bec2f1cbaecce220f6ba9c",
     "scripts/sha2/capture-sha2-hardened-native.py": "50cd60bc595fa44c85c8424863757aa61dd7cb6d930eb127f7bad4fc9f013ad4",
     "scripts/sha2/check-sha2-execution.py": "3d20e641efc386705b9aa770fe2f897e1b881a4f738d7dc9702eb3cf4c184887",
     "scripts/sha2/check-sha2-hardened-asan.py": "c3f92262a67b1229230c6b4b0099137a387011dbc1b5cdadded39c5d32584dc2",
@@ -120,9 +120,9 @@
     "scripts/sha2/sha2_hardened_execution_policy.py": "0b8a738f6b8de8748d6411f38db770f949eba69ffae4be75a1c1137af7367998",
     "scripts/sha2/test-sha2-hardened-execution.py": "7cefa185b58d0def522fdd9fa67939e6ea6caf2e7939033dfd1fd6584c5db8cf",
     "scripts/sha2/test-sha2-hardened-native.py": "619ae2124bf076310c3b88df0280d96139e97b903d5efb2c1b865cead292021e",
-    "scripts/tag_gate.sh": "31d3e8a9aff37d2135ff14739aefa037e6deab4cac68d15be4e5af84391a3219",
-    "scripts/zeroization/check-zeroization-miri.sh": "9d472c8d1b0c93a4aab55d474a919e802cadc12ada232849784b2d381d767e00",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "1f22930a85af1967083b352e0cddb2645a6cc2ecd58a561859891adf92bb40a8"
+    "scripts/tag_gate.sh": "206e2f33966b4e35f0f5e6dc7079e19ee0b6eec4764ec308bfada762dd219a09",
+    "scripts/zeroization/check-zeroization-miri.sh": "70fea0362f4d8e773761a8767509fa0ded5c1cd59b8ba610893b413016f297b2",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "74ecd4347bd927af3bfbf12f993fd8ab05e9a29193a757350476444088072878"
   },
   "version": "0.24.34"
 }

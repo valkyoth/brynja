@@ -63,6 +63,7 @@ def main():
             ('scripts/md5/md5-reviewed.toml', 'sha256'),
             ('scripts/md5/md5-cpu-reviewed.toml', 'files'),
             ('scripts/md5/execution-reviewed.json', 'sha256'),
+            ('scripts/md5/hardened-reviewed.json', 'sha256'),
         ):
             for missing in (False, True):
                 hashes = dict(metadata.verifier_review(review, key))
@@ -97,7 +98,7 @@ def main():
                     except ValueError as error:
                         assert any(message in str(error) for message in (
                             'MD5 reviewed', 'CPU hash', 'CPU source changed',
-                            'MD5 execution reviewed')), str(error)
+                            'MD5 execution reviewed', 'hardened source review changed')), str(error)
                     else:
                         raise AssertionError('stale or missing MD5 package binding accepted')
         read_review = metadata.verifier_review
@@ -174,7 +175,7 @@ def main():
         assert '\npython3 scripts/release/' + name + '-acceptance-metadata.py\n' in gate
     print('Final metadata rejects five stale README bindings and six API-profile regressions without crypto execution')
     print('Shared verifier preflight rejects 28 stale or missing review bindings without crypto execution')
-    print('Final metadata rejects six stale/missing MD5 package-helper bindings without crypto execution')
+    print('Final metadata rejects eight stale/missing MD5 package-helper bindings without crypto execution')
     print('Final metadata rejects the stale MD5 rustdoc acceleration pin and missing binding without crypto execution')
     print('Final metadata rejects stale/missing ParallelHash facade-fixture bindings without crypto execution')
 

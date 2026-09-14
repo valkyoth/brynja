@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: twenty exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: twenty-four exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only twenty exact modules: the private core volatile clearer; the
+Rust in only twenty-four exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -270,3 +270,16 @@ The separate hosted MD5 platform module has one reviewed unsafe call importing
 the supported AArch64 OS contract. Generic x86 current-core detection is not
 treated as authority. These ordinary APIs require public classification and have
 no hardened output path. See [ordinary MD5 execution](legacy-md5-execution.md).
+
+The separate default-off hardened MD5 feature adds four exact exceptions:
+`cpu/secret.rs`, `cpu/x86_secret.rs`, `cpu/arm_secret.rs`, and the hosted
+`hardened_execution/platform.rs`. These accept only their distinct authority
+and private clearing scratch, never an ordinary session or caller boolean.
+AVX2 loads/stores exactly 32 bytes from fixed owner arrays; NEON loads/stores
+16 bytes from the same 32-byte owner slots, clearing unused upper storage too.
+Every pointer is derived from a live fixed shared/exclusive byte borrow; no
+caller-controlled pointer or length enters these kernels. Feature authority
+covers the entire operation and every schedulable CPU, including OS YMM support
+for AVX2. Failed revalidation/dispatch clears scratch and quarantines authority.
+No full register/spill erasure, migration monitor, FIPS or independent review is
+claimed. See [hardened MD5 ownership](legacy-md5-hardened-execution.md).

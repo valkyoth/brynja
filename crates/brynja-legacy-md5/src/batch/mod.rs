@@ -2,6 +2,8 @@
 mod control;
 #[cfg(feature = "execution")]
 pub mod execution;
+#[cfg(feature = "hardened-execution")]
+pub mod hardened_execution;
 mod owner;
 #[cfg(feature = "cpu")]
 mod vector;

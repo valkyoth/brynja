@@ -9,8 +9,10 @@ LEAF = 'crates/brynja-legacy-md5/'
 CPU = LEAF+'src/cpu/'
 BATCH = LEAF+'src/batch/'
 ADAPTER = 'crates/brynja-legacy-md5-std/'
-CPU_SOURCES = ('mod.rs','constants.rs','kat.rs','session.rs','session/tests.rs','x86_avx2_md5.rs','aarch64_neon_md5.rs')
-BATCH_SOURCES = ('mod.rs','control.rs','owner.rs','vector.rs','tests.rs','execution.rs','execution/tests.rs')
+CPU_SOURCES = ('mod.rs','constants.rs','kat.rs','session.rs','session/tests.rs','x86_avx2_md5.rs','aarch64_neon_md5.rs',
+               'scratch.rs','secret.rs','x86_secret.rs','arm_secret.rs')
+BATCH_SOURCES = ('mod.rs','control.rs','owner.rs','vector.rs','tests.rs','execution.rs','execution/tests.rs',
+                 'hardened_execution/mod.rs','hardened_execution/vector.rs')
 BOUND = [CPU+p for p in CPU_SOURCES]+[BATCH+p for p in BATCH_SOURCES]+[
     LEAF+'Cargo.toml',LEAF+'src/lib.rs',LEAF+'tests/cpu.rs',
     ADAPTER+'Cargo.toml',ADAPTER+'src/lib.rs',ADAPTER+'README.md',
@@ -90,6 +92,9 @@ def validate(root=ROOT,hashes=True):
     for name in BATCH_SOURCES:
         text=sources[BATCH+name].split('#[cfg(test)]')[0]
         if name.endswith('tests.rs') or name == 'execution.rs': continue
+        # Rustdoc ownership examples legitimately contain the 'static lifetime.
+        # Keep the executable production boundary strict, excluding only comments.
+        text='\n'.join(line for line in text.splitlines() if not line.lstrip().startswith('//'))
         if re.search(r'\b(unsafe|alloc|std|Vec|Box|static)\b|\.(unwrap|expect)\(',text):
             raise ValueError('batch allocation/unchecked/global boundary changed')
     adapter=sources[ADAPTER+'src/lib.rs']

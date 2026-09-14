@@ -233,7 +233,7 @@ impl ExecutionAuthority {
     }
 }
 
-fn require_architecture(backend: Md5Backend) -> Result<(), Md5BackendError> {
+pub(super) fn require_architecture(backend: Md5Backend) -> Result<(), Md5BackendError> {
     match backend {
         Md5Backend::X86Avx2 if cfg!(target_arch = "x86_64") => Ok(()),
         Md5Backend::Aarch64Neon if cfg!(all(target_arch = "aarch64", target_endian = "little")) => {
@@ -243,11 +243,11 @@ fn require_architecture(backend: Md5Backend) -> Result<(), Md5BackendError> {
     }
 }
 
-fn compiled_features(backend: Md5Backend) -> bool {
+pub(super) fn compiled_features(backend: Md5Backend) -> bool {
     compiled_backend() == Some(backend)
 }
 
-fn compiled_backend() -> Option<Md5Backend> {
+pub(super) fn compiled_backend() -> Option<Md5Backend> {
     if cfg!(all(target_arch = "x86_64", target_feature = "avx2")) {
         Some(Md5Backend::X86Avx2)
     } else if cfg!(all(

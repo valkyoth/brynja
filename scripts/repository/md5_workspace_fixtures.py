@@ -5,6 +5,10 @@ def check(no_default, all_features, package, node, reject):
     for name, feature, wrong in (
         ("brynja-legacy-md5", "execution", ["cpu-evidence"]),
         ("brynja-legacy-md5-std", "runtime-execution", []),
+        ("brynja-legacy-md5", "hardened-execution", ["execution"]),
+        ("brynja-legacy-md5", "hardened-execution", ["cpu-evidence"]),
+        ("brynja-legacy-md5-std", "runtime-hardened-execution", ["runtime-execution"]),
+        ("brynja-legacy-md5-std", "runtime-hardened-execution", []),
     ):
         altered = copy.deepcopy(all_features)
         package(altered, name)["features"][feature] = wrong

@@ -74,6 +74,10 @@ python3 scripts/pki/check-asn1-values.py
 python3 scripts/pki/test-asn1-values.py
 python3 scripts/md5/check-md5.py
 python3 scripts/md5/check-md5-execution.py
+python3 scripts/md5/check-md5-hardened.py
+python3 scripts/md5/check-md5-hardened-codegen.py
+python3 scripts/md5/test-md5-hardened.py
+python3 scripts/md5/test-md5-hardened-native.py
 python3 scripts/md5/check-md5-execution-codegen.py
 python3 scripts/md5/test-md5-execution.py
 python3 scripts/md5/test-md5-execution-native.py

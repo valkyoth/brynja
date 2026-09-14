@@ -15,9 +15,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cpu', action='store_true')
     parser.add_argument('--execution', action='store_true')
+    parser.add_argument('--hardened', action='store_true')
     args = parser.parse_args()
     closure = dict(CLOSURE)
-    if args.cpu or args.execution: closure['brynja-legacy-md5-std'] = '0.1.0'
+    if args.cpu or args.execution or args.hardened: closure['brynja-legacy-md5-std'] = '0.1.0'
     with tempfile.TemporaryDirectory(prefix='brynja-md5-package-') as temporary:
         root = Path(temporary)
         environment = dict(os.environ, CARGO_TARGET_DIR=str(root / 'target'))
@@ -46,11 +47,15 @@ def main():
         manifest = '[package]\nname="md5-packaged-consumer"\nversion="0.0.0"\nedition="2024"\n[workspace]\n'
         features = ', features=["cpu"]' if args.cpu else ''
         if args.execution: features = ', features=["execution"]'
+        if args.hardened: features = ', features=["hardened-execution","execution"]'
         manifest += '[dependencies]\nbrynja-legacy-md5 = { version="=0.1.0", default-features=false'+features+' }\n'
         if args.cpu: manifest += 'brynja-legacy-md5-std = "=0.1.0"\n'
         if args.execution:
             manifest += 'brynja-legacy-md5-std = {version="=0.1.0", default-features=false, features=["runtime-execution"]}\n'
             manifest += '[features]\ndefault=["execution","runtime-execution"]\nexecution=[]\nruntime-execution=[]\n'
+        if args.hardened:
+            manifest += 'brynja-legacy-md5-std = {version="=0.1.0", default-features=false, features=["runtime-hardened-execution"]}\n'
+            manifest += '[features]\ndefault=["hardened-execution","runtime-hardened-execution"]\nhardened-execution=[]\nruntime-hardened-execution=[]\n'
         manifest += '[patch.crates-io]\n'
         for package, version in closure.items():
             manifest += f'{package} = {{ path="../unpacked/{package}-{version}" }}\n'
@@ -60,9 +65,13 @@ def main():
         if args.execution:
             import execution_package
             execution_package.prepare(consumer, root)
+        if args.hardened:
+            import md5_hardened_package
+            md5_hardened_package.prepare(consumer, root)
         subprocess.run(['cargo', 'generate-lockfile', '--offline'], cwd=consumer, env=environment, check=True, timeout=60)
         subprocess.run(['cargo', 'test', '--locked', '--offline'], cwd=consumer, env=environment, check=True, timeout=180)
         if args.execution: execution_package.check(consumer, root, environment)
+        if args.hardened: md5_hardened_package.check(consumer, root, environment)
     print(f'MD5 packaged closure and external consumer: PASS; cpu={args.cpu}; no upload')
 
 

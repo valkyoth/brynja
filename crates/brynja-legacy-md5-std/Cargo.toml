@@ -13,6 +13,7 @@ publish = ["crates-io"]
 [features]
 default = []
 runtime-execution = ["brynja-legacy-md5/execution"]
+runtime-hardened-execution = ["brynja-legacy-md5/hardened-execution"]
 
 [dependencies]
 brynja-legacy-md5 = { path = "../brynja-legacy-md5", version = "=0.1.0", features = ["cpu"] }

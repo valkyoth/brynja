@@ -241,8 +241,10 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         # neither feature implies the separate non-production evidence key.
         expected["cpu"] = ["batch"]
         expected["execution"] = ["cpu"]
+        expected["hardened-execution"] = ["cpu"]
     if name == "brynja-legacy-md5-std":
         expected["runtime-execution"] = ["brynja-legacy-md5/execution"]
+        expected["runtime-hardened-execution"] = ["brynja-legacy-md5/hardened-execution"]
     if name == "brynja-legacy-sha1":
         expected["execution"] = ["cpu"]
         expected["hardened-execution"] = ["cpu"]

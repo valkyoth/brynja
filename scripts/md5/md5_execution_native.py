@@ -14,7 +14,7 @@ def require(value,label):
 
 def record_check(record,lane,commit,sources):
     require(set(record)=={'schema','version','lane','commit','compiler','cpu','system','features','source_sha256','results','native','profile','independent_review','fips_validated'},'record fields')
-    require(type(record['schema']) is int and record['schema']==1 and record['version']=='0.24.43','schema/version')
+    require(type(record['schema']) is int and record['schema']==1 and record['version']=='0.24.44','schema/version')
     require(record['lane']==lane and record['commit']==commit,'lane/commit')
     require(record['source_sha256']==sources,'source closure')
     require(record['native']=='operator-self-attested' and record['profile']=='ordinary-public-only','classification')
@@ -47,7 +47,7 @@ def record_check(record,lane,commit,sources):
 def validate():
     root=policy.ROOT
     index=json.loads(policy.read(root,INDEX))
-    require(set(index)=={'schema','version','owner_review','lanes'} and type(index['schema']) is int and index['schema']==1 and index['version']=='0.24.43','index')
+    require(set(index)=={'schema','version','owner_review','lanes'} and type(index['schema']) is int and index['schema']==1 and index['version']=='0.24.44','index')
     require(index['owner_review']=='accepted-correctness-with-residuals','owner review pending')
     require(set(index['lanes'])==set(LANES),'four native lanes required')
     sources=policy.snapshot()

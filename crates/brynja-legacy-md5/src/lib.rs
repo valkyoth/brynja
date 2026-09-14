@@ -47,6 +47,8 @@ mod cpu;
 
 #[cfg(feature = "execution")]
 pub use batch::execution;
+#[cfg(feature = "hardened-execution")]
+pub use batch::hardened_execution;
 
 #[cfg(feature = "batch")]
 pub use batch::{

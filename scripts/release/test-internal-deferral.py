@@ -13,7 +13,14 @@ def main():
     count = 0
     with tempfile.TemporaryDirectory(prefix='brynja-internal-deferral-') as tmp:
         root = Path(tmp)
-        names = set(policy.md5_execution_policy.paths()) | set(policy.md5_execution_policy.GATES)
+        # The exception is immutable v0.24.43 history, not this release's tree.
+        # Use its pinned commit so advancing the facade or adding hardened code
+        # cannot require broadening the production exception to test it.
+        baseline = '4640d7c795d42617e7f65ef0c2399a87363ccd41'
+        def historical(name):
+            return subprocess.check_output(['git','show',baseline+':'+name],cwd=policy.ROOT,timeout=30)
+        reviewed = json.loads(historical(policy.md5_execution_policy.REVIEW))
+        names = set(reviewed['sha256']) | set(policy.md5_execution_policy.GATES)
         names.update((policy.md5_execution_policy.REVIEW, policy.RECORD, 'rust-toolchain.toml',
                       'release-crates.toml', 'security/pentest/v0.24.43.md',
                       'scripts/release/internal_deferral.py',
@@ -21,7 +28,9 @@ def main():
         for name in names:
             destination = root / name
             destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(policy.ROOT / name, destination)
+            destination.write_bytes(historical(name))
+        for name in ('scripts/release/internal_deferral.py', 'scripts/release/validate-release-readiness.sh'):
+            shutil.copy2(policy.ROOT / name, root / name)
         policy.validate(root)
 
         def rejects():

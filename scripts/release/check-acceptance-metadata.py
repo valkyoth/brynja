@@ -20,6 +20,7 @@ import api_profile_model
 import md5_policy
 import md5_cpu_policy
 import md5_execution_policy
+import md5_hardened_policy
 import acceleration_availability
 import parallelhash_policy
 
@@ -83,11 +84,12 @@ def check_all():
     sha3_public_api.validate_repository(ROOT)
     final_acceptance.validate(ROOT)
     portable_acceptance.validate(ROOT)
-    # These share packaging helpers. Recheck all three review closures after
+    # These share packaging helpers. Recheck all four review closures after
     # final packaging/docs edits, without invoking their Rust test drivers.
     md5_policy.validate(ROOT)
     md5_cpu_policy.validate(ROOT)
     md5_execution_policy.validate(ROOT)
+    md5_hardened_policy.validate(ROOT)
     # The cross-family acceleration inventory also binds MD5 source comments.
     # Check its full current closure, not only each family's local review.
     acceleration_availability.validate(ROOT)
@@ -97,4 +99,4 @@ def check_all():
 
 if __name__ == '__main__':
     check_all()
-    print('Shared verifier bindings, API-profile, five acceptance, three MD5, acceleration and ParallelHash metadata/hash closures: PASS (no crypto rerun)')
+    print('Shared verifier bindings, API-profile, five acceptance, four MD5, acceleration and ParallelHash metadata/hash closures: PASS (no crypto rerun)')

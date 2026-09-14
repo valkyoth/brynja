@@ -35,7 +35,7 @@ def capture(args):
     results['packaged']=host.run([sys.executable,'scripts/md5/check-md5-package.py','--execution'],env)
     if host.run(['git','status','--porcelain']) or host.run(['git','rev-parse','HEAD'])!=commit or sources!=policy.snapshot():
         raise ValueError('capture source changed')
-    record=dict(schema=1,version='0.24.43',lane=args.lane,commit=commit,compiler=compiler,cpu=cpu,
+    record=dict(schema=1,version='0.24.44',lane=args.lane,commit=commit,compiler=compiler,cpu=cpu,
         system=platform.system(),features=features,source_sha256=sources,results=results,
         native='operator-self-attested',profile='ordinary-public-only',independent_review=False,fips_validated=False)
     evidence.record_check(record,args.lane,commit,sources)

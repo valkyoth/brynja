@@ -153,7 +153,7 @@
     "crates/brynja-hash-sha3/tests/hardened_execution.rs": "f74dda865da5f9be960d15712bfeba3d5a41ae892322aa6595f605b4a255ba35",
     "crates/brynja-hash-sha3/tests/keccak_properties/mod.rs": "7c441598ee1a0254b4c98d98a6c648ccc02045a2dcfd61470d7f96d183720be5",
     "docs/hardened-keccak-execution.md": "d6a61c082045026d8d690b0cbcb8965276b5dfb5e7b089cc8914f78edc4fd7dd",
-    "scripts/checks.sh": "0ad699da65388e3ffa1f754401a6ca6c6dd39573ef5c7e566a35d8dfa31ccddf",
+    "scripts/checks.sh": "b6ef8ea01423e003f5139ec8f5df32a4eb9c76e854bec2f1cbaecce220f6ba9c",
     "scripts/sha3/capture-keccak-hardened-native.py": "9fe3556c0afa7414fdb9ebda2d7126f599be6feaae393649b0d87ccbd6a81e9e",
     "scripts/sha3/check-keccak-hardened-asan.py": "dea0b642f2788de9473289d8608e6b7522ec526f3da570a4a503805d0c869963",
     "scripts/sha3/check-keccak-hardened-codegen.py": "307a2cb3d3544a4982f5e52cd70b437fde1b170a5e5f519d4bd15525ceb7b5a6",
@@ -163,9 +163,9 @@
     "scripts/sha3/keccak_hardened_policy.py": "310407566a1ff6c53b2018b89eedf556f006ddf91150ce635a296019e42e98b6",
     "scripts/sha3/test-keccak-hardened-native.py": "a1ba3eda53c85f18d18d06c0a056bb993c949c3ae75921bc6fe918f78a6eca1e",
     "scripts/sha3/test-keccak-hardened.py": "2f61095b204a30405992e8c577c52a59885465077035cdb9c51eff80bba6b0ff",
-    "scripts/tag_gate.sh": "31d3e8a9aff37d2135ff14739aefa037e6deab4cac68d15be4e5af84391a3219",
-    "scripts/zeroization/check-zeroization-miri.sh": "9d472c8d1b0c93a4aab55d474a919e802cadc12ada232849784b2d381d767e00",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "1f22930a85af1967083b352e0cddb2645a6cc2ecd58a561859891adf92bb40a8"
+    "scripts/tag_gate.sh": "206e2f33966b4e35f0f5e6dc7079e19ee0b6eec4764ec308bfada762dd219a09",
+    "scripts/zeroization/check-zeroization-miri.sh": "70fea0362f4d8e773761a8767509fa0ded5c1cd59b8ba610893b413016f297b2",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "74ecd4347bd927af3bfbf12f993fd8ab05e9a29193a757350476444088072878"
   },
   "status": "implementation-review; native-qualification-pending",
   "version": "0.24.37"

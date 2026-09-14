@@ -33,6 +33,7 @@ First-party, allocation-free `no_std` legacy MD5 for explicit compatibility.
 | --- | --- | --- |
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
 | Ordinary batch AVX2 / NEON execution | 🚧 In progress; native qualification pending | ❌ No |
+| Hardened batch AVX2 / NEON execution | 🚧 In progress; retest and native evidence pending | ❌ No |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -138,7 +139,8 @@ See the workspace toolchain policy for supported Rust versions. MIT OR Apache-2.
 Enable `batch` for consuming `Md5Batch` / `HardenedMd5Batch` with eight ordered,
 caller-owned slots and explicit compression budgets/cancellation. Inactive slots
 are distinct from empty messages. Public output commits atomically; secret output
-is one clearing 128-byte owner. All hardened processing remains portable.
+is one clearing 128-byte owner. The default hardened batch remains portable;
+the separate `hardened-execution` feature opts into clearing SIMD owners.
 
 Enable `cpu` for unadmitted eight-lane x86_64 AVX2 and four-lane AArch64 NEON
 candidate sessions. Production builds cannot execute them. Cargo feature
@@ -163,6 +165,38 @@ assert_eq!(report.vector_blocks, 0);
 
 Portable MD5 public acceptance is complete; CPU candidates remain unadmitted.
 See [batch ownership and evidence](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-acceleration.md).
+
+## Hardened SIMD batching
+
+Enable `hardened-execution` for distinct clearing AVX2/NEON batches. No ordinary
+authority can be converted into a hardened one. `Mode::Prefer` permits portable
+pre-operation fallback; `Mode::Require` rejects workloads with no full SIMD group.
+Lengths, activity masks and work reports are public. Failed batches are consumed
+and quarantine their executor. The ordinary SIMD path remains public-only.
+
+```rust
+# #[cfg(feature = "hardened-execution")] {
+use brynja_legacy_md5::{BitString, Md5BatchControl};
+use brynja_legacy_md5::hardened_execution::{Executor, Mode};
+let executor = Executor::for_compiled_target(Mode::Prefer).map_err(|_| "selection")?;
+let message = [0x41; 128];
+let inputs = [Some(BitString::new(&message, 8).map_err(|_| "bits")?); 8];
+let mut bytes = [[0; 16]; 8];
+let (secret, report) = executor.batch().digest_secret(
+    &inputs, &mut bytes, &mut Md5BatchControl::new(24),
+).map_err(|_| "batch")?;
+assert_eq!(secret.expose().len(), 128);
+assert_eq!(report.work.active_lanes, 8);
+drop(secret);
+assert_eq!(bytes, [[0; 16]; 8]);
+# }
+# Ok::<(), &'static str>(())
+```
+
+Use `digest_public` with explicit `PublicDeclassification` only when releasing
+results publicly. Caller inputs/copies, compiler copies, registers/spills, caches,
+platform storage, abort and `mem::forget` retain the documented residual limits.
+See [hardened ownership](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-hardened-execution.md).
 
 The separate default-off `execution` feature exposes ordinary public-data SIMD
 through `execution::Executor`. It supports Portable, Prefer and Require policies,

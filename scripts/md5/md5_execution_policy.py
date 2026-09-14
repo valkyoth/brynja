@@ -128,7 +128,9 @@ def validate(root=ROOT,reviewed=True):
     host=tomllib.loads(read(root,HOST+'Cargo.toml').decode())
     if leaf['features']['default'] or leaf['features'].get('execution')!=['cpu']:
         raise ValueError('ordinary execution must be default-off')
-    if host['features']!={'default':[],'runtime-execution':['brynja-legacy-md5/execution']}:
+    old_features={'default':[],'runtime-execution':['brynja-legacy-md5/execution']}
+    hardened_features={**old_features,'runtime-hardened-execution':['brynja-legacy-md5/hardened-execution']}
+    if host['features'] not in (old_features, hardened_features):
         raise ValueError('hosted execution must be separately default-off')
     for name in paths(root):
         if name.endswith(('.rs','.py')) and len(read(root,name).splitlines())>500:

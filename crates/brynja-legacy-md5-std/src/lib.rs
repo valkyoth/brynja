@@ -10,6 +10,8 @@
 
 #[cfg(feature = "runtime-execution")]
 pub mod execution;
+#[cfg(feature = "runtime-hardened-execution")]
+pub mod hardened_execution;
 
 use brynja_legacy_md5::{BitString, Md5, Md5Backend, Md5Error};
 

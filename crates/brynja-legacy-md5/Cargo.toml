@@ -16,6 +16,7 @@ batch = []
 cpu = ["batch"]
 cpu-evidence = []
 execution = ["cpu"]
+hardened-execution = ["cpu"]
 
 [dependencies]
 brynja-core = { workspace = true }

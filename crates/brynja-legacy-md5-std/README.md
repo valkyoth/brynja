@@ -37,8 +37,36 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | --- | --- | --- |
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
 | Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |
+| Hardened hosted batch SIMD | 🚧 In progress; retest and native evidence pending | ❌ No |
 
 ## Hardware and SIMD
+
+The distinct default-off `runtime-hardened-execution` feature exposes
+`hardened_execution::select(Mode::{Portable,Prefer,Require})`. It returns a
+clearing executor with affine per-batch owners and typed secret output. Generic
+x86 remains portable unless compiled with AVX2; allowlisted little-endian Arm
+platforms can select NEON. Cached detection is not proof of arbitrary hotplug or
+VM-migration safety. Batch dimensions and work reports are public.
+
+```rust
+# #[cfg(feature = "runtime-hardened-execution")] {
+use brynja_legacy_md5_std::hardened_execution::{select, Mode};
+use brynja_legacy_md5::{BitString, Md5BatchControl};
+let executor = select(Mode::Prefer).map_err(|_| "selection")?;
+let data = [0x41; 128];
+let inputs = [Some(BitString::new(&data, 8).map_err(|_| "bits")?); 8];
+let mut output = [[0; 16]; 8];
+let (secret, _) = executor.batch().digest_secret(
+    &inputs, &mut output, &mut Md5BatchControl::new(24),
+).map_err(|_| "batch")?;
+assert_eq!(secret.expose().len(), 128);
+drop(secret);
+assert_eq!(output, [[0; 16]; 8]);
+# }
+# Ok::<(), &'static str>(())
+```
+
+See [hardened storage and deployment limits](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-hardened-execution.md).
 
 No MD5 SIMD candidate is admitted. `opportunistic()` selects the portable leaf;
 `required()` fails closed. CPU detection cannot establish migration-safe

@@ -160,7 +160,12 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 73
+    assert status == 0 and len(commands) == 76
+    for suffix in ('--lib cpu::scratch::tests', '--lib cpu::secret::tests',
+                   '--test hardened_execution bounded_portable_cleanup_smoke'):
+        assert sum('brynja-legacy-md5 --features hardened-execution ' + suffix in c for c in commands) == 1
+    status, selected_md5 = run_profile('--selected', 'md5')
+    assert status == 0 and selected_md5 == [c for c in commands if '-p brynja-legacy-md5 ' in c]
     for suffix in ('--lib batch::execution::tests',
                    '--lib operational_revalidator_unwind_quarantines_without_instructions',
                    '--test execution callback_unwind_is_terminal_and_transactional'):

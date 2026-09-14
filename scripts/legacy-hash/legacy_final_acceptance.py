@@ -14,9 +14,13 @@ SHA1_DELTA = 'scripts/legacy-hash/sha1-operational-delta.toml'
 MD5_DELTA = 'scripts/legacy-hash/md5-operational-delta.toml'
 MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
     'Cargo.toml', 'src/lib.rs', 'src/cpu/mod.rs', 'src/cpu/session.rs', 'src/cpu/session/tests.rs',
-    'src/batch/mod.rs', 'src/batch/execution.rs', 'src/batch/execution/tests.rs', 'tests/execution.rs')) + tuple(
+    'src/batch/mod.rs', 'src/batch/execution.rs', 'src/batch/execution/tests.rs', 'tests/execution.rs',
+    'src/batch/hardened_execution/mod.rs', 'src/batch/hardened_execution/vector.rs',
+    'src/cpu/scratch.rs', 'src/cpu/secret.rs', 'src/cpu/x86_secret.rs', 'src/cpu/arm_secret.rs',
+    'tests/hardened_execution.rs')) + tuple(
     'crates/brynja-legacy-md5-std/' + name for name in (
-        'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs'))
+        'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs',
+        'src/hardened_execution/mod.rs', 'src/hardened_execution/platform.rs', 'tests/hardened_execution.rs'))
 SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
     'Cargo.toml', 'src/lib.rs', 'src/cpu/mod.rs', 'src/cpu/session.rs', 'src/cpu/session/tests.rs',
     'src/execution.rs', 'src/execution/ownership.rs', 'tests/execution.rs',
@@ -129,7 +133,7 @@ def validate_native(root):
             expected.update(delta['files'])
         if family == 'md5':
             delta = tomllib.loads(read(root, MD5_DELTA))
-            if (set(delta) != {'version', 'native', 'files'} or delta['version'] != '0.24.43'
+            if (set(delta) != {'version', 'native', 'files'} or delta['version'] != '0.24.44'
                 or delta['native'] != 'fresh operational evidence required separately'
                 or set(delta['files']) != set(MD5_CHANGED)):
                 raise ValueError('MD5 operational review cannot widen historical evidence')

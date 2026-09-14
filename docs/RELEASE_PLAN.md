@@ -4599,7 +4599,10 @@ Exit criteria:
 
 ### v0.24.43 - MD5 Batch SIMD Operational Routing
 
-Status: in progress
+Status: released
+
+Signed development milestone at `4640d7c7`: ordinary public-data-only SIMD,
+with the cleanup finding carried into v0.24.44.
 
 Plan scope: Make existing AVX2 eight-lane and AArch64 NEON four-lane MD5 batch backends reachable from ordinary legacy no_std and hosted APIs with explicit selection and accurate per-batch route reporting.
 
@@ -4626,7 +4629,10 @@ Exit criteria:
 
 ### v0.24.44 - MD5 Hardened Batch SIMD
 
-Status: planned
+Status: awaiting pentest
+
+Exceptional retest, source-bound native collection and final release checks are
+required before tagging.
 
 Plan scope: Implement hardened MD5 SIMD batches with affine per-lane owners, complete vector staging destruction, typed secret outputs and explicit hosted/static selection.
 

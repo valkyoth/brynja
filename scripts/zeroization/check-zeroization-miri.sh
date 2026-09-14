@@ -35,6 +35,9 @@ quick_md5() {
 }
 
 full_md5() {
+    run_miri -p brynja-legacy-md5 --features hardened-execution --lib cpu::scratch::tests
+    run_miri -p brynja-legacy-md5 --features hardened-execution --lib cpu::secret::tests
+    run_miri -p brynja-legacy-md5 --features hardened-execution --test hardened_execution bounded_portable_cleanup_smoke
     run_miri -p brynja-legacy-md5 --features execution --lib batch::execution::tests
     run_miri -p brynja-legacy-md5 --features execution --lib operational_revalidator_unwind_quarantines_without_instructions
     run_miri -p brynja-legacy-md5 --features execution --test execution callback_unwind_is_terminal_and_transactional

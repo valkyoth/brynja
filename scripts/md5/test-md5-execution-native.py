@@ -8,7 +8,7 @@ def record(lane):
     apple=lane=='apple-m2-aarch64'
     target='aarch64-apple-darwin' if apple else ('x86_64-unknown-linux-gnu' if x86 else 'aarch64-unknown-linux-gnu')
     cpu={'amd-x86_64':'AuthenticAMD','intel-x86_64':'GenuineIntel','apple-m2-aarch64':'Apple M2 Pro','aws-aarch64':'operator-labelled AWS Arm; provider identity not authenticated'}[lane]
-    return dict(schema=1,version='0.24.43',lane=lane,commit='a'*40,
+    return dict(schema=1,version='0.24.44',lane=lane,commit='a'*40,
         compiler='release: 1.98.1\nhost: '+target,cpu=cpu,system='Darwin' if apple else 'Linux',
         features='+avx2' if x86 else '+neon',source_sha256={'test':'b'*64},
         native='operator-self-attested',profile='ordinary-public-only',independent_review=False,fips_validated=False,

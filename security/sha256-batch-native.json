@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "version": "0.24.45",
+  "capture_commit": "fe89ab576c465dd2005a31ca1585b881be8e8921",
+  "review_status": "project-reviewed correctness; performance limitations recorded; final release checks pending",
+  "lanes": {
+    "amd-x86_64": {
+      "artifact": "assurance/sha256-batch-observations/v0.24.45/amd-x86_64.json",
+      "sha256": "c0f5c7596c5b56a9343cea094bf4b2c563f59a837dc651075bbe46e0b2fa03de"
+    },
+    "intel-x86_64": {
+      "artifact": "assurance/sha256-batch-observations/v0.24.45/intel-x86_64.json",
+      "sha256": "7632bd31de0f212b65f59c4a2cba98dc31dd03255838ef50f76fc21ca67cc1e0"
+    },
+    "aws-aarch64": {
+      "artifact": "assurance/sha256-batch-observations/v0.24.45/aws-aarch64.json",
+      "sha256": "33e23a269a3e94aa787e7f19c4ce870d68b122a7e467734ca5ff99f5995b9092"
+    },
+    "apple-m2-aarch64": {
+      "artifact": "assurance/sha256-batch-observations/v0.24.45/apple-m2-aarch64.json",
+      "sha256": "be4dcd83760fd9327b990d067c6448fba1e07f9613cac2e91f719c219ca08e3d"
+    }
+  },
+  "supplemental_diagnostics": {
+    "intel_sha_only": {
+      "artifact": "assurance/sha256-batch-observations/v0.24.45/intel-sha-only-diagnostic.txt",
+      "sha256": "e6a0a123a58616c4756cb6b94031655fb4e177d8d269d6ba6c86a6c3d90f6905"
+    }
+  },
+  "review": "docs/sha256-batch-native-evidence.md"
+}

@@ -1,0 +1,15 @@
+Supplemental diagnostic; not a replacement for the source-bound native capture.
+Commit: fe89ab576c465dd2005a31ca1585b881be8e8921
+Host: owner-supplied AWS Intel; Xeon Platinum 8488C; Linux x86_64
+Command: RUSTFLAGS="-C target-feature=+sha,+sse2" cargo +1.98.1 run --locked --offline --release --manifest-path assurance/sha256-batch/Cargo.toml -- portable --benchmark
+No source or runtime policy changes. Compiler version is the native capture's 1.98.1.
+
+SHA256_BATCH_BENCH: algorithm=Sha224; lanes=8; bytes=64; samples=7; iterations=64; portable_median_ns=263978; selected_median_ns=271474; dedicated_median_ns=Some(165871); report=Report { kernel: None, vector_calls: 0, vector_blocks: 0, scalar_blocks: 16 }; benefit_vs_portable=false
+SHA256_BATCH_BENCH: algorithm=Sha224; lanes=8; bytes=128; samples=7; iterations=64; portable_median_ns=396976; selected_median_ns=409332; dedicated_median_ns=Some(232771); report=Report { kernel: None, vector_calls: 0, vector_blocks: 0, scalar_blocks: 24 }; benefit_vs_portable=false
+SHA256_BATCH_BENCH: algorithm=Sha224; lanes=8; bytes=1024; samples=7; iterations=64; portable_median_ns=2202468; selected_median_ns=2198556; dedicated_median_ns=Some(942051); report=Report { kernel: None, vector_calls: 0, vector_blocks: 0, scalar_blocks: 136 }; benefit_vs_portable=true
+SHA256_BATCH_BENCH: algorithm=Sha224; lanes=8; bytes=16384; samples=7; iterations=8; portable_median_ns=4146040; selected_median_ns=4143599; dedicated_median_ns=Some(1683543); report=Report { kernel: None, vector_calls: 0, vector_blocks: 0, scalar_blocks: 2056 }; benefit_vs_portable=true
+SHA256_BATCH_BENCH: algorithm=Sha256; lanes=8; bytes=64; samples=7; iterations=64; portable_median_ns=272366; selected_median_ns=263923; dedicated_median_ns=Some(175403); report=Report { kernel: None, vector_calls: 0, vector_blocks: 0, scalar_blocks: 16 }; benefit_vs_portable=true
+SHA256_BATCH_BENCH: algorithm=Sha256; lanes=8; bytes=128; samples=7; iterations=64; portable_median_ns=402803; selected_median_ns=405620; dedicated_median_ns=Some(227338); report=Report { kernel: None, vector_calls: 0, vector_blocks: 0, scalar_blocks: 24 }; benefit_vs_portable=false
+SHA256_BATCH_BENCH: algorithm=Sha256; lanes=8; bytes=1024; samples=7; iterations=64; portable_median_ns=2190955; selected_median_ns=2202170; dedicated_median_ns=Some(953948); report=Report { kernel: None, vector_calls: 0, vector_blocks: 0, scalar_blocks: 136 }; benefit_vs_portable=false
+SHA256_BATCH_BENCH: algorithm=Sha256; lanes=8; bytes=16384; samples=7; iterations=8; portable_median_ns=4149103; selected_median_ns=4140808; dedicated_median_ns=Some(1670875); report=Report { kernel: None, vector_calls: 0, vector_blocks: 0, scalar_blocks: 2056 }; benefit_vs_portable=true
+Timing is machine/workload-specific; no universal speedup or side-channel qualification.

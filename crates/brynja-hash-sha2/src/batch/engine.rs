@@ -56,6 +56,9 @@ pub(super) fn run(
                 }
                 control.charge(u64::try_from(width).map_err(|_| Error::Invariant)?)?;
                 let before = session.completed_vector_calls();
+                // Classification follows the caller's PublicData batch: packed
+                // IV/state and blocks derive only from its asserted-public input.
+                // This preserves that assertion; it does not prove provenance.
                 session
                     .compress(PublicData::new(&mut packed), PublicData::new(&blocks))
                     .map_err(Error::Backend)?;
@@ -65,14 +68,11 @@ pub(super) fn run(
                     return Err(Error::Invariant);
                 }
                 report.kernel = Some(session.kernel());
-                report.vector_calls = report
-                    .vector_calls
-                    .checked_add(1)
-                    .ok_or(Error::MessageTooLong)?;
-                report.vector_blocks = report
-                    .vector_blocks
-                    .checked_add(u64::try_from(width).map_err(|_| Error::Invariant)?)
-                    .ok_or(Error::MessageTooLong)?;
+                report.vector_calls = checked_work(report.vector_calls, 1)?;
+                report.vector_blocks = checked_work(
+                    report.vector_blocks,
+                    u64::try_from(width).map_err(|_| Error::Invariant)?,
+                )?;
             }
             for (state, index) in packed.iter().zip(group) {
                 *states.get_mut(*index).ok_or(Error::Invariant)? = *state;
@@ -119,11 +119,12 @@ fn scalar(
 ) -> Result<(), Error> {
     control.charge(1)?;
     crate::compress::compress(state, block);
-    report.scalar_blocks = report
-        .scalar_blocks
-        .checked_add(1)
-        .ok_or(Error::MessageTooLong)?;
+    report.scalar_blocks = checked_work(report.scalar_blocks, 1)?;
     Ok(())
+}
+
+fn checked_work(total: u64, additional: u64) -> Result<u64, Error> {
+    total.checked_add(additional).ok_or(Error::Invariant)
 }
 
 fn finish(
@@ -175,5 +176,36 @@ fn render(algorithm: Algorithm, state: &[u32; 8]) -> Digest {
             }
             Digest::Sha256(crate::Sha256Digest::from_bytes(bytes))
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{Error, checked_work};
+
+    #[test]
+    fn report_overflow_is_an_invariant_not_a_message_length_error() {
+        assert_eq!(checked_work(0, 1), Ok(1));
+        assert_eq!(checked_work(u64::MAX - 8, 8), Ok(u64::MAX));
+        assert_eq!(checked_work(u64::MAX, 0), Ok(u64::MAX));
+        assert_eq!(checked_work(u64::MAX, 1), Err(Error::Invariant));
+        assert_eq!(checked_work(u64::MAX - 7, 8), Err(Error::Invariant));
+    }
+
+    #[test]
+    fn scalar_report_overflow_rejects_without_wrapping() {
+        let mut report = super::Report {
+            scalar_blocks: u64::MAX,
+            ..super::Report::default()
+        };
+        let mut cancel = || false;
+        let mut control = super::Control::new(1, &mut cancel);
+        let mut state = crate::sha256::INITIAL_STATE;
+        assert_eq!(
+            super::scalar(&mut state, &[0; 64], &mut control, &mut report),
+            Err(Error::Invariant)
+        );
+        assert_eq!(report.scalar_blocks, u64::MAX);
+        assert_eq!(control.used(), 1);
     }
 }

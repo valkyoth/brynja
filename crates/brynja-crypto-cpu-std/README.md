@@ -58,6 +58,11 @@ drop(executor);
 
 AVX2 uses eight lanes in a target-specialized executable; allowlisted AArch64
 NEON uses four. Generic x86 current-core detection does not authorize migration.
+On x86-64, the Cargo feature alone does not activate AVX2: a generic build's
+`Mode::Prefer` selects portable and `Mode::Require` returns `Error::Unavailable`,
+even on an AVX2-capable machine. Use `RUSTFLAGS="-C target-feature=+avx,+avx2"`
+only for deployments guaranteeing the full CPU/OS bundle throughout execution,
+scheduling and migration. This is not an automatic runtime CPUID selector.
 Neither the state nor vector scratch is zeroized. See the
 [batch contract](https://github.com/valkyoth/brynja/blob/main/docs/sha256-batch-execution.md).
 

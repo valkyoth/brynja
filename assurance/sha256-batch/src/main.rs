@@ -95,7 +95,7 @@ fn main() -> Result<(), String> {
         if control.used() != report.vector_blocks + report.scalar_blocks {
             return Err("work accounting".into());
         }
-        total_vector += report.vector_calls;
+        add_vector_calls(&mut total_vector, report.vector_calls)?;
         for (index, digest) in digests.into_iter().enumerate() {
             if index != 0 {
                 write!(output, ";").map_err(|e| e.to_string())?;
@@ -113,9 +113,32 @@ fn main() -> Result<(), String> {
     Ok(())
 }
 
+fn add_vector_calls(total: &mut u64, additional: u64) -> Result<(), String> {
+    *total = total
+        .checked_add(additional)
+        .ok_or_else(|| "vector call counter overflow".to_string())?;
+    Ok(())
+}
+
 fn hex(output: &mut impl Write, bytes: &[u8]) -> Result<(), String> {
     for byte in bytes {
         write!(output, "{byte:02x}").map_err(|e| e.to_string())?;
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn vector_counter_boundary_is_checked_and_atomic() {
+        let mut total = u64::MAX - 8;
+        assert_eq!(super::add_vector_calls(&mut total, 8), Ok(()));
+        assert_eq!(total, u64::MAX);
+        assert_eq!(super::add_vector_calls(&mut total, 0), Ok(()));
+        assert_eq!(
+            super::add_vector_calls(&mut total, 1),
+            Err("vector call counter overflow".to_string())
+        );
+        assert_eq!(total, u64::MAX);
+    }
 }

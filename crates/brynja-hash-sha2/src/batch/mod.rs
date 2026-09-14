@@ -71,13 +71,13 @@ pub enum Error {
     IneligibleWorkload,
     /// No authority supplied for required execution, or zero threshold.
     InvalidSelection,
-    /// FIPS message-length domain or representable total work exceeded.
+    /// FIPS message-length domain exceeded.
     MessageTooLong,
     /// Caller-supplied block-compression budget exhausted.
     WorkLimit,
     /// Caller cancelled; already charged work is not refunded.
     Cancelled,
-    /// Internal fixed-size shape violated; vector owner is revoked.
+    /// Internal shape or report accounting violated; vector owner is revoked.
     Invariant,
 }
 

@@ -69,6 +69,13 @@ assert!(output[0].is_some() && output[1].is_some() && output[2].is_none());
 For explicit target/platform authority and workload thresholds, see the
 [batch execution contract](https://github.com/valkyoth/brynja/blob/main/docs/sha256-batch-execution.md).
 
+On x86-64, enabling the Cargo feature alone does not activate AVX2. Build the
+application with `RUSTFLAGS="-C target-feature=+avx,+avx2"` only when every CPU
+on which it may run supports that bundle and OS-enabled YMM state. A generic
+x86-64 build stays portable in hosted `Mode::Prefer` and returns `Unavailable`
+in hosted `Mode::Require`, even on an AVX2-capable machine. This is deliberate;
+current-core CPUID alone does not prove safety across migration.
+
 The APIs documented here include unpublished workspace functionality. From a
 local checkout, without maintaining a dependency version in this example:
 
@@ -124,13 +131,15 @@ Defaults remain portable and do not probe the CPU.
 
 | Feature | Reachable API | Supported execution |
 | --- | --- | --- |
+| `batch-execution` | `batch`, public data only | Eight independent SHA-224/256 lanes with AVX2; four with AArch64 NEON |
 | `static-execution` | `execution`, public data only | x86-64 SHA instructions for SHA-224/256; AArch64 SHA2/SHA-512 |
 | `runtime-execution` | `execution` with hosted authority | Qualifying AArch64 system-wide feature guarantees |
 | `hardened-execution` | Separate erasing execution owners | Static routes above; hosted routes with `runtime-execution` |
 | `cpu` | Historical candidate sessions | Unadmitted; not an operational acceleration route |
 
-x86-64 SHA-512 is portable; no separate AVX2/AVX-512 multi-message SHA-2
-backend is provided. RISC-V Zknh candidates are QEMU/codegen-tested, not
+x86-64 SHA-512 is portable; no separate multi-message SHA-512-family
+backend is provided yet. SHA-224/256 multibuffer SIMD is the separate
+`batch-execution` profile above. RISC-V Zknh candidates are QEMU/codegen-tested, not
 enabled for production execution. Static binaries require compatible CPUs and
 OS state throughout scheduling and migration. A current-core feature probe
 alone is not sufficient hosted authority.

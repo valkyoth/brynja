@@ -47,6 +47,7 @@ def corpus():
 
 def check(consumer=FIXTURE, env=None, mode='portable', data=None, expected=None):
     if data is None: data, expected = corpus()
+    run(['cargo', '+1.98.1', 'test', '--locked', '--offline', '--release'], consumer, env)
     result = run(['cargo', '+1.98.1', 'run', '--locked', '--offline', '--release', '--', mode], consumer, env, data)
     if result.stdout.splitlines() != expected: raise ValueError('independent batch oracle mismatch')
     match = re.search(r'SHA256_BATCH_ACCEPTANCE: batches=384; vector_calls=(\d+)', result.stderr)
@@ -153,3 +154,15 @@ def native_mutants(consumer, roots, env, data, expected):
                 raise ValueError('native no-op/scalar-only/uncommitted mutant survived')
     finally: engine.write_text(original)
     print('Three compiled actual-vector/scalar-substitution/commit mutants rejected')
+    main = consumer / 'src/main.rs'
+    original = main.read_text()
+    before = 'let mut total_vector = 0_u64;'
+    if original.count(before) != 1: raise ValueError('missing fixture counter injection site')
+    try:
+        main.write_text(original.replace(before, 'let mut total_vector = u64::MAX;'))
+        result = run(['cargo', '+1.98.1', 'run', '--locked', '--offline', '--release', '--', 'required'],
+                     consumer, env, data, success=False)
+        if result.stdout or 'Error: "vector call counter overflow"' not in result.stderr:
+            raise ValueError('fixture overflow did not reject cleanly before output')
+    finally: main.write_text(original)
+    print('Native fixture counter overflow injection: clean rejection before output')

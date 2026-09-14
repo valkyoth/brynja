@@ -1,5 +1,19 @@
 use super::*;
 
+#[cfg(all(
+    target_arch = "x86_64",
+    not(all(target_feature = "avx", target_feature = "avx2"))
+))]
+#[test]
+fn generic_x86_build_does_not_infer_migration_authority() -> Result<(), Error> {
+    assert_eq!(Authority::new(Mode::Prefer)?.kernel()?, None);
+    assert!(matches!(
+        Authority::new(Mode::Require),
+        Err(Error::Unavailable)
+    ));
+    Ok(())
+}
+
 #[test]
 fn portable_never_requires_cpu_and_selection_is_explicit() -> Result<(), Error> {
     let owner = Authority::new(Mode::Portable)?;

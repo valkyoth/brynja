@@ -34,6 +34,14 @@ SHA-2 APIs remain the appropriate secret-bearing API; hardened multibuffer SIMD
 is outside this ordinary milestone. Lengths, activity masks and batch shape are
 public. Constant-work rounds do not hide these dimensions.
 
+Review every new `PublicData::new` call site for input provenance and for the
+absence of secret-bearing callers. For batch dispatch, packed IV/state and
+blocks inherit the caller's public-input assertion; they do not acquire a new
+proof of classification. A network-received value or a hash output is not
+inherently public. Another freely constructible marker cannot establish that
+property either. This remains a caller/code-review obligation, not an enforced
+secret-detection claim; the existing source-bound review includes these sites.
+
 ## Scheduling, bounds and errors
 
 Active slots are packed in original order into full-width groups: eight for

@@ -16,6 +16,32 @@ import general_sha512_t_work as work
 
 
 class GeneralTests(unittest.TestCase):
+    def test_batch_feature_preserves_general_isolation(self):
+        policy.validate(hashes=False)
+        original = policy.read
+        path = "crates/brynja-hash-sha2/Cargo.toml"
+        batch = 'batch-execution = ["cpu", "brynja-crypto-cpu/sha256-batch"]'
+        cases = (
+            (batch, ''),
+            (batch, 'batch-execution = ["cpu"]'),
+            (batch, 'batch-execution = ["brynja-crypto-cpu/sha256-batch"]'),
+            (batch, batch.replace('"cpu"', '"cpu", "general-sha512-t"')),
+            ('default = []', 'default = ["batch-execution"]'),
+            ('general-sha512-t = []', 'general-sha512-t = ["batch-execution"]'),
+            (batch, batch + '\nunreviewed = []'),
+        )
+        for before, after in cases:
+            with self.subTest(after=after):
+                def changed(root, name):
+                    value = original(root, name)
+                    if name == path:
+                        self.assertEqual(value.count(before), 1)
+                        return value.replace(before, after)
+                    return value
+                with patch.object(policy, "read", changed), self.assertRaisesRegex(
+                        ValueError, "general feature must be explicit and dependency-free"):
+                    policy.validate(hashes=False)
+
     def test_profile_rejects_unrecognized_arguments(self):
         result = subprocess.run(["cargo", "run", "--locked", "--offline", "--release", "--manifest-path",
                                  "assurance/general-sha512-t/Cargo.toml", "--bin", "general-sha512-t-profile",

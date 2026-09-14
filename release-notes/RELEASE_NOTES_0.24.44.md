@@ -1,7 +1,8 @@
 # Brynja v0.24.44
 
-Status: development in progress. Exceptional pentest/retest, fresh native
-qualification, final release checks and GitHub/CodeQL are required before tagging.
+Status: owner-supplied pentest/retest and four hardened native captures passed.
+Refreshed ordinary native qualification, final release checks and GitHub/CodeQL
+remain required before tagging.
 
 Adds separate default-off hardened MD5 batch SIMD: eight-lane x86 AVX2 and
 four-lane little-endian AArch64 NEON, clearing packed state/schedules/round
@@ -17,9 +18,10 @@ quarantine it. Consumed work is not refunded.
 Unequal suffixes and all padding remain scalar; reports account actual work.
 Batch dimensions/lengths are public and not traffic-analysis protection.
 
-This addresses the implementation work deferred from v0.24.43, but the historical
-finding is not claimed closed before retest and evidence. The old internal-only
-exception cannot authorize this release. No crates.io publication is scheduled.
+This addresses the source-owned cleanup work deferred from v0.24.43; the supplied
+retest accepted the implementation and its request-failure remediation. Ordinary
+SIMD remains public-only. The old internal-only exception does not authorize this
+release. No crates.io publication is scheduled.
 
 MD5 remains collision-broken. No independent cryptographic verification, FIPS
 validation or military approval is claimed. Registers, compiler copies/spills,
@@ -38,8 +40,10 @@ Development validation passed (not the final release gate):
   Apple-target emitted-code compatibility (not native Apple execution).
 - Workspace all-feature compilation, scoped strict Clippy and crate README checks.
 
-Both ordinary and hardened MD5 native indexes are pending fresh four-lane
-qualification. Historical captures remain unchanged and cannot qualify the new
-source closure.
+The hardened native index binds fresh AMD, Intel, AWS Arm and Apple M2 captures
+to the reviewed source at 98cdad39. Refreshed ordinary MD5 qualification remains
+pending. Historical captures remain unchanged and cannot qualify the new source
+closure. Native records are self-attested correctness evidence, not independent
+verification or proof of complete physical erasure.
 
 See [hardened MD5 execution](../docs/legacy-md5-hardened-execution.md).

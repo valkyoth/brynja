@@ -62,11 +62,15 @@ The v0.24.42 release checks passed and its tag is signed. SHA-1 stays collision-
 compatibility; this evidence is not independent verification, timing/migration
 proof, physical-copy erasure or FIPS validation.
 
-Separate [ordinary MD5 batch SIMD execution](legacy-md5-execution.md) is in
-progress. Default-off AVX2/NEON authority and hosted selection expose bounded
-public-data batches with actual-work reports. Portable/hardened defaults and
-old candidate admission are unchanged. Exceptional pentest and fresh four-lane
-native qualification remain pending; hardened MD5 SIMD is not yet implemented.
+Separate [ordinary MD5 batch SIMD execution](legacy-md5-execution.md) exposes
+default-off AVX2/NEON authority and hosted selection for bounded public-data
+batches with actual-work reports. The v0.24.44 candidate also implements distinct
+[hardened MD5 SIMD owners](legacy-md5-hardened-execution.md) with source-owned
+cleanup and typed secret outputs. Its owner-supplied retest and four native
+hardened captures passed; refreshed ordinary qualification and final release
+checks remain pending. Portable defaults and old candidate admission are
+unchanged. Neither path is independently cryptographically verified or FIPS
+validated, and hardened ownership does not repair MD5's collision weakness.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |

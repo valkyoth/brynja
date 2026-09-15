@@ -1,7 +1,7 @@
 # Hardened multibuffer hash owners
 
-Status: v0.24.48 in development; SHA-224/256 CPU foundation implemented,
-complete leaf APIs and qualification pending.
+Status: v0.24.48 in development; SHA-224/256 CPU and leaf batch APIs implemented,
+remaining families, hosted adapters and qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
 public-only. Nothing in this document authorizes passing secrets to those types.
@@ -10,9 +10,19 @@ The first implemented layer is
 `brynja-crypto-cpu::sha256_hardened_batch`, under its separate default-off
 `sha256-hardened-batch` feature. Its Authority/Session/Workspace process raw
 compression states using distinct AVX2/NEON kernels and clearing packed storage.
-They do not perform hash framing or own caller states/blocks. All higher-level
-API names below remain proposed; wide SHA-2, Keccak and ParallelHash work is
-still pending. Native qualification is not supplied by local/emulated tests.
+They do not perform hash framing or own caller states/blocks. The implemented
+`brynja-hash-sha2::hardened_batch` module adds SHA-224/256 framing, eight bounded
+optional input/destination slots, clearing workspace and typed borrowed secret
+outputs. Enable only `hardened-batch-execution`; it does not enable ordinary
+batch execution. `Executor::portable` needs no CPU authority; `with_session`
+requires a distinct hardened session, nonzero threshold and Prefer/Require mode.
+Required mode demands one eligible full-width group; unequal tails and padding
+use the existing hardened scalar compressor. Its rustdoc includes a runnable
+secret-output example. The CPU byte-state entry avoids an unowned word array
+between packed compression and leaf finalization.
+
+Names for wide SHA-2, Keccak, hosted adapters and ParallelHash remain proposed.
+Native qualification is not supplied by local/emulated tests.
 
 ## Implementation order and scope
 

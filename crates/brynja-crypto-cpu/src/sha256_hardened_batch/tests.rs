@@ -68,6 +68,9 @@ fn cleanup_all_four_regions_and_inactive_capacity() {
     poison(&mut workspace);
     workspace.wipe();
     cleared(&workspace);
+    poison(&mut workspace);
+    workspace.clear();
+    cleared(&workspace);
     workspace.wipe();
     cleared(&workspace);
 }
@@ -80,6 +83,12 @@ fn pack_rejects_invalid_width_and_initializes_inactive_lanes() -> Result<(), Err
         poison(&mut workspace);
         assert_eq!(
             workspace.pack(&states, &blocks, width),
+            Err(Error::Invariant)
+        );
+        cleared(&workspace);
+        poison(&mut workspace);
+        assert_eq!(
+            workspace.pack_bytes(&[[0x12; 32]; 8], &blocks, width),
             Err(Error::Invariant)
         );
         cleared(&workspace);
@@ -239,6 +248,13 @@ fn native_lane_distinct_differential_and_actual_dispatch() -> Result<(), Error> 
                 }
             }
             let mut expected = states;
+            let mut byte_states = states.map(|state| {
+                let mut bytes = [0; 32];
+                for (out, word) in bytes.as_chunks_mut::<4>().0.iter_mut().zip(state) {
+                    *out = word.to_be_bytes();
+                }
+                bytes
+            });
             for (state, block) in expected.iter_mut().zip(&blocks).take(kernel.width()) {
                 reference(state, block)?;
             }
@@ -246,13 +262,71 @@ fn native_lane_distinct_differential_and_actual_dispatch() -> Result<(), Error> 
             session.compress(&mut states, &blocks, &mut workspace)?;
             assert_eq!(states, expected);
             cleared(&workspace);
+            poison(&mut workspace);
+            session.compress_bytes(&mut byte_states, &blocks, &mut workspace)?;
+            for (state, words) in byte_states.iter().zip(expected) {
+                for (bytes, word) in state.as_chunks::<4>().0.iter().zip(words) {
+                    assert_eq!(*bytes, word.to_be_bytes());
+                }
+            }
+            cleared(&workspace);
             executed = executed.checked_add(1).ok_or(Error::Invariant)?;
         }
-        assert_eq!(session.completed_vector_calls(), 512);
+        assert_eq!(session.completed_vector_calls(), 1024);
         assert!(authority.is_healthy());
     }
     if std::env::var_os("BRYNJA_REQUIRE_SHA256_HARDENED_BATCH").is_some() {
         assert_eq!(executed, 512);
+    }
+    Ok(())
+}
+
+#[test]
+fn byte_entry_rejection_unwind_and_counter_overflow_preserve_states() -> Result<(), Error> {
+    for kernel in [Kernel::Avx2, Kernel::Neon] {
+        for boundary in 0..=1 {
+            if boundary == 1 && !kernel.compiled() {
+                continue;
+            }
+            for panic in [false, true] {
+                let authority = owner(kernel, revokes);
+                REMAINING.with(|left| left.set(boundary));
+                PANIC.with(|flag| flag.set(panic));
+                let session = Session { owner: &authority };
+                let mut workspace = Workspace::new();
+                poison(&mut workspace);
+                let mut states = [[0xa5; 32]; 8];
+                let outcome = catch_unwind(AssertUnwindSafe(|| {
+                    session.compress_bytes(&mut states, &[[0x96; 64]; 8], &mut workspace)
+                }));
+                if panic {
+                    assert!(outcome.is_err());
+                } else {
+                    assert!(matches!(outcome, Ok(Err(Error::Quarantined))));
+                }
+                assert_eq!(states, [[0xa5; 32]; 8]);
+                assert!(!authority.is_healthy());
+                assert_eq!(authority.completed.get(), 0);
+                cleared(&workspace);
+            }
+        }
+        PANIC.with(|flag| flag.set(false));
+        if !kernel.compiled() {
+            continue;
+        }
+        let authority = Authority::for_compiled_target(kernel)?;
+        authority.completed.set(u64::MAX);
+        let session = authority.session()?;
+        let mut states = [[0xa5; 32]; 8];
+        let mut workspace = Workspace::new();
+        assert_eq!(
+            session.compress_bytes(&mut states, &[[0x96; 64]; 8], &mut workspace),
+            Err(Error::Invariant)
+        );
+        assert_eq!(states, [[0xa5; 32]; 8]);
+        assert!(!authority.is_healthy());
+        assert_eq!(session.completed_vector_calls(), u64::MAX);
+        cleared(&workspace);
     }
     Ok(())
 }

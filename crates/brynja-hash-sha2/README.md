@@ -32,6 +32,7 @@ SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Hardened SHA-224/256 multibuffer owners and typed secret output | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message SHA-512-family AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
@@ -132,18 +133,30 @@ Defaults remain portable and do not probe the CPU.
 
 | Feature | Reachable API | Supported execution |
 | --- | --- | --- |
+| `hardened-batch-execution` | Separate clearing `hardened_batch` owners | Eight SHA-224/256 lanes with AVX2; four with NEON; hardened scalar tails/padding |
+| `batch512-execution` | `batch512`, public data only | Four SHA-512-family lanes with AVX2; two with NEON |
 | `batch-execution` | `batch`, public data only | Eight independent SHA-224/256 lanes with AVX2; four with AArch64 NEON |
 | `static-execution` | `execution`, public data only | x86-64 SHA instructions for SHA-224/256; AArch64 SHA2/SHA-512 |
 | `runtime-execution` | `execution` with hosted authority | Qualifying AArch64 system-wide feature guarantees |
 | `hardened-execution` | Separate erasing execution owners | Static routes above; hosted routes with `runtime-execution` |
 | `cpu` | Historical candidate sessions | Unadmitted; not an operational acceleration route |
 
-x86-64 SHA-512 is portable; no separate multi-message SHA-512-family
-backend is provided yet. SHA-224/256 multibuffer SIMD is the separate
-`batch-execution` profile above. RISC-V Zknh candidates are QEMU/codegen-tested, not
+x86-64 single-message SHA-512 is portable; multi-message SHA-512-family SIMD
+uses the separate `batch512-execution` profile above. RISC-V Zknh candidates are QEMU/codegen-tested, not
 enabled for production execution. Static binaries require compatible CPUs and
 OS state throughout scheduling and migration. A current-core feature probe
 alone is not sufficient hosted authority.
+
+For confidential SHA-224/256 batches, use `hardened-batch-execution`, not
+ordinary `batch` types. `hardened_batch::Executor::portable()` is available
+without CPU feature flags; `with_session` borrows distinct hardened authority.
+The caller supplies eight optional canonical `Input` slots, a clearing
+`Workspace`, finite `Control`, and exact-width destination borrows. Successful
+`digest_secret` returns a `SecretBatchOutput` which clears those destinations on
+Drop. See the runnable module rustdoc example and
+[hardened batch design](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
+This profile is still awaiting qualification; wide SHA-2 hardened batching and
+hosted batch adapters are not implemented yet. Batch shapes remain public.
 
 See [ordinary execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-ordinary-execution.md)
 and [hardened execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md)

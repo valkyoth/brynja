@@ -203,6 +203,41 @@ pub struct Session<'a> {
     owner: &'a Authority,
 }
 impl Session<'_> {
+    /// Compresses canonical big-endian byte states without an unowned word array.
+    /// Caller states/blocks remain caller-owned; all workspace regions clear on
+    /// every exit. Inactive NEON slots and all states on error are preserved.
+    pub fn compress_bytes(
+        &self,
+        states: &mut [[u8; 32]; 8],
+        blocks: &[[u8; 64]; 8],
+        workspace: &mut Workspace,
+    ) -> Result<(), Error> {
+        let mut operation = Operation {
+            health: HealthGuard {
+                owner: self.owner,
+                complete: false,
+            },
+            workspace,
+        };
+        self.ensure_healthy()?;
+        operation
+            .workspace
+            .pack_bytes(states, blocks, self.kernel().width())?;
+        platform::dispatch(self.kernel(), operation.workspace)?;
+        self.ensure_healthy()?;
+        let completed = self
+            .owner
+            .completed
+            .get()
+            .checked_add(1)
+            .ok_or(Error::Invariant)?;
+        operation
+            .workspace
+            .commit_bytes(states, self.kernel().width());
+        self.owner.completed.set(completed);
+        operation.health.complete = true;
+        Ok(())
+    }
     /// Selected kernel identity.
     pub const fn kernel(&self) -> Kernel {
         self.owner.kernel

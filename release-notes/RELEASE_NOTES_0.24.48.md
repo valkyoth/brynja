@@ -1,8 +1,9 @@
 # Brynja v0.24.48
 
 Development in progress: hardened multibuffer hash owners. Not released; no
-crates selected for publication. The SHA-224/256 CPU foundation is implemented;
-complete secret-bearing batch hashing and qualification remain pending.
+crates selected for publication. The SHA-224/256 CPU foundation and leaf batch
+APIs are implemented; remaining families, hosted adapters and qualification
+remain pending.
 
 ## Scope
 
@@ -32,8 +33,16 @@ It enables only the existing first-party clearing dependency. Workspace cleanup
 covers all packed initial words, schedule, working words and six temporaries,
 including inactive lanes. Backend errors, checked counter overflow and unwind
 quarantine authority without committing caller state. Raw caller states/blocks
-remain caller-owned; complete leaf hashing, typed destinations, wide SHA-2,
-Keccak and ParallelHash integration are not supplied by this foundation.
+remain caller-owned at this low-level boundary.
+
+`brynja-hash-sha2/hardened-batch-execution` adds the separate `hardened_batch`
+module. It handles SHA-224/256 canonical arbitrary-bit input, mixed identity,
+inactive slots and uneven lengths through clearing storage. Exact-width secret
+destination borrows move into a non-copying output owner and clear on failure
+or Drop; public output requires explicit declassification and commits atomically.
+Budgets include padding; routine rejection/cancellation permits executor reuse,
+while backend/invariant failures and unwind quarantine it. Wide SHA-2, Keccak,
+hosted adapters and ParallelHash integration are still pending.
 
 Batch shape, configured limits and scheduling are public; callers must pad when
 traffic-analysis resistance is required. Explicit clearing cannot guarantee

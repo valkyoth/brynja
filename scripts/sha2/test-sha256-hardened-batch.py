@@ -123,20 +123,79 @@ def mutations(root, env, toolchain, target):
         ('mod.rs', 'operation.workspace)?;\n        self.ensure_healthy()?;', 'operation.workspace)?;'),
         ('scratch.rs', '.enumerate().take(width)', '.enumerate().take(width.saturating_sub(1))'),
     ]
+    rejected = 0
     for name, before, after in cases:
         path = root / SOURCE / name
         original = path.read_text()
-        require(original.count(before) == 1, 'mutation anchor: ' + before)
+        # Word and byte entry points each need their own load-bearing mutation:
+        # changing both together could mask an untested entry point.
+        doubled = ('platform::dispatch', '.checked_add', '};\n        self.ensure_healthy',
+                   'operation.workspace)?;', '.enumerate().take')
+        count = 2 if before.startswith(doubled) else 1
+        require(original.count(before) == count, 'mutation anchor: ' + before)
+        pieces = original.split(before)
+        for occurrence in range(count):
+            try:
+                changed = pieces[0]
+                for index, piece in enumerate(pieces[1:]):
+                    changed += (after if index == occurrence else before) + piece
+                path.write_text(changed)
+                result = subprocess.run(command, cwd=root, env=env, text=True,
+                                        capture_output=True, timeout=300)
+                require(result.returncode != 0 and 'test result: FAILED' in result.stdout,
+                        'mutant survived or failed to compile: ' + before + '\n' + result.stderr[-1500:])
+                rejected += 1
+            finally:
+                path.write_text(original)
+    run(command, root, env)
+    print(f'Hardened SHA-256 batch compiled cleanup/route/accounting mutants: {rejected} rejected')
+
+
+def leaf_mutations(root, env, toolchain, target):
+    command = ['cargo', '+'+toolchain, 'test', '--locked', '--offline', '-p', 'brynja-hash-sha2',
+               '--no-default-features', '--features', 'hardened-batch-execution', '--target', target,
+               '--lib', 'hardened_batch::']
+    env = dict(env, BRYNJA_REQUIRE_SHA256_HARDENED_BATCH='1')
+    run(command, root, env)
+    env['RUSTDOCFLAGS'] = env.get('RUSTFLAGS', '')
+    run(command[:-2] + ['--doc', 'hardened_batch'], root, env)
+    source = root / 'crates/brynja-hash-sha2/src/hardened_batch'
+    cases = [('workspace.rs', f'clear_owned_region(self.{field}.as_flattened_mut())', 'Ok::<(), ()>(())')
+             for field in ('states', 'packed', 'blocks', 'output', 'offsets')]
+    cases += [('workspace.rs', f'clear_owned_region(&mut self.{field})', 'Ok::<(), ()>(())')
+              for field in ('indices', 'active')]
+    cases += [
+        ('workspace.rs', 'self.scalar.wipe();', '// missing scalar teardown'),
+        ('workspace.rs', 'self.wipe();\n        #[cfg(test)]', '// missing destructor wipe\n        #[cfg(test)]'),
+        ('output.rs', 'clear_owned_region(destination)', 'Ok::<(), ()>(())'),
+        ('output.rs', 'destination.copy_from_slice(source);', '// missing declassification write'),
+        ('output.rs', '*out = *byte;', '// missing public output write'),
+        ('mod.rs', 'self.workspace.wipe();', '// missing operation cleanup'),
+        ('mod.rs', 'if !self.complete {', 'if false {'),
+        ('engine.rs', 'executor.check()?;', '// missing final revalidation'),
+        ('engine.rs', 'Algorithm::Sha224 => crate::sha224::INITIAL_STATE',
+                       'Algorithm::Sha224 => crate::sha256::INITIAL_STATE'),
+        ('engine.rs', 'byte | (0x80_u8 >> valid)', 'byte'),
+        ('engine.rs', 'remainder.len() >= 56', 'remainder.len() > 56'),
+        ('engine.rs', 'length.to_be_bytes()', 'length.to_le_bytes()'),
+        ('engine.rs', 'scalar(s, control, report)?;', '// omitted complete message block'),
+        ('engine.rs', 'total.checked_add(additional).ok_or(Error::Invariant)',
+                       'Ok(total.wrapping_add(additional))'),
+    ]
+    for name, before, after in cases:
+        path = source / name
+        original = path.read_text()
+        require(original.count(before) == 1, 'leaf mutation anchor: ' + before)
         try:
             path.write_text(original.replace(before, after))
             result = subprocess.run(command, cwd=root, env=env, text=True,
                                     capture_output=True, timeout=300)
             require(result.returncode != 0 and 'test result: FAILED' in result.stdout,
-                    'mutant survived or failed to compile: ' + before + '\n' + result.stderr[-1500:])
+                    'leaf mutant survived or failed to compile: ' + before + '\n' + result.stderr[-1500:])
         finally:
             path.write_text(original)
     run(command, root, env)
-    print(f'Hardened SHA-256 batch compiled cleanup/route/accounting mutants: {len(cases)} rejected')
+    print(f'Hardened SHA-224/256 leaf compiled cleanup/framing/route mutants: {len(cases)} rejected')
 
 
 def main():
@@ -144,11 +203,15 @@ def main():
     parser.add_argument('--toolchain', default='1.98.1')
     parser.add_argument('--target', default='x86_64-unknown-linux-gnu')
     parser.add_argument('--mutations', action='store_true')
+    parser.add_argument('--leaf', action='store_true', help='also run the leaf tests and compiled mutants')
     args = parser.parse_args()
     require(args.target.startswith(('x86_64', 'aarch64')), 'unsupported evidence architecture')
     with tempfile.TemporaryDirectory(prefix='brynja-hardened-sha256-batch-') as directory:
         root = Path(directory)
-        for crate in ('brynja-core', 'brynja-crypto-cpu'):
+        crates = ['brynja-core', 'brynja-crypto-cpu']
+        if args.leaf:
+            crates += ['brynja-hash-core', 'brynja-hash-sha2']
+        for crate in crates:
             shutil.copytree(ROOT / 'crates' / crate, root / 'crates' / crate,
                             ignore=shutil.ignore_patterns('target'))
         manifest = (ROOT / 'Cargo.toml').read_text().replace('default-members = ["crates/brynja"]',
@@ -159,11 +222,14 @@ def main():
             env.pop(key, None)
         run(['cargo', '+'+args.toolchain, 'generate-lockfile', '--offline'], root, env)
         compile_evidence(root, env, args.toolchain, args.target)
-        if args.mutations:
+        if args.mutations or args.leaf:
             env['RUSTFLAGS'] = '-C target-feature=' + ('+avx,+avx2' if args.target.startswith('x86_64') else '+neon')
             if args.target == 'aarch64-unknown-linux-musl':
                 env['RUSTFLAGS'] += ' -C linker=rust-lld'
-            mutations(root, env, args.toolchain, args.target)
+            if args.mutations:
+                mutations(root, env, args.toolchain, args.target)
+            if args.leaf:
+                leaf_mutations(root, env, args.toolchain, args.target)
 
 
 if __name__ == '__main__':

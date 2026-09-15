@@ -94,6 +94,7 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
     manifest = tomllib.loads(read(root, "crates/brynja-hash-sha2/Cargo.toml"))
     if manifest["features"] != {"default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],
                                "batch-execution": ["cpu", "brynja-crypto-cpu/sha256-batch"],
+                               "hardened-batch-execution": ["cpu", "brynja-crypto-cpu/sha256-hardened-batch"],
                                "batch512-execution": ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-batch"],
                                "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],
                                "runtime-execution": ["static-execution", "brynja-crypto-cpu/runtime-execution"],

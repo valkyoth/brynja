@@ -45,6 +45,58 @@ impl Default for Workspace {
     }
 }
 impl Workspace {
+    /// Explicitly clears all packed regions; also performed on operation exit
+    /// and Drop. This does not revoke instruction authority or erase callers.
+    pub fn clear(&mut self) {
+        self.wipe();
+    }
+    pub(super) fn pack_bytes(
+        &mut self,
+        states: &[[u8; 32]; 8],
+        blocks: &[[u8; 64]; 8],
+        width: usize,
+    ) -> Result<(), Error> {
+        self.wipe();
+        if width != 4 && width != 8 {
+            return Err(Error::Invariant);
+        }
+        for (word, packed) in self.initial.iter_mut().enumerate() {
+            for (slot, state) in packed
+                .as_chunks_mut::<4>()
+                .0
+                .iter_mut()
+                .zip(states)
+                .take(width)
+            {
+                let bytes = state.as_chunks::<4>().0.get(word).ok_or(Error::Invariant)?;
+                slot.copy_from_slice(&u32::from_be_bytes(*bytes).to_ne_bytes());
+            }
+        }
+        for (word, packed) in self.schedule.iter_mut().take(16).enumerate() {
+            for (slot, block) in packed
+                .as_chunks_mut::<4>()
+                .0
+                .iter_mut()
+                .zip(blocks)
+                .take(width)
+            {
+                let bytes = block.as_chunks::<4>().0.get(word).ok_or(Error::Invariant)?;
+                slot.copy_from_slice(&u32::from_be_bytes(*bytes).to_ne_bytes());
+            }
+        }
+        Ok(())
+    }
+    pub(super) fn commit_bytes(&self, states: &mut [[u8; 32]; 8], width: usize) {
+        for (lane, state) in states.iter_mut().enumerate().take(width) {
+            for (out, packed) in state.as_chunks_mut::<4>().0.iter_mut().zip(&self.work) {
+                for (index, bytes) in packed.as_chunks::<4>().0.iter().enumerate() {
+                    if index == lane {
+                        out.copy_from_slice(&u32::from_ne_bytes(*bytes).to_be_bytes());
+                    }
+                }
+            }
+        }
+    }
     /// Constructs empty storage; contains no caller secrets during construction.
     pub const fn new() -> Self {
         Self {

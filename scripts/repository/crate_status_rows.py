@@ -85,6 +85,7 @@ ROWS = {
         "| Production randomness, clocks or secure protocols | ❌ Not provided | Not applicable |"
     ],
     "crates/brynja-hash-sha2/README.md": [
+        "| Hardened SHA-224/256 multibuffer owners and typed secret output | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-512-family AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |",
         "| SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |",

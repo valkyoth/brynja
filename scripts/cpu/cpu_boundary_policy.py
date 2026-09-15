@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "1f352ba0d29be2dd9a076088b76326675c7f43b44e592d582af4097450e5e3d8"
+EXPECTED_POLICY_SHA256 = "1df4398e46c7263d9ce62a92ec7dc684448bc3bcf4cf7b4a9f2dd958a3d4d268"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -280,6 +280,7 @@ def validate_packages(root: Path) -> None:
     if sha2.get("features") != {
         "default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],
         "batch-execution": ["cpu", "brynja-crypto-cpu/sha256-batch"],
+        "hardened-batch-execution": ["cpu", "brynja-crypto-cpu/sha256-hardened-batch"],
         "batch512-execution": ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-batch"],
         "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],
         "runtime-execution": ["static-execution", "brynja-crypto-cpu/runtime-execution"],

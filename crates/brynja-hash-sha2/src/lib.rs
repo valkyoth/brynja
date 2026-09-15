@@ -9,6 +9,9 @@
 
 #![no_std]
 
+#[cfg(feature = "hardened-batch-execution")]
+pub mod hardened_batch;
+
 #[cfg(feature = "batch512-execution")]
 pub mod batch512;
 

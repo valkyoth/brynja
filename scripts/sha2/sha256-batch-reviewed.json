@@ -1,6 +1,6 @@
 {
   "files": {
-    "Cargo.lock": "121f5883f695d6104cdf60a475f7e900ad5a55d81a87631d7f90de3105a6c3ab",
+    "Cargo.lock": "979d3c352b25dc361929597f6777ecdbe7bca2d4e2c61812faa74af4089b00a7",
     "Cargo.toml": "f3d0a5d8366b15047dbdbd7bca6403dbe43e96fc21d50b1e9d0127059e791c1b",
     "assurance/sha256-batch/Cargo.lock": "463f7b67e1ecb277e0626e7f02bd74f9db2bcc6a4b84a93ff302cbd4ccd47834",
     "assurance/sha256-batch/Cargo.toml": "25e2ca0def458eebe40c4b5278db557136d17ffbfbb5b7f52c94ecec58afcf48",
@@ -104,7 +104,7 @@
     "crates/brynja-crypto-cpu/src/hardened_execution/tests.rs": "3909e211ba642c53140811e4707511b8093b2047f5720faa190fcde7cc82d213",
     "crates/brynja-crypto-cpu/src/keccak.rs": "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a",
     "crates/brynja-crypto-cpu/src/keccak_batch/arm.rs": "2191fb9338fcb49f7869c8f5243fd1c2f4bb1cafd8b9acd704b7dcaf04195b4d",
-    "crates/brynja-crypto-cpu/src/keccak_batch/mod.rs": "029a75293fa901965865634299dfb4203ba0d67b6150ae288be41cb5620fca27",
+    "crates/brynja-crypto-cpu/src/keccak_batch/mod.rs": "54600f5bdac1984888225951992ece912eafc9be7355811941263871167ce863",
     "crates/brynja-crypto-cpu/src/keccak_batch/platform.rs": "e77387ad44d2470852b11262fc11784809fc9b8e09ac1a0bfe2751f5157ff7e9",
     "crates/brynja-crypto-cpu/src/keccak_batch/tests.rs": "7c90efab127b520dfcbfcae738723007069bf596c15cd98112770cc9f93f1c47",
     "crates/brynja-crypto-cpu/src/keccak_batch/x86.rs": "cef6c1433caf37131fc0afb6844985c2e9ee73ed375e31eab23ad1402148edba",

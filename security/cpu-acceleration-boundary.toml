@@ -597,7 +597,7 @@ sha256 = "4ec8cba49a959ea22a523e66994e21800638e697cea2f85547771da80ec36c8d"
 package = "brynja-crypto-cpu"
 path = "src/keccak_batch/mod.rs"
 status = "ordinary-keccak-batch-authority"
-sha256 = "029a75293fa901965865634299dfb4203ba0d67b6150ae288be41cb5620fca27"
+sha256 = "54600f5bdac1984888225951992ece912eafc9be7355811941263871167ce863"
 
 [[sources]]
 package = "brynja-crypto-cpu"

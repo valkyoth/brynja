@@ -1,4 +1,4 @@
-//! Default-off Keccak-f[1600] permutation of independent public states.
+//! Default-off `Keccak-f[1600]` permutation of independent public states.
 //!
 //! AVX2 permutes four states; NEON permutes two and preserves slots two/three.
 //! This is not the single-state SHA-3 instruction backend, ParallelHash, or

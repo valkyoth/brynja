@@ -1,6 +1,6 @@
 //! Bounded independent-message SHA-3/SHAKE/cSHAKE batches, public data only.
 //!
-//! All eight identities use the same Keccak-f[1600] permutation, so lanes may
+//! All eight identities use the same `Keccak-f[1600]` permutation, so lanes may
 //! differ in rate, suffix, input length, customization and finite output length.
 //! Each lane retains its own framing and output position. Only simultaneously
 //! ready lanes are grouped; incomplete groups use portable scalar tails.

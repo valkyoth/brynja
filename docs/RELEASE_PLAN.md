@@ -4723,7 +4723,7 @@ Exit criteria:
 
 ### v0.24.47 - Keccak Multi-Buffer SIMD
 
-Status: in progress
+Status: released
 
 The owner-requested local-first standards monitor is implemented. The ordinary
 Keccak multibuffer kernels, leaf batch API and optional hosted adapter are now
@@ -4731,8 +4731,9 @@ implemented with focused development tests. Benchmarks, generated-code checks,
 native capture tooling and the existing-family assurance wiring are implemented.
 Owner-supplied exceptional retest and fresh four-platform native collection have
 passed; [performance limitations](keccak-batch-native-evidence.md) are recorded.
-Final release verification and GitHub approval remain pending. Existing
-single-state Keccak evidence is not substituted for these multibuffer captures.
+All 372 detached commands and the final tag gate passed, GitHub was green,
+and signed v0.24.47 was pushed at `002ae1ba`. Existing single-state Keccak
+evidence was not substituted for these multibuffer captures.
 
 Plan scope: Implement bounded ordinary independent-state Keccak SIMD batches and public SHA-3/SHAKE/cSHAKE batch APIs over x86 AVX2 and AArch64 NEON, separate from existing single-state accelerated permutations.
 
@@ -4762,7 +4763,12 @@ Exit criteria:
 
 ### v0.24.48 - Hardened Multi-Buffer Hash Owners
 
-Status: planned
+Status: in progress
+
+The milestone is open. The [ownership and integration design](hardened-multibuffer-owners.md)
+separates packed kernel storage, leaf execution and bounded ParallelHash integration.
+No hardened multibuffer implementation or fresh qualification is claimed yet.
+The existing ordinary owners remain public-only; do not reuse them for secrets.
 
 Plan scope: Add hardened ownership to the new SHA-2 and Keccak batch APIs and integrate eligible batched leaves into ParallelHash without losing secret classification or bounded scheduling.
 

@@ -87,9 +87,12 @@ and GitHub checks passed; the tag records the owner-accepted ITU download outage
 exception. Ordinary scratch is not erased; independent verification is unchanged.
 The v0.24.47 Keccak multibuffer implementation and owner-supplied retest are
 complete. Fresh four-platform [native observations](keccak-batch-native-evidence.md)
-passed with explicit performance limitations; final release verification and
-GitHub approval remain pending. Earlier single-state evidence is not substituted
-for this new multibuffer collection. Independent verification remains unchanged.
+passed with explicit performance limitations. All 372 detached commands, final
+tag-gate checks and GitHub passed; signed v0.24.47 points to `002ae1ba`.
+Earlier single-state evidence was not substituted for this multibuffer collection.
+The v0.24.48 [hardened batch owner work](hardened-multibuffer-owners.md) is in
+development, not a completed secret-bearing capability. Independent verification
+remains unchanged.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |

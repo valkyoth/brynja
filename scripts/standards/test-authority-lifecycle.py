@@ -427,3 +427,5 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
+    import lifecycle_local_tests
+    lifecycle_local_tests.test()

@@ -78,12 +78,15 @@ independent messages and NEON four; owner retest, fresh native qualification
 and release checks passed. This does not change the verification status of portable SHA-2
 or authorize secret-bearing SIMD use.
 
-The v0.24.46 candidate adds [SHA-512-family multibuffer SIMD](sha512-batch-execution.md):
+The signed v0.24.46 milestone adds [SHA-512-family multibuffer SIMD](sha512-batch-execution.md):
 four AVX2 lanes or two NEON lanes, including distinct per-lane general SHA-512/t
 IVs and canonical bit outputs. The supplied retest is accepted, including explicit
 owner acceptance of the ordinary public-only, non-erasing limitation; fresh
-[native evidence](sha512-batch-native-evidence.md) passed. Final release verification
-remains pending. Ordinary scratch is not erased; independent verification is unchanged.
+[native evidence](sha512-batch-native-evidence.md) passed. All 538 detached checks
+and GitHub checks passed; the tag records the owner-accepted ITU download outage
+exception. Ordinary scratch is not erased; independent verification is unchanged.
+The v0.24.47 Keccak multibuffer milestone is in development, not yet implemented
+or qualified by the preceding single-state Keccak evidence.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |

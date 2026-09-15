@@ -50,7 +50,8 @@ authority_artifact_dir="$(
 )"
 authority_artifact="${authority_artifact_dir}/observation.json"
 trap 'rm -f -- "$authority_artifact"; rmdir -- "$authority_artifact_dir"' EXIT
-python3 scripts/standards/observe-authority-lifecycle.py \
+python3 scripts/standards/prepare-authority-cache.py
+python3 scripts/standards/observe-authority-lifecycle.py --allow-verified-local \
     --artifact "$authority_artifact"
 scripts/release/release_crates.py --check
 scripts/ci/check-rust-version-matrix.sh

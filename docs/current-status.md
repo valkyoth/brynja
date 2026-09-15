@@ -19,7 +19,7 @@ Current generated planning coverage is 2157 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.45 signed. The v0.24.46 candidate adds default-off [independent-message SHA-512-family SIMD](sha512-batch-execution.md), including all general SHA-512/t parameters, mixed identities, bit tails and transactional public output. The owner accepted the supplied retest with the ordinary public-data limitation retained, and [fresh native evidence](sha512-batch-native-evidence.md) passed. Final release verification remains pending. Ordinary SIMD does not zeroize; no crates.io publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.46 signed. The v0.24.47 milestone is in progress: local-first standards observation is implemented and tested, while ordinary Keccak multibuffer SIMD remains pending. The existing [SHA-512-family SIMD](sha512-batch-execution.md) qualification and signed v0.24.46 tag retain the explicit owner-accepted ITU download outage exception and ordinary public-data limitation. Ordinary SIMD does not zeroize; no new crates.io publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

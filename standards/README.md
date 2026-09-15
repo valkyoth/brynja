@@ -6,6 +6,30 @@ This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
 primitive is implemented.
 
+## Local-first release observation
+
+Run `python3 scripts/standards/prepare-authority-cache.py` to copy the reviewed
+local PDF, RFC and IANA sources into `references/local/authority-cache`. That
+directory is ignored by Git; only its public source identities and reviewed
+hashes are tracked. Existing committed RFC/IANA test fixtures are retained.
+Preparation verifies every byte against the register and refuses corrupt existing
+entries instead of overwriting them. Missing source PDFs must first be obtained
+using the existing local-reference process and verified against `LOCAL_SHA256SUMS`.
+
+The release gate uses `observe-authority-lifecycle.py --allow-verified-local`.
+It still compares online bytes with the pinned document and checks lifecycle
+metadata. HTTP 408/429/5xx, connection failures, DNS failures and timeouts may use
+an already verified local document. The artifact then explicitly reports
+`PASS WITH VERIFIED LOCAL DOCUMENTS` and lists each unavailable authority with
+`remote_freshness: unverified`. This is not proof that upstream is unchanged.
+
+Changed content, HTTP 404/410 and other non-outage errors, TLS failures, redirects,
+malformed responses, corrupt/missing local documents and unresolved reviews remain
+blocking. Metadata-channel failures are not substituted with document content.
+Offline results cannot write live freshness receipts; existing freshness-age
+rules are unchanged. The scheduled monitor does not opt into offline fallback.
+No document/hash is updated automatically and no cryptographic gate is skipped.
+
 ## Artifacts
 
 - `source-policy.toml` is the reviewed human-authored mapping from each locked

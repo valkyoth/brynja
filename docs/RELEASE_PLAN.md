@@ -4690,12 +4690,13 @@ Exit criteria:
 
 ### v0.24.46 - SHA-512 Family Multi-Buffer SIMD
 
-Status: in progress
+Status: released
 
 Ordinary four-lane AVX2 and two-lane NEON implementation and focused development
 acceptance are complete. The supplied retest and fresh native qualification are
 complete, with explicit owner acceptance of the ordinary public-only limitation.
-Final release checks remain pending; hardened batching remains v0.24.48.
+All 538 detached checks and GitHub checks passed; the signed tag records the
+explicit owner-accepted ITU download outage exception. Hardened batching remains v0.24.48.
 
 Plan scope: Implement bounded ordinary SHA-384/512, named SHA-512/224 and /256 and general SHA-512/t independent-message SIMD batches over x86 AVX2 and AArch64 NEON.
 
@@ -4722,7 +4723,11 @@ Exit criteria:
 
 ### v0.24.47 - Keccak Multi-Buffer SIMD
 
-Status: planned
+Status: in progress
+
+Development begins with the owner-requested local-first standards monitor.
+Keccak multibuffer SIMD implementation and qualification remain pending; the
+existing single-state Keccak APIs are not multibuffer implementations.
 
 Plan scope: Implement bounded ordinary independent-state Keccak SIMD batches and public SHA-3/SHAKE/cSHAKE batch APIs over x86 AVX2 and AArch64 NEON, separate from existing single-state accelerated permutations.
 
@@ -4734,12 +4739,15 @@ Deliverables:
 - Support per-lane rates, suffixes, byte/bit input and finite requested XOF output with checked work bounds and explicit incompatible-lane grouping.
 - Keep scratch caller-owned and batch sizes public; preserve output ordering, inactive-lane handling and scalar tail semantics.
 - Differentiate this API from ParallelHash tree hashing and std threading; benchmark combinations before selecting a preferred route.
+- Complete the owner-requested local-first standards observation: keep a hash-verified authority cache in ignored `references/local/authority-cache`, compare exact online content without automatically replacing reviewed bytes, and permit transport-outage fallback only with verified local documents. Record remote freshness as unverified; do not turn outages into evidence that upstream content is unchanged.
+- Preserve changed-content, redirect, malformed-response, missing/corrupt-cache and unresolved-review failures. Keep the scheduled monitor strict and prohibit offline observations from minting live freshness receipts. Do not change cryptographic selection, approvals, publication cadence or unrelated release gates.
 - Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.
 
 Verification:
 
 - Compare all FIPS 202 and cSHAKE identities against independent oracles under lane reorder, mixed lengths and cross-permutation output.
 - Inject stale/no-op/partial-write and false-vector routes; test oversized output/work rejection before mutation and normal packaged execution.
+- Test local cache preparation, exact pins, available/changed documents, temporary server and transport failures, corrupt/missing/symlinked/oversized cache entries, non-outage HTTP and TLS failures, retained review blockers, and CLI output/freshness behavior without relying on a live outage.
 - Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
 
 Exit criteria:

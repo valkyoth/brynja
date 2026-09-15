@@ -4770,8 +4770,9 @@ separates packed kernel storage, leaf execution and bounded ParallelHash integra
 The distinct narrow and wide SHA-2 CPU authorities, clearing packed workspaces,
 AVX2/NEON kernels and leaf batch APIs are implemented, including all 510 general
 SHA-512/t parameters with typed secret outputs. The distinct clearing Keccak
-AVX2/NEON CPU foundation is also implemented. Keccak leaf framing, hosted
-adapters, ParallelHash integration and fresh qualification remain pending.
+AVX2/NEON CPU foundation and all eight SHA-3/SHAKE/cSHAKE leaf batch identities
+are also implemented. Hosted adapters, ParallelHash integration and fresh
+qualification remain pending.
 The existing ordinary owners remain public-only; do not reuse them for secrets.
 
 Plan scope: Add hardened ownership to the new SHA-2 and Keccak batch APIs and integrate eligible batched leaves into ParallelHash without losing secret classification or bounded scheduling.

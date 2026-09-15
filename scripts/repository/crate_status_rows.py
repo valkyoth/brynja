@@ -75,6 +75,7 @@ ROWS = {
         "| cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |",
         "| Hardened states and classified outputs | ✅ Implemented | ❌ No |",
         "| Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |",
+        "| Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |"
     ],
     "crates/brynja-legacy-tls10/README.md": [

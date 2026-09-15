@@ -9,6 +9,7 @@
 
 #[cfg(feature = "batch-execution")]
 pub mod batch;
+
 mod bit_api;
 mod bit_string;
 mod cshake;
@@ -17,6 +18,8 @@ mod error;
 #[cfg(feature = "static-execution")]
 pub mod execution;
 mod hardened;
+#[cfg(feature = "hardened-batch-execution")]
+pub mod hardened_batch;
 #[cfg(feature = "hardened-execution")]
 pub use hardened::accelerated as hardened_execution;
 mod keccak;

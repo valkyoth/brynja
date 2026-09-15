@@ -3,8 +3,8 @@ pub mod accelerated;
 mod cshake;
 mod fixed;
 mod output;
-mod owner;
-mod permutation;
+pub(crate) mod owner;
+pub(crate) mod permutation;
 mod sponge;
 mod xof;
 

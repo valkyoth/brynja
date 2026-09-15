@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+hardened-batch-execution = ["cpu", "brynja-crypto-cpu/keccak-hardened-batch"]
 batch-execution = ["cpu", "brynja-crypto-cpu/keccak-batch"]
 cpu = ["dep:brynja-crypto-cpu"]
 static-execution = ["cpu", "brynja-crypto-cpu/static-execution"]

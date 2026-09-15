@@ -2,8 +2,8 @@
 
 Development in progress: hardened multibuffer hash owners. Not released; no
 crates selected for publication. The narrow and wide SHA-2 CPU and leaf batch
-APIs and Keccak CPU foundation are implemented; Keccak framing, hosted adapters
-and qualification remain pending.
+APIs and Keccak CPU/leaf batching are implemented; hosted adapters, ParallelHash
+integration and qualification remain pending.
 
 ## Scope
 
@@ -49,13 +49,23 @@ distinct wide owners and kernels: four AVX2 lanes or two NEON lanes, SHA-384,
 SHA-512, named /224 and /256, and all 510 general SHA-512/t parameters. Secret
 outputs preserve exact parameter identity and canonical final bits. Finite work
 includes general IV derivation as well as padding. Ordinary batch storage and
-public digest importers are not used for secret state. Keccak leaf framing, hosted adapters,
+public digest importers are not used for secret state. Hosted adapters,
 ParallelHash integration and full qualification are still pending. Keccak now
 has a distinct default-off `brynja-crypto-cpu/keccak-hardened-batch` permutation
 foundation with four AVX2 or two NEON lanes. Word/byte state entry points clear
 all packed state, parity, delta and rho/pi/chi staging on every exit and commit
-caller state only after health/accounting validation. This does not yet provide
-Keccak batch hash framing or squeezing.
+caller state only after health/accounting validation.
+
+`brynja-hash-sha3/hardened-batch-execution` adds distinct SHA-3/SHAKE/cSHAKE
+leaf batching with four optional slots, per-lane domains/rates and arbitrary-bit
+messages/customization/output. Virtual framing cursors and clearing scalar
+tails avoid ordinary batch storage. Secret outputs retain exact identity and
+bit count; every supplied secret destination clears on failure, while public
+destinations remain unchanged on failure. Entire caller staging and owned
+workspace clear on every exit, including unused capacity. Finite budgets count
+prefix, padding and squeezing work. Required eligibility is checked before
+secret processing; routine rejection permits reuse, backend/invariant/unwind
+failures revoke execution. This feature does not enable ordinary batching.
 
 Batch shape, configured limits and scheduling are public; callers must pad when
 traffic-analysis resistance is required. Explicit clearing cannot guarantee

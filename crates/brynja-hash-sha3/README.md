@@ -37,6 +37,7 @@ Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 | cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |
 | Hardened states and classified outputs | ✅ Implemented | ❌ No |
 | Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
+| Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |
 
 FIPS 202 and SP 800-185 specify these algorithms; they do not confer FIPS
@@ -100,6 +101,20 @@ assert_eq!(output, [0; 32]);
 ```
 
 ## Hardware and SIMD
+
+Default-off `hardened-batch-execution` exposes the distinct
+`hardened_batch::{Input, Workspace, Executor, SecretBatchOutput}` API. Four
+bounded optional slots support all eight SHA-3/SHAKE/cSHAKE identities, mixed
+rates, arbitrary-bit input/customization and finite XOF output. Portable mode
+needs no CPU authority; a supplied `keccak_hardened_batch::Session` selects
+four-state AVX2 or two-state NEON execution with clearing scalar tails. This
+feature does not enable the ordinary batch API. Secret destinations clear on
+failure and owner Drop; public output requires explicit declassification.
+Caller-provided staging clears in full on every exit. Batch shape, lengths and
+work reports remain public metadata, not traffic-analysis protection.
+The module rustdoc provides a runnable secret-output example. Hosted hardened
+batch adapters and full qualification are pending; see the
+[hardened ownership contract](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
 
 Default-off `batch-execution` adds `batch::Executor` for up to four independent
 messages with caller-owned workspace and transactional output staging. AVX2

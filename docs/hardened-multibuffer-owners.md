@@ -1,7 +1,7 @@
 # Hardened multibuffer hash owners
 
 Status: v0.24.48 in development; narrow and wide SHA-2 CPU/leaf batch APIs implemented,
-Keccak CPU foundation implemented; Keccak framing, hosted adapters and qualification pending.
+Keccak CPU/leaf APIs implemented; hosted adapters and qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
 public-only. Nothing in this document authorizes passing secrets to those types.
@@ -42,9 +42,30 @@ two NEON states use clearing packed state, columns, deltas and rho/pi/chi stagin
 states without ordinary packed storage. Both stage all changes until final
 health/accounting validation, clear every packed region on exit, and preserve
 inactive caller slots. Raw caller state is not owned or erased by this layer.
-No SHA-3 padding, SHAKE squeezing or cSHAKE encoding is supplied here yet.
+The raw CPU layer itself does not supply SHA-3 padding, SHAKE squeezing or
+cSHAKE encoding.
 
-Names for Keccak leaf framing, hosted adapters and ParallelHash remain proposed.
+The separate `brynja-hash-sha3/hardened-batch-execution` feature now exposes
+`hardened_batch::{Input, Workspace, Executor, SecretBatchOutput}`. Four optional
+borrowed slots support all eight SHA-3/SHAKE/cSHAKE identities, mixed rates,
+arbitrary-bit messages and N/S, and finite output (including zero-bit XOF).
+Virtual prefix/padding cursors avoid materializing secret cSHAKE prefixes in
+ordinary storage. The workspace owns byte states, gathered vector states,
+framing encodings/cursors, output offsets, pending-lane flags and distinct
+clearing scalar/CPU scratch. Caller-provided output staging is exclusively
+borrowed and cleared in full on success, rejection and unwind. Secret output
+retains exact per-slot identity and bit count; public commit and consuming
+declassification validate every destination before any public write.
+
+Required mode checks eligible full-width groups before reading secret bytes;
+the budget counts prefix, padding and squeezing permutations. Unequal tails use
+the existing clearing scalar permutation, not ordinary batch storage. Routine
+rejection/cancellation preserves reuse, while backend/invariant failures and
+unwind revoke the executor. Input lengths, identities and scheduling remain
+public metadata. The leaf module rustdoc includes a runnable secret-output
+example. These APIs do not enable ordinary batching or ordinary execution.
+
+Names for hosted adapters and ParallelHash integration remain proposed.
 Native qualification is not supplied by local/emulated tests.
 
 ## Implementation order and scope

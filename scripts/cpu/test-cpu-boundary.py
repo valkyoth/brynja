@@ -6,6 +6,7 @@ from __future__ import annotations
 import shutil
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 
 import cpu_boundary_policy as policy
 
@@ -63,6 +64,15 @@ def test() -> None:
         fixture(root)
         policy.validate(root)
         document = root / policy.POLICY
+
+        # A valid inner source review still requires its enclosing policy pin.
+        with patch.object(policy, "EXPECTED_POLICY_SHA256",
+                          "888dd5bfb1c9589d187f1ed5772ff07bb2507050480ed7a1733f99f7bbcb1cc8"):
+            require_rejection(root, "CPU security policy changed")
+        document.write_text(document.read_text(encoding="utf-8") + "\n# review drift\n",
+                            encoding="utf-8")
+        require_rejection(root, "CPU security policy changed")
+        reset(root)
 
         cases = (
             ("implemented_backend_count = 7", "implemented_backend_count = 8", "limits"),
@@ -189,4 +199,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("CPU boundary rejects twenty-four package, source, dispatch, and admission regressions")
+    print("CPU boundary rejects twenty-six package, source, dispatch, admission, and review-pin regressions")

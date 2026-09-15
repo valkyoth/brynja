@@ -7,6 +7,7 @@ Independent review/FIPS status must never be inferred from internal test results
 ROWS = {
     "crates/brynja-crypto-cpu/README.md": [
         "| SHA-512-family four-lane AVX2 / two-lane NEON compression | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Keccak four-state AVX2 / two-state NEON permutation | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |",
         "| Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |",
         "| Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |",
@@ -70,7 +71,8 @@ ROWS = {
         "| Byte/bit input and arbitrary-bit SHAKE output | ✅ Fully implemented | ❌ No |",
         "| cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |",
         "| Hardened states and classified outputs | ✅ Implemented | ❌ No |",
-        "| Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |"
+        "| Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |",
+        "| Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |"
     ],
     "crates/brynja-legacy-tls10/README.md": [
         "| TLS 1.0 controlled interoperability | ❌ Not implemented | ❌ No |"
@@ -128,6 +130,7 @@ ROWS = {
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
         "| Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |",
         "| Hosted independent-message SHA-224/256 batching | ✅ Opt-in, platform-limited | ❌ No |",
         "| Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |",
         "| Explicit hosted raw execution | ✅ Opt-in, qualifying AArch64 only | ❌ No |",

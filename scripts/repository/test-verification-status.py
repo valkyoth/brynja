@@ -98,6 +98,21 @@ def crate_tables() -> None:
                 mutations += 1
             else:
                 raise AssertionError(f"unreviewed capability/status mutation accepted: {path}")
+    # Exercise non-leading batch rows too: these additions must be admitted
+    # explicitly, without permitting deletion or upgrading independent claims.
+    for name in ("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha3"):
+        path = Path("crates") / name / "README.md"
+        text = (root / path).read_text()
+        row = next(row for row in MODULE.CRATE_ROWS[path.as_posix()]
+                   if "Keccak four-state" in row or "SHA-3/SHAKE/cSHAKE" in row)
+        for changed in (text.replace(row, ""),
+                        text.replace(row, row.replace("❌ No", "✅ Independently verified"))):
+            try:
+                MODULE.validate_crate_document(path, changed)
+            except MODULE.VerificationStatusError:
+                mutations += 1
+            else:
+                raise AssertionError(f"batch capability drift accepted: {path}")
     for removed in MODULE.CRATE_ROWS:
         altered = dict(MODULE.CRATE_ROWS)
         del altered[removed]

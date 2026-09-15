@@ -4770,6 +4770,7 @@ Deliverables:
 
 - Complete v0.24.47 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Use sealed non-cloneable lane owners and typed destinations; inventory vector packing, per-lane metadata, schedules, root staging and partial-output storage.
+- Provide distinct hardened Workspace/Executor and secret-output types; never route keyed state through or wrap/relabel the ordinary non-erasing batch owners. Add package-negative and compiled routing-mutation tests proving ordinary Workspace/Executor values cannot substitute for hardened owners. Preserve explicit declassification boundaries; PublicData cannot prove secret provenance.
 - Implement all-region cleanup on success, failed batch admission, mid-batch health loss, cancellation, unwind and Drop; preserve public-output atomicity.
 - Keep KMAC/TupleHash item semantics distinct from independent-message batches and keep required backends fail-closed in nested consumers.
 - Keep first-party Rust, no_std leaves, separate default-off hosted/legacy graphs, supported Rust versions and source modules below 500 lines. If a backend or owner exceeds one review, insert a smaller patch before dependent work rather than silently dropping that profile.

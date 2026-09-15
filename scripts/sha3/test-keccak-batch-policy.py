@@ -23,6 +23,15 @@ def main():
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(policy.ROOT / name, target)
         policy.validate(root)
+        target = root / 'crates/brynja-hash-sha3/src/hardened/mod.rs'
+        original = target.read_text()
+        for statement in ('use crate::batch::Workspace;',
+                          'use crate::batch as ordinary;',
+                          'use brynja_crypto_cpu::keccak_batch::Session;'):
+            target.write_text(original + '\n' + statement + '\n')
+            reject(lambda: policy.validate_separation(root))
+            target.write_text(original)
+            count += 1
         for name, tokens in (*policy.CONTRACTS.items(), *policy.COMMANDS.items()):
             target = root / name
             original = target.read_text()

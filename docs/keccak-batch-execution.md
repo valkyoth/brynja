@@ -72,6 +72,14 @@ OS/hypervisor process ABI. Cached detection is not live revocation. External
 `no_std` providers may use the intentionally public **unsafe** `from_platform`
 constructor, accepting its complete feature/OS/lifetime safety obligation.
 
+Establish this deployment guarantee before constructing authority, not only
+before a particular permutation. A revalidation callback cannot lock the
+scheduler between a check and an instruction. A controlled CPU set/affinity can
+constrain scheduling when administered correctly, but does not by itself prove
+hypervisor migration safety or prevent a later change to that CPU set. If the
+platform cannot maintain its lifetime-wide feature contract, use portable mode.
+The portable crate does not impose process affinity or application-wide policy.
+
 Each authority runs a direct real-vector startup KAT, checks health before and
 after dispatch, stages state updates, and checks its diagnostic counter before
 commit. Owners and sessions are non-Send/non-Sync/non-cloneable. These operational
@@ -86,6 +94,11 @@ states, vector temporaries, workspace, output staging, outputs or platform copie
 are zeroized. Do not use these APIs for keys, passwords, KMAC/KDF intermediates,
 or other confidential material. All lengths and batch shape are public.
 Hardened batching belongs to v0.24.48, not a partial wipe in this ordinary API.
+That milestone must provide distinct clearing Workspace/Executor owners and
+secret outputs; it must not wrap or relabel these ordinary non-erasing owners.
+The current hardened SHA-3 implementation has a regression guard against
+imports of ordinary batching. This is a repository integration guard, not proof
+of provenance for arbitrary downstream callers or a guarantee of register erasure.
 
 ## Evidence status
 

@@ -1,6 +1,7 @@
 """Reviewed ordinary Keccak batch source and assurance inventory."""
 import hashlib
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -16,6 +17,15 @@ CONTRACTS = {
         'QEMU is explicitly not native evidence.'),
     'crates/brynja-hash-sha3/src/batch/tests.rs': (
         'Some(report.vector_calls)', 'Session::completed_vector_calls', '!b'),
+    'crates/brynja-crypto-cpu/src/keccak_batch/mod.rs': (
+        'Revalidation is not a scheduler lock or a live migration monitor.',
+        'If this cannot be guaranteed, use portable execution instead.'),
+    'crates/brynja-crypto-cpu/src/keccak_batch/platform.rs': (
+        'immediately before dispatch cannot prevent intervening migration.',
+        'CPU affinity may constrain scheduling but does not prove VM-host support.'),
+    'crates/brynja-hash-sha3/src/batch/mod.rs': (
+        'Never use this workspace for keyed or otherwise secret-derived state.',
+        'It is not a hardened owner; a clearing wrapper cannot erase kernel copies.'),
 }
 COMMANDS = {
     'scripts/checks.sh': (
@@ -64,7 +74,20 @@ def snapshot(root=ROOT):
     return result
 
 
+def validate_separation(root=ROOT):
+    # An integration tripwire for the existing hardened module, not a Rust
+    # provenance proof. The full source closure additionally requires review.
+    base = root / 'crates/brynja-hash-sha3/src/hardened'
+    sources = sorted(base.rglob('*.rs'))
+    if not sources: raise ValueError('missing hardened SHA-3 source')
+    for path in sources:
+        code = '\n'.join(line.split('//')[0] for line in path.read_text().splitlines())
+        if re.search(r'\b(?:batch|keccak_batch)\b', code):
+            raise ValueError('ordinary batching referenced by hardened SHA-3: ' + str(path))
+
+
 def validate_contracts(root=ROOT):
+    validate_separation(root)
     for name, tokens in CONTRACTS.items():
         text = (root / name).read_text()
         for token in tokens:

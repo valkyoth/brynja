@@ -597,13 +597,13 @@ sha256 = "4ec8cba49a959ea22a523e66994e21800638e697cea2f85547771da80ec36c8d"
 package = "brynja-crypto-cpu"
 path = "src/keccak_batch/mod.rs"
 status = "ordinary-keccak-batch-authority"
-sha256 = "e7424dcb293b83852fb85bceb7c31f85840c59c724a572af41e2ca5d412a27f3"
+sha256 = "029a75293fa901965865634299dfb4203ba0d67b6150ae288be41cb5620fca27"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/keccak_batch/platform.rs"
 status = "ordinary-keccak-batch-platform-import"
-sha256 = "20cccde7ef5d87fad8c7a940e1ed22b3557397f41737a79a78d3bdf5be3b3a90"
+sha256 = "e77387ad44d2470852b11262fc11784809fc9b8e09ac1a0bfe2751f5157ff7e9"
 
 [[sources]]
 package = "brynja-crypto-cpu"

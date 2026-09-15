@@ -15,8 +15,8 @@
     "crates/brynja-crypto-cpu/src/hardened_execution/tests.rs": "3909e211ba642c53140811e4707511b8093b2047f5720faa190fcde7cc82d213",
     "crates/brynja-crypto-cpu/src/keccak.rs": "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a",
     "crates/brynja-crypto-cpu/src/keccak_batch/arm.rs": "2191fb9338fcb49f7869c8f5243fd1c2f4bb1cafd8b9acd704b7dcaf04195b4d",
-    "crates/brynja-crypto-cpu/src/keccak_batch/mod.rs": "e7424dcb293b83852fb85bceb7c31f85840c59c724a572af41e2ca5d412a27f3",
-    "crates/brynja-crypto-cpu/src/keccak_batch/platform.rs": "20cccde7ef5d87fad8c7a940e1ed22b3557397f41737a79a78d3bdf5be3b3a90",
+    "crates/brynja-crypto-cpu/src/keccak_batch/mod.rs": "029a75293fa901965865634299dfb4203ba0d67b6150ae288be41cb5620fca27",
+    "crates/brynja-crypto-cpu/src/keccak_batch/platform.rs": "e77387ad44d2470852b11262fc11784809fc9b8e09ac1a0bfe2751f5157ff7e9",
     "crates/brynja-crypto-cpu/src/keccak_batch/tests.rs": "7c90efab127b520dfcbfcae738723007069bf596c15cd98112770cc9f93f1c47",
     "crates/brynja-crypto-cpu/src/keccak_batch/x86.rs": "cef6c1433caf37131fc0afb6844985c2e9ee73ed375e31eab23ad1402148edba",
     "crates/brynja-crypto-cpu/src/keccak_constants.rs": "a1c1eb54418629305e71fe458d70b6e0ebb3e4fded9d60f898bc0fd09db2fc14",
@@ -53,7 +53,7 @@
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/cpu/check-static-execution.py": "6989e3358f8defae5b33975bb4a022489c6dc705de43e1931558eaec0ec63d61",
     "scripts/cpu/static_execution_docs.py": "a1c17b8bc303dba358b1f2d42e67ade620776c1cf0294b7d4d34e2f27bb66527",
-    "scripts/repository/unsafe_policy.py": "80ef9744cd0ae0e5241d1c8c8b5fe8ab47d2945b7a5c5f8bc72dfaf8369756b2",
+    "scripts/repository/unsafe_policy.py": "7732cc0cbabda724aa5939416b660f9df4c5aa642b6c88d25ac01251727dc3a0",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
   }

@@ -198,6 +198,8 @@ pub struct Report {
 }
 
 /// Caller-owned fixed-size state workspace. Public only; not cleared on Drop.
+/// Never use this workspace for keyed or otherwise secret-derived state.
+/// It is not a hardened owner; a clearing wrapper cannot erase kernel copies.
 pub struct Workspace {
     states: [[u64; 25]; CAPACITY],
     vector: [[u64; 25]; CAPACITY],

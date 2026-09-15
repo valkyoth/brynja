@@ -91,6 +91,10 @@ pub struct Authority {
 impl Authority {
     /// Runs the actual vector KAT under the executable's target-feature contract.
     /// Every CPU used by this executable must support its compiled bundle.
+    /// Establish that deployment guarantee before construction, including CPU
+    /// scheduling, hotplug and VM migration, and maintain it for every session.
+    /// Revalidation is not a scheduler lock or a live migration monitor.
+    /// If this cannot be guaranteed, use portable execution instead.
     pub fn for_compiled_target(kernel: Kernel) -> Result<Self, Error> {
         if !kernel.architecture() {
             return Err(Error::WrongArchitecture);

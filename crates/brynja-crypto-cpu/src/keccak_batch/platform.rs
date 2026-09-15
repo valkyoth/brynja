@@ -12,6 +12,10 @@ impl Authority {
     /// AArch64 ASIMD. All scheduled CPUs must retain the bundle for this owner's
     /// entire lifetime, including hotplug and VM migration. The callback must
     /// be sound for that deployment; returning true alone proves nothing.
+    /// Establish the lifetime-wide CPU/OS guarantee before this call; a check
+    /// immediately before dispatch cannot prevent intervening migration.
+    /// CPU affinity may constrain scheduling but does not prove VM-host support.
+    /// If this cannot be guaranteed, use portable execution instead.
     pub unsafe fn from_platform(
         kernel: Kernel,
         revalidate: fn(Kernel) -> bool,

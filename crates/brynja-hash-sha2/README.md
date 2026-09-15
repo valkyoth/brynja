@@ -32,7 +32,8 @@ SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Independent-message SHA-224/256 AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |
+| Independent-message SHA-512-family AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |
+| Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
 | General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |
 | Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |
@@ -163,3 +164,30 @@ equality is not authentication, MAC verification or password hashing.
 
 [Verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 MIT OR Apache-2.0.
+
+## Ordinary SHA-512-family batching
+
+Enable `batch512-execution` for four bounded optional slots, mixed SHA-384/512,
+named /224 and /256, and all 510 validated general SHA-512/t parameters.
+AVX2 processes four independent messages; NEON processes two. Remaining
+blocks and padding are scalar. Output identity and exact canonical bit widths
+are retained. General-t IV derivation is included in the work budget.
+
+```rust
+use brynja_hash_sha2::{BitString, Sha512TBits, batch512::*};
+let bits = BitString::new(b"public message", 8).map_err(|e| format!("{e:?}"))?;
+let inputs = [Some(Input::new(Algorithm::Sha512T(Sha512TBits::new(257).map_err(|e| format!("{e:?}"))?), bits)), None, None, None];
+let mut output = [None; CAPACITY];
+let mut cancel = || false;
+let report = Executor::portable().digest(PublicData::new(&inputs), &mut output, &mut Control::new(8, &mut cancel)).map_err(|e| format!("{e:?}"))?;
+assert_eq!(report.vector_calls, 0);
+# Ok::<(), String>(())
+```
+
+This API is caller-classified public-data-only, not a declassification boundary,
+and does not zeroize. Do not pass keys, passwords or secret-derived material.
+Portable defaults are unchanged. A Cargo feature alone does not enable AVX2;
+generic x86 builds remain portable/Unavailable. Static AVX2 requires
+`-C target-feature=+avx,+avx2` on a supporting deployment. Hosted Arm NEON
+relies on the documented OS ABI, not independent migration proof. No universal
+speedup is promised. See the [batch contract](../../docs/sha512-batch-execution.md).

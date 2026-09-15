@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+sha512-batch = ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]
 sha256-batch = ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"]
 runtime-execution = ["brynja-crypto-cpu/runtime-execution"]
 sponge-execution = ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"]

@@ -14,6 +14,7 @@ LIMIT = 4 * 1024 * 1024
 GENERATED_REGISTER_LIMIT = 8 * 1024 * 1024
 GENERATED_REGISTERS = frozenset({'standards/protocol-surfaces.json'})
 PACKAGES = {
+    'brynja-sha512-batch-fixture': 'sha2',
     'brynja-general-sha512-t-consumer': 'sha2',
     'brynja-sha2-execution-fixture': 'sha2',
     'brynja-sha2-hardened-execution-fixture': 'sha2',
@@ -171,9 +172,9 @@ def readme_fixture(manifest, lock, source, workspace_lock):
     names = sorted(name for name, row in rows.items() if 'source' not in row)
     features = {'brynja-hash-parallel': ['runtime-execution'],
                 'brynja-hash-parallel-std': ['runtime-execution'],
-                'brynja-crypto-cpu': ['static-execution', 'sha256-batch'],
-                'brynja-crypto-cpu-std': ['runtime-execution', 'sha256-batch'],
-                'brynja-hash-sha2': ['batch-execution'], 'brynja-legacy-md5': ['batch']}
+                'brynja-crypto-cpu': ['static-execution', 'sha256-batch', 'sha512-batch'],
+                'brynja-crypto-cpu-std': ['runtime-execution', 'sha256-batch', 'sha512-batch'],
+                'brynja-hash-sha2': ['batch-execution', 'batch512-execution'], 'brynja-legacy-md5': ['batch']}
     expected = {name: {'path': '../../crates/' + name, 'default-features': False,
                       **({'features': features[name]} if name in features else {})} for name in names}
     if data['dependencies'] != expected:

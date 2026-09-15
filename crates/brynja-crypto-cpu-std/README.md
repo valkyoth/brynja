@@ -33,7 +33,8 @@ It is not automatically installed or added to facade/default graphs.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Hosted independent-message SHA-224/256 batching | 🚧 Implemented; qualification pending | ❌ No |
+| Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
+| Hosted independent-message SHA-224/256 batching | ✅ Opt-in, platform-limited | ❌ No |
 | Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |
 | Explicit hosted raw execution | ✅ Opt-in, qualifying AArch64 only | ❌ No |
 | Ordinary SHA-3/SHAKE/cSHAKE sponge adapters | ✅ Opt-in, public data only | ❌ No |
@@ -113,3 +114,24 @@ copied health reports cannot create sessions.
 [Hosted contract](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
 · [Sponge examples](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md).
 MIT OR Apache-2.0.
+
+## Ordinary SHA-512-family batching
+
+Enable `sha512-batch` and select `sha512_batch::Authority::new(Mode)`.
+Portable never probes; Prefer reports initial unavailability as portable;
+Require rejects it. Backend health failure never permits silent fallback.
+
+```rust
+use brynja_crypto_cpu_std::sha512_batch::{Authority, Mode};
+let owner = Authority::new(Mode::Portable);
+assert!(owner.is_ok());
+# Ok::<(), String>(())
+```
+
+This API is caller-classified public-data-only, not a declassification boundary,
+and does not zeroize. Do not pass keys, passwords or secret-derived material.
+Portable defaults are unchanged. A Cargo feature alone does not enable AVX2;
+generic x86 builds remain portable/Unavailable. Static AVX2 requires
+`-C target-feature=+avx,+avx2` on a supporting deployment. Hosted Arm NEON
+relies on the documented OS ABI, not independent migration proof. No universal
+speedup is promised. See the [batch contract](../../docs/sha512-batch-execution.md).

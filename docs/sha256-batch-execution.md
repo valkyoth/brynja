@@ -1,8 +1,10 @@
 # Independent-message SHA-224/256 SIMD
 
-Status: implementation candidate; exceptional owner pentest and fresh native
-AMD, Intel, AWS Arm and Apple M2 qualification pending. Not independently
-verified, FIPS validated, or suitable for a secret-bearing deployment profile.
+Status: opt-in, platform-limited implementation released in v0.24.45 with
+owner pentest and native AMD, Intel, AWS Arm and Apple M2 evidence. Subsequent
+source changes require the existing evidence checks; historical captures do
+not automatically qualify a changed implementation. Not independently verified,
+FIPS validated, or suitable for a secret-bearing deployment profile.
 
 ## Scope and public API
 
@@ -86,9 +88,9 @@ safety. No process affinity, memory policy or OS settings are changed.
 and dedicated-instruction sequential batches when that compiled bundle exists.
 Results include actual work and no-benefit dispositions; do not generalize a
 machine's speedup. The caller chooses its threshold from its workload evidence;
-no heuristic based solely on vector width is installed globally. Initial local
-AMD measurements show a benefit for the tested full eight-lane shapes; fresh
-committed native measurements and other platforms remain pending.
+no heuristic based solely on vector width is installed globally. The v0.24.45
+native records contain the measured shapes and platform-specific dispositions;
+they are not a universal performance guarantee or evidence for changed kernels.
 
 ## Development evidence and remaining work
 

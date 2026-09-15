@@ -23,7 +23,7 @@ def validate(root):
     texts = {name: (root / name).read_text(encoding='utf-8') for name in FILES}
     features = tomllib.loads(texts[MANIFEST]).get('features')
     if features != {'default': [], 'static-execution': [], 'runtime-execution': ['static-execution'],
-                    'hardened-execution': ['static-execution', 'dep:brynja-core'], 'sha256-batch': ['static-execution']}:
+                    'hardened-execution': ['static-execution', 'dep:brynja-core'], 'sha256-batch': ['static-execution'], 'sha512-batch': ['static-execution']}:
         raise ValueError('documented static feature no longer matches the manifest')
     if '#[cfg(feature = "static-execution")]\npub mod static_execution;' not in texts[LIBRARY]:
         raise ValueError('documented static module no longer matches its public gate')
@@ -45,6 +45,7 @@ def validate(root):
     words = 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty'.split()
     words += ['twenty-one', 'twenty-two', 'twenty-three', 'twenty-four']
     words += ['twenty-five', 'twenty-six', 'twenty-seven', 'twenty-eight']
+    words += ['twenty-nine', 'thirty', 'thirty-one', 'thirty-two']
     count = len(inventory[0].keys)
     if count >= len(words):
         raise ValueError('extend the reviewed documentation count vocabulary')
@@ -62,8 +63,8 @@ def regressions(root):
     # Replace normalized text in disposable copies; source hashes are not used
     # here, so each test must fail for a semantic contract discrepancy.
     cases += [
-        (DOCS[0], 'Status: twenty-eight exact', 'Status: nine exact'),
-        (DOCS[0], 'Rust in only twenty-eight exact', 'Rust in only nine exact'),
+        (DOCS[0], 'Status: thirty-two exact', 'Status: nine exact'),
+        (DOCS[0], 'Rust in only thirty-two exact', 'Rust in only nine exact'),
         (DOCS[2], 'source-hash-bound module inventory', 'exactly nine modules'),
         (MANIFEST, 'default = []', 'default = ["static-execution"]'),
         (LIBRARY, 'pub mod static_execution;', 'mod static_execution;'),

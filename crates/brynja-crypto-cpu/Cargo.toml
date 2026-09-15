@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+sha512-batch = ["static-execution"]
 sha256-batch = ["static-execution"]
 static-execution = []
 runtime-execution = ["static-execution"]

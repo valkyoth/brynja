@@ -305,11 +305,14 @@ else:
                                     capture_output=True, text=True, timeout=30)
             return result.returncode, [json.loads(line) for line in trace.read_text().splitlines()]
         status, calls = run("--required-groups", "sha2")
-        assert status == 0 and len(calls) == 1
+        assert status == 0 and len(calls) == 2
         assert calls[0] == ["run", "1.90.0-x86_64-unknown-linux-gnu", "cargo", "kani", "-p",
                             "brynja-hash-sha2", "--features", "batch-execution"]
+        assert calls[1] == ["run", "1.90.0-x86_64-unknown-linux-gnu", "cargo", "kani", "-p",
+                            "brynja-hash-sha2", "--features", "batch512-execution", "--harness",
+                            "batch512::control::proofs::batch_budget_is_atomic_and_never_wraps"]
         status, calls = run("--required")
-        assert status == 0 and len(calls) == 7
+        assert status == 0 and len(calls) == 8
         status, calls = run("--required-groups", "sha2", fail="brynja-hash-sha2")
         assert status == 42 and len(calls) == 1
         status, calls = run("--required-groups", "unknown")

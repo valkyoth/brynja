@@ -420,6 +420,7 @@ def validate_packages(root: Path) -> None:
     if manifest.get("features") != {
         "general-sha512-t": [],
         "batch-execution": ["cpu", "brynja-crypto-cpu/sha256-batch"],
+        "batch512-execution": ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-batch"],
         "default": [],
         "cpu": ["dep:brynja-crypto-cpu"],
         "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],

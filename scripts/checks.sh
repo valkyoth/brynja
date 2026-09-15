@@ -108,6 +108,10 @@ python3 scripts/sha1/check-sha1-hardened-codegen.py
 cargo test --locked --manifest-path assurance/sha1-public-api/Cargo.toml
 python3 scripts/sha2/check-sha256.py
 python3 scripts/sha2/check-sha256-batch.py --package
+python3 scripts/sha2/check-sha512-batch.py --package
+python3 scripts/sha2/check-sha512-batch-codegen.py
+python3 scripts/sha2/test-sha512-batch.py
+cargo clippy --locked --offline --manifest-path assurance/sha512-batch/Cargo.toml --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 python3 scripts/sha2/check-sha256-batch-codegen.py
 python3 scripts/sha2/test-sha256-batch.py
 cargo clippy --locked --offline --manifest-path assurance/sha256-batch/Cargo.toml --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks

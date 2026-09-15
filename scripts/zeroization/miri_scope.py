@@ -46,6 +46,7 @@ GROUP_PREFIXES = {
         "assurance/hash-final-acceptance/",
         "assurance/sha2-",
         "assurance/sha256-",
+        "assurance/sha512-batch/",
         "crates/brynja-hash-core/",
         "crates/brynja-hash-sha2/",
         "scripts/sha2/", "scripts/hash/",

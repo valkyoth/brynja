@@ -33,7 +33,8 @@ leaves; raw compression or permutation is not a complete hash API.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Independent-message SHA-224/256 AVX2 / NEON kernels | 🚧 Implemented; qualification pending | ❌ No |
+| SHA-512-family four-lane AVX2 / two-lane NEON compression | 🚧 Implemented; qualification pending | ❌ No |
+| Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |
 | Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |
 | Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |
 | Low-level hosted-authority boundary | ✅ Platform proof required | ❌ No |
@@ -117,3 +118,17 @@ dump, swap or abort-time erasure.
 · [Hosted execution](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
 · [Hardened Keccak](https://github.com/valkyoth/brynja/blob/main/docs/hardened-keccak-execution.md).
 MIT OR Apache-2.0.
+
+## Ordinary SHA-512-family batching
+
+Enable `sha512-batch` for `sha512_batch::{Authority, Session, Kernel}`.
+Raw compression uses four fixed state/block slots (NEON uses the first two).
+Use the SHA-2 leaf's `batch512` API for hashing, IVs, bit padding and digests.
+
+This API is caller-classified public-data-only, not a declassification boundary,
+and does not zeroize. Do not pass keys, passwords or secret-derived material.
+Portable defaults are unchanged. A Cargo feature alone does not enable AVX2;
+generic x86 builds remain portable/Unavailable. Static AVX2 requires
+`-C target-feature=+avx,+avx2` on a supporting deployment. Hosted Arm NEON
+relies on the documented OS ABI, not independent migration proof. No universal
+speedup is promised. See the [batch contract](../../docs/sha512-batch-execution.md).

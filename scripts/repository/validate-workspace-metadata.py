@@ -218,28 +218,28 @@ def validate_dependencies(
 
 def validate_features(name: str, package: dict, entry: dict) -> None:
     expected = {"default": []}
-    expected.update(
-        {
-            feature: [f"dep:{name}" for name in execution_policy.feature_dependencies(dependency)]
-            for feature, dependency in entry["optional"].items()
-        }
-    )
+    expected.update({
+        feature: [f"dep:{name}" for name in execution_policy.feature_dependencies(dependency)]
+        for feature, dependency in entry["optional"].items()
+    })
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-crypto-cpu":
         expected["sha256-batch"] = ["static-execution"]
+        expected["sha512-batch"] = ["static-execution"]
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
         expected["sha256-batch"] = ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"]
+        expected["sha512-batch"] = ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]
         expected["runtime-execution"] = ["brynja-crypto-cpu/runtime-execution"]
         expected["sponge-execution"] = ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"]
     if name in {"brynja-hash-sha2", "brynja-hash-sha3"}:
         expected["hardened-execution"] = ["static-execution", "brynja-crypto-cpu/hardened-execution"]
-    if name == "brynja-hash-sha2":
-        expected["batch-execution"] = ["cpu", "brynja-crypto-cpu/sha256-batch"]
-    if name in {"brynja-hash-sha2", "brynja-hash-sha3"}:
         expected["static-execution"] = ["cpu", "brynja-crypto-cpu/static-execution"]
         expected["runtime-execution"] = ["static-execution", "brynja-crypto-cpu/runtime-execution"]
+    if name == "brynja-hash-sha2":
+        expected["batch-execution"] = ["cpu", "brynja-crypto-cpu/sha256-batch"]
+        expected["batch512-execution"] = ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-batch"]
     if name == "brynja-legacy-md5":
         # The reviewed CPU surface includes the bounded portable batch API;
         # neither feature implies the separate non-production evidence key.

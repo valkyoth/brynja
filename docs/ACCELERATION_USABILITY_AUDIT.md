@@ -5,8 +5,10 @@ Basis: v0.24.29 candidate `236b0d12`, reviewed 2026-09-08.
 
 This table preserves the original audit, not current implementation status.
 See [current status](current-status.md) for completed closures. The v0.24.45
-candidate adds [ordinary SHA-224/256 multibuffer SIMD](sha256-batch-execution.md);
-its owner retest and fresh native qualification remain pending.
+signed milestone adds [ordinary SHA-224/256 multibuffer SIMD](sha256-batch-execution.md)
+with completed retest and native qualification. The v0.24.46 candidate adds
+[SHA-512-family multibuffer SIMD](sha512-batch-execution.md); its exceptional
+retest and fresh native qualification remain pending.
 
 ## Decision
 

@@ -81,6 +81,7 @@ pub(crate) const ROUND_CONSTANTS: [u64; 80] = [
     0x6c44_198c_4a47_5817,
 ];
 
+#[cfg(any(target_arch = "aarch64", target_arch = "riscv64"))]
 pub(crate) fn expanded(block: &[u8; 128]) -> [u64; 80] {
     let mut words = [0_u64; 80];
     for (word, bytes) in words.iter_mut().take(16).zip(block.chunks_exact(8)) {

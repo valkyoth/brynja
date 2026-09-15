@@ -4659,10 +4659,11 @@ Exit criteria:
 
 ### v0.24.45 - SHA-224 And SHA-256 Multi-Buffer SIMD
 
-Status: awaiting pentest
+Status: released
 
-Ordinary AVX2/NEON implementation and development acceptance are in place;
-exceptional pentest and fresh native qualification remain pending.
+Signed tag `v0.24.45` identifies `9fc9baf7`. Exceptional retest, native
+qualification, the full release sweep and GitHub/CodeQL passed; no crates
+were published.
 
 Plan scope: Implement bounded independent-message SHA-224/256 SIMD batching with first-party x86 AVX2 and AArch64 NEON backends, distinct from dedicated single-stream SHA instructions.
 
@@ -4689,7 +4690,11 @@ Exit criteria:
 
 ### v0.24.46 - SHA-512 Family Multi-Buffer SIMD
 
-Status: planned
+Status: in progress
+
+Ordinary four-lane AVX2 and two-lane NEON implementation and focused development
+acceptance are complete. Awaiting exceptional owner pentest, fresh native
+qualification and final release checks.
 
 Plan scope: Implement bounded ordinary SHA-384/512, named SHA-512/224 and /256 and general SHA-512/t independent-message SIMD batches over x86 AVX2 and AArch64 NEON.
 

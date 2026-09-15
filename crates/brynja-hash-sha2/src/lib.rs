@@ -9,6 +9,9 @@
 
 #![no_std]
 
+#[cfg(feature = "batch512-execution")]
+pub mod batch512;
+
 #[cfg(feature = "batch-execution")]
 pub mod batch;
 

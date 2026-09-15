@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "f67ede2cf79e667fb64d5cf46ebe90268026653bdfb2bf8103c21143f7dd9351"
+EXPECTED_POLICY_SHA256 = "888dd5bfb1c9589d187f1ed5772ff07bb2507050480ed7a1733f99f7bbcb1cc8"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,14 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/sha512_batch/mod.rs"): "ordinary-sha512-batch-authority",
+    (CPU, "src/sha512_batch/platform.rs"): "ordinary-sha512-batch-platform-import",
+    (CPU, "src/sha512_batch/x86.rs"): "ordinary-sha512-four-lane-avx2",
+    (CPU, "src/sha512_batch/arm.rs"): "ordinary-sha512-two-lane-neon",
+    (CPU, "src/sha512_batch/tests.rs"): "ordinary-sha512-batch-authority-tests",
+    (DETECTOR, "src/sha512_batch/mod.rs"): "ordinary-sha512-batch-hosted-selection",
+    (DETECTOR, "src/sha512_batch/platform.rs"): "ordinary-sha512-batch-hosted-import",
+    (DETECTOR, "src/sha512_batch/tests.rs"): "ordinary-sha512-batch-hosted-selection-tests",
     (CPU, "src/sha256_batch/mod.rs"): "ordinary-sha256-batch-authority",
     (CPU, "src/sha256_batch/platform.rs"): "ordinary-sha256-batch-platform-import",
     (CPU, "src/sha256_batch/x86.rs"): "ordinary-sha256-eight-lane-avx2",
@@ -247,17 +255,18 @@ def validate_packages(root: Path) -> None:
     detector = manifest(root, DETECTOR)
     sha2 = manifest(root, SHA2)
     if cpu.get("features") != {"default": [], "static-execution": [], "runtime-execution": ["static-execution"],
-            "hardened-execution": ["static-execution", "dep:brynja-core"], "sha256-batch": ["static-execution"]} or cpu.get("dependencies") != {
+            "hardened-execution": ["static-execution", "dep:brynja-core"], "sha256-batch": ["static-execution"], "sha512-batch": ["static-execution"]} or cpu.get("dependencies") != {
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")
     if detector.get("features") != {"default": [], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"],
-            "sponge-execution": ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"], "sha256-batch": ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"]}:
+            "sponge-execution": ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"], "sha256-batch": ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"], "sha512-batch": ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]}:
         fail("host detector default feature set drifted")
     if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3} or detector['dependencies'][SHA3] != {'workspace': True, 'optional': True}:
         fail("host detector dependency boundary drifted")
     if sha2.get("features") != {
         "default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],
         "batch-execution": ["cpu", "brynja-crypto-cpu/sha256-batch"],
+        "batch512-execution": ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-batch"],
         "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],
         "runtime-execution": ["static-execution", "brynja-crypto-cpu/runtime-execution"],
         "hardened-execution": ["static-execution", "brynja-crypto-cpu/hardened-execution"],

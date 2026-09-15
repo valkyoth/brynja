@@ -8,6 +8,9 @@
 
 #![no_std]
 
+#[cfg(feature = "sha512-batch")]
+pub mod sha512_batch;
+
 #[cfg(feature = "sha256-batch")]
 pub mod sha256_batch;
 
@@ -30,7 +33,11 @@ mod sha256;
 ))]
 mod sha256_schedule;
 mod sha512;
-#[cfg(any(target_arch = "aarch64", target_arch = "riscv64"))]
+#[cfg(any(
+    target_arch = "aarch64",
+    target_arch = "riscv64",
+    all(target_arch = "x86_64", feature = "sha512-batch")
+))]
 mod sha512_schedule;
 
 #[cfg(target_arch = "aarch64")]

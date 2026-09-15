@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+batch512-execution = ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-batch"]
 batch-execution = ["cpu", "brynja-crypto-cpu/sha256-batch"]
 general-sha512-t = []
 cpu = ["dep:brynja-crypto-cpu"]

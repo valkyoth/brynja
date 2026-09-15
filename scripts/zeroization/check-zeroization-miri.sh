@@ -68,6 +68,9 @@ quick_sha2() {
 
 full_sha2() {
     run_miri -p brynja-hash-sha2 --features batch-execution --test batch bounded_batch_lifecycle_smoke
+    run_miri -p brynja-hash-sha2 --features batch512-execution --test batch512 bounded_batch_lifecycle_smoke
+    run_miri -p brynja-hash-sha2 --features batch512-execution --test batch512 batch512_general::derived_iv_work_is_bounded_and_named_identity_is_distinct
+    run_miri -p brynja-crypto-cpu --features sha512-batch --lib sha512_batch::tests::failed_revalidation_and_unwind_revoke_before_instruction_entry
     run_miri -p brynja-crypto-cpu --features sha256-batch --lib sha256_batch::tests::failed_revalidation_and_unwind_revoke_before_instruction_entry
     run_miri -p brynja-hash-sha2 --lib buffer_length_rejects_invalid_values_without_mutation
     run_miri -p brynja-hash-sha2 --features hardened-execution,general-sha512-t \

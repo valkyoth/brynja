@@ -44,8 +44,8 @@ harnesses="$(
         wc -l |
         tr -d ' '
 )"
-test "$harnesses" = "30" || {
-    echo "Kani policy: expected exactly thirty admitted MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash harnesses, found ${harnesses}" >&2
+test "$harnesses" = "31" || {
+    echo "Kani policy: expected exactly thirty-one admitted MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash harnesses, found ${harnesses}" >&2
     exit 1
 }
 
@@ -56,6 +56,7 @@ confined_harnesses="$(
 expected_harness_files="$(printf '%s\n' \
     crates/brynja-hash-parallel/src/lib.rs \
     crates/brynja-hash-sha2/src/batch/control.rs \
+    crates/brynja-hash-sha2/src/batch512/control.rs \
     crates/brynja-hash-sha2/src/bit_input.rs \
     crates/brynja-hash-sha2/src/hardened/output.rs \
     crates/brynja-hash-sha2/src/lib.rs \
@@ -75,7 +76,7 @@ test "$confined_harnesses" = "$expected_harness_files" || {
 }
 
 if [ "$mode" = "--policy-only" ]; then
-    echo "Kani policy: thirty portable MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds are inventoried; full proofs are local tag-gate evidence"
+    echo "Kani policy: thirty-one portable MD5/SHA-1/SHA-2/SHA-3/SP 800-185/KMAC/TupleHash/ParallelHash bounds are inventoried; full proofs are local tag-gate evidence"
     exit 0
 fi
 
@@ -120,6 +121,7 @@ if selected sha1; then
 fi
 if selected sha2; then
     rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2 --features batch-execution
+    rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2 --features batch512-execution --harness batch512::control::proofs::batch_budget_is_atomic_and_never_wraps
 fi
 if selected sha3; then
     rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha3

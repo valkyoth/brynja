@@ -72,11 +72,16 @@ checks. Portable defaults and old candidate admission are
 unchanged. Neither path is independently cryptographically verified or FIPS
 validated, and hardened ownership does not repair MD5's collision weakness.
 
-The v0.24.45 candidate adds separate, default-off [SHA-224/256 multibuffer
+The signed v0.24.45 milestone adds separate, default-off [SHA-224/256 multibuffer
 SIMD](sha256-batch-execution.md) for public data only. AVX2 processes eight
-independent messages and NEON four; owner retest and fresh native qualification
-remain pending. This does not change the verification status of portable SHA-2
+independent messages and NEON four; owner retest, fresh native qualification
+and release checks passed. This does not change the verification status of portable SHA-2
 or authorize secret-bearing SIMD use.
+
+The v0.24.46 candidate adds [SHA-512-family multibuffer SIMD](sha512-batch-execution.md):
+four AVX2 lanes or two NEON lanes, including distinct per-lane general SHA-512/t
+IVs and canonical bit outputs. Development checks do not replace its pending
+exceptional pentest and fresh native qualification. Ordinary scratch is not erased.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |

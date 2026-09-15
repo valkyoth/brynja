@@ -6,6 +6,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 REVIEW = 'scripts/sha2/sha512-batch-reviewed.json'
 CRATES = ('brynja-core', 'brynja-hash-core', 'brynja-crypto-cpu', 'brynja-hash-sha2', 'brynja-crypto-cpu-std')
+CONTRACTS = {
+    'crates/brynja-hash-sha2/src/batch512/mod.rs': (
+        'PublicData is only a caller assertion; secret provenance is not enforced.',
+        'With `panic = "abort"`, Drop does not run',
+        'no explicit quarantine or cleanup is promised before termination.'),
+    'crates/brynja-crypto-cpu/src/sha512_batch/platform.rs': (
+        "Module privacy does not hide Authority's public inherent methods.",
+        'intentionally public unsafe API for external no_std platform',
+        'a true callback result does not establish that guarantee.'),
+    'crates/brynja-crypto-cpu/src/sha512_batch/mod.rs': (
+        'Quarantine on panic requires stack unwinding.',),
+    'docs/sha512-batch-execution.md': (
+        'This remains an open design limitation of the ordinary API.',
+        'Review each new `PublicData::new` call site',
+        "The library does not select the application's panic profile.",
+        'the hosted adapter is not the only permitted importer.'),
+}
+
+
+def validate_contracts(root=ROOT):
+    for name, tokens in CONTRACTS.items():
+        source = (root / name).read_text()
+        for token in tokens:
+            if token not in source: raise ValueError('missing batch contract: ' + token)
 
 
 def paths(root=ROOT):
@@ -42,6 +66,7 @@ def validate(root=ROOT):
     if set(reviewed) != {'schema', 'version', 'files'} or reviewed['schema'] != 1 or reviewed['version'] != '0.24.46':
         raise ValueError('batch review schema')
     if reviewed['files'] != snapshot(root): raise ValueError('batch source closure changed; reopen review')
+    validate_contracts(root)
     for name in ('crates/brynja-hash-sha2/src/batch512', 'crates/brynja-crypto-cpu/src/sha512_batch'):
         for path in (root / name).glob('*.rs'):
             if len(path.read_text().splitlines()) >= 500: raise ValueError('oversized batch module')

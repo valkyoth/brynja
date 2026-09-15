@@ -49,6 +49,14 @@ Never pass keys, passwords, confidential messages, HMAC/KDF intermediates or
 secret-derived state through this profile. No hardened owner routes here.
 States, schedules, staging, register and compiler copies are not erased.
 
+This remains an open design limitation of the ordinary API. Renaming a freely
+constructible marker cannot prove provenance. Partial scratch wiping or
+`black_box` alone would not establish compiler-resistant, complete cleanup.
+The separate hardened batching milestone must cover owned state, schedules,
+staging and all supported lifecycle exits; it does not turn this ordinary API
+into a secret-bearing API. Review each new `PublicData::new` call site, including
+the caller-asserted packed state and blocks at vector dispatch.
+
 All caller outputs are staged and committed together after final health and
 cancellation checks. Every error and recoverable unwind preserves the entire
 destination, including inactive slots. A finite `Control` charges one per
@@ -62,6 +70,12 @@ Routine ineligibility, work-limit and cancellation errors permit executor
 reuse. Backend/invariant failures and callback unwinding permanently quarantine
 the supplied authority. Authorities, sessions and borrowed executors are not
 Send, Sync, Copy, Clone or Debug. Their borrowing prevents lifetime escape.
+
+Quarantine on panic requires stack unwinding. With `panic = "abort"`, Drop does
+not run: no explicit quarantine or cleanup is promised before termination.
+The library does not select the application's panic profile. Process exit on
+hosted targets is not memory erasure; embedded panic handlers and reset behavior
+are deployment responsibilities. Never rely on an abort to clear ordinary data.
 
 ## Platform and performance boundaries
 
@@ -78,6 +92,15 @@ scheduling/hotplug/migration. Cached detection is not a live migration monitor.
 Unknown hosts remain portable or return Unavailable. Explicit unsafe platform
 authority has a documented whole-lifetime obligation, never a safe boolean
 override. No independent migration or machine-level side-channel claim is made.
+
+`Authority::from_platform` is intentionally public and unsafe for external
+no_std platform providers. Its private implementation module does not hide the
+inherent method, and the hosted adapter is not the only permitted importer.
+Making it `pub(crate)` would also prevent the separate hosted crate from using
+it. Prefer the safe compiled-target or hosted constructors where applicable.
+An arbitrary always-true callback is not platform attestation: an unsafe caller
+must independently uphold the complete lifetime/CPU contract. Violating that
+contract can execute unsupported instructions and terminate the process.
 
 The separate ordinary single-stream execution API can use dedicated Arm
 SHA-512 instructions; x86 dedicated SHA-512 is a later milestone. Native

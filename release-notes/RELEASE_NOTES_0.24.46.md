@@ -14,6 +14,9 @@ Development milestone: SHA-512-family multibuffer SIMD. Not yet released.
   authority while routine request rejection preserves reuse.
 - Portable defaults, existing SHA-224/256 batching and ordinary/hardened
   single-stream APIs remain unchanged. No new external dependency is added.
+- Clarifies caller-asserted public classification, the intentionally public
+  unsafe platform-provider import, and the distinction between recoverable
+  unwinding and panic-abort termination. No partial zeroization claim is added.
 
 See the [API and security contract](../docs/sha512-batch-execution.md).
 This is caller-classified public data only, without secret-state erasure.

@@ -26,6 +26,16 @@ def source_regressions():
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(policy.ROOT / name, destination)
         policy.validate(root)
+        contracts = 0
+        for name, tokens in policy.CONTRACTS.items():
+            path = root / name; original = path.read_text()
+            for token in tokens:
+                path.write_text(original.replace(token, ''))
+                # Exercise semantic obligations independently of hash mismatch.
+                reject(lambda: policy.validate_contracts(root))
+                path.write_text(original)
+                contracts += 1
+        policy.validate_contracts(root)
         for name in ('crates/brynja-crypto-cpu/src/sha512_batch/x86.rs',
                      'crates/brynja-crypto-cpu/src/sha512_batch/arm.rs',
                      'crates/brynja-hash-sha2/src/batch512/engine.rs',
@@ -46,6 +56,7 @@ def source_regressions():
         path.write_text('// unreviewed source\n')
         reject(lambda: policy.validate(root))
     print('Nine batch hash/removal/symlink/new-source regressions rejected')
+    print(f'{contracts} public-data/platform-import/panic-profile documentation regressions rejected')
 
 
 def sanitizer_regressions():

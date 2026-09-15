@@ -1,10 +1,14 @@
-//! Sole authority import and instruction-entry boundary for the batch profile.
+//! Implementation location of the public unsafe import and private dispatch.
+//! Module privacy does not hide Authority's public inherent methods.
 #![allow(unsafe_code)]
 
 use super::{Authority, Error, Kernel};
 
 impl Authority {
     /// Imports explicit platform authority and executes the startup vector KAT.
+    /// This is an intentionally public unsafe API for external no_std platform
+    /// providers, not an entry point reserved for the hosted adapter. Prefer
+    /// the safe compiled-target constructor or the hosted adapter when applicable.
     ///
     /// # Safety
     /// Caller must guarantee the complete AVX2/OS XMM-YMM or AArch64 NEON

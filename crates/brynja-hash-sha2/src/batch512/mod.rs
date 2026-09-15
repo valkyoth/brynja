@@ -6,6 +6,8 @@
 //! All failures preserve the entire caller destination. No allocation, global
 //! dispatch or secret-bearing integration. Dedicated SHA instructions are a
 //! separate single-stream API, not used by this vector profile.
+//! PublicData is only a caller assertion; secret provenance is not enforced.
+//! Hardened multibuffer ownership is a separate API milestone, not this profile.
 
 use crate::{
     BitString, Sha384Digest, Sha512_224Digest, Sha512_256Digest, Sha512Digest, Sha512TBits,
@@ -174,6 +176,8 @@ impl<'a> Executor<'a> {
     /// PublicData is a caller assertion, not runtime classification or a means
     /// to declassify keys/passwords/confidential input. A cancelled callback may
     /// run between blocks and before output commit; its unwind revokes authority.
+    /// With `panic = "abort"`, Drop does not run and a panic terminates execution
+    /// instead; no explicit quarantine or cleanup is promised before termination.
     pub fn digest(
         &self,
         input: PublicData<&[Option<Input<'_>>; CAPACITY]>,

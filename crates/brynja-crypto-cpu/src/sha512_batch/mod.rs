@@ -68,6 +68,8 @@ pub enum Error {
 
 /// Sealed, thread-bound owner. Quarantine is permanent and owner-local.
 /// Neither feature detection nor startup KAT proves migration safety.
+/// Quarantine on panic requires stack unwinding. With `panic = "abort"`, Drop
+/// does not run: no explicit quarantine or cleanup is promised before termination.
 ///
 /// ```compile_fail
 /// use brynja_crypto_cpu::sha512_batch::Authority;

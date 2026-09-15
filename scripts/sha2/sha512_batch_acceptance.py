@@ -104,11 +104,21 @@ def negative(consumer, env):
         ('let _ = Authority::from_platform(Kernel::Avx2, |_| true);', 'E0133'),
     ))
     try:
+        # Public inherent visibility is deliberate even from a private module.
+        # Name its unsafe function type without executing an attestation or KAT.
+        path.write_text(original + '''
+fn intentional_platform_import() {
+    let _: unsafe fn(Kernel, fn(Kernel) -> bool) -> Result<Authority, BackendError>
+        = Authority::from_platform;
+}
+''')
+        run(['cargo', '+1.98.1', 'check', '--locked', '--offline'], consumer, env)
         for source, diagnostic in cases:
             path.write_text(original + '\nfn forbidden() { ' + source + ' }\n')
             result = run(['cargo', '+1.98.1', 'check', '--locked', '--offline'], consumer, env, success=False)
             if f'error[{diagnostic}]' not in result.stderr: raise ValueError('wrong negative diagnostic: ' + result.stderr)
     finally: path.write_text(original)
+    print('Packaged public unsafe platform-import signature: PASS (not executed)')
     print(f'{len(cases)} packaged batch ownership/classification/authority negatives rejected')
 
 

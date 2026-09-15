@@ -34,6 +34,7 @@ It is not automatically installed or added to facade/default graphs.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
+| Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-224/256 batching | ✅ Opt-in, platform-limited | ❌ No |
 | Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |
 | Explicit hosted raw execution | ✅ Opt-in, qualifying AArch64 only | ❌ No |
@@ -114,6 +115,15 @@ copied health reports cannot create sessions.
 [Hosted contract](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
 · [Sponge examples](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md).
 MIT OR Apache-2.0.
+
+## Ordinary Keccak batching
+
+Default-off `keccak-batch` similarly exposes `keccak_batch::Authority` for
+independent SHA-3/SHAKE/cSHAKE messages, with borrowed batch executors and
+caller-owned output staging. This is public-only, not a secret-erasing API.
+Generic x86 builds remain portable/unavailable; an AVX2-specialized deployment
+or an allowlisted AArch64 NEON platform is required for hosted SIMD.
+See the [Keccak batch contract](../../docs/keccak-batch-execution.md).
 
 ## Ordinary SHA-512-family batching
 

@@ -7,6 +7,8 @@
 
 #![no_std]
 
+#[cfg(feature = "batch-execution")]
+pub mod batch;
 mod bit_api;
 mod bit_string;
 mod cshake;

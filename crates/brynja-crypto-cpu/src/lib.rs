@@ -11,6 +11,9 @@
 #[cfg(feature = "sha512-batch")]
 pub mod sha512_batch;
 
+#[cfg(feature = "keccak-batch")]
+pub mod keccak_batch;
+
 #[cfg(feature = "sha256-batch")]
 pub mod sha256_batch;
 

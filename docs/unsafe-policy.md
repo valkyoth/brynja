@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: thirty-two exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: thirty-six exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only thirty-two exact modules: the private core volatile clearer; the
+Rust in only thirty-six exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -13,7 +13,8 @@ separate legacy SHA-1 hosted platform bridge and hardened secret authority; and
 the ordinary MD5 hosted platform bridge; the hardened MD5 authority and kernels;
 and the ordinary SHA-224/256 batch platform import, AVX2/NEON kernels and hosted
 bridge; and the corresponding ordinary SHA-512-family batch platform import,
-AVX2/NEON kernels and hosted bridge. These four new modules use fixed-size
+AVX2/NEON kernels and hosted bridge; plus the independent-state Keccak batch
+platform import, AVX2/NEON kernels and hosted bridge. These modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
 instruction/import boundaries, never framing or output ownership. Each
@@ -30,6 +31,26 @@ safe alternative analysis, isolated module or crate, documented invariants,
 Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
+
+## v0.24.47 Independent-state Keccak SIMD
+
+Four new exceptions isolate the raw multibuffer `keccak_batch/platform.rs`,
+`x86.rs` and `arm.rs` modules and the hosted `keccak_batch/platform.rs` bridge.
+Necessity: portable safe Rust cannot express the AVX2/NEON vector intrinsics;
+the scalar Keccak implementation remains the explicit safe alternative.
+The public framing, cursor, scratch ownership and output-commit layer contains
+no low-level code. Fixed-size local arrays back every unaligned vector load
+and store: exactly four initialized u64s for AVX2 or two for NEON. Exclusive
+state references forbid aliasing; every computed word destination is checked.
+All rotations and round control depend only on public FIPS 202 constants.
+
+The sealed authority's exact CPU/OS lifetime contract and a direct vector KAT
+precede instruction entry. Pre/post health checks, staged state commits,
+checked counters and unwind guards preserve fail-closed authority semantics.
+These ordinary states and temporaries do not erase secrets. New source hashes
+and exact unsafe counts bind this development inventory; native qualification
+and exceptional pentest remain pending, not supplied by these hash entries.
+See [Keccak batch execution](keccak-batch-execution.md).
 
 ## v0.24.4 Keccak CPU-Intrinsic Exceptions
 

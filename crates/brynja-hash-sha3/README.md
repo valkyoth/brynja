@@ -37,6 +37,7 @@ Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 | cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |
 | Hardened states and classified outputs | ✅ Implemented | ❌ No |
 | Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
+| Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |
 
 FIPS 202 and SP 800-185 specify these algorithms; they do not confer FIPS
 140-3 validation. Brynja has no named independent cryptographic review or FIPS
@@ -99,6 +100,13 @@ assert_eq!(output, [0; 32]);
 ```
 
 ## Hardware and SIMD
+
+Default-off `batch-execution` adds `batch::Executor` for up to four independent
+messages with caller-owned workspace and transactional output staging. AVX2
+processes four states; NEON processes two; incomplete groups use scalar tails.
+This ordinary public-only API does not erase state and is not ParallelHash or
+threading. The optional hosted adapter is `brynja-crypto-cpu-std::keccak_batch`.
+See the [multibuffer API and ownership contract](https://github.com/valkyoth/brynja/blob/main/docs/keccak-batch-execution.md).
 
 Defaults are portable. Default-off `static-execution` adds ordinary
 `execution::Sha3_*`, `Shake*` and `Cshake*`; `runtime-execution`

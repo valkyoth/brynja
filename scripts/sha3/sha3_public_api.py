@@ -50,9 +50,9 @@ EXPECTED_SHA256: dict[Path, str] = {
     VECTORS: "677ff52adaa6b88a2b19e93219238b0751e539afaa7c7d3934740a2c68588d6f",
     MAIN: "676f7e6dfc44120ea26cc0a2cf69717ab21fb6bbd22c68039b20c8807e810161",
     CONTENT: "ab72282b43ccf28714e57ff9c4cedde2d3736a5e38eb1016c2d8956615c9cdd3",
-    LEAF_MANIFEST: "0b79f25d85fb3d6f5453a42b2fba22fb5bb284e41de0b85418cc8712a8e89c15",
-    LEAF_LIB: "b21203e38ab1d396ed06f38ecb196650c8787466c1d4dc08bb4d7f40633ef700",
-    LEAF_README: "28f9cd3086d30eb19be050a85626cc4ccc49f0c7569be5e4cd57218bc76b9b8a",
+    LEAF_MANIFEST: "b47ab0a0206861d43d701518b42ce8a793ff545e36b7c21e301dbc0f3a741b58",
+    LEAF_LIB: "8cc8a204a89afc5b2c933a47faed44a32f34238215ee9199060182079c1bee7e",
+    LEAF_README: "2e62bdc43546ece51d3dd30a1dde8a26e504f1d4edb3e58988eb3428f84e293c",
     CRYPTO_LIB: "bb425769dbf02a1c39a386196d013ab38f92f200f368f95d0911914f321f8785",
     FACADE_MANIFEST: "5b9c1d77b5724fcf138cb151c3487c11c543fb2882e75a19681b7940518df4c0",
     FACADE_LIB: "dfa6311a5a73bed4547611739752052e8e98c30de7c8cd9536d1b0d0ebad8deb",
@@ -156,6 +156,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     leaf_manifest = tomllib.loads(loaded[LEAF_MANIFEST])
     if leaf_manifest.get("features") != {
         "default": [], "cpu": ["dep:brynja-crypto-cpu"],
+        "batch-execution": ["cpu", "brynja-crypto-cpu/keccak-batch"],
         "static-execution": ["cpu", "brynja-crypto-cpu/static-execution"],
         "runtime-execution": ["static-execution", "brynja-crypto-cpu/runtime-execution"],
         "hardened-execution": ["static-execution", "brynja-crypto-cpu/hardened-execution"],

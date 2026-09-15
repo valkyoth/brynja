@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "9b03177e10aaf091c689801c33b252d19c1bf8abd502ec794db807fa8b696bd3"
+EXPECTED_POLICY_SHA256 = "b926e3790250619c1ec1e1a4d1c857332fbb3e6767afec5e1ff0675c0d53fb94"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,14 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/keccak_batch/mod.rs"): "ordinary-keccak-batch-authority",
+    (CPU, "src/keccak_batch/platform.rs"): "ordinary-keccak-batch-platform-import",
+    (CPU, "src/keccak_batch/x86.rs"): "ordinary-keccak-four-state-avx2",
+    (CPU, "src/keccak_batch/arm.rs"): "ordinary-keccak-two-state-neon",
+    (CPU, "src/keccak_batch/tests.rs"): "ordinary-keccak-batch-authority-tests",
+    (DETECTOR, "src/keccak_batch/mod.rs"): "ordinary-keccak-batch-hosted-selection",
+    (DETECTOR, "src/keccak_batch/platform.rs"): "ordinary-keccak-batch-hosted-import",
+    (DETECTOR, "src/keccak_batch/tests.rs"): "ordinary-keccak-batch-hosted-selection-tests",
     (CPU, "src/sha512_batch/mod.rs"): "ordinary-sha512-batch-authority",
     (CPU, "src/sha512_batch/platform.rs"): "ordinary-sha512-batch-platform-import",
     (CPU, "src/sha512_batch/x86.rs"): "ordinary-sha512-four-lane-avx2",
@@ -254,11 +262,11 @@ def validate_packages(root: Path) -> None:
     cpu = manifest(root, CPU)
     detector = manifest(root, DETECTOR)
     sha2 = manifest(root, SHA2)
-    if cpu.get("features") != {"default": [], "static-execution": [], "runtime-execution": ["static-execution"],
+    if cpu.get("features") != {"default": [], "keccak-batch": ["static-execution"], "static-execution": [], "runtime-execution": ["static-execution"],
             "hardened-execution": ["static-execution", "dep:brynja-core"], "sha256-batch": ["static-execution"], "sha512-batch": ["static-execution"]} or cpu.get("dependencies") != {
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")
-    if detector.get("features") != {"default": [], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"],
+    if detector.get("features") != {"default": [], "keccak-batch": ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"],
             "sponge-execution": ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"], "sha256-batch": ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"], "sha512-batch": ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]}:
         fail("host detector default feature set drifted")
     if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3} or detector['dependencies'][SHA3] != {'workspace': True, 'optional': True}:

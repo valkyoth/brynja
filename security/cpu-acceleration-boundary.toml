@@ -208,7 +208,7 @@ sha256 = "cb30ca0fbc0945f710992887b7e2afafbe630e2137bf69605639b0d82eef4ca0"
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "29fd11fea06da3526cd5bf8122a7110a5624ebad4a67ea444eb6280ecd83eba7"
+sha256 = "3687f015b0376062ed921e29a753279df9fa931bf76694b098a7f97c9c11f214"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -280,7 +280,7 @@ sha256 = "f0b1d27f9de27ac2a3877777bfdfaab3c08f36336065c2d072a35408420099e1"
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "bb7a6a8aeb62502e6dde9fe5e26fb77dc9465279ef730b3f99383733cb9ba882"
+sha256 = "0983cb3c992eacf1f93b7d463f4da2a584e3ae0f3cb7bafed9708165982e9403"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -592,3 +592,51 @@ package = "brynja-crypto-cpu-std"
 path = "src/sha512_batch/tests.rs"
 status = "ordinary-sha512-batch-hosted-selection-tests"
 sha256 = "4ec8cba49a959ea22a523e66994e21800638e697cea2f85547771da80ec36c8d"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_batch/mod.rs"
+status = "ordinary-keccak-batch-authority"
+sha256 = "e7424dcb293b83852fb85bceb7c31f85840c59c724a572af41e2ca5d412a27f3"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_batch/platform.rs"
+status = "ordinary-keccak-batch-platform-import"
+sha256 = "20cccde7ef5d87fad8c7a940e1ed22b3557397f41737a79a78d3bdf5be3b3a90"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_batch/x86.rs"
+status = "ordinary-keccak-four-state-avx2"
+sha256 = "cef6c1433caf37131fc0afb6844985c2e9ee73ed375e31eab23ad1402148edba"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_batch/arm.rs"
+status = "ordinary-keccak-two-state-neon"
+sha256 = "2191fb9338fcb49f7869c8f5243fd1c2f4bb1cafd8b9acd704b7dcaf04195b4d"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_batch/tests.rs"
+status = "ordinary-keccak-batch-authority-tests"
+sha256 = "7c90efab127b520dfcbfcae738723007069bf596c15cd98112770cc9f93f1c47"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/keccak_batch/mod.rs"
+status = "ordinary-keccak-batch-hosted-selection"
+sha256 = "0f8824a6322ec67e09e4c238c9b8749944adab513ffacd6c58afcbd9b0ab0b0d"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/keccak_batch/platform.rs"
+status = "ordinary-keccak-batch-hosted-import"
+sha256 = "8865e11ca3156c3bd8ec918aa144f7eb27d9046a7b9fd5c0e71553e95bc5a2b9"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/keccak_batch/tests.rs"
+status = "ordinary-keccak-batch-hosted-selection-tests"
+sha256 = "cdb9431eb7e60a9a7bf3ae8ebf7f3ef3d60a1e8d628de842829080dee0e6f0c4"

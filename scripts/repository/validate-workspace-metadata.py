@@ -12,17 +12,10 @@ import parallelhash_workspace_policy as execution_policy
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "package-policy.toml"
-MODERN_CLASSES = frozenset(
-    {
-        "modern-facade",
-        "modern-router",
-        "modern-engine",
-        "modern-shared",
-        "platform-adapter",
-        "protocol-adapter",
-        "cpu-backend",
-    }
-)
+MODERN_CLASSES = frozenset({
+    "modern-facade", "modern-router", "modern-engine", "modern-shared",
+    "platform-adapter", "protocol-adapter", "cpu-backend",
+})
 LEGACY_CLASSES = frozenset({"legacy-facade", "legacy-engine"})
 PRIVATE_CLASSES = frozenset({"repository-only", "research-only"})
 ADAPTER_CLASSES = frozenset({"security-adapter", "host-adapter"})
@@ -224,11 +217,13 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     })
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-crypto-cpu":
+        expected["keccak-batch"] = ["static-execution"]
         expected["sha256-batch"] = ["static-execution"]
         expected["sha512-batch"] = ["static-execution"]
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
+        expected["keccak-batch"] = ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"]
         expected["sha256-batch"] = ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"]
         expected["sha512-batch"] = ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]
         expected["runtime-execution"] = ["brynja-crypto-cpu/runtime-execution"]
@@ -240,6 +235,8 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-hash-sha2":
         expected["batch-execution"] = ["cpu", "brynja-crypto-cpu/sha256-batch"]
         expected["batch512-execution"] = ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-batch"]
+    if name == "brynja-hash-sha3":
+        expected["batch-execution"] = ["cpu", "brynja-crypto-cpu/keccak-batch"]
     if name == "brynja-legacy-md5":
         # The reviewed CPU surface includes the bounded portable batch API;
         # neither feature implies the separate non-production evidence key.

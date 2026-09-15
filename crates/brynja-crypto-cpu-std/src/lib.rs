@@ -5,6 +5,8 @@
 //! acceleration modes. It is not used by the `brynja` facade, default feature
 //! graph, protocol engines, or future FIPS module.
 
+#[cfg(feature = "keccak-batch")]
+pub mod keccak_batch;
 mod runtime_detection;
 mod sha512_runtime;
 

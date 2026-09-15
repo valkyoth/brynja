@@ -5,6 +5,15 @@ standards observation. Not released; no crates selected for publication.
 
 ## Completed development work
 
+- Added default-off ordinary independent-state Keccak SIMD: four AVX2 lanes
+  and two NEON lanes, separate from single-state Keccak acceleration.
+- Added bounded SHA-3/SHAKE/cSHAKE batch APIs with independent byte/bit framing,
+  finite XOF outputs, arbitrary-bit cSHAKE N/S, mixed-domain groups, scalar tails,
+  checked work controls and transactional caller-owned output staging.
+- Added an optional hosted adapter, explicit portable/prefer/require selection,
+  and owner-local quarantine with ordinary request-failure reuse.
+- Development tests cover portable/native-AVX2 differential comparisons,
+  emulated NEON, packaged consumers, negative ownership and compiled mutants.
 - The optional local-first authority observer requires hash-verified local
   copies of all locked documents before checking upstream content.
 - Transport outages may retain the reviewed document, but explicitly report
@@ -18,11 +27,10 @@ standards observation. Not released; no crates selected for publication.
 
 ## Pending milestone work
 
-Independent-state AVX2/NEON Keccak kernels, public SHA-3/SHAKE/cSHAKE batch APIs,
-packaged oracle/mutation campaigns, native correctness/performance qualification,
-pentest and final release verification are not complete yet. Existing single-state
-acceleration is not a substitute. No new production cryptographic API is claimed
-by the standards-tooling work.
+Native correctness/performance qualification, emitted-code assurance integration,
+exceptional pentest and final release verification are not complete yet.
+Existing single-state acceleration is not a substitute. See the
+[batch contract](../docs/keccak-batch-execution.md) for the new API boundaries.
 
 No independent cryptographic review, FIPS validation, secret-bearing multibuffer
 support or military-deployment approval is claimed. Hardened batching remains

@@ -4725,9 +4725,11 @@ Exit criteria:
 
 Status: in progress
 
-Development begins with the owner-requested local-first standards monitor.
-Keccak multibuffer SIMD implementation and qualification remain pending; the
-existing single-state Keccak APIs are not multibuffer implementations.
+The owner-requested local-first standards monitor is implemented. The ordinary
+Keccak multibuffer kernels, leaf batch API and optional hosted adapter are now
+implemented with focused development tests. Full assurance integration,
+benchmarks, native qualification and exceptional pentest remain pending; the
+existing single-state Keccak evidence does not qualify these multibuffer APIs.
 
 Plan scope: Implement bounded ordinary independent-state Keccak SIMD batches and public SHA-3/SHAKE/cSHAKE batch APIs over x86 AVX2 and AArch64 NEON, separate from existing single-state accelerated permutations.
 

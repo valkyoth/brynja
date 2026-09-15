@@ -34,6 +34,7 @@ leaves; raw compression or permutation is not a complete hash API.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-512-family four-lane AVX2 / two-lane NEON compression | 🚧 Implemented; qualification pending | ❌ No |
+| Keccak four-state AVX2 / two-state NEON permutation | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |
 | Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |
 | Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |
@@ -118,6 +119,14 @@ dump, swap or abort-time erasure.
 · [Hosted execution](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md)
 · [Hardened Keccak](https://github.com/valkyoth/brynja/blob/main/docs/hardened-keccak-execution.md).
 MIT OR Apache-2.0.
+
+## Ordinary Keccak batching
+
+Independent-state Keccak uses the separate default-off `keccak-batch` feature
+and `keccak_batch::{Authority, Session, Kernel}` API. It processes four public
+states on AVX2 or two on NEON, with no erasure or hash framing. Complete
+SHA-3/SHAKE/cSHAKE batches live in `brynja-hash-sha3::batch`.
+See the [Keccak batch contract](../../docs/keccak-batch-execution.md).
 
 ## Ordinary SHA-512-family batching
 

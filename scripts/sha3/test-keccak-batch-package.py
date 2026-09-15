@@ -23,6 +23,32 @@ def run(command, cwd, env, data=None):
     return subprocess.run(command, cwd=cwd, env=env, input=data, text=True, capture_output=True, timeout=300)
 
 
+def false_route(consumer, leaf, env, data, expected):
+    test = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--release',
+            '-p', 'brynja-hash-sha3', '--lib', 'batch::tests::native_vector_campaign', '--', '--nocapture']
+    valid = run(test, consumer, env)
+    if valid.returncode or 'KECCAK_BATCH_API:' not in valid.stdout:
+        raise ValueError('packaged actual-route regression test unavailable: ' + valid.stderr)
+    path = leaf / 'engine.rs'
+    original = path.read_text()
+    before = 'session\n        .permute(PublicData::new(&mut workspace.vector))\n        .map_err(Error::Backend)?;'
+    after = 'session.ensure_healthy().map_err(Error::Backend)?;\n    for state in workspace.vector.iter_mut().take(width) { crate::keccak::permute(state); }'
+    if original.count(before) != 1: raise ValueError('false-route anchor drift')
+    try:
+        path.write_text(original.replace(before, after))
+        # A scalar substitution still computes correct digests and forged report
+        # counters. Prove that the separate actual-session counter catches it.
+        result = run(['cargo', '+1.98.1', 'run', '--locked', '--offline', '--release', '--', 'required'], consumer, env, data)
+        if result.returncode or result.stdout.splitlines() != expected:
+            raise ValueError('false-route mutant is not a runnable correct-output substitution')
+        result = run(test, consumer, env)
+        if not result.returncode or 'batch::tests::native_vector_campaign ... FAILED' not in result.stdout or 'assertion `left == right` failed' not in result.stderr:
+            raise ValueError('false-route test did not reject through its counter assertion: ' + result.stderr)
+    finally:
+        path.write_text(original)
+    print('Packaged Keccak batch: one compiled scalar-only false-route mutant rejected')
+
+
 def main(native=False):
     helper = load('keccak_batch_package', ROOT / 'scripts/sha2/check-sha2-execution.py')
     differential = load('keccak_batch_differential', ROOT / 'scripts/sha3/check-keccak-batch.py')
@@ -85,6 +111,8 @@ def main(native=False):
                 if result.stdout.splitlines() == expected: raise ValueError('surviving mutant: ' + before)
             finally:
                 path.write_text(previous)
+        if native:
+            false_route(consumer, leaf, env, data, expected)
         print(f'Packaged Keccak batch: {len(negatives)} negatives, {len(mutations)} compiled mutants rejected; modes={modes}')
 
 

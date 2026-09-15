@@ -130,7 +130,7 @@
     "crates/brynja-hash-sha3/src/batch/engine.rs": "d6b18209908cb74bb22ad9b50527d6572a74f50ba129b5019179992a0f998fd2",
     "crates/brynja-hash-sha3/src/batch/framing.rs": "19278397db77739fd50a886df683b90850f5cdff2fb0ac4f5992a8b98b7716f5",
     "crates/brynja-hash-sha3/src/batch/mod.rs": "f1ed51226f886f0c9b42ce54c9822066483568f5ba7a328940aeb0bfb08cd6bb",
-    "crates/brynja-hash-sha3/src/batch/tests.rs": "0e8e4e0905d95773240184188f01af360a130cc104b9ae075ed166014a36567a",
+    "crates/brynja-hash-sha3/src/batch/tests.rs": "b9b1352825a156665cde25e8da7537742754f8c1e06c925e3b93a8e750d581b6",
     "crates/brynja-hash-sha3/src/bit_api.rs": "4a1cc813ed35ffe1f6eac442da9879a0fe2a8855cf58142f93cb95e448094ac2",
     "crates/brynja-hash-sha3/src/bit_string.rs": "ec5920f5d2651806328dea324700f089980bda818eba34570fcfeff20dbf1fbd",
     "crates/brynja-hash-sha3/src/cshake.rs": "2497f525ceb51f638de4fd82736e6b94ea749c8ff64abe5e28dff549e4e0dcad",
@@ -192,7 +192,7 @@
     "crates/brynja-hash-tuple/tests/execution.rs": "7709df62259035f025ae0ac68ab84865a7bd657593a3df115b8f8599ff076834",
     "crates/brynja-hash-tuple/tests/official_vectors.rs": "8cbb13c168530dad1dc732cd2923c693bcf4323a701e1a92c186e33acffc1a65",
     "docs/tuplehash-accelerated-execution.md": "90bb61fc927eda892c5e2e704af03004f36b7d6e2eb926b9ea79ed5fa8641b49",
-    "scripts/checks.sh": "e6ba9459e97495da05746958bc91a20d620924ca9a586e0105b7a68aad4c1e33",
+    "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/cryptography/mir_cleanup_flow.py": "9b56316d6bf2a02c85cb4bcd75c2fab00a2442b49332bda1852f6d91012a2dc4",
     "scripts/sha3/check-cshake-differential.py": "0e936f96b8a8bb7295055694cf751353207c83d78f5fad95c7184e9148c16d39",
     "scripts/sha3/check-sha3-bit-differential.py": "c796b542560131229a7ea933c94de944d687856fc84be678ef7e4238c2fb07da",
@@ -207,8 +207,8 @@
     "scripts/tuplehash/test-tuplehash-execution-policy.py": "a184759f818bb29d240e7b3899e4683e46d22c70a9993d2b02338351a51384d9",
     "scripts/tuplehash/tuplehash_execution_native.py": "0ca9e45a262d61f5f1e696613015f8eaf53ef691135caf715255e5890a0a5649",
     "scripts/tuplehash/tuplehash_execution_policy.py": "e8a15baa9534a1129e45d1060a4f593d6070bfb1eb11604df02a69cdb2fcd7a6",
-    "scripts/zeroization/check-zeroization-miri.sh": "1a2f34bd164d7d483aaaad68da5397751fe18cf19d6fca99af48b4c7860947d6",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "a6ff319193a562178a55d99f58aeeea97851c7fce8b6953d47945fc4212ba538"
+    "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
   },
   "status": "implementation-review; native-qualification-pending",
   "version": "0.24.39"

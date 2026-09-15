@@ -8,6 +8,7 @@ use std::{
     fmt::Write as _,
     io::{self, Read as _},
 };
+mod benchmark;
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 const MAX_BYTES: u64 = 8 * 1024 * 1024;
@@ -103,6 +104,17 @@ fn main() -> Result<()> {
     };
     let owner = Authority::new(mode).map_err(|e| format!("authority: {e:?}"))?;
     let executor = owner.executor(1).map_err(|e| format!("executor: {e:?}"))?;
+    match std::env::args().nth(2).as_deref() {
+        Some("--benchmark") => {
+            return benchmark::run(
+                &executor,
+                mode,
+                owner.kernel().map_err(|e| format!("kernel: {e:?}"))?,
+            );
+        }
+        None => (),
+        _ => return Err("unknown option".into()),
+    }
     let mut campaign = String::new();
     io::stdin()
         .take(MAX_BYTES + 1)

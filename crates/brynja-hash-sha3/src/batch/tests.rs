@@ -152,6 +152,10 @@ fn campaign(executor: &Executor<'_>, vector: bool) -> Result<(), Error> {
         let mut staging = vec![0x71; expected.iter().map(Vec::len).sum()];
         let mut cancel = || false;
         let mut control = Control::new(1024, &mut cancel);
+        let before = executor
+            .session
+            .as_ref()
+            .map_or(0, Session::completed_vector_calls);
         let report = executor.digest(
             PublicData::new(inputs.as_slice()),
             &mut output,
@@ -160,6 +164,11 @@ fn campaign(executor: &Executor<'_>, vector: bool) -> Result<(), Error> {
             &mut control,
         )?;
         assert_eq!(actual, expected, "case {case}");
+        let after = executor
+            .session
+            .as_ref()
+            .map_or(0, Session::completed_vector_calls);
+        assert_eq!(after.checked_sub(before), Some(report.vector_calls));
         assert_eq!(
             report
                 .vector_permutations
@@ -274,6 +283,41 @@ fn request_failures_are_atomic_and_reusable() -> Result<(), Error> {
             Mode::Prefer,
             1,
         )?)?;
+    }
+    Ok(())
+}
+
+#[test]
+fn bounded_batch_lifecycle() -> Result<(), Error> {
+    let executor = Executor::portable();
+    let input = Input::new(Algorithm::Sha3_256, bits(b"abc", 24)?, 256)?;
+    let expected = oracle(input)?;
+    let mut workspace = Workspace::new();
+    for (budget, cancel_now) in [(0, false), (3, false), (4, true), (4, false)] {
+        let mut storage = [[0x59; 32]; 4];
+        let mut outputs: Vec<_> = storage.iter_mut().map(|a| a.as_mut_slice()).collect();
+        let mut cancel = || cancel_now;
+        let result = executor.digest(
+            PublicData::new(&[input; 4]),
+            &mut outputs,
+            &mut workspace,
+            &mut [0; 128],
+            &mut Control::new(budget, &mut cancel),
+        );
+        if cancel_now {
+            assert_eq!(result, Err(Error::Cancelled));
+        } else if budget < 4 {
+            assert_eq!(result, Err(Error::WorkLimit));
+        } else {
+            assert_eq!(result?.scalar_permutations, 4);
+            for output in storage {
+                assert_eq!(output.as_slice(), expected);
+            }
+        }
+        if cancel_now || budget < 4 {
+            assert_eq!(storage, [[0x59; 32]; 4]);
+        }
+        executor.check()?;
     }
     Ok(())
 }

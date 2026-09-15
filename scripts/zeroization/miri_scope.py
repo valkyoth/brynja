@@ -55,6 +55,7 @@ GROUP_PREFIXES = {
         "assurance/hash-final-acceptance/", "assurance/sp800185-", "scripts/sp800185/",
         "assurance/cshake-",
         "assurance/sha3-",
+        "assurance/keccak-batch/",
         "crates/brynja-hash-core/",
         "crates/brynja-hash-sha3/",
         "scripts/sha3/", "scripts/hash/",

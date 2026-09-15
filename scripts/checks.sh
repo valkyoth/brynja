@@ -140,6 +140,15 @@ python3 scripts/sha3/test-sha3.py
 python3 scripts/sha3/check-sha3-differential.py
 python3 scripts/sha3/check-sha3-bit-differential.py
 python3 scripts/sha3/check-cshake-differential.py
+python3 scripts/sha3/check-keccak-batch.py
+python3 scripts/sha3/test-keccak-batch-policy.py
+python3 scripts/sha3/test-keccak-batch-native.py
+python3 scripts/sha3/test-keccak-batch-package.py
+python3 scripts/sha3/check-keccak-batch-codegen.py
+python3 scripts/sha3/test-keccak-batch-codegen.py
+python3 scripts/sha3/test-keccak-batch-asan.py
+cargo test --locked --offline --manifest-path assurance/keccak-batch/Cargo.toml
+cargo clippy --locked --offline --manifest-path assurance/keccak-batch/Cargo.toml --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 cargo test --locked --manifest-path assurance/cshake-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/cshake-public-api/Cargo.toml --all-targets -- -D warnings
 python3 scripts/sha3/check-sha3-public-api.py

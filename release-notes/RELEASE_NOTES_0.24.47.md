@@ -14,6 +14,10 @@ standards observation. Not released; no crates selected for publication.
   and owner-local quarantine with ordinary request-failure reuse.
 - Development tests cover portable/native-AVX2 differential comparisons,
   emulated NEON, packaged consumers, negative ownership and compiled mutants.
+- Added a 128-case end-to-end portable/vector benchmark, exact AVX2/NEON
+  emitted-code inspection and native evidence collection with coverage checks.
+- Integrated the new budget proof, focused Miri and enforced ASan/LeakSanitizer
+  into the existing SHA-3 family. No release approval or publication rule changed.
 - The optional local-first authority observer requires hash-verified local
   copies of all locked documents before checking upstream content.
 - Transport outages may retain the reviewed document, but explicitly report
@@ -27,8 +31,8 @@ standards observation. Not released; no crates selected for publication.
 
 ## Pending milestone work
 
-Native correctness/performance qualification, emitted-code assurance integration,
-exceptional pentest and final release verification are not complete yet.
+Native correctness/performance qualification, exceptional pentest and final
+release verification are not complete yet.
 Existing single-state acceleration is not a substitute. See the
 [batch contract](../docs/keccak-batch-execution.md) for the new API boundaries.
 

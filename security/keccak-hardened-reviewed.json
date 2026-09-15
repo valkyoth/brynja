@@ -132,7 +132,7 @@
     "crates/brynja-hash-sha3/src/batch/engine.rs": "d6b18209908cb74bb22ad9b50527d6572a74f50ba129b5019179992a0f998fd2",
     "crates/brynja-hash-sha3/src/batch/framing.rs": "19278397db77739fd50a886df683b90850f5cdff2fb0ac4f5992a8b98b7716f5",
     "crates/brynja-hash-sha3/src/batch/mod.rs": "f1ed51226f886f0c9b42ce54c9822066483568f5ba7a328940aeb0bfb08cd6bb",
-    "crates/brynja-hash-sha3/src/batch/tests.rs": "0e8e4e0905d95773240184188f01af360a130cc104b9ae075ed166014a36567a",
+    "crates/brynja-hash-sha3/src/batch/tests.rs": "b9b1352825a156665cde25e8da7537742754f8c1e06c925e3b93a8e750d581b6",
     "crates/brynja-hash-sha3/src/bit_api.rs": "4a1cc813ed35ffe1f6eac442da9879a0fe2a8855cf58142f93cb95e448094ac2",
     "crates/brynja-hash-sha3/src/bit_string.rs": "ec5920f5d2651806328dea324700f089980bda818eba34570fcfeff20dbf1fbd",
     "crates/brynja-hash-sha3/src/cshake.rs": "2497f525ceb51f638de4fd82736e6b94ea749c8ff64abe5e28dff549e4e0dcad",
@@ -173,7 +173,7 @@
     "crates/brynja-hash-sha3/tests/hardened_execution.rs": "f74dda865da5f9be960d15712bfeba3d5a41ae892322aa6595f605b4a255ba35",
     "crates/brynja-hash-sha3/tests/keccak_properties/mod.rs": "7c441598ee1a0254b4c98d98a6c648ccc02045a2dcfd61470d7f96d183720be5",
     "docs/hardened-keccak-execution.md": "d6a61c082045026d8d690b0cbcb8965276b5dfb5e7b089cc8914f78edc4fd7dd",
-    "scripts/checks.sh": "e6ba9459e97495da05746958bc91a20d620924ca9a586e0105b7a68aad4c1e33",
+    "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/sha3/capture-keccak-hardened-native.py": "9fe3556c0afa7414fdb9ebda2d7126f599be6feaae393649b0d87ccbd6a81e9e",
     "scripts/sha3/check-keccak-hardened-asan.py": "dea0b642f2788de9473289d8608e6b7522ec526f3da570a4a503805d0c869963",
     "scripts/sha3/check-keccak-hardened-codegen.py": "307a2cb3d3544a4982f5e52cd70b437fde1b170a5e5f519d4bd15525ceb7b5a6",
@@ -184,8 +184,8 @@
     "scripts/sha3/test-keccak-hardened-native.py": "a1ba3eda53c85f18d18d06c0a056bb993c949c3ae75921bc6fe918f78a6eca1e",
     "scripts/sha3/test-keccak-hardened.py": "2f61095b204a30405992e8c577c52a59885465077035cdb9c51eff80bba6b0ff",
     "scripts/tag_gate.sh": "626a2c6ecd41f20c91bb4272430c3355f194d143b3fc5f530a2a8466f0fa5c0a",
-    "scripts/zeroization/check-zeroization-miri.sh": "1a2f34bd164d7d483aaaad68da5397751fe18cf19d6fca99af48b4c7860947d6",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "a6ff319193a562178a55d99f58aeeea97851c7fce8b6953d47945fc4212ba538"
+    "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
   },
   "status": "implementation-review; native-qualification-pending",
   "version": "0.24.37"

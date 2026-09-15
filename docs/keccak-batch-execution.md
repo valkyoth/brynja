@@ -93,7 +93,31 @@ Development checks include independent bit-level differential comparisons,
 packaged downstream compilation, ownership negatives, output/algorithm mutants,
 native local AVX2 and supplemental emulated NEON comparisons. Scalar-reference
 checks alone cannot qualify hardware; QEMU is explicitly not native evidence.
+The exact AVX2/NEON multibuffer symbols are inspected in x86-64 Linux,
+AArch64 Linux and Apple AArch64 emitted assembly, with instruction-removal and
+unrelated-symbol regression checks. These establish vector-code presence, not
+machine-level constant-time or erasure guarantees. The batch budget proof is
+wired into the existing SHA-3 Kani family; focused Miri ownership/error checks
+and actual-kernel ASan with forced LeakSanitizer use that family's existing
+verification workflow. Approval and publication policies are unchanged.
+
+The standalone `assurance/keccak-batch` fixture accepts `prefer --benchmark`
+after `cargo run --locked --offline --release --manifest-path
+assurance/keccak-batch/Cargo.toml --`. The 128-case matrix covers all eight
+identities, one to four active lanes, empty/rate-sized/4 KiB/16 KiB messages,
+unequal lengths and finite multi-block partial-bit XOF output. Seven paired
+samples alternate portable/selected ordering; medians exclude allocation and
+output comparison. Destinations start guaranteed incorrect on each sample and
+all measured outputs must match the portable reference. Reports expose actual
+vector calls. No speedup or automatic threshold is inferred from a single run;
+collect on an otherwise idle target before choosing a workload threshold.
+
+Use `scripts/sha3/capture-keccak-batch-native.py` with an explicit native lane,
+new output JSON path and `--attest-native`. Capture requires a clean committed
+checkout, exact source review, matching compiler/CPU/OS, packaged independent
+oracles, actual-kernel markers, codegen and the complete benchmark matrix.
+Artifacts are operator-self-attested, not authenticated platform certification.
 Fresh Linux x86-64, Linux AArch64 and Apple AArch64 correctness/performance
-collection, emitted-code checks and exceptional review remain required before
+collection and exceptional review remain required before
 this milestone may be described as qualified. Existing single-state native
 evidence does not qualify these new multibuffer kernels.

@@ -120,6 +120,8 @@ quick_sha3() {
 }
 
 full_sha3() {
+    run_miri -p brynja-hash-sha3 --features batch-execution --lib batch::tests::shape_staging_empty_and_scalar_tail_boundaries
+    run_miri -p brynja-hash-sha3 --features batch-execution --lib batch::tests::bounded_batch_lifecycle
     run_miri -p brynja-hash-sha3 --features hardened-execution --lib hardened::accelerated::reader::tests
     run_miri -p brynja-hash-sha3 --features hardened-execution --lib hardened::accelerated::engine::tests::every_memory_region_is_explicitly_cleared
     run_miri -p brynja-crypto-cpu --features hardened-execution --lib hardened_execution::keccak::tests::all_seven_regions_clear

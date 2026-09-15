@@ -312,7 +312,12 @@ else:
                             "brynja-hash-sha2", "--features", "batch512-execution", "--harness",
                             "batch512::control::proofs::batch_budget_is_atomic_and_never_wraps"]
         status, calls = run("--required")
-        assert status == 0 and len(calls) == 8
+        assert status == 0 and len(calls) == 9
+        status, calls = run("--required-groups", "sha3")
+        assert status == 0 and len(calls) == 2
+        assert calls[1] == ["run", "1.90.0-x86_64-unknown-linux-gnu", "cargo", "kani", "-p",
+                            "brynja-hash-sha3", "--features", "batch-execution", "--harness",
+                            "batch::control::proofs::batch_budget_is_atomic_and_never_wraps"]
         status, calls = run("--required-groups", "sha2", fail="brynja-hash-sha2")
         assert status == 42 and len(calls) == 1
         status, calls = run("--required-groups", "unknown")

@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import keccak_batch_policy as policy
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / 'assurance/keccak-batch/Cargo.toml'
@@ -72,5 +73,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--mode', choices=('portable', 'prefer', 'required'), default='portable')
     parser.add_argument('--manifest', type=Path, default=MANIFEST)
+    parser.add_argument('--policy-only', action='store_true')
     args = parser.parse_args()
-    check(args.mode, args.manifest)
+    policy.validate()
+    if not args.policy_only:
+        check(args.mode, args.manifest)

@@ -120,13 +120,16 @@ def main() -> int:
     status, commands = run_profile(
         "--focused", "sha3", "kmac", "tuplehash", "parallelhash"
     )
-    assert status == 0 and len(commands) == 35
+    assert status == 0 and len(commands) == 37
+    assert sum('batch::tests::bounded_batch_lifecycle' in c for c in commands) == 1
+    assert sum('batch::tests::shape_staging_empty_and_scalar_tail_boundaries' in c for c in commands) == 1
+    assert not any('batch::tests::request_failures_are_atomic_and_reusable' in c for c in commands)
     assert sum('hardened_execution::keccak::tests::all_seven_regions_clear' in c for c in commands) == 1
     assert sum('hardened::accelerated::engine::tests::every_memory_region_is_explicitly_cleared' in c for c in commands) == 1
     assert sum('--features sponge-execution --lib sponge::tests::portable_sponge' in c for c in commands) == 1
     assert any('--features static-execution --lib execution' in command for command in commands)
     assert any('--features static-execution --test execution execution_smoke' in command for command in commands)
-    assert sum("-p brynja-hash-sha3" in command for command in commands) == 13
+    assert sum("-p brynja-hash-sha3" in command for command in commands) == 15
     assert sum("-p brynja-mac-kmac" in command for command in commands) == 3
     assert sum('--features hardened-execution --lib execution' in c and 'brynja-mac-kmac' in c for c in commands) == 1
     assert sum('--features hardened-execution --test execution' in c and 'brynja-mac-kmac' in c for c in commands) == 1
@@ -166,7 +169,7 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 81
+    assert status == 0 and len(commands) == 83
     for suffix in ('--lib cpu::scratch::tests', '--lib cpu::secret::tests',
                    '--test hardened_execution bounded_portable_cleanup_smoke'):
         assert sum('brynja-legacy-md5 --features hardened-execution ' + suffix in c for c in commands) == 1

@@ -6,6 +6,7 @@ python3 scripts/sha2/check-sha2-hardened-asan.py
 python3 scripts/sha2/check-sha256-batch-asan.py
 python3 scripts/sha2/check-sha512-batch-asan.py
 python3 scripts/sha3/check-keccak-hardened-asan.py
+python3 scripts/sha3/check-keccak-batch-asan.py
 python3 scripts/sha1/check-sha1-hardened-asan.py
 python3 scripts/md5/check-md5-execution-asan.py
 python3 scripts/md5/check-md5-hardened-asan.py

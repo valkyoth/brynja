@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: forty-two exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: forty-five exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only forty-two exact modules: the private core volatile clearer; the
+Rust in only forty-five exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -15,7 +15,7 @@ and the ordinary SHA-224/256 batch platform import, AVX2/NEON kernels and hosted
 bridge; and the corresponding ordinary SHA-512-family batch platform import,
 AVX2/NEON kernels and hosted bridge; plus the independent-state Keccak batch
 platform import, AVX2/NEON kernels and hosted bridge; and the distinct hardened
-SHA-224/256 and SHA-512-family batch platform imports and AVX2/NEON kernels. These modules use fixed-size
+SHA-224/256, SHA-512-family and Keccak batch platform imports and AVX2/NEON kernels. These modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
 instruction/import boundaries, never framing or output ownership. Each
@@ -61,6 +61,16 @@ input blocks. Every packed vector still occupies an owned 32-byte region;
 NEON reads/writes its first 16 bytes and teardown clears its inactive half.
 Safe framing, exact-t output identity and destination ownership stay outside
 the instruction boundary. No ordinary packed owner is reused for secrets.
+
+Three further development exceptions isolate `keccak_hardened_batch/platform.rs`,
+`x86.rs` and `arm.rs`. Their distinct AVX2/NEON permutation kernels store packed
+state, column parities, theta deltas and rho/pi/chi staging in four clearing
+regions (800, 160, 160 and 800 bytes). Every intrinsic load/store borrows fixed
+initialized owner storage. NEON uses its first two lanes and cleanup erases all
+four lanes. Raw caller states remain caller-owned; byte and word entry points
+commit only after revalidation and checked accounting. The same register/copy,
+abort and platform-authority limitations apply. Hash framing and final native
+qualification remain pending.
 
 ## v0.24.47 Independent-state Keccak SIMD
 

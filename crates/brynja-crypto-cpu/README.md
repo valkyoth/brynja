@@ -35,6 +35,7 @@ leaves; raw compression or permutation is not a complete hash API.
 | --- | --- | --- |
 | Hardened SHA-224/256 batch compression with clearing packed storage | 🚧 CPU foundation; qualification pending | ❌ No |
 | Hardened SHA-512-family batch compression with clearing packed storage | 🚧 CPU foundation; qualification pending | ❌ No |
+| Hardened independent-state Keccak AVX2 / NEON with clearing storage | 🚧 CPU foundation; qualification pending | ❌ No |
 | SHA-512-family four-lane AVX2 / two-lane NEON compression | 🚧 Implemented; qualification pending | ❌ No |
 | Keccak four-state AVX2 / two-state NEON permutation | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |
@@ -61,6 +62,15 @@ crate's `hardened_batch` and `hardened_batch512` modules. Hosted batch adapters
 and qualification remain pending. Neither feature enables or reuses ordinary
 batch storage. See the
 [implementation design](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
+
+The default-off `keccak-hardened-batch` feature similarly exports distinct
+`keccak_hardened_batch::{Authority, Session, Workspace}` owners. AVX2 permutes
+four independent states; little-endian AArch64 NEON permutes two. Use
+`Session::permute` for word states or `permute_bytes` for canonical little-endian
+byte states. Both preserve caller state on rejection and clear all packed
+workspace regions on every exit. These are raw permutation APIs, not hashing or
+padding APIs; the caller still owns its state and all copies. Complete hardened
+Keccak batch framing and qualification remain under development.
 
 The separate default-off `sha256-batch` feature exposes independent-message
 AVX2 (eight lanes) and AArch64 NEON (four lanes) compression. Both raw states and

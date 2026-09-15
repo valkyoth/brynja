@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "d11ad4d23d6fe4273908e5074dc4151926af9b96086c9966ce18a52a165adf11"
+EXPECTED_POLICY_SHA256 = "716c7374ca718ae8affe21573a0d2a6211fb058ddf9efb310b784b5cf528e10c"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,12 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/keccak_hardened_batch/mod.rs"): "hardened-keccak-batch-authority",
+    (CPU, "src/keccak_hardened_batch/scratch.rs"): "hardened-keccak-batch-owned-storage",
+    (CPU, "src/keccak_hardened_batch/platform.rs"): "hardened-keccak-batch-platform-import",
+    (CPU, "src/keccak_hardened_batch/x86.rs"): "hardened-keccak-batch-four-lane-avx2",
+    (CPU, "src/keccak_hardened_batch/arm.rs"): "hardened-keccak-batch-two-lane-neon",
+    (CPU, "src/keccak_hardened_batch/tests.rs"): "hardened-keccak-batch-lifecycle-tests",
     (CPU, "src/sha512_hardened_batch/mod.rs"): "hardened-sha512-batch-authority",
     (CPU, "src/sha512_hardened_batch/scratch.rs"): "hardened-sha512-batch-owned-storage",
     (CPU, "src/sha512_hardened_batch/platform.rs"): "hardened-sha512-batch-platform-import",
@@ -274,7 +280,7 @@ def validate_packages(root: Path) -> None:
     cpu = manifest(root, CPU)
     detector = manifest(root, DETECTOR)
     sha2 = manifest(root, SHA2)
-    if cpu.get("features") != {"default": [], "sha256-hardened-batch": ["dep:brynja-core"], "sha512-hardened-batch": ["dep:brynja-core"], "keccak-batch": ["static-execution"], "static-execution": [], "runtime-execution": ["static-execution"],
+    if cpu.get("features") != {"default": [], "sha256-hardened-batch": ["dep:brynja-core"], "sha512-hardened-batch": ["dep:brynja-core"], "keccak-hardened-batch": ["dep:brynja-core"], "keccak-batch": ["static-execution"], "static-execution": [], "runtime-execution": ["static-execution"],
             "hardened-execution": ["static-execution", "dep:brynja-core"], "sha256-batch": ["static-execution"], "sha512-batch": ["static-execution"]} or cpu.get("dependencies") != {
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")

@@ -1,7 +1,7 @@
 # Hardened multibuffer hash owners
 
 Status: v0.24.48 in development; narrow and wide SHA-2 CPU/leaf batch APIs implemented,
-remaining families, hosted adapters and qualification pending.
+Keccak CPU foundation implemented; Keccak framing, hosted adapters and qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
 public-only. Nothing in this document authorizes passing secrets to those types.
@@ -35,7 +35,16 @@ the exact parameter identity, including distinctions between named and general
 secret bytes through an ordinary digest constructor. Its module rustdoc has a
 runnable secret-output example.
 
-Names for Keccak, hosted adapters and ParallelHash remain proposed.
+The default-off `keccak-hardened-batch` CPU feature now exposes the distinct
+`keccak_hardened_batch::{Authority, Session, Workspace}` foundation. Four AVX2 or
+two NEON states use clearing packed state, columns, deltas and rho/pi/chi staging.
+`permute` and `permute_bytes` support word and canonical little-endian byte
+states without ordinary packed storage. Both stage all changes until final
+health/accounting validation, clear every packed region on exit, and preserve
+inactive caller slots. Raw caller state is not owned or erased by this layer.
+No SHA-3 padding, SHAKE squeezing or cSHAKE encoding is supplied here yet.
+
+Names for Keccak leaf framing, hosted adapters and ParallelHash remain proposed.
 Native qualification is not supplied by local/emulated tests.
 
 ## Implementation order and scope

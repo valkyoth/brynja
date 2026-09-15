@@ -1,22 +1,22 @@
 {
   "schema": 1,
-  "capture_commit": "fe89ab576c465dd2005a31ca1585b881be8e8921",
+  "capture_commit": "49ca105c335e4179705ced2fb77ca99c2c5444cf",
   "lanes": {
     "linux-x86_64": {
-      "artifact": "assurance/tuplehash-execution-native/linux-x86_64-v02445.json",
-      "sha256": "eada66cc628fa032f212b0c54bc260ceefceb0be021b93c6131c24d6f3b405b7",
+      "artifact": "assurance/tuplehash-execution-native/linux-x86_64-v02446.json",
+      "sha256": "6902158e05ab20a4cc4fea064fe2f31ea76e79c4f516ce201e86e17aa180d9f6",
       "cpu": "model name : Intel(R) Xeon(R) Platinum 8488C",
       "reviewed": true
     },
     "linux-aarch64": {
-      "artifact": "assurance/tuplehash-execution-native/linux-aarch64-v02445.json",
-      "sha256": "f3a0fcd215becdc19bf7d99abb18d02d8e71eacc330587de9053152fd5320a2c",
+      "artifact": "assurance/tuplehash-execution-native/linux-aarch64-v02446.json",
+      "sha256": "399bb2416676ff172853722846983314c2527493a004981652ed81c1809d96cd",
       "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd40; CPU revision : 1",
       "reviewed": true
     },
     "apple-aarch64": {
-      "artifact": "assurance/tuplehash-execution-native/apple-aarch64-v02445.json",
-      "sha256": "0a646f562ca319421e2ceec231ad5ba09b3c801ea6832a6a128103ba0ab70fa5",
+      "artifact": "assurance/tuplehash-execution-native/apple-aarch64-v02446.json",
+      "sha256": "00f741a95dfc2810c98119d11f9e22d374eb4a9d8d74422925eaa6a6349fecf8",
       "cpu": "Apple M2 Pro",
       "reviewed": true
     }

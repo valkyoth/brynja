@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "version": "0.24.46",
+  "capture_commit": "49ca105c335e4179705ced2fb77ca99c2c5444cf",
+  "review_status": "project-reviewed correctness; shared refresh complete; performance limitations recorded; final release checks pending",
+  "lanes": {
+    "amd-x86_64": {
+      "artifact": "assurance/sha512-batch-observations/v0.24.46/amd-x86_64.json",
+      "sha256": "e53a807f8203fb663192b2b4252ad6eb90bc336b57e069847821cf0970d3b8c6"
+    },
+    "intel-x86_64": {
+      "artifact": "assurance/sha512-batch-observations/v0.24.46/intel-x86_64.json",
+      "sha256": "aead21e8e830504beff54a4810cd2f7baefea5bfcbcf4998079adfb1b8555e13"
+    },
+    "aws-aarch64": {
+      "artifact": "assurance/sha512-batch-observations/v0.24.46/aws-aarch64.json",
+      "sha256": "695d6a6dece0cca2de046bfec88713143586d302ff0f467e727219645dec315e"
+    },
+    "apple-m2-aarch64": {
+      "artifact": "assurance/sha512-batch-observations/v0.24.46/apple-m2-aarch64.json",
+      "sha256": "87c4944fd171a779dd07b880d8d4825b12660e4c251c0542d216cb7a73a56bf9"
+    }
+  },
+  "review": "docs/sha512-batch-native-evidence.md"
+}

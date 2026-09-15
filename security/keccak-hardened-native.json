@@ -1,22 +1,22 @@
 {
   "schema": 1,
-  "capture_commit": "fe89ab576c465dd2005a31ca1585b881be8e8921",
+  "capture_commit": "49ca105c335e4179705ced2fb77ca99c2c5444cf",
   "lanes": {
     "linux-x86_64": {
-      "artifact": "assurance/keccak-hardened-native/linux-x86_64-v02445.json",
-      "sha256": "c40c193fb4c114efd6b46db089897ec315d3fc2513730f92a618c845f4f27186",
+      "artifact": "assurance/keccak-hardened-native/linux-x86_64-v02446.json",
+      "sha256": "c27ee632f75abe54ffeb653533b8210ca0d8940cf96529316d7e73fcad850b69",
       "cpu": "model name : Intel(R) Xeon(R) Platinum 8488C",
       "reviewed": true
     },
     "linux-aarch64": {
-      "artifact": "assurance/keccak-hardened-native/linux-aarch64-v02445.json",
-      "sha256": "cd418955ab19c22d4710b302af0b8a64b5fadf2abc0d248604fc985f825732b5",
+      "artifact": "assurance/keccak-hardened-native/linux-aarch64-v02446.json",
+      "sha256": "ef5cc1af6179b5c38427387a6f771cca0deafbc525d767bdc98ea3050dea0cb9",
       "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd40; CPU revision : 1",
       "reviewed": true
     },
     "apple-aarch64": {
-      "artifact": "assurance/keccak-hardened-native/apple-aarch64-v02445.json",
-      "sha256": "3e59fa58d4f5463cfd0da002e88890f4c9f6e94c728a88c218cf6e77b760c37a",
+      "artifact": "assurance/keccak-hardened-native/apple-aarch64-v02446.json",
+      "sha256": "bc96e3b617d475cd4f69bb53f41bcc1b14231569ef8f388502ac7ec1153a25c8",
       "cpu": "Apple M2 Pro",
       "reviewed": true
     }

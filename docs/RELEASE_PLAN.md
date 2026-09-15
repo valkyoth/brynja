@@ -4693,8 +4693,9 @@ Exit criteria:
 Status: in progress
 
 Ordinary four-lane AVX2 and two-lane NEON implementation and focused development
-acceptance are complete. Awaiting exceptional owner pentest, fresh native
-qualification and final release checks.
+acceptance are complete. The supplied retest and fresh native qualification are
+complete, with explicit owner acceptance of the ordinary public-only limitation.
+Final release checks remain pending; hardened batching remains v0.24.48.
 
 Plan scope: Implement bounded ordinary SHA-384/512, named SHA-512/224 and /256 and general SHA-512/t independent-message SIMD batches over x86 AVX2 and AArch64 NEON.
 

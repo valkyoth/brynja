@@ -80,8 +80,10 @@ or authorize secret-bearing SIMD use.
 
 The v0.24.46 candidate adds [SHA-512-family multibuffer SIMD](sha512-batch-execution.md):
 four AVX2 lanes or two NEON lanes, including distinct per-lane general SHA-512/t
-IVs and canonical bit outputs. Development checks do not replace its pending
-exceptional pentest and fresh native qualification. Ordinary scratch is not erased.
+IVs and canonical bit outputs. The supplied retest is accepted, including explicit
+owner acceptance of the ordinary public-only, non-erasing limitation; fresh
+[native evidence](sha512-batch-native-evidence.md) passed. Final release verification
+remains pending. Ordinary scratch is not erased; independent verification is unchanged.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |

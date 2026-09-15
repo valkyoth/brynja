@@ -25,6 +25,12 @@ for military/classified deployment. Native performance is workload-specific;
 dedicated instructions may outperform SIMD. Hardened multibuffer ownership
 remains a later milestone.
 
-Exceptional pentest/retest, fresh AMD/Intel/Linux Arm/Apple native qualification
-and final release checks remain pending. The existing release workflow is
-unchanged, and this internal milestone selects no crates for publication.
+The supplied pentest/retest is accepted, with public-data provenance and
+non-erasure explicitly retained as an owner-accepted ordinary-API limitation,
+not a technical fix. Fresh AMD/Intel/Linux Arm/Apple batch qualification and
+fifteen shared native refresh records passed; see the
+[native evidence and performance disposition](../docs/sha512-batch-native-evidence.md).
+AWS Arm SIMD showed no benefit over portable execution for the measured shapes;
+no universal speedup is claimed. Final release checks remain pending. The
+existing release workflow is unchanged, and this internal milestone selects
+no crates for publication.

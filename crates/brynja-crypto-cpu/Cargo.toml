@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+sha256-hardened-batch = ["dep:brynja-core"]
 keccak-batch = ["static-execution"]
 sha512-batch = ["static-execution"]
 sha256-batch = ["static-execution"]

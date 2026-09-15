@@ -1,9 +1,18 @@
 # Hardened multibuffer hash owners
 
-Status: v0.24.48 implementation design, not an available or qualified API.
+Status: v0.24.48 in development; SHA-224/256 CPU foundation implemented,
+complete leaf APIs and qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
 public-only. Nothing in this document authorizes passing secrets to those types.
+
+The first implemented layer is
+`brynja-crypto-cpu::sha256_hardened_batch`, under its separate default-off
+`sha256-hardened-batch` feature. Its Authority/Session/Workspace process raw
+compression states using distinct AVX2/NEON kernels and clearing packed storage.
+They do not perform hash framing or own caller states/blocks. All higher-level
+API names below remain proposed; wide SHA-2, Keccak and ParallelHash work is
+still pending. Native qualification is not supplied by local/emulated tests.
 
 ## Implementation order and scope
 

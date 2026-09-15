@@ -6,6 +6,7 @@ Independent review/FIPS status must never be inferred from internal test results
 
 ROWS = {
     "crates/brynja-crypto-cpu/README.md": [
+        "| Hardened SHA-224/256 batch compression with clearing packed storage | 🚧 CPU foundation; qualification pending | ❌ No |",
         "| SHA-512-family four-lane AVX2 / two-lane NEON compression | 🚧 Implemented; qualification pending | ❌ No |",
         "| Keccak four-state AVX2 / two-state NEON permutation | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |",

@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: thirty-six exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: thirty-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only thirty-six exact modules: the private core volatile clearer; the
+Rust in only thirty-nine exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -14,7 +14,8 @@ the ordinary MD5 hosted platform bridge; the hardened MD5 authority and kernels;
 and the ordinary SHA-224/256 batch platform import, AVX2/NEON kernels and hosted
 bridge; and the corresponding ordinary SHA-512-family batch platform import,
 AVX2/NEON kernels and hosted bridge; plus the independent-state Keccak batch
-platform import, AVX2/NEON kernels and hosted bridge. These modules use fixed-size
+platform import, AVX2/NEON kernels and hosted bridge; and the distinct hardened
+SHA-224/256 batch platform import and AVX2/NEON kernels. These modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
 instruction/import boundaries, never framing or output ownership. Each
@@ -31,6 +32,26 @@ safe alternative analysis, isolated module or crate, documented invariants,
 Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
+
+## v0.24.48 Hardened SHA-224/256 batch foundation
+
+Three development exceptions isolate `sha256_hardened_batch/platform.rs`,
+`x86.rs` and `arm.rs`. Safe Rust cannot express these AVX2/NEON intrinsics;
+existing portable hardened hashing remains the safe alternative. The new
+default-off feature enables only the first-party clearing dependency, not
+ordinary batch execution. All packed arrays belong to the distinct clearing
+Workspace: initial words, full schedule, working words and six round temporaries.
+Loads/stores borrow exact initialized 32-byte arrays; AVX2 touches all 32 bytes,
+little-endian NEON touches the first 16. Inactive capacity is cleared too.
+
+The session guard clears every region before return and on recoverable unwind.
+State commits only after post-dispatch health and checked accounting succeed;
+backend failures and unwind revoke authority. The public platform import is an
+explicit lifetime-wide instruction-safety obligation, not runtime provenance
+proof. Compiler-created copies/registers, abort and caller-owned states/blocks
+remain outside the workspace erasure guarantee. This development inventory is
+not independent review or native qualification. Full milestone assurance remains
+pending; see [hardened multibuffer owners](hardened-multibuffer-owners.md).
 
 ## v0.24.47 Independent-state Keccak SIMD
 

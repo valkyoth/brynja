@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "c34faf6b0130a64feaaec9348368d9d7c7091acb3da21bde23498cebbca44978"
+EXPECTED_POLICY_SHA256 = "1f352ba0d29be2dd9a076088b76326675c7f43b44e592d582af4097450e5e3d8"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,12 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/sha256_hardened_batch/mod.rs"): "hardened-sha256-batch-authority",
+    (CPU, "src/sha256_hardened_batch/scratch.rs"): "hardened-sha256-batch-owned-storage",
+    (CPU, "src/sha256_hardened_batch/platform.rs"): "hardened-sha256-batch-platform-import",
+    (CPU, "src/sha256_hardened_batch/x86.rs"): "hardened-sha256-eight-lane-avx2",
+    (CPU, "src/sha256_hardened_batch/arm.rs"): "hardened-sha256-four-lane-neon",
+    (CPU, "src/sha256_hardened_batch/tests.rs"): "hardened-sha256-batch-lifecycle-tests",
     (CPU, "src/keccak_batch/mod.rs"): "ordinary-keccak-batch-authority",
     (CPU, "src/keccak_batch/platform.rs"): "ordinary-keccak-batch-platform-import",
     (CPU, "src/keccak_batch/x86.rs"): "ordinary-keccak-four-state-avx2",
@@ -262,7 +268,7 @@ def validate_packages(root: Path) -> None:
     cpu = manifest(root, CPU)
     detector = manifest(root, DETECTOR)
     sha2 = manifest(root, SHA2)
-    if cpu.get("features") != {"default": [], "keccak-batch": ["static-execution"], "static-execution": [], "runtime-execution": ["static-execution"],
+    if cpu.get("features") != {"default": [], "sha256-hardened-batch": ["dep:brynja-core"], "keccak-batch": ["static-execution"], "static-execution": [], "runtime-execution": ["static-execution"],
             "hardened-execution": ["static-execution", "dep:brynja-core"], "sha256-batch": ["static-execution"], "sha512-batch": ["static-execution"]} or cpu.get("dependencies") != {
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")

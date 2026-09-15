@@ -8,6 +8,9 @@
 
 #![no_std]
 
+#[cfg(feature = "sha256-hardened-batch")]
+pub mod sha256_hardened_batch;
+
 #[cfg(feature = "sha512-batch")]
 pub mod sha512_batch;
 

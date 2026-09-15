@@ -9,6 +9,9 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/platform.rs"): ("24dea1b5fd00a72b980ea8d0b89851b0654823a4009722e0995096e3beb5700c", 2, 1, 2),
+    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/x86.rs"): ("98351e5d38a6c9520fa24242fd488c9143e6b98135b21eee10d01bd8dd3b16b6", 3, 3, 3),
+    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/arm.rs"): ("c445575508e419205b22eb8a29c560eb82bcad1a2ad6b0d58bf0b5c35a9b70d8", 3, 3, 3),
     Path("crates/brynja-crypto-cpu/src/keccak_batch/platform.rs"): ("e77387ad44d2470852b11262fc11784809fc9b8e09ac1a0bfe2751f5157ff7e9", 2, 1, 2),
     Path("crates/brynja-crypto-cpu/src/keccak_batch/x86.rs"): ("cef6c1433caf37131fc0afb6844985c2e9ee73ed375e31eab23ad1402148edba", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/keccak_batch/arm.rs"): ("2191fb9338fcb49f7869c8f5243fd1c2f4bb1cafd8b9acd704b7dcaf04195b4d", 1, 1, 1),

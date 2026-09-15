@@ -19,7 +19,7 @@ Current generated planning coverage is 2157 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.46 signed. The v0.24.47 milestone is in progress: local-first standards observation is implemented and tested, while ordinary Keccak multibuffer SIMD remains pending. The existing [SHA-512-family SIMD](sha512-batch-execution.md) qualification and signed v0.24.46 tag retain the explicit owner-accepted ITU download outage exception and ordinary public-data limitation. Ordinary SIMD does not zeroize; no new crates.io publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.46 signed. The v0.24.47 implementation, owner-supplied retest and [native Keccak multibuffer collection](keccak-batch-native-evidence.md) are complete; final release checks and GitHub approval remain pending. Local-first standards observation is implemented and tested. Native performance is workload-dependent and the tested full-width NEON shapes were slower than portable. The signed v0.24.46 tag retains its owner-accepted ITU download outage exception. Ordinary SIMD does not zeroize; no new crates.io publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

@@ -85,8 +85,11 @@ owner acceptance of the ordinary public-only, non-erasing limitation; fresh
 [native evidence](sha512-batch-native-evidence.md) passed. All 538 detached checks
 and GitHub checks passed; the tag records the owner-accepted ITU download outage
 exception. Ordinary scratch is not erased; independent verification is unchanged.
-The v0.24.47 Keccak multibuffer milestone is in development, not yet implemented
-or qualified by the preceding single-state Keccak evidence.
+The v0.24.47 Keccak multibuffer implementation and owner-supplied retest are
+complete. Fresh four-platform [native observations](keccak-batch-native-evidence.md)
+passed with explicit performance limitations; final release verification and
+GitHub approval remain pending. Earlier single-state evidence is not substituted
+for this new multibuffer collection. Independent verification remains unchanged.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |

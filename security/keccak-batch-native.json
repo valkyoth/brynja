@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "version": "0.24.47",
+  "capture_commit": "e7beb698792eb21d96283204431fe0ded12fa242",
+  "review_status": "project-reviewed correctness; shared refresh complete; performance limitations recorded; final release checks pending",
+  "lanes": {
+    "amd-x86_64": {
+      "artifact": "assurance/keccak-batch-observations/v0.24.47/amd-x86_64.json",
+      "sha256": "dc64044a2bddab89cb5713d780391fc2e794a80b4b604791b45e79e892648dcc"
+    },
+    "intel-x86_64": {
+      "artifact": "assurance/keccak-batch-observations/v0.24.47/intel-x86_64.json",
+      "sha256": "a85168fd5b96b452e3a382900617ddd9fd5daf55d1cb31c42d1d510766f33436"
+    },
+    "aws-aarch64": {
+      "artifact": "assurance/keccak-batch-observations/v0.24.47/aws-aarch64.json",
+      "sha256": "dce26808694889ea8eea0bdb735cff54d51bc01c3284ebcb08a88c27e561eadd"
+    },
+    "apple-m2-aarch64": {
+      "artifact": "assurance/keccak-batch-observations/v0.24.47/apple-m2-aarch64.json",
+      "sha256": "111dfdc2f5e16b14d439d547ed4dcd85821e024bfda516e94a93372a326be947"
+    }
+  },
+  "review": "docs/keccak-batch-native-evidence.md"
+}

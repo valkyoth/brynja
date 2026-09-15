@@ -4729,8 +4729,10 @@ The owner-requested local-first standards monitor is implemented. The ordinary
 Keccak multibuffer kernels, leaf batch API and optional hosted adapter are now
 implemented with focused development tests. Benchmarks, generated-code checks,
 native capture tooling and the existing-family assurance wiring are implemented.
-Fresh native qualification and exceptional pentest remain pending; the
-existing single-state Keccak evidence does not qualify these multibuffer APIs.
+Owner-supplied exceptional retest and fresh four-platform native collection have
+passed; [performance limitations](keccak-batch-native-evidence.md) are recorded.
+Final release verification and GitHub approval remain pending. Existing
+single-state Keccak evidence is not substituted for these multibuffer captures.
 
 Plan scope: Implement bounded ordinary independent-state Keccak SIMD batches and public SHA-3/SHAKE/cSHAKE batch APIs over x86 AVX2 and AArch64 NEON, separate from existing single-state accelerated permutations.
 

@@ -1,7 +1,7 @@
 # Brynja v0.24.47
 
-Development in progress: ordinary Keccak multibuffer SIMD and local-first
-standards observation. Not released; no crates selected for publication.
+Release candidate: ordinary Keccak multibuffer SIMD and local-first standards
+observation. Not tagged; no crates selected for publication.
 
 ## Completed development work
 
@@ -29,11 +29,17 @@ standards observation. Not released; no crates selected for publication.
 - The release observer opts into this behavior. The scheduled monitor remains
   strict, and offline results cannot renew successful-live-observation receipts.
 
-## Pending milestone work
+## Evidence and remaining release work
 
-Native correctness/performance qualification, exceptional pentest and final
-release verification are not complete yet.
-Existing single-state acceleration is not a substitute. See the
+Owner-supplied retest and project-owned native correctness/performance collection
+passed on AMD, Intel, AWS Arm and Apple M2, including fresh shared-family records.
+The [native review](../docs/keccak-batch-native-evidence.md) records the measured
+limitations: full-width NEON was slower than portable for the sampled workloads,
+and Intel results were mixed. No universal speedup or automatic threshold is claimed.
+The SHA-3 policy inventory now recognizes both new Miri tests, with regressions
+for their removal. No production code or release rule changed in finalization.
+Final release verification and GitHub approval remain pending.
+Existing single-state acceleration is not a substitute for multibuffer evidence. See the
 [batch contract](../docs/keccak-batch-execution.md) for the new API boundaries.
 
 No independent cryptographic review, FIPS validation, secret-bearing multibuffer

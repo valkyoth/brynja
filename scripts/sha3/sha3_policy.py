@@ -346,7 +346,10 @@ def validate(root: Path) -> None:
         require(miri, token, "SHA-3 Miri coverage")
     require(miri, "--features static-execution --lib execution", "execution Miri faults")
     require(miri, "--features static-execution --test execution execution_smoke", "execution Miri smoke")
-    if miri.count("-p brynja-hash-sha3") != 11:
+    for test in ("shape_staging_empty_and_scalar_tail_boundaries", "bounded_batch_lifecycle"):
+        require(miri, "--features batch-execution --lib batch::tests::" + test,
+                "batch Miri lifecycle coverage")
+    if miri.count("-p brynja-hash-sha3") != 13:
         fail("SHA-3 Miri package coverage changed")
     sanitizer = read(root, SANITIZER_SCRIPT)
     require(

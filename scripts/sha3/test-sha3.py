@@ -54,6 +54,9 @@ def reject(label: str, mutation) -> None:
 
 
 def main() -> int:
+    # Accept the real inventory before testing mutations, so a stale baseline
+    # cannot make every negative test pass for an unrelated policy failure.
+    policy.validate(ROOT)
     reject("unsafe", lambda root: replace(root, policy.KECCAK, "pub(super) fn permute", "pub(super) unsafe fn permute"))
     reject("public permutation", lambda root: replace(root, policy.KECCAK, "pub(super) fn permute", "pub fn permute"))
     reject("round count", lambda root: replace(root, policy.KECCAK, "0x8000_0000_8000_8008,", ""))
@@ -106,6 +109,9 @@ def main() -> int:
     reject("SHAKE state transition", lambda root: replace(root, policy.SHAKE256_TEST, "zero_length_and_checked_state_transitions_are_exact", "removed_transitions"))
     reject("SHAKE strength identity", lambda root: replace(root, policy.SHAKE256_TEST, "shake_strength_identities_are_distinct", "removed_identity"))
     reject("SHA-3 Miri package", lambda root: replace(root, policy.MIRI_SCRIPT, "-p brynja-hash-sha3", "-p brynja-hash-sha2"))
+    for test in ("shape_staging_empty_and_scalar_tail_boundaries", "bounded_batch_lifecycle"):
+        reject("batch Miri lifecycle", lambda root, test=test: replace(
+            root, policy.MIRI_SCRIPT, "batch::tests::" + test, "batch::tests::removed"))
     reject("SHA-3 Miri test inventory", lambda root: replace(root, policy.MIRI_SCRIPT, "sha3_384 sha3_512", "sha3_384"))
     reject("SHAKE Miri test inventory", lambda root: replace(root, policy.MIRI_SCRIPT, "shake128 shake256", "shake128"))
     reject("SHA-3 sanitizer package", lambda root: replace(root, policy.SANITIZER_SCRIPT, "-p brynja-hash-sha3", "-p brynja-hash-sha2"))
@@ -130,7 +136,7 @@ def main() -> int:
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects sixty-eight boundary, permutation, padding, SP 800-185, cSHAKE, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
+    print("portable SHA-3 policy rejects seventy boundary, permutation, padding, SP 800-185, cSHAKE, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
     return 0
 
 

@@ -7,6 +7,7 @@ Independent review/FIPS status must never be inferred from internal test results
 ROWS = {
     "crates/brynja-crypto-cpu/README.md": [
         "| Hardened SHA-224/256 batch compression with clearing packed storage | 🚧 CPU foundation; qualification pending | ❌ No |",
+        "| Hardened SHA-512-family batch compression with clearing packed storage | 🚧 CPU foundation; qualification pending | ❌ No |",
         "| SHA-512-family four-lane AVX2 / two-lane NEON compression | 🚧 Implemented; qualification pending | ❌ No |",
         "| Keccak four-state AVX2 / two-state NEON permutation | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |",
@@ -86,6 +87,7 @@ ROWS = {
     ],
     "crates/brynja-hash-sha2/README.md": [
         "| Hardened SHA-224/256 multibuffer owners and typed secret output | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Hardened SHA-512-family multibuffer owners with exact general-t identity | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-512-family AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |",
         "| SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |",

@@ -22,7 +22,7 @@ CLAIMS = (
 def validate(root):
     texts = {name: (root / name).read_text(encoding='utf-8') for name in FILES}
     features = tomllib.loads(texts[MANIFEST]).get('features')
-    if features != {'default': [], 'sha256-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
+    if features != {'default': [], 'sha256-hardened-batch': ['dep:brynja-core'], 'sha512-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
                     'hardened-execution': ['static-execution', 'dep:brynja-core'], 'sha256-batch': ['static-execution'], 'sha512-batch': ['static-execution']}:
         raise ValueError('documented static feature no longer matches the manifest')
     if '#[cfg(feature = "static-execution")]\npub mod static_execution;' not in texts[LIBRARY]:
@@ -48,6 +48,7 @@ def validate(root):
     words += ['twenty-nine', 'thirty', 'thirty-one', 'thirty-two']
     words += ['thirty-three', 'thirty-four', 'thirty-five', 'thirty-six']
     words += ['thirty-seven', 'thirty-eight', 'thirty-nine']
+    words += ['forty', 'forty-one', 'forty-two']
     count = len(inventory[0].keys)
     if count >= len(words):
         raise ValueError('extend the reviewed documentation count vocabulary')
@@ -65,8 +66,8 @@ def regressions(root):
     # Replace normalized text in disposable copies; source hashes are not used
     # here, so each test must fail for a semantic contract discrepancy.
     cases += [
-        (DOCS[0], 'Status: thirty-nine exact', 'Status: nine exact'),
-        (DOCS[0], 'Rust in only thirty-nine exact', 'Rust in only nine exact'),
+        (DOCS[0], 'Status: forty-two exact', 'Status: nine exact'),
+        (DOCS[0], 'Rust in only forty-two exact', 'Rust in only nine exact'),
         (DOCS[2], 'source-hash-bound module inventory', 'exactly nine modules'),
         (MANIFEST, 'default = []', 'default = ["static-execution"]'),
         (LIBRARY, 'pub mod static_execution;', 'mod static_execution;'),

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Development regression campaign for the hardened SHA-256 CPU foundation.
+"""Development regression campaign for the hardened SHA-2 batch foundations.
 
 This is not native qualification or the complete v0.24.48 acceptance gate.
 Compiled mutants execute only with an explicitly selected compiled-target
@@ -16,8 +16,12 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
+FAMILY = 'sha256'
+NAMESPACE = 'sha256_hardened_batch'
 SOURCE = 'crates/brynja-crypto-cpu/src/sha256_hardened_batch/'
 FEATURE = 'sha256-hardened-batch'
+LEAF = 'hardened_batch'
+LEAF_FEATURE = 'hardened-batch-execution'
 sys.path.insert(0, str(ROOT / 'scripts/cryptography'))
 import mir_cleanup_flow as flow
 
@@ -35,14 +39,14 @@ def run(command, root, env):
 
 
 def inspect(mir, llvm, assembly, target):
-    destructor = ('fn scratch::<impl', '/sha256_hardened_batch/scratch.rs:', '::drop(')
+    destructor = ('fn scratch::<impl', '/'+NAMESPACE+'/scratch.rs:', '::drop(')
     flow.require_owner_cleanup(mir, destructor, 'scratch::Workspace::wipe(')
-    wipe = flow.exact_function(mir, ('fn scratch::<impl', '/sha256_hardened_batch/scratch.rs:', '::wipe('))
+    wipe = flow.exact_function(mir, ('fn scratch::<impl', '/'+NAMESPACE+'/scratch.rs:', '::wipe('))
     blocks = flow.basic_blocks(wipe)
     require(set(blocks) == {f'bb{i}' for i in range(9)}, 'wipe control flow changed')
     # Exact field -> whole flattened slice -> clear provenance, with no
     # reassignment or branch between them. Source byte fields are 0..3.
-    for i, count in enumerate((8, 64, 8, 6)):
+    for i, count in enumerate((8, 64 if FAMILY == 'sha256' else 80, 8, 6)):
         compact = lambda value: re.sub(r'\s+', '', re.sub(r'Storage(?:Live|Dead)\(_\d+\);', '', value))
         first = compact(blocks[f'bb{2*i}'])
         second = compact(blocks[f'bb{2*i+1}'])
@@ -57,23 +61,23 @@ def inspect(mir, llvm, assembly, target):
                             r'\)->\[return:bb' + str(2*i+2) + r',unwindunreachable\];\}', second),
                 'clear argument/control flow')
     require(compact(blocks['bb8']) == 'return;}}', 'wipe terminal block')
-    operation = flow.exact_function(mir, ('fn sha256_hardened_batch::<impl', '::drop(_1: &mut Operation<'))
+    operation = flow.exact_function(mir, ('fn '+NAMESPACE+'::<impl', '::drop(_1: &mut Operation<'))
     require('scratch::Workspace::wipe(' in operation and '.1:' in operation, 'operation lost workspace cleanup')
     definitions = re.findall(r'^define [^\n]*\{.*?^}', llvm, re.M | re.S)
     wipes = [body for body in definitions if all(token in body.splitlines()[0] for token in
-                                               ('sha256_hardened_batch', 'Workspace', 'wipe'))]
+                                               (NAMESPACE, 'Workspace', 'wipe'))]
     require(len(wipes) == 1, 'ambiguous LLVM wipe')
     calls = [line for line in wipes[0].splitlines() if not line.lstrip().startswith(';')
              and 'call ' in line and 'clear_owned_region' in line]
     require(len(calls) == 4, 'LLVM lost a clearing region')
     require([int(re.search(r'i(?:32|64) (?:noundef )?(\d+)\)', line)[1]) for line in calls] ==
-            [256, 2048, 256, 192], 'LLVM region widths')
+            [256, 2048 if FAMILY == 'sha256' else 2560, 256, 192], 'LLVM region widths')
     # Reuse the ordinary instruction inspector's exact function-boundary and
     # lane-width checks, mapping only the namespace of this separate kernel.
-    spec = importlib.util.spec_from_file_location('batch_codegen', ROOT / 'scripts/sha2/check-sha256-batch-codegen.py')
+    spec = importlib.util.spec_from_file_location('batch_codegen', ROOT / f'scripts/sha2/check-{FAMILY}-batch-codegen.py')
     checker = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(checker)
-    checker.inspect(assembly.replace('sha256_hardened_batch', 'sha256_batch'), target)
+    checker.inspect(assembly.replace(NAMESPACE, FAMILY+'_batch'), target)
 
 
 def compile_evidence(root, env, toolchain, target):
@@ -91,7 +95,7 @@ def compile_evidence(root, env, toolchain, target):
         (0, '((*_1).0: [[u8; 32]; 8])', '((*_1).2: [[u8; 32]; 8])'),
         (0, 'clear_owned_region(', 'omitted_clear('),
         (1, 'clear_owned_region', 'omitted_clear'),
-        (2, 'vpaddd' if target.startswith('x86') else 'ushr', 'omitted_instruction'),
+        (2, ('vpaddd' if FAMILY == 'sha256' else 'vpaddq') if target.startswith('x86') else 'ushr', 'omitted_instruction'),
     ):
         require(before in artifacts[index], 'inspector mutation anchor')
         changed = list(artifacts)
@@ -102,14 +106,14 @@ def compile_evidence(root, env, toolchain, target):
             pass
         else:
             raise ValueError('inspector accepted a mutated artifact: ' + before)
-    print(f'Hardened SHA-256 batch compiler smoke: PASS; {toolchain}; {target}')
+    print(f'Hardened {FAMILY} batch compiler smoke: PASS; {toolchain}; {target}')
 
 
 def mutations(root, env, toolchain, target):
     command = ['cargo', '+'+toolchain, 'test', '--locked', '--offline', '-p', 'brynja-crypto-cpu',
                '--no-default-features', '--features', FEATURE, '--target', target,
-               '--lib', 'sha256_hardened_batch::tests::']
-    env = dict(env, BRYNJA_REQUIRE_SHA256_HARDENED_BATCH='1')
+               '--lib', NAMESPACE+'::tests::']
+    env = dict(env, **{'BRYNJA_REQUIRE_'+FAMILY.upper()+'_HARDENED_BATCH': '1'})
     run(command, root, env)
     cases = [('scratch.rs', f'clear_owned_region(self.{field}.as_flattened_mut())', 'Ok::<(), ()>(())')
              for field in ('initial', 'schedule', 'work', 'temporary')]
@@ -148,18 +152,45 @@ def mutations(root, env, toolchain, target):
             finally:
                 path.write_text(original)
     run(command, root, env)
-    print(f'Hardened SHA-256 batch compiled cleanup/route/accounting mutants: {rejected} rejected')
+    print(f'Hardened {FAMILY} batch compiled cleanup/route/accounting mutants: {rejected} rejected')
+
+
+def public_conversion_rejection(root, env, toolchain, target):
+    """Reject a real conversion, not a misspelled or unavailable digest type."""
+    consumer = root / 'public-conversion'
+    (consumer / 'src').mkdir(parents=True)
+    (consumer / 'Cargo.toml').write_text(
+        '[package]\nname="hardened-conversion-probe"\nversion="0.0.0"\nedition="2024"\n'
+        '[workspace]\n[dependencies]\n'
+        'brynja-hash-sha2={path="../crates/brynja-hash-sha2", default-features=false, '
+        'features=["'+LEAF_FEATURE+'"]}\n')
+    path = consumer / 'src/lib.rs'
+    command = ['cargo', '+'+toolchain, 'check', '--offline', '--manifest-path',
+               str(consumer / 'Cargo.toml'), '--target', target]
+    digests = ('Sha256Digest',) if FAMILY == 'sha256' else ('Sha512Digest', 'Sha512TDigest')
+    for digest in digests:
+        imports = ('use brynja_hash_sha2::{'+digest+', '+LEAF+'::SecretBatchOutput};\n')
+        path.write_text(imports + 'pub fn types(_: Option<'+digest+'>, _: Option<SecretBatchOutput<\'_>>) {}\n')
+        run(command, root, env)
+        path.write_text(imports + 'pub fn convert(out: SecretBatchOutput<\'_>) -> '+digest+' { out.into() }\n')
+        result = subprocess.run(command + ['--locked'], cwd=root, env=env, text=True,
+                                capture_output=True, timeout=300)
+        require(result.returncode != 0 and 'error[E0277]' in result.stderr
+                and 'error[E0412]' not in result.stderr,
+                'secret/public conversion must fail for missing From, not an unknown type: '+result.stderr)
+    print(f'Hardened {FAMILY} public conversion: valid types; missing From rejected')
 
 
 def leaf_mutations(root, env, toolchain, target):
     command = ['cargo', '+'+toolchain, 'test', '--locked', '--offline', '-p', 'brynja-hash-sha2',
-               '--no-default-features', '--features', 'hardened-batch-execution', '--target', target,
-               '--lib', 'hardened_batch::']
-    env = dict(env, BRYNJA_REQUIRE_SHA256_HARDENED_BATCH='1')
+               '--no-default-features', '--features', LEAF_FEATURE, '--target', target,
+               '--lib', LEAF+'::']
+    env = dict(env, **{'BRYNJA_REQUIRE_'+FAMILY.upper()+'_HARDENED_BATCH': '1'})
     run(command, root, env)
     env['RUSTDOCFLAGS'] = env.get('RUSTFLAGS', '')
-    run(command[:-2] + ['--doc', 'hardened_batch'], root, env)
-    source = root / 'crates/brynja-hash-sha2/src/hardened_batch'
+    run(command[:-2] + ['--doc', LEAF], root, env)
+    public_conversion_rejection(root, env, toolchain, target)
+    source = root / 'crates/brynja-hash-sha2/src' / LEAF
     cases = [('workspace.rs', f'clear_owned_region(self.{field}.as_flattened_mut())', 'Ok::<(), ()>(())')
              for field in ('states', 'packed', 'blocks', 'output', 'offsets')]
     cases += [('workspace.rs', f'clear_owned_region(&mut self.{field})', 'Ok::<(), ()>(())')
@@ -182,6 +213,19 @@ def leaf_mutations(root, env, toolchain, target):
         ('engine.rs', 'total.checked_add(additional).ok_or(Error::Invariant)',
                        'Ok(total.wrapping_add(additional))'),
     ]
+    if FAMILY == 'sha512':
+        cases = [(name, before, after) for name, before, after in cases
+                 if not before.startswith('Algorithm::Sha224')]
+        cases = [(name, before.replace('>= 56', '>= 112'), after.replace('> 56', '> 112'))
+                 for name, before, after in cases]
+        cases += [
+            ('algorithm.rs', 'Self::Sha384 => crate::sha384::INITIAL_STATE',
+                             'Self::Sha384 => crate::sha512::INITIAL_STATE'),
+            ('algorithm.rs', 't.last_byte_mask()', '0xff'),
+            ('algorithm.rs', '0x1000 | t.bits()', '0x1000 | 9'),
+            ('engine.rs', 'control.charge(1)?;\n                report.scalar_blocks',
+                          'control.charge(0)?;\n                report.scalar_blocks'),
+        ]
     for name, before, after in cases:
         path = source / name
         original = path.read_text()
@@ -195,16 +239,24 @@ def leaf_mutations(root, env, toolchain, target):
         finally:
             path.write_text(original)
     run(command, root, env)
-    print(f'Hardened SHA-224/256 leaf compiled cleanup/framing/route mutants: {len(cases)} rejected')
+    print(f'Hardened {FAMILY} leaf compiled cleanup/framing/route mutants: {len(cases)} rejected')
 
 
 def main():
+    global FAMILY, NAMESPACE, SOURCE, FEATURE, LEAF, LEAF_FEATURE
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--family', choices=('sha256', 'sha512'), default='sha256')
     parser.add_argument('--toolchain', default='1.98.1')
     parser.add_argument('--target', default='x86_64-unknown-linux-gnu')
     parser.add_argument('--mutations', action='store_true')
     parser.add_argument('--leaf', action='store_true', help='also run the leaf tests and compiled mutants')
     args = parser.parse_args()
+    FAMILY = args.family
+    NAMESPACE = FAMILY+'_hardened_batch'
+    SOURCE = 'crates/brynja-crypto-cpu/src/'+NAMESPACE+'/'
+    FEATURE = FAMILY+'-hardened-batch'
+    LEAF = 'hardened_batch' if FAMILY == 'sha256' else 'hardened_batch512'
+    LEAF_FEATURE = 'hardened-batch-execution' if FAMILY == 'sha256' else 'hardened-batch512-execution'
     require(args.target.startswith(('x86_64', 'aarch64')), 'unsupported evidence architecture')
     with tempfile.TemporaryDirectory(prefix='brynja-hardened-sha256-batch-') as directory:
         root = Path(directory)

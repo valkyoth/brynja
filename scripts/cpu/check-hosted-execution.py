@@ -26,7 +26,7 @@ def validate(write=False):
     manifests = {name: tomllib.loads((ROOT / 'crates' / name / 'Cargo.toml').read_text())
                  for name in (CPU, HOST)}
     if manifests[CPU].get('features') != {
-            'default': [], 'sha256-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
+            'default': [], 'sha256-hardened-batch': ['dep:brynja-core'], 'sha512-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
             'hardened-execution': ['static-execution', 'dep:brynja-core'], 'sha256-batch': ['static-execution'], 'sha512-batch': ['static-execution']}:
         raise ValueError('CPU execution features changed')
     if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {

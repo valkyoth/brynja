@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: thirty-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: forty-two exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only thirty-nine exact modules: the private core volatile clearer; the
+Rust in only forty-two exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -15,7 +15,7 @@ and the ordinary SHA-224/256 batch platform import, AVX2/NEON kernels and hosted
 bridge; and the corresponding ordinary SHA-512-family batch platform import,
 AVX2/NEON kernels and hosted bridge; plus the independent-state Keccak batch
 platform import, AVX2/NEON kernels and hosted bridge; and the distinct hardened
-SHA-224/256 batch platform import and AVX2/NEON kernels. These modules use fixed-size
+SHA-224/256 and SHA-512-family batch platform imports and AVX2/NEON kernels. These modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
 instruction/import boundaries, never framing or output ownership. Each
@@ -52,6 +52,15 @@ proof. Compiler-created copies/registers, abort and caller-owned states/blocks
 remain outside the workspace erasure guarantee. This development inventory is
 not independent review or native qualification. Full milestone assurance remains
 pending; see [hardened multibuffer owners](hardened-multibuffer-owners.md).
+
+The SHA-512-family adds three separately pinned development exceptions in
+`sha512_hardened_batch/platform.rs`, `x86.rs` and `arm.rs`. The same necessity and
+authority/cleanup contracts apply, but these are distinct 64-bit kernels:
+four AVX2 lanes or two little-endian NEON lanes, 80 schedule words and 128-byte
+input blocks. Every packed vector still occupies an owned 32-byte region;
+NEON reads/writes its first 16 bytes and teardown clears its inactive half.
+Safe framing, exact-t output identity and destination ownership stay outside
+the instruction boundary. No ordinary packed owner is reused for secrets.
 
 ## v0.24.47 Independent-state Keccak SIMD
 

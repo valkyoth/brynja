@@ -12,6 +12,9 @@
 #[cfg(feature = "hardened-batch-execution")]
 pub mod hardened_batch;
 
+#[cfg(feature = "hardened-batch512-execution")]
+pub mod hardened_batch512;
+
 #[cfg(feature = "batch512-execution")]
 pub mod batch512;
 

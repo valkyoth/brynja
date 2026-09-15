@@ -1,7 +1,7 @@
 # Brynja v0.24.48
 
 Development in progress: hardened multibuffer hash owners. Not released; no
-crates selected for publication. The SHA-224/256 CPU foundation and leaf batch
+crates selected for publication. The narrow and wide SHA-2 CPU and leaf batch
 APIs are implemented; remaining families, hosted adapters and qualification
 remain pending.
 
@@ -41,8 +41,16 @@ inactive slots and uneven lengths through clearing storage. Exact-width secret
 destination borrows move into a non-copying output owner and clear on failure
 or Drop; public output requires explicit declassification and commits atomically.
 Budgets include padding; routine rejection/cancellation permits executor reuse,
-while backend/invariant failures and unwind quarantine it. Wide SHA-2, Keccak,
-hosted adapters and ParallelHash integration are still pending.
+while backend/invariant failures and unwind quarantine it.
+
+`brynja-crypto-cpu/sha512-hardened-batch` and the leaf
+`brynja-hash-sha2/hardened-batch512-execution` extend these contracts through
+distinct wide owners and kernels: four AVX2 lanes or two NEON lanes, SHA-384,
+SHA-512, named /224 and /256, and all 510 general SHA-512/t parameters. Secret
+outputs preserve exact parameter identity and canonical final bits. Finite work
+includes general IV derivation as well as padding. Ordinary batch storage and
+public digest importers are not used for secret state. Keccak, hosted adapters,
+ParallelHash integration and full qualification are still pending.
 
 Batch shape, configured limits and scheduling are public; callers must pad when
 traffic-analysis resistance is required. Explicit clearing cannot guarantee

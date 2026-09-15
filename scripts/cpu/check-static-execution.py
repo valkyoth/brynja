@@ -23,7 +23,7 @@ REVIEW = ROOT / 'security/static-cpu-execution-reviewed.json'
 def validate(write=False):
     static_execution_docs.validate(ROOT)
     manifest = tomllib.loads((CPU / 'Cargo.toml').read_text())
-    if manifest.get('features') != {'default': [], 'sha256-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
+    if manifest.get('features') != {'default': [], 'sha256-hardened-batch': ['dep:brynja-core'], 'sha512-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
             'hardened-execution': ['static-execution', 'dep:brynja-core'], 'sha256-batch': ['static-execution'], 'sha512-batch': ['static-execution']} or manifest.get('dependencies') != {
                 'brynja-core': {'workspace': True, 'optional': True}}:
         raise RuntimeError('static CPU boundary permits only the opt-in first-party clearing owner')

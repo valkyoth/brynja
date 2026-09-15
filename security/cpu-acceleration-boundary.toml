@@ -146,6 +146,42 @@ sha256 = "7fc48e128bbc57fff4f81c59818aa26c6b8ed54a94a84a18a2307958bcaf8046"
 
 [[sources]]
 package = "brynja-crypto-cpu"
+path = "src/sha512_hardened_batch/mod.rs"
+status = "hardened-sha512-batch-authority"
+sha256 = "81c6bb0c604ccdb19c9cf28d0f7030b733e9919f33edff6eefd53bbf6e8ed649"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha512_hardened_batch/scratch.rs"
+status = "hardened-sha512-batch-owned-storage"
+sha256 = "bb59ce834d62946a2f23b776d248a190d25f3da05c0c5f4329b26ec9c8a1951c"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha512_hardened_batch/platform.rs"
+status = "hardened-sha512-batch-platform-import"
+sha256 = "24dea1b5fd00a72b980ea8d0b89851b0654823a4009722e0995096e3beb5700c"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha512_hardened_batch/x86.rs"
+status = "hardened-sha512-batch-four-lane-avx2"
+sha256 = "bc58dbd74a1566b9ded419357bf3568b7fe6fc98a7f2f87321bdae5b7fd5dd1d"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha512_hardened_batch/arm.rs"
+status = "hardened-sha512-batch-two-lane-neon"
+sha256 = "c4d1785547c3a5887e9667f03d87e2ed2ee8fe5e3d21d550b522aa63a36e9c3d"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha512_hardened_batch/tests.rs"
+status = "hardened-sha512-batch-lifecycle-tests"
+sha256 = "603d5876e5d1e70a2016cf9f5e40352505fb27901c3f8fe8efe2a4e9303d844b"
+
+[[sources]]
+package = "brynja-crypto-cpu"
 path = "src/sha256_hardened_batch/mod.rs"
 status = "hardened-sha256-batch-authority"
 sha256 = "0225a87dd9e57cbf948239a8ecb9f285beba86df99bd9cb4b55c96c275ba4c6f"
@@ -244,7 +280,7 @@ sha256 = "cb30ca0fbc0945f710992887b7e2afafbe630e2137bf69605639b0d82eef4ca0"
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "6e427d7a45a4701892fea32666e093e6f456bd5ffa970b1db82dcbe1126152c0"
+sha256 = "24909dd3b3adb76633c55272a0a985fef20a93db7544f641ff479bce2c62625c"
 
 [[sources]]
 package = "brynja-crypto-cpu"

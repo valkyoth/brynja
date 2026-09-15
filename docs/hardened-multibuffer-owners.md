@@ -1,6 +1,6 @@
 # Hardened multibuffer hash owners
 
-Status: v0.24.48 in development; SHA-224/256 CPU and leaf batch APIs implemented,
+Status: v0.24.48 in development; narrow and wide SHA-2 CPU/leaf batch APIs implemented,
 remaining families, hosted adapters and qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
@@ -21,7 +21,21 @@ use the existing hardened scalar compressor. Its rustdoc includes a runnable
 secret-output example. The CPU byte-state entry avoids an unowned word array
 between packed compression and leaf finalization.
 
-Names for wide SHA-2, Keccak, hosted adapters and ParallelHash remain proposed.
+The separate `sha512-hardened-batch` CPU feature now provides
+`sha512_hardened_batch::{Authority, Session, Workspace}` with four AVX2 or two
+NEON lanes, 128-byte blocks and an owned 80-word packed schedule. The separate
+leaf feature `hardened-batch512-execution` exposes `hardened_batch512`: four
+bounded slots supporting SHA-384, SHA-512, named /224 and /256, and
+`Algorithm::Sha512T(Sha512TBits)` for all 510 valid parameters. It retains the
+same clearing, transactional, finite-work and authority contracts as the narrow
+leaf. General IV derivation costs one compression per active general slot;
+required-route eligibility is checked before derivation. A secret output keeps
+the exact parameter identity, including distinctions between named and general
+/224 or /256, and masks unused final bits before committing. It never imports
+secret bytes through an ordinary digest constructor. Its module rustdoc has a
+runnable secret-output example.
+
+Names for Keccak, hosted adapters and ParallelHash remain proposed.
 Native qualification is not supplied by local/emulated tests.
 
 ## Implementation order and scope

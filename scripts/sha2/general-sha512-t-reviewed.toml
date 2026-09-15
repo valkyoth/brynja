@@ -16,7 +16,7 @@
 "assurance/general-sha512-t/Cargo.lock" = "b3863c77914df96e8587b8d9476be4383425c7675ddaa0e83a037c5de9675a97"
 "assurance/general-sha512-t/src/lib.rs" = "3bfde614efe1e956cca3ee669fd4787c54d3b1d96d4170f0f4092a879aaf5028"
 "scripts/sha2/sha512_t_iv_oracle.py" = "7a875eddc65f15e2319fd9cd253bf16f504f93fb0bab39d4c8441ced638f0db3"
-"scripts/sha2/general_sha512_t_policy.py" = "0e9c6a4930f712377d2f933595a5b7cbee42ca3c0124c512de52ebf18f0678d8"
+"scripts/sha2/general_sha512_t_policy.py" = "85ca9139ff1e1f6aea7c5c8d89a5e0ce6cc9e34f20866e7e38f06bafde6917c0"
 "scripts/sha2/check-general-sha512-t.py" = "fdf0bebc33fad9e2601488ebf84a665000fea7617d1886e6788a2ee68c9e2c5d"
 "scripts/sha2/test-general-sha512-t.py" = "8f4d2d75451090dc48eecd682f9793462f6847bf6b11ed0c7903213bae19d8f3"
 "scripts/sha2/sha512_t_digest_oracle.py" = "0f5f09b10c6b24369649ed2449d2248ebe731c5ff3df657e072ffd7596945866"

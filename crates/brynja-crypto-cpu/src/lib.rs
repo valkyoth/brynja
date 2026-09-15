@@ -11,6 +11,9 @@
 #[cfg(feature = "sha256-hardened-batch")]
 pub mod sha256_hardened_batch;
 
+#[cfg(feature = "sha512-hardened-batch")]
+pub mod sha512_hardened_batch;
+
 #[cfg(feature = "sha512-batch")]
 pub mod sha512_batch;
 
@@ -42,7 +45,10 @@ mod sha512;
 #[cfg(any(
     target_arch = "aarch64",
     target_arch = "riscv64",
-    all(target_arch = "x86_64", feature = "sha512-batch")
+    all(
+        target_arch = "x86_64",
+        any(feature = "sha512-batch", feature = "sha512-hardened-batch")
+    )
 ))]
 mod sha512_schedule;
 

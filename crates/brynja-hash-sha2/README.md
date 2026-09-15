@@ -33,6 +33,7 @@ SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Hardened SHA-224/256 multibuffer owners and typed secret output | 🚧 Implemented; qualification pending | ❌ No |
+| Hardened SHA-512-family multibuffer owners with exact general-t identity | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message SHA-512-family AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
@@ -134,6 +135,7 @@ Defaults remain portable and do not probe the CPU.
 | Feature | Reachable API | Supported execution |
 | --- | --- | --- |
 | `hardened-batch-execution` | Separate clearing `hardened_batch` owners | Eight SHA-224/256 lanes with AVX2; four with NEON; hardened scalar tails/padding |
+| `hardened-batch512-execution` | Separate clearing `hardened_batch512` owners | Four SHA-512-family lanes with AVX2; two with NEON; all general-t parameters |
 | `batch512-execution` | `batch512`, public data only | Four SHA-512-family lanes with AVX2; two with NEON |
 | `batch-execution` | `batch`, public data only | Eight independent SHA-224/256 lanes with AVX2; four with AArch64 NEON |
 | `static-execution` | `execution`, public data only | x86-64 SHA instructions for SHA-224/256; AArch64 SHA2/SHA-512 |
@@ -155,8 +157,13 @@ The caller supplies eight optional canonical `Input` slots, a clearing
 `digest_secret` returns a `SecretBatchOutput` which clears those destinations on
 Drop. See the runnable module rustdoc example and
 [hardened batch design](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
-This profile is still awaiting qualification; wide SHA-2 hardened batching and
-hosted batch adapters are not implemented yet. Batch shapes remain public.
+For the wide family, `hardened-batch512-execution` provides the same contract
+through `hardened_batch512`, with four optional slots. Its `Algorithm` includes
+SHA-384, SHA-512, named /224 and /256, and `Sha512T(Sha512TBits)`. General secret
+outputs retain the exact parameter and canonical final-byte mask; general IV
+derivation is charged to the finite work budget. The module rustdoc includes a
+runnable example. Both profiles await qualification; hosted hardened batch
+adapters are not implemented yet. Batch shapes remain public.
 
 See [ordinary execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-ordinary-execution.md)
 and [hardened execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md)

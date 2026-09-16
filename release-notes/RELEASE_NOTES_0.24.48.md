@@ -45,8 +45,10 @@ assembly-loop checks under the valid Vec allocation invariant. These
 pass the same matrix with compiled omission/shortening mutation tests. The
 worker coordinator's local Drop ordering is now checked through normal/error and
 recoverable-unwind MIR paths, with five compiled ownership/guard mutants. Broader
-caller-to-cleanup lifecycle and promoted worker-argument qualification remain
-pending. New compositional Kani harnesses exercise actual transfer consumption
+caller-to-cleanup lifecycle and inlined worker-argument qualification remain
+pending. The standalone worker destructor now has LLVM/assembly checks binding
+the original Vec base and complete live length to the clearing loop, with three
+additional compiled argument mutations. New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.
 No release gate changed.

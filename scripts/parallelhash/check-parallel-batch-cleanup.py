@@ -9,6 +9,7 @@ import tempfile
 import batch_cleanup_codegen as check
 import batch_worker_cleanup as worker
 import batch_worker_lifecycle as lifecycle
+import batch_worker_arguments as arguments_check
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -54,6 +55,9 @@ def main():
             states, count = lifecycle.mutations(row, panic)
             print(f'ParallelHash worker coordinator MIR lifecycle: PASS; {args.toolchain}; '
                   f'{args.target}; panic={panic}; states={states}; rejected={count}', flush=True)
+            count = arguments_check.mutations(row)
+            print(f'ParallelHash worker destructor arguments LLVM/assembly: PASS; {args.toolchain}; '
+                  f'{args.target}; panic={panic}; rejected={count}', flush=True)
 
 
 if __name__ == '__main__':

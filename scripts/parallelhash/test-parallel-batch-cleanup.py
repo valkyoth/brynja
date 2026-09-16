@@ -30,6 +30,28 @@ def main():
         worker_path = root / 'crates/brynja-hash-parallel-std/src/execution/batch/worker.rs'
         original = worker_path.read_text()
         worker_target = root / 'workers'
+        driver.arguments_check.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True))
+        for replacement in ('self.0.clear(); self.clear();',
+                            'self.0.truncate(1); self.clear();',
+                            'let _ = self.0.remove(0); self.clear();'):
+            anchor = 'self.clear();\n        #[cfg(test)]'
+            driver.check.require(original.count(anchor) == 1, 'unique worker argument source mutation')
+            try:
+                worker_path.write_text(original.replace(anchor, replacement + '\n        #[cfg(test)]'))
+                row = driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True)
+                llvm, assembly, symbol = driver.arguments_check.functions(row)
+                for inspector, body in ((driver.arguments_check.llvm_check, llvm),
+                                        (driver.arguments_check.assembly_check, assembly)):
+                    try:
+                        inspector(body, symbol)
+                    except ValueError:
+                        pass
+                    else:
+                        raise AssertionError('compiled worker argument regression survived')
+                count += 1
+            finally:
+                worker_path.write_text(original)
+        driver.arguments_check.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True))
         driver.worker.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (

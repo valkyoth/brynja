@@ -328,6 +328,7 @@ python3 scripts/cryptography/test-batch-output-codegen.py
 python3 scripts/parallelhash/test-batch-worker-cleanup.py
 python3 scripts/parallelhash/test-batch-worker-assembly.py
 python3 scripts/parallelhash/test-batch-worker-lifecycle.py
+python3 scripts/parallelhash/test-batch-worker-arguments.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -425,9 +426,23 @@ evidence. Callee cleanup and cancellation behavior are separately checked; this
 does not prove every borrowed slice retains its original allocation or every
 public entry point reaches these owners.
 
+The standalone Storage destructor now has a separate LLVM/assembly argument
+check. Its input is the original 24-byte owner; the reviewed compiler layout
+loads the Vec base at offset 8 and live-slot length at offset 16 and transfers
+both unchanged to the exact qualified clear-loop symbol. The closed machine
+forms preserve the platform calling convention without altering either value.
+These offsets are compiler-specific evidence, not a stable Rust layout promise.
+All twelve existing compiler/target/panic artifacts pass, rejecting thirteen
+argument mutants per row. Sixty-two synthetic provenance/ABI/boundary regressions
+are rejected. Three further source mutants discard all slots, truncate to one,
+or remove the first slot before clearing; each compiles and independently fails
+LLVM and assembly inspection. Both full twenty-two-mutant source campaigns pass
+on 1.98.1 x86 Linux and 1.90.0 Apple Arm, including restored sources.
+
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all
-caller-to-Drop unwind edges or caller-to-promoted-argument machine lowering. Compilation
+caller-to-Drop unwind edges or the separate inlined copies of the destructor's
+argument lowering inside coordinators/drop glue. Compilation
 for Apple/Arm is not fresh native evidence, and abort-profile checks never imply
 that abort executes Drop.
 
@@ -479,7 +494,8 @@ also pass. Invalid source anchors and interrupted verifier results are tested
 separately; disabling either check is detected by checker mutation tests.
 
 Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
-and promoted-argument provenance from callers. The new compositional proofs
+and inlined promoted-argument provenance from callers (the standalone Storage
+destructor handoff is now checked). The new compositional proofs
 do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.

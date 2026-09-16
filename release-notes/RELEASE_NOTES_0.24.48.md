@@ -45,7 +45,7 @@ assembly-loop checks under the valid Vec allocation invariant. These
 pass the same matrix with compiled omission/shortening mutation tests. The
 worker coordinator's local Drop ordering is now checked through normal/error and
 recoverable-unwind MIR paths, with five compiled ownership/guard mutants. Broader
-caller-to-cleanup lifecycle and inlined worker-argument qualification remain
+caller-to-cleanup lifecycle and machine-level coordinator qualification remain
 pending. The standalone worker destructor now has LLVM/assembly checks binding
 the original Vec base and complete live length to the clearing loop, with three
 additional compiled argument mutations. Retained drop glue now checks original
@@ -53,10 +53,13 @@ buffer arguments and clear-before-deallocation in LLVM, plus the machine entry
 prefix. Fully inlined coordinator LLVM now checks cleanup-call reachability after
 native worker-spawn attempts across normal/error/unwind exits. An additional
 LLVM fixed-point analysis checks original buffer pointer/live-length arguments
-and header non-escape/immutability after spawn for eight memory-backed rows,
-with 60 artifact regressions and three further compiled source mutants.
-The four 1.98.1 Arm rows scalar-replace that header and remain pending, as do
-machine unwind tables and the broader lifecycle obligations.
+and header non-escape/immutability after spawn for ten memory-backed rows.
+The two 1.98.1 Arm abort rows fully scalar-replace that header; a separate
+allocation-bound check follows their original base/count to cleanup. All twelve
+rows now pass inlined LLVM argument qualification, rejecting 96 artifact
+regressions; compiled slot-discard/truncation/removal mutations are rejected
+under both Arm panic profiles. Machine unwind tables and broader lifecycle
+obligations remain pending.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

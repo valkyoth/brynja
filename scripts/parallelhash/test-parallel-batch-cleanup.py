@@ -65,27 +65,32 @@ def main():
         driver.arguments_check.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True))
         driver.drop_glue.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.inline.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
-        memory_header = args.toolchain == '1.90.0' or args.target == 'x86_64-unknown-linux-gnu'
-        if memory_header:
-            driver.provenance.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+        for profile in (('unwind', 'abort') if args.toolchain == '1.98.1' and args.target.startswith('aarch64-') else ('unwind',)):
+            scalar = profile == 'abort'
+            verifier = driver.scalar if scalar else driver.provenance
+            argument_target = root / ('arguments-' + profile)
+            verifier.check(driver.compile_row(root, argument_target, args.toolchain, args.target, profile, True), profile)
             for edit in ('storage.0.clear();', 'storage.0.truncate(1);', 'let _ = storage.0.remove(0);'):
                 anchor = 'operation.complete = true;'
                 driver.check.require(original.count(anchor) == 1, 'unique inlined argument source mutation')
                 try:
                     worker_path.write_text(original.replace(anchor, edit + '\n    ' + anchor))
-                    row = driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True)
+                    row = driver.compile_row(root, argument_target, args.toolchain, args.target, profile, True)
                     # Qualify reachability/drop glue separately so their failure
                     # cannot accidentally stand in for the new caller proof.
-                    body, clear, drop, _ = driver.inline.check(row, 'unwind')
+                    body, clear, drop, _ = driver.inline.check(row, profile)
                     try:
-                        driver.provenance.inspect(body, clear, drop)
+                        if scalar:
+                            verifier.inspect(body, clear)
+                        else:
+                            verifier.inspect(body, clear, drop)
                     except ValueError:
                         count += 1
                     else:
                         raise AssertionError('compiled inlined buffer-discard regression survived')
                 finally:
                     worker_path.write_text(original)
-            driver.provenance.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+            verifier.check(driver.compile_row(root, argument_target, args.toolchain, args.target, profile, True), profile)
         driver.worker.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (

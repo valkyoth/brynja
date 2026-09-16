@@ -327,6 +327,7 @@ python3 scripts/cryptography/check-batch-output-codegen.py
 python3 scripts/cryptography/test-batch-output-codegen.py
 python3 scripts/parallelhash/test-batch-worker-cleanup.py
 python3 scripts/parallelhash/test-batch-worker-assembly.py
+python3 scripts/parallelhash/test-batch-worker-lifecycle.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -399,6 +400,30 @@ rejected on 1.98.1 x86 Linux and 1.90.0 Apple Arm. The shared provenance checker
 now rejects 83 malformed artifacts; prior SHA-2/SHA-3 inspectors remain passing.
 The three compiled worker-loop mutations must independently fail both LLVM and
 assembly inspection; removal of Drop's clear call must fail its MIR check.
+
+A path-sensitive MIR check now follows the worker coordinator's `run_with` local
+Storage and Operation owners. It preserves separate lifecycle states at CFG
+joins, explores both normal and recoverable-unwind edges, and requires storage
+Drop before operation Drop on every such exit after construction. Earlier errors
+may precede storage construction but still require the root guard. Only an Ok
+result may disarm cancellation; the guard destructor must cancel its exact root
+on the incomplete branch. Direct owner moves, overwrites, premature StorageDead,
+double drops, unknown calls and removed unwind edges fail inspection.
+
+All twelve compiler/target/panic rows passed, rejecting eleven abort-profile and
+23 unwind-profile artifact mutants per row. Eighty-three synthetic lifecycle
+regressions are rejected. Five additional real-source mutants (forgotten storage,
+forgotten guard, omitted success completion, initially disarmed guard and inverted
+cancellation) compile but fail inspection on 1.98.1 x86 Linux and 1.90.0 Apple Arm.
+Both full source campaigns now reject nineteen mutants, and restored sources pass.
+
+This establishes local Drop invocation/order, not arbitrary resource/alias flow
+or worker joining. It assumes valid Rust references/discriminants and the reviewed
+borrow-preserving contracts of the allowed calls. Invalid-enum unreachable sinks,
+nonterminating paths, abort and double-panic termination do not supply cleanup
+evidence. Callee cleanup and cancellation behavior are separately checked; this
+does not prove every borrowed slice retains its original allocation or every
+public entry point reaches these owners.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all

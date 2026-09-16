@@ -31,6 +31,27 @@ def main():
         original = worker_path.read_text()
         worker_target = root / 'workers'
         driver.worker.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+        driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+        for before, after in (
+            ('operation.complete = true;', 'core::mem::forget(storage);\n    operation.complete = true;'),
+            ('operation.complete = true;', 'core::mem::forget(operation);'),
+            ('operation.complete = true;', '// omitted successful completion'),
+            ('complete: false,', 'complete: true,'),
+            ('if !self.complete {', 'if self.complete {'),
+        ):
+            driver.check.require(original.count(before) == 1, 'unique lifecycle source mutation')
+            try:
+                worker_path.write_text(original.replace(before, after))
+                row = driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True)
+                try:
+                    driver.lifecycle.check(row, 'unwind')
+                except (ValueError, driver.worker.flow.MirCleanupFlowError):
+                    count += 1
+                else:
+                    raise AssertionError('compiled worker lifecycle regression survived')
+            finally:
+                worker_path.write_text(original)
+        driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (
             ('for slot in &mut self.0 {', 'for slot in self.0.iter_mut().skip(1) {'),
             ('for slot in &mut self.0 {', 'for slot in self.0.iter_mut().take(1) {'),

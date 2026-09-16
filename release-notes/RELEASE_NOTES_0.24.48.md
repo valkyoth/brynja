@@ -42,7 +42,9 @@ nonempty lengths; assembly tracks ABI clobbers and full-slice call arguments.
 ParallelHash workspace/transport/stream cleanup passes MIR/LLVM/assembly
 inspection; worker-storage teardown has MIR, exact LLVM-loop and complete
 assembly-loop checks under the valid Vec allocation invariant. These
-pass the same matrix with compiled omission/shortening mutation tests. Complete
+pass the same matrix with compiled omission/shortening mutation tests. The
+worker coordinator's local Drop ordering is now checked through normal/error and
+recoverable-unwind MIR paths, with five compiled ownership/guard mutants. Broader
 caller-to-cleanup lifecycle and promoted worker-argument qualification remain
 pending. New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;

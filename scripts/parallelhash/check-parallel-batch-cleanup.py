@@ -8,6 +8,7 @@ import tempfile
 
 import batch_cleanup_codegen as check
 import batch_worker_cleanup as worker
+import batch_worker_lifecycle as lifecycle
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -50,6 +51,9 @@ def main():
             count = worker.mutations(row, panic)
             print(f'ParallelHash worker storage MIR/LLVM/assembly: PASS; {args.toolchain}; '
                   f'{args.target}; panic={panic}; rejected={count}', flush=True)
+            states, count = lifecycle.mutations(row, panic)
+            print(f'ParallelHash worker coordinator MIR lifecycle: PASS; {args.toolchain}; '
+                  f'{args.target}; panic={panic}; states={states}; rejected={count}', flush=True)
 
 
 if __name__ == '__main__':

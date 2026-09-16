@@ -869,6 +869,39 @@ do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.
 
+## Independent hardened Keccak-family batch oracle
+
+`assurance/hardened-keccak-batch` enables only the distinct hardened Keccak batch
+profile. It accepts four optional public test-vector slots across all eight
+SHA-3/SHAKE/cSHAKE identities, including arbitrary-bit message/N/S and finite
+output bits. Three calls per batch exercise borrowed secret output, consumed
+declassification and direct public output. Exact identity/bit/byte widths, output
+Drop/declassification clearing, full staging (including excess capacity) and
+destination canaries are checked. Its ordinary CLI buffers must never be used
+as an application secret-input interface.
+
+Run `python3 scripts/cryptography/check-hardened-keccak-batch-oracle.py`; add a
+matching `--lane` for native preferred/required SIMD. Existing independent
+Python FIPS 202/SP 800-185 oracles, cross-checked against pinned NIST vectors,
+provide 256 full mixed-domain/rate batches. Sixteen derived batches cover every
+activity mask, preserving active empty output separately from inactive slots.
+Required mode uses the full batches; portable/prefer also run the sparse cases.
+
+Local AVX2 passed 272 portable, 272 preferred and 256 required batches, reporting
+respectively 0, 1,062 and 1,056 vector calls across the three API calls per batch.
+The generic build also passed all 272 portable batches with no SIMD flags.
+Thirteen malformed requests rejected without output or panic on both builds.
+Rust 1.90 tests and strict Rust 1.98.1 Clippy passed.
+
+`test-hardened-keccak-batch-oracle.py` checks all activity-mask derivations and
+rejects 33 result/status/route regressions. With `--lane`, five compiled mutations
+must fail: forgotten output owner, corrupted encoding, forced portable routing,
+counter overflow and deliberately dirty post-execution staging. Restored source
+passes after each mutant; compilation failure is not accepted as evidence.
+This is author development evidence, not an independent review, NEON execution
+result, complete erasure proof or fresh platform qualification. Release gates
+remain unchanged.
+
 ## Independent hardened SHA-224/256 batch oracle
 
 The separate `assurance/hardened-sha256-batch` adapter enables only the distinct

@@ -38,6 +38,13 @@ batches; a generic build passed another 384 portable batches. Output cleanup,
 malformed input and four compiled fixture mutations were checked without changing
 production code or release gates. Native multi-platform qualification is pending.
 
+Hardened SHA-3/SHAKE/cSHAKE batches now have a direct independent bit-oracle
+adapter covering all eight identities, sparse slots and finite XOF outputs.
+Local AVX2 passed 800 portable/prefer/require batches; the generic build passed
+272 portable batches. Full staging and output cleanup, malformed input and five
+compiled fixture mutations were checked. Native multi-platform qualification
+and independent review are still pending; release gates are unchanged.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

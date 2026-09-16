@@ -869,6 +869,41 @@ do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.
 
+## Independent threaded ParallelHash batch oracle
+
+`assurance/parallelhash-batch-oracle` directly exercises the new bounded threaded
+multibuffer API for all four ParallelHash identities. Its CLI processes public
+generated vectors, not application secrets. Each case compares transactional
+public and borrowed-secret outputs and reports, checks exact leaf/group/vector
+participation and reported thread width, and observes full scratch and output
+Drop clearing with destination canaries. The root remains portable to isolate
+the hardened multibuffer leaf path.
+
+Run `python3 scripts/cryptography/check-parallelhash-batch-oracle.py`; add a
+matching `--lane` for preferred/required SIMD. The existing independently composed
+Python SP 800-185 oracle supplies 256 arbitrary-bit cases across all identities,
+partial-bit customization/output, zero output and varied block sizes. Every case
+runs with one, two and three workers. Required mode selects 48 nonempty cases
+with four-aligned leaf counts, avoiding incomplete final groups on both vector
+widths; portable/prefer still cover the complete corpus.
+
+Local AVX2 passed 1,680 cases: 256 portable, 256 preferred and 48 required for
+each of the three worker counts. Vector calls across both output profiles were
+respectively 0, 600 and 448 per worker-count campaign. The generic build passed
+another 768 portable cases with no SIMD flags. Ten malformed requests and two
+worker bounds rejected. Rust 1.90 tests and strict Rust 1.98.1 Clippy passed.
+
+`test-parallelhash-batch-oracle.py` rejects 117 result/count/thread/route
+regressions and checks required-group selection at partial-bit boundaries.
+With `--lane`, six compiled fixture mutations must reject skipped output Drop,
+dirty scratch, corrupted output encoding, forced portable routing, counter
+overflow and reduced worker count. Restored source passes after every mutation;
+compilation failure is not accepted as evidence. Thread width describes
+submitted workers, not a measurement of simultaneous core utilization or
+scheduler fairness. This is not independent review, native NEON execution,
+fresh platform qualification or separate scheduled/streaming oracle coverage.
+Production code and release/tag gates remain unchanged.
+
 ## Independent hardened Keccak-family batch oracle
 
 `assurance/hardened-keccak-batch` enables only the distinct hardened Keccak batch

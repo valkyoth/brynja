@@ -45,6 +45,12 @@ Local AVX2 passed 800 portable/prefer/require batches; the generic build passed
 compiled fixture mutations were checked. Native multi-platform qualification
 and independent review are still pending; release gates are unchanged.
 
+A direct independent-oracle adapter now covers threaded hardened ParallelHash
+batching with one, two and three workers. Local AVX2 passed 1,680 cases across
+portable/prefer/require; a generic build passed 768 portable cases. Public/secret
+outputs, cleanup, work reports and six compiled fixture mutations were checked.
+These development checks do not change release gates or replace native review.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

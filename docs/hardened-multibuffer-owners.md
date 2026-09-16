@@ -322,6 +322,7 @@ python3 scripts/sha3/test-sha3-batch-cleanup-flow.py
 python3 scripts/sha3/check-hardened-sha3-batch-codegen.py
 python3 scripts/sha3/test-hardened-sha3-batch-codegen.py
 python3 scripts/cryptography/test-batch-output-flow.py
+python3 scripts/cryptography/test-batch-output-assembly.py
 python3 scripts/cryptography/check-batch-output-codegen.py
 python3 scripts/cryptography/test-batch-output-codegen.py
 python3 scripts/parallelhash/test-batch-worker-cleanup.py
@@ -352,7 +353,7 @@ artifacts per combination. Nine real compiled source regressions were rejected
 on Rust 1.98.1 x86 Linux and Rust 1.90.0 Apple Arm. Twenty-one standalone LLVM
 address, extent and control-flow regressions are rejected too.
 
-Secret-output destruction is checked separately by a closed LLVM interpreter.
+Secret-output destruction is checked separately by closed LLVM and assembly interpreters.
 It explores all absent/empty/nonempty slot combinations: 6,561 for narrow SHA-2
 and 81 each for wide SHA-2 and Keccak. Nonempty destination pointers and lengths
 remain symbolic; only zero/equality length tests are supported. Every nonempty
@@ -361,7 +362,18 @@ complete identity/bit-count metadata. Unknown instructions, skipped slots,
 truncation, early returns and unvisited blocks fail inspection. All twelve
 compiler/target/panic combinations passed, as did rejection of 28 synthetic
 regressions and sixteen actually compiled source mutations on 1.98.1 x86 Linux
-and 1.90.0 Apple Arm. This checks LLVM, not full MIR or machine-level loop semantics.
+and 1.90.0 Apple Arm. LLVM and assembly independently reject each compiled mutant.
+
+The assembly interpreter follows the emitted x86-64 SysV and AArch64 loops over
+the same symbolic shapes. It tracks owner-relative loads, full-width slice
+arguments, stack saves/restores, exact direct/indirect clearing targets and ABI
+caller-saved clobbers. Exact ordered destination/metadata calls and balanced
+callee-saved state are required; unknown instructions and unvisited code fail
+closed. Fifty-five synthetic assembly regressions exercise skipped/shortened
+clears, bad strides/branches, lost owner pointers, call-clobbered values, wrong
+callees, stack corruption and truncating register operations. This is a bounded
+interpreter of the observed instruction subset, not a general ISA proof, full
+MIR lifecycle proof, linker validation or proof of the callee's internal stores.
 
 ParallelHash inspection binds batch workspace cleanup, transferred leaf storage,
 stream cancellation/destruction, reader destruction and the incomplete-operation
@@ -377,7 +389,7 @@ now rejects 83 malformed artifacts; prior SHA-2/SHA-3 inspectors remain passing.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all
-caller-to-Drop unwind edges or output/worker loop machine lowering. Compilation
+caller-to-Drop unwind edges or worker loop machine lowering. Compilation
 for Apple/Arm is not fresh native evidence, and abort-profile checks never imply
 that abort executes Drop.
 
@@ -429,7 +441,7 @@ also pass. Invalid source anchors and interrupted verifier results are tested
 separately; disabling either check is detected by checker mutation tests.
 
 Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
-and output/worker loop machine-level qualification. The new compositional proofs
+and worker loop machine-level qualification. The new compositional proofs
 do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Require actual compiled output cleanup regressions to fail LLVM inspection."""
+"""Require compiled cleanup regressions to fail LLVM and assembly independently."""
 import importlib.util
 import os
 from pathlib import Path
@@ -26,10 +26,9 @@ def main():
         count = 0
         for family, (package, module, _, _) in driver.FAMILIES.items():
             target = root / 'target' / package
-            def compile_and_inspect():
-                llvm = driver.compile_package(root, target, package, args.toolchain, args.target, 'unwind')
-                return llvm
-            driver.inspect(compile_and_inspect(), family)
+            def compile_artifacts():
+                return driver.compile_package(root, target, package, args.toolchain, args.target, 'unwind')
+            driver.inspect(compile_artifacts(), family, args.target)
             path = root / 'crates' / package / 'src' / module / 'output.rs'
             original = path.read_text()
             cases = [
@@ -48,16 +47,18 @@ def main():
                 driver.cleanup.require(original.count(before) == 1, 'unique output mutation anchor')
                 try:
                     path.write_text(original.replace(before, after))
-                    llvm = compile_and_inspect()  # Compilation errors do not count as rejection.
-                    try:
-                        driver.inspect(llvm, family)
-                    except ValueError:
-                        count += 1
-                    else:
-                        raise AssertionError('compiled output-cleanup regression survived: ' + before)
+                    artifacts = compile_artifacts()  # Compilation errors do not count as rejection.
+                    for inspector in (driver.inspect_llvm, driver.inspect_assembly):
+                        try:
+                            inspector(artifacts, family, args.target)
+                        except ValueError:
+                            pass
+                        else:
+                            raise AssertionError(inspector.__name__ + ' accepted compiled regression: ' + before)
+                    count += 1
                 finally:
                     path.write_text(original)
-            driver.inspect(compile_and_inspect(), family)
+            driver.inspect(compile_artifacts(), family, args.target)
     print(f'Batch output compiler: PASS; {count} compiled source regressions rejected; {args.toolchain}; {args.target}')
 
 

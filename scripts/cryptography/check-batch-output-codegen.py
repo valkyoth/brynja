@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect real optimized LLVM secret-output destruction, without release-gate changes."""
+"""Inspect optimized LLVM and assembly output destruction, without gate changes."""
 import argparse
 import os
 from pathlib import Path
@@ -9,6 +9,7 @@ import tempfile
 
 import batch_cleanup_flow as cleanup
 import batch_output_flow as flow
+import batch_output_assembly as machine
 
 ROOT = Path(__file__).resolve().parents[2]
 FAMILIES = {
@@ -27,22 +28,41 @@ def compile_package(root, target, package, toolchain, platform, panic):
         env.pop(key, None)
     subprocess.run(['cargo', '+' + toolchain, 'rustc', '--locked', '--offline', '--release',
                     '-p', package, '--no-default-features', '--features', features,
-                    '--target', platform, '--lib', '--', '--emit=llvm-ir'],
+                    '--target', platform, '--lib', '--', '--emit=llvm-ir,asm'],
                    cwd=root, env=env, check=True, timeout=300)
-    paths = list(target.rglob(package.replace('-', '_') + '-*.ll'))
-    cleanup.require(len(paths) == 1, 'unique output LLVM artifact')
-    return paths[0].read_text()
+    artifacts = {}
+    for extension in ('ll', 's'):
+        paths = list(target.rglob(package.replace('-', '_') + '-*.' + extension))
+        cleanup.require(len(paths) == 1, 'unique output artifact: ' + extension)
+        artifacts[extension] = paths[0].read_text()
+    return artifacts
 
 
-def inspect(llvm, family):
+def inspect_llvm(artifacts, family, platform):
     package, module, capacity, metadata = FAMILIES[family]
     v0 = (package.replace('-', '_'), f'{len(module)}{module}', '6output', '17SecretBatchOutput', '4drop')
     legacy = package.replace('-', '_') + '..' + module + '..output..SecretBatchOutput$u20$as$u20$core..ops..drop..Drop$GT$4drop'
-    bodies = re.findall(r'^define [^\n]*\{.*?^}', llvm, re.M | re.S)
+    bodies = re.findall(r'^define [^\n]*\{.*?^}', artifacts['ll'], re.M | re.S)
     found = [body for body in bodies if all(token in body.splitlines()[0] for token in v0)
              or legacy in body.splitlines()[0]]
     cleanup.require(len(found) == 1, 'unique exact output Drop identity')
     return flow.check(found[0], capacity, metadata)
+
+
+def inspect_assembly(artifacts, family, platform):
+    package, module, capacity, metadata = FAMILIES[family]
+    text = artifacts['s']
+    # Module terminators distinguish hardened_batch from hardened_batch512.
+    token = module + '..output' if '..output..SecretBatchOutput' in text else f'{len(module)}{module}6output'
+    drop = 'Drop$GT$4drop' if '..output..SecretBatchOutput' in text else '4Drop4drop'
+    body = cleanup.assembly_function(text, (package.replace('-', '_'), token, 'SecretBatchOutput', drop))
+    return machine.check(body, capacity, metadata, platform.startswith('aarch64'))
+
+
+def inspect(artifacts, family, platform):
+    count = inspect_llvm(artifacts, family, platform)
+    cleanup.require(inspect_assembly(artifacts, family, platform) == count, 'matching symbolic shape coverage')
+    return count
 
 
 def arguments():
@@ -62,8 +82,8 @@ def main():
                 if package not in artifacts:
                     artifacts[package] = compile_package(ROOT, Path(directory) / panic / package,
                                                         package, args.toolchain, args.target, panic)
-                count = inspect(artifacts[package], family)
-                print(f'Batch output LLVM: PASS; {family}; {args.toolchain}; {args.target}; '
+                count = inspect(artifacts[package], family, args.target)
+                print(f'Batch output LLVM/assembly: PASS; {family}; {args.toolchain}; {args.target}; '
                       f'panic={panic}; symbolic slot shapes={count}', flush=True)
 
 

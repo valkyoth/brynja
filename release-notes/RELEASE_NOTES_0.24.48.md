@@ -37,11 +37,12 @@ on both compiler endpoints and three targets under abort/unwind. Six bounded Kan
 proofs cover the actual hardened SHA-2/Keccak work controls. SHA-3 batch frame and
 whole-workspace emitted cleanup now passes the same compiler/target matrix; four
 further Kani proofs cover local ParallelHash range and completion predicates.
-Secret-output LLVM iteration now checks every slot shape with symbolic nonempty
-lengths. ParallelHash workspace/transport/stream cleanup passes MIR/LLVM/assembly
+Secret-output LLVM and assembly iteration now check every slot shape with symbolic
+nonempty lengths; assembly tracks ABI clobbers and full-slice call arguments.
+ParallelHash workspace/transport/stream cleanup passes MIR/LLVM/assembly
 inspection; worker-storage teardown has MIR and exact LLVM-loop checks. These
 pass the same matrix with compiled omission/shortening mutation tests. Complete
-caller-to-cleanup lifecycle and output/worker machine-level qualification remain
+caller-to-cleanup lifecycle and worker machine-level qualification remain
 pending. New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

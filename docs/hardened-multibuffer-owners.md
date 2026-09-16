@@ -278,9 +278,23 @@ destination clearing. This uses synchronization, not elapsed-time assertions.
 The twelve cases pass on Rust 1.90.0/1.98.1 and in optimized tests. The threaded
 source-mutation campaign now rejects fifteen regressions, including two disabled
 cancellation-guard variants and omission of the test-only Drop observer.
-The pinned Miri run passes the three ParallelHash128 cases (approximately five
-minutes). An initial all-identity invocation timed out and is not counted as
-passing; the other nine cases have native, not Miri, evidence at this checkpoint.
+Separate pinned nightly-2026-09-11 Miri runs pass all four identities, each
+covering the three launch positions (twelve cases total). The earlier fixed-128
+run took 291.98 seconds; subsequent fixed-256, XOF-128 and XOF-256 runs took
+291.22, 291.92 and 291.25 seconds respectively. The latter three ran concurrently
+with isolated build directories and no custom MIRIFLAGS. An initial combined
+all-identity invocation timed out and is not counted as passing evidence.
+
+To reproduce one identity without a substring or empty-selection ambiguity:
+
+```sh
+cargo +nightly-2026-09-11 miri test --locked --offline --target x86_64-unknown-linux-gnu -p brynja-hash-parallel-std --features runtime-batch-execution --lib execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed256 -- --exact
+```
+
+The other exact test-name suffixes are `fixed128`, `xof128` and `xof256`.
+Each command must report one passed test; each test internally covers all three
+launch positions. These results use Miri's default schedule/seed and do not
+establish exhaustive interleaving coverage.
 
 This is runtime evidence for these recoverable-unwind cases, not a general
 proof of thread joining, all schedules, native SIMD cleanup or abort behavior.
@@ -742,9 +756,10 @@ machine-level provenance proof. Production code and release gates are unchanged.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all
-caller-to-Drop unwind edges or complete machine
-argument provenance inside coordinators. Retained glue is qualified only to the
-LLVM and machine-entry scope above. Compilation
+caller-to-Drop unwind edges or complete machine argument provenance inside
+coordinators. Retained glue has the LLVM ordering/argument checks and complete
+normal machine-path deallocation checks above, not machine exception-tail or
+CFI qualification. Compilation
 for Apple/Arm is not fresh native evidence, and abort-profile checks never imply
 that abort executes Drop.
 

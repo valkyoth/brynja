@@ -97,6 +97,12 @@ setup. All six fresh compiler/target runs pass, with 36 artifact mutants and 45
 focused regressions rejected. This assumes a correctly restored stack frame;
 CFI, preceding header memory/alias provenance and runtime unwinding remain outside
 the claim. No production implementation or release gate changed.
+Separate runtime tests now exercise coordinator unwinding with live workers
+across all four ParallelHash identities and three launch positions. All twelve
+cases pass under pinned Miri, split into four exact-name invocations; the earlier
+combined timeout is not counted as passing. The tests check worker completion,
+Storage clearing, root cancellation and rejected-secret-output clearing. This
+is bounded runtime evidence, not exhaustive scheduling or native SIMD evidence.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

@@ -330,6 +330,7 @@ python3 scripts/parallelhash/test-batch-worker-assembly.py
 python3 scripts/parallelhash/test-batch-worker-lifecycle.py
 python3 scripts/parallelhash/test-batch-worker-arguments.py
 python3 scripts/parallelhash/test-batch-worker-drop-glue.py
+python3 scripts/parallelhash/test-batch-worker-inline.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -459,6 +460,28 @@ The synthetic suite rejects 61 LLVM and 178 machine-prefix regressions. The thre
 compiled storage-discard/truncation/removal mutants now independently fail both
 LLVM and machine-prefix checks for retained glue as well as the standalone
 destructor; both twenty-two-mutant source campaigns pass with restored sources.
+
+The actual fully inlined LLVM coordinator now has a post-spawn cleanup
+reachability analysis. It extracts branch, switch and invoke successors from
+instructions (not predecessor comments), checks phi predecessor-edge
+multiplicity, and retains separate possibly-dirty states through loop/branch
+joins. Attempting the native thread creation call marks storage possibly dirty;
+both successful and failed creation and its unwind edge are covered. Every
+subsequent normal return or recoverable-unwind exit must pass the exact Storage
+clear symbol or separately qualified retained drop glue. Another spawn attempt
+marks storage dirty again. No branch-value pruning hides cleanup obligations.
+
+All twelve compiler/target/panic rows pass, including the three fully-inlined
+1.98.1 abort rows. Each unwind row rejects three omitted/replaced cleanup calls;
+each abort row rejects two. Thirty synthetic graph/exit/loop/phi regressions are
+rejected. The compiled forgotten-Storage mutant independently fails this LLVM
+check on 1.98.1 x86 Linux and 1.90.0 Apple Arm, and restored source passes.
+This is control-flow/call reachability only: it does not validate inlined cleanup
+arguments, arbitrary aliases, worker joining, pre-spawn cleanup, or machine-code
+lowering. Nonreturning callees, valid-enum unreachable defaults and infinite paths
+are explicitly outside the erasure guarantee. Valid Rust/LLVM and the reviewed
+clear/drop-glue contracts remain assumptions; a call is not proof of successful
+erasure if those callee contracts are violated.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all

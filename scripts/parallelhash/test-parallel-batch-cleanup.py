@@ -64,6 +64,7 @@ def main():
                 worker_path.write_text(original)
         driver.arguments_check.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True))
         driver.drop_glue.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+        driver.inline.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.worker.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (
@@ -83,9 +84,17 @@ def main():
                     count += 1
                 else:
                     raise AssertionError('compiled worker lifecycle regression survived')
+                if 'core::mem::forget(storage)' in after:
+                    try:
+                        driver.inline.check(row, 'unwind')
+                    except ValueError:
+                        pass
+                    else:
+                        raise AssertionError('compiled inlined storage omission survived')
             finally:
                 worker_path.write_text(original)
         driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+        driver.inline.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (
             ('for slot in &mut self.0 {', 'for slot in self.0.iter_mut().skip(1) {'),
             ('for slot in &mut self.0 {', 'for slot in self.0.iter_mut().take(1) {'),

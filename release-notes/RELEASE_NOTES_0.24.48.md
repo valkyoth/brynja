@@ -80,6 +80,12 @@ normal-return check still passes, alongside 78 focused regressions. This assumes
 valid cleanup arguments and non-unwinding clear/deallocator contracts; it does
 not prove all throwing-call coverage, CFI restoration, exception-path arguments
 or linked/runtime unwinding.
+A complementary entry-origin walk covers later recorded exceptional edges after
+worker creation. LLVM invoke and assembly landing-pad call inventories agree on
+all six unwind rows; 286 artifact mutations and 33 focused regressions fail as
+expected. This is multiset correspondence, not individual call-site identity or
+proof that LLVM retained every needed invoke. The same cleanup contracts and
+exception-argument/CFI/runtime limitations remain. Release gates are unchanged.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

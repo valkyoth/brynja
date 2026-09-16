@@ -1,4 +1,4 @@
-"""Cleanup reachability from the native-spawn LSDA landing pad.
+"""Cleanup reachability across ordinary and recorded exceptional edges.
 
 Follow ordinary branches and recorded LSDA may-edges. This does not establish
 coverage of every throwing call, action/personality decisions, unwind argument
@@ -12,39 +12,41 @@ import batch_worker_lsda as lsda
 from batch_worker_handoff import machine, require, successors
 
 
-def inspect(body, clear, drop, noreturn, arm, apple):
+def inspect(body, clear, drop, noreturn, arm, apple, *, from_entry=False):
     machine.inspect(body, clear, drop, noreturn, arm, apple)
     code, labels, raw, exceptional, records = lsda.parse(body, arm, apple)
     symbols = [machine.machine.call_symbol(op, args, arm, apple) for op, args in code]
     spawn = next(i for i, s in enumerate(symbols) if re.fullmatch(machine.inline.SPAWN, s or ''))
     require(exceptional.get(spawn) is not None, 'native spawn has a recorded unwind landing pad')
     edges = successors(code, labels, symbols, noreturn, arm)
-    pending, seen, cleans, resumed = [(exceptional[spawn], True)], set(), set(), set()
+    initial = (0, False, False) if from_entry else (exceptional[spawn], True, True)
+    pending, seen, cleans, resumed = [initial], set(), set(), set()
     while pending:
-        pc, dirty = state = pending.pop()
+        pc, active, dirty = state = pending.pop()
         require(0 <= pc < len(code), 'bounded worker unwind control flow')
         if state in seen:
             continue
         seen.add(state)
         symbol = symbols[pc]
         if pc == spawn:
-            dirty = True
+            active = dirty = True
         cleanup = symbol == clear or (drop is not None and symbol == drop)
         # The exact qualified Storage cleanup calls use the separately reviewed
         # non-unwinding clear/deallocator contracts. LLVM can retain conservative
         # LSDA entries even without a nounwind attribute across crate boundaries.
         # Every other recorded exception transfers before that call returns.
         if exceptional.get(pc) is not None and not cleanup:
-            pending.append((exceptional[pc], dirty))
+            pending.append((exceptional[pc], active, dirty))
         if cleanup:
             dirty = False
-            cleans.add(pc)
+            if active:
+                cleans.add(pc)
         if symbol == '_Unwind_Resume' or code[pc][0] in ('ret', 'retq'):
             require(not dirty, 'machine unwind path escapes before worker cleanup')
-            if symbol == '_Unwind_Resume':
+            if symbol == '_Unwind_Resume' and active:
                 resumed.add(pc)
             continue
-        pending.extend((next_pc, dirty) for next_pc in edges[pc])
+        pending.extend((next_pc, active, dirty) for next_pc in edges[pc])
     require(cleans and resumed, 'non-vacuous spawn unwind cleanup and resume')
     return len(seen), cleans, exceptional[spawn], raw, records
 

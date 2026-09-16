@@ -18,6 +18,7 @@ import batch_worker_machine as machine
 import batch_worker_handoff as handoff
 import batch_worker_arm_arguments as arm_arguments
 import batch_worker_unwind as unwind
+import batch_worker_throwing as throwing
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -98,6 +99,10 @@ def main():
                 print(f'ParallelHash spawn exception cleanup reachability: PASS; {args.toolchain}; '
                       f'{args.target}; states={states}; records={records}; rejected={count}; '
                       'non-unwinding cleanup contract assumed; CFI/arguments/all-call coverage excluded', flush=True)
+                calls, states, count = throwing.mutations(row)
+                print(f'ParallelHash invoke inventory and post-spawn exception cleanup: PASS; {args.toolchain}; '
+                      f'{args.target}; invokes={calls}; states={states}; rejected={count}; '
+                      'callee/cleanup contracts assumed; site identity/CFI/arguments excluded', flush=True)
 
 
 if __name__ == '__main__':

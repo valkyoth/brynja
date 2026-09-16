@@ -337,6 +337,7 @@ python3 scripts/parallelhash/test-batch-worker-machine.py
 python3 scripts/parallelhash/test-batch-worker-handoff.py
 python3 scripts/parallelhash/test-batch-worker-arm-arguments.py
 python3 scripts/parallelhash/test-batch-worker-unwind.py
+python3 scripts/parallelhash/test-batch-worker-throwing.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -647,6 +648,33 @@ LSDA record. CFI/register/stack recovery, exception-path argument provenance,
 action selection, linked table offsets and the runtime unwinder remain unproved.
 Earlier ordinary-only checks retain their original scope. Release gates and
 production Rust are unchanged.
+
+The complementary throwing-call check now starts at function entry and follows
+both ordinary and recorded exceptional edges. After any native spawn attempt,
+every reachable return/resume must pass exact Storage cleanup, including failures
+from subsequent join, merge and destruction calls. The same non-unwinding
+cleanup/deallocator assumptions apply. Calls marked `noreturn` still contribute
+their exceptional edges before ordinary traversal stops.
+
+To prevent disappearing LSDA entries from silently shrinking that scope, this
+check compares the multiset of LLVM `invoke` callees with machine calls covered
+by nonzero landing pads. Direct symbols retain their multiplicities; indirect
+calls have a separate counted bucket, without invented target identities. The
+six rows match 56 invokes each, except the two 1.98.1 Arm rows with 53 each.
+All six pass and reject 286 artifact mutations: removing each call-bearing
+nonzero table entry, plus redirecting the later thread-join exception to resume
+without cleanup. The latter mutants preserve inventory counts and pass ordinary
+return inspection, but fail the broader exceptional walk. Thirty-three focused
+regressions cover missing/extra/replaced calls, indirect calls, later exceptional
+bypasses and throwing `noreturn` calls. Fresh full standalone compiler-driver
+runs pass for 1.98.1 x86 Linux/Apple Arm and 1.90.0 Arm Linux.
+
+This inventory is not one-to-one source-site correspondence: equal-symbol calls
+could exchange coverage without changing counts. It also cannot prove that
+LLVM itself retained every needed invoke, identify indirect targets, or certify
+callee behavior. Exception-path argument provenance, CFI restoration, personality
+decisions and linked/runtime unwinding remain outside the claim. These are
+development checks only; no release-gate policy was changed.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all

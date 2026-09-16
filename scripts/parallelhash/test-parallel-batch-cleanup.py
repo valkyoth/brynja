@@ -48,10 +48,22 @@ def main():
                         pass
                     else:
                         raise AssertionError('compiled worker argument regression survived')
+                glue = driver.drop_glue.extract(row, 'unwind')
+                driver.check.require(glue is not None, 'retained compiled mutant drop glue')
+                llvm, assembly, symbol = glue
+                for inspector, body in ((lambda body, symbol: driver.drop_glue.llvm_check(body, symbol, 'unwind'), llvm),
+                                        (driver.drop_glue.assembly_check, assembly)):
+                    try:
+                        inspector(body, symbol)
+                    except ValueError:
+                        pass
+                    else:
+                        raise AssertionError('compiled worker drop-glue regression survived')
                 count += 1
             finally:
                 worker_path.write_text(original)
         driver.arguments_check.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True))
+        driver.drop_glue.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.worker.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (

@@ -10,6 +10,7 @@ import batch_cleanup_codegen as check
 import batch_worker_cleanup as worker
 import batch_worker_lifecycle as lifecycle
 import batch_worker_arguments as arguments_check
+import batch_worker_drop_glue as drop_glue
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -58,6 +59,9 @@ def main():
             count = arguments_check.mutations(row)
             print(f'ParallelHash worker destructor arguments LLVM/assembly: PASS; {args.toolchain}; '
                   f'{args.target}; panic={panic}; rejected={count}', flush=True)
+            count = drop_glue.mutations(row, panic)
+            print(f'ParallelHash retained worker drop glue: {"PASS" if count else "not emitted; inlined checks pending"}; '
+                  f'{args.toolchain}; {args.target}; panic={panic}; rejected={count}', flush=True)
 
 
 if __name__ == '__main__':

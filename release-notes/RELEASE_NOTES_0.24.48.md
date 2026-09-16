@@ -48,7 +48,10 @@ recoverable-unwind MIR paths, with five compiled ownership/guard mutants. Broade
 caller-to-cleanup lifecycle and inlined worker-argument qualification remain
 pending. The standalone worker destructor now has LLVM/assembly checks binding
 the original Vec base and complete live length to the clearing loop, with three
-additional compiled argument mutations. New compositional Kani harnesses exercise actual transfer consumption
+additional compiled argument mutations. Retained drop glue now checks original
+buffer arguments and clear-before-deallocation in LLVM, plus the machine entry
+prefix; fully inlined coordinator paths and machine unwind tables remain outside
+that check. New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.
 No release gate changed.

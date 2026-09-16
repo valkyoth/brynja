@@ -329,6 +329,7 @@ python3 scripts/parallelhash/test-batch-worker-cleanup.py
 python3 scripts/parallelhash/test-batch-worker-assembly.py
 python3 scripts/parallelhash/test-batch-worker-lifecycle.py
 python3 scripts/parallelhash/test-batch-worker-arguments.py
+python3 scripts/parallelhash/test-batch-worker-drop-glue.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -439,10 +440,31 @@ or remove the first slot before clearing; each compiles and independently fails
 LLVM and assembly inspection. Both full twenty-two-mutant source campaigns pass
 on 1.98.1 x86 Linux and 1.90.0 Apple Arm, including restored sources.
 
+Retained Storage drop glue now has a separate closed LLVM interpreter. It follows
+the original owner fields, requires exactly one full live-buffer clear invocation
+before deallocation, checks base/capacity-derived allocation size and alignment,
+and distinguishes normal return from exception resumption. Zero capacity and
+positive symbolic capacity are covered, with arbitrary valid live length; this
+includes allocated-but-empty storage without sampling a few allocation sizes.
+Every emitted block must be visited. A hypothetical exception from clear is
+checked for invocation/deallocation ordering only, not successful erasure after
+a throwing clear; the erasure claim assumes the qualified non-unwinding clear.
+Machine inspection here covers only the exact straight-line entry-to-clear
+argument prefix, not deallocation instructions or platform unwind tables.
+
+Nine retained rows pass (all unwind rows plus 1.90.0 abort), rejecting 150 artifact
+mutants across those rows. Three 1.98.1 abort rows fully inline the glue and are
+explicitly reported as pending inlined qualification, not successful glue checks.
+The synthetic suite rejects 61 LLVM and 178 machine-prefix regressions. The three
+compiled storage-discard/truncation/removal mutants now independently fail both
+LLVM and machine-prefix checks for retained glue as well as the standalone
+destructor; both twenty-two-mutant source campaigns pass with restored sources.
+
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all
 caller-to-Drop unwind edges or the separate inlined copies of the destructor's
-argument lowering inside coordinators/drop glue. Compilation
+argument lowering inside coordinators. Retained glue is qualified only to the
+LLVM and machine-entry scope above. Compilation
 for Apple/Arm is not fresh native evidence, and abort-profile checks never imply
 that abort executes Drop.
 

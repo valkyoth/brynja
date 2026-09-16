@@ -65,6 +65,8 @@ def main():
         driver.arguments_check.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True))
         driver.drop_glue.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.inline.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+        machine_baseline = driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True)
+        driver.machine.check(machine_baseline, 'unwind')
         for profile in (('unwind', 'abort') if args.toolchain == '1.98.1' and args.target.startswith('aarch64-') else ('unwind',)):
             scalar = profile == 'abort'
             verifier = driver.scalar if scalar else driver.provenance
@@ -117,10 +119,22 @@ def main():
                         pass
                     else:
                         raise AssertionError('compiled inlined storage omission survived')
+                    # Inspect only the altered machine function with the original
+                    # source-qualified identities, not the already-failing MIR/LLVM.
+                    _, clear, drop, noreturn, arm, apple = driver.machine.context(machine_baseline, 'unwind')
+                    body = driver.machine.assembly_function(row['s'], ('9execution5batch', '8Executor7execute'))
+                    try:
+                        driver.machine.inspect(body, clear, drop, noreturn, arm, apple)
+                    except ValueError as error:
+                        driver.check.require('machine normal return bypasses worker cleanup' in str(error),
+                                             'compiled assembly omission must violate cleanup, not just parsing')
+                    else:
+                        raise AssertionError('compiled machine cleanup omission survived')
             finally:
                 worker_path.write_text(original)
         driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.inline.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+        driver.machine.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (
             ('for slot in &mut self.0 {', 'for slot in self.0.iter_mut().skip(1) {'),
             ('for slot in &mut self.0 {', 'for slot in self.0.iter_mut().take(1) {'),

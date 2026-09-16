@@ -331,6 +331,9 @@ python3 scripts/parallelhash/test-batch-worker-lifecycle.py
 python3 scripts/parallelhash/test-batch-worker-arguments.py
 python3 scripts/parallelhash/test-batch-worker-drop-glue.py
 python3 scripts/parallelhash/test-batch-worker-inline.py
+python3 scripts/parallelhash/test-batch-worker-provenance.py
+python3 scripts/parallelhash/test-batch-worker-scalar.py
+python3 scripts/parallelhash/test-batch-worker-machine.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -528,10 +531,38 @@ unwind and abort; restored sources pass. Fresh compiler-driver runs pass on both
 Arm targets. Cross-compilation is not native execution evidence.
 
 These analyses assume valid LLVM/Rust Vec invariants and
-the reviewed reservation/clear/drop contracts; it does not prove initial
+the reviewed reservation/clear/drop contracts; they do not prove initial
 allocation size against the input plan, allocator internals, worker joins,
 arbitrary backing-buffer aliases or machine lowering. Field offsets and the
 source-local identity are compiler-specific, not a stable Rust ABI guarantee.
+
+The emitted coordinator assembly now has a separate ordinary-control-flow
+cleanup check. A closed x86-64/AArch64 instruction-class parser recognizes direct
+branches, tested branches, returning calls, ordinary returns and terminal traps.
+Native thread creation marks storage possibly dirty, including creation failure;
+every later normal return must pass the exact qualified clear/drop symbol.
+States remain separate across merges and repeated-spawn loops. Indirect returning
+calls cannot count as cleanup, and indirect jumps, unknown instructions, inline
+assembly markers and opaque executable directives are rejected. GOT/PLT and
+Mach-O symbol normalization is explicit and assumes correct runtime linking.
+
+All twelve compiler/target/panic rows pass, rejecting four assembly-only mutants
+per row (48 total): removal/substitution of each of the two normal/error cleanup
+calls, or an early return in its place. The focused suite rejects 67 bypass,
+identity, loop and parser regressions. Real compiled forgotten-Storage mutations
+also fail the assembly check independently of the already-failing MIR/LLVM;
+fresh 1.98.1 x86 Linux/Apple Arm and 1.90.0 Arm Linux source campaigns pass with
+restored sources (25, 28 and 25 mutations respectively).
+The artifact and compiled forgotten-Storage tests require an actual dirty-return
+violation; an unrelated parser rejection cannot satisfy those mutation checks.
+
+This is machine CFG call reachability only, not instruction data-flow semantics
+or argument/register/stack correctness. Its ordinary edges do not include LSDA
+exception tables or CFI recovery, even when inspecting an unwind-profile build.
+Landing pads reachable only through unwinding remain outside this analysis.
+Traps, independently identified noreturn callees and infinite paths establish no
+erasure. Valid code/ABI, reviewed callee contracts and symbol resolution remain
+assumptions. No release gate or production code changed.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all

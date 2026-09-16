@@ -14,6 +14,7 @@ import batch_worker_drop_glue as drop_glue
 import batch_worker_inline as inline
 import batch_worker_provenance as provenance
 import batch_worker_scalar as scalar
+import batch_worker_machine as machine
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -76,6 +77,9 @@ def main():
                 states, sites, count = provenance.mutations(row, panic)
                 print(f'ParallelHash inlined memory-backed arguments: PASS; {args.toolchain}; '
                       f'{args.target}; panic={panic}; states={states}; sites={sites}; rejected={count}', flush=True)
+            states, count = machine.mutations(row, panic)
+            print(f'ParallelHash machine normal-path cleanup reachability: PASS; {args.toolchain}; '
+                  f'{args.target}; panic={panic}; states={states}; rejected={count}; unwind/arguments excluded', flush=True)
 
 
 if __name__ == '__main__':

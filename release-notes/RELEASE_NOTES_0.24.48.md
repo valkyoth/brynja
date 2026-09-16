@@ -58,8 +58,11 @@ The two 1.98.1 Arm abort rows fully scalar-replace that header; a separate
 allocation-bound check follows their original base/count to cleanup. All twelve
 rows now pass inlined LLVM argument qualification, rejecting 96 artifact
 regressions; compiled slot-discard/truncation/removal mutations are rejected
-under both Arm panic profiles. Machine unwind tables and broader lifecycle
-obligations remain pending.
+under both Arm panic profiles. A separate emitted-assembly CFG check now requires
+cleanup on post-spawn normal return paths across all twelve rows and rejects
+48 assembly-only bypass mutations. It does not qualify instruction data flow,
+argument registers, unwind tables or broader lifecycle obligations; those remain
+pending.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

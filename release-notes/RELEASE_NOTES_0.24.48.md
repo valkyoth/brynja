@@ -37,8 +37,12 @@ on both compiler endpoints and three targets under abort/unwind. Six bounded Kan
 proofs cover the actual hardened SHA-2/Keccak work controls. SHA-3 batch frame and
 whole-workspace emitted cleanup now passes the same compiler/target matrix; four
 further Kani proofs cover local ParallelHash range and completion predicates.
-Secret-output iteration, ParallelHash owner/lifecycle compiler checks and
-end-to-end transfer/completion proofs are still pending.
+Secret-output LLVM iteration now checks every slot shape with symbolic nonempty
+lengths. ParallelHash workspace/transport/stream cleanup passes MIR/LLVM/assembly
+inspection; worker-storage teardown has MIR and exact LLVM-loop checks. These
+pass the same matrix with compiled omission/shortening mutation tests. Complete
+caller-to-cleanup lifecycle, output/worker machine-level qualification and
+end-to-end transfer/completion proofs are still pending. No release gate changed.
 
 The new `brynja-crypto-cpu/sha256-hardened-batch` feature supplies distinct
 Authority/Session/Workspace types and clearing AVX2/NEON compression kernels.

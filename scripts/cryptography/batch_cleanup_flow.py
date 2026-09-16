@@ -18,7 +18,7 @@ def compact(value):
     return re.sub(r'\s+', '', value)
 
 
-def linear_fields(function, expected, panic, owner):
+def linear_fields(function, expected, panic, owner, borrowed=()):
     blocks = flow.basic_blocks(function)
     current, seen, observed = 'bb0', set(), []
     aliases = {'_1': ('self', compact(owner))}
@@ -43,7 +43,12 @@ def linear_fields(function, expected, panic, owner):
             field = re.fullmatch(r'(_\d+) = (?:&mut|(?:no_retag )?copy) \(\(\*_1\)\.(\d+): (.+)\);', line)
             cast = re.fullmatch(r'(_\d+) = (?:copy|move) (_\d+) as &mut (.+) \(PointerCoercion\(Unsize, Implicit\)\);', line)
             if field:
-                aliases[field[1]] = (field[2], compact(field[3]))
+                kind = compact(field[3])
+                if field[2] in borrowed:
+                    require(re.search(r'= (?:no_retag )?copy ', line) and kind.startswith('&mut'),
+                            'borrowed field must reborrow its exact exclusive reference')
+                    kind = kind[4:]
+                aliases[field[1]] = (field[2], kind)
             elif cast:
                 require(cast[2] in aliases, 'unknown slice origin')
                 origin, source_type = aliases[cast[2]]
@@ -127,6 +132,9 @@ def assembly_calls(body):
                 require(re.match(r'\*?_+(?:R|ZN)', arguments), 'non-Rust cleanup call or jump')
                 calls.append(arguments)
             terminal = operation in ('jmp', 'jmpq', 'b')
+            # Only the explicitly supported tail-call copy can use a volatile
+            # function register; a preceding call invalidates that value.
+            aliases.pop('%rax', None)
             continue
         require(operation in ('movq', 'movl', 'movabsq', 'leaq', 'addq', 'subq', 'pushq', 'popq',
                               'retq', 'ret', 'add', 'sub', 'mov', 'stp', 'ldp', 'str', 'ldr'),
@@ -138,8 +146,12 @@ def assembly_calls(body):
             register = destination[1]
             register = re.sub(r'^(%r1[2-5])[dwb]$', r'\1', register)
             register = {'%ebx': '%rbx', '%bx': '%rbx', '%bl': '%rbx', '%bh': '%rbx',
-                        '%ebp': '%rbp', '%bp': '%rbp', '%bpl': '%rbp'}.get(register, register)
+                        '%ebp': '%rbp', '%bp': '%rbp', '%bpl': '%rbp',
+                        '%eax': '%rax', '%ax': '%rax', '%al': '%rax', '%ah': '%rax'}.get(register, register)
             aliases.pop(register, None)
+        copied = re.fullmatch(r'(%(?:rbx|rbp|r1[2-5])), %rax', arguments)
+        if operation == 'movq' and copied and copied[1] in aliases:
+            aliases['%rax'] = aliases[copied[1]]
         load = re.fullmatch(r'(_+(?:R|ZN)[^\s,]+)@GOTPCREL\(%rip\), (%(?:rbx|rbp|r1[2-5]))', arguments)
         if operation == 'movq' and load:
             aliases[load[2]] = load[1]

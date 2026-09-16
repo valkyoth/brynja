@@ -321,6 +321,12 @@ python3 scripts/sha2/test-hardened-sha2-batch-codegen.py
 python3 scripts/sha3/test-sha3-batch-cleanup-flow.py
 python3 scripts/sha3/check-hardened-sha3-batch-codegen.py
 python3 scripts/sha3/test-hardened-sha3-batch-codegen.py
+python3 scripts/cryptography/test-batch-output-flow.py
+python3 scripts/cryptography/check-batch-output-codegen.py
+python3 scripts/cryptography/test-batch-output-codegen.py
+python3 scripts/parallelhash/test-batch-worker-cleanup.py
+python3 scripts/parallelhash/check-parallel-batch-cleanup.py
+python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
 python3 scripts/assurance/check-hardened-batch-kani.py
 python3 scripts/assurance/check-parallel-batch-kani.py
@@ -345,6 +351,35 @@ artifacts per combination. Nine real compiled source regressions were rejected
 on Rust 1.98.1 x86 Linux and Rust 1.90.0 Apple Arm. Twenty-one standalone LLVM
 address, extent and control-flow regressions are rejected too.
 
+Secret-output destruction is checked separately by a closed LLVM interpreter.
+It explores all absent/empty/nonempty slot combinations: 6,561 for narrow SHA-2
+and 81 each for wide SHA-2 and Keccak. Nonempty destination pointers and lengths
+remain symbolic; only zero/equality length tests are supported. Every nonempty
+destination must clear exactly once at its original length, followed by the
+complete identity/bit-count metadata. Unknown instructions, skipped slots,
+truncation, early returns and unvisited blocks fail inspection. All twelve
+compiler/target/panic combinations passed, as did rejection of 28 synthetic
+regressions and sixteen actually compiled source mutations on 1.98.1 x86 Linux
+and 1.90.0 Apple Arm. This checks LLVM, not full MIR or machine-level loop semantics.
+
+ParallelHash inspection binds batch workspace cleanup, transferred leaf storage,
+stream cancellation/destruction, reader destruction and the incomplete-operation
+guard to their exact owners in MIR. LLVM binds full owned and borrowed extents;
+assembly retains the corresponding ordered calls. Each of the twelve compiler
+combinations rejects 34 altered artifacts. Thread-worker Storage destruction
+has a separate MIR call check and exact LLVM loop check: from a valid Vec's base
+to its end, each 256-byte slot is cleared before advancing. It rejects seven
+artifact changes on Rust 1.90.0 and eight on 1.98.1, plus sixteen synthetic loop
+regressions. Fourteen compiled ParallelHash cleanup omissions/shortenings are
+rejected on 1.98.1 x86 Linux and 1.90.0 Apple Arm. The shared provenance checker
+now rejects 83 malformed artifacts; prior SHA-2/SHA-3 inspectors remain passing.
+
+These checks assume valid Rust owner/Vec invariants and non-unwinding external
+clearing contracts. They do not prove worker joining, allocation reuse, all
+caller-to-Drop unwind edges or output/worker loop machine lowering. Compilation
+for Apple/Arm is not fresh native evidence, and abort-profile checks never imply
+that abort executes Drop.
+
 The standalone Kani driver uses the repository-pinned verifier and appends its
 harnesses only to isolated copies of the actual three production Control modules.
 It proves arbitrary 64-bit charge/cancellation/error accounting is atomic, with
@@ -366,9 +401,9 @@ prove the local predicates, not cryptographic state validity, all block sizes,
 token provenance, transfer ordering, complete public lifecycle or cleanup.
 Insufficient loop-unwinding failures cannot count as mutation counterexamples.
 
-Remaining compiler obligations include secret-output destination iteration,
-ParallelHash stream/transport/thread storage and full caller-to-cleanup lifecycle
-coverage. Remaining bounded-proof obligations include worker-result transfer and
+Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
+and output/worker loop machine-level qualification. Remaining bounded-proof
+obligations include worker-result transfer and
 end-to-end completion-token consumption. These limited checks are
 not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.

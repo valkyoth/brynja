@@ -116,8 +116,38 @@ def assembly_tests():
     return len(changes) + 8
 
 
+def borrowed_tests():
+    count = 0
+    for panic in ('abort', 'unwind'):
+        source = fixture(panic).replace('&mut ((*_1).0: [[u8; 4]; 2])',
+                                       'no_retag copy ((*_1).0: &mut [[u8; 4]; 2])')
+        check.linear_fields(source, EXPECTED, panic, 'Owner', ('0',))
+        for before, after in (
+            ('no_retag copy', '&mut'), ('no_retag copy', 'move'),
+            ('0: &mut [[u8;', '0: &[[u8;'), ('((*_1).0:', '((*_1).2:'),
+            ('move _4)', 'move _3)'),
+        ):
+            rejects(lambda: check.linear_fields(source.replace(before, after), EXPECTED, panic, 'Owner', ('0',)))
+            count += 1
+        rejects(lambda: check.linear_fields(source, EXPECTED, panic, 'Owner'))
+        count += 1
+    return count
+
+
+def tail_copy_tests():
+    source = 'movq _Rclear@GOTPCREL(%rip), %r14\nmovq %r14, %rax\npopq %r14\njmpq *%rax'
+    assert check.assembly_calls(source) == ['_Rclear']
+    count = 0
+    for changed in ('callq _Runrelated', 'movq $0, %rax', 'movl $0, %eax',
+                    'movl $0, %ax', 'movl $0, %al', 'movl $0, %ah'):
+        rejects(lambda: check.assembly_calls(source.replace('jmpq *%rax', changed + '\njmpq *%rax')))
+        count += 1
+    rejects(lambda: check.assembly_calls(source.replace('movq %r14, %rax', 'movq %r15, %rax')))
+    return count + 1
+
+
 def main():
-    count = mir_tests() + assembly_tests()
+    count = mir_tests() + assembly_tests() + borrowed_tests() + tail_copy_tests()
     print(f'Batch cleanup field/CFG/call provenance: PASS; {count} malformed artifacts rejected')
 
 

@@ -106,7 +106,8 @@ ROWS = {
     "crates/brynja-hash-parallel/README.md": [
         "| All four portable ParallelHash/ParallelHashXOF identities | ✅ Fully implemented | ❌ No |",
         "| Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |",
-        "| Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |"
+        "| Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |",
+        "| Hardened scheduled leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |"
     ],
     "crates/brynja-legacy-ssl2/README.md": [
         "| SSL 2.0 controlled interoperability | ❌ Not implemented | ❌ No |"

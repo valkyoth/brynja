@@ -78,7 +78,7 @@ impl<'input> Plan<'input> {
 pub struct Job<'plan, 'input> {
     plan: &'plan Plan<'input>,
     index: u128,
-    input: Fips202BitString<'input>,
+    pub(super) input: Fips202BitString<'input>,
 }
 impl<'plan, 'input> Job<'plan, 'input> {
     /// Exact zero-based index in the retained plan.

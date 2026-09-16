@@ -3,7 +3,8 @@
 Development in progress: hardened multibuffer hash owners. Not released; no
 crates selected for publication. The narrow and wide SHA-2 CPU and leaf batch
 APIs, Keccak CPU/leaf batching and distinct hosted adapters are implemented;
-ParallelHash integration and qualification remain pending.
+Scheduled ParallelHash leaf groups are implemented; streaming/threaded batching
+and qualification remain pending.
 
 ## Scope
 
@@ -49,8 +50,8 @@ distinct wide owners and kernels: four AVX2 lanes or two NEON lanes, SHA-384,
 SHA-512, named /224 and /256, and all 510 general SHA-512/t parameters. Secret
 outputs preserve exact parameter identity and canonical final bits. Finite work
 includes general IV derivation as well as padding. Ordinary batch storage and
-public digest importers are not used for secret state. ParallelHash integration
-and full qualification are still pending. Keccak now
+public digest importers are not used for secret state. Full qualification is
+still pending. Keccak now
 has a distinct default-off `brynja-crypto-cpu/keccak-hardened-batch` permutation
 foundation with four AVX2 or two NEON lanes. Word/byte state entry points clear
 all packed state, parity, delta and rho/pi/chi staging on every exit and commit
@@ -75,6 +76,16 @@ Generic x86 remains portable/unavailable without a build-specialized AVX2
 deployment. Allowlisted little-endian AArch64 uses the OS NEON feature ABI;
 cached detection does not prove arbitrary migration safety. CPU revocation
 affects every borrowed accelerated executor, not unrelated portable executors.
+
+The separate `brynja-hash-parallel/hardened-batch-execution` feature now adds
+bounded scheduled SHAKE leaf groups for all four ParallelHash identities.
+Plan-bound affine results retain exact indices and clear on merge/drop; the
+collector validates provenance and order before absorbing CVs. Per-slot actual
+vector participation drives worker policy and reports. Require rejects
+incomplete groups; Prefer explicitly permits clearing scalar tails. Failure or
+unwind cancels the root and clears workspace/results. The existing streaming
+completion proof is unchanged; streaming/threaded multibuffer integration and
+complete qualification remain pending.
 
 Batch shape, configured limits and scheduling are public; callers must pad when
 traffic-analysis resistance is required. Explicit clearing cannot guarantee

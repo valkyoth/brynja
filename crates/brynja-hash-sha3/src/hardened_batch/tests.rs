@@ -14,6 +14,64 @@ const ALGORITHMS: [Algorithm; 8] = [
     Algorithm::Cshake256,
 ];
 #[test]
+fn accelerated_slot_mask_tracks_sparse_groups_not_selected_authority() -> Result<(), Error> {
+    let kernel = if cfg!(target_arch = "aarch64") {
+        Kernel::Neon
+    } else {
+        Kernel::Avx2
+    };
+    if !kernel.compiled() {
+        return Ok(());
+    }
+    let owner = Authority::for_compiled_target(kernel).map_err(Error::Backend)?;
+    let executor =
+        Executor::with_session(owner.session().map_err(Error::Backend)?, Mode::Prefer, 1)?;
+    for active in 0_u8..16 {
+        let mut inputs: [Option<Input<'_>>; CAPACITY] = core::array::from_fn(|_| None);
+        for (index, slot) in inputs.iter_mut().enumerate() {
+            if active & (1 << index) != 0 {
+                *slot = Some(Input::new(Algorithm::Sha3_256, bits(b"abc", 24)?, 256)?);
+            }
+        }
+        let count = usize::try_from(active.count_ones()).map_err(|_| Error::Invariant)?;
+        let vector_count = count
+            .checked_div(kernel.width())
+            .and_then(|n| n.checked_mul(kernel.width()))
+            .ok_or(Error::Invariant)?;
+        let mut expected = 0_u8;
+        let mut seen = 0_usize;
+        for index in 0..CAPACITY {
+            if active & (1 << index) != 0 && seen < vector_count {
+                expected |= 1 << index;
+                seen = seen.checked_add(1).ok_or(Error::Invariant)?;
+            }
+        }
+        let mut outputs = [[0xa5; 32]; CAPACITY];
+        let mut destinations = core::array::from_fn(|_| None);
+        for (index, (output, destination)) in outputs.iter_mut().zip(&mut destinations).enumerate()
+        {
+            if active & (1 << index) != 0 {
+                *destination = Some(output.as_mut_slice());
+            }
+        }
+        let mut workspace = Workspace::new();
+        let mut staging = [0xff; 128];
+        let mut no = || false;
+        let (secret, report) = executor.digest_secret(
+            &inputs,
+            destinations,
+            &mut workspace,
+            &mut staging,
+            &mut Control::new(4, &mut no),
+        )?;
+        assert_eq!(report.accelerated_slots, expected);
+        assert_eq!(report.vector_permutations, vector_count as u64);
+        drop(secret);
+        assert_eq!(staging, [0; 128]);
+    }
+    Ok(())
+}
+#[test]
 fn input_identity_width_and_customization_are_checked() -> Result<(), Error> {
     let empty = bits(&[], 0)?;
     let custom = bits(&[1], 1)?;
@@ -275,6 +333,7 @@ fn campaign(executor: &Executor<'_>, vector: bool) -> Result<(), Error> {
             Some(control.used())
         );
         assert_eq!(report.vector_calls != 0, vector);
+        assert_eq!(report.accelerated_slots, if vector { 0b1111 } else { 0 });
         let mut cancel = || false;
         let mut control = Control::new(1024, &mut cancel);
         executor.digest_public(

@@ -94,6 +94,9 @@ pub struct Report {
     pub kernel: Option<Kernel>,
     /// Actual vector dispatches, excluding the authority startup KAT.
     pub vector_calls: u64,
+    /// Bit i is set only if input slot i actually participated in a vector call.
+    /// This does not claim that every permutation of that slot was accelerated.
+    pub accelerated_slots: u8,
     /// Independent states permuted by vector dispatches.
     pub vector_permutations: u64,
     /// Independent states permuted by portable code.
@@ -165,6 +168,12 @@ impl<'a> Executor<'a> {
             minimum_permutations,
             revoked: Cell::new(false),
         })
+    }
+    /// Healthy selected kernel, not a claim that a workload used acceleration.
+    /// Fails on revocation; never authorizes portable fallback from failure.
+    pub fn kernel(&self) -> Result<Option<Kernel>, Error> {
+        self.check()?;
+        Ok(self.session.as_ref().map(|session| session.kernel()))
     }
     /// Permanently revokes the executor and any supplied authority.
     pub fn quarantine(&self) {

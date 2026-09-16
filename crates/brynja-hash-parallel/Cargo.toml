@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+hardened-batch-execution = ["hardened-execution", "brynja-hash-sha3/hardened-batch-execution"]
 hardened-execution = ["brynja-hash-sha3/hardened-execution"]
 runtime-execution = ["hardened-execution", "brynja-hash-sha3/runtime-execution"]
 

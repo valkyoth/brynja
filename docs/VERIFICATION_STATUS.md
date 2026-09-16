@@ -91,8 +91,10 @@ passed with explicit performance limitations. All 372 detached commands, final
 tag-gate checks and GitHub passed; signed v0.24.47 points to `002ae1ba`.
 Earlier single-state evidence was not substituted for this multibuffer collection.
 The v0.24.48 [hardened batch owner work](hardened-multibuffer-owners.md) is in
-development, not a completed secret-bearing capability. Independent verification
-remains unchanged.
+development, not a completed secret-bearing capability. Scheduled ParallelHash
+leaf groups now use distinct clearing owners and actual per-slot SIMD accounting;
+streaming/threaded batch integration and full qualification remain pending.
+Independent verification remains unchanged.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |

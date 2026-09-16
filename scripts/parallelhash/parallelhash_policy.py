@@ -18,6 +18,7 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
+    "batch.rs", "batch/tests.rs", "collector/batch.rs",
     "backend.rs", "binding.rs", "collector.rs", "collector/tests.rs", "encoding.rs", "mod.rs",
     "ownership.rs", "plan.rs", "stream.rs", "stream_output.rs", "stream/tests.rs",
 ))
@@ -53,6 +54,7 @@ DIFFERENTIAL = (
     Path("scripts/parallelhash/capture-parallelhash-execution-native.py"),
     Path("scripts/parallelhash/check-parallelhash-execution-native.py"),
     Path("scripts/parallelhash/test-parallelhash-execution-native.py"),
+    Path("scripts/parallelhash/test-parallelhash-batch.py"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -107,7 +109,11 @@ def validate(root: Path) -> None:
     if set(HASHES) != set(HASHED):
         fail("ParallelHash reviewed hash inventory changed")
 
-    production = "\n".join(loaded[path] for path in (*SOURCES, *EXECUTION))
+    # This out-of-line, test-only module uses host allocation/unwind probes.
+    require(loaded[PORTABLE / "src/execution/batch.rs"],
+            "#[cfg(test)]\nmod tests;", "batch tests remain test-only")
+    production = "\n".join(loaded[path] for path in (*SOURCES, *EXECUTION)
+                           if path != PORTABLE / "src/execution/batch/tests.rs")
     for forbidden in (
         "unsafe", 'extern "C"', "std::", "alloc::", "Vec<", "Box<",
         "static mut", "Atomic", "thread_local", "core::arch", "asm!",
@@ -153,6 +159,7 @@ def validate(root: Path) -> None:
     portable_manifest = tomllib.loads(loaded[MANIFESTS[0]])
     if portable_manifest.get("features") != {
         "default": [],
+        "hardened-batch-execution": ["hardened-execution", "brynja-hash-sha3/hardened-batch-execution"],
         "hardened-execution": ["brynja-hash-sha3/hardened-execution"],
         "runtime-execution": ["hardened-execution", "brynja-hash-sha3/runtime-execution"],
     }:

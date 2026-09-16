@@ -149,6 +149,9 @@ fn vector(
             .get_mut(*index)
             .ok_or(Error::Invariant)?
             .copy_from_slice(state);
+        report.accelerated_slots |= 1_u8
+            .checked_shl(u32::try_from(*index).map_err(|_| Error::Invariant)?)
+            .ok_or(Error::Invariant)?;
     }
     report.kernel = Some(session.kernel());
     report.vector_calls = report.vector_calls.checked_add(1).ok_or(Error::Invariant)?;

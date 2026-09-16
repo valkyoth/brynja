@@ -256,6 +256,8 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name in {"brynja-mac-kmac", "brynja-hash-tuple", "brynja-hash-parallel"}:
         expected["hardened-execution"] = ["brynja-hash-sha3/hardened-execution"]
         expected["runtime-execution"] = ["hardened-execution", "brynja-hash-sha3/runtime-execution"]
+    if name == "brynja-hash-parallel":
+        expected["hardened-batch-execution"] = ["hardened-execution", "brynja-hash-sha3/hardened-batch-execution"]
     if name == "brynja-hash-parallel-std":
         expected["runtime-execution"] = ["brynja-hash-parallel/runtime-execution",
                                         "dep:brynja-crypto-cpu-std", "dep:brynja-crypto-cpu"]

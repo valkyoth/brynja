@@ -57,6 +57,9 @@ def main() -> int:
     reject("proof", Path("scripts/assurance/check-kani.sh"), "cargo kani -p brynja-hash-parallel", "cargo kani -p missing-parallelhash")
     reject("dependency", Path("crates/brynja-hash-parallel/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", 'foreign = "1"')
     reject("execution-default", Path("crates/brynja-hash-parallel/Cargo.toml"), "default = []", 'default = ["hardened-execution"]')
+    reject("batch-default", Path("crates/brynja-hash-parallel/Cargo.toml"), "default = []", 'default = ["hardened-batch-execution"]')
+    reject("batch-test-only", Path("crates/brynja-hash-parallel/src/execution/batch.rs"), "#[cfg(test)]\nmod tests;", "mod tests;")
+    reject("batch-unsafe", Path("crates/brynja-hash-parallel/src/execution/batch.rs"), "use super::", "unsafe fn bypass() {}\nuse super::")
     reject("std-execution-default", Path("crates/brynja-hash-parallel-std/Cargo.toml"), "default = []", 'default = ["runtime-execution"]')
     reject("execution-oracle-gate", Path("scripts/checks.sh"), "python3 scripts/parallelhash/check-parallelhash-execution-differential.py", "removed-execution-oracle")
     reject("execution-package-gate", Path("scripts/checks.sh"), "python3 scripts/parallelhash/check-parallelhash-execution-package.py", "removed-execution-package")
@@ -70,7 +73,7 @@ def main() -> int:
     reject("owner-inventory", Path("docs/parallelhash-execution.md"), "std `worker::Storage`", "omitted")
     reject("storage-test", Path("crates/brynja-hash-parallel-std/src/execution/worker/tests.rs"),
            "storage_clear_visits_every_byte_of_every_live_slot", "omitted")
-    print("ParallelHash policy rejects thirty-one domain, encoding, lifecycle, cleanup, scheduling, evidence, test, and dependency regressions")
+    print("ParallelHash policy rejects thirty-four domain, encoding, lifecycle, cleanup, scheduling, evidence, test, and dependency regressions")
     return 0
 
 

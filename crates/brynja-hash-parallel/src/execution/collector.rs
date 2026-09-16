@@ -2,6 +2,8 @@ use super::binding::Binding;
 use super::{Clear, Error, Leaf, Mode, Plan, Report, backend::State, encoding::Encoded};
 use crate::{Fips202BitString, ParallelHashPublicDeclassification, ParallelHashSecretOutput};
 use brynja_core::clear_owned_region;
+#[cfg(feature = "hardened-batch-execution")]
+mod batch;
 
 /// Hardened root bound to one exact plan and one selected execution authority.
 /// Leaf completion reports record historical work, not live worker authority.

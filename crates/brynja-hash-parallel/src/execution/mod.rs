@@ -24,6 +24,8 @@
 //! ```
 
 mod backend;
+#[cfg(feature = "hardened-batch-execution")]
+pub mod batch;
 mod binding;
 mod collector;
 mod encoding;

@@ -1,7 +1,8 @@
 # Hardened multibuffer hash owners
 
 Status: v0.24.48 in development; narrow and wide SHA-2 CPU/leaf batch APIs implemented,
-Keccak CPU/leaf APIs and hosted adapters implemented; integration/qualification pending.
+Keccak CPU/leaf APIs, hosted adapters and scheduled ParallelHash groups implemented;
+streaming/threaded integration and qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
 public-only. Nothing in this document authorizes passing secrets to those types.
@@ -79,9 +80,30 @@ revocation or proof of arbitrary hypervisor migration safety.
 CPU quarantine revokes existing accelerated borrows and prevents new ones.
 Portable selections have no CPU authority; use the portable executor's own
 quarantine method for local revocation. Authority/borrow lifetimes and
-non-Send/Sync/Copy/Clone/Debug contracts remain enforced. Names for ParallelHash
-integration remain proposed.
+non-Send/Sync/Copy/Clone/Debug contracts remain enforced.
 Native qualification is not supplied by local/emulated tests.
+
+The separate `brynja-hash-parallel/hardened-batch-execution` feature implements
+scheduled groups through `execution::batch::{Job, Leaves, Workspace}` and the
+clearing SHA-3 batch `Executor`. `Plan::batch(start, count)` selects one to four
+contiguous leaves. `Job::execute` computes exact SHAKE128/256 chaining values,
+retaining the exact plan object and indices in a non-forgeable affine result.
+`Collector::merge_batch` consumes that result, checks all identities, widths and
+worker-policy results before absorption, and clears values on success/failure.
+`Collector::execute_batched` performs bounded groups in order with one shared
+leaf-permutation budget/cancellation control. Root work retains its separate
+existing construction/output contract; any failure or unwind cancels the root.
+
+SHA-3 batch reports now include the actual vector-participating slot mask.
+Selecting an authority alone does not satisfy RequireAcceleration. Require mode
+applies to each group and rejects an incomplete final group; Prefer explicitly
+allows clearing scalar tails. Mixed worker policy also permits caller-scheduled
+accelerated groups followed by a separate portable tail. Workspace clears all
+active and unused CV capacity, nested hash state and staging; completed results
+retain exclusive borrows until merge/drop. No ordinary batch owner is involved.
+The existing streaming completion token remains unchanged, and scheduled tokens
+cannot complete streaming roots. Streaming/threaded multibuffer integration is
+still pending; these aggregate secret results remain thread-bound.
 
 ## Implementation order and scope
 

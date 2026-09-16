@@ -41,8 +41,11 @@ Secret-output LLVM iteration now checks every slot shape with symbolic nonempty
 lengths. ParallelHash workspace/transport/stream cleanup passes MIR/LLVM/assembly
 inspection; worker-storage teardown has MIR and exact LLVM-loop checks. These
 pass the same matrix with compiled omission/shortening mutation tests. Complete
-caller-to-cleanup lifecycle, output/worker machine-level qualification and
-end-to-end transfer/completion proofs are still pending. No release gate changed.
+caller-to-cleanup lifecycle and output/worker machine-level qualification remain
+pending. New compositional Kani harnesses exercise actual transfer consumption
+and completion-token finalization with modeled sponge results and byte clearing;
+they do not establish hashing correctness, arbitrary input flushing or threading.
+No release gate changed.
 
 The new `brynja-crypto-cpu/sha256-hardened-batch` feature supplies distinct
 Authority/Session/Workspace types and clearing AVX2/NEON compression kernels.

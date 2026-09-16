@@ -329,6 +329,7 @@ python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
 python3 scripts/assurance/check-hardened-batch-kani.py
+python3 scripts/assurance/test-parallel-batch-kani.py
 python3 scripts/assurance/check-parallel-batch-kani.py
 ```
 
@@ -401,11 +402,36 @@ prove the local predicates, not cryptographic state validity, all block sizes,
 token provenance, transfer ordering, complete public lifecycle or cleanup.
 Insufficient loop-unwinding failures cannot count as mutation counterexamples.
 
+Three further compositional Kani harnesses follow actual transport consumption
+and completion-token methods. Two cover narrow/wide scheduled transfer with
+arbitrary u128 positions/limits/accounting, usize counts, valid active-slot masks,
+all worker policies, foreign plans, invalid phases and streaming-root rejection.
+They check exact successful accounting, terminal cancellation on failure and
+clearing of every transport byte, including inactive capacity. A third follows
+batch `finish_input` through exact root-bound token consumption by
+`Collector::finish_stream`, then rejects a second finalization attempt. It covers
+all u16 input-bit counts with no pending bytes or final tail, arbitrary u128 merged
+counts, and cancellation at either poll. It is not a full input-buffer proof.
+
+These are explicitly compositional proofs: completed tokens/counters are injected,
+sponge absorption is modeled as success or failure for transfer, and sponge
+absorption/finalization as success for completion. The volatile primitive is
+modeled by its byte-clearing effect; actual owner Drop, guard cancellation,
+accounting and token methods are not replaced. Thus these harnesses do not prove
+hash values, payload absorption/order, token creation by real worker hashing,
+machine-store preservation, registers or every callback/unwind behavior. They
+complement the separately scoped runtime, ownership and emitted-code checks.
+The standalone driver selects exact harness names and bounds each verifier run;
+timeout/interruption is never accepted as a source-mutation counterexample.
+All three added harnesses and twelve real-source counterexamples passed with
+the pinned Kani 0.67.0. The original four predicate proofs and their nine mutants
+also pass. Invalid source anchors and interrupted verifier results are tested
+separately; disabling either check is detected by checker mutation tests.
+
 Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
-and output/worker loop machine-level qualification. Remaining bounded-proof
-obligations include worker-result transfer and
-end-to-end completion-token consumption. These limited checks are
-not full multibuffer qualification, proof of crypto kernels, register erasure,
+and output/worker loop machine-level qualification. The new compositional proofs
+do not close arbitrary streaming flush/payload paths or thread joining. These
+limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.
 
 ## Acceptance required before completion

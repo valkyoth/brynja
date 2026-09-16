@@ -113,6 +113,9 @@ def thread_campaign(root, env, cargo, target):
         (worker, 'for handle in handles {', 'for handle in handles.into_iter().rev() {', 'std', 'reversed_worker'),
         (worker, 'vector_calls: report.vector_calls', 'vector_calls: 0', 'std', 'work_totals'),
         (worker, 'scalar_permutations: report.scalar_permutations', 'scalar_permutations: 0', 'std', 'work_totals'),
+        (worker, 'complete: false,', 'complete: true,', 'std', 'coordinator_unwind'),
+        (worker, 'if !self.complete {', 'if false {', 'std', 'coordinator_unwind'),
+        (worker, 'tests::observe_drop(self);', '{}', 'std', 'coordinator_unwind'),
     ]
     for name, before, after, package, test in cases:
         subject = root / name

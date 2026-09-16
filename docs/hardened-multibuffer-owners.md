@@ -268,6 +268,25 @@ Create thread-bound authority inside each worker; do not make sessions Send to
 enable parallelism. Only explicitly reviewed completed leaf owners may cross
 worker boundaries. SIMD width and worker count are separate public limits.
 
+The hosted batch tests additionally inject a coordinator-side panic before the
+first, second or third worker launch across all four ParallelHash identities.
+Already started workers wait on channels until coordinator unwinding disconnects
+them, so their real work cannot finish before the injected panic. The Storage
+Drop probe records completed worker wrappers and zeroed live slots at destruction;
+the caller then checks root cancellation, terminal reuse rejection and secret
+destination clearing. This uses synchronization, not elapsed-time assertions.
+The twelve cases pass on Rust 1.90.0/1.98.1 and in optimized tests. The threaded
+source-mutation campaign now rejects fifteen regressions, including two disabled
+cancellation-guard variants and omission of the test-only Drop observer.
+The pinned Miri run passes the three ParallelHash128 cases (approximately five
+minutes). An initial all-identity invocation timed out and is not counted as
+passing; the other nine cases have native, not Miri, evidence at this checkpoint.
+
+This is runtime evidence for these recoverable-unwind cases, not a general
+proof of thread joining, all schedules, native SIMD cleanup or abort behavior.
+The observer deliberately records rather than asserts during Drop, avoiding a
+second panic that could mask the regression by aborting the process.
+
 ## Packaged-consumer development acceptance
 
 The standalone checker builds actual `.crate` archives for the eight first-party

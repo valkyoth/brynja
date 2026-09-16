@@ -27,6 +27,7 @@ EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
 STD_EXECUTION = tuple(STD / "src/execution" / name for name in (
     "mod.rs", "selection.rs", "worker.rs", "tests.rs", "worker/tests.rs",
     "batch.rs", "batch/selection.rs", "batch/worker.rs", "batch/tests.rs", "batch/worker/tests.rs",
+    "batch/worker/tests/coordinator_unwind.rs",
 ))
 TESTS = (
     PORTABLE / "tests/api.rs", PORTABLE / "tests/official_vectors.rs",

@@ -166,6 +166,11 @@ worker is joined, results merge in submission order, and errors clear unmerged
 results and cancel the root. Worker count, SIMD width, per-group permutation
 budget and complete-input leaf limit are distinct. Actual vector/scalar work is
 reported separately. Complete qualification remains pending.
+Coordinator-panic tests now cover all four identities with zero, one or two
+workers already started. Channel ordering checks worker completion and cleared
+Storage at destruction, followed by terminal root/output checks. These add
+runtime lifecycle evidence, not a general thread-joining or abort-erasure proof;
+production behavior and release gates are unchanged.
 
 Batch shape, configured limits and scheduling are public; callers must pad when
 traffic-analysis resistance is required. Explicit clearing cannot guarantee

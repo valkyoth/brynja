@@ -4,6 +4,8 @@ use brynja_hash_parallel::execution::{Identity, Mode};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+mod coordinator_unwind;
+
 #[test]
 fn work_totals_are_exact_checked_and_atomic() -> Result<(), Error> {
     let mut work = Work::default();
@@ -51,6 +53,7 @@ fn work_totals_are_exact_checked_and_atomic() -> Result<(), Error> {
 
 std::thread_local! { static DROPS: core::cell::Cell<usize> = const { core::cell::Cell::new(0) }; }
 pub(super) fn observe_drop(storage: &Storage) {
+    coordinator_unwind::observe(storage);
     if storage.0.iter().flatten().flatten().all(|v| *v == 0) {
         DROPS.with(|n| n.set(n.get().saturating_add(1)));
     }

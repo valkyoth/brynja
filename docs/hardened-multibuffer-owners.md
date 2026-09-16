@@ -810,6 +810,34 @@ the pinned Kani 0.67.0. The original four predicate proofs and their nine mutant
 also pass. Invalid source anchors and interrupted verifier results are tested
 separately; disabling either check is detected by checker mutation tests.
 
+A further `buffer` harness exercises actual `Stream::update`, `update_inner`,
+`flush`, cancellation and Drop on two chunked updates. It covers B=1, every
+length from zero to twelve bytes, every split point, arbitrary byte values,
+cancellation at any of the four outer polls and rejection of any of three
+complete groups. A modeled consumer asserts that every full group receives the
+next four original bytes in order; it either advances modeled leaf accounting
+or returns an error. Successful updates must preserve the exact remaining
+prefix, zero unused buffer bytes and report the exact input and merged counts.
+Errors must cancel the root, clear pending bytes/counters and reject reuse;
+Drop must clear the buffer on both success and failure.
+
+The harness injects an empty root, repurposing otherwise-unused pre-output fields
+only as oracle data and a failure selector. These are not claimed to be a valid
+hashed transcript. `Collector::merge_stream_batch` is stubbed, so this proof does
+not qualify its hashing, CV construction, root absorption or work charging.
+Clearing is modeled by byte fill, not machine-store preservation. The real
+buffer-copy, flush clearing and cancellation code is not replaced. Partial-bit
+tails, larger block/message sizes, more updates and arbitrary unwind remain
+outside this bounded proof. Run it separately with
+`python3 scripts/assurance/check-parallel-batch-kani.py --proof buffer`.
+The positive proof passes with pinned Kani 0.67.0. Five real-source mutants
+produce assertion counterexamples: zero-filled copying, discarded input tails,
+omitted post-flush buffer clearing, discarded input accounting and disabled
+cancellation guards. An initial 33-unroll attempt with generic slice comparisons
+timed out and is excluded. Explicit four-byte oracle comparisons and a five-step
+unwind bound retain the same input domain; unwinding assertions remain enabled.
+The restored-source proof passes again after all five mutations.
+
 Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
 and machine-level coordinator argument/unwind qualification (standalone Storage
 and both forms of inlined LLVM handoff are now checked at the levels above). The new compositional proofs

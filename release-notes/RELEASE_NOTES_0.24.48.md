@@ -106,6 +106,11 @@ is bounded runtime evidence, not exhaustive scheduling or native SIMD evidence.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.
+A bounded buffering Kani harness also follows two real byte updates at B=1,
+with symbolic payloads up to twelve bytes, all split points and modeled consumer
+failures. It checks ordered full-group handoff, pending bytes, counters and
+cancel/Drop clearing. Hashing, partial-bit tails, arbitrary sizes and machine
+erasure are outside this compositional proof.
 No release gate changed.
 
 The new `brynja-crypto-cpu/sha256-hardened-batch` feature supplies distinct

@@ -268,6 +268,42 @@ Create thread-bound authority inside each worker; do not make sessions Send to
 enable parallelism. Only explicitly reviewed completed leaf owners may cross
 worker boundaries. SIMD width and worker count are separate public limits.
 
+## Packaged-consumer development acceptance
+
+The standalone checker builds actual `.crate` archives for the eight first-party
+dependencies, then resolves an external consumer exclusively against their
+extracted contents. It rejects registry/workspace escapes and ordinary batch
+features in the hardened-only graph. It never publishes a package or modifies
+release-gate rules.
+
+```sh
+python3 scripts/cryptography/test-hardened-batch-package.py
+python3 scripts/cryptography/check-hardened-batch-package.py --toolchain 1.90.0
+python3 scripts/cryptography/check-hardened-batch-package.py --simd
+```
+
+`--simd` requires the operator to establish the target's feature bundle: AVX2
+on x86-64 or NEON on little-endian AArch64. It forces actual-route tests rather
+than accepting an unavailable backend as accelerated evidence. The default is
+portable. `--target` selects an installed target and Cargo runner; emulated Arm
+execution remains emulation, never native qualification.
+
+The checker runs all six feature-owning crates' shipped library tests/doctests
+in debug and release, plus six documented APIs as external-consumer examples.
+It pairs every negative compilation with a positive type control and requires
+the exact structured rustc error: 129 forbidden ownership traits and sixteen
+ordinary-type substitutions or implicit secret-to-public conversions. Completed
+ParallelHash transport has a positive Send control; unfinished owners do not.
+Eight real cleanup omission mutants must fail executing release tests. SIMD
+runs also reject three skipped-dispatch mutations. Restored sources are retested;
+missing tests and compilation failures cannot stand in for runtime rejection.
+Checker regressions exercise dependency provenance, wrong diagnostics, failed
+positive controls, missing runtime tests, restoration and weakened checks.
+
+These checks supplement the prior family-specific mutation campaigns. They do
+not replace per-region emitted-code analysis, Kani proofs, fresh platform captures
+or the exceptional owner pentest/retest.
+
 ## Acceptance required before completion
 
 - Positive downstream examples for every constructor, exact bit/byte identity,

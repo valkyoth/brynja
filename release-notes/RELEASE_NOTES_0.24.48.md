@@ -28,6 +28,11 @@ does not change executable Rust, kernels, algorithm domains or dispatch.
 
 ## Limitations
 
+A standalone package-consumer check now exercises the hardened feature graph
+from extracted `.crate` archives, tests ownership and ordinary/hardened type
+separation, and rejects compiled cleanup/dispatch mutations. This is development
+acceptance, not complete qualification; release-gate rules are unchanged.
+
 The new `brynja-crypto-cpu/sha256-hardened-batch` feature supplies distinct
 Authority/Session/Workspace types and clearing AVX2/NEON compression kernels.
 It enables only the existing first-party clearing dependency. Workspace cleanup

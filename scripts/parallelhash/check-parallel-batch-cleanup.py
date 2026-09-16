@@ -17,6 +17,7 @@ import batch_worker_scalar as scalar
 import batch_worker_machine as machine
 import batch_worker_handoff as handoff
 import batch_worker_arm_arguments as arm_arguments
+import batch_worker_unwind as unwind
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -92,6 +93,11 @@ def main():
                 print(f'ParallelHash machine stack-owner handoff: PASS; {args.toolchain}; '
                       f'{args.target}; panic={panic}; root={root}; sites={sites}; rejected={count}; '
                       'preceding memory provenance/unwind excluded', flush=True)
+            if panic == 'unwind':
+                states, records, count = unwind.mutations(row)
+                print(f'ParallelHash spawn exception cleanup reachability: PASS; {args.toolchain}; '
+                      f'{args.target}; states={states}; records={records}; rejected={count}; '
+                      'non-unwinding cleanup contract assumed; CFI/arguments/all-call coverage excluded', flush=True)
 
 
 if __name__ == '__main__':

@@ -73,6 +73,13 @@ register/spill check, rejecting 64 assembly-only mutations and 77 focused
 regressions. It follows full-width copies, stack spills, joins, loops and call
 clobbers under explicit private-spill/callee non-aliasing assumptions. Hidden
 aliases, complete memory provenance and exception recovery remain unproved.
+A separate unwind-profile check now binds the emitted exception table to native
+worker creation and follows its landing pad to cleanup before return/resume.
+All six compiler/target rows pass; 24 assembly-only mutations fail while the
+normal-return check still passes, alongside 78 focused regressions. This assumes
+valid cleanup arguments and non-unwinding clear/deallocator contracts; it does
+not prove all throwing-call coverage, CFI restoration, exception-path arguments
+or linked/runtime unwinding.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

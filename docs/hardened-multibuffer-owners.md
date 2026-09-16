@@ -336,6 +336,7 @@ python3 scripts/parallelhash/test-batch-worker-scalar.py
 python3 scripts/parallelhash/test-batch-worker-machine.py
 python3 scripts/parallelhash/test-batch-worker-handoff.py
 python3 scripts/parallelhash/test-batch-worker-arm-arguments.py
+python3 scripts/parallelhash/test-batch-worker-unwind.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -618,6 +619,34 @@ spill cells, under the reviewed stack ownership and ABI/callee contracts. Known
 overlapping writes are checked; arbitrary hidden aliases are not. Input-plan
 arithmetic, allocation internals, complete memory initialization, worker joining,
 exception tables and recovery remain separate obligations.
+
+The six unwind-profile rows now additionally check the emitted LSDA connection
+from native worker creation to cleanup. The closed parser binds the function's
+personality/LSDA reference to its table, checks the reviewed encodings and
+action/type bytes, and resolves ordered, nonoverlapping label-relative call
+ranges to executable landing pads. This follows the table layout described in
+[LLVM's personality implementation](https://github.com/llvm/llvm-project/blob/main/libcxxabi/src/cxa_personality.cpp);
+it does not emulate personality matching or inspect linked binary offsets.
+
+Native worker creation must have a nonzero landing pad. From that pad, a CFG
+walk follows ordinary branches and further recorded exceptional may-edges.
+Every reachable return or `_Unwind_Resume` must first pass the exact Storage
+clear/drop call; repeated spawning makes storage dirty again. Traps and terminal
+abort calls establish no erasure. The analysis assumes valid cleanup arguments
+and the reviewed non-unwinding clear/deallocator contracts. Only those exact
+cleanup symbols omit conservative exception edges under that assumption; this
+is not inferred from mere absence of an LLVM `nounwind` attribute.
+
+All six rows pass and reject 24 assembly-only mutations: omission/early return
+at the unwind-only cleanup, or removal/redirection of the spawn landing pad.
+Each mutant still passes ordinary-return inspection, so the additional rejection
+comes from the exceptional scope. The focused suite rejects 78
+binding/range/action/escape regressions. This is deliberately spawn-origin
+reachability, not proof that every potentially throwing call has an appropriate
+LSDA record. CFI/register/stack recovery, exception-path argument provenance,
+action selection, linked table offsets and the runtime unwinder remain unproved.
+Earlier ordinary-only checks retain their original scope. Release gates and
+production Rust are unchanged.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all

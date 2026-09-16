@@ -48,7 +48,7 @@ def main():
                   f'{args.target}; panic={panic}; rejected={count}', flush=True)
             row = compile_row(ROOT, Path(directory) / (panic + '-workers'), args.toolchain, args.target, panic, True)
             count = worker.mutations(row, panic)
-            print(f'ParallelHash worker storage MIR/LLVM: PASS; {args.toolchain}; '
+            print(f'ParallelHash worker storage MIR/LLVM/assembly: PASS; {args.toolchain}; '
                   f'{args.target}; panic={panic}; rejected={count}', flush=True)
 
 

@@ -40,9 +40,10 @@ further Kani proofs cover local ParallelHash range and completion predicates.
 Secret-output LLVM and assembly iteration now check every slot shape with symbolic
 nonempty lengths; assembly tracks ABI clobbers and full-slice call arguments.
 ParallelHash workspace/transport/stream cleanup passes MIR/LLVM/assembly
-inspection; worker-storage teardown has MIR and exact LLVM-loop checks. These
+inspection; worker-storage teardown has MIR, exact LLVM-loop and complete
+assembly-loop checks under the valid Vec allocation invariant. These
 pass the same matrix with compiled omission/shortening mutation tests. Complete
-caller-to-cleanup lifecycle and worker machine-level qualification remain
+caller-to-cleanup lifecycle and promoted worker-argument qualification remain
 pending. New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

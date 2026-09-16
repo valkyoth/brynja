@@ -3,7 +3,7 @@
 For a valid Vec of 256-byte slots, the matched loop clears [base, base+256*n)
 by induction: initial pointer=base, one full clear, increment=256, stop=end.
 This relies on Vec's allocation/length invariant and non-unwinding external clear.
-It does not prove worker joining, allocation reuse, machine lowering or caller
+It does not prove worker joining, allocation reuse or caller
 unwind dominance. Rust layouts are compiler-specific, not a stable ABI claim.
 """
 from pathlib import Path
@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'cryptography'))
 import batch_cleanup_flow as cleanup
 import batch_output_flow as output
 import mir_cleanup_flow as flow
+import batch_worker_assembly as machine
 
 VALUE = r'%[\w.]+'
 OWNER = 'execution::batch::worker::Storage'
@@ -51,17 +52,31 @@ def loop_check(body):
                     'worker iteration clears current full slot before advancing')
 
 
-def check(row, panic):
+def check_mir(row, panic):
     destructor = flow.exact_function(row['mir'],
         ('crates/brynja-hash-parallel-std/src/execution/batch/worker.rs:', '::drop(', '_1: &mut ' + OWNER))
     cleanup.linear_fields(destructor, [('self', OWNER, OWNER + '::clear(')], panic, OWNER)
+    return destructor
+
+
+def check_llvm(row):
     body = cleanup.llvm_function(row['ll'], ('9execution5batch6worker', '7Storage5clear'))
     loop_check(body)
-    return destructor, body
+    return body
+
+
+def check_assembly(row):
+    body = cleanup.assembly_function(row['s'], ('9execution5batch6worker', '7Storage5clear'))
+    machine.check(body)
+    return body
+
+
+def check(row, panic):
+    return check_mir(row, panic), check_llvm(row), check_assembly(row)
 
 
 def mutations(row, panic):
-    destructor, body = check(row, panic)
+    destructor, body, assembly = check(row, panic)
     cases = [('mir', destructor, destructor.replace('Storage::clear(', 'Storage::omitted('))]
     for before, after in ((', 8\n', ', 7\n'), ('i64 256', 'i64 255'),
                           ('i64 noundef 256', 'i64 noundef 255'),
@@ -77,4 +92,4 @@ def mutations(row, panic):
         except (ValueError, flow.MirCleanupFlowError):
             continue
         raise AssertionError('worker cleanup regression survived')
-    return len(cases)
+    return len(cases) + machine.regressions(assembly)

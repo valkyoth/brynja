@@ -326,6 +326,7 @@ python3 scripts/cryptography/test-batch-output-assembly.py
 python3 scripts/cryptography/check-batch-output-codegen.py
 python3 scripts/cryptography/test-batch-output-codegen.py
 python3 scripts/parallelhash/test-batch-worker-cleanup.py
+python3 scripts/parallelhash/test-batch-worker-assembly.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -383,13 +384,25 @@ combinations rejects 34 altered artifacts. Thread-worker Storage destruction
 has a separate MIR call check and exact LLVM loop check: from a valid Vec's base
 to its end, each 256-byte slot is cleared before advancing. It rejects seven
 artifact changes on Rust 1.90.0 and eight on 1.98.1, plus sixteen synthetic loop
-regressions. Fourteen compiled ParallelHash cleanup omissions/shortenings are
+regressions. Assembly now requires the complete reviewed worker loop, including
+empty-length exit, 256-byte scaling/clears/advances, callee-saved pointer/counter
+registers, back-edge flags and stack/link restoration. For a valid Vec allocation,
+`256 * len <= isize::MAX`; induction on the exact matched countdown covers every
+slot without sampling allocation lengths. Unknown instructions, altered loop
+bounds, short clears and incomplete function extents fail closed. This recognizes
+the observed instruction forms, including CFI-free abort output; it is not a
+general machine-code proof or proof that callers supply the promoted Vec fields.
+All twelve rows pass and reject eight additional altered assembly artifacts each.
+The standalone assembly suite rejects 262 instruction/ABI/boundary regressions.
+Fourteen compiled ParallelHash cleanup omissions/shortenings are
 rejected on 1.98.1 x86 Linux and 1.90.0 Apple Arm. The shared provenance checker
 now rejects 83 malformed artifacts; prior SHA-2/SHA-3 inspectors remain passing.
+The three compiled worker-loop mutations must independently fail both LLVM and
+assembly inspection; removal of Drop's clear call must fail its MIR check.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all
-caller-to-Drop unwind edges or worker loop machine lowering. Compilation
+caller-to-Drop unwind edges or caller-to-promoted-argument machine lowering. Compilation
 for Apple/Arm is not fresh native evidence, and abort-profile checks never imply
 that abort executes Drop.
 
@@ -441,7 +454,7 @@ also pass. Invalid source anchors and interrupted verifier results are tested
 separately; disabling either check is detected by checker mutation tests.
 
 Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
-and worker loop machine-level qualification. The new compositional proofs
+and promoted-argument provenance from callers. The new compositional proofs
 do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.

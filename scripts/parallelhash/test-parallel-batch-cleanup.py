@@ -41,12 +41,20 @@ def main():
             try:
                 worker_path.write_text(original.replace(before, after))
                 row = driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True)
-                try:
-                    driver.worker.check(row, 'unwind')
-                except (ValueError, driver.worker.flow.MirCleanupFlowError):
-                    count += 1
+                # Loop regressions must independently fail both emitted levels;
+                # removing Drop's call must fail the destructor MIR obligation.
+                if before.startswith(('for ', 'clear_')):
+                    inspectors = (driver.worker.check_llvm, driver.worker.check_assembly)
                 else:
-                    raise AssertionError('compiled worker cleanup regression survived')
+                    inspectors = (lambda artifacts: driver.worker.check_mir(artifacts, 'unwind'),)
+                for inspector in inspectors:
+                    try:
+                        inspector(row)
+                    except (ValueError, driver.worker.flow.MirCleanupFlowError):
+                        pass
+                    else:
+                        raise AssertionError('compiled worker cleanup regression survived')
+                count += 1
             finally:
                 worker_path.write_text(original)
         driver.worker.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')

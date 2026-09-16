@@ -304,6 +304,46 @@ These checks supplement the prior family-specific mutation campaigns. They do
 not replace per-region emitted-code analysis, Kani proofs, fresh platform captures
 or the exceptional owner pentest/retest.
 
+## Compiler and bounded-proof development coverage
+
+The narrow and wide SHA-2 leaf workspace inspector checks seven complete byte
+regions, the exact nested scalar/CPU owner calls, workspace destruction and
+unconditional workspace cleanup at operation-guard entry. MIR binds exact field
+and full-slice provenance; LLVM checks ordered region widths and nested calls;
+assembly checks surviving calls, including callee-saved x86 GOT-call provenance.
+Unknown shapes fail closed. It assumes the reviewed external clearing methods
+do not panic; it is not a proof of arbitrary MIR or every upstream caller path.
+
+```sh
+python3 scripts/cryptography/test-batch-cleanup-flow.py
+python3 scripts/sha2/check-hardened-sha2-batch-codegen.py
+python3 scripts/sha2/test-hardened-sha2-batch-codegen.py
+python3 scripts/assurance/test-hardened-batch-kani.py
+python3 scripts/assurance/check-hardened-batch-kani.py
+```
+
+Compiler coverage passed at Rust 1.90.0 and 1.98.1 for x86-64 Linux, AArch64
+Linux and Apple AArch64, with both abort and unwind profiles. Cross-compilation
+is not native execution. Each combination rejects 38 altered artifacts. The
+inspector also rejects eight actually compiled source regressions (wrong equal-
+width field, missing nested clear, destructor clear and operation clear).
+Abort-profile inspection does not imply Drop runs after abort.
+
+The standalone Kani driver uses the repository-pinned verifier and appends its
+harnesses only to isolated copies of the actual three production Control modules.
+It proves arbitrary 64-bit charge/cancellation/error accounting is atomic, with
+one callback per charge, and polling preserves the finite budget. All six proofs
+passed; nine real-source mutations produce assertion counterexamples. Compiler
+errors, empty selection and failed proof runs do not count as proof success.
+The existing global harness inventory and release rules are unchanged.
+
+Remaining compiler obligations include secret-output destination iteration,
+complete SHA-3 framing/workspace teardown, ParallelHash stream/transport/thread
+storage and full caller-to-cleanup lifecycle coverage. Further bounded proofs
+must cover the new scheduling/completion invariants. These limited checks are
+not full multibuffer qualification, proof of crypto kernels, register erasure,
+native platform collection or independent review.
+
 ## Acceptance required before completion
 
 - Positive downstream examples for every constructor, exact bit/byte identity,

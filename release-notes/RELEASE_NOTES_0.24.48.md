@@ -50,7 +50,12 @@ pending. The standalone worker destructor now has LLVM/assembly checks binding
 the original Vec base and complete live length to the clearing loop, with three
 additional compiled argument mutations. Retained drop glue now checks original
 buffer arguments and clear-before-deallocation in LLVM, plus the machine entry
-prefix. Fully inlined coordinator LLVM now checks cleanup-call reachability after
+prefix. An additional complete normal-path machine check binds capacity testing,
+deallocator identity/base/size/alignment and returning epilogues on all nine
+retained rows, rejecting 216 post-clearing artifact mutations and 420 focused
+regressions. This assumes valid Vec headers and non-unwinding callees; it does
+not qualify exception tails or CFI. Fully inlined coordinator LLVM now checks
+cleanup-call reachability after
 native worker-spawn attempts across normal/error/unwind exits. An additional
 LLVM fixed-point analysis checks original buffer pointer/live-length arguments
 and header non-escape/immutability after spawn for ten memory-backed rows.

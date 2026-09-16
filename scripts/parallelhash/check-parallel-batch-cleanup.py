@@ -11,6 +11,7 @@ import batch_worker_cleanup as worker
 import batch_worker_lifecycle as lifecycle
 import batch_worker_arguments as arguments_check
 import batch_worker_drop_glue as drop_glue
+import batch_worker_glue_machine as glue_machine
 import batch_worker_inline as inline
 import batch_worker_provenance as provenance
 import batch_worker_scalar as scalar
@@ -71,6 +72,10 @@ def main():
             count = drop_glue.mutations(row, panic)
             print(f'ParallelHash retained worker drop glue: {"PASS" if count else "not emitted; see separate inlined checks"}; '
                   f'{args.toolchain}; {args.target}; panic={panic}; rejected={count}', flush=True)
+            count = glue_machine.mutations(row, panic)
+            print(f'ParallelHash retained glue normal machine deallocation: {"PASS" if count else "not emitted; see separate inlined checks"}; '
+                  f'{args.toolchain}; {args.target}; panic={panic}; rejected={count}; '
+                  'valid header/non-unwinding callees assumed; exception tails/CFI excluded', flush=True)
             states, count = inline.mutations(row, panic)
             print(f'ParallelHash inlined post-spawn LLVM cleanup reachability: PASS; {args.toolchain}; '
                   f'{args.target}; panic={panic}; states={states}; rejected={count}', flush=True)

@@ -477,8 +477,10 @@ includes allocated-but-empty storage without sampling a few allocation sizes.
 Every emitted block must be visited. A hypothetical exception from clear is
 checked for invocation/deallocation ordering only, not successful erasure after
 a throwing clear; the erasure claim assumes the qualified non-unwinding clear.
-Machine inspection here covers only the exact straight-line entry-to-clear
-argument prefix, not deallocation instructions or platform unwind tables.
+The original machine inspection covers the exact straight-line entry-to-clear
+argument prefix. A complementary normal-path check now extends it through
+deallocation and both returning epilogues; platform unwind tables remain outside
+this check.
 
 Nine retained rows pass (all unwind rows plus 1.90.0 abort), rejecting 150 artifact
 mutants across those rows. Three 1.98.1 abort rows fully inline the glue and are
@@ -487,6 +489,23 @@ The synthetic suite rejects 61 LLVM and 178 machine-prefix regressions. The thre
 compiled storage-discard/truncation/removal mutants now independently fail both
 LLVM and machine-prefix checks for retained glue as well as the standalone
 destructor; both twenty-two-mutant source campaigns pass with restored sources.
+
+`batch_worker_glue_machine.py` recognizes the complete normal instruction paths
+of retained Storage glue on the same three targets and compiler endpoints.
+After clearing the original live buffer, zero capacity must return without
+deallocation; positive capacity must tail-call the LLVM-bound Rust deallocator
+with the original allocation base, capacity times 256 bytes and alignment one.
+Both paths must restore the reviewed saved registers and frame. The capacity
+branch must resolve to the exact returning epilogue, not merely a matching label
+name. This assumes a valid immutable Vec header and the reviewed non-unwinding
+clearing/deallocator and ABI contracts. It does not establish allocator internals,
+CFI restoration or behavior on a hypothetical exception from either callee.
+
+All nine retained rows reject 216 post-clearing artifact mutations which still
+pass the original entry-only check. The focused suite rejects 420 instruction,
+allocation-ABI and branch regressions. The standalone compiler driver runs this
+additional check; no release-gate rule changed. The three fully inlined abort
+rows are reported separately and do not count as retained-glue passes.
 
 The actual fully inlined LLVM coordinator now has a post-spawn cleanup
 reachability analysis. It extracts branch, switch and invoke successors from

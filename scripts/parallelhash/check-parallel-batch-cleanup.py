@@ -12,6 +12,7 @@ import batch_worker_lifecycle as lifecycle
 import batch_worker_arguments as arguments_check
 import batch_worker_drop_glue as drop_glue
 import batch_worker_inline as inline
+import batch_worker_provenance as provenance
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -61,11 +62,17 @@ def main():
             print(f'ParallelHash worker destructor arguments LLVM/assembly: PASS; {args.toolchain}; '
                   f'{args.target}; panic={panic}; rejected={count}', flush=True)
             count = drop_glue.mutations(row, panic)
-            print(f'ParallelHash retained worker drop glue: {"PASS" if count else "not emitted; inlined argument checks pending"}; '
+            print(f'ParallelHash retained worker drop glue: {"PASS" if count else "not emitted; see separate inlined checks"}; '
                   f'{args.toolchain}; {args.target}; panic={panic}; rejected={count}', flush=True)
             states, count = inline.mutations(row, panic)
             print(f'ParallelHash inlined post-spawn LLVM cleanup reachability: PASS; {args.toolchain}; '
                   f'{args.target}; panic={panic}; states={states}; rejected={count}', flush=True)
+            if args.toolchain == '1.98.1' and args.target.startswith('aarch64-'):
+                print('ParallelHash inlined argument provenance: pending scalar-replaced header qualification', flush=True)
+            else:
+                states, sites, count = provenance.mutations(row, panic)
+                print(f'ParallelHash inlined memory-backed arguments: PASS; {args.toolchain}; '
+                      f'{args.target}; panic={panic}; states={states}; sites={sites}; rejected={count}', flush=True)
 
 
 if __name__ == '__main__':

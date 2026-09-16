@@ -51,8 +51,12 @@ the original Vec base and complete live length to the clearing loop, with three
 additional compiled argument mutations. Retained drop glue now checks original
 buffer arguments and clear-before-deallocation in LLVM, plus the machine entry
 prefix. Fully inlined coordinator LLVM now checks cleanup-call reachability after
-native worker-spawn attempts across normal/error/unwind exits. Inlined argument
-provenance and machine unwind tables remain outside those checks.
+native worker-spawn attempts across normal/error/unwind exits. An additional
+LLVM fixed-point analysis checks original buffer pointer/live-length arguments
+and header non-escape/immutability after spawn for eight memory-backed rows,
+with 60 artifact regressions and three further compiled source mutants.
+The four 1.98.1 Arm rows scalar-replace that header and remain pending, as do
+machine unwind tables and the broader lifecycle obligations.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

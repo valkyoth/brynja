@@ -455,7 +455,7 @@ argument prefix, not deallocation instructions or platform unwind tables.
 
 Nine retained rows pass (all unwind rows plus 1.90.0 abort), rejecting 150 artifact
 mutants across those rows. Three 1.98.1 abort rows fully inline the glue and are
-explicitly reported as pending inlined qualification, not successful glue checks.
+explicitly reported as not emitted, not successful retained-glue checks.
 The synthetic suite rejects 61 LLVM and 178 machine-prefix regressions. The three
 compiled storage-discard/truncation/removal mutants now independently fail both
 LLVM and machine-prefix checks for retained glue as well as the standalone
@@ -476,16 +476,47 @@ All twelve compiler/target/panic rows pass, including the three fully-inlined
 each abort row rejects two. Thirty synthetic graph/exit/loop/phi regressions are
 rejected. The compiled forgotten-Storage mutant independently fails this LLVM
 check on 1.98.1 x86 Linux and 1.90.0 Apple Arm, and restored source passes.
-This is control-flow/call reachability only: it does not validate inlined cleanup
+That analysis is control-flow/call reachability only: it does not validate inlined cleanup
 arguments, arbitrary aliases, worker joining, pre-spawn cleanup, or machine-code
 lowering. Nonreturning callees, valid-enum unreachable defaults and infinite paths
 are explicitly outside the erasure guarantee. Valid Rust/LLVM and the reviewed
 clear/drop-glue contracts remain assumptions; a call is not proof of successful
 erasure if those callee contracts are violated.
 
+An additional LLVM analysis now binds inlined clear arguments to the original
+memory-backed Storage header. All header-address uses are classified: unknown
+uses/escapes fail, field loads/stores have exact types and offsets, and only
+reviewed Vec reservation helpers may receive mutable header authority before
+spawn. After a native worker-spawn attempt, header writes/reservation/restart
+are forbidden. This freezes the original base and live length across worker
+execution; backing-buffer contents remain mutable as intended.
+
+Must-equality facts follow stores, loads and predecessor-specific phi inputs.
+Joins intersect facts, phis read their inputs simultaneously, re-executed SSA
+definitions kill stale iteration facts, and calls are checked only after the
+worklist reaches a fixed point. Each post-spawn clear must receive the unchanged
+header base/full live length; retained drop glue must receive the original owner.
+Reservation invalidates earlier equalities even before spawn. Neither branch
+sampling nor an optimistic first loop iteration is accepted as proof.
+
+Eight rows pass: 1.90.0 on all three targets and 1.98.1 on x86 Linux, each under
+abort/unwind. These reject 60 modified artifacts; 34 synthetic pointer, length,
+escape, join and loop regressions are rejected. Fresh 1.98.1 x86 Linux and 1.90.0
+Apple Arm campaigns each reject 25 compiled source mutations. The three new
+mutations discard, truncate or remove slots in the coordinator after worker
+execution; they still pass the separate cleanup-reachability/drop-glue checks
+and then independently fail this argument analysis. Restored sources pass.
+
+The four 1.98.1 Arm rows scalar-replace the header and are explicitly pending,
+not skipped successes. This analysis assumes valid LLVM/Rust Vec invariants and
+the reviewed reservation/clear/drop contracts; it does not prove initial
+allocation size against the input plan, allocator internals, worker joins,
+arbitrary backing-buffer aliases or machine lowering. Field offsets and the
+source-local identity are compiler-specific, not a stable Rust ABI guarantee.
+
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all
-caller-to-Drop unwind edges or the separate inlined copies of the destructor's
+caller-to-Drop unwind edges, scalar-replaced inlined arguments or machine
 argument lowering inside coordinators. Retained glue is qualified only to the
 LLVM and machine-entry scope above. Compilation
 for Apple/Arm is not fresh native evidence, and abort-profile checks never imply
@@ -539,8 +570,8 @@ also pass. Invalid source anchors and interrupted verifier results are tested
 separately; disabling either check is detected by checker mutation tests.
 
 Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
-and inlined promoted-argument provenance from callers (the standalone Storage
-destructor handoff is now checked). The new compositional proofs
+and scalar-replaced inlined promoted-argument provenance (standalone Storage
+and memory-backed inlined handoffs are now checked at the levels above). The new compositional proofs
 do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.

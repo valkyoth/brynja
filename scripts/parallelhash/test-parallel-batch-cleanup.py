@@ -65,6 +65,27 @@ def main():
         driver.arguments_check.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True))
         driver.drop_glue.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.inline.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+        memory_header = args.toolchain == '1.90.0' or args.target == 'x86_64-unknown-linux-gnu'
+        if memory_header:
+            driver.provenance.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
+            for edit in ('storage.0.clear();', 'storage.0.truncate(1);', 'let _ = storage.0.remove(0);'):
+                anchor = 'operation.complete = true;'
+                driver.check.require(original.count(anchor) == 1, 'unique inlined argument source mutation')
+                try:
+                    worker_path.write_text(original.replace(anchor, edit + '\n    ' + anchor))
+                    row = driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True)
+                    # Qualify reachability/drop glue separately so their failure
+                    # cannot accidentally stand in for the new caller proof.
+                    body, clear, drop, _ = driver.inline.check(row, 'unwind')
+                    try:
+                        driver.provenance.inspect(body, clear, drop)
+                    except ValueError:
+                        count += 1
+                    else:
+                        raise AssertionError('compiled inlined buffer-discard regression survived')
+                finally:
+                    worker_path.write_text(original)
+            driver.provenance.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.worker.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (

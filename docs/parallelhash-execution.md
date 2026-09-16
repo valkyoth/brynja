@@ -104,6 +104,9 @@ contract in the general API register. Its additional owned regions are:
 | `Clear` / output staging | Secret intermediate bytes borrowed exclusively; drop clears the entire loan | Public-output transaction/error tests and MIR clearing call |
 | `Reader` / `StreamReader` | Exclusive parent loan, no independent sponge copy; drop cancels parent | Ownership negatives, forgotten-reader/terminal/error tests and MIR parent-call binding |
 | std `worker::Storage` | At most 64 initialized 64-byte slots; drop calls clear on every byte of every live slot before deallocation | Empty/1/2/3/64-slot tests, compiled no-clear mutant, MIR drop binding and LLVM/assembly loop inspection |
+| `batch::Workspace` / `batch::Leaves` | Four 64-byte CV slots, 256-byte staging and nested clearing SHA-3 workspace; completed affine tokens retain exclusive clearing output loans | Development destructor/error tests and compiled omission mutants; full batch compiler qualification pending |
+| `batch::Stream` | Exactly 4B pending input bytes, used/input counters (16 bytes each), clearing batch workspace and root; cancel/drop clears all | Development chunk/bit, exact-completion, cancellation, unwind and pending-drop tests; compiler qualification pending |
+| `batch::StreamReader` | Exclusive stream loan, no independent state copy; drop cancels the stream and forgotten readers cannot reopen input | Development ownership negatives, mixed XOF and output-failure tests; compiler qualification pending |
 
 Plan identity, block size, admitted limits, route reports, thread handles and
 operation-completion flags are public control/provenance, not secret buffers.

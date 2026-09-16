@@ -31,7 +31,7 @@ def campaign(root, env, cargo, target):
         (base + 'collector/batch.rs', '!core::ptr::eq(plan, leaves.plan)', 'false', 'provenance_order'),
         (base + 'collector/batch.rs', 'leaves.start != root.merged_leaves()', 'false', 'provenance_order'),
         (base + 'collector/batch.rs', 'let plan = root.binding.scheduled()?;', 'let plan = leaves.plan;', 'scheduled_tokens'),
-        (base + 'collector/batch.rs', 'root.state\n                .update(leaves.inner.expose(index).ok_or(RootError::State)?)?;', '// omitted root CV absorption', 'portable_domains'),
+        (base + 'collector/batch.rs', 'root.state\n                .update(leaves.inner.expose(index).ok_or(RootError::State)?)?;\n            root.merged', '// omitted root CV absorption\n            root.merged', 'portable_domains'),
         (base + 'batch.rs', 'hash::Algorithm::Shake256', 'hash::Algorithm::Shake128', 'portable_domains'),
         (base + 'collector.rs', 'if !self.complete {', 'if false {', 'cancellation_budget'),
         (base + 'collector/batch.rs', '.checked_add(work.vector_calls)', '.checked_add(0)', 'vector_domains'),
@@ -53,10 +53,48 @@ def campaign(root, env, cargo, target):
     print(f'Scheduled ParallelHash batching: {len(cases)} compiled regressions rejected')
 
 
+def stream_campaign(root, env, cargo, target):
+    command = [*cargo, 'test', '--locked', '--offline', '-p', 'brynja-hash-parallel',
+               '--features', 'hardened-batch-execution', '--target', target, '--lib', 'execution::stream::batch']
+    run(command, root, env)
+    run(command[:-2] + ['--doc', 'execution::stream::batch'], root, env)
+    base = 'crates/brynja-hash-parallel/src/execution/'
+    path = base + 'stream/batch.rs'
+    cases = [
+        (path, 'self.hash.clear();\n        let _ = clear_owned_region(self.workspace);', 'self.hash.clear();', 'cancellation_budget'),
+        (path, 'let _ = clear_owned_region(&mut self.input_bits);', '// omitted length cleanup', 'cancellation_budget'),
+        (path, 'fn drop(&mut self) {\n        self.cancel();', 'fn drop(&mut self) {\n        // omitted drop cleanup', 'cancellation_budget'),
+        (path, 'if !self.complete {', 'if false {', 'cancellation_budget'),
+        (path, 'self.used()? != 0 ||', 'false ||', 'exact_completion'),
+        (path, 'self.root.merged_leaves() != self.expected(self.input_bits())?', 'false', 'exact_completion'),
+        (path, 'stream.check_complete()?;', '// omitted completion proof', 'exact_completion'),
+        (path, 'guard.stream.input_bits = total.to_le_bytes();', '// omitted input accounting', 'portable_chunk'),
+        (path, 'if self.expected(total)? > self.limit {', 'if false {', 'construction_work_limit'),
+        (path, 'guard.stream.update_inner(input, control)?;', 'guard.stream.update_inner(&[], control)?;', 'portable_chunk'),
+        (base + 'collector/batch.rs', 'root.accelerated = accelerated.to_le_bytes();\n        guard.complete', 'root.accelerated = [0; 16];\n        guard.complete', 'vector_chunk'),
+        (base + 'collector/batch.rs', 'for index in 0..count {', 'for index in 0..0 {', 'portable_chunk'),
+    ]
+    for name, before, after, test in cases:
+        subject = root / name
+        original = subject.read_text()
+        if original.count(before) != 1:
+            raise ValueError('ambiguous stream mutation: ' + before)
+        try:
+            subject.write_text(original.replace(before, after))
+            result = run(command[:-1] + ['execution::stream::batch::tests::' + test], root, env, success=False)
+            if result.returncode == 0 or 'test result: FAILED' not in result.stdout:
+                raise ValueError('stream mutant survived or failed to compile: ' + before + '\n' + result.stdout[-1000:] + result.stderr[-1500:])
+        finally:
+            subject.write_text(original)
+    run(command, root, env)
+    print(f'Streaming ParallelHash batching: {len(cases)} compiled regressions rejected')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--target', default='x86_64-unknown-linux-gnu')
     parser.add_argument('--toolchain', default='1.98.1')
+    parser.add_argument('--stream', action='store_true')
     args = parser.parse_args()
     if not args.target.startswith(('x86_64-', 'aarch64-')):
         raise ValueError('unsupported architecture')
@@ -78,7 +116,7 @@ def main():
         env['BRYNJA_REQUIRE_PARALLELHASH_BATCH'] = '1'
         cargo = ['cargo', '+' + args.toolchain]
         run([*cargo, 'generate-lockfile', '--offline'], root, env)
-        campaign(root, env, cargo, args.target)
+        (stream_campaign if args.stream else campaign)(root, env, cargo, args.target)
 
 
 if __name__ == '__main__':

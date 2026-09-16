@@ -27,6 +27,7 @@
 //!     ParallelHashPublicDeclassification::acknowledge())?;
 //! # Ok(()) }
 //! ```
+pub use super::stream::batch::{Stream, StreamReader};
 use super::{Error as RootError, Plan, WorkerPolicy};
 use brynja_core::clear_owned_region;
 use brynja_hash_sha3::hardened_batch as hash;

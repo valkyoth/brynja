@@ -5,6 +5,55 @@ use crate::execution::{
 };
 
 impl<'plan, 'input, 'authority> Collector<'plan, 'input, 'authority> {
+    // Only the streaming owner supplies pending input. No external completed
+    // token can authorize this route or the separate complete-input proof.
+    pub(in crate::execution) fn merge_stream_batch(
+        &mut self,
+        input: crate::Fips202BitString<'_>,
+        executor: &batch::Executor<'_>,
+        workspace: &mut batch::Workspace,
+        control: &mut batch::Control<'_>,
+    ) -> Result<(), Error> {
+        let mut guard = Operation {
+            root: self,
+            complete: false,
+        };
+        let root = &mut guard.root;
+        if !matches!(root.binding, super::Binding::Streaming { .. }) || root.phase != [1] {
+            return Err(RootError::State.into());
+        }
+        let plan = crate::execution::Plan::new_bits(
+            root.binding.identity(),
+            input,
+            root.binding.block(),
+            batch::CAPACITY as u128,
+        )?
+        .with_worker_policy(root.binding.workers());
+        let count = usize::try_from(plan.leaf_count()).map_err(|_| RootError::State)?;
+        let merged = root
+            .merged_leaves()
+            .checked_add(plan.leaf_count())
+            .ok_or(RootError::State)?;
+        if merged > root.binding.limit() {
+            return Err(RootError::WorkLimit.into());
+        }
+        let leaves = plan
+            .batch(0, count)?
+            .execute(executor, workspace, control)?;
+        let accelerated = root
+            .accelerated_leaves()
+            .checked_add(u128::from(leaves.report.accelerated_slots.count_ones()))
+            .ok_or(RootError::State)?;
+        for index in 0..count {
+            root.state
+                .update(leaves.inner.expose(index).ok_or(RootError::State)?)?;
+        }
+        root.merged = merged.to_le_bytes();
+        root.accelerated = accelerated.to_le_bytes();
+        guard.complete = true;
+        Ok(())
+    }
+
     /// Consumes exactly the next contiguous plan-bound group. Foreign, duplicate,
     /// missing, reordered or wrong-policy leaves cancel this root and clear CVs.
     /// Streaming roots cannot accept these scheduled completion tokens.

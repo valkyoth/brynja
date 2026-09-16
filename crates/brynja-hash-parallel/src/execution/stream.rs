@@ -1,6 +1,8 @@
 use super::{Collector, Error, Identity, Mode, Report, WorkerPolicy, binding::Binding};
 use crate::Fips202BitString;
 use brynja_core::clear_owned_region;
+#[cfg(feature = "hardened-batch-execution")]
+pub(super) mod batch;
 
 /// Public streaming identity, complete-input work budget and worker policy.
 /// The caller-owned workspace length supplies the positive block size B.

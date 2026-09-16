@@ -3,8 +3,8 @@
 Development in progress: hardened multibuffer hash owners. Not released; no
 crates selected for publication. The narrow and wide SHA-2 CPU and leaf batch
 APIs, Keccak CPU/leaf batching and distinct hosted adapters are implemented;
-Scheduled ParallelHash leaf groups are implemented; streaming/threaded batching
-and qualification remain pending.
+Scheduled and streaming ParallelHash leaf groups are implemented; threaded
+batching and qualification remain pending.
 
 ## Scope
 
@@ -84,8 +84,13 @@ collector validates provenance and order before absorbing CVs. Per-slot actual
 vector participation drives worker policy and reports. Require rejects
 incomplete groups; Prefer explicitly permits clearing scalar tails. Failure or
 unwind cancels the root and clears workspace/results. The existing streaming
-completion proof is unchanged; streaming/threaded multibuffer integration and
-complete qualification remain pending.
+completion proof remains required. Distinct `execution::batch::Stream` owners
+buffer exactly 4B caller-owned bytes across small updates, retain a borrowed
+clearing executor and support arbitrary-bit final tails plus fixed/XOF output.
+They construct a root-bound completion token only after checking zero pending
+bytes and the exact expected leaf count. Cancellation is polled at buffering
+boundaries; Drop/error/unwind clear pending storage and nested hash workspaces.
+Threaded multibuffer integration and complete qualification remain pending.
 
 Batch shape, configured limits and scheduling are public; callers must pad when
 traffic-analysis resistance is required. Explicit clearing cannot guarantee

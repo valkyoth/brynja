@@ -4773,8 +4773,9 @@ SHA-512/t parameters with typed secret outputs. The distinct clearing Keccak
 AVX2/NEON CPU foundation and all eight SHA-3/SHAKE/cSHAKE leaf batch identities
 are also implemented, with distinct default-off hosted adapters for all three
 families. Scheduled ParallelHash leaf groups now use distinct clearing owners,
-plan-bound consumed results and actual per-slot vector accounting. Streaming and
-threaded multibuffer integration and fresh qualification remain pending.
+plan-bound consumed results and actual per-slot vector accounting. Distinct
+streaming batch owners buffer 4B bytes and require exact complete-input proofs.
+Threaded multibuffer integration and fresh qualification remain pending.
 The existing ordinary owners remain public-only; do not reuse them for secrets.
 
 Plan scope: Add hardened ownership to the new SHA-2 and Keccak batch APIs and integrate eligible batched leaves into ParallelHash without losing secret classification or bounded scheduling.

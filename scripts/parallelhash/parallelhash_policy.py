@@ -19,6 +19,7 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
     "batch.rs", "batch/tests.rs", "collector/batch.rs",
+    "stream/batch.rs", "stream/batch/output.rs", "stream/batch/tests.rs", "stream/batch/failures.rs",
     "backend.rs", "binding.rs", "collector.rs", "collector/tests.rs", "encoding.rs", "mod.rs",
     "ownership.rs", "plan.rs", "stream.rs", "stream_output.rs", "stream/tests.rs",
 ))
@@ -112,8 +113,12 @@ def validate(root: Path) -> None:
     # This out-of-line, test-only module uses host allocation/unwind probes.
     require(loaded[PORTABLE / "src/execution/batch.rs"],
             "#[cfg(test)]\nmod tests;", "batch tests remain test-only")
+    for module in ("tests", "failures"):
+        require(loaded[PORTABLE / "src/execution/stream/batch.rs"],
+                f"#[cfg(test)]\nmod {module};", "stream batch tests remain test-only")
     production = "\n".join(loaded[path] for path in (*SOURCES, *EXECUTION)
-                           if path != PORTABLE / "src/execution/batch/tests.rs")
+                           if path not in {PORTABLE / "src/execution" / name for name in (
+                               "batch/tests.rs", "stream/batch/tests.rs", "stream/batch/failures.rs")})
     for forbidden in (
         "unsafe", 'extern "C"', "std::", "alloc::", "Vec<", "Box<",
         "static mut", "Atomic", "thread_local", "core::arch", "asm!",

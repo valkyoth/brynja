@@ -2,7 +2,7 @@
 
 Status: v0.24.48 in development; narrow and wide SHA-2 CPU/leaf batch APIs implemented,
 Keccak CPU/leaf APIs, hosted adapters and scheduled ParallelHash groups implemented;
-streaming/threaded integration and qualification pending.
+streaming groups implemented; threaded integration and qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
 public-only. Nothing in this document authorizes passing secrets to those types.
@@ -101,9 +101,21 @@ allows clearing scalar tails. Mixed worker policy also permits caller-scheduled
 accelerated groups followed by a separate portable tail. Workspace clears all
 active and unused CV capacity, nested hash state and staging; completed results
 retain exclusive borrows until merge/drop. No ordinary batch owner is involved.
-The existing streaming completion token remains unchanged, and scheduled tokens
-cannot complete streaming roots. Streaming/threaded multibuffer integration is
-still pending; these aggregate secret results remain thread-bound.
+Scheduled tokens cannot complete streaming roots. A distinct
+`execution::batch::Stream` now retains exactly 4B caller-owned pending bytes and
+a clearing batch workspace, so small updates can fill full SIMD groups. Its
+constructor accepts explicit B, root mode, worker executor and StreamConfig.
+Byte updates and arbitrary-bit final tails use the same exact SHAKE CV framing;
+fixed public/secret destinations and incremental mixed public/secret XOF reads
+have the existing transactional/clearing contracts. The internal completion
+capability remains private to the streaming module: the new stream independently
+checks pending-used == 0 and merged == ceil(total input bits / block bits)
+before constructing a root-bound proof. Forgotten readers cannot reopen input.
+Cancellation is polled even on calls that only buffer data; reuse one Control
+across calls for a cumulative leaf-permutation budget. The complete-input leaf
+limit always applies, separately from root construction/output work. Errors and
+recoverable unwind cancel the root, pending buffer, hash workspace and counters.
+Threaded multibuffer integration remains pending; these owners are thread-bound.
 
 ## Implementation order and scope
 

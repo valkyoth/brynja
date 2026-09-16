@@ -36,7 +36,7 @@ block-size parameter `B`. Cryptographic code is first-party Rust.
 | All four portable ParallelHash/ParallelHashXOF identities | ✅ Fully implemented | ❌ No |
 | Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |
 | Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |
-| Hardened scheduled leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
+| Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
 
 Brynja is not FIPS 140-3 validated. Project tests and pentests are not named
 independent cryptographic review. See the
@@ -125,8 +125,13 @@ Distinct clearing AVX2 four-state and NEON two-state kernels are available on
 correctly specialized targets. Require mode applies to each group and rejects
 incomplete tails; Prefer explicitly permits clearing scalar tails. Actual
 per-leaf participation is reported, not inferred from the selected authority.
-Streaming and threaded multibuffer integration remain pending; this scheduled
-API does not create threads or change the existing streaming completion proof.
+`execution::batch::Stream` buffers exactly four B-byte leaves across small
+updates using caller-owned storage. Its borrowed executor, cumulative leaf work
+control, exact final leaf-count proof and clearing XOF reader preserve the same
+secret-output contract. See the
+[streaming example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-hash-parallel/src/execution/stream/batch.rs).
+Neither scheduled nor streaming batching creates threads. Threaded multibuffer
+integration remains pending; the existing single-leaf stream is unchanged.
 
 The new execution profile still needs its complete milestone acceptance and
 reviewed native evidence. See the

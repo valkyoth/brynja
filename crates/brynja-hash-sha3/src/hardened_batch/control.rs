@@ -24,7 +24,9 @@ impl<'a> Control<'a> {
     pub const fn remaining(&self) -> u64 {
         self.remaining
     }
-    pub(super) fn poll(&mut self) -> Result<(), Error> {
+    /// Checks cancellation without charging a permutation. Composed buffering
+    /// APIs use this at call boundaries even when no hash work is ready yet.
+    pub fn poll(&mut self) -> Result<(), Error> {
         if (self.cancelled)() {
             Err(Error::Cancelled)
         } else {

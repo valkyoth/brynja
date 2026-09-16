@@ -271,7 +271,7 @@
     "crates/brynja-hash-sha3/src/hardened/permutation.rs": "7f153430110a047e6f556d52e035c4d1ba4f8bb77d501234ca1ae0882fe88887f6413ec93faf1ba5014e5334523e98831ed7397298f12487c0a560e0892b436b",
     "crates/brynja-hash-sha3/src/hardened/sponge.rs": "11a3e5dae0819b94cc4ea1a62b23f98c021ee9d138f45a8da3c8a68772ba8f871bf59c0391c30b36a06f9d01dbcfa30d0fbd6874f2426698ec73483cd296c277",
     "crates/brynja-hash-sha3/src/hardened/xof.rs": "85756f890e427c75228f18b7666156c186dfa93235d74adfcc8710deafcc6e03394636de0aaf94529ade1cf06865383f49c67436e7680135025fe5d6dc9b7607",
-    "crates/brynja-hash-sha3/src/hardened_batch/control.rs": "1f2aa5c6982ec1cc83c090463848e6f3615979eb07a96089998b5d03f72d383ffad72417499521ac0db420a46b19a8a49bf403a2bc06d5cdfd118f47dfef3f28",
+    "crates/brynja-hash-sha3/src/hardened_batch/control.rs": "8beeed693a23a07a18cd99e0cde9d69e33186d3e2efabb382e3f558b5752314ab3aa34facea37742df97dad04ff63dc6e703a681463cd49992a3db99004fdb1b",
     "crates/brynja-hash-sha3/src/hardened_batch/engine.rs": "62d0ed04f16d28e3a592c37ef0428d834f43872dc641c33371a306a6dc6d35c61af047e90bc15fa798d11532c4d379dd62a210a8d9663a7ad9d08a1216933cd2",
     "crates/brynja-hash-sha3/src/hardened_batch/framing.rs": "3feb39bc113dbd2fab1f0ae1792dd2cf44ad21d5b3ecb705884d127c6d045a68b55490f1dff07bd11aef7a79bac79cda4efa860e65a04eefef8a4e5c00110251",
     "crates/brynja-hash-sha3/src/hardened_batch/input.rs": "8510d3ea918fa70dc4d0ed23000b146ab2a734e46792cff7212b5c51f674131244d29740f06a92ddcb0291c9f95638c8961d57a83e2f7eb5604ee7ba28bf3902",

@@ -86,6 +86,12 @@ all six unwind rows; 286 artifact mutations and 33 focused regressions fail as
 expected. This is multiset correspondence, not individual call-site identity or
 proof that LLVM retained every needed invoke. The same cleanup contracts and
 exception-argument/CFI/runtime limitations remain. Release gates are unchanged.
+The exception-only Storage destructor additionally checks the original stack
+owner's full-width address and rejects ordinary/exceptional entry past argument
+setup. All six fresh compiler/target runs pass, with 36 artifact mutants and 45
+focused regressions rejected. This assumes a correctly restored stack frame;
+CFI, preceding header memory/alias provenance and runtime unwinding remain outside
+the claim. No production implementation or release gate changed.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

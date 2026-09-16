@@ -19,6 +19,7 @@ import batch_worker_handoff as handoff
 import batch_worker_arm_arguments as arm_arguments
 import batch_worker_unwind as unwind
 import batch_worker_throwing as throwing
+import batch_worker_exception_arguments as exception_arguments
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -103,6 +104,10 @@ def main():
                 print(f'ParallelHash invoke inventory and post-spawn exception cleanup: PASS; {args.toolchain}; '
                       f'{args.target}; invokes={calls}; states={states}; rejected={count}; '
                       'callee/cleanup contracts assumed; site identity/CFI/arguments excluded', flush=True)
+                root, sites, count = exception_arguments.mutations(row)
+                print(f'ParallelHash exception-only Storage argument handoff: PASS; {args.toolchain}; '
+                      f'{args.target}; root={root}; sites={sites}; rejected={count}; '
+                      'restored frame/callee contracts assumed; CFI/header memory provenance excluded', flush=True)
 
 
 if __name__ == '__main__':

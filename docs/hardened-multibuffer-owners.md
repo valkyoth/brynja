@@ -338,6 +338,7 @@ python3 scripts/parallelhash/test-batch-worker-handoff.py
 python3 scripts/parallelhash/test-batch-worker-arm-arguments.py
 python3 scripts/parallelhash/test-batch-worker-unwind.py
 python3 scripts/parallelhash/test-batch-worker-throwing.py
+python3 scripts/parallelhash/test-batch-worker-exception-arguments.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -675,6 +676,31 @@ LLVM itself retained every needed invoke, identify indirect targets, or certify
 callee behavior. Exception-path argument provenance, CFI restoration, personality
 decisions and linked/runtime unwinding remain outside the claim. These are
 development checks only; no release-gate policy was changed.
+
+The exception-only destructor now has a separate local argument check on all six
+unwind rows. It identifies the unique empty Storage stack header independently
+of cleanup sites, checks that initialization dominates worker creation under the
+combined ordinary/exceptional graph, and rejects explicit frame adjustments
+between initialization and cleanup. The call must receive that header's exact
+full-width address through a bounded, call-free setup sequence. All recorded
+incoming edges are considered: a landing pad cannot skip the setup and enter
+directly at the destructor call. This covers the additional exception-only drop
+site, not a replacement for ordinary-path argument checks.
+
+Fresh full standalone compiler-driver runs passed at both compiler endpoints on
+all three targets. Thirty-six assembly-only mutants (six per unwind row) corrupt
+the argument, truncate it, shift the address, interpose an indirect call, change
+the actual frame offset or redirect a landing pad past setup. Each still passes
+cleanup-call reachability but fails the argument check. Forty-five focused
+regressions exercise initialization identity/dominance, full-width copies,
+clobbers, stack changes and bypassing ordinary/exceptional edges.
+
+This is conditional on the runtime unwinder restoring this function's stack
+frame and on reviewed callee/ABI behavior. The checker does not interpret CFI,
+prove restored registers or memory, track every preceding header write/alias,
+or prove its backing allocation/length remains valid. The existing LLVM header
+checks and destructor checks provide separately scoped evidence, not a complete
+machine-level provenance proof. Production code and release gates are unchanged.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all

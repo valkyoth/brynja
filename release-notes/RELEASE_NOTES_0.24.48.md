@@ -63,6 +63,12 @@ cleanup on post-spawn normal return paths across all twelve rows and rejects
 48 assembly-only bypass mutations. It does not qualify instruction data flow,
 argument registers, unwind tables or broader lifecycle obligations; those remain
 pending.
+A further local stack-owner-to-ABI handoff check covers eight rows (all 1.90.0
+targets and 1.98.1 x86, both panic profiles), rejecting 48 assembly-only argument
+and offset substitutions plus 62 focused regressions. It checks stable frame
+offsets and full-width field/address setup on post-spawn normal cleanup paths;
+it does not prove preceding memory/alias provenance or exception recovery. The
+four register-held 1.98.1 Arm handoffs remain explicitly pending.
 New compositional Kani harnesses exercise actual transfer consumption
 and completion-token finalization with modeled sponge results and byte clearing;
 they do not establish hashing correctness, arbitrary input flushing or threading.

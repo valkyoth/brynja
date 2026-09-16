@@ -334,6 +334,7 @@ python3 scripts/parallelhash/test-batch-worker-inline.py
 python3 scripts/parallelhash/test-batch-worker-provenance.py
 python3 scripts/parallelhash/test-batch-worker-scalar.py
 python3 scripts/parallelhash/test-batch-worker-machine.py
+python3 scripts/parallelhash/test-batch-worker-handoff.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -563,6 +564,30 @@ Landing pads reachable only through unwinding remain outside this analysis.
 Traps, independently identified noreturn callees and infinite paths establish no
 erasure. Valid code/ABI, reviewed callee contracts and symbol resolution remain
 assumptions. No release gate or production code changed.
+
+An additional local machine handoff check covers eight stack-backed rows: both
+panic profiles on all three 1.90.0 targets and 1.98.1 x86 Linux. It identifies
+the unique original empty Vec header independently of cleanup arguments and
+requires its initialization to dominate worker creation. Stack-pointer changes
+on ordinary paths from initialization to cleanup fail closed. For each
+post-spawn normal/error cleanup site, a bounded, single-entry, call-free suffix
+must load the exact full-width base/live-length fields into the clearing ABI
+registers, or form the original header address for retained drop glue. Register
+copies are tracked; narrower loads, clobbers and post-spawn entry past setup
+cannot establish the argument identity. Pre-spawn empty exits do not count as
+post-spawn argument evidence. The four 1.98.1 Arm rows retain some arguments in
+registers and are explicitly PENDING in the driver, not silently counted as
+qualified by this stack-backed check.
+
+All eight supported rows pass and reject 48 assembly-only argument/offset
+mutations with unchanged LLVM inputs. The focused suite rejects 62
+field/width/branch/frame/ABI regressions. This is a local stack-field-to-call
+handoff under the reviewed Vec layout, valid stack ownership, linking and
+ordinary-return ABI assumptions. It does not establish preceding memory writes,
+header/backing-buffer alias provenance, allocation correctness or exception
+recovery. In particular, loading the correct field does not by itself prove that
+the field still contains the correct allocation value. The separate LLVM checks
+do not turn this limited machine check into a whole-machine provenance proof.
 
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all

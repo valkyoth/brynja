@@ -26,6 +26,12 @@ Local AVX2 execution passed 117 tests; driver regressions reject seven weakened
 enforcement variants. This is not native platform qualification or independent
 review, and no release/tag-gate rule changed.
 
+A separate hardened SHA-512-family adapter now checks the existing independent
+bit-level/all-parameter oracle through secret, declassified and public outputs.
+Local AVX2 passed 14,282 portable/prefer/require batches; cleanup, malformed-input
+and four compiled fixture regressions passed. This is development evidence, not
+independent review or multi-platform native qualification.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

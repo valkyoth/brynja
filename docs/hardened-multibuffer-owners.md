@@ -869,6 +869,36 @@ do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.
 
+## Independent hardened SHA-512-family batch oracle
+
+The separate `assurance/hardened-sha512-batch` public-vector adapter uses only the
+distinct hardened feature graph. It runs borrowed-secret, consumed explicit
+declassification and direct-public output paths, checks exact algorithm/width
+identity, and observes secret destination clearing after both Drop and
+declassification without changing inactive buffer capacity. Input/output is
+public test data; its ordinary CLI buffers are not an application secret owner.
+
+`python3 scripts/cryptography/check-hardened-sha512-batch-oracle.py` runs the
+existing independent Python bit-level SHA-2/SHA-512/t corpus directly through
+these APIs. It covers 4,846 mixed batches, all 510 valid t values, sparse slots,
+canonical partial bits and padding boundaries. With `--lane` naming a matching
+native platform, it also runs prefer mode and the 4,590 full batches eligible for
+required SIMD. The actual vector-call counter must be nonzero for accelerated
+campaigns and zero for portable execution. A failing or empty execution cannot
+be counted as success. No ordinary digest importer handles the secret output.
+
+Local AVX2 execution passed 14,282 batches across portable/prefer/require, with
+three output/lifecycle calls per batch. Ten malformed requests rejected without
+digest output or panic. The generic build separately passed all 4,846 portable
+batches and malformed cases without SIMD build flags. Rust 1.90 fixture tests and strict Rust 1.98.1 Clippy
+passed. The result checker rejects 33 coverage/status/output/route regressions.
+`test-hardened-sha512-batch-oracle.py --lane amd-x86_64` additionally rejects four
+compiled mutations: skipped secret-output Drop, corrupted hex output, forced
+portable dispatch and overflowing fixture work counters. Restored source passes
+after every mutant. This reuses an existing independent oracle implementation;
+it is not a new independent security review, proof of all erasure, qualification
+of the other batch families or a fresh native-platform receipt.
+
 ## Standalone sanitizer development check
 
 On a matching Linux x86_64 AVX2 or AArch64 NEON host, run:

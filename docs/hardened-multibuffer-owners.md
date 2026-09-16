@@ -869,6 +869,37 @@ do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.
 
+## Independent hardened SHA-224/256 batch oracle
+
+The separate `assurance/hardened-sha256-batch` adapter enables only the distinct
+hardened narrow batch profile, not ordinary batch execution. Eight optional
+inputs mix SHA-224 and SHA-256 identities. Each request performs borrowed-secret,
+consumed declassification and direct-public output calls; it checks exact
+identity/width, Drop/declassification clearing and untouched inactive capacity.
+All CLI input/output is public generated test data, not an application secret
+processing interface.
+
+Run `python3 scripts/cryptography/check-hardened-sha256-batch-oracle.py` for the
+generic portable campaign, or add `--lane` naming the matching native platform
+for preferred/required SIMD as well. The existing independent Python bit-level
+SHA-2 oracle supplies expected results for 384 batches covering all 256 slot
+activity masks, both IVs, partial bits, padding boundaries and unequal lengths.
+Required mode selects the 128 full batches with eligible message blocks.
+
+Local AVX2 passed 384 portable, 384 preferred and 128 required batches, with
+respectively zero, 1,257 and 1,257 actual vector calls across the three API calls
+per request. The generic build independently passed all 384 portable batches
+without SIMD flags. Ten malformed requests rejected without digest output or
+panic. Rust 1.90 fixture tests and strict Rust 1.98.1 Clippy passed.
+
+`test-hardened-sha256-batch-oracle.py` rejects 33 result-validation regressions;
+with a matching `--lane` it also compiles four mutants that skip secret-output
+Drop, corrupt digest encoding, force portable routing or overflow the fixture
+counter. Runtime rejection/oracle mismatch is required, not failed compilation;
+restored source must pass after every mutation. These checks do not qualify
+NEON without a native run, prove all cleanup, replace independent review or
+change any release/tag gate.
+
 ## Independent hardened SHA-512-family batch oracle
 
 The separate `assurance/hardened-sha512-batch` public-vector adapter uses only the

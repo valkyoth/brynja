@@ -32,6 +32,12 @@ Local AVX2 passed 14,282 portable/prefer/require batches; cleanup, malformed-inp
 and four compiled fixture regressions passed. This is development evidence, not
 independent review or multi-platform native qualification.
 
+The matching hardened SHA-224/256 adapter checks eight-slot mixed-identity batches
+against the independent bit oracle. Local AVX2 passed 896 portable/prefer/require
+batches; a generic build passed another 384 portable batches. Output cleanup,
+malformed input and four compiled fixture mutations were checked without changing
+production code or release gates. Native multi-platform qualification is pending.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

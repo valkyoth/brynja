@@ -28,10 +28,12 @@
 //! # Ok(()) }
 //! ```
 pub use super::stream::batch::{Stream, StreamReader};
+mod transfer;
 use super::{Error as RootError, Plan, WorkerPolicy};
 use brynja_core::clear_owned_region;
 use brynja_hash_sha3::hardened_batch as hash;
 pub use hash::{Authority, Control, Executor, Kernel, Mode, Report as KernelReport};
+pub use transfer::TransferredLeaves;
 /// Maximum independently scheduled leaves in one group, not a thread count.
 pub const CAPACITY: usize = hash::CAPACITY;
 
@@ -239,7 +241,8 @@ impl<'plan, 'input> Job<'plan, 'input> {
 }
 
 /// Unforgeable completed CVs, retaining plan/index identity and clearing borrows.
-/// Thread-bound for now: no authority or aggregate secret owner crosses workers.
+/// Thread-bound: consume with `transfer` for a separate completed-only transport
+/// loan; no authority or unfinished hash state crosses workers.
 ///
 /// ```compile_fail
 /// use brynja_hash_parallel::execution::{Collector, batch::Leaves};

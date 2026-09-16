@@ -35,6 +35,7 @@ package owns scheduling, resource admission and local worker selection.
 | --- | --- | --- |
 | Bounded portable ParallelHash/ParallelHashXOF worker executor | ✅ Implemented | ❌ No |
 | Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |
+| Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |
 
 Brynja is not FIPS 140-3 validated. Threading and project tests do not constitute
 independent verification. This `std` package is absent from the modern facade's
@@ -101,6 +102,24 @@ Use `hash_secret`/`hash_secret_bits` for typed clearing output ownership.
 The entire secret destination and public staging are cleared on errors;
 caller-owned input/customization and copies remain the caller's responsibility.
 
+### Threaded multibuffer execution
+
+Enable the separate default-off `runtime-batch-execution` feature for
+`execution::batch::{Config, Executor}`. Its
+[runnable secret-output example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-hash-parallel-std/src/execution/batch.rs)
+uses the same request identities and explicit root/worker preferences as above.
+Groups contain up to four leaves. `workers` bounds concurrent groups;
+`max_leaves` bounds the complete input; `max_group_permutations` separately
+bounds each group's leaf work, not root construction/output. Set a positive
+`minimum_permutations` crossover. Required routes reject ineligible groups,
+including incomplete final groups; Prefer explicitly permits clearing tails.
+
+Workers create their own clearing authority/workspace and return only completed,
+plan-bound CV loans. Every started worker is joined, results merge in order, and
+unmerged results clear on failures. Reports separate actual vector/scalar work,
+groups, accelerated leaves and submitted thread width. This is implemented
+development functionality, not complete native/compiler qualification.
+
 ## Hardware and SIMD
 
 `Portable` never probes a CPU. Hosted `Prefer` permits an observable portable
@@ -112,6 +131,8 @@ from a parent thread. Generic x86 hosted selection remains unavailable.
 
 The report separates root route, actual accelerated leaves and thread width.
 Threads are not SIMD lanes. A backend error never authorizes fallback.
+Multibuffer workers instead use four-state AVX2 or two-state NEON kernels;
+their root still uses independently selected single-state execution.
 The new execution profile still requires final qualification and native evidence;
 see the [execution guide](https://github.com/valkyoth/brynja/blob/main/docs/parallelhash-execution.md).
 

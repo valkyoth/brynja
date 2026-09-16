@@ -130,8 +130,12 @@ updates using caller-owned storage. Its borrowed executor, cumulative leaf work
 control, exact final leaf-count proof and clearing XOF reader preserve the same
 secret-output contract. See the
 [streaming example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-hash-parallel/src/execution/stream/batch.rs).
-Neither scheduled nor streaming batching creates threads. Threaded multibuffer
-integration remains pending; the existing single-leaf stream is unchanged.
+Neither scheduled nor streaming batching creates threads. The std adapter's
+separate `runtime-batch-execution` feature adds bounded worker-local batching.
+`Leaves::transfer` consumes completed CVs into clearing, plan-bound transport
+loans; `Collector::merge_transferred` consumes them in exact order. Only these
+completed results may cross threads, never authorities or unfinished state.
+The existing single-leaf stream is unchanged.
 
 The new execution profile still needs its complete milestone acceptance and
 reviewed native evidence. See the

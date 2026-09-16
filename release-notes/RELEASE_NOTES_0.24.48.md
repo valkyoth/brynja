@@ -3,8 +3,8 @@
 Development in progress: hardened multibuffer hash owners. Not released; no
 crates selected for publication. The narrow and wide SHA-2 CPU and leaf batch
 APIs, Keccak CPU/leaf batching and distinct hosted adapters are implemented;
-Scheduled and streaming ParallelHash leaf groups are implemented; threaded
-batching and qualification remain pending.
+scheduled, streaming and threaded ParallelHash leaf groups are implemented.
+Complete qualification remains pending.
 
 ## Scope
 
@@ -90,7 +90,13 @@ clearing executor and support arbitrary-bit final tails plus fixed/XOF output.
 They construct a root-bound completion token only after checking zero pending
 bytes and the exact expected leaf count. Cancellation is polled at buffering
 boundaries; Drop/error/unwind clear pending storage and nested hash workspaces.
-Threaded multibuffer integration and complete qualification remain pending.
+`brynja-hash-parallel-std/runtime-batch-execution` adds bounded worker-local
+multibuffer executors. Only completed, plan-bound clearing CV loans cross worker
+boundaries; authorities and unfinished state remain thread-local. Every started
+worker is joined, results merge in submission order, and errors clear unmerged
+results and cancel the root. Worker count, SIMD width, per-group permutation
+budget and complete-input leaf limit are distinct. Actual vector/scalar work is
+reported separately. Complete qualification remains pending.
 
 Batch shape, configured limits and scheduling are public; callers must pad when
 traffic-analysis resistance is required. Explicit clearing cannot guarantee

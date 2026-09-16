@@ -117,7 +117,8 @@ ROWS = {
     ],
     "crates/brynja-hash-parallel-std/README.md": [
         "| Bounded portable ParallelHash/ParallelHashXOF worker executor | ✅ Implemented | ❌ No |",
-        "| Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |"
+        "| Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |",
+        "| Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |"
     ],
     "crates/brynja-legacy-snp/README.md": [
         "| SNP controlled interoperability | ❌ Not implemented | ❌ No |"

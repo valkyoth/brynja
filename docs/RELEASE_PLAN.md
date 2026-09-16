@@ -4775,7 +4775,10 @@ are also implemented, with distinct default-off hosted adapters for all three
 families. Scheduled ParallelHash leaf groups now use distinct clearing owners,
 plan-bound consumed results and actual per-slot vector accounting. Distinct
 streaming batch owners buffer 4B bytes and require exact complete-input proofs.
-Threaded multibuffer integration and fresh qualification remain pending.
+Bounded threaded multibuffer integration now creates worker-local authorities
+and transfers only completed plan-bound clearing CV loans. Failed spawn, panic
+and cancellation join all started workers; deterministic merging rejects foreign
+or reordered results. Fresh complete qualification remains pending.
 The existing ordinary owners remain public-only; do not reuse them for secrets.
 
 Plan scope: Add hardened ownership to the new SHA-2 and Keccak batch APIs and integrate eligible batched leaves into ParallelHash without losing secret classification or bounded scheduling.

@@ -2,7 +2,7 @@
 
 Status: v0.24.48 in development; narrow and wide SHA-2 CPU/leaf batch APIs implemented,
 Keccak CPU/leaf APIs, hosted adapters and scheduled ParallelHash groups implemented;
-streaming groups implemented; threaded integration and qualification pending.
+streaming and threaded groups implemented; complete qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
 public-only. Nothing in this document authorizes passing secrets to those types.
@@ -115,7 +115,26 @@ Cancellation is polled even on calls that only buffer data; reuse one Control
 across calls for a cumulative leaf-permutation budget. The complete-input leaf
 limit always applies, separately from root construction/output work. Errors and
 recoverable unwind cancel the root, pending buffer, hash workspace and counters.
-Threaded multibuffer integration remains pending; these owners are thread-bound.
+These owners remain thread-bound. The std adapter's separate default-off
+`runtime-batch-execution` feature now supplies `execution::batch::Executor`.
+Each bounded worker constructs its own hosted/static authority and clearing
+workspace. `Leaves::transfer` consumes completed CVs into a separate
+`TransferredLeaves` loan: auto-Send, not Sync/Copy/Clone/Debug, without authority,
+unfinished sponge or a byte importer. Transfer clears the source and initializes
+all destination capacity; merge/drop clears all 256 destination bytes.
+`Collector::merge_transferred` retains exact plan identity, indices, worker policy
+and deterministic order. Partial/failed work cannot construct a completed token.
+
+The std executor admits 1..=64 simultaneous workers and bounds the complete
+input by `max_leaves`. Each group of at most four leaves has its own finite
+`max_group_permutations`; this is not a global shared budget and does not count
+root construction/output work. Worker width is independent of SIMD width.
+Reports sum actual group, vector and scalar work with checked arithmetic.
+Storage never grows after initialization. Failed launch, worker panic, cancellation
+and backend failure join every started worker, clear unmerged results and cancel
+the root. Reversed completion cannot reorder root absorption. No backend failure
+is retried through portable execution. Full compiler/package/native qualification
+of these new paths remains pending.
 
 ## Implementation order and scope
 

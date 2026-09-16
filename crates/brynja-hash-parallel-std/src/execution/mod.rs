@@ -23,6 +23,8 @@
 //! # Ok::<(), Error>(())
 //! ```
 
+#[cfg(feature = "runtime-batch-execution")]
+pub mod batch;
 mod selection;
 mod worker;
 

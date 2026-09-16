@@ -94,7 +94,8 @@ The v0.24.48 [hardened batch owner work](hardened-multibuffer-owners.md) is in
 development, not a completed secret-bearing capability. Scheduled ParallelHash
 leaf groups now use distinct clearing owners and actual per-slot SIMD accounting;
 streaming groups now buffer 4B bytes and require exact complete-input proofs.
-Threaded batch integration and full qualification remain pending.
+Bounded threaded batch integration is implemented with completed-only clearing
+result transport; full qualification remains pending.
 Independent verification remains unchanged.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |

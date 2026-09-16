@@ -5,6 +5,59 @@ use crate::execution::{
 };
 
 impl<'plan, 'input, 'authority> Collector<'plan, 'input, 'authority> {
+    /// Consumes completed, clearing worker results in exact plan/index order.
+    /// No caller-supplied bytes or raw worker reports can construct this token.
+    pub fn merge_transferred(
+        &mut self,
+        leaves: batch::TransferredLeaves<'plan, 'input, '_>,
+    ) -> Result<(), Error> {
+        let mut guard = Operation {
+            root: self,
+            complete: false,
+        };
+        let root = &mut guard.root;
+        let bound = root.binding.scheduled()?;
+        let position = root.merged_leaves();
+        let end = leaves
+            .start
+            .checked_add(leaves.count as u128)
+            .ok_or(RootError::State)?;
+        if root.phase != [1]
+            || !core::ptr::eq(bound, leaves.plan)
+            || leaves.start != position
+            || leaves.count == 0
+            || leaves.count > batch::CAPACITY
+            || end > bound.leaf_count()
+        {
+            return Err(RootError::State.into());
+        }
+        for index in 0..leaves.count {
+            let vector = leaves.report.accelerated_slots & (1 << index) != 0;
+            if !match bound.workers {
+                WorkerPolicy::Mixed => true,
+                WorkerPolicy::Portable => !vector,
+                WorkerPolicy::RequireAcceleration => vector,
+            } {
+                return Err(RootError::State.into());
+            }
+        }
+        let next_accelerated = root
+            .accelerated_leaves()
+            .checked_add(u128::from(leaves.report.accelerated_slots.count_ones()))
+            .ok_or(RootError::State)?;
+        for value in leaves.values.iter().take(leaves.count) {
+            root.state.update(
+                value
+                    .get(..bound.identity.leaf_bytes())
+                    .ok_or(RootError::State)?,
+            )?;
+        }
+        root.merged = end.to_le_bytes();
+        root.accelerated = next_accelerated.to_le_bytes();
+        guard.complete = true;
+        Ok(())
+    }
+
     // Only the streaming owner supplies pending input. No external completed
     // token can authorize this route or the separate complete-input proof.
     pub(in crate::execution) fn merge_stream_batch(

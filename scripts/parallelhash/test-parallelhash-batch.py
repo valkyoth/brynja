@@ -90,18 +90,61 @@ def stream_campaign(root, env, cargo, target):
     print(f'Streaming ParallelHash batching: {len(cases)} compiled regressions rejected')
 
 
+def thread_campaign(root, env, cargo, target):
+    commands = {
+        'std': [*cargo, 'test', '--locked', '--offline', '-p', 'brynja-hash-parallel-std', '--features', 'runtime-batch-execution', '--target', target],
+        'leaf': [*cargo, 'test', '--locked', '--offline', '-p', 'brynja-hash-parallel', '--features', 'hardened-batch-execution', '--target', target],
+    }
+    for command in commands.values():
+        run(command + ['--lib', 'execution::batch'], root, env)
+        run(command + ['--doc'], root, env)
+    base = 'crates/brynja-hash-parallel/src/execution/'
+    worker = 'crates/brynja-hash-parallel-std/src/execution/batch/worker.rs'
+    cases = [
+        (base + 'batch/transfer.rs', 'clear_owned_region(self.values.as_flattened_mut())', 'Ok::<(), ()>(())', 'leaf', 'transfer_clears'),
+        (base + 'batch/transfer.rs', 'clear_owned_region(values.as_flattened_mut())', 'Ok::<(), ()>(())', 'leaf', 'transfer_clears'),
+        (base + 'batch/transfer.rs', 'destination.copy_from_slice(source);', '// omitted CV transport', 'std', 'portable_threads'),
+        (base + 'collector/batch.rs', '!core::ptr::eq(bound, leaves.plan)', 'false', 'leaf', 'transferred_tokens'),
+        (base + 'collector/batch.rs', 'leaves.start != position', 'false', 'leaf', 'transferred_tokens'),
+        (worker, 'root.merge_transferred(leaves)?;', 'drop(leaves);', 'std', 'portable_threads'),
+        (worker, 'if !self.complete {', 'if false {', 'std', 'spawn_errors'),
+        (worker, 'self.clear();\n        #[cfg(test)]', '// omitted storage Drop clear\n        #[cfg(test)]', 'std', 'storage_drop'),
+        (worker, 'leaf::Control::new(executor.budget, &mut cancel)', 'leaf::Control::new(u64::MAX, &mut cancel)', 'std', 'request_rejections'),
+        (worker, 'for handle in handles {', 'for handle in handles.into_iter().rev() {', 'std', 'reversed_worker'),
+        (worker, 'vector_calls: report.vector_calls', 'vector_calls: 0', 'std', 'work_totals'),
+        (worker, 'scalar_permutations: report.scalar_permutations', 'scalar_permutations: 0', 'std', 'work_totals'),
+    ]
+    for name, before, after, package, test in cases:
+        subject = root / name
+        original = subject.read_text()
+        if original.count(before) != 1:
+            raise ValueError('ambiguous threaded mutation: ' + before)
+        try:
+            subject.write_text(original.replace(before, after))
+            result = run(commands[package] + ['--lib', test], root, env, success=False)
+            if result.returncode == 0 or 'test result: FAILED' not in result.stdout:
+                raise ValueError('threaded mutant survived or failed to compile: ' + before + '\n' + result.stdout[-1000:] + result.stderr[-1500:])
+        finally:
+            subject.write_text(original)
+    for command in commands.values():
+        run(command + ['--lib', 'execution::batch'], root, env)
+    print(f'Threaded ParallelHash batching: {len(cases)} compiled regressions rejected')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--target', default='x86_64-unknown-linux-gnu')
     parser.add_argument('--toolchain', default='1.98.1')
-    parser.add_argument('--stream', action='store_true')
+    kind = parser.add_mutually_exclusive_group()
+    kind.add_argument('--stream', action='store_true')
+    kind.add_argument('--threaded', action='store_true')
     args = parser.parse_args()
     if not args.target.startswith(('x86_64-', 'aarch64-')):
         raise ValueError('unsupported architecture')
     with tempfile.TemporaryDirectory(prefix='brynja-parallelhash-batch-') as directory:
         root = Path(directory)
         for package in ('brynja-core', 'brynja-hash-core', 'brynja-crypto-cpu', 'brynja-hash-sha2',
-                        'brynja-hash-sha3', 'brynja-crypto-cpu-std', 'brynja-hash-parallel'):
+                        'brynja-hash-sha3', 'brynja-crypto-cpu-std', 'brynja-hash-parallel', 'brynja-hash-parallel-std'):
             shutil.copytree(ROOT / 'crates' / package, root / 'crates' / package,
                             ignore=shutil.ignore_patterns('target'))
         (root / 'Cargo.toml').write_text((ROOT / 'Cargo.toml').read_text().replace(
@@ -116,7 +159,8 @@ def main():
         env['BRYNJA_REQUIRE_PARALLELHASH_BATCH'] = '1'
         cargo = ['cargo', '+' + args.toolchain]
         run([*cargo, 'generate-lockfile', '--offline'], root, env)
-        (stream_campaign if args.stream else campaign)(root, env, cargo, args.target)
+        selected = thread_campaign if args.threaded else stream_campaign if args.stream else campaign
+        selected(root, env, cargo, args.target)
 
 
 if __name__ == '__main__':

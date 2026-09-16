@@ -13,6 +13,7 @@ publish = ["crates-io"]
 [features]
 default = []
 runtime-execution = ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "dep:brynja-crypto-cpu"]
+runtime-batch-execution = ["runtime-execution", "brynja-hash-parallel/hardened-batch-execution", "brynja-crypto-cpu-std/keccak-hardened-batch", "brynja-crypto-cpu/keccak-hardened-batch"]
 
 [dependencies]
 brynja-core = { workspace = true }

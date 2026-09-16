@@ -7,6 +7,12 @@ remain required. The three native lanes below have now
 passed capture and source-bound artifact review. Independent-review/FIPS claims
 are unchanged.
 
+The native observations below concern the earlier single-leaf execution profile,
+not qualification of the new multibuffer paths. Scheduled, streaming and threaded
+multibuffer integration is implemented in development; its complete emitted-code,
+packaged, Kani and native qualification remains pending. See the
+[hardened batch design](hardened-multibuffer-owners.md) for exact boundaries.
+
 ## API boundaries
 
 `brynja-hash-parallel::execution` is enabled by `hardened-execution`. It keeps
@@ -107,6 +113,8 @@ contract in the general API register. Its additional owned regions are:
 | `batch::Workspace` / `batch::Leaves` | Four 64-byte CV slots, 256-byte staging and nested clearing SHA-3 workspace; completed affine tokens retain exclusive clearing output loans | Development destructor/error tests and compiled omission mutants; full batch compiler qualification pending |
 | `batch::Stream` | Exactly 4B pending input bytes, used/input counters (16 bytes each), clearing batch workspace and root; cancel/drop clears all | Development chunk/bit, exact-completion, cancellation, unwind and pending-drop tests; compiler qualification pending |
 | `batch::StreamReader` | Exclusive stream loan, no independent state copy; drop cancels the stream and forgotten readers cannot reopen input | Development ownership negatives, mixed XOF and output-failure tests; compiler qualification pending |
+| `batch::TransferredLeaves` | Completed-only plan/index-bound loan of four 64-byte CV slots; Drop clears all 256 bytes, including inactive slots and short-CV tails; auto-Send, not Sync/Copy/Clone/Debug | Development ownership negatives, source/transport clearing, foreign-plan/order rejection and compiled mutants; compiler qualification pending |
+| std `batch::worker::Storage` | At most 64 initialized 256-byte group slots; no growth after initialization; clears every live slot before deallocation | Development join/panic/cancellation/reversed-completion tests, actual destructor probes, Miri and ASan/LSan; compiler qualification pending |
 
 Plan identity, block size, admitted limits, route reports, thread handles and
 operation-completion flags are public control/provenance, not secret buffers.

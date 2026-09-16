@@ -16,6 +16,7 @@ import batch_worker_provenance as provenance
 import batch_worker_scalar as scalar
 import batch_worker_machine as machine
 import batch_worker_handoff as handoff
+import batch_worker_arm_arguments as arm_arguments
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -82,8 +83,10 @@ def main():
             print(f'ParallelHash machine normal-path cleanup reachability: PASS; {args.toolchain}; '
                   f'{args.target}; panic={panic}; states={states}; rejected={count}; unwind/arguments excluded', flush=True)
             if args.toolchain == '1.98.1' and args.target.startswith('aarch64-'):
-                print(f'ParallelHash machine argument handoff: PENDING; {args.toolchain}; '
-                      f'{args.target}; panic={panic}; register-held owner requires separate qualification', flush=True)
+                states, sites, count = arm_arguments.mutations(row, panic)
+                print(f'ParallelHash machine register/spill arguments: PASS; {args.toolchain}; '
+                      f'{args.target}; panic={panic}; states={states}; sites={sites}; rejected={count}; '
+                      'hidden aliases/callee memory effects/unwind excluded', flush=True)
             else:
                 root, sites, count = handoff.mutations(row, panic)
                 print(f'ParallelHash machine stack-owner handoff: PASS; {args.toolchain}; '

@@ -335,6 +335,7 @@ python3 scripts/parallelhash/test-batch-worker-provenance.py
 python3 scripts/parallelhash/test-batch-worker-scalar.py
 python3 scripts/parallelhash/test-batch-worker-machine.py
 python3 scripts/parallelhash/test-batch-worker-handoff.py
+python3 scripts/parallelhash/test-batch-worker-arm-arguments.py
 python3 scripts/parallelhash/check-parallel-batch-cleanup.py
 python3 scripts/parallelhash/test-parallel-batch-cleanup.py
 python3 scripts/assurance/test-hardened-batch-kani.py
@@ -576,8 +577,7 @@ registers, or form the original header address for retained drop glue. Register
 copies are tracked; narrower loads, clobbers and post-spawn entry past setup
 cannot establish the argument identity. Pre-spawn empty exits do not count as
 post-spawn argument evidence. The four 1.98.1 Arm rows retain some arguments in
-registers and are explicitly PENDING in the driver, not silently counted as
-qualified by this stack-backed check.
+registers and use the separate register/spill analysis described below.
 
 All eight supported rows pass and reject 48 assembly-only argument/offset
 mutations with unchanged LLVM inputs. The focused suite rejects 62
@@ -589,10 +589,40 @@ recovery. In particular, loading the correct field does not by itself prove that
 the field still contains the correct allocation value. The separate LLVM checks
 do not turn this limited machine check into a whole-machine provenance proof.
 
+The four 1.98.1 Arm register/spill rows now have an ordinary-machine-path
+fixed-point check. It independently identifies the minimum-count selection,
+256-byte-slot allocation ABI, zero/nonzero routing, successful allocated-base
+load and empty-base initialization. Nonempty paths cannot reach worker creation
+without the successful allocation load. Full-width copies, direct stack cells
+and tracked stack-address aliases preserve identities; arithmetic, narrow writes,
+overlapping scalar/vector stores and ABI caller-clobbers invalidate them. Facts
+are intersected at joins and loops, separately before/after spawning, and every
+post-spawn normal/error clear must receive the original base/full count. The
+allocation call must also receive that count. The analysis does not infer branch
+predicates or turn arbitrary expressions into identities.
+
+All four rows pass and reject 64 assembly-only argument/initialization mutants,
+with unchanged LLVM. The focused suite rejects 77 root/spill/clobber/merge/loop
+regressions. Fresh compiler-driver runs pass on Linux Arm and Apple Arm under
+both panic profiles. Fresh source campaigns on both targets pass all 28 compiled
+mutations and restored-source checks. Of the six coordinator clear/truncate/remove
+mutations per target, all six Apple cases and three Linux cases independently
+fail the machine argument obligation; the other three Linux cases instead change
+the reviewed initialization shape and fail closed there. Those shape rejections
+are not counted as data-flow proof. New mutant panic exits use their actual
+compiler noreturn attributes, not an incomplete baseline list.
+This complements the eight local stack-backed handoffs;
+it is not an equivalent whole-machine proof for all twelve rows. Unknown-address
+writes and callee memory effects are assumed not to mutate the tracked private
+spill cells, under the reviewed stack ownership and ABI/callee contracts. Known
+overlapping writes are checked; arbitrary hidden aliases are not. Input-plan
+arithmetic, allocation internals, complete memory initialization, worker joining,
+exception tables and recovery remain separate obligations.
+
 These checks assume valid Rust owner/Vec invariants and non-unwinding external
 clearing contracts. They do not prove worker joining, allocation reuse, all
-caller-to-Drop unwind edges or machine
-argument lowering inside coordinators. Retained glue is qualified only to the
+caller-to-Drop unwind edges or complete machine
+argument provenance inside coordinators. Retained glue is qualified only to the
 LLVM and machine-entry scope above. Compilation
 for Apple/Arm is not fresh native evidence, and abort-profile checks never imply
 that abort executes Drop.

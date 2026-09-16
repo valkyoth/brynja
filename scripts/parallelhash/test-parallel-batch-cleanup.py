@@ -71,7 +71,11 @@ def main():
             scalar = profile == 'abort'
             verifier = driver.scalar if scalar else driver.provenance
             argument_target = root / ('arguments-' + profile)
-            verifier.check(driver.compile_row(root, argument_target, args.toolchain, args.target, profile, True), profile)
+            argument_baseline = driver.compile_row(root, argument_target, args.toolchain, args.target, profile, True)
+            verifier.check(argument_baseline, profile)
+            arm_registers = args.toolchain == '1.98.1' and args.target.startswith('aarch64-')
+            if arm_registers:
+                driver.arm_arguments.check(argument_baseline, profile)
             for edit in ('storage.0.clear();', 'storage.0.truncate(1);', 'let _ = storage.0.remove(0);'):
                 anchor = 'operation.complete = true;'
                 driver.check.require(original.count(anchor) == 1, 'unique inlined argument source mutation')
@@ -90,9 +94,30 @@ def main():
                         count += 1
                     else:
                         raise AssertionError('compiled inlined buffer-discard regression survived')
+                    if arm_registers:
+                        _, clear, drop, noreturn, arm, apple = driver.machine.context(argument_baseline, profile)
+                        # Source mutants can add new panic exits. Use their real
+                        # compiler noreturn attributes, not an incomplete old set;
+                        # no failing LLVM argument proof supplies machine facts.
+                        noreturn = driver.inline.cfg.noreturn_symbols(row['ll'])
+                        assembly = driver.machine.assembly_function(row['s'], ('9execution5batch', '8Executor7execute'))
+                        driver.machine.inspect(assembly, clear, drop, noreturn, arm, apple)
+                        try:
+                            driver.arm_arguments.inspect(assembly, clear, drop, noreturn, arm, apple)
+                        except ValueError as error:
+                            reason = str(error)
+                            driver.check.require('machine cleanup must receive' in reason or
+                                                 'original retained empty header' in reason or
+                                                 'one original machine worker allocation' in reason,
+                                                 'compiled Arm mutant must violate arguments or reviewed initialization shape')
+                            print(f'Compiled Arm argument mutation: {profile}; {edit}; {reason}', flush=True)
+                        else:
+                            raise AssertionError('compiled Arm argument discard survived machine inspection')
                 finally:
                     worker_path.write_text(original)
             verifier.check(driver.compile_row(root, argument_target, args.toolchain, args.target, profile, True), profile)
+            if arm_registers:
+                driver.arm_arguments.check(driver.compile_row(root, argument_target, args.toolchain, args.target, profile, True), profile)
         driver.worker.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         driver.lifecycle.check(driver.compile_row(root, worker_target, args.toolchain, args.target, 'unwind', True), 'unwind')
         for before, after in (

@@ -318,8 +318,12 @@ do not panic; it is not a proof of arbitrary MIR or every upstream caller path.
 python3 scripts/cryptography/test-batch-cleanup-flow.py
 python3 scripts/sha2/check-hardened-sha2-batch-codegen.py
 python3 scripts/sha2/test-hardened-sha2-batch-codegen.py
+python3 scripts/sha3/test-sha3-batch-cleanup-flow.py
+python3 scripts/sha3/check-hardened-sha3-batch-codegen.py
+python3 scripts/sha3/test-hardened-sha3-batch-codegen.py
 python3 scripts/assurance/test-hardened-batch-kani.py
 python3 scripts/assurance/check-hardened-batch-kani.py
+python3 scripts/assurance/check-parallel-batch-kani.py
 ```
 
 Compiler coverage passed at Rust 1.90.0 and 1.98.1 for x86-64 Linux, AArch64
@@ -329,6 +333,18 @@ inspector also rejects eight actually compiled source regressions (wrong equal-
 width field, missing nested clear, destructor clear and operation clear).
 Abort-profile inspection does not imply Drop runs after abort.
 
+SHA-3 batch inspection covers all four framing fields in MIR, frame/workspace
+destructors and workspace cleanup at operation-guard entry. Its LLVM check follows
+workspace-derived addresses through the fully unrolled frame loop: seven byte
+regions, all sixteen frame-region clears and the two exact nested owner calls
+must cover the entire 5260-byte workspace without gaps or overlap. Assembly
+must retain the ordered 25 calls. This is an inspection of the supported compiler
+layouts, not a Rust layout ABI or proof of arbitrary iterator MIR. Both compiler
+endpoints, all three targets and both panic profiles passed, rejecting 62 altered
+artifacts per combination. Nine real compiled source regressions were rejected
+on Rust 1.98.1 x86 Linux and Rust 1.90.0 Apple Arm. Twenty-one standalone LLVM
+address, extent and control-flow regressions are rejected too.
+
 The standalone Kani driver uses the repository-pinned verifier and appends its
 harnesses only to isolated copies of the actual three production Control modules.
 It proves arbitrary 64-bit charge/cancellation/error accounting is atomic, with
@@ -337,10 +353,23 @@ passed; nine real-source mutations produce assertion counterexamples. Compiler
 errors, empty selection and failed proof runs do not count as proof success.
 The existing global harness inventory and release rules are unchanged.
 
+Four additional Kani proofs check the actual ParallelHash batch-range predicate,
+scheduled/streaming completion-domain distinction and stream completion predicate.
+They cover arbitrary u128 plan/start/merged counts and usize batch counts; stream
+completion uses arbitrary u128 input/pending/merged counts at B=1, plus all u16
+input bit counts at the non-power-of-two B=3. The oracle uses independently written
+subtraction/rounding formulas. Nine compiled source mutants produce assertion
+counterexamples, and restored methods pass again. These harnesses inject private
+counters (including invalid/unreachable combinations) into real types; the stream
+harness deliberately suppresses Drop and does not execute hashing. They therefore
+prove the local predicates, not cryptographic state validity, all block sizes,
+token provenance, transfer ordering, complete public lifecycle or cleanup.
+Insufficient loop-unwinding failures cannot count as mutation counterexamples.
+
 Remaining compiler obligations include secret-output destination iteration,
-complete SHA-3 framing/workspace teardown, ParallelHash stream/transport/thread
-storage and full caller-to-cleanup lifecycle coverage. Further bounded proofs
-must cover the new scheduling/completion invariants. These limited checks are
+ParallelHash stream/transport/thread storage and full caller-to-cleanup lifecycle
+coverage. Remaining bounded-proof obligations include worker-result transfer and
+end-to-end completion-token consumption. These limited checks are
 not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.
 

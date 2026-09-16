@@ -32,6 +32,8 @@ def exercise(success, counterexample):
         (0, 'assertion failure\nVERIFICATION:- FAILED'),
         (1, 'compiler error: assertion'), (1, 'VERIFICATION:- FAILED'),
         (0, 'VERIFICATION:- SUCCESSFUL'), (1, ''),
+        (1, 'VERIFICATION:- FAILED\nFailed Checks: unwinding assertion loop 0'),
+        (1, 'assertion failure\nVERIFICATION:- FAILED\n[Kani] info: Verification output shows one or more unwinding failures.'),
     ):
         rejects(lambda: counterexample(result(status, output)))
 
@@ -46,6 +48,8 @@ def main():
         ("not result.returncode or 'VERIFICATION:- FAILED' not in result.stdout or 'assertion' not in result.stdout",
          "'VERIFICATION:- FAILED' not in result.stdout or 'assertion' not in result.stdout"),
         (" or 'assertion' not in result.stdout", ''),
+        ("'unwinding failures' in result.stdout", 'False'),
+        ("'Failed Checks: unwinding assertion' in result.stdout", 'False'),
     ):
         assert source.count(before) == 1
         namespace = {'__file__': str(PATH), '__name__': 'mutant'}
@@ -55,7 +59,7 @@ def main():
         except AssertionError:
             continue
         raise AssertionError('Kani outcome-check mutant survived')
-    print('Hardened Kani outcome checks: ten invalid outcomes and four weakened verifiers rejected')
+    print('Hardened Kani outcome checks: twelve invalid outcomes and six weakened verifiers rejected')
 
 
 if __name__ == '__main__':

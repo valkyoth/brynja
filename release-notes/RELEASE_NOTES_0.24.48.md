@@ -34,8 +34,11 @@ separation, and rejects compiled cleanup/dispatch mutations. This is development
 acceptance, not complete qualification; release-gate rules are unchanged.
 Development compiler checks now cover narrow/wide SHA-2 batch workspace cleanup
 on both compiler endpoints and three targets under abort/unwind. Six bounded Kani
-proofs cover the actual hardened SHA-2/Keccak work controls. Other owner/lifecycle
-compiler checks and scheduling/completion proofs are still pending.
+proofs cover the actual hardened SHA-2/Keccak work controls. SHA-3 batch frame and
+whole-workspace emitted cleanup now passes the same compiler/target matrix; four
+further Kani proofs cover local ParallelHash range and completion predicates.
+Secret-output iteration, ParallelHash owner/lifecycle compiler checks and
+end-to-end transfer/completion proofs are still pending.
 
 The new `brynja-crypto-cpu/sha256-hardened-batch` feature supplies distinct
 Authority/Session/Workspace types and clearing AVX2/NEON compression kernels.

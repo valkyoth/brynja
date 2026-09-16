@@ -76,6 +76,9 @@ def require_success(result):
 def require_counterexample(result):
     if not result.returncode or 'VERIFICATION:- FAILED' not in result.stdout or 'assertion' not in result.stdout:
         raise ValueError('Kani mutation lacked an assertion counterexample:\n' + result.stdout[-7000:] + result.stderr[-3000:])
+    if ('unwinding failures' in result.stdout or
+            'Failed Checks: unwinding assertion' in result.stdout):
+        raise ValueError('insufficient unwinding is not a mutation counterexample')
 
 
 def main():

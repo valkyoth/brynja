@@ -869,6 +869,37 @@ do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.
 
+## Standalone sanitizer development check
+
+On a matching Linux x86_64 AVX2 or AArch64 NEON host, run:
+
+```sh
+python3 scripts/cryptography/test-hardened-batch-asan.py
+python3 scripts/cryptography/check-hardened-batch-asan.py
+```
+
+The runner uses pinned `nightly-2026-09-11`, offline locked dependencies and a
+fresh temporary build directory. It checks SIMD support on every CPU listed in
+`/proc/cpuinfo`, selects the matching native target and forces AddressSanitizer
+and LeakSanitizer with fatal error exits. Ambient sanitizer options cannot disable
+leak checking. Cargo environment target/runner/wrapper overrides are removed;
+the checkout and on-disk Cargo/toolchain configuration remain trusted inputs.
+CPU scheduling/migration guarantees remain the deployment's responsibility.
+
+Six library-test selections cover the CPU kernels, SHA-2 leaves, Keccak leaves,
+hosted adapters, scheduled/streaming ParallelHash and threaded ParallelHash.
+Required-backend switches and exact named passing tests prevent portable-only
+or empty selections from passing. The CPU suite additionally requires the real
+1,024-pair Keccak SIMD marker. All four threaded coordinator-unwind identities
+must pass. Nonzero exits, missing results and timeouts reject the run; a runner
+that cannot support leak checking must be changed, not run with leaks disabled.
+
+Local x86_64 AVX2 execution passed 117 tests across these six selections with
+forced leak checking. Host/environment/result checks and seven enforcement
+mutations passed. This is repeatable implementation-author development evidence,
+not an AArch64 sanitizer result, native evidence receipt, complete memory-erasure
+proof or independent review. This runner is not added to the release/tag gates.
+
 ## Acceptance required before completion
 
 - Positive downstream examples for every constructor, exact bit/byte identity,

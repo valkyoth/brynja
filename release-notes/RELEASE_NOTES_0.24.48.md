@@ -20,6 +20,12 @@ Complete qualification remains pending.
 The [design](../docs/hardened-multibuffer-owners.md) records the implementation
 order and acceptance obligations. No release-gate or publication rule changes.
 
+Standalone development sanitizer execution now covers all six hardened batch
+layers with required SIMD tests and forced fatal ASan/LeakSanitizer settings.
+Local AVX2 execution passed 117 tests; driver regressions reject seven weakened
+enforcement variants. This is not native platform qualification or independent
+review, and no release/tag-gate rule changed.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

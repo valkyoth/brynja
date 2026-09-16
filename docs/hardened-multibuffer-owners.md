@@ -838,6 +838,30 @@ timed out and is excluded. Explicit four-byte oracle comparisons and a five-step
 unwind bound retain the same input domain; unwinding assertions remain enabled.
 The restored-source proof passes again after all five mutations.
 
+A separate `tail` harness follows the real `finish_input` partial-byte branch
+with B=1, one to eight total bytes and zero to three valid pending bytes. Payload
+bytes are symbolic, with the last byte canonicalized to each possible final
+valid-bit count from one to seven. A modeled consumer checks each group against
+the original ordered bytes, including exact final bit count, and either counts
+its leaves or rejects the first/second group. Cancellation can occur at either
+outer poll. On success the completion token must borrow the exact checked root,
+and input-bit/leaf counts must match the independent length formula. On error
+the root must be cancelled, buffers/counters cleared and further input rejected.
+The buffer is also checked after Drop.
+
+This injects pending bytes and matching metadata rather than proving their
+creation. The prior byte-update proof supplies separately bounded evidence for
+that operation. The consumer and volatile-store effects remain modeled; root
+output/finalization, hashing, arbitrary B/message sizes, more updates and unwind
+are outside this proof. Both full-prefix flushes and the final partial group
+are exercised without replacing actual input-copy, flush or guard methods.
+Run `python3 scripts/assurance/check-parallel-batch-kani.py --proof tail`.
+Pinned Kani 0.67.0 passes the positive proof and rejects five real-source
+mutations: zeroed final byte, byte-aligned replacement of its bit count,
+discarded full-byte prefix, lost total-bit accounting and skipped partial flush.
+Each rejection is an assertion counterexample, not a compiler error or timeout.
+The restored source passes again after the complete mutation campaign.
+
 Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
 and machine-level coordinator argument/unwind qualification (standalone Storage
 and both forms of inlined LLVM handoff are now checked at the levels above). The new compositional proofs

@@ -19,14 +19,17 @@ import parallel_batch_proofs as proofs
 import parallel_transfer_proofs as transfers
 import parallel_completion_proofs as completion
 import parallel_buffer_proofs as buffer
+import parallel_tail_proofs as tail
 
 SOURCES = {**proofs.SOURCES, **transfers.SOURCES}
 SOURCES['execution/stream/batch.rs'] += completion.STREAM
 SOURCES['execution/collector.rs'] += completion.COLLECTOR
 SOURCES['execution/stream/batch.rs'] += buffer.STREAM
 SOURCES['execution/collector.rs'] += buffer.COLLECTOR
-HARNESSES = {**proofs.HARNESSES, **transfers.HARNESSES, **completion.HARNESSES, **buffer.HARNESSES}
-MUTANTS = proofs.MUTANTS + transfers.MUTANTS + completion.MUTANTS + buffer.MUTANTS
+SOURCES['execution/stream/batch.rs'] += tail.STREAM
+SOURCES['execution/collector.rs'] += tail.COLLECTOR
+HARNESSES = {**proofs.HARNESSES, **transfers.HARNESSES, **completion.HARNESSES, **buffer.HARNESSES, **tail.HARNESSES}
+MUTANTS = proofs.MUTANTS + transfers.MUTANTS + completion.MUTANTS + buffer.MUTANTS + tail.MUTANTS
 
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location('batch_kani', Path(__file__).with_name('check-hardened-batch-kani.py'))
@@ -80,7 +83,7 @@ def main():
             command = [*prefix, 'kani', '-p', 'brynja-hash-parallel', '--no-default-features',
                        '--features', 'hardened-batch-execution', '--harness', HARNESSES[key],
                        '--exact', '-Z', 'unstable-options', '--harness-timeout', '300s']
-            if key in transfers.HARNESSES or key in completion.HARNESSES or key in buffer.HARNESSES:
+            if key in transfers.HARNESSES or key in completion.HARNESSES or key in buffer.HARNESSES or key in tail.HARNESSES:
                 command += ['-Z', 'stubbing']
             results.require_success(results.run(command, root, env))
             print('ParallelHash batch Kani proof: PASS; ' + key, flush=True)

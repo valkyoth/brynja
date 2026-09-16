@@ -111,6 +111,11 @@ with symbolic payloads up to twelve bytes, all split points and modeled consumer
 failures. It checks ordered full-group handoff, pending bytes, counters and
 cancel/Drop clearing. Hashing, partial-bit tails, arbitrary sizes and machine
 erasure are outside this compositional proof.
+A separate bounded partial-tail proof follows real final-input copying and
+flushing with pre-existing pending bytes. It checks canonical partial-byte
+handoff, exact bit/leaf accounting, root-bound completion and failure cleanup
+for B=1 and up to eight total bytes; hashing and root output remain modeled or
+excluded rather than claimed as proven.
 No release gate changed.
 
 The new `brynja-crypto-cpu/sha256-hardened-batch` feature supplies distinct

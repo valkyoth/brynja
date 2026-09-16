@@ -136,6 +136,7 @@ ROWS = {
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
         "| Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |",
         "| Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |",
         "| Hosted independent-message SHA-224/256 batching | ✅ Opt-in, platform-limited | ❌ No |",
         "| Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |",

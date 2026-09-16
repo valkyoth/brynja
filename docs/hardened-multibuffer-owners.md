@@ -1,7 +1,7 @@
 # Hardened multibuffer hash owners
 
 Status: v0.24.48 in development; narrow and wide SHA-2 CPU/leaf batch APIs implemented,
-Keccak CPU/leaf APIs implemented; hosted adapters and qualification pending.
+Keccak CPU/leaf APIs and hosted adapters implemented; integration/qualification pending.
 The names below are proposed API names until the implementation and downstream
 compile tests establish the exact exported surface. Ordinary batch types remain
 public-only. Nothing in this document authorizes passing secrets to those types.
@@ -65,7 +65,22 @@ unwind revoke the executor. Input lengths, identities and scheduling remain
 public metadata. The leaf module rustdoc includes a runnable secret-output
 example. These APIs do not enable ordinary batching or ordinary execution.
 
-Names for hosted adapters and ParallelHash integration remain proposed.
+Three separate default-off `brynja-crypto-cpu-std` features now expose
+`sha256_hardened_batch`, `sha512_hardened_batch` and `keccak_hardened_batch`.
+Each hosted `Authority::new(Mode)` returns borrowed leaf executors through
+`executor(nonzero_threshold)`. These are the exact hardened leaf types, not
+ordinary wrappers. Portable never probes; Prefer selects portable only on
+initial platform unavailability. KAT/health failures never permit fallback.
+AVX2 requires a complete build-wide bundle plus compatible deployment; generic
+x86 does not acquire migration authority from CPUID. Little-endian AArch64
+uses allowlisted OS NEON feature contracts. Cached detection is not live
+revocation or proof of arbitrary hypervisor migration safety.
+
+CPU quarantine revokes existing accelerated borrows and prevents new ones.
+Portable selections have no CPU authority; use the portable executor's own
+quarantine method for local revocation. Authority/borrow lifetimes and
+non-Send/Sync/Copy/Clone/Debug contracts remain enforced. Names for ParallelHash
+integration remain proposed.
 Native qualification is not supplied by local/emulated tests.
 
 ## Implementation order and scope

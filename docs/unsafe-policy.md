@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: forty-five exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: forty-eight exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only forty-five exact modules: the private core volatile clearer; the
+Rust in only forty-eight exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -15,7 +15,8 @@ and the ordinary SHA-224/256 batch platform import, AVX2/NEON kernels and hosted
 bridge; and the corresponding ordinary SHA-512-family batch platform import,
 AVX2/NEON kernels and hosted bridge; plus the independent-state Keccak batch
 platform import, AVX2/NEON kernels and hosted bridge; and the distinct hardened
-SHA-224/256, SHA-512-family and Keccak batch platform imports and AVX2/NEON kernels. These modules use fixed-size
+SHA-224/256, SHA-512-family and Keccak batch platform imports and AVX2/NEON kernels,
+with three distinct hosted hardened-batch platform imports. These modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
 instruction/import boundaries, never framing or output ownership. Each

@@ -34,6 +34,7 @@ It is not automatically installed or added to facade/default graphs.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
+| Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-224/256 batching | ✅ Opt-in, platform-limited | ❌ No |
 | Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |
@@ -91,6 +92,33 @@ explicitly public byte/bit inputs and preserve transactional output. They are
 not secret-erasing owners.
 
 ## Hardware and SIMD
+
+Hardened batching has three separate default-off features. None enables ordinary
+batching or relabels an ordinary authority/workspace:
+
+| Feature | Hosted module | Leaf executor |
+| --- | --- | --- |
+| `sha256-hardened-batch` | `sha256_hardened_batch` | `brynja_hash_sha2::hardened_batch` |
+| `sha512-hardened-batch` | `sha512_hardened_batch` | `brynja_hash_sha2::hardened_batch512` |
+| `keccak-hardened-batch` | `keccak_hardened_batch` | `brynja_hash_sha3::hardened_batch` |
+
+For each module, call `Authority::new(Mode::Portable/Prefer/Require)` and then
+`authority.executor(nonzero_threshold)`. The borrowed executor accepts its
+distinct clearing `Workspace`, canonical `Input` slots and secret destinations
+through `digest_secret`; `digest_public` requires explicit declassification.
+The leaf module rustdocs contain runnable complete hashing examples. SHA-2
+thresholds count common complete input blocks; Keccak thresholds count per-lane
+prefix/padding/squeezing permutations. Reports count actual vector work.
+
+Portable does not probe. Prefer falls back only on initial unavailability, never
+after startup KAT, health or execution failure. Generic x86 stays portable or
+Unavailable; AVX2 requires a matching build-wide bundle and compatible deployment.
+Little-endian AArch64 NEON uses allowlisted OS feature contracts. Cached detection
+does not prove arbitrary VM migration/hotplug safety. CPU quarantine revokes all
+borrowed accelerated executors; portable selection has no CPU authority, so use
+the portable executor's own `quarantine` when local revocation is wanted.
+Full qualification remains pending; see the
+[hardened multibuffer contract](../../docs/hardened-multibuffer-owners.md).
 
 Hosted execution uses qualifying AArch64 system-wide feature APIs for
 SHA2/SHA-512/SHA3 kernels. Generic x86 and unreviewed platforms cannot derive

@@ -30,7 +30,11 @@ def validate(write=False):
             'hardened-execution': ['static-execution', 'dep:brynja-core'], 'sha256-batch': ['static-execution'], 'sha512-batch': ['static-execution']}:
         raise ValueError('CPU execution features changed')
     if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {
-            'default': [], 'keccak-batch': ['brynja-crypto-cpu/keccak-batch', 'dep:brynja-hash-sha3', 'brynja-hash-sha3/batch-execution'], 'runtime-execution': ['brynja-crypto-cpu/runtime-execution'],
+            'default': [],
+            'sha256-hardened-batch': ['brynja-crypto-cpu/sha256-hardened-batch', 'brynja-hash-sha2/hardened-batch-execution'],
+            'sha512-hardened-batch': ['brynja-crypto-cpu/sha512-hardened-batch', 'brynja-hash-sha2/hardened-batch512-execution'],
+            'keccak-hardened-batch': ['brynja-crypto-cpu/keccak-hardened-batch', 'dep:brynja-hash-sha3', 'brynja-hash-sha3/hardened-batch-execution'],
+            'keccak-batch': ['brynja-crypto-cpu/keccak-batch', 'dep:brynja-hash-sha3', 'brynja-hash-sha3/batch-execution'], 'runtime-execution': ['brynja-crypto-cpu/runtime-execution'],
             'sponge-execution': ['runtime-execution', 'dep:brynja-hash-sha3', 'brynja-hash-sha3/runtime-execution'], 'sha256-batch': ['brynja-crypto-cpu/sha256-batch', 'brynja-hash-sha2/batch-execution'], 'sha512-batch': ['brynja-crypto-cpu/sha512-batch', 'brynja-hash-sha2/batch512-execution']}:
         raise ValueError('hosted execution must remain default-off and isolated')
     for owner, module in ((CPU, 'runtime_execution'), (HOST, 'execution')):

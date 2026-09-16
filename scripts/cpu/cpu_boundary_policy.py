@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "716c7374ca718ae8affe21573a0d2a6211fb058ddf9efb310b784b5cf528e10c"
+EXPECTED_POLICY_SHA256 = "b16ef6690d2998eb2745f783587e761b93efdc4c0c02bcf79a7bfdc89e66088d"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,15 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (DETECTOR, "src/sha256_hardened_batch/mod.rs"): "hardened-sha256-batch-hosted-selection",
+    (DETECTOR, "src/sha256_hardened_batch/platform.rs"): "hardened-sha256-batch-hosted-import",
+    (DETECTOR, "src/sha256_hardened_batch/tests.rs"): "hardened-sha256-batch-hosted-tests",
+    (DETECTOR, "src/sha512_hardened_batch/mod.rs"): "hardened-sha512-batch-hosted-selection",
+    (DETECTOR, "src/sha512_hardened_batch/platform.rs"): "hardened-sha512-batch-hosted-import",
+    (DETECTOR, "src/sha512_hardened_batch/tests.rs"): "hardened-sha512-batch-hosted-tests",
+    (DETECTOR, "src/keccak_hardened_batch/mod.rs"): "hardened-keccak-batch-hosted-selection",
+    (DETECTOR, "src/keccak_hardened_batch/platform.rs"): "hardened-keccak-batch-hosted-import",
+    (DETECTOR, "src/keccak_hardened_batch/tests.rs"): "hardened-keccak-batch-hosted-tests",
     (CPU, "src/keccak_hardened_batch/mod.rs"): "hardened-keccak-batch-authority",
     (CPU, "src/keccak_hardened_batch/scratch.rs"): "hardened-keccak-batch-owned-storage",
     (CPU, "src/keccak_hardened_batch/platform.rs"): "hardened-keccak-batch-platform-import",
@@ -189,29 +198,19 @@ EVIDENCE_STATUS = {
 
 class CpuBoundaryPolicyError(RuntimeError):
     """The reviewed CPU boundary differs from policy."""
-
-
 def fail(message: str) -> None:
     raise CpuBoundaryPolicyError(message)
-
-
 def read_toml(path: Path) -> dict:
     try:
         with path.open("rb") as handle:
             return tomllib.load(handle)
     except (OSError, tomllib.TOMLDecodeError) as error:
         fail(f"cannot read {path}: {error}")
-
-
 def exact_keys(value: dict, expected: set[str], label: str) -> None:
     if set(value) != expected:
         fail(f"{label} fields drifted")
-
-
 def manifest(root: Path, name: str) -> dict:
     return read_toml(root / "crates" / name / "Cargo.toml")
-
-
 def validate_policy_shape(policy: dict) -> None:
     exact_keys(policy, {
         "schema", "limits", "packages", "graph", "fips", "low_level_boundary",
@@ -269,8 +268,6 @@ def validate_policy_shape(policy: dict) -> None:
     invariants = policy["safe_wrapper"].get("invariants", [])
     if len(invariants) != 15 or len(invariants) != len(set(invariants)):
         fail("safe wrapper invariant inventory drifted")
-
-
 def validate_packages(root: Path) -> None:
     workspace = read_toml(root / "Cargo.toml")["workspace"]["dependencies"]
     expected_pins = {CPU: "=0.1.1", DETECTOR: "=0.1.1", SHA2: "=0.1.0"}
@@ -284,7 +281,11 @@ def validate_packages(root: Path) -> None:
             "hardened-execution": ["static-execution", "dep:brynja-core"], "sha256-batch": ["static-execution"], "sha512-batch": ["static-execution"]} or cpu.get("dependencies") != {
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")
-    if detector.get("features") != {"default": [], "keccak-batch": ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"],
+    if detector.get("features") != {"default": [],
+            "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"],
+            "sha512-hardened-batch": ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"],
+            "keccak-hardened-batch": ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"],
+            "keccak-batch": ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"],
             "sponge-execution": ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"], "sha256-batch": ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"], "sha512-batch": ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]}:
         fail("host detector default feature set drifted")
     if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3} or detector['dependencies'][SHA3] != {'workspace': True, 'optional': True}:
@@ -318,8 +319,6 @@ def validate_packages(root: Path) -> None:
         package = manifest(root, name)["package"]
         if "build" in package or "links" in package or (root / "crates" / name / "build.rs").exists():
             fail(f"CPU boundary introduced build or native linking: {name}")
-
-
 def validate_sources(root: Path, policy: dict) -> None:
     records = policy["sources"]
     if len(records) != len(SOURCE_STATUS):

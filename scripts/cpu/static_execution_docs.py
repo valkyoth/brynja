@@ -49,6 +49,7 @@ def validate(root):
     words += ['thirty-three', 'thirty-four', 'thirty-five', 'thirty-six']
     words += ['thirty-seven', 'thirty-eight', 'thirty-nine']
     words += ['forty', 'forty-one', 'forty-two', 'forty-three', 'forty-four', 'forty-five']
+    words += ['forty-six', 'forty-seven', 'forty-eight']
     count = len(inventory[0].keys)
     if count >= len(words):
         raise ValueError('extend the reviewed documentation count vocabulary')
@@ -66,8 +67,8 @@ def regressions(root):
     # Replace normalized text in disposable copies; source hashes are not used
     # here, so each test must fail for a semantic contract discrepancy.
     cases += [
-        (DOCS[0], 'Status: forty-five exact', 'Status: nine exact'),
-        (DOCS[0], 'Rust in only forty-five exact', 'Rust in only nine exact'),
+        (DOCS[0], 'Status: forty-eight exact', 'Status: nine exact'),
+        (DOCS[0], 'Rust in only forty-eight exact', 'Rust in only nine exact'),
         (DOCS[2], 'source-hash-bound module inventory', 'exactly nine modules'),
         (MANIFEST, 'default = []', 'default = ["static-execution"]'),
         (LIBRARY, 'pub mod static_execution;', 'mod static_execution;'),

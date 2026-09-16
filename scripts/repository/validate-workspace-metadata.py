@@ -39,8 +39,6 @@ AMBIGUOUS_LEGACY_NAMES = frozenset(
         "brynja-wtls",
     }
 )
-
-
 def load_policy() -> dict[str, dict]:
     with POLICY.open("rb") as handle:
         document = tomllib.load(handle)
@@ -73,8 +71,6 @@ def load_policy() -> dict[str, dict]:
         if name in dependencies:
             raise ValueError(f"{name} depends on itself")
     return packages
-
-
 def workspace_packages(document: dict) -> tuple[dict[str, dict], dict[str, str]]:
     members = set(document.get("workspace_members", []))
     by_id = {
@@ -104,12 +100,8 @@ def workspace_packages(document: dict) -> tuple[dict[str, dict], dict[str, str]]
         if package.get("source") != expected["source"]:
             raise ValueError(f"admitted external source drifted for {name}")
     return by_name, {name: package["id"] for name, package in by_name.items()}
-
-
 def expected_publish(entry: dict) -> list[str]:
     return ["crates-io"] if entry["publish"] == "crates-io" else []
-
-
 def validate_target(name: str, package: dict) -> None:
     targets = package.get("targets", [])
     libraries = [target for target in targets if target.get("kind") == ["lib"]]
@@ -217,12 +209,18 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     })
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-crypto-cpu":
+        expected["sha256-hardened-batch"] = ["dep:brynja-core"]
+        expected["sha512-hardened-batch"] = ["dep:brynja-core"]
+        expected["keccak-hardened-batch"] = ["dep:brynja-core"]
         expected["keccak-batch"] = ["static-execution"]
         expected["sha256-batch"] = ["static-execution"]
         expected["sha512-batch"] = ["static-execution"]
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
+        expected["sha256-hardened-batch"] = ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"]
+        expected["sha512-hardened-batch"] = ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"]
+        expected["keccak-hardened-batch"] = ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"]
         expected["keccak-batch"] = ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"]
         expected["sha256-batch"] = ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"]
         expected["sha512-batch"] = ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]
@@ -233,9 +231,12 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["static-execution"] = ["cpu", "brynja-crypto-cpu/static-execution"]
         expected["runtime-execution"] = ["static-execution", "brynja-crypto-cpu/runtime-execution"]
     if name == "brynja-hash-sha2":
+        expected["hardened-batch-execution"] = ["cpu", "brynja-crypto-cpu/sha256-hardened-batch"]
+        expected["hardened-batch512-execution"] = ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-hardened-batch"]
         expected["batch-execution"] = ["cpu", "brynja-crypto-cpu/sha256-batch"]
         expected["batch512-execution"] = ["cpu", "general-sha512-t", "brynja-crypto-cpu/sha512-batch"]
     if name == "brynja-hash-sha3":
+        expected["hardened-batch-execution"] = ["cpu", "brynja-crypto-cpu/keccak-hardened-batch"]
         expected["batch-execution"] = ["cpu", "brynja-crypto-cpu/keccak-batch"]
     if name == "brynja-legacy-md5":
         # The reviewed CPU surface includes the bounded portable batch API;

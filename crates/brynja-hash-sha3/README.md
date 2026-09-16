@@ -112,8 +112,9 @@ feature does not enable the ordinary batch API. Secret destinations clear on
 failure and owner Drop; public output requires explicit declassification.
 Caller-provided staging clears in full on every exit. Batch shape, lengths and
 work reports remain public metadata, not traffic-analysis protection.
-The module rustdoc provides a runnable secret-output example. Hosted hardened
-batch adapters and full qualification are pending; see the
+The module rustdoc provides a runnable secret-output example. The separate
+`brynja-crypto-cpu-std/keccak-hardened-batch` feature adds a hosted adapter;
+full qualification remains pending. See the
 [hardened ownership contract](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
 
 Default-off `batch-execution` adds `batch::Executor` for up to four independent

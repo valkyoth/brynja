@@ -162,8 +162,9 @@ through `hardened_batch512`, with four optional slots. Its `Algorithm` includes
 SHA-384, SHA-512, named /224 and /256, and `Sha512T(Sha512TBits)`. General secret
 outputs retain the exact parameter and canonical final-byte mask; general IV
 derivation is charged to the finite work budget. The module rustdoc includes a
-runnable example. Both profiles await qualification; hosted hardened batch
-adapters are not implemented yet. Batch shapes remain public.
+runnable example. Hosted adapters are available through the separate
+`brynja-crypto-cpu-std/sha256-hardened-batch` and `sha512-hardened-batch` features.
+Both profiles await qualification. Batch shapes remain public.
 
 See [ordinary execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-ordinary-execution.md)
 and [hardened execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md)

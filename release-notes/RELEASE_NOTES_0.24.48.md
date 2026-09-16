@@ -2,8 +2,8 @@
 
 Development in progress: hardened multibuffer hash owners. Not released; no
 crates selected for publication. The narrow and wide SHA-2 CPU and leaf batch
-APIs and Keccak CPU/leaf batching are implemented; hosted adapters, ParallelHash
-integration and qualification remain pending.
+APIs, Keccak CPU/leaf batching and distinct hosted adapters are implemented;
+ParallelHash integration and qualification remain pending.
 
 ## Scope
 
@@ -49,8 +49,8 @@ distinct wide owners and kernels: four AVX2 lanes or two NEON lanes, SHA-384,
 SHA-512, named /224 and /256, and all 510 general SHA-512/t parameters. Secret
 outputs preserve exact parameter identity and canonical final bits. Finite work
 includes general IV derivation as well as padding. Ordinary batch storage and
-public digest importers are not used for secret state. Hosted adapters,
-ParallelHash integration and full qualification are still pending. Keccak now
+public digest importers are not used for secret state. ParallelHash integration
+and full qualification are still pending. Keccak now
 has a distinct default-off `brynja-crypto-cpu/keccak-hardened-batch` permutation
 foundation with four AVX2 or two NEON lanes. Word/byte state entry points clear
 all packed state, parity, delta and rho/pi/chi staging on every exit and commit
@@ -66,6 +66,15 @@ workspace clear on every exit, including unused capacity. Finite budgets count
 prefix, padding and squeezing work. Required eligibility is checked before
 secret processing; routine rejection permits reuse, backend/invariant/unwind
 failures revoke execution. This feature does not enable ordinary batching.
+
+The three separate hosted `sha256-hardened-batch`, `sha512-hardened-batch` and
+`keccak-hardened-batch` features borrow those exact clearing leaf executors.
+They never enable ordinary batch features. Portable avoids probing; Prefer may
+select portable only on initial unavailability, not after KAT/health failure.
+Generic x86 remains portable/unavailable without a build-specialized AVX2
+deployment. Allowlisted little-endian AArch64 uses the OS NEON feature ABI;
+cached detection does not prove arbitrary migration safety. CPU revocation
+affects every borrowed accelerated executor, not unrelated portable executors.
 
 Batch shape, configured limits and scheduling are public; callers must pad when
 traffic-analysis resistance is required. Explicit clearing cannot guarantee

@@ -15,6 +15,7 @@ win64-probe = []
 # Select the separate SHA/SSE2 or NEON/SHA2 compression boundary.
 sha256-probe = []
 keccak-probe = []
+batch256-probe = []
 
 [lints.rust]
 unsafe_op_in_unsafe_fn = "deny"

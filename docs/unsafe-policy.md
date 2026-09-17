@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: fifty-five exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: fifty-seven exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only fifty-five exact modules: the private core volatile clearer; the
+Rust in only fifty-seven exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -74,7 +74,15 @@ and YMM0–3; Arm erases five GPRs and V0–3. Caller state transfer and higher-
 framing remain separate audit work. Guard-page, differential and mutation tests
 supplement ASan, which cannot instrument opaque assembly internally.
 
-These six kernel boundaries are under implementation-author verification, not
+The SHA-224/256 batch ports add `sha256_hardened_batch/{x86,arm}/secret.rs`.
+The exact 2,752-byte owner layout retains only packed output at 2304..2560;
+initial words, expanded schedule and round temporaries are erased. AVX2 uses
+YMM0–3 and three integer temporaries; little-endian NEON uses V0–3 and three
+integer temporaries, explicitly zeroing inactive output capacity. The complete
+schedule, rounds, feed-forward and cleanup stay inside the opaque block.
+Packing and output transfer in the caller remain separate audit work.
+
+These eight kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.
 Pre-existing caller registers and caller-owned buffers are not erased. Abort,
 interruption during computation, OS snapshots and platform storage remain
@@ -90,8 +98,9 @@ review or release acceptance. See [dedicated SHA-512](x86-sha512-execution.md).
 
 ## v0.24.48 Hardened SHA-224/256 batch foundation
 
-Three development exceptions isolate `sha256_hardened_batch/platform.rs`,
-`x86.rs` and `arm.rs`. Safe Rust cannot express these AVX2/NEON intrinsics;
+Five development exceptions isolate `sha256_hardened_batch/platform.rs`,
+`x86.rs`, `arm.rs` and their two private `secret.rs` kernels. Safe Rust cannot
+express these AVX2/NEON instructions;
 existing portable hardened hashing remains the safe alternative. The new
 default-off feature enables only the first-party clearing dependency, not
 ordinary batch execution. All packed arrays belong to the distinct clearing

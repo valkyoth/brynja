@@ -2,7 +2,8 @@
 
 Development assurance code, **not complete release evidence**.
 The owner requested register-remanence remediation across the hardened backends
-before another pentest. SHA-224/256, SHA-512 and single-state Keccak use this boundary in production;
+before another pentest. SHA-224/256 (single-state and batch), SHA-512 and
+single-state Keccak use this boundary in production;
 the fixture directly includes their actual private source files, rather than
 testing duplicate implementations. Other ports and native qualification remain
 pending. Release gates are unchanged. Finding F1 remains open.
@@ -18,7 +19,7 @@ all callers, framing, output conversion, or the whole process.
 Each kernel boundary keeps **all secret loads and computation inside one opaque,
 side-effecting assembly block**. Only pointers enter; no secret Rust values
 leave. The block uses fixed, reviewed memory bounds, no stack, no calls, and
-only public loop counters. It clears its scratch and every working register
+only public loop counters. It clears non-output scratch and every working register
 before leaving. Thus the compiler cannot spill an intermediate that it never
 receives. This avoids adding a broad register clobber to the existing intrinsic
 code, where live values could instead be moved to untracked spills.
@@ -45,6 +46,8 @@ or independent verification claim follows from these tests.
 | Arm SHA-512 | QEMU, 1,024 arbitrary state/block pairs per positive run | Five integer registers plus thirteen vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 | x86 single-state Keccak | Native Linux AVX2, 1,024 arbitrary states per positive run | Four integer registers plus four complete YMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
 | Arm single-state Keccak | QEMU, 1,024 arbitrary states per positive run | Five integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
+| x86 SHA-224/256 batch | Native Linux AVX2, 1,024 independent batches per positive run | Three integer registers plus four complete YMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
+| Arm SHA-224/256 batch | QEMU, 1,024 independent batches per positive run | Three integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 
 The scalar schedule and feed-forward also live inside the block; this is not
 merely a `vzeroupper`/`vzeroall` epilogue. The ordinary implementation is not
@@ -62,7 +65,7 @@ The compiled mutation campaign poisons each working register before cleanup,
 then independently removes its erasure. Separate mutations remove scratch
 clearing or corrupt the final lane ordering. Positive poisoned controls must
 still pass. Compiler-check mutations inject spills and loads before/after the
-opaque boundary. These tests exercise the six production kernels, not a complete
+opaque boundary. These tests exercise the eight production kernels, not a complete
 production qualification or a general assembly verifier.
 
 The Linux bounds test also places each input, state, scratch and constants at
@@ -87,6 +90,15 @@ The production layout assertions are also mutation-tested: no dynamic indexed
 scratch helper remains, so the former silent-index tests are superseded by
 exact-layout rejection, fixed-offset bounds and algorithm mutations.
 
+SHA-224/256 batching tests eight AVX2 lanes or four NEON lanes against a
+separate scalar compression oracle. The 2,752-byte scratch view retains only
+packed output at 2304..2560; both other intervals are cleared. Inactive Arm
+output halves are zero even when unused input capacity is poisoned. Four guarded
+placements and 31 unaligned placements check bounds; constants need only u32
+alignment. Thirteen x86 and fourteen Arm negative mutation classes remove wipes
+or corrupt schedule/round/feed-forward/lane behavior. High-level packing and
+output transfer are not part of this normal-return kernel contract.
+
 Run with an already licensed, verified Intel SDE executable:
 
 ```sh
@@ -96,7 +108,10 @@ python3 assurance/register-cleanup/check.py --sha256 --native --mutations
 python3 assurance/register-cleanup/check_arm.py --sha256 --qemu --mutations
 python3 assurance/register-cleanup/check_keccak.py x86 --execute --mutations
 python3 assurance/register-cleanup/check_keccak.py arm --execute --mutations
+python3 assurance/register-cleanup/check_keccak.py x86 --sha256-batch --execute --mutations
+python3 assurance/register-cleanup/check_keccak.py arm --sha256-batch --execute --mutations
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --all-targets -- -D warnings
+cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --features batch256-probe --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 ```
 
 A generic `cargo test` explicitly ignores the instruction execution test. It

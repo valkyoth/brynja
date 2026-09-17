@@ -3,22 +3,34 @@
 
 extern crate std;
 
-#[cfg(not(feature = "keccak-probe"))]
+#[cfg(not(any(feature = "keccak-probe", feature = "batch256-probe")))]
 use crate::kernel;
 use core::ffi::{c_int, c_void};
 use std::io;
 
-#[cfg(all(not(feature = "keccak-probe"), feature = "sha256-probe"))]
+#[cfg(all(
+    not(any(feature = "keccak-probe", feature = "batch256-probe")),
+    feature = "sha256-probe"
+))]
 type Word = u32;
-#[cfg(all(not(feature = "keccak-probe"), not(feature = "sha256-probe")))]
+#[cfg(all(
+    not(any(feature = "keccak-probe", feature = "batch256-probe")),
+    not(feature = "sha256-probe")
+))]
 type Word = u64;
-#[cfg(all(not(feature = "keccak-probe"), feature = "sha256-probe"))]
+#[cfg(all(
+    not(any(feature = "keccak-probe", feature = "batch256-probe")),
+    feature = "sha256-probe"
+))]
 const WORDS: usize = 64;
-#[cfg(all(not(feature = "keccak-probe"), not(feature = "sha256-probe")))]
+#[cfg(all(
+    not(any(feature = "keccak-probe", feature = "batch256-probe")),
+    not(feature = "sha256-probe")
+))]
 const WORDS: usize = 80;
-#[cfg(not(feature = "keccak-probe"))]
+#[cfg(not(any(feature = "keccak-probe", feature = "batch256-probe")))]
 const WORD_BYTES: usize = core::mem::size_of::<Word>();
-#[cfg(not(feature = "keccak-probe"))]
+#[cfg(not(any(feature = "keccak-probe", feature = "batch256-probe")))]
 const CONSTANT_BYTES: usize = WORDS * WORD_BYTES;
 
 unsafe extern "C" {
@@ -116,7 +128,7 @@ impl Drop for Pages {
 }
 
 #[test]
-#[cfg(not(feature = "keccak-probe"))]
+#[cfg(not(any(feature = "keccak-probe", feature = "batch256-probe")))]
 #[cfg_attr(
     all(
         not(feature = "sha256-probe"),

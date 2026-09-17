@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Source-bound Keccak development evidence; no release-gate changes."""
+"""Source-bound vector kernel development evidence; no release-gate changes."""
 import argparse
 import itertools
 import os
@@ -20,15 +20,32 @@ SOURCES = {
 FEATURE = ['--features', 'keccak-probe']
 MARKERS = ('KECCAK_CLEANUP: 1024 permutations; 31 unaligned placements; PASS',
            'KECCAK_BOUNDS: 4 guarded placements; readonly constants: PASS')
+BATCH256 = False
+FEATURE_NAME = 'keccak-probe'
+CONSTANTS = 'keccak_constants.rs'
+
+
+def configure_batch256():
+    global BATCH256, SOURCES, FEATURE_NAME, FEATURE, CONSTANTS, MARKERS
+    BATCH256 = True
+    SOURCES = {arch: REPO / ('crates/brynja-crypto-cpu/src/sha256_hardened_batch/' +
+                            ('x86' if arch == 'x86' else 'arm') + '/secret.rs')
+               for arch in ('x86', 'arm')}
+    FEATURE_NAME = 'batch256-probe'
+    FEATURE = ['--features', FEATURE_NAME]
+    CONSTANTS = 'sha256_schedule.rs'
+    MARKERS = ('BATCH256_CLEANUP: 1024 independent batches; 31 unaligned placements; PASS',
+               'BATCH256_BOUNDS: 4 guarded placements; readonly constants: PASS')
 
 
 def validator(arch, text):
     if arch == 'x86':
-        check.REGISTERS = ('eax', 'ecx', 'edx', 'r8d')
-        check.asm_check(text, keccak=True)
+        check.REGISTERS = ('eax', 'ecx', 'edx') if BATCH256 else ('eax', 'ecx', 'edx', 'r8d')
+        check.asm_check(text, keccak=not BATCH256, batch256=BATCH256)
     else:
         check_arm.VECTOR = tuple(range(4))
-        check_arm.asm_check(text, keccak=True)
+        check_arm.GP = (4, 5, 6) if BATCH256 else (4, 5, 6, 7, 9)
+        check_arm.asm_check(text, keccak=not BATCH256, batch256=BATCH256)
 
 
 def codegen(arch):
@@ -70,11 +87,15 @@ def codegen(arch):
                         pass
                     else:
                         raise AssertionError('accepted compiler-boundary mutation')
-                print(f'Keccak boundary: {compiler} {target} release={optimized}: PASS', flush=True)
+                label = 'SHA-256 batch' if FEATURE_NAME == 'batch256-probe' else 'Keccak'
+                print(f'{label} boundary: {compiler} {target} release={optimized}: PASS', flush=True)
 
 
 def mutation_cases(arch, original, mutations):
-    if arch == 'x86':
+    if BATCH256:
+        from batch256_mutations import specification
+        marker, erase, poison, algorithm = specification(arch)
+    elif arch == 'x86':
         marker = '"# BRYNJA_REGISTER_ERASE",'
         gp = ('eax', 'ecx', 'edx', 'r8d')
         erase = [f'"xor {r}, {r}",' for r in gp]
@@ -133,7 +154,7 @@ def execution(arch, mutations):
         fixture = Path(directory) / 'fixture'
         shutil.copytree(ROOT, fixture, ignore=shutil.ignore_patterns('target', '__pycache__'))
         lib = fixture / 'src/lib.rs'
-        relative = '../../../crates/brynja-crypto-cpu/src/keccak_constants.rs'
+        relative = '../../../crates/brynja-crypto-cpu/src/' + CONSTANTS
         lib.write_text(lib.read_text().replace(relative, (ROOT / 'src' / relative).resolve().as_posix())
                        .replace('../../../' + SOURCES[arch].relative_to(REPO).as_posix(), 'keccak.rs'))
         source = fixture / 'src/keccak.rs'
@@ -142,7 +163,7 @@ def execution(arch, mutations):
         if arch == 'x86':
             mismatch = check.run(['cargo', '+1.98.1', 'check', '--locked', '--offline', '--tests',
                                   '--manifest-path', str(fixture / 'Cargo.toml'), '--target',
-                                  'x86_64-unknown-linux-gnu', '--features', 'keccak-probe,win64-probe'],
+                                  'x86_64-unknown-linux-gnu', '--features', FEATURE_NAME + ',win64-probe'],
                                  check.clean_env(), success=False)
             if mismatch.returncode == 0 or 'expected "win64" fn, found "C" fn' not in mismatch.stderr:
                 raise AssertionError('observer ABI mismatch was not rejected')
@@ -155,10 +176,11 @@ def execution(arch, mutations):
                 env['CARGO_TARGET_DIR'] = str(Path(directory) / 'build')
                 target = 'x86_64-unknown-linux-gnu' if arch == 'x86' else 'aarch64-unknown-linux-musl'
                 env.pop('CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER', None)
-                env['RUSTFLAGS'] = '-C target-feature=+avx2' if arch == 'x86' else '-C linker=rust-lld -C target-feature=+neon,+sha3'
+                env['RUSTFLAGS'] = '-C target-feature=+avx2' if arch == 'x86' else (
+                    '-C linker=rust-lld -C target-feature=+neon' + ('' if BATCH256 else ',+sha3'))
                 if arch == 'arm':
                     env['CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER'] = 'qemu-aarch64 -cpu max'
-                features = 'keccak-probe' + (',win64-probe' if abi == 'win64' else '')
+                features = FEATURE_NAME + (',win64-probe' if abi == 'win64' else '')
                 result = check.run(['cargo', '+' + compiler, 'test', '--locked', '--offline',
                                     '--manifest-path', str(fixture / 'Cargo.toml'), '--features', features,
                                     '--target', target, *(['--release'] if optimized else []),
@@ -167,7 +189,8 @@ def execution(arch, mutations):
                     raise AssertionError('missing actual execution marker')
                 if not expected and (result.returncode == 0 or 'test result: FAILED' not in result.stdout):
                     raise AssertionError(f'mutant did not fail in execution: {name}\n{result.stdout}\n{result.stderr}')
-            print(f'Keccak {arch}: {compiler} release={optimized} ABI={abi}: {len(cases)} controls/mutants PASS', flush=True)
+            label = 'SHA-256 batch' if FEATURE_NAME == 'batch256-probe' else 'Keccak'
+            print(f'{label} {arch}: {compiler} release={optimized} ABI={abi}: {len(cases)} controls/mutants PASS', flush=True)
 
 
 if __name__ == '__main__':
@@ -175,10 +198,12 @@ if __name__ == '__main__':
     parser.add_argument('arch', choices=SOURCES)
     parser.add_argument('--execute', action='store_true', help='native x86 or QEMU Arm')
     parser.add_argument('--mutations', action='store_true')
+    parser.add_argument('--sha256-batch', action='store_true')
     args = parser.parse_args()
     if args.mutations and not args.execute:
         parser.error('--mutations requires --execute')
+    if args.sha256_batch:
+        configure_batch256()
     codegen(args.arch)
     if args.execute:
         execution(args.arch, args.mutations)
-

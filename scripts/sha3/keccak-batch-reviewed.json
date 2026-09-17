@@ -314,7 +314,7 @@
     "scripts/sha3/test-keccak-hardened-batch.py": "f039e2952c9aa31d7f34263910ccdc40ee50c36a08caef547f8c6d3d9e34c2b902859cfb81b90270e3bad6bcdd2dfc124bad6688f7ecb436c5199f68d0c6a33d",
     "scripts/zeroization/check-zeroization-miri.sh": "ae5409106472baad4c4bdc79844c88eb5ed1740d49a1ba30d177fc712847f40f4a56545cee27de426c17260c1616540375096a2b909ab071963cc0dec9d5d58e",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "29d75390d1fac519e61f36b4eda7e6bb8b1327879ea9c6155311b0a85a5a9591f1f717a1fde2c1204c769a30432b0cb3b79c9aff7560b8acdf7b3b7af64ab69e",
-    "scripts/zeroization/miri_scope.py": "012e88b6cd9eaf9329f9be466a08f0d1476ad0b3cb0cad886b292e9b13b0977fb9b4975d5db34d2ba524ae72edfb8f33e34f8c4f03e76e7ceec785957f072ce7"
+    "scripts/zeroization/miri_scope.py": "d5a280e199abd1ce5c292af2769594e9c1eea487dc01a344380db10693efe2f1b9989314fb00ca4a5a185a910a66f60fb62d6512490df5948dbc1a6e938bc7b6"
   },
   "schema": 1,
   "version": "0.24.47"

@@ -285,6 +285,27 @@ def hash_binding_only(before: bytes | None, after: bytes | None) -> bool:
     return scrub(document(before)) == scrub(document(after))
 
 
+def json_hash_binding_only(before: bytes, after: bytes) -> bool:
+    """Only existing digest values may change; paths and review policy must match."""
+    import json
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError('duplicate review key')
+            result[key] = value
+        return result
+    def scrub(value):
+        if isinstance(value, dict):
+            return {key: scrub(child) for key, child in value.items()}
+        if isinstance(value, list):
+            return [scrub(child) for child in value]
+        if isinstance(value, str) and re.fullmatch(r'(?:[a-f0-9]{64}|[a-f0-9]{128})', value):
+            return ('digest', len(value))
+        return value
+    return scrub(json.loads(before, object_pairs_hook=unique)) == scrub(json.loads(after, object_pairs_hook=unique))
+
+
 def fixture_lock(data: bytes, workspace: bytes, manifest: bytes,
                  consumer: tuple[bytes, bytes] | None = None) -> None:
     parsed = document(data)

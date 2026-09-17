@@ -9,8 +9,11 @@
   three Linux ASan/forced-LeakSanitizer runs. Final release/GitHub checks remain
   pending; no crates are selected for publication.
 - Retain workload-dependent performance results and document the newly available
-  C8i/C8g hardware capabilities. Release gates are unchanged.
+  C8i/C8g hardware capabilities. Native and publication requirements are unchanged.
   See [release notes](release-notes/RELEASE_NOTES_0.24.48.md).
+- Carry forward successful checks for unchanged implementations after metadata
+  or release-tooling edits; run current baseline and affected checks without
+  relabelling the original sweep or weakening publication requirements.
 
 Intermediate milestones are documented in their individual files under
 `release-notes/`. Entries below retain their historical development context.

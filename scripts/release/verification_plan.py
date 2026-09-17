@@ -82,7 +82,13 @@ def environment_issues(environment: dict[str, str], toolchain: str) -> list[str]
     return sorted(issues)
 
 
-def build(root: Path = ROOT, base: str | None = None) -> dict:
+def execution_identity(plan: dict) -> dict:
+    """Explanations are not execution inputs; source fingerprints still bind them."""
+    return {key: value for key, value in plan.items()
+            if key not in {'issues', 'reasons', 'estimated_runtime'}}
+
+
+def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = False) -> dict:
     config = inputs.document((root / "release-crates.toml").read_bytes())["release"]
     stage = config["stage"]
     if stage not in ("public", "internal"):
@@ -90,10 +96,10 @@ def build(root: Path = ROOT, base: str | None = None) -> dict:
     toolchain = inputs.document((root / "rust-toolchain.toml").read_bytes())["toolchain"]["channel"]
     issues = environment_issues(dict(os.environ), toolchain)
     base = baseline(root) if base is None else base
-    full, groups = scope.select_repository(base, root, issues=issues)
+    full, groups = scope.select_repository(base, root, issues=issues, verified_base=verified_base)
     paths = changed_paths(root, base)
     verifier_groups = {name: list(groups) for name in ("miri", "asan", "kani")}
-    miri_full, miri_groups = miri_dependencies.select(root, base, issues)
+    miri_full, miri_groups = miri_dependencies.select(root, base, issues, verified_base=verified_base)
     verifier_groups['miri'] = list(miri_groups)
     full = full or miri_full
     reasons = []
@@ -119,7 +125,11 @@ def build(root: Path = ROOT, base: str | None = None) -> dict:
             if old.get(tool) != new.get(tool):
                 verifier_groups[kind] = list(scope.GROUPS)
                 issues.append(f"{tool} verifier changed: old evidence is not evidence under the new verifier")
-    if stage == "public":
+    # This shared executable is a proof driver, not merely release metadata.
+    # Its policy-only baseline test does not replace rerunning changed proofs.
+    if 'scripts/assurance/check-kani.sh' in paths:
+        verifier_groups['kani'] = list(scope.GROUPS)
+    if stage == "public" and not verified_base:
         groups = scope.GROUPS
         verifier_groups = {name: list(scope.GROUPS) for name in verifier_groups}
         reasons.insert(0, "scheduled public crates.io checkpoint: full verification")

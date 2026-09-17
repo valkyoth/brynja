@@ -42,8 +42,11 @@ unmodified-source reruns. See [Kani policy](../docs/KANI.md) for scope limits.
 The subsequent Kani 0.68.0 sweep passed all 570 commands at `534189c3`.
 Receipt collection exposed unordered scope diagnostics across Python processes;
 changed paths are now sorted, with cross-process and mutation regressions.
-Exact-source receipt and approval checks remain unchanged, so that completed
-run does not qualify the later tooling correction.
+At the owner's subsequent request, the foreground gate now carries that original
+successful evidence forward for unchanged implementations and reruns current
+baseline/affected checks. It records the source commit and receipt instead of
+relabeling the historical run. Unknown scope, native qualification, publication
+rules and new public full checkpoints retain their requirements.
 
 - Distinct clearing owners for SHA-224/256, the complete SHA-512 family including
   general SHA-512/t, and SHA-3/SHAKE/cSHAKE independent-message batching.

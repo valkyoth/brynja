@@ -18,6 +18,14 @@ This is project-owned testing, not independent cryptographic verification.
 
 ## Inspect before running
 
+When a completed detached sweep is available, retain its original job and
+receipt and set `BRYNJA_DETACHED_JOB` / `BRYNJA_DETACHED_RECEIPT`. The runner then
+compares implementation inputs against that validated commit, not repeatedly
+against the previous release tag. It documents carried-forward checks and runs
+the current baseline plus affected or uncovered checks. A documentation/tooling
+commit is not a reason to repeat unchanged Miri/Kani/ASan campaigns. See
+[carry-forward](detached-verification.md#carry-forward-verified-implementation-checks).
+
 Run this read-only command to see the selected groups, uncertainty reasons and
 exact plan fingerprint:
 
@@ -110,12 +118,14 @@ their original commit, compiler, CPU and results remain mandatory.
 
 This prevents an unrelated facade version bump from requiring a new hardware
 campaign. It does not turn old observations into a new capture, authorize a
-backend or relax detached-runner snapshot matching.
+backend. Detached verification has its separate implementation-delta
+carry-forward rules; neither mechanism rewrites a historical capture.
 
 ## Evidence boundaries
 
 Selection compares staged, unstaged, deleted, renamed and nonignored untracked
-inputs against an authenticated signed ancestor. At a clean tagged checkout it
+inputs against an authenticated signed ancestor, or the clean ancestor commit
+of a fully validated successful detached run. At a clean tagged checkout it
 uses the preceding tag; dirty new work after a tag uses that current tag.
 Old and new dependency graphs are considered so removed edges cannot hide
 consumers. A fixture may remove optional workspace dependency edges, but cannot

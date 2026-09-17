@@ -149,9 +149,9 @@ def validate_source(manifest: dict, root: Path) -> None:
     if records.sources(root) != manifest["sources"]:
         raise ValueError("detached source closure changed")
     plan = plans.build(root=root, base=manifest["plan"]["base"])
-    if plan != manifest["plan"]:
+    if plans.execution_identity(plan) != plans.execution_identity(manifest["plan"]):
         raise ValueError("detached plan or approval changed")
-    if catalog.selected(plan, manifest["phases"], manifest["approval"], manifest["shards"]) != manifest["commands"]:
+    if catalog.selected(plan, manifest["phases"], manifest["approval"], manifest["shards"], root=root) != manifest["commands"]:
         raise ValueError("detached command coverage changed")
 
 

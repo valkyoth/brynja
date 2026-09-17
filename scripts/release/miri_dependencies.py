@@ -33,11 +33,12 @@ def graph(before: bytes, after: bytes):
     return downstream
 
 
-def select(root, base, issues):
+def select(root, base, issues, *, verified_base=False):
     try:
         before, after = inputs.snapshot(root, base, 'Cargo.lock')
         downstream = graph(before, after)
     except (OSError, KeyError, TypeError, ValueError) as error:
         issues.append('Miri dependency proof unavailable: ' + str(error))
         return True, scope.GROUPS
-    return scope.select_repository(base, root, issues=issues, downstream=downstream)
+    return scope.select_repository(base, root, issues=issues, downstream=downstream,
+                                   verified_base=verified_base)

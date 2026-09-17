@@ -56,6 +56,27 @@ def main() -> int:
         if args.ci and (job or receipt):
             raise ValueError("CI diagnostics cannot consume local detached release evidence")
         plan = plans.build(base=args.base)
+        if job and not args.ci:
+            import verification_carry_forward as carry
+            context = carry.prepare(Path(job), receipt, plans.ROOT, plan)
+            delta = context['plan']
+            print(plans.explain(delta), flush=True)
+            requested = extra[1:] if extra and extra[0] == '--' else extra
+            entries = carry.required(context, args.phase, shlex.join(requested) if requested else None)
+            decisions = [(entry, carry.disposition(entry, context)) for entry in entries]
+            for entry, reason in decisions:
+                print(reason.upper() + ': ' + entry['command'], flush=True)
+            plans.authorize(delta, args.approve_full or os.environ.get('BRYNJA_FULL_VERIFICATION_APPROVAL') or None)
+            if args.phase == 'plan' or args.check:
+                return 0
+            remaining = [entry for entry, reason in decisions if reason.startswith('run:')]
+            if args.phase == 'matrix' and remaining:
+                prepare_matrix([(entry['command'], entry['stdin']) for entry in remaining])
+            for entry in remaining:
+                execute(entry['command'], entry['stdin'])
+            print(f'Carry-forward from {delta["evidence"]["source_commit"]}: '
+                  f'{len(entries) - len(remaining)} unchanged checks; {len(remaining)} current checks passed.', flush=True)
+            return 0
         print(plans.explain(plan), flush=True)
         # Validate ALL command ownership before starting even the first test.
         catalog = commands.repository_commands()
@@ -71,14 +92,6 @@ def main() -> int:
             plans.authorize(plan, args.approve_full or os.environ.get("BRYNJA_FULL_VERIFICATION_APPROVAL") or None)
         if args.phase == "plan" or args.check:
             return 0
-        if job:
-            import detached_reuse
-            requested = extra[1:] if extra and extra[0] == "--" else extra
-            if detached_reuse.completed(Path(job), receipt, plans.ROOT, plan, args.phase,
-                                        shlex.join(requested) if requested else None):
-                print(f"REUSE (validated detached snapshot): {args.phase}; receipt={receipt}", flush=True)
-                return 0
-            print(f"Detached job does not cover {args.phase}; executing remaining required work.", flush=True)
         full = not args.ci and (plan["stage"] == "public" or plan["approval_required"])
         groups = ([] if args.ci and plan["approval_required"] else
                   list(plans.scope.GROUPS) if full else plan["groups"])

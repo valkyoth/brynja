@@ -9,15 +9,16 @@ import verification_plan as plans
 PHASES = ("repository", "matrix", "asan", "miri", "kani")
 
 
-def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 1) -> list[dict]:
+def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 1,
+             *, root=plans.ROOT) -> list[dict]:
     if type(shards) is not int or not 1 <= shards <= 8:
         raise ValueError("detached shards must be 1..8")
     plans.authorize(plan, approval)
     if not phases or len(phases) != len(set(phases)) or any(p not in PHASES for p in phases):
         raise ValueError("choose unique registered verification phases")
-    repository = commands.repository_commands()
-    sanitizer = commands.catalog(plans.ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
-    matrix = commands.matrix_commands()
+    repository = commands.repository_commands(root)
+    sanitizer = commands.catalog(root / "scripts/zeroization/check-zeroization-sanitizer.sh")
+    matrix = commands.matrix_commands(root)
     # Validate even commands outside the selected phase, just as foreground does.
     commands.selected(repository, list(plans.scope.GROUPS), full=True)
     commands.selected(sanitizer, list(plans.scope.GROUPS), full=True)

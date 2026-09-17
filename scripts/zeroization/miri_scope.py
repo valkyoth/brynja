@@ -143,12 +143,19 @@ def closure(selected: set[str], *, downstream=None) -> tuple[str, ...]:
 
 def select_repository(
     base: str, root: Path = ROOT, *, issues: list[str] | None = None, downstream=None,
+    verified_base: bool = False,
 ) -> tuple[bool, tuple[str, ...]]:
     """Semantic metadata classification; unknown or malformed inputs fail closed."""
     try:
-        if not re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?', base):
-            raise ValueError('invalid baseline tag')
-        scope_inputs.git(root, 'verify-tag', base)
+        if verified_base:
+            # Only the receipt importer supplies this after validating a complete
+            # successful snapshot. CLI --base still requires a signed tag.
+            if not re.fullmatch(r'[a-f0-9]{40}', base):
+                raise ValueError('invalid verified baseline commit')
+        else:
+            if not re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?', base):
+                raise ValueError('invalid baseline tag')
+            scope_inputs.git(root, 'verify-tag', base)
         scope_inputs.git(root, 'merge-base', '--is-ancestor', base, 'HEAD')
         contract_locks = scope_inputs.snapshot(root, base, 'assurance/acceleration-contract/Cargo.lock')
         contract_manifests = scope_inputs.snapshot(root, base, 'assurance/acceleration-contract/Cargo.toml')
@@ -252,6 +259,8 @@ def select_repository(
             elif path == 'assurance/zeroization-matrix.toml' and scope_inputs.matrix_verifier_only(before, after):
                 continue
             elif (path.endswith(('-reviewed.toml', '-hashes.toml')) or path == 'scripts/sha1/reviewed.toml') and before is not None and after is not None and scope_inputs.hash_binding_only(before, after):
+                continue
+            elif path.endswith('-reviewed.json') and before is not None and after is not None and scope_inputs.json_hash_binding_only(before, after):
                 continue
             elif path in orchestration:
                 # Coverage orchestration has mandatory structural and execution

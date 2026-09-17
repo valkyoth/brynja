@@ -87,10 +87,12 @@ remote access. Copy the complete records and logs for review, keeping the
 launch receipt separately. Transfer alone does not establish native execution
 or authorize substituting one platform's tests for another platform's lane.
 
-## Resume a verified phase
+## Carry forward verified implementation checks
 
-After reviewing and collecting a successful job on the matching host/toolchain,
-the foreground runner can consume the exact phase without executing it again:
+After a successful job on the matching host/toolchain, the foreground runner
+validates its original snapshot and compares the current checkout against that
+tested commit. An unchanged implementation does not need another expensive run
+just because release notes or release tooling changed:
 
 ```sh
 python3 scripts/release/run-verification.py miri --detached-job /tmp/brynja-verification-my-run --detached-receipt RECEIPT
@@ -98,15 +100,34 @@ python3 scripts/release/run-verification.py miri --detached-job /tmp/brynja-veri
 
 For the existing multi-step release gate, set `BRYNJA_DETACHED_JOB` and
 `BRYNJA_DETACHED_RECEIPT` to the same values in the invoking shell. The runner
-revalidates the complete manifest, source, plan, tools, successful exit records
-and logs before reuse. Phases or exact standalone commands not covered by the
-job run normally. A stale, failed or malformed supplied job is an error, not a
-successful shortcut. Existing full-scope approval is still required separately;
-a receipt cannot approve a plan. CI diagnostics reject detached imports.
+revalidates the original manifest, frozen sources, execution plan, tools,
+successful exit records and logs. The tested commit must be a clean ancestor.
+The original result is never rewritten to claim it tested a later commit.
 
-Changing the checkout or tools requires fresh evidence; even documentation-only
-reuse is not inferred. Records from another platform may be reviewed as native
-evidence but cannot silently replace this host's required verifier commands.
+Each current command is reported as `REUSE` or `RUN`, with a reason:
+
+- Documentation, version-only pins, review-digest rebinding and release
+  orchestration edits run the current build/test/lint/policy baseline. They do
+  not by themselves rerun unchanged cryptographic campaigns.
+- Changed implementation, dependency/feature, fixture or family test-driver
+  inputs rerun that family and its affected consumers. Both dependency graphs
+  participate; removals and dirty/untracked inputs count as changes.
+- Miri/Kani groups are considered separately. An old combined run may cover an
+  unchanged group without forcing the other groups to repeat.
+- A new or altered command without matching successful evidence runs normally.
+  Changed command drivers and explicit stdin inputs also run again.
+- Unknown scope still stops for explanation and full-run approval. A new public
+  release checkpoint still requires its full suite; later metadata edits within
+  that successfully tested public version may carry it forward.
+
+The plan prints the original commit, receipt, completed-command count, current
+commit and changed paths. Record that provenance in the release/pentest ledger,
+along with the newly run checks. Keep the job and its receipt: commit history
+proves what changed, while the validated results prove which checks passed.
+No fabricated receipt, failed/missing log, dirty baseline or non-ancestor can
+qualify a skip. Tool identity changes still invalidate the imported evidence.
+CI diagnostics cannot import local evidence. Reuse grants no release approval.
+Records from another platform cannot silently replace this host's verifier runs.
 
 ## Frozen inputs and result validation
 
@@ -121,9 +142,12 @@ The worker checks the snapshot and approved plan before each command and after
 the campaign. It records tool/compiler identities, commands, timestamps,
 statuses, exit codes and bounded log hashes. Collection requires every selected
 command to have completed successfully, the original launch receipt, complete
-matching logs, and an unchanged current source/plan. Source edits after launch
-do not affect the running snapshot, but invalidate collection against the edited
-checkout. Automatic documentation-equivalence reuse is not currently provided.
+matching logs, and an unchanged source/execution plan for the snapshot being
+collected. Explanatory reason text is not execution identity; fingerprints,
+groups, verifier selection and approval requirements remain checked. Direct
+`collect` against an edited checkout remains an error. The foreground runner
+instead collects against the unchanged historical snapshot and independently
+classifies the current delta for the carry-forward rules above.
 
 Selected Miri and Kani jobs bind the actual verifier's `--version` output as
 well as the installed Rust compiler identities. Changing a verifier without

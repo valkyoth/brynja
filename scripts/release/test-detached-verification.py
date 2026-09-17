@@ -23,7 +23,9 @@ import detached_manifest as records
 import detached_process as processes
 import detached_reuse as reuse
 import verification_plan as plans
+import verification_carry_forward as carry
 from detached_shard_tests import ShardTests
+from verification_carry_forward_tests import CarryForwardTests
 
 
 def plan(groups=("parallelhash",), *, public=False, blocked=False):
@@ -91,13 +93,16 @@ class SelectionTests(unittest.TestCase):
         for chosen_plan, args, covered, expected, executions, imports in (
             (plan(), base, True, 0, 0, 1),
             (plan(), base, False, 0, 1, 1),
-            (plan(blocked=True), base, True, 3, 0, 0),
+            (plan(blocked=True), base, True, 3, 0, 1),
             (plan(), ["runner", "repository", "--ci", *base[2:]], True, 1, 0, 0),
             (plan(), base[:-2], True, 1, 0, 0),
         ):
             with patch.object(runner.plans, "build", return_value=chosen_plan), \
                  patch.object(runner.sys, "argv", args), patch.object(runner, "execute") as execute, \
-                 patch.object(reuse, "completed", return_value=covered) as imported, \
+                 patch.object(carry, "prepare", return_value={"plan": {**chosen_plan,
+                     "evidence": {"source_commit": "b" * 40}}}) as imported, \
+                 patch.object(carry, "required", return_value=[{"command": "test command", "stdin": None}]), \
+                 patch.object(carry, "disposition", return_value="reuse: unchanged" if covered else "run: changed"), \
                  patch.dict(os.environ, {}, clear=True), contextlib.redirect_stdout(io.StringIO()), \
                  contextlib.redirect_stderr(io.StringIO()):
                 self.assertEqual(runner.main(), expected)
@@ -154,14 +159,14 @@ class RecordTests(unittest.TestCase):
                     "commands": catalog.selected(plan(), ["miri"], None)}
         with patch.object(records, "sources", return_value=manifest["sources"]), \
              patch.object(plans, "build", return_value=manifest["plan"]):
-            jobs.validate_source(manifest, Path("unused"))
+            jobs.validate_source(manifest, plans.ROOT)
             with patch.object(records, "sources", return_value={"head": "b"}), self.assertRaises(ValueError):
-                jobs.validate_source(manifest, Path("unused"))
+                jobs.validate_source(manifest, plans.ROOT)
             with patch.object(plans, "build", return_value=plan(("sha2",))), self.assertRaises(ValueError):
-                jobs.validate_source(manifest, Path("unused"))
+                jobs.validate_source(manifest, plans.ROOT)
             changed = {**manifest, "commands": []}
             with self.assertRaises(ValueError):
-                jobs.validate_source(changed, Path("unused"))
+                jobs.validate_source(changed, plans.ROOT)
 
     def test_duplicate_keys_size_and_non_regular_inputs(self):
         with tempfile.TemporaryDirectory() as raw:

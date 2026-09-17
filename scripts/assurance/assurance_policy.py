@@ -389,6 +389,7 @@ def build_evidence(policy: dict | None = None) -> dict:
         *(ROOT / "scripts/release" / name for name in (
             "run-verification.py", "verification_plan.py",
             "verification_commands.py", "test-verification-plan.py",
+            "verification_carry_forward.py", "verification_carry_forward_tests.py",
             "native_metadata_carry_forward.py", "test-native-metadata-carry-forward.py")),
         ROOT / "scripts/zeroization/scope_inputs.py",
         ROOT / "security/release-signers",

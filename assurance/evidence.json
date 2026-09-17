@@ -8,7 +8,7 @@
   "inputs": {
     ".github/workflows/ci.yml": "2fe2799aa92bdf30ca24b08eed1537ccd652f4d7a53d2b8556fe7de3d9a3ab9e",
     "Cargo.toml": "f3d0a5d8366b15047dbdbd7bca6403dbe43e96fc21d50b1e9d0127059e791c1b",
-    "assurance/policy.toml": "7c6a7d259ce666c0bb0b1ea4097e7a4ff417705fb8324f39ebad1753d57c4994",
+    "assurance/policy.toml": "709d30a39cb15545811506797de887c044cea2a8008d4b7bc3c8a79f6e39241f",
     "assurance/zeroization-matrix.toml": "b0bc1a1da931a6e892e62dabc955963f84923bf603ddca639c4341ec83e31ee3",
     "crates/brynja-core/Cargo.toml": "096f0e0ac8caf49da8820894ecec821f18c56b6576be37bdb8f5f84a23e58253",
     "crates/brynja-core/src/secret_memory.rs": "f5f4743353c7fb5afb6a85f0f8481827f7dac3ae910fd17df9da46248583d2c7",
@@ -52,7 +52,7 @@
     "crates/brynja-tls13/Cargo.toml": "834c18870265af6def85f905bd6da6f6ea60379f2e41899248174fa9d66bf4e8",
     "crates/brynja-xtask/Cargo.toml": "e178b328289b523b7dc0a9d994cf5409ae54a44ba4198092c520ee45f1247d50",
     "crates/brynja/Cargo.toml": "3b622874000e763cc2169dc9371b5f06a47f3f8b9f4ecbbcc4216e77ee4d5832",
-    "docs/KANI.md": "7a524d9c455fe2008f06f3bceed7d476cbed2c34e5d623db4484c11c99cf1b31",
+    "docs/KANI.md": "dacc111bc3400d0ac6d0366cabef1fe24ad5083696c273ae9d91fd297bc61a05",
     "docs/focused-assurance.md": "789a6752a2d415f01460c760d4fd343dd9960f2432424381cc6afbe0ddc9279a",
     "docs/unsafe-policy.md": "d1740dbe02975cbab9276ca00ba51957304d8a6c1652271dfa357427e3025e33",
     "rust-toolchain.toml": "85db324345b7937c49ea2ac8b962d741f710719f4f751cab809985cbe6afbe3c",
@@ -68,12 +68,12 @@
     "scripts/assurance/assurance_process_tree.py": "73eb16d00f46d2835962c1986664c46009a24f1626749f5142746add154225ef",
     "scripts/assurance/check-assurance.py": "d1be0ee90a78919071cf369b1b6f18cd1a8e44402683778b00166f72f18b4a07",
     "scripts/assurance/check-bare-metal.sh": "4cae003df12d834e8fa3d31e878a7004ed0e69022ef900c8bb007578f26aaf0b",
-    "scripts/assurance/check-kani.sh": "107e9b7f520e1d2abdfc5017220f1a024032e72ea014481bbe99b1bddf875434",
+    "scripts/assurance/check-kani.sh": "5434cd931e7604b2dc4d8674b83060894f74d232d0d665f8f846e62a83d923ab",
     "scripts/assurance/test-assurance.py": "52c75fc14fab8ac6fe90d3814b605260ce398dc165112e9c9dfa807a941b3b60",
     "scripts/release/native_metadata_carry_forward.py": "caddddf193c146ee01f7433f73d7607a727db2a1b7b63ec6602dff36a38d6184",
     "scripts/release/run-verification.py": "378472d9fa630fa3e489d7239c458b36c85b52b2fcc1d8c7fa2a6b4f352e0bae",
     "scripts/release/test-native-metadata-carry-forward.py": "cc47c5c8e4c0602baa04dc2f57abb32d92ac7d15f74289ca61c2a368fc6c0f57",
-    "scripts/release/test-verification-plan.py": "60101e08761d57bdea7c261ddf646d6e0115fca0f3ec2d8332dc18be396bfcbb",
+    "scripts/release/test-verification-plan.py": "c9c88b172ba5d09b5d17779a22e277222e7e8d15c0eba10416ecb90c08269b1c",
     "scripts/release/verification_commands.py": "5030b457a7efb10dd99cd0745f3cb21cc024b49a43afb4c640d5df85edd61a15",
     "scripts/release/verification_plan.py": "01ca088e9f2944713f4984ced05c2e8464b931b6737f26246570f4049ed2b144",
     "scripts/repository/check-unsafe-policy.py": "5fcc3c7de08df4e4cce665c68eab9a0647be8f34939eeb4d197969314f991583",
@@ -93,7 +93,7 @@
     "security/release-signers": "79c6c8982cd2d4624f11ba6019d3cdd58e14843ba4298be3d085f3ae084b37eb"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "7c6a7d259ce666c0bb0b1ea4097e7a4ff417705fb8324f39ebad1753d57c4994",
+  "policy_sha256": "709d30a39cb15545811506797de887c044cea2a8008d4b7bc3c8a79f6e39241f",
   "schema": 1,
   "tools": [
     {
@@ -113,9 +113,9 @@
     {
       "id": "kani",
       "owner": "0.155.0",
-      "revision": "4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d",
+      "revision": "0d2328a93f0e0ff66132d6bfa1a7d884877cf862",
       "source_kind": "git-tag",
-      "version": "0.67.0"
+      "version": "0.68.0"
     },
     {
       "id": "miri",

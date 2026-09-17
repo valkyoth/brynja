@@ -73,6 +73,12 @@ def require_success(result):
         raise ValueError('Kani proof failed or did not execute:\n' + result.stdout[-7000:] + result.stderr[-3000:])
 
 
+def require_version(result, version):
+    expected = f'Kani Rust Verifier {version} (cargo plugin)\nCBMC 6.11.0'
+    if result.returncode or result.stdout.strip() != expected:
+        raise ValueError('the repository-pinned Kani installation is required')
+
+
 def require_counterexample(result):
     if not result.returncode or 'VERIFICATION:- FAILED' not in result.stdout or 'assertion' not in result.stdout:
         raise ValueError('Kani mutation lacked an assertion counterexample:\n' + result.stdout[-7000:] + result.stderr[-3000:])
@@ -90,8 +96,7 @@ def main():
     version = next(tool['version'] for tool in policy['tools'] if tool['id'] == 'kani')
     prefix = ['rustup', 'run', toolchain, 'cargo']
     installed = run([*prefix, 'kani', '--version'], ROOT, os.environ)
-    if installed.returncode or installed.stdout.strip() != 'cargo-kani ' + version:
-        raise ValueError('the repository-pinned Kani installation is required')
+    require_version(installed, version)
     selected = FAMILIES if args.family == 'all' else {args.family: FAMILIES[args.family]}
     with tempfile.TemporaryDirectory(prefix='brynja-hardened-batch-kani-') as directory:
         root = Path(directory)

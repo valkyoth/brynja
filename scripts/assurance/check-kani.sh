@@ -105,7 +105,8 @@ installed="$(
 if [ -z "$installed" ]; then
     skip_or_fail "cargo-kani ${kani_version} is not installed"
 fi
-test "$installed" = "cargo-kani ${kani_version}" || {
+expected="$(printf 'Kani Rust Verifier %s (cargo plugin)\nCBMC 6.11.0' "$kani_version")"
+test "$installed" = "$expected" || {
     echo "Kani proof: installed ${installed}, expected cargo-kani ${kani_version}" >&2
     exit 1
 }
@@ -137,4 +138,4 @@ fi
 if selected parallelhash; then
     rustup run "$kani_toolchain" cargo kani -p brynja-hash-parallel
 fi
-echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; selected groups passed: ${selected_groups} (30 harnesses inventoried globally)"
+echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; selected groups passed: ${selected_groups} (${harnesses} harnesses inventoried globally)"

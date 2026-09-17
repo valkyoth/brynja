@@ -12,8 +12,11 @@ compatible pairing, following the same model as `base64-ng`.
 - Supported crate range: Rust `1.90.0` through `1.98.1`.
 - Kani verifier toolchain: Rust
   `1.90.0-x86_64-unknown-linux-gnu`.
-- Pinned verifier: `cargo-kani 0.67.0`, upstream tag `kani-0.67.0`, commit
-  `4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d`.
+- Pinned verifier: `cargo-kani 0.68.0`, upstream tag `kani-0.68.0`, commit
+  `0d2328a93f0e0ff66132d6bfa1a7d884877cf862`.
+- Bundled backend: CBMC `6.11.0`; Kani's own compiler uses
+  `nightly-2026-08-21`. The Rust `1.90.0` pairing above is the launcher
+  toolchain, not a claim that proofs execute on that stable compiler.
 - Current proof result: ten SHA-2 harnesses cover the shared byte and exact-
   bit 64-bit and 128-bit message domains, byte-padding decisions, public-output
   failure atomicity, and complete secret-output failure clearing; six
@@ -34,7 +37,7 @@ pair separately from the crate build matrix. The crate MSRV is never lowered
 or the release compiler held back merely to accommodate Kani.
 
 `scripts/assurance/check-kani.sh` verifies this policy, the installed pairing,
-the exact twenty-nine-harness inventory, and all proof results when the verifier is available.
+the exact thirty-two-harness inventory, and all proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
 The SHA-2 harnesses prove only their stated checked byte/bit-length,
@@ -92,7 +95,7 @@ formally verified behavior from this v0.4.0 policy foundation.
 ## Commands
 
 ```bash
-cargo install --locked kani-verifier --version 0.67.0
+cargo install --locked kani-verifier --version 0.68.0
 cargo kani setup
 cargo kani --version
 scripts/assurance/check-kani.sh
@@ -109,3 +112,18 @@ hosted CI bounded while retaining Kani as mandatory tag evidence.
 
 Revisit this document whenever the active stable Rust release, MSRV, Kani
 release, verifier toolchain, proof bounds, or harness inventory changes.
+
+## v0.24.48 verifier refresh
+
+The previous final detached sweep passed with Kani `0.67.0`, but the online
+freshness check found `0.68.0` before tagging. The
+[upstream release](https://github.com/model-checking/kani/releases/tag/kani-0.68.0)
+includes soundness and compiler/model changes; old proof results are not
+claimed as results under the new verifier. Historical `0.67.0` records remain
+unchanged.
+
+The new two-line version banner identifies both Kani and CBMC. The existing
+drivers now require that exact identity; regression tests reject stale Kani,
+missing or mismatched CBMC, and unsuccessful version commands. The proof
+inventory, proof bounds, failure requirements and release approval rules are
+unchanged.

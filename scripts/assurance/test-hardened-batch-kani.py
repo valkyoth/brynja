@@ -39,6 +39,14 @@ def exercise(success, counterexample):
 
 
 def main():
+    banner = 'Kani Rust Verifier 0.68.0 (cargo plugin)\nCBMC 6.11.0'
+    result = lambda status, output: subprocess.CompletedProcess([], status, output, '')
+    check.require_version(result(0, banner + '\n'), '0.68.0')
+    for status, output in ((1, banner), (0, ''), (0, 'cargo-kani 0.67.0'),
+                           (0, banner.replace('0.68.0', '0.67.0')),
+                           (0, banner.replace('6.11.0', '0.0.0')),
+                           (0, banner.splitlines()[0]), (0, banner + '\nunexpected')):
+        rejects(lambda: check.require_version(result(status, output), '0.68.0'))
     exercise(check.require_success, check.require_counterexample)
     source = PATH.read_text()
     for before, after in (

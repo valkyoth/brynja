@@ -22,15 +22,15 @@ through already reviewed fixed-width cryptographic chunk loops. Correctness,
 safety, panic, arithmetic, allocation, and project-specific source-policy
 checks remain enforced.
 
-Kani follows a separate verifier pairing because it is compiler-integration
+Kani follows a separate verifier pairing because it is compiler-integration-sensitive.
 The active release toolchain remains Rust `1.98.1`, while
-`cargo-kani 0.67.0` is pinned to the documented compatible Rust
+`cargo-kani 0.68.0` is pinned to the documented compatible Rust
 `1.90.0-x86_64-unknown-linux-gnu` execution toolchain. This does not lower the
 crate MSRV, hold back stable Rust, or turn policy-only status into proof.
 
 `assurance/policy.toml` additionally pins Kani, AFL++, honggfuzz, Miri, and
 sanitizers by exact source revision. Miri and sanitizers use the latest
-available `nightly-2026-09-07` at Rust revision `f248f4038796913873f11ca65b1b901e311c8dae`.
+available `nightly-2026-09-11` at Rust revision `67eda617e6a8f8ecec01e1ba7fafe2072a64adcc`.
 These tools are external to Cargo
 manifests. Ordinary builds do not download or execute them; each owning
 milestone must recheck upstream state and record exact campaign evidence.

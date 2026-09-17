@@ -28,6 +28,14 @@ Rust's feature-detector macro is not a migration guard for specialized binaries.
 
 ## Scope
 
+Release-tool freshness additionally updates the external Kani verifier from
+`0.67.0` to `0.68.0`, with its exact upstream revision pinned. Version-banner
+compatibility checks and rejection regressions were updated; production Rust,
+dependencies and release rules are unchanged. The earlier successful detached
+sweep remains a historical result, not a receipt for the updated checkout.
+Fresh final verification and the policy-bound SHA-2 native records are still
+required. See [Kani policy](../docs/KANI.md).
+
 - Distinct clearing owners for SHA-224/256, the complete SHA-512 family including
   general SHA-512/t, and SHA-3/SHAKE/cSHAKE independent-message batching.
 - Default-off AVX2/NEON execution with typed secret outputs and explicit public

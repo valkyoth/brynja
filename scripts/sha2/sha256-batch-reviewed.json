@@ -240,7 +240,7 @@
     "crates/brynja-hash-sha2/tests/batch.rs": "071ccd26e6e117510528706b5b1e7d06fea6d797cde133cb6e4b94f218ccfa97",
     "docs/sha256-batch-execution.md": "41e9efd18560ec86eafdcfe663e11822593c0cf1af2272b7627776161b54299b",
     "rust-toolchain.toml": "85db324345b7937c49ea2ac8b962d741f710719f4f751cab809985cbe6afbe3c",
-    "scripts/assurance/check-kani.sh": "107e9b7f520e1d2abdfc5017220f1a024032e72ea014481bbe99b1bddf875434",
+    "scripts/assurance/check-kani.sh": "5434cd931e7604b2dc4d8674b83060894f74d232d0d665f8f846e62a83d923ab",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/sha2/capture-sha256-batch-native.py": "8afca7dbde8dfa49d5cd470a86a1575f87014a4bd3acae03fb3ef1cb0997c3a5",
     "scripts/sha2/check-sha2-bit-differential.py": "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",

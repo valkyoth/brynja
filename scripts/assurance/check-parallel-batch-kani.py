@@ -59,8 +59,7 @@ def main():
     version = next(tool['version'] for tool in policy['tools'] if tool['id'] == 'kani')
     prefix = ['rustup', 'run', toolchain, 'cargo']
     installed = results.run([*prefix, 'kani', '--version'], ROOT, os.environ)
-    if installed.returncode or installed.stdout.strip() != 'cargo-kani ' + version:
-        raise ValueError('repository-pinned Kani installation required')
+    results.require_version(installed, version)
     selected = tuple(HARNESSES) if args.proof == 'all' else (args.proof,)
     with tempfile.TemporaryDirectory(prefix='brynja-parallel-batch-kani-') as directory:
         root = Path(directory)

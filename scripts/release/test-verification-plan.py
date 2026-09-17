@@ -288,7 +288,7 @@ args = sys.argv[1:]
 if args == ["toolchain", "list"]:
     print("1.90.0-x86_64-unknown-linux-gnu")
 elif args[-1:] == ["--version"]:
-    print("cargo-kani 0.67.0")
+    print(os.environ.get("KANI_BANNER", "Kani Rust Verifier 0.68.0 (cargo plugin)\\nCBMC 6.11.0"))
 else:
     with pathlib.Path(os.environ["TRACE"]).open("a") as output:
         output.write(json.dumps(args) + "\\n")
@@ -298,10 +298,10 @@ else:
         fake.chmod(0o700)
         trace = root / "trace"
         env = dict(os.environ, PATH=str(root) + os.pathsep + os.environ["PATH"], TRACE=str(trace))
-        def run(*args, fail=""):
+        def run(*args, fail="", banner="Kani Rust Verifier 0.68.0 (cargo plugin)\nCBMC 6.11.0"):
             trace.write_text("")
             result = subprocess.run(["bash", "scripts/assurance/check-kani.sh", *args],
-                                    cwd=plans.ROOT, env=dict(env, FAIL_PACKAGE=fail),
+                                    cwd=plans.ROOT, env=dict(env, FAIL_PACKAGE=fail, KANI_BANNER=banner),
                                     capture_output=True, text=True, timeout=30)
             return result.returncode, [json.loads(line) for line in trace.read_text().splitlines()]
         status, calls = run("--required-groups", "sha2")
@@ -311,6 +311,11 @@ else:
         assert calls[1] == ["run", "1.90.0-x86_64-unknown-linux-gnu", "cargo", "kani", "-p",
                             "brynja-hash-sha2", "--features", "batch512-execution", "--harness",
                             "batch512::control::proofs::batch_budget_is_atomic_and_never_wraps"]
+        for banner in ("cargo-kani 0.67.0", "Kani Rust Verifier 0.67.0 (cargo plugin)\nCBMC 6.11.0",
+                       "Kani Rust Verifier 0.68.0 (cargo plugin)",
+                       "Kani Rust Verifier 0.68.0 (cargo plugin)\nCBMC 0.0.0"):
+            status, calls = run("--required-groups", "sha2", banner=banner)
+            assert status != 0 and not calls
         status, calls = run("--required")
         assert status == 0 and len(calls) == 9
         status, calls = run("--required-groups", "sha3")

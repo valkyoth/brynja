@@ -1097,6 +1097,47 @@ review, constant-time validation or fresh multi-platform qualification. Those
 distinct evidence obligations are not closed by this fixture. Native collection
 and owner pentest remain pending; release/tag rules are unchanged.
 
+## Standalone threaded ParallelHash timings
+
+The `benchmark` binary in `assurance/parallelhash-batch-oracle` compares local
+scheduled portable hashing with the threaded multibuffer API. All four identities
+use public synthetic input, a portable root and typed secret outputs. Ninety-six
+workloads combine lengths 0/65/4096/16387, block sizes 64/1024 and worker counts
+1/2/4. Fixed output is 256 bits and XOF output is 4099 bits. This includes empty
+work, one partial group, full groups and nonempty scalar tails.
+
+Run `python3 scripts/cryptography/check-parallelhash-batch-bench.py`; add a
+matching native `--lane` to compare preferred SIMD leaves instead of portable
+threaded leaves. The selected kernel label describes authority selection; actual
+vector counts are checked separately. Each timed call must match the generated
+portable reference, clear its owned output, retain its canary and report exact
+leaves, groups, accelerated leaves and submitted worker width. The driver also
+independently computes the exact full-width leaf permutation count for each
+workload. Counters and complete reports must remain stable across samples.
+
+Seven samples alternate route order after warmup. Timings include hash work,
+worker allocation/spawn/join, worker-local authority construction, output
+comparison and Drop; caller allocation/poisoning, outer executor setup and
+post-Drop inspection are excluded. These are end-to-end comparisons, not isolated
+kernel timings. One worker still pays thread creation overhead. Submitted
+workers do not measure simultaneous physical cores or scheduler fairness.
+
+Separate local AVX2 and generic builds passed all 96 workloads. In the recorded
+local runs, threading was not faster in 62/96 AVX2 rows and 68/96 generic rows;
+those outcomes were retained, not filtered. This observation is machine/load
+specific, not statistical confidence or a recommended crossover. The generic
+run compares portable threading against portable scheduling, not SIMD.
+Rust 1.90 tests and strict Rust 1.98.1 Clippy passed. The result checker rejects
+80 malformed/coverage/accounting regressions, checks group-boundary calculations
+for AVX2/NEON and explicitly accepts slower results. Six compiled fixture
+mutations reject skipped Drop, counter overflow, false routing, reduced worker
+count, damaged canaries and broken output validation; restored source passes.
+
+This supplements, but does not replace, the independent correctness oracles.
+It is not native Arm execution, a dedicated single-stream comparison, constant-
+time qualification or independent review. No production source or release gate
+changed; complete qualification and owner pentest/native collection remain pending.
+
 ## Acceptance required before completion
 
 - Positive downstream examples for every constructor, exact bit/byte identity,

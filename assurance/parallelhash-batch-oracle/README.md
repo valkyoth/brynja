@@ -1,4 +1,4 @@
-# Hardened ParallelHash batch oracle adapters
+# Hardened ParallelHash batch development adapters
 
 Non-published development fixture. All CLI inputs and printed outputs are public
 generated vectors; its ordinary CLI buffers are not an application secret-input
@@ -9,7 +9,7 @@ interface.
 | Identities | ParallelHash128/256 and ParallelHashXOF128/256 |
 | Input/output | Arbitrary canonical bits, partial-bit customization and output, bounded B |
 | Profiles | Transactional public output and borrowed clearing secret output |
-| Threading | One, two and three workers, independently of SIMD width |
+| Threading | Oracle: one, two and three workers; benchmark: one, two and four; independent of SIMD width |
 | Local execution | Scheduled collector, byte-chunk stream, block-crossing stream, final-input-only stream |
 | Routing | Portable root; portable/prefer/require hardened multibuffer leaves |
 | Cleanup | Output Drop, full public scratch including excess capacity, destination canaries |
@@ -22,10 +22,12 @@ python3 scripts/cryptography/check-parallelhash-batch-oracle.py
 python3 scripts/cryptography/test-parallelhash-batch-oracle.py
 python3 scripts/cryptography/check-parallelhash-local-batch-oracle.py
 python3 scripts/cryptography/test-parallelhash-local-batch-oracle.py
+python3 scripts/cryptography/check-parallelhash-batch-bench.py
+python3 scripts/cryptography/test-parallelhash-batch-bench.py
 ```
 
 On a matching native machine, add `--lane amd-x86_64`, `--lane intel-x86_64`,
-`--lane aws-aarch64` or `--lane apple-m2-aarch64` to both commands. The operator
+`--lane aws-aarch64` or `--lane apple-m2-aarch64` to these commands. The operator
 remains responsible for stable CPU capabilities. These commands produce
 development results, not native qualification receipts or release approval.
 
@@ -57,3 +59,25 @@ Drop, encoded output, false routing, counter overflow, dirty pending storage and
 skipped streaming updates. Each applicable layout is tested separately for all
 four identities, so an early fixed-output failure cannot mask XOF paths.
 These checks are not full lifecycle/compiler qualification or independent review.
+
+The separate `benchmark` binary compares threaded hashing to local scheduled
+portable hashing for all four identities. Its 96 workloads combine empty,
+65-byte, 4096-byte and 16387-byte messages, B=64/1024, and 1/2/4 workers. Fixed
+outputs are 256 bits; XOF outputs are 4099 bits. Both roots stay portable. The
+driver without `--lane` compares portable leaves; native `--lane` requests
+preferred SIMD leaves. Incomplete groups retain their clearing scalar tails.
+
+Seven samples alternate route order after warmup. Timings include hashing,
+internal worker allocation/spawn/join, worker-local authority construction,
+public-vector output comparison and typed-output Drop. Input/reference generation,
+caller output allocation/poisoning, outer executor construction, post-Drop checks
+and formatting are outside the timer. Every sample must match exact leaf/group/
+worker/vector accounting and the warmup report. Output poisoning is the bitwise
+complement of the expected public vector; cleanup and canaries are checked.
+
+All workload rows and slower results are retained. SIMD width and submitted
+worker width do not prove physical CPU-core concurrency; single-worker results
+include thread overhead too. The benchmark is not an independent oracle, a
+dedicated single-stream instruction comparison, side-channel evidence or a
+universal speedup/crossover claim. Six compiled benchmark-fixture mutations and
+the result-validator regressions run separately, not alongside measured runs.

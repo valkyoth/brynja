@@ -65,6 +65,13 @@ selected results remain visible. Sixty-eight result regressions and six compiled
 fixture mutations were rejected. These exploratory measurements are not native
 qualification, side-channel evidence or a universal speedup claim.
 
+Threaded hardened ParallelHash now has a standalone 96-workload comparison to
+local scheduled portable hashing, across all four identities and 1/2/4 workers.
+Local AVX2 and generic runs passed output/cleanup and exact thread/vector-work
+checks; slower threaded results remain visible. Eighty result regressions and
+six compiled fixture mutations were rejected. This is development timing data,
+not native multi-platform qualification or a universal speedup claim.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

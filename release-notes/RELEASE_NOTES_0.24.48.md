@@ -12,6 +12,11 @@ native records and the unchanged release workflow remain outstanding. The
 checkpoint notes below preserve the evidence history, not a single current
 list of unfinished implementation tasks.
 
+Owner-review follow-up adds [static/platform contract clarification](../docs/hardened-batch-platform-contract.md)
+and compiled generic/specialized admission and unsafe-import regressions. Runtime
+dispatch is unchanged: the Cargo feature alone does not activate AVX2, and
+Rust's feature-detector macro is not a migration guard for specialized binaries.
+
 ## Scope
 
 - Distinct clearing owners for SHA-224/256, the complete SHA-512 family including

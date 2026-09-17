@@ -81,6 +81,12 @@ x86 does not acquire migration authority from CPUID. Little-endian AArch64
 uses allowlisted OS NEON feature contracts. Cached detection is not live
 revocation or proof of arbitrary hypervisor migration safety.
 
+The [platform-selection explanation](hardened-batch-platform-contract.md) details
+why the safe static constructor is bounded by the compiler-selected baseline,
+why adding Rust's detector macro does not protect a globally specialized binary,
+and how the external unsafe platform import differs. Compiled regression tests
+cover both hardened and ordinary siblings; no dispatch policy is changed.
+
 CPU quarantine revokes existing accelerated borrows and prevents new ones.
 Portable selections have no CPU authority; use the portable executor's own
 quarantine method for local revocation. Authority/borrow lifetimes and

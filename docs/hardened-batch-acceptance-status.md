@@ -13,6 +13,8 @@ SHA-512 family and all eight SHA-3/SHAKE/cSHAKE identities. Scheduled, streaming
 and threaded ParallelHash use these owners without relabeling ordinary storage.
 The exported APIs and package examples are implemented, not proposed names.
 Ordinary APIs remain public-data-only; their non-erasing storage is unchanged.
+The [platform contract](hardened-batch-platform-contract.md) distinguishes
+compiler-baseline admission from runtime observation and external unsafe import.
 
 ## Development evidence map
 

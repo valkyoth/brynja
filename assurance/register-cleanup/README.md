@@ -2,7 +2,7 @@
 
 Development assurance code, **not complete release evidence**.
 The owner requested register-remanence remediation across the hardened backends
-before another pentest. The SHA-224/256 and SHA-512 ports use this boundary in production;
+before another pentest. SHA-224/256, SHA-512 and single-state Keccak use this boundary in production;
 the fixture directly includes their actual private source files, rather than
 testing duplicate implementations. Other ports and native qualification remain
 pending. Release gates are unchanged. Finding F1 remains open.
@@ -15,7 +15,7 @@ Caller-owned input, output, and pre-existing caller register contents are not
 erased. This is a kernel-boundary guarantee, not an end-to-end promise covering
 all callers, framing, output conversion, or the whole process.
 
-Each SHA-2 boundary keeps **all secret loads and computation inside one opaque,
+Each kernel boundary keeps **all secret loads and computation inside one opaque,
 side-effecting assembly block**. Only pointers enter; no secret Rust values
 leave. The block uses fixed, reviewed memory bounds, no stack, no calls, and
 only public loop counters. It clears its scratch and every working register
@@ -43,6 +43,8 @@ or independent verification claim follows from these tests.
 | Arm SHA-224/256 | QEMU, 1,024 arbitrary state/block pairs per positive run | Five integer registers plus six vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 | Dedicated x86 SHA-512 | Intel SDE, 1,024 arbitrary state/block pairs per positive run | Seven integer registers plus three complete YMM registers | Integrated; native qualification pending |
 | Arm SHA-512 | QEMU, 1,024 arbitrary state/block pairs per positive run | Five integer registers plus thirteen vector registers; D8–15 caller canaries | Integrated; native qualification pending |
+| x86 single-state Keccak | Native Linux AVX2, 1,024 arbitrary states per positive run | Four integer registers plus four complete YMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
+| Arm single-state Keccak | QEMU, 1,024 arbitrary states per positive run | Five integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 
 The scalar schedule and feed-forward also live inside the block; this is not
 merely a `vzeroupper`/`vzeroall` epilogue. The ordinary implementation is not
@@ -60,7 +62,7 @@ The compiled mutation campaign poisons each working register before cleanup,
 then independently removes its erasure. Separate mutations remove scratch
 clearing or corrupt the final lane ordering. Positive poisoned controls must
 still pass. Compiler-check mutations inject spills and loads before/after the
-opaque boundary. These tests exercise the four production kernels, not a complete
+opaque boundary. These tests exercise the six production kernels, not a complete
 production qualification or a general assembly verifier.
 
 The Linux bounds test also places each input, state, scratch and constants at
@@ -75,6 +77,16 @@ Sentinels verify the inactive state half, caller input and surrounding storage
 remain unchanged. The independent scalar reference uses only the first 64 input
 bytes and 32 state bytes; sharing round constants does not share its recurrence.
 
+Keccak uses an independent coordinate oracle generating rho offsets and round
+constants, cross-checked against the zero-state known answer. Its Linux bounds
+test covers four scratch/constants placements with read-only constants and
+inaccessible neighbors, plus 31 unaligned scratch placements with sentinels.
+Compiled mutations remove individual register wipes or scratch clearing and
+corrupt theta, rho, chi or iota. These must fail in execution, not compilation.
+The production layout assertions are also mutation-tested: no dynamic indexed
+scratch helper remains, so the former silent-index tests are superseded by
+exact-layout rejection, fixed-offset bounds and algorithm mutations.
+
 Run with an already licensed, verified Intel SDE executable:
 
 ```sh
@@ -82,6 +94,8 @@ python3 assurance/register-cleanup/check.py --sde /absolute/path/to/sde64 --muta
 python3 assurance/register-cleanup/check_arm.py --qemu --mutations
 python3 assurance/register-cleanup/check.py --sha256 --native --mutations
 python3 assurance/register-cleanup/check_arm.py --sha256 --qemu --mutations
+python3 assurance/register-cleanup/check_keccak.py x86 --execute --mutations
+python3 assurance/register-cleanup/check_keccak.py arm --execute --mutations
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --all-targets -- -D warnings
 ```
 
@@ -123,7 +137,7 @@ No row below is complete merely because the SHA-512 prototype passes.
 | --- | --- | --- | --- |
 | SHA-224/256 instructions | `x86_sha::secret::compress` | `aarch64_sha2::secret256::compress` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
 | SHA-384/512 and SHA-512/t instructions | `x86_sha512::secret::compress` | `aarch64_sha2::secret512::compress` | Integrated; source-bound emulated checks; native qualification pending |
-| Keccak single state | `x86_avx2_keccak::permute_secret_avx2` | `aarch64_sha3_keccak::permute_secret_sha3` | Pending |
+| Keccak single state | `x86_avx2_keccak::secret::permute` | `aarch64_sha3_keccak::secret::permute` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
 | SHA-224/256 batch | `sha256_hardened_batch::x86` | `sha256_hardened_batch::arm` | Pending |
 | SHA-512-family batch | `sha512_hardened_batch::x86` | `sha512_hardened_batch::arm` | Pending |
 | Keccak batch | `keccak_hardened_batch::x86` | `keccak_hardened_batch::arm` | Pending |

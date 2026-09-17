@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: fifty-three exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: fifty-five exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only fifty-three exact modules: the private core volatile clearer; the
+Rust in only fifty-five exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -64,7 +64,17 @@ explicitly unaligned. Arm uses NEON/SHA2 and V0–5, preserving D8–15. The obs
 Rust schedule helpers were removed rather than leaving secret arithmetic outside
 the new boundary. Byte-offset and constant-alignment tests cover these accesses.
 
-These four kernel boundaries are under implementation-author verification, not
+The single-state Keccak ports add `x86_avx2_keccak/secret.rs` and
+`aarch64_sha3_keccak/secret.rs`. Exact owner offsets bind the 576-byte view:
+result lanes remain at 0..200; all temporary bytes at 200..576 are erased.
+Theta/rho/pi, AVX2 or SHA3 chi, iota and cleanup stay in the same opaque block.
+All addresses are fixed or public-loop bounded; there is no dynamic indexed
+Rust helper, stack use or call in the secret computation. X86 erases four GPRs
+and YMM0–3; Arm erases five GPRs and V0–3. Caller state transfer and higher-level
+framing remain separate audit work. Guard-page, differential and mutation tests
+supplement ASan, which cannot instrument opaque assembly internally.
+
+These six kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.
 Pre-existing caller registers and caller-owned buffers are not erased. Abort,
 interruption during computation, OS snapshots and platform storage remain

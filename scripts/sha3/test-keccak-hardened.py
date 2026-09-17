@@ -16,8 +16,7 @@ def semantic():
     cases = [(path, f'clear_owned_region(&mut self.{field})', 'Ok::<(), ()>(())')
              for path, fields in policy.REGIONS.items() for field in fields]
     cases += [
-        (policy.SCRATCH, '.ok_or(Error::Quarantined)?;', '.ok_or(Error::WrongOperation)?;'),
-        (policy.SCRATCH, 'check_chi(row, first, width)?;', 'let _ = (row, first, width);'),
+        (policy.SCRATCH, '#[repr(C, align(32))]', '#[repr(align(32))]'),
         (policy.CPU + '/src/hardened_execution/keccak.rs', 'if !correct {', 'if false {'),
         (policy.CPU + '/src/hardened_execution/keccak.rs', 'self.check()?;', 'let _ = self;'),
         (policy.ENGINE, 'self.failed = true;', 'self.failed = false;'),
@@ -25,6 +24,15 @@ def semantic():
         (policy.HASH + '/src/hardened/accelerated/reader.rs', 'clear_owned_region(self.0)', 'Ok::<(), ()>(())'),
         (policy.HASH + '/Cargo.toml', 'default = []', 'default = ["hardened-execution"]'),
     ]
+    for module in ('x86_avx2_keccak', 'aarch64_sha3_keccak'):
+        name = policy.CPU + '/src/' + module
+        cases += [
+            (name + '.rs', '== 576', '== 575'),
+            (name + '.rs', '== 280', '== 281'),
+            (name + '.rs', 'secret::permute(', 'ordinary::permute('),
+            (name + '/secret.rs', 'BRYNJA_REGISTER_ERASE', 'REMOVED'),
+            (name + '/secret.rs', '#[inline(never)]', '#[inline(always)]'),
+        ]
     with tempfile.TemporaryDirectory(prefix='brynja-keccak-policy-') as temporary:
         root = Path(temporary)
         for package in (policy.CPU, policy.HASH):
@@ -89,25 +97,27 @@ def compiled():
             finally:
                 path.write_text(original)
         root = roots['brynja-crypto-cpu']
-        path = root / 'src/hardened_execution/keccak_scratch.rs'
-        original = path.read_text()
-        for before, after in (
-            ('    let mut value = 0_u64;', '    if index >= bytes.len() / 8 { return Ok(0); }\n    let mut value = 0_u64;'),
-            ('    let word = bytes\n        .as_chunks_mut', '    if index >= bytes.len() / 8 { return Ok(()); }\n    let word = bytes\n        .as_chunks_mut'),
-        ):
-            policy.require(original.count(before) == 1, 'exact scratch boundary mutant')
-            try:
-                path.write_text(original.replace(before, after))
-                for profile in ([], ['--release']):
-                    result = acceptance.ordinary.run(['cargo', 'test', '--offline', '--manifest-path',
-                        str(root / 'Cargo.toml'), '--features', 'hardened-execution', '--lib',
-                        'hardened_execution::keccak::tests::all_seven_regions_clear', *profile], root, env, success=False)
-                    policy.require('assertion `left == right` failed' in result.stdout,
-                                   'scratch boundary runtime rejection')
-            finally:
-                path.write_text(original)
+        # Dynamic indexed helpers no longer exist in production. The assembly
+        # uses fixed exact offsets; prove the replacement layout assertions are
+        # active for each architecture, without executing cross-target binaries.
+        for module, target in (('x86_avx2_keccak', 'x86_64-unknown-linux-gnu'),
+                               ('aarch64_sha3_keccak', 'aarch64-unknown-linux-musl')):
+            path = root / 'src' / (module + '.rs')
+            original = path.read_text()
+            for before, after in (('== 576', '== 575'), ('== 280', '== 281')):
+                policy.require(original.count(before) == 1, 'exact layout mutant')
+                try:
+                    path.write_text(original.replace(before, after))
+                    for profile in ([], ['--release']):
+                        result = acceptance.ordinary.run(['cargo', 'check', '--offline',
+                            '--manifest-path', str(root / 'Cargo.toml'), '--target', target,
+                            '--features', 'hardened-execution', *profile], root, env, success=False)
+                        policy.require('error[E0080]' in result.stderr,
+                                       'compile-time scratch layout rejection')
+                finally:
+                    path.write_text(original)
     print('Hardened Keccak rejects 22 compiled debug/release region-removal mutants')
-    print('Hardened Keccak rejects four compiled debug/release silent-index mutants')
+    print('Hardened Keccak rejects eight compiled debug/release exact-layout mutants')
 
 
 def main():

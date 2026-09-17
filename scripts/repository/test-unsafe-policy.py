@@ -140,7 +140,9 @@ def register_boundaries() -> None:
     for relative in (Path('crates/brynja-crypto-cpu/src/x86_sha512/secret.rs'),
                      Path('crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs'),
                      Path('crates/brynja-crypto-cpu/src/x86_sha/secret.rs'),
-                     Path('crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs')):
+                     Path('crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs'),
+                     Path('crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs'),
+                     Path('crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs')):
         source = (ROOT / relative).read_text()
         _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
         unsafe_policy.validate_allowed(relative, source, blocks, items, proofs)
@@ -165,4 +167,4 @@ if __name__ == "__main__":
     test()
     register_boundaries()
     print("unsafe policy rejects eleven exception-boundary regressions")
-    print("opaque register boundaries reject twenty-four unsafe-ABI, clobber and memory-effect regressions")
+    print("opaque register boundaries reject thirty-six unsafe-ABI, clobber and memory-effect regressions")

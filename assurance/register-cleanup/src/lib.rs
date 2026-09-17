@@ -1,11 +1,22 @@
 //! Source-bound normal-return register tests; full qualification is pending.
 //!
-//! The SHA-2 modules below are the actual private production kernel sources.
+//! The modules below are the actual private production kernel sources.
 //! This fixture adds machine-level observers without changing release admission.
 
 #![no_std]
 
-#[cfg(target_arch = "x86_64")]
+#[cfg(all(feature = "keccak-probe", feature = "sha256-probe"))]
+compile_error!("Select one kernel family per observer build");
+
+#[cfg(all(target_arch = "x86_64", feature = "keccak-probe"))]
+#[path = "../../../crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs"]
+pub mod kernel;
+
+#[cfg(all(target_arch = "aarch64", feature = "keccak-probe"))]
+#[path = "../../../crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs"]
+pub mod kernel;
+
+#[cfg(all(target_arch = "x86_64", not(feature = "keccak-probe")))]
 #[cfg_attr(
     not(feature = "sha256-probe"),
     path = "../../../crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"
@@ -16,7 +27,7 @@
 )]
 pub mod kernel;
 
-#[cfg(target_arch = "aarch64")]
+#[cfg(all(target_arch = "aarch64", not(feature = "keccak-probe")))]
 #[cfg_attr(
     not(feature = "sha256-probe"),
     path = "../../../crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"
@@ -30,6 +41,7 @@ pub mod kernel;
 // The public FIPS round constants are shared with the existing implementation;
 // the test oracle's schedule and compression recurrence are independent.
 #[cfg(all(test, any(target_arch = "x86_64", target_arch = "aarch64")))]
+#[cfg(not(feature = "keccak-probe"))]
 #[allow(dead_code)] // Only the existing public round constants are used here.
 #[cfg_attr(
     not(feature = "sha256-probe"),
@@ -41,8 +53,14 @@ pub mod kernel;
 )]
 mod constants;
 
+#[cfg(all(test, feature = "keccak-probe"))]
+#[path = "../../../crates/brynja-crypto-cpu/src/keccak_constants.rs"]
+#[allow(dead_code)]
+mod constants;
+
 #[cfg(all(test, any(target_arch = "x86_64", target_arch = "aarch64")))]
 #[cfg_attr(feature = "sha256-probe", path = "tests256.rs")]
+#[cfg_attr(feature = "keccak-probe", path = "keccak_tests.rs")]
 mod tests;
 
 #[cfg(all(

@@ -3,19 +3,22 @@
 
 extern crate std;
 
+#[cfg(not(feature = "keccak-probe"))]
 use crate::kernel;
 use core::ffi::{c_int, c_void};
 use std::io;
 
-#[cfg(feature = "sha256-probe")]
+#[cfg(all(not(feature = "keccak-probe"), feature = "sha256-probe"))]
 type Word = u32;
-#[cfg(not(feature = "sha256-probe"))]
+#[cfg(all(not(feature = "keccak-probe"), not(feature = "sha256-probe")))]
 type Word = u64;
-#[cfg(feature = "sha256-probe")]
+#[cfg(all(not(feature = "keccak-probe"), feature = "sha256-probe"))]
 const WORDS: usize = 64;
-#[cfg(not(feature = "sha256-probe"))]
+#[cfg(all(not(feature = "keccak-probe"), not(feature = "sha256-probe")))]
 const WORDS: usize = 80;
+#[cfg(not(feature = "keccak-probe"))]
 const WORD_BYTES: usize = core::mem::size_of::<Word>();
+#[cfg(not(feature = "keccak-probe"))]
 const CONSTANT_BYTES: usize = WORDS * WORD_BYTES;
 
 unsafe extern "C" {
@@ -32,7 +35,7 @@ unsafe extern "C" {
     fn munmap(address: *mut c_void, length: usize) -> c_int;
 }
 
-struct Pages {
+pub(super) struct Pages {
     base: *mut u8,
     page: usize,
     length: usize,
@@ -40,7 +43,7 @@ struct Pages {
 }
 
 impl Pages {
-    fn new() -> io::Result<Self> {
+    pub(super) fn new() -> io::Result<Self> {
         // SAFETY: Linux libc query takes no pointers or mutable state.
         let size = unsafe { getpagesize() };
         let page = usize::try_from(size).map_err(io::Error::other)?;
@@ -73,7 +76,7 @@ impl Pages {
         Ok(pages)
     }
 
-    fn bytes<const N: usize>(&mut self, at_end: bool) -> &mut [u8; N] {
+    pub(super) fn bytes<const N: usize>(&mut self, at_end: bool) -> &mut [u8; N] {
         assert!(
             self.writable,
             "cannot create a mutable borrow of a read-only page"
@@ -85,7 +88,7 @@ impl Pages {
         unsafe { &mut *self.base.add(self.page + offset).cast::<[u8; N]>() }
     }
 
-    fn readonly(&mut self) -> io::Result<()> {
+    pub(super) fn readonly(&mut self) -> io::Result<()> {
         // SAFETY: No borrow escapes this method. This live middle page changes
         // to PROT_READ=1 before any shared reference is passed to the kernel.
         if unsafe { mprotect(self.base.add(self.page).cast(), self.page, 1) } != 0 {
@@ -95,7 +98,7 @@ impl Pages {
         Ok(())
     }
 
-    fn read<const N: usize>(&self, at_end: bool) -> &[u8; N] {
+    pub(super) fn read<const N: usize>(&self, at_end: bool) -> &[u8; N] {
         assert!(N <= self.page);
         let offset = if at_end { self.page - N } else { 0 };
         // SAFETY: The exact checked range is initialized and readable; shared
@@ -113,6 +116,7 @@ impl Drop for Pages {
 }
 
 #[test]
+#[cfg(not(feature = "keccak-probe"))]
 #[cfg_attr(
     all(
         not(feature = "sha256-probe"),

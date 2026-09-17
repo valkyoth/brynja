@@ -111,36 +111,30 @@ fn store4(vector: __m256i) -> [u64; 4] {
 }
 
 #[cfg(feature = "hardened-execution")]
+mod secret;
+
+#[cfg(feature = "hardened-execution")]
 pub(crate) fn permute_secret(
     scratch: &mut crate::hardened_execution::keccak_scratch::KeccakScratch,
 ) -> Result<(), crate::static_execution::Error> {
-    // SAFETY: Only the private hardened dispatcher calls this entry, after the
-    // complete AVX2 authority check. Every access is an exact live 32-byte field.
-    unsafe { permute_secret_avx2(scratch) }
-}
-
-#[cfg(feature = "hardened-execution")]
-#[target_feature(enable = "avx2")]
-unsafe fn permute_secret_avx2(
-    s: &mut crate::hardened_execution::keccak_scratch::KeccakScratch,
-) -> Result<(), crate::static_execution::Error> {
-    for constant in ROUND_CONSTANTS {
-        s.theta_rho_pi()?;
-        for row in 0..5 {
-            s.stage_chi(row, 0, 4)?;
-            // SAFETY: The three arrays each own 32 live initialized bytes;
-            // unaligned intrinsics access exactly that extent, without aliasing.
-            unsafe {
-                let current = _mm256_loadu_si256(s.current.as_ptr().cast());
-                let next = _mm256_loadu_si256(s.next.as_ptr().cast());
-                let following = _mm256_loadu_si256(s.following.as_ptr().cast());
-                let result = _mm256_xor_si256(current, _mm256_andnot_si256(next, following));
-                _mm256_storeu_si256(s.current.as_mut_ptr().cast(), result);
-            }
-            s.commit_chi(row, 0, 4)?;
-            s.last_chi(row)?;
-        }
-        s.iota(constant)?;
+    use crate::hardened_execution::keccak_scratch::KeccakScratch;
+    const _: () = assert!(core::mem::size_of::<KeccakScratch>() == 576);
+    const _: () = assert!(core::mem::offset_of!(KeccakScratch, lanes) == 0);
+    const _: () = assert!(core::mem::offset_of!(KeccakScratch, columns) == 200);
+    const _: () = assert!(core::mem::offset_of!(KeccakScratch, theta) == 240);
+    const _: () = assert!(core::mem::offset_of!(KeccakScratch, rearranged) == 280);
+    const _: () = assert!(core::mem::offset_of!(KeccakScratch, current) == 480);
+    const _: () = assert!(core::mem::offset_of!(KeccakScratch, next) == 512);
+    const _: () = assert!(core::mem::offset_of!(KeccakScratch, following) == 544);
+    // SAFETY: The sealed dispatcher establishes the complete instruction bundle.
+    // repr(C), the exact field offsets and total size prove a contiguous fully
+    // initialized 576-byte owner with no padding. This exclusive reborrow never
+    // escapes; the kernel preserves the result lanes and erases all other bytes.
+    unsafe {
+        secret::permute(
+            &mut *core::ptr::from_mut(scratch).cast::<[u8; 576]>(),
+            &ROUND_CONSTANTS,
+        );
     }
     Ok(())
 }

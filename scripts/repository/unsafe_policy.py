@@ -9,6 +9,8 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs"): ("fb571bcee4762b16fdae5012c7d15894a319c711500955d4c3a3d9134119b4aa", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs"): ("d913dd21b13d95ec2341b4bae3b738c5021c501cc6afaf4310f73c181d1736a8", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/x86_sha/secret.rs"): ("f8afc16ed5a53259391a9a32a87b3127a9d0556ce634a3cb2ac415a87d7f5adb", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs"): ("2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"): ("b790074aa3774d785a87bf3abca850540f3ab5c798c43aaf3ce29bdde4b38e66", 1, 1, 1),
@@ -79,10 +81,10 @@ ALLOWED = {
         "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a", 0, 1, 0,
     ),
     Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs"): (
-        "adc8b9f184e60c7ef8d47aa3133b51e10f9eb757a5444382393e6c0feb800598", 5, 2, 5,
+        "2322536da8ae0417973475c8ed702a39ec3759986f13ff7218f993bc0dd9bf23", 4, 1, 4,
     ),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs"): (
-        "f0b1d27f9de27ac2a3877777bfdfaab3c08f36336065c2d072a35408420099e1", 5, 2, 5,
+        "c4fc0d66df46a06af27219d60d36b3f19fd7dae4ac8ed022c9b221ec9af16a27", 4, 1, 4,
     ),
     Path("crates/brynja-crypto-cpu-std/src/runtime_detection.rs"): (
         "f80399ec92f54a4a7deaf5588e729908a1f730549f30de5bdfdc826c6cb31de5", 1, 0, 1,
@@ -169,6 +171,8 @@ def validate_allowed(
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
     elif relative in {
+        Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs"),
+        Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs"),
         Path("crates/brynja-crypto-cpu/src/x86_sha/secret.rs"),
         Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs"),
         Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"),
@@ -176,8 +180,10 @@ def validate_allowed(
     }:
         # Exact source hashes bind the reviewed instruction stream. This narrow
         # structural check does not admit assembly in any other kernel module.
-        required = ('pub unsafe extern "C" fn compress(', '#[inline(never)]',
-                    '#[target_feature', 'scratch: &mut [u8; 704]',
+        keccak = relative.parent.name in {'x86_avx2_keccak', 'aarch64_sha3_keccak'}
+        function, width = ('permute', 576) if keccak else ('compress', 704)
+        required = (f'pub unsafe extern "C" fn {function}(', '#[inline(never)]',
+                    '#[target_feature', f'scratch: &mut [u8; {width}]',
                     'BRYNJA_SECRET_BEGIN', 'BRYNJA_REGISTER_ERASE',
                     'BRYNJA_SECRET_END', 'options(nostack)')
         if any(text.count(token) != 1 for token in required) or text.count('asm!(') != 1:

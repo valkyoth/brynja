@@ -17,7 +17,7 @@ POISON = "\n".join(f'"mov x{i}, #-1",' for i in GP) + "\n" + "\n".join(
 SHA256 = False
 
 
-def asm_check(text):
+def asm_check(text, *, keccak=False):
     text = re.sub(r"(?m)^\s*(?://|;)\s*BRYNJA_", "// BRYNJA_", text)
     text = re.sub(r"movi\.16b\s+v([0-9]+),", r"movi v\1.16b,", text)
     if text.count("// BRYNJA_SECRET_BEGIN") != 1 or text.count("// BRYNJA_SECRET_END") != 1:
@@ -44,7 +44,10 @@ def asm_check(text):
             or any(not re.match(r"(?:mov|movi)\s", op) for op in operations[:-1])):
         raise ValueError("unexpected Arm post-computation operation")
     algorithm, rounds = ('256', 1) if SHA256 else ('512', 4)
-    if len(re.findall(r'\bsha' + algorithm + r'h\b', active)) != rounds or len(re.findall(r'\bsha' + algorithm + r'h2\b', active)) != rounds:
+    if keccak:
+        if len(re.findall(r'\bbcax\b', active)) != 2:
+            raise ValueError("Arm Keccak instructions absent")
+    elif len(re.findall(r'\bsha' + algorithm + r'h\b', active)) != rounds or len(re.findall(r'\bsha' + algorithm + r'h2\b', active)) != rounds:
         raise ValueError("Arm dedicated rounds absent")
     for area in (before, after):
         lines = area.splitlines()

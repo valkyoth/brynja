@@ -38,13 +38,14 @@ small, hashed, first-party `brynja-crypto-cpu` implementation symbols after the
 primitive- and architecture-specific unsafe, emitted-code, native-hardware,
 side-channel, differential, KAT, and audit gates in the release plan. External
 assembly files, prebuilt objects, and vendor libraries remain prohibited.
-Four exact private SHA-2 Rust function definitions use the C calling convention
+Six exact private SHA-2/Keccak Rust function definitions use the C calling convention
 solely for a stable, observable register boundary (`x86_sha/secret.rs`,
-`x86_sha512/secret.rs`, `aarch64_sha2/secret256.rs` and
-`aarch64_sha2/secret512.rs`). They contain first-party Rust inline assembly, not
+`x86_sha512/secret.rs`, `aarch64_sha2/secret256.rs`,
+`aarch64_sha2/secret512.rs`, `x86_avx2_keccak/secret.rs` and
+`aarch64_sha3_keccak/secret.rs`). They contain first-party Rust inline assembly, not
 external symbols, FFI imports or library calls. Their complete source is pinned
 by the unsafe inventory; foreign declarations and link attributes remain forbidden
-even inside these four files. This is not an exception allowing foreign crypto.
+even inside these six files. This is not an exception allowing foreign crypto.
 Version 0.13.2 reserved that package and eight symbol identities. Versions
 0.22.1 and 0.22.2 implement exact unadmitted x86 SHA, AArch64 SHA2, and RV64
 Zknh symbols under separately hash-bound low-level exceptions; no ordinary or

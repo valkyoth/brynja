@@ -48,7 +48,7 @@ def run(command, env=None, *, success=True):
     return result
 
 
-def asm_check(text):
+def asm_check(text, *, keccak=False):
     # There is exactly one function in this no_std prototype library. Comments
     # delimit the opaque asm boundary, not a claim about all source functions.
     if text.count("# BRYNJA_SECRET_BEGIN") != 1 or text.count("# BRYNJA_SECRET_END") != 1:
@@ -68,17 +68,19 @@ def asm_check(text):
     for register in REGISTERS:
         if not re.search(rf"\bxorl\s+%{register},\s*%{register}\b", cleanup):
             raise ValueError("missing integer erasure: " + register)
-    for i in range(4 if SHA256 else 3):
+    vectors = 4 if SHA256 or keccak else 3
+    for i in range(vectors):
         pattern = rf'\bpxor\s+%xmm{i},\s*%xmm{i}\b' if SHA256 else rf"\bvpxor\s+%ymm{i},\s*%ymm{i},\s*%ymm{i}\b"
         if not re.search(pattern, cleanup):
             raise ValueError("missing vector erasure")
-    if active.count('sha256rnds2' if SHA256 else 'vsha512rnds2') != 2:
+    instruction, count = ('vpandn', 1) if keccak else ('sha256rnds2' if SHA256 else 'vsha512rnds2', 2)
+    if active.count(instruction) != count:
         raise ValueError("dedicated round instructions absent")
     if SHA256 and re.search(r'(?m)^\s*(?:v\w+|pinsrd|pblend\w+)\s', active):
         raise ValueError('SHA/SSE2 kernel gained a stronger instruction prerequisite')
     # Cleanup must not branch, load, store, spill, call or reload after erasure.
     cleanup_ops = [line.strip() for line in cleanup.splitlines() if line.strip() and not line.lstrip().startswith("#")]
-    if (len(cleanup_ops) != (12 if SHA256 else 11) or not re.fullmatch(r"cmpl\s+%eax,\s*%eax", cleanup_ops[-1])
+    if (len(cleanup_ops) != len(REGISTERS) + vectors + 1 or not re.fullmatch(r"cmpl\s+%eax,\s*%eax", cleanup_ops[-1])
             or any(not re.match(r"(?:xorl|vpxor|pxor)\s", line) for line in cleanup_ops[:-1])):
         raise ValueError("unexpected post-computation operation")
     for area in (before, after):

@@ -37,9 +37,7 @@ def semantic(root):
             require(f'clear_owned_region(&mut self.{field})' in source, 'region clearing: ' + field)
         require('impl Drop for ' in source and 'self.wipe();' in source, 'owner destruction')
     checks = {
-        SCRATCH: ('fn read(bytes: &[u8], index: usize) -> Result<u64, Error>',
-                  'fn write(bytes: &mut [u8], index: usize, value: u64) -> Result<(), Error>',
-                  '.ok_or(Error::Quarantined)?;', 'check_chi(row, first, width)?;'),
+        SCRATCH: ('#[repr(C, align(32))]',),
         CPU + '/src/hardened_execution/keccak.rs': (
             'session.permute(core::hint::black_box(&mut state))?',
             'if !correct {', 'session.route.quarantine();',
@@ -64,6 +62,15 @@ def semantic(root):
             'squeeze_final_bits_public_in_place', 'self.engine.cancel();',
             'absorb_cshake_prefix', 'backend_error.unwrap_or(Error::PrefixEncoding)'),
     }
+    for module in ('x86_avx2_keccak', 'aarch64_sha3_keccak'):
+        checks[CPU + '/src/' + module + '.rs'] = (
+            'core::mem::size_of::<KeccakScratch>() == 576',
+            'core::mem::offset_of!(KeccakScratch, rearranged) == 280',
+            'secret::permute(', 'cast::<[u8; 576]>()')
+        checks[CPU + '/src/' + module + '/secret.rs'] = (
+            'pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24])',
+            '#[inline(never)]', 'BRYNJA_SECRET_BEGIN',
+            'BRYNJA_REGISTER_ERASE', 'BRYNJA_SECRET_END', 'options(nostack)')
     for name, tokens in checks.items():
         source = read(root, name)
         for token in tokens:

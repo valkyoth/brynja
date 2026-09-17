@@ -26,11 +26,6 @@ fn is_clear(s: &KeccakScratch) -> bool {
 
 #[test]
 fn all_seven_regions_clear() {
-    #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
-    assert_eq!(
-        super::super::keccak_scratch::check_invalid_indices(),
-        Ok(())
-    );
     let mut scratch = KeccakScratch::new();
     fill(&mut scratch);
     scratch.wipe();
@@ -99,11 +94,13 @@ fn unwind_clears_scratch_and_quarantines_owner() -> Result<(), Error> {
                     completed: false,
                 };
                 fill(guard.scratch);
-                guard.scratch.stage_chi(usize::MAX, 0, 4)?;
+                // Fault injection: an incompatible operation must not commit
+                // caller state, and the incomplete guard must still quarantine.
+                dispatch(Kernel::X86Sha256, guard.scratch)?;
                 caller.copy_from_slice(&guard.scratch.lanes);
                 Ok(())
             })();
-            assert_eq!(result, Err(Error::Quarantined));
+            assert_eq!(result, Err(Error::WrongOperation));
             assert_eq!(caller, [0xa5; 200]);
             assert!(is_clear(&scratch));
             assert_eq!(owner.report().health, raw::Health::Quarantined);

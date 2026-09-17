@@ -1,6 +1,9 @@
 #![allow(unsafe_code)]
 
 #[cfg(feature = "hardened-execution")]
+mod secret256;
+
+#[cfg(feature = "hardened-execution")]
 mod secret512;
 
 use core::arch::aarch64::{
@@ -25,74 +28,20 @@ pub(crate) fn compress_secret(
     block: &[u8; 128],
     scratch: &mut crate::hardened_execution::scratch::Scratch,
 ) {
-    // SAFETY: Sealed session checks complete NEON/SHA2 platform authority.
-    // The scratch owner is aligned and every load/store stays in its 64 bytes.
-    unsafe { secret_sha256(state, block, scratch) }
-}
-
-#[cfg(feature = "hardened-execution")]
-#[target_feature(enable = "sha2")]
-unsafe fn secret_sha256(
-    state: &mut [u8; 64],
-    block: &[u8; 128],
-    scratch: &mut crate::hardened_execution::scratch::Scratch,
-) {
-    use crate::hardened_execution::scratch::{read32, write32};
-    scratch.expand32(block);
-    for i in 0..8 {
-        // write32 encodes BE bytes; .to_be() first makes that a native-endian
-        // word in memory for vld1q_u32. Neither conversion is redundant.
-        write32(&mut scratch.vectors, i, read32(state, i).to_be());
-    }
-    // SAFETY: Fixed offsets 0/16 each read sixteen bytes of aligned owner data.
-    let (mut abcd, mut efgh) = unsafe {
-        (
-            vld1q_u32(scratch.vectors.as_ptr().cast()),
-            vld1q_u32(scratch.vectors.as_ptr().add(16).cast()),
-        )
-    };
-    let saved_abcd = abcd;
-    let saved_efgh = efgh;
-    for (chunk, constants) in ROUND_CONSTANTS.as_chunks::<4>().0.iter().enumerate() {
-        let round = chunk.saturating_mul(4);
-        for (j, constant) in constants.iter().enumerate() {
-            let value = read32(&scratch.schedule, round.saturating_add(j)).wrapping_add(*constant);
-            // The same BE-writer/native-load bridge applies to round words.
-            write32(
-                &mut scratch.vectors,
-                8_usize.saturating_add(j),
-                value.to_be(),
-            );
-        }
-        // SAFETY: One complete aligned sixteen-byte vector at offset 32.
-        let wk = unsafe { vld1q_u32(scratch.vectors.as_ptr().add(32).cast()) };
-        let previous = abcd;
-        abcd = vsha256hq_u32(abcd, efgh, wk);
-        efgh = vsha256h2q_u32(efgh, previous, wk);
-    }
-    // SAFETY: Exclusive aligned owner stores at offsets 0/16 stay in bounds.
+    use crate::hardened_execution::scratch::Scratch;
+    const _: () = assert!(core::mem::size_of::<Scratch>() == 704);
+    const _: () = assert!(core::mem::offset_of!(Scratch, schedule) == 0);
+    const _: () = assert!(core::mem::offset_of!(Scratch, vectors) == 640);
+    // SAFETY: The sealed session establishes the complete instruction bundle.
+    // repr(C) and these assertions prove that the initialized owner forms an
+    // exact contiguous 704-byte view. Its exclusive reborrow does not escape;
+    // the kernel reads only the first 64 input and updates 32 state bytes.
     unsafe {
-        vst1q_u32(
-            scratch.vectors.as_mut_ptr().cast(),
-            vaddq_u32(abcd, saved_abcd),
-        );
-        vst1q_u32(
-            scratch.vectors.as_mut_ptr().add(16).cast(),
-            vaddq_u32(efgh, saved_efgh),
-        );
-    }
-    for i in 0..8 {
-        let value = read32(&scratch.vectors, i);
-        // vst1q_u32 stored native bytes; undo read32's BE interpretation
-        // before writing the external big-endian chaining state.
-        write32(
+        secret256::compress(
             state,
-            i,
-            if cfg!(target_endian = "little") {
-                value.swap_bytes()
-            } else {
-                value
-            },
+            block,
+            &mut *core::ptr::from_mut(scratch).cast::<[u8; 704]>(),
+            &ROUND_CONSTANTS,
         );
     }
 }

@@ -3,12 +3,20 @@
 
 extern crate std;
 
-#[cfg(target_arch = "aarch64")]
-use crate::arm_sha512 as sha512;
-#[cfg(target_arch = "x86_64")]
-use crate::sha512;
+use crate::kernel;
 use core::ffi::{c_int, c_void};
 use std::io;
+
+#[cfg(feature = "sha256-probe")]
+type Word = u32;
+#[cfg(not(feature = "sha256-probe"))]
+type Word = u64;
+#[cfg(feature = "sha256-probe")]
+const WORDS: usize = 64;
+#[cfg(not(feature = "sha256-probe"))]
+const WORDS: usize = 80;
+const WORD_BYTES: usize = core::mem::size_of::<Word>();
+const CONSTANT_BYTES: usize = WORDS * WORD_BYTES;
 
 unsafe extern "C" {
     fn getpagesize() -> c_int;
@@ -106,23 +114,58 @@ impl Drop for Pages {
 
 #[test]
 #[cfg_attr(
-    not(any(
-        all(
-            target_arch = "x86_64",
-            target_feature = "sha512",
-            target_feature = "avx2",
-            target_feature = "avx"
-        ),
-        all(
-            target_arch = "aarch64",
-            target_feature = "neon",
-            target_feature = "sha3"
-        )
-    )),
+    all(
+        not(feature = "sha256-probe"),
+        not(any(
+            all(
+                target_arch = "x86_64",
+                target_feature = "sha512",
+                target_feature = "avx2",
+                target_feature = "avx"
+            ),
+            all(
+                target_arch = "aarch64",
+                target_feature = "neon",
+                target_feature = "sha3"
+            )
+        ))
+    ),
     ignore = "requires dedicated SHA512 CPU or Intel SDE and the complete build feature bundle"
 )]
+#[cfg_attr(
+    all(
+        feature = "sha256-probe",
+        not(any(
+            all(
+                target_arch = "x86_64",
+                target_feature = "sha",
+                target_feature = "sse2"
+            ),
+            all(
+                target_arch = "aarch64",
+                target_feature = "neon",
+                target_feature = "sha2"
+            )
+        ))
+    ),
+    ignore = "requires SHA/SSE2 or NEON/SHA2 with the complete build feature bundle"
+)]
 fn inaccessible_edges_and_readonly_inputs() -> io::Result<()> {
-    assert!(core::hint::black_box(cfg!(any(
+    #[cfg(feature = "sha256-probe")]
+    let available = cfg!(any(
+        all(
+            target_arch = "x86_64",
+            target_feature = "sha",
+            target_feature = "sse2"
+        ),
+        all(
+            target_arch = "aarch64",
+            target_feature = "neon",
+            target_feature = "sha2"
+        )
+    ));
+    #[cfg(not(feature = "sha256-probe"))]
+    let available = cfg!(any(
         all(
             target_arch = "x86_64",
             target_feature = "sha512",
@@ -134,7 +177,8 @@ fn inaccessible_edges_and_readonly_inputs() -> io::Result<()> {
             target_feature = "neon",
             target_feature = "sha3"
         )
-    ))));
+    ));
+    assert!(core::hint::black_box(available));
     for placement in 0..16 {
         let mut state = Pages::new()?;
         let mut block = Pages::new()?;
@@ -148,8 +192,8 @@ fn inaccessible_edges_and_readonly_inputs() -> io::Result<()> {
         block.bytes::<128>(block_end).fill(0x5a);
         scratch.bytes::<704>(scratch_end).fill(0x5c);
         for (slot, value) in constants
-            .bytes::<640>(constants_end)
-            .as_chunks_mut::<8>()
+            .bytes::<CONSTANT_BYTES>(constants_end)
+            .as_chunks_mut::<WORD_BYTES>()
             .0
             .iter_mut()
             .zip(crate::constants::ROUND_CONSTANTS)
@@ -161,20 +205,20 @@ fn inaccessible_edges_and_readonly_inputs() -> io::Result<()> {
         let initial = *state.read::<64>(state_end);
         let input = *block.read::<128>(block_end);
         let expected = crate::tests::reference(initial, &input);
-        let constant_bytes = constants.read::<640>(constants_end);
+        let constant_bytes = constants.read::<CONSTANT_BYTES>(constants_end);
         assert_eq!(
             constant_bytes
                 .as_ptr()
-                .align_offset(core::mem::align_of::<u64>()),
+                .align_offset(core::mem::align_of::<Word>()),
             0
         );
-        // SAFETY: The complete 640-byte aligned initialized range represents
-        // precisely 80 native-endian u64 constants and remains read-only.
-        let words = unsafe { &*constant_bytes.as_ptr().cast::<[u64; 80]>() };
+        // SAFETY: This complete aligned initialized range contains exactly
+        // WORDS native-endian Word constants and remains read-only.
+        let words = unsafe { &*constant_bytes.as_ptr().cast::<[Word; WORDS]>() };
         // SAFETY: The explicit ISA test precondition holds. Four distinct
         // mappings enforce exclusive outputs and truly read-only inputs.
         unsafe {
-            sha512::compress(
+            kernel::compress(
                 state.bytes(state_end),
                 block.read(block_end),
                 scratch.bytes(scratch_end),
@@ -185,8 +229,6 @@ fn inaccessible_edges_and_readonly_inputs() -> io::Result<()> {
         assert_eq!(*block.read::<128>(block_end), input);
         assert_eq!(*scratch.read::<704>(scratch_end), [0; 704]);
     }
-    std::println!(
-        "EXPERIMENTAL_SHA512_BOUNDS: 16 guarded placements; readonly input/constants: PASS"
-    );
+    std::println!("REGISTER_BOUNDS: 16 guarded placements; readonly input/constants: PASS");
     Ok(())
 }

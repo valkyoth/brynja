@@ -9,6 +9,8 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-crypto-cpu/src/x86_sha/secret.rs"): ("f8afc16ed5a53259391a9a32a87b3127a9d0556ce634a3cb2ac415a87d7f5adb", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs"): ("2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"): ("b790074aa3774d785a87bf3abca850540f3ab5c798c43aaf3ce29bdde4b38e66", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"): ("8febc7fc79bb5813590293d8b17bc5d9f1bcb56f17dba55c844f28dd89bcf96e", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/x86_sha512.rs"): ("9530acc46f67ba8f50f009bb2e837c2732b3f88cb80ba7847acf7229fce5d12c", 5, 1, 5),
@@ -65,10 +67,10 @@ ALLOWED = {
         "31e899058bbb2b2c5d5e43908fcf5a5e61862fa2f3f5a5df73eb1e6f1c63dd44", 0, 2, 0,
     ),
     Path("crates/brynja-crypto-cpu/src/x86_sha.rs"): (
-        "9519e6f2feb7ff836f56bee2d72b5259ebaf057f08928d89f555e97ade5cd7c0", 4, 2, 4,
+        "4d5f8e820fb177f43b79de2ba887e2c8d43f555263782d759a129c81e47c655a", 3, 1, 3,
     ),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2.rs"): (
-        "817ae121788f4acb525ce472d3c8f9e55ca0d95bcc4f32388832cf3ad0f6374b", 13, 3, 13,
+        "e9869ccd9e6bb2795a1ee753be0d1b6833009e507d84d904494f591964c3dc2f", 10, 2, 10,
     ),
     Path("crates/brynja-crypto-cpu/src/riscv64_zknh.rs"): (
         "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619", 8, 2, 8,
@@ -167,6 +169,8 @@ def validate_allowed(
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
     elif relative in {
+        Path("crates/brynja-crypto-cpu/src/x86_sha/secret.rs"),
+        Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs"),
         Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"),
         Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"),
     }:

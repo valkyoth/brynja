@@ -2,7 +2,7 @@
 
 Development assurance code, **not complete release evidence**.
 The owner requested register-remanence remediation across the hardened backends
-before another pentest. The SHA-512 ports now use this boundary in production;
+before another pentest. The SHA-224/256 and SHA-512 ports use this boundary in production;
 the fixture directly includes their actual private source files, rather than
 testing duplicate implementations. Other ports and native qualification remain
 pending. Release gates are unchanged. Finding F1 remains open.
@@ -15,7 +15,7 @@ Caller-owned input, output, and pre-existing caller register contents are not
 erased. This is a kernel-boundary guarantee, not an end-to-end promise covering
 all callers, framing, output conversion, or the whole process.
 
-The SHA-512 boundary keeps **all secret loads and computation inside one opaque,
+Each SHA-2 boundary keeps **all secret loads and computation inside one opaque,
 side-effecting assembly block**. Only pointers enter; no secret Rust values
 leave. The block uses fixed, reviewed memory bounds, no stack, no calls, and
 only public loop counters. It clears its scratch and every working register
@@ -25,8 +25,9 @@ code, where live values could instead be moved to untracked spills.
 
 The compiler still owns ABI preservation of pointer-bearing and pre-existing
 caller registers. The emitted prologue/epilogue is checked separately. Windows
-XMM6–15 must be preserved, not indiscriminately wiped. The first prototype uses
-only volatile vector registers 0–2. See the [Rust assembly contract](https://doc.rust-lang.org/reference/inline-assembly.html)
+XMM6–15 must be preserved, not indiscriminately wiped. X86 SHA-512 uses volatile
+YMM0–2; SHA-224/256 uses XMM0–3 and does not require AVX or SSE4. It clears the
+128-bit working lanes, not pre-existing upper-vector caller contents. See the [Rust assembly contract](https://doc.rust-lang.org/reference/inline-assembly.html)
 and [Windows x64 ABI](https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention).
 
 Asynchronous interruption can capture secrets **during** computation, before
@@ -38,6 +39,8 @@ or independent verification claim follows from these tests.
 
 | Candidate | Algorithm execution | Return-register observer | Production integration |
 | --- | --- | --- | --- |
+| x86 SHA-224/256 | Native Linux SHA-NI, 1,024 arbitrary state/block pairs per positive run | Seven integer registers plus four XMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
+| Arm SHA-224/256 | QEMU, 1,024 arbitrary state/block pairs per positive run | Five integer registers plus six vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 | Dedicated x86 SHA-512 | Intel SDE, 1,024 arbitrary state/block pairs per positive run | Seven integer registers plus three complete YMM registers | Integrated; native qualification pending |
 | Arm SHA-512 | QEMU, 1,024 arbitrary state/block pairs per positive run | Five integer registers plus thirteen vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 
@@ -57,7 +60,7 @@ The compiled mutation campaign poisons each working register before cleanup,
 then independently removes its erasure. Separate mutations remove scratch
 clearing or corrupt the final lane ordering. Positive poisoned controls must
 still pass. Compiler-check mutations inject spills and loads before/after the
-opaque boundary. These tests exercise the two production kernels, not a complete
+opaque boundary. These tests exercise the four production kernels, not a complete
 production qualification or a general assembly verifier.
 
 The Linux bounds test also places each input, state, scratch and constants at
@@ -66,20 +69,30 @@ placement combinations). Input and constants pages become read-only before the
 call. This supplements sanitizers, which cannot instrument loads and stores
 inside opaque assembly.
 
+SHA-224/256 also tests all fifteen nonzero byte offsets for input/state/scratch,
+with u32 constants deliberately offset by four bytes from vector alignment.
+Sentinels verify the inactive state half, caller input and surrounding storage
+remain unchanged. The independent scalar reference uses only the first 64 input
+bytes and 32 state bytes; sharing round constants does not share its recurrence.
+
 Run with an already licensed, verified Intel SDE executable:
 
 ```sh
 python3 assurance/register-cleanup/check.py --sde /absolute/path/to/sde64 --mutations
 python3 assurance/register-cleanup/check_arm.py --qemu --mutations
+python3 assurance/register-cleanup/check.py --sha256 --native --mutations
+python3 assurance/register-cleanup/check_arm.py --sha256 --qemu --mutations
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --all-targets -- -D warnings
 ```
 
 A generic `cargo test` explicitly ignores the instruction execution test. It
-must not be cited as evidence that SHA512 instructions or erasure executed.
+must not be cited as evidence that SHA instructions or erasure executed.
+`--native` accepts only the SHA-224/256 lane and checks every reported Linux CPU
+for SHA-NI/SSE2 before executing. It is development testing, not a migration proof.
 
 The `win64-probe` fixture-only feature selects the Windows x64 observer. The
 driver changes only the function ABI in a temporary copy of the production
-source so the SDE campaign can execute that calling convention on Linux. A
+source so the SDE/native campaign can execute that calling convention on Linux. A
 function-pointer type check rejects enabling this observer against a SysV
 function; use the driver, not a bare `cargo test --features win64-probe`.
 Its observer
@@ -108,7 +121,7 @@ No row below is complete merely because the SHA-512 prototype passes.
 
 | Hardened kernel family | x86 implementation to replace/review | Arm implementation to replace/review | Status |
 | --- | --- | --- | --- |
-| SHA-224/256 instructions | `x86_sha::secret_sha` | `aarch64_sha2::secret_sha256` | Pending |
+| SHA-224/256 instructions | `x86_sha::secret::compress` | `aarch64_sha2::secret256::compress` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
 | SHA-384/512 and SHA-512/t instructions | `x86_sha512::secret::compress` | `aarch64_sha2::secret512::compress` | Integrated; source-bound emulated checks; native qualification pending |
 | Keccak single state | `x86_avx2_keccak::permute_secret_avx2` | `aarch64_sha3_keccak::permute_secret_sha3` | Pending |
 | SHA-224/256 batch | `sha256_hardened_batch::x86` | `sha256_hardened_batch::arm` | Pending |

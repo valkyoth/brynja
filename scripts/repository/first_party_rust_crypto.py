@@ -35,6 +35,8 @@ FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"(?:C|system|stdcall|cdec
 # These are Rust function DEFINITIONS, not imported foreign implementations.
 # The separate unsafe inventory binds their complete first-party assembly bytes.
 LOCAL_C_ABI = {
+    Path("crates/brynja-crypto-cpu/src/x86_sha/secret.rs"),
+    Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs"),
     Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"),
 }
@@ -114,9 +116,12 @@ def validate(root: Path) -> None:
             text = path.read_text(encoding="utf-8")
             abi_text = text
             if relative in LOCAL_C_ABI:
-                if text.count(LOCAL_SIGNATURE) != 1:
+                signature = LOCAL_SIGNATURE
+                if relative.name == 'secret256.rs' or relative.parent.name == 'x86_sha':
+                    signature = signature.replace('[u64; 80]', '[u32; 64]')
+                if text.count(signature) != 1:
                     fail(f"local Rust ABI definition changed: {relative}")
-                abi_text = text.replace(LOCAL_SIGNATURE, '', 1)
+                abi_text = text.replace(signature, '', 1)
             if FOREIGN_ABI.search(abi_text):
                 fail(f"foreign ABI declaration is forbidden: {relative}")
             if NATIVE_LINK.search(text):

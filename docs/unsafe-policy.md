@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: fifty-one exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: fifty-three exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only fifty-one exact modules: the private core volatile clearer; the
+Rust in only fifty-three exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -55,7 +55,16 @@ size and field offsets are compile-time assertions before its exclusive borrow
 is viewed as 704 initialized bytes. The existing operation guard still clears
 both regions on success/error and recoverable unwind.
 
-These two kernel boundaries are under implementation-author verification, not
+The SHA-224/256 ports add `x86_sha/secret.rs` and `aarch64_sha2/secret256.rs`
+under the same exact-layout/opaque-block contract. They read the first 64 input
+bytes and update the first 32 state bytes, preserving unused state capacity;
+all 704 scratch bytes are erased. X86 still requires only SHA/SSE2 and uses four
+XMM registers, not AVX/SSE4. Constants need only u32 alignment; vector loads are
+explicitly unaligned. Arm uses NEON/SHA2 and V0–5, preserving D8–15. The obsolete
+Rust schedule helpers were removed rather than leaving secret arithmetic outside
+the new boundary. Byte-offset and constant-alignment tests cover these accesses.
+
+These four kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.
 Pre-existing caller registers and caller-owned buffers are not erased. Abort,
 interruption during computation, OS snapshots and platform storage remain

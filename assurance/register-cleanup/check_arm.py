@@ -6,7 +6,7 @@ import re
 import shutil
 import tempfile
 
-from check import ROOT, clean_env, run
+from check import ROOT, clean_env, run, configure, feature_args
 
 GP = (4, 5, 6, 7, 9)
 VECTOR = (*range(8), *range(16, 21))
@@ -14,6 +14,7 @@ ERASE = tuple(f'"mov x{i}, xzr",' for i in GP) + tuple(f'"movi v{i}.16b, #0",' f
 POISON = "\n".join(f'"mov x{i}, #-1",' for i in GP) + "\n" + "\n".join(
     f'"movi v{i}.16b, #255",' for i in VECTOR
 )
+SHA256 = False
 
 
 def asm_check(text):
@@ -39,10 +40,11 @@ def asm_check(text):
         if not re.search(rf"\bmovi\s+v{i}\.16b,\s*#0\b", cleanup):
             raise ValueError("missing Arm vector erasure")
     operations = [line.strip() for line in cleanup.splitlines() if line.strip() and not line.lstrip().startswith(("//", ";"))]
-    if (len(operations) != 19 or not re.fullmatch(r"cmp\s+xzr,\s*xzr", operations[-1])
+    if (len(operations) != len(GP) + len(VECTOR) + 1 or not re.fullmatch(r"cmp\s+xzr,\s*xzr", operations[-1])
             or any(not re.match(r"(?:mov|movi)\s", op) for op in operations[:-1])):
         raise ValueError("unexpected Arm post-computation operation")
-    if len(re.findall(r"\bsha512h\b", active)) != 4 or len(re.findall(r"\bsha512h2\b", active)) != 4:
+    algorithm, rounds = ('256', 1) if SHA256 else ('512', 4)
+    if len(re.findall(r'\bsha' + algorithm + r'h\b', active)) != rounds or len(re.findall(r'\bsha' + algorithm + r'h2\b', active)) != rounds:
         raise ValueError("Arm dedicated rounds absent")
     for area in (before, after):
         lines = area.splitlines()
@@ -75,7 +77,7 @@ def codegen():
                     env = clean_env()
                     env["CARGO_TARGET_DIR"] = directory
                     run(["cargo", "+" + compiler, "rustc", "--locked", "--offline", "--lib",
-                         "--manifest-path", str(ROOT / "Cargo.toml"), "--target", target,
+                         "--manifest-path", str(ROOT / "Cargo.toml"), *feature_args(), "--target", target,
                          *(["--release"] if optimized else []), "--", "--emit=asm"], env)
                     files = list(Path(directory).glob(f"{target}/*/deps/*.s"))
                     if len(files) != 1:
@@ -102,12 +104,15 @@ def execution(mutations):
         fixture = Path(directory) / "fixture"
         shutil.copytree(ROOT, fixture, ignore=shutil.ignore_patterns("target", "__pycache__"))
         lib = fixture / "src/lib.rs"
-        absolute = (ROOT / "src/../../../crates/brynja-crypto-cpu/src/sha512_schedule.rs").resolve()
-        lib.write_text(lib.read_text().replace("../../../crates/brynja-crypto-cpu/src/sha512_schedule.rs", absolute.as_posix()))
+        constants = 'sha256_schedule.rs' if SHA256 else 'sha512_schedule.rs'
+        relative = '../../../crates/brynja-crypto-cpu/src/' + constants
+        absolute = (ROOT / 'src' / relative).resolve()
+        lib.write_text(lib.read_text().replace(relative, absolute.as_posix()))
         source = fixture / "src/arm_sha512.rs"
+        production = 'crates/brynja-crypto-cpu/src/aarch64_sha2/secret' + ('256' if SHA256 else '512') + '.rs'
         lib.write_text(lib.read_text().replace(
-            '../../../crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs', 'arm_sha512.rs'))
-        original = (ROOT.parents[1] / 'crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs').read_text()
+            '../../../' + production, 'arm_sha512.rs'))
+        original = (ROOT.parents[1] / production).read_text()
         poisoned = original.replace('"// BRYNJA_REGISTER_ERASE",', POISON + '\n"// BRYNJA_REGISTER_ERASE",')
         cases = [("unmodified", original, True), ("poison before cleanup", poisoned, True)]
         if mutations:
@@ -117,17 +122,19 @@ def execution(mutations):
                     raise ValueError("stale Arm erasure mutation")
                 cases.append((token, prefix + '"// BRYNJA_REGISTER_ERASE",' + tail.replace(token, ""), False))
             cases.append(("scratch erasure removed", original.replace('"str xzr, [{scratch}, x4]",', ""), False))
-            cases.append(("wrong feed-forward", original.replace('"add v0.2d, v0.2d, v16.2d",', '"add v0.2d, v0.2d, v17.2d",'), False))
+            before, after = ('"add v0.4s, v0.4s, v2.4s",', '"add v0.4s, v0.4s, v3.4s",') if SHA256 else (
+                '"add v0.2d, v0.2d, v16.2d",', '"add v0.2d, v0.2d, v17.2d",')
+            cases.append(("wrong feed-forward", original.replace(before, after), False))
         for compiler in ("1.90.0", "1.98.1"):
             for optimized in (False, True):
                 for name, contents, expected in cases:
                     source.write_text(contents)
                     env = clean_env()
-                    env["RUSTFLAGS"] = "-C linker=rust-lld -C target-feature=+neon,+sha3"
+                    env["RUSTFLAGS"] = "-C linker=rust-lld -C target-feature=+neon,+" + ('sha2' if SHA256 else 'sha3')
                     env["CARGO_TARGET_DIR"] = str(Path(directory) / "build")
                     env["CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"] = "qemu-aarch64 -cpu max"
                     result = run(["cargo", "+" + compiler, "test", "--locked", "--offline",
-                                  "--manifest-path", str(fixture / "Cargo.toml"), "--target", "aarch64-unknown-linux-musl",
+                                  "--manifest-path", str(fixture / "Cargo.toml"), *feature_args(), "--target", "aarch64-unknown-linux-musl",
                                   *(["--release"] if optimized else []), "--", "--nocapture"], env, success=expected)
                     if not expected and (result.returncode == 0 or "test result: FAILED" not in result.stdout):
                         raise AssertionError(f"Arm mutant did not fail in execution: {name}\n{result.stdout}\n{result.stderr}")
@@ -140,7 +147,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--qemu", action="store_true")
     parser.add_argument("--mutations", action="store_true")
+    parser.add_argument('--sha256', action='store_true')
     args = parser.parse_args()
+    SHA256 = args.sha256
+    configure(SHA256)
+    if SHA256:
+        VECTOR = tuple(range(6))
+        ERASE = tuple(f'"mov x{i}, xzr",' for i in GP) + tuple(f'"movi v{i}.16b, #0",' for i in VECTOR)
+        POISON = '\n'.join(f'"mov x{i}, #-1",' for i in GP) + '\n' + '\n'.join(
+            f'"movi v{i}.16b, #255",' for i in VECTOR)
     codegen()
     if args.qemu:
         execution(args.mutations)

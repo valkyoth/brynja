@@ -19,6 +19,26 @@ ERASE = tuple(f'"xor {r}, {r}",' for r in REGISTERS) + tuple(
 POISON = "\n".join(f'"mov {r}, -1",' for r in REGISTERS) + "\n" + "\n".join(
     f'"vpcmpeqd ymm{i}, ymm{i}, ymm{i}",' for i in range(3)
 )
+SHA256 = False
+CARGO_FEATURES = []
+
+
+def configure(sha256):
+    global SHA256, PRODUCTION, FEATURES, ERASE, POISON, CARGO_FEATURES
+    SHA256 = sha256
+    if sha256:
+        PRODUCTION = ROOT.parents[1] / 'crates/brynja-crypto-cpu/src/x86_sha/secret.rs'
+        FEATURES = '-C target-feature=+sha,+sse2'
+        CARGO_FEATURES = ['sha256-probe']
+        ERASE = tuple(f'"xor {r}, {r}",' for r in REGISTERS) + tuple(
+            f'"pxor xmm{i}, xmm{i}",' for i in range(4))
+        POISON = '\n'.join(f'"mov {r}, -1",' for r in REGISTERS) + '\n' + '\n'.join(
+            f'"pcmpeqd xmm{i}, xmm{i}",' for i in range(4))
+
+
+def feature_args(extra=()):
+    features = [*CARGO_FEATURES, *extra]
+    return ['--features', ','.join(features)] if features else []
 
 
 def run(command, env=None, *, success=True):
@@ -48,15 +68,18 @@ def asm_check(text):
     for register in REGISTERS:
         if not re.search(rf"\bxorl\s+%{register},\s*%{register}\b", cleanup):
             raise ValueError("missing integer erasure: " + register)
-    for i in range(3):
-        if not re.search(rf"\bvpxor\s+%ymm{i},\s*%ymm{i},\s*%ymm{i}\b", cleanup):
+    for i in range(4 if SHA256 else 3):
+        pattern = rf'\bpxor\s+%xmm{i},\s*%xmm{i}\b' if SHA256 else rf"\bvpxor\s+%ymm{i},\s*%ymm{i},\s*%ymm{i}\b"
+        if not re.search(pattern, cleanup):
             raise ValueError("missing vector erasure")
-    if active.count("vsha512rnds2") != 2:
+    if active.count('sha256rnds2' if SHA256 else 'vsha512rnds2') != 2:
         raise ValueError("dedicated round instructions absent")
+    if SHA256 and re.search(r'(?m)^\s*(?:v\w+|pinsrd|pblend\w+)\s', active):
+        raise ValueError('SHA/SSE2 kernel gained a stronger instruction prerequisite')
     # Cleanup must not branch, load, store, spill, call or reload after erasure.
     cleanup_ops = [line.strip() for line in cleanup.splitlines() if line.strip() and not line.lstrip().startswith("#")]
-    if (len(cleanup_ops) != 11 or not re.fullmatch(r"cmpl\s+%eax,\s*%eax", cleanup_ops[-1])
-            or any(not re.match(r"(?:xorl|vpxor)\s", line) for line in cleanup_ops[:-1])):
+    if (len(cleanup_ops) != (12 if SHA256 else 11) or not re.fullmatch(r"cmpl\s+%eax,\s*%eax", cleanup_ops[-1])
+            or any(not re.match(r"(?:xorl|vpxor|pxor)\s", line) for line in cleanup_ops[:-1])):
         raise ValueError("unexpected post-computation operation")
     for area in (before, after):
         for line in area.splitlines():
@@ -86,7 +109,7 @@ def codegen():
                     env = clean_env()
                     env["CARGO_TARGET_DIR"] = directory
                     run(["cargo", "+" + compiler, "rustc", "--locked", "--offline", "--lib",
-                         "--manifest-path", str(ROOT / "Cargo.toml"), "--target", target,
+                         "--manifest-path", str(ROOT / "Cargo.toml"), *feature_args(), "--target", target,
                          *(["--release"] if optimized else []), "--", "--emit=asm"], env)
                     files = list(Path(directory).glob(f"{target}/*/deps/*.s"))
                     if len(files) != 1:
@@ -116,23 +139,35 @@ def clean_env():
 
 
 def execution(sde, mutations):
+    if sde is None:
+        if not SHA256 or os.uname().sysname != 'Linux' or os.uname().machine != 'x86_64':
+            raise ValueError('native lane requires Linux x86_64 SHA256')
+        with Path('/proc/cpuinfo').open() as stream:
+            identity = stream.read(4 * 1024 * 1024 + 1)
+        if len(identity) > 4 * 1024 * 1024:
+            raise ValueError('CPU identity exceeds bound')
+        flags = re.findall(r'^flags\s*:\s*(.+)$', identity, re.M)
+        if not flags or any(not {'sha_ni', 'sse2'} <= set(row.split()) for row in flags):
+            raise ValueError('native SHA256 observer requires SHA/SSE2 on every reported Linux CPU')
     with tempfile.TemporaryDirectory(prefix="brynja-register-mutants-") as directory:
         fixture = Path(directory) / "fixture"
         shutil.copytree(ROOT, fixture, ignore=shutil.ignore_patterns("target", "__pycache__"))
         # The shared public round constants are the only checkout dependency.
         lib = fixture / "src/lib.rs"
-        absolute = (ROOT / "src/../../../crates/brynja-crypto-cpu/src/sha512_schedule.rs").resolve()
-        lib.write_text(lib.read_text().replace("../../../crates/brynja-crypto-cpu/src/sha512_schedule.rs", absolute.as_posix()))
+        constants = 'sha256_schedule.rs' if SHA256 else 'sha512_schedule.rs'
+        relative = '../../../crates/brynja-crypto-cpu/src/' + constants
+        absolute = (ROOT / 'src' / relative).resolve()
+        lib.write_text(lib.read_text().replace(relative, absolute.as_posix()))
         # The normal fixture directly includes the production kernel. Mutants
         # run on a private copy of those same bytes, never the working kernel.
         lib.write_text(lib.read_text().replace(
-            '../../../crates/brynja-crypto-cpu/src/x86_sha512/secret.rs', 'sha512.rs'))
+            '../../../' + PRODUCTION.relative_to(ROOT.parents[1]).as_posix(), 'sha512.rs'))
         source = fixture / "src/sha512.rs"
         original = PRODUCTION.read_text()
         source.write_text(original)
         mismatch = run(['cargo', '+1.98.1', 'check', '--locked', '--offline', '--tests',
                         '--manifest-path', str(fixture / 'Cargo.toml'), '--target',
-                        'x86_64-unknown-linux-gnu', '--features', 'win64-probe'],
+                        'x86_64-unknown-linux-gnu', *feature_args(['win64-probe'])],
                        clean_env(), success=False)
         if mismatch.returncode == 0 or 'expected "win64" fn, found "C" fn' not in mismatch.stderr:
             raise AssertionError('cross-ABI observer did not reject a mismatched function type')
@@ -145,7 +180,9 @@ def execution(sde, mutations):
                     raise ValueError("stale erasure mutation")
                 cases.append((token, prefix + '"# BRYNJA_REGISTER_ERASE",' + tail.replace(token, ""), False))
             cases.append(("scratch wipe removed", original.replace('"mov [{scratch} + rcx], rax",\n            "add rcx, 8",\n            "cmp rcx, 704",', '"add rcx, 8",\n            "cmp rcx, 704",'), False))
-            cases.append(("wrong final lane mapping", original.replace("0x2028000830381018", "0x2028000830381810"), False))
+            cases.append(("wrong final lane mapping", original.replace(
+                '0x10140004181c080c' if SHA256 else '0x2028000830381018',
+                '0x10140004181c0c08' if SHA256 else '0x2028000830381810'), False))
         for compiler in ("1.90.0", "1.98.1"):
             for optimized, abi in itertools.product((False, True), ("sysv", "win64")):
                 for name, contents, expected in cases:
@@ -154,10 +191,12 @@ def execution(sde, mutations):
                     env = clean_env()
                     env["RUSTFLAGS"] = FEATURES
                     env["CARGO_TARGET_DIR"] = str(Path(directory) / "build")
-                    env["CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER"] = str(sde) + " -arl --"
+                    env.pop('CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER', None)
+                    if sde is not None:
+                        env["CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER"] = str(sde) + " -arl --"
                     result = run(["cargo", "+" + compiler, "test", "--locked", "--offline",
                                   "--manifest-path", str(fixture / "Cargo.toml"), "--target", "x86_64-unknown-linux-gnu",
-                                  *(["--features", "win64-probe"] if abi == "win64" else []),
+                                  *feature_args(['win64-probe'] if abi == 'win64' else []),
                                   *(["--release"] if optimized else []), "--", "--nocapture"], env, success=expected)
                     if not expected and (result.returncode == 0 or "test result: FAILED" not in result.stdout):
                         raise AssertionError(f"mutant did not fail in execution: {name}\n{result.stdout}\n{result.stderr}")
@@ -170,9 +209,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sde", type=Path)
     parser.add_argument("--mutations", action="store_true")
+    parser.add_argument('--sha256', action='store_true')
+    parser.add_argument('--native', action='store_true', help='SHA256 only: execute on checked native Linux x86')
     args = parser.parse_args()
+    if args.native and (args.sde or not args.sha256):
+        parser.error('--native requires --sha256 and excludes --sde')
+    configure(args.sha256)
     codegen()
     if args.sde:
         execution(args.sde.resolve(), args.mutations)
+    elif args.native:
+        execution(None, args.mutations)
     elif args.mutations:
         parser.error("--mutations requires --sde")

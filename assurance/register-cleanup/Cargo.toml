@@ -12,6 +12,8 @@ license = "MIT OR Apache-2.0"
 default = []
 # Calling-convention evidence, not native Windows qualification.
 win64-probe = []
+# Select the separate SHA/SSE2 or NEON/SHA2 compression boundary.
+sha256-probe = []
 
 [lints.rust]
 unsafe_op_in_unsafe_fn = "deny"

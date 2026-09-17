@@ -17,6 +17,7 @@ sha256-probe = []
 keccak-probe = []
 batch256-probe = []
 batch512-probe = []
+keccak-batch-probe = []
 
 [lints.rust]
 unsafe_op_in_unsafe_fn = "deny"

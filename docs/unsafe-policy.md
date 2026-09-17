@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: fifty-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: sixty-one exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only fifty-nine exact modules: the private core volatile clearer; the
+Rust in only sixty-one exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -92,7 +92,16 @@ schedule expansion remain inside the opaque block; inactive Arm output capacity
 is zeroed. SHA-384, named truncations and general SHA-512/t framing remain in
 their existing callers, outside this kernel-boundary claim.
 
-These ten kernel boundaries are under implementation-author verification, not
+The packed Keccak ports add `keccak_hardened_batch/{x86,arm}/secret.rs`.
+Their exact 1,920-byte owner retains state only at 0..800 and clears all columns,
+deltas and staging at 800..1920. Four AVX2 or two NEON independent permutations
+keep theta/rho/pi/chi/iota and cleanup inside the opaque block. Arm also erases
+inactive output halves. Three integer/four vector working registers and flags
+are cleared; no Arm SHA3 or x86 AVX-512 prerequisite is added. The repr(C)
+byte fields retain their original size and alignment. Packing and output transfer
+remain separate audit work.
+
+These twelve kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.
 Pre-existing caller registers and caller-owned buffers are not erased. Abort,
 interruption during computation, OS snapshots and platform storage remain
@@ -140,11 +149,12 @@ the instruction boundary. No ordinary packed owner is reused for secrets.
 Three further development exceptions isolate `keccak_hardened_batch/platform.rs`,
 `x86.rs` and `arm.rs`. Their distinct AVX2/NEON permutation kernels store packed
 state, column parities, theta deltas and rho/pi/chi staging in four clearing
-regions (800, 160, 160 and 800 bytes). Every intrinsic load/store borrows fixed
-initialized owner storage. NEON uses its first two lanes and cleanup erases all
+regions (800, 160, 160 and 800 bytes). The v0.24.49 opaque ports above replace
+their intrinsic implementation with bounded accesses to that same initialized
+owner storage. NEON uses its first two lanes and owner cleanup erases all
 four lanes. Raw caller states remain caller-owned; byte and word entry points
-commit only after revalidation and checked accounting. The same register/copy,
-abort and platform-authority limitations apply. Hash framing and final native
+commit only after revalidation and checked accounting. Caller copies,
+abort and platform-authority limitations still apply. Hash framing and final native
 qualification remain pending.
 
 ## v0.24.47 Independent-state Keccak SIMD

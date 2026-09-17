@@ -166,7 +166,7 @@ sha256 = "9f4555ee60fc80f0de31c5ecb6082150e13dab16cda9c09d0de437adbafe7b49"
 package = "brynja-crypto-cpu"
 path = "src/keccak_hardened_batch/scratch.rs"
 status = "hardened-keccak-batch-owned-storage"
-sha256 = "15ef4b1132da1fe25a3ef9bcc38c3168b0b84279ea50e2acc3de72f8d314ea8b"
+sha256 = "ec9d8da57ac6c099d95aff873aaffc55788d97d5082a46c289a4f35dad5c7ece"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -178,13 +178,13 @@ sha256 = "aaceb66eb54d19f782b876ae626a39f134e67da6f3515e37f90ada2fb95cc0c9"
 package = "brynja-crypto-cpu"
 path = "src/keccak_hardened_batch/x86.rs"
 status = "hardened-keccak-batch-four-lane-avx2"
-sha256 = "d52961eda7dd32f156c09e2ed5f49db29739e6442717529115e57a9eba4363a4"
+sha256 = "c86f9e8e991b198c5771f92d96fc994a74cfcd1ad3499ddc2c524e90a9c36c1d"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/keccak_hardened_batch/arm.rs"
 status = "hardened-keccak-batch-two-lane-neon"
-sha256 = "0e97b81b379216d5d8d7b49ebb1fd088d0dec5208f102e37bb4952503ff56e3c"
+sha256 = "bea57ebfa2d29bc3ecea4c466314c4d020a12e7ed56d5512b9050396947deb08"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -886,3 +886,15 @@ package = "brynja-crypto-cpu"
 path = "src/sha512_hardened_batch/arm/secret.rs"
 status = "hardened-sha512-batch-opaque-register-boundary"
 sha256 = "807a94ee4f3f8d73c1c945e8899121f6f3635a9ef438f2eb309477f4d5b550c5"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_hardened_batch/x86/secret.rs"
+status = "hardened-keccak-batch-opaque-register-boundary"
+sha256 = "11cd76232a6e59720835bb8bf1b977608c59ba7465a107c8f1dc1f27711d8146"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_hardened_batch/arm/secret.rs"
+status = "hardened-keccak-batch-opaque-register-boundary"
+sha256 = "db9a59d97c9ffbf81b0572a8e9cce770dbc89a409c22db4c6d85fb65f3f92ba8"

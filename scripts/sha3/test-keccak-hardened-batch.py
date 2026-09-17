@@ -6,7 +6,6 @@ Compiled mutants execute only with an explicitly selected compiled-target
 bundle. The operator must uphold that bundle on the test machine.
 """
 import argparse
-import importlib.util
 import os
 from pathlib import Path
 import re
@@ -70,12 +69,34 @@ def inspect(mir, llvm, assembly, target):
     require(len(calls) == 4, 'LLVM lost a clearing region')
     require([int(re.search(r'i(?:32|64) (?:noundef )?(\d+)\)', line)[1]) for line in calls] ==
             [800, 160, 160, 800], 'LLVM region widths')
-    # Reuse the ordinary instruction inspector's exact function-boundary and
-    # lane-width checks, mapping only the namespace of this separate kernel.
-    spec = importlib.util.spec_from_file_location('batch_codegen', ROOT / 'scripts/sha3/keccak_batch_codegen.py')
-    checker = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(checker)
-    checker.inspect(assembly.replace(NAMESPACE, FAMILY+'_batch'), target)
+    # The wrapper and opaque function are separate symbols. Select the
+    # latter exactly, never inspect an unrelated ordinary/vector kernel.
+    architecture = 'x86' if target.startswith('x86_64') else 'arm'
+    pattern = (r'^[_A-Za-z][^\n]*' + NAMESPACE + r'[0-9]+' + architecture +
+               r'6secret7permute[^\n]*:\s*(?://[^\n]*)?\n')
+    matches = list(re.finditer(pattern, assembly, re.M))
+    require(len(matches) == 1, 'missing/ambiguous opaque batch permutation symbol')
+    tail = assembly[matches[0].start():]
+    symbol = matches[0][0].split(':', 1)[0]
+    ending = re.search(r'(?m)^\s*\.size\s+' + re.escape(symbol) + r',.*$', tail)
+    require(ending is not None, 'missing exact opaque permutation end')
+    # Linux's exact .size terminator also works when panic=abort omits CFI
+    # at the MSRV. Normalize it for the shared instruction-only inspector.
+    assembly = tail[:ending.end()] + '\n.cfi_endproc\n'
+    # Whole-crate optimization specializes the public constants pointer.
+    # These address-only operations do not load any data. Remove them only
+    # before the opaque block; secret loads/stack spills still fail below.
+    marker = '# BRYNJA_SECRET_BEGIN' if architecture == 'x86' else '// BRYNJA_SECRET_BEGIN'
+    prefix, remainder = assembly.split(marker)
+    if architecture == 'x86':
+        prefix = re.sub(r'(?m)^\s*leaq\s+\.L[A-Za-z0-9_.]+\(%rip\),\s*%r[a-z0-9]+\s*$', '', prefix)
+    else:
+        prefix = re.sub(r'(?m)^\s*adrp\s+x[0-9]+,\s*\.L[A-Za-z0-9_.]+\s*$', '', prefix)
+    boundary_assembly = prefix + marker + remainder
+    sys.path.insert(0, str(ROOT / 'assurance/register-cleanup'))
+    import check_keccak as boundary
+    boundary.configure_keccak_batch()
+    boundary.validator(architecture, boundary_assembly)
 
 
 def compile_evidence(root, env, toolchain, target):
@@ -104,7 +125,56 @@ def compile_evidence(root, env, toolchain, target):
             pass
         else:
             raise ValueError('inspector accepted a mutated artifact: ' + before)
+    marker = '# ' if target.startswith('x86_64') else '// '
+    load = 'movq (%rdi), %rax\n' if target.startswith('x86_64') else 'ldr x4, [x0]\n'
+    for before, after in (
+        (marker + 'BRYNJA_SECRET_BEGIN', load + marker + 'BRYNJA_SECRET_BEGIN'),
+        (marker + 'BRYNJA_SECRET_END', marker + 'BRYNJA_SECRET_END\n' + load),
+        ('BRYNJA_REGISTER_ERASE', 'MISSING_ERASURE_BOUNDARY'),
+        ('6secret7permute', '6secret7missing'),
+        ('.size', '.missing_size'),
+    ):
+        require(before in artifacts[2], 'opaque inspector mutation anchor')
+        changed = artifacts[2].replace(before, after)
+        try:
+            inspect(artifacts[0], artifacts[1], changed, target)
+        except (ValueError, flow.MirCleanupFlowError):
+            pass
+        else:
+            raise ValueError('opaque inspector accepted a mutated artifact: ' + before)
     print(f'Hardened {FAMILY} batch compiler smoke: PASS; {toolchain}; {target}')
+
+
+def layout_rejections(root, env, toolchain, target):
+    """The byte reborrow must never survive a changed aggregate layout."""
+    architecture = 'x86' if target.startswith('x86_64') else 'arm'
+    path = root / SOURCE / (architecture + '.rs')
+    original = path.read_text()
+    size = 1920
+    cases = [(f'size_of::<Workspace>() == {size}', f'size_of::<Workspace>() == {size - 1}')]
+    cases += [(f'offset_of!(Workspace, {field}) == {offset}',
+               f'offset_of!(Workspace, {field}) == {offset + 1}')
+              for field, offset in (('state', 0), ('columns', 800),
+                                    ('deltas', 960), ('staging', 1120))]
+    command = ['cargo', '+'+toolchain, 'check', '--locked', '--offline',
+               '-p', 'brynja-crypto-cpu', '--no-default-features',
+               '--features', FEATURE, '--target', target]
+    for release in (False, True):
+        selected = command + (['--release'] if release else [])
+        run(selected, root, env)
+        for before, after in cases:
+            require(original.count(before) == 1, 'layout mutation anchor')
+            try:
+                path.write_text(original.replace(before, after))
+                result = subprocess.run(selected, cwd=root, env=env, text=True,
+                                        capture_output=True, timeout=300)
+                require(result.returncode != 0 and 'E0080' in result.stderr
+                        and 'assertion failed' in result.stderr,
+                        'layout mutation survived or unrelated compilation failure')
+            finally:
+                path.write_text(original)
+        run(selected, root, env)
+    print(f'Hardened {FAMILY} batch exact layout: ten debug/release mutations rejected')
 
 
 def mutations(root, env, toolchain, target):
@@ -175,6 +245,7 @@ def main():
         run(['cargo', '+'+args.toolchain, 'generate-lockfile', '--offline'], root, env)
         compile_evidence(root, env, args.toolchain, args.target)
         if args.mutations:
+            layout_rejections(root, env, args.toolchain, args.target)
             env['RUSTFLAGS'] = '-C target-feature=' + ('+avx,+avx2' if args.target.startswith('x86_64') else '+neon')
             if args.target == 'aarch64-unknown-linux-musl':
                 env['RUSTFLAGS'] += ' -C linker=rust-lld'

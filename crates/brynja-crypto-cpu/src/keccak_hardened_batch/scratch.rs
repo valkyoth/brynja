@@ -32,6 +32,7 @@ use core::marker::PhantomData;
 /// fn require<T: core::fmt::Debug>() {}
 /// require::<Workspace>();
 /// ```
+#[repr(C)]
 pub struct Workspace {
     pub(super) state: [[u8; 32]; 25],
     pub(super) columns: [[u8; 32]; 5],

@@ -2,8 +2,8 @@
 
 Development assurance code, **not complete release evidence**.
 The owner requested register-remanence remediation across the hardened backends
-before another pentest. SHA-224/256 and SHA-512 (single-state and batch), and
-single-state Keccak use this boundary in production;
+before another pentest. SHA-224/256, SHA-512 and Keccak (single-state and batch)
+use this boundary in production;
 the fixture directly includes their actual private source files, rather than
 testing duplicate implementations. Other ports and native qualification remain
 pending. Release gates are unchanged. Finding F1 remains open.
@@ -50,6 +50,8 @@ or independent verification claim follows from these tests.
 | Arm SHA-224/256 batch | QEMU, 1,024 independent batches per positive run | Three integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 | x86 SHA-512-family batch | Native Linux AVX2, 1,024 independent batches per positive run | Three integer registers plus four complete YMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
 | Arm SHA-512-family batch | QEMU, 1,024 independent batches per positive run | Three integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
+| x86 Keccak batch | Native Linux AVX2, 1,024 independent batches per positive run | Three integer registers plus four complete YMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
+| Arm Keccak batch | QEMU, 1,024 independent batches per positive run | Three integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 
 The scalar schedule and feed-forward also live inside the block; this is not
 merely a `vzeroupper`/`vzeroall` epilogue. The ordinary implementation is not
@@ -67,7 +69,7 @@ The compiled mutation campaign poisons each working register before cleanup,
 then independently removes its erasure. Separate mutations remove scratch
 clearing or corrupt the final lane ordering. Positive poisoned controls must
 still pass. Compiler-check mutations inject spills and loads before/after the
-opaque boundary. These tests exercise the ten production kernels, not a complete
+opaque boundary. These tests exercise the twelve production kernels, not a complete
 production qualification or a general assembly verifier.
 
 The Linux bounds test also places each input, state, scratch and constants at
@@ -109,6 +111,15 @@ u64 constants. Thirteen x86 and fourteen Arm negative mutation classes must fail
 at runtime. AVX2/NEON are sufficient; this batch path does not require dedicated
 SHA512 instructions, SDE, SHA-NI, SHA3 or AVX-512.
 
+Keccak batching tests four AVX2 or two NEON lanes against an independent
+coordinate permutation oracle, with generated rotations and round constants and
+a zero-state known-answer cross-check. Only packed state at 0..800 survives;
+columns, deltas and staging at 800..1920 are erased, as are inactive Arm output
+halves. The original byte alignment and total owner extent are unchanged.
+Seventeen negative classes on each architecture test register/scratch erasure,
+round count, theta/rho/pi/chi/iota and lane isolation. Four guarded placements and
+31 unaligned offsets supplement sanitizer checks. Arm needs NEON only, not SHA3.
+
 Run with an already licensed, verified Intel SDE executable:
 
 ```sh
@@ -122,6 +133,8 @@ python3 assurance/register-cleanup/check_keccak.py x86 --sha256-batch --execute 
 python3 assurance/register-cleanup/check_keccak.py arm --sha256-batch --execute --mutations
 python3 assurance/register-cleanup/check_keccak.py x86 --sha512-batch --execute --mutations
 python3 assurance/register-cleanup/check_keccak.py arm --sha512-batch --execute --mutations
+python3 assurance/register-cleanup/check_keccak.py x86 --keccak-batch --execute --mutations
+python3 assurance/register-cleanup/check_keccak.py arm --keccak-batch --execute --mutations
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --all-targets -- -D warnings
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --features batch256-probe --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --features batch512-probe --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
@@ -166,9 +179,9 @@ No row below is complete merely because the SHA-512 prototype passes.
 | SHA-224/256 instructions | `x86_sha::secret::compress` | `aarch64_sha2::secret256::compress` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
 | SHA-384/512 and SHA-512/t instructions | `x86_sha512::secret::compress` | `aarch64_sha2::secret512::compress` | Integrated; source-bound emulated checks; native qualification pending |
 | Keccak single state | `x86_avx2_keccak::secret::permute` | `aarch64_sha3_keccak::secret::permute` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
-| SHA-224/256 batch | `sha256_hardened_batch::x86` | `sha256_hardened_batch::arm` | Pending |
-| SHA-512-family batch | `sha512_hardened_batch::x86` | `sha512_hardened_batch::arm` | Pending |
-| Keccak batch | `keccak_hardened_batch::x86` | `keccak_hardened_batch::arm` | Pending |
+| SHA-224/256 batch | `sha256_hardened_batch::x86::secret::compress` | `sha256_hardened_batch::arm::secret::compress` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
+| SHA-512-family batch | `sha512_hardened_batch::x86::secret::compress` | `sha512_hardened_batch::arm::secret::compress` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
+| Keccak batch | `keccak_hardened_batch::x86::secret::permute` | `keccak_hardened_batch::arm::secret::permute` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
 | Legacy SHA-1 | `x86_sha1::compress_secret` | `aarch64_sha1::compress_secret` | Pending |
 | Legacy MD5 batch | `cpu::x86_secret::compress_secret` | `cpu::arm_secret::compress_secret` | Pending |
 

@@ -6,7 +6,8 @@ extern crate std;
 #[cfg(not(any(
     feature = "keccak-probe",
     feature = "batch256-probe",
-    feature = "batch512-probe"
+    feature = "batch512-probe",
+    feature = "keccak-batch-probe"
 )))]
 use crate::kernel;
 use core::ffi::{c_int, c_void};
@@ -16,7 +17,8 @@ use std::io;
     not(any(
         feature = "keccak-probe",
         feature = "batch256-probe",
-        feature = "batch512-probe"
+        feature = "batch512-probe",
+        feature = "keccak-batch-probe"
     )),
     feature = "sha256-probe"
 ))]
@@ -25,7 +27,8 @@ type Word = u32;
     not(any(
         feature = "keccak-probe",
         feature = "batch256-probe",
-        feature = "batch512-probe"
+        feature = "batch512-probe",
+        feature = "keccak-batch-probe"
     )),
     not(feature = "sha256-probe")
 ))]
@@ -34,7 +37,8 @@ type Word = u64;
     not(any(
         feature = "keccak-probe",
         feature = "batch256-probe",
-        feature = "batch512-probe"
+        feature = "batch512-probe",
+        feature = "keccak-batch-probe"
     )),
     feature = "sha256-probe"
 ))]
@@ -43,7 +47,8 @@ const WORDS: usize = 64;
     not(any(
         feature = "keccak-probe",
         feature = "batch256-probe",
-        feature = "batch512-probe"
+        feature = "batch512-probe",
+        feature = "keccak-batch-probe"
     )),
     not(feature = "sha256-probe")
 ))]
@@ -51,13 +56,15 @@ const WORDS: usize = 80;
 #[cfg(not(any(
     feature = "keccak-probe",
     feature = "batch256-probe",
-    feature = "batch512-probe"
+    feature = "batch512-probe",
+    feature = "keccak-batch-probe"
 )))]
 const WORD_BYTES: usize = core::mem::size_of::<Word>();
 #[cfg(not(any(
     feature = "keccak-probe",
     feature = "batch256-probe",
-    feature = "batch512-probe"
+    feature = "batch512-probe",
+    feature = "keccak-batch-probe"
 )))]
 const CONSTANT_BYTES: usize = WORDS * WORD_BYTES;
 
@@ -159,7 +166,8 @@ impl Drop for Pages {
 #[cfg(not(any(
     feature = "keccak-probe",
     feature = "batch256-probe",
-    feature = "batch512-probe"
+    feature = "batch512-probe",
+    feature = "keccak-batch-probe"
 )))]
 #[cfg_attr(
     all(

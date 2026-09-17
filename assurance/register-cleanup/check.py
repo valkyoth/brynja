@@ -48,7 +48,7 @@ def run(command, env=None, *, success=True):
     return result
 
 
-def asm_check(text, *, keccak=False, batch256=False, batch512=False):
+def asm_check(text, *, keccak=False, batch256=False, batch512=False, keccak_batch=False):
     # There is exactly one function in this no_std prototype library. Comments
     # delimit the opaque asm boundary, not a claim about all source functions.
     if text.count("# BRYNJA_SECRET_BEGIN") != 1 or text.count("# BRYNJA_SECRET_END") != 1:
@@ -78,6 +78,9 @@ def asm_check(text, *, keccak=False, batch256=False, batch512=False):
         instruction, count = ('vpbroadcastq' if batch512 else 'vpbroadcastd'), 1
     if active.count(instruction) != count:
         raise ValueError("dedicated round instructions absent")
+    if keccak_batch and (len(re.findall(r'\bvpandn\b', active)) != 5 or
+                         re.search(r'\b(?:vsha\w*|vprol\w*|vpternlog\w*)\b|%zmm', active)):
+        raise ValueError("Keccak batch chi shape or AVX2 prerequisites changed")
     if SHA256 and re.search(r'(?m)^\s*(?:v\w+|pinsrd|pblend\w+)\s', active):
         raise ValueError('SHA/SSE2 kernel gained a stronger instruction prerequisite')
     # Cleanup must not branch, load, store, spill, call or reload after erasure.

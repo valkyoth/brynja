@@ -7,6 +7,15 @@
 
 #[cfg(any(
     all(
+        feature = "keccak-batch-probe",
+        any(
+            feature = "sha256-probe",
+            feature = "keccak-probe",
+            feature = "batch256-probe",
+            feature = "batch512-probe"
+        )
+    ),
+    all(
         feature = "batch512-probe",
         any(
             feature = "sha256-probe",
@@ -21,6 +30,13 @@
     )
 ))]
 compile_error!("Select one kernel family per observer build");
+
+#[cfg(all(target_arch = "x86_64", feature = "keccak-batch-probe"))]
+#[path = "../../../crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs"]
+pub mod kernel;
+#[cfg(all(target_arch = "aarch64", feature = "keccak-batch-probe"))]
+#[path = "../../../crates/brynja-crypto-cpu/src/keccak_hardened_batch/arm/secret.rs"]
+pub mod kernel;
 
 #[cfg(all(target_arch = "x86_64", feature = "batch512-probe"))]
 #[path = "../../../crates/brynja-crypto-cpu/src/sha512_hardened_batch/x86/secret.rs"]
@@ -47,6 +63,7 @@ pub mod kernel;
 #[cfg(all(
     target_arch = "x86_64",
     not(any(
+        feature = "keccak-batch-probe",
         feature = "keccak-probe",
         feature = "batch256-probe",
         feature = "batch512-probe"
@@ -65,6 +82,7 @@ pub mod kernel;
 #[cfg(all(
     target_arch = "aarch64",
     not(any(
+        feature = "keccak-batch-probe",
         feature = "keccak-probe",
         feature = "batch256-probe",
         feature = "batch512-probe"
@@ -83,7 +101,7 @@ pub mod kernel;
 // The public FIPS round constants are shared with the existing implementation;
 // the test oracle's schedule and compression recurrence are independent.
 #[cfg(all(test, any(target_arch = "x86_64", target_arch = "aarch64")))]
-#[cfg(not(feature = "keccak-probe"))]
+#[cfg(not(any(feature = "keccak-probe", feature = "keccak-batch-probe")))]
 #[allow(dead_code)] // Only the existing public round constants are used here.
 #[cfg_attr(
     not(any(feature = "sha256-probe", feature = "batch256-probe")),
@@ -95,7 +113,7 @@ pub mod kernel;
 )]
 mod constants;
 
-#[cfg(all(test, feature = "keccak-probe"))]
+#[cfg(all(test, any(feature = "keccak-probe", feature = "keccak-batch-probe")))]
 #[path = "../../../crates/brynja-crypto-cpu/src/keccak_constants.rs"]
 #[allow(dead_code)]
 mod constants;
@@ -105,6 +123,7 @@ mod constants;
 #[cfg_attr(feature = "keccak-probe", path = "keccak_tests.rs")]
 #[cfg_attr(feature = "batch256-probe", path = "batch256_tests.rs")]
 #[cfg_attr(feature = "batch512-probe", path = "batch512_tests.rs")]
+#[cfg_attr(feature = "keccak-batch-probe", path = "keccak_batch_tests.rs")]
 mod tests;
 
 #[cfg(all(

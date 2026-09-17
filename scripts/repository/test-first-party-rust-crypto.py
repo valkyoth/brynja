@@ -126,4 +126,4 @@ if __name__ == "__main__":
     test()
     local_abi_definitions()
     print("first-party Rust cryptography policy rejects nine native-code regressions")
-    print("local Rust ABI definitions reject fifty foreign import/link/relocation regressions")
+    print("local Rust ABI definitions reject sixty foreign import/link/relocation regressions")

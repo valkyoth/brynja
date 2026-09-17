@@ -182,7 +182,10 @@ def select_repository(
             'scripts/zeroization/zeroization_evidence.py',
             'scripts/zeroization/test-zeroization-evidence.py',
         }
-        for encoded in set(paths) - {b''}:
+        # Diagnostics are part of the approved detached plan. Stable traversal
+        # must select the same first failure in every Python process, including
+        # when several changed fixtures independently require full coverage.
+        for encoded in sorted(set(paths) - {b''}):
             path = encoded.decode('utf-8')
             if normalized(path) != path:
                 raise ValueError('noncanonical change path')

@@ -3,6 +3,7 @@
 import json
 import os
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 from unittest.mock import patch
@@ -340,6 +341,54 @@ def readme_wrapper_tests():
     print('README-only scope rejects 14 code, graph, feature and partial-fixture regressions')
 
 
+def deterministic_diagnostics_tests():
+    # Exercise fresh interpreters: changing PYTHONHASHSEED in this process does
+    # not change set ordering. No Cargo/verifier command runs in these probes.
+    probe = r'''
+import sys
+from pathlib import Path
+from unittest.mock import patch
+import miri_scope as scope
+import scope_inputs as inputs
+if sys.argv[1] == 'mutant':
+    source = Path(scope.__file__).read_text()
+    original = "for encoded in sorted(set(paths) - {b''}):"
+    assert source.count(original) == 1
+    exec(compile(source.replace(original, "for encoded in set(paths) - {b''}:"),
+                 scope.__file__, 'exec'), scope.__dict__)
+for failing in (False, True):
+    names = [b'assurance/z-order/Cargo.lock', b'assurance/a-order/Cargo.lock'] if failing else [
+        b'scripts/z-unregistered/check.py', b'scripts/a-unregistered/check.py']
+    def git(root, *args):
+        return b'\0'.join(names + [names[0], b'']) if args[0] in ('diff', 'ls-files') else b''
+    def snapshot(root, base, path):
+        if failing and path.encode() in names:
+            raise ValueError('rejected fixture: ' + path)
+        return None, None
+    issues = []
+    with patch.object(inputs, 'git', side_effect=git), patch.object(inputs, 'snapshot', side_effect=snapshot):
+        assert scope.select_repository('v0.24.47', issues=issues) == (True, scope.GROUPS)
+    expected = ['rejected fixture: ' + sorted(names)[0].decode()] if failing else [
+        'broad or unclassified input: ' + name.decode() for name in sorted(names)]
+    assert issues == expected, (issues, expected)
+'''
+    mutant_rejections = 0
+    for seed in range(8):
+        environment = dict(os.environ, PYTHONHASHSEED=str(seed))
+        for mode in ('fixed', 'mutant'):
+            result = subprocess.run([sys.executable, '-c', probe, mode],
+                                    cwd=Path(scope.__file__).parent, env=environment,
+                                    capture_output=True, text=True, timeout=30)
+            if mode == 'fixed':
+                assert result.returncode == 0, result.stderr
+            else:
+                if result.returncode:
+                    assert result.returncode == 1 and 'AssertionError: (' in result.stderr, result.stderr
+                mutant_rejections += result.returncode != 0
+    assert mutant_rejections, 'unordered-path mutant escaped cross-process regression'
+    print('Scope diagnostics are stable across eight hash seeds; unordered traversal mutant rejected')
+
+
 def oracle_lock_tests():
     path = 'assurance/parallelhash-differential/Cargo.lock'
     manifest_path = path[:-4] + 'toml'
@@ -384,4 +433,5 @@ if __name__ == '__main__':
     generated_register_bounds_tests()
     readme_wrapper_tests()
     oracle_lock_tests()
+    deterministic_diagnostics_tests()
     print('Semantic Miri scope: versions, closures, removals, malformed inputs, dirty/untracked code and baseline failures PASS')

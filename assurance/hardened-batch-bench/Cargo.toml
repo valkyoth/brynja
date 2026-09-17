@@ -1,0 +1,22 @@
+[workspace]
+
+[package]
+name = "brynja-hardened-batch-bench"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", version = "=0.1.0", default-features = false, features = ["hardened-batch-execution", "hardened-batch512-execution"] }
+brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", version = "=0.1.0", default-features = false, features = ["hardened-batch-execution"] }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", version = "=0.1.1", default-features = false, features = ["sha256-hardened-batch", "sha512-hardened-batch", "keccak-hardened-batch"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+unwrap_used = "forbid"
+expect_used = "forbid"
+panic = "forbid"

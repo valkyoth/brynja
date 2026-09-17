@@ -1061,6 +1061,42 @@ mutations passed. This is repeatable implementation-author development evidence,
 not an AArch64 sanitizer result, native evidence receipt, complete memory-erasure
 proof or independent review. This runner is not added to the release/tag gates.
 
+## Standalone comparative hardened-batch timings
+
+`assurance/hardened-batch-bench` compares the actual hardened secret-output batch
+paths to their portable counterparts, using public synthetic messages. It covers
+640 workloads: both narrow SHA-2 identities, four named wide identities and four
+representative general-t identities, plus all eight SHA-3/SHAKE/cSHAKE identities.
+Every active-lane count is represented with balanced and unequal lengths at
+empty, one block/rate, 4096 and 16384 bytes. XOF output is 4099 bits and cSHAKE
+uses nonempty public N/S. General-t timing is representative, not all-parameter
+coverage; the separate independent oracle covers all 510 parameters.
+
+Run `python3 scripts/cryptography/check-hardened-batch-bench.py` for generic
+portable execution, or add a matching native `--lane` for selected SIMD. Both
+routes warm up and alternate order over seven samples. Medians include hashing,
+public-reference comparison and secret-output Drop, but exclude allocations,
+authority construction, poisoning, cleanup inspection and result formatting.
+Destination poisoning is guaranteed incorrect relative to the reference. Every
+call checks outputs, complete secret-output clearing, inactive slots, canaries,
+and Keccak caller staging. Work reports must match the finite budget's charge.
+
+The driver requires all 640 unique workload rows, stable actual route counters,
+exact SHA-2 common-block vector counts and correct Keccak SIMD eligibility.
+Slower results remain visible; threshold 1 is not a recommended crossover.
+Local AVX2 and a separate generic portable run passed. Rust 1.90 tests and strict
+Rust 1.98.1 Clippy passed. `test-hardened-batch-bench.py` rejects 68 malformed
+result/coverage/route regressions and explicitly accepts slower results. Six
+compiled fixture mutations reject omitted SHA-2/Keccak output Drop, overflowed
+vector totals, false portable routing, dirty staging and broken output validation;
+restored source passes after each. No production source is mutated.
+
+These exploratory timings are not statistical confidence, dedicated single-stream
+instruction comparisons, threaded ParallelHash timings, independent cryptographic
+review, constant-time validation or fresh multi-platform qualification. Those
+distinct evidence obligations are not closed by this fixture. Native collection
+and owner pentest remain pending; release/tag rules are unchanged.
+
 ## Acceptance required before completion
 
 - Positive downstream examples for every constructor, exact bit/byte identity,

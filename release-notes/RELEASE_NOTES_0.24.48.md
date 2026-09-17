@@ -58,6 +58,13 @@ pending-storage cleanup, 132 result-checker regressions and six compiled fixture
 mutations (84 identity/layout executions) were checked. These remain development
 results; production code and release gates are unchanged.
 
+Comparative hardened-batch timing tooling now exercises 640 SHA-2/Keccak workloads
+through secret outputs, including sparse and unequal-length batches. Local AVX2
+and generic portable runs passed output, cleanup and actual-work checks; slower
+selected results remain visible. Sixty-eight result regressions and six compiled
+fixture mutations were rejected. These exploratory measurements are not native
+qualification, side-channel evidence or a universal speedup claim.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

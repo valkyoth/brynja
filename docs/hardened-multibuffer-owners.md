@@ -3,9 +3,13 @@
 Status: v0.24.48 in development; narrow and wide SHA-2 CPU/leaf batch APIs implemented,
 Keccak CPU/leaf APIs, hosted adapters and scheduled ParallelHash groups implemented;
 streaming and threaded groups implemented; complete qualification pending.
-The names below are proposed API names until the implementation and downstream
-compile tests establish the exact exported surface. Ordinary batch types remain
-public-only. Nothing in this document authorizes passing secrets to those types.
+The exported APIs and downstream package examples are implemented. The
+[current acceptance map](hardened-batch-acceptance-status.md) separates recorded
+development passes, proof limitations and the remaining owner/native/release
+work. Historical checkpoints below describe their scope at the time; a later
+pass supersedes an earlier pending item only for the explicitly checked path.
+Ordinary batch types remain public-only. Nothing in this document authorizes
+passing secrets to those types.
 
 The first implemented layer is
 `brynja-crypto-cpu::sha256_hardened_batch`, under its separate default-off
@@ -862,12 +866,14 @@ discarded full-byte prefix, lost total-bit accounting and skipped partial flush.
 Each rejection is an assertion counterexample, not a compiler error or timeout.
 The restored source passes again after the complete mutation campaign.
 
-Remaining compiler obligations include full caller-to-cleanup lifecycle coverage
-and machine-level coordinator argument/unwind qualification (standalone Storage
-and both forms of inlined LLVM handoff are now checked at the levels above). The new compositional proofs
-do not close arbitrary streaming flush/payload paths or thread joining. These
-limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
-native platform collection or independent review.
+The compiler checkpoints above now include normal and exceptional coordinator
+cleanup reachability and the specified argument handoffs. They remain scoped
+checks: full arbitrary caller/alias provenance, linked unwinder/CFI restoration
+and every exceptional call-site identity are not proved. The compositional Kani
+proofs do not cover arbitrary streaming flush/payload paths or thread joining.
+The acceptance map retains these limitations separately from the completed
+bounded checks; neither is full multibuffer qualification, proof of crypto
+kernels, register erasure, native platform collection or independent review.
 
 ## Independent scheduled and streaming ParallelHash batch oracle
 

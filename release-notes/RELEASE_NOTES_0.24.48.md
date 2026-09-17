@@ -6,6 +6,12 @@ APIs, Keccak CPU/leaf batching and distinct hosted adapters are implemented;
 scheduled, streaming and threaded ParallelHash leaf groups are implemented.
 Complete qualification remains pending.
 
+The [acceptance status](../docs/hardened-batch-acceptance-status.md) summarizes
+the recorded development checks and their limits. Owner pentest, reviewed final
+native records and the unchanged release workflow remain outstanding. The
+checkpoint notes below preserve the evidence history, not a single current
+list of unfinished implementation tasks.
+
 ## Scope
 
 - Distinct clearing owners for SHA-224/256, the complete SHA-512 family including

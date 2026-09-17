@@ -1,7 +1,7 @@
 # Dedicated x86 SHA-512 execution
 
-Status: v0.24.49 development; exceptional pentest, full assurance integration
-and final release checks pending. No native SHA512 host measured.
+Status: v0.24.49 development checks complete; ready for exceptional owner
+pentest. Final evidence and release checks pending. No native SHA512 host measured.
 
 ## Exact capability
 
@@ -84,7 +84,10 @@ post-startup entry-loss and scalar-substitution probes also pass.
 The existing owner-cleanup MIR/LLVM/assembly checker passes at both compiler
 endpoints. Affected all-feature tests/doctests, strict scoped Clippy (with the
 existing chunks_exact style allowance), AArch64 compilation and bare-metal
-portable compilation also pass. These are development checks, not a full sweep.
+portable compilation also pass. Shared assurance/requirements metadata and
+their regressions, full workspace tests/doctests, all-feature Clippy,
+no-default-feature checks, documentation generation and dependency-isolation
+checks pass. These are development checks, not a full release sweep.
 Miri passes all 29 generic-build CPU tests, including fail-closed authority and
 scratch lifecycle checks; it does not interpret the new SHA512 instructions.
 The pinned nightly AddressSanitizer lane executes 1,024 dedicated comparisons,
@@ -99,8 +102,9 @@ Reproduce the dedicated tests with an owner-licensed SDE installation:
 python3 scripts/sha2/check-x86-sha512.py --sde /absolute/path/to/sde64 --asan
 ```
 
-Local development logs are `/tmp/brynja-v02449-x86-sha512-development.log`,
-`/tmp/brynja-v02449-affected-tests.log` and
+Local development logs are `/tmp/brynja-v02449-x86-sha512-integration.log`,
+`/tmp/brynja-v02449-workspace-tests.log`,
+`/tmp/brynja-v02449-workspace-clippy.log` and
 `/tmp/brynja-v02449-cleanup-{190,198}.log`; these transient files are not portable
 release receipts. The compiler/scope checks do not relabel earlier native records.
 
@@ -117,8 +121,8 @@ native performance, timing, heterogeneous-core/migration evidence, independent
 cryptographic verification, FIPS validation or military approval. Do not request
 a larger C8i assuming it adds the missing feature.
 
-Still required before milestone completion: finish shared assurance metadata and
-applicable scoped verification, then exceptional owner pentest. Existing Kani
+Still required before milestone completion: exceptional owner pentest, final
+source-bound evidence and the existing release verification. Existing Kani
 portable arithmetic/ownership proofs do not verify SHA512 intrinsics; no such
 claim is made. Native indices have not been rebound to this development delta;
 their old PASS records do not qualify the new code. The existing evidence-reuse workflow is

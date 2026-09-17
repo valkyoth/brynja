@@ -1330,7 +1330,7 @@
         "rationale": "The opt-in acceleration usability backfill is planned, not runtime activation or cryptographic approval. Before each implementation, bind its exact Rust intrinsic/target-feature and platform CPU/OS-state authorities, algorithm requirements, owned-secret lifecycle and public API profiles; existing algorithm vectors do not establish missing runtime dispatch, SIMD, native measurement or cleanup coverage."
       },
       "requirement_ids": [],
-      "scope": "Implement a first-party x86_64 SHA-512 instruction backend with the exact sha512 and avx/OS-state bundle, Rust 1.90 compatibility, public SHA-512-family routing and explicitly measured or emulator-only evidence.",
+      "scope": "Implement a first-party x86_64 SHA-512 instruction backend with the exact sha512, Rust-implied avx2 and avx/OS-state bundle, Rust 1.90 compatibility, public SHA-512-family routing and explicitly measured or emulator-only evidence.",
       "source_ids": [],
       "title": "x86 Dedicated SHA-512 Backend",
       "version": "0.24.49"

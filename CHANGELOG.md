@@ -3,8 +3,9 @@
 ## 0.24.49 development
 
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
-  exact SHA512/AVX2/AVX authority. Emulated correctness passes; full assurance and
-  exceptional pentest remain pending. Portable defaults and release rules are
+  exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration
+  pass; exceptional pentest and final release verification remain pending.
+  Portable defaults and release rules are
   unchanged. See [release notes](release-notes/RELEASE_NOTES_0.24.49.md).
 
 ## 0.24.48 candidate

@@ -165,7 +165,7 @@
     "crates/brynja-hash-sha2/src/sha512_state.rs": "621cda9793ff1f489533101cbdad23da26bd467a2909faa1e3c2fc334ebc0d10",
     "crates/brynja-hash-sha2/src/sha512_t.rs": "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
-    "docs/x86-sha512-execution.md": "14dd7f97fd6aaed2e2960f9fa1d5704ed963523c58134c7eb75ab80dba9ca494",
+    "docs/x86-sha512-execution.md": "a443e55d5268b7916cf41215543bb0f59edd641c11d458fa0ac92e2e37a26ca0",
     "package-policy.toml": "68f2bcbdc1c25e03d00460e5a0ba72a30b73aee2636a134874ac000b33a9e434",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/sha2/capture-sha2-hardened-native.py": "50cd60bc595fa44c85c8424863757aa61dd7cb6d930eb127f7bad4fc9f013ad4",

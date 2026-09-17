@@ -1,6 +1,21 @@
 # Changelog
 
-## 0.24.33 candidate
+## 0.24.48 candidate
+
+- Implement distinct default-off hardened SHA-2 and Keccak multibuffer owners,
+  typed secret outputs, hosted adapters and scheduled/streaming/threaded
+  ParallelHash integration. Ordinary non-erasing APIs remain public-data-only.
+- Record the clean supplied retest, four-platform native runtime evidence and
+  three Linux ASan/forced-LeakSanitizer runs. Final release/GitHub checks remain
+  pending; no crates are selected for publication.
+- Retain workload-dependent performance results and document the newly available
+  C8i/C8g hardware capabilities. Release gates are unchanged.
+  See [release notes](release-notes/RELEASE_NOTES_0.24.48.md).
+
+Intermediate milestones are documented in their individual files under
+`release-notes/`. Entries below retain their historical development context.
+
+## 0.24.33
 
 - Add complete opt-in ordinary SHA-2 static/hosted execution, including all
   general-t values, byte/bit streams and exact digest/work reporting.

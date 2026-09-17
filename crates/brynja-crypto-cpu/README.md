@@ -58,8 +58,9 @@ raw states and blocks remain caller-owned and must be cleared by their owner.
 The separate `sha512-hardened-batch` feature exposes the equivalent
 `sha512_hardened_batch` owners for four AVX2 or two NEON states. These are raw
 compression APIs; complete framing and typed secret outputs live in the SHA-2
-crate's `hardened_batch` and `hardened_batch512` modules. Hosted batch adapters
-and qualification remain pending. Neither feature enables or reuses ordinary
+crate's `hardened_batch` and `hardened_batch512` modules. Distinct hosted batch
+adapters are available in `brynja-crypto-cpu-std`; final release qualification
+remains pending. Neither feature enables or reuses ordinary
 batch storage. See the
 [implementation design](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
 
@@ -70,7 +71,8 @@ four independent states; little-endian AArch64 NEON permutes two. Use
 byte states. Both preserve caller state on rejection and clear all packed
 workspace regions on every exit. These are raw permutation APIs, not hashing or
 padding APIs; the caller still owns its state and all copies. Complete hardened
-Keccak batch framing and qualification remain under development.
+SHA-3/SHAKE/cSHAKE framing is available in `brynja-hash-sha3::hardened_batch`;
+final release qualification remains pending.
 
 The separate default-off `sha256-batch` feature exposes independent-message
 AVX2 (eight lanes) and AArch64 NEON (four lanes) compression. Both raw states and

@@ -102,7 +102,7 @@
     "crates/brynja-crypto-cpu-std/src/sponge.rs": "ecbaa3ea572ecf7fc951dda5bbff087a5e5b870cb8f521030a003a76a6297b9ef16d2cb8f4a8dc0aa1d3378723ea7496664082de848e9e93d609d3b4b03255e6",
     "crates/brynja-crypto-cpu-std/src/sponge/tests.rs": "98a1cda1b48afbe836574add2cd3c0f571eeec4da4a8d73bf589849020251ae1d23c2daadef348d1c39db7a75777b742c2a2ced94cc846c6d9c3a897e001a339",
     "crates/brynja-crypto-cpu/Cargo.toml": "6080d72c5eb0a412767a983e1ec70042465dafe7a30e1dcbe290075df71b3e097f5b5498d991642c2f8aa66f297a3e411685d1c1d1c5bc7977412839b5d0b1ed",
-    "crates/brynja-crypto-cpu/README.md": "89413035ebacb78ab464db233bdb6456be69e1a65e9bc993aa9606ac72ae0ea658ad17d9074b8101ffb7f32d4625b3ff54a20e544648cc230fc68f23f1c6e0bd",
+    "crates/brynja-crypto-cpu/README.md": "434d2336d5dc1ce546bcb7fb5decb37f8ffb1cfd9622027d7e3bc3b61545c89f6a94486951e693390e79b6000ece4eccd7ae08a12db84f85a7e747a124a93e8b",
     "crates/brynja-crypto-cpu/src/aarch64_sha2.rs": "a3743c66855458ce62c18e49752c49e9967ae1ada995e5e77b988432f1b49edcd19c8217c51620e1748cfc21a784b59577f0299ff0fadf853624a31cf5cdc153",
     "crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs": "23edd98915d871dc0c0a94b8817400f2b8c7942abd57db9c685e04b1dd5c7c5ce65073f0a626e7cfc65ed13c33f947252fd44925b3a6e048802832bdf9324d44",
     "crates/brynja-crypto-cpu/src/hardened_execution/keccak.rs": "33181434f88e76053730d2d597b13bdff1e0939e8c0395fff5de5bd70157351bfe7f572d86ac510842fd933fae8f9ad0537e5e5d0ea298f9b064bb1bc2152716",

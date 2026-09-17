@@ -1,16 +1,25 @@
 # Brynja v0.24.48
 
-Development in progress: hardened multibuffer hash owners. Not released; no
+Release candidate: hardened multibuffer hash owners. Not released; no
 crates selected for publication. The narrow and wide SHA-2 CPU and leaf batch
 APIs, Keccak CPU/leaf batching and distinct hosted adapters are implemented;
 scheduled, streaming and threaded ParallelHash leaf groups are implemented.
-Complete qualification remains pending.
+Final release verification and GitHub approval remain pending.
 
 The [acceptance status](../docs/hardened-batch-acceptance-status.md) summarizes
-the recorded development checks and their limits. Owner pentest, reviewed final
-native records and the unchanged release workflow remain outstanding. The
+the recorded development checks and their limits. The owner-supplied retest
+passed through `6978bc2a`, and [native runtime collection](../docs/hardened-batch-native-evidence.md)
+passed on AMD, Intel C8i, AWS Arm C8g and Apple M2 Pro. All fifteen shared-family
+records were refreshed, and forced ASan/LeakSanitizer passed on all three Linux
+hosts. The unchanged final release workflow remains outstanding. The
 checkpoint notes below preserve the evidence history, not a single current
 list of unfinished implementation tasks.
+
+Measured batching performance is workload-dependent; the native report retains
+slower results and the cloud hosts' core-count limitations. No universal speedup,
+independent cryptographic review, FIPS validation or military approval is claimed.
+The [hardware inventory](../docs/native-hardware-inventory.md) records future
+native testing options; C8i AVX-512 does not imply dedicated x86 SHA512 support.
 
 Owner-review follow-up adds [static/platform contract clarification](../docs/hardened-batch-platform-contract.md)
 and compiled generic/specialized admission and unsafe-import regressions. Runtime

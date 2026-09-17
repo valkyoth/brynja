@@ -1,0 +1,166 @@
+//! Experimental Arm SHA-512 boundary; no secret Rust values or stack operands.
+
+/// Compresses one big-endian block/state and erases all working registers.
+/// Caller state/input and pre-existing caller registers are not erased.
+///
+/// # Safety
+/// The deployment must provide NEON and SHA-512 instructions (Rust `sha3`) on
+/// every eligible CPU throughout the call. This prototype targets little-endian
+/// AArch64 ABIs; it does not establish that platform authority itself.
+#[target_feature(enable = "neon,sha3")]
+#[inline(never)]
+pub unsafe extern "C" fn compress(
+    state: &mut [u8; 64],
+    block: &[u8; 128],
+    scratch: &mut [u8; 704],
+    constants: &[u64; 80],
+) {
+    const {
+        assert!(cfg!(target_endian = "little"));
+    }
+    // SAFETY: All four exact borrows stay live/non-aliasing. X4 is a public
+    // fixed offset: initialization 0..128, expansion 128..640, rounds 0..640,
+    // cleanup 0..704. Expansion X7 is the schedule base plus X4; negative
+    // offsets -128/-120/-56/-16 therefore remain in its initialized prefix.
+    // Every vector load/store covers 16 bytes within the fixed arrays.
+    // No stack, call or secret Rust result crosses this assembly boundary.
+    // All working GPRs and vectors are declared and erased; V8–15 are untouched
+    // (their lower D halves are ABI-preserved). NZCV is reset with a public CMP.
+    unsafe {
+        core::arch::asm!(
+            "// BRYNJA_SECRET_BEGIN",
+            "mov x4, #0",
+            "2:",
+            "ldr x5, [{block}, x4]",
+            "rev x5, x5",
+            "str x5, [{scratch}, x4]",
+            "add x4, x4, #8",
+            "cmp x4, #128",
+            "b.ne 2b",
+            "3:",
+            "add x7, {scratch}, x4",
+            "ldur x5, [x7, #-120]",
+            "ror x6, x5, #1",
+            "eor x6, x6, x5, ror #8",
+            "lsr x5, x5, #7",
+            "eor x6, x6, x5",
+            "ldur x5, [x7, #-16]",
+            "ror x9, x5, #19",
+            "eor x9, x9, x5, ror #61",
+            "lsr x5, x5, #6",
+            "eor x9, x9, x5",
+            "add x6, x6, x9",
+            "ldur x5, [x7, #-128]",
+            "add x6, x6, x5",
+            "ldur x5, [x7, #-56]",
+            "add x6, x6, x5",
+            "str x6, [x7]",
+            "add x4, x4, #8",
+            "cmp x4, #640",
+            "b.ne 3b",
+            "ldp q0, q1, [{state}]",
+            "ldp q2, q3, [{state}, #32]",
+            "rev64 v0.16b, v0.16b",
+            "rev64 v1.16b, v1.16b",
+            "rev64 v2.16b, v2.16b",
+            "rev64 v3.16b, v3.16b",
+            "mov v16.16b, v0.16b",
+            "mov v17.16b, v1.16b",
+            "mov v18.16b, v2.16b",
+            "mov v19.16b, v3.16b",
+            "mov x4, #0",
+            "4:",
+            // Pair 0: GH := H2(mid, CD, AB); CD += mid.
+            "ldr q4, [{scratch}, x4]",
+            "ldr q20, [{constants}, x4]",
+            "add v4.2d, v4.2d, v20.2d",
+            "ext v4.16b, v4.16b, v4.16b, #8",
+            "add v5.2d, v4.2d, v3.2d",
+            "ext v6.16b, v2.16b, v3.16b, #8",
+            "ext v7.16b, v1.16b, v2.16b, #8",
+            "sha512h q5, q6, v7.2d",
+            "mov v3.16b, v5.16b",
+            "sha512h2 q3, q1, v0.2d",
+            "add v1.2d, v1.2d, v5.2d",
+            "add x4, x4, #16",
+            // Pair 1: EF := H2(mid, AB, GH); AB += mid.
+            "ldr q4, [{scratch}, x4]",
+            "ldr q20, [{constants}, x4]",
+            "add v4.2d, v4.2d, v20.2d",
+            "ext v4.16b, v4.16b, v4.16b, #8",
+            "add v5.2d, v4.2d, v2.2d",
+            "ext v6.16b, v1.16b, v2.16b, #8",
+            "ext v7.16b, v0.16b, v1.16b, #8",
+            "sha512h q5, q6, v7.2d",
+            "mov v2.16b, v5.16b",
+            "sha512h2 q2, q0, v3.2d",
+            "add v0.2d, v0.2d, v5.2d",
+            "add x4, x4, #16",
+            // Pair 2: CD := H2(mid, GH, EF); GH += mid.
+            "ldr q4, [{scratch}, x4]",
+            "ldr q20, [{constants}, x4]",
+            "add v4.2d, v4.2d, v20.2d",
+            "ext v4.16b, v4.16b, v4.16b, #8",
+            "add v5.2d, v4.2d, v1.2d",
+            "ext v6.16b, v0.16b, v1.16b, #8",
+            "ext v7.16b, v3.16b, v0.16b, #8",
+            "sha512h q5, q6, v7.2d",
+            "mov v1.16b, v5.16b",
+            "sha512h2 q1, q3, v2.2d",
+            "add v3.2d, v3.2d, v5.2d",
+            "add x4, x4, #16",
+            // Pair 3: AB := H2(mid, EF, CD); EF += mid.
+            "ldr q4, [{scratch}, x4]",
+            "ldr q20, [{constants}, x4]",
+            "add v4.2d, v4.2d, v20.2d",
+            "ext v4.16b, v4.16b, v4.16b, #8",
+            "add v5.2d, v4.2d, v0.2d",
+            "ext v6.16b, v3.16b, v0.16b, #8",
+            "ext v7.16b, v2.16b, v3.16b, #8",
+            "sha512h q5, q6, v7.2d",
+            "mov v0.16b, v5.16b",
+            "sha512h2 q0, q2, v1.2d",
+            "add v2.2d, v2.2d, v5.2d",
+            "add x4, x4, #16",
+            "cmp x4, #640",
+            "b.ne 4b",
+            "add v0.2d, v0.2d, v16.2d",
+            "add v1.2d, v1.2d, v17.2d",
+            "add v2.2d, v2.2d, v18.2d",
+            "add v3.2d, v3.2d, v19.2d",
+            "rev64 v0.16b, v0.16b",
+            "rev64 v1.16b, v1.16b",
+            "rev64 v2.16b, v2.16b",
+            "rev64 v3.16b, v3.16b",
+            "stp q0, q1, [{state}]",
+            "stp q2, q3, [{state}, #32]",
+            "mov x4, #0",
+            "5:",
+            "str xzr, [{scratch}, x4]",
+            "add x4, x4, #8",
+            "cmp x4, #704",
+            "b.ne 5b",
+            "// BRYNJA_REGISTER_ERASE",
+            "movi v0.16b, #0", "movi v1.16b, #0",
+            "movi v2.16b, #0", "movi v3.16b, #0",
+            "movi v4.16b, #0", "movi v5.16b, #0",
+            "movi v6.16b, #0", "movi v7.16b, #0",
+            "movi v16.16b, #0", "movi v17.16b, #0",
+            "movi v18.16b, #0", "movi v19.16b, #0",
+            "movi v20.16b, #0",
+            "mov x4, xzr", "mov x5, xzr", "mov x6, xzr",
+            "mov x7, xzr", "mov x9, xzr",
+            "cmp xzr, xzr",
+            "// BRYNJA_SECRET_END",
+            state = in(reg) state.as_mut_ptr(),
+            block = in(reg) block.as_ptr(),
+            scratch = in(reg) scratch.as_mut_ptr(),
+            constants = in(reg) constants.as_ptr(),
+            out("x4") _, out("x5") _, out("x6") _, out("x7") _, out("x9") _,
+            out("v0") _, out("v1") _, out("v2") _, out("v3") _,
+            out("v4") _, out("v5") _, out("v6") _, out("v7") _,
+            out("v16") _, out("v17") _, out("v18") _, out("v19") _, out("v20") _,
+            options(nostack),
+        );
+    }
+}

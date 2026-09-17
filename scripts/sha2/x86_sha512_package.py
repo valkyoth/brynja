@@ -54,10 +54,10 @@ def check(sde, environment):
                     ('word(1)? as i64, word(2)? as i64', 'word(2)? as i64, word(1)? as i64'),
                 ]
             else:
-                path = cpu / 'x86_sha512.rs'
+                path = cpu / 'x86_sha512/secret.rs'
                 cases = [
-                    ('words::expand(&mut scratch.schedule, block)?;', 'let _ = block;'),
-                    ('[aa, bb, cc, dd, ee, ff, gg, hh]', '[bb, aa, cc, dd, ee, ff, gg, hh]'),
+                    ('"mov rax, [{block} + rcx]",', '"xor eax, eax # {block}",'),
+                    ('0x2028000830381018', '0x2028000830381810'),
                 ]
             original = path.read_text()
             for before, after in cases:

@@ -86,7 +86,7 @@ def main():
             for instruction in ('vsha512msg1', 'vsha512msg2', 'vsha512rnds2'):
                 if not re.search(r'^\s*' + instruction + r'\s', assembly, re.M):
                     raise RuntimeError('missing emitted instruction: ' + instruction)
-            if 'compress_sha512' not in assembly or 'secret_sha512' not in assembly:
+            if 'compress_sha512' not in assembly or 'BRYNJA_SECRET_BEGIN' not in assembly:
                 raise RuntimeError('ordinary/secret dedicated codegen symbol absent')
             print(f'DEDICATED_X86_SHA512_CODEGEN: {compiler}; three instructions; ordinary/secret symbols')
             for fixture, marker in (

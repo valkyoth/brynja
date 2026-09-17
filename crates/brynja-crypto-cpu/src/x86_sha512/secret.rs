@@ -5,11 +5,11 @@
 //! enclosing function may spill pointers or preserve caller registers; those
 //! are NOT fresh copies of this block's secret intermediates.
 
+#![allow(unsafe_code)]
+
 use core::arch::asm;
 
-macro_rules! boundary {
-    ($abi:literal) => {
-/// Experimental compression boundary; callers retain ownership of input/state.
+/// Private compression boundary; callers retain ownership of input/state.
 ///
 /// # Safety
 /// SHA512, AVX2/AVX and OS YMM context support must hold throughout execution on
@@ -17,7 +17,7 @@ macro_rules! boundary {
 /// exact, initialized, non-aliasing writable state/scratch and readable input.
 #[target_feature(enable = "sha512,avx2,avx")]
 #[inline(never)]
-pub unsafe extern $abi fn compress(
+pub unsafe extern "C" fn compress(
     state: &mut [u8; 64],
     block: &[u8; 128],
     scratch: &mut [u8; 704],
@@ -161,10 +161,3 @@ pub unsafe extern $abi fn compress(
         );
     }
 }
-    };
-}
-
-#[cfg(not(feature = "win64-probe"))]
-boundary!("C");
-#[cfg(feature = "win64-probe")]
-boundary!("win64");

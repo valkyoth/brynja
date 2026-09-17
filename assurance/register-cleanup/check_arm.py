@@ -105,7 +105,9 @@ def execution(mutations):
         absolute = (ROOT / "src/../../../crates/brynja-crypto-cpu/src/sha512_schedule.rs").resolve()
         lib.write_text(lib.read_text().replace("../../../crates/brynja-crypto-cpu/src/sha512_schedule.rs", absolute.as_posix()))
         source = fixture / "src/arm_sha512.rs"
-        original = source.read_text()
+        lib.write_text(lib.read_text().replace(
+            '../../../crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs', 'arm_sha512.rs'))
+        original = (ROOT.parents[1] / 'crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs').read_text()
         poisoned = original.replace('"// BRYNJA_REGISTER_ERASE",', POISON + '\n"// BRYNJA_REGISTER_ERASE",')
         cases = [("unmodified", original, True), ("poison before cleanup", poisoned, True)]
         if mutations:

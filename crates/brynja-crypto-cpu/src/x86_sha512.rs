@@ -9,6 +9,8 @@ use core::arch::x86_64::{
 use crate::sha512_schedule::ROUND_CONSTANTS;
 use crate::static_execution::Error;
 mod authority;
+#[cfg(feature = "hardened-execution")]
+mod secret;
 mod words;
 pub(crate) use authority::Permit;
 
@@ -23,88 +25,23 @@ pub(crate) fn compress_secret(
     scratch: &mut crate::hardened_execution::scratch::Scratch,
 ) -> Result<(), Error> {
     permit.check()?;
-    // SAFETY: The sealed hardened session has the same SHA512/AVX2/AVX and OS-state
-    // authority as the ordinary route. Only its distinct clearing scratch is
-    // used; the operation guard erases both regions on return and unwind.
-    unsafe { secret_sha512(state, block, scratch) }
-}
-
-#[cfg(feature = "hardened-execution")]
-#[target_feature(enable = "sha512,avx2,avx")]
-#[inline(never)]
-unsafe fn secret_sha512(
-    state: &mut [u8; 64],
-    block: &[u8; 128],
-    scratch: &mut crate::hardened_execution::scratch::Scratch,
-) -> Result<(), Error> {
-    use words::read;
-    // A distinct owner-backed scalar schedule avoids the ordinary kernel's
-    // non-clearing arrays. Dedicated round instructions still perform all
-    // compression rounds. Registers and compiler-created copies are residuals.
-    words::expand(&mut scratch.schedule, block)?;
-    let mut abef = _mm256_set_epi64x(
-        read(state, 0)? as i64,
-        read(state, 1)? as i64,
-        read(state, 4)? as i64,
-        read(state, 5)? as i64,
-    );
-    let mut cdgh = _mm256_set_epi64x(
-        read(state, 2)? as i64,
-        read(state, 3)? as i64,
-        read(state, 6)? as i64,
-        read(state, 7)? as i64,
-    );
-    for (chunk, [k0, k1, k2, k3]) in ROUND_CONSTANTS.as_chunks::<4>().0.iter().enumerate() {
-        let round = words::round(chunk)?;
-        cdgh = _mm256_sha512rnds2_epi64(
-            cdgh,
-            abef,
-            _mm_set_epi64x(
-                read(
-                    &scratch.schedule,
-                    round.checked_add(1).ok_or(Error::InternalDomain)?,
-                )?
-                .wrapping_add(*k1) as i64,
-                read(&scratch.schedule, round)?.wrapping_add(*k0) as i64,
-            ),
-        );
-        abef = _mm256_sha512rnds2_epi64(
-            abef,
-            cdgh,
-            _mm_set_epi64x(
-                read(
-                    &scratch.schedule,
-                    round.checked_add(3).ok_or(Error::InternalDomain)?,
-                )?
-                .wrapping_add(*k3) as i64,
-                read(
-                    &scratch.schedule,
-                    round.checked_add(2).ok_or(Error::InternalDomain)?,
-                )?
-                .wrapping_add(*k2) as i64,
-            ),
-        );
-    }
-    // SAFETY: The two unaligned 32-byte stores cover exactly the exclusively
-    // borrowed 64-byte vector owner, which remains live until guard cleanup.
+    use crate::hardened_execution::scratch::Scratch;
+    // The repr(C) owner consists of two initialized byte arrays without padding.
+    // Bind the opaque kernel's contiguous view to that exact private layout.
+    const _: () = assert!(core::mem::size_of::<Scratch>() == 704);
+    const _: () = assert!(core::mem::offset_of!(Scratch, schedule) == 0);
+    const _: () = assert!(core::mem::offset_of!(Scratch, vectors) == 640);
+    // SAFETY: The checked permit establishes SHA512/AVX2/AVX and OS state.
+    // repr(C), the assertions above, and the exclusive live Scratch borrow
+    // justify the temporary 704-byte view. It never escapes this call; no
+    // other scratch reference is used while it is borrowed by the kernel.
     unsafe {
-        _mm256_storeu_si256(scratch.vectors.as_mut_ptr().cast::<__m256i>(), abef);
-        _mm256_storeu_si256(scratch.vectors.as_mut_ptr().add(32).cast::<__m256i>(), cdgh);
-    }
-    // Destructuring fixed arrays proves every source/destination lane exists.
-    // No fallible access occurs after the first caller-state write.
-    let [ff, ee, bb, aa, hh, gg, dd, cc] = scratch.vectors.as_chunks::<8>().0 else {
-        return Err(Error::InternalDomain);
-    };
-    for (word, lane) in state
-        .as_chunks_mut::<8>()
-        .0
-        .iter_mut()
-        .zip([aa, bb, cc, dd, ee, ff, gg, hh])
-    {
-        *word = u64::from_be_bytes(*word)
-            .wrapping_add(u64::from_le_bytes(*lane))
-            .to_be_bytes();
+        secret::compress(
+            state,
+            block,
+            &mut *core::ptr::from_mut(scratch).cast::<[u8; 704]>(),
+            &ROUND_CONSTANTS,
+        );
     }
     Ok(())
 }

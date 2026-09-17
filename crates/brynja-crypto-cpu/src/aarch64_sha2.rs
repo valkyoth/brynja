@@ -1,5 +1,8 @@
 #![allow(unsafe_code)]
 
+#[cfg(feature = "hardened-execution")]
+mod secret512;
+
 use core::arch::aarch64::{
     vaddq_u32, vaddq_u64, vextq_u64, vld1q_u32, vld1q_u64, vsha256h2q_u32, vsha256hq_u32,
     vsha512h2q_u64, vsha512hq_u64, vst1q_u32, vst1q_u64,
@@ -100,99 +103,20 @@ pub(crate) fn compress512_secret(
     block: &[u8; 128],
     scratch: &mut crate::hardened_execution::scratch::Scratch,
 ) {
-    // SAFETY: Sealed session checks complete NEON/SHA3/SHA512 authority and
-    // every vector access is confined to the aligned scratch owner.
-    unsafe { secret_sha512(state, block, scratch) }
-}
-
-#[cfg(feature = "hardened-execution")]
-#[target_feature(enable = "sha3")]
-unsafe fn secret_sha512(
-    state: &mut [u8; 64],
-    block: &[u8; 128],
-    scratch: &mut crate::hardened_execution::scratch::Scratch,
-) {
-    use crate::hardened_execution::scratch::{read64, write64};
-    scratch.expand64(block);
-    for i in 0..8 {
-        // write64 encodes BE bytes; .to_be() first makes that a native-endian
-        // word in memory for vld1q_u64. Neither conversion is redundant.
-        write64(&mut scratch.vectors, i, read64(state, i).to_be());
-    }
-    // SAFETY: Four aligned two-word loads cover precisely 64 owned bytes.
-    let (mut ab, mut cd, mut ef, mut gh) = unsafe {
-        (
-            vld1q_u64(scratch.vectors.as_ptr().cast()),
-            vld1q_u64(scratch.vectors.as_ptr().add(16).cast()),
-            vld1q_u64(scratch.vectors.as_ptr().add(32).cast()),
-            vld1q_u64(scratch.vectors.as_ptr().add(48).cast()),
-        )
-    };
-    let (saved_ab, saved_cd, saved_ef, saved_gh) = (ab, cd, ef, gh);
-    for (pair, constants) in ROUND_CONSTANTS_512.as_chunks::<2>().0.iter().enumerate() {
-        for (j, constant) in constants.iter().enumerate() {
-            let value = read64(&scratch.schedule, pair.saturating_mul(2).saturating_add(j))
-                .wrapping_add(*constant);
-            // The same BE-writer/native-load bridge applies to round words.
-            write64(&mut scratch.vectors, j, value.to_be());
-        }
-        // SAFETY: One aligned sixteen-byte input vector in the scratch owner.
-        let initial = unsafe { vld1q_u64(scratch.vectors.as_ptr().cast()) };
-        match pair % 4 {
-            0 => {
-                let sum = vaddq_u64(vextq_u64::<1>(initial, initial), gh);
-                let mid = vsha512hq_u64(sum, vextq_u64::<1>(ef, gh), vextq_u64::<1>(cd, ef));
-                gh = vsha512h2q_u64(mid, cd, ab);
-                cd = vaddq_u64(cd, mid);
-            }
-            1 => {
-                let sum = vaddq_u64(vextq_u64::<1>(initial, initial), ef);
-                let mid = vsha512hq_u64(sum, vextq_u64::<1>(cd, ef), vextq_u64::<1>(ab, cd));
-                ef = vsha512h2q_u64(mid, ab, gh);
-                ab = vaddq_u64(ab, mid);
-            }
-            2 => {
-                let sum = vaddq_u64(vextq_u64::<1>(initial, initial), cd);
-                let mid = vsha512hq_u64(sum, vextq_u64::<1>(ab, cd), vextq_u64::<1>(gh, ab));
-                cd = vsha512h2q_u64(mid, gh, ef);
-                gh = vaddq_u64(gh, mid);
-            }
-            _ => {
-                let sum = vaddq_u64(vextq_u64::<1>(initial, initial), ab);
-                let mid = vsha512hq_u64(sum, vextq_u64::<1>(gh, ab), vextq_u64::<1>(ef, gh));
-                ab = vsha512h2q_u64(mid, ef, cd);
-                ef = vaddq_u64(ef, mid);
-            }
-        }
-    }
-    // SAFETY: Four aligned, exclusive sixteen-byte stores cover this owner.
+    use crate::hardened_execution::scratch::Scratch;
+    const _: () = assert!(core::mem::size_of::<Scratch>() == 704);
+    const _: () = assert!(core::mem::offset_of!(Scratch, schedule) == 0);
+    const _: () = assert!(core::mem::offset_of!(Scratch, vectors) == 640);
+    // SAFETY: The sealed session checks NEON/SHA3/SHA512 platform authority.
+    // repr(C) and the asserted offsets prove the two initialized byte arrays
+    // form this exact contiguous view. Its exclusive borrow cannot escape the
+    // call, and the original Scratch reference is not used during that borrow.
     unsafe {
-        vst1q_u64(scratch.vectors.as_mut_ptr().cast(), vaddq_u64(ab, saved_ab));
-        vst1q_u64(
-            scratch.vectors.as_mut_ptr().add(16).cast(),
-            vaddq_u64(cd, saved_cd),
-        );
-        vst1q_u64(
-            scratch.vectors.as_mut_ptr().add(32).cast(),
-            vaddq_u64(ef, saved_ef),
-        );
-        vst1q_u64(
-            scratch.vectors.as_mut_ptr().add(48).cast(),
-            vaddq_u64(gh, saved_gh),
-        );
-    }
-    for i in 0..8 {
-        let value = read64(&scratch.vectors, i);
-        // vst1q_u64 stored native bytes; undo read64's BE interpretation
-        // before writing the external big-endian chaining state.
-        write64(
+        secret512::compress(
             state,
-            i,
-            if cfg!(target_endian = "little") {
-                value.swap_bytes()
-            } else {
-                value
-            },
+            block,
+            &mut *core::ptr::from_mut(scratch).cast::<[u8; 704]>(),
+            &ROUND_CONSTANTS_512,
         );
     }
 }

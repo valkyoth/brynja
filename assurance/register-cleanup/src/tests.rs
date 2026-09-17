@@ -6,6 +6,16 @@ use crate::constants::ROUND_CONSTANTS;
 #[cfg(target_arch = "x86_64")]
 use crate::sha512::compress;
 
+// The cross-ABI driver changes only the ABI in its temporary production-source
+// copy. Refuse to compile a Win64 observer paired with a SysV function: directly
+// enabling this test-only feature must never create a mismatched machine call.
+#[cfg(all(
+    target_arch = "x86_64",
+    not(target_os = "windows"),
+    feature = "win64-probe"
+))]
+const _: unsafe extern "win64" fn(&mut [u8; 64], &[u8; 128], &mut [u8; 704], &[u64; 80]) = compress;
+
 // This is an execution test, never a silent pass on an unsupported build.
 #[test]
 #[cfg_attr(

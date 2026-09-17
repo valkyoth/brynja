@@ -27,7 +27,7 @@ provider, build script, or FIPS milestone cannot create an exception.
 
 Repository checks reject foreign source and native binary artifacts in
 Brynja-owned package trees, package build scripts, Cargo native-link metadata,
-build dependencies, Rust foreign-ABI declarations, and native-library link
+build dependencies, Rust foreign-ABI imports, and native-library link
 attributes. The unsafe inventory independently rejects unapproved low-level
 code and FFI. Cargo metadata, lockfile, SBOM, package archives, and admission
 checks reject an unreviewed dependency or build edge.
@@ -38,6 +38,12 @@ small, hashed, first-party `brynja-crypto-cpu` implementation symbols after the
 primitive- and architecture-specific unsafe, emitted-code, native-hardware,
 side-channel, differential, KAT, and audit gates in the release plan. External
 assembly files, prebuilt objects, and vendor libraries remain prohibited.
+Two exact private SHA-512 Rust function definitions use the C calling convention
+solely for a stable, observable register boundary (`x86_sha512/secret.rs` and
+`aarch64_sha2/secret512.rs`). They contain first-party Rust inline assembly, not
+external symbols, FFI imports or library calls. Their complete source is pinned
+by the unsafe inventory; foreign declarations and link attributes remain forbidden
+even inside these two files. This is not an exception allowing foreign crypto.
 Version 0.13.2 reserved that package and eight symbol identities. Versions
 0.22.1 and 0.22.2 implement exact unadmitted x86 SHA, AArch64 SHA2, and RV64
 Zknh symbols under separately hash-bound low-level exceptions; no ordinary or

@@ -32,6 +32,18 @@ NATIVE_SUFFIXES = {
     ".so",
 }
 FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"(?:C|system|stdcall|cdecl)"', re.DOTALL)
+# These are Rust function DEFINITIONS, not imported foreign implementations.
+# The separate unsafe inventory binds their complete first-party assembly bytes.
+LOCAL_C_ABI = {
+    Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"),
+    Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"),
+}
+LOCAL_SIGNATURE = '''pub unsafe extern "C" fn compress(
+    state: &mut [u8; 64],
+    block: &[u8; 128],
+    scratch: &mut [u8; 704],
+    constants: &[u64; 80],
+) {'''
 NATIVE_LINK = re.compile(r"#\s*\[\s*link(?:_name|_section)?\b")
 NATIVE_INCLUDE = re.compile(
     r"include_bytes\s*!\s*\([^)]*\.(?:a|bc|dll|dylib|lib|ll|o|obj|so)[\"']",
@@ -100,7 +112,12 @@ def validate(root: Path) -> None:
             validate_manifest(path)
         if path.suffix == ".rs":
             text = path.read_text(encoding="utf-8")
-            if FOREIGN_ABI.search(text):
+            abi_text = text
+            if relative in LOCAL_C_ABI:
+                if text.count(LOCAL_SIGNATURE) != 1:
+                    fail(f"local Rust ABI definition changed: {relative}")
+                abi_text = text.replace(LOCAL_SIGNATURE, '', 1)
+            if FOREIGN_ABI.search(abi_text):
                 fail(f"foreign ABI declaration is forbidden: {relative}")
             if NATIVE_LINK.search(text):
                 fail(f"native link attribute is forbidden: {relative}")

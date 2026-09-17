@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parent
+PRODUCTION = ROOT.parents[1] / "crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"
 FEATURES = "-C target-feature=+sha512,+avx2,+avx"
 REGISTERS = ("eax", "ecx", "edx", "r8d", "r9d", "r10d", "r11d")
 ERASE = tuple(f'"xor {r}, {r}",' for r in REGISTERS) + tuple(
@@ -122,8 +123,19 @@ def execution(sde, mutations):
         lib = fixture / "src/lib.rs"
         absolute = (ROOT / "src/../../../crates/brynja-crypto-cpu/src/sha512_schedule.rs").resolve()
         lib.write_text(lib.read_text().replace("../../../crates/brynja-crypto-cpu/src/sha512_schedule.rs", absolute.as_posix()))
+        # The normal fixture directly includes the production kernel. Mutants
+        # run on a private copy of those same bytes, never the working kernel.
+        lib.write_text(lib.read_text().replace(
+            '../../../crates/brynja-crypto-cpu/src/x86_sha512/secret.rs', 'sha512.rs'))
         source = fixture / "src/sha512.rs"
-        original = source.read_text()
+        original = PRODUCTION.read_text()
+        source.write_text(original)
+        mismatch = run(['cargo', '+1.98.1', 'check', '--locked', '--offline', '--tests',
+                        '--manifest-path', str(fixture / 'Cargo.toml'), '--target',
+                        'x86_64-unknown-linux-gnu', '--features', 'win64-probe'],
+                       clean_env(), success=False)
+        if mismatch.returncode == 0 or 'expected "win64" fn, found "C" fn' not in mismatch.stderr:
+            raise AssertionError('cross-ABI observer did not reject a mismatched function type')
         poisoned = original.replace('"# BRYNJA_REGISTER_ERASE",', POISON + '\n"# BRYNJA_REGISTER_ERASE",')
         cases = [("unmodified", original, True), ("poison-before-cleanup", poisoned, True)]
         if mutations:
@@ -137,7 +149,8 @@ def execution(sde, mutations):
         for compiler in ("1.90.0", "1.98.1"):
             for optimized, abi in itertools.product((False, True), ("sysv", "win64")):
                 for name, contents, expected in cases:
-                    source.write_text(contents)
+                    source.write_text(contents.replace('extern "C"', 'extern "win64"')
+                                      if abi == "win64" else contents)
                     env = clean_env()
                     env["RUSTFLAGS"] = FEATURES
                     env["CARGO_TARGET_DIR"] = str(Path(directory) / "build")

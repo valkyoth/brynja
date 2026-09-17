@@ -54,6 +54,14 @@ schedule/vector regions clear on return, error and recoverable unwind; ordinary
 `execution` APIs remain public-only and non-erasing. Registers, compiler copies,
 spills, process abort and platform storage remain outside this clearing claim.
 
+The in-progress all-backend remediation now gives the private x86 and Arm
+SHA-512 compression kernels a narrower, separately tested normal-return
+boundary: their secret loads/computation/stores occur within opaque assembly,
+followed by scratch and working-register erasure before exit. This does not
+extend that guarantee to every caller, portable fallback or other kernel.
+Native ABI qualification and the remaining ports are pending; see the
+[source-bound checks and inventory](../assurance/register-cleanup/README.md).
+
 The low-level unsafe runtime platform import supports the new identity with the
 same explicit whole-lifetime obligation. The safe hosted x86 adapter still
 rejects missing migration guarantees, even if CPUID has SHA512. This milestone

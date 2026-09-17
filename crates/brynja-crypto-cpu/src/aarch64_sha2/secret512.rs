@@ -1,11 +1,12 @@
-//! Experimental Arm SHA-512 boundary; no secret Rust values or stack operands.
+//! Arm SHA-512 compression boundary; no secret Rust values or stack operands.
+#![allow(unsafe_code)]
 
 /// Compresses one big-endian block/state and erases all working registers.
 /// Caller state/input and pre-existing caller registers are not erased.
 ///
 /// # Safety
 /// The deployment must provide NEON and SHA-512 instructions (Rust `sha3`) on
-/// every eligible CPU throughout the call. This prototype targets little-endian
+/// every eligible CPU throughout the call. This boundary targets little-endian
 /// AArch64 ABIs; it does not establish that platform authority itself.
 #[target_feature(enable = "neon,sha3")]
 #[inline(never)]

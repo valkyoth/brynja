@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: forty-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: fifty-one exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only forty-nine exact modules: the private core volatile clearer; the
+Rust in only fifty-one exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -46,10 +46,21 @@ three dedicated instructions. Rust implicitly enables AVX2 for SHA512, so the
 authority explicitly checks that requirement too. AVX-512 is not required.
 
 The separate hardened entry uses the existing clearing schedule/vector owner,
-never the ordinary kernel or its arrays. Its scalar schedule and dedicated
-round instructions write only the owner-backed 64-byte vector region. The
-operation guard clears both regions on success/error and recoverable unwind.
-Registers, compiler copies/spills and abort remain residual limitations.
+never the ordinary kernel or its arrays. Two private modules,
+`x86_sha512/secret.rs` and `aarch64_sha2/secret512.rs`, keep SHA-512 secret loads,
+schedule expansion, rounds, feed-forward, scratch erasure and working-register
+erasure inside one opaque assembly block each. No secret Rust value leaves the
+block; no call or stack access occurs inside it. The `repr(C)` owner's exact
+size and field offsets are compile-time assertions before its exclusive borrow
+is viewed as 704 initialized bytes. The existing operation guard still clears
+both regions on success/error and recoverable unwind.
+
+These two kernel boundaries are under implementation-author verification, not
+complete qualification of the caller, other backends, or portable fallbacks.
+Pre-existing caller registers and caller-owned buffers are not erased. Abort,
+interruption during computation, OS snapshots and platform storage remain
+outside this normal-return boundary. See the source-bound
+[register-cleanup checks](../assurance/register-cleanup/README.md).
 
 Static construction requires the complete compiler bundle and deployment-wide
 CPU/OS support. Unsafe platform import retains its lifetime-wide obligation;

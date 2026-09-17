@@ -97,6 +97,33 @@ def test() -> None:
     )
 
 
+def local_abi_definitions() -> None:
+    repository = Path(__file__).resolve().parents[2]
+    for relative in first_party_rust_crypto.LOCAL_C_ABI:
+        with tempfile.TemporaryDirectory(prefix='brynja-local-abi-') as temporary:
+            root = Path(temporary)
+            fixture(root)
+            source = (repository / relative).read_text()
+            destination = root / relative
+            destination.parent.mkdir(parents=True)
+            destination.write_text(source)
+            first_party_rust_crypto.validate(root)
+            for mutated, message in (
+                (source.replace(') {', ');', 1), 'local Rust ABI definition'),
+                (source + '\nunsafe extern "C" { fn foreign_crypto(); }', 'foreign ABI'),
+                (source + '\nunsafe extern "system" { fn foreign_crypto(); }', 'foreign ABI'),
+                (source + '\n#[link(name="crypto")] mod native {}', 'native link'),
+            ):
+                destination.write_text(mutated)
+                reject(root, message)
+            destination.write_text(source)
+            unreviewed = destination.with_name('unreviewed.rs')
+            unreviewed.write_text(source)
+            reject(root, 'foreign ABI')
+
+
 if __name__ == "__main__":
     test()
+    local_abi_definitions()
     print("first-party Rust cryptography policy rejects nine native-code regressions")
+    print("local Rust ABI definitions reject ten foreign import/link/relocation regressions")

@@ -1,9 +1,11 @@
-# Register-cleanup prototype
+# Register-cleanup development checks
 
-Experimental assurance code, **not a production backend or release evidence**.
+Development assurance code, **not complete release evidence**.
 The owner requested register-remanence remediation across the hardened backends
-before another pentest. Production code and release gates are unchanged while
-the replacement boundary is being established here. Finding F1 remains open.
+before another pentest. The SHA-512 ports now use this boundary in production;
+the fixture directly includes their actual private source files, rather than
+testing duplicate implementations. Other ports and native qualification remain
+pending. Release gates are unchanged. Finding F1 remains open.
 
 ## Intended boundary
 
@@ -13,7 +15,7 @@ Caller-owned input, output, and pre-existing caller register contents are not
 erased. This is a kernel-boundary guarantee, not an end-to-end promise covering
 all callers, framing, output conversion, or the whole process.
 
-The prototype keeps **all secret loads and computation inside one opaque,
+The SHA-512 boundary keeps **all secret loads and computation inside one opaque,
 side-effecting assembly block**. Only pointers enter; no secret Rust values
 leave. The block uses fixed, reviewed memory bounds, no stack, no calls, and
 only public loop counters. It clears its scratch and every working register
@@ -32,12 +34,12 @@ cleanup. Signals, core dumps, abort, physical registers/caches, swap and OS
 copies remain outside this normal-return contract. No FIPS, military suitability
 or independent verification claim follows from these tests.
 
-## Current experiment
+## Current implementation-author checks
 
 | Candidate | Algorithm execution | Return-register observer | Production integration |
 | --- | --- | --- | --- |
-| Dedicated x86 SHA-512 | Intel SDE, 1,024 arbitrary state/block pairs per positive run | Seven integer registers plus three complete YMM registers | Pending |
-| Arm SHA-512 | QEMU, 1,024 arbitrary state/block pairs per positive run | Five integer registers plus thirteen vector registers; D8–15 caller canaries | Pending |
+| Dedicated x86 SHA-512 | Intel SDE, 1,024 arbitrary state/block pairs per positive run | Seven integer registers plus three complete YMM registers | Integrated; native qualification pending |
+| Arm SHA-512 | QEMU, 1,024 arbitrary state/block pairs per positive run | Five integer registers plus thirteen vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 
 The scalar schedule and feed-forward also live inside the block; this is not
 merely a `vzeroupper`/`vzeroall` epilogue. The ordinary implementation is not
@@ -55,7 +57,7 @@ The compiled mutation campaign poisons each working register before cleanup,
 then independently removes its erasure. Separate mutations remove scratch
 clearing or corrupt the final lane ordering. Positive poisoned controls must
 still pass. Compiler-check mutations inject spills and loads before/after the
-opaque boundary. These tests establish a candidate technique, not a complete
+opaque boundary. These tests exercise the two production kernels, not a complete
 production qualification or a general assembly verifier.
 
 The Linux bounds test also places each input, state, scratch and constants at
@@ -75,10 +77,30 @@ cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo
 A generic `cargo test` explicitly ignores the instruction execution test. It
 must not be cited as evidence that SHA512 instructions or erasure executed.
 
-The `win64-probe` fixture-only feature selects the Windows x64 function ABI so
-the SDE campaign can execute that calling convention on Linux. Its observer
+The `win64-probe` fixture-only feature selects the Windows x64 observer. The
+driver changes only the function ABI in a temporary copy of the production
+source so the SDE campaign can execute that calling convention on Linux. A
+function-pointer type check rejects enabling this observer against a SysV
+function; use the driver, not a bare `cargo test --features win64-probe`.
+Its observer
 also seeds XMM6–15 and verifies their preserved lower halves on return. This is
 not native Windows evidence and does not change any shipped Cargo feature.
+
+## Native Windows collection
+
+Windows evidence is useful and is **not interchangeable with Linux evidence**.
+The existing Windows CI workspace tests are not native qualification of every
+accelerated kernel. Once the ports are ready, collect a Windows x64 MSVC lane
+covering actual selected instructions, immediate return-register observations,
+callee-saved registers, recoverable unwinding/cleanup, quarantine, and packaged
+consumer behavior. Record source revision, OS, compiler, CPU feature bundle and
+actual route. Verify feature support before executing a specialized build.
+
+Do not infer dedicated SHA512 support from SHA-NI, AVX2, AVX-512 or an AWS family
+name. SDE remains emulation if the Windows host lacks the dedicated instruction.
+A Windows x64 run does not qualify Windows Arm, and a single host does not prove
+arbitrary VM migration safety. Existing platform-authority restrictions remain.
+This planned collection does not add or alter a release-gate mechanism.
 
 ## All-backend implementation inventory
 
@@ -87,7 +109,7 @@ No row below is complete merely because the SHA-512 prototype passes.
 | Hardened kernel family | x86 implementation to replace/review | Arm implementation to replace/review | Status |
 | --- | --- | --- | --- |
 | SHA-224/256 instructions | `x86_sha::secret_sha` | `aarch64_sha2::secret_sha256` | Pending |
-| SHA-384/512 and SHA-512/t instructions | `x86_sha512::secret_sha512` | `aarch64_sha2::secret_sha512` | x86/Arm isolated prototypes; production pending |
+| SHA-384/512 and SHA-512/t instructions | `x86_sha512::secret::compress` | `aarch64_sha2::secret512::compress` | Integrated; source-bound emulated checks; native qualification pending |
 | Keccak single state | `x86_avx2_keccak::permute_secret_avx2` | `aarch64_sha3_keccak::permute_secret_sha3` | Pending |
 | SHA-224/256 batch | `sha256_hardened_batch::x86` | `sha256_hardened_batch::arm` | Pending |
 | SHA-512-family batch | `sha512_hardened_batch::x86` | `sha512_hardened_batch::arm` | Pending |
@@ -110,9 +132,9 @@ existing portability or silently extending a cleanup claim.
 
 ## Remaining work before the requested retest
 
-1. Complete the pilot's native ABI coverage and production integration. SysV
-   and Win64 ABI observers under SDE, Linux guard pages and endpoint compiler
-   checks exist; these are not yet a source-bound production qualification.
+1. Complete the SHA-512 ports' native ABI coverage. SysV and Win64 observers
+   under SDE, Arm observers under QEMU, Linux guard pages and endpoint compiler
+   checks now bind the actual production sources. Native qualification remains.
 2. Port the sixteen accelerated entry points without changing authority, KAT,
    quarantine, error atomicity, target features, public signatures or fallback
    policy. Prove all normal error exits and retain existing unwind guarantees.

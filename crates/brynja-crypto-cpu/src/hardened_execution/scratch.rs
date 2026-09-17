@@ -34,20 +34,6 @@ impl Scratch {
             write32(&mut self.schedule, i, value);
         }
     }
-
-    #[cfg(target_arch = "aarch64")]
-    pub(crate) fn expand64(&mut self, block: &[u8; 128]) {
-        self.schedule[..128].copy_from_slice(block);
-        for i in 16_usize..80 {
-            let x = read64(&self.schedule, i.saturating_sub(15));
-            let y = read64(&self.schedule, i.saturating_sub(2));
-            let value = read64(&self.schedule, i.saturating_sub(16))
-                .wrapping_add(x.rotate_right(1) ^ x.rotate_right(8) ^ (x >> 7))
-                .wrapping_add(read64(&self.schedule, i.saturating_sub(7)))
-                .wrapping_add(y.rotate_right(19) ^ y.rotate_right(61) ^ (y >> 6));
-            write64(&mut self.schedule, i, value);
-        }
-    }
 }
 
 impl Drop for Scratch {
@@ -70,22 +56,6 @@ pub(crate) fn read32(bytes: &[u8], index: usize) -> u32 {
 #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 pub(crate) fn write32(bytes: &mut [u8], index: usize, value: u32) {
     if let Some(word) = bytes.as_chunks_mut::<4>().0.get_mut(index) {
-        *word = value.to_be_bytes();
-    }
-}
-#[cfg(target_arch = "aarch64")]
-pub(crate) fn read64(bytes: &[u8], index: usize) -> u64 {
-    bytes
-        .as_chunks::<8>()
-        .0
-        .get(index)
-        .copied()
-        .map(u64::from_be_bytes)
-        .unwrap_or(0)
-}
-#[cfg(target_arch = "aarch64")]
-pub(crate) fn write64(bytes: &mut [u8], index: usize, value: u64) {
-    if let Some(word) = bytes.as_chunks_mut::<8>().0.get_mut(index) {
         *word = value.to_be_bytes();
     }
 }

@@ -1,15 +1,16 @@
-//! Experimental normal-return register boundary. NOT a production backend.
+//! Source-bound normal-return register tests; full qualification is pending.
 //!
-//! This fixture deliberately does not change release admission or production
-//! dispatch. Its candidate must pass machine-level observers and compiler
-//! checks before any production port can claim register cleanup.
+//! The SHA-512 modules below are the actual private production kernel sources.
+//! This fixture adds machine-level observers without changing release admission.
 
 #![no_std]
 
 #[cfg(target_arch = "x86_64")]
+#[path = "../../../crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"]
 pub mod sha512;
 
 #[cfg(target_arch = "aarch64")]
+#[path = "../../../crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"]
 pub mod arm_sha512;
 
 // The public FIPS round constants are shared with the existing implementation;

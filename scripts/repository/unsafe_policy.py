@@ -9,7 +9,9 @@ from pathlib import Path
 
 
 ALLOWED = {
-    Path("crates/brynja-crypto-cpu/src/x86_sha512.rs"): ("db948e735f6c28265a68c5e0f290e2b743d1d10f6cdf003f1488eb9a493998c1", 6, 2, 6),
+    Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"): ("b790074aa3774d785a87bf3abca850540f3ab5c798c43aaf3ce29bdde4b38e66", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"): ("8febc7fc79bb5813590293d8b17bc5d9f1bcb56f17dba55c844f28dd89bcf96e", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/x86_sha512.rs"): ("9530acc46f67ba8f50f009bb2e837c2732b3f88cb80ba7847acf7229fce5d12c", 5, 1, 5),
     Path("crates/brynja-crypto-cpu-std/src/sha256_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
     Path("crates/brynja-crypto-cpu-std/src/sha512_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
     Path("crates/brynja-crypto-cpu-std/src/keccak_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
@@ -66,7 +68,7 @@ ALLOWED = {
         "9519e6f2feb7ff836f56bee2d72b5259ebaf057f08928d89f555e97ade5cd7c0", 4, 2, 4,
     ),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2.rs"): (
-        "b2155beb8d38b74e1d215ae6dcae2dc4b24a8a0286aed3a02ddb1d503c61e797", 16, 4, 16,
+        "817ae121788f4acb525ce472d3c8f9e55ca0d95bcc4f32388832cf3ad0f6374b", 13, 3, 13,
     ),
     Path("crates/brynja-crypto-cpu/src/riscv64_zknh.rs"): (
         "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619", 8, 2, 8,
@@ -85,7 +87,7 @@ ALLOWED = {
     ),
 }
 UNSAFE_BLOCK = re.compile(r"\bunsafe\s*\{")
-UNSAFE_ITEM = re.compile(r"\bunsafe\s+(?:fn|impl|trait)\b")
+UNSAFE_ITEM = re.compile(r'\bunsafe\s+(?:extern\s+"[^"]+"\s+)?(?:fn|impl|trait)\b')
 UNSAFE_ALLOW = "allow(unsafe_code)"
 FORBIDDEN_IDENTIFIER = re.compile(
     r"\b(?:unsafe|unsafe_code|asm|global_asm|llvm_asm|naked_asm|include|path)\b"
@@ -164,6 +166,21 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
+    elif relative in {
+        Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"),
+        Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"),
+    }:
+        # Exact source hashes bind the reviewed instruction stream. This narrow
+        # structural check does not admit assembly in any other kernel module.
+        required = ('pub unsafe extern "C" fn compress(', '#[inline(never)]',
+                    '#[target_feature', 'scratch: &mut [u8; 704]',
+                    'BRYNJA_SECRET_BEGIN', 'BRYNJA_REGISTER_ERASE',
+                    'BRYNJA_SECRET_END', 'options(nostack)')
+        if any(text.count(token) != 1 for token in required) or text.count('asm!(') != 1:
+            fail("register boundary lost its exact opaque assembly contract")
+        if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly)\b',
+                     re.sub(r'//[^\n]*', '', text)):
+            fail("register boundary weakened clobbers or memory effects")
     elif relative.name in {
         "x86_sha.rs", "x86_sha512.rs", "aarch64_sha2.rs", "riscv64_zknh.rs", "x86_sha1.rs", "aarch64_sha1.rs",
         "x86_avx2_keccak.rs", "aarch64_sha3_keccak.rs", "x86_avx2_md5.rs", "aarch64_neon_md5.rs",

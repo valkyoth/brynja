@@ -136,6 +136,31 @@ mod injected {
         require_rejection(root, "approved unsafe module changed")
 
 
+def register_boundaries() -> None:
+    for relative in (Path('crates/brynja-crypto-cpu/src/x86_sha512/secret.rs'),
+                     Path('crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs')):
+        source = (ROOT / relative).read_text()
+        _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
+        unsafe_policy.validate_allowed(relative, source, blocks, items, proofs)
+        for before, after in (
+            ('unsafe extern "C" fn', 'extern "C" fn'),
+            ('#[inline(never)]', '#[inline(always)]'),
+            ('BRYNJA_REGISTER_ERASE', 'REMOVED'),
+            ('out(', 'lateout('),
+            ('options(nostack)', 'options(nostack, nomem)'),
+            ('options(nostack)', 'options(nostack, readonly)'),
+        ):
+            assert before in source
+            try:
+                unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
+            except unsafe_policy.UnsafePolicyError:
+                pass
+            else:
+                raise AssertionError('accepted opaque-register-boundary regression: ' + before)
+
+
 if __name__ == "__main__":
     test()
+    register_boundaries()
     print("unsafe policy rejects eleven exception-boundary regressions")
+    print("opaque register boundaries reject twelve unsafe-ABI, clobber and memory-effect regressions")

@@ -51,6 +51,13 @@ portable/prefer/require; a generic build passed 768 portable cases. Public/secre
 outputs, cleanup, work reports and six compiled fixture mutations were checked.
 These development checks do not change release gates or replace native review.
 
+The matching local adapter covers scheduled collectors and three streaming
+layouts against the same independent oracle. Local AVX2 passed 2,240 cases and
+a generic build passed 1,024 portable cases. Actual vector counters, output and
+pending-storage cleanup, 132 result-checker regressions and six compiled fixture
+mutations (84 identity/layout executions) were checked. These remain development
+results; production code and release gates are unchanged.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

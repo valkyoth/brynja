@@ -869,6 +869,38 @@ do not close arbitrary streaming flush/payload paths or thread joining. These
 limited checks are not full multibuffer qualification, proof of crypto kernels, register erasure,
 native platform collection or independent review.
 
+## Independent scheduled and streaming ParallelHash batch oracle
+
+The `local` binary in `assurance/parallelhash-batch-oracle` reuses the threaded
+fixture's bounded public-vector protocol and independent Python SP 800-185
+corpus. It exercises a scheduled collector and three streaming layouts: single
+byte chunks, block-crossing chunks and all input supplied at finalization.
+Each case uses public and secret output APIs with a portable root, compares
+outputs, and checks full scratch, output Drop, stream pending storage and
+destination canaries. XOF streams reject updates after reader finalization.
+Scheduled reports and stream leaf counters are checked against expected counts.
+A second borrowed session observes actual authority vector calls, including
+calls in consuming finalizers; this does not infer execution from CPU support.
+
+Run `python3 scripts/cryptography/check-parallelhash-local-batch-oracle.py`;
+add a matching `--lane` to enable preferred and required SIMD execution. Local
+AVX2 passed 2,240 cases: 256 portable, 256 preferred and 48 eligible required
+cases for each layout. Vector calls across both output profiles were 0, 600
+and 448 respectively per layout campaign. A generic build passed another 1,024
+portable cases without SIMD flags. Each build cleanly rejected forty malformed
+requests and two invalid mode/layout arguments. Rust 1.90 compilation/tests and
+strict Rust 1.98.1 Clippy passed.
+
+`test-parallelhash-local-batch-oracle.py` rejects 132 output/count/layout/status/
+route regressions. With a matching `--lane`, six compiled fixture mutations
+test forgotten output Drop, corrupted digest encoding, false SIMD routing,
+fixture counter overflow, dirty pending storage and skipped stream updates.
+All four identities execute separately for each applicable layout: 84 mutant
+executions rejected, with restored source passing after every mutation.
+Compilation failures do not count as runtime rejection. These are development
+oracle checks, not native NEON evidence, whole-lifecycle erasure proof or
+independent review. Production code and release/tag gates remain unchanged.
+
 ## Independent threaded ParallelHash batch oracle
 
 `assurance/parallelhash-batch-oracle` directly exercises the new bounded threaded

@@ -52,6 +52,13 @@ Existing NEON and dedicated Arm hash paths can be tested natively on this host.
 
 ## When to request a larger host
 
+A replacement AWS Arm host used for the SHA-2-only verifier-policy refresh on
+2026-09-17 exposed four Neoverse-V2 r0p1 physical cores (one thread per core),
+7.6 GiB RAM and a 96 GiB filesystem. Its OS advertised NEON, SHA-256, SHA-512,
+SHA-3 and SVE/SVE2. Its instance type and SVE vector length were not re-probed;
+do not infer them from the previous smaller host. The SHA-2 capture passed,
+but the earlier two-core batch timing results were not rerun or relabelled.
+
 For v0.24.48 correctness, keep these machines unless collection shows resource
 pressure. The four-worker timing rows oversubscribe both hosts; Intel's two
 vCPUs are not two physical cores. Preserve those results as measured and do not

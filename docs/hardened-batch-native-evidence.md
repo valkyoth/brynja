@@ -90,3 +90,28 @@ side-channel resistance, migration safety, linked-unwinder restoration or
 register/compiler-copy erasure. These are project-reviewed, operator-self-attested
 results, not independent cryptographic review, provider attestation, military
 approval or FIPS validation. No gate or publication rule was changed.
+
+## SHA-2 refresh after the Kani policy update
+
+The `0.68.0` Kani update changed `assurance/policy.toml`, which is an exact input
+of the shared SHA-2 native capture. On 2026-09-17, all three required lanes were
+therefore recaptured at `99549a02aa466dc1fbd97a54db0d39f0a1cbbb05`; no native
+source-binding exception was introduced. The original captures remain above
+as historical evidence. The current SHA-2 index points to these new raw records:
+
+| Lane | Record | SHA-256 |
+| --- | --- | --- |
+| Local AMD Ryzen 9 9950X3D | [Linux x86](../assurance/sha2-hardened-native/linux-x86_64-v02448-kani068.json) | `a0f9f95d648dd79f4f1c35e4252fb0533979ead077bd5060e8d447d0e5abb742` |
+| AWS Arm Neoverse-V2 | [Linux Arm](../assurance/sha2-hardened-native/linux-aarch64-v02448-kani068.json) | `1d945ea7ca952a3a03e0337b2e95dee8fb8d246cea7ed985094538031d0ed783` |
+| Apple M2 Pro | [Apple Arm](../assurance/sha2-hardened-native/apple-aarch64-v02448-kani068.json) | `9f532765c5470909cceaf06bfd20ed2ba12a073d5d502a2a83448418853dadcc` |
+
+Each record passed the unchanged schema, compiler, exact-source, route, vector
+and actual-kernel marker checks. The Linux x86 lane exercised SHA-NI on AMD;
+the Arm lanes exercised SHA-256 and SHA-512 through hosted and static routes.
+The replacement AWS host exposes four Neoverse-V2 cores and about 7.6 GiB RAM;
+this SHA-2 refresh is not a new four-worker batching benchmark.
+
+Keccak, KMAC, TupleHash and ParallelHash native source closures were unchanged
+by the verifier update and their existing records still passed validation.
+The original four-platform hardened-batch runtime observations are preserved;
+none is relabelled as a Kani `0.68.0` proof or a completed final release sweep.

@@ -33,8 +33,9 @@ Release-tool freshness additionally updates the external Kani verifier from
 compatibility checks and rejection regressions were updated; production Rust,
 dependencies and release rules are unchanged. The earlier successful detached
 sweep remains a historical result, not a receipt for the updated checkout.
-Fresh final verification and the policy-bound SHA-2 native records are still
-required. See [Kani policy](../docs/KANI.md).
+The policy-bound SHA-2 native records were refreshed on AMD Linux, AWS Arm
+and Apple M2 Pro at `99549a02`; fresh final verification remains required.
+See [Kani policy](../docs/KANI.md).
 
 - Distinct clearing owners for SHA-224/256, the complete SHA-512 family including
   general SHA-512/t, and SHA-3/SHAKE/cSHAKE independent-message batching.

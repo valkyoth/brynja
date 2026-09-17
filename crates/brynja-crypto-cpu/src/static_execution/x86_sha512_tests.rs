@@ -23,6 +23,14 @@ fn dedicated_sha512_requires_its_own_complete_bundle() {
 
 #[test]
 #[cfg(target_arch = "x86_64")]
+#[cfg_attr(
+    not(all(
+        target_feature = "sha512",
+        target_feature = "avx2",
+        target_feature = "avx"
+    )),
+    ignore = "requires compiled SHA512/AVX2/AVX and compatible CPU or SDE; NOT execution evidence"
+)]
 fn dedicated_sha512_arbitrary_state_differential() -> Result<(), Error> {
     let required = std::env::var_os("BRYNJA_REQUIRE_X86_SHA512").is_some();
     if Kernel::X86Sha512.check_compiled_target().is_err() {

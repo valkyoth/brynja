@@ -16,11 +16,17 @@ pub(super) fn sha256(kernel: Kernel, state: &mut [u32; 8], block: &[u8; 64]) -> 
     Err(Error::WrongOperation)
 }
 
-pub(super) fn sha512(kernel: Kernel, state: &mut [u64; 8], block: &[u8; 128]) -> Result<(), Error> {
+pub(super) fn sha512(
+    owner: &super::Authority,
+    state: &mut [u64; 8],
+    block: &[u8; 128],
+) -> Result<(), Error> {
+    let kernel = owner.kernel;
     architecture(kernel)?;
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86Sha512 {
-        return crate::x86_sha512::compress(state, block);
+        let permit = crate::x86_sha512::Permit::runtime(owner)?;
+        return crate::x86_sha512::compress(&permit, state, block);
     }
     #[cfg(target_arch = "aarch64")]
     if kernel == Kernel::ArmSha512 {
@@ -48,7 +54,8 @@ pub(super) fn keccak(kernel: Kernel, state: &mut [u64; 25]) -> Result<(), Error>
 }
 
 #[inline(never)]
-pub(super) fn known_answer(kernel: Kernel) -> bool {
+pub(super) fn known_answer(owner: &super::Authority) -> bool {
+    let kernel = owner.kernel;
     match kernel {
         Kernel::X86Sha256 | Kernel::ArmSha256 => {
             let mut state = core::hint::black_box(crate::sha256::initial_state());
@@ -57,7 +64,7 @@ pub(super) fn known_answer(kernel: Kernel) -> bool {
         }
         Kernel::ArmSha512 | Kernel::X86Sha512 => {
             let mut state = core::hint::black_box(crate::sha512::initial_state());
-            sha512(kernel, &mut state, &crate::sha512::abc_block()).is_ok()
+            sha512(owner, &mut state, &crate::sha512::abc_block()).is_ok()
                 && state == crate::sha512::abc_digest_state()
         }
         Kernel::X86Keccak | Kernel::ArmKeccak => {

@@ -8,13 +8,21 @@ use core::arch::x86_64::{
 
 use crate::sha512_schedule::ROUND_CONSTANTS;
 use crate::static_execution::Error;
+mod authority;
+mod words;
+pub(crate) use authority::Permit;
+
+const _: () = assert!(ROUND_CONSTANTS.len() == 80);
+const _: () = assert!(core::mem::size_of::<[u8; 640]>() == 80 * 8);
 
 #[cfg(feature = "hardened-execution")]
 pub(crate) fn compress_secret(
+    permit: &Permit<'_>,
     state: &mut [u8; 64],
     block: &[u8; 128],
     scratch: &mut crate::hardened_execution::scratch::Scratch,
-) {
+) -> Result<(), Error> {
+    permit.check()?;
     // SAFETY: The sealed hardened session has the same SHA512/AVX2/AVX and OS-state
     // authority as the ordinary route. Only its distinct clearing scratch is
     // used; the operation guard erases both regions on return and unwind.
@@ -28,40 +36,52 @@ unsafe fn secret_sha512(
     state: &mut [u8; 64],
     block: &[u8; 128],
     scratch: &mut crate::hardened_execution::scratch::Scratch,
-) {
-    use crate::hardened_execution::scratch::{read64, write64};
+) -> Result<(), Error> {
+    use words::read;
     // A distinct owner-backed scalar schedule avoids the ordinary kernel's
     // non-clearing arrays. Dedicated round instructions still perform all
     // compression rounds. Registers and compiler-created copies are residuals.
-    scratch.expand64(block);
+    words::expand(&mut scratch.schedule, block)?;
     let mut abef = _mm256_set_epi64x(
-        read64(state, 0) as i64,
-        read64(state, 1) as i64,
-        read64(state, 4) as i64,
-        read64(state, 5) as i64,
+        read(state, 0)? as i64,
+        read(state, 1)? as i64,
+        read(state, 4)? as i64,
+        read(state, 5)? as i64,
     );
     let mut cdgh = _mm256_set_epi64x(
-        read64(state, 2) as i64,
-        read64(state, 3) as i64,
-        read64(state, 6) as i64,
-        read64(state, 7) as i64,
+        read(state, 2)? as i64,
+        read(state, 3)? as i64,
+        read(state, 6)? as i64,
+        read(state, 7)? as i64,
     );
     for (chunk, [k0, k1, k2, k3]) in ROUND_CONSTANTS.as_chunks::<4>().0.iter().enumerate() {
-        let round = chunk.saturating_mul(4);
+        let round = words::round(chunk)?;
         cdgh = _mm256_sha512rnds2_epi64(
             cdgh,
             abef,
             _mm_set_epi64x(
-                read64(&scratch.schedule, round.saturating_add(1)).wrapping_add(*k1) as i64,
-                read64(&scratch.schedule, round).wrapping_add(*k0) as i64,
+                read(
+                    &scratch.schedule,
+                    round.checked_add(1).ok_or(Error::InternalDomain)?,
+                )?
+                .wrapping_add(*k1) as i64,
+                read(&scratch.schedule, round)?.wrapping_add(*k0) as i64,
             ),
         );
         abef = _mm256_sha512rnds2_epi64(
             abef,
             cdgh,
             _mm_set_epi64x(
-                read64(&scratch.schedule, round.saturating_add(3)).wrapping_add(*k3) as i64,
-                read64(&scratch.schedule, round.saturating_add(2)).wrapping_add(*k2) as i64,
+                read(
+                    &scratch.schedule,
+                    round.checked_add(3).ok_or(Error::InternalDomain)?,
+                )?
+                .wrapping_add(*k3) as i64,
+                read(
+                    &scratch.schedule,
+                    round.checked_add(2).ok_or(Error::InternalDomain)?,
+                )?
+                .wrapping_add(*k2) as i64,
             ),
         );
     }
@@ -71,13 +91,30 @@ unsafe fn secret_sha512(
         _mm256_storeu_si256(scratch.vectors.as_mut_ptr().cast::<__m256i>(), abef);
         _mm256_storeu_si256(scratch.vectors.as_mut_ptr().add(32).cast::<__m256i>(), cdgh);
     }
-    for (index, lane) in [3, 2, 7, 6, 1, 0, 5, 4].into_iter().enumerate() {
-        let value = read64(state, index).wrapping_add(read64(&scratch.vectors, lane).swap_bytes());
-        write64(state, index, value);
+    // Destructuring fixed arrays proves every source/destination lane exists.
+    // No fallible access occurs after the first caller-state write.
+    let [ff, ee, bb, aa, hh, gg, dd, cc] = scratch.vectors.as_chunks::<8>().0 else {
+        return Err(Error::InternalDomain);
+    };
+    for (word, lane) in state
+        .as_chunks_mut::<8>()
+        .0
+        .iter_mut()
+        .zip([aa, bb, cc, dd, ee, ff, gg, hh])
+    {
+        *word = u64::from_be_bytes(*word)
+            .wrapping_add(u64::from_le_bytes(*lane))
+            .to_be_bytes();
     }
+    Ok(())
 }
 
-pub(crate) fn compress(state: &mut [u64; 8], block: &[u8; 128]) -> Result<(), Error> {
+pub(crate) fn compress(
+    permit: &Permit<'_>,
+    state: &mut [u64; 8],
+    block: &[u8; 128],
+) -> Result<(), Error> {
+    permit.check()?;
     // SAFETY: Only sealed static/runtime authorities call this entry. They
     // establish SHA512 plus AVX2/AVX and enabled XMM/YMM OS state for the entire
     // operation. Fixed arrays are initialized, live and exclusively borrowed.
@@ -94,9 +131,9 @@ unsafe fn compress_sha512(state: &mut [u64; 8], block: &[u8; 128]) -> Result<(),
     for i in (16_usize..80).step_by(4) {
         let word = |back: usize| {
             schedule
-                .get(i.saturating_sub(back))
+                .get(words::offset(i, back)?)
                 .copied()
-                .ok_or(Error::Quarantined)
+                .ok_or(Error::InternalDomain)
         };
         let first = _mm256_sha512msg1_epi64(
             _mm256_set_epi64x(
@@ -113,7 +150,7 @@ unsafe fn compress_sha512(state: &mut [u64; 8], block: &[u8; 128]) -> Result<(),
         unsafe { _mm256_storeu_si256(partial.as_mut_ptr().cast::<__m256i>(), first) };
         // Lane-local modulo additions preserve the schedule word ordering.
         for (offset, value) in partial.iter_mut().enumerate() {
-            *value = value.wrapping_add(word(7_usize.saturating_sub(offset))?);
+            *value = value.wrapping_add(word(words::offset(7, offset)?)?);
         }
         let [p0, p1, p2, p3] = partial;
         let next = _mm256_sha512msg2_epi64(

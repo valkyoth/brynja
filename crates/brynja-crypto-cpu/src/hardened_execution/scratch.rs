@@ -35,7 +35,7 @@ impl Scratch {
         }
     }
 
-    #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
+    #[cfg(target_arch = "aarch64")]
     pub(crate) fn expand64(&mut self, block: &[u8; 128]) {
         self.schedule[..128].copy_from_slice(block);
         for i in 16_usize..80 {
@@ -73,7 +73,7 @@ pub(crate) fn write32(bytes: &mut [u8], index: usize, value: u32) {
         *word = value.to_be_bytes();
     }
 }
-#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
+#[cfg(target_arch = "aarch64")]
 pub(crate) fn read64(bytes: &[u8], index: usize) -> u64 {
     bytes
         .as_chunks::<8>()
@@ -83,7 +83,7 @@ pub(crate) fn read64(bytes: &[u8], index: usize) -> u64 {
         .map(u64::from_be_bytes)
         .unwrap_or(0)
 }
-#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
+#[cfg(target_arch = "aarch64")]
 pub(crate) fn write64(bytes: &mut [u8], index: usize, value: u64) {
     if let Some(word) = bytes.as_chunks_mut::<8>().0.get_mut(index) {
         *word = value.to_be_bytes();

@@ -34,6 +34,8 @@ pub enum Error {
     Quarantined,
     /// The borrowed session no longer matches its owner's health generation.
     StaleGeneration,
+    /// A private fixed-domain invariant failed; the executing owner is revoked.
+    InternalDomain,
 }
 
 /// Diagnostic health, not a capability or proof of independent verification.
@@ -209,7 +211,11 @@ impl Session<'_> {
         block: PublicData<&[u8; 128]>,
     ) -> Result<(), Error> {
         self.owner.check(self.generation)?;
-        operations::sha512(self.owner.kernel, state.into_inner(), block.into_inner())
+        let result = operations::sha512(self.owner.kernel, state.into_inner(), block.into_inner());
+        if matches!(result, Err(Error::InternalDomain | Error::Quarantined)) {
+            self.owner.quarantine();
+        }
+        result
     }
 
     /// Permutes a complete `Keccak-f[1600]` state. Errors preserve every lane.

@@ -1,7 +1,7 @@
 # Dedicated x86 SHA-512 execution
 
-Status: v0.24.49 development checks complete; ready for exceptional owner
-pentest. Final evidence and release checks pending. No native SHA512 host measured.
+Status: v0.24.49 pentest follow-up; owner retest and register-residual disposition
+pending. Final evidence and release checks pending. No native SHA512 host measured.
 
 ## Exact capability
 
@@ -59,6 +59,22 @@ same explicit whole-lifetime obligation. The safe hosted x86 adapter still
 rejects missing migration guarantees, even if CPUID has SHA512. This milestone
 does not turn current-core detection into system-wide authority.
 
+Internally, both instruction-entry wrappers require a private-field permit,
+created from the checked static bundle or a borrowed platform-authorized owner.
+The entry rechecks that permit. Checked schedule/index failures produce
+`InternalDomain` and revoke the executing owner; caller state is unchanged and
+the hardened operation guard clears scratch. No zero-word substitution is used
+by the dedicated SHA512 kernel.
+
+Generic-build differential/runtime instruction tests are explicitly ignored
+when their complete compiled bundle is absent. They are not execution evidence.
+The separate [SDE CI workflow](../.github/workflows/dedicated-sha512.yml) runs on
+relevant source/test changes, with mandatory actual-execution markers, both
+compiler endpoints and ASan/LSan. The owner accepted Intel's license; the
+[installer](../scripts/ci/install-sde.sh) additionally requires explicit acceptance
+and verifies the pinned archive before extraction. Forks must obtain their own
+license acceptance before enabling this workflow. This is not a new tag gate.
+
 ## Development evidence and remaining work
 
 On 2026-09-17, Intel SDE 10.13.1 (2026-07-28), Arrow Lake model, passed:
@@ -88,8 +104,11 @@ portable compilation also pass. Shared assurance/requirements metadata and
 their regressions, full workspace tests/doctests, all-feature Clippy,
 no-default-feature checks, documentation generation and dependency-isolation
 checks pass. These are development checks, not a full release sweep.
-Miri passes all 29 generic-build CPU tests, including fail-closed authority and
-scratch lifecycle checks; it does not interpret the new SHA512 instructions.
+The pentest follow-up passes 30 generic-build CPU Miri tests, with two instruction
+tests explicitly ignored, including new domain and permit lifecycle checks;
+Miri does not interpret the new SHA512 instructions. Three compiled permit
+negatives and six debug/release quarantine mutants also pass, covering injected
+internal failures on ordinary static/runtime and hardened routes.
 The pinned nightly AddressSanitizer lane executes 1,024 dedicated comparisons,
 runtime authority and the 512-block hardened cleanup/unwind campaign under SDE.
 LeakSanitizer is forced on with fatal error exits, overriding ambient disable
@@ -102,7 +121,8 @@ Reproduce the dedicated tests with an owner-licensed SDE installation:
 python3 scripts/sha2/check-x86-sha512.py --sde /absolute/path/to/sde64 --asan
 ```
 
-Local development logs are `/tmp/brynja-v02449-x86-sha512-integration.log`,
+Local development logs include `/tmp/brynja-v02449-pentest-sde.log`,
+`/tmp/brynja-v02449-pentest-miri.log`,
 `/tmp/brynja-v02449-workspace-tests.log`,
 `/tmp/brynja-v02449-workspace-clippy.log` and
 `/tmp/brynja-v02449-cleanup-{190,198}.log`; these transient files are not portable
@@ -121,7 +141,8 @@ native performance, timing, heterogeneous-core/migration evidence, independent
 cryptographic verification, FIPS validation or military approval. Do not request
 a larger C8i assuming it adds the missing feature.
 
-Still required before milestone completion: exceptional owner pentest, final
+Still required before milestone completion: owner retest and the F1 register
+residual disposition recorded in the [pentest report](../security/pentest/v0.24.49.md), final
 source-bound evidence and the existing release verification. Existing Kani
 portable arithmetic/ownership proofs do not verify SHA512 intrinsics; no such
 claim is made. Native indices have not been rebound to this development delta;

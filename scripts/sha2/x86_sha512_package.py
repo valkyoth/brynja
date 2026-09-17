@@ -56,8 +56,8 @@ def check(sde, environment):
             else:
                 path = cpu / 'x86_sha512.rs'
                 cases = [
-                    ('scratch.expand64(block);', 'let _ = block;'),
-                    ('[3, 2, 7, 6, 1, 0, 5, 4]', '[2, 3, 7, 6, 1, 0, 5, 4]'),
+                    ('words::expand(&mut scratch.schedule, block)?;', 'let _ = block;'),
+                    ('[aa, bb, cc, dd, ee, ff, gg, hh]', '[bb, aa, cc, dd, ee, ff, gg, hh]'),
                 ]
             original = path.read_text()
             for before, after in cases:
@@ -79,6 +79,7 @@ def check(sde, environment):
                     ordinary.run, hosted=False, wide=True)
             else:
                 cleanup_faults(crates, env, ordinary.run)
+                helper('x86_sha512_faults').exercise(crates, env, ordinary.run)
                 helper('sha2_hardened_cleanup_mutants').kernel_faults(
                     consumer, crates, env, ordinary.run, extra, ['static'])
             execute()

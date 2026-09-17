@@ -59,7 +59,7 @@ impl Authority {
             generation: Cell::new(1),
             thread_bound: PhantomData,
         };
-        owner.complete_startup(operations::known_answer(kernel));
+        owner.complete_startup(operations::known_answer(&owner));
         Ok(owner)
     }
 
@@ -125,6 +125,12 @@ pub struct Session<'a> {
 }
 
 impl Session<'_> {
+    #[cfg(all(feature = "hardened-execution", target_arch = "x86_64"))]
+    pub(crate) fn sha512_permit(&self) -> Result<crate::x86_sha512::Permit<'_>, Error> {
+        self.owner.check(self.generation)?;
+        crate::x86_sha512::Permit::runtime(self.owner)
+    }
+
     #[cfg(feature = "hardened-execution")]
     pub(crate) fn check_hardened(&self) -> Result<Kernel, Error> {
         self.owner.check(self.generation)?;
@@ -158,7 +164,11 @@ impl Session<'_> {
         block: PublicData<&[u8; 128]>,
     ) -> Result<(), Error> {
         self.owner.check(self.generation)?;
-        operations::sha512(self.owner.kernel, state.into_inner(), block.into_inner())
+        let result = operations::sha512(self.owner, state.into_inner(), block.into_inner());
+        if matches!(result, Err(Error::InternalDomain | Error::Quarantined)) {
+            self.owner.quarantine();
+        }
+        result
     }
 
     /// Executes `Keccak-f[1600]`, not an entire SHA-3/SHAKE construction.

@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
-    Path("crates/brynja-crypto-cpu/src/x86_sha512.rs"): ("d9ea75fcb6f5ce6d7216f72aaa7e8bea956be191926510a1879ce6d85cea2a29", 6, 2, 6),
+    Path("crates/brynja-crypto-cpu/src/x86_sha512.rs"): ("db948e735f6c28265a68c5e0f290e2b743d1d10f6cdf003f1488eb9a493998c1", 6, 2, 6),
     Path("crates/brynja-crypto-cpu-std/src/sha256_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
     Path("crates/brynja-crypto-cpu-std/src/sha512_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
     Path("crates/brynja-crypto-cpu-std/src/keccak_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
@@ -40,7 +40,7 @@ ALLOWED = {
     Path("crates/brynja-legacy-md5-std/src/hardened_execution/platform.rs"): ("552ae73fb7389f0450e637f6c3e7d3b6b57b904694084eeb71e7fa860df34832", 1, 0, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/secret.rs"): ("135ab0dae0b9fbaf8dc147bf55ccf7e167c667ee675b980679ced331a3d6464e", 2, 1, 2),
     Path("crates/brynja-crypto-cpu/src/runtime_execution/mod.rs"): (
-        "7a98df0c160c08b5c12358f51890b2a358a8309aa512d9f94fbc8faa57517102", 0, 1, 0,
+        "19939961ef4e56f06df2154c7a5bde59f5e2d8289a044a858032ea1ab3e6d8d0", 0, 1, 0,
     ),
     Path("crates/brynja-crypto-cpu-std/src/execution/platform.rs"): (
         "777c14162432b633fc9ce13e4bd8ef397eb6258c9abf2d38a9cf0a04e44e2b19", 1, 0, 1,

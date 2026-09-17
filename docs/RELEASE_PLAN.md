@@ -4814,7 +4814,8 @@ Dedicated ordinary and owner-backed hardened kernels and
 SHA-512-family routing implemented; Intel SDE correctness, compiler cleanup,
 compiled lifecycle/route mutants and emulated ASan/LSan pass. Shared assurance
 metadata, workspace tests/doctests, Clippy and documentation checks pass;
-ready for exceptional owner pentest, with final release verification pending. Native SHA512
+pentest remediation is awaiting owner retest and register-residual disposition,
+with final release verification pending. Native SHA512
 hardware is not available in the observed fleet; see the
 [implementation status](x86-sha512-execution.md).
 

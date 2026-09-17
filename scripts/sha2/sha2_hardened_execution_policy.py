@@ -85,8 +85,10 @@ def validate(root=ROOT, write=False):
     paths.add(Path('scripts/sha2/sha2_hardened_cleanup_mutants.py'))
     # The optional licensed emulator is not a native gate prerequisite. Bind
     # its driver and regression interpretation to the same reviewed source.
-    for name in ('check-x86-sha512.py', 'x86_sha512_package.py', 'x86_sha512_regressions.py'):
+    for name in ('check-x86-sha512.py', 'x86_sha512_package.py', 'x86_sha512_regressions.py', 'x86_sha512_faults.py', 'x86_sha512_ci.py'):
         paths.add(Path('scripts/sha2') / name)
+    paths.add(Path('scripts/ci/install-sde.sh'))
+    paths.add(Path('.github/workflows/dedicated-sha512.yml'))
     paths.add(Path('docs/x86-sha512-execution.md'))
     for name in ('scripts/tag_gate.sh', 'scripts/sha2/hardened_native_host.py',
                  'scripts/sha2/hardened_native_evidence.py', 'scripts/sha2/check-sha2-hardened-asan.py',

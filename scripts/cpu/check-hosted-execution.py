@@ -159,7 +159,7 @@ def operational_mutations(workspace, env, extra):
                '--lib', *extra]
     original = owner.read_text()
     for call in ('operations::sha256(self.owner.kernel, state.into_inner(), block.into_inner())',
-                 'operations::sha512(self.owner.kernel, state.into_inner(), block.into_inner())',
+                 'operations::sha512(self.owner, state.into_inner(), block.into_inner())',
                  'operations::keccak(self.owner.kernel, state.into_inner())'):
         if original.count(call) != 1:
             raise ValueError('stale operational no-op mutant')
@@ -193,7 +193,7 @@ fn injected_failed_kat_retains_quarantine_without_fallback() -> Result<(), Error
         operations.write_text(ops.replace('&& state ==', '&& core::hint::black_box(false) && state =='))
         host_tests.write_text(tests + probe)
         run([*command, 'injected_failed_kat'], workspace, env)
-        owner.write_text(original.replace('owner.complete_startup(operations::known_answer(kernel));',
+        owner.write_text(original.replace('owner.complete_startup(operations::known_answer(&owner));',
                                           'owner.complete_startup(true);'))
         run([*command, '--no-run'], workspace, env)
         result = run([*command, 'injected_failed_kat'], workspace, env, success=False)

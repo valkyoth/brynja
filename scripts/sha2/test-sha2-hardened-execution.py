@@ -5,6 +5,7 @@ import importlib.util
 from pathlib import Path
 import re
 import x86_sha512_regressions
+import x86_sha512_ci
 
 
 def namespace_regressions():
@@ -27,3 +28,4 @@ if __name__ == '__main__':
     policy.regressions()
     namespace_regressions()
     x86_sha512_regressions.regressions()
+    x86_sha512_ci.regressions()

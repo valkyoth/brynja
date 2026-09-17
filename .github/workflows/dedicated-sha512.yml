@@ -1,0 +1,55 @@
+name: Dedicated x86 SHA512 emulation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'crates/brynja-crypto-cpu/src/**'
+      - 'crates/brynja-crypto-cpu/Cargo.toml'
+      - 'crates/brynja-hash-sha2/src/**'
+      - 'crates/brynja-hash-sha2/Cargo.toml'
+      - 'assurance/sha2-execution/**'
+      - 'assurance/sha2-hardened-execution/**'
+      - 'assurance/general-sha512-t/**'
+      - 'scripts/sha2/**'
+      - 'scripts/ci/install-sde.sh'
+      - '.github/workflows/dedicated-sha512.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'crates/brynja-crypto-cpu/src/**'
+      - 'crates/brynja-crypto-cpu/Cargo.toml'
+      - 'crates/brynja-hash-sha2/src/**'
+      - 'crates/brynja-hash-sha2/Cargo.toml'
+      - 'assurance/sha2-execution/**'
+      - 'assurance/sha2-hardened-execution/**'
+      - 'assurance/general-sha512-t/**'
+      - 'scripts/sha2/**'
+      - 'scripts/ci/install-sde.sh'
+      - '.github/workflows/dedicated-sha512.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  emulated-sha512:
+    # Owner accepted Intel's license for this repository. Forks must obtain
+    # their own acceptance before enabling a download; no secrets are used.
+    if: github.repository == 'valkyoth/brynja'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install pinned compiler endpoints and sanitizer toolchain
+        run: |
+          rustup toolchain install 1.90.0 1.98.1 nightly-2026-09-11 --profile minimal
+          cargo +1.98.1 fetch --locked
+          cargo +1.98.1 fetch --locked --manifest-path assurance/sha2-execution/Cargo.toml
+          cargo +1.98.1 fetch --locked --manifest-path assurance/sha2-hardened-execution/Cargo.toml
+      - name: Require actual SHA512 execution and sanitizer success under SDE
+        env:
+          BRYNJA_ACCEPT_INTEL_SDE_LICENSE: '1'
+        run: |
+          sde_executable="$(sh scripts/ci/install-sde.sh)"
+          python3 scripts/sha2/check-x86-sha512.py --sde "$sde_executable" --asan

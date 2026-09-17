@@ -123,7 +123,7 @@ impl<'a> Session<'a> {
             route: &self.route,
             completed: false,
         };
-        dispatch(kernel, state, block, guard.scratch)?;
+        dispatch(&self.route, kernel, state, block, guard.scratch)?;
         guard.completed = true;
         Ok(())
     }
@@ -183,17 +183,25 @@ impl Drop for Operation<'_, '_> {
 }
 
 fn dispatch(
+    route: &Route<'_>,
     kernel: Kernel,
     state: &mut [u8; 64],
     block: &[u8; 128],
     scratch: &mut Scratch,
 ) -> Result<(), Error> {
     // Private callers check exact operation, architecture and full authority
-    // before this infallible instruction entry. No ordinary kernel is used.
+    // before instruction entry. No ordinary kernel is used.
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86Sha512 {
-        crate::x86_sha512::compress_secret(state, block, scratch);
-        return Ok(());
+        let permit = match route {
+            Route::Static(session) => {
+                session.check_hardened()?;
+                crate::x86_sha512::Permit::compiled()?
+            }
+            #[cfg(feature = "runtime-execution")]
+            Route::Runtime(session) => session.sha512_permit()?,
+        };
+        return crate::x86_sha512::compress_secret(&permit, state, block, scratch);
     }
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86Sha256 {
@@ -212,7 +220,7 @@ fn dispatch(
         }
         _ => {}
     }
-    let _ = (kernel, state, block, scratch);
+    let _ = (route, kernel, state, block, scratch);
     Err(Error::WrongOperation)
 }
 

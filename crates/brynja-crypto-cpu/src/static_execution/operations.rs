@@ -20,7 +20,8 @@ pub(super) fn sha512(kernel: Kernel, state: &mut [u64; 8], block: &[u8; 128]) ->
     kernel.check_compiled_target()?;
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86Sha512 {
-        return crate::x86_sha512::compress(state, block);
+        let permit = crate::x86_sha512::Permit::compiled()?;
+        return crate::x86_sha512::compress(&permit, state, block);
     }
     #[cfg(target_arch = "aarch64")]
     if kernel == Kernel::ArmSha512 {

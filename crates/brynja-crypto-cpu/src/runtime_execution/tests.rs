@@ -86,6 +86,15 @@ fn exact_architecture_inventory() {
 }
 
 #[test]
+#[cfg_attr(
+    not(all(
+        target_arch = "x86_64",
+        target_feature = "sha512",
+        target_feature = "avx2",
+        target_feature = "avx"
+    )),
+    ignore = "requires compiled SHA512/AVX2/AVX and compatible CPU or SDE; NOT execution evidence"
+)]
 fn dedicated_sha512_runtime_dispatch_and_revocation() -> Result<(), Error> {
     if Kernel::X86Sha512.check_compiled_target().is_err() {
         assert!(std::env::var_os("BRYNJA_REQUIRE_X86_SHA512").is_none());
@@ -95,7 +104,7 @@ fn dedicated_sha512_runtime_dispatch_and_revocation() -> Result<(), Error> {
     // This does not claim that CPUID alone establishes platform authority.
     let mut owner = model();
     owner.kernel = Kernel::X86Sha512;
-    owner.complete_startup(operations::known_answer(owner.kernel));
+    owner.complete_startup(operations::known_answer(&owner));
     assert_eq!(owner.report().health, Health::Healthy);
     let session = owner.session()?;
     let mut state = crate::sha512::initial_state();
@@ -140,5 +149,25 @@ fn dedicated_sha512_runtime_dispatch_and_revocation() -> Result<(), Error> {
     );
     assert_eq!(state, before);
     std::println!("DEDICATED_X86_SHA512_RUNTIME: KAT; exact identity; revocation=PASS");
+    Ok(())
+}
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+fn dedicated_sha512_runtime_permit_rejects_other_identity_and_revocation() -> Result<(), Error> {
+    let mut owner = model();
+    assert!(matches!(
+        crate::x86_sha512::Permit::runtime(&owner),
+        Err(Error::WrongOperation)
+    ));
+    owner.kernel = Kernel::X86Sha512;
+    // Permit construction/check does not execute instructions, even during KAT.
+    let permit = crate::x86_sha512::Permit::runtime(&owner)?;
+    owner.quarantine();
+    assert_eq!(permit.check(), Err(Error::Quarantined));
+    assert!(matches!(
+        crate::x86_sha512::Permit::runtime(&owner),
+        Err(Error::Quarantined)
+    ));
     Ok(())
 }

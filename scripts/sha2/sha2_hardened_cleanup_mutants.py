@@ -118,10 +118,10 @@ fn injected_hardened_kat_quarantines_owner() -> Result<(), std::string::String> 
         tests.write_text(old_tests)
         manifest.write_text(old_manifest)
     # Prove real post-startup kernel entry rather than just a route label.
-    marker = 'dispatch(kernel, state, block, guard.scratch)?;'
+    marker = 'dispatch(&self.route, kernel, state, block, guard.scratch)?;'
     poison = '''
         if block.get(..3) != Some(b"abc") { state.fill(0); } else {
-            dispatch(kernel, state, block, guard.scratch)?;
+            dispatch(&self.route, kernel, state, block, guard.scratch)?;
         }
 '''
     if marker not in old_api:

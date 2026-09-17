@@ -1,7 +1,7 @@
 # Brynja v0.24.49
 
-Development candidate: dedicated x86 SHA-512 execution, ready for exceptional
-owner pentest. Not ready for release or final evidence collection yet.
+Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
+and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
 - Add an isolated first-party SHA512/AVX2/AVX intrinsic kernel and exact static/raw
@@ -12,6 +12,10 @@ No crates are selected for publication.
   migration restriction. SHA-NI or AVX-512 alone never authorizes this kernel.
 - Record Intel SDE development correctness separately from absent native CPU
   qualification. Keep Rust 1.90 support and no additional dependencies.
+- Address pentest instruction-entry, checked-domain, quarantine-reporting and
+  automated-coverage findings with private permits, fallible helpers, compiled
+  fault probes, explicit ignored tests and a separate path-filtered SDE job.
+  Register remnants remain outside the owned-memory clearing guarantee.
 
 See the [API and acceptance status](../docs/x86-sha512-execution.md).
 Both compiler endpoints pass development instruction, owner-cleanup and SDE
@@ -19,6 +23,6 @@ checks; packaged consumers, five compiled kernel mutants, ten cleanup/identity
 mutants and startup/route probes pass. Generic CPU Miri and emulated ASan/LSan
 also pass; neither establishes native instruction qualification. Shared assurance
 metadata, full workspace tests/doctests, Clippy, documentation and dependency
-isolation checks pass. The exceptional pentest, final source-bound evidence and
+isolation checks pass. The owner retest/disposition, final source-bound evidence and
 release verification remain pending. No release-gate or evidence-reuse policy
 changes.

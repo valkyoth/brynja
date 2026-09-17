@@ -23,7 +23,7 @@ Status: v0.20.0 published; milestones through v0.24.48 signed. The v0.24.48
 [hardened multibuffer ownership milestone](hardened-multibuffer-owners.md),
 including scheduled, streaming and threaded ParallelHash integration, passed its
 release checks and GitHub. The v0.24.49 [dedicated x86 SHA-512 work](x86-sha512-execution.md)
-is ready for exceptional owner pentest: ordinary and hardened routes pass Intel
+is awaiting owner retest and register-residual disposition: ordinary and hardened routes pass Intel
 SDE correctness, cleanup and emulated sanitizer checks, plus shared metadata and
 workspace integration checks. Pentest, final evidence and release verification
 remain pending. No native SHA512 host is available in the observed fleet.

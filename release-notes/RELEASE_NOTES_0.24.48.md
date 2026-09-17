@@ -35,7 +35,9 @@ dependencies and release rules are unchanged. The earlier successful detached
 sweep remains a historical result, not a receipt for the updated checkout.
 The policy-bound SHA-2 native records were refreshed on AMD Linux, AWS Arm
 and Apple M2 Pro at `99549a02`; fresh final verification remains required.
-See [Kani policy](../docs/KANI.md).
+Fresh Kani execution passed all 32 inventoried proofs, six isolated batch
+proofs/nine mutations and nine ParallelHash proofs/31 mutations, including
+unmodified-source reruns. See [Kani policy](../docs/KANI.md) for scope limits.
 
 - Distinct clearing owners for SHA-224/256, the complete SHA-512 family including
   general SHA-512/t, and SHA-3/SHAKE/cSHAKE independent-message batching.

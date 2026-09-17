@@ -1,6 +1,6 @@
 # Kani Verification Policy
 
-Status: v0.24.22 MD5 batch-budget/cancellation and legacy MD5/SHA-1, SHA-2, FIPS 202, KMAC, TupleHash, and ParallelHash policy harnesses admitted
+Status: 32 inventoried production-source harnesses; separate hardened-batch qualification campaigns
 
 Brynja builds, tests, and releases on the active stable Rust toolchain. Kani is
 compiler-integration-sensitive and therefore uses a separately documented
@@ -30,6 +30,10 @@ compatible pairing, following the same model as `base64-ng`.
   harness covers exact leaf-count division over its admitted symbolic domain.
   One legacy SHA-1 harness proves both acceptance and the exact returned sum
   for every pair of u64 current/additional bit lengths against u128 arithmetic.
+  Three ordinary-batch harnesses cover atomic checked budgets for narrow
+  SHA-2, wide SHA-2 and Keccak. The three legacy MD5 proofs described below
+  complete the 32-harness production-source inventory. Separate injected-source
+  hardened-batch/ParallelHash campaigns are not included in that inventory.
 
 Updating Brynja's active stable compiler does not imply that the installed Kani
 release supports that compiler. Kani evidence records its verifier/compiler
@@ -127,3 +131,11 @@ drivers now require that exact identity; regression tests reject stale Kani,
 missing or mismatched CBMC, and unsuccessful version commands. The proof
 inventory, proof bounds, failure requirements and release approval rules are
 unchanged.
+
+On 2026-09-17, fresh Kani `0.68.0` execution passed all 32 inventoried harnesses,
+six isolated hardened-batch budget proofs with nine real-source counterexamples,
+and all nine isolated ParallelHash proofs with 31 real-source counterexamples.
+The latter driver also reran each unmodified proof after its mutations and
+exited successfully. These retain the documented bounds, backend/clearing
+models and exclusions; they do not prove full cryptographic correctness or
+replace the separate final release sweep.

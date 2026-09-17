@@ -1,0 +1,382 @@
+ASan/LSan: brynja-crypto-cpu
+
+running 26 tests
+test keccak_hardened_batch::tests::absent_static_bundle_rejects ... ok
+test keccak_hardened_batch::tests::every_region_clears_explicitly_and_on_drop ... ok
+test keccak_hardened_batch::tests::invalid_widths_reject_and_clear_both_imports ... ok
+test keccak_hardened_batch::tests::pack_commit_roundtrips_and_preserves_inactive_capacity ... ok
+test keccak_hardened_batch::tests::post_dispatch_failure_and_overflow_preserve_caller_states ... ok
+test keccak_hardened_batch::tests::preflight_rejection_and_unwind_clear_and_quarantine ... ok
+test keccak_hardened_batch::tests::reference_matches_zero_state_kat ... ok
+test sha256_hardened_batch::tests::byte_entry_rejection_unwind_and_counter_overflow_preserve_states ... ok
+test sha256_hardened_batch::tests::cleanup_all_four_regions_and_inactive_capacity ... ok
+test sha256_hardened_batch::tests::destructor_clears_poisoned_storage ... ok
+test sha256_hardened_batch::tests::native_lane_distinct_differential_and_actual_dispatch ... ok
+test sha256_hardened_batch::tests::operation_unwind_clears_partially_populated_workspace ... ok
+test sha256_hardened_batch::tests::pack_rejects_invalid_width_and_initializes_inactive_lanes ... ok
+test sha256_hardened_batch::tests::post_dispatch_health_loss_unwind_and_counter_overflow_are_transactional ... ok
+test sha256_hardened_batch::tests::rejection_and_unwind_clear_before_any_instruction ... ok
+test sha256_hardened_batch::tests::unsupported_static_bundle_never_constructs_authority ... ok
+test sha512_hardened_batch::tests::byte_entry_rejection_unwind_and_counter_overflow_preserve_states ... ok
+test sha512_hardened_batch::tests::cleanup_all_four_regions_and_inactive_capacity ... ok
+test sha512_hardened_batch::tests::destructor_clears_poisoned_storage ... ok
+test sha512_hardened_batch::tests::native_lane_distinct_differential_and_actual_dispatch ... ok
+test sha512_hardened_batch::tests::operation_unwind_clears_partially_populated_workspace ... ok
+test sha512_hardened_batch::tests::pack_rejects_invalid_width_and_initializes_inactive_lanes ... ok
+test sha512_hardened_batch::tests::post_dispatch_health_loss_unwind_and_counter_overflow_are_transactional ... ok
+test sha512_hardened_batch::tests::rejection_and_unwind_clear_before_any_instruction ... ok
+test sha512_hardened_batch::tests::unsupported_static_bundle_never_constructs_authority ... ok
+test keccak_hardened_batch::tests::native_word_and_byte_entries_match_independent_reference ... ok
+
+successes:
+
+---- keccak_hardened_batch::tests::native_word_and_byte_entries_match_independent_reference stdout ----
+HARDENED_KECCAK_BATCH_NATIVE: Neon; pairs=1024
+
+
+successes:
+    keccak_hardened_batch::tests::absent_static_bundle_rejects
+    keccak_hardened_batch::tests::every_region_clears_explicitly_and_on_drop
+    keccak_hardened_batch::tests::invalid_widths_reject_and_clear_both_imports
+    keccak_hardened_batch::tests::native_word_and_byte_entries_match_independent_reference
+    keccak_hardened_batch::tests::pack_commit_roundtrips_and_preserves_inactive_capacity
+    keccak_hardened_batch::tests::post_dispatch_failure_and_overflow_preserve_caller_states
+    keccak_hardened_batch::tests::preflight_rejection_and_unwind_clear_and_quarantine
+    keccak_hardened_batch::tests::reference_matches_zero_state_kat
+    sha256_hardened_batch::tests::byte_entry_rejection_unwind_and_counter_overflow_preserve_states
+    sha256_hardened_batch::tests::cleanup_all_four_regions_and_inactive_capacity
+    sha256_hardened_batch::tests::destructor_clears_poisoned_storage
+    sha256_hardened_batch::tests::native_lane_distinct_differential_and_actual_dispatch
+    sha256_hardened_batch::tests::operation_unwind_clears_partially_populated_workspace
+    sha256_hardened_batch::tests::pack_rejects_invalid_width_and_initializes_inactive_lanes
+    sha256_hardened_batch::tests::post_dispatch_health_loss_unwind_and_counter_overflow_are_transactional
+    sha256_hardened_batch::tests::rejection_and_unwind_clear_before_any_instruction
+    sha256_hardened_batch::tests::unsupported_static_bundle_never_constructs_authority
+    sha512_hardened_batch::tests::byte_entry_rejection_unwind_and_counter_overflow_preserve_states
+    sha512_hardened_batch::tests::cleanup_all_four_regions_and_inactive_capacity
+    sha512_hardened_batch::tests::destructor_clears_poisoned_storage
+    sha512_hardened_batch::tests::native_lane_distinct_differential_and_actual_dispatch
+    sha512_hardened_batch::tests::operation_unwind_clears_partially_populated_workspace
+    sha512_hardened_batch::tests::pack_rejects_invalid_width_and_initializes_inactive_lanes
+    sha512_hardened_batch::tests::post_dispatch_health_loss_unwind_and_counter_overflow_are_transactional
+    sha512_hardened_batch::tests::rejection_and_unwind_clear_before_any_instruction
+    sha512_hardened_batch::tests::unsupported_static_bundle_never_constructs_authority
+
+test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 1.85s
+
+ASan/LSan: brynja-hash-sha2
+
+running 29 tests
+test hardened_batch512::control::tests::accounting_boundaries_are_atomic ... ok
+test hardened_batch512::engine::tests::report_overflow_is_an_invariant_failure ... ok
+test hardened_batch512::tests::destructor_clears_all_leaf_regions ... ok
+test hardened_batch512::tests::differential::portable_all_bit_tails_padding_boundaries_and_mixed_identities ... ok
+test hardened_batch512::tests::differential::required_ineligible_work_is_atomic_and_reusable ... ok
+test hardened_batch512::tests::differential::sparse_empty_and_inactive_slots_are_distinct ... ok
+test hardened_batch512::tests::differential::native_mixed_lanes_match_portable_and_required_route_is_real ... ok
+test hardened_batch512::tests::general::iv_derivation_is_charged_and_required_rejection_precedes_hashing ... ok
+test hardened_batch512::tests::general::parameter_identity_codes_are_injective_and_invalid_codes_rejected ... ok
+test hardened_batch512::tests::lifecycle::cancellation_revocation_and_unwind_at_every_boundary ... ok
+test hardened_batch512::tests::lifecycle::declassification_is_consuming_atomic_and_clears_originals ... ok
+test hardened_batch512::tests::lifecycle::every_wrong_slot_width_clears_secret_and_preserves_public ... ok
+test hardened_batch512::tests::lifecycle::focused_unwind_after_secret_processing_clears_and_revokes ... ok
+test hardened_batch512::tests::lifecycle::work_limit_is_not_persistent_quarantine ... ok
+test hardened_batch512::tests::portable_sha384_sha512_known_answers_and_output_drop ... ok
+test hardened_batch::control::tests::accounting_boundaries_are_atomic ... ok
+test hardened_batch::engine::tests::report_overflow_is_an_invariant_failure ... ok
+test hardened_batch::tests::destructor_clears_all_leaf_regions ... ok
+test hardened_batch::tests::differential::native_mixed_lanes_match_portable_and_required_route_is_real ... ok
+test hardened_batch::tests::differential::portable_all_bit_tails_padding_boundaries_and_mixed_identities ... ok
+test hardened_batch::tests::differential::required_ineligible_work_is_atomic_and_reusable ... ok
+test hardened_batch::tests::differential::sparse_empty_and_inactive_slots_are_distinct ... ok
+test hardened_batch::tests::lifecycle::cancellation_revocation_and_unwind_at_every_boundary ... ok
+test hardened_batch::tests::lifecycle::declassification_is_consuming_atomic_and_clears_originals ... ok
+test hardened_batch::tests::lifecycle::every_wrong_slot_width_clears_secret_and_preserves_public ... ok
+test hardened_batch::tests::lifecycle::focused_unwind_after_secret_processing_clears_and_revokes ... ok
+test hardened_batch::tests::lifecycle::work_limit_is_not_persistent_quarantine ... ok
+test hardened_batch::tests::portable_sha224_sha256_known_answers_and_output_drop ... ok
+test hardened_batch512::tests::general::all_parameters_preserve_identity_and_canonical_secret_output ... ok
+
+successes:
+
+successes:
+    hardened_batch512::control::tests::accounting_boundaries_are_atomic
+    hardened_batch512::engine::tests::report_overflow_is_an_invariant_failure
+    hardened_batch512::tests::destructor_clears_all_leaf_regions
+    hardened_batch512::tests::differential::native_mixed_lanes_match_portable_and_required_route_is_real
+    hardened_batch512::tests::differential::portable_all_bit_tails_padding_boundaries_and_mixed_identities
+    hardened_batch512::tests::differential::required_ineligible_work_is_atomic_and_reusable
+    hardened_batch512::tests::differential::sparse_empty_and_inactive_slots_are_distinct
+    hardened_batch512::tests::general::all_parameters_preserve_identity_and_canonical_secret_output
+    hardened_batch512::tests::general::iv_derivation_is_charged_and_required_rejection_precedes_hashing
+    hardened_batch512::tests::general::parameter_identity_codes_are_injective_and_invalid_codes_rejected
+    hardened_batch512::tests::lifecycle::cancellation_revocation_and_unwind_at_every_boundary
+    hardened_batch512::tests::lifecycle::declassification_is_consuming_atomic_and_clears_originals
+    hardened_batch512::tests::lifecycle::every_wrong_slot_width_clears_secret_and_preserves_public
+    hardened_batch512::tests::lifecycle::focused_unwind_after_secret_processing_clears_and_revokes
+    hardened_batch512::tests::lifecycle::work_limit_is_not_persistent_quarantine
+    hardened_batch512::tests::portable_sha384_sha512_known_answers_and_output_drop
+    hardened_batch::control::tests::accounting_boundaries_are_atomic
+    hardened_batch::engine::tests::report_overflow_is_an_invariant_failure
+    hardened_batch::tests::destructor_clears_all_leaf_regions
+    hardened_batch::tests::differential::native_mixed_lanes_match_portable_and_required_route_is_real
+    hardened_batch::tests::differential::portable_all_bit_tails_padding_boundaries_and_mixed_identities
+    hardened_batch::tests::differential::required_ineligible_work_is_atomic_and_reusable
+    hardened_batch::tests::differential::sparse_empty_and_inactive_slots_are_distinct
+    hardened_batch::tests::lifecycle::cancellation_revocation_and_unwind_at_every_boundary
+    hardened_batch::tests::lifecycle::declassification_is_consuming_atomic_and_clears_originals
+    hardened_batch::tests::lifecycle::every_wrong_slot_width_clears_secret_and_preserves_public
+    hardened_batch::tests::lifecycle::focused_unwind_after_secret_processing_clears_and_revokes
+    hardened_batch::tests::lifecycle::work_limit_is_not_persistent_quarantine
+    hardened_batch::tests::portable_sha224_sha256_known_answers_and_output_drop
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 22 filtered out; finished in 3.94s
+
+ASan/LSan: brynja-hash-sha3
+
+running 13 tests
+test hardened_batch::control::tests::accounting_boundaries_are_atomic ... ok
+test hardened_batch::tests::input_identity_width_and_customization_are_checked ... ok
+test hardened_batch::tests::accelerated_slot_mask_tracks_sparse_groups_not_selected_authority ... ok
+test hardened_batch::tests::lifecycle::explicit_declassification_clears_source_and_preserves_failed_public_output ... ok
+test hardened_batch::tests::lifecycle::focused_unwind_after_permutation_clears_every_owned_region ... ok
+test hardened_batch::tests::lifecycle::inactive_destination_and_required_ineligibility_fail_before_work ... ok
+test hardened_batch::tests::lifecycle::malformed_destinations_and_short_staging_clear_without_quarantine ... ok
+test hardened_batch::tests::lifecycle::native_work_and_cancellation_boundaries ... ok
+test hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state ... ok
+test hardened_batch::tests::lifecycle::zero_output_still_frames_and_all_activity_masks_work ... ok
+test hardened_batch::tests::native_differential_uses_hardened_vector_authority ... ok
+test hardened_batch::tests::lifecycle::all_work_cancel_revoke_and_unwind_boundaries ... ok
+test hardened_batch::tests::portable_mixed_domains_bit_tails_and_squeeze_boundaries ... ok
+
+successes:
+
+successes:
+    hardened_batch::control::tests::accounting_boundaries_are_atomic
+    hardened_batch::tests::accelerated_slot_mask_tracks_sparse_groups_not_selected_authority
+    hardened_batch::tests::input_identity_width_and_customization_are_checked
+    hardened_batch::tests::lifecycle::all_work_cancel_revoke_and_unwind_boundaries
+    hardened_batch::tests::lifecycle::explicit_declassification_clears_source_and_preserves_failed_public_output
+    hardened_batch::tests::lifecycle::focused_unwind_after_permutation_clears_every_owned_region
+    hardened_batch::tests::lifecycle::inactive_destination_and_required_ineligibility_fail_before_work
+    hardened_batch::tests::lifecycle::malformed_destinations_and_short_staging_clear_without_quarantine
+    hardened_batch::tests::lifecycle::native_work_and_cancellation_boundaries
+    hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state
+    hardened_batch::tests::lifecycle::zero_output_still_frames_and_all_activity_masks_work
+    hardened_batch::tests::native_differential_uses_hardened_vector_authority
+    hardened_batch::tests::portable_mixed_domains_bit_tails_and_squeeze_boundaries
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 14.22s
+
+ASan/LSan: brynja-crypto-cpu-std
+
+running 6 tests
+test keccak_hardened_batch::tests::portable_does_not_call_detector_and_fallback_is_unavailability_only ... ok
+test sha256_hardened_batch::tests::actual_hardened_routes_clear_outputs_and_never_recover_revoked_authority ... ok
+test sha256_hardened_batch::tests::portable_does_not_call_detector_and_fallback_is_unavailability_only ... ok
+test sha512_hardened_batch::tests::actual_hardened_routes_clear_outputs_and_never_recover_revoked_authority ... ok
+test sha512_hardened_batch::tests::portable_does_not_call_detector_and_fallback_is_unavailability_only ... ok
+test keccak_hardened_batch::tests::actual_hardened_routes_clear_outputs_and_never_recover_revoked_authority ... ok
+
+successes:
+
+successes:
+    keccak_hardened_batch::tests::actual_hardened_routes_clear_outputs_and_never_recover_revoked_authority
+    keccak_hardened_batch::tests::portable_does_not_call_detector_and_fallback_is_unavailability_only
+    sha256_hardened_batch::tests::actual_hardened_routes_clear_outputs_and_never_recover_revoked_authority
+    sha256_hardened_batch::tests::portable_does_not_call_detector_and_fallback_is_unavailability_only
+    sha512_hardened_batch::tests::actual_hardened_routes_clear_outputs_and_never_recover_revoked_authority
+    sha512_hardened_batch::tests::portable_does_not_call_detector_and_fallback_is_unavailability_only
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.07s
+
+ASan/LSan: brynja-hash-parallel
+
+running 29 tests
+test execution::batch::tests::completed_owner_and_workspace_drop_clear_storage ... ok
+test execution::batch::tests::cancellation_budget_and_unwind_close_root_and_clear_every_slot ... ok
+test execution::batch::tests::provenance_order_missing_and_duplicate_groups_fail_closed ... ok
+test execution::batch::tests::required_tail_and_revoked_backend_never_silently_fall_back ... ok
+test execution::batch::tests::scheduled_tokens_cannot_complete_streaming_roots ... ok
+test execution::batch::tests::vector_domains_bits_boundaries_and_actual_leaf_counts ... ok
+test execution::batch::tests::worker_policy_is_not_a_forged_vector_report ... ok
+test execution::batch::transfer::tests::transfer_clears_source_and_all_transport_capacity ... ok
+test execution::batch::transfer::tests::transferred_tokens_preserve_plan_and_order_and_clear_on_rejection ... ok
+test execution::collector::tests::cancel_clears_all_four_root_metadata_regions ... ok
+test execution::collector::tests::failed_operation_guard_clears_preexisting_metadata ... ok
+test execution::collector::tests::output_width_validation_accepts_only_canonical_shapes ... ok
+test execution::collector::tests::reader_output_overflow_clears_destination_and_closes_root ... ok
+test execution::collector::tests::streaming_root_rejects_finalization_without_input_proof ... ok
+test execution::stream::batch::failures::output_failures_and_reader_drop_clear_the_owner ... ok
+test execution::stream::batch::failures::required_tail_and_revocation_do_not_fall_back ... ok
+test execution::batch::tests::portable_domains_bits_boundaries_and_order ... ok
+test execution::stream::batch::tests::construction_work_limit_cancellation_and_forgotten_reader ... ok
+test execution::stream::batch::tests::empty_stream_completes ... ok
+test execution::stream::batch::tests::exact_completion_rejects_corrupted_pending_and_counts ... ok
+test execution::stream::batch::tests::pending_stream_drop_clears_buffer ... ok
+test execution::stream::batch::tests::cancellation_budget_unwind_and_drop_clear_pending_storage ... ok
+test execution::stream::batch::tests::vector_chunk_bit_and_xof_campaign ... ok
+test execution::stream::tests::cancellation_clears_both_input_metadata_regions_and_workspace ... ok
+test execution::stream::tests::completion_mismatched_leaf_count_clears_all_output_paths ... ok
+test execution::stream::tests::completion_rejects_pending_bytes_even_when_leaf_count_matches ... ok
+test execution::stream::tests::maximum_bit_count_rejects_before_callbacks_and_clears ... ok
+test execution::stream::tests::pending_count_corruption_is_terminal_not_a_slice_panic ... ok
+test execution::stream::batch::tests::portable_chunk_bit_and_xof_campaign ... ok
+
+successes:
+
+successes:
+    execution::batch::tests::cancellation_budget_and_unwind_close_root_and_clear_every_slot
+    execution::batch::tests::completed_owner_and_workspace_drop_clear_storage
+    execution::batch::tests::portable_domains_bits_boundaries_and_order
+    execution::batch::tests::provenance_order_missing_and_duplicate_groups_fail_closed
+    execution::batch::tests::required_tail_and_revoked_backend_never_silently_fall_back
+    execution::batch::tests::scheduled_tokens_cannot_complete_streaming_roots
+    execution::batch::tests::vector_domains_bits_boundaries_and_actual_leaf_counts
+    execution::batch::tests::worker_policy_is_not_a_forged_vector_report
+    execution::batch::transfer::tests::transfer_clears_source_and_all_transport_capacity
+    execution::batch::transfer::tests::transferred_tokens_preserve_plan_and_order_and_clear_on_rejection
+    execution::collector::tests::cancel_clears_all_four_root_metadata_regions
+    execution::collector::tests::failed_operation_guard_clears_preexisting_metadata
+    execution::collector::tests::output_width_validation_accepts_only_canonical_shapes
+    execution::collector::tests::reader_output_overflow_clears_destination_and_closes_root
+    execution::collector::tests::streaming_root_rejects_finalization_without_input_proof
+    execution::stream::batch::failures::output_failures_and_reader_drop_clear_the_owner
+    execution::stream::batch::failures::required_tail_and_revocation_do_not_fall_back
+    execution::stream::batch::tests::cancellation_budget_unwind_and_drop_clear_pending_storage
+    execution::stream::batch::tests::construction_work_limit_cancellation_and_forgotten_reader
+    execution::stream::batch::tests::empty_stream_completes
+    execution::stream::batch::tests::exact_completion_rejects_corrupted_pending_and_counts
+    execution::stream::batch::tests::pending_stream_drop_clears_buffer
+    execution::stream::batch::tests::portable_chunk_bit_and_xof_campaign
+    execution::stream::batch::tests::vector_chunk_bit_and_xof_campaign
+    execution::stream::tests::cancellation_clears_both_input_metadata_regions_and_workspace
+    execution::stream::tests::completion_mismatched_leaf_count_clears_all_output_paths
+    execution::stream::tests::completion_rejects_pending_bytes_even_when_leaf_count_matches
+    execution::stream::tests::maximum_bit_count_rejects_before_callbacks_and_clears
+    execution::stream::tests::pending_count_corruption_is_terminal_not_a_slice_panic
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 31.99s
+
+ASan/LSan: brynja-hash-parallel-std
+
+running 14 tests
+test execution::batch::tests::empty_input_has_no_workers ... ok
+test execution::batch::tests::preferred_threads_bits_outputs_and_counters ... ok
+test execution::batch::tests::request_rejections_preserve_public_clear_secret_and_allow_reuse ... ok
+test execution::batch::tests::required_partial_group_rejects_without_output ... ok
+test execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed128 ... ok
+test execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed256 ... ok
+test execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof128 ... ok
+test execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof256 ... ok
+test execution::batch::worker::tests::every_completed_or_panicking_worker_clears_its_output_slot ... ok
+test execution::batch::worker::tests::reversed_worker_completion_is_merged_in_submission_order ... ok
+test execution::batch::worker::tests::spawn_errors_panics_and_cancellation_join_and_close_root ... ok
+test execution::batch::worker::tests::storage_drop_clears_all_live_transport_capacity ... ok
+test execution::batch::worker::tests::work_totals_are_exact_checked_and_atomic ... ok
+test execution::batch::tests::portable_threads_bits_outputs_and_counters ... ok
+
+successes:
+
+---- execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed128 stdout ----
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed128' (74181) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 0
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed128' (74181) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 1
+ right: 1
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed128' (74181) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 2
+ right: 2
+
+---- execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed256 stdout ----
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed256' (74188) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 0
+ right: 0
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed256' (74188) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 1
+ right: 1
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed256' (74188) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 2
+ right: 2
+
+---- execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof128 stdout ----
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof128' (74193) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 0
+ right: 0
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof128' (74193) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 1
+ right: 1
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof128' (74193) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 2
+ right: 2
+
+---- execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof256 stdout ----
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof256' (74199) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 0
+ right: 0
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof256' (74199) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 1
+ right: 1
+
+thread 'execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof256' (74199) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs:48:13:
+assertion `left != right` failed: injected coordinator spawn unwind
+  left: 2
+ right: 2
+
+---- execution::batch::worker::tests::every_completed_or_panicking_worker_clears_its_output_slot stdout ----
+
+thread '<unnamed>' (74218) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests.rs:104:13:
+injected worker panic after computing output
+
+---- execution::batch::worker::tests::spawn_errors_panics_and_cancellation_join_and_close_root stdout ----
+
+thread '<unnamed>' (74254) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests.rs:104:13:
+injected worker panic after computing output
+
+thread '<unnamed>' (74263) panicked at crates/brynja-hash-parallel-std/src/execution/batch/worker/tests.rs:104:13:
+injected worker panic after computing output
+
+
+successes:
+    execution::batch::tests::empty_input_has_no_workers
+    execution::batch::tests::portable_threads_bits_outputs_and_counters
+    execution::batch::tests::preferred_threads_bits_outputs_and_counters
+    execution::batch::tests::request_rejections_preserve_public_clear_secret_and_allow_reuse
+    execution::batch::tests::required_partial_group_rejects_without_output
+    execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed128
+    execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed256
+    execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof128
+    execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof256
+    execution::batch::worker::tests::every_completed_or_panicking_worker_clears_its_output_slot
+    execution::batch::worker::tests::reversed_worker_completion_is_merged_in_submission_order
+    execution::batch::worker::tests::spawn_errors_panics_and_cancellation_join_and_close_root
+    execution::batch::worker::tests::storage_drop_clears_all_live_transport_capacity
+    execution::batch::worker::tests::work_totals_are_exact_checked_and_atomic
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 14.49s
+
+Hardened multibuffer ASan/forced LeakSanitizer: PASS; six layers; Neon

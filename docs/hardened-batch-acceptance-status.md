@@ -74,11 +74,13 @@ No release script, publication rule, verifier selector or gate was changed.
 
 ## Remaining hand-off
 
-1. Obtain the exceptional owner pentest/retest against the selected committed
-   source. The ledger remains `RETEST REQUIRED` / `PENDING`; zero recorded open
-   findings is not a PASS verdict. Address any finding and test its remediation.
-2. Collect and review fresh AMD, Intel, AWS Arm and Apple runtime records against
-   the agreed source. The local collector smoke record is not final approval.
+1. The owner supplied a clean pentest/retest through `6978bc2a` on 2026-09-17;
+   the ledger records PASS with the original sanitizer and Clippy caveats.
+   This is a supplied tool assessment, not independent cryptographic review.
+2. Fresh AMD, Intel, AWS Arm and Apple runtime records at `6978bc2a` passed
+   collection and project review; see the [native observations](hardened-batch-native-evidence.md).
+   All fifteen shared-family records and three native six-layer ASan/forced-LSan
+   runs also passed; their original artifacts and limits are recorded there.
    Its bundle explicitly excludes Miri, Kani, sanitizers and compiler inspection;
    preserve those separate obligations in the final verification.
 3. Run the unchanged release workflow on the settled candidate, including its

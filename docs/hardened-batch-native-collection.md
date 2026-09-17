@@ -9,6 +9,10 @@ Supported lanes are `amd-x86_64`, `intel-x86_64`, `aws-aarch64` and
 capabilities. CPU enumeration checks the complete AVX/AVX2 or NEON bundle; it is
 not a live-migration monitor or independent cloud-provider authentication.
 
+The [native hardware inventory](native-hardware-inventory.md) records the new
+C8i/C8g capabilities, the absent dedicated Intel SHA512 feature, and when to
+request more physical cores. Instance size and SIMD width are not interchangeable.
+
 From a clean committed checkout, inspect the plan without running it:
 
 ```sh

@@ -17,7 +17,7 @@ POISON = "\n".join(f'"mov x{i}, #-1",' for i in GP) + "\n" + "\n".join(
 SHA256 = False
 
 
-def asm_check(text, *, keccak=False, batch256=False):
+def asm_check(text, *, keccak=False, batch256=False, batch512=False):
     text = re.sub(r"(?m)^\s*(?://|;)\s*BRYNJA_", "// BRYNJA_", text)
     text = re.sub(r"movi\.16b\s+v([0-9]+),", r"movi v\1.16b,", text)
     if text.count("// BRYNJA_SECRET_BEGIN") != 1 or text.count("// BRYNJA_SECRET_END") != 1:
@@ -44,7 +44,7 @@ def asm_check(text, *, keccak=False, batch256=False):
             or any(not re.match(r"(?:mov|movi)\s", op) for op in operations[:-1])):
         raise ValueError("unexpected Arm post-computation operation")
     algorithm, rounds = ('256', 1) if SHA256 else ('512', 4)
-    if batch256:
+    if batch256 or batch512:
         if len(re.findall(r'\bld1r\b', active)) != 1:
             raise ValueError("Arm batch constant broadcast absent")
     elif keccak:

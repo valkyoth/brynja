@@ -70,3 +70,5 @@
 "crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs" = "d913dd21b13d95ec2341b4bae3b738c5021c501cc6afaf4310f73c181d1736a8"
 "crates/brynja-crypto-cpu/src/sha256_hardened_batch/x86/secret.rs" = "1c9dfe716a169deb9d8a2670eb485b74d393888898904ba5a092aa1cefcbd852"
 "crates/brynja-crypto-cpu/src/sha256_hardened_batch/arm/secret.rs" = "f29271f331283b937532ab931894679d4ee6a1a4049dfbff687c389ff5dfb946"
+"crates/brynja-crypto-cpu/src/sha512_hardened_batch/x86/secret.rs" = "bb03ef422bf0e6fb505e39f75364384683e696f8ef8c50ed6f3b683f20470c2b"
+"crates/brynja-crypto-cpu/src/sha512_hardened_batch/arm/secret.rs" = "807a94ee4f3f8d73c1c945e8899121f6f3635a9ef438f2eb309477f4d5b550c5"

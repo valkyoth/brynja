@@ -20,14 +20,16 @@ SOURCES = {
 FEATURE = ['--features', 'keccak-probe']
 MARKERS = ('KECCAK_CLEANUP: 1024 permutations; 31 unaligned placements; PASS',
            'KECCAK_BOUNDS: 4 guarded placements; readonly constants: PASS')
-BATCH256 = False
+BATCH = False
+BATCH512 = False
 FEATURE_NAME = 'keccak-probe'
 CONSTANTS = 'keccak_constants.rs'
 
 
 def configure_batch256():
-    global BATCH256, SOURCES, FEATURE_NAME, FEATURE, CONSTANTS, MARKERS
-    BATCH256 = True
+    global BATCH, BATCH512, SOURCES, FEATURE_NAME, FEATURE, CONSTANTS, MARKERS
+    BATCH = True
+    BATCH512 = False
     SOURCES = {arch: REPO / ('crates/brynja-crypto-cpu/src/sha256_hardened_batch/' +
                             ('x86' if arch == 'x86' else 'arm') + '/secret.rs')
                for arch in ('x86', 'arm')}
@@ -38,14 +40,26 @@ def configure_batch256():
                'BATCH256_BOUNDS: 4 guarded placements; readonly constants: PASS')
 
 
+def configure_batch512():
+    global BATCH512, SOURCES, FEATURE_NAME, FEATURE, CONSTANTS, MARKERS
+    configure_batch256()
+    BATCH512 = True
+    SOURCES = {arch: Path(str(path).replace('sha256_hardened_batch', 'sha512_hardened_batch'))
+               for arch, path in SOURCES.items()}
+    FEATURE_NAME = 'batch512-probe'
+    FEATURE = ['--features', FEATURE_NAME]
+    CONSTANTS = 'sha512_schedule.rs'
+    MARKERS = tuple(marker.replace('BATCH256', 'BATCH512') for marker in MARKERS)
+
+
 def validator(arch, text):
     if arch == 'x86':
-        check.REGISTERS = ('eax', 'ecx', 'edx') if BATCH256 else ('eax', 'ecx', 'edx', 'r8d')
-        check.asm_check(text, keccak=not BATCH256, batch256=BATCH256)
+        check.REGISTERS = ('eax', 'ecx', 'edx') if BATCH else ('eax', 'ecx', 'edx', 'r8d')
+        check.asm_check(text, keccak=not BATCH, batch256=BATCH and not BATCH512, batch512=BATCH512)
     else:
         check_arm.VECTOR = tuple(range(4))
-        check_arm.GP = (4, 5, 6) if BATCH256 else (4, 5, 6, 7, 9)
-        check_arm.asm_check(text, keccak=not BATCH256, batch256=BATCH256)
+        check_arm.GP = (4, 5, 6) if BATCH else (4, 5, 6, 7, 9)
+        check_arm.asm_check(text, keccak=not BATCH, batch256=BATCH and not BATCH512, batch512=BATCH512)
 
 
 def codegen(arch):
@@ -87,13 +101,16 @@ def codegen(arch):
                         pass
                     else:
                         raise AssertionError('accepted compiler-boundary mutation')
-                label = 'SHA-256 batch' if FEATURE_NAME == 'batch256-probe' else 'Keccak'
+                label = ('SHA-512 batch' if BATCH512 else 'SHA-256 batch') if BATCH else 'Keccak'
                 print(f'{label} boundary: {compiler} {target} release={optimized}: PASS', flush=True)
 
 
 def mutation_cases(arch, original, mutations):
-    if BATCH256:
-        from batch256_mutations import specification
+    if BATCH:
+        if BATCH512:
+            from batch512_mutations import specification
+        else:
+            from batch256_mutations import specification
         marker, erase, poison, algorithm = specification(arch)
     elif arch == 'x86':
         marker = '"# BRYNJA_REGISTER_ERASE",'
@@ -177,7 +194,7 @@ def execution(arch, mutations):
                 target = 'x86_64-unknown-linux-gnu' if arch == 'x86' else 'aarch64-unknown-linux-musl'
                 env.pop('CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER', None)
                 env['RUSTFLAGS'] = '-C target-feature=+avx2' if arch == 'x86' else (
-                    '-C linker=rust-lld -C target-feature=+neon' + ('' if BATCH256 else ',+sha3'))
+                    '-C linker=rust-lld -C target-feature=+neon' + ('' if BATCH else ',+sha3'))
                 if arch == 'arm':
                     env['CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER'] = 'qemu-aarch64 -cpu max'
                 features = FEATURE_NAME + (',win64-probe' if abi == 'win64' else '')
@@ -189,7 +206,7 @@ def execution(arch, mutations):
                     raise AssertionError('missing actual execution marker')
                 if not expected and (result.returncode == 0 or 'test result: FAILED' not in result.stdout):
                     raise AssertionError(f'mutant did not fail in execution: {name}\n{result.stdout}\n{result.stderr}')
-            label = 'SHA-256 batch' if FEATURE_NAME == 'batch256-probe' else 'Keccak'
+            label = ('SHA-512 batch' if BATCH512 else 'SHA-256 batch') if BATCH else 'Keccak'
             print(f'{label} {arch}: {compiler} release={optimized} ABI={abi}: {len(cases)} controls/mutants PASS', flush=True)
 
 
@@ -199,11 +216,16 @@ if __name__ == '__main__':
     parser.add_argument('--execute', action='store_true', help='native x86 or QEMU Arm')
     parser.add_argument('--mutations', action='store_true')
     parser.add_argument('--sha256-batch', action='store_true')
+    parser.add_argument('--sha512-batch', action='store_true')
     args = parser.parse_args()
     if args.mutations and not args.execute:
         parser.error('--mutations requires --execute')
+    if args.sha256_batch and args.sha512_batch:
+        parser.error('select only one batch family')
     if args.sha256_batch:
         configure_batch256()
+    if args.sha512_batch:
+        configure_batch512()
     codegen(args.arch)
     if args.execute:
         execution(args.arch, args.mutations)

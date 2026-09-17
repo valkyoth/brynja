@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "977f40d12d8fa23cce8c34164d9e320ed10f91904d2175795e38bfff330ca897"
+EXPECTED_POLICY_SHA256 = "e6d8e56e18c1f7e53d99a33896a85e2f28489218a224cdcb2d6cd7d4cee137cd"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,8 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/sha512_hardened_batch/x86/secret.rs"): "hardened-sha512-batch-opaque-register-boundary",
+    (CPU, "src/sha512_hardened_batch/arm/secret.rs"): "hardened-sha512-batch-opaque-register-boundary",
     (CPU, "src/sha256_hardened_batch/x86/secret.rs"): "hardened-sha256-batch-opaque-register-boundary",
     (CPU, "src/sha256_hardened_batch/arm/secret.rs"): "hardened-sha256-batch-opaque-register-boundary",
     (CPU, "src/x86_avx2_keccak/secret.rs"): "hardened-keccak-opaque-register-boundary",

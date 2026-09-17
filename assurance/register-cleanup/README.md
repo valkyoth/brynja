@@ -2,7 +2,7 @@
 
 Development assurance code, **not complete release evidence**.
 The owner requested register-remanence remediation across the hardened backends
-before another pentest. SHA-224/256 (single-state and batch), SHA-512 and
+before another pentest. SHA-224/256 and SHA-512 (single-state and batch), and
 single-state Keccak use this boundary in production;
 the fixture directly includes their actual private source files, rather than
 testing duplicate implementations. Other ports and native qualification remain
@@ -48,6 +48,8 @@ or independent verification claim follows from these tests.
 | Arm single-state Keccak | QEMU, 1,024 arbitrary states per positive run | Five integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 | x86 SHA-224/256 batch | Native Linux AVX2, 1,024 independent batches per positive run | Three integer registers plus four complete YMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
 | Arm SHA-224/256 batch | QEMU, 1,024 independent batches per positive run | Three integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
+| x86 SHA-512-family batch | Native Linux AVX2, 1,024 independent batches per positive run | Three integer registers plus four complete YMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
+| Arm SHA-512-family batch | QEMU, 1,024 independent batches per positive run | Three integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 
 The scalar schedule and feed-forward also live inside the block; this is not
 merely a `vzeroupper`/`vzeroall` epilogue. The ordinary implementation is not
@@ -65,7 +67,7 @@ The compiled mutation campaign poisons each working register before cleanup,
 then independently removes its erasure. Separate mutations remove scratch
 clearing or corrupt the final lane ordering. Positive poisoned controls must
 still pass. Compiler-check mutations inject spills and loads before/after the
-opaque boundary. These tests exercise the eight production kernels, not a complete
+opaque boundary. These tests exercise the ten production kernels, not a complete
 production qualification or a general assembly verifier.
 
 The Linux bounds test also places each input, state, scratch and constants at
@@ -99,6 +101,14 @@ alignment. Thirteen x86 and fourteen Arm negative mutation classes remove wipes
 or corrupt schedule/round/feed-forward/lane behavior. High-level packing and
 output transfer are not part of this normal-return kernel contract.
 
+SHA-512-family batching uses four AVX2 or two NEON lanes and a separate scalar
+80-round compression oracle. The 3,264-byte scratch view retains output only at
+2816..3072. It repeats the guarded-page, unaligned, inactive-capacity, register
+and ABI-preservation checks with 64-bit words and deliberately non-vector-aligned
+u64 constants. Thirteen x86 and fourteen Arm negative mutation classes must fail
+at runtime. AVX2/NEON are sufficient; this batch path does not require dedicated
+SHA512 instructions, SDE, SHA-NI, SHA3 or AVX-512.
+
 Run with an already licensed, verified Intel SDE executable:
 
 ```sh
@@ -110,8 +120,11 @@ python3 assurance/register-cleanup/check_keccak.py x86 --execute --mutations
 python3 assurance/register-cleanup/check_keccak.py arm --execute --mutations
 python3 assurance/register-cleanup/check_keccak.py x86 --sha256-batch --execute --mutations
 python3 assurance/register-cleanup/check_keccak.py arm --sha256-batch --execute --mutations
+python3 assurance/register-cleanup/check_keccak.py x86 --sha512-batch --execute --mutations
+python3 assurance/register-cleanup/check_keccak.py arm --sha512-batch --execute --mutations
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --all-targets -- -D warnings
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --features batch256-probe --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
+cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --features batch512-probe --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 ```
 
 A generic `cargo test` explicitly ignores the instruction execution test. It

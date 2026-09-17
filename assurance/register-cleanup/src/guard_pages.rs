@@ -3,34 +3,62 @@
 
 extern crate std;
 
-#[cfg(not(any(feature = "keccak-probe", feature = "batch256-probe")))]
+#[cfg(not(any(
+    feature = "keccak-probe",
+    feature = "batch256-probe",
+    feature = "batch512-probe"
+)))]
 use crate::kernel;
 use core::ffi::{c_int, c_void};
 use std::io;
 
 #[cfg(all(
-    not(any(feature = "keccak-probe", feature = "batch256-probe")),
+    not(any(
+        feature = "keccak-probe",
+        feature = "batch256-probe",
+        feature = "batch512-probe"
+    )),
     feature = "sha256-probe"
 ))]
 type Word = u32;
 #[cfg(all(
-    not(any(feature = "keccak-probe", feature = "batch256-probe")),
+    not(any(
+        feature = "keccak-probe",
+        feature = "batch256-probe",
+        feature = "batch512-probe"
+    )),
     not(feature = "sha256-probe")
 ))]
 type Word = u64;
 #[cfg(all(
-    not(any(feature = "keccak-probe", feature = "batch256-probe")),
+    not(any(
+        feature = "keccak-probe",
+        feature = "batch256-probe",
+        feature = "batch512-probe"
+    )),
     feature = "sha256-probe"
 ))]
 const WORDS: usize = 64;
 #[cfg(all(
-    not(any(feature = "keccak-probe", feature = "batch256-probe")),
+    not(any(
+        feature = "keccak-probe",
+        feature = "batch256-probe",
+        feature = "batch512-probe"
+    )),
     not(feature = "sha256-probe")
 ))]
 const WORDS: usize = 80;
-#[cfg(not(any(feature = "keccak-probe", feature = "batch256-probe")))]
+#[cfg(not(any(
+    feature = "keccak-probe",
+    feature = "batch256-probe",
+    feature = "batch512-probe"
+)))]
 const WORD_BYTES: usize = core::mem::size_of::<Word>();
-#[cfg(not(any(feature = "keccak-probe", feature = "batch256-probe")))]
+#[cfg(not(any(
+    feature = "keccak-probe",
+    feature = "batch256-probe",
+    feature = "batch512-probe"
+)))]
 const CONSTANT_BYTES: usize = WORDS * WORD_BYTES;
 
 unsafe extern "C" {
@@ -128,7 +156,11 @@ impl Drop for Pages {
 }
 
 #[test]
-#[cfg(not(any(feature = "keccak-probe", feature = "batch256-probe")))]
+#[cfg(not(any(
+    feature = "keccak-probe",
+    feature = "batch256-probe",
+    feature = "batch512-probe"
+)))]
 #[cfg_attr(
     all(
         not(feature = "sha256-probe"),

@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: fifty-seven exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: fifty-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only fifty-seven exact modules: the private core volatile clearer; the
+Rust in only fifty-nine exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -82,7 +82,17 @@ integer temporaries, explicitly zeroing inactive output capacity. The complete
 schedule, rounds, feed-forward and cleanup stay inside the opaque block.
 Packing and output transfer in the caller remain separate audit work.
 
-These eight kernel boundaries are under implementation-author verification, not
+The SHA-512-family batch ports add `sha512_hardened_batch/{x86,arm}/secret.rs`.
+The exact 3,264-byte owner layout retains packed output at 2816..3072 and
+clears all initial words, schedule words and round temporaries. These are
+four-lane AVX2 or two-lane NEON 64-bit kernels, not dedicated SHA512
+instruction paths. They use the same three integer/four vector working-register
+inventory as the narrower batch kernels. All 80 rounds and the complete
+schedule expansion remain inside the opaque block; inactive Arm output capacity
+is zeroed. SHA-384, named truncations and general SHA-512/t framing remain in
+their existing callers, outside this kernel-boundary claim.
+
+These ten kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.
 Pre-existing caller registers and caller-owned buffers are not erased. Abort,
 interruption during computation, OS snapshots and platform storage remain
@@ -117,8 +127,9 @@ remain outside the workspace erasure guarantee. This development inventory is
 not independent review or native qualification. Full milestone assurance remains
 pending; see [hardened multibuffer owners](hardened-multibuffer-owners.md).
 
-The SHA-512-family adds three separately pinned development exceptions in
-`sha512_hardened_batch/platform.rs`, `x86.rs` and `arm.rs`. The same necessity and
+The SHA-512-family has five separately pinned development exceptions in
+`sha512_hardened_batch/platform.rs`, `x86.rs`, `arm.rs` and their private
+`secret.rs` modules. The same necessity and
 authority/cleanup contracts apply, but these are distinct 64-bit kernels:
 four AVX2 lanes or two little-endian NEON lanes, 80 schedule words and 128-byte
 input blocks. Every packed vector still occupies an owned 32-byte region;

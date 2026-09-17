@@ -32,6 +32,7 @@ use core::marker::PhantomData;
 /// fn require<T: core::fmt::Debug>() {}
 /// require::<Workspace>();
 /// ```
+#[repr(C, align(32))]
 pub struct Workspace {
     pub(super) initial: [[u8; 32]; 8],
     pub(super) schedule: [[u8; 32]; 80],

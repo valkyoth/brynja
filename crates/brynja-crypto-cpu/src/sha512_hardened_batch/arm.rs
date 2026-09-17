@@ -1,133 +1,31 @@
-//! Two clearing SHA-512 lanes; unused packed capacity remains owned.
+//! Two little-endian NEON lanes behind one opaque secret-computation boundary.
 #![allow(unsafe_code)]
 use super::{Error, Workspace};
-use core::arch::aarch64::*;
 
-#[target_feature(enable = "neon")]
-unsafe fn load(bytes: &[u8; 32]) -> uint64x2_t {
-    // SAFETY: The byte-aligned 16-byte NEON load fits the initialized array.
-    unsafe { vreinterpretq_u64_u8(vld1q_u8(bytes.as_ptr())) }
-}
-#[target_feature(enable = "neon")]
-unsafe fn store(bytes: &mut [u8; 32], value: uint64x2_t) {
-    // SAFETY: The byte-aligned 16-byte store fits the exclusive owner array.
-    unsafe { vst1q_u8(bytes.as_mut_ptr(), vreinterpretq_u8_u64(value)) }
-}
+mod secret;
+
+const _: () = {
+    assert!(core::mem::size_of::<Workspace>() == 3264);
+    assert!(core::mem::offset_of!(Workspace, initial) == 0);
+    assert!(core::mem::offset_of!(Workspace, schedule) == 256);
+    assert!(core::mem::offset_of!(Workspace, work) == 2816);
+    assert!(core::mem::offset_of!(Workspace, temporary) == 3072);
+};
 
 #[target_feature(enable = "neon")]
 #[inline(never)]
 pub(super) unsafe fn compress_secret(s: &mut Workspace) -> Result<(), Error> {
-    // SAFETY: The private dispatcher carries lifetime-wide little-endian NEON
-    // authority. All loads/stores use fixed live owner arrays, including their
-    // unused upper half. Intrinsic values and compiler-created copies retain
-    // documented register/spill limits; no unowned vector arrays are created.
+    // SAFETY: The private dispatcher retains lifetime-wide NEON
+    // authority. repr(C) and the assertions above bind the initialized byte
+    // fields to the exact kernel layout. The exclusive reborrow covers only
+    // those fields, has no padding, and cannot escape the call. The kernel
+    // retains only packed output and clears its own working registers and
+    // non-output scratch before normal return; caller packing is separate.
     unsafe {
-        macro_rules! add {
-            ($a:expr, $b:expr) => {
-                vaddq_u64($a, $b)
-            };
-        }
-        macro_rules! xor {
-            ($a:expr, $b:expr) => {
-                veorq_u64($a, $b)
-            };
-        }
-        macro_rules! ror {
-            ($a:expr, $n:literal) => {
-                vorrq_u64(vshrq_n_u64::<$n>($a), vshlq_n_u64::<{ 64 - $n }>($a))
-            };
-        }
-        for t in 16_usize..80 {
-            let x = load(
-                s.schedule
-                    .get(t.checked_sub(15).ok_or(Error::Invariant)?)
-                    .ok_or(Error::Invariant)?,
-            );
-            let y = load(
-                s.schedule
-                    .get(t.checked_sub(2).ok_or(Error::Invariant)?)
-                    .ok_or(Error::Invariant)?,
-            );
-            let [sigma0, sigma1, ..] = &mut s.temporary;
-            store(
-                sigma0,
-                xor!(xor!(ror!(x, 1), ror!(x, 8)), vshrq_n_u64::<7>(x)),
-            );
-            store(
-                sigma1,
-                xor!(xor!(ror!(y, 19), ror!(y, 61)), vshrq_n_u64::<6>(y)),
-            );
-            let w16 = load(
-                s.schedule
-                    .get(t.checked_sub(16).ok_or(Error::Invariant)?)
-                    .ok_or(Error::Invariant)?,
-            );
-            let w7 = load(
-                s.schedule
-                    .get(t.checked_sub(7).ok_or(Error::Invariant)?)
-                    .ok_or(Error::Invariant)?,
-            );
-            store(
-                s.schedule.get_mut(t).ok_or(Error::Invariant)?,
-                add!(add!(w16, load(sigma0)), add!(w7, load(sigma1))),
-            );
-        }
-        for (work, initial) in s.work.iter_mut().zip(&s.initial) {
-            work.copy_from_slice(initial);
-        }
-        for (word, constant) in s
-            .schedule
-            .iter()
-            .zip(crate::sha512_schedule::ROUND_CONSTANTS)
-        {
-            let [a, b, c, _, e, f, g, h] = &s.work;
-            let [big0, big1, choose, majority, temp1, temp2] = &mut s.temporary;
-            store(
-                big0,
-                xor!(
-                    xor!(ror!(load(a), 28), ror!(load(a), 34)),
-                    ror!(load(a), 39)
-                ),
-            );
-            store(
-                big1,
-                xor!(
-                    xor!(ror!(load(e), 14), ror!(load(e), 18)),
-                    ror!(load(e), 41)
-                ),
-            );
-            store(
-                choose,
-                xor!(load(g), vandq_u64(load(e), xor!(load(f), load(g)))),
-            );
-            store(
-                majority,
-                xor!(
-                    vandq_u64(load(a), load(b)),
-                    vandq_u64(load(c), xor!(load(a), load(b)))
-                ),
-            );
-            store(
-                temp1,
-                add!(
-                    add!(add!(load(h), load(big1)), load(choose)),
-                    add!(vdupq_n_u64(constant), load(word))
-                ),
-            );
-            store(temp2, add!(load(big0), load(majority)));
-            let [a, b, c, d, e, f, g, h] = &mut s.work;
-            h.copy_from_slice(g);
-            g.copy_from_slice(f);
-            f.copy_from_slice(e);
-            store(e, add!(load(d), load(temp1)));
-            d.copy_from_slice(c);
-            c.copy_from_slice(b);
-            b.copy_from_slice(a);
-            store(a, add!(load(temp1), load(temp2)));
-        }
-        for (work, initial) in s.work.iter_mut().zip(&s.initial) {
-            store(work, add!(load(work), load(initial)));
-        }
+        secret::compress(
+            &mut *core::ptr::from_mut(s).cast::<[u8; 3264]>(),
+            &crate::sha512_schedule::ROUND_CONSTANTS,
+        );
     }
     Ok(())
 }

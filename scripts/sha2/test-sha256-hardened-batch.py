@@ -77,11 +77,11 @@ def inspect(mir, llvm, assembly, target):
     spec = importlib.util.spec_from_file_location('batch_codegen', ROOT / f'scripts/sha2/check-{FAMILY}-batch-codegen.py')
     checker = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(checker)
-    if FAMILY == 'sha256':
+    if FAMILY in ('sha256', 'sha512'):
         # The wrapper and opaque function are separate symbols. Select the
         # latter exactly, never inspect an unrelated ordinary/vector kernel.
         architecture = 'x86' if target.startswith('x86_64') else 'arm'
-        pattern = (r'^[_A-Za-z][^\n]*sha256_hardened_batch[0-9]+' + architecture +
+        pattern = (r'^[_A-Za-z][^\n]*' + NAMESPACE + r'[0-9]+' + architecture +
                    r'6secret8compress[^\n]*:\s*(?://[^\n]*)?\n')
         matches = list(re.finditer(pattern, assembly, re.M))
         require(len(matches) == 1, 'missing/ambiguous opaque batch compression symbol')
@@ -104,7 +104,7 @@ def inspect(mir, llvm, assembly, target):
         boundary_assembly = prefix + marker + remainder
         sys.path.insert(0, str(ROOT / 'assurance/register-cleanup'))
         import check_keccak as boundary
-        boundary.configure_batch256()
+        (boundary.configure_batch512 if FAMILY == 'sha512' else boundary.configure_batch256)()
         boundary.validator(architecture, boundary_assembly)
     checker.inspect(assembly.replace(NAMESPACE, FAMILY+'_batch'), target)
 
@@ -135,7 +135,7 @@ def compile_evidence(root, env, toolchain, target):
             pass
         else:
             raise ValueError('inspector accepted a mutated artifact: ' + before)
-    if FAMILY == 'sha256':
+    if FAMILY in ('sha256', 'sha512'):
         marker = '# ' if target.startswith('x86_64') else '// '
         load = 'movq (%rdi), %rax\n' if target.startswith('x86_64') else 'ldr x4, [x0]\n'
         for before, after in (
@@ -161,11 +161,12 @@ def layout_rejections(root, env, toolchain, target):
     architecture = 'x86' if target.startswith('x86_64') else 'arm'
     path = root / SOURCE / (architecture + '.rs')
     original = path.read_text()
-    cases = [('size_of::<Workspace>() == 2752', 'size_of::<Workspace>() == 2751')]
+    size, work, temporary = (3264, 2816, 3072) if FAMILY == 'sha512' else (2752, 2304, 2560)
+    cases = [(f'size_of::<Workspace>() == {size}', f'size_of::<Workspace>() == {size - 1}')]
     cases += [(f'offset_of!(Workspace, {field}) == {offset}',
                f'offset_of!(Workspace, {field}) == {offset + 1}')
               for field, offset in (('initial', 0), ('schedule', 256),
-                                    ('work', 2304), ('temporary', 2560))]
+                                    ('work', work), ('temporary', temporary))]
     command = ['cargo', '+'+toolchain, 'check', '--locked', '--offline',
                '-p', 'brynja-crypto-cpu', '--no-default-features',
                '--features', FEATURE, '--target', target]
@@ -184,7 +185,7 @@ def layout_rejections(root, env, toolchain, target):
             finally:
                 path.write_text(original)
         run(selected, root, env)
-    print('Hardened sha256 batch exact layout: ten debug/release mutations rejected')
+    print(f'Hardened {FAMILY} batch exact layout: ten debug/release mutations rejected')
 
 
 def mutations(root, env, toolchain, target):
@@ -352,7 +353,7 @@ def main():
             env.pop(key, None)
         run(['cargo', '+'+args.toolchain, 'generate-lockfile', '--offline'], root, env)
         compile_evidence(root, env, args.toolchain, args.target)
-        if args.mutations and FAMILY == 'sha256':
+        if args.mutations:
             layout_rejections(root, env, args.toolchain, args.target)
         if args.mutations or args.leaf:
             env['RUSTFLAGS'] = '-C target-feature=' + ('+avx,+avx2' if args.target.startswith('x86_64') else '+neon')

@@ -103,9 +103,9 @@ def controls():
                 text = source.read_text()
                 seen.append(text)
                 if len(seen) == 1:
-                    assert positive in text
+                    assert text == '#![forbid(unsafe_code)]\n' + positive
                     return result(0)
-                assert negative in text
+                assert text == '#![forbid(unsafe_code)]\n' + negative
                 return result(1, diagnostic(code))
 
             with patch.object(checker, 'run', side_effect=child):
@@ -155,11 +155,33 @@ def mutation_controls():
             assert source.read_text() == original
 
 
+def public_type_source():
+    # CodeQL alert #4 confused a type-name variable with confidential values.
+    # Bind the exact three generated conversion pairs, including their output
+    # type names. Neither source template reads an owner or supplies digest data.
+    subjects = [subject for subject in cases.substitutions()
+                if subject[0].startswith('implicit declassification:')]
+    expected = []
+    for module, digest in (('hardened_batch', 'Sha256Digest'),
+                           ('hardened_batch512', 'Sha512Digest'),
+                           ('hardened_batch512', 'Sha512TDigest')):
+        output_type = f"brynja_hash_sha2::{module}::SecretBatchOutput<'static>"
+        public_type = 'brynja_hash_sha2::' + digest
+        expected.append((
+            'implicit declassification: ' + public_type,
+            f'pub fn probe(_: {output_type}, value: {public_type}) -> {public_type} {{ value }}',
+            f'pub fn probe(value: {output_type}) -> {public_type} {{ value.into() }}',
+            'E0277',
+        ))
+    assert subjects == expected
+
+
 def main():
     diagnostic_checks(checker)
     graph_checks(checker)
     controls()
     mutation_controls()
+    public_type_source()
     source = PATH.read_text()
     changes = (
         ('not result.returncode or not errors or set(errors) != {code}', 'not errors or set(errors) != {code}'),
@@ -181,7 +203,7 @@ def main():
         except AssertionError:
             continue
         raise AssertionError('package-checker mutant survived: ' + before)
-    print('Hardened package checker: diagnostics, graph provenance, 145 paired controls and five enforcement mutants PASS')
+    print('Hardened package checker: diagnostics, graph provenance, 145 exact paired sources, three public type-source pairs and five enforcement mutants PASS')
 
 
 if __name__ == '__main__':

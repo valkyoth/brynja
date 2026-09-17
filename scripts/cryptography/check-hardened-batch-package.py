@@ -86,6 +86,9 @@ def validate_graph(metadata, roots, consumer, ordinary=False):
 
 
 def probes(source, command, consumer, env, subjects):
+    # Generated Rust source from the fixed cases module, not runtime secret
+    # material. cargo check needs these plaintext type/trait probes on disk;
+    # execute() confines them to its TemporaryDirectory consumer.
     count = 0
     for label, positive, negative, diagnostic in subjects:
         try:

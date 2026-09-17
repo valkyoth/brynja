@@ -60,11 +60,13 @@ def substitutions():
         ('brynja_hash_sha2', 'hardened_batch512', 'Sha512Digest'),
         ('brynja_hash_sha2', 'hardened_batch512', 'Sha512TDigest'),
     ):
-        secret = f"{package}::{hardened}::SecretBatchOutput<'static>"
+        # Public Rust type spelling for cargo-check probes, never digest bytes
+        # or a value read from a secret-output owner.
+        output_type = f"{package}::{hardened}::SecretBatchOutput<'static>"
         public = f'{package}::{digest}'
         yield (f'implicit declassification: {public}',
-               f'pub fn probe(_: {secret}, value: {public}) -> {public} {{ value }}',
-               f'pub fn probe(value: {secret}) -> {public} {{ value.into() }}', 'E0277')
+               f'pub fn probe(_: {output_type}, value: {public}) -> {public} {{ value }}',
+               f'pub fn probe(value: {output_type}) -> {public} {{ value.into() }}', 'E0277')
 
 
 def examples(roots):

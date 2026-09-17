@@ -1138,6 +1138,19 @@ It is not native Arm execution, a dedicated single-stream comparison, constant-
 time qualification or independent review. No production source or release gate
 changed; complete qualification and owner pentest/native collection remain pending.
 
+## Native runtime collection wrapper
+
+[Native collection instructions](hardened-batch-native-collection.md) describe
+the standalone fourteen-step wrapper for AMD/Intel Linux, AWS Arm and Apple M2.
+It reuses the six native suites, five oracle drivers, two comparative benchmarks
+and package acceptance. Every record binds a clean Git commit/tree, compiler,
+CPU/feature context and command outputs, while retaining pending owner review
+and explicit exclusions for the separately required verifier/compiler evidence.
+It does not add release-gate policy. Synthetic tests reject 484 record changes
+across four lanes and exercise orchestration failures, environment cleanup,
+attestation, source drift and no-overwrite behavior. Synthetic records are not
+native qualification results.
+
 ## Acceptance required before completion
 
 - Positive downstream examples for every constructor, exact bit/byte identity,

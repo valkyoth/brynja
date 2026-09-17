@@ -72,6 +72,12 @@ checks; slower threaded results remain visible. Eighty result regressions and
 six compiled fixture mutations were rejected. This is development timing data,
 not native multi-platform qualification or a universal speedup claim.
 
+A standalone native-runtime collection wrapper now combines existing native
+tests, independent oracles, timings and packaged-consumer checks. It records
+the clean commit/tree and platform context without changing release gates.
+Synthetic tamper/orchestration tests passed; its records explicitly exclude
+the separate Miri/Kani/sanitizer/compiler and owner-pentest obligations.
+
 ## Opening changes
 
 Version metadata and downstream fixture pins advance to v0.24.48. Two rustdoc

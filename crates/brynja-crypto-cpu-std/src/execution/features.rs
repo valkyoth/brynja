@@ -10,12 +10,14 @@ pub(super) struct Features {
     pub(super) neon: bool,
     pub(super) sha2: bool,
     pub(super) sha3: bool,
+    pub(super) sha512: bool,
 }
 
 impl Features {
     pub(super) fn supports(&self, kernel: Kernel) -> bool {
         match kernel {
             Kernel::X86Sha256 => self.sha && self.sse2,
+            Kernel::X86Sha512 => self.sha512 && self.avx2 && self.avx,
             Kernel::X86Keccak => self.avx && self.avx2,
             Kernel::ArmSha256 => self.neon && self.sha2,
             Kernel::ArmSha512 | Kernel::ArmKeccak => self.neon && self.sha3,
@@ -29,8 +31,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn all_128_feature_masks_require_every_prerequisite() {
-        for mask in 0_u8..128 {
+    fn all_256_feature_masks_require_every_prerequisite() {
+        for mask in 0_u16..256 {
             let features = Features {
                 sha: mask & 1 != 0,
                 sse2: mask & 2 != 0,
@@ -39,9 +41,11 @@ mod tests {
                 neon: mask & 16 != 0,
                 sha2: mask & 32 != 0,
                 sha3: mask & 64 != 0,
+                sha512: mask & 128 != 0,
             };
             for (kernel, required) in [
                 (Kernel::X86Sha256, 3),
+                (Kernel::X86Sha512, 140),
                 (Kernel::X86Keccak, 12),
                 (Kernel::ArmSha256, 48),
                 (Kernel::ArmSha512, 80),

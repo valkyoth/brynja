@@ -18,6 +18,10 @@ pub(super) fn sha256(kernel: Kernel, state: &mut [u32; 8], block: &[u8; 64]) -> 
 
 pub(super) fn sha512(kernel: Kernel, state: &mut [u64; 8], block: &[u8; 128]) -> Result<(), Error> {
     kernel.check_compiled_target()?;
+    #[cfg(target_arch = "x86_64")]
+    if kernel == Kernel::X86Sha512 {
+        return crate::x86_sha512::compress(state, block);
+    }
     #[cfg(target_arch = "aarch64")]
     if kernel == Kernel::ArmSha512 {
         crate::aarch64_sha2::compress512(state, block);
@@ -51,7 +55,7 @@ pub(super) fn known_answer(kernel: Kernel) -> bool {
             sha256(kernel, &mut state, &crate::sha256::abc_block()).is_ok()
                 && state == crate::sha256::abc_digest_state()
         }
-        Kernel::ArmSha512 => {
+        Kernel::ArmSha512 | Kernel::X86Sha512 => {
             let mut state = core::hint::black_box(crate::sha512::initial_state());
             sha512(kernel, &mut state, &crate::sha512::abc_block()).is_ok()
                 && state == crate::sha512::abc_digest_state()

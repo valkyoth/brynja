@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: forty-eight exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: forty-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only forty-eight exact modules: the private core volatile clearer; the
+Rust in only forty-nine exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -19,7 +19,8 @@ SHA-224/256, SHA-512-family and Keccak batch platform imports and AVX2/NEON kern
 with three distinct hosted hardened-batch platform imports. These modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
-instruction/import boundaries, never framing or output ownership. Each
+instruction/import boundaries, never framing or output ownership. The dedicated
+x86 SHA-512 module is the additional development exception described below. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every
@@ -33,6 +34,29 @@ safe alternative analysis, isolated module or crate, documented invariants,
 Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
+
+## v0.24.49 Dedicated x86 SHA-512 development exception
+
+`x86_sha512.rs` owns the stable Rust SHA512 intrinsics with the exact `sha512,avx2,avx`
+bundle. Safe Rust cannot express these instructions; portable SHA-512 remains
+the safe alternative. The ordinary entry uses fixed 80-word schedule storage
+and bounded unaligned vector stores. Every schedule offset is an internal fixed
+round index; caller lengths and pointers never enter the kernel. It uses all
+three dedicated instructions. Rust implicitly enables AVX2 for SHA512, so the
+authority explicitly checks that requirement too. AVX-512 is not required.
+
+The separate hardened entry uses the existing clearing schedule/vector owner,
+never the ordinary kernel or its arrays. Its scalar schedule and dedicated
+round instructions write only the owner-backed 64-byte vector region. The
+operation guard clears both regions on success/error and recoverable unwind.
+Registers, compiler copies/spills and abort remain residual limitations.
+
+Static construction requires the complete compiler bundle and deployment-wide
+CPU/OS support. Unsafe platform import retains its lifetime-wide obligation;
+generic hosted x86 detection still cannot supply a migration guarantee. Startup
+KATs, operation identity and quarantine apply before instruction entry.
+This is a source-bound development review, not native qualification, independent
+review or release acceptance. See [dedicated SHA-512](x86-sha512-execution.md).
 
 ## v0.24.48 Hardened SHA-224/256 batch foundation
 
@@ -136,8 +160,8 @@ See [the complete hardened boundary](sha2-hardened-execution.md).
 
 ## v0.24.31 Ordinary Static Execution
 
-The default-off `static-execution` feature exposes five ordinary raw kernels:
-x86 SHA-256, x86 AVX2 Keccak, Arm SHA-256, Arm SHA-512 and Arm SHA3 Keccak.
+The default-off `static-execution` feature exposes six ordinary raw kernels:
+x86 SHA-256, x86 SHA-512, x86 AVX2 Keccak, Arm SHA-256, Arm SHA-512 and Arm SHA3 Keccak.
 `static_execution::Authority` requires the complete compiler feature bundle,
 the specialized executable platform contract and a direct kernel KAT.
 Sessions recheck owner health and generation before mutation. This is an

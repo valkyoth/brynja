@@ -31,6 +31,14 @@ leaves; raw compression or permutation is not a complete hash API.
 
 ## Cryptography Verification Status
 
+Dedicated x86 SHA-512 is available through the opt-in static/runtime kernel
+identity `X86Sha512`, requiring `sha512,avx2,avx` and OS-enabled XMM/YMM state
+(Rust's SHA512 feature implies AVX2).
+Ordinary and distinct clearing-owner execution have SDE and compiler-cleanup coverage;
+native qualification and exceptional pentest are pending. SHA-NI and AVX-512
+do not substitute for SHA512. See the
+[dedicated execution contract](https://github.com/valkyoth/brynja/blob/main/docs/x86-sha512-execution.md).
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Hardened SHA-224/256 batch compression with clearing packed storage | 🚧 CPU foundation; qualification pending | ❌ No |
@@ -40,6 +48,7 @@ leaves; raw compression or permutation is not a complete hash API.
 | Keccak four-state AVX2 / two-state NEON permutation | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |
 | Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |
+| Dedicated x86 SHA-512 ordinary and hardened execution | 🚧 Implemented; emulated qualification only | ❌ No |
 | Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |
 | Low-level hosted-authority boundary | ✅ Platform proof required | ❌ No |
 | Hardened SHA-2 and Keccak sessions with clearing scratch | ✅ Opt-in | ❌ No |

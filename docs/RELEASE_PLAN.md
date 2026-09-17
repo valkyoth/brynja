@@ -4763,9 +4763,9 @@ Exit criteria:
 
 ### v0.24.48 - Hardened Multi-Buffer Hash Owners
 
-Status: in progress
+Status: released
 
-The milestone is open. The [ownership and integration design](hardened-multibuffer-owners.md)
+The signed milestone passed its release checks and GitHub. The [ownership and integration design](hardened-multibuffer-owners.md)
 separates packed kernel storage, leaf execution and bounded ParallelHash integration.
 The distinct narrow and wide SHA-2 CPU authorities, clearing packed workspaces,
 AVX2/NEON kernels and leaf batch APIs are implemented, including all 510 general
@@ -4778,7 +4778,8 @@ streaming batch owners buffer 4B bytes and require exact complete-input proofs.
 Bounded threaded multibuffer integration now creates worker-local authorities
 and transfers only completed plan-bound clearing CV loans. Failed spawn, panic
 and cancellation join all started workers; deterministic merging rejects foreign
-or reordered results. Fresh complete qualification remains pending.
+or reordered results. Project-owned native collection and release checks passed;
+independent cryptographic review and FIPS validation remain unclaimed.
 The existing ordinary owners remain public-only; do not reuse them for secrets.
 
 Plan scope: Add hardened ownership to the new SHA-2 and Keccak batch APIs and integrate eligible batched leaves into ParallelHash without losing secret classification or bounded scheduling.
@@ -4807,9 +4808,16 @@ Exit criteria:
 
 ### v0.24.49 - x86 Dedicated SHA-512 Backend
 
-Status: planned
+Status: in progress
 
-Plan scope: Implement a first-party x86_64 SHA-512 instruction backend with the exact sha512 and avx/OS-state bundle, Rust 1.90 compatibility, public SHA-512-family routing and explicitly measured or emulator-only evidence.
+Dedicated ordinary and owner-backed hardened kernels and
+SHA-512-family routing implemented; Intel SDE correctness, compiler cleanup,
+compiled lifecycle/route mutants and emulated ASan/LSan pass. Shared assurance
+integration and exceptional pentest remain pending. Native SHA512
+hardware is not available in the observed fleet; see the
+[implementation status](x86-sha512-execution.md).
+
+Plan scope: Implement a first-party x86_64 SHA-512 instruction backend with the exact sha512, Rust-implied avx2 and avx/OS-state bundle, Rust 1.90 compatibility, public SHA-512-family routing and explicitly measured or emulator-only evidence.
 
 Goal: Fill the missing dedicated x86 SHA-512 kernel without inferring support from SHA-NI or a cloud instance name.
 

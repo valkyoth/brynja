@@ -13,7 +13,12 @@ fn scratch_regions_clear_on_explicit_wipe_and_unwind() -> Result<(), std::string
             .chain(&scratch.vectors)
             .all(|b| *b == 0)
     );
-    for kernel in [Kernel::X86Sha256, Kernel::ArmSha256, Kernel::ArmSha512] {
+    for kernel in [
+        Kernel::X86Sha256,
+        Kernel::X86Sha512,
+        Kernel::ArmSha256,
+        Kernel::ArmSha512,
+    ] {
         let Ok(owner) = raw::Authority::new(kernel) else {
             continue;
         };
@@ -45,11 +50,16 @@ fn scratch_regions_clear_on_explicit_wipe_and_unwind() -> Result<(), std::string
 fn hardened_kernel_matches_ordinary_and_clears_every_operation() -> Result<(), std::string::String>
 {
     let mut runs = 0_usize;
-    for kernel in [Kernel::X86Sha256, Kernel::ArmSha256, Kernel::ArmSha512] {
+    for kernel in [
+        Kernel::X86Sha256,
+        Kernel::X86Sha512,
+        Kernel::ArmSha256,
+        Kernel::ArmSha512,
+    ] {
         let Ok(owner) = raw::Authority::new(kernel) else {
             continue;
         };
-        let wide = kernel == Kernel::ArmSha512;
+        let wide = matches!(kernel, Kernel::ArmSha512 | Kernel::X86Sha512);
         let mut session =
             Session::from_static(&owner).map_err(|error| std::format!("{error:?}"))?;
         let ordinary = owner.session().map_err(|error| std::format!("{error:?}"))?;
@@ -134,8 +144,17 @@ fn hardened_kernel_matches_ordinary_and_clears_every_operation() -> Result<(), s
         assert_eq!(state, [0xa5; 64]);
         runs = runs.saturating_add(1);
     }
-    #[cfg(all(target_arch = "x86_64", target_feature = "sha"))]
-    assert_eq!(runs, 1);
+    #[cfg(target_arch = "x86_64")]
+    assert_eq!(
+        runs,
+        usize::from(cfg!(all(target_feature = "sha", target_feature = "sse2"))).saturating_add(
+            usize::from(cfg!(all(
+                target_feature = "sha512",
+                target_feature = "avx2",
+                target_feature = "avx"
+            )))
+        )
+    );
     #[cfg(all(
         target_arch = "aarch64",
         target_feature = "sha2",

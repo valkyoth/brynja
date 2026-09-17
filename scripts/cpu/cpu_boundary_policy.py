@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "b16ef6690d2998eb2745f783587e761b93efdc4c0c02bcf79a7bfdc89e66088d"
+EXPECTED_POLICY_SHA256 = "b46cae8b4ecce5c42b08ab81f9c0ae6af7398b5ba7379f24edf13d10ff45579f"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,6 +26,8 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    (CPU, "src/x86_sha512.rs"): "dedicated-sha512-emulated-execution-kernel",
+    (CPU, "src/static_execution/x86_sha512_tests.rs"): "dedicated-sha512-differential-tests",
     (DETECTOR, "src/sha256_hardened_batch/mod.rs"): "hardened-sha256-batch-hosted-selection",
     (DETECTOR, "src/sha256_hardened_batch/platform.rs"): "hardened-sha256-batch-hosted-import",
     (DETECTOR, "src/sha256_hardened_batch/tests.rs"): "hardened-sha256-batch-hosted-tests",

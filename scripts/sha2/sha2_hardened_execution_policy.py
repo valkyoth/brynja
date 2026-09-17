@@ -83,6 +83,11 @@ def validate(root=ROOT, write=False):
     paths.update(path.relative_to(root) for path in (root / 'scripts/sha2').glob('*hardened-execution*.py'))
     paths.add(Path('scripts/sha2/sha2_hardened_execution_policy.py'))
     paths.add(Path('scripts/sha2/sha2_hardened_cleanup_mutants.py'))
+    # The optional licensed emulator is not a native gate prerequisite. Bind
+    # its driver and regression interpretation to the same reviewed source.
+    for name in ('check-x86-sha512.py', 'x86_sha512_package.py', 'x86_sha512_regressions.py'):
+        paths.add(Path('scripts/sha2') / name)
+    paths.add(Path('docs/x86-sha512-execution.md'))
     for name in ('scripts/tag_gate.sh', 'scripts/sha2/hardened_native_host.py',
                  'scripts/sha2/hardened_native_evidence.py', 'scripts/sha2/check-sha2-hardened-asan.py',
                  'scripts/sha2/check-sha2-hardened-native-evidence.py',

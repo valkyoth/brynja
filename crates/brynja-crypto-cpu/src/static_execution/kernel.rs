@@ -6,6 +6,8 @@ use super::Error;
 pub enum Kernel {
     /// x86_64 SHA-256 instructions with SSE2 register state.
     X86Sha256,
+    /// Dedicated x86_64 SHA-512; Rust implies AVX2/AVX and XMM/YMM OS state.
+    X86Sha512,
     /// AArch64 NEON and SHA2 instructions.
     ArmSha256,
     /// AArch64 NEON and the complete Rust SHA3/SHA512 bundle.
@@ -18,8 +20,9 @@ pub enum Kernel {
 
 impl Kernel {
     /// All static kernels supported by this boundary, not by every target.
-    pub const ALL: [Self; 5] = [
+    pub const ALL: [Self; 6] = [
         Self::X86Sha256,
+        Self::X86Sha512,
         Self::ArmSha256,
         Self::ArmSha512,
         Self::X86Keccak,
@@ -33,6 +36,14 @@ impl Kernel {
     /// an arbitrary host is compatible with the compiled executable.
     pub const fn check_compiled_target(self) -> Result<(), Error> {
         let (architecture, features) = match self {
+            Self::X86Sha512 => (
+                cfg!(target_arch = "x86_64"),
+                cfg!(all(
+                    target_feature = "sha512",
+                    target_feature = "avx2",
+                    target_feature = "avx"
+                )),
+            ),
             Self::X86Sha256 => (
                 cfg!(target_arch = "x86_64"),
                 cfg!(all(target_feature = "sha", target_feature = "sse2")),

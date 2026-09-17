@@ -38,9 +38,13 @@ fn system_guarantee() -> bool {
 
 fn detected(kernel: Kernel) -> (bool, bool) {
     #[cfg(target_arch = "x86_64")]
-    if matches!(kernel, Kernel::X86Sha256 | Kernel::X86Keccak) {
+    if matches!(
+        kernel,
+        Kernel::X86Sha256 | Kernel::X86Sha512 | Kernel::X86Keccak
+    ) {
         let features = Features {
             sha: std::is_x86_feature_detected!("sha"),
+            sha512: std::is_x86_feature_detected!("sha512"),
             sse2: std::is_x86_feature_detected!("sse2"),
             avx: std::is_x86_feature_detected!("avx"),
             avx2: std::is_x86_feature_detected!("avx2"),

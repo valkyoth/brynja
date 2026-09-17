@@ -75,9 +75,70 @@ fn quarantine_invalidates_existing_sessions_before_mutation() {
 #[test]
 fn exact_architecture_inventory() {
     for kernel in Kernel::ALL {
-        let x86 = matches!(kernel, Kernel::X86Sha256 | Kernel::X86Keccak);
+        let x86 = matches!(
+            kernel,
+            Kernel::X86Sha256 | Kernel::X86Sha512 | Kernel::X86Keccak
+        );
         let expected =
             (x86 && cfg!(target_arch = "x86_64")) || (!x86 && cfg!(target_arch = "aarch64"));
         assert_eq!(operations::architecture(kernel).is_ok(), expected);
     }
+}
+
+#[test]
+fn dedicated_sha512_runtime_dispatch_and_revocation() -> Result<(), Error> {
+    if Kernel::X86Sha512.check_compiled_target().is_err() {
+        assert!(std::env::var_os("BRYNJA_REQUIRE_X86_SHA512").is_none());
+        return Ok(());
+    }
+    // Test-only authority on the explicitly specialized SDE/native lane.
+    // This does not claim that CPUID alone establishes platform authority.
+    let mut owner = model();
+    owner.kernel = Kernel::X86Sha512;
+    owner.complete_startup(operations::known_answer(owner.kernel));
+    assert_eq!(owner.report().health, Health::Healthy);
+    let session = owner.session()?;
+    let mut state = crate::sha512::initial_state();
+    session.compress_sha512(
+        PublicData::new(&mut state),
+        PublicData::new(&crate::sha512::abc_block()),
+    )?;
+    assert_eq!(state, crate::sha512::abc_digest_state());
+    let mut narrow = [0xa5; 8];
+    assert_eq!(
+        session.compress_sha256(PublicData::new(&mut narrow), PublicData::new(&[0; 64])),
+        Err(Error::WrongOperation)
+    );
+    assert_eq!(narrow, [0xa5; 8]);
+    #[cfg(feature = "hardened-execution")]
+    {
+        let mut hardened = crate::hardened_execution::Session::from_runtime(owner.session()?)?;
+        let mut secret = [0_u8; 64];
+        for (slot, word) in secret
+            .chunks_exact_mut(8)
+            .zip(crate::sha512::initial_state())
+        {
+            slot.copy_from_slice(&word.to_be_bytes());
+        }
+        hardened.compress(true, &mut secret, &crate::sha512::abc_block())?;
+        for (slot, word) in secret.chunks_exact(8).zip(state) {
+            assert_eq!(slot, word.to_be_bytes());
+        }
+        owner.quarantine();
+        let before = secret;
+        assert_eq!(
+            hardened.compress(true, &mut secret, &[0; 128]),
+            Err(Error::Quarantined)
+        );
+        assert_eq!(secret, before);
+    }
+    owner.quarantine();
+    let before = state;
+    assert_eq!(
+        session.compress_sha512(PublicData::new(&mut state), PublicData::new(&[0; 128])),
+        Err(Error::Quarantined)
+    );
+    assert_eq!(state, before);
+    std::println!("DEDICATED_X86_SHA512_RUNTIME: KAT; exact identity; revocation=PASS");
+    Ok(())
 }

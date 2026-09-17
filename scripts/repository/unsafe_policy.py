@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-crypto-cpu/src/x86_sha512.rs"): ("d9ea75fcb6f5ce6d7216f72aaa7e8bea956be191926510a1879ce6d85cea2a29", 6, 2, 6),
     Path("crates/brynja-crypto-cpu-std/src/sha256_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
     Path("crates/brynja-crypto-cpu-std/src/sha512_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
     Path("crates/brynja-crypto-cpu-std/src/keccak_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
@@ -39,10 +40,10 @@ ALLOWED = {
     Path("crates/brynja-legacy-md5-std/src/hardened_execution/platform.rs"): ("552ae73fb7389f0450e637f6c3e7d3b6b57b904694084eeb71e7fa860df34832", 1, 0, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/secret.rs"): ("135ab0dae0b9fbaf8dc147bf55ccf7e167c667ee675b980679ced331a3d6464e", 2, 1, 2),
     Path("crates/brynja-crypto-cpu/src/runtime_execution/mod.rs"): (
-        "afa23e33c7da3b54aedf939bf2f2224e87ade560e46286a1d14af73f6eb1148b", 0, 1, 0,
+        "7a98df0c160c08b5c12358f51890b2a358a8309aa512d9f94fbc8faa57517102", 0, 1, 0,
     ),
     Path("crates/brynja-crypto-cpu-std/src/execution/platform.rs"): (
-        "867dcd77de44aeb70de8c2df48d8613adabbad93e69c0f4b94d945796122612c", 1, 0, 1,
+        "777c14162432b633fc9ce13e4bd8ef397eb6258c9abf2d38a9cf0a04e44e2b19", 1, 0, 1,
     ),
     Path("crates/brynja-legacy-md5/src/cpu/session.rs"): ("96c89bc6bf0cb9a2f0fb7b3be0c6a608a30eba9627a13233ca90f3f8548f3c5f", 4, 2, 4),
     Path("crates/brynja-legacy-md5-std/src/execution/platform.rs"): ("351571ad239d08b806f9e966aac9633cdc785407526afe66433d08bb1e327b55", 1, 0, 1),
@@ -164,7 +165,7 @@ def validate_allowed(
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
     elif relative.name in {
-        "x86_sha.rs", "aarch64_sha2.rs", "riscv64_zknh.rs", "x86_sha1.rs", "aarch64_sha1.rs",
+        "x86_sha.rs", "x86_sha512.rs", "aarch64_sha2.rs", "riscv64_zknh.rs", "x86_sha1.rs", "aarch64_sha1.rs",
         "x86_avx2_keccak.rs", "aarch64_sha3_keccak.rs", "x86_avx2_md5.rs", "aarch64_neon_md5.rs",
     }:
         if "#[target_feature" not in text or "core::arch" not in text:

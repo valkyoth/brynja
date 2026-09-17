@@ -50,7 +50,7 @@ mod sha512;
     target_arch = "riscv64",
     all(
         target_arch = "x86_64",
-        any(feature = "sha512-batch", feature = "sha512-hardened-batch")
+        any(feature = "static-execution", feature = "sha512-hardened-batch")
     )
 ))]
 mod sha512_schedule;
@@ -65,6 +65,8 @@ mod riscv64_zknh;
 mod x86_avx2_keccak;
 #[cfg(target_arch = "x86_64")]
 mod x86_sha;
+#[cfg(all(target_arch = "x86_64", feature = "static-execution"))]
+mod x86_sha512;
 
 pub use keccak::{
     KeccakBackend, KeccakBackendError, KeccakBackendHealth, KeccakBackendReport,
@@ -89,7 +91,9 @@ pub const IMPLEMENTED: bool = cfg!(any(
     target_arch = "riscv64"
 ));
 
-/// Number of complete source implementations in this release.
+/// Number of implementations in the historical candidate-backend APIs.
+/// Does not count the separate opt-in execution or independent-message batch
+/// APIs; see `static_execution::Kernel::ALL` when that feature is enabled.
 pub const IMPLEMENTED_BACKEND_COUNT: usize = 7;
 
 /// Number of Keccak-f\[1600\] source implementations.
@@ -98,7 +102,8 @@ pub const IMPLEMENTED_KECCAK_BACKEND_COUNT: usize = 2;
 /// Number of SHA-256-family source implementations.
 pub const IMPLEMENTED_SHA256_BACKEND_COUNT: usize = 3;
 
-/// Number of SHA-512-family source implementations.
+/// Number of SHA-512 implementations in the historical candidate API.
+/// Dedicated x86 SHA-512 is available through the separate execution API.
 pub const IMPLEMENTED_SHA512_BACKEND_COUNT: usize = 2;
 
 /// Number of accelerated backend identities admitted by current native evidence.

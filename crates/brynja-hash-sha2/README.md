@@ -39,12 +39,21 @@ SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
 | General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |
 | Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |
+| Dedicated x86 SHA-512-family execution (`sha512,avx2,avx`) | 🚧 Implemented; SDE tested, qualification pending | ❌ No |
 
 These implementations follow FIPS 180-4. That algorithm standard is not
 FIPS 140-3 validation: Brynja has no validated module or named independent
 cryptographic review.
 
 ## Use
+
+Dedicated SHA-512 instructions use `execution::Kernel::X86Sha512` with a
+`StaticSelection` and the existing ordinary or distinct hardened execution APIs.
+They support SHA-384/512, named truncations and general SHA-512/t. Enable the
+appropriate Cargo feature and the complete `sha512,avx2,avx` target bundle only for
+a deployment that guarantees compatible CPUs and OS vector state throughout.
+Generic defaults stay portable; SHA-NI and AVX-512 alone are insufficient.
+See the [API example and qualification limits](https://github.com/valkyoth/brynja/blob/main/docs/x86-sha512-execution.md).
 
 For bounded public-data batching, enable `batch-execution`. AVX2 handles eight
 independent messages and NEON four; mixed SHA-224/256 identities, inactive slots

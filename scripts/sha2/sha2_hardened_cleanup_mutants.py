@@ -86,7 +86,7 @@ def kernel_faults(consumer, roots, env, run, extra, mode):
 #[test]
 fn injected_hardened_kat_quarantines_owner() -> Result<(), std::string::String> {
     let mut count = 0;
-    for kernel in [Kernel::X86Sha256, Kernel::ArmSha256, Kernel::ArmSha512] {
+    for kernel in [Kernel::X86Sha256, Kernel::X86Sha512, Kernel::ArmSha256, Kernel::ArmSha512] {
         let Ok(owner) = raw::Authority::new(kernel) else { continue; };
         assert_eq!(Session::from_static(&owner).err(), Some(Error::Quarantined));
         assert_eq!(owner.report().health, raw::Health::Quarantined);

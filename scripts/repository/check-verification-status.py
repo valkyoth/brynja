@@ -36,7 +36,7 @@ COMPONENT_ROWS = (
     "| `brynja-hash-parallel-std` | Optional zero-dependency worker/leaf-budgeted native-thread executor with one fail-closed operation at a time per executor, reusable worker-sized storage, and fallible scoped launch over the portable leaf-job and ordered-collector API | ❌ Not independently verified; excluded from FIPS boundaries |",
     "| Future `brynja-mac-*` | Other reusable MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
-    "| `brynja-crypto-cpu` | Five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented but unadmitted; x86 SHA-512 and RISC-V Keccak are explicit scalar-only decisions | ❌ Not independently verified; native admission evidence incomplete |",
+    "| `brynja-crypto-cpu` | Historical candidates remain unadmitted; separate opt-in single-state and multibuffer execution APIs include ordinary and clearing owners. Dedicated x86 SHA-512 has emulated development evidence only; RISC-V Keccak remains scalar-only | ❌ Not independently verified; dedicated x86 SHA-512 native qualification absent |",
     "| `brynja-crypto-cpu-std` | Implemented opt-in SHA-2 host detection/reporting, opportunistic scalar fallback and fail-closed required modes; RISC-V auto-detection disabled | ❌ Not independently verified; accelerated candidates remain unadmitted |",
     "| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |",
     "| `brynja-protocol` | Shared TLS and DTLS record-envelope parsing and encoding | ❌ Not verified |",

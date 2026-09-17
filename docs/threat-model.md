@@ -511,8 +511,8 @@ that contract. Native
 performance, CPU migration, side-channel, register/spill erasure, independent
 review, and FIPS validation remain explicit residuals.
 
-The default-off `static-execution` feature exposes five ordinary raw kernels:
-x86 SHA-256, x86 AVX2 Keccak, Arm SHA-256, Arm SHA-512 and Arm SHA3 Keccak.
+The default-off `static-execution` feature exposes six ordinary raw kernels:
+x86 SHA-256, x86 SHA-512, x86 AVX2 Keccak, Arm SHA-256, Arm SHA-512 and Arm SHA3 Keccak.
 `static_execution::Authority` requires the complete compiler feature bundle,
 the specialized executable platform contract and a direct kernel KAT.
 Default hash constructors remain portable. The new surface is not high-level

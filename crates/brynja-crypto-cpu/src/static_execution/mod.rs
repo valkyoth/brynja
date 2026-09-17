@@ -13,6 +13,8 @@ mod kernel;
 mod public_data;
 pub use public_data::PublicData;
 mod operations;
+#[cfg(test)]
+mod x86_sha512_tests;
 pub use kernel::Kernel;
 
 /// Closed static execution failure; never a request to silently switch routes.

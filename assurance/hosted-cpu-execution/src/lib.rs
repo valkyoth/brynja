@@ -33,7 +33,7 @@ pub fn validate() -> Result<usize, Error> {
                             .map_err(Error::Kernel)?;
                         assert_ne!(state, [0; 8]);
                     }
-                    Kernel::ArmSha512 => {
+                    Kernel::ArmSha512 | Kernel::X86Sha512 => {
                         let mut state = [0; 8];
                         session
                             .compress_sha512(

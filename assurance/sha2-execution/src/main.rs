@@ -25,7 +25,11 @@ enum Owner {
 impl Owner {
     fn new(mode: &str, wide: bool) -> Result<Self, Box<dyn Error>> {
         let kernel = if wide {
-            api::Kernel::ArmSha512
+            if cfg!(target_arch = "x86_64") {
+                api::Kernel::X86Sha512
+            } else {
+                api::Kernel::ArmSha512
+            }
         } else if cfg!(target_arch = "x86_64") {
             api::Kernel::X86Sha256
         } else {

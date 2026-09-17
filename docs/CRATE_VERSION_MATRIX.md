@@ -309,7 +309,7 @@ FIPS validation remain later work. Zero crates are selected for publication.
 | `brynja-hash-parallel` | `0.1.0` | no | New unpublished complete ParallelHash128/ParallelHash256 and ParallelHashXOF128/ParallelHashXOF256 leaf with sequential caller workspace, arbitrary-bit input/output, hardened ownership, and ordered caller scheduling |
 | `brynja-hash-parallel-std` | `0.1.0` | no | New unpublished optional worker/leaf-budgeted native-thread executor with one operation at a time per executor, reusable worker-sized storage, and fallible thread creation; excluded from defaults, facades, bare metal, and FIPS boundaries |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while unpublished source also reexports complete cSHAKE, SP 800-185 encodings, and all KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF constructions |
-| `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five SHA-2 plus two Keccak candidates remain unadmitted; x86 SHA-512 and RISC-V Keccak are scalar-only |
+| `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; historical candidates remain unadmitted. Separate dedicated x86 SHA-512 execution has emulated development evidence; RISC-V Keccak remains scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.2 |
 | `brynja-protocol` | `0.1.0` | no | Published shared TLS/DTLS record-envelope boundary |

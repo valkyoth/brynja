@@ -17,6 +17,7 @@ runtime-detection paths retain their previous admission behavior.
 | Kernel | Compiler target bundle | Executable platform contract |
 | --- | --- | --- |
 | X86Sha256 | x86_64, sha, sse2 | SHA instructions and XMM state on every eligible CPU |
+| X86Sha512 | x86_64, sha512, avx2, avx | Dedicated SHA512, Rust-implied AVX2 and OSXSAVE/XCR0 XMM/YMM state on every eligible CPU; SDE development coverage, no native qualification |
 | X86Keccak | x86_64, avx, avx2 | AVX2 plus OSXSAVE/XCR0 XMM/YMM state on every eligible CPU |
 | ArmSha256 | aarch64, neon, sha2 | Advanced SIMD state and SHA2 on every eligible CPU |
 | ArmSha512 | aarch64, neon, sha3 | Advanced SIMD and the complete Rust SHA3/SHA512 bundle |

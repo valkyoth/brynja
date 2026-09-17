@@ -38,7 +38,7 @@ PROFILES = {
     46: ("SHA-512/t", "AVX2", "NEON", "SIMD"),
     47: ("Keccak", "independent-state", "batch APIs"),
     48: ("hardened", "batch APIs", "ParallelHash"),
-    49: ("x86_64 SHA-512", "sha512 and avx/OS-state", "Rust 1.90"),
+    49: ("x86_64 SHA-512", "sha512, Rust-implied avx2 and avx/OS-state", "Rust 1.90"),
     50: ("RV64 Zknh", "experimental", "QEMU", "no automatic runtime dispatch"),
     51: ("facade features", "legacy crates", "independent publishing"),
     52: ("package-external", "every operational", "before the final native sweep"),

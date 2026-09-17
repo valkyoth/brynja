@@ -13,6 +13,7 @@ ROWS = {
         "| Keccak four-state AVX2 / two-state NEON permutation | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |",
         "| Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |",
+        "| Dedicated x86 SHA-512 ordinary and hardened execution | 🚧 Implemented; emulated qualification only | ❌ No |",
         "| Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |",
         "| Low-level hosted-authority boundary | ✅ Platform proof required | ❌ No |",
         "| Hardened SHA-2 and Keccak sessions with clearing scratch | ✅ Opt-in | ❌ No |",
@@ -94,7 +95,8 @@ ROWS = {
         "| Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |",
         "| SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |",
         "| General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |",
-        "| Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |"
+        "| Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |",
+        "| Dedicated x86 SHA-512-family execution (`sha512,avx2,avx`) | 🚧 Implemented; SDE tested, qualification pending | ❌ No |"
     ],
     "crates/brynja-legacy-ssl3/README.md": [
         "| SSL 3.0 controlled interoperability | ❌ Not implemented | ❌ No |"

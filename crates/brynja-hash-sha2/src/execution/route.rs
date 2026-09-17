@@ -155,7 +155,8 @@ impl<'a> Execution<'a> {
             raw::Health::Quarantined => return Err(raw::Error::Quarantined.into()),
         }
         match (wide, report.kernel) {
-            (false, Kernel::X86Sha256 | Kernel::ArmSha256) | (true, Kernel::ArmSha512) => Ok(()),
+            (false, Kernel::X86Sha256 | Kernel::ArmSha256)
+            | (true, Kernel::ArmSha512 | Kernel::X86Sha512) => Ok(()),
             _ => Err(raw::Error::WrongOperation.into()),
         }
     }

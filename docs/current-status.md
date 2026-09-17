@@ -19,7 +19,15 @@ Current generated planning coverage is 2157 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.47 signed. All 372 detached checks, the final tag gate and GitHub passed for v0.24.47. The v0.24.48 [hardened multibuffer ownership milestone](hardened-multibuffer-owners.md) is in development: its narrow and wide SHA-2 CPU/leaf batch APIs are implemented, including all 510 general SHA-512/t parameters. Distinct clearing Keccak CPU and SHA-3/SHAKE/cSHAKE leaf batch APIs and default-off hosted adapters for all three families are also implemented; ParallelHash integration and fresh qualification remain pending. Existing ordinary SIMD remains public-only and non-erasing. No new crates.io publication, independent verification or FIPS validation is claimed.
+Status: v0.20.0 published; milestones through v0.24.48 signed. The v0.24.48
+[hardened multibuffer ownership milestone](hardened-multibuffer-owners.md),
+including scheduled, streaming and threaded ParallelHash integration, passed its
+release checks and GitHub. The v0.24.49 [dedicated x86 SHA-512 work](x86-sha512-execution.md)
+is in development: ordinary and hardened routes pass Intel SDE correctness,
+cleanup and emulated sanitizer checks, but exceptional pentest and final assurance
+remain pending. No native SHA512 host is available in the observed fleet.
+Existing ordinary SIMD remains public-only and non-erasing. No new crates.io
+publication, independent verification or FIPS validation is claimed.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

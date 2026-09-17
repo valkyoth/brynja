@@ -4,6 +4,7 @@ import sha2_hardened_execution_policy as policy
 import importlib.util
 from pathlib import Path
 import re
+import x86_sha512_regressions
 
 
 def namespace_regressions():
@@ -25,3 +26,4 @@ if __name__ == '__main__':
     policy.validate()
     policy.regressions()
     namespace_regressions()
+    x86_sha512_regressions.regressions()

@@ -75,7 +75,7 @@ impl<'a> Session<'a> {
         let kernel = route.check()?;
         if !matches!(
             kernel,
-            Kernel::X86Sha256 | Kernel::ArmSha256 | Kernel::ArmSha512
+            Kernel::X86Sha256 | Kernel::X86Sha512 | Kernel::ArmSha256 | Kernel::ArmSha512
         ) {
             return Err(Error::WrongOperation);
         }
@@ -98,7 +98,8 @@ impl<'a> Session<'a> {
         let kernel = self.route.check()?;
         if matches!(
             (wide, kernel),
-            (false, Kernel::X86Sha256 | Kernel::ArmSha256) | (true, Kernel::ArmSha512)
+            (false, Kernel::X86Sha256 | Kernel::ArmSha256)
+                | (true, Kernel::ArmSha512 | Kernel::X86Sha512)
         ) {
             Ok(())
         } else {
@@ -129,7 +130,7 @@ impl<'a> Session<'a> {
     #[inline(never)]
     fn known_answer(&mut self, kernel: Kernel) -> Result<bool, Error> {
         // These local arrays contain public KAT data, never caller secrets.
-        let wide = kernel == Kernel::ArmSha512;
+        let wide = matches!(kernel, Kernel::ArmSha512 | Kernel::X86Sha512);
         let mut state = [0_u8; 64];
         let mut block = [0_u8; 128];
         let mut expected = [0_u8; 64];
@@ -189,6 +190,11 @@ fn dispatch(
 ) -> Result<(), Error> {
     // Private callers check exact operation, architecture and full authority
     // before this infallible instruction entry. No ordinary kernel is used.
+    #[cfg(target_arch = "x86_64")]
+    if kernel == Kernel::X86Sha512 {
+        crate::x86_sha512::compress_secret(state, block, scratch);
+        return Ok(());
+    }
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86Sha256 {
         crate::x86_sha::compress_secret(state, block, scratch);

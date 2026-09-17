@@ -44,7 +44,9 @@ impl Authority {
     /// The caller must guarantee the kernel's complete CPU feature bundle and
     /// required OS register state on EVERY CPU on which this thread can execute
     /// for the owner's entire lifetime, including scheduling, hotplug and VM
-    /// migration. X86Sha256 requires SHA and SSE2; X86Keccak requires AVX/AVX2
+    /// migration. X86Sha512 requires SHA512, AVX2 and AVX with enabled XMM/YMM OS state
+    /// (Rust's SHA512 target feature implies AVX2, not merely AVX).
+    /// X86Sha256 requires SHA and SSE2; X86Keccak requires AVX/AVX2
     /// and OS-enabled XMM/YMM state; ArmSha256 requires NEON/SHA2;
     /// ArmSha512 and ArmKeccak require NEON and Rust's full SHA3/SHA512 bundle.
     /// A current-core CPUID result, a successful KAT, thread-bound ownership

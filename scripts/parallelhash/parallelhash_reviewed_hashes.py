@@ -51,7 +51,7 @@ REVIEWED_HASHES = {
     'crates/brynja-hash-parallel-std/tests/execution.rs': '6cdb418b52da5428a89af6bcefcb9f2d03dc3ace765aebd673d0e6d36dcdf44f',
     'crates/brynja-hash-parallel/Cargo.toml': '19a57892ff7ec722c477c4afd8aec41a44da798546cf9f43ce9912b0d783b029',
     'crates/brynja-hash-parallel-std/Cargo.toml': '343fbc0c11abd955cc5a70994dcc9a600ad1706bb6af9b65cec9699249daba6a',
-    'assurance/parallelhash-public-api/Cargo.toml': 'd756fc10a13b9de688e3d79f705baf6b6031a6f8368620ed6b4502985b9db81b',
+    'assurance/parallelhash-public-api/Cargo.toml': '687695a95aa6f1c03f80b5b3ef3921d97775aa4976cefdb8915a9e499fc696c7',
     'assurance/parallelhash-public-api/src/lib.rs': '0c2dc0f856053d372474a11ac4991f78048419db9362e162afe2a1f67ec76b9a',
     'assurance/parallelhash-std-public-api/Cargo.toml': '5870a95902b9baee0de39734977027ace8ca029641c9163b43106721445a9150',
     'assurance/parallelhash-std-public-api/src/lib.rs': 'f494e9016212f5b67148aca08846bc43c9a55ce8b7e2600c21ca5452e49fb53d',

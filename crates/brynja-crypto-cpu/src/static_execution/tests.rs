@@ -4,6 +4,14 @@ use super::{Authority, Error, Health, Kernel, PublicData, Session};
 fn static_authority_rejects_incomplete_bundles_before_startup() {
     for kernel in Kernel::ALL {
         let (arch, features) = match kernel {
+            Kernel::X86Sha512 => (
+                cfg!(target_arch = "x86_64"),
+                cfg!(all(
+                    target_feature = "sha512",
+                    target_feature = "avx2",
+                    target_feature = "avx"
+                )),
+            ),
             Kernel::X86Sha256 => (
                 cfg!(target_arch = "x86_64"),
                 cfg!(all(target_feature = "sha", target_feature = "sse2")),
@@ -61,7 +69,7 @@ fn static_authority_real_kats_and_operations() -> Result<(), Error> {
                 );
                 assert_eq!(wrong, [42; 25]);
             }
-            Kernel::ArmSha512 => {
+            Kernel::ArmSha512 | Kernel::X86Sha512 => {
                 let mut state = crate::sha512::initial_state();
                 session.compress_sha512(
                     PublicData::new(&mut state),

@@ -690,7 +690,7 @@
       "requires": [
         "0.24.48"
       ],
-      "scope_sha256": "95d002ab0edebe3385447e30961b53bf9c19c8a49e3f22f820fe35bfe9e58988"
+      "scope_sha256": "e5b3d89db6b17553fb01258d267840d80b3ab19909bd974bb63a15c6b8754c03"
     },
     {
       "id": "0.24.50",

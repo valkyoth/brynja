@@ -35,7 +35,7 @@ pub fn exercise() -> Result<usize, Error> {
                     ]
                 );
             }
-            Kernel::ArmSha512 => {
+            Kernel::ArmSha512 | Kernel::X86Sha512 => {
                 let mut state = [
                     0x6a09e667f3bcc908,
                     0xbb67ae8584caa73b,
@@ -136,6 +136,11 @@ fn public_static_execution_matches_exact_compiled_coverage() -> Result<(), Error
         target_arch = "x86_64",
         target_feature = "sha",
         target_feature = "sse2"
+    ))) + usize::from(cfg!(all(
+        target_arch = "x86_64",
+        target_feature = "sha512",
+        target_feature = "avx2",
+        target_feature = "avx"
     ))) + usize::from(cfg!(all(
         target_arch = "x86_64",
         target_feature = "avx2",

@@ -194,7 +194,7 @@ fn exercise(session: &Session<'_>, kernel: Kernel) -> Result<(), Error> {
                 ]
             );
         }
-        Kernel::ArmSha512 => {
+        Kernel::ArmSha512 | Kernel::X86Sha512 => {
             let mut state = [
                 0x6a09_e667_f3bc_c908,
                 0xbb67_ae85_84ca_a73b,
@@ -236,7 +236,7 @@ fn exercise(session: &Session<'_>, kernel: Kernel) -> Result<(), Error> {
         _ => return Err(Error::Kernel(KernelError::WrongOperation)),
     }
     let mut state = [31; 8];
-    if kernel != Kernel::ArmSha512 {
+    if !matches!(kernel, Kernel::ArmSha512 | Kernel::X86Sha512) {
         assert_eq!(
             session.compress_sha512(PublicData::new(&mut state), PublicData::new(&[0; 128])),
             Err(KernelError::WrongOperation)

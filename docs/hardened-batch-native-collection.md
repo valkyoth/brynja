@@ -60,3 +60,8 @@ Regression tests use synthetic records only:
 ```sh
 python3 scripts/cryptography/test-hardened-batch-native.py
 ```
+
+An end-to-end local AMD development run of the committed wrapper passed all
+fourteen steps at `6b1655f85de9bfdc74df9f098708e8dc45d20979`. This checks the
+actual orchestration as well as the synthetic regressions; it is not final
+owner-reviewed release evidence or a result for any other native lane.

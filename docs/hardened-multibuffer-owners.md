@@ -1151,6 +1151,12 @@ across four lanes and exercise orchestration failures, environment cleanup,
 attestation, source drift and no-overwrite behavior. Synthetic records are not
 native qualification results.
 
+The real local AMD wrapper execution at commit
+`6b1655f85de9bfdc74df9f098708e8dc45d20979` also passed all fourteen steps,
+including their existing oracle/benchmark and package result validators.
+It remains a development capture with owner review pending, not a substitute
+for the other native lanes or excluded compiler/verifier/pentest evidence.
+
 ## Acceptance required before completion
 
 - Positive downstream examples for every constructor, exact bit/byte identity,

@@ -35,6 +35,8 @@ FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"(?:C|system|stdcall|cdec
 # These are Rust function DEFINITIONS, not imported foreign implementations.
 # The separate unsafe inventory binds their complete first-party assembly bytes.
 LOCAL_C_ABI = {
+    Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1/secret.rs"),
+    Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1/secret.rs"),
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs"),
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/arm/secret.rs"),
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/x86/secret.rs"),
@@ -135,6 +137,10 @@ def validate(root: Path) -> None:
                     signature = 'pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24]) {'
                 if relative.parent.parent.name == 'keccak_hardened_batch':
                     signature = 'pub unsafe extern "C" fn permute(scratch: &mut [u8; 1920], constants: &[u64; 24]) {'
+                if relative.parent.name in {'x86_sha1', 'aarch64_sha1'}:
+                    signature = ('pub unsafe extern "C" fn compress(\n'
+                                 '    state: &mut [u8; 20],\n    block: &[u8; 64],\n'
+                                 '    schedule: &mut [u8; 320],\n) {')
                 if text.count(signature) != 1:
                     fail(f"local Rust ABI definition changed: {relative}")
                 abi_text = text.replace(signature, '', 1)

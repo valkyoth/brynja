@@ -3,45 +3,39 @@
 import shutil
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 import hardened_policy as policy
 import hardened_codegen as codegen
 
 
-def apple_inline_tests():
-    target = 'aarch64-apple-darwin'
-    symbol = '_RNbrynja_legacy_sha13cpu6secret9Authority8compress'
-    instructions = ('sha1c', 'sha1p', 'sha1m', 'sha1h', 'sha1su0', 'sha1su1')
-    assembly = '_' + symbol + ':\n ret\n_RNordinary:\n sha1c.4s q0,s0,v0\n'
-    llvm = 'define void @' + symbol + '() {\n' + ''.join(
-        ' call void @llvm.aarch64.crypto.' + name + '()\n' for name in instructions) + '}\n'
-    assert 'sha1c' not in codegen.kernel_body(assembly, llvm, target)
-    standalone = '_RNbrynja_legacy_sha1aarch64_sha1compress_secret:\n ret\n'
-    assert codegen.kernel_body(standalone, '', target).strip() == 'ret'
-    cases = [
-        (assembly + assembly, llvm, target),
-        (assembly, llvm + llvm, target),
-        (assembly, '', target),
-        (assembly.replace('3cpu6secret', '3cpu7session'), llvm, target),
-        (assembly, llvm.replace('3cpu6secret', '3cpu7session'), target),
-        (assembly, llvm, 'aarch64-unknown-linux-gnu'),
-        (standalone + standalone + assembly, llvm, target),
-        (assembly.replace('_' + symbol + ':', 'Lordinary:'), llvm, target),
-    ]
-    for instruction in instructions:
-        missing = llvm.replace(' call void @llvm.aarch64.crypto.' + instruction + '()\n', '')
-        # An intrinsic in a declaration or unrelated definition is insufficient.
-        donated = missing + 'declare void @llvm.aarch64.crypto.' + instruction + '()\n'
-        donated += 'define void @_RNordinary() {\n call void @llvm.aarch64.crypto.' + instruction + '()\n}\n'
-        cases.append((assembly, donated, target))
-    for asm, ir, triple in cases:
-        try: codegen.kernel_body(asm, ir, triple)
-        except ValueError: pass
-        else: raise AssertionError('Apple inlined-kernel evidence regression survived')
-    print(f'Apple hardened-kernel scoping: two valid layouts; {len(cases)} regressions rejected')
+def opaque_symbol_tests():
+    for target, kernel in (('aarch64-apple-darwin', 'aarch64_sha1'),
+                           ('x86_64-unknown-linux-gnu', 'x86_sha1')):
+        symbol = '_RNbrynja_legacy_sha1' + kernel + '6secret8compress'
+        valid = symbol + ':\n ret\n_RNordinary:\n sha1c q0,s0,v0.4s\n'
+        assert codegen.kernel_body(valid, '', target).strip() == 'ret'
+        for changed in (valid+valid, valid.replace('6secret8compress','compress_secret'),
+                        valid.replace('6secret8compress','9Authority8compress'),
+                        valid.replace(kernel,'ordinary'),
+                        valid.replace(symbol, 'Lordinary'), ''):
+            try: codegen.kernel_body(changed, '', target)
+            except ValueError: pass
+            else: raise AssertionError('opaque SHA-1 identity regression survived')
+    print('Opaque SHA-1 identity: two valid layouts; twelve regressions rejected')
 
 
 def main():
-    apple_inline_tests()
+    opaque_symbol_tests()
+    # The packaged cleanup campaign rebinds the compile root to an extracted
+    # workspace. Its emitted-code inspector must still come from our checkout.
+    with tempfile.TemporaryDirectory(prefix='brynja-sha1-inspector-root-') as temporary:
+        with patch.object(codegen, 'ROOT', Path(temporary)), \
+                patch.object(codegen, 'mir_check'), \
+                patch.object(codegen, 'kernel_body', return_value='\n sha1msg1 x\n sha1msg2 x\n sha1nexte x\n sha1rnds4 x\n'):
+            try: codegen.artifacts_check('', '', '', 'x86_64-unknown-linux-gnu')
+            except ValueError as error:
+                assert 'SHA-1 opaque boundary: absent/ambiguous markers' in str(error)
+            else: raise AssertionError('temporary package root bypassed boundary inspection')
     policy.validate()
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-hardened-policy-') as temporary:
         root = Path(temporary)

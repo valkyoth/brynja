@@ -23,7 +23,6 @@ mod ownership;
     target_arch = "x86_64",
     all(target_arch = "aarch64", target_endian = "little")
 ))]
-pub(crate) mod storage;
 mod stream;
 pub use crate::cpu::HardenedAuthority as Authority;
 use crate::{

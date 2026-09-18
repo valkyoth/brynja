@@ -56,105 +56,23 @@ pub(super) unsafe fn compress(state: &mut [u32; 5], block: &[u8; 64]) {
     ];
 }
 
-/// Hardened schedule and store staging never use unowned local arrays.
+#[cfg(feature = "hardened-execution")]
+mod secret;
+
+/// The opaque boundary covers all secret computation and register cleanup.
 #[cfg(feature = "hardened-execution")]
 #[target_feature(enable = "neon,sha2")]
 pub(super) unsafe fn compress_secret(
     owner: &mut crate::owner::Sha1Owner,
     scratch: &mut super::Scratch,
 ) -> Result<(), super::Sha1BackendError> {
-    use super::Sha1BackendError as Error;
-    use crate::hardened_execution::storage::{add, read, vector, vector_mut};
-    let mut abcd = vdupq_n_u32(0);
-    abcd = vsetq_lane_u32::<0>(read(&owner.chaining_state, 0)?, abcd);
-    abcd = vsetq_lane_u32::<1>(read(&owner.chaining_state, 1)?, abcd);
-    abcd = vsetq_lane_u32::<2>(read(&owner.chaining_state, 2)?, abcd);
-    abcd = vsetq_lane_u32::<3>(read(&owner.chaining_state, 3)?, abcd);
-    let mut hash_e = read(&owner.chaining_state, 4)?;
-    for group in 0_usize..4 {
-        let input = vector(&owner.block, group)?;
-        let mut message = vdupq_n_u32(0);
-        message = vsetq_lane_u32::<0>(read(input, 0)?, message);
-        message = vsetq_lane_u32::<1>(read(input, 1)?, message);
-        message = vsetq_lane_u32::<2>(read(input, 2)?, message);
-        message = vsetq_lane_u32::<3>(read(input, 3)?, message);
-        let destination = vector_mut(&mut owner.schedule, group)?;
-        // SAFETY: Exactly 16 exclusive initialized owner bytes, byte-aligned store.
-        unsafe {
-            vst1q_u8(destination.as_mut_ptr(), vreinterpretq_u8_u32(message));
-        }
-    }
-    for group in 4_usize..20 {
-        let m0 = vector(
-            &owner.schedule,
-            group.checked_sub(4).ok_or(Error::Quarantined)?,
-        )?;
-        let m1 = vector(
-            &owner.schedule,
-            group.checked_sub(3).ok_or(Error::Quarantined)?,
-        )?;
-        let m2 = vector(
-            &owner.schedule,
-            group.checked_sub(2).ok_or(Error::Quarantined)?,
-        )?;
-        let m3 = vector(
-            &owner.schedule,
-            group.checked_sub(1).ok_or(Error::Quarantined)?,
-        )?;
-        // SAFETY: Four exact initialized 16-byte borrowed schedule regions.
-        let message = unsafe {
-            vsha1su1q_u32(
-                vsha1su0q_u32(
-                    vreinterpretq_u32_u8(vld1q_u8(m0.as_ptr())),
-                    vreinterpretq_u32_u8(vld1q_u8(m1.as_ptr())),
-                    vreinterpretq_u32_u8(vld1q_u8(m2.as_ptr())),
-                ),
-                vreinterpretq_u32_u8(vld1q_u8(m3.as_ptr())),
-            )
-        };
-        let destination = vector_mut(&mut owner.schedule, group)?;
-        // SAFETY: Exactly 16 exclusive owner bytes; byte-aligned store.
-        unsafe {
-            vst1q_u8(destination.as_mut_ptr(), vreinterpretq_u8_u32(message));
-        }
-    }
-    for group in 0..20 {
-        let source = vector(&owner.schedule, group)?;
-        // SAFETY: Exactly 16 initialized source-owned schedule bytes.
-        let message = unsafe { vreinterpretq_u32_u8(vld1q_u8(source.as_ptr())) };
-        let next_e = vsha1h_u32(vgetq_lane_u32::<0>(abcd));
-        abcd = match group {
-            0..=4 => vsha1cq_u32(abcd, hash_e, vaddq_u32(message, vdupq_n_u32(0x5a827999))),
-            5..=9 => vsha1pq_u32(abcd, hash_e, vaddq_u32(message, vdupq_n_u32(0x6ed9eba1))),
-            10..=14 => vsha1mq_u32(abcd, hash_e, vaddq_u32(message, vdupq_n_u32(0x8f1bbcdc))),
-            _ => vsha1pq_u32(abcd, hash_e, vaddq_u32(message, vdupq_n_u32(0xca62c1d6))),
-        };
-        hash_e = next_e;
-    }
-    // SAFETY: Exact live 16-byte destination in the mandatory clearing owner.
+    // SAFETY: Private dispatch retains lifetime-wide neon,sha2 authority.
+    // Disjoint owner fields supply exact initialized fixed byte arrays.
+    // The opaque kernel retains only chaining output, clears its schedule
+    // and working registers, and cannot expose a Rust secret temporary.
     unsafe {
-        vst1q_u8(scratch.lanes.as_mut_ptr(), vreinterpretq_u8_u32(abcd));
+        secret::compress(&mut owner.chaining_state, &owner.block, &mut owner.schedule);
     }
-    add(
-        &mut owner.chaining_state,
-        0,
-        read(&scratch.lanes, 0)?.swap_bytes(),
-    )?;
-    add(
-        &mut owner.chaining_state,
-        1,
-        read(&scratch.lanes, 1)?.swap_bytes(),
-    )?;
-    add(
-        &mut owner.chaining_state,
-        2,
-        read(&scratch.lanes, 2)?.swap_bytes(),
-    )?;
-    add(
-        &mut owner.chaining_state,
-        3,
-        read(&scratch.lanes, 3)?.swap_bytes(),
-    )?;
-    add(&mut owner.chaining_state, 4, hash_e)?;
+    scratch.wipe();
     Ok(())
 }

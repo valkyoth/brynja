@@ -1,0 +1,16 @@
+[workspace]
+[package]
+name = "brynja-sha1-register-cleanup"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+[features]
+default = []
+win64-probe = []
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"

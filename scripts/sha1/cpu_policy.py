@@ -8,7 +8,8 @@ ROOT = Path(__file__).resolve().parents[2]
 CPU = 'crates/brynja-legacy-sha1/src/cpu/'
 ADAPTER = 'crates/brynja-legacy-sha1-std/'
 SOURCES = ('mod.rs','session.rs','stream.rs','x86_sha1.rs','aarch64_sha1.rs',
-           'session/tests.rs','stream/tests.rs','secret.rs','secret/tests.rs')
+           'session/tests.rs','stream/tests.rs','secret.rs','secret/tests.rs',
+           'x86_sha1/secret.rs','aarch64_sha1/secret.rs')
 BOUND = [CPU + name for name in SOURCES] + [
     'crates/brynja-legacy-sha1/src/execution.rs',
     'crates/brynja-legacy-sha1/src/execution/ownership.rs',

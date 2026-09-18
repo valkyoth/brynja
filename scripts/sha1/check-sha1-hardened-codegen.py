@@ -16,7 +16,7 @@ def main():
             for target in (args.target,) if args.target else ('x86_64-unknown-linux-gnu', 'aarch64-unknown-linux-gnu'):
                 for panic in ('abort', 'unwind'):
                     evidence.compile_and_check(Path(temporary) / (compiler + '-' + target + '-' + panic), compiler, target, panic)
-                print(f'Hardened SHA-1 MIR/LLVM/assembly: PASS; {compiler}; {target}; seven owned regions; no register-erasure claim')
+                print(f'Hardened SHA-1 MIR/LLVM/assembly: PASS; {compiler}; {target}; seven owned regions; kernel register boundary checked; no whole-API erasure claim')
 
 
 if __name__ == '__main__': main()

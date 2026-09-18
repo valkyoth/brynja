@@ -26,7 +26,8 @@ SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
     'src/execution.rs', 'src/execution/ownership.rs', 'tests/execution.rs',
     'src/hardened.rs', 'src/cpu/x86_sha1.rs', 'src/cpu/aarch64_sha1.rs',
     'src/cpu/secret.rs', 'src/cpu/secret/tests.rs', 'src/hardened_execution/mod.rs',
-    'src/hardened_execution/engine.rs', 'src/hardened_execution/storage.rs',
+    'src/hardened_execution/engine.rs', 'src/cpu/x86_sha1/secret.rs',
+    'src/cpu/aarch64_sha1/secret.rs',
     'src/hardened_execution/stream.rs', 'src/hardened_execution/stream/tests.rs',
     'src/hardened_execution/ownership.rs', 'tests/hardened_execution.rs')) + tuple(
     'crates/brynja-legacy-sha1-std/' + name for name in (

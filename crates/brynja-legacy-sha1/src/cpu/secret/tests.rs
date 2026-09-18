@@ -69,19 +69,11 @@ fn one_shot_callback_unwind_clears_destination_before_start() {
 }
 
 #[test]
-fn lane_wipe_and_invalid_views_fail_closed() {
-    use crate::hardened_execution::storage::{add, read, vector, vector_mut};
+fn lane_wipe_clears_full_owner() {
     let mut scratch = Scratch::new();
     scratch.lanes.fill(0xa5);
     scratch.wipe();
     assert_eq!(scratch.lanes, [0; 16]);
-    for index in [4, 64, usize::MAX] {
-        assert!(read(&scratch.lanes, index).is_err());
-        assert!(add(&mut scratch.lanes, index, 1).is_err());
-        assert!(vector(&scratch.lanes, index).is_err());
-        assert!(vector_mut(&mut scratch.lanes, index).is_err());
-        assert_eq!(scratch.lanes, [0; 16]);
-    }
 }
 
 #[test]

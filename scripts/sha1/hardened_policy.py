@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 LEAF = 'crates/brynja-legacy-sha1/'
 ADAPTER = 'crates/brynja-legacy-sha1-std/'
-SOURCES = ('mod.rs', 'engine.rs', 'storage.rs', 'stream.rs', 'stream/tests.rs', 'ownership.rs')
+SOURCES = ('mod.rs', 'engine.rs', 'stream.rs', 'stream/tests.rs', 'ownership.rs')
 TOOLS = ('hardened_policy.py', 'hardened_package.py', 'hardened_codegen.py',
          'check-sha1-hardened.py', 'test-sha1-hardened.py', 'check-sha1-hardened-codegen.py',
          'check-sha1-package.py', 'check-sha1-differential.py', 'hardened_native.py',
@@ -25,6 +25,8 @@ def inventory(root=ROOT):
         files.update(p.relative_to(root).as_posix() for p in (base / 'src').rglob('*.rs'))
     files.update((LEAF + 'tests/hardened_execution.rs', LEAF + 'tests/vectors/nist.txt',
                   ADAPTER + 'tests/hardened_execution.rs', 'Cargo.toml',
+                  'assurance/register-cleanup/check.py',
+                  'assurance/register-cleanup/check_sha1.py',
                   'scripts/cryptography/mir_cleanup_flow.py'))
     return sorted(files)
 
@@ -97,10 +99,19 @@ def validate(root=ROOT, reviewed=True):
         features = 'sha,sse2' if name == 'x86_sha1.rs' else 'neon,sha2'
         require(text, '#[target_feature(enable = "'+features+'")] pub(super) unsafe fn compress_secret(')
         kernel = text.split('pub(super) unsafe fn compress_secret', 1)[1]
-        for token in ('owner.schedule', 'scratch.lanes', 'Result<(),'):
+        for token in ('owner.schedule', 'scratch.wipe()', 'Result<(),'):
             require(kernel, token)
         if re.search(r'let(?:mut)?\w+=\[[^\]]*;', re.sub(r'\s+', '', kernel)):
             raise ValueError('secret kernel gained an unowned temporary array')
+    for name in ('x86_sha1', 'aarch64_sha1'):
+        opaque = read(root, LEAF + 'src/cpu/' + name + '/secret.rs')
+        for token in ('#[inline(never)]', 'pub unsafe extern "C" fn compress(',
+                      'state: &mut [u8; 20]', 'block: &[u8; 64]', 'schedule: &mut [u8; 320]',
+                      'BRYNJA_SECRET_BEGIN', 'BRYNJA_REGISTER_ERASE', 'BRYNJA_SECRET_END',
+                      'options(nostack)'):
+            require(opaque, token)
+        if opaque.count('asm!(') != 1 or re.search(r'\\b(?:lateout|nomem|readonly|pure)\\b', re.sub(r'//[^\\n]*', '', opaque)):
+            raise ValueError('SHA-1 opaque boundary weakened')
     for file, features in ((LEAF, {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu'], 'hardened-execution': ['cpu']}),
                            (ADAPTER, {'default': [], 'runtime-execution': ['brynja-legacy-sha1/execution'],
                                       'runtime-hardened-execution': ['runtime-execution', 'brynja-legacy-sha1/hardened-execution']})):

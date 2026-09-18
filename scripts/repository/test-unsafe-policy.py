@@ -137,7 +137,9 @@ mod injected {
 
 
 def register_boundaries() -> None:
-    for relative in (Path('crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs'),
+    for relative in (Path('crates/brynja-legacy-sha1/src/cpu/x86_sha1/secret.rs'),
+                     Path('crates/brynja-legacy-sha1/src/cpu/aarch64_sha1/secret.rs'),
+                     Path('crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs'),
                      Path('crates/brynja-crypto-cpu/src/keccak_hardened_batch/arm/secret.rs'),
                      Path('crates/brynja-crypto-cpu/src/x86_sha512/secret.rs'),
                      Path('crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs'),
@@ -173,4 +175,4 @@ if __name__ == "__main__":
     test()
     register_boundaries()
     print("unsafe policy rejects eleven exception-boundary regressions")
-    print("opaque register boundaries reject seventy-two unsafe-ABI, clobber and memory-effect regressions")
+    print("opaque register boundaries reject eighty-four unsafe-ABI, clobber and memory-effect regressions")

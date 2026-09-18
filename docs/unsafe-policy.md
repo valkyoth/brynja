@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: sixty-one exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: sixty-three exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only sixty-one exact modules: the private core volatile clearer; the
+Rust in only sixty-three exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -101,7 +101,17 @@ are cleared; no Arm SHA3 or x86 AVX-512 prerequisite is added. The repr(C)
 byte fields retain their original size and alignment. Packing and output transfer
 remain separate audit work.
 
-These twelve kernel boundaries are under implementation-author verification, not
+The legacy SHA-1 ports add `cpu/{x86_sha1,aarch64_sha1}/secret.rs` inside
+`brynja-legacy-sha1`. Fixed 20-byte state, 64-byte input and 320-byte schedule
+references bound the single opaque computation. Endian conversion, schedule,
+rounds, feed-forward and schedule clearing remain inside that block. SHA/SSE2
+uses only EAX and XMM0–3 for secret temporaries, including on 32-bit x86;
+Arm SHA-1 uses X4–6 and V0–5. These registers and flags are erased before return.
+Unaligned operands are supported without adding SSSE3, SSE4 or AVX requirements.
+The caller's owner and failure-guard clearing remain unchanged; framing and
+portable processing still need their separate audit.
+
+These fourteen kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.
 Pre-existing caller registers and caller-owned buffers are not erased. Abort,
 interruption during computation, OS snapshots and platform storage remain

@@ -1,4 +1,4 @@
-"""Feature-enabled emitted-code checks; source-owned clearing, not register erasure."""
+"""Feature-enabled owned-memory and opaque kernel-boundary emitted-code checks."""
 import os
 import re
 import subprocess
@@ -8,6 +8,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/cryptography'))
 import mir_cleanup_flow as flow
+# Packaging redirects ROOT to the extracted crate workspace. The inspector is
+# tooling from this checkout, not an input supplied by that temporary package.
+sys.path.insert(0, str(ROOT / 'assurance/register-cleanup'))
+import check_sha1 as boundary
 
 
 def require(condition, message):
@@ -81,37 +85,22 @@ def assembly_function(assembly, tokens):
 
 
 def kernel_body(assembly, llvm, target):
-    kernel = 'x86_sha1' if target.startswith('x86_64') else 'aarch64_sha1'
-    tokens = ('brynja_legacy_sha1', kernel, 'compress_secret')
-    found = assembly_functions(assembly, tokens)
-    if found:
-        require(len(found) == 1, 'ambiguous hardened kernel')
-        body = found[0]
-    else:
-        # Apple enables SHA1 in the baseline, permitting this private kernel
-        # to inline. Inspect only its secret-authority caller, never the whole
-        # file or the ordinary session. Keep other targets fail-closed.
-        require(target == 'aarch64-apple-darwin', 'absent standalone hardened kernel')
-        tokens = ('brynja_legacy_sha1', '3cpu6secret', '9Authority8compress')
-        body = assembly_function(assembly, tokens)
-        definitions = re.findall(r'^define [^\n]*\{.*?^}', llvm, re.M | re.S)
-        definitions = [part for part in definitions if all(token in part.splitlines()[0] for token in tokens)]
-        require(len(definitions) == 1, 'ambiguous or absent hardened authority LLVM')
-        for instruction in ('sha1c', 'sha1p', 'sha1m', 'sha1h', 'sha1su0', 'sha1su1'):
-            require(re.search(r'\bcall\b[^\n]*@llvm\.aarch64\.crypto\.' + instruction + r'\(', definitions[0]),
-                    'inlined hardened authority omitted LLVM ' + instruction)
-    return body
+    kernel = 'x86_sha1' if target.startswith(('x86_64', 'i686')) else 'aarch64_sha1'
+    # The opaque private function cannot inline. A wrapper/ordinary kernel or
+    # inlined authority cannot donate instructions to this exact source identity.
+    return assembly_function(assembly, ('brynja_legacy_sha1', kernel, '6secret8compress'))
 
 
 def artifacts_check(mir, llvm, assembly, target, panic='abort'):
     mir_check(mir, panic)
-    kernel = 'x86_sha1' if target.startswith('x86_64') else 'aarch64_sha1'
+    kernel = 'x86_sha1' if target.startswith(('x86_64', 'i686')) else 'aarch64_sha1'
     body = kernel_body(assembly, llvm, target)
     instructions = ('sha1msg1', 'sha1msg2', 'sha1nexte', 'sha1rnds4') if kernel == 'x86_sha1' else (
         'sha1c', 'sha1p', 'sha1m', 'sha1h', 'sha1su0', 'sha1su1')
     for instruction in instructions:
         require(re.search(r'^\s+' + instruction + r'(?:\.[\w]+)?\s', body, re.M),
                 'hardened kernel omitted ' + instruction)
+    boundary.inspect(body, 'x86' if kernel == 'x86_sha1' else 'arm')
     for owner in ('Scratch', 'Sha1Owner'):
         body = assembly_function(assembly, ('brynja_legacy_sha1', owner, 'wipe'))
         require('clear_owned_region' in body, owner + ' emitted clear disappeared')

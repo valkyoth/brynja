@@ -51,6 +51,9 @@ def main() -> int:
     reject("terminal-error-mapping", Path("crates/brynja-mac-kmac/src/error.rs"), "HardenedSha3Error::StateConsumed => Self::StateConsumed", "HardenedSha3Error::StateConsumed => Self::SecretMemory")
     reject("terminal-error-propagation", Path("crates/brynja-mac-kmac/src/packer.rs"), ".finalize_xof_erasing_source().map_err(KmacError::from)", ".finalize_xof_erasing_source().map(|reader| reader)")
     reject("encoded-width-fail-closed", Path("crates/brynja-mac-kmac/src/packer.rs"), "self.bytes.get(..length).ok_or(KmacError::SecretMemory)", "Ok(self.bytes.get(..length).unwrap_or_default())")
+    reject("borrowed-key-encoding", Path("crates/brynja-mac-kmac/src/packer.rs"), "fn left_encode(&mut self, value: u128)", "fn left_encode(mut self, value: u128)")
+    reject("borrowed-bytepad", Path("crates/brynja-mac-kmac/src/packer.rs"), "fn finish_bytepad(&mut self, rate: usize)", "fn finish_bytepad(mut self, rate: usize)")
+    reject("borrowed-framing", Path("crates/brynja-mac-kmac/src/packer.rs"), "storage: &'storage mut Framing", "storage: Framing")
     reject("conformance-feature", Path("crates/brynja-mac-kmac/src/lib.rs"), '#[cfg(feature = "conformance-testing")]\npub fn kmac128_conformance', "pub fn kmac128_conformance")
     reject("conformance-compile-gate", Path("scripts/checks.sh"), "scripts/kmac/check-kmac-conformance-gate.sh", "true # removed conformance gate")
     reject("constant-time", Path("crates/brynja-mac-kmac/src/output.rs"), "ct_eq", "ordinary_eq")
@@ -64,7 +67,7 @@ def main() -> int:
         "-p brynja-mac-kmac \\\n    --lib",
     )
     reject("dependency", Path("crates/brynja-mac-kmac/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", "foreign = \"1\"")
-    print("KMAC policy rejects twenty-one ownership, lifecycle, feature, algorithm, test, and dependency regressions")
+    print("KMAC policy rejects twenty-four ownership, lifecycle, feature, algorithm, test, and dependency regressions")
     return 0
 
 

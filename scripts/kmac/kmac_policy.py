@@ -15,7 +15,8 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "lib.rs",
     "output.rs", "packer.rs", "policy.rs", "verify.rs", "xof.rs",
 ))
-TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs")
+TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
+         CRATE / "src/packer/framing_tests.rs")
 MANIFEST = CRATE / "Cargo.toml"
 README = CRATE / "README.md"
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
@@ -116,20 +117,27 @@ def validate(root: Path) -> None:
         require(backend, token, "hardened cSHAKE backend")
     packer = loaded[CRATE / "src/packer.rs"]
     for token in (
-        "SecretEncodedInteger::left_encode(key_bits)", "finish_bytepad(rate)",
+        "key_length.left_encode(key_bits)", "finish_bytepad(rate)",
         "right_encode_u128(output_bits)", "clear_owned_region(&mut self.pending)",
         "clear_owned_region(&mut self.used)",
         "clear_owned_region(&mut self.emitted)",
         "impl Drop for SecretEncodedInteger",
         "impl<S: Absorb> Drop for SecretPacker",
+        "impl Drop for Framing", "storage: &'storage mut Framing",
+        "fn left_encode(&mut self, value: u128) -> Result<(), KmacError>",
+        "fn finish_bytepad(&mut self, rate: usize)", "finish(self.state, input)",
         "fn as_bytes(&self) -> Result<&[u8], KmacError>",
         "self.bytes.get(..length).ok_or(KmacError::SecretMemory)",
         "corrupt_encoded_width_fails_closed",
         ".finalize_xof_erasing_source().map_err(KmacError::from)",
     ):
         require(packer, token, "KMAC key and trailer packing")
-    if packer.count("clear_owned_region(&mut self.") != 9:
+    if packer.count("clear_owned_region(&mut self.") != 7:
         fail("KMAC secret staging cleanup inventory changed")
+    for forbidden in ("struct SecretTail", "Result<Self, KmacError>",
+                      "fn finish_bits(self)", "fn finish_bytepad(mut self"):
+        if forbidden in packer:
+            fail("KMAC framing reintroduced a by-value secret transfer")
     fixed = loaded[CRATE / "src/fixed.rs"]
     for token in (
         "finish_fixed(Some(final_message), bits, true)",

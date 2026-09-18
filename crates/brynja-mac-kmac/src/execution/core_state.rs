@@ -126,17 +126,12 @@ impl<'a> Core<'a> {
         if !xof && !conformance && bits < operation.core.strength {
             return Err(Error::TagTooShort);
         }
-        let tail = append_suffix(
+        append_suffix(
             &mut operation.core.state,
             message,
             if xof { 0 } else { bits },
+            |state, input| state.finish(input),
         )?;
-        let input = match tail.as_ref() {
-            Some(tail) => Fips202BitString::new(tail.as_bytes(), tail.valid())
-                .map_err(|_| Error::InvalidBitString)?,
-            None => super::bits(&[])?,
-        };
-        operation.core.state.finish(input)?;
         operation.core.metadata.phase = [2];
         operation.completed = true;
         Ok(())

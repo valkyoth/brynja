@@ -27,6 +27,11 @@ No crates are selected for publication.
   remains pending.
 - Add an isolated first-party SHA512/AVX2/AVX intrinsic kernel and exact static/raw
   runtime identity, with real startup KAT and irreversible quarantine.
+- Initialize KMAC key-length encoding through a borrow and finalize its partial
+  suffix through a callback borrowing the original framing scratch. Both
+  portable and accelerated KMAC use this internal boundary; public APIs and
+  output bytes are unchanged. Scoped KMAC owners and complete framing/compiler
+  residue qualification remain unfinished.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;
   add distinct owner-backed hardened compression without ordinary scratch reuse.
 - Preserve generic portable defaults, AVX2 batch routes and the hosted x86

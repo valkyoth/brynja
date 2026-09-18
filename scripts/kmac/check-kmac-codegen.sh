@@ -78,7 +78,13 @@ for raw_toolchain in "${toolchains[@]}"; do
         grep -q 'fn core_state::<impl at .*>::wipe(_1: &mut KmacMetadata)' "$mir"
         grep -q 'fn packer::<impl at .*>::drop(_1: &mut SecretEncodedInteger' "$mir"
         grep -q 'fn packer::<impl at .*>::drop(_1: &mut SecretPacker' "$mir"
-        grep -q 'fn packer::<impl at .*>::drop(_1: &mut SecretTail' "$mir"
+        grep -q 'fn packer::<impl at .*>::drop(_1: &mut Framing' "$mir"
+        grep -q '>::left_encode(_1: &mut SecretEncodedInteger, _2: u128) -> Result<(), KmacError>' "$mir"
+        grep -q '>::finish_bits(_1: &mut SecretPacker' "$mir"
+        if grep -q 'SecretTail' "$mir"; then
+            echo "KMAC framing returned an owned secret tail under ${toolchain#+}" >&2
+            exit 1
+        fi
     done
 
     for mir in "${sha3_mir[@]}"; do

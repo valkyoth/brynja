@@ -64,6 +64,14 @@ def mutations(consumer, roots, env):
     manifest.write_text(manifest.read_text() + '\n[workspace]\n[patch.crates-io]\n' +
         '\n'.join(f'{name}={{path="{path.as_posix()}"}}' for name, path in roots.items()) + '\n')
     cases = (
+        ('../packer.rs', 'clear_owned_region(&mut self.pending)', 'core::hint::black_box(&mut self.pending)', 'partial_tail_borrows_final_frame'),
+        ('../packer.rs', 'clear_owned_region(&mut self.used)', 'core::hint::black_box(&mut self.used)', 'partial_tail_borrows_final_frame'),
+        ('../packer.rs', 'clear_owned_region(&mut self.emitted)', 'core::hint::black_box(&mut self.emitted)', 'partial_tail_borrows_final_frame'),
+        ('../packer.rs', 'self.storage.wipe();', '', 'partial_tail_borrows_final_frame'),
+        ('../packer.rs', 'fn left_encode(&mut self, value: u128) -> Result<(), KmacError> {\n        self.wipe();',
+         'fn left_encode(&mut self, value: u128) -> Result<(), KmacError> {', 'encoded_integer_initializes_in_place'),
+        ('../packer.rs', 'let bytes = if self.used() == 0 {\n            &[][..]\n        } else {\n            &self.storage.pending[..]',
+         'let copied = self.storage.pending;\n        let bytes = if self.used() == 0 {\n            &[][..]\n        } else {\n            &copied[..]', 'partial_tail_borrows_final_frame'),
         ('../packer.rs', 'self.state.absorb(input)?;',
          'for byte in input { self.state.absorb(core::slice::from_ref(byte))?; }',
          'large_final_chunks_keep_bulk_absorption'),

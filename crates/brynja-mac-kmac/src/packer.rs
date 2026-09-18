@@ -23,9 +23,11 @@ pub(crate) fn absorb_key<S: Absorb>(
 ) -> Result<(), KmacError> {
     let key_bits = u128::try_from(key.bit_len()).map_err(|_| KmacError::MessageTooLong)?;
     let rate_value = u128::try_from(rate).map_err(|_| KmacError::MessageTooLong)?;
-    let mut packer = SecretPacker::new(state);
+    let mut storage = Framing::new();
+    let mut packer = SecretPacker::new(state, &mut storage);
     packer.push_bytes(left_encode_u128(rate_value).as_bytes())?;
-    let key_length = SecretEncodedInteger::left_encode(key_bits)?;
+    let mut key_length = SecretEncodedInteger::new();
+    key_length.left_encode(key_bits)?;
     packer.push_bytes(key_length.as_bytes()?)?;
     packer.push_bit_string(key)?;
     packer.finish_bytepad(rate)
@@ -37,7 +39,15 @@ struct SecretEncodedInteger {
 }
 
 impl SecretEncodedInteger {
-    fn left_encode(value: u128) -> Result<Self, KmacError> {
+    const fn new() -> Self {
+        Self {
+            bytes: [0; 17],
+            length: [0],
+        }
+    }
+
+    fn left_encode(&mut self, value: u128) -> Result<(), KmacError> {
+        self.wipe();
         let mut remaining = value;
         let mut width = 1_u8;
         while remaining > u128::from(u8::MAX) {
@@ -45,11 +55,8 @@ impl SecretEncodedInteger {
             remaining >>= 8;
         }
         let total = width.checked_add(1).ok_or(KmacError::MessageTooLong)?;
-        let mut encoded = Self {
-            bytes: [0; 17],
-            length: [total],
-        };
-        let Some(prefix) = encoded.bytes.first_mut() else {
+        self.length = [total];
+        let Some(prefix) = self.bytes.first_mut() else {
             return Err(KmacError::SecretMemory);
         };
         *prefix = width;
@@ -62,24 +69,28 @@ impl SecretEncodedInteger {
             let byte = u8::try_from((value >> shift) & u128::from(u8::MAX))
                 .map_err(|_| KmacError::MessageTooLong)?;
             let position = offset.checked_add(1).ok_or(KmacError::MessageTooLong)?;
-            let Some(target) = encoded.bytes.get_mut(position) else {
+            let Some(target) = self.bytes.get_mut(position) else {
                 return Err(KmacError::SecretMemory);
             };
             *target = byte;
         }
-        Ok(encoded)
+        Ok(())
     }
 
     fn as_bytes(&self) -> Result<&[u8], KmacError> {
         let length = usize::from(self.length.first().copied().unwrap_or_default());
         self.bytes.get(..length).ok_or(KmacError::SecretMemory)
     }
+
+    fn wipe(&mut self) {
+        let _ = clear_owned_region(&mut self.bytes);
+        let _ = clear_owned_region(&mut self.length);
+    }
 }
 
 impl Drop for SecretEncodedInteger {
     fn drop(&mut self) {
-        let _ = clear_owned_region(&mut self.bytes);
-        let _ = clear_owned_region(&mut self.length);
+        self.wipe();
     }
 }
 
@@ -88,50 +99,71 @@ pub(crate) fn append_right_encode<S: CshakeState>(
     final_message: Option<Fips202BitString<'_>>,
     output_bits: u128,
 ) -> Result<S::Reader, KmacError> {
-    let tail = append_suffix(state, final_message, output_bits)?;
-    match tail {
-        Some(tail) => {
-            let input = Fips202BitString::new(tail.as_bytes(), tail.valid())
-                .map_err(|_| KmacError::InvalidBitString)?;
+    append_suffix(state, final_message, output_bits, |state, input| {
+        if !input.as_bytes().is_empty() {
             state
                 .finalize_bits_xof_erasing_source(input)
                 .map_err(KmacError::from)
+        } else {
+            state.finalize_xof_erasing_source().map_err(KmacError::from)
         }
-        None => state.finalize_xof_erasing_source().map_err(KmacError::from),
-    }
+    })
 }
 
-pub(crate) fn append_suffix<S: Absorb>(
+pub(crate) fn append_suffix<S: Absorb, R>(
     state: &mut S,
     final_message: Option<Fips202BitString<'_>>,
     output_bits: u128,
-) -> Result<Option<SecretTail>, KmacError> {
+    finish: impl FnOnce(&mut S, Fips202BitString<'_>) -> Result<R, KmacError>,
+) -> Result<R, KmacError> {
     // A fresh packer bulk-absorbs the entire complete-byte message prefix.
     // Only right_encode (at most 17 bytes for u128) follows a partial byte.
     // Do not flush to alignment here: that would insert bits into the message.
-    let mut packer = SecretPacker::new(state);
+    let mut storage = Framing::new();
+    let mut packer = SecretPacker::new(state, &mut storage);
     if let Some(message) = final_message {
         packer.push_bit_string(message)?;
     }
     packer.push_bytes(right_encode_u128(output_bits).as_bytes())?;
-    Ok(packer.finish_bits())
+    packer.finish_bits(finish)
 }
 
-struct SecretPacker<'state, S: Absorb> {
-    state: &'state mut S,
+struct Framing {
     pending: [u8; 1],
     used: [u8; 1],
     emitted: [u8; core::mem::size_of::<usize>()],
 }
-
-impl<'state, S: Absorb> SecretPacker<'state, S> {
-    fn new(state: &'state mut S) -> Self {
+impl Framing {
+    const fn new() -> Self {
         Self {
-            state,
             pending: [0],
             used: [0],
             emitted: [0; core::mem::size_of::<usize>()],
         }
+    }
+    fn wipe(&mut self) {
+        let _ = clear_owned_region(&mut self.pending);
+        let _ = clear_owned_region(&mut self.used);
+        let _ = clear_owned_region(&mut self.emitted);
+    }
+}
+impl Drop for Framing {
+    fn drop(&mut self) {
+        self.wipe();
+    }
+}
+
+// The frame is allocated before accepting secret input. Finalizers borrow its
+// partial byte directly; neither finalization nor bytepad consumes the storage.
+struct SecretPacker<'state, 'storage, S: Absorb> {
+    state: &'state mut S,
+    storage: &'storage mut Framing,
+}
+
+impl<'state, 'storage, S: Absorb> SecretPacker<'state, 'storage, S> {
+    fn new(state: &'state mut S, storage: &'storage mut Framing) -> Self {
+        storage.wipe();
+        Self { state, storage }
     }
 
     fn push_bit_string(&mut self, input: Fips202BitString<'_>) -> Result<(), KmacError> {
@@ -173,6 +205,7 @@ impl<'state, S: Absorb> SecretPacker<'state, S> {
             let bit = (byte >> position) & 1;
             let used = self.used();
             let pending = self
+                .storage
                 .pending
                 .first_mut()
                 .ok_or(KmacError::InvalidBitString)?;
@@ -185,7 +218,7 @@ impl<'state, S: Absorb> SecretPacker<'state, S> {
         Ok(())
     }
 
-    fn finish_bytepad(mut self, rate: usize) -> Result<(), KmacError> {
+    fn finish_bytepad(&mut self, rate: usize) -> Result<(), KmacError> {
         if rate == 0 || rate > MAX_RATE {
             return Err(KmacError::MessageTooLong);
         }
@@ -207,84 +240,59 @@ impl<'state, S: Absorb> SecretPacker<'state, S> {
         Ok(())
     }
 
-    fn finish_bits(self) -> Option<SecretTail> {
-        if self.used() == 0 {
-            None
+    fn finish_bits<R>(
+        &mut self,
+        finish: impl FnOnce(&mut S, Fips202BitString<'_>) -> Result<R, KmacError>,
+    ) -> Result<R, KmacError> {
+        let bytes = if self.used() == 0 {
+            &[][..]
         } else {
-            self.pending
-                .first()
-                .copied()
-                .map(|byte| SecretTail::new(byte, self.used()))
-        }
+            &self.storage.pending[..]
+        };
+        let input =
+            Fips202BitString::new(bytes, self.used()).map_err(|_| KmacError::InvalidBitString)?;
+        finish(self.state, input)
     }
 
     fn flush(&mut self) -> Result<(), KmacError> {
-        self.state.absorb(&self.pending)?;
+        self.state.absorb(&self.storage.pending)?;
         let emitted = self
             .emitted()
             .checked_add(1)
             .ok_or(KmacError::MessageTooLong)?;
         self.set_emitted(emitted);
-        let _ = clear_owned_region(&mut self.pending);
-        let _ = clear_owned_region(&mut self.used);
+        let _ = clear_owned_region(&mut self.storage.pending);
+        let _ = clear_owned_region(&mut self.storage.used);
         Ok(())
     }
 
     fn used(&self) -> u8 {
-        self.used.first().copied().unwrap_or_default()
+        self.storage.used.first().copied().unwrap_or_default()
     }
 
     fn set_used(&mut self, value: u8) {
-        if let Some(used) = self.used.first_mut() {
+        if let Some(used) = self.storage.used.first_mut() {
             *used = value;
         }
     }
 
     fn emitted(&self) -> usize {
-        usize::from_le_bytes(self.emitted)
+        usize::from_le_bytes(self.storage.emitted)
     }
 
     fn set_emitted(&mut self, value: usize) {
-        self.emitted.copy_from_slice(&value.to_le_bytes());
+        self.storage.emitted.copy_from_slice(&value.to_le_bytes());
     }
 }
 
-impl<S: Absorb> Drop for SecretPacker<'_, S> {
+impl<S: Absorb> Drop for SecretPacker<'_, '_, S> {
     fn drop(&mut self) {
-        let _ = clear_owned_region(&mut self.pending);
-        let _ = clear_owned_region(&mut self.used);
-        let _ = clear_owned_region(&mut self.emitted);
+        self.storage.wipe();
     }
 }
 
-pub(crate) struct SecretTail {
-    byte: [u8; 1],
-    valid: [u8; 1],
-}
-
-impl SecretTail {
-    const fn new(byte: u8, valid: u8) -> Self {
-        Self {
-            byte: [byte],
-            valid: [valid],
-        }
-    }
-
-    pub(crate) const fn as_bytes(&self) -> &[u8] {
-        &self.byte
-    }
-
-    pub(crate) fn valid(&self) -> u8 {
-        self.valid.first().copied().unwrap_or_default()
-    }
-}
-
-impl Drop for SecretTail {
-    fn drop(&mut self) {
-        let _ = clear_owned_region(&mut self.byte);
-        let _ = clear_owned_region(&mut self.valid);
-    }
-}
+#[cfg(test)]
+mod framing_tests;
 
 #[cfg(test)]
 mod tests {
@@ -319,12 +327,14 @@ mod tests {
                     let input = Fips202BitString::new(prefix, valid)
                         .map_err(|_| KmacError::InvalidBitString)?;
                     let mut calls = AbsorbCalls::default();
-                    let tail = append_suffix(&mut calls, Some(input), bits)?;
+                    let tail = append_suffix(&mut calls, Some(input), bits, |_, tail| {
+                        Ok(tail.valid_bits_in_last_byte())
+                    })?;
                     let trailer = right_encode_u128(bits);
                     if valid == 8 {
                         assert_eq!(calls.count, 2);
                         assert_eq!(&calls.lengths[..2], &[size, trailer.as_bytes().len()]);
-                        assert!(tail.is_none());
+                        assert_eq!(tail, 0);
                     } else {
                         assert_eq!(calls.lengths[0], size - 1);
                         assert_eq!(calls.count, 1 + trailer.as_bytes().len());
@@ -334,7 +344,7 @@ mod tests {
                             .get(1..calls.count)
                             .ok_or(KmacError::MessageTooLong)?;
                         assert!(singles.iter().all(|n| *n == 1));
-                        assert_eq!(tail.as_ref().map(|t| t.valid()), Some(valid));
+                        assert_eq!(tail, valid);
                     }
                 }
             }

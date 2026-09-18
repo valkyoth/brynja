@@ -83,7 +83,7 @@ Handle and outer-scope guards independently clear hash storage, including
 forgotten handles and recoverable unwind. Existing CPU operation guards clear
 private scratch and retain their quarantine behavior. Neither the active engine
 nor its scratch moves through finalization. General-t execution is described
-below. Scoped Keccak/higher constructions remain rollout work; this is not complete
+below. Scoped higher constructions remain rollout work; this is not complete
 register/spill qualification.
 
 ## General SHA-512/t
@@ -174,6 +174,21 @@ unwind. Successful operations clear staging before returning. No secret length
 or preflight query is exposed. Authority/revocation and deployment requirements
 are unchanged, and none of this establishes complete compiler-copy, register or
 spill erasure.
+
+## KMAC framing prerequisite
+
+The shared private KMAC packer now initializes its key-length encoding through
+`&mut` storage rather than returning an initialized secret encoding. Framing
+scratch is allocated before accepting secret bits, borrowed by the packer and
+cleared by its guard and its own destructor. Bytepad no longer consumes that
+storage. The final partial suffix is borrowed directly by a finalization callback,
+not copied into a returned tail owner. Portable and accelerated KMAC use the
+same helper, retaining bulk absorption and exact SP 800-185 bit framing.
+
+This is internal groundwork, not a scoped public KMAC API or whole-framing
+register/spill qualification. Existing movable KMAC constructors still require
+the broader in-place rollout; integer calculations and compiler-created copies
+remain outside the owned-memory claim. No public API or parameter policy changed.
 
 ## Ownership and failure behavior
 

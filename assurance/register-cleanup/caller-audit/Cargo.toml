@@ -1,0 +1,22 @@
+[workspace]
+
+[package]
+name = "brynja-caller-residue-audit"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+brynja-hash-sha2 = { path = "../../../crates/brynja-hash-sha2", default-features = false }
+brynja-hash-sha3 = { path = "../../../crates/brynja-hash-sha3", default-features = false }
+brynja-legacy-sha1 = { path = "../../../crates/brynja-legacy-sha1", default-features = false }
+brynja-legacy-md5 = { path = "../../../crates/brynja-legacy-md5", default-features = false }
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"

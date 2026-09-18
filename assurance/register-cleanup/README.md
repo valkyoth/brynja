@@ -8,6 +8,11 @@ the fixture directly includes their actual private source files, rather than
 testing duplicate implementations. Portable/caller-side work and native qualification remain
 pending. Release gates are unchanged. Finding F1 remains open.
 
+The [portable/caller audit](caller-audit/README.md) now reproduces input-marker
+residue across selected public hardened calls while their owned-output clearing
+tests pass. Its source-bound diagnostics are not release qualification; they
+identify work outside the sixteen accelerated kernel boundaries.
+
 ## Intended boundary
 
 On normal return from a qualified kernel, that kernel's temporary secret values

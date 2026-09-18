@@ -74,6 +74,64 @@ All functional/owned-destination checks pass in these configurations. The
 positive residue observations prevent interpreting that result as complete
 normal-return cleanup. The zeros, including SHA-512, leave their audit work open.
 
+## Recheck after the private kernel and secret-copy ports
+
+The same unmodified diagnostic was rerun at
+`f76c57af564fcbcba89fa3e63bd8de30d4cb0432`. All eight compiler/target/profile
+configurations pass their five functional/observer tests. They still do **not**
+qualify whole-API erasure. Observed repeated-input matches out of 28 cases:
+
+| Compiler / execution / profile | SHA-256 | SHA-512 | SHA3-256 | SHA-1 | MD5 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1.90.0 / native Linux x86-64 / debug | 0 | 0 | 0 | 0 | 14 |
+| 1.90.0 / native Linux x86-64 / release | 24 | 0 | 10 | 0 | 0 |
+| 1.90.0 / QEMU Linux Arm / debug | 0 | 8 | 12 | 0 | 0 |
+| 1.90.0 / QEMU Linux Arm / release | 14 | 16 | 22 | 0 | 14 |
+| 1.98.1 / native Linux x86-64 / debug | 0 | 0 | 0 | 0 | 14 |
+| 1.98.1 / native Linux x86-64 / release | 24 | 0 | 10 | 0 | 14 |
+| 1.98.1 / QEMU Linux Arm / debug | 0 | 8 | 12 | 0 | 0 |
+| 1.98.1 / QEMU Linux Arm / release | 14 | 16 | 22 | 0 | 14 |
+
+These are compiler-sensitive diagnostics, not a score or a quantitative
+comparison of security. Changes in register allocation and wrapper code can
+change the marker count without changing the private kernel's cleanup contract.
+No match can establish absence of transformed secrets or stack copies.
+
+The current Rust 1.98.1 x86-64 release SHA3 wrapper still performs a 1,040-byte
+`memcpy` from `rsp + 1080` to `rsp + 32` after `update` succeeds, then passes
+the latter address to consuming `finalize_secret`. Its successful return path
+does not wipe the former region before reclaiming the stack frame. This is an
+inspection of emitted code, not a read of dead stack memory. The separately
+qualified permutation and destination-copy boundaries do not cover this move.
+
+Local source-bound observations are retained under
+`target/caller-residue-ql5q_sap/observations.json` with SHA-256
+`0ee7f16b727500fb07d8fd5770266fab933e2d96bbf1261e739961e66ef7260b`.
+The inspected `brynja_caller_residue_audit` 1.98.1 x86-64 release assembly has
+SHA-256 `09909ab5878e36cd69038dca0aebb84dcb94a0cc6ede1b6a4c79b8edb0071483`.
+These ignored development artifacts are not a release receipt or native approval.
+
+### Ownership-design decision before expanding the public API
+
+Keeping secret state inline in a freely movable Rust value prevents promising
+that all previous locations are erased: a semantic move may copy bytes without
+notifying that value. A private finalizer cannot recover an arbitrary prior
+caller address. This matches Rust's documented
+[move and pinning model](https://doc.rust-lang.org/std/pin/index.html#what-is-moving).
+
+The proposed next design is an additive, caller-owned in-place hardened API:
+initialize secret state only in its final storage, retain exclusive access for
+its active lifetime, finalize there, and clear before releasing storage. The
+existing by-value API would remain available with its existing owned-memory
+guarantee, not silently acquire a stronger guarantee. This needs owner approval
+because it expands the public API beyond private backend remediation.
+
+An in-place lifetime alone is not register or spill erasure. Absorb/padding/
+squeeze and higher-construction transfers still need qualified opaque paths,
+error/unwind and ownership tests, emitted-code review and platform coverage.
+Pinning alone does not suppress compiler temporaries; no such claim is made.
+Do not close F1 or collect final native qualification on this diagnostic result.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this

@@ -4,6 +4,12 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
+- Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied
+  Keccak authority stays borrowed through incremental and partial-bit output;
+  scope cleanup covers forgotten readers and recoverable unwinding. Errors are
+  terminal and preserve public output or clear supplied secret destinations.
+  No fallback, CPU admission or release-gate behavior changes.
+
 - Extend scoped storage to all six named SHA-2 identities, with exact-IV reset,
   byte/bit input and typed secret output. Update failures clear and terminate
   the scoped state. General SHA-512/t now has a parameter-bound scoped workspace,
@@ -46,10 +52,9 @@ No crates are selected for publication.
   cancelled handles and recoverable unwind. Integer prefixes/trailers initialize
   borrowed storage. Portable scoped TupleHashXOF128/256 readers now retain that
   borrow through incremental public/secret and consuming final-bit output, with
-  right_encode(0) framing. Scoped fixed accelerated TupleHash binds the supplied
+  right_encode(0) framing. Scoped fixed/XOF accelerated TupleHash binds the supplied
   hardened Keccak session and borrowed transactional staging without fallback.
-  Accelerated scoped XOF and complete compiler-copy/register/spill qualification
-  remain pending.
+  Complete compiler-copy/register/spill qualification remains pending.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;
   add distinct owner-backed hardened compression without ordinary scratch reuse.
 - Preserve generic portable defaults, AVX2 batch routes and the hosted x86

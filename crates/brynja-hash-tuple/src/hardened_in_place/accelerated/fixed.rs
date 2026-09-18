@@ -59,7 +59,7 @@ macro_rules! fixed {
         #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_hash_tuple::execution::in_place::", stringify!($state), "<'static, 'static>>();\n```")]
         #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_hash_tuple::execution::in_place::", stringify!($state), "<'static, 'static>>();\n```")]
         #[must_use = "finalize or cancel the tuple"]
-        pub struct $state<'scope, 'authority> { core: Core<'scope, Backend<cshake::$backend<'scope, 'authority>, &'scope mut [u8]>> }
+        pub struct $state<'scope, 'authority> { pub(super) core: Core<'scope, Backend<cshake::$backend<'scope, 'authority>, &'scope mut [u8]>> }
         impl<'scope, 'authority> $state<'scope, 'authority> {
             /// Appends a complete byte item. Empty items remain distinct members.
             pub fn push_item(&mut self, input: &[u8]) -> Result<(), TupleHashError> { self.core.item_bytes(input) }

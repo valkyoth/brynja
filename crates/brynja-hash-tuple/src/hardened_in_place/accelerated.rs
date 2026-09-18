@@ -1,4 +1,4 @@
-//! Scoped fixed TupleHash over an explicitly supplied hardened Keccak session.
+//! Scoped TupleHash/TupleHashXOF over an explicitly supplied hardened Keccak session.
 //!
 //! Storage is borrowed before customization/items. Reuse checks the same
 //! authority; failure never falls back or revives quarantine. Public output uses
@@ -21,6 +21,20 @@
 //!     })?
 //! }
 //! ```
+//!
+//! Scoped XOF output uses the same session and an exclusive reader borrow:
+//! ```
+//! use brynja_hash_tuple::{TupleHashError, TupleHashSecretOutput,
+//!     execution::{KeccakSession, in_place::TupleHashXof256Workspace}};
+//! fn expand<'out>(session: KeccakSession<'_>, item: &[u8], output: &'out mut [u8])
+//!     -> Result<TupleHashSecretOutput<'out>, TupleHashError> {
+//!     let mut workspace = TupleHashXof256Workspace::new(session)?;
+//!     workspace.with(b"application", |mut tuple| {
+//!         tuple.push_item(item)?;
+//!         tuple.finalize_xof()?.squeeze_secret(output)
+//!     })?
+//! }
+//! ```
 
 use super::core_state::{Core, Guard, Metadata, byte_valid, bytes_input};
 use crate::{
@@ -30,9 +44,14 @@ use brynja_hash_sha3::hardened_execution::{KeccakSession, Report, in_place as cs
 
 mod backend;
 mod fixed;
+mod xof;
 pub use fixed::{
     TupleHash128, TupleHash128ItemWriter, TupleHash128Workspace, TupleHash256,
     TupleHash256ItemWriter, TupleHash256Workspace,
+};
+pub use xof::{
+    TupleHashXof128, TupleHashXof128Reader, TupleHashXof128Workspace, TupleHashXof256,
+    TupleHashXof256Reader, TupleHashXof256Workspace,
 };
 
 struct Scratch<'a>(&'a mut [u8]);

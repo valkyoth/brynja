@@ -16,16 +16,47 @@ pub(super) fn check(
     expected: &[u8],
     selection: &Selection,
 ) -> Result<(), io::Error> {
-    if !matches!(algorithm, "tuple128" | "tuple256") {
-        return Ok(());
-    }
     let session = match selection.mode()? {
         Mode::Require(Some(session)) | Mode::Prefer(Some(session)) => session,
         Mode::Portable | Mode::Prefer(None) => return Ok(()),
         Mode::Require(None) => return Err(bad("missing required session")),
     };
+    macro_rules! public {
+        ($state:ident, fixed, $actual:ident) => {
+            $state.finalize_public_bits(
+                &mut $actual,
+                valid_bits(output_bits),
+                Public::acknowledge(),
+            )
+        };
+        ($state:ident, xof, $actual:ident) => {{
+            let mut reader = $state.finalize_xof().map_err(bad)?;
+            let prefix = $actual.len().saturating_sub(1);
+            for chunk in $actual[..prefix].chunks_mut(17) {
+                reader
+                    .squeeze_public(chunk, Public::acknowledge())
+                    .map_err(bad)?;
+            }
+            reader.squeeze_final_bits_public(
+                &mut $actual[prefix..],
+                valid_bits(output_bits),
+                Public::acknowledge(),
+            )
+        }};
+    }
+    macro_rules! secret {
+        ($state:ident, fixed, $actual:ident) => {
+            $state.finalize_secret_bits(&mut $actual, valid_bits(output_bits))
+        };
+        ($state:ident, xof, $actual:ident) => {
+            $state
+                .finalize_xof()
+                .map_err(bad)?
+                .squeeze_final_bits_secret(&mut $actual, valid_bits(output_bits))
+        };
+    }
     macro_rules! check {
-        ($workspace:ident) => {{
+        ($workspace:ident, $kind:ident) => {{
             let mut workspace = api::$workspace::new(session).map_err(bad)?;
             selection.check_actual(Some(workspace.report()))?;
             let mut actual = vec![0xa5; expected.len()];
@@ -37,13 +68,7 @@ pub(super) fn check(
                             .push_item_bits(bit_string(bytes, *count, 0)?)
                             .map_err(bad)?;
                     }
-                    state
-                        .finalize_public_bits(
-                            &mut actual,
-                            valid_bits(output_bits),
-                            Public::acknowledge(),
-                        )
-                        .map_err(bad)
+                    public!(state, $kind, actual).map_err(bad)
                 })
                 .map_err(bad)??;
             if actual != expected || scratch.iter().any(|byte| *byte != 0) {
@@ -76,9 +101,7 @@ pub(super) fn check(
                         }
                         writer.finish().map_err(bad)?;
                     }
-                    state
-                        .finalize_secret_bits(&mut actual, valid_bits(output_bits))
-                        .map_err(bad)
+                    secret!(state, $kind, actual).map_err(bad)
                 })
                 .map_err(bad)??;
             if secret.expose() != expected {
@@ -92,8 +115,10 @@ pub(super) fn check(
         }};
     }
     match algorithm {
-        "tuple128" => check!(TupleHash128Workspace),
-        "tuple256" => check!(TupleHash256Workspace),
+        "tuple128" => check!(TupleHash128Workspace, fixed),
+        "tuple256" => check!(TupleHash256Workspace, fixed),
+        "tuplexof128" => check!(TupleHashXof128Workspace, xof),
+        "tuplexof256" => check!(TupleHashXof256Workspace, xof),
         _ => return Err(bad("unexpected identity")),
     }
     Ok(())

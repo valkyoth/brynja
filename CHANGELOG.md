@@ -2,6 +2,10 @@
 
 ## 0.24.49 development
 
+- Extend scoped accelerated TupleHash to XOF128/256 with authority-bound readers,
+  mixed public/secret output, consuming partial-bit reads and scope-owned cleanup.
+  Complete register/spill qualification remains pending.
+
 - Add scoped caller-owned storage for named/general SHA-2 and SHA-3/SHAKE/cSHAKE, preserving
   existing by-value APIs. Ownership tests pass; wider in-place rollout and
   whole-API register/spill qualification remain pending.
@@ -21,9 +25,8 @@
   writers, with consuming secret/public finalizers and independent scope cleanup.
   Initialize integer framing through borrowed storage. Portable scoped TupleHashXOF
   readers retain that borrow through incremental public/secret and final-bit output.
-  Scoped fixed accelerated TupleHash now borrows the existing Keccak authority
-  and transactional staging; accelerated XOF and complete residue qualification
-  remain pending.
+  Scoped accelerated fixed/XOF TupleHash now borrows the existing Keccak authority
+  and transactional staging; complete residue qualification remains pending.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
   exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration
   pass; exceptional pentest and final release verification remain pending.

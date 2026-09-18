@@ -90,6 +90,20 @@ def negatives(consumer, env):
              'let a=brynja_crypto_cpu::static_execution::Authority::new(brynja_crypto_cpu::static_execution::Kernel::X86Keccak).map_err(|_|api::Error::AccelerationUnavailable)?; '
              f'{accelerated}::TupleHash{strength}Workspace::new(api::KeccakSession::from_static(&a).map_err(|_|api::Error::AccelerationUnavailable)?) }}', 'E0515'),
         ]
+        xof = f'{accelerated}::TupleHashXof{strength}'
+        for name in (xof, xof + 'Workspace', xof + 'Reader'):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn check<T:{bound}>(){{}} check::<{name}>();', 'E0277'))
+        cases += [
+            (f'fn reuse(s:{xof}) {{ let _=s.finalize_xof(); s.cancel(); }}', 'E0382'),
+            (f'fn reuse(r:{xof}Reader) {{ let _=r.squeeze_final_bits_secret(&mut [],0); r.cancel(); }}', 'E0382'),
+            (f'fn public(mut r:{xof}Reader) {{ let _=r.squeeze_public(&mut []); }}', 'E0061'),
+            (f'fn query(s:{xof}) {{ let _=s.item_count(); }}', 'E0599'),
+            (f'fn query(s:{xof}) {{ let _=s.check_additional_bits(1); }}', 'E0599'),
+            (f'fn escape() -> Result<{xof}Workspace<\'static>, api::Error> {{ '
+             'let a=brynja_crypto_cpu::static_execution::Authority::new(brynja_crypto_cpu::static_execution::Kernel::X86Keccak).map_err(|_|api::Error::AccelerationUnavailable)?; '
+             f'{xof}Workspace::new(api::KeccakSession::from_static(&a).map_err(|_|api::Error::AccelerationUnavailable)?) }}', 'E0515'),
+        ]
     try:
         for code, diagnostic in cases:
             path.write_text(original + prefix + code + '}\n')
@@ -257,16 +271,21 @@ def accelerated_mutations(consumer, roots, env):
         ('accelerated/fixed.rs', 'bytes_input(b"TupleHash")?', 'bytes_input(b"WRONG")?'),
         ('accelerated/backend.rs', 'self.state.update(bytes)', 'Ok::<(), brynja_hash_sha3::hardened_execution::Error>(())'),
         ('accelerated/backend.rs', '.squeeze_final_bits_secret(output, valid)', '.squeeze_final_bits_secret(output, 8)'),
+        ('core_state.rs', 'self.finish(0)', 'self.finish(1)'),
+        ('reader.rs', '.read_public(output)?', '.read_public(&mut [])?'),
+        ('reader.rs', 'clear_owned_region(output);\n        let mut guard', 'core::hint::black_box(&mut *output);\n        let mut guard'),
+        ('reader.rs', 'clear_owned_region(output);\n        let reader', 'core::hint::black_box(&mut *output);\n        let reader'),
     ]
     command = ['cargo', 'test', '--offline', '--test', 'scoped_accelerated']
     for profile in ([], ['--release']):
-        if '3 passed; 0 failed' not in shared.run(command + profile, consumer, env).stdout:
+        if '7 passed; 0 failed' not in shared.run(command + profile, consumer, env).stdout:
             raise ValueError('native scoped TupleHash positive control incomplete')
     for name, before, after in cases:
         path = root / name
         original = path.read_text()
         if original.count(before) != 1:
             raise ValueError('ambiguous accelerated scoped mutation: ' + before)
+        print('Native scoped TupleHash mutation: ' + name + ': ' + before, flush=True)
         try:
             path.write_text(original.replace(before, after))
             for profile in ([], ['--release']):

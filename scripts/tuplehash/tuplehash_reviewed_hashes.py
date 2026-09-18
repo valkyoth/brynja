@@ -2,9 +2,10 @@
 """Exact source identities reviewed for the v0.24.14 TupleHash boundary."""
 
 REVIEWED_HASHES = {
-    "crates/brynja-hash-tuple/src/hardened_in_place/accelerated.rs": "a7575546e42a829f4da7a45ee63d1d35f36745aaf8e7320128969b4b850b1832",
+    "crates/brynja-hash-tuple/src/hardened_in_place/accelerated.rs": "7176d5ab56a639d459c43d7483979cd9128b8933fc098ff1bcf65fb58c05aa44",
     "crates/brynja-hash-tuple/src/hardened_in_place/accelerated/backend.rs": "e64932a9a5eefb61ae8ebb3d5cc8bc0ba99813581ec02774a477baadcb3cbe07",
-    "crates/brynja-hash-tuple/src/hardened_in_place/accelerated/fixed.rs": "e46a4c9e3b91c96a277b86526218cc32b08c639967f2fbb444da98b03513758b",
+    "crates/brynja-hash-tuple/src/hardened_in_place/accelerated/fixed.rs": "8ce6227aed180e3a687d629bdc30070c169080c94174bf5bafe7ed79dc3f7aca",
+    "crates/brynja-hash-tuple/src/hardened_in_place/accelerated/xof.rs": "2bd581bb7c7e8f14a5a9a03794c9faf5d6b6b9ff24fd26198ba0569cfe98902f",
     "crates/brynja-hash-tuple/src/hardened_in_place/reader.rs": "2bd51b8b8717544d164dea9832905c6f9743062ca9b32d1d9ce1d5731e389702",
     "crates/brynja-hash-tuple/src/hardened_in_place/xof.rs": "2eb088f2452b28add3a63b3a2a68bc03a1adf7992eed38e43e243af5c98a1113",
     "crates/brynja-hash-tuple/src/hardened_in_place/reader/tests.rs": "008d03319efdde765032f37e1de0ffb143aa920cd27b870302210fd14122c428",

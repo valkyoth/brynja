@@ -18,7 +18,7 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "hardened_in_place/core_state.rs", "hardened_in_place/fixed.rs",
     "hardened_in_place/reader.rs", "hardened_in_place/xof.rs",
     "hardened_in_place/accelerated.rs", "hardened_in_place/accelerated/backend.rs",
-    "hardened_in_place/accelerated/fixed.rs",
+    "hardened_in_place/accelerated/fixed.rs", "hardened_in_place/accelerated/xof.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
          CRATE / "src/hardened_in_place/tests.rs",
@@ -318,6 +318,15 @@ SCOPED_TOKENS = {
         "self.core.begin(bits)?;", "self.core.complete()?;", "if !self.complete { self.core.cancel(); }",
         "TupleHashPublicDeclassification", "self.core.secret(output, valid)",
     ),
+    "hardened_in_place/accelerated/xof.rs": (
+        "inner: fixed::$fixed_workspace<'authority>", "inner: fixed::$fixed_state<'scope, 'authority>",
+        "pub fn new(session: KeccakSession<'authority>)", "fixed::$fixed_workspace::new(session)?",
+        "impl for<'scope> FnOnce($state<'scope, 'authority>) -> R",
+        "self.inner.core.finish_xof()?", "Output::new(reader, cleanup)",
+        "inner: Output<'scope, Backend<cshake::$backend_reader<'scope, 'authority>, &'scope mut [u8]>>",
+        "self.inner.begin_item(bits)", "_authority: TupleHashPublicDeclassification",
+        "pub fn squeeze_final_bits_secret<'out>(self,", "pub fn cancel(self)",
+    ),
     "hardened_in_place/accelerated/backend.rs": (
         "State for Backend<cshake::$state<'s, 'a>, &'s mut [u8]>",
         "self.state.update(bytes)", "state: self.state.finalize_bits_xof(tail)?",
@@ -338,7 +347,8 @@ def validate_scoped(loaded: dict) -> None:
         require(core, f"clear_owned_region(&mut self.{field})", "scoped tuple owned region")
     fixed = without_comments(loaded[CRATE / "src/hardened_in_place/fixed.rs"] +
                              loaded[CRATE / "src/hardened_in_place/xof.rs"] +
-                             loaded[CRATE / "src/hardened_in_place/accelerated/fixed.rs"])
+                             loaded[CRATE / "src/hardened_in_place/accelerated/fixed.rs"] +
+                             loaded[CRATE / "src/hardened_in_place/accelerated/xof.rs"])
     for forbidden in ("pub fn item_count", "pub fn remaining_bits", "pub fn check_additional", "pub fn input_bits"):
         if forbidden in fixed:
             fail("scoped tuple exposes metadata/preflight query: " + forbidden)

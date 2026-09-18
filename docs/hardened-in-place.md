@@ -1,6 +1,6 @@
 # Scoped hardened storage
 
-Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and portable TupleHash/TupleHashXOF API development checkpoint; wider rollout and complete
+Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and portable/accelerated TupleHash/TupleHashXOF API development checkpoint; wider rollout and complete
 register/spill qualification pending. No independent verification or FIPS claim.
 
 The first additive API is `brynja_hash_sha3::hardened_in_place`, with
@@ -183,8 +183,9 @@ portable and accelerated paths borrow those bytes rather than receive populated
 encoding owners by value. Reuse clears the entire 17-byte region and its length
 before writing, and Drop clears both regions. Empty or invalid encoded lengths
 fail closed. This removes that explicit owner-return transfer, not every possible
-compiler-created copy of length metadata. Scoped accelerated TupleHashXOF
-workspaces and complete register/spill qualification remain unfinished.
+compiler-created copy of length metadata. Scoped portable and accelerated
+TupleHash/XOF workspaces use this encoder; complete register/spill qualification
+remains unfinished.
 
 ## Scoped fixed TupleHash
 
@@ -244,7 +245,7 @@ is added. This is portable owned-memory lifecycle coverage, not complete
 register, spill or compiler-copy erasure. Abort and caller-owned inputs remain
 outside the guarantee. Existing accelerated APIs remain separate and unchanged.
 
-## Scoped accelerated fixed TupleHash
+## Scoped accelerated TupleHash and TupleHashXOF
 
 The default-off `hardened-execution` feature exposes
 `execution::in_place::{TupleHash128Workspace, TupleHash256Workspace}`, also
@@ -276,7 +277,20 @@ current operations fail and later scopes reject without invoking the callback.
 Admission failure cannot clear a destination that the callback never supplied.
 This prevents explicit secret-owner moves but does not prove register, spill or
 compiler-copy erasure; abort and caller input remain outside the guarantee.
-Scoped accelerated XOF is a separate unfinished slice.
+
+`execution::in_place::TupleHashXof128Workspace`/`TupleHashXof256Workspace`
+retain the same supplied session and scope storage. Their consuming
+`finalize_xof` writes `right_encode(0)` and transfers only the storage borrow
+into the reader. Readers support mixed incremental `squeeze_public` and
+`squeeze_secret`, followed by consuming `squeeze_final_bits_public` or
+`squeeze_final_bits_secret`. Each public fragment must fit the scope's staging;
+total output can exceed it across multiple reads. Secret output is typed and
+does not need matching public staging. Short staging, invalid output shapes and
+revocation preserve public destinations or clear secret destinations and
+terminate the affected handle. Empty reads do not revive failed readers.
+Reader Drop/cancel, forget and recoverable unwind retain the outer scope's
+cleanup guarantee. No state/reader can escape the scope or supplied authority;
+this is still not whole-API register/spill/compiler-copy qualification.
 
 ## KMAC framing prerequisite
 

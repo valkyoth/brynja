@@ -37,7 +37,7 @@ hardened cSHAKE owner, without duplicating Keccak. It has no third-party depende
 | Byte/bit tuples, streamed items and hardened outputs | ✅ Implemented | ❌ No |
 | Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
 | Scoped fixed TupleHash128/256 workspaces and item writers | ✅ Portable | ❌ No |
-| Scoped TupleHashXOF128/256 workspaces and incremental readers | ✅ Portable | ❌ No |
+| Scoped TupleHashXOF128/256 workspaces and incremental readers | ✅ Portable and opt-in accelerated | ❌ No |
 | Scoped fixed TupleHash128/256 acceleration | ✅ Opt-in, platform-limited | ❌ No |
 
 Implementation is not independent assurance. No named independent
@@ -116,8 +116,8 @@ assert_eq!(bytes, [0; 32]);
 `squeeze_public`/`squeeze_secret` and consuming `squeeze_final_bits_public`/
 `squeeze_final_bits_secret`; public output requires explicit declassification.
 XOF scopes retain the same item-writer discipline and expose no length queries.
-Scoped accelerated XOF remains under development; existing accelerated APIs remain
-available separately. Registers, spills and compiler copies are not covered by
+Scoped accelerated XOF uses the matching `execution::in_place` workspace names
+and requires a supplied hardened Keccak session. Registers, spills and compiler copies are not covered by
 the scoped owned-memory cleanup guarantee.
 
 ## Hardware and SIMD
@@ -128,10 +128,13 @@ Defaults are portable. Default-off `hardened-execution` exposes
 leaf remains `no_std`.
 
 `execution::in_place::TupleHash128Workspace` and `TupleHash256Workspace` offer
-scoped fixed-output processing with a supplied hardened Keccak session. They
+scoped fixed-output processing with a supplied hardened Keccak session.
+`execution::in_place::TupleHashXof128Workspace` and `TupleHashXof256Workspace`
+provide incremental and final-bit XOF output with the same scoped ownership. They
 retain that authority across reuse and never silently fall back. Public output
 uses 168 bytes of built-in staging; supply a larger erasing scratch slice via
-`with_scratch`/`with_bits_and_scratch` for wider output. Secret output does not
+`with_scratch`/`with_bits_and_scratch` for wider public fragments. Incremental
+XOF reads may exceed that size in total. Secret output does not
 need public staging of the same width. See the compiled session-based example
 in the [scoped accelerated module](https://github.com/valkyoth/brynja/blob/main/crates/brynja-hash-tuple/src/hardened_in_place/accelerated.rs).
 

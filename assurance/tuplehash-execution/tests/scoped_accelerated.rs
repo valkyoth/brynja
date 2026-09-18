@@ -1,5 +1,16 @@
 use brynja_crypto_cpu::static_execution::{Authority, Kernel};
 
+#[cfg(any(
+    all(target_arch = "x86_64", target_feature = "avx2"),
+    all(
+        target_arch = "aarch64",
+        target_feature = "neon",
+        target_feature = "sha3"
+    )
+))]
+#[path = "scoped_accelerated/xof.rs"]
+mod xof;
+
 #[test]
 fn scoped_tuple_requires_exact_compiled_authority() {
     #[cfg(not(all(target_arch = "x86_64", target_feature = "avx2")))]
@@ -30,10 +41,10 @@ mod native {
         io,
         panic::{AssertUnwindSafe, catch_unwind},
     };
-    fn bad(error: impl core::fmt::Debug) -> io::Error {
+    pub(super) fn bad(error: impl core::fmt::Debug) -> io::Error {
         io::Error::other(format!("scoped TupleHash: {error:?}"))
     }
-    fn owner() -> Result<Authority, io::Error> {
+    pub(super) fn owner() -> Result<Authority, io::Error> {
         Authority::new(if cfg!(target_arch = "aarch64") {
             Kernel::ArmKeccak
         } else {
@@ -41,7 +52,7 @@ mod native {
         })
         .map_err(bad)
     }
-    fn session(owner: &Authority) -> Result<KeccakSession<'_>, io::Error> {
+    pub(super) fn session(owner: &Authority) -> Result<KeccakSession<'_>, io::Error> {
         KeccakSession::from_static(owner).map_err(bad)
     }
     macro_rules! check {

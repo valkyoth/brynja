@@ -91,7 +91,8 @@ impl<'a> Core<'a> {
         let core = &mut operation.core;
         core.phase(1)?;
         core.state.update(&[])?;
-        let prefix = SecretEncodedInteger::left(bits)?;
+        let mut prefix = SecretEncodedInteger::empty();
+        prefix.left(bits)?;
         let bytes = prefix.as_bytes()?;
         let prefix_bits = super::output::byte_bits(bytes.len())?;
         // Pre-flight the eventual total (prefix + complete declared item) before
@@ -211,7 +212,8 @@ impl<'a> Core<'a> {
         let core = &mut operation.core;
         core.phase(1)?;
         core.state.update(&[])?;
-        let suffix = SecretEncodedInteger::right(bits)?;
+        let mut suffix = SecretEncodedInteger::empty();
+        suffix.right(bits)?;
         let bytes = suffix.as_bytes()?;
         core.input_bits()
             .checked_add(super::output::byte_bits(bytes.len())?)

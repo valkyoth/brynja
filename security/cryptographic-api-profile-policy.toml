@@ -979,7 +979,7 @@ sha256 = "845400daa8451df50a08d98c7c45e7660a19d17a4e3216e87b2abe59af75eae9"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/core_state.rs"
-sha256 = "e97474a5bfa9aecd4df814f2c4bbb044f7f1c8b5a549fe4ca8e1be16ba93ba41"
+sha256 = "a0039452e42567d0c12c51ae44def4d99ca31cb21f0518236ed29b0304bc1488"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/item.rs"
@@ -987,7 +987,7 @@ sha256 = "b712ae3f2baaf30251ac00d4436dddf62e64fdd66fac22c7dcc170e0c9db5514"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/secret_encoding.rs"
-sha256 = "50ea02d2a325a31cf485010e832e39df022d465bf57d42f5dee6d591afba748b"
+sha256 = "567cdd42eb1718fc6bfde6108337a14dd47adc8384aa9d3bc5c72f3c63cd5a73"
 
 [[reviewed-source]]
 path = "assurance/tuplehash-public-api/src/lib.rs"
@@ -995,7 +995,7 @@ sha256 = "49ce2027bcbda7941947c04d697c2d8efa7e50d5f5d23ed01b4f5aeb4be91484"
 
 [[reviewed-source]]
 path = "scripts/tuplehash/check-tuplehash-codegen.sh"
-sha256 = "1b11e5a0f98429920a85175bea7390e38c2c07f3cc178ea083d73bde78ca7a5c"
+sha256 = "0c3c783a21ce39ffbd37f236b8f5e0ccf9264a7cb60c6e3fef2ce962dcdd6bb4"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-parallel/src/core_state.rs"

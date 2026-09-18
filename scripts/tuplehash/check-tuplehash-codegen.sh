@@ -205,6 +205,12 @@ for raw_toolchain in "${toolchains[@]}"; do
         grep -Fq '= &mut ((*_1).0: [u8; 17]);' <<<"$encoding_drop"
         grep -Fq '= &mut ((*_1).1: [u8; 1]);' <<<"$encoding_drop"
         test "$(grep -c 'clear_owned_region' <<<"$encoding_drop")" -eq 2
+        for operation in left right; do
+            encoding_write="$(extract_function ">::${operation}(_1: &mut SecretEncodedInteger, _2: u128)" "$mir")"
+            require_fragment "$encoding_write" '-> Result<(), TupleHashError>' 'borrowed encoding writer result'
+            require_fragment "$encoding_write" 'SecretEncodedInteger::reset' 'borrowed encoding writer reset'
+            require_fragment "$encoding_write" 'SecretEncodedInteger::write_value' 'borrowed encoding writer body'
+        done
         grep -q 'checked_remaining_after' "$mir"
         grep -q 'complete_item' "$mir"
     done

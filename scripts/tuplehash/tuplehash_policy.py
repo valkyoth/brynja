@@ -63,6 +63,21 @@ def without_comments(text: str) -> str:
     return "\n".join(line.split("//", 1)[0] for line in text.splitlines())
 
 
+def validate_encoding(text: str) -> None:
+    code = without_comments(text).split("#[cfg(test)]", 1)[0]
+    for token in (
+        "pub(crate) const fn empty() -> Self",
+        "fn left(&mut self, value: u128) -> Result<(), TupleHashError>",
+        "fn right(&mut self, value: u128) -> Result<(), TupleHashError>",
+        "if !(2..=17).contains(&length)",
+        "clear_owned_region(&mut self.bytes)",
+        "clear_owned_region(&mut self.length)",
+    ):
+        require(code, token, "borrowed secret encoding")
+    if "Result<Self" in code or code.count("self.reset();") != 2:
+        fail("secret encoding must reuse cleared storage without returning a populated owner")
+
+
 def validate(root: Path) -> None:
     actual = set((root / CRATE / "src").glob("*.rs"))
     expected = {root / source for source in SOURCES}
@@ -106,8 +121,8 @@ def validate(root: Path) -> None:
         require(backend, token, "hardened cSHAKE backend")
     core = loaded[CRATE / "src/core_state.rs"]
     for token in (
-        "SecretEncodedInteger::left(bits)",
-        "SecretEncodedInteger::right(output_bits)",
+        "let mut prefix = SecretEncodedInteger::empty();", "prefix.left(bits)?;",
+        "let mut suffix = SecretEncodedInteger::empty();", "suffix.right(output_bits)?;",
         ".checked_add(added)", ".checked_add(1)",
         "self.backend.check_additional_bits", "self.backend.wipe();",
         "self.failed = [1];", "write_u128(&mut self.remaining, bits)",
@@ -145,6 +160,7 @@ def validate(root: Path) -> None:
     if "remaining: u128" in item or "self.remaining = 0" in item:
         fail("streamed item length escaped the clearing TupleCore owner")
     encoding = loaded[CRATE / "src/secret_encoding.rs"]
+    validate_encoding(encoding)
     for token in (
         "struct SecretEncodedInteger", "bytes: [u8; 17]", "length: [u8; 1]",
         "pub(crate) fn left", "pub(crate) fn right",
@@ -217,6 +233,7 @@ def validate(root: Path) -> None:
         (CODEGEN, "reject_secret_copy"),
         (CODEGEN, "self_test_secret_copy_matcher"),
         (CODEGEN, "reject_any_memcpy"),
+        (CODEGEN, "borrowed encoding writer result"),
         (CODEGEN, "Backend17finalize_in_place"),
         (CODEGEN, "TupleCore15finish_in_place"),
         (MIRI, "-p brynja-hash-tuple"),

@@ -105,8 +105,8 @@ def algorithm_mutations(consumer, roots, env):
     cases = (
         ('backend.rs', 'b"TupleHash"', 'b"WRONG"'),
         ('backend.rs', 'dispatch!(self, update(bytes))', 'let _ = (self, bytes); Ok(())'),
-        ('core_state.rs', 'SecretEncodedInteger::left(bits)', 'SecretEncodedInteger::right(bits)'),
-        ('core_state.rs', 'SecretEncodedInteger::right(bits)', 'SecretEncodedInteger::right(0)'),
+        ('core_state.rs', 'prefix.left(bits)', 'prefix.right(bits)'),
+        ('core_state.rs', 'suffix.right(bits)', 'suffix.right(0)'),
     )
     def run(profile):
         return subprocess.run(['cargo', 'run', '--offline', '--quiet', *profile, '--', 'portable'],
@@ -133,6 +133,38 @@ def algorithm_mutations(consumer, roots, env):
     print('Packaged TupleHash algorithm/verification mutants: PASS; rejected=8', flush=True)
 
 
+def encoding_mutations(roots, env):
+    crate = roots['brynja-hash-tuple']
+    path = crate / 'src/secret_encoding.rs'
+    original = path.read_text()
+    cases = (
+        ('self.reset();', '', 1),
+        ('fn right(&mut self, value: u128) -> Result<(), TupleHashError> {\n        self.reset();',
+         'fn right(&mut self, value: u128) -> Result<(), TupleHashError> {', 1),
+        ('clear_owned_region(&mut self.bytes)', 'core::hint::black_box(&mut self.bytes)', 1),
+        ('if !(2..=17).contains(&length)', 'if length > 17', 1),
+        ('*target = byte;', '*target = byte ^ 1;', 1),
+    )
+    def run(profile, success=True):
+        return shared.run(['cargo', 'test', '--offline', '--lib', *profile,
+                           'secret_encoding::tests'], crate, env, success)
+    for profile in ([], ['--release']):
+        if '3 passed; 0 failed' not in run(profile).stdout:
+            raise ValueError('secret encoding mutation control incomplete')
+    for before, after, count in cases:
+        if original.count(before) < count:
+            raise ValueError('missing secret encoding mutation target')
+        try:
+            path.write_text(original.replace(before, after, count))
+            for profile in ([], ['--release']):
+                result = run(profile, False)
+                if 'test result: FAILED' not in result.stdout:
+                    raise ValueError('secret encoding mutant did not execute: ' + result.stderr)
+        finally:
+            path.write_text(original)
+    print('Packaged TupleHash borrowed encoding mutants: PASS; rejected=10', flush=True)
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix='brynja-tuplehash-package-') as directory:
         destination = Path(directory)
@@ -151,6 +183,7 @@ def main():
         negatives(consumer, env)
         mutations(consumer, roots, env)
         algorithm_mutations(consumer, roots, env)
+        encoding_mutations(roots, env)
     print('Packaged TupleHash hardened execution public API: PASS')
 
 

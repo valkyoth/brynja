@@ -45,7 +45,8 @@ impl TupleCore {
 
     pub(crate) fn begin_item(&mut self, bits: u128) -> Result<(), TupleHashError> {
         self.ensure_live()?;
-        let prefix = SecretEncodedInteger::left(bits)?;
+        let mut prefix = SecretEncodedInteger::empty();
+        prefix.left(bits)?;
         let prefix_bytes = prefix.as_bytes()?;
         let prefix_bits = u128::try_from(prefix_bytes.len())
             .ok()
@@ -160,7 +161,8 @@ impl TupleCore {
         output_bits: u128,
     ) -> Result<BackendReader<'_>, TupleHashError> {
         self.ensure_live()?;
-        let suffix = SecretEncodedInteger::right(output_bits)?;
+        let mut suffix = SecretEncodedInteger::empty();
+        suffix.right(output_bits)?;
         let suffix_bytes = suffix.as_bytes()?;
         let suffix_bits = u128::try_from(suffix_bytes.len())
             .ok()

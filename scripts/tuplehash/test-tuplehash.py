@@ -41,8 +41,8 @@ def main() -> int:
     reject("std", Path("crates/brynja-hash-tuple/src/lib.rs"), "#![no_std]", "extern crate std;")
     reject("unsafe", Path("crates/brynja-hash-tuple/src/output.rs"), "use brynja_hash_sha3", "unsafe fn bypass() {}\nuse brynja_hash_sha3")
     reject("domain", Path("crates/brynja-hash-tuple/src/backend.rs"), 'b"TupleHash"', 'b"RawHash"')
-    reject("item-prefix", Path("crates/brynja-hash-tuple/src/core_state.rs"), "SecretEncodedInteger::left(bits)", "SecretEncodedInteger::right(bits)")
-    reject("fixed-trailer", Path("crates/brynja-hash-tuple/src/core_state.rs"), "SecretEncodedInteger::right(output_bits)", "SecretEncodedInteger::left(output_bits)")
+    reject("item-prefix", Path("crates/brynja-hash-tuple/src/core_state.rs"), "prefix.left(bits)", "prefix.right(bits)")
+    reject("fixed-trailer", Path("crates/brynja-hash-tuple/src/core_state.rs"), "suffix.right(output_bits)", "suffix.left(output_bits)")
     reject("reader-borrow", Path("crates/brynja-hash-tuple/src/backend.rs"), "backend: &'a mut Backend", "backend: Backend")
     reject("in-place-transition", Path("crates/brynja-hash-tuple/src/backend.rs"), "state.enter_squeezing_in_place(tail)?", "state.finalize_xof_erasing_source()?")
     reject("reader-erasure", Path("crates/brynja-hash-tuple/src/backend.rs"), "squeeze_final_bits_secret_in_place", "squeeze_final_bits_secret")
@@ -53,6 +53,7 @@ def main() -> int:
     reject("codegen-owner-copy", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "reject_secret_copy", "accept_secret_copy")
     reject("codegen-matcher-self-test", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "self_test_secret_copy_matcher", "skip_secret_copy_matcher_test")
     reject("codegen-any-memcpy", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "reject_any_memcpy", "allow_any_memcpy")
+    reject("codegen-encoding-borrow", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "borrowed encoding writer result", "omitted encoding writer check")
     reject("codegen-external", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "assurance/tuplehash-public-api/Cargo.toml", "assurance/missing/Cargo.toml")
     reject("open-latch", Path("crates/brynja-hash-tuple/src/core_state.rs"), "self.failed = [1];", "self.failed = [0];")
     reject("complete-latch", Path("crates/brynja-hash-tuple/src/item.rs"), "self.core.complete_item()?;", "self.core.check_item_fragment(0)?;")
@@ -72,7 +73,23 @@ def main() -> int:
     reject("sanitizer-latch", Path("scripts/zeroization/check-zeroization-sanitizer.sh"), "forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch", "missing_latch_test")
     reject("facade-bit-xof", Path("crates/brynja-crypto/src/lib.rs"), "tuple_hash_xof128_bits", "removed_bit_xof")
     reject("dependency", Path("crates/brynja-hash-tuple/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", 'foreign = "1"')
-    print("TupleHash policy rejects thirty-four encoding, lifecycle, cleanup, API, proof, dynamic-analysis, code-generation, test, and dependency regressions")
+    encoding = (ROOT / "crates/brynja-hash-tuple/src/secret_encoding.rs").read_text()
+    # Exercise the semantic rule itself, independent of source hash rejection.
+    for old, new in (
+        ("fn left(&mut self,", "fn left(self,"),
+        ("fn right(&mut self,", "fn right(self,"),
+        ("self.reset();", ""),
+        ("if !(2..=17).contains(&length)", "if length > 17"),
+        ("Result<(), TupleHashError>", "Result<Self, TupleHashError>"),
+    ):
+        if old not in encoding:
+            raise RuntimeError("missing borrowed encoding mutation target")
+        try:
+            tuplehash_policy.validate_encoding(encoding.replace(old, new, 1))
+        except tuplehash_policy.TupleHashPolicyError:
+            continue
+        raise RuntimeError("accepted borrowed encoding regression: " + old)
+    print("TupleHash policy rejects forty encoding, lifecycle, cleanup, API, proof, dynamic-analysis, code-generation, test, and dependency regressions")
     return 0
 
 

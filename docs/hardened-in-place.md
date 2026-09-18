@@ -1,6 +1,6 @@
 # Scoped hardened storage
 
-Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE and portable KMAC/KMACXOF API development checkpoint; wider rollout and complete
+Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE and KMAC/KMACXOF API development checkpoint; wider rollout and complete
 register/spill qualification pending. No independent verification or FIPS claim.
 
 The first additive API is `brynja_hash_sha3::hardened_in_place`, with
@@ -174,6 +174,17 @@ unwind. Successful operations clear staging before returning. No secret length
 or preflight query is exposed. Authority/revocation and deployment requirements
 are unchanged, and none of this establishes complete compiler-copy, register or
 spill erasure.
+
+## TupleHash framing prerequisite
+
+The private TupleHash integer encoder is constructed empty, then filled through
+`&mut` for `left_encode(item_bits)` and `right_encode(output_bits)`. Both the
+portable and accelerated paths borrow those bytes rather than receive populated
+encoding owners by value. Reuse clears the entire 17-byte region and its length
+before writing, and Drop clears both regions. Empty or invalid encoded lengths
+fail closed. This removes that explicit owner-return transfer, not every possible
+compiler-created copy of length metadata. Scoped TupleHash states, item writers
+and readers, and complete register/spill qualification, remain unfinished.
 
 ## KMAC framing prerequisite
 

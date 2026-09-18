@@ -173,8 +173,36 @@ def register_boundaries() -> None:
                 raise AssertionError('accepted opaque-register-boundary regression: ' + before)
 
 
+def transfer_boundaries():
+    relative = Path('crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs')
+    source = (ROOT / relative).read_text()
+    _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
+    unsafe_policy.validate_allowed(relative, source, blocks, items, proofs)
+    for before, after in (
+        ('unsafe extern "C" fn', 'extern "C" fn'),
+        ('#[inline(never)]', '#[inline(always)]'),
+        ('WORDS == 8 || WORDS == 16', 'WORDS <= 64'),
+        ('width.min(8)', 'width'),
+        ('BRYNJA_TRANSFER_BEGIN', 'REMOVED'),
+        ('BRYNJA_TRANSFER_ERASE', 'REMOVED'),
+        ('BRYNJA_TRANSFER_END', 'REMOVED'),
+        ('out(', 'lateout('),
+        ('options(nostack)', 'options(nostack, nomem)'),
+        ('options(nostack)', 'options(nostack, readonly)'),
+    ):
+        assert before in source
+        try:
+            unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
+        except unsafe_policy.UnsafePolicyError:
+            pass
+        else:
+            raise AssertionError('accepted transfer boundary regression: ' + before)
+
+
 if __name__ == "__main__":
     test()
     register_boundaries()
+    transfer_boundaries()
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
+    print("opaque transfer boundary rejects ten ABI, bounds, clobber and memory-effect regressions")

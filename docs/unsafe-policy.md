@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: sixty-five exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: sixty-six exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only sixty-five exact modules: the private core volatile clearer; the
+Rust in only sixty-six exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -66,12 +66,13 @@ the new boundary. Byte-offset and constant-alignment tests cover these accesses.
 
 The single-state Keccak ports add `x86_avx2_keccak/secret.rs` and
 `aarch64_sha3_keccak/secret.rs`. Exact owner offsets bind the 576-byte view:
-result lanes remain at 0..200; all temporary bytes at 200..576 are erased.
+all 576 bytes clear after output is committed to separate caller-owned state.
 Theta/rho/pi, AVX2 or SHA3 chi, iota and cleanup stay in the same opaque block.
 All addresses are fixed or public-loop bounded; there is no dynamic indexed
 Rust helper, stack use or call in the secret computation. X86 erases four GPRs
-and YMM0–3; Arm erases five GPRs and V0–3. Caller state transfer and higher-level
-framing remain separate audit work. Guard-page, differential and mutation tests
+and YMM0–3; Arm erases five GPRs and V0–3. Import and output transfer occur inside
+the same opaque block. Higher-level framing remains separate audit work.
+Guard-page, differential and mutation tests
 supplement ASan, which cannot instrument opaque assembly internally.
 
 The SHA-224/256 batch ports add `sha256_hardened_batch/{x86,arm}/secret.rs`.
@@ -80,7 +81,20 @@ initial words, expanded schedule and round temporaries are erased. AVX2 uses
 YMM0–3 and three integer temporaries; little-endian NEON uses V0–3 and three
 integer temporaries, explicitly zeroing inactive output capacity. The complete
 schedule, rounds, feed-forward and cleanup stay inside the opaque block.
-Packing and output transfer in the caller remain separate audit work.
+`sha256_hardened_batch/transfer.rs` separately owns state/block packing and output
+commit. Safe Rust slice copies can leave secret words in compiler temporaries;
+the private pointer-only transposition therefore uses one opaque scalar block
+on x86-64 or little-endian AArch64, with fixed 8/16-word layouts and bounded
+lane count. It uses no SIMD or additional ISA requirement. Only RAX or X4 carries
+secret words; it and the working counters are erased before returning. Typed
+disjoint array borrows establish all bounds; private safe entry points cap lanes
+at eight, and the workspace API rejects pack widths other than four/eight.
+The health/counter check still separates compression from transactional output
+commit. No caller buffers are erased. Miri/Kani and other targets retain the safe
+reference mapping, not a register-cleanup claim. Higher-level input packing,
+portable compression and output ownership remain separate work. This exception
+adds no public API or authority bypass; external retest/native qualification is
+still pending along with the other v0.24.49 cleanup changes.
 
 The SHA-512-family batch ports add `sha512_hardened_batch/{x86,arm}/secret.rs`.
 The exact 3,264-byte owner layout retains packed output at 2816..3072 and

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import tempfile
+import re
 from pathlib import Path
 
 import first_party_rust_crypto
@@ -109,7 +110,7 @@ def local_abi_definitions() -> None:
             destination.write_text(source)
             first_party_rust_crypto.validate(root)
             for mutated, message in (
-                (source.replace(') {', ');', 1), 'local Rust ABI definition'),
+                (re.sub(r'(\bunsafe extern "C" fn [^{]+)\) \{', r'\1);', source, count=1), 'local Rust ABI definition'),
                 (source + '\nunsafe extern "C" { fn foreign_crypto(); }', 'foreign ABI'),
                 (source + '\nunsafe extern "system" { fn foreign_crypto(); }', 'foreign ABI'),
                 (source + '\n#[link(name="crypto")] mod native {}', 'native link'),
@@ -126,4 +127,4 @@ if __name__ == "__main__":
     test()
     local_abi_definitions()
     print("first-party Rust cryptography policy rejects nine native-code regressions")
-    print("local Rust ABI definitions reject eighty foreign import/link/relocation regressions")
+    print(f"local Rust ABI definitions reject {len(first_party_rust_crypto.LOCAL_C_ABI) * 5} foreign import/link/relocation regressions")

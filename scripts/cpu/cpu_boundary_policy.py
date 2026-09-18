@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "af2ed900326ef5904037a66cc77b480c413ecedb59e82634c59ad302b2825819"
+EXPECTED_POLICY_SHA256 = "843d657c34446287d2e24250118ec78a0a8f4fbea5520bfeeeec83e59c9dca84"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -65,6 +65,8 @@ SOURCE_STATUS = {
     (CPU, "src/sha512_hardened_batch/tests.rs"): "hardened-sha512-batch-lifecycle-tests",
     (CPU, "src/sha256_hardened_batch/mod.rs"): "hardened-sha256-batch-authority",
     (CPU, "src/sha256_hardened_batch/scratch.rs"): "hardened-sha256-batch-owned-storage",
+    (CPU, "src/sha256_hardened_batch/transfer.rs"): "hardened-sha256-batch-opaque-state-transfer",
+    (CPU, "src/sha256_hardened_batch/transfer_tests.rs"): "hardened-sha256-batch-state-transfer-tests",
     (CPU, "src/sha256_hardened_batch/platform.rs"): "hardened-sha256-batch-platform-import",
     (CPU, "src/sha256_hardened_batch/x86.rs"): "hardened-sha256-eight-lane-avx2",
     (CPU, "src/sha256_hardened_batch/arm.rs"): "hardened-sha256-four-lane-neon",

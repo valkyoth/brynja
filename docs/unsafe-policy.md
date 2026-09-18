@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: sixty-seven exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: sixty-eight exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only sixty-seven exact modules: the private core volatile clearer; the
+Rust in only sixty-eight exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -117,8 +117,16 @@ deltas and staging at 800..1920. Four AVX2 or two NEON independent permutations
 keep theta/rho/pi/chi/iota and cleanup inside the opaque block. Arm also erases
 inactive output halves. Three integer/four vector working registers and flags
 are cleared; no Arm SHA3 or x86 AVX-512 prerequisite is added. The repr(C)
-byte fields retain their original size and alignment. Packing and output transfer
-remain separate audit work.
+byte fields retain their original size and alignment.
+`keccak_hardened_batch/transfer.rs` imports and commits the 25-word states using
+two private opaque transpositions with fixed 800-byte source/destination bounds.
+Only RAX or X4 holds secret words; it and all public working counters/offsets
+are erased before return. Canonical little-endian bytes need no reversal on the
+supported x86-64/little-endian Arm targets. This adds no SIMD/ISA prerequisite.
+The existing health/counter check still precedes output commit; failed operations
+preserve caller state and clear workspace storage. Miri/Kani/other targets retain
+the safe model without a register-cleanup claim. Higher-level sponge absorption,
+squeezing and owner copies remain separate work.
 
 The legacy SHA-1 ports add `cpu/{x86_sha1,aarch64_sha1}/secret.rs` inside
 `brynja-legacy-sha1`. Fixed 20-byte state, 64-byte input and 320-byte schedule

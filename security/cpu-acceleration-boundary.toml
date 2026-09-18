@@ -160,19 +160,31 @@ sha256 = "4d92dca161bdd021ad9e24c79edf6c22f276fab3d586b4cf1cdfe02141cc50c0"
 package = "brynja-crypto-cpu"
 path = "src/keccak_hardened_batch/mod.rs"
 status = "hardened-keccak-batch-authority"
-sha256 = "9f4555ee60fc80f0de31c5ecb6082150e13dab16cda9c09d0de437adbafe7b49"
+sha256 = "1ee4056704d83bc33a03e2da27a66addee3ddf26009c2c88eeb5ce051946903d"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/keccak_hardened_batch/scratch.rs"
 status = "hardened-keccak-batch-owned-storage"
-sha256 = "ec9d8da57ac6c099d95aff873aaffc55788d97d5082a46c289a4f35dad5c7ece"
+sha256 = "554dc00e92d3af63c3f04ed34247b2df69ca5dd95935291201f35cded44fded8"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/keccak_hardened_batch/platform.rs"
 status = "hardened-keccak-batch-platform-import"
 sha256 = "aaceb66eb54d19f782b876ae626a39f134e67da6f3515e37f90ada2fb95cc0c9"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_hardened_batch/transfer.rs"
+status = "hardened-keccak-batch-opaque-state-transfer"
+sha256 = "b1293ffcbfe51b26b49bc17dfd861e917f151c8d73356e7902e3277efeec42d4"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_hardened_batch/transfer_tests.rs"
+status = "hardened-keccak-batch-state-transfer-tests"
+sha256 = "058535a8b24e24290e72b18deb7ed82b658044cab079854f077b8f00a0d9d883"
 
 [[sources]]
 package = "brynja-crypto-cpu"

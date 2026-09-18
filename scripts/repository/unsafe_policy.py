@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"): ("b1293ffcbfe51b26b49bc17dfd861e917f151c8d73356e7902e3277efeec42d4", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"): ("1b87c3f35bde0f59fe65f54b2c14a1d93369d9c03fe6f20a7e336f7d7992ac1f", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"): ("d8e07cce1e24149d37874f3dd9828e587fbdf8ae61dd91bcf9b602ecbf914d5d", 6, 1, 6),
     Path("crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs"): ("c008b23798ed127c95607d333f633b845e2383752768588023ae5dfbb4f33dd8", 1, 1, 1),
@@ -185,9 +186,13 @@ def validate_allowed(
     elif relative in {
         Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"),
         Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"),
+        Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"),
     }:
         required = ('pub(super) unsafe extern "C" fn transpose<const WORDS: usize, const PACK: bool>',
                     '#[inline(never)]', 'assert!(WORDS == 8 || WORDS == 16)')
+        if relative.parent.name == 'keccak_hardened_batch':
+            required = ('pub(super) unsafe extern "C" fn transpose<const PACK: bool>',
+                        '#[inline(never)]', '"cmp r8, 25"', '"cmp x6, #25"')
         if any(text.count(token) != 1 for token in required):
             fail("transfer boundary lost its checked word domain or non-inlining contract")
         if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_TRANSFER_BEGIN',

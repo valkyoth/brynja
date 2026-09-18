@@ -8,7 +8,7 @@ import unsafe_policy
 
 def main() -> int:
     unsafe_policy.validate(Path(__file__).resolve().parents[2])
-    print("unsafe policy confines volatile clearing and SHA-2/Keccak and isolated legacy SHA-1/MD5 low-level code to sixty-seven reviewed modules")
+    print("unsafe policy confines volatile clearing and SHA-2/Keccak and isolated legacy SHA-1/MD5 low-level code to sixty-eight reviewed modules")
     return 0
 
 

@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "63a9e2c9279e876c2f0d03c7c8fbd16207d573df8e0dec8b74abdea8369b3885"
+EXPECTED_POLICY_SHA256 = "31f9b71543f13c602e9711db0926a19a3efe0208639f01c7caa87da7c034c803"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -53,6 +53,8 @@ SOURCE_STATUS = {
     (DETECTOR, "src/keccak_hardened_batch/tests.rs"): "hardened-keccak-batch-hosted-tests",
     (CPU, "src/keccak_hardened_batch/mod.rs"): "hardened-keccak-batch-authority",
     (CPU, "src/keccak_hardened_batch/scratch.rs"): "hardened-keccak-batch-owned-storage",
+    (CPU, "src/keccak_hardened_batch/transfer.rs"): "hardened-keccak-batch-opaque-state-transfer",
+    (CPU, "src/keccak_hardened_batch/transfer_tests.rs"): "hardened-keccak-batch-state-transfer-tests",
     (CPU, "src/keccak_hardened_batch/platform.rs"): "hardened-keccak-batch-platform-import",
     (CPU, "src/keccak_hardened_batch/x86.rs"): "hardened-keccak-batch-four-lane-avx2",
     (CPU, "src/keccak_hardened_batch/arm.rs"): "hardened-keccak-batch-two-lane-neon",

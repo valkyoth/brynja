@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SHA-2 packing development checks; never changes a release gate."""
+"""SHA-2/Keccak packing development checks; never changes a release gate."""
 import argparse
 from pathlib import Path
 import re
@@ -21,9 +21,9 @@ def instructions(area):
             and not line.strip().endswith(':')]
 
 
-def assembly(text, arm):
+def assembly(text, arm, count=3):
     functions = list(re.finditer(r'(?m)^[_A-Za-z][^\n:]*transpose[^\n:]*:\s*(?:[#;].*)?$', text))
-    if len(functions) != 3:
+    if len(functions) != count:
         raise ValueError('missing/ambiguous transfer monomorphizations')
     for function in functions:
         body = text[function.end():]
@@ -92,7 +92,7 @@ def integrated(directory, compiler, target, release):
     files = list(destination.glob(target + '/*/deps/brynja_crypto_cpu-*.s'))
     if len(files) != 1:
         raise ValueError('ambiguous actual CPU crate assembly')
-    assembly(files[0].read_text(), arm)
+    assembly(files[0].read_text(), arm, 2 if FAMILY == 'keccak' else 3)
     print(f'Actual CPU crate transfers: {compiler} {target} release={release}: PASS', flush=True)
 
 
@@ -100,12 +100,14 @@ def main():
     global FAMILY, SOURCE, FIXTURE
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--arm', action='store_true')
-    parser.add_argument('--family', choices=('sha256', 'sha512'), default='sha256')
+    parser.add_argument('--family', choices=('sha256', 'sha512', 'keccak'), default='sha256')
     args = parser.parse_args()
     FAMILY = args.family
     SOURCE = ROOT.parents[1] / f'crates/brynja-crypto-cpu/src/{FAMILY}_hardened_batch/transfer.rs'
     FIXTURE = ROOT / (FAMILY + '-transfer')
-    layouts = 2592 if FAMILY == 'sha256' else 1440
+    layouts = {'sha256': 2592, 'sha512': 1440, 'keccak': 320}[FAMILY]
+    guards = 8 if FAMILY == 'keccak' else 12
+    functions = 2 if FAMILY == 'keccak' else 3
     with tempfile.TemporaryDirectory(prefix=f'brynja-{FAMILY}-transfer-') as temporary:
         directory = Path(temporary)
         fixture, source = prepare(directory)
@@ -135,7 +137,7 @@ def main():
                         raise ValueError('ambiguous assembly artifact')
                     text = artifacts[0].read_text()
                     text = re.sub(r'(?m)^\s*(?://|;)\s*BRYNJA_', '// BRYNJA_', text) if arm else re.sub(r'(?m)^\s*#+\s*BRYNJA_', '# BRYNJA_', text)
-                    assembly(text, arm)
+                    assembly(text, arm, functions)
                     for marker in ('BEGIN', 'ERASE', 'END'):
                         # Add an actual spill or post-cleanup secret reload to the
                         # emitted stream, not merely a mismatching source token.
@@ -148,7 +150,7 @@ def main():
                         if mutant == text:
                             raise ValueError('missing assembly mutation anchor')
                         try:
-                            assembly(mutant, arm)
+                            assembly(mutant, arm, functions)
                         except ValueError:
                             pass
                         else:
@@ -166,7 +168,14 @@ def main():
                                               (f'"bswap {register}",', ''),
                                               (f'"mov [{{destination}} + rdx], {register}",', '"# omitted {destination}",'),
                                               (f'"mov {register}, [{{source}} + rdx]",', '"# omitted {source}", "xor eax, eax",')])
-                    if FAMILY == 'sha512':
+                    if FAMILY == 'keccak':
+                        # Keccak is little-endian on both supported targets;
+                        # there is deliberately no byte reversal to remove.
+                        mutations = [item for item in mutations if not item[0].startswith(('"rev ', '"bswap '))]
+                        mutations += [(('"cmp x6, #25",' if arm else '"cmp r8, 25",'),
+                                       ('"cmp x6, #24",' if arm else '"cmp r8, 24",')),
+                                      ('{ 200 }', '{ 192 }')]
+                    if FAMILY in ('sha512', 'keccak'):
                         # A 32-bit transplant must not truncate the upper half
                         # of a state, input word or output, even if it clears.
                         mutations += ([('"ldr x4, [{source}, x7]",', '"ldr w4, [{source}, x7]",'),
@@ -175,6 +184,8 @@ def main():
                                       if arm else [('"mov rax, [{source} + rdx]",', '"mov eax, [{source} + rdx]",'),
                                                    ('"mov [{destination} + rdx], rax",', '"mov [{destination} + rdx], eax",'),
                                                    ('"bswap rax",', '"bswap eax",')])
+                        if FAMILY == 'keccak':
+                            mutations = [item for item in mutations if not item[0].startswith(('"rev ', '"bswap '))]
                     cases = [('original', original, True)]
                     # Poison before erasure must still pass; then omit its wipe.
                     wipe = '"mov x4, xzr",' if arm else '"xor eax, eax",'
@@ -182,7 +193,7 @@ def main():
                     poisoned = original.replace(wipe, poison + wipe)
                     cases += [('poisoned', poisoned, True), ('removed wipe', poisoned.replace(wipe, ''), False)]
                     for before, after in mutations:
-                        if original.count(before) != 1:
+                        if original.count(before) != (4 if before == '{ 200 }' else 1):
                             raise ValueError('stale source mutation anchor')
                         cases.append((before, original.replace(before, after), False))
                     for label, changed, succeeds in cases:
@@ -190,7 +201,7 @@ def main():
                         result = check.run(['cargo', '+' + compiler, 'test', *common, '--lib', '--', '--nocapture'], env, success=False)
                         log = result.stdout + result.stderr
                         if succeeds:
-                            if result.returncode or f'{FAMILY.upper()}_TRANSFER: {layouts} layouts;' not in log or f'{FAMILY.upper()}_TRANSFER_BOUNDS: 12 guarded placements;' not in log:
+                            if result.returncode or f'{FAMILY.upper()}_TRANSFER: {layouts} layouts;' not in log or f'{FAMILY.upper()}_TRANSFER_BOUNDS: {guards} guarded placements;' not in log:
                                 raise ValueError('positive transfer control failed: ' + log[-4000:])
                         elif result.returncode == 0 or 'test result: FAILED' not in log:
                             raise ValueError('mutant did not fail in execution: ' + label + log[-4000:])

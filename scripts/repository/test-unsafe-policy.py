@@ -178,10 +178,11 @@ def transfer_boundaries(family, lanes):
     source = (ROOT / relative).read_text()
     _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
     unsafe_policy.validate_allowed(relative, source, blocks, items, proofs)
+    domain = ('"cmp r8, 25"', '"cmp r8, 24"') if family == 'keccak' else ('WORDS == 8 || WORDS == 16', 'WORDS <= 64')
     for before, after in (
         ('unsafe extern "C" fn', 'extern "C" fn'),
         ('#[inline(never)]', '#[inline(always)]'),
-        ('WORDS == 8 || WORDS == 16', 'WORDS <= 64'),
+        domain,
         (f'width.min({lanes})', 'width'),
         ('BRYNJA_TRANSFER_BEGIN', 'REMOVED'),
         ('BRYNJA_TRANSFER_ERASE', 'REMOVED'),
@@ -204,6 +205,7 @@ if __name__ == "__main__":
     register_boundaries()
     transfer_boundaries('sha256', 8)
     transfer_boundaries('sha512', 4)
+    transfer_boundaries('keccak', 4)
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
-    print("opaque transfer boundaries reject twenty ABI, bounds, clobber and memory-effect regressions")
+    print("opaque transfer boundaries reject thirty ABI, bounds, clobber and memory-effect regressions")

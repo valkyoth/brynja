@@ -1,7 +1,7 @@
 extern crate std;
 use super::*;
 
-fn cleared(owner: &HardenedSha2Owner) -> bool {
+pub(super) fn cleared(owner: &HardenedSha2Owner) -> bool {
     [
         &owner.chaining_state[..],
         &owner.partial_input,

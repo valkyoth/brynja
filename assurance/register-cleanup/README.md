@@ -272,8 +272,10 @@ framing/register qualification remain pending.
 The [scoped SHA-2 fixture](in-place-sha2/README.md) now adds the six named
 SHA-2 identities with borrowed workspaces and typed secret output. Its compiled
 mutations cover IV reset, checked counters and scope/handle/operation cleanup.
-General SHA-512/t and accelerated scoped execution remain pending; existing
-by-value APIs and complete register/spill exclusions are unchanged.
+Its optional general-t wrapper checks all 510 parameters and exact secret-output
+identity; the scoped API also runs against the independent 4,590-vector corpus.
+Accelerated scoped execution remains pending; existing by-value APIs and complete
+register/spill exclusions are unchanged.
 
 ## Remaining work before the requested retest
 

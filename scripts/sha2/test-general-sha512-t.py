@@ -16,6 +16,16 @@ import general_sha512_t_work as work
 
 
 class GeneralTests(unittest.TestCase):
+    def test_work_model_selection_is_explicit_and_complete(self):
+        condition = "not(any(miri, kani))"
+        for expected in (1, 4):
+            for count in range(6):
+                if count != expected:
+                    with self.subTest(expected=expected, count=count), self.assertRaises(ValueError):
+                        work.instrumented_model(condition * count, expected)
+            selected = work.instrumented_model(condition * expected, expected)
+            self.assertEqual(selected.count('feature = "work-model"'), expected)
+
     def test_batch_feature_preserves_general_isolation(self):
         policy.validate(hashes=False)
         original = policy.read

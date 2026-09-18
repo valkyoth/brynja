@@ -1,11 +1,11 @@
-//! Scoped, caller-owned storage for the six named hardened SHA-2 identities.
+//! Scoped, caller-owned storage for hardened SHA-2 identities.
 //!
 //! Active secret storage stays in its borrowed workspace. Finalization moves
 //! only a handle; scope exit clears the owner even if that handle is forgotten.
 //! This is not a guarantee about compiler-created copies, registers, spills,
 //! caller inputs, aborts or platform storage. It uses the existing portable
 //! hardened implementation, not optional accelerated dispatch. General SHA-512/t
-//! and higher constructions are not part of this namespace yet.
+//! requires the existing default-off `general-sha512-t` feature.
 //!
 //! ```
 //! use brynja_hash_sha2::hardened_in_place::Sha256Workspace;
@@ -28,6 +28,11 @@ use super::{
 use crate::BitString;
 use brynja_core::{OwnedSecretRegion, SecretRegionInitialization};
 use core::marker::PhantomData;
+
+#[cfg(feature = "general-sha512-t")]
+mod general;
+#[cfg(feature = "general-sha512-t")]
+pub use general::{Sha512T, Sha512TWorkspace};
 
 struct Cleanup<'scope> {
     owner: &'scope mut HardenedSha2Owner,

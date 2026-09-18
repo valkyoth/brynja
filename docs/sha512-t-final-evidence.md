@@ -39,7 +39,7 @@ records actual runs and remaining review.
 | --- | --- |
 | IV derivation | One ordinary SHA-512 compression over a public decimal t label before accepting any secret |
 | Message work | For n complete bytes: floor(n/128) + one final block when n mod 128 < 112, otherwise two; exactly 80 rounds per block |
-| Instrumented coverage | All 510 t, eight lengths (0/1/111/112/127/128/129/1024), three public patterns, ordinary and hardened: 12,240 cases per debug/release profile |
+| Instrumented coverage | Rust fallback model: all 510 t, eight lengths (0/1/111/112/127/128/129/1024), three public patterns, ordinary and hardened: 12,240 cases per debug/release profile. The isolated copy explicitly selects the model; these counters do not measure native assembly, which has separate scalar-boundary checks. |
 | Instrumentation | Block-entry and round counters added only to an isolated copied crate; four omitted hooks and two shortened compression-loop mutants must each compile and fail a real work assertion in both profiles (12 mutant runs) |
 | Object storage | Consumer enforces ordinary state <=256, hardened state <=1200, public digest <=72, secret output owner <=32 bytes; caller-owned output <=64 bytes for valid t |
 | Error work | Length admission is checked before mutation. Invalid secret destinations are cleared in O(destination length), including oversized slices; callers bound their own buffers |

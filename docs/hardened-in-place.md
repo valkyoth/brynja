@@ -1,6 +1,6 @@
 # Scoped hardened storage
 
-Status: named SHA-2 and SHA-3/SHAKE/cSHAKE API development checkpoint; wider rollout and complete
+Status: named/general SHA-2 and SHA-3/SHAKE/cSHAKE API development checkpoint; wider rollout and complete
 register/spill qualification pending. No independent verification or FIPS claim.
 
 The first additive API is `brynja_hash_sha3::hardened_in_place`, with
@@ -48,7 +48,23 @@ into finalization. Update errors clear the state and make further operations
 return `HardenedSha2Error::StateConsumed`. No accumulated-length/preflight query
 is exposed. Storage and handles are neither Copy/Clone/Debug/Send nor Sync.
 The same scope/Drop/forget/output guarantees and exclusions below apply.
-General SHA-512/t and accelerated scoped sessions remain separate rollout work.
+Accelerated scoped sessions remain separate rollout work.
+
+## General SHA-512/t
+
+With the default-off `general-sha512-t` feature, `hardened_in_place` also exposes
+`Sha512TWorkspace::new(parameter)` and its borrowed `Sha512T` handle. The validated
+`Sha512TBits` identity is public and fixed for the workspace; `parameter()` does
+not expose accumulated message length. `with` derives the public parameter IV
+before accepting secret input, including on reuse.
+
+The handle has the same update, cancel and byte/bit finalization operations.
+Secret finalization returns `Sha512TSecretDigest` with the exact parameter and
+canonical partial-byte mask, never a public byte importer. Public finalization
+requires `PublicDeclassification` and returns `Sha512TDigest`. Update failure
+clears and disables the handle (`Sha512TError::StateConsumed`); secret-output
+errors clear the complete destination. A separately borrowed secret digest may
+outlive the callback, but the state cannot escape it.
 
 ## Ownership and failure behavior
 
@@ -58,7 +74,7 @@ moves only the reference-bearing handle. No new unsafe code, allocation, heap
 pinning, thread support, feature default or dependency is required.
 
 Handle finalization/cancellation/Drop clears every region of the existing
-`HardenedFips202Owner` in place. An outer cleanup guard independently clears
+SHA-2 or FIPS 202 hardened owner in place. An outer cleanup guard independently clears
 the owner on callback return or recoverable unwind, including `mem::forget` of
 the handle. An update error clears and terminally disables the handle. Failed
 secret finalization clears the entire destination; failed public finalization
@@ -86,7 +102,7 @@ storage are not erased by an ownership API.
 
 This initial module uses the portable hardened implementation, including its
 already implemented baseline scalar permutation ports. It does not enable an
-optional hardware/SIMD route. General SHA-512/t, accelerated sessions, other
+optional hardware/SIMD route. Accelerated sessions, other
 hash families and higher constructions remain rollout work before the broader
 F1 remediation can be declared complete. Release gates and publishing are unchanged.
 
@@ -123,3 +139,10 @@ The development driver rejects eight compiled cleanup, lifecycle, IV, output
 and counter mutants in debug/release and tests the packaged downstream API,
 including a SHA-256 known answer. These are not a replacement for independent
 review or complete framing/register/spill qualification.
+
+General SHA-512/t additionally checks all 510 parameters, all tail widths,
+invalid destination widths, exact output identity, clearing and scope failure.
+The existing independent 4,590-vector corpus now exercises the scoped API too.
+Thirteen compiled negative examples cover ownership and secret/public type
+separation. The development driver rejects eight additional compiled general-t
+mutants in both profiles and tests all parameters through the packaged API.

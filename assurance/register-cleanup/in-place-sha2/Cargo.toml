@@ -7,6 +7,9 @@ rust-version = "1.90"
 publish = false
 license = "MIT OR Apache-2.0"
 
+[features]
+general = ["brynja-hash-sha2/general-sha512-t"]
+
 [dependencies]
 brynja-hash-sha2 = { path = "../../../crates/brynja-hash-sha2", default-features = false }
 

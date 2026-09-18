@@ -27,6 +27,8 @@ pub use secret::Sha512TSecretDigest;
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[non_exhaustive]
 pub enum Sha512TError {
+    /// A scoped state was terminated by an earlier failed operation.
+    StateConsumed,
     /// t must be in 1..=511, excluding 384.
     InvalidParameter,
     /// The label destination is too short or the digest length is not exact.

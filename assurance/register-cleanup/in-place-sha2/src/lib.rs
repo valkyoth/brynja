@@ -33,9 +33,60 @@ probe!(scoped512, Sha512Workspace, 64);
 probe!(scoped512_224, Sha512_224Workspace, 28);
 probe!(scoped512_256, Sha512_256Workspace, 32);
 
+/// Borrows general-t storage; only its exact output slice is secret-owned.
+#[cfg(feature = "general")]
+#[inline(never)]
+pub extern "C" fn scoped_general(
+    workspace: &mut Sha512TWorkspace,
+    input: &[u8; 256],
+    output: &mut [u8; 64],
+) -> u8 {
+    let Some(output) = output.get_mut(..workspace.parameter().output_bytes()) else {
+        return 2;
+    };
+    let result = workspace.with(|mut state| {
+        state.update(input)?;
+        drop(state.finalize_secret(output)?);
+        Ok::<(), brynja_hash_sha2::Sha512TError>(())
+    });
+    u8::from(result.is_err())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[cfg(feature = "general")]
+    #[test]
+    fn all_general_parameters_keep_secret_output_typed()
+    -> Result<(), brynja_hash_sha2::Sha512TError> {
+        use brynja_hash_sha2::{Sha512TBits, Sha512TError, Sha512TSecretDigest};
+        for t in 1..512 {
+            if t == 384 {
+                continue;
+            }
+            let parameter = Sha512TBits::new(t)?;
+            let mut workspace = Sha512TWorkspace::new(parameter);
+            let mut output = [0xa5; 64];
+            assert_eq!(scoped_general(&mut workspace, &[0x5a; 256], &mut output), 0);
+            let (written, untouched) = output.split_at(parameter.output_bytes());
+            assert!(written.iter().all(|byte| *byte == 0));
+            assert!(untouched.iter().all(|byte| *byte == 0xa5));
+            let destination = output
+                .get_mut(..parameter.output_bytes())
+                .ok_or(Sha512TError::OutputLength)?;
+            let secret: Sha512TSecretDigest<'_> = workspace.with(|mut state| {
+                state.update(b"abc")?;
+                state.finalize_secret(destination)
+            })?;
+            assert_eq!(secret.parameter(), parameter);
+            assert_eq!(
+                secret.as_bytes(),
+                brynja_hash_sha2::sha512_t(parameter, b"abc")?.as_bytes()
+            );
+            drop(secret);
+        }
+        Ok(())
+    }
     macro_rules! smoke {
         ($name:ident, $workspace:ident, $width:literal, $probe:ident, $reference:ident) => {
             #[test]

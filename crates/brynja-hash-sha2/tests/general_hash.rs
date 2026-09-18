@@ -55,6 +55,25 @@ fn all_parameters_match_independent_byte_and_bit_oracle() -> Result<(), Sha512TE
         let input = BitString::new(&message, valid).map_err(|_| Sha512TError::MessageTooLong)?;
         let result = sha512_t_bits(p, input)?;
         assert_eq!(result.as_bytes(), expected, "t={t} bits={bits}");
+        let mut scoped = hardened_in_place::Sha512TWorkspace::new(p);
+        let mut scoped_output = vec![0xa5; p.output_bytes()];
+        let scoped_secret = scoped.with(|mut state| {
+            let split = message.len() / 2;
+            let (prefix, tail_bytes) = message.split_at(split);
+            state.update(prefix)?;
+            state.finalize_bits_secret(
+                BitString::new(tail_bytes, valid).map_err(|_| Sha512TError::MessageTooLong)?,
+                &mut scoped_output,
+            )
+        })?;
+        assert_eq!(scoped_secret.parameter(), p);
+        assert_eq!(scoped_secret.as_bytes(), expected);
+        drop(scoped_secret);
+        assert!(scoped_output.iter().all(|byte| *byte == 0));
+        assert_eq!(
+            scoped.with(|state| state.finalize_bits_public(input, auth()))?,
+            result
+        );
         assert_eq!(result.parameter(), p);
         assert_eq!(result, Sha512TDigest::from_bytes(p, &expected)?);
         assert_eq!(hardened_sha512_t_bits_public(p, input, auth())?, result);

@@ -1,4 +1,4 @@
-"""Exact-source temporary block/round counters; not a machine timing proof."""
+"""Rust fallback-model block/round counters; not native assembly/timing evidence."""
 import shutil
 import subprocess
 import tempfile
@@ -20,6 +20,15 @@ def replace_once(text, before, after):
     return text.replace(before, after)
 
 
+def instrumented_model(text, expected):
+    # Only the copied crate selects the Rust fallback. Production native assembly
+    # has separate round-bound/cleanup checks; do not invent native round ticks.
+    condition = "not(any(miri, kani))"
+    if text.count(condition) != expected:
+        raise ValueError("ambiguous hardened model selection")
+    return text.replace(condition, 'not(any(miri, kani, feature = "work-model"))')
+
+
 def run(*, mutations=False):
     with tempfile.TemporaryDirectory(prefix="brynja-general-work-") as directory:
         root = Path(directory)
@@ -28,7 +37,10 @@ def run(*, mutations=False):
                          for name in ("brynja-core", "brynja-hash-core"))
         (root / "Cargo.toml").write_text(
             '[workspace]\n[package]\nname="brynja-hash-sha2"\nversion="0.1.0"\nedition="2024"\n'
-            '[features]\ndefault=[]\ngeneral-sha512-t=[]\ncpu=[]\n[dependencies]\n' + deps + '\n')
+            '[features]\ndefault=[]\ngeneral-sha512-t=[]\ncpu=[]\nwork-model=[]\n[dependencies]\n' + deps + '\n')
+        for name, expected in (("hardened/compress64.rs", 4), ("compress64.rs", 1)):
+            path = root / "src" / name
+            path.write_text(instrumented_model(path.read_text(), expected))
         lib = root / "src/lib.rs"
         lib.write_text(lib.read_text() + '\n#[cfg(test)]\nmod work_probe;\n')
         shutil.copyfile(FIXTURE / "work_probe.rs", root / "src/work_probe.rs")
@@ -39,7 +51,7 @@ def run(*, mutations=False):
             path.write_text(replace_once(path.read_text(), before, after))
         for profile in ([], ["--release"]):
             command = ["cargo", "test", "--locked", "--offline", "--manifest-path", str(root / "Cargo.toml"),
-                       "--features", "general-sha512-t", "--lib", *profile, "work_probe::final_work_counts"]
+                       "--features", "general-sha512-t,work-model", "--lib", *profile, "work_probe::final_work_counts"]
             if not (root / "Cargo.lock").exists():
                 subprocess.run(["cargo", "generate-lockfile", "--offline", "--manifest-path", str(root / "Cargo.toml")],
                                check=True, capture_output=True, timeout=60)
@@ -63,7 +75,7 @@ def run(*, mutations=False):
                             raise ValueError("work hook or shortened rounds not detected by compiled assertion")
                     finally:
                         path.write_text(source)
-    print("General SHA-512/t work counts: PASS; 12240 cases per profile, ordinary and hardened; debug/release")
+    print("General SHA-512/t Rust fallback-model work counts: PASS; 12240 cases per profile, ordinary and hardened; debug/release; not native assembly evidence")
 
 
 if __name__ == "__main__":

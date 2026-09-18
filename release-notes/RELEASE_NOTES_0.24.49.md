@@ -6,7 +6,8 @@ No crates are selected for publication.
 
 - Extend scoped storage to all six named SHA-2 identities, with exact-IV reset,
   byte/bit input and typed secret output. Update failures clear and terminate
-  the scoped state. General SHA-512/t and accelerated scoped APIs remain pending;
+  the scoped state. General SHA-512/t now has a parameter-bound scoped workspace,
+  typed secret output and all-parameter oracle coverage. Accelerated scoped APIs remain pending;
   no whole-register/spill guarantee is claimed.
 - Add `brynja_hash_sha3::hardened_in_place` for scoped SHA3-224/256/384/512,
   SHAKE128/256 and cSHAKE128/256 workspaces. Handles and readers borrow the active

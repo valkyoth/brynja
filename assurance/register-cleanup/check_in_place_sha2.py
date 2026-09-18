@@ -29,7 +29,8 @@ def packaged(root):
         f'{name} = {{ path = "{path.as_posix()}" }}\n' for name, path in roots.items()))
     acceptance.run(['cargo', '+1.98.1', 'generate-lockfile', '--offline'], cwd=fixture)
     acceptance.run(['cargo', '+1.98.1', 'test', '--locked', '--offline'], cwd=fixture)
-    print('Packaged scoped SHA-2: six identities and SHA-256 known answer PASS', flush=True)
+    acceptance.run(['cargo', '+1.98.1', 'test', '--locked', '--offline', '--all-features'], cwd=fixture)
+    print('Packaged scoped SHA-2: six named identities, SHA-256 known answer and 510 general parameters PASS', flush=True)
 
 
 def main():
@@ -79,7 +80,39 @@ def main():
                     raise ValueError('mutant must compile and fail at runtime: '+label+'\n'+log[-3000:])
             print(f'Scoped SHA-2: positive control and eight compiled mutants; release={release}: PASS', flush=True)
         path.write_text(original)
+        general_mutants(crate, env)
         packaged(root)
+
+
+def general_mutants(crate, env):
+    path = crate/'src/hardened/in_place/general.rs'
+    original = path.read_text()
+    mutations = (
+        ('scope guard disabled', 'owner: &mut self.owner,\n            keep: false,', 'owner: &mut self.owner,\n            keep: true,'),
+        ('handle destructor disabled', 'fn drop(&mut self) {\n        self.owner.wipe();\n    }', 'fn drop(&mut self) {}'),
+        ('update cleanup disabled', 'owner: &mut *self.owner,\n            keep: false,', 'owner: &mut *self.owner,\n            keep: true,'),
+        ('failed state revived', 'self.active = false;\n        let mut cleanup', 'self.active = true;\n        let mut cleanup'),
+        ('parameter IV omitted', 'initialize64(&mut self.owner, self.parameter.initial_words());', ''),
+        ('secret mask omitted', '&= self.parameter.last_byte_mask();', '&= 0xff;'),
+        ('secret identity substituted', 'Sha512TSecretDigest::from_region(\n            self.parameter,', 'Sha512TSecretDigest::from_region(\n            Sha512TBits::new(9)?, '),
+        ('secret guard bypassed', 'let mut guard = SecretRegionInitialization::begin(destination)?;', 'self.check()?; let mut guard = SecretRegionInitialization::begin(destination)?;'),
+    )
+    for release in (False, True):
+        command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path', str(crate/'Cargo.toml'), '--features', 'general-sha512-t', '--lib', 'hardened::in_place::general']
+        if release:
+            command.append('--release')
+        path.write_text(original)
+        run(command, env)
+        for label, before, after in mutations:
+            if original.count(before) != 1:
+                raise ValueError('general mutation source absent/ambiguous: '+label)
+            path.write_text(original.replace(before, after))
+            result = run(command, env, success=False)
+            log = result.stdout + result.stderr
+            if result.returncode == 0 or 'test result: FAILED' not in log:
+                raise ValueError('general mutant must compile and fail at runtime: '+label+'\n'+log[-3000:])
+        print(f'Scoped general SHA-512/t: positive control and eight compiled mutants; release={release}: PASS', flush=True)
+    path.write_text(original)
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@
 
 ## 0.24.49 development
 
-- Add scoped caller-owned storage for named SHA-2 and SHA-3/SHAKE/cSHAKE, preserving
+- Add scoped caller-owned storage for named/general SHA-2 and SHA-3/SHAKE/cSHAKE, preserving
   existing by-value APIs. Ownership tests pass; wider in-place rollout and
   whole-API register/spill qualification remain pending.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with

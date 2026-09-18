@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Development scoped-owner regressions; no release workflow changes."""
 from pathlib import Path
+import argparse
+import platform
 import shutil
 import sys
 import tempfile
@@ -12,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / 'crates/brynja-hash-sha3'
 
 
-def packaged(root):
+def packaged(root, env=None):
     sys.path.insert(0, str(ROOT/'scripts/sha3'))
     import sha3_public_api as acceptance
     roots = acceptance.package_roots(root/'packages')
@@ -20,19 +22,23 @@ def packaged(root):
     shutil.copytree(ROOT/'assurance/register-cleanup/in-place-sha3', fixture,
                     ignore=shutil.ignore_patterns('target', 'Cargo.lock'))
     manifest = fixture/'Cargo.toml'
-    manifest.write_text(manifest.read_text().replace(
-        'path = "../../../crates/brynja-hash-sha3"',
-        'path = "'+str(roots['brynja-hash-sha3'])+'"'))
+    contents = manifest.read_text()
+    for name in ('brynja-hash-sha3', 'brynja-crypto-cpu', 'brynja-crypto-cpu-std'):
+        contents = contents.replace('path = "../../../crates/'+name+'"', 'path = "'+str(roots[name])+'"')
+    manifest.write_text(contents)
     config = fixture/'.cargo'
     config.mkdir()
     (config/'config.toml').write_text('[patch.crates-io]\n'+''.join(
         f'{name} = {{ path = "{path.as_posix()}" }}\n' for name, path in roots.items()))
     acceptance.run(['cargo', '+1.98.1', 'generate-lockfile', '--offline'], cwd=fixture)
     acceptance.run(['cargo', '+1.98.1', 'test', '--locked', '--offline'], cwd=fixture)
+    acceptance.run(['cargo', '+1.98.1', 'test', '--locked', '--offline', '--all-features'], cwd=fixture)
+    if env is not None:
+        run(['cargo', '+1.98.1', '--config', str(config/'config.toml'), 'test', '--locked', '--offline', '--manifest-path', str(manifest), '--all-features', 'execution::tests'], env)
     print('Packaged scoped SHA-3 downstream known-answer/ownership smoke: PASS', flush=True)
 
 
-def main():
+def main(native_x86=False):
     with tempfile.TemporaryDirectory(prefix='brynja-in-place-sha3-') as temporary:
         root = Path(temporary)
         crate = root / 'sha3'
@@ -51,6 +57,16 @@ def main():
         env = clean_environment()
         env['CARGO_TARGET_DIR'] = str(root/'target')
         run(['cargo', '+1.98.1', 'generate-lockfile', '--offline', '--manifest-path', str(crate/'Cargo.toml')], env)
+        if native_x86:
+            if platform.system() != 'Linux' or platform.machine() != 'x86_64':
+                raise ValueError('scoped native Keccak requires Linux x86_64')
+            flags = [set(line.split(':', 1)[1].split()) for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('flags')]
+            if not flags or not all('avx2' in features for features in flags):
+                raise ValueError('every advertised CPU must support AVX2')
+            env.update(RUSTFLAGS='-C target-feature=+avx2', BRYNJA_REQUIRE_SCOPED_KECCAK='1')
+            execution_mutants(crate, env)
+            packaged(root, env)
+            return
         path = crate/'src/hardened/in_place.rs'
         original = path.read_text()
         mutations = (
@@ -113,5 +129,43 @@ def xof_mutants(crate, env):
     path.write_text(original)
 
 
+def execution_mutants(crate, env):
+    path = crate/'src/hardened/accelerated/in_place.rs'
+    engine = crate/'src/hardened/accelerated/engine.rs'
+    original, original_engine = path.read_text(), engine.read_text()
+    mutations = (
+        (path, 'scope cleanup', 'fn drop(&mut self) {\n        self.0.clear();\n    }', 'fn drop(&mut self) {}', 1),
+        (path, 'handle cleanup', 'fn drop(&mut self) { self.storage.clear(); }', 'fn drop(&mut self) {}', 1),
+        (path, 'staging cleanup', 'let _ = clear_owned_region(&mut self.stage.0);', '', 1),
+        (path, 'failed update staging', 'if result.is_err() { self.storage.clear(); }', '', 1),
+        (path, 'domain suffix', 'self.storage.engine.finish(input, 0x06, 3)?;', 'self.storage.engine.finish(input, 0x1f, 5)?;', 2),
+        (path, 'secret guard', 'let length = output.len();', 'self.storage.engine.check(false)?; let length = output.len();', 1),
+        (engine, 'restart authority', 'self.cancel();\n        self.session.check().map_err(Error::Backend)?;', 'self.cancel();', 1),
+        (engine, 'restart phase', 'self.squeezing = false;', '', 1),
+    )
+    for release in (False, True):
+        command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path', str(crate/'Cargo.toml'), '--features', 'hardened-execution', '--lib', 'hardened::accelerated::in_place']
+        if release:
+            command.append('--release')
+        path.write_text(original)
+        engine.write_text(original_engine)
+        run(command, env)
+        for target, label, before, after, count in mutations:
+            path.write_text(original)
+            engine.write_text(original_engine)
+            source = target.read_text()
+            if source.count(before) != count:
+                raise ValueError('scoped execution mutation absent/ambiguous: '+label)
+            target.write_text(source.replace(before, after))
+            result = run(command, env, success=False)
+            if result.returncode == 0 or 'test result: FAILED' not in result.stdout + result.stderr:
+                raise ValueError('scoped execution mutant must compile and fail at runtime: '+label)
+        print(f'Scoped native Keccak: positive control and eight compiled cleanup/authority/framing mutants; release={release}: PASS', flush=True)
+    path.write_text(original)
+    engine.write_text(original_engine)
+
+
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--native-x86', action='store_true', help='native AVX2 scoped execution mutations and packaged consumer; checks Linux CPU support')
+    main(parser.parse_args().native_x86)

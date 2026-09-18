@@ -120,6 +120,32 @@ the workspace/handle cannot be copied, cloned, formatted, sent or shared.
 Fourteen compiled negative examples cover these traits, handle escape, overlap,
 authority lifetime and implicit secret-to-public conversion.
 
+## Fixed-output SHA-3 execution scopes
+
+The default-off `hardened-execution` feature also exposes
+`brynja_hash_sha3::hardened_execution::in_place::{Sha3_224Workspace,
+Sha3_256Workspace, Sha3_384Workspace, Sha3_512Workspace}`. Each constructor takes
+the existing `KeccakSession`, not ordinary public-data authority or scratch.
+The workspace retains the sponge engine, session scratch and 168-byte clearing
+output stage before secret input. The handle borrows that storage through update
+and consuming byte/bit finalization. Public output requires explicit
+`Sha3PublicDeclassification` and commits only after success; secret output is
+typed and its entire destination clears on any finalization error.
+
+`with` clears storage and checks the same session before invoking the callback.
+As with scoped SHA-2, the outer result covers admission, not captured buffers
+which were never supplied to an operation. Scope and handle guards independently
+clear the sponge/stage, including cancellation, forgotten handles and recoverable
+unwind. Every update error terminates the current computation. Reuse starts a
+fresh zero state but never reverses authority quarantine or silently falls back.
+`report()` returns only the existing backend/health observation, not message
+length or authority. No preflight/length query is exposed on the handle.
+
+The existing static deployment and hosted platform requirements are unchanged.
+Register/spill/framing qualification is separate; neither scope ownership nor
+functional testing establishes whole-register erasure. Scoped accelerated
+SHAKE/cSHAKE readers remain rollout work.
+
 ## Ownership and failure behavior
 
 Storage is secret-free at construction and after every scope. During `with`, an
@@ -224,3 +250,15 @@ driver checks eight additional compiled cleanup, IV, mask, secret-identity,
 destination and report mutants in both profiles. The packaged fixture tests
 all parameters and available hosted wide execution. Emulated Arm results do
 not substitute for native wide-kernel qualification.
+
+Fixed-output SHA-3 execution scopes test all four identities, rate boundaries,
+chunking, all eight input tail widths, exact engine/staging address stability,
+destination failures, overflow, revocation, forgetting, unwind and reuse.
+The existing curated NIST corpus additionally runs its 40 fixed-output vectors
+through these scopes when the static route is available. Fifty-two compile-fail
+examples enforce traits, escape/overlap and authority lifetime. The development
+driver's `--native-x86` mode validates AVX2 support on every advertised Linux CPU
+and rejects eight compiled cleanup, authority, phase, suffix and destination
+mutants in debug/release. It also executes the packaged native consumer.
+The fixture's hosted feature tests available hosted execution; mandatory-route
+switches prevent treating an unavailable backend as accelerated coverage.

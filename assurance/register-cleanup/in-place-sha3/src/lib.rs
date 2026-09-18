@@ -4,6 +4,9 @@
 
 use brynja_hash_sha3::{HardenedSha3Error, hardened_in_place::*};
 
+#[cfg(feature = "execution")]
+pub mod execution;
+
 macro_rules! probe {
     ($name:ident, $workspace:ident, $width:expr) => {
         /// Initializes/finalizes a scoped state in caller-provided storage.

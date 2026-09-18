@@ -7,8 +7,14 @@ rust-version = "1.90"
 publish = false
 license = "MIT OR Apache-2.0"
 
+[features]
+execution = ["brynja-hash-sha3/hardened-execution", "dep:brynja-crypto-cpu"]
+hosted = ["execution", "brynja-hash-sha3/runtime-execution", "dep:brynja-crypto-cpu-std"]
+
 [dependencies]
 brynja-hash-sha3 = { path = "../../../crates/brynja-hash-sha3", default-features = false }
+brynja-crypto-cpu = { path = "../../../crates/brynja-crypto-cpu", default-features = false, features = ["hardened-execution"], optional = true }
+brynja-crypto-cpu-std = { path = "../../../crates/brynja-crypto-cpu-std", default-features = false, features = ["runtime-execution"], optional = true }
 
 [lints.rust]
 unsafe_code = "forbid"

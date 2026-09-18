@@ -62,6 +62,27 @@ impl<'a> Engine<'a> {
     pub(super) fn report(&self) -> Report {
         self.session.report()
     }
+    pub(super) fn restart(&mut self) -> Result<(), Error> {
+        self.cancel();
+        self.session.check().map_err(Error::Backend)?;
+        self.squeezing = false;
+        self.failed = false;
+        Ok(())
+    }
+    #[cfg(test)]
+    pub(super) fn cleared_for_test(&self) -> bool {
+        self.memory
+            .lanes
+            .iter()
+            .chain(&self.memory.message_count)
+            .chain(&self.memory.output_count)
+            .chain(&self.memory.suffix)
+            .all(|byte| *byte == 0)
+    }
+    #[cfg(test)]
+    pub(super) fn overflow_message_for_test(&mut self) {
+        self.memory.message_count.fill(0xff);
+    }
     pub(super) fn cancel(&mut self) {
         self.failed = true;
         self.position = 0;

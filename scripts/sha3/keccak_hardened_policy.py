@@ -122,7 +122,9 @@ def validate(root=ROOT, write=False):
     paths.add(Path('assurance/register-cleanup/check_keccak_scalar.py'))
     paths.add(Path('assurance/register-cleanup/check_in_place_sha3.py'))
     paths.add(Path('docs/hardened-in-place.md'))
-    for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs'):
+    paths.add(Path(HASH + '/tests/bit_inputs.rs'))
+    paths.add(Path(HASH + '/tests/vectors/nist-bit-selected.txt'))
+    for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/execution.rs'):
         paths.add(Path('assurance/register-cleanup/in-place-sha3') / name)
     for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs', 'src/tests/reference.rs'):
         paths.add(Path('assurance/register-cleanup/keccak-scalar') / name)

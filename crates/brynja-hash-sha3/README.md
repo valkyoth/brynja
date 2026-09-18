@@ -37,6 +37,7 @@ Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 | cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |
 | Hardened states and classified outputs | ✅ Implemented | ❌ No |
 | Scoped in-place hardened SHA-3/SHAKE/cSHAKE | Development; ownership checks implemented, residue qualification pending | ❌ No |
+| Scoped accelerated fixed-output SHA-3 | Development; explicit static/hosted session, residue qualification pending | ❌ No |
 | Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
 | Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |
@@ -56,6 +57,16 @@ reader; `Cshake128Workspace` / `Cshake256Workspace` initialize byte/bit N/S in
 the borrowed storage. These scoped APIs are portable: they do not select
 hardware/SIMD routes. This is not a whole-register/spill erasure claim.
 Existing by-value and accelerated APIs remain available unchanged.
+
+With `hardened-execution`, `hardened_execution::in_place` adds the four fixed
+SHA-3 workspaces for an explicit `KeccakSession`. They retain sponge, CPU scratch
+and output staging in caller-owned storage through `with`; finalization moves
+only the borrowed handle. Static sessions require the complete compiled feature
+bundle; hosted sessions require `runtime-execution` and the existing platform
+authority. No fallback or renewed authority is implied. The outer result is
+admission and the inner value is the callback result. See the compiled module
+example and [in-place guide](../../docs/hardened-in-place.md).
+Scoped accelerated SHAKE/cSHAKE readers remain pending.
 
 ## Use
 

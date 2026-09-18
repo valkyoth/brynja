@@ -45,6 +45,10 @@ fn check_vector(line: &str) -> bool {
     let Some(input) = canonical(&message, input_bits) else {
         return false;
     };
+    #[cfg(feature = "hardened-execution")]
+    if check_scoped_fixed(algorithm, input, &expected).is_err() {
+        return false;
+    }
     match algorithm {
         "sha3-224" => sha3_224_bits(input)
             .map(|value| value.as_bytes().as_slice() == expected.as_slice())
@@ -62,6 +66,56 @@ fn check_vector(line: &str) -> bool {
         "shake256" => check_xof(input, output_bits, &expected, false),
         _ => false,
     }
+}
+
+#[cfg(feature = "hardened-execution")]
+fn check_scoped_fixed(
+    algorithm: &str,
+    input: Fips202BitString<'_>,
+    expected: &[u8],
+) -> Result<(), brynja_hash_sha3::hardened_execution::Error> {
+    use brynja_crypto_cpu::static_execution::{Authority, Kernel};
+    use brynja_hash_sha3::hardened_execution::{Error, KeccakSession, in_place::*};
+    let kernel = if cfg!(target_arch = "aarch64") {
+        Kernel::ArmKeccak
+    } else {
+        Kernel::X86Keccak
+    };
+    let selected = Authority::new(kernel);
+    if std::env::var_os("BRYNJA_REQUIRE_SCOPED_KECCAK").is_some() {
+        assert!(selected.is_ok());
+    }
+    let Ok(owner) = selected else {
+        return Ok(());
+    };
+    macro_rules! check {
+        ($workspace:ident) => {{
+            let mut workspace =
+                $workspace::new(KeccakSession::from_static(&owner).map_err(Error::Backend)?)?;
+            let mut output = vec![0xa5; expected.len()];
+            let secret =
+                workspace.with(|state| state.finalize_bits_secret(input, &mut output))??;
+            assert_eq!(secret.expose(), expected);
+            drop(secret);
+            assert!(output.iter().all(|b| *b == 0));
+            workspace.with(|state| {
+                state.finalize_bits_public(
+                    input,
+                    &mut output,
+                    brynja_hash_sha3::Sha3PublicDeclassification::acknowledge(),
+                )
+            })??;
+            assert_eq!(output, expected);
+        }};
+    }
+    match algorithm {
+        "sha3-224" => check!(Sha3_224Workspace),
+        "sha3-256" => check!(Sha3_256Workspace),
+        "sha3-384" => check!(Sha3_384Workspace),
+        "sha3-512" => check!(Sha3_512Workspace),
+        _ => {}
+    }
+    Ok(())
 }
 
 fn check_xof(input: Fips202BitString<'_>, bits: usize, expected: &[u8], strength128: bool) -> bool {

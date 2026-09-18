@@ -7,14 +7,39 @@ name = "brynja-core"
 version = "0.9.0"
 
 [[package]]
+name = "brynja-crypto-cpu"
+version = "0.1.1"
+dependencies = [
+ "brynja-core",
+]
+
+[[package]]
+name = "brynja-crypto-cpu-std"
+version = "0.1.1"
+dependencies = [
+ "brynja-crypto-cpu",
+ "brynja-hash-sha2",
+]
+
+[[package]]
 name = "brynja-hash-core"
 version = "0.1.0"
+
+[[package]]
+name = "brynja-hash-sha2"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-crypto-cpu",
+ "brynja-hash-core",
+]
 
 [[package]]
 name = "brynja-hash-sha3"
 version = "0.1.0"
 dependencies = [
  "brynja-core",
+ "brynja-crypto-cpu",
  "brynja-hash-core",
 ]
 
@@ -22,5 +47,7 @@ dependencies = [
 name = "brynja-in-place-sha3-fixture"
 version = "0.0.0"
 dependencies = [
+ "brynja-crypto-cpu",
+ "brynja-crypto-cpu-std",
  "brynja-hash-sha3",
 ]

@@ -7,6 +7,8 @@
   whole-API register/spill qualification remain pending.
 - Add scoped named and general-t SHA-2 execution workspaces with explicit existing routes,
   stable engine/scratch ownership and unchanged authority/revocation boundaries.
+- Add scoped fixed-output SHA-3 execution workspaces retaining sponge, CPU
+  scratch and output staging; accelerated XOF scopes remain pending.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
   exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration
   pass; exceptional pentest and final release verification remain pending.

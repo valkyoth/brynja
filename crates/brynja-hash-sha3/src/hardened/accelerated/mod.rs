@@ -11,6 +11,7 @@
 
 mod engine;
 mod fixed;
+pub mod in_place;
 mod reader;
 mod xof;
 

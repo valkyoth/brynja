@@ -15,6 +15,7 @@ OUTPUT = Path("crates/brynja-hash-sha2/src/hardened/output.rs")
 STATE32 = Path("crates/brynja-hash-sha2/src/hardened/state32.rs")
 STATE64 = Path("crates/brynja-hash-sha2/src/hardened/state64.rs")
 SCALAR32 = Path("crates/brynja-hash-sha2/src/hardened/compress32.rs")
+SCALAR64 = Path("crates/brynja-hash-sha2/src/hardened/compress64.rs")
 TEST = Path("crates/brynja-hash-sha2/tests/hardened.rs")
 LENGTH_TEST = Path("crates/brynja-hash-sha2/src/hardened/tests.rs")
 LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
@@ -28,7 +29,7 @@ MIRI = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 FILES = (
     OWNER, API, OUTPUT, STATE32, STATE64, TEST, LENGTH_TEST, LIB, CRYPTO, CHECKS, CODEGEN,
-    FIXTURE_MANIFEST, FIXTURE_LOCK, FIXTURE_LIB, MIRI, SANITIZER, SCALAR32,
+    FIXTURE_MANIFEST, FIXTURE_LOCK, FIXTURE_LIB, MIRI, SANITIZER, SCALAR32, SCALAR64,
 )
 
 
@@ -57,13 +58,14 @@ def require(text: str, token: str, label: str) -> None:
 
 def validate(root: Path = ROOT) -> None:
     loaded = {path: read(root, path) for path in FILES}
-    scalar = re.sub(r'\s+', '', loaded[SCALAR32])
     condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
-    if scalar.count('#[cfg('+condition+')]') != 2 or scalar.count('#[cfg(not('+condition+'))]') != 2:
-        fail('scalar SHA-256 native/model target separation changed')
-    for token in ('native::compress(&mutowner.chaining_state,&owner.block_copy,&mutowner.message_schedule,);',
-                  'model::compress(owner);', 'owner.message_schedule.fill(0);'):
-        require(scalar, token, 'scalar dispatch/model cleanup')
+    for path in (SCALAR32, SCALAR64):
+        scalar = re.sub(r'\s+', '', loaded[path])
+        if scalar.count('#[cfg('+condition+')]') != 2 or scalar.count('#[cfg(not('+condition+'))]') != 2:
+            fail(f'scalar SHA-2 native/model target separation changed: {path}')
+        for token in ('native::compress(&mutowner.chaining_state,&owner.block_copy,&mutowner.message_schedule,);',
+                      'model::compress(owner);', 'owner.message_schedule.fill(0);'):
+            require(scalar, token, 'scalar dispatch/model cleanup')
     owner = loaded[OWNER]
     fields = (
         "chaining_state", "partial_input", "message_length", "phase",

@@ -11,7 +11,7 @@ SOURCE_HASHES = {
     "crates/brynja-hash-sha2/src/error.rs": "9657f1223bd80a8c16f93585f690a7b17dd2fe51486ccf161a962810f79cfa7e",
     "crates/brynja-hash-sha2/src/sha224.rs": "c9ab24aa6428539109215bc639a38e555bba19ba1ad1c6fe3e2a241187c8f6b5",
     "crates/brynja-hash-sha2/src/sha256.rs": "7e7608615c9bc80703f0711230453d9390df70e06ce71bb61310179c71d9d701",
-    "crates/brynja-hash-sha2/src/compress64.rs": "962e2a6701ffbaba7204ed3c2d0e9d804d581582d8ccec90dd3cc413f61e4e6a",
+    "crates/brynja-hash-sha2/src/compress64.rs": "bb25dfd4b5abac5e4b9283e46c0cb00a34e94906950debcee64a542522292419",
     "crates/brynja-hash-sha2/src/sha512_state.rs": "621cda9793ff1f489533101cbdad23da26bd467a2909faa1e3c2fc334ebc0d10",
     "crates/brynja-hash-sha2/src/sha384.rs": "9e173d94cd38acf6a40d644eac356ec6f7d3042d1da5a84f5c2c78f67709513a",
     "crates/brynja-hash-sha2/src/sha512.rs": "2f643003d20f30441da5efd84ec50f9baa6894a6e1162b1aaebf5abd862aa125",

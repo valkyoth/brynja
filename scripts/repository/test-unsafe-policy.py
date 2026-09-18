@@ -210,6 +210,8 @@ def scalar_boundary(family):
     relative = Path(f'crates/brynja-legacy-{family}/src/compress/native.rs')
     if family == 'sha256':
         relative = Path('crates/brynja-hash-sha2/src/hardened/compress32/native.rs')
+    if family == 'sha512':
+        relative = Path('crates/brynja-hash-sha2/src/hardened/compress64/native.rs')
     source = (ROOT / relative).read_text()
     _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
     unsafe_policy.validate_allowed(relative, source, blocks, items, proofs)
@@ -222,8 +224,18 @@ def scalar_boundary(family):
                  ('out(', 'lateout('),
                  ('options(nostack)', 'options(nostack, nomem)'),
                  ('options(nostack)', 'options(nostack, readonly)')]
-    if family == 'sha256':
+    if family in ('sha256', 'sha512'):
         mutations = [(a.replace('64]', '128]'), b.replace('63]', '127]')) for a, b in mutations]
+    if family == 'sha512':
+        mutations += [('"and r11d, 127"', '"and r11d, 63"'),
+                      ('"and x10, x9, #127"', '"and x10, x9, #63"'),
+                      ('"cmp r10d, 640"', '"cmp r10d, 632"'),
+                      ('"cmp x9, #640"', '"cmp x9, #632"'),
+                      ('scratch: &mut [u8; 640]', 'scratch: &mut [u8; 632]'),
+                      ('constants: &[u64; 80]', 'constants: &[u64; 79]'),
+                      ('"mov qword ptr [{scratch} + r10], 0"', '"nop"'),
+                      ('"str xzr, [{scratch}, x9]"', '"nop"')]
+    elif family == 'sha256':
         mutations += [('"cmp r10d, 256"', '"cmp r10d, 252"'),
                       ('"cmp x9, #256"', '"cmp x9, #252"'),
                       ('"cmp r10d, 640"', '"cmp r10d, 636"'),
@@ -240,6 +252,8 @@ def scalar_boundary(family):
                   if family == 'sha1' else [('"cmp r14d, 64"', '"cmp r14d, 63"'),
                                             ('"cmp w10, #64"', '"cmp w10, #63"')])
     registers = ('eax', 'ecx', 'edx', 'r8d', 'r10d') if family == 'sha256' else ('eax', 'ecx', 'edx', 'r8d', 'r9d', 'r10d', 'r11d', 'r14d')
+    if family == 'sha512':
+        registers = registers[:-1]
     mutations += [(f'"xor {r}, {r}"', '"nop"') for r in registers]
     last = 13 if family == 'sha1' else 11 if family == 'sha256' else 12
     mutations += [(f'"mov x{i}, xzr"', '"nop"') for i in range(4, last)]
@@ -264,6 +278,7 @@ if __name__ == "__main__":
     scalar_boundary('md5')
     scalar_boundary('sha1')
     scalar_boundary('sha256')
+    scalar_boundary('sha512')
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
     print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

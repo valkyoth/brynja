@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: seventy-two exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy-three exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-two exact modules: the private core volatile clearer; the
+Rust in only seventy-three exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -186,6 +186,17 @@ participate; the remainder is preserved. Schedule and round state are stored
 explicitly in owned scratch, never compiler stack storage, and all 640 bytes
 clear inside the stack/call-free block. EAX/ECX/EDX/R8/R10 or X4-X10 clear before
 return. The remaining portable model and high-level copies are not qualified.
+
+SHA-2's `hardened/compress64/native.rs` extends that baseline boundary to the
+hardened SHA-512 family (including SHA-384 and named/general SHA-512/t). The
+same fixed state/input/scratch sizes and 80 public u64 constants enter. A
+16-word rolling schedule occupies scratch bytes 0..128; working state occupies
+128..192. Every schedule index is eight-byte aligned and masked to 127.
+All 80 rounds, feed-forward and erasure of all 640 bytes stay opaque and
+stack/call-free. RAX/RCX/RDX/R8-R11 or X4-X11 and condition flags clear before
+return. Independent full-schedule comparisons, guarded bounds, immediate
+register snapshots and compiled mutations cover the development boundary.
+No owner size, public API, feature default or acceleration authority changes.
 
 These sixteen kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.

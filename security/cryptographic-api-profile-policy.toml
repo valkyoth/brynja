@@ -1035,7 +1035,7 @@ sha256 = "7001a6d7958150b68240cd3c959fef834af76bcf5b8eef982b8d165b394ff86b"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/hardened/compress64.rs"
-sha256 = "300af80705a2c7744f52a87b095f96cc2e1b7b5ec3d6fed22c1abb956c55e95e"
+sha256 = "afc0f6480c2e9550c875c0775961657ac3cce59a62ff9e4597d0cc8d1065ac2e"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/hardened/mod.rs"
@@ -1071,11 +1071,11 @@ sha256 = "50fd84ff28dd35d92e55abbde89ad18443abd436ea270f1dcdbb809d2b57cf5c"
 
 [[reviewed-source]]
 path = "scripts/sha2/sha2_hardened.py"
-sha256 = "a70def5491b20429d0f0671a445e9bf947be9333e02608d44f416262498bd35e"
+sha256 = "d1745f438cef700401815412b0c19a0c6f92aa221a55a9c4263cb7fd594d0c21"
 
 [[reviewed-source]]
 path = "scripts/sha2/test-sha2-hardened.py"
-sha256 = "e7b28c20b28730e99cbf410943bdabfcb65a6147476be14542e7e5327e3d723e"
+sha256 = "6c5e796424d5a60310cf008198175d3890775b2a75eed007f1bcb5f7849fdd68"
 
 [[reviewed-source]]
 path = "assurance/sha2-hardened-api/Cargo.lock"

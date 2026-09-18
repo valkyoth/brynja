@@ -1,4 +1,4 @@
-const ROUND_CONSTANTS: [u64; 80] = [
+pub(crate) const ROUND_CONSTANTS: [u64; 80] = [
     0x428a_2f98_d728_ae22,
     0x7137_4491_23ef_65cd,
     0xb5c0_fbcf_ec4d_3b2f,
@@ -131,6 +131,13 @@ fn schedule_word(schedule: &[u64; 80], index: usize) -> u64 {
     }
 }
 
+#[cfg(not(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+)))]
 pub(crate) fn round_constant(index: usize) -> u64 {
     ROUND_CONSTANTS.get(index).copied().unwrap_or(0)
 }

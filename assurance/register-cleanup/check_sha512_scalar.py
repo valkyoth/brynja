@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scalar SHA256 development evidence; not a release-gate change."""
+"""Scalar SHA512 development evidence; not a release-gate change."""
 from pathlib import Path
 import re
 import shutil
@@ -11,16 +11,40 @@ from check_transfer import instructions
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-SOURCE = ROOT / 'crates/brynja-hash-sha2/src/hardened/compress32/native.rs'
-FIXTURE = HERE / 'sha256-scalar'
-REGISTERS = ('eax', 'ecx', 'edx', 'r8d', 'r10d')
+SOURCE = ROOT / 'crates/brynja-hash-sha2/src/hardened/compress64/native.rs'
+FIXTURE = HERE / 'sha512-scalar'
+REGISTERS = ('eax', 'ecx', 'edx', 'r8d', 'r9d', 'r10d', 'r11d')
+
+
+def reference_constants(source):
+    """Reproduce the oracle table without reading production constants."""
+    primes = []
+    value = 2
+    while len(primes) < 80:
+        if all(value % prime for prime in primes if prime * prime <= value):
+            primes.append(value)
+        value += 1
+    expected = []
+    for prime in primes:
+        low, high = 0, 1 << 68
+        while low + 1 < high:
+            middle = (low + high) // 2
+            if middle ** 3 <= prime << 192:
+                low = middle
+            else:
+                high = middle
+        expected.append(low & ((1 << 64) - 1))
+    table = source.split('const fn constants()', 1)[1].split('}', 1)[0]
+    actual = [int(word, 16) for word in re.findall(r'0x[0-9a-f]{16}', table)]
+    if actual != expected:
+        raise ValueError('independent SHA-512 constants differ from integer cube roots')
 
 
 def inspect(text, arm):
     labels = list(re.finditer(r'(?m)^(_+(?:R|ZN)[^\s:]+):[^\n]*$', text))
     found = [text[m.end():labels[i+1].start() if i+1 < len(labels) else len(text)]
              for i, m in enumerate(labels) if '6scalar' in m[1]
-             and ('compress32' in m[1] or 'sha256_scalar_cleanup' in m[1])]
+             and ('compress64' in m[1] or 'sha512_scalar_cleanup' in m[1])]
     if len(found) != 1:
         raise ValueError('missing/ambiguous scalar identity')
     body = found[0]
@@ -36,11 +60,11 @@ def inspect(text, arm):
     cleanup, after = re.split(r'[^\n]*BRYNJA_SCALAR_END[^\n]*', rest)
     if re.search(r'\b(?:call\w*|push\w*|pop\w*|ret\w*|sp|rsp|rbp|bl|blr|br|x18|x29|x30)\b', active):
         raise ValueError('stack/call/escape in scalar computation')
-    allowed = (r'(?:ldr|ldur|str|mov|movk|cmp|b(?:\.hs|\.ne)?|and|bic|orr|eor|add|rev|ror)\b'
-               if arm else r'(?:movl|xorl|cmpl|jae|jmp|jne|andl|notl|orl|leal|imull|addl|shrl|roll|incl|bswapl|rorl)\b')
+    allowed = (r'(?:ldr|ldur|str|mov|movk|cmp|b(?:\.lo|\.ne)?|and|bic|orr|eor|add|rev|ror)\b'
+               if arm else r'(?:movq|movl|xorq|xorl|cmpl|jb|jmp|jne|andq|andl|orq|leal|addq|addl|shrq|bswapq|rorq)\b')
     if any(not re.match(allowed, op) for op in instructions(active)):
         raise ValueError('unreviewed scalar instruction or stronger ISA')
-    expected = ([f'mov x{i}, xzr' for i in range(4, 11)] + ['cmp xzr, xzr'] if arm
+    expected = ([f'mov x{i}, xzr' for i in range(4, 12)] + ['cmp xzr, xzr'] if arm
                 else [f'xorl %{r}, %{r}' for r in REGISTERS])
     normalized = lambda op: re.sub(r'\s+', ' ', op).replace(', ', ',')
     if [normalized(op) for op in instructions(cleanup)] != [normalized(op) for op in expected]:
@@ -72,8 +96,8 @@ def prepare(directory):
     fixture = directory / 'fixture'
     shutil.copytree(FIXTURE, fixture, ignore=shutil.ignore_patterns('target'))
     lib = fixture / 'src/lib.rs'
-    lib.write_text(lib.read_text().replace('../../../../crates/brynja-hash-sha2/src/hardened/compress32/native.rs', 'native.rs')
-                   .replace('../../../../crates/brynja-hash-sha2/src/compress.rs', str(ROOT/'crates/brynja-hash-sha2/src/compress.rs')))
+    lib.write_text(lib.read_text().replace('../../../../crates/brynja-hash-sha2/src/hardened/compress64/native.rs', 'native.rs')
+                   .replace('../../../../crates/brynja-hash-sha2/src/compress64.rs', str(ROOT/'crates/brynja-hash-sha2/src/compress64.rs')))
     test = fixture / 'src/tests.rs'
     test.write_text(test.read_text().replace('../../src/guard_memory.rs', str(HERE/'src/guard_memory.rs')))
     source = fixture / 'src/native.rs'
@@ -82,7 +106,7 @@ def prepare(directory):
 
 
 def controls(original, arm):
-    registers = tuple(f'x{i}' for i in range(4, 11)) if arm else REGISTERS
+    registers = tuple(f'x{i}' for i in range(4, 12)) if arm else REGISTERS
     wipes = [f'"mov {r}, xzr",' if arm else f'"xor {r}, {r}",' for r in registers]
     poison = ' '.join(f'"mov {r}, #-1",' if arm else f'"mov {r}, -1",' for r in registers)
     marker = '"// BRYNJA_SCALAR_ERASE",' if arm else '"# BRYNJA_SCALAR_ERASE",'
@@ -94,19 +118,21 @@ def controls(original, arm):
         assert cleanup.count(wipe) == 1
         yield wipe, prefix + marker + cleanup.replace(wipe, ''), False
     changes = ([
-        ('"cmp x9, #256"', '"cmp x9, #252"'),
-        ('"ror w8, w5, #2"', '"ror w8, w5, #3"'),
-        ('"ldur w5, [x10, #-60]"', '"ldur w5, [x10, #-56]"'),
-        ('"add w4, w4, w5"', '"sub w4, w4, w5"'),
-        ('"str wzr, [{scratch}, x9]"', '"nop"'),
-        ('"cmp x9, #640"', '"cmp x9, #636"'),
+        ('"cmp x9, #640"', '"cmp x9, #632"'),
+        ('"ror x8, x5, #28"', '"ror x8, x5, #27"'),
+        ('"add x11, x10, #72"', '"add x11, x10, #64"'),
+        ('"add x4, x4, x5"', '"sub x4, x4, x5"'),
+        ('"str xzr, [{scratch}, x9]"', '"nop"'),
+        ('"and x10, x9, #127"', '"and x10, x9, #63"'),
+        ('"b.lo 5f"', '"b 5f"'),
     ] if arm else [
-        ('"cmp r10d, 256"', '"cmp r10d, 252"'),
-        ('"ror r8d, 2"', '"ror r8d, 3"'),
-        ('"mov ecx, [{scratch} + r10 - 60]"', '"mov ecx, [{scratch} + r10 - 56]"'),
-        ('"add eax, [{scratch} + r10 + 256]"', '"sub eax, [{scratch} + r10 + 256]"'),
-        ('"mov dword ptr [{scratch} + r10], 0"', '"nop"'),
-        ('"cmp r10d, 640"', '"cmp r10d, 636"'),
+        ('"cmp r10d, 640"', '"cmp r10d, 632"'),
+        ('"ror r8, 28"', '"ror r8, 27"'),
+        ('"lea r9d, [r11 + 72]"', '"lea r9d, [r11 + 64]"'),
+        ('"add rax, [{scratch} + r10 + 128]"', '"sub rax, [{scratch} + r10 + 128]"'),
+        ('"mov qword ptr [{scratch} + r10], 0"', '"nop"'),
+        ('"and r11d, 127"', '"and r11d, 63"'),
+        ('"jb 5f"', '"jmp 5f"'),
     ])
     for old, new in changes:
         assert old in original
@@ -114,7 +140,15 @@ def controls(original, arm):
 
 
 def main():
-    with tempfile.TemporaryDirectory(prefix='brynja-sha256-scalar-') as temporary:
+    reference = (FIXTURE/'src/tests/reference.rs').read_text()
+    reference_constants(reference)
+    try:
+        reference_constants(reference.replace('0x428a2f98d728ae22', '0x428a2f98d728ae23'))
+    except ValueError:
+        pass
+    else:
+        raise ValueError('independent constant corruption passed')
+    with tempfile.TemporaryDirectory(prefix='brynja-sha512-scalar-') as temporary:
         directory = Path(temporary)
         fixture, source = prepare(directory)
         original = source.read_text()
@@ -155,7 +189,7 @@ def main():
                             pass
                         else:
                             raise ValueError('emitted boundary mutation passed')
-                    print(f'Scalar SHA256 assembly: {compiler} {target} release={release}: PASS', flush=True)
+                    print(f'Scalar SHA512 assembly: {compiler} {target} release={release}: PASS', flush=True)
                     if target not in ('x86_64-unknown-linux-gnu', 'aarch64-unknown-linux-musl'):
                         continue
                     crate_env = dict(env, CARGO_TARGET_DIR=env['CARGO_TARGET_DIR']+'-crate')
@@ -171,12 +205,12 @@ def main():
                         result = run(['cargo', '+'+compiler, 'test', *common, '--lib', '--', '--nocapture'], env, success=False)
                         log = result.stdout + result.stderr
                         if success:
-                            if result.returncode or 'SHA256_SCALAR: 1024 independent pairs;' not in log or 'SHA256_SCALAR_BOUNDS: 16 placements;' not in log:
+                            if result.returncode or 'SHA512_SCALAR: 1024 independent pairs;' not in log or 'SHA512_SCALAR_BOUNDS: 16 placements;' not in log:
                                 raise ValueError('positive control failed: '+log[-4000:])
                         elif result.returncode == 0 or 'test result: FAILED' not in log:
                             raise ValueError('mutant did not fail in execution: '+label+log[-4000:])
                         count += 1
-                    print(f'Scalar SHA256 real crate + runtime: {compiler} {target} release={release}; {count} controls/mutants: PASS', flush=True)
+                    print(f'Scalar SHA512 real crate + runtime: {compiler} {target} release={release}; {count} controls/mutants: PASS', flush=True)
 
 
 if __name__ == '__main__':

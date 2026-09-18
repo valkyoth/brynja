@@ -83,9 +83,10 @@ def validate(root=ROOT, write=False):
     paths.update(path.relative_to(root) for path in (root / 'scripts/sha2').glob('*hardened-execution*.py'))
     paths.add(Path('scripts/sha2/sha2_hardened_execution_policy.py'))
     paths.add(Path('scripts/sha2/sha2_hardened_cleanup_mutants.py'))
-    paths.add(Path('assurance/register-cleanup/check_sha256_scalar.py'))
-    for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs', 'src/tests/reference.rs'):
-        paths.add(Path('assurance/register-cleanup/sha256-scalar') / name)
+    for family in ('sha256', 'sha512'):
+        paths.add(Path(f'assurance/register-cleanup/check_{family}_scalar.py'))
+        for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs', 'src/tests/reference.rs'):
+            paths.add(Path(f'assurance/register-cleanup/{family}-scalar') / name)
     # The optional licensed emulator is not a native gate prerequisite. Bind
     # its driver and regression interpretation to the same reviewed source.
     for name in ('check-x86-sha512.py', 'x86_sha512_package.py', 'x86_sha512_regressions.py', 'x86_sha512_faults.py', 'x86_sha512_ci.py'):

@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"): ("1b87c3f35bde0f59fe65f54b2c14a1d93369d9c03fe6f20a7e336f7d7992ac1f", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"): ("d8e07cce1e24149d37874f3dd9828e587fbdf8ae61dd91bcf9b602ecbf914d5d", 6, 1, 6),
     Path("crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs"): ("c008b23798ed127c95607d333f633b845e2383752768588023ae5dfbb4f33dd8", 1, 1, 1),
     Path("crates/brynja-legacy-md5/src/cpu/arm_secret/kernel.rs"): ("3134097267beea2f7d2c97abaf8d3fb721a870b38581a4e8dbc0245c4194515c", 1, 1, 1),
@@ -181,7 +182,10 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
-    elif relative == Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"):
+    elif relative in {
+        Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"),
+        Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"),
+    }:
         required = ('pub(super) unsafe extern "C" fn transpose<const WORDS: usize, const PACK: bool>',
                     '#[inline(never)]', 'assert!(WORDS == 8 || WORDS == 16)')
         if any(text.count(token) != 1 for token in required):
@@ -189,7 +193,8 @@ def validate_allowed(
         if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_TRANSFER_BEGIN',
                 'BRYNJA_TRANSFER_ERASE', 'BRYNJA_TRANSFER_END', 'options(nostack)')):
             fail("transfer lost its two opaque architecture boundaries")
-        if text.count('width.min(8)') != 4:
+        lanes = 8 if relative.parent.name == 'sha256_hardened_batch' else 4
+        if text.count(f'width.min({lanes})') != 4:
             fail("safe transfer entry lost its fixed lane bound")
         if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly)\b',
                      re.sub(r'//[^\n]*', '', text)):

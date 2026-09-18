@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: sixty-six exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: sixty-seven exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only sixty-six exact modules: the private core volatile clearer; the
+Rust in only sixty-seven exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -103,7 +103,12 @@ four-lane AVX2 or two-lane NEON 64-bit kernels, not dedicated SHA512
 instruction paths. They use the same three integer/four vector working-register
 inventory as the narrower batch kernels. All 80 rounds and the complete
 schedule expansion remain inside the opaque block; inactive Arm output capacity
-is zeroed. SHA-384, named truncations and general SHA-512/t framing remain in
+is zeroed. `sha512_hardened_batch/transfer.rs` extends the same private opaque
+packing/commit boundary to 64-bit words in two/four active lanes. Its fixed
+8/16-word layouts, scalar registers, pointer-only inputs, erasure and modeled
+fallback have the same restrictions as the narrower transfer module. It adds
+no dedicated SHA512 requirement and retains the health/counter check before
+caller-state commit. SHA-384, named truncations and general SHA-512/t framing remain in
 their existing callers, outside this kernel-boundary claim.
 
 The packed Keccak ports add `keccak_hardened_batch/{x86,arm}/secret.rs`.

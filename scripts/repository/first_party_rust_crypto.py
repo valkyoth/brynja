@@ -35,6 +35,7 @@ FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"(?:C|system|stdcall|cdec
 # These are Rust function DEFINITIONS, not imported foreign implementations.
 # The separate unsafe inventory binds their complete first-party assembly bytes.
 LOCAL_C_ABI = {
+    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"),
     Path("crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs"),
     Path("crates/brynja-legacy-md5/src/cpu/arm_secret/kernel.rs"),

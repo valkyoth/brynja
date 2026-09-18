@@ -51,6 +51,14 @@ impl Workspace {
     pub fn clear(&mut self) {
         self.wipe();
     }
+    #[cfg(any(
+        miri,
+        kani,
+        not(any(
+            target_arch = "x86_64",
+            all(target_arch = "aarch64", target_endian = "little")
+        ))
+    ))]
     pub(super) fn pack_bytes(
         &mut self,
         states: &[[u8; 64]; 4],
@@ -87,6 +95,14 @@ impl Workspace {
         }
         Ok(())
     }
+    #[cfg(any(
+        miri,
+        kani,
+        not(any(
+            target_arch = "x86_64",
+            all(target_arch = "aarch64", target_endian = "little")
+        ))
+    ))]
     pub(super) fn commit_bytes(&self, states: &mut [[u8; 64]; 4], width: usize) {
         for (lane, state) in states.iter_mut().enumerate().take(width) {
             for (out, packed) in state.as_chunks_mut::<8>().0.iter_mut().zip(&self.work) {
@@ -115,6 +131,14 @@ impl Workspace {
         let _ = clear_owned_region(self.work.as_flattened_mut());
         let _ = clear_owned_region(self.temporary.as_flattened_mut());
     }
+    #[cfg(any(
+        miri,
+        kani,
+        not(any(
+            target_arch = "x86_64",
+            all(target_arch = "aarch64", target_endian = "little")
+        ))
+    ))]
     pub(super) fn pack(
         &mut self,
         states: &[[u64; 8]; 4],
@@ -151,6 +175,14 @@ impl Workspace {
         Ok(())
     }
     // Fixed equal-size zips; no fallible operations after output commit begins.
+    #[cfg(any(
+        miri,
+        kani,
+        not(any(
+            target_arch = "x86_64",
+            all(target_arch = "aarch64", target_endian = "little")
+        ))
+    ))]
     pub(super) fn commit(&self, states: &mut [[u64; 8]; 4], width: usize) {
         for (lane, state) in states.iter_mut().enumerate().take(width) {
             for (out, packed) in state.iter_mut().zip(&self.work) {
@@ -164,6 +196,51 @@ impl Workspace {
         }
     }
 }
+// Native supported architectures transfer only through the opaque pointer-only
+// boundary. The safe reference above remains available to Miri/Kani and targets
+// without these kernels; neither is register-cleanup qualification.
+#[cfg(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+))]
+impl Workspace {
+    pub(super) fn pack_bytes(
+        &mut self,
+        states: &[[u8; 64]; 4],
+        blocks: &[[u8; 128]; 4],
+        width: usize,
+    ) -> Result<(), Error> {
+        self.wipe();
+        if width != 2 && width != 4 {
+            return Err(Error::Invariant);
+        }
+        super::transfer::pack_bytes(self, states, blocks, width);
+        Ok(())
+    }
+    pub(super) fn pack(
+        &mut self,
+        states: &[[u64; 8]; 4],
+        blocks: &[[u8; 128]; 4],
+        width: usize,
+    ) -> Result<(), Error> {
+        self.wipe();
+        if width != 2 && width != 4 {
+            return Err(Error::Invariant);
+        }
+        super::transfer::pack(self, states, blocks, width);
+        Ok(())
+    }
+    pub(super) fn commit_bytes(&self, states: &mut [[u8; 64]; 4], width: usize) {
+        super::transfer::commit_bytes(self, states, width);
+    }
+    pub(super) fn commit(&self, states: &mut [[u64; 8]; 4], width: usize) {
+        super::transfer::commit(self, states, width);
+    }
+}
+
 impl Drop for Workspace {
     fn drop(&mut self) {
         self.wipe();

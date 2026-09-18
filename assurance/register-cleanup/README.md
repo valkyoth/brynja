@@ -13,9 +13,10 @@ residue across selected public hardened calls while their owned-output clearing
 tests pass. Its source-bound diagnostics are not release qualification; they
 identify work outside the sixteen accelerated kernel boundaries.
 
-The [SHA-224/256 batch transfer probe](sha256-transfer/README.md) covers opaque
-word/byte packing and output commit around that family's compression kernels.
-The post-compression health check still precedes output commit. Other batch
+The [SHA-224/256](sha256-transfer/README.md) and
+[SHA-512-family](sha512-transfer/README.md) batch transfer probes cover opaque
+word/byte packing and output commit around those families' compression kernels.
+The post-compression health check still precedes output commit. Keccak/MD5 batch
 transfers and high-level framing/owner copies remain separate work.
 
 ## Intended boundary

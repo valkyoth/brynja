@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "843d657c34446287d2e24250118ec78a0a8f4fbea5520bfeeeec83e59c9dca84"
+EXPECTED_POLICY_SHA256 = "63a9e2c9279e876c2f0d03c7c8fbd16207d573df8e0dec8b74abdea8369b3885"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -59,6 +59,8 @@ SOURCE_STATUS = {
     (CPU, "src/keccak_hardened_batch/tests.rs"): "hardened-keccak-batch-lifecycle-tests",
     (CPU, "src/sha512_hardened_batch/mod.rs"): "hardened-sha512-batch-authority",
     (CPU, "src/sha512_hardened_batch/scratch.rs"): "hardened-sha512-batch-owned-storage",
+    (CPU, "src/sha512_hardened_batch/transfer.rs"): "hardened-sha512-batch-opaque-state-transfer",
+    (CPU, "src/sha512_hardened_batch/transfer_tests.rs"): "hardened-sha512-batch-state-transfer-tests",
     (CPU, "src/sha512_hardened_batch/platform.rs"): "hardened-sha512-batch-platform-import",
     (CPU, "src/sha512_hardened_batch/x86.rs"): "hardened-sha512-batch-four-lane-avx2",
     (CPU, "src/sha512_hardened_batch/arm.rs"): "hardened-sha512-batch-two-lane-neon",

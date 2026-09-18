@@ -11,6 +11,14 @@ use core::{cell::Cell, marker::PhantomData};
 mod arm;
 mod platform;
 mod scratch;
+#[cfg(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+))]
+mod transfer;
 #[cfg(target_arch = "x86_64")]
 mod x86;
 pub use scratch::Workspace;
@@ -313,3 +321,5 @@ impl Drop for Operation<'_, '_> {
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod transfer_tests;

@@ -196,13 +196,13 @@ sha256 = "195e36933ea0b1c92233d650ffa156c663b1dc9529e0351fa3f704f93e01aa82"
 package = "brynja-crypto-cpu"
 path = "src/sha512_hardened_batch/mod.rs"
 status = "hardened-sha512-batch-authority"
-sha256 = "81c6bb0c604ccdb19c9cf28d0f7030b733e9919f33edff6eefd53bbf6e8ed649"
+sha256 = "5001092c04b0ca1a546ce1c0ad0676d84f9f2112a8fad82956766d4566932db5"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/sha512_hardened_batch/scratch.rs"
 status = "hardened-sha512-batch-owned-storage"
-sha256 = "fe856418b43ef11dab88df7f21291763d57a2416943584b523de4651d9f829f8"
+sha256 = "fe21a6fa378c816136aaad252e545e1c0e5fbb6e12c86e67b9c44354be46d02d"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -227,6 +227,18 @@ package = "brynja-crypto-cpu"
 path = "src/sha512_hardened_batch/tests.rs"
 status = "hardened-sha512-batch-lifecycle-tests"
 sha256 = "603d5876e5d1e70a2016cf9f5e40352505fb27901c3f8fe8efe2a4e9303d844b"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha512_hardened_batch/transfer.rs"
+status = "hardened-sha512-batch-opaque-state-transfer"
+sha256 = "1b87c3f35bde0f59fe65f54b2c14a1d93369d9c03fe6f20a7e336f7d7992ac1f"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha512_hardened_batch/transfer_tests.rs"
+status = "hardened-sha512-batch-state-transfer-tests"
+sha256 = "bcb6e35084f7ce83c93430e66f3f2a6ebde7b8500b47aab079cef8081a1a11af"
 
 [[sources]]
 package = "brynja-crypto-cpu"

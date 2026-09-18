@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SHA-256 packing development checks; never changes a release gate."""
+"""SHA-2 packing development checks; never changes a release gate."""
 import argparse
 from pathlib import Path
 import re
@@ -10,6 +10,7 @@ import check
 from check_callers import clean_environment
 
 ROOT = Path(__file__).resolve().parent
+FAMILY = 'sha256'
 SOURCE = ROOT.parents[1] / 'crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs'
 FIXTURE = ROOT / 'sha256-transfer'
 
@@ -83,7 +84,7 @@ def integrated(directory, compiler, target, release):
     env['RUSTFLAGS'] = '-C target-feature=' + ('+neon' if arm else '+avx2')
     command = ['cargo', '+' + compiler, 'rustc', '--locked', '--offline',
                '--manifest-path', str(ROOT.parents[1] / 'Cargo.toml'),
-               '-p', 'brynja-crypto-cpu', '--features', 'sha256-hardened-batch',
+               '-p', 'brynja-crypto-cpu', '--features', FAMILY + '-hardened-batch',
                '--target', target, '--lib']
     if release:
         command += ['--release']
@@ -96,10 +97,16 @@ def integrated(directory, compiler, target, release):
 
 
 def main():
+    global FAMILY, SOURCE, FIXTURE
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--arm', action='store_true')
+    parser.add_argument('--family', choices=('sha256', 'sha512'), default='sha256')
     args = parser.parse_args()
-    with tempfile.TemporaryDirectory(prefix='brynja-sha256-transfer-') as temporary:
+    FAMILY = args.family
+    SOURCE = ROOT.parents[1] / f'crates/brynja-crypto-cpu/src/{FAMILY}_hardened_batch/transfer.rs'
+    FIXTURE = ROOT / (FAMILY + '-transfer')
+    layouts = 2592 if FAMILY == 'sha256' else 1440
+    with tempfile.TemporaryDirectory(prefix=f'brynja-{FAMILY}-transfer-') as temporary:
         directory = Path(temporary)
         fixture, source = prepare(directory)
         original = source.read_text()
@@ -150,12 +157,24 @@ def main():
                     if target not in ('x86_64-unknown-linux-gnu', 'aarch64-unknown-linux-musl'):
                         continue
                     integrated(directory, compiler, target, release)
+                    register = ('w4' if FAMILY == 'sha256' else 'x4') if arm else ('eax' if FAMILY == 'sha256' else 'rax')
                     mutations = ([('"mov x4, xzr",', '"mov x4, #1",'),
-                                  ('"rev w4, w4",', ''), ('"str w4, [{destination}, x7]",', '"// omitted {destination}",'),
-                                  ('"ldr w4, [{source}, x7]",', '"// omitted {source}", "mov w4, #0",')]
+                                  (f'"rev {register}, {register}",', ''),
+                                  (f'"str {register}, [{{destination}}, x7]",', '"// omitted {destination}",'),
+                                  (f'"ldr {register}, [{{source}}, x7]",', '"// omitted {source}", "mov x4, #0",')]
                                  if arm else [('"xor eax, eax",', '"mov eax, 1",'),
-                                              ('"bswap eax",', ''), ('"mov [{destination} + rdx], eax",', '"# omitted {destination}",'),
-                                              ('"mov eax, [{source} + rdx]",', '"# omitted {source}", "xor eax, eax",')])
+                                              (f'"bswap {register}",', ''),
+                                              (f'"mov [{{destination}} + rdx], {register}",', '"# omitted {destination}",'),
+                                              (f'"mov {register}, [{{source}} + rdx]",', '"# omitted {source}", "xor eax, eax",')])
+                    if FAMILY == 'sha512':
+                        # A 32-bit transplant must not truncate the upper half
+                        # of a state, input word or output, even if it clears.
+                        mutations += ([('"ldr x4, [{source}, x7]",', '"ldr w4, [{source}, x7]",'),
+                                       ('"str x4, [{destination}, x7]",', '"str w4, [{destination}, x7]",'),
+                                       ('"rev x4, x4",', '"rev w4, w4",')]
+                                      if arm else [('"mov rax, [{source} + rdx]",', '"mov eax, [{source} + rdx]",'),
+                                                   ('"mov [{destination} + rdx], rax",', '"mov [{destination} + rdx], eax",'),
+                                                   ('"bswap rax",', '"bswap eax",')])
                     cases = [('original', original, True)]
                     # Poison before erasure must still pass; then omit its wipe.
                     wipe = '"mov x4, xzr",' if arm else '"xor eax, eax",'
@@ -171,11 +190,11 @@ def main():
                         result = check.run(['cargo', '+' + compiler, 'test', *common, '--lib', '--', '--nocapture'], env, success=False)
                         log = result.stdout + result.stderr
                         if succeeds:
-                            if result.returncode or 'SHA256_TRANSFER: 2592 layouts;' not in log or 'SHA256_TRANSFER_BOUNDS: 12 guarded placements;' not in log:
+                            if result.returncode or f'{FAMILY.upper()}_TRANSFER: {layouts} layouts;' not in log or f'{FAMILY.upper()}_TRANSFER_BOUNDS: 12 guarded placements;' not in log:
                                 raise ValueError('positive transfer control failed: ' + log[-4000:])
                         elif result.returncode == 0 or 'test result: FAILED' not in log:
                             raise ValueError('mutant did not fail in execution: ' + label + log[-4000:])
-                    print(f'Transfer runtime: {compiler} {target} release={release}: 7 controls/mutants PASS', flush=True)
+                    print(f'Transfer runtime: {compiler} {target} release={release}: {len(cases)} controls/mutants PASS', flush=True)
         source.write_text(original)
 
 

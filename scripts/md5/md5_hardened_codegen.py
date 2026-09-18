@@ -1,4 +1,4 @@
-"""Whole owned-region destruction and actual SIMD; not register-erasure proof."""
+"""Whole owned-region destruction and exact opaque SIMD register boundaries."""
 import os
 import re
 import subprocess
@@ -8,6 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/cryptography'))
 import mir_cleanup_flow as flow
+sys.path.insert(0, str(ROOT / 'assurance/register-cleanup'))
+import check_md5 as boundary
 
 
 def require(condition, label):
@@ -56,12 +58,10 @@ def asm_body(text, tokens):
 
 def artifacts_check(mir, llvm, assembly, target, panic):
     mir_check(mir, panic)
-    # Target-feature private kernels may inline into this distinct authority.
-    body = asm_body(assembly, ('brynja_legacy_md5', 'cpu', 'secret', 'Authority', 'compress'))
-    for instruction in (('vpaddd', 'vpsllvd', 'vpsrlvd') if target.startswith('x86_64') else ('add', 'ushl')):
-        pattern = (r'^\s*'+instruction+r'\.4s\s+v\d+,' if target == 'aarch64-apple-darwin'
-                   else r'^\s*'+instruction+r'\s+[^\n]*(?:%ymm|v\d+\.4[si])')
-        require(re.search(pattern, body, re.M), 'actual SIMD '+instruction)
+    # A wrapper or ordinary kernel cannot donate instructions to this identity.
+    arch = 'x86' if target.startswith('x86_64') else 'arm'
+    body = asm_body(assembly, ('brynja_legacy_md5', arch+'_secret', '6kernel8compress'))
+    boundary.inspect(body, arch)
     wipe = asm_body(assembly, ('brynja_legacy_md5', 'scratch', 'Scratch', 'wipe'))
     require('clear_owned_region' in wipe, 'emitted clearing boundary')
     functions = re.findall(r'^define [^\n]*\{.*?^}', llvm, re.M | re.S)

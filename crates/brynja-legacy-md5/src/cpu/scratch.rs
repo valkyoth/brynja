@@ -1,6 +1,7 @@
 //! All source-owned packed SIMD storage, including unused NEON half-lanes.
 use brynja_core::clear_owned_region;
 
+#[repr(C)]
 pub(crate) struct Scratch {
     pub(crate) initial: [[u8; 32]; 4],
     pub(crate) words: [[u8; 32]; 16],
@@ -28,30 +29,6 @@ impl Drop for Scratch {
     fn drop(&mut self) {
         self.wipe();
     }
-}
-
-#[cfg(any(
-    target_arch = "x86_64",
-    all(target_arch = "aarch64", target_endian = "little")
-))]
-pub(super) fn round(round: usize) -> Result<(usize, i32), super::Md5BackendError> {
-    let (index, shifts) = match round {
-        0..=15 => (round, [7, 12, 17, 22]),
-        16..=31 => (
-            round.saturating_mul(5).saturating_add(1) % 16,
-            [5, 9, 14, 20],
-        ),
-        32..=47 => (
-            round.saturating_mul(3).saturating_add(5) % 16,
-            [4, 11, 16, 23],
-        ),
-        48..=63 => (round.saturating_mul(7) % 16, [6, 10, 15, 21]),
-        _ => return Err(super::Md5BackendError::Quarantined),
-    };
-    let shift = shifts
-        .get(round % 4)
-        .ok_or(super::Md5BackendError::Quarantined)?;
-    Ok((index, *shift))
 }
 
 #[cfg(test)]

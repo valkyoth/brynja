@@ -7,8 +7,25 @@ import subprocess
 import tempfile
 from unittest.mock import patch
 import md5_hardened_policy as policy
+import md5_hardened_codegen as codegen
+
+
+def opaque_identity():
+    for arch in ('x86','arm'):
+        tokens = ('brynja_legacy_md5', arch+'_secret', '6kernel8compress')
+        symbol = '_RNbrynja_legacy_md5'+arch+'_secret6kernel8compress'
+        valid = symbol+':\n ret\n_RNordinary:\n omitted_simd\n'
+        assert codegen.asm_body(valid,tokens).strip() == 'ret'
+        for mutated in (valid+valid, valid.replace('6kernel8compress','compress_secret'),
+                        valid.replace(arch+'_secret','ordinary'), '',
+                        valid.replace(symbol,'Lordinary')):
+            try: codegen.asm_body(mutated,tokens)
+            except ValueError: pass
+            else: raise AssertionError('opaque MD5 identity regression accepted')
+    print('MD5 opaque identity rejects ten wrapper/ordinary/ambiguous substitutions')
 
 def main():
+    opaque_identity()
     policy.validate()
     count=0
     with tempfile.TemporaryDirectory(prefix='brynja-md5-hardened-policy-') as directory:

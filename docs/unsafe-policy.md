@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: sixty-three exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: sixty-five exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only sixty-three exact modules: the private core volatile clearer; the
+Rust in only sixty-five exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -111,7 +111,17 @@ Unaligned operands are supported without adding SSSE3, SSE4 or AVX requirements.
 The caller's owner and failure-guard clearing remain unchanged; framing and
 portable processing still need their separate audit.
 
-These fourteen kernel boundaries are under implementation-author verification, not
+The legacy MD5 ports add `cpu/{x86_secret,arm_secret}/kernel.rs` inside
+`brynja-legacy-md5`. Exact repr(C) layout assertions bind the 864-byte owner;
+initial state/message/temporary storage clears, leaving only work at 640..768.
+Eight AVX2 or four NEON lanes retain their existing ISA requirements. Arm also
+clears inactive output half-lanes. All 64 rounds, feed-forward and erasure of
+the three integer/four vector working registers stay in the opaque block.
+The public 80-word constant table includes the sixteen rotation counts and is
+checked against an independent RFC 1321 sine construction. MD5 remains broken;
+these cleanup properties do not restore collision resistance.
+
+These sixteen kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.
 Pre-existing caller registers and caller-owned buffers are not erased. Abort,
 interruption during computation, OS snapshots and platform storage remain

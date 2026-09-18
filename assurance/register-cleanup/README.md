@@ -2,10 +2,10 @@
 
 Development assurance code, **not complete release evidence**.
 The owner requested register-remanence remediation across the hardened backends
-before another pentest. SHA-224/256, SHA-512, Keccak (single-state and batch) and legacy SHA-1
+before another pentest. SHA-224/256, SHA-512, Keccak (single-state and batch), legacy SHA-1 and MD5
 use this boundary in production;
 the fixture directly includes their actual private source files, rather than
-testing duplicate implementations. Other ports and native qualification remain
+testing duplicate implementations. Portable/caller-side work and native qualification remain
 pending. Release gates are unchanged. Finding F1 remains open.
 
 ## Intended boundary
@@ -54,6 +54,8 @@ or independent verification claim follows from these tests.
 | Arm Keccak batch | QEMU, 1,024 independent batches per positive run | Three integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 | x86 legacy SHA-1 | Native Linux x86-64 and i686 SHA-NI, 1,024 arbitrary state/block pairs per positive run | EAX plus XMM0–3; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
 | Arm legacy SHA-1 | QEMU, 1,024 arbitrary state/block pairs per positive run | X4–6 plus V0–5; D8–15 caller canaries | Integrated; native qualification pending |
+| x86 legacy MD5 batch | Native Linux AVX2, 1,024 independent batches per positive run | Three integer registers plus four complete YMM registers; Win64 XMM6–15 canaries | Integrated; remaining native qualification pending |
+| Arm legacy MD5 batch | QEMU, 1,024 independent batches per positive run | Three integer registers plus four vector registers; D8–15 caller canaries | Integrated; native qualification pending |
 
 The scalar schedule and feed-forward also live inside the block; this is not
 merely a `vzeroupper`/`vzeroall` epilogue. The ordinary implementation is not
@@ -71,7 +73,7 @@ The compiled mutation campaign poisons each working register before cleanup,
 then independently removes its erasure. Separate mutations remove scratch
 clearing or corrupt the final lane ordering. Positive poisoned controls must
 still pass. Compiler-check mutations inject spills and loads before/after the
-opaque boundary. These tests exercise the fourteen production kernels, not a complete
+opaque boundary. These tests exercise the sixteen production kernels, not a complete
 production qualification or a general assembly verifier.
 
 The Linux bounds test also places each input, state, scratch and constants at
@@ -133,6 +135,17 @@ No aligned-only SSE arithmetic memory operands are permitted. The removed
 dynamic storage helper is superseded by fixed-array bounds, guard pages and
 exact emitted-code checks, not by unchecked dynamic indexing.
 
+Legacy MD5 batching retains eight AVX2 or four NEON lanes. Its 864-byte repr(C)
+owner retains output only at 640..768; initial/message/temporary storage and
+inactive Arm output halves clear. A separate scalar oracle derives constants
+from the RFC sine construction and cross-checks the `abc` known answer.
+Fifteen x86 and sixteen Arm negative classes cover register/scratch erasure,
+round count, rotation, message index, feed-forward and state movement. Four
+guarded scratch/table placements and 31 unaligned offsets test memory bounds;
+the public table requires only u32 alignment. Ten compiled layout corruptions
+per architecture reject across debug/release. Caller packing/output handling
+and the broken algorithm's collision resistance are not repaired by this work.
+
 Run with an already licensed, verified Intel SDE executable:
 
 ```sh
@@ -150,6 +163,8 @@ python3 assurance/register-cleanup/check_keccak.py x86 --keccak-batch --execute 
 python3 assurance/register-cleanup/check_keccak.py arm --keccak-batch --execute --mutations
 python3 assurance/register-cleanup/check_sha1.py x86 --execute --mutations
 python3 assurance/register-cleanup/check_sha1.py arm --execute --mutations
+python3 assurance/register-cleanup/check_md5.py x86 --execute --mutations
+python3 assurance/register-cleanup/check_md5.py arm --execute --mutations
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --all-targets -- -D warnings
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --features batch256-probe --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 cargo clippy --locked --offline --manifest-path assurance/register-cleanup/Cargo.toml --features batch512-probe --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
@@ -198,7 +213,7 @@ No row below is complete merely because the SHA-512 prototype passes.
 | SHA-512-family batch | `sha512_hardened_batch::x86::secret::compress` | `sha512_hardened_batch::arm::secret::compress` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
 | Keccak batch | `keccak_hardened_batch::x86::secret::permute` | `keccak_hardened_batch::arm::secret::permute` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
 | Legacy SHA-1 | `x86_sha1::secret::compress` | `aarch64_sha1::secret::compress` | Integrated; native x86-64/i686 and emulated Arm checks; full native qualification pending |
-| Legacy MD5 batch | `cpu::x86_secret::compress_secret` | `cpu::arm_secret::compress_secret` | Pending |
+| Legacy MD5 batch | `cpu::x86_secret::kernel::compress` | `cpu::arm_secret::kernel::compress` | Integrated; native x86 and emulated Arm checks; full native qualification pending |
 
 This is sixteen existing hardware/SIMD entry points. Shared consumers include
 SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash and threaded batch execution; these

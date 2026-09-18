@@ -40,6 +40,17 @@ CHECKS = {
         "env['LSAN_OPTIONS']='exitcode=23'", "env['BRYNJA_REQUIRE_HARDENED_MD5']='1'",
         "'-Zsanitizer=address -C target-feature=+avx2'", 'check=True'),
 }
+for arch, feature in (('x86', 'avx2'), ('arm', 'neon')):
+    CHECKS[LEAF+f'src/cpu/{arch}_secret/kernel.rs'] = (
+        '#[inline(never)]', f'#[target_feature(enable = "{feature}")]',
+        'pub unsafe extern "C" fn compress(scratch: &mut [u8; 864], constants: &[u32; 80])',
+        'BRYNJA_SECRET_BEGIN', 'BRYNJA_REGISTER_ERASE', 'BRYNJA_SECRET_END', 'options(nostack)')
+    CHECKS[LEAF+f'src/cpu/{arch}_secret.rs'] = (
+        'size_of::<Scratch>() == 864', 'align_of::<Scratch>() == 1',
+        'offset_of!(Scratch, initial) == 0', 'offset_of!(Scratch, words) == 128',
+        'offset_of!(Scratch, work) == 640', 'offset_of!(Scratch, temporary) == 768',
+        'core::ptr::from_mut(s).cast::<[u8; 864]>()')
+CHECKS[LEAF+'src/cpu/scratch.rs'] += ('#[repr(C)]',)
 GATES = {
     'scripts/checks.sh': ('python3 scripts/md5/check-md5-hardened.py',
                          'python3 scripts/md5/check-md5-hardened-codegen.py',
@@ -57,6 +68,7 @@ GATES = {
 
 def paths(root=ROOT):
     names=set(ordinary.paths(root)) | set(CHECKS)
+    names.update(('assurance/register-cleanup/check.py', 'assurance/register-cleanup/check_md5.py'))
     names.update((LEAF+'tests/hardened_execution.rs',HOST+'tests/hardened_execution.rs',
         'docs/legacy-md5-hardened-execution.md'))
     names.update('assurance/md5-hardened-execution/'+n for n in ('Cargo.toml','Cargo.lock','src/main.rs'))

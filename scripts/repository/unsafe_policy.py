@@ -9,6 +9,8 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs"): ("c008b23798ed127c95607d333f633b845e2383752768588023ae5dfbb4f33dd8", 1, 1, 1),
+    Path("crates/brynja-legacy-md5/src/cpu/arm_secret/kernel.rs"): ("3134097267beea2f7d2c97abaf8d3fb721a870b38581a4e8dbc0245c4194515c", 1, 1, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1/secret.rs"): ("b7625787a8d512fc0f4129c002997e32b088e3dff52cc84c6c57a0decb75eab0", 1, 1, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1/secret.rs"): ("663c0964503b0063e0a4031133e4c633e33ca386d04eb19199840410aae2799e", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs"): ("11cd76232a6e59720835bb8bf1b977608c59ba7465a107c8f1dc1f27711d8146", 1, 1, 1),
@@ -49,8 +51,8 @@ ALLOWED = {
     Path("crates/brynja-crypto-cpu/src/sha256_batch/arm.rs"): ("42cce4243621807a453db7fb48876487ea39ee2c1749f2f8e54dba7d0e63ec51", 1, 1, 1),
     Path("crates/brynja-crypto-cpu-std/src/sha256_batch/platform.rs"): ("8865e11ca3156c3bd8ec918aa144f7eb27d9046a7b9fd5c0e71553e95bc5a2b9", 1, 0, 1),
     Path("crates/brynja-legacy-md5/src/cpu/secret.rs"): ("1fd19b0d4167991ae1cb93ec209807350e334a3a85b3204124f013f05afbddb8", 2, 1, 2),
-    Path("crates/brynja-legacy-md5/src/cpu/x86_secret.rs"): ("187318346e149c418554708552aec2d0f3d09dabbb68987c8e50289b1eccddfa", 3, 3, 3),
-    Path("crates/brynja-legacy-md5/src/cpu/arm_secret.rs"): ("210447e40e6d20cdc75554e185adc8cdc9280f2bb3d4e2dbb5ec43bb115bbf40", 3, 3, 3),
+    Path("crates/brynja-legacy-md5/src/cpu/x86_secret.rs"): ("03ba73e4d293fb3b8d3095f68220927dd48a4dd2102858791e1c74885e8346f3", 1, 1, 1),
+    Path("crates/brynja-legacy-md5/src/cpu/arm_secret.rs"): ("6e6d7883d222b9ec2b4211b5c2a4d5a0902ec33d8c4348c97d714a4c4ea33a71", 1, 1, 1),
     Path("crates/brynja-legacy-md5-std/src/hardened_execution/platform.rs"): ("552ae73fb7389f0450e637f6c3e7d3b6b57b904694084eeb71e7fa860df34832", 1, 0, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/secret.rs"): ("135ab0dae0b9fbaf8dc147bf55ccf7e167c667ee675b980679ced331a3d6464e", 2, 1, 2),
     Path("crates/brynja-crypto-cpu/src/runtime_execution/mod.rs"): (
@@ -179,6 +181,8 @@ def validate_allowed(
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
     elif relative in {
+        Path("crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs"),
+        Path("crates/brynja-legacy-md5/src/cpu/arm_secret/kernel.rs"),
         Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1/secret.rs"),
         Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1/secret.rs"),
         Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs"),
@@ -204,6 +208,8 @@ def validate_allowed(
             width = 3264
         if relative.parent.parent.name == 'keccak_hardened_batch':
             function, width = 'permute', 1920
+        if relative.parent.name in {'x86_secret', 'arm_secret'}:
+            width = 864
         required = (f'pub unsafe extern "C" fn {function}(', '#[inline(never)]',
                     '#[target_feature', f'scratch: &mut [u8; {width}]',
                     'BRYNJA_SECRET_BEGIN', 'BRYNJA_REGISTER_ERASE',

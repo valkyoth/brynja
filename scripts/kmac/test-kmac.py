@@ -84,7 +84,15 @@ def main() -> int:
     reject("scoped-accelerated-domain", scoped / "accelerated/fixed.rs", 'bytes(b"KMAC")?', 'bytes(b"RAW")?')
     reject("scoped-accelerated-key", scoped / "accelerated/fixed.rs", "key.bit_len() < $strength", "false")
     reject("scoped-accelerated-feature", scoped.with_suffix('.rs'), '#[cfg(feature = "hardened-execution")]\npub mod accelerated;', 'pub mod accelerated;')
-    print("KMAC policy rejects forty ownership, lifecycle, feature, algorithm, test, and dependency regressions")
+    for label, before, after in (
+        ('state', 'self.core.finish_xof(input, production)?', 'self.core.finish_xof(input, false)?'),
+        ('borrow', "&'scope mut [u8]", "[u8; 168]"),
+        ('public', '_authority: KmacPublicDeclassification', '_authority: ()'),
+        ('output', 'self.inner.public(output)', 'Ok(())'),
+        ('final-bits', 'self.inner.final_secret(output, valid)', 'self.inner.final_secret(output, 8)'),
+    ):
+        reject('scoped-accelerated-xof-' + label, scoped / 'accelerated/xof.rs', before, after)
+    print("KMAC policy rejects forty-five ownership, lifecycle, feature, algorithm, test, and dependency regressions")
     return 0
 
 

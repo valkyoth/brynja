@@ -243,9 +243,30 @@ callback and cannot clear captured output buffers it never received.
 
 Only borrowed sponge/staging handles move at finalization. Independent metadata,
 staging and cSHAKE scope guards clear on exit, including forgotten handles.
-This does not establish complete register/spill erasure. Accelerated scoped
-KMACXOF is still pending; existing accelerated inline-owner XOF APIs remain
-available under their documented ownership contract.
+This does not establish complete register/spill erasure.
+
+### Accelerated KMACXOF readers
+
+The same execution module provides `KmacXof128Workspace` and
+`KmacXof256Workspace`, with matching authority-bound `new`, `report`, byte/bit
+scopes and caller-scratch scopes. Their absorbing handles finalize into borrowed
+`KmacXof128Reader` / `KmacXof256Reader` handles using `right_encode(0)`.
+Production finalizers reject weak keys even when setup used a conformance scope.
+
+Readers expose incremental `squeeze_secret` and explicitly declassified
+`squeeze_public`, consuming `squeeze_final_bits_secret` /
+`squeeze_final_bits_public`, `cancel` and non-approved service status. There are
+no message/output length or preflight queries. Secret output may outlive the
+computation scope through its separate destination lifetime.
+
+Each public read must fit the scope's staging (168 bytes by default); use
+`with_scratch` or `with_bits_and_scratch` for larger transactional fragments.
+Staging is reusable across successful reads. Insufficient staging, revocation
+or another read failure clears and terminalizes the computation: a subsequent
+secret read clears its supplied destination and fails, including empty reads.
+Final-bit reads consume the reader, including on invalid shape. An outer scope
+guard also covers forgotten readers and recoverable unwind. Existing inline-owner
+APIs are unchanged, and complete register/spill qualification remains pending.
 
 ## Scoped KMACXOF
 

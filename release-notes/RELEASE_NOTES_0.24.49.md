@@ -35,10 +35,10 @@ No crates are selected for publication.
   constant-time verification, exact-length verification and independent cleanup
   for forgotten handles and recoverable unwind. Scoped KMACXOF128/256 readers
   add zero-trailer framing, mixed secret/public reads, consuming partial-bit
-  output and immediate terminal cleanup. Accelerated fixed KMAC scopes now bind
+  output and immediate terminal cleanup. Accelerated fixed KMAC and KMACXOF scopes bind
   the existing Keccak authority and borrowed staging for transactional public
-  tags. Accelerated scoped XOF and complete framing/compiler residue
-  qualification remain unfinished.
+  tags and XOF fragments. Complete framing/compiler residue qualification and
+  higher-construction rollout remain unfinished.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;
   add distinct owner-backed hardened compression without ordinary scratch reuse.
 - Preserve generic portable defaults, AVX2 batch routes and the hosted x86

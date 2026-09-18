@@ -84,9 +84,9 @@ def campaign(mode, environment=None, target=None, toolchain='1.98.1'):
         if target:
             tests += ['--target', target]
         checked = execute(tests, env)
-        if '2 passed; 0 failed' not in checked.stdout:
+        if '4 passed; 0 failed' not in checked.stdout:
             raise RuntimeError('scoped accelerated KMAC lifecycle did not execute')
-        print('Scoped accelerated KMAC lifecycle: PASS; tests=2', flush=True)
+        print('Scoped accelerated KMAC lifecycle: PASS; tests=4', flush=True)
 
 
 def native_environment(arm=False):

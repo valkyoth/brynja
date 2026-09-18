@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Packaged KMAC execution APIs, affine ownership, and real compiled mutants."""
 import importlib.util
+import argparse
 import os
 from pathlib import Path
 import shutil
@@ -67,6 +68,14 @@ def negatives(consumer, env):
                 cases.append((f'fn check<T:{bound}>(){{}} check::<api::in_place::{name}{lifetimes}>();', 'E0277'))
         cases.append((f'fn reuse(h:api::in_place::Kmac{width}) {{ let mut b=[0;32]; let _=h.finalize_secret(&mut b); let _=h.key_policy(); }}', 'E0382'))
         cases.append((f'fn overlap(w:&mut api::in_place::Kmac{width}Workspace) {{ let _=w.with(&[0;32],b"",|_|w.with(&[0;32],b"",|_|())); }}', 'E0500'))
+        for name, lifetimes in ((f'KmacXof{width}Workspace', "<'static>"),
+                                (f'KmacXof{width}', "<'static, 'static>"),
+                                (f'KmacXof{width}Reader', "<'static, 'static>")):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn check<T:{bound}>(){{}} check::<api::in_place::{name}{lifetimes}>();', 'E0277'))
+        cases.append((f'fn reuse(h:api::in_place::KmacXof{width}) {{ let _=h.finalize_xof(); let _=h.key_policy(); }}', 'E0382'))
+        cases.append((f'fn reuse(h:api::in_place::KmacXof{width}Reader) {{ h.cancel(); let _=h.service_status(); }}', 'E0382'))
+        cases.append((f'fn public(r:&mut api::in_place::KmacXof{width}Reader) {{ let _=r.squeeze_public(&mut []); }}', 'E0061'))
     try:
         for code, diagnostic in cases:
             path.write_text(original + prefix + code + '}\n')
@@ -185,7 +194,46 @@ def algorithm_mutations(consumer, roots, env):
     print('Packaged KMAC algorithm/verification mutants: PASS; rejected=8', flush=True)
 
 
+def native_xof_mutations(consumer, roots, env):
+    path = roots['brynja-mac-kmac'] / 'src/hardened_in_place/accelerated/xof.rs'
+    original = path.read_text()
+    cases = (
+        ('self.finish(None, true)', 'self.finish(None, false)'),
+        ('self.finish(Some(input), true)', 'self.finish(None, true)'),
+        ('self.inner.public(output)', 'Ok(())'),
+        ('self.inner.secret(output)', 'Err(KmacError::SecretMemory)'),
+        ('self.inner.final_public(output, valid)', 'self.inner.final_public(output, 8)'),
+        ('self.inner.final_secret(output, valid)', 'self.inner.final_secret(output, 8)'),
+    )
+    command = ['cargo', 'test', '--offline', '--test', 'scoped']
+    for profile in ([], ['--release']):
+        result = shared.run(command + profile, consumer, env)
+        if '4 passed; 0 failed' not in result.stdout:
+            raise ValueError('native scoped KMAC control did not execute all tests')
+    for before, after in cases:
+        if original.count(before) != 1:
+            raise ValueError('ambiguous scoped XOF mutation: ' + before)
+        try:
+            path.write_text(original.replace(before, after))
+            for profile in ([], ['--release']):
+                result = shared.run(command + profile, consumer, env, False)
+                if 'test result: FAILED' not in result.stdout:
+                    raise ValueError('native scoped XOF mutant did not fail at runtime: ' + before + result.stderr)
+        finally:
+            path.write_text(original)
+    print('Packaged native scoped KMACXOF mutants: PASS; rejected=12', flush=True)
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    native = parser.add_mutually_exclusive_group()
+    native.add_argument('--native-x86', action='store_true')
+    native.add_argument('--native-arm', action='store_true')
+    args = parser.parse_args()
+    native_env = None
+    if args.native_x86 or args.native_arm:
+        module = importlib.import_module('check-kmac-execution')
+        native_env = module.native_environment(args.native_arm)
     with tempfile.TemporaryDirectory(prefix='brynja-kmac-package-') as directory:
         destination = Path(directory)
         env = dict(os.environ, CARGO_TARGET_DIR=str(destination / 'target'))
@@ -203,6 +251,9 @@ def main():
         negatives(consumer, env)
         mutations(consumer, roots, env)
         algorithm_mutations(consumer, roots, env)
+        if native_env is not None:
+            selected = dict(native_env, CARGO_TARGET_DIR=env['CARGO_TARGET_DIR'])
+            native_xof_mutations(consumer, roots, selected)
     print('Packaged KMAC hardened execution public API: PASS')
 
 

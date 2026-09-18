@@ -19,6 +19,7 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "hardened_in_place/reader.rs", "hardened_in_place/xof.rs",
     "hardened_in_place/accelerated.rs", "hardened_in_place/accelerated/backend.rs",
     "hardened_in_place/accelerated/fixed.rs",
+    "hardened_in_place/accelerated/xof.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
          CRATE / "src/packer/framing_tests.rs",
@@ -200,6 +201,16 @@ def validate(root: Path) -> None:
     require(loaded[CRATE / 'src/hardened_in_place.rs'],
             '#[cfg(feature = "hardened-execution")]\npub mod accelerated;',
             'scoped accelerated KMAC default-off boundary')
+    accelerated_xof = loaded[CRATE / 'src/hardened_in_place/accelerated/xof.rs']
+    for token in ("inner: fixed::$fixed<'authority>", "fixed::$fixed::new(session)?",
+                  "Backend<cshake::$backend_reader<'scope, 'authority>, &'scope mut [u8]>",
+                  "self.core.finish_xof(input, production)?", "Output::new(reader, cleanup)",
+                  "_authority: KmacPublicDeclassification", "self.inner.public(output)",
+                  "self.inner.secret(output)", "self.inner.final_public(output, valid)",
+                  "self.inner.final_secret(output, valid)", "with_bits_and_scratch_conformance"):
+        require(accelerated_xof, token, "scoped accelerated XOF borrow/output")
+    if accelerated_xof.count('#[cfg(feature = "conformance-testing")]') != 5:
+        fail("scoped accelerated KMACXOF conformance feature gate changed")
     if scoped_xof.count('#[cfg(feature = "conformance-testing")]') != 4:
         fail("scoped KMACXOF conformance feature gate changed")
     for token in (

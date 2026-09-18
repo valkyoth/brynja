@@ -12,6 +12,8 @@ use brynja_mac_kmac::{
     execution::{KeccakSession, in_place as api},
 };
 use std::io;
+#[path = "scoped/xof.rs"]
+mod xof;
 fn bad(e: impl core::fmt::Debug) -> io::Error {
     io::Error::other(format!("scoped lifecycle: {e:?}"))
 }

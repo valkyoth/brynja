@@ -14,9 +14,9 @@
   Add portable scoped fixed KMAC128/256 workspaces with typed secret output,
   exact-length verification and independent scope cleanup. Scoped KMACXOF128/256
   readers now retain the workspace borrow through incremental and partial-bit
-  output. Accelerated fixed KMAC scopes now bind the existing Keccak authority
-  and borrowed public staging; accelerated scoped XOF and complete compiler-residue
-  qualification remain pending.
+  output. Accelerated fixed KMAC and KMACXOF scopes bind the existing Keccak
+  authority and borrowed public staging. Complete compiler-residue qualification
+  and higher-construction rollout remain pending.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
   exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration
   pass; exceptional pentest and final release verification remain pending.

@@ -2,7 +2,8 @@
 """Exact source identities reviewed for the v0.24.13 KMAC boundary."""
 
 REVIEWED_HASHES = {
-    "crates/brynja-mac-kmac/src/hardened_in_place/accelerated.rs": "848b9105ae604c7e022d785c9bb652d471a8e3c033a0540646f397deec05efbf",
+    "crates/brynja-mac-kmac/src/hardened_in_place/accelerated/xof.rs": "bc071a7e7ef4db5baa45d27e25ee9117ba172666dd7175ca34b74ec9ec0b720c",
+    "crates/brynja-mac-kmac/src/hardened_in_place/accelerated.rs": "4b843c5983e9a81f24fda0dc6511dc1ddfdb18b6b64fcc03712fa6ee4025d2a3",
     "crates/brynja-mac-kmac/src/hardened_in_place/accelerated/backend.rs": "bc47334948c8bdfc32db5729786916330ad06cc034cc0d14bdbccb15f5a68c00",
     "crates/brynja-mac-kmac/src/hardened_in_place/accelerated/fixed.rs": "e34a077a0b7db9bc5281d2a5ebd252ea3e4ef773f288f5da7990dcffc6c04e8f",
     "crates/brynja-mac-kmac/src/hardened_in_place/accelerated/tests.rs": "b3c3f663aae185450e9e387a5aed80ae53c0bf12b8b16815614b5527d1afbc42",

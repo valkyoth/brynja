@@ -27,6 +27,12 @@ def inventory(root=ROOT):
                   ADAPTER + 'tests/hardened_execution.rs', 'Cargo.toml',
                   'assurance/register-cleanup/check.py',
                   'assurance/register-cleanup/check_sha1.py',
+                  'assurance/register-cleanup/check_sha1_scalar.py',
+                  'assurance/register-cleanup/sha1-scalar/Cargo.toml',
+                  'assurance/register-cleanup/sha1-scalar/Cargo.lock',
+                  'assurance/register-cleanup/sha1-scalar/src/lib.rs',
+                  'assurance/register-cleanup/sha1-scalar/src/tests.rs',
+                  'assurance/register-cleanup/sha1-scalar/src/tests/reference.rs',
                   'scripts/cryptography/mir_cleanup_flow.py'))
     return sorted(files)
 
@@ -68,6 +74,7 @@ def validate(root=ROOT, reviewed=True):
         if name != 'stream/tests.rs' and re.search(r'\b(?:unsafe|Vec|Box|alloc::|std::)|\.(?:unwrap|expect)\(|\b(?:panic|todo|unimplemented)!', source):
             raise ValueError('hardened API gained low-level, allocating or panicking code')
     module = read(root, LEAF + 'src/hardened_execution/mod.rs')
+    require(module, 'mod engine; mod ownership; mod stream;')
     stream = read(root, LEAF + 'src/hardened_execution/stream.rs')
     secret = read(root, LEAF + 'src/cpu/secret.rs')
     methods = re.findall(r'\bpub\s+(?:(?:const|async)\s+)*fn\s+(\w+)', stream)

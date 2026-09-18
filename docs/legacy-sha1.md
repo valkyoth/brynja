@@ -54,10 +54,18 @@ downstream settings. See [panic strategy](panic-strategy.md).
 Update errors retain unchanged live state until the caller drops or retries.
 No physical-copy, register, compiler spill/copy, cache, DMA, locked-memory,
 swap, dump, abort, termination, forget, or caller-copy erasure is promised.
-Scalar round words and length conversion temporaries have residual compiler/
-register copy risk, not an assertion of complete machine-state erasure.
+Other-target scalar round words and high-level length conversion temporaries
+retain compiler/register copy risk; complete machine-state erasure is not claimed.
 
 ## Reproducible conformance
+
+The private baseline x86-64/little-endian AArch64 scalar compressor has a narrow
+normal-return cleanup boundary: all round/feed-forward registers and the owned
+schedule are cleared inside one opaque block. No SHA/SIMD instruction feature
+is required. Other architectures and Miri/Kani retain the safe Rust model and
+its compiler/register limitations. This does not extend to high-level input,
+padding/output or moved owner copies; see the
+[development evidence](../assurance/register-cleanup/sha1-scalar/README.md).
 
 Official data comes from [NIST CAVP secure hashing](https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program/secure-hashing):
 `shabittestvectors.zip`, SHA-256

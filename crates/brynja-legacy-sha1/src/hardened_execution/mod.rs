@@ -17,12 +17,6 @@
 
 mod engine;
 mod ownership;
-#[cfg(any(
-    test,
-    target_arch = "x86",
-    target_arch = "x86_64",
-    all(target_arch = "aarch64", target_endian = "little")
-))]
 mod stream;
 pub use crate::cpu::HardenedAuthority as Authority;
 use crate::{

@@ -25,6 +25,7 @@ MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
         'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs',
         'src/hardened_execution/mod.rs', 'src/hardened_execution/platform.rs', 'tests/hardened_execution.rs'))
 SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
+    'src/compress.rs', 'src/compress/native.rs',
     'Cargo.toml', 'src/lib.rs', 'src/cpu/mod.rs', 'src/cpu/session.rs', 'src/cpu/session/tests.rs',
     'src/execution.rs', 'src/execution/ownership.rs', 'tests/execution.rs',
     'src/hardened.rs', 'src/cpu/x86_sha1.rs', 'src/cpu/aarch64_sha1.rs',

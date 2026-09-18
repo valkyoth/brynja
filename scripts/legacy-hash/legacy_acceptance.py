@@ -20,6 +20,7 @@ FILES = [f'{FIXTURE}/{name}' for name in (
     'check-panic-profiles.py',
 )]
 FILES += ['crates/brynja-legacy-md5/src/compress/native.rs']
+FILES += ['crates/brynja-legacy-sha1/src/compress/native.rs']
 
 
 def read(root, path):

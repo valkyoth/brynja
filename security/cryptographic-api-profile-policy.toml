@@ -1171,7 +1171,7 @@ sha256 = "4ff9916a0676fc4d8c93e670eed95b5b4ff1f5b1459bd8a1730486da91f864e9"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/compress.rs"
-sha256 = "07fe5d150de04af55f7459e9672adce7e93b051570214162939726820b0830e8"
+sha256 = "2b25c33d82e5669e55d9af38bd022dc415168f24c37ee1fe7dd322add6b41100"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/engine.rs"

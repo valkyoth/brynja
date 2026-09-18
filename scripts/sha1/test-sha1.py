@@ -9,6 +9,10 @@ import sha1_policy as policy
 def main():
     policy.validate()
     mutations = [
+        (policy.CRATE + 'src/compress.rs', 'not(any(miri, kani))', 'not(miri)'),
+        (policy.CRATE + 'src/compress.rs', 'target_endian = "little"', 'target_endian = "big"'),
+        (policy.CRATE + 'src/compress.rs', 'compress_model(owner);', ''),
+        (policy.CRATE + 'src/compress.rs', 'owner.clear_block();', ''),
         ('scripts/sha1/check-sha1.py', "'--release',", ''),
         ('scripts/sha1/check-sha1.py', "'--lib', 'invalid_'", "'--lib', 'unmatched_filter'"),
         (policy.CRATE + 'src/engine.rs', 'fn invalid_update_offsets_trip_before_mutation()', '#[cfg(debug_assertions)]\n    fn invalid_update_offsets_trip_before_mutation()'),

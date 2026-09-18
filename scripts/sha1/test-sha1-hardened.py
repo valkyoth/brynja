@@ -46,6 +46,7 @@ def main():
             shutil.copyfile(policy.ROOT / relative, destination)
         policy.validate(root)
         cases = [
+            (policy.LEAF+'src/hardened_execution/mod.rs', 'mod stream;', '#[cfg(target_arch = "x86_64")]\nmod stream;'),
             (policy.LEAF+'src/hardened_execution/stream.rs', "impl<'a> Stream<'a> {", "impl<'a> Stream<'a> { pub fn check_additional_bits(&self, bits: u64) -> bool { crate::engine::admit_bits(self.owner.bits(), bits).is_ok() }"),
             (policy.LEAF+'src/hardened_execution/stream.rs', "impl<'a> Stream<'a> {", "impl<'a> Stream<'a> { pub fn check_additional_bytes(&self, bytes: usize) -> bool { crate::engine::admit_bytes(self.owner.bits(), bytes).is_ok() }"),
             (policy.LEAF+'src/cpu/secret.rs', 'PhantomData<*mut ()>', 'PhantomData<()>'),

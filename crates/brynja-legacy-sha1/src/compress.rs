@@ -1,8 +1,46 @@
 use crate::owner::Sha1Owner;
 
+#[cfg(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+))]
+mod native;
+
+pub(crate) fn compress(owner: &mut Sha1Owner) {
+    #[cfg(all(
+        not(any(miri, kani)),
+        any(
+            target_arch = "x86_64",
+            all(target_arch = "aarch64", target_endian = "little")
+        )
+    ))]
+    native::compress(&mut owner.chaining_state, &owner.block, &mut owner.schedule);
+    #[cfg(not(all(
+        not(any(miri, kani)),
+        any(
+            target_arch = "x86_64",
+            all(target_arch = "aarch64", target_endian = "little")
+        )
+    )))]
+    compress_model(owner);
+    owner.clear_block();
+}
+
 // FIPS 180-4 §§4.1.1, 4.2.1, 6.1.2. All round additions are modulo 2^32.
 // Indexes and branches depend only on public fixed round numbers, never data.
-pub(crate) fn compress(owner: &mut Sha1Owner) {
+// Other architectures and Miri/Kani retain the Rust model and its documented
+// compiler/register limits. Native paths need no crypto/SIMD target feature.
+#[cfg(not(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+)))]
+fn compress_model(owner: &mut Sha1Owner) {
     for (destination, source) in owner.schedule.iter_mut().zip(owner.block.iter()) {
         *destination = *source;
     }
@@ -43,9 +81,15 @@ pub(crate) fn compress(owner: &mut Sha1Owner) {
     add(&mut owner.chaining_state, 2, c);
     add(&mut owner.chaining_state, 3, d);
     add(&mut owner.chaining_state, 4, e);
-    owner.clear_block();
 }
 
+#[cfg(not(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+)))]
 fn read(bytes: &[u8], index: usize) -> u32 {
     let mut word = 0_u32;
     for byte in bytes.iter().skip(index.saturating_mul(4)).take(4) {
@@ -54,6 +98,13 @@ fn read(bytes: &[u8], index: usize) -> u32 {
     word
 }
 
+#[cfg(not(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+)))]
 fn write(bytes: &mut [u8], index: usize, word: u32) {
     for (byte, shift) in bytes
         .iter_mut()
@@ -65,6 +116,13 @@ fn write(bytes: &mut [u8], index: usize, word: u32) {
     }
 }
 
+#[cfg(not(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+)))]
 fn add(bytes: &mut [u8], index: usize, word: u32) {
     write(bytes, index, read(bytes, index).wrapping_add(word));
 }

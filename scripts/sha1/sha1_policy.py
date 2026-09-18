@@ -18,6 +18,7 @@ TOKENS = {
 }
 REGIONS = ('chaining_state', 'block', 'schedule', 'message_length', 'buffered', 'output_staging')
 BOUND = [CRATE + 'src/' + name for name in FILES] + [
+    CRATE + 'src/compress/native.rs',
     CRATE + 'Cargo.toml', CRATE + 'README.md', CRATE + 'tests/api.rs', CRATE + 'tests/vectors/nist.txt',
     'assurance/sha1-public-api/Cargo.toml', 'assurance/sha1-public-api/Cargo.lock',
     'assurance/sha1-public-api/src/lib.rs', 'assurance/sha1-public-api/src/main.rs',
@@ -41,6 +42,12 @@ def validate(root=ROOT, hashes=True):
         production = text.split('#[cfg(test)]')[0].split('#[cfg(kani)]')[0]
         if re.search(r'\b(unsafe\s*\{|extern|alloc::|std::|Vec|Box|static\s+mut)|\.(unwrap|expect)\(|\b(panic|unimplemented|todo)!', production):
             raise ValueError('SHA-1 unsafe, hosted or panic surface')
+    compressor = re.sub(r'\s+', '', (src/'compress.rs').read_text())
+    condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
+    if compressor.count('#[cfg('+condition+')]') != 2 or compressor.count('#[cfg(not('+condition+'))]') != 5:
+        raise ValueError('SHA-1 scalar/model target separation changed')
+    if 'native::compress(&mutowner.chaining_state,&owner.block,&mutowner.schedule);' not in compressor or 'compress_model(owner);owner.clear_block();' not in compressor:
+        raise ValueError('SHA-1 scalar dispatch or owner cleanup changed')
     owner = (src / 'owner.rs').read_text()
     if '#[cfg(debug_assertions)]' in (src / 'engine.rs').read_text():
         raise ValueError('SHA-1 invariant regression tests must also run in release')

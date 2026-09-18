@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs"): ("08ea056cb766efe8c246f7772ca780ad6586baa82301fa5c40997737f06e2e32", 3, 1, 3),
     Path("crates/brynja-legacy-sha1/src/compress/native.rs"): ("f785162fdf3c5ada9847cc5796db0b7a870d289707587c9d698d78a6d6355ad3", 3, 1, 3),
     Path("crates/brynja-legacy-md5/src/compress/native.rs"): ("33adb9934e5b3c42ba112263a963266b8391d3b4e58fc7b94b27341df66ce33d", 3, 1, 3),
     Path("crates/brynja-legacy-md5/src/cpu/transfer.rs"): ("086352bda68dd5908f397079dcaf8b30f75501510a993d00143d473db4c8d481", 6, 1, 6),
@@ -187,8 +188,10 @@ def validate_allowed(
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
     elif relative in {Path("crates/brynja-legacy-md5/src/compress/native.rs"),
-                      Path("crates/brynja-legacy-sha1/src/compress/native.rs")}:
+                      Path("crates/brynja-legacy-sha1/src/compress/native.rs"),
+                      Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs")}:
         sha1 = relative.parts[1] == 'brynja-legacy-sha1'
+        sha256 = relative.parts[1] == 'brynja-hash-sha2'
         required = ('pub(super) unsafe extern "C" fn scalar(', '#[inline(never)]',
                     'state: &mut [u8; 16]', 'block: &[u8; 64]', 'constants: &[u32; 64]',
                     'shifts: &[u32; 16]', '"cmp r14d, 64"', '"cmp w10, #64"')
@@ -197,6 +200,12 @@ def validate_allowed(
                         'state: &mut [u8; 20]', 'block: &[u8; 64]', 'schedule: &mut [u8; 320]',
                         '"cmp r14d, 320"', '"cmp x11, #320"',
                         '"mov dword ptr [{schedule} + r14], 0"', '"str wzr, [{schedule}, x11]"')
+        if sha256:
+            required = ('pub(super) unsafe extern "C" fn scalar(', '#[inline(never)]',
+                        'state: &mut [u8; 64]', 'block: &[u8; 128]', 'scratch: &mut [u8; 640]',
+                        'constants: &[u32; 64]', '"cmp r10d, 256"', '"cmp x9, #256"',
+                        '"cmp r10d, 640"', '"cmp x9, #640"',
+                        '"mov dword ptr [{scratch} + r10], 0"', '"str wzr, [{scratch}, x9]"')
         if any(token not in text for token in required):
             fail("scalar compressor lost its fixed operands, ABI, bound or schedule wipe")
         if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_SCALAR_BEGIN',
@@ -204,6 +213,9 @@ def validate_allowed(
             fail("scalar compressor lost an opaque architecture boundary")
         wipes = tuple(f'"xor {reg}, {reg}"' for reg in ('eax', 'ecx', 'edx', 'r8d', 'r9d', 'r10d', 'r11d', 'r14d'))
         wipes += tuple(f'"mov x{i}, xzr"' for i in range(4, 13 if sha1 else 12))
+        if sha256:
+            wipes = tuple(f'"xor {r}, {r}"' for r in ('eax', 'ecx', 'edx', 'r8d', 'r10d'))
+            wipes += tuple(f'"mov x{i}, xzr"' for i in range(4, 11))
         if any(token not in text for token in wipes):
             fail("scalar compressor register erasure disappeared")
         if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly|target_feature)\b',

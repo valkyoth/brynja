@@ -24257,7 +24257,7 @@
       ]
     }
   ],
-  "policy_sha256": "2897ddd749398e469e20173364ffb92b8fb5564448f2498245a996e2e41c6e22",
+  "policy_sha256": "47a0a29abe3eeb00954d4c5c73f86b67c48e8283816bd65638fb18632107a744",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",

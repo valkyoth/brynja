@@ -78,6 +78,10 @@ def reject(relative: Path, old: str, new: str) -> None:
 
 def main() -> int:
     policy.validate()
+    reject(policy.SCALAR32, 'not(any(miri, kani))', 'not(miri)')
+    reject(policy.SCALAR32, 'target_endian = "little"', 'target_endian = "big"')
+    reject(policy.SCALAR32, 'model::compress(owner);', '')
+    reject(policy.SCALAR32, 'owner.message_schedule.fill(0);', '')
     reject(policy.OWNER, "clear_owned_region(&mut self.chaining_state)", "self.chaining_state.fill(0)")
     reject(policy.API, "pub trait HardenedSha2State: sealed::Registered", "pub trait HardenedSha2State")
     reject(policy.API, "pub fn finalize_secret<'output>(", "fn missing_secret_output(")
@@ -91,7 +95,7 @@ def main() -> int:
     reject(policy.API, "mod tests;", "mod missing_tests;")
     reject(policy.MIRI, "--lib hardened::tests::checked_length_", "--lib missing_test")
     compiled_length_regressions()
-    print("hardened SHA-2 policy rejects twelve cleanup, capability, API, arithmetic, test-coverage and codegen regressions")
+    print("hardened SHA-2 policy rejects sixteen cleanup, capability, API, arithmetic, target/model and codegen regressions")
     return 0
 
 

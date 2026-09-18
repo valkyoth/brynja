@@ -93,6 +93,7 @@ PACKAGES = (
         "src/sha512.rs", "src/sha512_224.rs", "src/sha512_256.rs",
         "src/sha512_state.rs", "src/sha512_t.rs", "src/hardened/mod.rs",
         "src/hardened/compress32.rs", "src/hardened/compress64.rs",
+        "src/hardened/compress32/native.rs",
         "src/hardened/output.rs", "src/hardened/owner.rs",
         "src/hardened/state32.rs", "src/hardened/state64.rs",
     )),

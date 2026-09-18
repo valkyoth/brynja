@@ -37,6 +37,7 @@ FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"(?:C|system|stdcall|cdec
 LOCAL_C_ABI = {
     Path("crates/brynja-legacy-md5/src/compress/native.rs"),
     Path("crates/brynja-legacy-sha1/src/compress/native.rs"),
+    Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs"),
     Path("crates/brynja-legacy-md5/src/cpu/transfer.rs"),
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"),
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"),
@@ -143,6 +144,10 @@ def validate(root: Path) -> None:
                     signature = ('pub(super) unsafe extern "C" fn scalar(\n'
                                  '    state: &mut [u8; 20],\n    block: &[u8; 64],\n'
                                  '    schedule: &mut [u8; 320],\n) {')
+                if relative == Path('crates/brynja-hash-sha2/src/hardened/compress32/native.rs'):
+                    signature = ('pub(super) unsafe extern "C" fn scalar(\n'
+                                 '    state: &mut [u8; 64],\n    block: &[u8; 128],\n'
+                                 '    scratch: &mut [u8; 640],\n    constants: &[u32; 64],\n) {')
                 if relative.name == 'transfer.rs':
                     signature = ('pub(super) unsafe extern "C" fn transpose<const WORDS: usize, const PACK: bool>(\n'
                                  '    destination: *mut u8,\n    source: *const u8,\n'

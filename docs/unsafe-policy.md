@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: seventy-one exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy-two exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-one exact modules: the private core volatile clearer; the
+Rust in only seventy-two exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -177,6 +177,15 @@ working registers and a public offset, or X4-X12 and condition flags on Arm,
 clear before return. Baseline integer instructions need no acceleration
 authority. Other targets and Miri/Kani retain the existing Rust model; outer
 framing/output/owner copies remain separate work.
+
+SHA-2's `hardened/compress32/native.rs` provides the corresponding baseline
+x86-64/little-endian AArch64 boundary for hardened SHA-224/256, not ordinary
+public hashing. Fixed 64-byte state, 128-byte input, 640-byte owned scratch and
+64-word public constants pointers enter. Only 32 state bytes and 64 input bytes
+participate; the remainder is preserved. Schedule and round state are stored
+explicitly in owned scratch, never compiler stack storage, and all 640 bytes
+clear inside the stack/call-free block. EAX/ECX/EDX/R8/R10 or X4-X10 clear before
+return. The remaining portable model and high-level copies are not qualified.
 
 These sixteen kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.

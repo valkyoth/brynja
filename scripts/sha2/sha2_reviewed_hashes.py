@@ -6,7 +6,7 @@ SOURCE_HASHES = {
     "crates/brynja-hash-sha2/src/lib.rs": "add7eb7f37d87f7da70d910da3c120654780e07f3df2efe76832913459efb247",
     "crates/brynja-hash-sha2/src/bit_api.rs": "007b960b0d869dcd6abb5bcb7f13397dfd9a41e45fdb38f13ab684782f6f662d",
     "crates/brynja-hash-sha2/src/bit_input.rs": "eccb31f3ebc8056bc7f51319483002c27feddf76203cc7bb7a3d0d073fc9e16a",
-    "crates/brynja-hash-sha2/src/compress.rs": "06545885d59a72980005de38bcf75f422621c87c262ca1243905a80fd7a5d353",
+    "crates/brynja-hash-sha2/src/compress.rs": "d051b97c11bd82fd49753dcfbf1d4a7bdc185b2ba9492233e23fe28b910ee551",
     "crates/brynja-hash-sha2/src/digest.rs": "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
     "crates/brynja-hash-sha2/src/error.rs": "9657f1223bd80a8c16f93585f690a7b17dd2fe51486ccf161a962810f79cfa7e",
     "crates/brynja-hash-sha2/src/sha224.rs": "c9ab24aa6428539109215bc639a38e555bba19ba1ad1c6fe3e2a241187c8f6b5",

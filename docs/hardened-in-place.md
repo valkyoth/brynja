@@ -183,8 +183,8 @@ portable and accelerated paths borrow those bytes rather than receive populated
 encoding owners by value. Reuse clears the entire 17-byte region and its length
 before writing, and Drop clears both regions. Empty or invalid encoded lengths
 fail closed. This removes that explicit owner-return transfer, not every possible
-compiler-created copy of length metadata. Scoped accelerated TupleHash workspaces
-and complete register/spill qualification remain unfinished.
+compiler-created copy of length metadata. Scoped accelerated TupleHashXOF
+workspaces and complete register/spill qualification remain unfinished.
 
 ## Scoped fixed TupleHash
 
@@ -215,7 +215,8 @@ byte fragments. State, workspace and writers are not Copy/Clone/Debug/Send/Sync.
 Independent scope cleanup covers forgotten handles and recoverable unwind.
 Caller inputs, compiler-created copies, registers/spills and abort remain outside
 the owned-memory claim. Existing APIs, defaults and acceleration authority are
-unchanged. Scoped accelerated TupleHash remains unfinished.
+unchanged. Scoped accelerated fixed-output counterparts are described below;
+accelerated scoped XOF remains unfinished.
 
 ## Scoped TupleHashXOF
 
@@ -242,6 +243,40 @@ reader can escape or overlap its scope. No secret-length or item-count query
 is added. This is portable owned-memory lifecycle coverage, not complete
 register, spill or compiler-copy erasure. Abort and caller-owned inputs remain
 outside the guarantee. Existing accelerated APIs remain separate and unchanged.
+
+## Scoped accelerated fixed TupleHash
+
+The default-off `hardened-execution` feature exposes
+`execution::in_place::{TupleHash128Workspace, TupleHash256Workspace}`, also
+available under `hardened_in_place::accelerated`. Construction takes an existing
+hardened `KeccakSession`, accepts no secret input and retains that authority for
+every scope. Static and hosted platform guarantees are exactly the existing
+cSHAKE guarantees; no new CPU feature detection, admission or fallback is added.
+
+`with`/`with_bits` borrow the accelerated sponge, CPU scratch and seven-region
+tuple metadata before customization or item absorption. Fixed handles expose
+the same exact-length item-writer and consuming public/secret finalizers as
+portable scopes. `report` exposes only existing public backend/health metadata,
+never accumulated message lengths or item counts. State/workspace/writer are
+not Copy/Clone/Debug/Send/Sync, cannot escape their borrows, and cannot outlive
+the supplied authority.
+
+Transactional public output requires scratch for the entire destination: the
+default scope supplies 168 bytes, while `with_scratch` and
+`with_bits_and_scratch` borrow caller-provided arbitrary-width staging. A short
+scratch region rejects output without partial public writes; the complete
+scratch slice clears on every scope exit. Secret output is independent of
+public staging width, clears destinations on errors and clears on typed-output
+Drop. Invalid bit shapes are checked before output, including empty buffers.
+
+Caller mistakes terminate the computation, not the healthy authority. A fresh
+scope may reuse healthy storage after cancellation, failure, forgotten handles
+or recoverable callback unwind. Revocation remains terminal for that authority:
+current operations fail and later scopes reject without invoking the callback.
+Admission failure cannot clear a destination that the callback never supplied.
+This prevents explicit secret-owner moves but does not prove register, spill or
+compiler-copy erasure; abort and caller input remain outside the guarantee.
+Scoped accelerated XOF is a separate unfinished slice.
 
 ## KMAC framing prerequisite
 

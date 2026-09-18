@@ -80,11 +80,8 @@ impl<'scope, R: Reader> Output<'scope, R> {
     ) -> Result<TupleHashSecretOutput<'out>, TupleHashError> {
         let _ = clear_owned_region(output);
         let reader = self.reader.take().ok_or(TupleHashError::StateConsumed)?;
-        reader
-            .secret(
-                Fips202Output::new(output, valid).map_err(|_| TupleHashError::InvalidBitString)?,
-            )
-            .map(TupleHashSecretOutput::new)
+        Fips202Output::new(output, valid).map_err(|_| TupleHashError::InvalidBitString)?;
+        reader.secret(output, valid).map(TupleHashSecretOutput::new)
     }
 }
 

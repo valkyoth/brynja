@@ -21,7 +21,9 @@
   writers, with consuming secret/public finalizers and independent scope cleanup.
   Initialize integer framing through borrowed storage. Portable scoped TupleHashXOF
   readers retain that borrow through incremental public/secret and final-bit output.
-  Scoped acceleration and complete residue qualification remain pending.
+  Scoped fixed accelerated TupleHash now borrows the existing Keccak authority
+  and transactional staging; accelerated XOF and complete residue qualification
+  remain pending.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
   exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration
   pass; exceptional pentest and final release verification remain pending.

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Packaged TupleHash execution APIs, affine ownership, and real compiled mutants."""
 import importlib.util
+import argparse
 import os
 from pathlib import Path
 import shutil
@@ -74,6 +75,20 @@ def negatives(consumer, env):
             (f'fn public(mut r:{xof}Reader) {{ let _=r.squeeze_public(&mut []); }}', 'E0061'),
             (f'fn query(s:{xof}) {{ let _=s.item_count(); }}', 'E0599'),
             (f'fn query(s:{xof}) {{ let _=s.check_additional_bits(1); }}', 'E0599'),
+        ]
+        accelerated = 'brynja_hash_tuple::execution::in_place'
+        state = f'{accelerated}::TupleHash{strength}'
+        for name in (f'TupleHash{strength}Workspace', f'TupleHash{strength}', f'TupleHash{strength}ItemWriter'):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn check<T:{bound}>(){{}} check::<{accelerated}::{name}>();', 'E0277'))
+        cases += [
+            (f'fn reuse(s:{state}) {{ let _=s.finalize_secret(&mut []); s.cancel(); }}', 'E0382'),
+            (f'fn public(s:{state}) {{ let _=s.finalize_public(&mut []); }}', 'E0061'),
+            (f'fn query(s:{state}) {{ let _=s.item_count(); }}', 'E0599'),
+            (f'fn query(s:{state}) {{ let _=s.check_additional_bits(1); }}', 'E0599'),
+            (f'fn escape() -> Result<{accelerated}::TupleHash{strength}Workspace<\'static>, api::Error> {{ '
+             'let a=brynja_crypto_cpu::static_execution::Authority::new(brynja_crypto_cpu::static_execution::Kernel::X86Keccak).map_err(|_|api::Error::AccelerationUnavailable)?; '
+             f'{accelerated}::TupleHash{strength}Workspace::new(api::KeccakSession::from_static(&a).map_err(|_|api::Error::AccelerationUnavailable)?) }}', 'E0515'),
         ]
     try:
         for code, diagnostic in cases:
@@ -235,7 +250,43 @@ def scoped_mutations(roots, env):
     print(f'Packaged scoped TupleHash mutants: PASS; rejected={len(cases)*2}', flush=True)
 
 
+def accelerated_mutations(consumer, roots, env):
+    root = roots['brynja-hash-tuple'] / 'src/hardened_in_place'
+    cases = [
+        ('accelerated.rs', 'brynja_core::clear_owned_region(self.0)', 'core::hint::black_box(&mut *self.0)'),
+        ('accelerated/fixed.rs', 'bytes_input(b"TupleHash")?', 'bytes_input(b"WRONG")?'),
+        ('accelerated/backend.rs', 'self.state.update(bytes)', 'Ok::<(), brynja_hash_sha3::hardened_execution::Error>(())'),
+        ('accelerated/backend.rs', '.squeeze_final_bits_secret(output, valid)', '.squeeze_final_bits_secret(output, 8)'),
+    ]
+    command = ['cargo', 'test', '--offline', '--test', 'scoped_accelerated']
+    for profile in ([], ['--release']):
+        if '3 passed; 0 failed' not in shared.run(command + profile, consumer, env).stdout:
+            raise ValueError('native scoped TupleHash positive control incomplete')
+    for name, before, after in cases:
+        path = root / name
+        original = path.read_text()
+        if original.count(before) != 1:
+            raise ValueError('ambiguous accelerated scoped mutation: ' + before)
+        try:
+            path.write_text(original.replace(before, after))
+            for profile in ([], ['--release']):
+                result = shared.run(command + profile, consumer, env, False)
+                if 'test result: FAILED' not in result.stdout:
+                    raise ValueError('accelerated scoped mutant did not execute: ' + result.stderr)
+        finally:
+            path.write_text(original)
+    print(f'Packaged native scoped TupleHash mutants: PASS; rejected={len(cases)*2}', flush=True)
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    native = parser.add_mutually_exclusive_group()
+    native.add_argument('--native-x86', action='store_true')
+    native.add_argument('--native-arm', action='store_true')
+    args = parser.parse_args()
+    native_env = None
+    if args.native_x86 or args.native_arm:
+        native_env = importlib.import_module('check-tuplehash-execution').native_environment(args.native_arm)
     with tempfile.TemporaryDirectory(prefix='brynja-tuplehash-package-') as directory:
         destination = Path(directory)
         env = dict(os.environ, CARGO_TARGET_DIR=str(destination / 'target'))
@@ -258,6 +309,8 @@ def main():
         algorithm_mutations(consumer, roots, env)
         encoding_mutations(roots, env)
         scoped_mutations(roots, env)
+        if native_env is not None:
+            accelerated_mutations(consumer, roots, dict(native_env, CARGO_TARGET_DIR=env['CARGO_TARGET_DIR']))
     print('Packaged TupleHash hardened execution public API: PASS')
 
 

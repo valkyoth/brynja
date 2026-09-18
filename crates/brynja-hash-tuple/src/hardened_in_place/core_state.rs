@@ -297,7 +297,7 @@ impl<'scope, S: State> Core<'scope, S> {
             Fips202Output::new(bytes, valid).map_err(|_| TupleHashError::InvalidBitString)?;
         let bits = u128::try_from(output.bit_len()).map_err(|_| TupleHashError::OutputTooLong)?;
         let (reader, _cleanup) = self.finish(bits)?;
-        reader.secret(output).map(TupleHashSecretOutput::new)
+        reader.secret(bytes, valid).map(TupleHashSecretOutput::new)
     }
 }
 pub(super) fn bytes_input(bytes: &[u8]) -> Result<Fips202BitString<'_>, TupleHashError> {

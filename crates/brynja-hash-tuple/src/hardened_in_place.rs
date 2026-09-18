@@ -7,7 +7,9 @@
 //! terminal. No accumulated-length, item-count or preflight query is exposed.
 //! Scope exit clears owned storage even after forgotten handles or recoverable
 //! unwind. Caller inputs, compiler copies, registers, spills and panic-abort are
-//! outside this owned-memory claim. These APIs use portable execution only.
+//! outside this owned-memory claim. Top-level scopes use portable execution.
+//! Default-off `accelerated` (also `execution::in_place`) supplies fixed-output
+//! scopes bound to an explicit hardened Keccak session, without changing defaults.
 //!
 //! The outer result covers setup; the callback's own result is the inner value.
 //! Secret output borrows a separate destination and can outlive the scope:
@@ -30,6 +32,8 @@
 //! # Ok::<(), TupleHashError>(())
 //! ```
 
+#[cfg(feature = "hardened-execution")]
+pub mod accelerated;
 mod backend;
 mod core_state;
 mod fixed;

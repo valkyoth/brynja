@@ -18,6 +18,7 @@ mod ownership;
 mod xof;
 
 pub use crate::TupleHashError as Error;
+pub use crate::hardened_in_place::accelerated as in_place;
 pub use brynja_hash_sha3::hardened_execution::{KeccakSession, Report};
 pub use fixed::{HardenedTupleHash128, HardenedTupleHash256, TupleHash128, TupleHash256};
 pub use item::TupleItemWriter;

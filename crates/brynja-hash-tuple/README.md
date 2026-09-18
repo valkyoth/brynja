@@ -38,6 +38,7 @@ hardened cSHAKE owner, without duplicating Keccak. It has no third-party depende
 | Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
 | Scoped fixed TupleHash128/256 workspaces and item writers | ✅ Portable | ❌ No |
 | Scoped TupleHashXOF128/256 workspaces and incremental readers | ✅ Portable | ❌ No |
+| Scoped fixed TupleHash128/256 acceleration | ✅ Opt-in, platform-limited | ❌ No |
 
 Implementation is not independent assurance. No named independent
 cryptographic review or FIPS 140-3 validation is claimed.
@@ -115,7 +116,7 @@ assert_eq!(bytes, [0; 32]);
 `squeeze_public`/`squeeze_secret` and consuming `squeeze_final_bits_public`/
 `squeeze_final_bits_secret`; public output requires explicit declassification.
 XOF scopes retain the same item-writer discipline and expose no length queries.
-Scoped acceleration remains under development; existing accelerated APIs remain
+Scoped accelerated XOF remains under development; existing accelerated APIs remain
 available separately. Registers, spills and compiler copies are not covered by
 the scoped owned-memory cleanup guarantee.
 
@@ -125,6 +126,18 @@ Defaults are portable. Default-off `hardened-execution` exposes
 `execution::TupleHash128/256`, `TupleHashXof128/256` and separate
 `Hardened*` variants. `runtime-execution` adds hosted support while the
 leaf remains `no_std`.
+
+`execution::in_place::TupleHash128Workspace` and `TupleHash256Workspace` offer
+scoped fixed-output processing with a supplied hardened Keccak session. They
+retain that authority across reuse and never silently fall back. Public output
+uses 168 bytes of built-in staging; supply a larger erasing scratch slice via
+`with_scratch`/`with_bits_and_scratch` for wider output. Secret output does not
+need public staging of the same width. See the compiled session-based example
+in the [scoped accelerated module](https://github.com/valkyoth/brynja/blob/main/crates/brynja-hash-tuple/src/hardened_in_place/accelerated.rs).
+
+Scope setup failure skips the callback and cannot clear captured output buffers
+it never received. Failed operations terminate their handles; healthy storage
+can start a new scope, but quarantined authority cannot be revived.
 
 Static x86-64 AVX2 and AArch64 SHA3/NEON use hardened Keccak. Hosted acceleration
 requires qualifying AArch64 system-wide feature guarantees; generic x86 hosted

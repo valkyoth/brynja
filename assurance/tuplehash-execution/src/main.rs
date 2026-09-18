@@ -6,6 +6,7 @@ use std::{
 
 use brynja_hash_tuple::Fips202BitString;
 mod dispatch;
+mod scoped_accelerated;
 mod selection;
 
 const MAX_CAMPAIGN_BYTES: u64 = 1024 * 1024;
@@ -78,6 +79,14 @@ fn evaluate(
         &items,
         output_bits,
         &mut output,
+        selection,
+    )?;
+    scoped_accelerated::check(
+        algorithm,
+        custom_input,
+        &items,
+        output_bits,
+        &output,
         selection,
     )?;
     append_hex(rendered, &output)?;

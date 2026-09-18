@@ -39,7 +39,8 @@ impl Reader for Mock<'_> {
     }
     fn secret<'out>(
         self,
-        _: Fips202Output<'out>,
+        _: &'out mut [u8],
+        _: u8,
     ) -> Result<HardenedSha3SecretOutput<'out>, TupleHashError> {
         self.reject()?;
         Err(TupleHashError::SecretMemory)

@@ -17,6 +17,8 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "hardened_in_place.rs", "hardened_in_place/backend.rs",
     "hardened_in_place/core_state.rs", "hardened_in_place/fixed.rs",
     "hardened_in_place/reader.rs", "hardened_in_place/xof.rs",
+    "hardened_in_place/accelerated.rs", "hardened_in_place/accelerated/backend.rs",
+    "hardened_in_place/accelerated/fixed.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
          CRATE / "src/hardened_in_place/tests.rs",
@@ -285,7 +287,7 @@ SCOPED_TOKENS = {
     ),
     "hardened_in_place/backend.rs": (
         "State for api::$state<'scope>", "self.finalize_bits_xof(tail)",
-        "self.squeeze_final_bits_secret(output)", "Sha3PublicDeclassification::acknowledge()",
+        "self.squeeze_final_bits_secret(", "Fips202Output::new(output, valid)", "Sha3PublicDeclassification::acknowledge()",
         "self.squeeze_public(output,", "self.squeeze_secret(output)",
     ),
     "hardened_in_place/xof.rs": (
@@ -303,6 +305,26 @@ SCOPED_TOKENS = {
         "self.reader.take().ok_or(TupleHashError::StateConsumed)?",
         "Fips202Output::new(output, valid)", ".map(TupleHashSecretOutput::new)",
     ),
+    "hardened_in_place/accelerated.rs": (
+        "struct Scratch<'a>(&'a mut [u8])", "brynja_core::clear_owned_region(self.0)",
+    ),
+    "hardened_in_place/accelerated/fixed.rs": (
+        "sponge: cshake::$storage<'authority>", "metadata: Metadata", "stage: [u8; 168]",
+        "pub fn new(session: KeccakSession<'authority>)", "cshake::$storage::new(session)?",
+        "impl for<'scope> FnOnce($state<'scope, 'authority>) -> R",
+        "let cleanup = Guard(metadata);", "let scratch = Scratch(scratch);",
+        'sponge.with_bits(bytes_input(b"TupleHash")?',
+        "Core::new(Backend { state, scratch: &mut *scratch.0 }, &mut *cleanup.0)",
+        "self.core.begin(bits)?;", "self.core.complete()?;", "if !self.complete { self.core.cancel(); }",
+        "TupleHashPublicDeclassification", "self.core.secret(output, valid)",
+    ),
+    "hardened_in_place/accelerated/backend.rs": (
+        "State for Backend<cshake::$state<'s, 'a>, &'s mut [u8]>",
+        "self.state.update(bytes)", "state: self.state.finalize_bits_xof(tail)?",
+        "scratch: self.scratch", ".squeeze_public_with_scratch(",
+        ".squeeze_final_bits_public(", ".squeeze_final_bits_secret(output, valid)",
+        "Sha3PublicDeclassification::acknowledge()",
+    ),
 }
 
 
@@ -315,7 +337,8 @@ def validate_scoped(loaded: dict) -> None:
     for field in ("pending", "used", "items", "remaining", "input_bits", "phase", "staging"):
         require(core, f"clear_owned_region(&mut self.{field})", "scoped tuple owned region")
     fixed = without_comments(loaded[CRATE / "src/hardened_in_place/fixed.rs"] +
-                             loaded[CRATE / "src/hardened_in_place/xof.rs"])
+                             loaded[CRATE / "src/hardened_in_place/xof.rs"] +
+                             loaded[CRATE / "src/hardened_in_place/accelerated/fixed.rs"])
     for forbidden in ("pub fn item_count", "pub fn remaining_bits", "pub fn check_additional", "pub fn input_bits"):
         if forbidden in fixed:
             fail("scoped tuple exposes metadata/preflight query: " + forbidden)

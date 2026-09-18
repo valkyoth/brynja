@@ -11,7 +11,7 @@ REVIEW = 'security/tuplehash-execution-reviewed.json'
 FILES = ('mod.rs', 'backend.rs', 'core_state.rs', 'common.rs', 'item.rs', 'fixed.rs',
          'output.rs', 'xof.rs', 'ownership.rs', 'core_state/tests.rs')
 TOKENS = {
-    'mod.rs': ('pub trait HardenedState: sealed::State', 'Require(Option<KeccakSession',
+    'mod.rs': ('pub use crate::hardened_in_place::accelerated as in_place;', 'pub trait HardenedState: sealed::State', 'Require(Option<KeccakSession',
                'Prefer(Option<KeccakSession', 'impl HardenedState for HardenedReader'),
     'backend.rs': ('Mode::Require(None) => return Err(Error::AccelerationUnavailable)',
         'Mode::Prefer(Some(session)) | Mode::Require(Some(session)) => Some(session)',

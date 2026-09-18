@@ -19,7 +19,8 @@ pub(super) trait Reader {
     fn public(self, output: Fips202Output<'_>) -> Result<(), TupleHashError>;
     fn secret<'out>(
         self,
-        output: Fips202Output<'out>,
+        output: &'out mut [u8],
+        valid: u8,
     ) -> Result<HardenedSha3SecretOutput<'out>, TupleHashError>;
 }
 macro_rules! port {
@@ -50,10 +51,14 @@ macro_rules! port {
             }
             fn secret<'out>(
                 self,
-                output: Fips202Output<'out>,
+                output: &'out mut [u8],
+                valid: u8,
             ) -> Result<HardenedSha3SecretOutput<'out>, TupleHashError> {
-                self.squeeze_final_bits_secret(output)
-                    .map_err(TupleHashError::from)
+                self.squeeze_final_bits_secret(
+                    Fips202Output::new(output, valid)
+                        .map_err(|_| TupleHashError::InvalidBitString)?,
+                )
+                .map_err(TupleHashError::from)
             }
         }
     };

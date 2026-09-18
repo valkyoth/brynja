@@ -96,8 +96,7 @@ fn unwind_clears_scratch_and_quarantines_owner() -> Result<(), Error> {
                 fill(guard.scratch);
                 // Fault injection: an incompatible operation must not commit
                 // caller state, and the incomplete guard must still quarantine.
-                dispatch(Kernel::X86Sha256, guard.scratch)?;
-                caller.copy_from_slice(&guard.scratch.lanes);
+                dispatch(Kernel::X86Sha256, guard.scratch, &mut caller)?;
                 Ok(())
             })();
             assert_eq!(result, Err(Error::WrongOperation));

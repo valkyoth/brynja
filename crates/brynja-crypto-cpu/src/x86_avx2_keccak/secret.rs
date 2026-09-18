@@ -1,25 +1,39 @@
 //! Single-state Keccak-f[1600] with an opaque AVX2 cleanup boundary.
 #![allow(unsafe_code)]
 
-/// Permute scratch lanes 0..200; clear temporary bytes 200..576 and registers.
-/// Caller state and pre-existing caller registers are outside this boundary.
+/// Import and permute caller state; commit output, clear scratch and registers.
+/// Caller state remains owned by the caller, not erased. Import/export is inside
+/// this boundary; pre-existing caller registers and upstream copies are not.
 ///
 /// # Safety
 /// AVX2 and OS-enabled XMM/YMM state must hold on every eligible CPU for this call.
 #[target_feature(enable = "avx2")]
 #[inline(never)]
-pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24]) {
+pub unsafe extern "C" fn permute(
+    scratch: &mut [u8; 576],
+    constants: &[u64; 24],
+    state: &mut [u8; 200],
+) {
     // SAFETY: The initialized exclusive scratch contains 25 LE lanes at 0..200,
     // five columns at 200..240, five deltas at 240..280 and 25 rearranged lanes
     // at 280..480. All rho/pi addresses below are fixed, and chi reads exactly
     // one five-lane row at a time. The public round offset visits 0..192 by 8.
     // The entire secret computation stays in one side-effecting, stack-free
-    // block. It clears bytes 200..576, RAX/RCX/RDX/R8, YMM0..3 and flags before
-    // exit. Early clobbers cannot overlap either input pointer. No Rust secret
+    // block. Exactly 25 words move between the disjoint state and scratch;
+    // output commits only after all rounds. It clears all 576 scratch bytes,
+    // RAX/RCX/RDX/R8, YMM0..3 and flags before exit. Early clobbers cannot overlap
+    // any of the three pointers. No Rust secret
     // value, call or compiler-generated intermediate crosses the boundary.
     unsafe {
         core::arch::asm!(
             "# BRYNJA_SECRET_BEGIN",
+            "xor ecx, ecx",
+            "6:",
+            "mov rax, [{state} + rcx]",
+            "mov [{scratch} + rcx], rax",
+            "add rcx, 8",
+            "cmp rcx, 200",
+            "jne 6b",
             "xor r8d, r8d",
             "2:",
             "xor ecx, ecx",
@@ -183,8 +197,15 @@ pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24])
             "add r8, 8",
             "cmp r8, 192",
             "jne 2b",
+            "xor ecx, ecx",
+            "7:",
+            "mov rax, [{scratch} + rcx]",
+            "mov [{state} + rcx], rax",
+            "add rcx, 8",
+            "cmp rcx, 200",
+            "jne 7b",
             "xor eax, eax",
-            "mov ecx, 200",
+            "xor ecx, ecx",
             "5:",
             "mov [{scratch} + rcx], rax",
             "add rcx, 8",
@@ -198,6 +219,7 @@ pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24])
             "# BRYNJA_SECRET_END",
             scratch = in(reg) scratch.as_mut_ptr(),
             constants = in(reg) constants.as_ptr(),
+            state = in(reg) state.as_mut_ptr(),
             out("rax") _, out("rcx") _, out("rdx") _, out("r8") _,
             out("ymm0") _, out("ymm1") _, out("ymm2") _, out("ymm3") _,
             options(nostack),

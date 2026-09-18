@@ -19,8 +19,8 @@ ALLOWED = {
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/arm/secret.rs"): ("807a94ee4f3f8d73c1c945e8899121f6f3635a9ef438f2eb309477f4d5b550c5", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/x86/secret.rs"): ("1c9dfe716a169deb9d8a2670eb485b74d393888898904ba5a092aa1cefcbd852", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/arm/secret.rs"): ("f29271f331283b937532ab931894679d4ee6a1a4049dfbff687c389ff5dfb946", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs"): ("fb571bcee4762b16fdae5012c7d15894a319c711500955d4c3a3d9134119b4aa", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs"): ("d913dd21b13d95ec2341b4bae3b738c5021c501cc6afaf4310f73c181d1736a8", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs"): ("59efd87d9c1fc577f2eb1c39a626849262919783909195ea4e0459ae4641d67e", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs"): ("5e01c5624d8783c742f8d5e04cd6f276bbb158d80fe10160c1d17b715aa36949", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/x86_sha/secret.rs"): ("f8afc16ed5a53259391a9a32a87b3127a9d0556ce634a3cb2ac415a87d7f5adb", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs"): ("2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"): ("b790074aa3774d785a87bf3abca850540f3ab5c798c43aaf3ce29bdde4b38e66", 1, 1, 1),
@@ -91,10 +91,10 @@ ALLOWED = {
         "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a", 0, 1, 0,
     ),
     Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs"): (
-        "2322536da8ae0417973475c8ed702a39ec3759986f13ff7218f993bc0dd9bf23", 4, 1, 4,
+        "25820050594a2f20027667c4f5ed53b8194d516d94e8c80b19a7f72516d5b1bf", 4, 1, 4,
     ),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs"): (
-        "c4fc0d66df46a06af27219d60d36b3f19fd7dae4ac8ed022c9b221ec9af16a27", 4, 1, 4,
+        "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f", 4, 1, 4,
     ),
     Path("crates/brynja-crypto-cpu-std/src/runtime_detection.rs"): (
         "f80399ec92f54a4a7deaf5588e729908a1f730549f30de5bdfdc826c6cb31de5", 1, 0, 1,

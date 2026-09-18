@@ -95,10 +95,18 @@ bytes and 32 state bytes; sharing round constants does not share its recurrence.
 
 Keccak uses an independent coordinate oracle generating rho offsets and round
 constants, cross-checked against the zero-state known answer. Its Linux bounds
-test covers four scratch/constants placements with read-only constants and
-inaccessible neighbors, plus 31 unaligned scratch placements with sentinels.
+test covers eight state/scratch/constants placements with read-only constants and
+inaccessible neighbors, plus 31 unaligned state/scratch placements with sentinels.
+Single-state import and output commit now happen inside the same opaque block
+as permutation: no Rust copy of caller state surrounds the kernel. All 576 bytes
+of private scratch clear before return, including the temporary lane copy.
 Compiled mutations remove individual register wipes or scratch clearing and
-corrupt theta, rho, chi or iota. These must fail in execution, not compilation.
+corrupt import, commit, import length, theta, rho, chi or iota. These must fail
+in execution, not compilation. Higher-level absorb/squeeze and movable owners
+remain separate; this does not establish whole-public-API cleanup.
+The [public-session probe](keccak-session/README.md) additionally checks the
+real session return against exact vector metadata, with deliberate residue
+controls. It does not extend the kernel guarantee to upstream callers.
 The production layout assertions are also mutation-tested: no dynamic indexed
 scratch helper remains, so the former silent-index tests are superseded by
 exact-layout rejection, fixed-offset bounds and algorithm mutations.

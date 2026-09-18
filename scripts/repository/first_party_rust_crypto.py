@@ -138,7 +138,9 @@ def validate(root: Path) -> None:
                 if relative.name == 'secret256.rs' or relative.parent.name == 'x86_sha':
                     signature = signature.replace('[u64; 80]', '[u32; 64]')
                 if relative.parent.name in {'x86_avx2_keccak', 'aarch64_sha3_keccak'}:
-                    signature = 'pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24]) {'
+                    signature = ('pub unsafe extern "C" fn permute(\n'
+                                 '    scratch: &mut [u8; 576],\n    constants: &[u64; 24],\n'
+                                 '    state: &mut [u8; 200],\n) {')
                 if relative.parent.parent.name == 'keccak_hardened_batch':
                     signature = 'pub unsafe extern "C" fn permute(scratch: &mut [u8; 1920], constants: &[u64; 24]) {'
                 if relative.parent.name in {'x86_sha1', 'aarch64_sha1'}:

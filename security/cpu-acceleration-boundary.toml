@@ -388,13 +388,13 @@ sha256 = "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619"
 package = "brynja-crypto-cpu"
 path = "src/x86_avx2_keccak.rs"
 status = "implemented-unadmitted-candidate-kernel"
-sha256 = "2322536da8ae0417973475c8ed702a39ec3759986f13ff7218f993bc0dd9bf23"
+sha256 = "25820050594a2f20027667c4f5ed53b8194d516d94e8c80b19a7f72516d5b1bf"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/aarch64_sha3_keccak.rs"
 status = "implemented-unadmitted-candidate-kernel"
-sha256 = "c4fc0d66df46a06af27219d60d36b3f19fd7dae4ac8ed022c9b221ec9af16a27"
+sha256 = "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -453,7 +453,7 @@ identity = "X86Avx2"
 architecture = "x86_64"
 module = "src/x86_avx2_keccak.rs"
 status = "implemented-unadmitted-local-correctness-observed"
-sha256 = "2322536da8ae0417973475c8ed702a39ec3759986f13ff7218f993bc0dd9bf23"
+sha256 = "25820050594a2f20027667c4f5ed53b8194d516d94e8c80b19a7f72516d5b1bf"
 low_level_allowed = true
 instructions = ["avx2"]
 abi_preconditions = ["x86_64", "osxsave-and-xcr0-ymm-state", "avx2-usable-on-current-logical-cpu"]
@@ -508,7 +508,7 @@ identity = "Aarch64Sha3"
 architecture = "aarch64"
 module = "src/aarch64_sha3_keccak.rs"
 status = "implemented-unadmitted-qemu-correctness-observed"
-sha256 = "c4fc0d66df46a06af27219d60d36b3f19fd7dae4ac8ed022c9b221ec9af16a27"
+sha256 = "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f"
 low_level_allowed = true
 instructions = ["neon", "sha3"]
 abi_preconditions = ["aarch64", "neon-and-sha3-usable-on-current-logical-cpu"]
@@ -603,7 +603,7 @@ sha256 = "a5b427fb4eaf9613ec1f29cd5120eb25567c01645e6b01e41273a67c2f9d421a"
 package = "brynja-crypto-cpu"
 path = "src/hardened_execution/keccak.rs"
 status = "hardened-keccak-authority-and-cleanup"
-sha256 = "d0b0f0d758d3b4297cb13e7bc6a3113dad970f72200a5f106284325a9b313ffc"
+sha256 = "382debd88475a214c3440ba4ac91bd10c1aed29537b180adf60632dc58693795"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -615,7 +615,7 @@ sha256 = "8d8c24854fb5b681b29f425da8b5842a79766f447e70ee5453ed96e1b1e3422d"
 package = "brynja-crypto-cpu"
 path = "src/hardened_execution/keccak/tests.rs"
 status = "hardened-keccak-lifecycle-tests"
-sha256 = "54fb5d0a886e46dec4a7a2560640163fa125329a7a5835fe72690b2f2fe2b025"
+sha256 = "834b19fd12f82f8982aa7fb12c8661e2c92feacd0fd0283e3dd1ea7f7591a60c"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -855,13 +855,13 @@ sha256 = "2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f"
 package = "brynja-crypto-cpu"
 path = "src/x86_avx2_keccak/secret.rs"
 status = "hardened-keccak-opaque-register-boundary"
-sha256 = "fb571bcee4762b16fdae5012c7d15894a319c711500955d4c3a3d9134119b4aa"
+sha256 = "59efd87d9c1fc577f2eb1c39a626849262919783909195ea4e0459ae4641d67e"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/aarch64_sha3_keccak/secret.rs"
 status = "hardened-keccak-opaque-register-boundary"
-sha256 = "d913dd21b13d95ec2341b4bae3b738c5021c501cc6afaf4310f73c181d1736a8"
+sha256 = "5e01c5624d8783c742f8d5e04cd6f276bbb158d80fe10160c1d17b715aa36949"
 
 [[sources]]
 package = "brynja-crypto-cpu"

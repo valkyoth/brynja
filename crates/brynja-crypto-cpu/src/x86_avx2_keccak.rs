@@ -116,6 +116,7 @@ mod secret;
 #[cfg(feature = "hardened-execution")]
 pub(crate) fn permute_secret(
     scratch: &mut crate::hardened_execution::keccak_scratch::KeccakScratch,
+    state: &mut [u8; 200],
 ) -> Result<(), crate::static_execution::Error> {
     use crate::hardened_execution::keccak_scratch::KeccakScratch;
     const _: () = assert!(core::mem::size_of::<KeccakScratch>() == 576);
@@ -129,11 +130,13 @@ pub(crate) fn permute_secret(
     // SAFETY: The sealed dispatcher establishes the complete instruction bundle.
     // repr(C), the exact field offsets and total size prove a contiguous fully
     // initialized 576-byte owner with no padding. This exclusive reborrow never
-    // escapes; the kernel preserves the result lanes and erases all other bytes.
+    // escapes; state is a separate exclusive 200-byte region. The kernel imports
+    // and commits those lanes internally, then erases the complete scratch.
     unsafe {
         secret::permute(
             &mut *core::ptr::from_mut(scratch).cast::<[u8; 576]>(),
             &ROUND_CONSTANTS,
+            state,
         );
     }
     Ok(())

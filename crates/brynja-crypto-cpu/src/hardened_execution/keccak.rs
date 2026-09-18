@@ -79,9 +79,10 @@ impl<'a> KeccakSession<'a> {
             route: &self.route,
             completed: false,
         };
-        guard.scratch.lanes.copy_from_slice(state);
-        dispatch(kernel, guard.scratch)?;
-        state.copy_from_slice(&guard.scratch.lanes);
+        // The opaque kernel imports and commits state itself. Rust handles only
+        // pointers here, so it cannot recreate secret register copies after the
+        // kernel's cleanup epilogue. This does not qualify upstream callers.
+        dispatch(kernel, guard.scratch, state)?;
         guard.completed = true;
         Ok(())
     }
@@ -102,16 +103,20 @@ impl Drop for Operation<'_, '_> {
     }
 }
 
-fn dispatch(kernel: Kernel, scratch: &mut KeccakScratch) -> Result<(), Error> {
+fn dispatch(
+    kernel: Kernel,
+    scratch: &mut KeccakScratch,
+    state: &mut [u8; 200],
+) -> Result<(), Error> {
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86Keccak {
-        return crate::x86_avx2_keccak::permute_secret(scratch);
+        return crate::x86_avx2_keccak::permute_secret(scratch, state);
     }
     #[cfg(target_arch = "aarch64")]
     if kernel == Kernel::ArmKeccak {
-        return crate::aarch64_sha3_keccak::permute_secret(scratch);
+        return crate::aarch64_sha3_keccak::permute_secret(scratch, state);
     }
-    let _ = (kernel, scratch);
+    let _ = (kernel, scratch, state);
     Err(Error::WrongOperation)
 }
 

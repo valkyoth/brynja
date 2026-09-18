@@ -1,14 +1,19 @@
 //! Single-state Keccak-f[1600] with an opaque Arm SHA3 cleanup boundary.
 #![allow(unsafe_code)]
 
-/// Permute scratch lanes 0..200; clear temporary bytes 200..576 and registers.
-/// Caller state and pre-existing caller registers are outside this boundary.
+/// Import and permute caller state; commit output, clear scratch and registers.
+/// Caller state remains owned by the caller, not erased. Import/export is inside
+/// this boundary; pre-existing caller registers and upstream copies are not.
 ///
 /// # Safety
 /// NEON/SHA3 must hold on every eligible CPU throughout this call.
 #[target_feature(enable = "neon,sha3")]
 #[inline(never)]
-pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24]) {
+pub unsafe extern "C" fn permute(
+    scratch: &mut [u8; 576],
+    constants: &[u64; 24],
+    state: &mut [u8; 200],
+) {
     const {
         assert!(cfg!(target_endian = "little"));
     }
@@ -16,12 +21,20 @@ pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24])
     // 240..280 and rearranged lanes 280..480. Fixed rho/pi offsets stay within
     // those regions. Each chi load fits its five-lane row; round offsets visit
     // 0..192 by eight. No stack access, call or Rust secret result escapes this
-    // single side-effecting block. It erases bytes 200..576, all working
+    // single side-effecting block. Exactly 25 words move between disjoint state
+    // and scratch; output commits only after all rounds. It erases all 576 bytes, all working
     // X4/X5/X6/X7/X9 and V0..3, then NZCV. Early clobbers exclude input pointers;
     // preserved D8..15 are untouched. Normal unaligned memory is supported.
     unsafe {
         core::arch::asm!(
             "// BRYNJA_SECRET_BEGIN",
+            "mov x7, #0",
+            "6:",
+            "ldr x5, [{state}, x7]",
+            "str x5, [{scratch}, x7]",
+            "add x7, x7, #8",
+            "cmp x7, #200",
+            "b.ne 6b",
             "mov x4, #0",
             "2:",
             "mov x7, #0",
@@ -219,7 +232,14 @@ pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24])
             "add x4, x4, #8",
             "cmp x4, #192",
             "b.ne 2b",
-            "mov x7, #200",
+            "mov x7, #0",
+            "7:",
+            "ldr x5, [{scratch}, x7]",
+            "str x5, [{state}, x7]",
+            "add x7, x7, #8",
+            "cmp x7, #200",
+            "b.ne 7b",
+            "mov x7, #0",
             "5:",
             "str xzr, [{scratch}, x7]",
             "add x7, x7, #8",
@@ -234,6 +254,7 @@ pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24])
             "// BRYNJA_SECRET_END",
             scratch = in(reg) scratch.as_mut_ptr(),
             constants = in(reg) constants.as_ptr(),
+            state = in(reg) state.as_mut_ptr(),
             out("x4") _, out("x5") _, out("x6") _, out("x7") _, out("x9") _,
             out("v0") _, out("v1") _, out("v2") _, out("v3") _,
             options(nostack),

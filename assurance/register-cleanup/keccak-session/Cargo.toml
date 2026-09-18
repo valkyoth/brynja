@@ -1,0 +1,19 @@
+[workspace]
+
+[package]
+name = "brynja-keccak-session-cleanup"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+brynja-crypto-cpu = { path = "../../../crates/brynja-crypto-cpu", default-features = false, features = ["hardened-execution"] }
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"

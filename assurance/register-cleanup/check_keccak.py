@@ -19,7 +19,7 @@ SOURCES = {
 }
 FEATURE = ['--features', 'keccak-probe']
 MARKERS = ('KECCAK_CLEANUP: 1024 permutations; 31 unaligned placements; PASS',
-           'KECCAK_BOUNDS: 4 guarded placements; readonly constants: PASS')
+           'KECCAK_BOUNDS: 8 guarded placements; readonly constants: PASS')
 BATCH = False
 BATCH512 = False
 KECCAK_BATCH = False
@@ -138,7 +138,10 @@ def mutation_cases(arch, original, mutations):
         poison = [f'"mov {r}, -1",' for r in gp]
         poison += [f'"vpcmpeqd ymm{i}, ymm{i}, ymm{i}",' for i in range(4)]
         algorithm = (
-            ('"mov [{scratch} + rcx], rax",', ''),
+            ('"5:",\n            "mov [{scratch} + rcx], rax",', '"5:",'),
+            ('"mov rax, [{state} + rcx]",', '"xor eax, eax",'),
+            ('"mov [{state} + rcx], rax",', ''),
+            ('"cmp rcx, 200",\n            "jne 6b",', '"cmp rcx, 192",\n            "jne 6b",'),
             ('"rol rax, 62",', '"rol rax, 61",'),
             ('"vpblendd ymm2, ymm2, ymm3, 0xc0",', '"vpblendd ymm2, ymm2, ymm3, 0x30",'),
             ('"xor [{scratch}], rax",', ''),
@@ -153,6 +156,9 @@ def mutation_cases(arch, original, mutations):
         poison += [f'"movi v{i}.16b, #255",' for i in range(4)]
         algorithm = (
             ('"str xzr, [{scratch}, x7]",', ''),
+            ('"ldr x5, [{state}, x7]",', '"mov x5, xzr",'),
+            ('"str x5, [{state}, x7]",', ''),
+            ('"cmp x7, #200",\n            "b.ne 6b",', '"cmp x7, #192",\n            "b.ne 6b",'),
             ('"ror x5, x5, #2",', '"ror x5, x5, #3",'),
             ('"ins v2.d[1], v3.d[0]",', '"ins v2.d[1], v2.d[0]",'),
             ('"str x5, [{scratch}]",', ''),

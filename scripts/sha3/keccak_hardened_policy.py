@@ -42,7 +42,7 @@ def semantic(root):
             'session.permute(core::hint::black_box(&mut state))?',
             'if !correct {', 'session.route.quarantine();',
             'self.check()?;', 'self.route.check()?;',
-            'dispatch(kernel, guard.scratch)?;', 'self.scratch.wipe();',
+            'dispatch(kernel, guard.scratch, state)?;', 'self.scratch.wipe();',
             'if !self.completed {', 'self.route.quarantine();'),
         ENGINE: ('self.session.check().map_err(Error::Backend)',
                  'Operation::new(self)', 'impl Drop for Operation',
@@ -68,13 +68,19 @@ def semantic(root):
             'core::mem::offset_of!(KeccakScratch, rearranged) == 280',
             'secret::permute(', 'cast::<[u8; 576]>()')
         checks[CPU + '/src/' + module + '/secret.rs'] = (
-            'pub unsafe extern "C" fn permute(scratch: &mut [u8; 576], constants: &[u64; 24])',
+            'pub unsafe extern "C" fn permute(', 'scratch: &mut [u8; 576]',
+            'constants: &[u64; 24]', 'state: &mut [u8; 200]',
+            'state = in(reg) state.as_mut_ptr()',
             '#[inline(never)]', 'BRYNJA_SECRET_BEGIN',
             'BRYNJA_REGISTER_ERASE', 'BRYNJA_SECRET_END', 'options(nostack)')
     for name, tokens in checks.items():
         source = read(root, name)
         for token in tokens:
             require(token in source, name + ': ' + token)
+    session = '\n'.join(line.split('//')[0] for line in
+                        read(root, CPU + '/src/hardened_execution/keccak.rs').splitlines())
+    require('copy_from_slice' not in session and 'scratch.lanes' not in session,
+            'secret state transfer escaped opaque kernel')
     manifest = tomllib.loads(read(root, HASH + '/Cargo.toml'))
     require(manifest['features']['hardened-execution'] ==
             ['static-execution', 'brynja-crypto-cpu/hardened-execution'], 'exact feature closure')

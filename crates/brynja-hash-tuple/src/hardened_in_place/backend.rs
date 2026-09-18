@@ -11,6 +11,11 @@ pub(super) trait State {
     fn finish(self, tail: Fips202BitString<'_>) -> Result<Self::Reader, TupleHashError>;
 }
 pub(super) trait Reader {
+    fn read_public(&mut self, output: &mut [u8]) -> Result<(), TupleHashError>;
+    fn read_secret<'out>(
+        &mut self,
+        output: &'out mut [u8],
+    ) -> Result<HardenedSha3SecretOutput<'out>, TupleHashError>;
     fn public(self, output: Fips202Output<'_>) -> Result<(), TupleHashError>;
     fn secret<'out>(
         self,
@@ -29,6 +34,16 @@ macro_rules! port {
             }
         }
         impl Reader for api::$reader<'_> {
+            fn read_public(&mut self, output: &mut [u8]) -> Result<(), TupleHashError> {
+                self.squeeze_public(output, Sha3PublicDeclassification::acknowledge())
+                    .map_err(TupleHashError::from)
+            }
+            fn read_secret<'out>(
+                &mut self,
+                output: &'out mut [u8],
+            ) -> Result<HardenedSha3SecretOutput<'out>, TupleHashError> {
+                self.squeeze_secret(output).map_err(TupleHashError::from)
+            }
             fn public(self, output: Fips202Output<'_>) -> Result<(), TupleHashError> {
                 self.squeeze_final_bits_public(output, Sha3PublicDeclassification::acknowledge())
                     .map_err(TupleHashError::from)

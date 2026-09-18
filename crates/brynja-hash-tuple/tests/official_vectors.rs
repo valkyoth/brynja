@@ -142,6 +142,22 @@ fn check_xof_128(customized: bool, third: bool, expected: &str) {
         Ok(())
     );
     assert_hex(&output, expected);
+    let mut workspace = brynja_hash_tuple::hardened_in_place::TupleHashXof128Workspace::new();
+    output.fill(0xa5);
+    assert_eq!(
+        workspace.with(customization(customized), |mut state| {
+            for item in tuple(third) {
+                state.push_item(item)?;
+            }
+            state.finalize_xof()?.squeeze_final_bits_public(
+                &mut output,
+                8,
+                brynja_hash_tuple::TupleHashPublicDeclassification::acknowledge(),
+            )
+        }),
+        Ok(Ok(()))
+    );
+    assert_hex(&output, expected);
 }
 
 fn check_xof_256(customized: bool, third: bool, expected: &str) {
@@ -149,6 +165,22 @@ fn check_xof_256(customized: bool, third: bool, expected: &str) {
     assert_eq!(
         tuple_hash_xof256(tuple(third), customization(customized), &mut output),
         Ok(())
+    );
+    assert_hex(&output, expected);
+    let mut workspace = brynja_hash_tuple::hardened_in_place::TupleHashXof256Workspace::new();
+    output.fill(0xa5);
+    assert_eq!(
+        workspace.with(customization(customized), |mut state| {
+            for item in tuple(third) {
+                state.push_item(item)?;
+            }
+            state.finalize_xof()?.squeeze_final_bits_public(
+                &mut output,
+                8,
+                brynja_hash_tuple::TupleHashPublicDeclassification::acknowledge(),
+            )
+        }),
+        Ok(Ok(()))
     );
     assert_hex(&output, expected);
 }

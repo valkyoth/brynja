@@ -44,8 +44,10 @@ No crates are selected for publication.
   input; consuming secret/public finalizers transfer only references. Terminal
   errors and independent scope cleanup cover abandoned or forgotten writers,
   cancelled handles and recoverable unwind. Integer prefixes/trailers initialize
-  borrowed storage. Scoped TupleHash XOF and acceleration remain pending, as does
-  complete compiler-copy/register/spill qualification.
+  borrowed storage. Portable scoped TupleHashXOF128/256 readers now retain that
+  borrow through incremental public/secret and consuming final-bit output, with
+  right_encode(0) framing. Scoped acceleration and complete compiler-copy/register/
+  spill qualification remain pending.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;
   add distinct owner-backed hardened compression without ordinary scratch reuse.
 - Preserve generic portable defaults, AVX2 batch routes and the hosted x86

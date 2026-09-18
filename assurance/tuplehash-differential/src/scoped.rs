@@ -13,8 +13,41 @@ pub(super) fn check(
     line: usize,
 ) -> Result<(), io::Error> {
     let valid = valid_bits(output_bits);
+    macro_rules! public {
+        ($state:ident, $actual:ident, fixed) => {
+            $state.finalize_public_bits(
+                &mut $actual,
+                valid,
+                TupleHashPublicDeclassification::acknowledge(),
+            )
+        };
+        ($state:ident, $actual:ident, xof) => {
+            $state.finalize_xof().and_then(|mut reader| {
+                let split = $actual.len().saturating_sub(1);
+                let (prefix, tail) = $actual.split_at_mut(split);
+                for chunk in prefix.chunks_mut(17) {
+                    reader.squeeze_public(chunk, TupleHashPublicDeclassification::acknowledge())?;
+                }
+                reader.squeeze_final_bits_public(
+                    tail,
+                    valid,
+                    TupleHashPublicDeclassification::acknowledge(),
+                )
+            })
+        };
+    }
+    macro_rules! secret {
+        ($state:ident, $actual:ident, fixed) => {
+            $state.finalize_secret_bits(&mut $actual, valid)
+        };
+        ($state:ident, $actual:ident, xof) => {
+            $state
+                .finalize_xof()
+                .and_then(|reader| reader.squeeze_final_bits_secret(&mut $actual, valid))
+        };
+    }
     macro_rules! run {
-        ($workspace:ident) => {{
+        ($workspace:ident, $kind:ident) => {{
             let mut workspace = api::$workspace::new();
             let mut actual = vec![0xa5; expected.len()];
             workspace
@@ -24,12 +57,7 @@ pub(super) fn check(
                             .push_item_bits(bit_string(bytes, *count, line)?)
                             .map_err(|_| invalid(line, "scoped item rejected"))?;
                     }
-                    state
-                        .finalize_public_bits(
-                            &mut actual,
-                            valid,
-                            TupleHashPublicDeclassification::acknowledge(),
-                        )
+                    public!(state, actual, $kind)
                         .map_err(|_| invalid(line, "scoped public output rejected"))
                 })
                 .map_err(|_| invalid(line, "scoped setup rejected"))??;
@@ -75,8 +103,7 @@ pub(super) fn check(
                             .finish()
                             .map_err(|_| invalid(line, "scoped item finish rejected"))?;
                     }
-                    state
-                        .finalize_secret_bits(&mut actual, valid)
+                    secret!(state, actual, $kind)
                         .map_err(|_| invalid(line, "scoped secret output rejected"))
                 })
                 .map_err(|_| invalid(line, "scoped setup rejected"))??;
@@ -90,9 +117,11 @@ pub(super) fn check(
         }};
     }
     match algorithm {
-        "tuple128" => run!(TupleHash128Workspace),
-        "tuple256" => run!(TupleHash256Workspace),
-        _ => (),
+        "tuple128" => run!(TupleHash128Workspace, fixed),
+        "tuple256" => run!(TupleHash256Workspace, fixed),
+        "tuplexof128" => run!(TupleHashXof128Workspace, xof),
+        "tuplexof256" => run!(TupleHashXof256Workspace, xof),
+        _ => return Err(invalid(line, "unrecognized scoped identity")),
     }
     Ok(())
 }

@@ -1,6 +1,6 @@
 # Scoped hardened storage
 
-Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and portable fixed TupleHash API development checkpoint; wider rollout and complete
+Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and portable TupleHash/TupleHashXOF API development checkpoint; wider rollout and complete
 register/spill qualification pending. No independent verification or FIPS claim.
 
 The first additive API is `brynja_hash_sha3::hardened_in_place`, with
@@ -183,8 +183,8 @@ portable and accelerated paths borrow those bytes rather than receive populated
 encoding owners by value. Reuse clears the entire 17-byte region and its length
 before writing, and Drop clears both regions. Empty or invalid encoded lengths
 fail closed. This removes that explicit owner-return transfer, not every possible
-compiler-created copy of length metadata. Scoped TupleHash XOF readers,
-accelerated workspaces and complete register/spill qualification remain unfinished.
+compiler-created copy of length metadata. Scoped accelerated TupleHash workspaces
+and complete register/spill qualification remain unfinished.
 
 ## Scoped fixed TupleHash
 
@@ -215,7 +215,33 @@ byte fragments. State, workspace and writers are not Copy/Clone/Debug/Send/Sync.
 Independent scope cleanup covers forgotten handles and recoverable unwind.
 Caller inputs, compiler-created copies, registers/spills and abort remain outside
 the owned-memory claim. Existing APIs, defaults and acceleration authority are
-unchanged. Scoped XOF and accelerated TupleHash are separate unfinished work.
+unchanged. Scoped accelerated TupleHash remains unfinished.
+
+## Scoped TupleHashXOF
+
+`hardened_in_place::{TupleHashXof128Workspace, TupleHashXof256Workspace}` reuse
+the fixed workspaces' portable storage, customization and exact-length writer
+discipline. `with`/`with_bits` expose `TupleHashXof128`/`TupleHashXof256`; these
+accept `push_item`, `push_item_bits` and `begin_item`. `finalize_xof` consumes the
+state, appends `right_encode(0)` and transfers only references into the matching
+`TupleHashXof128Reader`/`TupleHashXof256Reader`. Open, incomplete or forgotten
+writers cannot authorize this transition.
+
+Readers provide incremental `squeeze_public` (explicit declassification) and
+`squeeze_secret` (typed clearing output). Consuming `squeeze_final_bits_public`
+and `squeeze_final_bits_secret` take a destination and valid-bit count: zero
+for empty output, 1..=8 otherwise. Partial output is canonical; public failures
+preserve destinations, while secret failures clear the entire destination even
+on invalid shape or an already terminated reader. Empty reads also enforce
+terminal state. Dropping/cancelling readers clears their borrowed storage;
+independent outer scope guards also cover forgotten handles and recoverable
+unwind. A secret output borrowing separate storage may outlive the scope.
+
+Workspace, state and reader are not Copy/Clone/Debug/Send/Sync; neither state nor
+reader can escape or overlap its scope. No secret-length or item-count query
+is added. This is portable owned-memory lifecycle coverage, not complete
+register, spill or compiler-copy erasure. Abort and caller-owned inputs remain
+outside the guarantee. Existing accelerated APIs remain separate and unchanged.
 
 ## KMAC framing prerequisite
 

@@ -64,6 +64,17 @@ def negatives(consumer, env):
             (f'fn query(s:{state}) {{ let _=s.check_additional_bits(1); }}', 'E0599'),
             (f'fn query(w:{scoped}::TupleHash{strength}ItemWriter) {{ let _=w.remaining_bits(); }}', 'E0599'),
         ]
+        xof = f'{scoped}::TupleHashXof{strength}'
+        for name in (xof, xof + 'Workspace', xof + 'Reader'):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn check<T:{bound}>(){{}} check::<{name}>();', 'E0277'))
+        cases += [
+            (f'fn reuse(s:{xof}) {{ let _=s.finalize_xof(); s.cancel(); }}', 'E0382'),
+            (f'fn reuse(r:{xof}Reader) {{ let _=r.squeeze_final_bits_secret(&mut [],0); r.cancel(); }}', 'E0382'),
+            (f'fn public(mut r:{xof}Reader) {{ let _=r.squeeze_public(&mut []); }}', 'E0061'),
+            (f'fn query(s:{xof}) {{ let _=s.item_count(); }}', 'E0599'),
+            (f'fn query(s:{xof}) {{ let _=s.check_additional_bits(1); }}', 'E0599'),
+        ]
     try:
         for code, diagnostic in cases:
             path.write_text(original + prefix + code + '}\n')
@@ -194,10 +205,18 @@ def scoped_mutations(roots, env):
         ('core_state.rs', 'suffix.right(bits)?;', 'suffix.right(0)?;'),
         ('fixed.rs', 'bytes_input(b"TupleHash")?', 'bytes_input(b"WRONG")?'),
         ('fixed.rs', 'if !self.complete { self.core.cancel(); }', ''),
+        ('core_state.rs', 'self.finish(0)', 'self.finish(1)'),
+        ('reader.rs', '*self.reader = None;', ''),
+        ('reader.rs', 'self.metadata.wipe();', ''),
+        ('reader.rs', 'if !self.complete {', 'if self.complete {'),
+        ('reader.rs', 'clear_owned_region(output);\n        let mut guard', 'core::hint::black_box(&mut *output);\n        let mut guard'),
+        ('reader.rs', 'clear_owned_region(output);\n        let reader', 'core::hint::black_box(&mut *output);\n        let reader'),
+        ('backend.rs', 'self.squeeze_public(output, Sha3PublicDeclassification::acknowledge())',
+         'Ok::<(), brynja_hash_sha3::HardenedSha3Error>(())'),
     ]
     command = ['cargo', 'test', '--offline', '--lib', 'hardened_in_place::']
     for profile in ([], ['--release']):
-        if '7 passed; 0 failed' not in shared.run(command + profile, crate, env).stdout:
+        if '13 passed; 0 failed' not in shared.run(command + profile, crate, env).stdout:
             raise ValueError('scoped TupleHash mutation control incomplete')
     for name, before, after in cases:
         path = root / name
@@ -232,7 +251,7 @@ def main():
             if '6 passed; 0 failed' not in result.stdout:
                 raise ValueError('packaged TupleHash execution suite incomplete')
             scoped = shared.run(['cargo', 'test', '--offline', '--test', 'scoped', *profile], consumer, env)
-            if '2 passed; 0 failed' not in scoped.stdout:
+            if '4 passed; 0 failed' not in scoped.stdout:
                 raise ValueError('packaged scoped TupleHash suite incomplete')
         negatives(consumer, env)
         mutations(consumer, roots, env)

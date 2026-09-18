@@ -1,4 +1,4 @@
-//! Scoped portable fixed TupleHash128/256 with caller-owned storage.
+//! Scoped portable TupleHash128/256 and TupleHashXOF128/256 with caller-owned storage.
 //!
 //! Workspaces are constructed empty, then exclusively borrowed before accepting
 //! customization or items. Finalization consumes a borrowed handle, not a secret
@@ -33,9 +33,15 @@
 mod backend;
 mod core_state;
 mod fixed;
+mod reader;
+mod xof;
 pub use fixed::{
     TupleHash128, TupleHash128ItemWriter, TupleHash128Workspace, TupleHash256,
     TupleHash256ItemWriter, TupleHash256Workspace,
+};
+pub use xof::{
+    TupleHashXof128, TupleHashXof128Reader, TupleHashXof128Workspace, TupleHashXof256,
+    TupleHashXof256Reader, TupleHashXof256Workspace,
 };
 
 #[cfg(test)]

@@ -36,6 +36,16 @@ impl Metadata {
         let _ = clear_owned_region(&mut self.staging);
     }
     #[cfg(test)]
+    pub(super) fn poison(&mut self) {
+        self.pending.fill(0xa5);
+        self.used.fill(0xa5);
+        self.items.fill(0xa5);
+        self.remaining.fill(0xa5);
+        self.input_bits.fill(0xa5);
+        self.phase.fill(0xa5);
+        self.staging.fill(0xa5);
+    }
+    #[cfg(test)]
     pub(super) fn cleared(&self) -> bool {
         self.pending == [0]
             && self.used == [0]
@@ -242,6 +252,9 @@ impl<'scope, S: State> Core<'scope, S> {
             }
         }
         Ok(())
+    }
+    pub(super) fn finish_xof(self) -> Result<(S::Reader, Guard<'scope>), TupleHashError> {
+        self.finish(0)
     }
     fn finish(mut self, bits: u128) -> Result<(S::Reader, Guard<'scope>), TupleHashError> {
         self.phase(1)?;

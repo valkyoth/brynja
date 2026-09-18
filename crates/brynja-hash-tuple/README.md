@@ -37,6 +37,7 @@ hardened cSHAKE owner, without duplicating Keccak. It has no third-party depende
 | Byte/bit tuples, streamed items and hardened outputs | ✅ Implemented | ❌ No |
 | Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
 | Scoped fixed TupleHash128/256 workspaces and item writers | ✅ Portable | ❌ No |
+| Scoped TupleHashXOF128/256 workspaces and incremental readers | ✅ Portable | ❌ No |
 
 Implementation is not independent assurance. No named independent
 cryptographic review or FIPS 140-3 validation is claimed.
@@ -93,8 +94,30 @@ writer `update_bits` accept canonical bit strings; consuming finalizers support
 byte/bit secret output or explicit public declassification. Errors terminate the
 scope's computation. These scopes expose no accumulated-length or item-count
 queries, and outer cleanup also covers forgotten handles and recoverable unwind.
-Scoped XOF and scoped acceleration remain under development; the existing XOF
-and accelerated APIs above remain available separately.
+For scoped extensible output, use the matching XOF workspace:
+
+```rust
+use brynja_hash_tuple::{TupleHashError, hardened_in_place::TupleHashXof128Workspace};
+let mut workspace = TupleHashXof128Workspace::new();
+let mut bytes = [0; 32];
+let secret = workspace.with(b"application", |mut tuple| {
+    tuple.push_item(b"first item")?;
+    let mut reader = tuple.finalize_xof()?;
+    reader.squeeze_secret(&mut bytes)
+})??;
+assert_eq!(secret.expose().len(), 32);
+drop(secret);
+assert_eq!(bytes, [0; 32]);
+# Ok::<(), TupleHashError>(())
+```
+
+`TupleHashXof256Workspace` has the same API. Readers support incremental
+`squeeze_public`/`squeeze_secret` and consuming `squeeze_final_bits_public`/
+`squeeze_final_bits_secret`; public output requires explicit declassification.
+XOF scopes retain the same item-writer discipline and expose no length queries.
+Scoped acceleration remains under development; existing accelerated APIs remain
+available separately. Registers, spills and compiler copies are not covered by
+the scoped owned-memory cleanup guarantee.
 
 ## Hardware and SIMD
 

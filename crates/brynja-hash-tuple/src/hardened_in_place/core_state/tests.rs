@@ -38,6 +38,15 @@ impl State for Mock<'_> {
     }
 }
 impl Reader for MockReader {
+    fn read_public(&mut self, _: &mut [u8]) -> Result<(), TupleHashError> {
+        Err(TupleHashError::SecretMemory)
+    }
+    fn read_secret<'out>(
+        &mut self,
+        _: &'out mut [u8],
+    ) -> Result<HardenedSha3SecretOutput<'out>, TupleHashError> {
+        Err(TupleHashError::SecretMemory)
+    }
     fn public(self, _: Fips202Output<'_>) -> Result<(), TupleHashError> {
         Err(TupleHashError::SecretMemory)
     }

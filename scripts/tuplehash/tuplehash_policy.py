@@ -16,10 +16,13 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "lib.rs", "output.rs", "secret_encoding.rs", "xof.rs",
     "hardened_in_place.rs", "hardened_in_place/backend.rs",
     "hardened_in_place/core_state.rs", "hardened_in_place/fixed.rs",
+    "hardened_in_place/reader.rs", "hardened_in_place/xof.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
          CRATE / "src/hardened_in_place/tests.rs",
-         CRATE / "src/hardened_in_place/core_state/tests.rs")
+         CRATE / "src/hardened_in_place/core_state/tests.rs",
+         CRATE / "src/hardened_in_place/reader/tests.rs",
+         CRATE / "src/hardened_in_place/xof/tests.rs")
 MANIFEST = CRATE / "Cargo.toml"
 README = CRATE / "README.md"
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
@@ -278,10 +281,27 @@ SCOPED_TOKENS = {
         "core.cleanup.0.phase = [1];", "prefix.left(bits)?;", "suffix.right(bits)?;",
         "self\n            .state\n            .take()", "clear_owned_region(bytes)",
         "for chunk in input.chunks(168)", "Fips202BitString::new(&self.cleanup.0.pending, valid)",
+        "self.finish(0)",
     ),
     "hardened_in_place/backend.rs": (
         "State for api::$state<'scope>", "self.finalize_bits_xof(tail)",
         "self.squeeze_final_bits_secret(output)", "Sha3PublicDeclassification::acknowledge()",
+        "self.squeeze_public(output,", "self.squeeze_secret(output)",
+    ),
+    "hardened_in_place/xof.rs": (
+        "inner: fixed::$fixed_workspace", "inner: fixed::$fixed_state<'scope>",
+        "impl for<'scope> FnOnce($state<'scope>) -> R", "self.inner.begin_item(bits)",
+        "self.inner.core.finish_xof()?", "Output::new(reader, cleanup)",
+        "inner: Output<'scope, cshake::$backend_reader<'scope>>",
+        "pub fn squeeze_public(&mut self,", "_authority: TupleHashPublicDeclassification",
+        "pub fn squeeze_final_bits_secret<'out>(self,", "pub fn cancel(self)",
+    ),
+    "hardened_in_place/reader.rs": (
+        "reader: Option<R>", "cleanup: Guard<'scope>", "if !self.complete {",
+        "*self.reader = None;", "self.metadata.wipe();", "clear_owned_region(output)",
+        ".read_public(output)?", ".read_secret(output)?", "guard.complete = true;",
+        "self.reader.take().ok_or(TupleHashError::StateConsumed)?",
+        "Fips202Output::new(output, valid)", ".map(TupleHashSecretOutput::new)",
     ),
 }
 
@@ -294,11 +314,13 @@ def validate_scoped(loaded: dict) -> None:
     core = loaded[CRATE / "src/hardened_in_place/core_state.rs"]
     for field in ("pending", "used", "items", "remaining", "input_bits", "phase", "staging"):
         require(core, f"clear_owned_region(&mut self.{field})", "scoped tuple owned region")
-    fixed = without_comments(loaded[CRATE / "src/hardened_in_place/fixed.rs"])
+    fixed = without_comments(loaded[CRATE / "src/hardened_in_place/fixed.rs"] +
+                             loaded[CRATE / "src/hardened_in_place/xof.rs"])
     for forbidden in ("pub fn item_count", "pub fn remaining_bits", "pub fn check_additional", "pub fn input_bits"):
         if forbidden in fixed:
             fail("scoped tuple exposes metadata/preflight query: " + forbidden)
     for token in ('scoped::check(',):
         require(loaded[DIFFERENTIAL_FIXTURE], token, "scoped tuple oracle dispatch")
-    for token in ('TupleHash128Workspace', 'TupleHash256Workspace', 'scoped public/oracle mismatch', 'scoped secret/oracle mismatch'):
+    for token in ('TupleHash128Workspace', 'TupleHash256Workspace', 'TupleHashXof128Workspace',
+                  'TupleHashXof256Workspace', 'scoped public/oracle mismatch', 'scoped secret/oracle mismatch'):
         require(loaded[SCOPED_FIXTURE], token, "scoped tuple differential coverage")

@@ -44,7 +44,7 @@ macro_rules! fixed {
         #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_hash_tuple::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
         #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_hash_tuple::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
         #[must_use = "finalize or cancel the tuple"]
-        pub struct $state<'scope> { core: Core<'scope, cshake::$backend<'scope>> }
+        pub struct $state<'scope> { pub(super) core: Core<'scope, cshake::$backend<'scope>> }
         impl<'scope> $state<'scope> {
             #[cfg(test)]
             pub(super) fn terminal_and_cleared(&self) -> bool { self.core.terminal_and_cleared() }

@@ -13,7 +13,7 @@
 "assurance/sp800185-public-api/src/vectors.rs" = "390669cf9dee21da18abe9fd4d09fd5679fbb79b93e80b7324c5a62a806f7f0f"
 "crates/brynja-hash-sha3/tests/cshake.rs" = "e57c82843a01a3956b8835511cb0a2d0f850918cd2be143b981c3e1575175b6b"
 "crates/brynja-mac-kmac/tests/official_vectors.rs" = "590c22f159980e40ad7a72b64e6c7b16e990d84c0d7f90ee31f47e1564480e27"
-"crates/brynja-hash-tuple/tests/official_vectors.rs" = "8cbb13c168530dad1dc732cd2923c693bcf4323a701e1a92c186e33acffc1a65"
+"crates/brynja-hash-tuple/tests/official_vectors.rs" = "d76c9c265e716dc1ea25f71a3d1b7e5cbad125d054dad51115978901ebea9030"
 "crates/brynja-hash-parallel/tests/official_vectors.rs" = "c2908295b594c5d683ed0a7d1ef550b47398841cac9d16265b411b4fc0524991"
 "assurance/cshake-public-api/src/lib.rs" = "73d4bc98b48cb6556eb0ec96c3aa19b8e8e52a177ebc3ad907bc196cae562c25"
 "assurance/kmac-public-api/src/lib.rs" = "6b83f70078bec568e180a486c15425ddd2d3dcc23bb6ab0d07deb57404f8a6c6"

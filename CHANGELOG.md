@@ -17,6 +17,10 @@
   output. Accelerated fixed KMAC and KMACXOF scopes bind the existing Keccak
   authority and borrowed public staging. Complete compiler-residue qualification
   and higher-construction rollout remain pending.
+- Add portable scoped fixed TupleHash128/256 workspaces and exact-length item
+  writers, with consuming secret/public finalizers and independent scope cleanup.
+  Initialize integer framing through borrowed storage. Scoped TupleHash XOF and
+  acceleration, and complete residue qualification, remain pending.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
   exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration
   pass; exceptional pentest and final release verification remain pending.

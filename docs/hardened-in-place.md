@@ -1,6 +1,6 @@
 # Scoped hardened storage
 
-Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE and KMAC/KMACXOF API development checkpoint; wider rollout and complete
+Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and portable fixed TupleHash API development checkpoint; wider rollout and complete
 register/spill qualification pending. No independent verification or FIPS claim.
 
 The first additive API is `brynja_hash_sha3::hardened_in_place`, with
@@ -183,8 +183,39 @@ portable and accelerated paths borrow those bytes rather than receive populated
 encoding owners by value. Reuse clears the entire 17-byte region and its length
 before writing, and Drop clears both regions. Empty or invalid encoded lengths
 fail closed. This removes that explicit owner-return transfer, not every possible
-compiler-created copy of length metadata. Scoped TupleHash states, item writers
-and readers, and complete register/spill qualification, remain unfinished.
+compiler-created copy of length metadata. Scoped TupleHash XOF readers,
+accelerated workspaces and complete register/spill qualification remain unfinished.
+
+## Scoped fixed TupleHash
+
+`brynja_hash_tuple::hardened_in_place::{TupleHash128Workspace, TupleHash256Workspace}`
+construct secret-free portable storage with `new`/`Default`. `with` and
+`with_bits` borrow sponge and metadata before absorbing the customization with
+the exact `TupleHash` cSHAKE function name. The outer result covers setup; the
+callback receives a scoped `TupleHash128` or `TupleHash256` handle.
+
+Handles accept whole byte/bit items or `begin_item(bit_length)`. The returned
+`TupleHash128ItemWriter`/`TupleHash256ItemWriter` exclusively borrows the parent,
+accepts byte/bit fragments and requires explicit exact-length `finish`.
+Dropping or cancelling an unfinished writer immediately clears its parent.
+Forgetting a writer leaves the parent incomplete, even if all declared bits
+were supplied: subsequent operations cannot produce output and scope exit
+still clears storage. Overlong fragments, incomplete completion, checked length
+overflow and other errors clear and terminate, rather than permitting retry.
+
+`finalize_secret`/`finalize_secret_bits` consume the handle and return the existing
+typed `TupleHashSecretOutput` borrowing a separate destination. Bit finalizers
+take a slice and valid-bit count so invalid shapes also clear secret destinations.
+`finalize_public`/`finalize_public_bits` require `TupleHashPublicDeclassification`
+and preserve public destinations on error. There are no accumulated-length,
+item-count, remaining-length or preflight queries. Empty items are distinct from
+an empty tuple; non-byte-aligned items retain bulk absorption for subsequent
+byte fragments. State, workspace and writers are not Copy/Clone/Debug/Send/Sync.
+
+Independent scope cleanup covers forgotten handles and recoverable unwind.
+Caller inputs, compiler-created copies, registers/spills and abort remain outside
+the owned-memory claim. Existing APIs, defaults and acceleration authority are
+unchanged. Scoped XOF and accelerated TupleHash are separate unfinished work.
 
 ## KMAC framing prerequisite
 

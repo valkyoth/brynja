@@ -94,6 +94,21 @@ fn check_128(customized: bool, third: bool, expected: &str) {
         Ok(())
     );
     assert_hex(&output, expected);
+    let mut workspace = brynja_hash_tuple::hardened_in_place::TupleHash128Workspace::new();
+    output.fill(0xa5);
+    assert_eq!(
+        workspace.with(customization(customized), |mut state| {
+            for item in tuple(third) {
+                state.push_item(item)?;
+            }
+            state.finalize_public(
+                &mut output,
+                brynja_hash_tuple::TupleHashPublicDeclassification::acknowledge(),
+            )
+        }),
+        Ok(Ok(()))
+    );
+    assert_hex(&output, expected);
 }
 
 fn check_256(customized: bool, third: bool, expected: &str) {
@@ -101,6 +116,21 @@ fn check_256(customized: bool, third: bool, expected: &str) {
     assert_eq!(
         tuple_hash256(tuple(third), customization(customized), &mut output),
         Ok(())
+    );
+    assert_hex(&output, expected);
+    let mut workspace = brynja_hash_tuple::hardened_in_place::TupleHash256Workspace::new();
+    output.fill(0xa5);
+    assert_eq!(
+        workspace.with(customization(customized), |mut state| {
+            for item in tuple(third) {
+                state.push_item(item)?;
+            }
+            state.finalize_public(
+                &mut output,
+                brynja_hash_tuple::TupleHashPublicDeclassification::acknowledge(),
+            )
+        }),
+        Ok(Ok(()))
     );
     assert_hex(&output, expected);
 }

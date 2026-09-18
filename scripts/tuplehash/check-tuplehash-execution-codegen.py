@@ -25,12 +25,12 @@ def body(mir, owner, operation):
 
 def check(row):
     mir = row['mir']
-    metadata = body(mir, '&mut Metadata)', 'wipe')
+    metadata = body(mir, '&mut execution::core_state::Metadata)', 'wipe')
     require(metadata.count('= clear_owned_region(') == 8, 'eight metadata regions')
-    for identity, call in (('&mut Metadata)', 'Metadata::wipe('),
-                           ("&mut Core<'_>", "Core::<'_>::cancel("),
-                           ("&mut execution::xof::Reader<", "Core::<'_>::cancel("),
-                           ("&mut HardenedReader<", "Core::<'_>::cancel(")):
+    for identity, call in (('&mut execution::core_state::Metadata)', 'execution::core_state::Metadata::wipe('),
+                           ("&mut execution::core_state::Core<'_>", "execution::core_state::Core::<'_>::cancel("),
+                           ("&mut execution::xof::Reader<", "execution::core_state::Core::<'_>::cancel("),
+                           ("&mut HardenedReader<", "execution::core_state::Core::<'_>::cancel(")):
         caller = body(mir, identity, 'drop')
         if 'Reader<' in identity:
             # Precisely model this reader's single borrowed Core field. Do not
@@ -51,10 +51,10 @@ def check(row):
         dominance = flow.dominators(graph, nodes)
         require(exits & nodes and all(cleanup in dominance[node] for node in exits & nodes),
                 'destruction dominates exits')
-    cancel = body(mir, "&mut Core<'_>", 'cancel')
+    cancel = body(mir, "&mut execution::core_state::Core<'_>", 'cancel')
     require('State::' in cancel and '::wipe(' in cancel and 'Metadata::wipe(' in cancel,
             'exact state and metadata destruction')
-    operation = body(mir, '&mut Operation<', 'drop')
+    operation = body(mir, '&mut execution::core_state::Operation<', 'drop')
     require('cancel(' in operation, 'unwind guard clears source')
     writer = body(mir, '&mut execution::item::TupleItemWriter<', 'drop')
     require('cancel(' in writer, 'abandoned writer clears source')
@@ -92,8 +92,13 @@ def main():
             require(len(paths) == 1, 'unique compiler artifact')
             row[extension] = paths[0].read_text()
         check(row)
-        for before in ('Metadata::wipe(', '= clear_owned_region('):
-            mutant = dict(row, mir=row['mir'].replace(before, 'omitted('))
+        for before, after in (
+            ('execution::core_state::Metadata::wipe(', 'omitted('),
+            ('execution::core_state::Metadata::wipe(', 'hardened_in_place::core_state::Metadata::wipe('),
+            ("execution::core_state::Core::<'_>::cancel(", "hardened_in_place::core_state::Core::<'_>::cancel("),
+            ('= clear_owned_region(', 'omitted('),
+        ):
+            mutant = dict(row, mir=row['mir'].replace(before, after))
             try:
                 check(mutant)
             except (ValueError, flow.MirCleanupFlowError):

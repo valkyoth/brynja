@@ -36,6 +36,7 @@ hardened cSHAKE owner, without duplicating Keccak. It has no third-party depende
 | TupleHash / TupleHashXOF, all four identities | ✅ Fully implemented | ❌ No |
 | Byte/bit tuples, streamed items and hardened outputs | ✅ Implemented | ❌ No |
 | Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
+| Scoped fixed TupleHash128/256 workspaces and item writers | ✅ Portable | ❌ No |
 
 Implementation is not independent assurance. No named independent
 cryptographic review or FIPS 140-3 validation is claimed.
@@ -67,6 +68,33 @@ Use ordinary types for public tuples and output; choose distinct `Hardened*`
 types for confidential items or derived state. The public API exposes fixed
 output and incremental XOF readers with explicit public declassification or
 typed secret destinations.
+
+For scoped fixed-output secret processing, use caller-owned storage:
+
+```rust
+use brynja_hash_tuple::{TupleHashError, hardened_in_place::TupleHash128Workspace};
+let mut workspace = TupleHash128Workspace::new();
+let mut bytes = [0; 32];
+let secret = workspace.with(b"application", |mut tuple| {
+    tuple.push_item(b"first item")?;
+    let mut item = tuple.begin_item(40)?;
+    item.update(b"hello")?;
+    item.finish()?;
+    tuple.finalize_secret(&mut bytes)
+})??;
+assert_eq!(secret.expose().len(), 32);
+drop(secret);
+assert_eq!(bytes, [0; 32]);
+# Ok::<(), TupleHashError>(())
+```
+
+`TupleHash256Workspace` has the same API. `with_bits`, `push_item_bits` and
+writer `update_bits` accept canonical bit strings; consuming finalizers support
+byte/bit secret output or explicit public declassification. Errors terminate the
+scope's computation. These scopes expose no accumulated-length or item-count
+queries, and outer cleanup also covers forgotten handles and recoverable unwind.
+Scoped XOF and scoped acceleration remain under development; the existing XOF
+and accelerated APIs above remain available separately.
 
 ## Hardware and SIMD
 

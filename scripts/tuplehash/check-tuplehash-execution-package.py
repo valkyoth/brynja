@@ -51,6 +51,19 @@ def negatives(consumer, env):
         ('fn convert(x:brynja_hash_tuple::TupleHashSecretOutput) { let _: &[u8]=x; }', 'E0308'),
         ('let _:api::Mode = true.into();', 'E0277'),
     ))
+    scoped = 'brynja_hash_tuple::hardened_in_place'
+    for strength in (128, 256):
+        state = f'{scoped}::TupleHash{strength}'
+        for name in (f'TupleHash{strength}Workspace', f'TupleHash{strength}', f'TupleHash{strength}ItemWriter'):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn check<T:{bound}>(){{}} check::<{scoped}::{name}>();', 'E0277'))
+        cases += [
+            (f'fn reuse(s:{state}) {{ let _=s.finalize_secret(&mut []); s.cancel(); }}', 'E0382'),
+            (f'fn public(s:{state}) {{ let _=s.finalize_public(&mut []); }}', 'E0061'),
+            (f'fn query(s:{state}) {{ let _=s.item_count(); }}', 'E0599'),
+            (f'fn query(s:{state}) {{ let _=s.check_additional_bits(1); }}', 'E0599'),
+            (f'fn query(w:{scoped}::TupleHash{strength}ItemWriter) {{ let _=w.remaining_bits(); }}', 'E0599'),
+        ]
     try:
         for code, diagnostic in cases:
             path.write_text(original + prefix + code + '}\n')
@@ -165,6 +178,44 @@ def encoding_mutations(roots, env):
     print('Packaged TupleHash borrowed encoding mutants: PASS; rejected=10', flush=True)
 
 
+def scoped_mutations(roots, env):
+    crate = roots['brynja-hash-tuple']
+    root = crate / 'src/hardened_in_place'
+    cases = [('core_state.rs', f'clear_owned_region(&mut self.{field})', f'core::hint::black_box(&mut self.{field})')
+             for field in ('pending', 'used', 'items', 'remaining', 'input_bits', 'phase', 'staging')]
+    cases += [
+        ('core_state.rs', 'self.0.wipe();', ''),
+        ('core_state.rs', 'self.core.cancel();', ''),
+        ('core_state.rs', 'self.state = None;', ''),
+        ('core_state.rs', 'self.phase(1)?;', ''),
+        ('core_state.rs', 'if read(&core.cleanup.0.remaining) != 0', 'if false'),
+        ('core_state.rs', 'total\n            .checked_add(bits)', 'total\n            .checked_add(0)'),
+        ('core_state.rs', 'clear_owned_region(bytes)', 'core::hint::black_box(&mut *bytes)'),
+        ('core_state.rs', 'suffix.right(bits)?;', 'suffix.right(0)?;'),
+        ('fixed.rs', 'bytes_input(b"TupleHash")?', 'bytes_input(b"WRONG")?'),
+        ('fixed.rs', 'if !self.complete { self.core.cancel(); }', ''),
+    ]
+    command = ['cargo', 'test', '--offline', '--lib', 'hardened_in_place::']
+    for profile in ([], ['--release']):
+        if '7 passed; 0 failed' not in shared.run(command + profile, crate, env).stdout:
+            raise ValueError('scoped TupleHash mutation control incomplete')
+    for name, before, after in cases:
+        path = root / name
+        original = path.read_text()
+        if original.count(before) != 1:
+            raise ValueError('ambiguous scoped mutation: ' + before)
+        print('Scoped TupleHash mutation: ' + name + ': ' + before, flush=True)
+        try:
+            path.write_text(original.replace(before, after))
+            for profile in ([], ['--release']):
+                result = shared.run(command + profile, crate, env, False)
+                if 'test result: FAILED' not in result.stdout:
+                    raise ValueError('scoped mutant failed to execute: ' + result.stderr)
+        finally:
+            path.write_text(original)
+    print(f'Packaged scoped TupleHash mutants: PASS; rejected={len(cases)*2}', flush=True)
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix='brynja-tuplehash-package-') as directory:
         destination = Path(directory)
@@ -180,10 +231,14 @@ def main():
                                  '--test', 'execution', *profile], consumer, env)
             if '6 passed; 0 failed' not in result.stdout:
                 raise ValueError('packaged TupleHash execution suite incomplete')
+            scoped = shared.run(['cargo', 'test', '--offline', '--test', 'scoped', *profile], consumer, env)
+            if '2 passed; 0 failed' not in scoped.stdout:
+                raise ValueError('packaged scoped TupleHash suite incomplete')
         negatives(consumer, env)
         mutations(consumer, roots, env)
         algorithm_mutations(consumer, roots, env)
         encoding_mutations(roots, env)
+        scoped_mutations(roots, env)
     print('Packaged TupleHash hardened execution public API: PASS')
 
 

@@ -39,6 +39,13 @@ No crates are selected for publication.
   the existing Keccak authority and borrowed staging for transactional public
   tags and XOF fragments. Complete framing/compiler residue qualification and
   higher-construction rollout remain unfinished.
+- Add portable scoped fixed TupleHash128/256 workspaces and exact-length item
+  writers. Sponge/metadata storage is borrowed before customization and item
+  input; consuming secret/public finalizers transfer only references. Terminal
+  errors and independent scope cleanup cover abandoned or forgotten writers,
+  cancelled handles and recoverable unwind. Integer prefixes/trailers initialize
+  borrowed storage. Scoped TupleHash XOF and acceleration remain pending, as does
+  complete compiler-copy/register/spill qualification.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;
   add distinct owner-backed hardened compression without ordinary scratch reuse.
 - Preserve generic portable defaults, AVX2 batch routes and the hosted x86

@@ -90,6 +90,22 @@ def main() -> int:
             continue
         raise RuntimeError("accepted borrowed encoding regression: " + old)
     print("TupleHash policy rejects forty encoding, lifecycle, cleanup, API, proof, dynamic-analysis, code-generation, test, and dependency regressions")
+    loaded = {path: tuplehash_policy.read(ROOT, path) for path in tuplehash_policy.FILES}
+    mutations = [(tuplehash_policy.CRATE / 'src' / name, token)
+                 for name, tokens in tuplehash_policy.SCOPED_TOKENS.items() for token in tokens]
+    mutations += [(tuplehash_policy.CRATE / 'src/hardened_in_place/core_state.rs', f'clear_owned_region(&mut self.{field})')
+                  for field in ('pending', 'used', 'items', 'remaining', 'input_bits', 'phase', 'staging')]
+    for path, token in mutations:
+        if token not in loaded[path]:
+            raise RuntimeError('missing scoped mutation target: ' + token)
+        mutant = dict(loaded)
+        mutant[path] = loaded[path].replace(token, 'REMOVED')
+        try:
+            tuplehash_policy.validate_scoped(mutant)
+        except tuplehash_policy.TupleHashPolicyError:
+            continue
+        raise RuntimeError('accepted scoped ownership/encoding regression: ' + token)
+    print(f'Scoped TupleHash policy rejects {len(mutations)} semantic regressions')
     return 0
 
 

@@ -14,8 +14,12 @@ CRATE = Path("crates/brynja-hash-tuple")
 SOURCES = tuple(CRATE / "src" / name for name in (
     "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "item.rs",
     "lib.rs", "output.rs", "secret_encoding.rs", "xof.rs",
+    "hardened_in_place.rs", "hardened_in_place/backend.rs",
+    "hardened_in_place/core_state.rs", "hardened_in_place/fixed.rs",
 ))
-TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs")
+TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
+         CRATE / "src/hardened_in_place/tests.rs",
+         CRATE / "src/hardened_in_place/core_state/tests.rs")
 MANIFEST = CRATE / "Cargo.toml"
 README = CRATE / "README.md"
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
@@ -24,6 +28,7 @@ PACKAGE_POLICY = Path("package-policy.toml")
 CHECKS = Path("scripts/checks.sh")
 DIFFERENTIAL = Path("scripts/tuplehash/check-tuplehash-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/tuplehash-differential/src/main.rs")
+SCOPED_FIXTURE = Path("assurance/tuplehash-differential/src/scoped.rs")
 DIFFERENTIAL_MANIFEST = Path("assurance/tuplehash-differential/Cargo.toml")
 PUBLIC_FIXTURE = Path("assurance/tuplehash-public-api/src/lib.rs")
 PUBLIC_MANIFEST = Path("assurance/tuplehash-public-api/Cargo.toml")
@@ -32,7 +37,7 @@ MIRI = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 FILES = (*SOURCES, *TESTS, MANIFEST, README, CRYPTO, MAIN, PACKAGE_POLICY,
          CHECKS, DIFFERENTIAL, DIFFERENTIAL_FIXTURE, DIFFERENTIAL_MANIFEST,
-         PUBLIC_FIXTURE, PUBLIC_MANIFEST, CODEGEN, MIRI, SANITIZER)
+         PUBLIC_FIXTURE, PUBLIC_MANIFEST, CODEGEN, MIRI, SANITIZER, SCOPED_FIXTURE)
 HASHES = {Path(path): digest for path, digest in tuplehash_reviewed_hashes.REVIEWED_HASHES.items()}
 
 
@@ -80,13 +85,15 @@ def validate_encoding(text: str) -> None:
 
 def validate(root: Path) -> None:
     actual = set((root / CRATE / "src").glob("*.rs"))
+    actual.update((root / CRATE / "src/hardened_in_place").rglob("*.rs"))
     expected = {root / source for source in SOURCES}
+    expected.update(root / source for source in TESTS if "hardened_in_place" in source.parts)
     if actual != expected:
         fail("TupleHash production source inventory changed")
     loaded = {path: read(root, path) for path in FILES}
     hashed = (*SOURCES, *TESTS, PUBLIC_FIXTURE, PUBLIC_MANIFEST,
               DIFFERENTIAL_FIXTURE, DIFFERENTIAL_MANIFEST, DIFFERENTIAL,
-              CODEGEN)
+              CODEGEN, SCOPED_FIXTURE)
     if set(HASHES) != set(hashed):
         fail("TupleHash reviewed hash inventory changed")
     production = "\n".join(without_comments(loaded[path]) for path in SOURCES)
@@ -97,6 +104,8 @@ def validate(root: Path) -> None:
     ):
         if forbidden in production:
             fail(f"TupleHash crossed forbidden boundary: {forbidden}")
+
+    validate_scoped(loaded)
 
     library = loaded[CRATE / "src/lib.rs"]
     for token in (
@@ -251,3 +260,45 @@ def validate(root: Path) -> None:
     for path, expected_hash in HASHES.items():
         if hashlib.sha256((root / path).read_bytes()).hexdigest() != expected_hash:
             fail(f"TupleHash reviewed source changed: {path}")
+
+
+SCOPED_TOKENS = {
+    "hardened_in_place/fixed.rs": (
+        "sponge: cshake::$storage", "metadata: Metadata", "let cleanup = Guard(&mut self.metadata);",
+        "Core::new(state, &mut *cleanup.0)", "impl for<'scope> FnOnce($state<'scope>) -> R",
+        'bytes_input(b"TupleHash")?', "self.core.begin(bits)?;", "self.core.complete()?;",
+        "if !self.complete { self.core.cancel(); }", "TupleHashPublicDeclassification",
+        "pub fn finalize_secret<'out>(self,", "pub fn cancel(self)",
+    ),
+    "hardened_in_place/core_state.rs": (
+        "state: Option<S>", "cleanup: Guard<'scope>", "self.core.cancel();",
+        "self.state = None;", "self.cleanup.0.wipe();", "self.0.wipe();",
+        "total\n            .checked_add(bits)", "core.phase(1)?;", "core.phase(2)?;", "self.phase(1)?;",
+        "if read(&core.cleanup.0.remaining) != 0", "core.cleanup.0.phase = [2];",
+        "core.cleanup.0.phase = [1];", "prefix.left(bits)?;", "suffix.right(bits)?;",
+        "self\n            .state\n            .take()", "clear_owned_region(bytes)",
+        "for chunk in input.chunks(168)", "Fips202BitString::new(&self.cleanup.0.pending, valid)",
+    ),
+    "hardened_in_place/backend.rs": (
+        "State for api::$state<'scope>", "self.finalize_bits_xof(tail)",
+        "self.squeeze_final_bits_secret(output)", "Sha3PublicDeclassification::acknowledge()",
+    ),
+}
+
+
+def validate_scoped(loaded: dict) -> None:
+    for name, tokens in SCOPED_TOKENS.items():
+        code = without_comments(loaded[CRATE / "src" / name])
+        for token in tokens:
+            require(code, token, "scoped tuple ownership/encoding")
+    core = loaded[CRATE / "src/hardened_in_place/core_state.rs"]
+    for field in ("pending", "used", "items", "remaining", "input_bits", "phase", "staging"):
+        require(core, f"clear_owned_region(&mut self.{field})", "scoped tuple owned region")
+    fixed = without_comments(loaded[CRATE / "src/hardened_in_place/fixed.rs"])
+    for forbidden in ("pub fn item_count", "pub fn remaining_bits", "pub fn check_additional", "pub fn input_bits"):
+        if forbidden in fixed:
+            fail("scoped tuple exposes metadata/preflight query: " + forbidden)
+    for token in ('scoped::check(',):
+        require(loaded[DIFFERENTIAL_FIXTURE], token, "scoped tuple oracle dispatch")
+    for token in ('TupleHash128Workspace', 'TupleHash256Workspace', 'scoped public/oracle mismatch', 'scoped secret/oracle mismatch'):
+        require(loaded[SCOPED_FIXTURE], token, "scoped tuple differential coverage")

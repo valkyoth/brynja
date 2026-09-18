@@ -29,6 +29,11 @@ def reject(relative: Path, old: str, new: str) -> None:
 
 def main() -> int:
     policy.validate()
+    reject(policy.PERMUTATION, 'not(any(miri, kani))', 'not(miri)')
+    reject(policy.PERMUTATION, 'target_endian = "little"', 'target_endian = "big"')
+    reject(policy.PERMUTATION, 'model::permute(owner);', '')
+    reject(policy.PERMUTATION, 'owner.wipe_permutation_scratch();', '')
+    reject(policy.PERMUTATION, '&mut owner.permutation_theta,', '&mut owner.permutation_columns,')
     reject(policy.OWNER, "clear_owned_region(&mut self.sponge_lanes)", "self.sponge_lanes.fill(0)")
     reject(policy.OWNER, "clear_owned_region(&mut self.cshake_setup_length)", "self.cshake_setup_length.fill(0)")
     reject(policy.CSHAKE, "owner: HardenedFips202Owner<$rate>,", "owner: HardenedFips202Owner<$rate>,\n            customized: bool,")
@@ -48,7 +53,7 @@ def main() -> int:
     reject(policy.API, "pub trait HardenedFips202State: sealed::Registered", "pub trait HardenedFips202State")
     reject(policy.FIXED, "pub fn finalize_secret<'output>(", "fn missing_secret_output(")
     reject(policy.XOF, "pub fn squeeze_secret<'output>(", "fn missing_secret_squeeze(")
-    reject(policy.PERMUTATION, "use super::owner::HardenedFips202Owner;", "unsafe fn injected() {}")
+    reject(policy.PERMUTATION, "use super::super::owner::HardenedFips202Owner;", "unsafe fn injected() {}")
     reject(policy.PERMUTATION, "let mut value = 0_u64;", "let value = [0_u8; 8];")
     reject(policy.SPONGE, "self.fill_staging(1);", "let byte = [self.next_byte()];")
     reject(policy.TEST, "recoverable_unwind_clears_typed_secret_destination", "missing_unwind_test")
@@ -58,7 +63,7 @@ def main() -> int:
     reject(policy.MIRI, "borrowing_reader_never_extracts_the_absorbing_owner", "missing_borrowed_owner_miri")
     reject(policy.SANITIZER, "final_bit_output_clears_the_exact_reader_source", "missing_exact_reader_source_sanitizer")
     reject(policy.SANITIZER, "borrowing_reader_never_extracts_the_absorbing_owner", "missing_borrowed_owner_sanitizer")
-    print("hardened FIPS 202 policy rejects twenty-nine cleanup, lifecycle, source-transition, metadata-ownership, capability, API, temporary, unsafe, failure, unwind, dynamic-analysis, and codegen regressions")
+    print("hardened FIPS 202 policy rejects thirty-four cleanup, lifecycle, source-transition, metadata-ownership, capability, API, temporary, unsafe, failure, unwind, dynamic-analysis, and codegen regressions")
     return 0
 
 

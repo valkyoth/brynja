@@ -63,6 +63,14 @@ def require(text: str, token: str, label: str) -> None:
 
 def validate(root: Path = ROOT) -> None:
     loaded = {path: read(root, path) for path in FILES}
+    scalar = re.sub(r'\s+', '', loaded[PERMUTATION])
+    condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
+    if scalar.count('#[cfg('+condition+')]') != 2 or scalar.count('#[cfg(not('+condition+'))]') != 2:
+        fail('scalar Keccak native/model target separation changed')
+    require(scalar, 'native::permute(&mutowner.sponge_lanes,&mutowner.permutation_columns,&mutowner.permutation_theta,&mutowner.permutation_rearranged,);', 'native owned scratch')
+    require(scalar, 'model::permute(owner);', 'safe permutation model')
+    if scalar.count('owner.wipe_permutation_scratch();') != 2:
+        fail('scalar Keccak native/model scratch cleanup changed')
     owner = loaded[OWNER]
     fields = (
         "sponge_lanes", "partial_input", "message_length", "output_length",

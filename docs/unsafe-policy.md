@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: seventy-three exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy-four exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-three exact modules: the private core volatile clearer; the
+Rust in only seventy-four exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -197,6 +197,17 @@ stack/call-free. RAX/RCX/RDX/R8-R11 or X4-X11 and condition flags clear before
 return. Independent full-schedule comparisons, guarded bounds, immediate
 register snapshots and compiled mutations cover the development boundary.
 No owner size, public API, feature default or acceleration authority changes.
+
+SHA-3's `hardened/permutation/native.rs` uses a baseline x86-64/little-endian
+AArch64 boundary with fixed pointers to its existing 200-byte state, 40-byte
+columns, 40-byte theta deltas, 200-byte rearranged lanes and 24 public constants.
+All theta/rho/pi/chi/iota computation, all three scratch wipes and working-register
+erasure stay inside one stack/call-free block. Immediate observation covers
+RAX/RCX/RDX/R10/R11 or X4-X10. No SIMD, stronger ISA or target-feature authority
+is required. The wrapper retains the original scratch destruction; owner size,
+API and ordinary public hashing remain unchanged. Other architectures and
+Miri/Kani retain the safe model without this register claim. This does not
+qualify higher-level absorb/squeeze, framing, input/output or moved-owner copies.
 
 These sixteen kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.

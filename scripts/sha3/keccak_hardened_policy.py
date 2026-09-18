@@ -119,6 +119,9 @@ def validate(root=ROOT, write=False):
     paths.update(path.relative_to(root) for path in (root / 'scripts/sha3').glob('*keccak-hardened*.py'))
     paths.add(Path('scripts/sha3/keccak_hardened_policy.py'))
     paths.add(Path('scripts/sha3/keccak_hardened_native.py'))
+    paths.add(Path('assurance/register-cleanup/check_keccak_scalar.py'))
+    for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs', 'src/tests/reference.rs'):
+        paths.add(Path('assurance/register-cleanup/keccak-scalar') / name)
     paths.update(map(Path, ('scripts/checks.sh', 'scripts/tag_gate.sh',
                            'scripts/zeroization/check-zeroization-miri.sh',
                            'scripts/zeroization/check-zeroization-sanitizer.sh')))

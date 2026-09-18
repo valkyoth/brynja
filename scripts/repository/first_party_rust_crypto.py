@@ -35,6 +35,7 @@ FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"(?:C|system|stdcall|cdec
 # These are Rust function DEFINITIONS, not imported foreign implementations.
 # The separate unsafe inventory binds their complete first-party assembly bytes.
 LOCAL_C_ABI = {
+    Path("crates/brynja-hash-sha3/src/hardened/permutation/native.rs"),
     Path("crates/brynja-legacy-md5/src/compress/native.rs"),
     Path("crates/brynja-legacy-sha1/src/compress/native.rs"),
     Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs"),
@@ -137,6 +138,11 @@ def validate(root: Path) -> None:
             abi_text = text
             if relative in LOCAL_C_ABI:
                 signature = LOCAL_SIGNATURE
+                if relative.parent.name == 'permutation':
+                    signature = ('pub(super) unsafe extern "C" fn scalar(\n'
+                                 '    state: &mut [u8; 200],\n    columns: &mut [u8; 40],\n'
+                                 '    theta: &mut [u8; 40],\n    rearranged: &mut [u8; 200],\n'
+                                 '    constants: &[u64; 24],\n) {')
                 if relative == Path('crates/brynja-legacy-md5/src/compress/native.rs'):
                     signature = ('pub(super) unsafe extern "C" fn scalar(\n'
                                  '    state: &mut [u8; 16],\n    block: &[u8; 64],\n'

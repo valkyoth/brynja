@@ -76,6 +76,7 @@ PACKAGES = (
     ("brynja-hash-sha3", "0.1.0", (
         "src/lib.rs", "src/bit_api.rs", "src/bit_string.rs", "src/digest.rs",
         "src/error.rs", "src/keccak.rs",
+        "src/hardened/permutation.rs", "src/hardened/permutation/native.rs",
         "src/sha3_224.rs", "src/sha3_256.rs", "src/sha3_384.rs",
         "src/sha3_512.rs", "src/shake128.rs", "src/shake256.rs", "src/sponge.rs",
     )),

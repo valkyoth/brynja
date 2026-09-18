@@ -247,11 +247,12 @@ need integration/lifecycle regressions even where they share a qualified kernel.
 RISC-V currently has no distinct hardened accelerated entry in this set; do not
 silently activate its ordinary candidate kernels as a substitute.
 
-Portable hardened Keccak, SHA-2/SHA-1/MD5's other-target models,
-and caller framing/output processing still require residue remediation.
+Other-target portable models and caller framing/output processing still
+require residue remediation.
 MD5's, [SHA-1's](sha1-scalar/README.md) and hardened
 [SHA-224/256's](sha256-scalar/README.md) and
-[SHA-512-family's](sha512-scalar/README.md) baseline scalar architecture ports now
+[SHA-512-family's](sha512-scalar/README.md) and
+[Keccak's](keccak-scalar/README.md) baseline scalar architecture ports now
 have source-bound development checks. Hardware-kernel success does not qualify
 portable fallback or imply that all high-level API temporaries are erased.
 Unsupported architecture/ABI coverage must remain explicit, without removing

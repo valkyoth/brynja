@@ -82,7 +82,7 @@ portable-only fixture. Paths below are relative to the repository root.
 | Boundary | Representative sources | Remaining obligation |
 | --- | --- | --- |
 | Portable SHA-2 | `crates/brynja-hash-sha2/src/hardened/compress32.rs`, `compress64.rs` | Both hardened SHA-224/256 and the SHA-512 family now have baseline x86-64/Arm scalar-boundary development checks. Other-target models still expose scalar round temporaries; higher-level owner copies remain separate. |
-| Portable Keccak | `crates/brynja-hash-sha3/src/hardened/permutation.rs` | Scalar theta/rho/pi/chi/iota values remain outside opaque kernel boundaries. |
+| Portable Keccak | `crates/brynja-hash-sha3/src/hardened/permutation.rs` | Baseline x86-64/Arm scalar permutation now has source-bound development checks. Other-target models, caller absorb/squeeze and moved-owner copies remain open. |
 | Portable legacy | `crates/brynja-legacy-sha1/src/compress.rs`, `crates/brynja-legacy-md5/src/compress.rs` | SHA-1 and MD5 now have baseline x86-64/Arm scalar-boundary development checks; their other-target models remain open. Tail framing/ownership is separate from compression. |
 | Single accelerated Keccak | `crates/brynja-crypto-cpu/src/hardened_execution/keccak.rs`, `crates/brynja-hash-sha3/src/hardened/accelerated/engine.rs` | Session import/commit now stays inside the opaque kernel. Higher-level absorption, padding and squeeze remain to be addressed. |
 | Batch staging | SHA-2 `src/hardened_batch/engine.rs`, `src/hardened_batch512/engine.rs`; SHA-3 `src/hardened_batch/engine.rs`; MD5 `src/batch/hardened_execution/vector.rs` | Packing, feed-forward/output transfer, portable tails and partial lanes require their own review. |

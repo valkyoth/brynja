@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-hash-sha3/src/hardened/permutation/native.rs"): ("2c1ec8a76fd6bb28be65fc8bf53bcdbec3d0c7ddb86584f005563ffc6debd640", 3, 1, 3),
     Path("crates/brynja-hash-sha2/src/hardened/compress64/native.rs"): ("df5e947205c991a83c410371811de6e44f00b38c8c9ce3141970d4585c8f1bc5", 3, 1, 3),
     Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs"): ("08ea056cb766efe8c246f7772ca780ad6586baa82301fa5c40997737f06e2e32", 3, 1, 3),
     Path("crates/brynja-legacy-sha1/src/compress/native.rs"): ("f785162fdf3c5ada9847cc5796db0b7a870d289707587c9d698d78a6d6355ad3", 3, 1, 3),
@@ -191,10 +192,12 @@ def validate_allowed(
     elif relative in {Path("crates/brynja-legacy-md5/src/compress/native.rs"),
                       Path("crates/brynja-legacy-sha1/src/compress/native.rs"),
                       Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs"),
-                      Path("crates/brynja-hash-sha2/src/hardened/compress64/native.rs")}:
+                      Path("crates/brynja-hash-sha2/src/hardened/compress64/native.rs"),
+                      Path("crates/brynja-hash-sha3/src/hardened/permutation/native.rs")}:
         sha1 = relative.parts[1] == 'brynja-legacy-sha1'
         sha256 = relative.parent.name == 'compress32'
         sha512 = relative.parent.name == 'compress64'
+        keccak = relative.parent.name == 'permutation'
         required = ('pub(super) unsafe extern "C" fn scalar(', '#[inline(never)]',
                     'state: &mut [u8; 16]', 'block: &[u8; 64]', 'constants: &[u32; 64]',
                     'shifts: &[u32; 16]', '"cmp r14d, 64"', '"cmp w10, #64"')
@@ -215,6 +218,16 @@ def validate_allowed(
                         'constants: &[u64; 80]', '"and r11d, 127"', '"and x10, x9, #127"',
                         '"cmp r10d, 640"', '"cmp x9, #640"',
                         '"mov qword ptr [{scratch} + r10], 0"', '"str xzr, [{scratch}, x9]"')
+        if keccak:
+            required = ('pub(super) unsafe extern "C" fn scalar(', '#[inline(never)]',
+                        'state: &mut [u8; 200]', 'columns: &mut [u8; 40]',
+                        'theta: &mut [u8; 40]', 'rearranged: &mut [u8; 200]', 'constants: &[u64; 24]',
+                        '"cmp r10d, 192"', '"cmp x8, #192"',
+                        '"cmp r11d, 200"', '"cmp x7, #200"',
+                        '"cmp r11d, 40"', '"cmp x7, #40"')
+            for region in ('columns', 'theta', 'rearranged'):
+                required += (f'"mov qword ptr [{{{region}}} + r11], 0"',
+                             f'"str xzr, [{{{region}}}, x7]"')
         if any(token not in text for token in required):
             fail("scalar compressor lost its fixed operands, ABI, bound or schedule wipe")
         if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_SCALAR_BEGIN',
@@ -228,6 +241,9 @@ def validate_allowed(
         if sha512:
             wipes = tuple(f'"xor {r}, {r}"' for r in ('eax', 'ecx', 'edx', 'r8d', 'r9d', 'r10d', 'r11d'))
             wipes += tuple(f'"mov x{i}, xzr"' for i in range(4, 12))
+        if keccak:
+            wipes = tuple(f'"xor {r}, {r}"' for r in ('eax', 'ecx', 'edx', 'r10d', 'r11d'))
+            wipes += tuple(f'"mov x{i}, xzr"' for i in range(4, 11))
         if any(token not in text for token in wipes):
             fail("scalar compressor register erasure disappeared")
         if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly|target_feature)\b',

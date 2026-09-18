@@ -65,6 +65,7 @@ def main(native_x86=False):
                 raise ValueError('every advertised CPU must support AVX2')
             env.update(RUSTFLAGS='-C target-feature=+avx2', BRYNJA_REQUIRE_SCOPED_KECCAK='1')
             execution_mutants(crate, env)
+            scoped_xof_execution_mutants(crate, env)
             packaged(root, env)
             return
         path = crate/'src/hardened/in_place.rs'
@@ -163,6 +164,43 @@ def execution_mutants(crate, env):
         print(f'Scoped native Keccak: positive control and eight compiled cleanup/authority/framing mutants; release={release}: PASS', flush=True)
     path.write_text(original)
     engine.write_text(original_engine)
+
+
+def scoped_xof_execution_mutants(crate, env):
+    api = crate/'src/hardened/accelerated/in_place/xof.rs'
+    core = api.parent/'xof/core.rs'
+    originals = {path: path.read_text() for path in (api, core)}
+    mutations = (
+        (core, 'scope cleanup', 'self.0.clear();', '', 1),
+        (core, 'borrowed cleanup', 'fn drop(&mut self) {\n        self.storage.clear();\n    }', 'fn drop(&mut self) {}', 1),
+        (core, 'operation error cleanup', 'if !self.complete {', 'if false {', 1),
+        (core, 'successful operation staging', 'else {\n            let _ = clear_owned_region(&mut self.storage.inner.stage.0);\n        }', 'else {}', 1),
+        (core, 'terminal secret destination', 'let length = output.len();', 'self.storage.inner.engine.check(true)?; let length = output.len();', 1),
+        (core, 'custom domain ignored', 'self.domain = if customized { [0x04, 3] } else { [0x1f, 5] };', 'self.domain = if customized { [0x1f, 5] } else { [0x1f, 5] };', 1),
+        (core, 'secret final mask', '*last &= u8::MAX >> 8_u8.saturating_sub(valid);', '*last &= u8::MAX;', 1),
+        (core, 'invalid final bits accepted', 'return Err(Error::OutputLength);', '', 1),
+        (api, 'public final mask', '*last &= u8::MAX >> 8_u8.saturating_sub(valid);', '*last &= u8::MAX;', 1),
+        (api, 'reader transfer destroys source', 'Ok($reader { inner: self.inner })', 'self.inner.storage.clear(); Ok($reader { inner: self.inner })', 1),
+    )
+    for release in (False, True):
+        command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path', str(crate/'Cargo.toml'), '--features', 'hardened-execution', '--lib', 'hardened::accelerated::in_place::xof']
+        if release:
+            command.append('--release')
+        for path, source in originals.items():
+            path.write_text(source)
+        run(command, env)
+        for path, label, before, after, count in mutations:
+            for target, source in originals.items():
+                target.write_text(source)
+            if originals[path].count(before) != count:
+                raise ValueError('scoped XOF execution mutation absent/ambiguous: '+label)
+            path.write_text(originals[path].replace(before, after))
+            result = run(command, env, success=False)
+            if result.returncode == 0 or 'test result: FAILED' not in result.stdout + result.stderr:
+                raise ValueError('scoped XOF execution mutant must compile and fail at runtime: '+label+'\n'+(result.stdout+result.stderr)[-2000:])
+        print(f'Scoped native XOF: positive control and ten compiled cleanup/framing/output mutants; release={release}: PASS', flush=True)
+    for path, source in originals.items():
+        path.write_text(source)
 
 
 if __name__ == '__main__':

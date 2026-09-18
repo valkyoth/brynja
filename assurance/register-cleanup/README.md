@@ -266,8 +266,11 @@ Following owner approval of additive in-place APIs, the first
 [scoped SHA-3 fixture](in-place-sha3/README.md) exercises four fixed identities
 and SHAKE/cSHAKE readers with borrowed caller-owned storage. Its scope guard
 survives forgotten handles/readers; the old by-value APIs and their guarantees
-remain unchanged. Accelerated scoped execution, other families and complete
-framing/register qualification remain pending.
+remain unchanged. Its optional execution fixture also covers all eight scoped
+accelerated identities, explicit static/hosted authority and revocation. Native
+AVX2 and emulated Arm development checks remain distinct from final native
+qualification. Other families and complete framing/register qualification remain
+pending.
 
 The [scoped SHA-2 fixture](in-place-sha2/README.md) now adds the six named
 SHA-2 identities with borrowed workspaces and typed secret output. Its compiled
@@ -277,8 +280,9 @@ identity; the scoped API also runs against the independent 4,590-vector corpus.
 Six named execution workspaces now also borrow their engine and CPU scratch,
 retaining static/hosted authority and revocation. The fixture separately checks
 portable, native static SHA-NI, and emulated Arm static/hosted use. General-t
-accelerated scopes and other families remain pending; existing by-value APIs
-and complete register/spill exclusions are unchanged.
+execution workspaces also cover all 510 parameters through existing wide
+routes. Other families remain pending; existing by-value APIs and complete
+register/spill exclusions are unchanged.
 
 ## Remaining work before the requested retest
 

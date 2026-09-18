@@ -143,8 +143,37 @@ length or authority. No preflight/length query is exposed on the handle.
 
 The existing static deployment and hosted platform requirements are unchanged.
 Register/spill/framing qualification is separate; neither scope ownership nor
-functional testing establishes whole-register erasure. Scoped accelerated
-SHAKE/cSHAKE readers remain rollout work.
+functional testing establishes whole-register erasure.
+
+## SHAKE/cSHAKE execution scopes
+
+The same `hardened_execution::in_place` module provides `Shake128Workspace`,
+`Shake256Workspace`, `Cshake128Workspace` and `Cshake256Workspace`. Construction
+binds a `KeccakSession` without accepting secrets. SHAKE uses `with(callback)`;
+cSHAKE uses `with(name, customization, callback)` or `with_bits` with canonical
+bit strings. Prefix absorption happens only after borrowing the workspace;
+empty name/customization selects SHAKE. Admission or prefix failure skips the
+callback and clears storage, but cannot clear captured destinations not yet
+passed to an operation.
+
+`finalize_xof` / `finalize_bits_xof` consume the absorbing handle and transfer
+its reference into a distinct reader. Sponge, session scratch, domain metadata
+and the 168-byte output stage remain in the workspace. `squeeze_secret` returns
+an affine output owner borrowing a separate destination, which may outlive the
+scope. `squeeze_public` explicitly declassifies up to 168 bytes transactionally;
+larger reads use `squeeze_public_with_scratch`, with scratch covering the output.
+The entire supplied scratch clears on every exit. Final-bit reads consume the
+reader and mask canonical low bits; invalid secret-output shapes clear the full
+destination. Empty reads still validate phase and authority.
+
+Every operation error terminates and clears the computation, even if a long
+read has already produced some internal chunks. Failed secret reads clear the
+whole destination; public destinations remain unchanged. Separate handle and
+scope guards cover cancellation, Drop, forgotten states/readers and recoverable
+unwind. Successful operations clear staging before returning. No secret length
+or preflight query is exposed. Authority/revocation and deployment requirements
+are unchanged, and none of this establishes complete compiler-copy, register or
+spill erasure.
 
 ## Ownership and failure behavior
 
@@ -210,6 +239,17 @@ controls and six fixed-output plus eight XOF compiled lifecycle/output mutants
 in debug and release. It is
 a development driver, not a new release-gate mechanism. The existing workspace
 test/doctest path exercises the in-crate tests without changing gate commands.
+
+Its `--native-x86` option requires actual AVX2 execution and additionally rejects
+eight fixed-output execution mutants and ten scoped XOF execution mutants in
+debug/release, then runs a packaged accelerated consumer. The XOF cases remove
+independent scope/handle cleanup, operation failure/success cleanup, terminal
+destination guarding, customization, output masks or final shape validation,
+or corrupt the absorbing-to-reader transfer. Seventy-six new compile-fail
+examples reject forbidden workspace/state/reader traits, escaping borrows,
+overlap and expired authority. Existing NIST SHAKE vectors and the 628-case
+cSHAKE official/independent corpus exercise the new scoped output APIs. Native
+AVX2 and emulated Arm checks are kept distinct from future native qualification.
 
 For named SHA-2, `python3 assurance/register-cleanup/check_in_place_sha2.py`
 checks all six identities against existing ordinary byte/bit implementations,

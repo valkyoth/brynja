@@ -24,6 +24,29 @@
 //! assert_eq!(output, [0; 32]);
 //! # Ok::<(), Error>(())
 //! ```
+//!
+//! XOF finalization transfers the borrow, not the sponge. cSHAKE accepts its
+//! name/customization only inside the scope; empty domains select SHAKE.
+//!
+//! ```
+//! use brynja_hash_sha3::hardened_execution::{Error, KeccakSession, in_place::Cshake128Workspace};
+//! use brynja_crypto_cpu::static_execution::{Authority, Kernel};
+//! let kernel = if cfg!(target_arch = "aarch64") { Kernel::ArmKeccak } else { Kernel::X86Keccak };
+//! // Use only where the static deployment guarantees the compiled feature bundle.
+//! let Ok(authority) = Authority::new(kernel) else { return Ok(()); };
+//! let mut workspace = Cshake128Workspace::new(KeccakSession::from_static(&authority).map_err(Error::Backend)?)?;
+//! let mut output = [0; 337];
+//! let secret = workspace.with(b"", b"example domain", |mut state| {
+//!     state.update(b"secret message")?;
+//!     let mut reader = state.finalize_xof()?;
+//!     reader.squeeze_secret(&mut output)
+//! })??;
+//! // The separately borrowed output can outlive the sponge scope.
+//! assert_eq!(secret.expose().len(), 337);
+//! drop(secret);
+//! assert_eq!(output, [0; 337]);
+//! # Ok::<(), Error>(())
+//! ```
 
 use super::super::output::{begin_secret, finish_secret};
 use super::{
@@ -32,6 +55,12 @@ use super::{
 };
 use crate::Fips202BitString;
 use brynja_core::clear_owned_region;
+
+mod xof;
+pub use xof::{
+    Cshake128, Cshake128Reader, Cshake128Workspace, Cshake256, Cshake256Reader, Cshake256Workspace,
+    Shake128, Shake128Reader, Shake128Workspace, Shake256, Shake256Reader, Shake256Workspace,
+};
 
 struct Storage<'authority> {
     engine: Engine<'authority>,

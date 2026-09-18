@@ -19,10 +19,12 @@ No crates are selected for publication.
   unwind. Existing by-value APIs remain unchanged. See the
   [in-place contract](../docs/hardened-in-place.md); wider rollout and complete
   framing/register/spill qualification are still pending, not release-qualified.
-- Add four scoped fixed-output SHA-3 execution workspaces with explicit existing
+- Add scoped fixed-output SHA-3 and SHAKE/cSHAKE execution workspaces with explicit existing
   static/hosted sessions, in-workspace output staging and no owner moves through
-  finalization. Authority/revocation behavior is unchanged. Scoped accelerated
-  SHAKE/cSHAKE readers remain pending.
+  finalization. SHAKE/cSHAKE readers transfer the storage borrow and support mixed
+  secret/public reads, byte/bit domains and consuming partial-bit output.
+  Authority/revocation behavior is unchanged; complete residue qualification
+  remains pending.
 - Add an isolated first-party SHA512/AVX2/AVX intrinsic kernel and exact static/raw
   runtime identity, with real startup KAT and irreversible quarantine.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;

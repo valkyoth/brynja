@@ -46,7 +46,7 @@ fn check_vector(line: &str) -> bool {
         return false;
     };
     #[cfg(feature = "hardened-execution")]
-    if check_scoped_fixed(algorithm, input, &expected).is_err() {
+    if check_scoped_fixed(algorithm, input, &expected, output_bits).is_err() {
         return false;
     }
     match algorithm {
@@ -73,6 +73,7 @@ fn check_scoped_fixed(
     algorithm: &str,
     input: Fips202BitString<'_>,
     expected: &[u8],
+    output_bits: usize,
 ) -> Result<(), brynja_hash_sha3::hardened_execution::Error> {
     use brynja_crypto_cpu::static_execution::{Authority, Kernel};
     use brynja_hash_sha3::hardened_execution::{Error, KeccakSession, in_place::*};
@@ -108,13 +109,135 @@ fn check_scoped_fixed(
             assert_eq!(output, expected);
         }};
     }
+    macro_rules! xof {
+        ($workspace:ident) => {{
+            let mut workspace =
+                $workspace::new(KeccakSession::from_static(&owner).map_err(Error::Backend)?)?;
+            let valid = u8::try_from(output_bits % 8).map_err(|_| Error::OutputLength)?;
+            let valid = if !expected.is_empty() && valid == 0 {
+                8
+            } else {
+                valid
+            };
+            let mut output = vec![0xa5; expected.len()];
+            let secret = workspace.with(|state| {
+                state
+                    .finalize_bits_xof(input)?
+                    .squeeze_final_bits_secret(&mut output, valid)
+            })??;
+            assert_eq!(secret.expose(), expected);
+            drop(secret);
+            assert!(output.iter().all(|b| *b == 0));
+            let mut scratch = vec![0xa5; expected.len()];
+            workspace.with(|state| {
+                state.finalize_bits_xof(input)?.squeeze_final_bits_public(
+                    Fips202Output::new(&mut output, valid).map_err(|_| Error::OutputLength)?,
+                    &mut scratch,
+                    brynja_hash_sha3::Sha3PublicDeclassification::acknowledge(),
+                )
+            })??;
+            assert_eq!(output, expected);
+            assert!(scratch.iter().all(|b| *b == 0));
+        }};
+    }
     match algorithm {
         "sha3-224" => check!(Sha3_224Workspace),
         "sha3-256" => check!(Sha3_256Workspace),
         "sha3-384" => check!(Sha3_384Workspace),
         "sha3-512" => check!(Sha3_512Workspace),
+        "shake128" => xof!(Shake128Workspace),
+        "shake256" => xof!(Shake256Workspace),
         _ => {}
     }
+    Ok(())
+}
+
+#[cfg(feature = "hardened-execution")]
+#[test]
+fn scoped_cshake_official_and_independent_vectors()
+-> Result<(), brynja_hash_sha3::hardened_execution::Error> {
+    use brynja_crypto_cpu::static_execution::{Authority, Kernel};
+    use brynja_hash_sha3::hardened_execution::{Error, KeccakSession, in_place::*};
+    let kernel = if cfg!(target_arch = "aarch64") {
+        Kernel::ArmKeccak
+    } else {
+        Kernel::X86Keccak
+    };
+    let selected = Authority::new(kernel);
+    if std::env::var_os("BRYNJA_REQUIRE_SCOPED_KECCAK").is_some() {
+        assert!(selected.is_ok());
+    }
+    let Ok(owner) = selected else {
+        return Ok(());
+    };
+    let mut count = 0_usize;
+    for line in include_str!("vectors/cshake-execution.txt")
+        .lines()
+        .filter(|line| !line.starts_with('#') && !line.is_empty())
+    {
+        let mut fields = line.split_whitespace();
+        let identity = fields.next().ok_or(Error::Terminal)?;
+        let mut pair = || -> Result<(usize, Vec<u8>), Error> {
+            let bits = fields
+                .next()
+                .ok_or(Error::Terminal)?
+                .parse()
+                .map_err(|_| Error::Terminal)?;
+            let text = fields.next().ok_or(Error::Terminal)?;
+            let bytes = if text == "-" {
+                Vec::new()
+            } else {
+                decode_hex(text).ok_or(Error::Terminal)?
+            };
+            Ok((bits, bytes))
+        };
+        let (n_bits, n) = pair()?;
+        let (s_bits, s) = pair()?;
+        let (input_bits, input) = pair()?;
+        let (output_bits, expected) = pair()?;
+        assert!(fields.next().is_none());
+        let n = canonical(&n, n_bits).ok_or(Error::PrefixEncoding)?;
+        let s = canonical(&s, s_bits).ok_or(Error::PrefixEncoding)?;
+        let input = canonical(&input, input_bits).ok_or(Error::Terminal)?;
+        let valid = u8::try_from(output_bits % 8).map_err(|_| Error::OutputLength)?;
+        let valid = if !expected.is_empty() && valid == 0 {
+            8
+        } else {
+            valid
+        };
+        macro_rules! check {
+            ($workspace:ident) => {{
+                let mut workspace =
+                    $workspace::new(KeccakSession::from_static(&owner).map_err(Error::Backend)?)?;
+                let mut output = vec![0xa5; expected.len()];
+                let secret = workspace.with_bits(n, s, |state| {
+                    state
+                        .finalize_bits_xof(input)?
+                        .squeeze_final_bits_secret(&mut output, valid)
+                })??;
+                assert_eq!(secret.expose(), expected);
+                drop(secret);
+                assert!(output.iter().all(|b| *b == 0));
+                let mut scratch = vec![0xa5; expected.len()];
+                workspace.with_bits(n, s, |state| {
+                    state.finalize_bits_xof(input)?.squeeze_final_bits_public(
+                        Fips202Output::new(&mut output, valid).map_err(|_| Error::OutputLength)?,
+                        &mut scratch,
+                        brynja_hash_sha3::Sha3PublicDeclassification::acknowledge(),
+                    )
+                })??;
+                assert_eq!(output, expected);
+                assert!(scratch.iter().all(|b| *b == 0));
+            }};
+        }
+        match identity {
+            "cshake128" => check!(Cshake128Workspace),
+            "cshake256" => check!(Cshake256Workspace),
+            _ => return Err(Error::Terminal),
+        }
+        count = count.checked_add(1).ok_or(Error::LengthOverflow)?;
+    }
+    assert_eq!(count, 628);
     Ok(())
 }
 

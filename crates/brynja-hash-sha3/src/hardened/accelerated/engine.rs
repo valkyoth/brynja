@@ -83,6 +83,10 @@ impl<'a> Engine<'a> {
     pub(super) fn overflow_message_for_test(&mut self) {
         self.memory.message_count.fill(0xff);
     }
+    #[cfg(test)]
+    pub(super) fn overflow_output_for_test(&mut self) {
+        self.memory.output_count.fill(0xff);
+    }
     pub(super) fn cancel(&mut self) {
         self.failed = true;
         self.position = 0;

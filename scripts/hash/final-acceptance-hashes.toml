@@ -22,7 +22,7 @@
 "README.md" = "f39ce108b2e6251c1203a4ff6d368e76fdd3bfd134867869f9421ca61b5e7d37"
 "crates/brynja/README.md" = "3776cdc91fb680c4baf151429ea5029655cb604d6dd403b0a58e38cdbe31420d"
 "crates/brynja-hash-sha2/README.md" = "42e555119ce6fcfebdeba16b8436ac872a5a0929adf20864f67d25f24498ba73"
-"crates/brynja-hash-sha3/README.md" = "1e808d5fd00e3ee670b0071bf862f1e74642549c61318ae64e749dfa6a733bae"
+"crates/brynja-hash-sha3/README.md" = "f092c93b4e738221d49124f71eee7da6f60d22ae0cf5c90d735b693cbee01232"
 "docs/VERIFICATION_STATUS.md" = "b373a97ea2d5e36f78bcf41c903984d29459fbce560a65bc63543e92021110db"
 "docs/current-status.md" = "3f6435340942e71c0cb388c2c65d8cea03c70a92286b4132a9badb8061be32f8"
 "docs/RELEASE_PLAN.md" = "927ab29022810a2fcf58756deaf469aeb701ce52f68453d4d421cc9d09f8e73d"

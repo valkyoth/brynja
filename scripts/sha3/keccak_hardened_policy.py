@@ -124,6 +124,7 @@ def validate(root=ROOT, write=False):
     paths.add(Path('docs/hardened-in-place.md'))
     paths.add(Path(HASH + '/tests/bit_inputs.rs'))
     paths.add(Path(HASH + '/tests/vectors/nist-bit-selected.txt'))
+    paths.add(Path(HASH + '/tests/vectors/cshake-execution.txt'))
     for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/execution.rs'):
         paths.add(Path('assurance/register-cleanup/in-place-sha3') / name)
     for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs', 'src/tests/reference.rs'):

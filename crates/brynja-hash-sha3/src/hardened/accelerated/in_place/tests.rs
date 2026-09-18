@@ -2,7 +2,7 @@ extern crate std;
 use super::*;
 use brynja_crypto_cpu::static_execution::{Authority, Kernel};
 
-fn authority() -> Result<Option<Authority>, Error> {
+pub(super) fn authority() -> Result<Option<Authority>, Error> {
     let kernel = if cfg!(target_arch = "aarch64") {
         Kernel::ArmKeccak
     } else {
@@ -14,13 +14,13 @@ fn authority() -> Result<Option<Authority>, Error> {
     }
     Ok(result.ok())
 }
-fn session(owner: &Authority) -> Result<KeccakSession<'_>, Error> {
+pub(super) fn session(owner: &Authority) -> Result<KeccakSession<'_>, Error> {
     KeccakSession::from_static(owner).map_err(Error::Backend)
 }
 fn cleared(storage: &Storage<'_>) -> bool {
     storage.engine.cleared_for_test() && storage.stage.0.iter().all(|b| *b == 0)
 }
-fn public() -> Sha3PublicDeclassification {
+pub(super) fn public() -> Sha3PublicDeclassification {
     Sha3PublicDeclassification::acknowledge()
 }
 

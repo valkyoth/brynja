@@ -37,7 +37,7 @@ Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 | cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |
 | Hardened states and classified outputs | ✅ Implemented | ❌ No |
 | Scoped in-place hardened SHA-3/SHAKE/cSHAKE | Development; ownership checks implemented, residue qualification pending | ❌ No |
-| Scoped accelerated fixed-output SHA-3 | Development; explicit static/hosted session, residue qualification pending | ❌ No |
+| Scoped accelerated SHA-3/SHAKE/cSHAKE | Development; explicit static/hosted session, residue qualification pending | ❌ No |
 | Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
 | Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |
@@ -66,7 +66,14 @@ bundle; hosted sessions require `runtime-execution` and the existing platform
 authority. No fallback or renewed authority is implied. The outer result is
 admission and the inner value is the callback result. See the compiled module
 example and [in-place guide](../../docs/hardened-in-place.md).
-Scoped accelerated SHAKE/cSHAKE readers remain pending.
+The same module also provides `Shake128Workspace` / `Shake256Workspace` and
+`Cshake128Workspace` / `Cshake256Workspace`. Finalization transfers the exclusive
+borrow into an incremental reader without moving the sponge. cSHAKE absorbs
+byte/bit name and customization after borrowing the workspace. Readers support
+arbitrary-length typed secret output, explicit transactional public output and
+consuming partial-bit reads. Public reads over 168 bytes require caller scratch;
+the entire supplied scratch clears on success or failure. See the second tested
+module example for secret output outliving a cSHAKE scope.
 
 ## Use
 

@@ -2,6 +2,8 @@ version = "0.24.44"
 native = "fresh operational evidence required separately"
 
 [files]
+"crates/brynja-legacy-md5/src/compress.rs" = "fe4b3527f6a26609ebf6d92d4681030fe250b6230d59cee96789f5e64dafed2e"
+"crates/brynja-legacy-md5/src/compress/native.rs" = "33adb9934e5b3c42ba112263a963266b8391d3b4e58fc7b94b27341df66ce33d"
 "crates/brynja-legacy-md5/Cargo.toml" = "24f3bda7d4db1352ccf8439fed0421988c98e5a66b0d21bd3e4cffbfb62ad481"
 "crates/brynja-legacy-md5/src/lib.rs" = "46800b0b88a043d3351e7d4606760d70c0323c2a7e9978016fade05f43a48adf"
 "crates/brynja-legacy-md5/src/cpu/mod.rs" = "238b0f2e82eb8724715c43856e3c2ba891f0382798e1df90117161f2a6209db2"

@@ -206,6 +206,35 @@ def transfer_boundaries(family, lanes):
             raise AssertionError('accepted transfer boundary regression: ' + before)
 
 
+def scalar_boundary():
+    relative = Path('crates/brynja-legacy-md5/src/compress/native.rs')
+    source = (ROOT / relative).read_text()
+    _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
+    unsafe_policy.validate_allowed(relative, source, blocks, items, proofs)
+    mutations = [('unsafe extern "C" fn', 'extern "C" fn'),
+                 ('#[inline(never)]', '#[inline(always)]'),
+                 ('"cmp r14d, 64"', '"cmp r14d, 63"'),
+                 ('"cmp w10, #64"', '"cmp w10, #63"'),
+                 ('block: &[u8; 64]', 'block: &[u8; 63]'),
+                 ('BRYNJA_SCALAR_BEGIN', 'REMOVED'),
+                 ('BRYNJA_SCALAR_ERASE', 'REMOVED'),
+                 ('BRYNJA_SCALAR_END', 'REMOVED'),
+                 ('out(', 'lateout('),
+                 ('options(nostack)', 'options(nostack, nomem)'),
+                 ('options(nostack)', 'options(nostack, readonly)')]
+    mutations += [(f'"xor {r}, {r}"', '"nop"') for r in ('eax', 'ecx', 'edx', 'r8d', 'r9d', 'r10d', 'r11d', 'r14d')]
+    mutations += [(f'"mov x{i}, xzr"', '"nop"') for i in range(4, 12)]
+    for before, after in mutations:
+        assert before in source
+        try:
+            unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
+        except unsafe_policy.UnsafePolicyError:
+            pass
+        else:
+            raise AssertionError('accepted scalar boundary regression: '+before)
+    print(f'Scalar MD5 boundary rejects {len(mutations)} ABI, memory, bound and wipe regressions')
+
+
 if __name__ == "__main__":
     test()
     register_boundaries()
@@ -213,6 +242,7 @@ if __name__ == "__main__":
     transfer_boundaries('sha512', 4)
     transfer_boundaries('keccak', 4)
     transfer_boundaries('md5', 8)
+    scalar_boundary()
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
     print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

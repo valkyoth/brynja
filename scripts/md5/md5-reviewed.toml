@@ -1,11 +1,12 @@
 [sha256]
-"crates/brynja-legacy-md5/src/compress.rs" = "324e7dba2d3eefbea2fb280ce5a38858e00dfbf1c23ca407b07d4320035677c9"
+"crates/brynja-legacy-md5/src/compress.rs" = "fe4b3527f6a26609ebf6d92d4681030fe250b6230d59cee96789f5e64dafed2e"
 "crates/brynja-legacy-md5/src/engine.rs" = "8cef857e7f6a5955ecf54c4c01496fddc366dcb92d0da96c15443b57a8578dbe"
 "crates/brynja-legacy-md5/src/hardened.rs" = "b997fd50ff27e4dab2bf4201517138ef6c991d02333dbc4e13fa8606cfa74334"
 "crates/brynja-legacy-md5/src/lib.rs" = "46800b0b88a043d3351e7d4606760d70c0323c2a7e9978016fade05f43a48adf"
 "crates/brynja-legacy-md5/src/ordinary.rs" = "b78605d0a26a689b5d0bfdf13f41f6f949e9c0cb1dc06445241aec82df4ffab2"
 "crates/brynja-legacy-md5/src/output.rs" = "4b9fd996f05dfb4509728fdca8ea3457340932316d95300e8de47d472733dfa8"
 "crates/brynja-legacy-md5/src/owner.rs" = "1e1f9b2ad97d42b0d52fd04de473180a41ada8d6f52c154075f2ea7217b29947"
+"crates/brynja-legacy-md5/src/compress/native.rs" = "33adb9934e5b3c42ba112263a963266b8391d3b4e58fc7b94b27341df66ce33d"
 "crates/brynja-legacy-md5/Cargo.toml" = "24f3bda7d4db1352ccf8439fed0421988c98e5a66b0d21bd3e4cffbfb62ad481"
 "crates/brynja-legacy-md5/README.md" = "63c94c5f9919963f63b560ef42352a48f6449fc50ca6dc93c508510fc2495701"
 "crates/brynja-legacy-md5/tests/api.rs" = "80d4cb9c851b4dabac57feb6d6e3364a663badf5f2bafe2e9133ec636f7742e8"

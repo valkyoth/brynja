@@ -16,6 +16,10 @@ def main():
         except ValueError: continue
         raise AssertionError('accepted corrupt or incomplete RFC vector selection')
     mutations = [
+        (policy.CRATE + 'src/compress.rs', 'not(any(miri, kani))', 'not(miri)'),
+        (policy.CRATE + 'src/compress.rs', 'target_endian = "little"', 'target_endian = "big"'),
+        (policy.CRATE + 'src/compress.rs', 'native::compress(&mut owner.chaining_state, &owner.block);', 'let _ = owner;'),
+        (policy.CRATE + 'src/compress.rs', 'owner.clear_block();', ''),
         ('scripts/md5/check-md5.py', "'--release',", ''),
         ('scripts/md5/check-md5.py', "'--lib', 'invalid_'", "'--lib', 'unmatched_filter'"),
         (policy.CRATE + 'src/engine.rs', 'fn invalid_update_offsets_trip_before_mutation()', '#[cfg(debug_assertions)]\n    fn invalid_update_offsets_trip_before_mutation()'),

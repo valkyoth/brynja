@@ -13,6 +13,7 @@ SNAPSHOT = 'scripts/legacy-hash/native-source-snapshot.toml'
 SHA1_DELTA = 'scripts/legacy-hash/sha1-operational-delta.toml'
 MD5_DELTA = 'scripts/legacy-hash/md5-operational-delta.toml'
 MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
+    'src/compress.rs', 'src/compress/native.rs',
     'Cargo.toml', 'src/lib.rs', 'src/cpu/mod.rs', 'src/cpu/session.rs', 'src/cpu/session/tests.rs',
     'src/batch/mod.rs', 'src/batch/execution.rs', 'src/batch/execution/tests.rs', 'tests/execution.rs',
     'src/batch/hardened_execution/mod.rs', 'src/batch/hardened_execution/vector.rs',

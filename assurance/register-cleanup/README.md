@@ -21,6 +21,11 @@ packing and output commit around those families' compression/permutation kernels
 The existing health checks still precede output commit. MD5 also covers its
 inter-block state transfer. High-level framing/owner copies remain separate work.
 
+The [scalar MD5 probe](md5-scalar/README.md) covers baseline x86-64 and
+little-endian AArch64 compression, including scalar tails, without a crypto/SIMD
+feature requirement. Other-target models and high-level calls retain their
+documented limitations; this is not an end-to-end clearing claim.
+
 ## Intended boundary
 
 On normal return from a qualified kernel, that kernel's temporary secret values
@@ -242,9 +247,10 @@ need integration/lifecycle regressions even where they share a qualified kernel.
 RISC-V currently has no distinct hardened accelerated entry in this set; do not
 silently activate its ordinary candidate kernels as a substitute.
 
-The five portable hardened compression/permutation implementations (SHA-1,
-MD5, SHA-256, SHA-512, Keccak), along with caller framing/output processing,
-require a separate residue audit. Hardware-kernel success does not qualify
+Portable hardened SHA-1, SHA-256, SHA-512 and Keccak, MD5's other-target model,
+and caller framing/output processing still require residue remediation.
+MD5's two baseline scalar architecture ports now have their own source-bound
+development checks. Hardware-kernel success does not qualify
 portable fallback or imply that all high-level API temporaries are erased.
 Unsupported architecture/ABI coverage must remain explicit, without removing
 existing portability or silently extending a cleanup claim.

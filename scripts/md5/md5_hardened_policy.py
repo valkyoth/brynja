@@ -73,6 +73,9 @@ def paths(root=ROOT):
     names.update(('assurance/register-cleanup/check_transfer.py', 'assurance/register-cleanup/src/guard_memory.rs'))
     names.update('assurance/register-cleanup/md5-transfer/'+name for name in
                  ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs'))
+    names.add('assurance/register-cleanup/check_md5_scalar.py')
+    names.update('assurance/register-cleanup/md5-scalar/'+name for name in
+                 ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs', 'src/tests/reference.rs'))
     names.update((LEAF+'tests/hardened_execution.rs',HOST+'tests/hardened_execution.rs',
         'docs/legacy-md5-hardened-execution.md'))
     names.update('assurance/md5-hardened-execution/'+n for n in ('Cargo.toml','Cargo.lock','src/main.rs'))

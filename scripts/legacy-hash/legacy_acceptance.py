@@ -19,6 +19,7 @@ FILES = [f'{FIXTURE}/{name}' for name in (
     'check-legacy-vectors.py',
     'check-panic-profiles.py',
 )]
+FILES += ['crates/brynja-legacy-md5/src/compress/native.rs']
 
 
 def read(root, path):

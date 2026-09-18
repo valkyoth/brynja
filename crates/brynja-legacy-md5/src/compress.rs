@@ -1,7 +1,16 @@
 use crate::owner::Md5Owner;
 
 // RFC 1321 §3.4. Constants and indices depend only on the public round.
-// Working scalars retain the documented compiler-copy/register/spill limits.
+// The Rust model remains for Miri/Kani and architectures without this native
+// scalar boundary. It retains the documented compiler-copy/register limits.
+#[cfg(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+))]
+mod native;
 const CONSTANTS: [u32; 64] = [
     0xd76a_a478,
     0xe8c7_b756,
@@ -70,6 +79,33 @@ const CONSTANTS: [u32; 64] = [
 ];
 
 pub(crate) fn compress(owner: &mut Md5Owner) {
+    #[cfg(all(
+        not(any(miri, kani)),
+        any(
+            target_arch = "x86_64",
+            all(target_arch = "aarch64", target_endian = "little")
+        )
+    ))]
+    native::compress(&mut owner.chaining_state, &owner.block);
+    #[cfg(not(all(
+        not(any(miri, kani)),
+        any(
+            target_arch = "x86_64",
+            all(target_arch = "aarch64", target_endian = "little")
+        )
+    )))]
+    compress_model(owner);
+    owner.clear_block();
+}
+
+#[cfg(not(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+)))]
+fn compress_model(owner: &mut Md5Owner) {
     let mut a = read(&owner.chaining_state, 0);
     let mut b = read(&owner.chaining_state, 1);
     let mut c = read(&owner.chaining_state, 2);
@@ -105,9 +141,15 @@ pub(crate) fn compress(owner: &mut Md5Owner) {
     add(&mut owner.chaining_state, 1, b);
     add(&mut owner.chaining_state, 2, c);
     add(&mut owner.chaining_state, 3, d);
-    owner.clear_block();
 }
 
+#[cfg(not(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+)))]
 fn read(bytes: &[u8], index: usize) -> u32 {
     let mut word = 0_u32;
     for (byte, shift) in bytes
@@ -121,6 +163,13 @@ fn read(bytes: &[u8], index: usize) -> u32 {
     word
 }
 
+#[cfg(not(all(
+    not(any(miri, kani)),
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+)))]
 fn add(bytes: &mut [u8], index: usize, value: u32) {
     let value = read(bytes, index).wrapping_add(value);
     for (byte, shift) in bytes

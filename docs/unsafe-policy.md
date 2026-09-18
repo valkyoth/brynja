@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: sixty-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only sixty-nine exact modules: the private core volatile clearer; the
+Rust in only seventy exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -157,6 +157,17 @@ retain a safe model, without a register-cleanup claim. The existing authority,
 work limits and cancellation boundaries remain unchanged. Portable processing,
 scalar final padding, output copies and higher-level owner moves remain separate
 work; this is not an end-to-end register-erasure guarantee.
+
+MD5's `compress/native.rs` adds a baseline scalar boundary on x86-64 and
+little-endian AArch64, including default-feature-disabled ordinary/hardened
+processing and scalar batch tails. It does not require SIMD or crypto features
+and does not acquire accelerated authority. Only typed state/block/table pointers
+enter; all rounds and feed-forward stay in one stack/call-free block. Seven
+volatile x86 working registers plus a public counter, or X4-X11 on Arm, clear
+before normal return. ABI-preserved caller registers are restored, not erased.
+The existing owner clears its block afterward. Other architectures and Miri/Kani
+retain the Rust model with its original residue limitations. Input framing,
+padding, output copies and owner moves remain outside this narrow boundary.
 
 These sixteen kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.

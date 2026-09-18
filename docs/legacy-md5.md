@@ -61,6 +61,15 @@ No claim covers registers, compiler-created copies/spills, caches, moves,
 swap, dumps, DMA, caller copies, `mem::forget`, abort, termination or power
 loss. No pinned/locked memory, independent review or FIPS validation exists.
 
+The private scalar compressor has a narrower normal-return cleanup boundary on
+x86-64 and little-endian AArch64: round words never leave its opaque assembly
+block, and its working registers clear before return. This uses baseline integer
+instructions, not optional SIMD/crypto acceleration, and also serves scalar
+batch tails. Other targets and Miri/Kani use the original Rust model. This does
+not strengthen the high-level API claim above: input/padding processing, output
+copies, by-value owner moves, prior caller registers and asynchronous snapshots
+are outside that compression boundary. See the [development checks](../assurance/register-cleanup/md5-scalar/README.md).
+
 ## Reproducible verification
 
 The RFC Editor and IETF RFC 1321 plaintext copies were byte-identical on

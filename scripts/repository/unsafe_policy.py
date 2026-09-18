@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-legacy-md5/src/compress/native.rs"): ("33adb9934e5b3c42ba112263a963266b8391d3b4e58fc7b94b27341df66ce33d", 3, 1, 3),
     Path("crates/brynja-legacy-md5/src/cpu/transfer.rs"): ("086352bda68dd5908f397079dcaf8b30f75501510a993d00143d473db4c8d481", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"): ("b1293ffcbfe51b26b49bc17dfd861e917f151c8d73356e7902e3277efeec42d4", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"): ("1b87c3f35bde0f59fe65f54b2c14a1d93369d9c03fe6f20a7e336f7d7992ac1f", 6, 1, 6),
@@ -184,6 +185,22 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
+    elif relative == Path("crates/brynja-legacy-md5/src/compress/native.rs"):
+        required = ('pub(super) unsafe extern "C" fn scalar(', '#[inline(never)]',
+                    'state: &mut [u8; 16]', 'block: &[u8; 64]', 'constants: &[u32; 64]',
+                    'shifts: &[u32; 16]', '"cmp r14d, 64"', '"cmp w10, #64"')
+        if any(token not in text for token in required):
+            fail("scalar MD5 lost its fixed operands, ABI or public round bound")
+        if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_SCALAR_BEGIN',
+                'BRYNJA_SCALAR_ERASE', 'BRYNJA_SCALAR_END', 'options(nostack)')):
+            fail("scalar MD5 lost an opaque architecture boundary")
+        wipes = tuple(f'"xor {reg}, {reg}"' for reg in ('eax', 'ecx', 'edx', 'r8d', 'r9d', 'r10d', 'r11d', 'r14d'))
+        wipes += tuple(f'"mov x{i}, xzr"' for i in range(4, 12))
+        if any(token not in text for token in wipes):
+            fail("scalar MD5 register erasure disappeared")
+        if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly|target_feature)\b',
+                     re.sub(r'//[^\n]*', '', text)):
+            fail("scalar MD5 changed memory/clobber or baseline ISA contract")
     elif relative in {
         Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"),
         Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"),

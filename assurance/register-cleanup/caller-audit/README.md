@@ -83,7 +83,7 @@ portable-only fixture. Paths below are relative to the repository root.
 | --- | --- | --- |
 | Portable SHA-2 | `crates/brynja-hash-sha2/src/hardened/compress32.rs`, `compress64.rs` | Scalar schedule/round/feed-forward values still enter Rust registers and compiler temporaries. |
 | Portable Keccak | `crates/brynja-hash-sha3/src/hardened/permutation.rs` | Scalar theta/rho/pi/chi/iota values remain outside opaque kernel boundaries. |
-| Portable legacy | `crates/brynja-legacy-sha1/src/compress.rs`, `crates/brynja-legacy-md5/src/compress.rs` | Portable rounds also service tails/fallbacks; hardware kernel cleanup does not cover them. |
+| Portable legacy | `crates/brynja-legacy-sha1/src/compress.rs`, `crates/brynja-legacy-md5/src/compress.rs` | MD5 now has baseline x86-64/Arm scalar-boundary development checks; its other-target model and SHA-1 rounds remain open. Tail framing/ownership is separate from compression. |
 | Single accelerated Keccak | `crates/brynja-crypto-cpu/src/hardened_execution/keccak.rs`, `crates/brynja-hash-sha3/src/hardened/accelerated/engine.rs` | Session import/commit now stays inside the opaque kernel. Higher-level absorption, padding and squeeze remain to be addressed. |
 | Batch staging | SHA-2 `src/hardened_batch/engine.rs`, `src/hardened_batch512/engine.rs`; SHA-3 `src/hardened_batch/engine.rs`; MD5 `src/batch/hardened_execution/vector.rs` | Packing, feed-forward/output transfer, portable tails and partial lanes require their own review. |
 | Ownership and finalization | Primitive hardened owners, consuming finalizers, core secret-region output initialization | Moving a by-value Rust owner may create compiler copies; clearing its final owned region is not proof that earlier copies or registers clear. |

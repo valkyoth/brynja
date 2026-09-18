@@ -79,7 +79,12 @@ def main() -> int:
     reject("scoped-reader-metadata", scoped / "reader.rs", "self.metadata.wipe();", "")
     reject("scoped-reader-secret", scoped / "reader.rs", "clear_owned_region(output)", "core::hint::black_box(output)")
     reject("scoped-reader-public", scoped / "xof.rs", "_authority: KmacPublicDeclassification", "_authority: ()")
-    print("KMAC policy rejects thirty-five ownership, lifecycle, feature, algorithm, test, and dependency regressions")
+    reject("scoped-accelerated-scratch", scoped / "accelerated.rs", "clear_owned_region(self.0)", "core::hint::black_box(self.0)")
+    reject("scoped-accelerated-guard", scoped / "accelerated/fixed.rs", "let cleanup = Guard(metadata);", "let cleanup = metadata;")
+    reject("scoped-accelerated-domain", scoped / "accelerated/fixed.rs", 'bytes(b"KMAC")?', 'bytes(b"RAW")?')
+    reject("scoped-accelerated-key", scoped / "accelerated/fixed.rs", "key.bit_len() < $strength", "false")
+    reject("scoped-accelerated-feature", scoped.with_suffix('.rs'), '#[cfg(feature = "hardened-execution")]\npub mod accelerated;', 'pub mod accelerated;')
+    print("KMAC policy rejects forty ownership, lifecycle, feature, algorithm, test, and dependency regressions")
     return 0
 
 

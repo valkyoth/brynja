@@ -16,7 +16,8 @@ pub(super) trait Reader: Sized {
     ) -> Result<HardenedSha3SecretOutput<'out>, KmacError>;
     fn final_secret<'out>(
         self,
-        output: Fips202Output<'out>,
+        output: &'out mut [u8],
+        valid: u8,
     ) -> Result<HardenedSha3SecretOutput<'out>, KmacError>;
     fn final_public(self, output: Fips202Output<'_>) -> Result<(), KmacError>;
 }
@@ -56,10 +57,13 @@ macro_rules! port {
             }
             fn final_secret<'out>(
                 self,
-                output: Fips202Output<'out>,
+                output: &'out mut [u8],
+                valid: u8,
             ) -> Result<HardenedSha3SecretOutput<'out>, KmacError> {
-                self.squeeze_final_bits_secret(output)
-                    .map_err(KmacError::from)
+                self.squeeze_final_bits_secret(
+                    Fips202Output::new(output, valid).map_err(|_| KmacError::InvalidBitString)?,
+                )
+                .map_err(KmacError::from)
             }
             fn final_public(self, output: Fips202Output<'_>) -> Result<(), KmacError> {
                 self.squeeze_final_bits_public(output, Sha3PublicDeclassification::acknowledge())

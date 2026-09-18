@@ -6,7 +6,9 @@
 //! not received. Finalization accepts public tags or typed secret destinations.
 //! Scope exit also clears forgotten handles and recoverable unwind. Caller input,
 //! compiler copies, registers/spills and abort are outside the cleanup claim.
-//! Existing by-value/execution APIs remain unchanged; these scopes are portable.
+//! Existing by-value/execution APIs remain unchanged; these top-level scopes are
+//! portable. The default-off `accelerated` module is also exposed as
+//! `execution::in_place` and requires an explicit hardened Keccak session.
 //! KMACXOF readers transfer only the exclusive borrow, require explicit public
 //! declassification, and terminate on errors. Final-bit reads consume the reader.
 //! There are no accumulated-message/output length or preflight queries.
@@ -45,6 +47,8 @@
 //! # Ok::<(), KmacError>(())
 //! ```
 
+#[cfg(feature = "hardened-execution")]
+pub mod accelerated;
 mod backend;
 mod core_state;
 mod fixed;

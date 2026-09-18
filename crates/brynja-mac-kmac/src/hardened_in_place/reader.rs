@@ -77,10 +77,9 @@ impl<'scope, R: Reader> Output<'scope, R> {
     ) -> Result<KmacSecretOutput<'out>, KmacError> {
         let _ = clear_owned_region(output);
         let reader = self.reader.take().ok_or(KmacError::StateConsumed)?;
+        Fips202Output::new(output, valid).map_err(|_| KmacError::InvalidBitString)?;
         reader
-            .final_secret(
-                Fips202Output::new(output, valid).map_err(|_| KmacError::InvalidBitString)?,
-            )
+            .final_secret(output, valid)
             .map(KmacSecretOutput::new)
     }
 }

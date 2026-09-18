@@ -221,6 +221,32 @@ The existing packaged test rejects thirteen additional compiled regressions in
 both debug/release profiles. This is development assurance, not independent
 qualification or proof of complete register/spill erasure.
 
+## Scoped accelerated fixed KMAC
+
+With `hardened-execution`, `brynja_mac_kmac::execution::in_place` provides
+`Kmac128Workspace` and `Kmac256Workspace`. `new(session)` accepts the same
+explicit hardened `KeccakSession` used by existing execution APIs, before any
+secret input. `report()` contains only backend/health metadata. Each scope
+rechecks that exact authority; quarantine is never revived and no fallback is
+introduced. The hosted/static platform trust requirements are unchanged.
+
+`with`/`with_bits` and their conformance counterparts expose borrowed states
+with the portable fixed-scope update, public-tag, typed-secret-output, exact
+verification and cancellation API. Public tags require transactional staging:
+the default scope provides 168 bytes. `with_scratch` and
+`with_bits_and_scratch` accept caller staging for larger tags; scratch must
+cover the entire destination and is fully cleared even on setup rejection or
+recoverable unwind. `with_bits_and_scratch_conformance` supports weak/partial
+test keys behind the existing conformance feature. Secret output and chunked
+verification do not have the public-staging limit. Setup rejection skips the
+callback and cannot clear captured output buffers it never received.
+
+Only borrowed sponge/staging handles move at finalization. Independent metadata,
+staging and cSHAKE scope guards clear on exit, including forgotten handles.
+This does not establish complete register/spill erasure. Accelerated scoped
+KMACXOF is still pending; existing accelerated inline-owner XOF APIs remain
+available under their documented ownership contract.
+
 ## Scoped KMACXOF
 
 `KmacXof128Workspace` and `KmacXof256Workspace` reuse the fixed KMAC setup scope

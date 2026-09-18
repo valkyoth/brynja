@@ -164,9 +164,7 @@ impl<'scope, S: State> Core<'scope, S> {
         let bits = output_bits(output.len(), valid)?;
         let (reader, _cleanup) = self.finish(input, bits, strength, production)?;
         reader
-            .final_secret(
-                Fips202Output::new(output, valid).map_err(|_| KmacError::InvalidBitString)?,
-            )
+            .final_secret(output, valid)
             .map(KmacSecretOutput::new)
     }
     pub(super) fn verify(
@@ -217,9 +215,7 @@ impl<'scope, S: State> Core<'scope, S> {
                 .verification
                 .get_mut(..1)
                 .ok_or(KmacError::OutputTooLong)?;
-            let secret = reader.final_secret(
-                Fips202Output::new(output, valid).map_err(|_| KmacError::InvalidBitString)?,
-            )?;
+            let secret = reader.final_secret(output, valid)?;
             let actual = secret
                 .expose()
                 .first()

@@ -17,13 +17,16 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "hardened_in_place.rs", "hardened_in_place/backend.rs",
     "hardened_in_place/core_state.rs", "hardened_in_place/fixed.rs",
     "hardened_in_place/reader.rs", "hardened_in_place/xof.rs",
+    "hardened_in_place/accelerated.rs", "hardened_in_place/accelerated/backend.rs",
+    "hardened_in_place/accelerated/fixed.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
          CRATE / "src/packer/framing_tests.rs",
          CRATE / "src/hardened_in_place/tests.rs",
          CRATE / "src/hardened_in_place/core_state/tests.rs",
          CRATE / "src/hardened_in_place/reader/tests.rs",
-         CRATE / "src/hardened_in_place/xof/tests.rs")
+         CRATE / "src/hardened_in_place/xof/tests.rs",
+         CRATE / "src/hardened_in_place/accelerated/tests.rs")
 MANIFEST = CRATE / "Cargo.toml"
 README = CRATE / "README.md"
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
@@ -185,6 +188,18 @@ def validate(root: Path) -> None:
                   "with_bits_conformance", "squeeze_final_bits_secret"):
         require(scoped_xof, token, "scoped XOF borrow/classification")
     require(scoped, "self.finish(input, 0, 0, false)", "KMACXOF zero trailer")
+    accelerated = loaded[CRATE / 'src/hardened_in_place/accelerated/fixed.rs']
+    for token in ("sponge: cshake::$storage<'authority>", "stage: [u8; 168]",
+                  "cshake::$storage::new(session)?", "let cleanup = Guard(metadata);",
+                  "let scratch = Scratch(scratch);", 'bytes(b"KMAC")?',
+                  "impl for<'scope> FnOnce($state<'scope, 'authority>) -> R",
+                  "key.bit_len() < $strength", "with_bits_and_scratch_conformance"):
+        require(accelerated, token, "scoped accelerated KMAC storage/authority")
+    require(loaded[CRATE / 'src/hardened_in_place/accelerated.rs'],
+            'clear_owned_region(self.0)', 'scoped accelerated KMAC scratch clearing')
+    require(loaded[CRATE / 'src/hardened_in_place.rs'],
+            '#[cfg(feature = "hardened-execution")]\npub mod accelerated;',
+            'scoped accelerated KMAC default-off boundary')
     if scoped_xof.count('#[cfg(feature = "conformance-testing")]') != 4:
         fail("scoped KMACXOF conformance feature gate changed")
     for token in (

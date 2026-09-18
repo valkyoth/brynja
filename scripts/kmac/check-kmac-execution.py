@@ -78,6 +78,15 @@ def campaign(mode, environment=None, target=None, toolchain='1.98.1'):
         if execute(command, env, invalid, False).stdout:
             raise RuntimeError('malformed KMAC request leaked partial output')
     print(f'KMAC hardened execution oracle: PASS; mode={mode}; cases={len(cases)}; kernel={route}', flush=True)
+    if mode == 'static':
+        tests = ['cargo', '+' + toolchain, 'test', '--locked', '--offline', '--release',
+                 '--manifest-path', MANIFEST, '--test', 'scoped']
+        if target:
+            tests += ['--target', target]
+        checked = execute(tests, env)
+        if '2 passed; 0 failed' not in checked.stdout:
+            raise RuntimeError('scoped accelerated KMAC lifecycle did not execute')
+        print('Scoped accelerated KMAC lifecycle: PASS; tests=2', flush=True)
 
 
 def native_environment(arm=False):

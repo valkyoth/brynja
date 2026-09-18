@@ -20,7 +20,8 @@ impl Reader for NoReader {
     }
     fn final_secret<'out>(
         self,
-        _: Fips202Output<'out>,
+        _: &'out mut [u8],
+        _: u8,
     ) -> Result<HardenedSha3SecretOutput<'out>, KmacError> {
         match self {}
     }

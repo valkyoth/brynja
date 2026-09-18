@@ -7,6 +7,7 @@ use std::{
 use brynja_mac_kmac::Fips202BitString;
 mod dispatch;
 mod lifecycle;
+mod scoped;
 mod selection;
 use dispatch::dispatch;
 
@@ -78,6 +79,17 @@ fn evaluate(
         selection,
     )?;
     lifecycle::check(
+        lifecycle::Case {
+            algorithm,
+            key: key_input,
+            custom: custom_input,
+            message: message_input,
+            valid: valid_bits(output_bits),
+            expected: &output,
+        },
+        selection,
+    )?;
+    scoped::check(
         lifecycle::Case {
             algorithm,
             key: key_input,

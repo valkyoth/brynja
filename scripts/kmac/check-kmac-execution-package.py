@@ -60,6 +60,13 @@ def negatives(consumer, env):
         cases.append((f'fn reuse(h:{scoped}::KmacXof{width}) {{ let _=h.finalize_xof(); let _=h.key_policy(); }}', 'E0382'))
         cases.append((f'fn reuse(h:{scoped}::KmacXof{width}Reader) {{ h.cancel(); let _=h.service_status(); }}', 'E0382'))
         cases.append((f'fn public(r:&mut {scoped}::KmacXof{width}Reader) {{ let _=r.squeeze_public(&mut []); }}', 'E0061'))
+    for width in (128, 256):
+        for name, lifetimes in ((f'Kmac{width}Workspace', "<'static>"),
+                                (f'Kmac{width}', "<'static, 'static>")):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn check<T:{bound}>(){{}} check::<api::in_place::{name}{lifetimes}>();', 'E0277'))
+        cases.append((f'fn reuse(h:api::in_place::Kmac{width}) {{ let mut b=[0;32]; let _=h.finalize_secret(&mut b); let _=h.key_policy(); }}', 'E0382'))
+        cases.append((f'fn overlap(w:&mut api::in_place::Kmac{width}Workspace) {{ let _=w.with(&[0;32],b"",|_|w.with(&[0;32],b"",|_|())); }}', 'E0500'))
     try:
         for code, diagnostic in cases:
             path.write_text(original + prefix + code + '}\n')
@@ -117,12 +124,13 @@ def mutations(consumer, roots, env):
         ('../hardened_in_place/reader.rs', 'let _ = clear_owned_region(output);\n        let mut operation', 'let mut operation', 'reader_failure_and_unwind'),
         ('../hardened_in_place/reader.rs', 'let _ = clear_owned_region(output);\n        let reader', 'let reader', 'consuming_reader_failures'),
         ('../hardened_in_place/reader.rs', 'reader.final_public(\n            Fips202Output::new(output, valid)', 'reader.final_public(\n            Fips202Output::new(output, 8)', 'scoped_xof_lifecycle_shapes'),
+        ('../hardened_in_place/accelerated.rs', 'brynja_core::clear_owned_region(self.0)', 'core::hint::black_box(&mut *self.0)', 'scoped_accelerated_scratch_guard'),
     )
     for profile in ([], ['--release']):
         control = shared.run(['cargo', 'test', '--offline', '-p', 'brynja-mac-kmac',
             '--features', 'hardened-execution,conformance-testing', '--lib', *profile, 'hardened_in_place'],
             roots['brynja-mac-kmac'], env)
-        if '12 passed; 0 failed' not in control.stdout:
+        if '13 passed; 0 failed' not in control.stdout:
             raise ValueError('scoped KMAC mutation positive control incomplete')
     for file, before, after, test in cases:
         path = root / file

@@ -141,6 +141,8 @@ mod fixed;
 mod output;
 mod xof;
 
+pub use crate::hardened_in_place::accelerated as in_place;
+
 pub use crate::KmacError as Error;
 pub use brynja_hash_sha3::hardened_execution::{KeccakSession, Report};
 pub use fixed::{Kmac128, Kmac256};

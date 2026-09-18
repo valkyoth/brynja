@@ -120,6 +120,10 @@ def validate(root=ROOT, write=False):
     paths.add(Path('scripts/sha3/keccak_hardened_policy.py'))
     paths.add(Path('scripts/sha3/keccak_hardened_native.py'))
     paths.add(Path('assurance/register-cleanup/check_keccak_scalar.py'))
+    paths.add(Path('assurance/register-cleanup/check_in_place_sha3.py'))
+    paths.add(Path('docs/hardened-in-place.md'))
+    for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs'):
+        paths.add(Path('assurance/register-cleanup/in-place-sha3') / name)
     for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs', 'src/tests/reference.rs'):
         paths.add(Path('assurance/register-cleanup/keccak-scalar') / name)
     paths.update(map(Path, ('scripts/checks.sh', 'scripts/tag_gate.sh',

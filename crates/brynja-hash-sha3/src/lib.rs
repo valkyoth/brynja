@@ -18,6 +18,7 @@ mod error;
 #[cfg(feature = "static-execution")]
 pub mod execution;
 mod hardened;
+pub use hardened::in_place as hardened_in_place;
 #[cfg(feature = "hardened-batch-execution")]
 pub mod hardened_batch;
 #[cfg(feature = "hardened-execution")]

@@ -14,7 +14,7 @@
 "crates/brynja-hash-sha3/src/execution/mod.rs" = "06387b55f86a8e9f10a80eeaf76a2e6174a90d9d89dfe47a871ef64995e56d46"
 "crates/brynja-hash-sha3/src/execution/route.rs" = "749561dc17f0741b3352efa84d50bdea6734647586374b82f0d5644a509803ed"
 "crates/brynja-hash-sha3/src/execution/xof.rs" = "b633a0a3b4f5ef9401799bbbeb231abffec5b0b47c4e9abc7801e5df150e00e5"
-"crates/brynja-hash-sha3/src/lib.rs" = "54eca4a183c500f466901a26eaae8bfd481df1f190aa804da7b5b32d2ce1bef1"
+"crates/brynja-hash-sha3/src/lib.rs" = "d2f5ebce2345775ae6f8a7b3a065adf26a117f9438ea2622cd52c352a99cc088"
 "crates/brynja-hash-sha3/tests/cshake_execution.rs" = "5efe68968a714267802c9fe044d0390d6dd8699d6b24b69e839f8c477632cb49"
 "crates/brynja-hash-sha3/tests/cshake_execution_cases/mod.rs" = "354f280274ebb2deea0d53582d5a370090666dd486e7292d848b0a9791ea8861"
 "crates/brynja-hash-sha3/tests/execution.rs" = "8fe5cee602bdd2f5bce147c283137fd568a5900b38d4771062657789f6e13cde"

@@ -2,6 +2,7 @@
 pub mod accelerated;
 mod cshake;
 mod fixed;
+pub mod in_place;
 mod output;
 pub(crate) mod owner;
 pub(crate) mod permutation;

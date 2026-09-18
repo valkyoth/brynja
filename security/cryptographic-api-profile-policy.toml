@@ -1131,7 +1131,7 @@ sha256 = "9c3626701516823ffd6e23a638337a4b4952726a65f7e41d423f5eaa9a12b29d"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/mod.rs"
-sha256 = "29b57006172b1428a20f8076e059ef9e860199afbefdd99c72585df85ed0f9fe"
+sha256 = "83aa4e10f13f14e08844f9d5428bc5b1cc9f37132fb2093ed802b8dd8afb815d"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake.rs"

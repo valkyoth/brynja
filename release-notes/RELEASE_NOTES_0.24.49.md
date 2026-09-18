@@ -4,6 +4,12 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
+- Add `brynja_hash_sha3::hardened_in_place` for scoped SHA3-224/256/384/512
+  workspaces. Handles borrow the active owner; finalization does not move that
+  owner. Independent scope cleanup covers forgotten handles and recoverable
+  unwind. Existing by-value APIs remain unchanged. See the
+  [in-place contract](../docs/hardened-in-place.md); wider rollout and complete
+  framing/register/spill qualification are still pending, not release-qualified.
 - Add an isolated first-party SHA512/AVX2/AVX intrinsic kernel and exact static/raw
   runtime identity, with real startup KAT and irreversible quarantine.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;

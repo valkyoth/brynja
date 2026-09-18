@@ -2,6 +2,9 @@
 
 ## 0.24.49 development
 
+- Add scoped caller-owned storage for hardened SHA3-224/256/384/512, preserving
+  existing by-value APIs. Ownership tests pass; wider in-place rollout and
+  whole-API register/spill qualification remain pending.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
   exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration
   pass; exceptional pentest and final release verification remain pending.

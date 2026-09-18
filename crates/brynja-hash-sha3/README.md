@@ -36,6 +36,7 @@ Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 | Byte/bit input and arbitrary-bit SHAKE output | ✅ Fully implemented | ❌ No |
 | cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |
 | Hardened states and classified outputs | ✅ Implemented | ❌ No |
+| Scoped in-place hardened SHA3-224/256/384/512 | Development; ownership checks implemented, residue qualification pending | ❌ No |
 | Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
 | Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |
@@ -44,6 +45,15 @@ FIPS 202 and SP 800-185 specify these algorithms; they do not confer FIPS
 140-3 validation. Brynja has no named independent cryptographic review or FIPS
 validation. KMAC, TupleHash and ParallelHash live in their own leaf crates,
 not as separate algorithms implemented in this crate.
+
+`hardened_in_place::Sha3_256Workspace` (and the other three fixed SHA-3
+identities) keeps active state in caller-owned storage through a scoped `with`
+callback. Consuming its handle does not move the secret owner. Scope exit clears
+storage even if the handle is forgotten; it can then be reused. See the
+[in-place guide](../../docs/hardened-in-place.md) and the tested module example.
+This first slice is portable: it does not select hardware/SIMD routes and does
+not yet include scoped SHAKE/cSHAKE. It is not a whole-register/spill erasure
+claim. Existing by-value and accelerated APIs remain available unchanged.
 
 ## Use
 

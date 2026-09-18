@@ -9,6 +9,9 @@ struct Failing<'a> {
 }
 enum NoReader {}
 impl Reader for NoReader {
+    fn public(&mut self, _: &mut [u8]) -> Result<(), KmacError> {
+        Err(KmacError::SecretMemory)
+    }
     fn secret<'out>(
         &mut self,
         _: &'out mut [u8],
@@ -134,4 +137,49 @@ fn outer_guard_clears_all_regions_even_after_forgotten_inner_guard() {
         core::mem::forget(inner);
     }
     assert!(metadata.cleared());
+}
+
+#[test]
+fn xof_production_rejects_weak_keys_and_terminal_states() -> Result<(), KmacError> {
+    for production in [false, true] {
+        let mut metadata = Metadata::new();
+        let mode = Cell::new(0);
+        let dropped = Cell::new(false);
+        let state = Core::new(
+            Failing {
+                mode: &mode,
+                dropped: &dropped,
+            },
+            &mut metadata,
+            bytes(b"")?,
+            168,
+            128,
+        )?;
+        let expected = if production {
+            KmacError::KeyTooShort
+        } else {
+            KmacError::SecretMemory
+        };
+        assert!(matches!(state.finish_xof(None, production), Err(error) if error == expected));
+        assert!(dropped.get());
+        assert!(metadata.cleared());
+        let mut state = Core::new(
+            Failing {
+                mode: &mode,
+                dropped: &dropped,
+            },
+            &mut metadata,
+            bytes(&[0x42; 16])?,
+            168,
+            128,
+        )?;
+        mode.set(1);
+        assert_eq!(state.update(b""), Err(KmacError::MessageTooLong));
+        assert!(matches!(
+            state.finish_xof(None, production),
+            Err(KmacError::StateConsumed)
+        ));
+        assert!(metadata.cleared());
+    }
+    Ok(())
 }

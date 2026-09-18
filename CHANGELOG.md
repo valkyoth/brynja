@@ -12,8 +12,10 @@
 - Keep KMAC key-length encoding and partial suffix framing in borrowed storage,
   avoiding returned secret framing owners in portable and accelerated execution.
   Add portable scoped fixed KMAC128/256 workspaces with typed secret output,
-  exact-length verification and independent scope cleanup. Scoped KMACXOF and
-  accelerated KMAC, plus complete compiler-residue qualification, remain pending.
+  exact-length verification and independent scope cleanup. Scoped KMACXOF128/256
+  readers now retain the workspace borrow through incremental and partial-bit
+  output. Accelerated KMAC scopes and complete compiler-residue qualification
+  remain pending.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
   exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration
   pass; exceptional pentest and final release verification remain pending.

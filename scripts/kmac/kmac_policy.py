@@ -16,11 +16,14 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "output.rs", "packer.rs", "policy.rs", "verify.rs", "xof.rs",
     "hardened_in_place.rs", "hardened_in_place/backend.rs",
     "hardened_in_place/core_state.rs", "hardened_in_place/fixed.rs",
+    "hardened_in_place/reader.rs", "hardened_in_place/xof.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
          CRATE / "src/packer/framing_tests.rs",
          CRATE / "src/hardened_in_place/tests.rs",
-         CRATE / "src/hardened_in_place/core_state/tests.rs")
+         CRATE / "src/hardened_in_place/core_state/tests.rs",
+         CRATE / "src/hardened_in_place/reader/tests.rs",
+         CRATE / "src/hardened_in_place/xof/tests.rs")
 MANIFEST = CRATE / "Cargo.toml"
 README = CRATE / "README.md"
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
@@ -171,6 +174,19 @@ def validate(root: Path) -> None:
                   "Core::new(state, &mut *cleanup.0", 'bytes(b"KMAC")?'):
         require(scoped_fixed, token, "scoped KMAC storage/borrow")
     hardened_cshake = loaded[HARDENED_CSHAKE]
+    scoped_reader = loaded[CRATE / "src/hardened_in_place/reader.rs"]
+    for token in ("reader: Option<R>", "cleanup: Guard<'scope>",
+                  "*self.reader = None;", "self.metadata.wipe();",
+                  "operation.complete = true;", "clear_owned_region(output)"):
+        require(scoped_reader, token, "scoped XOF reader cleanup")
+    scoped_xof = loaded[CRATE / "src/hardened_in_place/xof.rs"]
+    for token in ("inner: fixed::$fixed", "core.finish_xof(input, production)?",
+                  "Output::new(reader, cleanup)", "_authority: KmacPublicDeclassification",
+                  "with_bits_conformance", "squeeze_final_bits_secret"):
+        require(scoped_xof, token, "scoped XOF borrow/classification")
+    require(scoped, "self.finish(input, 0, 0, false)", "KMACXOF zero trailer")
+    if scoped_xof.count('#[cfg(feature = "conformance-testing")]') != 4:
+        fail("scoped KMACXOF conformance feature gate changed")
     for token in (
         "pub fn finalize_xof_erasing_source(&mut self)",
         "pub fn finalize_bits_xof_erasing_source(",

@@ -1,6 +1,6 @@
 # Scoped hardened storage
 
-Status: named/general SHA-2 and SHA-3/SHAKE/cSHAKE API development checkpoint; wider rollout and complete
+Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE and portable KMAC/KMACXOF API development checkpoint; wider rollout and complete
 register/spill qualification pending. No independent verification or FIPS claim.
 
 The first additive API is `brynja_hash_sha3::hardened_in_place`, with
@@ -210,8 +210,8 @@ An outer metadata guard and the underlying cSHAKE scope guard independently
 cover forgotten handles. Finalization transfers only reference-bearing handles
 into the cSHAKE reader. Secret-output errors clear the full supplied destination;
 public errors preserve it. Typed secret output may outlive the scope, but not its
-destination borrow. This does not change the older movable APIs. Scoped KMACXOF
-readers and accelerated KMAC remain pending; these two workspaces are portable.
+destination borrow. This does not change the older movable APIs. These two
+workspaces are portable; accelerated KMAC scopes remain pending.
 
 Tests cover all six fixed NIST examples, the fixed-output half of the existing
 256-case independent arbitrary-bit corpus, 896 additional portable comparisons,
@@ -220,6 +220,33 @@ Twenty-four compile-fail examples enforce trait/escape/overlap restrictions.
 The existing packaged test rejects thirteen additional compiled regressions in
 both debug/release profiles. This is development assurance, not independent
 qualification or proof of complete register/spill erasure.
+
+## Scoped KMACXOF
+
+`KmacXof128Workspace` and `KmacXof256Workspace` reuse the fixed KMAC setup scope
+without moving initialized storage. `finalize_xof` / `finalize_bits_xof` consume
+the absorbing handle and append `right_encode(0)`, returning a reader that keeps
+the original sponge and metadata exclusively borrowed. Production finalizers
+still reject weak keys introduced through feature-gated conformance setup.
+
+Incremental `squeeze_secret` returns typed output; `squeeze_public` requires
+`KmacPublicDeclassification`. Both permit empty reads and crossing rate boundaries.
+The consuming `squeeze_final_bits_secret` / `squeeze_final_bits_public` methods
+take a destination slice and valid-tail width, so malformed secret destinations
+can be cleared before returning an error. Public errors preserve destinations.
+No accumulated-length/preflight query is exposed. An operation guard immediately
+drops a failed reader and clears metadata on errors or recoverable unwind;
+empty follow-up reads are also rejected. Scope exit independently covers forgotten
+readers. These scopes are portable, not an accelerated dispatch change.
+
+The six official XOF examples and the XOF half of the existing independent
+256-case campaign exercise these scoped outputs. Another 128-case comparison
+checks partial keys/customization/messages, all tail widths and mixed reads
+across rate boundaries. Thirty-six new compile-fail examples enforce workspace,
+state and reader traits, escape and overlap. Packaged tests reject nine new
+compiled XOF regressions in debug/release, including trailer/key errors, revoked
+reader reuse, omitted metadata/destination clearing and lost success transitions.
+Compiler-copy/framing/register/spill qualification remains unfinished.
 
 ## Ownership and failure behavior
 

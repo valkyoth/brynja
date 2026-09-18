@@ -943,7 +943,7 @@ sha256 = "2d801bf0444967e62728846fcfa8180cd4cd6a683b348d0adba4f5a2e6f83074"
 
 [[reviewed-source]]
 path = "assurance/kmac-public-api/src/lib.rs"
-sha256 = "1ece3eb5b0a87093c727729c57bd6d781e9a176e1c141aefc3821626ebfa1c26"
+sha256 = "6b83f70078bec568e180a486c15425ddd2d3dcc23bb6ab0d07deb57404f8a6c6"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/core_state.rs"

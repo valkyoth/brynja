@@ -9,6 +9,7 @@ pub(super) trait State {
     fn finish(self, input: Fips202BitString<'_>) -> Result<Self::Reader, KmacError>;
 }
 pub(super) trait Reader: Sized {
+    fn public(&mut self, output: &mut [u8]) -> Result<(), KmacError>;
     fn secret<'out>(
         &mut self,
         output: &'out mut [u8],
@@ -43,6 +44,10 @@ macro_rules! port {
             }
         }
         impl Reader for api::$reader<'_> {
+            fn public(&mut self, output: &mut [u8]) -> Result<(), KmacError> {
+                self.squeeze_public(output, Sha3PublicDeclassification::acknowledge())
+                    .map_err(KmacError::from)
+            }
             fn secret<'out>(
                 &mut self,
                 output: &'out mut [u8],

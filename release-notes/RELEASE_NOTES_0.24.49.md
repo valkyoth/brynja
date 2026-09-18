@@ -33,8 +33,10 @@ No crates are selected for publication.
   output bytes are unchanged. Add portable scoped fixed KMAC128/256 workspaces
   borrowing cSHAKE storage before key input, with typed secret output,
   constant-time verification, exact-length verification and independent cleanup
-  for forgotten handles and recoverable unwind. Scoped KMACXOF/accelerated KMAC
-  and complete framing/compiler residue qualification remain unfinished.
+  for forgotten handles and recoverable unwind. Scoped KMACXOF128/256 readers
+  add zero-trailer framing, mixed secret/public reads, consuming partial-bit
+  output and immediate terminal cleanup. Accelerated KMAC scopes and complete
+  framing/compiler residue qualification remain unfinished.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;
   add distinct owner-backed hardened compression without ordinary scratch reuse.
 - Preserve generic portable defaults, AVX2 batch routes and the hosted x86

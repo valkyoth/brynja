@@ -20,6 +20,18 @@ pub fn leaf_mac(key: &[u8; 16], message: &[u8], output: &mut [u8; 16]) -> Result
     state.finalize_tag(output).map(|_| ())
 }
 
+pub fn scoped_xof_secret<'out>(
+    workspace: &mut brynja_mac_kmac::hardened_in_place::KmacXof256Workspace,
+    key: &[u8; 32],
+    message: &[u8],
+    output: &'out mut [u8; 33],
+) -> Result<brynja_mac_kmac::KmacSecretOutput<'out>, KmacError> {
+    workspace.with(key, b"package-external", |mut state| {
+        state.update(message)?;
+        state.finalize_xof()?.squeeze_final_bits_secret(output, 5)
+    })?
+}
+
 pub fn leaf_prf(key: &[u8; 32], message: &[u8], output: &mut [u8]) -> Result<(), KmacError> {
     let mut state = KmacXof256::new(key, b"package-external")?;
     state.update(message)?;
@@ -38,6 +50,28 @@ pub fn main_facade(key: &[u8; 16], output: &mut [u8; 16]) -> Result<(), KmacErro
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn scoped_xof_output_retains_ownership_and_canonical_bits() -> Result<(), super::KmacError> {
+        let mut workspace = brynja_mac_kmac::hardened_in_place::KmacXof256Workspace::new();
+        let mut output = [0xa5; 33];
+        let mut expected = [0; 33];
+        brynja_mac_kmac::kmacxof256_public(
+            &[0x42; 32],
+            b"message",
+            b"package-external",
+            &mut expected,
+            super::KmacPublicDeclassification::acknowledge(),
+        )?;
+        if let Some(last) = expected.last_mut() {
+            *last &= 0x1f;
+        }
+        let secret =
+            super::scoped_xof_secret(&mut workspace, &[0x42; 32], b"message", &mut output)?;
+        assert_eq!(secret.expose(), expected);
+        drop(secret);
+        assert_eq!(output, [0; 33]);
+        Ok(())
+    }
     #[test]
     fn scoped_output_outlives_scope_and_clears_on_drop() -> Result<(), super::KmacError> {
         let mut workspace = brynja_mac_kmac::hardened_in_place::Kmac128Workspace::new();

@@ -77,6 +77,14 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
         &output,
     )?;
     append_hex(rendered, &output)?;
+    scoped_xof(
+        algorithm,
+        key_input,
+        custom_input,
+        message_input,
+        output_bits,
+        &output,
+    )?;
     output.fill(0);
     key.fill(0);
     custom.fill(0);
@@ -142,6 +150,67 @@ fn scoped_fixed(
     match algorithm {
         "kmac128" => check!(Kmac128Workspace),
         "kmac256" => check!(Kmac256Workspace),
+        _ => (),
+    }
+    Ok(())
+}
+
+fn scoped_xof(
+    algorithm: &str,
+    key: Fips202BitString<'_>,
+    custom: Fips202BitString<'_>,
+    message: Fips202BitString<'_>,
+    output_bits: usize,
+    expected: &[u8],
+) -> Result<(), Box<dyn Error>> {
+    use brynja_mac_kmac::hardened_in_place::{KmacXof128Workspace, KmacXof256Workspace};
+    macro_rules! check {
+        ($workspace:ident) => {{
+            let mut workspace = $workspace::new();
+            let valid = valid_bits(output_bits);
+            let mut actual: Vec<u8> = expected.iter().map(|byte| !byte).collect();
+            let secret = workspace
+                .with_bits_conformance(key, custom, |state| {
+                    state
+                        .finalize_bits_xof_conformance(message)?
+                        .squeeze_final_bits_secret(&mut actual, valid)
+                })
+                .and_then(core::convert::identity)
+                .map_err(|_| io::Error::other("scoped XOF secret failure"))?;
+            if secret.expose() != expected {
+                return Err(io::Error::other("scoped XOF oracle mismatch").into());
+            }
+            drop(secret);
+            if actual.iter().any(|byte| *byte != 0) {
+                return Err(io::Error::other("scoped XOF destination not cleared").into());
+            }
+            for (byte, expected) in actual.iter_mut().zip(expected) {
+                *byte = !expected;
+            }
+            workspace
+                .with_bits_conformance(key, custom, |state| {
+                    let mut reader = state.finalize_bits_xof_conformance(message)?;
+                    let split = actual.len().saturating_sub(1);
+                    let (complete, tail) = actual.split_at_mut(split);
+                    for chunk in complete.chunks_mut(73) {
+                        reader.squeeze_public(chunk, KmacPublicDeclassification::acknowledge())?;
+                    }
+                    reader.squeeze_final_bits_public(
+                        tail,
+                        valid,
+                        KmacPublicDeclassification::acknowledge(),
+                    )
+                })
+                .and_then(core::convert::identity)
+                .map_err(|_| io::Error::other("scoped XOF public failure"))?;
+            if actual != expected {
+                return Err(io::Error::other("scoped XOF incremental oracle mismatch").into());
+            }
+        }};
+    }
+    match algorithm {
+        "kmacxof128" => check!(KmacXof128Workspace),
+        "kmacxof256" => check!(KmacXof256Workspace),
         _ => (),
     }
     Ok(())

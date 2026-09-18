@@ -74,7 +74,12 @@ def main() -> int:
     reject("scoped-terminal", scoped / "core_state.rs", "self.core.state.0 = None;", "")
     reject("scoped-output", scoped / "core_state.rs", "let _ = clear_owned_region(output);", "")
     reject("scoped-verify", scoped / "core_state.rs", "difference.ct_eq(&[0])", "difference.ct_eq(&[1])")
-    print("KMAC policy rejects thirty ownership, lifecycle, feature, algorithm, test, and dependency regressions")
+    reject("scoped-xof-trailer", scoped / "core_state.rs", "self.finish(input, 0, 0, false)", "self.finish(input, 8, 0, false)")
+    reject("scoped-reader-terminal", scoped / "reader.rs", "*self.reader = None;", "")
+    reject("scoped-reader-metadata", scoped / "reader.rs", "self.metadata.wipe();", "")
+    reject("scoped-reader-secret", scoped / "reader.rs", "clear_owned_region(output)", "core::hint::black_box(output)")
+    reject("scoped-reader-public", scoped / "xof.rs", "_authority: KmacPublicDeclassification", "_authority: ()")
+    print("KMAC policy rejects thirty-five ownership, lifecycle, feature, algorithm, test, and dependency regressions")
     return 0
 
 

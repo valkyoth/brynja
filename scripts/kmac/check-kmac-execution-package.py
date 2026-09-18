@@ -48,13 +48,18 @@ def negatives(consumer, env):
         ('let _:api::Mode = true.into();', 'E0277'),
     ))
     scoped = 'brynja_mac_kmac::hardened_in_place'
-    for name in ('Kmac128Workspace', 'Kmac256Workspace', 'Kmac128', 'Kmac256'):
+    for name in ('Kmac128Workspace', 'Kmac256Workspace', 'Kmac128', 'Kmac256',
+                 'KmacXof128Workspace', 'KmacXof256Workspace', 'KmacXof128',
+                 'KmacXof256', 'KmacXof128Reader', 'KmacXof256Reader'):
         ty = f'{scoped}::{name}' + ("<'static>" if 'Workspace' not in name else '')
         for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
             cases.append((f'fn check<T:{bound}>(){{}} check::<{ty}>();', 'E0277'))
     for width in (128, 256):
         cases.append((f'fn reuse(h:{scoped}::Kmac{width}) {{ let mut b=[0;32]; let _=h.finalize_tag(&mut b); let _=h.key_policy(); }}', 'E0382'))
         cases.append((f'let mut w={scoped}::Kmac{width}Workspace::new(); let _=w.with(&[0;32], b"", |_| w.with(&[0;32], b"", |_| ()));', 'E0499'))
+        cases.append((f'fn reuse(h:{scoped}::KmacXof{width}) {{ let _=h.finalize_xof(); let _=h.key_policy(); }}', 'E0382'))
+        cases.append((f'fn reuse(h:{scoped}::KmacXof{width}Reader) {{ h.cancel(); let _=h.service_status(); }}', 'E0382'))
+        cases.append((f'fn public(r:&mut {scoped}::KmacXof{width}Reader) {{ let _=r.squeeze_public(&mut []); }}', 'E0061'))
     try:
         for code, diagnostic in cases:
             path.write_text(original + prefix + code + '}\n')
@@ -103,12 +108,21 @@ def mutations(consumer, roots, env):
         ('../hardened_in_place/fixed.rs', 'key.bit_len() < $strength', 'key.bit_len() < 0', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'let cleanup = Guard(&mut self.metadata);', 'let mut cleanup = core::mem::ManuallyDrop::new(Guard(&mut self.metadata));', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'bytes(b"KMAC")?', 'bytes(b"WRONG")?', 'scoped_known_answer'),
+        ('../hardened_in_place/core_state.rs', 'self.finish(input, 0, 0, false)', 'self.finish(input, 8, 0, false)', 'scoped_xof_returned_secret'),
+        ('../hardened_in_place/core_state.rs', 'if production && self.key_policy() != KmacKeyPolicy::FullStrength {\n            return Err(KmacError::KeyTooShort);\n        }\n        // KMACXOF', '// KMACXOF', 'xof_production_rejects_weak_keys'),
+        ('../hardened_in_place/reader.rs', '*self.reader = None;', '', 'reader_failure_and_unwind'),
+        ('../hardened_in_place/reader.rs', 'self.metadata.wipe();', '', 'reader_failure_and_unwind'),
+        ('../hardened_in_place/reader.rs', 'operation.complete = true;\n        Ok(())', 'Ok(())', 'scoped_xof_all_tails'),
+        ('../hardened_in_place/reader.rs', 'operation.complete = true;\n        Ok(KmacSecretOutput::new(secret))', 'Ok(KmacSecretOutput::new(secret))', 'scoped_xof_all_tails'),
+        ('../hardened_in_place/reader.rs', 'let _ = clear_owned_region(output);\n        let mut operation', 'let mut operation', 'reader_failure_and_unwind'),
+        ('../hardened_in_place/reader.rs', 'let _ = clear_owned_region(output);\n        let reader', 'let reader', 'consuming_reader_failures'),
+        ('../hardened_in_place/reader.rs', 'reader.final_public(\n            Fips202Output::new(output, valid)', 'reader.final_public(\n            Fips202Output::new(output, 8)', 'scoped_xof_lifecycle_shapes'),
     )
     for profile in ([], ['--release']):
         control = shared.run(['cargo', 'test', '--offline', '-p', 'brynja-mac-kmac',
-            '--features', 'hardened-execution', '--lib', *profile, 'hardened_in_place'],
+            '--features', 'hardened-execution,conformance-testing', '--lib', *profile, 'hardened_in_place'],
             roots['brynja-mac-kmac'], env)
-        if '5 passed; 0 failed' not in control.stdout:
+        if '12 passed; 0 failed' not in control.stdout:
             raise ValueError('scoped KMAC mutation positive control incomplete')
     for file, before, after, test in cases:
         path = root / file
@@ -119,7 +133,7 @@ def mutations(consumer, roots, env):
             path.write_text(original.replace(before, after))
             for profile in ([], ['--release']):
                 result = shared.run(['cargo', 'test', '--offline', '-p', 'brynja-mac-kmac',
-                    '--features', 'hardened-execution', '--lib', *profile, test], roots['brynja-mac-kmac'], env, False)
+                    '--features', 'hardened-execution,conformance-testing', '--lib', *profile, test], roots['brynja-mac-kmac'], env, False)
                 if 'test result: FAILED' not in result.stdout:
                     raise ValueError('KMAC mutant failed to execute: ' + result.stderr)
         finally:

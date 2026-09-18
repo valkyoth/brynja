@@ -1,4 +1,4 @@
-//! Scoped portable KMAC128/KMAC256, with caller-owned sponge and verification storage.
+//! Scoped portable KMAC/KMACXOF128/256 with caller-owned sponge and metadata storage.
 //!
 //! Construction accepts no secrets. `with` borrows the workspace before absorbing
 //! a key; its outer result covers setup and its inner value is the callback result.
@@ -7,6 +7,9 @@
 //! Scope exit also clears forgotten handles and recoverable unwind. Caller input,
 //! compiler copies, registers/spills and abort are outside the cleanup claim.
 //! Existing by-value/execution APIs remain unchanged; these scopes are portable.
+//! KMACXOF readers transfer only the exclusive borrow, require explicit public
+//! declassification, and terminate on errors. Final-bit reads consume the reader.
+//! There are no accumulated-message/output length or preflight queries.
 //!
 //! ```
 //! use brynja_mac_kmac::{KmacError, hardened_in_place::Kmac128Workspace};
@@ -21,11 +24,37 @@
 //! assert_eq!(bytes, [0; 32]);
 //! # Ok::<(), KmacError>(())
 //! ```
+//!
+//! Incremental XOF reads retain the workspace borrow; secret output has its own
+//! destination lifetime and can be returned from the scope:
+//!
+//! ```
+//! use brynja_mac_kmac::{KmacError, KmacPublicDeclassification, hardened_in_place::KmacXof256Workspace};
+//! let mut workspace = KmacXof256Workspace::new();
+//! let mut public = [0; 16];
+//! let mut output = [0; 33];
+//! let secret = workspace.with(&[0x42; 32], b"example only", |mut state| {
+//!     state.update(b"message")?;
+//!     let mut reader = state.finalize_xof()?;
+//!     reader.squeeze_public(&mut public, KmacPublicDeclassification::acknowledge())?;
+//!     reader.squeeze_final_bits_secret(&mut output, 5)
+//! })??;
+//! assert_eq!(secret.expose().len(), 33);
+//! drop(secret);
+//! assert_eq!(output, [0; 33]);
+//! # Ok::<(), KmacError>(())
+//! ```
 
 mod backend;
 mod core_state;
 mod fixed;
+mod reader;
+mod xof;
 pub use fixed::{Kmac128, Kmac128Workspace, Kmac256, Kmac256Workspace};
+pub use xof::{
+    KmacXof128, KmacXof128Reader, KmacXof128Workspace, KmacXof256, KmacXof256Reader,
+    KmacXof256Workspace,
+};
 
 #[cfg(test)]
 mod tests;

@@ -143,6 +143,19 @@ fn check_xof_128(message: &[u8], customization: &[u8], expected: &str) {
         Ok(())
     );
     assert_hex(&output, expected);
+    let mut workspace = brynja_mac_kmac::hardened_in_place::KmacXof128Workspace::new();
+    let scoped = require_some!(
+        workspace
+            .with(&key, customization, |mut state| {
+                state.update(message)?;
+                state.finalize_xof()?.squeeze_secret(&mut output)
+            })
+            .ok()
+    );
+    let secret = require_some!(scoped.ok());
+    assert_hex(secret.expose(), expected);
+    drop(secret);
+    assert_eq!(output, [0; 32]);
 }
 
 fn check_xof_256(message: &[u8], customization: &[u8], expected: &str) {
@@ -159,6 +172,19 @@ fn check_xof_256(message: &[u8], customization: &[u8], expected: &str) {
         Ok(())
     );
     assert_hex(&output, expected);
+    let mut workspace = brynja_mac_kmac::hardened_in_place::KmacXof256Workspace::new();
+    let scoped = require_some!(
+        workspace
+            .with(&key, customization, |mut state| {
+                state.update(message)?;
+                state.finalize_xof()?.squeeze_secret(&mut output)
+            })
+            .ok()
+    );
+    let secret = require_some!(scoped.ok());
+    assert_hex(secret.expose(), expected);
+    drop(secret);
+    assert_eq!(output, [0; 64]);
 }
 
 fn assert_hex(actual: &[u8], expected: &str) {

@@ -29,6 +29,12 @@ impl Metadata {
         let _ = clear_owned_region(&mut self.difference);
     }
     #[cfg(test)]
+    pub(super) fn poison(&mut self) {
+        self.key_class.fill(0xa5);
+        self.verification.fill(0xa5);
+        self.difference.fill(0xa5);
+    }
+    #[cfg(test)]
     pub(super) fn cleared(&self) -> bool {
         self.key_class == [0] && self.difference == [0] && self.verification.iter().all(|b| *b == 0)
     }
@@ -114,6 +120,21 @@ impl<'scope, S: State> Core<'scope, S> {
             state.0.take().ok_or(KmacError::StateConsumed)?.finish(tail)
         })?;
         Ok((reader, self.cleanup))
+    }
+    pub(super) fn finish_xof(
+        self,
+        input: Option<Fips202BitString<'_>>,
+        production: bool,
+    ) -> Result<(S::Reader, Guard<'scope>), KmacError> {
+        if self.state.0.is_none() {
+            return Err(KmacError::StateConsumed);
+        }
+        if production && self.key_policy() != KmacKeyPolicy::FullStrength {
+            return Err(KmacError::KeyTooShort);
+        }
+        // KMACXOF frames right_encode(0), not the requested output length.
+        // Key strength was checked above; fixed-tag minimums do not apply.
+        self.finish(input, 0, 0, false)
     }
     pub(super) fn tag<'out>(
         self,

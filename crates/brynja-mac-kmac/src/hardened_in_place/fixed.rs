@@ -104,7 +104,7 @@ macro_rules! fixed {
         #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
         #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
         pub struct $state<'scope> {
-            core: Core<'scope, cshake::$backend<'scope>>,
+            pub(super) core: Core<'scope, cshake::$backend<'scope>>,
         }
         impl $state<'_> {
             /// Reports key-strength classification, not exact key length.

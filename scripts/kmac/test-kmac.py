@@ -67,7 +67,14 @@ def main() -> int:
         "-p brynja-mac-kmac \\\n    --lib",
     )
     reject("dependency", Path("crates/brynja-mac-kmac/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", "foreign = \"1\"")
-    print("KMAC policy rejects twenty-four ownership, lifecycle, feature, algorithm, test, and dependency regressions")
+    scoped = Path("crates/brynja-mac-kmac/src/hardened_in_place")
+    reject("scoped-guard", scoped / "fixed.rs", "let cleanup = Guard(&mut self.metadata);", "let cleanup = &mut self.metadata;")
+    reject("scoped-domain", scoped / "fixed.rs", 'bytes(b"KMAC")?', 'bytes(b"RAW")?')
+    reject("scoped-borrow", scoped / "fixed.rs", "impl for<'scope> FnOnce($state<'scope>) -> R", "impl FnOnce($state<'static>) -> R")
+    reject("scoped-terminal", scoped / "core_state.rs", "self.core.state.0 = None;", "")
+    reject("scoped-output", scoped / "core_state.rs", "let _ = clear_owned_region(output);", "")
+    reject("scoped-verify", scoped / "core_state.rs", "difference.ct_eq(&[0])", "difference.ct_eq(&[1])")
+    print("KMAC policy rejects thirty ownership, lifecycle, feature, algorithm, test, and dependency regressions")
     return 0
 
 

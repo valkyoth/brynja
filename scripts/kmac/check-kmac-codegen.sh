@@ -60,7 +60,11 @@ for raw_toolchain in "${toolchains[@]}"; do
     [[ "${#kmac_asm[@]}" -eq 2 && "${#sha3_asm[@]}" -eq 2 ]]
 
     for mir in "${kmac_mir[@]}"; do
-        if grep -qE 'Option<S>|state\.take\(\)|take_state' "$mir"; then
+        # S in the original core owns secret state. The scoped backend's S is
+        # only a borrowed handle; its Option must not be mistaken for that owner.
+        inline_owner="$(awk '/^fn core_state::/ { active=1 } active { print } active && /^}/ { active=0 }' "$mir")"
+        [[ -n "$inline_owner" ]]
+        if grep -qE 'Option<S>|state\.take\(\)|take_state' <<<"$inline_owner"; then
             echo "KMAC MIR moved inline secret state under ${toolchain#+}" >&2
             exit 1
         fi

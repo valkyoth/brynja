@@ -30,8 +30,11 @@ No crates are selected for publication.
 - Initialize KMAC key-length encoding through a borrow and finalize its partial
   suffix through a callback borrowing the original framing scratch. Both
   portable and accelerated KMAC use this internal boundary; public APIs and
-  output bytes are unchanged. Scoped KMAC owners and complete framing/compiler
-  residue qualification remain unfinished.
+  output bytes are unchanged. Add portable scoped fixed KMAC128/256 workspaces
+  borrowing cSHAKE storage before key input, with typed secret output,
+  constant-time verification, exact-length verification and independent cleanup
+  for forgotten handles and recoverable unwind. Scoped KMACXOF/accelerated KMAC
+  and complete framing/compiler residue qualification remain unfinished.
 - Connect all ordinary SHA-512-family APIs, including every general-t identity;
   add distinct owner-backed hardened compression without ordinary scratch reuse.
 - Preserve generic portable defaults, AVX2 batch routes and the hosted x86

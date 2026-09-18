@@ -47,6 +47,14 @@ def negatives(consumer, env):
         ('fn convert(x:brynja_mac_kmac::KmacSecretOutput) { let _: &[u8]=x; }', 'E0308'),
         ('let _:api::Mode = true.into();', 'E0277'),
     ))
+    scoped = 'brynja_mac_kmac::hardened_in_place'
+    for name in ('Kmac128Workspace', 'Kmac256Workspace', 'Kmac128', 'Kmac256'):
+        ty = f'{scoped}::{name}' + ("<'static>" if 'Workspace' not in name else '')
+        for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+            cases.append((f'fn check<T:{bound}>(){{}} check::<{ty}>();', 'E0277'))
+    for width in (128, 256):
+        cases.append((f'fn reuse(h:{scoped}::Kmac{width}) {{ let mut b=[0;32]; let _=h.finalize_tag(&mut b); let _=h.key_policy(); }}', 'E0382'))
+        cases.append((f'let mut w={scoped}::Kmac{width}Workspace::new(); let _=w.with(&[0;32], b"", |_| w.with(&[0;32], b"", |_| ()));', 'E0499'))
     try:
         for code, diagnostic in cases:
             path.write_text(original + prefix + code + '}\n')
@@ -82,7 +90,26 @@ def mutations(consumer, roots, env):
         ('core_state.rs', 'if !self.completed {', 'if self.completed {', 'every_metadata_region'),
         ('core_state.rs', '.checked_add(length)', '.checked_sub(length)', 'overflow_clears_owner'),
         ('core_state.rs', 'let _ = clear_owned_region(output);', '', 'overflow_clears_owner'),
+        ('../hardened_in_place/core_state.rs', 'clear_owned_region(&mut self.key_class)', 'core::hint::black_box(&mut self.key_class)', 'outer_guard_clears_all_regions'),
+        ('../hardened_in_place/core_state.rs', 'clear_owned_region(&mut self.verification)', 'core::hint::black_box(&mut self.verification)', 'outer_guard_clears_all_regions'),
+        ('../hardened_in_place/core_state.rs', 'clear_owned_region(&mut self.difference)', 'core::hint::black_box(&mut self.difference)', 'outer_guard_clears_all_regions'),
+        ('../hardened_in_place/core_state.rs', 'self.0.wipe();', '', 'outer_guard_clears_all_regions'),
+        ('../hardened_in_place/core_state.rs', 'self.core.state.0 = None;', '', 'rejected_and_unwinding_updates_destroy_state'),
+        ('../hardened_in_place/core_state.rs', 'self.core.cleanup.0.wipe();', '', 'rejected_and_unwinding_updates_destroy_state'),
+        ('../hardened_in_place/core_state.rs', 'let _ = clear_owned_region(output);', '', 'scoped_lifecycle_strength'),
+        ('../hardened_in_place/core_state.rs', 'production && bits < strength', 'production && bits < 0', 'scoped_lifecycle_strength'),
+        ('../hardened_in_place/core_state.rs', 'append_suffix(&mut self.state, input, bits,', 'append_suffix(&mut self.state, input, 0,', 'scoped_known_answer'),
+        ('../hardened_in_place/core_state.rs', 'cleanup.0.difference.ct_eq(&[0])', 'cleanup.0.difference.ct_eq(&cleanup.0.difference)', 'scoped_lifecycle_strength'),
+        ('../hardened_in_place/fixed.rs', 'key.bit_len() < $strength', 'key.bit_len() < 0', 'scoped_lifecycle_strength'),
+        ('../hardened_in_place/fixed.rs', 'let cleanup = Guard(&mut self.metadata);', 'let mut cleanup = core::mem::ManuallyDrop::new(Guard(&mut self.metadata));', 'scoped_lifecycle_strength'),
+        ('../hardened_in_place/fixed.rs', 'bytes(b"KMAC")?', 'bytes(b"WRONG")?', 'scoped_known_answer'),
     )
+    for profile in ([], ['--release']):
+        control = shared.run(['cargo', 'test', '--offline', '-p', 'brynja-mac-kmac',
+            '--features', 'hardened-execution', '--lib', *profile, 'hardened_in_place'],
+            roots['brynja-mac-kmac'], env)
+        if '5 passed; 0 failed' not in control.stdout:
+            raise ValueError('scoped KMAC mutation positive control incomplete')
     for file, before, after, test in cases:
         path = root / file
         original = path.read_text()

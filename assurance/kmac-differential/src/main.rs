@@ -68,11 +68,82 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
         &mut output,
         line,
     )?;
+    scoped_fixed(
+        algorithm,
+        key_input,
+        custom_input,
+        message_input,
+        output_bits,
+        &output,
+    )?;
     append_hex(rendered, &output)?;
     output.fill(0);
     key.fill(0);
     custom.fill(0);
     message.fill(0);
+    Ok(())
+}
+
+// Compare each scoped fixed-output path with the value independently checked by
+// the Python oracle. Initialize destinations incorrectly to reject stale output.
+fn scoped_fixed(
+    algorithm: &str,
+    key: Fips202BitString<'_>,
+    custom: Fips202BitString<'_>,
+    message: Fips202BitString<'_>,
+    output_bits: usize,
+    expected: &[u8],
+) -> Result<(), Box<dyn Error>> {
+    use brynja_mac_kmac::hardened_in_place::{Kmac128Workspace, Kmac256Workspace};
+    macro_rules! check {
+        ($workspace:ident) => {{
+            let mut workspace = $workspace::new();
+            let valid = valid_bits(output_bits);
+            let mut actual: Vec<u8> = expected.iter().map(|byte| !byte).collect();
+            let secret = workspace
+                .with_bits_conformance(key, custom, |state| {
+                    state.finalize_secret_bits_conformance(message, &mut actual, valid)
+                })
+                .and_then(core::convert::identity)
+                .map_err(|_| io::Error::other("scoped secret operation failed"))?;
+            if secret.expose() != expected {
+                return Err(io::Error::other("scoped secret/oracle mismatch").into());
+            }
+            drop(secret);
+            if actual.iter().any(|byte| *byte != 0) {
+                return Err(io::Error::other("scoped secret destination not cleared").into());
+            }
+            for (byte, expected) in actual.iter_mut().zip(expected) {
+                *byte = !expected;
+            }
+            let tag = workspace
+                .with_bits_conformance(key, custom, |state| {
+                    state.finalize_tag_bits_conformance(message, &mut actual, valid)
+                })
+                .and_then(core::convert::identity)
+                .map_err(|_| io::Error::other("scoped public operation failed"))?;
+            if tag.as_bytes() != expected {
+                return Err(io::Error::other("scoped public/oracle mismatch").into());
+            }
+            let candidate = Fips202BitString::new(expected, valid)
+                .map_err(|_| io::Error::other("scoped candidate shape"))?;
+            if !workspace
+                .with_bits_conformance(key, custom, |state| {
+                    state.verify_bits_conformance(message, candidate)
+                })
+                .and_then(core::convert::identity)
+                .map_err(|_| io::Error::other("scoped verification failed"))?
+                .expose_public()
+            {
+                return Err(io::Error::other("scoped oracle verification rejected").into());
+            }
+        }};
+    }
+    match algorithm {
+        "kmac128" => check!(Kmac128Workspace),
+        "kmac256" => check!(Kmac256Workspace),
+        _ => (),
+    }
     Ok(())
 }
 

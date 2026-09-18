@@ -14,9 +14,13 @@ CRATE = Path("crates/brynja-mac-kmac")
 SOURCES = tuple(CRATE / "src" / name for name in (
     "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "lib.rs",
     "output.rs", "packer.rs", "policy.rs", "verify.rs", "xof.rs",
+    "hardened_in_place.rs", "hardened_in_place/backend.rs",
+    "hardened_in_place/core_state.rs", "hardened_in_place/fixed.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
-         CRATE / "src/packer/framing_tests.rs")
+         CRATE / "src/packer/framing_tests.rs",
+         CRATE / "src/hardened_in_place/tests.rs",
+         CRATE / "src/hardened_in_place/core_state/tests.rs")
 MANIFEST = CRATE / "Cargo.toml"
 README = CRATE / "README.md"
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
@@ -73,7 +77,9 @@ def without_comments(text: str) -> str:
 
 def validate(root: Path) -> None:
     actual = set((root / CRATE / "src").glob("*.rs"))
+    actual.update((root / CRATE / "src/hardened_in_place").rglob("*.rs"))
     expected = {root / source for source in SOURCES}
+    expected.update(root / source for source in TESTS if 'hardened_in_place' in source.parts)
     if actual != expected:
         fail("KMAC production source inventory changed")
     loaded = {path: read(root, path) for path in FILES}
@@ -153,6 +159,17 @@ def validate(root: Path) -> None:
     for forbidden in ("state: Option<S>", ".state.take()", "fn take_state"):
         if forbidden in core_state:
             fail(f"KMAC source owner can escape without in-place clearing: {forbidden}")
+    scoped = loaded[CRATE / "src/hardened_in_place/core_state.rs"]
+    for token in ("state: Borrowed<S>", "cleanup: Guard<'scope>",
+                  "self.core.state.0 = None;", "self.core.cleanup.0.wipe();",
+                  "let _ = clear_owned_region(output);", "difference.ct_eq(&[0])"):
+        require(scoped, token, "scoped KMAC cleanup/verification")
+    scoped_fixed = loaded[CRATE / "src/hardened_in_place/fixed.rs"]
+    for token in ("sponge: cshake::$storage", "metadata: Metadata",
+                  "let cleanup = Guard(&mut self.metadata);",
+                  "impl for<'scope> FnOnce($state<'scope>) -> R",
+                  "Core::new(state, &mut *cleanup.0", 'bytes(b"KMAC")?'):
+        require(scoped_fixed, token, "scoped KMAC storage/borrow")
     hardened_cshake = loaded[HARDENED_CSHAKE]
     for token in (
         "pub fn finalize_xof_erasing_source(&mut self)",
@@ -221,6 +238,8 @@ def validate(root: Path) -> None:
         fail("fixed KMAC conformance feature gate changed")
     if loaded[CRATE / "src/xof.rs"].count('#[cfg(feature = "conformance-testing")]') != 4:
         fail("KMACXOF conformance feature gate changed")
+    if scoped_fixed.count('#[cfg(feature = "conformance-testing")]') != 8:
+        fail("scoped fixed KMAC conformance feature gate changed")
     differential_manifest = tomllib.loads(loaded[DIFFERENTIAL_MANIFEST])
     differential_dependency = differential_manifest["dependencies"]["brynja-mac-kmac"]
     if differential_dependency.get("features") != ["conformance-testing"]:

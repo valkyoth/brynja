@@ -35,6 +35,7 @@ NIST SP 800-185, built on Brynja's hardened cSHAKE owner.
 | KMAC128/256 and KMACXOF128/256 | ✅ Fully implemented | ❌ No |
 | Byte/bit input, opaque tags and typed secret XOF output | ✅ Implemented | ❌ No |
 | Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
+| Scoped fixed KMAC128/256 storage | ✅ Portable; XOF/accelerated scopes pending | ❌ No |
 
 All services report `NonApproved`. Project tests and pentests are not named
 independent cryptographic review; Brynja has no FIPS 140-3 validation.
@@ -95,6 +96,15 @@ silently falls back. See the
 [accelerated API and memory boundary](https://github.com/valkyoth/brynja/blob/main/docs/kmac-accelerated-execution.md).
 
 ## Secret ownership
+
+`hardened_in_place::Kmac128Workspace` and `Kmac256Workspace` retain the sponge
+and verification scratch in caller-owned storage. Construct them without secrets,
+then use `with`/`with_bits` to borrow before absorbing a key. The callback's
+consuming finalizer returns an opaque public tag or typed secret output; the
+secret output may outlive the scope and clears its destination on Drop.
+An independent scope guard also clears forgotten handles and recoverable unwind.
+These fixed-output scopes are portable, not accelerated KMAC or KMACXOF scopes.
+See the executable example in the `hardened_in_place` module documentation.
 
 Key-derived sponge, metadata, encodings and staging clear on success, errors,
 cancellation, recoverable unwind and Drop. Fixed tags are opaque, without

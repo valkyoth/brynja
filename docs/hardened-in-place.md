@@ -185,10 +185,41 @@ storage. The final partial suffix is borrowed directly by a finalization callbac
 not copied into a returned tail owner. Portable and accelerated KMAC use the
 same helper, retaining bulk absorption and exact SP 800-185 bit framing.
 
-This is internal groundwork, not a scoped public KMAC API or whole-framing
-register/spill qualification. Existing movable KMAC constructors still require
-the broader in-place rollout; integer calculations and compiler-created copies
-remain outside the owned-memory claim. No public API or parameter policy changed.
+This internal groundwork does not establish whole-framing register/spill
+qualification. Integer calculations and compiler-created copies remain outside
+the owned-memory claim. Existing constructors and parameter policy are unchanged.
+
+## Scoped fixed KMAC
+
+`brynja_mac_kmac::hardened_in_place::{Kmac128Workspace, Kmac256Workspace}`
+own a portable cSHAKE workspace plus key-strength classification, verification
+scratch and comparison accumulator. Construction accepts no secrets. `with` and
+`with_bits` borrow storage before key/customization absorption and return an
+outer setup result around the callback's result. Setup failure does not invoke
+the callback or clear destinations it never received.
+
+Handles support streaming updates, consuming byte/bit tag and secret-output
+finalizers, verification, explicit cancellation and feature-gated conformance
+methods. `verify_exact` additionally binds the public candidate bit length to the
+application's expected length. Verification work depends on public candidate
+length; callers must bound it at ingestion. No accumulated-message length or
+preflight query is exposed. An update failure destroys the borrowed state and
+clears metadata immediately, including a recoverable unwind caught by the caller.
+
+An outer metadata guard and the underlying cSHAKE scope guard independently
+cover forgotten handles. Finalization transfers only reference-bearing handles
+into the cSHAKE reader. Secret-output errors clear the full supplied destination;
+public errors preserve it. Typed secret output may outlive the scope, but not its
+destination borrow. This does not change the older movable APIs. Scoped KMACXOF
+readers and accelerated KMAC remain pending; these two workspaces are portable.
+
+Tests cover all six fixed NIST examples, the fixed-output half of the existing
+256-case independent arbitrary-bit corpus, 896 additional portable comparisons,
+strength/shape failures, verification mismatches, forgetting, unwind and reuse.
+Twenty-four compile-fail examples enforce trait/escape/overlap restrictions.
+The existing packaged test rejects thirteen additional compiled regressions in
+both debug/release profiles. This is development assurance, not independent
+qualification or proof of complete register/spill erasure.
 
 ## Ownership and failure behavior
 

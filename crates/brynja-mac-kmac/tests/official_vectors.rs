@@ -93,6 +93,19 @@ fn check_fixed_128(message: &[u8], customization: &[u8], expected: &str) {
     let tag = require_some!(kmac128(&key, message, customization, &mut output).ok());
     assert_eq!(tag.bit_len(), 256);
     assert_hex(tag.as_bytes(), expected);
+    let mut workspace = brynja_mac_kmac::hardened_in_place::Kmac128Workspace::new();
+    let scoped = require_some!(
+        workspace
+            .with(&key, customization, |mut state| {
+                state.update(message)?;
+                state.finalize_secret(&mut output)
+            })
+            .ok()
+    );
+    let secret = require_some!(scoped.ok());
+    assert_hex(secret.expose(), expected);
+    drop(secret);
+    assert_eq!(output, [0; 32]);
 }
 
 fn check_fixed_256(message: &[u8], customization: &[u8], expected: &str) {
@@ -101,6 +114,19 @@ fn check_fixed_256(message: &[u8], customization: &[u8], expected: &str) {
     let tag = require_some!(kmac256(&key, message, customization, &mut output).ok());
     assert_eq!(tag.bit_len(), 512);
     assert_hex(tag.as_bytes(), expected);
+    let mut workspace = brynja_mac_kmac::hardened_in_place::Kmac256Workspace::new();
+    let scoped = require_some!(
+        workspace
+            .with(&key, customization, |mut state| {
+                state.update(message)?;
+                state.finalize_secret(&mut output)
+            })
+            .ok()
+    );
+    let secret = require_some!(scoped.ok());
+    assert_hex(secret.expose(), expected);
+    drop(secret);
+    assert_eq!(output, [0; 64]);
 }
 
 fn check_xof_128(message: &[u8], customization: &[u8], expected: &str) {

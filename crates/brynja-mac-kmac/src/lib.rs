@@ -19,6 +19,8 @@ mod policy;
 mod verify;
 mod xof;
 
+pub mod hardened_in_place;
+
 #[cfg(feature = "hardened-execution")]
 pub mod execution;
 

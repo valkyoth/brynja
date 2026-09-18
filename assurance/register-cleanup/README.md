@@ -269,6 +269,12 @@ survives forgotten handles/readers; the old by-value APIs and their guarantees
 remain unchanged. Accelerated scoped execution, other families and complete
 framing/register qualification remain pending.
 
+The [scoped SHA-2 fixture](in-place-sha2/README.md) now adds the six named
+SHA-2 identities with borrowed workspaces and typed secret output. Its compiled
+mutations cover IV reset, checked counters and scope/handle/operation cleanup.
+General SHA-512/t and accelerated scoped execution remain pending; existing
+by-value APIs and complete register/spill exclusions are unchanged.
+
 ## Remaining work before the requested retest
 
 1. Complete the SHA-512 ports' native ABI coverage. SysV and Win64 observers

@@ -1,5 +1,6 @@
 pub(crate) mod compress32;
 pub(crate) mod compress64;
+pub mod in_place;
 mod output;
 mod owner;
 mod state32;

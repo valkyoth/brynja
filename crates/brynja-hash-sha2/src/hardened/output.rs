@@ -19,6 +19,8 @@ impl PublicDeclassification {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum HardenedSha2Error {
+    /// A scoped state was terminated by an earlier failed operation.
+    StateConsumed,
     /// The message would exceed the selected SHA-2 identity's length domain.
     MessageTooLong,
     /// The caller-owned output does not have the exact digest width.

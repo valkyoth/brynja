@@ -37,6 +37,7 @@ SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 | Independent-message SHA-512-family AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |
 | Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
+| Scoped in-place hardened states for the six named identities | Development; ownership checks implemented, residue qualification pending | ❌ No |
 | General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |
 | Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |
 | Dedicated x86 SHA-512-family execution (`sha512,avx2,avx`) | 🚧 Implemented; SDE tested, qualification pending | ❌ No |
@@ -46,6 +47,15 @@ FIPS 140-3 validation: Brynja has no validated module or named independent
 cryptographic review.
 
 ## Use
+
+`hardened_in_place::Sha256Workspace` and the other five named workspaces keep
+active secret state in caller-owned storage through a `with` callback. Consuming
+the handle does not move the active owner, and scope exit clears storage even
+if the handle is forgotten. These scoped APIs use portable hardened hashing,
+not optional hardware/SIMD dispatch. General SHA-512/t scoped storage is still
+pending. See the [in-place guide](../../docs/hardened-in-place.md) and the
+compiled module example. This is not whole-register/spill erasure; existing
+by-value and accelerated APIs retain their current guarantees.
 
 Dedicated SHA-512 instructions use `execution::Kernel::X86Sha512` with a
 `StaticSelection` and the existing ordinary or distinct hardened execution APIs.

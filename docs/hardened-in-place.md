@@ -1,6 +1,6 @@
 # Scoped hardened storage
 
-Status: SHA-3/SHAKE/cSHAKE API development checkpoint; wider rollout and complete
+Status: named SHA-2 and SHA-3/SHAKE/cSHAKE API development checkpoint; wider rollout and complete
 register/spill qualification pending. No independent verification or FIPS claim.
 
 The first additive API is `brynja_hash_sha3::hardened_in_place`, with
@@ -30,6 +30,25 @@ scope. The state cannot escape. Its lifetime is independent of the separately
 borrowed destination, so callers can use a returned output after the workspace
 has been cleared. Neither storage, state nor reader implements
 Copy/Clone/Debug/Send/Sync. XOF readers cannot escape the callback either.
+
+## Named SHA-2
+
+`brynja_hash_sha2::hardened_in_place` provides `Sha224Workspace`,
+`Sha256Workspace`, `Sha384Workspace`, `Sha512Workspace`, `Sha512_224Workspace`
+and `Sha512_256Workspace`, each with `new`, `Default` and `with`. The borrowed
+handle supports `update`, `finalize_secret`, `finalize_bits_secret`,
+`finalize_public`, `finalize_bits_public` and `cancel`. Bit input uses canonical
+MSB-first `BitString`; public output requires `PublicDeclassification` and secret
+output returns `OwnedSecretRegion`.
+
+These scopes use the existing portable hardened SHA-2 implementation. Each scope
+loads its exact public IV before allowing secret input into the borrowed storage.
+Initialization may move secret-free storage, but no active secret owner moves
+into finalization. Update errors clear the state and make further operations
+return `HardenedSha2Error::StateConsumed`. No accumulated-length/preflight query
+is exposed. Storage and handles are neither Copy/Clone/Debug/Send nor Sync.
+The same scope/Drop/forget/output guarantees and exclusions below apply.
+General SHA-512/t and accelerated scoped sessions remain separate rollout work.
 
 ## Ownership and failure behavior
 
@@ -67,7 +86,7 @@ storage are not erased by an ownership API.
 
 This initial module uses the portable hardened implementation, including its
 already implemented baseline scalar permutation ports. It does not enable an
-optional hardware/SIMD route. Accelerated sessions, other
+optional hardware/SIMD route. General SHA-512/t, accelerated sessions, other
 hash families and higher constructions remain rollout work before the broader
 F1 remediation can be declared complete. Release gates and publishing are unchanged.
 
@@ -94,3 +113,13 @@ controls and six fixed-output plus eight XOF compiled lifecycle/output mutants
 in debug and release. It is
 a development driver, not a new release-gate mechanism. The existing workspace
 test/doctest path exercises the in-crate tests without changing gate commands.
+
+For named SHA-2, `python3 assurance/register-cleanup/check_in_place_sha2.py`
+checks all six identities against existing ordinary byte/bit implementations,
+including padding boundaries, all tail widths, irregular chunking, invalid
+destination sizes, counter failures, forgotten handles, unwind and reuse.
+Seventy-two compile-fail examples enforce escape/overlap/trait restrictions.
+The development driver rejects eight compiled cleanup, lifecycle, IV, output
+and counter mutants in debug/release and tests the packaged downstream API,
+including a SHA-256 known answer. These are not a replacement for independent
+review or complete framing/register/spill qualification.

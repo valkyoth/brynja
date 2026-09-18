@@ -1,0 +1,17 @@
+[workspace]
+[package]
+name = "brynja-in-place-sha2-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+brynja-hash-sha2 = { path = "../../../crates/brynja-hash-sha2", default-features = false }
+
+[lints.rust]
+unsafe_code = "forbid"
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"

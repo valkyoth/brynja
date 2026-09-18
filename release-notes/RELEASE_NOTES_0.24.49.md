@@ -4,6 +4,10 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
+- Extend scoped storage to all six named SHA-2 identities, with exact-IV reset,
+  byte/bit input and typed secret output. Update failures clear and terminate
+  the scoped state. General SHA-512/t and accelerated scoped APIs remain pending;
+  no whole-register/spill guarantee is claimed.
 - Add `brynja_hash_sha3::hardened_in_place` for scoped SHA3-224/256/384/512,
   SHAKE128/256 and cSHAKE128/256 workspaces. Handles and readers borrow the active
   owner; finalization does not move that

@@ -23,7 +23,7 @@
 "crates/brynja-hash-sha2/tests/general_hash.rs" = "5bd4c3ca3a8b4973e47e6e6dc67cff9944ed780d24a8b3ebece748e3912332be"
 "crates/brynja-hash-sha2/tests/vectors/general-sha512-t-digest.txt" = "1e8a84f31c38a60def61e3f310ca8979402a325bb8c8a0909ae3a4e4b473e07a"
 "crates/brynja-hash-sha2/src/hardened/owner.rs" = "1732ee28791717e76b1cc9699f5e0ecc571cc66902d52ab609b85c90f82f7275"
-"crates/brynja-hash-sha2/src/hardened/mod.rs" = "3d0f613dd36c3b396f2a51411cb6d7c6e18f33f560c397a2eee082c8ebdca14a"
+"crates/brynja-hash-sha2/src/hardened/mod.rs" = "3fd7e156908bfbadbe644e17b896fa3567a439b3311f687434973acd582237a2"
 "crates/brynja-hash-sha2/src/hardened/tests.rs" = "d861e09714ef0af8fe95af9e07e70d6e24ea4e895f223ac885ed2133d8d5055f"
 "scripts/sha2/sha2_hardened.py" = "d1745f438cef700401815412b0c19a0c6f92aa221a55a9c4263cb7fd594d0c21"
 "scripts/sha2/test-sha2-hardened.py" = "6c5e796424d5a60310cf008198175d3890775b2a75eed007f1bcb5f7849fdd68"

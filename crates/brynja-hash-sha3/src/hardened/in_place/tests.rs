@@ -1,7 +1,7 @@
 extern crate std;
 use super::*;
 
-fn cleared<const RATE: usize>(owner: &HardenedFips202Owner<RATE>) -> bool {
+pub(super) fn cleared<const RATE: usize>(owner: &HardenedFips202Owner<RATE>) -> bool {
     [
         &owner.sponge_lanes[..],
         &owner.partial_input,

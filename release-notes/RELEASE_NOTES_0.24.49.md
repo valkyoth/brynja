@@ -4,8 +4,9 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
-- Add `brynja_hash_sha3::hardened_in_place` for scoped SHA3-224/256/384/512
-  workspaces. Handles borrow the active owner; finalization does not move that
+- Add `brynja_hash_sha3::hardened_in_place` for scoped SHA3-224/256/384/512,
+  SHAKE128/256 and cSHAKE128/256 workspaces. Handles and readers borrow the active
+  owner; finalization does not move that
   owner. Independent scope cleanup covers forgotten handles and recoverable
   unwind. Existing by-value APIs remain unchanged. See the
   [in-place contract](../docs/hardened-in-place.md); wider rollout and complete

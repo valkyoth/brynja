@@ -34,9 +34,97 @@ probe!(scoped256, Sha3_256Workspace, 32);
 probe!(scoped384, Sha3_384Workspace, 48);
 probe!(scoped512, Sha3_512Workspace, 64);
 
+macro_rules! xof_probe {
+    ($name:ident, $workspace:ident, $kind:ident) => {
+        /// Borrows one owner through absorption and reader transfer, then clears output.
+        #[inline(never)]
+        pub extern "C" fn $name(
+            workspace: &mut $workspace,
+            input: &[u8; 256],
+            output: &mut [u8; 337],
+        ) -> u8 {
+            let operation = |mut state: $kind<'_>| {
+                state.update(input)?;
+                let mut reader = state.finalize_xof()?;
+                let secret = reader.squeeze_secret(output)?;
+                drop(secret);
+                Ok::<(), HardenedSha3Error>(())
+            };
+            u8::from(workspace.with(operation).is_err())
+        }
+    };
+}
+xof_probe!(scoped_shake128, Shake128Workspace, Shake128);
+xof_probe!(scoped_shake256, Shake256Workspace, Shake256);
+
+macro_rules! cshake_probe {
+    ($name:ident, $workspace:ident) => {
+        /// Initializes customization only after the workspace is borrowed.
+        #[inline(never)]
+        pub extern "C" fn $name(
+            workspace: &mut $workspace,
+            input: &[u8; 256],
+            output: &mut [u8; 337],
+        ) -> u8 {
+            let result = workspace.with(b"", b"custom", |mut state| {
+                state.update(input)?;
+                let mut reader = state.finalize_xof()?;
+                drop(reader.squeeze_secret(output)?);
+                Ok::<(), HardenedSha3Error>(())
+            });
+            u8::from(!matches!(result, Ok(Ok(()))))
+        }
+    };
+}
+cshake_probe!(scoped_cshake128, Cshake128Workspace);
+cshake_probe!(scoped_cshake256, Cshake256Workspace);
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn xof_downstream_smoke() -> Result<(), HardenedSha3Error> {
+        let input = [0x5a; 256];
+        let mut output = [0xa5; 337];
+        assert_eq!(
+            scoped_shake128(&mut Shake128Workspace::new(), &input, &mut output),
+            0
+        );
+        assert_eq!(output, [0; 337]);
+        output.fill(0xa5);
+        assert_eq!(
+            scoped_shake256(&mut Shake256Workspace::new(), &input, &mut output),
+            0
+        );
+        assert_eq!(output, [0; 337]);
+        output.fill(0xa5);
+        assert_eq!(
+            scoped_cshake128(&mut Cshake128Workspace::new(), &input, &mut output),
+            0
+        );
+        assert_eq!(output, [0; 337]);
+        output.fill(0xa5);
+        assert_eq!(
+            scoped_cshake256(&mut Cshake256Workspace::new(), &input, &mut output),
+            0
+        );
+        assert_eq!(output, [0; 337]);
+        // SHAKE128 empty message, first 32 output bytes (FIPS 202 example).
+        let mut workspace = Shake128Workspace::new();
+        let mut output = [0; 32];
+        let secret = workspace.with(|state| state.finalize_xof()?.squeeze_secret(&mut output))?;
+        assert_eq!(
+            secret.expose(),
+            [
+                0x7f, 0x9c, 0x2b, 0xa4, 0xe8, 0x8f, 0x82, 0x7d, 0x61, 0x60, 0x45, 0x50, 0x76, 0x05,
+                0x85, 0x3e, 0xd7, 0x3b, 0x80, 0x93, 0xf6, 0xef, 0xbc, 0x88, 0xeb, 0x1a, 0x6e, 0xac,
+                0xfa, 0x66, 0xef, 0x26
+            ]
+        );
+        drop(secret);
+        assert_eq!(output, [0; 32]);
+        Ok(())
+    }
     #[test]
     fn scoped_downstream_smoke() -> Result<(), HardenedSha3Error> {
         let input = [0x5a; 256];

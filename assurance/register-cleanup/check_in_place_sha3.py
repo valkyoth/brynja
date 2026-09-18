@@ -76,7 +76,41 @@ def main():
                 if result.returncode == 0 or 'test result: FAILED' not in log:
                     raise ValueError('mutant must compile and fail at runtime: '+label+'\n'+log[-3000:])
             print(f'Scoped SHA-3: positive control and six compiled mutants; release={release}: PASS', flush=True)
+        path.write_text(original)
+        xof_mutants(crate, env)
         packaged(root)
+
+
+def xof_mutants(crate, env):
+    path = crate/'src/hardened/in_place/xof.rs'
+    original = path.read_text()
+    mutations = (
+        ('scope guard disabled', 'let cleanup = Cleanup { owner: &mut self.owner, keep: false }', 'let cleanup = Cleanup { owner: &mut self.owner, keep: true }'),
+        ('borrowed destructor disabled', 'fn drop(&mut self) {\n        self.owner.wipe();\n    }', 'fn drop(&mut self) {}'),
+        ('operation cleanup disabled', 'owner: &mut *self.owner,\n            keep: false,', 'owner: &mut *self.owner,\n            keep: true,'),
+        ('error revived', 'self.active = false;\n        let mut cleanup', 'self.active = true;\n        let mut cleanup'),
+        ('secret terminal output unguarded', 'let length = destination.len();', 'if !self.active { return Err(HardenedSha3Error::StateConsumed); }\n        let length = destination.len();'),
+        ('reader transition wipes state', 'Ok($reader { inner: self.inner })', 'self.inner.owner.wipe(); Ok($reader { inner: self.inner })'),
+        ('customization ignored', 'if owner.cshake_is_customized() {', 'if false {'),
+        ('SHAKE suffix corrupted', 'owner.finalize(partial, SHAKE_SUFFIX, SHAKE_SUFFIX_BITS);', 'owner.finalize(partial, 0x06, SHAKE_SUFFIX_BITS);'),
+    )
+    for release in (False, True):
+        command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path', str(crate/'Cargo.toml'), '--lib', 'hardened::in_place::xof']
+        if release:
+            command.append('--release')
+        path.write_text(original)
+        run(command, env)
+        for label, before, after in mutations:
+            count = 2 if label == 'reader transition wipes state' else 1
+            if original.count(before) != count:
+                raise ValueError('XOF mutation source absent/ambiguous: '+label)
+            path.write_text(original.replace(before, after))
+            result = run(command, env, success=False)
+            log = result.stdout + result.stderr
+            if result.returncode == 0 or 'test result: FAILED' not in log:
+                raise ValueError('XOF mutant must compile and fail at runtime: '+label+'\n'+log[-3000:])
+        print(f'Scoped XOF: positive control and eight compiled mutants; release={release}: PASS', flush=True)
+    path.write_text(original)
 
 
 if __name__ == '__main__':

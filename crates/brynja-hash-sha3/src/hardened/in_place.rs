@@ -1,4 +1,4 @@
-//! Scoped, caller-owned storage for hardened fixed-output SHA-3.
+//! Scoped, caller-owned storage for hardened SHA-3, SHAKE and cSHAKE.
 //!
 //! Secret state stays in its borrowed workspace throughout a computation.
 //! Only a reference-bearing handle moves into finalization. An outer guard
@@ -24,6 +24,25 @@
 //! assert_eq!(output, [0; 32]);
 //! # Ok::<(), brynja_hash_sha3::HardenedSha3Error>(())
 //! ```
+//!
+//! SHAKE and cSHAKE transfer the same borrow to an incremental reader. cSHAKE
+//! setup runs inside the scope; its outer result covers setup and its inner
+//! result is the callback's return value.
+//!
+//! ```
+//! use brynja_hash_sha3::hardened_in_place::Cshake128Workspace;
+//! let mut workspace = Cshake128Workspace::new();
+//! let mut output = [0u8; 48];
+//! let secret = workspace.with(b"", b"application domain", |mut state| {
+//!     state.update(b"message")?;
+//!     let mut reader = state.finalize_xof()?;
+//!     reader.squeeze_secret(&mut output)
+//! })??;
+//! assert_eq!(secret.expose().len(), 48);
+//! drop(secret);
+//! assert_eq!(output, [0; 48]);
+//! # Ok::<(), brynja_hash_sha3::HardenedSha3Error>(())
+//! ```
 
 use core::marker::PhantomData;
 
@@ -34,6 +53,12 @@ use super::{
     sponge::{SHA3_SUFFIX, SHA3_SUFFIX_BITS},
 };
 use crate::Fips202BitString;
+
+mod xof;
+pub use xof::{
+    Cshake128, Cshake128Reader, Cshake128Workspace, Cshake256, Cshake256Reader, Cshake256Workspace,
+    Shake128, Shake128Reader, Shake128Workspace, Shake256, Shake256Reader, Shake256Workspace,
+};
 
 // This guard belongs to the scope, not to the user-controlled handle. It also
 // guards updates: only a successful update may retain the working state.

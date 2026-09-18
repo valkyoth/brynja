@@ -264,9 +264,10 @@ path in typed destination initialization, not all higher-level copies.
 
 Following owner approval of additive in-place APIs, the first
 [scoped SHA-3 fixture](in-place-sha3/README.md) exercises four fixed identities
-with borrowed caller-owned storage. Its scope guard survives forgotten handles;
-the old by-value APIs and their guarantees remain unchanged. SHAKE/cSHAKE,
-other families and complete framing/register qualification remain pending.
+and SHAKE/cSHAKE readers with borrowed caller-owned storage. Its scope guard
+survives forgotten handles/readers; the old by-value APIs and their guarantees
+remain unchanged. Accelerated scoped execution, other families and complete
+framing/register qualification remain pending.
 
 ## Remaining work before the requested retest
 

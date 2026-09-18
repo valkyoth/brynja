@@ -98,9 +98,7 @@ impl<'region> SecretRegionInitialization<'region> {
             Some(destination) => destination,
             None => return Err(SecretMemoryError::InsufficientCapacity),
         };
-        for (output, byte) in destination.iter_mut().zip(input.iter()) {
-            *output = *byte;
-        }
+        crate::secret_memory_transfer::copy(destination, input)?;
         self.initialized = end;
         Ok(())
     }

@@ -1,9 +1,10 @@
 # Unsafe Rust Policy
 
-Status: seventy-four exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy-five exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-four exact modules: the private core volatile clearer; the
+Rust in only seventy-five exact modules: the private core volatile clearer and
+checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -19,7 +20,8 @@ SHA-224/256, SHA-512-family and Keccak batch platform imports and AVX2/NEON kern
 with three distinct hosted hardened-batch platform imports. These modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
-instruction/import boundaries, never framing or output ownership. The dedicated
+instruction/import boundaries and the reviewed private memory primitives, never
+public framing or output ownership. The dedicated
 x86 SHA-512 module is the additional development exception described below. Each
 complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
@@ -208,6 +210,18 @@ is required. The wrapper retains the original scratch destruction; owner size,
 API and ordinary public hashing remain unchanged. Other architectures and
 Miri/Kani retain the safe model without this register claim. This does not
 qualify higher-level absorb/squeeze, framing, input/output or moved-owner copies.
+
+Core's private `secret_memory_transfer.rs` replaces the byte-copy loop inside
+`SecretRegionInitialization::write` on baseline x86-64/little-endian AArch64.
+The safe wrapper requires equal-length, disjoint borrowed slices; the existing
+public writer still rejects insufficient capacity before mutation. One opaque
+block copies bounded eight-byte words and remaining bytes, without stack spills
+or calls, then clears RAX/RCX/RDX or X4-X6 and condition flags. Empty input never
+dereferences either pointer. This needs no optional ISA feature. Other targets
+and Miri/Kani retain the safe Rust model, without the register-erasure claim.
+Guard-page, alignment/tail, immediate-register and compiled-mutation checks
+are in `assurance/register-cleanup/secret-copy`. The source buffer, earlier
+caller copies, framing and moved owners are not erased by this operation.
 
 These sixteen kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.

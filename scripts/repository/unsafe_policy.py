@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-core/src/secret_memory_transfer.rs"): ("85f0cef7c2a8508c4d594ad7462bccb92fd8e5bea7897164d7df3ee655dcf3e0", 3, 1, 3),
     Path("crates/brynja-hash-sha3/src/hardened/permutation/native.rs"): ("2c1ec8a76fd6bb28be65fc8bf53bcdbec3d0c7ddb86584f005563ffc6debd640", 3, 1, 3),
     Path("crates/brynja-hash-sha2/src/hardened/compress64/native.rs"): ("df5e947205c991a83c410371811de6e44f00b38c8c9ce3141970d4585c8f1bc5", 3, 1, 3),
     Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs"): ("08ea056cb766efe8c246f7772ca780ad6586baa82301fa5c40997737f06e2e32", 3, 1, 3),
@@ -79,7 +80,7 @@ ALLOWED = {
     Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"): ("885555cbbddbfa704599e2d3c30493e2a39496cee6032d9262891e0a212c8d07", 2, 2, 2),
     Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"): ("89e4b91af4adf587828396a612e8d3c1f14a8160176edbb58a5f1d49ae882f4e", 4, 2, 4),
     Path("crates/brynja-core/src/secret_memory_volatile.rs"): (
-        "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217",
+        "44ee344e643429e45061dc8f3aacaf985789058c594ca7d54198077eaa8f756c",
         1,
         0,
         1,
@@ -165,6 +166,11 @@ def validate(root: Path) -> None:
         fail("volatile-store module must remain private and declared exactly once")
     if "pub mod secret_memory_volatile" in library:
         fail("volatile-store implementation module became public")
+    if library.count('mod secret_memory_transfer;') != 1 or 'pub mod secret_memory_transfer' in library:
+        fail('secret-transfer module must remain private and declared once')
+    writer = (root / 'crates/brynja-core/src/secret_memory.rs').read_text()
+    if writer.count('crate::secret_memory_transfer::copy(destination, input)?;') != 1:
+        fail('secret initialization lost its checked transfer boundary')
 
 
 def validate_allowed(
@@ -189,6 +195,30 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
+    elif relative == Path('crates/brynja-core/src/secret_memory_transfer.rs'):
+        required = ('pub(crate) unsafe extern "C" fn copy_bytes(destination: *mut u8, source: *const u8, length: usize)',
+                    '#[inline(never)]', 'if destination.len() != input.len()',
+                    'return Err(SecretMemoryError::InsufficientCapacity);',
+                    'copy_bytes(destination.as_mut_ptr(), input.as_ptr(), input.len())',
+                    '"cmp rdx, 8"', '"cmp x6, #8"', '"test rdx, rdx"', '"cbz x6, 5f"',
+                    '"mov rax, [{source} + rcx]"', '"ldr x4, [{source}, x5]"')
+        if any(token not in text for token in required):
+            fail('secret transfer lost ABI, checked length, empty guard or word bound')
+        if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_COPY_BEGIN',
+                'BRYNJA_COPY_ERASE', 'BRYNJA_COPY_END', 'options(nostack)')):
+            fail('secret transfer lost an opaque architecture boundary')
+        for token in tuple(f'"xor {r}, {r}"' for r in ('eax', 'ecx', 'edx')) + tuple(f'"mov x{i}, xzr"' for i in range(4, 7)):
+            if token not in text:
+                fail('secret transfer register erasure disappeared')
+        normalized = re.sub(r'\s+', '', text)
+        condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
+        if normalized.count('#[cfg('+condition+')]') != 2 or normalized.count('#[cfg(not('+condition+'))]') != 1:
+            fail('secret transfer native/model target separation changed')
+        if 'for(output,byte)indestination.iter_mut().zip(input.iter()){*output=*byte;}' not in normalized:
+            fail('secret transfer safe model disappeared')
+        if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly|target_feature)\b',
+                     re.sub(r'//[^\n]*', '', text)):
+            fail('secret transfer changed memory/clobber or baseline ISA contract')
     elif relative in {Path("crates/brynja-legacy-md5/src/compress/native.rs"),
                       Path("crates/brynja-legacy-sha1/src/compress/native.rs"),
                       Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs"),

@@ -20,8 +20,9 @@ def fixture(root: Path) -> None:
         '[workspace.lints.rust]\nunsafe_code = "deny"\n', encoding="utf-8"
     )
     (source / "lib.rs").write_text(
-        "mod secret_memory_volatile;\npub mod safe {}\n", encoding="utf-8"
+        "mod secret_memory_volatile;\nmod secret_memory_transfer;\npub mod safe {}\n", encoding="utf-8"
     )
+    shutil.copyfile(ROOT / 'crates/brynja-core/src/secret_memory.rs', source / 'secret_memory.rs')
     for relative in unsafe_policy.ALLOWED:
         target = root / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -206,6 +207,44 @@ def transfer_boundaries(family, lanes):
             raise AssertionError('accepted transfer boundary regression: ' + before)
 
 
+def secret_copy_boundary():
+    relative = Path('crates/brynja-core/src/secret_memory_transfer.rs')
+    source = (ROOT / relative).read_text()
+    _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
+    mutations = [('unsafe extern "C" fn', 'extern "C" fn'),
+                 ('#[inline(never)]', '#[inline(always)]'),
+                 ('if destination.len() != input.len()', 'if false'),
+                 ('return Err(SecretMemoryError::InsufficientCapacity);', 'return Ok(());'),
+                 ('input.len())', 'destination.len())'),
+                 ('"cmp rdx, 8"', '"cmp rdx, 7"'),
+                 ('"cmp x6, #8"', '"cmp x6, #7"'),
+                 ('"test rdx, rdx"', '"nop"'), ('"cbz x6, 5f"', '"nop"'),
+                 ('BRYNJA_COPY_BEGIN', 'REMOVED'), ('BRYNJA_COPY_ERASE', 'REMOVED'),
+                 ('BRYNJA_COPY_END', 'REMOVED'), ('out(', 'lateout('),
+                 ('options(nostack)', 'options(nostack, nomem)'),
+                 ('options(nostack)', 'options(nostack, readonly)'),
+                 ('not(any(miri, kani))', 'not(miri)'),
+                 ('target_endian = "little"', 'target_endian = "big"'),
+                 ('*output = *byte;', '*output = 0;')]
+    mutations += [(f'"xor {r}, {r}"', '"nop"') for r in ('eax', 'ecx', 'edx')]
+    mutations += [(f'"mov x{i}, xzr"', '"nop"') for i in range(4, 7)]
+    for before, after in mutations:
+        assert before in source
+        try:
+            unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
+        except unsafe_policy.UnsafePolicyError:
+            pass
+        else:
+            raise AssertionError('accepted secret transfer regression: '+before)
+    with tempfile.TemporaryDirectory(prefix='brynja-secret-transfer-policy-') as temporary:
+        root = Path(temporary)
+        fixture(root)
+        writer = root / 'crates/brynja-core/src/secret_memory.rs'
+        writer.write_text(writer.read_text().replace('crate::secret_memory_transfer::copy(destination, input)?;', ''))
+        require_rejection(root, 'initialization lost its checked transfer')
+    print(f'Secret transfer rejects {len(mutations)} ABI/bound/wipe/model regressions and a writer bypass')
+
+
 def scalar_boundary(family):
     relative = Path(f'crates/brynja-legacy-{family}/src/compress/native.rs')
     if family == 'sha256':
@@ -298,6 +337,7 @@ if __name__ == "__main__":
     scalar_boundary('sha256')
     scalar_boundary('sha512')
     scalar_boundary('keccak')
+    secret_copy_boundary()
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
     print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

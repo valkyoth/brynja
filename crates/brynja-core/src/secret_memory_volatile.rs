@@ -1,6 +1,7 @@
 //! Isolated volatile-store implementation for owned-region clearing.
 //!
-//! This is the only core-memory module admitted to contain unsafe Rust. The
+//! This is the core-memory volatile-store exception; the separately reviewed
+//! secret-initialization transfer has its own register-cleanup boundary. The
 //! safe caller proves exclusive access and a live Rust allocation by passing a
 //! mutable slice. The implementation derives every raw pointer from each live
 //! exclusive byte reference and never performs pointer arithmetic.

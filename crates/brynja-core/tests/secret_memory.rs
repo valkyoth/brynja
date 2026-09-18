@@ -137,6 +137,55 @@ fn failed_write_is_transactional_and_owner_drop_clears() {
 }
 
 #[test]
+fn sequential_transfers_cover_word_tails_alignment_and_rejected_reuse() {
+    let mut input = [0_u8; 1088];
+    for (index, byte) in input.iter_mut().enumerate() {
+        *byte = u8::try_from(index % 251).unwrap_or_default();
+    }
+    for length in (1..=257).chain([511, 512, 513, 1023, 1024]) {
+        let offset = length % 32;
+        let source = input
+            .get(offset..offset + length)
+            .unwrap_or_else(unreachable_for_test);
+        let mut backing = [0xa5; 1088];
+        {
+            let region = backing
+                .get_mut(offset..offset + length)
+                .unwrap_or_else(unreachable_for_test);
+            let mut initialization = match SecretRegionInitialization::begin(region) {
+                Ok(value) => value,
+                Err(_) => return assert!(core::hint::black_box(false)),
+            };
+            assert_eq!(initialization.write(&[]), Ok(()));
+            for part in source.chunks(17) {
+                assert_eq!(initialization.write(part), Ok(()));
+            }
+            // Failed writes must not advance accounting or mutate the result.
+            assert_eq!(
+                initialization.write(&[1]),
+                Err(SecretMemoryError::InsufficientCapacity)
+            );
+            assert_eq!(initialization.write(&[]), Ok(()));
+            let owner = match initialization.finish() {
+                Ok(value) => value,
+                Err(_) => return assert!(core::hint::black_box(false)),
+            };
+            assert_eq!(owner.expose(), source);
+        }
+        for (index, byte) in backing.iter().enumerate() {
+            assert_eq!(
+                *byte,
+                if (offset..offset + length).contains(&index) {
+                    0
+                } else {
+                    0xa5
+                }
+            );
+        }
+    }
+}
+
+#[test]
 fn begin_and_partial_drop_clear_preexisting_and_partial_bytes() {
     let mut preexisting = [0xa5_u8; 4];
     drop(match SecretRegionInitialization::begin(&mut preexisting) {

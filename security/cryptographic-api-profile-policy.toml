@@ -839,7 +839,27 @@ storage = "unpublished-test-only"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory.rs"
-sha256 = "f5f4743353c7fb5afb6a85f0f8481827f7dac3ae910fd17df9da46248583d2c7"
+sha256 = "435c4b2c3bd5ea5541ca44560e859faccc3db305cc055f7a3525f172cd8cb905"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/check_secret_copy.py"
+sha256 = "af459a411e0d1f688a0fb10755aa301d06efdabcce543daef6891d4663403285"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-copy/Cargo.toml"
+sha256 = "174b25794af12d229bf98ab6b0834e0c7f106c9dc51618868cc48df25fccf549"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-copy/Cargo.lock"
+sha256 = "432adf8eaecc67f40f4a464d4235ae63457dab4430267aa2043575ebfe459563"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-copy/src/lib.rs"
+sha256 = "f4aff86c5d44f5aa391460f6d46d8ed0a4ce6e591f9fb3edcfc708c995f40035"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-copy/src/tests.rs"
+sha256 = "6372a38d78228a1a4c4ad4553720e7cdf703a619499cd2e1ca7938a2e6b4c049"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory/assurance_contract.rs"
@@ -847,7 +867,11 @@ sha256 = "0f29b772af69199cce88c52903bff3314222817bb6f4bd20ecec0f044b7984a7"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory_volatile.rs"
-sha256 = "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217"
+sha256 = "44ee344e643429e45061dc8f3aacaf985789058c594ca7d54198077eaa8f756c"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory_transfer.rs"
+sha256 = "85f0cef7c2a8508c4d594ad7462bccb92fd8e5bea7897164d7df3ee655dcf3e0"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret.rs"
@@ -995,7 +1019,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "63164b1268532679904cf219096879decbed0a66011ca16f14d91aaed2b0c337"
+sha256 = "61302e73825cb3f9bb2e2b8d965b9934872eb903c715e1e3f6ee0dd14eb8366c"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

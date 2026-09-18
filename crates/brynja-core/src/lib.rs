@@ -35,6 +35,7 @@ pub mod read;
 pub mod secret;
 pub mod secret_destruction;
 pub mod secret_memory;
+mod secret_memory_transfer;
 mod secret_memory_volatile;
 pub mod secure_random;
 pub mod security_event;

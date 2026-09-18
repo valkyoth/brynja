@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: sixty-eight exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: sixty-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only sixty-eight exact modules: the private core volatile clearer; the
+Rust in only sixty-nine exact modules: the private core volatile clearer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
 RV64 Zknh kernel; the opt-in standard-library runtime detector; and the three
@@ -147,6 +147,16 @@ the three integer/four vector working registers stay in the opaque block.
 The public 80-word constant table includes the sixteen rotation counts and is
 checked against an independent RFC 1321 sine construction. MD5 remains broken;
 these cleanup properties do not restore collision resistance.
+
+MD5's private `cpu/transfer.rs` packs each fixed 16-byte state and 64-byte
+block, advances the 128-byte inter-block result, and commits the lane state
+through four opaque transpositions. Only EAX or X4 holds secret words; working
+registers and flags clear before return. Lane indices outside 0..8 reject before
+mutation. These scalar transfers add no ISA requirement. Miri/Kani/other targets
+retain a safe model, without a register-cleanup claim. The existing authority,
+work limits and cancellation boundaries remain unchanged. Portable processing,
+scalar final padding, output copies and higher-level owner moves remain separate
+work; this is not an end-to-end register-erasure guarantee.
 
 These sixteen kernel boundaries are under implementation-author verification, not
 complete qualification of the caller, other backends, or portable fallbacks.

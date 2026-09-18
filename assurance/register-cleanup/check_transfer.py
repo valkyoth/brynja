@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SHA-2/Keccak packing development checks; never changes a release gate."""
+"""SHA-2/Keccak/MD5 packing development checks; never changes a release gate."""
 import argparse
 from pathlib import Path
 import re
@@ -21,7 +21,7 @@ def instructions(area):
             and not line.strip().endswith(':')]
 
 
-def assembly(text, arm, count=3):
+def assembly(text, arm, count=3, md5=False):
     functions = list(re.finditer(r'(?m)^[_A-Za-z][^\n:]*transpose[^\n:]*:\s*(?:[#;].*)?$', text))
     if len(functions) != count:
         raise ValueError('missing/ambiguous transfer monomorphizations')
@@ -39,8 +39,9 @@ def assembly(text, arm, count=3):
         cleanup, after = re.split(r'[^\n]*BRYNJA_TRANSFER_END[^\n]*', cleanup)
         if re.search(r'\b(?:call\w*|push\w*|pop\w*|ret\w*|bl|blr|br|sp|rsp|rbp|x18)\b', active):
             raise ValueError('transfer escaped stack-free block')
+        registers = ('eax', 'edx', 'r8d', 'r9d') if md5 else ('eax', 'ecx', 'edx', 'r8d', 'r9d')
         expected = ([f'mov x{i}, xzr' for i in range(4, 8)] + ['cmp xzr, xzr'] if arm
-                    else [f'xorl %{r}, %{r}' for r in ('eax', 'ecx', 'edx', 'r8d', 'r9d')])
+                    else [f'xorl %{r}, %{r}' for r in registers])
         actual = [re.sub(r'\s+', ' ', op).replace(', ', ',') for op in instructions(cleanup)]
         if actual != [op.replace(', ', ',') for op in expected]:
             raise ValueError('transfer cleanup is incomplete or gained operations')
@@ -56,6 +57,10 @@ def assembly(text, arm, count=3):
                 if re.search(r'\b[vdqs][0-9]+\b', op):
                     raise ValueError('Arm vector outside boundary')
             else:
+                # The real MD5 fixed-copy caller supplies lane=0. LLVM may
+                # materialize that public constant here rather than in its caller.
+                if md5 and re.fullmatch(r'xorl\s+%ecx,\s*%ecx', op):
+                    continue
                 if not re.match(r'(?:movq|movl|pushq|popq|subq|addq|retq)\b', op):
                     raise ValueError('unreviewed x86 boundary operation: ' + op)
                 if any(not re.fullmatch(r'\(%(?:rsp|rbp)\)', mem)
@@ -72,6 +77,8 @@ def prepare(directory):
     tests.write_text(tests.read_text().replace('../../src/guard_memory.rs', (ROOT / 'src/guard_memory.rs').as_posix()))
     source = fixture / 'src/transfer.rs'
     source.write_text(SOURCE.read_text())
+    if FAMILY == 'md5':
+        shutil.copytree(SOURCE.with_suffix(''), fixture / 'src/transfer')
     return fixture, source
 
 
@@ -82,17 +89,19 @@ def integrated(directory, compiler, target, release):
     env['CARGO_TARGET_DIR'] = str(destination)
     arm = target.startswith('aarch64')
     env['RUSTFLAGS'] = '-C target-feature=' + ('+neon' if arm else '+avx2')
+    package = 'brynja-legacy-md5' if FAMILY == 'md5' else 'brynja-crypto-cpu'
+    feature = 'hardened-execution' if FAMILY == 'md5' else FAMILY + '-hardened-batch'
     command = ['cargo', '+' + compiler, 'rustc', '--locked', '--offline',
                '--manifest-path', str(ROOT.parents[1] / 'Cargo.toml'),
-               '-p', 'brynja-crypto-cpu', '--features', FAMILY + '-hardened-batch',
+               '-p', package, '--features', feature,
                '--target', target, '--lib']
     if release:
         command += ['--release']
     check.run(command + ['--', '--emit=asm'], env)
-    files = list(destination.glob(target + '/*/deps/brynja_crypto_cpu-*.s'))
+    files = list(destination.glob(target + '/*/deps/' + package.replace('-', '_') + '-*.s'))
     if len(files) != 1:
         raise ValueError('ambiguous actual CPU crate assembly')
-    assembly(files[0].read_text(), arm, 2 if FAMILY == 'keccak' else 3)
+    assembly(files[0].read_text(), arm, {'keccak': 2, 'md5': 4}.get(FAMILY, 3), FAMILY == 'md5')
     print(f'Actual CPU crate transfers: {compiler} {target} release={release}: PASS', flush=True)
 
 
@@ -100,14 +109,16 @@ def main():
     global FAMILY, SOURCE, FIXTURE
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--arm', action='store_true')
-    parser.add_argument('--family', choices=('sha256', 'sha512', 'keccak'), default='sha256')
+    parser.add_argument('--family', choices=('sha256', 'sha512', 'keccak', 'md5'), default='sha256')
     args = parser.parse_args()
     FAMILY = args.family
     SOURCE = ROOT.parents[1] / f'crates/brynja-crypto-cpu/src/{FAMILY}_hardened_batch/transfer.rs'
+    if FAMILY == 'md5':
+        SOURCE = ROOT.parents[1] / 'crates/brynja-legacy-md5/src/cpu/transfer.rs'
     FIXTURE = ROOT / (FAMILY + '-transfer')
-    layouts = {'sha256': 2592, 'sha512': 1440, 'keccak': 320}[FAMILY]
-    guards = 8 if FAMILY == 'keccak' else 12
-    functions = 2 if FAMILY == 'keccak' else 3
+    layouts = {'sha256': 2592, 'sha512': 1440, 'keccak': 320, 'md5': 800}[FAMILY]
+    guards = {'keccak': 8, 'md5': 28}.get(FAMILY, 12)
+    functions = {'keccak': 2, 'md5': 4}.get(FAMILY, 3)
     with tempfile.TemporaryDirectory(prefix=f'brynja-{FAMILY}-transfer-') as temporary:
         directory = Path(temporary)
         fixture, source = prepare(directory)
@@ -137,7 +148,7 @@ def main():
                         raise ValueError('ambiguous assembly artifact')
                     text = artifacts[0].read_text()
                     text = re.sub(r'(?m)^\s*(?://|;)\s*BRYNJA_', '// BRYNJA_', text) if arm else re.sub(r'(?m)^\s*#+\s*BRYNJA_', '# BRYNJA_', text)
-                    assembly(text, arm, functions)
+                    assembly(text, arm, functions, FAMILY == 'md5')
                     for marker in ('BEGIN', 'ERASE', 'END'):
                         # Add an actual spill or post-cleanup secret reload to the
                         # emitted stream, not merely a mismatching source token.
@@ -150,7 +161,7 @@ def main():
                         if mutant == text:
                             raise ValueError('missing assembly mutation anchor')
                         try:
-                            assembly(mutant, arm, functions)
+                            assembly(mutant, arm, functions, FAMILY == 'md5')
                         except ValueError:
                             pass
                         else:
@@ -159,7 +170,8 @@ def main():
                     if target not in ('x86_64-unknown-linux-gnu', 'aarch64-unknown-linux-musl'):
                         continue
                     integrated(directory, compiler, target, release)
-                    register = ('w4' if FAMILY == 'sha256' else 'x4') if arm else ('eax' if FAMILY == 'sha256' else 'rax')
+                    narrow = FAMILY in ('sha256', 'md5')
+                    register = ('w4' if narrow else 'x4') if arm else ('eax' if narrow else 'rax')
                     mutations = ([('"mov x4, xzr",', '"mov x4, #1",'),
                                   (f'"rev {register}, {register}",', ''),
                                   (f'"str {register}, [{{destination}}, x7]",', '"// omitted {destination}",'),
@@ -175,6 +187,17 @@ def main():
                         mutations += [(('"cmp x6, #25",' if arm else '"cmp r8, 25",'),
                                        ('"cmp x6, #24",' if arm else '"cmp r8, 24",')),
                                       ('{ 200 }', '{ 192 }')]
+                    if FAMILY == 'md5':
+                        mutations = [item for item in mutations if not item[0].startswith(('"rev ', '"bswap '))]
+                        mutations += [
+                            ('words = const WORDS,', 'words = const WORDS - 1,'),
+                            (('source_shift = const if PACK { 2 } else { 5 },' if arm else
+                              'source_stride = const if PACK { 4 } else { 32 },'),
+                             ('source_shift = const if PACK { 2 } else { 4 },' if arm else
+                              'source_stride = const if PACK { 4 } else { 16 },')),
+                            ('source_lane = const if PACK { 0 } else { 4 },',
+                             'source_lane = const if PACK { 0 } else { 0 },'),
+                        ]
                     if FAMILY in ('sha512', 'keccak'):
                         # A 32-bit transplant must not truncate the upper half
                         # of a state, input word or output, even if it clears.
@@ -193,7 +216,8 @@ def main():
                     poisoned = original.replace(wipe, poison + wipe)
                     cases += [('poisoned', poisoned, True), ('removed wipe', poisoned.replace(wipe, ''), False)]
                     for before, after in mutations:
-                        if original.count(before) != (4 if before == '{ 200 }' else 1):
+                        expected_count = 4 if before == '{ 200 }' else (2 if FAMILY == 'md5' and before.startswith(('words = ', 'source_lane = ')) else 1)
+                        if original.count(before) != expected_count:
                             raise ValueError('stale source mutation anchor')
                         cases.append((before, original.replace(before, after), False))
                     for label, changed, succeeds in cases:

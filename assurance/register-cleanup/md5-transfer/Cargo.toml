@@ -1,0 +1,17 @@
+[workspace]
+
+[package]
+name = "brynja-md5-transfer-probe"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"

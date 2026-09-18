@@ -89,11 +89,11 @@
     "docs/security-controls.md": "43ee30cba7ab8f3c2eef178fa649f37fa6a855d2d981fe212acca13a02580b79",
     "docs/static-cpu-execution.md": "3356632f7af4fabf253bf664e8c1cf6d599e8085e434009ebc2fec48274d9e55",
     "docs/threat-model.md": "1ba408fb8b2c369319b933f787752450e03b2afe275171ffe42986bcf4145a9c",
-    "docs/unsafe-policy.md": "5d34e5b48283f76222344d9e6e00eac95ae7d4d964c5ba76dcedf6b348ce6d81",
+    "docs/unsafe-policy.md": "310be1b316b5fa366acb2b36e63115ee898bc4d65158faba0aee307282f835f1",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/cpu/check-static-execution.py": "7cb4678bb69b5fddc4c8a722e2bcbdea70a01b61801010ea05a2ef1a4773ea7e",
-    "scripts/cpu/static_execution_docs.py": "33ee57bbc6c5e8955023c3adc400b32cccd521db0629dd069a763842cf46abaa",
-    "scripts/repository/unsafe_policy.py": "77bbf4e7fff68c853f7dc0264fbe2e9684622da99faad34dc3fc0df498ca806b",
+    "scripts/cpu/static_execution_docs.py": "7d17c4f7fa08e101a94e0b1fb0dad26357136576862e86ce4e56cd34b658a3a4",
+    "scripts/repository/unsafe_policy.py": "15374e7c369dc1c00ab28ee184f9a033ba410f51acba71307299fd058a59761a",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
   }

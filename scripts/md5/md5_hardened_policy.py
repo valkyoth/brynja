@@ -30,7 +30,8 @@ CHECKS = {
         'guard.complete = matches!(result, Ok(_) | Err(Error::IneligibleWorkload) | Err(Error::Batch(Md5BatchError::WorkLimit | Md5BatchError::Cancelled | Md5BatchError::MessageTooLong)));'),
     LEAF+'src/batch/hardened_execution/vector.rs': ('let mut scratch = Scratch::new();',
         'authority.compress(&mut scratch)', 'finish_lane(lane, *input, prefix, control, &mut report)?;',
-        'control.charge(width)?;', 'report.vector_blocks.checked_add(width)'),
+        'control.charge(width)?;', 'report.vector_blocks.checked_add(width)',
+        'transfer::pack_state(', 'transfer::pack_block(', 'transfer::advance(', 'transfer::commit_state('),
     HOST+'src/hardened_execution/platform.rs': ('target_feature = "avx2"',
         'std::arch::is_aarch64_feature_detected!("neon")', 'Authority::from_platform(backend, revalidate)',
         'backend == Md5Backend::Aarch64Neon && availability() == Ok(backend)',
@@ -69,6 +70,9 @@ GATES = {
 def paths(root=ROOT):
     names=set(ordinary.paths(root)) | set(CHECKS)
     names.update(('assurance/register-cleanup/check.py', 'assurance/register-cleanup/check_md5.py'))
+    names.update(('assurance/register-cleanup/check_transfer.py', 'assurance/register-cleanup/src/guard_memory.rs'))
+    names.update('assurance/register-cleanup/md5-transfer/'+name for name in
+                 ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs'))
     names.update((LEAF+'tests/hardened_execution.rs',HOST+'tests/hardened_execution.rs',
         'docs/legacy-md5-hardened-execution.md'))
     names.update('assurance/md5-hardened-execution/'+n for n in ('Cargo.toml','Cargo.lock','src/main.rs'))

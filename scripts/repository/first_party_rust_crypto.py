@@ -35,6 +35,7 @@ FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"(?:C|system|stdcall|cdec
 # These are Rust function DEFINITIONS, not imported foreign implementations.
 # The separate unsafe inventory binds their complete first-party assembly bytes.
 LOCAL_C_ABI = {
+    Path("crates/brynja-legacy-md5/src/cpu/transfer.rs"),
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"),
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"),
@@ -138,6 +139,8 @@ def validate(root: Path) -> None:
                                  '    width: usize,\n    swap: u32,\n) {')
                     if relative.parent.name == 'keccak_hardened_batch':
                         signature = signature.replace('const WORDS: usize, ', '').replace('    swap: u32,\n', '')
+                    if relative == Path('crates/brynja-legacy-md5/src/cpu/transfer.rs'):
+                        signature = signature.replace('width: usize', 'lane: usize').replace('    swap: u32,\n', '')
                 if relative.parent.name in {'x86_secret', 'arm_secret'}:
                     signature = 'pub unsafe extern "C" fn compress(scratch: &mut [u8; 864], constants: &[u32; 80]) {'
                 if relative.parent.parent.name == 'sha512_hardened_batch':

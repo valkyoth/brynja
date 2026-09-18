@@ -11,7 +11,7 @@ BATCH = LEAF+'src/batch/'
 ADAPTER = 'crates/brynja-legacy-md5-std/'
 CPU_SOURCES = ('mod.rs','constants.rs','kat.rs','session.rs','session/tests.rs','x86_avx2_md5.rs','aarch64_neon_md5.rs',
                'scratch.rs','secret.rs','x86_secret.rs','arm_secret.rs',
-               'x86_secret/kernel.rs','arm_secret/kernel.rs')
+               'x86_secret/kernel.rs','arm_secret/kernel.rs','transfer.rs','transfer/tests.rs')
 BATCH_SOURCES = ('mod.rs','control.rs','owner.rs','vector.rs','tests.rs','execution.rs','execution/tests.rs',
                  'hardened_execution/mod.rs','hardened_execution/vector.rs')
 BOUND = [CPU+p for p in CPU_SOURCES]+[BATCH+p for p in BATCH_SOURCES]+[

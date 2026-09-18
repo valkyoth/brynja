@@ -14,11 +14,12 @@ tests pass. Its source-bound diagnostics are not release qualification; they
 identify work outside the sixteen accelerated kernel boundaries.
 
 The [SHA-224/256](sha256-transfer/README.md),
-[SHA-512-family](sha512-transfer/README.md) and
-[Keccak](keccak-transfer/README.md) batch transfer probes cover opaque word/byte
+[SHA-512-family](sha512-transfer/README.md),
+[Keccak](keccak-transfer/README.md) and
+[MD5](md5-transfer/README.md) batch transfer probes cover opaque word/byte
 packing and output commit around those families' compression/permutation kernels.
-The post-computation health check still precedes output commit. MD5 batch
-transfers and high-level framing/owner copies remain separate work.
+The existing health checks still precede output commit. MD5 also covers its
+inter-block state transfer. High-level framing/owner copies remain separate work.
 
 ## Intended boundary
 

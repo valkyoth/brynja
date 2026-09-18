@@ -17,6 +17,8 @@ pub(crate) mod scratch;
 #[cfg(feature = "hardened-execution")]
 pub(crate) mod secret;
 mod session;
+#[cfg(feature = "hardened-execution")]
+pub(crate) mod transfer;
 #[cfg(target_arch = "x86_64")]
 mod x86_avx2_md5;
 #[cfg(all(feature = "hardened-execution", target_arch = "x86_64"))]

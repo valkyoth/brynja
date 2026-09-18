@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-legacy-md5/src/cpu/transfer.rs"): ("086352bda68dd5908f397079dcaf8b30f75501510a993d00143d473db4c8d481", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"): ("b1293ffcbfe51b26b49bc17dfd861e917f151c8d73356e7902e3277efeec42d4", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"): ("1b87c3f35bde0f59fe65f54b2c14a1d93369d9c03fe6f20a7e336f7d7992ac1f", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"): ("d8e07cce1e24149d37874f3dd9828e587fbdf8ae61dd91bcf9b602ecbf914d5d", 6, 1, 6),
@@ -187,19 +188,23 @@ def validate_allowed(
         Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"),
         Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"),
         Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"),
+        Path("crates/brynja-legacy-md5/src/cpu/transfer.rs"),
     }:
         required = ('pub(super) unsafe extern "C" fn transpose<const WORDS: usize, const PACK: bool>',
                     '#[inline(never)]', 'assert!(WORDS == 8 || WORDS == 16)')
         if relative.parent.name == 'keccak_hardened_batch':
             required = ('pub(super) unsafe extern "C" fn transpose<const PACK: bool>',
                         '#[inline(never)]', '"cmp r8, 25"', '"cmp x6, #25"')
+        md5 = relative == Path("crates/brynja-legacy-md5/src/cpu/transfer.rs")
+        if md5:
+            required = (required[0], required[1], 'assert!(WORDS == 4 || WORDS == 16 || (WORDS == 32 && PACK))')
         if any(text.count(token) != 1 for token in required):
             fail("transfer boundary lost its checked word domain or non-inlining contract")
         if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_TRANSFER_BEGIN',
                 'BRYNJA_TRANSFER_ERASE', 'BRYNJA_TRANSFER_END', 'options(nostack)')):
             fail("transfer lost its two opaque architecture boundaries")
         lanes = 8 if relative.parent.name == 'sha256_hardened_batch' else 4
-        if text.count(f'width.min({lanes})') != 4:
+        if (text.count('if lane >= 8') != 3 if md5 else text.count(f'width.min({lanes})') != 4):
             fail("safe transfer entry lost its fixed lane bound")
         if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly)\b',
                      re.sub(r'//[^\n]*', '', text)):

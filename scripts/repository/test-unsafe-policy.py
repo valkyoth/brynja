@@ -175,15 +175,21 @@ def register_boundaries() -> None:
 
 def transfer_boundaries(family, lanes):
     relative = Path(f'crates/brynja-crypto-cpu/src/{family}_hardened_batch/transfer.rs')
+    if family == 'md5':
+        relative = Path('crates/brynja-legacy-md5/src/cpu/transfer.rs')
     source = (ROOT / relative).read_text()
     _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
     unsafe_policy.validate_allowed(relative, source, blocks, items, proofs)
     domain = ('"cmp r8, 25"', '"cmp r8, 24"') if family == 'keccak' else ('WORDS == 8 || WORDS == 16', 'WORDS <= 64')
+    bound = (f'width.min({lanes})', 'width')
+    if family == 'md5':
+        domain = ('WORDS == 4 || WORDS == 16 || (WORDS == 32 && PACK)', 'WORDS <= 64')
+        bound = ('if lane >= 8', 'if lane > 8')
     for before, after in (
         ('unsafe extern "C" fn', 'extern "C" fn'),
         ('#[inline(never)]', '#[inline(always)]'),
         domain,
-        (f'width.min({lanes})', 'width'),
+        bound,
         ('BRYNJA_TRANSFER_BEGIN', 'REMOVED'),
         ('BRYNJA_TRANSFER_ERASE', 'REMOVED'),
         ('BRYNJA_TRANSFER_END', 'REMOVED'),
@@ -206,6 +212,7 @@ if __name__ == "__main__":
     transfer_boundaries('sha256', 8)
     transfer_boundaries('sha512', 4)
     transfer_boundaries('keccak', 4)
+    transfer_boundaries('md5', 8)
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
-    print("opaque transfer boundaries reject thirty ABI, bounds, clobber and memory-effect regressions")
+    print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

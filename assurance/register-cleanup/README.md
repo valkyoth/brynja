@@ -274,8 +274,11 @@ SHA-2 identities with borrowed workspaces and typed secret output. Its compiled
 mutations cover IV reset, checked counters and scope/handle/operation cleanup.
 Its optional general-t wrapper checks all 510 parameters and exact secret-output
 identity; the scoped API also runs against the independent 4,590-vector corpus.
-Accelerated scoped execution remains pending; existing by-value APIs and complete
-register/spill exclusions are unchanged.
+Six named execution workspaces now also borrow their engine and CPU scratch,
+retaining static/hosted authority and revocation. The fixture separately checks
+portable, native static SHA-NI, and emulated Arm static/hosted use. General-t
+accelerated scopes and other families remain pending; existing by-value APIs
+and complete register/spill exclusions are unchanged.
 
 ## Remaining work before the requested retest
 

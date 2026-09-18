@@ -9,6 +9,14 @@ The fixture's optional `general` feature adds a parameter-bound SHA-512/t wrappe
 and checks all 510 parameters, typed secret output, canonical masking and exact
 destination clearing. Use `--all-features` to include it.
 
+Optional `execution` adds six wrappers borrowing both engine and CPU scratch.
+`hosted` additionally exercises supported runtime authority and revocation using
+the first-party hosted adapter. `BRYNJA_REQUIRE_SCOPED_SHA2_HOSTED=1` requires all
+hosted identities rather than allowing an unavailable platform to skip them;
+it is suitable for the Arm lane, not the current x86 hosted policy. In-crate
+tests use `BRYNJA_REQUIRE_SCOPED_SHA2=1` for compiled static execution (SHA-NI on
+x86, narrow/wide Arm). Neither switch creates platform authority.
+
 Run `cargo test --locked --offline --manifest-path assurance/register-cleanup/in-place-sha2/Cargo.toml`.
 The adjacent `check_in_place_sha2.py` tests the packaged first-party closure and
 requires eight compiled mutations to fail at runtime in debug and release.
@@ -17,6 +25,12 @@ finalization, counter overflow and failed secret-output clearing. Production
 sources are copied to a temporary directory, never mutated in the checkout.
 Eight additional general-t mutants cover scope/handle/update cleanup, terminal
 failure, parameter IV, output masking, secret identity and failed output clearing.
+Six execution mutants cover scope/handle/update cleanup, IV reset, finalization
+and failed secret-output clearing in both profiles.
+Use `python3 assurance/register-cleanup/check_in_place_sha2.py --native-x86`
+for three additional compiled authority/counter/failed-state mutations on a
+Linux SHA-NI host. This mode checks the actual CPU inventory first and runs
+unmodified controls in debug/release. It is not a release-gate command.
 
 Emit MIR/LLVM/assembly from this fixture to inspect the borrowed-workspace ABI.
 There may still be compiler-created copies within absorption/padding/output

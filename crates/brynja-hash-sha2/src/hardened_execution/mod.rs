@@ -32,6 +32,7 @@
 mod engine;
 #[cfg(feature = "general-sha512-t")]
 mod general;
+pub mod in_place;
 mod named;
 mod route;
 #[cfg(test)]

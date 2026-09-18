@@ -48,7 +48,43 @@ into finalization. Update errors clear the state and make further operations
 return `HardenedSha2Error::StateConsumed`. No accumulated-length/preflight query
 is exposed. Storage and handles are neither Copy/Clone/Debug/Send nor Sync.
 The same scope/Drop/forget/output guarantees and exclusions below apply.
-Accelerated scoped sessions remain separate rollout work.
+Named accelerated scopes are available separately as described below.
+
+## Named SHA-2 execution scopes
+
+The default-off `hardened-execution` feature exposes
+`hardened_execution::in_place::{Sha224Workspace, Sha256Workspace, Sha384Workspace,
+Sha512Workspace, Sha512_224Workspace, Sha512_256Workspace}`. Construction takes
+an explicit existing `hardened_execution::Execution`: portable, static, or
+hosted when `runtime-execution` is enabled. No new platform authority is added.
+The same migration/deployment requirements apply. Hosted x86 remains unavailable
+under the existing policy; compiled static SHA-NI remains supported.
+
+These workspaces own the engine and CPU session scratch before secrets arrive.
+`with(callback)` rechecks the same authority, resets public work counters and
+restores the exact public IV in cleared storage. Its outer `Result` covers
+admission; the inner value is the callback result (`??` in the module example).
+Admission failure does not invoke the callback or access its captured buffers;
+it cannot clear a destination it has not received. Secret-destination clearing
+starts when a finalization method receives that destination.
+An authority cannot be replaced or renewed, and a quarantined workspace never
+invokes a new callback or silently falls back. A healthy workspace can start a
+new computation after the previous scope clears.
+
+Borrowed handles support `update`, byte/bit `finalize_secret`, byte/bit
+`finalize_public`, and `cancel`. Every update error clears and terminally disables
+that computation, including length errors (unlike the older by-value API).
+No accumulated-length/preflight methods are added. Final outputs retain the
+existing `SecretOutput`/`Report` contract: route and work counts are public
+metadata, not hidden message-length guarantees. Public output still requires
+explicit declassification; all secret errors clear the complete destination.
+
+Handle and outer-scope guards independently clear hash storage, including
+forgotten handles and recoverable unwind. Existing CPU operation guards clear
+private scratch and retain their quarantine behavior. Neither the active engine
+nor its scratch moves through finalization. General-t accelerated scopes and
+scoped Keccak/higher constructions remain rollout work; this is not complete
+register/spill qualification.
 
 ## General SHA-512/t
 
@@ -102,7 +138,8 @@ storage are not erased by an ownership API.
 
 This initial module uses the portable hardened implementation, including its
 already implemented baseline scalar permutation ports. It does not enable an
-optional hardware/SIMD route. Accelerated sessions, other
+optional hardware/SIMD route. The separate execution namespace above retains
+explicit acceleration. Other accelerated scopes, other
 hash families and higher constructions remain rollout work before the broader
 F1 remediation can be declared complete. Release gates and publishing are unchanged.
 
@@ -146,3 +183,16 @@ The existing independent 4,590-vector corpus now exercises the scoped API too.
 Thirteen compiled negative examples cover ownership and secret/public type
 separation. The development driver rejects eight additional compiled general-t
 mutants in both profiles and tests all parameters through the packaged API.
+
+Named execution scopes check six identities over byte/bit padding boundaries,
+chunk sizes, work counts, all invalid destination widths, stable engine address,
+clearing, terminal errors, forgotten handles, unwind and reuse. Seventy-eight
+compile-fail examples also enforce authority lifetime, escape and forbidden
+traits. The development driver includes six compiled execution cleanup/output/IV
+mutants in debug/release. The packaged fixture's optional `execution` and
+`hosted` features exercise the new API; required-ISA test switches prevent
+silently counting unavailable routes as accelerated coverage. Native SHA-NI and
+emulated Arm static/hosted runs are distinct from final native qualification.
+The development driver's `--native-x86` mode first validates the Linux CPU
+feature inventory, then rejects three additional compiled authority-recheck,
+counter-reset and failed-state mutations in both profiles.

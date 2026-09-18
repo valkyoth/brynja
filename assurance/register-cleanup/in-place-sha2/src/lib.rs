@@ -4,6 +4,9 @@
 
 use brynja_hash_sha2::{HardenedSha2Error, hardened_in_place::*};
 
+#[cfg(feature = "execution")]
+pub mod execution;
+
 macro_rules! probe {
     ($name:ident, $workspace:ident, $width:literal) => {
         /// Borrows a workspace through secret input and consuming finalization.

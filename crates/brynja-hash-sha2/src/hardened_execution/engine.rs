@@ -11,6 +11,21 @@ pub(super) struct Engine<'a> {
 }
 
 impl<'a> Engine<'a> {
+    // New scoped computations reuse cleared storage, never renew CPU authority.
+    pub(super) fn restart(&mut self) -> Result<(), Error> {
+        self.invalidate();
+        self.execution.check(self.wide)?;
+        self.report.message_blocks = 0;
+        self.report.padding_blocks = 0;
+        self.failed = false;
+        Ok(())
+    }
+
+    pub(super) fn invalidate(&mut self) {
+        self.owner.wipe();
+        self.failed = true;
+    }
+
     pub(super) fn new(
         owner: HardenedSha2Owner,
         execution: Execution<'a>,

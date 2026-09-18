@@ -84,6 +84,7 @@ def validate(root=ROOT, write=False):
     paths.add(Path('scripts/sha2/sha2_hardened_execution_policy.py'))
     paths.add(Path('scripts/sha2/sha2_hardened_cleanup_mutants.py'))
     paths.add(Path('assurance/register-cleanup/check_in_place_sha2.py'))
+    paths.add(Path('assurance/register-cleanup/in-place-sha2/src/execution/general.rs'))
     paths.add(Path('docs/hardened-in-place.md'))
     for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/execution.rs'):
         paths.add(Path('assurance/register-cleanup/in-place-sha2') / name)

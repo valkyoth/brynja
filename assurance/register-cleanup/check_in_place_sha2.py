@@ -87,6 +87,7 @@ def main(native_x86=False):
         path.write_text(original)
         general_mutants(crate, env)
         execution_mutants(crate, env)
+        general_execution_mutants(crate, env)
         packaged(root)
 
 
@@ -146,6 +147,37 @@ def execution_mutants(crate, env):
             if result.returncode == 0 or 'test result: FAILED' not in result.stdout + result.stderr:
                 raise ValueError('execution mutant must compile and fail at runtime: '+label)
         print(f'Scoped execution: positive control and six compiled cleanup/output/IV mutants; release={release}: PASS', flush=True)
+    path.write_text(original)
+
+
+def general_execution_mutants(crate, env):
+    path = crate/'src/hardened_execution/in_place/general.rs'
+    original = path.read_text()
+    mutations = (
+        ('scope cleanup', 'engine: &mut self.engine,\n            keep: false,', 'engine: &mut self.engine,\n            keep: true,'),
+        ('handle cleanup', 'fn drop(&mut self) {\n        self.engine.invalidate();\n    }', 'fn drop(&mut self) {}'),
+        ('failed update cleanup', 'engine: &mut *self.engine,\n            keep: false,', 'engine: &mut *self.engine,\n            keep: true,'),
+        ('parameter IV', 'initialize64(&mut self.engine, self.parameter.initial_words());', ''),
+        ('partial output mask', 'self.parameter.last_byte_mask(),', '0xff,'),
+        ('secret identity', 'Sha512TSecretDigest::from_region(self.parameter, guard.finish()?)', 'Sha512TSecretDigest::from_region(Sha512TBits::new(9).map_err(|_| Error::Failed)?, guard.finish()?)'),
+        ('terminal secret destination', 'let guard = begin(destination, self.parameter.output_bytes())?;\n        self.secret(None, guard)', 'self.engine.check_bytes(0)?; let guard = begin(destination, self.parameter.output_bytes())?;\n        self.secret(None, guard)'),
+        ('IV work report', 'execution, true, true)?', 'execution, true, false)?'),
+    )
+    for release in (False, True):
+        command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path', str(crate/'Cargo.toml'), '--features', 'hardened-execution,general-sha512-t', '--lib', 'hardened_execution::in_place::general']
+        if release:
+            command.append('--release')
+        path.write_text(original)
+        run(command, env)
+        for label, before, after in mutations:
+            if original.count(before) != 1:
+                raise ValueError('general execution mutation absent/ambiguous: '+label)
+            path.write_text(original.replace(before, after))
+            result = run(command, env, success=False)
+            log = result.stdout + result.stderr
+            if result.returncode == 0 or 'test result: FAILED' not in log:
+                raise ValueError('general execution mutant must compile and fail at runtime: '+label+'\n'+log[-3000:])
+        print(f'Scoped general execution: positive control and eight compiled lifecycle/identity/output/report mutants; release={release}: PASS', flush=True)
     path.write_text(original)
 
 

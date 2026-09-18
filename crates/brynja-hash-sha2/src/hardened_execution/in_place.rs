@@ -1,4 +1,4 @@
-//! Scoped named SHA-2 with explicit hardened portable/static/hosted execution.
+//! Scoped SHA-2 with explicit hardened portable/static/hosted execution.
 //!
 //! Workspaces own both hash storage and execution scratch before accepting
 //! secrets. Handles borrow them; finalization never moves the active engine.
@@ -27,6 +27,11 @@ use super::{
 };
 use crate::{BitString, hardened::HardenedSha2Owner};
 use brynja_core::SecretRegionInitialization;
+
+#[cfg(feature = "general-sha512-t")]
+mod general;
+#[cfg(feature = "general-sha512-t")]
+pub use general::{Sha512T, Sha512TWorkspace};
 
 struct Cleanup<'scope, 'authority> {
     engine: &'scope mut Engine<'authority>,

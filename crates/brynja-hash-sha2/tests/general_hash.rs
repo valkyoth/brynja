@@ -33,6 +33,14 @@ fn bytes(text: &str) -> Vec<u8> {
 
 #[test]
 fn all_parameters_match_independent_byte_and_bit_oracle() -> Result<(), Sha512TError> {
+    #[cfg(feature = "hardened-execution")]
+    let cpu =
+        brynja_crypto_cpu::static_execution::Authority::new(if cfg!(target_arch = "aarch64") {
+            hardened_execution::Kernel::ArmSha512
+        } else {
+            hardened_execution::Kernel::X86Sha512
+        })
+        .ok();
     for row in include_str!("vectors/general-sha512-t-digest.txt").lines() {
         let fields: Vec<_> = row.split_whitespace().collect();
         let t = fields
@@ -55,6 +63,38 @@ fn all_parameters_match_independent_byte_and_bit_oracle() -> Result<(), Sha512TE
         let input = BitString::new(&message, valid).map_err(|_| Sha512TError::MessageTooLong)?;
         let result = sha512_t_bits(p, input)?;
         assert_eq!(result.as_bytes(), expected, "t={t} bits={bits}");
+        #[cfg(feature = "hardened-execution")]
+        for owner in [None, cpu.as_ref()] {
+            use hardened_execution::{Execution, in_place::Sha512TWorkspace};
+            let route = owner
+                .map_or_else(|| Ok(Execution::portable()), Execution::from_static)
+                .map_err(|_| Sha512TError::MessageTooLong)?;
+            let mut workspace =
+                Sha512TWorkspace::new(p, route).map_err(|_| Sha512TError::MessageTooLong)?;
+            let mut output = vec![0xa5; p.output_bytes()];
+            let secret = workspace
+                .with(|mut state| {
+                    let (prefix, rest) = message.split_at(message.len() / 2);
+                    state.update(prefix)?;
+                    state.finalize_bits_secret(
+                        BitString::new(rest, valid)
+                            .map_err(|_| hardened_execution::Error::Failed)?,
+                        &mut output,
+                    )
+                })
+                .map_err(|_| Sha512TError::MessageTooLong)?
+                .map_err(|_| Sha512TError::MessageTooLong)?;
+            assert_eq!(secret.digest.parameter(), p);
+            assert_eq!(secret.digest.as_bytes(), expected);
+            assert_eq!(secret.report.portable_iv_blocks, 1);
+            drop(secret);
+            assert!(output.iter().all(|byte| *byte == 0));
+            let public = workspace
+                .with(|state| state.finalize_bits_public(input, auth()))
+                .map_err(|_| Sha512TError::MessageTooLong)?
+                .map_err(|_| Sha512TError::MessageTooLong)?;
+            assert_eq!(public.digest, result);
+        }
         let mut scoped = hardened_in_place::Sha512TWorkspace::new(p);
         let mut scoped_output = vec![0xa5; p.output_bytes()];
         let scoped_secret = scoped.with(|mut state| {

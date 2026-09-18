@@ -8,7 +8,8 @@ No crates are selected for publication.
   byte/bit input and typed secret output. Update failures clear and terminate
   the scoped state. General SHA-512/t now has a parameter-bound scoped workspace,
   typed secret output and all-parameter oracle coverage. Six named execution
-  workspaces now retain the engine and CPU scratch in place with existing
+  workspaces and a parameter-bound general-t execution workspace now retain
+  the engine and CPU scratch in place with existing
   static/hosted authority. Other accelerated scoped APIs remain pending;
   no whole-register/spill guarantee is claimed.
 - Add `brynja_hash_sha3::hardened_in_place` for scoped SHA3-224/256/384/512,

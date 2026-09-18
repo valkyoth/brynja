@@ -2,7 +2,7 @@ extern crate std;
 use super::*;
 use brynja_crypto_cpu::static_execution::{Authority, Kernel};
 
-fn cleared(owner: &HardenedSha2Owner) -> bool {
+pub(super) fn cleared(owner: &HardenedSha2Owner) -> bool {
     owner
         .chaining_state
         .iter()
@@ -15,7 +15,7 @@ fn cleared(owner: &HardenedSha2Owner) -> bool {
         .chain(&owner.output_staging)
         .all(|byte| *byte == 0)
 }
-fn authority(wide: bool) -> Option<Authority> {
+pub(super) fn authority(wide: bool) -> Option<Authority> {
     let kernel = match (cfg!(target_arch = "aarch64"), wide) {
         (false, false) => Kernel::X86Sha256,
         (false, true) => Kernel::X86Sha512,
@@ -30,7 +30,7 @@ fn authority(wide: bool) -> Option<Authority> {
     }
     result
 }
-fn execution(owner: Option<&Authority>) -> Result<Execution<'_>, Error> {
+pub(super) fn execution(owner: Option<&Authority>) -> Result<Execution<'_>, Error> {
     owner.map_or_else(|| Ok(Execution::portable()), Execution::from_static)
 }
 fn declassify() -> PublicDeclassification {

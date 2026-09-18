@@ -26,6 +26,9 @@ probe!(execution512, Sha512Workspace, 64);
 probe!(execution512_224, Sha512_224Workspace, 28);
 probe!(execution512_256, Sha512_256Workspace, 32);
 
+#[cfg(feature = "general")]
+pub mod general;
+
 #[cfg(test)]
 mod tests {
     extern crate std;

@@ -38,7 +38,7 @@ SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 | Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
 | Scoped in-place hardened states for six named identities and general SHA-512/t | Development; ownership checks implemented, residue qualification pending | ❌ No |
-| Scoped named SHA-2 with explicit portable/static/hosted execution | Development; opt-in, platform-limited; residue qualification pending | ❌ No |
+| Scoped named/general-t SHA-2 with explicit portable/static/hosted execution | Development; opt-in, platform-limited; residue qualification pending | ❌ No |
 | General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |
 | Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |
 | Dedicated x86 SHA-512-family execution (`sha512,avx2,avx`) | 🚧 Implemented; SDE tested, qualification pending | ❌ No |
@@ -66,8 +66,10 @@ They keep the active engine and CPU scratch borrowed through `with`; the outer
 result reports authority admission and the inner value is your callback result.
 Revocation remains terminal for that authority, with no silent fallback. These
 APIs reuse the existing static/hosted feature contracts; hosted x86 is still
-unavailable under the migration policy. General-t accelerated scopes remain
-pending. See the compiled execution-module example and the in-place guide.
+unavailable under the migration policy. With `general-sha512-t`,
+`hardened_execution::in_place::Sha512TWorkspace::new(parameter, execution)`
+also preserves exact parameter identity and typed secret output across all 510
+parameters. See the compiled execution-module examples and the in-place guide.
 
 Dedicated SHA-512 instructions use `execution::Kernel::X86Sha512` with a
 `StaticSelection` and the existing ordinary or distinct hardened execution APIs.

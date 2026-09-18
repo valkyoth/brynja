@@ -82,8 +82,8 @@ explicit declassification; all secret errors clear the complete destination.
 Handle and outer-scope guards independently clear hash storage, including
 forgotten handles and recoverable unwind. Existing CPU operation guards clear
 private scratch and retain their quarantine behavior. Neither the active engine
-nor its scratch moves through finalization. General-t accelerated scopes and
-scoped Keccak/higher constructions remain rollout work; this is not complete
+nor its scratch moves through finalization. General-t execution is described
+below. Scoped Keccak/higher constructions remain rollout work; this is not complete
 register/spill qualification.
 
 ## General SHA-512/t
@@ -101,6 +101,24 @@ requires `PublicDeclassification` and returns `Sha512TDigest`. Update failure
 clears and disables the handle (`Sha512TError::StateConsumed`); secret-output
 errors clear the complete destination. A separately borrowed secret digest may
 outlive the callback, but the state cannot escape it.
+
+With both `general-sha512-t` and `hardened-execution`, the separate
+`hardened_execution::in_place::Sha512TWorkspace::new(parameter, execution)`
+offers the same scoped identity through an explicit wide execution route.
+It derives the public IV inside each scope after authority validation, before
+accepting secret input. Narrow SHA-256 authority is rejected. Secret output is
+the existing `GeneralSecretOutput` containing `Sha512TSecretDigest` and a public
+work report; public output is `Output<Sha512TDigest>` and requires explicit
+declassification. No secret output uses `Sha512TDigest::from_bytes`.
+The report retains one portable IV-derivation block per computation and discloses
+message/padding work as before; it is not a length-hiding guarantee.
+The outer admission result, full-destination clearing, terminal update errors,
+forget/unwind cleanup and authority rules match the named execution scopes.
+
+The compiled module example demonstrates secret output outliving the scope;
+the workspace/handle cannot be copied, cloned, formatted, sent or shared.
+Fourteen compiled negative examples cover these traits, handle escape, overlap,
+authority lifetime and implicit secret-to-public conversion.
 
 ## Ownership and failure behavior
 
@@ -196,3 +214,13 @@ emulated Arm static/hosted runs are distinct from final native qualification.
 The development driver's `--native-x86` mode first validates the Linux CPU
 feature inventory, then rejects three additional compiled authority-recheck,
 counter-reset and failed-state mutations in both profiles.
+
+General-t execution scopes extend the 4,590-vector independent corpus to
+portable and available static wide execution. Lifecycle tests check all 510
+parameters, all eight tail widths, padding boundaries, exact report/parameter
+identity, stable engine storage and clearing; focused tests cover failure,
+forgetting, unwind, wrong-family admission and revocation. The same development
+driver checks eight additional compiled cleanup, IV, mask, secret-identity,
+destination and report mutants in both profiles. The packaged fixture tests
+all parameters and available hosted wide execution. Emulated Arm results do
+not substitute for native wide-kernel qualification.

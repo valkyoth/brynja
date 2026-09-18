@@ -20,7 +20,7 @@
 "scripts/sha2/check-general-sha512-t.py" = "fdf0bebc33fad9e2601488ebf84a665000fea7617d1886e6788a2ee68c9e2c5d"
 "scripts/sha2/test-general-sha512-t.py" = "b5900ac9b01c23ef7303dece31abe923fc6dad84fce47c7051c66dc43affcb07"
 "scripts/sha2/sha512_t_digest_oracle.py" = "0f5f09b10c6b24369649ed2449d2248ebe731c5ff3df657e072ffd7596945866"
-"crates/brynja-hash-sha2/tests/general_hash.rs" = "bafe3567420cf01081946448f0bcc7635b494534c613101f0929f57722ba8319"
+"crates/brynja-hash-sha2/tests/general_hash.rs" = "5d7826ef74f65b2dfb0998fcc7cd44c5aea2030960d37badcd9c89e0cf8f9f8b"
 "crates/brynja-hash-sha2/tests/vectors/general-sha512-t-digest.txt" = "1e8a84f31c38a60def61e3f310ca8979402a325bb8c8a0909ae3a4e4b473e07a"
 "crates/brynja-hash-sha2/src/hardened/owner.rs" = "1732ee28791717e76b1cc9699f5e0ecc571cc66902d52ab609b85c90f82f7275"
 "crates/brynja-hash-sha2/src/hardened/mod.rs" = "3fd7e156908bfbadbe644e17b896fa3567a439b3311f687434973acd582237a2"

@@ -5,7 +5,7 @@
 - Add scoped caller-owned storage for named/general SHA-2 and SHA-3/SHAKE/cSHAKE, preserving
   existing by-value APIs. Ownership tests pass; wider in-place rollout and
   whole-API register/spill qualification remain pending.
-- Add scoped named SHA-2 execution workspaces with explicit existing routes,
+- Add scoped named and general-t SHA-2 execution workspaces with explicit existing routes,
   stable engine/scratch ownership and unchanged authority/revocation boundaries.
 - Add dedicated x86 SHA-512 ordinary and owner-backed hardened execution with
   exact SHA512/AVX2/AVX authority. Emulated correctness and workspace integration

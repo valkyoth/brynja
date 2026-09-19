@@ -17,6 +17,14 @@ impl<'input> BitString<'input> {
     /// `valid_bits_in_last_byte` must be `0` for an empty string and in
     /// `1..=8` for a nonempty string. A value of `8` means the final byte is
     /// complete.
+    ///
+    /// Canonicality is observable: rejection reveals whether unused low bits
+    /// were nonzero. Validation borrows the final byte through a private
+    /// predicate; it does not clear caller storage or establish secret
+    /// provenance. Baseline x86-64 and little-endian AArch64 clear the
+    /// predicate's secret working register on normal return. Other targets,
+    /// Miri and Kani use a safe model. This is not whole-API register/spill or
+    /// interruption-state erasure.
     pub fn new(bytes: &'input [u8], valid_bits_in_last_byte: u8) -> Result<Self, BitStringError> {
         if bytes.is_empty() {
             return if valid_bits_in_last_byte == 0 {
@@ -42,7 +50,8 @@ impl<'input> BitString<'input> {
             .ok_or(BitStringError::LengthOverflow)?;
         if valid_bits_in_last_byte < 8 {
             let unused_mask = u8::MAX >> valid_bits_in_last_byte;
-            if bytes.last().copied().unwrap_or(0) & unused_mask != 0 {
+            let byte = bytes.last().ok_or(BitStringError::InvalidValidBitCount)?;
+            if !crate::secret_memory_predicate::apply(byte, unused_mask) {
                 return Err(BitStringError::NonZeroUnusedBits);
             }
         }
@@ -220,5 +229,28 @@ mod tests {
             }
         }
         Ok(())
+    }
+
+    #[test]
+    fn borrowed_validation_exhausts_byte_and_width_domains() {
+        for width in 0..=9 {
+            for value in 0..=u8::MAX {
+                let bytes = [0xa5, value];
+                let result = BitString::new(&bytes, width);
+                if !(1..=8).contains(&width) {
+                    assert_eq!(result.err(), Some(BitStringError::InvalidValidBitCount));
+                } else if width < 8 && value & (u8::MAX >> width) != 0 {
+                    assert_eq!(result.err(), Some(BitStringError::NonZeroUnusedBits));
+                } else {
+                    assert!(result.is_ok());
+                    if let Ok(bits) = result {
+                        assert!(core::ptr::eq(bits.as_bytes().as_ptr(), bytes.as_ptr()));
+                        assert_eq!(bits.bit_len(), 8 + usize::from(width));
+                        assert_eq!(bits.valid_bits_in_last_byte(), width);
+                    }
+                }
+                assert_eq!(bytes, [0xa5, value]);
+            }
+        }
     }
 }

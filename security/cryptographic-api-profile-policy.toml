@@ -847,7 +847,19 @@ sha256 = "86cf628f419b4e63c0a7d53bbd1c7b8be283a685a2bdff91d6ca871ba95ba8a9"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/check_secret_predicate.py"
-sha256 = "795bc7ae5bf9de95d6ec6b3e8a078dcf11788dea388ced2362361c7af6578e63"
+sha256 = "01971fdcdba3929d64d3a25658ca23a34e99b6578d05d7f69eee77ec16a837a0"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-core/src/bit_string.rs"
+sha256 = "5380273f4bffdf50eb69520c874e1cc330dbb1cff3c4f8b47596d01e2c0e634a"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-core/src/lib.rs"
+sha256 = "3fc26b83af9b7bcdbba00b181cc6dde1dfd8e02747b33190a1cb15e13ce3be80"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-core/src/secret_memory_predicate.rs"
+sha256 = "d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-predicate/Cargo.toml"
@@ -1099,7 +1111,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "eb70dafa4f7b531db08578aaa924a4328cd55ffc76276fb1e9eee6820b8a501e"
+sha256 = "152ba929feacc09df7a0a2b4b896a0a8e20531c8ea5e082fd631e247827e436c"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

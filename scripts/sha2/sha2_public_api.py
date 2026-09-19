@@ -24,6 +24,7 @@ VECTORS = FIXTURE / "src/vectors.rs"
 MAIN = FIXTURE / "src/main.rs"
 CONTENT = FIXTURE / "fixtures/representative.txt"
 CORE_BITS = Path("crates/brynja-hash-core/src/bit_string.rs")
+CORE_PREDICATE = Path("crates/brynja-hash-core/src/secret_memory_predicate.rs")
 LEAF_LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
 LEAF_BIT_API = Path("crates/brynja-hash-sha2/src/bit_api.rs")
 LEAF_BIT_INPUT = Path("crates/brynja-hash-sha2/src/bit_input.rs")
@@ -45,7 +46,7 @@ BARE_METAL = Path("scripts/assurance/check-bare-metal.sh")
 WORKFLOW = Path(".github/workflows/ci.yml")
 FILES = (
     MANIFEST, LOCK, LIB, ALGORITHMS, BIT_INPUTS, HARDENED, VECTORS, MAIN, CONTENT,
-    CORE_BITS, LEAF_LIB, LEAF_BIT_API, LEAF_BIT_INPUT, LEAF_BIT_TEST,
+    CORE_BITS, CORE_PREDICATE, LEAF_LIB, LEAF_BIT_API, LEAF_BIT_INPUT, LEAF_BIT_TEST,
     NIST_BIT_VECTORS, DIFFERENTIAL_MANIFEST, DIFFERENTIAL_LOCK,
     DIFFERENTIAL_MAIN, DIFFERENTIAL_CHECK, DIGEST, FACADE_LIB, LEAF_README,
     FACADE_README, CHECK_SCRIPT, TEST_SCRIPT, CHECKS, RUST_MATRIX, BARE_METAL,
@@ -61,7 +62,8 @@ EXPECTED_SHA256 = {
     VECTORS: "cc4a0209cd9bbc322a0f2ad0dfaffc3e72337a28e189d9a311b94229e5d8b6d6",
     MAIN: "e4f91117588953731960dae2a31ca77e09c0d54017cd7fa65d113d916b6ed37c",
     CONTENT: "fcb4220a9a063622c8c2f19d66c56e813a8add0814ece5cb6ec09ca5830d2a71",
-    CORE_BITS: "c4a4da6146cdccfe5d186adff63ef8083dbd1b43f98aad3043bb769bdf58dd32",
+    CORE_BITS: "5380273f4bffdf50eb69520c874e1cc330dbb1cff3c4f8b47596d01e2c0e634a",
+    CORE_PREDICATE: "d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c",
     LEAF_LIB: "2c7e8bb99c1f91d449fb524016d966d9738ef49749945c97d9d9a0463a46f726",
     LEAF_BIT_API: "007b960b0d869dcd6abb5bcb7f13397dfd9a41e45fdb38f13ab684782f6f662d",
     LEAF_BIT_INPUT: "eccb31f3ebc8056bc7f51319483002c27feddf76203cc7bb7a3d0d073fc9e16a",

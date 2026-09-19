@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-hash-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_xor.rs"): ("fc6c8a3caccc38c9b45795805b266bec60d2fcd10f1414f654d2e407af9bec7d", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_mask.rs"): ("a81ce3a6608d5baddf00190bb5e276db7d56aec5be320962eafcf89e70f05ac9", 3, 1, 3),
@@ -180,6 +181,14 @@ def validate(root: Path) -> None:
         fail('secret-predicate module must remain private and declared once')
     if writer.count('crate::secret_memory_predicate::apply(byte, mask)') != 1:
         fail('borrowed secret predicate lost its boundary')
+    hash_root = root / 'crates/brynja-hash-core/src'
+    hash_library = (hash_root / 'lib.rs').read_text()
+    if hash_library.count('mod secret_memory_predicate;') != 1 or 'pub mod secret_memory_predicate' in hash_library:
+        fail('hash predicate module must remain private and declared once')
+    if (hash_root / 'bit_string.rs').read_text().count('crate::secret_memory_predicate::apply(byte, unused_mask)') != 1:
+        fail('hash bit validation lost its borrowed predicate boundary')
+    if (hash_root / 'secret_memory_predicate.rs').read_bytes() != (root / 'crates/brynja-core/src/secret_memory_predicate.rs').read_bytes():
+        fail('private borrowed predicate implementations drifted')
     if writer.count('crate::secret_memory_mask::apply(byte, keep, set);') != 1:
         fail('borrowed secret-byte masking lost its boundary')
     if library.count('mod secret_memory_xor;') != 1 or 'pub mod secret_memory_xor' in library:
@@ -210,7 +219,8 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
-    elif relative == Path('crates/brynja-core/src/secret_memory_predicate.rs'):
+    elif relative in (Path('crates/brynja-core/src/secret_memory_predicate.rs'),
+                      Path('crates/brynja-hash-core/src/secret_memory_predicate.rs')):
         required = ('pub(crate) unsafe extern "C" fn mask_is_zero(byte: *const u8, mask: u8) -> u32',
                     '#[inline(never)]', 'mask_is_zero(core::ptr::from_ref(byte), mask) == 1',
                     '"movzx r10d, byte ptr [{byte}]"', '"and r10d, {mask:e}"',

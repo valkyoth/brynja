@@ -97,7 +97,8 @@ def main() -> int:
     reject("bit-length multiplication", lambda root: replace(root, policy.BIT_INPUT, ".checked_mul(8)", ".wrapping_mul(8)"))
     reject("bit-length addition", lambda root: replace(root, policy.BIT_INPUT, ".checked_add(additional_bits)", ".wrapping_add(additional_bits)"))
     reject("partial-bit padding", lambda root: replace(root, policy.BIT_INPUT, "0x80_u8 >> valid_bits", "0x80_u8 << valid_bits"))
-    reject("ambiguous tail", lambda root: replace(root, policy.CORE_BITS, "& unused_mask != 0", "& unused_mask == 0"))
+    reject("ambiguous tail", lambda root: replace(root, policy.CORE_BITS, "if !crate::secret_memory_predicate::apply(byte, unused_mask)", "if crate::secret_memory_predicate::apply(byte, unused_mask)"))
+    reject("borrowed tail validation", lambda root: replace(root, policy.CORE_BITS, "let byte = bytes.last().ok_or(BitStringError::InvalidValidBitCount)?;", "let copied = bytes.last().copied().unwrap_or(0); let byte = &copied;"))
     reject("bit vector authority", lambda root: replace(root, policy.BIT_VECTORS, "cd7b9f11680c6e0ccdbe13b28403f2017b5ff48789152162461e0a24fb4c5d45", "dd7b9f11680c6e0ccdbe13b28403f2017b5ff48789152162461e0a24fb4c5d45"))
     reject("bit vector coverage", lambda root: replace(root, policy.BIT_VECTORS, "SHA224|0|00|", "# SHA224|0|00|"))
     reject("bit vector test", lambda root: replace(root, policy.BIT_TEST, "selected_official_nist_bit_vectors_match_every_identity", "removed_official_bit_vectors"))
@@ -115,7 +116,7 @@ def main() -> int:
     reject("consumer test", lambda root: replace(root, policy.TEST, "fn downstream_style_real_content_uses_only_public_api", "fn removed_consumer"))
     reject("oversized", lambda root: (root / policy.SHA256).write_text((root / policy.SHA256).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-2 policy rejects seventy-two unsafe, native, allocation, identity, bit-domain, arithmetic, padding, dynamic-analysis, package, test, size, and hash regressions")
+    print("portable SHA-2 policy rejects seventy-three unsafe, native, allocation, identity, bit-domain, arithmetic, padding, dynamic-analysis, package, test, size, and hash regressions")
     return 0
 
 

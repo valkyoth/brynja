@@ -411,6 +411,9 @@ OPERATION_CONTRACTS = {
 }
 
 REVIEWED_SOURCE_PATHS = {
+    "crates/brynja-hash-core/src/bit_string.rs",
+    "crates/brynja-hash-core/src/lib.rs",
+    "crates/brynja-hash-core/src/secret_memory_predicate.rs",
     "crates/brynja-core/src/secret_memory_predicate.rs",
     "crates/brynja-core/tests/secret_predicate.rs",
     "assurance/register-cleanup/check_secret_predicate.py",

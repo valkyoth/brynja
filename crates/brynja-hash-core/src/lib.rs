@@ -6,6 +6,7 @@
 #![no_std]
 
 mod bit_string;
+mod secret_memory_predicate;
 
 pub use bit_string::{BitString, BitStringError};
 

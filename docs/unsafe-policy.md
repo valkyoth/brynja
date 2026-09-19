@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: seventy-eight exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-eight exact modules: the private core volatile clearer and
+Rust in only seventy-nine exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -221,6 +221,20 @@ Other targets and Miri/Kani use a safe model without the register claim.
 `assurance/register-cleanup/secret-predicate` checks exhaustive predicates,
 read-only guard pages, immediate register/flags observations and compiled
 mutants. Caller copies, spills and interruption snapshots are not covered.
+
+The dependency-free hash-interface crate has one private, byte-identical copy
+of that predicate for MSB-first canonical input validation. Its public constructor
+passes a live shared final-byte reference and a public unused-bit mask; only the
+canonicality Boolean returns. Rejection intentionally reveals nonzero unused
+bits. Safe Rust remains the fallback, but does not provide the explicit working
+register cleanup; adding a dependency on the core implementation would violate
+the interface crate's existing dependency boundary. No public unsafe constructor,
+feature, CPU admission or dispatch is introduced. Both copies have exact
+hash/block/item/proof inventories, the same instruction/cleanup invariants, and
+a byte-identity check to prevent independent drift. The existing predicate
+development driver supports `--hash-core` to inspect this copy and the actual
+hash-interface artifact. This remains development evidence pending independent
+retest, not complete API or platform erasure qualification.
 
 Core's private `secret_memory_mask.rs` implements `(byte & keep) | set` for one
 exclusively borrowed byte and public masks. Exact one-byte loads/stores and

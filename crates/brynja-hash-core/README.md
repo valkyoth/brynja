@@ -63,8 +63,12 @@ provided by `brynja-hash-sha3`, not this MSB-first type.
 `split_borrowed()` returns the same complete prefix and a borrowed partial byte
 with its public valid-bit count. Use it when a downstream hardened implementation
 must avoid a by-value tail copy; `split()` remains the ordinary copying API.
-Neither accessor clears storage. Construction still uses ordinary canonicality
-validation and does not promise register or spill erasure.
+Neither accessor clears storage. Construction validates the final byte through
+a private borrowed predicate. Rejection reveals noncanonical unused bits; it is
+not secret provenance enforcement. On baseline x86-64 and little-endian AArch64,
+the predicate clears its secret working register and condition flags on normal
+return. Other targets use a safe model. Caller copies, compiler spills outside
+that boundary and interruption/platform state are not covered.
 
 - `Update` absorbs a complete byte slice or returns a closed error.
 - `FixedOutput` consumes a state into its algorithm-specific digest.
@@ -73,7 +77,9 @@ validation and does not promise register or spill erasure.
 
 ## Hardware and SIMD
 
-None: these are backend-neutral interfaces. Select acceleration and hardened
+No hash acceleration: these are backend-neutral interfaces. The private
+canonicality predicate uses baseline instructions, not optional SIMD or CPU
+features, and has a safe fallback. Select hash acceleration and hardened
 ownership through the implementing leaf; an interface or borrowed bit string
 does not itself zeroize storage or establish secret provenance.
 

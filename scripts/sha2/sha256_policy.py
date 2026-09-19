@@ -32,6 +32,7 @@ from sha2_test_policy import (
 
 CORE_LIB = Path("crates/brynja-hash-core/src/lib.rs")
 CORE_BITS = Path("crates/brynja-hash-core/src/bit_string.rs")
+CORE_PREDICATE = Path("crates/brynja-hash-core/src/secret_memory_predicate.rs")
 LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
 BIT_API = Path("crates/brynja-hash-sha2/src/bit_api.rs")
 BIT_INPUT = Path("crates/brynja-hash-sha2/src/bit_input.rs")
@@ -54,6 +55,7 @@ PACKAGE_POLICY = Path("package-policy.toml")
 SOURCES = (
     CORE_LIB,
     CORE_BITS,
+    CORE_PREDICATE,
     LIB,
     BIT_API,
     BIT_INPUT,
@@ -105,7 +107,9 @@ def load_sources(root: Path) -> dict[Path, tuple[str, str]]:
 
 
 def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
-    all_code = "\n".join(code for _text, code in sources.values())
+    # Only the exact hash-bound private predicate is a low-level exception;
+    # its instruction/bounds/cleanup contract is enforced by unsafe_policy.
+    all_code = "\n".join(code for path, (_text, code) in sources.items() if path != CORE_PREDICATE)
     for forbidden in (
         "unsafe",
         'extern "C"',
@@ -140,6 +144,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     core_bits = sources[CORE_BITS][1]
     for token in (
         "pub struct BitString<'input>",
+        "let byte = bytes.last().ok_or(BitStringError::InvalidValidBitCount)?;",
+        "if !crate::secret_memory_predicate::apply(byte, unused_mask)",
         "valid_bits_in_last_byte: u8",
         "pub fn new(bytes: &'input [u8], valid_bits_in_last_byte: u8)",
         "LengthOverflow",

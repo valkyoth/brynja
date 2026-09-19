@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Borrowed byte-predicate development evidence; never changes release gates."""
 from pathlib import Path
+import argparse
 import re
 import shutil
 import tempfile
@@ -120,7 +121,55 @@ def emitted_mutants(text, arm):
             raise ValueError('emitted boundary mutation accepted: ' + marker + ': ' + op)
 
 
-def main():
+def constructor_mutants():
+    """Compile the real constructor and tests, not an equivalent model."""
+    with tempfile.TemporaryDirectory(prefix='brynja-bit-constructor-') as temporary:
+        directory = Path(temporary)
+        shutil.copytree(ROOT / 'crates/brynja-hash-core/src', directory / 'src')
+        shutil.copy(ROOT / 'crates/brynja-hash-core/README.md', directory / 'README.md')
+        (directory / 'Cargo.toml').write_text(
+            '[workspace]\n[package]\nname="bit-constructor-probe"\n'
+            'version="0.0.0"\nedition="2024"\n')
+        source = directory / 'src/bit_string.rs'
+        original = source.read_text()
+        changes = (
+            ('predicate inversion', '!crate::secret_memory_predicate::apply(byte, unused_mask)',
+             'crate::secret_memory_predicate::apply(byte, unused_mask)'),
+            ('canonicality bypass', '!crate::secret_memory_predicate::apply(byte, unused_mask)',
+             'false'),
+            ('wrong bit order', 'u8::MAX >> valid_bits_in_last_byte',
+             'u8::MAX << valid_bits_in_last_byte'),
+            ('wrong source byte', 'bytes.last().ok_or(BitStringError::InvalidValidBitCount)?',
+             'bytes.first().ok_or(BitStringError::InvalidValidBitCount)?'),
+        )
+        for compiler in ('1.90.0', '1.98.1'):
+            for release in (False, True):
+                command = ['cargo', '+' + compiler, 'test', '--offline', '--manifest-path',
+                           str(directory / 'Cargo.toml'), '--lib']
+                if release:
+                    command += ['--release']
+                environment = clean_environment()
+                environment['CARGO_TARGET_DIR'] = str(directory / 'target')
+                source.write_text(original)
+                run(command, environment)
+                for label, old, new in changes:
+                    if original.count(old) != 1:
+                        raise ValueError('stale constructor mutation: ' + label)
+                    source.write_text(original.replace(old, new))
+                    result = run(command, environment, success=False)
+                    if (result.returncode == 0 or 'test result: FAILED' not in result.stdout
+                            or 'error[E' in result.stderr):
+                        raise ValueError('constructor mutant must compile and fail tests: '
+                                         + label + result.stdout + result.stderr)
+                print(f'BitString constructor: {compiler} release={release}: PASS; '
+                      'four compiled mutants rejected', flush=True)
+
+
+def main(hash_core=False):
+    global SOURCE
+    package = 'brynja-hash-core' if hash_core else 'brynja-core'
+    if hash_core:
+        SOURCE = ROOT / 'crates/brynja-hash-core/src/secret_memory_predicate.rs'
     with tempfile.TemporaryDirectory(prefix='brynja-secret-predicate-') as temporary:
         directory = Path(temporary)
         fixture, source = prepare(directory)
@@ -155,10 +204,10 @@ def main():
                     if target not in ('x86_64-unknown-linux-gnu', 'aarch64-unknown-linux-musl'):
                         continue
                     crate_env = dict(env, CARGO_TARGET_DIR=env['CARGO_TARGET_DIR']+'-crate')
-                    run(['cargo', '+'+compiler, 'rustc', '--locked', '--offline', '-p', 'brynja-core',
+                    run(['cargo', '+'+compiler, 'rustc', '--locked', '--offline', '-p', package,
                          '--no-default-features', '--target', target, *(['--release'] if release else []),
                          '--lib', '--', '--emit=asm'], crate_env)
-                    actual = list(Path(crate_env['CARGO_TARGET_DIR']).glob(f'{target}/*/deps/brynja_core-*.s'))
+                    actual = list(Path(crate_env['CARGO_TARGET_DIR']).glob(f'{target}/*/deps/{package.replace("-", "_")}-*.s'))
                     if len(actual) != 1:
                         raise ValueError('ambiguous actual crate assembly')
                     inspect(actual[0].read_text(), arm)
@@ -175,4 +224,13 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--hash-core', action='store_true',
+                        help='inspect the dependency-free hash-interface predicate and actual crate')
+    parser.add_argument('--constructor-only', action='store_true',
+                        help='run only the real MSB-first constructor compiled mutations')
+    args = parser.parse_args()
+    if args.hash_core or args.constructor_only:
+        constructor_mutants()
+    if not args.constructor_only:
+        main(args.hash_core)

@@ -23,6 +23,10 @@ def fixture(root: Path) -> None:
         "mod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\nmod secret_memory_predicate;\npub mod safe {}\n", encoding="utf-8"
     )
     shutil.copyfile(ROOT / 'crates/brynja-core/src/secret_memory.rs', source / 'secret_memory.rs')
+    hash_root = root / 'crates/brynja-hash-core/src'
+    hash_root.mkdir(parents=True, exist_ok=True)
+    for name in ('lib.rs', 'bit_string.rs'):
+        shutil.copyfile(ROOT / 'crates/brynja-hash-core/src' / name, hash_root / name)
     for relative in unsafe_policy.ALLOWED:
         target = root / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -405,8 +409,8 @@ def secret_xor_boundary():
     print(f'Secret XOR rejects {len(mutations)} bounds/shift/memory/wipe/model regressions plus wrapper/visibility bypasses')
 
 
-def secret_predicate_boundary():
-    relative = Path('crates/brynja-core/src/secret_memory_predicate.rs')
+def secret_predicate_boundary(crate='brynja-core'):
+    relative = Path('crates') / crate / 'src/secret_memory_predicate.rs'
     source = (ROOT / relative).read_text()
     _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
     mutations = [
@@ -442,6 +446,15 @@ def secret_predicate_boundary():
         library = root / 'crates/brynja-core/src/lib.rs'
         library.write_text(library.read_text().replace('mod secret_memory_predicate;', 'pub mod secret_memory_predicate;'))
         require_rejection(root, 'secret-predicate module must remain private')
+        fixture(root)
+        bits = root / 'crates/brynja-hash-core/src/bit_string.rs'
+        original = bits.read_text()
+        bits.write_text(original.replace('crate::secret_memory_predicate::apply(byte, unused_mask)', 'true'))
+        require_rejection(root, 'hash bit validation lost its borrowed predicate boundary')
+        bits.write_text(original)
+        library = root / 'crates/brynja-hash-core/src/lib.rs'
+        library.write_text(library.read_text().replace('mod secret_memory_predicate;', 'pub mod secret_memory_predicate;'))
+        require_rejection(root, 'hash predicate module must remain private')
     print(f'Secret predicate rejects {len(mutations)} byte/result/wipe/flags/model regressions plus wrapper/visibility bypasses')
 
 
@@ -461,6 +474,7 @@ if __name__ == "__main__":
     secret_mask_boundary()
     secret_xor_boundary()
     secret_predicate_boundary()
+    secret_predicate_boundary('brynja-hash-core')
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
     print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

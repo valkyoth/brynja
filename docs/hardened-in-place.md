@@ -106,10 +106,10 @@ padding expression. Absorption, buffered/full compression blocks, padding and
 digest staging also use the reviewed core copy helper. General-t final output
 masking uses the borrowed mask helper for both moved and scoped owners.
 
-The no-dependency hash-interface crate retains its ordinary `split` and
-constructor unchanged. The added accessor preserves the backing allocation and
-input lifetime; it does not make construction register-clean or erase caller
-storage. Public IV/length metadata and explicitly declassified outputs retain
+The no-dependency hash-interface crate retains its ordinary `split` API. The
+borrowed accessor preserves the backing allocation and input lifetime; the
+constructor now uses the private borrowed predicate described below. Neither
+erases caller storage. Public IV/length metadata and explicitly declassified outputs retain
 their existing contracts. Owned-region/scope cleanup still applies independently
 of these transfers; complete API register/spill qualification remains pending.
 
@@ -228,10 +228,27 @@ a safe model. The development fixture checks all 65,536 byte/mask pairs,
 immediate registers/flags, read-only page edges, compiler output and mutations.
 Native x86 and QEMU Arm coverage is distinguished from compilation-only Apple,
 Windows and Android coverage. This does not qualify complete API register/spill
-erasure, caller copies, interrupted execution or platform storage. The
-dependency-free MSB-first `brynja-hash-core::BitString` remains a separate
-follow-up; this checkpoint neither changes its dependency graph nor claims to
-remove its by-value validation/partial-byte transfers.
+erasure, caller copies, interrupted execution or platform storage.
+
+### Borrowed MSB-first representation validation
+
+`brynja-hash-core::BitString::new` now borrows the last byte through a private,
+byte-identical copy of the same predicate. Keeping this small boundary private
+preserves the hash-interface crate's dependency-free design and public API. The
+existing unsafe-source policy checks both copies and requires their bytes to
+match. Empty, byte-aligned, malformed and partial-byte acceptance rules remain
+unchanged. Canonicality is deliberately observable; this is not a provenance
+check and does not erase caller storage, public lengths or the Boolean result.
+
+`python3 assurance/register-cleanup/check_secret_predicate.py --hash-core`
+checks the actual crate's emitted predicate and the native/QEMU probe matrix;
+it also rejects four compiled constructor mutants on Rust 1.90/1.98 in both
+debug/release profiles. Exhaustive constructor tests cover every byte value at
+widths 0 through 9. Apple, Windows, iOS and Android emitted-code checks are not
+native runtime evidence. This development check adds no release-gate command.
+The ordinary by-value `split` accessor remains available for public callers;
+hardened consumers use `split_borrowed`. Whole-API compiler-copy/spill and
+interruption/platform qualification remain unfinished.
 
 ## Portable scoped ParallelHash and ParallelHashXOF
 
@@ -485,8 +502,9 @@ The portable engines retain their pre-write fail-stop offset assertions and
 checked message-length admission. MD5's u128 accounting and low-64-bit
 little-endian length encoding are unchanged. Existing by-value and scoped APIs
 share these engine changes, without changing their signatures or output policy.
-The MSB-first input constructor, public length metadata and complete
-caller/compiler-copy/spill qualification remain separate open work.
+The MSB-first constructor now uses the borrowed predicate described above;
+public length metadata and complete caller/compiler-copy/spill qualification
+remain outside this transfer checkpoint.
 
 `python3 assurance/register-cleanup/check_legacy_transfers.py` is a development
 driver, not a new release gate. It rejects twelve compiled input/tail/staging
@@ -499,8 +517,8 @@ separate checks.
 MD5 batch eligibility and common-prefix accounting now inspect only `bit_len`,
 without materializing a partial byte. The shared lane finalizer borrows its tail,
 and the final public commit uses the borrowed-copy helper after declassification.
-The partial-tail descriptor still goes through the ordinary MSB-first constructor;
-its validation is not covered by the transfer-only change. Portable batches,
+The partial-tail descriptor goes through the MSB-first constructor, whose
+validation now uses the separate borrowed predicate. Portable batches,
 hardened batches and scoped hardened execution now test the fifteen independent
 partial-bit answers, including expected actual SIMD work for a full common block.
 `check_legacy_transfers.py --native-md5-batch` first validates Linux AVX2 support

@@ -97,6 +97,22 @@ nor its scratch moves through finalization. General-t execution is described
 below. Scoped higher constructions remain rollout work; this is not complete
 register/spill qualification.
 
+### Portable SHA-2 borrowed transfers
+
+Portable hardened SHA-2 now uses `BitString::split_borrowed` for named and
+general-t final input. The partial byte stays borrowed through padding; a
+borrowed one-byte copy followed by public-mask insertion replaces the by-value
+padding expression. Absorption, buffered/full compression blocks, padding and
+digest staging also use the reviewed core copy helper. General-t final output
+masking uses the borrowed mask helper for both moved and scoped owners.
+
+The no-dependency hash-interface crate retains its ordinary `split` and
+constructor unchanged. The added accessor preserves the backing allocation and
+input lifetime; it does not make construction register-clean or erase caller
+storage. Public IV/length metadata and explicitly declassified outputs retain
+their existing contracts. Owned-region/scope cleanup still applies independently
+of these transfers; complete API register/spill qualification remains pending.
+
 ## General SHA-512/t
 
 With the default-off `general-sha512-t` feature, `hardened_in_place` also exposes

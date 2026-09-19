@@ -86,9 +86,57 @@ def main(native_x86=False):
             print(f'Scoped SHA-2: positive control and eight compiled mutants; release={release}: PASS', flush=True)
         path.write_text(original)
         general_mutants(crate, env)
+        portable_transfer_mutants(crate, env)
         execution_mutants(crate, env)
         general_execution_mutants(crate, env)
         packaged(root)
+
+
+def portable_transfer_mutants(crate, env):
+    for family in ('32', '64'):
+        path = crate / f'src/hardened/state{family}.rs'
+        original = path.read_text()
+        calls = [
+            'brynja_core::copy_secret_region(destination, source)',
+            'brynja_core::copy_secret_region(destination, tail)',
+            'brynja_core::copy_secret_region(output, state)',
+            ('brynja_core::copy_secret_region(destination, block)' if family == '32'
+             else 'brynja_core::copy_secret_region(&mut self.block_copy, block)'),
+            'brynja_core::copy_secret_region(\n                        core::slice::from_mut(target),\n                        core::slice::from_ref(byte),\n                    )',
+        ]
+        if family == '64':
+            calls += ['brynja_core::copy_secret_region(&mut self.block_copy, &self.partial_input)',
+                      'brynja_core::copy_secret_region(&mut self.block_copy, &self.padding_block)']
+        mutations = [(call, 'Ok::<(), brynja_core::SecretMemoryError>(())') for call in calls]
+        mutations += [('apply_secret_byte_mask(target, 0xff, 0x80 >> valid_bits)',
+                       'apply_secret_byte_mask(target, 0xff, 0x40 >> valid_bits)')]
+        # Independently omit each call site, including buffered and padding copies.
+        expanded = []
+        for before, after in mutations:
+            start = 0
+            count = 0
+            while (index := original.find(before, start)) >= 0:
+                expanded.append(original[:index] + after + original[index + len(before):])
+                start = index + len(before)
+                count += 1
+            if not count:
+                raise ValueError('missing portable SHA-2 mutation: ' + before)
+        for release in (False, True):
+            command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path',
+                       str(crate/'Cargo.toml'), '--features', 'general-sha512-t',
+                       '--lib', 'hardened::in_place']
+            if release:
+                command.append('--release')
+            path.write_text(original)
+            run(command, env)
+            for index, mutant in enumerate(expanded):
+                path.write_text(mutant)
+                result = run(command, env, success=False)
+                log = result.stdout + result.stderr
+                if not result.returncode or 'test result: FAILED' not in log:
+                    raise ValueError(f'portable SHA-2/{family} mutant {index} must compile and fail: {log[-2000:]}')
+            print(f'Borrowed SHA-2/{family} transfers: {len(expanded)} compiled mutants; release={release}: PASS', flush=True)
+        path.write_text(original)
 
 
 def general_mutants(crate, env):
@@ -100,7 +148,7 @@ def general_mutants(crate, env):
         ('update cleanup disabled', 'owner: &mut *self.owner,\n            keep: false,', 'owner: &mut *self.owner,\n            keep: true,'),
         ('failed state revived', 'self.active = false;\n        let mut cleanup', 'self.active = true;\n        let mut cleanup'),
         ('parameter IV omitted', 'initialize64(&mut self.owner, self.parameter.initial_words());', ''),
-        ('secret mask omitted', '&= self.parameter.last_byte_mask();', '&= 0xff;'),
+        ('secret mask omitted', 'apply_secret_byte_mask(last, self.parameter.last_byte_mask(), 0);', 'apply_secret_byte_mask(last, 0xff, 0);'),
         ('secret identity substituted', 'Sha512TSecretDigest::from_region(\n            self.parameter,', 'Sha512TSecretDigest::from_region(\n            Sha512TBits::new(9)?, '),
         ('secret guard bypassed', 'let mut guard = SecretRegionInitialization::begin(destination)?;', 'self.check()?; let mut guard = SecretRegionInitialization::begin(destination)?;'),
     )

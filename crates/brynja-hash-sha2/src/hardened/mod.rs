@@ -174,7 +174,7 @@ macro_rules! hardened32 {
                 }
                 let bits = state32::finalize_bits_length32(&self.owner, input)
                     .map_err(|_| HardenedSha2Error::MessageTooLong)?;
-                let (complete, partial) = input.split();
+                let (complete, partial) = input.split_borrowed();
                 self.update(complete)?;
                 self.owner.finalize32(partial, bits, $output);
                 let output = self
@@ -200,7 +200,7 @@ macro_rules! hardened32 {
                         ));
                     }
                 };
-                let (complete, partial) = input.split();
+                let (complete, partial) = input.split_borrowed();
                 if self.update(complete).is_err() {
                     return Err(clear_failed_secret_output(
                         destination,
@@ -349,7 +349,7 @@ macro_rules! hardened64 {
                 }
                 let bits = state64::finalize_bits_length64(&self.owner, input)
                     .map_err(|_| HardenedSha2Error::MessageTooLong)?;
-                let (complete, partial) = input.split();
+                let (complete, partial) = input.split_borrowed();
                 self.update(complete)?;
                 self.owner.finalize64(partial, bits, $output);
                 let output = self
@@ -375,7 +375,7 @@ macro_rules! hardened64 {
                         ));
                     }
                 };
-                let (complete, partial) = input.split();
+                let (complete, partial) = input.split_borrowed();
                 if self.update(complete).is_err() {
                     return Err(clear_failed_secret_output(
                         destination,

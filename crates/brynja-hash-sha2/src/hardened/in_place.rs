@@ -150,7 +150,7 @@ macro_rules! scoped {
                 self.check()?;
                 let (partial, bits) = if let Some(input) = input {
                     let bits = super::$family::$length(self.owner, input).map_err(|()| HardenedSha2Error::MessageTooLong)?;
-                    let (complete, partial) = input.split();
+                    let (complete, partial) = input.split_borrowed();
                     self.update(complete)?;
                     (partial, bits)
                 } else {

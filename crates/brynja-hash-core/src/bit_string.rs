@@ -77,6 +77,45 @@ impl<'input> BitString<'input> {
         self.valid_bits_in_last_byte == 0 || self.valid_bits_in_last_byte == 8
     }
 
+    /// Borrows complete message bytes and the optional canonical partial byte.
+    ///
+    /// Unlike [`split`](Self::split), this does not copy the tail's contents.
+    /// The reference retains the input lifetime, and the accompanying valid-bit
+    /// count is public metadata. This does not clear input storage or qualify
+    /// register/spill cleanup in construction or downstream processing.
+    ///
+    /// ```
+    /// let bytes = [0xa5, 0xa0];
+    /// let bits = brynja_hash_core::BitString::new(&bytes, 3)?;
+    /// let (prefix, tail) = bits.split_borrowed();
+    /// assert_eq!(prefix, &[0xa5]);
+    /// assert_eq!(tail, Some((&bytes[1], 3)));
+    /// # Ok::<(), brynja_hash_core::BitStringError>(())
+    /// ```
+    /// The tail cannot outlive its backing storage:
+    /// ```compile_fail
+    /// let tail;
+    /// {
+    ///     let bytes = [0x80];
+    ///     tail = brynja_hash_core::BitString::new(&bytes, 1)
+    ///         .unwrap().split_borrowed().1.unwrap().0;
+    /// }
+    /// assert_eq!(*tail, 0x80);
+    /// ```
+    #[must_use]
+    pub fn split_borrowed(self) -> (&'input [u8], Option<(&'input u8, u8)>) {
+        if self.is_byte_aligned() {
+            return (self.bytes, None);
+        }
+        let split = self.bytes.len().saturating_sub(1);
+        let (complete, tail) = self.bytes.split_at(split);
+        (
+            complete,
+            tail.first()
+                .map(|byte| (byte, self.valid_bits_in_last_byte)),
+        )
+    }
+
     /// Separates complete message bytes from the optional canonical tail.
     ///
     /// The tuple contains the partial byte followed by its valid high-bit
@@ -157,5 +196,29 @@ mod tests {
                 Err(BitStringError::NonZeroUnusedBits)
             ));
         }
+    }
+
+    #[test]
+    fn borrowed_tail_preserves_input_identity_for_every_width() -> Result<(), BitStringError> {
+        assert_eq!(BitString::new(&[], 0)?.split_borrowed(), (&[][..], None));
+        for valid in 1..=8 {
+            for value in 0..=u8::MAX {
+                let bytes = [0xa5, value & (u8::MAX << (8 - valid))];
+                let bits = BitString::new(&bytes, valid)?;
+                let (complete, partial) = bits.split_borrowed();
+                assert_eq!(complete.as_ptr(), bytes.as_ptr());
+                if valid == 8 {
+                    assert_eq!(complete, &bytes);
+                    assert!(partial.is_none());
+                } else {
+                    assert_eq!(complete, &bytes[..1]);
+                    let (tail, width) = partial.ok_or(BitStringError::InvalidValidBitCount)?;
+                    assert!(core::ptr::eq(tail, &bytes[1]));
+                    assert_eq!(width, valid);
+                    assert_eq!((complete, Some((*tail, width))), bits.split());
+                }
+            }
+        }
+        Ok(())
     }
 }

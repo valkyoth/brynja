@@ -77,6 +77,16 @@ def validate(root: Path = ROOT) -> None:
     require(owner, "impl Drop for HardenedSha2Owner", "terminal cleanup")
     require(owner, "self.wipe();", "terminal cleanup")
     api = loaded[API]
+    if api.count('input.split_borrowed()') != 4 or 'input.split()' in api:
+        fail('hardened SHA-2 tails must remain borrowed')
+    for path in (STATE32, STATE64):
+        for token in ('partial: Option<(&u8, u8)>',
+                      'brynja_core::copy_secret_region(destination, source)',
+                      'brynja_core::copy_secret_region(destination, tail)',
+                      'brynja_core::copy_secret_region(output, state)',
+                      'core::slice::from_ref(byte)',
+                      'brynja_core::apply_secret_byte_mask(target, 0xff, 0x80 >> valid_bits)'):
+            require(loaded[path], token, 'borrowed portable SHA-2 transfer')
     if "wrapping_mul" in api or api.count(".checked_mul(8)") != 4:
         fail("named byte finalizers require four locally checked bit lengths")
     require(api, "#[cfg(test)]\nmod tests;", "synthetic length regressions")

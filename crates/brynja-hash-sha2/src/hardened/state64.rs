@@ -44,12 +44,13 @@ impl HardenedSha2Owner {
                 self.partial_input.get_mut(buffered..end),
                 remaining.get(..copied),
             ) {
-                destination.copy_from_slice(source);
+                brynja_core::copy_secret_region(destination, source).map_err(|_| ())?;
             }
             remaining = remaining.get(copied..).unwrap_or_default();
             self.set_buffer_len(end)?;
             if end == BLOCK_BYTES {
-                self.block_copy.copy_from_slice(&self.partial_input);
+                brynja_core::copy_secret_region(&mut self.block_copy, &self.partial_input)
+                    .map_err(|_| ())?;
                 compress64::compress(self);
                 self.wipe_compression_scratch();
                 let _ = clear_owned_region(&mut self.partial_input);
@@ -61,13 +62,13 @@ impl HardenedSha2Owner {
         }
         let mut blocks = remaining.chunks_exact(BLOCK_BYTES);
         for block in blocks.by_ref() {
-            self.block_copy.copy_from_slice(block);
+            brynja_core::copy_secret_region(&mut self.block_copy, block).map_err(|_| ())?;
             compress64::compress(self);
             self.wipe_compression_scratch();
         }
         let tail = blocks.remainder();
         if let Some(destination) = self.partial_input.get_mut(..tail.len()) {
-            destination.copy_from_slice(tail);
+            brynja_core::copy_secret_region(destination, tail).map_err(|_| ())?;
         }
         self.set_buffer_len(tail.len())?;
         self.message_length = new_length.to_be_bytes();
@@ -76,7 +77,7 @@ impl HardenedSha2Owner {
 
     pub(crate) fn finalize64(
         &mut self,
-        partial: Option<(u8, u8)>,
+        partial: Option<(&u8, u8)>,
         message_bits: u128,
         output_bytes: usize,
     ) {
@@ -86,14 +87,20 @@ impl HardenedSha2Owner {
             self.padding_block.get_mut(..buffered),
             self.partial_input.get(..buffered),
         ) {
-            destination.copy_from_slice(source);
+            let _ = brynja_core::copy_secret_region(destination, source);
         }
-        let marker = match partial {
-            Some((byte, valid_bits)) => byte | (0x80_u8 >> valid_bits),
-            None => 0x80,
-        };
         if let Some(target) = self.padding_block.get_mut(buffered) {
-            *target = marker;
+            match partial {
+                Some((byte, valid_bits)) => {
+                    // Equal one-byte regions; this transfer cannot reject length.
+                    let _ = brynja_core::copy_secret_region(
+                        core::slice::from_mut(target),
+                        core::slice::from_ref(byte),
+                    );
+                    brynja_core::apply_secret_byte_mask(target, 0xff, 0x80 >> valid_bits);
+                }
+                None => *target = 0x80,
+            }
         }
         if buffered >= LENGTH_START {
             self.compress_padding64();
@@ -108,7 +115,8 @@ impl HardenedSha2Owner {
     }
 
     fn compress_padding64(&mut self) {
-        self.block_copy.copy_from_slice(&self.padding_block);
+        // Both fields are complete 128-byte regions.
+        let _ = brynja_core::copy_secret_region(&mut self.block_copy, &self.padding_block);
         compress64::compress(self);
         self.wipe_compression_scratch();
     }
@@ -131,7 +139,8 @@ fn render64(owner: &mut HardenedSha2Owner, output_bytes: usize) {
         let Some(output) = owner.output_staging.get_mut(start..start.saturating_add(8)) else {
             return;
         };
-        output.copy_from_slice(state);
+        // Equal word-sized slices; the checked ranges establish exact length.
+        let _ = brynja_core::copy_secret_region(output, state);
     }
     if let Some(remainder) = owner.output_staging.get_mut(output_bytes..) {
         remainder.fill(0);

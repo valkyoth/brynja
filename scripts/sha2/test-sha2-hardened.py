@@ -84,6 +84,14 @@ def main() -> int:
         reject(scalar, 'model::compress(owner);', '')
         reject(scalar, 'owner.message_schedule.fill(0);', '')
     reject(policy.OWNER, "clear_owned_region(&mut self.chaining_state)", "self.chaining_state.fill(0)")
+    reject(policy.API, 'input.split_borrowed()', 'input.split()')
+    for state in (policy.STATE32, policy.STATE64):
+        reject(state, 'partial: Option<(&u8, u8)>', 'partial: Option<(u8, u8)>')
+        reject(state, 'brynja_core::copy_secret_region(destination, source)', 'destination.copy_from_slice(source)')
+        reject(state, 'brynja_core::copy_secret_region(destination, tail)', 'destination.copy_from_slice(tail)')
+        reject(state, 'brynja_core::copy_secret_region(output, state)', 'output.copy_from_slice(state)')
+        reject(state, 'core::slice::from_ref(byte)', '&[*byte]')
+        reject(state, 'apply_secret_byte_mask(target, 0xff, 0x80 >> valid_bits)', 'apply_secret_byte_mask(target, 0xff, 0x40 >> valid_bits)')
     reject(policy.API, "pub trait HardenedSha2State: sealed::Registered", "pub trait HardenedSha2State")
     reject(policy.API, "pub fn finalize_secret<'output>(", "fn missing_secret_output(")
     reject(policy.API, "mod compress32;", "unsafe fn injected() {}\nmod compress32;")
@@ -96,7 +104,7 @@ def main() -> int:
     reject(policy.API, "mod tests;", "mod missing_tests;")
     reject(policy.MIRI, "--lib hardened::tests::checked_length_", "--lib missing_test")
     compiled_length_regressions()
-    print("hardened SHA-2 policy rejects twenty cleanup, capability, API, arithmetic, target/model and codegen regressions")
+    print("hardened SHA-2 policy rejects thirty-three cleanup, capability, borrowed-transfer, API, arithmetic, target/model and codegen regressions")
     return 0
 
 

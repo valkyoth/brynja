@@ -120,7 +120,7 @@ impl HardenedSha512T {
         let (partial, bits) = if let Some(input) = input {
             let bits = finalize_bits_length64(&self.owner, input)
                 .map_err(|_| Sha512TError::MessageTooLong)?;
-            let (complete, partial) = input.split();
+            let (complete, partial) = input.split_borrowed();
             self.update(complete)?;
             (partial, bits)
         } else {
@@ -138,7 +138,7 @@ impl HardenedSha512T {
             .output_staging
             .get_mut(self.parameter.output_bytes().saturating_sub(1))
         {
-            *last &= self.parameter.last_byte_mask();
+            brynja_core::apply_secret_byte_mask(last, self.parameter.last_byte_mask(), 0);
         }
         Ok(())
     }

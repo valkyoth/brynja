@@ -60,6 +60,12 @@ Empty strings use zero valid tail bits; nonempty byte-aligned strings use
 eight. SHA-3's FIPS 202 low-bit convention uses the different descriptor
 provided by `brynja-hash-sha3`, not this MSB-first type.
 
+`split_borrowed()` returns the same complete prefix and a borrowed partial byte
+with its public valid-bit count. Use it when a downstream hardened implementation
+must avoid a by-value tail copy; `split()` remains the ordinary copying API.
+Neither accessor clears storage. Construction still uses ordinary canonicality
+validation and does not promise register or spill erasure.
+
 - `Update` absorbs a complete byte slice or returns a closed error.
 - `FixedOutput` consumes a state into its algorithm-specific digest.
 - `ExtendableOutput` consumes absorption into a distinct reader.

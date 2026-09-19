@@ -215,7 +215,7 @@ impl Sha512T<'_> {
         let (partial, bits) = if let Some(input) = input {
             let bits = crate::hardened::finalize_bits_length64(self.owner, input)
                 .map_err(|()| Sha512TError::MessageTooLong)?;
-            let (complete, partial) = input.split();
+            let (complete, partial) = input.split_borrowed();
             self.update(complete)?;
             (partial, bits)
         } else {
@@ -230,11 +230,12 @@ impl Sha512T<'_> {
         let width = self.parameter.output_bytes();
         self.owner.finalize64(partial, bits, width);
         let last = width.checked_sub(1).ok_or(Sha512TError::OutputLength)?;
-        *self
+        let last = self
             .owner
             .output_staging
             .get_mut(last)
-            .ok_or(Sha512TError::OutputLength)? &= self.parameter.last_byte_mask();
+            .ok_or(Sha512TError::OutputLength)?;
+        brynja_core::apply_secret_byte_mask(last, self.parameter.last_byte_mask(), 0);
         self.active = false;
         Ok(())
     }

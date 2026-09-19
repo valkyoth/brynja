@@ -2,6 +2,7 @@ use super::*;
 extern crate std;
 mod differential;
 mod lifecycle;
+mod output;
 
 std::thread_local! {
     static DROP_CLEARED: Cell<bool> = const { Cell::new(false) };

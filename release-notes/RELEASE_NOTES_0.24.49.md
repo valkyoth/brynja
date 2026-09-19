@@ -55,7 +55,9 @@ No crates are selected for publication.
   qualification remains unfinished.
 
 - Add checked borrowed secret-region copying for already-owned storage and use
-  it in SHA-224/256 hardened batch state, block and digest-staging transfers.
+  it in SHA-224/256 hardened batch state, block, digest-staging and final-output
+  transfers, including explicit declassification. Full-slot preflight preserves
+  transactional public output; consumed secret outputs retain clearing on Drop.
   Exact-length failures preserve storage; callers retain cleanup responsibility.
   This is partial caller-copy remediation, not whole-API residue qualification.
 - Add scoped hardened MD5 SIMD batches in caller-owned eight-lane workspaces.

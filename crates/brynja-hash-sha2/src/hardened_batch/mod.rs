@@ -269,8 +269,12 @@ impl<'a> Executor<'a> {
         );
         let report = result?;
         // All widths/slots, health, callbacks and accounting completed above.
-        // Fixed zips below cannot fail or invoke caller code during commit.
-        output::commit(&guard.workspace.output, destinations);
+        // Commit invokes no caller code; equal-length borrowed copies follow a
+        // complete preflight. An internal transfer invariant must still revoke
+        // the executor rather than being treated as a reusable request error.
+        guard.complete = false;
+        output::commit(&guard.workspace.output, destinations)?;
+        guard.complete = true;
         Ok(report)
     }
 }

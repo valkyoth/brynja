@@ -122,6 +122,22 @@ def compiled_mutants(simd):
            'brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)',
            'let _ = (destination, source); Ok(())',
            'hardened_batch::tests::differential::portable_all_bit_tails_padding_boundaries_and_mixed_identities', 1)
+    for before, after, test, count in (
+        ('brynja_core::copy_secret_region(destination, source)\n'
+         '                    .map_err(|_| Error::Invariant)?;',
+         'let _ = (destination, source);',
+         'mixed_declassification_preflights_all_slots_and_clears_secrets', 1),
+        ('brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)?;',
+         'let _ = (destination, source);',
+         'commit_preflights_every_width_before_any_write', 1),
+        ('if !matches!(destination.len(), 28 | 32)', 'if false',
+         'commit_preflights_every_width_before_any_write', 1),
+        ('self.destinations.iter().zip(&destinations)',
+         'self.destinations.iter().zip(&destinations).take(CAPACITY - 1)',
+         'mixed_declassification_preflights_all_slots_and_clears_secrets', 1),
+    ):
+        yield ('brynja-hash-sha2', 'src/hardened_batch/output.rs', before, after,
+               'hardened_batch::tests::output::' + test, count)
     yield ('brynja-hash-sha3', 'src/hardened_batch/workspace.rs',
            'clear_owned_region(self.states.as_flattened_mut())', 'Ok::<(), ()>(())',
            'hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state', 1)

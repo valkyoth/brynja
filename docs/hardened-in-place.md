@@ -419,9 +419,12 @@ the existing work, selection, cancellation and quarantine contracts. See
 for already-owned disjoint byte regions. It preserves both regions on a length
 mismatch, accepts empty transfers and never takes over cleanup or declassifies
 data. SHA-224/256 hardened batching now uses it for lane packing/unpacking,
-message blocks, scalar-state transfer, padding-block transfer and digest staging.
+message blocks, scalar-state transfer, padding-block transfer, digest staging,
+final destination commit and explicitly authorized declassification. Both output
+paths preflight every slot before writing; consumed secret outputs still clear
+their originals. Prepared source borrows do not copy the digest bytes.
 Public IV/count setup remains ordinary public computation. This change does not
-yet cover partial-bit separator arithmetic, final destination commit, other
+yet cover partial-bit separator arithmetic, other
 batch families or all higher-level framing. Normal-return working-register
 evidence for the copy routine is not whole-API residue qualification.
 

@@ -96,7 +96,8 @@ impl<'a> SecretBatchOutput<'a> {
         }
         for (source, destination) in self.destinations.iter().zip(&mut destinations) {
             if let (Some(source), Some(destination)) = (source, destination) {
-                destination.copy_from_slice(source);
+                brynja_core::copy_secret_region(destination, source)
+                    .map_err(|_| Error::Invariant)?;
             }
         }
         Ok(())
@@ -129,12 +130,23 @@ pub(super) fn validate(
 pub(super) fn commit(
     staging: &[[u8; 32]; CAPACITY],
     destinations: &mut [Option<&mut [u8]>; CAPACITY],
-) {
-    for (source, destination) in staging.iter().zip(destinations) {
+) -> Result<(), Error> {
+    // Validate every width before writing even the first destination. Prepared
+    // borrows contain no digest copies; mutation/fallible slicing cannot change
+    // their lengths between this preflight and the equal-length transfers.
+    let mut sources = [None; CAPACITY];
+    for ((source, destination), prepared) in staging.iter().zip(&*destinations).zip(&mut sources) {
         if let Some(destination) = destination {
-            for (out, byte) in destination.iter_mut().zip(source) {
-                *out = *byte;
+            if !matches!(destination.len(), 28 | 32) {
+                return Err(Error::Invariant);
             }
+            *prepared = Some(source.get(..destination.len()).ok_or(Error::Invariant)?);
         }
     }
+    for (source, destination) in sources.into_iter().zip(destinations) {
+        if let (Some(source), Some(destination)) = (source, destination) {
+            brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)?;
+        }
+    }
+    Ok(())
 }

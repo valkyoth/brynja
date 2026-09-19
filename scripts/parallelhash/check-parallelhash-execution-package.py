@@ -162,6 +162,18 @@ def main():
             )
         ]
         cases += [
+            ("brynja-hash-parallel-std", "src/execution/" + file, before, after, tests)
+            for file, before, after, tests in (
+                ("in_place.rs", "let scratch = Scratch(scratch);\n        let _gate = self.inner.gate()?;", "let scratch = Scratch(scratch);", ["--lib", "scoped_execution_gate"]),
+                ("in_place.rs", "let _ = clear_owned_region(output);\n        let _gate = self.inner.gate()?;", "let _ = clear_owned_region(output);", ["--lib", "scoped_execution_gate"]),
+                ("in_place.rs", "output.copy_from_slice(secret.expose());", "", ["--test", "scoped_execution"]),
+                ("in_place.rs", "clear_owned_region(output)", "core::hint::black_box(&mut *output)", ["--test", "scoped_execution", "early_failures"]),
+                ("in_place.rs", "if is_xof(request.identity)", "if false", ["--lib", "scoped_execution_fixed_xof"]),
+                ("in_place/worker.rs", "if failure.is_none()", "if true", ["--lib", "scoped_execution_workers_join"]),
+                ("in_place/worker.rs", "merge(leaf).map_err(crypto)?;", "", ["--test", "scoped_execution"]),
+            )
+        ]
+        cases += [
             ("brynja-hash-parallel", "src/execution/binding.rs",
              "streaming_complete && merged <= *limit", "merged <= *limit",
              ["--lib", "streaming_root_rejects_finalization_without_input_proof"]),
@@ -268,6 +280,15 @@ def main():
         # Additional live hardware regressions in an explicitly required static
         # lane. Generic builds still run all existing portable mutation cases.
         if os.environ.get('BRYNJA_REQUIRE_SCOPED_PARALLEL') == '1':
+            cases += [
+                ("brynja-hash-parallel-std", "src/execution/in_place/worker.rs", before, after,
+                 ["--lib", "scoped_execution_leaf_revocation"])
+                for before, after in (
+                    ("match owner.mode()?", "match Mode::Portable"),
+                    ("brynja_core::clear_owned_region(output)", "core::hint::black_box(&mut *output)"),
+                    ("workspace.execute(job, output).map_err(crypto)?, true", "workspace.execute(job, output).map_err(crypto)?, false"),
+                )
+            ]
             cases += [
                 ('brynja-hash-parallel', 'src/hardened_in_place/accelerated/' + file, before, after,
                  ['--test', 'scoped_accelerated', 'scheduled'])

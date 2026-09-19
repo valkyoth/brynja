@@ -66,6 +66,7 @@ pub(super) fn run(
         {
             return Err(super::invalid(line, "threaded execution route mismatch"));
         }
+        super::scoped_execution::check(&request, preference, valid, output)?;
         return Ok(());
     }
     let kernel = if cfg!(target_arch = "x86_64") {

@@ -11,7 +11,8 @@
 //! recoverable unwind are covered, not abort, caller input, registers or spills.
 //! XOF readers retain root authority only after leaf completion. Public staging
 //! bounds each read, not total output. Scheduled roots and separate leaf workspaces
-//! support exact-plan caller scheduling. Scoped thread handoff remains follow-up work.
+//! support exact-plan caller scheduling. The optional std adapter provides scoped
+//! single-state worker handoff; scoped multibuffer handoff remains follow-up work.
 //!
 //! ```
 //! use brynja_hash_parallel::{ParallelHashError, ParallelHashSecretOutput,

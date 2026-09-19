@@ -41,11 +41,13 @@ STD_EXECUTION = tuple(STD / "src/execution" / name for name in (
     "mod.rs", "selection.rs", "worker.rs", "tests.rs", "worker/tests.rs",
     "batch.rs", "batch/selection.rs", "batch/worker.rs", "batch/tests.rs", "batch/worker/tests.rs",
     "batch/worker/tests/coordinator_unwind.rs",
+    "in_place.rs", "in_place/tests.rs", "in_place/worker.rs", "in_place/worker/tests.rs",
 ))
 TESTS = (
     PORTABLE / "tests/api.rs", PORTABLE / "tests/official_vectors.rs",
     STD / "tests/executor.rs",
     STD / "tests/scoped.rs",
+    STD / "tests/scoped_execution.rs",
     PORTABLE / "tests/execution.rs", PORTABLE / "tests/execution_vectors/mod.rs",
     PORTABLE / "tests/execution_stream.rs",
     STD / "tests/execution.rs",
@@ -83,6 +85,7 @@ DIFFERENTIAL = (
     Path("assurance/parallelhash-differential/src/scoped_scheduled.rs"),
     Path("assurance/parallelhash-differential/src/scoped_scheduled_accelerated.rs"),
     Path("assurance/parallelhash-differential/src/scoped_threaded.rs"),
+    Path("assurance/parallelhash-differential/src/scoped_execution.rs"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -247,12 +250,23 @@ SCOPED_THREAD_TOKENS = {
         "workspace.with_bits(plan, customization, |mut root|", "|leaf| root.merge(leaf)",
         "crate::worker::ensure_live(cancellation)?", "Ok(operation(root))",
         "impl for<'scope> FnOnce(api::$collector<'scope, 'plan, 'input>) -> R"),
-    "scoped_worker.rs": ("struct Slots<const N: usize>(Vec<[u8; N]>)", "try_reserve_exact(length)",
+    "scoped_worker.rs": ("struct Slots<const N: usize>(pub(crate) Vec<[u8; N]>)", "try_reserve_exact(length)",
         "clear_owned_region(slot)", "self.clear()", "Slots::<$width>::new(leaves.min(workers))",
         "base.checked_add(count)", "base.checked_add(offset)", "if leaves > limit",
         "thread::scope(|scope|", "try_reserve_exact(batch.len())", "match handle.join()",
         "if failure.is_none()", "ensure_live(cancel)?", "let result = job.execute(destination)?",
         "failure.map_or(Ok(()), Err)", "#[cfg(test)]\nmod tests;"),
+    "execution/in_place.rs": ("let scratch = Scratch(scratch)", "let _gate = self.inner.gate()?",
+        "clear_owned_region(output)", "output.copy_from_slice(secret.expose())", "live(cancellation)?",
+        "Selection::new(self.inner.config.root)?", "plan.leaf_count() > self.inner.config.max_leaves",
+        ".with_bits(&plan, request.customization, |mut root|", "|leaf| root.merge(leaf)",
+        "accelerated::$workspace::new(session).map_err(crypto)?", "Mode::Require(None) => Err(Error::Unavailable)",
+        ".squeeze_final_bits_secret(output, valid)", "root.finalize_secret_bits(output, valid)"),
+    "execution/in_place/worker.rs": ("Slots::<$width>::new(leaves.min(config.workers))", "if failure.is_none()",
+        "Selection::new(preference)?", "let result = $leaf(job, destination, &owner)?", "match handle.join()",
+        "accelerated.checked_add(used)", ".checked_add(u128::from(used))", "merge(leaf).map_err(crypto)?",
+        "workspace.execute(job, output).map_err(crypto)?", "Mode::Require(None) => Err(Error::Unavailable)",
+        "clear_owned_region(output)", "live(cancellation)?", "failure.map_or(Ok(accelerated), Err)"),
 }
 
 def validate_scoped_threads(loaded):

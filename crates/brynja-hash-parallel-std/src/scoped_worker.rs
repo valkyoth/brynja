@@ -5,9 +5,9 @@ use std::{io, thread};
 
 // Allocated empty, never resized with secret data, and borrowed disjointly by
 // workers. No secret CV array is returned by value through a thread handle.
-struct Slots<const N: usize>(Vec<[u8; N]>);
+pub(crate) struct Slots<const N: usize>(pub(crate) Vec<[u8; N]>);
 impl<const N: usize> Slots<N> {
-    fn new(length: usize) -> Result<Self, Error> {
+    pub(crate) fn new(length: usize) -> Result<Self, Error> {
         let mut slots = Vec::new();
         slots
             .try_reserve_exact(length)
@@ -28,7 +28,7 @@ impl<const N: usize> Drop for Slots<N> {
     }
 }
 
-trait Spawner {
+pub(crate) trait Spawner {
     fn spawn<'scope, 'env: 'scope, F, T>(
         &mut self,
         scope: &'scope thread::Scope<'scope, 'env>,
@@ -38,7 +38,7 @@ trait Spawner {
         F: FnOnce() -> T + Send + 'scope,
         T: Send + 'scope;
 }
-struct System;
+pub(crate) struct System;
 impl Spawner for System {
     fn spawn<'scope, 'env: 'scope, F, T>(
         &mut self,

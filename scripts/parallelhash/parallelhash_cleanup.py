@@ -184,7 +184,7 @@ def check_scoped_storage(storage, fixture):
     function = flow.exact_function(storage["mir"], (
         "crates/brynja-hash-parallel-std/src/scoped_worker.rs:", "::drop(", "_1: &mut Slots<N>)"))
     linear_fields(function, [("Slots::<N>::clear(", "self")])
-    functions = re.findall(r"^define [\s\S]*?^}", fixture["ll"], re.M)
+    functions = re.findall(r"^define [\s\S]*?^}", storage["ll"], re.M)
     selected = [fn for fn in functions if re.search(r"scoped_worker.*Slots.*clear", fn.splitlines()[0])]
     require(len(selected) == 2, "both instantiated scoped slot clearers")
     widths = []
@@ -199,6 +199,8 @@ def check_scoped_storage(storage, fixture):
                 "scoped slot stride and iteration")
         symbol = re.search(r"@([^ (]+)", fn.splitlines()[0])[1].strip('"')
         require(re.fullmatch(r"[A-Za-z0-9_.$]+", symbol), "unescaped Rust slot symbol")
-        require(re.search(r"^" + re.escape(symbol) + r":$", fixture["s"], re.M),
+        require(re.search(r"^" + re.escape(symbol) + r":$", storage["s"], re.M),
                 "instantiated slot assembly definition")
+        require(re.search(r'^[^;\n]*(?:call|invoke)[^\n]*@"?' + re.escape(symbol) + r'"?\(', fixture["ll"], re.M),
+                "downstream calls the emitted scoped slot clearer")
     require(sorted(widths) == [32, 64], "both complete scoped slot widths")

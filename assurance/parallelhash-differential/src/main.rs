@@ -16,6 +16,8 @@ mod execution;
 mod scoped_accelerated;
 
 mod scoped;
+#[cfg(feature = "execution")]
+mod scoped_execution;
 mod scoped_scheduled;
 #[cfg(feature = "execution")]
 mod scoped_scheduled_accelerated;

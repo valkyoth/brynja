@@ -2,6 +2,7 @@
 """Emit and inspect the new ParallelHash source-owned destruction boundaries."""
 import argparse
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -71,32 +72,30 @@ def main():
                 continue
             raise ValueError("ParallelHash emitted cleanup mutant escaped")
         subprocess.run(["cargo", "+" + args.toolchain, "rustc", "--locked", "--offline",
-                        "-p", "brynja-hash-parallel-std", "--features", "runtime-execution",
-                        "--release", "--lib", "--target", args.target, "--", "--emit=mir,llvm-ir,asm"],
-                       cwd=ROOT, env=env, check=True, timeout=180)
+                        "--manifest-path", "assurance/parallelhash-differential/Cargo.toml",
+                        "--features", "execution", "--release", "--bin", "brynja-parallelhash-differential-fixture",
+                        "--target", args.target, "--", "--emit=mir,llvm-ir,asm",
+                        *(["-C", "linker=rust-lld"] if args.target == "aarch64-unknown-linux-musl" else [])],
+                       cwd=ROOT, env=dict(env, RUSTFLAGS="--emit=mir,llvm-ir,asm"), check=True, timeout=180)
         storage = {}
         for extension in ("mir", "ll", "s"):
             paths = list(Path(directory).rglob("brynja_hash_parallel_std-*." + extension))
             cleanup.require(len(paths) == 1, "unique std compiler artifact")
             storage[extension] = paths[0].read_text()
         cleanup.check_storage(storage)
-        subprocess.run(["cargo", "+" + args.toolchain, "rustc", "--locked", "--offline",
-                        "--manifest-path", "assurance/parallelhash-differential/Cargo.toml",
-                        "--features", "execution", "--release", "--bin", "brynja-parallelhash-differential-fixture",
-                        "--target", args.target, "--", "--emit=mir,llvm-ir,asm",
-                        *(["-C", "linker=rust-lld"] if args.target == "aarch64-unknown-linux-musl" else [])],
-                       cwd=ROOT, env=env, check=True, timeout=180)
         fixture = {}
+        binaries = [path for path in Path(directory).rglob("brynja_parallelhash_differential_fixture-*.ll")
+                    if re.search(r"^define [^\n]*@main\(", path.read_text(), re.M)]
+        cleanup.require(len(binaries) == 1, "unique executable downstream artifact")
         for extension in ("ll", "s"):
-            paths = list(Path(directory).rglob("brynja_parallelhash_differential_fixture-*." + extension))
-            cleanup.require(len(paths) == 1, "unique scoped downstream artifact")
-            fixture[extension] = paths[0].read_text()
+            fixture[extension] = binaries[0].with_suffix("." + extension).read_text()
         cleanup.check_scoped_storage(storage, fixture)
         for part, extension, before, after in (
             ("storage", "mir", "Slots::<N>::clear(", "Slots::<N>::omitted("),
-            ("fixture", "ll", "i64 noundef 32)", "i64 noundef 16)"),
-            ("fixture", "ll", "i64 noundef 64)", "i64 noundef 32)"),
-            ("fixture", "s", "Slots", "Omitted"),
+            ("storage", "ll", "i64 noundef 32)", "i64 noundef 16)"),
+            ("storage", "ll", "i64 noundef 64)", "i64 noundef 32)"),
+            ("storage", "s", "Slots", "Omitted"),
+            ("fixture", "ll", "scoped_worker", "omitted_worker"),
         ):
             original = storage if part == "storage" else fixture
             cleanup.require(before in original[extension], "live scoped slot cleanup mutation")

@@ -294,8 +294,19 @@ by the callback are not cleared by this API. Recoverable callback unwinding
 clears the workspace and poisons the executor gate; abort cannot run Drop.
 
 This portable scoped handoff does not transfer sponge state or CPU authority
-between threads and does not select acceleration. Scoped accelerated worker
-selection and multibuffer thread ownership still need the broader work.
+between threads and does not select acceleration. The separate opt-in
+`brynja_hash_parallel_std::execution::in_place::Executor` now supports independent
+root/leaf selection using the existing `Config`/`Request` contract. Each worker
+constructs authority locally and uses a scoped SHAKE leaf workspace; the calling
+thread retains its scoped cSHAKE collector. Parent-owned disjoint clearing slots
+hold the typed leaf outputs until ordered merge. No authority or live sponge
+state crosses a thread boundary. Fixed/XOF byte/bit output, explicit mixed
+routes, cancellation, and typed failures preserve the existing no-fallback
+contract. Secret admission failures clear destinations; public output is staged
+and committed under the operation gate only after all workers have joined.
+Reports count completed accelerated leaves rather than inferring acceleration
+from preference alone. This does not qualify cached detection or VM migration.
+Scoped multibuffer thread ownership still needs the broader work.
 Registers, spills and compiler-created
 copies remain outside this checkpoint's guarantee; `panic = "abort"` cannot run
 scope destructors.

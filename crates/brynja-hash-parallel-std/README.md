@@ -35,6 +35,7 @@ package owns scheduling, resource admission and local worker selection.
 | --- | --- | --- |
 | Bounded portable ParallelHash/ParallelHashXOF worker executor | ✅ Implemented | ❌ No |
 | Scoped portable root with bounded borrowed-leaf thread handoff | 🚧 Implemented; qualification pending | ❌ No |
+| Scoped root/leaf storage with independently selected threaded acceleration | 🚧 Implemented; qualification pending | ❌ No |
 | Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |
 | Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |
 
@@ -100,7 +101,8 @@ The executor's nonblocking gate remains held through the callback. Recoverable
 callback unwinding clears the workspace and poisons the gate; the workspace may
 be reused with a different executor. Forgetting a scoped root/reader does not
 bypass its outer workspace cleanup. Abort, register/spill and caller-copy limits
-remain unchanged. Scoped accelerated worker selection is not provided here.
+remain unchanged. These callback methods are portable-only; use the separate
+scoped execution adapter below for accelerated workers.
 
 ### Explicit root and worker selection
 
@@ -138,6 +140,46 @@ assert_eq!(scratch, [0; 32]);
 Use `hash_secret`/`hash_secret_bits` for typed clearing output ownership.
 The entire secret destination and public staging are cleared on errors;
 caller-owned input/customization and copies remain the caller's responsibility.
+
+### Scoped accelerated threaded execution
+
+With `runtime-execution`, select `execution::in_place::Executor` for the same
+four identities and independent root/leaf preferences using scoped storage
+throughout. Authorities and empty workspaces are initialized on the thread
+that uses them; only completed plan/output borrows return from workers.
+
+```rust
+use brynja_hash_parallel::{Fips202BitString, execution::Identity};
+use brynja_hash_parallel_std::{CancellationToken, execution::{Config, Error, Preference, Request, in_place::Executor}};
+let executor = Executor::new(Config {
+    workers: 4, max_leaves: 4096,
+    root: Preference::Prefer, leaves: Preference::Prefer,
+})?;
+let request = Request {
+    identity: Identity::ParallelHashXof256,
+    input: Fips202BitString::new(b"input", 8).map_err(|_| Error::Limits)?,
+    block_size: 8,
+    customization: Fips202BitString::new(b"application", 8).map_err(|_| Error::Limits)?,
+};
+let mut output = [0; 64];
+let (secret, report) = executor.hash_secret(&request, &mut output, &CancellationToken::new())?;
+assert_eq!(report.leaves, 1);
+drop(secret);
+assert_eq!(output, [0; 64]);
+# Ok::<(), Error>(())
+```
+
+The byte/bit `hash_public` methods use caller staging covering the complete
+output, preserve destinations on failure and clear all supplied staging. Secret
+methods clear the entire destination even on admission or worker failure.
+Reports distinguish root routing, actual accelerated leaves and thread width;
+zero-leaf messages do not create workers or claim a leaf route. The executor gate
+stays held through public output commit. Required routes reject unavailable
+authority; a backend error never authorizes fallback. Static deployment and
+cached hosted-detection limitations remain the same as the other adapters.
+This adapter is single-state-per-worker, not multibuffer execution. Complete
+compiler-copy/register/spill qualification and scoped multibuffer handoff remain
+pending; existing executors are unchanged.
 
 ### Threaded multibuffer execution
 

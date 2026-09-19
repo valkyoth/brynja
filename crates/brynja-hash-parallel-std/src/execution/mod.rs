@@ -25,6 +25,7 @@
 
 #[cfg(feature = "runtime-batch-execution")]
 pub mod batch;
+pub mod in_place;
 mod selection;
 mod worker;
 

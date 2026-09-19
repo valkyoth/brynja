@@ -22,7 +22,9 @@ No crates are selected for publication.
   leaf workspaces now preserve the same plan/order and cleanup contracts with
   explicit supplied sessions. Portable scoped thread handoff now keeps the root
   on the calling thread and joins bounded workers returning borrowed typed leaf
-  outputs before the completion callback. Accelerated scoped threaded ownership and complete
+  outputs before the completion callback. A separate scoped execution adapter
+  now constructs accelerated root/leaf authority locally on its executing thread
+  and joins workers returning only completed output borrows. Scoped multibuffer ownership and complete
   compiler-copy/register/spill qualification remain unfinished.
 
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied

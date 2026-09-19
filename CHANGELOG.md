@@ -16,8 +16,9 @@
   scheduled roots and separate leaf workspaces now bind supplied sessions with
   unchanged plan provenance and no fallback. Portable scoped threaded collection
   now joins bounded borrowed-output workers before lending the completed root
-  to a caller callback. Accelerated scoped thread-handoff ownership remains
-  under development.
+  to a caller callback. The opt-in scoped execution adapter now selects root
+  and leaf routes independently with thread-local authority and borrowed leaf
+  handoff. Scoped multibuffer ownership remains under development.
 
 - Extend scoped accelerated TupleHash to XOF128/256 with authority-bound readers,
   mixed public/secret output, consuming partial-bit reads and scope-owned cleanup.

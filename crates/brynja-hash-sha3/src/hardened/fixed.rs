@@ -6,7 +6,7 @@ use super::{
         finish_secret,
     },
     owner::HardenedFips202Owner,
-    sponge::{SHA3_SUFFIX, SHA3_SUFFIX_BITS},
+    sponge::{SHA3_SUFFIX, SHA3_SUFFIX_BITS, split_input},
 };
 
 macro_rules! hardened_sha3 {
@@ -119,7 +119,7 @@ macro_rules! hardened_sha3 {
                 let bits = u128::try_from(input.bit_len())
                     .map_err(|_| HardenedSha3Error::MessageTooLong)?;
                 self.check_additional_bits(bits)?;
-                let (complete, partial) = input.split();
+                let (complete, partial) = split_input(input);
                 self.update(complete)?;
                 self.owner.finalize(partial, SHA3_SUFFIX, SHA3_SUFFIX_BITS);
                 self.owner.stage_fixed($output)?;
@@ -146,7 +146,7 @@ macro_rules! hardened_sha3 {
                 let bits = u128::try_from(input.bit_len())
                     .map_err(|_| HardenedSha3Error::MessageTooLong)?;
                 self.check_additional_bits(bits)?;
-                let (complete, partial) = input.split();
+                let (complete, partial) = split_input(input);
                 self.update(complete)?;
                 self.owner.finalize(partial, SHA3_SUFFIX, SHA3_SUFFIX_BITS);
                 self.owner.stage_fixed($output)?;

@@ -194,7 +194,7 @@ macro_rules! fixed {
                 let partial = if let Some(input) = input {
                     let bits = u128::try_from(input.bit_len()).map_err(|_| HardenedSha3Error::MessageTooLong)?;
                     self.owner.check_message_bits(bits).map_err(|()| HardenedSha3Error::MessageTooLong)?;
-                    let (complete, partial) = input.split();
+                    let (complete, partial) = super::sponge::split_input(input);
                     self.update(complete)?;
                     partial
                 } else { None };

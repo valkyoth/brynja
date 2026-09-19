@@ -116,6 +116,28 @@ def portable_transfer_mutants(crate, env):
     mutations += [(sponge, f'apply_secret_byte_mask({name}, low_mask(valid), 0)',
                    f'apply_secret_byte_mask({name}, 0xff, 0)', 1) for name in ('target', 'tail')]
     mutations.append((fixed, 'brynja_core::copy_secret_region(destination, output)?;', '', 2))
+    for name in ('absorb_partial', 'absorb_slice', 'absorb_padding'):
+        source = originals[sponge]
+        start = source.index('    fn '+name+'(')
+        end = source.index('\n    fn ', start + 1)
+        body = source[start:end]
+        if body.count('xor_byte(state, input);') != 1:
+            raise ValueError('portable absorption mutation absent/ambiguous: '+name)
+        mutations.append((sponge, body, body.replace('xor_byte(state, input);', ''), 1))
+    mutations += [
+        (sponge, 'let _ = brynja_core::copy_secret_region(destination, source);', '', 1),
+        (sponge, 'copy_byte(target, byte);', '', 1),
+        (sponge, 'apply_secret_byte_mask(target, low_mask(valid_bits), 0)',
+         'apply_secret_byte_mask(target, 0xff, 0)', 1),
+        (sponge, 'apply_secret_byte_mask(target, 0xff, 1_u8 << bit_in_byte)',
+         'apply_secret_byte_mask(target, 0xff, 0)', 1),
+        (sponge, 'apply_secret_byte_mask(last, 0xff, 0x80)',
+         'apply_secret_byte_mask(last, 0xff, 0)', 1),
+        (sponge, 'xor_secret_byte_bits(destination, source, 0, 8, 0)',
+         'xor_secret_byte_bits(destination, source, 0, 1, 0)', 1),
+        (sponge, '.map(|byte| (byte, input.valid_bits_in_last_byte()))',
+         '.map(|byte| (byte, 1))', 1),
+    ]
     for release in (False, True):
         command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path',
                    str(crate/'Cargo.toml'), '--lib', 'hardened::sponge::tests']
@@ -137,7 +159,7 @@ def portable_transfer_mutants(crate, env):
             result = run(command, env, success=False)
             if result.returncode == 0 or 'test result: FAILED' not in result.stdout + result.stderr:
                 raise ValueError('portable transfer mutant must compile and fail at runtime: '+before)
-        print(f'Portable sponge: eight compiled transfer/mask mutants; release={release}: PASS', flush=True)
+        print(f'Portable sponge: {len(mutations)} compiled transfer/mask/framing mutants; release={release}: PASS', flush=True)
     for path, source in originals.items():
         path.write_text(source)
 

@@ -1179,7 +1179,7 @@ sha256 = "77be53da91a6e5321403833fe10e85f06a8444854de4afc034fcc2a0e37ef3b6"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/fixed.rs"
-sha256 = "2bc135ae9afad23a5e6d7d3d3bf66bef1eb9794a8bee42c88d71f1548472e253"
+sha256 = "36366a3c7d13e691894bdcef1a2c4b3e85554e7121da76b68924a8412d24ba7f"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/mod.rs"
@@ -1187,7 +1187,7 @@ sha256 = "83aa4e10f13f14e08844f9d5428bc5b1cc9f37132fb2093ed802b8dd8afb815d"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake.rs"
-sha256 = "663b34d19246778cbd4b126582b6731e6fba6e3627e5067eeda120e936f45c2d"
+sha256 = "830d8799fcc32b83c3b871ff5a9e76c563de914c3283173eb81138ead49b218f"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake/tests.rs"
@@ -1207,11 +1207,11 @@ sha256 = "14b952b85df2efd98b05e83b48c54226c0a161a112c099aa05d2259940d894f3"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/sponge.rs"
-sha256 = "e985a2a3537f5182cab73f9d1ee4bda7e35ccb6fff3c642ea57224433ed7c22b"
+sha256 = "c5500cfc935fa33f90c24a71c611c6decbffd7b73704f3e8f298174cd5dd9bb9"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/xof.rs"
-sha256 = "e2aed6a452f7c80a859af36ebbd7991f962d79a3e387120eace8ce33975817a7"
+sha256 = "fd97b9370dcc6b30d7c935c34300607ab4e471f62e9b12451b198cf9f4fc0a6a"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/tests/hardened.rs"

@@ -6,7 +6,7 @@ use super::{
         finish_secret,
     },
     owner::HardenedFips202Owner,
-    sponge::{SHAKE_SUFFIX, SHAKE_SUFFIX_BITS},
+    sponge::{SHAKE_SUFFIX, SHAKE_SUFFIX_BITS, split_input},
 };
 
 const CSHAKE_SUFFIX: u8 = 0x04;
@@ -141,7 +141,7 @@ macro_rules! hardened_cshake {
                     let bits = u128::try_from(input.bit_len())
                         .map_err(|_| HardenedSha3Error::MessageTooLong)?;
                     self.check_additional_bits(bits)?;
-                    let (complete, partial) = input.split();
+                    let (complete, partial) = split_input(input);
                     self.update(complete)?;
                     self.finish(partial);
                 } else {
@@ -268,7 +268,7 @@ macro_rules! hardened_cshake {
                 }
             }
 
-            fn finish(&mut self, partial: Option<(u8, u8)>) {
+            fn finish(&mut self, partial: Option<(&u8, u8)>) {
                 if self.owner.cshake_is_customized() {
                     self.owner
                         .finalize(partial, CSHAKE_SUFFIX, CSHAKE_SUFFIX_BITS);

@@ -50,7 +50,7 @@ impl<const RATE: usize> Borrowed<'_, RATE> {
                 owner
                     .check_message_bits(bits)
                     .map_err(|()| HardenedSha3Error::MessageTooLong)?;
-                let (complete, partial) = input.split();
+                let (complete, partial) = crate::hardened::sponge::split_input(input);
                 owner
                     .update(complete)
                     .map_err(|()| HardenedSha3Error::MessageTooLong)?;

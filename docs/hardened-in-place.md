@@ -480,10 +480,15 @@ commits. Partial-output masks operate on borrowed bytes. Squeezing returns only
 public cursor indices internally, not secret bytes by value; empty reads do not
 advance the sponge, and invalid staging/cursor ranges fail before writing.
 Existing secret-output initialization and cleanup guards remain responsible for
-destination ownership. These changes preserve the public APIs, including
-infallible finalization. Portable absorption XOR, padding/final-tail handling,
-input construction and prefix packers still require separate follow-up; this is
-not whole-API register or compiler-spill qualification.
+destination ownership. Portable absorption XOR, padding copies, partial-input
+masks and public suffix/padding-bit insertion now also use borrowed helpers.
+Affine and scoped SHA-3/SHAKE/cSHAKE finalizers retain the original tail borrow
+instead of receiving its byte by value. Equal-length copies and constant
+full-byte XOR ranges cannot reject, preserving infallible finalization without
+discarding a caller-controlled range error. Tests check all 65,536 byte-pair XORs
+and 2,880 padding/chunk/rate/domain combinations, including suffix spillover.
+Input construction, prefix packers and other higher-level callers still require
+separate follow-up; this is not whole-API register or compiler-spill qualification.
 
 ## TupleHash integer framing
 

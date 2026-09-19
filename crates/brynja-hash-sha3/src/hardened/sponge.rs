@@ -89,8 +89,11 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         Ok(())
     }
 
-    pub(crate) fn finalize(&mut self, partial: Option<(u8, u8)>, suffix: u8, suffix_bits: u8) {
-        self.suffix_staging[0] = partial.map_or(0, |tail| tail.0);
+    pub(crate) fn finalize(&mut self, partial: Option<(&u8, u8)>, suffix: u8, suffix_bits: u8) {
+        self.suffix_staging[0] = 0;
+        if let Some((byte, _)) = partial {
+            copy_byte(&mut self.suffix_staging[0], byte);
+        }
         self.suffix_staging[1] = partial.map_or(0, |tail| tail.1);
         self.suffix_staging[2] = suffix;
         self.suffix_staging[3] = suffix_bits;
@@ -99,12 +102,14 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
             self.padding_block.get_mut(..buffered),
             self.partial_input.get(..buffered),
         ) {
-            destination.copy_from_slice(source);
+            // Both slices have exactly `buffered` bytes: mismatch is impossible.
+            let _ = brynja_core::copy_secret_region(destination, source);
         }
         let mut bit_position = buffered.saturating_mul(8);
         if let Some((byte, valid_bits)) = partial {
             if let Some(target) = self.padding_block.get_mut(buffered) {
-                *target = byte & low_mask(valid_bits);
+                copy_byte(target, byte);
+                brynja_core::apply_secret_byte_mask(target, low_mask(valid_bits), 0);
             }
             bit_position = bit_position.saturating_add(usize::from(valid_bits));
         }
@@ -117,7 +122,8 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
                 let byte_position = bit_position / 8;
                 let bit_in_byte = bit_position % 8;
                 if let Some(target) = self.padding_block.get_mut(byte_position) {
-                    *target ^= 1_u8 << bit_in_byte;
+                    // This unused bit is zero after the canonical tail mask.
+                    brynja_core::apply_secret_byte_mask(target, 0xff, 1_u8 << bit_in_byte);
                 }
             }
             bit_position = bit_position.saturating_add(1);
@@ -126,7 +132,7 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
             self.absorb_padding();
         }
         if let Some(last) = self.padding_block.get_mut(RATE.saturating_sub(1)) {
-            *last ^= 0x80;
+            brynja_core::apply_secret_byte_mask(last, 0xff, 0x80);
         }
         self.absorb_padding();
         self.phase[0] = SQUEEZING;
@@ -254,7 +260,7 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
                 self.sponge_lanes.get_mut(index),
                 self.partial_input.get(index),
             ) {
-                *state ^= *input;
+                xor_byte(state, input);
             }
         }
         permutation::permute(self);
@@ -264,7 +270,7 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
 
     fn absorb_slice(&mut self, block: &[u8]) {
         for (state, input) in self.sponge_lanes.iter_mut().take(RATE).zip(block) {
-            *state ^= *input;
+            xor_byte(state, input);
         }
         permutation::permute(self);
     }
@@ -275,7 +281,7 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
                 self.sponge_lanes.get_mut(index),
                 self.padding_block.get(index),
             ) {
-                *state ^= *input;
+                xor_byte(state, input);
             }
         }
         permutation::permute(self);
@@ -355,6 +361,35 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
 
 #[cfg(test)]
 mod tests;
+
+// These two fixed-domain operations preserve infallible finalization: equal
+// singleton slices cannot fail length validation, and offsets 0/count 8 always
+// fit both bytes. No caller-controlled range/error is discarded here. The core
+// boundaries borrow bytes and do not return a secret value to this caller.
+fn copy_byte(destination: &mut u8, source: &u8) {
+    let _ = brynja_core::copy_secret_region(
+        core::slice::from_mut(destination),
+        core::slice::from_ref(source),
+    );
+}
+
+fn xor_byte(destination: &mut u8, source: &u8) {
+    let _ = brynja_core::xor_secret_byte_bits(destination, source, 0, 8, 0);
+}
+
+pub(super) fn split_input(input: crate::Fips202BitString<'_>) -> (&[u8], Option<(&u8, u8)>) {
+    if input.is_byte_aligned() {
+        return (input.as_bytes(), None);
+    }
+    let (complete, tail) = input
+        .as_bytes()
+        .split_at(input.as_bytes().len().saturating_sub(1));
+    (
+        complete,
+        tail.first()
+            .map(|byte| (byte, input.valid_bits_in_last_byte())),
+    )
+}
 
 fn complete_output_bytes(length: usize, valid: u8) -> usize {
     if valid == 0 || valid == 8 {

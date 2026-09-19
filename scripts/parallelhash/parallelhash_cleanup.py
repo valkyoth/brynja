@@ -75,6 +75,7 @@ def emitted(ll, pattern, widths, dynamic=0):
 
 
 def check(row):
+    check_integer(row)
     mir = row["mir"]
     collector = "Collector::<'_, '_, '_>::cancel("
     stream = "Stream::<'_, '_>::cancel("
@@ -101,6 +102,16 @@ def check(row):
     emitted(row["ll"], r"execution.*encoding.*Encoded.*drop", [17, 1])
     for pattern in (r"execution.*collector.*Collector.*cancel", r"execution.*stream.*Stream.*cancel"):
         require(re.search(pattern, row["s"]), "assembly destruction boundary")
+
+
+def check_integer(row):
+    function = flow.exact_function(row["mir"], (
+        "crates/brynja-hash-parallel/src/secret_encoding.rs:",
+        "::drop(", "_1: &mut SecretEncodedInteger)"))
+    linear_fields(function, [("clear_owned_region(", "0"), ("clear_owned_region(", "1")])
+    emitted(row["ll"], r"secret_encoding.*SecretEncodedInteger.*drop", [17, 1])
+    require(re.search(r"secret_encoding.*SecretEncodedInteger.*drop", row["s"]),
+            "portable integer assembly destruction boundary")
 
 
 def check_storage(row):

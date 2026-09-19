@@ -46,7 +46,9 @@ impl<'plan, 'input, 'authority> Collector<'plan, 'input, 'authority> {
             phase: [1],
         };
         let block = u128::try_from(root.binding.block()).map_err(|_| Error::State)?;
-        root.state.update(Encoded::new(block, true)?.bytes()?)?;
+        let mut prefix = Encoded::empty();
+        prefix.left(block)?;
+        root.state.update(prefix.bytes()?)?;
         Ok(root)
     }
     /// Non-authorizing root route observation, separate from worker routing.
@@ -199,10 +201,11 @@ impl<'plan, 'input, 'authority> Collector<'plan, 'input, 'authority> {
         {
             return Err(Error::State);
         }
-        root.state
-            .update(Encoded::new(root.merged_leaves(), false)?.bytes()?)?;
-        root.state
-            .update(Encoded::new(output_bits, false)?.bytes()?)?;
+        let mut suffix = Encoded::empty();
+        suffix.right(root.merged_leaves())?;
+        root.state.update(suffix.bytes()?)?;
+        suffix.right(output_bits)?;
+        root.state.update(suffix.bytes()?)?;
         root.state.finish(super::bits(&[])?)?;
         root.phase = [2];
         guard.complete = true;

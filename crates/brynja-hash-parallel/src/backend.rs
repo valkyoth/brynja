@@ -120,48 +120,17 @@ pub(crate) fn leaf128<'a>(
     input: Fips202BitString<'_>,
     output: &'a mut [u8; LEAF_128_BYTES],
 ) -> Result<HardenedSha3SecretOutput<'a>, HardenedSha3Error> {
-    let mut state = HardenedCshake128::new(b"", b"")?;
-    let (complete, tail) = split(input);
-    state.update(complete)?;
-    let mut reader = match tail {
-        Some(tail) => state.finalize_bits_xof(bit_tail(&tail)?)?,
-        None => state.finalize_xof()?,
-    };
-    reader.squeeze_secret(output)
+    let mut workspace = brynja_hash_sha3::hardened_in_place::Shake128Workspace::new();
+    workspace.with(|state| state.finalize_bits_xof(input)?.squeeze_secret(output))
 }
 
 pub(crate) fn leaf256<'a>(
     input: Fips202BitString<'_>,
     output: &'a mut [u8; LEAF_256_BYTES],
 ) -> Result<HardenedSha3SecretOutput<'a>, HardenedSha3Error> {
-    let mut state = HardenedCshake256::new(b"", b"")?;
-    let (complete, tail) = split(input);
-    state.update(complete)?;
-    let mut reader = match tail {
-        Some(tail) => state.finalize_bits_xof(bit_tail(&tail)?)?,
-        None => state.finalize_xof()?,
-    };
-    reader.squeeze_secret(output)
+    let mut workspace = brynja_hash_sha3::hardened_in_place::Shake256Workspace::new();
+    workspace.with(|state| state.finalize_bits_xof(input)?.squeeze_secret(output))
 }
 
-fn split(input: Fips202BitString<'_>) -> (&[u8], Option<[u8; 2]>) {
-    if input.is_byte_aligned() {
-        return (input.as_bytes(), None);
-    }
-    let split = input.as_bytes().len().saturating_sub(1);
-    let (complete, tail) = input.as_bytes().split_at(split);
-    (
-        complete,
-        tail.first()
-            .copied()
-            .map(|byte| [byte, input.valid_bits_in_last_byte()]),
-    )
-}
-
-fn bit_tail(value: &[u8; 2]) -> Result<Fips202BitString<'_>, HardenedSha3Error> {
-    Fips202BitString::new(
-        value.get(..1).unwrap_or_default(),
-        value.get(1).copied().unwrap_or_default(),
-    )
-    .map_err(|_| HardenedSha3Error::MessageTooLong)
-}
+#[cfg(test)]
+mod tests;

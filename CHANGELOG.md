@@ -2,6 +2,10 @@
 
 ## 0.24.49 development
 
+- Initialize ParallelHash integer framing in borrowed storage across portable and
+  execution roots. Portable leaves now use scoped SHAKE owners and borrowed bit
+  input; outer scopes and thread-handoff ownership remain under development.
+
 - Extend scoped accelerated TupleHash to XOF128/256 with authority-bound readers,
   mixed public/secret output, consuming partial-bit reads and scope-owned cleanup.
   Complete register/spill qualification remains pending.

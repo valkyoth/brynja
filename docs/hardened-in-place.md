@@ -175,7 +175,25 @@ or preflight query is exposed. Authority/revocation and deployment requirements
 are unchanged, and none of this establishes complete compiler-copy, register or
 spill erasure.
 
-## TupleHash framing prerequisite
+## ParallelHash framing and portable leaf prerequisite
+
+ParallelHash also now initializes integer framing through borrowed storage: its
+portable sequential/scheduled roots and execution collectors create empty
+encoding owners, fill them through `&mut`, and borrow the bytes for absorption.
+Reuse clears the complete 17-byte encoding and length before writing; Drop clears
+both. An empty or invalid encoding cannot be read. No populated encoding owner
+is returned from initialization.
+
+Portable ParallelHash leaf helpers now use scoped SHAKE128/256 storage and pass
+the complete borrowed bit-string to finalization. The previous returned partial
+tail array and populated leaf sponge moves are removed. The 32/64-byte leaf
+output remains a typed borrow of the supplied destination. This is a prerequisite,
+not a finished ParallelHash scoped API: outer roots, stream/scheduler lifecycles,
+accelerated leaves and thread handoff still need the broader ownership work.
+Registers, spills and compiler-created copies remain outside this checkpoint's
+guarantee.
+
+## TupleHash integer framing
 
 The private TupleHash integer encoder is constructed empty, then filled through
 `&mut` for `left_encode(item_bits)` and `right_encode(output_bits)`. Both the

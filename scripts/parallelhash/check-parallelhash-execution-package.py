@@ -109,10 +109,29 @@ def main():
             ("brynja-hash-parallel-std", "src/execution/mod.rs", "!(1..=64).contains(&config.workers)", "!(0..=65).contains(&config.workers)",
              ["--test", "execution", "early_failures_preserve_public_and_clear_secret_and_scratch"]),
         ]
+        cases += [
+            ("brynja-hash-parallel", "src/secret_encoding.rs", before, after, ["--lib", "secret_encoding::tests"])
+            for before, after in (
+                ("clear_owned_region(storage)", "core::hint::black_box(&mut *storage)"),
+                ("!(2..=17).contains(&count)", "false"),
+                ("let marker = if left { 0 } else { width }", "let marker = if left { width } else { 0 }"),
+                (".checked_add(usize::from(left))", ".checked_add(0)"),
+                ("(value >> shift) & 255", "(value >> shift) & 127"),
+            )
+        ]
+        cases += [
+            ("brynja-hash-parallel", "src/backend.rs", before, after,
+             ["--lib", "scoped_leaf_matches_shake_for_every_tail_and_rate_boundary"])
+            for before, after in (
+                ("state.finalize_bits_xof(input)?", "state.finalize_xof()?"),
+                ("hardened_in_place::Shake256Workspace::new()", "hardened_in_place::Shake128Workspace::new()"),
+            )
+        ]
         for index, (package, file, before, after, tests) in enumerate(cases):
             path = roots[package] / file
             original = path.read_text()
-            if original.count(before) != 1:
+            expected_occurrences = 2 if before == "state.finalize_bits_xof(input)?" else 1
+            if original.count(before) != expected_occurrences:
                 raise ValueError("mutation no longer has one exact target: " + before)
             try:
                 path.write_text(original.replace(before, after))

@@ -14,7 +14,8 @@ PORTABLE = Path("crates/brynja-hash-parallel")
 STD = Path("crates/brynja-hash-parallel-std")
 SOURCES = tuple(PORTABLE / "src" / name for name in (
     "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "lib.rs",
-    "output.rs", "scheduled.rs", "xof.rs",
+    "output.rs", "scheduled.rs", "xof.rs", "secret_encoding.rs",
+    "secret_encoding/tests.rs", "backend/tests.rs",
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
@@ -96,6 +97,38 @@ def require(text: str, token: str, label: str) -> None:
         fail(f"{label} drift: {token}")
 
 
+BORROWED_TOKENS = {
+    "secret_encoding.rs": (
+        "pub(crate) const fn empty() -> Self", "pub(crate) fn left(&mut self,", "pub(crate) fn right(&mut self,",
+        "clear_owned_region(storage)", "clear_owned_region(length)", "!(2..=17).contains(&count)",
+        "clear_owned_region(&mut self.bytes)", "clear_owned_region(&mut self.length)",
+        "let marker = if left { 0 } else { width }", ".checked_add(usize::from(left))",
+    ),
+    "core_state.rs": ("let mut prefix = Encoded::empty();", "prefix.left(block_size)?", "suffix.right(self.leaf_count())?", "suffix.right(output_bits)?"),
+    "scheduled.rs": ("let mut prefix = Encoded::empty();", "prefix.left(block)?", "suffix.right(self.expected)?", "suffix.right(output_bits)?"),
+    "execution/encoding.rs": ("pub(super) const fn empty() -> Self", "pub(super) fn left(&mut self,", "pub(super) fn right(&mut self,",
+        "crate::secret_encoding::write(&mut self.bytes, &mut self.length, value, true)",
+        "crate::secret_encoding::write(&mut self.bytes, &mut self.length, value, false)",
+        "crate::secret_encoding::bytes(&self.bytes, &self.length)",
+        "clear_owned_region(&mut self.bytes)", "clear_owned_region(&mut self.length)"),
+    "execution/collector.rs": ("prefix.left(block)?", "suffix.right(root.merged_leaves())?", "suffix.right(output_bits)?"),
+    "backend.rs": ("hardened_in_place::Shake128Workspace::new()", "hardened_in_place::Shake256Workspace::new()",
+        "workspace.with(|state| state.finalize_bits_xof(input)?.squeeze_secret(output))"),
+}
+
+
+def validate_borrowed(loaded: dict) -> None:
+    for name, tokens in BORROWED_TOKENS.items():
+        code = loaded[PORTABLE / "src" / name]
+        for token in tokens:
+            require(code, token, "borrowed ParallelHash framing/leaf storage")
+    for name in ("core_state.rs", "scheduled.rs", "execution/collector.rs"):
+        code = loaded[PORTABLE / "src" / name]
+        for forbidden in ("Encoded::new(", "left_encode_u128(", "right_encode_u128("):
+            if forbidden in code:
+                fail("ParallelHash populated integer owner return: " + name)
+
+
 def validate(root: Path) -> None:
     expected_sources = {root / path for path in (*SOURCES, *EXECUTION)}
     if set((root / PORTABLE / "src").rglob("*.rs")) != expected_sources:
@@ -144,10 +177,11 @@ def validate(root: Path) -> None:
         require(backend, token, "SP 800-185 backend")
     core = loaded[PORTABLE / "src/core_state.rs"]
     for token in (
-        "left_encode_u128", "right_encode_u128", "clear_owned_region",
+        "prefix.left(block_size)?", "suffix.right(self.leaf_count())?", "suffix.right(output_bits)?", "clear_owned_region",
         "checked_add", "finalize_input", "impl Drop for ParallelCore",
     ):
         require(core, token, "sequential lifecycle")
+    validate_borrowed(loaded)
     scheduled = loaded[PORTABLE / "src/scheduled.rs"]
     for token in (
         "ParallelHash128Plan", "ParallelHash256Plan",

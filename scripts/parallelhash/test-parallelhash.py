@@ -41,7 +41,7 @@ def main() -> int:
     reject("std", Path("crates/brynja-hash-parallel/src/lib.rs"), "#![no_std]", "extern crate std;")
     reject("unsafe", Path("crates/brynja-hash-parallel/src/backend.rs"), "use brynja_hash_sha3", "unsafe fn bypass() {}\nuse brynja_hash_sha3")
     reject("domain", Path("crates/brynja-hash-parallel/src/backend.rs"), 'b"ParallelHash"', 'b"RawHash"')
-    reject("block-encoding", Path("crates/brynja-hash-parallel/src/core_state.rs"), "left_encode_u128", "right_encode_u128")
+    reject("block-encoding", Path("crates/brynja-hash-parallel/src/core_state.rs"), "prefix.left(block_size)?", "prefix.right(block_size)?")
     reject("leaf-order", Path("crates/brynja-hash-parallel/src/scheduled.rs"), "ParallelHashError::LeafOrder", "ParallelHashError::StateConsumed")
     reject("plan-identity", Path("crates/brynja-hash-parallel/src/scheduled.rs"), "core::ptr::eq(identity, self.identity)", "core::ptr::eq(identity, identity)")
     reject("cleanup", Path("crates/brynja-hash-parallel/src/core_state.rs"), "clear_owned_region", "core::hint::black_box")
@@ -76,6 +76,20 @@ def main() -> int:
     reject("storage-test", Path("crates/brynja-hash-parallel-std/src/execution/worker/tests.rs"),
            "storage_clear_visits_every_byte_of_every_live_slot", "omitted")
     print("ParallelHash policy rejects thirty-six domain, encoding, lifecycle, cleanup, scheduling, evidence, test, and dependency regressions")
+    loaded = {path: (ROOT / path).read_text() for path in parallelhash_policy.FILES}
+    count = 0
+    for name, tokens in parallelhash_policy.BORROWED_TOKENS.items():
+        path = parallelhash_policy.PORTABLE / "src" / name
+        for token in tokens:
+            mutated = dict(loaded)
+            mutated[path] = loaded[path].replace(token, "REMOVED")
+            try:
+                parallelhash_policy.validate_borrowed(mutated)
+            except parallelhash_policy.ParallelHashPolicyError:
+                count += 1
+                continue
+            raise RuntimeError("borrowed framing guard accepted mutation: " + token)
+    print(f"Borrowed ParallelHash framing/leaf policy rejects {count} semantic regressions")
     return 0
 
 

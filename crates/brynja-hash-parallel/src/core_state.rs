@@ -1,5 +1,6 @@
+use crate::secret_encoding::SecretEncodedInteger as Encoded;
 use brynja_core::clear_owned_region;
-use brynja_hash_sha3::{Fips202BitString, Fips202Output, left_encode_u128, right_encode_u128};
+use brynja_hash_sha3::{Fips202BitString, Fips202Output};
 
 use crate::{
     ParallelHashError,
@@ -27,7 +28,9 @@ impl<'workspace> ParallelCore<'workspace> {
         let block_size =
             u128::try_from(workspace.len()).map_err(|_| ParallelHashError::InvalidBlockSize)?;
         let mut outer = Backend::outer(strength, customization)?;
-        outer.update(left_encode_u128(block_size).as_bytes())?;
+        let mut prefix = Encoded::empty();
+        prefix.left(block_size)?;
+        outer.update(prefix.bytes()?)?;
         let _ = clear_owned_region(workspace);
         Ok(Self {
             outer,
@@ -149,10 +152,11 @@ impl<'workspace> ParallelCore<'workspace> {
             return Err(ParallelHashError::LeafOrder);
         }
         self.failed = [1];
-        self.outer
-            .update(right_encode_u128(self.leaf_count()).as_bytes())?;
-        self.outer
-            .update(right_encode_u128(output_bits).as_bytes())?;
+        let mut suffix = Encoded::empty();
+        suffix.right(self.leaf_count())?;
+        self.outer.update(suffix.bytes()?)?;
+        suffix.right(output_bits)?;
+        self.outer.update(suffix.bytes()?)?;
         let reader = self.outer.finalize_in_place()?;
         let _ = clear_owned_region(&mut self.used);
         let _ = clear_owned_region(&mut self.leaves);

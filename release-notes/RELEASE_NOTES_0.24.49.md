@@ -4,6 +4,12 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
+- Remove populated integer-encoding returns from portable and execution
+  ParallelHash framing, and use scoped SHAKE storage in portable leaf hashing.
+  Encodings clear on reuse/drop; leaf output remains a typed destination borrow.
+  This is prerequisite work, not completion of the outer ParallelHash scoped API
+  or compiler-copy/register/spill qualification.
+
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied
   Keccak authority stays borrowed through incremental and partial-bit output;
   scope cleanup covers forgotten readers and recoverable unwinding. Errors are

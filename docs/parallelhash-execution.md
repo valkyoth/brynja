@@ -105,7 +105,7 @@ contract in the general API register. Its additional owned regions are:
 | `backend::State` | Secret-derived portable or accelerated sponge; every variant is wiped before drop | Shared hardened cSHAKE/Keccak checks and execution MIR variant inspection |
 | `Collector` metadata | Secret-derived merged count, accelerated count, output bit count (16 bytes each), phase (1 byte); cancel clears all four and the sponge | Region tests, compiled deletion mutants, MIR field provenance and LLVM widths |
 | `Stream` workspace and metadata | Secret leaf bytes in the caller loan, used count and input bit count (16 bytes each); cancel clears all and the collector | Workspace/budget/error/unwind tests; MIR receiver-field checks and LLVM widths |
-| `Encoded` | Secret-derived integer encoding (17 bytes) and width (1 byte); drop clears both | MIR/LLVM/assembly destruction checks |
+| `Encoded` | Secret-derived integer encoding (17 bytes) and width (1 byte); empty construction, borrowed initialization, clearing on reuse/drop | MIR/LLVM/assembly destruction checks |
 | `Leaf` / worker output | Secret chaining value in `SecretOutput`; job errors clear the complete supplied destination; merge/drop releases the clearing owner | Leaf provenance, success/error/panic and all-slot clearing tests |
 | `Clear` / output staging | Secret intermediate bytes borrowed exclusively; drop clears the entire loan | Public-output transaction/error tests and MIR clearing call |
 | `Reader` / `StreamReader` | Exclusive parent loan, no independent sponge copy; drop cancels parent | Ownership negatives, forgotten-reader/terminal/error tests and MIR parent-call binding |

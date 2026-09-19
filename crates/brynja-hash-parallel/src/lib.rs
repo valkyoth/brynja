@@ -14,6 +14,7 @@ mod error;
 mod fixed;
 mod output;
 mod scheduled;
+mod secret_encoding;
 mod xof;
 
 #[cfg(feature = "hardened-execution")]

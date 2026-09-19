@@ -10,8 +10,10 @@
   consuming partial-bit output. Scoped accelerated fixed-output workspaces now
   bind separate root/leaf authority with borrowed public staging. Accelerated
   XOF readers now retain only root authority after leaf completion and support
-  mixed public/secret and final-bit output. Scheduled/thread-handoff ownership
-  remains under development.
+  mixed public/secret and final-bit output. Portable scoped scheduled collectors
+  now consume exact-plan leaf results, enforce ordered complete collection, and
+  retain root/counter storage through fixed/XOF finalization. Accelerated
+  scheduled collection and thread-handoff ownership remain under development.
 
 - Extend scoped accelerated TupleHash to XOF128/256 with authority-bound readers,
   mixed public/secret output, consuming partial-bit reads and scope-owned cleanup.

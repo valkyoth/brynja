@@ -16,6 +16,7 @@ mod execution;
 mod scoped_accelerated;
 
 mod scoped;
+mod scoped_scheduled;
 
 const MAX_CAMPAIGN_BYTES: u64 = 1024 * 1024;
 const MAX_CASES: usize = 512;
@@ -87,6 +88,14 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
         line,
     )?;
     scoped::check(
+        algorithm,
+        custom,
+        input_bits,
+        valid_bits(output_bits),
+        block_size,
+        &output,
+    )?;
+    scoped_scheduled::check(
         algorithm,
         custom,
         input_bits,

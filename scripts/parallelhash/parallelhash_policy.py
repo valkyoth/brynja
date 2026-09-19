@@ -22,6 +22,8 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "hardened_in_place/xof.rs", "hardened_in_place/xof/tests.rs",
     "hardened_in_place/accelerated.rs", "hardened_in_place/accelerated/backend.rs", "hardened_in_place/accelerated/fixed.rs",
     "hardened_in_place/accelerated/xof.rs",
+    "hardened_in_place/scheduled.rs", "hardened_in_place/scheduled/tests.rs",
+    "hardened_in_place/scheduled_core.rs", "hardened_in_place/scheduled_core/tests.rs",
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
@@ -44,6 +46,7 @@ TESTS = (
     STD / "tests/execution.rs",
     PORTABLE / "tests/scoped_accelerated.rs",
     PORTABLE / "tests/scoped_accelerated/xof.rs", PORTABLE / "tests/scoped_accelerated/xof_lifecycle.rs",
+    PORTABLE / "tests/scoped_scheduled.rs",
 )
 MANIFESTS = (PORTABLE / "Cargo.toml", STD / "Cargo.toml")
 PUBLIC = (
@@ -71,6 +74,7 @@ DIFFERENTIAL = (
     Path("assurance/parallelhash-differential/src/scoped.rs"),
     Path("assurance/parallelhash-differential/tests/scoped.rs"),
     Path("assurance/parallelhash-differential/src/scoped_accelerated.rs"),
+    Path("assurance/parallelhash-differential/src/scoped_scheduled.rs"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -109,6 +113,23 @@ def require(text: str, token: str, label: str) -> None:
 
 
 BORROWED_TOKENS = {
+    "hardened_in_place/scheduled.rs": (
+        "sponge: api::$storage, count: Count", "let guard = CountGuard(&mut self.count);",
+        "impl for<'scope> FnOnce($collector<'scope, 'plan, 'input>) -> R",
+        'self.sponge.with_bits(byte_string(b"ParallelHash")?', "plan.block_size(), plan.leaf_count()",
+        "plan: &'plan crate::$plan<'input>", "self.inner.merge(self.plan.checked_index(&result), result.expose())",
+        "pub fn merge(&mut self, result: crate::$result<'plan, '_>)",
+        "self.inner.public(output, valid)", "self.inner.secret(output, valid)", "Output::new(self.inner.xof()?)",
+    ),
+    "hardened_in_place/scheduled_core.rs": (
+        "count: &'scope mut Count", "state: Option<S>", "merged: [u8; 16]", "clear_owned_region(&mut self.merged)",
+        "impl Drop for CountGuard<'_>", "self.0.wipe()", "self.count.wipe()", "self.state = None",
+        "if !self.complete {", "self.collector.cancel()", "guard.collector.root()?.check()?",
+        "index != read(&guard.collector.count.merged) || index >= guard.collector.expected",
+        "index.checked_add(1)", "write(&mut guard.collector.count.merged, next)?",
+        "read(&self.count.merged) != self.expected", "suffix.right(self.expected)?", "suffix.right(bits)?",
+        "prefix.left(u128::try_from(block)", "clear_owned_region(output)", "self.finish(0)",
+    ),
     "hardened_in_place/accelerated/xof.rs": (
         "inner: fixed::$fixed_workspace<'authority>", "inner: fixed::$fixed_state<'scope, 'authority>",
         "fixed::$fixed_workspace::new(root, leaf)?", "self.inner.root_report()", "self.inner.leaf_report()",
@@ -180,7 +201,9 @@ BORROWED_TOKENS = {
         "let marker = if left { 0 } else { width }", ".checked_add(usize::from(left))",
     ),
     "core_state.rs": ("let mut prefix = Encoded::empty();", "prefix.left(block_size)?", "suffix.right(self.leaf_count())?", "suffix.right(output_bits)?"),
-    "scheduled.rs": ("let mut prefix = Encoded::empty();", "prefix.left(block)?", "suffix.right(self.expected)?", "suffix.right(output_bits)?"),
+    "scheduled.rs": ("let mut prefix = Encoded::empty();", "prefix.left(block)?", "suffix.right(self.expected)?", "suffix.right(output_bits)?",
+        "pub(crate) fn checked_index", "!core::ptr::eq(identity, &self.identity)",
+        "count != self.leaves", "block != self.block_size"),
     "execution/encoding.rs": ("pub(super) const fn empty() -> Self", "pub(super) fn left(&mut self,", "pub(super) fn right(&mut self,",
         "crate::secret_encoding::write(&mut self.bytes, &mut self.length, value, true)",
         "crate::secret_encoding::write(&mut self.bytes, &mut self.length, value, false)",

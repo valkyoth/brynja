@@ -68,7 +68,7 @@ macro_rules! xof {
         #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_hash_parallel::hardened_in_place::", stringify!($reader), "<'static>>();\n```")]
         #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_hash_parallel::hardened_in_place::", stringify!($reader), "<'static>>();\n```")]
         #[must_use = "read or cancel the scoped ParallelHashXOF reader"]
-        pub struct $reader<'scope> { inner: Output<api::$backend_reader<'scope>> }
+        pub struct $reader<'scope> { pub(super) inner: Output<api::$backend_reader<'scope>> }
         impl $reader<'_> {
             /// Emits the next bytes with explicit public declassification.
             pub fn squeeze_public(&mut self, output: &mut [u8], _authority: ParallelHashPublicDeclassification) -> Result<(), ParallelHashError> { self.inner.public(output) }

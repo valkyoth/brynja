@@ -26,9 +26,15 @@ mod backend;
 mod core_state;
 mod fixed;
 mod reader;
+mod scheduled;
+mod scheduled_core;
 mod xof;
 pub use fixed::{
     ParallelHash128, ParallelHash128Workspace, ParallelHash256, ParallelHash256Workspace,
+};
+pub use scheduled::{
+    ParallelHash128Collector, ParallelHash128CollectorWorkspace, ParallelHash256Collector,
+    ParallelHash256CollectorWorkspace,
 };
 pub use xof::{
     ParallelHashXof128, ParallelHashXof128Reader, ParallelHashXof128Workspace, ParallelHashXof256,

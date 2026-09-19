@@ -217,6 +217,25 @@ public preservation and secret-destination clearing. Cancellation/drop clears
 the borrowed sponge; outer scope cleanup covers forgotten readers and unwind.
 The same non-Copy/Clone/Debug/Send/Sync and no-scope-escape constraints apply.
 
+Portable scoped scheduling uses `ParallelHash128CollectorWorkspace` and
+`ParallelHash256CollectorWorkspace`, with empty root sponge/counter storage.
+`with`/`with_bits` borrow storage for one existing exact-plan object; populated
+root/counter owners are never returned. Existing plan leaf jobs already hash
+through scoped portable SHAKE storage into separately borrowed secret outputs.
+The new `merge` consumes those typed results, validates exact plan identity and
+shape, enforces the next index, and clears each consumed output even on error.
+Errors terminate the collector. Finalization requires the exact planned leaf
+count and consumes the handle; public failures preserve destinations and secret
+failures clear them.
+
+Both fixed and XOF output are available. XOF transition clears the merge counter
+before returning a scoped root reader; the independent outer guard also handles
+forgotten collectors/readers and recoverable unwind. No accumulated-count or
+preflight query is exposed on the collector. The existing plan's total shape and
+job indices remain caller-visible, and leaf-result metadata is not yet a scoped
+thread-handoff redesign. This is portable scheduling only, not an accelerated
+collector or complete register/spill qualification.
+
 With the existing default-off `hardened-execution` feature,
 `execution::in_place::ParallelHash128Workspace`/`ParallelHash256Workspace` now
 provide scoped fixed-output acceleration. They take separate supplied root and
@@ -246,8 +265,8 @@ partial-bit reads use the same scoped output guard as portable XOF. Staging
 bounds each public read, not the total stream, and does not limit secret reads.
 Scope cleanup covers cancelled, forgotten and unwinding readers.
 
-Scoped acceleration remains sequential. Scheduled collectors and thread handoff
-still need the broader ownership work. Registers, spills and compiler-created
+Scoped acceleration remains sequential. Accelerated scheduled collectors and
+thread handoff still need the broader ownership work. Registers, spills and compiler-created
 copies remain outside this checkpoint's guarantee; `panic = "abort"` cannot run
 scope destructors.
 

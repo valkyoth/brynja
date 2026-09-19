@@ -44,6 +44,24 @@ macro_rules! plan {
                 self.leaves
             }
 
+            pub(crate) const fn block_size(&self) -> usize {
+                self.block_size
+            }
+
+            pub(crate) fn checked_index(
+                &self,
+                result: &$result<'_, '_>,
+            ) -> Result<u128, ParallelHashError> {
+                let (index, count, block, identity, _) = result.parts();
+                if !core::ptr::eq(identity, &self.identity)
+                    || count != self.leaves
+                    || block != self.block_size
+                {
+                    return Err(ParallelHashError::LeafIdentity);
+                }
+                Ok(index)
+            }
+
             /// Returns one exact indexed leaf job.
             pub fn job<'plan>(
                 &'plan self,

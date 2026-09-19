@@ -36,6 +36,7 @@ block-size parameter `B`. Cryptographic code is first-party Rust.
 | All four portable ParallelHash/ParallelHashXOF identities | ✅ Fully implemented | ❌ No |
 | Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |
 | Caller-owned portable scoped fixed-output/XOF workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |
+| Portable scoped exact-plan collectors with fixed/XOF output | 🚧 Implemented; qualification pending | ❌ No |
 | Scoped accelerated fixed-output/XOF root/leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |
 | Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |
 | Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
@@ -77,8 +78,9 @@ declassification decision.
 
 The portable `hardened_in_place` API borrows an empty workspace before accepting
 input. Scope cleanup also covers forgotten handles and recoverable unwind.
-This API supports ParallelHash128/256 and ParallelHashXOF128/256, not scoped
-scheduled, threaded or accelerated execution. Complete register/spill clearing
+These sequential portable workspaces support ParallelHash128/256 and
+ParallelHashXOF128/256. Scoped collectors and accelerated workspaces are described
+below; scoped thread handoff remains unfinished. Complete register/spill clearing
 is not guaranteed; `panic = "abort"` does not run destructors.
 
 ```rust
@@ -140,6 +142,49 @@ and secret destinations; a partial-bit output consumes the reader. Empty final
 output requires zero valid bits, otherwise specify 1..=8. Reader errors are
 terminal, including subsequent empty reads; they preserve public destinations
 and clear secret destinations.
+
+### Scoped scheduled collection
+
+`hardened_in_place::ParallelHash128CollectorWorkspace` and
+`ParallelHash256CollectorWorkspace` borrow their root sponge and merge counter
+for one exact `ParallelHash128Plan`/`ParallelHash256Plan`. Leaf jobs may be
+computed in any order, then merged in increasing index order. `merge` consumes
+each typed leaf result and clears its output on success or failure. A result
+from another plan instance is rejected even if input, block size and leaf count
+match. Duplicate, skipped or reordered leaves permanently close that collector.
+Finalization requires every planned leaf and consumes the collector.
+
+```rust
+use brynja_hash_parallel::{
+    ParallelHash128Plan, ParallelHashError,
+    hardened_in_place::ParallelHash128CollectorWorkspace,
+};
+let plan = ParallelHash128Plan::new(b"caller-scheduled input", 8)?;
+let mut workspace = ParallelHash128CollectorWorkspace::new();
+let mut output = [0; 32];
+let secret = workspace.with(&plan, b"application", |mut root| {
+    let mut leaf_output = [0; 32];
+    for index in 0..plan.leaf_count() {
+        root.merge(plan.job(index)?.execute(&mut leaf_output)?)?;
+        assert_eq!(leaf_output, [0; 32]);
+    }
+    root.finalize_secret(&mut output)
+})??;
+drop(secret);
+assert_eq!(output, [0; 32]);
+# Ok::<(), ParallelHashError>(())
+```
+
+`with_bits` accepts canonical-bit customization; the plan carries complete
+byte/bit input. Fixed public output requires explicit declassification. Fixed
+secret output returns a clearing destination borrow. `finalize_xof` transfers
+the root borrow into the same scoped incremental reader used above, clearing
+the merge counter before output begins. Scope exit also covers forgotten
+collectors/readers and recoverable unwinding. Plan shape and job indices remain
+caller-visible; this API does not hide message length. Existing leaf-result
+metadata and thread handoff are not a new whole-register/spill erasure guarantee.
+These new collectors and their leaf jobs are portable; accelerated scoped
+scheduling and scoped threaded executors remain follow-up work.
 
 ### Incremental execution
 

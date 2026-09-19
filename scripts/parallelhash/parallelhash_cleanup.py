@@ -77,6 +77,7 @@ def emitted(ll, pattern, widths, dynamic=0):
 def check(row):
     check_integer(row)
     check_scoped(row)
+    check_scoped_scheduled(row)
     mir = row["mir"]
     collector = "Collector::<'_, '_, '_>::cancel("
     stream = "Stream::<'_, '_>::cancel("
@@ -137,6 +138,22 @@ def check_scoped(row):
         pattern = "hardened_in_place.*core_state.*" + owner + ".*" + method
         emitted(row["ll"], pattern, widths, dynamic)
         require(re.search(pattern, row["s"]), "scoped assembly cleanup boundary")
+
+
+def check_scoped_scheduled(row):
+    """Exact borrowed scheduled counter and independent scope-guard cleanup."""
+    prefix = "crates/brynja-hash-parallel/src/hardened_in_place/scheduled_core.rs:"
+    for owner, method, calls in (
+        ("scheduled_core::Count)", "wipe", [("clear_owned_region(", "0")]),
+        ("scheduled_core::Count)", "drop", [("scheduled_core::Count::wipe(", "self")]),
+        ("CountGuard<", "drop", [("scheduled_core::Count::wipe(", "0")]),
+    ):
+        function = flow.exact_function(row["mir"], (prefix, "::" + method + "(", "_1: &mut " + owner))
+        linear_fields(function, calls)
+    for owner, method in (("Count", "wipe"), ("Count", "drop"), ("CountGuard", "drop")):
+        pattern = "hardened_in_place.*scheduled_core.*" + owner + (r"(?!Guard)" if owner == "Count" else "") + ".*" + method
+        emitted(row["ll"], pattern, [16])
+        require(re.search(pattern, row["s"]), "scoped scheduled assembly cleanup boundary")
 
 
 def check_storage(row):

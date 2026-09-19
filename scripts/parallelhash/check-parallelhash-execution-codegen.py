@@ -32,6 +32,18 @@ def main():
             row[extension] = paths[0].read_text()
         cleanup.check(row)
         for extension, before, after in (
+            ("mir", "scheduled_core::Count::wipe(", "scheduled_core::Count::omitted("),
+            ("ll", "i64 noundef 16)", "i64 noundef 8)"),
+            ("s", "CountGuard", "OmittedGuard"),
+        ):
+            cleanup.require(before in row[extension], "live scheduled counter cleanup mutation target")
+            mutant = dict(row, **{extension: row[extension].replace(before, after)})
+            try:
+                cleanup.check_scoped_scheduled(mutant)
+            except (ValueError, cleanup.flow.MirCleanupFlowError):
+                continue
+            raise ValueError("ParallelHash scheduled emitted cleanup mutant escaped")
+        for extension, before, after in (
             ("mir", "Metadata::wipe(", "Metadata::omitted("),
             ("mir", "&mut ((*_1).2: [u8; 64])", "&mut ((*_1).0: [u8; 16])"),
             ("ll", "i64 noundef 64)", "i64 noundef 32)"),

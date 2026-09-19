@@ -234,14 +234,14 @@ impl<S: State> Drop for Core<'_, S> {
         self.cancel();
     }
 }
-fn write(bytes: &mut [u8; 16], value: u128) -> Result<(), Error> {
+pub(super) fn write(bytes: &mut [u8; 16], value: u128) -> Result<(), Error> {
     for (index, byte) in bytes.iter_mut().enumerate() {
         let shift = index.checked_mul(8).ok_or(Error::MessageTooLong)?;
         *byte = u8::try_from((value >> shift) & 255).map_err(|_| Error::MessageTooLong)?;
     }
     Ok(())
 }
-fn read(bytes: &[u8; 16]) -> u128 {
+pub(super) fn read(bytes: &[u8; 16]) -> u128 {
     bytes.iter().enumerate().fold(0, |value, (index, byte)| {
         value | (u128::from(*byte) << index.saturating_mul(8))
     })

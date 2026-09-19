@@ -76,6 +76,20 @@ def scoped_negatives():
             (f'fn probe(s: {xof}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
             (f'fn probe(r: {reader}) {{ let _ = r.leaf_count(); }}', 'E0599'),
         ]
+        collector = f'crate::hardened_in_place::ParallelHash{strength}Collector'
+        result = f'crate::ParallelHash{strength}LeafResult'
+        other = f'crate::ParallelHash{384 - strength}LeafResult'
+        for name in (collector + "<'static, 'static, 'static>", collector + 'Workspace'):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn bound<T:{bound}>() {{}} fn probe() {{ bound::<{name}>(); }}', 'E0277'))
+        cases += [
+            (f'fn probe(s: {collector}) {{ let _ = s.finalize_secret(&mut []); s.cancel(); }}', 'E0382'),
+            (f'fn probe(mut s: {collector}, leaf: {result}) {{ let _ = s.merge(leaf); let _ = leaf.expose(); }}', 'E0382'),
+            (f'fn probe(s: {collector}) {{ let _ = s.finalize_public(&mut []); }}', 'E0061'),
+            (f'fn probe(s: {collector}) {{ let _ = s.merged_leaves(); }}', 'E0599'),
+            (f'fn probe(s: {collector}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
+            (f'fn probe(mut s: {collector}, leaf: {other}) {{ let _ = s.merge(leaf); }}', 'E0308'),
+        ]
     return cases
 
 
@@ -207,6 +221,26 @@ def main():
                 ('guard.complete = true;', 'guard.complete = false;'),
                 ('Fips202Output::new(output, valid)', 'Fips202Output::new(output, 8)'),
             )
+        ]
+        cases += [
+            ('brynja-hash-parallel', 'src/hardened_in_place/scheduled_core.rs', before, after,
+             ['--lib', 'hardened_in_place::scheduled'])
+            for before, after in (
+                ('clear_owned_region(&mut self.merged)', 'core::hint::black_box(&mut self.merged)'),
+                ('self.0.wipe();', ''),
+                ('self.state = None;', ''),
+                ('if !self.complete {', 'if self.complete {'),
+                ('index != read(&guard.collector.count.merged) || index >= guard.collector.expected', 'false'),
+                ('read(&self.count.merged) != self.expected', 'false'),
+                ('suffix.right(bits)?', 'suffix.right(0)?'),
+                ('clear_owned_region(output)', 'core::hint::black_box(&mut *output)'),
+            )
+        ]
+        cases += [
+            ('brynja-hash-parallel', 'src/scheduled.rs', '!core::ptr::eq(identity, &self.identity)', 'false',
+             ['--lib', 'hardened_in_place::scheduled']),
+            ('brynja-hash-parallel', 'src/hardened_in_place/scheduled.rs',
+             'byte_string(b"ParallelHash")?', 'byte_string(b"WRONG")?', ['--lib', 'hardened_in_place::scheduled']),
         ]
         # Additional live hardware regressions in an explicitly required static
         # lane. Generic builds still run all existing portable mutation cases.

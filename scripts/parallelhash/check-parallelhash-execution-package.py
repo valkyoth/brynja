@@ -152,6 +152,17 @@ def main():
             for field in ("merged", "accelerated", "output_bits", "phase")
         ]
         cases += [
+            ("brynja-hash-parallel", "src/core_state.rs", before, after,
+             ["--lib", "borrowed_buffering"])
+            for before, after in (
+                ("brynja_core::copy_secret_region(target, source)",
+                 "Ok::<(), brynja_core::SecretMemoryError>(())"),
+                ("core::slice::from_mut(target),\n                    core::slice::from_ref(byte)",
+                 "core::slice::from_mut(target),\n                    &[0]"),
+                ("self.absorb_pending(tail.valid_bits_in_last_byte())?", "self.absorb_pending(8)?"),
+            )
+        ]
+        cases += [
             ("brynja-hash-parallel-std", "src/" + file, before, after, tests)
             for file, before, after, tests in (
                 ("in_place.rs", "let _gate = self.enter_operation()?;", "", ["--test", "scoped", "lifecycle"]),
@@ -166,7 +177,8 @@ def main():
             for file, before, after, tests in (
                 ("in_place.rs", "let scratch = Scratch(scratch);\n        let _gate = self.inner.gate()?;", "let scratch = Scratch(scratch);", ["--lib", "scoped_execution_gate"]),
                 ("in_place.rs", "let _ = clear_owned_region(output);\n        let _gate = self.inner.gate()?;", "let _ = clear_owned_region(output);", ["--lib", "scoped_execution_gate"]),
-                ("in_place.rs", "output.copy_from_slice(secret.expose());", "", ["--test", "scoped_execution"]),
+                ("in_place.rs", "brynja_core::copy_secret_region(output, secret.expose())",
+                 "Ok::<(), brynja_core::SecretMemoryError>(())", ["--test", "scoped_execution"]),
                 ("in_place.rs", "clear_owned_region(output)", "core::hint::black_box(&mut *output)", ["--test", "scoped_execution", "early_failures"]),
                 ("in_place.rs", "if is_xof(request.identity)", "if false", ["--lib", "scoped_execution_fixed_xof"]),
                 ("in_place/worker.rs", "if failure.is_none()", "if true", ["--lib", "scoped_execution_workers_join"]),
@@ -204,7 +216,8 @@ def main():
              ["--lib", "failed_operation_guard_clears_preexisting_metadata"]),
             ("brynja-hash-parallel", "src/execution/collector.rs", "|| !core::ptr::eq(plan, leaf.plan)", "|| false",
              ["--test", "execution", "wrong_duplicate_missing_and_reordered_leaves_close_root"]),
-            ("brynja-hash-parallel", "src/execution/collector.rs", "output.copy_from_slice(secret.expose());", "let _ = secret;",
+            ("brynja-hash-parallel", "src/execution/collector.rs", "brynja_core::copy_secret_region(output, secret.expose())",
+             "Ok::<(), brynja_core::SecretMemoryError>(())",
              ["--test", "official_vectors"]),
             ("brynja-hash-parallel", "src/execution/backend.rs", 'b"ParallelHash"', 'b"Incorrect"',
              ["--test", "official_vectors"]),

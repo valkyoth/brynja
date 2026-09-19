@@ -323,7 +323,7 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "drop(_1: &mut TupleCore) -> () {"
     ],
     PARALLELHASH_DROP: [
-        "fn core_state::<impl at crates/brynja-hash-parallel/src/core_state.rs:253:1: 253:31>::"
+        "fn core_state::<impl at crates/brynja-hash-parallel/src/core_state.rs:267:1: 267:31>::"
         "drop(_1: &mut ParallelCore<'_>) -> () {"
     ],
 }

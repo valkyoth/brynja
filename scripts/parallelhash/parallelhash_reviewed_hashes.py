@@ -2,7 +2,7 @@
 
 REVIEWED_HASHES = {
     'crates/brynja-hash-parallel/src/backend.rs': '80dffc58c0ff3a891504b2f48251df89f1463e6d909cacbde671b02b2b0d2554',
-    'crates/brynja-hash-parallel/src/core_state.rs': '79f64a79a55987409c9724d3984924482d6adb00e8c82415ae8400316f2fc09b',
+    'crates/brynja-hash-parallel/src/core_state.rs': 'e7222da8a0c10e0f54c1d45dce17017c3150fff49db9bb7ee815dbcd61e657a8',
     'crates/brynja-hash-parallel/src/error.rs': '7d7fa4d9aa40a2942c7bd5afbac15188a54d715b98e55a9f34f12fd5119bf11a',
     'crates/brynja-hash-parallel/src/fixed.rs': '03e876a5dd92d1578c7921f030309f1c3bba84662beff2b285ee2cd0ee871cdb',
     'crates/brynja-hash-parallel/src/lib.rs': 'ba6a765cdaac783ce73f39353e05119ac6f7e918d642fd804418b9361072a8b4',
@@ -110,7 +110,7 @@ REVIEWED_HASHES = {
     'crates/brynja-hash-parallel/README.md': 'e5a1965ffc5e5ae0b99f42e0c7deb17b5246323326d9c5480bf2dcc943e0bf93',
     'crates/brynja-hash-parallel-std/README.md': '5582a58c03d998bbe478b6ed8b16e59a69a21b36ae4efac4e845a92aede8c748',
     'scripts/parallelhash/check-parallelhash-execution-differential.py': '5ee4290c0727bac66653d50dee4fb1353b82957ccd6062e59e4a08c36ed4da36',
-    'scripts/parallelhash/check-parallelhash-execution-package.py': 'a8c1821aa311c6f48f546e72f054b8e91ce87666b4ea0874e9186f7e778ca0be',
+    'scripts/parallelhash/check-parallelhash-execution-package.py': 'b6288a334586eb8da1e61bb5528c49ed94a1c030f76e46caaf3765cae95fc861',
     'scripts/parallelhash/check-parallelhash-execution-codegen.py': '88f5e984807d161371c000f67ffcc19e22af15ef1ea850eef785e3797da4d145',
     'scripts/parallelhash/parallelhash_cleanup.py': 'eb4ed35344a26379b34805413fdd34ebb2e02b2ccc5b2ae59788efa23bb9b0eb',
     'scripts/parallelhash/parallelhash_execution_native.py': 'e2fa76eb4018691b5b75f4ae7831e5fce6d09ab2e6eb6b1830d1cec0ffe54407',

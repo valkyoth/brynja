@@ -252,6 +252,14 @@ interruption/platform qualification remain unfinished.
 
 ## Portable scoped ParallelHash and ParallelHashXOF
 
+The existing portable `ParallelCore` buffer now also transfers whole input
+chunks and the final partial byte through the borrowed secret-copy boundary.
+Neither call site first loads secret bytes into ordinary Rust values. Invalid
+tail ranges fail closed; workspace ownership, clearing, block size, leaf order
+and framing are unchanged. Direct-leaf comparisons and buffer/error tests cover
+these transfers. This is a specific transfer-boundary improvement, not complete
+caller-register, compiler-copy, spill or platform erasure qualification.
+
 ParallelHash also now initializes integer framing through borrowed storage: its
 portable sequential/scheduled roots and execution collectors create empty
 encoding owners, fill them through `&mut`, and borrow the bytes for absorption.

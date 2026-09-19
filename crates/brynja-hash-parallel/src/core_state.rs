@@ -80,7 +80,8 @@ impl<'workspace> ParallelCore<'workspace> {
                 .get_mut(used..end)
                 .ok_or(ParallelHashError::StateConsumed)?;
             let source = input.get(..take).ok_or(ParallelHashError::MessageTooLong)?;
-            target.copy_from_slice(source);
+            brynja_core::copy_secret_region(target, source)
+                .map_err(|_| ParallelHashError::SecretMemory)?;
             self.set_used(end)?;
             input = input.get(take..).ok_or(ParallelHashError::MessageTooLong)?;
             if end == self.workspace.len() {
@@ -112,17 +113,26 @@ impl<'workspace> ParallelCore<'workspace> {
                 bytes
             } else {
                 bytes
-                    .get(..bytes.len().saturating_sub(1))
-                    .unwrap_or_default()
+                    .get(
+                        ..bytes
+                            .len()
+                            .checked_sub(1)
+                            .ok_or(ParallelHashError::InvalidBitString)?,
+                    )
+                    .ok_or(ParallelHashError::InvalidBitString)?
             };
             self.update(complete)?;
             if !tail.is_byte_aligned() {
-                let byte = bytes.last().copied().unwrap_or_default();
+                let byte = bytes.last().ok_or(ParallelHashError::InvalidBitString)?;
                 let used = self.used()?;
                 let Some(target) = self.workspace.get_mut(used) else {
                     return Err(ParallelHashError::MessageTooLong);
                 };
-                *target = byte;
+                brynja_core::copy_secret_region(
+                    core::slice::from_mut(target),
+                    core::slice::from_ref(byte),
+                )
+                .map_err(|_| ParallelHashError::SecretMemory)?;
                 self.set_used(
                     used.checked_add(1)
                         .ok_or(ParallelHashError::MessageTooLong)?,
@@ -309,9 +319,160 @@ pub(crate) fn finish_public_bits(
 
 #[cfg(test)]
 pub(crate) mod assurance_contract {
-    use brynja_hash_sha3::Fips202BitString;
-
     use super::{ParallelCore, Strength};
+    use crate::{Fips202BitString, ParallelHashError as Error};
+
+    #[test]
+    fn borrowed_buffering_preserves_bytes_and_clears() -> Result<(), Error> {
+        let mut input = [0_u8; 256];
+        for (index, byte) in input.iter_mut().enumerate() {
+            *byte = index.to_le_bytes()[0];
+        }
+        for strength in [Strength::Bits128, Strength::Bits256] {
+            let mut storage = [0xa5; 257];
+            let mut owner = ParallelCore::new(&mut storage, strength, super::byte_string(b"")?)?;
+            for (index, byte) in input.iter().enumerate() {
+                owner.update(core::slice::from_ref(byte))?;
+                owner.update(&[])?;
+                assert_eq!(owner.used()?, index + 1);
+                assert_eq!(owner.workspace.get(..=index), input.get(..=index));
+                assert!(
+                    owner
+                        .workspace
+                        .get(index + 1..)
+                        .ok_or(Error::StateConsumed)?
+                        .iter()
+                        .all(|b| *b == 0)
+                );
+            }
+            owner.cancel();
+            assert!(owner.workspace.iter().all(|b| *b == 0));
+            drop(owner);
+            assert_eq!(storage, [0; 257]);
+        }
+        Ok(())
+    }
+
+    // This reference groups input directly into leaf slices; it never copies
+    // through ParallelCore's buffering/final-tail paths under test.
+    fn direct_leaf_reference(
+        strength: Strength,
+        input: Fips202BitString<'_>,
+        block: usize,
+        output_bits: u128,
+    ) -> Result<[u8; 32], Error> {
+        let mut root = super::Backend::outer(strength, super::byte_string(b"")?)?;
+        let mut encoding = super::Encoded::empty();
+        encoding.left(u128::try_from(block).map_err(|_| Error::InvalidBlockSize)?)?;
+        root.update(encoding.bytes()?)?;
+        let mut leaves = 0_u128;
+        let mut position = 0_usize;
+        for chunk in input.as_bytes().chunks(block) {
+            position = position
+                .checked_add(chunk.len())
+                .ok_or(Error::MessageTooLong)?;
+            let valid = if position == input.as_bytes().len() {
+                input.valid_bits_in_last_byte()
+            } else {
+                8
+            };
+            let bits = Fips202BitString::new(chunk, valid).map_err(|_| Error::InvalidBitString)?;
+            match strength {
+                Strength::Bits128 => {
+                    let mut output = [0; 32];
+                    let secret = super::leaf128(bits, &mut output)?;
+                    root.update(secret.expose())?;
+                }
+                Strength::Bits256 => {
+                    let mut output = [0; 64];
+                    let secret = super::leaf256(bits, &mut output)?;
+                    root.update(secret.expose())?;
+                }
+            }
+            leaves = leaves.checked_add(1).ok_or(Error::MessageTooLong)?;
+        }
+        encoding.right(leaves)?;
+        root.update(encoding.bytes()?)?;
+        encoding.right(output_bits)?;
+        root.update(encoding.bytes()?)?;
+        let mut output = [0; 32];
+        root.finalize_in_place()?.squeeze_public(&mut output)?;
+        Ok(output)
+    }
+
+    #[test]
+    fn borrowed_buffering_and_tails_match_direct_leaves() -> Result<(), Error> {
+        for strength in [Strength::Bits128, Strength::Bits256] {
+            for block in [1_usize, 2, 7, 64, 136, 168, 169] {
+                for length in [0, 1, block - 1, block, block + 1, block * 2 + 1] {
+                    for valid in 1..=8 {
+                        let mut input = [0_u8; 339];
+                        for (index, byte) in input.iter_mut().enumerate() {
+                            *byte = index.to_le_bytes()[0].wrapping_mul(29).wrapping_add(0xa5);
+                        }
+                        let input = input.get_mut(..length).ok_or(Error::StateConsumed)?;
+                        if let Some(last) = input.last_mut() {
+                            *last &= u8::MAX >> (8 - valid);
+                        }
+                        let bits =
+                            Fips202BitString::new(input, if length == 0 { 0 } else { valid })
+                                .map_err(|_| Error::InvalidBitString)?;
+                        for output_bits in [0, 256] {
+                            let expected =
+                                direct_leaf_reference(strength, bits, block, output_bits)?;
+                            let mut storage = [0xa5; 169];
+                            let storage = storage.get_mut(..block).ok_or(Error::StateConsumed)?;
+                            let mut owner =
+                                ParallelCore::new(storage, strength, super::byte_string(b"")?)?;
+                            if let Some((last, prefix)) = input.split_last() {
+                                for chunk in prefix.chunks(13) {
+                                    owner.update(chunk)?;
+                                }
+                                owner.finalize_input(Some(
+                                    Fips202BitString::new(core::slice::from_ref(last), valid)
+                                        .map_err(|_| Error::InvalidBitString)?,
+                                ))?;
+                            } else {
+                                owner.finalize_input(Some(bits))?;
+                            }
+                            assert!(owner.workspace.iter().all(|byte| *byte == 0));
+                            assert_eq!(owner.used()?, 0);
+                            let mut output = [0xa5; 32];
+                            let mut reader = owner.finish(None, output_bits)?;
+                            let secret = reader.squeeze_secret(&mut output)?;
+                            assert_eq!(secret.expose(), expected);
+                            drop(secret);
+                            assert_eq!(output, [0; 32]);
+                        }
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn borrowed_buffering_rejections_clear_and_close() -> Result<(), Error> {
+        for finalizing in [false, true] {
+            let mut storage = [0xa5; 8];
+            let mut owner =
+                ParallelCore::new(&mut storage, Strength::Bits128, super::byte_string(b"")?)?;
+            owner.update(b"secret")?;
+            if finalizing {
+                owner.leaves = u128::MAX.to_le_bytes();
+                let tail = Fips202BitString::new(&[1], 1).map_err(|_| Error::InvalidBitString)?;
+                assert_eq!(owner.finalize_input(Some(tail)), Err(Error::MessageTooLong));
+            } else {
+                owner.set_used(9)?;
+                assert_eq!(owner.update(b"x"), Err(Error::StateConsumed));
+            }
+            assert_eq!(owner.update(b"x"), Err(Error::StateConsumed));
+            assert!(owner.workspace.iter().all(|byte| *byte == 0));
+            assert_eq!(owner.used, [0; 16]);
+            assert_eq!(owner.leaves, [0; 16]);
+        }
+        Ok(())
+    }
 
     #[test]
     fn registered_algorithm_parallelhash_owner_contract_is_compiler_checked() {

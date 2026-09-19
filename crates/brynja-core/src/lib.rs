@@ -35,6 +35,9 @@ pub mod read;
 pub mod secret;
 pub mod secret_destruction;
 pub mod secret_memory;
+mod secret_memory_difference;
+#[cfg(test)]
+mod secret_memory_difference_tests;
 mod secret_memory_mask;
 mod secret_memory_predicate;
 mod secret_memory_transfer;
@@ -143,8 +146,9 @@ pub use secret_destruction::{
 };
 pub use secret_memory::{
     OwnedRegionClearComplete, OwnedSecretRegion, SecretBitRangeError, SecretMemoryError,
-    SecretRegionInitialization, apply_secret_byte_mask, clear_owned_region, copy_secret_region,
-    secret_byte_mask_is_zero, xor_secret_byte_bits,
+    SecretRegionInitialization, accumulate_secret_byte_difference, apply_secret_byte_mask,
+    clear_owned_region, copy_secret_region, secret_byte_mask_is_zero, secret_difference_is_zero,
+    xor_secret_byte_bits,
 };
 pub use secure_random::{
     MAX_RESEED_INTERVAL, RandomPurpose, RandomRuntimeGeneration, RandomStateDestruction,

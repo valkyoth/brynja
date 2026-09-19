@@ -411,6 +411,13 @@ OPERATION_CONTRACTS = {
 }
 
 REVIEWED_SOURCE_PATHS = {
+    "crates/brynja-core/src/secret_memory_difference.rs",
+    "crates/brynja-core/src/secret_memory_difference_tests.rs",
+    "assurance/register-cleanup/check_secret_difference.py",
+    "assurance/register-cleanup/secret-difference/Cargo.toml",
+    "assurance/register-cleanup/secret-difference/Cargo.lock",
+    "assurance/register-cleanup/secret-difference/src/lib.rs",
+    "assurance/register-cleanup/secret-difference/src/tests.rs",
     "crates/brynja-hash-core/src/bit_string.rs",
     "crates/brynja-hash-core/src/lib.rs",
     "crates/brynja-hash-core/src/secret_memory_predicate.rs",

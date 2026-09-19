@@ -150,6 +150,48 @@ pub fn secret_byte_mask_is_zero(byte: &u8, mask: u8) -> bool {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct SecretBitRangeError;
 
+/// Accumulates `*difference |= *left ^ *right` without returning a partial result.
+///
+/// Start the caller-owned difference byte at zero and retain its cleanup guard.
+/// Every pair must be processed before calling [`secret_difference_is_zero`].
+/// Lengths are separate public metadata: callers comparing sequences must also
+/// check exact length equality. No content-dependent branch occurs here.
+/// Shared inputs may alias each other; neither may alias the exclusive output.
+///
+/// The baseline x86-64/little-endian AArch64 boundary clears its own working
+/// registers and normalizes condition flags on normal return. Other targets and Miri/Kani
+/// use a safe model without that register guarantee. Caller copies, spills,
+/// interruption snapshots and surrounding storage remain outside the guarantee.
+#[inline(never)]
+pub fn accumulate_secret_byte_difference(difference: &mut u8, left: &u8, right: &u8) {
+    crate::secret_memory_difference::accumulate(difference, left, right);
+}
+
+/// Converts a completed borrowed difference into an opaque equality decision.
+///
+/// Only the normalized final decision leaves the borrowed predicate boundary;
+/// it is explicitly declassified with [`crate::Choice::expose_public`]. Do not
+/// use this to observe partial comparisons. The byte is not owned or cleared by
+/// this function: retain its cleanup guard and clear it after finishing.
+/// Register guarantees and limitations match [`accumulate_secret_byte_difference`].
+///
+/// ```
+/// let mut difference = 0;
+/// brynja_core::accumulate_secret_byte_difference(&mut difference, &7, &7);
+/// brynja_core::accumulate_secret_byte_difference(&mut difference, &9, &9);
+/// let equal = brynja_core::secret_difference_is_zero(&difference);
+/// let _ = brynja_core::clear_owned_region(core::slice::from_mut(&mut difference))?;
+/// assert!(equal.expose_public());
+/// # Ok::<(), brynja_core::SecretMemoryError>(())
+/// ```
+#[inline(never)]
+pub fn secret_difference_is_zero(difference: &u8) -> crate::Choice {
+    crate::Choice::from_lsb(u8::from(crate::secret_memory_predicate::apply(
+        difference,
+        u8::MAX,
+    )))
+}
+
 /// XORs `count` low-bit-first source bits into one borrowed destination byte.
 /// Public offsets specify the starting bit in each byte; `count` must be 1..=8
 /// and both ranges must fit. Invalid metadata leaves both bytes unchanged.

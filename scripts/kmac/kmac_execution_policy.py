@@ -29,7 +29,7 @@ TOKENS = {
     'xof.rs': ("core: &'s mut Core<'a>", 'impl Drop for Reader', 'self.core.cancel();',
                'pub fn finalize_xof(&mut self)', 'core: &mut self.core', 'KmacPublicDeclassification'),
     'output.rs': ('clear_owned_region(&mut self.0)', 'clear_owned_region(self.0)',
-                  'VerificationDifference::new()', 'difference.accumulate(*actual ^ *expected)',
+                  'VerificationDifference::new()', 'difference.accumulate(actual, expected)',
                   'difference.is_zero()', '.checked_mul(8)'),
 }
 REGIONS = {'message_bytes': 16, 'output_bits': 16, 'phase': 1, 'key_class': 1}

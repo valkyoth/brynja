@@ -35,6 +35,7 @@ FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"(?:C|system|stdcall|cdec
 # These are Rust function DEFINITIONS, not imported foreign implementations.
 # The separate unsafe inventory binds their complete first-party assembly bytes.
 LOCAL_C_ABI = {
+    Path("crates/brynja-core/src/secret_memory_difference.rs"),
     Path("crates/brynja-hash-core/src/secret_memory_predicate.rs"),
     Path("crates/brynja-core/src/secret_memory_predicate.rs"),
     Path("crates/brynja-core/src/secret_memory_mask.rs"),
@@ -143,6 +144,9 @@ def validate(root: Path) -> None:
             abi_text = text
             if relative in LOCAL_C_ABI:
                 signature = LOCAL_SIGNATURE
+                if relative == Path('crates/brynja-core/src/secret_memory_difference.rs'):
+                    signature = ('pub(crate) unsafe extern "C" fn accumulate_byte(\n'
+                                 '    difference: *mut u8,\n    left: *const u8,\n    right: *const u8,\n) {')
                 if relative == Path('crates/brynja-core/src/secret_memory_transfer.rs'):
                     signature = 'pub(crate) unsafe extern "C" fn copy_bytes(destination: *mut u8, source: *const u8, length: usize) {'
                 if relative == Path('crates/brynja-core/src/secret_memory_mask.rs'):

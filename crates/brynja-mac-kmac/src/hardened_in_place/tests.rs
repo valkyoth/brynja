@@ -2,6 +2,66 @@ use super::*;
 extern crate std;
 use crate::{Fips202BitString, KmacError};
 
+#[cfg(feature = "conformance-testing")]
+#[test]
+fn borrowed_verification_rejects_equal_mismatches_across_chunks() -> Result<(), KmacError> {
+    macro_rules! check {
+        ($name:ident, $workspace:ident) => {{
+            let key = Fips202BitString::new(&[0x13], 5).map_err(|_| KmacError::InvalidBitString)?;
+            let empty = Fips202BitString::new(&[], 0).map_err(|_| KmacError::InvalidBitString)?;
+            let mut workspace = $workspace::new();
+            for length in [1, 63, 64, 65, 129] {
+                for valid in 1..=8 {
+                    let mut storage = [0; 129];
+                    let tag = storage
+                        .get_mut(..length)
+                        .ok_or(KmacError::InvalidBitString)?;
+                    let _ = crate::$name::new_bits_conformance(key, empty)?
+                        .finalize_tag_bits_conformance(empty, tag, valid)?;
+                    for mismatch in [false, true] {
+                        if mismatch {
+                            *tag.first_mut().ok_or(KmacError::InvalidBitString)? ^= 1;
+                            if length > 1 {
+                                *tag.last_mut().ok_or(KmacError::InvalidBitString)? ^= 1;
+                            }
+                        }
+                        let candidate = Fips202BitString::new(tag, valid)
+                            .map_err(|_| KmacError::InvalidBitString)?;
+                        assert_eq!(
+                            crate::$name::new_bits_conformance(key, empty)?
+                                .verify_bits_conformance(empty, candidate)?
+                                .expose_public(),
+                            !mismatch
+                        );
+                        assert_eq!(
+                            workspace
+                                .with_bits_conformance(key, empty, |state| state
+                                    .verify_bits_conformance(empty, candidate))??
+                                .expose_public(),
+                            !mismatch
+                        );
+                        assert!(workspace.metadata_cleared());
+                        #[cfg(feature = "hardened-execution")]
+                        assert_eq!(
+                            crate::execution::$name::new_bits_conformance(
+                                crate::execution::Mode::Portable,
+                                key,
+                                empty
+                            )?
+                            .verify_bits_conformance(empty, candidate)?
+                            .expose_public(),
+                            !mismatch
+                        );
+                    }
+                }
+            }
+        }};
+    }
+    check!(Kmac128, Kmac128Workspace);
+    check!(Kmac256, Kmac256Workspace);
+    Ok(())
+}
+
 #[test]
 fn scoped_known_answer_and_returned_secret() -> Result<(), KmacError> {
     let mut workspace = Kmac128Workspace::new();

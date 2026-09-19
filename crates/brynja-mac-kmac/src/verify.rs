@@ -33,14 +33,13 @@ pub(crate) fn verify_reader<R: CshakeReader>(
             .squeeze_secret(destination)
             .map_err(KmacError::from)?;
         for (left, right) in secret.expose().iter().zip(expected.iter()) {
-            difference.accumulate(*left ^ *right);
+            difference.accumulate(left, right);
         }
     }
     if !candidate.is_byte_aligned() {
         let expected = candidate
             .as_bytes()
             .last()
-            .copied()
             .ok_or(KmacError::InvalidBitString)?;
         let valid = candidate.valid_bits_in_last_byte();
         let mut generated = VerificationBlock::new();
@@ -53,8 +52,8 @@ pub(crate) fn verify_reader<R: CshakeReader>(
         let secret = reader
             .squeeze_final_bits_secret(output)
             .map_err(KmacError::from)?;
-        let actual = secret.expose().first().copied().unwrap_or_default();
-        difference.accumulate(actual ^ expected);
+        let actual = secret.expose().first().ok_or(KmacError::SecretMemory)?;
+        difference.accumulate(actual, expected);
     }
     Ok(KmacVerification::new(difference.is_zero()))
 }

@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: seventy-nine exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: eighty exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-nine exact modules: the private core volatile clearer and
+Rust in only eighty exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -221,6 +221,18 @@ Other targets and Miri/Kani use a safe model without the register claim.
 `assurance/register-cleanup/secret-predicate` checks exhaustive predicates,
 read-only guard pages, immediate register/flags observations and compiled
 mutants. Caller copies, spills and interruption snapshots are not covered.
+
+Core's private `secret_memory_difference.rs` accumulates `left XOR right` into
+one exclusively borrowed byte using OR. Both input bytes remain shared and may
+alias each other. Exact byte-width baseline x86-64/little-endian Arm assembly
+does not return an intermediate difference; it clears RAX or X4/X5 and fixes
+flags on normal return. The caller retains the accumulator's clearing guard.
+KMAC processes every candidate byte before exposing the final authentication
+decision through the borrowed predicate above. Safe models on other targets
+and Miri/Kani do not carry a register-erasure claim. The development fixture
+`assurance/register-cleanup/secret-difference` checks exhaustive comparisons,
+sticky mismatches, aliasing, guard pages, immediate registers/flags and compiled
+mutants. This does not qualify complete verification callers or platform storage.
 
 The dependency-free hash-interface crate has one private, byte-identical copy
 of that predicate for MSB-first canonical input validation. Its public constructor

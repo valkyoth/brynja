@@ -5,7 +5,7 @@ use crate::{
     packer::{Absorb, absorb_key, append_suffix},
     policy::tag_policy,
 };
-use brynja_core::{ConstantTimeEq, clear_owned_region};
+use brynja_core::clear_owned_region;
 
 #[cfg(test)]
 mod tests;
@@ -199,7 +199,7 @@ impl<'scope, S: State> Core<'scope, S> {
             let secret = reader.secret(output)?;
             for (actual, expected) in secret.expose().iter().zip(expected) {
                 for difference in &mut cleanup.0.difference {
-                    *difference |= *actual ^ *expected;
+                    brynja_core::accumulate_secret_byte_difference(difference, actual, expected);
                 }
             }
         }
@@ -207,7 +207,6 @@ impl<'scope, S: State> Core<'scope, S> {
             let expected = candidate
                 .as_bytes()
                 .last()
-                .copied()
                 .ok_or(KmacError::InvalidBitString)?;
             let valid = candidate.valid_bits_in_last_byte();
             let output = cleanup
@@ -216,16 +215,14 @@ impl<'scope, S: State> Core<'scope, S> {
                 .get_mut(..1)
                 .ok_or(KmacError::OutputTooLong)?;
             let secret = reader.final_secret(output, valid)?;
-            let actual = secret
-                .expose()
-                .first()
-                .copied()
-                .ok_or(KmacError::SecretMemory)?;
+            let actual = secret.expose().first().ok_or(KmacError::SecretMemory)?;
             for difference in &mut cleanup.0.difference {
-                *difference |= actual ^ expected;
+                brynja_core::accumulate_secret_byte_difference(difference, actual, expected);
             }
         }
-        Ok(KmacVerification::new(cleanup.0.difference.ct_eq(&[0])))
+        Ok(KmacVerification::new(
+            brynja_core::secret_difference_is_zero(&cleanup.0.difference[0]),
+        ))
     }
 }
 

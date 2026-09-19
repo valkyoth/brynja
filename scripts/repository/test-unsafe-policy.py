@@ -20,7 +20,7 @@ def fixture(root: Path) -> None:
         '[workspace.lints.rust]\nunsafe_code = "deny"\n', encoding="utf-8"
     )
     (source / "lib.rs").write_text(
-        "mod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\nmod secret_memory_predicate;\npub mod safe {}\n", encoding="utf-8"
+        "mod secret_memory_difference;\nmod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\nmod secret_memory_predicate;\npub mod safe {}\n", encoding="utf-8"
     )
     shutil.copyfile(ROOT / 'crates/brynja-core/src/secret_memory.rs', source / 'secret_memory.rs')
     hash_root = root / 'crates/brynja-hash-core/src'
@@ -409,6 +409,22 @@ def secret_xor_boundary():
     print(f'Secret XOR rejects {len(mutations)} bounds/shift/memory/wipe/model regressions plus wrapper/visibility bypasses')
 
 
+def secret_difference_boundary():
+    relative = Path('crates/brynja-core/src/secret_memory_difference.rs')
+    source = (ROOT / relative).read_text()
+    _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
+    mutations = [(token, '"nop"') for token in ('"xor eax, eax"', '"mov x4, xzr"', '"mov x5, xzr"', '"cmp xzr, xzr"', '"xor al, byte ptr [{right}]"', '"or byte ptr [{difference}], al"', '"eor w4, w4, w5"', '"orr w4, w4, w5"')]
+    mutations += [('"ldrb w4, [{left}]"', '"ldr w4, [{left}]"'), ('"movzx eax, byte ptr [{left}]"', '"mov eax, dword ptr [{left}]"'), ('not(any(miri, kani))', 'not(kani)'), ('*difference |=', '*difference ^='), ('options(nostack)', 'options(nostack, pure)'), ('out("rax")', 'lateout("rax")'), ('out("x4")', 'lateout("x4")')]
+    for before, after in mutations:
+        assert before in source
+        try:
+            unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
+        except unsafe_policy.UnsafePolicyError:
+            continue
+        raise AssertionError('accepted secret difference regression: ' + before)
+    print(f'Secret difference rejects {len(mutations)} computation/bounds/wipe/model regressions')
+
+
 def secret_predicate_boundary(crate='brynja-core'):
     relative = Path('crates') / crate / 'src/secret_memory_predicate.rs'
     source = (ROOT / relative).read_text()
@@ -473,6 +489,7 @@ if __name__ == "__main__":
     secret_copy_boundary()
     secret_mask_boundary()
     secret_xor_boundary()
+    secret_difference_boundary()
     secret_predicate_boundary()
     secret_predicate_boundary('brynja-hash-core')
     print("unsafe policy rejects eleven exception-boundary regressions")

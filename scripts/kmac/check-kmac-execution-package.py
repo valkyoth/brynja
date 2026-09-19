@@ -93,6 +93,10 @@ def mutations(consumer, roots, env):
     manifest.write_text(manifest.read_text() + '\n[workspace]\n[patch.crates-io]\n' +
         '\n'.join(f'{name}={{path="{path.as_posix()}"}}' for name, path in roots.items()) + '\n')
     cases = (
+        ('../output.rs', 'brynja_core::accumulate_secret_byte_difference(&mut self.value[0], left, right);',
+         'let _ = (left, right);', 'borrowed_comparison_rejects_repeated_mismatches_and_lengths'),
+        ('../verify.rs', 'difference.accumulate(actual, expected);',
+         'difference.accumulate(actual, actual);', 'borrowed_verification_rejects_equal_mismatches_across_chunks'),
         ('../packer.rs', 'brynja_core::xor_secret_byte_bits(pending, byte, position, take, used)',
          'Ok::<(), brynja_core::SecretBitRangeError>(())', 'borrowed_fragments_match_bit_oracle'),
         ('../packer.rs', 'xor_secret_byte_bits(pending, byte, position, take, used)',
@@ -128,7 +132,7 @@ def mutations(consumer, roots, env):
         ('../hardened_in_place/core_state.rs', 'let _ = clear_owned_region(output);', '', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/core_state.rs', 'production && bits < strength', 'production && bits < 0', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/core_state.rs', 'append_suffix(&mut self.state, input, bits,', 'append_suffix(&mut self.state, input, 0,', 'scoped_known_answer'),
-        ('../hardened_in_place/core_state.rs', 'cleanup.0.difference.ct_eq(&[0])', 'cleanup.0.difference.ct_eq(&cleanup.0.difference)', 'scoped_lifecycle_strength'),
+        ('../hardened_in_place/core_state.rs', 'brynja_core::secret_difference_is_zero(&cleanup.0.difference[0])', 'brynja_core::secret_difference_is_zero(&0)', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'key.bit_len() < $strength', 'key.bit_len() < 0', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'let cleanup = Guard(&mut self.metadata);', 'let mut cleanup = core::mem::ManuallyDrop::new(Guard(&mut self.metadata));', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'bytes(b"KMAC")?', 'bytes(b"WRONG")?', 'scoped_known_answer'),
@@ -147,7 +151,7 @@ def mutations(consumer, roots, env):
         control = shared.run(['cargo', 'test', '--offline', '-p', 'brynja-mac-kmac',
             '--features', 'hardened-execution,conformance-testing', '--lib', *profile, 'hardened_in_place'],
             roots['brynja-mac-kmac'], env)
-        if '13 passed; 0 failed' not in control.stdout:
+        if '14 passed; 0 failed' not in control.stdout:
             raise ValueError('scoped KMAC mutation positive control incomplete')
     for file, before, after, test in cases:
         path = root / file
@@ -175,7 +179,7 @@ def algorithm_mutations(consumer, roots, env):
         ('backend.rs', 'b"KMAC"', 'b"WRONG"'),
         ('backend.rs', 'dispatch!(self, update(bytes))', 'let _ = (self, bytes); Ok(())'),
         ('core_state.rs', 'if xof { 0 } else { bits }', 'if xof { bits } else { 0 }'),
-        ('output.rs', 'difference.accumulate(*actual ^ *expected)', 'difference.accumulate(*actual ^ *actual); let _ = expected'),
+        ('output.rs', 'difference.accumulate(actual, expected)', 'difference.accumulate(actual, actual); let _ = expected'),
     )
     def run(profile):
         return subprocess.run(['cargo', 'run', '--offline', '--quiet', *profile, '--', 'portable'],

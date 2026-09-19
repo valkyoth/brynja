@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-core/src/secret_memory_difference.rs"): ("6eb3156c9092a90050efe81c8aa5e136a5c6dbc06e59fd296c6a1e46c1148093", 3, 1, 3),
     Path("crates/brynja-hash-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_xor.rs"): ("fc6c8a3caccc38c9b45795805b266bec60d2fcd10f1414f654d2e407af9bec7d", 3, 1, 3),
@@ -173,6 +174,10 @@ def validate(root: Path) -> None:
     if library.count('mod secret_memory_transfer;') != 1 or 'pub mod secret_memory_transfer' in library:
         fail('secret-transfer module must remain private and declared once')
     writer = (root / 'crates/brynja-core/src/secret_memory.rs').read_text()
+    if library.count('mod secret_memory_difference;') != 1 or 'pub mod secret_memory_difference' in library:
+        fail('secret difference must remain private')
+    if writer.count('crate::secret_memory_difference::accumulate(difference, left, right);') != 1:
+        fail('secret difference lost its borrowed boundary')
     if writer.count('crate::secret_memory_transfer::copy(destination, input)?;') != 1:
         fail('secret initialization lost its checked transfer boundary')
     if library.count('mod secret_memory_mask;') != 1 or 'pub mod secret_memory_mask' in library:
@@ -219,6 +224,23 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
+    elif relative == Path('crates/brynja-core/src/secret_memory_difference.rs'):
+        required = ('pub(crate) unsafe extern "C" fn accumulate_byte(', '#[inline(never)]',
+                    'core::ptr::from_mut(difference)', 'core::ptr::from_ref(left)', 'core::ptr::from_ref(right)',
+                    '"movzx eax, byte ptr [{left}]"', '"xor al, byte ptr [{right}]"', '"or byte ptr [{difference}], al"', '"xor eax, eax"',
+                    '"ldrb w4, [{left}]"', '"ldrb w5, [{right}]"', '"eor w4, w4, w5"',
+                    '"ldrb w5, [{difference}]"', '"orr w4, w4, w5"', '"strb w4, [{difference}]"',
+                    '"mov x4, xzr"', '"mov x5, xzr"', '"cmp xzr, xzr"', 'out("rax") _', 'out("x4") _', 'out("x5") _')
+        if any(token not in text for token in required):
+            fail('secret difference lost byte bounds, computation or cleanup')
+        if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_DIFFERENCE_BEGIN', 'BRYNJA_DIFFERENCE_ERASE', 'BRYNJA_DIFFERENCE_END', 'options(nostack)')):
+            fail('secret difference lost an opaque boundary')
+        normalized = re.sub(r'\s+', '', text)
+        condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
+        if normalized.count('#[cfg('+condition+')]') != 2 or normalized.count('#[cfg(not('+condition+'))]') != 1 or '*difference|=*left^*right;' not in normalized:
+            fail('secret difference native/model separation changed')
+        if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly|target_feature|preserves_flags)\b', re.sub(r'//[^\n]*', '', text)):
+            fail('secret difference changed memory/clobber or baseline ISA contract')
     elif relative in (Path('crates/brynja-core/src/secret_memory_predicate.rs'),
                       Path('crates/brynja-hash-core/src/secret_memory_predicate.rs')):
         required = ('pub(crate) unsafe extern "C" fn mask_is_zero(byte: *const u8, mask: u8) -> u32',

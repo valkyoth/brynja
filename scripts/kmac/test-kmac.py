@@ -60,6 +60,8 @@ def main() -> int:
     reject("conformance-feature", Path("crates/brynja-mac-kmac/src/lib.rs"), '#[cfg(feature = "conformance-testing")]\npub fn kmac128_conformance', "pub fn kmac128_conformance")
     reject("conformance-compile-gate", Path("scripts/checks.sh"), "scripts/kmac/check-kmac-conformance-gate.sh", "true # removed conformance gate")
     reject("constant-time", Path("crates/brynja-mac-kmac/src/output.rs"), "ct_eq", "ordinary_eq")
+    reject("borrowed-comparison", Path("crates/brynja-mac-kmac/src/output.rs"), "accumulate_secret_byte_difference", "ordinary_difference")
+    reject("borrowed-decision", Path("crates/brynja-mac-kmac/src/output.rs"), "secret_difference_is_zero", "ordinary_zero_check")
     reject("official-vector", Path("crates/brynja-mac-kmac/tests/official_vectors.rs"), "E5780B0D3EA6F7D3", "F5780B0D3EA6F7D3")
     reject("differential", Path("scripts/checks.sh"), "python3 scripts/kmac/check-kmac-differential.py", "true")
     reject("miri", Path("scripts/zeroization/check-zeroization-miri.sh"), "-p brynja-mac-kmac", "-p missing-kmac")
@@ -76,7 +78,7 @@ def main() -> int:
     reject("scoped-borrow", scoped / "fixed.rs", "impl for<'scope> FnOnce($state<'scope>) -> R", "impl FnOnce($state<'static>) -> R")
     reject("scoped-terminal", scoped / "core_state.rs", "self.core.state.0 = None;", "")
     reject("scoped-output", scoped / "core_state.rs", "let _ = clear_owned_region(output);", "")
-    reject("scoped-verify", scoped / "core_state.rs", "difference.ct_eq(&[0])", "difference.ct_eq(&[1])")
+    reject("scoped-verify", scoped / "core_state.rs", "secret_difference_is_zero(&cleanup.0.difference[0])", "secret_difference_is_zero(&0)")
     reject("scoped-xof-trailer", scoped / "core_state.rs", "self.finish(input, 0, 0, false)", "self.finish(input, 8, 0, false)")
     reject("scoped-reader-terminal", scoped / "reader.rs", "*self.reader = None;", "")
     reject("scoped-reader-metadata", scoped / "reader.rs", "self.metadata.wipe();", "")
@@ -95,7 +97,7 @@ def main() -> int:
         ('final-bits', 'self.inner.final_secret(output, valid)', 'self.inner.final_secret(output, 8)'),
     ):
         reject('scoped-accelerated-xof-' + label, scoped / 'accelerated/xof.rs', before, after)
-    print("KMAC policy rejects forty-eight ownership, lifecycle, feature, algorithm, test, and dependency regressions")
+    print("KMAC policy rejects ownership, lifecycle, borrowed-comparison, feature, algorithm, test, and dependency regressions")
     return 0
 
 

@@ -878,8 +878,36 @@ path = "assurance/register-cleanup/secret-predicate/src/tests.rs"
 sha256 = "bfa732cb92b75845b684cb9df5ddd93a90f6f300a9e6f77f5532cd232af655ac"
 
 [[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory_difference.rs"
+sha256 = "6eb3156c9092a90050efe81c8aa5e136a5c6dbc06e59fd296c6a1e46c1148093"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory_difference_tests.rs"
+sha256 = "d04f53f5d36c770e3d7c65ebe1751eec9cf4022d4adabef4eed82bcb8de6d512"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/check_secret_difference.py"
+sha256 = "354c4ba206030fc11e20f84da55be2067a32f34fe4d34cf67fbc25b4414446ba"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-difference/Cargo.toml"
+sha256 = "4d231ab52354da917b2c911c516e76cf06c7712c8efc700296f183fadee6c6e4"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-difference/Cargo.lock"
+sha256 = "e3cf4f14a485a9be1bc01d313cdac83ba4452f37a7037663c79d3c3f94fc777f"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-difference/src/lib.rs"
+sha256 = "d56371ccae870ebbf74ac158717688d9191b516f45df6247b4e5117068f0caa5"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-difference/src/tests.rs"
+sha256 = "5e2803ccc6fbb060df25b53e1136ec9bb2107c7e8e87e374278082730f8dcd63"
+
+[[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory.rs"
-sha256 = "43639462e6ffce780b686a2e8f23575a09fb02336d11724e191512f3d01d644f"
+sha256 = "b3c23d66ac1b0528e0db4de8c804239733810df2070c67a342cfd39cfe1b11d5"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory_xor.rs"
@@ -1043,7 +1071,7 @@ sha256 = "846e8faf8aff60286f0903fc26420e397aa48883313df3bef9226ee4aa6b6f18"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/output.rs"
-sha256 = "194598a94ca33aad9b0e885159268c70faf6412f9665ac7e2c9c5bbccad54b75"
+sha256 = "f9b30f0dd6f63059631c3e470e98754ffcfb2571c4396bc864c887287806aebd"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/packer.rs"
@@ -1111,7 +1139,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "b3347e4b883d12aa1fb8ada3065ce614b04e22ae45df6b76e5e1658db83725a4"
+sha256 = "2ec5d6c53c91f2a398914f32771ca403d3082a95546cfbde0e1a2e14facf7937"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

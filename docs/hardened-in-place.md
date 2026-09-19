@@ -760,6 +760,16 @@ length; callers must bound it at ingestion. No accumulated-message length or
 preflight query is exposed. An update failure destroys the borrowed state and
 clears metadata immediately, including a recoverable unwind caught by the caller.
 
+Portable, scoped and execution verification borrow each generated/candidate
+byte into a shared comparison primitive. The intermediate OR-of-XOR difference
+remains in the existing guarded byte; no per-byte difference is returned to
+Rust. A borrowed predicate exposes only the final authentication decision.
+The baseline x86-64/little-endian Arm boundary explicitly clears its working
+registers and normalizes flags on normal return. Other targets and Miri/Kani
+retain the safe model without that guarantee. Public candidate lengths still
+govern verification work. This is not complete caller/register/spill erasure,
+and the application must not expose partial accumulators as an oracle.
+
 An outer metadata guard and the underlying cSHAKE scope guard independently
 cover forgotten handles. Finalization transfers only reference-bearing handles
 into the cSHAKE reader. Secret-output errors clear the full supplied destination;

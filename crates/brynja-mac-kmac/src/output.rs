@@ -104,7 +104,7 @@ impl KmacVerification {
 pub(crate) fn compare_bytes(expected: &[u8], candidate: &[u8]) -> KmacVerification {
     let mut difference = VerificationDifference::new();
     for (left, right) in expected.iter().zip(candidate.iter()) {
-        difference.accumulate(*left ^ *right);
+        difference.accumulate(left, right);
     }
     let lengths = expected.len().ct_eq(&candidate.len());
     KmacVerification::new(lengths.and(difference.is_zero()))
@@ -119,19 +119,49 @@ impl VerificationDifference {
         Self { value: [0] }
     }
 
-    pub(crate) fn accumulate(&mut self, value: u8) {
-        if let Some(current) = self.value.first_mut() {
-            *current |= value;
-        }
+    pub(crate) fn accumulate(&mut self, left: &u8, right: &u8) {
+        brynja_core::accumulate_secret_byte_difference(&mut self.value[0], left, right);
     }
 
     pub(crate) fn is_zero(&self) -> Choice {
-        self.value.ct_eq(&[0])
+        brynja_core::secret_difference_is_zero(&self.value[0])
     }
 }
 
 impl Drop for VerificationDifference {
     fn drop(&mut self) {
         let _ = clear_owned_region(&mut self.value);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn borrowed_comparison_rejects_repeated_mismatches_and_lengths() -> Result<(), crate::KmacError>
+    {
+        let expected = [7_u8; 129];
+        for size in [0, 1, 63, 64, 65, 128, 129] {
+            assert_eq!(
+                super::compare_bytes(
+                    &expected,
+                    expected.get(..size).ok_or(crate::KmacError::SecretMemory)?
+                )
+                .expose_public(),
+                size == expected.len()
+            );
+        }
+        assert!(super::compare_bytes(&expected, &expected).expose_public());
+        for position in [0, 63, 64, 128] {
+            let mut candidate = expected;
+            *candidate
+                .get_mut(position)
+                .ok_or(crate::KmacError::SecretMemory)? ^= 1;
+            assert!(!super::compare_bytes(&expected, &candidate).expose_public());
+            if position != 0 {
+                candidate[0] ^= 1;
+            }
+            assert!(!super::compare_bytes(&expected, &candidate).expose_public());
+        }
+        Ok(())
     }
 }

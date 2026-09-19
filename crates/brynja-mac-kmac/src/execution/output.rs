@@ -61,7 +61,7 @@ pub(super) fn verify(
             .ok_or(Error::OutputTooLong)?;
         let secret = core.secret(destination, valid, last)?;
         for (actual, expected) in secret.expose().iter().zip(expected) {
-            difference.accumulate(*actual ^ *expected);
+            difference.accumulate(actual, expected);
         }
     }
     core.cancel();

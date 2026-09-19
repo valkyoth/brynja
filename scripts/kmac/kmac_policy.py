@@ -172,7 +172,8 @@ def validate(root: Path) -> None:
     scoped = loaded[CRATE / "src/hardened_in_place/core_state.rs"]
     for token in ("state: Borrowed<S>", "cleanup: Guard<'scope>",
                   "self.core.state.0 = None;", "self.core.cleanup.0.wipe();",
-                  "let _ = clear_owned_region(output);", "difference.ct_eq(&[0])"):
+                  "let _ = clear_owned_region(output);", "secret_difference_is_zero(&cleanup.0.difference[0])",
+                  "accumulate_secret_byte_difference(difference, actual, expected)"):
         require(scoped, token, "scoped KMAC cleanup/verification")
     scoped_fixed = loaded[CRATE / "src/hardened_in_place/fixed.rs"]
     for token in ("sponge: cshake::$storage", "metadata: Metadata",
@@ -228,9 +229,11 @@ def validate(root: Path) -> None:
     for token in (
         "pub struct KmacTag", "pub struct KmacSecretOutput",
         "pub struct KmacVerification", "ct_eq", "clear_owned_region",
+        "brynja_core::accumulate_secret_byte_difference(&mut self.value[0], left, right);",
+        "brynja_core::secret_difference_is_zero(&self.value[0])",
     ):
         require(output, token, "KMAC output boundary")
-    if output.count("ct_eq") != 2:
+    if output.count("ct_eq") != 1:
         fail("KMAC constant-time comparison inventory changed")
     policy = loaded[CRATE / "src/policy.rs"]
     for token in (

@@ -157,7 +157,7 @@ impl<'scope, S: State> Core<'scope, S> {
                 .split_last()
                 .ok_or(TupleHashError::InvalidBitString)?;
             core.append(prefix)?;
-            core.append_bits(*last, input.valid_bits_in_last_byte())?;
+            core.append_bits(last, input.valid_bits_in_last_byte())?;
         }
         write(&mut core.cleanup.0.remaining, remaining)?;
         write(&mut core.cleanup.0.input_bits, total)?;
@@ -221,8 +221,13 @@ impl<'scope, S: State> Core<'scope, S> {
         // Preserve bulk absorption even after a partial-bit tuple member.
         for chunk in input.chunks(168) {
             for (byte, target) in chunk.iter().zip(metadata.staging.iter_mut()) {
-                *target = metadata.pending[0] | (*byte << used);
-                metadata.pending[0] = *byte >> shift;
+                brynja_core::copy_secret_region(core::slice::from_mut(target), &metadata.pending)
+                    .map_err(|_| TupleHashError::SecretMemory)?;
+                brynja_core::xor_secret_byte_bits(target, byte, 0, shift, used)
+                    .map_err(|_| TupleHashError::SecretMemory)?;
+                let _ = clear_owned_region(&mut metadata.pending);
+                brynja_core::xor_secret_byte_bits(&mut metadata.pending[0], byte, shift, used, 0)
+                    .map_err(|_| TupleHashError::SecretMemory)?;
             }
             state.update(
                 metadata
@@ -234,14 +239,21 @@ impl<'scope, S: State> Core<'scope, S> {
         }
         Ok(())
     }
-    fn append_bits(&mut self, byte: u8, valid: u8) -> Result<(), TupleHashError> {
+    fn append_bits(&mut self, byte: &u8, valid: u8) -> Result<(), TupleHashError> {
         let state = self.state.as_mut().ok_or(TupleHashError::StateConsumed)?;
         let metadata = &mut *self.cleanup.0;
         if valid > 8 || metadata.used[0] >= 8 {
             return Err(TupleHashError::InvalidBitString);
         }
         for position in 0..valid {
-            metadata.pending[0] |= ((byte >> position) & 1) << metadata.used[0];
+            brynja_core::xor_secret_byte_bits(
+                &mut metadata.pending[0],
+                byte,
+                position,
+                1,
+                metadata.used[0],
+            )
+            .map_err(|_| TupleHashError::InvalidBitString)?;
             metadata.used[0] = metadata.used[0]
                 .checked_add(1)
                 .ok_or(TupleHashError::MessageTooLong)?;

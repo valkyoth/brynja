@@ -594,6 +594,18 @@ compiler-created copy of length metadata. Scoped portable and accelerated
 TupleHash/XOF workspaces use this encoder; complete register/spill qualification
 remains unfinished.
 
+TupleHash's partial item bytes now remain borrowed through bit insertion in
+the portable, execution and scoped packers. Their zero, unused pending bits are
+filled by the reviewed bit-fragment XOR helper. Execution and scoped packers
+also use borrowed copying and fragment insertion to form each staged byte and
+retain its carry; they keep the existing 168-byte bulk absorption and erase
+staging after use. No secret byte is loaded into Rust arithmetic at these sites.
+An independent bit-packing model checks alignments, tail widths and chunk
+boundaries, and both portable/execution packing are compared with separately
+packed cSHAKE input. Failure/unwind tests retain owner cleanup. This does not
+qualify metadata, freely movable owners, verification, compiler spills or
+whole-API register erasure.
+
 ## Scoped fixed TupleHash
 
 `brynja_hash_tuple::hardened_in_place::{TupleHash128Workspace, TupleHash256Workspace}`

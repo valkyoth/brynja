@@ -1071,7 +1071,7 @@ sha256 = "845400daa8451df50a08d98c7c45e7660a19d17a4e3216e87b2abe59af75eae9"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/core_state.rs"
-sha256 = "a0039452e42567d0c12c51ae44def4d99ca31cb21f0518236ed29b0304bc1488"
+sha256 = "58eba7e097bb9cd75f0ae9bce5fbe19764f366e7c7a513ce12b92163468a8564"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/item.rs"
@@ -1111,7 +1111,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "152ba929feacc09df7a0a2b4b896a0a8e20531c8ea5e082fd631e247827e436c"
+sha256 = "8e22dc43963a6119a61aa4cd81111e5df4ba83378554bfb742fdc8461cae285f"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

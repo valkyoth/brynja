@@ -42,6 +42,8 @@ def main() -> int:
     reject("unsafe", Path("crates/brynja-hash-tuple/src/output.rs"), "use brynja_hash_sha3", "unsafe fn bypass() {}\nuse brynja_hash_sha3")
     reject("domain", Path("crates/brynja-hash-tuple/src/backend.rs"), 'b"TupleHash"', 'b"RawHash"')
     reject("item-prefix", Path("crates/brynja-hash-tuple/src/core_state.rs"), "prefix.left(bits)", "prefix.right(bits)")
+    reject("borrowed-fragment", Path("crates/brynja-hash-tuple/src/core_state.rs"), "byte: &u8, valid: u8", "byte: u8, valid: u8")
+    reject("fragment-insertion", Path("crates/brynja-hash-tuple/src/core_state.rs"), "brynja_core::xor_secret_byte_bits(pending, byte, position, 1, used)", "Ok::<(), brynja_core::SecretBitRangeError>(())")
     reject("fixed-trailer", Path("crates/brynja-hash-tuple/src/core_state.rs"), "suffix.right(output_bits)", "suffix.left(output_bits)")
     reject("reader-borrow", Path("crates/brynja-hash-tuple/src/backend.rs"), "backend: &'a mut Backend", "backend: Backend")
     reject("in-place-transition", Path("crates/brynja-hash-tuple/src/backend.rs"), "state.enter_squeezing_in_place(tail)?", "state.finalize_xof_erasing_source()?")
@@ -89,7 +91,7 @@ def main() -> int:
         except tuplehash_policy.TupleHashPolicyError:
             continue
         raise RuntimeError("accepted borrowed encoding regression: " + old)
-    print("TupleHash policy rejects forty encoding, lifecycle, cleanup, API, proof, dynamic-analysis, code-generation, test, and dependency regressions")
+    print("TupleHash policy rejects forty-two encoding, lifecycle, cleanup, API, proof, dynamic-analysis, code-generation, test, and dependency regressions")
     loaded = {path: tuplehash_policy.read(ROOT, path) for path in tuplehash_policy.FILES}
     mutations = [(tuplehash_policy.CRATE / 'src' / name, token)
                  for name, tokens in tuplehash_policy.SCOPED_TOKENS.items() for token in tokens]

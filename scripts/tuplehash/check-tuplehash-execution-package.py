@@ -126,6 +126,16 @@ def mutations(consumer, roots, env):
         for field in ('pending', 'used', 'items', 'remaining', 'input_bits', 'output_bits', 'phase', 'staging')
     ]
     cases += [
+        ('../core_state.rs', 'brynja_core::xor_secret_byte_bits(pending, byte, position, 1, used)',
+         'Ok::<(), brynja_core::SecretBitRangeError>(())', 'borrowed_staging_matches_independently_packed_cshake'),
+        ('../core_state.rs', 'xor_secret_byte_bits(pending, byte, position, 1, used)',
+         'xor_secret_byte_bits(pending, byte, 0, 1, used)', 'borrowed_staging_matches_independently_packed_cshake'),
+        ('core_state.rs', '&self.metadata.pending,', '&[0],',
+         'borrowed_staging_matches_independently_packed_cshake'),
+        ('core_state.rs', 'xor_secret_byte_bits(target, byte, 0, carry_shift, used)',
+         'xor_secret_byte_bits(target, byte, 0, carry_shift, 0)', 'borrowed_staging_matches_independently_packed_cshake'),
+        ('core_state.rs', 'byte,\n                    carry_shift,\n                    used,',
+         'byte,\n                    0,\n                    used,', 'borrowed_staging_matches_independently_packed_cshake'),
         ('core_state.rs', '.and_then(|n| n.checked_add(bits))', '',
          'begin_preflights_the_complete_item_but_commits_only_its_prefix'),
         ('core_state.rs', 'write_counter(&mut core.metadata.input_bits, total)?;\n        write_counter(&mut core.metadata.remaining, bits)?;',
@@ -224,6 +234,11 @@ def scoped_mutations(roots, env):
     cases = [('core_state.rs', f'clear_owned_region(&mut self.{field})', f'core::hint::black_box(&mut self.{field})')
              for field in ('pending', 'used', 'items', 'remaining', 'input_bits', 'phase', 'staging')]
     cases += [
+        ('core_state.rs', 'core::slice::from_mut(target), &metadata.pending', 'core::slice::from_mut(target), &[0]'),
+        ('core_state.rs', 'xor_secret_byte_bits(target, byte, 0, shift, used)',
+         'xor_secret_byte_bits(target, byte, 0, shift, 0)'),
+        ('core_state.rs', 'xor_secret_byte_bits(&mut metadata.pending[0], byte, shift, used, 0)',
+         'xor_secret_byte_bits(&mut metadata.pending[0], byte, 0, used, 0)'),
         ('core_state.rs', 'self.0.wipe();', ''),
         ('core_state.rs', 'self.core.cancel();', ''),
         ('core_state.rs', 'self.state = None;', ''),
@@ -245,7 +260,7 @@ def scoped_mutations(roots, env):
     ]
     command = ['cargo', 'test', '--offline', '--lib', 'hardened_in_place::']
     for profile in ([], ['--release']):
-        if '13 passed; 0 failed' not in shared.run(command + profile, crate, env).stdout:
+        if '15 passed; 0 failed' not in shared.run(command + profile, crate, env).stdout:
             raise ValueError('scoped TupleHash mutation control incomplete')
     for name, before, after in cases:
         path = root / name

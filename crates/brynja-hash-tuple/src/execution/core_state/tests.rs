@@ -129,3 +129,95 @@ fn operation_guard_clears_on_early_return() -> Result<(), Error> {
     cleared(&core);
     Ok(())
 }
+
+#[test]
+fn borrowed_staging_matches_independently_packed_cshake() -> Result<(), Error> {
+    for wide in [false, true] {
+        for used in 0..8 {
+            for valid in 1..=8 {
+                for length in [0, 1, 167, 168, 169, 336, 337] {
+                    let mut input = [0_u8; 337];
+                    for (n, byte) in input.iter_mut().enumerate() {
+                        *byte = n.to_le_bytes()[0];
+                    }
+                    let input = input.get(..length).ok_or(Error::SecretMemory)?;
+                    let mut reference = [0_u8; 341];
+                    let mut count = 0_usize;
+                    for (byte, width) in core::iter::once((0xa5, used))
+                        .chain(input.iter().map(|byte| (*byte, 8)))
+                        .chain(core::iter::once((0x96, valid)))
+                        .chain([(0, 8), (1, 8)])
+                    // right_encode(0) for XOF
+                    {
+                        for position in 0..width {
+                            *reference.get_mut(count / 8).ok_or(Error::SecretMemory)? |=
+                                ((byte >> position) & 1) << (count % 8);
+                            count += 1;
+                        }
+                    }
+                    let valid_output = if count.is_multiple_of(8) {
+                        8
+                    } else {
+                        u8::try_from(count % 8).map_err(|_| Error::SecretMemory)?
+                    };
+                    let packed = Fips202BitString::new(
+                        reference
+                            .get(..count.div_ceil(8))
+                            .ok_or(Error::SecretMemory)?,
+                        valid_output,
+                    )
+                    .map_err(|_| Error::InvalidBitString)?;
+                    let mut expected = [0; 32];
+                    let output = crate::Fips202Output::new(&mut expected, 8)
+                        .map_err(|_| Error::InvalidBitString)?;
+                    let name = super::super::bits(b"TupleHash")?;
+                    let custom = super::super::bits(b"")?;
+                    if wide {
+                        brynja_hash_sha3::cshake256_bits(packed, name, custom, output)
+                            .map_err(|_| Error::SecretMemory)?;
+                    } else {
+                        brynja_hash_sha3::cshake128_bits(packed, name, custom, output)
+                            .map_err(|_| Error::SecretMemory)?;
+                    }
+                    let mut core = Core::new(Mode::Portable, wide, custom)?;
+                    core.append_bits(&0xa5, used)?;
+                    core.append(input)?;
+                    core.append_bits(&0x96, valid)?;
+                    assert_eq!(core.metadata.staging, [0; 168]);
+                    core.finish(0)?;
+                    let mut actual = [0xa5; 32];
+                    let secret = core.state.secret(&mut actual, 8, false)?;
+                    assert_eq!(secret.expose(), expected);
+                    drop(secret);
+                    assert_eq!(actual, [0; 32]);
+                    core.cancel();
+                    cleared(&core);
+                    let strength = if wide {
+                        crate::backend::BackendStrength::Bits256
+                    } else {
+                        crate::backend::BackendStrength::Bits128
+                    };
+                    let mut portable = crate::core_state::TupleCore::new(strength, custom)?;
+                    if used != 0 {
+                        let first = [0xa5 & (u8::MAX >> (8 - used))];
+                        portable.push_bit_string(
+                            Fips202BitString::new(&first, used)
+                                .map_err(|_| Error::InvalidBitString)?,
+                        )?;
+                    }
+                    portable.push_bytes(input)?;
+                    let last = [0x96 & (u8::MAX >> (8 - valid))];
+                    portable.push_bit_string(
+                        Fips202BitString::new(&last, valid).map_err(|_| Error::InvalidBitString)?,
+                    )?;
+                    let mut reader = portable.finish_in_place(0)?;
+                    let secret = reader.squeeze_secret(&mut actual)?;
+                    assert_eq!(secret.expose(), expected);
+                    drop(secret);
+                    assert_eq!(actual, [0; 32]);
+                }
+            }
+        }
+    }
+    Ok(())
+}

@@ -136,7 +136,7 @@ impl<'a> Core<'a> {
         } else {
             let (last, prefix) = bytes.split_last().ok_or(Error::InvalidBitString)?;
             core.append(prefix)?;
-            core.append_bits(*last, input.valid_bits_in_last_byte())?;
+            core.append_bits(last, input.valid_bits_in_last_byte())?;
         }
         write_counter(&mut core.metadata.remaining, remaining)?;
         write_counter(&mut core.metadata.input_bits, total)?;
@@ -176,8 +176,22 @@ impl<'a> Core<'a> {
         let carry_shift = 8_u8.checked_sub(used).ok_or(Error::SecretMemory)?;
         for chunk in input.chunks(168) {
             for (byte, target) in chunk.iter().zip(self.metadata.staging.iter_mut()) {
-                *target = self.metadata.pending[0] | (*byte << used);
-                self.metadata.pending[0] = *byte >> carry_shift;
+                brynja_core::copy_secret_region(
+                    core::slice::from_mut(target),
+                    &self.metadata.pending,
+                )
+                .map_err(|_| Error::SecretMemory)?;
+                brynja_core::xor_secret_byte_bits(target, byte, 0, carry_shift, used)
+                    .map_err(|_| Error::SecretMemory)?;
+                let _ = clear_owned_region(&mut self.metadata.pending);
+                brynja_core::xor_secret_byte_bits(
+                    &mut self.metadata.pending[0],
+                    byte,
+                    carry_shift,
+                    used,
+                    0,
+                )
+                .map_err(|_| Error::SecretMemory)?;
             }
             self.state.update(
                 self.metadata
@@ -189,12 +203,19 @@ impl<'a> Core<'a> {
         }
         Ok(())
     }
-    fn append_bits(&mut self, byte: u8, valid: u8) -> Result<(), Error> {
+    fn append_bits(&mut self, byte: &u8, valid: u8) -> Result<(), Error> {
         if valid > 8 || self.metadata.used[0] >= 8 {
             return Err(Error::InvalidBitString);
         }
         for position in 0..valid {
-            self.metadata.pending[0] |= ((byte >> position) & 1) << self.metadata.used[0];
+            brynja_core::xor_secret_byte_bits(
+                &mut self.metadata.pending[0],
+                byte,
+                position,
+                1,
+                self.metadata.used[0],
+            )
+            .map_err(|_| Error::InvalidBitString)?;
             self.metadata.used[0] = self.metadata.used[0]
                 .checked_add(1)
                 .ok_or(Error::MessageTooLong)?;

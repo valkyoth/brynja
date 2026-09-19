@@ -105,7 +105,6 @@ impl TupleCore {
         } else {
             bytes
                 .last()
-                .copied()
                 .map(|byte| (byte, input.valid_bits_in_last_byte()))
         };
         let complete_length = if partial.is_some() {
@@ -128,19 +127,23 @@ impl TupleCore {
             return self.backend.update(input).map_err(TupleHashError::from);
         }
         for byte in input {
-            self.push_bits(*byte, 8)?;
+            self.push_bits(byte, 8)?;
         }
         Ok(())
     }
 
-    fn push_bits(&mut self, byte: u8, valid: u8) -> Result<(), TupleHashError> {
+    fn push_bits(&mut self, byte: &u8, valid: u8) -> Result<(), TupleHashError> {
+        if valid > 8 || self.used() >= 8 {
+            return Err(TupleHashError::InvalidBitString);
+        }
         for position in 0..valid {
-            let bit = (byte >> position) & 1;
             let used = self.used();
             let Some(pending) = self.pending.first_mut() else {
                 return Err(TupleHashError::SecretMemory);
             };
-            *pending |= bit << used;
+            // The destination bit is unused and zero; XOR inserts the bit.
+            brynja_core::xor_secret_byte_bits(pending, byte, position, 1, used)
+                .map_err(|_| TupleHashError::InvalidBitString)?;
             self.set_used(used.checked_add(1).ok_or(TupleHashError::MessageTooLong)?);
             if self.used() == 8 {
                 self.flush()?;

@@ -12,6 +12,14 @@ REVIEW = 'scripts/md5/hardened-reviewed.json'
 LEAF = 'crates/brynja-legacy-md5/'
 HOST = 'crates/brynja-legacy-md5-std/'
 CHECKS = {
+    LEAF+'src/batch/hardened_execution/in_place.rs': (
+        "batch: &'scope mut super::Batch<'authority>", "batch: super::Batch<'authority>",
+        'for lane in &mut batch.owner.lanes { lane.wipe(); }',
+        'clear(self.batch); if !self.complete { self.batch.executor.quarantine(); }',
+        'clear(&mut self.batch);', 'scope.batch.executor.ready()?;',
+        'scope.complete = true;', 'self.batch.run(inputs, control)?;',
+        'SecretRegionInitialization::begin(output.as_flattened_mut())',
+        'self.batch.owner.commit_public(output);', 'impl Drop for Batch'),
     LEAF+'src/cpu/scratch.rs': tuple('clear_owned_region(self.'+field+'.as_flattened_mut())' for field in ('initial','words','work','temporary')) + ('impl Drop for Scratch', 'self.wipe();'),
     LEAF+'src/cpu/secret.rs': ('session::require_architecture(backend)?;', 'authority.ensure_healthy()?;',
         'authority.compress(&mut scratch)?;', 'if actual != &value.to_le_bytes()',
@@ -105,7 +113,7 @@ def validate(root=ROOT, reviewed=True):
     for name in paths(root):
         if name.endswith(('.rs','.py')) and len(ordinary.read(root,name).splitlines()) > 500:
             raise ValueError('hardened MD5 module review limit')
-    for name in (LEAF+'src/cpu/scratch.rs',LEAF+'src/cpu/secret.rs',LEAF+'src/batch/hardened_execution/mod.rs',LEAF+'src/batch/hardened_execution/vector.rs'):
+    for name in (LEAF+'src/cpu/scratch.rs',LEAF+'src/cpu/secret.rs',LEAF+'src/batch/hardened_execution/mod.rs',LEAF+'src/batch/hardened_execution/vector.rs',LEAF+'src/batch/hardened_execution/in_place.rs'):
         source=ordinary.read(root,name).decode().split('#[cfg(test)]')[0]
         source='\n'.join(line for line in source.splitlines() if not line.lstrip().startswith('//'))
         if re.search(r'\b(?:ManuallyDrop|MaybeUninit|forget|transmute|Vec|Box)\b|\.(?:unwrap|expect)\(|\b(?:panic|todo|unimplemented)!',source):

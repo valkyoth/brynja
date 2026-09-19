@@ -58,6 +58,7 @@ def asm_body(text, tokens):
 
 def artifacts_check(mir, llvm, assembly, target, panic):
     mir_check(mir, panic)
+    scoped_check(mir, llvm, assembly)
     # A wrapper or ordinary kernel cannot donate instructions to this identity.
     arch = 'x86' if target.startswith('x86_64') else 'arm'
     body = asm_body(assembly, ('brynja_legacy_md5', arch+'_secret', '6kernel8compress'))
@@ -69,6 +70,67 @@ def artifacts_check(mir, llvm, assembly, target, panic):
     require(len(wipes) == 1, 'LLVM wipe identity')
     for width in (128, 512, 96):
         require(re.search(r'call[^\n]*clear_owned_region[^\n]*i64[^\n]*\b'+str(width)+r'\)', wipes[0]), 'LLVM complete region width '+str(width))
+
+
+def scoped_check(mir, llvm, assembly):
+    """Exact borrowed guard receiver plus eight unrolled whole-owner wipe calls.
+
+    This binds the selected compiler's actual layout, not a public Rust layout
+    promise or a whole-API register/spill-erasure claim.
+    """
+    prefix = 'src/batch/hardened_execution/in_place.rs:'
+    compact = lambda text: re.sub(r'\s+', '', re.sub(r'Storage(?:Live|Dead)\(_\d+\);', '', text))
+    functions = re.findall(r'^define [^\n]*\{.*?^}', llvm, re.M | re.S)
+    clears = [f for f in functions if all(t in f.splitlines()[0] for t in ('hardened_execution', 'in_place', '5clear'))]
+    require(len(clears) == 1, 'scoped clear LLVM identity')
+    header, *lines = clears[0].splitlines()
+    argument = re.search(r'(%[\w.]+)\)', header)
+    require(argument is not None, 'scoped clear LLVM argument')
+    receiver = argument[1]
+    require(receiver.startswith('%'), 'scoped clear LLVM receiver')
+    instructions = [line.strip() for line in lines
+                    if line.strip() and not line.lstrip().startswith(';') and line.strip() not in ('start:', '}')]
+    require(len(instructions) == 17 and instructions[-1] == 'ret void', 'scoped whole-lane straight-line cleanup')
+    for lane in range(8):
+        offset = 8 + 113 * lane
+        pointer = re.fullmatch(r'(%[\w.]+) = getelementptr inbounds(?: nuw)? i8, ptr '+re.escape(receiver)+r', i64 '+str(offset), instructions[2*lane])
+        require(pointer is not None, 'scoped lane receiver offset '+str(lane))
+        call = instructions[2*lane+1]
+        require(re.fullmatch(r'(?:tail )?call void @[^ (]*Md5Owner[^ (]*wipe[^ (]*\(ptr [^\n,()]*'+re.escape(pointer[1])+r'\)(?: #\d+)?',
+                             re.sub(r'dereferenceable\(\d+\)', 'dereferenceable', call)), 'scoped exact lane wipe '+str(lane))
+    body = asm_body(assembly, ('brynja_legacy_md5', 'hardened_execution', 'in_place', '5clear'))
+    if '@GOTPCREL' in body:
+        # Closed x86 grammar: the callee is held in r14 then copied to rax
+        # before the final tail call. Do not count arbitrary indirect calls.
+        instructions = [re.sub(r'\s+', ' ', line.strip()) for line in body.splitlines()
+                        if re.match(r'^\s+[a-z]', line)]
+        loads = [i for i in instructions if re.fullmatch(r'movq [^ ]*Md5Owner[^ ]*wipe[^ ]*@GOTPCREL\(%rip\), %r14', i)]
+        require(len(loads) == 1, 'scoped assembly wipe callee')
+        expected = ['pushq %r14', 'pushq %rbx', 'pushq %rax', 'movq %rdi, %rbx',
+                    'addq $8, %rdi', loads[0], 'callq *%r14']
+        for lane in range(1, 7):
+            expected += [f'leaq {8+113*lane}(%rbx), %rdi', 'callq *%r14']
+        expected += ['addq $799, %rbx', 'movq %rbx, %rdi', 'movq %r14, %rax',
+                     'addq $8, %rsp', 'popq %rbx', 'popq %r14', 'jmpq *%rax']
+        require(instructions == expected, 'scoped assembly exact eight receivers/calls')
+    else:
+        require(len(re.findall(r'(?:callq?|jmpq?|bl|b)\s+[^\n]*Md5Owner[^\n]*wipe', body)) == 8, 'scoped emitted eight-lane clearing')
+    for owner in ('Scope', 'Batch'):
+        blocks = flow.basic_blocks(flow.exact_function(mir, (prefix, '::drop(', owner+"<'_, '_>")))
+        pattern = (r'(?P<p>_\d+)=(?:no_retag)?copy\(\(\*_1\)\.0:&mutbatch::hardened_execution::Batch<\x27_>\);'
+                   r'_\d+=clear\(move(?P=p)\)->\[return:bb1,unwind(?:unreachable|continue)\];}')
+        require(re.fullmatch(pattern, compact(blocks['bb0'])), 'scoped borrowed destructor receiver '+owner)
+        if owner == 'Scope':
+            require(re.fullmatch(r'(?P<c>_\d+)=copy\(\(\*_1\)\.1:bool\);switchInt\(move(?P=c)\)->\[0:bb2,otherwise:bb3\];}', compact(blocks['bb1'])), 'scoped incomplete-scope failure branch')
+        identity = rf'(?:{len(owner)}{owner}|\.\.{owner}\$)'
+        destructors = [f for f in functions if all(t in f.splitlines()[0] for t in ('hardened_execution', 'in_place', '4drop'))
+                       and re.search(identity, f.splitlines()[0])]
+        require(len(destructors) == 1, 'scoped destructor LLVM identity '+owner)
+        calls = [line for line in destructors[0].splitlines() if not line.lstrip().startswith(';') and re.search(r'\b(?:call|invoke)\b', line)]
+        require(sum('in_place' in line and '5clear' in line for line in calls) == 1, 'scoped destructor LLVM clearing '+owner)
+        symbol = re.search(r'@([^ (]+)', destructors[0].splitlines()[0])[1].strip('"')
+        body = asm_body(assembly, (symbol,))
+        require(re.search(r'(?:callq?|jmpq?|bl|b)\s+[^\n]*in_place[^\n]*5clear', body), 'scoped destructor assembly clearing '+owner)
 
 
 def compile_and_check(output, compiler, target, panic='abort', manifest=None):
@@ -88,4 +150,17 @@ def compile_and_check(output, compiler, target, panic='abort', manifest=None):
         require(len(paths)==1,'artifact identity '+extension)
         contents.append(paths[0].read_text())
     artifacts_check(*contents,target,panic)
+    for index, old, new in (
+        (0, 'clear(move', 'omitted(move'),
+        (0, '0: bb2, otherwise: bb3', '1: bb2, otherwise: bb3'),
+        (1, 'i64 799', 'i64 686'),
+        (1, '5clear', '5other'),
+        (2, '5clear', '5other'),
+    ):
+        require(old in contents[index], 'live scoped compiler mutation')
+        changed = list(contents)
+        changed[index] = changed[index].replace(old, new)
+        try: scoped_check(*changed)
+        except (ValueError, flow.MirCleanupFlowError): pass
+        else: raise AssertionError('scoped compiler mutation survived: '+old)
     return contents

@@ -101,6 +101,7 @@ fn assert_reusable(executor: &Executor) -> Result {
 #[test]
 fn all_masks_bits_and_unequal_lengths_match_portable_with_exact_work() -> Result {
     let executor = executor()?;
+    let mut scoped = brynja_legacy_md5::hardened_execution::in_place::Workspace::new(&executor);
     let mut vector_total = 0;
     for mask in 0..256u16 {
         for valid in 1..=8 {
@@ -150,6 +151,25 @@ fn all_masks_bits_and_unequal_lengths_match_portable_with_exact_work() -> Result
                     .digest_secret(&inputs, &mut secret, &mut control)?;
             assert_eq!(owned.expose(), expected.as_flattened());
             assert_eq!(report, secret_report);
+            drop(owned);
+            assert_eq!(secret, [[0; 16]; 8]);
+            public.fill([0xa5; 16]);
+            let scoped_report = scoped.with(|batch| {
+                batch.digest_public(
+                    &inputs,
+                    &mut public,
+                    &mut Md5BatchControl::new(128),
+                    PublicDeclassification::acknowledge(),
+                )
+            })??;
+            assert_eq!(public, expected);
+            assert_eq!(scoped_report, report);
+            secret.fill([0xa5; 16]);
+            let (owned, scoped_report) = scoped.with(|batch| {
+                batch.digest_secret(&inputs, &mut secret, &mut Md5BatchControl::new(128))
+            })??;
+            assert_eq!(owned.expose(), expected.as_flattened());
+            assert_eq!(scoped_report, report);
             drop(owned);
             assert_eq!(secret, [[0; 16]; 8]);
             let wanted_vector = executor.backend().map_or(0, |b| {

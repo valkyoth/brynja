@@ -13,7 +13,8 @@ CPU_SOURCES = ('mod.rs','constants.rs','kat.rs','session.rs','session/tests.rs',
                'scratch.rs','secret.rs','x86_secret.rs','arm_secret.rs',
                'x86_secret/kernel.rs','arm_secret/kernel.rs','transfer.rs','transfer/tests.rs')
 BATCH_SOURCES = ('mod.rs','control.rs','owner.rs','vector.rs','tests.rs','execution.rs','execution/tests.rs',
-                 'hardened_execution/mod.rs','hardened_execution/vector.rs')
+                 'hardened_execution/mod.rs','hardened_execution/vector.rs',
+                 'hardened_execution/in_place.rs','hardened_execution/in_place/tests.rs')
 BOUND = [CPU+p for p in CPU_SOURCES]+[BATCH+p for p in BATCH_SOURCES]+[
     LEAF+'Cargo.toml',LEAF+'src/lib.rs',LEAF+'tests/cpu.rs',
     ADAPTER+'Cargo.toml',ADAPTER+'src/lib.rs',ADAPTER+'README.md',

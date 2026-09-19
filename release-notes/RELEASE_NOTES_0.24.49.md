@@ -54,6 +54,11 @@ No crates are selected for publication.
   output under the operation gate. Complete compiler-copy/register/spill
   qualification remains unfinished.
 
+- Add scoped hardened MD5 SIMD batches in caller-owned eight-lane workspaces.
+  Consuming public/secret output reuses the existing engine, exact work accounting
+  and quarantine policy. Independent scope cleanup survives forgotten handles;
+  ordinary request rejection preserves executor reuse. No complete compiler-copy,
+  register/spill erasure or repair of MD5's collision weakness is claimed.
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied
   Keccak authority stays borrowed through incremental and partial-bit output;
   scope cleanup covers forgotten readers and recoverable unwinding. Errors are

@@ -30,6 +30,21 @@ Each `executor.batch()` creates eight non-cloneable clearing lane owners.
 the eight ordered 16-byte slots. The caller's original inputs and any copies
 the caller creates remain the caller's responsibility.
 
+`hardened_execution::in_place::Workspace::new(&executor)` instead stores those
+eight lane owners in caller-owned storage. `with` lends a consuming `Batch`
+handle; only the public IV is restored in place before secret processing. The
+handle cannot escape or overlap another scope, and neither handle nor workspace
+implements Send/Sync/Copy/Clone/Debug. Its consuming public/secret digest methods
+use the same hardened engine, selection and work accounting as the by-value API.
+A separate parent guard clears all lanes even if the handle is forgotten. Explicit
+`cancel` clears without revoking a healthy executor. A callback unwind quarantines
+the executor; an ordinary returned request error preserves its existing policy.
+Failed admission never invokes the callback and cannot clear buffers captured
+only by it. A secret digest method begins destination ownership before processing;
+the returned output owner may outlive the workspace scope. Abort cannot execute
+scope destructors. This borrowing profile does not prove complete compiler-copy,
+register or spill erasure, and does not change historical by-value APIs.
+
 ## Workload and confidentiality
 
 All eight slots keep their order. `None` is inactive; `Some(empty)` hashes an

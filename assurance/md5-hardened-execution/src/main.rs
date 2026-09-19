@@ -72,6 +72,30 @@ fn execute(executor: &Executor, line: &[u8]) -> Result<(), Box<dyn Error>> {
     if secret != [[0; 16]; 8] {
         return Err(invalid().into());
     }
+    let mut workspace = brynja_legacy_md5::hardened_execution::in_place::Workspace::new(executor);
+    let mut scoped = output.map(|lane| lane.map(|byte| !byte));
+    let scoped_report = workspace.with(|batch| {
+        batch.digest_public(
+            &inputs,
+            &mut scoped,
+            &mut Md5BatchControl::new(144),
+            PublicDeclassification::acknowledge(),
+        )
+    })??;
+    if scoped != output || scoped_report != report {
+        return Err(invalid().into());
+    }
+    secret.fill([0xa5; 16]);
+    let (owned, scoped_report) = workspace.with(|batch| {
+        batch.digest_secret(&inputs, &mut secret, &mut Md5BatchControl::new(144))
+    })??;
+    if owned.expose() != output.as_flattened() || scoped_report != report {
+        return Err(invalid().into());
+    }
+    drop(owned);
+    if secret != [[0; 16]; 8] {
+        return Err(invalid().into());
+    }
     for lane in output {
         for byte in lane {
             print!("{byte:02x}");

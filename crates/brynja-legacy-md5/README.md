@@ -35,6 +35,7 @@ First-party, allocation-free `no_std` legacy MD5 for explicit compatibility.
 | Ordinary batch AVX2 / NEON execution | 🚧 In progress; native qualification pending | ❌ No |
 | Hardened batch AVX2 / NEON execution | 🚧 In progress; retest and native evidence pending | ❌ No |
 | Caller-owned portable scoped workspace | 🚧 Implemented; residue qualification pending | ❌ No |
+| Caller-owned scoped hardened AVX2 / NEON batches | 🚧 Implemented; residue qualification pending | ❌ No |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -151,7 +152,8 @@ state. No capacity/length query, snapshot or reset is exposed. Start a new scope
 to reuse the cleared workspace.
 
 This profile is portable single-message hashing, not the AVX2/NEON batch API.
-Scoped SIMD batch ownership remains follow-up work. It does not promise complete
+Scoped SIMD batch ownership is available separately under `hardened-execution`.
+Neither scoped profile promises complete
 register, spill or compiler-copy erasure; forgetting a separate secret output
 still prevents its Drop, and abort cannot run guards. Memory hygiene does not
 repair MD5's collision or chosen-prefix weaknesses.
@@ -220,9 +222,10 @@ let executor = Executor::for_compiled_target(Mode::Prefer).map_err(|_| "selectio
 let message = [0x41; 128];
 let inputs = [Some(BitString::new(&message, 8).map_err(|_| "bits")?); 8];
 let mut bytes = [[0; 16]; 8];
-let (secret, report) = executor.batch().digest_secret(
+let mut workspace = brynja_legacy_md5::hardened_execution::in_place::Workspace::new(&executor);
+let (secret, report) = workspace.with(|batch| batch.digest_secret(
     &inputs, &mut bytes, &mut Md5BatchControl::new(24),
-).map_err(|_| "batch")?;
+)).map_err(|_| "scope admission")?.map_err(|_| "batch")?;
 assert_eq!(secret.expose().len(), 128);
 assert_eq!(report.work.active_lanes, 8);
 drop(secret);
@@ -230,6 +233,12 @@ assert_eq!(bytes, [[0; 16]; 8]);
 # }
 # Ok::<(), &'static str>(())
 ```
+
+The scoped workspace keeps eight lane owners borrowed throughout processing;
+its parent guard clears them even when a batch handle is forgotten. It can be
+reused after normal scope completion. Failed scope admission never invokes the
+callback and cannot clear output buffers captured only by that callback. A digest
+method clears every secret destination byte it receives on failure or unwind.
 
 Use `digest_public` with explicit `PublicDeclassification` only when releasing
 results publicly. Caller inputs/copies, compiler copies, registers/spills, caches,

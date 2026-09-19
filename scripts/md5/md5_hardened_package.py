@@ -65,6 +65,7 @@ def check(consumer, root, env):
         finally: path.write_text(source)
     run(consumer,env,['test','--locked','--offline','--test','hardened_execution'])
     cleanup_mutants(consumer,root,env)
+    scoped_checks(consumer, root, env)
     print(f'Packaged hardened MD5: {count} ownership/classification negatives; {len(mutations)} compiled algorithm/health mutants rejected')
 
 
@@ -97,3 +98,51 @@ def cleanup_mutants(consumer,root,env):
 def require_error(result, codes):
     if not any(code in result.stderr for code in codes):
         raise ValueError('negative failed for an unrelated compiler error:\n'+result.stderr)
+
+
+def scoped_checks(consumer, root, env):
+    library = consumer/'src/lib.rs'
+    original = library.read_text()
+    prefix = 'use brynja_legacy_md5::hardened_execution::{Executor, in_place::{Workspace, Batch}};\n'
+    negatives = [(f'fn bound<T:{trait}>(){{}} fn probe(){{bound::<{owner}>();}}', ('E0277',))
+                 for owner in ("Workspace<'static>", "Batch<'static, 'static>")
+                 for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug')]
+    negatives += [
+        ('fn probe(b:Batch){b.cancel(); b.cancel();}', ('E0382',)),
+        ('fn probe(w:&mut Workspace){let _=w.with(|b| {b.cancel(); w.with(|_| ())});}', ('E0500', 'E0501', 'E0499')),
+        ('fn probe()->Workspace<\'static>{let e=Executor::portable(); Workspace::new(&e)}', ('E0515',)),
+        ('fn probe(b:Batch){let _=b.digest_public(&[None;8],&mut [[0;16];8],&mut brynja_legacy_md5::Md5BatchControl::new(0));}', ('E0061',)),
+    ]
+    try:
+        for source, codes in negatives:
+            library.write_text(prefix+source)
+            require_error(run(consumer, env, ['check', '--locked', '--offline', '--lib'], False), codes)
+    finally:
+        library.write_text(original)
+    path = root/'unpacked/brynja-legacy-md5-0.1.0/src/batch/hardened_execution/in_place.rs'
+    original = path.read_text()
+    mutations = (
+        ('for lane in &mut batch.owner.lanes {', 'for lane in batch.owner.lanes.iter_mut().take(7) {'),
+        ('clear(self.batch);\n        if !self.complete', 'if !self.complete'),
+        ('if !self.complete {', 'if false {'),
+        ('clear(&mut self.batch);', 'core::hint::black_box(&mut self.batch);'),
+        ('lane.chaining_state.copy_from_slice(&[', 'lane.chaining_state.copy_from_slice(&[1 ^'),
+        ('scope.batch.executor.ready()?;', 'core::hint::black_box(scope.batch.executor);'),
+        ('fn drop(&mut self) {\n        clear(self.batch);\n    }', 'fn drop(&mut self) {}'),
+        ('self.batch.owner.commit_public(output);', 'core::hint::black_box(output);'),
+        ('initialization\n                .write(&lane.output_staging)', 'initialization\n                .write(&[0; 16])'),
+    )
+    command = ['test', '--locked', '--offline', '-p', 'brynja-legacy-md5', '--lib', 'scoped_batch']
+    for profile in ([], ['--release']):
+        run(consumer, env, command+profile)
+        for old, new in mutations:
+            if original.count(old) != 1: raise ValueError('ambiguous scoped batch mutant: '+old)
+            try:
+                path.write_text(original.replace(old, new))
+                result = run(consumer, env, command+profile, False)
+                if 'test result: FAILED' not in result.stdout:
+                    raise ValueError('scoped batch mutant survived or failed compilation: '+old+'\n'+result.stderr)
+            finally:
+                path.write_text(original)
+        run(consumer, env, command+profile)
+    print(f'Scoped hardened MD5 batch: {len(negatives)} ownership/classification negatives; {2*len(mutations)} compiled mutants rejected')

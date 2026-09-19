@@ -6,6 +6,7 @@
 //! and Drop. Registers, compiler copies/spills, caches, dumps, caller copies,
 //! abort, termination and mem::forget remain explicit residual risks. This is
 //! neither independent cryptographic verification nor FIPS/military approval.
+pub mod in_place;
 mod vector;
 use super::{Md5BatchControl, Md5BatchError, Md5BatchReport, owner::BatchOwner};
 pub use crate::cpu::secret::Authority;

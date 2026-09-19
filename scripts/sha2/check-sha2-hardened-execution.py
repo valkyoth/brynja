@@ -50,7 +50,12 @@ def mutations(consumer, roots, env, mode, extra):
         (leaf / 'engine.rs', 'self.execution.compress(self.wide, guard.owner)?;', 'let _ = &guard.owner;'),
         (leaf / 'engine.rs', 'self.execution.compress(self.wide, &mut self.owner)?;', 'let _ = &self.owner;'),
         (leaf / 'general.rs', 'parameter.initial_words()', '[0; 8]'),
-        (leaf / 'engine.rs', 'byte | (0x80 >> bits)', 'byte | (0x80 >> bits.saturating_add(1))'),
+        (leaf / 'engine.rs', '0xff, 0x80 >> bits', '0xff, 0x80 >> bits.saturating_add(1)'),
+        (leaf / 'engine.rs', 'brynja_core::copy_secret_region(\n                guard', 'omitted_secret_copy(\n                guard'),
+        (leaf / 'engine.rs', 'brynja_core::copy_secret_region(\n        destination', 'omitted_secret_copy(\n        destination'),
+        (leaf / 'engine.rs', 'brynja_core::copy_secret_region(\n                core::slice::from_mut(delimiter)', 'omitted_secret_copy(\n                core::slice::from_mut(delimiter)'),
+        (leaf / 'engine.rs', 'core::slice::from_ref(byte)', '&[0]'),
+        (leaf / 'named.rs', 'brynja_core::copy_secret_region(\n                    destination,\n                    &self.engine.owner.output_staging[..$size],\n                )?;', ''),
         (leaf / 'engine.rs', '.checked_add(1)', '.checked_add(0)'),
         (leaf / 'general.rs', 'self.parameter.last_byte_mask()', '0xff'),
     ]
@@ -62,7 +67,11 @@ def mutations(consumer, roots, env, mode, extra):
         if before not in original:
             raise ValueError('stale mutation: ' + before)
         try:
-            path.write_text(original.replace(before, after))
+            mutated = original.replace(before, after)
+            if 'omitted_secret_copy(' in after:
+                # Keep the real calls and error flow well-typed; omit only writes.
+                mutated += '\nfn omitted_secret_copy(_: &mut [u8], _: &[u8]) -> Result<(), brynja_core::SecretMemoryError> { Ok(()) }\n'
+            path.write_text(mutated)
             for profile in ([], ['--release']):
                 command = ['cargo', 'run', '--offline', *profile, *extra, '--', mode]
                 result = run(command, consumer, env, success=False)

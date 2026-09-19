@@ -132,6 +132,7 @@ def execution_mutants(crate, env):
         ('IV initialization', '$initialize(&mut self.engine, $initial);', ''),
         ('secret finalization', 'self.engine.finish(input, $size, 0xff)?;\n                output.write', 'output.write'),
         ('secret output guard', 'self.secret(None, begin(destination, $size)?)', 'self.engine.check_bytes(0)?; self.secret(None, begin(destination, $size)?)'),
+        ('public output transfer', 'brynja_core::copy_secret_region(destination, self.engine.owner.staged($size).ok_or(Error::OutputLength)?)?;', ''),
     )
     for release in (False, True):
         command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path', str(crate/'Cargo.toml'), '--features', 'hardened-execution', '--lib', 'hardened_execution::in_place']
@@ -146,7 +147,7 @@ def execution_mutants(crate, env):
             result = run(command, env, success=False)
             if result.returncode == 0 or 'test result: FAILED' not in result.stdout + result.stderr:
                 raise ValueError('execution mutant must compile and fail at runtime: '+label)
-        print(f'Scoped execution: positive control and six compiled cleanup/output/IV mutants; release={release}: PASS', flush=True)
+        print(f'Scoped execution: positive control and {len(mutations)} compiled cleanup/output/IV mutants; release={release}: PASS', flush=True)
     path.write_text(original)
 
 

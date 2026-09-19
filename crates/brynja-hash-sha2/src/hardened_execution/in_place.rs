@@ -142,7 +142,7 @@ macro_rules! scoped {
             fn public(self, input: Option<BitString<'_>>, destination: &mut [u8], _authority: PublicDeclassification) -> Result<Report, Error> {
                 if destination.len() != $size { return Err(Error::OutputLength); }
                 self.engine.finish(input, $size, 0xff)?;
-                destination.copy_from_slice(self.engine.owner.staged($size).ok_or(Error::OutputLength)?);
+                brynja_core::copy_secret_region(destination, self.engine.owner.staged($size).ok_or(Error::OutputLength)?)?;
                 Ok(self.engine.report)
             }
         }

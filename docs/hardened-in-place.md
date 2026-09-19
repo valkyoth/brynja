@@ -82,6 +82,14 @@ existing `SecretOutput`/`Report` contract: route and work counts are public
 metadata, not hidden message-length guarantees. Public output still requires
 explicit declassification; all secret errors clear the complete destination.
 
+The shared hardened execution engine now transfers input, padding, compression
+blocks and output staging through the reviewed borrowed-copy helper. It retains
+the partial input byte by reference and applies the public padding/output masks
+through `apply_secret_byte_mask`; named public commits use borrowed copying too.
+Public IV initialization and length metadata are unchanged. This removes those
+explicit ordinary-copy sites, not caller-side bit-string validation copies or
+all whole-API register/spill residue. Existing cleanup guards remain mandatory.
+
 Handle and outer-scope guards independently clear hash storage, including
 forgotten handles and recoverable unwind. Existing CPU operation guards clear
 private scratch and retain their quarantine behavior. Neither the active engine

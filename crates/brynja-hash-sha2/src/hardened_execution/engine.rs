@@ -117,12 +117,15 @@ impl<'a> Engine<'a> {
                 remaining.len(),
             );
             let end = offset.checked_add(copied).ok_or(Error::Failed)?;
-            guard
-                .owner
-                .partial_input
-                .get_mut(offset..end)
-                .ok_or(Error::Failed)?
-                .copy_from_slice(remaining.get(..copied).ok_or(Error::Failed)?);
+            brynja_core::copy_secret_region(
+                guard
+                    .owner
+                    .partial_input
+                    .get_mut(offset..end)
+                    .ok_or(Error::Failed)?,
+                remaining.get(..copied).ok_or(Error::Failed)?,
+            )
+            .map_err(|_| Error::Failed)?;
             guard.owner.set_buffer_len(end).map_err(|_| Error::Failed)?;
             remaining = remaining.get(copied..).ok_or(Error::Failed)?;
             if guard.owner.buffer_len() == block_bytes {
@@ -163,9 +166,14 @@ impl<'a> Engine<'a> {
         let total_bits = self.check_bits(additional)?;
         self.execution.check(self.wide)?;
         let partial = if let Some(input) = input {
-            let (bytes, tail) = input.split();
-            self.update(bytes)?;
-            tail
+            if input.is_byte_aligned() {
+                self.update(input.as_bytes())?;
+                None
+            } else {
+                let (tail, bytes) = input.as_bytes().split_last().ok_or(Error::Failed)?;
+                self.update(bytes)?;
+                Some((tail, input.valid_bits_in_last_byte()))
+            }
         } else {
             None
         };
@@ -178,11 +186,21 @@ impl<'a> Engine<'a> {
             &self.owner.partial_input,
             buffered,
         )?;
-        *self
+        let delimiter = self
             .owner
             .padding_block
             .get_mut(buffered)
-            .ok_or(Error::Failed)? = partial.map_or(0x80, |(byte, bits)| byte | (0x80 >> bits));
+            .ok_or(Error::Failed)?;
+        if let Some((byte, bits)) = partial {
+            brynja_core::copy_secret_region(
+                core::slice::from_mut(delimiter),
+                core::slice::from_ref(byte),
+            )
+            .map_err(|_| Error::Failed)?;
+            brynja_core::apply_secret_byte_mask(delimiter, 0xff, 0x80 >> bits);
+        } else {
+            *delimiter = 0x80;
+        }
         if buffered >= length_start {
             self.padding(block_bytes)?;
             let _ = clear_owned_region(&mut self.owner.padding_block);
@@ -210,11 +228,14 @@ impl<'a> Engine<'a> {
             &self.owner.chaining_state,
             length,
         )?;
-        *self
-            .owner
-            .output_staging
-            .get_mut(length.checked_sub(1).ok_or(Error::Failed)?)
-            .ok_or(Error::Failed)? &= mask;
+        brynja_core::apply_secret_byte_mask(
+            self.owner
+                .output_staging
+                .get_mut(length.checked_sub(1).ok_or(Error::Failed)?)
+                .ok_or(Error::Failed)?,
+            mask,
+            0,
+        );
         Ok(())
     }
     fn padding(&mut self, length: usize) -> Result<(), Error> {
@@ -235,11 +256,11 @@ impl<'a> Engine<'a> {
 
 // Mutable update may be caught across unwind with the stream still alive.
 fn copy_prefix(destination: &mut [u8], source: &[u8], length: usize) -> Result<(), Error> {
-    destination
-        .get_mut(..length)
-        .ok_or(Error::Failed)?
-        .copy_from_slice(source.get(..length).ok_or(Error::Failed)?);
-    Ok(())
+    brynja_core::copy_secret_region(
+        destination.get_mut(..length).ok_or(Error::Failed)?,
+        source.get(..length).ok_or(Error::Failed)?,
+    )
+    .map_err(|_| Error::Failed)
 }
 
 // A guard, not merely the stream's eventual Drop, therefore owns invalidation.

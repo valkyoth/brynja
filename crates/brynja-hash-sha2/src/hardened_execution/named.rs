@@ -80,7 +80,10 @@ macro_rules! named {
                     return Err(Error::OutputLength);
                 }
                 self.engine.finish(input, $size, 0xff)?;
-                destination.copy_from_slice(&self.engine.owner.output_staging[..$size]);
+                brynja_core::copy_secret_region(
+                    destination,
+                    &self.engine.owner.output_staging[..$size],
+                )?;
                 Ok(self.engine.report)
             }
             /// Consumes the stream into an erasing secret destination owner.

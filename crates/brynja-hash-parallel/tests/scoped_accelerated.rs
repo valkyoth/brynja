@@ -10,6 +10,8 @@ use std::panic::{AssertUnwindSafe, catch_unwind};
 
 mod scoped_accelerated {
     use super::*;
+    mod scheduled;
+    mod scheduled_lifecycle;
     mod xof;
     mod xof_lifecycle;
 }

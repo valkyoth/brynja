@@ -13,7 +13,9 @@
   mixed public/secret and final-bit output. Portable scoped scheduled collectors
   now consume exact-plan leaf results, enforce ordered complete collection, and
   retain root/counter storage through fixed/XOF finalization. Accelerated
-  scheduled collection and thread-handoff ownership remain under development.
+  scheduled roots and separate leaf workspaces now bind supplied sessions with
+  unchanged plan provenance and no fallback. Thread-handoff ownership remains
+  under development.
 
 - Extend scoped accelerated TupleHash to XOF128/256 with authority-bound readers,
   mixed public/secret output, consuming partial-bit reads and scope-owned cleanup.

@@ -12,6 +12,11 @@ pub(super) struct Output<R, B> {
     state: R,
     scratch: B,
 }
+impl<R, B> Output<R, B> {
+    pub(super) fn new(state: R, scratch: B) -> Self {
+        Self { state, scratch }
+    }
+}
 macro_rules! port {
     ($state:ident, $reader:ident, $leaf:ident, $size:expr) => {
         impl<'s, 'a> State for Backend<api::$state<'s, 'a>, &'s mut api::$leaf<'a>, &'s mut [u8]> {

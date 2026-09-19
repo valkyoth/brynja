@@ -233,8 +233,8 @@ before returning a scoped root reader; the independent outer guard also handles
 forgotten collectors/readers and recoverable unwind. No accumulated-count or
 preflight query is exposed on the collector. The existing plan's total shape and
 job indices remain caller-visible, and leaf-result metadata is not yet a scoped
-thread-handoff redesign. This is portable scheduling only, not an accelerated
-collector or complete register/spill qualification.
+thread-handoff redesign. This is portable scheduling, not complete
+register/spill qualification.
 
 With the existing default-off `hardened-execution` feature,
 `execution::in_place::ParallelHash128Workspace`/`ParallelHash256Workspace` now
@@ -265,8 +265,24 @@ partial-bit reads use the same scoped output guard as portable XOF. Staging
 bounds each public read, not the total stream, and does not limit secret reads.
 Scope cleanup covers cancelled, forgotten and unwinding readers.
 
-Scoped acceleration remains sequential. Accelerated scheduled collectors and
-thread handoff still need the broader ownership work. Registers, spills and compiler-created
+Explicit accelerated scheduling also provides `execution::in_place::ParallelHash128CollectorWorkspace`/
+`ParallelHash256CollectorWorkspace` and separate `ParallelHash128LeafWorkspace`/
+`ParallelHash256LeafWorkspace`. Roots bind one supplied session; leaf workspaces
+bind their own, possibly from the same authority. Existing exact-plan jobs gain
+only a crate-private execution adapter to preserve typed result provenance.
+Public leaf execution clears its destination even if authority rejects before
+entering the scope. A completed result borrows the plan and destination, not the
+leaf workspace/authority. Later worker revocation cannot change those completed
+bytes. Root merges/finalization and XOF reads check the root's authority.
+
+Scheduled roots reuse the scoped counter/framing guard and transactional output
+adapter. They expose built-in or caller public staging, consumed-leaf merge,
+fixed output and borrowed XOF readers. Caller-selected portable/accelerated root
+and leaf combinations remain explicit; neither supplied route falls back, and
+root route reports do not attest which route produced every leaf. CPU admission,
+authority lifetimes and thread restrictions are unchanged.
+
+Scoped thread handoff still needs the broader ownership work. Registers, spills and compiler-created
 copies remain outside this checkpoint's guarantee; `panic = "abort"` cannot run
 scope destructors.
 

@@ -17,6 +17,8 @@ mod scoped_accelerated;
 
 mod scoped;
 mod scoped_scheduled;
+#[cfg(feature = "execution")]
+mod scoped_scheduled_accelerated;
 
 const MAX_CAMPAIGN_BYTES: u64 = 1024 * 1024;
 const MAX_CASES: usize = 512;
@@ -105,6 +107,15 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
     )?;
     #[cfg(feature = "execution")]
     scoped_accelerated::check(
+        algorithm,
+        custom,
+        input_bits,
+        valid_bits(output_bits),
+        block_size,
+        &output,
+    )?;
+    #[cfg(feature = "execution")]
+    scoped_scheduled_accelerated::check(
         algorithm,
         custom,
         input_bits,

@@ -24,6 +24,8 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "hardened_in_place/accelerated/xof.rs",
     "hardened_in_place/scheduled.rs", "hardened_in_place/scheduled/tests.rs",
     "hardened_in_place/scheduled_core.rs", "hardened_in_place/scheduled_core/tests.rs",
+    "hardened_in_place/accelerated/scheduled.rs", "hardened_in_place/accelerated/scheduled_leaf.rs",
+    "hardened_in_place/accelerated/scheduled_backend.rs",
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
@@ -47,6 +49,7 @@ TESTS = (
     PORTABLE / "tests/scoped_accelerated.rs",
     PORTABLE / "tests/scoped_accelerated/xof.rs", PORTABLE / "tests/scoped_accelerated/xof_lifecycle.rs",
     PORTABLE / "tests/scoped_scheduled.rs",
+    PORTABLE / "tests/scoped_accelerated/scheduled.rs", PORTABLE / "tests/scoped_accelerated/scheduled_lifecycle.rs",
 )
 MANIFESTS = (PORTABLE / "Cargo.toml", STD / "Cargo.toml")
 PUBLIC = (
@@ -75,6 +78,7 @@ DIFFERENTIAL = (
     Path("assurance/parallelhash-differential/tests/scoped.rs"),
     Path("assurance/parallelhash-differential/src/scoped_accelerated.rs"),
     Path("assurance/parallelhash-differential/src/scoped_scheduled.rs"),
+    Path("assurance/parallelhash-differential/src/scoped_scheduled_accelerated.rs"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -113,6 +117,24 @@ def require(text: str, token: str, label: str) -> None:
 
 
 BORROWED_TOKENS = {
+    "hardened_in_place/accelerated/scheduled.rs": (
+        "sponge: api::$storage<'authority>, count: Count, stage: [u8;168]",
+        "api::$storage::new(session)?", "self.sponge.report()", "let guard = CountGuard(count)",
+        "let scratch = Block(scratch)", "Scheduled { state, scratch: &mut *scratch.0 }",
+        "impl for<'scope> FnOnce($collector<'scope, 'plan, 'input, 'authority>) -> R",
+        'sponge.with_bits(byte_string(b"ParallelHash")?', "plan.block_size(), plan.leaf_count()",
+        "self.inner.merge(self.plan.checked_index(&result), result.expose())",
+        "pub fn merge(&mut self, result: crate::$result<'plan, '_>)",
+        "self.inner.public(output, valid)", "self.inner.secret(output, valid)", "Output::new(self.inner.xof()?)",
+    ),
+    "hardened_in_place/accelerated/scheduled_leaf.rs": (
+        "sponge: api::$storage<'authority>", "api::$storage::new(session)?", "self.sponge.report()",
+        "clear_owned_region(output)", "job.execute_with(output,", "state.finalize_bits_xof(input)?.squeeze_secret(output)",
+    ),
+    "hardened_in_place/accelerated/scheduled_backend.rs": (
+        "self.state.update(&[])", "self.state.update(input)", "self.check()?",
+        "Output::new(self.state.finalize_xof()?, self.scratch)", "clear_owned_region(output)", "Err(Error::StateConsumed)",
+    ),
     "hardened_in_place/scheduled.rs": (
         "sponge: api::$storage, count: Count", "let guard = CountGuard(&mut self.count);",
         "impl for<'scope> FnOnce($collector<'scope, 'plan, 'input>) -> R",
@@ -203,7 +225,8 @@ BORROWED_TOKENS = {
     "core_state.rs": ("let mut prefix = Encoded::empty();", "prefix.left(block_size)?", "suffix.right(self.leaf_count())?", "suffix.right(output_bits)?"),
     "scheduled.rs": ("let mut prefix = Encoded::empty();", "prefix.left(block)?", "suffix.right(self.expected)?", "suffix.right(output_bits)?",
         "pub(crate) fn checked_index", "!core::ptr::eq(identity, &self.identity)",
-        "count != self.leaves", "block != self.block_size"),
+        "count != self.leaves", "block != self.block_size", "pub(crate) fn execute_with",
+        "operation(self.input, output)", "identity: self.identity"),
     "execution/encoding.rs": ("pub(super) const fn empty() -> Self", "pub(super) fn left(&mut self,", "pub(super) fn right(&mut self,",
         "crate::secret_encoding::write(&mut self.bytes, &mut self.length, value, true)",
         "crate::secret_encoding::write(&mut self.bytes, &mut self.length, value, false)",

@@ -37,6 +37,7 @@ block-size parameter `B`. Cryptographic code is first-party Rust.
 | Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |
 | Caller-owned portable scoped fixed-output/XOF workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |
 | Portable scoped exact-plan collectors with fixed/XOF output | 🚧 Implemented; qualification pending | ❌ No |
+| Accelerated scoped exact-plan collectors and leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |
 | Scoped accelerated fixed-output/XOF root/leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |
 | Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |
 | Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
@@ -183,8 +184,59 @@ the merge counter before output begins. Scope exit also covers forgotten
 collectors/readers and recoverable unwinding. Plan shape and job indices remain
 caller-visible; this API does not hide message length. Existing leaf-result
 metadata and thread handoff are not a new whole-register/spill erasure guarantee.
-These new collectors and their leaf jobs are portable; accelerated scoped
-scheduling and scoped threaded executors remain follow-up work.
+These collectors and ordinary plan-job `execute` calls are portable. Explicit
+accelerated scheduling is available as described below. Scoped threaded
+executors and thread handoff remain follow-up work.
+
+### Accelerated scheduled collection
+
+Enable `hardened-execution` and use the corresponding
+`execution::in_place::ParallelHash128CollectorWorkspace` or
+`ParallelHash256CollectorWorkspace`. Each constructor accepts one supplied root
+session. A separate `ParallelHash128LeafWorkspace`/`ParallelHash256LeafWorkspace`
+binds the leaf session and executes consumed plan jobs into exact-width typed
+results. Root and leaf workspaces may share the same authority or use separate
+authorities. Neither silently falls back.
+
+```rust
+use brynja_hash_parallel::{
+    ParallelHash128Plan, ParallelHashError, ParallelHashSecretOutput,
+    execution::{KeccakSession, in_place::{
+        ParallelHash128CollectorWorkspace, ParallelHash128LeafWorkspace,
+    }},
+};
+fn scheduled<'out>(root_session: KeccakSession<'_>, leaf_session: KeccakSession<'_>,
+    input: &[u8], output: &'out mut [u8])
+    -> Result<ParallelHashSecretOutput<'out>, ParallelHashError>
+{
+    let plan = ParallelHash128Plan::new(input, 64)?;
+    let mut workspace = ParallelHash128CollectorWorkspace::new(root_session)?;
+    let mut worker = ParallelHash128LeafWorkspace::new(leaf_session)?;
+    workspace.with(&plan, b"application", |mut root| {
+        let mut leaf_output = [0; 32];
+        for index in 0..plan.leaf_count() {
+            root.merge(worker.execute(plan.job(index)?, &mut leaf_output)?)?;
+        }
+        root.finalize_secret(output)
+    })?
+}
+```
+
+The root checks its authority at merge/finalization and throughout XOF reading.
+Leaf execution checks its own authority and clears its destination on every
+failure, including rejected scope entry. Completed results hold provenance and
+bytes, not a live worker-authority lease: they may outlive the worker, and later
+leaf revocation does not invalidate them. The collector accepts correctly typed
+portable leaves too; using portable leaves or a portable root is an explicit
+caller choice, not automatic fallback or a claim that every leaf was accelerated.
+`report()` observes each workspace's bound route/health, not per-result history.
+
+Fixed public output and each XOF public read must fit the built-in 168-byte
+stage. `with_scratch`/`with_bits_and_scratch` accept larger caller staging and
+clear it on scope exit, including failed setup. Secret output is not
+staging-limited. Fixed/XOF output, exact-plan/order enforcement and scope cleanup
+match the portable collectors. CPU authorities and these workspaces are not
+transferable between threads.
 
 ### Incremental execution
 
@@ -193,7 +245,7 @@ For scoped fixed-output acceleration, enable `hardened-execution` and use
 Their constructors require separate hardened root and leaf sessions; both may
 borrow the same established authority. Neither silently falls back. The block
 buffer length is B, not a thread count. These scopes execute leaves sequentially;
-scheduled/threaded scopes remain follow-up work.
+scoped threaded execution remains follow-up work.
 
 ```rust
 use brynja_hash_parallel::{

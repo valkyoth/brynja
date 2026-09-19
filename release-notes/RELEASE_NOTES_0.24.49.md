@@ -18,8 +18,10 @@ No crates are selected for publication.
   authority after leaf completion, with terminal errors, mixed public/secret
   reads and consuming final-bit output. Portable scoped scheduled collectors
   now borrow root/counter storage for exact-plan fixed/XOF completion, consuming
-  and clearing each ordered leaf result. Accelerated scheduling, threaded
-  ownership and complete compiler-copy/register/spill qualification remain unfinished.
+  and clearing each ordered leaf result. Accelerated scheduled roots and separate
+  leaf workspaces now preserve the same plan/order and cleanup contracts with
+  explicit supplied sessions. Threaded ownership and complete
+  compiler-copy/register/spill qualification remain unfinished.
 
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied
   Keccak authority stays borrowed through incremental and partial-bit output;

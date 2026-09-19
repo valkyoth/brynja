@@ -98,15 +98,27 @@ macro_rules! plan {
                 self,
                 output: &'output mut [u8; $size],
             ) -> Result<$result<'plan, 'output>, ParallelHashError> {
-                $leaf(self.input, output)
-                    .map(|inner| $result {
-                        index: self.index,
-                        leaf_count: self.leaf_count,
-                        block_size: self.block_size,
-                        identity: self.identity,
-                        inner,
-                    })
-                    .map_err(ParallelHashError::from)
+                self.execute_with(output, |input, output| {
+                    $leaf(input, output).map_err(ParallelHashError::from)
+                })
+            }
+
+            pub(crate) fn execute_with<'output>(
+                self,
+                output: &'output mut [u8; $size],
+                operation: impl FnOnce(
+                    Fips202BitString<'input>,
+                    &'output mut [u8; $size],
+                )
+                    -> Result<HardenedSha3SecretOutput<'output>, ParallelHashError>,
+            ) -> Result<$result<'plan, 'output>, ParallelHashError> {
+                operation(self.input, output).map(|inner| $result {
+                    index: self.index,
+                    leaf_count: self.leaf_count,
+                    block_size: self.block_size,
+                    identity: self.identity,
+                    inner,
+                })
             }
         }
 

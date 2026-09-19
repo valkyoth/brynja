@@ -90,6 +90,19 @@ def scoped_negatives():
             (f'fn probe(s: {collector}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
             (f'fn probe(mut s: {collector}, leaf: {other}) {{ let _ = s.merge(leaf); }}', 'E0308'),
         ]
+        collector = f'crate::execution::in_place::ParallelHash{strength}Collector'
+        leaf_workspace = f'crate::execution::in_place::ParallelHash{strength}LeafWorkspace'
+        for name in (collector + "<'static, 'static, 'static, 'static>", collector + "Workspace<'static>", leaf_workspace + "<'static>"):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn bound<T:{bound}>() {{}} fn probe() {{ bound::<{name}>(); }}', 'E0277'))
+        cases += [
+            (f'fn probe(s: {collector}) {{ let _ = s.finalize_secret(&mut []); s.cancel(); }}', 'E0382'),
+            (f'fn probe(mut s: {collector}, leaf: {result}) {{ let _ = s.merge(leaf); let _ = leaf.expose(); }}', 'E0382'),
+            (f'fn probe(s: {collector}) {{ let _ = s.finalize_public(&mut []); }}', 'E0061'),
+            (f'fn probe(s: {collector}) {{ let _ = s.merged_leaves(); }}', 'E0599'),
+            (f'fn probe(s: {collector}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
+            (f'fn probe(mut s: {collector}, leaf: {other}) {{ let _ = s.merge(leaf); }}', 'E0308'),
+        ]
     return cases
 
 
@@ -245,6 +258,19 @@ def main():
         # Additional live hardware regressions in an explicitly required static
         # lane. Generic builds still run all existing portable mutation cases.
         if os.environ.get('BRYNJA_REQUIRE_SCOPED_PARALLEL') == '1':
+            cases += [
+                ('brynja-hash-parallel', 'src/hardened_in_place/accelerated/' + file, before, after,
+                 ['--test', 'scoped_accelerated', 'scheduled'])
+                for file, before, after in (
+                    ('scheduled.rs', 'self.plan.checked_index(&result)', 'Ok(0)'),
+                    ('scheduled.rs', 'byte_string(b"ParallelHash")?', 'byte_string(b"WRONG")?'),
+                    ('scheduled.rs', 'self.inner.public(output, valid)', 'Ok(())'),
+                    ('scheduled.rs', 'self.inner.secret(output, valid)', 'self.inner.secret(output, 8)'),
+                    ('scheduled_leaf.rs', 'clear_owned_region(output)', 'core::hint::black_box(&mut *output)'),
+                    ('scheduled_leaf.rs', 'state.finalize_bits_xof(input)?', 'state.finalize_xof()?'),
+                    ('scheduled_backend.rs', 'self.state.update(input).map_err(Error::from)', 'Ok(())'),
+                )
+            ]
             cases += [
                 ('brynja-hash-parallel', 'src/hardened_in_place/accelerated/xof.rs', before, after,
                  ['--test', 'scoped_accelerated', 'xof'])

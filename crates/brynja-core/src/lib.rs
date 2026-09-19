@@ -36,6 +36,7 @@ pub mod secret;
 pub mod secret_destruction;
 pub mod secret_memory;
 mod secret_memory_mask;
+mod secret_memory_predicate;
 mod secret_memory_transfer;
 mod secret_memory_volatile;
 mod secret_memory_xor;
@@ -143,7 +144,7 @@ pub use secret_destruction::{
 pub use secret_memory::{
     OwnedRegionClearComplete, OwnedSecretRegion, SecretBitRangeError, SecretMemoryError,
     SecretRegionInitialization, apply_secret_byte_mask, clear_owned_region, copy_secret_region,
-    xor_secret_byte_bits,
+    secret_byte_mask_is_zero, xor_secret_byte_bits,
 };
 pub use secure_random::{
     MAX_RESEED_INTERVAL, RandomPurpose, RandomRuntimeGeneration, RandomStateDestruction,

@@ -57,6 +57,8 @@ def main() -> int:
     # Accept the real inventory before testing mutations, so a stale baseline
     # cannot make every negative test pass for an unrelated policy failure.
     policy.validate(ROOT)
+    reject("borrowed canonical predicate", lambda root: replace(root, policy.BIT_STRING,
+        "brynja_core::secret_byte_mask_is_zero(byte, unused_mask)", "(*byte & unused_mask == 0)"))
     reject("unsafe", lambda root: replace(root, policy.KECCAK, "pub(super) fn permute", "pub(super) unsafe fn permute"))
     reject("public permutation", lambda root: replace(root, policy.KECCAK, "pub(super) fn permute", "pub fn permute"))
     reject("round count", lambda root: replace(root, policy.KECCAK, "0x8000_0000_8000_8008,", ""))
@@ -136,7 +138,7 @@ def main() -> int:
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects seventy boundary, permutation, padding, SP 800-185, cSHAKE, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
+    print("portable SHA-3 policy rejects seventy-one boundary, permutation, padding, SP 800-185, cSHAKE, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
     return 0
 
 

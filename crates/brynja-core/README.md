@@ -85,6 +85,19 @@ Arm boundary clears its own working register on normal return; portable models
 do not provide that guarantee. The surrounding region still needs its cleanup
 guard, and caller copies/spills and interruption snapshots remain out of scope.
 
+`secret_byte_mask_is_zero(byte, mask)` checks selected bits through a shared
+borrow, without returning the byte. The Boolean result is **explicitly
+declassified**; repeated arbitrary masks can reveal the whole byte. Use it only
+where disclosing that validity predicate is acceptable, such as canonical
+partial-byte validation. Native x86-64/little-endian Arm clears the helper's
+secret working register and makes condition flags input-independent on normal
+return. It does not erase the input, caller copies/spills or interruption state.
+
+```rust
+assert!(brynja_core::secret_byte_mask_is_zero(&0x07, 0xf8));
+assert!(!brynja_core::secret_byte_mask_is_zero(&0x87, 0xf8));
+```
+
 Typed workspace domains prevent swapping secret/plaintext/transcript/
 certificate/output arenas, but a domain label alone does not clear memory.
 

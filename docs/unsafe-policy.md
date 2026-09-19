@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: seventy-seven exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy-eight exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-seven exact modules: the private core volatile clearer and
+Rust in only seventy-eight exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -210,6 +210,17 @@ is required. The wrapper retains the original scratch destruction; owner size,
 API and ordinary public hashing remain unchanged. Other architectures and
 Miri/Kani retain the safe model without this register claim. This does not
 qualify higher-level absorb/squeeze, framing, input/output or moved-owner copies.
+
+Core's private `secret_memory_predicate.rs` validates selected bits of one
+shared byte without returning the original byte. Its public mask and Boolean
+result are explicitly declassified: repeated arbitrary masks can reveal the
+byte. Exact baseline x86-64/little-endian Arm assembly performs a single byte
+read, normalizes the predicate, then clears the secret working register and
+sets flags to input-independent values on normal return. The input is unchanged.
+Other targets and Miri/Kani use a safe model without the register claim.
+`assurance/register-cleanup/secret-predicate` checks exhaustive predicates,
+read-only guard pages, immediate register/flags observations and compiled
+mutants. Caller copies, spills and interruption snapshots are not covered.
 
 Core's private `secret_memory_mask.rs` implements `(byte & keep) | set` for one
 exclusively borrowed byte and public masks. Exact one-byte loads/stores and

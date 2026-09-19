@@ -110,11 +110,12 @@ def local_abi_definitions() -> None:
             destination.write_text(source)
             first_party_rust_crypto.validate(root)
             for mutated, message in (
-                (re.sub(r'(\bunsafe extern "C" fn [^{]+)\) \{', r'\1);', source, count=1), 'local Rust ABI definition'),
+                (re.sub(r'(\bunsafe extern "C" fn [^{]+)\{', r'\1;', source, count=1), 'local Rust ABI definition'),
                 (source + '\nunsafe extern "C" { fn foreign_crypto(); }', 'foreign ABI'),
                 (source + '\nunsafe extern "system" { fn foreign_crypto(); }', 'foreign ABI'),
                 (source + '\n#[link(name="crypto")] mod native {}', 'native link'),
             ):
+                assert mutated != source, 'local ABI mutation did not change source'
                 destination.write_text(mutated)
                 reject(root, message)
             destination.write_text(source)

@@ -411,6 +411,13 @@ OPERATION_CONTRACTS = {
 }
 
 REVIEWED_SOURCE_PATHS = {
+    "crates/brynja-core/src/secret_memory_predicate.rs",
+    "crates/brynja-core/tests/secret_predicate.rs",
+    "assurance/register-cleanup/check_secret_predicate.py",
+    "assurance/register-cleanup/secret-predicate/Cargo.toml",
+    "assurance/register-cleanup/secret-predicate/Cargo.lock",
+    "assurance/register-cleanup/secret-predicate/src/lib.rs",
+    "assurance/register-cleanup/secret-predicate/src/tests.rs",
     "crates/brynja-core/src/secret_memory_xor.rs",
     "crates/brynja-core/src/secret_memory_xor_tests.rs",
     "assurance/register-cleanup/check_secret_xor.py",

@@ -838,8 +838,36 @@ evidence = ["crates/brynja-test-support/tests/deterministic_random.rs"]
 storage = "unpublished-test-only"
 
 [[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory_predicate.rs"
+sha256 = "d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c"
+
+[[reviewed-source]]
+path = "crates/brynja-core/tests/secret_predicate.rs"
+sha256 = "86cf628f419b4e63c0a7d53bbd1c7b8be283a685a2bdff91d6ca871ba95ba8a9"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/check_secret_predicate.py"
+sha256 = "795bc7ae5bf9de95d6ec6b3e8a078dcf11788dea388ced2362361c7af6578e63"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-predicate/Cargo.toml"
+sha256 = "9904c058662c5d9950ba5aac675cf87e2cb2884d1648bc2efcb21472bd628a9e"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-predicate/Cargo.lock"
+sha256 = "3397cff34156f78308a2cb9d77d2bad9de10229e956b4f5230820d18a7b50455"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-predicate/src/lib.rs"
+sha256 = "a71e21393f7d8c245a1966893f8a6946369f50a5f11685290531fd5a2cdad9ed"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-predicate/src/tests.rs"
+sha256 = "bfa732cb92b75845b684cb9df5ddd93a90f6f300a9e6f77f5532cd232af655ac"
+
+[[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory.rs"
-sha256 = "5f428e5522cc0552d1668de1e1dc2834e23ba52321effa026fe681ff203f22b0"
+sha256 = "43639462e6ffce780b686a2e8f23575a09fb02336d11724e191512f3d01d644f"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory_xor.rs"
@@ -1071,7 +1099,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "c0cbb91505c68e084635a3a64d272dae29df9c4b6f411c72e0d1318de21d77fb"
+sha256 = "eb70dafa4f7b531db08578aaa924a4328cd55ffc76276fb1e9eee6820b8a501e"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

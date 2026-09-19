@@ -20,7 +20,7 @@ def fixture(root: Path) -> None:
         '[workspace.lints.rust]\nunsafe_code = "deny"\n', encoding="utf-8"
     )
     (source / "lib.rs").write_text(
-        "mod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\npub mod safe {}\n", encoding="utf-8"
+        "mod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\nmod secret_memory_predicate;\npub mod safe {}\n", encoding="utf-8"
     )
     shutil.copyfile(ROOT / 'crates/brynja-core/src/secret_memory.rs', source / 'secret_memory.rs')
     for relative in unsafe_policy.ALLOWED:
@@ -405,6 +405,46 @@ def secret_xor_boundary():
     print(f'Secret XOR rejects {len(mutations)} bounds/shift/memory/wipe/model regressions plus wrapper/visibility bypasses')
 
 
+def secret_predicate_boundary():
+    relative = Path('crates/brynja-core/src/secret_memory_predicate.rs')
+    source = (ROOT / relative).read_text()
+    _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
+    mutations = [
+        ('byte: *const u8', 'byte: *const u64'),
+        ('"movzx r10d, byte ptr [{byte}]"', '"mov r10d, [{byte}]"'),
+        ('"ldrb w4, [{byte}]"', '"ldr w4, [{byte}]"'),
+        *[(token, '"nop"') for token in ('"and r10d, {mask:e}"',
+          '"sete {result:l}"', '"movzx {result:e}, {result:l}"', '"xor r10d, r10d"',
+          '"and w4, w4, {mask:w}"', '"cmp w4, #0"', '"cset {result:w}, eq"',
+          '"mov x4, xzr"', '"cmp xzr, xzr"')],
+        ('result = out(reg) result', 'result = lateout(reg) result'),
+        ('out("r10") _', 'lateout("r10") _'),
+        ('out("x4") _', 'lateout("x4") _'),
+        ('options(nostack)', 'options(nostack, preserves_flags)'),
+        ('not(any(miri, kani))', 'not(kani)'),
+        ('*byte & mask == 0', '*byte == 0'),
+    ]
+    for before, after in mutations:
+        assert before in source
+        try:
+            unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
+        except unsafe_policy.UnsafePolicyError:
+            continue
+        raise AssertionError('accepted secret predicate regression: ' + before)
+    with tempfile.TemporaryDirectory(prefix='brynja-secret-predicate-policy-') as temporary:
+        root = Path(temporary)
+        fixture(root)
+        writer = root / 'crates/brynja-core/src/secret_memory.rs'
+        original = writer.read_text()
+        writer.write_text(original.replace('crate::secret_memory_predicate::apply(byte, mask)', 'false'))
+        require_rejection(root, 'predicate lost its boundary')
+        writer.write_text(original)
+        library = root / 'crates/brynja-core/src/lib.rs'
+        library.write_text(library.read_text().replace('mod secret_memory_predicate;', 'pub mod secret_memory_predicate;'))
+        require_rejection(root, 'secret-predicate module must remain private')
+    print(f'Secret predicate rejects {len(mutations)} byte/result/wipe/flags/model regressions plus wrapper/visibility bypasses')
+
+
 if __name__ == "__main__":
     test()
     register_boundaries()
@@ -420,6 +460,7 @@ if __name__ == "__main__":
     secret_copy_boundary()
     secret_mask_boundary()
     secret_xor_boundary()
+    secret_predicate_boundary()
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
     print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

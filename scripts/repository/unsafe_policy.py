@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_xor.rs"): ("fc6c8a3caccc38c9b45795805b266bec60d2fcd10f1414f654d2e407af9bec7d", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_mask.rs"): ("a81ce3a6608d5baddf00190bb5e276db7d56aec5be320962eafcf89e70f05ac9", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_transfer.rs"): ("85f0cef7c2a8508c4d594ad7462bccb92fd8e5bea7897164d7df3ee655dcf3e0", 3, 1, 3),
@@ -175,6 +176,10 @@ def validate(root: Path) -> None:
         fail('secret initialization lost its checked transfer boundary')
     if library.count('mod secret_memory_mask;') != 1 or 'pub mod secret_memory_mask' in library:
         fail('secret-mask module must remain private and declared once')
+    if library.count('mod secret_memory_predicate;') != 1 or 'pub mod secret_memory_predicate' in library:
+        fail('secret-predicate module must remain private and declared once')
+    if writer.count('crate::secret_memory_predicate::apply(byte, mask)') != 1:
+        fail('borrowed secret predicate lost its boundary')
     if writer.count('crate::secret_memory_mask::apply(byte, keep, set);') != 1:
         fail('borrowed secret-byte masking lost its boundary')
     if library.count('mod secret_memory_xor;') != 1 or 'pub mod secret_memory_xor' in library:
@@ -205,6 +210,29 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
+    elif relative == Path('crates/brynja-core/src/secret_memory_predicate.rs'):
+        required = ('pub(crate) unsafe extern "C" fn mask_is_zero(byte: *const u8, mask: u8) -> u32',
+                    '#[inline(never)]', 'mask_is_zero(core::ptr::from_ref(byte), mask) == 1',
+                    '"movzx r10d, byte ptr [{byte}]"', '"and r10d, {mask:e}"',
+                    '"sete {result:l}"', '"movzx {result:e}, {result:l}"', '"xor r10d, r10d"',
+                    '"ldrb w4, [{byte}]"', '"and w4, w4, {mask:w}"', '"cmp w4, #0"',
+                    '"cset {result:w}, eq"', '"mov x4, xzr"', '"cmp xzr, xzr"',
+                    'out("r10") _', 'out("x4") _')
+        if any(token not in text for token in required):
+            fail('secret predicate lost byte bounds, normalization or cleanup')
+        if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_PREDICATE_BEGIN',
+                'BRYNJA_PREDICATE_ERASE', 'BRYNJA_PREDICATE_END', 'options(nostack)',
+                'result = out(reg) result')):
+            fail('secret predicate lost an opaque architecture boundary')
+        normalized = re.sub(r'\s+', '', text)
+        condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
+        if normalized.count('#[cfg('+condition+')]') != 2 or normalized.count('#[cfg(not('+condition+'))]') != 1:
+            fail('secret predicate native/model separation changed')
+        if '*byte&mask==0' not in normalized:
+            fail('secret predicate safe model disappeared')
+        if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly|target_feature|preserves_flags)\b',
+                     re.sub(r'//[^\n]*', '', text)):
+            fail('secret predicate changed memory/clobber or baseline ISA contract')
     elif relative == Path('crates/brynja-core/src/secret_memory_xor.rs'):
         required = ('pub(crate) unsafe extern "C" fn xor_bits(', '#[inline(never)]',
                     '8_u8.checked_sub(count).ok_or(SecretBitRangeError)?',

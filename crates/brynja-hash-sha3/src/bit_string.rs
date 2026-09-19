@@ -12,12 +12,15 @@ pub struct Fips202BitString<'input> {
 
 impl<'input> Fips202BitString<'input> {
     /// Validates a borrowed FIPS 202 bit-string representation.
+    /// Canonicality (whether unused high bits are zero) is intentionally
+    /// revealed by success or error; the original byte is borrowed for checking.
     pub fn new(bytes: &'input [u8], valid_bits_in_last_byte: u8) -> Result<Self, Fips202BitsError> {
         validate_shape(bytes.len(), valid_bits_in_last_byte)?;
         let bit_len = exact_bit_len(bytes.len(), valid_bits_in_last_byte)?;
         if valid_bits_in_last_byte < 8 && !bytes.is_empty() {
             let unused_mask = u8::MAX << valid_bits_in_last_byte;
-            if bytes.last().copied().unwrap_or(0) & unused_mask != 0 {
+            let byte = bytes.last().ok_or(Fips202BitsError::InvalidValidBitCount)?;
+            if !brynja_core::secret_byte_mask_is_zero(byte, unused_mask) {
                 return Err(Fips202BitsError::NonZeroUnusedBits);
             }
         }

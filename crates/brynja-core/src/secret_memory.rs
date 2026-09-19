@@ -123,6 +123,29 @@ pub fn apply_secret_byte_mask(byte: &mut u8, keep: u8, set: u8) {
     crate::secret_memory_mask::apply(byte, keep, set);
 }
 
+/// Tests whether the selected bits of a borrowed byte are all zero.
+///
+/// The public mask selects a predicate that is **explicitly declassified** by
+/// the Boolean result. Callers must decide that revealing this predicate is
+/// acceptable: repeated arbitrary masks can disclose the whole byte. This is
+/// intended for canonical representation checks, not secret equality tests.
+/// The input is not changed, owned or cleared.
+///
+/// The baseline x86-64/little-endian AArch64 boundary clears its own secret
+/// working register and condition flags on normal return, retaining only the
+/// Boolean result. Other targets and Miri/Kani use a safe model without that
+/// register guarantee. Caller copies, spills and interruption snapshots are
+/// outside the guarantee.
+///
+/// ```
+/// assert!(brynja_core::secret_byte_mask_is_zero(&0x07, 0xf8));
+/// assert!(!brynja_core::secret_byte_mask_is_zero(&0x87, 0xf8));
+/// ```
+#[inline(never)]
+pub fn secret_byte_mask_is_zero(byte: &u8, mask: u8) -> bool {
+    crate::secret_memory_predicate::apply(byte, mask)
+}
+
 /// An empty or out-of-byte public bit range; no secret values are included.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct SecretBitRangeError;

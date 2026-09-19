@@ -265,6 +265,20 @@ fn official_nist_five_bit_examples_match_all_six_identities() -> TestResult {
 
 #[test]
 fn low_bit_canonical_representation_is_exact() -> TestResult {
+    for byte in 0..=u8::MAX {
+        for valid in 1..=8 {
+            let input = [0xa5, byte];
+            let result = Fips202BitString::new(&input, valid);
+            if valid < 8 && byte >> valid != 0 {
+                assert!(matches!(result, Err(Fips202BitsError::NonZeroUnusedBits)));
+            } else {
+                let bits = result.map_err(|_| "canonical input rejected")?;
+                assert_eq!(bits.as_bytes().as_ptr(), input.as_ptr());
+                assert_eq!(bits.bit_len(), 8 + usize::from(valid));
+            }
+            assert_eq!(input, [0xa5, byte]);
+        }
+    }
     assert_eq!(
         Fips202BitString::new(&[], 0)
             .map_err(|_| "empty")?

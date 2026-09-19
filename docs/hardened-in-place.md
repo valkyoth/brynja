@@ -196,6 +196,27 @@ stream. These helper changes do not qualify caller-side bit-string validation,
 cSHAKE prefix construction, portable sponge paths or whole-API register/spill
 erasure.
 
+### Borrowed FIPS 202 representation validation
+
+`Fips202BitString::new` now borrows its final byte for canonicality validation
+through core's `secret_byte_mask_is_zero`, rather than copying that byte into
+ordinary Rust arithmetic. The public length/shape checks and errors are
+unchanged. Validity is intentionally observable; the helper explicitly
+declassifies only its Boolean predicate. Repeated arbitrary masks could reveal
+all bits, so it is not an equality or secret-provenance barrier.
+
+The baseline x86-64/little-endian Arm boundary reads exactly one byte, returns a
+normalized predicate, clears its secret working register and sets condition
+flags independently of input on normal return. Other targets and Miri/Kani use
+a safe model. The development fixture checks all 65,536 byte/mask pairs,
+immediate registers/flags, read-only page edges, compiler output and mutations.
+Native x86 and QEMU Arm coverage is distinguished from compilation-only Apple,
+Windows and Android coverage. This does not qualify complete API register/spill
+erasure, caller copies, interrupted execution or platform storage. The
+dependency-free MSB-first `brynja-hash-core::BitString` remains a separate
+follow-up; this checkpoint neither changes its dependency graph nor claims to
+remove its by-value validation/partial-byte transfers.
+
 ## Portable scoped ParallelHash and ParallelHashXOF
 
 ParallelHash also now initializes integer framing through borrowed storage: its

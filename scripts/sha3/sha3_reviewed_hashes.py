@@ -2,7 +2,7 @@
 
 REVIEWED_HASHES = {
     "crates/brynja-hash-sha3/src/bit_api.rs": "4a1cc813ed35ffe1f6eac442da9879a0fe2a8855cf58142f93cb95e448094ac2",
-    "crates/brynja-hash-sha3/src/bit_string.rs": "ec5920f5d2651806328dea324700f089980bda818eba34570fcfeff20dbf1fbd",
+    "crates/brynja-hash-sha3/src/bit_string.rs": "9177f2c483a7b9f9179ca53cd218ba2aadc0b26eef7fad58d1ed825b267ff0c7",
     "crates/brynja-hash-sha3/src/cshake.rs": "2497f525ceb51f638de4fd82736e6b94ea749c8ff64abe5e28dff549e4e0dcad",
     "crates/brynja-hash-sha3/src/digest.rs": "70ad97c79e48598e58dd978fdcda4bff4165eb2e6d9b86e123fd6eb1c0aa4845",
     "crates/brynja-hash-sha3/src/error.rs": "c8738c7bab26cbb153ed8aa2b81ab292974d85ad418126783f4e02330b59c732",
@@ -17,7 +17,7 @@ REVIEWED_HASHES = {
     "crates/brynja-hash-sha3/src/sp800185.rs": "5c5c553e4ddb90b492399100a097af76eb39697d122600f8dbc47718762fa552",
     "crates/brynja-hash-sha3/src/sponge.rs": "1f5e3b66d5de98cf9bcdec12aa867b9b5b74a8835acbe0f12ea56ba3dc46b3dd",
     "crates/brynja-hash-sha3/tests/bit_input_support/mod.rs": "9a1ed88de6a29c46b7b7fa071326df77416488e3fb1b3c32f6049e783d029ac0",
-    "crates/brynja-hash-sha3/tests/bit_inputs.rs": "b0533ef1bc0c90dafc228172b0c0213a9def2a72aca522989f7184008426fabc",
+    "crates/brynja-hash-sha3/tests/bit_inputs.rs": "18199274957c69c40879164e5fd88542af17c207e869fe2d47532d897cdfa298",
     "crates/brynja-hash-sha3/tests/cshake.rs": "e57c82843a01a3956b8835511cb0a2d0f850918cd2be143b981c3e1575175b6b",
     "crates/brynja-hash-sha3/tests/sha3_224.rs": "5dcf06a59bd41212f657ac8857de91da08a536cee5662dc6a6e06655e96cc8a9",
     "crates/brynja-hash-sha3/tests/sha3_256.rs": "e4989cce429187b042c988de53d1fc783c030c64bac85d897be25826d69fa293",

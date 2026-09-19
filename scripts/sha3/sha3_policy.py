@@ -394,6 +394,7 @@ def validate(root: Path) -> None:
         "pub struct Fips202Output<'output>",
         "pub enum Fips202BitsError",
         "let unused_mask = u8::MAX << valid_bits_in_last_byte;",
+        "brynja_core::secret_byte_mask_is_zero(byte, unused_mask)",
         "NonZeroUnusedBits",
     ):
         require(bit_string, token, "FIPS 202 low-bit representation")

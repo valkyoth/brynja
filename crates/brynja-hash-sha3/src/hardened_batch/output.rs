@@ -99,7 +99,8 @@ impl<'a> SecretBatchOutput<'a> {
         }
         for (source, destination) in self.destinations.iter().zip(&mut destinations) {
             if let (Some(source), Some(destination)) = (source, destination) {
-                destination.copy_from_slice(source);
+                brynja_core::copy_secret_region(destination, source)
+                    .map_err(|_| Error::Invariant)?;
             }
         }
         Ok(())
@@ -125,6 +126,31 @@ pub(super) fn validate(
             (None, None) => {}
             (Some(input), Some(destination)) if destination.len() == input.output_bytes() => {}
             _ => return Err(Error::InvalidDestination),
+        }
+    }
+    Ok(())
+}
+
+// Prepare only borrowed slices before writing any output. Inactive slots and
+// zero-width XOF outputs are valid. No callback can change the shape at commit.
+pub(super) fn commit(
+    staging: &[u8],
+    destinations: &mut [Option<&mut [u8]>; CAPACITY],
+) -> Result<(), Error> {
+    let mut sources: [Option<&[u8]>; CAPACITY] = [None; CAPACITY];
+    let mut rest = staging;
+    for (source, destination) in sources.iter_mut().zip(destinations.iter()) {
+        if let Some(destination) = destination {
+            let (bytes, next) = rest
+                .split_at_checked(destination.len())
+                .ok_or(Error::Invariant)?;
+            *source = Some(bytes);
+            rest = next;
+        }
+    }
+    for (source, destination) in sources.iter().zip(destinations.iter_mut()) {
+        if let (Some(source), Some(destination)) = (source, destination) {
+            brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)?;
         }
     }
     Ok(())

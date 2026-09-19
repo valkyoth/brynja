@@ -169,6 +169,28 @@ def compiled_mutants(simd):
     yield ('brynja-hash-sha3', 'src/hardened_batch/workspace.rs',
            'clear_owned_region(self.states.as_flattened_mut())', 'Ok::<(), ()>(())',
            'hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state', 1)
+    yield ('brynja-hash-sha3', 'src/hardened_batch/engine.rs',
+           'brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)',
+           'let _ = (destination, source); Ok(())',
+           'hardened_batch::tests::portable_mixed_domains_bit_tails_and_squeeze_boundaries', 1)
+    yield ('brynja-hash-sha3', 'src/hardened_batch/engine.rs',
+           'mask(input.output_bits() % 8),', '0xff,',
+           'hardened_batch::tests::portable_mixed_domains_bit_tails_and_squeeze_boundaries', 1)
+    for before, after, test in (
+        ('brynja_core::copy_secret_region(destination, source)\n'
+         '                    .map_err(|_| Error::Invariant)?;',
+         'let _ = (destination, source);', 'declassification_is_atomic_and_clears_secret_slots'),
+        ('brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)?;',
+         'let _ = (destination, source);', 'commit_preflights_all_slices_and_preserves_sparse_slots'),
+        ('self.destinations.iter().zip(&destinations)',
+         'self.destinations.iter().zip(&destinations).take(CAPACITY - 1)',
+         'declassification_is_atomic_and_clears_secret_slots'),
+        ('sources.iter_mut().zip(destinations.iter())',
+         'sources.iter_mut().zip(destinations.iter()).take(CAPACITY - 1)',
+         'commit_preflights_all_slices_and_preserves_sparse_slots'),
+    ):
+        yield ('brynja-hash-sha3', 'src/hardened_batch/output.rs', before, after,
+               'hardened_batch::tests::output::' + test, 1)
     yield ('brynja-hash-parallel', 'src/execution/batch/transfer.rs',
            'clear_owned_region(self.values.as_flattened_mut())', 'Ok::<(), ()>(())',
            'execution::batch::transfer::tests::transfer_clears_source_and_all_transport_capacity', 1)

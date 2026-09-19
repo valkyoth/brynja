@@ -431,6 +431,15 @@ computation. Other families, input-construction validation and higher-level
 callers remain separate obligations. Normal-return working-register evidence
 for these helpers is not whole-API residue qualification.
 
+Hardened SHA-3/SHAKE/cSHAKE batching also uses the borrowed helper for scalar
+state transfer, SIMD lane gathering/scattering, squeeze staging, final output
+commit and explicit declassification. Canonical partial-output bytes use the
+public-mask helper. Commit prepares all source slices before any destination
+write, including sparse slots and empty XOF outputs. An unexpected transfer
+invariant retains executor quarantine; ordinary request rejection remains
+reusable. Absorption's XOR/bit-packing operations and input construction are
+not covered by this transfer checkpoint and still require separate review.
+
 ## TupleHash integer framing
 
 

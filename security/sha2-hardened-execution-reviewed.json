@@ -215,7 +215,7 @@
     "crates/brynja-hash-sha2/src/sha512_256.rs": "d824f3bb67940e9c461da359bca2d0d64641b315d4410e006da8d831a00ae04f",
     "crates/brynja-hash-sha2/src/sha512_state.rs": "621cda9793ff1f489533101cbdad23da26bd467a2909faa1e3c2fc334ebc0d10",
     "crates/brynja-hash-sha2/src/sha512_t.rs": "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
-    "docs/hardened-in-place.md": "f252342e6bffd2d05bd50ece4f58fd042bb79dfb25c33d179537b1ffa1a9ea73",
+    "docs/hardened-in-place.md": "a793179ea8dad9872605a801d3d037c2d3d3b681e38a0743073fdbbdc9bd2ca6",
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
     "docs/x86-sha512-execution.md": "2d9224b1025cc1d917f57499e1e3513672589eb1bf144cb029633b58bae284aa",
     "package-policy.toml": "68f2bcbdc1c25e03d00460e5a0ba72a30b73aee2636a134874ac000b33a9e434",

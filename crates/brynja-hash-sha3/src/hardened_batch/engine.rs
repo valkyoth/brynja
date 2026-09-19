@@ -106,9 +106,9 @@ pub(super) fn run(
             if *ready == 1 {
                 control.charge(1)?;
                 executor.check()?;
-                s.scalar.sponge_lanes.copy_from_slice(state);
+                transfer(&mut s.scalar.sponge_lanes, state)?;
                 crate::hardened::permutation::permute(&mut s.scalar);
-                state.copy_from_slice(&s.scalar.sponge_lanes);
+                transfer(state, &s.scalar.sponge_lanes)?;
                 s.scalar.wipe();
                 report.scalar_permutations = report
                     .scalar_permutations
@@ -135,7 +135,7 @@ fn vector(
     // Clear even unused packed capacity before gathering secret byte states.
     let _ = brynja_core::clear_owned_region(s.vector.as_flattened_mut());
     for (out, index) in s.vector.iter_mut().zip(group).take(width) {
-        out.copy_from_slice(s.states.get(*index).ok_or(Error::Invariant)?);
+        transfer(out, s.states.get(*index).ok_or(Error::Invariant)?)?;
     }
     let before = session.completed_vector_calls();
     session
@@ -145,10 +145,7 @@ fn vector(
         return Err(Error::Invariant);
     }
     for (state, index) in s.vector.iter().zip(group).take(width) {
-        s.states
-            .get_mut(*index)
-            .ok_or(Error::Invariant)?
-            .copy_from_slice(state);
+        transfer(s.states.get_mut(*index).ok_or(Error::Invariant)?, state)?;
         report.accelerated_slots |= 1_u8
             .checked_shl(u32::try_from(*index).map_err(|_| Error::Invariant)?)
             .ok_or(Error::Invariant)?;
@@ -181,16 +178,38 @@ fn squeeze(
         .ok_or(Error::Invariant)?;
     let end = start.checked_add(take).ok_or(Error::Invariant)?;
     let out = staging.get_mut(start..end).ok_or(Error::Invariant)?;
-    out.copy_from_slice(
+    transfer(
+        out,
         s.states
             .get(i)
             .and_then(|v| v.get(..take))
             .ok_or(Error::Invariant)?,
-    );
+    )?;
     let written = written.checked_add(take).ok_or(Error::Invariant)?;
     store(s.written.get_mut(i).ok_or(Error::Invariant)?, written)?;
     if written == input.output_bytes() && !input.output_bits().is_multiple_of(8) {
-        *out.last_mut().ok_or(Error::Invariant)? &= mask(input.output_bits() % 8);
+        brynja_core::apply_secret_byte_mask(
+            out.last_mut().ok_or(Error::Invariant)?,
+            mask(input.output_bits() % 8),
+            0,
+        );
     }
     Ok(())
+}
+fn transfer(destination: &mut [u8], source: &[u8]) -> Result<(), Error> {
+    brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn transfer_rejects_mismatched_lengths_without_mutation() {
+        let mut destination = [0xa5; 200];
+        assert_eq!(
+            super::transfer(&mut destination, &[0; 199]),
+            Err(super::Error::Invariant)
+        );
+        assert_eq!(destination, [0xa5; 200]);
+        assert_eq!(super::transfer(&mut [], &[]), Ok(()));
+    }
 }

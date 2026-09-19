@@ -270,14 +270,11 @@ impl<'a> Executor<'a> {
                     | Error::Cancelled)
         );
         let report = result?;
-        // All widths/slots, health, callbacks and accounting completed above.
-        // Fixed zips below cannot fail or invoke caller code during commit.
-        let mut rest = &*guard.staging;
-        for destination in destinations.iter_mut().flatten() {
-            let (source, next) = rest.split_at(destination.len());
-            destination.copy_from_slice(source);
-            rest = next;
-        }
+        // Unexpected transfer invariants still quarantine; ordinary request
+        // rejection above remains reusable. Commit has no caller callbacks.
+        guard.complete = false;
+        output::commit(guard.staging, destinations)?;
+        guard.complete = true;
         Ok(report)
     }
 }

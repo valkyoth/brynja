@@ -374,3 +374,4 @@ fn native_differential_uses_hardened_vector_authority() -> Result<(), Error> {
     Ok(())
 }
 mod lifecycle;
+mod output;

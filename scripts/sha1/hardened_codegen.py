@@ -93,6 +93,7 @@ def kernel_body(assembly, llvm, target):
 
 def artifacts_check(mir, llvm, assembly, target, panic='abort'):
     mir_check(mir, panic)
+    scoped_check(mir, llvm, assembly)
     kernel = 'x86_sha1' if target.startswith(('x86_64', 'i686')) else 'aarch64_sha1'
     body = kernel_body(assembly, llvm, target)
     instructions = ('sha1msg1', 'sha1msg2', 'sha1nexte', 'sha1rnds4') if kernel == 'x86_sha1' else (
@@ -108,6 +109,35 @@ def artifacts_check(mir, llvm, assembly, target, panic='abort'):
         require(len(definitions) == 1 and 'clear_owned_region' in definitions[0], owner + ' LLVM clear disappeared')
 
 
+def scoped_check(mir, llvm, assembly):
+    prefix = 'src/hardened_execution/in_place.rs:'
+    compact = lambda text: re.sub(r'\s+', '', re.sub(r'Storage(?:Live|Dead)\(_\d+\);', '', text))
+    clear = flow.basic_blocks(flow.exact_function(mir, (prefix, '::clear(', '_1: &mut Storage')))
+    require(set(clear) == {'bb0', 'bb1'}, 'scoped storage clearing CFG')
+    require(re.fullmatch(r'(?P<p>_\d+)=&mut\(\(\*_1\)\.0:owner::Sha1Owner\);_\d+=Sha1Owner::wipe\(move(?P=p)\)->\[return:bb1,unwind(?:unreachable|continue)\];}', compact(clear['bb0'])), 'scoped storage owner provenance')
+    require(compact(clear['bb1']) == '((*_1).2:bool)=constfalse;return;}}', 'scoped storage terminal flag')
+    for owner in ('Scope', 'Sha1', 'Operation'):
+        function = flow.exact_function(mir, (prefix, '::drop(', owner + "<'_, '_>"))
+        blocks = flow.basic_blocks(function)
+        entry = 'bb0'
+        if owner == 'Operation':
+            require(re.fullmatch(r'(?P<c>_\d+)=copy\(\(\*_1\)\.1:bool\);switchInt\(move(?P=c)\)->\[0:bb1,otherwise:bb\d+\];}', compact(blocks['bb0'])), 'scoped operation failure edge')
+            entry = 'bb1'
+        pattern = (r'(?P<p>_\d+)=(?:no_retag)?copy\(\(\*_1\)\.0:&mut(?:hardened_execution::in_place::)?Storage<\x27_>\);'
+                   r'_\d+=Storage::<\x27_>::clear\(move(?P=p)\)->\[return:bb\d+,unwind(?:unreachable|continue)\];}')
+        require(re.fullmatch(pattern, compact(blocks[entry])), 'scoped guard clears exact borrowed storage: '+owner)
+        identity = rf'(?:{len(owner)}{owner}|\.\.{owner}\$)'
+        definitions = [f for f in re.findall(r'^define [^\n]*\{.*?^}', llvm, re.M | re.S)
+                       if all(t in f.splitlines()[0] for t in ('hardened_execution', 'in_place', '4drop'))
+                       and re.search(identity, f.splitlines()[0])]
+        require(len(definitions) == 1, 'scoped destructor LLVM identity: '+owner)
+        calls = [line for line in definitions[0].splitlines() if not line.lstrip().startswith(';') and re.search(r'\b(?:call|invoke)\b', line)]
+        require(sum('Sha1Owner' in line and 'wipe' in line for line in calls) == 1, 'scoped destructor LLVM wipe: '+owner)
+        symbol = re.search(r'@([^ (]+)', definitions[0].splitlines()[0])[1].strip('"')
+        body = assembly_function(assembly, (symbol,))
+        require(re.search(r'(?:callq?|jmpq?|bl|b)\s+[^\n]*Sha1Owner[^\n]*wipe', body), 'scoped destructor assembly wipe: '+owner)
+
+
 def compile_and_check(output, compiler, target, panic='abort'):
     environment = dict(os.environ, CARGO_TARGET_DIR=str(output), CARGO_PROFILE_RELEASE_PANIC=panic)
     for key in ('RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'CARGO_BUILD_TARGET'):
@@ -121,4 +151,16 @@ def compile_and_check(output, compiler, target, panic='abort'):
         require(len(paths) == 1, 'ambiguous artifact inventory')
         contents.append(paths[0].read_text())
     artifacts_check(*contents, target, panic)
+    for index, before, after in (
+        (0, '0: bb1, otherwise:', '1: bb1, otherwise:'),
+        (0, "Storage::<'_>::clear(", "Storage::<'_>::omitted("),
+        (0, 'Sha1Owner::wipe(', 'Sha1Owner::omitted('),
+        (1, '4wipe', '4skip'), (2, '4wipe', '4skip'),
+    ):
+        require(before in contents[index], 'live scoped compiler mutation')
+        changed = list(contents)
+        changed[index] = changed[index].replace(before, after)
+        try: scoped_check(*changed)
+        except (ValueError, flow.MirCleanupFlowError): pass
+        else: raise AssertionError('scoped compiler mutation survived: '+before)
     return contents

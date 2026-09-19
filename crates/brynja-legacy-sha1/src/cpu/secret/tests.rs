@@ -77,6 +77,43 @@ fn lane_wipe_clears_full_owner() {
 }
 
 #[test]
+fn scoped_execution_callback_unwind_clears_secret_output()
+-> Result<(), crate::hardened_execution::Error> {
+    use crate::hardened_execution::in_place::Sha1Workspace;
+    std::thread_local! { static CALLS: Cell<u8> = const { Cell::new(0) }; }
+    fn revalidate(_: Sha1Backend) -> bool {
+        CALLS.with(|calls| {
+            let next = calls.get().checked_add(1);
+            calls.set(next.unwrap_or_default());
+            if next == Some(3) {
+                std::panic::resume_unwind(std::boxed::Box::new("finalize callback"));
+            }
+            true
+        })
+    }
+    CALLS.with(|calls| calls.set(0));
+    // Scope admission and the short update only revalidate; the third callback
+    // interrupts finalization before any instruction entry, even under Miri.
+    let executor = crate::hardened_execution::Executor::test_authority(model(revalidate));
+    let mut workspace = Sha1Workspace::new(&executor);
+    let mut destination = [0xa5; 20];
+    workspace.with(|mut s| {
+        s.update(b"secret")?;
+        assert!(
+            std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let _ = s.finalize_secret(&mut destination);
+            }))
+            .is_err()
+        );
+        Ok::<(), crate::hardened_execution::Error>(())
+    })??;
+    assert_eq!(destination, [0; 20]);
+    assert_eq!(executor.report().health, Sha1BackendHealth::Quarantined);
+    assert!(workspace.with(|_| ()).is_err());
+    Ok(())
+}
+
+#[test]
 fn native_hardened_kernel_matches_512_arbitrary_compressions() -> Result<(), Sha1BackendError> {
     let authority = match Authority::for_compiled_target() {
         Ok(authority) => authority,

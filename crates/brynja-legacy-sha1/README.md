@@ -43,6 +43,7 @@ is under qualification. See the
 | Opt-in ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Opt-in hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Caller-owned portable scoped workspace | 🚧 Implemented; residue qualification pending | ❌ Not independently verified |
+| Scoped hardened execution workspace | 🚧 Portable/SHA-NI/Arm routes; residue qualification pending | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -152,12 +153,48 @@ every supplied secret-destination byte. Unlike the older by-value state, an
 update error clears and terminates the scoped handle (`StateConsumed` thereafter).
 There is no length query, preflight oracle, snapshot or in-scope reset.
 
-This additive profile uses portable compression, not optional SHA instructions;
-scoped accelerated legacy execution remains follow-up work. It addresses
+This additive profile uses portable compression, not optional SHA instructions.
+It addresses
 source-owned state movement, not complete register/spill/compiler-copy erasure.
 Forgetting the separate secret output still prevents that output's own Drop;
 abort, caller copies and platform storage remain outside the guarantee. SHA-1
 remains collision-broken and inappropriate for new security designs.
+
+With `hardened-execution`, `hardened_execution::in_place::Sha1Workspace`
+borrows an existing hardened `Executor`. Select portable, compiled-target or
+hosted authority using the existing executor APIs; the workspace never changes
+that route. Construction and reuse cannot undo quarantine. This is single-stream
+instruction acceleration, not multibuffer SIMD batching.
+
+```rust
+# #[cfg(feature = "hardened-execution")]
+# fn example() -> Result<(), brynja_legacy_sha1::hardened_execution::Error> {
+use brynja_legacy_sha1::hardened_execution::{Executor, in_place::Sha1Workspace};
+let executor = Executor::portable(); // or an explicitly selected hardened authority
+let mut workspace = Sha1Workspace::new(&executor);
+let mut bytes = [0; 20];
+let output = workspace.with(|mut state| {
+    state.update(b"legacy input")?;
+    state.finalize_secret(&mut bytes)
+})??;
+drop(output);
+assert_eq!(bytes, [0; 20]);
+# Ok(())
+# }
+# #[cfg(feature = "hardened-execution")]
+# example()?;
+# Ok::<(), Box<dyn std::error::Error>>(())
+```
+
+The outer result reports scope admission; the inner value comes from your
+callback. Admission failure cannot clear buffers captured only by that callback.
+Secret finalization clears buffers once it receives them. Input-length errors
+terminate and clear the scoped state without revoking a healthy executor;
+backend failures and recoverable callback/operation unwind quarantine it.
+Normal cancellation or forgetting a handle still clears storage at scope exit
+without revocation. No length/preflight queries are exposed. This does not
+extend the guarantee to every register, spill or compiler-created copy, and
+abort cannot run cleanup guards.
 
 ## Verification and links
 

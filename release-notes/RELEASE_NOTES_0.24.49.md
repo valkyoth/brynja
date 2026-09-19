@@ -4,12 +4,20 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
+- Add `hardened_execution::in_place::Sha1Workspace` borrowing an existing
+  portable/static/hosted hardened executor. Active state stays in borrowed
+  storage; scope cleanup covers forgotten handles, and operation unwind clears
+  secret output and quarantines authority. Length rejection clears and closes
+  the computation without revoking a healthy executor. No route, CPU admission
+  or release workflow changes; complete register/spill qualification is pending.
+
 - Add `brynja_legacy_sha1::hardened_in_place` workspaces and borrowed handles.
   Consuming byte/bit finalization preserves public destinations on error or clears
   secret destinations, including recoverable unwind. Scope cleanup covers
   forgotten handles; failed updates terminate the handle without a length oracle.
-  This is portable legacy functionality, not new algorithm admission, scoped
-  acceleration or complete register/spill erasure. Existing APIs are unchanged.
+  This portable profile is not new algorithm admission or complete register/spill
+  erasure. The separate scoped execution profile is described above; existing
+  by-value APIs are unchanged.
 
 - Remove populated integer-encoding returns from portable and execution
   ParallelHash framing, and use scoped SHAKE storage in portable leaf hashing.

@@ -11,7 +11,7 @@
 "crates/brynja-legacy-sha1/src/compress/native.rs" = "f785162fdf3c5ada9847cc5796db0b7a870d289707587c9d698d78a6d6355ad3"
 "crates/brynja-legacy-sha1/src/hardened_in_place/tests.rs" = "6146cda4710bfaa1ec25cba38cd2cd5085ebc72edbcd63a628cdc30e626c9655"
 "crates/brynja-legacy-sha1/Cargo.toml" = "b3431eb870c8c8f2a690ed00a4cd4454ffc8477f556c300cf8eef5180cdc04b0"
-"crates/brynja-legacy-sha1/README.md" = "854b72150c465255f7b7c66289ae182e171091bb0295e8138319d74534647314"
+"crates/brynja-legacy-sha1/README.md" = "1b7d5382b6117a1405b9d65042d02da762b68c1a2ac71446b42aa62d982819b0"
 "crates/brynja-legacy-sha1/tests/api.rs" = "d9fb1cbb781fea9fe677e454b3487486205c48b1122561bfafb3b4e0a6c43ee3"
 "crates/brynja-legacy-sha1/tests/vectors/nist.txt" = "72535acd800ab7eea56bbf2587ee63ed5f99b1a597e0cb2f7b28020c54e5e5c0"
 "assurance/sha1-public-api/Cargo.toml" = "83d16c5d9c282cab0671b2509e90304039a02fafa2f289b90fcfa1b2c2664087"

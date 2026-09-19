@@ -2,6 +2,10 @@
 
 ## 0.24.49 development
 
+- Add scoped hardened SHA-1 execution borrowing an existing executor, with
+  fail-closed authority checks, independent owner cleanup and typed outputs.
+  Length rejection terminates the computation without quarantining healthy
+  authority; backend failure and unwind remain terminal for the executor.
 - Add portable scoped legacy SHA-1 storage with borrowed active state, explicit
   public declassification, typed secret output and independent scope cleanup.
   Failed updates clear and terminate the scoped handle; existing APIs remain.

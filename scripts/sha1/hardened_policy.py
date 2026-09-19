@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 LEAF = 'crates/brynja-legacy-sha1/'
 ADAPTER = 'crates/brynja-legacy-sha1-std/'
-SOURCES = ('mod.rs', 'engine.rs', 'stream.rs', 'stream/tests.rs', 'ownership.rs')
+SOURCES = ('mod.rs', 'engine.rs', 'stream.rs', 'stream/tests.rs', 'ownership.rs', 'in_place.rs', 'in_place/tests.rs')
 TOOLS = ('hardened_policy.py', 'hardened_package.py', 'hardened_codegen.py',
          'check-sha1-hardened.py', 'test-sha1-hardened.py', 'check-sha1-hardened-codegen.py',
          'check-sha1-package.py', 'check-sha1-differential.py', 'hardened_native.py',
@@ -15,6 +15,15 @@ TOOLS = ('hardened_policy.py', 'hardened_package.py', 'hardened_codegen.py',
          'check-sha1-hardened-asan.py', 'capture-sha1-cpu-native.py', 'check-sha1-hardened-native.py',
          'check-sha1-hardened-ci.py', 'test-sha1-hardened-ci.py', 'test-sha1-hardened-asan.py')
 REVIEW = 'scripts/sha1/hardened-reviewed.toml'
+SCOPED = ('state: Storage', "executor: &'authority Executor", 'owner: Sha1Owner',
+          "action: impl for<'scope> FnOnce(Sha1<'scope, 'authority>) -> R",
+          'self.state.clear();', 'self.owner.wipe(); self.active = false;',
+          'guard.state.executor.ready()?;', 'guard.quarantine = false;',
+          'scope.state.operate(|_, _| Ok(()))?;', 'scope.completed = true;',
+          'if !self.completed { self.state.executor.quarantine(); }',
+          'Err(Sha1Error::StateConsumed.into())',
+          'let mut output = begin_output(destination)?;',
+          'destination.copy_from_slice(&self.state.owner.output_staging);')
 
 
 def inventory(root=ROOT):
@@ -71,11 +80,15 @@ def validate(root=ROOT, reviewed=True):
     for name in SOURCES:
         source = read(root, LEAF + 'src/hardened_execution/' + name)
         if len(source.splitlines()) > 500: raise ValueError('hardened source exceeds 500 lines')
-        if name != 'stream/tests.rs' and re.search(r'\b(?:unsafe|Vec|Box|alloc::|std::)|\.(?:unwrap|expect)\(|\b(?:panic|todo|unimplemented)!', source):
+        if name not in ('stream/tests.rs', 'in_place/tests.rs') and re.search(r'\b(?:unsafe|Vec|Box|alloc::|std::)|\.(?:unwrap|expect)\(|\b(?:panic|todo|unimplemented)!', source):
             raise ValueError('hardened API gained low-level, allocating or panicking code')
     module = read(root, LEAF + 'src/hardened_execution/mod.rs')
-    require(module, 'mod engine; mod ownership; mod stream;')
+    require(module, 'mod engine; pub mod in_place; mod ownership; mod stream;')
     stream = read(root, LEAF + 'src/hardened_execution/stream.rs')
+    scoped = read(root, LEAF + 'src/hardened_execution/in_place.rs')
+    for token in SCOPED: require(scoped, token)
+    if re.search(r'pub\s+(?:const\s+)?fn\s+(?:check_additional_bits|check_additional_bytes|reset|snapshot|bits|length)\b', scoped):
+        raise ValueError('scoped hardened SHA-1 gained metadata/reopening API')
     secret = read(root, LEAF + 'src/cpu/secret.rs')
     methods = re.findall(r'\bpub\s+(?:(?:const|async)\s+)*fn\s+(\w+)', stream)
     if sorted(methods) != sorted(('update', 'finalize_public', 'finalize_bits_public',

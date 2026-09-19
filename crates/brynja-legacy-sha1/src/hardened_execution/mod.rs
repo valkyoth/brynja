@@ -16,6 +16,7 @@
 //! ```
 
 mod engine;
+pub mod in_place;
 mod ownership;
 mod stream;
 pub use crate::cpu::HardenedAuthority as Authority;

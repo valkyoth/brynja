@@ -7,7 +7,7 @@
 "crates/brynja-legacy-sha1/src/cpu/session/tests.rs" = "d7142239a755bdc0004eed928aada4d956114e63af5fc32f2ec54066c01500d8"
 "crates/brynja-legacy-sha1/src/cpu/stream/tests.rs" = "3def0308cb7a31046d17d25d27020a4d030d1e7e6d8ac6a03aaa94a2e65d69f0"
 "crates/brynja-legacy-sha1/src/cpu/secret.rs" = "135ab0dae0b9fbaf8dc147bf55ccf7e167c667ee675b980679ced331a3d6464e"
-"crates/brynja-legacy-sha1/src/cpu/secret/tests.rs" = "d9d30432992a5e695d3121a738f9d66dbb74bcea4b40896f8062f6b5742a0774"
+"crates/brynja-legacy-sha1/src/cpu/secret/tests.rs" = "9485989bc2f881aca4a4592b5ddeb5e8cdc29ec63932e0dfa4a1d2d77ade7bac"
 "crates/brynja-legacy-sha1/src/cpu/x86_sha1/secret.rs" = "b7625787a8d512fc0f4129c002997e32b088e3dff52cc84c6c57a0decb75eab0"
 "crates/brynja-legacy-sha1/src/cpu/aarch64_sha1/secret.rs" = "663c0964503b0063e0a4031133e4c633e33ca386d04eb19199840410aae2799e"
 "crates/brynja-legacy-sha1/src/execution.rs" = "d9973288c6729823bcdf327f2de09d585b9d5412e40ea9b8356d764524c71e97"

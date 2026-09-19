@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Adversarial source-review and emitted-artifact regression checks."""
 import shutil
+import re
 import tempfile
 from pathlib import Path
 from unittest.mock import patch
@@ -31,6 +32,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-inspector-root-') as temporary:
         with patch.object(codegen, 'ROOT', Path(temporary)), \
                 patch.object(codegen, 'mir_check'), \
+                patch.object(codegen, 'scoped_check'), \
                 patch.object(codegen, 'kernel_body', return_value='\n sha1msg1 x\n sha1msg2 x\n sha1nexte x\n sha1rnds4 x\n'):
             try: codegen.artifacts_check('', '', '', 'x86_64-unknown-linux-gnu')
             except ValueError as error:
@@ -73,6 +75,14 @@ def main():
             (policy.LEAF+'src/cpu/x86_sha1.rs', '#[target_feature(enable = "sha,sse2")]\npub(super) unsafe fn compress_secret(', 'pub(super) unsafe fn compress_secret('),
             (policy.LEAF+'src/cpu/aarch64_sha1.rs', '#[target_feature(enable = "neon,sha2")]\npub(super) unsafe fn compress_secret(', 'pub(super) unsafe fn compress_secret('),
         ]
+        scoped_path = policy.LEAF+'src/hardened_execution/in_place.rs'
+        for token in policy.SCOPED:
+            text = (root / scoped_path).read_text()
+            match = re.search(r'\s*'.join(re.escape(c) for c in re.sub(r'\s+', '', token)), text)
+            if match is None: raise AssertionError('stale scoped policy token: '+token)
+            cases.append((scoped_path, match[0], '/* missing scoped contract */'))
+        for method in ('check_additional_bits', 'check_additional_bytes', 'reset', 'snapshot', 'bits', 'length'):
+            cases.append((scoped_path, "impl Sha1<'_, '_> {", "impl Sha1<'_, '_> { pub fn "+method+"(&self) {}"))
         for relative, original, replacement in cases:
             path = root / relative
             before = path.read_text()

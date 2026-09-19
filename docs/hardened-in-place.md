@@ -361,9 +361,28 @@ output borrows only its destination and can outlive the workspace scope.
 The six owned state regions use existing `Sha1Owner::wipe`; no populated owner
 is returned by value through this API. The portable compression dispatch is
 unchanged. Complete padding/output compiler-copy, register/spill qualification
-and scoped accelerated legacy execution remain pending. Forgetting a separate
+remain pending. Forgetting a separate
 output prevents its Drop, and abort cannot run guards. Memory hygiene never
 repairs SHA-1's collision weakness or admits it for new security protocols.
+
+With `hardened-execution`, `hardened_execution::in_place::Sha1Workspace<'authority>`
+borrows an existing hardened executor. `new(&executor)` accepts no secret data;
+`with` checks the same authority before handing out a borrowed
+`Sha1<'scope, 'authority>`. Its outer result is admission, and its inner value is
+the callback result. Scope admission cannot clear a destination captured only
+by the callback: secret-output initialization starts on entering finalization.
+Finalization and cancellation consume the handle; secret output can outlive the
+scope, but neither the handle nor workspace can outlive its executor.
+
+An independent scope guard clears all six owner regions even after `forget`.
+Operation and handle guards clear failures immediately. A length rejection
+terminates this computation without revoking healthy sibling users; backend
+failure, broken invariants and recoverable callback/operation unwind quarantine
+the shared executor. Reuse cannot recover quarantined authority or silently
+fall back to portable. Existing CPU scratch cleanup remains per-compression.
+The original by-value APIs, static deployment guarantees and hosted feature
+detection caveats are unchanged. This additive API is not whole-API register,
+spill or compiler-copy qualification; MD5 scoped integration remains pending.
 
 ## TupleHash integer framing
 

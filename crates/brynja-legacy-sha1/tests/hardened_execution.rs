@@ -2,7 +2,7 @@
 #![cfg(feature = "hardened-execution")]
 use brynja_legacy_sha1::{
     BitString, PublicDeclassification, Sha1BackendHealth,
-    hardened_execution::{Executor, Mode},
+    hardened_execution::{Executor, Mode, in_place::Sha1Workspace},
 };
 
 fn decode(text: &str) -> Vec<u8> {
@@ -29,6 +29,7 @@ fn nist_bit_vectors_and_all_output_profiles() -> Result<(), Box<dyn std::error::
         Executor::for_compiled_target(Mode::Prefer)?,
     ] {
         let mut count = 0;
+        let mut workspace = Sha1Workspace::new(&executor);
         for line in include_str!("vectors/nist.txt")
             .lines()
             .filter(|line| !line.starts_with('#'))
@@ -58,6 +59,10 @@ fn nist_bit_vectors_and_all_output_profiles() -> Result<(), Box<dyn std::error::
             }
             assert_eq!(output, [0; 20]);
             let (bytes, partial) = input.split();
+            workspace.with(|s| {
+                s.finalize_bits_public(input, &mut output, PublicDeclassification::acknowledge())
+            })??;
+            assert_eq!(output.as_slice(), expected);
             for partition in [1, 7, 63, 64, 65, 257] {
                 let mut stream = executor.start()?;
                 for chunk in bytes.chunks(partition) {
@@ -72,6 +77,15 @@ fn nist_bit_vectors_and_all_output_profiles() -> Result<(), Box<dyn std::error::
                     let secret = stream.finalize_bits_secret(tail, &mut output)?;
                     assert_eq!(secret.expose(), expected);
                 }
+                assert_eq!(output, [0; 20]);
+                let secret = workspace.with(|mut s| {
+                    for chunk in bytes.chunks(partition) {
+                        s.update(chunk)?;
+                    }
+                    s.finalize_bits_secret(tail, &mut output)
+                })??;
+                assert_eq!(secret.expose(), expected);
+                drop(secret);
                 assert_eq!(output, [0; 20]);
             }
             count += 1;
@@ -104,6 +118,19 @@ fn byte_messages_and_million_byte_standard() -> Result<(), Box<dyn std::error::E
             output.as_slice(),
             decode("34aa973cd4c4daa4f61eeb2bdbad27316534016f")
         );
+        let mut workspace = Sha1Workspace::new(&executor);
+        let secret = workspace.with(|mut s| {
+            for _ in 0..1000 {
+                s.update(&[b'a'; 1000])?;
+            }
+            s.finalize_secret(&mut output)
+        })??;
+        assert_eq!(
+            secret.expose(),
+            decode("34aa973cd4c4daa4f61eeb2bdbad27316534016f")
+        );
+        drop(secret);
+        assert_eq!(output, [0; 20]);
     }
     Ok(())
 }

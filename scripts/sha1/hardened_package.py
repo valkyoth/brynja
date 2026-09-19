@@ -48,7 +48,13 @@ fn independent_hardened_bit_oracle() -> Result<(), Error> {
    let mut secret = [0xa5;20];
    let output = owner.hash_bits_secret(bits,&mut secret)?;
    assert_eq!(output.expose(),expected);
-   drop(output); assert_eq!(secret,[0;20]);
+  drop(output); assert_eq!(secret,[0;20]);
+  let mut workspace = brynja_legacy_sha1::hardened_execution::in_place::Sha1Workspace::new(&owner);
+  workspace.with(|s| s.finalize_bits_public(bits,&mut public,PublicDeclassification::acknowledge()))??;
+  assert_eq!(public,*expected);
+  let output = workspace.with(|s| s.finalize_bits_secret(bits,&mut secret))??;
+  assert_eq!(output.expose(),expected);
+  drop(output); assert_eq!(secret,[0;20]);
   }
  }
  Ok(())
@@ -62,10 +68,14 @@ def negatives(consumer, environment):
     path = consumer / 'src/lib.rs'
     before = path.read_bytes()
     cases = []
-    for owner in ('Authority', 'Executor', "Stream<'static>"):
+    for owner in ('Authority', 'Executor', "Stream<'static>", "in_place::Sha1Workspace<'static>", "in_place::Sha1<'static, 'static>"):
         for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
             cases.append((f'fn check<T: {bound}>() {{}}\nfn use_it() {{ check::<brynja_legacy_sha1::hardened_execution::{owner}>(); }}', 'E0277'))
     cases.extend([
+        ('fn use_it(s: &brynja_legacy_sha1::hardened_execution::in_place::Sha1) { let _ = s.check_additional_bits(u64::MAX); }', 'E0599'),
+        ('fn use_it(s: &brynja_legacy_sha1::hardened_execution::in_place::Sha1) { let _ = s.check_additional_bytes(usize::MAX); }', 'E0599'),
+        ('fn use_it(s: brynja_legacy_sha1::hardened_execution::in_place::Sha1) { let _ = s.finalize_public(&mut [0;20]); }', 'E0061'),
+        ('fn use_it(mut s: brynja_legacy_sha1::hardened_execution::in_place::Sha1) { s.cancel(); let _ = s.update(b"late"); }', 'E0382'),
         ('fn use_it(s: &brynja_legacy_sha1::hardened_execution::Stream<\'_>) { let _ = s.check_additional_bits(u64::MAX); }', 'E0599'),
         ('fn use_it(s: &brynja_legacy_sha1::hardened_execution::Stream<\'_>) { let _ = s.check_additional_bytes(usize::MAX); }', 'E0599'),
         ('struct Fake; impl brynja_legacy_sha1::HardenedSha1State for Fake {}', 'E0277'),
@@ -112,7 +122,44 @@ def mutants(consumer, root, environment):
         finally:
             path.write_text(before)
     print(f'Hardened output/quarantine/padding compiled mutants: {2 * len(cases)} rejected')
+    scoped_mutants(consumer, crate, environment)
     cleanup_mutants(consumer, crate, root)
+
+
+def scoped_mutants(consumer, crate, environment):
+    path = crate / 'src/hardened_execution/in_place.rs'
+    original = path.read_text()
+    cases = (
+        ('self.owner.wipe();', 'core::hint::black_box(&mut self.owner);'),
+        ('self.active = false;', 'self.active = true;'),
+        ('self.state.clear();\n        // Public IV', '// Public IV'),
+        ('scope.completed = true;', 'scope.completed = false;'),
+        ('guard.quarantine = false;', 'guard.quarantine = true;'),
+        ('self.state.executor.quarantine();', 'core::hint::black_box(self.state.executor);'),
+        ('guard.state.executor.ready()?;', 'core::hint::black_box(guard.state.executor);'),
+        ('if !self.active {', 'if false {'),
+        ('engine::update(owner, input, executor)', 'engine::update(owner, &[], executor)'),
+        ('destination.copy_from_slice(&self.state.owner.output_staging);', 'core::hint::black_box(destination);'),
+        ('self.state.owner.chaining_state.copy_from_slice(&[', 'self.state.owner.chaining_state.copy_from_slice(&[1 ^'),
+        ('self.state.clear();', 'core::hint::black_box(&mut self.state);'),
+    )
+    # The consumer already enables hardened-execution on its path dependency;
+    # Cargo forbids selecting features of a non-workspace package with -p.
+    command = ['cargo', 'test', '--locked', '--offline', '-p', 'brynja-legacy-sha1',
+               '--lib', 'scoped_execution']
+    for profile in ([], ['--release']):
+        subprocess.run(command + profile, cwd=consumer, env=environment, check=True, timeout=180)
+        for before, after in cases:
+            if before not in original: raise ValueError('stale scoped execution mutation: '+before)
+            try:
+                path.write_text(original.replace(before, after))
+                result = subprocess.run(command + profile, cwd=consumer, env=environment,
+                    text=True, capture_output=True, timeout=180)
+                if result.returncode == 0 or 'test result: FAILED' not in result.stdout:
+                    raise ValueError('scoped execution mutant survived or failed compilation: '+before+'\n'+result.stderr[-2000:])
+            finally:
+                path.write_text(original)
+    print(f'Scoped execution compiled lifecycle/cleanup mutants: {2 * len(cases)} rejected')
 
 
 def cleanup_mutants(consumer, crate, root):

@@ -839,7 +839,35 @@ storage = "unpublished-test-only"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory.rs"
-sha256 = "06a28a187578abffa68571b2c01941646ae8783d19b3750e9a64f440ecb54e3e"
+sha256 = "5f428e5522cc0552d1668de1e1dc2834e23ba52321effa026fe681ff203f22b0"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory_xor.rs"
+sha256 = "fc6c8a3caccc38c9b45795805b266bec60d2fcd10f1414f654d2e407af9bec7d"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory_xor_tests.rs"
+sha256 = "d2ef5913dd1b8891e03998a030b44952845172db15dd3b412968cdfccc202792"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/check_secret_xor.py"
+sha256 = "159daf04a48eaa2a7e795093d63ed29dce5f83d521bc4ca2291f33086cfdff03"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-xor/Cargo.toml"
+sha256 = "3a69b487cdcb33eeddc2706f823f9346ef76f1a415d871872fdca24925a62f73"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-xor/Cargo.lock"
+sha256 = "57c8de8d1f443b4e8c5bbf3d18e0ed5ed58910c6a70172b8d612dda939d86500"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-xor/src/lib.rs"
+sha256 = "91187b0cfe2a0c2e444892cd5d30c28522ec643590aea9a40a3bc063d6c485fc"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-xor/src/tests.rs"
+sha256 = "a3fe3fdf4db61e9bac57125db5eb4f2f661ce9d6f63153630525aac42ee7db7b"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory_mask.rs"
@@ -1043,7 +1071,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "38287a46046ab2afcebc504e056f73573612aaaff6551c83e7dfbfbfc5a51ee5"
+sha256 = "c0cbb91505c68e084635a3a64d272dae29df9c4b6f411c72e0d1318de21d77fb"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

@@ -437,8 +437,17 @@ commit and explicit declassification. Canonical partial-output bytes use the
 public-mask helper. Commit prepares all source slices before any destination
 write, including sparse slots and empty XOF outputs. An unexpected transfer
 invariant retains executor quarantine; ordinary request rejection remains
-reusable. Absorption's XOR/bit-packing operations and input construction are
-not covered by this transfer checkpoint and still require separate review.
+reusable.
+
+Batch absorption now uses `brynja_core::xor_secret_byte_bits` to XOR low-bit-first
+fragments from disjoint borrowed bytes directly into the owned state. Public
+source/destination offsets and bit counts are validated before access. Fragments
+crossing source-byte boundaries are split without returning or assembling a
+secret byte in Rust. Public suffix/padding bytes retain their existing framing.
+The helper's baseline x86-64/little-endian Arm boundary clears working registers
+on normal return; the safe portable/Miri/Kani model does not have that register
+guarantee. Input construction, other callers and whole-API compiler-copy/spill
+qualification remain separate unfinished obligations.
 
 ## TupleHash integer framing
 

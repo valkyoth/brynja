@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-core/src/secret_memory_xor.rs"): ("fc6c8a3caccc38c9b45795805b266bec60d2fcd10f1414f654d2e407af9bec7d", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_mask.rs"): ("a81ce3a6608d5baddf00190bb5e276db7d56aec5be320962eafcf89e70f05ac9", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_transfer.rs"): ("85f0cef7c2a8508c4d594ad7462bccb92fd8e5bea7897164d7df3ee655dcf3e0", 3, 1, 3),
     Path("crates/brynja-hash-sha3/src/hardened/permutation/native.rs"): ("2c1ec8a76fd6bb28be65fc8bf53bcdbec3d0c7ddb86584f005563ffc6debd640", 3, 1, 3),
@@ -176,6 +177,10 @@ def validate(root: Path) -> None:
         fail('secret-mask module must remain private and declared once')
     if writer.count('crate::secret_memory_mask::apply(byte, keep, set);') != 1:
         fail('borrowed secret-byte masking lost its boundary')
+    if library.count('mod secret_memory_xor;') != 1 or 'pub mod secret_memory_xor' in library:
+        fail('secret-xor module must remain private and declared once')
+    if re.sub(r'\s+', '', writer).count('crate::secret_memory_xor::apply(destination,source,source_offset,count,destination_offset,)') != 1:
+        fail('borrowed secret-byte xor lost its boundary')
 
 
 def validate_allowed(
@@ -200,6 +205,33 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
+    elif relative == Path('crates/brynja-core/src/secret_memory_xor.rs'):
+        required = ('pub(crate) unsafe extern "C" fn xor_bits(', '#[inline(never)]',
+                    '8_u8.checked_sub(count).ok_or(SecretBitRangeError)?',
+                    'count == 0 || right > remaining || left > remaining',
+                    'core::ptr::from_mut(destination)', 'core::ptr::from_ref(source)',
+                    '"movzx eax, byte ptr [{source}]"', '"mov ecx, {right:e}"', '"shr eax, cl"',
+                    '"and eax, {mask:e}"', '"mov ecx, {left:e}"', '"shl eax, cl"',
+                    '"xor byte ptr [{destination}], al"', '"xor eax, eax"', '"xor ecx, ecx"',
+                    '"ldrb w5, [{source}]"', '"lsr w5, w5, {right:w}"', '"and w5, w5, {mask:w}"',
+                    '"lsl w5, w5, {left:w}"', '"ldrb w6, [{destination}]"', '"eor w6, w6, w5"',
+                    '"strb w6, [{destination}]"', '"mov x5, xzr"', '"mov x6, xzr"', '"cmp xzr, xzr"',
+                    'out("rax") _', 'out("rcx") _', 'out("x5") _', 'out("x6") _')
+        if any(token not in text for token in required):
+            fail('secret xor lost bounds, computation or cleanup')
+        if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_XOR_BEGIN',
+                'BRYNJA_XOR_ERASE', 'BRYNJA_XOR_END', 'options(nostack)')):
+            fail('secret xor lost an opaque architecture boundary')
+        normalized = re.sub(r'\s+', '', text)
+        condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
+        if normalized.count('#[cfg('+condition+')]') != 2 or normalized.count('#[cfg(not('+condition+'))]') != 1:
+            fail('secret xor native/model separation changed')
+        if '*destination^=(source.checked_shr(u32::from(right)).ok_or(SecretBitRangeError)?&mask).checked_shl(u32::from(left)).ok_or(SecretBitRangeError)?;' not in normalized:
+            fail('secret xor safe model disappeared')
+        if 'letmask=u8::MAX.checked_shr(u32::from(remaining)).ok_or(SecretBitRangeError)?;' not in normalized:
+            fail('secret xor public mask changed')
+        if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly|target_feature)\b', re.sub(r'//[^\n]*', '', text)):
+            fail('secret xor changed memory/clobber or baseline ISA contract')
     elif relative == Path('crates/brynja-core/src/secret_memory_mask.rs'):
         required = ('pub(crate) unsafe extern "C" fn mask_byte(byte: *mut u8, keep: u8, set: u8)',
                     '#[inline(never)]', 'mask_byte(core::ptr::from_mut(byte), keep, set)',

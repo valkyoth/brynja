@@ -20,7 +20,7 @@ def fixture(root: Path) -> None:
         '[workspace.lints.rust]\nunsafe_code = "deny"\n', encoding="utf-8"
     )
     (source / "lib.rs").write_text(
-        "mod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\npub mod safe {}\n", encoding="utf-8"
+        "mod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\npub mod safe {}\n", encoding="utf-8"
     )
     shutil.copyfile(ROOT / 'crates/brynja-core/src/secret_memory.rs', source / 'secret_memory.rs')
     for relative in unsafe_policy.ALLOWED:
@@ -363,6 +363,48 @@ def secret_mask_boundary():
     print(f'Secret mask rejects {len(mutations)} byte-bound, operation, wipe, clobber and model regressions plus wrapper/visibility bypasses')
 
 
+def secret_xor_boundary():
+    relative = Path('crates/brynja-core/src/secret_memory_xor.rs')
+    source = (ROOT / relative).read_text()
+    _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
+    mutations = [
+        ('count == 0 || right > remaining || left > remaining', 'false'),
+        ('8_u8.checked_sub(count)', '8_u8.checked_sub(0)'),
+        ('u8::MAX', '0_u8'),
+        ('"movzx eax, byte ptr [{source}]"', '"mov eax, dword ptr [{source}]"'),
+        ('"ldrb w5, [{source}]"', '"ldr w5, [{source}]"'),
+        ('"xor byte ptr [{destination}], al"', '"mov byte ptr [{destination}], al"'),
+        ('"eor w6, w6, w5"', '"orr w6, w6, w5"'),
+        *[(token, '"nop"') for token in ('"shr eax, cl"', '"shl eax, cl"',
+          '"and eax, {mask:e}"', '"lsr w5, w5, {right:w}"', '"lsl w5, w5, {left:w}"',
+          '"and w5, w5, {mask:w}"', '"xor eax, eax"', '"xor ecx, ecx"',
+          '"mov x5, xzr"', '"mov x6, xzr"', '"cmp xzr, xzr"')],
+        *[(f'out("{reg}") _', f'lateout("{reg}") _') for reg in ('rax', 'rcx', 'x5', 'x6')],
+        ('options(nostack)', 'options(nostack, nomem)'),
+        ('not(any(miri, kani))', 'not(kani)'),
+        ('*destination ^=', '*destination ='),
+    ]
+    for before, after in mutations:
+        assert before in source
+        try:
+            unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
+        except unsafe_policy.UnsafePolicyError:
+            continue
+        raise AssertionError('accepted secret XOR regression: ' + before)
+    with tempfile.TemporaryDirectory(prefix='brynja-secret-xor-policy-') as temporary:
+        root = Path(temporary)
+        fixture(root)
+        writer = root / 'crates/brynja-core/src/secret_memory.rs'
+        original = writer.read_text()
+        writer.write_text(original.replace('crate::secret_memory_xor::apply(', 'other::apply('))
+        require_rejection(root, 'xor lost its boundary')
+        writer.write_text(original)
+        library = root / 'crates/brynja-core/src/lib.rs'
+        library.write_text(library.read_text().replace('mod secret_memory_xor;', 'pub mod secret_memory_xor;'))
+        require_rejection(root, 'secret-xor module must remain private')
+    print(f'Secret XOR rejects {len(mutations)} bounds/shift/memory/wipe/model regressions plus wrapper/visibility bypasses')
+
+
 if __name__ == "__main__":
     test()
     register_boundaries()
@@ -377,6 +419,7 @@ if __name__ == "__main__":
     scalar_boundary('keccak')
     secret_copy_boundary()
     secret_mask_boundary()
+    secret_xor_boundary()
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
     print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

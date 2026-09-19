@@ -123,6 +123,44 @@ pub fn apply_secret_byte_mask(byte: &mut u8, keep: u8, set: u8) {
     crate::secret_memory_mask::apply(byte, keep, set);
 }
 
+/// An empty or out-of-byte public bit range; no secret values are included.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct SecretBitRangeError;
+
+/// XORs `count` low-bit-first source bits into one borrowed destination byte.
+/// Public offsets specify the starting bit in each byte; `count` must be 1..=8
+/// and both ranges must fit. Invalid metadata leaves both bytes unchanged.
+///
+/// This does not own/clear either region or declassify data. Retain the owners'
+/// cleanup guards. The baseline x86-64/little-endian AArch64 boundary clears its
+/// working registers on normal return; portable targets and Miri/Kani use a safe
+/// model. Caller copies, spills and interruption snapshots remain outside that
+/// guarantee. The source/destination borrows must be disjoint.
+///
+/// ```
+/// let source = 0b1010_1100;
+/// let mut destination = 0b1000_0001;
+/// brynja_core::xor_secret_byte_bits(&mut destination, &source, 2, 3, 1)?;
+/// assert_eq!(destination, 0b1000_0111);
+/// # Ok::<(), brynja_core::SecretBitRangeError>(())
+/// ```
+#[inline(never)]
+pub fn xor_secret_byte_bits(
+    destination: &mut u8,
+    source: &u8,
+    source_offset: u8,
+    count: u8,
+    destination_offset: u8,
+) -> Result<(), SecretBitRangeError> {
+    crate::secret_memory_xor::apply(
+        destination,
+        source,
+        source_offset,
+        count,
+        destination_offset,
+    )
+}
+
 #[cfg(test)]
 mod byte_mask_tests {
     #[test]

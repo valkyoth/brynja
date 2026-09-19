@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: seventy-six exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy-seven exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-six exact modules: the private core volatile clearer and
+Rust in only seventy-seven exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -219,6 +219,15 @@ cannot accept a null or empty region. Other targets and Miri/Kani use a safe
 model. Development evidence in `assurance/register-cleanup/secret-mask` covers
 guard-page edges, immediate register observation, emitted-code checks and
 compiled mutations. This is not whole-caller register/spill qualification.
+
+Core's private `secret_memory_xor.rs` XORs checked low-bit-first fragments between
+disjoint borrowed bytes. Count and offsets are public and checked before access;
+native code only loads/stores individual bytes. Baseline x86-64/little-endian
+Arm working registers clear on normal return, with no stack or calls inside the
+opaque boundary. Other targets and Miri/Kani retain the safe model. The
+`assurance/register-cleanup/secret-xor` fixture observes registers immediately,
+checks protected source/destination page edges and rejects compiled mutations.
+This does not erase source owners, callers, spills or interruption snapshots.
 
 Core's private `secret_memory_transfer.rs` replaces the byte-copy loop inside
 `SecretRegionInitialization::write` on baseline x86-64/little-endian AArch64.

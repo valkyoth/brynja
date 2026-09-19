@@ -169,6 +169,13 @@ def compiled_mutants(simd):
     yield ('brynja-hash-sha3', 'src/hardened_batch/workspace.rs',
            'clear_owned_region(self.states.as_flattened_mut())', 'Ok::<(), ()>(())',
            'hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state', 1)
+    for before, after in (
+        ('self.xor_part(input, index, offset, count, destination, filled)?;',
+         'let _ = destination;'),
+        ('left.checked_add(first).ok_or(Error::Invariant)?', 'left'),
+    ):
+        yield ('brynja-hash-sha3', 'src/hardened_batch/framing.rs', before, after,
+               'hardened_batch::tests::portable_mixed_domains_bit_tails_and_squeeze_boundaries', 1)
     yield ('brynja-hash-sha3', 'src/hardened_batch/engine.rs',
            'brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)',
            'let _ = (destination, source); Ok(())',

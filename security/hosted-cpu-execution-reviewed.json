@@ -118,7 +118,7 @@
     "docs/hosted-cpu-execution.md": "ee95ea12465819e9d071196d39497b7245b94589f3060b3c48e48af960fe978a",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/cpu/check-hosted-execution.py": "1353541e6a79d8127ab0562fd2ba18a44e1e5a40cb25f3e0665d4d399722b55e",
-    "scripts/repository/unsafe_policy.py": "ab75cb9e534f48f5dcbf38def9c5e345e199a85ff8d0a071ee0c270879eabf3e",
+    "scripts/repository/unsafe_policy.py": "bc5e5fbd78b908ef6ad0f4ad3f4b9b44ab6d1c3a4d7f4e1268a61a6dece80b60",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
   }

@@ -139,15 +139,18 @@ impl Frame {
     pub fn permutations(&self) -> Result<usize, Error> {
         number(self.cursor.get(3).ok_or(Error::Invariant)?)
     }
-    fn read(
+    fn xor_part(
         &self,
         input: &Input<'_>,
         part: usize,
         offset: usize,
         count: usize,
-    ) -> Result<u8, Error> {
+        destination: &mut u8,
+        left: usize,
+    ) -> Result<(), Error> {
         let end = offset.checked_add(count).ok_or(Error::Invariant)?;
-        if count > 8 || end > self.len(part)? {
+        let available = 8_usize.checked_sub(count).ok_or(Error::Invariant)?;
+        if count == 0 || left > available || end > self.len(part)? {
             return Err(Error::Invariant);
         }
         let bytes = match part {
@@ -162,38 +165,46 @@ impl Frame {
                 .as_slice(),
             2 => input.name.as_bytes(),
             4 => input.customization.as_bytes(),
-            5 => return Ok(0),
+            5 => return Ok(()),
             6 => input.message.as_bytes(),
             7 => {
-                return Ok(self.suffix[0]
-                    .checked_shr(u32::try_from(offset).map_err(|_| Error::Invariant)?)
-                    .ok_or(Error::Invariant)?
-                    & mask(count));
+                return xor_bits(destination, &self.suffix[0], offset, count, left);
             }
             8 => {
-                return Ok(if end == self.len(part)? && count != 0 {
+                // Padding is public metadata, never a secret-derived byte.
+                let padding = if end == self.len(part)? {
                     1 << count.checked_sub(1).ok_or(Error::Invariant)?
                 } else {
                     0
-                });
+                };
+                return xor_bits(destination, &padding, 0, count, left);
             }
             _ => return Err(Error::Invariant),
         };
-        let first = u16::from(*bytes.get(offset / 8).ok_or(Error::Invariant)?);
-        let second = if (offset % 8).checked_add(count).ok_or(Error::Invariant)? > 8 {
-            u16::from(
-                *bytes
+        // At most two disjoint fragments; no secret byte is returned or
+        // assembled in a Rust local. XOR distributes over these disjoint bits.
+        let first = count.min(8_usize.checked_sub(offset % 8).ok_or(Error::Invariant)?);
+        xor_bits(
+            destination,
+            bytes.get(offset / 8).ok_or(Error::Invariant)?,
+            offset % 8,
+            first,
+            left,
+        )?;
+        if first < count {
+            xor_bits(
+                destination,
+                bytes
                     .get((offset / 8).checked_add(1).ok_or(Error::Invariant)?)
                     .ok_or(Error::Invariant)?,
-            )
-        } else {
-            0
-        };
-        u8::try_from(((first | (second << 8)) >> (offset % 8)) & u16::from(mask(count)))
-            .map_err(|_| Error::Invariant)
+                0,
+                count.checked_sub(first).ok_or(Error::Invariant)?,
+                left.checked_add(first).ok_or(Error::Invariant)?,
+            )?;
+        }
+        Ok(())
     }
-    fn next_byte(&mut self, input: &Input<'_>) -> Result<u8, Error> {
-        let mut byte = 0;
+    fn absorb_byte(&mut self, input: &Input<'_>, destination: &mut u8) -> Result<(), Error> {
         let mut filled = 0_usize;
         while filled < 8 {
             let [part, position, ..] = &self.cursor;
@@ -210,14 +221,14 @@ impl Frame {
                 continue;
             }
             let count = remaining.min(8_usize.checked_sub(filled).ok_or(Error::Invariant)?);
-            byte |= self.read(input, index, offset, count)? << filled;
+            self.xor_part(input, index, offset, count, destination, filled)?;
             store(
                 self.cursor.get_mut(1).ok_or(Error::Invariant)?,
                 offset.checked_add(count).ok_or(Error::Invariant)?,
             )?;
             filled = filled.checked_add(count).ok_or(Error::Invariant)?;
         }
-        Ok(byte)
+        Ok(())
     }
     pub fn absorb(&mut self, input: &Input<'_>, state: &mut [u8; 200]) -> Result<(), Error> {
         let remaining = self.remaining()?.checked_sub(1).ok_or(Error::Invariant)?;
@@ -225,13 +236,70 @@ impl Frame {
             .get_mut(..input.algorithm.rate())
             .ok_or(Error::Invariant)?
         {
-            *out ^= self.next_byte(input)?;
+            self.absorb_byte(input, out)?;
         }
         store(self.cursor.get_mut(2).ok_or(Error::Invariant)?, remaining)
     }
 }
+fn xor_bits(
+    destination: &mut u8,
+    source: &u8,
+    right: usize,
+    count: usize,
+    left: usize,
+) -> Result<(), Error> {
+    brynja_core::xor_secret_byte_bits(
+        destination,
+        source,
+        u8::try_from(right).map_err(|_| Error::Invariant)?,
+        u8::try_from(count).map_err(|_| Error::Invariant)?,
+        u8::try_from(left).map_err(|_| Error::Invariant)?,
+    )
+    .map_err(|_| Error::Invariant)
+}
 impl Drop for Frame {
     fn drop(&mut self) {
         self.wipe();
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn borrowed_fragments_cross_byte_boundaries_without_changing_other_bits() -> Result<(), Error> {
+        let bytes = [0x96, 0x69];
+        let bits = crate::Fips202BitString::new(&bytes, 8).map_err(|_| Error::Invariant)?;
+        let input = Input::new(super::super::Algorithm::Shake128, bits, 1)?;
+        let mut frame = Frame::new();
+        frame.initialize(&input)?;
+        for offset in 0..16 {
+            for count in 1..=8.min(16 - offset) {
+                for left in 0..=8 - count {
+                    let mut out = 0xa5;
+                    frame.xor_part(&input, 6, offset, count, &mut out, left)?;
+                    let value = (u16::from_le_bytes(bytes) >> offset) & ((1_u16 << count) - 1);
+                    assert_eq!(
+                        out,
+                        0xa5 ^ u8::try_from(value << left).map_err(|_| Error::Invariant)?
+                    );
+                }
+            }
+        }
+        for (offset, count, left) in [
+            (0, 0, 0),
+            (0, 9, 0),
+            (15, 2, 0),
+            (0, 1, 8),
+            (usize::MAX, 1, 0),
+        ] {
+            let mut out = 0xa5;
+            assert_eq!(
+                frame.xor_part(&input, 6, offset, count, &mut out, left),
+                Err(Error::Invariant)
+            );
+            assert_eq!(out, 0xa5);
+        }
+        Ok(())
     }
 }

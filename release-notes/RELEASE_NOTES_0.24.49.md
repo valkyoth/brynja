@@ -55,7 +55,7 @@ No crates are selected for publication.
   qualification remains unfinished.
 
 - Add checked borrowed secret-region copying for already-owned storage and use
-  it in SHA-224/256 hardened batch state, block, digest-staging and final-output
+  it in SHA-224/256 and SHA-512-family hardened batch state, block, digest-staging and final-output
   transfers, including explicit declassification. Full-slot preflight preserves
   transactional public output; consumed secret outputs retain clearing on Drop.
   Exact-length failures preserve storage; callers retain cleanup responsibility.

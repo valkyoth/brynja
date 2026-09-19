@@ -92,7 +92,8 @@ impl<'a> SecretBatchOutput<'a> {
         }
         for (source, destination) in self.destinations.iter().zip(&mut destinations) {
             if let (Some(source), Some(destination)) = (source, destination) {
-                destination.copy_from_slice(source);
+                brynja_core::copy_secret_region(destination, source)
+                    .map_err(|_| Error::Invariant)?;
             }
         }
         Ok(())
@@ -125,12 +126,23 @@ pub(super) fn validate(
 pub(super) fn commit(
     staging: &[[u8; 64]; CAPACITY],
     destinations: &mut [Option<&mut [u8]>; CAPACITY],
-) {
-    for (source, destination) in staging.iter().zip(destinations) {
+) -> Result<(), Error> {
+    // Exact identity/width matching was validated before hashing. Independently
+    // preflight every transfer before writing; general t permits all byte widths
+    // 1..=64. Prepared borrows contain no digest bytes or new secret owners.
+    let mut sources = [None; CAPACITY];
+    for ((source, destination), prepared) in staging.iter().zip(&*destinations).zip(&mut sources) {
         if let Some(destination) = destination {
-            for (out, byte) in destination.iter_mut().zip(source) {
-                *out = *byte;
+            if !(1..=64).contains(&destination.len()) {
+                return Err(Error::Invariant);
             }
+            *prepared = Some(source.get(..destination.len()).ok_or(Error::Invariant)?);
         }
     }
+    for (source, destination) in sources.into_iter().zip(destinations) {
+        if let (Some(source), Some(destination)) = (source, destination) {
+            brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)?;
+        }
+    }
+    Ok(())
 }

@@ -138,6 +138,26 @@ def compiled_mutants(simd):
     ):
         yield ('brynja-hash-sha2', 'src/hardened_batch/output.rs', before, after,
                'hardened_batch::tests::output::' + test, count)
+    yield ('brynja-hash-sha2', 'src/hardened_batch512/engine.rs',
+           'brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)',
+           'let _ = (destination, source); Ok(())',
+           'hardened_batch512::tests::differential::portable_all_bit_tails_padding_boundaries_and_mixed_identities', 1)
+    for before, after, test in (
+        ('brynja_core::copy_secret_region(destination, source)\n'
+         '                    .map_err(|_| Error::Invariant)?;',
+         'let _ = (destination, source);',
+         'declassification_all_widths_is_atomic_and_clears_secrets'),
+        ('brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)?;',
+         'let _ = (destination, source);',
+         'commit_preflights_every_width_before_any_write'),
+        ('if !(1..=64).contains(&destination.len())', 'if false',
+         'commit_preflights_every_width_before_any_write'),
+        ('self.destinations.iter().zip(&destinations)',
+         'self.destinations.iter().zip(&destinations).take(CAPACITY - 1)',
+         'declassification_all_widths_is_atomic_and_clears_secrets'),
+    ):
+        yield ('brynja-hash-sha2', 'src/hardened_batch512/output.rs', before, after,
+               'hardened_batch512::tests::output::' + test, 1)
     yield ('brynja-hash-sha3', 'src/hardened_batch/workspace.rs',
            'clear_owned_region(self.states.as_flattened_mut())', 'Ok::<(), ()>(())',
            'hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state', 1)

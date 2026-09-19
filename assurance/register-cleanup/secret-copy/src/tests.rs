@@ -54,6 +54,9 @@ fn alignment_length_and_return_registers() {
             };
             assert_eq!(destination, source);
             assert_eq!(snapshot, [u64::MAX, 0, 0, 0, u64::MAX]);
+            destination.fill(0xa5);
+            assert_eq!(brynja_core::copy_secret_region(destination, source), Ok(()));
+            assert_eq!(destination, source);
             assert!(
                 output[..start]
                     .iter()
@@ -112,6 +115,11 @@ fn checked_transfer_preserves_mismatch_and_zero_length() {
         let mut bytes = [0xa5; 32];
         assert_eq!(
             transfer::copy(&mut bytes[..destination], &[0x5a; 32][..source]),
+            Err(super::SecretMemoryError::InsufficientCapacity)
+        );
+        assert_eq!(bytes, [0xa5; 32]);
+        assert_eq!(
+            brynja_core::copy_secret_region(&mut bytes[..destination], &[0x5a; 32][..source]),
             Err(super::SecretMemoryError::InsufficientCapacity)
         );
         assert_eq!(bytes, [0xa5; 32]);

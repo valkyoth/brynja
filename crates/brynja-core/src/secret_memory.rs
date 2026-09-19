@@ -61,6 +61,8 @@ pub fn clear_owned_region(
 
 /// Write-only initialization of one caller-owned secret region.
 ///
+/// See [`copy_secret_region`] for transfers between already-owned regions.
+///
 /// Construction immediately clears the complete pre-existing region. Writes
 /// are sequential and failure-atomic. Read access does not exist until
 /// [`finish`](Self::finish) confirms exact complete initialization. Dropping an
@@ -69,6 +71,36 @@ pub fn clear_owned_region(
 pub struct SecretRegionInitialization<'region> {
     region: Option<&'region mut [u8]>,
     initialized: usize,
+}
+
+/// Copies between disjoint, already-owned regions of exactly equal length.
+///
+/// A mismatch returns a value-free error before changing either region. Empty
+/// transfers succeed. This function neither takes ownership nor clears either
+/// region: the caller must retain its own cleanup guards. It does not declassify
+/// data or prevent the caller from making additional copies.
+///
+/// The checked baseline x86-64/little-endian AArch64 implementation clears its
+/// own working registers on normal return. Other targets and Miri/Kani use a
+/// portable model, without that register guarantee. This is not a promise to
+/// erase caller registers, compiler copies, spills or interruption snapshots.
+///
+/// ```
+/// let input = [7_u8; 8];
+/// let mut destination = [0_u8; 8];
+/// brynja_core::copy_secret_region(&mut destination, &input)?;
+/// assert_eq!(destination, input);
+/// let _ = brynja_core::clear_owned_region(&mut destination)?;
+/// # Ok::<(), brynja_core::SecretMemoryError>(())
+/// ```
+/// Safe borrows reject overlapping source and destination storage:
+/// ```compile_fail
+/// let mut bytes = [7_u8; 8];
+/// brynja_core::copy_secret_region(&mut bytes, &bytes).ok();
+/// ```
+#[inline(never)]
+pub fn copy_secret_region(destination: &mut [u8], input: &[u8]) -> Result<(), SecretMemoryError> {
+    crate::secret_memory_transfer::copy(destination, input)
 }
 
 impl<'region> SecretRegionInitialization<'region> {
@@ -208,6 +240,67 @@ mod assurance_contract;
 #[cfg(test)]
 mod tests {
     use super::{SecretMemoryError, checked_write_end};
+
+    #[test]
+    fn copy_secret_region_lengths_alignments_and_error_atomicity() -> Result<(), SecretMemoryError>
+    {
+        let mut input = [0_u8; 145];
+        for (byte, value) in input.iter_mut().zip(0_u8..) {
+            *byte = value;
+        }
+        for length in 0..=128 {
+            for offset in 0..8 {
+                let mut output = [0xa5; 145];
+                assert_eq!(
+                    super::copy_secret_region(
+                        output
+                            .get_mut(offset..offset + length)
+                            .ok_or(SecretMemoryError::InsufficientCapacity)?,
+                        input
+                            .get(7 - offset..7 - offset + length)
+                            .ok_or(SecretMemoryError::InsufficientCapacity)?,
+                    ),
+                    Ok(())
+                );
+                assert_eq!(
+                    output.get(offset..offset + length),
+                    input.get(7 - offset..7 - offset + length)
+                );
+                assert!(
+                    output
+                        .get(..offset)
+                        .ok_or(SecretMemoryError::InsufficientCapacity)?
+                        .iter()
+                        .chain(
+                            output
+                                .get(offset + length..)
+                                .ok_or(SecretMemoryError::InsufficientCapacity)?
+                        )
+                        .all(|byte| *byte == 0xa5)
+                );
+                let before = output;
+                assert_eq!(
+                    super::copy_secret_region(
+                        output
+                            .get_mut(offset..offset + length)
+                            .ok_or(SecretMemoryError::InsufficientCapacity)?,
+                        input
+                            .get(..length + 1)
+                            .ok_or(SecretMemoryError::InsufficientCapacity)?,
+                    ),
+                    Err(SecretMemoryError::InsufficientCapacity)
+                );
+                assert_eq!(output, before);
+            }
+        }
+        let mut output = [0xa5; 1];
+        assert_eq!(
+            super::copy_secret_region(&mut output, &[]),
+            Err(SecretMemoryError::InsufficientCapacity)
+        );
+        assert_eq!(output, [0xa5]);
+        Ok(())
+    }
 
     #[test]
     fn checked_boundaries_reject_overflow_and_capacity() {

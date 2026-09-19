@@ -138,7 +138,7 @@ pub use secret_destruction::{
 };
 pub use secret_memory::{
     OwnedRegionClearComplete, OwnedSecretRegion, SecretMemoryError, SecretRegionInitialization,
-    clear_owned_region,
+    clear_owned_region, copy_secret_region,
 };
 pub use secure_random::{
     MAX_RESEED_INTERVAL, RandomPurpose, RandomRuntimeGeneration, RandomStateDestruction,

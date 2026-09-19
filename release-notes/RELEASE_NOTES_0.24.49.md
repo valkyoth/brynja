@@ -54,6 +54,10 @@ No crates are selected for publication.
   output under the operation gate. Complete compiler-copy/register/spill
   qualification remains unfinished.
 
+- Add checked borrowed secret-region copying for already-owned storage and use
+  it in SHA-224/256 hardened batch state, block and digest-staging transfers.
+  Exact-length failures preserve storage; callers retain cleanup responsibility.
+  This is partial caller-copy remediation, not whole-API residue qualification.
 - Add scoped hardened MD5 SIMD batches in caller-owned eight-lane workspaces.
   Consuming public/secret output reuses the existing engine, exact work accounting
   and quarantine policy. Independent scope cleanup survives forgotten handles;

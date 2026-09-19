@@ -54,10 +54,10 @@ pub(super) fn run(
             }
             for lane in 0..width {
                 let index = s.index(group, lane)?;
-                s.packed
-                    .get_mut(lane)
-                    .ok_or(Error::Invariant)?
-                    .copy_from_slice(s.states.get(index).ok_or(Error::Invariant)?);
+                transfer(
+                    s.packed.get_mut(lane).ok_or(Error::Invariant)?,
+                    s.states.get(index).ok_or(Error::Invariant)?,
+                )?;
             }
             for number in 0..common {
                 for lane in 0..width {
@@ -74,10 +74,7 @@ pub(super) fn run(
                         .0
                         .get(number)
                         .ok_or(Error::Invariant)?;
-                    s.blocks
-                        .get_mut(lane)
-                        .ok_or(Error::Invariant)?
-                        .copy_from_slice(block);
+                    transfer(s.blocks.get_mut(lane).ok_or(Error::Invariant)?, block)?;
                 }
                 control.charge(u64::try_from(width).map_err(|_| Error::Invariant)?)?;
                 let before = session.completed_vector_calls();
@@ -98,10 +95,10 @@ pub(super) fn run(
             }
             for lane in 0..width {
                 let index = s.index(group, lane)?;
-                s.states
-                    .get_mut(index)
-                    .ok_or(Error::Invariant)?
-                    .copy_from_slice(s.packed.get(lane).ok_or(Error::Invariant)?);
+                transfer(
+                    s.states.get_mut(index).ok_or(Error::Invariant)?,
+                    s.packed.get(lane).ok_or(Error::Invariant)?,
+                )?;
                 s.offsets
                     .get_mut(index)
                     .ok_or(Error::Invariant)?
@@ -150,15 +147,10 @@ fn scalar(s: &mut Workspace, control: &mut Control<'_>, report: &mut Report) -> 
     Ok(())
 }
 fn padding(s: &mut Workspace, control: &mut Control<'_>, report: &mut Report) -> Result<(), Error> {
-    for (out, byte) in s
-        .scalar
-        .block_copy
-        .iter_mut()
-        .take(64)
-        .zip(&s.scalar.padding_block)
-    {
-        *out = *byte;
-    }
+    transfer(
+        s.scalar.block_copy.get_mut(..64).ok_or(Error::Invariant)?,
+        s.scalar.padding_block.get(..64).ok_or(Error::Invariant)?,
+    )?;
     scalar(s, control, report)
 }
 fn finish(
@@ -169,14 +161,13 @@ fn finish(
     report: &mut Report,
 ) -> Result<(), Error> {
     s.scalar.wipe();
-    for (out, byte) in s
-        .scalar
-        .chaining_state
-        .iter_mut()
-        .zip(s.states.get(index).ok_or(Error::Invariant)?)
-    {
-        *out = *byte;
-    }
+    transfer(
+        s.scalar
+            .chaining_state
+            .get_mut(..32)
+            .ok_or(Error::Invariant)?,
+        s.states.get(index).ok_or(Error::Invariant)?,
+    )?;
     let offset = usize::try_from(u64::from_le_bytes(
         *s.offsets.get(index).ok_or(Error::Invariant)?,
     ))
@@ -184,14 +175,19 @@ fn finish(
     let (complete, tail) = input.bits.split();
     let (blocks, remainder) = complete.as_chunks::<64>();
     for block in blocks.get(offset..).ok_or(Error::Invariant)? {
-        for (out, byte) in s.scalar.block_copy.iter_mut().zip(block) {
-            *out = *byte;
-        }
+        transfer(
+            s.scalar.block_copy.get_mut(..64).ok_or(Error::Invariant)?,
+            block,
+        )?;
         scalar(s, control, report)?;
     }
-    for (out, byte) in s.scalar.padding_block.iter_mut().zip(remainder) {
-        *out = *byte;
-    }
+    transfer(
+        s.scalar
+            .padding_block
+            .get_mut(..remainder.len())
+            .ok_or(Error::Invariant)?,
+        remainder,
+    )?;
     let separator = tail.map_or(0x80, |(byte, valid)| byte | (0x80_u8 >> valid));
     *s.scalar
         .padding_block
@@ -208,23 +204,38 @@ fn finish(
         .ok_or(Error::Invariant)?
         .copy_from_slice(&length.to_be_bytes());
     padding(s, control, report)?;
-    for (out, byte) in s
-        .output
-        .get_mut(index)
-        .ok_or(Error::Invariant)?
-        .iter_mut()
-        .take(input.algorithm.output_bytes())
-        .zip(&s.scalar.chaining_state)
-    {
-        *out = *byte;
-    }
+    let width = input.algorithm.output_bytes();
+    transfer(
+        s.output
+            .get_mut(index)
+            .and_then(|slot| slot.get_mut(..width))
+            .ok_or(Error::Invariant)?,
+        s.scalar
+            .chaining_state
+            .get(..width)
+            .ok_or(Error::Invariant)?,
+    )?;
     s.scalar.wipe();
     Ok(())
+}
+
+fn transfer(destination: &mut [u8], source: &[u8]) -> Result<(), Error> {
+    brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn secret_transfer_mismatch_is_atomic_invariant_failure() {
+        let mut output = [0xa5; 33];
+        assert_eq!(transfer(&mut output, &[0x36; 32]), Err(Error::Invariant));
+        assert_eq!(output, [0xa5; 33]);
+        assert_eq!(transfer(&mut output[..32], &[0x36; 32]), Ok(()));
+        assert_eq!(output[..32], [0x36; 32]);
+        assert_eq!(output[32], 0xa5);
+        assert_eq!(transfer(&mut [], &[]), Ok(()));
+    }
     #[test]
     fn report_overflow_is_an_invariant_failure() {
         assert_eq!(work(u64::MAX, 0), Ok(u64::MAX));

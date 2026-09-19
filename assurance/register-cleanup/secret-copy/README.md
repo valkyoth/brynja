@@ -1,7 +1,9 @@
 # Private secret-initialization transfer checks
 
 Development fixture for the actual core `SecretRegionInitialization::write`
-copy boundary. No new public API or release gate is introduced.
+copy boundary and the additive `copy_secret_region` borrowed transfer API.
+The latter retains caller-owned cleanup and rejects unequal lengths before
+mutation. No release gate is introduced or changed.
 
 Run `python3 assurance/register-cleanup/check_secret_copy.py` from the repository
 root. It checks Rust 1.90.0/1.98.1 debug/release compiler output, then executes

@@ -35,6 +35,7 @@ TLS engine or collection of hash/cipher implementations.
 | --- | --- | --- |
 | Checked counters, budgets, transactional cursors and typed workspaces | ✅ Implemented | ❌ No |
 | Owned secret regions and compiler-resistant clearing | ✅ Implemented | ❌ No |
+| Checked borrowed secret-region copies | ✅ Implemented; caller cleanup required | ❌ No |
 | Fixed-width constant-time equality, selection and swap | ✅ Implemented | ❌ No |
 | Provider, entropy, clock, pending-operation and security-outcome contracts | ✅ Implemented contracts | ❌ No |
 | Bounded observational security events | ✅ Implemented | ❌ No |
@@ -71,6 +72,13 @@ initialization, explicit clearing and Drop erase the complete allocation.
 
 `ReadCursor` and `WriteCursor` preflight ranges before advancing; failed
 writes preserve output. Named builders require every limit exactly once.
+`copy_secret_region(destination, source)` copies equal-length disjoint borrows
+without taking ownership. Mismatched lengths preserve the destination; empty
+copies succeed. Both regions still need caller-managed clearing. Its baseline
+x86-64/little-endian Arm routine clears its own working registers on normal
+return; portable models and caller registers/copies have no such guarantee.
+It does not declassify data or replace `SecretRegionInitialization` ownership.
+
 Typed workspace domains prevent swapping secret/plaintext/transcript/
 certificate/output arenas, but a domain label alone does not clear memory.
 

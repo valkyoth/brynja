@@ -118,6 +118,10 @@ def compiled_mutants(simd):
         yield ('brynja-hash-sha2', f'src/{module}/workspace.rs',
                'clear_owned_region(self.states.as_flattened_mut())', 'Ok::<(), ()>(())',
                module + '::tests::destructor_clears_all_leaf_regions', 1)
+    yield ('brynja-hash-sha2', 'src/hardened_batch/engine.rs',
+           'brynja_core::copy_secret_region(destination, source).map_err(|_| Error::Invariant)',
+           'let _ = (destination, source); Ok(())',
+           'hardened_batch::tests::differential::portable_all_bit_tails_padding_boundaries_and_mixed_identities', 1)
     yield ('brynja-hash-sha3', 'src/hardened_batch/workspace.rs',
            'clear_owned_region(self.states.as_flattened_mut())', 'Ok::<(), ()>(())',
            'hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state', 1)

@@ -89,9 +89,13 @@ def controls():
     owners = cases.owners()
     boundaries = cases.boundaries()
     substitutions = list(cases.substitutions())
-    assert len(owners) == len(set(owners)) == 26
-    assert len(boundaries) == 129 and len(substitutions) == 16
-    assert len({case[0] for case in boundaries + substitutions}) == 145
+    assert len(owners) == len(set(owners)) == 28
+    assert len(boundaries) == 137 and len(substitutions) == 16
+    assert len({case[0] for case in boundaries + substitutions}) == 153
+    for strength in (128, 256):
+        owner = f"brynja_hash_parallel::execution::batch::scoped::Leaves{strength}<'static, 'static, 'static>"
+        assert owner in owners
+        assert {label.removeprefix(owner + ': !') for label, *_ in boundaries if label.startswith(owner + ': !')} == {'Sync', 'Copy', 'Clone', 'core::fmt::Debug'}
     with tempfile.TemporaryDirectory(prefix='brynja-package-controls-') as directory:
         root = Path(directory)
         source = root / 'lib.rs'
@@ -203,7 +207,7 @@ def main():
         except AssertionError:
             continue
         raise AssertionError('package-checker mutant survived: ' + before)
-    print('Hardened package checker: diagnostics, graph provenance, 145 exact paired sources, three public type-source pairs and five enforcement mutants PASS')
+    print('Hardened package checker: diagnostics, graph provenance, 153 exact paired sources, three public type-source pairs and five enforcement mutants PASS')
 
 
 if __name__ == '__main__':

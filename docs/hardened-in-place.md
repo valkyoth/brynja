@@ -1,7 +1,10 @@
 # Scoped hardened storage
 
-Status: named/general SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and portable/accelerated TupleHash/TupleHashXOF API development checkpoint; wider rollout and complete
-register/spill qualification pending. No independent verification or FIPS claim.
+Status: scoped named/general SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF,
+TupleHash/TupleHashXOF, ParallelHash/ParallelHashXOF and legacy SHA-1/MD5 APIs
+are integrated development checkpoints. Remaining caller-copy/framing work and
+complete register/spill qualification are pending. No independent verification
+or FIPS claim.
 
 The first additive API is `brynja_hash_sha3::hardened_in_place`, with
 `Sha3_224Workspace`, `Sha3_256Workspace`, `Sha3_384Workspace` and
@@ -382,7 +385,7 @@ the shared executor. Reuse cannot recover quarantined authority or silently
 fall back to portable. Existing CPU scratch cleanup remains per-compression.
 The original by-value APIs, static deployment guarantees and hosted feature
 detection caveats are unchanged. This additive API is not whole-API register,
-spill or compiler-copy qualification; scoped MD5 SIMD batching remains pending.
+spill or compiler-copy qualification. Scoped MD5 SIMD batching is described below.
 
 ## Legacy MD5 scoped workspace
 
@@ -400,10 +403,27 @@ MD5 retains checked u128 message accounting, with the low 64 bits encoded in
 little-endian padding; this is not SHA-1's u64 admission rule. There is no public
 capacity/length oracle, snapshot, reset or ordinary-state conversion on the new
 handle. Existing by-value APIs, kernels, feature defaults and batch authorities
-are unchanged. This is portable single-message storage; separate scoped SIMD
-batch integration and full register/spill/compiler-copy qualification remain
-pending. MD5 remains collision- and chosen-prefix-broken, not an authentication
+are unchanged. This is portable single-message storage; full
+register/spill/compiler-copy qualification remains pending. MD5 remains collision- and chosen-prefix-broken, not an authentication
 primitive, and abort cannot run cleanup guards.
+
+The opt-in `hardened_execution::in_place::{Workspace, Batch}` separately provides
+scoped eight-lane MD5 SIMD storage borrowing the existing hardened executor.
+Its parent guard clears even forgotten handles; public/secret outputs preserve
+the existing work, selection, cancellation and quarantine contracts. See
+[hardened MD5 batching](legacy-md5-hardened-execution.md).
+
+## Borrowed transfer follow-up
+
+`brynja_core::copy_secret_region` exposes the existing checked transfer routine
+for already-owned disjoint byte regions. It preserves both regions on a length
+mismatch, accepts empty transfers and never takes over cleanup or declassifies
+data. SHA-224/256 hardened batching now uses it for lane packing/unpacking,
+message blocks, scalar-state transfer, padding-block transfer and digest staging.
+Public IV/count setup remains ordinary public computation. This change does not
+yet cover partial-bit separator arithmetic, final destination commit, other
+batch families or all higher-level framing. Normal-return working-register
+evidence for the copy routine is not whole-API residue qualification.
 
 ## TupleHash integer framing
 
@@ -559,7 +579,7 @@ cover forgotten handles. Finalization transfers only reference-bearing handles
 into the cSHAKE reader. Secret-output errors clear the full supplied destination;
 public errors preserve it. Typed secret output may outlive the scope, but not its
 destination borrow. This does not change the older movable APIs. These two
-workspaces are portable; accelerated KMAC scopes remain pending.
+workspaces are portable; accelerated KMAC scopes are described below.
 
 Tests cover all six fixed NIST examples, the fixed-output half of the existing
 256-case independent arbitrary-bit corpus, 896 additional portable comparisons,

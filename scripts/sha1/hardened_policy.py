@@ -24,6 +24,10 @@ SCOPED = ('state: Storage', "executor: &'authority Executor", 'owner: Sha1Owner'
           'Err(Sha1Error::StateConsumed.into())',
           'let mut output = begin_output(destination)?;',
           'destination.copy_from_slice(&self.state.owner.output_staging);')
+BORROWED_ENGINE = ('tail.split_borrowed()', 'copy_secret_region(destination, source)',
+                   'core::slice::from_ref(last)',
+                   'apply_secret_byte_mask(destination, 0xff, 0x80 >> valid)',
+                   'copy_secret_region(&mut owner.output_staging, &owner.chaining_state)')
 
 
 def inventory(root=ROOT):
@@ -83,6 +87,8 @@ def validate(root=ROOT, reviewed=True):
         if name not in ('stream/tests.rs', 'in_place/tests.rs') and re.search(r'\b(?:unsafe|Vec|Box|alloc::|std::)|\.(?:unwrap|expect)\(|\b(?:panic|todo|unimplemented)!', source):
             raise ValueError('hardened API gained low-level, allocating or panicking code')
     module = read(root, LEAF + 'src/hardened_execution/mod.rs')
+    engine = read(root, LEAF + 'src/hardened_execution/engine.rs')
+    for token in BORROWED_ENGINE: require(engine, token)
     require(module, 'mod engine; pub mod in_place; mod ownership; mod stream;')
     stream = read(root, LEAF + 'src/hardened_execution/stream.rs')
     scoped = read(root, LEAF + 'src/hardened_execution/in_place.rs')

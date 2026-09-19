@@ -120,6 +120,59 @@ fn official_rfc_vectors_ordinary_hardened_and_streamed() {
 }
 
 #[test]
+fn independent_partial_bit_vectors_cover_borrowed_tail_transfers() -> Result<(), Md5Error> {
+    // Frozen from scripts/md5/check-md5-differential.py's independent bit oracle,
+    // not from this crate. Nonzero tails catch a shared-engine copy omission.
+    for (length, width, expected) in [
+        (0, 1, "7e663710ae2348bf0deaca2c79311eae"),
+        (0, 3, "1a3d7ed7c89884725176d6403e7ba0e6"),
+        (0, 7, "841e07f647563f66963a5f65ad1366b5"),
+        (55, 1, "542fce58279b3b373bd19bbeed123b91"),
+        (55, 3, "112e38d6847cc73a2bac8bd69c619a75"),
+        (55, 7, "61b25e6bb6c5c9e2fa3e61e7df80dcd0"),
+        (56, 1, "948862e5514fa86a286f84a5db1e4138"),
+        (56, 3, "7ecce2cebaf1b83df6cada6571be96aa"),
+        (56, 7, "f533d2a22398a98848878cebb8d16cca"),
+        (63, 1, "f5619320f4986d390c7d0485f1dc2dd4"),
+        (63, 3, "e6e42d39e056f405668368e76c5cc64e"),
+        (63, 7, "e4e14b396a7f0ba0d2379f04941b134d"),
+        (64, 1, "87e2a8d28b4bb60cfbbdb3965487a10b"),
+        (64, 3, "321d6cec051ea31fa075497436849fe4"),
+        (64, 7, "dc32c537ecb15bbafe0ccc4184e7f67f"),
+    ] {
+        let mut message = vec![0xa5; length];
+        message.push(0xff << (8 - width));
+        let input = BitString::new(&message, width).map_err(|_| Md5Error::MessageTooLong)?;
+        let expected = decode(expected);
+        assert_eq!(md5_bits(input)?.as_slice(), expected);
+        let mut output = [0xa5; 16];
+        {
+            let secret = HardenedMd5::digest_bits_secret(input, &mut output)?;
+            assert_eq!(secret.expose(), expected);
+        }
+        assert_eq!(output, [0; 16]);
+        let mut workspace = brynja_legacy_md5::hardened_in_place::Md5Workspace::new();
+        for chunk in [1, 7, 64] {
+            let (bytes, partial) = input.split_borrowed();
+            let (byte, valid) = partial.ok_or(Md5Error::MessageTooLong)?;
+            let tail = BitString::new(core::slice::from_ref(byte), valid)
+                .map_err(|_| Md5Error::MessageTooLong)?;
+            {
+                let secret = workspace.with(|mut state| {
+                    for part in bytes.chunks(chunk) {
+                        state.update(part)?;
+                    }
+                    state.finalize_bits_secret(tail, &mut output)
+                })?;
+                assert_eq!(secret.expose(), expected);
+            }
+            assert_eq!(output, [0; 16]);
+        }
+    }
+    Ok(())
+}
+
+#[test]
 fn standard_byte_vectors_and_million_a() {
     for (message, expected) in [
         (b"".as_slice(), "d41d8cd98f00b204e9800998ecf8427e"),

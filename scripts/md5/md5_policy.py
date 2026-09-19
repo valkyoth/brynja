@@ -21,7 +21,7 @@ TOKENS = {
         'destination.copy_from_slice(&self.owner.output_staging)',
         'PhantomData<*mut ()>', '#[cfg(test)] mod tests;'),
     'lib.rs': ('#![no_std]', 'collision- and chosen-prefix-broken', 'No independent cryptographic review or FIPS validation'),
-    'engine.rs': ('current: u128', 'current.checked_add(additional)', 'bytes.checked_mul(8)', 'admit_bytes(owner.bits(), input.len())?', 'admit_bits(owner.bits(), additional)?', 'tail.split()', 'if offset >= 56', '.zip([0, 8, 16, 24, 32, 40, 48, 56])', 'rfc_length_wrap_is_not_sha1_exhaustion', 'padding_encodes_low_64_bits_only_in_little_endian_order'),
+    'engine.rs': ('current: u128', 'current.checked_add(additional)', 'bytes.checked_mul(8)', 'admit_bytes(owner.bits(), input.len())?', 'admit_bits(owner.bits(), additional)?', 'tail.split_borrowed()', 'if offset >= 56', '.zip([0, 8, 16, 24, 32, 40, 48, 56])', 'rfc_length_wrap_is_not_sha1_exhaustion', 'padding_encodes_low_64_bits_only_in_little_endian_order'),
     'ordinary.rs': ('pub fn finalize(mut self)', 'pub fn finalize_bits(mut self,', 'pub fn md5(', 'pub fn md5_bits('),
     'hardened.rs': ('pub trait HardenedMd5State: sealed::Sealed', 'pub struct HardenedMd5', 'mut self,', 'output::failed(destination, error)', 'output::secret(&self.owner.output_staging, destination)'),
     'owner.rs': ('impl Drop for Md5Owner', 'self.wipe();', '#[inline(never)]'),
@@ -84,8 +84,17 @@ def validate(root=ROOT, hashes=True):
         guard = re.sub(r'\s+', '', f'assert!(offset < owner.block.len(), "MD5 {operation} offset invariant");')
         if 'debug_'+guard in engine:
             raise ValueError('MD5 buffer guard must remain active in release')
-        if engine.count(guard + 'ifletSome(destination)=owner.block.get_mut(offset)') != 1:
+        following = ('letcount=owner.block.len().saturating_sub(offset).min(input.len());'
+                     if operation == 'update' else 'ifletSome(destination)=owner.block.get_mut(offset)')
+        if engine.count(guard + following) != 1:
             raise ValueError(f'MD5 {operation} buffer invariant guard missing or misplaced')
+    for token in ('tail.split_borrowed()', 'offset.checked_add(count)',
+                  'input.get(..count)', 'get_mut(offset..end)',
+                  'copy_secret_region(destination,source)', 'input.get(count..)',
+                  'core::slice::from_ref(byte)', 'apply_secret_byte_mask(destination,0xff,0x80>>valid)',
+                  'copy_secret_region(&mutowner.output_staging,&owner.chaining_state)'):
+        if token not in engine:
+            raise ValueError('MD5 borrowed engine transfer missing: ' + token)
     for region in REGIONS:
         if f'clear_owned_region(&mut self.{region})' not in owner:
             raise ValueError('MD5 private region is not cleared')

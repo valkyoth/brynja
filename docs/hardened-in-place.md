@@ -477,6 +477,25 @@ the existing work, selection, cancellation and quarantine contracts. See
 
 ## Borrowed transfer follow-up
 
+The shared single-message SHA-1/MD5 engines and SHA-1 hardened execution engine
+now absorb bounded slices through the reviewed borrowed-copy helper. Their
+partial final bytes remain borrowed through padding via `split_borrowed`;
+padding masks and final state-to-staging transfers use the borrowed helpers too.
+The portable engines retain their pre-write fail-stop offset assertions and
+checked message-length admission. MD5's u128 accounting and low-64-bit
+little-endian length encoding are unchanged. Existing by-value and scoped APIs
+share these engine changes, without changing their signatures or output policy.
+The MSB-first input constructor, public length metadata and complete
+caller/compiler-copy/spill qualification remain separate open work.
+
+`python3 assurance/register-cleanup/check_legacy_transfers.py` is a development
+driver, not a new release gate. It rejects twelve compiled input/tail/staging
+copy omissions and padding corruptions in each debug/release profile. The MD5
+tests include fifteen frozen independent-oracle partial-bit answers so a shared
+engine regression cannot pass merely by comparing two equally broken paths.
+SHA-1 retains its NIST bit vectors; both independent bit-oracle campaigns remain
+separate checks.
+
 `brynja_core::copy_secret_region` exposes the existing checked transfer routine
 for already-owned disjoint byte regions. It preserves both regions on a length
 mismatch, accepts empty transfers and never takes over cleanup or declassifies

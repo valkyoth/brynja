@@ -1279,7 +1279,7 @@ sha256 = "2b25c33d82e5669e55d9af38bd022dc415168f24c37ee1fe7dd322add6b41100"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/engine.rs"
-sha256 = "c158bb3c7d97f0dc4f5ec3e6dc053b997d48395f983c0474308ce5a0b90cb379"
+sha256 = "ffe120701d7676a122fa9cfea30f0bf16d2634f4f1aee6170e71303b2219b0fa"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/hardened.rs"
@@ -1327,7 +1327,7 @@ sha256 = "fe4b3527f6a26609ebf6d92d4681030fe250b6230d59cee96789f5e64dafed2e"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/engine.rs"
-sha256 = "8cef857e7f6a5955ecf54c4c01496fddc366dcb92d0da96c15443b57a8578dbe"
+sha256 = "546c367050297d3d4ce8dc77f1c19f45c0f293de837100f26cc3d374e5b76f0e"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/hardened.rs"
@@ -1351,7 +1351,7 @@ sha256 = "1e1f9b2ad97d42b0d52fd04de473180a41ada8d6f52c154075f2ea7217b29947"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/tests/api.rs"
-sha256 = "594a4e7b38f1306e632cb263ff69f10bc28be283a12d31407c62260980908cdf"
+sha256 = "6ea928f2e4d7719ad16704e32284c9558787ea8558563fef027928145def2665"
 
 [[reviewed-source]]
 path = "scripts/cryptography/legacy_md5_owner_contract.py"

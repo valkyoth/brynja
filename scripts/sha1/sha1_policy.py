@@ -10,7 +10,7 @@ CRATE = 'crates/brynja-legacy-sha1/'
 FILES = ('compress.rs', 'engine.rs', 'hardened.rs', 'hardened_in_place.rs', 'lib.rs', 'ordinary.rs', 'output.rs', 'owner.rs', 'execution.rs')
 TOKENS = {
     'lib.rs': ('#![no_std]', 'collision-broken', 'No independent cryptographic review or FIPS validation'),
-    'engine.rs': ('current.checked_add(additional)', 'bytes.checked_mul(8)', 'admit_bytes(owner.bits(), input.len())?', 'admit_bits(owner.bits(), additional)?', 'tail.split()', 'if offset >= 56'),
+    'engine.rs': ('current.checked_add(additional)', 'bytes.checked_mul(8)', 'admit_bytes(owner.bits(), input.len())?', 'admit_bits(owner.bits(), additional)?', 'tail.split_borrowed()', 'if offset >= 56'),
     'ordinary.rs': ('pub fn finalize(mut self)', 'pub fn finalize_bits(mut self,', 'pub fn sha1(', 'pub fn sha1_bits('),
     'hardened.rs': ('pub trait HardenedSha1State: sealed::Sealed', 'pub struct HardenedSha1', 'mut self,', 'output::failed(destination, error)', 'output::secret(&self.owner.output_staging, destination)'),
     'owner.rs': ('impl Drop for Sha1Owner', 'self.wipe();', '#[inline(never)]'),
@@ -73,8 +73,17 @@ def validate(root=ROOT, hashes=True):
         guard = re.sub(r'\s+', '', f'assert!(offset < owner.block.len(), "SHA-1 {operation} offset invariant");')
         if 'debug_' + guard in engine:
             raise ValueError('SHA-1 buffer guard must remain active in release')
-        if engine.count(guard + 'ifletSome(destination)=owner.block.get_mut(offset)') != 1:
+        following = ('letcount=owner.block.len().saturating_sub(offset).min(input.len());'
+                     if operation == 'update' else 'ifletSome(destination)=owner.block.get_mut(offset)')
+        if engine.count(guard + following) != 1:
             raise ValueError(f'SHA-1 {operation} buffer invariant guard missing or misplaced')
+    for token in ('tail.split_borrowed()', 'offset.checked_add(count)',
+                  'input.get(..count)', 'get_mut(offset..end)',
+                  'copy_secret_region(destination,source)', 'input.get(count..)',
+                  'core::slice::from_ref(byte)', 'apply_secret_byte_mask(destination,0xff,0x80>>valid)',
+                  'copy_secret_region(&mutowner.output_staging,&owner.chaining_state)'):
+        if token not in engine:
+            raise ValueError('SHA-1 borrowed engine transfer missing: ' + token)
     for region in REGIONS:
         if f'clear_owned_region(&mut self.{region})' not in owner:
             raise ValueError('SHA-1 private region is not cleared')

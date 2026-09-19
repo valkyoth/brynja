@@ -76,6 +76,12 @@ def main():
             (policy.LEAF+'src/cpu/aarch64_sha1.rs', '#[target_feature(enable = "neon,sha2")]\npub(super) unsafe fn compress_secret(', 'pub(super) unsafe fn compress_secret('),
         ]
         scoped_path = policy.LEAF+'src/hardened_execution/in_place.rs'
+        engine_path = policy.LEAF+'src/hardened_execution/engine.rs'
+        for token in policy.BORROWED_ENGINE:
+            text = (root / engine_path).read_text()
+            match = re.search(r'\s*'.join(re.escape(c) for c in re.sub(r'\s+', '', token)), text)
+            if match is None: raise AssertionError('stale borrowed engine token: '+token)
+            cases.append((engine_path, match[0], '/* missing borrowed transfer */'))
         for token in policy.SCOPED:
             text = (root / scoped_path).read_text()
             match = re.search(r'\s*'.join(re.escape(c) for c in re.sub(r'\s+', '', token)), text)

@@ -1,6 +1,6 @@
 [sha256]
 "crates/brynja-legacy-sha1/src/compress.rs" = "2b25c33d82e5669e55d9af38bd022dc415168f24c37ee1fe7dd322add6b41100"
-"crates/brynja-legacy-sha1/src/engine.rs" = "c158bb3c7d97f0dc4f5ec3e6dc053b997d48395f983c0474308ce5a0b90cb379"
+"crates/brynja-legacy-sha1/src/engine.rs" = "ffe120701d7676a122fa9cfea30f0bf16d2634f4f1aee6170e71303b2219b0fa"
 "crates/brynja-legacy-sha1/src/hardened.rs" = "d99c2b86452af7c037cdf8bb4e47bd4bde93511a267656dd145e148797f981a4"
 "crates/brynja-legacy-sha1/src/hardened_in_place.rs" = "89a73f83891e14c0d999ea738b5e0355fbe4ae95aa00db370530838afb386691"
 "crates/brynja-legacy-sha1/src/lib.rs" = "76da263119df9ddd94e500fb444225451b978f83d70139869fe29930d6c4443d"

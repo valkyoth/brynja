@@ -22,7 +22,8 @@ pub(super) fn update(
             .block
             .get_mut(offset..end)
             .ok_or(Sha1BackendError::Quarantined)?;
-        destination.copy_from_slice(source);
+        brynja_core::copy_secret_region(destination, source)
+            .map_err(|_| Sha1BackendError::Quarantined)?;
         owner.buffered = [u8::try_from(end).map_err(|_| Sha1BackendError::Quarantined)?];
         if end == 64 {
             executor.compress(owner)?;
@@ -40,17 +41,23 @@ pub(super) fn finish(
 ) -> Result<(), Error> {
     let additional = u64::try_from(tail.bit_len()).map_err(|_| Sha1Error::MessageTooLong)?;
     let total = crate::engine::admit_bits(owner.bits(), additional)?;
-    let (bytes, partial) = tail.split();
+    let (bytes, partial) = tail.split_borrowed();
     update(owner, bytes, executor)?;
     let offset = owner.buffered();
-    let (last, valid) = partial.unwrap_or((0, 0));
+    let (last, valid) = partial.unwrap_or((&0, 0));
     if offset >= 64 || valid > 7 {
         return Err(Sha1BackendError::Quarantined.into());
     }
-    *owner
+    let destination = owner
         .block
         .get_mut(offset)
-        .ok_or(Sha1BackendError::Quarantined)? = last | (0x80_u8 >> valid);
+        .ok_or(Sha1BackendError::Quarantined)?;
+    brynja_core::copy_secret_region(
+        core::slice::from_mut(destination),
+        core::slice::from_ref(last),
+    )
+    .map_err(|_| Sha1BackendError::Quarantined)?;
+    brynja_core::apply_secret_byte_mask(destination, 0xff, 0x80 >> valid);
     if offset >= 56 {
         executor.compress(owner)?;
     }
@@ -63,6 +70,7 @@ pub(super) fn finish(
         *byte = u8::try_from((total >> shift) & 0xff).map_err(|_| Sha1BackendError::Quarantined)?;
     }
     executor.compress(owner)?;
-    owner.output_staging.copy_from_slice(&owner.chaining_state);
+    brynja_core::copy_secret_region(&mut owner.output_staging, &owner.chaining_state)
+        .map_err(|_| Sha1BackendError::Quarantined)?;
     Ok(())
 }

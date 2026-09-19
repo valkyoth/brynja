@@ -115,7 +115,7 @@
     "crates/brynja-legacy-md5/src/cpu/x86_avx2_md5.rs": "ed6bc494e363fc24256b835b5d4ee52b0785f4d46028a5bdb7ca8446d597ea8e",
     "crates/brynja-legacy-md5/src/cpu/x86_secret.rs": "03ba73e4d293fb3b8d3095f68220927dd48a4dd2102858791e1c74885e8346f3",
     "crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs": "c008b23798ed127c95607d333f633b845e2383752768588023ae5dfbb4f33dd8",
-    "crates/brynja-legacy-md5/src/engine.rs": "8cef857e7f6a5955ecf54c4c01496fddc366dcb92d0da96c15443b57a8578dbe",
+    "crates/brynja-legacy-md5/src/engine.rs": "546c367050297d3d4ce8dc77f1c19f45c0f293de837100f26cc3d374e5b76f0e",
     "crates/brynja-legacy-md5/src/hardened.rs": "b997fd50ff27e4dab2bf4201517138ef6c991d02333dbc4e13fa8606cfa74334",
     "crates/brynja-legacy-md5/src/hardened_in_place.rs": "f6ca50c9856d767df7da7de28ff39bb375a61d8db796735fce3a2a38faa912ae",
     "crates/brynja-legacy-md5/src/hardened_in_place/tests.rs": "a6a5e09f1a5b025a0132ae3f97c16a862cd03f292c265f2755ce8838d860dfab",

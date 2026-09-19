@@ -170,7 +170,11 @@ impl Borrowed<'_, '_> {
                     && let Some(valid) = final_bits
                 {
                     let last = buffer.last_mut().ok_or(Error::OutputLength)?;
-                    *last &= u8::MAX >> 8_u8.saturating_sub(valid);
+                    brynja_core::apply_secret_byte_mask(
+                        last,
+                        u8::MAX >> 8_u8.saturating_sub(valid),
+                        0,
+                    );
                 }
                 initialization
                     .as_mut()

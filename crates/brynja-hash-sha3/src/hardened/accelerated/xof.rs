@@ -72,7 +72,7 @@ macro_rules! operations {
                 && valid != 8
                 && let Some(last) = bytes.last_mut()
             {
-                *last &= u8::MAX >> 8_u8.saturating_sub(valid);
+                brynja_core::apply_secret_byte_mask(last, u8::MAX >> 8_u8.saturating_sub(valid), 0);
             }
             Ok(())
         }

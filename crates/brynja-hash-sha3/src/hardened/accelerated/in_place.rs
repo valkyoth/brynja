@@ -159,7 +159,7 @@ macro_rules! fixed {
                 self.storage.engine.finish(input, 0x06, 3)?;
                 let buffer = self.storage.stage.0.get_mut(..$width).ok_or(Error::OutputLength)?;
                 self.storage.engine.read(buffer)?;
-                output.copy_from_slice(buffer);
+                brynja_core::copy_secret_region(output, buffer).map_err(|_| Error::SecretMemory)?;
                 Ok(())
             }
         }

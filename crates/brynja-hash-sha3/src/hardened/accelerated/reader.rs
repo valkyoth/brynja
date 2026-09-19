@@ -98,7 +98,7 @@ impl Reader<'_> {
             && valid != 8
             && let Some(last) = bytes.last_mut()
         {
-            *last &= u8::MAX >> 8_u8.saturating_sub(valid);
+            brynja_core::apply_secret_byte_mask(last, u8::MAX >> 8_u8.saturating_sub(valid), 0);
         }
         Ok(())
     }
@@ -115,7 +115,7 @@ impl Engine<'_> {
         let mut operation = Operation::new(self);
         let buffer = stage.0.get_mut(..output.len()).ok_or(Error::OutputLength)?;
         operation.engine.read(buffer)?;
-        output.copy_from_slice(buffer);
+        brynja_core::copy_secret_region(output, buffer).map_err(|_| Error::SecretMemory)?;
         operation.completed = true;
         Ok(())
     }
@@ -140,7 +140,7 @@ impl Engine<'_> {
             operation.engine.read(buffer)?;
             if remaining == count && valid != 8 {
                 let last = buffer.last_mut().ok_or(Error::OutputLength)?;
-                *last &= u8::MAX >> 8_u8.saturating_sub(valid);
+                brynja_core::apply_secret_byte_mask(last, u8::MAX >> 8_u8.saturating_sub(valid), 0);
             }
             initialization
                 .as_mut()

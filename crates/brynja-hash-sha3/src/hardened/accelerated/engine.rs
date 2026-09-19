@@ -127,7 +127,8 @@ impl<'a> Engine<'a> {
                 .lanes
                 .get_mut(self.position)
                 .ok_or(Error::Terminal)?;
-            *target ^= *byte;
+            brynja_core::xor_secret_byte_bits(target, byte, 0, 8, 0)
+                .map_err(|_| Error::Terminal)?;
             self.position = self.position.checked_add(1).ok_or(Error::LengthOverflow)?;
             if self.position == self.rate {
                 self.permute()?;
@@ -150,7 +151,12 @@ impl<'a> Engine<'a> {
     ) -> Result<(), Error> {
         let mut operation = Operation::new(self);
         let engine = &mut *operation.engine;
-        let (complete, partial) = input.split();
+        let (complete, partial) = if input.is_byte_aligned() {
+            (input.as_bytes(), None)
+        } else {
+            let (byte, complete) = input.as_bytes().split_last().ok_or(Error::Terminal)?;
+            (complete, Some((byte, input.valid_bits_in_last_byte())))
+        };
         engine.absorb(complete)?;
         engine.memory.suffix = [suffix, width];
         let mut bit_position = engine.position.saturating_mul(8);
@@ -160,7 +166,8 @@ impl<'a> Engine<'a> {
                 .lanes
                 .get_mut(engine.position)
                 .ok_or(Error::Terminal)?;
-            *target ^= byte;
+            brynja_core::xor_secret_byte_bits(target, byte, 0, valid, 0)
+                .map_err(|_| Error::Terminal)?;
             bit_position = bit_position.saturating_add(usize::from(valid));
         }
         for bit in 0..width {
@@ -173,7 +180,14 @@ impl<'a> Engine<'a> {
                 .lanes
                 .get_mut(bit_position / 8)
                 .ok_or(Error::Terminal)?;
-            *target ^= ((suffix >> bit) & 1) << (bit_position % 8);
+            brynja_core::xor_secret_byte_bits(
+                target,
+                &suffix,
+                bit,
+                1,
+                u8::try_from(bit_position % 8).map_err(|_| Error::Terminal)?,
+            )
+            .map_err(|_| Error::Terminal)?;
             bit_position = bit_position.saturating_add(1);
         }
         if bit_position == engine.rate.saturating_mul(8) {
@@ -184,7 +198,7 @@ impl<'a> Engine<'a> {
             .lanes
             .get_mut(engine.rate.saturating_sub(1))
             .ok_or(Error::Terminal)?;
-        *last ^= 0x80;
+        brynja_core::xor_secret_byte_bits(last, &0x80, 7, 1, 7).map_err(|_| Error::Terminal)?;
         engine.permute()?;
         engine.squeezing = true;
         let _ = clear_owned_region(&mut engine.memory.suffix);
@@ -198,19 +212,33 @@ impl<'a> Engine<'a> {
         let count = read_count(&engine.memory.output_count)
             .checked_add(destination.len() as u128)
             .ok_or(Error::LengthOverflow)?;
-        for byte in destination {
+        let mut remaining = destination;
+        while !remaining.is_empty() {
             if engine.position == engine.rate {
                 engine.permute()?;
             }
-            *byte = *engine
-                .memory
-                .lanes
-                .get(engine.position)
-                .ok_or(Error::Terminal)?;
-            engine.position = engine
+            let count = engine
+                .rate
+                .checked_sub(engine.position)
+                .filter(|count| *count != 0)
+                .ok_or(Error::Terminal)?
+                .min(remaining.len());
+            let end = engine
                 .position
-                .checked_add(1)
+                .checked_add(count)
                 .ok_or(Error::LengthOverflow)?;
+            let (output, rest) = remaining.split_at_mut(count);
+            brynja_core::copy_secret_region(
+                output,
+                engine
+                    .memory
+                    .lanes
+                    .get(engine.position..end)
+                    .ok_or(Error::Terminal)?,
+            )
+            .map_err(|_| Error::SecretMemory)?;
+            engine.position = end;
+            remaining = rest;
         }
         write_count(&mut engine.memory.output_count, count);
         operation.completed = true;

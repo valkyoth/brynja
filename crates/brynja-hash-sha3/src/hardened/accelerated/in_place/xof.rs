@@ -89,7 +89,7 @@ macro_rules! xof {
                 let (bytes, valid) = output.into_parts();
                 self.inner.public_with_scratch(bytes, scratch, authority)?;
                 if valid != 0 && valid != 8 && let Some(last) = bytes.last_mut() {
-                    *last &= u8::MAX >> 8_u8.saturating_sub(valid);
+                    brynja_core::apply_secret_byte_mask(last, u8::MAX >> 8_u8.saturating_sub(valid), 0);
                 }
                 Ok(())
             }

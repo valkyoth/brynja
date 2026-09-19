@@ -53,7 +53,7 @@ def semantic(root):
             'clear_owned_region(&mut self.0)', 'clear_owned_region(self.0)',
             'let mut initialization = begin_secret(output)?;',
             'let mut operation = Operation::new(self);',
-            'operation.engine.preflight(length)?;', 'output.copy_from_slice(buffer);'),
+            'operation.engine.preflight(length)?;', 'brynja_core::copy_secret_region(output, buffer)'),
         HASH + '/src/hardened/accelerated/fixed.rs': (
             'mut self,', 'begin_secret(output)?;', 'finish_secret(initialization)',
             'Sha3PublicDeclassification'),

@@ -186,6 +186,16 @@ or preflight query is exposed. Authority/revocation and deployment requirements
 are unchanged, and none of this establishes complete compiler-copy, register or
 spill erasure.
 
+The shared hardened accelerated sponge now absorbs bytes, partial input bits,
+domain suffixes and padding through the reviewed borrowed XOR helper. Squeezing
+copies rate-bounded slices through the borrowed-copy helper without returning
+secret bytes by value. Named/scoped public commits and final-byte masks use the
+same borrowed-copy/mask boundaries. Existing staging and operation guards still
+govern failure cleanup; empty reads still check authority without advancing the
+stream. These helper changes do not qualify caller-side bit-string validation,
+cSHAKE prefix construction, portable sponge paths or whole-API register/spill
+erasure.
+
 ## Portable scoped ParallelHash and ParallelHashXOF
 
 ParallelHash also now initializes integer framing through borrowed storage: its

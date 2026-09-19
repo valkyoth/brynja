@@ -23,7 +23,7 @@ pub(super) fn execute(
     for (group, messages) in owner.lanes.chunks_mut(width).zip(inputs.chunks(width)) {
         let blocks = messages
             .iter()
-            .map(|i| i.map_or(0, |b| b.split().0.len() / 64))
+            .map(|i| i.map_or(0, |b| b.bit_len() / 512))
             .min()
             .unwrap_or(0);
         let mut scratch = Scratch::new();

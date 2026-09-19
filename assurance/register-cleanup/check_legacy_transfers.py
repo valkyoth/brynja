@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Development borrowed legacy-engine regressions; not a release gate."""
 from pathlib import Path
+import argparse
+import importlib.util
 import shutil
+import sys
 import tempfile
 
 from check import run
@@ -30,7 +33,7 @@ def isolated(root, family):
     return crate
 
 
-def campaign(crate, env, relative):
+def campaign(crate, env, relative, custom=None):
     path = crate / relative
     original = path.read_text()
     # Omit each exact transfer independently. A compile error is not a pass.
@@ -46,6 +49,8 @@ def campaign(crate, env, relative):
     mutations = [(call, 'Ok::<(), brynja_core::SecretMemoryError>(())') for call in calls]
     mutations.append(('apply_secret_byte_mask(destination, 0xff, 0x80 >> valid)',
                       'apply_secret_byte_mask(destination, 0xff, 0x40 >> valid)'))
+    if custom is not None:
+        mutations = custom
     for before, _ in mutations:
         if original.count(before) != 1:
             raise ValueError('absent/ambiguous legacy transfer mutation: ' + before)
@@ -65,23 +70,54 @@ def campaign(crate, env, relative):
                     raise ValueError('legacy mutant must compile and fail: ' + before + '\n' + log[-3000:])
             finally:
                 path.write_text(original)
-        print(f'{crate.name}/{relative}: four compiled transfer/padding mutants rejected; '
+        print(f'{crate.name}/{relative}: {len(mutations)} compiled transfer/padding mutants rejected; '
               f'release={release}: PASS', flush=True)
 
 
-def main():
+def batch_campaign(crate, env):
+    campaign(crate, env, 'src/batch/owner.rs', [
+        ('brynja_core::copy_secret_region(destination, &lane.output_staging)',
+         'Ok::<(), brynja_core::SecretMemoryError>(())'),
+        ('input.split_borrowed()', '(input.as_bytes(), None::<(&u8, u8)>)'),
+    ])
+    campaign(crate, env, 'src/batch/hardened_execution/mod.rs', [
+        ('b.bit_len() >= 512', 'b.bit_len() >= 520'),
+    ])
+    campaign(crate, env, 'src/batch/hardened_execution/vector.rs', [
+        ('b.bit_len() / 512', 'b.bit_len() / 1024'),
+    ])
+
+
+def main(native_md5_batch=False):
     with tempfile.TemporaryDirectory(prefix='brynja-legacy-transfers-') as temporary:
         root = Path(temporary)
         env = clean_environment()
         env['CARGO_TARGET_DIR'] = str(root / 'target')
-        for family in ('sha1', 'md5'):
+        if native_md5_batch:
+            # Validate every enumerated native CPU before requesting AVX2.
+            sys.path.insert(0, str(ROOT / 'scripts/md5'))
+            spec = importlib.util.spec_from_file_location(
+                'md5_native_host', ROOT / 'scripts/md5/capture-md5-cpu-native.py')
+            host = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(host)
+            lane = 'amd-x86_64' if 'AuthenticAMD' in Path('/proc/cpuinfo').read_text() else 'intel-x86_64'
+            _, features = host.host(lane)
+            env.update(RUSTFLAGS='-C target-feature=' + features,
+                       BRYNJA_REQUIRE_HARDENED_MD5='1')
+        for family in (('md5',) if native_md5_batch else ('sha1', 'md5')):
             crate = isolated(root, family)
             run(['cargo', '+1.98.1', 'generate-lockfile', '--offline',
                  '--manifest-path', str(crate / 'Cargo.toml')], env)
+            if native_md5_batch:
+                batch_campaign(crate, env)
+                continue
             campaign(crate, env, 'src/engine.rs')
             if family == 'sha1':
                 campaign(crate, env, 'src/hardened_execution/engine.rs')
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--native-md5-batch', action='store_true',
+                        help='only MD5 batch mutants; requires validated native Linux AVX2')
+    main(parser.parse_args().native_md5_batch)

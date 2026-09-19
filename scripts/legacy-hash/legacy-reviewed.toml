@@ -26,7 +26,7 @@
 "crates/brynja-legacy-md5/src/compress.rs" = "fe4b3527f6a26609ebf6d92d4681030fe250b6230d59cee96789f5e64dafed2e"
 "crates/brynja-legacy-md5/src/owner.rs" = "1e1f9b2ad97d42b0d52fd04de473180a41ada8d6f52c154075f2ea7217b29947"
 "crates/brynja-legacy-md5/src/output.rs" = "e9fa579738ee04c8d96553109f651d5764b02bf99a033467395da1a0c6e8acc4"
-"crates/brynja-legacy-md5/tests/api.rs" = "6ea928f2e4d7719ad16704e32284c9558787ea8558563fef027928145def2665"
+"crates/brynja-legacy-md5/tests/api.rs" = "725949399117eae8b85e5ce3e460115d442f42c6f447a68c6f18bf505b06ebfe"
 "scripts/legacy-hash/legacy_acceptance.py" = "3fe7c2a82208553b07850823903e81771450992db34c6b9df80c88b77ce8e2e7"
 "scripts/legacy-hash/check-legacy-acceptance.py" = "01408f2710ed98e4d29c6e3b7b6da675e88a421872806093fc0b44dd336f4961"
 "scripts/legacy-hash/check-legacy-package.py" = "af33bbe30883f704c642e661572a6f7aa28f29c7179d3edc23ddb687c876599a"

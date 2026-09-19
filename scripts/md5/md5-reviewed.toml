@@ -11,7 +11,7 @@
 "crates/brynja-legacy-md5/src/hardened_in_place/tests.rs" = "a6a5e09f1a5b025a0132ae3f97c16a862cd03f292c265f2755ce8838d860dfab"
 "crates/brynja-legacy-md5/Cargo.toml" = "24f3bda7d4db1352ccf8439fed0421988c98e5a66b0d21bd3e4cffbfb62ad481"
 "crates/brynja-legacy-md5/README.md" = "c15f32ef64e46487ed2b6941b8f1b238cbcf8ab6dd65d8e3fb68612827c50817"
-"crates/brynja-legacy-md5/tests/api.rs" = "6ea928f2e4d7719ad16704e32284c9558787ea8558563fef027928145def2665"
+"crates/brynja-legacy-md5/tests/api.rs" = "725949399117eae8b85e5ce3e460115d442f42c6f447a68c6f18bf505b06ebfe"
 "crates/brynja-legacy-md5/tests/vectors/rfc1321.txt" = "4df9daaafab96e6e59bef4b17b95cc0240b474c574bc02b36cd19bdaae5ead94"
 "assurance/md5-public-api/Cargo.toml" = "c6b8ae8a16bd0ace17e858f08dd431c25650cfdf02ebcc053b879a4265c149ef"
 "assurance/md5-public-api/Cargo.lock" = "6cc302e68404609b10aa2b589aaed67f3794a399bad4f5c342f3d74b190297be"

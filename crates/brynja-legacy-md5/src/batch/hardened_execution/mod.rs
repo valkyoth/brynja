@@ -292,7 +292,7 @@ impl Batch<'_> {
 fn eligible(inputs: &[Option<BitString<'_>>; 8], width: usize) -> bool {
     inputs
         .chunks(width)
-        .any(|g| g.len() == width && g.iter().all(|i| i.is_some_and(|b| b.split().0.len() >= 64)))
+        .any(|g| g.len() == width && g.iter().all(|i| i.is_some_and(|b| b.bit_len() >= 512)))
 }
 struct Operation<'a> {
     executor: &'a Executor,

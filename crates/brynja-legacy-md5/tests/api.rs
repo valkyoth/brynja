@@ -145,6 +145,8 @@ fn independent_partial_bit_vectors_cover_borrowed_tail_transfers() -> Result<(),
         let input = BitString::new(&message, width).map_err(|_| Md5Error::MessageTooLong)?;
         let expected = decode(expected);
         assert_eq!(md5_bits(input)?.as_slice(), expected);
+        #[cfg(feature = "batch")]
+        independent_batch_bits(input, &expected)?;
         let mut output = [0xa5; 16];
         {
             let secret = HardenedMd5::digest_bits_secret(input, &mut output)?;
@@ -167,6 +169,60 @@ fn independent_partial_bit_vectors_cover_borrowed_tail_transfers() -> Result<(),
                 assert_eq!(secret.expose(), expected);
             }
             assert_eq!(output, [0; 16]);
+        }
+    }
+    Ok(())
+}
+
+#[cfg(feature = "batch")]
+fn independent_batch_bits(input: BitString<'_>, expected: &[u8]) -> Result<(), Md5Error> {
+    use brynja_legacy_md5::{HardenedMd5Batch, Md5Batch, Md5BatchControl};
+    let inputs = [Some(input); 8];
+    let mut output = [[0xa5; 16]; 8];
+    Md5Batch::new()
+        .digest(&inputs, &mut output, &mut Md5BatchControl::new(32))
+        .map_err(|_| Md5Error::SecretMemory)?;
+    assert!(output.iter().all(|lane| lane.as_slice() == expected));
+    {
+        let (secret, _) = HardenedMd5Batch::new()
+            .digest_secret(&inputs, &mut output, &mut Md5BatchControl::new(32))
+            .map_err(|_| Md5Error::SecretMemory)?;
+        assert!(secret.expose().chunks(16).all(|lane| lane == expected));
+    }
+    assert_eq!(output, [[0; 16]; 8]);
+    #[cfg(feature = "hardened-execution")]
+    {
+        use brynja_legacy_md5::hardened_execution::{Executor, Mode, in_place::Workspace};
+        for executor in [
+            Executor::portable(),
+            Executor::for_compiled_target(Mode::Prefer).map_err(|_| Md5Error::SecretMemory)?,
+        ] {
+            let mut workspace = Workspace::new(&executor);
+            let (secret, report) = workspace
+                .with(|batch| {
+                    batch.digest_secret(&inputs, &mut output, &mut Md5BatchControl::new(32))
+                })
+                .map_err(|_| Md5Error::SecretMemory)?
+                .map_err(|_| Md5Error::SecretMemory)?;
+            assert!(secret.expose().chunks(16).all(|lane| lane == expected));
+            assert_eq!(report.work.active_lanes, 8);
+            let accelerated = executor.backend().is_some() && input.bit_len() >= 512;
+            assert_eq!(report.backend.is_some(), accelerated);
+            assert_eq!(report.work.vector_blocks, if accelerated { 8 } else { 0 });
+            drop(secret);
+            assert_eq!(output, [[0; 16]; 8]);
+            workspace
+                .with(|batch| {
+                    batch.digest_public(
+                        &inputs,
+                        &mut output,
+                        &mut Md5BatchControl::new(32),
+                        PublicDeclassification::acknowledge(),
+                    )
+                })
+                .map_err(|_| Md5Error::SecretMemory)?
+                .map_err(|_| Md5Error::SecretMemory)?;
+            assert!(output.iter().all(|lane| lane.as_slice() == expected));
         }
     }
     Ok(())

@@ -30,7 +30,8 @@ impl BatchOwner {
     }
     pub(super) fn commit_public(&self, output: &mut [[u8; 16]; 8]) {
         for (destination, lane) in output.iter_mut().zip(&self.lanes) {
-            destination.copy_from_slice(&lane.output_staging);
+            // Both arrays have the same fixed width; this cannot reject length.
+            let _ = brynja_core::copy_secret_region(destination, &lane.output_staging);
         }
     }
 }
@@ -42,7 +43,7 @@ pub(super) fn finish_lane(
     control: &mut Md5BatchControl<'_>,
     report: &mut Md5BatchReport,
 ) -> Result<(), Md5BatchError> {
-    let (bytes, partial) = input.split();
+    let (bytes, partial) = input.split_borrowed();
     let suffix = bytes.get(prefix..).ok_or(Md5BatchError::MessageTooLong)?;
     for chunk in suffix.chunks(64) {
         if chunk.len() == 64 {

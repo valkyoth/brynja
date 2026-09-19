@@ -496,6 +496,17 @@ engine regression cannot pass merely by comparing two equally broken paths.
 SHA-1 retains its NIST bit vectors; both independent bit-oracle campaigns remain
 separate checks.
 
+MD5 batch eligibility and common-prefix accounting now inspect only `bit_len`,
+without materializing a partial byte. The shared lane finalizer borrows its tail,
+and the final public commit uses the borrowed-copy helper after declassification.
+The partial-tail descriptor still goes through the ordinary MSB-first constructor;
+its validation is not covered by the transfer-only change. Portable batches,
+hardened batches and scoped hardened execution now test the fifteen independent
+partial-bit answers, including expected actual SIMD work for a full common block.
+`check_legacy_transfers.py --native-md5-batch` first validates Linux AVX2 support
+and rejects four additional compiled tail/commit/eligibility/work-count mutants
+in both profiles. These checks do not qualify native platform migration or timing.
+
 `brynja_core::copy_secret_region` exposes the existing checked transfer routine
 for already-owned disjoint byte regions. It preserves both regions on a length
 mismatch, accepts empty transfers and never takes over cleanup or declassifies

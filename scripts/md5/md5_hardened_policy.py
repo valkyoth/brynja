@@ -12,6 +12,9 @@ REVIEW = 'scripts/md5/hardened-reviewed.json'
 LEAF = 'crates/brynja-legacy-md5/'
 HOST = 'crates/brynja-legacy-md5-std/'
 CHECKS = {
+    LEAF+'src/batch/owner.rs': (
+        'let (bytes, partial) = input.split_borrowed();',
+        'copy_secret_region(destination, &lane.output_staging)'),
     LEAF+'src/batch/hardened_execution/in_place.rs': (
         "batch: &'scope mut super::Batch<'authority>", "batch: super::Batch<'authority>",
         'for lane in &mut batch.owner.lanes { lane.wipe(); }',
@@ -28,6 +31,7 @@ CHECKS = {
         'super::arm_secret::compress_secret(operation.scratch)?;',
         'self.scratch.wipe();', 'self.authority.quarantine();'),
     LEAF+'src/batch/hardened_execution/mod.rs': ('owner: BatchOwner', 'executor: &\'a Executor',
+        'i.is_some_and(|b| b.bit_len() >= 512)',
         'mut self,', '_authority: PublicDeclassification', "OwnedSecretRegion<'out>",
         'SecretRegionInitialization::begin(output.as_flattened_mut())',
         'self.executor.ready()?;', 'if self.executor.required && authority.is_none()',
@@ -37,6 +41,7 @@ CHECKS = {
         'let result = self.run_inner(inputs, control);',
         'guard.complete = matches!(result, Ok(_) | Err(Error::IneligibleWorkload) | Err(Error::Batch(Md5BatchError::WorkLimit | Md5BatchError::Cancelled | Md5BatchError::MessageTooLong)));'),
     LEAF+'src/batch/hardened_execution/vector.rs': ('let mut scratch = Scratch::new();',
+        'i.map_or(0, |b| b.bit_len() / 512)',
         'authority.compress(&mut scratch)', 'finish_lane(lane, *input, prefix, control, &mut report)?;',
         'control.charge(width)?;', 'report.vector_blocks.checked_add(width)',
         'transfer::pack_state(', 'transfer::pack_block(', 'transfer::advance(', 'transfer::commit_state('),

@@ -1351,7 +1351,7 @@ sha256 = "1e1f9b2ad97d42b0d52fd04de473180a41ada8d6f52c154075f2ea7217b29947"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/tests/api.rs"
-sha256 = "6ea928f2e4d7719ad16704e32284c9558787ea8558563fef027928145def2665"
+sha256 = "725949399117eae8b85e5ce3e460115d442f42c6f447a68c6f18bf505b06ebfe"
 
 [[reviewed-source]]
 path = "scripts/cryptography/legacy_md5_owner_contract.py"
@@ -1371,7 +1371,7 @@ sha256 = "695a9c85efc49dd7316686614a162ce1b7105887d1b31e99554dee4cea8ff2c8"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/batch/owner.rs"
-sha256 = "a82239dbe66e31b99be4542d8802faf6ae43ca27f707226049007f5ae6bafe0d"
+sha256 = "838dd5a8e47708f68912f7ac34dbf3e03a8108bbad743f6e4ba5f2d883e67861"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/batch/control.rs"

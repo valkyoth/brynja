@@ -215,7 +215,8 @@ where
         return Err(());
     }
     let expected = cshake_prefix_bytes(rate, function_name, customization)?;
-    let mut packer = PrefixPacker::new(&mut absorb);
+    let mut pending = [0];
+    let mut packer = PrefixPacker::new(&mut absorb, &mut pending);
     packer.push_bytes(left_encode_u128(u128::try_from(rate).map_err(|_| ())?).as_bytes())?;
     push_encoded_string(&mut packer, function_name)?;
     push_encoded_string(&mut packer, customization)?;
@@ -274,7 +275,7 @@ where
     F: FnMut(&[u8]) -> Result<(), ()>,
 {
     absorb: &'sink mut F,
-    pending: [u8; 1],
+    pending: &'sink mut [u8; 1],
     used: u8,
     emitted: usize,
 }
@@ -283,19 +284,22 @@ impl<'sink, F> PrefixPacker<'sink, F>
 where
     F: FnMut(&[u8]) -> Result<(), ()>,
 {
-    fn new(absorb: &'sink mut F) -> Self {
+    fn new(absorb: &'sink mut F, pending: &'sink mut [u8; 1]) -> Self {
+        let _ = clear_owned_region(pending);
         Self {
             absorb,
-            pending: [0],
+            pending,
             used: 0,
             emitted: 0,
         }
     }
 
     fn push_bit_string(&mut self, input: Fips202BitString<'_>) -> Result<(), ()> {
-        let (whole, partial) = input.split();
-        self.push_bytes(whole)?;
-        if let Some((byte, valid)) = partial {
+        let complete = input.bit_len() / 8;
+        self.push_bytes(input.as_bytes().get(..complete).ok_or(())?)?;
+        let valid = input.valid_bits_in_last_byte();
+        if (1..8).contains(&valid) {
+            let byte = input.as_bytes().get(complete).ok_or(())?;
             self.push_bits(byte, valid)?;
         }
         Ok(())
@@ -303,21 +307,37 @@ where
 
     fn push_bytes(&mut self, bytes: &[u8]) -> Result<(), ()> {
         if self.used == 0 {
+            let emitted = self.emitted.checked_add(bytes.len()).ok_or(())?;
             (self.absorb)(bytes)?;
-            self.emitted = self.emitted.checked_add(bytes.len()).ok_or(())?;
+            self.emitted = emitted;
             return Ok(());
         }
         for byte in bytes {
-            self.push_bits(*byte, 8)?;
+            self.push_bits(byte, 8)?;
         }
         Ok(())
     }
 
-    fn push_bits(&mut self, byte: u8, valid: u8) -> Result<(), ()> {
-        for position in 0..valid {
-            let bit = (byte >> position) & 1;
-            self.pending[0] |= bit << self.used;
-            self.used = self.used.checked_add(1).ok_or(())?;
+    fn push_bits(&mut self, byte: &u8, valid: u8) -> Result<(), ()> {
+        if !(1..=8).contains(&valid) || self.used >= 8 {
+            return Err(());
+        }
+        let mut position = 0_u8;
+        while position < valid {
+            let count = valid
+                .checked_sub(position)
+                .ok_or(())?
+                .min(8_u8.checked_sub(self.used).ok_or(())?);
+            brynja_core::xor_secret_byte_bits(
+                &mut self.pending[0],
+                byte,
+                position,
+                count,
+                self.used,
+            )
+            .map_err(|_| ())?;
+            position = position.checked_add(count).ok_or(())?;
+            self.used = self.used.checked_add(count).ok_or(())?;
             if self.used == 8 {
                 self.flush()?;
             }
@@ -334,16 +354,18 @@ where
             let padding = width.checked_sub(remainder).ok_or(())?;
             let zeros = [0_u8; 168];
             let slice = zeros.get(..padding).ok_or(())?;
+            let emitted = self.emitted.checked_add(padding).ok_or(())?;
             (self.absorb)(slice)?;
-            self.emitted = self.emitted.checked_add(padding).ok_or(())?;
+            self.emitted = emitted;
         }
         Ok(())
     }
 
     fn flush(&mut self) -> Result<(), ()> {
-        (self.absorb)(&self.pending)?;
-        self.emitted = self.emitted.checked_add(1).ok_or(())?;
-        let _ = clear_owned_region(&mut self.pending);
+        let emitted = self.emitted.checked_add(1).ok_or(())?;
+        (self.absorb)(self.pending)?;
+        self.emitted = emitted;
+        let _ = clear_owned_region(self.pending);
         self.used = 0;
         Ok(())
     }
@@ -354,10 +376,13 @@ where
     F: FnMut(&[u8]) -> Result<(), ()>,
 {
     fn drop(&mut self) {
-        let _ = clear_owned_region(&mut self.pending);
+        let _ = clear_owned_region(self.pending);
         self.used = 0;
     }
 }
+
+#[cfg(test)]
+mod tests;
 
 fn encode_u128(value: u128, right: bool) -> EncodedInteger {
     let bytes = value.to_be_bytes();

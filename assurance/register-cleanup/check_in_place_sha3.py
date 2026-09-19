@@ -97,7 +97,54 @@ def main(native_x86=False):
         path.write_text(original)
         xof_mutants(crate, env)
         portable_transfer_mutants(crate, env)
+        prefix_mutants(crate, env)
         packaged(root)
+
+
+def prefix_mutants(crate, env):
+    path = crate/'src/sp800185.rs'
+    original = path.read_text()
+    mutations = [
+        ('initial clear', 'let _ = clear_owned_region(pending);', '', 1),
+        ('bulk path', 'if self.used == 0 {', 'if false {', 1),
+        ('partial input', 'self.push_bits(byte, valid)?;', '', 1),
+        ('bit transfer', 'brynja_core::xor_secret_byte_bits(', 'omitted_xor(', 1),
+        ('source bit offset', '                position,', '                0,', 1),
+        ('destination bit offset', '                self.used,', '                0,', 1),
+        ('invalid bit range', 'if !(1..=8).contains(&valid) || self.used >= 8 {', 'if false {', 1),
+        ('bulk counter', 'self.emitted.checked_add(bytes.len()).ok_or(())?', 'self.emitted.saturating_add(bytes.len())', 1),
+        ('flush counter', 'self.emitted.checked_add(1).ok_or(())?', 'self.emitted.saturating_add(1)', 1),
+        ('padding counter', 'self.emitted.checked_add(padding).ok_or(())?', 'self.emitted.saturating_add(padding)', 1),
+        ('final flush', 'if self.used != 0 {\n            self.flush()?;\n        }', '', 1),
+        ('padding output', '(self.absorb)(slice)?;', '', 1),
+    ]
+    for label, marker in (('flush clear', '    fn flush('), ('drop clear', '    fn drop(')):
+        start = original.index(marker)
+        end = original.index('\n    }', start) + len('\n    }')
+        body = original[start:end]
+        token = 'let _ = clear_owned_region(self.pending);'
+        if body.count(token) != 1:
+            raise ValueError('prefix cleanup mutation absent: '+label)
+        mutations.append((label, body, body.replace(token, ''), 1))
+    for release in (False, True):
+        command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path',
+                   str(crate/'Cargo.toml'), '--lib', 'sp800185::tests']
+        if release:
+            command.append('--release')
+        path.write_text(original)
+        run(command, env)
+        for label, before, after, count in mutations:
+            if original.count(before) != count:
+                raise ValueError('prefix mutation absent/ambiguous: '+label)
+            mutated = original.replace(before, after)
+            if 'omitted_xor' in after:
+                mutated += '\nfn omitted_xor(_: &mut u8, _: &u8, _: u8, _: u8, _: u8) -> Result<(), brynja_core::SecretBitRangeError> { Ok(()) }\n'
+            path.write_text(mutated)
+            result = run(command, env, success=False)
+            if result.returncode == 0 or 'test result: FAILED' not in result.stdout + result.stderr:
+                raise ValueError('prefix mutant must compile and fail at runtime: '+label)
+        print(f'Borrowed prefix: {len(mutations)} compiled packing/cleanup/counter mutants; release={release}: PASS', flush=True)
+    path.write_text(original)
 
 
 def portable_transfer_mutants(crate, env):

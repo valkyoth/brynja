@@ -39,6 +39,7 @@ SHAKE128_TEST = CRATE / "tests/shake128.rs"
 SHAKE256_TEST = CRATE / "tests/shake256.rs"
 TEST_SUPPORT = CRATE / "tests/support/mod.rs"
 BIT_TEST = CRATE / "tests/bit_inputs.rs"
+SCOPED_BIT_TEST = CRATE / "tests/bit_input_support/mod.rs"
 SP800185_TEST = CRATE / "tests/sp800185.rs"
 CSHAKE_TEST = CRATE / "tests/cshake.rs"
 BIT_VECTORS = CRATE / "tests/vectors/nist-bit-selected.txt"
@@ -58,7 +59,7 @@ SOURCES = (
 TESTS = (
     SHA3_224_TEST, SHA3_256_TEST, SHA3_384_TEST, SHA3_512_TEST,
     SHAKE128_TEST, SHAKE256_TEST, TEST_SUPPORT, BIT_TEST, SP800185_TEST, CSHAKE_TEST,
-    BIT_VECTORS,
+    BIT_VECTORS, SCOPED_BIT_TEST,
 )
 HASHES = {
     Path(path): digest for path, digest in sha3_reviewed_hashes.REVIEWED_HASHES.items()
@@ -201,7 +202,7 @@ def validate(root: Path) -> None:
         "if destination.len() != encoded_bytes",
         "if destination.len() != padded_bytes",
         "if !matches!(rate, 136 | 168)",
-        "let _ = clear_owned_region(&mut self.pending);",
+        "let _ = clear_owned_region(self.pending);",
         "#[kani::proof]",
     ):
         require(sp800185, token, "SP 800-185 encoding")

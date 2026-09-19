@@ -96,7 +96,7 @@ def main() -> int:
     reject("SP 800-185 integer bound", lambda root: replace(root, policy.SP800185, "MAX_INTEGER_BYTES: usize = 255", "MAX_INTEGER_BYTES: usize = 254"))
     reject("SP 800-185 canonical integer", lambda root: replace(root, policy.SP800185, "bytes.len() > 1 && bytes.first() == Some(&0)", "bytes.len() > 2 && bytes.first() == Some(&0)"))
     reject("cSHAKE official examples", lambda root: replace(root, policy.CSHAKE_TEST, "every_official_nist_cshake_example_matches", "removed_official_examples"))
-    reject("cSHAKE prefix erasure", lambda root: replace(root, policy.SP800185, "clear_owned_region(&mut self.pending)", "clear_owned_region(&mut [0])"))
+    reject("cSHAKE prefix erasure", lambda root: replace(root, policy.SP800185, "clear_owned_region(self.pending)", "clear_owned_region(&mut [0])"))
     reject("cSHAKE differential bound", lambda root: replace(root, policy.CSHAKE_DIFFERENTIAL_FIXTURE, "MAX_OUTPUT_BITS: usize = 4_095", "MAX_OUTPUT_BITS: usize = usize::MAX"))
     reject("cSHAKE differential oracle", lambda root: replace(root, policy.CSHAKE_DIFFERENTIAL, "def cshake(rate: int, x: list[int], n: list[int], s: list[int], output_bits: int)", "def removed(rate: int, x: list[int], n: list[int], s: list[int], output_bits: int)"))
     reject("vector", lambda root: replace(root, policy.SHA3_256_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))

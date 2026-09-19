@@ -487,8 +487,14 @@ instead of receiving its byte by value. Equal-length copies and constant
 full-byte XOR ranges cannot reject, preserving infallible finalization without
 discarding a caller-controlled range error. Tests check all 65,536 byte-pair XORs
 and 2,880 padding/chunk/rate/domain combinations, including suffix spillover.
-Input construction, prefix packers and other higher-level callers still require
-separate follow-up; this is not whole-API register or compiler-spill qualification.
+The shared cSHAKE prefix packer now borrows a caller-local pending byte instead
+of owning populated byte storage by value. Its guard clears that exact byte on
+success, error and recoverable unwind. Unaligned input is combined with borrowed
+bit-fragment XOR; aligned input retains its direct bulk-absorption path. Input
+tail selection borrows the canonical source byte without calling the by-value
+split helper. Emitted-byte counters are checked before each sink invocation.
+Input construction and other higher-level callers still require separate
+follow-up; this is not whole-API register or compiler-spill qualification.
 
 ## TupleHash integer framing
 

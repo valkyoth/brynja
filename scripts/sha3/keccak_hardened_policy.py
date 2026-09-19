@@ -123,6 +123,7 @@ def validate(root=ROOT, write=False):
     paths.add(Path('assurance/register-cleanup/check_in_place_sha3.py'))
     paths.add(Path('docs/hardened-in-place.md'))
     paths.add(Path(HASH + '/tests/bit_inputs.rs'))
+    paths.add(Path(HASH + '/tests/bit_input_support/mod.rs'))
     paths.add(Path(HASH + '/tests/vectors/nist-bit-selected.txt'))
     paths.add(Path(HASH + '/tests/vectors/cshake-execution.txt'))
     for name in ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/execution.rs'):

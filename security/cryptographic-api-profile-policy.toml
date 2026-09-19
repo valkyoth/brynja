@@ -991,7 +991,7 @@ sha256 = "2497f525ceb51f638de4fd82736e6b94ea749c8ff64abe5e28dff549e4e0dcad"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/sp800185.rs"
-sha256 = "2d801bf0444967e62728846fcfa8180cd4cd6a683b348d0adba4f5a2e6f83074"
+sha256 = "5c5c553e4ddb90b492399100a097af76eb39697d122600f8dbc47718762fa552"
 
 [[reviewed-source]]
 path = "assurance/kmac-public-api/src/lib.rs"

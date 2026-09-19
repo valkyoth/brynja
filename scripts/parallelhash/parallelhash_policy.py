@@ -20,6 +20,7 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "hardened_in_place/fixed.rs", "hardened_in_place/tests.rs", "hardened_in_place/core_state/tests.rs",
     "hardened_in_place/reader.rs", "hardened_in_place/reader/tests.rs",
     "hardened_in_place/xof.rs", "hardened_in_place/xof/tests.rs",
+    "hardened_in_place/accelerated.rs", "hardened_in_place/accelerated/backend.rs", "hardened_in_place/accelerated/fixed.rs",
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
@@ -40,6 +41,7 @@ TESTS = (
     PORTABLE / "tests/execution.rs", PORTABLE / "tests/execution_vectors/mod.rs",
     PORTABLE / "tests/execution_stream.rs",
     STD / "tests/execution.rs",
+    PORTABLE / "tests/scoped_accelerated.rs",
 )
 MANIFESTS = (PORTABLE / "Cargo.toml", STD / "Cargo.toml")
 PUBLIC = (
@@ -66,6 +68,7 @@ DIFFERENTIAL = (
     Path("scripts/parallelhash/test-parallelhash-batch.py"),
     Path("assurance/parallelhash-differential/src/scoped.rs"),
     Path("assurance/parallelhash-differential/tests/scoped.rs"),
+    Path("assurance/parallelhash-differential/src/scoped_accelerated.rs"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -104,6 +107,21 @@ def require(text: str, token: str, label: str) -> None:
 
 
 BORROWED_TOKENS = {
+    "hardened_in_place/accelerated/fixed.rs": (
+        "sponge: api::$storage<'authority>", "leaf: api::$leaf<'authority>", "metadata: Metadata", "stage: [u8;168]",
+        "pub fn new(root: KeccakSession<'authority>, leaf: KeccakSession<'authority>)",
+        "api::$storage::new(root)?", "api::$leaf::new(leaf)?",
+        "impl for<'scope> FnOnce($state<'scope, 'authority>) -> R", "let cleanup = Guard(metadata);",
+        "let scratch = Block(scratch);", "let block = Block(block);",
+        'sponge.with_bits(byte_string(b"ParallelHash")?', "Backend { state, leaf, scratch: &mut *scratch.0 }",
+        "self.core.public(tail, output, valid)", "self.core.secret(tail, output, valid)",
+    ),
+    "hardened_in_place/accelerated/backend.rs": (
+        "self.state.update(&[])?", "self.leaf.with(|state| state.cancel())?", "self.check()?",
+        "self.state.update(input)", "self.state.finalize_xof()?", "output.get_mut(..$size)",
+        ".with(|state| state.finalize_bits_xof(input)?.squeeze_secret(bytes))?",
+        "squeeze_final_bits_public(\n                        output,\n                        self.scratch,", "squeeze_final_bits_secret(output, valid)",
+    ),
     "hardened_in_place/xof.rs": (
         "inner: fixed::$fixed_workspace", "inner: fixed::$fixed_state<'scope>",
         "impl for<'scope> FnOnce($state<'scope>) -> R", "self.inner.with_bits(block, customization,",
@@ -131,7 +149,8 @@ BORROWED_TOKENS = {
         "clear_owned_region(&mut self.used)", "clear_owned_region(&mut self.leaves)", "clear_owned_region(&mut self.leaf)",
         "impl Drop for Guard<'_>", "impl Drop for Block<'_>", "self.state = None;", "if !self.complete {",
         "self.core.cancel();", "operation.complete = true;", "prefix.left(", "suffix.right(read(&self.metadata.leaves))?",
-        "suffix.right(output_bits)?", "S::leaf(bits, &mut self.metadata.leaf)?", "update(secret.expose())?",
+        "suffix.right(output_bits)?", "state.leaf(bits, &mut self.metadata.leaf)?", "update(secret.expose())?",
+        "operation.core.root()?.check()?", "self.root()?.check()?",
         "clear_owned_region(output)", "Fips202Output::new(output, valid)", "self.state.take().ok_or(Error::StateConsumed)?.finish()",
         "self.flush(tail.valid_bits_in_last_byte())", "u128::try_from(full)",
         "pub(super) fn finish_xof(mut self,", "self.finish(tail, 0)",

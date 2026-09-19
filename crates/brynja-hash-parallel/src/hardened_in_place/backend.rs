@@ -5,9 +5,11 @@ use brynja_hash_sha3::{
 
 pub(super) trait State {
     type Reader: Reader;
+    fn check(&mut self) -> Result<(), Error>;
     fn update(&mut self, input: &[u8]) -> Result<(), Error>;
     fn finish(self) -> Result<Self::Reader, Error>;
     fn leaf<'out>(
+        &mut self,
         input: Fips202BitString<'_>,
         output: &'out mut [u8; 64],
     ) -> Result<HardenedSha3SecretOutput<'out>, Error>;
@@ -29,6 +31,9 @@ macro_rules! port {
     ($state:ident, $reader:ident, $leaf:ident, $size:expr) => {
         impl<'scope> State for api::$state<'scope> {
             type Reader = api::$reader<'scope>;
+            fn check(&mut self) -> Result<(), Error> {
+                Self::update(self, &[]).map_err(Error::from)
+            }
             fn update(&mut self, input: &[u8]) -> Result<(), Error> {
                 Self::update(self, input).map_err(Error::from)
             }
@@ -36,6 +41,7 @@ macro_rules! port {
                 self.finalize_xof().map_err(Error::from)
             }
             fn leaf<'out>(
+                &mut self,
                 input: Fips202BitString<'_>,
                 output: &'out mut [u8; 64],
             ) -> Result<HardenedSha3SecretOutput<'out>, Error> {

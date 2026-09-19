@@ -217,10 +217,28 @@ public preservation and secret-destination clearing. Cancellation/drop clears
 the borrowed sponge; outer scope cleanup covers forgotten readers and unwind.
 The same non-Copy/Clone/Debug/Send/Sync and no-scope-escape constraints apply.
 
-These scoped APIs remain portable only. Accelerated roots/leaves, scheduled
-collectors and thread handoff still need the broader ownership work. Registers,
-spills and compiler-created copies remain outside this checkpoint's guarantee;
-`panic = "abort"` cannot run scope destructors.
+With the existing default-off `hardened-execution` feature,
+`execution::in_place::ParallelHash128Workspace`/`ParallelHash256Workspace` now
+provide scoped fixed-output acceleration. They take separate supplied root and
+leaf Keccak sessions (which may borrow the same authority). Both sponges and
+CPU scratch remain in caller-owned workspaces. An empty leaf scope checks its
+authority between leaf computations; non-authorizing reports are not used for
+admission. Updates, including empty updates, leaf work and finalization check
+the original authorities. Any failure terminates without portable fallback.
+
+Public output is transactional through 168 bytes of internal staging or the
+caller staging passed to `with_scratch`/`with_bits_and_scratch`. Staging must cover
+the destination; secret output has no staging-width restriction. Metadata, block
+and supplied staging clear on all scope exits, including skipped callbacks,
+forgotten handles and recoverable unwind. Setup cannot clear captured outputs
+not yet passed to a state method. Non-authorizing `root_report`/`leaf_report`
+contain route/health only. The new `ParallelHashError::Execution` retains the
+underlying fixed failure category, not secret data.
+
+The accelerated scoped API is fixed-output and sequential only. Scoped
+accelerated XOF, scheduled collectors and thread handoff still need the broader
+ownership work. Registers, spills and compiler-created copies remain outside
+this checkpoint's guarantee; `panic = "abort"` cannot run scope destructors.
 
 ## TupleHash integer framing
 

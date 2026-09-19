@@ -36,6 +36,7 @@ block-size parameter `B`. Cryptographic code is first-party Rust.
 | All four portable ParallelHash/ParallelHashXOF identities | ✅ Fully implemented | ❌ No |
 | Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |
 | Caller-owned portable scoped fixed-output/XOF workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |
+| Scoped accelerated fixed-output root/leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |
 | Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |
 | Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
 
@@ -141,6 +142,38 @@ terminal, including subsequent empty reads; they preserve public destinations
 and clear secret destinations.
 
 ### Incremental execution
+
+For scoped fixed-output acceleration, enable `hardened-execution` and use
+`execution::in_place::ParallelHash128Workspace` or `ParallelHash256Workspace`.
+Their constructors require separate hardened root and leaf sessions; both may
+borrow the same established authority. Neither silently falls back. The block
+buffer length is B, not a thread count. These scopes execute leaves sequentially;
+scheduled/threaded scopes and scoped accelerated XOF remain follow-up work.
+
+```rust
+use brynja_hash_parallel::{
+    execution::{KeccakSession, in_place::ParallelHash128Workspace},
+    ParallelHashError, ParallelHashSecretOutput,
+};
+fn digest<'out>(root: KeccakSession<'_>, leaf: KeccakSession<'_>,
+    input: &[u8], output: &'out mut [u8])
+    -> Result<ParallelHashSecretOutput<'out>, ParallelHashError>
+{
+    let mut workspace = ParallelHash128Workspace::new(root, leaf)?;
+    workspace.with(&mut [0;64], b"application", |mut state| {
+        state.update(input)?;
+        state.finalize_secret(output)
+    })?
+}
+```
+
+Root and leaf authority are rechecked before updates (including empty updates),
+leaf processing and finalization. Public output uses a 168-byte stage;
+`with_scratch`/`with_bits_and_scratch` accept larger caller-owned staging.
+Staging must cover the whole public destination and clears on scope exit.
+Secret output is not limited by staging width. Admission failures skip the
+callback; they cannot clear output buffers captured only by that callback.
+`root_report`/`leaf_report` expose route/health metadata, not secret lengths.
 
 Enable `hardened-execution` explicitly for the execution API. This example
 selects portable hardened work; selecting a CPU session is a separate choice.

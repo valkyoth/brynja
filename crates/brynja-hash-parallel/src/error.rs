@@ -18,6 +18,16 @@ pub enum ParallelHashError {
     SecretMemory,
     /// The underlying state was already consumed or permanently failed.
     StateConsumed,
+    /// A supplied accelerated backend rejected work; never permits fallback.
+    #[cfg(feature = "hardened-execution")]
+    Execution(brynja_hash_sha3::hardened_execution::Error),
+}
+
+#[cfg(feature = "hardened-execution")]
+impl From<brynja_hash_sha3::hardened_execution::Error> for ParallelHashError {
+    fn from(error: brynja_hash_sha3::hardened_execution::Error) -> Self {
+        Self::Execution(error)
+    }
 }
 
 impl From<brynja_hash_sha3::HardenedSha3Error> for ParallelHashError {

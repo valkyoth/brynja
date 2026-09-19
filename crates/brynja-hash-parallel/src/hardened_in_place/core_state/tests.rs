@@ -28,6 +28,9 @@ impl Reader for MockReader {
 }
 impl State for Mock<'_> {
     type Reader = MockReader;
+    fn check(&mut self) -> Result<(), Error> {
+        Ok(())
+    }
     fn update(&mut self, _: &[u8]) -> Result<(), Error> {
         if self.reject {
             Err(Error::StateConsumed)
@@ -43,6 +46,7 @@ impl State for Mock<'_> {
         }
     }
     fn leaf<'a>(
+        &mut self,
         _: Fips202BitString<'_>,
         _: &'a mut [u8; 64],
     ) -> Result<HardenedSha3SecretOutput<'a>, Error> {

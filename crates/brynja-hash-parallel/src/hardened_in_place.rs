@@ -20,6 +20,8 @@
 //! # Ok::<(), ParallelHashError>(())
 //! ```
 
+#[cfg(feature = "hardened-execution")]
+pub mod accelerated;
 mod backend;
 mod core_state;
 mod fixed;

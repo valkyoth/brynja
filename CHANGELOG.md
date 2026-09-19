@@ -7,8 +7,9 @@
   input. Portable scoped fixed-output ParallelHash128/256 now retain root,
   metadata and leaf-output storage through consuming finalization. Portable
   scoped XOF readers retain the root borrow through mixed public/secret and
-  consuming partial-bit output; accelerated roots/leaves and thread-handoff
-  ownership remain under development.
+  consuming partial-bit output. Scoped accelerated fixed-output workspaces now
+  bind separate root/leaf authority with borrowed public staging; accelerated
+  XOF and scheduled/thread-handoff ownership remain under development.
 
 - Extend scoped accelerated TupleHash to XOF128/256 with authority-bound readers,
   mixed public/secret output, consuming partial-bit reads and scope-owned cleanup.

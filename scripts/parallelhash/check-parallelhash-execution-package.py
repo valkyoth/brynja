@@ -53,6 +53,16 @@ def scoped_negatives():
             (f'fn probe(s: {xof}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
             (f'fn probe(r: {reader}) {{ let _ = r.leaf_count(); }}', 'E0599'),
         ]
+        accelerated = f'crate::execution::in_place::ParallelHash{strength}'
+        for name in (accelerated + "<'static, 'static>", accelerated + "Workspace<'static>"):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn bound<T:{bound}>() {{}} fn probe() {{ bound::<{name}>(); }}', 'E0277'))
+        cases += [
+            (f'fn probe(s: {accelerated}) {{ let _ = s.finalize_secret(&mut []); s.cancel(); }}', 'E0382'),
+            (f'fn probe(s: {accelerated}) {{ let _ = s.finalize_public(&mut []); }}', 'E0061'),
+            (f'fn probe(s: {accelerated}) {{ let _ = s.leaf_count(); }}', 'E0599'),
+            (f'fn probe(s: {accelerated}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
+        ]
     return cases
 
 
@@ -185,10 +195,28 @@ def main():
                 ('Fips202Output::new(output, valid)', 'Fips202Output::new(output, 8)'),
             )
         ]
+        # Additional live hardware regressions in an explicitly required static
+        # lane. Generic builds still run all existing portable mutation cases.
+        if os.environ.get('BRYNJA_REQUIRE_SCOPED_PARALLEL') == '1':
+            cases += [
+                ('brynja-hash-parallel', 'src/hardened_in_place/accelerated/backend.rs', before, after, ['--test', 'scoped_accelerated'])
+                for before, after in (
+                    ('self.state.update(&[])?;', ''),
+                    ('self.leaf.with(|state| state.cancel())?;', ''),
+                    ('state.finalize_bits_xof(input)?', 'state.finalize_xof()?'),
+                    ('output.get_mut(..$size)', 'output.get_mut(..16)'),
+                )
+            ]
+            cases += [
+                ('brynja-hash-parallel', 'src/hardened_in_place/core_state.rs',
+                 'operation.core.root()?.check()?;', 'operation.core.root()?;', ['--test', 'scoped_accelerated']),
+                ('brynja-hash-parallel', 'src/hardened_in_place/accelerated/fixed.rs',
+                 'byte_string(b"ParallelHash")?', 'byte_string(b"WRONG")?', ['--test', 'scoped_accelerated']),
+            ]
         for index, (package, file, before, after, tests) in enumerate(cases):
             path = roots[package] / file
             original = path.read_text()
-            expected_occurrences = 2 if before == "state.finalize_bits_xof(input)?" else 1
+            expected_occurrences = 2 if file == "src/backend.rs" and before == "state.finalize_bits_xof(input)?" else 1
             if file == 'src/hardened_in_place/reader.rs' and before in (
                 'clear_owned_region(output)', 'guard.complete = true;', 'Fips202Output::new(output, valid)',
             ):

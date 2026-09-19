@@ -12,8 +12,10 @@ No crates are selected for publication.
   cleanup on cancellation, forgotten handles and recoverable unwinding.
   Portable scoped XOF readers now retain the root borrow through incremental
   secret/public and consuming final-bit output, with immediate absorption-region
-  clearing and terminal read errors. Accelerated roots/leaves, scheduled/threaded ownership and complete
-  compiler-copy/register/spill qualification remain unfinished.
+  clearing and terminal read errors. Scoped accelerated fixed-output workspaces
+  now bind separate hardened root/leaf sessions and borrowed public staging,
+  with checked revocation and no fallback. Accelerated XOF, scheduled/threaded
+  ownership and complete compiler-copy/register/spill qualification remain unfinished.
 
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied
   Keccak authority stays borrowed through incremental and partial-bit output;

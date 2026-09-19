@@ -34,6 +34,7 @@ mod plan;
 mod stream;
 mod stream_output;
 
+pub use crate::hardened_in_place::accelerated as in_place;
 pub use brynja_hash_sha3::hardened_execution::{KeccakSession, Report};
 pub use collector::{Collector, Reader};
 pub use plan::{Job, Leaf, Plan};

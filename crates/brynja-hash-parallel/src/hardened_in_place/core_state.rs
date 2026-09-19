@@ -102,7 +102,7 @@ impl<'scope, S: State> Core<'scope, S> {
             core: self,
             complete: false,
         };
-        operation.core.root()?;
+        operation.core.root()?.check()?;
         operation.core.update_inner(input)?;
         operation.complete = true;
         Ok(())
@@ -148,18 +148,16 @@ impl<'scope, S: State> Core<'scope, S> {
         let bits =
             Fips202BitString::new(self.block.get(..used).ok_or(Error::StateConsumed)?, valid)
                 .map_err(|_| Error::InvalidBitString)?;
-        let secret = S::leaf(bits, &mut self.metadata.leaf)?;
-        self.state
-            .as_mut()
-            .ok_or(Error::StateConsumed)?
-            .update(secret.expose())?;
+        let state = self.state.as_mut().ok_or(Error::StateConsumed)?;
+        let secret = state.leaf(bits, &mut self.metadata.leaf)?;
+        state.update(secret.expose())?;
         drop(secret);
         let _ = clear_owned_region(self.block);
         let _ = clear_owned_region(&mut self.metadata.used);
         write(&mut self.metadata.leaves, count)
     }
     fn finish_input(&mut self, tail: Fips202BitString<'_>) -> Result<(), Error> {
-        self.root()?;
+        self.root()?.check()?;
         let input = tail.as_bytes();
         if tail.is_byte_aligned() {
             self.update_inner(input)?;

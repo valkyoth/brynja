@@ -117,14 +117,16 @@ def check_integer(row):
 
 def check_scoped(row):
     """Exact owned metadata/outer-guard cleanup, not a compiler-copy proof."""
+    # Sharing these owners with the accelerated module makes MIR use their
+    # fully qualified names. Keep identity exact rather than broadening matches.
     prefix = "crates/brynja-hash-parallel/src/hardened_in_place/core_state.rs:"
     for owner, method, calls in (
         ("Metadata)", "wipe", [("clear_owned_region(", str(i)) for i in range(3)]),
-        ("Metadata)", "drop", [("Metadata::wipe(", "self")]),
-        ("Guard<", "drop", [("Metadata::wipe(", "0")]),
+        ("Metadata)", "drop", [("hardened_in_place::core_state::Metadata::wipe(", "self")]),
+        ("Guard<", "drop", [("hardened_in_place::core_state::Metadata::wipe(", "0")]),
         ("Block<", "drop", [("clear_owned_region(", "0")]),
     ):
-        function = flow.exact_function(row["mir"], (prefix, "::" + method + "(", "_1: &mut " + owner))
+        function = flow.exact_function(row["mir"], (prefix, "::" + method + "(", "_1: &mut hardened_in_place::core_state::" + owner))
         linear_fields(function, calls)
     for owner, method, widths, dynamic in (
         ("Metadata", "wipe", [16, 16, 64], 0),

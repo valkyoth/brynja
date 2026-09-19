@@ -12,6 +12,8 @@ use brynja_hash_parallel::{
 
 #[cfg(feature = "execution")]
 mod execution;
+#[cfg(feature = "execution")]
+mod scoped_accelerated;
 
 mod scoped;
 
@@ -85,6 +87,15 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
         line,
     )?;
     scoped::check(
+        algorithm,
+        custom,
+        input_bits,
+        valid_bits(output_bits),
+        block_size,
+        &output,
+    )?;
+    #[cfg(feature = "execution")]
+    scoped_accelerated::check(
         algorithm,
         custom,
         input_bits,

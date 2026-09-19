@@ -22,6 +22,15 @@ pub fn acceptance() -> Result<(), Md5Error> {
         assert_eq!(secret.expose(), expected);
     }
     assert_eq!(output, [0; 16]);
+    let mut workspace = brynja_legacy_md5::hardened_in_place::Md5Workspace::new();
+    let secret = workspace.with(|mut state| {
+        state.update(b"a")?;
+        state.update(b"bc")?;
+        state.finalize_secret(&mut output)
+    })?;
+    assert_eq!(secret.expose(), expected);
+    drop(secret);
+    assert_eq!(output, [0; 16]);
     Ok(())
 }
 

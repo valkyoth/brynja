@@ -382,9 +382,31 @@ the shared executor. Reuse cannot recover quarantined authority or silently
 fall back to portable. Existing CPU scratch cleanup remains per-compression.
 The original by-value APIs, static deployment guarantees and hosted feature
 detection caveats are unchanged. This additive API is not whole-API register,
-spill or compiler-copy qualification; MD5 scoped integration remains pending.
+spill or compiler-copy qualification; scoped MD5 SIMD batching remains pending.
+
+## Legacy MD5 scoped workspace
+
+`brynja_legacy_md5::hardened_in_place::Md5Workspace` owns the five existing
+clearing regions. `with` lends a non-Send/non-Sync `Md5` handle; the parent
+cleanup guard remains outside that handle, including after `mem::forget`.
+Initialization restores only the public little-endian MD5 IV directly in
+cleared storage. Updates never move a populated owner and fail terminally.
+Consuming public/secret byte and bit finalization and cancellation mirror the
+portable scoped SHA-1 contract. Public failures preserve output; secret errors
+and recoverable unwind clear the entire destination before returning control.
+The returned secret owner borrows its destination independently of the scope.
+
+MD5 retains checked u128 message accounting, with the low 64 bits encoded in
+little-endian padding; this is not SHA-1's u64 admission rule. There is no public
+capacity/length oracle, snapshot, reset or ordinary-state conversion on the new
+handle. Existing by-value APIs, kernels, feature defaults and batch authorities
+are unchanged. This is portable single-message storage; separate scoped SIMD
+batch integration and full register/spill/compiler-copy qualification remain
+pending. MD5 remains collision- and chosen-prefix-broken, not an authentication
+primitive, and abort cannot run cleanup guards.
 
 ## TupleHash integer framing
+
 
 The private TupleHash integer encoder is constructed empty, then filled through
 `&mut` for `left_encode(item_bits)` and `right_encode(output_bits)`. Both the

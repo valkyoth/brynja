@@ -68,11 +68,64 @@ def main():
         if args.hardened:
             import md5_hardened_package
             md5_hardened_package.prepare(consumer, root)
+        (consumer / 'tests/vectors').mkdir(parents=True, exist_ok=True)
+        for name in ('api.rs', 'vectors/rfc1321.txt'):
+            (consumer / 'tests' / name).write_bytes((ROOT / 'crates/brynja-legacy-md5/tests' / name).read_bytes())
         subprocess.run(['cargo', 'generate-lockfile', '--offline'], cwd=consumer, env=environment, check=True, timeout=60)
         subprocess.run(['cargo', 'test', '--locked', '--offline'], cwd=consumer, env=environment, check=True, timeout=180)
+        scoped_checks(consumer, root, environment)
         if args.execution: execution_package.check(consumer, root, environment)
         if args.hardened: md5_hardened_package.check(consumer, root, environment)
     print(f'MD5 packaged closure and external consumer: PASS; cpu={args.cpu}; no upload')
+
+
+def scoped_checks(consumer, root, environment):
+    source = consumer / 'src/lib.rs'
+    original = source.read_text()
+    api = 'brynja_legacy_md5::hardened_in_place::'
+    negatives = [(f'fn bound<T:{bound}>() {{}} fn check() {{ bound::<{api}{owner}>(); }}', 'E0277')
+                 for owner in ('Md5Workspace', "Md5<'static>")
+                 for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug')]
+    negatives += [(f'fn check(s: &{api}Md5) {{ let _ = s.{method}(1); }}', 'E0599')
+                  for method in ('check_additional_bits', 'check_additional_bytes')]
+    negatives += [(f'fn check(s: {api}Md5, out: &mut [u8]) {{ let _ = s.finalize_public(out); }}', 'E0061')]
+    try:
+        for text, code in negatives:
+            source.write_text(text)
+            result = subprocess.run(['cargo', 'check', '--locked', '--offline', '--all-features'],
+                cwd=consumer, env=environment, capture_output=True, text=True, timeout=90)
+            if result.returncode == 0 or f'error[{code}]' not in result.stderr:
+                raise ValueError('scoped MD5 negative absent or wrong error: ' + result.stderr[-2000:])
+    finally:
+        source.write_text(original)
+    # Test the actual unpacked dependency, with the consumer's exact path patches.
+    command = ['cargo', 'test', '--locked', '--offline', '-p', 'brynja-legacy-md5', '--lib', 'scoped_md5']
+    path = root / 'unpacked/brynja-legacy-md5-0.1.0/src/hardened_in_place.rs'
+    original = path.read_text()
+    cases = (
+        ('if !self.keep {', 'if false {'),
+        ('self.owner.wipe();\n        // Public IV', 'core::hint::black_box(&mut self.owner);\n        // Public IV'),
+        ('fn drop(&mut self) {\n        self.owner.wipe();', 'fn drop(&mut self) {\n        core::hint::black_box(&mut self.owner);'),
+        ('self.owner.chaining_state.copy_from_slice(&[', 'self.owner.chaining_state.copy_from_slice(&[1 ^'),
+        ('let result = engine::update(cleanup.owner, input);', 'let result = engine::update(cleanup.owner, &[]);'),
+        ('self.active = false;', 'self.active = true;'),
+        ('output::failed(destination, Md5Error::OutputLength)', 'Md5Error::OutputLength'),
+        ('destination.copy_from_slice(&self.owner.output_staging);', 'core::hint::black_box(destination);'),
+        ('self.stage(tail)?;\n        initialization', 'initialization'),
+    )
+    for profile in ([], ['--release']):
+        subprocess.run(command + profile, cwd=consumer, env=environment, check=True, capture_output=True, timeout=180)
+        for before, after in cases:
+            if before not in original: raise ValueError('stale scoped mutation: ' + before)
+            try:
+                path.write_text(original.replace(before, after))
+                result = subprocess.run(command + profile, cwd=consumer, env=environment,
+                    capture_output=True, text=True, timeout=180)
+                if result.returncode == 0 or 'test result: FAILED' not in result.stdout:
+                    raise ValueError('scoped mutant survived or failed compilation: ' + before + '\n' + result.stdout[-1800:] + result.stderr[-2000:])
+            finally:
+                path.write_text(original)
+    print(f'Scoped MD5 packaged negatives: {len(negatives)}; compiled regressions: {2 * len(cases)} rejected')
 
 
 if __name__ == '__main__': main()

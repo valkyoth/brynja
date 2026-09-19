@@ -290,12 +290,18 @@ Portable legacy SHA-1 now also has a scoped caller-owned workspace under
 `hardened_in_place`, with consuming secret/public bit output, terminal update
 errors, and independent scope cleanup for forgotten handles. Its existing
 NIST/oracle/package checks exercise the new API. This does not yet extend to
-MD5 scoped integration or close whole-API register/spill qualification.
+scoped MD5 SIMD batching or close whole-API register/spill qualification.
 The separate `hardened_execution::in_place` SHA-1 workspace now borrows existing
 portable/static/hosted authority and keeps active state in final storage, with
 independent scope, operation and handle cleanup. Its length errors do not revoke
 healthy authority; backend failures and recoverable unwind do. This is additive
 API/lifecycle coverage, not final native or whole-API residue qualification.
+
+Portable MD5 now also has a caller-owned `hardened_in_place::Md5Workspace`,
+with independent scope cleanup, consuming public/secret bit output and terminal
+update errors. Its checked u128 count and low-64-bit padding remain distinct
+from SHA-1. The separate MD5 multibuffer SIMD API still needs scoped integration;
+this portable checkpoint does not close whole-API register/spill qualification.
 
 1. Complete the SHA-512 ports' native ABI coverage. SysV and Win64 observers
    under SDE, Arm observers under QEMU, Linux guard pages and endpoint compiler

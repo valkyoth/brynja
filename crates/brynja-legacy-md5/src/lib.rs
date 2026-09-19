@@ -36,6 +36,7 @@
 mod compress;
 mod engine;
 mod hardened;
+pub mod hardened_in_place;
 mod ordinary;
 mod output;
 mod owner;

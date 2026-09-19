@@ -4,6 +4,13 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
+- Add portable `brynja_legacy_md5::hardened_in_place` workspace/handle APIs,
+  with consuming byte/bit finalization and cleanup after errors, forgotten
+  handles and recoverable unwind. Failed updates close the scoped state; no
+  public length/preflight oracle is exposed. MD5's checked u128 accounting
+  and low-64-bit length padding remain unchanged. Scoped SIMD batching and
+  complete register/spill qualification are still pending.
+
 - Add `hardened_execution::in_place::Sha1Workspace` borrowing an existing
   portable/static/hosted hardened executor. Active state stays in borrowed
   storage; scope cleanup covers forgotten handles, and operation unwind clears

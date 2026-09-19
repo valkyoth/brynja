@@ -34,6 +34,7 @@ First-party, allocation-free `no_std` legacy MD5 for explicit compatibility.
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
 | Ordinary batch AVX2 / NEON execution | 🚧 In progress; native qualification pending | ❌ No |
 | Hardened batch AVX2 / NEON execution | 🚧 In progress; retest and native evidence pending | ❌ No |
+| Caller-owned portable scoped workspace | 🚧 Implemented; residue qualification pending | ❌ No |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -119,6 +120,41 @@ No guarantee covers registers, compiler-created copies/spills, caches, moves,
 swap, DMA, dumps, `mem::forget`, abort, termination, power loss, or caller-owned
 input/output copies. No pinned/locked memory is supplied. Defaults and hardened
 processing remain portable; separate ordinary SIMD APIs are described below.
+
+### Scoped caller-owned storage
+
+`hardened_in_place::Md5Workspace` lends the active state to a callback instead
+of returning a populated owner by value. The handle cannot escape the scope,
+be copied/cloned/formatted, or be sent/shared across threads. A parent guard
+clears all five owned regions on scope exit, even if the handle is forgotten.
+
+```rust
+use brynja_legacy_md5::hardened_in_place::Md5Workspace;
+let mut workspace = Md5Workspace::new();
+let mut bytes = [0; 16];
+let output = workspace.with(|mut state| {
+    state.update(b"legacy input")?;
+    state.finalize_secret(&mut bytes)
+})?;
+assert_eq!(output.expose().len(), 16);
+drop(output);
+assert_eq!(bytes, [0; 16]);
+# Ok::<(), brynja_legacy_md5::Md5Error>(())
+```
+
+Byte updates and consuming canonical bit-tail finalization are supported.
+`finalize_public`/`finalize_bits_public` require explicit declassification and
+preserve output on failure. Secret finalization clears the whole destination
+on failure or recoverable unwind; its returned owner may outlive the scope.
+Unlike the older by-value API, an update error clears and terminates the scoped
+state. No capacity/length query, snapshot or reset is exposed. Start a new scope
+to reuse the cleared workspace.
+
+This profile is portable single-message hashing, not the AVX2/NEON batch API.
+Scoped SIMD batch ownership remains follow-up work. It does not promise complete
+register, spill or compiler-copy erasure; forgetting a separate secret output
+still prevents its Drop, and abort cannot run guards. Memory hygiene does not
+repair MD5's collision or chosen-prefix weaknesses.
 
 ## Verification and links
 

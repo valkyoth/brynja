@@ -7,8 +7,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CRATE = 'crates/brynja-legacy-md5/'
-FILES = ('compress.rs', 'engine.rs', 'hardened.rs', 'lib.rs', 'ordinary.rs', 'output.rs', 'owner.rs')
+FILES = ('compress.rs', 'engine.rs', 'hardened.rs', 'hardened_in_place.rs', 'lib.rs', 'ordinary.rs', 'output.rs', 'owner.rs')
 TOKENS = {
+    'hardened_in_place.rs': (
+        "impl for<'scope> FnOnce(Md5<'scope>) -> R", 'self.owner.wipe();',
+        'self.owner.chaining_state.copy_from_slice(&[', 'owner: &mut *cleanup.owner',
+        'if !self.keep { self.owner.wipe(); }', 'keep: false',
+        'engine::update(cleanup.owner, input)', 'self.active = false;',
+        'if result.is_ok() { cleanup.keep = true; self.active = true; }',
+        'impl Drop for Md5', 'Err(Md5Error::StateConsumed)',
+        'output::failed(destination, Md5Error::OutputLength)',
+        'SecretRegionInitialization::begin(destination)', 'self.stage(tail)?; initialization',
+        'destination.copy_from_slice(&self.owner.output_staging)',
+        'PhantomData<*mut ()>', '#[cfg(test)] mod tests;'),
     'lib.rs': ('#![no_std]', 'collision- and chosen-prefix-broken', 'No independent cryptographic review or FIPS validation'),
     'engine.rs': ('current: u128', 'current.checked_add(additional)', 'bytes.checked_mul(8)', 'admit_bytes(owner.bits(), input.len())?', 'admit_bits(owner.bits(), additional)?', 'tail.split()', 'if offset >= 56', '.zip([0, 8, 16, 24, 32, 40, 48, 56])', 'rfc_length_wrap_is_not_sha1_exhaustion', 'padding_encodes_low_64_bits_only_in_little_endian_order'),
     'ordinary.rs': ('pub fn finalize(mut self)', 'pub fn finalize_bits(mut self,', 'pub fn md5(', 'pub fn md5_bits('),
@@ -19,6 +30,7 @@ TOKENS = {
 REGIONS = ('chaining_state', 'block', 'message_length', 'buffered', 'output_staging')
 BOUND = [CRATE + 'src/' + name for name in FILES] + [
     CRATE + 'src/compress/native.rs',
+    CRATE + 'src/hardened_in_place/tests.rs',
     CRATE + 'Cargo.toml', CRATE + 'README.md', CRATE + 'tests/api.rs', CRATE + 'tests/vectors/rfc1321.txt',
     'assurance/md5-public-api/Cargo.toml', 'assurance/md5-public-api/Cargo.lock',
     'assurance/md5-public-api/src/lib.rs', 'assurance/md5-public-api/src/main.rs',
@@ -43,6 +55,11 @@ def validate(root=ROOT, hashes=True):
     src = root / CRATE / 'src'
     if sorted(path.name for path in src.glob('*.rs')) != sorted(FILES):
         raise ValueError('MD5 source inventory differs')
+    if sorted(p.relative_to(src / 'hardened_in_place').as_posix() for p in (src / 'hardened_in_place').rglob('*.rs')) != ['tests.rs']:
+        raise ValueError('MD5 scoped inventory differs')
+    scoped = (src / 'hardened_in_place.rs').read_text()
+    if re.search(r'pub\s+(?:const\s+)?fn\s+(check_additional_bits|check_additional_bytes|bits|snapshot|reset)\b', scoped):
+        raise ValueError('MD5 scoped state gained a metadata or reopening API')
     for name in FILES:
         text = (src / name).read_text()
         if len(text.splitlines()) > 500:

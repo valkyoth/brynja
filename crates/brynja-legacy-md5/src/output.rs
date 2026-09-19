@@ -10,6 +10,8 @@ pub enum Md5Error {
     OutputLength,
     /// Typed secret initialization failed.
     SecretMemory,
+    /// A scoped state failed or was already consumed.
+    StateConsumed,
 }
 
 impl core::fmt::Display for Md5Error {
@@ -18,6 +20,7 @@ impl core::fmt::Display for Md5Error {
             Self::MessageTooLong => "MD5 message length exceeds its bit domain",
             Self::OutputLength => "MD5 output must be exactly 16 bytes",
             Self::SecretMemory => "MD5 secret output initialization failed",
+            Self::StateConsumed => "MD5 scoped state is no longer active",
         })
     }
 }

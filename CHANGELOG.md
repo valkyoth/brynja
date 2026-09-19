@@ -2,6 +2,9 @@
 
 ## 0.24.49 development
 
+- Add portable scoped MD5 storage with borrowed active state, explicit public
+  release, typed secret output and independent scope cleanup. Preserve checked
+  u128 accounting and low-64-bit RFC padding; scoped SIMD batching remains pending.
 - Add scoped hardened SHA-1 execution borrowing an existing executor, with
   fail-closed authority checks, independent owner cleanup and typed outputs.
   Length rejection terminates the computation without quarantining healthy

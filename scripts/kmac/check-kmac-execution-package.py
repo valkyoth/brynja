@@ -93,6 +93,14 @@ def mutations(consumer, roots, env):
     manifest.write_text(manifest.read_text() + '\n[workspace]\n[patch.crates-io]\n' +
         '\n'.join(f'{name}={{path="{path.as_posix()}"}}' for name, path in roots.items()) + '\n')
     cases = (
+        ('../packer.rs', 'brynja_core::xor_secret_byte_bits(pending, byte, position, take, used)',
+         'Ok::<(), brynja_core::SecretBitRangeError>(())', 'borrowed_fragments_match_bit_oracle'),
+        ('../packer.rs', 'xor_secret_byte_bits(pending, byte, position, take, used)',
+         'xor_secret_byte_bits(pending, byte, 0, take, used)', 'borrowed_fragments_match_bit_oracle'),
+        ('../packer.rs', 'xor_secret_byte_bits(pending, byte, position, take, used)',
+         'xor_secret_byte_bits(pending, byte, position, take, 0)', 'borrowed_fragments_match_bit_oracle'),
+        ('../packer.rs', 'if valid > 8 || self.used() >= 8',
+         'if valid > 8', 'invalid_fragment_shape_rejects'),
         ('../packer.rs', 'clear_owned_region(&mut self.pending)', 'core::hint::black_box(&mut self.pending)', 'partial_tail_borrows_final_frame'),
         ('../packer.rs', 'clear_owned_region(&mut self.used)', 'core::hint::black_box(&mut self.used)', 'partial_tail_borrows_final_frame'),
         ('../packer.rs', 'clear_owned_region(&mut self.emitted)', 'core::hint::black_box(&mut self.emitted)', 'partial_tail_borrows_final_frame'),

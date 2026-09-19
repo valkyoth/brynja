@@ -1047,7 +1047,7 @@ sha256 = "194598a94ca33aad9b0e885159268c70faf6412f9665ac7e2c9c5bbccad54b75"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/packer.rs"
-sha256 = "cb2d4153329b7ad1344a6df655a2468178fb52414ece2382a6c136303f2de9f0"
+sha256 = "e5a35d85d83e2198ad58279f50c5dae8bc2f2e9074cacb1e7ef36c89cb1d1fc0"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/tests/api.rs"

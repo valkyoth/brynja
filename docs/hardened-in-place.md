@@ -709,6 +709,16 @@ storage. The final partial suffix is borrowed directly by a finalization callbac
 not copied into a returned tail owner. Portable and accelerated KMAC use the
 same helper, retaining bulk absorption and exact SP 800-185 bit framing.
 
+Partial key/message bytes and unaligned framing bytes now stay borrowed through
+`xor_secret_byte_bits`. At most two fragments fill the zero, unused bits of the
+pending byte; full bytes are flushed before carrying the remaining fragment.
+Aligned input still takes the bulk path. Invalid fragment widths or pending-bit
+counts reject before touching pending data or calling the sink. Independent
+bit-at-a-time tests cover all 256 source bytes, all eight pending alignments and
+widths 0 through 8, including carry into subsequent bytes. Compiled mutations
+remove insertion, corrupt either offset or bypass the shape check; all must
+fail in execution. Existing error/unwind guards still clear the framing owner.
+
 This internal groundwork does not establish whole-framing register/spill
 qualification. Integer calculations and compiler-created copies remain outside
 the owned-memory claim. Existing constructors and parameter policy are unchanged.

@@ -54,6 +54,9 @@ def main() -> int:
     reject("borrowed-key-encoding", Path("crates/brynja-mac-kmac/src/packer.rs"), "fn left_encode(&mut self, value: u128)", "fn left_encode(mut self, value: u128)")
     reject("borrowed-bytepad", Path("crates/brynja-mac-kmac/src/packer.rs"), "fn finish_bytepad(&mut self, rate: usize)", "fn finish_bytepad(mut self, rate: usize)")
     reject("borrowed-framing", Path("crates/brynja-mac-kmac/src/packer.rs"), "storage: &'storage mut Framing", "storage: Framing")
+    reject("borrowed-fragment", Path("crates/brynja-mac-kmac/src/packer.rs"), "byte: &u8, valid: u8", "byte: u8, valid: u8")
+    reject("fragment-boundary", Path("crates/brynja-mac-kmac/src/packer.rs"), "brynja_core::xor_secret_byte_bits(pending, byte, position, take, used)", "Ok::<(), brynja_core::SecretBitRangeError>(())")
+    reject("fragment-shape", Path("crates/brynja-mac-kmac/src/packer.rs"), "if valid > 8 || self.used() >= 8", "if valid > 9 || self.used() > 8")
     reject("conformance-feature", Path("crates/brynja-mac-kmac/src/lib.rs"), '#[cfg(feature = "conformance-testing")]\npub fn kmac128_conformance', "pub fn kmac128_conformance")
     reject("conformance-compile-gate", Path("scripts/checks.sh"), "scripts/kmac/check-kmac-conformance-gate.sh", "true # removed conformance gate")
     reject("constant-time", Path("crates/brynja-mac-kmac/src/output.rs"), "ct_eq", "ordinary_eq")
@@ -92,7 +95,7 @@ def main() -> int:
         ('final-bits', 'self.inner.final_secret(output, valid)', 'self.inner.final_secret(output, 8)'),
     ):
         reject('scoped-accelerated-xof-' + label, scoped / 'accelerated/xof.rs', before, after)
-    print("KMAC policy rejects forty-five ownership, lifecycle, feature, algorithm, test, and dependency regressions")
+    print("KMAC policy rejects forty-eight ownership, lifecycle, feature, algorithm, test, and dependency regressions")
     return 0
 
 

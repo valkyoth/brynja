@@ -60,7 +60,7 @@ fn partial_tail_borrows_final_frame_and_cleanup_covers_every_exit() -> Result<()
             };
             let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 let mut packer = SecretPacker::new(&mut sink, &mut storage);
-                packer.push_bits(0xff, valid)?;
+                packer.push_bits(&0xff, valid)?;
                 if exit == 2 {
                     packer.state.fail = true;
                 }
@@ -104,7 +104,7 @@ fn partial_tail_borrows_final_frame_and_cleanup_covers_every_exit() -> Result<()
             sink.fail = false;
             sink.unwind = false;
             let mut packer = SecretPacker::new(&mut sink, &mut storage);
-            packer.push_bits(0x5, 3)?;
+            packer.push_bits(&0x5, 3)?;
             let unwind = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 let mut packer = packer;
                 packer.finish_bits::<()>(|_, _| std::panic::resume_unwind(std::boxed::Box::new(())))
@@ -126,11 +126,89 @@ fn bytepad_retains_frame_and_clears_on_guard_drop() -> Result<(), KmacError> {
     let address = core::ptr::from_ref(&storage);
     {
         let mut packer = SecretPacker::new(&mut sink, &mut storage);
-        packer.push_bits(0x5, 3)?;
+        packer.push_bits(&0x5, 3)?;
         packer.finish_bytepad(168)?;
         assert_eq!(core::ptr::from_ref(&*packer.storage), address);
         assert_eq!(packer.emitted(), 168);
     }
     assert!(cleared(&storage));
+    Ok(())
+}
+
+#[derive(Default)]
+struct RecordingSink(std::vec::Vec<u8>);
+
+impl Absorb for RecordingSink {
+    fn absorb(&mut self, input: &[u8]) -> Result<(), KmacError> {
+        self.0.extend_from_slice(input);
+        Ok(())
+    }
+}
+
+#[test]
+fn borrowed_fragments_match_bit_oracle_at_every_alignment() -> Result<(), KmacError> {
+    for used in 0..8 {
+        for valid in 0..=8 {
+            for value in 0..=u8::MAX {
+                let mut sink = RecordingSink::default();
+                let mut frame = Framing::new();
+                let mut reference = std::vec::Vec::<u8>::new();
+                let mut bits = 0_usize;
+                // Independent bit-at-a-time model, including carried bytes.
+                for (byte, width) in [(0xa5, used), (value, valid), (0x96, 8), (0x69, 8)] {
+                    for position in 0..width {
+                        if bits.is_multiple_of(8) {
+                            reference.push(0);
+                        }
+                        if let Some(last) = reference.last_mut() {
+                            *last |= ((byte >> position) & 1) << (bits % 8);
+                        }
+                        bits += 1;
+                    }
+                }
+                {
+                    let mut packer = SecretPacker::new(&mut sink, &mut frame);
+                    packer.push_bits(&0xa5, used)?;
+                    packer.push_bits(&value, valid)?;
+                    packer.push_bytes(&[0x96, 0x69])?;
+                    assert_eq!(packer.emitted(), bits / 8);
+                    assert_eq!(usize::from(packer.used()), bits % 8);
+                    assert_eq!(
+                        packer.state.0,
+                        reference.get(..bits / 8).ok_or(KmacError::SecretMemory)?
+                    );
+                    let tail = if bits.is_multiple_of(8) {
+                        0
+                    } else {
+                        *reference.get(bits / 8).ok_or(KmacError::SecretMemory)?
+                    };
+                    assert_eq!(packer.storage.pending, [tail]);
+                }
+                assert!(cleared(&frame));
+            }
+        }
+    }
+    Ok(())
+}
+
+#[test]
+fn invalid_fragment_shape_rejects_before_absorption_and_clears() -> Result<(), KmacError> {
+    for (used, valid) in [(8, 0), (8, 1), (9, 8), (255, 8), (0, 9), (3, 255)] {
+        let mut sink = RecordingSink::default();
+        let mut frame = Framing::new();
+        {
+            let mut packer = SecretPacker::new(&mut sink, &mut frame);
+            packer.storage.pending = [0xa5];
+            packer.storage.used = [used];
+            assert_eq!(
+                packer.push_bits(&0x96, valid),
+                Err(KmacError::InvalidBitString)
+            );
+            assert_eq!(packer.storage.pending, [0xa5]);
+            assert_eq!(packer.storage.used, [used]);
+            assert!(packer.state.0.is_empty());
+        }
+        assert!(cleared(&frame));
+    }
     Ok(())
 }

@@ -176,11 +176,7 @@ impl<'state, 'storage, S: Absorb> SecretPacker<'state, 'storage, S> {
             .get(..complete_length)
             .ok_or(KmacError::InvalidBitString)?;
         self.push_bytes(complete)?;
-        let tail = input
-            .as_bytes()
-            .last()
-            .copied()
-            .ok_or(KmacError::InvalidBitString)?;
+        let tail = input.as_bytes().last().ok_or(KmacError::InvalidBitString)?;
         self.push_bits(tail, input.valid_bits_in_last_byte())
     }
 
@@ -195,22 +191,36 @@ impl<'state, 'storage, S: Absorb> SecretPacker<'state, 'storage, S> {
             return Ok(());
         }
         for byte in input {
-            self.push_bits(*byte, 8)?;
+            self.push_bits(byte, 8)?;
         }
         Ok(())
     }
 
-    fn push_bits(&mut self, byte: u8, valid: u8) -> Result<(), KmacError> {
-        for position in 0..valid {
-            let bit = (byte >> position) & 1;
+    fn push_bits(&mut self, byte: &u8, valid: u8) -> Result<(), KmacError> {
+        if valid > 8 || self.used() >= 8 {
+            return Err(KmacError::InvalidBitString);
+        }
+        let mut position = 0_u8;
+        while position < valid {
             let used = self.used();
+            let capacity = 8_u8.checked_sub(used).ok_or(KmacError::InvalidBitString)?;
+            let remaining = valid
+                .checked_sub(position)
+                .ok_or(KmacError::InvalidBitString)?;
+            let take = core::cmp::min(capacity, remaining);
             let pending = self
                 .storage
                 .pending
                 .first_mut()
                 .ok_or(KmacError::InvalidBitString)?;
-            *pending |= bit << used;
-            self.set_used(used.checked_add(1).ok_or(KmacError::MessageTooLong)?);
+            // Only unused (zero) pending bits are filled, so XOR is insertion.
+            // Keep the source byte borrowed across both possible fragments.
+            brynja_core::xor_secret_byte_bits(pending, byte, position, take, used)
+                .map_err(|_| KmacError::InvalidBitString)?;
+            self.set_used(used.checked_add(take).ok_or(KmacError::MessageTooLong)?);
+            position = position
+                .checked_add(take)
+                .ok_or(KmacError::MessageTooLong)?;
             if self.used() == 8 {
                 self.flush()?;
             }

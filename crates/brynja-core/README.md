@@ -79,6 +79,12 @@ x86-64/little-endian Arm routine clears its own working registers on normal
 return; portable models and caller registers/copies have no such guarantee.
 It does not declassify data or replace `SecretRegionInitialization` ownership.
 
+`apply_secret_byte_mask(byte, keep, set)` performs `(byte & keep) | set` through
+an exclusive byte borrow and **public** masks. Its baseline x86-64/little-endian
+Arm boundary clears its own working register on normal return; portable models
+do not provide that guarantee. The surrounding region still needs its cleanup
+guard, and caller copies/spills and interruption snapshots remain out of scope.
+
 Typed workspace domains prevent swapping secret/plaintext/transcript/
 certificate/output arenas, but a domain label alone does not clear memory.
 

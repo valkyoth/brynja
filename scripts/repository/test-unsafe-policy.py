@@ -20,7 +20,7 @@ def fixture(root: Path) -> None:
         '[workspace.lints.rust]\nunsafe_code = "deny"\n', encoding="utf-8"
     )
     (source / "lib.rs").write_text(
-        "mod secret_memory_volatile;\nmod secret_memory_transfer;\npub mod safe {}\n", encoding="utf-8"
+        "mod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\npub mod safe {}\n", encoding="utf-8"
     )
     shutil.copyfile(ROOT / 'crates/brynja-core/src/secret_memory.rs', source / 'secret_memory.rs')
     for relative in unsafe_policy.ALLOWED:
@@ -325,6 +325,44 @@ def scalar_boundary(family):
     print(f'Scalar {family} boundary rejects {len(mutations)} ABI, memory, bound and wipe regressions')
 
 
+def secret_mask_boundary():
+    relative = Path('crates/brynja-core/src/secret_memory_mask.rs')
+    source = (ROOT / relative).read_text()
+    _, blocks, items, proofs = unsafe_policy.ALLOWED[relative]
+    mutations = [
+        ('byte: *mut u8', 'byte: *mut u64'),
+        ('"movzx eax, byte ptr [{byte}]"', '"mov eax, [{byte}]"'),
+        ('"ldrb w4, [{byte}]"', '"ldr w4, [{byte}]"'),
+        ('"and al, {keep}"', '"nop"'), ('"or al, {set}"', '"nop"'),
+        ('"and w4, w4, {keep:w}"', '"nop"'), ('"orr w4, w4, {set:w}"', '"nop"'),
+        ('"xor eax, eax"', '"nop"'), ('"mov x4, xzr"', '"nop"'),
+        ('out("rax") _', 'lateout("rax") _'),
+        ('out("x4") _', 'lateout("x4") _'),
+        ('options(nostack)', 'options(nostack, nomem)'),
+        ('not(any(miri, kani))', 'not(kani)'),
+        ('*byte = (*byte & keep) | set;', '*byte = set;'),
+    ]
+    for before, after in mutations:
+        assert before in source
+        try:
+            unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
+        except unsafe_policy.UnsafePolicyError:
+            continue
+        raise AssertionError('accepted secret byte-mask regression: ' + before)
+    with tempfile.TemporaryDirectory(prefix='brynja-secret-mask-policy-') as temporary:
+        root = Path(temporary)
+        fixture(root)
+        writer = root / 'crates/brynja-core/src/secret_memory.rs'
+        original = writer.read_text()
+        writer.write_text(original.replace('crate::secret_memory_mask::apply(byte, keep, set);', ''))
+        require_rejection(root, 'masking lost its boundary')
+        writer.write_text(original)
+        library = root / 'crates/brynja-core/src/lib.rs'
+        library.write_text(library.read_text().replace('mod secret_memory_mask;', 'pub mod secret_memory_mask;'))
+        require_rejection(root, 'secret-mask module must remain private')
+    print(f'Secret mask rejects {len(mutations)} byte-bound, operation, wipe, clobber and model regressions plus wrapper/visibility bypasses')
+
+
 if __name__ == "__main__":
     test()
     register_boundaries()
@@ -338,6 +376,7 @@ if __name__ == "__main__":
     scalar_boundary('sha512')
     scalar_boundary('keccak')
     secret_copy_boundary()
+    secret_mask_boundary()
     print("unsafe policy rejects eleven exception-boundary regressions")
     print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
     print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

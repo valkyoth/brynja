@@ -412,6 +412,11 @@ OPERATION_CONTRACTS = {
 
 REVIEWED_SOURCE_PATHS = {
     "assurance/register-cleanup/check_secret_copy.py",
+    "assurance/register-cleanup/check_secret_mask.py",
+    "assurance/register-cleanup/secret-mask/Cargo.toml",
+    "assurance/register-cleanup/secret-mask/Cargo.lock",
+    "assurance/register-cleanup/secret-mask/src/lib.rs",
+    "assurance/register-cleanup/secret-mask/src/tests.rs",
     "assurance/register-cleanup/secret-copy/Cargo.toml",
     "assurance/register-cleanup/secret-copy/Cargo.lock",
     "assurance/register-cleanup/secret-copy/src/lib.rs",
@@ -432,6 +437,7 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-core/src/secret_memory/assurance_contract.rs",
     "crates/brynja-core/src/secret_memory_volatile.rs",
     "crates/brynja-core/src/secret_memory_transfer.rs",
+    "crates/brynja-core/src/secret_memory_mask.rs",
     "crates/brynja-core/src/secure_random.rs",
     "crates/brynja-core/src/secure_random/assurance_contract.rs",
     "crates/brynja-hash-sha2/src/sha224.rs",

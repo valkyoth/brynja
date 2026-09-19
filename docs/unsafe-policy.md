@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: seventy-five exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: seventy-six exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only seventy-five exact modules: the private core volatile clearer and
+Rust in only seventy-six exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -210,6 +210,15 @@ is required. The wrapper retains the original scratch destruction; owner size,
 API and ordinary public hashing remain unchanged. Other architectures and
 Miri/Kani retain the safe model without this register claim. This does not
 qualify higher-level absorb/squeeze, framing, input/output or moved-owner copies.
+
+Core's private `secret_memory_mask.rs` implements `(byte & keep) | set` for one
+exclusively borrowed byte and public masks. Exact one-byte loads/stores and
+straight-line baseline x86-64/little-endian Arm assembly keep the secret value
+in one working register, which is cleared on normal return. The safe wrapper
+cannot accept a null or empty region. Other targets and Miri/Kani use a safe
+model. Development evidence in `assurance/register-cleanup/secret-mask` covers
+guard-page edges, immediate register observation, emitted-code checks and
+compiled mutations. This is not whole-caller register/spill qualification.
 
 Core's private `secret_memory_transfer.rs` replaces the byte-copy loop inside
 `SecretRegionInitialization::write` on baseline x86-64/little-endian AArch64.

@@ -158,6 +158,14 @@ def compiled_mutants(simd):
     ):
         yield ('brynja-hash-sha2', 'src/hardened_batch512/output.rs', before, after,
                'hardened_batch512::tests::output::' + test, 1)
+    for module in ('hardened_batch', 'hardened_batch512'):
+        yield ('brynja-hash-sha2', f'src/{module}/engine.rs',
+               '0x80_u8 >> input.bits.valid_bits_in_last_byte(),', '0,',
+               module + '::tests::differential::portable_all_bit_tails_padding_boundaries_and_mixed_identities', 1)
+    yield ('brynja-hash-sha2', 'src/hardened_batch512/engine.rs',
+           'brynja_core::apply_secret_byte_mask(last_byte, input.algorithm.last_byte_mask(), 0);',
+           'brynja_core::apply_secret_byte_mask(last_byte, 0xff, 0);',
+           'hardened_batch512::tests::general::all_parameters_preserve_identity_and_canonical_secret_output', 1)
     yield ('brynja-hash-sha3', 'src/hardened_batch/workspace.rs',
            'clear_owned_region(self.states.as_flattened_mut())', 'Ok::<(), ()>(())',
            'hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state', 1)

@@ -423,10 +423,13 @@ message blocks, scalar-state transfer, padding-block transfer, digest staging,
 final destination commit and explicitly authorized declassification. Both output
 paths preflight every slot before writing; consumed secret outputs still clear
 their originals. Prepared source borrows do not copy the digest bytes.
-Public IV/count setup remains ordinary public computation. This change does not
-yet cover partial-bit separator arithmetic, the general SHA-512/t final-byte
-mask, non-SHA-2 batch families or all higher-level framing. Normal-return working-register
-evidence for the copy routine is not whole-API residue qualification.
+SHA-2 batch partial-bit padding and SHA-512/t final-byte masking also use
+`apply_secret_byte_mask` with public masks and borrowed byte storage. Complete
+input views use metadata-only slicing instead of `BitString::split`, avoiding
+an internal by-value partial byte. Public IV/count setup remains ordinary public
+computation. Other families, input-construction validation and higher-level
+callers remain separate obligations. Normal-return working-register evidence
+for these helpers is not whole-API residue qualification.
 
 ## TupleHash integer framing
 

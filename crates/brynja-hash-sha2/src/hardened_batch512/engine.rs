@@ -76,10 +76,7 @@ pub(super) fn run(
                         .get(index)
                         .and_then(Option::as_ref)
                         .ok_or(Error::Invariant)?;
-                    let block = input
-                        .bits
-                        .split()
-                        .0
+                    let block = complete_bytes(input.bits)?
                         .as_chunks::<128>()
                         .0
                         .get(number)
@@ -141,7 +138,7 @@ fn common(
             .get(s.index(group, lane)?)
             .and_then(Option::as_ref)
             .ok_or(Error::Invariant)?;
-        common = common.min(input.bits.split().0.len() / 128);
+        common = common.min(complete_bytes(input.bits)?.len() / 128);
     }
     Ok(common)
 }
@@ -183,7 +180,7 @@ fn finish(
         *s.offsets.get(index).ok_or(Error::Invariant)?,
     ))
     .map_err(|_| Error::Invariant)?;
-    let (complete, tail) = input.bits.split();
+    let complete = complete_bytes(input.bits)?;
     let (blocks, remainder) = complete.as_chunks::<128>();
     for block in blocks.get(offset..).ok_or(Error::Invariant)? {
         transfer(&mut s.scalar.block_copy, block)?;
@@ -196,11 +193,24 @@ fn finish(
             .ok_or(Error::Invariant)?,
         remainder,
     )?;
-    let separator = tail.map_or(0x80, |(byte, valid)| byte | (0x80_u8 >> valid));
-    *s.scalar
+    let separator = s
+        .scalar
         .padding_block
         .get_mut(remainder.len())
-        .ok_or(Error::Invariant)? = separator;
+        .ok_or(Error::Invariant)?;
+    if input.bits.is_byte_aligned() {
+        *separator = 0x80;
+    } else {
+        transfer(
+            core::slice::from_mut(separator),
+            core::slice::from_ref(input.bits.as_bytes().last().ok_or(Error::Invariant)?),
+        )?;
+        brynja_core::apply_secret_byte_mask(
+            separator,
+            0xff,
+            0x80_u8 >> input.bits.valid_bits_in_last_byte(),
+        );
+    }
     if remainder.len() >= 112 {
         padding(s, control, report)?;
         let _ = brynja_core::clear_owned_region(&mut s.scalar.padding_block);
@@ -228,12 +238,21 @@ fn finish(
         .output_bytes()
         .checked_sub(1)
         .ok_or(Error::Invariant)?;
-    *s.output
+    let last_byte = s
+        .output
         .get_mut(index)
         .and_then(|out| out.get_mut(last))
-        .ok_or(Error::Invariant)? &= input.algorithm.last_byte_mask();
+        .ok_or(Error::Invariant)?;
+    brynja_core::apply_secret_byte_mask(last_byte, input.algorithm.last_byte_mask(), 0);
     s.scalar.wipe();
     Ok(())
+}
+
+fn complete_bytes(bits: super::BitString<'_>) -> Result<&[u8], Error> {
+    // Unlike split(), this never materializes the secret partial byte in Rust.
+    bits.as_bytes()
+        .get(..bits.bit_len() / 8)
+        .ok_or(Error::Invariant)
 }
 
 #[cfg(test)]

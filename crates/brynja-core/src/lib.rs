@@ -35,6 +35,7 @@ pub mod read;
 pub mod secret;
 pub mod secret_destruction;
 pub mod secret_memory;
+mod secret_memory_mask;
 mod secret_memory_transfer;
 mod secret_memory_volatile;
 pub mod secure_random;
@@ -138,7 +139,7 @@ pub use secret_destruction::{
 };
 pub use secret_memory::{
     OwnedRegionClearComplete, OwnedSecretRegion, SecretMemoryError, SecretRegionInitialization,
-    clear_owned_region, copy_secret_region,
+    apply_secret_byte_mask, clear_owned_region, copy_secret_region,
 };
 pub use secure_random::{
     MAX_RESEED_INTERVAL, RandomPurpose, RandomRuntimeGeneration, RandomStateDestruction,

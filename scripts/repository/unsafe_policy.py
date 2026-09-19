@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 ALLOWED = {
+    Path("crates/brynja-core/src/secret_memory_mask.rs"): ("a81ce3a6608d5baddf00190bb5e276db7d56aec5be320962eafcf89e70f05ac9", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_transfer.rs"): ("85f0cef7c2a8508c4d594ad7462bccb92fd8e5bea7897164d7df3ee655dcf3e0", 3, 1, 3),
     Path("crates/brynja-hash-sha3/src/hardened/permutation/native.rs"): ("2c1ec8a76fd6bb28be65fc8bf53bcdbec3d0c7ddb86584f005563ffc6debd640", 3, 1, 3),
     Path("crates/brynja-hash-sha2/src/hardened/compress64/native.rs"): ("df5e947205c991a83c410371811de6e44f00b38c8c9ce3141970d4585c8f1bc5", 3, 1, 3),
@@ -171,6 +172,10 @@ def validate(root: Path) -> None:
     writer = (root / 'crates/brynja-core/src/secret_memory.rs').read_text()
     if writer.count('crate::secret_memory_transfer::copy(destination, input)?;') != 1:
         fail('secret initialization lost its checked transfer boundary')
+    if library.count('mod secret_memory_mask;') != 1 or 'pub mod secret_memory_mask' in library:
+        fail('secret-mask module must remain private and declared once')
+    if writer.count('crate::secret_memory_mask::apply(byte, keep, set);') != 1:
+        fail('borrowed secret-byte masking lost its boundary')
 
 
 def validate_allowed(
@@ -195,6 +200,28 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
+    elif relative == Path('crates/brynja-core/src/secret_memory_mask.rs'):
+        required = ('pub(crate) unsafe extern "C" fn mask_byte(byte: *mut u8, keep: u8, set: u8)',
+                    '#[inline(never)]', 'mask_byte(core::ptr::from_mut(byte), keep, set)',
+                    '"movzx eax, byte ptr [{byte}]"', '"and al, {keep}"', '"or al, {set}"',
+                    '"mov byte ptr [{byte}], al"', '"xor eax, eax"',
+                    '"ldrb w4, [{byte}]"', '"and w4, w4, {keep:w}"', '"orr w4, w4, {set:w}"',
+                    '"strb w4, [{byte}]"', '"mov x4, xzr"', '"cmp xzr, xzr"',
+                    'out("rax") _', 'out("x4") _')
+        if any(token not in text for token in required):
+            fail('secret mask lost byte bounds, computation or cleanup')
+        if any(text.count(token) != 2 for token in ('asm!(', 'BRYNJA_MASK_BEGIN',
+                'BRYNJA_MASK_ERASE', 'BRYNJA_MASK_END', 'options(nostack)')):
+            fail('secret mask lost an opaque architecture boundary')
+        normalized = re.sub(r'\s+', '', text)
+        condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
+        if normalized.count('#[cfg('+condition+')]') != 2 or normalized.count('#[cfg(not('+condition+'))]') != 1:
+            fail('secret mask native/model target separation changed')
+        if '*byte=(*byte&keep)|set;' not in normalized:
+            fail('secret mask safe model disappeared')
+        if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly|target_feature)\b',
+                     re.sub(r'//[^\n]*', '', text)):
+            fail('secret mask changed memory/clobber or baseline ISA contract')
     elif relative == Path('crates/brynja-core/src/secret_memory_transfer.rs'):
         required = ('pub(crate) unsafe extern "C" fn copy_bytes(destination: *mut u8, source: *const u8, length: usize)',
                     '#[inline(never)]', 'if destination.len() != input.len()',

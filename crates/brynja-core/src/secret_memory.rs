@@ -103,6 +103,44 @@ pub fn copy_secret_region(destination: &mut [u8], input: &[u8]) -> Result<(), Se
     crate::secret_memory_transfer::copy(destination, input)
 }
 
+/// Updates one borrowed byte to `(byte & keep) | set`, using public masks.
+///
+/// This neither owns/clears the surrounding region nor declassifies data. Keep
+/// the region's cleanup guard live. The x86-64/little-endian AArch64 boundary
+/// clears its own working register on normal return; portable targets and
+/// Miri/Kani use a safe model without a register guarantee. Caller copies,
+/// spills, interruption snapshots and secret masks are outside that guarantee.
+///
+/// ```
+/// let mut byte = 0xa0;
+/// brynja_core::apply_secret_byte_mask(&mut byte, 0xff, 0x10);
+/// assert_eq!(byte, 0xb0);
+/// brynja_core::apply_secret_byte_mask(&mut byte, 0x80, 0);
+/// assert_eq!(byte, 0x80);
+/// ```
+#[inline(never)]
+pub fn apply_secret_byte_mask(byte: &mut u8, keep: u8, set: u8) {
+    crate::secret_memory_mask::apply(byte, keep, set);
+}
+
+#[cfg(test)]
+mod byte_mask_tests {
+    #[test]
+    fn masks_preserve_neighbor_bytes() {
+        for input in 0..=u8::MAX {
+            for keep in [0, 1, 2, 0x80, 0x7f, 0xf0, 0xaa, 0x55, 0xff] {
+                for set in [0, 1, 2, 0x80, 0x7f, 0xf0, 0xaa, 0x55, 0xff] {
+                    let mut region = [0xa5, input, 0x69];
+                    if let Some(byte) = region.get_mut(1) {
+                        super::apply_secret_byte_mask(byte, keep, set);
+                    }
+                    assert_eq!(region, [0xa5, (input & keep) | set, 0x69]);
+                }
+            }
+        }
+    }
+}
+
 impl<'region> SecretRegionInitialization<'region> {
     /// Clears and exclusively borrows one non-empty caller-owned region.
     pub fn begin(region: &'region mut [u8]) -> Result<Self, SecretMemoryError> {

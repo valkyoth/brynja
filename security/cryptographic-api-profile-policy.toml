@@ -839,7 +839,31 @@ storage = "unpublished-test-only"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory.rs"
-sha256 = "432c8be7bb8d0fa7c5e1441df856a6896c1b4b36a78af697eedfc04038f23d9c"
+sha256 = "06a28a187578abffa68571b2c01941646ae8783d19b3750e9a64f440ecb54e3e"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory_mask.rs"
+sha256 = "a81ce3a6608d5baddf00190bb5e276db7d56aec5be320962eafcf89e70f05ac9"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/check_secret_mask.py"
+sha256 = "aa528d1a9476e5a1e96a416721d123c32e895945479008f18f5dc7e459e113cd"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-mask/Cargo.toml"
+sha256 = "aff4c8e11245748de48dae442e296ec3ee3b482d9ae89e61553925313cb6a07e"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-mask/Cargo.lock"
+sha256 = "2ec766453478d17993eecdc5669a1fd2af34bbd69e3c0b07b5087b87dd4e20b1"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-mask/src/lib.rs"
+sha256 = "43b61959ce690359c07c0a6b475ad1216a445ce9c4c4fd3f0a520850a6949777"
+
+[[reviewed-source]]
+path = "assurance/register-cleanup/secret-mask/src/tests.rs"
+sha256 = "ab963c573960ce3e41893a7cecb601b3588d61c1314962eb745ba7532d954db8"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/check_secret_copy.py"
@@ -1019,7 +1043,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "61302e73825cb3f9bb2e2b8d965b9934872eb903c715e1e3f6ee0dd14eb8366c"
+sha256 = "38287a46046ab2afcebc504e056f73573612aaaff6551c83e7dfbfbfc5a51ee5"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

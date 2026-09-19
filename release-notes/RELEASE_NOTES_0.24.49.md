@@ -60,6 +60,11 @@ No crates are selected for publication.
   transactional public output; consumed secret outputs retain clearing on Drop.
   Exact-length failures preserve storage; callers retain cleanup responsibility.
   This is partial caller-copy remediation, not whole-API residue qualification.
+- Add a borrowed-byte mask helper with baseline x86/Arm opaque boundaries and
+  safe portable models. SHA-2 hardened batches use it for bit-tail padding and
+  general SHA-512/t output masks without materializing the byte in Rust. Exact
+  byte bounds, working-register cleanup and mutation regressions have development
+  evidence; caller copies/spills and final native qualification remain separate.
 - Add scoped hardened MD5 SIMD batches in caller-owned eight-lane workspaces.
   Consuming public/secret output reuses the existing engine, exact work accounting
   and quarantine policy. Independent scope cleanup survives forgotten handles;

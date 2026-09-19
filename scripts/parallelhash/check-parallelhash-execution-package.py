@@ -152,6 +152,16 @@ def main():
             for field in ("merged", "accelerated", "output_bits", "phase")
         ]
         cases += [
+            ("brynja-hash-parallel-std", "src/" + file, before, after, tests)
+            for file, before, after, tests in (
+                ("in_place.rs", "let _gate = self.enter_operation()?;", "", ["--test", "scoped", "lifecycle"]),
+                ("scoped_worker.rs", "clear_owned_region(slot)", "core::hint::black_box(slot)", ["--lib", "scoped_slots_clear"]),
+                ("scoped_worker.rs", "if leaves > limit", "if false", ["--lib", "scoped_slots_clear"]),
+                ("scoped_worker.rs", "if failure.is_none()", "if true", ["--lib", "scoped_workers_join_and_clear"]),
+                ("scoped_worker.rs", "else if let Err(error) = merge(leaf)", "else if let Err(error) = Ok::<(), ParallelHashError>(())", ["--test", "scoped", "matches_all_outputs"]),
+            )
+        ]
+        cases += [
             ("brynja-hash-parallel", "src/execution/binding.rs",
              "streaming_complete && merged <= *limit", "merged <= *limit",
              ["--lib", "streaming_root_rejects_finalization_without_input_proof"]),

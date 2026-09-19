@@ -282,7 +282,21 @@ and leaf combinations remain explicit; neither supplied route falls back, and
 root route reports do not attest which route produced every leaf. CPU admission,
 authority lifetimes and thread restrictions are unchanged.
 
-Scoped thread handoff still needs the broader ownership work. Registers, spills and compiler-created
+The portable std executor now exposes `with128`/`with256` and canonical-bit
+variants for these collector workspaces. It retains the root on the calling
+thread, computes bounded leaves in parent-owned disjoint clearing slots, joins
+every started worker and consumes typed exact-plan results in order. The callback
+receives a completed scoped collector only after successful collection and a
+cancellation check. It can return a separately borrowed secret output, not a
+root or reader. The shared nonblocking operation gate remains held throughout
+the callback. Admission/worker failures skip it, so destinations captured only
+by the callback are not cleared by this API. Recoverable callback unwinding
+clears the workspace and poisons the executor gate; abort cannot run Drop.
+
+This portable scoped handoff does not transfer sponge state or CPU authority
+between threads and does not select acceleration. Scoped accelerated worker
+selection and multibuffer thread ownership still need the broader work.
+Registers, spills and compiler-created
 copies remain outside this checkpoint's guarantee; `panic = "abort"` cannot run
 scope destructors.
 

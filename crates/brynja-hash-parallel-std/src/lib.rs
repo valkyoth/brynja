@@ -15,6 +15,8 @@ use brynja_hash_parallel::{
     ParallelHashPublicDeclassification,
 };
 
+mod in_place;
+mod scoped_worker;
 mod worker;
 
 #[cfg(feature = "runtime-execution")]

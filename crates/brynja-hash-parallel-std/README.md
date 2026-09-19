@@ -34,6 +34,7 @@ package owns scheduling, resource admission and local worker selection.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Bounded portable ParallelHash/ParallelHashXOF worker executor | ✅ Implemented | ❌ No |
+| Scoped portable root with bounded borrowed-leaf thread handoff | 🚧 Implemented; qualification pending | ❌ No |
 | Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |
 | Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |
 
@@ -64,6 +65,42 @@ Public output is transactional. Allocation, launch, worker panic, cancellation
 and work-limit failures are typed errors. Completion order does not determine
 merge order. Temporary leaf storage is bounded by the smaller of the leaf and
 worker counts, and every started worker is joined.
+
+### Scoped portable threaded collection
+
+`with128`/`with256` and their `_bits` variants borrow a caller-owned empty
+collector workspace. Workers compute leaves in disjoint clearing slots; only
+typed plan/output borrows cross back to the calling thread. The root never
+leaves that thread. All workers join and merge in order before the callback,
+which can consume the completed collector for fixed or incremental XOF output.
+
+```rust
+use brynja_hash_parallel::{ParallelHash128Plan, hardened_in_place::ParallelHash128CollectorWorkspace};
+use brynja_hash_parallel_std::{CancellationToken, ParallelHashExecutor};
+let executor = ParallelHashExecutor::new(4, 4096)?;
+let plan = ParallelHash128Plan::new(b"message split into leaves", 8)?;
+let mut workspace = ParallelHash128CollectorWorkspace::new();
+let mut output = [0; 32];
+let secret = executor.with128(
+    &mut workspace, &plan, b"example", &CancellationToken::new(),
+    |root| root.finalize_secret(&mut output),
+)??;
+assert_eq!(secret.expose().len(), 32);
+drop(secret);
+assert_eq!(output, [0; 32]);
+# Ok::<(), brynja_hash_parallel_std::ParallelHashExecutorError>(())
+```
+
+These methods select portable processing only, not automatic acceleration.
+The callback cannot return the root/reader but can return a typed output borrowing
+its own destination. Admission/worker failures skip the callback: destinations
+captured only by that callback are **not** automatically cleared. Cancellation
+is checked before the callback; subsequent reader use is controlled by the caller.
+The executor's nonblocking gate remains held through the callback. Recoverable
+callback unwinding clears the workspace and poisons the gate; the workspace may
+be reused with a different executor. Forgetting a scoped root/reader does not
+bypass its outer workspace cleanup. Abort, register/spill and caller-copy limits
+remain unchanged. Scoped accelerated worker selection is not provided here.
 
 ### Explicit root and worker selection
 

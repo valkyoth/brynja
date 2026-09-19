@@ -177,3 +177,28 @@ def check_storage(row):
             "std storage iteration survives optimization")
     require(re.search(r"execution.*worker.*Storage.*clear", row["s"]),
             "std storage assembly clearing definition")
+
+
+def check_scoped_storage(storage, fixture):
+    """Inspect both instantiated slot widths in a real downstream caller."""
+    function = flow.exact_function(storage["mir"], (
+        "crates/brynja-hash-parallel-std/src/scoped_worker.rs:", "::drop(", "_1: &mut Slots<N>)"))
+    linear_fields(function, [("Slots::<N>::clear(", "self")])
+    functions = re.findall(r"^define [\s\S]*?^}", fixture["ll"], re.M)
+    selected = [fn for fn in functions if re.search(r"scoped_worker.*Slots.*clear", fn.splitlines()[0])]
+    require(len(selected) == 2, "both instantiated scoped slot clearers")
+    widths = []
+    for fn in selected:
+        code = "\n".join(line for line in fn.splitlines() if not line.lstrip().startswith(";"))
+        calls = [line for line in code.splitlines() if "call " in line and "clear_owned_region" in line]
+        require(len(calls) == 1, "one full-slot clearing call per iteration")
+        width = re.search(r"i64 (?:noundef )?(32|64)\)", calls[0])
+        require(width, "exact scoped slot width")
+        widths.append(int(width[1]))
+        require("phi ptr" in code and re.search(r"getelementptr[^\n]+i64 " + width[1] + r"\b", code),
+                "scoped slot stride and iteration")
+        symbol = re.search(r"@([^ (]+)", fn.splitlines()[0])[1].strip('"')
+        require(re.fullmatch(r"[A-Za-z0-9_.$]+", symbol), "unescaped Rust slot symbol")
+        require(re.search(r"^" + re.escape(symbol) + r":$", fixture["s"], re.M),
+                "instantiated slot assembly definition")
+    require(sorted(widths) == [32, 64], "both complete scoped slot widths")

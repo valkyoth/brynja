@@ -80,6 +80,33 @@ def main():
             cleanup.require(len(paths) == 1, "unique std compiler artifact")
             storage[extension] = paths[0].read_text()
         cleanup.check_storage(storage)
+        subprocess.run(["cargo", "+" + args.toolchain, "rustc", "--locked", "--offline",
+                        "--manifest-path", "assurance/parallelhash-differential/Cargo.toml",
+                        "--features", "execution", "--release", "--bin", "brynja-parallelhash-differential-fixture",
+                        "--target", args.target, "--", "--emit=mir,llvm-ir,asm",
+                        *(["-C", "linker=rust-lld"] if args.target == "aarch64-unknown-linux-musl" else [])],
+                       cwd=ROOT, env=env, check=True, timeout=180)
+        fixture = {}
+        for extension in ("ll", "s"):
+            paths = list(Path(directory).rglob("brynja_parallelhash_differential_fixture-*." + extension))
+            cleanup.require(len(paths) == 1, "unique scoped downstream artifact")
+            fixture[extension] = paths[0].read_text()
+        cleanup.check_scoped_storage(storage, fixture)
+        for part, extension, before, after in (
+            ("storage", "mir", "Slots::<N>::clear(", "Slots::<N>::omitted("),
+            ("fixture", "ll", "i64 noundef 32)", "i64 noundef 16)"),
+            ("fixture", "ll", "i64 noundef 64)", "i64 noundef 32)"),
+            ("fixture", "s", "Slots", "Omitted"),
+        ):
+            original = storage if part == "storage" else fixture
+            cleanup.require(before in original[extension], "live scoped slot cleanup mutation")
+            mutant = dict(original, **{extension: original[extension].replace(before, after)})
+            try:
+                cleanup.check_scoped_storage(mutant if part == "storage" else storage,
+                                             mutant if part == "fixture" else fixture)
+            except (ValueError, cleanup.flow.MirCleanupFlowError):
+                continue
+            raise ValueError("scoped thread slot cleanup mutant escaped")
         for extension, before, after in (
             ("mir", "Storage::clear(", "Storage::omitted("),
             ("ll", "clear_owned_region", "omitted"),

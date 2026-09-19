@@ -27,7 +27,9 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "hardened_in_place/accelerated/scheduled.rs", "hardened_in_place/accelerated/scheduled_leaf.rs",
     "hardened_in_place/accelerated/scheduled_backend.rs",
 ))
-STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
+STD_SOURCES = tuple(STD / "src" / name for name in (
+    "lib.rs", "worker.rs", "in_place.rs", "scoped_worker.rs", "scoped_worker/tests.rs",
+))
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
     "batch.rs", "batch/tests.rs", "collector/batch.rs",
     "batch/transfer.rs", "batch/transfer/tests.rs",
@@ -43,6 +45,7 @@ STD_EXECUTION = tuple(STD / "src/execution" / name for name in (
 TESTS = (
     PORTABLE / "tests/api.rs", PORTABLE / "tests/official_vectors.rs",
     STD / "tests/executor.rs",
+    STD / "tests/scoped.rs",
     PORTABLE / "tests/execution.rs", PORTABLE / "tests/execution_vectors/mod.rs",
     PORTABLE / "tests/execution_stream.rs",
     STD / "tests/execution.rs",
@@ -79,6 +82,7 @@ DIFFERENTIAL = (
     Path("assurance/parallelhash-differential/src/scoped_accelerated.rs"),
     Path("assurance/parallelhash-differential/src/scoped_scheduled.rs"),
     Path("assurance/parallelhash-differential/src/scoped_scheduled_accelerated.rs"),
+    Path("assurance/parallelhash-differential/src/scoped_threaded.rs"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -238,6 +242,24 @@ BORROWED_TOKENS = {
 }
 
 
+SCOPED_THREAD_TOKENS = {
+    "in_place.rs": ("let _gate = self.enter_operation()?", "crate::scoped_worker::admit(",
+        "workspace.with_bits(plan, customization, |mut root|", "|leaf| root.merge(leaf)",
+        "crate::worker::ensure_live(cancellation)?", "Ok(operation(root))",
+        "impl for<'scope> FnOnce(api::$collector<'scope, 'plan, 'input>) -> R"),
+    "scoped_worker.rs": ("struct Slots<const N: usize>(Vec<[u8; N]>)", "try_reserve_exact(length)",
+        "clear_owned_region(slot)", "self.clear()", "Slots::<$width>::new(leaves.min(workers))",
+        "base.checked_add(count)", "base.checked_add(offset)", "if leaves > limit",
+        "thread::scope(|scope|", "try_reserve_exact(batch.len())", "match handle.join()",
+        "if failure.is_none()", "ensure_live(cancel)?", "let result = job.execute(destination)?",
+        "failure.map_or(Ok(()), Err)", "#[cfg(test)]\nmod tests;"),
+}
+
+def validate_scoped_threads(loaded):
+    for name, tokens in SCOPED_THREAD_TOKENS.items():
+        for token in tokens:
+            require(loaded[STD / "src" / name], token, "scoped thread ownership")
+
 def validate_borrowed(loaded: dict) -> None:
     for name, tokens in BORROWED_TOKENS.items():
         code = loaded[PORTABLE / "src" / name]
@@ -306,6 +328,7 @@ def validate(root: Path) -> None:
     ):
         require(core, token, "sequential lifecycle")
     validate_borrowed(loaded)
+    validate_scoped_threads(loaded)
     scheduled = loaded[PORTABLE / "src/scheduled.rs"]
     for token in (
         "ParallelHash128Plan", "ParallelHash256Plan",

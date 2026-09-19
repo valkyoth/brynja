@@ -90,6 +90,19 @@ def main() -> int:
                 continue
             raise RuntimeError("borrowed framing guard accepted mutation: " + token)
     print(f"Borrowed ParallelHash framing/leaf policy rejects {count} semantic regressions")
+    count = 0
+    for name, tokens in parallelhash_policy.SCOPED_THREAD_TOKENS.items():
+        path = parallelhash_policy.STD / "src" / name
+        for token in tokens:
+            mutated = dict(loaded)
+            mutated[path] = loaded[path].replace(token, "REMOVED")
+            try:
+                parallelhash_policy.validate_scoped_threads(mutated)
+            except parallelhash_policy.ParallelHashPolicyError:
+                count += 1
+                continue
+            raise RuntimeError("scoped thread guard accepted mutation: " + token)
+    print(f"Scoped thread handoff rejects {count} semantic regressions")
     return 0
 
 

@@ -24,7 +24,9 @@ No crates are selected for publication.
   on the calling thread and joins bounded workers returning borrowed typed leaf
   outputs before the completion callback. A separate scoped execution adapter
   now constructs accelerated root/leaf authority locally on its executing thread
-  and joins workers returning only completed output borrows. Scoped multibuffer ownership and complete
+  and joins workers returning only completed output borrows. Typed multibuffer
+  leaf jobs now return clearing exact-plan result loans for scoped collector
+  merging. The std scoped multibuffer scheduler and complete
   compiler-copy/register/spill qualification remain unfinished.
 
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied

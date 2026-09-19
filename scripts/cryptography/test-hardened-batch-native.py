@@ -44,7 +44,7 @@ def outputs(lane):
     result['package'] = '\n'.join('Packaged hardened tests/doctests: PASS; ' + package
                                   for package, *_ in native.suites.SUITES)
     result['package'] += '\nPackaged cleanup/dispatch compiled mutants: 11 rejected\n'
-    result['package'] += ('Hardened batch package acceptance: PASS; ownership=129; substitutions/conversions=16; '
+    result['package'] += ('Hardened batch package acceptance: PASS; ownership=137; substitutions/conversions=16; '
                           f'1.98.1; {native.target(lane)}; simd=True\n')
     return result
 

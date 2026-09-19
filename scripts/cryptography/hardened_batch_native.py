@@ -92,7 +92,7 @@ def validate_result(key, text, lane):
         output = '\n'.join(line for line in lines if line.startswith(prefix)) + '\n'
         checker.validate(subprocess.CompletedProcess([], 0, output, ''), 'prefer', kernel == 'Neon')
     elif key == 'package':
-        marker = ('Hardened batch package acceptance: PASS; ownership=129; substitutions/conversions=16; '
+        marker = ('Hardened batch package acceptance: PASS; ownership=137; substitutions/conversions=16; '
                   f'1.98.1; {target(lane)}; simd=True')
         if lines.count(marker) != 1 or lines.count('Packaged cleanup/dispatch compiled mutants: 11 rejected') != 1:
             raise ValueError('native package acceptance missing')

@@ -28,6 +28,7 @@
 //! # Ok(()) }
 //! ```
 pub use super::stream::batch::{Stream, StreamReader};
+pub mod scoped;
 mod transfer;
 use super::{Error as RootError, Plan, WorkerPolicy};
 use brynja_core::clear_owned_region;

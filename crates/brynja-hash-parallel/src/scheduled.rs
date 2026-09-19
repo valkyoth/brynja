@@ -87,6 +87,10 @@ macro_rules! plan {
         }
 
         impl<'plan, 'input> $job<'plan, 'input> {
+            #[cfg(feature = "hardened-batch-execution")]
+            pub(crate) const fn batch_input(&self) -> Fips202BitString<'input> {
+                self.input
+            }
             /// Returns this leaf's zero-based index.
             #[must_use]
             pub const fn index(&self) -> u128 {

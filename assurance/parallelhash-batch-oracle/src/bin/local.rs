@@ -10,6 +10,8 @@ use std::{
 };
 #[path = "../request.rs"]
 mod request;
+#[path = "../scoped.rs"]
+mod scoped;
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 fn check<T, E: core::fmt::Debug>(result: std::result::Result<T, E>) -> Result<T> {
@@ -89,7 +91,10 @@ fn scheduled(
             return Err("scheduled secret Drop/canary cleanup".into());
         }
     }
-    Ok(report.vector_calls)
+    report
+        .vector_calls
+        .checked_add(scoped::compare(request, executor, output, valid)?)
+        .ok_or_else(|| "scoped comparison vector overflow".into())
 }
 
 fn streaming(

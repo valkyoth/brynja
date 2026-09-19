@@ -306,7 +306,23 @@ contract. Secret admission failures clear destinations; public output is staged
 and committed under the operation gate only after all workers have joined.
 Reports count completed accelerated leaves rather than inferring acceleration
 from preference alone. This does not qualify cached detection or VM migration.
-Scoped multibuffer thread ownership still needs the broader work.
+Scoped multibuffer scheduling now has a typed result bridge under the existing
+`hardened-batch-execution` feature: `ParallelHash128Plan::batch` and
+`ParallelHash256Plan::batch` select exactly one to four contiguous leaves.
+`execution::in_place::batch::{Batch128,Batch256}::execute_into` borrows the
+worker-local clearing executor/workspace and transfers completed CVs into a
+caller-owned `[[u8;64];4]`. Intermediate CVs and scratch clear before return;
+no populated sponge owner moves. `Leaves128`/`Leaves256` are Send, not Sync,
+Copy, Clone or Debug, and carry exact plan/index provenance, not live authority.
+Portable and accelerated scoped collectors consume them with `merge_batch`.
+Wrong plans, order errors and revoked roots reject terminally; every merge/drop
+clears the entire result array, including inactive slots and short-CV tails.
+Require rejects ineligible groups; Prefer permits scalar tails. Results report
+actual vector participation without treating a requested route as proof of work.
+The explicit bounded CV copy is between two clearing owners, not a declassification
+or a promise to erase compiler-created copies. Forgetting a completed result
+cannot run its Drop: a threaded scheduler must keep its own parent storage guard.
+The std scoped multibuffer scheduler still needs implementation and testing.
 Registers, spills and compiler-created
 copies remain outside this checkpoint's guarantee; `panic = "abort"` cannot run
 scope destructors.

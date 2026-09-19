@@ -334,7 +334,7 @@ execution remains emulation, never native qualification.
 The checker runs all six feature-owning crates' shipped library tests/doctests
 in debug and release, plus six documented APIs as external-consumer examples.
 It pairs every negative compilation with a positive type control and requires
-the exact structured rustc error: 129 forbidden ownership traits and sixteen
+the exact structured rustc error: 137 forbidden ownership traits and sixteen
 ordinary-type substitutions or implicit secret-to-public conversions. Completed
 ParallelHash transport has a positive Send control; unfinished owners do not.
 Eight real cleanup omission mutants must fail executing release tests. SIMD

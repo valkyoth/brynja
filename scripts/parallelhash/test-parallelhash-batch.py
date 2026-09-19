@@ -51,6 +51,39 @@ def campaign(root, env, cargo, target):
             path.write_text(original)
     run(command, root, env)
     print(f'Scheduled ParallelHash batching: {len(cases)} compiled regressions rejected')
+    scoped_campaign(root, env, cargo, target)
+
+
+def scoped_campaign(root, env, cargo, target):
+    command = [*cargo, 'test', '--locked', '--offline', '-p', 'brynja-hash-parallel',
+               '--features', 'hardened-batch-execution', '--target', target, '--lib', 'scoped_batch']
+    path = root / 'crates/brynja-hash-parallel/src/execution/batch/scoped.rs'
+    original = path.read_text()
+    cases = (
+        ('clear_owned_region(self.0.as_flattened_mut())', 'Ok::<(), ()>(())'),
+        ('clear_owned_region(output.0.as_flattened_mut())', 'Ok::<(), ()>(())'),
+        ('!core::ptr::eq(plan, self.plan)', 'false'),
+        ('destination.copy_from_slice(source);', 'core::hint::black_box(source);'),
+        ('Leaves256, Shake256, 64', 'Leaves256, Shake128, 64'),
+        ('merge(index, &bytes[..$width])?;', 'merge(Ok(self.start), &bytes[..$width])?;'),
+    )
+    # All mutations must compile and fail executing tests, not merely fail a
+    # source grep.
+    for profile in ([], ['--release']):
+        current = command + profile
+        run(current, root, env)
+        for before, after in cases:
+            if original.count(before) != 1:
+                raise ValueError('ambiguous scoped mutation: ' + before)
+            try:
+                path.write_text(original.replace(before, after))
+                result = run(current, root, env, success=False)
+                if result.returncode == 0 or 'test result: FAILED' not in result.stdout:
+                    raise ValueError('scoped mutant survived or failed to compile: ' + before + '\n' + result.stdout[-1500:] + result.stderr[-2000:])
+            finally:
+                path.write_text(original)
+        run(current, root, env)
+    print(f'Scoped ParallelHash batch bridge: {2 * len(cases)} compiled regressions rejected')
 
 
 def stream_campaign(root, env, cargo, target):

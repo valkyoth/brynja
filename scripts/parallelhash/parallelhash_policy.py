@@ -33,6 +33,7 @@ STD_SOURCES = tuple(STD / "src" / name for name in (
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
     "batch.rs", "batch/tests.rs", "collector/batch.rs",
     "batch/transfer.rs", "batch/transfer/tests.rs",
+    "batch/scoped.rs", "batch/scoped/tests.rs", "batch/scoped/tests/handoff.rs",
     "stream/batch.rs", "stream/batch/output.rs", "stream/batch/tests.rs", "stream/batch/failures.rs",
     "backend.rs", "binding.rs", "collector.rs", "collector/tests.rs", "encoding.rs", "mod.rs",
     "ownership.rs", "plan.rs", "stream.rs", "stream_output.rs", "stream/tests.rs",
@@ -86,6 +87,7 @@ DIFFERENTIAL = (
     Path("assurance/parallelhash-differential/src/scoped_scheduled_accelerated.rs"),
     Path("assurance/parallelhash-differential/src/scoped_threaded.rs"),
     Path("assurance/parallelhash-differential/src/scoped_execution.rs"),
+    Path("assurance/parallelhash-batch-oracle/src/scoped.rs"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -124,6 +126,16 @@ def require(text: str, token: str, label: str) -> None:
 
 
 BORROWED_TOKENS = {
+    "execution/batch/scoped.rs": (
+        "struct Output<'out>(&'out mut [[u8; 64]; CAPACITY])", "impl Drop for Output<'_>",
+        "clear_owned_region(self.0.as_flattened_mut())", "clear_owned_region(output.0.as_flattened_mut())",
+        "struct Scratch<'a>(&'a mut Workspace)", "self.0.clear()", "let scratch = Scratch(workspace)",
+        "executor.kernel()?", "self.plan.job(index).map_err(plan_error)?.batch_input()",
+        "executor.digest_secret(&inputs, destinations,", "destination.copy_from_slice(source)",
+        "report.accelerated_slots & !active != 0", "executor.quarantine()",
+        "!core::ptr::eq(plan, self.plan)", "merge(Err(ParallelHashError::LeafIdentity), &[])",
+        "merge(index, &bytes[..$width])?", "Output<'out>", "PhantomData<Cell<()>>",
+    ),
     "hardened_in_place/accelerated/scheduled.rs": (
         "sponge: api::$storage<'authority>, count: Count, stage: [u8;168]",
         "api::$storage::new(session)?", "self.sponge.report()", "let guard = CountGuard(count)",
@@ -310,7 +322,12 @@ def validate(root: Path) -> None:
         require(loaded[PORTABLE / "src/execution/stream/batch.rs"],
                 f"#[cfg(test)]\nmod {module};", "stream batch tests remain test-only")
     test_only = {PORTABLE / "src/execution" / name for name in (
-        "batch/tests.rs", "stream/batch/tests.rs", "stream/batch/failures.rs")}
+        "batch/tests.rs", "batch/scoped/tests.rs", "batch/scoped/tests/handoff.rs",
+        "stream/batch/tests.rs", "stream/batch/failures.rs")}
+    require(loaded[PORTABLE / "src/execution/batch/scoped.rs"],
+            "#[cfg(test)]\nmod tests;", "scoped batch host tests remain test-only")
+    require(loaded[PORTABLE / "src/execution/batch/scoped/tests.rs"],
+            "mod handoff;", "scoped batch threaded regression reachable")
     require(loaded[PORTABLE / "src/hardened_in_place/reader.rs"],
             "#[cfg(test)]\nmod tests;", "scoped reader unwind tests remain test-only")
     test_only.add(PORTABLE / "src/hardened_in_place/reader/tests.rs")

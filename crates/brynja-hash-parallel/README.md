@@ -38,6 +38,7 @@ block-size parameter `B`. Cryptographic code is first-party Rust.
 | Caller-owned portable scoped fixed-output/XOF workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |
 | Portable scoped exact-plan collectors with fixed/XOF output | 🚧 Implemented; qualification pending | ❌ No |
 | Accelerated scoped exact-plan collectors and leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |
+| Typed multibuffer jobs and clearing result handoff to scoped collectors | 🚧 Implemented; qualification pending | ❌ No |
 | Scoped accelerated fixed-output/XOF root/leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |
 | Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |
 | Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
@@ -81,7 +82,8 @@ The portable `hardened_in_place` API borrows an empty workspace before accepting
 input. Scope cleanup also covers forgotten handles and recoverable unwind.
 These sequential portable workspaces support ParallelHash128/256 and
 ParallelHashXOF128/256. Scoped collectors and accelerated workspaces are described
-below; scoped thread handoff remains unfinished. Complete register/spill clearing
+below; the std adapter supports scoped single-state threading, while its scoped
+multibuffer scheduler remains unfinished. Complete register/spill clearing
 is not guaranteed; `panic = "abort"` does not run destructors.
 
 ```rust
@@ -185,8 +187,9 @@ collectors/readers and recoverable unwinding. Plan shape and job indices remain
 caller-visible; this API does not hide message length. Existing leaf-result
 metadata and thread handoff are not a new whole-register/spill erasure guarantee.
 These collectors and ordinary plan-job `execute` calls are portable. Explicit
-accelerated scheduling is available as described below. Scoped threaded
-executors and thread handoff remain follow-up work.
+accelerated scheduling is available as described below. The optional std crate
+provides scoped single-state workers; its scoped multibuffer scheduler remains
+follow-up work.
 
 ### Accelerated scheduled collection
 
@@ -237,6 +240,25 @@ clear it on scope exit, including failed setup. Secret output is not
 staging-limited. Fixed/XOF output, exact-plan/order enforcement and scope cleanup
 match the portable collectors. CPU authorities and these workspaces are not
 transferable between threads.
+
+### Multibuffer jobs for scoped collectors
+
+With `hardened-batch-execution`, either typed plan's `batch(start, count)` selects
+exactly one to four leaves. Use `execution::in_place::batch::Batch128`/`Batch256`
+with `execute_into` to borrow a worker-local clearing executor/workspace and
+transfer completed CVs into caller-owned `[[u8; 64]; 4]` storage. Both portable
+and accelerated scoped collectors consume these results with `merge_batch`.
+See the [runnable API example](https://docs.rs/brynja-hash-parallel/latest/brynja_hash_parallel/execution/in_place/batch/index.html).
+
+The existing AVX2 and NEON leaf kernels are opt-in; Require rejects ineligible
+groups and Prefer permits scalar tails. Results report actual vector work.
+`Leaves128`/`Leaves256` may cross threads, but cannot be copied, cloned or shared
+concurrently. They borrow the exact plan and clearing output, never live CPU
+authority. All original CVs and worker scratch clear before return; merge/drop
+clears the full destination, including unused slots. This is an explicit copy
+between clearing owners, not a claim that compiler copies or registers clear.
+Callers implementing threads must retain their own parent storage guard for
+forgotten results. This leaf API itself starts no threads.
 
 ### Incremental execution
 

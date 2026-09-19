@@ -11,7 +11,7 @@ use crate::{
 use brynja_hash_sha3::hardened_execution::in_place as api;
 
 macro_rules! scheduled {
-    ($workspace:ident, $collector:ident, $plan:ident, $result:ident, $storage:ident, $backend:ident, $reader:ident) => {
+    ($workspace:ident, $collector:ident, $plan:ident, $result:ident, $storage:ident, $backend:ident, $reader:ident, $batch:ident) => {
         /// Empty accelerated storage for an exact-plan ordered ParallelHash collector.
         #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<brynja_hash_parallel::execution::in_place::", stringify!($workspace), "<'static>>();\n```")]
         #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<brynja_hash_parallel::execution::in_place::", stringify!($workspace), "<'static>>();\n```")]
@@ -74,6 +74,12 @@ macro_rules! scheduled {
             plan: &'plan crate::$plan<'input>,
         }
         impl<'scope, 'plan, 'input, 'authority> $collector<'scope, 'plan, 'input, 'authority> {
+            /// Consumes ordered multibuffer results bound to the exact plan.
+            /// Every merge error is terminal; the complete result storage clears.
+            #[cfg(feature = "hardened-batch-execution")]
+            pub fn merge_batch(&mut self, leaves: crate::execution::batch::scoped::$batch<'plan, 'input, '_>) -> Result<(), Error> {
+                leaves.merge(self.plan, |index, bytes| self.inner.merge(index, bytes))
+            }
             /// Consumes and clears the typed leaf output on success or failure.
             /// Results must match the exact plan instance, shape and next index.
             pub fn merge(&mut self, result: crate::$result<'plan, '_>) -> Result<(), Error> {
@@ -114,7 +120,8 @@ scheduled!(
     ParallelHash128LeafResult,
     Cshake128Workspace,
     Cshake128,
-    ParallelHashXof128Reader
+    ParallelHashXof128Reader,
+    Leaves128
 );
 scheduled!(
     ParallelHash256CollectorWorkspace,
@@ -123,5 +130,6 @@ scheduled!(
     ParallelHash256LeafResult,
     Cshake256Workspace,
     Cshake256,
-    ParallelHashXof256Reader
+    ParallelHashXof256Reader,
+    Leaves256
 );

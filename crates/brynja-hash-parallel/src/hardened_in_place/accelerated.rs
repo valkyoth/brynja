@@ -40,6 +40,8 @@ mod scheduled;
 mod scheduled_backend;
 mod scheduled_leaf;
 mod xof;
+#[cfg(feature = "hardened-batch-execution")]
+pub use crate::execution::batch::scoped as batch;
 pub use fixed::{
     ParallelHash128, ParallelHash128Workspace, ParallelHash256, ParallelHash256Workspace,
 };

@@ -21,6 +21,7 @@ def owners():
                base + "Stream<'static, 'static, 'static>",
                base + "StreamReader<'static, 'static, 'static, 'static>",
                base + "TransferredLeaves<'static, 'static, 'static>"]
+    result += [base + f"scoped::Leaves{strength}<'static, 'static, 'static>" for strength in (128, 256)]
     return result
 
 
@@ -29,7 +30,7 @@ def boundaries():
     result = []
     for owner in owners():
         for trait in TRAITS:
-            if 'TransferredLeaves<' in owner and trait == 'Send':
+            if ('TransferredLeaves<' in owner or 'scoped::Leaves' in owner) and trait == 'Send':
                 continue  # Only completed CV transport is intentionally auto-Send.
             result.append((f'{owner}: !{trait}',
                            f'pub fn probe(_: Option<{owner}>) {{}}',
@@ -76,6 +77,7 @@ def examples(roots):
         ('brynja-hash-sha2', 'src/hardened_batch512/mod.rs'),
         ('brynja-hash-sha3', 'src/hardened_batch/mod.rs'),
         ('brynja-hash-parallel', 'src/execution/batch.rs'),
+        ('brynja-hash-parallel', 'src/execution/batch/scoped.rs'),
         ('brynja-hash-parallel', 'src/execution/stream/batch.rs'),
         ('brynja-hash-parallel-std', 'src/execution/batch.rs'),
     )

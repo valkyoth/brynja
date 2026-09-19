@@ -20,7 +20,7 @@ Each lane passed six optimized feature-owning library suites with required
 native execution markers; five independent-oracle drivers (narrow/wide SHA-2,
 Keccak, local scheduled/streaming and threaded ParallelHash); 640 leaf benchmark
 rows and 96 threaded rows with output/work checks; and extracted-package tests,
-doctests, 129 ownership negatives, 16 ordinary-owner substitutions/conversions
+doctests, 137 ownership negatives, 16 ordinary-owner substitutions/conversions
 and eleven compiled cleanup/dispatch mutants. See the
 [collection contract](hardened-batch-native-collection.md) for scope and exclusions.
 

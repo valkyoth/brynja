@@ -25,7 +25,7 @@ evidence. Do not substitute this table for checking that binding.
 
 | Acceptance area | Recorded coverage and entry point | Disposition |
 | --- | --- | --- |
-| Public API and feature isolation | [Extracted-package check](../scripts/cryptography/check-hardened-batch-package.py): six crates' tests/examples, eight first-party dependencies, 129 ownership negatives, 16 ordinary-owner substitutions/conversions | Passed development runs; default-off hardened-only graph checked |
+| Public API and feature isolation | [Extracted-package check](../scripts/cryptography/check-hardened-batch-package.py): six crates' tests/examples, eight first-party dependencies, 137 ownership negatives, 16 ordinary-owner substitutions/conversions | Passed development runs; default-off hardened-only graph checked |
 | Narrow SHA-2 correctness | [Independent bit oracle](../scripts/cryptography/check-hardened-sha256-batch-oracle.py): 896 portable/prefer/require native cases | Passed local AVX2; generic portable also checked |
 | Wide SHA-2 correctness | [Independent oracle](../scripts/cryptography/check-hardened-sha512-batch-oracle.py): 14,282 cases including all 510 general-t parameters | Passed local AVX2; typed parameter identity retained |
 | Keccak-family correctness | [Independent oracle](../scripts/cryptography/check-hardened-keccak-batch-oracle.py): 800 cases across eight identities | Passed local AVX2; bit framing, variable output and cleanup checked |

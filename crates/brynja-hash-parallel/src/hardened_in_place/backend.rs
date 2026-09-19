@@ -13,6 +13,11 @@ pub(super) trait State {
     ) -> Result<HardenedSha3SecretOutput<'out>, Error>;
 }
 pub(super) trait Reader {
+    fn read_public(&mut self, output: &mut [u8]) -> Result<(), Error>;
+    fn read_secret<'out>(
+        &mut self,
+        output: &'out mut [u8],
+    ) -> Result<HardenedSha3SecretOutput<'out>, Error>;
     fn public(self, output: Fips202Output<'_>) -> Result<(), Error>;
     fn secret<'out>(
         self,
@@ -40,6 +45,16 @@ macro_rules! port {
             }
         }
         impl Reader for api::$reader<'_> {
+            fn read_public(&mut self, output: &mut [u8]) -> Result<(), Error> {
+                self.squeeze_public(output, Sha3PublicDeclassification::acknowledge())
+                    .map_err(Error::from)
+            }
+            fn read_secret<'out>(
+                &mut self,
+                output: &'out mut [u8],
+            ) -> Result<HardenedSha3SecretOutput<'out>, Error> {
+                self.squeeze_secret(output).map_err(Error::from)
+            }
             fn public(self, output: Fips202Output<'_>) -> Result<(), Error> {
                 self.squeeze_final_bits_public(output, Sha3PublicDeclassification::acknowledge())
                     .map_err(Error::from)

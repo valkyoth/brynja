@@ -193,6 +193,11 @@ impl<'scope, S: State> Core<'scope, S> {
         self.root()?.update(suffix.bytes()?)?;
         self.state.take().ok_or(Error::StateConsumed)?.finish()
     }
+    pub(super) fn finish_xof(mut self, tail: Fips202BitString<'_>) -> Result<S::Reader, Error> {
+        // Only the sponge borrow leaves; Core::drop clears leaf/block metadata
+        // before the first squeeze. The outer scope also handles forgotten readers.
+        self.finish(tail, 0)
+    }
     pub(super) fn public(
         mut self,
         tail: Fips202BitString<'_>,

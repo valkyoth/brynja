@@ -18,6 +18,8 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "secret_encoding/tests.rs", "backend/tests.rs",
     "hardened_in_place.rs", "hardened_in_place/backend.rs", "hardened_in_place/core_state.rs",
     "hardened_in_place/fixed.rs", "hardened_in_place/tests.rs", "hardened_in_place/core_state/tests.rs",
+    "hardened_in_place/reader.rs", "hardened_in_place/reader/tests.rs",
+    "hardened_in_place/xof.rs", "hardened_in_place/xof/tests.rs",
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
@@ -102,6 +104,20 @@ def require(text: str, token: str, label: str) -> None:
 
 
 BORROWED_TOKENS = {
+    "hardened_in_place/xof.rs": (
+        "inner: fixed::$fixed_workspace", "inner: fixed::$fixed_state<'scope>",
+        "impl for<'scope> FnOnce($state<'scope>) -> R", "self.inner.with_bits(block, customization,",
+        "self.inner.core.finish_xof(tail)?", "inner: Output<api::$backend_reader<'scope>>",
+        "self.inner.public(output)", "self.inner.secret(output)", "self.inner.final_public(output, valid)",
+        "self.inner.final_secret(output, valid)", "ParallelHashPublicDeclassification", "pub fn cancel(self)",
+    ),
+    "hardened_in_place/reader.rs": (
+        "reader: Option<R>", "reader: &'borrow mut Option<R>", "impl<R: Reader> Drop for Operation",
+        "if !self.complete {", "*self.reader = None;", "guard.complete = true;",
+        "clear_owned_region(output)", "self.reader.take().ok_or(Error::StateConsumed)?",
+        "Fips202Output::new(output, valid)", "read_public(output)?", "read_secret(output)?",
+        "#[cfg(test)]\nmod tests;",
+    ),
     "hardened_in_place/fixed.rs": (
         "sponge: api::$storage, metadata: Metadata", "pub fn new() -> Self",
         "impl for<'scope> FnOnce($state<'scope>) -> R", "let metadata = Guard(&mut self.metadata);",
@@ -118,6 +134,7 @@ BORROWED_TOKENS = {
         "suffix.right(output_bits)?", "S::leaf(bits, &mut self.metadata.leaf)?", "update(secret.expose())?",
         "clear_owned_region(output)", "Fips202Output::new(output, valid)", "self.state.take().ok_or(Error::StateConsumed)?.finish()",
         "self.flush(tail.valid_bits_in_last_byte())", "u128::try_from(full)",
+        "pub(super) fn finish_xof(mut self,", "self.finish(tail, 0)",
     ),
     "hardened_in_place/backend.rs": (
         "impl<'scope> State for api::$state<'scope>", "self.finalize_xof()",
@@ -178,9 +195,12 @@ def validate(root: Path) -> None:
     for module in ("tests", "failures"):
         require(loaded[PORTABLE / "src/execution/stream/batch.rs"],
                 f"#[cfg(test)]\nmod {module};", "stream batch tests remain test-only")
-    production = "\n".join(loaded[path] for path in (*SOURCES, *EXECUTION)
-                           if path not in {PORTABLE / "src/execution" / name for name in (
-                               "batch/tests.rs", "stream/batch/tests.rs", "stream/batch/failures.rs")})
+    test_only = {PORTABLE / "src/execution" / name for name in (
+        "batch/tests.rs", "stream/batch/tests.rs", "stream/batch/failures.rs")}
+    require(loaded[PORTABLE / "src/hardened_in_place/reader.rs"],
+            "#[cfg(test)]\nmod tests;", "scoped reader unwind tests remain test-only")
+    test_only.add(PORTABLE / "src/hardened_in_place/reader/tests.rs")
+    production = "\n".join(loaded[path] for path in (*SOURCES, *EXECUTION) if path not in test_only)
     for forbidden in (
         "unsafe", 'extern "C"', "std::", "alloc::", "Vec<", "Box<",
         "static mut", "Atomic", "thread_local", "core::arch", "asm!",

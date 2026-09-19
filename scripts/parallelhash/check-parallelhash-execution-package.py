@@ -40,6 +40,19 @@ def scoped_negatives():
             (f'fn probe(s: {state}) {{ let _ = s.leaf_count(); }}', 'E0599'),
             (f'fn probe(s: {state}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
         ]
+        xof = f'crate::hardened_in_place::ParallelHashXof{strength}'
+        reader = xof + 'Reader'
+        for name in (xof + "<'static>", xof + 'Workspace', reader + "<'static>"):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn bound<T:{bound}>() {{}} fn probe() {{ bound::<{name}>(); }}', 'E0277'))
+        cases += [
+            (f'fn probe(s: {xof}) {{ let _ = s.finalize_xof(); s.cancel(); }}', 'E0382'),
+            (f'fn probe(r: {reader}) {{ let _ = r.squeeze_final_bits_secret(&mut [], 0); r.cancel(); }}', 'E0382'),
+            (f'fn probe(mut r: {reader}) {{ let _ = r.squeeze_public(&mut []); }}', 'E0061'),
+            (f'fn probe(s: {xof}) {{ let _ = s.leaf_count(); }}', 'E0599'),
+            (f'fn probe(s: {xof}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
+            (f'fn probe(r: {reader}) {{ let _ = r.leaf_count(); }}', 'E0599'),
+        ]
     return cases
 
 
@@ -160,11 +173,26 @@ def main():
         ]
         cases += [
             ('brynja-hash-parallel', 'src/hardened_in_place/fixed.rs', 'byte_string(b"ParallelHash")?', 'byte_string(b"WRONG")?', ['--lib', 'hardened_in_place::']),
+            ('brynja-hash-parallel', 'src/hardened_in_place/core_state.rs', 'self.finish(tail, 0)', 'self.finish(tail, 8)', ['--lib', 'hardened_in_place::xof::']),
+        ]
+        cases += [
+            ('brynja-hash-parallel', 'src/hardened_in_place/reader.rs', before, after, ['--lib', 'hardened_in_place::'])
+            for before, after in (
+                ('if !self.complete {', 'if self.complete {'),
+                ('*self.reader = None;', ''),
+                ('clear_owned_region(output)', 'core::hint::black_box(&mut *output)'),
+                ('guard.complete = true;', 'guard.complete = false;'),
+                ('Fips202Output::new(output, valid)', 'Fips202Output::new(output, 8)'),
+            )
         ]
         for index, (package, file, before, after, tests) in enumerate(cases):
             path = roots[package] / file
             original = path.read_text()
             expected_occurrences = 2 if before == "state.finalize_bits_xof(input)?" else 1
+            if file == 'src/hardened_in_place/reader.rs' and before in (
+                'clear_owned_region(output)', 'guard.complete = true;', 'Fips202Output::new(output, valid)',
+            ):
+                expected_occurrences = 2
             if original.count(before) != expected_occurrences:
                 raise ValueError("mutation no longer has one exact target: " + before)
             try:

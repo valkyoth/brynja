@@ -23,8 +23,14 @@
 mod backend;
 mod core_state;
 mod fixed;
+mod reader;
+mod xof;
 pub use fixed::{
     ParallelHash128, ParallelHash128Workspace, ParallelHash256, ParallelHash256Workspace,
+};
+pub use xof::{
+    ParallelHashXof128, ParallelHashXof128Reader, ParallelHashXof128Workspace, ParallelHashXof256,
+    ParallelHashXof256Reader, ParallelHashXof256Workspace,
 };
 
 #[cfg(test)]

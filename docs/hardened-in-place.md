@@ -175,7 +175,7 @@ or preflight query is exposed. Authority/revocation and deployment requirements
 are unchanged, and none of this establishes complete compiler-copy, register or
 spill erasure.
 
-## Portable scoped fixed-output ParallelHash
+## Portable scoped ParallelHash and ParallelHashXOF
 
 ParallelHash also now initializes integer framing through borrowed storage: its
 portable sequential/scheduled roots and execution collectors create empty
@@ -206,10 +206,21 @@ No public count, accumulated-length or capacity-preflight query is provided.
 Workspaces and handles are neither Copy/Clone/Debug nor Send/Sync. These additive
 APIs do not replace the existing by-value APIs or enable acceleration by default.
 
-This slice is fixed-output and portable only. Scoped XOF readers, accelerated
-roots/leaves, scheduled collectors and thread handoff still need the broader
-ownership work. Registers, spills and compiler-created copies remain outside
-this checkpoint's guarantee; `panic = "abort"` cannot run scope destructors.
+`ParallelHashXof128Workspace`/`ParallelHashXof256Workspace` also expose scoped
+absorbing handles and incremental readers. `finalize_xof`/`finalize_bits_xof`
+append the zero output-length trailer, consume absorption and transfer only the
+root sponge borrow. The counters, leaf-output region and block are cleared before
+the first squeeze. Mixed secret/public byte reads retain the reader; a final
+canonical-bit read consumes it. Public reads require explicit declassification.
+Every read error terminates the reader, including subsequent empty reads, with
+public preservation and secret-destination clearing. Cancellation/drop clears
+the borrowed sponge; outer scope cleanup covers forgotten readers and unwind.
+The same non-Copy/Clone/Debug/Send/Sync and no-scope-escape constraints apply.
+
+These scoped APIs remain portable only. Accelerated roots/leaves, scheduled
+collectors and thread handoff still need the broader ownership work. Registers,
+spills and compiler-created copies remain outside this checkpoint's guarantee;
+`panic = "abort"` cannot run scope destructors.
 
 ## TupleHash integer framing
 

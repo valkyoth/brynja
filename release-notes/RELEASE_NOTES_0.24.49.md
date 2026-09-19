@@ -10,7 +10,9 @@ No crates are selected for publication.
   Add portable scoped fixed-output ParallelHash128/256 workspaces, byte/bit
   customization and final input, consuming public/secret output and independent
   cleanup on cancellation, forgotten handles and recoverable unwinding.
-  Scoped XOF, accelerated roots/leaves, scheduled/threaded ownership and complete
+  Portable scoped XOF readers now retain the root borrow through incremental
+  secret/public and consuming final-bit output, with immediate absorption-region
+  clearing and terminal read errors. Accelerated roots/leaves, scheduled/threaded ownership and complete
   compiler-copy/register/spill qualification remain unfinished.
 
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied

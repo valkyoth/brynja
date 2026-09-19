@@ -5,8 +5,10 @@
 - Initialize ParallelHash integer framing in borrowed storage across portable and
   execution roots. Portable leaves now use scoped SHAKE owners and borrowed bit
   input. Portable scoped fixed-output ParallelHash128/256 now retain root,
-  metadata and leaf-output storage through consuming finalization; scoped XOF,
-  accelerated roots/leaves and thread-handoff ownership remain under development.
+  metadata and leaf-output storage through consuming finalization. Portable
+  scoped XOF readers retain the root borrow through mixed public/secret and
+  consuming partial-bit output; accelerated roots/leaves and thread-handoff
+  ownership remain under development.
 
 - Extend scoped accelerated TupleHash to XOF128/256 with authority-bound readers,
   mixed public/secret output, consuming partial-bit reads and scope-owned cleanup.

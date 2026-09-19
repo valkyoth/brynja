@@ -50,7 +50,7 @@ macro_rules! fixed {
         #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_hash_parallel::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
         #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_hash_parallel::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
         #[must_use = "finalize or cancel the scoped ParallelHash state"]
-        pub struct $state<'scope> { core: Core<'scope, api::$backend<'scope>> }
+        pub struct $state<'scope> { pub(super) core: Core<'scope, api::$backend<'scope>> }
         impl $state<'_> {
             /// Absorbs complete bytes. A partial-byte suffix belongs to finalization.
             pub fn update(&mut self, input: &[u8]) -> Result<(), ParallelHashError> { self.core.update(input) }

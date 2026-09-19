@@ -13,6 +13,12 @@ impl Drop for Mock<'_> {
 }
 struct MockReader;
 impl Reader for MockReader {
+    fn read_public(&mut self, _: &mut [u8]) -> Result<(), Error> {
+        Err(Error::StateConsumed)
+    }
+    fn read_secret<'a>(&mut self, _: &'a mut [u8]) -> Result<HardenedSha3SecretOutput<'a>, Error> {
+        Err(Error::StateConsumed)
+    }
     fn public(self, _: Fips202Output<'_>) -> Result<(), Error> {
         Err(Error::StateConsumed)
     }
@@ -30,7 +36,11 @@ impl State for Mock<'_> {
         }
     }
     fn finish(self) -> Result<MockReader, Error> {
-        Err(Error::StateConsumed)
+        if self.reject {
+            Err(Error::StateConsumed)
+        } else {
+            Ok(MockReader)
+        }
     }
     fn leaf<'a>(
         _: Fips202BitString<'_>,
@@ -148,5 +158,27 @@ fn scoped_final_errors_preserve_public_and_clear_secret() -> Result<(), Error> {
         assert_eq!(dropped.get(), 2);
         assert!(metadata.cleared());
     }
+    Ok(())
+}
+
+#[test]
+fn scoped_xof_transition_clears_absorption_regions_before_return() -> Result<(), Error> {
+    let dropped = Cell::new(0);
+    let mut metadata = Metadata::new();
+    let mut block = [0; 8];
+    let core = Core::new(
+        Mock {
+            dropped: &dropped,
+            reject: false,
+        },
+        &mut metadata,
+        &mut block,
+    )?;
+    core.metadata.leaf.fill(0xa5);
+    core.block.fill(0xa5);
+    let _reader = core.finish_xof(crate::core_state::byte_string(&[])?)?;
+    assert!(metadata.cleared());
+    assert_eq!(block, [0; 8]);
+    assert_eq!(dropped.get(), 1);
     Ok(())
 }

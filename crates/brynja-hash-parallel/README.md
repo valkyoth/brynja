@@ -35,7 +35,7 @@ block-size parameter `B`. Cryptographic code is first-party Rust.
 | --- | --- | --- |
 | All four portable ParallelHash/ParallelHashXOF identities | ✅ Fully implemented | ❌ No |
 | Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |
-| Caller-owned portable scoped fixed-output workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |
+| Caller-owned portable scoped fixed-output/XOF workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |
 | Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |
 | Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
 
@@ -76,7 +76,7 @@ declassification decision.
 
 The portable `hardened_in_place` API borrows an empty workspace before accepting
 input. Scope cleanup also covers forgotten handles and recoverable unwind.
-This API currently supports fixed-output ParallelHash128/256, not scoped XOF,
+This API supports ParallelHash128/256 and ParallelHashXOF128/256, not scoped
 scheduled, threaded or accelerated execution. Complete register/spill clearing
 is not guaranteed; `panic = "abort"` does not run destructors.
 
@@ -103,6 +103,42 @@ partial-bit customization, final input and output. Public output requires
 `ParallelHashPublicDeclassification`; secret outputs can leave the scope while
 retaining their separate destination borrow. Failed secret finalization clears
 the destination; public errors preserve it.
+
+### Incremental scoped XOF output
+
+XOF finalization retains the workspace borrow, not an inline sponge copy. It
+clears absorption counters, the leaf output and the block before squeezing.
+Readers cannot escape the callback, but typed outputs borrowing a separate
+destination may. Drop/cancel clears the reader; the outer scope also covers
+forgotten readers and recoverable unwind.
+
+```rust
+use brynja_hash_parallel::{
+    hardened_in_place::ParallelHashXof256Workspace,
+    ParallelHashPublicDeclassification,
+};
+let mut workspace = ParallelHashXof256Workspace::new();
+let mut block = [0; 64];
+let mut public = [0; 17];
+let mut output = [0; 32];
+let secret = workspace.with(&mut block, b"application", |mut state| {
+    state.update(b"message")?;
+    let mut reader = state.finalize_xof()?;
+    reader.squeeze_public(&mut public, ParallelHashPublicDeclassification::acknowledge())?;
+    reader.squeeze_final_bits_secret(&mut output, 3)
+})??;
+assert_eq!(block, [0; 64]);
+assert_eq!(secret.expose().len(), 32);
+drop(secret);
+assert_eq!(output, [0; 32]);
+# Ok::<(), brynja_hash_parallel::ParallelHashError>(())
+```
+
+Use `finalize_bits_xof` for canonical final input bits. Byte reads can mix public
+and secret destinations; a partial-bit output consumes the reader. Empty final
+output requires zero valid bits, otherwise specify 1..=8. Reader errors are
+terminal, including subsequent empty reads; they preserve public destinations
+and clear secret destinations.
 
 ### Incremental execution
 

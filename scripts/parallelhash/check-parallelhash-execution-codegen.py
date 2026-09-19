@@ -119,6 +119,30 @@ def main():
             except (ValueError, cleanup.flow.MirCleanupFlowError):
                 continue
             raise ValueError("ParallelHash std cleanup mutant escaped")
+        # Separate artifacts avoid ambiguity with the single-state feature set.
+        grouped = Path(directory) / 'scoped-groups'
+        subprocess.run(['cargo', '+' + args.toolchain, 'rustc', '--locked', '--offline',
+                        '-p', 'brynja-hash-parallel-std', '--features', 'runtime-batch-execution',
+                        '--release', '--lib', '--target', args.target, '--', '--emit=mir,llvm-ir,asm'],
+                       cwd=ROOT, env=dict(env, CARGO_TARGET_DIR=str(grouped)), check=True, timeout=180)
+        group = {}
+        for extension in ('mir', 'll', 's'):
+            paths = list(grouped.rglob('brynja_hash_parallel_std-*.' + extension))
+            cleanup.require(len(paths) == 1, 'unique scoped group artifact')
+            group[extension] = paths[0].read_text()
+        cleanup.check_scoped_groups(group)
+        for extension, before, after in (
+            ('mir', 'GroupSlots::clear(', 'GroupSlots::omitted('),
+            ('ll', 'clear_owned_region', 'omitted'),
+            ('ll', 'i64 noundef 256)', 'i64 noundef 255)'),
+            ('s', 'GroupSlots', 'OmittedSlots'),
+        ):
+            cleanup.require(before in group[extension], 'live scoped group cleanup mutation')
+            try:
+                cleanup.check_scoped_groups(dict(group, **{extension: group[extension].replace(before, after)}))
+            except (ValueError, cleanup.flow.MirCleanupFlowError):
+                continue
+            raise ValueError('scoped multibuffer group cleanup mutant escaped')
     print(f"ParallelHash execution MIR/LLVM/assembly cleanup: PASS; {args.toolchain} {args.target}")
     print("Source-owned storage only; not register, compiler-spill or platform erasure")
 

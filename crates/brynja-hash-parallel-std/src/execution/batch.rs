@@ -20,6 +20,7 @@
 //! drop(secret); assert_eq!(bytes, [0; 32]);
 //! # Ok(()) }
 //! ```
+pub mod in_place;
 mod selection;
 mod worker;
 pub use super::{Preference, Request};

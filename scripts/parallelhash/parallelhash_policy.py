@@ -9,7 +9,6 @@ from pathlib import Path
 
 import parallelhash_reviewed_hashes
 
-
 PORTABLE = Path("crates/brynja-hash-parallel")
 STD = Path("crates/brynja-hash-parallel-std")
 SOURCES = tuple(PORTABLE / "src" / name for name in (
@@ -42,6 +41,8 @@ STD_EXECUTION = tuple(STD / "src/execution" / name for name in (
     "mod.rs", "selection.rs", "worker.rs", "tests.rs", "worker/tests.rs",
     "batch.rs", "batch/selection.rs", "batch/worker.rs", "batch/tests.rs", "batch/worker/tests.rs",
     "batch/worker/tests/coordinator_unwind.rs",
+    "batch/in_place.rs", "batch/in_place/tests.rs", "batch/in_place/worker.rs",
+    "batch/in_place/worker/tests.rs", "batch/in_place/worker/tests/order.rs",
     "in_place.rs", "in_place/tests.rs", "in_place/worker.rs", "in_place/worker/tests.rs",
 ))
 TESTS = (
@@ -88,6 +89,7 @@ DIFFERENTIAL = (
     Path("assurance/parallelhash-differential/src/scoped_threaded.rs"),
     Path("assurance/parallelhash-differential/src/scoped_execution.rs"),
     Path("assurance/parallelhash-batch-oracle/src/scoped.rs"),
+    Path("assurance/parallelhash-batch-oracle/src/main.rs"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -101,14 +103,11 @@ FILES = (*SOURCES, *STD_SOURCES, *EXECUTION, *STD_EXECUTION, *TESTS, *MANIFESTS,
 HASHED = (*SOURCES, *STD_SOURCES, *EXECUTION, *STD_EXECUTION, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL)
 HASHES = {Path(path): digest for path, digest in parallelhash_reviewed_hashes.REVIEWED_HASHES.items()}
 
-
 class ParallelHashPolicyError(RuntimeError):
     """The reviewed ParallelHash boundary differs from policy."""
 
-
 def fail(message: str) -> None:
     raise ParallelHashPolicyError(message)
-
 
 def read(root: Path, path: Path) -> str:
     subject = root / path
@@ -119,11 +118,9 @@ def read(root: Path, path: Path) -> str:
         fail(f"ParallelHash boundary exceeds 500 lines: {path}")
     return text
 
-
 def require(text: str, token: str, label: str) -> None:
     if token not in text:
         fail(f"{label} drift: {token}")
-
 
 BORROWED_TOKENS = {
     "execution/batch/scoped.rs": (
@@ -256,8 +253,17 @@ BORROWED_TOKENS = {
         "workspace.with(|state| state.finalize_bits_xof(input)?.squeeze_secret(output))"),
 }
 
-
 SCOPED_THREAD_TOKENS = {
+    "execution/batch/in_place.rs": ("let scratch = Scratch(scratch)", "let _gate = self.inner.base.gate()?",
+        "clear_owned_region(output)", "output.copy_from_slice(secret.expose())", "root.merge_batch(leaves)",
+        "Selection::new(self.inner.base.config.root)?", "plan.leaf_count() > self.inner.base.config.max_leaves",
+        "accelerated::$workspace::new(session).map_err(crypto)?", "#[cfg(test)]\nmod tests;"),
+    "execution/batch/in_place/worker.rs": ("struct GroupSlots(Vec<[[u8; 64]; leaf::CAPACITY]>)",
+        "try_reserve_exact(length)", "clear_owned_region(slot.as_flattened_mut())", "self.clear()",
+        "GroupSlots::new(width)?", "thread::scope(|scope|", "match handle.join()", "if failure.is_none()",
+        "Selection::new(executor.inner.base.config.leaves)?", "leaf::Workspace::new()",
+        "leaf::Control::new(executor.inner.budget, &mut cancel)", "merge(leaves).map_err(crypto)",
+        "failure.map_or(Ok(work), Err)", "#[cfg(test)]\nmod tests;"),
     "in_place.rs": ("let _gate = self.enter_operation()?", "crate::scoped_worker::admit(",
         "workspace.with_bits(plan, customization, |mut root|", "|leaf| root.merge(leaf)",
         "crate::worker::ensure_live(cancellation)?", "Ok(operation(root))",
@@ -296,7 +302,6 @@ def validate_borrowed(loaded: dict) -> None:
         for forbidden in ("Encoded::new(", "left_encode_u128(", "right_encode_u128("):
             if forbidden in code:
                 fail("ParallelHash populated integer owner return: " + name)
-
 
 def validate(root: Path) -> None:
     expected_sources = {root / path for path in (*SOURCES, *EXECUTION)}

@@ -204,3 +204,28 @@ def check_scoped_storage(storage, fixture):
         require(re.search(r'^[^;\n]*(?:call|invoke)[^\n]*@"?' + re.escape(symbol) + r'"?\(', fixture["ll"], re.M),
                 "downstream calls the emitted scoped slot clearer")
     require(sorted(widths) == [32, 64], "both complete scoped slot widths")
+
+
+def check_scoped_groups(row):
+    """Inspect the parent group guard; runtime mutants cover Vec iteration.
+
+    This binds source-owned cleanup, not register/spill or whole-API erasure.
+    """
+    function = flow.exact_function(row['mir'], (
+        'crates/brynja-hash-parallel-std/src/execution/batch/in_place/worker.rs:',
+        '::drop(', '_1: &mut GroupSlots)'))
+    linear_fields(function, [('GroupSlots::clear(', 'self')])
+    functions = re.findall(r'^define [\s\S]*?^}', row['ll'], re.M)
+    selected = [fn for fn in functions if re.search(r'GroupSlots.*clear', fn.splitlines()[0])]
+    require(len(selected) == 1, 'unique scoped group clearing definition')
+    code = '\n'.join(line for line in selected[0].splitlines() if not line.lstrip().startswith(';'))
+    calls = [line for line in code.splitlines() if 'call ' in line and 'clear_owned_region' in line]
+    require(len(calls) == 1 and re.search(r'i64 (?:noundef )?256\)', calls[0]),
+            'complete 256-byte group clearing call')
+    require('phi ptr' in code and re.search(r'getelementptr[^\n]+i64 256\b', code),
+            'scoped group iteration stride')
+    symbol = re.search(r'@([^ (]+)', selected[0].splitlines()[0])[1].strip('"')
+    require(re.fullmatch(r'[A-Za-z0-9_.$]+', symbol), 'unescaped group symbol')
+    require(re.search(r'^' + re.escape(symbol) + r':$', row['s'], re.M), 'group assembly definition')
+    require(re.search(r'^[^;\n]*(?:call|invoke)[^\n]*@"?' + re.escape(symbol) + r'"?\(', row['ll'], re.M),
+            'group clearer remains called by production code')

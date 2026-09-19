@@ -165,6 +165,41 @@ def thread_campaign(root, env, cargo, target):
     for command in commands.values():
         run(command + ['--lib', 'execution::batch'], root, env)
     print(f'Threaded ParallelHash batching: {len(cases)} compiled regressions rejected')
+    scoped_thread_campaign(root, env, commands['std'])
+
+
+def scoped_thread_campaign(root, env, command):
+    base = 'crates/brynja-hash-parallel-std/src/execution/batch/in_place'
+    cases = (
+        (base + '.rs', 'let _gate = self.inner.base.gate()?;', 'let _gate = ();'),
+        (base + '.rs', 'output.copy_from_slice(secret.expose());', 'core::hint::black_box(secret.expose());'),
+        (base + '.rs', 'clear_owned_region(output)', 'Ok::<(), ()>(())'),
+        (base + '/worker.rs', 'merge(leaves).map_err(crypto)', 'drop(leaves); Ok::<(), Error>(())'),
+        (base + '/worker.rs', 'leaf::Control::new(executor.inner.budget, &mut cancel)', 'leaf::Control::new(u64::MAX, &mut cancel)'),
+        (base + '/worker.rs', 'self.clear();', '// omitted parent storage cleanup'),
+        (base + '/worker.rs', 'for handle in handles {', 'for handle in handles.into_iter().rev() {'),
+        (base + '/worker.rs', 'if failure.is_none() {', 'if true {'),
+        (base + '/worker.rs', 'vector_calls: report.vector_calls', 'vector_calls: 0'),
+        (base + '/worker.rs', 'accelerated: u128::from(report.accelerated_slots.count_ones())', 'accelerated: 0'),
+    )
+    for profile in ([], ['--release']):
+        current = command + ['--lib', 'execution::batch::in_place', *profile]
+        run(current, root, env)
+        for name, before, after in cases:
+            path = root / name
+            original = path.read_text()
+            expected = 2 if before == 'let _gate = self.inner.base.gate()?;' else 1
+            if original.count(before) != expected:
+                raise ValueError('ambiguous scoped scheduler mutation: ' + before)
+            try:
+                path.write_text(original.replace(before, after))
+                result = run(current, root, env, success=False)
+                if result.returncode == 0 or 'test result: FAILED' not in result.stdout:
+                    raise ValueError('scheduler mutant survived or failed to compile: ' + before + '\n' + result.stdout[-1800:] + result.stderr[-1800:])
+            finally:
+                path.write_text(original)
+        run(current, root, env)
+    print(f'Scoped multibuffer scheduler: {2 * len(cases)} compiled regressions rejected')
 
 
 def main():

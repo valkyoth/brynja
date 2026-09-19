@@ -38,6 +38,7 @@ package owns scheduling, resource admission and local worker selection.
 | Scoped root/leaf storage with independently selected threaded acceleration | 🚧 Implemented; qualification pending | ❌ No |
 | Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |
 | Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |
+| Scoped multibuffer workers with guarded parent slots and scoped root | 🚧 Implemented; qualification pending | ❌ No |
 
 Brynja is not FIPS 140-3 validated. Threading and project tests do not constitute
 independent verification. This `std` package is absent from the modern facade's
@@ -178,8 +179,9 @@ stays held through public output commit. Required routes reject unavailable
 authority; a backend error never authorizes fallback. Static deployment and
 cached hosted-detection limitations remain the same as the other adapters.
 This adapter is single-state-per-worker, not multibuffer execution. Complete
-compiler-copy/register/spill qualification and scoped multibuffer handoff remain
-pending; existing executors are unchanged.
+compiler-copy/register/spill qualification remains pending. Scoped multibuffer
+execution is available through the separate adapter below; existing executors
+are unchanged.
 
 ### Threaded multibuffer execution
 
@@ -198,6 +200,19 @@ plan-bound CV loans. Every started worker is joined, results merge in order, and
 unmerged results clear on failures. Reports separate actual vector/scalar work,
 groups, accelerated leaves and submitted thread width. This is implemented
 development functionality, not complete native/compiler qualification.
+
+For scoped root and worker storage, use
+`execution::batch::in_place::Executor` with the same `Config` and `Request`.
+Its [runnable example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-hash-parallel-std/src/execution/batch/in_place.rs)
+shows secret output and cleanup. The four `hash_public[_bits]` and
+`hash_secret[_bits]` methods preserve the same bounds and route choices.
+Authority and empty leaf workspaces are constructed inside each worker; only
+completed exact-plan CV loans cross back. The coordinator merges in submission
+order even when completion is reversed. Parent-owned slots clear after all
+workers join, including spawn failure, cancellation, panic or forgotten results.
+Public output commits under the executor gate and all staging clears; secret
+errors clear the whole supplied destination. This is owned-storage protection,
+not a register/spill/compiler-copy erasure guarantee. Abort cannot run Drop.
 
 ## Hardware and SIMD
 

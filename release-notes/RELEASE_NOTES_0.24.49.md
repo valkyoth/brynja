@@ -26,8 +26,11 @@ No crates are selected for publication.
   now constructs accelerated root/leaf authority locally on its executing thread
   and joins workers returning only completed output borrows. Typed multibuffer
   leaf jobs now return clearing exact-plan result loans for scoped collector
-  merging. The std scoped multibuffer scheduler and complete
-  compiler-copy/register/spill qualification remain unfinished.
+  merging. The std scoped multibuffer scheduler now uses bounded worker-local
+  authority/workspaces, independent parent clearing slots and an ordered scoped
+  root. It joins every started worker before returning and commits staged public
+  output under the operation gate. Complete compiler-copy/register/spill
+  qualification remains unfinished.
 
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied
   Keccak authority stays borrowed through incremental and partial-bit output;

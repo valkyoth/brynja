@@ -19,8 +19,9 @@
   to a caller callback. The opt-in scoped execution adapter now selects root
   and leaf routes independently with thread-local authority and borrowed leaf
   handoff. Typed multibuffer leaf jobs now transfer clearing output loans into
-  portable/accelerated scoped collectors with exact-plan ordered merge; the std
-  scoped multibuffer scheduler remains under development.
+  portable/accelerated scoped collectors with exact-plan ordered merge. The std
+  scoped multibuffer scheduler now retains independent parent clearing slots,
+  joins every started worker and stages public output under its operation gate.
 
 - Extend scoped accelerated TupleHash to XOF128/256 with authority-bound readers,
   mixed public/secret output, consuming partial-bit reads and scope-owned cleanup.

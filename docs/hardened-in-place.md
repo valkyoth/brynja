@@ -322,7 +322,21 @@ actual vector participation without treating a requested route as proof of work.
 The explicit bounded CV copy is between two clearing owners, not a declassification
 or a promise to erase compiler-created copies. Forgetting a completed result
 cannot run its Drop: a threaded scheduler must keep its own parent storage guard.
-The std scoped multibuffer scheduler still needs implementation and testing.
+The std `execution::batch::in_place::Executor` supplies that parent guard under
+the existing `runtime-batch-execution` feature. It creates authority and empty
+workspace inside each worker, returns only completed exact-plan loans, and
+merges them into a scoped coordinator-local root in submission order. Bounded
+waves contain at most `workers` groups (one to four leaves each); thread count
+is separate from SIMD width. All started workers join after failure or unwind.
+The parent clears every byte of each allocated CV slot even if a result is
+forgotten. No populated sponge owner or authority crosses a thread boundary.
+The existing `Config`, `Request`, preferences and reports apply. Root and leaf
+routes remain independent; Require rejects unavailable or incomplete groups,
+Prefer permits scalar tails, and backend failures never authorize fallback.
+Fixed/XOF byte/bit secret outputs clear on failure and Drop; public outputs
+commit transactionally while the executor gate remains held and all staging
+clears. Bounds cover workers, total leaves and per-group leaf permutations,
+not root/output work. Allocation failure is reported, not silently retried.
 Registers, spills and compiler-created
 copies remain outside this checkpoint's guarantee; `panic = "abort"` cannot run
 scope destructors.

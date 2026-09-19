@@ -61,6 +61,15 @@ fn main() -> Result<()> {
         max_group_permutations: 4096,
     })
     .map_err(|e| format!("executor: {e:?}"))?;
+    let scoped = brynja_hash_parallel_std::execution::batch::in_place::Executor::new(Config {
+        workers,
+        max_leaves: 4096,
+        root: Preference::Portable,
+        leaves: preference,
+        minimum_permutations: 1,
+        max_group_permutations: 4096,
+    })
+    .map_err(|e| format!("scoped executor: {e:?}"))?;
     let mut campaign = String::new();
     io::stdin().take(1_048_577).read_to_string(&mut campaign)?;
     if campaign.len() > 1_048_576 {
@@ -108,6 +117,35 @@ fn main() -> Result<()> {
         drop(owned);
         if secret[..size].iter().any(|byte| *byte != 0) || secret.last() != Some(&0xa5) {
             return Err("secret Drop/canary cleanup".into());
+        }
+        let mut scoped_public = vec![0xa5; size];
+        scratch.fill(0x5a);
+        let scoped_report = scoped
+            .hash_public_bits(
+                &request,
+                &mut scoped_public,
+                valid,
+                &mut scratch,
+                &cancellation,
+            )
+            .map_err(|e| format!("scoped public: {e:?}"))?;
+        if scoped_public != public[..size]
+            || scoped_report != report
+            || scratch.iter().any(|b| *b != 0)
+        {
+            return Err("scoped public output/report/clearing mismatch".into());
+        }
+        charge(&mut total_vector, scoped_report.vector_calls)?;
+        let (owned, scoped_report) = scoped
+            .hash_secret_bits(&request, &mut secret[..size], valid, &cancellation)
+            .map_err(|e| format!("scoped secret: {e:?}"))?;
+        if owned.expose() != &public[..size] || scoped_report != report {
+            return Err("scoped secret output/report mismatch".into());
+        }
+        charge(&mut total_vector, scoped_report.vector_calls)?;
+        drop(owned);
+        if secret[..size].iter().any(|b| *b != 0) || secret.last() != Some(&0xa5) {
+            return Err("scoped secret Drop/canary cleanup".into());
         }
         for byte in &public[..size] {
             write!(rendered, "{byte:02x}")?;

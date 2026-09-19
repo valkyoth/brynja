@@ -80,6 +80,7 @@ def examples(roots):
         ('brynja-hash-parallel', 'src/execution/batch/scoped.rs'),
         ('brynja-hash-parallel', 'src/execution/stream/batch.rs'),
         ('brynja-hash-parallel-std', 'src/execution/batch.rs'),
+        ('brynja-hash-parallel-std', 'src/execution/batch/in_place.rs'),
     )
     source = '#![forbid(unsafe_code)]\n'
     for index, (package, path) in enumerate(paths):

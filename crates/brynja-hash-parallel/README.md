@@ -82,8 +82,8 @@ The portable `hardened_in_place` API borrows an empty workspace before accepting
 input. Scope cleanup also covers forgotten handles and recoverable unwind.
 These sequential portable workspaces support ParallelHash128/256 and
 ParallelHashXOF128/256. Scoped collectors and accelerated workspaces are described
-below; the std adapter supports scoped single-state threading, while its scoped
-multibuffer scheduler remains unfinished. Complete register/spill clearing
+below; the std adapter supports scoped single-state and multibuffer threading.
+Complete register/spill clearing
 is not guaranteed; `panic = "abort"` does not run destructors.
 
 ```rust
@@ -188,8 +188,8 @@ caller-visible; this API does not hide message length. Existing leaf-result
 metadata and thread handoff are not a new whole-register/spill erasure guarantee.
 These collectors and ordinary plan-job `execute` calls are portable. Explicit
 accelerated scheduling is available as described below. The optional std crate
-provides scoped single-state workers; its scoped multibuffer scheduler remains
-follow-up work.
+provides scoped single-state workers and a scoped multibuffer scheduler under
+its separate `runtime-batch-execution` feature.
 
 ### Accelerated scheduled collection
 
@@ -266,8 +266,8 @@ For scoped fixed-output acceleration, enable `hardened-execution` and use
 `execution::in_place::ParallelHash128Workspace` or `ParallelHash256Workspace`.
 Their constructors require separate hardened root and leaf sessions; both may
 borrow the same established authority. Neither silently falls back. The block
-buffer length is B, not a thread count. These scopes execute leaves sequentially;
-scoped threaded execution remains follow-up work.
+buffer length is B, not a thread count. These incremental scopes execute leaves
+sequentially; use the separate std adapter for bounded scoped scheduled threads.
 
 ```rust
 use brynja_hash_parallel::{

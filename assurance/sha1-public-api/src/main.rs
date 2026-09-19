@@ -69,6 +69,23 @@ fn main() -> Result<(), Box<dyn Error>> {
         if digest != hardened {
             return Err(invalid().into());
         }
+        let mut workspace = brynja_legacy_sha1::hardened_in_place::Sha1Workspace::new();
+        hardened.fill(0xa5);
+        workspace.with(|state| {
+            state.finalize_bits_public(bits, &mut hardened, PublicDeclassification::acknowledge())
+        })?;
+        if digest != hardened {
+            return Err(invalid().into());
+        }
+        hardened.fill(0xa5);
+        let secret = workspace.with(|state| state.finalize_bits_secret(bits, &mut hardened))?;
+        if secret.expose() != digest {
+            return Err(invalid().into());
+        }
+        drop(secret);
+        if hardened != [0; 20] {
+            return Err(invalid().into());
+        }
         for byte in digest {
             print!("{byte:02x}");
         }

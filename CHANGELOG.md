@@ -2,6 +2,9 @@
 
 ## 0.24.49 development
 
+- Add portable scoped legacy SHA-1 storage with borrowed active state, explicit
+  public declassification, typed secret output and independent scope cleanup.
+  Failed updates clear and terminate the scoped handle; existing APIs remain.
 - Initialize ParallelHash integer framing in borrowed storage across portable and
   execution roots. Portable leaves now use scoped SHAKE owners and borrowed bit
   input. Portable scoped fixed-output ParallelHash128/256 now retain root,

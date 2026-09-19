@@ -10,6 +10,8 @@ pub enum Sha1Error {
     OutputLength,
     /// Typed secret initialization failed.
     SecretMemory,
+    /// A scoped state failed or was already consumed.
+    StateConsumed,
 }
 
 impl core::fmt::Display for Sha1Error {
@@ -18,6 +20,7 @@ impl core::fmt::Display for Sha1Error {
             Self::MessageTooLong => "SHA-1 message length exceeds its bit domain",
             Self::OutputLength => "SHA-1 output must be exactly 20 bytes",
             Self::SecretMemory => "SHA-1 secret output initialization failed",
+            Self::StateConsumed => "SHA-1 scoped state is no longer active",
         })
     }
 }

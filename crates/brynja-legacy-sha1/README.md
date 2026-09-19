@@ -42,6 +42,7 @@ is under qualification. See the
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 | Opt-in ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Opt-in hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
+| Caller-owned portable scoped workspace | 🚧 Implemented; residue qualification pending | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -121,6 +122,42 @@ No guarantee covers registers, compiler-created copies/spills, caches, moves,
 swap, DMA, dumps, `mem::forget`, abort, termination, power loss, or caller-owned
 input/output copies. No pinned/locked memory is supplied. `HardenedSha1` remains
 portable; the separate opt-in hardened executor is described below.
+
+### Scoped caller-owned storage
+
+`hardened_in_place::Sha1Workspace` keeps active state in borrowed storage. The
+handle cannot escape the callback, be reused after finalization, cloned,
+formatted or sent/shared across threads. The independent scope guard clears
+all six owned regions on return or recoverable unwind, even if the handle is
+forgotten. The workspace can then start another fresh computation.
+
+```rust
+use brynja_legacy_sha1::hardened_in_place::Sha1Workspace;
+let mut workspace = Sha1Workspace::new();
+let mut bytes = [0; 20];
+let secret = workspace.with(|mut state| {
+    state.update(b"legacy input")?;
+    state.finalize_secret(&mut bytes)
+})?;
+assert_eq!(secret.expose().len(), 20);
+drop(secret);
+assert_eq!(bytes, [0; 20]);
+# Ok::<(), brynja_legacy_sha1::Sha1Error>(())
+```
+
+`finalize_bits_secret` accepts a final canonical bit string. The corresponding
+`finalize_public` and `finalize_bits_public` methods require an explicit
+`PublicDeclassification` token. Errors preserve public destinations or clear
+every supplied secret-destination byte. Unlike the older by-value state, an
+update error clears and terminates the scoped handle (`StateConsumed` thereafter).
+There is no length query, preflight oracle, snapshot or in-scope reset.
+
+This additive profile uses portable compression, not optional SHA instructions;
+scoped accelerated legacy execution remains follow-up work. It addresses
+source-owned state movement, not complete register/spill/compiler-copy erasure.
+Forgetting the separate secret output still prevents that output's own Drop;
+abort, caller copies and platform storage remain outside the guarantee. SHA-1
+remains collision-broken and inappropriate for new security designs.
 
 ## Verification and links
 

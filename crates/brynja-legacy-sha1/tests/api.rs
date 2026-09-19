@@ -60,6 +60,16 @@ fn official_nist_vectors_ordinary_hardened_and_streamed() {
                 Ok(())
             );
             assert_eq!(output.as_slice(), expected);
+            let mut workspace = brynja_legacy_sha1::hardened_in_place::Sha1Workspace::new();
+            assert_eq!(
+                workspace.with(|state| state.finalize_bits_public(
+                    input,
+                    &mut output,
+                    PublicDeclassification::acknowledge()
+                )),
+                Ok(())
+            );
+            assert_eq!(output.as_slice(), expected);
             let (complete, partial) = input.split();
             for partition in [1, 7, 63, 64, 65] {
                 let mut state = Sha1::new();
@@ -81,6 +91,19 @@ fn official_nist_vectors_ordinary_hardened_and_streamed() {
                         let secret = hardened.finalize_bits_secret(tail, &mut output);
                         assert!(secret.is_ok());
                         if let Ok(secret) = secret {
+                            assert_eq!(secret.expose(), expected);
+                        }
+                    }
+                    assert_eq!(output, [0; 20]);
+                    {
+                        let scoped = workspace.with(|mut state| {
+                            for chunk in complete.chunks(partition) {
+                                state.update(chunk)?;
+                            }
+                            state.finalize_bits_secret(tail, &mut output)
+                        });
+                        assert!(scoped.is_ok());
+                        if let Ok(secret) = scoped {
                             assert_eq!(secret.expose(), expected);
                         }
                     }
@@ -117,6 +140,21 @@ fn standard_byte_vectors_and_million_a() {
     }
     assert_eq!(
         state.finalize().as_slice(),
+        decode("34aa973cd4c4daa4f61eeb2bdbad27316534016f")
+    );
+    let mut workspace = brynja_legacy_sha1::hardened_in_place::Sha1Workspace::new();
+    let mut output = [0; 20];
+    assert_eq!(
+        workspace.with(|mut state| {
+            for _ in 0..1000 {
+                state.update(&[b'a'; 1000])?;
+            }
+            state.finalize_public(&mut output, PublicDeclassification::acknowledge())
+        }),
+        Ok(())
+    );
+    assert_eq!(
+        output.as_slice(),
         decode("34aa973cd4c4daa4f61eeb2bdbad27316534016f")
     );
 }

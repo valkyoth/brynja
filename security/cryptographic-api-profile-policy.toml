@@ -1191,7 +1191,7 @@ sha256 = "84cc9b8fa609b6597f526e18cd6fc7358f3d1fd9ccf6255eee1af91f2e39acd8"
 
 [[reviewed-source]]
 path = "assurance/sha1-public-api/src/lib.rs"
-sha256 = "4ff9916a0676fc4d8c93e670eed95b5b4ff1f5b1459bd8a1730486da91f864e9"
+sha256 = "9c36aacd2a55cab6fce45fed602f4a3f5bcedeae4e5c5204d75fecd1cd17f878"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/compress.rs"
@@ -1207,7 +1207,7 @@ sha256 = "d99c2b86452af7c037cdf8bb4e47bd4bde93511a267656dd145e148797f981a4"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/lib.rs"
-sha256 = "49edf4ca807761b4f5933dfdf4d4446735a5d6f18e9949337cc11c4b50e60035"
+sha256 = "76da263119df9ddd94e500fb444225451b978f83d70139869fe29930d6c4443d"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/ordinary.rs"
@@ -1215,7 +1215,7 @@ sha256 = "7f01b517da3d220bbc84eb56a19512bbf2551a4b5b427a4200923c8fbd348fac"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/output.rs"
-sha256 = "2e5c659c25f4c2a4dd93d26bff6de5ca49dfd9a8c9a7ce761476b9b3869d16d7"
+sha256 = "f31463fa7f73853bd0d6c9d161b269c87074ec8d527de7a2c778643c894c1fc4"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/src/owner.rs"
@@ -1223,7 +1223,7 @@ sha256 = "50360bf20b114052132d8acfb1fac9890f2572c5c591947319f111eaa65d86b8"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-sha1/tests/api.rs"
-sha256 = "769b3abdbe623a057af4c71357c179d05fe5898ab3fbb088e787ee9802bfd4fc"
+sha256 = "d9fb1cbb781fea9fe677e454b3487486205c48b1122561bfafb3b4e0a6c43ee3"
 
 [[reviewed-source]]
 path = "scripts/cryptography/legacy_sha1_owner_contract.py"
@@ -1231,7 +1231,7 @@ sha256 = "6796277ff737147ff0a36c17c7589649905f0a3a159ecdbc7b6dd947fbd01cf1"
 
 [[reviewed-source]]
 path = "scripts/sha1/check-sha1-codegen.sh"
-sha256 = "76cb6d5422e778139afb15d6f9d99e951bbaababfd322b7b6470e64790894ec2"
+sha256 = "4b0362fac6ee61ca7bfc8447dbc0cf3838f58b238ae172132f2c45208f360cbc"
 
 [[reviewed-source]]
 path = "scripts/sha1/check-sha1.py"

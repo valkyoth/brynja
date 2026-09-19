@@ -286,6 +286,12 @@ register/spill exclusions are unchanged.
 
 ## Remaining work before the requested retest
 
+Portable legacy SHA-1 now also has a scoped caller-owned workspace under
+`hardened_in_place`, with consuming secret/public bit output, terminal update
+errors, and independent scope cleanup for forgotten handles. Its existing
+NIST/oracle/package checks exercise the new API. This does not yet extend to
+scoped accelerated SHA-1 or MD5, or close whole-API register/spill qualification.
+
 1. Complete the SHA-512 ports' native ABI coverage. SysV and Win64 observers
    under SDE, Arm observers under QEMU, Linux guard pages and endpoint compiler
    checks now bind the actual production sources. Native qualification remains.

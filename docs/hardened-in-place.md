@@ -341,6 +341,30 @@ Registers, spills and compiler-created
 copies remain outside this checkpoint's guarantee; `panic = "abort"` cannot run
 scope destructors.
 
+## Legacy SHA-1 scoped workspace
+
+`brynja_legacy_sha1::hardened_in_place::{Sha1Workspace,Sha1}` adds an allocation-free
+portable workspace and borrowed handle. `with` restores only the public IV in
+cleared storage before accepting input. The handle cannot escape its scope;
+workspace and handle are neither Send, Sync, Copy, Clone nor Debug. The separate
+scope guard covers forgotten handles and recoverable unwind. Existing by-value
+states and accelerated APIs are unchanged; no modern facade gains legacy SHA-1.
+
+The handle exposes byte updates, consuming byte/bit finalization to public or
+typed secret destinations, and cancellation. Update failure clears and closes
+the handle; later calls return `Sha1Error::StateConsumed`. There is no public
+length/preflight oracle or snapshot. Public output needs explicit declassification
+and is transactional. Secret initialization begins before finalization, so errors
+and recoverable unwind clear even the supplied destination. A completed secret
+output borrows only its destination and can outlive the workspace scope.
+
+The six owned state regions use existing `Sha1Owner::wipe`; no populated owner
+is returned by value through this API. The portable compression dispatch is
+unchanged. Complete padding/output compiler-copy, register/spill qualification
+and scoped accelerated legacy execution remain pending. Forgetting a separate
+output prevents its Drop, and abort cannot run guards. Memory hygiene never
+repairs SHA-1's collision weakness or admits it for new security protocols.
+
 ## TupleHash integer framing
 
 The private TupleHash integer encoder is constructed empty, then filled through

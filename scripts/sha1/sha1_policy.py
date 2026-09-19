@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CRATE = 'crates/brynja-legacy-sha1/'
-FILES = ('compress.rs', 'engine.rs', 'hardened.rs', 'lib.rs', 'ordinary.rs', 'output.rs', 'owner.rs', 'execution.rs')
+FILES = ('compress.rs', 'engine.rs', 'hardened.rs', 'hardened_in_place.rs', 'lib.rs', 'ordinary.rs', 'output.rs', 'owner.rs', 'execution.rs')
 TOKENS = {
     'lib.rs': ('#![no_std]', 'collision-broken', 'No independent cryptographic review or FIPS validation'),
     'engine.rs': ('current.checked_add(additional)', 'bytes.checked_mul(8)', 'admit_bytes(owner.bits(), input.len())?', 'admit_bits(owner.bits(), additional)?', 'tail.split()', 'if offset >= 56'),
@@ -15,10 +15,22 @@ TOKENS = {
     'hardened.rs': ('pub trait HardenedSha1State: sealed::Sealed', 'pub struct HardenedSha1', 'mut self,', 'output::failed(destination, error)', 'output::secret(&self.owner.output_staging, destination)'),
     'owner.rs': ('impl Drop for Sha1Owner', 'self.wipe();', '#[inline(never)]'),
     'compress.rs': ('16_usize..80', '.rotate_left(1)', '0..80', '.rotate_left(5)', 'b.rotate_left(30)', 'owner.clear_block();'),
+    'hardened_in_place.rs': (
+        "impl for<'scope> FnOnce(Sha1<'scope>) -> R", 'self.owner.wipe();',
+        'self.owner.chaining_state.copy_from_slice(&[', 'owner: &mut *cleanup.owner',
+        'if !self.keep { self.owner.wipe(); }', 'keep: false',
+        'engine::update(cleanup.owner, input)', 'self.active = false;',
+        'if result.is_ok() { cleanup.keep = true; self.active = true; }',
+        'impl Drop for Sha1', 'Err(Sha1Error::StateConsumed)',
+        'output::failed(destination, Sha1Error::OutputLength)',
+        'SecretRegionInitialization::begin(destination)', 'self.stage(tail)?; initialization',
+        'destination.copy_from_slice(&self.owner.output_staging)',
+        'PhantomData<*mut ()>', '#[cfg(test)] mod tests;'),
 }
 REGIONS = ('chaining_state', 'block', 'schedule', 'message_length', 'buffered', 'output_staging')
 BOUND = [CRATE + 'src/' + name for name in FILES] + [
     CRATE + 'src/compress/native.rs',
+    CRATE + 'src/hardened_in_place/tests.rs',
     CRATE + 'Cargo.toml', CRATE + 'README.md', CRATE + 'tests/api.rs', CRATE + 'tests/vectors/nist.txt',
     'assurance/sha1-public-api/Cargo.toml', 'assurance/sha1-public-api/Cargo.lock',
     'assurance/sha1-public-api/src/lib.rs', 'assurance/sha1-public-api/src/main.rs',
@@ -32,6 +44,8 @@ def validate(root=ROOT, hashes=True):
     src = root / CRATE / 'src'
     if sorted(path.name for path in src.glob('*.rs')) != sorted(FILES):
         raise ValueError('SHA-1 source inventory differs')
+    if sorted(p.name for p in (src / 'hardened_in_place').rglob('*.rs')) != ['tests.rs']:
+        raise ValueError('SHA-1 scoped inventory differs')
     for name in FILES:
         text = (src / name).read_text()
         if len(text.splitlines()) > 500:
@@ -42,6 +56,9 @@ def validate(root=ROOT, hashes=True):
         production = text.split('#[cfg(test)]')[0].split('#[cfg(kani)]')[0]
         if re.search(r'\b(unsafe\s*\{|extern|alloc::|std::|Vec|Box|static\s+mut)|\.(unwrap|expect)\(|\b(panic|unimplemented|todo)!', production):
             raise ValueError('SHA-1 unsafe, hosted or panic surface')
+    scoped = (src / 'hardened_in_place.rs').read_text()
+    if re.search(r'pub\s+fn\s+(check_additional_bits|check_additional_bytes|bits|snapshot|reset)\b', scoped):
+        raise ValueError('SHA-1 scoped state gained a secret metadata or reopening API')
     compressor = re.sub(r'\s+', '', (src/'compress.rs').read_text())
     condition = 'all(not(any(miri,kani)),any(target_arch="x86_64",all(target_arch="aarch64",target_endian="little")))'
     if compressor.count('#[cfg('+condition+')]') != 2 or compressor.count('#[cfg(not('+condition+'))]') != 5:

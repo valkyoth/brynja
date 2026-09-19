@@ -22,6 +22,15 @@ pub fn acceptance() -> Result<(), Sha1Error> {
         assert_eq!(secret.expose(), expected);
     }
     assert_eq!(output, [0; 20]);
+    let mut workspace = brynja_legacy_sha1::hardened_in_place::Sha1Workspace::new();
+    let secret = workspace.with(|mut state| {
+        state.update(b"a")?;
+        state.update(b"bc")?;
+        state.finalize_secret(&mut output)
+    })?;
+    assert_eq!(secret.expose(), expected);
+    drop(secret);
+    assert_eq!(output, [0; 20]);
     Ok(())
 }
 

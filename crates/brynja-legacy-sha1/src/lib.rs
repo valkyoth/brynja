@@ -32,6 +32,7 @@ pub mod execution;
 mod hardened;
 #[cfg(feature = "hardened-execution")]
 pub mod hardened_execution;
+pub mod hardened_in_place;
 mod ordinary;
 mod output;
 mod owner;

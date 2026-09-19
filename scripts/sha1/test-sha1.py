@@ -35,6 +35,15 @@ def main():
         ('scripts/zeroization/check-zeroization-miri.sh', 'run_miri -p brynja-legacy-sha1', 'run_miri -p brynja-core'),
         ('scripts/zeroization/check-zeroization-sanitizer.sh', '-p brynja-legacy-sha1', '-p brynja-core'),
     ] + [(policy.CRATE + 'src/owner.rs', f'clear_owned_region(&mut self.{region})', f'Ok(self.{region}.fill(0))') for region in policy.REGIONS]
+    import re
+    scoped = (policy.ROOT / policy.CRATE / 'src/hardened_in_place.rs').read_text()
+    for token in policy.TOKENS['hardened_in_place.rs']:
+        pattern = r'\s*'.join(re.escape(c) for c in re.sub(r'\s+', '', token))
+        match = re.search(pattern, scoped)
+        if not match: raise ValueError('stale scoped policy mutation: ' + token)
+        mutations.append((policy.CRATE + 'src/hardened_in_place.rs', match[0], 'REMOVED_SCOPED_CONTRACT'))
+    for name in ('check_additional_bits', 'check_additional_bytes', 'bits', 'snapshot', 'reset'):
+        mutations.append((policy.CRATE + 'src/hardened_in_place.rs', 'fn check(&self)', 'pub fn ' + name + '(&self)'))
     for path, before, after in mutations:
         with tempfile.TemporaryDirectory(prefix='brynja-sha1-policy-') as directory:
             root = Path(directory)

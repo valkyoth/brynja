@@ -199,7 +199,7 @@ macro_rules! fixed {
                     partial
                 } else { None };
                 self.owner.finalize(partial, SHA3_SUFFIX, SHA3_SUFFIX_BITS);
-                self.owner.stage_fixed($width);
+                self.owner.stage_fixed($width)?;
                 self.active = false;
                 Ok(())
             }
@@ -222,7 +222,7 @@ macro_rules! fixed {
                 if destination.len() != $width { return Err(HardenedSha3Error::OutputLength); }
                 self.stage(input)?;
                 let staged = self.owner.staged($width).ok_or(HardenedSha3Error::OutputLength)?;
-                destination.copy_from_slice(staged);
+                brynja_core::copy_secret_region(destination, staged)?;
                 Ok(())
             }
         }

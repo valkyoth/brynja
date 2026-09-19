@@ -474,6 +474,17 @@ on normal return; the safe portable/Miri/Kani model does not have that register
 guarantee. Input construction, other callers and whole-API compiler-copy/spill
 qualification remain separate unfinished obligations.
 
+The portable hardened SHA-3/SHAKE owner also uses borrowed copies for partial
+input buffering, fixed-digest staging, rate-bounded XOF output and public digest
+commits. Partial-output masks operate on borrowed bytes. Squeezing returns only
+public cursor indices internally, not secret bytes by value; empty reads do not
+advance the sponge, and invalid staging/cursor ranges fail before writing.
+Existing secret-output initialization and cleanup guards remain responsible for
+destination ownership. These changes preserve the public APIs, including
+infallible finalization. Portable absorption XOR, padding/final-tail handling,
+input construction and prefix packers still require separate follow-up; this is
+not whole-API register or compiler-spill qualification.
+
 ## TupleHash integer framing
 
 

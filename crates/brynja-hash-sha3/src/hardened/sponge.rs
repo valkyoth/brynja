@@ -63,12 +63,11 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         if buffered != 0 {
             let copied = core::cmp::min(RATE.saturating_sub(buffered), remaining.len());
             let end = buffered.saturating_add(copied);
-            if let (Some(destination), Some(source)) = (
-                self.partial_input.get_mut(buffered..end),
-                remaining.get(..copied),
-            ) {
-                destination.copy_from_slice(source);
-            }
+            brynja_core::copy_secret_region(
+                self.partial_input.get_mut(buffered..end).ok_or(())?,
+                remaining.get(..copied).ok_or(())?,
+            )
+            .map_err(|_| ())?;
             remaining = remaining.get(copied..).unwrap_or_default();
             self.set_buffer_len(end);
             if end == RATE {
@@ -83,9 +82,8 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
             self.absorb_slice(block);
         }
         let tail = blocks.remainder();
-        if let Some(destination) = self.partial_input.get_mut(..tail.len()) {
-            destination.copy_from_slice(tail);
-        }
+        brynja_core::copy_secret_region(self.partial_input.get_mut(..tail.len()).ok_or(())?, tail)
+            .map_err(|_| ())?;
         self.set_buffer_len(tail.len());
         write_counter(&mut self.message_length, new_length);
         Ok(())
@@ -138,15 +136,16 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         self.wipe_staging();
     }
 
-    pub(crate) fn stage_fixed(&mut self, output_bytes: usize) {
-        for index in 0..output_bytes {
-            if let (Some(destination), Some(source)) = (
-                self.squeeze_staging.get_mut(index),
-                self.sponge_lanes.get(index),
-            ) {
-                *destination = *source;
-            }
-        }
+    pub(crate) fn stage_fixed(&mut self, output_bytes: usize) -> Result<(), HardenedSha3Error> {
+        brynja_core::copy_secret_region(
+            self.squeeze_staging
+                .get_mut(..output_bytes)
+                .ok_or(HardenedSha3Error::OutputLength)?,
+            self.sponge_lanes
+                .get(..output_bytes)
+                .ok_or(HardenedSha3Error::OutputLength)?,
+        )?;
+        Ok(())
     }
 
     pub(crate) fn staged(&self, output_bytes: usize) -> Option<&[u8]> {
@@ -164,7 +163,7 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
             .output_bytes()
             .checked_add(additional)
             .ok_or(HardenedSha3Error::OutputTooLong)?;
-        self.squeeze_to_slice(destination);
+        self.squeeze_to_slice(destination)?;
         write_counter(&mut self.output_length, new_length);
         Ok(())
     }
@@ -183,7 +182,7 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         let mut remaining = output_bytes;
         while remaining != 0 {
             let count = core::cmp::min(remaining, RATE);
-            self.fill_staging(count);
+            self.fill_staging(count)?;
             let staged = self
                 .squeeze_staging
                 .get(..count)
@@ -213,7 +212,8 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         let (whole, tail) = destination.split_at_mut(complete);
         self.squeeze_public(whole, authority)?;
         if let Some(target) = tail.first_mut() {
-            *target = self.next_byte() & low_mask(valid);
+            self.squeeze_to_slice(core::slice::from_mut(target))?;
+            brynja_core::apply_secret_byte_mask(target, low_mask(valid), 0);
         }
         Ok(())
     }
@@ -234,11 +234,11 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
             .map_err(|()| HardenedSha3Error::OutputTooLong)?;
         self.squeeze_secret(initialization, complete)?;
         if complete != output_bytes {
-            self.fill_staging(1);
+            self.fill_staging(1)?;
             let Some(tail) = self.squeeze_staging.first_mut() else {
                 return Err(HardenedSha3Error::OutputLength);
             };
-            *tail &= low_mask(valid);
+            brynja_core::apply_secret_byte_mask(tail, low_mask(valid), 0);
             let result = initialization
                 .write(&self.squeeze_staging[..1])
                 .map_err(HardenedSha3Error::from);
@@ -282,32 +282,79 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         let _ = clear_owned_region(&mut self.padding_block);
     }
 
-    fn squeeze_to_slice(&mut self, destination: &mut [u8]) {
-        for target in destination {
-            *target = self.next_byte();
+    fn squeeze_to_slice(&mut self, destination: &mut [u8]) -> Result<(), HardenedSha3Error> {
+        let mut remaining = destination;
+        while !remaining.is_empty() {
+            let (start, end) = self.next_range(remaining.len())?;
+            let count = end
+                .checked_sub(start)
+                .ok_or(HardenedSha3Error::StateConsumed)?;
+            let (target, rest) = remaining.split_at_mut(count);
+            brynja_core::copy_secret_region(
+                target,
+                self.sponge_lanes
+                    .get(start..end)
+                    .ok_or(HardenedSha3Error::StateConsumed)?,
+            )?;
+            self.set_squeeze_position(end);
+            remaining = rest;
         }
+        Ok(())
     }
 
-    fn fill_staging(&mut self, count: usize) {
-        for index in 0..count {
-            let value = self.next_byte();
-            if let Some(target) = self.squeeze_staging.get_mut(index) {
-                *target = value;
-            }
+    fn fill_staging(&mut self, count: usize) -> Result<(), HardenedSha3Error> {
+        if count > self.squeeze_staging.len() {
+            return Err(HardenedSha3Error::OutputLength);
         }
+        let mut offset = 0;
+        while offset < count {
+            let remaining = count
+                .checked_sub(offset)
+                .ok_or(HardenedSha3Error::OutputLength)?;
+            let (start, end) = self.next_range(remaining)?;
+            let length = end
+                .checked_sub(start)
+                .ok_or(HardenedSha3Error::StateConsumed)?;
+            let next = offset
+                .checked_add(length)
+                .ok_or(HardenedSha3Error::OutputLength)?;
+            brynja_core::copy_secret_region(
+                self.squeeze_staging
+                    .get_mut(offset..next)
+                    .ok_or(HardenedSha3Error::OutputLength)?,
+                self.sponge_lanes
+                    .get(start..end)
+                    .ok_or(HardenedSha3Error::StateConsumed)?,
+            )?;
+            self.set_squeeze_position(end);
+            offset = next;
+        }
+        Ok(())
     }
 
-    fn next_byte(&mut self) -> u8 {
+    // Public cursor arithmetic only; no secret byte is returned by value.
+    fn next_range(&mut self, maximum: usize) -> Result<(usize, usize), HardenedSha3Error> {
+        if RATE == 0 || RATE > super::owner::MAX_RATE || self.squeeze_position() > RATE {
+            return Err(HardenedSha3Error::StateConsumed);
+        }
         if self.squeeze_position() == RATE {
             permutation::permute(self);
             self.set_squeeze_position(0);
         }
         let position = self.squeeze_position();
-        let value = self.sponge_lanes.get(position).copied().unwrap_or(0);
-        self.set_squeeze_position(position.saturating_add(1));
-        value
+        let available = RATE
+            .checked_sub(position)
+            .ok_or(HardenedSha3Error::StateConsumed)?;
+        let count = maximum.min(available);
+        let end = position
+            .checked_add(count)
+            .ok_or(HardenedSha3Error::StateConsumed)?;
+        Ok((position, end))
     }
 }
+
+#[cfg(test)]
+mod tests;
 
 fn complete_output_bytes(length: usize, valid: u8) -> usize {
     if valid == 0 || valid == 8 {

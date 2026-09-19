@@ -73,12 +73,12 @@ macro_rules! hardened_sha3 {
                     return Err(HardenedSha3Error::OutputLength);
                 }
                 self.owner.finalize(None, SHA3_SUFFIX, SHA3_SUFFIX_BITS);
-                self.owner.stage_fixed($output);
+                self.owner.stage_fixed($output)?;
                 let output = self
                     .owner
                     .staged($output)
                     .ok_or(HardenedSha3Error::OutputLength)?;
-                destination.copy_from_slice(output);
+                brynja_core::copy_secret_region(destination, output)?;
                 Ok(())
             }
 
@@ -93,7 +93,7 @@ macro_rules! hardened_sha3 {
                     return Err(HardenedSha3Error::OutputLength);
                 }
                 self.owner.finalize(None, SHA3_SUFFIX, SHA3_SUFFIX_BITS);
-                self.owner.stage_fixed($output);
+                self.owner.stage_fixed($output)?;
                 let output = self
                     .owner
                     .staged($output)
@@ -122,12 +122,12 @@ macro_rules! hardened_sha3 {
                 let (complete, partial) = input.split();
                 self.update(complete)?;
                 self.owner.finalize(partial, SHA3_SUFFIX, SHA3_SUFFIX_BITS);
-                self.owner.stage_fixed($output);
+                self.owner.stage_fixed($output)?;
                 let output = self
                     .owner
                     .staged($output)
                     .ok_or(HardenedSha3Error::OutputLength)?;
-                destination.copy_from_slice(output);
+                brynja_core::copy_secret_region(destination, output)?;
                 Ok(())
             }
 
@@ -149,7 +149,7 @@ macro_rules! hardened_sha3 {
                 let (complete, partial) = input.split();
                 self.update(complete)?;
                 self.owner.finalize(partial, SHA3_SUFFIX, SHA3_SUFFIX_BITS);
-                self.owner.stage_fixed($output);
+                self.owner.stage_fixed($output)?;
                 let output = self
                     .owner
                     .staged($output)

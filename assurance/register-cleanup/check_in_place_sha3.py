@@ -75,7 +75,8 @@ def main(native_x86=False):
             ('handle wipe removed', 'fn drop(&mut self) { self.owner.wipe(); }', 'fn drop(&mut self) {}'),
             ('update cleanup disabled', 'let mut cleanup = Cleanup { owner: &mut *self.owner, keep: false }', 'let mut cleanup = Cleanup { owner: &mut *self.owner, keep: true }'),
             ('failed update reusable', 'self.active = false;\n                let mut cleanup', 'self.active = true;\n                let mut cleanup'),
-            ('stage omitted', 'self.owner.stage_fixed($width);', ''),
+            ('stage omitted', 'self.owner.stage_fixed($width)?;', ''),
+            ('public copy omitted', 'brynja_core::copy_secret_region(destination, staged)?;', ''),
             ('fixed suffix corrupted', 'self.owner.finalize(partial, SHA3_SUFFIX, SHA3_SUFFIX_BITS);', 'self.owner.finalize(partial, 0x1f, SHA3_SUFFIX_BITS);'),
         )
         for release in (False, True):
@@ -92,10 +93,53 @@ def main(native_x86=False):
                 log = result.stdout + result.stderr
                 if result.returncode == 0 or 'test result: FAILED' not in log:
                     raise ValueError('mutant must compile and fail at runtime: '+label+'\n'+log[-3000:])
-            print(f'Scoped SHA-3: positive control and six compiled mutants; release={release}: PASS', flush=True)
+            print(f'Scoped SHA-3: positive control and {len(mutations)} compiled mutants; release={release}: PASS', flush=True)
         path.write_text(original)
         xof_mutants(crate, env)
+        portable_transfer_mutants(crate, env)
         packaged(root)
+
+
+def portable_transfer_mutants(crate, env):
+    sponge = crate/'src/hardened/sponge.rs'
+    fixed = crate/'src/hardened/fixed.rs'
+    originals = {path: path.read_text() for path in (sponge, fixed)}
+    calls = (
+        'brynja_core::copy_secret_region(\n                self.partial_input',
+        'brynja_core::copy_secret_region(self.partial_input',
+        'brynja_core::copy_secret_region(\n            self.squeeze_staging',
+        'brynja_core::copy_secret_region(\n                target,',
+        'brynja_core::copy_secret_region(\n                self.squeeze_staging',
+    )
+    mutations = [(sponge, call, call.replace('brynja_core::copy_secret_region', 'omitted_copy'), 1)
+                 for call in calls]
+    mutations += [(sponge, f'apply_secret_byte_mask({name}, low_mask(valid), 0)',
+                   f'apply_secret_byte_mask({name}, 0xff, 0)', 1) for name in ('target', 'tail')]
+    mutations.append((fixed, 'brynja_core::copy_secret_region(destination, output)?;', '', 2))
+    for release in (False, True):
+        command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path',
+                   str(crate/'Cargo.toml'), '--lib', 'hardened::sponge::tests']
+        if release:
+            command.append('--release')
+        for path, source in originals.items():
+            path.write_text(source)
+        run(command, env)
+        for path, before, after, count in mutations:
+            for target, source in originals.items():
+                target.write_text(source)
+            source = originals[path]
+            if source.count(before) != count:
+                raise ValueError('portable transfer mutation absent/ambiguous: '+before)
+            changed = source.replace(before, after)
+            if 'omitted_copy' in after:
+                changed += '\nfn omitted_copy(_: &mut [u8], _: &[u8]) -> Result<(), brynja_core::SecretMemoryError> { Ok(()) }\n'
+            path.write_text(changed)
+            result = run(command, env, success=False)
+            if result.returncode == 0 or 'test result: FAILED' not in result.stdout + result.stderr:
+                raise ValueError('portable transfer mutant must compile and fail at runtime: '+before)
+        print(f'Portable sponge: eight compiled transfer/mask mutants; release={release}: PASS', flush=True)
+    for path, source in originals.items():
+        path.write_text(source)
 
 
 def xof_mutants(crate, env):

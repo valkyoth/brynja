@@ -27,11 +27,29 @@ def check(args, cwd, environment, *, failing=False):
     return result
 
 
+def scoped_negatives():
+    cases = []
+    for strength in (128, 256):
+        state = f'crate::hardened_in_place::ParallelHash{strength}'
+        for name in (state + "<'static>", state + 'Workspace'):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn bound<T:{bound}>() {{}} fn probe() {{ bound::<{name}>(); }}', 'E0277'))
+        cases += [
+            (f'fn probe(s: {state}) {{ let _ = s.finalize_secret(&mut []); s.cancel(); }}', 'E0382'),
+            (f'fn probe(s: {state}) {{ let _ = s.finalize_public(&mut []); }}', 'E0061'),
+            (f'fn probe(s: {state}) {{ let _ = s.leaf_count(); }}', 'E0599'),
+            (f'fn probe(s: {state}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
+        ]
+    return cases
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix="brynja-parallel-package-") as directory:
         destination = Path(directory)
         environment = dict(os.environ, CARGO_TARGET_DIR=str(destination / "target"))
         _, roots = shared.package(destination, environment)
+        (roots['brynja-hash-parallel'] / 'tests/scoped.rs').write_bytes(
+            (ROOT / 'assurance/parallelhash-differential/tests/scoped.rs').read_bytes())
         patches = "\n[patch.crates-io]\n" + "\n".join(
             f'{name} = {{ path = "{path.as_posix()}" }}' for name, path in roots.items()) + "\n"
         for name in ("brynja-hash-parallel", "brynja-hash-parallel-std"):
@@ -41,7 +59,7 @@ def main():
                 check(["cargo", "test", "--offline", "--features", "runtime-execution", *profile], roots[name], environment)
         boundary = roots["brynja-hash-parallel"] / "src/execution/mod.rs"
         original_boundary = boundary.read_text()
-        for body, code in (
+        probes = (
             ("fn forge(root: &mut super::Collector<'static, 'static, '_>) { "
              "let _ = super::stream::CompleteInput { root }; }", "E0451"),
             ("fn bypass(root: &mut super::Collector<'static, 'static, '_>) { "
@@ -50,7 +68,8 @@ def main():
              "let _ = root.finish_inner(0, true, true); }", "E0624"),
             ("fn reuse(input: super::stream::CompleteInput<'_, '_>) { "
              "let _ = input.into_root(); let _ = input.into_root(); }", "E0382"),
-        ):
+        ) + tuple(scoped_negatives())
+        for body, code in probes:
             try:
                 boundary.write_text(original_boundary + "\n#[cfg(test)] mod completion_boundary_probe { " + body + " }\n")
                 for profile in ([], ["--release"]):
@@ -62,7 +81,7 @@ def main():
                         raise ValueError("completion boundary did not reject " + code + ":\n" + result.stderr)
             finally:
                 boundary.write_text(original_boundary)
-        print("Streaming completion rejects eight compiled forgery/bypass/reuse probes", flush=True)
+        print(f"Streaming/scoped ownership rejects {len(probes)*2} compiled probes", flush=True)
         cases = [
             ("brynja-hash-parallel", "src/execution/collector.rs",
              f"let _ = clear_owned_region(&mut self.{field});", "",
@@ -126,6 +145,21 @@ def main():
                 ("state.finalize_bits_xof(input)?", "state.finalize_xof()?"),
                 ("hardened_in_place::Shake256Workspace::new()", "hardened_in_place::Shake128Workspace::new()"),
             )
+        ]
+        cases += [
+            ('brynja-hash-parallel', 'src/hardened_in_place/core_state.rs', before, after, ['--lib', 'hardened_in_place::'])
+            for before, after in (
+                ('clear_owned_region(&mut self.used)', 'core::hint::black_box(&mut self.used)'),
+                ('clear_owned_region(&mut self.leaves)', 'core::hint::black_box(&mut self.leaves)'),
+                ('clear_owned_region(&mut self.leaf)', 'core::hint::black_box(&mut self.leaf)'),
+                ('self.state = None;', ''), ('if !self.complete {', 'if self.complete {'),
+                ('clear_owned_region(output)', 'core::hint::black_box(&mut *output)'),
+                ('suffix.right(output_bits)?;', 'suffix.right(0)?;'),
+                ('self.flush(tail.valid_bits_in_last_byte())', 'self.flush(8)'),
+            )
+        ]
+        cases += [
+            ('brynja-hash-parallel', 'src/hardened_in_place/fixed.rs', 'byte_string(b"ParallelHash")?', 'byte_string(b"WRONG")?', ['--lib', 'hardened_in_place::']),
         ]
         for index, (package, file, before, after, tests) in enumerate(cases):
             path = roots[package] / file

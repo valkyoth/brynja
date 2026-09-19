@@ -17,6 +17,8 @@ mod scheduled;
 mod secret_encoding;
 mod xof;
 
+pub mod hardened_in_place;
+
 #[cfg(feature = "hardened-execution")]
 pub mod execution;
 

@@ -175,7 +175,7 @@ or preflight query is exposed. Authority/revocation and deployment requirements
 are unchanged, and none of this establishes complete compiler-copy, register or
 spill erasure.
 
-## ParallelHash framing and portable leaf prerequisite
+## Portable scoped fixed-output ParallelHash
 
 ParallelHash also now initializes integer framing through borrowed storage: its
 portable sequential/scheduled roots and execution collectors create empty
@@ -187,11 +187,29 @@ is returned from initialization.
 Portable ParallelHash leaf helpers now use scoped SHAKE128/256 storage and pass
 the complete borrowed bit-string to finalization. The previous returned partial
 tail array and populated leaf sponge moves are removed. The 32/64-byte leaf
-output remains a typed borrow of the supplied destination. This is a prerequisite,
-not a finished ParallelHash scoped API: outer roots, stream/scheduler lifecycles,
-accelerated leaves and thread handoff still need the broader ownership work.
-Registers, spills and compiler-created copies remain outside this checkpoint's
-guarantee.
+output remains a typed borrow of the supplied destination.
+
+`brynja_hash_parallel::hardened_in_place::{ParallelHash128Workspace,
+ParallelHash256Workspace}` now retain portable root sponge storage, two 16-byte
+counters and a 64-byte leaf-output region. Construct empty storage, then call
+`with` or `with_bits` with a caller-owned nonempty block buffer; its length is B.
+The scoped handle accepts complete-byte updates and consuming finalizers with
+canonical-bit final input and output. Public finalization requires explicit
+declassification and preserves its destination on errors; secret finalization
+clears its whole destination on errors and returns a typed clearing output borrow.
+The scope may return that separate output borrow, never its state handle.
+
+Update failures are terminal. Cancelling/dropping a handle clears metadata and
+the whole block. Independent outer guards clear them even if the handle is
+forgotten or the callback unwinds; the borrowed cSHAKE scope clears its sponge.
+No public count, accumulated-length or capacity-preflight query is provided.
+Workspaces and handles are neither Copy/Clone/Debug nor Send/Sync. These additive
+APIs do not replace the existing by-value APIs or enable acceleration by default.
+
+This slice is fixed-output and portable only. Scoped XOF readers, accelerated
+roots/leaves, scheduled collectors and thread handoff still need the broader
+ownership work. Registers, spills and compiler-created copies remain outside
+this checkpoint's guarantee; `panic = "abort"` cannot run scope destructors.
 
 ## TupleHash integer framing
 

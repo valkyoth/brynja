@@ -35,6 +35,7 @@ block-size parameter `B`. Cryptographic code is first-party Rust.
 | --- | --- | --- |
 | All four portable ParallelHash/ParallelHashXOF identities | ✅ Fully implemented | ❌ No |
 | Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |
+| Caller-owned portable scoped fixed-output workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |
 | Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |
 | Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
 
@@ -70,6 +71,38 @@ jobs. Select `HardenedParallelHash*` types for confidential inputs and
 `finalize_secret` or secret squeezing for confidential results. Secret-output
 owners clear their destination on Drop; public output requires an explicit
 declassification decision.
+
+### Keep fixed-output state in caller-owned storage
+
+The portable `hardened_in_place` API borrows an empty workspace before accepting
+input. Scope cleanup also covers forgotten handles and recoverable unwind.
+This API currently supports fixed-output ParallelHash128/256, not scoped XOF,
+scheduled, threaded or accelerated execution. Complete register/spill clearing
+is not guaranteed; `panic = "abort"` does not run destructors.
+
+```rust
+use brynja_hash_parallel::hardened_in_place::ParallelHash128Workspace;
+
+let mut workspace = ParallelHash128Workspace::new();
+let mut block = [0; 8]; // B = 8
+let mut output = [0; 32];
+let secret = workspace.with(&mut block, b"application", |mut state| {
+    state.update(b"first chunk")?;
+    state.update(b"second chunk")?;
+    state.finalize_secret(&mut output)
+})??;
+assert_eq!(block, [0; 8]);
+assert_eq!(secret.expose().len(), 32);
+drop(secret);
+assert_eq!(output, [0; 32]);
+# Ok::<(), brynja_hash_parallel::ParallelHashError>(())
+```
+
+Use `with_bits` and `finalize_bits_secret`/`finalize_bits_public` for canonical
+partial-bit customization, final input and output. Public output requires
+`ParallelHashPublicDeclassification`; secret outputs can leave the scope while
+retaining their separate destination borrow. Failed secret finalization clears
+the destination; public errors preserve it.
 
 ### Incremental execution
 

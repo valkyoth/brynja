@@ -13,6 +13,8 @@ use brynja_hash_parallel::{
 #[cfg(feature = "execution")]
 mod execution;
 
+mod scoped;
+
 const MAX_CAMPAIGN_BYTES: u64 = 1024 * 1024;
 const MAX_CASES: usize = 512;
 const MAX_FIELD_BYTES: usize = 4_096;
@@ -81,6 +83,14 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
         block_size,
         &mut output,
         line,
+    )?;
+    scoped::check(
+        algorithm,
+        custom,
+        input_bits,
+        valid_bits(output_bits),
+        block_size,
+        &output,
     )?;
     append_hex(rendered, &output)?;
     output.fill(0);

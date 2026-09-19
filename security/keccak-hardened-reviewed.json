@@ -247,7 +247,7 @@
     "crates/brynja-hash-sha3/tests/keccak_properties/mod.rs": "7c441598ee1a0254b4c98d98a6c648ccc02045a2dcfd61470d7f96d183720be5",
     "crates/brynja-hash-sha3/tests/vectors/cshake-execution.txt": "b5f34958563e142793fad730b776c741baba8b73be2f2cb8c120629d6bcb9361",
     "crates/brynja-hash-sha3/tests/vectors/nist-bit-selected.txt": "fa7045fa83baa86021d95141f75197c9ca91907d16447c95502388a3bce04f20",
-    "docs/hardened-in-place.md": "ccfedb3f27960baf735c74398f64c962460938fbd4e1027fda764f00fd18f8d8",
+    "docs/hardened-in-place.md": "1fbbd0d205d94a8e598ee54c593e4426e607980458275ff6b91ba44159a70463",
     "docs/hardened-keccak-execution.md": "d6a61c082045026d8d690b0cbcb8965276b5dfb5e7b089cc8914f78edc4fd7dd",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/sha3/capture-keccak-hardened-native.py": "9fe3556c0afa7414fdb9ebda2d7126f599be6feaae393649b0d87ccbd6a81e9e",

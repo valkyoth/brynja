@@ -32,6 +32,19 @@ def main():
             row[extension] = paths[0].read_text()
         cleanup.check(row)
         for extension, before, after in (
+            ("mir", "Metadata::wipe(", "Metadata::omitted("),
+            ("mir", "&mut ((*_1).2: [u8; 64])", "&mut ((*_1).0: [u8; 16])"),
+            ("ll", "i64 noundef 64)", "i64 noundef 32)"),
+            ("s", "Metadata", "Omitted"),
+        ):
+            cleanup.require(before in row[extension], "live scoped cleanup mutation target")
+            mutant = dict(row, **{extension: row[extension].replace(before, after)})
+            try:
+                cleanup.check_scoped(mutant)
+            except (ValueError, cleanup.flow.MirCleanupFlowError):
+                continue
+            raise ValueError("ParallelHash scoped emitted cleanup mutant escaped")
+        for extension, before, after in (
             ("mir", "clear_owned_region(", "omitted("),
             ("mir", "::cancel(", "::omitted("),
             ("mir", "&mut ((*_1).2: [u8; 16])", "&mut ((*_1).3: [u8; 16])"),

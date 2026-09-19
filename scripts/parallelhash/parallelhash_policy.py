@@ -16,6 +16,8 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "lib.rs",
     "output.rs", "scheduled.rs", "xof.rs", "secret_encoding.rs",
     "secret_encoding/tests.rs", "backend/tests.rs",
+    "hardened_in_place.rs", "hardened_in_place/backend.rs", "hardened_in_place/core_state.rs",
+    "hardened_in_place/fixed.rs", "hardened_in_place/tests.rs", "hardened_in_place/core_state/tests.rs",
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
@@ -60,6 +62,8 @@ DIFFERENTIAL = (
     Path("scripts/parallelhash/check-parallelhash-execution-native.py"),
     Path("scripts/parallelhash/test-parallelhash-execution-native.py"),
     Path("scripts/parallelhash/test-parallelhash-batch.py"),
+    Path("assurance/parallelhash-differential/src/scoped.rs"),
+    Path("assurance/parallelhash-differential/tests/scoped.rs"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -98,6 +102,28 @@ def require(text: str, token: str, label: str) -> None:
 
 
 BORROWED_TOKENS = {
+    "hardened_in_place/fixed.rs": (
+        "sponge: api::$storage, metadata: Metadata", "pub fn new() -> Self",
+        "impl for<'scope> FnOnce($state<'scope>) -> R", "let metadata = Guard(&mut self.metadata);",
+        "let block = Block(block);", 'self.sponge.with_bits(byte_string(b"ParallelHash")?',
+        "Core::new(state, &mut *metadata.0, &mut *block.0)?",
+        "self.core.public(tail, output, valid)", "self.core.secret(tail, output, valid)",
+        "pub fn finalize_bits_secret<'out>(self,", "ParallelHashPublicDeclassification", "pub fn cancel(self)",
+    ),
+    "hardened_in_place/core_state.rs": (
+        "state: Option<S>", "metadata: &'scope mut Metadata", "block: &'scope mut [u8]",
+        "clear_owned_region(&mut self.used)", "clear_owned_region(&mut self.leaves)", "clear_owned_region(&mut self.leaf)",
+        "impl Drop for Guard<'_>", "impl Drop for Block<'_>", "self.state = None;", "if !self.complete {",
+        "self.core.cancel();", "operation.complete = true;", "prefix.left(", "suffix.right(read(&self.metadata.leaves))?",
+        "suffix.right(output_bits)?", "S::leaf(bits, &mut self.metadata.leaf)?", "update(secret.expose())?",
+        "clear_owned_region(output)", "Fips202Output::new(output, valid)", "self.state.take().ok_or(Error::StateConsumed)?.finish()",
+        "self.flush(tail.valid_bits_in_last_byte())", "u128::try_from(full)",
+    ),
+    "hardened_in_place/backend.rs": (
+        "impl<'scope> State for api::$state<'scope>", "self.finalize_xof()",
+        "crate::backend::$leaf(input,", "Fips202Output::new(output, valid)",
+        "Sha3PublicDeclassification::acknowledge()",
+    ),
     "secret_encoding.rs": (
         "pub(crate) const fn empty() -> Self", "pub(crate) fn left(&mut self,", "pub(crate) fn right(&mut self,",
         "clear_owned_region(storage)", "clear_owned_region(length)", "!(2..=17).contains(&count)",

@@ -76,6 +76,7 @@ def emitted(ll, pattern, widths, dynamic=0):
 
 def check(row):
     check_integer(row)
+    check_scoped(row)
     mir = row["mir"]
     collector = "Collector::<'_, '_, '_>::cancel("
     stream = "Stream::<'_, '_>::cancel("
@@ -112,6 +113,28 @@ def check_integer(row):
     emitted(row["ll"], r"secret_encoding.*SecretEncodedInteger.*drop", [17, 1])
     require(re.search(r"secret_encoding.*SecretEncodedInteger.*drop", row["s"]),
             "portable integer assembly destruction boundary")
+
+
+def check_scoped(row):
+    """Exact owned metadata/outer-guard cleanup, not a compiler-copy proof."""
+    prefix = "crates/brynja-hash-parallel/src/hardened_in_place/core_state.rs:"
+    for owner, method, calls in (
+        ("Metadata)", "wipe", [("clear_owned_region(", str(i)) for i in range(3)]),
+        ("Metadata)", "drop", [("Metadata::wipe(", "self")]),
+        ("Guard<", "drop", [("Metadata::wipe(", "0")]),
+        ("Block<", "drop", [("clear_owned_region(", "0")]),
+    ):
+        function = flow.exact_function(row["mir"], (prefix, "::" + method + "(", "_1: &mut " + owner))
+        linear_fields(function, calls)
+    for owner, method, widths, dynamic in (
+        ("Metadata", "wipe", [16, 16, 64], 0),
+        ("Metadata", "drop", [16, 16, 64], 0),
+        ("Guard", "drop", [16, 16, 64], 0),
+        ("Block", "drop", [], 1),
+    ):
+        pattern = "hardened_in_place.*core_state.*" + owner + ".*" + method
+        emitted(row["ll"], pattern, widths, dynamic)
+        require(re.search(pattern, row["s"]), "scoped assembly cleanup boundary")
 
 
 def check_storage(row):

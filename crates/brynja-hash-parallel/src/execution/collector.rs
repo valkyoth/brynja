@@ -252,7 +252,7 @@ impl<'plan, 'input, 'authority> Collector<'plan, 'input, 'authority> {
         };
         let target = stage.0.get_mut(..output.len()).ok_or(Error::OutputLength)?;
         let secret = guard.root.secret(target, valid, terminal)?;
-        output.copy_from_slice(secret.expose());
+        brynja_core::copy_secret_region(output, secret.expose()).map_err(|_| Error::State)?;
         guard.complete = true;
         Ok(())
     }

@@ -106,7 +106,7 @@ macro_rules! group {
                     let source = values.expose(index).ok_or(RootError::State)?;
                     let destination = destination.get_mut(..$width).ok_or(RootError::State)?;
                     if source.len() != destination.len() { return Err(RootError::State.into()); }
-                    destination.copy_from_slice(source);
+                    brynja_core::copy_secret_region(destination, source).map_err(|_| RootError::State)?;
                 }
                 Ok($leaves { plan: self.plan, start: self.start, count: self.count,
                     report, output, exclusive: PhantomData })

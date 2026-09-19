@@ -167,10 +167,11 @@ impl<'workspace, 'authority> Stream<'workspace, 'authority> {
                 return Err(Error::State);
             }
             let end = used.checked_add(take).ok_or(Error::State)?;
-            self.workspace
-                .get_mut(used..end)
-                .ok_or(Error::State)?
-                .copy_from_slice(input.get(..take).ok_or(Error::State)?);
+            brynja_core::copy_secret_region(
+                self.workspace.get_mut(used..end).ok_or(Error::State)?,
+                input.get(..take).ok_or(Error::State)?,
+            )
+            .map_err(|_| Error::State)?;
             self.set_used(end)?;
             input = input.get(take..).ok_or(Error::State)?;
             if end == self.workspace.len() {
@@ -215,7 +216,11 @@ impl<'workspace, 'authority> Stream<'workspace, 'authority> {
             let (last, prefix) = bytes.split_last().ok_or(Error::State)?;
             stream.update_inner(prefix, &mut select)?;
             let used = stream.used()?;
-            *stream.workspace.get_mut(used).ok_or(Error::State)? = *last;
+            brynja_core::copy_secret_region(
+                core::slice::from_mut(stream.workspace.get_mut(used).ok_or(Error::State)?),
+                core::slice::from_ref(last),
+            )
+            .map_err(|_| Error::State)?;
             stream.set_used(used.checked_add(1).ok_or(Error::State)?)?;
             stream.flush(tail.valid_bits_in_last_byte(), &mut select)?;
         }

@@ -93,7 +93,7 @@ impl<'plan, 'input> Leaves<'plan, 'input, '_> {
             if source.len() != destination.len() {
                 return Err(RootError::State.into());
             }
-            destination.copy_from_slice(source);
+            brynja_core::copy_secret_region(destination, source).map_err(|_| RootError::State)?;
         }
         Ok(result)
     }

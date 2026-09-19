@@ -16,6 +16,48 @@ fn cleared(stream: &Stream<'_, '_>) {
 }
 
 #[test]
+fn borrowed_updates_and_tail_preserve_planned_digest() -> Result<(), Error> {
+    use crate::ParallelHashPublicDeclassification as Public;
+    use crate::execution::Plan;
+    for identity in [Identity::ParallelHash128, Identity::ParallelHash256] {
+        for block in [1, 3, 7] {
+            for valid in 1..=8 {
+                let message = Fips202BitString::new(b"abc\x01", valid).map_err(|_| Error::State)?;
+                let plan = Plan::new_bits(identity, message, block, 8)?;
+                let mut root = Collector::new(&plan, Mode::Portable, b"")?;
+                root.execute_serial(|_| Ok(Mode::Portable))?;
+                let mut expected = [0xa5; 17];
+                let reference = root.finalize_secret_bits(&mut expected, 5)?;
+                let mut buffer = [0xa5; 7];
+                let pending = buffer.get_mut(..block).ok_or(Error::State)?;
+                let mut cfg = config();
+                cfg.identity = identity;
+                let mut stream = Stream::new(cfg, Mode::Portable, pending, b"")?;
+                for chunk in [b"ab".as_slice(), b"c".as_slice()] {
+                    stream.update(chunk, |_| Ok(Mode::Portable))?;
+                }
+                let mut out = [0x69; 17];
+                let mut scratch = [0xff; 19];
+                stream.finalize_public_bits(
+                    Fips202BitString::new(&[1], valid).map_err(|_| Error::State)?,
+                    &mut out,
+                    5,
+                    &mut scratch,
+                    Public::acknowledge(),
+                    |_| Ok(Mode::Portable),
+                )?;
+                assert_eq!(out, reference.expose());
+                assert_eq!(scratch, [0; 19]);
+                assert!(pending.iter().all(|byte| *byte == 0));
+                drop(reference);
+                assert_eq!(expected, [0; 17]);
+            }
+        }
+    }
+    Ok(())
+}
+
+#[test]
 fn cancellation_clears_both_input_metadata_regions_and_workspace() -> Result<(), Error> {
     let mut workspace = [0xa5; 8];
     let mut stream = Stream::new(config(), Mode::Portable, &mut workspace, &[])?;

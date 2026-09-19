@@ -59,7 +59,8 @@ impl Executor {
             .get_mut(..output.len())
             .ok_or(Error::Crypto(hash::execution::Error::OutputLength))?;
         let (secret, report) = self.compute_secret(request, stage, valid, cancellation)?;
-        output.copy_from_slice(secret.expose());
+        brynja_core::copy_secret_region(output, secret.expose())
+            .map_err(|_| Error::Crypto(hash::execution::Error::State))?;
         Ok(report)
     }
     /// Typed secret bytes. Every failure clears the complete supplied destination.

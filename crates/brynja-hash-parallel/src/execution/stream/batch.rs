@@ -212,10 +212,11 @@ impl<'workspace, 'worker, 'authority> Stream<'workspace, 'worker, 'authority> {
                 return Err(RootError::State.into());
             }
             let end = used.checked_add(take).ok_or(RootError::State)?;
-            self.workspace
-                .get_mut(used..end)
-                .ok_or(RootError::State)?
-                .copy_from_slice(input.get(..take).ok_or(RootError::State)?);
+            brynja_core::copy_secret_region(
+                self.workspace.get_mut(used..end).ok_or(RootError::State)?,
+                input.get(..take).ok_or(RootError::State)?,
+            )
+            .map_err(|_| RootError::State)?;
             self.used = (end as u128).to_le_bytes();
             input = input.get(take..).ok_or(RootError::State)?;
             if end == self.workspace.len() {
@@ -257,7 +258,11 @@ impl<'workspace, 'worker, 'authority> Stream<'workspace, 'worker, 'authority> {
             let (last, prefix) = tail.as_bytes().split_last().ok_or(RootError::State)?;
             stream.update_inner(prefix, control)?;
             let used = stream.used()?;
-            *stream.workspace.get_mut(used).ok_or(RootError::State)? = *last;
+            brynja_core::copy_secret_region(
+                core::slice::from_mut(stream.workspace.get_mut(used).ok_or(RootError::State)?),
+                core::slice::from_ref(last),
+            )
+            .map_err(|_| RootError::State)?;
             stream.used = (used.checked_add(1).ok_or(RootError::State)? as u128).to_le_bytes();
             stream.flush(tail.valid_bits_in_last_byte(), control)?;
         }

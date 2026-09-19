@@ -325,6 +325,13 @@ actual vector participation without treating a requested route as proof of work.
 The explicit bounded CV copy is between two clearing owners, not a declassification
 or a promise to erase compiler-created copies. Forgetting a completed result
 cannot run its Drop: a threaded scheduler must keep its own parent storage guard.
+Completed CV loans now use the reviewed borrowed-copy helper, as do scoped and
+execution streaming input buffers (including partial final bytes), collector
+public commits and scoped threaded public commits. Existing guards still clear
+source/transport/staging storage on failure or Drop. This removes those explicit
+ordinary copy sites without changing provenance, scheduling or declassification
+requirements; the helper's normal-return working-register claim is not a
+whole-ParallelHash register/spill guarantee.
 The std `execution::batch::in_place::Executor` supplies that parent guard under
 the existing `runtime-batch-execution` feature. It creates authority and empty
 workspace inside each worker, returns only completed exact-plan loans, and

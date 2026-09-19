@@ -8,14 +8,21 @@ fn transfer_clears_source_and_all_transport_capacity() -> Result<(), Error> {
         let mut workspace = Workspace::new();
         let mut slots = [[0xa5; 64]; CAPACITY];
         let mut no = || false;
-        let transfer = plan
-            .batch(0, 3)?
-            .execute(
-                &Executor::portable(),
-                &mut workspace,
-                &mut Control::new(16, &mut no),
-            )?
-            .transfer(&mut slots)?;
+        let leaves = plan.batch(0, 3)?.execute(
+            &Executor::portable(),
+            &mut workspace,
+            &mut Control::new(16, &mut no),
+        )?;
+        // Test-only snapshot: source and transport must agree, not just clear.
+        let mut expected = [[0; 64]; CAPACITY];
+        for (index, out) in expected.iter_mut().enumerate().take(3) {
+            let source = leaves.inner.expose(index).ok_or(RootError::State)?;
+            out.get_mut(..source.len())
+                .ok_or(RootError::State)?
+                .copy_from_slice(source);
+        }
+        let transfer = leaves.transfer(&mut slots)?;
+        assert_eq!(*transfer.values, expected);
         assert_eq!(workspace.values, [[0; 64]; CAPACITY]);
         assert_eq!(workspace.staging, [0; 256]);
         assert_eq!(transfer.len(), 3);
@@ -31,6 +38,31 @@ fn transfer_clears_source_and_all_transport_capacity() -> Result<(), Error> {
         }
         drop(transfer);
         assert_eq!(slots, [[0; 64]; CAPACITY]);
+    }
+    Ok(())
+}
+#[test]
+fn rejected_transfer_clears_partial_transport_and_originals() -> Result<(), Error> {
+    for identity in [Identity::ParallelHash128, Identity::ParallelHash256] {
+        let plan = Plan::new(identity, b"abcd", 1, 4)?;
+        let mut workspace = Workspace::new();
+        let mut slots = [[0xa5; 64]; CAPACITY];
+        let mut no = || false;
+        let mut leaves = plan.batch(0, 3)?.execute(
+            &Executor::portable(),
+            &mut workspace,
+            &mut Control::new(16, &mut no),
+        )?;
+        // The first three values are valid; the final missing source must cause
+        // both guards to clear even after earlier secret transfers succeeded.
+        leaves.count = 4;
+        assert!(matches!(
+            leaves.transfer(&mut slots),
+            Err(Error::Root(RootError::State))
+        ));
+        assert_eq!(slots, [[0; 64]; CAPACITY]);
+        assert_eq!(workspace.values, [[0; 64]; CAPACITY]);
+        assert_eq!(workspace.staging, [0; 256]);
     }
     Ok(())
 }

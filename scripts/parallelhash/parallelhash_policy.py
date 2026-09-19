@@ -128,7 +128,7 @@ BORROWED_TOKENS = {
         "clear_owned_region(self.0.as_flattened_mut())", "clear_owned_region(output.0.as_flattened_mut())",
         "struct Scratch<'a>(&'a mut Workspace)", "self.0.clear()", "let scratch = Scratch(workspace)",
         "executor.kernel()?", "self.plan.job(index).map_err(plan_error)?.batch_input()",
-        "executor.digest_secret(&inputs, destinations,", "destination.copy_from_slice(source)",
+        "executor.digest_secret(&inputs, destinations,", "brynja_core::copy_secret_region(destination, source)",
         "report.accelerated_slots & !active != 0", "executor.quarantine()",
         "!core::ptr::eq(plan, self.plan)", "merge(Err(ParallelHashError::LeafIdentity), &[])",
         "merge(index, &bytes[..$width])?", "Output<'out>", "PhantomData<Cell<()>>",
@@ -255,7 +255,7 @@ BORROWED_TOKENS = {
 
 SCOPED_THREAD_TOKENS = {
     "execution/batch/in_place.rs": ("let scratch = Scratch(scratch)", "let _gate = self.inner.base.gate()?",
-        "clear_owned_region(output)", "output.copy_from_slice(secret.expose())", "root.merge_batch(leaves)",
+        "clear_owned_region(output)", "brynja_core::copy_secret_region(output, secret.expose())", "root.merge_batch(leaves)",
         "Selection::new(self.inner.base.config.root)?", "plan.leaf_count() > self.inner.base.config.max_leaves",
         "accelerated::$workspace::new(session).map_err(crypto)?", "#[cfg(test)]\nmod tests;"),
     "execution/batch/in_place/worker.rs": ("struct GroupSlots(Vec<[[u8; 64]; leaf::CAPACITY]>)",
@@ -275,7 +275,7 @@ SCOPED_THREAD_TOKENS = {
         "if failure.is_none()", "ensure_live(cancel)?", "let result = job.execute(destination)?",
         "failure.map_or(Ok(()), Err)", "#[cfg(test)]\nmod tests;"),
     "execution/in_place.rs": ("let scratch = Scratch(scratch)", "let _gate = self.inner.gate()?",
-        "clear_owned_region(output)", "output.copy_from_slice(secret.expose())", "live(cancellation)?",
+        "clear_owned_region(output)", "brynja_core::copy_secret_region(output, secret.expose())", "live(cancellation)?",
         "Selection::new(self.inner.config.root)?", "plan.leaf_count() > self.inner.config.max_leaves",
         ".with_bits(&plan, request.customization, |mut root|", "|leaf| root.merge(leaf)",
         "accelerated::$workspace::new(session).map_err(crypto)?", "Mode::Require(None) => Err(Error::Unavailable)",

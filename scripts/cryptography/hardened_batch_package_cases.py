@@ -101,6 +101,7 @@ def examples(roots):
 
 
 def compiled_mutants(simd):
+    yield from parallel_copy_mutants()
     for family in CPU:
         base = f'src/{family}_hardened_batch/'
         drop_test = ('every_region_clears_explicitly_and_on_drop' if family == 'keccak'
@@ -204,3 +205,42 @@ def compiled_mutants(simd):
     yield ('brynja-hash-parallel-std', 'src/execution/batch/worker.rs',
            'self.clear();\n        #[cfg(test)]', '// omitted clear\n        #[cfg(test)]',
            'execution::batch::worker::tests::storage_drop_clears_all_live_transport_capacity', 1)
+
+
+def parallel_copy_mutants():
+    """Each borrowed transfer must be load-bearing in a real output comparison."""
+    for path, test in (
+        ('execution/batch/transfer.rs', 'execution::batch::transfer::tests::transfer_clears_source_and_all_transport_capacity'),
+        ('execution/batch/scoped.rs', 'execution::batch::scoped::tests::scoped_batch_portable128'),
+        ('execution/collector.rs', 'execution::stream::tests::borrowed_updates_and_tail_preserve_planned_digest'),
+    ):
+        expression = ('brynja_core::copy_secret_region(output, secret.expose())' if 'collector' in path
+                      else 'brynja_core::copy_secret_region(destination, source)')
+        yield ('brynja-hash-parallel', 'src/' + path, expression,
+               'Ok::<(), brynja_core::SecretMemoryError>(())', test, 1)
+    for path, error, test in (
+        ('execution/stream.rs', 'Error::State', 'execution::stream::tests::borrowed_updates_and_tail_preserve_planned_digest'),
+        ('execution/stream/batch.rs', 'RootError::State', 'execution::stream::batch::tests::portable_chunk_bit_and_xof_campaign'),
+    ):
+        for destination, source in (
+            (f'self.workspace.get_mut(used..end).ok_or({error})?', f'input.get(..take).ok_or({error})?'),
+            (f'core::slice::from_mut(stream.workspace.get_mut(used).ok_or({error})?)', 'core::slice::from_ref(last)'),
+        ):
+            expression = f'brynja_core::copy_secret_region(\n                {destination},\n                {source},\n            )'
+            yield ('brynja-hash-parallel', 'src/' + path, expression,
+                   'Ok::<(), brynja_core::SecretMemoryError>(())', test, 1)
+    for source in ('input.get(..take).ok_or(Error::StateConsumed)?',
+                   'input.get(complete..).ok_or(Error::InvalidBitString)?'):
+        expression = ('brynja_core::copy_secret_region(\n'
+                      '                self.block.get_mut(used..end).ok_or(Error::StateConsumed)?,\n'
+                      f'                {source},\n            )')
+        yield ('brynja-hash-parallel', 'src/hardened_in_place/core_state.rs', expression,
+               'Ok::<(), brynja_core::SecretMemoryError>(())',
+               'hardened_in_place::tests::scoped_parallel128_matches_and_clears', 1)
+    for module, test in (
+        ('execution/batch/in_place', 'execution::batch::in_place::tests::portable_threads_bits_outputs_and_counters'),
+        ('execution/in_place', 'execution::in_place::tests::scoped_execution_fixed_xof_domains_and_zero_output'),
+    ):
+        yield ('brynja-hash-parallel-std', 'src/' + module + '.rs',
+               'brynja_core::copy_secret_region(output, secret.expose())',
+               'Ok::<(), brynja_core::SecretMemoryError>(())', test, 1)

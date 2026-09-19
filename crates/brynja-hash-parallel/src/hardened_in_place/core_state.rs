@@ -125,10 +125,11 @@ impl<'scope, S: State> Core<'scope, S> {
                 .ok_or(Error::StateConsumed)?;
             let take = available.min(input.len());
             let end = used.checked_add(take).ok_or(Error::MessageTooLong)?;
-            self.block
-                .get_mut(used..end)
-                .ok_or(Error::StateConsumed)?
-                .copy_from_slice(input.get(..take).ok_or(Error::StateConsumed)?);
+            brynja_core::copy_secret_region(
+                self.block.get_mut(used..end).ok_or(Error::StateConsumed)?,
+                input.get(..take).ok_or(Error::StateConsumed)?,
+            )
+            .map_err(|_| Error::StateConsumed)?;
             self.set_used(end)?;
             input = input.get(take..).ok_or(Error::StateConsumed)?;
             if end == self.block.len() {
@@ -166,10 +167,11 @@ impl<'scope, S: State> Core<'scope, S> {
             self.update_inner(input.get(..complete).ok_or(Error::InvalidBitString)?)?;
             let used = self.used()?;
             let end = used.checked_add(1).ok_or(Error::MessageTooLong)?;
-            self.block
-                .get_mut(used..end)
-                .ok_or(Error::StateConsumed)?
-                .copy_from_slice(input.get(complete..).ok_or(Error::InvalidBitString)?);
+            brynja_core::copy_secret_region(
+                self.block.get_mut(used..end).ok_or(Error::StateConsumed)?,
+                input.get(complete..).ok_or(Error::InvalidBitString)?,
+            )
+            .map_err(|_| Error::StateConsumed)?;
             self.set_used(end)?;
             return self.flush(tail.valid_bits_in_last_byte());
         }

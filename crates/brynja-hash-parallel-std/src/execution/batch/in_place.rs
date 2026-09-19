@@ -76,7 +76,8 @@ impl Executor {
             .get_mut(..output.len())
             .ok_or(hash::execution::Error::OutputLength)?;
         let (secret, report) = self.compute_secret(request, stage, valid, cancellation)?;
-        output.copy_from_slice(secret.expose());
+        brynja_core::copy_secret_region(output, secret.expose())
+            .map_err(|_| hash::execution::Error::State)?;
         Ok(report)
     }
     /// Secret byte output; errors clear the entire supplied destination.

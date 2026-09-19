@@ -63,6 +63,19 @@ def scoped_negatives():
             (f'fn probe(s: {accelerated}) {{ let _ = s.leaf_count(); }}', 'E0599'),
             (f'fn probe(s: {accelerated}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
         ]
+        xof = f'crate::execution::in_place::ParallelHashXof{strength}'
+        reader = xof + 'Reader'
+        for name in (xof + "<'static, 'static>", xof + "Workspace<'static>", reader + "<'static, 'static>"):
+            for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                cases.append((f'fn bound<T:{bound}>() {{}} fn probe() {{ bound::<{name}>(); }}', 'E0277'))
+        cases += [
+            (f'fn probe(s: {xof}) {{ let _ = s.finalize_xof(); s.cancel(); }}', 'E0382'),
+            (f'fn probe(r: {reader}) {{ let _ = r.squeeze_final_bits_secret(&mut [], 0); r.cancel(); }}', 'E0382'),
+            (f'fn probe(mut r: {reader}) {{ let _ = r.squeeze_public(&mut []); }}', 'E0061'),
+            (f'fn probe(s: {xof}) {{ let _ = s.leaf_count(); }}', 'E0599'),
+            (f'fn probe(s: {xof}) {{ let _ = s.check_additional_bits(1); }}', 'E0599'),
+            (f'fn probe(r: {reader}) {{ let _ = r.leaf_count(); }}', 'E0599'),
+        ]
     return cases
 
 
@@ -198,6 +211,21 @@ def main():
         # Additional live hardware regressions in an explicitly required static
         # lane. Generic builds still run all existing portable mutation cases.
         if os.environ.get('BRYNJA_REQUIRE_SCOPED_PARALLEL') == '1':
+            cases += [
+                ('brynja-hash-parallel', 'src/hardened_in_place/accelerated/xof.rs', before, after,
+                 ['--test', 'scoped_accelerated', 'xof'])
+                for before, after in (
+                    ('self.inner.core.finish_xof(tail)?', 'self.inner.core.finish_xof(byte_string(&[])?)?'),
+                    ('self.inner.update(input)', 'self.inner.update(&[])'),
+                    ('self.inner.public(output)', 'Ok(())'),
+                    ('self.inner.final_public(output, valid)', 'self.inner.final_public(output, 8)'),
+                    ('self.inner.final_secret(output, valid)', 'self.inner.final_secret(output, 8)'),
+                )
+            ]
+            cases += [
+                ('brynja-hash-parallel', 'src/hardened_in_place/core_state.rs',
+                 'self.finish(tail, 0)', 'self.finish(tail, 8)', ['--test', 'scoped_accelerated', 'xof']),
+            ]
             cases += [
                 ('brynja-hash-parallel', 'src/hardened_in_place/accelerated/backend.rs', before, after, ['--test', 'scoped_accelerated'])
                 for before, after in (

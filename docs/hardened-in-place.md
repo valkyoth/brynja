@@ -235,10 +235,21 @@ not yet passed to a state method. Non-authorizing `root_report`/`leaf_report`
 contain route/health only. The new `ParallelHashError::Execution` retains the
 underlying fixed failure category, not secret data.
 
-The accelerated scoped API is fixed-output and sequential only. Scoped
-accelerated XOF, scheduled collectors and thread handoff still need the broader
-ownership work. Registers, spills and compiler-created copies remain outside
-this checkpoint's guarantee; `panic = "abort"` cannot run scope destructors.
+The accelerated `ParallelHashXof128Workspace`/`ParallelHashXof256Workspace`
+share the same root/leaf construction and four scope entry points. Consuming
+XOF finalization clears absorption metadata, leaf output and block, retaining
+only root and staging borrows in the reader. The completed leaf authority is
+not used for squeezing; root revocation rejects even empty reads without
+fallback. Public read errors preserve destinations, secret read errors clear
+them, and both terminate the reader. Mixed public/secret reads and consuming
+partial-bit reads use the same scoped output guard as portable XOF. Staging
+bounds each public read, not the total stream, and does not limit secret reads.
+Scope cleanup covers cancelled, forgotten and unwinding readers.
+
+Scoped acceleration remains sequential. Scheduled collectors and thread handoff
+still need the broader ownership work. Registers, spills and compiler-created
+copies remain outside this checkpoint's guarantee; `panic = "abort"` cannot run
+scope destructors.
 
 ## TupleHash integer framing
 

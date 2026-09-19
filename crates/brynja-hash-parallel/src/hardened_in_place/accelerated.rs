@@ -1,4 +1,4 @@
-//! Scoped fixed-output ParallelHash with explicitly supplied hardened root and
+//! Scoped fixed-output ParallelHash and ParallelHashXOF with supplied hardened root and
 //! leaf Keccak sessions. Both may borrow the same authority; each remains checked
 //! independently. No supplied session ever falls back to portable work.
 //!
@@ -9,7 +9,8 @@
 //! Setup failure skips the callback and cannot clear captured output destinations.
 //! Block and supplied scratch clear on every scope exit. Forgotten handles and
 //! recoverable unwind are covered, not abort, caller input, registers or spills.
-//! Scoped accelerated XOF and scheduled/threaded APIs remain separate follow-up work.
+//! XOF readers retain root authority only after leaf completion. Public staging
+//! bounds each read, not total output. Scoped scheduled/threaded APIs remain follow-up work.
 //!
 //! ```
 //! use brynja_hash_parallel::{ParallelHashError, ParallelHashSecretOutput,
@@ -33,6 +34,11 @@ use brynja_hash_sha3::hardened_execution::{KeccakSession, Report, in_place as ap
 
 mod backend;
 mod fixed;
+mod xof;
 pub use fixed::{
     ParallelHash128, ParallelHash128Workspace, ParallelHash256, ParallelHash256Workspace,
+};
+pub use xof::{
+    ParallelHashXof128, ParallelHashXof128Reader, ParallelHashXof128Workspace, ParallelHashXof256,
+    ParallelHashXof256Reader, ParallelHashXof256Workspace,
 };

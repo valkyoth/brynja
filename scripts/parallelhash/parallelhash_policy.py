@@ -21,6 +21,7 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "hardened_in_place/reader.rs", "hardened_in_place/reader/tests.rs",
     "hardened_in_place/xof.rs", "hardened_in_place/xof/tests.rs",
     "hardened_in_place/accelerated.rs", "hardened_in_place/accelerated/backend.rs", "hardened_in_place/accelerated/fixed.rs",
+    "hardened_in_place/accelerated/xof.rs",
 ))
 STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
@@ -42,6 +43,7 @@ TESTS = (
     PORTABLE / "tests/execution_stream.rs",
     STD / "tests/execution.rs",
     PORTABLE / "tests/scoped_accelerated.rs",
+    PORTABLE / "tests/scoped_accelerated/xof.rs", PORTABLE / "tests/scoped_accelerated/xof_lifecycle.rs",
 )
 MANIFESTS = (PORTABLE / "Cargo.toml", STD / "Cargo.toml")
 PUBLIC = (
@@ -107,6 +109,17 @@ def require(text: str, token: str, label: str) -> None:
 
 
 BORROWED_TOKENS = {
+    "hardened_in_place/accelerated/xof.rs": (
+        "inner: fixed::$fixed_workspace<'authority>", "inner: fixed::$fixed_state<'scope, 'authority>",
+        "fixed::$fixed_workspace::new(root, leaf)?", "self.inner.root_report()", "self.inner.leaf_report()",
+        "impl for<'scope> FnOnce($state<'scope, 'authority>) -> R",
+        "self.inner.with(block, customization,", "self.inner.with_bits(block, customization,",
+        "self.inner.with_scratch(block, customization, scratch,", "self.inner.with_bits_and_scratch(block, customization, scratch,",
+        "self.inner.core.finish_xof(tail)?",
+        "inner: Output<BackendOutput<api::$backend_reader<'scope, 'authority>, &'scope mut [u8]>>",
+        "self.inner.public(output)", "self.inner.secret(output)", "self.inner.final_public(output, valid)",
+        "self.inner.final_secret(output, valid)", "ParallelHashPublicDeclassification", "pub fn cancel(self)",
+    ),
     "hardened_in_place/accelerated/fixed.rs": (
         "sponge: api::$storage<'authority>", "leaf: api::$leaf<'authority>", "metadata: Metadata", "stage: [u8;168]",
         "pub fn new(root: KeccakSession<'authority>, leaf: KeccakSession<'authority>)",

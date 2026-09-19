@@ -8,6 +8,12 @@ use brynja_hash_parallel::{
 };
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
+mod scoped_accelerated {
+    use super::*;
+    mod xof;
+    mod xof_lifecycle;
+}
+
 fn owner() -> Result<Option<Authority>, Box<dyn std::error::Error>> {
     let kernel = if cfg!(target_arch = "aarch64") {
         Kernel::ArmKeccak

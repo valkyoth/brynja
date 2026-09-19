@@ -14,8 +14,10 @@ No crates are selected for publication.
   secret/public and consuming final-bit output, with immediate absorption-region
   clearing and terminal read errors. Scoped accelerated fixed-output workspaces
   now bind separate hardened root/leaf sessions and borrowed public staging,
-  with checked revocation and no fallback. Accelerated XOF, scheduled/threaded
-  ownership and complete compiler-copy/register/spill qualification remain unfinished.
+  with checked revocation and no fallback. Accelerated XOF readers retain root
+  authority after leaf completion, with terminal errors, mixed public/secret
+  reads and consuming final-bit output. Scheduled/threaded ownership and complete
+  compiler-copy/register/spill qualification remain unfinished.
 
 - Add scoped accelerated TupleHashXOF128/256 workspaces and readers. Supplied
   Keccak authority stays borrowed through incremental and partial-bit output;

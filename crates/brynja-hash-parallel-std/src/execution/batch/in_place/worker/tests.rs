@@ -126,7 +126,20 @@ macro_rules! tests {
                     },
                     &mut spawner,
                 );
-                assert_eq!(result, Err(expected));
+                if cancel.is_some() {
+                    // Cancellation can be observed at the scheduler boundary
+                    // or inside a leaf's Control::poll, depending on scheduling.
+                    // Both exact errors preserve the original failure layer.
+                    let mut cancelled = || true;
+                    let inner = leaf::Control::new(64, &mut cancelled)
+                        .poll()
+                        .err()
+                        .ok_or(Error::Limits)?;
+                    let leaf_error = Error::Batch(leaf::Error::Hash(inner));
+                    assert!(result == Err(expected) || result == Err(leaf_error));
+                } else {
+                    assert_eq!(result, Err(expected));
+                }
                 assert_eq!(finished.load(Ordering::SeqCst), spawner.started);
                 assert_eq!(
                     merged,

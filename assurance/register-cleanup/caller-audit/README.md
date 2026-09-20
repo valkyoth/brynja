@@ -404,6 +404,41 @@ They do not snapshot worker registers, inspect OS-reclaimed stacks or prove
 whole-callee cleanup. F1 remains open for those separate qualification limits
 and the final retest. No release-gate command or acceptance criterion changes.
 
+### Retained production assembly boundary recheck
+
+The threaded record contains actual dependency-crate assembly, emitted with
+the consumer's unified features. It can therefore recheck selected private
+normal-return boundaries without compiling them again. The new development
+driver first validates the record's current source closure, full matrix and
+artifact hashes through the worker-handoff checker, then uses the **existing**
+assembly validators rather than inventing weaker copies.
+
+```sh
+python3 assurance/register-cleanup/check_recorded_boundaries.py target/caller-residue-tcj2wmrb/observations.json
+python3 assurance/register-cleanup/test_recorded_boundaries.py target/caller-residue-tcj2wmrb/observations.json
+```
+
+All 88 inspections pass: core secret copy, mask, XOR, predicate and difference;
+the hash-core predicate; and scalar SHA-256, SHA-512, Keccak, SHA-1 and MD5,
+each across both compilers, architectures and debug/release profiles. The
+validators check their defined opaque assembly boundary, working-register
+cleanup and compiler instructions outside that boundary. They do not qualify
+arbitrary calling functions or expand the supported architecture contract.
+
+The tests reject 440 assembly-text mutants: missing erasure markers, removed
+wipe instructions, loads during cleanup, loads after cleanup and stack spills.
+Missing/duplicate inventory checks also fail, and the test forbids subprocess
+execution to ensure inspection does not quietly rerun compilers or runtime tests.
+These are artifact-text regressions, not newly compiled algorithm mutants.
+
+The log `target/development-v02449/recorded-boundaries.log` has SHA-256
+`de60064a66f67a79f26662a64d1a2cd1d7d255efb4da8ba8186ade970a2c89bf`.
+It records the observation-record digest and the exact loaded inspector source
+hashes separately from the retained Rust inputs. No new native execution,
+Windows/Apple qualification or release receipt is inferred. High-level caller
+copies, error/verification paths and final platform qualification remain
+separate; F1 and the unchanged release workflow retain their current status.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this

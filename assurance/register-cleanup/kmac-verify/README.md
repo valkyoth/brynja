@@ -498,3 +498,39 @@ platform qualification remain outside this checkpoint. Arm artifacts use QEMU;
 Windows evidence is not supplied here. No production code, release gate or
 retained runtime record changed. F1 remains open for the remaining qualification
 and fresh independent retest.
+
+## Optimized volatile-clear geometry
+
+```sh
+python3 assurance/register-cleanup/check_volatile_clear.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_volatile_clear.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All eight retained optimized `zeroize_region_volatile` bodies pass 2,112 modeled
+length cases. The inspector evaluates the actual LLVM loops, including x86's
+remainder loop and eight-byte unrolling and Arm's byte loop. Every byte in the
+original slice is addressed once, in order, by a volatile zero-byte store before
+exactly one sequentially consistent single-thread compiler fence. Empty input
+performs no store and still reaches the fence. The closed instruction grammar
+does not permit payload loads, extra calls or ordinary nonvolatile stores.
+
+The cases cover every length from 0 through 257, plus 511/512/513 and
+1023/1024/1025, using a nonzero, unaligned symbolic base. All emitted blocks are
+visited across those cases. Pointer geometry is checked against the original
+slice, arithmetic flags are checked for the modeled values, and loop phis use
+simultaneous predecessor values. This is bounded interpretation, not a formal
+proof for every valid slice length or a complete LLVM semantics implementation.
+
+All 312 retained-LLVM mutations reject, including omitted/nonvolatile/nonzero
+stores, repeated or shifted addresses, broken strides/remainders, inverted
+branches, and missing, weakened or premature fences. Sixteen harmless SSA-name
+and phi-predecessor-order controls pass. Tests forbid subprocess execution. Log:
+`target/development-v02449/volatile-clear.log`, SHA-256
+`eeff5899bc7c7d67fcccfc27e3c87945b789a1f572755e0dc538ad2f46330715`.
+
+This examines the optimized clearing callee separately from the previous caller
+checks. It does not qualify the debug callee, final assembly, interruption/abort
+behavior, whole-call register/spill erasure, or native Arm/Windows platforms.
+The retained Arm artifacts remain QEMU-based. No production code, release gate
+or retained runtime record changed; no production defect was established.
+F1 remains open pending remaining qualification and fresh independent retest.

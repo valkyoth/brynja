@@ -600,3 +600,39 @@ interruption/abort behavior and native Arm/Windows qualification remain outside
 this checkpoint. Arm artifacts remain QEMU-based. No production code, release
 gate or retained runtime record changed. F1 and root `PENTEST.md` remain open
 pending remaining qualification and fresh independent retest.
+
+## Debug clearing entry and byte-write assembly
+
+```sh
+python3 assurance/register-cleanup/check_debug_clear_assembly.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_debug_clear_assembly.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All eight retained debug builds pass paired entry/write-helper assembly contracts
+and the previously described 416 LLVM length cases. The 416 normalized machine
+instructions/labels preserve the iterator's returned destination, pass literal
+zero to the write helper, and preserve that byte and address across its pointer
+check before the byte store. The entry requests the SeqCst compiler fence after
+iteration ends. No payload loads or extra calls are admitted in these two bodies;
+their debug stack traffic contains descriptors, the zero write value, public
+source-location metadata and ABI frame state, not imported old payload bytes.
+This does not erase or qualify pre-existing caller values in saved ABI registers.
+
+Calls bind to exact helper identities from the associated LLVM closure. Only
+known debug/unwind directives, block labels, symbol names and whitespace are
+normalized. The actual iterator, fence and pointer-precondition machine bodies
+are not checked here; the existing LLVM model evaluates iterator/fence behavior
+and assumes successful valid-pointer precondition return. This is not a full
+assembly interpreter or a formal LLVM-to-machine equivalence proof.
+
+All 1,016 instruction/call/identity mutations and 48 function-extraction mutations
+reject, including instructions hidden after debug directives. Forty-four harmless
+spacing, label and debug-location controls pass. Tests prohibit subprocess
+execution. Log: `target/development-v02449/debug-clear-assembly.log`, SHA-256
+`f56a0d4cef39a8f6cffc95648115d769c1bc5237d331d1ad475bc445a0100554`.
+
+No production code, retained runtime evidence or release gate changed. These
+retained-artifact checks are not new machine-code execution, arbitrary-compiler
+qualification, whole-call register/spill erasure or interruption/abort coverage.
+Arm remains QEMU-based; fresh native Arm/Windows qualification and independent
+retest remain outstanding. F1 and root `PENTEST.md` remain open.

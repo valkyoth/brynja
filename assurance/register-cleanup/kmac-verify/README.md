@@ -827,3 +827,47 @@ this normal-return inspection. Arm artifacts remain QEMU-based; no new runtime
 execution or native Arm/Windows qualification is claimed. Production, retained
 runtime records and release gates are unchanged. F1 and root `PENTEST.md` remain
 open pending remaining qualification and independent retest.
+
+## Instantiated guard glue and debug verifier cleanup paths
+
+```sh
+python3 assurance/register-cleanup/check_kmac_guard_paths.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_guard_paths.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The compiler-generated guard drop glue is distinct from the `Drop` method above.
+All sixteen retained LLVM/assembly glue definitions pass, covering 192 machine
+instructions and 32 modeled invocations. Debug glue receives the guard descriptor
+and forwards to its bound `Drop`; optimized glue receives the promoted metadata
+pointer directly and requests the complete ordered 1/64/1-byte regions. Its
+nonnull assumption is checked, not treated as a runtime pointer validator. The
+corresponding assembly uses the exact previously reviewed forwarding sequences.
+
+All 24 retained debug verifier bodies also pass an explicit control-flow check:
+2,718 reachable blocks and 120 selected operation sites. Starting at the unique
+guard initialization and at both normal/unwind successors of each selected
+operation, every modeled return or resumed unwind has invoked the bound guard
+glue with the local cleanup descriptor. The five sites per body are two
+comparison accumulations, verdict conversion, full-byte secret reading and
+final-partial-byte secret reading. Their callees must have retained definitions.
+All branch outcomes are considered; loops converge over block/invocation states.
+Initialization must dominate every selected operation and guard invocation;
+those sites must also be reachable from the initialized region itself.
+Each selected start must retain a reachable return or resume, preventing vacuous
+success from an all-abort/all-loop replacement.
+
+Tests reject 376 glue LLVM, 628 glue assembly, 48 extraction and 744 caller-CFG
+mutations. Sixty-four comment/label/debug controls pass. Tests prohibit subprocess
+execution; these are artifact-text tests, not compiled or executed fault campaigns.
+Log: `target/development-v02449/kmac-guard-paths.log`, SHA-256
+`452df6fcb5338c79a9bb502402f107d9d90917915d2cf5b785d2fbc79e65e187`.
+
+Invocation does not establish successful cleanup: the CFG follows the glue's
+explicit unwind edge too. The known double-panic abort path is excluded, not
+treated as a cleanup success. This is not a termination, alias/provenance,
+implicit-unwind or whole-verifier machine-code proof. The initialized descriptor's
+provenance and optimized verifier caller CFG remain separate qualification work.
+No new runtime collection occurred; Arm remains QEMU-based and fresh native
+Arm/Windows evidence remains outstanding. Production, runtime records and release
+gates are unchanged. F1 and root `PENTEST.md` remain open pending the remaining
+qualification and independent retest.

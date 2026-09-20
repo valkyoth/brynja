@@ -788,3 +788,42 @@ No runtime campaign was repeated; production, runtime records and release gates
 are unchanged. Arm artifacts remain QEMU-based; fresh native Arm/Windows evidence
 and broader F1 qualification/retest remain outstanding. Root `PENTEST.md` remains
 open.
+
+## Scoped KMAC metadata cleanup assembly
+
+```sh
+python3 assurance/register-cleanup/check_kmac_metadata_assembly.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_metadata_assembly.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All sixteen retained configurations pass 72 function checks covering 956 machine
+instructions. These comprise the metadata wipe, metadata Drop, borrowed-guard
+Drop and core clearing wrapper, plus the separate debug emptiness helper.
+The preceding 96 LLVM cases are repeated, not reported as new runtime vectors.
+Exact function identities come from the hash-validated corresponding LLVM and
+assembly artifacts; the instruction contracts are explicit reviewed templates.
+
+The normal-return paths preserve the original metadata pointer, request the
+complete 1/64/1-byte regions, and retain the guard's descriptor dereference.
+Optimized wrappers tail-call the bound core clearer for the final byte; x86's
+indirect target is loaded from that exact symbol, not accepted as an arbitrary
+function pointer. Core wrappers forward the original pointer/length only when
+nonempty. Branches and compiler-private result-byte representations are checked.
+Payload bytes are not loaded by these wrappers. Their stack traffic comprises
+descriptors, public lengths/results and saved ABI state; saved pre-existing
+caller values are not claimed erased.
+
+All 3,088 instruction/callee/identity mutations and 216 function-extraction
+mutations reject; 200 spacing/label/debug-location/CFI controls pass. The previous
+1,728 LLVM cleanup mutations and 112 controls still pass. These are retained
+artifact-text tests, not compiled fault injection; subprocess execution is
+forbidden. Log: `target/development-v02449/kmac-metadata-assembly.log`, SHA-256
+`0328966fefb35a3bf86783cbdf1a44f42ad198704af1ff3deb43149991b28959`.
+
+This corroborates the cleanup argument handoff in LLVM and machine code. It does
+not prove destructor reachability, unwind correctness, arbitrary compiler
+equivalence or whole-call residue removal. CFI metadata is explicitly outside
+this normal-return inspection. Arm artifacts remain QEMU-based; no new runtime
+execution or native Arm/Windows qualification is claimed. Production, retained
+runtime records and release gates are unchanged. F1 and root `PENTEST.md` remain
+open pending remaining qualification and independent retest.

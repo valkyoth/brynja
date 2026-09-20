@@ -336,6 +336,37 @@ native Apple/Windows/Arm evidence or a release receipt. Full worker/caller spill
 inspection, additional failure/verification paths and final native qualification
 remain separate obligations. F1 stays open.
 
+### Single-kernel worker handoff MIR check
+
+`check_worker_handoffs.py` reuses the retained threaded record without rebuilding.
+It checks current source hashes and retained artifact hashes, requires the exact
+eight compiler/target/profile identities, and selects the two actual hosted
+single-leaf helpers, `leaf128` and `leaf256`. Starting at their direct borrowed
+workspace `execute` call, it follows both return and cleanup CFG edges. The
+active workspace and its borrowed alias cannot be copied, moved, escaped or
+reused; normal returns and recoverable unwinds must invoke that workspace's
+Drop. The compiler's bare `unreachable` terminator for invalid enum states is
+not a normal-return path and is not counted as cleanup. Construction-time copies
+precede secret processing and are outside this narrow post-call check.
+
+```sh
+python3 assurance/register-cleanup/check_worker_handoffs.py target/caller-residue-tcj2wmrb/observations.json
+python3 assurance/register-cleanup/test_worker_handoffs.py target/caller-residue-tcj2wmrb/observations.json
+```
+
+All sixteen helpers pass. The self-test rejects 256 mutations of their actual
+MIR, including each individual success/error/unwind Drop removal, owner copies,
+moves, escaped aliases, premature storage death, bypassed exits, cycles, missing
+unwind edges and wrong signatures. Six record regressions reject stale sources,
+wrong profiles/claims, missing/duplicate matrix rows and changed artifacts.
+These are **MIR mutations**, not newly compiled crypto mutants.
+
+This establishes the selected MIR handoff shape, not the destructor's machine
+code, callee internals, metadata erasure, compiler spills or register cleanup.
+It does not cover multibuffer worker closures or post-return operating-system
+thread teardown. No release command calls this development checker; the existing
+release gate and its evidence-reuse policy remain unchanged.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this

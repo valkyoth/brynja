@@ -458,3 +458,43 @@ modeled only for null discrimination, not as a numerical machine address.
 Arm artifacts still use QEMU; Windows is not qualified here. No production
 code, release gate or retained runtime record changed. F1 remains open pending
 remaining qualification and fresh independent retest.
+
+## Debug output completion and recoverable-unwind handoff
+
+```sh
+python3 assurance/register-cleanup/check_debug_output_finish.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_debug_output_finish.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Eight retained debug builds pass 560 modeled cases through their nine-function
+completion/helper closures, stopping at the volatile-clear boundary. Completed
+initialization transfers the original pointer and length into the returned
+owner, consumes the initializer's optional borrow, and does not request wiping
+the transferred output. Incomplete initialization returns the error and requests
+clearing the full original region exactly once. Missing owners reject without a
+wipe request. Progress metadata is not modified by completion.
+
+The model also injects failures before the initial descriptor accessor or the
+ownership-taking helper executes, and a missing-borrow result from that latter
+helper. On the selected recoverable-unwind paths, the actual emitted Drop glue
+and destructor forward the original buffer/length to cleanup and resume the
+original exception pointer and selector without returning an output descriptor.
+Every entry-function block except its unreachable and double-panic-abort blocks
+is visited across these cases. This is not every path through every helper.
+
+All 256 retained-LLVM mutations reject, covering omitted destructors, incorrect
+wipe ranges, broken ownership transfer, suppressed unwinds, and altered exception
+identities. Eight debug-metadata controls pass. The earlier debug-write campaign
+still rejects all 260 LLVM and 40 copy-assembly mutations, with 24 positive
+controls. Both mutation suites prohibit subprocess execution. Log:
+`target/development-v02449/debug-output-finish.log`, SHA-256
+`17f994b12f63d72dbc53faf4ffa4c3d3f39d15e67d5f40242eeb5f51d1059256`.
+
+Wiping is an opaque request in this model, not proof of volatile-callee erasure.
+Injected exceptions occur before the modeled helpers mutate the live owner;
+this does not claim arbitrary mid-helper interruption coverage. Double-panic
+abort, full LLVM/ABI semantics, whole-call register/spill cleanup and native
+platform qualification remain outside this checkpoint. Arm artifacts use QEMU;
+Windows evidence is not supplied here. No production code, release gate or
+retained runtime record changed. F1 remains open for the remaining qualification
+and fresh independent retest.

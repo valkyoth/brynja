@@ -10,6 +10,14 @@ UNKNOWN = object()
 MASK = (1 << 64) - 1
 
 
+class Unwind(Exception):
+    """Synthetic exception identity for selected recoverable-unwind paths."""
+
+    def __init__(self, value):
+        super().__init__('modeled recoverable unwind')
+        self.value = value
+
+
 @dataclass(frozen=True)
 class Pointer:
     region: str
@@ -128,6 +136,7 @@ class Model:
         params, graph = self.functions[name]
         require(len(params) == len(args), 'debug call argument count')
         env = dict(zip(params, args))
+        exception = None
         self.frames += 1
         frame = self.frames
         label = 'start'
@@ -191,6 +200,32 @@ class Model:
                     pair = list((UNKNOWN, UNKNOWN) if pair is UNKNOWN else pair)
                     pair[int(found[3])] = self.typed(found[2], env)
                     val = tuple(pair)
+                elif op.startswith('invoke '):
+                    require(index == len(lines) - 2, 'invoke followed by terminal edges')
+                    normal, unwind = shared.edges(lines[index + 1])
+                    symbol = re.search(shared.comparison.SYMBOL, op)
+                    require(symbol is not None, 'named direct debug invoke')
+                    call_args = shared.comparison.arguments(op, symbol.end())
+                    try:
+                        val = self.run(symbol[1], [self.typed(a, env) for a in call_args], depth + 1)
+                    except Unwind as error:
+                        exception = error.value
+                        label = unwind
+                    else:
+                        if dest is not None:
+                            env[dest] = val
+                        label = normal
+                    break
+                elif op == 'landingpad { ptr, i32 }':
+                    require(exception is not None and index + 1 < len(lines)
+                            and lines[index + 1] == 'cleanup', 'recoverable cleanup landingpad')
+                    val = exception
+                elif op == 'cleanup':
+                    require(index > 0 and lines[index - 1].endswith('landingpad { ptr, i32 }'),
+                            'landingpad cleanup clause')
+                elif op.startswith('resume { ptr, i32 } '):
+                    require(index == len(lines) - 1, 'terminal exception resume')
+                    raise Unwind(self.value(op.rsplit(' ', 1)[1], env))
                 elif op.startswith('call '):
                     symbol = re.search(shared.comparison.SYMBOL, op)
                     require(symbol is not None, 'named direct debug call')

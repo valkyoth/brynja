@@ -321,3 +321,33 @@ does not prove that the callee erases memory. Double-panic aborts, debug bodies,
 all compiler spills, native Arm/Windows and broader platform qualification
 remain outside this checkpoint. No new runtime vulnerability was established;
 no production code, release gate or runtime record changed. F1 remains open.
+
+## Portable fill-loop geometry
+
+```sh
+python3 assurance/register-cleanup/check_sha3_fill.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_fill.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 optimized `fill_staging` bodies pass 42,704 modeled cases across the
+two rate instantiations and eight retained builds. A closed LLVM instruction
+interpreter compares the emitted loop with an independently written geometry
+model: checked request/cursor bounds, exact permutation and scratch-clear
+arguments/order, state-to-staging slice ranges, copy failures, cursor commits
+and error returns. Its only permitted direct load/store address is the owner's
+cursor byte; payload copying remains a borrowed call. A permutation requests
+clearing of all three scratch regions before copying output.
+
+The campaign includes every count from 0 through 169 at selected cursor
+boundaries, all 256 cursor-byte values at selected lengths (including `u64::MAX`),
+and selected first/second-copy failures. It is not the full Cartesian product
+or a formal all-input proof. Twelve hand-written model examples and 528 LLVM
+address/copy/permutation/clear/control mutations pass/reject as expected. Tests
+forbid subprocess execution. Log: `target/development-v02449/sha3-fill.log`,
+SHA-256 `8bfac5d98dc7c554966e3d2435f1197053930d926d13f1c7980eba5aed91939c`.
+
+This does not establish the permutation, copy or clear callee's implementation,
+debug/accelerated producers, entire caller spill behavior, or native-platform
+qualification. Arm evidence remains QEMU execution. No production defect was
+found; production, release gates and the retained runtime record are unchanged.
+F1 and the independent-retest requirement remain open.

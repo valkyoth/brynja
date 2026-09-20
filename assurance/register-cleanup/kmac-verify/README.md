@@ -1184,3 +1184,34 @@ No compiler/runtime campaign was rerun; tests forbid subprocess execution.
 Production, retained runtime records and release gates are unchanged. Native
 Arm/Windows qualification and independent retest remain outstanding; F1 and
 root `PENTEST.md` remain open.
+
+## Portable final-reader result handoff
+
+```sh
+python3 assurance/register-cleanup/check_kmac_final_adapter.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_final_adapter.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 portable final-reader adapters actually called by the retained optimized
+verifiers pass checks of 48 selected blocks. The reader receives the original
+state and lifecycle flag; its distinct 24-byte result slot supplies the error
+discriminator. Only the non-error edge may copy the complete result into the
+adapter's caller-owned return slot. The error path cannot reach that copy or
+reenter the reader. After the copy, only the reviewed local lifetime ends and
+return are permitted. Selected cSHAKE final-reader aliases must bind to a defined
+SHAKE reader of the matching strength and reviewed result ABI.
+
+All 432 LLVM mutations and six alias regressions reject; 48 SSA-name, label and
+comment controls pass. The preceding 1,152 reader-result mutations and 72 controls
+also pass, as do the SHA-3 wrapper's 160 mutations and eight core-binding
+regressions. Log: `target/development-v02449/kmac-final-adapter.log`, SHA-256
+`77e5eb23319661fcf6633b7a6d4be6e00eaf21686a282f132d38ea84cf841092`.
+
+The accelerated verifier invokes its final reader directly; unused portable
+adapter code is not counted as accelerated coverage. This checks successful
+descriptor handoff, not output-constructor or reader semantics, exact returned
+bytes/length, all error cleanup/encoding, alias effects or register/spill erasure.
+These are retained compiler-private layouts, not stable ABI guarantees. Tests
+forbid subprocess execution; production, runtime records and release gates are
+unchanged. F1 and root `PENTEST.md` remain open for remaining qualification and
+independent retest, including fresh native Arm/Windows evidence.

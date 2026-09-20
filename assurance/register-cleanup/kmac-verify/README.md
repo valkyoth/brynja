@@ -1003,3 +1003,46 @@ separation remains an assumption, not a new alias proof. Arm remains QEMU-based;
 fresh native Arm/Windows qualification and independent retest remain outstanding.
 Production, retained runtime records and release gates are unchanged. F1 and
 root `PENTEST.md` remain open.
+
+## Successful metadata transfer into verification
+
+```sh
+python3 assurance/register-cleanup/check_kmac_metadata_transfer.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_metadata_transfer.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 24 retained optimized finish/verifier pairs pass a linked metadata-transfer
+check: 84 success-result field stores and 48 matching discriminator decisions.
+The callee stores the metadata pointer loaded from its original Core into the
+last pointer field of the observed 24/32-byte result. The caller passes a bounded
+matching result slot, tests that slot's returned discriminator and extracts its
+matching metadata field. The prior verifier inventory links that extracted owner
+to the difference byte at metadata offset 65.
+
+The success branch must be the non-error edge of the actual tested discriminator;
+the opposite callee edge writes a recognized error result. The value written into
+the success result must be the value tested. Result fields have the reviewed
+nonoverlapping layouts, with one metadata store and no overlapping later stores.
+The callee's small transfer/state-drop/return diamond permits no further output
+writes or unreviewed calls. On the caller side, the interval from finish return
+through metadata extraction rejects writes, unreviewed calls and premature result
+lifetime end. The accelerated reader's 15-byte descriptor copy is allowed only
+from result offset 9 into a distinct bounded local allocation, not back into the
+result or across its metadata field.
+
+All 996 callee and 504 caller mutations reject; 144 owner-name, label and comment
+controls pass. Mutations cover wrong owners/fields, overlapping stores, mismatched
+discriminators, inverted branches, altered extraction, result clobbering and wrong
+callee bindings. The previous 3,816 finish-path and 1,320 Core-destructor mutations
+and 96 controls remain green. Subprocess execution is forbidden; no new runtime
+or compilation campaign occurred. Log:
+`target/development-v02449/kmac-metadata-transfer.log`, SHA-256
+`c2bcfda48ee9e22d278a8b414094e1b717c7705a822b815fed1acfd7507cd30a`.
+
+This is a bounded metadata descriptor handoff, not a proof of the reader fields'
+contents, earlier opaque-callee/alias effects, comparison-byte provenance,
+implicit unwinds or machine register/spill clearing. Compiler-private layouts
+are not stable Rust ABI promises. Arm artifacts remain QEMU-based; native
+Arm/Windows qualification and independent retest remain outstanding. Production,
+runtime records and release gates are unchanged. F1 and root `PENTEST.md` remain
+open pending remaining qualification and retest.

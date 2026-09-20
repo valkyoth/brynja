@@ -1215,3 +1215,38 @@ These are retained compiler-private layouts, not stable ABI guarantees. Tests
 forbid subprocess execution; production, runtime records and release gates are
 unchanged. F1 and root `PENTEST.md` remain open for remaining qualification and
 independent retest, including fresh native Arm/Windows evidence.
+
+## Portable final-reader input forwarding
+
+```sh
+python3 assurance/register-cleanup/check_kmac_final_input.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_final_input.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 retained optimized portable adapters pass checks binding their constructor
+call to the defined SHA-3 `Fips202Output::new` symbol and result ABI. The original
+destination pointer, length and valid-bit count are forwarded unchanged. The
+constructor result is tested before reader entry; the rejected-result edge
+cannot reach the reader or reenter the constructor. Only local allocations and
+lifetime markers may precede construction.
+
+A bounded opaque-byte provenance model follows all 32 descriptor bytes through
+the selected success path. Both scalar stores and the 24 total tail copies
+(including Arm's intermediate staging) must preserve their original positions.
+The model rejects unknown calls, overlapping or missing writes, out-of-bounds
+accesses and reads after a local lifetime ends. The actual reader argument must
+be the complete forwarded descriptor, not the constructor's expired result slot.
+
+All 640 LLVM mutations and six constructor-binding regressions reject; 48
+SSA-name, label and comment controls pass. The previous result-handoff tests
+also pass: 432 mutations, six alias regressions and 48 controls. Log:
+`target/development-v02449/kmac-final-input.log`, SHA-256
+`b69c98db4949e2c4219f4dc53d8cf7550e86f97fb8cd2040f2f90d00743a5ce9`.
+
+Opaque byte provenance is not a claim that padding is initialized, nor a proof
+of constructor validity arithmetic, reader semantics, all error/unwind cleanup
+or register/spill erasure. Compiler-private layouts are not stable ABI promises.
+Accelerated readers are not counted as portable adapter coverage. Tests forbid
+subprocess execution; production, retained runtime records and release gates
+are unchanged. F1 and root `PENTEST.md` remain open for remaining qualification
+and independent retest; Arm execution remains QEMU, not fresh native evidence.

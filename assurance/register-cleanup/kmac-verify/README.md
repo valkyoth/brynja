@@ -382,3 +382,38 @@ caller spill footprint, or native-platform behavior. These checks reuse
 native x86 and Arm/QEMU artifacts, not fresh native Arm/Windows evidence.
 Production and release gates are unchanged. F1 remains open pending the
 remaining qualification and fresh independent retest.
+
+## Accelerated reader admission and output counter
+
+```sh
+python3 assurance/register-cleanup/check_read_counter.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_read_counter.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Four optimized builds pass 1,328 modeled preflight/commit cases. The checker
+first reuses the read-loop boundary inspection, then interprets the entry and
+counter code. Failed/non-squeezing owners reject before session checks;
+otherwise the original session is checked before output-counter admission.
+Overflow rejects without committing the counter. Accepted empty output returns
+directly, while accepted nonempty output reaches the data loop. On the modeled
+successful-loop continuation, the new 128-bit count is encoded into exactly
+the original 16-byte little-endian counter field.
+
+Cases include all 128 single-bit counter values, public-length bit/boundary
+cases through bit 62, exact-maximum addition, overflow, a mixed-byte value,
+terminal flags and revoked-session results. Vector insertion/shuffle/shift
+lowering is evaluated rather than checked only for a store's presence. The
+model rejects sampled violations of `nuw`, `nsw` and disjoint arithmetic
+assumptions. All 116 LLVM mutations reject; two valid post-admission `nuw`
+strengthening controls pass. Subprocess execution is forbidden. Log:
+`target/development-v02449/read-counter.log`, SHA-256
+`53345ca49f76510397855c6b570261ed098e7c958475b44dcf970cc4a8955cfa`.
+
+The byte-processing loop is checked separately, not simulated here: counter
+commit evaluation explicitly assumes successful loop completion. Session
+internals and a throwing session check are not modeled. This is bounded
+artifact analysis, not an all-input formal proof, full LLVM semantics, debug
+qualification, whole-call spill erasure or native-platform evidence. Arm
+artifacts remain QEMU-based. No production code, release gate or retained
+runtime record changed. F1 remains open pending remaining qualification and
+fresh independent retest.

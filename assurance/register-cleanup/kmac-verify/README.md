@@ -178,3 +178,31 @@ are ignored for descriptor-access classification, not proven unreachable by a
 CFG analysis. This is not a proof of alias safety, output-producer effects,
 result-slot contents, machine-code spill cleanup or erasure. Those obligations,
 native qualification and fresh retest remain open; no release gate changed.
+
+## Optimized initialization-to-output handoff
+
+```sh
+python3 assurance/register-cleanup/check_secret_output_finish.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_secret_output_finish.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The retained `SecretRegionInitialization::finish` code passes in all eight
+optimized configurations. A closed instruction interpreter follows its absent,
+complete and incomplete metadata cases and visits all 48 retained basic blocks.
+Success returns the original destination pointer/length. Incomplete
+initialization returns the value-free error and requests exactly one clearing
+of that original full region. No payload load or copy is accepted in this
+handoff; only descriptor fields are read/written. Rust 1.90's explicit nulling
+of the consumed input descriptor is allowed, as is its removal in Rust 1.98.
+
+All 160 retained-LLVM mutations reject, covering vacuous/inverted completion,
+wrong fields, returned ownership, missing/partial/duplicate cleanup, payload
+loads/copies and broken control flow. Tests prohibit subprocess execution.
+Log: `target/development-v02449/secret-output-finish.log`, SHA-256
+`572e2ac5f87d60035304e26ae74c55201a26c4cc6abda5173e74694193770f05`.
+
+This checks the optimized ownership-handoff control flow, not whether prior
+writes produced the correct bytes, whether the volatile cleanup callee completes,
+or whether machine-code spills are erased. Debug completion bodies, surrounding
+SHA-3 result wrapping, squeeze/finalization producers and platform qualification
+remain separate review obligations. No production or release-gate changes.

@@ -367,6 +367,43 @@ It does not cover multibuffer worker closures or post-return operating-system
 thread teardown. No release command calls this development checker; the existing
 release gate and its evidence-reuse policy remain unchanged.
 
+### Multibuffer worker handoff MIR check
+
+The same retained record also supports `--batch`, selecting the actual
+`wave128`/`wave256` worker closures rather than their coordinator. All sixteen
+compiler/target/profile instances borrow their workspace into `execute_into`;
+the checker traces that borrow across the out-of-line debug `Control::new`
+call as well as the inlined release setup. It rejects owner/alias copies,
+redefinitions and escapes before execution, then requires workspace Drop on
+normal/error returns and recoverable unwinds after execution. Result-loan Drop
+is distinct from workspace Drop and cannot substitute for it.
+
+```sh
+python3 assurance/register-cleanup/check_worker_handoffs.py --batch target/caller-residue-tcj2wmrb/observations.json
+python3 assurance/register-cleanup/test_worker_handoffs.py --batch target/caller-residue-tcj2wmrb/observations.json
+```
+
+All sixteen closures pass; 368 mutations of their actual MIR and six record
+regressions are rejected. The shared traversal still rejects all 256 existing
+single-leaf mutants. Double-panic termination is explicitly outside recoverable
+cleanup; a mutant changing that termination to an escaping recoverable unwind
+must fail. This distinction does not add an abort-time erasure guarantee.
+
+The parent `GroupSlots` destructor also passes an exact receiver-forwarding
+check in all eight artifacts: it calls `GroupSlots::clear` on its own receiver.
+Twenty-four additional MIR mutants reject changed callees, receivers and bypass
+paths. This is only a forwarding check: its MIR retains `unwind continue`, so
+it does **not** establish that the clear routine is compiler-proven non-unwinding
+or qualify its machine code. The stricter production cleanup verifier is not
+changed or bypassed. Sixteen existing scoped multibuffer runtime tests pass with
+native static execution required, including parent clearing after forgotten
+result loans, worker/coordinator panic, cancellation, ordering and launch failure.
+
+These checks reuse the record/hash above; production inputs are unchanged.
+They do not snapshot worker registers, inspect OS-reclaimed stacks or prove
+whole-callee cleanup. F1 remains open for those separate qualification limits
+and the final retest. No release-gate command or acceptance criterion changes.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this

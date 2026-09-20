@@ -439,6 +439,35 @@ Windows/Apple qualification or release receipt is inferred. High-level caller
 copies, error/verification paths and final platform qualification remain
 separate; F1 and the unchanged release workflow retain their current status.
 
+### Retained accelerated Keccak boundaries
+
+The same source-bound record also supplies the actual single-state and
+multibuffer CPU kernels, rather than only their standalone fixtures:
+
+```sh
+python3 assurance/register-cleanup/check_recorded_keccak.py target/caller-residue-tcj2wmrb/observations.json
+python3 assurance/register-cleanup/test_recorded_keccak.py target/caller-residue-tcj2wmrb/observations.json
+```
+
+All sixteen inspections pass (two kernels across the eight configurations).
+Release LLVM embeds the public round-table address in the prologue. A narrow
+adapter verifies its unique read-only 192-byte definition against the existing
+independent oracle before allowing that address formation. It never allows a
+load in its place; Arm literal-address loads are explicitly rejected as well
+as the ordinary memory accesses checked by the existing boundary validators.
+The original validators are unchanged and their temporary configuration is
+restored after every inspection.
+
+The tests reject 128 missing-boundary/wipe, load and spill assembly mutations,
+plus 56 writable/altered/ambiguous table and address-formation mutations.
+Subprocess execution is forbidden during those tests. These are assembly-text
+negative controls, not newly compiled mutants or runtime checks. The log
+`target/development-v02449/recorded-keccak.log` has SHA-256
+`cf3b9bda6d562365e34f04efaca61b582a4466c8812ff1a456247f3d32fbcb46`.
+It binds the retained record and loaded inspectors. This corroborates these
+private normal-return boundaries, not caller verification/error paths, worker
+spills, native platform execution or whole-call cleanup. F1 remains open.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this

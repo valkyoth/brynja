@@ -233,3 +233,29 @@ owners and guarded staging. That source review is not new emitted-code
 qualification of those producers. Debug completion/wrapping, byte-production
 paths, machine-code spills and platform qualification remain separate; F1 is
 not closed by this checkpoint. No production or release-gate change.
+
+## Optimized secret-output writes
+
+```sh
+python3 assurance/register-cleanup/check_secret_output_write.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_secret_output_write.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All eight optimized `SecretRegionInitialization::write` bodies pass. Their
+five-block control flow checks region presence, addition overflow and capacity
+before dispatch. The exact original source and length are copied to the original
+destination plus its initialized offset; only after that call does the updated
+count commit. The direct function body reads descriptor fields, not payload
+bytes. Existing copy-boundary assembly inspection passes in all eight builds.
+The checker explicitly handles Rust 1.90's overflow intrinsic and Rust 1.98's
+add/unsigned-comparison lowering, including their different success discriminants.
+
+Tests reject 144 guard/forwarding/progress LLVM-text mutations and 40 copy-boundary
+assembly mutations. They forbid subprocess execution. Log:
+`target/development-v02449/secret-output-write.log`, SHA-256
+`bd47c7c0fad2a1553656a1de9a5662e2d0cf458e7ab40d62be7c373ec99f3c42`.
+
+This qualifies neither the bytes supplied by the upstream sponge producer nor
+all surrounding compiler spills. Debug write paths, producer staging/cleanup,
+native platforms and independent retest remain separate obligations. No new
+production defect was found and no production or release-gate code changed.

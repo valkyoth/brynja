@@ -55,7 +55,10 @@ def run(command, env):
     return result.stdout
 
 
-def observations(log):
+def observations(log, api_profile='movable'):
+    if api_profile not in ('movable', 'scoped') or re.findall(
+            r'^CALLER_API_PROFILE: (\w+)$', log, re.MULTILINE) != [api_profile]:
+        raise ValueError('missing, duplicate or wrong API profile')
     rows = re.findall(r'^CALLER_AUDIT: (\w+); cases=(\d+); input_marker_cases=(\d+); '
                       r'qualifies_cleanup=false$', log, re.MULTILINE)
     if len(rows) != 5 or {row[0] for row in rows} != ALGORITHMS:
@@ -69,10 +72,17 @@ def observations(log):
             for name, cases, matches in rows}
 
 
+def emitted_command(compiler, common, package, scoped):
+    features = ['--features', 'scoped'] if scoped and package == 'brynja-caller-residue-audit' else []
+    return ['cargo', '+' + compiler, 'rustc', *common, '-p', package,
+            *features, '--lib', '--', '--emit=mir,llvm-ir,asm']
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--arm', action='store_true', help='also run QEMU AArch64')
     parser.add_argument('--emit', action='store_true', help='retain MIR/LLVM/assembly for inspection')
+    parser.add_argument('--scoped', action='store_true', help='observe the borrowed-workspace APIs')
     args = parser.parse_args()
     if platform.system() != 'Linux' or platform.machine() != 'x86_64':
         raise ValueError('this development driver requires a Linux x86_64 host')
@@ -97,19 +107,19 @@ def main():
                           '--target', target]
                 if profile == 'release':
                     common.append('--release')
-                log = run(['cargo', '+' + compiler, 'test', *common, '--test', 'audit',
+                features = ['--features', 'scoped'] if args.scoped else []
+                log = run(['cargo', '+' + compiler, 'test', *common, *features, '--test', 'audit',
                            '--', '--nocapture', '--test-threads=1'], env)
                 build.mkdir(exist_ok=True)
                 (build / 'observations.log').write_text(log)
                 record = {'compiler': run(['rustc', '+' + compiler, '-vV'], env),
                           'target': target, 'profile': profile,
                           'execution': 'QEMU, not native' if target.startswith('aarch64') else 'native',
-                          'observations': observations(log), 'artifacts': {},
+                          'observations': observations(log, 'scoped' if args.scoped else 'movable'), 'artifacts': {},
                           'log_sha256': digest(build / 'observations.log')}
                 if args.emit:
                     for package in (*PACKAGES, 'brynja-caller-residue-audit'):
-                        run(['cargo', '+' + compiler, 'rustc', *common, '-p', package,
-                             '--lib', '--', '--emit=mir,llvm-ir,asm'], env)
+                        run(emitted_command(compiler, common, package, args.scoped), env)
                         stem = package.replace('-', '_')
                         for extension in ('mir', 'll', 's'):
                             files = list((build / target / profile / 'deps').glob(f'{stem}-*.{extension}'))
@@ -123,6 +133,7 @@ def main():
     if before != sources():
         raise ValueError('source changed during development observations')
     report = {'schema': 1, 'qualifies_register_cleanup': False,
+              'api_profile': 'scoped' if args.scoped else 'movable',
               'scope': 'portable public wrapper normal return; selected volatile registers only',
               'limitations': ['No stack, upper-vector, interruption or native Windows/Arm qualification',
                               'Only repeated synthetic input markers; zero matches do not prove erasure',

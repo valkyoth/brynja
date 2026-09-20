@@ -7,13 +7,31 @@ from unittest.mock import patch
 import check_callers as audit
 
 
-def sample(matches=0):
-    return '\n'.join(f'CALLER_AUDIT: {name}; cases=28; input_marker_cases={matches}; '
+def sample(matches=0, api_profile='movable'):
+    return 'CALLER_API_PROFILE: ' + api_profile + '\n' + '\n'.join(f'CALLER_AUDIT: {name}; cases=28; input_marker_cases={matches}; '
                      'qualifies_cleanup=false' for name in sorted(audit.ALGORITHMS)) + (
                          '\ntest result: ok. 5 passed; 0 failed; 0 ignored;\n')
 
 
 class ObservationTests(unittest.TestCase):
+    def test_scoped_feature_applies_only_to_fixture_not_dependency_packages(self):
+        for scoped in (False, True):
+            for package in (*audit.PACKAGES, 'brynja-caller-residue-audit'):
+                command = audit.emitted_command('1.90.0', ['--offline'], package, scoped)
+                self.assertEqual(command[:4], ['cargo', '+1.90.0', 'rustc', '--offline'])
+                self.assertEqual(command[4:6], ['-p', package])
+                features = ['--features', 'scoped'] if scoped and package == 'brynja-caller-residue-audit' else []
+                self.assertEqual(command[6:], [*features, '--lib', '--', '--emit=mir,llvm-ir,asm'])
+
+    def test_profile_is_explicit_and_cannot_be_substituted(self):
+        self.assertEqual(set(audit.observations(sample(api_profile='scoped'), 'scoped')), audit.ALGORITHMS)
+        for log, profile in ((sample(), 'scoped'), (sample(api_profile='scoped'), 'movable'),
+                             (sample().replace('CALLER_API_PROFILE: movable\n', ''), 'movable'),
+                             (sample() + '\nCALLER_API_PROFILE: movable', 'movable'),
+                             (sample(api_profile='unknown'), 'unknown')):
+            with self.subTest(profile=profile), self.assertRaises(ValueError):
+                audit.observations(log, profile)
+
     def test_residue_is_recorded_not_misreported_as_a_clean_verdict(self):
         rows = audit.observations(sample(28))
         self.assertEqual(set(rows), audit.ALGORITHMS)

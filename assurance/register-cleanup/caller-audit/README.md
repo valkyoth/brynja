@@ -13,6 +13,14 @@ public `HardenedSha256`, `HardenedSha512`, `HardenedSha3_256`, `HardenedSha1` an
 drops the output owner, and returns only a status. They do not expose the digest.
 Separate known-answer tests check the five `abc` digests before output drop.
 
+The optional fixture-only `scoped` feature selects five corresponding borrowed
+workspace wrappers. Each constructs secret-free local storage before `with`,
+updates/finalizes through the borrowed handle, drops the output, and lets the
+scope clear before returning. The input/output/status ABI and observer are
+unchanged. Construction is inside the observed wrapper; this is not a probe of
+an arbitrary external caller's existing workspace or registers. Known-answer
+tests use the selected API profile, not always the old movable implementation.
+
 Linux observers seed caller-clobbered registers before the call and snapshot
 them immediately on return, before Rust can overwrite them. Arguments are only
 live buffer addresses and public lengths. The snapshot includes nine integer
@@ -43,6 +51,7 @@ From the repository root, with both endpoint compilers and QEMU installed:
 ```sh
 python3 assurance/register-cleanup/test_callers.py
 python3 assurance/register-cleanup/check_callers.py --arm --emit
+python3 assurance/register-cleanup/check_callers.py --scoped --arm --emit
 cargo +1.98.1 clippy --locked --offline --manifest-path assurance/register-cleanup/caller-audit/Cargo.toml --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 ```
 
@@ -52,6 +61,12 @@ MIR/LLVM/assembly for manual inspection. It rejects missing/duplicate records,
 skipped controls, invalid counts and source changes during collection. It does
 not automatically certify emitted-code cleanup. Arm execution is QEMU, not
 native; no native Windows or Apple observation is made here.
+
+Each run records `api_profile` and requires exactly one matching runtime marker.
+Missing, duplicated or substituted profile markers fail; a movable run cannot
+be presented as a scoped observation. The fixture feature is passed only to
+the fixture, not to separately compiled dependencies. Nine collector regressions
+cover this selection, observation bounds, missing controls and build overrides.
 
 ## Initial observations
 
@@ -111,7 +126,7 @@ The inspected `brynja_caller_residue_audit` 1.98.1 x86-64 release assembly has
 SHA-256 `09909ab5878e36cd69038dca0aebb84dcb94a0cc6ede1b6a4c79b8edb0071483`.
 These ignored development artifacts are not a release receipt or native approval.
 
-### Ownership-design decision before expanding the public API
+### Historical ownership-design decision before expanding the public API
 
 Keeping secret state inline in a freely movable Rust value prevents promising
 that all previous locations are erased: a semantic move may copy bytes without
@@ -131,6 +146,47 @@ squeeze and higher-construction transfers still need qualified opaque paths,
 error/unwind and ownership tests, emitted-code review and platform coverage.
 Pinning alone does not suppress compiler temporaries; no such claim is made.
 Do not close F1 or collect final native qualification on this diagnostic result.
+
+The owner subsequently approved the additive scoped APIs. They are implemented;
+the following recheck observes five of them. The historical proposal above is
+not a new approval request or a claim that those five APIs remain unimplemented.
+
+## Scoped versus movable recheck, 2026-09-20
+
+Production sources are those at `daa8e33b`; this checkpoint changes the
+development fixture/collector, not production Rust. Each profile runs 28 cases
+per algorithm on both compiler endpoints, both Linux architectures and both
+debug/release profiles (1,120 observations per API profile).
+
+All five scoped algorithms have **zero repeated-input marker matches** in all
+eight configurations. All functional checks, owned-output clearing and observer
+controls pass. This narrow result does not prove removal of transformed secrets,
+partial bytes, stack spills, upper vector lanes or interruption snapshots.
+
+The movable recheck has zero matches for SHA-256, SHA-512, SHA3-256 and SHA-1.
+MD5 still has 14/28 matches in x86 debug under both compilers, x86 release under
+1.98.1, and Arm release under both compilers; its other configurations have zero.
+These observations are not comparative security scores. The old movable API
+retains its owned-memory guarantee, not a whole-register claim.
+
+Inspection of the 1.98.1 x86 release scoped SHA3 wrapper finds its 1,032-byte
+`memcpy` during secret-free initialization, **before** `update`. Unlike the
+earlier movable wrapper, no bulk populated-owner copy occurs between `update`
+and `finalize_secret` in this wrapper. This specific observation is not a proof
+covering callees, all error paths, other compilers or other algorithms.
+
+Ignored, source-bound records:
+
+- `target/caller-residue-heo5fer6/observations.json` (scoped), SHA-256
+  `01b618abca82e5da85d870876a19b7a3551fa8b09aeed74fab9d41aa0cdb5141`.
+- `target/caller-residue-83c83esq/observations.json` (movable), SHA-256
+  `7e7e7164e77bd94476372346aa5b0cd4f3dfd3d2ea96e21e979f4d31e5ddf454`.
+- Scoped 1.98.1 x86 release fixture assembly, SHA-256
+  `4bfedc0cc1f909f64fd880f415d52658c4ceef6f43217b7f99a4c97cd50e673f`.
+
+The scoped fixture also passes strict Clippy and ASan/LSan with leak detection
+and fatal error exits forced. These are development checks, not release receipts
+or native approvals. No release-gate commands or behavior changed.
 
 ## Remaining source boundaries
 

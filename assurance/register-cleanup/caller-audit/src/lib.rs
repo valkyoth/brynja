@@ -6,6 +6,15 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+pub mod scoped;
+
+/// Explicit diagnostic identity; neither profile qualifies register erasure.
+pub const API_PROFILE: &str = if cfg!(feature = "scoped") {
+    "scoped"
+} else {
+    "movable"
+};
+
 /// Public length, caller-owned input/output, and a non-secret status result.
 pub type Probe = extern "C" fn(&[u8; 256], &mut [u8; 64], usize) -> u8;
 
@@ -40,6 +49,7 @@ probe!(sha1, brynja_legacy_sha1::HardenedSha1, 20);
 probe!(md5, brynja_legacy_md5::HardenedMd5, 16);
 
 /// Algorithm name, actual public-API call, and owned output width.
+#[cfg(not(feature = "scoped"))]
 pub const PROBES: [(&str, Probe, usize); 5] = [
     ("sha256", sha256, 32),
     ("sha512", sha512, 64),
@@ -47,3 +57,6 @@ pub const PROBES: [(&str, Probe, usize); 5] = [
     ("sha1", sha1, 20),
     ("md5", md5, 16),
 ];
+
+#[cfg(feature = "scoped")]
+pub use scoped::PROBES;

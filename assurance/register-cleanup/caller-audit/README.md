@@ -468,6 +468,40 @@ It binds the retained record and loaded inspectors. This corroborates these
 private normal-return boundaries, not caller verification/error paths, worker
 spills, native platform execution or whole-call cleanup. F1 remains open.
 
+### Scoped KMAC verification cleanup paths
+
+The retained actual KMAC crate MIR includes the generic scoped verifier. This
+development check examines lifecycle exits after its metadata guard is initialized
+and after its five reader/comparison operation sites:
+
+```sh
+python3 assurance/register-cleanup/check_kmac_verify_handoffs.py target/caller-residue-tcj2wmrb/observations.json
+python3 assurance/register-cleanup/test_kmac_verify_handoffs.py target/caller-residue-tcj2wmrb/observations.json
+```
+
+All eight compiler/target/profile artifacts pass. Normal/error returns and
+recoverable unwinding after these points invoke the metadata guard's Drop. The
+guard forwards its own borrowed metadata to `wipe`; the wipe sequence passes
+all three whole fields (1-byte key classification, 64-byte verification buffer,
+1-byte difference accumulator) to `clear_owned_region` in order. These checks
+reuse the existing closed-grammar field-clearing inspector.
+
+Tests reject 172 initialization/call/return/unwind MIR mutations, 24 guard
+forwarding mutations and 72 field/width/callee mutations. They prohibit subprocess
+execution. An explicit divergence control documents that loop termination is not
+proved. These are generic MIR checks, **not** monomorphized verification assembly
+or register/spill qualification. Destructor invocation is not a proof that its
+callee cannot unwind; the existing MIR unwind edges remain visible. Abort and
+double-panic termination remain outside recoverable cleanup.
+
+The inspection log is `target/development-v02449/kmac-verify-handoffs.log`, SHA-256
+`b31af1865d97a151a9a2e9734172a3bece59fef41e24f45ddd4f357770567017`.
+The existing fourteen scoped KMAC library tests also pass in optimized mode,
+including cross-chunk verification mismatches and error/unwind lifecycle checks.
+Production code and release gates are unchanged. The earlier long Miri result
+was retained, not rerun. Verification machine-code/platform qualification and the
+fresh independent retest still remain; this checkpoint does not close F1.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this

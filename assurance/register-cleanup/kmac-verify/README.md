@@ -711,3 +711,43 @@ Arm/Windows qualification remain outside this checkpoint. Arm artifacts are
 QEMU-based. Production, runtime records and release gates are unchanged; F1 and
 root `PENTEST.md` remain open pending remaining qualification and independent
 retest.
+
+## Byte-precondition normal-return assembly
+
+```sh
+python3 assurance/register-cleanup/check_byte_precondition_assembly.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_byte_precondition_assembly.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Eight retained debug builds pass twelve normal-return function contracts,
+covering 338 machine instructions and the preceding 216 LLVM instructions.
+The caller/write handoff is rechecked to pass alignment one, and the existing
+416 modeled length cases are repeated. These are reused checks, not new
+independent runtime vectors.
+
+The inspected paths retain the address/alignment arguments, calculate the
+alignment predicate and return successfully for alignment one. Rust 1.98's
+additional helper is bound by exact identity at both caller and callee. x86's
+integer bit-count sequence and Arm's vector bit-count sequence operate on the
+public alignment value, not the pointed-to bytes. No checked normal block
+loads payload data. Arm's use of vector registers here is therefore not secret
+state processing. Stack traffic covers public values, descriptors and ABI frame
+state; pre-existing caller register values are not claimed erased.
+
+All 796 instruction/branch/identity mutations and 36 extraction mutations
+reject; 48 label/spacing/debug-location/excluded-failure controls pass. The prior
+LLVM precondition, entry/write and iterator/fence mutation suites still pass.
+Tests prohibit subprocess execution. Log:
+`target/development-v02449/byte-precondition-assembly.log`, SHA-256
+`a2f6f1524598c1b035c25a084d98e5f55a01b97a08999551a48f6dd900d728ce`.
+
+This completes the bounded saved-debug-clearing normal-path inspection sequence:
+entry/write, iterator/fence, and byte-precondition helpers each have linked
+LLVM/assembly checks for the retained matrix. It is not a whole-call erasure
+proof or a formal proof of compiler equivalence. Invalid-alignment diagnostics,
+panic/unwind and interruption paths remain deliberately excluded. Alignment
+acceptance does not establish nullness, liveness or exclusivity; those remain
+the caller's Rust-borrow obligations. Arm artifacts remain QEMU-based, not fresh
+native qualification. Production code, runtime records and release gates are
+unchanged. Broader F1 qualification and independent retest remain outstanding;
+root `PENTEST.md` stays open.

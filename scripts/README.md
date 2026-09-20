@@ -41,6 +41,12 @@ SHA-1 kernel tests use the same two-key gate. See
 
 ## Directories
 
+For every new or extended family, run the standalone
+[end-of-milestone development review](../docs/family-development-review.md).
+`release/check-family-completeness.py` reports unreviewed hardening, SIMD,
+hardware and platform-evidence decisions and missing numbered follow-ups.
+It does not execute or alter release gates or expensive verification.
+
 `cpu/check-acceleration-availability.py` validates the v0.24.30 contract-only
 kernel/family inventory. Its companion tests compile selection-model mutants;
 they do not execute or authorize CPU kernels. See the

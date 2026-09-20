@@ -216,6 +216,12 @@ every ISA. The later performance gate is a regression gate, not the first point
 at which earlier completed acceleration becomes usable. Final acceptance must
 exercise real package-external opt-in routes, not pass by skipping all backends.
 
+At family design and each implementation handoff, run the standalone
+[family development review](family-development-review.md) to record hardening,
+SIMD, dedicated-instruction and platform-evidence dispositions. Unresolved work
+needs an explicit numbered follow-up before family acceptance; this manual
+checklist does not change release gates or automatically rerun verification.
+
 Freeze usable consumer tests before the final native sweep; rerun affected
 evidence after relevant source, dispatch, cleanup, toolchain or dependency
 changes. Self-reported project evidence must bind source, binary, environment,

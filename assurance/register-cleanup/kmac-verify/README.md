@@ -956,3 +956,50 @@ borrowed-state/metadata separation contract, not a new aliasing proof. Arm
 artifacts remain QEMU-based, not native Arm/Windows qualification. No production,
 runtime-record or release-gate changes; F1 and root `PENTEST.md` remain open for
 remaining qualification and independent retest.
+
+## Finish error and unwind metadata cleanup
+
+```sh
+python3 assurance/register-cleanup/check_kmac_finish_cleanup.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_finish_cleanup.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+This extends the preceding checkpoint into the actual `finish` callees selected
+by the 24 optimized verifiers. The retained matrix covers 72 explicit error-result
+roots and 576 invoke unwind edges, including repeated landing-pad destinations
+and identified double-panic abort destinations. The selected cleanup regions
+contain 480 finish blocks and 144 blocks in the 24 matching Core destructors.
+
+The error-result roots use the observed compiler layouts: an error discriminator
+at byte 8 of the 24-byte portable result, or a null reader pointer at byte 0 of
+the 32-byte accelerated result. These are artifact-specific layouts, not stable
+Rust ABI promises. Every root must be reachable from finish entry. Following
+every explicit successor from these roots, normal returns require completion
+of the ordered metadata clearing requests; resumed unwinds require an attempt.
+The actual Core destructor is inspected too: it reaches metadata clearing after
+normal state destruction, and the original guard on the state's unwind edge.
+Its name alone is not treated as proof that cleanup occurs.
+
+The checker binds state, framing/packer and metadata destructor identities to the
+retained artifacts, verifies original owner pointers and call ABIs, and rejects
+wrong normal/unwind edge kinds, unreviewed writes/calls, partial clearing and
+loops in the selected cleanup slice. Only identified double-panic aborts are
+excluded. A direct abort destination is reported as an exclusion, not as a
+successful cleanup or resumed unwind.
+
+All 3,816 finish-path and 1,320 Core-destructor mutations reject, with 96 label
+and comment controls passing. The preceding 2,040 early-path mutations, six alias
+regressions and 72 controls remain green. These are retained LLVM-text tests;
+subprocess execution is forbidden. Log:
+`target/development-v02449/kmac-finish-cleanup.log`, SHA-256
+`7175ab817eed4bdeff1c393a8f7eb527867599b860f07468971106baa542a0c4`.
+
+This checks cleanup after the explicit error-result stores and on explicit
+invoke unwinds. It does not prove error classification before those stores,
+success-result metadata transfer, comparison-byte provenance, state/framing
+callee internals, successful cleanup after a clearer unwinds, implicit unwinds,
+termination, or machine-code register/spill clearing. Existing borrowed-owner
+separation remains an assumption, not a new alias proof. Arm remains QEMU-based;
+fresh native Arm/Windows qualification and independent retest remain outstanding.
+Production, retained runtime records and release gates are unchanged. F1 and
+root `PENTEST.md` remain open.

@@ -1250,3 +1250,39 @@ Accelerated readers are not counted as portable adapter coverage. Tests forbid
 subprocess execution; production, retained runtime records and release gates
 are unchanged. F1 and root `PENTEST.md` remain open for remaining qualification
 and independent retest; Arm execution remains QEMU, not fresh native evidence.
+
+## Output constructor shape and length boundaries
+
+```sh
+python3 assurance/register-cleanup/check_fips202_output_constructor.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_fips202_output_constructor.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The constructor is selected from the same validated SHA-3 artifacts and bound
+to the actual portable KMAC adapter calls. All eight optimized bodies pass a
+bounded LLVM metadata model: 20,480 cases cover all 256 final-bit-count values at
+ten lengths (0, 1, 2, 63, 64, 65, 2^61-1, 2^61, 2^61+1 and 2^63-1).
+These are abstract lengths, not allocated slices or executed Rust calls.
+Every retained constructor block is exercised (64 across the eight bodies).
+
+The mathematical comparison checks empty/nonempty shape validation, exact
+`(length - 1) * 8 + valid` length, overflow rejection, error identity and the
+original output pointer/length/valid fields. The closed instruction model
+rejects payload reads/writes and unexpected calls; only bounded nonoverlapping
+result fields may be written. LLVM 20's speculative `nuw` sum may become poison
+on an error path, but selected phi/store operands cannot consume that poison.
+LLVM 22's different overflow sequence is checked against the same result model.
+
+All 400 arithmetic, result, poison-use and payload-access mutations reject;
+24 SSA-name, label and comment controls pass. The preceding input-forwarding
+tests also pass (640 mutations, six binding regressions and 48 controls). Log:
+`target/development-v02449/fips202-output-constructor.log`, SHA-256
+`363c1c6989cba2b684ddc23856983f521c00f33b523631392bd5b61e25e20d1b`.
+
+This is bounded metadata-model coverage, not exhaustive verification of every
+length, a general LLVM interpreter, padding initialization, reader semantics,
+machine-code qualification or register/spill erasure. Compiler-private result
+layouts remain nonportable evidence details. Tests forbid subprocess execution;
+production, runtime records and release gates are unchanged. F1 and root
+`PENTEST.md` remain open for remaining qualification and independent retest;
+fresh native Arm/Windows evidence is still outstanding.

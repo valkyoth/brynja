@@ -11,8 +11,12 @@ license = "MIT OR Apache-2.0"
 [features]
 default = []
 scoped = []
+higher = []
 
 [dependencies]
+brynja-mac-kmac = { path = "../../../crates/brynja-mac-kmac", default-features = false }
+brynja-hash-tuple = { path = "../../../crates/brynja-hash-tuple", default-features = false }
+brynja-hash-parallel = { path = "../../../crates/brynja-hash-parallel", default-features = false }
 brynja-hash-sha2 = { path = "../../../crates/brynja-hash-sha2", default-features = false }
 brynja-hash-sha3 = { path = "../../../crates/brynja-hash-sha3", default-features = false }
 brynja-legacy-sha1 = { path = "../../../crates/brynja-legacy-sha1", default-features = false }

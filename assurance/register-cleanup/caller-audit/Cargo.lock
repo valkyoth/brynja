@@ -6,10 +6,13 @@ version = 4
 name = "brynja-caller-residue-audit"
 version = "0.0.0"
 dependencies = [
+ "brynja-hash-parallel",
  "brynja-hash-sha2",
  "brynja-hash-sha3",
+ "brynja-hash-tuple",
  "brynja-legacy-md5",
  "brynja-legacy-sha1",
+ "brynja-mac-kmac",
 ]
 
 [[package]]
@@ -19,6 +22,14 @@ version = "0.9.0"
 [[package]]
 name = "brynja-hash-core"
 version = "0.1.0"
+
+[[package]]
+name = "brynja-hash-parallel"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-hash-sha3",
+]
 
 [[package]]
 name = "brynja-hash-sha2"
@@ -37,6 +48,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "brynja-hash-tuple"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-hash-sha3",
+]
+
+[[package]]
 name = "brynja-legacy-md5"
 version = "0.1.0"
 dependencies = [
@@ -50,4 +69,12 @@ version = "0.1.0"
 dependencies = [
  "brynja-core",
  "brynja-hash-core",
+]
+
+[[package]]
+name = "brynja-mac-kmac"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-hash-sha3",
 ]

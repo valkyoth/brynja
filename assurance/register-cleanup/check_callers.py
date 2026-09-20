@@ -15,6 +15,9 @@ FIXTURE = ROOT / 'assurance/register-cleanup/caller-audit'
 PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-hash-sha2',
             'brynja-hash-sha3', 'brynja-legacy-sha1', 'brynja-legacy-md5')
 ALGORITHMS = {'sha256', 'sha512', 'sha3', 'sha1', 'md5'}
+HIGHER_PACKAGES = ('brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-hash-parallel')
+HIGHER_ALGORITHMS = {family + form + strength for family in ('kmac', 'tuple', 'parallel')
+                     for form in ('', 'xof') for strength in ('128', '256')}
 
 
 def digest(path):
@@ -23,8 +26,13 @@ def digest(path):
 
 def sources():
     paths = {ROOT / 'Cargo.toml', ROOT / 'Cargo.lock', Path(__file__).resolve(),
-             Path(__file__).with_name('test_callers.py')}
-    for directory in [FIXTURE, *(ROOT / 'crates' / name for name in PACKAGES)]:
+             Path(__file__).with_name('test_callers.py'),
+             Path(__file__).with_name('check_higher_callers.py')}
+    paths.update(ROOT / f'scripts/{family}/check-{family}-differential.py'
+                 for family in ('kmac', 'tuplehash', 'parallelhash'))
+    paths.update(ROOT / path for path in ('scripts/sha3/check-cshake-differential.py',
+                                         'scripts/sha3/check-sha3-bit-differential.py'))
+    for directory in [FIXTURE, *(ROOT / 'crates' / name for name in (*PACKAGES, *HIGHER_PACKAGES))]:
         paths.add(directory / 'Cargo.toml')
         for subdirectory in ('src', 'tests'):
             paths.update((directory / subdirectory).rglob('*.rs'))
@@ -56,12 +64,13 @@ def run(command, env):
 
 
 def observations(log, api_profile='movable'):
-    if api_profile not in ('movable', 'scoped') or re.findall(
+    if api_profile not in ('movable', 'scoped', 'higher') or re.findall(
             r'^CALLER_API_PROFILE: (\w+)$', log, re.MULTILINE) != [api_profile]:
         raise ValueError('missing, duplicate or wrong API profile')
     rows = re.findall(r'^CALLER_AUDIT: (\w+); cases=(\d+); input_marker_cases=(\d+); '
                       r'qualifies_cleanup=false$', log, re.MULTILINE)
-    if len(rows) != 5 or {row[0] for row in rows} != ALGORITHMS:
+    algorithms = HIGHER_ALGORITHMS if api_profile == 'higher' else ALGORITHMS
+    if len(rows) != len(algorithms) or {row[0] for row in rows} != algorithms:
         raise ValueError('missing, duplicate, or unexpected diagnostic observations')
     if any(int(cases) != 28 or not 0 <= int(matches) <= 28
            for _, cases, matches in rows):
@@ -72,8 +81,10 @@ def observations(log, api_profile='movable'):
             for name, cases, matches in rows}
 
 
-def emitted_command(compiler, common, package, scoped):
-    features = ['--features', 'scoped'] if scoped and package == 'brynja-caller-residue-audit' else []
+def emitted_command(compiler, common, package, api_profile):
+    if api_profile not in ('movable', 'scoped', 'higher'):
+        raise ValueError('unknown API profile')
+    features = ['--features', api_profile] if api_profile != 'movable' and package == 'brynja-caller-residue-audit' else []
     return ['cargo', '+' + compiler, 'rustc', *common, '-p', package,
             *features, '--lib', '--', '--emit=mir,llvm-ir,asm']
 
@@ -82,8 +93,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--arm', action='store_true', help='also run QEMU AArch64')
     parser.add_argument('--emit', action='store_true', help='retain MIR/LLVM/assembly for inspection')
-    parser.add_argument('--scoped', action='store_true', help='observe the borrowed-workspace APIs')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--scoped', action='store_true', help='observe the borrowed-workspace APIs')
+    mode.add_argument('--higher', action='store_true', help='observe scoped KMAC/TupleHash/ParallelHash fixed/XOF APIs')
     args = parser.parse_args()
+    api_profile = 'higher' if args.higher else 'scoped' if args.scoped else 'movable'
     if platform.system() != 'Linux' or platform.machine() != 'x86_64':
         raise ValueError('this development driver requires a Linux x86_64 host')
     target_root = ROOT / 'target'
@@ -107,7 +121,7 @@ def main():
                           '--target', target]
                 if profile == 'release':
                     common.append('--release')
-                features = ['--features', 'scoped'] if args.scoped else []
+                features = ['--features', api_profile] if api_profile != 'movable' else []
                 log = run(['cargo', '+' + compiler, 'test', *common, *features, '--test', 'audit',
                            '--', '--nocapture', '--test-threads=1'], env)
                 build.mkdir(exist_ok=True)
@@ -115,11 +129,12 @@ def main():
                 record = {'compiler': run(['rustc', '+' + compiler, '-vV'], env),
                           'target': target, 'profile': profile,
                           'execution': 'QEMU, not native' if target.startswith('aarch64') else 'native',
-                          'observations': observations(log, 'scoped' if args.scoped else 'movable'), 'artifacts': {},
+                          'observations': observations(log, api_profile), 'artifacts': {},
                           'log_sha256': digest(build / 'observations.log')}
                 if args.emit:
-                    for package in (*PACKAGES, 'brynja-caller-residue-audit'):
-                        run(emitted_command(compiler, common, package, args.scoped), env)
+                    packages = (*PACKAGES, *(HIGHER_PACKAGES if args.higher else ()), 'brynja-caller-residue-audit')
+                    for package in packages:
+                        run(emitted_command(compiler, common, package, api_profile), env)
                         stem = package.replace('-', '_')
                         for extension in ('mir', 'll', 's'):
                             files = list((build / target / profile / 'deps').glob(f'{stem}-*.{extension}'))
@@ -133,7 +148,7 @@ def main():
     if before != sources():
         raise ValueError('source changed during development observations')
     report = {'schema': 1, 'qualifies_register_cleanup': False,
-              'api_profile': 'scoped' if args.scoped else 'movable',
+              'api_profile': api_profile,
               'scope': 'portable public wrapper normal return; selected volatile registers only',
               'limitations': ['No stack, upper-vector, interruption or native Windows/Arm qualification',
                               'Only repeated synthetic input markers; zero matches do not prove erasure',

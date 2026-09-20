@@ -1,5 +1,7 @@
 //! Diagnostic observations, NOT an erasure acceptance gate.
 use brynja_caller_residue_audit::PROBES;
+#[cfg(feature = "higher")]
+mod higher_vectors;
 
 #[cfg(all(
     target_os = "linux",
@@ -25,6 +27,7 @@ fn public_calls_clear_only_the_owned_output_and_preserve_input() {
 }
 
 #[test]
+#[cfg(not(feature = "higher"))]
 fn public_implementations_match_known_abc_digests_before_output_drop() {
     macro_rules! known {
         ($state:path, $workspace:path, $hex:literal) => {{

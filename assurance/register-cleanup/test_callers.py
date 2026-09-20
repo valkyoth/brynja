@@ -8,20 +8,34 @@ import check_callers as audit
 
 
 def sample(matches=0, api_profile='movable'):
+    algorithms = audit.HIGHER_ALGORITHMS if api_profile == 'higher' else audit.ALGORITHMS
     return 'CALLER_API_PROFILE: ' + api_profile + '\n' + '\n'.join(f'CALLER_AUDIT: {name}; cases=28; input_marker_cases={matches}; '
-                     'qualifies_cleanup=false' for name in sorted(audit.ALGORITHMS)) + (
+                     'qualifies_cleanup=false' for name in sorted(algorithms)) + (
                          '\ntest result: ok. 5 passed; 0 failed; 0 ignored;\n')
 
 
 class ObservationTests(unittest.TestCase):
     def test_scoped_feature_applies_only_to_fixture_not_dependency_packages(self):
-        for scoped in (False, True):
-            for package in (*audit.PACKAGES, 'brynja-caller-residue-audit'):
-                command = audit.emitted_command('1.90.0', ['--offline'], package, scoped)
+        for profile in ('movable', 'scoped', 'higher'):
+            for package in (*audit.PACKAGES, *audit.HIGHER_PACKAGES, 'brynja-caller-residue-audit'):
+                command = audit.emitted_command('1.90.0', ['--offline'], package, profile)
                 self.assertEqual(command[:4], ['cargo', '+1.90.0', 'rustc', '--offline'])
                 self.assertEqual(command[4:6], ['-p', package])
-                features = ['--features', 'scoped'] if scoped and package == 'brynja-caller-residue-audit' else []
+                features = ['--features', profile] if profile != 'movable' and package == 'brynja-caller-residue-audit' else []
                 self.assertEqual(command[6:], [*features, '--lib', '--', '--emit=mir,llvm-ir,asm'])
+
+    def test_higher_requires_all_twelve_identities_and_matching_profile(self):
+        self.assertEqual(set(audit.observations(sample(api_profile='higher'), 'higher')), audit.HIGHER_ALGORITHMS)
+        for name in audit.HIGHER_ALGORITHMS:
+            for log in (sample(api_profile='higher').replace('CALLER_AUDIT: '+name+';', 'OMITTED: '+name+';'),
+                        sample(api_profile='higher').replace('CALLER_AUDIT: '+name+';', 'CALLER_AUDIT: unknown;')):
+                with self.subTest(name=name), self.assertRaises(ValueError):
+                    audit.observations(log, 'higher')
+        for profile in ('movable', 'scoped'):
+            with self.assertRaises(ValueError):
+                audit.observations(sample(api_profile='higher'), profile)
+        with self.assertRaises(ValueError):
+            audit.emitted_command('1.90.0', [], 'brynja-caller-residue-audit', 'unknown')
 
     def test_profile_is_explicit_and_cannot_be_substituted(self):
         self.assertEqual(set(audit.observations(sample(api_profile='scoped'), 'scoped')), audit.ALGORITHMS)

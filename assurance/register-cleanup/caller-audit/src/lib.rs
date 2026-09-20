@@ -6,10 +6,14 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+#[cfg(feature = "higher")]
+pub mod higher;
 pub mod scoped;
 
 /// Explicit diagnostic identity; neither profile qualifies register erasure.
-pub const API_PROFILE: &str = if cfg!(feature = "scoped") {
+pub const API_PROFILE: &str = if cfg!(feature = "higher") {
+    "higher"
+} else if cfg!(feature = "scoped") {
     "scoped"
 } else {
     "movable"
@@ -49,7 +53,7 @@ probe!(sha1, brynja_legacy_sha1::HardenedSha1, 20);
 probe!(md5, brynja_legacy_md5::HardenedMd5, 16);
 
 /// Algorithm name, actual public-API call, and owned output width.
-#[cfg(not(feature = "scoped"))]
+#[cfg(not(any(feature = "scoped", feature = "higher")))]
 pub const PROBES: [(&str, Probe, usize); 5] = [
     ("sha256", sha256, 32),
     ("sha512", sha512, 64),
@@ -58,5 +62,7 @@ pub const PROBES: [(&str, Probe, usize); 5] = [
     ("md5", md5, 16),
 ];
 
-#[cfg(feature = "scoped")]
+#[cfg(feature = "higher")]
+pub use higher::PROBES;
+#[cfg(all(feature = "scoped", not(feature = "higher")))]
 pub use scoped::PROBES;

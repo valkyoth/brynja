@@ -572,3 +572,31 @@ or final machine-code/whole-call register and spill qualification. Arm artifacts
 remain QEMU-based; no fresh native Arm/Windows evidence is supplied. No production
 code, release gate or retained runtime record changed, and no production defect
 was established. F1 remains open for remaining qualification and fresh retest.
+
+## Optimized volatile-clear assembly
+
+```sh
+python3 assurance/register-cleanup/check_volatile_clear_assembly.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_volatile_clear_assembly.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Eight retained optimized builds match closed, manually reviewed x86/Arm assembly
+contracts, alongside 2,112 modeled length cases through their linked LLVM bodies.
+The 156 normalized instructions, labels and annotations describe literal-zero
+byte stores and public pointer/length loops, with no payload loads, calls, stack
+work or vector operations. Only labels and spacing are normalized; unexpected
+instructions reject. The compiler barrier annotation is not a hardware fence;
+the linked LLVM inspector separately checks the single-thread SeqCst fence.
+
+All 344 assembly mutations reject; 16 harmless label/spacing controls pass.
+Tests prohibit subprocess execution. Log:
+`target/development-v02449/volatile-clear-assembly.log`, SHA-256
+`4ec423a46bb013ddaf388fd78ac44f35b20bced1f690b08b5aef38e568d7f342`.
+
+This is inspection of retained optimized LLVM and emitted assembly, not newly
+executed machine code, a formal compiler-equivalence/all-length proof, or support
+for arbitrary compiler output. Debug assembly, whole-call register/spill erasure,
+interruption/abort behavior and native Arm/Windows qualification remain outside
+this checkpoint. Arm artifacts remain QEMU-based. No production code, release
+gate or retained runtime record changed. F1 and root `PENTEST.md` remain open
+pending remaining qualification and fresh independent retest.

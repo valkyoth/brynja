@@ -417,3 +417,44 @@ qualification, whole-call spill erasure or native-platform evidence. Arm
 artifacts remain QEMU-based. No production code, release gate or retained
 runtime record changed. F1 remains open pending remaining qualification and
 fresh independent retest.
+
+## Debug secret-output write helpers
+
+```sh
+python3 assurance/register-cleanup/check_debug_output_write.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_debug_output_write.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Eight retained debug builds pass 2,072 modeled cases. Each write entry is bound
+to its actual sixteen-function LLVM call closure. The small interpreter follows
+the emitted Option, Result, checked-add and mutable-slice helpers rather than
+assuming their result from the root function's name. Missing owners, arithmetic
+overflow and insufficient capacity reject without changing owner progress.
+Successful writes forward the original input and the exact output subrange to
+the opaque borrowed-copy boundary, then commit progress once. The original
+output pointer and capacity remain unchanged.
+
+The model permits descriptor-local memory accesses but rejects direct accesses
+to the symbolic input/output payload allocations. Undefined inactive Option
+payload fields may be forwarded without being used for arithmetic, addresses
+or decisions. Cases include empty/exact/over-capacity writes, selected size and
+overflow boundaries, and deliberately invalid progress metadata. Huge lengths
+are symbolic metadata, not allocated or fabricated Rust slices. Five additional
+synthetic helper-return failures per build exercise slice rejection and all four
+copy-error values; these are model injections, not runtime fault tests.
+
+All 260 retained-LLVM mutations and 40 borrowed-copy assembly mutations reject.
+Twenty-four positive controls accept removal of debug declarations or changes
+to unused descriptor loads. Subprocess execution is forbidden in the tests.
+Log: `target/development-v02449/debug-output-write.log`, SHA-256
+`fc8fcddc0ec8152c804f4b75b0359d2502eef9597a00205f8b435e57b234db36`.
+
+The copy operation is an opaque event in the model; its saved assembly is
+checked separately by the existing copy-boundary inspector. This is bounded
+metadata analysis, not full LLVM/alias/ABI semantics, exhaustive path or input
+coverage, source-byte correctness, a whole-call register/spill erasure proof,
+or fresh native-platform evidence. Non-null pointer-to-integer conversion is
+modeled only for null discrimination, not as a numerical machine address.
+Arm artifacts still use QEMU; Windows is not qualified here. No production
+code, release gate or retained runtime record changed. F1 remains open pending
+remaining qualification and fresh independent retest.

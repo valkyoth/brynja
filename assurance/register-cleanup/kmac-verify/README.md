@@ -636,3 +636,42 @@ retained-artifact checks are not new machine-code execution, arbitrary-compiler
 qualification, whole-call register/spill erasure or interruption/abort coverage.
 Arm remains QEMU-based; fresh native Arm/Windows qualification and independent
 retest remain outstanding. F1 and root `PENTEST.md` remain open.
+
+## Debug clearing iterator and fence assembly
+
+```sh
+python3 assurance/register-cleanup/check_debug_clear_helpers.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_debug_clear_helpers.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Eight retained debug builds pass manually reviewed iterator-construction,
+iterator-advance and compiler-fence route contracts. Their 740 normalized
+instructions/labels/annotations keep iteration descriptor-only: construct the
+original start/end pair, compare the current pointer with the end, advance by
+one byte and return the original current pointer, or return None at the end.
+They do not read the payload. The entry/write assembly checks and existing 416
+LLVM length cases are also rerun; those are not additional independent vectors.
+
+The fence check binds the exact dispatch from the caller's checked SeqCst
+discriminant (four) through the compiler-barrier annotation and return. On x86
+it also binds the unique five-entry relative jump table, including the selected
+entry and target labels. Arm's compare/branch dispatch is checked explicitly.
+The annotation is not a hardware fence or proof of hardware ordering. The
+Relaxed-order panic block is unreachable from this checked input and deliberately
+excluded; a positive control confirms that its body is not being claimed as
+qualified. Unwind metadata is normalized, not validated as an unwind guarantee.
+
+All 1,480 instruction/branch/annotation mutations, 36 jump-table mutations and
+20 table-binding mutations reject. Sixty-four scoped positive controls pass.
+The preceding debug entry/write and optimized clearing mutation suites also
+still pass (1,064 and 344 rejections, respectively). No subprocess execution is
+allowed by these mutation tests. Log:
+`target/development-v02449/debug-clear-helpers.log`, SHA-256
+`eceaccbb796784acd9f080ce2547ac14bb9c9051d1e7866e79c0b67065d3f37f`.
+
+These checks extend retained debug assembly coverage, not the production erasure
+guarantee. The pointer-precondition machine body, panic behavior, formal compiler
+equivalence, whole-call register/spill residue and interruption/abort behavior
+are not established. Arm artifacts remain QEMU-based; native Arm/Windows and
+independent qualification remain outstanding. No production code, release gates
+or runtime records changed. F1 and root `PENTEST.md` remain open.

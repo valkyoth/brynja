@@ -288,3 +288,36 @@ the local clear-after-write check is not proof of cleanup after a fill failure
 or unwinding; those paths rely on outer owners/guards. The Arm artifacts are
 from QEMU, not native evidence. F1 remains open. Production code, release gates
 and the retained runtime record are unchanged; no full sweep was restarted.
+
+## Accelerated producer staging and selected cleanup paths
+
+```sh
+python3 assurance/register-cleanup/check_accelerated_staging.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_accelerated_staging.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The four optimized accelerated builds pass (Rust 1.90/1.98, native x86 and
+Arm/QEMU). The inspector binds the engine read and initialization write to the
+same original staging address and bounded chunk count. Successful writes
+immediately request a full 168-byte staging clear. It follows the selected read
+and write error/unwind continuations to 24 exits, checking initialization-drop
+requests and engine-memory, staging and domain cleanup requests. Normal error
+returns retain their error discriminant; recoverable unwinding resumes rather
+than becoming success. The actual operation-drop body is checked with both
+completion values, and unwind calls must pass the original owner with the
+completion flag unset.
+
+All 164 retained-LLVM producer/guard mutations reject, including wrong owners,
+wrong widths, skipped initialization destruction, omitted cleanup calls,
+inverted result checks, completed-on-unwind guards and cleanup bypasses. Tests
+forbid subprocess execution. Log:
+`target/development-v02449/accelerated-staging.log`, SHA-256
+`99b197011dd39ad7a52b1fc05e6b30036bd96ca00d556d59108b0801f44b366b`.
+
+The path checks start at the instantiated read/write calls, assuming the live
+initialization owner required to reach them. They do not establish every
+upstream state transition or the producer's entire CFG. A cleanup *request*
+does not prove that the callee erases memory. Double-panic aborts, debug bodies,
+all compiler spills, native Arm/Windows and broader platform qualification
+remain outside this checkpoint. No new runtime vulnerability was established;
+no production code, release gate or runtime record changed. F1 remains open.

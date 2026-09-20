@@ -3,6 +3,38 @@ use brynja_caller_residue_audit::PROBES;
 #[cfg(feature = "higher")]
 mod higher_vectors;
 
+#[test]
+#[cfg(feature = "accelerated")]
+fn accelerated_workers_reject_revoked_authority_without_fallback() {
+    use brynja_crypto_cpu::static_execution::{Health, Kernel, Report};
+    let mut report = Report {
+        kernel: Kernel::X86Sha256,
+        health: Health::Healthy,
+        generation: 0,
+    };
+    assert!(!brynja_caller_residue_audit::accelerated::valid(report));
+    report.kernel = brynja_caller_residue_audit::accelerated::kernel();
+    assert!(brynja_caller_residue_audit::accelerated::valid(report));
+    report.health = Health::Quarantined;
+    assert!(!brynja_caller_residue_audit::accelerated::valid(report));
+    for (name, _, _) in PROBES {
+        let input = [0x36; 256];
+        let mut output = [0xa5; 64];
+        assert_eq!(
+            brynja_caller_residue_audit::higher::check_revoked(name, &input, &mut output),
+            1,
+            "{name}"
+        );
+        // Setup rejects before output is supplied or secret input is accepted.
+        assert_eq!(output, [0xa5; 64]);
+        assert_eq!(input, [0x36; 256]);
+    }
+    println!(
+        "\nCALLER_ACCELERATION: kernel={:?}; no_fallback=true",
+        brynja_caller_residue_audit::accelerated::kernel()
+    );
+}
+
 #[cfg(all(
     target_os = "linux",
     any(target_arch = "x86_64", target_arch = "aarch64")

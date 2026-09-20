@@ -12,8 +12,10 @@ license = "MIT OR Apache-2.0"
 default = []
 scoped = []
 higher = []
+accelerated = ["higher", "brynja-crypto-cpu/hardened-execution", "brynja-mac-kmac/hardened-execution", "brynja-hash-tuple/hardened-execution", "brynja-hash-parallel/hardened-execution"]
 
 [dependencies]
+brynja-crypto-cpu = { path = "../../../crates/brynja-crypto-cpu", default-features = false }
 brynja-mac-kmac = { path = "../../../crates/brynja-mac-kmac", default-features = false }
 brynja-hash-tuple = { path = "../../../crates/brynja-hash-tuple", default-features = false }
 brynja-hash-parallel = { path = "../../../crates/brynja-hash-parallel", default-features = false }

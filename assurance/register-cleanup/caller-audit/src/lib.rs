@@ -1,17 +1,21 @@
 //! Development-only public-API probes. Passing tests do NOT qualify cleanup.
 //!
-//! Each C boundary includes this wrapper and the portable public implementation.
+//! Each C boundary includes this wrapper and the selected public implementation.
 //! The wrapper never exposes the digest and drops its secret output before return.
 //! Only fixed, synthetic, non-confidential test input may be supplied to observers.
 #![no_std]
 #![forbid(unsafe_code)]
 
+#[cfg(feature = "accelerated")]
+pub mod accelerated;
 #[cfg(feature = "higher")]
 pub mod higher;
 pub mod scoped;
 
 /// Explicit diagnostic identity; neither profile qualifies register erasure.
-pub const API_PROFILE: &str = if cfg!(feature = "higher") {
+pub const API_PROFILE: &str = if cfg!(feature = "accelerated") {
+    "accelerated"
+} else if cfg!(feature = "higher") {
     "higher"
 } else if cfg!(feature = "scoped") {
     "scoped"

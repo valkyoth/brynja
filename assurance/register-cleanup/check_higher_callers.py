@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Development-only higher-construction vectors and compiled probe regressions."""
 import importlib.util
+import argparse
 from pathlib import Path
 import re
 import shutil
@@ -42,30 +43,40 @@ def golden_vectors():
     print('Higher caller golden vectors: 12 independently regenerated', flush=True)
 
 
-def mutations():
+def mutations(accelerated=False):
     with tempfile.TemporaryDirectory(prefix='brynja-higher-callers-') as temporary:
         fixture = Path(temporary) / 'fixture'
         shutil.copytree(audit.FIXTURE, fixture, ignore=shutil.ignore_patterns('target'))
         manifest = fixture / 'Cargo.toml'
         manifest.write_text(manifest.read_text().replace('../../../crates/', str(audit.ROOT / 'crates') + '/'))
-        source = fixture / 'src/higher.rs'
-        original = source.read_text()
-        cases = (
+        cases = [('higher.rs', *case) for case in (
             ('$state.update($input)', '$state.update(&[])', 1),
             ('$state.push_item($input)', '$state.push_item(&[])', 1),
             ('drop(secret);', 'core::mem::forget(secret);', 2),
             ('value != secret.expose()', 'value != value', 2),
             ('&mut output[..32]', '&mut output[..31]', 1),
-        )
+        )]
+        if accelerated:
+            audit.require_native_avx2(Path('/proc/cpuinfo').read_text())
+            cases.extend((
+                ('higher.rs', 'owner.quarantine();', '/* missed revocation */', 1),
+                ('accelerated.rs', 'report.kernel == kernel()', 'true', 1),
+                ('accelerated.rs', 'report.health == Health::Healthy', 'true', 1),
+            ))
         env = audit.clean_environment()
         env['CARGO_TARGET_DIR'] = str(Path(temporary) / 'target')
+        if accelerated:
+            env['RUSTFLAGS'] = '-C target-feature=+avx2'
         for profile in ([], ['--release']):
             command = ['cargo', '+1.98.1', 'test', '--locked', '--offline', '--manifest-path',
-                       str(manifest), '--features', 'higher', '--test', 'audit', *profile]
+                       str(manifest), '--features', 'accelerated' if accelerated else 'higher', '--test', 'audit', *profile]
             control = audit.run(command, env)
-            if '5 passed; 0 failed; 0 ignored;' not in control:
+            count = 6 if accelerated else 5
+            if f'{count} passed; 0 failed; 0 ignored;' not in control:
                 raise ValueError('higher caller positive controls did not execute')
-            for before, after, count in cases:
+            for filename, before, after, count in cases:
+                source = fixture / 'src' / filename
+                original = source.read_text()
                 if original.count(before) != count:
                     raise ValueError('ambiguous higher caller mutation: ' + before)
                 try:
@@ -76,9 +87,12 @@ def mutations():
                         raise ValueError('higher caller mutant did not compile and fail: ' + before + result.stderr[-3000:])
                 finally:
                     source.write_text(original)
-    print('Higher caller compiled regressions: 10 rejected in debug/release', flush=True)
+    print(f'Higher caller compiled regressions: {len(cases) * 2} rejected in debug/release; accelerated={accelerated}', flush=True)
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--accelerated', action='store_true')
+    args = parser.parse_args()
     golden_vectors()
-    mutations()
+    mutations(args.accelerated)

@@ -1,4 +1,4 @@
-# Portable/caller residue audit
+# Caller residue audit
 
 Development diagnostics, **not release evidence or an erasure acceptance gate**.
 No production API, backend selection, or release workflow is changed by this
@@ -28,6 +28,15 @@ an empty message; TupleHash adds one item (including an empty item);
 ParallelHash borrows an eight-byte block buffer. Customization is empty.
 XOF readers are created and consumed within the scope. This is not accelerated,
 threaded, arbitrary-bit, verification-only, cancellation or failure-path coverage.
+
+The fixture-only `accelerated` profile uses the same twelve probes and golden
+outputs through the existing scoped execution APIs. It requires a static
+AVX2 or Arm Keccak authority and creates distinct root/leaf sessions for
+ParallelHash. There is no portable fallback. Construction and its public KATs
+are inside the observed wrapper, before any synthetic key/message is supplied.
+The worker checks exact route and health; a separate control revokes authority
+after workspace construction and requires every identity to reject before input
+is accepted. This does not exercise threaded workers or mid-message revocation.
 
 Linux observers seed caller-clobbered registers before the call and snapshot
 them immediately on return, before Rust can overwrite them. Arguments are only
@@ -62,6 +71,8 @@ python3 assurance/register-cleanup/check_callers.py --arm --emit
 python3 assurance/register-cleanup/check_callers.py --scoped --arm --emit
 python3 assurance/register-cleanup/check_higher_callers.py
 python3 assurance/register-cleanup/check_callers.py --higher --arm --emit
+python3 assurance/register-cleanup/check_higher_callers.py --accelerated
+python3 assurance/register-cleanup/check_callers.py --accelerated --arm --emit
 cargo +1.98.1 clippy --locked --offline --manifest-path assurance/register-cleanup/caller-audit/Cargo.toml --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 ```
 
@@ -79,6 +90,19 @@ the fixture, not to separately compiled dependencies. Nine collector regressions
 cover this selection, observation bounds, missing controls and build overrides.
 The higher profile extends the collector to ten regression tests and requires
 exactly its twelve identities. `--higher` and `--scoped` cannot be combined.
+`--accelerated` is likewise mutually exclusive and requires six tests, an exact
+target-specific route marker and all twelve identities. Thirteen collector tests
+cover profile/route substitution, lost revocation controls, every exposed x86
+CPU's AVX/AVX2/XSAVE flags, and dependency-feature emission under Rust 1.90.
+The driver explicitly supplies `+avx2` or QEMU's `+neon,+sha2,+sha3` bundle.
+Linux feature enumeration is not a live migration monitor. Do not directly run
+the specialized fixture on a deployment without that complete feature contract.
+
+For accelerated emitted-code collection, the fixture is selected through its
+isolated manifest; affected dependency libraries are emitted through the root
+workspace with `hardened-execution`. Cargo 1.90 rejects selecting a dependency's
+features through the isolated consumer manifest. These are development artifact
+builds; they do not change production feature defaults or release commands.
 
 ## Initial observations
 
@@ -230,10 +254,40 @@ These observations do not cover transformed values, arbitrary compiler spills,
 all error paths, live migration, native Apple/Windows/Arm behavior or callers'
 pre-existing register contents. They do not close F1 or alter release gates.
 
+## Static accelerated higher-call observations
+
+The twelve scoped KMAC/TupleHash/ParallelHash identities pass on both compiler
+endpoints in debug/release on native Linux x86 AVX2 and QEMU Linux Arm Keccak.
+All 2,688 observations have zero repeated-input matches. This does not prove
+absence of transformed secrets, spills, upper-vector residue or worker-thread
+residue. No native Arm, Apple or Windows execution is claimed by this campaign.
+
+Six tests run in each configuration: independent vectors (and corrupt-vector
+rejection), input/output bounds and clearing, two observer controls, observations,
+and exact-route/health plus revoked-authority rejection. Sixteen compiled
+debug/release mutations reject missing absorption, item content, output Drop,
+comparison, width, revocation, kernel identity and health checks. Strict Clippy,
+ASan/forced LSan and the existing movable/scoped/portable higher controls pass.
+Production crate sources remain unchanged from `daa8e33b`.
+
+The final source-bound record is
+`target/caller-residue-q7339336/observations.json`, SHA-256
+`50bdbaa301c7bc4e66d7dd821906f06699a921d5ab739e23741f399314939a13`.
+It retains compiler identities, flags, Linux CPU enumeration, observations and
+MIR/LLVM/assembly for all eight configurations. Current source and retained
+artifact hashes were rechecked. CPU enumeration is not live-migration assurance.
+
+The inspected Rust 1.90 x86 release KMAC256 wrapper's large `memcpy` calls move
+the session/workspace before accepting the key or message; after update its
+handle transfer is separate from the borrowed sponge. This is a specific emitted
+wrapper observation, not a complete call-tree or spill/metadata qualification.
+The report remains diagnostic and is not a release receipt or F1 closure.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this
-portable-only fixture. Paths below are relative to the repository root.
+fixture. Paths below are relative to the repository root. Earlier observations
+above remain historical; success-return probes do not close the obligations.
 
 | Boundary | Representative sources | Remaining obligation |
 | --- | --- | --- |
@@ -243,7 +297,7 @@ portable-only fixture. Paths below are relative to the repository root.
 | Single accelerated Keccak | `crates/brynja-crypto-cpu/src/hardened_execution/keccak.rs`, `crates/brynja-hash-sha3/src/hardened/accelerated/engine.rs` | Session import/commit now stays inside the opaque kernel. Higher-level absorption, padding and squeeze remain to be addressed. |
 | Batch staging | SHA-2 `src/hardened_batch/engine.rs`, `src/hardened_batch512/engine.rs`; SHA-3 `src/hardened_batch/engine.rs`; MD5 `src/batch/hardened_execution/vector.rs` | Packing, feed-forward/output transfer, portable tails and partial lanes require their own review. |
 | Ownership and finalization | Primitive hardened owners, consuming finalizers, core secret-region output initialization | Moving a by-value Rust owner may create compiler copies; clearing its final owned region is not proof that earlier copies or registers clear. |
-| Higher constructions | KMAC, TupleHash, ParallelHash framing/readers and threaded output transfer | Inherit the primitive limitations and add framing/transfer paths; not covered by these five probes. |
+| Higher constructions | KMAC, TupleHash, ParallelHash framing/readers and threaded output transfer | Portable and static scoped success-return probes cover twelve identities. Thread handoffs, verification/error paths and complete emitted-code qualification remain separate. |
 
 The remediation must keep secret loads/transformations within qualified
 boundaries and address caller staging explicitly. A late `vzeroall`, an ordinary

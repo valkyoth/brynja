@@ -8,21 +8,54 @@ import check_callers as audit
 
 
 def sample(matches=0, api_profile='movable'):
-    algorithms = audit.HIGHER_ALGORITHMS if api_profile == 'higher' else audit.ALGORITHMS
+    algorithms = audit.HIGHER_ALGORITHMS if api_profile in ('higher', 'accelerated') else audit.ALGORITHMS
     return 'CALLER_API_PROFILE: ' + api_profile + '\n' + '\n'.join(f'CALLER_AUDIT: {name}; cases=28; input_marker_cases={matches}; '
                      'qualifies_cleanup=false' for name in sorted(algorithms)) + (
-                         '\ntest result: ok. 5 passed; 0 failed; 0 ignored;\n')
+                         '\nCALLER_ACCELERATION: kernel=X86Keccak; no_fallback=true\ntest result: ok. 6 passed; 0 failed; 0 ignored;\n'
+                         if api_profile == 'accelerated' else '\ntest result: ok. 5 passed; 0 failed; 0 ignored;\n')
 
 
 class ObservationTests(unittest.TestCase):
+    def test_accelerated_dependency_features_use_own_workspace_manifest(self):
+        common = ['--offline', '--manifest-path', str(audit.FIXTURE / 'Cargo.toml')]
+        for package in audit.ACCELERATED_PACKAGES:
+            command = audit.emitted_command('1.90.0', common, package, 'accelerated')
+            self.assertEqual(command[command.index('--manifest-path') + 1], str(audit.ROOT / 'Cargo.toml'))
+        command = audit.emitted_command('1.90.0', common, 'brynja-caller-residue-audit', 'accelerated')
+        self.assertEqual(command[command.index('--manifest-path') + 1], str(audit.FIXTURE / 'Cargo.toml'))
+        self.assertEqual(common[-1], str(audit.FIXTURE / 'Cargo.toml'))
+
     def test_scoped_feature_applies_only_to_fixture_not_dependency_packages(self):
-        for profile in ('movable', 'scoped', 'higher'):
-            for package in (*audit.PACKAGES, *audit.HIGHER_PACKAGES, 'brynja-caller-residue-audit'):
+        for profile in audit.PROFILES:
+            for package in (*audit.PACKAGES, *audit.HIGHER_PACKAGES, 'brynja-crypto-cpu', 'brynja-caller-residue-audit'):
                 command = audit.emitted_command('1.90.0', ['--offline'], package, profile)
                 self.assertEqual(command[:4], ['cargo', '+1.90.0', 'rustc', '--offline'])
                 self.assertEqual(command[4:6], ['-p', package])
                 features = ['--features', profile] if profile != 'movable' and package == 'brynja-caller-residue-audit' else []
+                if profile == 'accelerated' and package in audit.ACCELERATED_PACKAGES:
+                    features = ['--features', 'hardened-execution']
                 self.assertEqual(command[6:], [*features, '--lib', '--', '--emit=mir,llvm-ir,asm'])
+
+    def test_accelerated_route_requires_exact_target_and_revocation_control(self):
+        log = sample(api_profile='accelerated')
+        self.assertEqual(set(audit.observations(log, 'accelerated', 'X86Keccak')), audit.HIGHER_ALGORITHMS)
+        for changed in (log.replace('X86Keccak', 'ArmKeccak'), log.replace('no_fallback=true', 'no_fallback=false'),
+                        log.replace('6 passed', '5 passed'), log + '\nCALLER_ACCELERATION: kernel=X86Keccak; no_fallback=true',
+                        log.replace('CALLER_ACCELERATION:', 'UNRECORDED:'),
+                        log.replace('CALLER_API_PROFILE: accelerated', 'CALLER_API_PROFILE: higher')):
+            with self.assertRaises(ValueError):
+                audit.observations(changed, 'accelerated', 'X86Keccak')
+        for kernel in (None, 'Portable', 'ArmKeccak'):
+            with self.assertRaises(ValueError):
+                audit.observations(log, 'accelerated', kernel)
+
+    def test_avx2_requires_flags_on_every_exposed_processor(self):
+        good = 'processor : 0\nflags : avx avx2 xsave\n\nprocessor : 1\nflags : avx avx2 xsave\n'
+        audit.require_native_avx2(good)
+        for text in ('', good.replace('avx2', 'avx512f', 1), good.replace('xsave', '', 1),
+                     good.replace('flags :', 'missing :', 1), good.replace('avx ', '', 1)):
+            with self.assertRaises(ValueError):
+                audit.require_native_avx2(text)
 
     def test_higher_requires_all_twelve_identities_and_matching_profile(self):
         self.assertEqual(set(audit.observations(sample(api_profile='higher'), 'higher')), audit.HIGHER_ALGORITHMS)

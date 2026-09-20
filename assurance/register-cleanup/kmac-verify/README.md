@@ -259,3 +259,32 @@ This qualifies neither the bytes supplied by the upstream sponge producer nor
 all surrounding compiler spills. Debug write paths, producer staging/cleanup,
 native platforms and independent retest remain separate obligations. No new
 production defect was found and no production or release-gate code changed.
+
+## Portable producer staging loop
+
+```sh
+python3 assurance/register-cleanup/check_sha3_staging.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_staging.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Both 136-byte and 168-byte rate instantiations pass in all eight optimized
+configurations: 16 portable `squeeze_secret` loops. The inspected loop passes
+the bounded chunk to the actual fill definition, rejects its failure before
+writing, and forwards the original initialization owner and its staging slice
+to the exact core write symbol. A full 168-byte staging clear is requested
+before either branch on the write result. Only the successful branch advances
+the remaining count; fill and write errors retain their error results.
+
+All 416 retained-LLVM mutations reject, including moving the clear before the
+write, shortening its range, substituting source/owner pointers, removing calls,
+and reversing loop/error edges. Tests prohibit subprocess execution. Log:
+`target/development-v02449/sha3-staging.log`, SHA-256
+`4c62bb0d5b1f90e15387d374cb2a0a5078c2effd6e89e89bc8d9cbf4c11920ab`.
+
+This checks the selected loop blocks, not correctness of `fill_staging` or the
+clear callee, the entire producer control flow, debug bodies, accelerated
+cleanup guards, compiler spills or native-platform qualification. In particular,
+the local clear-after-write check is not proof of cleanup after a fill failure
+or unwinding; those paths rely on outer owners/guards. The Arm artifacts are
+from QEMU, not native evidence. F1 remains open. Production code, release gates
+and the retained runtime record are unchanged; no full sweep was restarted.

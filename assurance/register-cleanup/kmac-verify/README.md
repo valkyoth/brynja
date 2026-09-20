@@ -751,3 +751,40 @@ the caller's Rust-borrow obligations. Arm artifacts remain QEMU-based, not fresh
 native qualification. Production code, runtime records and release gates are
 unchanged. Broader F1 qualification and independent retest remain outstanding;
 root `PENTEST.md` stays open.
+
+## Scoped KMAC metadata clearing requests
+
+```sh
+python3 assurance/register-cleanup/check_kmac_metadata_clear.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_metadata_clear.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The sixteen retained compiler/target/profile/mode configurations pass checks of
+48 metadata wipe/Drop/guard definitions, 96 modeled invocations and sixteen core
+clearing-wrapper contracts. The scoped guard dereferences its original borrowed
+metadata descriptor; all three cleanup entry points request the complete regions
+in order: key classification (1 byte), verification staging (64 bytes), and
+comparison difference (1 byte). The retained layout places those at offsets
+64, 0 and 65; this is an artifact observation, not a stable Rust layout promise.
+Both zero and nonzero modeled owner offsets are checked. Payload loads/stores
+outside the opaque clearing call are rejected.
+
+The core LLVM wrapper is separately checked to skip empty slices and forward the
+original nonempty pointer and width to the bound volatile-clearing symbol. Its
+debug emptiness helper reads only the descriptor length. The compiler-specific
+result representation is checked without assuming stable enum layout. Cleanup
+callers discard the clearing result; this model does not infer erasure from that
+return value. The zeroizer body has the separate bounded checks described above.
+
+All 1,728 region/call/identity/forwarding mutations reject; 112 comment and debug
+metadata controls pass. These are LLVM-text mutations, not compiled fault tests.
+Tests forbid subprocess execution. Log:
+`target/development-v02449/kmac-metadata-clear.log`, SHA-256
+`a35d58b07ca5878ffa31f520bc5527dd2a9ea4ddbd4fa5686366fd28046d92fd`.
+
+This closes the scoped LLVM clearing-request/forwarding inspection, not destructor
+reachability, machine-level caller residue or whole-call erasure qualification.
+No runtime campaign was repeated; production, runtime records and release gates
+are unchanged. Arm artifacts remain QEMU-based; fresh native Arm/Windows evidence
+and broader F1 qualification/retest remain outstanding. Root `PENTEST.md` remains
+open.

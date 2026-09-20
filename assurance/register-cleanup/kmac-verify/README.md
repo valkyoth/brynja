@@ -871,3 +871,47 @@ No new runtime collection occurred; Arm remains QEMU-based and fresh native
 Arm/Windows evidence remains outstanding. Production, runtime records and release
 gates are unchanged. F1 and root `PENTEST.md` remain open pending the remaining
 qualification and independent retest.
+
+## Optimized verifier cleanup control flow
+
+```sh
+python3 assurance/register-cleanup/check_kmac_optimized_cleanup.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_optimized_cleanup.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 24 optimized verifier bodies in eight retained configurations pass a scoped
+LLVM control-flow check: 1,386 reachable blocks, 216 cleanup call sites and 72
+comparison sites. The inspected region begins when the metadata pointer is
+extracted after `finish`, not at verifier entry. Its descriptor is a bounded
+24/32-byte result slot written by the bound finish callee, with metadata at the
+observed 16/24-byte field offset. The verdict uses the difference byte at metadata
+offset 65. These are retained layouts, not a stable Rust layout promise or proof
+of the contents produced by `finish`.
+
+Starting at extraction and at both successors of each comparison, all modeled
+normal returns follow the complete ordered 1/64/1-byte clearing requests or a
+normally completed bound guard-glue call. Constant-offset aliases must resolve to
+the extracted metadata owner. Cleanup progress advances only on normal invoke
+edges; an unwind retains an attempt, not an assumed completion. Resumed unwinds
+must have attempted cleanup. Inlined sequences and glue are both checked, as are
+explicit normal-versus-landingpad edge kinds, callee identities and call ABIs.
+No comparison may follow the start of cleanup. Each selected start must have a
+reachable return/resume, and comparisons must be dominated by extraction.
+
+All 2,562 region/sequence/control-flow/identity mutations reject; 72 owner-name,
+label and comment controls pass. Mutations include skipping actual clearing
+calls while preserving their continuations, wrong widths/owners, swapped invoke
+edges, partial-cleanup return bypasses, wrong result fields and vacuous loops.
+The prior 1,796 guard-glue/debug-CFG mutations and 64 controls still pass.
+Subprocess execution is prohibited; these are LLVM-text tests, not new compiled
+fault campaigns. Log: `target/development-v02449/kmac-optimized-cleanup.log`, SHA-256
+`00c5d2a36ad3bf39bff785cf1620d5000f2e6ef7b05a989ce2201bdea9a95c0b`.
+
+This does not establish successful cleanup after a clearer unwinds. Early exits
+before metadata extraction, finish-callee contents, comparison-byte provenance,
+implicit unwinds, termination and whole-verifier machine-code spills remain
+outside this checkpoint. Known double-panic aborts are excluded, not treated as
+successful cleanup. Arm artifacts remain QEMU-based; no new runtime or native
+Arm/Windows qualification is claimed. Production, retained runtime records and
+release gates are unchanged. F1 and root `PENTEST.md` remain open pending remaining
+qualification and independent retest.

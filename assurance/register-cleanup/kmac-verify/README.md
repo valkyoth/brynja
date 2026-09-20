@@ -150,3 +150,31 @@ This is a direct-memory inspection, not complete secret-data provenance: it
 does not establish what callees write into result slots, recursively inspect
 their behavior, or prove machine-code spill cleanup. Those obligations and
 native-platform qualification remain separate. F1 remains open.
+
+## Debug secret-output accessors
+
+```sh
+python3 assurance/register-cleanup/check_kmac_output_accessors.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_output_accessors.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The retained debug `HardenedSha3SecretOutput::expose` path has seven reachable
+functions, including `OwnedSecretRegion::expose`, slice/option forwarding and the
+empty-slice constructor. All eight debug configurations pass: 56 functions and
+152 direct descriptor loads. Exact call-graph coverage and bounded descriptor/
+local-slot accesses are checked. Pointer reload aliases must agree with their
+final store inventory; payload pointers do not authorize further dereferences.
+The `as_ref` summary is bound to the retained borrowed-region field at offset 8.
+
+Tests reject 336 memory/call/missing-definition mutations plus 32 actual payload
+dereference, field-offset and alias-overwrite mutations. These are LLVM-text
+tests with subprocess execution forbidden, not compiled/runtime campaigns.
+Log: `target/development-v02449/kmac-output-accessors.log`, SHA-256
+`e95107ef8a26e79d75d77ce89488c8c976529817b0390a50735171d9e4c85fbb`.
+
+Optimized accessors are inlined; this check does not invent separate optimized
+functions or replace the direct-verifier inspection above. Null alternatives
+are ignored for descriptor-access classification, not proven unreachable by a
+CFG analysis. This is not a proof of alias safety, output-producer effects,
+result-slot contents, machine-code spill cleanup or erasure. Those obligations,
+native qualification and fresh retest remain open; no release gate changed.

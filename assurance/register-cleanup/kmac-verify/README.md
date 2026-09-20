@@ -123,3 +123,30 @@ missing definitions, with subprocess execution forbidden. Log:
 This closes the narrow predicate-wrapper inspection item noted above, not the
 whole-verifier pointer-provenance, machine-code spill or native-platform review.
 No production code, original evidence, or release gate changed.
+
+## Direct verifier memory accesses
+
+```sh
+python3 assurance/register-cleanup/check_kmac_verify_memory.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_verify_memory.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 48 retained verifier bodies pass: 2,152 direct loads, 2,288 stores and 508
+memory copies. Their addresses resolve to local allocations or the three input/
+owner descriptors, using only constant-offset alias propagation. A pointer
+loaded from a descriptor does **not** grant trusted provenance to its pointee;
+direct accesses through that pointer reject. Access widths and offsets must
+fit the allocation bounds or the conservative 32-byte descriptor envelope.
+Portable `Core` can be smaller (24 bytes), so this envelope is not an exact Rust
+object-layout or memory-safety proof. Unreviewed vector/volatile/atomic accesses,
+inline assembly and memory intrinsics also reject.
+
+The tests reject 672 access/copy/bounds LLVM-text mutations and accept 48 bounded
+local-alias controls. They forbid subprocess execution and do not rerun Rust.
+Log: `target/development-v02449/kmac-verify-memory.log`, SHA-256
+`0ea30bfd496724b2f38aa72278bf10f38aa4eb5c46f3d5b274d2a9a777707b7d`.
+
+This is a direct-memory inspection, not complete secret-data provenance: it
+does not establish what callees write into result slots, recursively inspect
+their behavior, or prove machine-code spill cleanup. Those obligations and
+native-platform qualification remain separate. F1 remains open.

@@ -1120,3 +1120,33 @@ loop iteration, intervening memory writes or register/spill erasure. The retaine
 artifacts and their compiler/source bindings are reused; tests forbid subprocess
 execution. No production or release-gate changes. Native Arm/Windows qualification
 and independent retest remain outstanding; F1 and root `PENTEST.md` remain open.
+
+## Bulk comparison loop geometry
+
+```sh
+python3 assurance/register-cleanup/check_kmac_compare_loop.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_compare_loop.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 24 optimized verifiers pass checks of 156 additional SSA definitions and 96
+selected blocks. The comparison bound is the unsigned minimum of the requested
+chunk width and the length loaded from the actual secret-output descriptor.
+The index starts at zero, advances by one and repeats until that bound is reached.
+The checker follows LLVM 20's nested one-byte difference loop and LLVM 22's direct
+accumulation-to-latch edge. Null/empty output guards must use the same pointer and
+length as the comparison and guard entry into the loop. Their rejection paths
+cannot reach the current chunk's comparison before another reader invocation.
+
+All 756 LLVM mutations reject; 72 internal-SSA-name, label and comment controls
+pass. They cover wrong descriptor fields, minimum-to-maximum changes, unrelated
+lengths, inverted guards and bypassed index advancement. The preceding 1,056
+candidate-shape mutations and 72 controls also pass. Log:
+`target/development-v02449/kmac-compare-loop.log`, SHA-256
+`6862b1e9eb6bdfc64aeb1fc380b2b1e0e4fe2684526d2c449a4fd746fdc77c12`.
+
+This is selected loop geometry, not proof that a reader returns the complete
+requested length or correct bytes, or proof of all result-discriminator/alias
+effects. Those remain separate callee contracts. No whole-call register/spill
+erasure or native Arm/Windows qualification follows. These retained-text tests
+forbid subprocess execution; no production, runtime-record or release-gate
+changes were made. F1 remains open for remaining qualification and retest.

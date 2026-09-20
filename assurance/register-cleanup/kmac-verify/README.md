@@ -675,3 +675,39 @@ equivalence, whole-call register/spill residue and interruption/abort behavior
 are not established. Arm artifacts remain QEMU-based; native Arm/Windows and
 independent qualification remain outstanding. No production code, release gates
 or runtime records changed. F1 and root `PENTEST.md` remain open.
+
+## Debug byte-precondition normal-return LLVM paths
+
+```sh
+python3 assurance/register-cleanup/check_debug_byte_precondition.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_debug_byte_precondition.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Eight retained debug builds pass twelve normal-path contracts (216 LLVM
+instructions). Rust 1.90 checks alignment inline; Rust 1.98 delegates to a bound
+`is_aligned_to` definition, whose normal-return path is included. The actual
+caller/write assembly is rechecked to supply alignment one. The prior 416 LLVM
+length cases are repeated, not counted as new independent vectors.
+
+These closed contracts corroborate the clearing model's earlier successful
+precondition-return assumption: the bit count of alignment one is one, and
+`address & (alignment - 1)` is zero independently of the address representation.
+The normal path stores descriptors/public diagnostic metadata in local slots,
+not payload bytes, and performs no payload loads. No general LLVM interpreter
+or new runtime execution is claimed. The existing model remains unchanged.
+
+All 544 normal-path/ABI mutations reject; 24 debug-metadata and excluded-panic
+controls pass. Tests prohibit subprocess execution. The previous entry/write and
+iterator/fence mutation suites still pass. Log:
+`target/development-v02449/debug-byte-precondition.log`, SHA-256
+`27dec94d6ded7fad02466fd370aa88beaeb31148ffa1f5d3f15c5f8974a21a76`.
+
+Alignment acceptance is not a null check or allocation-validity check. Live,
+exclusive storage remains the caller's Rust-borrow obligation, not something
+this predicate proves. Invalid-alignment, panic and unwind paths are deliberately
+excluded; mutations of diagnostic panic bodies are accepted as scope controls.
+The precondition's own machine-code lowering, whole-call residue and fresh native
+Arm/Windows qualification remain outside this checkpoint. Arm artifacts are
+QEMU-based. Production, runtime records and release gates are unchanged; F1 and
+root `PENTEST.md` remain open pending remaining qualification and independent
+retest.

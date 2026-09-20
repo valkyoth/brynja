@@ -1087,3 +1087,36 @@ execute modified cryptographic binaries. No compiler/runtime campaign was rerun;
 the tests forbid subprocess execution. Production and release gates are unchanged.
 Arm remains QEMU-based; fresh native Arm/Windows qualification and independent
 retest remain outstanding. F1 and root `PENTEST.md` remain open.
+
+## Candidate length and partial-byte routing
+
+```sh
+python3 assurance/register-cleanup/check_kmac_candidate_shape.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_candidate_shape.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 24 optimized verifiers pass a follow-up check of 168 additional SSA
+definitions and 144 selected blocks. The initial remaining length is now bound
+to the candidate descriptor: byte-aligned inputs use the full byte length;
+partial-byte inputs use length minus one, with the zero-length branch unable to
+reach a reader or comparison. The split phi accounts for every incoming edge,
+including both aligned switch cases. An empty split skips the bulk loop; the
+bulk loop's remaining-count check feeds the same final-byte decision.
+
+Both alignment switches use the candidate's valid-bit field, and that same value
+is passed to the final secret reader. The aligned cases go directly to the
+difference predicate. The final reader is reachable from the partial-byte edge
+and cannot be reached from function entry with that edge removed.
+
+All 1,056 candidate-shape LLVM mutations reject, with 72 valid-bit-name, label
+and comment controls passing. The preceding 1,752 operand-routing mutations,
+18 alias regressions and 72 controls also pass. Log:
+`target/development-v02449/kmac-candidate-shape.log`, SHA-256
+`ab1000035b27800feb16ef74cf39377af129ef6ce1eae3cb52cd8b89e019949a`.
+
+This checks selected descriptor-field and control-flow relationships; it does not
+prove descriptor construction, the reader's masking/output semantics, every
+loop iteration, intervening memory writes or register/spill erasure. The retained
+artifacts and their compiler/source bindings are reused; tests forbid subprocess
+execution. No production or release-gate changes. Native Arm/Windows qualification
+and independent retest remain outstanding; F1 and root `PENTEST.md` remain open.

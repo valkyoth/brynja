@@ -1150,3 +1150,37 @@ effects. Those remain separate callee contracts. No whole-call register/spill
 erasure or native Arm/Windows qualification follows. These retained-text tests
 forbid subprocess execution; no production, runtime-record or release-gate
 changes were made. F1 remains open for remaining qualification and retest.
+
+## Reader-result and output-ownership decisions
+
+```sh
+python3 assurance/register-cleanup/check_kmac_reader_results.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_reader_results.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 24 optimized verifiers pass checks of 48 result/ownership decisions and 144
+additional SSA definitions. Each decision loads the discriminator from the
+24-byte result slot passed to its actual reader invocation. The normal-return
+decision block permits only the reviewed loads, field addressing and comparisons;
+it cannot call another function or overwrite the result before the decision.
+The observed error discriminator takes a path that cannot reach a reader,
+accumulation or verdict predicate. The non-error edge uniquely enters output
+construction and dominates the corresponding comparison.
+
+The output descriptor receives that same discriminator. Its owned-payload bit
+controls the actual pointer-load block; a rejected payload cannot reach the
+current comparison before another reader invocation. These are observations of
+the retained compiler-private enum layouts, not stable Rust ABI promises.
+
+All 1,152 LLVM mutations reject; 72 internal-SSA-name, label and comment controls
+pass. The preceding 756 comparison-loop mutations and 72 controls also pass. Log:
+`target/development-v02449/kmac-reader-results.log`, SHA-256
+`664a936baa6187ffea5feb4b2b11d5d4d37da869b5c5d18b48210ca52199c4e5`.
+
+This closes the selected caller result/ownership routing check, not proof of
+callee result semantics, the exact returned bytes/length, every alias/write
+effect, the final returned error encoding or machine register/spill erasure.
+No compiler/runtime campaign was rerun; tests forbid subprocess execution.
+Production, retained runtime records and release gates are unchanged. Native
+Arm/Windows qualification and independent retest remain outstanding; F1 and
+root `PENTEST.md` remain open.

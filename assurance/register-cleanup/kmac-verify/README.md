@@ -1046,3 +1046,44 @@ are not stable Rust ABI promises. Arm artifacts remain QEMU-based; native
 Arm/Windows qualification and independent retest remain outstanding. Production,
 runtime records and release gates are unchanged. F1 and root `PENTEST.md` remain
 open pending remaining qualification and retest.
+
+## Optimized comparison operand routing
+
+```sh
+python3 assurance/register-cleanup/check_kmac_operand_routes.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_operand_routes.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 24 retained optimized verifiers pass: 48 accumulation sites, 48 bound reader
+producers and 744 selected SSA definitions. Bulk actual/candidate pointers use
+the same byte index, starting at zero with unit feedback. Candidate chunk pointers
+start at the input descriptor and advance by the requested squeeze width, bounded
+by the observed `umin(remaining, 64)` expression. The final candidate pointer is
+the input pointer plus its byte length minus one. Actual pointers come from the
+separate bulk/final secret-output descriptors, while the difference pointer uses
+metadata offset 65 (directly, or through Rust 1.90's one-byte loop).
+
+The checker follows both pieces of each returned pointer field: the separately
+loaded/stored first byte and the remaining bytes within a 15-byte descriptor copy.
+Arm's additional 15-byte staging allocation is matched to its source copy. Each
+result is tied to a reader invocation that receives the extracted metadata buffer
+and the matching bulk width or single final byte. Selected SHAKE/cSHAKE LLVM
+aliases must name a defined target with the reviewed family mapping and argument
+layout; accelerated readers share the rate-carrying implementation.
+
+All 1,752 LLVM mutations and 18 alias regressions reject; 72 owner-name, label and
+comment controls pass. These include swapped/self-comparison operands, wrong
+offsets, loop steps and widths, partial/duplicate descriptor copies, missing
+pointer bytes and wrong reader buffers. The preceding 996 callee and 504 caller
+metadata-transfer mutations and 144 controls also pass. Log:
+`target/development-v02449/kmac-operand-routes.log`, SHA-256
+`27d98d1a185e21d3feb0635c5311128edda3d4bcc75d8b2c80078fdf1688a615`.
+
+This is selected routing under the reader-result contracts, not a complete
+control-flow/dominance, bounds, initial remaining-length, final-bit mask or
+intervening alias-effects proof. It does not establish callee output contents,
+all memory writes, machine spills or whole-call erasure. Text mutations do not
+execute modified cryptographic binaries. No compiler/runtime campaign was rerun;
+the tests forbid subprocess execution. Production and release gates are unchanged.
+Arm remains QEMU-based; fresh native Arm/Windows qualification and independent
+retest remain outstanding. F1 and root `PENTEST.md` remain open.

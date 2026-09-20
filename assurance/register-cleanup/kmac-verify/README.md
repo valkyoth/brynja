@@ -351,3 +351,34 @@ debug/accelerated producers, entire caller spill behavior, or native-platform
 qualification. Arm evidence remains QEMU execution. No production defect was
 found; production, release gates and the retained runtime record are unchanged.
 F1 and the independent-retest requirement remain open.
+
+## Accelerated read-loop boundaries
+
+```sh
+python3 assurance/register-cleanup/check_accelerated_read.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_accelerated_read.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All four optimized accelerated `Engine::read` bodies pass the loop-boundary
+inspection. The destination/length phis start with the original caller slice;
+the cursor and rate are read from their actual owner fields. Permutation uses
+the same session and lane buffer, and cursor reset follows only its success.
+The available rate must be nonzero and not underflow. The copy width is the
+minimum of remaining output and available state; checked end arithmetic and
+the 200-byte lane bound precede the borrowed equal-length copy. Cursor progress
+commits only after successful copying. Copy/permutation errors retain their
+failure result and request terminal owner cleanup; the unwind path requests
+the same memory cleanup and resumes the original exception.
+
+All 120 retained-LLVM mutations reject, including moved-before-copy cursor
+commits, copy-pointer/length substitutions, off-by-one lane bounds, missing
+wipes, reversed loop checks and substituted unwind results. Subprocess
+execution is forbidden. Log: `target/development-v02449/accelerated-read.log`,
+SHA-256 `7cb43861c0349d3717183ac76bc227ca7770e2cb6b709c3047f05703c967e7e7`.
+
+This inspection does not prove the preflight/output-counter calculation,
+callee erasure or permutation correctness, debug lowering, the complete
+caller spill footprint, or native-platform behavior. These checks reuse
+native x86 and Arm/QEMU artifacts, not fresh native Arm/Windows evidence.
+Production and release gates are unchanged. F1 remains open pending the
+remaining qualification and fresh independent retest.

@@ -534,3 +534,41 @@ behavior, whole-call register/spill erasure, or native Arm/Windows platforms.
 The retained Arm artifacts remain QEMU-based. No production code, release gate
 or retained runtime record changed; no production defect was established.
 F1 remains open pending remaining qualification and fresh independent retest.
+
+## Debug volatile-clear iterator and store paths
+
+```sh
+python3 assurance/register-cleanup/check_debug_volatile_clear.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_debug_volatile_clear.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+Eight retained debug builds pass 416 modeled lengths through six-function
+clearing/helper closures. The actual emitted iterator construction, iterator
+advance, `write_volatile` body and compiler-fence ordering selection are followed.
+Every requested byte receives exactly one volatile zero store, after its byte
+pointer check, followed by one sequentially consistent single-thread compiler
+fence after the entire slice. Empty input skips stores but still reaches the
+fence. Ordinary payload loads/stores are prohibited by the model.
+
+The byte-pointer precondition helper is a deliberate model boundary: it receives
+the original in-range, non-null byte address and alignment one, and successful
+return is assumed. Its assertion/panic implementation is not evaluated. All live
+blocks in the clearing, iterator and volatile-write functions are visited across
+the cases; only the requested SeqCst path of the ordering helper is required.
+Lengths cover 0..33 and selected boundaries around 64, 128, 136, 168, 256 and 512,
+with a nonzero, unaligned symbolic base and surrounding allocation space.
+
+All 192 retained-LLVM mutations reject; eight debug-metadata controls pass.
+The indexed descriptor-memory implementation matches the existing model for
+100 overlapping-store cases. After extending the shared model, the prior write
+and finish suites still reject 260 write LLVM mutations, 40 copy-assembly
+mutations and 256 finish mutations; their 32 positive controls pass. Tests forbid
+subprocess execution. Log: `target/development-v02449/debug-volatile-clear.log`,
+SHA-256 `9fe2478036d2e133c1d9ed2a2ac7110e6c22a186375ee12de101f512921b1f78`.
+
+These are bounded artifact/model checks, not newly compiled fault tests, a
+complete LLVM/ABI interpretation, an all-length or pointer-precondition proof,
+or final machine-code/whole-call register and spill qualification. Arm artifacts
+remain QEMU-based; no fresh native Arm/Windows evidence is supplied. No production
+code, release gate or retained runtime record changed, and no production defect
+was established. F1 remains open for remaining qualification and fresh retest.

@@ -52,6 +52,7 @@ class Model:
         self.memory, self.sizes, self.payloads = {}, {}, set()
         self.events, self.visited = [], set()
         self.frames = self.steps = 0
+        self.step_limit = 3000
         for line in globals_text.splitlines():
             found = re.fullmatch(r'(@[-.$\w]+) = private unnamed_addr constant '
                                  r'<\{ \[8 x i8\], \[8 x i8\] }> '
@@ -118,6 +119,12 @@ class Model:
             value &= (1 << int(found[1][1:])) - 1
         return value
 
+    def volatile_store(self, ptr, value):
+        raise ValueError('volatile writes are outside this descriptor model')
+
+    def compiler_fence(self, order):
+        raise ValueError('fences are outside this descriptor model')
+
     def run(self, name, args, depth=0):
         require(depth < 20, 'bounded debug helper nesting')
         if self.fault is not None and name == self.fault[0]:
@@ -146,7 +153,7 @@ class Model:
             lines = graph[label]
             for index, line in enumerate(lines):
                 self.steps += 1
-                require(self.steps < 3000, 'bounded debug instruction count')
+                require(self.steps < self.step_limit, 'bounded debug instruction count')
                 dest, op = (line.split(' = ', 1) if ' = ' in line else (None, line))
                 val = UNKNOWN
                 found = re.fullmatch(r'alloca \[(\d+) x i8\], align (\d+)', op)
@@ -158,6 +165,10 @@ class Model:
                 elif found := re.fullmatch(r'store (ptr|i\d+) (\S+), ptr (\S+), align \d+', op):
                     width = 8 if found[1] == 'ptr' else int(found[1][1:]) // 8
                     self.store(self.value(found[3], env), width, self.typed(found[1] + ' ' + found[2], env))
+                elif found := re.fullmatch(r'store volatile i8 (\S+), ptr (\S+), align 1', op):
+                    self.volatile_store(self.value(found[2], env), self.typed('i8 ' + found[1], env))
+                elif found := re.fullmatch(r'fence syncscope\("singlethread"\) (seq_cst|acq_rel|acquire|release)', op):
+                    self.compiler_fence(found[1])
                 elif found := re.fullmatch(r'getelementptr inbounds(?: nuw)? i8, ptr (\S+), i64 (\S+)', op):
                     ptr, offset = self.value(found[1], env), self.value(found[2], env)
                     require(isinstance(ptr, Pointer) and type(offset) is int, 'descriptor GEP operands')
@@ -174,6 +185,11 @@ class Model:
                     if 'nuw' in op:
                         require(value < 1 << int(found[3]), 'non-poison truncation')
                     val = value & ((1 << int(found[3])) - 1)
+                elif found := re.fullmatch(r'icmp (eq|ne) ptr (\S+), (\S+)', op):
+                    a, b = self.value(found[2], env), self.value(found[3], env)
+                    require((a == 0 or isinstance(a, Pointer)) and (b == 0 or isinstance(b, Pointer)),
+                            'initialized pointer comparison operands')
+                    val = int(a == b) if found[1] == 'eq' else int(a != b)
                 elif found := re.fullmatch(r'icmp (eq|ne|ult|ule|ugt|uge) i(\d+) (\S+), (\S+)', op):
                     a = self.typed('i' + found[2] + ' ' + found[3], env)
                     b = self.typed('i' + found[2] + ' ' + found[4], env)
@@ -200,6 +216,17 @@ class Model:
                     pair = list((UNKNOWN, UNKNOWN) if pair is UNKNOWN else pair)
                     pair[int(found[3])] = self.typed(found[2], env)
                     val = tuple(pair)
+                elif found := re.fullmatch(r'switch i64 (\S+), label %(\S+) \[', op):
+                    require(lines[-1] == ']', 'terminal switch closing bracket')
+                    cases = {}
+                    for case in lines[index + 1:-1]:
+                        entry = re.fullmatch(r'i64 (\d+), label %(\S+)', case)
+                        require(entry is not None and int(entry[1]) not in cases, 'unique switch case')
+                        cases[int(entry[1])] = entry[2]
+                    selector = self.value(found[1], env)
+                    require(type(selector) is int, 'initialized switch selector')
+                    label = cases.get(selector, found[2])
+                    break
                 elif op.startswith('invoke '):
                     require(index == len(lines) - 2, 'invoke followed by terminal edges')
                     normal, unwind = shared.edges(lines[index + 1])

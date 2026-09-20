@@ -64,3 +64,35 @@ repository's existing `chunks_exact_to_as_chunks` compatibility allowance.
 Production verification logic is unchanged. Complete emitted-code analysis,
 native platform qualification and fresh independent retest remain separate;
 the earlier long Miri result was retained rather than repeated.
+
+## Retained comparison-path inspection
+
+These commands reuse the record above without compiling or executing Rust:
+
+```sh
+python3 assurance/register-cleanup/check_kmac_verify_comparisons.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_verify_comparisons.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The checker validates the exact sixteen-configuration matrix, current source
+closure, execution labels, runtime-log observations and all 240 artifact hashes.
+Across 48 instantiated verifier bodies, each has two pointer-only accumulation
+calls and one pointer-input, byte-sized `Choice` verdict call. The 24 core
+accumulation forwarding wrappers have a closed LLVM instruction grammar: input
+pointers may be stored in local debug slots, but no secret-byte loads, arithmetic,
+branches or extra calls are allowed. Each forwards the same three pointers to
+the private accumulation boundary. The existing difference and predicate
+assembly validators also pass on all 32 private boundaries in this record.
+
+Negative controls reject 480 call-ABI, 264 pointer-forwarding and 160 assembly
+mutations, sixteen missing-verifier inventories and twelve record/source/hash/
+log changes. These are LLVM/assembly-text mutations, **not** newly compiled or
+executed mutants. The test forbids subprocess execution. Inspection log:
+`target/development-v02449/kmac-verify-comparisons.log`, SHA-256
+`3424d808ae64da75ade5737f187820177d87f8d92dddbc70ec8aab1ade7c935d`.
+
+This proves neither pointer provenance at the verifier call sites nor cleanup
+of its full body, predicate wrapper, callee tree or compiler spills. Normalized
+verification results intentionally leave the comparison boundary. It does not
+extend the original observation scope to native Arm, Apple or Windows, and
+does not close F1 or replace the pending independent retest.

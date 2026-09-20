@@ -1,0 +1,27 @@
+[workspace]
+
+[package]
+name = "brynja-kmac-verify-caller"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[features]
+default = []
+accelerated = ["brynja-mac-kmac/hardened-execution", "brynja-crypto-cpu/hardened-execution"]
+
+[dependencies]
+brynja-mac-kmac = { path = "../../../crates/brynja-mac-kmac", default-features = false }
+brynja-crypto-cpu = { path = "../../../crates/brynja-crypto-cpu", default-features = false }
+
+[dev-dependencies]
+brynja-caller-residue-audit = { path = "../caller-audit", default-features = false }
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"

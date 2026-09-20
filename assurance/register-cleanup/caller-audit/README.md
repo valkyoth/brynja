@@ -502,6 +502,12 @@ Production code and release gates are unchanged. The earlier long Miri result
 was retained, not rerun. Verification machine-code/platform qualification and the
 fresh independent retest still remain; this checkpoint does not close F1.
 
+The separate [KMAC verification-return fixture](../kmac-verify/README.md) now
+adds portable and required-static match/mismatch/error return observations and
+retains instantiated verifier artifacts. It does not modify this fixture or
+invalidate its prior threaded source-bound record. Its marker observations do
+not replace full verification machine-code or platform qualification.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this

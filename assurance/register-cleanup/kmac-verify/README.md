@@ -206,3 +206,30 @@ writes produced the correct bytes, whether the volatile cleanup callee completes
 or whether machine-code spills are erased. Debug completion bodies, surrounding
 SHA-3 result wrapping, squeeze/finalization producers and platform qualification
 remain separate review obligations. No production or release-gate changes.
+
+## Optimized SHA-3 output wrapping
+
+```sh
+python3 assurance/register-cleanup/check_sha3_output_wrap.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_output_wrap.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All eight optimized `finish_secret` wrappers pass, covering all 52 blocks in
+the retained Rust 1.90/1.98 artifacts. Empty, complete, incomplete and missing-
+region cases are followed separately. The only copy transfers the 24-byte
+initialization descriptor, not payload bytes; the exact core completion callee
+is independently checked by the preceding handoff inspector. Success preserves
+the original pointer/length, failures become the value-free SHA-3 secret-memory
+error, and empty output bypasses completion without fabricating ownership.
+
+All 160 descriptor/call/result/branch mutations and eight broken core-handoff
+bindings reject. Tests prohibit subprocess execution. Log:
+`target/development-v02449/sha3-output-wrap.log`, SHA-256
+`17c7988941b6d451f835b2aa886b6f1f8ddebf4da984a9f5a54c666a6651dfb8`.
+
+Source tracing also confirms that portable `sponge.rs::squeeze_secret` and
+accelerated `in_place/xof/core.rs::Borrowed::secret` write through initialization
+owners and guarded staging. That source review is not new emitted-code
+qualification of those producers. Debug completion/wrapping, byte-production
+paths, machine-code spills and platform qualification remain separate; F1 is
+not closed by this checkpoint. No production or release-gate change.

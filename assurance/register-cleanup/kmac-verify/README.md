@@ -915,3 +915,44 @@ successful cleanup. Arm artifacts remain QEMU-based; no new runtime or native
 Arm/Windows qualification is claimed. Production, retained runtime records and
 release gates are unchanged. F1 and root `PENTEST.md` remain open pending remaining
 qualification and independent retest.
+
+## Early verifier rejection and ownership handoff
+
+```sh
+python3 assurance/register-cleanup/check_kmac_early_cleanup.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_early_cleanup.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The 24 optimized verifier bodies now also pass a separate check from entry up to
+the `finish` handoff: 216 blocks and 96 metadata-cleanup call sites across eight
+retained builds. Every modeled early normal return follows the ordered
+1/64/1-byte clearing requests against metadata loaded from the original Core
+descriptor. The explicit state-destructor unwind path invokes the original
+metadata guard before resuming. Cleanup attempts and normal completion remain
+distinct; a double-panic abort is excluded rather than called successful cleanup.
+
+The accepted handoff copies the full observed 24/32-byte Core descriptor from
+`self` into the bounded local descriptor passed to the bound `finish` callee.
+This path must precede metadata cleanup. The small pre-handoff slice rejects
+stores, indirect calls and unreviewed side effects. State-destructor calls are
+bound to retained SHA-3 definitions, including exact compiler-generated
+`void(ptr)` aliases where LLVM merged monomorphizations. Their argument must
+refer to the original state field; their internal cleanup behavior is not proved
+by this check. Both explicit branch outcomes are explored, and loops, missing
+return/resume/handoff paths and wrong metadata provenance reject.
+
+All 2,040 ownership/region/handoff/control-flow mutations and six alias-binding
+regressions reject; 72 owner-name, label and comment controls pass. The preceding
+2,562 optimized cleanup mutations and 72 controls still pass. Tests forbid
+subprocess execution and only mutate retained LLVM text. Log:
+`target/development-v02449/kmac-early-cleanup.log`, SHA-256
+`419818b217e434772100cde9fa4677a171ce2db059a9997066bd1c22d3f43e76`.
+
+This advances early-rejection coverage, not whole-verifier erasure. The check
+stops at the handoff; `finish` error paths and output contents, comparison-byte
+provenance, successful cleanup after unwinding, implicit unwinds, termination
+and machine-code spills remain separate obligations. It relies on the existing
+borrowed-state/metadata separation contract, not a new aliasing proof. Arm
+artifacts remain QEMU-based, not native Arm/Windows qualification. No production,
+runtime-record or release-gate changes; F1 and root `PENTEST.md` remain open for
+remaining qualification and independent retest.

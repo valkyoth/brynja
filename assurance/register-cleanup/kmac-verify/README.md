@@ -96,3 +96,30 @@ of its full body, predicate wrapper, callee tree or compiler spills. Normalized
 verification results intentionally leave the comparison boundary. It does not
 extend the original observation scope to native Arm, Apple or Windows, and
 does not close F1 or replace the pending independent retest.
+
+## Verdict conversion path
+
+The remaining predicate forwarding path can be checked without rebuilding:
+
+```sh
+python3 assurance/register-cleanup/check_kmac_verdict.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_verdict.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All sixteen configurations pass. Debug artifacts retain the public wrapper,
+private `apply` wrapper and `Choice::from_lsb`; optimized artifacts fold these
+into the public wrapper. The checker follows all 32 retained wrappers with a
+closed LLVM grammar. It requires the original borrowed difference pointer and
+full-byte mask at the private boundary, exact predicate normalization and a
+returned value derived from that predicate. No raw difference load is permitted
+in these wrappers. Optional local debug stores contain only pointers, a public
+mask or the normalized verdict intentionally exposed by verification. The
+existing assembly validator checks the private predicate in all sixteen builds.
+
+Tests reject 400 load/store/call/return/normalization LLVM-text mutations and 48
+missing definitions, with subprocess execution forbidden. Log:
+`target/development-v02449/kmac-verdict.log`, SHA-256
+`fd0e3edccd67a3cd079fa56baf4228c668c7a74b296a3b91d7671510cae1c0c3`.
+This closes the narrow predicate-wrapper inspection item noted above, not the
+whole-verifier pointer-provenance, machine-code spill or native-platform review.
+No production code, original evidence, or release gate changed.

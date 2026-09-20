@@ -1,10 +1,12 @@
 //! Diagnostic observations, NOT an erasure acceptance gate.
 use brynja_caller_residue_audit::PROBES;
-#[cfg(feature = "higher")]
+#[cfg(all(feature = "higher", not(feature = "threaded")))]
 mod higher_vectors;
+#[cfg(feature = "threaded")]
+mod threaded_vectors;
 
 #[test]
-#[cfg(feature = "accelerated")]
+#[cfg(all(feature = "accelerated", not(feature = "threaded")))]
 fn accelerated_workers_reject_revoked_authority_without_fallback() {
     use brynja_crypto_cpu::static_execution::{Health, Kernel, Report};
     let mut report = Report {
@@ -45,7 +47,7 @@ mod observer;
 fn public_calls_clear_only_the_owned_output_and_preserve_input() {
     for (_, probe, width) in PROBES {
         let input = [0x36; 256];
-        for length in [0, 1, 55, 56, 63, 64, 111, 112, 127, 128, 135, 136, 255, 256] {
+        for &length in brynja_caller_residue_audit::LENGTHS {
             let mut output = [0xa5; 64];
             assert_eq!(probe(&input, &mut output, length), 0);
             assert_eq!(&output[..width], &vec![0; width]);
@@ -141,7 +143,7 @@ fn diagnostic_return_observations_are_not_cleanup_qualification() {
         let mut input_marker_cases = 0;
         for marker in [0x36, 0xa7] {
             let input = [marker; 256];
-            for length in [0, 1, 55, 56, 63, 64, 111, 112, 127, 128, 135, 136, 255, 256] {
+            for &length in brynja_caller_residue_audit::LENGTHS {
                 let mut output = [0xa5; 64];
                 let snapshot = observer::capture(probe, &input, &mut output, length);
                 assert_eq!(snapshot[0], 0, "public probe rejected synthetic input");

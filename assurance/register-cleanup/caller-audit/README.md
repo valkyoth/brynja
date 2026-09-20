@@ -38,6 +38,18 @@ The worker checks exact route and health; a separate control revokes authority
 after workspace construction and requires every identity to reject before input
 is accepted. This does not exercise threaded workers or mid-message revocation.
 
+The fixture-only `threaded` profile invokes the public scoped ParallelHash
+coordinator with two workers, an eight-byte block and 32-byte secret output.
+All four fixed/XOF identities run through portable, required static single-kernel
+and required static multibuffer routes (twelve probes). Empty input and complete
+four-leaf groups use lengths 0, 32, 64, ..., 256; two markers give 18 observations
+per probe. Partial required-mode groups are tested separately for rejection,
+not silently replaced by portable work. Checks bind leaf counts, accelerated
+counts, worker width, root identity/health and multibuffer counters. Independent
+vectors check results before output Drop; pre-cancelled calls must clear output.
+The observer runs on the **coordinator after join**, not on the worker threads.
+Neither worker-register residue nor OS thread-stack cleanup is measured here.
+
 Linux observers seed caller-clobbered registers before the call and snapshot
 them immediately on return, before Rust can overwrite them. Arguments are only
 live buffer addresses and public lengths. The snapshot includes nine integer
@@ -73,6 +85,8 @@ python3 assurance/register-cleanup/check_higher_callers.py
 python3 assurance/register-cleanup/check_callers.py --higher --arm --emit
 python3 assurance/register-cleanup/check_higher_callers.py --accelerated
 python3 assurance/register-cleanup/check_callers.py --accelerated --arm --emit
+python3 assurance/register-cleanup/check_threaded_callers.py
+python3 assurance/register-cleanup/check_callers.py --threaded --arm --emit
 cargo +1.98.1 clippy --locked --offline --manifest-path assurance/register-cleanup/caller-audit/Cargo.toml --all-targets -- -D warnings -A clippy::chunks_exact_to_as_chunks
 ```
 
@@ -103,6 +117,12 @@ isolated manifest; affected dependency libraries are emitted through the root
 workspace with `hardened-execution`. Cargo 1.90 rejects selecting a dependency's
 features through the isolated consumer manifest. These are development artifact
 builds; they do not change production feature defaults or release commands.
+
+The threaded profile instead emits every dependency in one isolated consumer
+build using `--emit=mir,llvm-ir,asm,link`, preserving that consumer's unified
+feature graph on both endpoint compilers. Fourteen collector tests now include
+threaded profile, route, scope, count and emission-command substitution checks.
+The threaded profile cannot be combined with another collector profile.
 
 ## Initial observations
 
@@ -283,6 +303,39 @@ handle transfer is separate from the borrowed sponge. This is a specific emitted
 wrapper observation, not a complete call-tree or spill/metadata qualification.
 The report remains diagnostic and is not a release receipt or F1 closure.
 
+## Threaded coordinator observations
+
+The twelve threaded probes pass on Rust 1.90/1.98, debug/release, native Linux
+x86 AVX2 and QEMU Linux Arm. All 1,728 observations have zero repeated-input
+register markers. This observes the coordinating thread after every worker has
+joined; it is **not worker-register or thread-stack erasure qualification**.
+
+Six tests pass per configuration. Independent Python vectors cover all four
+identities through all three routes. Sixteen compiled debug/release mutants
+reject missing output Drop, disabled vector comparison, altered leaf/route/width
+accounting, changed block framing, missing cancellation and portable substitution.
+Fourteen collector tests, strict fixture Clippy and ASan with forced LeakSanitizer
+pass. The existing threaded library's 53 tests also pass with required native
+multibuffer coverage, including launch failure, cancellation, panic, ordering,
+join and output-slot cleanup cases. Prior movable/scoped/higher/accelerated
+fixture controls still pass under Rust 1.90.
+
+Source inspection traces worker output into disjoint parent-owned slots that
+are allocated empty and not resized while populated. Workers return typed
+result borrows, not digest arrays or live authority leases. Rust 1.98.1 x86
+release MIR likewise retains `leaf128`/`leaf256` results as `(LeafResult, bool)`;
+that observation alone cannot rule out compiler-created temporaries elsewhere.
+The parent slot guard survives worker errors and coordinator unwinding. Existing
+fault tests exercise that lifecycle; this diagnostic adds no production changes.
+
+The source-bound record is `target/caller-residue-tcj2wmrb/observations.json`,
+SHA-256 `35b448f6a2995a25a2d42ca97646081efbcc709d14b2b0652f0f1bac4706d501`.
+All recorded source hashes and 312 MIR/LLVM/assembly hashes were checked. These
+are retained development artifacts, not automatic emitted-code qualification,
+native Apple/Windows/Arm evidence or a release receipt. Full worker/caller spill
+inspection, additional failure/verification paths and final native qualification
+remain separate obligations. F1 stays open.
+
 ## Remaining source boundaries
 
 These are inspected source boundaries, not all dynamically tested by this
@@ -297,7 +350,7 @@ above remain historical; success-return probes do not close the obligations.
 | Single accelerated Keccak | `crates/brynja-crypto-cpu/src/hardened_execution/keccak.rs`, `crates/brynja-hash-sha3/src/hardened/accelerated/engine.rs` | Session import/commit now stays inside the opaque kernel. Higher-level absorption, padding and squeeze remain to be addressed. |
 | Batch staging | SHA-2 `src/hardened_batch/engine.rs`, `src/hardened_batch512/engine.rs`; SHA-3 `src/hardened_batch/engine.rs`; MD5 `src/batch/hardened_execution/vector.rs` | Packing, feed-forward/output transfer, portable tails and partial lanes require their own review. |
 | Ownership and finalization | Primitive hardened owners, consuming finalizers, core secret-region output initialization | Moving a by-value Rust owner may create compiler copies; clearing its final owned region is not proof that earlier copies or registers clear. |
-| Higher constructions | KMAC, TupleHash, ParallelHash framing/readers and threaded output transfer | Portable and static scoped success-return probes cover twelve identities. Thread handoffs, verification/error paths and complete emitted-code qualification remain separate. |
+| Higher constructions | KMAC, TupleHash, ParallelHash framing/readers and threaded output transfer | Portable and static scoped success-return probes cover twelve identities; threaded coordinator probes cover four identities over three routes. Worker-register/spill qualification, verification/error paths and complete emitted-code qualification remain separate. |
 
 The remediation must keep secret loads/transformations within qualified
 boundaries and address caller staging explicitly. A late `vzeroall`, an ordinary

@@ -8,9 +8,12 @@ import check_callers as audit
 
 
 def sample(matches=0, api_profile='movable'):
-    algorithms = audit.HIGHER_ALGORITHMS if api_profile in ('higher', 'accelerated') else audit.ALGORITHMS
-    return 'CALLER_API_PROFILE: ' + api_profile + '\n' + '\n'.join(f'CALLER_AUDIT: {name}; cases=28; input_marker_cases={matches}; '
+    algorithms = audit.THREADED_ALGORITHMS if api_profile == 'threaded' else audit.HIGHER_ALGORITHMS if api_profile in ('higher', 'accelerated') else audit.ALGORITHMS
+    cases = 18 if api_profile == 'threaded' else 28
+    return 'CALLER_API_PROFILE: ' + api_profile + '\n' + '\n'.join(f'CALLER_AUDIT: {name}; cases={cases}; input_marker_cases={matches}; '
                      'qualifies_cleanup=false' for name in sorted(algorithms)) + (
+                         '\nCALLER_THREADS: kernel=X86Keccak; workers=2; block=8; profiles=portable,static,batch; coordinator_only=true\ntest result: ok. 6 passed; 0 failed; 0 ignored;\n'
+                         if api_profile == 'threaded' else
                          '\nCALLER_ACCELERATION: kernel=X86Keccak; no_fallback=true\ntest result: ok. 6 passed; 0 failed; 0 ignored;\n'
                          if api_profile == 'accelerated' else '\ntest result: ok. 5 passed; 0 failed; 0 ignored;\n')
 
@@ -26,7 +29,7 @@ class ObservationTests(unittest.TestCase):
         self.assertEqual(common[-1], str(audit.FIXTURE / 'Cargo.toml'))
 
     def test_scoped_feature_applies_only_to_fixture_not_dependency_packages(self):
-        for profile in audit.PROFILES:
+        for profile in audit.PROFILES[:-1]:
             for package in (*audit.PACKAGES, *audit.HIGHER_PACKAGES, 'brynja-crypto-cpu', 'brynja-caller-residue-audit'):
                 command = audit.emitted_command('1.90.0', ['--offline'], package, profile)
                 self.assertEqual(command[:4], ['cargo', '+1.90.0', 'rustc', '--offline'])
@@ -35,6 +38,19 @@ class ObservationTests(unittest.TestCase):
                 if profile == 'accelerated' and package in audit.ACCELERATED_PACKAGES:
                     features = ['--features', 'hardened-execution']
                 self.assertEqual(command[6:], [*features, '--lib', '--', '--emit=mir,llvm-ir,asm'])
+
+    def test_threaded_profile_binds_coordinator_only_and_all_routes(self):
+        log = sample(api_profile='threaded')
+        self.assertEqual(set(audit.observations(log, 'threaded', 'X86Keccak')), audit.THREADED_ALGORITHMS)
+        for before, after in (('coordinator_only=true', 'coordinator_only=false'), ('workers=2', 'workers=1'),
+                              ('static,batch', 'static'), ('kernel=X86Keccak', 'kernel=ArmKeccak'),
+                              ('cases=18', 'cases=28'), ('6 passed', '5 passed'), ('CALLER_AUDIT: batch128', 'MISSING: batch128')):
+            with self.assertRaises(ValueError):
+                audit.observations(log.replace(before, after), 'threaded', 'X86Keccak')
+        with self.assertRaises(ValueError):
+            audit.observations(log, 'accelerated', 'X86Keccak')
+        command = audit.emitted_threaded_tree('1.90.0', ['--locked', '--offline'])
+        self.assertEqual(command, ['cargo', '+1.90.0', 'build', '--locked', '--offline', '--features', 'threaded', '--lib'])
 
     def test_accelerated_route_requires_exact_target_and_revocation_control(self):
         log = sample(api_profile='accelerated')

@@ -6,14 +6,18 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
-#[cfg(feature = "accelerated")]
+#[cfg(any(feature = "accelerated", feature = "threaded"))]
 pub mod accelerated;
 #[cfg(feature = "higher")]
 pub mod higher;
 pub mod scoped;
+#[cfg(feature = "threaded")]
+pub mod threaded;
 
 /// Explicit diagnostic identity; neither profile qualifies register erasure.
-pub const API_PROFILE: &str = if cfg!(feature = "accelerated") {
+pub const API_PROFILE: &str = if cfg!(feature = "threaded") {
+    "threaded"
+} else if cfg!(feature = "accelerated") {
     "accelerated"
 } else if cfg!(feature = "higher") {
     "higher"
@@ -66,7 +70,16 @@ pub const PROBES: [(&str, Probe, usize); 5] = [
     ("md5", md5, 16),
 ];
 
-#[cfg(feature = "higher")]
+#[cfg(all(feature = "higher", not(feature = "threaded")))]
 pub use higher::PROBES;
 #[cfg(all(feature = "scoped", not(feature = "higher")))]
 pub use scoped::PROBES;
+#[cfg(feature = "threaded")]
+pub use threaded::PROBES;
+
+/// Complete SIMD groups for the threaded static-required profile, including empty input.
+#[cfg(feature = "threaded")]
+pub const LENGTHS: &[usize] = &[0, 32, 64, 96, 128, 160, 192, 224, 256];
+/// Padding/rate boundaries for the original single-state profiles.
+#[cfg(not(feature = "threaded"))]
+pub const LENGTHS: &[usize] = &[0, 1, 55, 56, 63, 64, 111, 112, 127, 128, 135, 136, 255, 256];

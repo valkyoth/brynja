@@ -12,9 +12,11 @@ license = "MIT OR Apache-2.0"
 default = []
 scoped = []
 higher = []
+threaded = ["higher", "brynja-hash-parallel-std/runtime-batch-execution"]
 accelerated = ["higher", "brynja-crypto-cpu/hardened-execution", "brynja-mac-kmac/hardened-execution", "brynja-hash-tuple/hardened-execution", "brynja-hash-parallel/hardened-execution"]
 
 [dependencies]
+brynja-hash-parallel-std = { path = "../../../crates/brynja-hash-parallel-std", default-features = false }
 brynja-crypto-cpu = { path = "../../../crates/brynja-crypto-cpu", default-features = false }
 brynja-mac-kmac = { path = "../../../crates/brynja-mac-kmac", default-features = false }
 brynja-hash-tuple = { path = "../../../crates/brynja-hash-tuple", default-features = false }

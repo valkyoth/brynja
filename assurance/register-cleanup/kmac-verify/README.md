@@ -1460,3 +1460,36 @@ caller destination clearing or whole-call register/spill erasure. Tests forbid
 subprocess execution; production, retained runtime records and release gates
 are unchanged. F1 and root `PENTEST.md` remain open for remaining qualification
 and independent retest, including fresh native Arm/Windows evidence.
+
+## Secret-output initialization boundary
+
+```sh
+python3 assurance/register-cleanup/check_secret_output_begin.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_secret_output_begin.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All eight optimized core initialization bodies pass inspection of all 32 blocks.
+Only an empty original destination skips the volatile clearing call, returning
+the retained empty-region error. For nonempty regions, the actual defined
+volatile callee receives the original pointer and full length before the result
+descriptor stores that pointer/length and a zero initialized-byte count. The
+shared return selects success only from the nonempty branch. No additional
+payload access, copy or callee is allowed in this boundary.
+
+The same record's volatile LLVM body is checked with the existing 264-length
+bounded model, and its exact emitted symbol is checked against the existing
+x86/Arm assembly contract. This reuses the established clearing checks; it does
+not introduce an all-length proof or new native execution.
+
+All 280 initialization LLVM mutations and eight wrong-callee bindings reject;
+24 naming/comment controls pass. Existing output-completion tests reject 160
+regressions and volatile-clearing tests reject 312 regressions (16 controls).
+Log: `target/development-v02449/secret-output-begin.log`, SHA-256
+`b177409b7d453362b6de94c4656fd522537f60c703a8966a074509d058de81bd`.
+
+This checks the initialization callee, not the caller's ordering or subsequent
+write/drop behavior, abort cleanup or whole-call register/spill erasure. Arm
+remains QEMU evidence. Tests forbid subprocess execution; production, retained
+runtime records and release gates are unchanged. F1 and root `PENTEST.md` remain
+open for remaining qualification and independent retest, including fresh native
+Arm/Windows evidence.

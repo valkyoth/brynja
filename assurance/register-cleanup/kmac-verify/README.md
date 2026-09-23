@@ -1592,3 +1592,36 @@ spill erasure. Arm remains QEMU evidence. Tests forbid subprocess execution;
 production, retained runtime records and release gates are unchanged. F1 and
 root `PENTEST.md` remain open for remaining qualification and independent retest,
 including fresh native Arm/Windows evidence.
+
+## Active-reader descriptor transfer and squeeze arguments
+
+```sh
+python3 assurance/register-cleanup/check_sha3_active_output.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_active_output.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 selected portable borrowed readers preserve the complete 48-byte
+operation descriptor at the active-reader handoff. The reader is made inactive
+before this transfer. The original initialized-output descriptor and references
+to original public length/final-bit metadata reach the bulk/final decision;
+only present output ownership takes the squeeze path.
+
+The 32 actual bulk/final squeeze invocations bind to defined portable sponge
+functions and pass the original borrowed owner, initialization handle, length
+and (where applicable) final-bit count. Their setup blocks reject intervening
+payload writes and extra work. Predecessor checks prevent alternate entries
+from bypassing the inspected handoff. Both invocations retain a shared unwind
+edge, whose cleanup behavior is a separate obligation.
+
+All 864 LLVM mutations and 32 missing-squeeze-definition bindings reject;
+48 naming/comment controls pass. The terminal-output regression suite remains
+green (912 mutations and 16 destructor bindings). Log:
+`target/development-v02449/sha3-active-output.log`, SHA-256
+`6ea470928fa6c9223a24d8eee8360fff2a021bbce6152fb816b276f24534839c`.
+
+This checks argument routing, not squeeze-callee algorithm/length semantics,
+returned-result handling, recoverable-unwind destination cleanup or whole-call
+register/spill erasure. Arm remains QEMU evidence. Tests forbid subprocess
+execution; production, retained runtime records and release gates are unchanged.
+F1 and root `PENTEST.md` remain open for remaining qualification and independent
+retest, including fresh native Arm/Windows evidence.

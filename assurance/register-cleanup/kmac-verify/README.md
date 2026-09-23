@@ -1323,3 +1323,37 @@ not claimed. Tests forbid subprocess execution; production, retained runtime
 records and release gates are unchanged. F1 and root `PENTEST.md` remain open
 for remaining qualification and independent retest, including fresh native
 Arm/Windows evidence.
+
+## Borrowed reader owner-pointer preservation
+
+```sh
+python3 assurance/register-cleanup/check_sha3_borrowed_handle.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_borrowed_handle.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 borrowed secret bodies selected through the inspected portable final
+readers pass a handle-use scan over all 504 blocks and 128 field/address uses.
+The exclusive 16-byte handle parameter and every constant-offset derivative
+are tracked. Allowed uses are owner-pointer loads at offset zero, lifecycle
+byte loads/stores at offset eight, and constant addressing of those fields.
+The owner-pointer bytes cannot be overwritten. Handle addresses cannot be
+stored elsewhere, passed to callees, converted to integers or hidden behind
+unreviewed pointer transformations. Unknown handle uses reject.
+
+This closes the preceding final-reader checkpoint's local handle-preservation
+obligation under the valid exclusive-reference contracts: the outer destructor
+reloads the owner pointer that it originally stored. It does not inspect what
+the owner wipe or squeeze callees do to their own storage.
+
+All 576 overwrite/escape/field mutations reject; 64 SSA-name, label, comment and
+benign zero-offset alias controls pass. The preceding final-reader tests also
+pass (560 mutations, 48 binding regressions and 48 controls). Log:
+`target/development-v02449/sha3-borrowed-handle.log`, SHA-256
+`8f149ae5027934d5368c0060f49cf93a7dd5f177b7d08e246dd3713e06409a15`.
+
+This is local pointer preservation, not proof against invalid external aliases,
+arbitrary memory corruption, wipe/squeeze semantics, compiler spills or register
+erasure. Tests forbid subprocess execution; production, retained runtime records
+and release gates are unchanged. F1 and root `PENTEST.md` remain open for the
+remaining qualification and independent retest, including native Arm/Windows
+evidence.

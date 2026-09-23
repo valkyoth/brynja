@@ -1286,3 +1286,40 @@ layouts remain nonportable evidence details. Tests forbid subprocess execution;
 production, runtime records and release gates are unchanged. F1 and root
 `PENTEST.md` remain open for remaining qualification and independent retest;
 fresh native Arm/Windows evidence is still outstanding.
+
+## Consuming portable final-reader cleanup requests
+
+```sh
+python3 assurance/register-cleanup/check_sha3_final_reader.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_final_reader.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 portable reader bodies reached by the inspected KMAC adapters (including
+validated cSHAKE-to-SHAKE aliases) pass checks of all 80 blocks. The original
+owner and lifecycle flag initialize a bounded local borrowed handle. The
+original destination pointer, length and valid-bit field reach a defined
+`Borrowed::secret` with final-bit mode enabled and the original return slot.
+The callee's calling convention, argument count and types are bound to its
+retained definition.
+
+Both normal and unwind paths reload the owner pointer from the borrowed handle
+and request the same bound owner wipe: 32 request sites across the matrix.
+Normal return follows the wipe call. Recoverable unwind resumes the original
+exception after cleanup returns; cleanup failure enters only the identified
+double-panic abort path. No additional work or result writes are allowed in
+these closed exit blocks.
+
+All 560 LLVM mutations and 48 callee-binding regressions reject; 48 SSA-name,
+label and comment controls pass. The preceding final-input and constructor
+tests remain green (640 and 400 mutations respectively). Log:
+`target/development-v02449/sha3-final-reader.log`, SHA-256
+`1e91ba9d95669507cbd2d8c1d64c8e90e21848212fffa5df43cca9109437be30`.
+
+This establishes forwarding and cleanup requests, not that the borrowed callee
+preserves the handle's owner field or that the wipe callee clears its regions.
+Those callee effects remain separate obligations, as do output semantics,
+machine-code spills and register erasure. Abort and double-panic cleanup are
+not claimed. Tests forbid subprocess execution; production, retained runtime
+records and release gates are unchanged. F1 and root `PENTEST.md` remain open
+for remaining qualification and independent retest, including fresh native
+Arm/Windows evidence.

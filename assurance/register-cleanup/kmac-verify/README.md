@@ -1625,3 +1625,35 @@ register/spill erasure. Arm remains QEMU evidence. Tests forbid subprocess
 execution; production, retained runtime records and release gates are unchanged.
 F1 and root `PENTEST.md` remain open for remaining qualification and independent
 retest, including fresh native Arm/Windows evidence.
+
+## Squeeze unwind destination and owner cleanup
+
+```sh
+python3 assurance/register-cleanup/check_sha3_squeeze_unwind.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_squeeze_unwind.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 selected portable readers pass checks of the shared cleanup reached by
+their 32 bulk/final squeeze invoke edges. Across 112 selected blocks, present
+output ownership invokes the verified destructor on the original initialization
+handle before requesting the bound wipe of the original borrowed owner. Only
+absent output ownership skips destination Drop. Normal cleanup completion
+resumes the original squeeze exception; the exception phi and separate cleanup
+landing pad are checked explicitly.
+
+The two double-panic paths must end in the identified core cleanup-panic routine
+and are excluded from completed-cleanup claims. No payload writes, extra
+callees, normal return or replacement exception are allowed on these slices.
+
+All 656 LLVM mutations and 32 missing-cleanup bindings reject; 48 naming/comment
+controls pass. The active-reader suite remains green (864 mutations and 32
+callee bindings). Log: `target/development-v02449/sha3-squeeze-unwind.log`,
+SHA-256 `e26273c3ef94fbdcbdc8f4db94ab7ae896bfd3249ab3783f030e123c8920a5b5`.
+
+This checks exceptional caller routing under the retained descriptor-ownership
+contract. Preservation of that descriptor by the squeeze callees, normal result
+handling, abort cleanup and whole-call register/spill erasure remain separate
+obligations. Arm remains QEMU evidence. Tests forbid subprocess execution;
+production, retained runtime records and release gates are unchanged. F1 and
+root `PENTEST.md` remain open for remaining qualification and independent retest,
+including fresh native Arm/Windows evidence.

@@ -1393,3 +1393,36 @@ asynchronous/abort cleanup, squeeze correctness or whole-call register/spill
 erasure. Tests forbid subprocess execution; production, runtime records and
 release gates are unchanged. F1 and root `PENTEST.md` remain open for remaining
 qualification and independent retest, including fresh native Arm/Windows evidence.
+
+## Final-adapter constructor rejection and unwind
+
+```sh
+python3 assurance/register-cleanup/check_kmac_final_rejection.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_final_rejection.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 portable final adapters pass checks of 64 selected rejection/cleanup
+blocks. Constructor rejection writes an error-shaped result and wipes the
+original owner before returning. Recoverable constructor unwind requests the
+same wipe, then resumes the original exception. The double-panic termination
+path is identified, not treated as successful cleanup.
+
+The 32 wipe call sites are bound to actual source-bound definitions, including
+compiler aliases. Each selected wipe is checked with the preceding thirteen-
+region, 1,040-byte coverage model, core forwarding, volatile-loop and matching
+assembly checks. Internal error codes 6/18 and discriminator 2 describe these
+retained compiler layouts only; they are not stable Rust ABI guarantees.
+
+All 384 LLVM mutations and 16 missing-wipe binding regressions reject; 48
+naming/comment controls pass. The owner-wipe suite (1,552 region and 144 composed
+core/assembly regressions) and final-input suite (640 mutations and six binding
+regressions) also pass. Log:
+`target/development-v02449/kmac-final-rejection.log`, SHA-256
+`97aa986142a1a2b76f5dfb93a18176ade00be5ec8916cb3b6c245a83cf895866`.
+
+This covers constructor rejection and recoverable unwind, not downstream reader
+error conversion, caller destination clearing, abort/double-panic cleanup or
+whole-call register/spill erasure. Tests forbid subprocess execution; no
+production, retained runtime-record or release-gate changes. F1 and root
+`PENTEST.md` remain open for remaining qualification and independent retest,
+including fresh native Arm/Windows evidence.

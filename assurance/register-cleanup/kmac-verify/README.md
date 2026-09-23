@@ -1559,3 +1559,36 @@ abort-time cleanup or whole-call register/spill erasure. Arm remains QEMU
 evidence. Tests forbid subprocess execution; no production, retained runtime-
 record or release-gate changes. F1 and root `PENTEST.md` remain open for remaining
 qualification and independent retest, including fresh native Arm/Windows evidence.
+
+## Terminal-reader output ownership and cleanup
+
+```sh
+python3 assurance/register-cleanup/check_sha3_terminal_output.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_terminal_output.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 selected portable borrowed readers preserve the complete 24-byte
+initialization descriptor through its one-byte load and two 23-byte tail copies.
+Source lifetimes, local bounds, ownership discriminators and predecessor edges
+are checked. Empty destinations carry absent ownership; descriptor padding is
+treated as opaque and is not claimed initialized.
+
+On the terminal-reader branch, the checked lifecycle decision produces only
+`StateConsumed`. Nonempty output must call the verified initialization destructor
+with the reconstructed original descriptor, then end local lifetimes and return.
+Only the original empty-destination condition permits skipping Drop. Together
+with the initializer and destructor checks, this binds terminal-state output
+cleanup to the original full destination rather than merely a named call.
+
+All 912 LLVM mutations and 16 missing-destructor bindings reject; 48 naming/
+comment controls pass. The reader-initialization suite (592 mutations, 32 binding
+regressions) and destructor suite (184 mutations, eight bindings) remain green.
+Log: `target/development-v02449/sha3-terminal-output.log`, SHA-256
+`e2ed0886a45ccc03ad5e9e4d568eb25b16794d78a6b90f7ff9b030ccbf6f54c6`.
+
+This closes the local terminal-state transfer/drop path, not active squeezing,
+recoverable-unwind destination cleanup, abort cleanup or whole-call register/
+spill erasure. Arm remains QEMU evidence. Tests forbid subprocess execution;
+production, retained runtime records and release gates are unchanged. F1 and
+root `PENTEST.md` remain open for remaining qualification and independent retest,
+including fresh native Arm/Windows evidence.

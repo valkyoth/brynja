@@ -1324,6 +1324,40 @@ records and release gates are unchanged. F1 and root `PENTEST.md` remain open
 for remaining qualification and independent retest, including fresh native
 Arm/Windows evidence.
 
+## Borrowed-reader destination initialization ordering
+
+```sh
+python3 assurance/register-cleanup/check_sha3_reader_initialization.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_reader_initialization.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 portable borrowed readers selected through the actual final-reader calls
+bind to a verified core initializer. Its retained definition, volatile loop and
+assembly are checked by the secret-output initialization boundary checker. Reused
+initializer symbols must have identical definitions across the retained records.
+
+Reader entry permits only bounded local metadata preparation before testing the
+original destination length. Nonempty destinations must immediately pass their
+original pointer/full length to the initializer, before lifecycle reads or
+squeeze work. The initializer's actual result controls the next branch. Failure
+sets the reader inactive, requests a bound wipe of the original owner and returns
+a value-free `SecretMemory` error without entering the normal operation. The
+empty-destination path requires no output-region clearing.
+
+All 592 LLVM mutations and 32 missing initializer/wipe bindings reject; 48
+naming/comment controls pass. Existing initializer tests reject 280 mutations
+and eight wrong-callee bindings; handle-preservation tests reject 576 mutations
+(64 controls). Log: `target/development-v02449/sha3-reader-initialization.log`,
+SHA-256 `b98816bc22c279bf0f33adef4b8c8187ba9c13ddad74ba6ff1ffece73f083edc`.
+
+This connects the entry ordering to the verified initializer. Subsequent
+initialization-handle transfer/drop, squeeze semantics, unwind destination
+cleanup and whole-call register/spill erasure remain separate obligations.
+Arm remains QEMU evidence. Tests forbid subprocess execution; no production,
+retained runtime-record or release-gate changes. F1 and root `PENTEST.md` remain
+open for remaining qualification and independent retest, including fresh native
+Arm/Windows evidence.
+
 ## Borrowed reader owner-pointer preservation
 
 ```sh

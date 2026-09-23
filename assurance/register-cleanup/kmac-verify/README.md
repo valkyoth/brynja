@@ -1357,3 +1357,39 @@ erasure. Tests forbid subprocess execution; production, retained runtime records
 and release gates are unchanged. F1 and root `PENTEST.md` remain open for the
 remaining qualification and independent retest, including native Arm/Windows
 evidence.
+
+## Final-reader owner wipe and core clearing
+
+```sh
+python3 assurance/register-cleanup/check_sha3_owner_wipe.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_owner_wipe.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+The actual owner wipe selected by each of the 16 portable final-reader bindings
+passes a straight-line region check. Its thirteen clearing calls cover exactly
+1,040 bytes, without overlaps or gaps, in the retained compiler layout. The
+regions correspond to lanes, partial input, message/output/cSHAKE lengths,
+domain/phase/suffix metadata, padding/squeeze staging and permutation scratch.
+The reader bindings may share a compiler-merged wipe; sixteen bindings do not
+mean sixteen distinct implementations.
+
+Each call is bound to the recorded core `clear_owned_region` definition. The
+existing wrapper checker verifies unchanged pointer/length forwarding to the
+actual volatile callee. The existing volatile-loop model is then executed for
+all seven field widths (1, 3, 4, 16, 40, 168 and 200), covering every retained
+loop block, and the matching core assembly must satisfy its existing closed
+zero-store contract. No new LLVM interpreter or assembly validator was added.
+
+All 1,552 region regressions and 144 composed core/assembly regressions reject;
+32 naming/comment controls pass. The preceding handle-preservation and
+final-reader tests also pass (576 and 560 mutations respectively). Log:
+`target/development-v02449/sha3-owner-wipe.log`, SHA-256
+`c44c7675f6eea48be8df17b3ad6075cb662c58525a0dd77fae60cf0cc429185e`.
+
+This closes the selected portable final reader's owned-storage wipe-coverage
+obligation on normal cleanup completion, using retained source-bound compiler
+evidence. It is not a stable Rust layout guarantee, new native execution,
+asynchronous/abort cleanup, squeeze correctness or whole-call register/spill
+erasure. Tests forbid subprocess execution; production, runtime records and
+release gates are unchanged. F1 and root `PENTEST.md` remain open for remaining
+qualification and independent retest, including fresh native Arm/Windows evidence.

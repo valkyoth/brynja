@@ -1527,3 +1527,35 @@ remains QEMU evidence. Tests forbid subprocess execution; production, retained
 runtime records and release gates are unchanged. F1 and root `PENTEST.md` remain
 open for remaining qualification and independent retest, including fresh native
 Arm/Windows evidence.
+
+## Secret initialization destructor boundary
+
+```sh
+python3 assurance/register-cleanup/check_secret_output_drop.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_secret_output_drop.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All eight optimized initialization destructor bodies pass inspection of all 24
+blocks. Only absent ownership skips cleanup. A present region forwards its
+original stored pointer and complete region length to the defined volatile
+callee, then returns. The initialized-prefix field is never substituted for the
+full region length. No payload reads, extra calls or descriptor writes are
+allowed in this destructor boundary.
+
+The actual destructor symbol is referenced by both portable borrowed-reader
+strengths in each matching SHA-3 artifact. Its volatile callee is checked with
+the existing bounded LLVM model and the matching assembly contract. Symbol
+references alone do not prove that every caller path invokes Drop correctly or
+that the transferred descriptor is unchanged; those remain caller obligations.
+
+All 184 LLVM mutations and eight wrong-callee bindings reject; 24 naming/comment
+controls pass. The initializer suite (280 mutations and eight binding failures)
+and completion suite (160 regressions) remain green. Log:
+`target/development-v02449/secret-output-drop.log`, SHA-256
+`9454a51bd9b6a1e27f34232afd5114e6589678eba29e55d01d0b9b7618d93669`.
+
+This checks normal destructor completion, not caller transfer/drop coverage,
+abort-time cleanup or whole-call register/spill erasure. Arm remains QEMU
+evidence. Tests forbid subprocess execution; no production, retained runtime-
+record or release-gate changes. F1 and root `PENTEST.md` remain open for remaining
+qualification and independent retest, including fresh native Arm/Windows evidence.

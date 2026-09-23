@@ -1593,6 +1593,41 @@ production, retained runtime records and release gates are unchanged. F1 and
 root `PENTEST.md` remain open for remaining qualification and independent retest,
 including fresh native Arm/Windows evidence.
 
+## Squeeze error identity and normal cleanup
+
+```sh
+python3 assurance/register-cleanup/check_sha3_squeeze_error.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_sha3_squeeze_error.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 selected portable readers pass 32 bulk/final result decisions and their
+normal error continuations. The actual source-bound squeeze signatures select
+the two reviewed compiler-private result layouts; these are not stable Rust ABI
+promises. Only the successful result enters output completion. Both error phi
+inputs retain the actual callee result, and all five valid errors retain their
+identity through either the direct-byte or pointer-encoded return layout.
+
+Present output ownership invokes the verified destructor on the original
+initialization handle before wiping the original borrowed owner. Absent
+ownership alone skips destination Drop. A destructor unwind enters the already
+checked exceptional owner-cleanup path. Normal cleanup ends the local descriptor
+lifetimes and returns an error without reactivating the reader or retrying
+successful work. Closed blocks reject extra payload writes or unreviewed calls.
+
+All 1,032 LLVM mutations and 96 missing/incompatible signature bindings reject;
+48 naming/comment controls pass. The adjacent unwind suite remains green
+(656 mutations, 32 cleanup bindings, 48 controls). Log:
+`target/development-v02449/sha3-squeeze-error.log`, SHA-256
+`c857a817030461f5ec39dbfaa528e8960bc7efa8dbc43053d341c61b180a3a52`.
+
+This qualifies caller error routing under the retained result and ownership
+contracts. Squeeze-callee semantics/descriptor preservation, successful output
+completion and whole-call register/spill erasure remain separate obligations.
+Arm remains QEMU evidence. Tests forbid subprocess execution; no production,
+runtime-capture or release-gate changes. F1 and root `PENTEST.md` remain open
+until remaining qualification and independent retest, including fresh native
+Arm/Windows evidence, are complete.
+
 ## Active-reader descriptor transfer and squeeze arguments
 
 ```sh

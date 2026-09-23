@@ -1426,3 +1426,37 @@ whole-call register/spill erasure. Tests forbid subprocess execution; no
 production, retained runtime-record or release-gate changes. F1 and root
 `PENTEST.md` remain open for remaining qualification and independent retest,
 including fresh native Arm/Windows evidence.
+
+## Final-adapter downstream reader-error conversion
+
+```sh
+python3 assurance/register-cleanup/check_kmac_final_error.py target/kmac-verify-1iopq9b5/observations.json
+python3 assurance/register-cleanup/test_kmac_final_error.py target/kmac-verify-1iopq9b5/observations.json
+```
+
+All 16 portable final adapters preserve the failed reader's error descriptor
+through the downstream conversion block. The check binds the loaded error byte
+to that reader's result slot, checks all five entries of the retained packed
+mapping, and requires the mapped byte and error discriminator to be stored only
+in the caller's result descriptor before reaching the checked return block.
+No payload access, additional callee or success-descriptor copy is permitted in
+this branch. This composes with the preceding reader-result decision check.
+
+The five retained SHA-3 error values map to KMAC bytes `(0, 3, 4, 4, 5)` in the
+portable-only build and `(12, 15, 16, 16, 17)` with acceleration features. These
+are reviewed compiler-private layouts, not stable enum discriminants or an ABI
+promise. The 80 valid-value checks cover the shift-width/flag premises; invalid
+Rust enum representations are outside this contract.
+
+All 512 LLVM mutations and 32 unknown/mismatched feature-layout tests reject;
+48 naming/comment controls pass. Prior adapter tests (432 mutations and six
+alias regressions) and constructor-rejection tests (384 mutations and sixteen
+wipe-binding regressions) remain green. Log:
+`target/development-v02449/kmac-final-error.log`, SHA-256
+`f033cdb024345f10b9721d649b462a73da54af3b08157666a519aef155ca00c2`.
+
+This closes the local downstream error-conversion check, not reader correctness,
+caller destination clearing or whole-call register/spill erasure. Tests forbid
+subprocess execution; production, retained runtime records and release gates
+are unchanged. F1 and root `PENTEST.md` remain open for remaining qualification
+and independent retest, including fresh native Arm/Windows evidence.

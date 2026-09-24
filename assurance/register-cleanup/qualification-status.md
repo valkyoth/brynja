@@ -148,9 +148,20 @@ Later diagnostic-only additions can run there without replacing captured sources
   length, checked bit admission, partial-byte mask requests, output progress and
   staging-clear ordering are checked. The byte counter commits after the complete
   prefix, before the tail: a tail failure does not undo that commit inside this
-  helper. Final outer-guard composition remains outstanding; the direct helper
-  result must not be represented as whole-call cleanup. Fill/copy/mask/volatile
+  helper. That direct check does not compose the outer guard (covered below);
+  its result must not be represented as whole-call cleanup. Fill/copy/mask/volatile
   primitive bodies remain opaque, and this is not register/spill qualification.
+- Portable debug final-bit squeezing now runs inside the actual producer,
+  initializer, operation, completion and guard/destructor chain. All 5,984
+  selected cases pass, including tail failures after the prefix counter commits.
+  Failures after processing starts and selected fill/copy unwind request complete
+  output and thirteen-region owner clearing, with exact prefix accounting and
+  original exception propagation. Only successful producer completion restores
+  the borrowed reader's active flag; this is not public final-API reuse. This
+  closes the direct final-bit helper/producer-guard link for the modeled cases.
+  Already-terminal rejection requests output clearing without another owner mutation.
+  The consuming-reader wrapper is still separately checked, not composed here;
+  secret primitives and whole-call register/spill behavior remain unqualified.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -159,7 +170,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   final-bit squeeze/outer-guard composition, staging-fill internals,
+   remaining consuming-reader/producer links, staging-fill internals,
    accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

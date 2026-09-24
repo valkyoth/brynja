@@ -2949,3 +2949,68 @@ and optional direct-check shard dispatch; the Rust 1.90 interpreted behavior and
 mutation expectations are unchanged. Their completed results were reused rather
 than repeated. The initial unsharded/interrupted and pre-correction failure logs
 remain in `dist/` but are not passing evidence for the complete matrix.
+
+### Composed debug final-bit producer guard
+
+From the preserved source-matching checkout, with the absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_final_guard.py "$record"
+python3 assurance/register-cleanup/test_debug_final_guard.py "$record"
+```
+
+Both commands accept optional `--shard 0`, `1`, `2` or `3`; all four disjoint
+shards are required for the complete matrix. All 5,984 composed cases pass
+(374 per path) using the same 117/118-function sets as the direct final-bit
+checkpoint. This connects the actual initializer, producer operation, final-bit
+body, byte-prefix body, completion and guard/destructor chain. It includes
+empty output, terminal readers, four initializer errors, all valid tail widths,
+selected rate/multirate lengths and counter boundaries. Representative one-byte
+and multichunk shapes exercise every loop iteration with synthetic fill/write/
+slice/tail failures and selected fill/copy unwind.
+
+The original guard remains armed during fill, mask and output transfer. Exact
+initialization progress is retained until successful descriptor transfer or
+destruction. Failures after processing starts and selected unwind request complete
+destination clearing and all thirteen owner-region clears. Initializer failure
+also deactivates and requests owner clearing. Already-terminal rejection requests
+output clearing without reading counters or requesting another owner clear.
+Tail failures retain any earlier
+prefix-counter commit before those opaque wipe requests; the diagnostic does
+not mistake an unchanged numeric counter for proof of complete cleanup.
+Only successful producer completion restores the borrowed reader's active flag.
+The outer consuming-reader wrapper still consumes the public final-output API;
+that separately checked wrapper is not composed in this checkpoint.
+
+Six synthetic boundary controls pass and eighteen malformed/unarmed calls
+reject. Fill/copy/mask/volatile primitive bodies remain opaque. These bounded
+event-order checks do not prove arbitrary unwind, secret-value erasure,
+whole-call register/spill cleanup or native Arm execution. F1 and root
+`PENTEST.md` remain open. No production Rust, captured sources or release gate
+changed, and no Rust/native campaign was repeated.
+
+Both new diagnostics ran from the preserved checkout; the complete inspector
+source hashes are included in each direct-check log. Checker SHA-256:
+`869c507831768e82dd7ca417e0e7a70cbc7124016c8068e70659b305633b3d5f`;
+mutation harness:
+`4f2c776afa4518b4144db9992f9dde9fc72a9a046f8d035dca3aa1cf6e18c183`.
+
+All 352 retained-IR mutations reject (22 per path), with sixteen passing SSA
+rename controls. They cover omitted final/prefix handoffs, premature completion,
+missing masking/counter commits, altered guard activation, missing output/owner
+destructors, omitted first/last owner-region clears and swallowed unwind. Both
+`drop_in_place` and `drop_glue` compiler spellings are covered. The mutation
+harness forbids compiler/runtime subprocess execution; it does not rebuild Rust.
+
+All logs are under ignored `dist/`, outside Cargo's `target/` directory:
+
+| Log | SHA-256 |
+| --- | --- |
+| `debug-final-guard-check-shard-0.log` | `84aecfd07459ee10dc3e36d4630dc409ffb3227a7396c85c055788222686acb4` |
+| `debug-final-guard-check-shard-1.log` | `d0e1086b16fa30158c5804f6b5b48a776e594466d76dc5d506b2139561c014f4` |
+| `debug-final-guard-check-shard-2.log` | `7882636d4e17e2dd739f0846a63bfa73b748c37a0fb284bf67e7518d14f0431c` |
+| `debug-final-guard-check-shard-3.log` | `45f2e0749fe0587a99910bb2d5825477ed7ff43c8637b0380fe4faa08824d64e` |
+| `debug-final-guard-mutations-shard-0.log` | `9b8749a162bc3382cd30c1ff2efe45dfe7ef33106d50af717ce33e3aa15275e3` |
+| `debug-final-guard-mutations-shard-1.log` | `660f5678db39dfd1095ff72af4e801f3ae7ed09299c65265bfdb81ebef436109` |
+| `debug-final-guard-mutations-shard-2.log` | `cf1627d4ab2c9ce9f48a99d4f25d2d9c1209e934aa11635abd493716365bb84e` |
+| `debug-final-guard-mutations-shard-3.log` | `d7912d691f19db9ac62b0f8ee3bd27c26965a1dee158525784a094629ee56183` |

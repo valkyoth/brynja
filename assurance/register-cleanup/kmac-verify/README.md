@@ -2014,3 +2014,41 @@ This completes this optimized portable bulk-entry connection, not accelerated
 or debug verifier qualification or whole-call machine-code erasure. The current
 [pre-pentest checklist](../qualification-status.md) records those outstanding
 work packages separately from post-pentest native evidence and release checks.
+
+## Accelerated reader entry and consuming cleanup
+
+```sh
+python3 assurance/register-cleanup/check_kmac_accelerated_readers.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_kmac_accelerated_readers.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+All eight optimized accelerated KMAC bulk/final reader pairs are selected from
+their actual verifier calls. Same-row alias and callee checks bind both entries
+to the defined accelerated borrowed producer and its calling convention. Bulk
+reads load only the storage pointer from their borrowed handle, forwarding
+original output and length in bulk mode. Final reads forward original storage,
+output, length and valid bits in final mode; this check does not establish the
+producer's full metadata validation or successful result semantics.
+
+The consuming final reader's complete five-block boundary is checked. Normal
+return marks the original engine terminal, resets its cursor and clears its
+owned memory, all 168 staging bytes and both domain bytes. Recoverable unwind
+calls the actual same-storage destructor, whose corresponding cleanup body is
+also inspected, then resumes the original exception. Only the identified
+double-panic termination is excluded. The engine wipe covers its 234 owned bytes
+exactly: 200 lane bytes, two 16-byte counters and two suffix bytes. Clear calls
+bind to the existing core volatile LLVM/assembly checks, not just a matching name.
+
+All 824 LLVM and 64 dependency/ABI mutations reject; 64 naming/comment controls
+pass. Adjacent staging tests reject 164 mutations and accelerated read tests
+reject 120. Tests forbid subprocess execution. Log:
+`dist/kmac-accelerated-readers.log`, SHA-256
+`f853adea9367abc090e54a07ed9cabe946598bd0dd2229d3de9e92799b085aa4`.
+
+The existing accelerated producer staging/error-path checker is composed with
+these entry checks. This does not qualify the entire producer, backend session,
+debug execution, machine spills or native platform. The shared CPU/session
+scratch has its separate kernel/operation contract; this is not a claim to wipe
+every byte of the containing 1,088-byte storage, including public metadata and
+padding. Arm remains QEMU evidence. No production or release-gate change, no
+compiler/runtime rerun, and no F1 closure is implied.

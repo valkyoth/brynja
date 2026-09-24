@@ -21,15 +21,19 @@ todo list: several were superseded by later implementation and tests.
   metadata, ownership, error/unwind, counter, staging, mask and cleanup checks.
   The current [KMAC diagnostic record](kmac-verify/README.md) lives under ignored
   `dist/`, outside Cargo's `target/` directory.
+- Accelerated KMAC bulk/final entry forwarding and consuming reader cleanup now
+  bind to the actual same-row producer, destructor, engine-memory wipe and core
+  clearing functions. This is not yet complete accelerated producer/lifecycle
+  or debug call-chain qualification.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
 ## Before the next independent pentest
 
-1. **Finish the remaining instantiated KMAC path review.** Complete the matching
-   accelerated and debug caller/reader coverage, including error and unwind
-   paths. Individual existing helper checks are evidence to reuse, not a reason
+1. **Finish the remaining instantiated KMAC path review.** Complete accelerated
+   producer/lifecycle coverage and debug caller/reader coverage, including error
+   and unwind paths. Individual existing helper checks are evidence to reuse, not a reason
    to assume an unchecked call-chain link is correct. The optimized portable
    bulk/final chain is no longer the next unfinished item.
 2. **Complete the wider caller and worker emitted-code review.** Check the

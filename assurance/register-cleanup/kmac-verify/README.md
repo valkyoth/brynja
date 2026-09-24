@@ -1991,3 +1991,26 @@ erasure proofs. Debug paths, wider caller qualification, native platform
 evidence and independent retest remain outstanding. Arm artifacts remain QEMU
 evidence. No production code or release gate changed, and no compiler/runtime
 rerun was needed. F1 and root `PENTEST.md` remain open.
+
+### Bulk/final reader pairing follow-up
+
+The same composed command now selects both calls from each actual optimized
+portable verifier. The bulk entry must forward the original result, borrowed
+handle, destination and complete length directly to the exact borrowed-reader
+specialization used by final output. Its two-instruction body contains no
+payload loads, copies or extra calls. The final-mode flag is false; the unused
+Option payload is `undef`, not an asserted valid-bit count. Existing active-reader
+checks bind selection and output ownership in the shared callee.
+
+All sixteen paths pass with unchanged constructor/counter/tail/fill case counts.
+The expanded suite rejects 352 composition mutations and 192 focused bulk-call
+mutations; 48 comment controls pass. Log: `dist/kmac-bulk-final-chain.log`, SHA-256
+`7cf0d8d4548a23ef050de26081973f1cb831ed35ec7dc8131accde94dc456507`.
+Adjacent reader-result tests reject 1,152 mutations with 72 controls, and final
+reader tests reject 560 mutations plus 48 missing bindings with 48 controls.
+Log: `dist/kmac-bulk-final-adjacent.log`, SHA-256
+`2e375af2c458d98d9865185e5e86f93ab89076b34d80b1f3b09b8261fd7c6d2f`.
+This completes this optimized portable bulk-entry connection, not accelerated
+or debug verifier qualification or whole-call machine-code erasure. The current
+[pre-pentest checklist](../qualification-status.md) records those outstanding
+work packages separately from post-pentest native evidence and release checks.

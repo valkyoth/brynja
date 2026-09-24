@@ -8,6 +8,11 @@ the fixture directly includes their actual private source files, rather than
 testing duplicate implementations. Portable/caller-side work and native qualification remain
 pending. Release gates are unchanged. Finding F1 remains open.
 
+For the current pre-pentest checklist, use
+[qualification status](qualification-status.md). It separates completed
+implementation, remaining qualification and post-pentest native/release work;
+older checkpoint descriptions below are not a current backlog.
+
 The [portable/caller audit](caller-audit/README.md) now reproduces input-marker
 residue across selected public hardened calls while their owned-output clearing
 tests pass. Its source-bound diagnostics are not release qualification; they
@@ -274,8 +279,9 @@ survives forgotten handles/readers; the old by-value APIs and their guarantees
 remain unchanged. Its optional execution fixture also covers all eight scoped
 accelerated identities, explicit static/hosted authority and revocation. Native
 AVX2 and emulated Arm development checks remain distinct from final native
-qualification. Other families and complete framing/register qualification remain
-pending.
+qualification. The other scoped families have since been implemented, as
+recorded in the qualification status; complete caller/register qualification
+remains pending.
 
 The [scoped SHA-2 fixture](in-place-sha2/README.md) now adds the six named
 SHA-2 identities with borrowed workspaces and typed secret output. Its compiled
@@ -286,8 +292,8 @@ Six named execution workspaces now also borrow their engine and CPU scratch,
 retaining static/hosted authority and revocation. The fixture separately checks
 portable, native static SHA-NI, and emulated Arm static/hosted use. General-t
 execution workspaces also cover all 510 parameters through existing wide
-routes. Other families remain pending; existing by-value APIs and complete
-register/spill exclusions are unchanged.
+routes. Other scoped families have since been implemented; existing by-value
+APIs and complete register/spill exclusions are unchanged.
 
 ## Remaining work before the requested retest
 
@@ -309,19 +315,12 @@ from SHA-1. The separate MD5 multibuffer SIMD API now also has scoped eight-lane
 storage borrowing its existing executor. Both profiles retain caller/whole-API
 register/spill exclusions.
 
-1. Complete the SHA-512 ports' native ABI coverage. SysV and Win64 observers
-   under SDE, Arm observers under QEMU, Linux guard pages and endpoint compiler
-   checks now bind the actual production sources. Native qualification remains.
-2. The sixteen accelerated entry ports above are integrated. Their final native
-   qualification and independent retest remain; do not repeat the ports or
-   change authority, KAT, quarantine, target features or fallback policy.
-3. Audit portable paths and shared high-level call boundaries; record precisely
-   where a stronger return-boundary guarantee is implemented and tested.
-4. Run independent differential vectors, ownership/error tests, cleanup
-   mutations, sanitizers, and matching native/emulated ISA tests for each port.
-   Recheck performance; do not silently replace acceleration with scalar work.
-5. Refresh existing review bindings, obtain the new pentest and native evidence,
-   then run the owner's approved full verification through the existing gates.
-   No new release-gate mechanism is part of this work.
+The current [qualification checklist](qualification-status.md) tracks remaining
+KMAC accelerated/debug call-chain review, wider scoped caller/worker emitted-code
+review, exact guarantee/coverage reconciliation and the targeted-test/review
+handoff. The sixteen accelerated ports do not need to be rewritten again.
+Native platform collection and the final approved sweep are listed separately
+after the independent pentest. Authority, KAT, quarantine, target features,
+fallback policy and release-gate mechanisms remain unchanged.
 
 Keep the root `PENTEST.md` until its findings and this implementation are handled.

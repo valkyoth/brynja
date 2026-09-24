@@ -30,6 +30,7 @@ def selected(case):
     owner = check.resolve(case.sha3, definitions, sorted(wipes)[0], 'void (ptr)')
     yield 'sha3', definitions[construct]
     yield 'sha3', public
+    yield 'sha3', check.resolve(case.sha3, definitions, case.bulk, 'void (ptr, ptr, ptr, i64)')
     yield 'sha3', definitions[borrowed]
     for name in (*squeeze, *fill):
         yield 'sha3', definitions[name]
@@ -62,13 +63,35 @@ def mutations(case):
     callee = re.search(check.comparison.SYMBOL, line)[1]
     changed = writer.replace(line, line.replace(callee, callee + '_unbound'), 1)
     yield 'token-matching but unbound output copy', replace(case, core=case.core.replace(writer, changed, 1))
+    yield 'missing bulk entry', replace(case, bulk='missing_bulk_reader')
+
+
+def bulk_mutations(body):
+    graph, _, _ = check.adapter.routes.transfer.finish.graph_info(body)
+    call = graph['start'][0]
+    name, args = check.adapter.routes.guard.call(call)
+    for index, value in enumerate(('ptr noalias %destination.0', 'ptr noalias %destination.0',
+                                   'ptr noalias %self', 'i64 noundef 0',
+                                   'i1 noundef zeroext true', 'i8 7')):
+        yield 'bulk argument substitution', body.replace(call, call.replace(args[index], value, 1), 1)
+    yield 'wrong borrowed specialization', body.replace(call, call.replace(name, 'unbound_borrowed'), 1)
+    yield 'omitted borrowed call', body.replace(call, '', 1)
+    yield 'duplicated borrowed call', body.replace(call, call + '\n  ' + call, 1)
+    yield 'payload access', body.replace(call, '%leak = load i8, ptr %destination.0\n  ' + call, 1)
+    yield 'lost input exclusivity', body.replace('ptr noalias ', 'ptr ', 1)
+    yield 'missing return', body.replace('ret void', 'unreachable', 1)
 
 
 def main(record):
-    counts, controls = [], 0
+    counts, controls, bulk_counts = [], 0, []
     before = check.comparison.capture.sources()
     for case in check.cases(record):
         counts.append(rejects(lambda value: check.inspect(value, thorough=False), case, mutations(case)))
+        definitions = check.comparison.definitions(case.sha3)
+        bulk = check.resolve(case.sha3, definitions, case.bulk, 'void (ptr, ptr, ptr, i64)')
+        graph, _, _ = check.adapter.routes.transfer.finish.graph_info(bulk)
+        borrowed, _ = check.adapter.routes.guard.call(graph['start'][0])
+        bulk_counts.append(rejects(lambda value: check.bulk_bridge(value, borrowed), bulk, bulk_mutations(bulk)))
         # Full composition must continue to tolerate harmless formatting on
         # both sides of the package boundary; mutation checks are not hashes.
         for field in ('caller', 'sha3', 'core'):
@@ -77,9 +100,10 @@ def main(record):
             assert original != changed
             check.inspect(replace(case, **{field: changed}), thorough=False)
             controls += 1
-    assert counts == [20] * 16 and controls == 48, (counts, controls)
+    assert counts == [22] * 16 and controls == 48 and bulk_counts == [12] * 16, (counts, controls, bulk_counts)
     assert before == check.comparison.capture.sources()
     print(f'Final-chain composition rejects {sum(counts)} dependency/body/layout regressions; {controls} controls PASS')
+    print(f'Bulk-reader forwarding rejects {sum(bulk_counts)} argument, effect, binding and control-flow regressions PASS')
     print('Actual retained callees checked without compiler/runtime execution; production and release gates unchanged')
 
 

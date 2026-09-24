@@ -60,12 +60,13 @@ class Model:
         self.step_limit = 3000
         for line in globals_text.splitlines():
             found = re.fullmatch(r'(@[-.$\w]+) = private unnamed_addr constant '
-                                 r'<\{ \[(4|8|16) x i8\], \[\2 x i8\] }> '
-                                 r'<\{ \[\2 x i8\] (zeroinitializer|c"\\01\\00\\00\\00"), '
+                                 r'<\{ \[(1|4|8|16) x i8\], \[\2 x i8\] }> '
+                                 r'<\{ \[\2 x i8\] (zeroinitializer|c"\\01(?:\\00\\00\\00)?"), '
                                  r'\[\2 x i8\] undef }>, align \2', line)
             if found:
                 width = int(found[2])
-                require(found[3] == 'zeroinitializer' or width == 4, 'exact constant discriminator width')
+                require(found[3] == 'zeroinitializer' or found[3] == r'c"\01' + r'\00' * (width - 1) + '"',
+                        'exact constant discriminator width')
                 self.sizes[found[1]] = 2 * width
                 self.memory[Pointer(found[1])] = (width, int(found[3] != 'zeroinitializer'))
 
@@ -222,14 +223,14 @@ class Model:
                     condition = self.value(found[1], env)
                     require(condition in (0, 1), 'initialized select condition')
                     val = self.typed(found[2] if condition else found[3], env)
-                elif found := re.fullmatch(r'(and|or|shl) i(32|128) (\S+), (\S+)', op):
+                elif found := re.fullmatch(r'(and|or|shl|lshr) i(32|128) (\S+), (\S+)', op):
                     a = self.typed('i' + found[2] + ' ' + found[3], env)
                     b = self.typed('i' + found[2] + ' ' + found[4], env)
                     require(type(a) is int and type(b) is int, 'initialized bit operation operands')
                     bits = int(found[2])
-                    if found[1] == 'shl':
+                    if found[1] in ('shl', 'lshr'):
                         require(b < bits, 'non-poison shift amount')
-                        val = (a << b) & ((1 << bits) - 1)
+                        val = (a << b) & ((1 << bits) - 1) if found[1] == 'shl' else a >> b
                     else:
                         val = a & b if found[1] == 'and' else a | b
                 elif found := re.fullmatch(r'extractvalue \{ [^}]+ } (\S+), ([01])', op):

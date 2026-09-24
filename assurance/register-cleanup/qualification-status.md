@@ -110,6 +110,13 @@ todo list: several were superseded by later implementation and tests.
   Rust 1.98's packed result ABI preserves undefined padding in the model. This
   closes the opaque decoder boundary for these paths, not scalar temporary
   erasure, actual squeezing or whole-verifier register/spill qualification.
+- The actual byte-squeeze callee now binds a fourteen-function counter-writer
+  closure, including mutable iteration, byte narrowing and defaults. The combined
+  writer/decoder/helper set contains seventy-two/seventy-three functions. Every
+  byte starts incorrect, is written exactly once in order, and round-trips through
+  the actual decoder. Narrowing is checked for every byte value and selected
+  overflow values. This checks the helper's modeled effects, not the squeeze
+  caller's execution or counter-commit ordering, nor scalar/register/spill erasure.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -118,7 +125,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   actual byte/final-bit squeeze bodies and counter writes, accelerated
+   actual byte/final-bit squeeze bodies and counter-commit ordering, accelerated
    producer guard paths and whole-verifier error/unwind paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,

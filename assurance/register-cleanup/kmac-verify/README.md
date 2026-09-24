@@ -2690,3 +2690,56 @@ The mutation harness forbids subprocess execution. Mutation log:
 `c47dc25d5a02aa1929ea80fc91e31af2c29cc49da02d19e4c86539824b89f568`.
 Documentation links, script inventory, acceptance metadata and its regression
 tests pass without crypto execution.
+
+### Debug counter-writer and decoder round-trip
+
+```sh
+python3 assurance/register-cleanup/check_debug_counter_write.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_counter_write.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_counter_write_model.py
+```
+
+The writer is selected from the actual byte-squeeze body's call, not found by an
+unrelated matching name. Its fourteen-function closure includes mutable slice
+iteration, enumeration, checked byte shifts, narrowing and Result defaults. Five
+helpers are shared with the checked decoder; the combined function set contains
+seventy-two/seventy-three functions. All 6,608 modeled cases pass across sixteen
+instantiated paths. This binds the writer to its actual caller but does not yet
+execute the complete squeeze body or establish its counter-commit/error ordering.
+
+Each destination byte starts as the complement of its expected value. The model
+requires sixteen exact, ordered writes with no old-counter reads and no writes
+outside the original sixteen-byte field, then reads back through the actual
+decoder. Zero, all ones, every single-bit u128 value and two mixed byte patterns
+check encoding independently of readback. All 256 byte values and four overflow
+values exercise the actual narrowing/default helpers; synthetic shift offsets
+exercise the shared checked-conversion/multiplication defaults. All normal writer
+helper blocks are covered, excluding panic-only paths and blocks without an entry
+path. These synthetic helper cases are not represented as reachable writer inputs.
+
+Logical right shifts and one-byte constant layouts extend the bounded diagnostic
+model. Forty-three shift/constant/exact-write controls and 29 poison/constant/
+mutation-boundary rejections pass. Existing counter-operation (218 controls/22
+rejections), packed-ABI (nine/24), wide-arithmetic (302/76) and zero-argument
+(eight/14) tests remain green, along with retained output-write (2,072), core-finish
+(560), output-limit (4,928) and counter-decoder (3,792) cases.
+
+This is functional modeling of scalar counters and bounded owner-field effects,
+not proof of scalar-copy/register/spill erasure. Squeeze execution/commit ordering,
+broader caller/worker qualification and native platforms remain pending. Arm stays
+QEMU; F1 and root `PENTEST.md` remain open. No production implementation, original
+capture record or release gate changed; no Rust compiler/runtime campaign ran.
+
+Writer log: `dist/debug-counter-write-check.log`, SHA-256
+`8aa58cc81c7ef65d3b792c86199ba14a6b039f7a81c9a4c4af883bdbf20df50f`.
+Regression log: `dist/debug-counter-write-regressions.log`, SHA-256
+`dda386b2a94ff9ad489633e66d4f6724d434db724d6ee1dbdc64dd9bd2145e5a`.
+
+All 648 store/order/arithmetic/iterator/dependency/ABI mutations reject; 32
+debug-metadata/SSA controls pass. Eight paths reject 41 mutations each and eight
+reject 40; shared decoder helpers retain their earlier mutation coverage rather
+than being counted again. The harness forbids subprocess execution. Mutation log:
+`dist/debug-counter-write-mutations.log`, SHA-256
+`c4b0582385d10893eff9eea9d091335ede0c1ec802763e25a19c4df1e0f70efd`.
+Documentation links, script inventory, acceptance metadata and its regression
+tests pass without crypto execution.

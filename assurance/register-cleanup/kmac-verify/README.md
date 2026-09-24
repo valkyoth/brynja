@@ -1862,3 +1862,42 @@ qualification remain separate obligations. Arm remains QEMU evidence. Tests
 forbid subprocess execution; production code and release gates are unchanged.
 F1 and root `PENTEST.md` remain open for remaining qualification, fresh native
 platform evidence and independent retest.
+
+## Reader-bound staging dependencies
+
+```sh
+python3 assurance/register-cleanup/check_sha3_fill_dependencies.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_sha3_fill_dependencies.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+The existing fill-geometry model is now composed with the actual dependencies
+selected by the checked bulk reader. Both rate instantiations in every retained
+release configuration pass: 16 bodies and 42,704 modeled cursor/count/error
+cases. No replacement geometry model or fresh compiler/runtime campaign was
+introduced. LLVM and assembly remain paired by their record row even when
+function bodies are identical across builds.
+
+The three-block core copy wrapper checks equal slice lengths before forwarding
+the original pointers and complete length to its defined `copy_bytes` primitive.
+Length mismatch remains an error; the wrapper has no payload loads or stores.
+The matching copy assembly passes the existing opaque-boundary/register-cleanup
+checker. The actual scalar permutation definition is likewise bound to its
+matching assembly and existing boundary checker. All three requested scratch
+clears bind through the core wrapper to the checked volatile implementation.
+This connects caller geometry to the real callees instead of assuming that a
+matching function name alone establishes their cleanup behavior.
+
+All 272 copy-wrapper mutations and 208 composed dependency mutations reject;
+48 naming/comment controls pass. Missing callees, wrong target/rate identities,
+removed erasure boundaries and altered volatile clearing reject. Existing fill
+regressions (528 mutations, twelve model examples) and bulk progress regressions
+(656 mutations, 16 missing-fill bindings, 48 controls) also pass. Log:
+`dist/sha3-fill-dependencies.log`, SHA-256
+`9e4f8d51b656c90b79f4255fc6a74a8e485d5b7a6b398a01a6eb78d8c5196a86`.
+
+This is composition of bounded geometry/error models and existing dependency
+assembly checks, not a new cryptographic proof or exhaustive byte-value test.
+Final-bit handling, debug paths and whole-call register/spill qualification
+remain separate. Arm remains QEMU evidence. Production and release gates are
+unchanged; subprocess execution is forbidden in the regression suite. F1 and
+root `PENTEST.md` remain open for remaining qualification and independent retest.

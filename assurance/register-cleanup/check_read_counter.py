@@ -113,7 +113,7 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit, *, por
             if found:
                 require(portable_bulk and get(found[2]) in (0, 1), 'defined portable bit-count selection')
                 env[found[1]] = get(found[3] if get(found[2]) else found[4]); continue
-            found = re.fullmatch('(' + SSA + r') = tail call \{ i128, i1 \} @llvm.uadd.with.overflow.i128\(i128 (' + SSA + '), i128 (' + SSA + r')\)', line)
+            found = re.fullmatch('(' + SSA + r') = (?:tail )?call \{ i128, i1 \} @llvm.uadd.with.overflow.i128\(i128 (' + SSA + '), i128 (' + SSA + r')\)', line)
             if found:
                 left, right = get(found[2]), get(found[3])
                 require(left is not None and right is not None, 'defined overflow intrinsic operands')

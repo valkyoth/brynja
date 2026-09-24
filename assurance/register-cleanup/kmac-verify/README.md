@@ -2129,3 +2129,50 @@ Producer shape/state/authority admission, complete read/mask/write loop progress
 debug callers, register/spill qualification and fresh native evidence remain
 outstanding. Arm remains QEMU; F1 and root `PENTEST.md` remain open. No production
 code or release gate changed.
+
+### Accelerated producer admission and read/mask/write loop
+
+```sh
+python3 assurance/register-cleanup/check_accelerated_output_loop.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_accelerated_output_loop.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+Eight instantiated paths compose the existing initialization/completion checks
+with the producer's full-request preflight and loop. Final output accepts zero
+valid bits only for an empty destination and one through eight bits for a
+nonempty destination; bulk mode uses the original full byte count. Terminal or
+non-squeezing state rejects before authority revalidation, which precedes the
+checked 128-bit output-count admission. The unchanged bounded counter model is
+reused with the verified original length phi supplied explicitly and the owner
+parameter alpha-renamed; its parser now also accepts the ordinary `call` spelling
+of the same pure checked-add intrinsic. No arithmetic behavior is weakened.
+
+Both producer preflight and the actual engine read are tested across 2,656
+modeled cases each (four compiler/target configurations, instantiated twice for
+the two strengths). The producer checks the reconstructed counter itself, not
+just its overflow decision: incorrect byte offsets can otherwise escape sparse
+accept/reject tests. This is bounded modeling, not an all-input formal proof.
+
+Only nonempty admitted output enters the loop. Each iteration reads exactly
+`min(remaining, 168)` bytes into the original staging region, optionally masks
+only the last byte of the final chunk, writes the same count into the original
+owned initializer, clears all 168 staging bytes, and then subtracts that count.
+Completion is reached only on zero original length or exact loop exhaustion.
+Predecessor checks reject bypasses of read, mask, write, clearing and progress.
+Mask, read, write, copy and destination-drop helpers are bound to the actual
+same-configuration LLVM/assembly checks, not just matching symbol fragments.
+Existing error/unwind cleanup checks are reused for the new paths. Session
+internals retain their separate authority/kernel qualification scope.
+
+All 1,924 LLVM and 72 dependency regressions reject; 20 comment/SSA/equivalent-call
+controls pass. Adjacent completion (916 LLVM/64 dependency mutations, 16 controls),
+engine counters (116 mutations, two controls), portable bulk counters (2,032
+mutations, 56 controls) and final-bit tails (2,184 LLVM/160 dependency mutations,
+48 controls and 1,792 mathematical mask cases) pass. Log:
+`dist/accelerated-output-loop.log`, SHA-256
+`50be5e058ebf57e3138e483ad92b779992d687c92647905d70901f02aa23c4a8`.
+No cryptographic implementation, runtime artifact or release gate
+changed. This supersedes the preceding checkpoint's outstanding optimized
+producer admission/progress item, not the debug, wider caller/worker,
+register/spill or native-platform work. Arm remains QEMU evidence; F1 and root
+`PENTEST.md` remain open.

@@ -27,19 +27,23 @@ todo list: several were superseded by later implementation and tests.
   initialization before state/authority work, the full ownership-descriptor
   transfer, and initialization-failure cleanup. Completion now binds original
   output ownership, failed-finish clearing and recoverable-unwind cleanup to the
-  actual core finish and operation guard. Producer admission/loop-progress and
-  debug call-chain qualification remain outstanding.
+  actual core finish and operation guard. Producer valid-bit/state/authority
+  admission, bounded loop progress, final-byte masking and owned writes now
+  compose with those boundaries and the actual helper checks. These retained
+  optimized checks do not qualify debug call chains or whole-call spills.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
 ## Before the next independent pentest
 
-1. **Finish the remaining instantiated KMAC path review.** Complete accelerated
-   producer/lifecycle coverage and debug caller/reader coverage, including error
-   and unwind paths. Individual existing helper checks are evidence to reuse, not a reason
-   to assume an unchecked call-chain link is correct. The optimized portable
-   bulk/final chain is no longer the next unfinished item.
+1. **Finish the remaining instantiated KMAC path review.** Complete debug
+   caller/reader coverage, including error and unwind paths, and reconcile the
+   optimized caller-to-reader/dependency coverage before claiming the whole
+   instantiated path qualified. Individual helper checks are evidence to reuse,
+   not a reason to assume an unchecked call-chain link is correct. The optimized
+   portable bulk/final chain and accelerated producer admission/loop/completion
+   boundaries are no longer the next unfinished items.
 2. **Complete the wider caller and worker emitted-code review.** Check the
    remaining scoped SHA-2/SHA-3, legacy, TupleHash and ParallelHash call boundaries
    against their stated contracts, including actual worker handoff/return paths.

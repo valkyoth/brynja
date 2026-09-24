@@ -1825,3 +1825,40 @@ remain separate obligations. Arm remains QEMU evidence. Tests forbid subprocess
 execution; no compiler/runtime rerun, production change or release-gate change.
 F1 and root `PENTEST.md` remain open for remaining qualification and independent
 retest, including native platform evidence.
+
+## Bulk squeeze counter admission and serialization
+
+```sh
+python3 assurance/register-cleanup/check_sha3_squeeze_counter.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_sha3_squeeze_counter.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+The selected 16 bulk bodies pass 9,568 bounded interpreter cases for decoding
+the original owner's byte-aligned 128-bit counter, checking addition of the
+requested byte count, and committing the exact little-endian result. Cases
+cover every counter bit, carries, zero requests, rate boundaries, maximum
+`u64` requests, and both sides of the `u128` overflow boundary. Overflow must
+return its error before any loop work or counter write. The separate progress
+checker binds successful loop completion to the modeled commit block; this
+counter model does not execute the staging-fill or output-copy routines.
+
+The existing accelerated-reader interpreter has an explicit portable-layout
+mode; its default owner layout and session checks remain unchanged. Rust 1.90's
+unused `add nuw` result can become poison on a rejected overflow path. That
+unused value is allowed, but an invalid value reaching a decision or committed
+counter rejects. Dedicated selected/unselected-poison controls exercise this
+distinction. This is a restricted model of the observed instructions, not a
+general LLVM interpreter or an all-input formal proof.
+
+All 2,032 counter LLVM mutations reject; 56 naming/comment and valid arithmetic
+controls pass. The accelerated-reader checks still pass 1,328 cases and reject
+116 mutations, with two valid controls. Bulk progress still rejects 656 mutations
+and 16 missing-fill bindings, with 48 controls. Log:
+`dist/sha3-squeeze-counter.log`, SHA-256
+`0a2bc2b33089c788cfe0e0c70e9ef77a83621a7d75b2ddadd9979614b4674f26`.
+
+Staging-byte generation, final-bit semantics and whole-call register/spill
+qualification remain separate obligations. Arm remains QEMU evidence. Tests
+forbid subprocess execution; production code and release gates are unchanged.
+F1 and root `PENTEST.md` remain open for remaining qualification, fresh native
+platform evidence and independent retest.

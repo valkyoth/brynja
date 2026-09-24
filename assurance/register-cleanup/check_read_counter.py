@@ -13,8 +13,11 @@ ATOM = r'(?:' + SSA + r'|-?\d+|true|false|poison|undef)'
 MAX = (1 << 128) - 1
 
 
-def evaluate(blocks, label, previous, env, state, session, stops, commit):
+def evaluate(blocks, label, previous, env, state, session, stops, commit, *, portable_bulk=False):
     """Small closed interpreter; the already-inspected data loop is not simulated."""
+    # Portable bulk squeeze has a different byte-aligned owner layout. Keep the
+    # accelerated reader's original layout and strict arithmetic checks by default.
+    offset_start = 16 if portable_bulk else 640
     def get(token):
         if token in ('undef', 'poison'):
             return None
@@ -52,15 +55,16 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit):
                 env[found[1]] = ('owner', int(found[2])); continue
             found = re.fullmatch('(' + SSA + r') = load i(8|64), ptr (' + SSA + r'), align \d+', line)
             if found:
+                require(not portable_bulk or line.endswith(', align 1'), 'byte-aligned portable counter load')
                 address, bits = get(found[3]), int(found[2])
                 require(isinstance(address, tuple) and address[0] == 'owner', 'owner counter/flag load')
                 offset = address[1]
-                if offset in (858, 859):
+                if not portable_bulk and offset in (858, 859):
                     require(bits == 8, 'byte state flag')
                     env[found[1]] = state['squeezing' if offset == 858 else 'failed']
                 else:
-                    require(640 <= offset and offset + bits // 8 <= 656, 'only output-counter metadata loaded')
-                    env[found[1]] = (state['counter'] >> ((offset - 640) * 8)) & ((1 << bits) - 1)
+                    require(offset_start <= offset and offset + bits // 8 <= offset_start + 16, 'only output-counter metadata loaded')
+                    env[found[1]] = (state['counter'] >> ((offset - offset_start) * 8)) & ((1 << bits) - 1)
                 continue
             found = re.fullmatch('(' + SSA + r') = (zext|trunc)(?: nuw| nneg)? i\d+ (' + ATOM + r') to i(1|8|64|128)', line)
             if found:
@@ -70,6 +74,8 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit):
             if found:
                 output, op, flags, width, left, right = found.groups()
                 bits = int(width); left, right = get(left), get(right)
+                if portable_bulk and (left is None or right is None):
+                    env[output] = None; continue
                 require(left is not None and right is not None, 'defined counter arithmetic')
                 mask = (1 << bits) - 1
                 if op in ('shl', 'lshr'):
@@ -77,6 +83,12 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit):
                     value = left << right if op == 'shl' else (left & mask) >> right
                 else:
                     value = left | right if op == 'or' else left ^ right if op == 'xor' else left + right
+                if portable_bulk and (('nuw' in flags and not 0 <= value <= mask)
+                                      or ('nsw' in flags and not -(1 << (bits - 1)) <= value < 1 << (bits - 1))
+                                      or ('disjoint' in flags and left & right != 0)):
+                    # Rust 1.90 computes a nuw sum even on its rejected overflow
+                    # path. Poison in that unused value is not observable UB.
+                    env[output] = None; continue
                 require('nuw' not in flags or 0 <= value <= mask, 'no unsigned arithmetic poison')
                 require('nsw' not in flags or -(1 << (bits - 1)) <= value < 1 << (bits - 1), 'no signed arithmetic poison')
                 require('disjoint' not in flags or left & right == 0, 'disjoint counter fragments')
@@ -85,19 +97,29 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit):
             if found:
                 output, op, width, left, right = found.groups()
                 mask = (1 << int(width)) - 1
-                left, right = get(left) & mask, get(right) & mask
+                left, right = get(left), get(right)
+                require(left is not None and right is not None, 'defined counter comparison')
+                left, right = left & mask, right & mask
                 env[output] = int(left == right if op == 'eq' else left < right); continue
             found = re.fullmatch('(' + SSA + r') = select i1 (' + SSA + r'), i1 (' + ATOM + r'), i1 (' + ATOM + ')', line)
             if found:
+                require(get(found[2]) in (0, 1), 'defined boolean selection condition')
+                env[found[1]] = get(found[3] if get(found[2]) else found[4]); continue
+            found = re.fullmatch('(' + SSA + r') = select i1 (' + SSA + r'), i128 (' + ATOM + r'), i128 (' + ATOM + ')', line)
+            if found:
+                require(portable_bulk and get(found[2]) in (0, 1), 'defined portable counter selection')
                 env[found[1]] = get(found[3] if get(found[2]) else found[4]); continue
             found = re.fullmatch('(' + SSA + r') = tail call \{ i128, i1 \} @llvm.uadd.with.overflow.i128\(i128 (' + SSA + '), i128 (' + SSA + r')\)', line)
             if found:
-                total = get(found[2]) + get(found[3])
+                left, right = get(found[2]), get(found[3])
+                require(left is not None and right is not None, 'defined overflow intrinsic operands')
+                total = left + right
                 env[found[1]] = (total & MAX, int(total > MAX)); continue
             found = re.fullmatch('(' + SSA + r') = extractvalue \{ i128, i1 \} (' + SSA + '), ([01])', line)
             if found:
                 env[found[1]] = get(found[2])[int(found[3])]; continue
             if 'invoke ' in line:
+                require(not portable_bulk, 'portable counter has no session invocation')
                 name, args = read.shared.invocation(line)
                 require(name == session and len(args) == 1 and read.comparison.pointer(args[0]) == '%self', 'original session revalidation')
                 output = read.match('(' + SSA + ') = invoke noundef i8 ', line[:re.search(read.comparison.SYMBOL, line).start()])[1]
@@ -125,9 +147,9 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit):
             found = re.fullmatch('(' + SSA + r') = trunc <16 x i128> (' + SSA + r') to <16 x i8>', line)
             if found:
                 env[found[1]] = [None if value is None else value & 255 for value in vector(found[2], 16)]; continue
-            found = re.fullmatch(r'store <16 x i8> (' + SSA + '), ptr (' + SSA + '), align 32', line)
+            found = re.fullmatch(r'store <16 x i8> (' + SSA + '), ptr (' + SSA + '), align ' + ('1' if portable_bulk else '32'), line)
             if found:
-                require(get(found[2]) == ('owner', 640) and not state['writes'], 'one original output-counter commit')
+                require(get(found[2]) == ('owner', offset_start) and not state['writes'], 'one original output-counter commit')
                 values = vector(found[1], 16)
                 require(all(value is not None for value in values), 'no poison counter bytes')
                 state['writes'].append(int.from_bytes(bytes(values), 'little')); continue
@@ -138,6 +160,7 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit):
                 env[found[1]] = get(selected[0]) % 256; continue
             found = re.fullmatch('br i1 (' + SSA + '), label %(' + read.LABEL + '), label %(' + read.LABEL + ')', line)
             if found:
+                require(get(found[1]) in (0, 1), 'defined counter branch condition')
                 previous, label = label, found[2] if get(found[1]) else found[3]; break
             found = re.fullmatch('br label %(' + read.LABEL + ')', line)
             if found:

@@ -2578,3 +2578,55 @@ store is not counted as a security regression. The mutation harness forbids
 subprocess execution. Mutation log: `dist/debug-producer-operation-mutations.log`,
 SHA-256 `5ce87673f7f2ba73f2f3569fa3ec436eacb3884a6adc713cf8768e2b770be1d7`.
 Documentation links, script inventory and acceptance metadata checks pass.
+
+### Debug output-limit composition
+
+```sh
+python3 assurance/register-cleanup/check_debug_output_limit.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_output_limit.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_wide_arithmetic.py
+```
+
+The actual debug output-limit helper now binds six same-configuration functions:
+counter-field selection, checked u128 addition and Option/result mapping. It
+composes with the portable empty-output producer in fifty-one/fifty-two-function
+closures. All 4,928 modeled cases pass across sixteen instantiated paths. Eleven
+counter and increment values cover zero, 64/127/128-bit boundaries and the full
+u128 maximum. The checked-add helper's exact successful sum is tested separately
+because the limit adapter intentionally discards that sum; checking only the
+overflow tag would miss arithmetic-value regressions. Inactive Option payloads
+remain undefined rather than being invented as initialized zeroes.
+
+The original owner's exact sixteen-byte output-counter field reaches a borrowed
+decoder boundary once, without owner mutation. Empty output admits zero additional
+bytes even at the maximum counter. Terminal readers never reach the decoder;
+synthetic decoder unwind traverses the actual guard and thirteen owned-region
+clear requests, preserving the original exception. All six limit-helper control
+flow graphs are covered except unreachable blocks. This supersedes the opaque
+limit-check boundary for these paths, not the actual byte/final-bit squeeze bodies.
+
+The shared diagnostic model now handles checked u128 addition and the retained
+sixteen-byte Option tag layout in addition to its prior 64-bit forms. Its focused
+tests pass 302 arithmetic/constant controls and 76 poison, malformed-operand,
+range and read-only-storage rejections. This remains a bounded interpreter of
+selected LLVM instructions, not a complete LLVM implementation or formal proof.
+The counter decoder and volatile primitive bodies remain opaque. Injected scalar
+counters and synthetic decoder unwind do not prove scalar-copy/register/spill
+cleanup, whole-verifier behavior or native platform qualification. Arm remains
+QEMU; F1 and root `PENTEST.md` remain open. No production implementation, original
+capture record or release gate changed, and no Rust campaign was repeated.
+
+Existing retained output-write (2,072 cases), core-finish (560 cases),
+finish-adapter (1,136 cases) and producer-operation (21,728 cases) checks pass
+with the shared model change. The existing core-finish mutation test rejects all
+256 mutations with eight controls; zero-argument tests retain eight controls and
+fourteen rejections. Regression log: `dist/debug-wide-arithmetic-regressions.log`,
+SHA-256 `82ef7b70ec02263a1cd302f6f2542d22c32dc22e066f1808bd45081159e5ffad`.
+Output-limit check log: `dist/debug-output-limit-check.log`, SHA-256
+`2655768eb55c0b3c3bad3d8ba4ea485ad0051dda884472eb5a3570102ffed062`.
+
+All 400 arithmetic, counter-field, result-mapping and decoder-ABI mutations
+reject; 32 debug-metadata/SSA controls pass. The mutation harness forbids
+subprocess execution. Mutation log: `dist/debug-output-limit-mutations.log`,
+SHA-256 `5da77bd207d4d69cf395e190cc595f9f3ead392b9999dca6d52473deb6c4c2a0`.
+Documentation links, script inventory and acceptance metadata checks pass.

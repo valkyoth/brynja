@@ -60,11 +60,12 @@ class Model:
         self.step_limit = 3000
         for line in globals_text.splitlines():
             found = re.fullmatch(r'(@[-.$\w]+) = private unnamed_addr constant '
-                                 r'<\{ \[8 x i8\], \[8 x i8\] }> '
-                                 r'<\{ \[8 x i8\] zeroinitializer, \[8 x i8\] undef }>, align 8', line)
+                                 r'<\{ \[(8|16) x i8\], \[\2 x i8\] }> '
+                                 r'<\{ \[\2 x i8\] zeroinitializer, \[\2 x i8\] undef }>, align \2', line)
             if found:
-                self.sizes[found[1]] = 16
-                self.memory[Pointer(found[1])] = (8, 0)
+                width = int(found[2])
+                self.sizes[found[1]] = 2 * width
+                self.memory[Pointer(found[1])] = (width, 0)
 
     def allocate(self, name, size, payload=False):
         require(name not in self.sizes and size >= 0, 'distinct bounded model allocation')
@@ -139,9 +140,11 @@ class Model:
         if self.fault is not None and name == self.fault[0]:
             self.events.append(('fault', name))
             return self.fault[1]
-        if name == 'llvm.uadd.with.overflow.i64':
+        if name in ('llvm.uadd.with.overflow.i64', 'llvm.uadd.with.overflow.i128'):
             require(len(args) == 2 and all(type(x) is int for x in args), 'integer checked-add operands')
-            return ((args[0] + args[1]) & MASK, int(args[0] + args[1] > MASK))
+            mask = (1 << int(name.rsplit('i', 1)[1])) - 1
+            require(all(0 <= value <= mask for value in args), 'checked-add operands match integer width')
+            return ((args[0] + args[1]) & mask, int(args[0] + args[1] > mask))
         if name == self.copy_name:
             require(len(args) == 3 and type(args[2]) is int, 'opaque copy ABI')
             self.address(args[0], args[2], access=False)
@@ -205,12 +208,13 @@ class Model:
                     require(type(a) is int and type(b) is int, 'initialized comparison operands')
                     val = int({'eq': a == b, 'ne': a != b, 'ult': a < b,
                                'ule': a <= b, 'ugt': a > b, 'uge': a >= b}[found[1]])
-                elif found := re.fullmatch(r'(add|sub)( nuw)? i64 (\S+), (\S+)', op):
-                    a, b = self.value(found[3], env), self.value(found[4], env)
+                elif found := re.fullmatch(r'(add|sub)( nuw)? i(64|128) (\S+), (\S+)', op):
+                    a, b = self.value(found[4], env), self.value(found[5], env)
                     require(type(a) is int and type(b) is int, 'initialized arithmetic operands')
+                    mask = (1 << int(found[3])) - 1
                     result = a + b if found[1] == 'add' else a - b
-                    require(not found[2] or 0 <= result <= MASK, 'non-poison arithmetic')
-                    val = result & MASK
+                    require(not found[2] or 0 <= result <= mask, 'non-poison arithmetic')
+                    val = result & mask
                 elif found := re.fullmatch(r'select i1 (\S+), (i\d+ \S+), (i\d+ \S+)', op):
                     condition = self.value(found[1], env)
                     require(condition in (0, 1), 'initialized select condition')

@@ -93,6 +93,14 @@ todo list: several were superseded by later implementation and tests.
   Actual squeeze/check and volatile bodies remain explicit boundaries. All
   operation-closure blocks except unreachable/cleanup double panic are covered;
   standalone helper checks retain their separately documented coverage.
+- The debug output-limit helper now binds its six-function checked-u128-addition,
+  counter-field selection and result-mapping closure, composed with the portable
+  empty-output producer in fifty-one/fifty-two-function closures. Exact sums and
+  overflow tags are checked independently of the adapter that discards the sum.
+  Zero-length output succeeds even at the maximum counter; terminal readers
+  cannot read the counter, and synthetic decoder unwind follows owner cleanup.
+  The counter decoder and volatile primitive remain explicit boundaries; this
+  does not establish scalar-counter register/spill cleanup or squeezing behavior.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -101,7 +109,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   actual squeeze/limit-check bodies, accelerated
+   actual squeeze/counter-decoder bodies, accelerated
    producer guard paths and whole-verifier error/unwind paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,

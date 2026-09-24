@@ -23,8 +23,10 @@ todo list: several were superseded by later implementation and tests.
   `dist/`, outside Cargo's `target/` directory.
 - Accelerated KMAC bulk/final entry forwarding and consuming reader cleanup now
   bind to the actual same-row producer, destructor, engine-memory wipe and core
-  clearing functions. This is not yet complete accelerated producer/lifecycle
-  or debug call-chain qualification.
+  clearing functions. The producer entry also binds complete destination
+  initialization before state/authority work, the full ownership-descriptor
+  transfer, and initialization-failure cleanup. Later producer admission,
+  progress/completion and debug call-chain qualification remain outstanding.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.

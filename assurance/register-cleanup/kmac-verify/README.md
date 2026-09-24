@@ -2052,3 +2052,39 @@ scratch has its separate kernel/operation contract; this is not a claim to wipe
 every byte of the containing 1,088-byte storage, including public metadata and
 padding. Arm remains QEMU evidence. No production or release-gate change, no
 compiler/runtime rerun, and no F1 closure is implied.
+
+### Accelerated producer initialization and descriptor transfer
+
+```sh
+python3 assurance/register-cleanup/check_accelerated_initialization.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_accelerated_initialization.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+Eight instantiated optimized paths (four unique compiler/target configurations,
+each reached by both strengths) pass. Before destination initialization the
+closed entry permits only local metadata preparation. Nonempty output calls the
+actual same-row core initializer with the original pointer and full length;
+its existing checker establishes volatile clearing before ownership is returned.
+Only zero-length output skips that call. Initialization rejection terminates
+the engine, resets its cursor, clears its 234 owned memory bytes, 168 staging
+bytes and two domain bytes, and returns `SecretMemory` without entering output
+production. The cleanup callees retain their existing LLVM/assembly bindings.
+
+Successful initialization transfers all 24 descriptor bytes into the operation:
+the compiler's one-byte plus 23-byte split, including the additional Arm local
+copy, is checked completely. The presence discriminator is set only on that
+successful path. Original length and final-bit metadata are preserved; empty
+output remains absent, not a fabricated initialized region. These copies are
+pointer/length/ownership metadata, not a claim that payload bytes are copied or
+that metadata itself is erased.
+
+The regression suite rejects 984 entry/transfer mutations and 56 dependency
+mutations; 16 comment/SSA controls pass. Tests forbid compiler/runtime subprocess
+execution. Adjacent accelerated-reader tests (824 LLVM and 64 dependency
+mutations, 64 controls) and staging tests (164 mutations) also pass. Log:
+`dist/accelerated-initialization.log`, SHA-256
+`c509ee6c6b8a79a93d02a00042894abb3b63fec85def8e58d10a11d92ed38b07`.
+Later shape/state/authority admission, progress, output completion,
+debug execution and register/spill qualification remain separate unfinished
+work. Arm remains QEMU evidence. Production code and release gates are unchanged;
+F1 and root `PENTEST.md` remain open.

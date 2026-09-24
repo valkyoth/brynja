@@ -43,8 +43,7 @@ todo list: several were superseded by later implementation and tests.
   clearing before publishing the exact result or resuming the original
   exception. Producer and volatile primitive bodies remain explicit boundaries
   of this check; the existing volatile-helper checks retain their own scope.
-  Portable debug consuming-final bridges and whole debug verifier paths remain
-  outstanding.
+  Whole debug verifier paths remain outstanding.
 - The portable debug final-output constructor now binds its nineteen-function
   shape/checked-length closure, including the actual separately emitted
   `brynja-hash-core` range helper. All 256 final-bit values are modeled across ten
@@ -53,6 +52,14 @@ todo list: several were superseded by later implementation and tests.
   separately; they were not silently added to the original runtime record.
   Constructor qualification does not establish the consuming caller's handoff,
   producer cleanup or whole-call register/spill behavior.
+- Portable debug consuming-final bridges now compose the actual constructor,
+  reader handoff, descriptor extraction, destructor chain and error conversion
+  in thirty-five-function closures. Both reader strengths preserve the original
+  owner/active flag/output shape, request all thirteen owned-region clears once
+  on ordinary return and selected boundary unwind, and preserve exact results.
+  Shape rejection clears before returning; successful transfer clears before
+  publishing the producer result. Producer and volatile primitive bodies remain
+  opaque here, and arbitrary helper/double-panic unwind is not qualified.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -60,9 +67,9 @@ observations alone do not prove absence of transformed secrets or stack spills.
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
-   caller/reader coverage beyond bulk and accelerated consuming-final bridges,
-   including portable consuming-final, producer, error and unwind paths, and
-   reconcile the
+   caller/reader coverage beyond bulk and consuming-final bridges, including
+   producer initialization/initializer transfer and operation-guard error/unwind
+   paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

@@ -2308,3 +2308,56 @@ forbid subprocess execution; no compiler/runtime campaign was repeated. Log:
 `568d6eef066262c2db95c2fd6db01f4b808453bd70dfbca4eef740e1bff44cfd`.
 No production code or release gate changed. Arm remains QEMU; F1 and root
 `PENTEST.md` remain open pending the remaining qualification and independent retest.
+
+### Portable debug consuming-final handoff
+
+```sh
+python3 assurance/register-cleanup/check_debug_portable_final_bridge.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_portable_final_bridge.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+Sixteen portable final-reader paths (both cSHAKE strengths, including builds
+with accelerated features enabled) now bind thirty-five-function closures from
+their own retained KMAC, SHA-3, core and supplemental hash-core artifacts. The
+actual output constructor, descriptor extraction, reader transfer, destructor
+chain, owned-clear wrapper and error conversion execute in the metadata model.
+Duplicate instantiated helpers in different caller artifacts must have identical
+normalized bodies and parameter lists; unrelated configurations are never pooled.
+
+All 6,528 modeled cases pass: eight selected lengths, six final-bit values,
+both incoming reader-active flags, successful production, every portable backend
+error, and selected constructor/producer boundary unwind. Invalid shapes and
+bit-length overflow return the feature-correct KMAC error without calling the
+producer. Valid inputs preserve the original owner, active flag, output pointer,
+length and final-bit value into the borrowed producer in final mode. Synthetic
+exceptions retain their original identity and selector.
+
+Every selected return/resume path requests all thirteen original owner-region
+clears exactly once. Both strengths own 168-byte maximum-rate input/padding/output
+buffers; their different algorithmic rates do not shrink those clearing extents.
+Shape errors write their result before dropping the reader but complete cleanup
+before returning. After successful ownership transfer, producer success/errors
+complete cleanup before the outer result is written. The model rejects direct
+payload/state access and does not model secret bytes as ordinary metadata.
+
+Coverage includes every selected constructor, handoff, result and destructor
+block, except the fixed-inclusive range helper's unused generic arms,
+disconnected compiler unwind scaffolding, the clearing wrapper's empty-region
+branch and double-panic abort blocks. Huge lengths are scalar descriptors, not
+runtime allocations. Producer and volatile primitive bodies remain explicit
+opaque boundaries. This does not establish producer behavior, output-buffer
+clearing inside the producer, arbitrary helper panics, whole-verifier register
+or spill cleanup, native-platform behavior or an all-input formal proof.
+
+Main check log: `dist/debug-portable-final-bridge-check.log`, SHA-256
+`c4dd5397797431fef9f237f57ec7e33abf7366a848cc912b04b38e336fe31f84`.
+All 1,240 ownership, cleanup, result, dependency and unwind mutations reject;
+32 harmless metadata/SSA controls pass. Pure repeated metadata copies are not
+counted as security failures; duplicated owned-region cleanup is rejected.
+Mutation log: `dist/debug-portable-final-bridge-mutations.log`, SHA-256
+`fb8ddbfb13f74a833aa8a070750f5c3a65a533ee99de0b39e501899322474e0d`.
+Mutation tests prohibit subprocess execution; no compiler/runtime campaign was
+repeated. The existing constructor and volatile-body diagnostics keep their own
+recorded scope and are not replaced by this handoff model.
+No production code, shared model, release gate or original observation record
+changed. Arm remains QEMU; F1 and root `PENTEST.md` remain open.

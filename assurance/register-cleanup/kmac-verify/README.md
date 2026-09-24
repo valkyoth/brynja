@@ -1945,3 +1945,49 @@ whole-call register/spill erasure or native platform qualification. Arm remains
 QEMU evidence. No production code, runtime artifact or release gate changed;
 tests forbid subprocess execution. F1 and root `PENTEST.md` remain open pending
 the remaining qualification and independent retest.
+
+## Composed final metadata and reader chain
+
+```sh
+python3 assurance/register-cleanup/check_kmac_final_chain.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_kmac_final_chain.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+This standalone diagnostic connects the previously separate constructor,
+adapter, reader, output-owner and final-tail checks. Each of the 16
+verifier-selected KMAC paths resolves its actual callees and LLVM/assembly
+dependencies from the same retained build row. It does not pool symbol names
+across compilers, targets or feature configurations.
+
+The existing constructor model checks all 256 valid-bit values at ten length
+boundaries. The composed matrix checks 40,960 constructor cases (the same eight
+definitions checked for both KMAC strengths, not twice as many unique bodies),
+9,568 counter cases, 2,896 tail-admission cases and 42,704 fill cases. Original
+descriptor forwarding, invalid-metadata owner cleanup, reader error conversion,
+initialization, terminal-state rejection, unwind cleanup and output completion
+are checked together with the actual write, mask, copy, scalar permutation and
+volatile-clear dependencies. The output writer must call the exact defined copy
+primitive, not merely a symbol containing the expected name fragment.
+
+All 320 composition mutations reject and 48 comment controls pass. These alter
+actual dependency bodies without changing their symbols/ABIs, substitute
+unbound callees, change compiler/feature/architecture identities, or remove
+mask cleanup. The regression suite forbids subprocess execution. Final log:
+`dist/kmac-final-chain-composition.log`, SHA-256
+`4b898a4ded55faf16a30cb1f13cc02ade494f617d5715880c3e08a9e2dc37736`.
+Adjacent constructor regressions (400 mutations, 24 controls), adapter rejection
+regressions (384 mutations, 16 missing bindings, 48 controls) and completion
+regressions (1,120 mutations, 16 missing bindings, 48 controls) also pass, logged
+in `dist/kmac-final-chain.log`, SHA-256
+`1c07513916c6319bab856b7da301ad19746fa6740c95c129e130900b9ad75118`.
+That adjacent log predates the final additional exact-copy-callee check; the
+composition log above includes the final checker and its regression.
+
+Constructor rejection requests owner cleanup; this does not claim that the
+constructor itself clears the caller's destination. Whole-verifier error
+cleanup remains a separate contract. Likewise, these bounded models and
+structural checks are not exhaustive cryptographic or whole-call register/spill
+erasure proofs. Debug paths, wider caller qualification, native platform
+evidence and independent retest remain outstanding. Arm artifacts remain QEMU
+evidence. No production code or release gate changed, and no compiler/runtime
+rerun was needed. F1 and root `PENTEST.md` remain open.

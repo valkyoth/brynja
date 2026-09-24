@@ -84,6 +84,15 @@ todo list: several were superseded by later implementation and tests.
   Selected helper unwind preserves exception identity and clears the owned output.
   All adapter/core blocks except unreachable and cleanup double panic are covered.
   This checks the completion helper, not its upstream squeeze/operation caller.
+- Portable debug producer operations now connect the actual initializer, guard,
+  dispatch closure and completion/destructor chain in forty-five/forty-six-
+  function closures. Original owner, initializer, length and optional bit shape
+  reach the selected squeeze boundary; empty output takes the zero-increment
+  limit check. Synthetic partial progress, errors and selected unwind exercise
+  destination cleanup, owner cleanup and success-only reader reactivation.
+  Actual squeeze/check and volatile bodies remain explicit boundaries. All
+  operation-closure blocks except unreachable/cleanup double panic are covered;
+  standalone helper checks retain their separately documented coverage.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -92,7 +101,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   actual squeeze/operation bodies and their completion-helper handoff, accelerated
+   actual squeeze/limit-check bodies, accelerated
    producer guard paths and whole-verifier error/unwind paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,

@@ -2516,3 +2516,65 @@ execution; no compiler/runtime campaign was repeated. Log:
 `c1f041bb1257b5e2829acaf018ac1b3b15487ceeebc9f670f76415e35145d2ca`.
 Documentation links, script layout and acceptance metadata/checker regressions
 pass. Arm remains QEMU; F1 and root `PENTEST.md` remain open.
+
+### Debug portable operation composition
+
+```sh
+python3 assurance/register-cleanup/check_debug_producer_operation.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_producer_operation.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_zero_arguments.py
+```
+
+The actual portable producer operation now composes its initialization, operation
+guard, dispatch/result adapters, finish adapter and core destructors. This binds
+forty-five/forty-six same-configuration functions, including the actual
+twenty-four-function operation/completion closure. All 21,728 modeled cases pass
+across sixteen instantiated paths and ten selected output lengths. The three
+opaque operation boundaries have their actual borrowed ABIs checked: byte
+squeeze, final-bit squeeze and the empty-output `check_output_bytes(0)` call.
+Their bodies are not modeled by this checkpoint.
+
+The operation receives the original initializer and captured output metadata with
+the reader guard armed. It dispatches the original owner, destination descriptor,
+length and optional final-bit value to the correct boundary. Inactive readers and
+initialization failures do not enter the operation. Failure after synthetic
+partial progress clears the original output and owner; incomplete successful
+boundary progress cannot escape as a completed output. Successful completion
+transfers the actual original output descriptor and alone reactivates the reader.
+Selected squeeze, core-finish and result-predicate unwind retain cleanup and the
+original exception. Every actual operation block is visited except unreachable
+and cleanup double panic; this is not full coverage of every block of every
+composed helper, whose standalone checks remain separately scoped.
+
+Boundary progress/errors are injected metadata effects, not generated secret
+bytes or evidence of squeezing correctness. Final-bit values outside valid API
+shapes test forwarding only; huge lengths are not allocated/runtime workloads.
+The volatile primitive remains opaque. Actual squeeze/check bodies, accelerated
+debug producer paths, whole-verifier register/spill behavior and native platforms
+remain outstanding. Arm remains QEMU; F1 and root `PENTEST.md` remain open.
+
+An actual empty-output error mapper has zero arguments. The shared diagnostic
+interpreter now normalizes an empty argument list for definitions, calls and
+invokes; malformed lists and arity mismatches remain rejected. Eight normal,
+whitespace, nonempty-parameter and unwind controls pass, with fourteen negative
+cases. Existing retained output-write (2,072 cases), output-finish (560 cases)
+and finish-adapter (1,136 cases) checks also pass with that interpreter change.
+Regression log: `dist/debug-zero-argument-regressions.log`, SHA-256
+`7755c2505d56df41a484c63c01760d45be32d7228cb0ec784987c0f0c604c0d5`.
+No production code, release gate or original capture record changed; no Rust
+compiler/runtime campaign was repeated.
+
+The existing core-finish mutation suite also rejects all 256 ownership/cleanup/
+unwind mutations, with eight metadata controls passing under the updated model.
+Log: `dist/debug-zero-argument-finish-mutations.log`, SHA-256
+`860fb6a8b0bf755b8fdc4a627bc951b5d30539ce651abc3d97c1ecfdb4dbc2b4`.
+Operation check log: `dist/debug-producer-operation-check.log`, SHA-256
+`a36972995812ee9a6a1b179d23cba588bc17187d54b8c8fa4c35075b4809449a`.
+
+All 816 dispatch, ownership, cleanup, unwind and ABI mutations reject. The 48
+accepted controls cover harmless debug metadata, SSA renaming and a redundant
+initial drop-flag store that is immediately overwritten before use. This dead
+store is not counted as a security regression. The mutation harness forbids
+subprocess execution. Mutation log: `dist/debug-producer-operation-mutations.log`,
+SHA-256 `5ce87673f7f2ba73f2f3569fa3ec436eacb3884a6adc713cf8768e2b770be1d7`.
+Documentation links, script inventory and acceptance metadata checks pass.

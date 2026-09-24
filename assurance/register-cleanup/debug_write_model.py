@@ -24,11 +24,16 @@ class Pointer:
     offset: int = 0
 
 
+def arguments(text, position):
+    args = shared.comparison.arguments(text, position)
+    return [] if args == [''] else args
+
+
 def parameters(function):
     header = function.splitlines()[0]
     symbol = re.search(shared.comparison.SYMBOL, header)
     require(symbol is not None, 'debug function symbol')
-    args = shared.comparison.arguments(header, symbol.end())
+    args = arguments(header, symbol.end())
     result = []
     for arg in args:
         found = re.search('(' + SSA + ')$', arg)
@@ -236,7 +241,7 @@ class Model:
                     normal, unwind = shared.edges(lines[index + 1])
                     symbol = re.search(shared.comparison.SYMBOL, op)
                     require(symbol is not None, 'named direct debug invoke')
-                    call_args = shared.comparison.arguments(op, symbol.end())
+                    call_args = arguments(op, symbol.end())
                     try:
                         val = self.run(symbol[1], [self.typed(a, env) for a in call_args], depth + 1)
                     except Unwind as error:
@@ -260,7 +265,7 @@ class Model:
                 elif op.startswith('call '):
                     symbol = re.search(shared.comparison.SYMBOL, op)
                     require(symbol is not None, 'named direct debug call')
-                    call_args = shared.comparison.arguments(op, symbol.end())
+                    call_args = arguments(op, symbol.end())
                     val = self.run(symbol[1], [self.typed(a, env) for a in call_args], depth + 1)
                 elif found := re.fullmatch(r'br i1 (\S+), label %(\S+), label %(\S+)', op):
                     condition = self.value(found[1], env)

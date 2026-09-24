@@ -103,6 +103,10 @@ class Model:
             return 0
         if token == 'true':
             return 1
+        field = r'(?:i\d+ (?:-?\d+|poison|undef)|ptr (?:null|poison|undef))'
+        aggregate = re.fullmatch(r'\{ (' + field + '), (' + field + r') }', token)
+        if aggregate:
+            return tuple(self.typed(item, env) for item in aggregate.groups())
         if re.fullmatch(r'-?\d+', token):
             return int(token)
         if re.fullmatch(r'@[-.$\w]+', token):
@@ -210,7 +214,7 @@ class Model:
                     pair = self.value(found[1], env)
                     require(isinstance(pair, tuple) and len(pair) == 2, 'two-field aggregate')
                     val = pair[int(found[2])]
-                elif found := re.fullmatch(r'insertvalue \{ [^}]+ } (\S+), ((?:ptr|i\d+) \S+), ([01])', op):
+                elif found := re.fullmatch(r'insertvalue \{ [^}]+ } (\S+|\{ [^{}]+ }), ((?:ptr|i\d+) \S+), ([01])', op):
                     pair = self.value(found[1], env)
                     require(pair is UNKNOWN or isinstance(pair, tuple), 'aggregate insertion')
                     pair = list((UNKNOWN, UNKNOWN) if pair is UNKNOWN else pair)

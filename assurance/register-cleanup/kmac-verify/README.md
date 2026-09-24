@@ -2267,3 +2267,44 @@ the retained artifacts and prohibit subprocess execution. Log:
 `3c99361ce9db9fa202ec0e1847a90436aa11581dcde959de38b27f09a6a6935f`.
 No production code or release gate changed. Arm remains QEMU, and F1 and root
 `PENTEST.md` remain open.
+
+### Debug final-output constructor and actual range helpers
+
+```sh
+python3 assurance/register-cleanup/check_debug_fips202_output.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_fips202_output.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+The constructor used by portable consuming-final readers now binds its actual
+nineteen-function shape, checked-length, result and range-helper closure in all
+eight retained debug configurations. The inclusive range helpers are resolved
+from the same configuration's `brynja-hash-core` LLVM file, not substituted by
+an assumed range predicate. The model reads the actual constant bounds and
+checks the original destination, byte length, computed bit length and final-bit
+value, or the exact shape/overflow error. Payload access is rejected.
+
+All 256 final-bit values over ten selected length boundaries pass: 20,480 cases.
+These are scalar descriptor models, not fabricated Rust slices or huge runtime
+allocations. Coverage includes constructor and fixed-inclusive helper paths;
+generic Excluded/Unbounded arms and disconnected compiler unwind scaffolding
+are explicitly outside those paths. This does not qualify the consuming-reader
+handoff, producer behavior, whole-verifier cleanup, registers or spills.
+
+The eight supplemental hash-core files were present in the protected full
+archive but absent from the original 240-artifact observation index. Each was
+compared byte-for-byte with its regular archive member and is separately
+SHA-256-pinned in the diagnostic. The original observation record is unchanged.
+The full archive `dist/kmac-verify-nft_nl5x.tar.gz` was independently rehashed as
+`6a85f5de89c4e0e0f7c3dc725bfb7ab09c93b35525bcdb09645c361d75d26e52`.
+These supplemental author-review pins are not new release-gate requirements.
+
+All 352 LLVM/constant/dependency mutations and eight changed-artifact pin cases
+reject; sixteen metadata/SSA controls pass. The shared metadata interpreter now
+accepts the compiler's two-field literal aggregate syntax, with fifteen value
+controls and three malformed-constant rejections. Adjacent bulk/final bridge,
+output write/finish and volatile-clearing mutation suites pass. Mutation tests
+forbid subprocess execution; no compiler/runtime campaign was repeated. Log:
+`dist/debug-final-output-constructor.log`, SHA-256
+`568d6eef066262c2db95c2fd6db01f4b808453bd70dfbca4eef740e1bff44cfd`.
+No production code or release gate changed. Arm remains QEMU; F1 and root
+`PENTEST.md` remain open pending the remaining qualification and independent retest.

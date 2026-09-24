@@ -45,6 +45,14 @@ todo list: several were superseded by later implementation and tests.
   of this check; the existing volatile-helper checks retain their own scope.
   Portable debug consuming-final bridges and whole debug verifier paths remain
   outstanding.
+- The portable debug final-output constructor now binds its nineteen-function
+  shape/checked-length closure, including the actual separately emitted
+  `brynja-hash-core` range helper. All 256 final-bit values are modeled across ten
+  selected length boundaries in all eight debug configurations. The eight extra
+  helper files were verified against the protected original archive and pinned
+  separately; they were not silently added to the original runtime record.
+  Constructor qualification does not establish the consuming caller's handoff,
+  producer cleanup or whole-call register/spill behavior.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.

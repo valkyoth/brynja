@@ -1753,3 +1753,39 @@ qualification is established here. The regression tests prohibit subprocess
 execution; only the separately reported focused recovery capture rebuilt Rust.
 Production code and release gates are unchanged. F1 remains open for remaining
 qualification, fresh native platform evidence and independent retest.
+
+## Squeeze initialization ownership and post-write cleanup
+
+```sh
+python3 assurance/register-cleanup/check_sha3_squeeze_ownership.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_sha3_squeeze_ownership.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+Across 32 selected bulk/final squeeze bodies, all 48 direct initialization-handle
+uses are confined to the actual core write routine and the final-to-bulk
+forwarding call. The original exclusive initialization borrow is not directly
+read, copied, stored, cast, returned or aliased by either squeeze body. Core
+write definitions are separately checked: they preserve region pointer/length,
+check bounds before copying, and commit only the initialized-byte count.
+
+Writes use the original owner's staging region at its retained byte offset 584.
+Bulk source lengths are bounded by a supported 136/168-byte rate; the final tail
+write is exactly one byte. Every normal write result is followed by clearing all
+168 staging bytes before either continuing or returning a `SecretMemory` error.
+The write-result discriminator and error return edge are checked for both
+compiler-private layouts. Core write/copy and clearing dependencies bind to
+their checked source-specific LLVM and assembly artifacts.
+
+All 1,040 LLVM mutations and 96 missing dependency bindings reject; 96 naming/
+comment controls pass. Adjacent core write/copy regressions pass (144 LLVM and
+40 assembly mutations), as do the completion regressions (1,120 mutations,
+16 bindings, 48 controls). Log: `dist/sha3-squeeze-ownership.log`, SHA-256
+`e9fde5e59de76632e1799838e32e36ddcf2f8efc48ab665be819595390770689`.
+
+This checks direct descriptor uses and normal post-write routing under valid,
+disjoint Rust borrows. It is not a full proof of squeeze length/counter
+progression, staging-byte generation, other callee effects, unwinding or
+whole-call register/spill erasure. Those wider obligations remain separate;
+Arm remains QEMU evidence. No Rust compilation/runtime test was repeated for
+this checkpoint, and production code and release gates are unchanged. F1 and
+root `PENTEST.md` remain open for remaining qualification and independent retest.

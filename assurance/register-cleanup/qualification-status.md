@@ -36,8 +36,15 @@ todo list: several were superseded by later implementation and tests.
   preserves the borrowed owner, destination, length, success ownership and exact
   errors; a synthetic producer unwind propagates without publishing a result.
   The debug producer body remains an explicit unchecked boundary in this check,
-  not an inferred cleanup guarantee. Consuming-final bridges and whole debug
-  verifier paths remain outstanding.
+  not an inferred cleanup guarantee.
+- Accelerated debug consuming-final bridges now bind fourteen-function
+  handoff/destructor/core-clear closures. Normal success, each backend error and
+  synthetic producer unwind request complete same-owner engine/staging/domain
+  clearing before publishing the exact result or resuming the original
+  exception. Producer and volatile primitive bodies remain explicit boundaries
+  of this check; the existing volatile-helper checks retain their own scope.
+  Portable debug consuming-final bridges and whole debug verifier paths remain
+  outstanding.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -45,8 +52,9 @@ observations alone do not prove absence of transformed secrets or stack spills.
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
-   caller/reader coverage beyond the bulk bridge, including consuming-final,
-   producer, error and unwind paths, and reconcile the
+   caller/reader coverage beyond bulk and accelerated consuming-final bridges,
+   including portable consuming-final, producer, error and unwind paths, and
+   reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

@@ -2218,3 +2218,52 @@ the protected artifacts without a compiler/runtime rerun. Log:
 `e60999eeb55d5b4ac095e04253917b3f79535c4a64ff8fbdadd3deb9746299e2`.
 No production code or release gate changed. Arm remains QEMU; F1 and root
 `PENTEST.md` remain open pending the remaining qualification and independent retest.
+
+### Accelerated debug consuming-final handoff
+
+```sh
+python3 assurance/register-cleanup/check_debug_kmac_final_bridge.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_kmac_final_bridge.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+Eight actual accelerated final bridges bind fourteen-function closures from
+their own KMAC, SHA-3 and core artifacts. Generic helpers resolve in their
+caller's artifact; definitions from unrelated configurations are not pooled.
+The closure includes the trait handoff, consuming reader, real destructor
+chain, engine cancellation, engine-memory wipe, staging/domain cleanup,
+core clearing wrapper and result/error conversion. The borrowed producer and
+volatile byte-clearing primitive remain explicit opaque boundaries with their
+actual definitions and ABIs checked, not bodies interpreted by this diagnostic.
+
+The original storage, destination, length and valid-bit value reach the producer
+in final mode. On success, every returned backend error and a synthetic producer
+exception, the real destructor chain marks the same engine terminal, resets its
+cursor and requests all six original owned-region clears: engine state (200
+bytes), two 16-byte counters, two engine-domain bytes, all 168 staging bytes and
+two XOF-domain bytes. The wrapper publishes the original secret-output descriptor
+or exact backend error only after cleanup. Producer unwind performs the same
+cleanup and resumes the original exception identity and selector. Double-panic
+abort and arbitrary exceptions from cleanup helpers are excluded.
+
+The 4,704 modeled cases cover seven lengths, six byte-sized valid-bit values,
+empty/nonempty successful result descriptors, all twelve accelerated-error encodings
+and producer unwind. These are synthetic boundary results, not claims that the
+opaque producer accepts invalid output shapes or can allocate enormous slices.
+Every selected reachable block is exercised; the core wrapper's unused
+empty-region branch and cleanup-abort block are explicitly outside these paths.
+Direct payload/state reads, wrong clear offsets/extents, skipped/duplicated
+cleanup and publication before cleanup reject. This is not a proof of producer
+behavior, debug portable-final handoff, whole-verifier control flow, compiler
+spills or native-platform behavior. The existing volatile LLVM/assembly checks
+retain their own narrower guarantees.
+
+All 684 retained-LLVM handoff/drop/clear/unwind mutations reject; 16 harmless
+metadata/SSA controls pass. Adjacent bulk-bridge tests reject 1,032 mutations with
+48 controls; volatile clearing rejects 192 mutations with eight controls and
+checks 100 overlapping-store model cases. Clearing assembly rejects 1,016
+instruction/call/identity and 48 extraction mutations with 44 controls. All use
+the retained artifacts and prohibit subprocess execution. Log:
+`dist/debug-kmac-final-bridge.log`, SHA-256
+`3c99361ce9db9fa202ec0e1847a90436aa11581dcde959de38b27f09a6a6935f`.
+No production code or release gate changed. Arm remains QEMU, and F1 and root
+`PENTEST.md` remain open.

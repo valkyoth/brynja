@@ -117,6 +117,16 @@ todo list: several were superseded by later implementation and tests.
   the actual decoder. Narrowing is checked for every byte value and selected
   overflow values. This checks the helper's modeled effects, not the squeeze
   caller's execution or counter-commit ordering, nor scalar/register/spill erasure.
+- The portable debug byte-squeeze body now composes its actual counter decoder/
+  writer, checked arithmetic, staging-slice and output-initialization write
+  helpers. Its fifty-eight-function closure joins the earlier helpers in
+  ninety-eight/ninety-nine-function sets. Modeled iteration failures check exact
+  prefix progress, full staging-clear requests after returned write attempts,
+  and counter commit only after every chunk succeeds. Staging fill, byte copy
+  and volatile wiping remain explicit boundaries. Selected boundary unwinds
+  propagate without a counter commit; the enclosing guard's cleanup must still
+  be composed with this body. Final-bit squeezing and whole-call residue remain
+  unqualified; this is not a register/spill-erasure guarantee.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -125,9 +135,10 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   actual byte/final-bit squeeze bodies and counter-commit ordering, accelerated
-   producer guard paths and whole-verifier error/unwind paths, and reconcile the
-   optimized caller-to-reader/dependency coverage before claiming the whole
+   final-bit squeeze bodies, staging-fill internals, byte-squeeze/outer-guard
+   composition, accelerated producer guard paths and whole-verifier error/unwind
+   paths, and reconcile the optimized caller-to-reader/dependency coverage before
+   claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized
    portable bulk/final chain and accelerated producer admission/loop/completion

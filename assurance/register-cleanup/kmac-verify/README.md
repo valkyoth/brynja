@@ -2743,3 +2743,52 @@ than being counted again. The harness forbids subprocess execution. Mutation log
 `c4b0582385d10893eff9eea9d091335ede0c1ec802763e25a19c4df1e0f70efd`.
 Documentation links, script inventory, acceptance metadata and its regression
 tests pass without crypto execution.
+
+### Debug byte-squeeze scheduling and counter commit
+
+```sh
+python3 assurance/register-cleanup/check_debug_squeeze_operation.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_squeeze_operation.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_squeeze_model.py
+```
+
+This models the actual portable debug byte-squeeze body selected by the producer,
+including its actual decoder/writer, checked arithmetic, slice, result-mapping,
+output-initialization write and clear-request helpers. The local closure contains
+fifty-eight functions; composition with earlier helper sets contains ninety-eight/
+ninety-nine functions. The rate is checked independently against the reader
+identity, while the staging allocation/clear size stays 168 bytes for both rates.
+
+The full matrix covers 6,208 cases: seven zero/rate/multiple-rate lengths, four
+counter values straddling overflow, and failures at every iteration of the
+selected one-, two- and three-chunk requests. Overflow precedes work; successful
+copies advance the original initializer by the exact chunk length. Returned
+write failures still request complete staging clearing before propagation.
+Counter bytes are committed exactly once, after complete success, and remain
+unchanged on fill, slice or write errors and selected fill/copy unwind. The
+counter value, sixteen read/write positions and output descriptor are checked
+independently of the event-order assertions.
+
+Fill and copy internals remain explicit boundaries, as does the volatile wipe
+primitive. Failure/unwind injection is synthetic, not a claim that those helper
+failures are reachable from valid inputs. The zero-length direct-helper case is
+a metadata probe, not a constructed Rust zero-length initializer. The modeled
+body does not clear the whole owner on its own: outer-guard composition remains
+pending. These bounded cases do not establish all-input/helper-block coverage,
+arbitrary unwind behavior, secret-copy/register/spill erasure, final-bit squeeze
+behavior or native qualification. Existing standalone helper evidence retains
+its separately recorded scope. Arm stays QEMU; F1 and root `PENTEST.md` stay open.
+
+Eighteen model saturation/boundary controls pass and seventeen malformed calls
+are rejected. No shared model, production implementation, capture record or
+release gate changed, and no Rust/native campaign was rerun.
+
+Squeeze log: `dist/debug-squeeze-operation-check.log`, SHA-256
+`fdc77068ac33207d1c7db74aeadef58a89a332b2e63ad873da09d708a427b703`.
+Model-test log: `dist/debug-squeeze-model-tests.log`, SHA-256
+`23b6fbd4d04d30374a6d1ac5437c86ef7082b190119f4e39953c1202b682057c`.
+
+All 736 dependency/ABI/scheduling/cleanup mutations reject (46 per path);
+32 metadata/SSA controls pass. Subprocess execution is forbidden by the harness.
+Mutation log: `dist/debug-squeeze-operation-mutations.log`, SHA-256
+`f6f2d2db7f62cc5454b0501697cf97bb81c6ed16ec06a9e0eaa8884573ac22bb`.

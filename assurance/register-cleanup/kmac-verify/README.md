@@ -3014,3 +3014,73 @@ All logs are under ignored `dist/`, outside Cargo's `target/` directory:
 | `debug-final-guard-mutations-shard-1.log` | `660f5678db39dfd1095ff72af4e801f3ae7ed09299c65265bfdb81ebef436109` |
 | `debug-final-guard-mutations-shard-2.log` | `cf1627d4ab2c9ce9f48a99d4f25d2d9c1209e934aa11635abd493716365bb84e` |
 | `debug-final-guard-mutations-shard-3.log` | `d7912d691f19db9ac62b0f8ee3bd27c26965a1dee158525784a094629ee56183` |
+
+### Composed debug consuming final reader
+
+From the same preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_consuming_final.py "$record"
+python3 assurance/register-cleanup/test_debug_consuming_final.py "$record"
+```
+
+Both accept optional `--shard 0`, `1`, `2` or `3`; all four disjoint shards are
+required for the complete sixteen-path matrix. These diagnostics connect the
+actual KMAC consuming trait bridge, checked output constructor, SHA-3 consuming
+reader and original guarded final producer. Shared helper definitions must
+agree before merging the 149/150-function closures. No captured implementation
+or release-gate policy changes, and no compiler/native campaign is repeated.
+
+The producer first passes its independent arithmetic/lifecycle/event-order
+oracle. Its trace is then compared against execution through the actual wrapper,
+including real compiler-local reader and result descriptors. Diagnostic guard
+observations refer to that original reader address; no replacement reader or
+manufactured descriptor is supplied to the compiled helper bodies. Exact counter
+reads/writes, output progress, exception identity and result conversion remain
+bound across the handoff. An admitted producer's result is transferred to the
+public return descriptor after consuming cleanup. A shape-rejection error is
+stored earlier, but owner cleanup still precedes return.
+
+Consuming cleanup requests all thirteen owner-region clears even when the
+producer already requested cleanup after failure. The check distinguishes these
+two requests rather than claiming a numeric counter rollback or exactly one wipe
+for the whole call. Shape rejection occurs before destination initialization:
+the consumed owner is cleared, but that path does not promise destination erasure.
+Constructor unwind is synthetic; fill/copy unwind is injected at the previously
+documented primitive boundaries, not at every machine instruction.
+
+All 6,272 composed cases pass across sixteen paths (392 each), including empty
+output, all valid final widths, rate/multirate and counter boundaries, terminal
+readers, initializer failures, fill/write/slice/tail errors and selected unwind.
+The existing producer oracle is also rerun over its 5,984 modeled cases before
+trace comparison. Four synthetic address-binding controls and eleven malformed/
+inactive-call rejections pass. All 192 retained-IR mutations reject (twelve per
+path), with sixteen passing SSA rename controls. Mutations omit the producer or
+normal/unwind destructor calls, corrupt forwarded length/mode/valid-bit metadata,
+swallow exceptions or introduce direct secret-payload reads. Both compiler
+destructor spellings are covered.
+The mutation harness forbids compiler/runtime subprocesses. Secret fill, copy,
+mask and volatile primitive bodies remain opaque. This does not qualify arbitrary
+unwind, whole-call register/spill erasure or native Arm execution. F1 and root
+`PENTEST.md` remain open.
+
+Checker SHA-256:
+`5fd9b1000b3c0d48fe1ba3c30027641c962dd4251a3487c2af555aa51a10c1a9`;
+mutation harness:
+`87137529611eca403ae6290b4be8c0f760ee19585cef184d9f9afb98baff5877`.
+Logs use `dist/debug-consuming-final-{check,mutations}-shard-{0,1,2,3}.log`,
+outside Cargo's `target/` directory.
+
+| Completed direct-check log | SHA-256 |
+| --- | --- |
+| `debug-consuming-final-check-shard-0.log` | `0808ad313c06443b6bab12949265c48906956e6013bf20e1ac62946f2c49eb30` |
+| `debug-consuming-final-check-shard-1.log` | `4f85fff67a182a375818aa41801e28d76d00f8bd240eb0ef762e8ff673a3a566` |
+| `debug-consuming-final-check-shard-2.log` | `1b2c4afbe5d478b4b71160ff3de27c02fb59338d723d68ace2e335c581a70f6b` |
+| `debug-consuming-final-check-shard-3.log` | `57eea9d5482601d8e9f79c3a5e49b3b0267fb12498c1ae9782319f34e48b7b6c` |
+
+| Completed mutation log | SHA-256 |
+| --- | --- |
+| `debug-consuming-final-mutations-shard-0.log` | `dd59a8919e79dae340136d165a70fd1be2da6a9a6b9ff7db5cf0b06605b24951` |
+| `debug-consuming-final-mutations-shard-1.log` | `610d128f98479dae8ddb0b6a52f43b3ed9bbb704a6a46b4efd2fb8bebda95127` |
+| `debug-consuming-final-mutations-shard-2.log` | `2db729b9319c1dc0d6c10dfbaeb91bc88e03a51257618ac418143d40c653e7df` |
+| `debug-consuming-final-mutations-shard-3.log` | `96af782998cccc50468f3e716e86e5cb56d5fc14aea16679ab8432eb3366e0fd` |

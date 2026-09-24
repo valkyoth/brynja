@@ -162,6 +162,16 @@ Later diagnostic-only additions can run there without replacing captured sources
   Already-terminal rejection requests output clearing without another owner mutation.
   The consuming-reader wrapper is still separately checked, not composed here;
   secret primitives and whole-call register/spill behavior remain unqualified.
+- The subsequent consuming-final diagnostic connects that producer to the
+  actual output constructor, SHA-3 consuming reader and KMAC trait bridge.
+  All 6,272 modeled cases pass through the combined 149/150-function closures.
+  The original compiler-local reader/result descriptors, exact output progress,
+  counter effects and exception identity survive the handoff. Consuming cleanup
+  requests all thirteen owner-region clears before return or resumed unwind,
+  including after an inner guard already requested clearing. Constructor shape
+  rejection consumes the owner without promising destination erasure. All 192
+  injected regressions reject and sixteen SSA controls pass. This does not qualify
+  secret primitive bodies or whole-call register/spill cleanup.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -170,7 +180,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   remaining consuming-reader/producer links, staging-fill internals,
+   remaining bulk-reader/producer links, staging-fill internals,
    accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

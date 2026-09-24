@@ -2798,8 +2798,10 @@ Mutation log: `dist/debug-squeeze-operation-mutations.log`, SHA-256
 The capture's source manifest includes Rust tests. The subsequent ParallelHash
 Arm test correction changes that manifest, not production code. Keep the record
 unchanged: it does not validate against the corrected main checkout. The ignored
-worktree `dist/register-cleanup-review-source` is pinned to diagnostic checkpoint
-`cc5b9add`, where exact source equality and all retained artifact hashes passed.
+worktree `dist/register-cleanup-review-source` preserves the captured sources from
+diagnostic checkpoint `cc5b9add`, where exact source equality and all retained
+artifact hashes passed. Subsequent diagnostic-only scripts can be added there
+without changing those captured inputs.
 Run retained inspections from that checkout, passing an absolute record path:
 
 ```sh
@@ -2812,3 +2814,54 @@ This preserves historical qualification without recollection, source-hash
 exceptions or release-gate changes. It does not qualify subsequently changed
 implementation code. The checkout and artifacts remain local and ignored;
 neither is under Cargo's `target/` directory.
+
+### Composed debug byte-squeeze guard
+
+From the preserved source checkout, using the absolute record path above:
+
+```sh
+python3 assurance/register-cleanup/check_debug_squeeze_guard.py "$record"
+python3 assurance/register-cleanup/test_debug_squeeze_guard.py "$record"
+```
+
+All 7,936 cases pass (496 per instantiated path) through the actual portable
+producer/initializer/operation/byte-squeeze/completion/destructor chain. The
+ninety-eight/ninety-nine-function sets reuse the existing helper checks. Six
+zero/rate/multiple-rate lengths and four counter values cover empty requests,
+overflow and success boundaries; terminal readers and all four synthetic
+initializer-clear errors are included. Each selected loop iteration is exercised
+with all five fill errors, four write errors, missing staging slices and selected
+fill/copy unwind. These injections are not claims that each fault is reachable
+from valid Rust inputs.
+
+The check requires the original reader to stay inactive during fill and output
+transfer. Only successful completion transfers the complete output descriptor
+and reactivates it. Errors/unwind request complete output clearing and all thirteen
+owner-region clears in the actual guard chain. Counter encoding is committed only
+on successful byte squeezing; the model's recorded counter bytes reflect algorithm
+writes, not memory contents after the opaque volatile-clear request.
+
+Four synthetic model controls and twelve malformed/unarmed-call rejections pass.
+Fill, byte-copy and volatile-wipe internals remain boundaries. This is bounded
+functional/event-order qualification, not proof of all-input behavior, arbitrary
+unwind, final-bit squeezing or register/spill erasure. Arm remains QEMU. F1 and
+root `PENTEST.md` remain open; no production code, captured record or release gate
+changed, and no Rust/native campaign was repeated.
+
+Composition log: `dist/debug-squeeze-guard-check.log`, SHA-256
+`8fcea16c8242f8aa36e96cb863ad51a2b787834a9e8fb8116af49ab0495ca37f`.
+Model-test log: `dist/debug-squeeze-guard-model.log`, SHA-256
+`3c2a74d32ce2bfb6207d6a40f511f75ecc8fbf4b8029444736af412f82a32d23`.
+The retained dependencies were imported from the matching checkout while the
+new inspector ran from the main checkout; its additional SHA-256 is
+`b1017b111b7b30a446610a06f0cff801362d0ac2c20c5602eccaee419719571c`.
+
+All 320 handoff/cleanup/commit/unwind mutations reject (twenty per path), and
+32 debug-metadata/SSA controls pass. The harness includes both older
+`drop_in_place` and newer `drop_glue` destructor symbols; its initial run caught
+incomplete mutation coverage of the latter, which was corrected before the full
+passing rerun. Compiler/runtime subprocess calls are forbidden in the harness.
+Mutation log: `dist/debug-squeeze-guard-mutations-final.log`, SHA-256
+`699feb0a56b7150ef9acdba3700c10b3e0c9fde387573a2556156c13114d7251`.
+Final mutation harness SHA-256:
+`814786a4b5fe9642d2cd68ccb5a2cfad1aa93d8860674aba064268f21e9ebf1e`.

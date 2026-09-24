@@ -5,11 +5,12 @@ The [pentest ledger](../../security/pentest/v0.24.49.md) retains the historical
 checks and their limitations. Earlier checkpoint paragraphs are not a current
 todo list: several were superseded by later implementation and tests.
 
-Retained KMAC inspections use the local source-matching checkout at `cc5b9add`
+Retained KMAC inspections use the local source-matching checkout based on `cc5b9add`
 under `dist/register-cleanup-review-source`; see the diagnostic README for the
 command. A later Arm CI test correction changes a captured test-file hash, not
 production behavior. Exact source/artifact validation remains enabled; the old
 record must not be presented as validating the corrected main checkout.
+Later diagnostic-only additions can run there without replacing captured sources.
 
 ## Already implemented
 
@@ -133,6 +134,14 @@ record must not be presented as validating the corrected main checkout.
   propagate without a counter commit; the enclosing guard's cleanup must still
   be composed with this body. Final-bit squeezing and whole-call residue remain
   unqualified; this is not a register/spill-erasure guarantee.
+- Portable debug byte squeezing now executes inside the actual producer,
+  initializer, operation, completion and guard/destructor chain. The composed
+  check binds exact output progress and success-only counter commits to complete
+  destination/owner clear requests on returned failures and selected fill/copy
+  unwind. It also checks initializer failure, terminal-state rejection and empty
+  output. Fill/copy/volatile primitives remain explicit boundaries. This closes
+  the previously separate byte-squeeze/outer-guard link for the modeled cases,
+  not final-bit paths, arbitrary unwind or register/spill erasure.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -141,11 +150,10 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   final-bit squeeze bodies, staging-fill internals, byte-squeeze/outer-guard
-   composition, accelerated producer guard paths and whole-verifier error/unwind
+   final-bit squeeze bodies, staging-fill internals,
+   accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
-   claiming the whole
-   instantiated path qualified. Individual helper checks are evidence to reuse,
+   claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized
    portable bulk/final chain and accelerated producer admission/loop/completion
    boundaries are no longer the next unfinished items.

@@ -1139,7 +1139,11 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "2ec5d6c53c91f2a398914f32771ca403d3082a95546cfbde0e1a2e14facf7937"
+sha256 = "93a7acffcf48a9a40b874490194b7ae5e8110392cb9e2bcef0231b5b005fa335"
+
+[[reviewed-source]]
+path = "scripts/cryptography/api_profile_operations.py"
+sha256 = "7138ad8b49633b9aee89d4d722ff4402ec4562b719e2262361c20afcee15ef9b"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
@@ -1163,7 +1167,7 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "db5b41767b08bc1fa74f3c80f2931dc0ea6f73111d91172d7edc6aa789f6b133"
+sha256 = "1d112d1682c09a484f75dffcf30fe813c7150c0917e9407814a960acf648827a"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"

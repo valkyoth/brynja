@@ -8,6 +8,7 @@ import tempfile
 from pathlib import Path
 
 import parallelhash_policy
+import parallelhash_scoped_contracts
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -37,6 +38,8 @@ def reject(label: str, path: Path, old: str, new: str) -> None:
 
 
 def main() -> int:
+    assert parallelhash_policy.BORROWED_TOKENS is parallelhash_scoped_contracts.BORROWED_TOKENS
+    assert parallelhash_policy.SCOPED_THREAD_TOKENS is parallelhash_scoped_contracts.SCOPED_THREAD_TOKENS
     parallelhash_policy.validate(ROOT)
     reject("std", Path("crates/brynja-hash-parallel/src/lib.rs"), "#![no_std]", "extern crate std;")
     reject("unsafe", Path("crates/brynja-hash-parallel/src/backend.rs"), "use brynja_hash_sha3", "unsafe fn bypass() {}\nuse brynja_hash_sha3")

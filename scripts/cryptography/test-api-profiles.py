@@ -8,6 +8,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import api_profile_model as model
+import api_profile_operations
 import rust_source_contract as rust_contract
 
 
@@ -254,6 +255,14 @@ def parser_rejects_comment_and_string_fabrication() -> None:
 
 
 def main() -> int:
+    assert model.contracts.OPERATION_CONTRACTS is api_profile_operations.OPERATION_CONTRACTS
+    helper = "scripts/cryptography/api_profile_operations.py"
+    assert helper in model.contracts.REVIEWED_SOURCE_PATHS
+    def corrupt_split_helper(policy, _surfaces):
+        row = next(row for row in policy["reviewed-source"] if row["path"] == helper)
+        row["sha256"] = "0" * 64
+    rejects(corrupt_split_helper, "reviewed secret-state source changed: " + helper)
+    print("Split operation contracts retain public exports and reject helper review drift")
     policy = model.read_policy()
     surfaces = model.read_surfaces()
     first = model.build_register(policy, surfaces)

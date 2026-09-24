@@ -9,6 +9,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import cpu_boundary_policy as policy
+import cpu_boundary_backends
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -59,6 +60,7 @@ def require_rejection(root: Path, expected: str) -> None:
 
 
 def test() -> None:
+    assert policy.BACKENDS is cpu_boundary_backends.BACKENDS
     with tempfile.TemporaryDirectory(prefix="brynja-cpu-boundary-") as temporary:
         root = Path(temporary) / "fixture"
         fixture(root)

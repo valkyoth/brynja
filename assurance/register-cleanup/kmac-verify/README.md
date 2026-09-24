@@ -2361,3 +2361,65 @@ repeated. The existing constructor and volatile-body diagnostics keep their own
 recorded scope and are not replaced by this handoff model.
 No production code, shared model, release gate or original observation record
 changed. Arm remains QEMU; F1 and root `PENTEST.md` remain open.
+
+### Portable debug producer handoff and operation guard
+
+```sh
+python3 assurance/register-cleanup/check_debug_portable_producer_guard.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_portable_producer_guard.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+Sixteen actual portable producer paths now bind nineteen-function closures from
+the retained same-configuration SHA-3/core artifacts. Both cSHAKE strengths and
+both feature configurations are covered under Rust 1.90.0/1.98.1 and x86/Arm. The
+constructor/consumer diagnostic identifies the actual producer; this diagnostic
+then follows its initialization handoff, instantiated operation guard, success
+predicate, initializer/output destructors, owner wipe and core clearing wrapper.
+It resolves both compiler symbol formats against actual definitions.
+
+All 27,648 modeled cases pass across nine lengths, bulk/final output shapes,
+both reader-active states, five synthetic initializer errors, five operation
+errors, success and selected operation/result-predicate unwind. Bulk mode also
+includes an undefined inactive bit-tail byte; it is preserved as metadata, not
+used as a branch or address. Huge lengths remain scalar descriptor scenarios,
+not allocated Rust slices or runtime tests.
+
+The original destination reaches the initializer before changing reader state. An
+initialization error deactivates the reader and requests all thirteen original
+owner-region clears before returning its exact error. Terminal readers never
+invoke the operation: the actual closure/initializer destructor requests full
+destination clearing for a present initializer. Otherwise the guard deactivates
+the reader before invoking the operation with the original owner, complete
+initializer descriptor, length and optional final-bit metadata. Only success
+restores the active flag. Operation errors and selected unwind clear the owner
+before return/resume. A synthetic predicate unwind also destroys any returned
+nonempty output before owner clearing, preserving exception identity/selector.
+
+Initializer, operation and volatile primitive bodies remain explicit opaque
+boundaries with checked actual ABIs. The operation boundary does not imply that
+its destination was cleared on error/unwind; that belongs to its pending body
+review. Likewise, this does not establish initializer-body or initializer-unwind
+behavior. No secret payload/state read or direct write is allowed by the model.
+Result metadata may be written before destructor execution, but cleanup must
+finish before returning control to the caller.
+
+All selected blocks are covered except double-panic abort, unreachable blocks,
+the root's pre-transfer unwind arm (the only invoke follows ownership transfer),
+the valid initializer's unused inner-None branch, and the clear wrapper's
+empty-region branch. These exclusions do not authorize skipping any exercised
+cleanup. Arbitrary helper panics, corrupted initializer representations,
+whole-verifier register/spill behavior and native platforms remain outside this
+check. Main log: `dist/debug-portable-producer-guard-check.log`, SHA-256
+`0fbb1bae049e9e83e85986bcb4351bf043357cb9ceb8ac92b602df4feee3ccbf`.
+
+All 1,872 retained-LLVM handoff, lifecycle, cleanup, dependency and unwind
+mutations reject; 32 metadata/SSA controls pass. Tests exercise changed initializer
+and closure arguments, truncated descriptor transfers, missing/duplicate cleanup,
+incorrect active/keep decisions, altered clear extents and swallowed/substituted
+exceptions. They prohibit subprocess execution and do not rebuild production
+code. Mutation log: `dist/debug-portable-producer-guard-mutations.log`, SHA-256
+`b0bc4e60604955e433589ce25a36268bcf568502d1d82d47df1ccd5e913fa391`.
+
+No production code, shared interpreter or release gate changed. The original
+observation record is unchanged; Arm remains QEMU. F1 and root `PENTEST.md`
+remain open pending the remaining qualification and independent retest.

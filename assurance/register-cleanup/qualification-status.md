@@ -60,6 +60,14 @@ todo list: several were superseded by later implementation and tests.
   Shape rejection clears before returning; successful transfer clears before
   publishing the producer result. Producer and volatile primitive bodies remain
   opaque here, and arbitrary helper/double-panic unwind is not qualified.
+- Portable debug producer handoff and operation guards now bind nineteen-function
+  closures. The initializer call precedes terminal-state handling; its
+  complete descriptor and output-shape captures reach the operation. Initialization
+  failure deactivates/clears the owner; terminal rejection drops the initializer;
+  only operation success restores active state. Errors and selected boundary
+  unwind execute the actual guard/destructor chain and owned-clear requests.
+  Initializer, squeeze/finish-operation and volatile primitive bodies are explicit
+  boundaries, not behavior inferred from the guard model.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -68,8 +76,8 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   producer initialization/initializer transfer and operation-guard error/unwind
-   paths, and reconcile the
+   actual destination-initializer and squeeze/finish-operation bodies, accelerated
+   producer guard paths and whole-verifier error/unwind paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

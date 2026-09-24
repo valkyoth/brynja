@@ -25,8 +25,10 @@ todo list: several were superseded by later implementation and tests.
   bind to the actual same-row producer, destructor, engine-memory wipe and core
   clearing functions. The producer entry also binds complete destination
   initialization before state/authority work, the full ownership-descriptor
-  transfer, and initialization-failure cleanup. Later producer admission,
-  progress/completion and debug call-chain qualification remain outstanding.
+  transfer, and initialization-failure cleanup. Completion now binds original
+  output ownership, failed-finish clearing and recoverable-unwind cleanup to the
+  actual core finish and operation guard. Producer admission/loop-progress and
+  debug call-chain qualification remain outstanding.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.

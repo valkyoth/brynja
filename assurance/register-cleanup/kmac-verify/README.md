@@ -2088,3 +2088,44 @@ Later shape/state/authority admission, progress, output completion,
 debug execution and register/spill qualification remain separate unfinished
 work. Arm remains QEMU evidence. Production code and release gates are unchanged;
 F1 and root `PENTEST.md` remain open.
+
+### Accelerated producer completion and operation cleanup
+
+```sh
+python3 assurance/register-cleanup/check_accelerated_completion.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_accelerated_completion.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+The eight actual optimized accelerated paths now compose the checked entry with
+the completion boundary. Only a present initializer moves its complete 24-byte
+descriptor into the same-row core `finish` function. That function's existing
+model checks absent, incomplete and complete ownership; its cleanup is bound to
+the actual volatile implementation. Only successful completion returns the
+finished original pointer and full extent. Empty output returns the absent
+discriminator, not an owned output. Predecessor checks reject alternate entries
+that bypass the presence or finish-result decisions.
+
+The producer's successful operation clears all 168 staging bytes and preserves
+the live engine. Failed finish maps to `SecretMemory`, marks the engine terminal,
+resets its cursor and clears engine memory, staging and domain bytes. The shared
+cleanup block's predecessor-selected address and extent are checked explicitly.
+This producer-level success behavior differs intentionally from the consuming
+final reader, which subsequently clears its whole owned engine state.
+
+Completion unwind invokes the actual incomplete operation guard on the original
+storage and resumes the original exception; the guard's clear requests are
+checked through the existing cleanup model. A second panic during cleanup is a
+nonreturning excluded path. This does not claim destination clearing after an
+arbitrary panic inside an unreviewed callee: the actual retained core finish
+contains only the inspected ownership/length logic and volatile clear call.
+
+All 916 LLVM and 64 dependency mutations reject; 16 comment/SSA controls pass.
+Adjacent initialization tests reject 984 entry/transfer and 56 dependency
+mutations with 16 controls; core output-handoff tests reject 160 mutations and
+staging tests reject 164. Log: `dist/accelerated-completion.log`, SHA-256
+`b34fef4402aa27f26efbcd38ae210dd58f4a564c494e584ef21eba2b112f3a65`.
+These are retained-artifact checks, not new compiled or runtime campaigns.
+Producer shape/state/authority admission, complete read/mask/write loop progress,
+debug callers, register/spill qualification and fresh native evidence remain
+outstanding. Arm remains QEMU; F1 and root `PENTEST.md` remain open. No production
+code or release gate changed.

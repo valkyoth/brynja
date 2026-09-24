@@ -2423,3 +2423,54 @@ code. Mutation log: `dist/debug-portable-producer-guard-mutations.log`, SHA-256
 No production code, shared interpreter or release gate changed. The original
 observation record is unchanged; Arm remains QEMU. F1 and root `PENTEST.md`
 remain open pending the remaining qualification and independent retest.
+
+### Debug destination initializer and producer composition
+
+```sh
+python3 assurance/register-cleanup/check_debug_output_begin.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_output_begin.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+The actual `begin_secret` body now binds its slice-empty test, core
+`SecretRegionInitialization::begin`, clearing wrapper, ownership construction,
+result adapters and error conversion. The closure has twelve or thirteen
+functions depending on whether the compiler emits distinct slice-empty helper
+instances. The separately emitted helper is resolved from the same retained
+configuration's already-pinned hash-core artifact, not replaced with an assumed
+predicate. No new capture files or observation-index entries were created.
+
+The actual initializer is also composed with both portable producer strengths
+and their previously checked operation guards, producing twenty-nine/thirty-
+function closures. All 6,976 modeled cases pass over ten selected lengths,
+active/terminal readers, bulk/final metadata, operation success/errors and
+selected operation/predicate unwind. Direct core-constructor checks distinguish
+its empty-region rejection from the SHA-3 adapter's successful empty `None`.
+Four injected clearing-wrapper error values preserve their exact identity in
+the core result before the SHA-3 adapter maps them to `SecretMemory`.
+
+Nonempty initialization requests clearing of the complete original destination
+before returning its original pointer/length and zero initialized-byte count.
+The producer consumes that actual descriptor with the original output metadata;
+terminal rejection drops it, initialization errors deactivate/clear the owner,
+and the operation guard preserves its recorded success/error/unwind behavior.
+The model forbids direct payload/state access. Huge lengths are scalar boundary
+scenarios, not allocated slices or runtime workload tests.
+
+Coverage includes the initializer's selected blocks and both empty/nonempty
+branches of the actual clear wrapper, plus the composed guard paths. Exclusions
+remain unreachable blocks, cleanup double panic, the producer's pre-transfer
+unwind arm and the valid owner's unused inner-None branch. Clearing-wrapper
+errors are synthetic fault propagation, not claims that every error is currently
+reachable for a valid nonempty slice. Arbitrary initializer/helper unwind is not
+qualified. The squeeze/finish-operation and volatile primitive bodies remain
+opaque here; their behavior, whole-verifier register/spill cleanup and native
+platforms are not inferred from this model.
+
+Main log: `dist/debug-output-begin-check.log`, SHA-256
+`11a6386eb8930bd5ab6ee9e49d70f15a6f2bad6413faaf0eb1d99833d4b2eab7`.
+All 988 clearing, descriptor, error-mapping and ABI mutations reject; 32
+metadata/SSA controls pass. The mutation harness forbids subprocess execution.
+Mutation log: `dist/debug-output-begin-mutations.log`, SHA-256
+`379388b62080dc5cec31e376216ddd17abd51be7cc00b589b8df9fbb5a4b4323`.
+No production code, shared interpreter, release gate or original observation
+record changed. Arm remains QEMU; F1 and root `PENTEST.md` remain open.

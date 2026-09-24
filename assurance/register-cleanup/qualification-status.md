@@ -68,6 +68,15 @@ todo list: several were superseded by later implementation and tests.
   unwind execute the actual guard/destructor chain and owned-clear requests.
   Initializer, squeeze/finish-operation and volatile primitive bodies are explicit
   boundaries, not behavior inferred from the guard model.
+- The debug destination-initializer body now binds its core constructor, slice
+  helpers, full-region clear request, ownership construction and error conversion.
+  Its twelve/thirteen-function closure is also composed with the portable producer
+  guard in twenty-nine/thirty-function closures. Empty output produces no owner;
+  nonempty output requests its complete clear before returning the original
+  destination with zero initialization progress. The core constructor preserves
+  exact errors before the SHA-3 adapter deliberately maps them to `SecretMemory`.
+  This supersedes the opaque initializer boundary for those composed paths;
+  squeeze/finish-operation and volatile primitive bodies retain their own scope.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -76,7 +85,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   actual destination-initializer and squeeze/finish-operation bodies, accelerated
+   actual squeeze/finish-operation bodies, accelerated
    producer guard paths and whole-verifier error/unwind paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,

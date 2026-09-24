@@ -93,14 +93,14 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit, *, por
                 require('nsw' not in flags or -(1 << (bits - 1)) <= value < 1 << (bits - 1), 'no signed arithmetic poison')
                 require('disjoint' not in flags or left & right == 0, 'disjoint counter fragments')
                 env[output] = value & mask; continue
-            found = re.fullmatch('(' + SSA + r') = icmp (eq|ult) i(1|8|64|128) (' + ATOM + '), (' + ATOM + ')', line)
+            found = re.fullmatch('(' + SSA + r') = icmp (eq|ult|ugt) i(1|8|64|128) (' + ATOM + '), (' + ATOM + ')', line)
             if found:
                 output, op, width, left, right = found.groups()
                 mask = (1 << int(width)) - 1
                 left, right = get(left), get(right)
                 require(left is not None and right is not None, 'defined counter comparison')
                 left, right = left & mask, right & mask
-                env[output] = int(left == right if op == 'eq' else left < right); continue
+                env[output] = int(left == right if op == 'eq' else left < right if op == 'ult' else left > right); continue
             found = re.fullmatch('(' + SSA + r') = select i1 (' + SSA + r'), i1 (' + ATOM + r'), i1 (' + ATOM + ')', line)
             if found:
                 require(get(found[2]) in (0, 1), 'defined boolean selection condition')
@@ -108,6 +108,10 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit, *, por
             found = re.fullmatch('(' + SSA + r') = select i1 (' + SSA + r'), i128 (' + ATOM + r'), i128 (' + ATOM + ')', line)
             if found:
                 require(portable_bulk and get(found[2]) in (0, 1), 'defined portable counter selection')
+                env[found[1]] = get(found[3] if get(found[2]) else found[4]); continue
+            found = re.fullmatch('(' + SSA + r') = select i1 (' + SSA + r'), i8 (' + ATOM + r'), i8 (' + ATOM + ')', line)
+            if found:
+                require(portable_bulk and get(found[2]) in (0, 1), 'defined portable bit-count selection')
                 env[found[1]] = get(found[3] if get(found[2]) else found[4]); continue
             found = re.fullmatch('(' + SSA + r') = tail call \{ i128, i1 \} @llvm.uadd.with.overflow.i128\(i128 (' + SSA + '), i128 (' + SSA + r')\)', line)
             if found:
@@ -158,6 +162,11 @@ def evaluate(blocks, label, previous, env, state, session, stops, commit, *, por
                 selected = [v for v, pred in re.findall(r'\[ ([^,]+), %(' + read.LABEL + r') \]', found[2]) if pred == previous]
                 require(len(selected) == 1, 'successful return predecessor')
                 env[found[1]] = get(selected[0]) % 256; continue
+            found = re.fullmatch('(' + SSA + ') = phi i64 (.+)', line)
+            if found:
+                selected = {v for v, pred in re.findall(r'\[ ([^,]+), %(' + read.LABEL + r') \]', found[2]) if pred == previous}
+                require(portable_bulk and len(selected) == 1, 'unambiguous portable complete-byte count')
+                env[found[1]] = get(selected.pop()) % (1 << 64); continue
             found = re.fullmatch('br i1 (' + SSA + '), label %(' + read.LABEL + '), label %(' + read.LABEL + ')', line)
             if found:
                 require(get(found[1]) in (0, 1), 'defined counter branch condition')

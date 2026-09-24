@@ -1901,3 +1901,47 @@ Final-bit handling, debug paths and whole-call register/spill qualification
 remain separate. Arm remains QEMU evidence. Production and release gates are
 unchanged; subprocess execution is forbidden in the regression suite. F1 and
 root `PENTEST.md` remain open for remaining qualification and independent retest.
+
+## Final-bit admission, masking and error routing
+
+```sh
+python3 assurance/register-cleanup/check_sha3_final_tail.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_sha3_final_tail.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+All 16 reader-selected final-bit bodies pass 2,896 admission cases within the
+valid output-metadata domain: empty output, full-byte output, and one through
+seven valid bits in a nonempty final byte. The complete-byte switch and
+saturating tail adjustment are checked structurally. The retained counter
+instructions reject overflowing byte counts before forwarding to bulk output;
+admitted calls forward the original owner, initializer and exact complete count.
+This extends the existing counter interpreter only for the observed unsigned
+comparison, byte selection and complete-count phi instructions.
+
+The full eight-block final-tail graph is checked. Successful bulk output alone
+reaches the tail decision; fractional output alone reaches the one-byte fill.
+The freshly staged byte is masked to its low valid bits before the original
+initializer writes it. The set mask is zero. Every normal write result clears
+the entire staging region through the existing ownership checker. Admission,
+bulk, fill and write error paths preserve their specified results, with exact
+predecessor sets rejecting bypasses.
+
+The actual mask wrapper forwards the original byte and both public mask values
+to its defined primitive, respecting the retained x86/Arm argument attributes.
+The matching assembly passes the existing one-byte operation and register-wipe
+checker. All 1,792 byte/partial-width mathematical combinations agree with
+low-bit truncation; this is not execution of the emitted machine code.
+
+All 2,184 LLVM mutations and 160 mask-dependency mutations reject; 48 naming/
+comment controls pass. Adjacent accelerated counter checks (1,328 cases,
+116 mutations), bulk counter regressions (2,032 mutations, 56 controls) and fill
+dependency regressions (272 wrapper mutations, 208 dependency mutations,
+48 controls) also pass. Log: `dist/sha3-final-tail.log`, SHA-256
+`0d214ba89099ad05e9b719f48499675850ba56599ee05698e24aab819e3d620e`.
+
+These are bounded admission and structural routing checks for valid metadata,
+not proof of upstream metadata validation, all-input correctness, debug paths,
+whole-call register/spill erasure or native platform qualification. Arm remains
+QEMU evidence. No production code, runtime artifact or release gate changed;
+tests forbid subprocess execution. F1 and root `PENTEST.md` remain open pending
+the remaining qualification and independent retest.

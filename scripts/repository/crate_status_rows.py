@@ -37,12 +37,15 @@ ROWS = {
     "crates/brynja-legacy-md5/README.md": [
         "| MD5 | ✅ Fully implemented | ❌ Not independently verified |",
         "| Ordinary batch AVX2 / NEON execution | 🚧 In progress; native qualification pending | ❌ No |",
-        "| Hardened batch AVX2 / NEON execution | 🚧 In progress; retest and native evidence pending | ❌ No |"
+        "| Hardened batch AVX2 / NEON execution | 🚧 In progress; retest and native evidence pending | ❌ No |",
+        "| Caller-owned portable scoped workspace | 🚧 Implemented; residue qualification pending | ❌ No |",
+        "| Caller-owned scoped hardened AVX2 / NEON batches | 🚧 Implemented; residue qualification pending | ❌ No |"
     ],
     "crates/brynja-mac-kmac/README.md": [
         "| KMAC128/256 and KMACXOF128/256 | ✅ Fully implemented | ❌ No |",
         "| Byte/bit input, opaque tags and typed secret XOF output | ✅ Implemented | ❌ No |",
-        "| Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |"
+        "| Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |",
+        "| Scoped KMAC/KMACXOF128/256 storage | ✅ Portable and opt-in accelerated workspaces/readers | ❌ No |"
     ],
     "crates/brynja-tls13/README.md": [
         "| TLS 1.3 engine | ❌ Not implemented | ❌ No |"
@@ -75,6 +78,8 @@ ROWS = {
         "| Byte/bit input and arbitrary-bit SHAKE output | ✅ Fully implemented | ❌ No |",
         "| cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |",
         "| Hardened states and classified outputs | ✅ Implemented | ❌ No |",
+        "| Scoped in-place hardened SHA-3/SHAKE/cSHAKE | Development; ownership checks implemented, residue qualification pending | ❌ No |",
+        "| Scoped accelerated SHA-3/SHAKE/cSHAKE | Development; explicit static/hosted session, residue qualification pending | ❌ No |",
         "| Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |",
         "| Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |"
@@ -94,6 +99,8 @@ ROWS = {
         "| Independent-message SHA-512-family AVX2 / NEON batching | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |",
         "| SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |",
+        "| Scoped in-place hardened states for six named identities and general SHA-512/t | Development; ownership checks implemented, residue qualification pending | ❌ No |",
+        "| Scoped named/general-t SHA-2 with explicit portable/static/hosted execution | Development; opt-in, platform-limited; residue qualification pending | ❌ No |",
         "| General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |",
         "| Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |",
         "| Dedicated x86 SHA-512-family execution (`sha512,avx2,avx`) | 🚧 Implemented; SDE tested, qualification pending | ❌ No |"
@@ -108,6 +115,11 @@ ROWS = {
     "crates/brynja-hash-parallel/README.md": [
         "| All four portable ParallelHash/ParallelHashXOF identities | ✅ Fully implemented | ❌ No |",
         "| Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |",
+        "| Caller-owned portable scoped fixed-output/XOF workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |",
+        "| Portable scoped exact-plan collectors with fixed/XOF output | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Accelerated scoped exact-plan collectors and leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Typed multibuffer jobs and clearing result handoff to scoped collectors | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Scoped accelerated fixed-output/XOF root/leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |",
         "| Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |",
         "| Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |"
     ],
@@ -119,8 +131,11 @@ ROWS = {
     ],
     "crates/brynja-hash-parallel-std/README.md": [
         "| Bounded portable ParallelHash/ParallelHashXOF worker executor | ✅ Implemented | ❌ No |",
+        "| Scoped portable root with bounded borrowed-leaf thread handoff | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Scoped root/leaf storage with independently selected threaded acceleration | 🚧 Implemented; qualification pending | ❌ No |",
         "| Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |",
-        "| Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |"
+        "| Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Scoped multibuffer workers with guarded parent slots and scoped root | 🚧 Implemented; qualification pending | ❌ No |"
     ],
     "crates/brynja-legacy-snp/README.md": [
         "| SNP controlled interoperability | ❌ Not implemented | ❌ No |"
@@ -136,7 +151,9 @@ ROWS = {
     "crates/brynja-legacy-sha1/README.md": [
         "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |",
         "| Opt-in ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |",
-        "| Opt-in hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |"
+        "| Opt-in hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |",
+        "| Caller-owned portable scoped workspace | 🚧 Implemented; residue qualification pending | ❌ Not independently verified |",
+        "| Scoped hardened execution workspace | 🚧 Portable/SHA-NI/Arm routes; residue qualification pending | ❌ Not independently verified |"
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
         "| Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |",
@@ -171,6 +188,7 @@ ROWS = {
     "crates/brynja-core/README.md": [
         "| Checked counters, budgets, transactional cursors and typed workspaces | ✅ Implemented | ❌ No |",
         "| Owned secret regions and compiler-resistant clearing | ✅ Implemented | ❌ No |",
+        "| Checked borrowed secret-region copies | ✅ Implemented; caller cleanup required | ❌ No |",
         "| Fixed-width constant-time equality, selection and swap | ✅ Implemented | ❌ No |",
         "| Provider, entropy, clock, pending-operation and security-outcome contracts | ✅ Implemented contracts | ❌ No |",
         "| Bounded observational security events | ✅ Implemented | ❌ No |",
@@ -182,6 +200,9 @@ ROWS = {
     "crates/brynja-hash-tuple/README.md": [
         "| TupleHash / TupleHashXOF, all four identities | ✅ Fully implemented | ❌ No |",
         "| Byte/bit tuples, streamed items and hardened outputs | ✅ Implemented | ❌ No |",
-        "| Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |"
+        "| Hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |",
+        "| Scoped fixed TupleHash128/256 workspaces and item writers | ✅ Portable | ❌ No |",
+        "| Scoped TupleHashXOF128/256 workspaces and incremental readers | ✅ Portable and opt-in accelerated | ❌ No |",
+        "| Scoped fixed TupleHash128/256 acceleration | ✅ Opt-in, platform-limited | ❌ No |"
     ]
 }

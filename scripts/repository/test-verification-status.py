@@ -126,8 +126,54 @@ def crate_tables() -> None:
     print(f"Crate status tables reject {mutations} claim/table and 38 inventory regressions")
 
 
+def scoped_status_rows() -> None:
+    """Review additions stay static; no qualification or verification upgrade."""
+    root = SCRIPT.resolve().parents[2]
+    counts = {
+        "brynja-core": 1, "brynja-hash-sha2": 2, "brynja-hash-sha3": 2,
+        "brynja-mac-kmac": 1, "brynja-hash-tuple": 3,
+        "brynja-hash-parallel": 5, "brynja-hash-parallel-std": 3,
+        "brynja-legacy-sha1": 2, "brynja-legacy-md5": 2,
+    }
+    mutations = 0
+    for crate, count in counts.items():
+        path = Path("crates") / crate / "README.md"
+        text = (root / path).read_text()
+        rows = MODULE.CRATE_ROWS[path.as_posix()]
+        added = [row for row in rows if "scoped" in row.lower() or "Checked borrowed" in row]
+        assert len(added) == count, (path, added)
+        for row in added:
+            capability, status, review = [cell.strip() for cell in row.strip("|").split("|")]
+            assert review in ("❌ No", "❌ Not independently verified")
+            for replacement in ("", row + "\n" + row,
+                                f"| {capability} | ✅ Fully implemented | {review} |",
+                                f"| {capability} | {status} | ✅ Independently verified |",
+                                f"| {capability} | {status} | ✅ FIPS validated |"):
+                assert replacement != row
+                try:
+                    MODULE.validate_crate_document(path, text.replace(row, replacement))
+                except MODULE.VerificationStatusError:
+                    mutations += 1
+                else:
+                    raise AssertionError(f"scoped capability mutation accepted: {path}: {row}")
+            # Reproduce a stale inventory entry while leaving the real README intact.
+            stale = dict(MODULE.CRATE_ROWS)
+            stale[path.as_posix()] = [value for value in rows if value != row]
+            with patch.object(MODULE, "CRATE_ROWS", stale):
+                try:
+                    MODULE.validate_crate_document(path, text)
+                except MODULE.VerificationStatusError as error:
+                    assert "capability status changed" in str(error), error
+                    mutations += 1
+                else:
+                    raise AssertionError(f"stale scoped inventory accepted: {path}: {row}")
+    assert sum(counts.values()) == 21 and mutations == 126
+    print("Scoped/borrowed status rows reject 126 omission, duplication, overclaim and stale-inventory regressions")
+
+
 def main() -> int:
     crate_tables()
+    scoped_status_rows()
     MODULE.validate_document(Path("fixture.md"), BASE, (ROW,))
     MODULE.validate_document(Path("README.md"), ROOT, (ROW,))
     must_fail(BASE.replace(MODULE.HEADING, "## Status"), "heading")

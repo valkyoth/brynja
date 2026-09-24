@@ -1789,3 +1789,39 @@ whole-call register/spill erasure. Those wider obligations remain separate;
 Arm remains QEMU evidence. No Rust compilation/runtime test was repeated for
 this checkpoint, and production code and release gates are unchanged. F1 and
 root `PENTEST.md` remain open for remaining qualification and independent retest.
+
+## Bulk squeeze progress and commit routing
+
+```sh
+python3 assurance/register-cleanup/check_sha3_squeeze_progress.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_sha3_squeeze_progress.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+All 16 selected bulk squeeze bodies pass the loop-control checks. The remainder
+starts at the original requested length. Each nonempty iteration takes the
+minimum of that remainder and a supported chunk bound, passes that exact count
+to the actual defined staging-fill callee, and writes exactly the filled chunk.
+Only a successful fill permits writing; only a successful write permits
+subtracting the chunk. The loop repeats exactly when the remainder is nonzero.
+
+The commit block has only two predecessors: the zero-length branch and the
+last successful iteration. Admission, fill and write failures return their
+specified status without entering it. Exact predecessor sets reject alternate
+entries and premature commits. The sole direct store in these bulk functions
+is in that commit block. This checks reachability, not the counter value being
+serialized or indirect memory effects inside callees.
+
+All 656 LLVM mutations and 16 missing-fill bindings reject; 48 naming/comment
+controls pass. Mathematical boundary checks cover chunk transitions and one
+step at the maximum `u64` remainder; they are not execution of LLVM or an
+exhaustive runtime campaign. The adjacent ownership suite remains green
+(1,040 mutations, 96 bindings, 96 controls). Log:
+`dist/sha3-squeeze-progress.log`, SHA-256
+`078958ba99f163f0c65b3ddbe86adea2d866ba8a7e44a6ae2177c2f26d4a1fbf`.
+
+Counter decoding, overflow arithmetic and serialization, staging-byte
+generation, final-bit semantics and whole-call register/spill qualification
+remain separate obligations. Arm remains QEMU evidence. Tests forbid subprocess
+execution; no compiler/runtime rerun, production change or release-gate change.
+F1 and root `PENTEST.md` remain open for remaining qualification and independent
+retest, including native platform evidence.

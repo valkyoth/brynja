@@ -77,6 +77,13 @@ todo list: several were superseded by later implementation and tests.
   exact errors before the SHA-3 adapter deliberately maps them to `SecretMemory`.
   This supersedes the opaque initializer boundary for those composed paths;
   squeeze/finish-operation and volatile primitive bodies retain their own scope.
+- The debug SHA-3 output-completion adapter now composes its actual sixteen-
+  function ownership/result-conversion closure with core initialization finish
+  and Drop. Completion transfers the original descriptor; incomplete/missing
+  owners return `SecretMemory`, requesting complete clearing when an owner exists.
+  Selected helper unwind preserves exception identity and clears the owned output.
+  All adapter/core blocks except unreachable and cleanup double panic are covered.
+  This checks the completion helper, not its upstream squeeze/operation caller.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -85,7 +92,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   actual squeeze/finish-operation bodies, accelerated
+   actual squeeze/operation bodies and their completion-helper handoff, accelerated
    producer guard paths and whole-verifier error/unwind paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,

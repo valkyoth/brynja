@@ -2474,3 +2474,45 @@ Mutation log: `dist/debug-output-begin-mutations.log`, SHA-256
 `379388b62080dc5cec31e376216ddd17abd51be7cc00b589b8df9fbb5a4b4323`.
 No production code, shared interpreter, release gate or original observation
 record changed. Arm remains QEMU; F1 and root `PENTEST.md` remain open.
+
+### Debug output-completion adapter
+
+```sh
+python3 assurance/register-cleanup/check_debug_finish_adapter.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_finish_adapter.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+The portable operation's actual `finish_secret` target now binds sixteen
+same-configuration functions: its empty-output constructor, core initializer
+completion and destructor helpers, ownership conversion and error adapters.
+All 1,136 modeled cases pass across sixteen instantiated paths. These cover
+empty outer `None`, complete/incomplete/over-complete initialization, missing
+inner ownership, seven selected capacities and synthetic dereference/take faults.
+Malformed descriptors and huge lengths are model rejection probes, not Rust
+values manufactured or allocated in a runtime test.
+
+Success consumes the original owner and publishes its original destination and
+length. Incomplete/missing ownership returns `SecretMemory`; present unsuccessful
+owners request a full original-region clear. Selected helper unwind clears before
+resuming the original exception. The model also checks core ownership revocation
+and initialization-progress preservation, not just the outer result. All actual
+adapter/core blocks are visited except unreachable blocks and cleanup double
+panic. Payload reads/copies are prohibited; descriptor copies remain metadata.
+
+The core constructor/finish checks enforce core error identity separately. This
+adapter intentionally collapses core errors into `SecretMemory`, so changing one
+core error into another is an accepted control at this layer, not claimed as a
+rejected adapter regression. The upstream squeeze/operation body and its actual
+completion handoff still need qualification. Volatile clearing remains an opaque
+request here. This does not establish arbitrary-helper unwind, whole-verifier
+register/spill cleanup, native Arm/Windows behavior or independent review.
+No production, shared interpreter, original capture record or release gate changed.
+
+All 1,120 adapter/core ownership, cleanup, result-mapping and ABI mutations reject.
+The 48 accepted controls cover harmless debug/SSA changes and the intentional
+core-error collapsing described above. The mutation harness forbids subprocess
+execution; no compiler/runtime campaign was repeated. Log:
+`dist/debug-finish-adapter.log`, SHA-256
+`c1f041bb1257b5e2829acaf018ac1b3b15487ceeebc9f670f76415e35145d2ca`.
+Documentation links, script layout and acceptance metadata/checker regressions
+pass. Arm remains QEMU; F1 and root `PENTEST.md` remain open.

@@ -3,6 +3,31 @@
 Development only. Passing these tests does **not** qualify register cleanup or
 close F1. No release-gate command, API default or backend admission changes.
 
+## Current local evidence location
+
+On 2026-09-24 the root `target/` directory was absent; the owner reported that
+it was likely removed by the regular Cargo clean. The historical record and
+logs cited below were no longer available. The unchanged focused collector was
+rerun, not the full release gate or long Miri campaign. All sixteen configurations
+passed again, retaining 240 compiler artifacts and 416 return observations with
+zero repeated input-marker matches (not proof of erasure).
+
+Use `dist/kmac-verify-nft_nl5x/observations.json` for further local inspection;
+its SHA-256 is
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+The full build/record directory was moved outside Cargo's `target/`, with an
+additional archive at `dist/kmac-verify-nft_nl5x.tar.gz`, SHA-256
+`6a85f5de89c4e0e0f7c3dc725bfb7ab09c93b35525bcdb09645c361d75d26e52`.
+Archive integrity was checked with `gzip -t`. Both paths are ignored local
+evidence, not GitHub artifacts; ordinary `cargo clean` will not remove them.
+The collection log is `dist/kmac-verify-recovery.log`, SHA-256
+`fc2fd07c1b7caafdacaa6b9612204891de1af45d55441fe11b24730c829b14af`.
+
+Historical commands below retain the original record path and run hashes;
+substitute the new record path when rerunning them. This is a fresh capture,
+not restoration of the original bytes or missing historical test logs. It does
+not recover other deleted evidence or replace native qualification/retest.
+
 This standalone fixture exercises the actual scoped KMAC128/256 verification
 APIs, including required static AVX2/Arm Keccak execution. Four public synthetic
 tags are independently generated with the existing Python SP 800-185 oracle,
@@ -46,7 +71,7 @@ fixture/KMAC/SHA-3/CPU/core MIR, LLVM and assembly artifacts. No artifact is
 automatically declared erasure-qualified. This separate fixture leaves the
 existing threaded caller record and its source closure unchanged.
 
-The current record is `target/kmac-verify-1iopq9b5/observations.json`, SHA-256
+The original record was `target/kmac-verify-1iopq9b5/observations.json`, SHA-256
 `fd6af99e11917911e3b8c2a0c3784c5b40c40feb99d1d3683d04940024a0dc02`.
 All sixteen configurations passed four tests each, with 416 return observations
 and zero repeated input-marker matches. All 240 retained artifact hashes and
@@ -1692,3 +1717,39 @@ obligations. Arm remains QEMU evidence. Tests forbid subprocess execution;
 production, retained runtime records and release gates are unchanged. F1 and
 root `PENTEST.md` remain open for remaining qualification and independent retest,
 including fresh native Arm/Windows evidence.
+
+## Borrowed-reader output completion
+
+```sh
+python3 assurance/register-cleanup/check_sha3_output_completion.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_sha3_output_completion.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+All 16 selected portable readers pass checks of the successful squeeze-to-output
+handoff, including the empty-output branch. Only present ownership transfers
+the complete 24-byte initialization descriptor into the verified core `finish`
+callee. The actual finish result controls success or failure; successful owned
+results preserve the returned pointer and full length, while empty success
+exposes no owned payload. Only successful completion reactivates the original
+reader. Predecessor checks reject alternate entries bypassing these decisions.
+
+Finish failures remain `SecretMemory` errors and enter the already checked
+original-owner wipe. Finish unwinding enters its verified exceptional cleanup.
+The eight optimized core finish definitions are checked for absent, complete
+and incomplete initialization; their actual incomplete-output cleanup callee
+is bound to the existing volatile LLVM model and matching x86/Arm assembly.
+This composes the previously separate completion-callee and caller inspections.
+
+All 1,120 LLVM mutations and 16 missing-finish bindings reject; 48 naming/comment
+controls pass. The adjacent squeeze-error suite (1,032 mutations, 96 bindings),
+core finish suite (160 mutations) and 16 original-owner wipe checks also pass
+against the recovered record. Log: `dist/sha3-output-completion.log`, SHA-256
+`e75627922c2d9b5b9e8678b1805510bd95d412b6ae1d1319925fc15009a6f144`.
+
+The caller proof assumes the squeeze callees preserve initialization ownership
+and report their results correctly; their complete semantics remain a separate
+obligation. No whole-call register/spill erasure, abort cleanup or native Arm
+qualification is established here. The regression tests prohibit subprocess
+execution; only the separately reported focused recovery capture rebuilt Rust.
+Production code and release gates are unchanged. F1 remains open for remaining
+qualification, fresh native platform evidence and independent retest.

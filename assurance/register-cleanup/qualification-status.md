@@ -142,6 +142,15 @@ Later diagnostic-only additions can run there without replacing captured sources
   output. Fill/copy/volatile primitives remain explicit boundaries. This closes
   the previously separate byte-squeeze/outer-guard link for the modeled cases,
   not final-bit paths, arbitrary unwind or register/spill erasure.
+- The portable debug final-bit squeeze helper now composes nineteen additional
+  same-configuration helpers with the earlier byte-squeeze/counter/write model.
+  All 3,888 selected cases pass across sixteen instantiated paths. Exact prefix
+  length, checked bit admission, partial-byte mask requests, output progress and
+  staging-clear ordering are checked. The byte counter commits after the complete
+  prefix, before the tail: a tail failure does not undo that commit inside this
+  helper. Final outer-guard composition remains outstanding; the direct helper
+  result must not be represented as whole-call cleanup. Fill/copy/mask/volatile
+  primitive bodies remain opaque, and this is not register/spill qualification.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -150,7 +159,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   final-bit squeeze bodies, staging-fill internals,
+   final-bit squeeze/outer-guard composition, staging-fill internals,
    accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

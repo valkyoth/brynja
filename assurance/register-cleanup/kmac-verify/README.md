@@ -2865,3 +2865,87 @@ Mutation log: `dist/debug-squeeze-guard-mutations-final.log`, SHA-256
 `699feb0a56b7150ef9acdba3700c10b3e0c9fde387573a2556156c13114d7251`.
 Final mutation harness SHA-256:
 `814786a4b5fe9642d2cd68ccb5a2cfad1aa93d8860674aba064268f21e9ebf1e`.
+
+### Direct debug final-bit squeeze
+
+From the source-matching checkout with the absolute record path above:
+
+```sh
+python3 assurance/register-cleanup/check_debug_final_squeeze.py "$record"
+python3 assurance/register-cleanup/test_debug_final_squeeze.py "$record"
+python3 assurance/register-cleanup/test_debug_final_arithmetic.py
+```
+
+Both retained-artifact commands optionally accept `--shard 0`, `1`, `2` or `3`.
+Each shard covers four disjoint paths; all four are required for the full matrix.
+This diagnostic-only partition does not change any release gate.
+
+All 3,888 direct helper cases pass (243 per path). Nineteen newly interpreted
+helpers join the earlier byte-squeeze closure in 117/118-function sets. The
+matrix covers empty output, every valid tail width, selected rate/multirate
+lengths and counter boundaries. All five fill errors, four output-write errors,
+missing staging slices/tail references and selected fill/copy unwind are injected
+at every iteration for representative one-byte/multichunk shapes. These are
+synthetic boundary faults, not claims of reachability from valid Rust inputs.
+
+The complete-byte prefix is counted before the partial-byte tail is processed.
+Thus a tail error retains the committed prefix counter inside this direct helper;
+the expectation does not incorrectly require all-or-nothing counter mutation.
+Successful partial tails request the exact low-bit mask on the original staging
+byte, then copy and request all 168 staging bytes cleared. Returned write errors
+also request that clear; pre-write errors/unwind rely on the outer guard, which
+is not composed by this checkpoint. Public metadata alone is interpreted;
+fill/copy/mask/volatile primitive bodies remain explicit boundaries.
+
+The new arithmetic model passes 8,312 controls and rejects 27 malformed/poison
+cases. Existing counter/packing/wide-arithmetic/zero-argument/squeeze model tests
+also pass. Exact source/artifact validation remains enabled. No production Rust,
+captured evidence or release gate changed; no Rust/native campaign was repeated.
+F1 and root `PENTEST.md` remain open. Arm remains QEMU; this does not establish
+whole-call register/spill erasure or all-input/arbitrary-unwind behavior.
+
+The initial matrix passed Rust 1.90 but stopped at Rust 1.98's renamed
+`slice_index_fail` panic boundary. That exact compiler symbol is now recognized
+as a forbidden panic call, not treated as successful execution. The complete
+four-shard direct check passed after the diagnostic correction.
+
+The new checker ran from the main checkout while unchanged dependencies came
+from the preserved checkout. Checker SHA-256:
+`ad5b62933b960c37177c1ec49044c4de7c54f18870145df3e19d609e6cdf37a4`;
+mutation harness:
+`9f1cb185190b3ba3571d77d24fbcc7ae9ce371c3e434927cf81ac3bdbfad0210`;
+arithmetic model test:
+`41098f2462a751a036b68579e0b2dd07fd7080444ac54e76d9ee0199bf3da063`.
+The shared model hash recorded in the logs is
+`208ad72a0b12274575d774c6752a25383b03f673cc1d66de717a6d25b109e99d`.
+Identical final diagnostic files are preserved in the source-matching checkout.
+
+Retained logs (all paths relative to ignored `dist/`, outside Cargo clean):
+
+| Log | SHA-256 |
+| --- | --- |
+| `debug-final-squeeze-check-shard-0.log` | `f6606b29452c82aa0fc1ee37a06fd0ece849801d01fea182fdbe80857a6cea20` |
+| `debug-final-squeeze-check-shard-1.log` | `787421a656708ea147e183cd6eacb1e388c69da03ccaad8f7d41188e7315c036` |
+| `debug-final-squeeze-check-shard-2.log` | `734f1673329bf7d290dbd1eba8618782e2687a1c0f5c4c74f6212eeeb63dbe6b` |
+| `debug-final-squeeze-check-shard-3.log` | `61e1dc2f0e3cd1727dc140c674e59e072c4ead6bcb729deacb3cd98d5e1814dc` |
+| `debug-final-squeeze-model.log` | `d80f86451c2e8e6eb33aa22ada8dd47f39e70916eba3a7344b7ce24c6f9ca050` |
+| `debug-final-squeeze-mutations-shard-0.log` | `8a4a7b5875d08a2ea75ac2aa2efac48600bbaf01738cec19fb6cc5cc7e09e794` |
+| `debug-final-squeeze-mutations-shard-1.log` | `03dea3c94015c6083ed420b5ac1ba705225a22eb847dc442227662def030ef96` |
+| `debug-final-squeeze-mutations-shard-2-final.log` | `e7ba946722b3149869609bfe5593265b3fb08c9d43d41d717ed20a0c5a4b72bf` |
+| `debug-final-squeeze-mutations-shard-3-final.log` | `5a3d2e832dec0284fd370424bb50369d447e0cd16bc2ee3c63295905f96ec8d2` |
+
+All 672 retained-IR mutations reject (42 per path), with sixteen passing SSA
+rename controls. The internal complete-byte/mask helpers also pass 20,480
+controls over every u8 tail value and four selected lengths; this does not imply
+the public API accepts invalid tail shapes. The boundary model passes 26 controls
+and rejects twelve malformed/unordered calls. Compiler/runtime subprocess calls
+are forbidden throughout the mutation harness.
+
+Rust 1.90 mutation shards 0/1 started with inspector SHA-256
+`26dd3422a2726cba50dc673c3f4ed588143968c3cefbcad67246bad43d3a01b5`,
+retained as `dist/debug-final-squeeze-initial.py`. Shards 2/3 use the final
+inspector above. The differences are only the Rust 1.98 forbidden-panic symbol
+and optional direct-check shard dispatch; the Rust 1.90 interpreted behavior and
+mutation expectations are unchanged. Their completed results were reused rather
+than repeated. The initial unsharded/interrupted and pre-correction failure logs
+remain in `dist/` but are not passing evidence for the complete matrix.

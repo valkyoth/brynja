@@ -143,7 +143,8 @@ class Model:
         if self.fault is not None and name == self.fault[0]:
             self.events.append(('fault', name))
             return self.fault[1]
-        if name in ('llvm.uadd.with.overflow.i64', 'llvm.uadd.with.overflow.i128', 'llvm.umul.with.overflow.i32'):
+        if name in ('llvm.uadd.with.overflow.i64', 'llvm.uadd.with.overflow.i128',
+                    'llvm.umul.with.overflow.i32', 'llvm.umul.with.overflow.i128'):
             require(len(args) == 2 and all(type(x) is int for x in args), 'integer checked-add operands')
             mask = (1 << int(name.rsplit('i', 1)[1])) - 1
             require(all(0 <= value <= mask for value in args), 'checked-add operands match integer width')
@@ -223,7 +224,13 @@ class Model:
                     condition = self.value(found[1], env)
                     require(condition in (0, 1), 'initialized select condition')
                     val = self.typed(found[2] if condition else found[3], env)
-                elif found := re.fullmatch(r'(and|or|shl|lshr) i(32|128) (\S+), (\S+)', op):
+                elif found := re.fullmatch(r'udiv i128 (\S+), (\S+)', op):
+                    a = self.typed('i128 ' + found[1], env)
+                    b = self.typed('i128 ' + found[2], env)
+                    require(type(a) is int and type(b) is int and b != 0,
+                            'initialized nonzero unsigned divisor')
+                    val = a // b
+                elif found := re.fullmatch(r'(and|or|shl|lshr) i(8|32|128) (\S+), (\S+)', op):
                     a = self.typed('i' + found[2] + ' ' + found[3], env)
                     b = self.typed('i' + found[2] + ' ' + found[4], env)
                     require(type(a) is int and type(b) is int, 'initialized bit operation operands')

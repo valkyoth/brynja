@@ -73,7 +73,7 @@ REVIEWED_HASHES = {
     'crates/brynja-hash-parallel-std/src/execution/batch/worker/tests.rs': '99769a510813add152c09cf31669891ebce4a0899b0c39f3996778dfaa60d6cb',
     'crates/brynja-hash-parallel-std/src/execution/batch/worker/tests/coordinator_unwind.rs': '55de62b96b5a74d34cb7feb65f00fb20f24350c37827b7d8fd709268fc32fc90',
     'crates/brynja-hash-parallel-std/src/execution/batch/in_place.rs': '6771814b70e64365cb8f1222a6c5fac32948749cd117f307c370a10601be23c9',
-    'crates/brynja-hash-parallel-std/src/execution/batch/in_place/tests.rs': '4e4dd352235e942a6522ac34523a85627f245db08fee9641e32212d77167378d',
+    'crates/brynja-hash-parallel-std/src/execution/batch/in_place/tests.rs': '79130d0d752a3eaf38e8ced54c82d5e8f43453721521e353c3895ed6fd578e75',
     'crates/brynja-hash-parallel-std/src/execution/batch/in_place/worker.rs': 'fe68c933c166d04577723a165861627122046b88f3849ae849c7e5e9e4858230',
     'crates/brynja-hash-parallel-std/src/execution/batch/in_place/worker/tests.rs': 'c5fdb63a050bb3c58766f2d57c682080187e463885f0cf3d8fec25e836b4c01b',
     'crates/brynja-hash-parallel-std/src/execution/batch/in_place/worker/tests/order.rs': '3a3abe5518784a2fc824a16a6df0f4b292c339ddb76c6368aa08b8f79fecd9cf',

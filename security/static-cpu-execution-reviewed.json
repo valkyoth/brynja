@@ -92,7 +92,7 @@
     "docs/unsafe-policy.md": "08fe83ed48f8eb6ed785d02b8373396888a2caa15ff6d57bb6ba57a3238a6d22",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/cpu/check-static-execution.py": "7cb4678bb69b5fddc4c8a722e2bcbdea70a01b61801010ea05a2ef1a4773ea7e",
-    "scripts/cpu/static_execution_docs.py": "259db7caaa1b63543bf39081678db2756dabf4f5c46e23f1449cbeac0a9e7ba6",
+    "scripts/cpu/static_execution_docs.py": "bbc4a87234197b025446a8fd08f0ffdb5c7e299ea1707ff59587fcf60361d3a4",
     "scripts/repository/unsafe_policy.py": "4f5c14838b4875927193a4588eecb10493a5cf7a8c8d3d73fe88e73f48b5c3c3",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"

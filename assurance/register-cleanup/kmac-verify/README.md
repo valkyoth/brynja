@@ -2792,3 +2792,23 @@ All 736 dependency/ABI/scheduling/cleanup mutations reject (46 per path);
 32 metadata/SSA controls pass. Subprocess execution is forbidden by the harness.
 Mutation log: `dist/debug-squeeze-operation-mutations.log`, SHA-256
 `f6f2d2db7f62cc5454b0501697cf97bb81c6ed16ec06a9e0eaa8884573ac22bb`.
+
+### Preserved source checkout after the CI test correction
+
+The capture's source manifest includes Rust tests. The subsequent ParallelHash
+Arm test correction changes that manifest, not production code. Keep the record
+unchanged: it does not validate against the corrected main checkout. The ignored
+worktree `dist/register-cleanup-review-source` is pinned to diagnostic checkpoint
+`cc5b9add`, where exact source equality and all retained artifact hashes passed.
+Run retained inspections from that checkout, passing an absolute record path:
+
+```sh
+record="$PWD/dist/kmac-verify-nft_nl5x/observations.json"
+cd dist/register-cleanup-review-source
+python3 assurance/register-cleanup/check_debug_squeeze_operation.py "$record"
+```
+
+This preserves historical qualification without recollection, source-hash
+exceptions or release-gate changes. It does not qualify subsequently changed
+implementation code. The checkout and artifacts remain local and ignored;
+neither is under Cargo's `target/` directory.

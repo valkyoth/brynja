@@ -5,6 +5,12 @@ The [pentest ledger](../../security/pentest/v0.24.49.md) retains the historical
 checks and their limitations. Earlier checkpoint paragraphs are not a current
 todo list: several were superseded by later implementation and tests.
 
+Retained KMAC inspections use the local source-matching checkout at `cc5b9add`
+under `dist/register-cleanup-review-source`; see the diagnostic README for the
+command. A later Arm CI test correction changes a captured test-file hash, not
+production behavior. Exact source/artifact validation remains enabled; the old
+record must not be presented as validating the corrected main checkout.
+
 ## Already implemented
 
 - All sixteen existing accelerated kernel entries have opaque computation and

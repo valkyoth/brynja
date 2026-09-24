@@ -223,6 +223,8 @@ fn empty_input_has_no_workers() -> Result<(), Error> {
 
 #[test]
 fn scoped_multibuffer_static_and_mixed_routes() -> Result<(), Error> {
+    use brynja_crypto_cpu::static_execution::{Error as StaticError, Kernel as RootKernel};
+
     let kernel = if cfg!(target_arch = "aarch64") {
         leaf::Kernel::Neon
     } else {
@@ -231,6 +233,17 @@ fn scoped_multibuffer_static_and_mixed_routes() -> Result<(), Error> {
     if !kernel.compiled() {
         assert!(std::env::var_os("BRYNJA_REQUIRE_SCOPED_MULTIBUFFER").is_none());
         return Ok(());
+    }
+    // NEON leaves need no SHA3 extension; the single-state static root does.
+    // Validate the two capabilities independently, including root rejection.
+    let root_kernel = if cfg!(target_arch = "aarch64") {
+        RootKernel::ArmKeccak
+    } else {
+        RootKernel::X86Keccak
+    };
+    let root_available = root_kernel.check_compiled_target().is_ok();
+    if !root_available {
+        assert!(std::env::var_os("BRYNJA_REQUIRE_SCOPED_MULTIBUFFER").is_none());
     }
     for identity in [
         Identity::ParallelHash128,
@@ -250,6 +263,24 @@ fn scoped_multibuffer_static_and_mixed_routes() -> Result<(), Error> {
                 let token = CancellationToken::new();
                 let mut output = [0xa5; 173];
                 let mut scratch = [0xa5; 180];
+                if root == Preference::RequireStatic && !root_available {
+                    assert!(matches!(
+                        executor.hash_public_bits(&request, &mut output, 5, &mut scratch, &token),
+                        Err(Error::Scheduling(crate::execution::Error::Static(
+                            StaticError::MissingTargetFeatures
+                        )))
+                    ));
+                    assert_eq!(output, [0xa5; 173]);
+                    assert_eq!(scratch, [0; 180]);
+                    assert!(matches!(
+                        executor.hash_secret_bits(&request, &mut output, 5, &token),
+                        Err(Error::Scheduling(crate::execution::Error::Static(
+                            StaticError::MissingTargetFeatures
+                        )))
+                    ));
+                    assert_eq!(output, [0; 173]);
+                    continue;
+                }
                 let report =
                     executor.hash_public_bits(&request, &mut output, 5, &mut scratch, &token)?;
                 assert_eq!(output, expected);

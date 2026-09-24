@@ -2176,3 +2176,45 @@ changed. This supersedes the preceding checkpoint's outstanding optimized
 producer admission/progress item, not the debug, wider caller/worker,
 register/spill or native-platform work. Arm remains QEMU evidence; F1 and root
 `PENTEST.md` remain open.
+
+### Debug bulk-reader forwarding and result ownership
+
+```sh
+python3 assurance/register-cleanup/check_debug_kmac_bulk_bridge.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_kmac_bulk_bridge.py dist/kmac-verify-nft_nl5x/observations.json
+```
+
+The 24 instantiated debug bulk bridges are selected from actual verifier calls
+in the retained eight debug configurations. Each binds five real functions from
+the same configuration: the KMAC trait bridge, SHA-3 reader wrapper, result
+mapper, error-call adapter and error conversion. Sixteen paths use portable
+readers (including their instantiations in acceleration-enabled builds); eight
+use accelerated readers. The selected borrowed producer's definition and ABI
+are bound, but its body is deliberately opaque in this checker.
+
+The existing bounded descriptor interpreter executes these five-function
+closures. The original borrowed reader, output pointer and complete length must
+reach the producer exactly once, with bulk mode and no final-bit shape. Only
+24-byte ownership-descriptor copies are permitted in the result handoff; direct
+reader-state or output-payload accesses are rejected by the model. Success
+preserves the original empty/nonempty output descriptor. All five portable and
+twelve accelerated error encodings are checked, including the feature-dependent
+KMAC enum encoding. A synthetic producer exception must propagate unchanged,
+without publishing an output result. No producer clearing behavior is assumed.
+
+All 1,568 modeled cases pass, covering seven lengths and every reachable block
+in the selected bridge/wrapper/error-helper closures. Huge lengths are scalar
+metadata scenarios, not manufactured Rust slices or allocation/runtime tests.
+This does not check the verifier's arguments before bridge entry, consuming-final
+bridges, debug producer internals, arbitrary helper panics, machine registers or
+compiler spills. It is not an all-input formal proof or native-platform evidence.
+
+All 1,032 forwarding, ownership, error, payload-access and ABI mutations reject;
+48 metadata/SSA controls pass. Adjacent debug output-finish tests reject 256
+mutations with eight controls; debug writes reject 260 LLVM and 40 copy-assembly
+mutations with 24 controls. These tests prohibit subprocess execution and reuse
+the protected artifacts without a compiler/runtime rerun. Log:
+`dist/debug-kmac-bulk-bridge.log`, SHA-256
+`e60999eeb55d5b4ac095e04253917b3f79535c4a64ff8fbdadd3deb9746299e2`.
+No production code or release gate changed. Arm remains QEMU; F1 and root
+`PENTEST.md` remain open pending the remaining qualification and independent retest.

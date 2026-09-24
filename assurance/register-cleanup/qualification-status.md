@@ -31,6 +31,13 @@ todo list: several were superseded by later implementation and tests.
   admission, bounded loop progress, final-byte masking and owned writes now
   compose with those boundaries and the actual helper checks. These retained
   optimized checks do not qualify debug call chains or whole-call spills.
+- Debug KMAC bulk-reader bridges now bind to the actual same-configuration
+  SHA-3 wrappers and error-conversion helpers. Their descriptor-only handoff
+  preserves the borrowed owner, destination, length, success ownership and exact
+  errors; a synthetic producer unwind propagates without publishing a result.
+  The debug producer body remains an explicit unchecked boundary in this check,
+  not an inferred cleanup guarantee. Consuming-final bridges and whole debug
+  verifier paths remain outstanding.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -38,7 +45,8 @@ observations alone do not prove absence of transformed secrets or stack spills.
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
-   caller/reader coverage, including error and unwind paths, and reconcile the
+   caller/reader coverage beyond the bulk bridge, including consuming-final,
+   producer, error and unwind paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

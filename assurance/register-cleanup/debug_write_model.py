@@ -60,12 +60,14 @@ class Model:
         self.step_limit = 3000
         for line in globals_text.splitlines():
             found = re.fullmatch(r'(@[-.$\w]+) = private unnamed_addr constant '
-                                 r'<\{ \[(8|16) x i8\], \[\2 x i8\] }> '
-                                 r'<\{ \[\2 x i8\] zeroinitializer, \[\2 x i8\] undef }>, align \2', line)
+                                 r'<\{ \[(4|8|16) x i8\], \[\2 x i8\] }> '
+                                 r'<\{ \[\2 x i8\] (zeroinitializer|c"\\01\\00\\00\\00"), '
+                                 r'\[\2 x i8\] undef }>, align \2', line)
             if found:
                 width = int(found[2])
+                require(found[3] == 'zeroinitializer' or width == 4, 'exact constant discriminator width')
                 self.sizes[found[1]] = 2 * width
-                self.memory[Pointer(found[1])] = (width, 0)
+                self.memory[Pointer(found[1])] = (width, int(found[3] != 'zeroinitializer'))
 
     def allocate(self, name, size, payload=False):
         require(name not in self.sizes and size >= 0, 'distinct bounded model allocation')
@@ -140,11 +142,12 @@ class Model:
         if self.fault is not None and name == self.fault[0]:
             self.events.append(('fault', name))
             return self.fault[1]
-        if name in ('llvm.uadd.with.overflow.i64', 'llvm.uadd.with.overflow.i128'):
+        if name in ('llvm.uadd.with.overflow.i64', 'llvm.uadd.with.overflow.i128', 'llvm.umul.with.overflow.i32'):
             require(len(args) == 2 and all(type(x) is int for x in args), 'integer checked-add operands')
             mask = (1 << int(name.rsplit('i', 1)[1])) - 1
             require(all(0 <= value <= mask for value in args), 'checked-add operands match integer width')
-            return ((args[0] + args[1]) & mask, int(args[0] + args[1] > mask))
+            value = args[0] * args[1] if '.umul.' in name else args[0] + args[1]
+            return (value & mask, int(value > mask))
         if name == self.copy_name:
             require(len(args) == 3 and type(args[2]) is int, 'opaque copy ABI')
             self.address(args[0], args[2], access=False)
@@ -219,6 +222,16 @@ class Model:
                     condition = self.value(found[1], env)
                     require(condition in (0, 1), 'initialized select condition')
                     val = self.typed(found[2] if condition else found[3], env)
+                elif found := re.fullmatch(r'(and|or|shl) i(32|128) (\S+), (\S+)', op):
+                    a = self.typed('i' + found[2] + ' ' + found[3], env)
+                    b = self.typed('i' + found[2] + ' ' + found[4], env)
+                    require(type(a) is int and type(b) is int, 'initialized bit operation operands')
+                    bits = int(found[2])
+                    if found[1] == 'shl':
+                        require(b < bits, 'non-poison shift amount')
+                        val = (a << b) & ((1 << bits) - 1)
+                    else:
+                        val = a & b if found[1] == 'and' else a | b
                 elif found := re.fullmatch(r'extractvalue \{ [^}]+ } (\S+), ([01])', op):
                     pair = self.value(found[1], env)
                     require(isinstance(pair, tuple) and len(pair) == 2, 'two-field aggregate')

@@ -101,6 +101,15 @@ todo list: several were superseded by later implementation and tests.
   cannot read the counter, and synthetic decoder unwind follows owner cleanup.
   The counter decoder and volatile primitive remain explicit boundaries; this
   does not establish scalar-counter register/spill cleanup or squeezing behavior.
+- The debug counter decoder now includes its actual twelve-function iterator,
+  conversion and shift closure, composed with output-limit and empty-producer
+  paths in sixty-three/sixty-four-function closures. It reads exactly the sixteen
+  original counter bytes once, in order, and reconstructs the little-endian u128.
+  Checked offset conversion/multiplication defaults are separately exercised;
+  normal helper blocks are covered without entering the two panic boundaries.
+  Rust 1.98's packed result ABI preserves undefined padding in the model. This
+  closes the opaque decoder boundary for these paths, not scalar temporary
+  erasure, actual squeezing or whole-verifier register/spill qualification.
 
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
@@ -109,7 +118,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   actual squeeze/counter-decoder bodies, accelerated
+   actual byte/final-bit squeeze bodies and counter writes, accelerated
    producer guard paths and whole-verifier error/unwind paths, and reconcile the
    optimized caller-to-reader/dependency coverage before claiming the whole
    instantiated path qualified. Individual helper checks are evidence to reuse,

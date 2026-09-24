@@ -2630,3 +2630,63 @@ reject; 32 debug-metadata/SSA controls pass. The mutation harness forbids
 subprocess execution. Mutation log: `dist/debug-output-limit-mutations.log`,
 SHA-256 `5da77bd207d4d69cf395e190cc595f9f3ead392b9999dca6d52473deb6c4c2a0`.
 Documentation links, script inventory and acceptance metadata checks pass.
+
+### Debug counter-decoder composition
+
+```sh
+python3 assurance/register-cleanup/check_debug_counter_decode.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_counter_decode.py dist/kmac-verify-nft_nl5x/observations.json
+python3 assurance/register-cleanup/test_debug_counter_operations.py
+python3 assurance/register-cleanup/test_debug_counter_packing.py
+```
+
+The retained debug counter decoder now binds twelve actual same-configuration
+functions, including slice construction/iteration, enumeration, checked offset
+conversion/multiplication and Option/Result handling. Composition with the actual
+limit helper and empty-output producer binds sixty-three/sixty-four functions.
+All 3,792 modeled cases pass across sixteen instantiated paths. The decoder reads
+exactly the sixteen original counter bytes, once each and in order. Zero, all
+ones, all 128 single-bit values and two mixed byte patterns check little-endian
+reconstruction; enclosing limit decisions cover both sides of overflow boundaries.
+Empty producer paths retain the reader's original ownership and active state,
+and terminal readers never decode the counter.
+
+The byte-shift helper's integer-conversion/multiplication fallback paths are
+checked with separate synthetic offsets, not presented as reachable iterator
+inputs. All decoder/helper normal control-flow blocks are covered. The two
+overflow-panic boundaries are prohibited; paths reachable only through them and
+blocks without an entry path are excluded rather than claimed tested. Arbitrary
+unwind and machine-level residue behavior are not established by this model.
+
+Rust 1.98 moves one conversion result through an eight-byte integer ABI carrier
+containing smaller fields and undefined padding. A local-only packed-field model
+preserves those fields through stores and memcpy without inventing initialized
+padding or allowing that carrier to participate in arithmetic. Nine round-trip
+controls and 24 width/escape/copy/arithmetic rejections pass. Bit operations,
+checked u32 multiplication and four-byte constants have 218 positive controls
+and 22 rejected malformed/poison/constant operations. Earlier shared-model
+regressions remain green: 302 wide-arithmetic controls/76 rejections, eight
+zero-argument controls/14 rejections, retained output-write (2,072), core-finish
+(560), finish-adapter (1,136) and limit (4,928) cases, and 256 core-finish mutations
+with eight controls.
+
+Actual scalar counter bytes are modeled here for functional decoding, not secret
+erasure. The debug IR contains scalar accumulator/byte temporaries; this check
+does not prove those copies or their registers/spills are erased. Squeeze bodies,
+wider caller/worker qualification and native platforms remain pending. Arm remains
+QEMU; F1 and root `PENTEST.md` remain open. No production implementation, original
+capture record or release gate changed; no Rust compiler/runtime campaign ran.
+
+Decoder log: `dist/debug-counter-decode-check.log`, SHA-256
+`be346eadf552ac64b341ac1e2624a8abd2da8d5748644b378deecf7b9b258e5f`.
+Regression log: `dist/debug-counter-model-regressions.log`, SHA-256
+`6d0ea347f5981d25f7f5db971c37e3568c100a51b8b856b53db10a6c8a72e0b6`.
+
+All 776 byte-read, iterator, arithmetic and dependency/ABI-layout mutations
+reject; 32 debug-metadata/SSA controls pass. Harmless branches that only take an
+extra side-effect-free jump to the same successor are not counted as regressions.
+The mutation harness forbids subprocess execution. Mutation log:
+`dist/debug-counter-decode-mutations.log`, SHA-256
+`c47dc25d5a02aa1929ea80fc91e31af2c29cc49da02d19e4c86539824b89f568`.
+Documentation links, script inventory, acceptance metadata and its regression
+tests pass without crypto execution.

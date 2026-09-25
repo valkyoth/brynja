@@ -4459,3 +4459,59 @@ Final logs under ignored `dist/`, outside Cargo cleanup:
 | --- | --- |
 | `debug-verifier-final-comparison-check-final.log` | `f9ff55aad6989a0a09aac2e2ebc522d0c3a1af5c44d0c2103c3bd379636798b6` |
 | `debug-verifier-final-comparison-mutations-final.log` | `ba51a22801c23053ba14ce76a9d561b458a4c72186cc3e8bfb368f2cdc855264` |
+
+### Debug finish body and caller ownership composition
+
+From the preserved source-matching checkout, with the unchanged record:
+
+```sh
+python3 assurance/register-cleanup/check_debug_verifier_finish.py /absolute/path/to/observations.json
+python3 assurance/register-cleanup/test_debug_verifier_finish.py /absolute/path/to/observations.json
+```
+
+The actual debug `finish()` body now supplies the previously separate caller
+ownership fragment. All 24 instantiated paths pass 4,368 cases, including 1,216
+successful reader/guard transfers and 48 modeled suffix-unwind paths. The replay
+checks consumed-state/key/tag rejection precedence, production/conformance mode,
+tag-bit boundaries through `u128::MAX`, every applicable suffix error, portable
+reader flags and accelerated scratch lengths, at base offsets 0/32. Original
+optional-input descriptors and exact requested bit lengths reach the suffix
+boundary. Successful reader fields and metadata ownership reach the caller;
+its actual guard/glue/wipe bodies request the original 1/64/1-byte regions.
+Rejected finish does not initialize either caller owner.
+
+All 1,392 finish-body/helper mutations reject, with 48 label/debug-metadata
+controls. Twelve direct boundary tests reject payload access, wrong core/state
+pointers, incorrect suffix arguments and invalid descriptor copies. Mutation
+runs use a focused scenario subset; the completed positive run uses the full
+matrix. The FullStrength constant is bound to the actual zero-valued compiler
+global, not assumed from an arbitrary argument.
+
+This remains contract-based composition: state/key classification, suffix
+framing/state consumption and state/Core destructor internals are explicit
+boundaries. Their requests are checked, not their physical cleanup. A modeled
+suffix exception follows the original landingpad, requests Core destruction and
+resumes the same exception without publishing a result. This is not actual
+native unwind, extern-C panic, abort, signal or interruption evidence. No secret
+payload bytes are read/synthesized. The optional-input descriptor's contents and
+canonicality remain producer preconditions. Whole-verifier, suffix/destructor
+reconciliation and wider caller/worker qualification remain outstanding. F1 and
+root `PENTEST.md` remain open; Arm runtime evidence remains QEMU, not native.
+
+No production Rust, shared interpreter, dependencies or release policy changed.
+No compiler/native/full campaign ran. Retained source/artifact bindings,
+script/status regressions, acceptance metadata, assurance freshness and links
+pass. GitHub is still green at pushed `6ec41f52`, not this local checkpoint.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_verifier_finish.py` | `d07fd59019e51ef0847f736e1bfda4736080d4f2ae77fb185a6c8ec7fb299718` |
+| `check_debug_verifier_finish.py` | `3089072d9fb2b85c59b723b77c2ead106ac03c12c4bcaa80e5f99db594217e3d` |
+| `test_debug_verifier_finish.py` | `94d7e126f1de8656af91dabb98fe45e8fa7e7b421babc093236324b5ab9ff245` |
+
+Final logs under ignored `dist/`, outside Cargo cleanup:
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-verifier-finish-check-final.log` | `3c29eef01a71f71f648a2a9a06ab43912d117e69422b21de158755ef632a1d2e` |
+| `debug-verifier-finish-mutations-final.log` | `03e1cab86715936cf71fdda4f5b54125ba88ebf58d270072ab237a51ed7eff96` |

@@ -358,11 +358,22 @@ field, not merely an equal-valued metadata-owner pointer. Output exposure,
 masking, full-chain composition and subsequent cleanup/unwind are not newly
 qualified by this bounded replay.
 
+The actual debug `finish()` body now composes with the caller's reader/guard
+transfer across 24 instances: 4,368 cases, 1,216 successful transfers and 48
+modeled suffix-unwind paths pass. Admission precedence, exact requested bit
+length/input-descriptor forwarding, returned reader fields, metadata-owner
+identity, error propagation and destructor requests are checked. All 1,392
+body/helper mutations reject, with 48 label/metadata controls and twelve direct
+boundary rejections. State/key classification, suffix framing/state consumption
+and state/Core destructor internals remain explicit contracts. This closes the
+previous isolated finish-result input at the handoff, not the entire producing
+or cleanup chain; it does not establish physical erasure or real unwind behavior.
+
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   finish-body and full comparison-chain composition, whole-verifier error/unwind
+   suffix-producer/destructor reconciliation and full comparison-chain composition, whole-verifier error/unwind
    paths, and reconcile the optimized
    caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

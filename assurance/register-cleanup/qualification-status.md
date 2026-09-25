@@ -322,11 +322,25 @@ This closes that composition gap, not whole-verifier/caller spill qualification.
 The diagnostic record distinguishes this focused matrix from the earlier broader
 standalone session and reader matrices. No production or release policy changed.
 
+The debug verifier's post-`finish()` ownership handoff now replays its actual
+result-branch helper, discriminator, reader-field transfer and cleanup-guard
+initialization. All 864 descriptor cases pass across 24 verifier instances;
+408 IR mutations reject with 48 metadata/block-label controls. The returned
+metadata owner reaches the actual three-region guard cleanup, the live-reader
+flag is armed only on success, and the exact error byte reaches the residual
+conversion boundary without creating either owner. This is a bounded fragment:
+`finish()` results are contract inputs, synthetic fragment stops are not verifier
+exits, and later comparison/cleanup control flow is not executed by this replay.
+Ten direct boundary tests reject payload access and malformed transfers. It
+extends the earlier CFG invocation check with returned-descriptor provenance,
+not a whole-verifier or register/spill qualification claim.
+
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   whole-verifier error/unwind paths, and reconcile the optimized
+   finish-body and comparison-loop composition, whole-verifier error/unwind
+   paths, and reconcile the optimized
    caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

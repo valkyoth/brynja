@@ -4275,3 +4275,73 @@ Completed logs are under ignored `dist/`, outside Cargo cleanup:
 | `debug-reader-session-mutations-final-shard-5.log` | `9717a4f95e7e7a58ce7b2924c797b22f912b87e48b5a54e882278779f6b38ecf` |
 | `debug-reader-session-mutations-final-shard-6.log` | `ba69f7ee652d475eec99064f5da07731526b517a8b75e531c65459ceddf94ffd` |
 | `debug-reader-session-mutations-final-shard-7.log` | `89188b2fd44cfec2b4b60090388f43c8873427e1d7e9454947f68086ef0aedba` |
+
+### Retained debug verifier post-finish ownership
+
+From the preserved source-matching checkout, using the absolute retained record:
+
+```sh
+python3 assurance/register-cleanup/check_debug_verifier_ownership.py /absolute/path/to/observations.json
+python3 assurance/register-cleanup/test_debug_verifier_ownership.py /absolute/path/to/observations.json
+```
+
+All 24 debug verifier instances pass 864 descriptor cases across the two
+compilers, targets, feature modes and instantiated reader strengths. The check
+locates the actual finish-result slot and its normal successor, executes the
+original result-branch helper and caller discriminator, and replays original
+reader/guard extraction instructions. It includes the actual guard drop glue,
+Guard Drop and Metadata wipe bodies, binding their three clearing requests to
+the metadata pointer returned by `finish()`.
+
+The fragment receives modeled valid finish-result descriptors as a contract
+input: a borrowed reader plus cleanup owner, or one of the seven/twenty retained
+feature-dependent error bytes. Portable reader Boolean fields, accelerated
+scratch lengths 0/1/168 and distinct owner offsets are exercised. Complete
+24/32-byte local descriptor moves preserve all live fields and undefined padding.
+No state, metadata payload or scratch bytes may be loaded/copied by those moves.
+Errors cannot construct the reader or cleanup guard; the exact error byte must
+reach the caller's actual residual-conversion argument. Successful extraction
+arms the original live-reader flag and preserves the returned reader fields.
+The resulting guard requests key-class, verification and difference clearing
+at the original owner offsets 64/0/65 with lengths 1/64/1.
+
+This is an explicitly isolated fragment, not full verifier execution. Synthetic
+stops delimit the transfer before later candidate processing or residual
+conversion; they must not be mistaken for original verifier exits. The earlier
+whole-CFG guard invocation/dominance check is reused, but it does not establish
+all branch feasibility or subsequent reader/drop behavior. This new replay
+closes the returned-descriptor provenance gap, not the provenance inside
+`finish()` itself, framing correctness, full error/unwind behavior or
+register/spill erasure. Actual core/volatile clearing retains separate evidence;
+the fragment observes calls to the real core-clearing boundary, not physical
+erasure. Arm runtime evidence remains QEMU, not native.
+
+All 408 selected caller/helper IR mutations reject. Forty-eight block-label/
+debug-metadata controls pass. Ten direct boundary tests reject payload accesses,
+overlapping moves, short/volatile copies and incorrect clearing regions; an
+undefined-padding control passes. Development exposed a diagnostic gap: checking
+the returned error field alone missed a corrupted caller residual load. The
+final checker observes that onward argument too. Mutations of later candidate
+work are outside this fragment and are not counted as rejected regressions.
+Earlier development logs are superseded by the final logs below.
+
+F1 and root `PENTEST.md` remain open for whole-verifier and wider caller/worker
+qualification and independent retest. Production Rust, dependencies, shared
+interpreter and release-gate policy are unchanged. No compiler, native or full
+verification campaign was repeated. Retained source/artifact binding, assurance
+freshness, script/status regressions, acceptance metadata and documentation links
+pass. GitHub remains green at the last pushed `6ec41f52`, not this local checkpoint.
+The record remains `d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_verifier_ownership.py` | `37d424609b67ad0a33ebf92a5f6025259e3125d1a46519696837af14e9c918cd` |
+| `check_debug_verifier_ownership.py` | `3e573a74c47d18b150220761c2898fb133628128dd1a9f7b5d74be814f127cdb` |
+| `test_debug_verifier_ownership.py` | `4eb7b30e473a3dcfa46217ffcaffcc4a893fcc825a8b2c8d3872f006a9272824` |
+
+Final logs under ignored `dist/`, outside Cargo cleanup:
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-verifier-ownership-check-final.log` | `705748874fd0621114339737c5c9f5a7adce01e69cf1f8e348e5e0f08cd200dd` |
+| `debug-verifier-ownership-mutations-final.log` | `00af294c77eeb91c3d64d1e4c0ba7de676ae5842b899c877820d61e2eb5f6544` |

@@ -245,6 +245,18 @@ Later diagnostic-only additions can run there without replacing captured sources
   outcome. Engine preflight/read and primitive bodies remain opaque; whole-
   verifier and whole-call register/spill qualification are still outstanding.
 
+- Accelerated debug preflight now executes its actual nineteen-function
+  terminal-state, session-result, counter-decoding and checked-addition closure,
+  both directly and beneath the bulk/consuming reader bridges. All 19,808 cases
+  pass, including 8,784 composed reader cases. Counter bytes are read exactly
+  once in order after state/authority admission; overflow and exact backend
+  errors propagate through output/owner cleanup. All normal preflight/helper
+  blocks are covered except forbidden panic paths. Session-check internals,
+  engine read and copy/mask/volatile bodies remain opaque. Scalar counter
+  temporaries, register/spill cleanup and whole-verifier coverage remain
+  unqualified; this is not F1 closure. All 1,248 mutations reject with eighty
+  metadata/SSA/no-op controls; 2,744 existing bridge cases also still pass.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -252,8 +264,8 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   actual accelerated engine preflight/read bodies composed beneath the checked
-   producer/outer reader bridges, plus whole-verifier error/unwind
+   the actual accelerated engine read body composed beneath the checked
+   preflight/producer/outer reader bridges, plus whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

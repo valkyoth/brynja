@@ -3673,3 +3673,93 @@ Completed logs remain under ignored `dist/`, outside Cargo's `target/` directory
 | `debug-accelerated-bridges-mutations-shard-5.log` | `ce01fd6ec4087194f301194102c37245b480be936529917daf0921d60a3bf313` |
 | `debug-accelerated-bridges-mutations-shard-6.log` | `9733a887e0eb2f8d5b1beba3069cd31aa9ad9123cf312ab16e5e2bfdff176ec9` |
 | `debug-accelerated-bridges-mutations-shard-7.log` | `f085477a6153e923f326cf9ca0cb0b22af4d867619d2bb8fede0a3c3a25c62c4` |
+
+### Accelerated debug engine preflight and reader composition
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_accelerated_preflight.py "$record"
+python3 assurance/register-cleanup/test_debug_accelerated_preflight.py "$record"
+python3 assurance/register-cleanup/test_debug_preflight_model.py
+python3 assurance/register-cleanup/test_debug_u64_operations.py
+```
+
+The first two accept `--shard 0` through `7`; all eight shards are required.
+The nineteen-function same-row preflight closure now executes its actual state
+check, backend-error mapping, sixteen-byte counter decoder, checked u128 addition
+and result mapping. The CPU session check remains an explicit opaque boundary.
+All 19,808 cases pass (1,238 per bridge/path), including 8,784 composed reader
+cases. Bulk closures contain 102/103 functions and consuming closures 105/106.
+
+The independent oracle checks terminal/wrong-phase rejection before authority
+or counter access, exact backend errors, the full little-endian decoded value,
+and output-length overflow at counter/usize boundaries. Every original counter
+byte must be read once in order; no engine field may be written by preflight.
+Tests include all 128 one-bit counter basis values, nonuniform bytes, all seven
+backend errors and selected synthetic session unwind. Large increments are
+standalone arithmetic probes, not huge destination allocations. The actual
+saturating-multiplication helper is separately checked near overflow; such
+oversized offsets are not claimed reachable through the sixteen-byte iterator.
+All normal preflight/helper blocks are covered, excluding forbidden panic paths.
+
+The bulk/consuming composition executes the real preflight below the existing
+initializer, producer operation and reader bridges. Exact failures and session
+unwind follow the independent output/owner-cleanup oracle; consuming success
+still requests its additional complete owner cleanup. Existing engine-read
+behavior remains synthetic here, so this does not establish output-counter
+commit ordering or permutation/copy correctness within that body.
+
+All 1,248 mutations reject: 79 per bridge/path under Rust 1.90 and 77 under
+Rust 1.98. Eighty metadata/SSA/no-op controls pass. In particular, removing the
+side-effect-free sum-to-unit mapping closure is accepted as equivalent for this
+admission check, not misclassified as a security regression. The mutation
+harness forbids compiler/runtime subprocess execution. All sixteen final
+check/mutation shards exited successfully.
+
+The interpreter gained unsigned-64 bit operations and checked multiplication
+using its existing width/poison rules. Focused tests pass 156 arithmetic controls
+and fourteen malformed-operand/poison rejections; the preflight boundary model
+passes nineteen controls and twenty-four payload/metadata/authority rejections.
+Existing counter, squeeze, exception-phi and accelerated-boundary tests pass,
+as do 2,744 existing composed-reader quick cases. Source/artifact validation,
+assurance freshness, script/status policy, acceptance metadata and doc links
+pass. No production Rust, captured implementation, dependency, release-gate
+policy, compiler/native campaign or full sweep changed or reran.
+
+Session-check internals, engine read and copy/mask/volatile bodies remain opaque.
+This does not qualify scalar counter temporaries, whole-verifier paths, actual
+extern-C unwind, arbitrary interruptions or whole-call register/spill cleanup.
+Arm runtime evidence remains QEMU, not native. F1 and root `PENTEST.md` remain
+open. This is author diagnostic evidence, not independent qualification.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `check_debug_accelerated_preflight.py` | `472e324f5ce8cc308dbf446bdbfc07853f48d25ddafc562d24ec2ca42e369d92` |
+| `test_debug_accelerated_preflight.py` | `1434291a1472ce9597b1e7a804ab39f0d0168a57b4a4c742b1e5bbf5b3771cc5` |
+| `debug_write_model.py` | `80ed3c800d3e0050a1a920e4d6b549f63810b763b64e0472c2e0e8a8757906a6` |
+| `test_debug_preflight_model.py` | `a34e7ffc229717d532f68585d579c416713f345c2d769e1f37fa72140e68ceee` |
+| `test_debug_u64_operations.py` | `5782d2669e8f6a3d35900d1f5216288098bed4197f3e23895da9ae3ecb719af4` |
+
+The unchanged observation record has SHA-256
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Logs remain under ignored `dist/`, outside Cargo's `target/` directory.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-accelerated-preflight-check-shard-0.log` | `47f4e20e35dd9014337198b1771121e1f9356a7a09a814669851d50edacbcc68` |
+| `debug-accelerated-preflight-check-shard-1.log` | `30a6c33afe0d8f9cc421f480ffe99aa33678c517795dd656fc785d41a2df01c6` |
+| `debug-accelerated-preflight-check-shard-2.log` | `d905be6505cfebeb4f4aed207c7e7bd94c52ed2b2c28f98fc41119184fe25f43` |
+| `debug-accelerated-preflight-check-shard-3.log` | `851be79e9acd5f0f22bb4f64a304a5215546d6c986eb877ce7ea8f37d90431c5` |
+| `debug-accelerated-preflight-check-shard-4.log` | `c5f0645b516986be727a4add64aa33d4a2b9a258651178dd1ddcd911d4fd9a92` |
+| `debug-accelerated-preflight-check-shard-5.log` | `37de7d6a9dd2b2cea0610312ebc49a13daba872138ca8428266decd1de782c8d` |
+| `debug-accelerated-preflight-check-shard-6.log` | `6a679be5abcf019c2be3f8f3c543cb352cc85eb6a24103ffacf0dc9139eb1abe` |
+| `debug-accelerated-preflight-check-shard-7.log` | `692acb2ead4c2ec528055c1d5deaae7ebca62ca814a6d4f81f7ab822c78932cd` |
+| `debug-accelerated-preflight-mutations-shard-0.log` | `52fc667962f0e25f79fe6c68c97ac40990393b797a5cc56727f65491e08dcd3e` |
+| `debug-accelerated-preflight-mutations-shard-1.log` | `95563bc1e1273d70a948878ffe7df98054a050206cfdef9c1a187fafc5892525` |
+| `debug-accelerated-preflight-mutations-shard-2.log` | `355a1b3853d69419c7b26b9931e163b4a7062868be72c38300b1137bb9bd61bc` |
+| `debug-accelerated-preflight-mutations-shard-3.log` | `a676169ebfdc449c91bc7b8068614da236cba96e5f9fd916a99c6d91f2403159` |
+| `debug-accelerated-preflight-mutations-shard-4.log` | `a18847c08169c1d206416de240ea243e5c201fd74a15c0e0424c6c7e3cd8ec6b` |
+| `debug-accelerated-preflight-mutations-shard-5.log` | `d3d3ff8e58a41b63d554e0c4a16363e78f345e5a9476267523799eafde45cb7a` |
+| `debug-accelerated-preflight-mutations-shard-6.log` | `8493a6704b47bb2bd8322ecca1b801561c8824d00cb361abee93da21c5f41200` |
+| `debug-accelerated-preflight-mutations-shard-7.log` | `b1cc9facca18712be03c7313a2f2e8e3d2c3cfbe301bb3aaabe3e6eac0bb573f` |

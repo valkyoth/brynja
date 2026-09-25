@@ -3854,3 +3854,90 @@ incorrectly expected that removal to fail; the v3 campaign supersedes them.
 | `debug-accelerated-read-mutations-v3-shard-5.log` | `5b43b54f034cd9c8cd2e4843ace145ed8f261df8c52e6c4313829b4a50b0af86` |
 | `debug-accelerated-read-mutations-v3-shard-6.log` | `5f8ae7cc3771da1444707cee0ed037d7c5ab7f245df33f05e12cf8653fcfdcfa` |
 | `debug-accelerated-read-mutations-v3-shard-7.log` | `df1629e01e41891f4b2c01cb8d7a11fd37ff321c977ac014fa5b93710c8b16c3` |
+
+### Accelerated debug engine-read/outer-reader composition
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_composed_read.py "$record"
+python3 assurance/register-cleanup/test_debug_composed_read.py "$record"
+python3 assurance/register-cleanup/test_debug_composed_read_model.py
+```
+
+The first two accept `--shard 0` through `7`; all eight are required. The checker
+also accepts `--quick` for development, not as a substitute for its full matrix.
+The new model links the actual engine-read closure beneath the actual bulk and
+consuming reader/producer/initializer/guard bodies. It uses one interpreter and
+the same original storage allocation throughout, not independent per-chunk
+machines. The previous standalone checker and shared interpreter are unchanged.
+
+The oracle checks all five rates, empty and partial output, 168-byte staging
+boundaries, multichunk output, exact full-width counter carry and preflight
+overflow. Each inner call rechecks session authority; failures at the second
+or later call test cleanup after earlier initialized output. Inner permutation,
+copy and writer-boundary errors/unwind must preserve their error/exception
+identity through the inner engine guard, outer initializer and reader guard.
+The actual engine counter and cursor persist between chunk calls. Successful
+bulk calls leave nonterminal metadata; consuming calls terminate the owner.
+This does not exercise a second external bulk API call on the same reader.
+
+Exact interleaved traces bind original lanes to original staging, final-bit
+mask requests to the final chunk, successful staging copies to original output,
+per-chunk staging clearing and whole-destination clearing on failure. The
+private engine may have copied a partial staging prefix before failure; the
+composed outer cleanup, not private helper transactionality, clears it and the
+destination. Tests check clearing requests, not physical bytes or residue.
+
+CPU session/permutation, split, copy, mask and volatile primitive bodies remain
+explicit opaque boundaries. This is finite-case symbolic metadata execution,
+not a general LLVM proof, actual extern-C unwind qualification or whole-verifier
+register/spill erasure. It does not qualify abort, signals or arbitrary
+interruptions. The retained Arm runtime evidence remains QEMU, not native.
+F1 and root `PENTEST.md` remain open. Production Rust, dependency versions,
+captured implementation and release-gate policy are unchanged.
+
+The focused model suite passes three controls and twenty-six wrong-alias,
+inactive-boundary, width and direct-payload-access rejections. All eight
+retained-IR mutation paths reject 224 regressions with thirty-two controls.
+These target skipped inner calls, wrong pointers/lengths/counter commits and
+lost unwind cleanup/exception propagation, with two metadata/SSA controls per
+bridge/path. Mutation execution forbids compiler/runtime subprocesses. All
+8,576 full-matrix cases pass: 533 bulk and 539 consuming cases per retained
+path, with 126/127-function bulk and 129/130-function consuming closures.
+The oracle also checks that all 161 configured fault scenarios actually predict
+failure, rather than injecting a fault beyond the last executed call.
+Source/artifact validation, assurance freshness, script-layout, verification-
+status, acceptance metadata and documentation-link checks pass. No compiler,
+native or full verifier sweep was repeated. GitHub is green at `6ec41f52`,
+before this local diagnostic checkpoint.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_composed_read_model.py` | `5e2c8c85b479961531c16ceabea50c42544e38b4d8bd7d140d733784f6e41ed0` |
+| `check_debug_composed_read.py` | `8d114490863b68f5370a2a7d0e2b40ab3d4ba7b568326ecb3a8604542d6566d5` |
+| `test_debug_composed_read_model.py` | `d384af1fbf0e20ced78b691bcbea32545b3e20d55dfa8b939f604aaa80cb8fd1` |
+| `test_debug_composed_read.py` | `12c3fdf78129bad8e8328d921526403951d4a2e45b0ee86586be82bc6d28cc09` |
+
+The source-matching record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Raw logs are retained under ignored `dist/`, outside Cargo's `target/` directory.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-composed-read-check-shard-0.log` | `1d5472f202eabb160c645695af696ab796f29e15ce105dec6bc44693d96cc3a7` |
+| `debug-composed-read-check-shard-1.log` | `ac3c6f7018c4ab65250a126d0add202ae2c8d67ddbe678a2bb9df4b73db5d130` |
+| `debug-composed-read-check-shard-2.log` | `86f96817e0d34c21bd4ec21da9e76db0b52e93b0dcf7db42dc67cb9fc5241eed` |
+| `debug-composed-read-check-shard-3.log` | `0739c99f75de4df4a718c1d98923c860e7632e354c2c9e558b15d343dd01cc22` |
+| `debug-composed-read-check-shard-4.log` | `0a413b845c01a691be28a93f89e3b9b58fd9083e23127b805a2d0672a5012be3` |
+| `debug-composed-read-check-shard-5.log` | `a26a4d88947779c6673f87cacf0dcf71b427623923742cbffe51e293463f787f` |
+| `debug-composed-read-check-shard-6.log` | `945b4a5fd2e611a222caf02e41e00f23b24fb6b16bf1168b0b42d02bb483e5b0` |
+| `debug-composed-read-check-shard-7.log` | `ca632f0c582ad3911f2c4389c5f8f2b10265edae741b2fd42074347d789a32aa` |
+| `debug-composed-read-mutations-shard-0.log` | `61c0891326602825feb7f48dd14e25edbdcfb7be264ae45256295f6fc0e766cd` |
+| `debug-composed-read-mutations-shard-1.log` | `930f0734cadfaddc0a0e3e992d47e950051e93147ab7a708ba686a1ba5543d0a` |
+| `debug-composed-read-mutations-shard-2.log` | `4fac7c9a9956e484a4aa83dffde72fa0343ef1a096489d7561c8355b29b15e7b` |
+| `debug-composed-read-mutations-shard-3.log` | `db4154d445cfd280bb8cbc91c06c6fd2479c5a6e33903fc7226292f2e4c5b60e` |
+| `debug-composed-read-mutations-shard-4.log` | `e1b224c280667b4a8a4f1213acd45f1d340bca2814f089f4684f3cca37f04c9f` |
+| `debug-composed-read-mutations-shard-5.log` | `6cbdd3a60991ec666b65dcd7722db9d63c95c4cb50644b226de4e4cf3e1fdf30` |
+| `debug-composed-read-mutations-shard-6.log` | `9a5790e0abd5c920700614d6210ee1b56b5601e34844599f82fb188ec5ae1fb1` |
+| `debug-composed-read-mutations-shard-7.log` | `b718f45cbd2ad9d9c787a5e02be95d928f249d00eb3d8618394c81dde4664d09` |

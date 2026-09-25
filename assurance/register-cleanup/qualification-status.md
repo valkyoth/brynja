@@ -268,6 +268,16 @@ Later diagnostic-only additions can run there without replacing captured sources
   this direct check does not yet compose the read body with the outer producer
   and reader guards. It does not qualify output bytes or register/spill cleanup.
 
+- The accelerated debug engine-read closure now executes beneath both actual
+  bulk and consuming readers in one metadata model with original storage shared
+  across all chunk calls. All 8,576 cases pass across eight retained paths,
+  including later-chunk failures and inner-to-outer cleanup/exception flow.
+  All 224 focused IR mutations reject with thirty-two controls; twenty-six
+  malformed model-boundary cases reject. This closes the previously opaque
+  engine-read handoff, not the still-opaque session/permutation/split/copy/mask/
+  volatile primitive bodies. Whole-verifier and register/spill qualification
+  remain open; no production implementation or release-gate policy changed.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -275,8 +285,8 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   composition of the now-checked accelerated engine read body beneath the
-   producer/outer reader bridges, its remaining primitive boundaries, plus
+   the remaining primitive boundaries beneath the now-composed accelerated
+   engine read and producer/outer reader bridges, plus
    whole-verifier error/unwind paths, and reconcile the optimized
    caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

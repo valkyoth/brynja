@@ -34,7 +34,7 @@ It is not automatically installed or added to facade/default graphs.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
-| Synchronous protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
+| Joined single/group protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
 | Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
 | Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |
 | Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Four identities, protected verification; qualification pending | ❌ No |
@@ -68,7 +68,12 @@ the entire stack from the caller's stack, including after recoverable panic.
 The minimum reservation is 64 KiB; callers must budget enough for their work.
 No ordinary-stack fallback is allowed. This is not a secure closure sandbox:
 captures, arbitrary heap/TLS allocations, panic hooks and registers are outside
-its storage guarantee. Concurrent protected hashing is not implemented yet.
+its storage guarantee. `ProtectedStack::run_group` runs 1..=64 borrowed callbacks
+on distinct preacquired stacks, joins every started worker on errors/unwind and
+clears stacks after termination. It never exposes a join handle or retries on an
+ordinary stack. Callbacks must finish without relying on unstarted peers; output
+transactions are the integrator's responsibility. Concurrent protected hashing
+is not implemented yet: this is its resource prerequisite, not admission.
 
 `strict-sha2` adds a library-controlled protected hash session. It preacquires
 stack/output resources and rejects unsupported targets instead of silently using

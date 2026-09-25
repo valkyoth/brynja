@@ -5,6 +5,8 @@ use core::ffi::{c_int, c_ulong, c_void};
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
 #[cfg(test)]
+mod group_tests;
+#[cfg(test)]
 mod tests;
 
 // GNU libc's public pthread_attr_t union has long alignment and the following
@@ -79,8 +81,8 @@ struct Job<F> {
 }
 
 extern "C" fn enter<F: FnOnce() + Send>(argument: *mut c_void) -> *mut c_void {
-    // SAFETY: run creates exactly one worker with this pointer to a live Job<F>.
-    // F is Send, and run neither touches nor drops it before successful join.
+    // SAFETY: run/run_group create one worker with this live, stable Job<F>.
+    // F is Send, and the caller neither accesses nor drops it before join.
     // No callback/Job reference escapes this synchronous invocation.
     let job = unsafe { &mut *argument.cast::<Job<F>>() };
     let result = catch_unwind(AssertUnwindSafe(|| {
@@ -146,6 +148,117 @@ pub(super) fn run<F: FnOnce() + Send>(mapping: &mut Mapping, work: F) -> Result<
     }
 }
 
+// Native workers mutate only their own UnsafeCell<Job>. The coordinator accesses
+// handles/attributes through shared slot references until *all* joins complete.
+// Vec capacity is finalized before any job address is passed to pthread_create.
+struct Slot<'mapping, 'work, F> {
+    mapping: &'mapping mut Mapping,
+    attributes: Attributes,
+    job: core::cell::UnsafeCell<Job<&'work mut F>>,
+    worker: core::cell::Cell<Option<c_ulong>>,
+}
+struct Group<'mapping, 'work, F> {
+    slots: Vec<Slot<'mapping, 'work, F>>,
+}
+impl<F> Group<'_, '_, F> {
+    fn join_all(&mut self) {
+        for slot in &self.slots {
+            if let Some(worker) = slot.worker.get() {
+                if join(worker) != 0 {
+                    std::process::abort();
+                }
+                slot.worker.set(None);
+                #[cfg(test)]
+                tests::joined();
+            }
+        }
+        // Only now may exclusive slot/mapping borrows be recreated. Native TLS
+        // destructors have finished; no worker can access Job or stack storage.
+        for slot in &mut self.slots {
+            slot.mapping.clear();
+        }
+    }
+}
+impl<F> Drop for Group<'_, '_, F> {
+    fn drop(&mut self) {
+        self.join_all();
+    }
+}
+
+pub(super) fn run_group<'a, F: FnMut() + Send>(
+    mappings: impl ExactSizeIterator<Item = &'a mut Mapping>,
+    work: &mut [F],
+) -> Result<(), Error> {
+    let count = mappings.len();
+    if count == 0 || count != work.len() {
+        return Err(Error::InvalidSize);
+    }
+    if count > 64 {
+        return Err(Error::ResourceLimit);
+    }
+    let mut group = Group { slots: Vec::new() };
+    group
+        .slots
+        .try_reserve_exact(count)
+        .map_err(|_| Error::ResourceLimit)?;
+    // Prepare every attribute before starting anything; failure unwinds only
+    // inactive mappings and callbacks. No vector resize/allocation after launch.
+    for (mapping, work) in mappings.zip(work) {
+        if !mapping.admitted || mapping.base.is_none() || mapping.layout.payload < 65536 {
+            return Err(Error::ThreadAttributes);
+        }
+        let attributes = Attributes::new(mapping)?;
+        group.slots.push(Slot {
+            mapping,
+            attributes,
+            job: core::cell::UnsafeCell::new(Job {
+                work: Some(work),
+                completed: false,
+                panicked: false,
+            }),
+            worker: core::cell::Cell::new(None),
+        });
+    }
+    for slot in &group.slots {
+        let mut worker: c_ulong = 0;
+        let created = call(Step::Create, || {
+            // SAFETY: all slots are stable in a preallocated vector. This pointer
+            // derives from UnsafeCell, allowing worker writes while the coordinator
+            // holds shared slots. The unique callback borrow is Send and is never
+            // read again until join. Group Drop joins on every returning/unwinding
+            // path; no user-visible handle can detach or forget that obligation.
+            unsafe {
+                pthread_create(
+                    &mut worker,
+                    &slot.attributes.0,
+                    enter::<&mut F>,
+                    slot.job.get().cast(),
+                )
+            }
+        });
+        if created != 0 {
+            return Err(Error::ThreadStart);
+        }
+        // No fallible action between successful creation and recording ownership.
+        slot.worker.set(Some(worker));
+        #[cfg(test)]
+        group_tests::launched();
+    }
+    group.join_all();
+    for slot in &group.slots {
+        // SAFETY: every started worker joined; no native access remains. Reading
+        // public completion flags does not expose or move callback/secret results.
+        let job = unsafe { &*slot.job.get() };
+        if job.panicked {
+            return Err(Error::WorkerPanicked);
+        }
+        if !job.completed {
+            return Err(Error::WorkerProtocol);
+        }
+    }
+    Ok(())
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum Step {
     Init,
@@ -155,7 +268,7 @@ enum Step {
 }
 fn call(step: Step, operation: impl FnOnce() -> c_int) -> c_int {
     #[cfg(test)]
-    if tests::fail(step) {
+    if tests::fail(step) || group_tests::fail(step) {
         return 11;
     }
     let _ = step;
@@ -164,7 +277,7 @@ fn call(step: Step, operation: impl FnOnce() -> c_int) -> c_int {
 
 fn join(worker: c_ulong) -> c_int {
     #[cfg(test)]
-    if tests::fail_join() {
+    if tests::fail_join() || group_tests::fail_join() {
         return 22;
     }
     // SAFETY: run is the sole joiner for this successfully created joinable

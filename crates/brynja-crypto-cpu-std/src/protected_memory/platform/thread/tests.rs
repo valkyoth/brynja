@@ -41,6 +41,7 @@ impl Drop for ExitProbe {
 
 #[test]
 fn public_stack_accepts_scoped_output_loan_without_moving_its_owner() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     use crate::protected_memory::{ProtectedBytes, ProtectedStack};
     let mut stack = ProtectedStack::new(256 * 1024, 1024 * 1024)?;
     let mut output = ProtectedBytes::new(32, 1024 * 1024)?;
@@ -59,6 +60,7 @@ fn public_stack_accepts_scoped_output_loan_without_moving_its_owner() -> Result<
 #[test]
 fn callback_really_runs_on_the_locked_guarded_mapping_and_then_it_is_cleared() -> Result<(), Error>
 {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut mapping = Mapping::stack(256 * 1024, 1024 * 1024)?;
     let begin = mapping.data.as_ptr() as usize;
     let end = begin
@@ -113,6 +115,7 @@ fn callback_really_runs_on_the_locked_guarded_mapping_and_then_it_is_cleared() -
 #[test]
 fn borrowed_work_and_native_thread_destructors_finish_before_clear_and_return() -> Result<(), Error>
 {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut mapping = Mapping::stack(256 * 1024, 1024 * 1024)?;
     let stage = Arc::new(AtomicUsize::new(0));
     let child = Arc::clone(&stage);
@@ -129,6 +132,7 @@ fn borrowed_work_and_native_thread_destructors_finish_before_clear_and_return() 
 
 #[test]
 fn unwind_is_caught_on_worker_and_stack_can_be_reused() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut mapping = Mapping::stack(256 * 1024, 1024 * 1024)?;
     JOINS.with(|n| n.set(0));
     assert_eq!(
@@ -154,6 +158,7 @@ fn unwind_is_caught_on_worker_and_stack_can_be_reused() -> Result<(), Error> {
 
 #[test]
 fn failed_startup_never_runs_callback_or_falls_back() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut mapping = Mapping::stack(256 * 1024, 1024 * 1024)?;
     for step in [Step::Init, Step::Stack, Step::Create] {
         FAILURE.with(|slot| slot.set(Some(step)));
@@ -178,6 +183,7 @@ fn failed_startup_never_runs_callback_or_falls_back() -> Result<(), Error> {
 
 #[test]
 fn undersized_or_over_budget_stacks_are_rejected() {
+    let _resources = crate::protected_memory::test_resource_guard();
     assert!(matches!(
         Mapping::stack(65535, 1 << 20),
         Err(Error::InvalidSize)
@@ -195,6 +201,7 @@ fn undersized_or_over_budget_stacks_are_rejected() {
 #[test]
 #[ignore = "invoked by parent in isolated child; must abort rather than return"]
 fn join_failure_child() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut mapping = Mapping::stack(256 * 1024, 1024 * 1024)?;
     JOIN_FAILURE.with(|slot| slot.set(true));
     mapping.run(|| {
@@ -206,12 +213,14 @@ fn join_failure_child() -> Result<(), Error> {
 
 #[test]
 fn unexpected_join_failure_cannot_return_with_live_borrows() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     expect_abort("join_failure_child")
 }
 
 #[test]
 #[ignore = "invoked by parent in isolated child; must abort rather than return"]
 fn destroy_failure_child() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut mapping = Mapping::stack(256 * 1024, 1024 * 1024)?;
     FAILURE.with(|slot| slot.set(Some(Step::Destroy)));
     mapping.run(|| {})
@@ -219,6 +228,7 @@ fn destroy_failure_child() -> Result<(), Error> {
 
 #[test]
 fn unexpected_attribute_destruction_failure_never_reports_success() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     expect_abort("destroy_failure_child")
 }
 

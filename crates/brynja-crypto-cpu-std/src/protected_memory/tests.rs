@@ -38,6 +38,12 @@ fn sizes_are_checked_before_any_allocation() -> Result<(), Error> {
 )))]
 #[test]
 fn unsupported_builds_never_mint_protected_storage() {
+    let mut stacks: [ProtectedStack; 0] = [];
+    let mut jobs: [fn(); 0] = [];
+    assert_eq!(
+        ProtectedStack::run_group(&mut stacks, &mut jobs),
+        Err(Error::Unsupported)
+    );
     for bytes in [0, 1, 4096, usize::MAX] {
         assert!(matches!(
             ProtectedBytes::new(bytes, usize::MAX),
@@ -52,6 +58,7 @@ fn unsupported_builds_never_mint_protected_storage() {
 
 #[test]
 fn protected_owner_never_implicitly_formats_data() {
+    let _resources = super::test_resource_guard();
     // Compile-fail doctests check the five forbidden traits. Keep a positive
     // type reference here so typos/removal cannot masquerade as their success.
     let _: fn(usize, usize) -> Result<ProtectedBytes, Error> = ProtectedBytes::new;

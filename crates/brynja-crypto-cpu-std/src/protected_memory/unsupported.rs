@@ -10,6 +10,12 @@ impl Mapping {
     pub(super) fn run<F: FnOnce() + Send>(&mut self, _: F) -> Result<(), Error> {
         match *self {}
     }
+    pub(super) fn run_group<'a, F: FnMut() + Send>(
+        _: impl ExactSizeIterator<Item = &'a mut Self>,
+        _: &mut [F],
+    ) -> Result<(), Error> {
+        Err(Error::Unsupported)
+    }
     pub(super) fn new(_: usize, _: usize) -> Result<Self, Error> {
         Err(Error::Unsupported)
     }

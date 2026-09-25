@@ -7,6 +7,7 @@ use sys::{
 
 #[test]
 fn each_acquisition_failure_rolls_back_without_exposing_bytes() {
+    let _resources = crate::protected_memory::test_resource_guard();
     for (step, error, calls) in [
         (Step::Map, Error::Mapping, vec![Step::Map]),
         (
@@ -47,6 +48,7 @@ fn each_acquisition_failure_rolls_back_without_exposing_bytes() {
 
 #[test]
 fn native_mapping_is_guarded_resident_dump_excluded_and_not_inherited() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     hooks::reset(None);
     let mut mapping = Mapping::new(17, 1 << 20)?;
     assert_eq!(mapping.bytes(), &[0; 17]);
@@ -106,6 +108,7 @@ fn native_mapping_is_guarded_resident_dump_excluded_and_not_inherited() -> Resul
 
 #[test]
 fn explicit_release_failure_retains_cleared_locked_owner_for_retry() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     hooks::reset(None);
     let mut bytes = ProtectedBytes::new(31, 1 << 20)?;
     bytes.as_bytes_mut().fill(0xda);
@@ -132,6 +135,7 @@ fn explicit_release_failure_retains_cleared_locked_owner_for_retry() -> Result<(
 
 #[test]
 fn cleanup_covers_padding_and_runs_during_unwind() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     hooks::reset(None);
     let mut mapping = Mapping::new(1, 1 << 20)?;
     // Test-only expansion to dirty rounding padding, which the public API never
@@ -157,6 +161,7 @@ fn cleanup_covers_padding_and_runs_during_unwind() -> Result<(), Error> {
 
 #[test]
 fn oversized_requests_do_not_call_the_os() {
+    let _resources = crate::protected_memory::test_resource_guard();
     hooks::reset(None);
     assert!(matches!(
         ProtectedBytes::new(4096, 1),
@@ -172,6 +177,7 @@ fn oversized_requests_do_not_call_the_os() {
 #[test]
 #[ignore = "invoked in isolated child with zero residency limit by its parent test"]
 fn zero_residency_limit_child() {
+    let _resources = crate::protected_memory::test_resource_guard();
     assert!(matches!(
         ProtectedBytes::new(4096, 1 << 20),
         Err(Error::Lock)
@@ -180,6 +186,7 @@ fn zero_residency_limit_child() {
 
 #[test]
 fn actual_zero_residency_limit_fails_closed_in_a_child() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     let binary = std::env::current_exe().map_err(|_| Error::Mapping)?;
     let child = std::process::Command::new("bash")
         .args([

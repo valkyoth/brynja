@@ -939,31 +939,31 @@ sha256 = "db9a59d97c9ffbf81b0572a8e9cce770dbc89a409c22db4c6d85fb65f3f92ba8"
 package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/mod.rs"
 status = "opt-in-protected-storage-resource"
-sha256 = "ac25f96cef7b95b250b8d0a63561f9554f127ae5b379cd9420317d6bad3bdbc5"
+sha256 = "e0eaf117646d9020d395605c5e57bdff47c7e856ce653f081d0eda6a21f17ac2"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/unsupported.rs"
 status = "protected-resource-unsupported-rejection"
-sha256 = "2fff66b9579e666aeddfaf623f7dbc11108dc27ede8d7759939d4e2693c393cb"
+sha256 = "128bc7fac023be0d65b9ddb45b6ba4a8c4419a20dd543b4dab5b2de85d6e0eb7"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/tests.rs"
 status = "protected-resource-contract-tests"
-sha256 = "9be8ff8eb1e097f34e33c975a33c3f84b8c8abfc327c84086418426b01930ae9"
+sha256 = "4cf43839520902ca34c049279a62bfdef50f497ab0529635f7984919d29a6591"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/platform.rs"
 status = "linux-protected-mapping-owner"
-sha256 = "a89a4ad86963e0e36e730bf3e07248a683dc535aeec20f0765f284fa82890e60"
+sha256 = "5f4f0e14d6f3cae15c0cdec36004c0c3deddebaa9efe55ad426e867fb4f1cc71"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/stack.rs"
 status = "synchronous-protected-stack-owner"
-sha256 = "b1c806ca76d4eafec20539e22ca350c5f3fa2a6d1d2dc4ecb6cb0015b1292eb7"
+sha256 = "a435d0f75e252218f91d3a61f5c10ff1d7f82945fe30d8a4dae730b7584dcf20"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -975,19 +975,19 @@ sha256 = "b67434aab46e5b719d11cf963ced335a037e605aa84f2e953220fafdd29ad4b4"
 package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/platform/tests.rs"
 status = "linux-mapping-lifecycle-tests"
-sha256 = "fc5c651100e9f57808fce0180193fe4fb0eed85446974e9985c5016d2e38b521"
+sha256 = "0fb3237ce1ef7477108290dd53dd9a1d9fa0619676b86fff01e5f42829f1be5f"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/platform/thread.rs"
 status = "linux-scoped-pthread-owner"
-sha256 = "547b248aacb3ebe2b6ca8be6953f77ac04d5bc23e341477fe1dc70e386884227"
+sha256 = "ad5929a5b0f283aa57ef2b7c5801fb86e5ede6bbdee48f3d1b72cb8549797ed9"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/platform/thread/tests.rs"
 status = "linux-protected-stack-lifecycle-tests"
-sha256 = "495115cdfdff7f3279ecdfebabaf79e135dd565f87ced3d5c56f2a376f075957"
+sha256 = "7bf19cb5a3b393f49b9097bfb3a6b6cd5402b41245ea3673b5f33c79a7179352"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1011,7 +1011,7 @@ sha256 = "acb728e7868814679059c5405e89c4c84fe966535506dd6a8cb3107da2072090"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_sha2/tests.rs"
 status = "protected-sha2-integration-tests"
-sha256 = "542dd92fabd7284a18e7fddc8e0b7c25089f94dea436d6eca20117f2901cc519"
+sha256 = "f305527fd04badb15e42555ad2e18c01b9822e343222184a0ebb073aad608137"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1041,7 +1041,7 @@ sha256 = "2da633f0f56665c6ff58cfbef09e84e321cf1ac369219fe22b171acda50721de"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_sha3/tests/native.rs"
 status = "protected-sha3-native-integration-tests"
-sha256 = "187b73c29cf1542b5dcde958c5cbad009ba6bec90a94f7d2e5f81fade31d8b15"
+sha256 = "f53d36701983d2c7b887414412a971dfb5eb61899ca6dce35d64a29af2a9561f"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1071,7 +1071,7 @@ sha256 = "8e184b045ab4c5103bc9bd0f44324029a434ff501ef80e19d374a945939411a4"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/tests/native.rs"
 status = "protected-kmac-native-integration-tests"
-sha256 = "fa9ad50752d470c32a0037f988a7d6ef08fa587b1c2e556a331448cd5099b5af"
+sha256 = "42a4277f89f6129fd802462446bc0b8e5ac0ba0fe83f97b413c5d3e0674e93f8"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1101,4 +1101,10 @@ sha256 = "4118d94fb855e76868e5465f5b8406e62cd1c52ee03ee2854de0753d68dcf708"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_tuplehash/tests/native.rs"
 status = "protected-tuplehash-native-integration-tests"
-sha256 = "285cfa47144866c72dde68ab16834987c2ea825a7e4eca1a6f7a92e2c5b6c67c"
+sha256 = "b273f6a21aedf7980a956ccd2d7deab207c950ef5158da66f2be36305cc2bea3"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/platform/thread/group_tests.rs"
+status = "linux-protected-stack-group-lifecycle-tests"
+sha256 = "aca6cc5a934a41ae309c4ea7c0de8e7eef0c8ee9832a88d025c232d600319420"

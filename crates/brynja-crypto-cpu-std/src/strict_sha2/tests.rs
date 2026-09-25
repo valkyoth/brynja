@@ -90,6 +90,7 @@ fn limits() -> Limits {
 
 #[test]
 fn metadata_and_request_arithmetic_are_bounded_without_touching_input() {
+    let _resources = crate::protected_memory::test_resource_guard();
     assert_eq!(Algorithm::Sha256.output_bytes(), 32);
     assert_eq!(Algorithm::Sha512.output_bits(), 512);
     let mut bound = limits();
@@ -138,6 +139,7 @@ fn metadata_and_request_arithmetic_are_bounded_without_touching_input() {
 )))]
 #[test]
 fn unsupported_targets_and_models_cannot_construct_a_session() {
+    let _resources = crate::protected_memory::test_resource_guard();
     assert!(matches!(
         Session::new(Algorithm::Sha256, limits()),
         Err(Error::Resource(crate::protected_memory::Error::Unsupported))
@@ -189,6 +191,7 @@ mod native {
 
     #[test]
     fn all_named_identities_match_padding_chunks_and_bit_tails() -> Result<(), Error> {
+        let _resources = crate::protected_memory::test_resource_guard();
         for algorithm in [
             Algorithm::Sha224,
             Algorithm::Sha256,
@@ -230,6 +233,7 @@ mod native {
 
     #[test]
     fn all_510_general_parameters_keep_exact_identity_and_masking() -> Result<(), Error> {
+        let _resources = crate::protected_memory::test_resource_guard();
         for t in 1..512 {
             let Ok(parameter) = Sha512TBits::new(t) else {
                 continue;
@@ -247,6 +251,7 @@ mod native {
 
     #[test]
     fn failures_clear_forgotten_outputs_and_resources_remain_reusable() -> Result<(), Error> {
+        let _resources = crate::protected_memory::test_resource_guard();
         let mut bound = limits();
         bound.max_message_bits = 24;
         bound.max_chunks = 1;
@@ -281,6 +286,7 @@ mod native {
 
     #[test]
     fn public_release_is_explicit_exact_width_and_clears_secret() -> Result<(), Error> {
+        let _resources = crate::protected_memory::test_resource_guard();
         let mut session = Session::new(Algorithm::Sha256, limits())?;
         let mut wrong = [0xa5; 31];
         assert_eq!(
@@ -307,6 +313,7 @@ mod native {
 
     #[test]
     fn output_protection_and_resource_failures_are_real() -> Result<(), Error> {
+        let _resources = crate::protected_memory::test_resource_guard();
         for algorithm in [
             Algorithm::Sha224,
             Algorithm::Sha256,
@@ -368,6 +375,7 @@ mod native {
 
     #[test]
     fn cancellation_at_each_boundary_and_post_write_panic_clear_output() -> Result<(), Error> {
+        let _resources = crate::protected_memory::test_resource_guard();
         let input = vec![0x98; 8193];
         for algorithm in [
             Algorithm::Sha256,

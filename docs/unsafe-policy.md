@@ -67,8 +67,19 @@ Its scoped Send callback is borrowed exclusively until successful native join;
 unexpected join failure aborts rather than returning with live borrows. No join
 handle escapes. The guarded, locked stack is cleared from another stack only
 after native termination, including TLS destructors. The three modules carry
-sixteen local safety proofs. GNU attribute sizes/alignment are target-specific;
+eighteen local safety proofs. GNU attribute sizes/alignment are target-specific;
 other libc ABIs reject rather than reusing their layout.
+
+The bounded group path prepares every native attribute and a fixed-capacity
+vector of public job metadata before launch. Jobs contain exclusive callback
+borrows, not secret thread results. Each job is in an UnsafeCell; shared slot
+references cannot invalidate worker writes. The vector never grows after job
+addresses escape to pthread_create. An internal RAII owner records each native
+handle immediately after successful launch, joins all handles on success/error
+or coordinator unwind, and only then recreates exclusive slot/mapping borrows
+for clearing. Worker panic payloads are destroyed on their worker. No manual
+Send/Sync implementation or new foreign symbol is introduced. Callbacks/output
+storage retain the resource API's separate caller obligations.
 
 Exclusive borrowed slices cannot resize or transfer mapping ownership. Drop
 uses the core volatile clearer on the whole writable payload, including padding,

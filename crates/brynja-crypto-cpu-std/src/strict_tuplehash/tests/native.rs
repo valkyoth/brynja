@@ -77,6 +77,7 @@ fn cleared(session: &Session) {
 
 #[test]
 fn tuple_boundaries_are_distinct_while_item_chunking_is_equivalent() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(256) {
         let mut session = Session::new(algorithm, limits())?;
         let variants: [&[Item<'_>]; 6] = [
@@ -112,6 +113,7 @@ fn tuple_boundaries_are_distinct_while_item_chunking_is_equivalent() -> Result<(
 
 #[test]
 fn all_identities_bits_rates_and_streamed_items_match_portable() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(257) {
         let mut session = Session::new(algorithm, limits())?;
         for length in [0usize, 1, 31, 32, 33, 135, 136, 137, 167, 168, 169, 4097] {
@@ -159,6 +161,7 @@ fn all_identities_bits_rates_and_streamed_items_match_portable() -> Result<(), E
 
 #[test]
 fn custom_bits_and_empty_partial_multifragment_output_match_portable() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for bits in [
         0usize, 1, 7, 8, 9, 1087, 1088, 1344, 32767, 32768, 32769, 65539,
     ] {
@@ -197,6 +200,7 @@ fn custom_bits_and_empty_partial_multifragment_output_match_portable() -> Result
 
 #[test]
 fn rejection_clears_forgotten_output_and_does_not_poison_session() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut bound = limits();
     bound.max_items = 2;
     bound.max_chunks = 1;
@@ -264,6 +268,7 @@ fn rejection_clears_forgotten_output_and_does_not_poison_session() -> Result<(),
 
 #[test]
 fn cancellation_unwind_and_wrong_item_length_cannot_produce_output() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(65539) {
         let mut session = Session::new(algorithm, limits())?;
         let items = [Item {
@@ -303,6 +308,7 @@ fn cancellation_unwind_and_wrong_item_length_cannot_produce_output() -> Result<(
 
 #[test]
 fn resources_are_protected_and_public_release_is_explicit() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(257) {
         let mut session = Session::new(algorithm, limits())?;
         session.fault = Fault::VerifyStorage;

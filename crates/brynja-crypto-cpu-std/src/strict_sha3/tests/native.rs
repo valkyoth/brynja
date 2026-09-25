@@ -77,6 +77,7 @@ fn identities(bits: usize) -> [Algorithm; 8] {
 
 #[test]
 fn all_identities_and_bit_tails_match_portable_across_rate_boundaries() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(1377) {
         let mut session = Session::new(algorithm, limits())?;
         for length in [
@@ -116,6 +117,7 @@ fn all_identities_and_bit_tails_match_portable_across_rate_boundaries() -> Resul
 
 #[test]
 fn xof_widths_and_customized_bit_prefixes_match_portable() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for bits in [
         0usize, 1, 7, 8, 9, 1087, 1088, 1344, 32767, 32768, 32769, 65539,
     ] {
@@ -155,6 +157,7 @@ fn xof_widths_and_customized_bit_prefixes_match_portable() -> Result<(), Error> 
 
 #[test]
 fn prefix_padding_boundaries_match_portable() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in [Algorithm::Cshake128(1601), Algorithm::Cshake256(1601)] {
         let mut session = Session::new(algorithm, limits())?;
         for length in [1usize, 127, 128, 129, 135, 136, 137, 167, 168, 169, 256] {
@@ -191,6 +194,7 @@ fn prefix_padding_boundaries_match_portable() -> Result<(), Error> {
 
 #[test]
 fn errors_clear_forgotten_output_and_allow_reuse() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut bound = limits();
     bound.max_message_bits = 24;
     bound.max_chunks = 1;
@@ -234,6 +238,7 @@ fn errors_clear_forgotten_output_and_allow_reuse() -> Result<(), Error> {
 
 #[test]
 fn cancel_and_post_write_unwind_clear_every_output_fragment() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in [
         Algorithm::Sha3_256,
         Algorithm::Shake256(65539),
@@ -279,6 +284,7 @@ fn cancel_and_post_write_unwind_clear_every_output_fragment() -> Result<(), Erro
 
 #[test]
 fn real_protected_storage_exact_release_and_fail_closed_construction() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(65539) {
         let mut session = Session::new(algorithm, limits())?;
         session.fault = Fault::VerifyStorage;

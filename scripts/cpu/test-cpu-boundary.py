@@ -179,7 +179,7 @@ def test() -> None:
             require_rejection(root, expected)
             reset(root)
 
-        for relative in ('src/protected_memory/platform/thread.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_tuplehash/worker.rs'):
+        for relative in ('src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_tuplehash/worker.rs'):
             source = root / 'crates' / policy.DETECTOR / relative
             source.write_text(source.read_text() + '\n// unreviewed resource drift\n')
             require_rejection(root, 'source changed')
@@ -225,4 +225,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("CPU boundary rejects twenty-six existing and seventeen protected-resource package/source regressions")
+    print("CPU boundary rejects twenty-six existing and eighteen protected-resource package/source regressions")

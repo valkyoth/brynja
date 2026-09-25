@@ -2,6 +2,10 @@
 
 ## 0.24.49 development
 
+- Add bounded concurrent protected-stack groups with prelaunch resource setup,
+  every-started-worker joining, clear-after-join and partial-launch/unwind tests.
+  This is a ParallelHash resource prerequisite; strict hash integration and
+  platform qualification remain pending. No release-gate policy changed.
 - Add a default-off protected scalar MD5 session in the isolated legacy hosted
   adapter. Retain checked u128 accounting and low-64-bit RFC padding, protected
   worker/output storage and cleanup on errors, cancellation, unwind and reuse.

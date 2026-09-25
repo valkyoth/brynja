@@ -76,6 +76,7 @@ fn cleared(session: &Session) {
 
 #[test]
 fn all_identities_rate_boundaries_and_bit_inputs_match_portable() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(257) {
         let mut session = Session::new(algorithm, limits())?;
         for length in [0usize, 1, 135, 136, 137, 167, 168, 169, 4097] {
@@ -120,6 +121,7 @@ fn all_identities_rate_boundaries_and_bit_inputs_match_portable() -> Result<(), 
 
 #[test]
 fn bit_keys_prefixes_and_multifragment_outputs_match_portable() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(65539) {
         let mut session = Session::new(algorithm, limits())?;
         for key_len in [33usize, 135, 136, 167, 168, 169] {
@@ -186,6 +188,7 @@ fn bit_keys_prefixes_and_multifragment_outputs_match_portable() -> Result<(), Er
 
 #[test]
 fn verification_is_exact_constant_work_and_clears_output() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(65539) {
         let mut session = Session::new(algorithm, limits())?;
         let tag = session
@@ -256,6 +259,7 @@ fn verification_is_exact_constant_work_and_clears_output() -> Result<(), Error> 
 
 #[test]
 fn invalid_requests_clear_previous_forgotten_loans_and_allow_reuse() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     let mut bound = limits();
     bound.max_chunks = 1;
     bound.max_message_bits = 24;
@@ -305,6 +309,7 @@ fn invalid_requests_clear_previous_forgotten_loans_and_allow_reuse() -> Result<(
 
 #[test]
 fn cancellation_unwind_and_verification_cleanup_cover_all_fragments() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(65539) {
         let mut session = Session::new(algorithm, limits())?;
         let tag = session
@@ -346,6 +351,7 @@ fn cancellation_unwind_and_verification_cleanup_cover_all_fragments() -> Result<
 
 #[test]
 fn actual_protection_and_explicit_public_release() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(257) {
         let mut session = Session::new(algorithm, limits())?;
         session.fault = Fault::VerifyStorage;
@@ -387,6 +393,7 @@ fn actual_protection_and_explicit_public_release() -> Result<(), Error> {
 
 #[test]
 fn production_key_strength_is_not_weakened_by_conformance_features() -> Result<(), Error> {
+    let _resources = crate::protected_memory::test_resource_guard();
     for algorithm in identities(256) {
         let mut session = Session::new(algorithm, limits())?;
         for bits in [0usize, 127, 128, 129, 255, 256, 257] {

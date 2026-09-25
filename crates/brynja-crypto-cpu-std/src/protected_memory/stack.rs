@@ -95,6 +95,52 @@ impl ProtectedStack {
         self.mapping.run(work)
     }
 
+    /// Runs one callback per stack concurrently, joins all, then clears all stacks.
+    ///
+    /// Requires 1..=64 stacks and exactly as many callbacks. All native attributes
+    /// and bounded bookkeeping are prepared before the first launch. A failed
+    /// launch stops further launches but waits for every started callback; worker
+    /// panic or coordinator unwind also joins before releasing any borrowed work.
+    /// No callback is retried or moved to an ordinary stack. There is no timeout:
+    /// callbacks must terminate without depending on unstarted peers.
+    ///
+    /// Bookkeeping contains callback borrows and public status only. Captures,
+    /// callback allocations and output protection remain the caller's obligations,
+    /// exactly as for `run`. Stack protection is not a secure-closure sandbox.
+    /// A failed group can have partially written caller output; this resource
+    /// does not know or clear those destinations. Strict executors must own their
+    /// output transaction and clear it after this operation has joined workers.
+    /// ```no_run
+    /// use brynja_crypto_cpu_std::protected_memory::{Error, ProtectedBytes, ProtectedStack};
+    /// let mut stacks = [ProtectedStack::new(262144, 1048576)?,
+    ///                   ProtectedStack::new(262144, 1048576)?];
+    /// let mut output = ProtectedBytes::new(64, 65536)?;
+    /// let mut jobs: Vec<_> = output.as_bytes_mut().chunks_mut(32)
+    ///     .map(|slot| move || slot.fill(0x42)).collect();
+    /// ProtectedStack::run_group(&mut stacks, &mut jobs)?;
+    /// # Ok::<(), Error>(())
+    /// ```
+    /// Non-Send captures are rejected:
+    /// ```compile_fail
+    /// use brynja_crypto_cpu_std::protected_memory::ProtectedStack;
+    /// let mut stacks = [ProtectedStack::new(262144, 1048576).unwrap()];
+    /// let local = std::rc::Rc::new(1);
+    /// let mut jobs = [move || { std::hint::black_box(&local); }];
+    /// ProtectedStack::run_group(&mut stacks, &mut jobs).unwrap();
+    /// ```
+    /// Output remains exclusively borrowed through the submitted callbacks:
+    /// ```compile_fail
+    /// use brynja_crypto_cpu_std::protected_memory::ProtectedStack;
+    /// let mut stacks = [ProtectedStack::new(262144, 1048576).unwrap()];
+    /// let mut output = [0u8; 32];
+    /// let mut jobs = [|| output.fill(7)];
+    /// output.fill(9);
+    /// ProtectedStack::run_group(&mut stacks, &mut jobs).unwrap();
+    /// ```
+    pub fn run_group<F: FnMut() + Send>(stacks: &mut [Self], work: &mut [F]) -> Result<(), Error> {
+        platform::Mapping::run_group(stacks.iter_mut().map(|stack| &mut stack.mapping), work)
+    }
+
     /// Releases the inactive, cleared stack; retains the owner on release error.
     pub fn close(mut self) -> Result<(), (Error, Self)> {
         match self.mapping.close() {

@@ -1,7 +1,7 @@
 //! Opt-in, bounded, resident and core-dump-excluded byte storage.
 //! This resource is NOT strict execution admission. In particular, borrowing
 //! these bytes does not protect the caller's stack, registers or other copies.
-//! [`ProtectedStack`] separately provides synchronous protected-stack execution.
+//! [`ProtectedStack`] separately provides joined single/group protected-stack execution.
 //! Strict hashing admission and parallel protected scheduling are not available.
 //!
 //! The initial adapter supports Linux GNU on x86-64 and little-endian AArch64.
@@ -52,6 +52,18 @@ use unsupported as platform;
 
 #[cfg(test)]
 mod tests;
+
+// Native resource tests share the process's finite RLIMIT_MEMLOCK. Serialize
+// test cases, not their workers, so --all-features/high-core hosts do not turn
+// legitimate residency exhaustion into unrelated family-test failures.
+#[cfg(test)]
+pub(crate) fn test_resource_guard() -> std::sync::MutexGuard<'static, ()> {
+    static TEST_RESOURCES: std::sync::Mutex<()> = std::sync::Mutex::new(());
+    match TEST_RESOURCES.lock() {
+        Ok(guard) => guard,
+        Err(poisoned) => poisoned.into_inner(),
+    }
+}
 
 /// Public resource failures, never containing secret bytes.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

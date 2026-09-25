@@ -15,7 +15,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "6aa1f8d93496ac6b797a1972c24c722f02366e44893baed80adc60bfc71311e0"
+EXPECTED_POLICY_SHA256 = "15ccb8cd70a767428e5f92339f377e0b405bbeadf2f763e61bb4c692117c11b6"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -144,6 +144,7 @@ SOURCE_STATUS = {
     (DETECTOR, "src/protected_memory/platform/tests.rs"): "linux-mapping-lifecycle-tests",
     (DETECTOR, "src/protected_memory/platform/thread.rs"): "linux-scoped-pthread-owner",
     (DETECTOR, "src/protected_memory/platform/thread/tests.rs"): "linux-protected-stack-lifecycle-tests",
+    (DETECTOR, "src/protected_memory/platform/thread/group_tests.rs"): "linux-protected-stack-group-lifecycle-tests",
     (DETECTOR, "src/strict_sha2/mod.rs"): "protected-scalar-sha2-session-development",
     (DETECTOR, "src/strict_sha2/types.rs"): "protected-sha2-public-identity-and-bounds",
     (DETECTOR, "src/strict_sha2/worker.rs"): "protected-sha2-scoped-worker",

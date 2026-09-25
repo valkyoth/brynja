@@ -34,6 +34,13 @@ impl Mapping {
         thread::run(self, work)
     }
 
+    pub(super) fn run_group<'a, F: FnMut() + Send>(
+        mappings: impl ExactSizeIterator<Item = &'a mut Self>,
+        work: &mut [F],
+    ) -> Result<(), Error> {
+        thread::run_group(mappings, work)
+    }
+
     pub(super) fn new(bytes: usize, max: usize) -> Result<Self, Error> {
         let page = usize::try_from(sys::page_size()).map_err(|_| Error::InvalidSize)?;
         let layout = Layout::new(bytes, max, page)?;

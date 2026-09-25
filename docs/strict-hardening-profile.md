@@ -55,7 +55,27 @@ inputs originate in caller storage; arbitrary heap allocations, dynamic TLS,
 signal alternate stacks, panic hooks and register copies are not covered. Do not
 externally cancel the native thread, fork, or revoke its mapping. Strict hash
 integration must constrain these paths rather than treating this generic callback
-as cryptographic admission. Concurrent protected worker pools remain pending.
+as cryptographic admission. Persistent protected worker pools remain pending.
+
+`ProtectedStack::run_group` now provides bounded concurrent resource execution:
+one borrowed Send callback per preacquired stack, with 1..=64 jobs. All public
+bookkeeping and native attributes are prepared before launch. Stable per-job
+cells retain callback borrows while native threads write completion status.
+Partial startup failure stops further launches, joins every started thread, then
+clears stacks. The same owner joins during coordinator unwind; callback unwind
+is caught on its worker. Unexpected native join failure aborts, never releases
+live borrowed work. No caller-owned join handle can detach or forget the join.
+
+Only job pointers/status/handles occupy ordinary bookkeeping; callers remain
+responsible for callback captures and outputs. A failed group can partially
+write destinations. Strict ParallelHash must retain a separate output/CV cleanup
+transaction and protect its root processing; this resource alone is not that
+integration. Callbacks must terminate without waiting for peers that may never
+start after a launch failure. No timeout, fallback or forced cancellation is
+provided. Native x86 author tests witness actual overlapping workers, distinct
+protected stack addresses and mapping flags, TLS completion, every four-worker
+launch failure position, worker/coordinator unwind and reuse. Native Arm and
+independent qualification remain pending.
 
 The GNU pthread adapter uses the caller-stack contract of
 [pthread_attr_setstack](https://man7.org/linux/man-pages/man3/pthread_attr_setstack.3.html)

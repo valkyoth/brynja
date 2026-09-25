@@ -124,8 +124,37 @@ def local_abi_definitions() -> None:
             reject(root, 'foreign ABI')
 
 
+def os_memory_imports() -> None:
+    repository = Path(__file__).resolve().parents[2]
+    source = (repository / first_party_rust_crypto.OS_MEMORY_ADAPTER).read_text()
+    with tempfile.TemporaryDirectory(prefix='brynja-os-memory-') as temporary:
+        root = Path(temporary)
+        fixture(root)
+        destination = root / first_party_rust_crypto.OS_MEMORY_ADAPTER
+        destination.parent.mkdir(parents=True)
+        destination.write_text(source)
+        first_party_rust_crypto.validate(root)
+        for mutated, message in (
+            (source.replace('fn mlock(', 'fn foreign_crypto('), 'OS memory ABI'),
+            (source.replace('offset: i64', 'offset: i32'), 'OS memory ABI'),
+            (source.replace('safe fn getpagesize()', 'safe fn crypto()'), 'OS memory ABI'),
+            (source + '\nunsafe extern "C" { fn crypto(); }', 'foreign ABI'),
+            (source + '\nunsafe extern "system" { fn crypto(); }', 'foreign ABI'),
+            (source + '\n#[link(name="crypto")] mod native {}', 'native link'),
+            (source + '\n' + first_party_rust_crypto.OS_MEMORY_ABI, 'OS memory ABI'),
+        ):
+            assert mutated != source
+            destination.write_text(mutated)
+            reject(root, message)
+        destination.write_text(source)
+        destination.with_name('unreviewed.rs').write_text(source)
+        reject(root, 'foreign ABI')
+
+
 if __name__ == "__main__":
     test()
     local_abi_definitions()
+    os_memory_imports()
     print("first-party Rust cryptography policy rejects nine native-code regressions")
     print(f"local Rust ABI definitions reject {len(first_party_rust_crypto.LOCAL_C_ABI) * 5} foreign import/link/relocation regressions")
+    print('OS memory adapter rejects eight import/signature/link/relocation regressions')

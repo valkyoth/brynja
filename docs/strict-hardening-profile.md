@@ -1,9 +1,37 @@
 # Strict hardening profile — implementation contract
 
-Status: owner-approved design and implementation work, **not implemented or
-available yet**. Added after the two-testers' follow-up on v0.24.49. The current
+Status: owner-approved implementation in progress; the protected-byte resource
+is implemented for initial Linux tests, but **strict hashing and protected-stack
+execution are not available yet**. Added after the two-testers' follow-up on v0.24.49. The current
 portable APIs remain available with their existing owned-memory guarantees.
 This document does not admit an execution path or change any release gate.
+
+## Implemented resource foundation (not strict admission)
+
+The default-off `protected-memory` feature of `brynja-crypto-cpu-std` exposes
+`protected_memory::ProtectedBytes`. This is a usable byte-storage resource,
+not the final strict session/token API: it cannot authorize a hash or move
+ordinary caller execution onto a protected stack. `new(bytes, max_mapping_bytes)`
+bounds payload rounding plus two guard pages, returns zero-initialized storage
+only after all OS steps succeed, and never falls back. Explicit `close` returns
+the cleared owner on release failure so the caller can retry. Drop clears before
+release. The owner is not Send/Sync/Copy/Clone/Debug.
+
+The initial adapter is Linux GNU 64-bit on x86-64/little-endian AArch64.
+Other builds, including Miri/Kani models, reject with `Unsupported`. Architecture
+support here means an implemented OS adapter, **not qualified strict execution**.
+Native x86 checks exercise residency/dump/fork flags and guards, rollback,
+zero-residency-limit rejection, padded cleanup and unwind. Native Arm protection
+evidence and independent review are still outstanding. macOS/Windows must not
+inherit Linux's claims.
+
+The implementation uses [mlock](https://man7.org/linux/man-pages/man2/mlock.2.html)
+for residency and [madvise](https://man7.org/linux/man-pages/man2/madvise.2.html)
+with DONTDUMP/DONTFORK for exclusion. Callers must not fork while owners are
+live or externally revoke protections. Unmapping releases the lock after the
+full writable mapping is cleared; there is no separate unlocked interval.
+These per-region controls do not protect another stack, TLS, other allocations,
+privileged snapshots or hibernation. The remaining steps below are still required.
 
 ## Scope and admission
 

@@ -436,7 +436,7 @@ sha256 = "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f"
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "808b7b0c21ca552630f8e29b01872458a27849537cdfeb409d000f1bdf2cd87e"
+sha256 = "d005d49523af115893162070bf0b94c4d014ac7a4b002c82e8bc4f3d723fff80"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

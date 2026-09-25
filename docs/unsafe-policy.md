@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: eighty exact source-hash-bound exceptions inventoried; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: eighty-two exact source-hash-bound exceptions inventoried, including two development OS-memory modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only eighty exact modules: the private core volatile clearer and
+Rust in only eighty-two exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -17,7 +17,8 @@ bridge; and the corresponding ordinary SHA-512-family batch platform import,
 AVX2/NEON kernels and hosted bridge; plus the independent-state Keccak batch
 platform import, AVX2/NEON kernels and hosted bridge; and the distinct hardened
 SHA-224/256, SHA-512-family and Keccak batch platform imports and AVX2/NEON kernels,
-with three distinct hosted hardened-batch platform imports. These modules use fixed-size
+with three distinct hosted hardened-batch platform imports; and the two bounded
+OS-memory modules described below. The cryptographic modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
 instruction/import boundaries and the reviewed private memory primitives, never
@@ -36,6 +37,45 @@ safe alternative analysis, isolated module or crate, documented invariants,
 Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
+
+## v0.24.49 protected-storage development exception
+
+The owner approved implementation of a stricter opt-in profile for the new
+unsupported-target and pageable-storage findings. Two private modules under
+`brynja-crypto-cpu-std/src/protected_memory`, `platform.rs` and `platform/sys.rs`,
+implement its first resource layer. They do **not** admit strict cryptographic
+execution or protect worker stacks. Independent review and native AArch64
+qualification remain pending.
+
+Necessity: safe Vec/Box storage cannot acquire OS residency and per-mapping dump
+exclusion or create inaccessible guard pages. Locking an arbitrary allocator
+page can affect unrelated allocations. The alternative is to reject protected
+storage entirely; silently using ordinary heap is not allowed. This exception
+uses a fresh bounded anonymous mapping with two guard pages. Page geometry is
+checked before allocation. Dump and fork exclusion precede access and locking;
+no caller can initialize secret bytes until every acquisition succeeds.
+
+Only six GNU/Linux OS symbols may be imported: getpagesize, mmap, mprotect,
+madvise, mlock and munmap. Their exact declarations and location are checked by
+the existing first-party policy; extra crypto imports, links, altered ABI types
+or relocation to other modules reject. No foreign cryptographic implementation
+or third-party dependency is introduced. The source-hash unsafe inventory binds
+all pointer conversions, fixed ownership, geometry and ten local safety proofs.
+
+Exclusive borrowed slices cannot resize or transfer mapping ownership. Drop
+uses the core volatile clearer on the whole writable payload, including padding,
+before munmap releases residency. There is no separate unlock-before-free
+interval. Explicit close retains the cleared owner if unmap fails; a refused
+Drop release leaks cleared storage. A forgotten whole owner still leaks its
+mapping, as with other Rust resources; borrowed views do not own cleanup.
+
+Linux tests observe real guard/protection/residency flags, force a zero memory-
+lock limit in a child, inject every acquisition/release failure and check cleanup
+ordering and recoverable unwind. Unsupported OS/ABI/architecture and model builds
+have an uninhabited adapter, not a simulated success. Platform settings must not
+revoke protections; fork while owners are live is unsupported. This does not
+cover privileged reads, snapshots, hibernation, active execution stacks or all
+registers. See the [strict profile contract](strict-hardening-profile.md).
 
 ## v0.24.49 Dedicated x86 SHA-512 development exception
 

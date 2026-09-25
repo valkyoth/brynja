@@ -5,6 +5,9 @@
 //! acceleration modes. It is not used by the `brynja` facade, default feature
 //! graph, protocol engines, or future FIPS module.
 
+#[cfg(feature = "protected-memory")]
+pub mod protected_memory;
+
 #[cfg(feature = "keccak-hardened-batch")]
 pub mod keccak_hardened_batch;
 #[cfg(feature = "sha256-hardened-batch")]

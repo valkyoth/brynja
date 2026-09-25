@@ -8,7 +8,7 @@ import unsafe_policy
 
 def main() -> int:
     unsafe_policy.validate(Path(__file__).resolve().parents[2])
-    print("unsafe policy confines core/hash-interface secret-memory primitives and SHA-2/Keccak and isolated legacy SHA-1/MD5 low-level code to eighty reviewed modules")
+    print("unsafe policy confines crypto/memory boundaries to 82 source-bound modules, including two development OS-memory adapters")
     return 0
 
 

@@ -55,6 +55,7 @@ def validate(root):
     words += ['fifty-eight', 'fifty-nine', 'sixty', 'sixty-one', 'sixty-two', 'sixty-three', 'sixty-four', 'sixty-five', 'sixty-six', 'sixty-seven', 'sixty-eight', 'sixty-nine']
     words += ['seventy', 'seventy-one', 'seventy-two', 'seventy-three', 'seventy-four', 'seventy-five']
     words += ['seventy-six', 'seventy-seven', 'seventy-eight', 'seventy-nine', 'eighty']
+    words += ['eighty-one', 'eighty-two']
     count = len(inventory[0].keys)
     if count >= len(words):
         raise ValueError('extend the reviewed documentation count vocabulary')
@@ -72,8 +73,8 @@ def regressions(root):
     # Replace normalized text in disposable copies; source hashes are not used
     # here, so each test must fail for a semantic contract discrepancy.
     cases += [
-        (DOCS[0], 'Status: eighty exact', 'Status: nine exact'),
-        (DOCS[0], 'Rust in only eighty exact', 'Rust in only nine exact'),
+        (DOCS[0], 'Status: eighty-two exact', 'Status: nine exact'),
+        (DOCS[0], 'Rust in only eighty-two exact', 'Rust in only nine exact'),
         (DOCS[2], 'source-hash-bound module inventory', 'exactly nine modules'),
         (MANIFEST, 'default = []', 'default = ["static-execution"]'),
         (LIBRARY, 'pub mod static_execution;', 'mod static_execution;'),

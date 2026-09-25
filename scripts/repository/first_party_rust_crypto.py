@@ -73,6 +73,24 @@ LOCAL_SIGNATURE = '''pub unsafe extern "C" fn compress(
     scratch: &mut [u8; 704],
     constants: &[u64; 80],
 ) {'''
+# OS memory-management ABI only, not an imported crypto implementation. The
+# unsafe inventory separately pins the entire mapping/cleanup implementation.
+OS_MEMORY_ADAPTER = Path('crates/brynja-crypto-cpu-std/src/protected_memory/platform.rs')
+OS_MEMORY_ABI = '''unsafe extern "C" {
+    safe fn getpagesize() -> i32;
+    fn mmap(
+        addr: *mut c_void,
+        len: usize,
+        prot: i32,
+        flags: i32,
+        fd: i32,
+        offset: i64,
+    ) -> *mut c_void;
+    fn mprotect(addr: *mut c_void, len: usize, prot: i32) -> i32;
+    fn madvise(addr: *mut c_void, len: usize, advice: i32) -> i32;
+    fn mlock(addr: *const c_void, len: usize) -> i32;
+    fn munmap(addr: *mut c_void, len: usize) -> i32;
+}'''
 NATIVE_LINK = re.compile(r"#\s*\[\s*link(?:_name|_section)?\b")
 NATIVE_INCLUDE = re.compile(
     r"include_bytes\s*!\s*\([^)]*\.(?:a|bc|dll|dylib|lib|ll|o|obj|so)[\"']",
@@ -142,6 +160,10 @@ def validate(root: Path) -> None:
         if path.suffix == ".rs":
             text = path.read_text(encoding="utf-8")
             abi_text = text
+            if relative == OS_MEMORY_ADAPTER:
+                if text.count(OS_MEMORY_ABI) != 1:
+                    fail('OS memory ABI inventory changed')
+                abi_text = text.replace(OS_MEMORY_ABI, '', 1)
             if relative in LOCAL_C_ABI:
                 signature = LOCAL_SIGNATURE
                 if relative == Path('crates/brynja-core/src/secret_memory_difference.rs'):

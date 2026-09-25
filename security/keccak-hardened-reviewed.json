@@ -19,7 +19,7 @@
   "sha256": {
     "assurance/register-cleanup/check_in_place_sha3.py": "45acce2faffb6e8e524cecaae9be02b144a2461109ec2676b7f88abf2b3de266",
     "assurance/register-cleanup/check_keccak_scalar.py": "2f540710d8fa2692957c1896f110250176dbe6a32653dd053893378b46a84bb7",
-    "assurance/register-cleanup/in-place-sha3/Cargo.lock": "7762f571daf8d9385f1f0cb419bfab904f6139e24b44eae43cbb6181faf192eb",
+    "assurance/register-cleanup/in-place-sha3/Cargo.lock": "ecabc8686b9a411ab9e9643f4ddf813da93ab5ec6effc9e024be175ee5828fa5",
     "assurance/register-cleanup/in-place-sha3/Cargo.toml": "f3245ff049342f9b8af61e6f6041914814ecab0213dea7a50d59d9f444f0787b",
     "assurance/register-cleanup/in-place-sha3/src/execution.rs": "651606d787798c505fa20753c87893b79a8204ee0a506a83e75fca196730fffc",
     "assurance/register-cleanup/in-place-sha3/src/lib.rs": "110acc533e45100d7b7081d6f8dfb86222ad8d3aba874eb245aa68e3873b3218",

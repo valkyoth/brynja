@@ -33,6 +33,7 @@ It is not automatically installed or added to facade/default graphs.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
 | Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
@@ -44,6 +45,16 @@ It is not automatically installed or added to facade/default graphs.
 No named independent cryptographic review or FIPS 140-3 validation is claimed.
 
 ## Use
+
+`protected-memory` provides bounded `protected_memory::ProtectedBytes` with
+resident pages, per-mapping core-dump exclusion and guard pages. Allocation is
+fallible and fails closed on unsupported systems or OS protection failure.
+`new(bytes, max_mapping_bytes)` returns initially zeroed storage; use explicit
+`as_bytes`/`as_bytes_mut` loans and `clear`/`close`. Drop clears the full payload
+before release. It is not a protected worker stack or strict hashing authority;
+ordinary caller copies, stack and registers remain outside its guarantee.
+No hardware/SIMD instruction feature is required for this storage adapter.
+See the [implementation contract](../../docs/strict-hardening-profile.md).
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
 adapter. Portable selection never probes; Require fails on unqualified platforms

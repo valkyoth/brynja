@@ -6,7 +6,7 @@
     "phase": 1
   },
   "sha256": {
-    "assurance/kmac-execution/Cargo.lock": "35094ed7726daeed8dcbd8515dd9d52df32be827331a97e2931c06a6c15aacd4",
+    "assurance/kmac-execution/Cargo.lock": "2aff6dadc2065d7ed3887514c636b9efa43a210719f02238fbe491f59d9752bc",
     "assurance/kmac-execution/Cargo.toml": "4beb50cfd8cd1901dbd7858e74326962b7955acffb03f3569f7a6e36349f7e34",
     "assurance/kmac-execution/src/dispatch.rs": "933b0656eb04263821b910eb55785a1ccb3001723a2e938edb64a7b59858ea86",
     "assurance/kmac-execution/src/lifecycle.rs": "468240b7148ab7924ff780e03ba650f154f6c2e7b7ba7824052f2a4207211b8e",

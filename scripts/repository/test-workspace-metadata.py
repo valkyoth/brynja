@@ -90,11 +90,12 @@ def test_baselines(no_default: dict, all_features: dict) -> None:
                 f"workspace validator rejected {mode}: {accepted.stderr}"
             )
     md5_workspace_fixtures.check(no_default, all_features, package, node, require_rejection)
-    for name, feature in (("brynja-legacy-sha1", "hardened-execution"), ("brynja-legacy-sha1-std", "runtime-hardened-execution")):
+    for name, feature in (("brynja-legacy-sha1", "hardened-execution"), ("brynja-legacy-sha1-std", "runtime-hardened-execution"),
+                          ("brynja-crypto-cpu-std", "protected-memory")):
         for key, replacement in ((feature, []), ("default", [feature])):
             changed = copy.deepcopy(all_features)
             package(changed, name)["features"][key] = replacement
-            require_rejection(changed, "all-features", "feature policy differs", "weakened hardened SHA-1 feature closure")
+            require_rejection(changed, "all-features", "feature policy differs", "weakened opt-in SHA-1 or protected-storage feature closure")
     for feature, replacement in (
         ("default", ["hardened-execution"]),
         ("default", ["runtime-execution"]),

@@ -2,6 +2,11 @@
 
 ## 0.24.49 development
 
+- Add default-off Linux GNU protected byte storage with bounded guarded mappings,
+  residency locking, dump/fork exclusion and clearing before release. Reject
+  unsupported targets and model builds rather than using ordinary heap. This
+  is the strict profile's resource foundation, not strict hashing admission;
+  protected execution stacks and ParallelHash integration remain unfinished.
 - Add portable scoped MD5 storage with borrowed active state, explicit public
   release, typed secret output and independent scope cleanup. Preserve checked
   u128 accounting and low-64-bit RFC padding. Scoped SIMD batching also retains

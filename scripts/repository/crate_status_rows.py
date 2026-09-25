@@ -51,6 +51,7 @@ ROWS = {
         "| TLS 1.3 engine | ❌ Not implemented | ❌ No |"
     ],
     "crates/brynja-legacy-md5-std/README.md": [
+        "| Protected compiled MD5 SIMD batches | 🚧 Implemented; qualification pending | ❌ No |",
         "| MD5 | ✅ Fully implemented | ❌ Not independently verified |",
         "| Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |",
         "| Hardened hosted batch SIMD | 🚧 In progress; retest and native evidence pending | ❌ No |",
@@ -137,7 +138,8 @@ ROWS = {
         "| Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |",
         "| Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |",
         "| Scoped multibuffer workers with guarded parent slots and scoped root | 🚧 Implemented; qualification pending | ❌ No |",
-        "| Strict protected scalar root, concurrent leaf stacks, CVs and output | 🚧 Implemented; qualification pending | ❌ No |"
+        "| Strict protected scalar root, concurrent leaf stacks, CVs and output | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Strict protected accelerated root and single/SIMD leaf workers | 🚧 Implemented; qualification pending | ❌ No |"
     ],
     "crates/brynja-legacy-snp/README.md": [
         "| SNP controlled interoperability | ❌ Not implemented | ❌ No |"
@@ -158,6 +160,8 @@ ROWS = {
         "| Scoped hardened execution workspace | 🚧 Portable/SHA-NI/Arm routes; residue qualification pending | ❌ Not independently verified |"
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
+        "| Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |",
         "| Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |",
         "| Joined single/group protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |",
         "| Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |",
@@ -181,6 +185,7 @@ ROWS = {
         "| Handshake, record encryption and authenticated connections | ❌ Not implemented | ❌ No |"
     ],
     "crates/brynja-legacy-sha1-std/README.md": [
+        "| Protected compiled SHA-1 sessions | 🚧 Implemented; qualification pending | ❌ Not independently verified |",
         "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |",
         "| Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |",
         "| Opt-in hosted hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |",

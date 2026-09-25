@@ -1,18 +1,94 @@
 # Strict hardening profile — implementation contract
 
-Status: owner-approved implementation in progress; the protected-byte resource
+Status: implementation complete for independent retest; the protected-byte resource
 and synchronous protected-stack resources are implemented for initial Linux tests,
 and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and
 TupleHash/TupleHashXOF, isolated legacy SHA-1/MD5, and protected scalar
 ParallelHash/ParallelHashXOF sessions are implemented.
-Compiled SHA-2, SHA-3/SHAKE/cSHAKE and KMAC/KMACXOF wrappers are implemented; **remaining strict
-accelerated integration is not available yet**;
-the combined profile remains unqualified and is not ready for independent retest.
+Compiled SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF,
+legacy SHA-1 and legacy MD5 SIMD batch wrappers are implemented, as are
+protected modern SIMD batches and accelerated ParallelHash root/worker integration;
+the combined profile remains unqualified pending independent retest and final
+native platform evidence. This is not release approval.
 Added after the two-testers' follow-up on v0.24.49. The current
 portable APIs remain available with their existing owned-memory guarantees.
 This document does not admit an execution path or change any release gate.
+The consolidated integration section below supersedes the earlier incremental
+notes about remaining families; those notes retain the original validation scope.
+
+## Consolidated strict acceleration integration
+
+All wrappers remain separate, default-off APIs. Scalar constructors do not
+silently become accelerated. Compiled constructors require the exact build-wide
+feature bundle and a deployment that preserves it; they do not establish CPU
+affinity, detect live migration or guarantee arbitrary platform snapshots.
+
+| Package / feature | Protected API | Execution policy |
+| --- | --- | --- |
+| `brynja-crypto-cpu-std` / `strict-tuplehash-acceleration` | `strict_tuplehash::CompiledSession` | Required AVX2/Arm Keccak; exact tuple completion, fixed/XOF staging and output |
+| `brynja-crypto-cpu-std` / `strict-batch` | `strict_batch::Session` | SHA-224/256, complete SHA-512 family including general t, SHA-3/SHAKE/cSHAKE; explicit portable or required AVX2/NEON groups |
+| `brynja-legacy-sha1-std` / `strict-acceleration` | `strict_execution::CompiledSession` | Required SHA-NI or Arm SHA-1; canonical MSB-first final bits |
+| `brynja-legacy-md5-std` / `strict-acceleration` | `strict_execution::batch::Session` | Required AVX2/NEON SIMD groups; incomplete groups reject |
+| `brynja-hash-parallel-std` / `strict-acceleration` | `strict_execution::CompiledSession` | Required compiled root; explicit single-kernel leaves or SIMD groups with protected scalar tails |
+
+Constructors acquire protected resources before accepting secret input. Workers
+construct authority/startup checks, scoped workspaces and populated state locally
+on their protected stacks. No thread-bound authority is transferred or retained
+between threads. Only borrowed input descriptors, public metadata/status and
+exact-plan loans into protected result mappings cross joins. Every started
+ParallelHash worker joins before CVs, staging, output or worker stacks are cleared.
+Its grouped CV mapping reserves four full 64-byte slots per group, including
+inactive/narrow capacity, and clears that full owned allocation.
+
+Batch inputs retain exact identities/output widths and checked bit framing.
+Explicit output exposure borrows secret bytes; declassification validates every
+destination before writing any public output and consumes/clears the loan.
+Zero-length XOF slots remain distinct from inactive slots. Session reuse clears
+forgotten output loans. Budget/canonical-input/cancellation rejection permits
+reuse; backend/invariant failure and recoverable worker unwind quarantine without
+fallback or reset. Error classification uses the returned error, not a concurrent
+cancellation flag which could otherwise mask a backend failure.
+
+The strict ParallelHash batch policy permits scalar incomplete/unequal tails
+explicitly, on protected stacks. It is not a claim that every leaf uses SIMD.
+Modern and MD5 strict batch `Require` routes instead reject ineligible work.
+Public lengths, scheduling and work reports remain observable. Legacy SHA-1/MD5
+remain collision-broken compatibility algorithms: stronger storage does not
+restore their cryptographic security.
+
+The next retest must evaluate the complete implementation, not just these
+author checks. Native Arm protection, final source-bound evidence and independent
+qualification remain separate. No military certification or all-register,
+interruption, hibernation, privileged-snapshot or panic-abort erasure is claimed.
 
 ## Implemented resource foundation (not strict admission)
+
+### Reproducing the combined pre-retest checks
+
+On a GNU/Linux x86-64 host whose deployment guarantees AVX2/SHA/SSE2, run
+`python3 scripts/cryptography/check-strict-profile-package.py --simd --attest-native-features`.
+The equivalent Arm run requires NEON/SHA2/SHA3. This packages first-party crates
+locally, runs debug/release tests and ownership doctests for all four strict
+host adapters, and rejects sixteen compiled locking, output, cleanup and
+quarantine regressions. It does not publish anything or modify release gates.
+Native Arm results are still required for final qualification.
+
+`python3 scripts/cryptography/check-protected-resource-codegen.py --toolchain 1.98.1 --target x86_64-unknown-linux-gnu`
+checks retained eager-lock/clear/release calls under both panic strategies.
+Repeat with `1.90.0` and `aarch64-unknown-linux-gnu` for the complete eight-row
+author matrix. Seven emitted-artifact regressions per row reject missing calls,
+lazy locking and comment-only evidence. These are exact-function call checks,
+not a whole-CFG dominance proof or full caller-register qualification; native
+mapping/rollback/join tests and packaged source mutants cover separate duties.
+
+The combined author run passed full workspace all-feature tests; native strict
+debug/release and MSRV tests; all strict ownership doctests; 85 actual protected
+ASan/LeakSanitizer tests; scoped Clippy; Miri metadata/unsupported-model tests;
+cross-compilation for supported Arm and rejecting Apple/Windows/RISC-V targets;
+and existing batch workspace/output and SHA-1 kernel cleanup checks. ASan uses
+the explicit fake-stack limitation described below. No emulated or cross-built
+row is presented as native Arm evidence. Earlier per-consumer notes below are
+historical progress records, superseded by this combined validation summary.
 
 The default-off `protected-memory` feature of `brynja-crypto-cpu-std` exposes
 `protected_memory::ProtectedBytes`. This is a usable byte-storage resource,
@@ -31,13 +107,25 @@ zero-residency-limit rejection, padded cleanup and unwind. Native Arm protection
 evidence and independent review are still outstanding. macOS/Windows must not
 inherit Linux's claims.
 
-The implementation uses [mlock](https://man7.org/linux/man-pages/man2/mlock.2.html)
-for residency and [madvise](https://man7.org/linux/man-pages/man2/madvise.2.html)
+The implementation uses [mlock2](https://man7.org/linux/man-pages/man2/mlock.2.html)
+with zero flags (eager residency, not MLOCK_ONFAULT), requiring Linux 4.4 and
+glibc 2.27 or newer, and [madvise](https://man7.org/linux/man-pages/man2/madvise.2.html)
 with DONTDUMP/DONTFORK for exclusion. Callers must not fork while owners are
 live or externally revoke protections. Unmapping releases the lock after the
 full writable mapping is cleared; there is no separate unlocked interval.
 These per-region controls do not protect another stack, TLS, other allocations,
 privileged snapshots or hibernation. The remaining steps below are still required.
+
+There is no fallback to `mlock`: LLVM sanitizer runtimes can intercept that
+symbol and return success without locking. Native tests inspect actual mapping
+flags and zero-residency-budget rejection instead of trusting a return code.
+Instrumented test builds must disable ASan's fake-stack relocation with
+`detect_stack_use_after_return=0`, since those relocated locals are not on the
+protected stack. This deliberately omits ASan use-after-return coverage; ordinary
+bounds checking and mandatory leak detection remain enabled. Instrumented builds
+are diagnostics, not deployment qualification, and must not process real secrets.
+See [LLVM's interceptor](https://github.com/llvm/llvm-project/blob/main/compiler-rt/lib/sanitizer_common/sanitizer_common_interceptors.inc)
+and [ASan's option documentation](https://clang.llvm.org/docs/AddressSanitizer.html).
 
 `protected_memory::ProtectedStack` preacquires the same guarded, locked mapping
 before accepting work. `run` accepts a scoped `FnOnce() + Send` callback, joins

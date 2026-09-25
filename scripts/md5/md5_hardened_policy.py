@@ -132,6 +132,8 @@ def validate(root=ROOT, reviewed=True):
             raise ValueError('strict MD5 protected resources must remain optional')
     if host['features'].get('strict-execution') != ['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory']:
         raise ValueError('strict MD5 feature boundary')
+    if host['features'].get('strict-acceleration') != ['strict-execution', 'brynja-legacy-md5/hardened-execution']:
+        raise ValueError('strict MD5 acceleration feature boundary')
     if leaf['features'].get('hardened-execution') != ['cpu'] or host['features'].get('runtime-hardened-execution') != ['brynja-legacy-md5/hardened-execution']:
         raise ValueError('hardened feature boundary')
     for name in paths(root):

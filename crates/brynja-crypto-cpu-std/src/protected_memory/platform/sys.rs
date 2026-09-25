@@ -72,10 +72,12 @@ pub(super) fn access(base: NonNull<u8>, len: usize) -> Result<(), Error> {
 
 pub(super) fn lock(base: NonNull<u8>, len: usize) -> Result<(), Error> {
     fault(Step::Lock, Error::Lock)?;
-    // SAFETY: this is the parent's live readable/writable payload. mlock only
-    // changes page residency and does not access Rust values through aliases.
+    // SAFETY: this is the parent's live readable/writable payload. mlock2 with
+    // zero flags eagerly locks every page, not MLOCK_ONFAULT. It changes residency
+    // without accessing Rust values through aliases. No fallback to mlock:
+    // sanitizer runtimes may replace that older symbol with a success-only no-op.
     result(
-        unsafe { super::mlock(base.as_ptr().cast(), len) },
+        unsafe { super::mlock2(base.as_ptr().cast(), len, 0) },
         Error::Lock,
     )
 }

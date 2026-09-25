@@ -9,9 +9,9 @@ from pathlib import Path
 
 
 ALLOWED = {
-    Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform.rs"): ("5f4f0e14d6f3cae15c0cdec36004c0c3deddebaa9efe55ad426e867fb4f1cc71", 4, 0, 4),
+    Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform.rs"): ("35e77466f3e2400ae70de5aed806d14ea4c5d8ea6f59bf8e89099313fcd3bf7e", 4, 0, 4),
     Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform/thread.rs"): ("ad5929a5b0f283aa57ef2b7c5801fb86e5ede6bbdee48f3d1b72cb8549797ed9", 8, 0, 8),
-    Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform/sys.rs"): ("b67434aab46e5b719d11cf963ced335a037e605aa84f2e953220fafdd29ad4b4", 6, 0, 6),
+    Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform/sys.rs"): ("04b2b6cae7d7c069329fcf6036dae1a6a3b8b09555c26aa4965c168f8036b3dd", 6, 0, 6),
     Path("crates/brynja-core/src/secret_memory_difference.rs"): ("6eb3156c9092a90050efe81c8aa5e136a5c6dbc06e59fd296c6a1e46c1148093", 3, 1, 3),
     Path("crates/brynja-hash-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),
     Path("crates/brynja-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),

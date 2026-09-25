@@ -11,7 +11,8 @@
 //! Original inputs, caller copies, privileged snapshots and abort retain their
 //! existing limits. Deployment must uphold protected-memory lifetimes: no fork,
 //! external mapping revocation or native cancellation. This wrapper selects
-//! scalar opaque boundaries only; strict accelerated integration remains pending.
+//! scalar opaque boundaries only. The separately enabled `CompiledSession`
+//! requires a compiled kernel and never falls back. Qualification is pending.
 //!
 //! ```no_run
 //! use brynja_crypto_cpu_std::strict_tuplehash::{Algorithm, Item, Limits, Session, Error};
@@ -27,8 +28,12 @@
 //! # Ok::<(), Error>(())
 //! ```
 use crate::protected_memory::{ProtectedBytes, ProtectedStack};
+#[cfg(feature = "strict-tuplehash-acceleration")]
+mod compiled;
 mod types;
 mod worker;
+#[cfg(feature = "strict-tuplehash-acceleration")]
+pub use compiled::{CompiledSession, Kernel};
 pub use types::{Algorithm, Bits, Cancellation, Error, Item, Limits, PublicDeclassification};
 #[cfg(test)]
 mod tests;

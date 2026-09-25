@@ -13,6 +13,7 @@ publish = ["crates-io"]
 [features]
 default = []
 strict-execution = ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
+strict-acceleration = ["strict-execution", "brynja-legacy-md5/hardened-execution"]
 runtime-execution = ["brynja-legacy-md5/execution"]
 runtime-hardened-execution = ["brynja-legacy-md5/hardened-execution"]
 

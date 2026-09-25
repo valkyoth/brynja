@@ -33,7 +33,9 @@ mod transfer;
 use super::{Error as RootError, Plan, WorkerPolicy};
 use brynja_core::clear_owned_region;
 use brynja_hash_sha3::hardened_batch as hash;
-pub use hash::{Authority, Control, Executor, Kernel, Mode, Report as KernelReport};
+pub use hash::{
+    Authority, Control, Error as HashError, Executor, Kernel, Mode, Report as KernelReport,
+};
 pub use transfer::TransferredLeaves;
 /// Maximum independently scheduled leaves in one group, not a thread count.
 pub const CAPACITY: usize = hash::CAPACITY;

@@ -61,7 +61,7 @@ def require_rejection(root: Path, expected: str) -> None:
 
 def test() -> None:
     assert policy.BACKENDS is cpu_boundary_backends.BACKENDS
-    assert len(cpu_boundary_backends.STRICT_COMPILED_SOURCES) == 12
+    assert len(cpu_boundary_backends.STRICT_COMPILED_SOURCES) == 22
     for path, status in cpu_boundary_backends.STRICT_COMPILED_SOURCES.items():
         assert policy.SOURCE_STATUS[(policy.DETECTOR, path)] == status
     with tempfile.TemporaryDirectory(prefix="brynja-cpu-boundary-") as temporary:
@@ -173,6 +173,10 @@ def test() -> None:
             ('strict-kmac = ["protected-memory", "dep:brynja-mac-kmac"]', 'strict-kmac = ["dep:brynja-mac-kmac"]', 'default feature'),
             ('strict-tuplehash = ["protected-memory", "dep:brynja-hash-tuple"]', 'strict-tuplehash = ["dep:brynja-hash-tuple"]', 'default feature'),
             ('default = []', 'default = ["strict-tuplehash"]', 'default feature'),
+            ('strict-tuplehash-acceleration = ["strict-tuplehash", "brynja-hash-tuple/hardened-execution"]', 'strict-tuplehash-acceleration = ["brynja-hash-tuple/hardened-execution"]', 'default feature'),
+            ('default = []', 'default = ["strict-tuplehash-acceleration"]', 'default feature'),
+            ('strict-batch = ["protected-memory",', 'strict-batch = [', 'default feature'),
+            ('default = []', 'default = ["strict-batch"]', 'default feature'),
             ('brynja-hash-tuple = { workspace = true, optional = true }', 'brynja-hash-tuple = { workspace = true }', 'dependency boundary'),
             ('default = []', 'default = ["strict-kmac"]', 'default feature'),
             ('brynja-mac-kmac = { workspace = true, optional = true }', 'brynja-mac-kmac = { workspace = true }', 'dependency boundary'),
@@ -188,7 +192,7 @@ def test() -> None:
             require_rejection(root, expected)
             reset(root)
 
-        for relative in ('src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha2/compiled/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_sha3/compiled/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_kmac/compiled/worker.rs', 'src/strict_tuplehash/worker.rs'):
+        for relative in ('src/protected_memory/platform/sys.rs', 'src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha2/compiled/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_sha3/compiled/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_kmac/compiled/worker.rs', 'src/strict_tuplehash/worker.rs', 'src/strict_tuplehash/compiled/worker.rs', 'src/strict_batch/worker.rs'):
             source = root / 'crates' / policy.DETECTOR / relative
             source.write_text(source.read_text() + '\n// unreviewed resource drift\n')
             require_rejection(root, 'source changed')
@@ -234,4 +238,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("CPU boundary rejects twenty-six existing and eighteen protected-resource package/source regressions")
+    print("CPU boundary rejects existing and protected-resource package/source regressions")

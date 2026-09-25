@@ -135,7 +135,7 @@ def os_memory_imports() -> None:
         destination.write_text(source)
         first_party_rust_crypto.validate(root)
         for mutated, message in (
-            (source.replace('fn mlock(', 'fn foreign_crypto('), 'OS memory ABI'),
+            (source.replace('fn mlock2(', 'fn foreign_crypto('), 'OS memory ABI'),
             (source.replace('offset: i64', 'offset: i32'), 'OS memory ABI'),
             (source.replace('safe fn getpagesize()', 'safe fn crypto()'), 'OS memory ABI'),
             (source + '\nunsafe extern "C" { fn crypto(); }', 'foreign ABI'),

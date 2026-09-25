@@ -1,6 +1,16 @@
 """Canonical backend and protected compiled-source inventories."""
 
 STRICT_COMPILED_SOURCES = {
+    "src/strict_batch/mod.rs": "protected-modern-batch-session-development",
+    "src/strict_batch/types.rs": "protected-modern-batch-api-types",
+    "src/strict_batch/worker.rs": "protected-modern-batch-worker",
+    "src/strict_batch/tests.rs": "protected-modern-batch-admission-tests",
+    "src/strict_batch/tests/native.rs": "protected-modern-batch-native-sha2-tests",
+    "src/strict_batch/tests/sponge.rs": "protected-modern-batch-native-sponge-tests",
+    "src/strict_tuplehash/compiled.rs": "protected-compiled-tuplehash-session-development",
+    "src/strict_tuplehash/compiled/worker.rs": "protected-compiled-tuplehash-worker",
+    "src/strict_tuplehash/compiled/tests.rs": "protected-compiled-tuplehash-admission-tests",
+    "src/strict_tuplehash/compiled/tests/native.rs": "protected-compiled-tuplehash-native-tests",
     "src/strict_sha2/compiled.rs": "protected-compiled-sha2-session-development",
     "src/strict_sha2/compiled/worker.rs": "protected-compiled-sha2-worker",
     "src/strict_sha2/compiled/tests.rs": "protected-compiled-sha2-admission-tests",

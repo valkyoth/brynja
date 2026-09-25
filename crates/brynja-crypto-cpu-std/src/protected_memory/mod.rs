@@ -2,9 +2,14 @@
 //! This resource is NOT strict execution admission. In particular, borrowing
 //! these bytes does not protect the caller's stack, registers or other copies.
 //! [`ProtectedStack`] separately provides joined single/group protected-stack execution.
-//! Strict hashing admission and parallel protected scheduling are not available.
+//! Separate default-off strict session features integrate these resources with
+//! cryptography; this generic byte/stack API alone does not admit such execution.
 //!
 //! The initial adapter supports Linux GNU on x86-64 and little-endian AArch64.
+//! It requires Linux 4.4/glibc 2.27 or newer for eager `mlock2` (zero flags).
+//! There is no fallback to the older `mlock` symbol, which sanitizers may no-op.
+//! Instrumented diagnostic builds must not process real secrets; ASan fake-stack
+//! relocation is incompatible with the protected-stack placement guarantee.
 //! Other targets and verification-model builds return [`Error::Unsupported`].
 //! Construction acquires OS protections before exposing zero-initialized bytes;
 //! it never falls back to an ordinary allocation. The whole resident mapping,

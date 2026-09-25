@@ -25,6 +25,12 @@ pub struct Limits {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum Error {
+    /// Required accelerated processing or admission failed.
+    #[cfg(feature = "strict-acceleration")]
+    Execution(brynja_legacy_sha1::hardened_execution::Error),
+    /// This compiled wrapper permanently rejected further work.
+    #[cfg(feature = "strict-acceleration")]
+    Quarantined,
     /// Required platform/storage/thread protection could not be provided.
     Resource(protected_memory::Error),
     /// Configuration cannot admit a chunk list.
@@ -50,6 +56,10 @@ impl From<protected_memory::Error> for Error {
 impl core::fmt::Display for Error {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.write_str(match self {
+            #[cfg(feature = "strict-acceleration")]
+            Self::Execution(_) => "strict legacy SHA-1 execution failed",
+            #[cfg(feature = "strict-acceleration")]
+            Self::Quarantined => "strict legacy SHA-1 quarantined",
             Self::Resource(_) => "strict legacy SHA-1 protected resource failed",
             Self::InvalidLimits => "strict legacy SHA-1 limits are invalid",
             Self::WorkLimit => "strict legacy SHA-1 work limit exceeded",

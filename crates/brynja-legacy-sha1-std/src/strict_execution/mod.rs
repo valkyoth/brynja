@@ -15,7 +15,8 @@
 //! Original inputs, caller copies, public lengths, OS scheduling, privileged
 //! inspection, hibernation and process abort retain their documented limits.
 //! Existing opaque scalar boundaries cover their normal returns only. No SIMD
-//! or hardware route is selected here; those strict integrations remain pending.
+//! or hardware route is selected by `Session`. The separately enabled
+//! `CompiledSession` requires hardware and never falls back; qualification is pending.
 //! Deployment must uphold the protected-memory contract (no external revocation,
 //! fork or native cancellation). Recoverable worker panic clears before return;
 //! panic hooks and fatal termination do not acquire stronger guarantees.
@@ -33,8 +34,12 @@
 //! # Ok::<(), Error>(())
 //! ```
 use brynja_crypto_cpu_std::protected_memory::{self, ProtectedBytes, ProtectedStack};
+#[cfg(feature = "strict-acceleration")]
+mod compiled;
 mod types;
 mod worker;
+#[cfg(feature = "strict-acceleration")]
+pub use compiled::CompiledSession;
 pub use types::{Cancellation, Error, Limits, PublicDeclassification};
 #[cfg(test)]
 mod tests;

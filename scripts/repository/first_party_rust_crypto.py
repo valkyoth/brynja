@@ -88,7 +88,7 @@ OS_MEMORY_ABI = '''unsafe extern "C" {
     ) -> *mut c_void;
     fn mprotect(addr: *mut c_void, len: usize, prot: i32) -> i32;
     fn madvise(addr: *mut c_void, len: usize, advice: i32) -> i32;
-    fn mlock(addr: *const c_void, len: usize) -> i32;
+    fn mlock2(addr: *const c_void, len: usize, flags: u32) -> i32;
     fn munmap(addr: *mut c_void, len: usize) -> i32;
 }'''
 OS_THREAD_ADAPTER = Path('crates/brynja-crypto-cpu-std/src/protected_memory/platform/thread.rs')

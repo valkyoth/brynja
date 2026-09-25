@@ -30,11 +30,20 @@ This crate is not a default or modern-facade dependency. The leaf stays `no_std`
 
 ## Cryptography Verification Status
 
+Default-off `strict-acceleration` adds `strict_execution::CompiledSession`.
+Use the scalar session's `Limits`, `hash` and `hash_chunks` interfaces, with
+build-wide SHA/SSE2 on x86-64 or NEON/SHA2 on little-endian GNU/Linux AArch64.
+Deployment must preserve this bundle throughout execution. Startup KATs,
+authority, state and staging stay on protected stacks. There is no fallback.
+Cancellation permits reuse; backend failure or worker panic quarantines.
+This does not repair SHA-1 or claim independent qualification.
+
 No named independent reviewer has verified this component. Passing tests, CI,
 Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
+| Protected compiled SHA-1 sessions | 🚧 Implemented; qualification pending | ❌ Not independently verified |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 | Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Opt-in hosted hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
@@ -65,8 +74,8 @@ locked, guarded, dump/fork-excluded worker stack. Output stays in an affine
 protected loan: Drop clears it, `expose` borrows secret bytes, and `declassify`
 requires explicit public-output authority. Errors and recoverable unwind clear
 output and the joined stack before reuse. Unsupported targets fail closed.
-This wrapper is scalar-only; SHA-NI/Arm acceleration and native qualification
-are pending. It does not repair collision resistance, protect caller copies,
+This `Session` wrapper is scalar-only; separate `CompiledSession` selects
+SHA-NI/Arm. Qualification remains pending. Neither repairs collision resistance, protects caller copies,
 or promise whole-process/register/interruption erasure. The modern facade gains
 no legacy dependency. See the [compiled session example](src/strict_execution/mod.rs)
 and [strict-profile limits](../../docs/strict-hardening-profile.md).

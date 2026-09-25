@@ -166,6 +166,7 @@ def validate(root=ROOT, reviewed=True):
     for file, features in ((LEAF, {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu'], 'hardened-execution': ['cpu']}),
                            (ADAPTER, {'default': [], 'runtime-execution': ['brynja-legacy-sha1/execution'],
                                       'strict-execution': ['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory'],
+                                      'strict-acceleration': ['strict-execution', 'brynja-legacy-sha1/hardened-execution'],
                                       'runtime-hardened-execution': ['runtime-execution', 'brynja-legacy-sha1/hardened-execution']})):
         manifest = tomllib.loads(read(root, file+'Cargo.toml'))
         if manifest['features'] != features: raise ValueError('secret SHA-1 must remain explicit and default-off')

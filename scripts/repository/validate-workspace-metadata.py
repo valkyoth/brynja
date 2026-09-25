@@ -217,8 +217,8 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
-        expected.update({"strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"], "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"], "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"], "strict-sha3-acceleration": ["strict-sha3", "brynja-hash-sha3/hardened-execution"], "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"], "strict-kmac-acceleration": ["strict-kmac", "brynja-mac-kmac/hardened-execution"], "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"]})
-        expected["sha256-hardened-batch"] = ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"]
+        expected.update({"strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"], "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"], "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"], "strict-sha3-acceleration": ["strict-sha3", "brynja-hash-sha3/hardened-execution"], "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"], "strict-kmac-acceleration": ["strict-kmac", "brynja-mac-kmac/hardened-execution"], "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"], "strict-tuplehash-acceleration": ["strict-tuplehash", "brynja-hash-tuple/hardened-execution"]})
+        expected.update({"strict-batch": ["protected-memory", "sha256-hardened-batch", "sha512-hardened-batch", "keccak-hardened-batch", "brynja-hash-sha2/general-sha512-t"], "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"]})
         expected["sha512-hardened-batch"] = ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"]
         expected["keccak-hardened-batch"] = ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"]
         expected["keccak-batch"] = ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"]
@@ -244,14 +244,14 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["execution"] = ["cpu"]
         expected["hardened-execution"] = ["cpu"]
     if name == "brynja-legacy-md5-std":
-        expected["strict-execution"] = ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
+        expected.update({"strict-execution": ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"], "strict-acceleration": ["strict-execution", "brynja-legacy-md5/hardened-execution"]})
         expected["runtime-execution"] = ["brynja-legacy-md5/execution"]
         expected["runtime-hardened-execution"] = ["brynja-legacy-md5/hardened-execution"]
     if name == "brynja-legacy-sha1":
         expected["execution"] = ["cpu"]
         expected["hardened-execution"] = ["cpu"]
     if name == "brynja-legacy-sha1-std":
-        expected["strict-execution"] = ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
+        expected.update({"strict-execution": ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"], "strict-acceleration": ["strict-execution", "brynja-legacy-sha1/hardened-execution"]})
         expected["runtime-execution"] = ["brynja-legacy-sha1/execution"]
         expected["runtime-hardened-execution"] = ["runtime-execution", "brynja-legacy-sha1/hardened-execution"]
     if name in {"brynja-mac-kmac", "brynja-hash-tuple", "brynja-hash-parallel"}:
@@ -260,7 +260,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-hash-parallel":
         expected["hardened-batch-execution"] = ["hardened-execution", "brynja-hash-sha3/hardened-batch-execution"]
     if name == "brynja-hash-parallel-std":
-        expected.update({"runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/runtime-execution", "dep:brynja-crypto-cpu"], "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]})
+        expected.update({"runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/runtime-execution", "dep:brynja-crypto-cpu"], "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"], "strict-acceleration": ["strict-execution", "brynja-hash-parallel/hardened-batch-execution", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/keccak-hardened-batch"]})
         expected["runtime-batch-execution"] = ["runtime-execution", "brynja-hash-parallel/hardened-batch-execution", "brynja-crypto-cpu-std/keccak-hardened-batch", "brynja-crypto-cpu/keccak-hardened-batch"]
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")

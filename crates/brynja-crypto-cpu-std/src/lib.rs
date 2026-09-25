@@ -8,6 +8,9 @@
 #[cfg(feature = "protected-memory")]
 pub mod protected_memory;
 
+#[cfg(feature = "strict-batch")]
+pub mod strict_batch;
+
 #[cfg(feature = "strict-kmac")]
 pub mod strict_kmac;
 #[cfg(feature = "strict-sha2")]

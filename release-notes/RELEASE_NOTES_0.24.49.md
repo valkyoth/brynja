@@ -4,6 +4,19 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
+- Complete the separate default-off strict profile across scalar and compiled
+  SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, isolated legacy SHA-1/MD5,
+  modern SIMD batches and protected ParallelHash root/worker execution.
+  Protected GNU/Linux resources are acquired before secret processing;
+  unsupported targets reject instead of inheriting weaker portable guarantees.
+  Eager `mlock2` requires Linux 4.4/glibc 2.27+. All started workers join before
+  protected stacks, CVs, staging and outputs are cleared. Kernel failure remains
+  terminal even if cancellation is concurrently requested. No release-gate or
+  publication policy changed. The [consolidated contract](../docs/strict-hardening-profile.md)
+  supersedes incremental pending-integration notes below; independent retest and
+  final native qualification are still required, with no whole-process or
+  arbitrary-interruption register-erasure claim.
+
 - Add portable `brynja_legacy_md5::hardened_in_place` workspace/handle APIs,
   with consuming byte/bit finalization and cleanup after errors, forgotten
   handles and recoverable unwind. Failed updates close the scoped state; no

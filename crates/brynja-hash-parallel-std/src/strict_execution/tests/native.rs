@@ -1,10 +1,10 @@
 use super::*;
 use brynja_hash_parallel::{self as api, Fips202BitString, Fips202Output};
-fn guard() -> std::sync::MutexGuard<'static, ()> {
+pub(crate) fn guard() -> std::sync::MutexGuard<'static, ()> {
     static LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
     LOCK.lock().unwrap_or_else(|p| p.into_inner())
 }
-fn identities(n: usize) -> [Algorithm; 4] {
+pub(crate) fn identities(n: usize) -> [Algorithm; 4] {
     [
         Algorithm::ParallelHash128(n),
         Algorithm::ParallelHash256(n),
@@ -12,7 +12,7 @@ fn identities(n: usize) -> [Algorithm; 4] {
         Algorithm::ParallelHashXof256(n),
     ]
 }
-fn reference(
+pub(crate) fn reference(
     algorithm: Algorithm,
     input: Bits<'_>,
     block: usize,

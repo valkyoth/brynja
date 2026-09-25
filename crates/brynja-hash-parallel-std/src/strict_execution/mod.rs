@@ -27,8 +27,12 @@
 //! ```
 use crate::CancellationToken;
 use brynja_crypto_cpu_std::protected_memory::{ProtectedBytes, ProtectedStack};
+#[cfg(feature = "strict-acceleration")]
+mod compiled;
 mod types;
 mod worker;
+#[cfg(feature = "strict-acceleration")]
+pub use compiled::{BatchKernel, CompiledSession, Kernel, LeafRoute};
 pub use types::{Algorithm, Bits, Error, Limits, PublicDeclassification};
 #[cfg(test)]
 mod tests;

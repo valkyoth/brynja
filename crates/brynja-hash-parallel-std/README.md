@@ -40,6 +40,7 @@ package owns scheduling, resource admission and local worker selection.
 | Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |
 | Scoped multibuffer workers with guarded parent slots and scoped root | 🚧 Implemented; qualification pending | ❌ No |
 | Strict protected scalar root, concurrent leaf stacks, CVs and output | 🚧 Implemented; qualification pending | ❌ No |
+| Strict protected accelerated root and single/SIMD leaf workers | 🚧 Implemented; qualification pending | ❌ No |
 
 Brynja is not FIPS 140-3 validated. Threading and project tests do not constitute
 independent verification. This `std` package is absent from the modern facade's
@@ -51,8 +52,13 @@ The separate, default-off `strict-execution` feature provides
 `strict_execution::Session` for complete bounded requests. It preacquires
 resident, dump/fork-excluded storage and joined worker stacks on native GNU/Linux
 x86-64/little-endian AArch64; unsupported targets reject, without fallback.
-This route is scalar (no strict SIMD/hardware selection yet). Inputs remain
-caller-owned; lengths and scheduling are public. Qualification is pending.
+`Session` is scalar. The separate default-off `strict-acceleration` feature adds
+`CompiledSession`: an explicitly selected compiled AVX2/Arm Keccak root and
+single-state or SIMD-group leaf workers. Incomplete SIMD groups and unequal tails
+use explicit clearing scalar work on protected stacks; backend failures never
+authorize fallback. Deployment must guarantee the compiled feature bundle
+throughout scheduling/migration. Inputs remain caller-owned; lengths and scheduling
+are public. Native GNU/Linux protection and independent qualification are pending.
 
 See the [compiled strict Session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-hash-parallel-std/src/strict_execution/mod.rs)
 and [strict-profile limitations](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).

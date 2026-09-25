@@ -2,6 +2,17 @@
 
 ## 0.24.49 development
 
+- Complete default-off strict compiled TupleHash, legacy SHA-1 and MD5 SIMD,
+  modern SHA-2/Keccak SIMD batches and protected ParallelHash root/leaf workers.
+  Earlier incremental entries below describe their prerequisite work; the
+  consolidated contract in `docs/strict-hardening-profile.md` is current.
+  Unsupported protected targets reject; ordinary APIs and release rules remain
+  unchanged. Independent retest and final native qualification are pending.
+- Require eager `mlock2` for protected Linux resources (Linux 4.4/glibc 2.27+),
+  avoiding sanitizer-intercepted `mlock` success without residency. Verify real
+  page protection and reject no-op/lazy locking in packaged compiled regressions.
+- Preserve ParallelHash backend/invariant errors even when cancellation is
+  concurrently requested; those failures remain terminal, not reusable rejection.
 - Add bounded concurrent protected-stack groups with prelaunch resource setup,
   every-started-worker joining, clear-after-join and partial-launch/unwind tests.
   This is a ParallelHash resource prerequisite; strict hash integration and

@@ -50,6 +50,8 @@ def main():
         original = path.read_text()
         for before, after in (
             ('default = []', 'default = ["strict-execution"]'),
+            ('default = []', 'default = ["strict-acceleration"]'),
+            ('strict-acceleration = ["strict-execution",', 'strict-acceleration = ['),
             (', "brynja-crypto-cpu-std/protected-memory"', ''),
             ('brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }'),
             ('brynja-crypto-cpu-std = { workspace = true, optional = true }', 'brynja-crypto-cpu-std = { workspace = true }'),

@@ -86,7 +86,7 @@ fn verify_mapping<T: ?Sized>(value: &T) {
         assert!(verified);
     }
 }
-fn limits() -> Limits {
+pub(super) fn limits() -> Limits {
     Limits {
         stack_bytes: 262144,
         max_stack_mapping_bytes: 1048576,

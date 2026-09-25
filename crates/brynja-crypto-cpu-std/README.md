@@ -31,8 +31,19 @@ It is not automatically installed or added to facade/default graphs.
 
 ## Cryptography Verification Status
 
+Default-off `strict-tuplehash-acceleration` exposes `strict_tuplehash::CompiledSession`.
+Select build-wide AVX2 or Arm NEON/SHA3 on supported GNU/Linux strict targets,
+and preserve CPU/OS support throughout execution. Authority, exact-item writers,
+framing and XOF state stay on protected worker stacks; staging/output use
+protected mappings. Cancellation permits reuse; backend failure or worker panic
+quarantines permanently without fallback. Scalar `Session` remains unchanged.
+Compiler/platform qualification and independent retest remain pending.
+See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
+| Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
 | Joined single/group protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
 | Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
@@ -106,8 +117,9 @@ its storage guarantee. `ProtectedStack::run_group` runs 1..=64 borrowed callback
 on distinct preacquired stacks, joins every started worker on errors/unwind and
 clears stacks after termination. It never exposes a join handle or retries on an
 ordinary stack. Callbacks must finish without relying on unstarted peers; output
-transactions are the integrator's responsibility. Concurrent protected hashing
-is not implemented yet: this is its resource prerequisite, not admission.
+transactions are the integrator's responsibility. The separate strict
+ParallelHash adapter uses these resources for protected root/leaf execution;
+the general callback resource itself is not hashing admission.
 
 `strict-sha2` adds a library-controlled protected hash session. It preacquires
 stack/output resources and rejects unsupported targets instead of silently using
@@ -159,6 +171,16 @@ affine protected loan until exposure or explicit declassification. Setup and
 fixed finalization are bounded but not internally cancellable. This path is
 scalar-only, qualification-pending and has the target/caller-storage limits above.
 See the [compiled TupleHash session example](src/strict_tuplehash/mod.rs).
+
+`strict-batch` enables `strict_batch::Session` for protected independent-message
+SHA-2/SHA-3/SHAKE/cSHAKE batches. `Route::Sha256(None)`, `Sha512(None)` and
+`Keccak(None)` explicitly select portable execution. `Some(kernel)` requires
+matching compiled AVX2/NEON and eligible actual SIMD work; it never silently
+falls back. SHA-256 has eight slots; wide/Keccak batches have four. Exact identity,
+bit width and inactive slots remain distinct, and outputs borrow protected
+storage. All public destinations are checked before declassification writes.
+See the [compiled batch example](src/strict_batch/mod.rs). Qualification is
+pending; caller inputs/copies and public lengths retain the limits above.
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
 adapter. Portable selection never probes; Require fails on unqualified platforms

@@ -53,7 +53,7 @@ pub(super) fn observe<T: ?Sized>(value: &T) {
     #[cfg(not(all(target_os = "linux", target_env = "gnu", not(any(miri, kani)))))]
     let _ = value;
 }
-fn limits() -> Limits {
+pub(super) fn limits() -> Limits {
     Limits {
         workers: 3,
         max_leaves: 128,
@@ -119,4 +119,4 @@ fn unsupported_never_falls_back() {
         all(target_arch = "aarch64", target_endian = "little")
     )
 ))]
-mod native;
+pub(crate) mod native;

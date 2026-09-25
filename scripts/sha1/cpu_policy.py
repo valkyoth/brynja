@@ -97,7 +97,7 @@ def validate(root=ROOT, hashes=True):
         raise ValueError('current-core x86 detection cannot establish hosted authority')
     for path, expected in (
         ('crates/brynja-legacy-sha1/Cargo.toml', {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu'], 'hardened-execution': ['cpu']}),
-        (ADAPTER+'Cargo.toml', {'default': [], 'strict-execution': ['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory'], 'runtime-execution': ['brynja-legacy-sha1/execution'], 'runtime-hardened-execution': ['runtime-execution', 'brynja-legacy-sha1/hardened-execution']}),
+        (ADAPTER+'Cargo.toml', {'default': [], 'strict-execution': ['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory'], 'strict-acceleration': ['strict-execution', 'brynja-legacy-sha1/hardened-execution'], 'runtime-execution': ['brynja-legacy-sha1/execution'], 'runtime-hardened-execution': ['runtime-execution', 'brynja-legacy-sha1/hardened-execution']}),
     ):
         if tomllib.loads(sources[path])['features'] != expected:
             raise ValueError('operational SHA-1 must remain explicit and default-off')

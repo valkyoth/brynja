@@ -47,6 +47,8 @@ STD_EXECUTION = tuple(STD / "src/execution" / name for name in (
     "batch/in_place.rs", "batch/in_place/tests.rs", "batch/in_place/worker.rs",
     "batch/in_place/worker/tests.rs", "batch/in_place/worker/tests/order.rs",
     "in_place.rs", "in_place/tests.rs", "in_place/worker.rs", "in_place/worker/tests.rs",
+)) + tuple(STD / "src/strict_execution" / name for name in (
+    "compiled.rs", "compiled/worker.rs", "compiled/tests.rs", "compiled/tests/native.rs",
 ))
 TESTS = (
     PORTABLE / "tests/api.rs", PORTABLE / "tests/official_vectors.rs",
@@ -243,6 +245,7 @@ def validate(root: Path) -> None:
         "runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/runtime-execution", "dep:brynja-crypto-cpu"],
         "runtime-batch-execution": ["runtime-execution", "brynja-hash-parallel/hardened-batch-execution", "brynja-crypto-cpu-std/keccak-hardened-batch", "brynja-crypto-cpu/keccak-hardened-batch"],
         "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"],
+        "strict-acceleration": ["strict-execution", "brynja-hash-parallel/hardened-batch-execution", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/keccak-hardened-batch"],
     }:
         fail("std execution must remain explicitly opt-in")
     if std_manifest.get("dependencies") != {

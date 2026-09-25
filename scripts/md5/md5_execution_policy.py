@@ -131,7 +131,8 @@ def validate(root=ROOT,reviewed=True):
     old_features={'default':[],'runtime-execution':['brynja-legacy-md5/execution']}
     hardened_features={**old_features,'runtime-hardened-execution':['brynja-legacy-md5/hardened-execution']}
     strict_features={**hardened_features,'strict-execution':['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory']}
-    if host['features'] not in (old_features, hardened_features, strict_features):
+    compiled_features={**strict_features,'strict-acceleration':['strict-execution', 'brynja-legacy-md5/hardened-execution']}
+    if host['features'] not in (old_features, hardened_features, strict_features, compiled_features):
         raise ValueError('hosted execution must be separately default-off')
     for name in paths(root):
         if name.endswith(('.rs','.py')) and len(read(root,name).splitlines())>500:

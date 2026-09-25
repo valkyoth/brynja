@@ -77,6 +77,18 @@ pub struct Limits {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum Error {
+    /// Required compiled authority rejected; no fallback.
+    #[cfg(feature = "strict-acceleration")]
+    Backend(brynja_crypto_cpu::static_execution::Error),
+    /// Protected accelerated root or leaf operation rejected.
+    #[cfg(feature = "strict-acceleration")]
+    Execution(brynja_hash_parallel::ParallelHashError),
+    /// Protected SIMD leaf operation rejected.
+    #[cfg(feature = "strict-acceleration")]
+    Batch(brynja_hash_parallel::execution::batch::Error),
+    /// Compiled session is permanently revoked.
+    #[cfg(feature = "strict-acceleration")]
+    Quarantined,
     /// OS, target, allocation or native worker failure.
     Resource(protected_memory::Error),
     /// Invalid configuration or request budget exceeded.
@@ -98,6 +110,14 @@ impl From<protected_memory::Error> for Error {
 impl core::fmt::Display for Error {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.write_str(match self {
+            #[cfg(feature = "strict-acceleration")]
+            Self::Backend(_) => "strict ParallelHash backend failed",
+            #[cfg(feature = "strict-acceleration")]
+            Self::Execution(_) => "strict ParallelHash execution failed",
+            #[cfg(feature = "strict-acceleration")]
+            Self::Batch(_) => "strict ParallelHash SIMD batch failed",
+            #[cfg(feature = "strict-acceleration")]
+            Self::Quarantined => "strict ParallelHash quarantined",
             Self::Resource(_) => "strict ParallelHash protected resource failed",
             Self::WorkLimit => "strict ParallelHash work limit exceeded",
             Self::InvalidBits => "strict ParallelHash noncanonical bits",

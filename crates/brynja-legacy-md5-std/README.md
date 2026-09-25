@@ -30,11 +30,23 @@ allocation-free `no_std`; this adapter is never a modern-facade dependency.
 
 ## Cryptography Verification Status
 
+Default-off `strict-acceleration` adds `strict_execution::batch::Session`.
+Supply protected stack/output mapping budgets and an aggregate input-bit limit.
+`digest` accepts eight `Option<Input>` slots, a finite compression budget and
+a cancellation token. The affine output exposes eight ordered 16-byte slots
+and public work metadata; inactive slots are zero. Build-wide AVX2 or NEON is
+required on GNU/Linux x86-64 or little-endian AArch64 respectively. Deployment
+must preserve support throughout execution. Ineligible workloads reject;
+scalar tails and padding use clearing owners on protected stacks. Budget and
+cancellation failures preserve reuse; backend failure or panic quarantines.
+Compiler/platform qualification and independent retest remain pending.
+
 No named independent reviewer has verified this component. Passing tests, CI,
 Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
+| Protected compiled MD5 SIMD batches | 🚧 Implemented; qualification pending | ❌ No |
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
 | Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |
 | Hardened hosted batch SIMD | 🚧 In progress; retest and native evidence pending | ❌ No |

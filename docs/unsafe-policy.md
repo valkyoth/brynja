@@ -56,7 +56,7 @@ checked before allocation. Dump and fork exclusion precede access and locking;
 no caller can initialize secret bytes until every acquisition succeeds.
 
 The memory adapter imports only six GNU/Linux OS symbols: getpagesize, mmap, mprotect,
-madvise, mlock and munmap. Their exact declarations and location are checked by
+madvise, mlock2 (zero flags, eager residency) and munmap. Their exact declarations and location are checked by
 the existing first-party policy; extra crypto imports, links, altered ABI types
 or relocation to other modules reject. No foreign cryptographic implementation
 or third-party dependency is introduced. The source-hash unsafe inventory binds

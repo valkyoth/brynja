@@ -98,6 +98,15 @@ pub struct Limits {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum Error {
+    /// Compiled authority admission or health failed, without fallback.
+    #[cfg(feature = "strict-tuplehash-acceleration")]
+    Backend(brynja_crypto_cpu::static_execution::Error),
+    /// Scoped accelerated framing or processing failed.
+    #[cfg(feature = "strict-tuplehash-acceleration")]
+    Execution(brynja_hash_tuple::TupleHashError),
+    /// This compiled wrapper has permanently rejected further work.
+    #[cfg(feature = "strict-tuplehash-acceleration")]
+    Quarantined,
     /// Required OS, target or worker protection failed.
     Resource(protected_memory::Error),
     /// A public request budget was exceeded.
@@ -121,6 +130,12 @@ impl From<protected_memory::Error> for Error {
 impl core::fmt::Display for Error {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.write_str(match self {
+            #[cfg(feature = "strict-tuplehash-acceleration")]
+            Self::Backend(_) => "strict TupleHash backend failed",
+            #[cfg(feature = "strict-tuplehash-acceleration")]
+            Self::Execution(_) => "strict TupleHash execution failed",
+            #[cfg(feature = "strict-tuplehash-acceleration")]
+            Self::Quarantined => "strict TupleHash quarantined",
             Self::Resource(_) => "strict TupleHash protected resource failed",
             Self::WorkLimit => "strict TupleHash work limit exceeded",
             Self::MessageTooLong => "strict TupleHash length domain exceeded",

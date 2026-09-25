@@ -93,6 +93,10 @@ fn native_mapping_is_guarded_resident_dump_excluded_and_not_inherited() -> Resul
             "missing {flag}: {flags}"
         );
     }
+    assert!(
+        !flags.split_whitespace().any(|f| f == "lf"),
+        "lazy locking is not eager residency"
+    );
     let resident_kb = locked
         .ok_or(Error::Mapping)?
         .split_whitespace()

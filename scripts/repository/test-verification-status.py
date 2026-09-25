@@ -132,9 +132,9 @@ def scoped_status_rows() -> None:
     counts = {
         "brynja-core": 1, "brynja-hash-sha2": 2, "brynja-hash-sha3": 2,
         "brynja-mac-kmac": 1, "brynja-hash-tuple": 3,
-        "brynja-hash-parallel": 5, "brynja-hash-parallel-std": 4,
+        "brynja-hash-parallel": 5, "brynja-hash-parallel-std": 5,
         "brynja-legacy-sha1": 2, "brynja-legacy-md5": 2,
-        "brynja-crypto-cpu-std": 9, "brynja-legacy-sha1-std": 1, "brynja-legacy-md5-std": 1,
+        "brynja-crypto-cpu-std": 11, "brynja-legacy-sha1-std": 2, "brynja-legacy-md5-std": 2,
     }
     mutations = 0
     for crate, count in counts.items():
@@ -168,8 +168,8 @@ def scoped_status_rows() -> None:
                     mutations += 1
                 else:
                     raise AssertionError(f"stale scoped inventory accepted: {path}: {row}")
-    assert sum(counts.values()) == 33 and mutations == 198
-    print("Scoped/borrowed/protected status rows reject 198 omission, duplication, overclaim and stale-inventory regressions")
+    assert sum(counts.values()) == 38 and mutations == 228
+    print("Scoped/borrowed/protected status rows reject 228 omission, duplication, overclaim and stale-inventory regressions")
 
 
 def main() -> int:

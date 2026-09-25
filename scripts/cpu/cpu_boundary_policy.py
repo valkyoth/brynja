@@ -15,7 +15,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "e97d80498182b91b493ff1369efa62870e14a3847f0cb5fa1345909b79e9219b"
+EXPECTED_POLICY_SHA256 = "fe0d30376a85018a9561608b8a5c75dcdc054e7adc0b3003fc89df0535ff58d2"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -276,6 +276,8 @@ def validate_packages(root: Path) -> None:
             "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"],
             "strict-kmac-acceleration": ["strict-kmac", "brynja-mac-kmac/hardened-execution"],
             "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"],
+            "strict-tuplehash-acceleration": ["strict-tuplehash", "brynja-hash-tuple/hardened-execution"],
+            "strict-batch": ["protected-memory", "sha256-hardened-batch", "sha512-hardened-batch", "keccak-hardened-batch", "brynja-hash-sha2/general-sha512-t"],
             "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"],
             "sha512-hardened-batch": ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"],
             "keccak-hardened-batch": ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"],

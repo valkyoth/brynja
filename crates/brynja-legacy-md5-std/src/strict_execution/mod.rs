@@ -33,6 +33,8 @@
 //! # Ok::<(), Error>(())
 //! ```
 use brynja_crypto_cpu_std::protected_memory::{self, ProtectedBytes, ProtectedStack};
+#[cfg(feature = "strict-acceleration")]
+pub mod batch;
 mod types;
 mod worker;
 pub use types::{Cancellation, Error, Limits, PublicDeclassification};

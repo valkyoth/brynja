@@ -4190,3 +4190,88 @@ Final logs below are under ignored `dist/`, outside Cargo cleanup.
 | `debug-keccak-session-mutations-final-shard-1.log` | `dbc959acd28af92db65abbde232ce06c97e6860d47e6dcd9cc91b4c12352b6be` |
 | `debug-keccak-session-mutations-final-shard-2.log` | `8638edaa8649d17b3320152edd55bcd8ec6e1ad2ff6e908bf9eb726516402d95` |
 | `debug-keccak-session-mutations-final-shard-3.log` | `b8d4d4408ad114fe215b4a8080eb2e8f34f3657edca26b8bc158a1fcc965568a` |
+
+### Retained debug reader/static-session composition
+
+Run from the preserved source-matching checkout with the absolute retained record
+path; all eight shards are required (omitting `--shard` runs the full matrix):
+
+```sh
+python3 assurance/register-cleanup/check_debug_reader_session.py /absolute/path/to/observations.json --shard 0
+python3 assurance/register-cleanup/test_debug_reader_session.py /absolute/path/to/observations.json --shard 0
+```
+
+This follow-up joins the actual CPU session closure to the reader/volatile-clear
+closure by exact same-row imported identities and identical shared helper bodies.
+There are 161/162 functions for bulk and 164/165 for consuming-final readers.
+Original reader storage holds the borrowed session, scratch and lane array;
+public authority metadata remains separate. Kernel payload computation is an
+explicit opaque boundary, with its previously recorded evidence reused.
+
+All 168 focused scenarios pass across both strengths, Rust 1.90.0/1.98.1 and
+Linux x86/AArch64 retained builds. They execute 656 actual CPU check/permutation
+calls and 3,680 volatile clearing calls. The independent reader oracle still
+checks the original outer/engine events, cursor/counter results, error values,
+guard completion, output publication and original exception identity. A separate
+CPU oracle checks call order, exact authority checks, dispatch, seven scratch
+regions and error/unwind quarantine. Every requested clear executes its real
+byte loop and final fence, including scratch, engine, staging, output and owner
+regions. Payload loads and ordinary secret-region stores remain forbidden.
+
+The focused scenarios include empty/single-byte/multi-chunk output, early and
+late NotReady/Quarantined/StaleGeneration metadata rejection, kernel errors,
+synthetic kernel unwind, outer copy unwind and invalid final-bit width. They do
+not claim every cross-product from the earlier standalone matrices was repeated.
+No concurrent owner mutation, signal-safe revocation or arbitrary migration is
+modeled. The raw kernel boundary cannot establish cryptographic output bytes.
+
+All 72 integration IR mutations reject: nine per path, covering bypassed session,
+permutation, authority, dispatch, scratch cleanup and quarantine bodies, a short
+scratch clear, altered kernel borrow and lost original exception. Sixteen
+metadata/SSA controls pass. Twelve boundary regressions per shard reject payload
+reads, invalid borrows, old caller-frame writes, invalid authority updates and
+recursive CPU entry. During test development a healthy-only probe accepted a
+bypassed authority body; the final tests include a real NotReady rejection as
+well as a dispatched unwind. Earlier development logs are not final evidence.
+
+Static-session composition is now checked, but hosted routes, whole-verifier and
+wider caller/worker register/spill qualification remain outstanding. Valid raw
+pointer precondition returns remain assumptions. Synthetic unwind is not actual
+extern-C unwind, abort or interruption qualification. Arm runtime evidence is
+QEMU, not native. There is no physical-erasure, independent-verification, FIPS or
+military claim. F1 and root `PENTEST.md` remain open.
+
+Production Rust, shared interpreter, source/artifact record, dependencies and
+release-gate policy are unchanged. No compiler/native/full campaign was rerun;
+diagnostic entry points forbid compiler/runtime subprocesses. Source/artifact
+binding, script/status regressions, acceptance metadata, generated assurance
+freshness and documentation links pass. GitHub remains green for the last pushed
+`6ec41f52`, not this local checkpoint. The record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_reader_session.py` | `25f04b9b066bfd18b5e1aa56583810e1d07bc4ff5acae73872ddb582344d2a71` |
+| `check_debug_reader_session.py` | `7c71da29489145477a800087b9c2288112c7bb41f71716c099515db94f658b3a` |
+| `test_debug_reader_session.py` | `fdd66a80facdce714fcb9828bdfbaafdd41f214c8b0bb251a458810293db6fb6` |
+
+Completed logs are under ignored `dist/`, outside Cargo cleanup:
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-reader-session-check-shard-0.log` | `9eea3acb70129b6a55530894f2b5a24596ab8588bfd8f56846c899e55067b99f` |
+| `debug-reader-session-check-shard-1.log` | `b9b8e87c720779c68ac3ef89dd67df4a0f2a3b8bb70391e65797c02a79519906` |
+| `debug-reader-session-check-shard-2.log` | `164805b04544845788855105faa37686cf744a6c3c04c3072106e42ad2579cd5` |
+| `debug-reader-session-check-shard-3.log` | `df82e3683d6f1a9c26b7009c1e5afd00487715f19dec905d563d67f203369693` |
+| `debug-reader-session-check-shard-4.log` | `f6066adb1875c6267868d12504843b683e2aa2505df185779f183c8cd1b91778` |
+| `debug-reader-session-check-shard-5.log` | `3b7c1995f7f807624bc365632c067a0becd023c0030eb1ca745ae7943bd4c02b` |
+| `debug-reader-session-check-shard-6.log` | `8b9831c0db18452c93220f95129bb591d5a2f79de9e8e8a15fbd3c8f75358a82` |
+| `debug-reader-session-check-shard-7.log` | `9aba41a138d5040c35f4ce17d43e2d15cabdc128cc83d65d15446c17b3169c9a` |
+| `debug-reader-session-mutations-final-shard-0.log` | `fa1c7cb77b78e7bb977f3b068f680224dd43e282c860aa413ad73f13d64d24bc` |
+| `debug-reader-session-mutations-final-shard-1.log` | `9064bff732c34ec620d9447659748e92c4eab9cf94125cae1a0c238cb7d1e22c` |
+| `debug-reader-session-mutations-final-shard-2.log` | `67458b346049f7d0fbf30783dea91a0a6510cffc5e4fa54d3ffd5018320a4c3f` |
+| `debug-reader-session-mutations-final-shard-3.log` | `71830d4006a3262edf0585e35bb422b98404284050ff93c74baf84d962b1d5eb` |
+| `debug-reader-session-mutations-final-shard-4.log` | `037cd4683fa3363a7bb0577d4fabb5b20d4b89457948d651663eda1320a691ae` |
+| `debug-reader-session-mutations-final-shard-5.log` | `9717a4f95e7e7a58ce7b2924c797b22f912b87e48b5a54e882278779f6b38ecf` |
+| `debug-reader-session-mutations-final-shard-6.log` | `ba69f7ee652d475eec99064f5da07731526b517a8b75e531c65459ceddf94ffd` |
+| `debug-reader-session-mutations-final-shard-7.log` | `89188b2fd44cfec2b4b60090388f43c8873427e1d7e9454947f68086ef0aedba` |

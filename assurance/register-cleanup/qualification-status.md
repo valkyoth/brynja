@@ -305,23 +305,34 @@ The static Keccak session now has a retained 26-function metadata check: 800
 cases pass across four compiler/architecture builds. It executes actual health,
 generation and compiled-feature admission, exact kernel selection, operation
 guard completion, seven scratch-clearing requests and terminal quarantine.
-All 458 mutations reject with eighteen semantic/metadata controls. This is
-standalone coverage bound to the SHA-3 imported identities; composition beneath
-the reader and kernel/clearing payload qualification remain separate. The retained
+All 458 mutations reject with eighteen semantic/metadata controls. That standalone
+coverage binds the SHA-3 imported identities; the reader composition described
+below builds on it. Kernel payload qualification remains separate. The retained
 fixture does not enable the hosted runtime route. F1 remains open.
+
+The follow-up reader/session composition now executes those actual static CPU
+guards beneath the bulk and consuming-final readers, on their original borrowed
+storage. Its 168 focused cases span all eight retained paths, checking 656 CPU
+calls and 3,680 actual volatile clears. Admission rejection prevents dispatch;
+kernel error/synthetic unwind wipes scratch before quarantine and propagates
+through engine/output cleanup. All 72 integration IR mutants reject with sixteen
+SSA/metadata controls; twelve alias/payload/frame boundary tests reject per shard.
+Raw kernel payload computation remains opaque, with its separate evidence reused.
+This closes that composition gap, not whole-verifier/caller spill qualification.
+The diagnostic record distinguishes this focused matrix from the earlier broader
+standalone session and reader matrices. No production or release policy changed.
 
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   composition of the now-checked static CPU session/permutation metadata beneath the accelerated
-   engine read, primitive clearing and producer/outer reader bridges, plus
    whole-verifier error/unwind paths, and reconcile the optimized
    caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized
    portable bulk/final chain and accelerated producer admission/loop/completion
-   boundaries are no longer the next unfinished items.
+   boundaries and the debug reader/static-session/volatile-clear composition
+   are no longer the next unfinished items.
 2. **Complete the wider caller and worker emitted-code review.** Check the
    remaining scoped SHA-2/SHA-3, legacy, TupleHash and ParallelHash call boundaries
    against their stated contracts, including actual worker handoff/return paths.

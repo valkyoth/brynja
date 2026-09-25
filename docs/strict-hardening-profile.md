@@ -2,8 +2,9 @@
 
 Status: owner-approved implementation in progress; the protected-byte resource
 and synchronous protected-stack resources are implemented for initial Linux tests,
-and a first protected scalar SHA-2 session is implemented. **Strict acceleration,
-other families and protected ParallelHash scheduling are not available yet**;
+and protected scalar SHA-2 and SHA-3/SHAKE/cSHAKE sessions are implemented.
+**Strict acceleration, other families and protected ParallelHash scheduling are
+not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
 Added after the two-testers' follow-up on v0.24.49. The current
 portable APIs remain available with their existing owned-memory guarantees.
@@ -106,6 +107,39 @@ post-write unwind, forgotten output loans, cleanup and reuse. Native Arm, new
 emitted-code evidence, protected-stack sanitizer qualification, remaining-family
 integration and the independent retest are still pending. Do not infer closure
 of either Medium finding from this first consumer.
+
+## Protected SHA-3/SHAKE/cSHAKE consumer (qualification pending)
+
+The default-off `strict-sha3` feature adds `strict_sha3::Session`. It does not
+enable `strict-sha2`, general SHA-512/t, or any accelerated execution feature.
+All four SHA-3 identities and both strengths of SHAKE/cSHAKE create scoped
+scalar workspaces on the protected worker. `Algorithm` retains the exact XOF
+output-bit count, including zero; all outputs use canonical low-order final bits.
+`hash_chunks` accepts byte chunks and a raw LSB-first `Bits` tail;
+`hash_customized_chunks` also accepts arbitrary-bit N/S for cSHAKE. Nonempty N/S
+on another algorithm is rejected, never ignored. Canonicality validation reads
+secret tail bytes only on the protected worker. N/S are per-request caller
+storage, not retained by the session or encoded in the returned algorithm label.
+
+Construction checks the explicit output-bit and mapping bounds and acquires
+both resources before input. Empty output uses a one-byte protected placeholder
+but exposes/declassifies exactly zero bytes. Request limits independently bound
+message bits, combined customization bits, and chunk count. N/S prefix setup is
+bounded by that budget and checked for cancellation before/after setup; it is
+not interruptible internally. Message and XOF output processing check cancellation
+at 4096-byte boundaries. XOF output is staged in a fixed-size protected-stack
+buffer, not an output-sized allocation. Each typed staging loan clears before
+reuse, and the whole protected output clears on any failure even after earlier
+fragments were written. Session/output ownership, explicit declassification,
+forgotten-loan cleanup and joined-stack clearing follow the SHA-2 contract above.
+
+Native x86 author tests compare all identities to the existing portable APIs,
+cover rate/padding/chunk boundaries, all tail widths, N/S framing boundaries,
+partial/empty/multifragment XOF output, cancellation and post-write unwind.
+They also inspect actual workspace/staging/output protection flags. These are
+author integration tests, not a new independent cryptographic oracle or native
+Arm qualification. Neither Medium finding is closed by this partial integration;
+strict acceleration, other families and protected ParallelHash remain pending.
 
 ## Scope and admission
 

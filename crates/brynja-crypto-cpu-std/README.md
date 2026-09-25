@@ -36,6 +36,7 @@ It is not automatically installed or added to facade/default graphs.
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
 | Synchronous protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
 | Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
+| Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
 | Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
@@ -80,6 +81,17 @@ See the [compiled API example and complete limits](src/strict_sha2/mod.rs).
 `hash_chunks` also accepts a raw MSB-first final bit tail and a cooperative
 `Cancellation`. The returned digest loan has no implicit public conversion;
 `expose` is a deliberate borrow and `declassify` requires explicit authority.
+
+`strict-sha3` separately enables `strict_sha3::Session`. Select a fixed identity
+such as `Algorithm::Sha3_256` or an exact XOF width such as
+`Algorithm::Shake256(257)`, then supply explicit mapping, message, customization,
+output-bit and chunk limits. `hash` uses byte input; `hash_chunks` accepts raw
+LSB-first `Bits`, and `hash_customized_chunks` additionally accepts cSHAKE N/S.
+Empty N/S preserves SHAKE equivalence. Canonical validation runs on the protected
+worker; output loans clear on Drop. Empty and partial-bit XOF output are supported.
+Prefix setup is bounded but not internally cancellable. This is scalar-only and
+qualification-pending, with the same target and caller-storage limits as above.
+See the [compiled SHA-3 session example](src/strict_sha3/mod.rs).
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
 adapter. Portable selection never probes; Require fails on unqualified platforms

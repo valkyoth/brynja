@@ -10,6 +10,8 @@ pub mod protected_memory;
 
 #[cfg(feature = "strict-sha2")]
 pub mod strict_sha2;
+#[cfg(feature = "strict-sha3")]
+pub mod strict_sha3;
 
 #[cfg(feature = "keccak-hardened-batch")]
 pub mod keccak_hardened_batch;

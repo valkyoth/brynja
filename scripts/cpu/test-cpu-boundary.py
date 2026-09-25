@@ -164,6 +164,8 @@ def test() -> None:
         for before, after, expected in (
             ('protected-memory = ["dep:brynja-core"]', 'protected-memory = []', 'default feature'),
             ('strict-sha2 = ["protected-memory", "brynja-hash-sha2/general-sha512-t"]', 'strict-sha2 = ["brynja-hash-sha2/general-sha512-t"]', 'default feature'),
+            ('strict-sha3 = ["protected-memory", "dep:brynja-hash-sha3"]', 'strict-sha3 = ["dep:brynja-hash-sha3"]', 'default feature'),
+            ('default = []', 'default = ["strict-sha3"]', 'default feature'),
             ('default = []', 'default = ["strict-sha2"]', 'default feature'),
             ('brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }', 'dependency boundary'),
         ):
@@ -171,7 +173,7 @@ def test() -> None:
             require_rejection(root, expected)
             reset(root)
 
-        for relative in ('src/protected_memory/platform/thread.rs', 'src/strict_sha2/worker.rs'):
+        for relative in ('src/protected_memory/platform/thread.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha3/worker.rs'):
             source = root / 'crates' / policy.DETECTOR / relative
             source.write_text(source.read_text() + '\n// unreviewed resource drift\n')
             require_rejection(root, 'source changed')
@@ -217,4 +219,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("CPU boundary rejects twenty-six existing and six protected-resource package/source regressions")
+    print("CPU boundary rejects twenty-six existing and nine protected-resource package/source regressions")

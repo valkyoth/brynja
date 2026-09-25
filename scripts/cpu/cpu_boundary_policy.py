@@ -15,7 +15,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "d8f60d8b3ecc6f03511232d541fb339a39497203f36e692ea4c1df1579f6574d"
+EXPECTED_POLICY_SHA256 = "47cb572c7a5b342b5ac2d3ef239bce8c64e5879156eb3a9b2867bb534b1298cd"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -148,6 +148,11 @@ SOURCE_STATUS = {
     (DETECTOR, "src/strict_sha2/types.rs"): "protected-sha2-public-identity-and-bounds",
     (DETECTOR, "src/strict_sha2/worker.rs"): "protected-sha2-scoped-worker",
     (DETECTOR, "src/strict_sha2/tests.rs"): "protected-sha2-integration-tests",
+    (DETECTOR, "src/strict_sha3/mod.rs"): "protected-scalar-sha3-session-development",
+    (DETECTOR, "src/strict_sha3/types.rs"): "protected-sha3-public-identity-and-bounds",
+    (DETECTOR, "src/strict_sha3/worker.rs"): "protected-sha3-scoped-worker",
+    (DETECTOR, "src/strict_sha3/tests.rs"): "protected-sha3-integration-tests",
+    (DETECTOR, "src/strict_sha3/tests/native.rs"): "protected-sha3-native-integration-tests",
 }
 BACKEND_KEYS = {
     "id", "identity", "architecture", "module", "status", "sha256",
@@ -253,6 +258,7 @@ def validate_packages(root: Path) -> None:
     if detector.get("features") != {"default": [],
             "protected-memory": ["dep:brynja-core"],
             "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
+            "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"],
             "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"],
             "sha512-hardened-batch": ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"],
             "keccak-hardened-batch": ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"],

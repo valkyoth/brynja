@@ -2,6 +2,11 @@
 
 ## 0.24.49 development
 
+- Add default-off protected scalar SHA-3/SHAKE/cSHAKE sessions with canonical
+  LSB-first input/customization and exact-bit XOF output, including empty output.
+  Bound prefix/message/output work, retain protected affine output, and clear
+  previously written fragments on cancellation or unwind. Qualification and
+  strict accelerated/remaining-family integrations are still pending.
 - Add an opt-in protected scalar SHA-2 session for six named identities and all
   general SHA-512/t parameters. Preacquire stack/output resources, validate bit
   tails on the protected worker, bound requests and cancellation, retain affine

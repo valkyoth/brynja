@@ -1,4 +1,4 @@
-use super::{Error, ProtectedBytes, geometry::Layout};
+use super::{Error, ProtectedBytes, ProtectedStack, geometry::Layout};
 
 #[test]
 fn sizes_are_checked_before_any_allocation() -> Result<(), Error> {
@@ -43,6 +43,10 @@ fn unsupported_builds_never_mint_protected_storage() {
             ProtectedBytes::new(bytes, usize::MAX),
             Err(Error::Unsupported)
         ));
+        assert!(matches!(
+            ProtectedStack::new(bytes, usize::MAX),
+            Err(Error::Unsupported)
+        ));
     }
 }
 
@@ -51,4 +55,5 @@ fn protected_owner_never_implicitly_formats_data() {
     // Compile-fail doctests check the five forbidden traits. Keep a positive
     // type reference here so typos/removal cannot masquerade as their success.
     let _: fn(usize, usize) -> Result<ProtectedBytes, Error> = ProtectedBytes::new;
+    let _: fn(usize, usize) -> Result<ProtectedStack, Error> = ProtectedStack::new;
 }

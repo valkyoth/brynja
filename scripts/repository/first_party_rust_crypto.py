@@ -91,6 +91,20 @@ OS_MEMORY_ABI = '''unsafe extern "C" {
     fn mlock(addr: *const c_void, len: usize) -> i32;
     fn munmap(addr: *mut c_void, len: usize) -> i32;
 }'''
+OS_THREAD_ADAPTER = Path('crates/brynja-crypto-cpu-std/src/protected_memory/platform/thread.rs')
+OS_THREAD_ENTRY = 'extern "C" fn enter<F: FnOnce() + Send>(argument: *mut c_void) -> *mut c_void {'
+OS_THREAD_ABI = '''unsafe extern "C" {
+    fn pthread_attr_init(attr: *mut Attr) -> c_int;
+    fn pthread_attr_destroy(attr: *mut Attr) -> c_int;
+    fn pthread_attr_setstack(attr: *mut Attr, address: *mut c_void, bytes: usize) -> c_int;
+    fn pthread_create(
+        thread: *mut c_ulong,
+        attr: *const Attr,
+        start: extern "C" fn(*mut c_void) -> *mut c_void,
+        arg: *mut c_void,
+    ) -> c_int;
+    fn pthread_join(thread: c_ulong, result: *mut *mut c_void) -> c_int;
+}'''
 NATIVE_LINK = re.compile(r"#\s*\[\s*link(?:_name|_section)?\b")
 NATIVE_INCLUDE = re.compile(
     r"include_bytes\s*!\s*\([^)]*\.(?:a|bc|dll|dylib|lib|ll|o|obj|so)[\"']",
@@ -164,6 +178,10 @@ def validate(root: Path) -> None:
                 if text.count(OS_MEMORY_ABI) != 1:
                     fail('OS memory ABI inventory changed')
                 abi_text = text.replace(OS_MEMORY_ABI, '', 1)
+            if relative == OS_THREAD_ADAPTER:
+                if text.count(OS_THREAD_ABI) != 1 or text.count(OS_THREAD_ENTRY) != 1:
+                    fail('OS thread ABI inventory changed')
+                abi_text = text.replace(OS_THREAD_ABI, '', 1).replace(OS_THREAD_ENTRY, '', 1)
             if relative in LOCAL_C_ABI:
                 signature = LOCAL_SIGNATURE
                 if relative == Path('crates/brynja-core/src/secret_memory_difference.rs'):

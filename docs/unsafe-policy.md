@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: eighty-two exact source-hash-bound exceptions inventoried, including two development OS-memory modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: eighty-three exact source-hash-bound exceptions inventoried, including three development OS-resource modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only eighty-two exact modules: the private core volatile clearer and
+Rust in only eighty-three exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -17,8 +17,8 @@ bridge; and the corresponding ordinary SHA-512-family batch platform import,
 AVX2/NEON kernels and hosted bridge; plus the independent-state Keccak batch
 platform import, AVX2/NEON kernels and hosted bridge; and the distinct hardened
 SHA-224/256, SHA-512-family and Keccak batch platform imports and AVX2/NEON kernels,
-with three distinct hosted hardened-batch platform imports; and the two bounded
-OS-memory modules described below. The cryptographic modules use fixed-size
+with three distinct hosted hardened-batch platform imports; and the three bounded
+OS-resource modules described below. The cryptographic modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
 instruction/import boundaries and the reviewed private memory primitives, never
@@ -41,10 +41,10 @@ when hidden behind build tooling.
 ## v0.24.49 protected-storage development exception
 
 The owner approved implementation of a stricter opt-in profile for the new
-unsupported-target and pageable-storage findings. Two private modules under
-`brynja-crypto-cpu-std/src/protected_memory`, `platform.rs` and `platform/sys.rs`,
-implement its first resource layer. They do **not** admit strict cryptographic
-execution or protect worker stacks. Independent review and native AArch64
+unsupported-target and pageable-storage findings. Three private modules under
+`brynja-crypto-cpu-std/src/protected_memory`, `platform.rs`, `platform/sys.rs` and
+`platform/thread.rs`, implement bounded memory and synchronous execution stacks.
+They do **not** admit strict cryptographic execution. Independent review and native AArch64
 qualification remain pending.
 
 Necessity: safe Vec/Box storage cannot acquire OS residency and per-mapping dump
@@ -55,12 +55,20 @@ uses a fresh bounded anonymous mapping with two guard pages. Page geometry is
 checked before allocation. Dump and fork exclusion precede access and locking;
 no caller can initialize secret bytes until every acquisition succeeds.
 
-Only six GNU/Linux OS symbols may be imported: getpagesize, mmap, mprotect,
+The memory adapter imports only six GNU/Linux OS symbols: getpagesize, mmap, mprotect,
 madvise, mlock and munmap. Their exact declarations and location are checked by
 the existing first-party policy; extra crypto imports, links, altered ABI types
 or relocation to other modules reject. No foreign cryptographic implementation
 or third-party dependency is introduced. The source-hash unsafe inventory binds
-all pointer conversions, fixed ownership, geometry and ten local safety proofs.
+all pointer conversions, fixed ownership and geometry. The separate thread adapter
+imports exactly pthread_attr_init, pthread_attr_destroy, pthread_attr_setstack,
+pthread_create and pthread_join, plus a Rust-defined generic C-ABI trampoline.
+Its scoped Send callback is borrowed exclusively until successful native join;
+unexpected join failure aborts rather than returning with live borrows. No join
+handle escapes. The guarded, locked stack is cleared from another stack only
+after native termination, including TLS destructors. The three modules carry
+sixteen local safety proofs. GNU attribute sizes/alignment are target-specific;
+other libc ABIs reject rather than reusing their layout.
 
 Exclusive borrowed slices cannot resize or transfer mapping ownership. Drop
 uses the core volatile clearer on the whole writable payload, including padding,
@@ -74,8 +82,11 @@ lock limit in a child, inject every acquisition/release failure and check cleanu
 ordering and recoverable unwind. Unsupported OS/ABI/architecture and model builds
 have an uninhabited adapter, not a simulated success. Platform settings must not
 revoke protections; fork while owners are live is unsupported. This does not
-cover privileged reads, snapshots, hibernation, active execution stacks or all
-registers. See the [strict profile contract](strict-hardening-profile.md).
+cover privileged reads, snapshots, hibernation, arbitrary caller/alternate stacks,
+dynamic TLS, callback heap allocations or all registers. The stack resource is
+not a secure closure sandbox. Tests cover real stack addresses and flags, startup
+return-code failures, join/destructor ordering, unwind, reuse and fatal join or
+attribute-destruction failure. See the [strict profile contract](strict-hardening-profile.md).
 
 ## v0.24.49 Dedicated x86 SHA-512 development exception
 

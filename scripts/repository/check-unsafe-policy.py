@@ -8,7 +8,7 @@ import unsafe_policy
 
 def main() -> int:
     unsafe_policy.validate(Path(__file__).resolve().parents[2])
-    print("unsafe policy confines crypto/memory boundaries to 82 source-bound modules, including two development OS-memory adapters")
+    print("unsafe policy confines crypto/memory boundaries to 83 source-bound modules, including three development OS-resource adapters")
     return 0
 
 

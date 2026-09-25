@@ -1,8 +1,9 @@
 //! Isolated Linux GNU 64-bit mapping adapter; no foreign cryptography.
 //!
 //! Constants/signatures match Linux UAPI and the GNU libc mmap ABI on the two
-//! cfg-selected targets. No allocator, caller mapping or active stack is owned
-//! here. The owner always unmaps the entire dedicated mapping, never a subrange.
+//! cfg-selected targets. No allocator or caller mapping is owned here. The
+//! stack adapter exclusively borrows this owner until its native worker joins.
+//! The owner always unmaps the entire dedicated mapping, never a subrange.
 #![allow(unsafe_code)]
 
 use super::{Error, geometry::Layout};
@@ -11,6 +12,7 @@ use core::{ffi::c_void, ptr::NonNull};
 mod sys;
 #[cfg(test)]
 mod tests;
+mod thread;
 
 pub(super) struct Mapping {
     base: Option<NonNull<u8>>,
@@ -21,6 +23,17 @@ pub(super) struct Mapping {
 }
 
 impl Mapping {
+    pub(super) fn stack(bytes: usize, max: usize) -> Result<Self, Error> {
+        if bytes < 65536 {
+            return Err(Error::InvalidSize);
+        }
+        Self::new(bytes, max)
+    }
+
+    pub(super) fn run<F: FnOnce() + Send>(&mut self, work: F) -> Result<(), Error> {
+        thread::run(self, work)
+    }
+
     pub(super) fn new(bytes: usize, max: usize) -> Result<Self, Error> {
         let page = usize::try_from(sys::page_size()).map_err(|_| Error::InvalidSize)?;
         let layout = Layout::new(bytes, max, page)?;

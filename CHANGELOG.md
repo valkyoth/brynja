@@ -6,7 +6,11 @@
   residency locking, dump/fork exclusion and clearing before release. Reject
   unsupported targets and model builds rather than using ordinary heap. This
   is the strict profile's resource foundation, not strict hashing admission;
-  protected execution stacks and ParallelHash integration remain unfinished.
+  strict hash and ParallelHash integration remain unfinished.
+- Add synchronous protected native-thread stacks under the same opt-in feature.
+  Join before clearing/reuse, catch recoverable callback panic on the worker,
+  reject startup failure without fallback and abort on unexpected join failure.
+  This resource is not a secure callback sandbox or strict cryptographic admission.
 - Add portable scoped MD5 storage with borrowed active state, explicit public
   release, typed secret output and independent scope cleanup. Preserve checked
   u128 accounting and low-64-bit RFC padding. Scoped SIMD batching also retains

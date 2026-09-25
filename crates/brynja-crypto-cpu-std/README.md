@@ -34,6 +34,7 @@ It is not automatically installed or added to facade/default graphs.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
+| Synchronous protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
 | Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
@@ -51,10 +52,19 @@ resident pages, per-mapping core-dump exclusion and guard pages. Allocation is
 fallible and fails closed on unsupported systems or OS protection failure.
 `new(bytes, max_mapping_bytes)` returns initially zeroed storage; use explicit
 `as_bytes`/`as_bytes_mut` loans and `clear`/`close`. Drop clears the full payload
-before release. It is not a protected worker stack or strict hashing authority;
+before release. It is not a strict hashing authority;
 ordinary caller copies, stack and registers remain outside its guarantee.
 No hardware/SIMD instruction feature is required for this storage adapter.
 See the [implementation contract](../../docs/strict-hardening-profile.md).
+
+The same feature provides `protected_memory::ProtectedStack`. Acquire it with
+`new(stack_bytes, max_mapping_bytes)`, then call `run` with a borrowed
+`FnOnce() + Send` callback returning `()`. It joins before returning and clears
+the entire stack from the caller's stack, including after recoverable panic.
+The minimum reservation is 64 KiB; callers must budget enough for their work.
+No ordinary-stack fallback is allowed. This is not a secure closure sandbox:
+captures, arbitrary heap/TLS allocations, panic hooks and registers are outside
+its storage guarantee. Concurrent protected hashing is not implemented yet.
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
 adapter. Portable selection never probes; Require fails on unqualified platforms

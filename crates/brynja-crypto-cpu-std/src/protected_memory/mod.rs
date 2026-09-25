@@ -1,7 +1,8 @@
 //! Opt-in, bounded, resident and core-dump-excluded byte storage.
 //! This resource is NOT strict execution admission. In particular, borrowing
 //! these bytes does not protect the caller's stack, registers or other copies.
-//! Strict hashing and protected worker stacks are not available yet.
+//! [`ProtectedStack`] separately provides synchronous protected-stack execution.
+//! Strict hashing admission and parallel protected scheduling are not available.
 //!
 //! The initial adapter supports Linux GNU on x86-64 and little-endian AArch64.
 //! Other targets and verification-model builds return [`Error::Unsupported`].
@@ -74,6 +75,14 @@ pub enum Error {
     Access,
     /// Unmapping failed. Explicit close retains the cleared owner for retry.
     Release,
+    /// Native thread attributes could not be initialized/configured.
+    ThreadAttributes,
+    /// A native worker could not start. There is no ordinary-stack fallback.
+    ThreadStart,
+    /// The callback panicked and unwound on its worker; its stack was cleared.
+    WorkerPanicked,
+    /// The worker terminated without completing the Rust callback protocol.
+    WorkerProtocol,
 }
 
 impl core::fmt::Display for Error {
@@ -88,6 +97,10 @@ impl core::fmt::Display for Error {
             Self::ForkExclusion => "protected storage fork exclusion failed",
             Self::Access => "protected storage payload access failed",
             Self::Release => "cleared protected storage could not be released",
+            Self::ThreadAttributes => "protected worker attributes failed",
+            Self::ThreadStart => "protected worker could not start",
+            Self::WorkerPanicked => "protected worker callback panicked",
+            Self::WorkerProtocol => "protected worker did not complete its callback",
         })
     }
 }
@@ -169,6 +182,9 @@ impl ProtectedBytes {
         }
     }
 }
+
+mod stack;
+pub use stack::ProtectedStack;
 
 #[cfg(any(
     test,

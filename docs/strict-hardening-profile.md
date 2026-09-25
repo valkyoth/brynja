@@ -1,8 +1,9 @@
 # Strict hardening profile — implementation contract
 
 Status: owner-approved implementation in progress; the protected-byte resource
-is implemented for initial Linux tests, but **strict hashing and protected-stack
-execution are not available yet**. Added after the two-testers' follow-up on v0.24.49. The current
+and synchronous protected-stack resources are implemented for initial Linux tests,
+but **strict hashing and protected ParallelHash scheduling are not available yet**.
+Added after the two-testers' follow-up on v0.24.49. The current
 portable APIs remain available with their existing owned-memory guarantees.
 This document does not admit an execution path or change any release gate.
 
@@ -32,6 +33,37 @@ live or externally revoke protections. Unmapping releases the lock after the
 full writable mapping is cleared; there is no separate unlocked interval.
 These per-region controls do not protect another stack, TLS, other allocations,
 privileged snapshots or hibernation. The remaining steps below are still required.
+
+`protected_memory::ProtectedStack` preacquires the same guarded, locked mapping
+before accepting work. `run` accepts a scoped `FnOnce() + Send` callback, joins
+the native thread synchronously, then clears its entire stack from the calling
+stack. No join handle or secret-bearing thread result is exposed. Successful
+join includes native thread-local destruction. Recoverable callback panic returns
+`WorkerPanicked` after cleanup; the stack can be reused. Startup failures never
+run the callback or fall back. Unexpected join or attribute-destruction failure
+aborts rather than returning with uncertain ownership. Aborting panic, stack
+overflow and a panicking panic-payload destructor do not promise cleanup.
+
+The initial stack reservation minimum is 64 KiB, not a promise that arbitrary
+work fits: libc also uses part of the mapping. Callers must budget adequate stack
+and locked-memory capacity. The callback is not a secure sandbox: captures and
+inputs originate in caller storage; arbitrary heap allocations, dynamic TLS,
+signal alternate stacks, panic hooks and register copies are not covered. Do not
+externally cancel the native thread, fork, or revoke its mapping. Strict hash
+integration must constrain these paths rather than treating this generic callback
+as cryptographic admission. Concurrent protected worker pools remain pending.
+
+The GNU pthread adapter uses the caller-stack contract of
+[pthread_attr_setstack](https://man7.org/linux/man-pages/man3/pthread_attr_setstack.3.html)
+and the termination guarantee of
+[pthread_join](https://man7.org/linux/man-pages/man3/pthread_join.3.html).
+Its private attribute ABI follows glibc's
+[x86-64 definitions](https://github.com/bminor/glibc/blob/master/sysdeps/x86/nptl/bits/pthreadtypes-arch.h),
+[AArch64 definitions](https://github.com/bminor/glibc/blob/master/sysdeps/aarch64/nptl/bits/pthreadtypes-arch.h)
+and [public union/thread types](https://github.com/bminor/glibc/blob/master/sysdeps/nptl/bits/pthreadtypes.h).
+Other libc/OS ABIs are not admitted. Native x86 tests check actual callback stack
+addresses, protection flags, TLS destructor ordering, panic cleanup, scoped output
+loans, repeated reuse and fatal join/destruction failures in isolated children.
 
 ## Scope and admission
 

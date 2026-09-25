@@ -219,6 +219,14 @@ Later diagnostic-only additions can run there without replacing captured sources
   portable-reader link for the modeled cases. Primitive bodies, accelerated
   reader guards and whole-verifier/register/spill coverage remain separate.
 
+- Accelerated debug producer/local-guard coverage now checks 22-function
+  closures across eight compiler/target/identity paths. All 10,752 cases pass;
+  760 mutations reject and sixteen metadata/SSA controls pass. Original output,
+  initializer and storage borrows are preserved. Success clears staging and
+  disarms the guard; rejection and selected synthetic unwind request terminal
+  owner cleanup. Initializer/operation/volatile bodies remain opaque, so their
+  composition with these guards and the reader bridges is still outstanding.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -226,7 +234,8 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   accelerated producer guard paths and whole-verifier error/unwind
+   accelerated initializer/operation bodies composed with the checked producer
+   guards and reader bridges, plus whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

@@ -3424,3 +3424,79 @@ Completed logs live under ignored `dist/`, outside Cargo's `target/` directory.
 | `debug-filled-consuming-mutations-v2-shard-1.log` | `63bb12db08a00fb8bbdccf1e99b92d8b88b64f6c74731016bb91d6f3ac967941` |
 | `debug-filled-consuming-mutations-v2-shard-2.log` | `462f6d2801903671808901b8e57a19c3ca5e8c16170fbe49ce47152d3f45949f` |
 | `debug-filled-consuming-mutations-v2-shard-3.log` | `d0101324ed8e5fdd5846c3a1a281e1aca16112f52ae494a3b4ba43affce24859` |
+
+### Accelerated debug producer and local guard
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_accelerated_guard.py "$record"
+python3 assurance/register-cleanup/test_debug_accelerated_guard.py "$record"
+```
+
+Both accept `--shard 0` through `7`; all eight shards are required. The matrix
+covers Rust 1.90/1.98, x86 GNU/Arm musl and 128/256 accelerated debug producers.
+Each 22-function closure includes the actual producer, borrowed operation guard,
+result/error helpers and owned-region clearing wrappers. Original output,
+initializer, mode, length and storage captures must remain bound; the operation
+receives the original storage under an armed local guard. Only success changes
+the guard completion bit from zero to one.
+
+The independent lifecycle oracle requires staging clearing even on success.
+Initialization errors, operation errors and selected synthetic unwind request
+terminal storage metadata updates and six exact owned-region clears. Predicate
+unwind after a successful operation also clears the returned destination. The
+initializer and operation bodies are opaque synthetic boundaries: operation
+unwind checks owner cleanup here, not the destination cleanup inside the opaque
+operation. Metadata copies and volatile clearing are likewise modeled boundaries.
+This does not qualify CPU admission, read-loop contents or physical erasure.
+
+All 10,752 cases pass (1,344 per path). Selected reachable root/local-guard blocks
+are exercised, excluding the known pre-transfer initializer unwind arm and
+double-panic/unreachable blocks. This is not exhaustive block coverage of all
+22 helpers. All 760 mutations reject (94 per Rust 1.90 path, 96 per Rust 1.98
+path), with sixteen passing debug-metadata/SSA controls. Mutations cover ABI,
+capture/storage provenance, direct payload reads, omitted/duplicate cleanup,
+guard completion, result branches and exception propagation. Compiler/runtime
+subprocesses are forbidden in the mutation harness.
+
+The initial mutation harness assumed a hash-core artifact field unavailable in
+these cases. Its next run assumed an initializer alignment annotation that Rust
+1.98 omits. Both harness-only issues were corrected; all eight final `v3` shards
+exited successfully. Earlier mutation logs are superseded. The direct checker
+was unchanged, so its completed logs were reused. No production Rust, captured
+implementation, dependency or release-gate policy changed; no compiler/native
+campaign or full sweep was repeated.
+
+Initializer/operation-body composition with the checked guard and reader bridges
+remains pending, as do whole-verifier and whole-call register/spill qualification.
+Synthetic unwind does not establish real extern-C unwind, abort/signal cleanup
+or arbitrary-interruption behavior. Arm runtime evidence remains QEMU, not native.
+F1 and root `PENTEST.md` remain open; this is author diagnostic evidence.
+
+Checker SHA-256:
+`6ff9b911c619e407ebe7bff449c7b334679dadf5281e5dde8b702deb1e244e2f`;
+final mutation harness:
+`5f0488da6bad5f527e267ee3ff9df0e3dc6460bc91de5279758b57b0901a731e`.
+The observation record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Completed logs remain under ignored `dist/`, outside Cargo's `target/` directory.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-accelerated-guard-check-shard-0.log` | `b5829c37c7effe0a2c1aa7c7360eb33398b733e7b105ebdf271ee4a9a73dd945` |
+| `debug-accelerated-guard-check-shard-1.log` | `fb0d9ae41b8a6f015de58d742e55f572dda6fb1fe4e54dc31f04d4866b32b41e` |
+| `debug-accelerated-guard-check-shard-2.log` | `0f051c918563f746505daaf22660a5a3077d143e1b3ee3d096882c6e8b59dfff` |
+| `debug-accelerated-guard-check-shard-3.log` | `b1617711fc74fbbfee928b6cd6358be38c3371e626c62cc756d799e585dc2ce6` |
+| `debug-accelerated-guard-check-shard-4.log` | `9fc3d3360d567c6dab8dd28ac3a5324a6896ed489ad899c53767d9fbb3c6cf0b` |
+| `debug-accelerated-guard-check-shard-5.log` | `b75ac51b9dba2e3a83f5823e27f4d7e40517e138cbea6f407394b3687ceaaa99` |
+| `debug-accelerated-guard-check-shard-6.log` | `8ce79635c3955ca7918005099359f277bd8d2f8e0c109e09558cd097b8dd8d32` |
+| `debug-accelerated-guard-check-shard-7.log` | `077c94460194afd83e0c599d156408c08987b1c16f6e1d1e3b11c5c81e41d19e` |
+| `debug-accelerated-guard-mutations-v3-shard-0.log` | `e982f33d6e608813caa223d966dcfdaebd66e2aa3640abf46a291a544fa5ed3f` |
+| `debug-accelerated-guard-mutations-v3-shard-1.log` | `ce5a36953087182262c5c1bd397ed096cdbcdd3a404bfb8e017650e49d3de9e9` |
+| `debug-accelerated-guard-mutations-v3-shard-2.log` | `969a5ddf30591e937091f7c512b94ba318b2288a098bcbf1c1623c143d6cb412` |
+| `debug-accelerated-guard-mutations-v3-shard-3.log` | `1e10843dc0f233c05e542263abf0790180a0089ebb8922fe684e94c27934e6b8` |
+| `debug-accelerated-guard-mutations-v3-shard-4.log` | `d155a3415ba58457a9c5f770ac47aaf43cb3d6e623268f32c9c604594b7d42e4` |
+| `debug-accelerated-guard-mutations-v3-shard-5.log` | `5cbf9e6e9f51df93f3c6f8408a30fa15470339029b731dc60e0cc0d15a404703` |
+| `debug-accelerated-guard-mutations-v3-shard-6.log` | `8e8b8bbdd3f891d0acd5b1fe8dba5f4b1ed65a4c44e90c0fd468f39834cfe1b9` |
+| `debug-accelerated-guard-mutations-v3-shard-7.log` | `9269bfd3749faa0df3f1368af992d1edfaf4ce899130b5b60e7e138100676a67` |

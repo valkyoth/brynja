@@ -4024,3 +4024,89 @@ Completed logs below are retained under ignored `dist/`, outside Cargo cleanup.
 | `debug-reader-primitives-mutations-final-shard-6.log` | `447ca1e81fdeaa8562e800026fba6562b6517f004517461062f9628475b0fb9d` |
 | `debug-reader-primitives-mutations-final-shard-7.log` | `0e155c60eedeb1479655023118bd70601197713244f108399906660fd61872b4` |
 | `debug-reader-primitive-assembly-final.log` | `1451f11f28594a6d610027d3a90a9e2ae0d7be36fd9533197590725612d6a5cb` |
+
+### Accelerated debug readers with actual volatile clearing
+
+From the preserved source-matching checkout, with the absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_reader_clear.py "$record"
+python3 assurance/register-cleanup/test_debug_reader_clear.py "$record"
+```
+
+Both commands accept `--shard 0` through `7`; all eight are required. They forbid
+compiler/runtime subprocesses. This is a focused extension of the preceding
+reader/primitive composition, not a repeat of the full reader parameter matrix.
+It merges the previously checked six-function clearing closure with the actual
+reader closure, requiring the same original clearing symbol and identical shared
+helpers from the retained row. Bulk closures contain 137/138 functions and
+consuming closures contain 140/141.
+
+The clearing loop, iterator, byte writer and compiler-fence bodies execute against
+the original reader storage and output. Their check/write sequence must cover
+each original byte exactly once in increasing order with volatile zero, followed
+by one SeqCst compiler fence. Valid borrowed byte-pointer precondition return is
+still assumed. Every completed clear is matched in order to the independently
+checked caller trace, including inner engine cleanup, per-chunk staging, full
+failed output and consuming-owner cleanup. The modeled counter bytes become zero
+when their original region is cleared. Local descriptor spills are restricted to
+frames created inside the active clear, never earlier caller frames or payload.
+
+Seventeen bulk and nineteen consuming cases per path cover empty output, staging
+boundaries and multiple chunks; terminal state and counter overflow; session,
+permutation and copy failures; later writer unwind; and outer cleanup failures.
+All seventeen configured fault scenarios are checked to predict failure, avoiding
+vacuous injections beyond the final call. The development late-permutation case
+was lengthened to reach that dispatch. Synthetic boundary unwind remains a
+caller-cleanup test, not proof of actual extern-C or arbitrary-interruption paths.
+
+Each mutation shard reuses twenty-four retained clearing-body mutations beneath
+a real consuming reader, plus metadata removal and local-SSA rename controls.
+Fifteen malformed boundary cases reject early/duplicate/weak fences, skipped or
+duplicate bytes, wrong original regions, ordinary payload stores, recursive
+clearing and writes into earlier caller metadata. Positive controls verify actual
+counter-byte updates, empty-slice fencing and helper-local stores; the existing
+100-case overlapping-store control checks the reused indexed memory operation.
+An initial control renamed an ABI-bound parameter rather than a local SSA value;
+the final campaign corrects it. Initial development logs are superseded below.
+
+The exact same-record entry/write and iterator/fence assembly checks documented
+above are reused. These finite LLVM traces are not all-length proof, new physical
+erasure observations, wrapper/whole-caller spill qualification, native Arm or
+Windows evidence. CPU session/permutation bodies, whole-verifier error/unwind
+paths and wider caller/worker qualification remain outstanding. F1 and root
+`PENTEST.md` remain open. Production Rust, captured artifacts, the shared
+interpreter, dependencies and release-gate policy are unchanged. No compiler,
+native campaign or full verifier sweep was repeated.
+
+All eight composition and mutation shards exited zero: 288 focused reader cases
+completed 3,064 clearing calls, and 192 mutations rejected with sixteen controls.
+Retained source/artifact binding, assurance freshness, script-layout/status
+regressions, acceptance metadata and documentation links pass. The record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Completed logs are under ignored `dist/`, outside Cargo cleanup.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_reader_clear.py` | `aeea4ead998265c9a676c9b8c342e7e903eebfc577a589be9d4235052fc4dee0` |
+| `check_debug_reader_clear.py` | `d659e25d544e6f62ee77e4c18f78d656b3ee967eed1243f9fd4454aacbc662a1` |
+| `test_debug_reader_clear.py` | `acce6eb5048f79a433d6a3f38bd93cd2f8673937a23d89dc5f56ff88ccfd1efd` |
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-reader-clear-check-shard-0.log` | `210c9d86393c757d230db89dd213674cbe4fd3fa4eb8776eee2b05c0c298b9c3` |
+| `debug-reader-clear-check-shard-1.log` | `e352fcbdba4dff7c89d51406378d7ffbbdc6515f61d049eff658109a31805129` |
+| `debug-reader-clear-check-shard-2.log` | `a02d503a39c8b9622e14c78b4495c713d4cc7842c5aba5626dae5d0e70cdb6ca` |
+| `debug-reader-clear-check-shard-3.log` | `ba44bcefb7ed901fd9505cd4e2fee144e2783fe4c412c90055a49c52261edb48` |
+| `debug-reader-clear-check-shard-4.log` | `e72732cff2503403ec0de0fcfa89b2a5746ec148bcc54af39793444a8c437c9f` |
+| `debug-reader-clear-check-shard-5.log` | `02ad4b345d86050807c3fea27d2e50c793efbb8f8869f8c72d245e30735f72a5` |
+| `debug-reader-clear-check-shard-6.log` | `1809fa9bc3c38cde827c5f4f4fea8c3544ce79782fd9ab26e6a954e438622be4` |
+| `debug-reader-clear-check-shard-7.log` | `fec3e7bbf54899b9278e09887108c811f086e5353dd761b748da6dad40d055e4` |
+| `debug-reader-clear-mutations-final-shard-0.log` | `8ff62d26ad89eac5996769eaf72075c5ad6f6158442c4d9374cd98a8313ef6d0` |
+| `debug-reader-clear-mutations-final-shard-1.log` | `d58f739dae878d125f630005ebc6eca22cce30a053062748306261b83bbc412b` |
+| `debug-reader-clear-mutations-final-shard-2.log` | `c83ad0a668eadf4066a6be395e503b921a939abc145a60b9369c635ebff5fb77` |
+| `debug-reader-clear-mutations-final-shard-3.log` | `e3f1f6b2a01162056c11dc2a2ebfd2851868b2f7defb268581b8e73917ea5bf1` |
+| `debug-reader-clear-mutations-final-shard-4.log` | `05d6aee063df6fe6e4ad18260aa955d51c1bd09486ba1adc90fc352f22bee081` |
+| `debug-reader-clear-mutations-final-shard-5.log` | `4127ce624c53c4ae107db762a85246f6499b894c5a834e358244856c9ea45db5` |
+| `debug-reader-clear-mutations-final-shard-6.log` | `d9202e1f7253303d5b99d5cab02e6f94605593760f71185d09e3ce3a3dba8887` |
+| `debug-reader-clear-mutations-final-shard-7.log` | `ca0859373cb09d2d5c297c3b7b9756b9553723ef91559ae1034f417037914979` |

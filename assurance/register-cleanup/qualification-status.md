@@ -292,12 +292,21 @@ Later diagnostic-only additions can run there without replacing captured sources
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
+The retained six-function volatile-clear closure now executes beneath the actual
+accelerated readers, including inner engine, staging, output and consuming-owner
+cleanup. All 288 focused cases pass across eight paths, completing 3,064 clearing
+calls. Exact byte order, zero values and the final SeqCst compiler fence are
+checked against the original caller regions. All 192 IR mutations reject with
+sixteen controls; fifteen malformed boundary cases reject per shard. Valid
+byte-pointer precondition return remains an assumption. This composes the
+previously opaque volatile body but does not qualify whole-call spills or close F1.
+
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   the remaining primitive boundaries beneath the now-composed accelerated
-   engine read and producer/outer reader bridges, plus
+   the CPU session/permutation boundaries beneath the now-composed accelerated
+   engine read, primitive clearing and producer/outer reader bridges, plus
    whole-verifier error/unwind paths, and reconcile the optimized
    caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

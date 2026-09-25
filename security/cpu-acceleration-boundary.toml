@@ -867,7 +867,7 @@ sha256 = "f77a10d0138bb2c2855dbfb62b10195e0b0a302b452fc62b3f225adef4d8ee12"
 package = "brynja-crypto-cpu"
 path = "src/x86_sha512/secret.rs"
 status = "hardened-sha512-opaque-register-boundary"
-sha256 = "b790074aa3774d785a87bf3abca850540f3ab5c798c43aaf3ce29bdde4b38e66"
+sha256 = "333d5588c1e3ff4f9a0ea5ab9584fa9f1342452ebb4b01ad17d9982df8c6c2a7"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -891,7 +891,7 @@ sha256 = "2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f"
 package = "brynja-crypto-cpu"
 path = "src/x86_avx2_keccak/secret.rs"
 status = "hardened-keccak-opaque-register-boundary"
-sha256 = "59efd87d9c1fc577f2eb1c39a626849262919783909195ea4e0459ae4641d67e"
+sha256 = "02ff4ce6f630d0da916cbb212e77d2bf04e834b7c15ee7eda8b53f221b48d5e6"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -903,7 +903,7 @@ sha256 = "5e01c5624d8783c742f8d5e04cd6f276bbb158d80fe10160c1d17b715aa36949"
 package = "brynja-crypto-cpu"
 path = "src/sha256_hardened_batch/x86/secret.rs"
 status = "hardened-sha256-batch-opaque-register-boundary"
-sha256 = "1c9dfe716a169deb9d8a2670eb485b74d393888898904ba5a092aa1cefcbd852"
+sha256 = "59631be40d1d8ab35eb055f62a427c6b44901c4998927a077e7a26219f64e56f"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -915,7 +915,7 @@ sha256 = "f29271f331283b937532ab931894679d4ee6a1a4049dfbff687c389ff5dfb946"
 package = "brynja-crypto-cpu"
 path = "src/sha512_hardened_batch/x86/secret.rs"
 status = "hardened-sha512-batch-opaque-register-boundary"
-sha256 = "bb03ef422bf0e6fb505e39f75364384683e696f8ef8c50ed6f3b683f20470c2b"
+sha256 = "31658d70a760e4d2688a93f307f90a6d509fd5cd2f84cbf0296ab57225ddcb4e"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -927,7 +927,7 @@ sha256 = "807a94ee4f3f8d73c1c945e8899121f6f3635a9ef438f2eb309477f4d5b550c5"
 package = "brynja-crypto-cpu"
 path = "src/keccak_hardened_batch/x86/secret.rs"
 status = "hardened-keccak-batch-opaque-register-boundary"
-sha256 = "11cd76232a6e59720835bb8bf1b977608c59ba7465a107c8f1dc1f27711d8146"
+sha256 = "b853abff14b17c5cdc48be23e1e0ce8f6f4ec7653757231a7ab08cbd2d081a5f"
 
 [[sources]]
 package = "brynja-crypto-cpu"

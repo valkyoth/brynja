@@ -149,6 +149,8 @@ pub unsafe extern "C" fn compress(
             "xor r11d, r11d",
             // Unlike XOR's undefined AF, CMP fixes all arithmetic status flags.
             "cmp eax, eax",
+            // Clear the AVX upper-state tracker after all secret working wipes.
+            "vzeroupper",
             "# BRYNJA_SECRET_END",
             state = in(reg) state.as_mut_ptr(),
             block = in(reg) block.as_ptr(),
@@ -157,6 +159,12 @@ pub unsafe extern "C" fn compress(
             out("rax") _, out("rcx") _, out("rdx") _,
             out("r8") _, out("r9") _, out("r10") _, out("r11") _,
             out("ymm0") _, out("ymm1") _, out("ymm2") _,
+            // VZEROUPPER also writes upper halves of otherwise unused registers.
+            // Declare all aliases; the compiler preserves Win64's low XMM6-15.
+            out("ymm3") _,
+            out("ymm4") _, out("ymm5") _, out("ymm6") _, out("ymm7") _,
+            out("ymm8") _, out("ymm9") _, out("ymm10") _, out("ymm11") _,
+            out("ymm12") _, out("ymm13") _, out("ymm14") _, out("ymm15") _,
             options(nostack),
         );
     }

@@ -1,6 +1,11 @@
 # v0.24.49 register-cleanup qualification status
 
 Updated 2026-09-25. This is a work checklist, **not a new release gate**.
+The subsequent two-tester follow-up supersedes the earlier pre-pentest readiness:
+the owner approved implementation of a [strict protected profile](../../docs/strict-hardening-profile.md).
+Unsupported-target admission and protected storage/worker stacks remain open.
+The original five findings are reported fixed at their stated boundaries; the
+two new Medium findings are not closed by that result. Keep both raw reports.
 The [pentest ledger](../../security/pentest/v0.24.49.md) retains the historical
 checks and their limitations. Earlier checkpoint paragraphs are not a current
 todo list: several were superseded by later implementation and tests.

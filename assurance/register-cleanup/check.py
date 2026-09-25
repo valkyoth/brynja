@@ -85,6 +85,9 @@ def asm_check(text, *, keccak=False, batch256=False, batch512=False, keccak_batc
         raise ValueError('SHA/SSE2 kernel gained a stronger instruction prerequisite')
     # Cleanup must not branch, load, store, spill, call or reload after erasure.
     cleanup_ops = [line.strip() for line in cleanup.splitlines() if line.strip() and not line.lstrip().startswith("#")]
+    if not SHA256:
+        if not cleanup_ops or cleanup_ops.pop() != 'vzeroupper':
+            raise ValueError("missing final AVX return transition")
     if (len(cleanup_ops) != len(REGISTERS) + vectors + 1 or not re.fullmatch(r"cmpl\s+%eax,\s*%eax", cleanup_ops[-1])
             or any(not re.match(r"(?:xorl|vpxor|pxor)\s", line) for line in cleanup_ops[:-1])):
         raise ValueError("unexpected post-computation operation")
@@ -95,6 +98,8 @@ def asm_check(text, *, keccak=False, batch256=False, batch512=False, keccak_batc
                 continue
             if re.fullmatch(r"@feat\.00 = [0-9]+", op):
                 continue
+            if re.fullmatch(r'v?mov[au]ps\s+(?:%xmm(?:[6-9]|1[0-5]),\s*[0-9]*\(%rsp\)|[0-9]*\(%rsp\),\s*%xmm(?:[6-9]|1[0-5]))', op):
+                continue  # Save/restore only caller-owned Win64 nonvolatile lows.
             # Remaining instructions may only marshal/save public argument
             # pointers or restore ABI-preserved caller registers. Secret loads
             # and all vector/integer secret arithmetic stay inside the block.
@@ -128,6 +133,7 @@ def codegen():
                         ("# BRYNJA_REGISTER_ERASE", "pushq %rax\n# BRYNJA_REGISTER_ERASE"),
                         ("# BRYNJA_SECRET_BEGIN", "movq (%rdi), %rax\n# BRYNJA_SECRET_BEGIN"),
                         ("# BRYNJA_SECRET_END", "# BRYNJA_SECRET_END\nmovq (%rdi), %rax"),
+                        *([] if SHA256 else [("vzeroupper", "nop")]),
                     ):
                         try:
                             asm_check(text.replace(before, after))

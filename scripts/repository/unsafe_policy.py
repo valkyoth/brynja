@@ -24,21 +24,21 @@ ALLOWED = {
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"): ("b1293ffcbfe51b26b49bc17dfd861e917f151c8d73356e7902e3277efeec42d4", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"): ("1b87c3f35bde0f59fe65f54b2c14a1d93369d9c03fe6f20a7e336f7d7992ac1f", 6, 1, 6),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"): ("d8e07cce1e24149d37874f3dd9828e587fbdf8ae61dd91bcf9b602ecbf914d5d", 6, 1, 6),
-    Path("crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs"): ("c008b23798ed127c95607d333f633b845e2383752768588023ae5dfbb4f33dd8", 1, 1, 1),
+    Path("crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs"): ("3efe9dce167d2b1e8728adc81a8d7033657afdc9d21180a9c2b42e1223856aa9", 1, 1, 1),
     Path("crates/brynja-legacy-md5/src/cpu/arm_secret/kernel.rs"): ("3134097267beea2f7d2c97abaf8d3fb721a870b38581a4e8dbc0245c4194515c", 1, 1, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1/secret.rs"): ("b7625787a8d512fc0f4129c002997e32b088e3dff52cc84c6c57a0decb75eab0", 1, 1, 1),
     Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1/secret.rs"): ("663c0964503b0063e0a4031133e4c633e33ca386d04eb19199840410aae2799e", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs"): ("11cd76232a6e59720835bb8bf1b977608c59ba7465a107c8f1dc1f27711d8146", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs"): ("b853abff14b17c5cdc48be23e1e0ce8f6f4ec7653757231a7ab08cbd2d081a5f", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/arm/secret.rs"): ("db9a59d97c9ffbf81b0572a8e9cce770dbc89a409c22db4c6d85fb65f3f92ba8", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/x86/secret.rs"): ("bb03ef422bf0e6fb505e39f75364384683e696f8ef8c50ed6f3b683f20470c2b", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/x86/secret.rs"): ("31658d70a760e4d2688a93f307f90a6d509fd5cd2f84cbf0296ab57225ddcb4e", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/arm/secret.rs"): ("807a94ee4f3f8d73c1c945e8899121f6f3635a9ef438f2eb309477f4d5b550c5", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/x86/secret.rs"): ("1c9dfe716a169deb9d8a2670eb485b74d393888898904ba5a092aa1cefcbd852", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/x86/secret.rs"): ("59631be40d1d8ab35eb055f62a427c6b44901c4998927a077e7a26219f64e56f", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/arm/secret.rs"): ("f29271f331283b937532ab931894679d4ee6a1a4049dfbff687c389ff5dfb946", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs"): ("59efd87d9c1fc577f2eb1c39a626849262919783909195ea4e0459ae4641d67e", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs"): ("02ff4ce6f630d0da916cbb212e77d2bf04e834b7c15ee7eda8b53f221b48d5e6", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs"): ("5e01c5624d8783c742f8d5e04cd6f276bbb158d80fe10160c1d17b715aa36949", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/x86_sha/secret.rs"): ("f8afc16ed5a53259391a9a32a87b3127a9d0556ce634a3cb2ac415a87d7f5adb", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs"): ("2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"): ("b790074aa3774d785a87bf3abca850540f3ab5c798c43aaf3ce29bdde4b38e66", 1, 1, 1),
+    Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"): ("333d5588c1e3ff4f9a0ea5ab9584fa9f1342452ebb4b01ad17d9982df8c6c2a7", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"): ("8febc7fc79bb5813590293d8b17bc5d9f1bcb56f17dba55c844f28dd89bcf96e", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/x86_sha512.rs"): ("9530acc46f67ba8f50f009bb2e837c2732b3f88cb80ba7847acf7229fce5d12c", 5, 1, 5),
     Path("crates/brynja-crypto-cpu-std/src/sha256_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
@@ -462,6 +462,12 @@ def validate_allowed(
             required += ('state: &mut [u8; 20]', 'block: &[u8; 64]', 'schedule: &mut [u8; 320]')
         if any(text.count(token) != 1 for token in required) or text.count('asm!(') != 1:
             fail("register boundary lost its exact opaque assembly contract")
+        if 'out("ymm0")' in text:
+            code = re.sub(r'//[^\n]*', '', text)
+            if (code.count('"vzeroupper"') != 1
+                    or not re.search(r'"vzeroupper",\s*"# BRYNJA_SECRET_END"', code)
+                    or any(code.count(f'out("ymm{i}")') != 1 for i in range(16))):
+                fail("AVX boundary lost return transition cleanup or complete clobbers")
         if re.search(r'\b(?:lateout|inlateout|global_asm|pure|nomem|readonly)\b',
                      re.sub(r'//[^\n]*', '', text)):
             fail("register boundary weakened clobbers or memory effects")

@@ -3,7 +3,7 @@ regions = 7
 
 [files]
 "Cargo.toml" = "f3d0a5d8366b15047dbdbd7bca6403dbe43e96fc21d50b1e9d0127059e791c1b"
-"assurance/register-cleanup/check.py" = "5f19b552088e94e2348e77a4b1e0646d0a0ea01055c355d1e46d6dbafa203409"
+"assurance/register-cleanup/check.py" = "14b71abf1257a029c4074d06793e7154b8f85508f75b17a99d627a5f9498cdbe"
 "assurance/register-cleanup/check_sha1.py" = "ddb1735feef8f3fd46533654e468973a29a7a528ae8172a43310aed32897c52e"
 "assurance/register-cleanup/check_sha1_scalar.py" = "67ea0f0adbcb2627bfa8c59b562663675b06fe02b3c4024b08ceef5b22e7ab42"
 "assurance/register-cleanup/sha1-scalar/Cargo.lock" = "7a4684406206baf177cd66e4a444d5bde5c08b5b5928dc9535716977d289466a"

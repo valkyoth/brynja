@@ -43,7 +43,7 @@ def inspect(assembly, arch):
         required = {'vpaddd': 5, 'vpslld': 1, 'vpsrld': 1}
         erase = [rf'xorl\s+%{r},\s*%{r}' for r in ('eax', 'ecx', 'edx')]
         erase += [rf'vpxor\s+%ymm{i},\s*%ymm{i},\s*%ymm{i}' for i in range(4)]
-        erase += [r'cmpl\s+%eax,\s*%eax']
+        erase += [r'cmpl\s+%eax,\s*%eax', 'vzeroupper']
         require(not re.search(r'%zmm|%k[0-7]\b|\b(?:sha\w*|rorx|shrx)\b', active),
                 'stronger ISA than AVX2')
         outside = r'(?:push[ql]|pop[ql]|mov[ql]|sub[ql]|add[ql]|ret[ql]?)\b'
@@ -71,6 +71,8 @@ def inspect(assembly, arch):
                 continue
             if arch == 'x86' and op == 'vzeroupper':
                 continue
+            if arch == 'x86' and re.fullmatch(r'v?mov[au]ps\s+(?:%xmm(?:[6-9]|1[0-5]),\s*[0-9]*\(%rsp\)|[0-9]*\(%rsp\),\s*%xmm(?:[6-9]|1[0-5]))', op):
+                continue  # Win64 caller-owned nonvolatile lows, not secret data.
             # LLVM may specialize the public table pointer in this private
             # function. Address formation reads no table or secret bytes.
             if arch == 'x86' and re.fullmatch(r'leaq\s+[.A-Za-z_][\w.]*\(%rip\),\s*%r\w+', op):
@@ -113,6 +115,7 @@ def codegen(arch):
                     ('# BRYNJA_REGISTER_ERASE', spill+'# BRYNJA_REGISTER_ERASE'),
                     ('# BRYNJA_SECRET_END', load+'# BRYNJA_SECRET_END'),
                     ('# BRYNJA_SECRET_END', '# BRYNJA_SECRET_END\n'+load),
+                    *([('vzeroupper', 'nop')] if arch == 'x86' else []),
                 ):
                     try:
                         inspect(text.replace(before, after), arch)

@@ -168,7 +168,8 @@ def register_boundaries() -> None:
             ('out(', 'lateout('),
             ('options(nostack)', 'options(nostack, nomem)'),
             ('options(nostack)', 'options(nostack, readonly)'),
-        ):
+        ) + ((('"vzeroupper",', ''), ('out("ymm15") _,', ''),
+              ('"vzeroupper"', '"vzeroall"')) if 'out("ymm0")' in source else ()):
             assert before in source
             try:
                 unsafe_policy.validate_allowed(relative, source.replace(before, after), blocks, items, proofs)
@@ -493,5 +494,5 @@ if __name__ == "__main__":
     secret_predicate_boundary()
     secret_predicate_boundary('brynja-hash-core')
     print("unsafe policy rejects eleven exception-boundary regressions")
-    print("opaque register boundaries reject ninety-six unsafe-ABI, clobber and memory-effect regressions")
+    print("opaque register boundaries reject 114 unsafe-ABI, clobber, AVX-transition and memory-effect regressions")
     print("opaque transfer boundaries reject forty ABI, bounds, clobber and memory-effect regressions")

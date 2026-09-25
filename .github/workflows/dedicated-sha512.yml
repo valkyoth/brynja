@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
     paths:
+      - 'crates/brynja-core/**'
+      - 'crates/brynja-hash-core/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'rust-toolchain.toml'
       - 'crates/brynja-crypto-cpu/src/**'
       - 'crates/brynja-crypto-cpu/Cargo.toml'
       - 'crates/brynja-hash-sha2/src/**'
@@ -18,6 +23,11 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - 'crates/brynja-core/**'
+      - 'crates/brynja-hash-core/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'rust-toolchain.toml'
       - 'crates/brynja-crypto-cpu/src/**'
       - 'crates/brynja-crypto-cpu/Cargo.toml'
       - 'crates/brynja-hash-sha2/src/**'

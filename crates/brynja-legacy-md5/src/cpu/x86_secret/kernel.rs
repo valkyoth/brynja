@@ -121,6 +121,8 @@ pub unsafe extern "C" fn compress(scratch: &mut [u8; 864], constants: &[u32; 80]
             "vpxor ymm2, ymm2, ymm2",
             "vpxor ymm3, ymm3, ymm3",
             "cmp eax, eax",
+            // Clear the AVX upper-state tracker after all secret working wipes.
+            "vzeroupper",
             "# BRYNJA_SECRET_END",
             scratch = in(reg) scratch.as_mut_ptr(),
             constants = in(reg) constants.as_ptr(),
@@ -131,6 +133,11 @@ pub unsafe extern "C" fn compress(scratch: &mut [u8; 864], constants: &[u32; 80]
             out("ymm1") _,
             out("ymm2") _,
             out("ymm3") _,
+            // VZEROUPPER also writes upper halves of otherwise unused registers.
+            // Declare all aliases; the compiler preserves Win64's low XMM6-15.
+            out("ymm4") _, out("ymm5") _, out("ymm6") _, out("ymm7") _,
+            out("ymm8") _, out("ymm9") _, out("ymm10") _, out("ymm11") _,
+            out("ymm12") _, out("ymm13") _, out("ymm14") _, out("ymm15") _,
             options(nostack),
         );
     }

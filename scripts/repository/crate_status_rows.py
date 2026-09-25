@@ -5,6 +5,10 @@ Independent review/FIPS status must never be inferred from internal test results
 """
 
 ROWS = {
+    "crates/brynja-strict/README.md": [
+        "| Strict-only modern protected sessions | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |",
+    ],
     "crates/brynja-crypto-cpu/README.md": [
         "| Hardened SHA-224/256 batch compression with clearing packed storage | 🚧 CPU foundation; qualification pending | ❌ No |",
         "| Hardened SHA-512-family batch compression with clearing packed storage | 🚧 CPU foundation; qualification pending | ❌ No |",

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -336,6 +337,25 @@ def test_parallelhash_test_dependencies_are_publishable_first() -> None:
     )
 
 
+def test_strict_facade_and_legacy_protected_adapters_follow_dependencies() -> None:
+    plan = public_plan()
+    fixture = packages()
+    for owner, names in (
+        ('brynja-legacy-sha1-std', ('brynja-crypto-cpu-std',)),
+        ('brynja-legacy-md5-std', ('brynja-crypto-cpu-std',)),
+        ('brynja-strict', ('brynja-crypto-cpu-std', 'brynja-hash-parallel-std')),
+    ):
+        fixture[owner]['dependencies'] = [
+            {'name': name, 'req': '=0.3.0'} for name in names]
+    policy.verify_repository(fixture, plan)
+    for owner in ('brynja-legacy-sha1-std', 'brynja-legacy-md5-std', 'brynja-strict'):
+        order = list(policy.PUBLISH_ORDER)
+        order.remove(owner)
+        order.insert(0, owner)
+        with patch.object(policy, 'PUBLISH_ORDER', tuple(order)):
+            assert_fails('appears later in PUBLISH_ORDER', policy.verify_repository, fixture, plan)
+
+
 def test_release_candidates_parse_structurally() -> None:
     assert str(policy.parse_version("1.0.0-rc.1")) == "1.0.0-rc.1"
     assert_fails(
@@ -446,6 +466,8 @@ def run_tests() -> None:
         test_repository_manifest_stays_unpublishable,
         test_product_manifest_must_allow_crates_io,
         test_dependency_order_is_checked,
+        test_parallelhash_test_dependencies_are_publishable_first,
+        test_strict_facade_and_legacy_protected_adapters_follow_dependencies,
         test_release_candidates_parse_structurally,
         test_post_tag_preflight_supplies_guarded_context,
         train_tests.test_future_checkpoint_uses_complete_generic_tag_gate,

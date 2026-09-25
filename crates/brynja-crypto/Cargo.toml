@@ -4,9 +4,7 @@ version = "0.1.2"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
-homepage.workspace = true
 repository.workspace = true
-readme = "README.md"
 description = "Cryptographic provider, policy, and composition layer for Brynja"
 publish = ["crates-io"]
 

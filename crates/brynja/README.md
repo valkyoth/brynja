@@ -25,7 +25,7 @@
 
 # brynja
 
-`brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library.
+`brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library. Select the separate [brynja-strict facade](../brynja-strict/README.md) for protected-memory/worker-stack APIs: upgrading `brynja` does not enable them. Strict constructors reject unsupported platforms or unavailable resources; qualification remains pending.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides all six SHA-2 and FIPS 202 functions,
 > complete cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF families, plus security and bounded framing foundations,

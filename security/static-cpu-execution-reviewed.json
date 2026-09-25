@@ -4,7 +4,7 @@
     "assurance/static-cpu-execution/Cargo.lock": "cc154cd6722528445f1b30637d1ac967bac2730abea9eaca8fbd1fcf3f6fe24f",
     "assurance/static-cpu-execution/Cargo.toml": "32fa1023273547186cc8b4fb883e1f9953a86ef0454c9b742d75979abaf1440c",
     "assurance/static-cpu-execution/src/lib.rs": "0682f23b803098d0d458c22247ba37067f563c41b47567bd7ab9b3db1bc8515e",
-    "crates/brynja-crypto-cpu/Cargo.toml": "20b506934ce79acdaeb28a7947f591c6092b922c4e1d964ad60334622b737380",
+    "crates/brynja-crypto-cpu/Cargo.toml": "88b0e163db8a2fb28465b5606eb0e9d4fcdc8c6623f11f826b533894e1f7ae28",
     "crates/brynja-crypto-cpu/src/aarch64_sha2.rs": "e9869ccd9e6bb2795a1ee753be0d1b6833009e507d84d904494f591964c3dc2f",
     "crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs": "2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f",
     "crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs": "8febc7fc79bb5813590293d8b17bc5d9f1bcb56f17dba55c844f28dd89bcf96e",

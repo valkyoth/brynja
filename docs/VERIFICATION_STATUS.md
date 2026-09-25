@@ -125,6 +125,7 @@ Independent verification remains unchanged.
 | `brynja-legacy-sha1-std` | Opt-in legacy CPU observation and portable fallback; no execution authority or admitted route | ❌ Not independently verified |
 | `brynja-legacy-md5` | Portable ordinary/hardened byte/bit MD5; collision-broken legacy compatibility | ❌ Not verified |
 | `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |
+| `brynja-strict` | Strict-only protected modern sessions; no ordinary, raw or legacy exports; fail-closed resource admission | ❌ Not independently verified; qualification pending |
 | `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |

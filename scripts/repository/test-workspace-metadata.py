@@ -7,6 +7,7 @@ import copy
 import cpu_workspace_fixtures
 import md5_workspace_fixtures
 import parallelhash_workspace_fixtures
+import strict_workspace_policy
 import json
 import subprocess
 import sys
@@ -90,6 +91,7 @@ def test_baselines(no_default: dict, all_features: dict) -> None:
                 f"workspace validator rejected {mode}: {accepted.stderr}"
             )
     md5_workspace_fixtures.check(no_default, all_features, package, node, require_rejection)
+    strict_workspace_policy.regressions(all_features, dependency, package, require_rejection)
     for name, feature in (("brynja-legacy-sha1", "hardened-execution"), ("brynja-legacy-sha1-std", "runtime-hardened-execution"), ("brynja-legacy-sha1-std", "strict-execution"), ("brynja-legacy-md5-std", "strict-execution"), ("brynja-legacy-md5-std", "strict-acceleration"), ("brynja-legacy-sha1-std", "strict-acceleration"),
                           ("brynja-crypto-cpu-std", "protected-memory"), ("brynja-crypto-cpu-std", "strict-sha2"), ("brynja-crypto-cpu-std", "strict-sha2-acceleration"), ("brynja-crypto-cpu-std", "strict-sha3"), ("brynja-crypto-cpu-std", "strict-sha3-acceleration"), ("brynja-crypto-cpu-std", "strict-kmac"), ("brynja-crypto-cpu-std", "strict-kmac-acceleration"), ("brynja-crypto-cpu-std", "strict-tuplehash"), ("brynja-crypto-cpu-std", "strict-tuplehash-acceleration"), ("brynja-crypto-cpu-std", "strict-batch"), ("brynja-hash-parallel-std", "strict-acceleration")):
         for key, replacement in ((feature, []), ("default", [feature])):

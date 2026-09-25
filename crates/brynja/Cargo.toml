@@ -4,9 +4,7 @@ version = "0.24.49"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
-homepage.workspace = true
 repository.workspace = true
-readme = "README.md"
 description = "Security-first no_std cryptography and secure-protocol facade"
 publish = ["crates-io"]
 

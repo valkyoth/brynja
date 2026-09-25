@@ -54,6 +54,7 @@ dependencies = [
  "brynja-quic-tls",
  "brynja-research-ssl1",
  "brynja-sanitization",
+ "brynja-strict",
  "brynja-test-support",
  "brynja-tls",
  "brynja-tls12",
@@ -84,8 +85,12 @@ dependencies = [
 name = "brynja-crypto-cpu-std"
 version = "0.1.1"
 dependencies = [
+ "brynja-core",
  "brynja-crypto-cpu",
  "brynja-hash-sha2",
+ "brynja-hash-sha3",
+ "brynja-hash-tuple",
+ "brynja-mac-kmac",
 ]
 
 [[package]]
@@ -263,6 +268,14 @@ version = "0.1.1"
 dependencies = [
  "brynja-core",
  "sanitization",
+]
+
+[[package]]
+name = "brynja-strict"
+version = "0.1.0"
+dependencies = [
+ "brynja-crypto-cpu-std",
+ "brynja-hash-parallel-std",
 ]
 
 [[package]]

@@ -224,6 +224,7 @@ Detailed release-by-release history belongs in those reports and
 | Package group | Responsibility |
 | --- | --- |
 | `brynja` | Curated modern facade |
+| `brynja-strict` | Separate strict-only protected modern sessions; qualification pending |
 | `brynja-core`, `brynja-hash-core` | Bounded ownership, constant-time and hash interfaces |
 | `brynja-hash-*`, `brynja-mac-*` | Reusable algorithm and construction families |
 | `brynja-crypto` | Cryptographic composition, provider contracts and policy |

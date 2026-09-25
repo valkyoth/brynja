@@ -4,6 +4,14 @@ Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
 and register-residual disposition. Not ready for release or final evidence collection yet.
 No crates are selected for publication.
 
+- Add the separate `brynja-strict` facade over protected modern SHA-2,
+  SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash and batch sessions. Its
+  dependencies remain protected with default features disabled; no raw CPU,
+  ordinary, generic callback or legacy API is exported. Existing `brynja`
+  defaults are unchanged. Unsupported targets/resources reject, and explicit
+  compiled selection still needs a valid deployment guarantee. This is not
+  certification; independent retest and native qualification remain pending.
+
 - Complete the separate default-off strict profile across scalar and compiled
   SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, isolated legacy SHA-1/MD5,
   modern SIMD batches and protected ParallelHash root/worker execution.

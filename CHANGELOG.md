@@ -2,6 +2,12 @@
 
 ## 0.24.49 development
 
+- Add `brynja-strict`, a thin strict-only modern facade with mandatory protected
+  session dependencies, explicit acceleration and no ordinary/raw/legacy exports.
+  Keep normal facade defaults unchanged; unsupported targets/resources fail closed.
+  Add packaged export/ownership negatives and session-reuse checks. Qualification
+  and independent retest remain pending; no publication is selected.
+
 - Complete default-off strict compiled TupleHash, legacy SHA-1 and MD5 SIMD,
   modern SHA-2/Keccak SIMD batches and protected ParallelHash root/leaf workers.
   Earlier incremental entries below describe their prerequisite work; the

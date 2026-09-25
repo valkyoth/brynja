@@ -106,6 +106,13 @@ change = "code"
 publish = false
 reason = "Retain published metadata 0.1.1 while adding optional default-off hosted sponge constructors through existing execution authority; no external dependency or publication."
 
+[crates."brynja-strict"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Separate strict-only facade over protected modern sessions; qualification pending, no publication."
+
 [crates."brynja-pki"]
 previous_version = "0.2.0"
 version = "0.2.0"

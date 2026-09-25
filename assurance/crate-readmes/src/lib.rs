@@ -97,6 +97,9 @@ pub struct BrynjaResearchSsl1;
 #[doc = include_str!("../../../crates/brynja-sanitization/README.md")]
 pub struct BrynjaSanitization;
 
+#[doc = include_str!("../../../crates/brynja-strict/README.md")]
+pub struct BrynjaStrict;
+
 #[doc = include_str!("../../../crates/brynja-test-support/README.md")]
 pub struct BrynjaTestSupport;
 

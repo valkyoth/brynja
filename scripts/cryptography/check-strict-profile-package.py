@@ -15,6 +15,7 @@ import platform
 import subprocess
 import sys
 import tempfile
+import strict_facade_package
 
 ROOT = Path(__file__).resolve().parents[2]
 FEATURES = {
@@ -69,7 +70,8 @@ def execute(args, destination):
     shared = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(shared)
     shared.PACKAGES = (*shared.PACKAGES, 'brynja-hash-parallel', 'brynja-hash-parallel-std',
-        'brynja-legacy-sha1', 'brynja-legacy-sha1-std', 'brynja-legacy-md5', 'brynja-legacy-md5-std')
+        'brynja-legacy-sha1', 'brynja-legacy-sha1-std', 'brynja-legacy-md5', 'brynja-legacy-md5-std',
+        'brynja-strict')
     env = dict(os.environ, RUSTUP_TOOLCHAIN=args.toolchain, CARGO_TARGET_DIR=str(destination / 'target'))
     for key in tuple(env):
         if key in ('RUSTFLAGS', 'RUSTDOCFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'CARGO_BUILD_TARGET') or key.startswith('BRYNJA_REQUIRE_'):
@@ -81,6 +83,7 @@ def execute(args, destination):
     patches = '\n[workspace]\n[patch.crates-io]\n' + ''.join(
         f'{name} = {{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
     cargo = ['cargo', '+' + args.toolchain]
+    strict_facade_package.check(ROOT, roots, destination, cargo, env, run, require)
     for name, features in FEATURES.items():
         manifest = roots[name] / 'Cargo.toml'
         manifest.write_text(manifest.read_text() + patches)

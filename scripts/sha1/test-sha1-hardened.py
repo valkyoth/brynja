@@ -113,12 +113,15 @@ def main():
                 except ValueError: pass
                 else: raise AssertionError('hardened policy mutant survived: '+original)
             finally: path.write_text(before)
-        path = root / policy.LEAF / 'src/hardened_execution/unreviewed.rs'
-        path.write_text('// unexpected source')
-        try: policy.validate(root, reviewed=False)
-        except ValueError: pass
-        else: raise AssertionError('new source escaped review')
-        path.unlink()
+        for name in ('unreviewed.rs', 'storage.rs'):
+            path = root / policy.LEAF / 'src/hardened_execution' / name
+            path.write_text('// unexpected, unreferenced working-tree source')
+            try:
+                try: policy.validate(root, reviewed=False)
+                except ValueError as error:
+                    assert 'source inventory changed' in str(error)
+                else: raise AssertionError('new source escaped review')
+            finally: path.unlink()
         for relative in policy.inventory(root):
             path = root / relative
             before = path.read_bytes()
@@ -128,7 +131,7 @@ def main():
                 except (ValueError, SyntaxError): pass
                 else: raise AssertionError('review binding accepted drift: '+relative)
             finally: path.write_bytes(before)
-        print(f'Hardened SHA-1: {len(cases)+1} structural and {len(policy.inventory(root))} source-binding regressions rejected')
+        print(f'Hardened SHA-1: {len(cases)+2} structural and {len(policy.inventory(root))} source-binding regressions rejected')
     # Mutation-test instruction scoping: ordinary-kernel instructions cannot
     # satisfy a missing hardened-kernel body.
     sample = '_RNbrynja_legacy_sha1x86_sha1compress_secret:\n ret\n_RNordinary:\n sha1msg1 xmm0,xmm1\n'

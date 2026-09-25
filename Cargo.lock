@@ -243,6 +243,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "brynja-strict"
+version = "0.1.0"
+dependencies = [
+ "brynja-crypto-cpu-std",
+ "brynja-hash-parallel-std",
+]
+
+[[package]]
 name = "brynja-test-support"
 version = "0.1.0"
 dependencies = [

@@ -7,6 +7,13 @@ publish = "crates-io"
 required = ["brynja-core", "brynja-crypto", "brynja-pki", "brynja-protocol", "brynja-tls"]
 optional = { dtls = "brynja-dtls", platform = "brynja-platform", quic = "brynja-quic-tls" }
 
+[packages.brynja-strict]
+class = "host-adapter"
+publish = "crates-io"
+required = ["brynja-crypto-cpu-std", "brynja-hash-parallel-std"]
+optional = {}
+features = ["acceleration"]
+
 [packages.brynja-legacy-sha1-std]
 class = "host-adapter"
 publish = "crates-io"

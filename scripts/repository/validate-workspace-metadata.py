@@ -8,6 +8,7 @@ import json
 import tomllib
 from pathlib import Path
 import parallelhash_workspace_policy as execution_policy
+import strict_workspace_policy as strict_policy
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "package-policy.toml"
@@ -132,14 +133,13 @@ def validate_target(name: str, package: dict) -> None:
     expected_repository = "https://github.com/valkyoth/brynja"
     if package.get("repository") != expected_repository:
         raise ValueError(f"{name} has unexpected repository metadata")
-    if package.get("homepage") != expected_repository:
+    if package.get("homepage") is not None:
         raise ValueError(f"{name} has unexpected homepage metadata")
     expected_manifest = (ROOT / "crates" / name / "Cargo.toml").resolve()
     if Path(package.get("manifest_path", "")).resolve() != expected_manifest:
         raise ValueError(f"{name} manifest escaped its classified package directory")
     if not package.get("description"):
         raise ValueError(f"{name} must have a package description")
-
 
 def validate_dependencies(
     name: str,
@@ -186,11 +186,13 @@ def validate_dependencies(
             else []
         )
         admitted = execution_policy.direct_features(name, dependency_name)
+        if name == "brynja-strict":
+            admitted = strict_policy.DIRECT.get(dependency_name)
         if admitted is not None:
             allowed_features = admitted
         if dependency.get("features") != allowed_features:
             raise ValueError(f"{name} directly enables features on {dependency_name}")
-        if dependency.get("uses_default_features") is not (not external):
+        if dependency.get("uses_default_features") is not (not external and name != "brynja-strict"):
             raise ValueError(f"{name} default-feature policy drifted for {dependency_name}")
         version = EXTERNAL[dependency_name]["version"] if external else packages[dependency_name]["version"]
         expected_req = f"={version}"
@@ -199,7 +201,6 @@ def validate_dependencies(
                 f"{name} must pin {dependency_name} to {expected_req}"
             )
 
-
 def validate_features(name: str, package: dict, entry: dict) -> None:
     expected = {"default": []}
     expected.update({
@@ -207,6 +208,8 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         for feature, dependency in entry["optional"].items()
     })
     expected.update({feature: [] for feature in entry.get("features", [])})
+    if name == "brynja-strict":
+        expected = strict_policy.FEATURES
     if name == "brynja-crypto-cpu":
         expected["sha256-hardened-batch"] = ["dep:brynja-core"]
         expected["sha512-hardened-batch"] = ["dep:brynja-core"]
@@ -265,7 +268,6 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")
 
-
 def validate_manifest_inventory(
     packages: dict[str, dict],
     policy: dict[str, dict],
@@ -296,7 +298,6 @@ def validate_manifest_inventory(
         validate_dependencies(name, package, entry, packages)
         validate_features(name, package, entry)
 
-
 def resolved_edges(document: dict) -> dict[str, set[str]]:
     resolve = document.get("resolve")
     if not isinstance(resolve, dict):
@@ -305,7 +306,6 @@ def resolved_edges(document: dict) -> dict[str, set[str]]:
         node["id"]: {dependency["pkg"] for dependency in node["deps"]}
         for node in resolve["nodes"]
     }
-
 
 def reachable_names(
     root: str,
@@ -322,7 +322,6 @@ def reachable_names(
         seen.add(package_id)
         pending.extend(edges.get(package_id, set()))
     return {packages_by_id[package_id]["name"] for package_id in seen}
-
 
 def validate_resolved_mode(
     document: dict,
@@ -361,6 +360,9 @@ def validate_resolved_mode(
             expected_features.update(("hardened-execution", "static-execution", "runtime-execution"))
         if mode == "no-default-features" and name == "brynja-crypto-cpu-std":
             expected_features.add("runtime-execution")
+        if mode == "no-default-features":
+            expected_features.update(strict_policy.UNIFIED.get(name, []))
+            expected_dependencies.update(strict_policy.EDGES.get(name, []))
         package_id = names[name]
         actual_dependencies = {
             packages_by_id[dependency_id]["name"]
@@ -429,8 +431,7 @@ def validate_resolved_mode(
         "brynja-hash-core",
         "brynja-hash-sha2",
     }
-    if mode == "all-features":
-        expected_detector.update(("brynja-hash-sha3", "brynja-mac-kmac", "brynja-hash-tuple"))
+    expected_detector.update(("brynja-hash-sha3", "brynja-mac-kmac", "brynja-hash-tuple"))
     if detector != expected_detector:
         raise ValueError("host CPU detector package graph drifted")
     parallel_executor = reachable_names(
@@ -443,8 +444,7 @@ def validate_resolved_mode(
         "brynja-hash-core",
         "brynja-hash-sha3",
     }
-    if mode == "all-features":
-        expected_parallel_executor.update(("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha2", "brynja-mac-kmac", "brynja-hash-tuple"))
+    expected_parallel_executor.update(("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha2", "brynja-mac-kmac", "brynja-hash-tuple"))
     if parallel_executor != expected_parallel_executor:
         raise ValueError("ParallelHash std executor package graph drifted")
     if {"brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-parallel-std"}.intersection(modern):
@@ -461,7 +461,6 @@ def validate_resolved_mode(
         if {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}.intersection(reached):
             raise ValueError(f"protocol engine reaches a CPU adapter: {engine}")
 
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("metadata", type=Path)
@@ -471,7 +470,6 @@ def parse_args() -> argparse.Namespace:
         choices=("no-default-features", "all-features"),
     )
     return parser.parse_args()
-
 
 def main() -> int:
     args = parse_args()

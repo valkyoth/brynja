@@ -18,6 +18,31 @@ notes about remaining families; those notes retain the original validation scope
 
 ## Consolidated strict acceleration integration
 
+### Strict-only facade
+
+Applications can depend on [brynja-strict](../crates/brynja-strict/README.md)
+instead of selecting individual strict features. Its protected dependencies are
+mandatory even with default features disabled. It exposes only modern protected
+SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash and batch APIs; no ordinary
+owners, legacy APIs, raw execution authority or generic protected-stack callbacks
+are re-exported. The normal `brynja` facade and its defaults are unchanged.
+This is application-level selection, not proof that other dependencies or caller
+copies comply. No new cryptographic implementation or admission gate is added.
+Unsupported targets compile but constructors reject before accepting input.
+
+Use a bounded session pool created at startup and exclusive loans per operation.
+Drop output loans before reuse and retire quarantined compiled sessions. Mapping
+limits are per resource, not a global process quota: budget all concurrent sessions
+and workers against RLIMIT_MEMLOCK. On 4 KiB pages a SHA-256 session with a 256 KiB
+stack locks 266240 bytes (stack plus one digest page), excluding virtual-only guard
+pages. ParallelHash additionally reserves root/worker stacks and CV/staging/output
+mappings. Construction failure is an error, never an unprotected fallback.
+The facade does not detect ASan fake-stack instrumentation: diagnostic builds are
+still not qualified to process secrets, and placement/residency tests are necessary
+to validate the stated diagnostic configuration, not a production sandbox.
+
+### Leaf integrations
+
 All wrappers remain separate, default-off APIs. Scalar constructors do not
 silently become accelerated. Compiled constructors require the exact build-wide
 feature bundle and a deployment that preserves it; they do not establish CPU

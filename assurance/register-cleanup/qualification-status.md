@@ -210,6 +210,15 @@ Later diagnostic-only additions can run there without replacing captured sources
   consuming wrapper is not yet composed with this filled chain; primitive
   bodies, accelerated guards and whole-verifier qualification remain separate.
 
+- The consuming wrapper now includes the actual staging-filled final-bit chain
+  in 167/168-function closures. All 17,968 cases pass, all 656 mutations reject
+  and sixteen SSA controls pass. Constructor rejection/unwind, original local
+  reader binding, prefix/tail effects, error translation and final owner cleanup
+  are checked together against an independent lifecycle envelope, not a second
+  execution of the producer as its own oracle. This closes the consuming/filled
+  portable-reader link for the modeled cases. Primitive bodies, accelerated
+  reader guards and whole-verifier/register/spill coverage remain separate.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -217,7 +226,6 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   composition of the filled final-bit chain with its consuming wrapper,
    accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

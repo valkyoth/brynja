@@ -3352,3 +3352,75 @@ logs were redirected while their processes ran.
 | `debug-filled-final-mutations-shard-1.log` | `26095738ac850bf2ca23a34a16ad2a1f19044ab6b9355112014e8e5a91c1d538` |
 | `debug-filled-final-mutations-shard-2.log` | `c8f2e33923c22ac74cf91aae57cd2a47bd7a5ec88eaf3fe683f6998f3d5ad5c5` |
 | `debug-filled-final-mutations-shard-3.log` | `daf302211393a29fb74b3e5eaf0d5c1149eaec3b1287faba1dd3daed826daf71` |
+
+### Consuming wrapper around the staging-filled debug final-bit chain
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_filled_consuming.py "$record"
+python3 assurance/register-cleanup/test_debug_filled_consuming.py "$record"
+```
+
+Both accept `--shard 0`, `1`, `2` or `3`; all four shards are required. This
+composition starts at the actual portable consuming-reader trait bridge and
+includes output-shape construction, the guarded producer, final-bit squeezing,
+staging fill and the consuming destructor. Shared helper definitions must match.
+The original compiler-local reader/result descriptors are used without creating
+a replacement reader allocation. Symbolic guard observations are valid only
+while that actual producer is active.
+
+The expected trace combines the existing independent staging/final-shape oracles
+with explicit producer and consuming lifecycle rules. It does not execute a
+second copy of the producer as its own oracle. The matrix adds malformed output
+shapes and synthetic constructor unwind to the filled-final scenarios. Rejection
+before initialization consumes/clears the owner but does not promise to clear a
+destination whose shape was never admitted. On an admitted request, constructor,
+producer, prefix/tail effects, error translation and final owner cleanup must
+appear in the exact order. Even successful inner reader reactivation is followed
+by consuming-owner cleanup; no reusable reader is returned.
+
+The mutation suite combines consuming-handoff/destructor/secret-read regressions
+with the inner guard, staging, tail-mask and cleanup mutations. The synthetic
+boundary fixture initially omitted the initializer required by its manually
+activated squeeze state. That fixture setup was corrected after its test workers
+exited; the unchanged direct checker continued running. The final mutation runs
+use `mutations-v2` logs; earlier unversioned mutation logs are superseded.
+
+Scalar/copy/mask/volatile primitive bodies remain opaque in this composition.
+Cursor/counter shadows record algorithm effects before opaque wipe requests,
+not post-clear memory contents. Synthetic unwind is not proof of real extern-C
+unwind, abort/signal cleanup or arbitrary-interruption behavior. This remains
+portable-reader coverage, not accelerated-reader guard qualification. The Arm
+runtime record is QEMU, not native. Whole-verifier and whole-call register/spill
+qualification remain outstanding; F1 and root `PENTEST.md` remain open.
+
+All 17,968 composition cases pass (1,123 per path) in 167/168-function closures.
+These are sixteen portable-reader paths present in the retained debug
+portable/accelerated builds. All four direct-check shards exited successfully.
+All 656 retained-IR mutations reject (forty-one per path), with sixteen passing
+SSA controls. Six synthetic binding controls and twenty-one malformed/inactive
+call rejections also pass. All four final mutation shards exited successfully.
+Source/artifact validation, generated-assurance freshness, script inventory,
+verification-status regressions, acceptance metadata and documentation links
+pass. No production Rust, dependencies, captured implementation or release-gate
+policy changed. No compiler/native campaign or full verification sweep repeated.
+
+Checker SHA-256:
+`5ffb4153400bca77149a944c7e2e906e7d2b98939961c33e1afed02d83df55e3`;
+final mutation harness:
+`229c60c663b4e5e13c39fd0c6b624a301c5e31d248a53d102c5833b6623c5646`.
+The observation record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Completed logs live under ignored `dist/`, outside Cargo's `target/` directory.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-filled-consuming-check-shard-0.log` | `4aa9c556d020a73132e04b26211024bc3cc86cf7ffdf3a3eb1117e53029ea601` |
+| `debug-filled-consuming-check-shard-1.log` | `963ac67d5c6b3db2121f115939ee4a04fdd2afc5d3e5c1088435df20f4871bad` |
+| `debug-filled-consuming-check-shard-2.log` | `9a6f0d1b39b0c0a7e1181d0e0f63d49d569e0d12740517af6383b4ac78541a9e` |
+| `debug-filled-consuming-check-shard-3.log` | `4b798c7f93b4d9d9d55659781594f040a939f09e3fc6d4fc7fa3719a57bd1836` |
+| `debug-filled-consuming-mutations-v2-shard-0.log` | `7b87eb0c74d7f810d40b53b9753b0a3d75ae739d51a7356b84c0dca502552f19` |
+| `debug-filled-consuming-mutations-v2-shard-1.log` | `63bb12db08a00fb8bbdccf1e99b92d8b88b64f6c74731016bb91d6f3ac967941` |
+| `debug-filled-consuming-mutations-v2-shard-2.log` | `462f6d2801903671808901b8e57a19c3ca5e8c16170fbe49ce47152d3f45949f` |
+| `debug-filled-consuming-mutations-v2-shard-3.log` | `d0101324ed8e5fdd5846c3a1a281e1aca16112f52ae494a3b4ba43affce24859` |

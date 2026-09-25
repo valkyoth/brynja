@@ -3763,3 +3763,94 @@ Logs remain under ignored `dist/`, outside Cargo's `target/` directory.
 | `debug-accelerated-preflight-mutations-shard-5.log` | `d3d3ff8e58a41b63d554e0c4a16363e78f345e5a9476267523799eafde45cb7a` |
 | `debug-accelerated-preflight-mutations-shard-6.log` | `8493a6704b47bb2bd8322ecca1b801561c8824d00cb361abee93da21c5f41200` |
 | `debug-accelerated-preflight-mutations-shard-7.log` | `b1cc9facca18712be03c7313a2f2e8e3d2c3cfbe301bb3aaabe3e6eac0bb573f` |
+
+### Accelerated debug engine read and inner operation guard
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_accelerated_read.py "$record"
+python3 assurance/register-cleanup/test_debug_accelerated_read.py "$record"
+python3 assurance/register-cleanup/test_debug_read_bindings.py "$record"
+python3 assurance/register-cleanup/test_debug_read_model.py
+```
+
+The first two accept `--shard 0` through `7`; all eight shards are required.
+All 4,624 read-body cases pass (578 per retained path). Each read closure contains
+51/52 functions and shares the previously checked preflight/reader dependencies
+in 126/127-function sets. This check executes the engine read body directly,
+including actual preflight, counter decoder/writer, permutation adapter, result
+and range helpers, and its own operation guard. It does not yet execute that
+read body beneath the outer producer/reader bridges.
+
+The independent trace oracle checks:
+
+- All five rates; empty, boundary and multirate output lengths; cursor resets
+  at permutations and exact original lane/destination slice boundaries.
+- State/session admission before counter use, full-width counter overflow,
+  exact seven backend errors, four copy errors and selected boundary unwind.
+- Cursor commits only after successful copying and all sixteen counter-byte
+  writes only after the complete read succeeds. One-bit/nonuniform byte
+  patterns and exact ordered-write traces reject stale/no-op/partial writers.
+- Engine terminal-state/reset and four memory-clear requests on error/unwind,
+  preserving the original exception. A successful read leaves the engine nonterminal.
+
+Corrupt metadata, injected missing helpers and a changed second counter value
+are internal invariant probes, not valid public constructors or evidence of
+reachable exploits. Every nonpanic read-body block is covered; this is not a
+claim of complete block coverage for every included helper. Failed private
+engine reads can have copied a prefix to their destination: destination
+transactionality depends on the enclosing owner, not this direct helper check.
+
+CPU session/permutation, slice-splitting, copying and volatile wiping remain
+explicit boundaries. This proves modeled metadata effects and clear requests,
+not digest bytes, physical erasure, scalar-temporary cleanup, whole-verifier
+paths or whole-call register/spill absence. Synthetic unwind does not qualify
+actual extern-C unwind, abort, signals or arbitrary interruption. Arm runtime
+evidence remains QEMU, not native. F1 and root `PENTEST.md` remain open.
+
+Model tests pass four primitive controls and twenty-nine malformed pointer,
+width, phase and payload rejections. ABI-binding tests reject 144 missing,
+narrowed or by-value boundaries, with sixteen pointer-attribute controls.
+Development corrected null-pointer rejection in the diagnostic and recognition
+of Rust 1.98's bare-pointer permutation declaration; neither was a production
+defect. No shared interpreter, production Rust, captured implementation,
+dependency or release-gate policy changed. No compiler/native campaign or full
+sweep was repeated. Source/artifact validation, assurance freshness, script/
+status checks, acceptance metadata and documentation links pass.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `check_debug_accelerated_read.py` | `32435604df4c8bb00789b8067bbd84f24ce0a58b493b7b4126a037b60514e4e0` |
+| `debug_accelerated_read_model.py` | `ce3050d8a38ca521ecefa5e3927ba0ab5bdd7b41023033a7e9207743dc848378` |
+| `test_debug_accelerated_read.py` | `0fb564f96476496f8a54e5d077df5b5c4355ace9bee9d84191baae2cb06df42e` |
+| `test_debug_read_bindings.py` | `2834139275c746c1164796053c0cd473e1208c502b721311ce994865ab392b00` |
+| `test_debug_read_model.py` | `52040a54c2fd54a0d15eed36deee057a5c67a7a21e12cfaa1722a702fbf8465a` |
+
+The unchanged record SHA-256 is
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Final direct logs are under ignored `dist/`; the initial unversioned development
+logs include the corrected ABI-parser failure and are superseded by these.
+All eight final mutation shards pass, rejecting 1,534 regressions with forty
+positive controls. Removing the success-only, completed guard Drop is a semantic
+control because that Drop has no remaining work. The earlier v2 mutation logs
+incorrectly expected that removal to fail; the v3 campaign supersedes them.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-accelerated-read-check-v2-shard-0.log` | `2c6f04c4d85976fd08eda5e5c4cc5ceff535855099f57735dd6da4ca00d066e5` |
+| `debug-accelerated-read-check-v2-shard-1.log` | `392afc7fbce6b2b1dca3dcd8a3620088bc5a6bffc69838a5fab5a00a8d8e2d83` |
+| `debug-accelerated-read-check-v2-shard-2.log` | `d1a67ad719bae418265cf6c8daf9f5a950d6d63d197bf99f0c477d160590a9db` |
+| `debug-accelerated-read-check-v2-shard-3.log` | `7720b414765ae217423a370c145a505ae16d71a7ae8181000b6784ab18e4ee77` |
+| `debug-accelerated-read-check-v2-shard-4.log` | `6827a8ea9bfb60438b99a6b5e5e1e14c4b5b641612d4ace64c2026e963e4367f` |
+| `debug-accelerated-read-check-v2-shard-5.log` | `5779e573e3e573f1731db2f8dc77bce961add263035b559bb8e7dae1b7ec65c0` |
+| `debug-accelerated-read-check-v2-shard-6.log` | `eaccbf270107b514d30a481f08a1e1b793775cf15c99ce1ba23a2821592a30fb` |
+| `debug-accelerated-read-check-v2-shard-7.log` | `68d483db884e62d57fd8731f58ed394707f162a69a4f7168c6f61081c924c97b` |
+| `debug-accelerated-read-mutations-v3-shard-0.log` | `0c508a5793f78ab05f9fc975b31efd2bc4c01681884318318e0cc75525ac7c82` |
+| `debug-accelerated-read-mutations-v3-shard-1.log` | `dab36cf251ca566e6c1712cbf10869d9ba8f33a7fdd281b3e566c5f2cb916629` |
+| `debug-accelerated-read-mutations-v3-shard-2.log` | `b706c7c2ce24b8a5015518fdefffb31b89329a052d7caa7d5e3b102722feca7a` |
+| `debug-accelerated-read-mutations-v3-shard-3.log` | `bc5ce44868402bacf1cebf6b947df5f8c9b768548a4c944fc947faba53cd8b80` |
+| `debug-accelerated-read-mutations-v3-shard-4.log` | `5429b8f8ee8e461d34e84a825c045dd7c83101301a31a44df1913f73c3b55bf5` |
+| `debug-accelerated-read-mutations-v3-shard-5.log` | `5b43b54f034cd9c8cd2e4843ace145ed8f261df8c52e6c4313829b4a50b0af86` |
+| `debug-accelerated-read-mutations-v3-shard-6.log` | `5f8ae7cc3771da1444707cee0ed037d7c5ab7f245df33f05e12cf8653fcfdcfa` |
+| `debug-accelerated-read-mutations-v3-shard-7.log` | `df1629e01e41891f4b2c01cb8d7a11fd37ff321c977ac014fa5b93710c8b16c3` |

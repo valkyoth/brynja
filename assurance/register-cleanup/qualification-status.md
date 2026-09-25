@@ -257,6 +257,17 @@ Later diagnostic-only additions can run there without replacing captured sources
   unqualified; this is not F1 closure. All 1,248 mutations reject with eighty
   metadata/SSA/no-op controls; 2,744 existing bridge cases also still pass.
 
+- The accelerated debug engine-read body now executes its actual preflight,
+  counter decoder/writer, permutation adapter and inner cleanup guard. All
+  4,624 cases pass across eight retained paths; 1,534 mutations reject with forty
+  positive controls and complete nonpanic read-body block coverage.
+  Checked cursor/rate bounds, exact lane/output copy slices,
+  success-only full counter commits and terminal owner-clear requests on errors
+  and selected unwind are checked independently. CPU session/permutation,
+  slice-splitting, copy and volatile primitives remain explicit boundaries;
+  this direct check does not yet compose the read body with the outer producer
+  and reader guards. It does not qualify output bytes or register/spill cleanup.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -264,9 +275,10 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   the actual accelerated engine read body composed beneath the checked
-   preflight/producer/outer reader bridges, plus whole-verifier error/unwind
-   paths, and reconcile the optimized caller-to-reader/dependency coverage before
+   composition of the now-checked accelerated engine read body beneath the
+   producer/outer reader bridges, its remaining primitive boundaries, plus
+   whole-verifier error/unwind paths, and reconcile the optimized
+   caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized
    portable bulk/final chain and accelerated producer admission/loop/completion

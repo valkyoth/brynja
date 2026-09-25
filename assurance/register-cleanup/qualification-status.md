@@ -192,6 +192,15 @@ Later diagnostic-only additions can run there without replacing captured sources
   Scalar/copy/volatile bodies remain opaque and the outer squeeze/guard link
   must still be composed with this fill body; no whole-call erasure is claimed.
 
+- The debug staging-fill body now executes inside the actual byte squeeze,
+  initializer/completion and owner-guard chain in 118/119-function closures.
+  All 3,760 cases pass across sixteen paths, with 336 rejected mutations and
+  sixteen passing SSA controls. Staging cursor/copy progress, full output/owner
+  clearing requests on failures and selected synthetic primitive unwind, and
+  success-only output-counter commit/reader reuse are checked together. This
+  closes the byte-squeeze/staging-fill link. Final-bit caller composition and
+  whole-verifier coverage remain outstanding; primitive bodies stay opaque.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -199,7 +208,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   composition of the checked staging-fill body with its squeeze/guard callers,
+   composition of the checked staging-fill body with final-bit squeeze/guard callers,
    accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

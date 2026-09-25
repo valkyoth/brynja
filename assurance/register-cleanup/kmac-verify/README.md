@@ -3210,3 +3210,73 @@ All logs below live under ignored `dist/`, outside Cargo's `target/` directory.
 | `debug-staging-fill-mutations-shard-1.log` | `59a84a399aef0d44180d3c8a96be6c9dca8ea618bef946235c54f03fa8e87ecc` |
 | `debug-staging-fill-mutations-shard-2.log` | `2366fa8a456a536d419c8c440db10ec45685f9e296b897407c199b5665c51b70` |
 | `debug-staging-fill-mutations-shard-3.log` | `95b9e5540476b5b08389af0b556c9d9e6cbee6e45a00dfee4539e2d518d74717` |
+
+### Staging fill inside the debug byte squeeze and owner guard
+
+From the same preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_filled_squeeze.py "$record"
+python3 assurance/register-cleanup/test_debug_filled_squeeze.py "$record"
+```
+
+Both accept optional `--shard 0`, `1`, `2` or `3`; all four disjoint shards are
+required for the sixteen-path matrix. The previously checked fill body now runs
+inside the actual byte squeeze, initializer, operation/completion and owner-guard
+chain. Shared helper definitions must agree before combining the 118/119-function
+closures. The original guard stays armed during fill and output transfer.
+The same model executes the actual fill body and carries its cursor across
+chunks; it does not replace the fill with a success/error stub. Scalar, byte-copy
+and volatile-clear bodies remain explicit primitive boundaries.
+
+All 3,760 cases pass (235 per path). Selected empty, one-byte, rate and multirate
+outputs combine with cursor boundaries, counter limits, terminal readers,
+initializer errors, first/second staging-copy rejection, synthetic primitive
+unwind and output write/slice/transfer failures. The oracle independently expands
+each chunk's geometry into the enclosing progress, error, cleanup and result
+trace. A copy failure cannot commit that chunk's cursor; an output failure may
+follow a successful staging fill. Such errors preserve the exact intermediate
+algorithm effects and request complete destination and thirteen-region owner
+clearing. Only total success commits the output counter and reactivates the
+reader. Cursor/counter shadows describe algorithm writes before opaque clear
+requests, not the contents of actually cleared memory.
+
+All 336 retained-IR mutations reject (twenty-one per path), with sixteen passing
+SSA rename controls. They alter guard state, omit handoffs/destructors, swallow
+unwind, zero or skip fill work, or remove inner-scratch/full-owner clear requests.
+Two synthetic boundary controls and ten malformed/unarmed access rejections
+also pass. The mutation harness forbids compiler/runtime subprocesses.
+
+The first mutation run stopped on owner-wipe symbol discovery in Rust 1.98;
+the harness's selector was corrected to support both legacy and v0 mangling
+without confusing the full-owner wipe with `wipe_permutation_scratch`. All four
+mutation shards were rerun using the final harness below. Earlier unversioned
+mutation logs are superseded; the unchanged direct-check logs remain valid.
+Source/artifact validation still passes. No compiler/native campaign or full
+verification sweep was repeated.
+
+Synthetic unwind exercises modeled propagation/cleanup ordering. It does not
+assert that an extern-C primitive actually unwinds, nor cover arbitrary
+instruction interruptions, abort or signals. Final-bit staging composition,
+whole-verifier paths and whole-call register/spill behavior remain outstanding.
+Arm runtime evidence remains QEMU, not native qualification. F1 and root
+`PENTEST.md` remain open.
+
+Checker SHA-256:
+`606896e96aa24d73e22e29b3c50a605a79238217ae91a35aa22b4c53a8c9b741`;
+final mutation harness:
+`9ce4f40bf7d0e87af969ed898cb285cbd29b543f3c536c3a8f80389d75cd4b51`.
+The observation record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+All logs below live under ignored `dist/`, outside Cargo's `target/` directory.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-filled-squeeze-check-shard-0.log` | `ff18ae6ed8bb4c02ecb8193f76cba337c8728259d2131096c267a972b96cf5f5` |
+| `debug-filled-squeeze-check-shard-1.log` | `7da291a397b7862c652ea720947a4ecff4de0482d388c06c2092b00bffa18745` |
+| `debug-filled-squeeze-check-shard-2.log` | `3f33b12a07d5b48c3fbbc8d2aeb59d9064d5083a0dc8bf1ec58b6ee0aed8497c` |
+| `debug-filled-squeeze-check-shard-3.log` | `0fa5e6069a5db03cf3f952ca5cc5af5a7fb7e0496d2b73799c9a20b58c68e8dd` |
+| `debug-filled-squeeze-mutations-v2-shard-0.log` | `6c6afd745a5ec0cf60bcb5c8d9ad424a4a0c6e785d7fcfb0662397c16b222ff4` |
+| `debug-filled-squeeze-mutations-v2-shard-1.log` | `c53e14b3633f1f58424e0aa1505841eda6ef92827e06335929e7818491378538` |
+| `debug-filled-squeeze-mutations-v2-shard-2.log` | `3fd4e5d9134506a961190c00b59e13b8dc170e364296c852070b67b35eeab676` |
+| `debug-filled-squeeze-mutations-v2-shard-3.log` | `f960e43246f190929a466c5a04c612a983c43f56cf6db005eecd9e70c58d51a8` |

@@ -1,4 +1,19 @@
-"""Canonical backend inventory for the CPU-boundary policy."""
+"""Canonical backend and protected compiled-source inventories."""
+
+STRICT_COMPILED_SOURCES = {
+    "src/strict_sha2/compiled.rs": "protected-compiled-sha2-session-development",
+    "src/strict_sha2/compiled/worker.rs": "protected-compiled-sha2-worker",
+    "src/strict_sha2/compiled/tests.rs": "protected-compiled-sha2-admission-tests",
+    "src/strict_sha2/compiled/tests/native.rs": "protected-compiled-sha2-native-tests",
+    "src/strict_sha3/compiled.rs": "protected-compiled-sha3-session-development",
+    "src/strict_sha3/compiled/worker.rs": "protected-compiled-sha3-worker",
+    "src/strict_sha3/compiled/tests.rs": "protected-compiled-sha3-admission-tests",
+    "src/strict_sha3/compiled/tests/native.rs": "protected-compiled-sha3-native-tests",
+    "src/strict_kmac/compiled.rs": "protected-compiled-kmac-session-development",
+    "src/strict_kmac/compiled/worker.rs": "protected-compiled-kmac-worker",
+    "src/strict_kmac/compiled/tests.rs": "protected-compiled-kmac-admission-tests",
+    "src/strict_kmac/compiled/tests/native.rs": "protected-compiled-kmac-native-tests",
+}
 
 BACKENDS = {
     "x86-sha": (

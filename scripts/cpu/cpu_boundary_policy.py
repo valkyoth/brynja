@@ -7,7 +7,7 @@ import hashlib
 import re
 import tomllib
 from pathlib import Path
-from cpu_boundary_backends import BACKENDS
+from cpu_boundary_backends import BACKENDS, STRICT_COMPILED_SOURCES
 
 
 POLICY = Path("security/cpu-acceleration-boundary.toml")
@@ -15,7 +15,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "436ccb71b1597487c061238359f52423d0cd30d684480c4d6b5c85e330ccbd14"
+EXPECTED_POLICY_SHA256 = "e97d80498182b91b493ff1369efa62870e14a3847f0cb5fa1345909b79e9219b"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -149,18 +149,11 @@ SOURCE_STATUS = {
     (DETECTOR, "src/strict_sha2/types.rs"): "protected-sha2-public-identity-and-bounds",
     (DETECTOR, "src/strict_sha2/worker.rs"): "protected-sha2-scoped-worker",
     (DETECTOR, "src/strict_sha2/tests.rs"): "protected-sha2-integration-tests",
-    (DETECTOR, "src/strict_sha2/compiled.rs"): "protected-compiled-sha2-session-development",
-    (DETECTOR, "src/strict_sha2/compiled/worker.rs"): "protected-compiled-sha2-worker",
-    (DETECTOR, "src/strict_sha2/compiled/tests.rs"): "protected-compiled-sha2-admission-tests",
-    (DETECTOR, "src/strict_sha2/compiled/tests/native.rs"): "protected-compiled-sha2-native-tests",
+    **{(DETECTOR, path): status for path, status in STRICT_COMPILED_SOURCES.items()},
     (DETECTOR, "src/strict_sha3/mod.rs"): "protected-scalar-sha3-session-development",
     (DETECTOR, "src/strict_sha3/types.rs"): "protected-sha3-public-identity-and-bounds",
     (DETECTOR, "src/strict_sha3/worker.rs"): "protected-sha3-scoped-worker",
     (DETECTOR, "src/strict_sha3/tests.rs"): "protected-sha3-integration-tests",
-    (DETECTOR, "src/strict_sha3/compiled.rs"): "protected-compiled-sha3-session-development",
-    (DETECTOR, "src/strict_sha3/compiled/worker.rs"): "protected-compiled-sha3-worker",
-    (DETECTOR, "src/strict_sha3/compiled/tests.rs"): "protected-compiled-sha3-admission-tests",
-    (DETECTOR, "src/strict_sha3/compiled/tests/native.rs"): "protected-compiled-sha3-native-tests",
     (DETECTOR, "src/strict_sha3/tests/native.rs"): "protected-sha3-native-integration-tests",
     (DETECTOR, "src/strict_kmac/mod.rs"): "protected-scalar-kmac-session-development",
     (DETECTOR, "src/strict_kmac/types.rs"): "protected-kmac-public-identity-and-bounds",
@@ -281,6 +274,7 @@ def validate_packages(root: Path) -> None:
             "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"],
             "strict-sha3-acceleration": ["strict-sha3", "brynja-hash-sha3/hardened-execution"],
             "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"],
+            "strict-kmac-acceleration": ["strict-kmac", "brynja-mac-kmac/hardened-execution"],
             "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"],
             "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"],
             "sha512-hardened-batch": ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"],

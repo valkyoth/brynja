@@ -165,6 +165,7 @@ ROWS = {
         "| Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |",
         "| Protected compiled SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Explicit static AVX2/Arm kernels; qualification pending | ❌ No |",
         "| Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Four identities, protected verification; qualification pending | ❌ No |",
+        "| Protected compiled KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Explicit static AVX2/Arm kernels and protected verification; qualification pending | ❌ No |",
         "| Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | 🚧 Four identities, exact item completion; qualification pending | ❌ No |",
         "| Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |",
         "| Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |",

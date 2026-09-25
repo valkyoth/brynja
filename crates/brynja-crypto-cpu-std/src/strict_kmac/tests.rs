@@ -88,7 +88,7 @@ fn verify_mapping<T: ?Sized>(value: &T) {
         assert!(verified);
     }
 }
-fn limits() -> Limits {
+pub(super) fn limits() -> Limits {
     Limits {
         stack_bytes: 262144,
         max_stack_mapping_bytes: 1048576,
@@ -107,6 +107,10 @@ pub(super) fn comparison_complete() {
     if let Fault::VerifyCompared(wanted) = FAULT.with(|f| f.get()) {
         assert_eq!(COMPARED.with(|n| n.get()), wanted);
     }
+}
+#[cfg(feature = "strict-kmac-acceleration")]
+pub(super) fn require_comparison_count(expected: usize) {
+    assert_eq!(COMPARED.with(|n| n.get()), expected);
 }
 #[test]
 fn metadata_and_model_admission_are_fail_closed() {

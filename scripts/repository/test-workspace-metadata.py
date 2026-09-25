@@ -91,7 +91,7 @@ def test_baselines(no_default: dict, all_features: dict) -> None:
             )
     md5_workspace_fixtures.check(no_default, all_features, package, node, require_rejection)
     for name, feature in (("brynja-legacy-sha1", "hardened-execution"), ("brynja-legacy-sha1-std", "runtime-hardened-execution"), ("brynja-legacy-sha1-std", "strict-execution"), ("brynja-legacy-md5-std", "strict-execution"),
-                          ("brynja-crypto-cpu-std", "protected-memory"), ("brynja-crypto-cpu-std", "strict-sha2"), ("brynja-crypto-cpu-std", "strict-sha2-acceleration"), ("brynja-crypto-cpu-std", "strict-sha3"), ("brynja-crypto-cpu-std", "strict-sha3-acceleration"), ("brynja-crypto-cpu-std", "strict-kmac"), ("brynja-crypto-cpu-std", "strict-tuplehash")):
+                          ("brynja-crypto-cpu-std", "protected-memory"), ("brynja-crypto-cpu-std", "strict-sha2"), ("brynja-crypto-cpu-std", "strict-sha2-acceleration"), ("brynja-crypto-cpu-std", "strict-sha3"), ("brynja-crypto-cpu-std", "strict-sha3-acceleration"), ("brynja-crypto-cpu-std", "strict-kmac"), ("brynja-crypto-cpu-std", "strict-kmac-acceleration"), ("brynja-crypto-cpu-std", "strict-tuplehash")):
         for key, replacement in ((feature, []), ("default", [feature])):
             changed = copy.deepcopy(all_features)
             package(changed, name)["features"][key] = replacement

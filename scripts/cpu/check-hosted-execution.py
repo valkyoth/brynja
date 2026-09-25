@@ -37,6 +37,7 @@ def validate(write=False):
             'strict-sha3': ['protected-memory', 'dep:brynja-hash-sha3'],
             'strict-sha3-acceleration': ['strict-sha3', 'brynja-hash-sha3/hardened-execution'],
             'strict-kmac': ['protected-memory', 'dep:brynja-mac-kmac'],
+            'strict-kmac-acceleration': ['strict-kmac', 'brynja-mac-kmac/hardened-execution'],
             'strict-tuplehash': ['protected-memory', 'dep:brynja-hash-tuple'],
             'sha256-hardened-batch': ['brynja-crypto-cpu/sha256-hardened-batch', 'brynja-hash-sha2/hardened-batch-execution'],
             'sha512-hardened-batch': ['brynja-crypto-cpu/sha512-hardened-batch', 'brynja-hash-sha2/hardened-batch512-execution'],

@@ -154,7 +154,11 @@ impl Drop for Difference {
         let _ = brynja_core::clear_owned_region(&mut self.0);
     }
 }
-fn compare(expected: &[u8], candidate: &[u8], cancel: &Cancellation) -> Result<bool, Error> {
+pub(super) fn compare(
+    expected: &[u8],
+    candidate: &[u8],
+    cancel: &Cancellation,
+) -> Result<bool, Error> {
     if expected.len() != candidate.len() {
         return Err(Error::Invariant);
     }

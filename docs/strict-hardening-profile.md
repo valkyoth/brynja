@@ -5,7 +5,7 @@ and synchronous protected-stack resources are implemented for initial Linux test
 and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and
 TupleHash/TupleHashXOF, isolated legacy SHA-1/MD5, and protected scalar
 ParallelHash/ParallelHashXOF sessions are implemented.
-Compiled SHA-2 and SHA-3/SHAKE/cSHAKE hardware wrappers are implemented; **remaining strict
+Compiled SHA-2, SHA-3/SHAKE/cSHAKE and KMAC/KMACXOF wrappers are implemented; **remaining strict
 accelerated integration is not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
 Added after the two-testers' follow-up on v0.24.49. The current
@@ -214,6 +214,40 @@ They also inspect actual workspace/staging/output protection flags. These are
 author integration tests, not a new independent cryptographic oracle or native
 Arm qualification. Neither Medium finding is closed by this partial integration;
 strict acceleration and new compiler/platform qualification remain pending.
+
+## Protected compiled KMAC/KMACXOF wrapper (qualification pending)
+
+Default-off `strict-kmac-acceleration` exposes `strict_kmac::CompiledSession`
+without changing scalar `Session`. All four identities require an explicit
+static AVX2 or Arm NEON/SHA3 Keccak kernel and the same protected GNU/Linux
+target. Establish compatible CPU/OS support for the entire execution lifetime;
+compiled features do not detect runtime migration or lock scheduling.
+
+All resources are acquired before accepting a request. Authority and both
+startup checks, scoped keyed state, framing and verification are created on
+protected worker stacks. Fixed output uses a full-width protected staging
+mapping; XOF staging is bounded to 4096 bytes and copies into protected output
+in bounded chunks. Bit canonicality for keys, customization, input and candidate
+tags is inspected only there. Original caller buffers remain caller-owned.
+
+Production key/tag strength and exact verification widths are unchanged, even
+when conformance-testing features are enabled elsewhere. Short XOF derivation
+is allowed but is not a weak-tag verification bypass. Verification reuses the
+scalar wrapper's protected full-width comparison routine: only its deliberately
+declassified Boolean leaves the worker. First/middle/last mismatch tests assert
+every candidate byte is compared; this is not machine-level timing evidence.
+Success and mismatch both clear computed tag/output/staging. An ordinary mismatch,
+malformed request or cancellation preserves reuse. Backend, scoped execution,
+invariant and worker failures permanently quarantine the wrapper, preventing
+fresh per-request authority from reviving it. Forgotten output loans cannot
+disable next-operation or owner-Drop clearing. No reset or fallback exists.
+
+Setup and fixed finalization are bounded by public budgets but not internally
+interruptible; message/XOF work and comparison check cancellation every 4096
+bytes. No whole-process, arbitrary-register, interruption or abort guarantee is
+added. Native AVX2 author checks are not native Arm, new emitted-code/sanitizer
+or independent qualification. Remaining strict families and batching are still
+pending, and neither Medium finding is closed.
 
 ## Protected KMAC/KMACXOF consumer (qualification pending)
 

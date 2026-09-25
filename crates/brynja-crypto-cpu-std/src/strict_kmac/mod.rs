@@ -7,8 +7,9 @@
 //! caller copies, privileged snapshots, interruptions and process abort retain
 //! their existing limits. No whole-process/register erasure or certification is
 //! claimed. Deployment must uphold protected-memory lifetimes (no fork, external
-//! mapping revocation or native cancellation). SIMD/hardware integration remains
-//! pending; this wrapper always uses the existing opaque scalar implementation.
+//! mapping revocation or native cancellation). [`Session`] always uses the
+//! existing opaque scalar implementation. Separate `strict-kmac-acceleration`
+//! enables explicit compiled Keccak sessions; qualification remains pending.
 //!
 //! ```no_run
 //! use brynja_crypto_cpu_std::strict_kmac::{Algorithm, Session, Limits, Error};
@@ -23,8 +24,12 @@
 //! # Ok::<(), Error>(())
 //! ```
 use crate::protected_memory::{ProtectedBytes, ProtectedStack};
+#[cfg(feature = "strict-kmac-acceleration")]
+mod compiled;
 mod types;
 mod worker;
+#[cfg(feature = "strict-kmac-acceleration")]
+pub use compiled::{CompiledSession, Kernel};
 pub use types::{Algorithm, Bits, Cancellation, Error, Limits, PublicDeclassification, Request};
 #[cfg(test)]
 mod tests;

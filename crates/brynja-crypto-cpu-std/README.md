@@ -40,6 +40,7 @@ It is not automatically installed or added to facade/default graphs.
 | Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |
 | Protected compiled SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Explicit static AVX2/Arm kernels; qualification pending | ❌ No |
 | Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Four identities, protected verification; qualification pending | ❌ No |
+| Protected compiled KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Explicit static AVX2/Arm kernels and protected verification; qualification pending | ❌ No |
 | Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | 🚧 Four identities, exact item completion; qualification pending | ❌ No |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
 | Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
@@ -52,6 +53,17 @@ It is not automatically installed or added to facade/default graphs.
 No named independent cryptographic review or FIPS 140-3 validation is claimed.
 
 ## Use
+
+Default-off `strict-kmac-acceleration` adds `strict_kmac::CompiledSession` with
+explicit AVX2 or Arm NEON/SHA3 selection. Enable the complete build-wide features
+and establish compatible CPU/OS support throughout execution. Keyed state,
+authority, startup tests and full-width tag comparison remain on protected
+worker stacks; output and staging use resident protected mappings. A tag mismatch
+or cancellation permits reuse; backend failure or worker panic permanently
+quarantines the session. Full-strength key/tag rules and scalar `Session` are
+unchanged. The [compiled KMAC API example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_kmac/compiled.rs)
+shows explicit setup and secret output ownership. Compiler/platform qualification
+and independent retest remain pending.
 
 Default-off `strict-sha3-acceleration` adds `strict_sha3::CompiledSession` for
 SHA-3, SHAKE and cSHAKE with exact-bit outputs and optional bit-oriented N/S.

@@ -1071,25 +1071,25 @@ sha256 = "f53d36701983d2c7b887414412a971dfb5eb61899ca6dce35d64a29af2a9561f"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/mod.rs"
 status = "protected-scalar-kmac-session-development"
-sha256 = "87d4d914ec88de6f0417bf166a2cf41b3ba0043109da7187820e620f6167f12e"
+sha256 = "29c0d7cd520b5a7333dfd494fd85145754eeb29a59d476ac26f4edcef5528f1d"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/types.rs"
 status = "protected-kmac-public-identity-and-bounds"
-sha256 = "13eea29e3d4476740d8d222d1a4e89623ec33f3ebb6c7bca193f7d2486725188"
+sha256 = "346940bb3326bb06e3d10101ccca50a09be31e8fe38334378a67cc116e6c88fa"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/worker.rs"
 status = "protected-kmac-scoped-worker-and-verification"
-sha256 = "21d31f4bb98c53158b68b7c597994575e71bc9d534d50ef7aeb95e1827309670"
+sha256 = "cb6701786b4717eae5937b17c713f7247af0b91bb9e195b80bf6a3cc7f1139ad"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/tests.rs"
 status = "protected-kmac-integration-tests"
-sha256 = "8e184b045ab4c5103bc9bd0f44324029a434ff501ef80e19d374a945939411a4"
+sha256 = "2e7601adcdb3a3451133183161fe097c6c3f5d6b7fda89db91b16a5e95ead603"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1156,3 +1156,27 @@ package = "brynja-crypto-cpu-std"
 path = "src/strict_sha3/compiled/tests/native.rs"
 status = "protected-compiled-sha3-native-tests"
 sha256 = "dfcb09c9c518d44208609f6a30e97624ce367c3f14a1a2cab90f6c01db640367"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/compiled.rs"
+status = "protected-compiled-kmac-session-development"
+sha256 = "d2b72a6a3b37be6738dbe4f9a94d65eddbbc676cee4a204e6fc9ef3aa7b3c3d1"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/compiled/worker.rs"
+status = "protected-compiled-kmac-worker"
+sha256 = "167c7a04fc2ea789dcaae3281da51dfcec32ce0a59c37ef4d1baa2f2d1a73f03"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/compiled/tests.rs"
+status = "protected-compiled-kmac-admission-tests"
+sha256 = "64e8608a7159dc68bb4c64385e73e7b92f29373162d921f58542d03823b565da"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/compiled/tests/native.rs"
+status = "protected-compiled-kmac-native-tests"
+sha256 = "2ee87d8aa169b61541892779c4c67a013af8a08d8abf2dc9bc3a8bad70533275"

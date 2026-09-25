@@ -115,6 +115,15 @@ pub enum Error {
     Cancelled,
     /// Scoped computation or transfer failed an invariant.
     Invariant,
+    /// Required compiled backend failed; never authorizes fallback.
+    #[cfg(feature = "strict-kmac-acceleration")]
+    Backend(brynja_crypto_cpu::static_execution::Error),
+    /// Scoped accelerated KMAC failed; the wrapper is terminal, with no fallback.
+    #[cfg(feature = "strict-kmac-acceleration")]
+    Execution(brynja_mac_kmac::KmacError),
+    /// The compiled wrapper was irreversibly invalidated.
+    #[cfg(feature = "strict-kmac-acceleration")]
+    Quarantined,
 }
 impl From<protected_memory::Error> for Error {
     fn from(error: protected_memory::Error) -> Self {
@@ -134,6 +143,12 @@ impl core::fmt::Display for Error {
             Self::OutputLength => "strict KMAC output width mismatch",
             Self::Cancelled => "strict KMAC cancelled",
             Self::Invariant => "strict KMAC invariant failed",
+            #[cfg(feature = "strict-kmac-acceleration")]
+            Self::Backend(_) => "strict KMAC compiled backend failed",
+            #[cfg(feature = "strict-kmac-acceleration")]
+            Self::Execution(_) => "strict KMAC accelerated computation failed",
+            #[cfg(feature = "strict-kmac-acceleration")]
+            Self::Quarantined => "strict KMAC compiled session quarantined",
         })
     }
 }

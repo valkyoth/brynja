@@ -61,6 +61,9 @@ def require_rejection(root: Path, expected: str) -> None:
 
 def test() -> None:
     assert policy.BACKENDS is cpu_boundary_backends.BACKENDS
+    assert len(cpu_boundary_backends.STRICT_COMPILED_SOURCES) == 12
+    for path, status in cpu_boundary_backends.STRICT_COMPILED_SOURCES.items():
+        assert policy.SOURCE_STATUS[(policy.DETECTOR, path)] == status
     with tempfile.TemporaryDirectory(prefix="brynja-cpu-boundary-") as temporary:
         root = Path(temporary) / "fixture"
         fixture(root)
@@ -176,6 +179,8 @@ def test() -> None:
             ('default = []', 'default = ["strict-sha3"]', 'default feature'),
             ('strict-sha3-acceleration = ["strict-sha3", "brynja-hash-sha3/hardened-execution"]', 'strict-sha3-acceleration = ["brynja-hash-sha3/hardened-execution"]', 'default feature'),
             ('default = []', 'default = ["strict-sha3-acceleration"]', 'default feature'),
+            ('strict-kmac-acceleration = ["strict-kmac", "brynja-mac-kmac/hardened-execution"]', 'strict-kmac-acceleration = ["brynja-mac-kmac/hardened-execution"]', 'default feature'),
+            ('default = []', 'default = ["strict-kmac-acceleration"]', 'default feature'),
             ('default = []', 'default = ["strict-sha2"]', 'default feature'),
             ('brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }', 'dependency boundary'),
         ):
@@ -183,7 +188,7 @@ def test() -> None:
             require_rejection(root, expected)
             reset(root)
 
-        for relative in ('src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha2/compiled/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_sha3/compiled/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_tuplehash/worker.rs'):
+        for relative in ('src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha2/compiled/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_sha3/compiled/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_kmac/compiled/worker.rs', 'src/strict_tuplehash/worker.rs'):
             source = root / 'crates' / policy.DETECTOR / relative
             source.write_text(source.read_text() + '\n// unreviewed resource drift\n')
             require_rejection(root, 'source changed')

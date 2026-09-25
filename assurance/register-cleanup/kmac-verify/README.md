@@ -3147,3 +3147,66 @@ retained file; no retained-log hash is claimed for that shard.
 | `debug-bulk-guard-mutations-shard-1.log` | `98241ddcabc428cc04e5fa6d920bf8c09135dc187e291bcdce654157b30d4dc9` |
 | `debug-bulk-guard-mutations-shard-2.log` | `fec580ec0a9182ebfa0441fbac3e0c2159bbd6c98b12b8c13529516a5ecf72a5` |
 | `debug-bulk-guard-mutations-shard-3.log` | `85206e7e0deb0cf851b40ba6f0705c162f436b974c0e01d947537db7c5813adb` |
+
+### Debug staging-fill helper
+
+From the same preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_staging_fill.py "$record"
+python3 assurance/register-cleanup/test_debug_staging_fill.py "$record"
+```
+
+Both accept optional `--shard 0`, `1`, `2` or `3`; all four disjoint shards are
+required for the sixteen-path matrix. The reader-selected debug `fill_staging`
+body includes its actual 32-function helper closure: range selection, cursor
+access/narrowing, checked arithmetic, slices, result conversion, core copy
+wrapper and scratch-clearing wrappers. The three primitive boundaries are the
+actual same-configuration scalar, byte-copy and volatile-clear definitions;
+each must retain its borrowed void ABI. The scalar receives the original
+state and three scratch addresses, plus the exact immutable 192-byte round
+table checked against the existing independent oracle in the source closure.
+
+All 43,136 cases pass across sixteen paths (2,571 per 168-byte-rate path and
+2,821 per 136-byte-rate path). The independent range model covers all cursor
+bytes for selected counts, all counts from 0 through 169 for selected cursor
+positions, maximum integer count rejection, copy failures and selected scalar/
+copy unwind. It checks exact state-to-staging copy ranges, successful byte-copy
+handoffs, cursor writes only after successful copies, state-consumed/output-size
+errors, permutation at the rate boundary and three scratch-clear requests before
+resetting the cursor. Empty fill performs no cursor update or permutation, even
+for an invalid stored cursor; oversized fill is rejected before processing.
+
+All 320 retained-IR mutations reject (twenty per path), with sixteen passing
+SSA rename controls. Mutations alter fill/cursor admission, staging/source
+addresses, cursor/permutation handoffs, scratch clear calls/widths, scalar
+operands/constants, primitive return ABIs, or introduce direct secret loads.
+The mutation harness forbids compiler/runtime subprocesses. Source/artifact
+validation still passes; no compiler or native campaign was repeated.
+
+The scalar, byte-copy and volatile bodies are opaque in this geometry check.
+Synthetic primitive unwind preserves the exact event prefix and original
+exception; this standalone helper does not promise cleanup after an interrupted
+primitive. Its enclosing squeeze/operation guard must still be composed with
+the fill body. Existing separate primitive checks are not automatically a
+whole-call register/spill guarantee. Arm runtime evidence remains QEMU, not
+native qualification. F1 and root `PENTEST.md` remain open.
+
+Checker SHA-256:
+`88ab58276da11575d10710959ce61ad41a4b8f8f62fd8f9493eb3443e3dba730`;
+mutation harness:
+`1a0927e96215ae0b4e04af156e53a1c5a15cd3db1ede2d4b779c7725ed045ca2`.
+The observation record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+All logs below live under ignored `dist/`, outside Cargo's `target/` directory.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-staging-fill-check-shard-0.log` | `c35e69a40ff1b53c4566264933e9dc368d4db32393b5631bd2a77b49dc6db319` |
+| `debug-staging-fill-check-shard-1.log` | `2c3fa93f6caaa2932e32134d0ec45485c72558235509bf8b096278b780c44232` |
+| `debug-staging-fill-check-shard-2.log` | `d76b39051c69a02f7491f122a78f5178ebf9d9acf0deb67dc33742f70896b1a3` |
+| `debug-staging-fill-check-shard-3.log` | `935da83cf9332b36b9cfb316201389fd228c7568756ea9bcd618045e7da51ad0` |
+| `debug-staging-fill-mutations-shard-0.log` | `5bc71d3ba9064d776481ec3aab44621dc3317a1e1a562879910978ba10282eb8` |
+| `debug-staging-fill-mutations-shard-1.log` | `59a84a399aef0d44180d3c8a96be6c9dca8ea618bef946235c54f03fa8e87ecc` |
+| `debug-staging-fill-mutations-shard-2.log` | `2366fa8a456a536d419c8c440db10ec45685f9e296b897407c199b5665c51b70` |
+| `debug-staging-fill-mutations-shard-3.log` | `95b9e5540476b5b08389af0b556c9d9e6cbee6e45a00dfee4539e2d518d74717` |

@@ -182,6 +182,16 @@ Later diagnostic-only additions can run there without replacing captured sources
   comparing the composed trace. Fill/copy/volatile bodies remain opaque; this
   completes the portable bulk-reader/producer link, not whole-call erasure.
 
+- The portable debug staging-fill body now includes its actual 32-function
+  range/cursor, checked-arithmetic, slice, core-copy-wrapper and scratch-clearing
+  helper closure. All 43,136 geometry/error cases pass across sixteen paths;
+  all 320 mutations reject with sixteen passing SSA controls. The scalar handoff
+  binds four original state/scratch borrows and the exact immutable round table.
+  Failed copies cannot advance that chunk's cursor. Selected primitive unwind
+  propagates without inventing cleanup absent from this standalone helper.
+  Scalar/copy/volatile bodies remain opaque and the outer squeeze/guard link
+  must still be composed with this fill body; no whole-call erasure is claimed.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -189,7 +199,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   staging-fill internals,
+   composition of the checked staging-fill body with its squeeze/guard callers,
    accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

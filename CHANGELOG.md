@@ -2,6 +2,10 @@
 
 ## 0.24.49 development
 
+- Add default-off protected scalar TupleHash/TupleHashXOF sessions with exact
+  item completion, arbitrary-bit customization/items and affine protected output.
+  Bound item/chunk/message/output work and clear staging/output on rejection,
+  cancellation and unwind. Strict acceleration and qualification remain pending.
 - Add default-off protected scalar KMAC/KMACXOF sessions with full-strength key
   checks, protected fixed-output staging, exact-bit affine output and protected
   tag verification. Bound setup/message/output work and clear on rejection,

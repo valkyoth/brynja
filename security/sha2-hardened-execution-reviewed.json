@@ -218,7 +218,7 @@
     "docs/hardened-in-place.md": "476cc1f53b6450c937f6869947d1979272a337f9a1583f9f7feb5652f3d707c4",
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
     "docs/x86-sha512-execution.md": "5dfce24baf4565a302286721b32d97895db5cd90ee3dd19e14cbbd96a839d0ba",
-    "package-policy.toml": "ef782cc0da95591284c38a6e874810d4089f68909390348f35cfdb602f443ba0",
+    "package-policy.toml": "060e88a1ec4ee9be97bbc3bc2f04aa05cee48a2ec80b53f05015a83f52928058",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/ci/install-sde.sh": "72f37ac72ae30b72f7155f09a51343ff9eecdb226c5898aad53eb3c0e0fa9c86",
     "scripts/sha2/capture-sha2-hardened-native.py": "50cd60bc595fa44c85c8424863757aa61dd7cb6d930eb127f7bad4fc9f013ad4",

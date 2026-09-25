@@ -38,6 +38,7 @@ It is not automatically installed or added to facade/default graphs.
 | Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
 | Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |
 | Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Four identities, protected verification; qualification pending | ❌ No |
+| Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | 🚧 Four identities, exact item completion; qualification pending | ❌ No |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
 | Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
@@ -106,6 +107,19 @@ explicit public tags. Setup and fixed finalization are bounded, not internally
 cancellable. SIMD/hardware, native Arm and independent qualification remain pending.
 See the [compiled KMAC session example](src/strict_kmac/mod.rs) and the
 [resource/limit contract](../../docs/strict-hardening-profile.md).
+
+`strict-tuplehash` enables `strict_tuplehash::Session`. Construct it with
+`Algorithm::TupleHash256(256)` and explicit mapping, input/customization/output,
+item-count and chunk-count limits. `hash(&[Item::bytes(first), Item::bytes(second)],
+customization)` preserves tuple-element boundaries. `compute` accepts chunked
+items, raw LSB-first final bits and cooperative cancellation. Splitting an item
+into chunks does not create more tuple elements; an empty tuple differs from
+one empty element. Item lengths are derived and completed on the protected
+worker. Fixed/XOF output, including empty and partial-bit output, stays in an
+affine protected loan until exposure or explicit declassification. Setup and
+fixed finalization are bounded but not internally cancellable. This path is
+scalar-only, qualification-pending and has the target/caller-storage limits above.
+See the [compiled TupleHash session example](src/strict_tuplehash/mod.rs).
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
 adapter. Portable selection never probes; Require fails on unqualified platforms

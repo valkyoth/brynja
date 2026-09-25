@@ -2,7 +2,8 @@
 
 Status: owner-approved implementation in progress; the protected-byte resource
 and synchronous protected-stack resources are implemented for initial Linux tests,
-and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE and KMAC/KMACXOF sessions are implemented.
+and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and
+TupleHash/TupleHashXOF sessions are implemented.
 **Strict acceleration, other families and protected ParallelHash scheduling are
 not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
@@ -236,6 +237,41 @@ Platform FFI belongs in isolated first-party hosted adapters, not the no_std
 cryptographic leaves. No third-party crypto/native implementation is introduced.
 Each OS adapter needs actual failure-path tests and its own evidence; Linux
 semantics cannot be assigned to macOS or Windows by changing constants.
+
+## Protected scalar TupleHash sessions (qualification pending)
+
+The default-off `strict-tuplehash` feature adds `strict_tuplehash::Session` for
+TupleHash128/256 and TupleHashXof128/256 with exact output-bit identities.
+Construction acquires a protected stack and separate protected staging/output
+mappings before any input. Each mapping has an explicit budget; these are
+per-resource limits, not a process-wide residency quota. GNU/Linux x86-64 and
+little-endian AArch64 native builds are the only implemented targets; other
+platforms and Miri/Kani models reject. Strict acceleration remains pending.
+
+`Item` describes one tuple element using borrowed byte chunks and a raw LSB-first
+final bit tail. The worker derives the exact checked bit length and completes
+the scoped item writer before starting another. Chunk boundaries are not tuple
+boundaries: the empty tuple, one empty element and two empty elements differ.
+Content validation, scoped sponge state, framing and secret transfer run on the
+protected stack. No populated state or secret thread result returns to the
+ordinary caller. Inputs and their preexisting copies remain caller-owned.
+
+Limits bound total item bits, customization bits, output bits, item count and
+total chunk descriptors, including empty chunks/items. Cancellation is checked
+at item/chunk and 4096-byte processing boundaries. Customization setup and fixed
+finalization are bounded but not internally cancellable. Fixed output uses a
+protected full-width staging map; XOF uses at most 4096 staging bytes. Empty
+output reserves a hidden protected byte without exposing it. The affine output
+loan preserves fixed/XOF and exact-bit identity; explicit public release consumes
+and clears it. Errors, wrong item completion, cancellation and recoverable unwind
+clear both buffers; the joined stack is independently cleared. Forgotten loans
+cannot suppress the session owner's cleanup.
+
+Author tests compare against the existing TupleHash implementation, not an
+independent oracle. Native x86 protection flags, cancellation and output-fragment
+unwind are covered. Native Arm execution, new emitted-code/platform qualification,
+protected-stack sanitizer validation and independent retest remain pending.
+This addition does not close M1 or M2 or change release rules.
 
 ## Execution and ParallelHash
 

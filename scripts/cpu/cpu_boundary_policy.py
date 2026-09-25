@@ -15,7 +15,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "eecc7c5f91b30cc1000b903da9027dc659727c39eb2c8946dcdcb9bab257929f"
+EXPECTED_POLICY_SHA256 = "6aa1f8d93496ac6b797a1972c24c722f02366e44893baed80adc60bfc71311e0"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -158,6 +158,11 @@ SOURCE_STATUS = {
     (DETECTOR, "src/strict_kmac/worker.rs"): "protected-kmac-scoped-worker-and-verification",
     (DETECTOR, "src/strict_kmac/tests.rs"): "protected-kmac-integration-tests",
     (DETECTOR, "src/strict_kmac/tests/native.rs"): "protected-kmac-native-integration-tests",
+    (DETECTOR, "src/strict_tuplehash/mod.rs"): "protected-scalar-tuplehash-session-development",
+    (DETECTOR, "src/strict_tuplehash/types.rs"): "protected-tuplehash-public-identity-and-bounds",
+    (DETECTOR, "src/strict_tuplehash/worker.rs"): "protected-tuplehash-scoped-worker-and-item-completion",
+    (DETECTOR, "src/strict_tuplehash/tests.rs"): "protected-tuplehash-integration-tests",
+    (DETECTOR, "src/strict_tuplehash/tests/native.rs"): "protected-tuplehash-native-integration-tests",
 }
 BACKEND_KEYS = {
     "id", "identity", "architecture", "module", "status", "sha256",
@@ -216,7 +221,7 @@ def validate_policy_shape(policy: dict) -> None:
         },
         "detector": {
             "name": DETECTOR, "version": "0.1.1", "runtime": "std",
-            "dependencies": [CPU, SHA2, SHA3, "brynja-core", "brynja-mac-kmac"], "default_features": [],
+            "dependencies": [CPU, SHA2, SHA3, "brynja-core", "brynja-mac-kmac", "brynja-hash-tuple"], "default_features": [],
             "publication": "deferred-crates-io", "facade_feature": "none",
         },
     }:
@@ -265,13 +270,14 @@ def validate_packages(root: Path) -> None:
             "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
             "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"],
             "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"],
+            "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"],
             "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"],
             "sha512-hardened-batch": ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"],
             "keccak-hardened-batch": ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"],
             "keccak-batch": ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"],
             "sponge-execution": ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"], "sha256-batch": ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"], "sha512-batch": ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]}:
         fail("host detector default feature set drifted")
-    if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3, "brynja-core", "brynja-mac-kmac"} or any(detector['dependencies'][name] != {'workspace': True, 'optional': True} for name in (SHA3, 'brynja-core', 'brynja-mac-kmac')):
+    if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3, "brynja-core", "brynja-mac-kmac", "brynja-hash-tuple"} or any(detector['dependencies'][name] != {'workspace': True, 'optional': True} for name in (SHA3, 'brynja-core', 'brynja-mac-kmac', 'brynja-hash-tuple')):
         fail("host detector dependency boundary drifted")
     if sha2.get("features") != {
         "default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],

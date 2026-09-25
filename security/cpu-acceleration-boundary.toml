@@ -25,7 +25,7 @@ facade_feature = "none"
 name = "brynja-crypto-cpu-std"
 version = "0.1.1"
 runtime = "std"
-dependencies = ["brynja-crypto-cpu", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-core", "brynja-mac-kmac"]
+dependencies = ["brynja-crypto-cpu", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-core", "brynja-mac-kmac", "brynja-hash-tuple"]
 default_features = []
 publication = "deferred-crates-io"
 facade_feature = "none"
@@ -436,7 +436,7 @@ sha256 = "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f"
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "a6af43ef452113cb9458b4fa23f133689f0bf52f0d2e075c3b9eee606a13fa8f"
+sha256 = "b261fa729b3bc9a8fc7e014b8c22a33bdf860c3e642916bb0ed529e1af0e635c"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1072,3 +1072,33 @@ package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/tests/native.rs"
 status = "protected-kmac-native-integration-tests"
 sha256 = "fa9ad50752d470c32a0037f988a7d6ef08fa587b1c2e556a331448cd5099b5af"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_tuplehash/mod.rs"
+status = "protected-scalar-tuplehash-session-development"
+sha256 = "a7dd3ff3e9b70ae6f22b90d1fdb514a271cdfe124346a4ddad9336f9c5c53328"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_tuplehash/types.rs"
+status = "protected-tuplehash-public-identity-and-bounds"
+sha256 = "a2e2247846f3228ee7e30bf0b1feea64ad9a1ff3be0718706aec4be5158265b0"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_tuplehash/worker.rs"
+status = "protected-tuplehash-scoped-worker-and-item-completion"
+sha256 = "d520c30b2b40ba8498a05697c83153359d3877f94ebf71d61a6dccd5e3cdde7b"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_tuplehash/tests.rs"
+status = "protected-tuplehash-integration-tests"
+sha256 = "4118d94fb855e76868e5465f5b8406e62cd1c52ee03ee2854de0753d68dcf708"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_tuplehash/tests/native.rs"
+status = "protected-tuplehash-native-integration-tests"
+sha256 = "285cfa47144866c72dde68ab16834987c2ea825a7e4eca1a6f7a92e2c5b6c67c"

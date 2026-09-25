@@ -3,7 +3,7 @@
 Status: owner-approved implementation in progress; the protected-byte resource
 and synchronous protected-stack resources are implemented for initial Linux tests,
 and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and
-TupleHash/TupleHashXOF and isolated legacy SHA-1 sessions are implemented.
+TupleHash/TupleHashXOF and isolated legacy SHA-1/MD5 sessions are implemented.
 **Strict acceleration, other families and protected ParallelHash scheduling are
 not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
@@ -272,6 +272,33 @@ independent oracle. Native x86 protection flags, cancellation and output-fragmen
 unwind are covered. Native Arm execution, new emitted-code/platform qualification,
 protected-stack sanitizer validation and independent retest remain pending.
 This addition does not close M1 or M2 or change release rules.
+
+## Protected legacy MD5 (qualification pending)
+
+The isolated `brynja-legacy-md5-std` adapter adds default-off `strict-execution`.
+`strict_execution::Session` preacquires a protected stack and sixteen-byte output
+mapping. Only GNU/Linux native x86-64 and little-endian AArch64 are implemented;
+other targets and Miri/Kani models reject. The portable MD5 leaf keeps its
+core/hash-core dependency closure; no modern consumer acquires a legacy edge.
+
+The existing scoped scalar MD5 workspace and sixteen-byte staging are created
+on the protected worker, not populated and moved from an ordinary caller stack.
+Byte chunks and a canonical raw MSB-first tail are supported. Total length uses
+checked u128 arithmetic; MD5's final encoding retains the low 64 bits, without
+imposing SHA-1's smaller message domain. Public budgets bound input bits, chunk
+count and mappings; cancellation checks occur at most every 4096 input bytes.
+Output is an affine protected loan. Rejection, cancellation, recoverable unwind,
+explicit declassification, forgotten-loan reuse and owner Drop retain independent
+cleanup. The joined worker stack is cleared before return or reuse.
+
+This is scalar compatibility support, not strict SIMD admission, collision
+resistance, whole-process erasure or independent qualification. MD5 remains
+collision-broken and unsuitable for new authentication or password hashing.
+Caller inputs/copies and the resource contract's OS, abort and interruption
+limits remain. Native x86 author tests cover RFC byte vectors, a million-byte
+message, bit/chunk boundaries and real mapping protections. Native Arm, new
+emitted-code/protected-stack sanitizer qualification and independent retest are
+pending. Both Medium findings remain open for the combined profile.
 
 ## Protected legacy SHA-1 (qualification pending)
 

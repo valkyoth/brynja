@@ -16,9 +16,17 @@ def main():
     parser.add_argument('--cpu', action='store_true')
     parser.add_argument('--execution', action='store_true')
     parser.add_argument('--hardened', action='store_true')
+    parser.add_argument('--strict', action='store_true')
     args = parser.parse_args()
     closure = dict(CLOSURE)
-    if args.cpu or args.execution or args.hardened: closure['brynja-legacy-md5-std'] = '0.1.0'
+    if args.strict and (args.cpu or args.execution or args.hardened):
+        parser.error('--strict must be tested independently of accelerated modes')
+    if args.cpu or args.execution or args.hardened or args.strict:
+        closure['brynja-legacy-md5-std'] = '0.1.0'
+        # Resolve optional manifest edges using real packaged first-party sources.
+        closure.update({name: '0.1.0' for name in ('brynja-hash-sha2', 'brynja-hash-sha3',
+                        'brynja-mac-kmac', 'brynja-hash-tuple')})
+        closure.update({'brynja-crypto-cpu': '0.1.1', 'brynja-crypto-cpu-std': '0.1.1'})
     with tempfile.TemporaryDirectory(prefix='brynja-md5-package-') as temporary:
         root = Path(temporary)
         environment = dict(os.environ, CARGO_TARGET_DIR=str(root / 'target'))
@@ -50,6 +58,8 @@ def main():
         if args.hardened: features = ', features=["hardened-execution","execution"]'
         manifest += '[dependencies]\nbrynja-legacy-md5 = { version="=0.1.0", default-features=false'+features+' }\n'
         if args.cpu: manifest += 'brynja-legacy-md5-std = "=0.1.0"\n'
+        if args.strict:
+            manifest += 'brynja-legacy-md5-std = {version="=0.1.0", default-features=false, features=["strict-execution"]}\n'
         if args.execution:
             manifest += 'brynja-legacy-md5-std = {version="=0.1.0", default-features=false, features=["runtime-execution"]}\n'
             manifest += '[features]\ndefault=["execution","runtime-execution"]\nexecution=[]\nruntime-execution=[]\n'
@@ -74,9 +84,47 @@ def main():
         subprocess.run(['cargo', 'generate-lockfile', '--offline'], cwd=consumer, env=environment, check=True, timeout=60)
         subprocess.run(['cargo', 'test', '--locked', '--offline'], cwd=consumer, env=environment, check=True, timeout=180)
         scoped_checks(consumer, root, environment)
+        if args.strict: strict_checks(consumer, root, environment)
         if args.execution: execution_package.check(consumer, root, environment)
         if args.hardened: md5_hardened_package.check(consumer, root, environment)
-    print(f'MD5 packaged closure and external consumer: PASS; cpu={args.cpu}; no upload')
+    print(f'MD5 packaged closure and external consumer: PASS; cpu={args.cpu}; strict={args.strict}; no upload')
+
+
+def strict_checks(consumer, root, environment):
+    for profile in ([], ['--release']):
+        for kind in (['--lib', 'strict_execution'], ['--doc', 'strict_execution']):
+            result = subprocess.run(['cargo', 'test', '--locked', '--offline', '-p',
+                'brynja-legacy-md5-std', *profile, *kind], cwd=consumer,
+                env=environment, capture_output=True, text=True, timeout=180)
+            if result.returncode:
+                raise ValueError('packaged strict MD5 failed:\n'+result.stdout[-4000:]+result.stderr[-4000:])
+            marker = 'rfc1321_byte_vectors ... ok' if kind[0] == '--lib' else '12 passed; 0 failed'
+            if marker not in result.stdout:
+                raise ValueError('packaged strict MD5 tests did not execute: '+result.stdout)
+    print('Packaged strict MD5 native tests and 12 ownership negatives: debug/release PASS')
+    base = root / 'unpacked/brynja-legacy-md5-std-0.1.0/src/strict_execution'
+    cases = (
+        ('mod.rs', 'if !self.complete {', 'if false {'),
+        ('mod.rs', 'self.output.clear();', 'core::hint::black_box(&mut self.output);'),
+        ('mod.rs', 'result?;', 'let _ = result;'),
+        ('worker.rs', 'state.update(part)', 'state.update(&[])'),
+        ('worker.rs', 'finalize_bits_secret(last, staged)',
+         'finalize_bits_secret(BitString::new(&[], 0).map_err(|_| Error::InvalidBits)?, staged)'),
+    )
+    for profile in ([], ['--release']):
+        for name, before, after in cases:
+            path = base / name
+            original = path.read_text()
+            if before not in original: raise ValueError('stale strict MD5 mutant: '+before)
+            try:
+                path.write_text(original.replace(before, after))
+                result = subprocess.run(['cargo', 'test', '--locked', '--offline', '-p',
+                    'brynja-legacy-md5-std', *profile, '--lib', 'strict_execution'],
+                    cwd=consumer, env=environment, capture_output=True, text=True, timeout=180)
+                if result.returncode == 0 or 'test result: FAILED' not in result.stdout:
+                    raise ValueError('strict MD5 mutant survived or failed compilation: '+before+'\n'+result.stderr[-2500:])
+            finally: path.write_text(original)
+    print('Protected MD5 compiled cleanup/output/absorption/tail regressions: 10 rejected')
 
 
 def scoped_checks(consumer, root, environment):

@@ -38,6 +38,24 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
 | Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |
 | Hardened hosted batch SIMD | 🚧 In progress; retest and native evidence pending | ❌ No |
+| Opt-in protected scalar MD5 session | 🚧 Implemented; qualification pending | ❌ No |
+
+## Protected scalar compatibility profile
+
+Default-off `strict-execution` exposes `strict_execution::Session` with bounded
+byte/bit requests and an affine protected output loan. GNU/Linux native x86-64
+and little-endian AArch64 acquire locked, guarded, dump/fork-excluded stack and
+output mappings before input; unsupported targets and model builds reject.
+The library-controlled scalar worker creates the scoped state on its protected
+stack, joins and clears before returning. Errors, cancellation and recoverable
+unwind clear output; explicit public release consumes the loan. This feature
+does not select SIMD and does not repair MD5's collision weakness.
+
+See the [compiled Session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-legacy-md5-std/src/strict_execution/mod.rs)
+and [strict-profile limitations](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).
+Native/platform qualification and independent retest remain pending. Inputs,
+caller copies, abort and whole-process/register/interruption erasure are not
+covered by this resource profile.
 
 ## Hardware and SIMD
 

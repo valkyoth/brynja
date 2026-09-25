@@ -25,7 +25,7 @@
     "crates/brynja-hash-sha3/Cargo.toml": "b9d89d69b8c21b17966659281f9268c6c34e4d31417a3a1f30b0ceb0c01c251f",
     "crates/brynja-hash-tuple/Cargo.toml": "d03ac188b2c8dc683bcf17e32d2a10c962345ca01b275287d71142a3c20640b4",
     "crates/brynja-interop/Cargo.toml": "5105aaaf822e07c68949c8a1672ffec3dc959c86d1069753a148257468de98cd",
-    "crates/brynja-legacy-md5-std/Cargo.toml": "345706044c49b1352fa0da2083b2ecd68401a832b5f84d877e540c692987e5b2",
+    "crates/brynja-legacy-md5-std/Cargo.toml": "70e04e87a8ffa6984fcf6976d6d4b112aad13d46af31d105b2632ec39786409a",
     "crates/brynja-legacy-md5/Cargo.toml": "24f3bda7d4db1352ccf8439fed0421988c98e5a66b0d21bd3e4cffbfb62ad481",
     "crates/brynja-legacy-pct/Cargo.toml": "f7d938e341441f901c069b75f5270385d1d036b186e458100c94a106da2c39bc",
     "crates/brynja-legacy-sha1-std/Cargo.toml": "e6d611fab8116fced14fd6c37f4c69ccb44a4c994563fac82d2bd7962f3c45d5",

@@ -139,6 +139,8 @@ dependencies = [
 name = "brynja-legacy-md5-std"
 version = "0.1.0"
 dependencies = [
+ "brynja-core",
+ "brynja-crypto-cpu-std",
  "brynja-legacy-md5",
 ]
 

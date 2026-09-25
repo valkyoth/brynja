@@ -2,6 +2,10 @@
 
 ## 0.24.49 development
 
+- Add a default-off protected scalar MD5 session in the isolated legacy hosted
+  adapter. Retain checked u128 accounting and low-64-bit RFC padding, protected
+  worker/output storage and cleanup on errors, cancellation, unwind and reuse.
+  MD5 remains collision-broken; strict acceleration/qualification remain pending.
 - Add a default-off protected scalar SHA-1 session in the isolated legacy hosted
   adapter. Preacquire stack/output resources, bound byte/bit requests and retain
   affine secret output with cleanup on rejection, cancellation, unwind and reuse.

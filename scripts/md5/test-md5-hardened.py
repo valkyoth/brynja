@@ -46,6 +46,20 @@ def main():
                 except ValueError: count+=1
                 else: raise AssertionError('hardened policy mutation accepted')
                 finally: path.write_text(original)
+        path = root / policy.HOST / 'Cargo.toml'
+        original = path.read_text()
+        for before, after in (
+            ('default = []', 'default = ["strict-execution"]'),
+            (', "brynja-crypto-cpu-std/protected-memory"', ''),
+            ('brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }'),
+            ('brynja-crypto-cpu-std = { workspace = true, optional = true }', 'brynja-crypto-cpu-std = { workspace = true }'),
+        ):
+            if before not in original: raise ValueError('stale strict MD5 manifest mutant')
+            path.write_text(original.replace(before, after))
+            try: policy.validate(root, reviewed=False)
+            except ValueError: count += 1
+            else: raise AssertionError('strict MD5 manifest regression accepted')
+            finally: path.write_text(original)
     spec=importlib.util.spec_from_file_location('md5_hardened_asan',policy.ROOT/'scripts/md5/check-md5-hardened-asan.py')
     asan=importlib.util.module_from_spec(spec); spec.loader.exec_module(asan)
     for status in (0,1,23):

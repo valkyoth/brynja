@@ -12,6 +12,20 @@ REVIEW = 'scripts/md5/hardened-reviewed.json'
 LEAF = 'crates/brynja-legacy-md5/'
 HOST = 'crates/brynja-legacy-md5-std/'
 CHECKS = {
+    HOST+'src/strict_execution/mod.rs': (
+        'require_target()?;', 'not(any(miri, kani))', 'target_os = "linux"',
+        'target_env = "gnu"', 'target_pointer_width = "64"',
+        'target_arch = "x86_64"', 'target_arch = "aarch64"', 'target_endian = "little"',
+        'ProtectedStack::new(limits.stack_bytes, limits.max_stack_mapping_bytes)?',
+        'ProtectedBytes::new(16, limits.max_output_mapping_bytes)?',
+        'self.output.clear();', 'self.stack.run(||', 'result?; cancel.check()?;',
+        'transaction.complete = true;', 'if !self.complete { self.output.clear(); }',
+        'impl Drop for Digest', 'chunks.len() > limits.max_chunks', 'bits > limits.max_message_bits'),
+    HOST+'src/strict_execution/worker.rs': (
+        'BitString::new(tail, valid_bits)', 'tail.split_borrowed()',
+        'chunk.chunks(4096)', 'checkpoint(cancel)?;',
+        'hardened_in_place::Md5Workspace::new()', 'finalize_bits_secret(last, staged)',
+        'brynja_core::copy_secret_region(destination, secret.$borrow())'),
     LEAF+'src/batch/owner.rs': (
         'let (bytes, partial) = input.split_borrowed();',
         'copy_secret_region(destination, &lane.output_staging)'),
@@ -113,6 +127,11 @@ def validate(root=ROOT, reviewed=True):
         if features['default']: raise ValueError('hardened execution must be opt-in')
     leaf=tomllib.loads(ordinary.read(root,LEAF+'Cargo.toml').decode())
     host=tomllib.loads(ordinary.read(root,HOST+'Cargo.toml').decode())
+    for name in ('brynja-core', 'brynja-crypto-cpu-std'):
+        if host['dependencies'].get(name) != {'workspace': True, 'optional': True}:
+            raise ValueError('strict MD5 protected resources must remain optional')
+    if host['features'].get('strict-execution') != ['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory']:
+        raise ValueError('strict MD5 feature boundary')
     if leaf['features'].get('hardened-execution') != ['cpu'] or host['features'].get('runtime-hardened-execution') != ['brynja-legacy-md5/hardened-execution']:
         raise ValueError('hardened feature boundary')
     for name in paths(root):

@@ -18,7 +18,7 @@ features = ["runtime-execution", "runtime-hardened-execution"]
 class = "host-adapter"
 publish = "crates-io"
 required = ["brynja-legacy-md5"]
-optional = {}
+optional = { strict-execution = ["brynja-core", "brynja-crypto-cpu-std"] }
 
 [packages.brynja-core]
 class = "modern-shared"

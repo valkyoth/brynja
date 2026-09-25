@@ -12,10 +12,13 @@ publish = ["crates-io"]
 
 [features]
 default = []
+strict-execution = ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
 runtime-execution = ["brynja-legacy-md5/execution"]
 runtime-hardened-execution = ["brynja-legacy-md5/hardened-execution"]
 
 [dependencies]
+brynja-core = { workspace = true, optional = true }
+brynja-crypto-cpu-std = { workspace = true, optional = true }
 brynja-legacy-md5 = { path = "../brynja-legacy-md5", version = "=0.1.0", features = ["cpu"] }
 
 [lints]

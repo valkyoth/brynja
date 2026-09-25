@@ -239,12 +239,12 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["hardened-batch-execution"] = ["cpu", "brynja-crypto-cpu/keccak-hardened-batch"]
         expected["batch-execution"] = ["cpu", "brynja-crypto-cpu/keccak-batch"]
     if name == "brynja-legacy-md5":
-        # The reviewed CPU surface includes the bounded portable batch API;
-        # neither feature implies the separate non-production evidence key.
+        # CPU includes bounded portable batching, but not the evidence-only key.
         expected["cpu"] = ["batch"]
         expected["execution"] = ["cpu"]
         expected["hardened-execution"] = ["cpu"]
     if name == "brynja-legacy-md5-std":
+        expected["strict-execution"] = ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
         expected["runtime-execution"] = ["brynja-legacy-md5/execution"]
         expected["runtime-hardened-execution"] = ["brynja-legacy-md5/hardened-execution"]
     if name == "brynja-legacy-sha1":

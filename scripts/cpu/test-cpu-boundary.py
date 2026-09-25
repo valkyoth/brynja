@@ -164,6 +164,8 @@ def test() -> None:
         for before, after, expected in (
             ('protected-memory = ["dep:brynja-core"]', 'protected-memory = []', 'default feature'),
             ('strict-sha2 = ["protected-memory", "brynja-hash-sha2/general-sha512-t"]', 'strict-sha2 = ["brynja-hash-sha2/general-sha512-t"]', 'default feature'),
+            ('strict-sha2-acceleration = ["strict-sha2", "brynja-hash-sha2/hardened-execution"]', 'strict-sha2-acceleration = ["brynja-hash-sha2/hardened-execution"]', 'default feature'),
+            ('default = []', 'default = ["strict-sha2-acceleration"]', 'default feature'),
             ('strict-sha3 = ["protected-memory", "dep:brynja-hash-sha3"]', 'strict-sha3 = ["dep:brynja-hash-sha3"]', 'default feature'),
             ('strict-kmac = ["protected-memory", "dep:brynja-mac-kmac"]', 'strict-kmac = ["dep:brynja-mac-kmac"]', 'default feature'),
             ('strict-tuplehash = ["protected-memory", "dep:brynja-hash-tuple"]', 'strict-tuplehash = ["dep:brynja-hash-tuple"]', 'default feature'),
@@ -179,7 +181,7 @@ def test() -> None:
             require_rejection(root, expected)
             reset(root)
 
-        for relative in ('src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_tuplehash/worker.rs'):
+        for relative in ('src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha2/compiled/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_tuplehash/worker.rs'):
             source = root / 'crates' / policy.DETECTOR / relative
             source.write_text(source.read_text() + '\n// unreviewed resource drift\n')
             require_rejection(root, 'source changed')

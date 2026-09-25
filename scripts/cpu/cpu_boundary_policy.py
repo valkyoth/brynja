@@ -15,7 +15,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "15ccb8cd70a767428e5f92339f377e0b405bbeadf2f763e61bb4c692117c11b6"
+EXPECTED_POLICY_SHA256 = "4a7ff6e22ae63ab665adc01e8101c6ac66461163c89e161fef85d996061b4cc0"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -149,6 +149,10 @@ SOURCE_STATUS = {
     (DETECTOR, "src/strict_sha2/types.rs"): "protected-sha2-public-identity-and-bounds",
     (DETECTOR, "src/strict_sha2/worker.rs"): "protected-sha2-scoped-worker",
     (DETECTOR, "src/strict_sha2/tests.rs"): "protected-sha2-integration-tests",
+    (DETECTOR, "src/strict_sha2/compiled.rs"): "protected-compiled-sha2-session-development",
+    (DETECTOR, "src/strict_sha2/compiled/worker.rs"): "protected-compiled-sha2-worker",
+    (DETECTOR, "src/strict_sha2/compiled/tests.rs"): "protected-compiled-sha2-admission-tests",
+    (DETECTOR, "src/strict_sha2/compiled/tests/native.rs"): "protected-compiled-sha2-native-tests",
     (DETECTOR, "src/strict_sha3/mod.rs"): "protected-scalar-sha3-session-development",
     (DETECTOR, "src/strict_sha3/types.rs"): "protected-sha3-public-identity-and-bounds",
     (DETECTOR, "src/strict_sha3/worker.rs"): "protected-sha3-scoped-worker",
@@ -269,6 +273,7 @@ def validate_packages(root: Path) -> None:
     if detector.get("features") != {"default": [],
             "protected-memory": ["dep:brynja-core"],
             "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
+            "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"],
             "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"],
             "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"],
             "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"],

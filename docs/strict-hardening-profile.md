@@ -5,7 +5,8 @@ and synchronous protected-stack resources are implemented for initial Linux test
 and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and
 TupleHash/TupleHashXOF, isolated legacy SHA-1/MD5, and protected scalar
 ParallelHash/ParallelHashXOF sessions are implemented.
-**Strict accelerated integration is not available yet**;
+The first compiled SHA-2 hardware wrapper is implemented; **remaining strict
+accelerated integration is not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
 Added after the two-testers' follow-up on v0.24.49. The current
 portable APIs remain available with their existing owned-memory guarantees.
@@ -128,6 +129,31 @@ post-write unwind, forgotten output loans, cleanup and reuse. Native Arm, new
 emitted-code evidence, protected-stack sanitizer qualification, remaining-family
 integration and the independent retest are still pending. Do not infer closure
 of either Medium finding from this first consumer.
+
+## Protected compiled SHA-2 hardware wrapper (qualification pending)
+
+Default-off `strict-sha2-acceleration` exposes `strict_sha2::CompiledSession`
+without changing the scalar constructor. It requires an exact narrow/wide
+SHA-2 static kernel, complete build-wide features, and the same supported OS
+protections. The caller must establish compatible CPU/OS execution throughout
+scheduling and migration; static features are not a runtime probe or scheduler
+lock. Authority and both startup tests are constructed on protected stacks, as
+are scoped hash state, CPU scratch and final staging. No thread-bound authority
+is moved across threads. General-t IV derivation remains public scalar work.
+
+Only public route/health metadata persists between requests. Each request creates
+fresh worker-local authority, but backend/invariant failure or recoverable worker
+panic permanently quarantines the outer session, so this cannot revive failed
+execution. Ordinary preflight rejection, invalid bits and cancellation preserve
+health. Resource/start failures conservatively quarantine too. There is no reset,
+authority export, automatic fallback, or promise of live deployment revocation.
+Outputs retain the same protected affine ownership and error clearing.
+
+Native x86 SHA-224/256 author tests witness actual SHA instructions through exact
+static routes and nonzero block counts. Wide/Arm route code cross-compilation is
+not native execution evidence. New emitted-code/native platform qualification,
+strict acceleration for the remaining families and independent retest remain
+pending; neither Medium finding is closed.
 
 ## Protected SHA-3/SHAKE/cSHAKE consumer (qualification pending)
 

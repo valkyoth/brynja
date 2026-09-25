@@ -78,7 +78,7 @@ pub(super) fn observe_storage<T: ?Sized>(value: &T) {
     }
 }
 
-fn limits() -> Limits {
+pub(super) fn limits() -> Limits {
     Limits {
         stack_bytes: 262144,
         max_stack_mapping_bytes: 1048576,

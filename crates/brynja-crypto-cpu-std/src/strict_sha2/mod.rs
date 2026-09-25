@@ -12,7 +12,9 @@
 //! Original inputs, caller copies, public lengths, OS scheduling, privileged
 //! inspection, hibernation and process abort retain their documented limits.
 //! Existing opaque scalar boundaries cover their normal returns only. No SIMD
-//! or hardware route is selected here; those strict integrations remain pending.
+//! or hardware route is selected by `Session`. The separate, default-off
+//! `strict-sha2-acceleration` feature exposes `CompiledSession` with an explicitly
+//! required static hardware route, still qualification pending.
 //! Deployment must uphold the protected-memory contract (no external revocation,
 //! fork or native cancellation). Recoverable worker panic clears before return;
 //! panic hooks and fatal termination do not acquire stronger guarantees.
@@ -30,8 +32,12 @@
 //! # Ok::<(), Error>(())
 //! ```
 use crate::protected_memory::{ProtectedBytes, ProtectedStack};
+#[cfg(feature = "strict-sha2-acceleration")]
+mod compiled;
 mod types;
 mod worker;
+#[cfg(feature = "strict-sha2-acceleration")]
+pub use compiled::{CompiledSession, Kernel};
 pub use types::{Algorithm, Cancellation, Error, Limits, PublicDeclassification, Sha512TBits};
 #[cfg(test)]
 mod tests;

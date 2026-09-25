@@ -36,6 +36,7 @@ It is not automatically installed or added to facade/default graphs.
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
 | Joined single/group protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
 | Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
+| Protected compiled SHA-2 hardware sessions (same Linux GNU targets) | 🚧 Explicit static kernels; qualification pending | ❌ No |
 | Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |
 | Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Four identities, protected verification; qualification pending | ❌ No |
 | Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | 🚧 Four identities, exact item completion; qualification pending | ❌ No |
@@ -50,6 +51,16 @@ It is not automatically installed or added to facade/default graphs.
 No named independent cryptographic review or FIPS 140-3 validation is claimed.
 
 ## Use
+
+Default-off `strict-sha2-acceleration` adds `strict_sha2::CompiledSession`.
+It requires an exact compatible SHA-2 kernel and its complete build-wide target
+features. Authority, startup tests, hash state and staging are created on the
+protected stack; backend failure or worker panic permanently quarantines the
+session without scalar fallback. Ordinary cancellation permits reuse. This is
+not runtime CPU detection: deployment must preserve CPU/OS support across
+scheduling and migration. The scalar `strict_sha2::Session` remains unchanged.
+See the [compiled hardware-session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_sha2/compiled.rs).
+Native Arm/dedicated x86 SHA-512 and emitted-code qualification remain pending.
 
 `protected-memory` provides bounded `protected_memory::ProtectedBytes` with
 resident pages, per-mapping core-dump exclusion and guard pages. Allocation is

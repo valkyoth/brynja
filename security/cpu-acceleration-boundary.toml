@@ -993,13 +993,13 @@ sha256 = "7bf19cb5a3b393f49b9097bfb3a6b6cd5402b41245ea3673b5f33c79a7179352"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_sha2/mod.rs"
 status = "protected-scalar-sha2-session-development"
-sha256 = "63c84297c5de1b67e974faf82a422d4315d6fc80b6aa21042f2a6c5b345c469e"
+sha256 = "c7af31df77a8d491800fb26ed01d6a0fc40847e14bc41bc9ad4cc473d65b61ea"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/strict_sha2/types.rs"
 status = "protected-sha2-public-identity-and-bounds"
-sha256 = "d49428d2d4355b1307ed04c34760e7ab6a2844fa08152ab201706c174a785197"
+sha256 = "2c936cd1f6de0b7e2ea45ad96d8367b354c84ad09fb26e60c468daa9a34a0cf3"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1011,7 +1011,31 @@ sha256 = "acb728e7868814679059c5405e89c4c84fe966535506dd6a8cb3107da2072090"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_sha2/tests.rs"
 status = "protected-sha2-integration-tests"
-sha256 = "f305527fd04badb15e42555ad2e18c01b9822e343222184a0ebb073aad608137"
+sha256 = "7d0c1a176cac9e008778bdc59856ae803a228c0acac47c0fc42de618547a4987"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha2/compiled.rs"
+status = "protected-compiled-sha2-session-development"
+sha256 = "f2ec11cb8680187ed222922522b3081fb41ba65469397371dc7b4ea9836c6283"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha2/compiled/worker.rs"
+status = "protected-compiled-sha2-worker"
+sha256 = "feef07500a0a1141229cee3fec4317bcea2ab476b7066f7db0aa28608c93ad96"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha2/compiled/tests.rs"
+status = "protected-compiled-sha2-admission-tests"
+sha256 = "d632793e3d251a310d72dbeca18a60e124b332a0c267f843d64dd21dbd4459d6"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha2/compiled/tests/native.rs"
+status = "protected-compiled-sha2-native-tests"
+sha256 = "dc8f5852aac3cdb6a673a64564e19fed3559fadf6af2530e639c8cd3afd192f1"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

@@ -76,6 +76,12 @@ pub enum Error {
     OutputLength,
     /// An internal scoped-state or transfer invariant was violated.
     Invariant,
+    /// Explicitly required compiled backend failed; never permits fallback.
+    #[cfg(feature = "strict-sha2-acceleration")]
+    Backend(brynja_crypto_cpu::static_execution::Error),
+    /// This compiled session was irreversibly invalidated.
+    #[cfg(feature = "strict-sha2-acceleration")]
+    Quarantined,
 }
 impl From<protected_memory::Error> for Error {
     fn from(error: protected_memory::Error) -> Self {
@@ -93,6 +99,10 @@ impl core::fmt::Display for Error {
             Self::Cancelled => "strict SHA-2 cancelled",
             Self::OutputLength => "strict SHA-2 output length mismatch",
             Self::Invariant => "strict SHA-2 internal invariant failed",
+            #[cfg(feature = "strict-sha2-acceleration")]
+            Self::Backend(_) => "strict SHA-2 compiled backend failed",
+            #[cfg(feature = "strict-sha2-acceleration")]
+            Self::Quarantined => "strict SHA-2 compiled session quarantined",
         })
     }
 }

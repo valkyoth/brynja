@@ -18,9 +18,16 @@ def main():
     parser.add_argument('--cpu', action='store_true')
     parser.add_argument('--execution', action='store_true')
     parser.add_argument('--hardened', action='store_true')
+    parser.add_argument('--strict', action='store_true')
     args = parser.parse_args()
     closure = dict(CLOSURE)
-    if args.cpu or args.execution or args.hardened: closure['brynja-legacy-sha1-std'] = '0.1.0'
+    if args.cpu or args.execution or args.hardened or args.strict:
+        closure['brynja-legacy-sha1-std'] = '0.1.0'
+        # Cargo resolves optional manifest edges even when this consumer does
+        # not enable them. Patch real packaged first-party sources, not stubs.
+        closure.update({name: '0.1.0' for name in ('brynja-hash-sha2', 'brynja-hash-sha3',
+                        'brynja-mac-kmac', 'brynja-hash-tuple')})
+        closure.update({'brynja-crypto-cpu': '0.1.1', 'brynja-crypto-cpu-std': '0.1.1'})
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-package-') as temporary:
         root = Path(temporary)
         environment = dict(os.environ, CARGO_TARGET_DIR=str(root / 'target'))
@@ -50,7 +57,9 @@ def main():
         features = ', features=["execution"]' if args.execution else ', features=["cpu"]' if args.cpu else ''
         if args.hardened: features = ', features=["execution","hardened-execution"]'
         manifest += '[dependencies]\nbrynja-legacy-sha1 = { version="=0.1.0", default-features=false'+features+' }\n'
-        if args.hardened:
+        if args.strict:
+            manifest += 'brynja-legacy-sha1-std = { version="=0.1.0", default-features=false, features=["strict-execution"] }\n'
+        elif args.hardened:
             manifest += 'brynja-legacy-sha1-std = { version="=0.1.0", default-features=false, features=["runtime-hardened-execution"] }\n'
             manifest += '[features]\nhardened-execution=[]\nruntime-hardened-execution=[]\n'
         elif args.execution:
@@ -81,13 +90,53 @@ def main():
         subprocess.run(['cargo', 'generate-lockfile', '--offline'], cwd=consumer, env=environment, check=True, timeout=60)
         subprocess.run(['cargo', 'test', '--locked', '--offline', '--all-features'], cwd=consumer, env=environment, check=True, timeout=180)
         scoped_checks(consumer, root, environment)
+        if args.strict:
+            for profile in ([], ['--release']):
+                for kind in (['--lib', 'strict_execution'], ['--doc', 'strict_execution']):
+                    result = subprocess.run(['cargo', 'test', '--locked', '--offline', '-p',
+                        'brynja-legacy-sha1-std', *profile, *kind],
+                        cwd=consumer, env=environment, capture_output=True,
+                        text=True, timeout=180)
+                    if result.returncode:
+                        raise ValueError('packaged strict SHA-1 execution failed:\n'+result.stdout[-4000:]+result.stderr[-4000:])
+                    marker = 'official_nist_bit_vectors ... ok' if kind[0] == '--lib' else '12 passed; 0 failed'
+                    if marker not in result.stdout:
+                        raise ValueError('packaged strict SHA-1 tests did not execute: '+result.stdout)
+            print('Packaged strict SHA-1 native tests and 12 ownership negatives: debug/release PASS')
+            strict_regressions(consumer, root, environment)
         if args.execution:
             ownership_negatives(consumer, environment)
             compiled_regressions(consumer, root, environment)
         if args.hardened:
             hardened_package.negatives(consumer, environment)
             hardened_package.mutants(consumer, root, environment)
-    print(f'SHA-1 packaged closure and external consumer: PASS; cpu={args.cpu}; execution={args.execution}; hardened={args.hardened}; no upload')
+    print(f'SHA-1 packaged closure and external consumer: PASS; cpu={args.cpu}; execution={args.execution}; hardened={args.hardened}; strict={args.strict}; no upload')
+
+
+def strict_regressions(consumer, root, environment):
+    base = root / 'unpacked/brynja-legacy-sha1-std-0.1.0/src/strict_execution'
+    cases = (
+        ('mod.rs', 'if !self.complete {', 'if false {'),
+        ('mod.rs', 'self.output.clear();', 'core::hint::black_box(&mut self.output);'),
+        ('mod.rs', 'result?;', 'let _ = result;'),
+        ('worker.rs', 'state.update(part)', 'state.update(&[])'),
+        ('worker.rs', 'finalize_bits_secret(last, staged)',
+         'finalize_bits_secret(BitString::new(&[], 0).map_err(|_| Error::InvalidBits)?, staged)'),
+    )
+    for profile in ([], ['--release']):
+        for name, before, after in cases:
+            path = base / name
+            original = path.read_text()
+            if before not in original: raise ValueError('stale strict SHA-1 mutant: '+before)
+            try:
+                path.write_text(original.replace(before, after))
+                result = subprocess.run(['cargo', 'test', '--locked', '--offline', '-p',
+                    'brynja-legacy-sha1-std', *profile, '--lib', 'strict_execution'],
+                    cwd=consumer, env=environment, capture_output=True, text=True, timeout=180)
+                if result.returncode == 0 or 'test result: FAILED' not in result.stdout:
+                    raise ValueError('strict SHA-1 mutant survived or failed compilation: '+before+'\n'+result.stderr[-2500:])
+            finally: path.write_text(original)
+    print('Protected SHA-1 compiled cleanup/output/absorption/tail regressions: 10 rejected')
 
 
 def scoped_checks(consumer, root, environment):

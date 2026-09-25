@@ -38,6 +38,7 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 | Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Opt-in hosted hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
+| Protected scalar SHA-1 sessions (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending | ❌ Not independently verified |
 
 ## Hardware and SIMD
 
@@ -54,6 +55,21 @@ lanes are not qualified by those observations. See the
 for selection, streaming, byte/bit hashing and ownership examples.
 
 ## Use
+
+The separate default-off `strict-execution` feature adds
+`strict_execution::Session`. Construct it with explicit protected stack/output
+mapping budgets, a message-bit limit and a chunk-count limit, then call
+`session.hash(input)` or `hash_chunks(chunks, tail, valid_bits, cancellation)`.
+Raw tails are MSB-first; content validation and scoped hashing execute on a
+locked, guarded, dump/fork-excluded worker stack. Output stays in an affine
+protected loan: Drop clears it, `expose` borrows secret bytes, and `declassify`
+requires explicit public-output authority. Errors and recoverable unwind clear
+output and the joined stack before reuse. Unsupported targets fail closed.
+This wrapper is scalar-only; SHA-NI/Arm acceleration and native qualification
+are pending. It does not repair collision resistance, protect caller copies,
+or promise whole-process/register/interruption erasure. The modern facade gains
+no legacy dependency. See the [compiled session example](src/strict_execution/mod.rs)
+and [strict-profile limits](../../docs/strict-hardening-profile.md).
 
 This adapter is unpublished. For a local checkout:
 

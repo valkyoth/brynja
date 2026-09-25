@@ -4,9 +4,12 @@
 //! opportunistic operations use the portable leaf, and required acceleration
 //! fails before hashing. The safe adapter cannot mint the migration authority
 //! needed by the experimental instruction sessions. No global registration,
-//! affinity changes, process policy, allocation or external dependency is added.
+//! affinity changes, process policy, allocation or external dependency is added
+//! by the default observational API.
 //! The separate default-off `runtime-execution` feature exposes operational
 //! public-data selection in [`execution`], with platform-qualified authority.
+//! `strict-execution` separately enables qualification-pending protected scalar
+//! storage and worker stacks; it does not repair SHA-1's cryptographic weaknesses.
 
 use brynja_legacy_sha1::{BitString, Sha1, Sha1Backend, Sha1Error};
 
@@ -15,6 +18,8 @@ use brynja_legacy_sha1::{BitString, Sha1, Sha1Backend, Sha1Error};
 pub mod execution;
 #[cfg(feature = "runtime-hardened-execution")]
 pub mod hardened_execution;
+#[cfg(feature = "strict-execution")]
+pub mod strict_execution;
 
 /// Public, non-authorizing reason for portable selection.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

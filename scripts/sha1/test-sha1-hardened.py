@@ -48,6 +48,7 @@ def main():
             shutil.copyfile(policy.ROOT / relative, destination)
         policy.validate(root)
         cases = [
+            (policy.ADAPTER+'tests/vectors/nist.txt', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', '0000000000000000000000000000000000000000'),
             (policy.LEAF+'src/hardened_execution/mod.rs', 'mod stream;', '#[cfg(target_arch = "x86_64")]\nmod stream;'),
             (policy.LEAF+'src/hardened_execution/stream.rs', "impl<'a> Stream<'a> {", "impl<'a> Stream<'a> { pub fn check_additional_bits(&self, bits: u64) -> bool { crate::engine::admit_bits(self.owner.bits(), bits).is_ok() }"),
             (policy.LEAF+'src/hardened_execution/stream.rs', "impl<'a> Stream<'a> {", "impl<'a> Stream<'a> { pub fn check_additional_bytes(&self, bytes: usize) -> bool { crate::engine::admit_bytes(self.owner.bits(), bytes).is_ok() }"),
@@ -89,6 +90,19 @@ def main():
             cases.append((scoped_path, match[0], '/* missing scoped contract */'))
         for method in ('check_additional_bits', 'check_additional_bytes', 'reset', 'snapshot', 'bits', 'length'):
             cases.append((scoped_path, "impl Sha1<'_, '_> {", "impl Sha1<'_, '_> { pub fn "+method+"(&self) {}"))
+        for file, tokens in policy.STRICT.items():
+            relative = policy.ADAPTER+'src/strict_execution/'+file
+            text = (root / relative).read_text()
+            for token in tokens:
+                match = re.search(r'\s*'.join(re.escape(c) for c in re.sub(r'\s+', '', token)), text)
+                if match is None: raise AssertionError('stale strict token: '+token)
+                cases.append((relative, match[0], '/* removed strict contract */'))
+        cases.extend([
+            (policy.ADAPTER+'Cargo.toml', 'default = []', 'default = ["strict-execution"]'),
+            (policy.ADAPTER+'Cargo.toml', '"brynja-crypto-cpu-std/protected-memory"', '"brynja-crypto-cpu-std/runtime-execution"'),
+            (policy.ADAPTER+'Cargo.toml', 'brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }'),
+            (policy.ADAPTER+'Cargo.toml', 'brynja-crypto-cpu-std = { workspace = true, optional = true }', 'brynja-crypto-cpu-std = { workspace = true }'),
+        ])
         for relative, original, replacement in cases:
             path = root / relative
             before = path.read_text()

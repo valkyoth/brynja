@@ -2,6 +2,10 @@
 
 ## 0.24.49 development
 
+- Add a default-off protected scalar SHA-1 session in the isolated legacy hosted
+  adapter. Preacquire stack/output resources, bound byte/bit requests and retain
+  affine secret output with cleanup on rejection, cancellation, unwind and reuse.
+  Strict acceleration/qualification remain pending; SHA-1 remains collision-broken.
 - Add default-off protected scalar TupleHash/TupleHashXOF sessions with exact
   item completion, arbitrary-bit customization/items and affine protected output.
   Bound item/chunk/message/output work and clear staging/output on rejection,

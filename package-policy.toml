@@ -11,7 +11,7 @@ optional = { dtls = "brynja-dtls", platform = "brynja-platform", quic = "brynja-
 class = "host-adapter"
 publish = "crates-io"
 required = ["brynja-legacy-sha1"]
-optional = {}
+optional = { strict-execution = ["brynja-core", "brynja-crypto-cpu-std"] }
 features = ["runtime-execution", "runtime-hardened-execution"]
 
 [packages.brynja-legacy-md5-std]

@@ -9,7 +9,6 @@ import tomllib
 from pathlib import Path
 import parallelhash_workspace_policy as execution_policy
 
-
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "package-policy.toml"
 MODERN_CLASSES = frozenset({
@@ -252,6 +251,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["execution"] = ["cpu"]
         expected["hardened-execution"] = ["cpu"]
     if name == "brynja-legacy-sha1-std":
+        expected["strict-execution"] = ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
         expected["runtime-execution"] = ["brynja-legacy-sha1/execution"]
         expected["runtime-hardened-execution"] = ["runtime-execution", "brynja-legacy-sha1/hardened-execution"]
     if name in {"brynja-mac-kmac", "brynja-hash-tuple", "brynja-hash-parallel"}:

@@ -158,6 +158,8 @@ dependencies = [
 name = "brynja-legacy-sha1-std"
 version = "0.1.0"
 dependencies = [
+ "brynja-core",
+ "brynja-crypto-cpu-std",
  "brynja-legacy-sha1",
 ]
 

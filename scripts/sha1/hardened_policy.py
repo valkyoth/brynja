@@ -28,6 +28,22 @@ BORROWED_ENGINE = ('tail.split_borrowed()', 'copy_secret_region(destination, sou
                    'core::slice::from_ref(last)',
                    'apply_secret_byte_mask(destination, 0xff, 0x80 >> valid)',
                    'copy_secret_region(&mut owner.output_staging, &owner.chaining_state)')
+STRICT = {
+    'mod.rs': ('require_target()?;', 'not(any(miri, kani))', 'target_os = "linux"',
+               'target_env = "gnu"', 'target_pointer_width = "64"',
+               'target_arch = "x86_64"', 'target_arch = "aarch64"', 'target_endian = "little"',
+               'ProtectedStack::new(limits.stack_bytes, limits.max_stack_mapping_bytes)?',
+               'ProtectedBytes::new(20, limits.max_output_mapping_bytes)?',
+               'self.output.clear();', 'self.stack.run(||', 'result?; cancel.check()?;',
+               'transaction.complete = true;', 'if !self.complete { self.output.clear(); }',
+               'impl Drop for Digest', 'bits > u128::from(u64::MAX)',
+               'chunks.len() > limits.max_chunks', 'bits > limits.max_message_bits'),
+    'worker.rs': ('BitString::new(tail, valid_bits)', 'tail.split_borrowed()',
+                  'chunk.chunks(4096)', 'checkpoint(cancel)?;',
+                  'hardened_in_place::Sha1Workspace::new()',
+                  'finalize_bits_secret(last, staged)',
+                  'brynja_core::copy_secret_region(destination, secret.$borrow())'),
+}
 
 
 def inventory(root=ROOT):
@@ -37,7 +53,7 @@ def inventory(root=ROOT):
         files.add(f'crates/{crate}/Cargo.toml')
         files.update(p.relative_to(root).as_posix() for p in (base / 'src').rglob('*.rs'))
     files.update((LEAF + 'tests/hardened_execution.rs', LEAF + 'tests/vectors/nist.txt',
-                  ADAPTER + 'tests/hardened_execution.rs', 'Cargo.toml',
+                  ADAPTER + 'tests/hardened_execution.rs', ADAPTER + 'tests/vectors/nist.txt', 'Cargo.toml',
                   'assurance/register-cleanup/check.py',
                   'assurance/register-cleanup/check_sha1.py',
                   'assurance/register-cleanup/check_sha1_scalar.py',
@@ -78,6 +94,15 @@ def require(source, token):
 
 
 def validate(root=ROOT, reviewed=True):
+    if read(root, ADAPTER+'tests/vectors/nist.txt') != read(root, LEAF+'tests/vectors/nist.txt'):
+        raise ValueError('packaged strict SHA-1 NIST corpus drifted')
+    for file, tokens in STRICT.items():
+        strict = read(root, ADAPTER+'src/strict_execution/'+file)
+        for token in tokens: require(strict, token)
+    manifest = tomllib.loads(read(root, ADAPTER+'Cargo.toml'))
+    for name in ('brynja-core', 'brynja-crypto-cpu-std'):
+        if manifest['dependencies'].get(name) != {'workspace': True, 'optional': True}:
+            raise ValueError('strict SHA-1 protected resources must remain optional')
     directory = root / LEAF / 'src/hardened_execution'
     if sorted(p.relative_to(directory).as_posix() for p in directory.rglob('*.rs')) != sorted(SOURCES):
         raise ValueError('hardened SHA-1 source inventory changed')
@@ -140,6 +165,7 @@ def validate(root=ROOT, reviewed=True):
             raise ValueError('SHA-1 opaque boundary weakened')
     for file, features in ((LEAF, {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu'], 'hardened-execution': ['cpu']}),
                            (ADAPTER, {'default': [], 'runtime-execution': ['brynja-legacy-sha1/execution'],
+                                      'strict-execution': ['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory'],
                                       'runtime-hardened-execution': ['runtime-execution', 'brynja-legacy-sha1/hardened-execution']})):
         manifest = tomllib.loads(read(root, file+'Cargo.toml'))
         if manifest['features'] != features: raise ValueError('secret SHA-1 must remain explicit and default-off')

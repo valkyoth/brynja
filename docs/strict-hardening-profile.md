@@ -3,7 +3,7 @@
 Status: owner-approved implementation in progress; the protected-byte resource
 and synchronous protected-stack resources are implemented for initial Linux tests,
 and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and
-TupleHash/TupleHashXOF sessions are implemented.
+TupleHash/TupleHashXOF and isolated legacy SHA-1 sessions are implemented.
 **Strict acceleration, other families and protected ParallelHash scheduling are
 not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
@@ -272,6 +272,32 @@ independent oracle. Native x86 protection flags, cancellation and output-fragmen
 unwind are covered. Native Arm execution, new emitted-code/platform qualification,
 protected-stack sanitizer validation and independent retest remain pending.
 This addition does not close M1 or M2 or change release rules.
+
+## Protected legacy SHA-1 (qualification pending)
+
+The legacy hosted adapter's default-off `strict-execution` feature exposes
+`brynja_legacy_sha1_std::strict_execution::Session`. The dependency direction is
+legacy adapter to shared protected resources, never modern facade to legacy.
+The portable leaf dependency closure remains core/hash-core only. No external
+dependency or new cryptographic implementation is introduced by this wrapper.
+
+A session acquires its stack and twenty-byte output mapping before accepting
+input. The scoped scalar workspace and twenty-byte staging are initialized and
+consumed on the protected worker; only public status crosses its synchronous
+join. Requests accept borrowed chunks and a canonical MSB-first final tail,
+with checked u64 message-domain and public budget admission before launch.
+Content canonicality is checked on the protected worker. Cancellation is checked
+at 4096-byte boundaries and before output commit; it is not forced termination.
+Errors, recoverable worker panic and forgotten output loans cannot suppress
+resource cleanup. Output exposure is an explicit borrow; public release requires
+the legacy declassification authority and clears the consumed loan. A wrong
+public destination width preserves its contents while clearing secret output.
+
+The GNU/Linux native-target limits match the protected resource adapter; other
+targets and Miri/Kani models reject. Hardware/SIMD routing is not enabled by this
+feature. Native Arm, emitted-code/protected-stack sanitizer qualification and
+independent review remain pending. SHA-1 is still collision-broken and unsuitable
+for new authentication/signatures; memory protection does not change that.
 
 ## Execution and ParallelHash
 

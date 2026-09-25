@@ -164,6 +164,7 @@ class Model:
         self.frames += 1
         frame = self.frames
         label = 'start'
+        predecessor = None
         while True:
             require(label in graph, 'debug successor exists')
             self.visited.add((name, label))
@@ -176,6 +177,17 @@ class Model:
                 found = re.fullmatch(r'alloca \[(\d+) x i8\], align (\d+)', op)
                 if found:
                     val = self.allocate(f'{frame}:{dest}', int(found[1]))
+                elif op.startswith('phi { ptr, i32 } '):
+                    require(index == 0 and predecessor is not None, 'exception phi at reached block entry')
+                    incoming = re.findall(r'\[ (%[-.$\w]+), %([-.$\w]+) \]', op[17:])
+                    require(incoming and ', '.join(f'[ {value}, %{block} ]' for value, block in incoming) == op[17:]
+                            and len({block for _, block in incoming}) == len(incoming)
+                            and all(block in graph for _, block in incoming), 'exact distinct exception-phi predecessors')
+                    values = [value for value, block in incoming if block == predecessor]
+                    require(len(values) == 1, 'actual predecessor supplies exception phi')
+                    val = self.value(values[0], env)
+                    require(isinstance(val, tuple) and len(val) == 2 and isinstance(val[0], Pointer)
+                            and type(val[1]) is int, 'initialized exception-phi identity')
                 elif found := re.fullmatch(r'load (ptr|i\d+), ptr (.+), align \d+', op):
                     width = 8 if found[1] == 'ptr' else int(found[1][1:]) // 8
                     val = self.load(self.value(found[2], env), width)
@@ -259,7 +271,7 @@ class Model:
                         cases[int(entry[1])] = entry[2]
                     selector = self.value(found[1], env)
                     require(type(selector) is int, 'initialized switch selector')
-                    label = cases.get(selector, found[2])
+                    predecessor, label = label, cases.get(selector, found[2])
                     break
                 elif op.startswith('invoke '):
                     require(index == len(lines) - 2, 'invoke followed by terminal edges')
@@ -271,11 +283,11 @@ class Model:
                         val = self.run(symbol[1], [self.typed(a, env) for a in call_args], depth + 1)
                     except Unwind as error:
                         exception = error.value
-                        label = unwind
+                        predecessor, label = label, unwind
                     else:
                         if dest is not None:
                             env[dest] = val
-                        label = normal
+                        predecessor, label = label, normal
                     break
                 elif op == 'landingpad { ptr, i32 }':
                     require(exception is not None and index + 1 < len(lines)
@@ -295,11 +307,11 @@ class Model:
                 elif found := re.fullmatch(r'br i1 (\S+), label %(\S+), label %(\S+)', op):
                     condition = self.value(found[1], env)
                     require(condition in (0, 1) and index == len(lines) - 1, 'terminal conditional branch')
-                    label = found[2] if condition else found[3]
+                    predecessor, label = label, found[2] if condition else found[3]
                     break
                 elif found := re.fullmatch(r'br label %(\S+)', op):
                     require(index == len(lines) - 1, 'terminal branch')
-                    label = found[1]
+                    predecessor, label = label, found[1]
                     break
                 elif op.startswith('ret '):
                     require(index == len(lines) - 1, 'terminal return')

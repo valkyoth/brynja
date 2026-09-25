@@ -3500,3 +3500,97 @@ Completed logs remain under ignored `dist/`, outside Cargo's `target/` directory
 | `debug-accelerated-guard-mutations-v3-shard-5.log` | `5cbf9e6e9f51df93f3c6f8408a30fa15470339029b731dc60e0cc0d15a404703` |
 | `debug-accelerated-guard-mutations-v3-shard-6.log` | `8e8b8bbdd3f891d0acd5b1fe8dba5f4b1ed65a4c44e90c0fd468f39834cfe1b9` |
 | `debug-accelerated-guard-mutations-v3-shard-7.log` | `9269bfd3749faa0df3f1368af992d1edfaf4ce899130b5b60e7e138100676a67` |
+
+### Accelerated debug initialization, chunk loop, completion and guard
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_accelerated_operation.py "$record"
+python3 assurance/register-cleanup/test_debug_accelerated_operation.py "$record"
+python3 assurance/register-cleanup/test_debug_exception_phi.py
+python3 assurance/register-cleanup/test_debug_accelerated_model.py
+```
+
+The first two commands accept `--shard 0` through `7`; all eight shards are
+required. This composition includes the actual output initializer, accelerated
+operation, chunk/slice helpers, output write/completion and local guard. Shared
+hash-core range helpers are loaded from the same retained compiler/target row.
+Original captures and armed guard storage must remain bound throughout. Secret
+payload access is forbidden outside the modeled primitive boundaries.
+
+The independent expected trace checks clearing-before-shape-validation, empty
+and nonempty final-bit shapes, engine preflight, 168-byte staging chunks,
+final-chunk-only masks, exact output-prefix progress, per-chunk scratch clearing,
+completion/ownership transfer, and final guard cleanup. It covers selected
+initial clearing failures, all twelve engine errors, slice/initializer/checked-
+subtraction rejection, four output-write errors, completion failures and
+synthetic unwind. Failure after initialization clears the original destination
+before the guard's terminal metadata updates and six owned-region clear
+requests. Success transfers output ownership and still requests staging
+clearing. Failure of the initial clearing boundary does not prove destination
+erasure; it maps to SecretMemory and requests owner cleanup.
+
+All 31,296 cases pass (3,912 per path) in 79/80-function closures. Every operation
+block except panic/unreachable/double-panic arms is exercised; this does not
+claim all blocks in every helper are covered. All 1,034 mutations reject:
+128 per Rust 1.90 x86 path, 129 per Rust 1.90 Arm path, and 130 per Rust 1.98
+path. Twenty-four metadata/SSA/dead-address controls pass. Earlier mutation
+attempts exposed two harness assumptions: an unused staging address is a
+positive control, not a meaningful mutation, and metadata copies include both
+24- and 32-byte descriptors. A null-pointer mutant also exposed a missing
+diagnostic precondition; explicit pointer rejection and regression cases were
+added. Final direct logs use `check-v2`; mutation logs use `mutations-v4`.
+Earlier versions are superseded, not counted as passing evidence.
+
+The Arm output merges exception identities through a phi. The interpreter now
+supports only block-entry two-field exception phi values, selecting the actual
+predecessor and preserving pointer/selector identity. Four normal/unwind controls
+pass and nine wrong-predecessor/identity/syntax cases reject. Seven accelerated
+boundary controls pass and thirty malformed binding/guard/payload/width cases
+reject. Existing squeeze/counter-model regressions and 1,024 selected existing
+guard cases also pass after the interpreter extension.
+
+Engine preflight/read and low-level copy/mask/volatile bodies remain opaque.
+The checker qualifies the modeled handoffs and cleanup requests, not actual
+CPU admission, digest bytes, physical erasure, register/spill absence or arbitrary
+interruptions. Synthetic unwind does not prove real extern-C unwind, abort or
+signal cleanup. Outer reader bridges, engine-body composition and whole-verifier
+qualification remain outstanding. Arm runtime evidence remains QEMU, not native.
+F1 and root `PENTEST.md` remain open; this is author diagnostic evidence.
+
+No production Rust, dependencies, captured implementation or release-gate policy
+changed. No compiler/native campaign or full sweep was repeated. Source/artifact
+validation, assurance freshness, status/inventory regressions, acceptance metadata
+and documentation checks pass. Compiler/runtime subprocesses are forbidden by
+the mutation harness. Retained logs remain under ignored `dist/`.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `check_debug_accelerated_operation.py` | `0c4e59e12e3edb98a3c79cc09e2b3cc1063aa4667322a357b20c3545aa86632d` |
+| `test_debug_accelerated_operation.py` | `070e45b54250a41d55a43f587bfceac6dd2edf72ecf48412c31b8aadb928acc1` |
+| `debug_write_model.py` | `bc52e44bbfe162d920b29bf74ad1f5bfb810ddf478b6c8e14efbee682ec6a3ee` |
+| `test_debug_exception_phi.py` | `dc60317a0fde5343ff541cae1726b1f8ceb7e2d2f7519a646fc7c6ae2bfdd98b` |
+| `test_debug_accelerated_model.py` | `efe1ce8566ebc4f6d7d840e4caeffbf028a432adf882188fd9a24d7f65c56371` |
+
+The observation record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-accelerated-operation-check-v2-shard-0.log` | `f51fe2ed3eb869998963b565ce8e518ec0c71ce477fdf3955efa615d0756f33e` |
+| `debug-accelerated-operation-check-v2-shard-1.log` | `8237098102a7c3ef1687b2a8842249d60250afb4ad7edfcc411fb61a86cfec04` |
+| `debug-accelerated-operation-check-v2-shard-2.log` | `fbe3f5785834cb540e3222759dd0e1084279b5a51a0369a2571de9e1bd24d891` |
+| `debug-accelerated-operation-check-v2-shard-3.log` | `77618ada392cc2340a7078129693eed27957157e1a5b909939639fe4d0e55694` |
+| `debug-accelerated-operation-check-v2-shard-4.log` | `966dad9204d9c16fb82e4c4a8f6688354925a0c4b770d83e1085547d2673be9a` |
+| `debug-accelerated-operation-check-v2-shard-5.log` | `2248ab4cffed6c95cc7b78a4546d117d5d690950514bf66898269f5580c71cd5` |
+| `debug-accelerated-operation-check-v2-shard-6.log` | `5597297b68078fcfd7f5616276df51748ecdd16846946b37488b983b55d8b69b` |
+| `debug-accelerated-operation-check-v2-shard-7.log` | `15c582e7cafa7fde529a22997efc0ac8c8b2eccffa8053d2d2f25290961d60d6` |
+| `debug-accelerated-operation-mutations-v4-shard-0.log` | `2ca728df390ff159111b5932515d66163366ce2190e177c16096dc92ade28079` |
+| `debug-accelerated-operation-mutations-v4-shard-1.log` | `c8e1c5fb8d8f2561429f5819510dd8fd669058724d3e8d207dd204d445324211` |
+| `debug-accelerated-operation-mutations-v4-shard-2.log` | `ab0b65ef784a87cf9f0e88c42e016f0a24b8d387c63b657702b45f6efae17edb` |
+| `debug-accelerated-operation-mutations-v4-shard-3.log` | `828b4dbfbb6e231b31d7d2e49fea64e70933634c6a0719d9f2925a7991f9016e` |
+| `debug-accelerated-operation-mutations-v4-shard-4.log` | `5072f700b3dd678c855a2d3c01f491292e0e6c4898080a23e1960edd60a009f8` |
+| `debug-accelerated-operation-mutations-v4-shard-5.log` | `60854fa837fd04b3a7d2e15467846927b477ef84383560db80a228ae77bcd003` |
+| `debug-accelerated-operation-mutations-v4-shard-6.log` | `d444ad941cc039fd7cba2ab4a5ef460962b23c4a854fd2b5915af9aa020dd6e2` |
+| `debug-accelerated-operation-mutations-v4-shard-7.log` | `736496e6aeb0087178f003fa739dd296f332ae5c4152ea8f30a9dcd433149f1d` |

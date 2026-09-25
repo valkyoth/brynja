@@ -227,6 +227,15 @@ Later diagnostic-only additions can run there without replacing captured sources
   owner cleanup. Initializer/operation/volatile bodies remain opaque, so their
   composition with these guards and the reader bridges is still outstanding.
 
+- Accelerated debug initialization, operation chunk dispatch, output writes and
+  completion now compose with the actual local guard in 79/80-function closures.
+  All 31,296 cases pass across eight paths; 1,034 mutations reject with twenty-four
+  positive controls. Failed operations clear their original destination before
+  the guard requests owner cleanup; success transfers output ownership and
+  clears staging. All nonpanic operation blocks are exercised. Engine preflight,
+  engine read, copy, mask and volatile bodies remain opaque. Outer reader bridges
+  and engine-body composition still need review; this is not whole-call erasure.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -234,8 +243,8 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   accelerated initializer/operation bodies composed with the checked producer
-   guards and reader bridges, plus whole-verifier error/unwind
+   the checked accelerated producer composed with its outer reader bridges and
+   actual engine preflight/read bodies, plus whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

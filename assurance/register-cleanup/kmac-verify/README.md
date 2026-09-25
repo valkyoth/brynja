@@ -4565,3 +4565,48 @@ Completed logs under ignored `dist/`, outside Cargo cleanup:
 | --- | --- |
 | `debug-verifier-destructors-check-final.log` | `5de17b072e217efdb17b42c24a962da8ee3288fb0bba8066afdee830c832c221` |
 | `debug-verifier-destructors-mutations-final.log` | `3491116618c708580ae0d52ce8409387e724ef885018349b1b3e9e45bc146667` |
+
+## Sustained whole-verifier, suffix and packing review
+
+The [consolidated KMAC review](../kmac-review.md) records the completed bounded
+verifier-composition work, source-reviewed surrounding APIs, exact provenance,
+commands, results and exclusions. It supersedes the immediately preceding
+checkpoint's uncomposed suffix/destructor status; it does not supersede the
+remaining shared-payload, platform or whole-call-erasure limitations.
+
+All nine commands in that report completed against the preserved source-matching
+checkout and the unchanged `d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`
+record. No Rust compiler/runtime, Miri, native capture or full sweep ran. No
+production Rust, shared interpreter or release gate changed. Model tests include
+real supplied-root substitution, return-type-correct no-op helper regressions,
+exhaustive public-byte arithmetic and strict rejection of unknown instructions.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_kmac_whole.py` | `7d4059848113eb38a9cb5ca29b8d14168c91e0c02e67566ab566562a4ec44d3d` |
+| `debug_kmac_whole_model.py` | `556b9feaac8f980521caf4cf5bf43cd7a5d0c1bcbf58ba2bf5345ea08f260feb` |
+| `check_debug_kmac_whole.py` | `6deaa9e6b9fd454b8cadac2ed2c63785a08b64c1ce2f4dd675254dd1e6b8b93c` |
+| `debug_kmac_suffix.py` | `1f800d50f1827d4f751a878573ae12e33c669e3dc56f806e3e67576bb77b1f23` |
+| `check_debug_kmac_suffix.py` | `976ec2aa98cacb302f4d265cdae0afa040b26915549a5281ca7154818d1282f7` |
+| `test_debug_kmac_whole.py` | `cf75b33a92dc0f517d588c16479909a47ae125660127ea3ab9bc83a47212e4db` |
+| `check_kmac_review_links.py` | `697532707cca097efa92df645c98ca5911963621461f32648f62eee54002a99e` |
+| `test_kmac_review_links.py` | `1ce187b433d087d24e745dc6a158f14c6abd7fcf0f5c7a2b978cc57697c39350` |
+| `check_kmac_packer_borrow.py` | `5d039a3df31181f184661822ef12d4055cc16b78339cb974104e8e646c470351` |
+| `test_kmac_packer_borrow.py` | `6079dae237adae60c8d6c8d0d30e1afb77e866db6c45f8347c6263785598059f` |
+| `debug_kmac_packing.py` | `4e17a544e58e1f87ff5400c775a329592e2942d454246ecb8059c15683fd6b2b` |
+| `check_debug_kmac_packing.py` | `0d256dfe3fee2b18918c1d7a33d26875cd9a67fa6080233f8e5fee12a8b97ab8` |
+| `test_debug_kmac_packing.py` | `c79f7c4535b16011277497125865e7a7dbec0ecf173021e6b29996b519dc49f8` |
+
+Completed logs under ignored `dist/`, outside Cargo cleanup:
+
+| Retained log | SHA-256 |
+| --- | --- |
+| `debug-kmac-whole-check-final.log` | `46c997bfa5a1a430c9c8a95d81fe0037582455bcbcf1e82d23674cf8cb81b8a4` |
+| `debug-kmac-suffix-check-final.log` | `1677dbf88b9c06e95112c22cc40537a7a53dcf073961d810cf63aa60e373ddec` |
+| `debug-kmac-whole-mutations-final.log` | `0a19ba5092e5c73fd5b3e4390b6710124738249d54d31b7cfae0fa558030eebe` |
+| `debug-kmac-packing-check-final.log` | `9d8cf5bfb1a8ce8d5e464bc1bb8f422bd1ee5065ed7695d4a85344b39de7f80b` |
+| `debug-kmac-packing-mutations-final.log` | `33b8e91119c7007f9553d8ad368033c6bc89778d765b18cafc0a1ad1e55b0217` |
+| `kmac-review-links-check-final.log` | `f83ccb26d2fd0e80f36357de73e846a8de131f416910191e1ffa87775743c3fc` |
+| `kmac-review-links-mutations-final.log` | `266fc333ac44c0c62098518e1d549ee60ab093da58826399e0733d66a7a9331f` |
+| `kmac-packer-borrow-check-final.log` | `a79eb3da8fbb689d780be2e6178d62ac98efadaec278c579eac4404e2f087750` |
+| `kmac-packer-borrow-mutations-final.log` | `70b872044ad05e070955cf378feccaa6909e2563b97d38f45207720f4db1329d` |

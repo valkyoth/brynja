@@ -381,31 +381,39 @@ destructor bodies still need composition with actual suffix state consumption;
 the volatile clear body retains its separate evidence. This is not physical
 erasure, native unwind or whole-verifier qualification.
 
+## Completed KMAC verifier composition
+
+The sustained pass now checks all 24 debug verifier instances with the actual
+finish/suffix/bit-packer and destructor control flow: 7,872 caller cases, 5,720
+suffix cases and 4,064 packing cases. All 480 caller/suffix/packer mutations
+reject. The 48 actual debug reader links and sixteen portable/eight accelerated
+optimized reader pairs reconcile to the original row/body/ABI. The 88 emitted
+shared packers preserve their input-byte borrow into the checked xor primitive.
+These replace the previously outstanding verifier-composition work item, not
+the separate payload/backend contracts or all-register/spill qualification.
+
+The [consolidated KMAC review](kmac-review.md) distinguishes completed diagnostic
+checks from the source review of key setup, tags and XOF lifecycles. Those APIs
+must not inherit verifier machine-code coverage merely because they share
+helpers. Shared SHA-3 absorption/finalization and kernel boundaries remain in
+the wider review below, including wherever KMAC calls them. Native evidence and
+independent retest remain separate. No production Rust or release gate changed.
+
 ## Before the next independent pentest
 
-1. **Finish the remaining instantiated KMAC path review.** Complete debug
-   caller/reader coverage beyond bulk and consuming-final bridges, including
-   suffix-producer/destructor composition and full comparison-chain composition, whole-verifier error/unwind
-   paths, and reconcile the optimized
-   caller-to-reader/dependency coverage before
-   claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
-   not a reason to assume an unchecked call-chain link is correct. The optimized
-   portable bulk/final chain and accelerated producer admission/loop/completion
-   boundaries and the debug reader/static-session/volatile-clear composition
-   are no longer the next unfinished items.
-2. **Complete the wider caller and worker emitted-code review.** Check the
+1. **Complete the wider caller and worker emitted-code review.** Check the
    remaining scoped SHA-2/SHA-3, legacy, TupleHash and ParallelHash call boundaries
    against their stated contracts, including actual worker handoff/return paths.
    Coordinator observations after joining threads do not establish worker
    register or spill cleanup. Fix any concrete secret-copy/residue path found
    within the intended qualified boundary and add a regression for it.
-3. **Reconcile the exact guarantee and coverage.** Keep supported compiler,
+2. **Reconcile the exact guarantee and coverage.** Keep supported compiler,
    target, ABI, feature and normal-return boundaries explicit. Existing movable
    APIs and other-target portable models must not inherit a stronger guarantee
    merely because a scoped x86/Arm path passes. Preserved caller state, signals,
    abort and platform snapshots remain outside the stated kernel contract.
    Any unresolved in-scope behavior must remain visible to the reviewer.
-4. **Finish targeted validation and the review handoff.** Reuse unchanged,
+3. **Finish targeted validation and the review handoff.** Reuse unchanged,
    source-bound results; rerun affected correctness, ownership/error, cleanup,
    sanitizer and performance checks when their inputs actually changed. Refresh
    the existing review bindings/documentation and commit a stable candidate with

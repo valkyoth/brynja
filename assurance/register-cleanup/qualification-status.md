@@ -236,6 +236,15 @@ Later diagnostic-only additions can run there without replacing captured sources
   engine read, copy, mask and volatile bodies remain opaque. Outer reader bridges
   and engine-body composition still need review; this is not whole-call erasure.
 
+- Both accelerated debug reader bridges now compose with the actual initializer,
+  operation loop, completion and guard: 28,264 cases pass across eight paths,
+  in 84/85-function bulk and 87/88-function consuming closures. All 1,012 outer
+  mutations reject with thirty-two positive controls. Original reader/result
+  descriptors remain bound; consuming calls request owner cleanup even after
+  producer success, while bulk calls preserve the producer's reusable-reader
+  outcome. Engine preflight/read and primitive bodies remain opaque; whole-
+  verifier and whole-call register/spill qualification are still outstanding.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -243,8 +252,8 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   the checked accelerated producer composed with its outer reader bridges and
-   actual engine preflight/read bodies, plus whole-verifier error/unwind
+   actual accelerated engine preflight/read bodies composed beneath the checked
+   producer/outer reader bridges, plus whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,
    not a reason to assume an unchecked call-chain link is correct. The optimized

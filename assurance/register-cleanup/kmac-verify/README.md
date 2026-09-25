@@ -3594,3 +3594,82 @@ The observation record remains
 | `debug-accelerated-operation-mutations-v4-shard-5.log` | `60854fa837fd04b3a7d2e15467846927b477ef84383560db80a228ae77bcd003` |
 | `debug-accelerated-operation-mutations-v4-shard-6.log` | `d444ad941cc039fd7cba2ab4a5ef460962b23c4a854fd2b5915af9aa020dd6e2` |
 | `debug-accelerated-operation-mutations-v4-shard-7.log` | `736496e6aeb0087178f003fa739dd296f332ae5c4152ea8f30a9dcd433149f1d` |
+
+### Accelerated debug bulk and consuming bridges around the operation
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_accelerated_bridges.py "$record"
+python3 assurance/register-cleanup/test_debug_accelerated_bridges.py "$record"
+```
+
+Both accept `--shard 0` through `7`; all eight shards are required. Each shard
+checks both the borrowed bulk reader and consuming final-bit reader against
+the actual initializer, operation chunk loop, output write/completion and guard.
+The outer reader and producer must agree on compiler/target row, strength and
+shared helper definitions. The original reader/result descriptors are used
+throughout, with no replacement reader allocation. Guard entry must borrow the
+same compiler-local reader that reached the producer.
+
+The independent operation lifecycle/chunk oracle supplies the inner expected
+trace, surrounded by explicit outer handoff and ownership rules. A second
+execution of the producer is not used as its own oracle. Bulk calls retain the
+producer's success/error reuse behavior. Consuming calls additionally request
+full owner cleanup before result publication or exception propagation, including
+after producer success. Result errors must preserve their exact identity; a
+successful result moves the complete original output descriptor exactly twice
+through the mapper, without extra, partial or volatile descriptor transfers.
+
+All 28,264 cases pass: 379 bulk and 3,154 consuming cases per path, totaling
+3,032 bulk and 25,232 consuming cases across eight paths. Bulk closures contain
+84/85 functions; consuming closures contain 87/88. Every selected outer reader
+entry/error/unwind block is exercised except unreachable/double-panic arms.
+This does not assert complete block coverage of every inner helper.
+
+The existing outer mutation campaigns were rerun with the operation composed:
+all 1,012 mutations reject (41 bulk per path, 86 consuming per Rust 1.90 path
+and 85 per Rust 1.98 path). Thirty-two metadata/SSA controls pass. Two synthetic
+handoff controls and twenty malformed/repeated/inactive binding checks also
+pass. All eight direct and eight mutation shards exited successfully. The
+mutation harness forbids compiler/runtime subprocess execution.
+
+Engine preflight/read and copy/mask/volatile primitive bodies remain opaque.
+The composition qualifies the modeled handoffs, metadata and cleanup requests,
+not actual engine admission, digest bytes, physical erasure or register/spill
+absence. Synthetic unwind does not establish real extern-C unwind, abort,
+signal or arbitrary-interruption cleanup. Engine-body and whole-verifier
+composition remain outstanding. Arm runtime evidence remains QEMU, not native.
+F1 and root `PENTEST.md` remain open; these are author diagnostics.
+
+No production Rust, shared interpreter, captured implementation, dependency or
+release-gate policy changed. No compiler/native campaign or full sweep was
+repeated. Source/artifact validation, assurance freshness, inventory/status,
+acceptance metadata and documentation checks pass.
+
+Checker SHA-256:
+`e04e0eff6d28f2df8fdaf6fe4daef2b2949b9144b7df048db04888ba84b8b228`;
+mutation harness:
+`14dfb73da022a35b71eec0371365524e3024946c095ff5e4ae5ae580f9ecab00`.
+The observation record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Completed logs remain under ignored `dist/`, outside Cargo's `target/` directory.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-accelerated-bridges-check-shard-0.log` | `e5db7e84ce8c22c63d69226102e2fa9901253e619f160ae68f06f94e2a5cce07` |
+| `debug-accelerated-bridges-check-shard-1.log` | `dd72b08eed7fb2d529427f65b318d1ecfca96510f79c452c6380359890ca7ba4` |
+| `debug-accelerated-bridges-check-shard-2.log` | `6dc2a7c674e74ae08d92b3a6ac460d022f023d4824ccb8aeb33d6d675252bbd8` |
+| `debug-accelerated-bridges-check-shard-3.log` | `c572bc9d9b5333a2d70d4c8037b78fca42336ea0e201eb5ad4b6f75cf2819523` |
+| `debug-accelerated-bridges-check-shard-4.log` | `0e014e30c0e810906dcfca112b1a435b15dd335d6ea1535a62d14a1a22175905` |
+| `debug-accelerated-bridges-check-shard-5.log` | `813d8362c3b93149a15209b2459218e2b1a7b8d04860f3955eed859b72537abc` |
+| `debug-accelerated-bridges-check-shard-6.log` | `865b7664b0510fda4a5a2aa3fbcf77aafd2e8660b4fb46fd3a481bf29540146d` |
+| `debug-accelerated-bridges-check-shard-7.log` | `53bf540a12ef8afcddcb9ce268102f2eabff2ddf14c19ea34b513c784ee0c324` |
+| `debug-accelerated-bridges-mutations-shard-0.log` | `effcf31f64751627d595f11fba094825344ed56620d3dc587aa3b5d1d8c7cffa` |
+| `debug-accelerated-bridges-mutations-shard-1.log` | `b060bc2cf9358ecd99d5e7c0f00fb370639e2df12d54a21ecb77a344720b4ac4` |
+| `debug-accelerated-bridges-mutations-shard-2.log` | `26c73e042c98a2d5549f9a7d622d254ab8c2dc78171b3dff9f0df65ec8db4072` |
+| `debug-accelerated-bridges-mutations-shard-3.log` | `69edb748a036f606a4ba0d58f2b9ae5436ab767be31eacff3414138691032315` |
+| `debug-accelerated-bridges-mutations-shard-4.log` | `95475872b210aba00f80acb679305a31fc33975a52eebd1552e062431844e710` |
+| `debug-accelerated-bridges-mutations-shard-5.log` | `ce01fd6ec4087194f301194102c37245b480be936529917daf0921d60a3bf313` |
+| `debug-accelerated-bridges-mutations-shard-6.log` | `9733a887e0eb2f8d5b1beba3069cd31aa9ad9123cf312ab16e5e2bfdff176ec9` |
+| `debug-accelerated-bridges-mutations-shard-7.log` | `f085477a6153e923f326cf9ca0cb0b22af4d867619d2bb8fede0a3c3a25c62c4` |

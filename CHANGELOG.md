@@ -4,7 +4,8 @@
 
 - Add portable scoped MD5 storage with borrowed active state, explicit public
   release, typed secret output and independent scope cleanup. Preserve checked
-  u128 accounting and low-64-bit RFC padding; scoped SIMD batching remains pending.
+  u128 accounting and low-64-bit RFC padding. Scoped SIMD batching also retains
+  caller-owned eight-lane storage and the existing executor/quarantine contract.
 - Add scoped hardened SHA-1 execution borrowing an existing executor, with
   fail-closed authority checks, independent owner cleanup and typed outputs.
   Length rejection terminates the computation without quarantining healthy
@@ -38,8 +39,8 @@
   Complete register/spill qualification remains pending.
 
 - Add scoped caller-owned storage for named/general SHA-2 and SHA-3/SHAKE/cSHAKE, preserving
-  existing by-value APIs. Ownership tests pass; wider in-place rollout and
-  whole-API register/spill qualification remain pending.
+  existing by-value APIs. Ownership tests pass; whole-API register/spill
+  qualification is not established by the scoped ownership model.
 - Add scoped named and general-t SHA-2 execution workspaces with explicit existing routes,
   stable engine/scratch ownership and unchanged authority/revocation boundaries.
 - Add scoped SHA-3/SHAKE/cSHAKE execution workspaces retaining sponge, CPU
@@ -50,8 +51,8 @@
   exact-length verification and independent scope cleanup. Scoped KMACXOF128/256
   readers now retain the workspace borrow through incremental and partial-bit
   output. Accelerated fixed KMAC and KMACXOF scopes bind the existing Keccak
-  authority and borrowed public staging. Complete compiler-residue qualification
-  and higher-construction rollout remain pending.
+  authority and borrowed public staging. The bounded KMAC and wider caller/worker
+  author reviews are complete; complete compiler-residue erasure is not claimed.
 - Add portable scoped fixed TupleHash128/256 workspaces and exact-length item
   writers, with consuming secret/public finalizers and independent scope cleanup.
   Initialize integer framing through borrowed storage. Portable scoped TupleHashXOF
@@ -63,6 +64,9 @@
   pass; exceptional pentest and final release verification remain pending.
   Portable defaults and release rules are
   unchanged. See [release notes](release-notes/RELEASE_NOTES_0.24.49.md).
+- Reconcile compiler/platform coverage and prepare the
+  [independent pentest handoff](assurance/register-cleanup/pentest-handoff.md).
+  F1 remains open; final native qualification and release verification are separate.
 
 ## 0.24.48 candidate
 

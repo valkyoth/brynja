@@ -5,8 +5,10 @@ The owner requested register-remanence remediation across the hardened backends
 before another pentest. SHA-224/256, SHA-512, Keccak (single-state and batch), legacy SHA-1 and MD5
 use this boundary in production;
 the fixture directly includes their actual private source files, rather than
-testing duplicate implementations. Portable/caller-side work and native qualification remain
-pending. Release gates are unchanged. Finding F1 remains open.
+testing duplicate implementations. The scoped caller rollout and bounded author
+reviews are complete; full-call erasure is not established. Independent retest
+and final native qualification remain pending. Release gates are unchanged.
+Finding F1 remains open.
 
 For the current pre-pentest checklist, use
 [qualification status](qualification-status.md). It separates completed
@@ -317,8 +319,9 @@ register/spill exclusions.
 
 The [KMAC review](kmac-review.md) and [wider caller/worker review](wider-review.md)
 record the completed bounded author-review passes. The current
-[qualification checklist](qualification-status.md) tracks exact guarantee/coverage
-reconciliation and the targeted-test/review handoff. These reviews do not establish
+[qualification checklist](qualification-status.md) and
+[pentest handoff](pentest-handoff.md) reconcile exact guarantee/coverage
+boundaries and the remaining independent/native review. These reviews do not establish
 whole-call register/spill erasure. The sixteen accelerated ports do not need to
 be rewritten again.
 Native platform collection and the final approved sweep are listed separately

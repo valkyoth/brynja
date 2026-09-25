@@ -8,8 +8,8 @@ No crates are selected for publication.
   with consuming byte/bit finalization and cleanup after errors, forgotten
   handles and recoverable unwind. Failed updates close the scoped state; no
   public length/preflight oracle is exposed. MD5's checked u128 accounting
-  and low-64-bit length padding remain unchanged. Scoped SIMD batching and
-  complete register/spill qualification are still pending.
+  and low-64-bit length padding remain unchanged. Scoped SIMD batching is
+  implemented separately below; complete register/spill erasure is not claimed.
 
 - Add `hardened_execution::in_place::Sha1Workspace` borrowing an existing
   portable/static/hosted hardened executor. Active state stays in borrowed
@@ -82,15 +82,15 @@ No crates are selected for publication.
   typed secret output and all-parameter oracle coverage. Six named execution
   workspaces and a parameter-bound general-t execution workspace now retain
   the engine and CPU scratch in place with existing
-  static/hosted authority. Other accelerated scoped APIs remain pending;
+  static/hosted authority. Other accelerated scoped APIs are described below;
   no whole-register/spill guarantee is claimed.
 - Add `brynja_hash_sha3::hardened_in_place` for scoped SHA3-224/256/384/512,
   SHAKE128/256 and cSHAKE128/256 workspaces. Handles and readers borrow the active
   owner; finalization does not move that
   owner. Independent scope cleanup covers forgotten handles and recoverable
   unwind. Existing by-value APIs remain unchanged. See the
-  [in-place contract](../docs/hardened-in-place.md); wider rollout and complete
-  framing/register/spill qualification are still pending, not release-qualified.
+  [in-place contract](../docs/hardened-in-place.md); complete
+  framing/register/spill erasure is not established by scoped ownership.
 - Add scoped fixed-output SHA-3 and SHAKE/cSHAKE execution workspaces with explicit existing
   static/hosted sessions, in-workspace output staging and no owner moves through
   finalization. SHAKE/cSHAKE readers transfer the storage borrow and support mixed
@@ -109,8 +109,8 @@ No crates are selected for publication.
   add zero-trailer framing, mixed secret/public reads, consuming partial-bit
   output and immediate terminal cleanup. Accelerated fixed KMAC and KMACXOF scopes bind
   the existing Keccak authority and borrowed staging for transactional public
-  tags and XOF fragments. Complete framing/compiler residue qualification and
-  higher-construction rollout remain unfinished.
+  tags and XOF fragments. The bounded KMAC and wider caller/worker author reviews
+  are complete; they do not establish complete framing/compiler residue erasure.
 - Add portable scoped fixed TupleHash128/256 workspaces and exact-length item
   writers. Sponge/metadata storage is borrowed before customization and item
   input; consuming secret/public finalizers transfer only references. Terminal
@@ -133,6 +133,10 @@ No crates are selected for publication.
   Register remnants remain outside the owned-memory clearing guarantee.
 
 See the [API and acceptance status](../docs/x86-sha512-execution.md).
+The [pentest handoff](../assurance/register-cleanup/pentest-handoff.md) reconciles
+the implemented ports, compiler/ABI matrix and retained evidence without
+conflating author checks with independent retest or native qualification.
+F1 remains open. The implementation rollout is not a whole-call erasure proof.
 Both compiler endpoints pass development instruction, owner-cleanup and SDE
 checks; packaged consumers, five compiled kernel mutants, ten cleanup/identity
 mutants and startup/route probes pass. Generic CPU Miri and emulated ASan/LSan

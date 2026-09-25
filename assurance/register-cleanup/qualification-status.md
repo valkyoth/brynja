@@ -409,18 +409,21 @@ independent retest remain separate. No production Rust or release gate changed.
    this does not prove opaque destructor completion or whole-thread erasure.
    Coordinator observations remain explicitly non-qualifying. No production
    code or release gate changed in this pass.
-2. **Reconcile the exact guarantee and coverage.** Keep supported compiler,
-   target, ABI, feature and normal-return boundaries explicit. Existing movable
+2. **Guarantee/coverage reconciliation completed (2026-09-25).** The
+   [pentest handoff](pentest-handoff.md) distinguishes supported compiler,
+   target, ABI, feature and normal-return boundaries. Existing movable
    APIs and other-target portable models must not inherit a stronger guarantee
    merely because a scoped x86/Arm path passes. Preserved caller state, signals,
    abort and platform snapshots remain outside the stated kernel contract.
    Any unresolved in-scope behavior must remain visible to the reviewer.
-3. **Finish targeted validation and the review handoff.** Reuse unchanged,
-   source-bound results; rerun affected correctness, ownership/error, cleanup,
-   sanitizer and performance checks when their inputs actually changed. Refresh
-   the existing review bindings/documentation and commit a stable candidate with
-   an accurate finding disposition. Do not mark F1 closed on author checks or
-   delete root `PENTEST.md` while remediation/retest remains outstanding.
+3. **Targeted validation and review handoff completed (2026-09-25).** The
+   [handoff](pentest-handoff.md) records matching source/record closures and all
+   984 retained artifact hashes, 15 collector regressions, 896 worker LLVM
+   mutations and the affected metadata/policy/documentation checks. No production
+   inputs changed in this pass; unchanged correctness, sanitizer and performance
+   campaigns were not rerun or relabelled. The existing documentation review
+   bindings are refreshed. F1 is not closed on author checks; root `PENTEST.md`
+   remains while remediation/retest is outstanding.
 
 These are qualification work packages, not a claim that each needs a new
 implementation or a full verifier sweep. Missing local artifacts must be
@@ -438,6 +441,6 @@ reported accurately; recover only the evidence needed for the current review.
   This checklist changes none of those mechanisms.
 
 F2–F5 have implementation/test changes awaiting independent retest. F1 remains
-open for coverage reconciliation and independent retest; the original sixteen-kernel
+open for independent assessment of the reconciled scope; the original sixteen-kernel
 rewrite is not missing. No military suitability, independent verification or
 FIPS validation is claimed.

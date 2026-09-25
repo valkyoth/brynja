@@ -94,8 +94,8 @@ Handle and outer-scope guards independently clear hash storage, including
 forgotten handles and recoverable unwind. Existing CPU operation guards clear
 private scratch and retain their quarantine behavior. Neither the active engine
 nor its scratch moves through finalization. General-t execution is described
-below. Scoped higher constructions remain rollout work; this is not complete
-register/spill qualification.
+below. Scoped higher constructions are described in their sections below;
+this is not complete register/spill qualification.
 
 ### Portable SHA-2 borrowed transfers
 
@@ -643,8 +643,8 @@ byte fragments. State, workspace and writers are not Copy/Clone/Debug/Send/Sync.
 Independent scope cleanup covers forgotten handles and recoverable unwind.
 Caller inputs, compiler-created copies, registers/spills and abort remain outside
 the owned-memory claim. Existing APIs, defaults and acceleration authority are
-unchanged. Scoped accelerated fixed-output counterparts are described below;
-accelerated scoped XOF remains unfinished.
+unchanged. Scoped accelerated fixed-output and XOF counterparts are described
+below; neither implies complete register/spill erasure.
 
 ## Scoped TupleHashXOF
 
@@ -896,9 +896,11 @@ storage are not erased by an ownership API.
 This initial module uses the portable hardened implementation, including its
 already implemented baseline scalar permutation ports. It does not enable an
 optional hardware/SIMD route. The separate execution namespace above retains
-explicit acceleration. Other accelerated scopes, other
-hash families and higher constructions remain rollout work before the broader
-F1 remediation can be declared complete. Release gates and publishing are unchanged.
+explicit acceleration. The other hash families and higher constructions now
+have their scoped counterparts, described above. The
+[coverage reconciliation](../assurance/register-cleanup/pentest-handoff.md)
+separates that implemented rollout from bounded author review and still-open
+F1 qualification/retest. Release gates and publishing are unchanged.
 
 ## Development checks
 

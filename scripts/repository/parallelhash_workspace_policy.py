@@ -29,7 +29,7 @@ def direct_features(owner, dependency):
         if dependency == "brynja-crypto-cpu":
             return ["hardened-execution"]
         if dependency == "brynja-crypto-cpu-std":
-            return ["runtime-execution"]
+            return ["runtime-execution"] if owner == "brynja-hash-parallel" else []
     return None
 
 

@@ -135,6 +135,19 @@ BORROWED_TOKENS = {
 }
 
 SCOPED_THREAD_TOKENS = {
+    "strict_execution/mod.rs": (
+        "ProtectedStack::new(limits.stack_bytes, limits.max_stack_mapping_bytes)?",
+        "let cvs = ProtectedBytes::new(cv_bytes, limits.max_buffer_mapping_bytes)?",
+        "let mut buffers = Buffers", "self.cvs.clear()", "self.staging.clear()", "self.output.clear()",
+        "if !self.keep", "buffers.keep = true", "#[cfg(test)]\nmod tests;",
+    ),
+    "strict_execution/worker.rs": (
+        "root.run(||", "ProtectedStack::run_group(", "output.take().ok_or(Error::Invariant)?",
+        "let plan = &plan", "let mut workspace = scoped::$workspace::new()",
+        "collector", ".merge(result.take().ok_or(Error::Invariant)??)",
+        "brynja_core::copy_secret_region(destination, source)",
+        "check(cancel)?", ".try_reserve_exact(count)",
+    ),
     "execution/batch/in_place.rs": ("let scratch = Scratch(scratch)", "let _gate = self.inner.base.gate()?",
         "clear_owned_region(output)", "brynja_core::copy_secret_region(output, secret.expose())", "root.merge_batch(leaves)",
         "Selection::new(self.inner.base.config.root)?", "plan.leaf_count() > self.inner.base.config.max_leaves",

@@ -3,6 +3,8 @@
 import importlib.util
 import copy
 import json
+import tempfile
+import tomllib
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -12,7 +14,36 @@ metadata = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(metadata)
 
 
+def package_optional_closure():
+    spec = importlib.util.spec_from_file_location('packaged_sha3', metadata.ROOT / 'scripts/sha3/check-sha3-execution.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    class BeforeCargo(Exception):
+        pass
+    for extras in ((), ('brynja-mac-kmac',), ('brynja-hash-tuple',),
+                   ('brynja-hash-parallel', 'brynja-hash-parallel-std')):
+        copied = []
+        with tempfile.TemporaryDirectory(prefix='brynja-package-inventory-') as directory, \
+                patch.object(module, 'PACKAGES', (*module.PACKAGES, *extras)), \
+                patch.object(module.shutil, 'copytree', side_effect=lambda source, *_args, **_kw: copied.append(Path(source).name)), \
+                patch.object(module, 'run', side_effect=BeforeCargo):
+            try:
+                module.package(Path(directory), {})
+            except BeforeCargo:
+                pass
+            else:
+                raise AssertionError('package inventory did not reach compilation boundary')
+        assert len(copied) == len(set(copied)), copied
+        assert {'brynja-mac-kmac', 'brynja-hash-tuple'} <= set(copied)
+        for name in copied:
+            manifest = tomllib.loads((metadata.ROOT / 'crates' / name / 'Cargo.toml').read_text())
+            for dependency in manifest.get('dependencies', {}):
+                assert dependency in copied, (name, dependency)
+    print('Four package-family inventories retain optional manifest closure without duplicate copies or crypto execution')
+
+
 def main():
+    package_optional_closure()
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()

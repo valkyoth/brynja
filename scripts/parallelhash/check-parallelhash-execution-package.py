@@ -120,6 +120,14 @@ def main():
             manifest.write_text(manifest.read_text() + "\n[workspace]\n" + patches)
             for profile in ([], ["--release"]):
                 check(["cargo", "test", "--offline", "--features", "runtime-execution", *profile], roots[name], environment)
+        # Exercise the actual shipped protected API, separately from runtime
+        # acceleration. Unsupported hosts execute its rejection test instead.
+        for profile in ([], ["--release"]):
+            check(["cargo", "test", "--offline", "--features", "strict-execution",
+                   *profile, "--lib", "strict_execution"], roots["brynja-hash-parallel-std"], environment)
+        check(["cargo", "test", "--offline", "--features", "strict-execution", "--doc"],
+              roots["brynja-hash-parallel-std"], environment)
+        print("Packaged protected ParallelHash lifecycle and ownership tests: PASS", flush=True)
         boundary = roots["brynja-hash-parallel"] / "src/execution/mod.rs"
         original_boundary = boundary.read_text()
         probes = (

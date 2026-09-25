@@ -71,6 +71,7 @@ class = "host-adapter"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-parallel"]
 optional = { runtime-execution = ["brynja-crypto-cpu-std", "brynja-crypto-cpu"] }
+features = ["strict-execution"]
 
 [packages.brynja-mac-kmac]
 class = "modern-shared"

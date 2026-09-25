@@ -22,6 +22,9 @@ mod worker;
 #[cfg(feature = "runtime-execution")]
 pub mod execution;
 
+#[cfg(feature = "strict-execution")]
+pub mod strict_execution;
+
 use worker::{ensure_live, execute128, execute256};
 
 /// Cooperative cancellation shared with one or more executor calls.

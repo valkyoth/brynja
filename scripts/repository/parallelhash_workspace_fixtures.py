@@ -38,6 +38,16 @@ def check(no_default, all_features, package, node, dependency, reject):
             dependency(changed, "brynja-hash-parallel-std", target)["optional"] = False
             reject(changed, mode, "optionality drifted", "an unconditional std CPU dependency")
             count += 1
+        for feature, value in (("strict-execution", []), ("default", ["strict-execution"]),
+                               ("strict-execution", ["runtime-execution"])):
+            changed = copy.deepcopy(baseline)
+            package(changed, "brynja-hash-parallel-std")["features"][feature] = value
+            reject(changed, mode, "feature policy differs", "a weakened protected ParallelHash feature")
+            count += 1
+        changed = copy.deepcopy(baseline)
+        dependency(changed, "brynja-hash-parallel-std", "brynja-crypto-cpu-std")["features"] = ["runtime-execution"]
+        reject(changed, mode, "directly enables features", "strict scalar enabling runtime authority")
+        count += 1
     for value in ([], ["x", "x"], [1], {}, None, ""):
         try:
             policy.feature_dependencies(value)

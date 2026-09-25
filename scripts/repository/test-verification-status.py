@@ -132,15 +132,16 @@ def scoped_status_rows() -> None:
     counts = {
         "brynja-core": 1, "brynja-hash-sha2": 2, "brynja-hash-sha3": 2,
         "brynja-mac-kmac": 1, "brynja-hash-tuple": 3,
-        "brynja-hash-parallel": 5, "brynja-hash-parallel-std": 3,
+        "brynja-hash-parallel": 5, "brynja-hash-parallel-std": 4,
         "brynja-legacy-sha1": 2, "brynja-legacy-md5": 2,
+        "brynja-crypto-cpu-std": 6, "brynja-legacy-sha1-std": 1, "brynja-legacy-md5-std": 1,
     }
     mutations = 0
     for crate, count in counts.items():
         path = Path("crates") / crate / "README.md"
         text = (root / path).read_text()
         rows = MODULE.CRATE_ROWS[path.as_posix()]
-        added = [row for row in rows if "scoped" in row.lower() or "Checked borrowed" in row]
+        added = [row for row in rows if "scoped" in row.lower() or "Checked borrowed" in row or "protected" in row.lower()]
         assert len(added) == count, (path, added)
         for row in added:
             capability, status, review = [cell.strip() for cell in row.strip("|").split("|")]
@@ -167,8 +168,8 @@ def scoped_status_rows() -> None:
                     mutations += 1
                 else:
                     raise AssertionError(f"stale scoped inventory accepted: {path}: {row}")
-    assert sum(counts.values()) == 21 and mutations == 126
-    print("Scoped/borrowed status rows reject 126 omission, duplication, overclaim and stale-inventory regressions")
+    assert sum(counts.values()) == 30 and mutations == 180
+    print("Scoped/borrowed/protected status rows reject 180 omission, duplication, overclaim and stale-inventory regressions")
 
 
 def main() -> int:

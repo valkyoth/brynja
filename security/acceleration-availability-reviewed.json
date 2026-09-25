@@ -147,7 +147,7 @@
     "crates/brynja-crypto-cpu/src/x86_sha512/authority.rs": "f53a002e2f36ccd552e2b83a0f7a797e0354490041acf5cd5143615f8362305f",
     "crates/brynja-crypto-cpu/src/x86_sha512/secret.rs": "333d5588c1e3ff4f9a0ea5ab9584fa9f1342452ebb4b01ad17d9982df8c6c2a7",
     "crates/brynja-crypto-cpu/src/x86_sha512/words.rs": "f77a10d0138bb2c2855dbfb62b10195e0b0a302b452fc62b3f225adef4d8ee12",
-    "crates/brynja-hash-parallel-std/Cargo.toml": "343fbc0c11abd955cc5a70994dcc9a600ad1706bb6af9b65cec9699249daba6a",
+    "crates/brynja-hash-parallel-std/Cargo.toml": "3d6c7412901495a178293c7aa379e1c971f8bbd8db3008f7bc1b5fed0c3f1b48",
     "crates/brynja-hash-parallel/Cargo.toml": "19a57892ff7ec722c477c4afd8aec41a44da798546cf9f43ce9912b0d783b029",
     "crates/brynja-hash-sha2/Cargo.toml": "830eb1ec78cf6af8dcfeb3e20e32d483486cdc72ba8dc81a19ab584aa1535353",
     "crates/brynja-hash-sha3/Cargo.toml": "b9d89d69b8c21b17966659281f9268c6c34e4d31417a3a1f30b0ceb0c01c251f",

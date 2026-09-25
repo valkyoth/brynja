@@ -29,6 +29,8 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
 ))
 STD_SOURCES = tuple(STD / "src" / name for name in (
     "lib.rs", "worker.rs", "in_place.rs", "scoped_worker.rs", "scoped_worker/tests.rs",
+    "strict_execution/mod.rs", "strict_execution/types.rs", "strict_execution/worker.rs",
+    "strict_execution/tests.rs", "strict_execution/tests/native.rs",
 ))
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
     "batch.rs", "batch/tests.rs", "collector/batch.rs",
@@ -238,14 +240,15 @@ def validate(root: Path) -> None:
     std_manifest = tomllib.loads(loaded[MANIFESTS[1]])
     if std_manifest.get("features") != {
         "default": [],
-        "runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "dep:brynja-crypto-cpu"],
+        "runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/runtime-execution", "dep:brynja-crypto-cpu"],
         "runtime-batch-execution": ["runtime-execution", "brynja-hash-parallel/hardened-batch-execution", "brynja-crypto-cpu-std/keccak-hardened-batch", "brynja-crypto-cpu/keccak-hardened-batch"],
+        "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"],
     }:
         fail("std execution must remain explicitly opt-in")
     if std_manifest.get("dependencies") != {
         "brynja-core": {"workspace": True},
         "brynja-hash-parallel": {"workspace": True},
-        "brynja-crypto-cpu-std": {"workspace": True, "optional": True, "features": ["runtime-execution"]},
+        "brynja-crypto-cpu-std": {"workspace": True, "optional": True},
         "brynja-crypto-cpu": {"workspace": True, "optional": True, "features": ["hardened-execution"]},
     }:
         fail("std executor dependency boundary changed")

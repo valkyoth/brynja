@@ -260,7 +260,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-hash-parallel":
         expected["hardened-batch-execution"] = ["hardened-execution", "brynja-hash-sha3/hardened-batch-execution"]
     if name == "brynja-hash-parallel-std":
-        expected["runtime-execution"] = ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "dep:brynja-crypto-cpu"]
+        expected.update({"runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/runtime-execution", "dep:brynja-crypto-cpu"], "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]})
         expected["runtime-batch-execution"] = ["runtime-execution", "brynja-hash-parallel/hardened-batch-execution", "brynja-crypto-cpu-std/keccak-hardened-batch", "brynja-crypto-cpu/keccak-hardened-batch"]
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")

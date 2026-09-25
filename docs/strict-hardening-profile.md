@@ -3,9 +3,9 @@
 Status: owner-approved implementation in progress; the protected-byte resource
 and synchronous protected-stack resources are implemented for initial Linux tests,
 and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and
-TupleHash/TupleHashXOF and isolated legacy SHA-1/MD5 sessions are implemented.
-**Strict acceleration, other families and protected ParallelHash scheduling are
-not available yet**;
+TupleHash/TupleHashXOF, isolated legacy SHA-1/MD5, and protected scalar
+ParallelHash/ParallelHashXOF sessions are implemented.
+**Strict accelerated integration is not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
 Added after the two-testers' follow-up on v0.24.49. The current
 portable APIs remain available with their existing owned-memory guarantees.
@@ -160,7 +160,7 @@ partial/empty/multifragment XOF output, cancellation and post-write unwind.
 They also inspect actual workspace/staging/output protection flags. These are
 author integration tests, not a new independent cryptographic oracle or native
 Arm qualification. Neither Medium finding is closed by this partial integration;
-strict acceleration, other families and protected ParallelHash remain pending.
+strict acceleration and new compiler/platform qualification remain pending.
 
 ## Protected KMAC/KMACXOF consumer (qualification pending)
 
@@ -347,6 +347,21 @@ independent review remain pending. SHA-1 is still collision-broken and unsuitabl
 for new authentication/signatures; memory protection does not change that.
 
 ## Execution and ParallelHash
+
+The default-off hosted `strict-execution` feature now connects the protected
+resources to all four scalar ParallelHash identities. Construction preacquires a
+root stack, 1..=64 leaf stacks, bounded CV storage, staging and output. Every CV
+slot is retained in protected memory until exact-plan ordered merge; bounded
+waves join completely before the next wave or root processing. This first
+implementation reserves storage for the complete maximum leaf count, not only
+one wave. Only borrowed descriptors and public bookkeeping traverse the ordinary
+coordinator; canonicality checks, populated workspaces and output copying run
+on protected stacks. Output loans cannot detach ownership. Failure clears all
+CV/staging/output and permits reuse. Cancellation granularity is one bounded
+leaf, merge or XOF chunk; prefix setup and fixed output are not internally
+cancellable. Original inputs and public shape metadata remain caller-owned.
+Native Arm, emitted-code/sanitizer qualification and strict acceleration are
+still pending. This integration does not close either Medium finding.
 
 Protecting CV slots alone is not sufficient: worker stacks and all secret
 workspace/staging allocations also need protected lifetimes.

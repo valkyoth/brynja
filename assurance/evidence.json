@@ -19,7 +19,7 @@
     "crates/brynja-crypto/Cargo.toml": "c6dc71e0dfab079f3ca7c5f77190933ba58ce0587e43972b291cd9cd1a5a9333",
     "crates/brynja-dtls/Cargo.toml": "c6846c1662b8e9d95028d6d4965f359e6b98e106032fe1623950bf273f081237",
     "crates/brynja-hash-core/Cargo.toml": "49cc0f7647065de434994a2b1be2d3e00ada5a257fef1cc625f734ed03bf6aa1",
-    "crates/brynja-hash-parallel-std/Cargo.toml": "343fbc0c11abd955cc5a70994dcc9a600ad1706bb6af9b65cec9699249daba6a",
+    "crates/brynja-hash-parallel-std/Cargo.toml": "3d6c7412901495a178293c7aa379e1c971f8bbd8db3008f7bc1b5fed0c3f1b48",
     "crates/brynja-hash-parallel/Cargo.toml": "19a57892ff7ec722c477c4afd8aec41a44da798546cf9f43ce9912b0d783b029",
     "crates/brynja-hash-sha2/Cargo.toml": "830eb1ec78cf6af8dcfeb3e20e32d483486cdc72ba8dc81a19ab584aa1535353",
     "crates/brynja-hash-sha3/Cargo.toml": "b9d89d69b8c21b17966659281f9268c6c34e4d31417a3a1f30b0ceb0c01c251f",

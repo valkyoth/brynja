@@ -53,18 +53,22 @@ def validate():
 
 
 def package(destination, env):
+    # Cargo resolves even disabled optional path dependencies. Keep those
+    # first-party manifests present, without activating their features. Family
+    # callers may already name them; copy/extract every archive only once.
+    packages = tuple(dict.fromkeys((*PACKAGES, 'brynja-mac-kmac', 'brynja-hash-tuple')))
     workspace = destination / 'workspace'
     workspace.mkdir()
     shutil.copyfile(ROOT / 'rust-toolchain.toml', destination / 'rust-toolchain.toml')
     manifest = (ROOT / 'Cargo.toml').read_text().replace(
         'default-members = ["crates/brynja"]', 'default-members = ["crates/brynja-hash-sha3"]')
     (workspace / 'Cargo.toml').write_text(manifest)
-    for name in PACKAGES:
+    for name in packages:
         shutil.copytree(ROOT / 'crates' / name, workspace / 'crates' / name,
                         ignore=shutil.ignore_patterns('target'))
     run(['cargo', 'package', '--workspace', '--offline', '--allow-dirty', '--no-verify'], workspace, env)
     roots = {}
-    for name in PACKAGES:
+    for name in packages:
         version = tomllib.loads((workspace / 'crates' / name / 'Cargo.toml').read_text())['package']['version']
         archive = Path(env['CARGO_TARGET_DIR']) / 'package' / f'{name}-{version}.crate'
         with tarfile.open(archive) as bundle:

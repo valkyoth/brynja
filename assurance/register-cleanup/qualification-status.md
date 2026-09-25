@@ -335,11 +335,23 @@ Ten direct boundary tests reject payload access and malformed transfers. It
 extends the earlier CFG invocation check with returned-descriptor provenance,
 not a whole-verifier or register/spill qualification claim.
 
+The debug bulk-comparison caller now has a bounded retained-IR replay across all
+24 verifier instances: 2,480 descriptor/chunk cases and 20,688 ordered byte-pair
+handoffs pass. It executes the actual result helper and caller loop, checks the
+original candidate-chunk inputs, original verification-buffer bytes and the
+one-byte difference accumulator, and rejects reader errors without exposing an
+output. All 1,008 caller/helper mutations reject, with 48 label/metadata controls
+and eight direct payload/copy-boundary rejections. Reader results, output
+exposure, standard-library iterators and the comparison primitive are explicit
+contracts, not newly executed helper bodies. Synthetic stops are at the original
+output-Drop/residual boundaries; they do not prove those exits or unwind paths.
+This is bulk caller routing evidence, not full comparison-chain qualification.
+
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   finish-body and comparison-loop composition, whole-verifier error/unwind
+   finish-body, final-byte and full comparison-chain composition, whole-verifier error/unwind
    paths, and reconcile the optimized
    caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

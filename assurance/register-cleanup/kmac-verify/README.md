@@ -4345,3 +4345,59 @@ Final logs under ignored `dist/`, outside Cargo cleanup:
 | --- | --- |
 | `debug-verifier-ownership-check-final.log` | `705748874fd0621114339737c5c9f5a7adce01e69cf1f8e348e5e0f08cd200dd` |
 | `debug-verifier-ownership-mutations-final.log` | `00af294c77eeb91c3d64d1e4c0ba7de676ae5842b899c877820d61e2eb5f6544` |
+
+### Debug bulk-comparison caller replay
+
+From the preserved, source-matching checkout, using the unchanged record:
+
+```sh
+python3 assurance/register-cleanup/check_debug_verifier_comparison.py /absolute/path/to/observations.json
+python3 assurance/register-cleanup/test_debug_verifier_comparison.py /absolute/path/to/observations.json
+```
+
+All 24 debug verifier instances pass 2,480 cases and 20,688 ordered byte-pair
+handoffs. The fragment executes the actual result-branch helper and caller loop
+from the bulk reader's normal-return edge up to the original output-Drop or
+residual-conversion boundary. It checks original candidate-chunk inputs,
+returned output-owner transfers, exact verification-buffer byte addresses and
+the one-byte difference accumulator. Reader errors retain their exact value
+without exposing or comparing output. Lengths 0/1/2/31/63/64 are independently
+varied for output and candidate at base offsets 0/32; every applicable error
+variant is also tested. Unequal lengths are adversarial fragment probes of
+`zip`'s shorter-length behavior, not evidence that truncated verification is
+allowed by the complete API.
+
+The reader result, `expose`, standard-library iterator and comparison primitive
+behaviors are explicit contracts. Their bodies are not newly interpreted by
+this replay. No secret payload is read or copied: only addresses and bounded
+descriptors are modeled. The caller's original argument counts and borrowed
+helper definitions are checked against same-row artifacts. The candidate inputs
+are selected from the original accepted chunk loads, not inferred solely from
+the comparison's own arguments. The synthetic fragment stops do not execute
+Drop/residual conversion and are not whole-verifier returns. Unwind, final-byte
+comparison, finish-body/full-chain composition and register/spill qualification
+remain separate work; this does not close F1. Arm runtime evidence remains QEMU,
+not native.
+
+All 1,008 caller/helper mutations reject, and 48 label/debug-metadata controls
+pass. Eight direct boundary tests reject payload reads/writes, overlapping or
+malformed copies and unknown callees. Unused Option-tuple reloads in debug IR
+are intentionally excluded from semantic mutation counts. No production Rust,
+shared interpreter, dependencies or release-gate policy changed. No compiler,
+native or full verification campaign ran. Focused script/status regressions,
+acceptance metadata, assurance freshness, documentation links and retained
+source/artifact binding pass. GitHub is green at the last pushed `6ec41f52`;
+that result does not cover these local diagnostic changes.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_verifier_comparison.py` | `7f175fe2aa8513398c4e1ae3992ac36ebdbff3242a03b0f5de1b47f45bcffff7` |
+| `check_debug_verifier_comparison.py` | `3622f56c60988aa84a9da3f2b7841438878c359d4b16b9a9bca17228c1f9ce55` |
+| `test_debug_verifier_comparison.py` | `81443009b31ad154af429d2ede98215d00d3e8c1df906b882adfbe22e960a7b1` |
+
+Final logs under ignored `dist/`, outside Cargo cleanup:
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-verifier-comparison-check-final.log` | `bbc1b6546fae96f5681d5e6b4c57a977b294120c64b27e70fbb8c611008105fb` |
+| `debug-verifier-comparison-mutations-final.log` | `9ac1dff58cb4d0d73324ba3e5bdb20b96d9d4e4e9ef89b3e4eb2f2852c190c25` |

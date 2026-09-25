@@ -160,12 +160,18 @@ def test_missing_ci_target_fails() -> None:
 
 def test_bare_metal_ci_cannot_compile_std_packages() -> None:
     workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-    broken = workflow.replace("--exclude brynja-crypto-cpu-std ", "")
-    with fails_with("CI bare-metal target command drifted"):
-        assurance.validate_workflow(broken)
-    broken = workflow.replace("--exclude brynja-hash-parallel-std ", "")
-    with fails_with("CI bare-metal target command drifted"):
-        assurance.validate_workflow(broken)
+    local = (ROOT / "scripts/assurance/check-bare-metal.sh").read_text(encoding="utf-8")
+    local = local.replace("\\\n", " ")
+    local_command = next(line.strip() for line in local.splitlines()
+                         if line.strip().startswith("cargo check --workspace "))
+    ci_command = next(line.strip().removeprefix("run: ") for line in workflow.splitlines()
+                      if line.strip().startswith("run: cargo check --workspace "))
+    assert local_command.split() == ci_command.replace('${{ matrix.target }}', '"$target"').split()
+    for package in ("brynja-strict", "brynja-crypto-cpu-std", "brynja-hash-parallel-std",
+                    "brynja-legacy-sha1-std", "brynja-legacy-md5-std"):
+        broken = workflow.replace(f"--exclude {package} ", "")
+        with fails_with("CI bare-metal target command drifted"):
+            assurance.validate_workflow(broken)
 
 
 def test_native_cpu_evidence_requires_exact_backend_binding() -> None:

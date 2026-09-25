@@ -77,10 +77,14 @@ Do not allocate an unbounded new session per incoming request.
 
 ## Platform and memory limits
 
+This is a hosted crate requiring `std` through its dependencies. Its local
+`#![no_std]` attribute avoids an implicit standard-library prelude; it is not a
+bare-metal portability claim.
+
 Constructors require native GNU/Linux x86-64 or little-endian AArch64, Linux 4.4
 and glibc 2.27 or newer, plus successful eager page locking and dump/fork exclusion.
-Other targets and verification models can compile for portability tests but
-constructors return errors. They never return a weaker implementation.
+Other supported hosted targets and verification models can compile for portability
+tests but constructors return errors. They never return a weaker implementation.
 
 On 4 KiB pages, a SHA-256 session with a 262144-byte stack locks 266240 bytes:
 64 stack pages plus one digest page. Guard pages add virtual address space,

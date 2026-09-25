@@ -1,5 +1,5 @@
 [files]
-".github/workflows/ci.yml" = "2fe2799aa92bdf30ca24b08eed1537ccd652f4d7a53d2b8556fe7de3d9a3ab9e"
+".github/workflows/ci.yml" = "615b0d31f771498b236e69a80bfbf6a0bd131b2f6451962ae71ded2bf8692329"
 "assurance/legacy-hash-final/Cargo.lock" = "5eddbddc9a17b02f8df23690745037ea9b2172ab8eed380e4e4a437b6feb4551"
 "assurance/legacy-hash-final/Cargo.toml" = "dd6c74dd41d8ba8301b6dea5ea690aa380a254be1f1131b9f443df430fa2b4b9"
 "assurance/legacy-hash-final/claims.toml" = "c9b9e816c381eea1a2039009d3cde062ea57908e2439a20c44a6b5c8bc7e8faf"
@@ -192,7 +192,7 @@
 "crates/brynja-legacy-sha1/tests/execution.rs" = "d85ae5588168b59ff083340f147e1bffe155ff735d79bcf5427231704db5b2aa"
 "crates/brynja-legacy-sha1/tests/hardened_execution.rs" = "e5be9fb6854c205ef8c3b91b7bf8cf221ab9c6fb23cd9e563326d49bb0f32416"
 "docs/legacy-hash-final-acceptance.md" = "683cf7e36bc934735022f72458813f63421ff9f549539bda4b37dd802c89162c"
-"scripts/assurance/check-bare-metal.sh" = "4cae003df12d834e8fa3d31e878a7004ed0e69022ef900c8bb007578f26aaf0b"
+"scripts/assurance/check-bare-metal.sh" = "f2903e49017f442fc92bb6b85b2d709bb66c4274a8042dd065b59462d8dfed1a"
 "scripts/checks.sh" = "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af"
 "scripts/ci/check-rust-version-matrix.sh" = "fec9a6ba60d2fdf016a5248760c332024085ecad2febfdeae5c8dd6ca7cc109f"
 "scripts/legacy-hash/check-legacy-final-acceptance.py" = "f450bd63085dce1bdf66339ad5bdad336312808f7f827dd273e63095459c228a"

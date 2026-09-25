@@ -14,5 +14,5 @@
 "scripts/sp800185/native_capture.py" = "9a6ef190395dae77480e61084db1d0a3f8081c2dfb316ab9ea9198b1e64d7091"
 "scripts/checks.sh" = "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af"
 "scripts/ci/check-rust-version-matrix.sh" = "fec9a6ba60d2fdf016a5248760c332024085ecad2febfdeae5c8dd6ca7cc109f"
-".github/workflows/ci.yml" = "2fe2799aa92bdf30ca24b08eed1537ccd652f4d7a53d2b8556fe7de3d9a3ab9e"
+".github/workflows/ci.yml" = "615b0d31f771498b236e69a80bfbf6a0bd131b2f6451962ae71ded2bf8692329"
 "docs/sp800185-final-acceptance.md" = "fe893759262addf574dc3924786fa1ae2b0bd5f595b28b701098b8e64803ba8b"

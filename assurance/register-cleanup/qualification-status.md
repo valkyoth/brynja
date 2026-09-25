@@ -278,6 +278,17 @@ Later diagnostic-only additions can run there without replacing captured sources
   volatile primitive bodies. Whole-verifier and register/spill qualification
   remain open; no production implementation or release-gate policy changed.
 
+- The retained split/copy/mask wrapper bodies now execute directly and beneath
+  both accelerated debug readers. The eight-path matrix covers 4,896 direct
+  primitive cases and 8,576 composed cases, with 352 rejected IR mutation
+  executions and thirty-two controls. Actual split descriptors and exact raw
+  copy/mask arguments are checked, not supplied as expected results. Four
+  same-row x86/Arm copy/mask assembly pairs pass exact normal-return instruction
+  contracts, rejecting 116 mutations with eight label controls. Valid borrowed
+  pointer preconditions remain assumptions; CPU session/permutation and volatile
+  bodies, wrapper/whole-caller spills and whole-verifier qualification remain
+  outstanding. These checks do not close F1 or change release gates.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 

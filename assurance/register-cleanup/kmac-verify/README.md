@@ -3941,3 +3941,86 @@ Raw logs are retained under ignored `dist/`, outside Cargo's `target/` directory
 | `debug-composed-read-mutations-shard-5.log` | `6cbdd3a60991ec666b65dcd7722db9d63c95c4cb50644b226de4e4cf3e1fdf30` |
 | `debug-composed-read-mutations-shard-6.log` | `9a5790e0abd5c920700614d6210ee1b56b5601e34844599f82fb188ec5ae1fb1` |
 | `debug-composed-read-mutations-shard-7.log` | `b718f45cbd2ad9d9c787a5e02be95d928f249d00eb3d8618394c81dde4664d09` |
+
+### Accelerated debug reader primitive handoffs
+
+From the preserved source-matching checkout with the absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_reader_primitives.py "$record"
+python3 assurance/register-cleanup/test_debug_reader_primitives.py "$record"
+python3 assurance/register-cleanup/check_debug_primitive_assembly.py "$record"
+```
+
+The first two accept `--shard 0` through `7`; all eight are required. The first
+also accepts `--quick` for development only. No compiler or native rerun is
+needed. Diagnostic copies in the preserved checkout match the sources below;
+captured production sources and artifact hashes are unchanged.
+
+The actual `split_at_mut` and unchecked descriptor construction, copy wrapper
+and mask wrapper now run in the metadata interpreter. Split descriptors are
+read from actual execution, never prefilled. Direct cases cover empty/boundary
+splits, equal and unequal copy widths and all byte values in each public mask
+position. All 4,896 direct cases pass. Integration beneath both original readers
+passes 8,576 cases: 533 bulk and 539 consuming per path, in 132/133-function bulk
+and 135/136-function consuming closures. Exact original pointer/length/mask
+handoffs and equal-length admission are required before the raw leaf.
+
+All 352 IR mutation executions reject, with thirty-two positive controls;
+twelve malformed borrowed-input/alias/recursive-boundary probes also reject
+on each shard. Final mutation logs supersede the development run whose expected
+count omitted the already-shared copy helper; that helper's length branch and
+raw handoff are included in this campaign.
+
+Four same-row copy/mask assembly pairs bind the eight caller paths under Rust
+1.90.0 and 1.98.1 on Linux x86_64 and AArch64 musl. Exact instruction contracts
+supplement the existing leaf allowlist: development found that the allowlist
+alone permitted an inserted load. The exact contracts reject extra operations,
+wrong ABI operands, incorrect copy strides/branches, mask prologue mappings,
+wide stores, spills/reloads and missing register clearing. All 116 assembly
+mutations reject and eight label-renaming controls pass. No production bug or
+production-code change is claimed by this diagnostic improvement.
+
+Valid borrowed byte-pointer construction preconditions are explicit assumptions,
+not qualification of their panic/check implementation. Raw copy/mask payload
+operations remain opaque in LLVM metadata execution; their assembly is checked
+separately for the exact normal-return leaf contract. Synthetic caller errors
+and unwind bypass the actual wrapper at the injected failure boundary; they do
+not imply the raw leaf can return those errors or unwind. CPU session/permutation
+and volatile primitive composition remain outstanding. Wrapper/whole-caller
+spills, whole-verifier qualification, actual extern-C unwind and arbitrary
+interruptions are not covered. Arm runtime observations remain QEMU, not native.
+F1 and root `PENTEST.md` remain open. Production Rust, the shared interpreter,
+dependencies and release-gate policy are unchanged.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_reader_primitives.py` | `7c9a3a99691acb213460a87bb1e9ffe212ded0b605b9b8da616e148a0ad0393e` |
+| `check_debug_reader_primitives.py` | `a50479c921a913fd1ce3c8783b6624b5ad629c6977c9655c3f4a43792319ce37` |
+| `debug_primitive_contracts.py` | `80306f4ece697270f7e41f389c42da53793da7abc2e28f30842b397190850d2d` |
+| `check_debug_primitive_assembly.py` | `ee6cb1d54efc114f6e65ce2b32b3d381d34751e692ede32177d5586e2d847db9` |
+| `test_debug_reader_primitives.py` | `b22a0dede007de3f78740a1ede07357ad3f3a22cfbb37634c99e5922a41cf91b` |
+
+Record SHA-256 remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Completed logs below are retained under ignored `dist/`, outside Cargo cleanup.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-reader-primitives-check-shard-0.log` | `b51b9c4291d3930e72a6eb0817c5d670efa47f7dffa58f60e75bd442a05c7c17` |
+| `debug-reader-primitives-check-shard-1.log` | `cdca025a169189f266ab9efa1aa0aa3b75d8ef08c557da0796ad9ee84352166c` |
+| `debug-reader-primitives-check-shard-2.log` | `cebd3699980e19540228a46418e843b4b5aa72be4141ca42b64c133aa33d4ec6` |
+| `debug-reader-primitives-check-shard-3.log` | `615dccc577a256268e3f4b9c47e9e9b7385af57afb31ebf78bcbdc95095fbb43` |
+| `debug-reader-primitives-check-shard-4.log` | `27ecd4123b60b526e00cbb1bb8f4e17bb3504f77bb7230e97478bbdb2341c6c2` |
+| `debug-reader-primitives-check-shard-5.log` | `d8175857bb453a13379758f021f76fc6681c9de0319e0d7588f6541d9698649a` |
+| `debug-reader-primitives-check-shard-6.log` | `c0cbeb04af57a84ce1bb04053513b446270b4d7750aa7fea333b1bbf2fb5ba60` |
+| `debug-reader-primitives-check-shard-7.log` | `e0479411707c391c04676f06dda9fc640e7de27733fd223dc86db19f1ebca41d` |
+| `debug-reader-primitives-mutations-final-shard-0.log` | `79cb6d220c70377e9e072beec381df9b9ff2cbbf0c790b330265968657bca436` |
+| `debug-reader-primitives-mutations-final-shard-1.log` | `a84c65fb62f5c464bf428a01a26a6a16a3c9df6d6d452971212fc638c112d705` |
+| `debug-reader-primitives-mutations-final-shard-2.log` | `47de2d3c321fcd54e0adb59d1e04e24ba45aa379b06b13972b91e3335ed11af6` |
+| `debug-reader-primitives-mutations-final-shard-3.log` | `870991b6f4841d13ea630f1aedd2dcf72d2060a7bb1fd2cf4b7150db4edc9396` |
+| `debug-reader-primitives-mutations-final-shard-4.log` | `89e997bc60f34c77aecc2e889193939d22b5e8c8ece773435354b97e516d4be6` |
+| `debug-reader-primitives-mutations-final-shard-5.log` | `fcb3e50a847d8ca4b934cf1d12df0aa7add785f2e4003173b484251a527471f3` |
+| `debug-reader-primitives-mutations-final-shard-6.log` | `447ca1e81fdeaa8562e800026fba6562b6517f004517461062f9628475b0fb9d` |
+| `debug-reader-primitives-mutations-final-shard-7.log` | `0e155c60eedeb1479655023118bd70601197713244f108399906660fd61872b4` |
+| `debug-reader-primitive-assembly-final.log` | `1451f11f28594a6d610027d3a90a9e2ae0d7be36fd9533197590725612d6a5cb` |

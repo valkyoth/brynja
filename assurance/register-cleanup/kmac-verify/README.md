@@ -3280,3 +3280,75 @@ All logs below live under ignored `dist/`, outside Cargo's `target/` directory.
 | `debug-filled-squeeze-mutations-v2-shard-1.log` | `c53e14b3633f1f58424e0aa1505841eda6ef92827e06335929e7818491378538` |
 | `debug-filled-squeeze-mutations-v2-shard-2.log` | `3fd4e5d9134506a961190c00b59e13b8dc170e364296c852070b67b35eeab676` |
 | `debug-filled-squeeze-mutations-v2-shard-3.log` | `f960e43246f190929a466c5a04c612a983c43f56cf6db005eecd9e70c58d51a8` |
+
+### Staging fill inside the guarded debug final-bit squeeze
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_filled_final.py "$record"
+python3 assurance/register-cleanup/test_debug_filled_final.py "$record"
+```
+
+Both accept `--shard 0`, `1`, `2` or `3`; all four shards are required. This
+extends the byte composition with the actual final-bit helper and dependencies,
+requiring matching definitions at shared boundaries. The 137/138-function
+closures interpret staging fill inside the original producer, initializer and
+owner guard. The final-shape and staging-geometry oracles independently compose
+the expected trace; they do not derive expectations from the model's events.
+
+The matrix covers empty output and all eight valid final-byte widths at selected
+one-byte, rate-boundary and multirate lengths, combined with staging cursors,
+counter boundaries and inactive readers. Selected initializer errors, inner
+copy rejections, synthetic permutation/copy unwind, output-write errors and
+missing staging slices exercise failures before and after prefix completion.
+The final mask must target the original staging byte. Cursor progress persists
+across prefix/tail fills. A successfully completed prefix may commit its counter
+before a tail failure; that failure must still request complete destination and
+thirteen-region owner clearing and leave the reader inactive. These cursor and
+counter observations describe algorithm effects before opaque clearing, not
+post-clear memory contents.
+
+The mutations cover guard state, skipped handoffs/destructors, swallowed unwind,
+skipped/zero-width fill, missing scratch/owner clears, missing tail masking,
+wrong tail width/mask arguments and incomplete staging clearing. Harmless SSA
+renames remain positive controls; compiler/runtime subprocesses are forbidden
+by the mutation harness.
+
+Scalar, byte-copy, mask and volatile-clear primitive bodies remain opaque here.
+Synthetic primitive unwind is a model fault, not a claim that an extern-C call
+can unwind, nor coverage of abort, signals or arbitrary interruptions. The
+consuming wrapper is not composed with this filled chain yet. Whole-verifier,
+register/spill and native-platform qualification remain outstanding. The Arm
+runtime record remains QEMU evidence. F1 and root `PENTEST.md` remain open.
+
+All 17,680 cases pass (1,105 per path). These are sixteen portable-reader paths
+present in the retained debug portable/accelerated builds, not qualification of
+accelerated-reader guards. All 464 retained-IR mutations reject (twenty-nine per
+path), with sixteen passing SSA controls. Three synthetic boundary controls and
+seventeen malformed/unarmed-access rejections also pass. Every shard exited
+successfully. Source/artifact validation, assurance freshness, script inventory,
+verification-status regressions, acceptance metadata and documentation links
+pass. No production implementation or release-gate policy changed; no compiler,
+native campaign or full verification sweep was repeated.
+
+Checker SHA-256:
+`8193879bedeab7372d98492ddcd9a1e281a0cba7e82ad5bd3f913b1c8fbaa99f`;
+mutation harness:
+`7a5e11e558e4aa0482314d511fa8679bf13a779733c46c9e30884dcea7fd4f61`.
+The observation record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Logs live under ignored `dist/`, outside Cargo's `target/` directory. Mutation
+shard zero's log preserves the completed process's captured stdout; the other
+logs were redirected while their processes ran.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-filled-final-check-shard-0.log` | `59fcfc664033aec002fc0f266b28307c26a8b7cede28805ff33df7f4a9d16b3b` |
+| `debug-filled-final-check-shard-1.log` | `56a824535f71cf8898ff6a729e70989346d0d4efbc1836875becb154ca5c8c47` |
+| `debug-filled-final-check-shard-2.log` | `3dcef5f77489e0b62c499754b3b6069b486294ecd029e7c1f23370689d988b08` |
+| `debug-filled-final-check-shard-3.log` | `7defa0d68959323a896de602e491e66d6f28a84cc86621638c53f38ef95233a0` |
+| `debug-filled-final-mutations-shard-0.log` | `7674e26dbebedae64b293d5c2bb1288b3de3e8391cd7d2c63d2a7aed12076d45` |
+| `debug-filled-final-mutations-shard-1.log` | `26095738ac850bf2ca23a34a16ad2a1f19044ab6b9355112014e8e5a91c1d538` |
+| `debug-filled-final-mutations-shard-2.log` | `c8f2e33923c22ac74cf91aae57cd2a47bd7a5ec88eaf3fe683f6998f3d5ad5c5` |
+| `debug-filled-final-mutations-shard-3.log` | `daf302211393a29fb74b3e5eaf0d5c1149eaec3b1287faba1dd3daed826daf71` |

@@ -201,6 +201,15 @@ Later diagnostic-only additions can run there without replacing captured sources
   closes the byte-squeeze/staging-fill link. Final-bit caller composition and
   whole-verifier coverage remain outstanding; primitive bodies stay opaque.
 
+- The same staging-fill body now composes with the guarded debug final-bit
+  squeeze in 137/138-function closures: all 17,680 cases pass, all 464 mutations
+  reject and sixteen SSA controls pass. The matrix checks prefix/tail cursor
+  progress, exact masks, prefix-counter commit even before a later tail failure,
+  and output/owner cleanup requests with success-only reader reactivation.
+  These remain portable-reader paths in portable/accelerated builds. The
+  consuming wrapper is not yet composed with this filled chain; primitive
+  bodies, accelerated guards and whole-verifier qualification remain separate.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -208,7 +217,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   composition of the checked staging-fill body with final-bit squeeze/guard callers,
+   composition of the filled final-bit chain with its consuming wrapper,
    accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

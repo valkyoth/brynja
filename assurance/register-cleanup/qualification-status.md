@@ -347,11 +347,22 @@ contracts, not newly executed helper bodies. Synthetic stops are at the original
 output-Drop/residual boundaries; they do not prove those exits or unwind paths.
 This is bulk caller routing evidence, not full comparison-chain qualification.
 
+The corresponding final-byte caller fragment now passes 3,392 cases across 24
+instances, including 192 exact final-byte handoffs, every applicable reader
+error and an unexpected empty-output result. Actual Option/Result helpers
+preserve errors and reject missing output before comparison. All 912 selected
+caller/helper mutations reject, with 48 label/metadata controls and ten direct
+boundary rejections. The byte pointer is traced to the actual `first()` success
+field, not merely an equal-valued metadata-owner pointer. Output exposure,
+`first()`, iterator and comparison primitive contracts remain explicit; producer
+masking, full-chain composition and subsequent cleanup/unwind are not newly
+qualified by this bounded replay.
+
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   finish-body, final-byte and full comparison-chain composition, whole-verifier error/unwind
+   finish-body and full comparison-chain composition, whole-verifier error/unwind
    paths, and reconcile the optimized
    caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

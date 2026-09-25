@@ -4401,3 +4401,61 @@ Final logs under ignored `dist/`, outside Cargo cleanup:
 | --- | --- |
 | `debug-verifier-comparison-check-final.log` | `bbc1b6546fae96f5681d5e6b4c57a977b294120c64b27e70fbb8c611008105fb` |
 | `debug-verifier-comparison-mutations-final.log` | `9ac1dff58cb4d0d73324ba3e5bdb20b96d9d4e4e9ef89b3e4eb2f2852c190c25` |
+
+### Debug final-byte comparison caller replay
+
+From the preserved source-matching checkout, using the unchanged record:
+
+```sh
+python3 assurance/register-cleanup/check_debug_verifier_final_comparison.py /absolute/path/to/observations.json
+python3 assurance/register-cleanup/test_debug_verifier_final_comparison.py /absolute/path/to/observations.json
+```
+
+All 24 debug verifier instances pass 3,392 cases with 192 exact final-byte
+handoffs. The fragment begins at the consuming reader's normal-return edge.
+It executes the original result helper, caller Option/Result handling and
+one-byte difference loop, stopping at the original output-Drop or residual
+conversion boundary. Every applicable reader error retains its value without
+output exposure. Unexpected successful-but-empty output reaches the original
+State error through the actual `ok_or` and `Try::branch` helpers, without a byte
+comparison. The State discriminant oracle is separate from the caller operand:
+5 in the portable-feature artifacts, 17 with accelerated features enabled.
+
+Owner offsets 0/32 and accepted candidate-tail offsets 0/1/63/255 exercise exact
+pointer routing. The caller's `actual` pointer must be loaded from the original
+successful `first()` result field; the expected pointer is the accepted candidate
+tail. Merely loading an equal-valued metadata-owner pointer does not satisfy
+that provenance check. This closes an equality-only gap exposed while testing
+the diagnostic, not an established production defect.
+
+All 912 caller/helper IR mutations reject. Forty-eight label/debug-metadata
+controls and an empty-slice control pass. Ten direct boundary cases reject
+malformed pointers/lengths, payload access and repeated final-byte comparison.
+The bulk caller and post-finish ownership replays also still pass. Script/status
+regressions, acceptance metadata, assurance freshness, documentation links and
+retained source/artifact bindings pass.
+
+Reader results, output exposure, `first()`, iterators and comparison primitives
+remain explicit contracts. In particular, `first()` may be an external
+monomorphization: its slice-call ABI is checked, not an interpreted helper body.
+The model never reads or synthesizes secret bytes. Producer partial-bit masking
+retains separate evidence. Synthetic stops are not verifier exits and do not
+execute output destruction/residual conversion; no unwind is injected. Full
+finish-body/comparison-chain and wider caller/worker qualification remain open,
+as do F1 and root `PENTEST.md`. Arm runtime evidence remains QEMU, not native.
+No production Rust, shared interpreter, dependencies or release policy changed,
+and no compiler/native/full campaign ran. GitHub remains green at pushed
+`6ec41f52`, not this local checkpoint.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_verifier_final_comparison.py` | `3bfd8b275b3ee9dd68ea980fad60b209bffbae6c790666f7edeaaded34c31e8f` |
+| `check_debug_verifier_final_comparison.py` | `9cf4c2e37c42430fde7ef6a5faf228246005399359a7360775c694a9bc4db51d` |
+| `test_debug_verifier_final_comparison.py` | `90120b91b903b5d738adca1959612c961000e6548764d8b7f885ced687adc707` |
+
+Final logs under ignored `dist/`, outside Cargo cleanup:
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-verifier-final-comparison-check-final.log` | `f9ff55aad6989a0a09aac2e2ebc522d0c3a1af5c44d0c2103c3bd379636798b6` |
+| `debug-verifier-final-comparison-mutations-final.log` | `ba51a22801c23053ba14ce76a9d561b458a4c72186cc3e8bfb368f2cdc855264` |

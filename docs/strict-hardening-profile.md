@@ -5,7 +5,7 @@ and synchronous protected-stack resources are implemented for initial Linux test
 and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and
 TupleHash/TupleHashXOF, isolated legacy SHA-1/MD5, and protected scalar
 ParallelHash/ParallelHashXOF sessions are implemented.
-The first compiled SHA-2 hardware wrapper is implemented; **remaining strict
+Compiled SHA-2 and SHA-3/SHAKE/cSHAKE hardware wrappers are implemented; **remaining strict
 accelerated integration is not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
 Added after the two-testers' follow-up on v0.24.49. The current
@@ -154,6 +154,33 @@ static routes and nonzero block counts. Wide/Arm route code cross-compilation is
 not native execution evidence. New emitted-code/native platform qualification,
 strict acceleration for the remaining families and independent retest remain
 pending; neither Medium finding is closed.
+
+## Protected compiled SHA-3/SHAKE/cSHAKE wrapper (qualification pending)
+
+Default-off `strict-sha3-acceleration` exposes `strict_sha3::CompiledSession`
+without altering scalar `Session`. Explicit static `X86Keccak` (AVX2) or
+`ArmKeccak` (NEON/SHA3) selection requires the full compiled feature bundle and
+the same supported GNU/Linux protections. Establish the compatible CPU/OS
+lifetime guarantee before construction; this is not runtime detection, a
+scheduler lock or a migration monitor.
+
+Authority, ordinary and hardened startup checks, scoped sponge state, erasing
+session scratch and bounded 4096-byte output staging are created on protected
+worker stacks. N/S and final input canonicality are checked there, not copied
+onto the coordinator stack. Fixed and XOF secret outputs copy into protected
+storage; even zero-bit output finalizes and checks authority. Cancellation is
+checked around prefix setup, at most every 4096 message/output bytes, and before
+return; prefix work is bounded by the public customization budget, not internally
+interruptible. Both cSHAKE identities preserve SHAKE equivalence for empty N/S.
+
+No populated sponge/session crosses join. Recoverable panic and backend or
+invariant errors permanently quarantine the wrapper before fresh authority can
+be recreated. Ordinary invalid input/cancellation permits reuse. Forgotten output
+loans cannot suppress next-operation or owner-Drop clearing. There is no reset,
+fallback, authority export or new whole-process/interruption/abort guarantee.
+Native AVX2 differential/fault checks are implementation-author evidence, not
+Arm native, emitted-code or independent qualification. Other strict accelerated
+family and batch integrations remain pending; neither Medium finding is closed.
 
 ## Protected SHA-3/SHAKE/cSHAKE consumer (qualification pending)
 

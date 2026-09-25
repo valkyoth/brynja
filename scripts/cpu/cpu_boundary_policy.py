@@ -15,7 +15,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "4a7ff6e22ae63ab665adc01e8101c6ac66461163c89e161fef85d996061b4cc0"
+EXPECTED_POLICY_SHA256 = "436ccb71b1597487c061238359f52423d0cd30d684480c4d6b5c85e330ccbd14"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -157,6 +157,10 @@ SOURCE_STATUS = {
     (DETECTOR, "src/strict_sha3/types.rs"): "protected-sha3-public-identity-and-bounds",
     (DETECTOR, "src/strict_sha3/worker.rs"): "protected-sha3-scoped-worker",
     (DETECTOR, "src/strict_sha3/tests.rs"): "protected-sha3-integration-tests",
+    (DETECTOR, "src/strict_sha3/compiled.rs"): "protected-compiled-sha3-session-development",
+    (DETECTOR, "src/strict_sha3/compiled/worker.rs"): "protected-compiled-sha3-worker",
+    (DETECTOR, "src/strict_sha3/compiled/tests.rs"): "protected-compiled-sha3-admission-tests",
+    (DETECTOR, "src/strict_sha3/compiled/tests/native.rs"): "protected-compiled-sha3-native-tests",
     (DETECTOR, "src/strict_sha3/tests/native.rs"): "protected-sha3-native-integration-tests",
     (DETECTOR, "src/strict_kmac/mod.rs"): "protected-scalar-kmac-session-development",
     (DETECTOR, "src/strict_kmac/types.rs"): "protected-kmac-public-identity-and-bounds",
@@ -275,6 +279,7 @@ def validate_packages(root: Path) -> None:
             "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
             "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"],
             "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"],
+            "strict-sha3-acceleration": ["strict-sha3", "brynja-hash-sha3/hardened-execution"],
             "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"],
             "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"],
             "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"],

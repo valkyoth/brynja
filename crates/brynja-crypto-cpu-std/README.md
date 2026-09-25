@@ -38,6 +38,7 @@ It is not automatically installed or added to facade/default graphs.
 | Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
 | Protected compiled SHA-2 hardware sessions (same Linux GNU targets) | 🚧 Explicit static kernels; qualification pending | ❌ No |
 | Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |
+| Protected compiled SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Explicit static AVX2/Arm kernels; qualification pending | ❌ No |
 | Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Four identities, protected verification; qualification pending | ❌ No |
 | Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | 🚧 Four identities, exact item completion; qualification pending | ❌ No |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
@@ -51,6 +52,16 @@ It is not automatically installed or added to facade/default graphs.
 No named independent cryptographic review or FIPS 140-3 validation is claimed.
 
 ## Use
+
+Default-off `strict-sha3-acceleration` adds `strict_sha3::CompiledSession` for
+SHA-3, SHAKE and cSHAKE with exact-bit outputs and optional bit-oriented N/S.
+Select `X86Keccak` (AVX2) or `ArmKeccak` (NEON/SHA3), enable the complete build-wide
+features, and establish compatible CPU/OS deployment throughout execution.
+Authority, scoped sponge and XOF staging stay on protected worker stacks; failed
+backends cannot silently fall back or regain health. Cancellation allows reuse.
+Scalar `Session` is unchanged. The [compiled SHA-3 API example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_sha3/compiled.rs)
+shows construction and protected output ownership. Wider compiler/platform
+qualification and independent retest remain pending.
 
 Default-off `strict-sha2-acceleration` adds `strict_sha2::CompiledSession`.
 It requires an exact compatible SHA-2 kernel and its complete build-wide target

@@ -1041,13 +1041,13 @@ sha256 = "dc8f5852aac3cdb6a673a64564e19fed3559fadf6af2530e639c8cd3afd192f1"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_sha3/mod.rs"
 status = "protected-scalar-sha3-session-development"
-sha256 = "7da319df1f5e3397fbe5616dd76d695aa9579dac0bf021a877063d5ce682239f"
+sha256 = "01a1509e903c0a285bf9ef4cada4b95f18f5bb55e519202ceb6c3f64a23c5682"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/strict_sha3/types.rs"
 status = "protected-sha3-public-identity-and-bounds"
-sha256 = "8cb522242273d35660217cc551db34513cc4db418b1e51f1da327d2d428d11d1"
+sha256 = "1960aeac2ec43eb9275a4d0ceb6ee133261f2cc6ce71b8a2344e17d8e6e5e03d"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1059,7 +1059,7 @@ sha256 = "d992fc05f563fad53cf5525f23134d4ad572631039c19047736eac915bb4d2a8"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_sha3/tests.rs"
 status = "protected-sha3-integration-tests"
-sha256 = "2da633f0f56665c6ff58cfbef09e84e321cf1ac369219fe22b171acda50721de"
+sha256 = "05879d87516982ac92d0e37118ed19fc711bc4de9c67f288a5dc8d39defa10f8"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1132,3 +1132,27 @@ package = "brynja-crypto-cpu-std"
 path = "src/protected_memory/platform/thread/group_tests.rs"
 status = "linux-protected-stack-group-lifecycle-tests"
 sha256 = "aca6cc5a934a41ae309c4ea7c0de8e7eef0c8ee9832a88d025c232d600319420"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha3/compiled.rs"
+status = "protected-compiled-sha3-session-development"
+sha256 = "5acee9b22999c87a40c0b49d9b324ba48c15939bd0f17349eccb1a98c501f963"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha3/compiled/worker.rs"
+status = "protected-compiled-sha3-worker"
+sha256 = "bcdad37f320e72bd0be282fe3d3069d60b0f8f88d62ae86ce8e70f85a7793da2"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha3/compiled/tests.rs"
+status = "protected-compiled-sha3-admission-tests"
+sha256 = "a6f2326103e6c73f6e1d2648aaad2389d3775a06e01899c7f50daa90cbd99933"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha3/compiled/tests/native.rs"
+status = "protected-compiled-sha3-native-tests"
+sha256 = "dfcb09c9c518d44208609f6a30e97624ce367c3f14a1a2cab90f6c01db640367"

@@ -9,9 +9,10 @@
 //!
 //! This does not erase original inputs, caller copies, arbitrary registers,
 //! interruption state, privileged inspection or abort-time remnants. Existing
-//! scalar opaque boundaries cover normal returns only. No SIMD/hardware route
-//! is selected; independent retest and strict accelerated integration remain
-//! pending. Deployment must uphold the protected-memory contract, including
+//! scalar opaque boundaries cover normal returns only. [`Session`] selects no
+//! SIMD/hardware route. Separate `strict-sha3-acceleration` enables an explicit
+//! compiled-kernel wrapper; qualification and independent retest remain pending.
+//! Deployment must uphold the protected-memory contract, including
 //! no fork, native cancellation or external mapping revocation.
 //!
 //! ```no_run
@@ -28,8 +29,12 @@
 //! # Ok::<(), Error>(())
 //! ```
 use crate::protected_memory::{ProtectedBytes, ProtectedStack};
+#[cfg(feature = "strict-sha3-acceleration")]
+mod compiled;
 mod types;
 mod worker;
+#[cfg(feature = "strict-sha3-acceleration")]
+pub use compiled::{CompiledSession, Kernel};
 pub use types::{Algorithm, Bits, Cancellation, Error, Limits, PublicDeclassification};
 #[cfg(test)]
 mod tests;

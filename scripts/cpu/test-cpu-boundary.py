@@ -174,6 +174,8 @@ def test() -> None:
             ('default = []', 'default = ["strict-kmac"]', 'default feature'),
             ('brynja-mac-kmac = { workspace = true, optional = true }', 'brynja-mac-kmac = { workspace = true }', 'dependency boundary'),
             ('default = []', 'default = ["strict-sha3"]', 'default feature'),
+            ('strict-sha3-acceleration = ["strict-sha3", "brynja-hash-sha3/hardened-execution"]', 'strict-sha3-acceleration = ["brynja-hash-sha3/hardened-execution"]', 'default feature'),
+            ('default = []', 'default = ["strict-sha3-acceleration"]', 'default feature'),
             ('default = []', 'default = ["strict-sha2"]', 'default feature'),
             ('brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }', 'dependency boundary'),
         ):
@@ -181,7 +183,7 @@ def test() -> None:
             require_rejection(root, expected)
             reset(root)
 
-        for relative in ('src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha2/compiled/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_tuplehash/worker.rs'):
+        for relative in ('src/protected_memory/platform/thread.rs', 'src/protected_memory/platform/thread/group_tests.rs', 'src/strict_sha2/worker.rs', 'src/strict_sha2/compiled/worker.rs', 'src/strict_sha3/worker.rs', 'src/strict_sha3/compiled/worker.rs', 'src/strict_kmac/worker.rs', 'src/strict_tuplehash/worker.rs'):
             source = root / 'crates' / policy.DETECTOR / relative
             source.write_text(source.read_text() + '\n// unreviewed resource drift\n')
             require_rejection(root, 'source changed')

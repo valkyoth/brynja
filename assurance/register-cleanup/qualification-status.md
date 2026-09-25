@@ -301,11 +301,20 @@ sixteen controls; fifteen malformed boundary cases reject per shard. Valid
 byte-pointer precondition return remains an assumption. This composes the
 previously opaque volatile body but does not qualify whole-call spills or close F1.
 
+The static Keccak session now has a retained 26-function metadata check: 800
+cases pass across four compiler/architecture builds. It executes actual health,
+generation and compiled-feature admission, exact kernel selection, operation
+guard completion, seven scratch-clearing requests and terminal quarantine.
+All 458 mutations reject with eighteen semantic/metadata controls. This is
+standalone coverage bound to the SHA-3 imported identities; composition beneath
+the reader and kernel/clearing payload qualification remain separate. The retained
+fixture does not enable the hosted runtime route. F1 remains open.
+
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   the CPU session/permutation boundaries beneath the now-composed accelerated
+   composition of the now-checked static CPU session/permutation metadata beneath the accelerated
    engine read, primitive clearing and producer/outer reader bridges, plus
    whole-verifier error/unwind paths, and reconcile the optimized
    caller-to-reader/dependency coverage before

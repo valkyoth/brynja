@@ -4110,3 +4110,83 @@ Completed logs are under ignored `dist/`, outside Cargo cleanup.
 | `debug-reader-clear-mutations-final-shard-5.log` | `4127ce624c53c4ae107db762a85246f6499b894c5a834e358244856c9ea45db5` |
 | `debug-reader-clear-mutations-final-shard-6.log` | `d9202e1f7253303d5b99d5cab02e6f94605593760f71185d09e3ce3a3dba8887` |
 | `debug-reader-clear-mutations-final-shard-7.log` | `ca0859373cb09d2d5c297c3b7b9756b9553723ef91559ae1034f417037914979` |
+
+### Retained static Keccak authority and operation guard
+
+From the preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_keccak_session.py "$record"
+python3 assurance/register-cleanup/test_debug_keccak_session.py "$record"
+```
+
+The mutation command accepts `--shard 0` through `3`; all four are required.
+Both commands forbid compiler/runtime subprocesses. They select the four retained
+debug accelerated CPU artifacts and bind their exact check/permutation symbols
+to the same-row SHA-3 imports. They validate original borrowed argument and return
+types before assembling each 26-function closure. This is static-route coverage:
+the captured fixture does not enable the hosted runtime variant.
+
+Actual session/route checks, authority health/generation checks, compiled-target
+selection, dispatch, operation guard, scratch wipe wrapper and quarantine execute
+in the metadata model. All 800 cases pass (200 per compiler/architecture build).
+The matrix covers six kernel identities, all three health states, matching/stale
+generations, zero/max generation boundary probes, seven synthetic kernel errors,
+selected kernel unwind and health faults injected between admission checks.
+Hypothetical internal metadata states do not imply that every state can be
+constructed through the safe API. Fault injection does not model concurrent
+mutable ownership, signal-safe reentry or arbitrary platform migration.
+
+Every admission failure prevents kernel dispatch. Once dispatch starts, the
+operation guard requests all seven exact scratch regions before quarantine on
+error/unwind; successful completion avoids quarantine. The original exception
+identity propagates, repeated quarantine makes no additional stores, and later
+checks reject the quarantined owner. Ordinary Rust metadata accesses cannot
+read/write secret scratch or caller state in this model. Kernel payload execution
+and the volatile primitive remain explicit boundaries with separate evidence.
+
+All non-abort blocks of the session check/permutation, authority check/quarantine
+and scratch wipe roots are exercised, except the x86 WrongOperation branch.
+For this retained +avx2 build, other kernels fail architecture/features first.
+The Arm +neon,+sha2,+sha3 build exercises that branch. This is not coverage of
+every helper block or actual extern-C unwind, abort or interruption behavior.
+
+All 458 IR mutations reject: 115 per x86 build and 114 per Arm build. Eight
+metadata/local-SSA controls and ten inactive-feature controls pass. Flipping a
+feature bit after its architecture has been rejected is semantically irrelevant;
+development correctly reclassified those as controls. Thirteen boundary tests
+reject secret payload access, bad aliases, wrong owner/generation, invalid
+quarantine writes and poison. Four Boolean-XOR truth-table and two Boolean
+aggregate controls cover the local model's narrow scalar extensions. Boolean
+`xor i1` is interpreted through its equivalent inequality truth table, without
+modifying the retained LLVM or shared interpreter. Other unsupported operations
+still fail closed. Rust's two retained symbol-mangling forms remain source-bound
+by exact imported identities, not by accepting arbitrary lookalike functions.
+
+This is a standalone CPU-session check, not yet composition with the actual
+reader chain. It does not prove secret output bytes, physical erasure, hosted
+authority behavior or whole-verifier register/spill cleanup. Existing same-record
+kernel/clearing evidence remains separate; Arm runtime evidence is QEMU, not
+native. F1 and root `PENTEST.md` remain open. Production Rust, dependencies,
+captured sources/artifacts, shared interpreter and release-gate policy are
+unchanged. No compiler/native campaign or full sweep was repeated.
+
+Retained source/artifact binding, assurance freshness, script-layout/status
+regressions, acceptance metadata and documentation links pass. GitHub is green
+at the last pushed `6ec41f52`, not this local checkpoint. The record remains
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Final logs below are under ignored `dist/`, outside Cargo cleanup.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_keccak_session_model.py` | `dd3c45a29a2327af2e28c2631c9966fb0bb331ae95108c83d822eac61709d380` |
+| `check_debug_keccak_session.py` | `a700c83a9c83eb2e4346c1d491049ac7d2bfc18447b6d02289050c4a29479ace` |
+| `test_debug_keccak_session.py` | `a6c78eafcb4ee8846d6b36d19deeac07c621cca0f81f0c1b75883fa5ec587d4c` |
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-keccak-session-check.log` | `15ae8c193eec21c5b335182c399869eb7c34c945c5a7b33dd98ee7b3fc43fb9a` |
+| `debug-keccak-session-mutations-final-shard-0.log` | `debc2cd12e1ff0657402bcd27acc0655b24430cfb9af0902538ffbfe83fa9581` |
+| `debug-keccak-session-mutations-final-shard-1.log` | `dbc959acd28af92db65abbde232ce06c97e6860d47e6dcd9cc91b4c12352b6be` |
+| `debug-keccak-session-mutations-final-shard-2.log` | `8638edaa8649d17b3320152edd55bcd8ec6e1ad2ff6e908bf9eb726516402d95` |
+| `debug-keccak-session-mutations-final-shard-3.log` | `b8d4d4408ad114fe215b4a8080eb2e8f34f3657edca26b8bc158a1fcc965568a` |

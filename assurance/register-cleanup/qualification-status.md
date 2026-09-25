@@ -369,11 +369,23 @@ and state/Core destructor internals remain explicit contracts. This closes the
 previous isolated finish-result input at the handoff, not the entire producing
 or cleanup chain; it does not establish physical erasure or real unwind behavior.
 
+The previously opaque Core/Borrowed destructor bodies now have a separate
+same-row KMAC/SHA-3 check. All 24 debug instances pass 512 scenarios, including
+256 modeled state-destructor entry unwinds and 2,624 exact owned-clear requests.
+Present portable state requests thirteen engine regions; accelerated state sets
+the two cancellation fields before requesting six regions. Absent state does
+not clear an engine. Core destruction requests metadata cleanup after state
+cleanup, or before resuming the original modeled exception. All 888 IR mutations
+reject with 48 label/metadata controls and eight boundary rejections. These
+destructor bodies still need composition with actual suffix state consumption;
+the volatile clear body retains its separate evidence. This is not physical
+erasure, native unwind or whole-verifier qualification.
+
 ## Before the next independent pentest
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   suffix-producer/destructor reconciliation and full comparison-chain composition, whole-verifier error/unwind
+   suffix-producer/destructor composition and full comparison-chain composition, whole-verifier error/unwind
    paths, and reconcile the optimized
    caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

@@ -4515,3 +4515,53 @@ Final logs under ignored `dist/`, outside Cargo cleanup:
 | --- | --- |
 | `debug-verifier-finish-check-final.log` | `3c29eef01a71f71f648a2a9a06ab43912d117e69422b21de158755ef632a1d2e` |
 | `debug-verifier-finish-mutations-final.log` | `03e1cab86715936cf71fdda4f5b54125ba88ebf58d270072ab237a51ed7eff96` |
+
+### Debug Core/Borrowed destructor chain
+
+From the preserved source-matching checkout, using the unchanged record:
+
+```sh
+python3 assurance/register-cleanup/check_debug_verifier_destructors.py /absolute/path/to/observations.json
+python3 assurance/register-cleanup/test_debug_verifier_destructors.py /absolute/path/to/observations.json
+```
+
+All 24 debug instances pass 512 scenarios, including 256 modeled state-destructor
+entry unwinds and 2,624 owned-clear requests. The selected actual Core, Borrowed,
+Option, Backend, CSHAKE, owner and metadata helpers come from the same bound
+KMAC/SHA-3 artifacts. Duplicate helper definitions must have identical normalized
+instructions and parameters; dependencies cannot silently come from another row.
+Owner/descriptor base offsets 0/32, absent/present state, both valid portable
+active bits, state-only destruction and full Core destruction are exercised.
+Portable live state requests thirteen exact engine regions. Accelerated live
+state first sets cancellation metadata, then requests six engine/staging/domain
+regions. Absent state cannot request engine clearing. Full Core destruction
+clears metadata last, including before resuming the exact modeled exception.
+
+All 888 IR mutations reject, including no-op helpers, omitted normal/unwind
+cleanup, altered pointers/branches/clear lengths, changed cancellation fields
+and cancellation stores moved after clearing. Forty-eight block-label/debug-
+metadata controls pass; eight direct boundary tests reject payload access and
+incorrect descriptors, clearing regions and cancellation writes.
+
+This is a standalone destructor replay, not composition with the suffix's
+actual state consumption. Clearing is observed at the original primitive call
+boundary; its separately retained volatile-body checks are not rerun or silently
+included. Synthetic unwind is injected at state-destructor entry; arbitrary
+internal/helper unwind, double panic, native unwind, abort and interruptions
+are not qualified. No secret payload bytes are read or synthesized, and no
+whole-verifier/register/spill-erasure guarantee follows. F1 and root `PENTEST.md`
+remain open. No production Rust, shared interpreter, dependencies or release
+policy changed, and no compiler/native/full campaign ran.
+
+| Diagnostic source | SHA-256 |
+| --- | --- |
+| `debug_verifier_destructors.py` | `d0500f027e7e902278753bf5608818375f55928b519168e318faf3bef776eba9` |
+| `check_debug_verifier_destructors.py` | `117d23f5ac0844c4d0997eebc88318996b136bae3b9a65d4297606a82e242863` |
+| `test_debug_verifier_destructors.py` | `8a8592d1170f40ef951312fe222250c60258f20203729b28aeedf6e4178b363f` |
+
+Completed logs under ignored `dist/`, outside Cargo cleanup:
+
+| Retained log | SHA-256 |
+| --- | --- |
+| `debug-verifier-destructors-check-final.log` | `5de17b072e217efdb17b42c24a962da8ee3288fb0bba8066afdee830c832c221` |
+| `debug-verifier-destructors-mutations-final.log` | `3491116618c708580ae0d52ce8409387e724ef885018349b1b3e9e45bc146667` |

@@ -315,10 +315,12 @@ from SHA-1. The separate MD5 multibuffer SIMD API now also has scoped eight-lane
 storage borrowing its existing executor. Both profiles retain caller/whole-API
 register/spill exclusions.
 
-The current [qualification checklist](qualification-status.md) tracks remaining
-KMAC accelerated/debug call-chain review, wider scoped caller/worker emitted-code
-review, exact guarantee/coverage reconciliation and the targeted-test/review
-handoff. The sixteen accelerated ports do not need to be rewritten again.
+The [KMAC review](kmac-review.md) and [wider caller/worker review](wider-review.md)
+record the completed bounded author-review passes. The current
+[qualification checklist](qualification-status.md) tracks exact guarantee/coverage
+reconciliation and the targeted-test/review handoff. These reviews do not establish
+whole-call register/spill erasure. The sixteen accelerated ports do not need to
+be rewritten again.
 Native platform collection and the final approved sweep are listed separately
 after the independent pentest. Authority, KAT, quarantine, target features,
 fallback policy and release-gate mechanisms remain unchanged.

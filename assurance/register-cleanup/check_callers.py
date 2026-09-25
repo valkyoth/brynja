@@ -128,6 +128,13 @@ def require_native_avx2(cpuinfo):
             raise ValueError('native AVX2/OS feature bundle unavailable; do not run specialized fixture')
 
 
+def observation_directory():
+    # Keep expensive diagnostic artifacts outside Cargo's disposable target/.
+    parent = ROOT / 'dist'
+    parent.mkdir(exist_ok=True)
+    return Path(tempfile.mkdtemp(prefix='caller-residue-', dir=parent))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--arm', action='store_true', help='also run QEMU AArch64')
@@ -144,9 +151,7 @@ def main():
     cpuinfo = Path('/proc/cpuinfo').read_text() if args.accelerated or args.threaded else None
     if args.accelerated or args.threaded:
         require_native_avx2(cpuinfo)
-    target_root = ROOT / 'target'
-    target_root.mkdir(exist_ok=True)
-    directory = Path(tempfile.mkdtemp(prefix='caller-residue-', dir=target_root))
+    directory = observation_directory()
     before = sources()
     records = []
     targets = ['x86_64-unknown-linux-gnu']

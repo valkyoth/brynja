@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Regression tests for the development-only observation collector."""
 import os
+from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -19,6 +21,17 @@ def sample(matches=0, api_profile='movable'):
 
 
 class ObservationTests(unittest.TestCase):
+    def test_artifacts_survive_cargo_target_cleanup_and_runs_are_distinct(self):
+        with tempfile.TemporaryDirectory(prefix='caller-storage-test-') as temporary:
+            root = Path(temporary)
+            with patch.object(audit, 'ROOT', root):
+                first, second = audit.observation_directory(), audit.observation_directory()
+            self.assertNotEqual(first, second)
+            self.assertEqual(first.parent, root / 'dist')
+            self.assertEqual(second.parent, root / 'dist')
+            self.assertTrue(first.is_dir() and second.is_dir())
+            self.assertFalse((root / 'target').exists())
+
     def test_accelerated_dependency_features_use_own_workspace_manifest(self):
         common = ['--offline', '--manifest-path', str(audit.FIXTURE / 'Cargo.toml')]
         for package in audit.ACCELERATED_PACKAGES:

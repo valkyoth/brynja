@@ -401,12 +401,14 @@ independent retest remain separate. No production Rust or release gate changed.
 
 ## Before the next independent pentest
 
-1. **Complete the wider caller and worker emitted-code review.** Check the
-   remaining scoped SHA-2/SHA-3, legacy, TupleHash and ParallelHash call boundaries
-   against their stated contracts, including actual worker handoff/return paths.
-   Coordinator observations after joining threads do not establish worker
-   register or spill cleanup. Fix any concrete secret-copy/residue path found
-   within the intended qualified boundary and add a regression for it.
+1. **Wider caller/worker author review completed (2026-09-25).** The
+   [consolidated review](wider-review.md) records fresh source-bound diagnostics,
+   focused compiled regressions, primitive assembly inspections and actual worker
+   MIR/LLVM handoffs. No new production defect was found. Its 48 emitted worker
+   functions retain cleanup dispatch and reject active-workspace copies/escapes;
+   this does not prove opaque destructor completion or whole-thread erasure.
+   Coordinator observations remain explicitly non-qualifying. No production
+   code or release gate changed in this pass.
 2. **Reconcile the exact guarantee and coverage.** Keep supported compiler,
    target, ABI, feature and normal-return boundaries explicit. Existing movable
    APIs and other-target portable models must not inherit a stronger guarantee
@@ -436,6 +438,6 @@ reported accurately; recover only the evidence needed for the current review.
   This checklist changes none of those mechanisms.
 
 F2–F5 have implementation/test changes awaiting independent retest. F1 remains
-open for the wider qualification described above; the original sixteen-kernel
+open for coverage reconciliation and independent retest; the original sixteen-kernel
 rewrite is not missing. No military suitability, independent verification or
 FIPS validation is claimed.

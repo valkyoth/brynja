@@ -218,7 +218,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
-        expected.update({"strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"], "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"]})
+        expected.update({"strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"], "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"], "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"]})
         expected["sha256-hardened-batch"] = ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"]
         expected["sha512-hardened-batch"] = ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"]
         expected["keccak-hardened-batch"] = ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"]
@@ -430,7 +430,7 @@ def validate_resolved_mode(
         "brynja-hash-sha2",
     }
     if mode == "all-features":
-        expected_detector.add("brynja-hash-sha3")
+        expected_detector.update(("brynja-hash-sha3", "brynja-mac-kmac"))
     if detector != expected_detector:
         raise ValueError("host CPU detector package graph drifted")
     parallel_executor = reachable_names(
@@ -444,7 +444,7 @@ def validate_resolved_mode(
         "brynja-hash-sha3",
     }
     if mode == "all-features":
-        expected_parallel_executor.update(("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha2"))
+        expected_parallel_executor.update(("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha2", "brynja-mac-kmac"))
     if parallel_executor != expected_parallel_executor:
         raise ValueError("ParallelHash std executor package graph drifted")
     if {"brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-parallel-std"}.intersection(modern):

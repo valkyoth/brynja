@@ -90,7 +90,7 @@ features = ["static-execution", "runtime-execution", "sha256-batch"]
 class = "host-adapter"
 publish = "crates-io"
 required = ["brynja-crypto-cpu", "brynja-hash-sha2"]
-optional = { sponge-execution = "brynja-hash-sha3", protected-memory = "brynja-core" }
+optional = { sponge-execution = "brynja-hash-sha3", protected-memory = "brynja-core", strict-kmac = "brynja-mac-kmac" }
 features = ["runtime-execution", "sha256-batch"]
 
 [packages.brynja-pki]

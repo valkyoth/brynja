@@ -25,7 +25,7 @@ facade_feature = "none"
 name = "brynja-crypto-cpu-std"
 version = "0.1.1"
 runtime = "std"
-dependencies = ["brynja-crypto-cpu", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-core"]
+dependencies = ["brynja-crypto-cpu", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-core", "brynja-mac-kmac"]
 default_features = []
 publication = "deferred-crates-io"
 facade_feature = "none"
@@ -436,7 +436,7 @@ sha256 = "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f"
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "689f1fba263eefc139463955c4db2e38cafad59399fb5e6a9bbdcca0e707176d"
+sha256 = "a6af43ef452113cb9458b4fa23f133689f0bf52f0d2e075c3b9eee606a13fa8f"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1042,3 +1042,33 @@ package = "brynja-crypto-cpu-std"
 path = "src/strict_sha3/tests/native.rs"
 status = "protected-sha3-native-integration-tests"
 sha256 = "187b73c29cf1542b5dcde958c5cbad009ba6bec90a94f7d2e5f81fade31d8b15"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/mod.rs"
+status = "protected-scalar-kmac-session-development"
+sha256 = "87d4d914ec88de6f0417bf166a2cf41b3ba0043109da7187820e620f6167f12e"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/types.rs"
+status = "protected-kmac-public-identity-and-bounds"
+sha256 = "13eea29e3d4476740d8d222d1a4e89623ec33f3ebb6c7bca193f7d2486725188"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/worker.rs"
+status = "protected-kmac-scoped-worker-and-verification"
+sha256 = "21d31f4bb98c53158b68b7c597994575e71bc9d534d50ef7aeb95e1827309670"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/tests.rs"
+status = "protected-kmac-integration-tests"
+sha256 = "8e184b045ab4c5103bc9bd0f44324029a434ff501ef80e19d374a945939411a4"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_kmac/tests/native.rs"
+status = "protected-kmac-native-integration-tests"
+sha256 = "fa9ad50752d470c32a0037f988a7d6ef08fa587b1c2e556a331448cd5099b5af"

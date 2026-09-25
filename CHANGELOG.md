@@ -2,6 +2,11 @@
 
 ## 0.24.49 development
 
+- Add default-off protected scalar KMAC/KMACXOF sessions with full-strength key
+  checks, protected fixed-output staging, exact-bit affine output and protected
+  tag verification. Bound setup/message/output work and clear on rejection,
+  cancellation, unwind and reuse. Strict acceleration and qualification remain
+  pending; existing portable APIs and release rules are unchanged.
 - Add default-off protected scalar SHA-3/SHAKE/cSHAKE sessions with canonical
   LSB-first input/customization and exact-bit XOF output, including empty output.
   Bound prefix/message/output work, retain protected affine output, and clear

@@ -2,7 +2,7 @@
 
 Status: owner-approved implementation in progress; the protected-byte resource
 and synchronous protected-stack resources are implemented for initial Linux tests,
-and protected scalar SHA-2 and SHA-3/SHAKE/cSHAKE sessions are implemented.
+and protected scalar SHA-2, SHA-3/SHAKE/cSHAKE and KMAC/KMACXOF sessions are implemented.
 **Strict acceleration, other families and protected ParallelHash scheduling are
 not available yet**;
 the combined profile remains unqualified and is not ready for independent retest.
@@ -140,6 +140,48 @@ They also inspect actual workspace/staging/output protection flags. These are
 author integration tests, not a new independent cryptographic oracle or native
 Arm qualification. Neither Medium finding is closed by this partial integration;
 strict acceleration, other families and protected ParallelHash remain pending.
+
+## Protected KMAC/KMACXOF consumer (qualification pending)
+
+Default-off `strict-kmac` adds `strict_kmac::Session`, using the existing scoped
+KMAC implementation through an optional first-party dependency. It does not
+enable strict SHA-2/SHA-3 session features or any accelerated route. All four
+identities retain exact output-bit width. Construction requires full-strength
+fixed output; all operations require a full-strength key even when the workspace
+has enabled conformance-testing elsewhere. Short/empty XOF derivation remains
+possible, but verification requires full-strength output and exact candidate
+bit width. Keys and customization are supplied afresh, not retained by sessions.
+
+Three resources are preacquired: a protected stack, protected staging, and
+protected output. Fixed KMAC finalization requires a contiguous complete
+destination, so its staging is output-sized protected storage, not a variable
+stack or ordinary heap buffer. XOF staging is at most 4096 bytes. Mapping limits
+apply separately to all three resources (not an aggregate process quota).
+Key/customization setup and fixed finalization are bounded but not internally
+cancellable; message/XOF processing and tag comparison check cancellation at
+4096-byte boundaries. The request separately bounds setup bits, message bits,
+output bits and chunk count. Canonical key/message/customization and candidate
+bit checks run only on the protected worker.
+
+`authenticate` is the byte convenience operation; `compute` accepts a borrowed
+`Request` with bit strings and message chunks. Both return a protected affine
+`Output`; explicit `declassify` is required to copy a public authenticator.
+`verify` performs the complete operation on the protected worker, compares
+canonical equal-width candidates using the existing borrowed constant-time
+primitives, and explicitly returns only a public Boolean decision. Computed
+tags, comparison scratch, staging and the joined stack are cleared; no tag is
+returned to the ordinary caller during verification. Malformed public shapes
+can reject early. Any failure/cancellation/recoverable unwind clears previous
+fragments. Forgotten output loans cannot suppress session cleanup.
+
+Author tests compare all identities to the existing portable KMAC APIs, exercise
+bit keys/customization/message/output, production key boundaries, wrong-width
+and noncanonical candidates, equal work for early/late mismatches, cancellation
+during comparison, post-write unwind, real mapping flags, and resource failure.
+These tests do not constitute independent cryptographic review, native Arm
+evidence or machine-level timing qualification. Strict acceleration, legacy
+SHA-1/MD5, TupleHash and protected ParallelHash integration remain unfinished;
+both Medium findings stay open pending the combined implementation and retest.
 
 ## Scope and admission
 

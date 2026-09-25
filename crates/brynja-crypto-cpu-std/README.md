@@ -37,6 +37,7 @@ It is not automatically installed or added to facade/default graphs.
 | Synchronous protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
 | Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
 | Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |
+| Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Four identities, protected verification; qualification pending | ❌ No |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
 | Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
@@ -92,6 +93,19 @@ worker; output loans clear on Drop. Empty and partial-bit XOF output are support
 Prefix setup is bounded but not internally cancellable. This is scalar-only and
 qualification-pending, with the same target and caller-storage limits as above.
 See the [compiled SHA-3 session example](src/strict_sha3/mod.rs).
+
+`strict-kmac` enables `strict_kmac::Session` with four scalar KMAC/KMACXOF
+identities. `Session::new(Algorithm::Kmac256(256), limits)` preacquires protected
+stack, staging and output. `authenticate(key, message, customization)` returns a
+secret output loan; `compute(request, cancellation)` also supports bit keys,
+customization and message tails. `verify(request, candidate, cancellation)`
+compares on the protected worker and returns only the public Boolean decision.
+Keys must be full-strength; fixed tags and verification also require full-strength
+output even if conformance-testing is enabled elsewhere. Use `declassify` for
+explicit public tags. Setup and fixed finalization are bounded, not internally
+cancellable. SIMD/hardware, native Arm and independent qualification remain pending.
+See the [compiled KMAC session example](src/strict_kmac/mod.rs) and the
+[resource/limit contract](../../docs/strict-hardening-profile.md).
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
 adapter. Portable selection never probes; Require fails on unqualified platforms

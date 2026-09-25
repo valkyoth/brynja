@@ -14,7 +14,6 @@ version = "0.1.1"
 name = "brynja-crypto-cpu-std"
 version = "0.1.1"
 dependencies = [
- "brynja-core",
  "brynja-crypto-cpu",
  "brynja-hash-sha2",
  "brynja-hash-sha3",

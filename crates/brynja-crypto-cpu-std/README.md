@@ -35,6 +35,7 @@ It is not automatically installed or added to facade/default graphs.
 | --- | --- | --- |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
 | Synchronous protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
+| Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
 | Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
 | Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
@@ -65,6 +66,20 @@ The minimum reservation is 64 KiB; callers must budget enough for their work.
 No ordinary-stack fallback is allowed. This is not a secure closure sandbox:
 captures, arbitrary heap/TLS allocations, panic hooks and registers are outside
 its storage guarantee. Concurrent protected hashing is not implemented yet.
+
+`strict-sha2` adds a library-controlled protected hash session. It preacquires
+stack/output resources and rejects unsupported targets instead of silently using
+ordinary storage. This initial path uses the hardened scalar implementation,
+not SIMD/hardware acceleration. It is not independently qualified or a
+whole-process/register-erasure guarantee. Inputs and caller-created copies remain
+caller responsibilities. Construct `Session::new(Algorithm::Sha256, limits)`
+with explicit stack/mapping, message-bit and chunk bounds, then use
+`session.hash(input)`. Drop the digest loan to clear output and reuse the session.
+See the [compiled API example and complete limits](src/strict_sha2/mod.rs).
+
+`hash_chunks` also accepts a raw MSB-first final bit tail and a cooperative
+`Cancellation`. The returned digest loan has no implicit public conversion;
+`expose` is a deliberate borrow and `declassify` requires explicit authority.
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
 adapter. Portable selection never probes; Require fails on unqualified platforms

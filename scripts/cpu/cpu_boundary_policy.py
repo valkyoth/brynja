@@ -15,7 +15,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "31f9b71543f13c602e9711db0926a19a3efe0208639f01c7caa87da7c034c803"
+EXPECTED_POLICY_SHA256 = "d8f60d8b3ecc6f03511232d541fb339a39497203f36e692ea4c1df1579f6574d"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -135,6 +135,19 @@ SOURCE_STATUS = {
     (DETECTOR, "src/sha512_runtime.rs"): "scalar-fallback-and-reporting-boundary",
     (DETECTOR, "src/sponge.rs"): "opt-in-ordinary-sponge-adapter",
     (DETECTOR, "src/sponge/tests.rs"): "ordinary-sponge-adapter-tests",
+    (DETECTOR, "src/protected_memory/mod.rs"): "opt-in-protected-storage-resource",
+    (DETECTOR, "src/protected_memory/unsupported.rs"): "protected-resource-unsupported-rejection",
+    (DETECTOR, "src/protected_memory/tests.rs"): "protected-resource-contract-tests",
+    (DETECTOR, "src/protected_memory/platform.rs"): "linux-protected-mapping-owner",
+    (DETECTOR, "src/protected_memory/stack.rs"): "synchronous-protected-stack-owner",
+    (DETECTOR, "src/protected_memory/platform/sys.rs"): "linux-memory-protection-ffi",
+    (DETECTOR, "src/protected_memory/platform/tests.rs"): "linux-mapping-lifecycle-tests",
+    (DETECTOR, "src/protected_memory/platform/thread.rs"): "linux-scoped-pthread-owner",
+    (DETECTOR, "src/protected_memory/platform/thread/tests.rs"): "linux-protected-stack-lifecycle-tests",
+    (DETECTOR, "src/strict_sha2/mod.rs"): "protected-scalar-sha2-session-development",
+    (DETECTOR, "src/strict_sha2/types.rs"): "protected-sha2-public-identity-and-bounds",
+    (DETECTOR, "src/strict_sha2/worker.rs"): "protected-sha2-scoped-worker",
+    (DETECTOR, "src/strict_sha2/tests.rs"): "protected-sha2-integration-tests",
 }
 BACKEND_KEYS = {
     "id", "identity", "architecture", "module", "status", "sha256",
@@ -193,7 +206,7 @@ def validate_policy_shape(policy: dict) -> None:
         },
         "detector": {
             "name": DETECTOR, "version": "0.1.1", "runtime": "std",
-            "dependencies": [CPU, SHA2, SHA3], "default_features": [],
+            "dependencies": [CPU, SHA2, SHA3, "brynja-core"], "default_features": [],
             "publication": "deferred-crates-io", "facade_feature": "none",
         },
     }:
@@ -238,13 +251,15 @@ def validate_packages(root: Path) -> None:
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")
     if detector.get("features") != {"default": [],
+            "protected-memory": ["dep:brynja-core"],
+            "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
             "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"],
             "sha512-hardened-batch": ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"],
             "keccak-hardened-batch": ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"],
             "keccak-batch": ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"],
             "sponge-execution": ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"], "sha256-batch": ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"], "sha512-batch": ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]}:
         fail("host detector default feature set drifted")
-    if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3} or detector['dependencies'][SHA3] != {'workspace': True, 'optional': True}:
+    if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3, "brynja-core"} or detector['dependencies'][SHA3] != {'workspace': True, 'optional': True} or detector['dependencies']['brynja-core'] != {'workspace': True, 'optional': True}:
         fail("host detector dependency boundary drifted")
     if sha2.get("features") != {
         "default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],

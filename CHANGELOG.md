@@ -2,6 +2,12 @@
 
 ## 0.24.49 development
 
+- Add an opt-in protected scalar SHA-2 session for six named identities and all
+  general SHA-512/t parameters. Preacquire stack/output resources, validate bit
+  tails on the protected worker, bound requests and cancellation, retain affine
+  protected output and clear on failures/unwind/reuse. Unsupported targets/models
+  reject. Strict acceleration, other families and ParallelHash remain pending;
+  this development API does not claim completed qualification or retest.
 - Add default-off Linux GNU protected byte storage with bounded guarded mappings,
   residency locking, dump/fork exclusion and clearing before release. Reject
   unsupported targets and model builds rather than using ordinary heap. This

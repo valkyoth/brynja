@@ -25,7 +25,7 @@ facade_feature = "none"
 name = "brynja-crypto-cpu-std"
 version = "0.1.1"
 runtime = "std"
-dependencies = ["brynja-crypto-cpu", "brynja-hash-sha2", "brynja-hash-sha3"]
+dependencies = ["brynja-crypto-cpu", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-core"]
 default_features = []
 publication = "deferred-crates-io"
 facade_feature = "none"
@@ -436,7 +436,7 @@ sha256 = "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f"
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "d005d49523af115893162070bf0b94c4d014ac7a4b002c82e8bc4f3d723fff80"
+sha256 = "3c31046b65430e61b9a26741c4cf5d5f4058d196e86fd069b337e752211e8acc"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -934,3 +934,81 @@ package = "brynja-crypto-cpu"
 path = "src/keccak_hardened_batch/arm/secret.rs"
 status = "hardened-keccak-batch-opaque-register-boundary"
 sha256 = "db9a59d97c9ffbf81b0572a8e9cce770dbc89a409c22db4c6d85fb65f3f92ba8"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/mod.rs"
+status = "opt-in-protected-storage-resource"
+sha256 = "ac25f96cef7b95b250b8d0a63561f9554f127ae5b379cd9420317d6bad3bdbc5"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/unsupported.rs"
+status = "protected-resource-unsupported-rejection"
+sha256 = "2fff66b9579e666aeddfaf623f7dbc11108dc27ede8d7759939d4e2693c393cb"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/tests.rs"
+status = "protected-resource-contract-tests"
+sha256 = "9be8ff8eb1e097f34e33c975a33c3f84b8c8abfc327c84086418426b01930ae9"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/platform.rs"
+status = "linux-protected-mapping-owner"
+sha256 = "a89a4ad86963e0e36e730bf3e07248a683dc535aeec20f0765f284fa82890e60"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/stack.rs"
+status = "synchronous-protected-stack-owner"
+sha256 = "b1c806ca76d4eafec20539e22ca350c5f3fa2a6d1d2dc4ecb6cb0015b1292eb7"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/platform/sys.rs"
+status = "linux-memory-protection-ffi"
+sha256 = "b67434aab46e5b719d11cf963ced335a037e605aa84f2e953220fafdd29ad4b4"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/platform/tests.rs"
+status = "linux-mapping-lifecycle-tests"
+sha256 = "fc5c651100e9f57808fce0180193fe4fb0eed85446974e9985c5016d2e38b521"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/platform/thread.rs"
+status = "linux-scoped-pthread-owner"
+sha256 = "547b248aacb3ebe2b6ca8be6953f77ac04d5bc23e341477fe1dc70e386884227"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/protected_memory/platform/thread/tests.rs"
+status = "linux-protected-stack-lifecycle-tests"
+sha256 = "495115cdfdff7f3279ecdfebabaf79e135dd565f87ced3d5c56f2a376f075957"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha2/mod.rs"
+status = "protected-scalar-sha2-session-development"
+sha256 = "63c84297c5de1b67e974faf82a422d4315d6fc80b6aa21042f2a6c5b345c469e"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha2/types.rs"
+status = "protected-sha2-public-identity-and-bounds"
+sha256 = "d49428d2d4355b1307ed04c34760e7ab6a2844fa08152ab201706c174a785197"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha2/worker.rs"
+status = "protected-sha2-scoped-worker"
+sha256 = "acb728e7868814679059c5405e89c4c84fe966535506dd6a8cb3107da2072090"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_sha2/tests.rs"
+status = "protected-sha2-integration-tests"
+sha256 = "542dd92fabd7284a18e7fddc8e0b7c25089f94dea436d6eca20117f2901cc519"

@@ -8,6 +8,9 @@
 #[cfg(feature = "protected-memory")]
 pub mod protected_memory;
 
+#[cfg(feature = "strict-sha2")]
+pub mod strict_sha2;
+
 #[cfg(feature = "keccak-hardened-batch")]
 pub mod keccak_hardened_batch;
 #[cfg(feature = "sha256-hardened-batch")]

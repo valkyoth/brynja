@@ -161,6 +161,22 @@ def test() -> None:
         require_rejection(root, "dependency boundary")
         reset(root)
 
+        for before, after, expected in (
+            ('protected-memory = ["dep:brynja-core"]', 'protected-memory = []', 'default feature'),
+            ('strict-sha2 = ["protected-memory", "brynja-hash-sha2/general-sha512-t"]', 'strict-sha2 = ["brynja-hash-sha2/general-sha512-t"]', 'default feature'),
+            ('default = []', 'default = ["strict-sha2"]', 'default feature'),
+            ('brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }', 'dependency boundary'),
+        ):
+            replace(detector, before, after)
+            require_rejection(root, expected)
+            reset(root)
+
+        for relative in ('src/protected_memory/platform/thread.rs', 'src/strict_sha2/worker.rs'):
+            source = root / 'crates' / policy.DETECTOR / relative
+            source.write_text(source.read_text() + '\n// unreviewed resource drift\n')
+            require_rejection(root, 'source changed')
+            reset(root)
+
         sha2 = root / "crates/brynja-hash-sha2/Cargo.toml"
         replace(sha2, 'cpu = ["dep:brynja-crypto-cpu"]', "cpu = []")
         require_rejection(root, "optional CPU feature")
@@ -201,4 +217,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("CPU boundary rejects twenty-six package, source, dispatch, admission, and review-pin regressions")
+    print("CPU boundary rejects twenty-six existing and six protected-resource package/source regressions")

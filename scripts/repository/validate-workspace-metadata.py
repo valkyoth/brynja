@@ -218,6 +218,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
+        expected["strict-sha2"] = ["protected-memory", "brynja-hash-sha2/general-sha512-t"]
         expected["sha256-hardened-batch"] = ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"]
         expected["sha512-hardened-batch"] = ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"]
         expected["keccak-hardened-batch"] = ["brynja-crypto-cpu/keccak-hardened-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/hardened-batch-execution"]
@@ -494,7 +495,6 @@ def main() -> int:
         "one exact adapter-owned first-party external package, and modern/legacy isolation"
     )
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

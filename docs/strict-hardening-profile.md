@@ -2,7 +2,9 @@
 
 Status: owner-approved implementation in progress; the protected-byte resource
 and synchronous protected-stack resources are implemented for initial Linux tests,
-but **strict hashing and protected ParallelHash scheduling are not available yet**.
+and a first protected scalar SHA-2 session is implemented. **Strict acceleration,
+other families and protected ParallelHash scheduling are not available yet**;
+the combined profile remains unqualified and is not ready for independent retest.
 Added after the two-testers' follow-up on v0.24.49. The current
 portable APIs remain available with their existing owned-memory guarantees.
 This document does not admit an execution path or change any release gate.
@@ -64,6 +66,46 @@ and [public union/thread types](https://github.com/bminor/glibc/blob/master/sysd
 Other libc/OS ABIs are not admitted. Native x86 tests check actual callback stack
 addresses, protection flags, TLS destructor ordering, panic cleanup, scoped output
 loans, repeated reuse and fatal join/destruction failures in isolated children.
+
+## First protected hash consumer (qualification pending)
+
+The additional default-off `strict-sha2` feature exposes
+`brynja_crypto_cpu_std::strict_sha2::Session`, `Algorithm`, `Limits`, `Cancellation`
+and a borrowed `Digest`. It enables the protected resources and general
+SHA-512/t parameter API, not an automatic accelerated route. Session construction
+requires both the native opaque-boundary target and successful OS resource
+acquisition. Unsupported OS/ABI/architecture and Miri/Kani models return an error
+before receiving input; ordinary portable APIs are unchanged.
+
+All six named SHA-2 identities and all 510 general t values use scoped hardened
+workspaces created inside a joined protected worker. Inputs are borrowed; their
+original storage remains caller-owned. No caller callback runs during hashing.
+Byte chunks and a raw canonical MSB-first final tail are supported. Tail content
+validation happens on the protected worker. Work and scratch initialization,
+finalization and the secret transfer to protected output all happen there. Only
+public status crosses the thread join. No active workspace is moved back to the
+ordinary caller. The existing scoped owner clears before the entire joined stack
+is cleared, covering this operation's stack-resident staging and spills.
+
+`Limits` bounds total input bits, chunk count (including empty chunks), and each
+of the two mappings including its guards and rounding. Cancellation is checked
+before work, at 4096-byte processing boundaries, and before output commit; it is
+cooperative, not a forced timeout. Errors and recoverable worker unwind clear
+output. The reusable session clears before each new operation; an independently
+owned mapping also clears on Drop, including after a forgotten digest loan.
+An output loan is neither Send/Sync/Copy/Clone/Debug nor implicitly comparable.
+Explicit exposure borrows bytes without declassification; `declassify` requires
+the existing public-output authority and consumes/clears the loan. Equal rounded
+widths never erase the exact general-t identity.
+
+This initial API processes a complete bounded request rather than retaining a
+live streaming state across calls. It does not use SHA-NI, Arm SHA, AVX2 or other
+optional acceleration. Native x86 author tests cover padding/bit/chunk boundaries,
+all parameters, real mapping flags for workspace/scratch/output, cancellation,
+post-write unwind, forgotten output loans, cleanup and reuse. Native Arm, new
+emitted-code evidence, protected-stack sanitizer qualification, remaining-family
+integration and the independent retest are still pending. Do not infer closure
+of either Medium finding from this first consumer.
 
 ## Scope and admission
 

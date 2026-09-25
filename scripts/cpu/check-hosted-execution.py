@@ -32,6 +32,7 @@ def validate(write=False):
     if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {
             'default': [],
             'protected-memory': ['dep:brynja-core'],
+            'strict-sha2': ['protected-memory', 'brynja-hash-sha2/general-sha512-t'],
             'sha256-hardened-batch': ['brynja-crypto-cpu/sha256-hardened-batch', 'brynja-hash-sha2/hardened-batch-execution'],
             'sha512-hardened-batch': ['brynja-crypto-cpu/sha512-hardened-batch', 'brynja-hash-sha2/hardened-batch512-execution'],
             'keccak-hardened-batch': ['brynja-crypto-cpu/keccak-hardened-batch', 'dep:brynja-hash-sha3', 'brynja-hash-sha3/hardened-batch-execution'],

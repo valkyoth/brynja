@@ -1,6 +1,6 @@
 # v0.24.49 register-cleanup qualification status
 
-Updated 2026-09-24. This is a work checklist, **not a new release gate**.
+Updated 2026-09-25. This is a work checklist, **not a new release gate**.
 The [pentest ledger](../../security/pentest/v0.24.49.md) retains the historical
 checks and their limitations. Earlier checkpoint paragraphs are not a current
 todo list: several were superseded by later implementation and tests.
@@ -173,6 +173,15 @@ Later diagnostic-only additions can run there without replacing captured sources
   injected regressions reject and sixteen SSA controls pass. This does not qualify
   secret primitive bodies or whole-call register/spill cleanup.
 
+- Portable debug bulk-reader forwarding now composes the actual guarded byte
+  producer in 103/104-function closures. All 7,936 modeled cases pass across
+  sixteen paths, preserving original borrowed reader/output addresses, exact
+  counter/progress effects, success-only reuse and error/unwind cleanup ordering.
+  All 256 outer handoff/result/payload-access mutations reject, with sixteen
+  passing SSA rename controls. The independent producer oracle is checked before
+  comparing the composed trace. Fill/copy/volatile bodies remain opaque; this
+  completes the portable bulk-reader/producer link, not whole-call erasure.
+
 Implementation completion is not qualification completion. Marker-free return
 observations alone do not prove absence of transformed secrets or stack spills.
 
@@ -180,7 +189,7 @@ observations alone do not prove absence of transformed secrets or stack spills.
 
 1. **Finish the remaining instantiated KMAC path review.** Complete debug
    caller/reader coverage beyond bulk and consuming-final bridges, including
-   remaining bulk-reader/producer links, staging-fill internals,
+   staging-fill internals,
    accelerated producer guard paths and whole-verifier error/unwind
    paths, and reconcile the optimized caller-to-reader/dependency coverage before
    claiming the whole instantiated path qualified. Individual helper checks are evidence to reuse,

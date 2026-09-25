@@ -3084,3 +3084,66 @@ outside Cargo's `target/` directory.
 | `debug-consuming-final-mutations-shard-1.log` | `610d128f98479dae8ddb0b6a52f43b3ed9bbb704a6a46b4efd2fb8bebda95127` |
 | `debug-consuming-final-mutations-shard-2.log` | `2db729b9319c1dc0d6c10dfbaeb91bc88e03a51257618ac418143d40c653e7df` |
 | `debug-consuming-final-mutations-shard-3.log` | `96af782998cccc50468f3e716e86e5cb56d5fc14aea16679ab8432eb3366e0fd` |
+
+### Composed debug bulk reader and byte producer
+
+From the same preserved source-matching checkout and absolute record path:
+
+```sh
+python3 assurance/register-cleanup/check_debug_bulk_guard.py "$record"
+python3 assurance/register-cleanup/test_debug_bulk_guard.py "$record"
+```
+
+Both accept optional `--shard 0`, `1`, `2` or `3`; all four disjoint shards are
+required for the complete sixteen-path matrix. This closes the portable
+bulk-reader/producer link: the KMAC trait bridge, SHA-3 wrapper, error conversion
+and actual guarded byte producer execute together in 103/104-function closures.
+The same-configuration helper definitions must agree before composition. The
+producer first passes its independent arithmetic/lifecycle/event-order oracle;
+the composed execution must preserve its exact trace through the public result.
+
+All 7,936 cases pass (496 per path), including empty and rate/multirate output,
+counter limits, inactive readers, initializer failures, fill/write/slice errors
+and selected fill/copy unwind. The producer receives the original borrowed
+reader, destination and length, with byte mode and no final-bit metadata. Its
+compiler-local result is interpreted directly, not synthesized by the wrapper
+model. Counter reads/writes, output progress, cleanup requests, error conversion
+and original exception identity must match. Successful completion alone restores
+reader reuse. Unlike the consuming-final API, this borrowed wrapper does not add
+an unconditional owner clear after a successful producer call.
+
+All 256 retained-IR mutations reject (sixteen per path), with sixteen passing
+SSA rename controls. They omit/duplicate handoffs, change reader/destination/
+length/mode/tail metadata, erase or misclassify errors, or read payload directly.
+A synthetic valid handoff and eight malformed/duplicate calls also pass.
+The producer oracle is checked once per original quick-test case; mutations may
+reuse it only after asserting the complete producer/helper closure is unchanged.
+The mutation harness forbids compiler/runtime subprocesses. No compiler/native
+campaign was repeated and the original source/artifact validation still passes.
+
+This is metadata/control-flow composition, not qualification of opaque fill,
+copy or volatile primitive bodies, whole-verifier register/spill erasure,
+arbitrary interruption or native Arm execution. The retained Arm runtime evidence
+is QEMU. F1 and root `PENTEST.md` remain open.
+
+Checker SHA-256:
+`d0c6f10a8b2125b3ec7b0106f6c4ed628ddd455a56abf1e69eb67ab840bdd7c6`;
+mutation harness:
+`e389ec01cc61b4670ce0cd9ee351e453f78bcf9d00e2f85d67192ead8047d081`.
+The observation record is unchanged:
+`d1b6515193cabfb68c4223b60dd9850d85c42525c2096927363ef32372d4b16f`.
+Logs below live under ignored `dist/`, outside Cargo's `target/` directory.
+Mutation shard 0 completed through the harness's `main(record, 0)` under the
+same subprocess prohibition, with exit 0, 64 rejected mutations and four passing
+controls. Its output was observed in the execution console, not redirected to a
+retained file; no retained-log hash is claimed for that shard.
+
+| Completed retained log | SHA-256 |
+| --- | --- |
+| `debug-bulk-guard-check-shard-0.log` | `7c1b59a7dc94c19a40af1b16f529615c4c0de1484a78442f9aa2dd3bc3396b7c` |
+| `debug-bulk-guard-check-shard-1.log` | `cb3cfb7ec7ad4c072c25e2cbd61bf983f846c1c9b6a3a1a9f30fb1e003ca3394` |
+| `debug-bulk-guard-check-shard-2.log` | `1ad8ef237d67144dc49d7372e8b31796e9540fb1cd9c79f3ea5e1d30eb9afda1` |
+| `debug-bulk-guard-check-shard-3.log` | `47349063e4246632073c82b7cc18ce85a78bddfa8833863575aac349fc21c17e` |
+| `debug-bulk-guard-mutations-shard-1.log` | `98241ddcabc428cc04e5fa6d920bf8c09135dc187e291bcdce654157b30d4dc9` |
+| `debug-bulk-guard-mutations-shard-2.log` | `fec580ec0a9182ebfa0441fbac3e0c2159bbd6c98b12b8c13529516a5ecf72a5` |
+| `debug-bulk-guard-mutations-shard-3.log` | `85206e7e0deb0cf851b40ba6f0705c162f436b974c0e01d947537db7c5813adb` |

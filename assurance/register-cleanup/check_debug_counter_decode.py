@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Retained debug counter decoding: byte reads, helper traversal and limit caller."""
+"""Retained debug counter byte decoding, helper traversal and limit caller."""
 import argparse
 from dataclasses import dataclass
 import json

@@ -1,11 +1,37 @@
 #!/usr/bin/env python3
 """Keep packed result fields precise without inventing initialized ABI padding."""
+import codecs
+from pathlib import Path
+import re
 import check_debug_counter_decode as check
 
 model = check.model
 
 
+def source_header_encoding():
+    # The scanner interpreted an unanchored encoding-like docstring substring
+    # as a source codec, although Python correctly ignores it outside comments.
+    def check_header(source):
+        for line in source.splitlines()[:2]:
+            match = re.search(r'coding[:=]\s*([-\w.]+)', line)
+            if match:
+                codecs.lookup(match[1])
+    source = Path(check.__file__).read_text(encoding='utf-8')
+    check_header(source)
+    compile(source, check.__file__, 'exec')
+    check_header('#!/usr/bin/env python3\n# coding: utf-8\n')
+    old_header = '#!/usr/bin/env python3\n"""Retained debug counter decoding: byte reads."""\n'
+    try:
+        check_header(old_header)
+    except LookupError:
+        pass
+    else:
+        raise AssertionError('old docstring no longer exercises the invalid codec regression')
+    print('Counter decoder header: Python compilation and scanner codec regression PASS')
+
+
 def main():
+    source_header_encoding()
     controls = rejected = 0
     for fields in (((0, 1, 0), (4, 4, 0)), ((0, 1, 0), (4, 4, (1 << 32) - 1)),
                    ((0, 1, 1), (1, 1, 2))):

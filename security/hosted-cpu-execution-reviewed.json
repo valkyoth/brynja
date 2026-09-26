@@ -168,7 +168,7 @@
     "crates/brynja-crypto-cpu/src/x86_sha512/words.rs": "f77a10d0138bb2c2855dbfb62b10195e0b0a302b452fc62b3f225adef4d8ee12",
     "docs/hosted-cpu-execution.md": "ee95ea12465819e9d071196d39497b7245b94589f3060b3c48e48af960fe978a",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
-    "scripts/cpu/check-hosted-execution.py": "402b75ffbca44d020aa9240c93c2457b086bf1ff602e4712ca0e7d2f1fe8b551",
+    "scripts/cpu/check-hosted-execution.py": "6ab7ca70327354101dd85a9f5d62c3be8485350cb9c5c69a00f2dab6da23934b",
     "scripts/repository/unsafe_policy.py": "fe2b2197c6cacd9c27fc35dd9d53a037e87d428ea5d7198f21e7e1926c61119d",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"

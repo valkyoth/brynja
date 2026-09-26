@@ -42,8 +42,40 @@ def package_optional_closure():
     print('Four package-family inventories retain optional manifest closure without duplicate copies or crypto execution')
 
 
+def hosted_package_optional_closure():
+    spec = importlib.util.spec_from_file_location(
+        'packaged_hosted_cpu', metadata.ROOT / 'scripts/cpu/check-hosted-execution.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    def check_inventory(packages):
+        copied = []
+        with tempfile.TemporaryDirectory(prefix='brynja-hosted-inventory-') as directory, \
+                patch.object(module, 'PACKAGES', packages), \
+                patch.object(module.shutil, 'copytree', side_effect=lambda source, *_args, **_kw: copied.append(Path(source).name)):
+            module.isolated(Path(directory))
+        assert len(copied) == len(set(copied)), copied
+        for name in copied:
+            manifest = tomllib.loads((metadata.ROOT / 'crates' / name / 'Cargo.toml').read_text())
+            # Cargo resolves optional manifest edges even when their features
+            # are disabled. Inspect the actual copied set, not active features.
+            for dependency in manifest.get('dependencies', {}):
+                assert dependency in copied, (name, dependency)
+
+    check_inventory(module.PACKAGES)
+    for missing in ('brynja-mac-kmac', 'brynja-hash-tuple'):
+        try:
+            check_inventory(tuple(name for name in module.PACKAGES if name != missing))
+        except AssertionError as error:
+            assert error.args == ((module.HOST, missing),), error.args
+        else:
+            raise AssertionError('missing optional hosted dependency escaped: ' + missing)
+    print('Hosted package inventory retains optional dependencies and rejects both omission regressions')
+
+
 def main():
     package_optional_closure()
+    hosted_package_optional_closure()
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()

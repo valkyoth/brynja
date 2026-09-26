@@ -16,7 +16,8 @@ import tomllib
 ROOT = Path(__file__).resolve().parents[2]
 CPU = 'brynja-crypto-cpu'
 HOST = 'brynja-crypto-cpu-std'
-PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-hash-sha2', 'brynja-hash-sha3', CPU, HOST)
+PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-hash-sha2', 'brynja-hash-sha3',
+            'brynja-mac-kmac', 'brynja-hash-tuple', CPU, HOST)
 FIXTURE = 'assurance/hosted-cpu-execution'
 REVIEW = ROOT / 'security/hosted-cpu-execution-reviewed.json'
 COMMAND = 'python3 scripts/cpu/check-hosted-execution.py'

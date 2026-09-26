@@ -9,6 +9,50 @@ import legacy_final_acceptance as policy
 import final_batch_mutations
 
 
+def strict_inventory_regressions(root):
+    """Current strict owners are explicit deltas, never historical evidence."""
+    import tomllib
+    common = ('crates/brynja-core/Cargo.toml', 'crates/brynja-hash-core/Cargo.toml')
+    cases = (
+        (policy.SHA1_DELTA, 'sha1', ('compiled.rs', 'compiled/worker.rs',
+                                  'compiled/tests.rs', 'compiled/tests/native.rs')),
+        (policy.MD5_DELTA, 'md5', ('batch/mod.rs', 'batch/worker.rs',
+                                'batch/tests.rs', 'batch/tests/native.rs')),
+    )
+    count = 0
+    for delta, family, names in cases:
+        paths = (*common, *(f'crates/brynja-legacy-{family}-std/src/strict_execution/{name}'
+                           for name in names))
+        record = root / delta
+        original = record.read_text()
+        hashes = tomllib.loads(original)['files']
+        for path in paths:
+            source = root / path
+            content = source.read_text()
+            line = f'"{path}" = "{hashes[path]}"'
+            assert original.count(line) == 1
+            # Neither an omitted/stale review entry nor changed source can be
+            # excused by refreshing only the outer final-acceptance hash map.
+            for mode in ('omitted', 'stale', 'source'):
+                try:
+                    if mode == 'source':
+                        source.write_text(content + '\n')
+                    else:
+                        replacement = '' if mode == 'omitted' else f'"{path}" = "' + '0' * 64 + '"'
+                        record.write_text(original.replace(line, replacement))
+                    try:
+                        policy.validate_native(root)
+                    except ValueError:
+                        count += 1
+                    else:
+                        raise AssertionError(f'accepted {mode} strict closure: {path}')
+                finally:
+                    record.write_text(original)
+                    source.write_text(content)
+        policy.validate_native(root)
+    print(f'Strict legacy source inventory rejects {count} missing/stale/source-drift regressions')
+
+
 def main():
     policy.validate()
     mutations = [
@@ -64,6 +108,7 @@ def main():
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(policy.ROOT / path, destination)
         policy.validate(root)
+        strict_inventory_regressions(root)
         # Simulate growth after the path's size check, without huge allocation.
         (root / 'read-bound.txt').write_bytes(b'old')
         with patch.object(policy, 'MAX_INPUT_BYTES', 1024):

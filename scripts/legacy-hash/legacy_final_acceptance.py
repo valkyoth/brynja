@@ -15,11 +15,13 @@ MD5_DELTA = 'scripts/legacy-hash/md5-operational-delta.toml'
 # Current scoped-owner changes require fresh qualification. They extend only
 # the source-bound delta, never the immutable historical capture snapshot.
 SHARED_CHANGED = tuple('crates/brynja-core/' + name for name in (
+    'Cargo.toml',
     'src/lib.rs', 'src/secret_memory.rs', 'src/secret_memory_volatile.rs', 'tests/secret_memory.rs',
     'src/secret_memory_difference.rs', 'src/secret_memory_difference_tests.rs',
     'src/secret_memory_mask.rs', 'src/secret_memory_predicate.rs', 'src/secret_memory_transfer.rs',
     'src/secret_memory_xor.rs', 'src/secret_memory_xor_tests.rs', 'tests/secret_predicate.rs')) + tuple(
-    'crates/brynja-hash-core/src/' + name for name in ('bit_string.rs', 'lib.rs', 'secret_memory_predicate.rs'))
+    'crates/brynja-hash-core/' + name for name in (
+        'Cargo.toml', 'src/bit_string.rs', 'src/lib.rs', 'src/secret_memory_predicate.rs'))
 MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
     'src/batch/owner.rs', 'src/engine.rs', 'src/output.rs', 'tests/api.rs',
     'src/hardened_in_place.rs', 'src/hardened_in_place/tests.rs',
@@ -36,7 +38,9 @@ MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
         'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs',
         'src/hardened_execution/mod.rs', 'src/hardened_execution/platform.rs', 'tests/hardened_execution.rs',
         'src/strict_execution/mod.rs', 'src/strict_execution/types.rs', 'src/strict_execution/worker.rs',
-        'src/strict_execution/tests.rs', 'src/strict_execution/tests/native.rs')) + SHARED_CHANGED
+        'src/strict_execution/tests.rs', 'src/strict_execution/tests/native.rs',
+        'src/strict_execution/batch/mod.rs', 'src/strict_execution/batch/worker.rs',
+        'src/strict_execution/batch/tests.rs', 'src/strict_execution/batch/tests/native.rs')) + SHARED_CHANGED
 SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
     'src/engine.rs', 'src/output.rs', 'tests/api.rs',
     'src/hardened_in_place.rs', 'src/hardened_in_place/tests.rs',
@@ -54,7 +58,9 @@ SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
         'Cargo.toml', 'src/lib.rs', 'src/execution/mod.rs', 'src/execution/platform.rs', 'tests/execution.rs',
         'src/hardened_execution.rs', 'tests/hardened_execution.rs',
         'src/strict_execution/mod.rs', 'src/strict_execution/types.rs', 'src/strict_execution/worker.rs',
-        'src/strict_execution/tests.rs', 'src/strict_execution/tests/native.rs')) + SHARED_CHANGED
+        'src/strict_execution/tests.rs', 'src/strict_execution/tests/native.rs',
+        'src/strict_execution/compiled.rs', 'src/strict_execution/compiled/worker.rs',
+        'src/strict_execution/compiled/tests.rs', 'src/strict_execution/compiled/tests/native.rs')) + SHARED_CHANGED
 HASHES = 'scripts/legacy-hash/final-reviewed.toml'
 CLAIMS = FIXTURE + '/claims.toml'
 PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-legacy-sha1',

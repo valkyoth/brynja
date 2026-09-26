@@ -1,11 +1,16 @@
 # Legacy SHA-1 and MD5 final acceptance — v0.24.23
 
-Historical closure note: the later default-off SHA-1 operational authority is
-reviewed separately in `scripts/legacy-hash/sha1-operational-delta.toml`. The
-original snapshot is immutable; the delta pins only the named new/changed
-authority files and never changes the SHA-1 algorithm, shared foundations or
-MD5 native bindings. It does not qualify the operational API using old captures.
-Fresh native review is required for that API; see [ordinary SHA-1 execution](legacy-sha1-execution.md).
+Historical closure note: later default-off operational and strict owners are
+reviewed separately in `scripts/legacy-hash/sha1-operational-delta.toml` and
+`scripts/legacy-hash/md5-operational-delta.toml`. The original snapshot and raw
+captures remain immutable. The deltas pin the explicitly named changed files,
+including shared foundation changes, manifests and strict compiled workers;
+they do not qualify these additions using old captures. Their historical schema
+versions are not claims that newer source was tested at those older releases.
+Fresh native review remains separate; see [ordinary SHA-1 execution](legacy-sha1-execution.md)
+and the [v0.24.49 collection](../assurance/native-v02449/README.md).
+The v0.24.23 route table and claims below describe that historical milestone,
+not the later operational or strict APIs.
 
 This closes the implemented ordinary and hardened SHA-1/MD5 byte/bit APIs,
 including one-shot and streaming use, typed secret output, explicit public

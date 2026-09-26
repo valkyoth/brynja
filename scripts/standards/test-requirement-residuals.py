@@ -128,10 +128,22 @@ def test_current_residual_repository() -> None:
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 131
-    assert len(artifact["plans"]) == 2157
+    assert len(artifact["plans"]) == 2159
     plans = {plan["version"]: plan for plan in artifact["plans"]}
-    for patch in range(30, 55):
+    for patch in range(30, 57):
         assert plans[f"0.24.{patch}"]["boundary"]["class"] == "planned-authority-admission"
+    # The two platform stops extend the chain; they must not overwrite the
+    # unstarted RISC-V, packaging, consumer, native and final-closure work.
+    for patch, title in enumerate((
+        "Windows Strict Protected Profiles",
+        "macOS Strict Protected Profiles",
+        "RISC-V Explicit Experimental Execution",
+        "Facade Features And Package Reachability",
+        "Acceleration Public Consumer Acceptance",
+        "Acceleration Native Evidence Sweep",
+        "Opt-In Acceleration Final Closure",
+    ), start=50):
+        assert plans[f"0.24.{patch}"]["title"] == title
     # The reusable-cryptography expansion must retain an authority boundary
     # at every implementation and acceptance stop, not just add version rows.
     last_patches = {378: 8, 379: 8, 380: 7, 381: 8, 388: 8, 470: 8}

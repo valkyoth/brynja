@@ -54,7 +54,8 @@ def main():
             ('strict-acceleration = ["strict-execution",', 'strict-acceleration = ['),
             (', "brynja-crypto-cpu-std/protected-memory"', ''),
             ('brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }'),
-            ('brynja-crypto-cpu-std = { workspace = true, optional = true }', 'brynja-crypto-cpu-std = { workspace = true }'),
+            ('brynja-crypto-cpu-std = { workspace = true, optional = true, default-features = true }', 'brynja-crypto-cpu-std = { workspace = true, default-features = true }'),
+            ('default-features = true', 'default-features = false'),
         ):
             if before not in original: raise ValueError('stale strict MD5 manifest mutant')
             path.write_text(original.replace(before, after))

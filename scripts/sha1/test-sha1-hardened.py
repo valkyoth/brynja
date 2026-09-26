@@ -101,7 +101,8 @@ def main():
             (policy.ADAPTER+'Cargo.toml', 'default = []', 'default = ["strict-execution"]'),
             (policy.ADAPTER+'Cargo.toml', '"brynja-crypto-cpu-std/protected-memory"', '"brynja-crypto-cpu-std/runtime-execution"'),
             (policy.ADAPTER+'Cargo.toml', 'brynja-core = { workspace = true, optional = true }', 'brynja-core = { workspace = true }'),
-            (policy.ADAPTER+'Cargo.toml', 'brynja-crypto-cpu-std = { workspace = true, optional = true }', 'brynja-crypto-cpu-std = { workspace = true }'),
+            (policy.ADAPTER+'Cargo.toml', 'brynja-crypto-cpu-std = { workspace = true, optional = true, default-features = true }', 'brynja-crypto-cpu-std = { workspace = true, default-features = true }'),
+            (policy.ADAPTER+'Cargo.toml', 'default-features = true', 'default-features = false'),
         ])
         for relative, original, replacement in cases:
             path = root / relative

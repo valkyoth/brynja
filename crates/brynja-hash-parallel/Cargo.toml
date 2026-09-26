@@ -20,7 +20,7 @@ brynja-hash-sha3 = { workspace = true }
 
 [dev-dependencies]
 brynja-crypto-cpu = { workspace = true, features = ["hardened-execution"] }
-brynja-crypto-cpu-std = { workspace = true, features = ["runtime-execution"] }
+brynja-crypto-cpu-std = { workspace = true, default-features = true, features = ["runtime-execution"] }
 
 [lints]
 workspace = true

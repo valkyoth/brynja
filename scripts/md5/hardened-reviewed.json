@@ -97,7 +97,7 @@
     "crates/brynja-hash-core/src/bit_string.rs": "5380273f4bffdf50eb69520c874e1cc330dbb1cff3c4f8b47596d01e2c0e634a",
     "crates/brynja-hash-core/src/lib.rs": "3fc26b83af9b7bcdbba00b181cc6dde1dfd8e02747b33190a1cb15e13ce3be80",
     "crates/brynja-hash-core/src/secret_memory_predicate.rs": "d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c",
-    "crates/brynja-legacy-md5-std/Cargo.toml": "4e26021821d6f931a228be7a20b485e2d9a9cdeaf7d8d92f2614ccc1f4072dc4",
+    "crates/brynja-legacy-md5-std/Cargo.toml": "4320855e692b499efea385b9240a445e93f20fc400a7de52677a9581c8507600",
     "crates/brynja-legacy-md5-std/README.md": "d3bac329c1ba0b174bac72b449230572a3e3a55ce458dcaec13aab9202e0d417",
     "crates/brynja-legacy-md5-std/src/execution/mod.rs": "ddc8d25b2fe5c5892ab931304e8d0280f92872826c1b15975e650e6866b7befe",
     "crates/brynja-legacy-md5-std/src/execution/platform.rs": "351571ad239d08b806f9e966aac9633cdc785407526afe66433d08bb1e327b55",
@@ -179,11 +179,11 @@
     "scripts/md5/md5_hardened_codegen.py": "552c48427914a9446b98e4704b730b27e7706f9fedf36d20b2fc6341f8089f2b",
     "scripts/md5/md5_hardened_native.py": "a34998dc1f5afd0de836a3c1d3d53187ba3061116477ec48c44badd6f0f71701",
     "scripts/md5/md5_hardened_package.py": "d99b2c720113bbb321d3d677c2db4217d2cca80f100597bd14c28eda682214af",
-    "scripts/md5/md5_hardened_policy.py": "5cf621e2f83a652f233484e9797d6af8860342d1e850fe3418a95c83d0e3bd7f",
+    "scripts/md5/md5_hardened_policy.py": "00c529d6580eccee2ca587415493759e324f19ea84d3935c4959ea8670e61e98",
     "scripts/md5/test-md5-execution-asan.py": "e56be7cb697374841cbb85a4e9be757957efbbfeec95ee608fc8e85b109fbaec",
     "scripts/md5/test-md5-execution-native.py": "dad79381265f097a69add41a2b816877d82194f6d8023d41da5b4b36262d5525",
     "scripts/md5/test-md5-execution.py": "97f117272f9e52ac4288947e3c778ab4651f0d0a0c3cf23e0a312ed23dd73709",
     "scripts/md5/test-md5-hardened-native.py": "f9d34f443788c011cb3601fa51aaf577b2670bbe71a666e4777428a296c7a61d",
-    "scripts/md5/test-md5-hardened.py": "e778e10ea6134c28749a0dcd842cf59ad57809fe4b4d06b1c71d5f7d5d8f18b7"
+    "scripts/md5/test-md5-hardened.py": "f9b02c60b80de08dde8290823f681794636b68785a8caaf36d2931d9aab0dc40"
   }
 }

@@ -101,7 +101,9 @@ def validate(root=ROOT, reviewed=True):
         for token in tokens: require(strict, token)
     manifest = tomllib.loads(read(root, ADAPTER+'Cargo.toml'))
     for name in ('brynja-core', 'brynja-crypto-cpu-std'):
-        if manifest['dependencies'].get(name) != {'workspace': True, 'optional': True}:
+        expected = {'workspace': True, 'optional': True}
+        if name == 'brynja-crypto-cpu-std': expected['default-features'] = True
+        if manifest['dependencies'].get(name) != expected:
             raise ValueError('strict SHA-1 protected resources must remain optional')
     directory = root / LEAF / 'src/hardened_execution'
     if sorted(p.relative_to(directory).as_posix() for p in directory.rglob('*.rs')) != sorted(SOURCES):

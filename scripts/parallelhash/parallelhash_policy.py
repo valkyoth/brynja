@@ -231,7 +231,7 @@ def validate(root: Path) -> None:
         fail("portable feature boundary changed")
     if portable_manifest.get("dev-dependencies") != {
         "brynja-crypto-cpu": {"workspace": True, "features": ["hardened-execution"]},
-        "brynja-crypto-cpu-std": {"workspace": True, "features": ["runtime-execution"]},
+        "brynja-crypto-cpu-std": {"workspace": True, "default-features": True, "features": ["runtime-execution"]},
     }:
         fail("execution test-only authority dependencies changed")
     if portable_manifest.get("dependencies") != {
@@ -251,7 +251,7 @@ def validate(root: Path) -> None:
     if std_manifest.get("dependencies") != {
         "brynja-core": {"workspace": True},
         "brynja-hash-parallel": {"workspace": True},
-        "brynja-crypto-cpu-std": {"workspace": True, "optional": True},
+        "brynja-crypto-cpu-std": {"workspace": True, "optional": True, "default-features": True},
         "brynja-crypto-cpu": {"workspace": True, "optional": True, "features": ["hardened-execution"]},
     }:
         fail("std executor dependency boundary changed")

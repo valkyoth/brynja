@@ -128,7 +128,9 @@ def validate(root=ROOT, reviewed=True):
     leaf=tomllib.loads(ordinary.read(root,LEAF+'Cargo.toml').decode())
     host=tomllib.loads(ordinary.read(root,HOST+'Cargo.toml').decode())
     for name in ('brynja-core', 'brynja-crypto-cpu-std'):
-        if host['dependencies'].get(name) != {'workspace': True, 'optional': True}:
+        expected = {'workspace': True, 'optional': True}
+        if name == 'brynja-crypto-cpu-std': expected['default-features'] = True
+        if host['dependencies'].get(name) != expected:
             raise ValueError('strict MD5 protected resources must remain optional')
     if host['features'].get('strict-execution') != ['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory']:
         raise ValueError('strict MD5 feature boundary')

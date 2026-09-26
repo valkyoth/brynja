@@ -1,5 +1,7 @@
 """Exact strict-facade feature closure; no relaxation of ordinary facade isolation."""
 import copy
+from pathlib import Path
+import tomllib
 
 DIRECT = {
     'brynja-crypto-cpu-std': ['strict-sha2', 'strict-sha3', 'strict-kmac', 'strict-tuplehash', 'strict-batch'],
@@ -31,6 +33,7 @@ EDGES = {
 
 
 def regressions(all_features, dependency, package, require_rejection):
+    shared_dependency_regressions()
     for owner in ('brynja-crypto-cpu-std', 'brynja-hash-parallel-std'):
         for field, value, message in (
             ('features', [], 'directly enables features'),
@@ -51,3 +54,42 @@ def regressions(all_features, dependency, package, require_rejection):
     require_rejection(changed, 'all-features', 'unexpected homepage metadata',
                       'redundant facade homepage')
     print('Strict facade rejects nine dependency, feature and metadata regressions')
+
+
+def validate_shared_dependency(workspace, facade):
+    shared = workspace['workspace']['dependencies']['brynja-crypto-cpu-std']
+    declaration = facade['dependencies']['brynja-crypto-cpu-std']
+    if shared.get('default-features') is not False:
+        raise ValueError('shared CPU adapter must disable inherited defaults')
+    if declaration.get('workspace') is not True or {'path', 'version'} & declaration.keys():
+        raise ValueError('strict facade must inherit the shared CPU adapter')
+    if declaration.get('default-features') is not False:
+        raise ValueError('strict facade must retain explicit disabled defaults')
+
+
+def shared_dependency_regressions():
+    root = Path(__file__).resolve().parents[2]
+    workspace = tomllib.loads((root / 'Cargo.toml').read_text())
+    facade = tomllib.loads((root / 'crates/brynja-strict/Cargo.toml').read_text())
+    validate_shared_dependency(workspace, facade)
+    for target, key, value in (
+        ('shared', 'default-features', True),
+        ('shared', 'default-features', None),
+        ('facade', 'workspace', False),
+        ('facade', 'path', '../brynja-crypto-cpu-std'),
+        ('facade', 'version', '=0.1.1'),
+        ('facade', 'default-features', True),
+    ):
+        changed_workspace, changed_facade = copy.deepcopy((workspace, facade))
+        declaration = (changed_workspace['workspace']['dependencies'] if target == 'shared'
+                       else changed_facade['dependencies'])['brynja-crypto-cpu-std']
+        if value is None:
+            declaration.pop(key)
+        else:
+            declaration[key] = value
+        try:
+            validate_shared_dependency(changed_workspace, changed_facade)
+        except ValueError:
+            continue
+        raise AssertionError(f'accepted shared dependency regression: {target}/{key}')
+    print('Strict facade rejects six shared inheritance/default regressions')

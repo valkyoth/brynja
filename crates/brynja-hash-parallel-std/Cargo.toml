@@ -18,7 +18,7 @@ strict-acceleration = ["strict-execution", "brynja-hash-parallel/hardened-batch-
 [dependencies]
 brynja-core = { workspace = true }
 brynja-hash-parallel = { workspace = true }
-brynja-crypto-cpu-std = { workspace = true, optional = true }
+brynja-crypto-cpu-std = { workspace = true, optional = true, default-features = true }
 brynja-crypto-cpu = { workspace = true, optional = true, features = ["hardened-execution"] }
 
 [lints]

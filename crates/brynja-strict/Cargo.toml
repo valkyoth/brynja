@@ -13,7 +13,7 @@ default = []
 acceleration = ["brynja-crypto-cpu-std/strict-sha2-acceleration", "brynja-crypto-cpu-std/strict-sha3-acceleration", "brynja-crypto-cpu-std/strict-kmac-acceleration", "brynja-crypto-cpu-std/strict-tuplehash-acceleration", "brynja-hash-parallel-std/strict-acceleration"]
 
 [dependencies]
-brynja-crypto-cpu-std = { path = "../brynja-crypto-cpu-std", version = "=0.1.1", default-features = false, features = ["strict-sha2", "strict-sha3", "strict-kmac", "strict-tuplehash", "strict-batch"] }
+brynja-crypto-cpu-std = { workspace = true, default-features = false, features = ["strict-sha2", "strict-sha3", "strict-kmac", "strict-tuplehash", "strict-batch"] }
 brynja-hash-parallel-std = { path = "../brynja-hash-parallel-std", version = "=0.1.0", default-features = false, features = ["strict-execution"] }
 
 [lints]

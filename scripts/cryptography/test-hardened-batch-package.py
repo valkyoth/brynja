@@ -68,6 +68,20 @@ def graph_checks(module):
             {'id': 'consumer', 'features': []},
         ]}}
         module.validate_graph(metadata, roots, consumer)
+        # Cargo needs optional archives to resolve manifests, but excludes them
+        # from this consumer's enabled graph. Reproduce the native Mac failure.
+        for optional in ('brynja-mac-kmac', 'brynja-hash-tuple'):
+            roots[optional] = root / optional
+            module.validate_graph(metadata, roots, consumer)
+        for ordinary in (False, True):
+            module.validate_graph(metadata, roots, consumer, ordinary=ordinary)
+            for optional in ('brynja-mac-kmac', 'brynja-hash-tuple'):
+                changed = copy.deepcopy(metadata)
+                changed['packages'].append({
+                    'name': optional, 'id': optional, 'source': None,
+                    'manifest_path': str(roots[optional] / 'Cargo.toml')})
+                changed['resolve']['nodes'].append({'id': optional, 'features': []})
+                rejects(lambda: module.validate_graph(changed, roots, consumer, ordinary=ordinary))
         for kind in ('registry', 'workspace', 'ordinary', 'missing', 'extra'):
             changed = copy.deepcopy(metadata)
             if kind == 'registry':
@@ -78,6 +92,7 @@ def graph_checks(module):
                 changed['resolve']['nodes'][0]['features'].append('batch-execution')
             elif kind == 'missing':
                 changed['packages'].pop(0)
+                changed['resolve']['nodes'].pop(0)
             else:
                 changed['packages'].append({'name': 'unexpected'})
             rejects(lambda: module.validate_graph(changed, roots, consumer))
@@ -193,6 +208,7 @@ def main():
         ("package['source'] is not None or", 'False or'),
         ("Path(package['manifest_path']).resolve() != (directory / 'Cargo.toml').resolve()", 'False'),
         ("if not ordinary and set(node['features']) & set(ORDINARY.get(name, [])):", 'if False:'),
+        ('if actual != expected:', 'if not actual <= expected:'),
     )
     for before, after in changes:
         assert source.count(before) == 1
@@ -207,7 +223,7 @@ def main():
         except AssertionError:
             continue
         raise AssertionError('package-checker mutant survived: ' + before)
-    print('Hardened package checker: diagnostics, graph provenance, 153 exact paired sources, three public type-source pairs and five enforcement mutants PASS')
+    print('Hardened package checker: diagnostics, graph provenance, inactive optional manifests, 153 exact paired sources, three public type-source pairs and six enforcement mutants PASS')
 
 
 if __name__ == '__main__':

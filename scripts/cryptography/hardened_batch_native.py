@@ -94,7 +94,7 @@ def validate_result(key, text, lane):
     elif key == 'package':
         marker = ('Hardened batch package acceptance: PASS; ownership=137; substitutions/conversions=16; '
                   f'1.98.1; {target(lane)}; simd=True')
-        if lines.count(marker) != 1 or lines.count('Packaged cleanup/dispatch compiled mutants: 11 rejected') != 1:
+        if lines.count(marker) != 1 or lines.count('Packaged cleanup/dispatch compiled mutants: 43 rejected') != 1:
             raise ValueError('native package acceptance missing')
         for package, *_ in suites.SUITES:
             if lines.count('Packaged hardened tests/doctests: PASS; ' + package) != 1:

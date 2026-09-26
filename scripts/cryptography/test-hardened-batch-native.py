@@ -43,7 +43,7 @@ def outputs(lane):
     result['parallel_bench'] = parallel.synthetic('prefer', kernel == 'Neon')
     result['package'] = '\n'.join('Packaged hardened tests/doctests: PASS; ' + package
                                   for package, *_ in native.suites.SUITES)
-    result['package'] += '\nPackaged cleanup/dispatch compiled mutants: 11 rejected\n'
+    result['package'] += '\nPackaged cleanup/dispatch compiled mutants: 43 rejected\n'
     result['package'] += ('Hardened batch package acceptance: PASS; ownership=137; substitutions/conversions=16; '
                           f'1.98.1; {native.target(lane)}; simd=True\n')
     return result
@@ -60,10 +60,20 @@ def record(lane):
 
 
 def validation():
+    import hardened_batch_package_cases as cases
+    # Bind the expected transcript to the real campaign, not just a synthetic
+    # success fixture that can remain stale together with the validator.
+    assert len(tuple(cases.compiled_mutants(True))) == 43
     count = 0
     for lane in native.LANES:
         original = record(lane)
         native.validate(original)
+        for rejected in (0, 11, 42, 44):
+            changed = copy.deepcopy(original)
+            changed['results']['package']['output'] = changed['results']['package']['output'].replace(
+                'compiled mutants: 43 rejected', f'compiled mutants: {rejected} rejected')
+            rejects(lambda: native.validate(changed))
+            count += 1
         for key, value in (('schema', True), ('version', '0.24.47'), ('lane', 'unknown'),
                            ('commit', 'bad'), ('tree', 'bad'), ('features', '+avx2'),
                            ('compiler', 'release: 1.90.0\nhost: ' + native.target(lane)),

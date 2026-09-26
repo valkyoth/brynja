@@ -31,6 +31,9 @@ ORDINARY = {
     'brynja-hash-sha3': ['batch-execution'],
     'brynja-crypto-cpu-std': ['sha256-batch', 'sha512-batch', 'keccak-batch'],
 }
+# The shared packager supplies these optional manifests for Cargo resolution.
+# Neither is activated by this consumer, even with ordinary batching enabled.
+MANIFEST_ONLY = {'brynja-mac-kmac', 'brynja-hash-tuple'}
 
 
 def run(command, cwd, environment):
@@ -71,9 +74,11 @@ def manifest(roots, ordinary=False):
 
 
 def validate_graph(metadata, roots, consumer, ordinary=False):
-    expected = set(roots) | {'hardened-batch-external'}
-    if {p['name'] for p in metadata['packages']} != expected:
-        raise ValueError('unexpected packaged dependency closure')
+    expected = (set(roots) - MANIFEST_ONLY) | {'hardened-batch-external'}
+    actual = {p['name'] for p in metadata['packages']}
+    if actual != expected:
+        raise ValueError('unexpected packaged dependency closure: '
+                         f'missing={sorted(expected - actual)}; extra={sorted(actual - expected)}')
     packages = {p['id']: p for p in metadata['packages']}
     for node in metadata['resolve']['nodes']:
         package = packages[node['id']]

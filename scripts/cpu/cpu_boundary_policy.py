@@ -258,7 +258,10 @@ def validate_packages(root: Path) -> None:
     workspace = read_toml(root / "Cargo.toml")["workspace"]["dependencies"]
     expected_pins = {CPU: "=0.1.1", DETECTOR: "=0.1.1", SHA2: "=0.1.0"}
     for name, version in expected_pins.items():
-        if workspace.get(name) != {"path": f"crates/{name}", "version": version}:
+        expected = {"path": f"crates/{name}", "version": version}
+        if name == DETECTOR:
+            expected["default-features"] = False
+        if workspace.get(name) != expected:
             fail(f"workspace dependency pin drifted: {name}")
     cpu = manifest(root, CPU)
     detector = manifest(root, DETECTOR)

@@ -70,6 +70,24 @@ def test() -> None:
         policy.validate(root)
         document = root / policy.POLICY
 
+        # The strict facade inherits this explicit default-off workspace edge.
+        # Keep the whole entry exact: accepting the false flag must not relax
+        # version/path identity or permit extra implicitly activated features.
+        pin = ('brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", '
+               'version = "=0.1.1", default-features = false }')
+        for broken in (
+            pin.replace(', default-features = false', ''),
+            pin.replace('default-features = false', 'default-features = true'),
+            pin.replace('version = "=0.1.1"', 'version = "0.1.1"'),
+            pin.replace('path = "crates/brynja-crypto-cpu-std"', 'path = "crates/unreviewed"'),
+            pin.replace('false }', 'false, features = ["runtime-execution"] }'),
+        ):
+            replace(root / 'Cargo.toml', pin, broken)
+            require_rejection(root, 'workspace dependency pin drifted: brynja-crypto-cpu-std')
+            reset(root)
+        policy.validate(root)
+        print('CPU workspace pin rejects five default-feature/path/version/activation regressions')
+
         # A valid inner source review still requires its enclosing policy pin.
         with patch.object(policy, "EXPECTED_POLICY_SHA256",
                           "888dd5bfb1c9589d187f1ed5772ff07bb2507050480ed7a1733f99f7bbcb1cc8"):

@@ -217,7 +217,7 @@
     "crates/brynja-hash-sha2/src/sha512_t.rs": "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
     "docs/hardened-in-place.md": "476cc1f53b6450c937f6869947d1979272a337f9a1583f9f7feb5652f3d707c4",
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
-    "docs/x86-sha512-execution.md": "5dfce24baf4565a302286721b32d97895db5cd90ee3dd19e14cbbd96a839d0ba",
+    "docs/x86-sha512-execution.md": "5d38f31ba53533a83a50496a5eea48d2b9f6501b560b396d62ce60e6e5a94d1d",
     "package-policy.toml": "3c98804ad84efdd7bf3feaaf56f37b6875d5fbf0d2759c039c139868549e811f",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
     "scripts/ci/install-sde.sh": "72f37ac72ae30b72f7155f09a51343ff9eecdb226c5898aad53eb3c0e0fa9c86",

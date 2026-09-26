@@ -4,20 +4,20 @@
   "owner_review": "accepted-correctness-with-residuals",
   "captures": {
     "intel-x86_64": {
-      "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/intel-x86_64.json",
-      "sha256": "3d4835bc44ab4ee635e86a4a250de93af7371d99b79e890126272e779dea5cbc"
+      "path": "assurance/sha1-hardened-observations/v0.24.49/intel-x86_64.json",
+      "sha256": "30ec591f5c5b3f42d1d69b69b9e80b640114dd63266778cbf105a647dba1e29e"
     },
     "aws-aarch64": {
-      "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/aws-aarch64.json",
-      "sha256": "18d0fc427e41f7f5e63af8d12a2a223328c022abf12f2ea112b0da311b781e5d"
+      "path": "assurance/sha1-hardened-observations/v0.24.49/aws-aarch64.json",
+      "sha256": "38dce4b10aa536c5df2cea970a38ba1870834bd99d7ff247c3dc52307ae77fd5"
     },
     "amd-x86_64": {
-      "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/amd-x86_64.json",
-      "sha256": "e22a6cb2d2515232db4d1cdb313ff1a2b6998edf053bb83abd16e7b7ca42f0d0"
+      "path": "assurance/sha1-hardened-observations/v0.24.49/amd-x86_64.json",
+      "sha256": "ed46e0b63711bdf21058328b75b58d2aac6ec262d0893043ea89dbdcf66035d6"
     },
     "apple-m2-aarch64": {
-      "path": "assurance/sha1-hardened-observations/v0.24.42/867d3ebc/apple-m2-aarch64.json",
-      "sha256": "078fd9684f8c1703bb2d1578738d0400b048d0e4b76ef6890eaad5a72352c054"
+      "path": "assurance/sha1-hardened-observations/v0.24.49/apple-m2-aarch64.json",
+      "sha256": "b5c3e0357edd1667128475f4af611e15768bcca57d08f2d81dad2566780d153f"
     }
   }
 }

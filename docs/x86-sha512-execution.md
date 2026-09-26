@@ -1,7 +1,9 @@
 # Dedicated x86 SHA-512 execution
 
-Status: v0.24.49 pentest follow-up; owner retest and register-residual disposition
-pending. Final evidence and release checks pending. No native SHA512 host measured.
+Status: v0.24.49 release candidate. Both owner-supplied retests are recorded;
+F1 is closed at the opaque-kernel boundary, with caller/platform limits retained.
+Native runtime evidence is collected; final release checks remain pending.
+No native dedicated x86 SHA512 host measured; its execution evidence remains SDE.
 
 ## Exact capability
 
@@ -59,8 +61,10 @@ SHA-512 compression kernels a narrower, separately tested normal-return
 boundary: their secret loads/computation/stores occur within opaque assembly,
 followed by scratch and working-register erasure before exit. This does not
 extend that guarantee to every caller, portable fallback or other kernel.
-All sixteen accelerated ports are implemented. Final native ABI qualification
-and independent retest remain pending; see the
+All sixteen accelerated ports are implemented. The supplied retest closes F1 at
+the opaque-kernel boundary, not at every caller frame. Native functional testing
+does not establish platform-wide register erasure or dedicated SHA512 silicon
+qualification; see the
 [source-bound checks and inventory](../assurance/register-cleanup/README.md)
 and the [compiler/platform handoff](../assurance/register-cleanup/pentest-handoff.md).
 
@@ -151,10 +155,10 @@ native performance, timing, heterogeneous-core/migration evidence, independent
 cryptographic verification, FIPS validation or military approval. Do not request
 a larger C8i assuming it adds the missing feature.
 
-Still required before milestone completion: owner retest and the F1 register
-residual disposition recorded in the [pentest report](../security/pentest/v0.24.49.md), final
-source-bound evidence and the existing release verification. Existing Kani
+Both owner retests and the F1 boundary disposition are recorded in the
+[pentest report](../security/pentest/v0.24.49.md). Final source-bound evidence
+integration and existing release verification remain required. Existing Kani
 portable arithmetic/ownership proofs do not verify SHA512 intrinsics; no such
-claim is made. Native indices have not been rebound to this development delta;
-their old PASS records do not qualify the new code. The existing evidence-reuse workflow is
+claim is made. Historical native PASS records do not qualify changed code;
+current captures retain their exact source identities. The existing evidence-reuse workflow is
 unchanged; unrelated implementations must not be rerun merely for these notes.

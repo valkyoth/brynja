@@ -1,8 +1,19 @@
 # Brynja v0.24.49
 
-Development candidate: dedicated x86 SHA-512 execution, awaiting owner retest
-and register-residual disposition. Not ready for release or final evidence collection yet.
-No crates are selected for publication.
+Release candidate: dedicated x86 SHA-512 execution, bounded opaque-kernel
+register cleanup, scoped owners and the separate strict-only facade.
+Both owner-supplied retests are recorded in the
+[pentest ledger](../security/pentest/v0.24.49.md): no open Critical/High/Medium/Low
+findings; F1 is closed at the opaque-kernel boundary, not as whole-call erasure.
+Native Linux Intel/Arm, Apple M2 and Windows MSVC runtime collections passed.
+Linux strict portable/accelerated sessions passed; Apple/Windows strict sessions
+reject as designed, with support planned for v0.24.51/v0.24.50 respectively.
+Dedicated x86 SHA512 has SDE evidence only, not native-silicon qualification.
+Final local release verification and GitHub approval remain pending.
+No crates are selected for publication. The incremental implementation notes
+below are historical; their pending-retest/integration wording is superseded by
+this status. Caller/platform residuals and informational instrumented-build
+limitations remain in force.
 
 - Add the separate `brynja-strict` facade over protected modern SHA-2,
   SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash and batch sessions. Its
@@ -157,12 +168,14 @@ See the [API and acceptance status](../docs/x86-sha512-execution.md).
 The [pentest handoff](../assurance/register-cleanup/pentest-handoff.md) reconciles
 the implemented ports, compiler/ABI matrix and retained evidence without
 conflating author checks with independent retest or native qualification.
-F1 remains open. The implementation rollout is not a whole-call erasure proof.
+The supplied retest closed F1 at the opaque-kernel boundary. The implementation
+rollout is not a whole-call erasure proof.
 Both compiler endpoints pass development instruction, owner-cleanup and SDE
 checks; packaged consumers, five compiled kernel mutants, ten cleanup/identity
 mutants and startup/route probes pass. Generic CPU Miri and emulated ASan/LSan
 also pass; neither establishes native instruction qualification. Shared assurance
 metadata, full workspace tests/doctests, Clippy, documentation and dependency
-isolation checks pass. The owner retest/disposition, final source-bound evidence and
-release verification remain pending. No release-gate or evidence-reuse policy
+isolation checks pass. Owner retests and native runtime collection have since
+completed; final evidence integration and release verification remain pending.
+No release-gate or evidence-reuse policy
 changes.

@@ -4,24 +4,24 @@
   "owner_review": "accepted-correctness-with-residuals",
   "lanes": {
     "amd-x86_64": {
-      "artifact": "assurance/md5-hardened-observations/v0.24.44/amd-x86_64.json",
-      "sha256": "e3e45c6429022dc6668468e6ad94a872844405fda18c043a86594969e3dabaea",
-      "commit": "98cdad39a8064c5b52586895cea8ad359b0324f8"
+      "artifact": "assurance/md5-hardened-observations/v0.24.44/amd-x86_64-v02449.json",
+      "sha256": "256df4fcce1d96b900c8fb10c6779b0f59a50f0e520c03251ff2c42094381a60",
+      "commit": "7a9e9cc6d309d2b0e447498f340fd26a095e2866"
     },
     "intel-x86_64": {
-      "artifact": "assurance/md5-hardened-observations/v0.24.44/intel-x86_64.json",
-      "sha256": "71b021f10dcf043b48a393b5b6c957b0049bf9ee4fd76ecd9aff602bd7dc71f4",
-      "commit": "98cdad39a8064c5b52586895cea8ad359b0324f8"
+      "artifact": "assurance/md5-hardened-observations/v0.24.44/intel-x86_64-v02449.json",
+      "sha256": "99a7a0235e8ef7deb307e6408cf1b5c441c734df64f247cd4821df32d4b07b9b",
+      "commit": "7a9e9cc6d309d2b0e447498f340fd26a095e2866"
     },
     "aws-aarch64": {
-      "artifact": "assurance/md5-hardened-observations/v0.24.44/aws-aarch64.json",
-      "sha256": "5bc844fa685398ec5ada62302b40b08c140529f25d961e7efd413f9f705de7c4",
-      "commit": "98cdad39a8064c5b52586895cea8ad359b0324f8"
+      "artifact": "assurance/md5-hardened-observations/v0.24.44/aws-aarch64-v02449.json",
+      "sha256": "d1fd94be6129ed6691f32a1987b9de8026eef2ee900b1fb6d7a2f59e98c6bf22",
+      "commit": "7a9e9cc6d309d2b0e447498f340fd26a095e2866"
     },
     "apple-m2-aarch64": {
-      "artifact": "assurance/md5-hardened-observations/v0.24.44/apple-m2-aarch64.json",
-      "sha256": "f7de781e0d3fbc6de1d7246bb45ae9ba1789150952a1fbd3b5b7b305af820e88",
-      "commit": "98cdad39a8064c5b52586895cea8ad359b0324f8"
+      "artifact": "assurance/md5-hardened-observations/v0.24.44/apple-m2-aarch64-v02449.json",
+      "sha256": "3225aff90c61798a834fa32dcdb8c15ef851b928b86de5629bf786cf1e4d6515",
+      "commit": "7a9e9cc6d309d2b0e447498f340fd26a095e2866"
     }
   }
 }

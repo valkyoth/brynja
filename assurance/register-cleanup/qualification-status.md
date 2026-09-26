@@ -1,11 +1,13 @@
 # v0.24.49 register-cleanup qualification status
 
-Updated 2026-09-25. This is a work checklist, **not a new release gate**.
-The subsequent two-tester follow-up supersedes the earlier pre-pentest readiness:
-the owner approved implementation of a [strict protected profile](../../docs/strict-hardening-profile.md).
-Unsupported-target admission and protected storage/worker stacks remain open.
-The original five findings are reported fixed at their stated boundaries; the
-two new Medium findings are not closed by that result. Keep both raw reports.
+Updated 2026-09-26. This is a work checklist, **not a new release gate**.
+The owner-approved [strict protected profile](../../docs/strict-hardening-profile.md)
+and strict-only facade are implemented. Both supplied retests report no open
+Critical/High/Medium/Low findings; F1 is closed at the opaque-kernel boundary.
+Native runtime collection passed on Linux Intel/Arm, Apple M2 and Windows MSVC.
+Linux strict sessions passed; Apple/Windows strict admission rejects by design.
+Final evidence integration and release verification remain pending. The detailed
+checkpoint history below is not a current list of unimplemented features.
 The [pentest ledger](../../security/pentest/v0.24.49.md) retains the historical
 checks and their limitations. Earlier checkpoint paragraphs are not a current
 todo list: several were superseded by later implementation and tests.

@@ -1,6 +1,18 @@
 # Changelog
 
-## 0.24.49 development
+## 0.24.49 candidate
+
+- Record both owner-supplied retests: no open Critical/High/Medium/Low findings;
+  F1 is closed at the opaque-kernel boundary, not as whole-process erasure.
+  Instrumented builds and platform/caller residuals retain their stated limits.
+- Collect native Linux Intel/Arm, Apple M2 and Windows MSVC runtime evidence.
+  Linux strict portable/accelerated checks pass; Apple/Windows strict sessions
+  correctly reject and remain planned for v0.24.51/v0.24.50 respectively.
+  Dedicated x86 SHA512 still has SDE evidence only, not native qualification.
+  Final local verification and GitHub approval remain pending. No crates are
+  selected for publication. The entries below retain implementation history;
+  their incremental pending-work statements are superseded by this status and
+  the [current pentest ledger](security/pentest/v0.24.49.md).
 
 - Add `brynja-strict`, a thin strict-only modern facade with mandatory protected
   session dependencies, explicit acceleration and no ordinary/raw/legacy exports.
@@ -124,7 +136,8 @@
   unchanged. See [release notes](release-notes/RELEASE_NOTES_0.24.49.md).
 - Reconcile compiler/platform coverage and prepare the
   [independent pentest handoff](assurance/register-cleanup/pentest-handoff.md).
-  F1 remains open; final native qualification and release verification are separate.
+  F1 was subsequently closed by the supplied retest at its stated boundary;
+  native qualification and release verification remain separate.
 
 ## 0.24.48 candidate
 

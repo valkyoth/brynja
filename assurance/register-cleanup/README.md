@@ -6,9 +6,13 @@ before another pentest. SHA-224/256, SHA-512, Keccak (single-state and batch), l
 use this boundary in production;
 the fixture directly includes their actual private source files, rather than
 testing duplicate implementations. The scoped caller rollout and bounded author
-reviews are complete; full-call erasure is not established. Independent retest
-and final native qualification remain pending. Release gates are unchanged.
-Finding F1 remains open.
+reviews are complete; full-call erasure is not established. Both owner-supplied
+retests are recorded in the [ledger](../../security/pentest/v0.24.49.md), with F1
+closed at the opaque-kernel boundary. Linux Intel/Arm, Apple M2 and Windows MSVC
+runtime collection passed; final evidence integration and release verification
+remain pending. Dedicated x86 SHA512 native qualification remains unavailable.
+Release gates are unchanged. Older checkpoint notes below retain their original
+scope and do not supersede the current ledger.
 
 For the current pre-pentest checklist, use
 [qualification status](qualification-status.md). It separates completed

@@ -2,14 +2,18 @@
 """Native orchestration must reject fake routes, incomplete tests and drift."""
 import argparse
 import copy
+import contextlib
 import hashlib
 import importlib.util
 import json
+import io
 import subprocess
 import tempfile
+import sys
 from pathlib import Path
 from unittest.mock import patch
 import hardened_native as native
+import hardened_package
 
 spec = importlib.util.spec_from_file_location('capture', Path(__file__).with_name('capture-sha1-hardened-native.py'))
 capture = importlib.util.module_from_spec(spec)
@@ -26,11 +30,33 @@ def result(lane):
     return dict(hosted='test result: ok. 1 passed; 0 failed;\nSHA1_HOSTED_HARDENED: '+(kernel if arm else 'portable'),
         portable='test result: ok. 4 passed; 0 failed;',
         static=f'test result: ok. 4 passed; 0 failed;\nHARDENED_SHA1_EXECUTION: {kernel}; blocks=512\nSHA1_HARDENED_OPERATIONAL: {kernel}; actual hardened startup and digest passed',
-        packaged='Independent hardened SHA-1 oracle: 1135 bit messages, public and secret destinations\nPackaged hardened ownership/classification negatives: 24 rejected\nHardened output/quarantine/padding compiled mutants: 10 rejected\nCompiled source-owner and scratch cleanup removals: 10 rejected',
-        codegen=f'Hardened SHA-1 MIR/LLVM/assembly: PASS; 1.98.1; {target}; seven owned regions; no register-erasure claim')
+        packaged='Independent hardened SHA-1 oracle: 1135 bit messages, public and secret destinations\nPackaged hardened ownership/classification negatives: 38 rejected\nHardened output/quarantine/padding compiled mutants: 10 rejected\nScoped execution compiled lifecycle/cleanup mutants: 24 rejected\nCompiled source-owner and scratch cleanup removals: 10 rejected',
+        codegen=f'Hardened SHA-1 MIR/LLVM/assembly: PASS; 1.98.1; {target}; seven owned regions; kernel register boundary checked; no whole-API erasure claim')
+
+
+def compiler_driver_alignment():
+    """Exercise the actual driver's output contract, without invoking rustc."""
+    path = Path(__file__).with_name('check-sha1-hardened-codegen.py')
+    spec = importlib.util.spec_from_file_location('native_codegen_driver', path)
+    driver = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(driver)
+    for lane in native.LANES:
+        expected = result(lane)['codegen']
+        target = expected.split('; ')[2]
+        output = io.StringIO()
+        with patch.object(sys, 'argv', [str(path), '--compiler', '1.98.1', '--target', target]), \
+             patch.object(driver.evidence, 'compile_and_check') as compile_check, \
+             contextlib.redirect_stdout(output):
+            driver.main()
+        assert output.getvalue().strip() == expected
+        assert [call.args[1:] for call in compile_check.call_args_list] == [
+            ('1.98.1', target, 'abort'), ('1.98.1', target, 'unwind')]
 
 
 def main():
+    compiler_driver_alignment()
+    cases = hardened_package.negative_cases()
+    assert len(cases) == len(set(cases)) == 38
     count = 0
     for lane in native.LANES:
         good = result(lane)
@@ -42,7 +68,11 @@ def main():
                 try: native.validate_results(changed, lane)
                 except ValueError: count += 1
                 else: raise AssertionError('accepted missing native result: '+key)
-        for original, replacement in (('blocks=512','blocks=0'), ('HARDENED_SHA1_EXECUTION:', 'test prefix HARDENED_SHA1_EXECUTION:'), ('1135', '1134'), ('24 rejected','22 rejected')):
+        for original, replacement in (('blocks=512','blocks=0'), ('HARDENED_SHA1_EXECUTION:', 'test prefix HARDENED_SHA1_EXECUTION:'), ('1135', '1134'),
+                                      ('38 rejected', '24 rejected'), ('38 rejected', '37 rejected'),
+                                      ('38 rejected', '39 rejected'), ('24 rejected', '22 rejected'),
+                                      ('Scoped execution compiled lifecycle/cleanup mutants: 24 rejected', ''),
+                                      ('kernel register boundary checked; no whole-API erasure claim', 'no register-erasure claim')):
             changed = {k:v.replace(original, replacement) for k,v in good.items()}
             if changed == good: continue
             try: native.validate_results(changed, lane)

@@ -64,9 +64,8 @@ fn independent_hardened_bit_oracle() -> Result<(), Error> {
     print(f'Independent hardened SHA-1 oracle: {len(rows)} bit messages, public and secret destinations')
 
 
-def negatives(consumer, environment):
-    path = consumer / 'src/lib.rs'
-    before = path.read_bytes()
+def negative_cases():
+    """The compiled inventory, also bound by the native-capture regression test."""
     cases = []
     for owner in ('Authority', 'Executor', "Stream<'static>", "in_place::Sha1Workspace<'static>", "in_place::Sha1<'static, 'static>"):
         for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
@@ -86,6 +85,13 @@ def negatives(consumer, environment):
         ('fn use_it(a: &brynja_legacy_sha1::hardened_execution::Executor) -> Result<(), brynja_legacy_sha1::hardened_execution::Error> { let mut s=a.start()?; drop(s.finalize_secret(&mut [0;20])?); s.update(b"x") }', 'E0382'),
         ('fn use_it(a: &brynja_legacy_sha1::hardened_execution::Executor) { let mut b=[0;20]; if let Ok(output)=a.hash_secret(b"x",&mut b) { let _ = output.clone(); } }', 'E0599'),
     ])
+    return cases
+
+
+def negatives(consumer, environment):
+    path = consumer / 'src/lib.rs'
+    before = path.read_bytes()
+    cases = negative_cases()
     try:
         for source, code in cases:
             path.write_text(source)

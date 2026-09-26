@@ -38,12 +38,13 @@ def validate_results(results, lane):
     require('SHA1_HOSTED_HARDENED: '+selected in results['hosted'].splitlines(), 'hosted route')
     require(re.search(r'^test result: ok\. 1 passed; 0 failed;', results['hosted'], re.M), 'hosted tests')
     for token in ('Independent hardened SHA-1 oracle: 1135 bit messages, public and secret destinations',
-                  'Packaged hardened ownership/classification negatives: 24 rejected',
+                  'Packaged hardened ownership/classification negatives: 38 rejected',
                   'Hardened output/quarantine/padding compiled mutants: 10 rejected',
+                  'Scoped execution compiled lifecycle/cleanup mutants: 24 rejected',
                   'Compiled source-owner and scratch cleanup removals: 10 rejected'):
         require(token in results['packaged'].splitlines(), 'packaged '+token)
     target = 'x86_64-unknown-linux-gnu' if LANES[lane] == 'x86' else 'aarch64-apple-darwin' if lane == 'apple-m2-aarch64' else 'aarch64-unknown-linux-gnu'
-    require(f'Hardened SHA-1 MIR/LLVM/assembly: PASS; 1.98.1; {target}; seven owned regions; no register-erasure claim' in results['codegen'].splitlines(), 'native compiler cleanup')
+    require(f'Hardened SHA-1 MIR/LLVM/assembly: PASS; 1.98.1; {target}; seven owned regions; kernel register boundary checked; no whole-API erasure claim' in results['codegen'].splitlines(), 'native compiler cleanup')
 
 
 def collect(lane, features, env):

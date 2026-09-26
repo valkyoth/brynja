@@ -58,6 +58,31 @@ def policy_tests() -> None:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(acceptance.ROOT / relative, target)
         acceptance.validate(root)
+        # Lockfile-only release bumps still require a current review binding.
+        # Reproduce both stale and missing pins independently of source drift.
+        lock = acceptance.FIXTURE / "Cargo.lock"
+        review = root / acceptance.HASHES
+        original_review = review.read_text(encoding="utf-8")
+        original_lock = (root / lock).read_text(encoding="utf-8")
+        line = f'"{lock.as_posix()}" = "{acceptance.digest(original_lock)}"'
+        assert original_review.count(line) == 1
+        for mode in ("stale", "missing", "lock-drift"):
+            try:
+                if mode == "lock-drift":
+                    (root / lock).write_text(original_lock + '\n# unreviewed lock change\n', encoding="utf-8")
+                else:
+                    replacement = '' if mode == "missing" else f'"{lock.as_posix()}" = "' + '0' * 64 + '"'
+                    review.write_text(original_review.replace(line, replacement), encoding="utf-8")
+                try:
+                    acceptance.validate(root)
+                except acceptance.ExecutionError as error:
+                    assert str(error) == "execution acceptance changed; reopen review", str(error)
+                else:
+                    raise AssertionError("accepted " + mode + " lockfile binding")
+            finally:
+                review.write_text(original_review, encoding="utf-8")
+                (root / lock).write_text(original_lock, encoding="utf-8")
+        acceptance.validate(root)
         for relative in (acceptance.FIXTURE / "src/lib.rs", Path(next(iter(frozen["files"]))),
                          Path("scripts/checks.sh")):
             target = root / relative
@@ -65,6 +90,7 @@ def policy_tests() -> None:
             target.write_text(original + "\n// unreviewed change\n", encoding="utf-8")
             rejects(acceptance.validate, root)
             target.write_text(original, encoding="utf-8")
+    print("SP 800-185 lock binding rejects stale, missing and changed-lock regressions")
 
 
 def executable_tests() -> None:

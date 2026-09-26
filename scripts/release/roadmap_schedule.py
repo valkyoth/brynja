@@ -41,7 +41,7 @@ def validate_manifest(data):
         raise ValueError("roadmap schedule schema or immutable boundary drift")
     records = data["milestones"]
     versions = [r["version"] for r in records]
-    if len(records) != 2158 or len(set(versions)) != len(records):
+    if len(records) != 2160 or len(set(versions)) != len(records):
         raise ValueError("missing or duplicate scheduled milestone")
     if len({r["id"] for r in records}) != len(records):
         raise ValueError("duplicate stable milestone identity")

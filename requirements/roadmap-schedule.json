@@ -695,45 +695,63 @@
     {
       "id": "0.24.50",
       "version": "0.24.50",
-      "title": "RISC-V Explicit Experimental Execution",
+      "title": "Windows Strict Protected Profiles",
       "requires": [
         "0.24.49"
       ],
-      "scope_sha256": "399aca82f7baa4a1f6e328c0c689499025e60bd051f84444ecd0ff5dc18e06d9"
+      "scope_sha256": "c50397649e5b86492d950b2d3e6a0808508b2a570285304a02851fc20a5c599f"
     },
     {
       "id": "0.24.51",
       "version": "0.24.51",
-      "title": "Facade Features And Package Reachability",
+      "title": "macOS Strict Protected Profiles",
       "requires": [
         "0.24.50"
       ],
-      "scope_sha256": "407f2ee925a0a1fe6c2f977985c042df09ba6c47b333ab02376bc33051421e57"
+      "scope_sha256": "9fe4ae86132426e47741d683fd45ab137d77dd49a99b742098d22ec4b8eae3d6"
     },
     {
       "id": "0.24.52",
       "version": "0.24.52",
-      "title": "Acceleration Public Consumer Acceptance",
+      "title": "RISC-V Explicit Experimental Execution",
       "requires": [
         "0.24.51"
       ],
-      "scope_sha256": "b94fd4c855014a96a70ed3c0014930a7fb6f64a5180cf586c566fa0414f0011b"
+      "scope_sha256": "399aca82f7baa4a1f6e328c0c689499025e60bd051f84444ecd0ff5dc18e06d9"
     },
     {
       "id": "0.24.53",
       "version": "0.24.53",
-      "title": "Acceleration Native Evidence Sweep",
+      "title": "Facade Features And Package Reachability",
       "requires": [
         "0.24.52"
       ],
-      "scope_sha256": "a3956da527eb25c41108933ccad320c8a32bb7e4c06be0771476d8df05da20eb"
+      "scope_sha256": "407f2ee925a0a1fe6c2f977985c042df09ba6c47b333ab02376bc33051421e57"
     },
     {
       "id": "0.24.54",
       "version": "0.24.54",
-      "title": "Opt-In Acceleration Final Closure",
+      "title": "Acceleration Public Consumer Acceptance",
       "requires": [
         "0.24.53"
+      ],
+      "scope_sha256": "b94fd4c855014a96a70ed3c0014930a7fb6f64a5180cf586c566fa0414f0011b"
+    },
+    {
+      "id": "0.24.55",
+      "version": "0.24.55",
+      "title": "Acceleration Native Evidence Sweep",
+      "requires": [
+        "0.24.54"
+      ],
+      "scope_sha256": "11e9dbbf410daf825cbcc3cd2e090d97342559ff9b2369be8d73e8f4f00eaac8"
+    },
+    {
+      "id": "0.24.56",
+      "version": "0.24.56",
+      "title": "Opt-In Acceleration Final Closure",
+      "requires": [
+        "0.24.55"
       ],
       "scope_sha256": "78ebfbb7655f0b507e6508c20e2794e393dd6e9fc634078029a92ffab26f4de3"
     },
@@ -744,7 +762,7 @@
       "requires": [
         "0.24.11",
         "0.24.17",
-        "0.24.54"
+        "0.24.56"
       ],
       "scope_sha256": "711f3bd1c4a742f024490be45a37547ab105092c65ac22fb74bec3cced16961a"
     },
@@ -12609,7 +12627,7 @@
       "title": "Reusable crypto consumer boundaries - Authority And Complete Public API Contract",
       "requires": [
         "0.12.0",
-        "0.24.54",
+        "0.24.56",
         "0.351.6"
       ],
       "scope_sha256": "8a513aee7ae8a7c397cb414c7d0fe3aa5a2265cbb9062ece06f9447f4b4ff120"
@@ -13524,7 +13542,7 @@
       "title": "Original Keccak operational acceleration and reuse - Authority And Complete Public API Contract",
       "requires": [
         "0.352.5",
-        "0.24.54",
+        "0.24.56",
         "0.378.8"
       ],
       "scope_sha256": "d81d40e7e8da3093d56889ea2d89141b3d32c3bd56800a81cafa2ffa2413abde"
@@ -19877,5 +19895,5 @@
       "disposition": "Import/merge is the present operation; the family cannot claim bidirectional closure before explicit export acceptance."
     }
   ],
-  "audited_graph_sha256": "e0e89b564e74fe9ee81031e79c6563327900df8ec317c417b720d21053468473"
+  "audited_graph_sha256": "279300d37a852ae9fa6a25a75d5d8801e3cc3894fa1b2e02cc33500efc22bff5"
 }

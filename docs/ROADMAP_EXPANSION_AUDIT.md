@@ -9,8 +9,10 @@ The counts immediately below describe the 2026-09-05 expansion. The
 adds 25 pre-HMAC stops, v0.24.30–v0.24.54. The subsequent
 [reusable cryptography plan](CRYPTO_REUSE_PLAN.md) adds 129 stops across
 15 new family/API contracts and strengthens two existing backend chains.
-Current totals are **2158** milestones, **114** public checkpoints and
-**2044** development tags, with **141** expansion families. Historical stable
+The 2026-09-26 platform extension adds Windows and macOS strict profiles at
+v0.24.50 and v0.24.51, moving the five unstarted backfill stops to v0.24.52–v0.24.56.
+Current totals are **2160** milestones, **114** public checkpoints and
+**2046** development tags, with **141** expansion families. Historical stable
 capability identities are preserved; only distant, unstarted versions move.
 
 All five groups from the gap review now have explicit owners in both

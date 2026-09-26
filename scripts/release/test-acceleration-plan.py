@@ -48,7 +48,7 @@ def main():
         reject(data=changed)
     changed = copy.deepcopy(schedule)
     hmac = next(r for r in changed["milestones"] if r["version"] == "0.25.0")
-    hmac["requires"].remove("0.24.54")
+    hmac["requires"].remove("0.24.56")
     changed["audited_graph_sha256"] = roadmap_schedule.graph_hash(changed)
     reject(data=changed)
     print(f"acceleration usability plan rejects {count} profile, claim and prerequisite regressions")

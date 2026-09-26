@@ -12,8 +12,9 @@ validator rejects numbering, ordering, title, or scope drift.
 
 See the [ordering review](ROADMAP_ORDERING_AUDIT.md) for the future family
 splits and the [schedule register](../requirements/roadmap-schedule.json) for
-old-to-new identities and prerequisite edges. Existing v0.24.x identities are
-preserved; the opt-in acceleration backfill adds v0.24.30–v0.24.54 before HMAC.
+old-to-new identities and prerequisite edges. Milestones through v0.24.49 are
+preserved; Windows/macOS strict support occupies v0.24.50–v0.24.51 and shifts
+the five unstarted backfill stops to v0.24.52–v0.24.56 before HMAC.
 
 
 The [five-part expansion review](ROADMAP_EXPANSION_AUDIT.md) and [scope register](ROADMAP_EXPANSION_REGISTER.json) assign the additional family/API and late-protocol work. Earlier implemented APIs retain their existing claims; backfills are new future work.
@@ -240,7 +241,7 @@ features select implementations, not proof of CPU support. No public route may
 require repository-only evidence cfgs or an independent attestation service.
 
 The [acceleration usability audit](ACCELERATION_USABILITY_AUDIT.md) assigns
-v0.24.30–v0.24.54 to existing-family backfills before HMAC. This is planned work,
+v0.24.30–v0.24.56 to existing-family backfills before HMAC. This is planned work,
 not activation of the current candidates. Future family design must inventory
 dedicated instructions, single-state SIMD, independent-message SIMD, hosted
 threading and ordinary/hardened public profiles. Add review-sized numbered
@@ -402,11 +403,13 @@ triggers, `v1.0.0-rc.1`, and `v1.0.0` are defined by
 | `0.24.47` | Keccak Multi-Buffer SIMD | Implement bounded ordinary independent-state Keccak SIMD batches and public SHA-3/SHAKE/cSHAKE batch APIs over x86 AVX2 and AArch64 NEON, separate from existing single-state accelerated permutations. |
 | `0.24.48` | Hardened Multi-Buffer Hash Owners | Add hardened ownership to the new SHA-2 and Keccak batch APIs and integrate eligible batched leaves into ParallelHash without losing secret classification or bounded scheduling. |
 | `0.24.49` | x86 Dedicated SHA-512 Backend | Implement a first-party x86_64 SHA-512 instruction backend with the exact sha512, Rust-implied avx2 and avx/OS-state bundle, Rust 1.90 compatibility, public SHA-512-family routing and explicitly measured or emulator-only evidence. |
-| `0.24.50` | RISC-V Explicit Experimental Execution | Make existing RV64 Zknh SHA-2 candidates usable through explicit default-off target-specialized experimental APIs with QEMU correctness evidence, truthful no-native-qualification status and no automatic runtime dispatch. |
-| `0.24.51` | Facade Features And Package Reachability | Expose completed modern acceleration through explicit no_std facade features and separate hosted companion packages; expose legacy acceleration only from explicitly selected legacy crates and preserve independent publishing. |
-| `0.24.52` | Acceleration Public Consumer Acceptance | Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep. |
-| `0.24.53` | Acceleration Native Evidence Sweep | Collect exact-source native correctness, performance, timing and resource observations after frozen consumer acceptance on available AMD, qualifying Intel, AWS Arm and Apple M2 machines; keep QEMU and unavailable ISA claims separate. |
-| `0.24.54` | Opt-In Acceleration Final Closure | Close the acceleration backfill before HMAC with operational public APIs, complete profile and evidence dispositions, default-portable examples and separate implementation, acceleration, independent-review and FIPS status. |
+| `0.24.50` | Windows Strict Protected Profiles | Implement Windows x86_64 and AArch64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support. |
+| `0.24.51` | macOS Strict Protected Profiles | Implement macOS AArch64 and x86_64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support. |
+| `0.24.52` | RISC-V Explicit Experimental Execution | Make existing RV64 Zknh SHA-2 candidates usable through explicit default-off target-specialized experimental APIs with QEMU correctness evidence, truthful no-native-qualification status and no automatic runtime dispatch. |
+| `0.24.53` | Facade Features And Package Reachability | Expose completed modern acceleration through explicit no_std facade features and separate hosted companion packages; expose legacy acceleration only from explicitly selected legacy crates and preserve independent publishing. |
+| `0.24.54` | Acceleration Public Consumer Acceptance | Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep. |
+| `0.24.55` | Acceleration Native Evidence Sweep | Collect exact-source native correctness, performance, timing and resource observations after frozen consumer acceptance on available AMD, qualifying Intel, AWS Arm, Apple M2, Intel Mac and Windows machines for every claimed OS/architecture; keep QEMU and unavailable ISA claims separate. |
+| `0.24.56` | Opt-In Acceleration Final Closure | Close the acceleration backfill before HMAC with operational public APIs, complete profile and evidence dispositions, default-portable examples and separate implementation, acceleration, independent-review and FIPS status. |
 | `0.25.0` | Complete Generic HMAC Construction | Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement the complete HMAC construction with long-key normalization, empty and block-boundary keys, arbitrary message partitioning, exact and policy-bounded truncation, constant-time verification, affine finalization, and hardened destruction; expose typed HMAC instantiations for every modern pre-1.0 fixed-output SHA-2 and SHA-3 digest without confusing MAC tags with unkeyed digests. |
 | `0.25.1` | Isolated HMAC-SHA-1 And HMAC-MD5 Compatibility | Implement explicit legacy-only HMAC-SHA-1 and HMAC-MD5 adapters over the exact v0.24 implementations, with RFC vectors, truncation policy, constant-time verification, secret-state cleanup, and hard type and package isolation; keep them absent from modern defaults, TLS, PKIX, OpenPGP modern profiles, FIPS approved services, and generic algorithm negotiation. |
 | `0.25.2` | HMAC Public API Usability Acceptance | Close the HMAC chain with downstream fixtures for every modern SHA-2/SHA-3 instantiation and the separately selected legacy SHA-1/MD5 adapters, exercising one-shot, streaming, long keys, truncated verification, invalid tags, package installation, cleanup evidence, and compile-time prevention of digest/tag or modern/legacy substitution. |

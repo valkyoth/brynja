@@ -5,7 +5,9 @@ research and reusable API owners, with larger protocols last. This is planned
 work, not a change in current implementation or verification status.
 
 The [ordering review](ROADMAP_ORDERING_AUDIT.md) splits oversized future
-families and records prerequisites without renumbering any v0.24.x work.
+families and records prerequisites. The Windows/macOS strict-profile additions
+occupy v0.24.50–v0.24.51; only the five unstarted backfill stops move, to
+v0.24.52–v0.24.56. Current implementation and release-gate policy are unchanged.
 
 The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any
@@ -14,8 +16,8 @@ planned for v0.34.6. The former standalone hash and legacy plans are now
 consolidated into the pre-1.0 roadmap, with final release gates through v0.495.0.
 The [reusable cryptography additions](CRYPTO_REUSE_PLAN.md) cover standalone
 Brynja APIs, hardware/SIMD and error-preserving usability, not work in `eth`.
-Current generated planning coverage is 2157 non-RC rows
-(2158 milestones including the release candidate), 131 authorities, 4,462
+Current generated planning coverage is 2159 non-RC rows
+(2160 milestones including the release candidate), 131 authorities, 4,462
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 

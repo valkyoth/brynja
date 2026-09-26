@@ -1341,10 +1341,32 @@
         "rationale": "The opt-in acceleration usability backfill is planned, not runtime activation or cryptographic approval. Before each implementation, bind its exact Rust intrinsic/target-feature and platform CPU/OS-state authorities, algorithm requirements, owned-secret lifecycle and public API profiles; existing algorithm vectors do not establish missing runtime dispatch, SIMD, native measurement or cleanup coverage."
       },
       "requirement_ids": [],
+      "scope": "Implement Windows x86_64 and AArch64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support.",
+      "source_ids": [],
+      "title": "Windows Strict Protected Profiles",
+      "version": "0.24.50"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "The opt-in acceleration usability backfill is planned, not runtime activation or cryptographic approval. Before each implementation, bind its exact Rust intrinsic/target-feature and platform CPU/OS-state authorities, algorithm requirements, owned-secret lifecycle and public API profiles; existing algorithm vectors do not establish missing runtime dispatch, SIMD, native measurement or cleanup coverage."
+      },
+      "requirement_ids": [],
+      "scope": "Implement macOS AArch64 and x86_64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support.",
+      "source_ids": [],
+      "title": "macOS Strict Protected Profiles",
+      "version": "0.24.51"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "The opt-in acceleration usability backfill is planned, not runtime activation or cryptographic approval. Before each implementation, bind its exact Rust intrinsic/target-feature and platform CPU/OS-state authorities, algorithm requirements, owned-secret lifecycle and public API profiles; existing algorithm vectors do not establish missing runtime dispatch, SIMD, native measurement or cleanup coverage."
+      },
+      "requirement_ids": [],
       "scope": "Make existing RV64 Zknh SHA-2 candidates usable through explicit default-off target-specialized experimental APIs with QEMU correctness evidence, truthful no-native-qualification status and no automatic runtime dispatch.",
       "source_ids": [],
       "title": "RISC-V Explicit Experimental Execution",
-      "version": "0.24.50"
+      "version": "0.24.52"
     },
     {
       "boundary": {
@@ -1355,7 +1377,7 @@
       "scope": "Expose completed modern acceleration through explicit no_std facade features and separate hosted companion packages; expose legacy acceleration only from explicitly selected legacy crates and preserve independent publishing.",
       "source_ids": [],
       "title": "Facade Features And Package Reachability",
-      "version": "0.24.51"
+      "version": "0.24.53"
     },
     {
       "boundary": {
@@ -1366,7 +1388,7 @@
       "scope": "Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.",
       "source_ids": [],
       "title": "Acceleration Public Consumer Acceptance",
-      "version": "0.24.52"
+      "version": "0.24.54"
     },
     {
       "boundary": {
@@ -1374,10 +1396,10 @@
         "rationale": "The opt-in acceleration usability backfill is planned, not runtime activation or cryptographic approval. Before each implementation, bind its exact Rust intrinsic/target-feature and platform CPU/OS-state authorities, algorithm requirements, owned-secret lifecycle and public API profiles; existing algorithm vectors do not establish missing runtime dispatch, SIMD, native measurement or cleanup coverage."
       },
       "requirement_ids": [],
-      "scope": "Collect exact-source native correctness, performance, timing and resource observations after frozen consumer acceptance on available AMD, qualifying Intel, AWS Arm and Apple M2 machines; keep QEMU and unavailable ISA claims separate.",
+      "scope": "Collect exact-source native correctness, performance, timing and resource observations after frozen consumer acceptance on available AMD, qualifying Intel, AWS Arm, Apple M2, Intel Mac and Windows machines for every claimed OS/architecture; keep QEMU and unavailable ISA claims separate.",
       "source_ids": [],
       "title": "Acceleration Native Evidence Sweep",
-      "version": "0.24.53"
+      "version": "0.24.55"
     },
     {
       "boundary": {
@@ -1388,7 +1410,7 @@
       "scope": "Close the acceleration backfill before HMAC with operational public APIs, complete profile and evidence dispositions, default-portable examples and separate implementation, acceleration, independent-review and FIPS status.",
       "source_ids": [],
       "title": "Opt-In Acceleration Final Closure",
-      "version": "0.24.54"
+      "version": "0.24.56"
     },
     {
       "boundary": null,

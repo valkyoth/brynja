@@ -8,7 +8,7 @@ from pathlib import Path
 import roadmap_schedule
 
 REGISTER = Path(__file__).resolve().parents[2] / "docs/ROADMAP_EXPANSION_REGISTER.json"
-REGISTER_SHA256 = "e14c51005bd45166c5fa0ceecce09e140f1b78a8d0640d1a252f2aa0831435b4"
+REGISTER_SHA256 = "bb8c0109eed58fbbb60848fac5d4f5c4f4857f129724d215a65cdda1e9c4558d"
 DOMAINS = {"crypto", "legacy", "research", "password", "utility", "format", "protocol"}
 
 

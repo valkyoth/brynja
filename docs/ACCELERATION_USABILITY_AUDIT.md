@@ -31,8 +31,8 @@ These are availability gaps, not missing mathematical hash algorithms.
 
 | Family / owning packages | Existing optimization | Downstream gap | Planned closure |
 | --- | --- | --- | --- |
-| SHA-224/256 / `brynja-hash-sha2`, `brynja-crypto-cpu` | x86 SHA, AArch64 SHA2, RV64 Zknh | Static/hosted routes blocked; hardened states portable | .33–.34, .50 |
-| SHA-384/512, named /224 and /256, general SHA-512/t / same packages | AArch64 SHA512, RV64 Zknh | Static routes blocked; hosted SHA512 only reports/falls back; general-t hosted API incomplete | .33–.34, .49–.50 |
+| SHA-224/256 / `brynja-hash-sha2`, `brynja-crypto-cpu` | x86 SHA, AArch64 SHA2, RV64 Zknh | Static/hosted routes blocked; hardened states portable | .33–.34, .52 |
+| SHA-384/512, named /224 and /256, general SHA-512/t / same packages | AArch64 SHA512, RV64 Zknh | Static routes blocked; hosted SHA512 only reports/falls back; general-t hosted API incomplete | .33–.34, .49, .52 |
 | SHA-3/SHAKE / `brynja-hash-sha3` | Isolated AVX2 and Arm SHA3 Keccak kernels | No public sponge integration; hardened states portable | .35, .37 |
 | cSHAKE / `brynja-hash-sha3` | Same possible Keccak reuse | Ordinary and hardened public integration missing | .36–.37 |
 | KMAC/KMACXOF / `brynja-mac-kmac` | Hardened cSHAKE reuse | Keyed accelerated owner and selection missing | .38 |
@@ -136,10 +136,19 @@ contract for future work.
 
 ## Evidence and release flow
 
-The backfill uses v0.24.30–v0.24.54: contracts and safe selection first, public
-family integration and missing kernels next, packaged acceptance at .52,
-native evidence at .53, final closure at .54 before HMAC. No new runtime route
+The backfill now uses v0.24.30–v0.24.56: contracts and safe selection first, public
+family integration and missing kernels next, Windows strict profiles at .50,
+macOS strict profiles at .51, packaged acceptance at .54,
+native evidence at .55, final closure at .56 before HMAC. No new runtime route
 is enabled by this planning update, and .29 still needs its own retest/evidence.
+
+The 2026-09-26 platform extension reuses shared lifecycle interfaces and existing
+SIMD/hardware kernels but requires separate OS protection and native qualification.
+Both milestones include protected mappings and worker stacks, strict-facade
+reachability, complete owned cleanup and failure-path regressions. Review OS
+feasibility first: an unavailable protection must not become a silent downgrade
+or a completed-support claim. Preserve the existing Linux contract and keep
+unsupported targets fail-closed until their required guarantees are established.
 
 Freeze and run real public examples before the final native sweep. A changed
 kernel, dispatch path, dependency, compiler or cleanup invalidates affected
@@ -147,7 +156,8 @@ evidence. Project-owned captures are reproducible observations, not independent
 cryptographic audits. Exact source/binary/command/result binding is required;
 a new remote-attestation or PKI service is not a release prerequisite.
 
-Use native AMD, genuinely qualifying Intel, AWS Arm and Apple M2 where available.
+Use native AMD, genuinely qualifying Intel, AWS Arm, Apple M2, Intel Mac and
+Windows hosts for each claimed OS/architecture.
 Record missing ISA, experimental routes and QEMU separately. Keep lengthy
 checks local/headless and impact-scoped at development tags; full gates remain
 mandatory at public checkpoints. Unsafe, secret and execution-authority changes

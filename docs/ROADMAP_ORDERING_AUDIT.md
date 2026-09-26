@@ -7,6 +7,10 @@ The current expansion and final gate positions are recorded in
 The later [acceleration usability backfill](ACCELERATION_USABILITY_AUDIT.md)
 adds v0.24.30–v0.24.54 before HMAC with explicit prerequisite edges. It does
 not renumber existing milestones or change the v0.25.2 publishing checkpoint.
+The 2026-09-26 extension subsequently inserts Windows and macOS strict profiles
+at v0.24.50 and v0.24.51. Only the five unstarted v0.24.50–v0.24.54 stops move,
+to v0.24.52–v0.24.56; released milestones, v0.24.49, HMAC at v0.25.0 and
+publication at v0.25.2 are unchanged.
 
 Date: 2026-09-05. Baseline: `dbe6f4b`.
 This is a planning review, not an implementation or cryptographic assessment.

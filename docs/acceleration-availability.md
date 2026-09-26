@@ -70,7 +70,7 @@ cannot satisfy an operational acceleration promise.
   for lanes, temporaries, metadata, outputs and every lifecycle exit. Ordinary
   acceleration does not approve hardened execution. Unsupported hardened routes
   stay portable under Prefer or reject under Require; never degrade ownership.
-- RV64 Zknh currently has QEMU-only instruction evidence. v0.24.50 may define an
+- RV64 Zknh currently has QEMU-only instruction evidence. v0.24.52 may define an
   explicitly experimental ordinary static route, not qualified native support.
   No hardened RV64 or RVV claim is scheduled by this inventory.
 

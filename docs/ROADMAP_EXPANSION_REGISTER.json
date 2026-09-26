@@ -7136,7 +7136,7 @@
       "tests": "compiled first-party choice/equality/selection consumer examples, valid digest versus rejected operation distinction, injected update/finalize/quarantine failure, caller buffers unchanged or cleared according to classification, no_std and dependency-closure tests",
       "requires": [
         "0.12.0",
-        "0.24.54",
+        "0.24.56",
         "0.351.6"
       ],
       "domain": "crypto",
@@ -8006,7 +8006,7 @@
       "tests": "independent original Keccak byte/bit vectors, explicit SHA3 non-equivalence, tiny-keccak differential as test-only oracle, all rate/tail/streaming boundaries, non-default required-backend failure and standalone packaged hashing of independently checked structured byte streams",
       "requires": [
         "0.352.5",
-        "0.24.54",
+        "0.24.56",
         "0.378.8"
       ],
       "domain": "crypto",

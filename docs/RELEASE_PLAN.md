@@ -205,7 +205,7 @@ features select implementations, not proof of CPU support. No public route may
 require repository-only evidence cfgs or an independent attestation service.
 
 The [acceleration usability audit](ACCELERATION_USABILITY_AUDIT.md) assigns
-v0.24.30–v0.24.54 to existing-family backfills before HMAC. This is planned work,
+v0.24.30–v0.24.56 to existing-family backfills before HMAC. This is planned work,
 not activation of the current candidates. Future family design must inventory
 dedicated instructions, single-state SIMD, independent-message SIMD, hosted
 threading and ordinary/hardened public profiles. Add review-sized numbered
@@ -4848,7 +4848,63 @@ Exit criteria:
 - Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
 - `v0.24.49 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.50 - RISC-V Explicit Experimental Execution
+### v0.24.50 - Windows Strict Protected Profiles
+
+Status: planned
+
+Plan scope: Implement Windows x86_64 and AArch64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support.
+
+Goal: Make the strict facade usable on Windows without weakening the existing protected-resource contract.
+
+Deliverables:
+
+- Complete v0.24.49; first review Windows allocation, residency, dump exposure, thread-stack and ABI authorities against every current strict guarantee. Establish supported OS/compiler baselines before implementing unsafe platform boundaries.
+- Implement guarded protected mappings, verified residency, acquisition rollback and complete clearing before unlock/free. Protect worker stacks and intermediate results, including bounded ParallelHash workers, without ordinary-memory or unprotected-stack fallback.
+- Integrate all strict SHA-2/general-t, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, batch and ParallelHash APIs. Cover applicable isolated hardened SHA-1/MD5 adapters without exporting legacy algorithms from brynja-strict.
+- Reuse the existing portable, SIMD and dedicated-instruction implementations with explicit opt-in CPU authority. Review Windows calling conventions, preserved registers, stack handling and unwind behavior; retain caller-buffer, fatal-abort and privileged-snapshot limitations.
+- Keep shared platform interfaces reusable for macOS, preserve Linux behavior and publish compiled downstream examples and accurate per-platform status tables. Do not change process-wide security settings implicitly.
+
+Verification:
+
+- Test every OS acquisition failure and rollback, residency/resource limits, guard boundaries, clearing on success/error/cancellation/unwind, partial worker creation, deterministic joins and quarantine. Inject missing protections and require constructor failure, never weaker fallback.
+- Run packaged strict-facade consumers, ownership/export negatives and differential cases across portable and actual SIMD/hardware routes; inspect optimized register/spill cleanup under Windows ABIs and both panic strategies.
+- Collect native Windows evidence for each claimed architecture, including protected worker execution and route-specific correctness/resource measurements. Cross-compilation and emulation do not qualify a native lane; retain Linux regression coverage and obtain the existing exceptional pentest/retest.
+
+Exit criteria:
+
+- Deliver operational protected profiles with source-bound native evidence, not merely unsupported-target rejection. If an OS cannot satisfy the existing strict contract, keep that target unsupported and obtain an explicit owner decision on a revised contract or numbered follow-up; do not silently weaken the guarantee or mark this milestone complete. Independent cryptographic review and certification remain separate claims.
+- Preserve the existing release gates and evidence-reuse rules; obtain the exceptional owner pentest PASS retest for the new platform/unsafe boundaries before tagging.
+- `v0.24.50 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.51 - macOS Strict Protected Profiles
+
+Status: planned
+
+Plan scope: Implement macOS AArch64 and x86_64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support.
+
+Goal: Make the strict facade usable on macOS using shared interfaces but independently verified Darwin protections.
+
+Deliverables:
+
+- Complete v0.24.50; review Darwin mapping, residency, dump exposure, thread-stack and ABI authorities against every current strict guarantee. Establish supported macOS/compiler baselines; do not assume Windows or Linux primitives have identical semantics.
+- Implement guarded protected mappings, verified residency and rollback, complete clearing before unlock/free, and protected worker stacks and intermediate results. Cover bounded ParallelHash threading without ordinary-memory or unprotected-stack fallback.
+- Integrate all strict SHA-2/general-t, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, batch and ParallelHash APIs plus applicable isolated hardened SHA-1/MD5 adapters; keep the modern strict facade free of legacy exports.
+- Reuse existing portable, Apple Arm and Intel SIMD/hardware implementations with explicit opt-in authority. Inspect Darwin register preservation, stack and unwind behavior; retain caller-buffer, fatal-abort and privileged-snapshot limitations and avoid implicit process-wide policy changes.
+- Reuse platform-independent lifecycle tests and interfaces from Windows while keeping OS-specific implementations and qualification separate. Update downstream examples and status tables and preserve Linux/Windows behavior.
+
+Verification:
+
+- Test OS failures, lock/residency limits, guard boundaries, complete cleanup, worker creation/join failures, cancellation, unwind and quarantine; reject missing protections rather than weakening strict construction.
+- Run packaged strict-facade consumers, ownership/export negatives, portable/accelerated differential tests and optimized ABI/register/spill checks under both panic strategies; test every promised byte/bit, XOF, batch and threaded profile.
+- Collect native Apple Silicon and Intel Mac evidence before claiming those respective targets, exercising real protected workers and SIMD/hardware routes. Cross-compilation cannot substitute for native qualification; run affected Linux/Windows regressions and obtain the existing exceptional pentest/retest.
+
+Exit criteria:
+
+- Deliver operational protected profiles with source-bound native evidence, not merely unsupported-target rejection. If an OS cannot satisfy the existing strict contract, keep that target unsupported and obtain an explicit owner decision on a revised contract or numbered follow-up; do not silently weaken the guarantee or mark this milestone complete. Independent cryptographic review and certification remain separate claims.
+- Preserve the existing release gates and evidence-reuse rules; obtain the exceptional owner pentest PASS retest for the new platform/unsafe boundaries before tagging.
+- `v0.24.51 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.52 - RISC-V Explicit Experimental Execution
 
 Status: planned
 
@@ -4858,7 +4914,7 @@ Goal: Permit deliberate supported-ISA use without pretending the available non-Z
 
 Deliverables:
 
-- Complete v0.24.49 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Complete v0.24.51 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Require complete compiler-declared target features and healthy sessions; preserve portability on generic RV64 and keep unqualified hardened paths disabled until owned-cleanup checks pass.
 - Publish exact emulator version/model, compiler, corpus and limitations; independent review and native measurements remain separate status axes.
 - Record RVV/Zvknha/Zvknhb and vectorized legacy/hash opportunities as separately numbered future work before implementation; retain post-1.0 community native qualification where hardware is unavailable.
@@ -4873,9 +4929,9 @@ Verification:
 Exit criteria:
 
 - Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
-- `v0.24.50 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.52 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.51 - Facade Features And Package Reachability
+### v0.24.53 - Facade Features And Package Reachability
 
 Status: planned
 
@@ -4885,7 +4941,7 @@ Goal: Ensure users can install and select the real routes without repository-onl
 
 Deliverables:
 
-- Complete v0.24.50 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Complete v0.24.52 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Complete feature forwarding for byte/bit, streaming, fixed/XOF, general-t and batch profiles; ordinary Cargo features never imply CPU support or FIPS approval.
 - Document leaf-only, modern facade, hosted preferred/required and legacy-only examples, plus forced portable deployment and no global default.
 - Verify package includes, exact dependency closure, rustdoc cfgs, MSRV and no unintended std/external/legacy edges; keep the next publication checkpoint at v0.25.2.
@@ -4900,9 +4956,9 @@ Verification:
 Exit criteria:
 
 - Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
-- `v0.24.51 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.53 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.52 - Acceleration Public Consumer Acceptance
+### v0.24.54 - Acceleration Public Consumer Acceptance
 
 Status: planned
 
@@ -4912,7 +4968,7 @@ Goal: Demonstrate actual consumer usability before expensive final evidence coll
 
 Deliverables:
 
-- Complete v0.24.51 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Complete v0.24.53 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Use official/independent expected outputs on representative real data; require actual instruction/vector counters in assurance observations without changing production outputs.
 - Exercise default portable, explicitly preferred and required routes plus unsupported/quarantined cases; mark experimental RISC-V and other unmeasured routes separately.
 - Freeze source, package and fixture identities; reject blanket skipping of every accelerated route on a capable qualifying test lane.
@@ -4927,19 +4983,19 @@ Verification:
 Exit criteria:
 
 - Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
-- `v0.24.52 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.54 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.53 - Acceleration Native Evidence Sweep
+### v0.24.55 - Acceleration Native Evidence Sweep
 
 Status: planned
 
-Plan scope: Collect exact-source native correctness, performance, timing and resource observations after frozen consumer acceptance on available AMD, qualifying Intel, AWS Arm and Apple M2 machines; keep QEMU and unavailable ISA claims separate.
+Plan scope: Collect exact-source native correctness, performance, timing and resource observations after frozen consumer acceptance on available AMD, qualifying Intel, AWS Arm, Apple M2, Intel Mac and Windows machines for every claimed OS/architecture; keep QEMU and unavailable ISA claims separate.
 
 Goal: Publish reproducible project-owned evidence sufficient for ordinary opt-in availability without pretending it is independent verification.
 
 Deliverables:
 
-- Complete v0.24.52 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Complete v0.24.54 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Bind commit, selected package graph, compiler, build flags, CPU/OS features, command, result and artifact digests; remove private host names, addresses and keys.
 - Run per-backend KAT/differentials, workload-sensitive single/batch/thread benchmarks and relevant side-channel/cleanup observations; report regressions and scalar-preferred thresholds honestly.
 - Use scoped/local and headless shards for lengthy evidence; reuse old records only with an explicit unchanged implementation/dependency/compiler disposition. Changed routes get fresh captures.
@@ -4954,9 +5010,9 @@ Verification:
 Exit criteria:
 
 - Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
-- `v0.24.53 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.55 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.54 - Opt-In Acceleration Final Closure
+### v0.24.56 - Opt-In Acceleration Final Closure
 
 Status: planned
 
@@ -4966,7 +5022,7 @@ Goal: Finish the pre-HMAC availability audit with no hidden candidate-only route
 
 Deliverables:
 
-- Complete v0.24.53 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Complete v0.24.55 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
 - Resolve every inventory row to implemented opt-in, explicitly experimental opt-in, or a concrete numbered follow-up for unavailable hardware/no justified optimization; no blanket unadmitted disposition may hide an implemented promised route.
 - Update leaf/facade README examples and status tables without changing portable mathematical completion or claiming speedups/secret guarantees beyond evidence.
 - Apply the same contract to every later hash, MAC, cipher, arithmetic/PQC implementation and protocol consumer; new relevant optimizations receive review-sized child milestones before their final family closure.
@@ -4981,7 +5037,7 @@ Verification:
 Exit criteria:
 
 - Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
-- `v0.24.54 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.56 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - Complete Generic HMAC Construction
 
@@ -41102,7 +41158,7 @@ Status: planned
 
 Plan scope: Authenticate Rust ownership and existing Brynja constant-time, secret-owner and execution contracts; freeze every operation, parameter, ownership, encoding, error and resource profile for Reusable crypto consumer boundaries in `brynja-core`, including every required downstream use and explicit modern/legacy/research policy. Incomplete operations remain In progress.
 
-Goal: complete the admission review unit for Reusable crypto consumer boundaries after v0.12.0, v0.24.54, v0.351.6, without importing Ethereum policy into Brynja.
+Goal: complete the admission review unit for Reusable crypto consumer boundaries after v0.12.0, v0.24.56, v0.351.6, without importing Ethereum policy into Brynja.
 
 Deliverables:
 
@@ -44204,7 +44260,7 @@ Status: planned
 
 Plan scope: Authenticate Original Keccak submission specifications and the accepted original-domain hash contract; freeze every operation, parameter, ownership, encoding, error and resource profile for Original Keccak operational acceleration and reuse in `brynja-hash-keccak`, including every required downstream use and explicit modern/legacy/research policy. Incomplete operations remain In progress.
 
-Goal: complete the admission review unit for Original Keccak operational acceleration and reuse after v0.352.5, v0.24.54, v0.378.8, without importing Ethereum policy into Brynja.
+Goal: complete the admission review unit for Original Keccak operational acceleration and reuse after v0.352.5, v0.24.56, v0.378.8, without importing Ethereum policy into Brynja.
 
 Deliverables:
 

@@ -106,6 +106,10 @@ def matrices(group: str) -> list[dict]:
                   for name, marker in (
                       ('all_six_official_fixed_examples_match', 'parallelhash-official'),
                       ('all_six_official_xof_examples_match', 'parallelhashxof-official')))
+    for strength in (128, 256):
+        name = f'scoped_scheduled{strength}_unwind_reuse'
+        result.append(dict(name=name, marker=name, total=4, routine=list(range(4)),
+                           package='brynja-hash-parallel', features=[], target=['--test', 'scoped_scheduled']))
     return result
 
 

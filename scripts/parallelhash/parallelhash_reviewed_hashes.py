@@ -103,7 +103,7 @@ REVIEWED_HASHES = {
     'crates/brynja-hash-parallel/tests/scoped_accelerated.rs': '7e4f1ef20d3e045e32f2c7f1977abc487b151ecdc24c662e85af8bad70d8d3c6',
     'crates/brynja-hash-parallel/tests/scoped_accelerated/xof.rs': 'f82844d819b7f77579aaca703cc1791689a0e9c82f7369620376b90478b32e0d',
     'crates/brynja-hash-parallel/tests/scoped_accelerated/xof_lifecycle.rs': '8f22630256d298a7fdf4d4e7cc22812589d7f1d96a2e7505e8c012b09d1397aa',
-    'crates/brynja-hash-parallel/tests/scoped_scheduled.rs': '27755c72031d3d24f44704daf493729565c007fe5440c404468d0d6f1df20a5e',
+    'crates/brynja-hash-parallel/tests/scoped_scheduled.rs': 'aca539ee182b978db43630126f5c09d96108ad6ba20cb946b195a51e9904253c',
     'crates/brynja-hash-parallel/tests/scoped_accelerated/scheduled.rs': 'd2a162b40a48f866ce0ea884fdcc04567ec0f48bd2caeda6b965045092b51814',
     'crates/brynja-hash-parallel/tests/scoped_accelerated/scheduled_lifecycle.rs': 'c3a5af335843660a4f16fb62c15aa61fba745b6de2601bbb8cfba2c0b9b3427e',
     'crates/brynja-hash-parallel/Cargo.toml': '3626f6faf23e720e89d420fcb05cc75f6d47cd0520d9245e39a0579aa8a1a46e',

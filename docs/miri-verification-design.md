@@ -51,12 +51,15 @@ invalid-output and empty-output case in both profiles. All six official KMAC
 and six KMACXOF vectors also run individually in both profiles, preserving both
 ordinary and scoped-secret comparisons and destination clearing. All 12 official
 ParallelHash/ParallelHashXOF vectors likewise retain their complete native
-checks and run as separate cases in both profiles.
+checks and run as separate cases in both profiles. Scheduled integration unwind
+and reuse tests run as four cases per strength: collector unwind, reader unwind,
+forgotten reader, and out-of-order computation with ordered merging. Every
+unwind/forgotten-reader case retains comparison of the reused and fresh owners.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-twenty-seven registered matrices now run separately. Thus a complete all-family
-routine catalog has 432 tasks (330 case/chunk tasks) and extended has 3,520
-(3,418 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
+twenty-nine registered matrices now run separately. Thus a complete all-family
+routine catalog has 440 tasks (338 case/chunk tasks) and extended has 3,528
+(3,426 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
 tests and six ParallelHash API tests additionally run as separate exact tests,
 with inputs/assertions unchanged.
 The original invocations keep the SHA-3 empty-owner and KMAC secret-output tests
@@ -150,6 +153,10 @@ passed in 32.4 seconds. All six separately scheduled ParallelHash API tests
 passed in 11.2–161.1 seconds, and its representative fixed/XOF official vectors
 passed in 55.8/53.8 seconds. Expected NIST digests are unchanged. The remaining
 KMAC grouped invocation passed all 19 selected tests in 101.2 seconds.
+The residual ParallelHash grouped probe reached the integration scheduled-unwind
+test but hit its 300-second diagnostic limit; that attempt remains incomplete,
+not a successful receipt. Its unwind/reuse scenarios are now separately selected
+without reducing their original inputs or comparisons.
 Native all-feature library/vector checks passed all 99 tests on both Rust
 1.90.0 and 1.98.1, including the complete vectors and lifecycle matrices.
 Hostile-selector checks, strict scoped Clippy, no-default-feature compilation,
@@ -158,6 +165,17 @@ A local overhead diagnostic measured source hashing (2,945 files) at
 0.27 seconds, tool identity at 1.83 seconds and planning at 0.17 seconds.
 Per-command source/tool seals deliberately remain in place; many tiny tasks
 therefore have measurable bookkeeping overhead as well as interpreter work.
+
+Scheduled-unwind follow-up: all eight integration cases passed under the pinned
+Miri in 21.8–120.2 host seconds each. Both strengths retain collector unwind,
+reader unwind, forgotten-reader cleanup, reuse-versus-fresh comparisons and
+ordered merging after out-of-order computation. Full ParallelHash all-feature
+tests/doctests passed all 350 checks on each of Rust 1.90.0 and 1.98.1. Native
+hostile-selector tests, scoped Clippy, 87 runner regressions, 51 assurance tests,
+planner, scope and review-binding regressions also passed. These diagnostics
+are not a completed all-family verification receipt. After this split the
+remaining broad ParallelHash `--tests` command passed its 15 retained tests in
+59.5 host seconds, under the same 300-second cap that previously expired.
 
 ## Recommendation
 

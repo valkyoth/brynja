@@ -5,13 +5,33 @@ use brynja_hash_parallel::{
 };
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
+fn miri_selection() -> Option<usize> {
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<usize>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(usize::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < 4));
+    selected
+}
+
 macro_rules! check {
     ($test:ident, $plan:ident, $workspace:ident, $width:expr) => {
         #[test]
         fn $test() -> Result<(), Error> {
+            let selected = miri_selection();
+            let mut executed = 0usize;
             let plan = hash::$plan::new(b"input spans several leaves", 8)?;
             let mut workspace = api::$workspace::new();
             for mode in 0..3 {
+                if selected.is_some_and(|case| case != mode) {
+                    continue;
+                }
+                executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
                 let mut leaf = [0xa5; $width];
                 let caught = catch_unwind(AssertUnwindSafe(|| {
                     let _: Result<Result<(), Error>, Error> =
@@ -51,18 +71,26 @@ macro_rules! check {
                 assert_ne!(actual, [0xa5; 32]);
             }
             // Computation may be scheduled out of order while merge remains ordered.
-            let plan = hash::$plan::new(b"two leaves", 8)?;
-            let mut first = [0; $width];
-            let mut last = [0; $width];
-            let second = plan.job(1)?.execute(&mut last)?;
-            let initial = plan.job(0)?.execute(&mut first)?;
-            workspace.with(&plan, b"", |mut root| {
-                root.merge(initial)?;
-                root.merge(second)?;
-                root.finalize_public(&mut [0; 32], Public::acknowledge())
-            })??;
-            assert_eq!(first, [0; $width]);
-            assert_eq!(last, [0; $width]);
+            if selected.is_none_or(|case| case == 3) {
+                executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
+                let plan = hash::$plan::new(b"two leaves", 8)?;
+                let mut first = [0; $width];
+                let mut last = [0; $width];
+                let second = plan.job(1)?.execute(&mut last)?;
+                let initial = plan.job(0)?.execute(&mut first)?;
+                workspace.with(&plan, b"", |mut root| {
+                    root.merge(initial)?;
+                    root.merge(second)?;
+                    root.finalize_public(&mut [0; 32], Public::acknowledge())
+                })??;
+                assert_eq!(first, [0; $width]);
+                assert_eq!(last, [0; $width]);
+            }
+            assert_eq!(executed, if selected.is_some() { 1 } else { 4 });
+            #[cfg(miri)]
+            if let Some(case) = selected {
+                println!("\nMIRI_CASE_PASS: {}:{case}", stringify!($test));
+            }
             Ok(())
         }
     };

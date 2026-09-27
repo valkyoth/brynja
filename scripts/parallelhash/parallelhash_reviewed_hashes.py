@@ -15,7 +15,7 @@ REVIEWED_HASHES = {
     'crates/brynja-hash-parallel/src/xof.rs': '1c5db80504b5138bc9e5ba4ca46116536eb4c479352ee0b280a2a3e08f861300',
     'crates/brynja-hash-parallel/src/secret_encoding.rs': '4bfcef9f321794588f05840108d2de4a940957e4feb88666c71480ed5710bcf6',
     'crates/brynja-hash-parallel/src/secret_encoding/tests.rs': '6e106cb70f170bc1583b778942719c9b741eab2fb3eee489a09643e917963f5a',
-    'crates/brynja-hash-parallel/src/backend/tests.rs': 'f6e8fcbf1f1b0f918f1f3d4a356b86abec6139f6db3487d5a7c6f8ff1a3d33e5',
+    'crates/brynja-hash-parallel/src/backend/tests.rs': '4c5ab3140c8f6cab84ee47a58b4f86eb2fc7d45f65940813be1026d6c678c4a6',
     'crates/brynja-hash-parallel/src/hardened_in_place.rs': 'ec68f4ea8807a71091464e0ad501dff30448d4d5c5db09f83194c59ba9157c61',
     'crates/brynja-hash-parallel/src/hardened_in_place/backend.rs': '3cf0bcc95cbb57b80d8bf080320a4869756b177bd033f929b96776a8496d0579',
     'crates/brynja-hash-parallel/src/hardened_in_place/core_state.rs': 'ee0fae4e278f3b82abd76c276620f002cbc641d5bac8aab81637ff626de3fd28',

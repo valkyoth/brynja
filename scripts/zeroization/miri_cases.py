@@ -53,6 +53,12 @@ def matrices(group: str) -> list[dict]:
     if group == 'kmac':
         return [{'name': 'packer::framing_tests::borrowed_fragments_match_bit_oracle_at_every_alignment',
                  'marker': 'kmac-framing', 'total': 8, 'routine': list(range(8)),
+                 'package': 'brynja-mac-kmac', 'features': []},
+                {'name': 'hardened_in_place::tests::scoped_lifecycle_strength_and_verification_failures',
+                 'marker': 'kmac-scoped-lifecycle', 'total': 18, 'routine': list(range(18)),
+                 'package': 'brynja-mac-kmac', 'features': []},
+                {'name': 'hardened_in_place::xof::tests::scoped_xof_lifecycle_shapes_and_large_public_reads',
+                 'marker': 'kmac-scoped-xof-lifecycle', 'total': 16, 'routine': list(range(16)),
                  'package': 'brynja-mac-kmac', 'features': []}]
     if group == "tuplehash":
         # Both strengths, every initial residue and final width, all seven
@@ -76,6 +82,10 @@ def matrices(group: str) -> list[dict]:
             result.append({"name": f"hardened_in_place::{module}::{name}", "marker": name,
                            "total": blocks * 8, "routine": [(bit % blocks) * 8 + bit for bit in range(8)],
                            "package": "brynja-hash-parallel"})
+    result.append({'name': 'backend::tests::scoped_leaf_matches_shake_for_every_tail_and_rate_boundary',
+                   'marker': 'parallelhash-leaf', 'total': 65,
+                   'routine': [0, *(1 + length * 8 + length for length in range(8))],
+                   'package': 'brynja-hash-parallel', 'features': []})
     return result
 
 

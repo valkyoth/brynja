@@ -2,6 +2,49 @@ use super::*;
 extern crate std;
 use crate::{Fips202BitString, KmacError};
 
+pub(super) fn miri_case(total: usize) -> Option<usize> {
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<usize>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(usize::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < total));
+    selected
+}
+
+pub(super) fn miri_take(
+    selected: Option<usize>,
+    visited: &mut usize,
+    executed: &mut usize,
+) -> Result<bool, KmacError> {
+    let index = *visited;
+    *visited = visited.checked_add(1).ok_or(KmacError::InvalidBitString)?;
+    let take = selected.is_none_or(|case| case == index);
+    if take {
+        *executed = executed.checked_add(1).ok_or(KmacError::InvalidBitString)?;
+    }
+    Ok(take)
+}
+
+pub(super) fn miri_complete(
+    selected: Option<usize>,
+    visited: usize,
+    executed: usize,
+    total: usize,
+    _name: &str,
+) {
+    assert_eq!(visited, total);
+    assert_eq!(executed, if selected.is_some() { 1 } else { total });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+    }
+}
+
 #[cfg(feature = "conformance-testing")]
 #[test]
 fn borrowed_verification_rejects_equal_mismatches_across_chunks() -> Result<(), KmacError> {
@@ -80,13 +123,14 @@ fn scoped_known_answer_and_returned_secret() -> Result<(), KmacError> {
 }
 
 macro_rules! lifecycle {
-    ($workspace:ident, $width:literal) => {{
+    ($workspace:ident, $width:literal, $selected:ident, $visited:ident, $executed:ident) => {{
         let mut workspace = $workspace::new();
         let key = [0x42; 32];
         let mut called = false;
         assert!(matches!(workspace.with(&[], b"", |_| called = true), Err(KmacError::KeyTooShort)));
         assert!(!called);
         for forget in [false, true] {
+            if !miri_take($selected, &mut $visited, &mut $executed)? { continue; }
             workspace.with(&key, b"custom", |mut state| {
                 state.update(b"secret")?;
                 if forget { core::mem::forget(state); } else { state.cancel(); }
@@ -102,6 +146,7 @@ macro_rules! lifecycle {
             assert!(result.is_err()); assert!(workspace.metadata_cleared());
         }
         for size in [0, 1, $width - 1] {
+            if !miri_take($selected, &mut $visited, &mut $executed)? { continue; }
             let mut bytes = std::vec![0xa5; size];
             assert!(matches!(workspace.with(&key, b"", |state| state.finalize_tag(&mut bytes))?, Err(KmacError::TagTooShort)));
             assert!(bytes.iter().all(|b| *b == 0xa5));
@@ -109,11 +154,13 @@ macro_rules! lifecycle {
             assert!(bytes.iter().all(|b| *b == 0)); assert!(workspace.metadata_cleared());
         }
         for valid in [0, 9, 255] {
+            if !miri_take($selected, &mut $visited, &mut $executed)? { continue; }
             let mut bytes = [0xa5; $width];
             let empty = Fips202BitString::new(&[], 0).map_err(|_| KmacError::InvalidBitString)?;
             assert!(matches!(workspace.with(&key, b"", |state| state.finalize_secret_bits(empty, &mut bytes, valid))?, Err(KmacError::InvalidBitString)));
             assert_eq!(bytes, [0; $width]); assert!(workspace.metadata_cleared());
         }
+        if miri_take($selected, &mut $visited, &mut $executed)? {
         let mut tag = [0; 65];
         let _ = workspace.with(&key, b"", |state| state.finalize_tag(&mut tag))??;
         assert!(workspace.with(&key, b"", |state| state.verify(&tag))??.expose_public());
@@ -127,13 +174,18 @@ macro_rules! lifecycle {
         let candidate = Fips202BitString::new(&tag, 8).map_err(|_| KmacError::InvalidBitString)?;
         assert!(matches!(workspace.with(&key, b"", |state| state.verify_exact(empty, candidate, 519))?, Err(KmacError::InvalidBitString)));
         assert!(workspace.metadata_cleared());
+        }
     }};
 }
 
 #[test]
 fn scoped_lifecycle_strength_and_verification_failures() -> Result<(), KmacError> {
-    lifecycle!(Kmac128Workspace, 16);
-    lifecycle!(Kmac256Workspace, 32);
+    let selected = miri_case(18);
+    let mut visited = 0;
+    let mut executed = 0;
+    lifecycle!(Kmac128Workspace, 16, selected, visited, executed);
+    lifecycle!(Kmac256Workspace, 32, selected, visited, executed);
+    miri_complete(selected, visited, executed, 18, "kmac-scoped-lifecycle");
     Ok(())
 }
 

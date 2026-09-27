@@ -1,5 +1,6 @@
 use super::*;
 extern crate std;
+use crate::hardened_in_place::tests::{miri_case, miri_complete, miri_take};
 
 #[test]
 fn scoped_xof_returned_secret_matches_known_api() -> Result<(), KmacError> {
@@ -27,6 +28,9 @@ fn scoped_xof_returned_secret_matches_known_api() -> Result<(), KmacError> {
 
 #[test]
 fn scoped_xof_lifecycle_shapes_and_large_public_reads() -> Result<(), KmacError> {
+    let selected = miri_case(16);
+    let mut visited = 0;
+    let mut executed = 0;
     macro_rules! check {
         ($workspace:ident, $reference:ident) => {{
             let mut workspace = $workspace::new();
@@ -39,6 +43,9 @@ fn scoped_xof_lifecycle_shapes_and_large_public_reads() -> Result<(), KmacError>
             assert!(!called);
             for forget in [false, true] {
                 for unwind in [false, true] {
+                    if !miri_take(selected, &mut visited, &mut executed)? {
+                        continue;
+                    }
                     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                         workspace.with(&key, b"", |mut state| {
                             state.update(b"secret")?;
@@ -62,19 +69,25 @@ fn scoped_xof_lifecycle_shapes_and_large_public_reads() -> Result<(), KmacError>
                     assert!(workspace.metadata_cleared());
                 }
             }
-            workspace.with(&key, b"", |state| {
-                let mut reader = state.finalize_xof()?;
-                let mut output = [0xa5; 169];
-                reader.squeeze_public(&mut output, KmacPublicDeclassification::acknowledge())?;
-                let mut expected = [0; 169];
-                crate::$reference::new(&key, b"")?
-                    .finalize_xof()?
-                    .squeeze_public(&mut expected, KmacPublicDeclassification::acknowledge())?;
-                assert_eq!(output, expected);
-                Ok::<(), KmacError>(())
-            })??;
-            assert!(workspace.metadata_cleared());
+            if miri_take(selected, &mut visited, &mut executed)? {
+                workspace.with(&key, b"", |state| {
+                    let mut reader = state.finalize_xof()?;
+                    let mut output = [0xa5; 169];
+                    reader
+                        .squeeze_public(&mut output, KmacPublicDeclassification::acknowledge())?;
+                    let mut expected = [0; 169];
+                    crate::$reference::new(&key, b"")?
+                        .finalize_xof()?
+                        .squeeze_public(&mut expected, KmacPublicDeclassification::acknowledge())?;
+                    assert_eq!(output, expected);
+                    Ok::<(), KmacError>(())
+                })??;
+                assert!(workspace.metadata_cleared());
+            }
             for valid in [0, 9, 255] {
+                if !miri_take(selected, &mut visited, &mut executed)? {
+                    continue;
+                }
                 let mut output = [0xa5; 17];
                 assert!(matches!(
                     workspace.with(&key, b"", |state| state
@@ -101,6 +114,7 @@ fn scoped_xof_lifecycle_shapes_and_large_public_reads() -> Result<(), KmacError>
     }
     check!(KmacXof128Workspace, KmacXof128);
     check!(KmacXof256Workspace, KmacXof256);
+    miri_complete(selected, visited, executed, 16, "kmac-scoped-xof-lifecycle");
     Ok(())
 }
 

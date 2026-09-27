@@ -36,11 +36,17 @@ partial bits and secret-XOF partial bits into 59 routine / 107 extended cases.
 Routine rate coverage uses each identity's own rate-1/rate/rate+1 plus empty,
 one-byte and 339-byte multiblock messages. Every original partial-bit combination
 remains selected in both profiles, including both XOF identities and clearing.
+KMAC scoped fixed/XOF lifecycle tests run as 18/16 separate cases in both
+profiles: cancellation, forgotten owners, unwind, invalid outputs and tag
+comparison assertions remain intact. ParallelHash's scoped leaf differential
+matrix runs as nine routine cases covering every original length and tail width,
+or all 65 extended cases; each case checks both strengths and output clearing.
+Conformance-only KMAC campaigns are unchanged and remain in native testing.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-seventeen registered matrices now run separately. Thus a complete all-family
-routine catalog has 317 tasks (225 case/chunk tasks) and extended has 2,693
-(2,601 case/chunk tasks). Nine existing SHA-3 lifecycle tests additionally run
+twenty registered matrices now run separately. Thus a complete all-family
+routine catalog has 360 tasks (268 case/chunk tasks) and extended has 2,792
+(2,700 case/chunk tasks). Nine existing SHA-3 lifecycle tests additionally run
 as separate exact tests, with their inputs/assertions unchanged. The original
 integration invocation keeps the empty-owner test and discovers future tests;
 only explicitly rescheduled tests are skipped there.
@@ -102,6 +108,14 @@ All nine separated lifecycle tests passed under Miri individually, ranging from
 0.6 to 36.2 host seconds. Together with the three matrix probes, extended-only
 probe and remaining broad invocation, these are 14 successful diagnostic tasks,
 not a complete SHA-3 extended campaign or release receipt.
+
+The next KMAC/ParallelHash decomposition passed representative KMAC comparison,
+forgotten-owner/unwind and XOF-output tasks in 91.0, 21.7 and 42.6 host seconds,
+and the longest scoped-leaf input case in 35.5 seconds. All 95 all-feature native
+library tests passed on both Rust 1.90.0 and 1.98.1; 45 default-feature tests
+passed with hostile Miri selectors. Scoped Clippy, 82 detached-runner tests,
+planner tests and source/metadata regression checks passed. These measurements
+cover the new splits, not every remaining grouped invocation.
 A local overhead diagnostic measured source hashing (2,945 files) at
 0.27 seconds, tool identity at 1.83 seconds and planning at 0.17 seconds.
 Per-command source/tool seals deliberately remain in place; many tiny tasks

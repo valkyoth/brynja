@@ -143,7 +143,7 @@ def closure(selected: set[str], *, downstream=None) -> tuple[str, ...]:
 
 def select_repository(
     base: str, root: Path = ROOT, *, issues: list[str] | None = None, downstream=None,
-    verified_base: bool = False,
+    verified_base: bool = False, include_miri_tasks: bool = True,
 ) -> tuple[bool, tuple[str, ...]]:
     """Semantic metadata classification; unknown or malformed inputs fail closed."""
     try:
@@ -201,6 +201,15 @@ def select_repository(
             if path in readme_paths:
                 continue  # Entire data-only wrapper and graph validated above.
             before, after = scope_inputs.snapshot(root, base, path)
+            if not include_miri_tasks and path in {
+                'scripts/zeroization/miri_tasks.py',
+                'scripts/zeroization/miri_cases.py',
+                'scripts/zeroization/run-miri-task.py',
+            }:
+                # These execute only Miri. Its independent selection below the
+                # release planner retains the conservative full fallback.
+                # Never exempt the directory, shared driver, or Rust tests.
+                continue
             if path == 'scripts/cryptography/api_profile_contracts.py' and scope_inputs.mir_spans_only(before, after):
                 continue
             elif path in {'scripts/sha2/sha2_public_api.py', 'scripts/sha3/sha3_public_api.py',

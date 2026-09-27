@@ -147,9 +147,32 @@ impl Absorb for RecordingSink {
 
 #[test]
 fn borrowed_fragments_match_bit_oracle_at_every_alignment() -> Result<(), KmacError> {
+    // The native oracle keeps all 18,432 combinations. Miri cases retain every
+    // used/valid width and select a byte sample only in the routine profile.
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE")
+            .ok()
+            .map(|value| value.parse::<usize>())
+            .transpose()
+            .map_err(|_| KmacError::SecretMemory)?
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < 8));
+    let bounded =
+        cfg!(miri) && std::env::var("BRYNJA_MIRI_PROFILE").ok().as_deref() == Some("routine");
+    assert!(!bounded || selected.is_some());
+    let mut executed = 0;
     for used in 0..8 {
+        if selected.is_some_and(|case| case != usize::from(used)) {
+            continue;
+        }
         for valid in 0..=8 {
             for value in 0..=u8::MAX {
+                if bounded && ![0, 1, 0x7f, 0x80, 0xa5, 0xff].contains(&value) {
+                    continue;
+                }
+                executed += 1;
                 let mut sink = RecordingSink::default();
                 let mut frame = Framing::new();
                 let mut reference = std::vec::Vec::<u8>::new();
@@ -187,6 +210,12 @@ fn borrowed_fragments_match_bit_oracle_at_every_alignment() -> Result<(), KmacEr
                 assert!(cleared(&frame));
             }
         }
+    }
+    let expected = (if selected.is_some() { 1 } else { 8 }) * 9 * (if bounded { 6 } else { 256 });
+    assert_eq!(executed, expected);
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        std::println!("\nMIRI_CASE_PASS: kmac-framing:{case}");
     }
     Ok(())
 }

@@ -8,12 +8,27 @@ macro_rules! check {
     ($test:ident, $workspace:ident, $ordinary:ident) => {
         #[test]
         fn $test() -> Result<(), Error> {
+            let (selected, bounded) = miri_selection(48)?;
+            let mut visited = 0;
+            let mut executed = 0;
             let mut workspace = $workspace::new();
             for b in [1, 7, 8, 17, 136, 168] {
                 let mut storage = [0xa5; 168];
                 let block = storage.get_mut(..b).ok_or(Error::StateConsumed)?;
-                let input = [0x05; 177];
                 for bits in 1..=8 {
+                    let index = visited;
+                    visited += 1;
+                    if selected.is_some_and(|case| case != index) {
+                        continue;
+                    }
+                    executed += 1;
+                    let bytes = [0x05; 177];
+                    let length = if bounded {
+                        (2 * b + 1).min(bytes.len())
+                    } else {
+                        bytes.len()
+                    };
+                    let input = bytes.get(..length).ok_or(Error::StateConsumed)?;
                     let tail =
                         Fips202BitString::new(&[1], bits).map_err(|_| Error::InvalidBitString)?;
                     let custom =
@@ -49,6 +64,12 @@ macro_rules! check {
                     assert_eq!(output, [0; 37]);
                     assert!(workspace.cleared());
                 }
+            }
+            // The matrix-independent lifecycle checks below belong to case 0.
+            // Native execution still reaches them once, after the full matrix.
+            if selected.is_some_and(|case| case != 0) {
+                miri_complete(selected, visited, executed, 48, stringify!($test));
+                return Ok(());
             }
             let mut block = [0xa5; 7];
             for action in 0..2 {
@@ -92,6 +113,7 @@ macro_rules! check {
                 state.finalize_public(&mut [], Public::acknowledge())
             })??;
             assert!(workspace.cleared());
+            miri_complete(selected, visited, executed, 48, stringify!($test));
             Ok(())
         }
     };
@@ -106,3 +128,43 @@ check!(
     ParallelHash256Workspace,
     ParallelHash256
 );
+
+// Native execution always traverses the complete original matrix. These
+// interpreted environment selectors are used only by exact Miri tasks.
+#[cfg(not(miri))]
+fn miri_selection(_total: usize) -> Result<(Option<usize>, bool), Error> {
+    Ok((None, false))
+}
+
+#[cfg(miri)]
+fn miri_selection(total: usize) -> Result<(Option<usize>, bool), Error> {
+    extern crate std;
+    let selected = std::env::var("BRYNJA_MIRI_CASE")
+        .ok()
+        .map(|value| value.parse::<usize>())
+        .transpose()
+        .map_err(|_| Error::StateConsumed)?;
+    assert!(selected.is_none_or(|case| case < total));
+    let profile_value = std::env::var("BRYNJA_MIRI_PROFILE").ok();
+    let profile = profile_value.as_deref();
+    assert!(matches!(profile, None | Some("routine") | Some("extended")));
+    let bounded = profile == Some("routine");
+    assert!(!bounded || selected.is_some());
+    Ok((selected, bounded))
+}
+
+fn miri_complete(
+    selected: Option<usize>,
+    visited: usize,
+    executed: usize,
+    total: usize,
+    _name: &str,
+) {
+    assert_eq!(visited, total);
+    assert_eq!(executed, if selected.is_some() { 1 } else { total });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        extern crate std;
+        std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+    }
+}

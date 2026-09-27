@@ -137,7 +137,8 @@ def verifier_commands(root: Path, selected: list[dict]) -> dict:
     names = set()
     for entry in selected:
         argv = entry["argv"]
-        if argv[0] == "scripts/zeroization/check-zeroization-miri.sh":
+        if (argv[0] == "scripts/zeroization/check-zeroization-miri.sh"
+                or argv[:2] == ["python3", "scripts/zeroization/run-miri-task.py"]):
             names.add("miri")
         if argv[0] == "scripts/assurance/check-kani.sh" and "--policy-only" not in argv:
             names.add("kani")

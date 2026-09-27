@@ -13,9 +13,10 @@ from pathlib import Path
 import detached_catalog as catalog
 import detached_manifest as records
 import detached_shards as shards
+import detached_checkpoints as checkpoints
 import verification_plan as plans
 
-TERMINAL = {"passed", "failed", "cancelled", "timed_out", "log_limit", "interrupted"}
+TERMINAL = {"passed", "partial", "failed", "cancelled", "timed_out", "log_limit", "interrupted"}
 
 
 def stamp() -> str:
@@ -75,7 +76,8 @@ def clone_inputs(root: Path, destination: Path, closure: dict) -> None:
 
 def start(root: Path, job: Path, phases: list[str], approval: str | None,
           base: str | None, seconds: int, log_bytes: int,
-          shard_count: int = 1, workers: int = 1) -> str:
+          shard_count: int = 1, workers: int = 1, resume: list | None = None,
+          partition: list[int] | None = None, miri_profile: str | None = None) -> str:
     if sys.platform not in {"linux", "darwin"}:
         raise ValueError("detached execution currently requires Linux or macOS")
     root, job = records.safe_path(root), records.safe_path(job)
@@ -86,7 +88,10 @@ def start(root: Path, job: Path, phases: list[str], approval: str | None,
     if shard_count > 1 and os.environ.get("CARGO_TARGET_DIR"):
         raise ValueError("clear CARGO_TARGET_DIR so detached shards cannot share build output")
     plan = plans.build(root=root, base=base)
-    chosen = catalog.selected(plan, phases, approval, shard_count)
+    from miri_cases import profile_for
+    miri_profile = profile_for(plan["stage"], miri_profile)
+    chosen = catalog.selected(plan, phases, approval, shard_count, root=root, miri_tasks=True,
+                              miri_profile=miri_profile)
     if plan["issues"] and any("environment" in issue or "RUSTUP_TOOLCHAIN" in issue for issue in plan["issues"]):
         raise ValueError("clear build/verifier environment overrides before detached execution")
     closure = records.sources(root)
@@ -102,11 +107,14 @@ def start(root: Path, job: Path, phases: list[str], approval: str | None,
         frozen = plans.build(root=job / "source", base=plan["base"])
         if frozen != plan:
             raise ValueError("frozen verification plan differs from approved plan")
-        manifest = {"schema": 1, "id": uuid.uuid4().hex, "created": stamp(),
+        manifest = {"schema": 2, "id": uuid.uuid4().hex, "created": stamp(),
                     "plan": plan, "approval": approval, "phases": phases,
                     "commands": chosen, "sources": closure, "tools": tools,
                     "seconds": seconds, "log_bytes": log_bytes,
-                    "shards": shard_count, "workers": workers}
+                    "shards": shard_count, "workers": workers, "resume": resume,
+                    "partition": partition, "miri_profile": miri_profile}
+        checkpoints.indices(manifest)
+        checkpoints.inherited(manifest)
         records.atomic(job / "manifest.json", manifest)
         receipt = records.digest(manifest)
         records.atomic(job / "state.json", {"state": "pending", "manifest": receipt})
@@ -133,25 +141,66 @@ def start(root: Path, job: Path, phases: list[str], approval: str | None,
 def load(job: Path, receipt: str) -> dict:
     records.safe_path(job)
     manifest = records.read(job / "manifest.json")
-    if (set(manifest) != {"schema", "id", "created", "plan", "approval", "phases", "commands",
-                         "sources", "tools", "seconds", "log_bytes", "shards", "workers"}
+    keys = {"schema", "id", "created", "plan", "approval", "phases", "commands",
+            "sources", "tools", "seconds", "log_bytes", "shards", "workers"}
+    if manifest.get("schema") == 2:
+        keys.update(("resume", "partition", "miri_profile"))
+    if (set(manifest) != keys
             or records.digest(manifest) != receipt or type(manifest.get("schema")) is not int
-            or manifest["schema"] != 1):
+            or manifest["schema"] not in (1, 2)):
         raise ValueError("detached launch receipt mismatch")
     bounds(manifest["seconds"], manifest["log_bytes"])
     shards.bounds(manifest["shards"], manifest["workers"])
     if len(manifest["commands"]) > 4096:
         raise ValueError("detached command bound exceeded")
+    checkpoints.indices(manifest)
+    if manifest["schema"] == 2:
+        from miri_cases import profile_for
+        profile_for(manifest["plan"]["stage"], manifest["miri_profile"])
     return manifest
+
+
+def status(job: Path, receipt: str) -> dict:
+    """Bounded observations, not a claim that a quiet/live PID is making progress."""
+    manifest = load(job, receipt)
+    state = records.read(job / "state.json")
+    if state.get("manifest") != receipt:
+        raise ValueError("status manifest mismatch")
+    observations = []
+    for index in range(manifest["shards"]):
+        path = job / f"shard-{index:02d}.json"
+        if not path.exists():
+            continue
+        shard = records.read(path)
+        if shard.get("manifest") != receipt:
+            raise ValueError("shard status manifest mismatch")
+        observation = {"shard": index, **shard}
+        current = shard.get("current")
+        if current is not None:
+            if type(current) is not int or not 0 <= current < len(manifest["commands"]):
+                raise ValueError("shard current task outside manifest")
+            observation["command"] = manifest["commands"][current]["command"]
+            log = records.safe_path(job / f"command-{current:04d}.log")
+            if log.exists():
+                stat = log.stat()
+                observation.update(log_bytes=stat.st_size, log_modified_unix=stat.st_mtime)
+        observations.append(observation)
+    return {**state, "progress": observations, "progress_is_not_success": True}
 
 
 def validate_source(manifest: dict, root: Path) -> None:
     if records.sources(root) != manifest["sources"]:
         raise ValueError("detached source closure changed")
-    plan = plans.build(root=root, base=manifest["plan"]["base"])
+    plan = dict(plans.build(root=root, base=manifest["plan"]["base"]))
+    if manifest['schema'] == 1 and 'full_phases' not in manifest['plan']:
+        # Legacy completed receipts used one conservative fallback for every
+        # phase. Preserve that command interpretation; do not rewrite evidence.
+        plan.pop('full_phases', None)
     if plans.execution_identity(plan) != plans.execution_identity(manifest["plan"]):
         raise ValueError("detached plan or approval changed")
-    if catalog.selected(plan, manifest["phases"], manifest["approval"], manifest["shards"], root=root) != manifest["commands"]:
+    if catalog.selected(plan, manifest["phases"], manifest["approval"], manifest["shards"],
+                        root=root, miri_tasks=manifest["schema"] == 2,
+                        miri_profile=manifest.get("miri_profile", "existing-full")) != manifest["commands"]:
         raise ValueError("detached command coverage changed")
 
 
@@ -174,22 +223,22 @@ def worker(job: Path, receipt: str) -> int:
                                             "started": wall, "shards": manifest["shards"],
                                             "workers": manifest["workers"]})
         results, state = shards.run(manifest, job, receipt, started, stamp, validate_source)
-        if state == "passed":
+        if state in {"passed", "partial"}:
             validate_source(manifest, root)
             if records.tool_identity(root, manifest["commands"]) != manifest["tools"]:
                 raise ValueError("detached tool identity changed during execution")
-            state = "cancelled" if (job / "cancel").exists() else "passed"
+            state = "cancelled" if (job / "cancel").exists() else state
     except Exception as error:
         # Store a closed category, not exception payloads which may carry secrets.
         failure = type(error).__name__
         state = "failed"
-    terminal = {"schema": 1, "manifest": receipt, "state": state, "started": wall,
+    terminal = {"schema": manifest["schema"], "manifest": receipt, "state": state, "started": wall,
                 "ended": stamp(), "elapsed_seconds": time.monotonic() - started,
                 "results": results, "failure_class": failure, "resources": usage()}
     records.atomic(job / "result.json", terminal)
     records.atomic(job / "state.json", {"state": state, "manifest": receipt,
                                         "result_sha256": records.digest(terminal)})
-    return 0 if state == "passed" else 1
+    return 0 if state in {"passed", "partial"} else 1
 
 
 def collect(job: Path, receipt: str, root: Path) -> dict:
@@ -199,7 +248,7 @@ def collect(job: Path, receipt: str, root: Path) -> dict:
     state = records.read(job / "state.json")
     result = records.read(job / "result.json")
     if (set(result) != {"schema", "manifest", "state", "started", "ended", "elapsed_seconds", "results", "failure_class", "resources"}
-            or type(result["schema"]) is not int or result["schema"] != 1
+            or type(result["schema"]) is not int or result["schema"] != manifest["schema"]
             or type(result["elapsed_seconds"]) not in (int, float) or result["elapsed_seconds"] < 0
             or set(state) != {"state", "manifest", "result_sha256"}
             or state["manifest"] != receipt or state["state"] != "passed"
@@ -211,7 +260,14 @@ def collect(job: Path, receipt: str, root: Path) -> dict:
     if len(result["results"]) != len(manifest["commands"]):
         raise ValueError("missing detached command results")
     total = 0
+    inherited = checkpoints.inherited(manifest) if manifest["schema"] == 2 else {}
     for index, (command, record) in enumerate(zip(manifest["commands"], result["results"])):
+        if manifest["schema"] == 2:
+            checkpoints.validate_record(manifest, job, record)
+            if record["index"] != index or (index in inherited and record != inherited[index]):
+                raise ValueError("resumed checkpoint coverage changed")
+            total += record["log_bytes"]
+            continue
         log = f"command-{index:04d}.log"
         if (set(record) != {"state", "exit_code", "elapsed_seconds", "log_bytes", "index", "command",
                             "started", "ended", "log", "log_sha256"}

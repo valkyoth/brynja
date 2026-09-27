@@ -2,6 +2,14 @@
 
 ## 0.24.49 candidate
 
+- Add resumable detached command checkpoints and disjoint task partitions.
+  Internal Miri runs now sample registered SHA-1/MD5/KMAC/TupleHash/ParallelHash matrices;
+  public checkpoints retain every original combination through exact case tasks.
+  Native matrices and interpreter safety checks remain intact. Wider timing and
+  remote qualification are pending; the cancelled full sweep remains incomplete.
+  Bind full-fallback scope per phase so Miri-only driver changes do not rerun
+  unrelated ASan/Kani campaigns merely because approval was required.
+  See [Miri verification design](docs/miri-verification-design.md).
 - Record both owner-supplied retests: no open Critical/High/Medium/Low findings;
   F1 is closed at the opaque-kernel boundary, not as whole-process erasure.
   Instrumented builds and platform/caller residuals retain their stated limits.

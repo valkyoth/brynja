@@ -10,7 +10,8 @@ PHASES = ("repository", "matrix", "asan", "miri", "kani")
 
 
 def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 1,
-             *, root=plans.ROOT) -> list[dict]:
+             *, root=plans.ROOT, miri_tasks: bool = False,
+             miri_profile: str = "existing-full") -> list[dict]:
     if type(shards) is not int or not 1 <= shards <= 8:
         raise ValueError("detached shards must be 1..8")
     plans.authorize(plan, approval)
@@ -22,10 +23,10 @@ def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 
     # Validate even commands outside the selected phase, just as foreground does.
     commands.selected(repository, list(plans.scope.GROUPS), full=True)
     commands.selected(sanitizer, list(plans.scope.GROUPS), full=True)
-    full = plan["stage"] == "public" or plan["approval_required"]
-    groups = list(plans.scope.GROUPS) if full else plan["groups"]
     result = []
     for phase in phases:
+        full = plans.requires_full(plan, phase)
+        groups = list(plans.scope.GROUPS) if full else plan["groups"]
         chosen = []
         if phase == "repository":
             chosen = [(c, None) for c in commands.selected(repository, groups, full=full)]
@@ -35,7 +36,10 @@ def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 
             chosen = [(c, None) for c in commands.selected(sanitizer, plan["verifiers"][phase], full=full)]
         elif phase in ("miri", "kani"):
             selected_groups = list(plans.scope.GROUPS) if full else plan["verifiers"][phase]
-            if selected_groups:
+            if phase == "miri" and selected_groups and miri_tasks:
+                from miri_tasks import commands as task_commands
+                chosen = [(shlex.join(argv), None) for argv in task_commands(root, selected_groups, miri_profile)]
+            elif selected_groups:
                 prefix = ("scripts/zeroization/check-zeroization-miri.sh --selected " if phase == "miri"
                           else "scripts/assurance/check-kani.sh --required-groups ")
                 partitions = [selected_groups] if shards == 1 else [[group] for group in selected_groups]

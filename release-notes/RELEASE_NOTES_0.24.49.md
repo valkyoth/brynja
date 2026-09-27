@@ -15,6 +15,14 @@ below are historical; their pending-retest/integration wording is superseded by
 this status. Caller/platform residuals and informational instrumented-build
 limitations remain in force.
 
+- Add resumable, source/tool-bound detached checkpoints and disjoint Miri task
+  partitions. Internal runs use a bounded sample of costly SHA-1, MD5, KMAC,
+  TupleHash and ParallelHash matrices; public checkpoints use all original combinations.
+  Full native test matrices remain unchanged, and no Miri safety checks are
+  disabled. Timing and multi-host qualification are still in progress; the
+  cancelled full sweep is not a successful release receipt. See the
+  [Miri verification design](../docs/miri-verification-design.md).
+
 - Add the separate `brynja-strict` facade over protected modern SHA-2,
   SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash and batch sessions. Its
   dependencies remain protected with default features disabled; no raw CPU,

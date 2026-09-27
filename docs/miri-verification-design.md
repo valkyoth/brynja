@@ -1,0 +1,355 @@
+# Bounded and resumable Miri verification
+
+Status: implementation approved by the owner, 2026-09-27; **partially implemented**.
+This work neither qualifies v0.24.49 nor authorizes a tag. New runs select a
+routine profile for internal releases and an extended profile for public
+checkpoints. Miri safety settings remain enabled. Wider timing and remote
+qualification remain outstanding; this is not a claim of a short full sweep.
+
+## Implementation progress
+
+The first stage adds streamed logs, command-level Miri scheduling with shared
+per-shard build/sysroot caches, a nonzero-test completion check, schema-2
+post-command source/tool checks, immutable resume into a new job, and partial
+partition collection. It leaves the reviewed legacy Miri driver byte-for-byte
+unchanged. See [operator instructions](detached-verification.md).
+
+The next stage registers fourteen costly matrices across five families.
+One TupleHash matrix and six
+ParallelHash fixed/XOF/scheduled matrices. Routine Miri selects 16 TupleHash
+cases and 48 ParallelHash cases; extended Miri addresses all 896 and 240 original
+combinations respectively. Each case has an exact completion marker and must
+run exactly one test. Native tests ignore the Miri selectors and retain all
+original combinations and input lengths. ParallelHash routine inputs use at
+most `2*B+1` bytes, retaining leaf transitions without hundreds of tiny leaves.
+Matrix-independent fixed/XOF lifecycle checks run on case zero of each identity,
+not repeatedly in every case. Scheduled lifecycle tests stay separate.
+
+SHA-1 and MD5 each split padding lengths, bulk-update lengths and scoped-owner
+combinations into separate tasks. Routine coverage retains padding/block edges,
+all chunk widths and all final-bit widths, using 47 tasks per family instead of
+675. KMAC framing is split by initial bit residue into eight tasks: routine
+checks six representative byte values at every final-bit width (432 total
+combinations); extended and native tests retain all 256 values (18,432 total).
+
+The other 83 original Cargo invocations remain selected, excluding only those
+fourteen registered matrices now run separately. Thus a complete all-family
+routine catalog has 249 tasks (166 case/chunk tasks) and extended has 2,577
+(2,494 case/chunk tasks). Remaining grouped selections, including SHA-2/SHA-3,
+have not yet been fully timed. Broad legacy selections still discover new
+tests; a future complete per-test obligation inventory remains outstanding.
+Legacy schema-1 partial evidence is not imported or marked successful.
+
+Local diagnostics with the pinned interpreter passed TupleHash routine cases
+in 24.1, 24.8 and 50.5 host seconds, a ParallelHash fixed case including lifecycle
+checks in 169.4 seconds, an XOF case in 141.3 seconds, and a scheduled case in
+192.2 seconds. The scheduled case exceeded the initial 180-second diagnostic
+cap, then passed under a separately recorded 300-second cap. Full native matrices
+also passed with deliberately invalid
+Miri selectors in the environment. An XOF diagnostic hit its 240-second limit
+before reliable interpreted-environment selectors were added; that attempt is
+incomplete evidence. Cargo-Miri can cache a compiler launch environment, so
+`option_env!` selectors were replaced by explicit `-Zmiri-env-set` inputs.
+Additional routine probes passed KMAC framing in 1.9 seconds, SHA-1 bulk updates
+in 11.0 seconds, MD5 padding in 1.5 seconds, and SHA-1/MD5 scoped-owner cases in
+3.2/1.5 seconds. These measurements are not a full-suite ETA or release receipt.
+
+Focused validation also passed 78 runner/profile/checkpoint regressions, 51
+assurance tests, both crates' 92 all-feature library tests on Rust 1.98.1 and
+62 hardened-execution library tests on Rust 1.90.0. Native tests with hostile
+Miri selectors, scoped Clippy, formatting, scope/policy mutations, review
+bindings, generated assurance evidence and documentation links passed. Two
+successive interpreted TupleHash selections emitted distinct expected markers
+while reusing the same Cargo cache. Historical native observations are unchanged;
+rebinding a test review hash is not a claim those native lanes reran.
+The additional SHA-1/MD5/KMAC native library run passed all 48 tests with invalid
+Miri selectors in its environment, all 48 on Rust 1.90.0, and 106 all-feature
+library tests on Rust 1.98.1. An extended KMAC chunk passed all 2,304 original
+combinations for its bit residue in 26.6 host seconds. Their source/package policy checks and the
+combined metadata regression suite also passed after refreshing test-source
+review bindings; production implementation code was not changed.
+
+The planner classifies the three new Miri-only task files separately from
+ASan/Kani inputs. Editing those files still selects Miri conservatively and
+requires full-fallback approval, but does not itself invalidate unrelated
+ASan/Kani work. Real-Git regression fixtures confirm that unknown scripts and
+concurrent Rust implementation edits remain in scope. No directory-wide
+exemption was introduced.
+The resulting full-phase selection is bound into the plan and honored by both
+foreground and detached execution and evidence reuse. Approval alone no longer
+expands an unrelated verifier's selection. Historical plans without per-phase
+scope retain their old conservative full-run interpretation.
+
+A further SHA-3 execution probe passed all eight selected tests in 8.2 host
+seconds. The broader SHA-3 hardened integration group hit its 180-second
+diagnostic cap while still executing its partial-bit matrix; this is incomplete
+evidence and remains a candidate for further splitting, not a successful run.
+A local overhead diagnostic measured source hashing (2,945 files) at
+0.27 seconds, tool identity at 1.83 seconds and planning at 0.17 seconds.
+Per-command source/tool seals deliberately remain in place; many tiny tasks
+therefore have measurable bookkeeping overhead as well as interpreter work.
+
+## Recommendation
+
+Use bounded, affected-family memory-safety tests for routine internal work.
+Keep wide input/seed campaigns for explicit qualification checkpoints and
+scheduled remote campaigns. Preserve exhaustive native cryptographic tests.
+Make every completed verification task independently collectible, so a timeout
+or shutdown loses only the interrupted task, not unrelated successful work.
+
+Two decisions must remain separate:
+
+- Splitting the same cases across processes/machines changes orchestration.
+  With equivalent inputs and complete coverage it need not reduce evidence.
+- Running a smaller Miri input set on an internal tag changes assurance scope.
+  It requires explicit policy approval and an honest statement of that scope.
+  Keeping the larger set for a later checkpoint is not evidence it passed now.
+
+Pre-1.0/internal status supports a proportionate qualification schedule; it
+does not excuse a known correctness or memory-safety defect. Native tests,
+sanitizers, proofs and Miri provide complementary, not interchangeable evidence.
+
+## What happened in v0.24.49
+
+The cancelled job at commit `b154b38ce119ef032e481ec997cbe24f70450bd0`
+preserves 553 passed command records, two cancelled commands and 15 unstarted
+commands. It ran about 9h24m. Its receipt is
+`0557f42349db6fc5c359b67b70ffc0bfe7f9ef31df0773f588b9a4947691993c`.
+It remains cancelled, not a successful release receipt.
+
+The Miri driver itself did not change from v0.24.48. Broad selections such as
+`--lib execution` and `--tests` automatically included new tests:
+
+- TupleHash added 896 combinations (strength, initial bit residue, final bit
+  width and message length), exercising three hashing paths per combination.
+- ParallelHash added scoped fixed/XOF/scheduled comparisons. Small block sizes
+  multiply leaf hashing: a 177-byte message at B=1 needs 177 full-byte leaves,
+  plus its final tail, for each compared path.
+- The old `detached_process.py` buffered log writes until its buffer filled or the command
+  finishes. The file timestamp is not a progress indicator.
+- The old `detached_catalog.py` partitioned whole family commands, not cases
+  inside them. Collection accepted only wholly successful terminal jobs.
+
+Isolated diagnostics on 2026-09-26, using the same pinned nightly and temporary
+test-only instrumentation, measured eight TupleHash cases passing in 265 seconds,
+one B=168 ParallelHash comparison passing in 79 seconds, and a single-leaf test
+passing in 6.5 seconds including startup. The B=1 comparison was unfinished when
+the diagnostic's per-command limit expired. These are diagnostic observations,
+not release evidence or a reliable full-suite ETA. They support excessive work
+as an explanation; they do not prove the cancelled workers were making progress.
+
+Other completed family timings were approximately KMAC 38 minutes, SHA-1 33,
+MD5 25, SHA-3 21 and SHA-2 6. The redesign must review all families, not just the
+two cancelled commands. Measurements are machine-specific.
+
+## Upstream findings and limits
+
+Miri checks particular executions, not cryptographic correctness or universal
+soundness. It supports progress stack traces via `-Zmiri-report-progress`.
+`-Zmiri-num-cpus` changes the emulated CPU count, not interpreter parallelism.
+Multiple seeds add executions, not a shortcut for finishing one execution.
+See the [official Miri documentation](https://github.com/rust-lang/miri).
+
+Nextest runs separate Miri processes concurrently, but cannot detect races
+between tests sharing one process and does not support Miri build archives.
+Retain deliberate shared-process concurrency checks and separate doctests.
+See the [official Nextest integration guide](https://nexte.st/docs/integrations/miri/).
+
+Per-test invocation recompiles test crates; upstream records workloads where
+that overhead dominates. Benchmark before adopting Nextest globally. See
+[Miri issue 5013](https://github.com/rust-lang/miri/issues/5013).
+
+Miri defaults to unoptimized MIR for validation. A release build is not an
+automatic native-speed solution. Do not change MIR optimization or substitute
+native/FFI execution just to make the checker faster. See
+[Miri's default compiler arguments](https://github.com/rust-lang/miri/blob/master/src/lib.rs).
+
+Local compatibility check: the installed Miri is
+`0.1.0 (67eda617e6 2026-09-10)`, pinned by `nightly-2026-09-11`.
+Its command parser accepted `-Zmiri-report-progress=1000000` with `--version`.
+Actual progress output was subsequently observed in bounded execution probes
+using `-Zmiri-report-progress=10000000`. Wider overhead and remote integrations
+still need measurement. Upstream master documentation is not a promise
+that every option works with our frozen version.
+
+## Execution profiles and remaining target coverage
+
+| Situation | Required Miri work | Other coverage |
+| --- | --- | --- |
+| Documentation/version/review metadata only | Reuse eligible unchanged tasks | Current repository, documentation and release checks |
+| Internal implementation tag | Bounded lifecycle/boundary tasks for affected families and consumers | Native vectors, differential tests, applicable sanitizers/proofs/codegen |
+| Memory-ownership/unsafe/concurrency fix | Bounded tasks plus the explicit bug regression and affected safety obligations | Relevant native instruction/platform and failure-path qualification |
+| Registered publication checkpoint, RC or 1.0 | All-family bounded profile plus registered extended cases/targets/seeds | Existing publication requirements |
+| Owner-requested assurance campaign | Explicit extended task set, normally remote | Report exact coverage; never imply certification |
+
+Reuse the existing checkpoint register; do not introduce a second release
+calendar. Unknown scope still requires review before expensive work, not an
+automatic success or an unannounced day-long run. A scheduled campaign with a
+confirmed defect blocks affected releases; a timeout is incomplete evidence,
+not a defect and not a pass.
+
+An internal release summary must distinguish bounded coverage passed, extended
+coverage carried forward from a named snapshot, and extended coverage deferred
+under the approved profile. Public checkpoint completeness is not satisfied by
+an internal-profile receipt. The runner enforces routine/extended separation;
+additional targets/seeds and all-family bounded sizing remain follow-up work.
+
+## Write tests around safety obligations
+
+Maintain one small case/task catalog, organized by family and safety obligation.
+Every relevant new test must be classified; no accidental inclusion through
+an ever-growing `--tests` invocation and no silent omission of new owners.
+Required obligations include initialization, boundary access, partial bits,
+overlap/borrowing, state transitions, overflow, output failure/clearing,
+cancellation, Drop/unwind and worker ownership/join behavior where applicable.
+
+Use the real public API and actual memory-handling path. Keep production code
+unchanged. Do not replace the tested primitive with a no-op under `cfg(miri)`.
+Existing Miri-specific safe models must be labelled as models, not machine-code
+or register-erasure evidence. The SHA-3 hardened permutation already chooses a
+safe model for Miri; native assembly, codegen and platform evidence remain needed.
+
+Concrete test refactoring:
+
+1. Extract reusable case helpers. Give each case or bounded case range a stable
+   ID. Native exhaustive tests continue traversing the original complete matrix.
+2. TupleHash: routine cases cover both strengths, all bit residues, short input,
+   rate-boundary staging and reuse/cleanup without taking the full Cartesian
+   product. Keep every original combination addressable in the extended profile.
+3. ParallelHash: test B=1 lifecycle with only enough bytes for a few leaves.
+   Test long/rate-crossing input with larger B separately. Retain actual root
+   merging, public/secret output, cancellation and forgotten-owner checks.
+   Do not shorten concurrency tests below the point where workers interact.
+4. Avoid interpreting two reference hashes merely to check the third path's
+   memory use. Where appropriate, use pinned expected bytes generated and
+   cross-checked independently in native tests; still assert outputs under Miri.
+   Native tests must validate fixture contents, not regenerate expectations from
+   the same implementation during the Miri run.
+5. Test huge counter boundaries by controlled internal state setup, not billions
+   of updates. Retain small real transitions before/after the boundary.
+6. Split extended loops into balanced chunks before adding machines. Case IDs,
+   seed ranges and the union of chunks must prove no gaps or duplicate counting.
+
+This preserves the full native and extended input sets, but deliberately narrows
+routine Miri combinations. Review the obligation-to-case mapping and mutation
+tests before accepting that trade-off. Pairwise/boundary selection is not a proof
+that all omitted combinations are equivalent.
+
+Never speed qualification up by disabling aliasing, data-race, alignment,
+validity, weak-memory or leak checks. Do not switch borrow models or upgrade
+the nightly implicitly. Benchmark any checker/configuration change separately.
+
+## Parallelism, caching and observability
+
+Start with existing Cargo/Miri commands in separate bounded processes; this
+avoids an immediate new tool dependency. Benchmark pinned Nextest for expensive,
+independent tests as an optional executor, not an evidence collector replacement.
+Keep shared-process tests for shared-state interactions and existing doctests.
+
+Suggested initial capacity: two Linux x86-64 hosts, two interpreter workers per
+host. Increase only after measuring compile memory and throughput. Extra workers
+do not split an inner loop automatically. Bind host and interpreted target
+identities separately; native evidence cannot be substituted by interpretation.
+
+Prepare a validated Miri sysroot once per pinned toolchain/target. Retain bounded
+per-worker build caches, segregated by source, features and compiler settings.
+Never share a mutable Cargo target directory across concurrent workers. Compile
+caches are disposable performance aids, not evidence. Keep receipts and logs
+outside Cargo target directories so `cargo clean` cannot erase them.
+
+Flush incremental output at a bounded interval (for example one second); fsync
+terminal records. Emit host-clock start/end times, task/case IDs and periodic
+bounded progress reports, without secret bytes. Heartbeats show runner liveness;
+case-completion records show work completed. Distinguish them in status output.
+Use host monotonic timing, not the interpreted test harness's simulated duration.
+
+Initial engineering targets, to be measured rather than advertised as promises:
+routine tasks usually 30 seconds to 3 minutes; extended chunks usually under
+10 minutes; ordinary affected-family verification around 15–30 minutes on the
+reference worker allocation. Longer safety obligations receive explicit budgets.
+Exceeding a budget reports timeout/needs-sizing; it never downgrades coverage or
+marks work passed. Estimate remaining work from measured durations, with an
+unknown category for unmeasured tasks. No credible ETA means say so.
+
+## Independently collectible tasks
+
+Extend the existing manifest/runner/collector rather than adding a cloud service
+or changing cryptographic publication rules. SSH is transport; no credentials
+belong in archives. A campaign freezes its complete required task set first.
+Workers execute assigned tasks; collection validates their union.
+
+Each task identity binds its test IDs/case range/profile, source and dependency
+closure, features, target, panic settings, compiler/Miri/sysroot identity,
+command, environment and seed. Include fixture and helper/driver contents.
+Record original source commit, worker/host identity, start/end times, actual
+test/case counts, exit status and log hashes. Use canonical bounded records.
+
+Before and after each task, validate the frozen inputs and relevant tools.
+Only after exit zero and expected nonzero coverage should the worker atomically
+publish a PASS record. Resumption starts a fresh attempt for an interrupted
+task; it never resumes interpreter memory or promotes a partial log to PASS.
+
+Collection must reject missing tasks/cases, zero-test passes, unexpected skips,
+duplicate coverage, changed inputs/tools/flags, mismatched targets, partial or
+tampered records and path traversal/symlink/archive attacks. Identical duplicate
+uploads may be deduplicated, but cannot fill missing coverage. Retain failed
+attempts; a later pass must not silently hide a UB report or unresolved failure.
+
+Successful tasks survive cancellation of another task or the campaign. Campaign
+status remains incomplete until every currently required task has eligible
+evidence. Source changes rerun affected tasks/consumers under the existing delta
+rules; metadata does not rewrite historical results. A lower-tier receipt cannot
+satisfy an extended task. Tool or semantic test-driver changes invalidate the
+corresponding tasks, not every unrelated verifier by default.
+
+These are trusted-owner receipts: hashes detect corruption/drift, not forged
+results from a malicious worker/operator. Keep that existing trust boundary
+explicit. Validate same-host-class Linux x86-64 transfers first; broaden host
+equivalence only after tests. No remote Miri record grants native CPU admission.
+
+## Transition from the cancelled sweep
+
+Keep its manifest, frozen sources, 553 PASS records, two cancellations and all
+logs immutable. It lacks the proposed per-task end-of-run attestations, so new
+code must not silently stamp it as a modern successful receipt.
+
+Provide an explicit legacy-import review that checks existing record/log hashes,
+commands, source snapshots and available tool provenance. Map only complete
+commands to obligations they actually covered. Produce a separate migration
+record identifying the weaker historical provenance and require owner approval;
+reject unverifiable records. Do not promise all 553 are eligible in advance.
+Neither cancelled family command covers its partially finished inner tests.
+
+New tests, changed drivers and newly required obligations still run. The 15
+unstarted commands have no results from this sweep. Kani work remains outstanding
+unless separately validated matching evidence exists. Debug probes never count.
+
+## Implementation order and acceptance
+
+1. Approve the two profile definitions and legacy-import approach. Inventory
+   every current Miri invocation, classify tests and identify shared-process
+   dependencies. Register the strict facade's real dependency/obligation mapping
+   so it does not remain an unexplained unknown-family fallback.
+2. Add progress flushing, task-local records and interrupted-task restart tests.
+   Keep complete legacy receipt validation working unchanged.
+3. Refactor TupleHash/ParallelHash tests into bounded and extended cases; then
+   review KMAC, SHA-1, MD5, SHA-3 and the other selected families for the same
+   pattern. Preserve native exhaustive execution and existing bug regressions.
+4. Add multi-job collection and single-host resume first, then two-host transfer.
+   Demonstrate cancellation after PASS, fresh restart and complete collection.
+5. Run bounded benchmarks comparing grouped Cargo and process-per-test execution.
+   Adopt Nextest only if measured gains justify its integration and version pin.
+6. Update the gate/profile routing only after regression tests and owner approval.
+   Generate a new v0.24.49 plan with explicit reuse, rerun and deferral decisions.
+
+Required regression tests: lost/malformed/tampered logs; wrong source/tool/target;
+zero selected tests; ignored or missing cases; overlapping/missing chunks; bad
+seed ranges; changed features; cancelled tasks; sibling cancellation after PASS;
+worker crash during record publication; unsafe ambient flags; stale caches;
+retained failures; native coverage retention; profile downgrade; new unclassified
+test; remote round-trip; receipt survival after Cargo cleanup. Seed deliberate
+memory/ownership/cleanup regressions into relevant bounded fixtures to demonstrate
+that the required checks remain load-bearing.
+
+No production crypto changes, full sweep, cancellation, cloud provisioning,
+commit, push or tag is authorized by this design document.

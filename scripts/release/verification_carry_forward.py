@@ -42,6 +42,12 @@ def prepare(job: Path, receipt: str, root: Path, release_plan: dict) -> dict:
 
 def verifier_groups(entry: dict) -> set[str] | None:
     argv = entry['argv']
+    if argv[:2] == ['python3', 'scripts/zeroization/run-miri-task.py']:
+        if (len(argv) not in (6, 8) or argv[2] != '--group' or argv[4] != '--task'
+                or (len(argv) == 8 and (argv[6] != '--profile' or argv[7] not in ('routine', 'extended')))
+                or argv[3] not in plans.scope.GROUPS or not argv[5].isdigit()):
+            raise ValueError('unknown recorded Miri task')
+        return {argv[3]}
     for program, option in (
         ('scripts/zeroization/check-zeroization-miri.sh', '--selected'),
         ('scripts/assurance/check-kani.sh', '--required-groups'),
@@ -55,6 +61,9 @@ def verifier_groups(entry: dict) -> set[str] | None:
 
 
 def covered(entry: dict, previous: list[dict]) -> bool:
+    # A single task is not evidence for every other task in its family.
+    if entry['argv'][:2] == ['python3', 'scripts/zeroization/run-miri-task.py']:
+        return entry in previous
     wanted = verifier_groups(entry)
     if wanted is not None:
         found = set()
@@ -88,7 +97,7 @@ def disposition(entry: dict, context: dict) -> str:
     delta = context['plan']
     affected = (delta['verifiers'][entry['phase']] if entry['phase'] in delta['verifiers']
                 else delta['groups'])
-    if delta['approval_required'] or groups.intersection(affected):
+    if plans.requires_full(delta, entry['phase']) or groups.intersection(affected):
         return 'run: changed or unresolved implementation inputs'
     if not covered(entry, context['manifest']['commands']):
         return 'run: no matching successful command evidence'
@@ -112,4 +121,8 @@ def required(context: dict, phase: str, command: str | None = None) -> list[dict
     # authorizes the delta before executing anything. Split verifier groups so
     # a changed family cannot force an unrelated family to run again.
     approval = plan['fingerprint'] if plan['approval_required'] else None
-    return catalog.selected(plan, phases, approval, shards=8)
+    from miri_cases import profile_for
+    manifest = context.get('manifest', {})
+    requested = manifest.get('miri_profile') if plan['stage'] == 'internal' else None
+    return catalog.selected(plan, phases, approval, shards=8, miri_tasks=True,
+                            miri_profile=profile_for(plan['stage'], requested))

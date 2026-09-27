@@ -75,7 +75,7 @@ def environment_issues(environment: dict[str, str], toolchain: str) -> list[str]
              "CARGO_ENCODED_RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC",
              "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"}
     issues = [f"build/verifier environment override: {name}" for name, value in environment.items()
-              if value and (name in exact or name.startswith(("CARGO_PROFILE_", "CARGO_TARGET_", "MIRI", "KANI", "ASAN_", "LSAN_", "UBSAN_")))
+              if value and (name in exact or name.startswith(("CARGO_PROFILE_", "CARGO_TARGET_", "MIRI", "BRYNJA_MIRI_", "KANI", "ASAN_", "LSAN_", "UBSAN_")))
               and name != "CARGO_TARGET_DIR"]
     if environment.get("RUSTUP_TOOLCHAIN", toolchain) != toolchain:
         issues.append("RUSTUP_TOOLCHAIN differs from the pinned default compiler")
@@ -88,6 +88,20 @@ def execution_identity(plan: dict) -> dict:
             if key not in {'issues', 'reasons', 'estimated_runtime'}}
 
 
+def requires_full(plan: dict, phase: str) -> bool:
+    """Approval permits a fallback; it does not expand unrelated verifier scope."""
+    phase = 'repository' if phase == 'command' else phase
+    phases = ('repository', 'matrix', 'asan', 'miri', 'kani')
+    selected = plan.get('full_phases')
+    if selected is None:
+        # Historical receipts retain their original conservative meaning.
+        return plan['stage'] == 'public' or plan['approval_required']
+    if (not isinstance(selected, list) or any(name not in phases for name in selected)
+            or len(selected) != len(set(selected))):
+        raise ValueError('invalid full verification phase scope')
+    return phase in selected
+
+
 def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = False) -> dict:
     config = inputs.document((root / "release-crates.toml").read_bytes())["release"]
     stage = config["stage"]
@@ -95,16 +109,24 @@ def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = F
         raise ValueError("unknown release stage")
     toolchain = inputs.document((root / "rust-toolchain.toml").read_bytes())["toolchain"]["channel"]
     issues = environment_issues(dict(os.environ), toolchain)
+    full_phases = set(('repository', 'matrix', 'asan', 'miri', 'kani')) if issues else set()
     base = baseline(root) if base is None else base
-    full, groups = scope.select_repository(base, root, issues=issues, verified_base=verified_base)
+    full, groups = scope.select_repository(base, root, issues=issues, verified_base=verified_base,
+                                          include_miri_tasks=False)
+    if full:
+        full_phases.update(('repository', 'matrix', 'asan', 'kani'))
     paths = changed_paths(root, base)
     verifier_groups = {name: list(groups) for name in ("miri", "asan", "kani")}
     miri_full, miri_groups = miri_dependencies.select(root, base, issues, verified_base=verified_base)
     verifier_groups['miri'] = list(miri_groups)
+    if miri_full:
+        full_phases.add('miri')
     full = full or miri_full
     reasons = []
+    reasons.append('Miri profile: ' + ('extended (all registered matrix combinations)' if stage == 'public'
+                   else 'routine (bounded registered matrix sample; full native tests retained)'))
     if set(miri_groups) != set(groups):
-        reasons.append('Miri uses portable owner dependency closures in both lock graphs; native CPU integration checks retain their wider scope')
+        reasons.append('Miri uses its own task drivers and portable owner dependency closures in both lock graphs; ASan/Kani retain native implementation scope')
     for path in paths:
         if path.endswith('.md') or path.startswith('assurance/crate-readmes/'):
             label = 'documentation: baseline README/example checks; not a production-code change'
@@ -124,6 +146,7 @@ def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = F
         for tool, kind in (("miri", "miri"), ("rust-sanitizers", "asan"), ("kani", "kani")):
             if old.get(tool) != new.get(tool):
                 verifier_groups[kind] = list(scope.GROUPS)
+                full_phases.add(kind)
                 issues.append(f"{tool} verifier changed: old evidence is not evidence under the new verifier")
     # This shared executable is a proof driver, not merely release metadata.
     # Its policy-only baseline test does not replace rerunning changed proofs.
@@ -132,12 +155,14 @@ def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = F
     if stage == "public" and not verified_base:
         groups = scope.GROUPS
         verifier_groups = {name: list(scope.GROUPS) for name in verifier_groups}
+        full_phases.update(('repository', 'matrix', 'asan', 'miri', 'kani'))
         reasons.insert(0, "scheduled public crates.io checkpoint: full verification")
     return {
         "schema": 1, "version": config["version"], "stage": stage, "base": base,
         "head": inputs.git(root, "rev-parse", "HEAD").decode().strip(),
         "fingerprint": fingerprint(root, base, paths),
         "approval_required": stage != "public" and bool(full or issues),
+        "full_phases": sorted(full_phases),
         "issues": issues, "groups": list(groups), "verifiers": verifier_groups,
         "reasons": reasons,
         "estimated_runtime": "not measured; a full verifier sweep can take tens of minutes or longer",

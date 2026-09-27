@@ -26,6 +26,9 @@ import verification_plan as plans
 import verification_carry_forward as carry
 from detached_shard_tests import ShardTests
 from verification_carry_forward_tests import CarryForwardTests
+from detached_checkpoint_tests import CheckpointTests
+from miri_task_tests import MiriTaskTests
+from miri_case_tests import MiriCaseTests
 
 
 def plan(groups=("parallelhash",), *, public=False, blocked=False):
@@ -124,7 +127,9 @@ class SelectionTests(unittest.TestCase):
                      patch.object(runner, "prepare_matrix"), \
                      patch.dict(os.environ, {}, clear=True), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(runner.main(), 0)
-                detached = catalog.selected(selected, [phase], approval)
+                from miri_cases import profile_for
+                detached = catalog.selected(selected, [phase], approval, miri_tasks=True,
+                                            miri_profile=profile_for(selected['stage']))
                 self.assertEqual(executed, [(c["command"], c["stdin"]) for c in detached])
 
     def test_invalid_phases_and_stale_approval(self):
@@ -154,12 +159,20 @@ class RecordTests(unittest.TestCase):
             jobs.validate_usage({**valid, "runner_max_rss_bytes": 1.5})
 
     def test_source_plan_and_command_drift(self):
-        manifest = {"sources": {"head": "a"}, "plan": plan(), "phases": ["miri"], "approval": None,
+        manifest = {"schema": 1, "sources": {"head": "a"}, "plan": plan(), "phases": ["miri"], "approval": None,
                     "shards": 1,
                     "commands": catalog.selected(plan(), ["miri"], None)}
         with patch.object(records, "sources", return_value=manifest["sources"]), \
              patch.object(plans, "build", return_value=manifest["plan"]):
             jobs.validate_source(manifest, plans.ROOT)
+            with patch.object(plans, 'build', return_value={**manifest['plan'], 'full_phases': []}):
+                jobs.validate_source(manifest, plans.ROOT)
+                # New receipts bind this field; only legacy schema-1 plans
+                # lacking the field receive the compatibility projection.
+                modern = {**manifest, 'schema': 2, 'miri_profile': 'routine',
+                          'plan': {**manifest['plan'], 'full_phases': ['miri']}}
+                with self.assertRaises(ValueError):
+                    jobs.validate_source(modern, plans.ROOT)
             with patch.object(records, "sources", return_value={"head": "b"}), self.assertRaises(ValueError):
                 jobs.validate_source(manifest, plans.ROOT)
             with patch.object(plans, "build", return_value=plan(("sha2",))), self.assertRaises(ValueError):

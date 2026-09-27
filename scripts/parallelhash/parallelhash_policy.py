@@ -176,6 +176,13 @@ def validate(root: Path) -> None:
     require(loaded[PORTABLE / "src/hardened_in_place/reader.rs"],
             "#[cfg(test)]\nmod tests;", "scoped reader unwind tests remain test-only")
     test_only.add(PORTABLE / "src/hardened_in_place/reader/tests.rs")
+    # Host-only Miri case selectors/markers, never part of the no_std library.
+    for parent, child in (("hardened_in_place.rs", "hardened_in_place/tests.rs"),
+                          ("hardened_in_place/xof.rs", "hardened_in_place/xof/tests.rs"),
+                          ("hardened_in_place/scheduled.rs", "hardened_in_place/scheduled/tests.rs")):
+        require(loaded[PORTABLE / "src" / parent], "#[cfg(test)]\nmod tests;",
+                "Miri matrix module remains test-only")
+        test_only.add(PORTABLE / "src" / child)
     production = "\n".join(loaded[path] for path in (*SOURCES, *EXECUTION) if path not in test_only)
     for forbidden in (
         "unsafe", 'extern "C"', "std::", "alloc::", "Vec<", "Box<",

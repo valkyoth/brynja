@@ -5,8 +5,9 @@ collection/reuse passed. Final release qualification remains pending.**
 
 The detached runner is an operator tool for running the existing verification
 commands without leaving a terminal or assistant conversation open. It does
-not change test coverage, grant approval, independently verify cryptography,
-or authorize publication. The ParallelHash acceleration work remains a
+not grant approval, independently verify cryptography, or authorize publication.
+Miri coverage is explicitly selected by the profile described below, not inferred
+from a generic PASS. The ParallelHash acceleration work remains a
 separate required deliverable of this milestone.
 
 ## Lifecycle
@@ -47,8 +48,10 @@ job**, not per command. `--seconds` and `--log-bytes` set explicit budgets,
 capped at one day and 1 GiB respectively. Exceeding either budget fails the job.
 For independent build shards, pass `--shards N --workers W`, with
 `1 <= W <= N <= 8`. Each shard gets its own source/build directory; Miri and
-Kani group lists are expanded into exact per-group commands with identical
-coverage. Other commands are unchanged. Commands are partitioned round-robin;
+Kani group lists are expanded into exact per-group commands. New schema-2 jobs
+split Miri further, at each Cargo invocation in the existing full-group driver,
+and into registered matrix cases under the selected profile.
+Other commands are unchanged. Commands are partitioned round-robin;
 order within each shard is retained, but global phase order is not promised.
 Use serial mode if a local operation outside the registered workflow depends
 on earlier phases' generated build artifacts. Do not set `CARGO_TARGET_DIR`
@@ -88,6 +91,79 @@ launch receipt separately. Transfer alone does not establish native execution
 or authorize substituting one platform's tests for another platform's lane.
 
 ## Carry forward verified implementation checks
+
+### Resume interrupted work and combine partitions
+
+New jobs use schema 2: every successful command is source/plan/tool checked
+before and after execution, before its checkpoint is published. Logs are flushed
+as output arrives. Miri tasks print their group/task identity, test names, a
+host-clock elapsed duration on completion, and interpreter progress stacks.
+Progress output is not proof of success; a nonzero exit or zero passed tests
+fails the task. Miri safety checks remain enabled.
+
+To resume a cancelled, timed-out, or log-limited **schema-2** job, repeat the
+original selection and approval arguments, but use a new destination:
+
+```sh
+python3 scripts/release/detached-verification.py start /tmp/brynja-verification-resumed --phase miri --resume /tmp/brynja-verification-my-run RECEIPT
+```
+
+Completed commands are copied and validated; interrupted commands start from
+the beginning. Sources, tools, profile, command selection and approved plan must match.
+Budgets and worker counts may change. Retain the original directories and
+receipts: parent evidence is revalidated at collection. A failed test, changed
+input, missing log, running/lost worker, or schema-1 job is not automatically
+resumable. In particular, the cancelled v0.24.49 sweep is still cancelled;
+its historical command records lack the new post-command attestations.
+
+To distribute one identical command set across prepared matching Linux hosts,
+use `--partition 0/2` on one and `--partition 1/2` on the other (zero-based;
+at most eight partitions). Each uses an independent new job directory. These
+jobs finish **partial**, not passed, and cannot qualify the release separately.
+Bring their complete job directories back without changing frozen files,
+then combine them into another new job:
+
+```sh
+python3 scripts/release/detached-verification.py start /tmp/brynja-verification-combined --phase miri --resume /tmp/brynja-part-0 RECEIPT_0 --resume /tmp/brynja-part-1 RECEIPT_1
+```
+
+The combined job validates all parents and runs any still-missing commands.
+It can pass only when the complete original task set is present. Repeated
+passes do not count as missing tasks; a failed parent cannot be hidden by a
+passing copy. All hosts must have matching tool identities and source/plan
+inputs. This is not cross-platform substitution. Multi-host operation has
+local separate-process regression coverage; a real remote trial is still due.
+
+### Miri profiles
+
+New foreground and detached runs default to **routine** for internal tags and
+**extended** for public checkpoints. Routine deliberately samples the registered
+SHA-1, MD5, KMAC, TupleHash and ParallelHash matrices: 166 case/chunk tasks
+rather than 2,494 extended tasks. KMAC chunks use representative byte values;
+ParallelHash uses smaller inputs for small leaf sizes. Full native matrices
+remain unchanged. The other 83 Cargo invocations retain their original
+selections, minus the registered matrices now executed separately.
+
+Use `start --miri-profile extended` for an internal extended campaign, or
+`--miri-profile existing-full` for the legacy unsplit matrices. A public job
+cannot select routine. The profile is frozen in the receipt; resume cannot
+change it, and routine evidence cannot satisfy extended requirements. The
+legacy full profile can still contain very long inner loops.
+
+Each selected case must emit its exact completion marker and pass exactly one
+test. Case selectors are explicit interpreted-environment inputs used only under Miri; ambient
+selectors are rejected by the runner. No aliasing, race, alignment, validity
+or leak check is disabled. See [the design and measured limitations](miri-verification-design.md).
+These profiles do not yet guarantee short total execution across all families.
+Miri-only task catalog/runner edits select Miri without themselves selecting
+ASan/Kani; concurrent implementation changes and unknown scripts retain their
+normal conservative scope. Full-fallback approval still applies.
+Approval is not a request to expand every verifier: `full_phases` records which
+phases actually need a fallback, and foreground/detached execution honors it.
+Historical plans without that field retain their conservative interpretation.
+No automatic sweep is started by collecting results.
+
+### Reuse after later metadata changes
 
 After a successful job on the matching host/toolchain, the foreground runner
 validates its original snapshot and compares the current checkout against that
@@ -139,7 +215,8 @@ bounded and includes content hashes and executable flags. The original source
 must remain stable while that snapshot is created.
 
 The worker checks the snapshot and approved plan before each command and after
-the campaign. It records tool/compiler identities, commands, timestamps,
+the campaign; schema-2 jobs also check sources and tools after each successful
+command. It records tool/compiler identities, commands, timestamps,
 statuses, exit codes and bounded log hashes. Collection requires every selected
 command to have completed successfully, the original launch receipt, complete
 matching logs, and an unchanged source/execution plan for the snapshot being

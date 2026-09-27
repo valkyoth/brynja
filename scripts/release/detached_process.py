@@ -54,6 +54,11 @@ def execute(argv: list[str], root: Path, log: Path, cancel: Path, *,
                     else:
                         allowed = chunk[:maximum - count]
                         stream.write(allowed)
+                        # A long interpreted test may emit less than the Python
+                        # buffer size for hours. Make progress visible now, not
+                        # only when the entire command exits. Durability is
+                        # still established by fsync before publishing a result.
+                        stream.flush()
                         count += len(allowed)
                         if len(chunk) > len(allowed):
                             status = "log_limit"

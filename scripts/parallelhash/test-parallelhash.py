@@ -41,6 +41,10 @@ def main() -> int:
     assert parallelhash_policy.BORROWED_TOKENS is parallelhash_scoped_contracts.BORROWED_TOKENS
     assert parallelhash_policy.SCOPED_THREAD_TOKENS is parallelhash_scoped_contracts.SCOPED_THREAD_TOKENS
     parallelhash_policy.validate(ROOT)
+    for parent in ("hardened_in_place.rs", "hardened_in_place/xof.rs", "hardened_in_place/scheduled.rs"):
+        reject("miri-matrix-test-only", parallelhash_policy.PORTABLE / "src" / parent,
+               "#[cfg(test)]\nmod tests;", "mod tests;")
+    print("ParallelHash Miri matrix modules reject three production-import regressions")
     reject("std", Path("crates/brynja-hash-parallel/src/lib.rs"), "#![no_std]", "extern crate std;")
     reject("unsafe", Path("crates/brynja-hash-parallel/src/backend.rs"), "use brynja_hash_sha3", "unsafe fn bypass() {}\nuse brynja_hash_sha3")
     reject("domain", Path("crates/brynja-hash-parallel/src/backend.rs"), 'b"ParallelHash"', 'b"RawHash"')

@@ -270,7 +270,7 @@
     "crates/brynja-mac-kmac/src/lib.rs": "df60454cee363e5d17b9ae025e31520208b1ac4b4c17774c72239b11dcc44240",
     "crates/brynja-mac-kmac/src/output.rs": "f9b30f0dd6f63059631c3e470e98754ffcfb2571c4396bc864c887287806aebd",
     "crates/brynja-mac-kmac/src/packer.rs": "e5a35d85d83e2198ad58279f50c5dae8bc2f2e9074cacb1e7ef36c89cb1d1fc0",
-    "crates/brynja-mac-kmac/src/packer/framing_tests.rs": "75edd151e15180b21499c0083ba0fbe7d4304cd09990dac8f04b2f37b1abb77a",
+    "crates/brynja-mac-kmac/src/packer/framing_tests.rs": "b7e981ad796b22a60f10b41855aa0fc525dd08857f18d9ca7580bfe87bfb4ba8",
     "crates/brynja-mac-kmac/src/policy.rs": "1263e759cca9e58f45a47a498d786a405301a5df5ce2df672d101e201eebb7eb",
     "crates/brynja-mac-kmac/src/verify.rs": "d4f48aaffcb354eec725f579eae18749222cd4f598d4de4129c9b0110112270e",
     "crates/brynja-mac-kmac/src/xof.rs": "0ea4b24c170c36109b237aa91d1807b1efc7deef0a9e05b6ba6352342c971ede",

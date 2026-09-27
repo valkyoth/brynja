@@ -3,11 +3,11 @@ native = "fresh operational evidence required separately"
 
 [files]
 "crates/brynja-legacy-md5/src/batch/owner.rs" = "838dd5a8e47708f68912f7ac34dbf3e03a8108bbad743f6e4ba5f2d883e67861"
-"crates/brynja-legacy-md5/src/engine.rs" = "546c367050297d3d4ce8dc77f1c19f45c0f293de837100f26cc3d374e5b76f0e"
+"crates/brynja-legacy-md5/src/engine.rs" = "1a52576b4d90ad72f80077ed7f8f069d45a98c91326753ad1544c68b029e05ac"
 "crates/brynja-legacy-md5/src/output.rs" = "e9fa579738ee04c8d96553109f651d5764b02bf99a033467395da1a0c6e8acc4"
 "crates/brynja-legacy-md5/tests/api.rs" = "725949399117eae8b85e5ce3e460115d442f42c6f447a68c6f18bf505b06ebfe"
 "crates/brynja-legacy-md5/src/hardened_in_place.rs" = "f6ca50c9856d767df7da7de28ff39bb375a61d8db796735fce3a2a38faa912ae"
-"crates/brynja-legacy-md5/src/hardened_in_place/tests.rs" = "a6a5e09f1a5b025a0132ae3f97c16a862cd03f292c265f2755ce8838d860dfab"
+"crates/brynja-legacy-md5/src/hardened_in_place/tests.rs" = "238fd5a77e06b813bd4e57d6f1dd6946cd931850330951ce34f4c4db1123ec75"
 "crates/brynja-legacy-md5/src/batch/hardened_execution/in_place.rs" = "4296f3195a0f6bb2ac7e2b2d4e27d8e83543d49e0ad15c51676d81928c2f1d3b"
 "crates/brynja-legacy-md5/src/batch/hardened_execution/in_place/tests.rs" = "6fe9759db33384f33e621ed3a221a0fce29ee5bf3804e55bf8c4289a036fb669"
 "crates/brynja-legacy-md5/src/compress.rs" = "fe4b3527f6a26609ebf6d92d4681030fe250b6230d59cee96789f5e64dafed2e"

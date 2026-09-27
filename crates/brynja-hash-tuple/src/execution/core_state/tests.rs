@@ -132,10 +132,32 @@ fn operation_guard_clears_on_early_return() -> Result<(), Error> {
 
 #[test]
 fn borrowed_staging_matches_independently_packed_cshake() -> Result<(), Error> {
+    // Only Miri may select a case. Native runs retain the full 896-case matrix,
+    // even if the caller inherited a Miri task environment variable.
+    #[cfg(miri)]
+    let selected = {
+        extern crate std;
+        std::env::var("BRYNJA_MIRI_CASE")
+            .ok()
+            .map(|value| value.parse::<usize>())
+            .transpose()
+            .map_err(|_| Error::SecretMemory)?
+    };
+    #[cfg(not(miri))]
+    let selected: Option<usize> = None;
+    assert!(selected.is_none_or(|case| case < 896));
+    let mut visited = 0;
+    let mut executed = 0;
     for wide in [false, true] {
         for used in 0..8 {
             for valid in 1..=8 {
                 for length in [0, 1, 167, 168, 169, 336, 337] {
+                    let index = visited;
+                    visited += 1;
+                    if selected.is_some_and(|case| case != index) {
+                        continue;
+                    }
+                    executed += 1;
                     let mut input = [0_u8; 337];
                     for (n, byte) in input.iter_mut().enumerate() {
                         *byte = n.to_le_bytes()[0];
@@ -218,6 +240,13 @@ fn borrowed_staging_matches_independently_packed_cshake() -> Result<(), Error> {
                 }
             }
         }
+    }
+    assert_eq!(visited, 896);
+    assert_eq!(executed, if selected.is_some() { 1 } else { 896 });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        extern crate std;
+        std::println!("\nMIRI_CASE_PASS: tuplehash-staging:{case}");
     }
     Ok(())
 }

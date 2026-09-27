@@ -26,6 +26,11 @@ def main() -> int:
     start.add_argument("--log-bytes", type=int, default=256 * 1024 * 1024)
     start.add_argument("--shards", type=int, default=1)
     start.add_argument("--workers", type=int, default=1)
+    start.add_argument("--resume", nargs=2, action="append", metavar=("JOB", "RECEIPT"),
+                       help="copy validated schema-2 passes into a NEW job; rerun interrupted commands")
+    start.add_argument("--partition", help="run only zero-based INDEX/COUNT of the task set (not a complete receipt)")
+    start.add_argument("--miri-profile", choices=("routine", "extended", "existing-full"),
+                       help="default: routine internal / extended public; public cannot use routine")
     for name in ("status", "collect", "cancel", "_worker"):
         child = sub.add_parser(name)
         child.add_argument("job", type=Path)
@@ -34,8 +39,13 @@ def main() -> int:
     try:
         job = records.safe_path(args.job)
         if args.action == "start":
+            resume = ([{"job": str(records.safe_path(Path(path))), "receipt": receipt}
+                       for path, receipt in args.resume]
+                      if args.resume else None)
+            partition = [int(value) for value in args.partition.split("/")] if args.partition else None
             receipt = jobs.start(plans.ROOT, job, args.phase, args.approve_full,
-                                 args.base, args.seconds, args.log_bytes, args.shards, args.workers)
+                                 args.base, args.seconds, args.log_bytes, args.shards, args.workers,
+                                 resume, partition, args.miri_profile)
             print(json.dumps({"job": str(job), "receipt": receipt, "state": "started"}))
         elif args.action == "_worker":
             return jobs.worker(job, args.receipt)
@@ -49,7 +59,7 @@ def main() -> int:
                         pass
                 print("Cancellation requested; collect will not accept this run.")
             else:
-                print(json.dumps(records.read(job / "state.json"), sort_keys=True))
+                print(json.dumps(jobs.status(job, args.receipt), sort_keys=True))
         return 0
     except (ValueError, KeyError, TypeError, OSError, RuntimeError, subprocess.SubprocessError) as error:
         print(f"Detached verification rejected: {error}", file=sys.stderr)

@@ -2,6 +2,29 @@ use super::*;
 extern crate std;
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
+// Native tests always execute the full matrix, regardless of ambient values.
+fn miri_case(total: usize) -> Option<usize> {
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<usize>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(usize::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < total));
+    selected
+}
+
+fn miri_complete(selected: Option<usize>, executed: usize, total: usize, _name: &str) {
+    assert_eq!(executed, if selected.is_some() { 1 } else { total });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+    }
+}
+
 fn cleared(owner: &Md5Owner) {
     assert_eq!(owner.chaining_state, [0; 16]);
     assert_eq!(owner.block, [0; 64]);
@@ -19,12 +42,21 @@ fn poison(owner: &mut Md5Owner) {
 
 #[test]
 fn scoped_md5_streaming_bits_reuse_and_output_lifetime() -> Result<(), Md5Error> {
+    let selected = miri_case(288);
+    let mut visited = 0;
+    let mut executed = 0;
     let mut workspace = Md5Workspace::new();
     let message = [0xa5; 129];
     for size in [0, 1, 55, 56, 63, 64, 65, 119, 120, 127, 128, 129] {
         let input = message.get(..size).ok_or(Md5Error::OutputLength)?;
         for width in [1, 7, 64] {
             for bits in 0..8 {
+                let index = visited;
+                visited += 1;
+                if selected.is_some_and(|case| case != index) {
+                    continue;
+                }
+                executed += 1;
                 let tail = [0x80];
                 let tail = if bits == 0 {
                     empty()?
@@ -64,6 +96,8 @@ fn scoped_md5_streaming_bits_reuse_and_output_lifetime() -> Result<(), Md5Error>
             }
         }
     }
+    assert_eq!(visited, 288);
+    miri_complete(selected, executed, 288, "md5-scoped");
     Ok(())
 }
 

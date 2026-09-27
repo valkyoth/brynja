@@ -156,6 +156,18 @@ def git_tests():
             return b'' if args[0] == 'verify-tag' else real(path, *args)
         with patch.object(inputs, 'git', authenticated):
             assert scope.select_repository('v0.24.19', root) == (False, ())
+            for name in ('miri_tasks.py', 'miri_cases.py', 'run-miri-task.py', 'unknown.py'):
+                driver = root / 'scripts/zeroization' / name
+                driver.parent.mkdir(parents=True, exist_ok=True)
+                driver.write_text('# changed interpreter driver\n')
+                assert scope.select_repository('v0.24.19', root)[0]
+                native = scope.select_repository('v0.24.19', root, include_miri_tasks=False)
+                assert native == ((True, scope.GROUPS) if name == 'unknown.py' else (False, ()))
+                source.write_text('fn changed_implementation() {}\n')
+                native = scope.select_repository('v0.24.19', root, include_miri_tasks=False)
+                assert 'sha3' in native[1] and 'parallelhash' in native[1]
+                source.write_text('// baseline\n')
+                driver.unlink()
             documentation_test = root / 'scripts/cpu/static_execution_docs.py'
             documentation_test.parent.mkdir(parents=True)
             documentation_test.write_text('# documentation-only regression change\n')

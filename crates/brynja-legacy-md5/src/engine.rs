@@ -130,6 +130,29 @@ mod tests {
 
     extern crate std;
 
+    // Native tests always execute the full matrix, regardless of ambient values.
+    fn miri_case(total: usize) -> Option<usize> {
+        let selected = if cfg!(miri) {
+            std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+                let parsed = value.parse::<usize>();
+                assert!(parsed.is_ok());
+                parsed.unwrap_or(usize::MAX)
+            })
+        } else {
+            None
+        };
+        assert!(selected.is_none_or(|case| case < total));
+        selected
+    }
+
+    fn miri_complete(selected: Option<usize>, executed: usize, total: usize, _name: &str) {
+        assert_eq!(executed, if selected.is_some() { 1 } else { total });
+        #[cfg(miri)]
+        if let Some(case) = selected {
+            std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+        }
+    }
+
     #[test]
     fn invalid_update_offsets_trip_before_mutation() {
         for count in 64..=u8::MAX {
@@ -168,7 +191,13 @@ mod tests {
 
     #[test]
     fn every_valid_offset_survives_absorption_and_padding() {
+        let selected = miri_case(129);
+        let mut executed = 0;
         for length in 0..=128 {
+            if selected.is_some_and(|case| case != length) {
+                continue;
+            }
+            executed += 1;
             let mut owner = Md5Owner::new();
             for _ in 0..length {
                 assert_eq!(update(&mut owner, &[0xa5]), Ok(()));
@@ -186,12 +215,19 @@ mod tests {
                 assert_eq!(padded.buffered(), 0);
             }
         }
+        miri_complete(selected, executed, 129, "md5-padding");
     }
 
     #[test]
     fn borrowed_bulk_updates_match_single_bytes_at_every_boundary() -> Result<(), Md5Error> {
+        let selected = miri_case(258);
+        let mut executed = 0;
         let input: [u8; 257] = core::array::from_fn(|i| u8::try_from(i % 251).unwrap_or(0));
         for length in 0..=input.len() {
+            if selected.is_some_and(|case| case != length) {
+                continue;
+            }
+            executed += 1;
             let bytes = input.get(..length).ok_or(Md5Error::MessageTooLong)?;
             let mut expected = Md5Owner::new();
             for byte in bytes {
@@ -211,6 +247,7 @@ mod tests {
                 assert_eq!(owner.bits(), u128::try_from(length).unwrap_or(0) * 8);
             }
         }
+        miri_complete(selected, executed, 258, "md5-bulk");
         Ok(())
     }
 

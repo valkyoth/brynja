@@ -8,6 +8,7 @@ from pathlib import Path
 
 import detached_manifest as records
 import detached_process as process
+import detached_checkpoints as checkpoints
 
 
 def bounds(count: int, workers: int) -> None:
@@ -43,6 +44,8 @@ def run(manifest: dict, job: Path, receipt: str, started: float, stamp, validate
     count, workers = manifest["shards"], manifest["workers"]
     bounds(count, workers)
     groups = partition(manifest["commands"], count)
+    resumed = checkpoints.install(manifest, job) if manifest.get("schema") == 2 else {}
+    assigned = checkpoints.indices(manifest)
     allowances = [manifest["log_bytes"] // count + (i < manifest["log_bytes"] % count)
                   for i in range(count)]
 
@@ -52,6 +55,15 @@ def run(manifest: dict, job: Path, receipt: str, started: float, stamp, validate
         try:
             validate(manifest, root)
             for command_index, command in groups[index]:
+                if command_index in resumed:
+                    record = resumed[command_index]
+                    consumed += record["log_bytes"]
+                    if consumed > allowances[index]:
+                        raise ValueError("resumed logs exceed shard allowance")
+                    results.append(record)
+                    continue
+                if command_index not in assigned:
+                    continue
                 records.atomic(job / f"shard-{index:02d}.json",
                                {"state": "running", "manifest": receipt,
                                 "completed": len(results), "current": command_index})
@@ -69,9 +81,14 @@ def run(manifest: dict, job: Path, receipt: str, started: float, stamp, validate
                 environment.pop("BRYNJA_DETACHED_RECEIPT", None)
                 environment.update(command["environment"])
                 before = stamp()
+                if manifest.get("schema") == 2:
+                    checkpoints.seal(manifest, root, validate)
                 result = process.execute(command["argv"], root, log, job / "cancel",
                                          seconds=remaining, maximum=allowances[index] - consumed,
                                          environment=environment, stdin=command["stdin"])
+                if manifest.get("schema") == 2:
+                    result["checks"] = (checkpoints.seal(manifest, root, validate)
+                                        if result["state"] == "passed" else None)
                 result.update({"index": command_index, "command": command, "started": before,
                                "ended": stamp(), "log": log.name,
                                "log_sha256": records.file_hash(log, manifest["log_bytes"])})
@@ -107,6 +124,10 @@ def run(manifest: dict, job: Path, receipt: str, started: float, stamp, validate
     # Preserve the concrete failure instead of replacing it with sibling cancellation.
     state = next((s for s in states if s not in {"passed", "cancelled"}),
                  "cancelled" if "cancelled" in states else "passed")
-    if state == "passed" and [item["index"] for item in results] != list(range(len(manifest["commands"]))):
-        raise ValueError("detached shard coverage is incomplete")
+    if state == "passed":
+        actual = {item["index"] for item in results}
+        if actual != assigned | set(resumed) or len(results) != len(actual):
+            raise ValueError("detached shard coverage is incomplete")
+        if len(actual) != len(manifest["commands"]):
+            state = "partial"
     return results, state

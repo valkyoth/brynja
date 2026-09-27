@@ -7,6 +7,7 @@ import importlib.util
 import io
 import json
 import os
+import shlex
 import subprocess
 import tempfile
 from pathlib import Path
@@ -169,13 +170,23 @@ def runner_tests() -> None:
     assert any("sha2-execution" in c[0] for c in executed)
     assert not any("md5-differential" in c[0] for c in executed)
     assert run("miri", sample(groups=("sha2",))) == 0
-    assert executed == [("scripts/zeroization/check-zeroization-miri.sh --selected sha2",)]
+    from miri_tasks import commands as miri_commands
+    assert executed == [(shlex.join(argv),) for argv in miri_commands(plans.ROOT, ["sha2"], "routine")]
     assert run("miri", sample()) == 0 and not executed
     assert run("matrix", sample()) == 0 and not executed
     assert run("kani", sample(groups=("sha2",))) == 0
     assert executed == [("scripts/assurance/check-kani.sh --required-groups sha2",)]
     assert run("asan", sample(groups=("sha2",))) == 0
     assert executed and not any("brynja-legacy-md5" in c[0] for c in executed)
+    miri_only = {**sample(blocked=True), 'full_phases': ['miri'],
+                 'verifiers': {'miri': list(plans.scope.GROUPS), 'asan': [], 'kani': []}}
+    for phase in ('asan', 'matrix'):
+        assert run(phase, miri_only, '--approve-full', 'a' * 64) == 0
+        assert not executed
+    assert run('kani', miri_only, '--approve-full', 'a' * 64) == 0
+    assert executed == [('scripts/assurance/check-kani.sh --policy-only',)]
+    assert run('miri', miri_only, '--approve-full', 'a' * 64) == 0
+    assert len(executed) == 249
     assert run("repository", sample(public=True)) == 0
     assert any("md5-differential" in c[0] for c in executed)
     with patch.object(commands, "matrix_commands", side_effect=ValueError("unknown matrix")):

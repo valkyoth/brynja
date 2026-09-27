@@ -92,7 +92,7 @@ def main() -> int:
             plans.authorize(plan, args.approve_full or os.environ.get("BRYNJA_FULL_VERIFICATION_APPROVAL") or None)
         if args.phase == "plan" or args.check:
             return 0
-        full = not args.ci and (plan["stage"] == "public" or plan["approval_required"])
+        full = not args.ci and plans.requires_full(plan, args.phase)
         groups = ([] if args.ci and plan["approval_required"] else
                   list(plans.scope.GROUPS) if full else plan["groups"])
         if args.phase == "repository":
@@ -128,7 +128,12 @@ def main() -> int:
         elif args.phase == "miri":
             groups = list(plans.scope.GROUPS) if full else plan["verifiers"]["miri"]
             if groups:
-                execute("scripts/zeroization/check-zeroization-miri.sh --selected " + " ".join(groups))
+                from miri_tasks import commands as task_commands
+                from miri_cases import profile_for
+                profile = profile_for(plan["stage"])
+                print("Miri coverage profile: " + profile, flush=True)
+                for argv in task_commands(plans.ROOT, groups, profile):
+                    execute(shlex.join(argv))
             else:
                 print("REUSE: all unchanged Miri groups; native repository smoke checks remain")
         else:

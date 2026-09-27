@@ -5,10 +5,25 @@ macro_rules! check {
     ($test:ident, $lifecycle:ident, $workspace:ident, $plan:ident, $fixed:ident, $xof:ident, $size:expr) => {
         #[test]
         fn $test() -> Result<(), Error> {
+            let (selected, bounded) = miri_selection(32)?;
+            let mut visited = 0;
+            let mut executed = 0;
             let mut workspace = $workspace::new();
             for b in [1, 8, 17, 168] {
                 for valid in 1..=8 {
-                    let input = [1; 35];
+                    let index = visited;
+                    visited += 1;
+                    if selected.is_some_and(|case| case != index) {
+                        continue;
+                    }
+                    executed += 1;
+                    let bytes = [1; 35];
+                    let length = if bounded {
+                        (2 * b + 1).min(bytes.len())
+                    } else {
+                        bytes.len()
+                    };
+                    let input = bytes.get(..length).ok_or(Error::StateConsumed)?;
                     let bits = Fips202BitString::new(&input, valid)
                         .map_err(|_| Error::InvalidBitString)?;
                     let custom =
@@ -69,6 +84,7 @@ macro_rules! check {
                     assert!(workspace.cleared());
                 }
             }
+            miri_complete(selected, visited, executed, 32, stringify!($test));
             Ok(())
         }
         #[test]
@@ -183,3 +199,43 @@ check!(
     ParallelHashXof256,
     64
 );
+
+// Native execution always traverses the complete original matrix. These
+// interpreted environment selectors are used only by exact Miri tasks.
+#[cfg(not(miri))]
+fn miri_selection(_total: usize) -> Result<(Option<usize>, bool), Error> {
+    Ok((None, false))
+}
+
+#[cfg(miri)]
+fn miri_selection(total: usize) -> Result<(Option<usize>, bool), Error> {
+    extern crate std;
+    let selected = std::env::var("BRYNJA_MIRI_CASE")
+        .ok()
+        .map(|value| value.parse::<usize>())
+        .transpose()
+        .map_err(|_| Error::StateConsumed)?;
+    assert!(selected.is_none_or(|case| case < total));
+    let profile_value = std::env::var("BRYNJA_MIRI_PROFILE").ok();
+    let profile = profile_value.as_deref();
+    assert!(matches!(profile, None | Some("routine") | Some("extended")));
+    let bounded = profile == Some("routine");
+    assert!(!bounded || selected.is_some());
+    Ok((selected, bounded))
+}
+
+fn miri_complete(
+    selected: Option<usize>,
+    visited: usize,
+    executed: usize,
+    total: usize,
+    _name: &str,
+) {
+    assert_eq!(visited, total);
+    assert_eq!(executed, if selected.is_some() { 1 } else { total });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        extern crate std;
+        std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+    }
+}

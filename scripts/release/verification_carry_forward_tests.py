@@ -64,7 +64,11 @@ class CarryForwardTests(unittest.TestCase):
         context = self.context([])
         for phase in ('miri', 'kani'):
             required = carry.required(context, phase)
-            self.assertEqual(len(required), len(plans.scope.GROUPS))
+            if phase == 'kani':
+                self.assertEqual(len(required), len(plans.scope.GROUPS))
+            else:
+                self.assertEqual(set().union(*(carry.verifier_groups(e) for e in required)), set(plans.scope.GROUPS))
+                self.assertTrue(all(e['argv'][-2:] == ['--profile', 'routine'] for e in required))
 
     def test_matrix_and_emitted_code_reuse_but_changed_test_driver_reruns(self):
         for check in (entry('cargo +1.90.0 check --workspace', 'matrix'),
@@ -81,7 +85,8 @@ class CarryForwardTests(unittest.TestCase):
         self.assertEqual(plans.execution_identity(original), plans.execution_identity(
             {**original, 'issues': ['different first fallback'], 'reasons': ['different wording']}))
         for key, value in (('fingerprint', 'c' * 64), ('groups', ['md5']), ('head', 'c' * 40),
-                           ('verifiers', {}), ('approval_required', True), ('stage', 'public')):
+                           ('verifiers', {}), ('approval_required', True), ('stage', 'public'),
+                           ('full_phases', ['miri'])):
             self.assertNotEqual(plans.execution_identity(original),
                                 plans.execution_identity({**original, key: value}))
 

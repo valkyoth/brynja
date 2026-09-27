@@ -3,8 +3,11 @@
 Status: implementation approved by the owner, 2026-09-27; **partially implemented**.
 This work neither qualifies v0.24.49 nor authorizes a tag. New runs select a
 routine profile for internal releases and an extended profile for public
-checkpoints. Miri safety settings remain enabled. Wider timing and remote
-qualification remain outstanding; this is not a claim of a short full sweep.
+checkpoints. Miri safety settings remain enabled. The complete routine Miri
+campaign and two-host collection now pass; see the
+[campaign record](detached-verification.md#complete-two-host-routine-miri-campaign).
+Extended-profile qualification, the per-test obligation inventory and other
+release phases remain separate work; this is not a claim of a short full sweep.
 
 ## Implementation progress
 

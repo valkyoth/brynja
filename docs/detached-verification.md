@@ -376,3 +376,39 @@ release authorization. The earlier failed trial remains immutable; its
 bookkeeping defect and regression fix are recorded in the
 [Miri design notes](miri-verification-design.md). Both archives are stored
 outside Cargo output directories and survive `cargo clean`.
+
+## Complete two-host routine Miri campaign
+
+On 2026-09-27, the owner-approved routine Miri campaign completed all 562 tasks
+on source `d689f75a7040071184383b777079a45215c6beb7`. The same two Ubuntu hosts
+described above each ran one complementary 281-task partition, with two workers,
+independent source/build trees and a 14,400-second limit. All assigned tasks
+passed: the first host took 8,724.770 seconds (2 h 25 min), and the second took
+9,113.646 seconds (2 h 32 min). These are observed campaign durations, not a
+future-suite timing guarantee. No Kani or ASan campaign ran as part of this job.
+
+- First partition receipt: `ab3e6251c65901605abc1891da90cda358c837185e8cf475914a6d06ee95332c`.
+- Second partition receipt: `4a23fe532f65557d868c4d2a7b367d8fe3a4b897a17563b1ae492865376b94ff`.
+- Combined receipt: `a4ead907f7261f13e3f9681f964401a1fbd5fa3412c5f89b67741d72072421ae`.
+- Combined result SHA-256: `ca6cfd24214c72b78cdec68cacfdaa37c081aef65689fe6bf82b67ac59b77be2`.
+- Complete archive SHA-256: `a828b44ed8ba1815be2746172838851571bc44b69baf1d91630567510c23c760`.
+
+The second partition was transferred without build caches. A new immutable
+combined job imported the 562 passing records; the collector validated complete
+coverage, log hashes, unchanged inherited records, source snapshots and tool
+identity. Both original partition results remain `partial`, correctly describing
+their individual coverage. The combined result is `passed`. Its 10.433-second
+elapsed time measures collection/bookkeeping, **not** execution of the tests.
+
+The foreground Miri verifier consumed this receipt on the same source and
+reported `562 unchanged checks; 0 current checks passed`: every requirement
+was reused, and no tests reran. The full archive, including both parents, their
+Git snapshots, the combined job and all command logs, is retained locally as
+`release-reports/miri-routine-d689f75a-complete.tar.gz`, outside Cargo output
+and ignored by Git. Build caches are excluded. Restore the recorded parent
+paths and matching tools when using the existing collector; the archive is not
+a path-independent or tool-independent receipt.
+
+This closes the complete real two-host routine Miri transfer/union demonstration.
+It does not qualify the extended profile, replace native/ASan/Kani evidence,
+import legacy partial evidence, or authorize publication or tagging.

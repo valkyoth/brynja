@@ -39,7 +39,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertEqual(catalog.selected(plan, ['matrix'], plan['fingerprint']), [])
         miri = catalog.selected(plan, ['miri'], plan['fingerprint'], miri_tasks=True,
                                 miri_profile='routine')
-        self.assertEqual(len(miri), 542)
+        self.assertEqual(len(miri), 562)
         old = {'phase': 'asan', 'command': 'cargo test -p brynja-hash-sha2',
                'argv': ['cargo', 'test', '-p', 'brynja-hash-sha2'], 'stdin': None,
                'environment': {}}
@@ -56,7 +56,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertTrue(plans.requires_full({**plan, 'full_phases': ['repository']}, 'command'))
 
     def test_profile_task_sets_are_unique_and_fit_detached_bound(self):
-        for profile, count in (('existing-full', 83), ('routine', 542), ('extended', 3838)):
+        for profile, count in (('existing-full', 83), ('routine', 562), ('extended', 4094)):
             commands = miri_tasks.commands(plans.ROOT, list(plans.scope.GROUPS), profile)
             self.assertEqual(len(commands), count)
             self.assertEqual(len({tuple(command) for command in commands}), count)
@@ -81,7 +81,7 @@ class MiriCaseTests(unittest.TestCase):
         commands = catalog.selected(plan, list(catalog.PHASES), None,
                                     miri_tasks=True, miri_profile='routine')
         self.assertEqual({command['phase'] for command in commands}, set(catalog.PHASES))
-        self.assertGreater(len(commands), 542)
+        self.assertGreater(len(commands), 562)
         self.assertLessEqual(len(commands), 4096)
 
     def test_routine_parallel_covers_widths_blocks_and_each_lifecycle_case_zero(self):
@@ -131,7 +131,7 @@ class MiriCaseTests(unittest.TestCase):
                 self.assertTrue(all(task['environment']['BRYNJA_MIRI_PROFILE'] == 'extended' for task in selected))
                 self.assertTrue(all(task['argv'][-2:] == ['--', '--exact'] for task in selected))
                 count += len(cases)
-        self.assertEqual(count, 3727)
+        self.assertEqual(count, 3983)
 
     def test_tuple_execution_splits_keep_every_strength_width_and_xof_case(self):
         matrices = miri_cases.matrices('tuplehash')[1:3]
@@ -266,7 +266,7 @@ class MiriCaseTests(unittest.TestCase):
 
     def test_legacy_boundary_samples_retain_padding_block_chunk_and_bit_dimensions(self):
         for group in ('sha1', 'md5'):
-            padding, bulk, scoped = miri_cases.matrices(group)
+            padding, bulk, scoped = miri_cases.matrices(group)[:3]
             self.assertTrue({0, 1, 55, 56, 63, 64, 65, 119, 120, 127, 128} <= set(padding['routine']))
             self.assertTrue({0, 1, 63, 64, 65, 127, 128, 129, 255, 256, 257} <= set(bulk['routine']))
             cases = scoped['routine']
@@ -275,6 +275,26 @@ class MiriCaseTests(unittest.TestCase):
             self.assertEqual({case % 8 for case in cases}, set(range(8)))
         framing = miri_cases.matrices('kmac')[0]
         self.assertEqual(framing['routine'], list(range(8)))
+
+    def test_md5_mask_tasks_preserve_lane_shapes_and_cleanup_comparisons(self):
+        matrix = miri_cases.matrices('md5')[3]
+        self.assertEqual(matrix['total'], 256)
+        self.assertEqual(matrix['features'], ['cpu'])
+        self.assertEqual(set(matrix['routine']),
+                         {0, 255, 0x55, 0xaa, *(1 << i for i in range(8)),
+                          *(255 ^ (1 << i) for i in range(8))})
+        for profile in ('routine', 'extended'):
+            tasks = miri_tasks.task_inventory(plans.ROOT, 'md5', profile)
+            self.assertEqual(tasks[6]['argv'].count(matrix['name']), 1)
+            exact = [task for task in tasks if task['marker'] and matrix['name'] in task['argv']]
+            expected = matrix['routine'] if profile == 'routine' else list(range(256))
+            self.assertEqual([int(task['environment']['BRYNJA_MIRI_CASE']) for task in exact], expected)
+            self.assertTrue(all(task['argv'][:5] == ['-p', 'brynja-legacy-md5', '--features', 'cpu', '--lib']
+                                for task in exact))
+            for name in ('batch::tests::all_inactive_and_active_empty_are_distinct',
+                         'batch::tests::exact_work_limits_and_every_callback_failure_are_transactional',
+                         'future_unregistered_test'):
+                self.assertNotIn(name, tasks[6]['argv'])
 
     def test_other_commands_and_families_keep_original_arguments(self):
         for group in plans.scope.GROUPS:

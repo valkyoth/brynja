@@ -51,16 +51,17 @@ def run(manifest: dict, job: Path, receipt: str, started: float, stamp, validate
 
     def shard(index: int) -> tuple[list, str]:
         root = source(job, index, count)
-        results, consumed = [], 0
+        # All inherited records already exist and are validated by install().
+        # Include them before running missing work: an early interruption must
+        # not drop later-indexed passes from this job's terminal checkpoint set.
+        results = [resumed[i] for i, _ in groups[index] if i in resumed]
+        consumed = sum(record["log_bytes"] for record in results)
         try:
+            if consumed > allowances[index]:
+                raise ValueError("resumed logs exceed shard allowance")
             validate(manifest, root)
             for command_index, command in groups[index]:
                 if command_index in resumed:
-                    record = resumed[command_index]
-                    consumed += record["log_bytes"]
-                    if consumed > allowances[index]:
-                        raise ValueError("resumed logs exceed shard allowance")
-                    results.append(record)
                     continue
                 if command_index not in assigned:
                     continue

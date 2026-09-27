@@ -76,7 +76,7 @@ routine execution matrices separately retain their 1,025-byte messages.
 
 The other 83 original Cargo invocations remain selected, excluding only those
 forty-two registered matrices now run separately. Thus a complete all-family
-routine catalog has 542 tasks (431 case/chunk tasks) and extended has 3,838
+routine catalog has 562 tasks (451 case/chunk tasks) and extended has 4,094
 (3,727 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
 tests and six ParallelHash API tests additionally run as separate exact tests,
 with inputs/assertions unchanged. Four TupleHash scoped lifecycle tests and five
@@ -287,10 +287,43 @@ command; the parent's cancelled result remains unchanged and uncollectible.
 These fixtures substitute planning/tool discovery, not source hashing or process
 execution. They do not substitute for the pending real two-host Miri trial.
 
-Capacity observation: the current complete internal routine catalog has 1,089
+MD5 mask follow-up: the remote trial exposed a still-grouped 256-mask batch
+comparison. It now has exact per-mask tasks: routine selects 20 masks (empty,
+full, each lone lane, each absent lane and alternating occupancy); native and
+extended retain all 256. Each case retains the original lane lengths, partial
+tails, ordinary/scalar comparisons, hardened output and destination-clearing
+checks. No mask shares a mutable batch owner with another mask in the original
+test. Native tests ignore ambient selectors; selected Miri execution requires
+exactly one completed mask and its matching marker. Other batch failure tests
+and discovery of future tests remain in the original broad invocation.
+All 20 routine mask tasks passed locally; empty/full/alternating probes took
+0.7/4.7/2.3 host seconds. The residual broad MD5 command passed 21 tests in 123
+seconds. Native all-feature tests/doctests passed on Rust 1.90.0 and 1.98.1
+with hostile selectors ignored; scoped Clippy and review/source-policy checks
+passed. Historical native observations and source snapshots were not rewritten.
+
+The first real two-host trial on `9ccd4ff3` transferred 33 unchanged completed
+commands (four from one parent and 29 from the other) after explicit cancellation.
+The resumed job hit its approved 600-second cap in the unsplit MD5 mask matrix.
+Inspection exposed a runner bug: copied later-indexed passes were absent from
+the terminal result when an earlier missing command timed out. Further resume
+correctly rejected that result as incomplete. The original trial remains
+unsuccessful and has not been repaired or promoted. Its three frozen jobs and
+logs were archived outside Cargo output, with archive SHA-256
+`309571c09d97c5b98b3b63333d07e842f5715a4cb207f7b5c1cfe710f9f226b0`.
+
+The correction initializes each shard's results and log accounting with all
+validated inherited passes before executing missing commands. A regression
+first reproduced the failure, then passed a timeout/resume chain without
+rerunning or changing the later pass. All 97 runner regressions passed after
+this correction. This changes checkpoint bookkeeping, not coverage, approval,
+source/tool validation or release authority. A corrected remote trial is still
+required; the failed trial is not qualification evidence.
+
+Capacity observation: the current complete internal routine catalog has 1,109
 commands including non-Miri phases, and has a regression check against the
-existing 4,096-command bound. The combined public/extended catalog has 4,385
-commands and exceeds that bound (Miri alone has 3,838). This capacity issue must
+existing 4,096-command bound. The combined public/extended catalog has 4,641
+commands and exceeds that bound (Miri alone has 4,094). This capacity issue must
 be resolved before a combined public sweep; no bound or evidence requirement
 has been changed by these test splits.
 

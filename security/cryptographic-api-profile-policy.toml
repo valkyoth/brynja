@@ -1423,7 +1423,7 @@ sha256 = "585635de1ae231bff3365dd8349fa67835e0712a963671512a39536944101f3b"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-md5/src/batch/tests.rs"
-sha256 = "70520292613104df45b27eea09d0ec1c3571db125ce84769afcf513cf17c4e38"
+sha256 = "88d7ba99043613ad916b178eaf22ad7c524d2ef850c49f161cc4f1450b6d10cd"
 
 [[reviewed-source]]
 path = "assurance/md5-cpu-public-api/src/packaged.rs"

@@ -140,6 +140,34 @@ class CheckpointTests(unittest.TestCase):
         self.assertEqual((parent[0] / "command-0000.json").read_bytes(),
                          (child[0] / "command-0000.json").read_bytes())
 
+    def test_resume_timeout_retains_inherited_passes_after_the_interrupted_index(self):
+        finish = self.root / "finish-early"
+        programs = [f'from pathlib import Path; import time; '
+                    f'time.sleep(0 if Path({str(finish)!r}).exists() else 30)',
+                    f'from pathlib import Path; Path({str(self.root / "once-later")!r}).touch(exist_ok=False)',
+                    'print("last")']
+        parent = self.job("later-parent", programs, partition=[1, 2])
+        self.assertEqual(self.run_job(parent), 0)
+        child = self.job("early-timeout", programs, seconds=1,
+                         resume={"job": str(parent[0]), "receipt": parent[1]})
+        self.assertEqual(self.run_job(child), 1)
+        terminal = records.read(child[0] / "result.json")
+        self.assertEqual(terminal["state"], "timed_out")
+        self.assertEqual([(r["index"], r["state"]) for r in terminal["results"]],
+                         [(0, "timed_out"), (1, "passed")])
+        with probes():
+            _, retained = checkpoints.completed(*child)
+        self.assertEqual(set(retained), {1})
+        finish.touch()
+        grandchild = self.job("complete-chain", programs,
+                              resume={"job": str(child[0]), "receipt": child[1]})
+        self.assertEqual(self.run_job(grandchild), 0)
+        with probes():
+            self.assertEqual(jobs.collect(*grandchild, grandchild[0] / "source")["commands"], 3)
+        self.assertEqual(terminal, records.read(child[0] / "result.json"))
+        self.assertEqual((parent[0] / "command-0001.json").read_bytes(),
+                         (grandchild[0] / "command-0001.json").read_bytes())
+
     def test_missing_partition_is_not_complete_and_duplicates_do_not_fill_it(self):
         programs = ['print("zero")', 'print("one")']
         job = self.job("part", programs, partition=[0, 2])

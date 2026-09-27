@@ -10,9 +10,24 @@ fn bits(bytes: &[u8], valid: u8) -> Option<BitString<'_>> {
 
 #[test]
 fn every_active_mask_and_uneven_bit_tail_matches_scalar() {
+    // Native execution retains every mask, even with hostile ambient selectors.
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<u16>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(u16::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|mask| mask < 256));
+    let mut executed = 0_usize;
     let data: [[u8; 130]; 8] =
         core::array::from_fn(|i| [u8::try_from(i).unwrap_or(0).saturating_mul(32); 130]);
     for mask in 0..256_u16 {
+        if selected.is_some_and(|case| mask != case) {
+            continue;
+        }
         let inputs = core::array::from_fn(|i| {
             if mask & (1 << i) == 0 {
                 None
@@ -47,6 +62,12 @@ fn every_active_mask_and_uneven_bit_tail_matches_scalar() {
         }
         drop(result);
         assert_eq!(hardened, [[0; 16]; 8]);
+        executed = executed.saturating_add(1);
+    }
+    assert_eq!(executed, if selected.is_some() { 1 } else { 256 });
+    #[cfg(miri)]
+    if let Some(mask) = selected {
+        std::println!("\nMIRI_CASE_PASS: md5-batch-mask:{mask}");
     }
 }
 

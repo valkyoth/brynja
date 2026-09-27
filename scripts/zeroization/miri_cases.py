@@ -36,7 +36,7 @@ def matrices(group: str) -> list[dict]:
                     ('every_partial_secret_xof_width_matches_and_clears', 'sha3-secret-xof-bits', 7, list(range(7))))]
     if group in ('sha1', 'md5'):
         package = 'brynja-legacy-' + group
-        return [
+        legacy = [
             {'name': 'engine::tests::every_valid_offset_survives_absorption_and_padding',
              'marker': group + '-padding', 'total': 129,
              'routine': [0, 1, 54, 55, 56, 57, 62, 63, 64, 65, 119, 120, 127, 128],
@@ -50,6 +50,17 @@ def matrices(group: str) -> list[dict]:
              'routine': [(size * 3 + size % 3) * 8 + size % 8 for size in range(12)],
              'package': package, 'features': []},
         ]
+        if group == 'md5':
+            # Empty/full, each lone lane, each absent lane and alternating
+            # occupancy. Every selected lane keeps its original input/tail.
+            legacy.append(dict(
+                name='batch::tests::every_active_mask_and_uneven_bit_tail_matches_scalar',
+                marker='md5-batch-mask', total=256,
+                routine=sorted({0, 255, 0x55, 0xaa,
+                                *(1 << lane for lane in range(8)),
+                                *(255 ^ (1 << lane) for lane in range(8))}),
+                package=package, features=['cpu']))
+        return legacy
     if group == 'kmac':
         official = [dict(name=name, marker=marker, total=6, routine=list(range(6)),
                          package='brynja-mac-kmac', features=[], target=['--test', 'official_vectors'])

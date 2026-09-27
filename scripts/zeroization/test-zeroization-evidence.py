@@ -78,9 +78,16 @@ def test() -> None:
         copy_fixture(root)
 
         runner = root / "scripts/release/run-verification.py"
-        replace(runner, 'execute("scripts/zeroization/check-zeroization-miri.sh --selected " + " ".join(groups))', "pass")
-        require_rejection(root, "focused Miri evidence")
-        copy_fixture(root)
+        for before, after in (
+            ('elif args.phase == "miri":', 'elif args.phase == "disabled-miri":'),
+            ('groups = list(plans.scope.GROUPS) if full else plan["verifiers"]["miri"]', 'groups = []'),
+            ('profile = profile_for(plan["stage"])', 'profile = "routine"'),
+            ('task_commands(plans.ROOT, groups, profile)', 'task_commands(plans.ROOT, [], profile)'),
+            ('execute(shlex.join(argv))', 'print(shlex.join(argv))'),
+        ):
+            replace(runner, before, after)
+            require_rejection(root, "focused Miri evidence")
+            copy_fixture(root)
 
         workflow.write_text(
             workflow.read_text(encoding="utf-8")
@@ -100,4 +107,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("zeroization evidence rejects eight claim, coverage, and execution-boundary regressions")
+    print("zeroization evidence rejects twelve claim, coverage, and execution-boundary regressions")

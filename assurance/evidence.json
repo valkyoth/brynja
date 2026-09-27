@@ -91,8 +91,8 @@
     "scripts/zeroization/miri_scope.py": "729ac79c9963a6d4a7ecd677151e7e2be82d11f691f4cddd75585e0a75e6bd17",
     "scripts/zeroization/scope_inputs.py": "0453a8f684053cf1777c6fe1ccc30ae0f970b53d5325218623dd473d582e7c25",
     "scripts/zeroization/test-miri-scope.py": "935573a30466112a3971e7cb8ac9c65a6e96c1fac813058c1e8296b2aeefb239",
-    "scripts/zeroization/test-zeroization-evidence.py": "96968fbf617be0ffa53ab7d7e20fad3448be1f479fd0f176fc639d51794bf902",
-    "scripts/zeroization/zeroization_evidence.py": "33553f322656ab6ed172f0884944dc06a5c31159ee6bc45f5a322e7dd6453053",
+    "scripts/zeroization/test-zeroization-evidence.py": "d062ead5388713476922aeaa611d9b270924f78491d30e2d332c95808ce9c3b5",
+    "scripts/zeroization/zeroization_evidence.py": "491c8d0c1dfbab66c4c75fa564be9c56ee261c78ae8d389cd67461ac506893b1",
     "security/release-signers": "79c6c8982cd2d4624f11ba6019d3cdd58e14843ba4298be3d085f3ae084b37eb"
   },
   "milestone": "0.4.0",

@@ -1,0 +1,5 @@
+ParallelHash Miri matrix modules reject five production-import regressions
+ParallelHash buffering matrix rejects production import and disconnected helper
+ParallelHash policy rejects thirty-six domain, encoding, lifecycle, cleanup, scheduling, evidence, test, and dependency regressions
+Borrowed ParallelHash framing/leaf policy rejects 227 semantic regressions
+Scoped thread handoff rejects 91 semantic regressions

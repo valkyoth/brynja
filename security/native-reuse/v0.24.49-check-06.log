@@ -1,0 +1,109 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/brynja_hash_parallel_std-0001e22e38c7f04a)
+
+running 62 tests
+test execution::batch::in_place::tests::scoped_multibuffer_static_and_mixed_routes ... ok
+test execution::batch::in_place::tests::empty_input_has_no_workers ... ok
+test execution::batch::in_place::worker::tests::scoped_multibuffer_work_counters_are_atomic ... ok
+test execution::batch::in_place::tests::required_partial_group_rejects_without_output ... ok
+test execution::batch::tests::empty_input_has_no_workers ... ok
+test execution::batch::worker::tests::work_totals_are_exact_checked_and_atomic ... ok
+test execution::batch::worker::tests::storage_drop_clears_all_live_transport_capacity ... ok
+test execution::batch::in_place::worker::tests::order::scoped_multibuffer_spawn_unwind128 ... ok
+test execution::in_place::tests::scoped_execution_gate_rejects_overlap_and_poison ... ok
+test execution::batch::in_place::worker::tests::order::scoped_multibuffer_spawn_unwind256 ... ok
+test execution::batch::tests::required_partial_group_rejects_without_output ... ok
+test execution::in_place::worker::tests::scoped_execution_leaf_revocation256 ... ok
+test execution::tests::operation_permit_rejects_reentry_without_touching_public_output ... ok
+test execution::tests::miri_case_accounting_rejects_missing_duplicate_and_unexecuted_work ... ok
+test execution::tests::poisoned_permit_is_terminal_and_still_clears_destinations ... ok
+test execution::in_place::worker::tests::scoped_execution_leaf_revocation128 ... ok
+test execution::worker::tests::storage_clear_visits_every_byte_of_every_live_slot ... ok
+test execution::batch::in_place::worker::tests::order::scoped_multibuffer_order128 ... ok
+test scoped_worker::tests::scoped_slots_clear_all_widths_and_admission_is_checked ... ok
+test strict_execution::compiled::tests::batch_cancellation_does_not_mask_backend_or_invariant_failure ... ok
+test strict_execution::compiled::tests::unsupported_model_missing_bundle_wrong_operation_reject ... ok
+test execution::in_place::worker::tests::scoped_execution_workers_join256 ... ok
+test execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed256 ... ok
+test execution::batch::in_place::tests::scoped_multibuffer_invalid_config_short_stage_and_poison ... ok
+test execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof256 ... ok
+test execution::in_place::worker::tests::scoped_execution_workers_join128 ... ok
+test execution::batch::in_place::worker::tests::scoped_multibuffer_unwind256 ... ok
+test execution::batch::in_place::worker::tests::order::scoped_multibuffer_order256 ... ok
+test strict_execution::tests::shape_limits_fail_before_launch ... ok
+test scoped_worker::tests::scoped_merge_unwind_joins_and_clears_results ... ok
+test execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_xof128 ... ok
+test execution::batch::in_place::worker::tests::scoped_multibuffer_unwind128 ... ok
+test worker::tests::every_panicking_worker_is_joined_without_scope_unwind ... ok
+test tests::all_public_operations_reject_concurrent_use_without_waiting ... ok
+test scoped_worker::tests::scoped_workers_overlap_and_merge_in_order ... ok
+test worker::tests::worker_panic_becomes_closed_error ... ok
+test tests::poisoned_operation_gate_fails_closed ... ok
+test worker::tests::launch_failure_is_typed_and_started_worker_is_joined ... ok
+test execution::worker::tests::every_completed_or_panicking_worker_clears_its_output_slot ... ok
+test execution::batch::worker::tests::coordinator_unwind::coordinator_unwind_fixed128 ... ok
+test worker::tests::launch_failure_is_typed_and_joined_for_parallel_hash256 ... ok
+test execution::batch::in_place::worker::tests::scoped_multibuffer_join256 ... ok
+test execution::batch::in_place::worker::tests::scoped_multibuffer_join128 ... ok
+test execution::batch::worker::tests::every_completed_or_panicking_worker_clears_its_output_slot ... ok
+test execution::worker::tests::spawn_errors_panics_and_cancellation_join_and_close_root ... ok
+test scoped_worker::tests::scoped_workers_join_and_clear256 ... ok
+test execution::worker::tests::reversed_worker_completion_is_merged_in_submission_order ... ok
+test scoped_worker::tests::scoped_workers_join_and_clear128 ... ok
+test execution::batch::worker::tests::spawn_errors_panics_and_cancellation_join_and_close_root ... ok
+test execution::batch::in_place::tests::request_rejections_preserve_public_clear_secret_and_allow_reuse ... ok
+test execution::batch::tests::request_rejections_preserve_public_clear_secret_and_allow_reuse ... ok
+test execution::in_place::tests::scoped_execution_fixed_xof_domains_and_zero_output ... ok
+test execution::batch::worker::tests::reversed_worker_completion_is_merged_in_submission_order ... ok
+test execution::batch::tests::preferred_threads_bits_outputs_and_counters ... ok
+test execution::batch::tests::portable_threads_bits_outputs_and_counters ... ok
+test execution::batch::in_place::tests::portable_threads_bits_outputs_and_counters ... ok
+test execution::batch::in_place::tests::preferred_threads_bits_outputs_and_counters ... ok
+test strict_execution::tests::native::all_identities_bits_and_multiple_waves_match_portable ... ok
+test strict_execution::tests::native::failures_after_leaf_root_and_output_clear_and_allow_reuse ... ok
+test strict_execution::tests::native::malformed_budget_cancelled_and_forgotten_outputs_clear ... ok
+test strict_execution::tests::native::reordered_leaf_loans_fail_closed_for_every_identity ... ok
+test strict_execution::tests::native::zero_partial_and_large_xof_output ... ok
+
+test result: ok. 62 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.09s
+
+     Running tests/execution.rs (target/debug/deps/execution-a39d3996e1e5f71f)
+
+running 4 tests
+test required_native_routes_are_real_or_fail_without_output ... ok
+test static_workers_require_compiled_features_and_never_silently_fall_back ... ok
+test early_failures_preserve_public_and_clear_secret_and_scratch ... ok
+test all_thread_widths_identities_and_mixed_routes_match_serial ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/executor.rs (target/debug/deps/executor-fc0785b731689ff5)
+
+running 5 tests
+test cancellation_is_fail_closed_and_preserves_output ... ok
+test zero_workers_are_rejected ... ok
+test zero_and_exceeded_leaf_budgets_fail_before_output ... ok
+test arbitrary_bit_executor_matches_portable_fixed_and_xof ... ok
+test worker_counts_match_portable_fixed_and_xof ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scoped.rs (target/debug/deps/scoped-2f304ea42e4ce771)
+
+running 4 tests
+test scoped_threaded256_lifecycle ... ok
+test scoped_threaded128_lifecycle ... ok
+test scoped_threaded128_matches_all_outputs ... ok
+test scoped_threaded256_matches_all_outputs ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/scoped_execution.rs (target/debug/deps/scoped_execution-58561787aa661780)
+
+running 4 tests
+test required_native_routes_are_real_or_fail_without_output ... ok
+test static_workers_require_compiled_features_and_never_silently_fall_back ... ok
+test early_failures_preserve_public_and_clear_secret_and_scratch ... ok
+test all_thread_widths_identities_and_mixed_routes_match_serial ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s

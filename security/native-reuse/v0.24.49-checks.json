@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "review_sha256": "d1925b5f05043cbbff8e53ace5df6b694dccc9d4245b647f5761f421358ed808",
+  "inputs": "9134a9ad6080c317572f285271ed685ede07fefc56fd6caa7f343a6163c4e60c",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "environment": {
+    "BRYNJA_MIRI_CASE": "not-a-valid-case",
+    "BRYNJA_MIRI_PROFILE": "routine"
+  },
+  "checks": [
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-legacy-sha1",
+        "--all-features",
+        "--lib",
+        "--tests"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-00.log",
+      "sha256": "b8794c9346ad60dfdc223ff10ea3ecf7b0637e12e5e740326782003db5547698"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-legacy-md5",
+        "--all-features",
+        "--lib",
+        "--tests"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-01.log",
+      "sha256": "caa581f6db1792f11e97f7c52fc621bd4e48e2a118d63bc01989558203d0cb44"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-hash-sha3",
+        "--all-features",
+        "--lib",
+        "--tests"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-02.log",
+      "sha256": "452f64029b3882b0474f06e23596f65ac00cda3a3e75f32890a326902d201041"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-mac-kmac",
+        "--all-features",
+        "--lib",
+        "--tests"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-03.log",
+      "sha256": "7e36f851dc378d2e2db081397fd3a35cfc75cfd713f5b73c5515b87591a0e407"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-hash-tuple",
+        "--all-features",
+        "--lib",
+        "--tests"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-04.log",
+      "sha256": "1a6c4f37b385acfa1ab624b4fe1cd752b2df8791f77602fd72cc1500d7a4d9fb"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-hash-parallel",
+        "--all-features",
+        "--lib",
+        "--tests"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-05.log",
+      "sha256": "1c0e34ce67b8e2d67406def5c02466312e61ba404ff9e3cf693b390c13ea2fc7"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-hash-parallel-std",
+        "--all-features",
+        "--lib",
+        "--tests"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-06.log",
+      "sha256": "d72628e60025268eb893757b9d81ac8a921145437aa02673b2962ca2170a7ec6"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/parallelhash/check-parallelhash.py"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-07.log",
+      "sha256": "a98749ef69c3c0adcfaa0c06a224ecad6a17909454b25fe31a7ccd6fbf2d686b"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/parallelhash/test-parallelhash.py"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-08.log",
+      "sha256": "210da976d3f1b68252ab37a16071c2a584dac39db86250eb2b9d216177954bfa"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/tuplehash/check-tuplehash-execution-package.py"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-09.log",
+      "sha256": "cf3b9cb732d4df690529d1dc2d1f8ff02f1fae9362cdc3f9bd5f2154bded18c6"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/release/test-native-metadata-carry-forward.py"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.49-check-10.log",
+      "sha256": "f72afbbde16b771d11d4d858d454355426a98b84681fd0d62d2a629ff97710f3"
+    }
+  ]
+}

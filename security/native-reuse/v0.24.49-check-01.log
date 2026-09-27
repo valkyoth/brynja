@@ -1,0 +1,85 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/brynja_legacy_md5-ec2ffbf405253fee)
+
+running 39 tests
+test batch::execution::tests::cancellation_budget_and_final_callback_revocation_preserve_output ... ok
+test batch::execution::tests::eligibility_distinguishes_inactive_empty_and_partial_blocks ... ok
+test batch::execution::tests::required_workload_rejection_needs_no_work_or_output_mutation ... ok
+test batch::hardened_execution::in_place::tests::scoped_batch_callback_unwind_and_failed_admission_clear_storage ... ok
+test batch::hardened_execution::in_place::tests::scoped_batch_ineligible_and_length_rejection_preserve_health ... ok
+test batch::hardened_execution::in_place::tests::scoped_batch_reset_forget_cancel_and_reuse ... ok
+test batch::tests::all_inactive_and_active_empty_are_distinct ... ok
+test cpu::scratch::tests::clears_all_packed_regions_including_inactive_storage ... ok
+test batch::tests::quarantined_session_preserves_every_output_slot_even_when_inactive ... ok
+test cpu::session::tests::every_accelerated_cancellation_and_late_quarantine_preserves_output ... ok
+test cpu::session::tests::failed_kat_and_lost_features_are_permanent_and_atomic ... ok
+test cpu::secret::tests::rejected_or_panicking_authority_clears_packed_storage_without_instructions ... ok
+test batch::hardened_execution::in_place::tests::scoped_batch_empty_and_inactive_output_is_not_stale ... ok
+test cpu::session::tests::identities_and_admission ... ok
+test cpu::session::tests::independent_arbitrary_state_block_lanes_match_frozen_scalar ... ok
+test cpu::session::tests::masks_lengths_and_bit_tails_preserve_lane_order ... ok
+test batch::hardened_execution::in_place::tests::scoped_batch_cancel_revocation_and_operation_unwind ... ok
+test cpu::session::tests::operational_kat_and_revocation_remain_fail_closed ... ok
+test cpu::session::tests::operational_revalidator_unwind_quarantines_without_instructions ... ok
+test engine::tests::exhaustion_rejects_before_any_state_mutation ... ok
+test engine::tests::rfc_length_wrap_is_not_sha1_exhaustion ... ok
+test hardened::tests::exhaustion_finalization_preserves_public_and_clears_secret_output ... ok
+test batch::tests::unwind_clears_secret_destination_and_preserves_public_destination ... ok
+test hardened_in_place::tests::scoped_md5_initialization_overwrites_all_previous_storage ... ok
+test hardened_in_place::tests::scoped_md5_guards_cover_forgotten_handle_and_unwind ... ok
+test owner::assurance_contract::registered_algorithm_md5_owner_contract_is_compiler_checked ... ok
+test hardened_in_place::tests::scoped_md5_update_failure_and_unwind_are_terminal ... ok
+test hardened_in_place::tests::scoped_md5_retains_u128_admission_and_low64_padding ... ok
+test hardened_in_place::tests::scoped_md5_error_and_unwind_destinations ... ok
+test engine::tests::padding_encodes_low_64_bits_only_in_little_endian_order ... ok
+test engine::tests::invalid_update_offsets_trip_before_mutation ... ok
+test batch::tests::exact_work_limits_and_every_callback_failure_are_transactional ... ok
+test cpu::transfer::tests::transfer_mapping_and_rejected_lanes_are_atomic ... ok
+test engine::tests::invalid_padding_offsets_trip_before_mutation ... ok
+test batch::hardened_execution::in_place::tests::scoped_batch_budget_failures_preserve_executor_and_clear_all_lanes ... ok
+test engine::tests::every_valid_offset_survives_absorption_and_padding ... ok
+test hardened_in_place::tests::scoped_md5_streaming_bits_reuse_and_output_lifetime ... ok
+test batch::tests::every_active_mask_and_uneven_bit_tail_matches_scalar ... ok
+test engine::tests::borrowed_bulk_updates_match_single_bytes_at_every_boundary ... ok
+
+test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/api.rs (target/debug/deps/api-13f45c12be7d0a8f)
+
+running 7 tests
+test canonical_tails_and_capacity_probes ... ok
+test output_failures_are_atomic_or_clear_complete_secret_destination ... ok
+test recoverable_unwind_clears_typed_secret_output ... ok
+test dynamic_analysis_covers_padding_and_partial_bit_boundaries ... ok
+test official_rfc_vectors_ordinary_hardened_and_streamed ... ok
+test independent_partial_bit_vectors_cover_borrowed_tail_transfers ... ok
+test standard_byte_vectors_and_million_a ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/cpu.rs (target/debug/deps/cpu-1c58c0ee04f24b01)
+
+running 1 test
+test ordinary_dependency_build_cannot_execute_a_candidate ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/execution.rs (target/debug/deps/execution-ec4e4319ea07aebb)
+
+running 3 tests
+test required_simd_and_failure_atomicity ... ok
+test callback_unwind_is_terminal_and_transactional ... ok
+test masks_permutations_unequal_lengths_and_bit_tails ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/hardened_execution.rs (target/debug/deps/hardened_execution-2b4066cf6fc09f07)
+
+running 5 tests
+test required_empty_work_and_explicit_revocation_fail_before_commit ... ok
+test bounded_portable_cleanup_smoke ... ok
+test every_work_failure_clears_secret_and_preserves_public ... ok
+test cancellation_revocation_and_unwind_at_every_boundary ... ok
+test all_masks_bits_and_unequal_lengths_match_portable_with_exact_work ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s

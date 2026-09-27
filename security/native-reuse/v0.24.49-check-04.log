@@ -1,0 +1,65 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/brynja_hash_tuple-040a9d8562149c41)
+
+running 27 tests
+test core_state::assurance_contract::registered_algorithm_tuplehash_owner_contract_is_compiler_checked ... ok
+test execution::core_state::tests::operation_guard_clears_on_early_return ... ok
+test execution::core_state::tests::metadata_cleanup_covers_every_owned_region ... ok
+test hardened_in_place::accelerated::tests::scoped_accelerated_tuple_scratch_clears_on_exit ... ok
+test hardened_in_place::core_state::tests::scoped_tuple_metadata_wipes_all_seven_regions ... ok
+test execution::core_state::tests::output_overflow_clears_secrets_but_preserves_public_destination ... ok
+test hardened_in_place::core_state::tests::scoped_tuple_borrowed_staging_failures_clear ... ok
+test execution::core_state::tests::begin_preflights_the_complete_item_but_commits_only_its_prefix ... ok
+test execution::core_state::tests::overflow_and_incomplete_operations_erase_metadata ... ok
+test hardened_in_place::reader::tests::scoped_tuple_xof_reader_errors_are_terminal_including_empty_reads ... ok
+test hardened_in_place::core_state::tests::scoped_tuple_failures_clear_and_drop_borrowed_state ... ok
+test hardened_in_place::reader::tests::scoped_tuple_xof_reader_final_errors_drop_backend ... ok
+test hardened_in_place::tests::miri_chunks_reject_incomplete_or_duplicate_output_widths ... ok
+test secret_encoding::tests::empty_and_corrupt_encoded_lengths_are_rejected ... ok
+test secret_encoding::tests::clearing_encoders_match_sp800185_for_boundary_values ... ok
+test hardened_in_place::core_state::tests::scoped_tuple_partial_items_keep_bulk_absorption ... ok
+test hardened_in_place::xof::tests::scoped_tuplexof128_lifecycle ... ok
+test hardened_in_place::xof::tests::scoped_tuplexof256_lifecycle ... ok
+test hardened_in_place::tests::scoped_tuple256_terminal_writer_and_output_lifecycle ... ok
+test hardened_in_place::tests::scoped_tuple128_terminal_writer_and_output_lifecycle ... ok
+test secret_encoding::tests::borrowed_encoding_reuse_clears_every_unused_byte_at_all_widths ... ok
+test hardened_in_place::core_state::tests::scoped_tuple_borrowed_packing_matches_bit_oracle ... ok
+test hardened_in_place::xof::tests::scoped_tuplexof256_differential ... ok
+test hardened_in_place::xof::tests::scoped_tuplexof128_differential ... ok
+test hardened_in_place::tests::scoped_tuple256_matches_portable_bits_and_streaming ... ok
+test hardened_in_place::tests::scoped_tuple128_matches_portable_bits_and_streaming ... ok
+test execution::core_state::tests::borrowed_staging_matches_independently_packed_cshake ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running tests/api.rs (target/debug/deps/api-f124336858d2a07e)
+
+running 6 tests
+test abandoned_or_incomplete_items_fail_closed ... ok
+test exact_length_streaming_matches_whole_items ... ok
+test forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch ... ok
+test arbitrary_bit_items_and_outputs_are_canonical ... ok
+test tuple_boundaries_order_and_empty_items_are_distinct ... ok
+test xof_partitions_and_hardened_output_match ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/execution.rs (target/debug/deps/execution-554aa55a952d6816)
+
+running 6 tests
+test fragmented_item_bits_preserve_exact_tuple_boundaries ... ok
+test unfinished_overlong_dropped_and_forgotten_items_never_reopen ... ok
+test unwind_and_forgotten_reader_leave_the_parent_terminal ... ok
+test invalid_output_is_atomic_and_required_absence_is_an_error ... ok
+test all_xof_profiles_match_irregular_and_mixed_secret_public_output ... ok
+test all_fixed_profiles_match_portable_for_bit_items_and_customization ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/official_vectors.rs (target/debug/deps/official_vectors-142b8e77e5318afc)
+
+running 2 tests
+test all_six_official_fixed_examples_match ... ok
+test all_six_official_xof_examples_match ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

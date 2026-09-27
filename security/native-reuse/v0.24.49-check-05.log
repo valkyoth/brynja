@@ -1,0 +1,142 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/brynja_hash_parallel-55da1020a3b91483)
+
+running 66 tests
+test backend::tests::scoped_leaf_clears_completed_secret_destination ... ok
+test core_state::assurance_contract::borrowed_buffering_rejections_clear_and_close ... ok
+test execution::batch::scoped::tests::scoped_batch_routes256 ... ok
+test execution::batch::scoped::tests::scoped_batch_routes128 ... ok
+test core_state::assurance_contract::registered_algorithm_parallelhash_owner_contract_is_compiler_checked ... ok
+test execution::batch::scoped::tests::scoped_batch_vector128 ... ok
+test execution::batch::scoped::tests::scoped_batch_vector256 ... ok
+test execution::batch::tests::required_tail_and_revoked_backend_never_silently_fall_back ... ok
+test execution::batch::tests::vector_domains_bits_boundaries_and_actual_leaf_counts ... ok
+test execution::collector::tests::failed_operation_guard_clears_preexisting_metadata ... ok
+test execution::collector::tests::output_width_validation_accepts_only_canonical_shapes ... ok
+test execution::batch::tests::worker_policy_is_not_a_forged_vector_report ... ok
+test execution::collector::tests::cancel_clears_all_four_root_metadata_regions ... ok
+test execution::encoding::tests::execution_encoding_borrows_and_rejects_empty_storage ... ok
+test execution::batch::tests::completed_owner_and_workspace_drop_clear_storage ... ok
+test execution::stream::batch::failures::required_tail_and_revocation_do_not_fall_back ... ok
+test execution::collector::tests::reader_output_overflow_clears_destination_and_closes_root ... ok
+test execution::stream::tests::cancellation_clears_both_input_metadata_regions_and_workspace ... ok
+test execution::stream::tests::completion_rejects_pending_bytes_even_when_leaf_count_matches ... ok
+test execution::collector::tests::streaming_root_rejects_finalization_without_input_proof ... ok
+test execution::batch::tests::scheduled_tokens_cannot_complete_streaming_roots ... ok
+test execution::batch::scoped::tests::handoff::scoped_batch_handoff128 ... ok
+test core_state::assurance_contract::borrowed_buffering_preserves_bytes_and_clears ... ok
+test execution::stream::batch::tests::vector_chunk_bit_and_xof_campaign ... ok
+test execution::stream::tests::maximum_bit_count_rejects_before_callbacks_and_clears ... ok
+test execution::batch::scoped::tests::handoff::scoped_batch_handoff256 ... ok
+test execution::stream::tests::pending_count_corruption_is_terminal_not_a_slice_panic ... ok
+test hardened_in_place::core_state::tests::scoped_core_rejections_clear_every_region_and_stay_terminal ... ok
+test hardened_in_place::core_state::tests::scoped_setup_failure_and_outer_guards_clear_poisoned_storage ... ok
+test hardened_in_place::core_state::tests::scoped_final_errors_preserve_public_and_clear_secret ... ok
+test execution::stream::batch::tests::pending_stream_drop_clears_buffer ... ok
+test hardened_in_place::core_state::tests::scoped_xof_transition_clears_absorption_regions_before_return ... ok
+test hardened_in_place::reader::tests::scoped_parallel_xof_final_errors_drop_reader_and_validate_before_output ... ok
+test hardened_in_place::reader::tests::scoped_parallel_xof_read_errors_and_unwind_are_terminal ... ok
+test hardened_in_place::scheduled_core::tests::scoped_scheduled_merge_failures_clear_and_terminate ... ok
+test hardened_in_place::scheduled_core::tests::scoped_scheduled_finish_errors_clear_and_complete_transition_wipes_count ... ok
+test execution::stream::batch::tests::empty_stream_completes ... ok
+test execution::batch::transfer::tests::transfer_clears_source_and_all_transport_capacity ... ok
+test execution::stream::tests::completion_mismatched_leaf_count_clears_all_output_paths ... ok
+test secret_encoding::tests::borrowed_encoder_function_clears_all_prior_storage ... ok
+test execution::batch::transfer::tests::rejected_transfer_clears_partial_transport_and_originals ... ok
+test execution::stream::batch::tests::construction_work_limit_cancellation_and_forgotten_reader ... ok
+test execution::batch::transfer::tests::transferred_tokens_preserve_plan_and_order_and_clear_on_rejection ... ok
+test execution::batch::tests::provenance_order_missing_and_duplicate_groups_fail_closed ... ok
+test secret_encoding::tests::borrowed_integer_matches_every_width_and_clears_reuse ... ok
+test hardened_in_place::scheduled::tests::scoped_scheduled256_lifecycle ... ok
+test execution::stream::batch::failures::output_failures_and_reader_drop_clear_the_owner ... ok
+test hardened_in_place::scheduled::tests::scoped_scheduled128_lifecycle ... ok
+test execution::batch::scoped::tests::scoped_batch_failures128 ... ok
+test execution::batch::scoped::tests::scoped_batch_failures256 ... ok
+test execution::stream::batch::tests::exact_completion_rejects_corrupted_pending_and_counts ... ok
+test backend::tests::scoped_leaf_matches_shake_for_every_tail_and_rate_boundary ... ok
+test execution::stream::tests::borrowed_updates_and_tail_preserve_planned_digest ... ok
+test execution::stream::batch::tests::cancellation_budget_unwind_and_drop_clear_pending_storage ... ok
+test execution::batch::tests::cancellation_budget_and_unwind_close_root_and_clear_every_slot ... ok
+test execution::batch::scoped::tests::scoped_batch_portable256 ... ok
+test hardened_in_place::scheduled::tests::scoped_scheduled128_matches ... ok
+test execution::batch::scoped::tests::scoped_batch_portable128 ... ok
+test hardened_in_place::scheduled::tests::scoped_scheduled256_matches ... ok
+test execution::batch::tests::portable_domains_bits_boundaries_and_order ... ok
+test hardened_in_place::xof::tests::scoped_parallel_xof256_matches_and_clears ... ok
+test hardened_in_place::xof::tests::scoped_parallel_xof128_matches_and_clears ... ok
+test hardened_in_place::tests::scoped_parallel128_matches_and_clears ... ok
+test hardened_in_place::tests::scoped_parallel256_matches_and_clears ... ok
+test core_state::assurance_contract::borrowed_buffering_and_tails_match_direct_leaves ... ok
+test execution::stream::batch::tests::portable_chunk_bit_and_xof_campaign ... ok
+
+test result: ok. 66 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running tests/api.rs (target/debug/deps/api-d0713f707d77c76a)
+
+running 7 tests
+test empty_input_has_zero_leaves_and_b_one_is_valid ... ok
+test zero_block_size_is_rejected_before_output ... ok
+test arbitrary_bit_input_and_output_partition_are_stable ... ok
+test reordered_leaf_permanently_fails_closed ... ok
+test equal_shape_cross_plan_result_permanently_fails_closed ... ok
+test hardened_output_and_workspace_clear_on_drop ... ok
+test streamed_scheduled_and_one_shot_are_identical ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/execution.rs (target/debug/deps/execution-8eb4e1a9c13138b3)
+
+running 6 tests
+test hosted_workers_and_root_match_reference_and_reject_quarantine ... ok
+test selection_and_work_limits_never_authorize_fallback ... ok
+test serial_callback_unwind_cancels_root ... ok
+test secret_reader_and_public_failure_cleanup ... ok
+test wrong_duplicate_missing_and_reordered_leaves_close_root ... ok
+test all_identities_bits_blocks_and_outputs_match_portable ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.05s
+
+     Running tests/execution_stream.rs (target/debug/deps/execution_stream-c552fc98e2f0ed01)
+
+running 5 tests
+test budget_rejection_happens_before_selection_and_is_terminal ... ok
+test callback_unwind_and_selection_failure_clear_partial_input ... ok
+test final_tail_failure_clears_workspace_and_secret_or_preserves_public ... ok
+test readers_cannot_reopen_input_and_errors_clear_retained_owner ... ok
+test irregular_updates_and_terminal_bits_match_planned_execution ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/official_vectors.rs (target/debug/deps/official_vectors-34ff84eb82028fd4)
+
+running 2 tests
+test all_six_official_fixed_examples_match ... ok
+test all_six_official_xof_examples_match ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scoped_accelerated.rs (target/debug/deps/scoped_accelerated-f1d98a70c2923077)
+
+running 12 tests
+test scoped_accelerated::scheduled::scoped_scheduled_accelerated128_matches ... ok
+test scoped_accelerated::scheduled_lifecycle::scoped_scheduled_accelerated128_lifecycle ... ok
+test scoped_accelerated::xof::scoped_accelerated_parallel_xof128_matches_and_clears ... ok
+test scoped_accelerated::scheduled::scoped_scheduled_accelerated256_matches ... ok
+test scoped_accelerated::xof_lifecycle::scoped_accelerated_xof128_lifecycle ... ok
+test scoped_accelerated::xof_lifecycle::scoped_accelerated_xof256_lifecycle ... ok
+test scoped_accelerated_parallel256_revokes ... ok
+test scoped_accelerated_parallel256_matches_and_clears ... ok
+test scoped_accelerated_parallel128_revokes ... ok
+test scoped_accelerated::scheduled_lifecycle::scoped_scheduled_accelerated256_lifecycle ... ok
+test scoped_accelerated::xof::scoped_accelerated_parallel_xof256_matches_and_clears ... ok
+test scoped_accelerated_parallel128_matches_and_clears ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scoped_scheduled.rs (target/debug/deps/scoped_scheduled-0c74142af73643dd)
+
+running 2 tests
+test scoped_scheduled128_unwind_reuse ... ok
+test scoped_scheduled256_unwind_reuse ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

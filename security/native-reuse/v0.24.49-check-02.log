@@ -1,0 +1,247 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/brynja_hash_sha3-ff57c260e1e8f7ee)
+
+running 82 tests
+test batch::tests::invalid_identity_and_output_are_rejected ... ok
+test batch::tests::native_vector_campaign ... ok
+test batch::tests::callback_unwind_and_revocation_never_commit_output ... ok
+test execution::cshake::tests::prefix_encoding_errors_do_not_claim_length_overflow ... ok
+test execution::engine::tests::bit_preflight_includes_each_partial_backing_byte ... ok
+test execution::cshake::tests::cshake_faults_keep_public_output_atomic ... ok
+test hardened::accelerated::engine::tests::borrowed_partial_high_bits_survive_suffix_boundary ... ok
+test hardened::accelerated::engine::tests::every_memory_region_is_explicitly_cleared ... ok
+test execution::cshake::tests::prefix_and_padding_faults_preserve_typed_errors ... ok
+test execution::engine::tests::late_permutation_failure_does_not_commit_absorb_or_output ... ok
+test hardened::accelerated::engine::tests::invalid_squeeze_range_clears_owner_and_preserves_public_destination ... ok
+test hardened::accelerated::engine::tests::borrowed_squeeze_chunks_preserve_rate_position_and_counters ... ok
+test hardened::accelerated::engine::tests::borrowed_reader_and_in_place_final_masks_preserve_low_bits ... ok
+test hardened::accelerated::engine::tests::late_squeeze_errors_clear_state_and_secret_output_but_preserve_public_output ... ok
+test execution::engine::tests::overflow_preserves_state_output_and_accounting ... ok
+test execution::engine::tests::partial_execution_matches_preflight_without_mutating_on_overflow ... ok
+test hardened::accelerated::engine::tests::overflow_and_unwind_terminate_and_clear_the_owner ... ok
+test hardened::accelerated::in_place::tests::scoped_fixed_execution_all_identities_bytes_bits_and_reuse ... ok
+test hardened::accelerated::in_place::tests::scoped_fixed_execution_cleanup_forget_unwind_and_errors ... ok
+test hardened::accelerated::in_place::tests::scoped_fixed_execution_revocation_never_reuses_or_falls_back ... ok
+test batch::tests::bounded_batch_lifecycle ... ok
+test hardened::accelerated::in_place::xof::tests::lifecycle::all_scoped_xof_lifecycle_failures_clear_and_terminate ... ok
+test hardened::accelerated::in_place::xof::tests::lifecycle::prefix_failure_and_revocation_skip_callbacks_and_clear ... ok
+test execution::cshake::tests::setup_counts_and_small_scratch_are_exact ... ok
+test hardened::accelerated::in_place::xof::tests::scoped_execution_cshake_bits_reading_and_storage ... ok
+test hardened::accelerated::in_place::xof::tests::scoped_execution_shake_matches_portable_and_cshake_empty ... ok
+test hardened::accelerated::reader::tests::borrowed_staging_clears_on_drop_and_unwind ... ok
+test hardened::cshake::tests::borrowing_reader_never_extracts_the_absorbing_owner ... ok
+test hardened::cshake::tests::explicit_wipe_is_an_irreversible_terminal_transition ... ok
+test hardened::in_place::tests::forgotten_handle_unwind_and_failed_update_clear_scope ... ok
+test hardened::cshake::tests::final_bit_output_clears_the_exact_reader_source ... ok
+test hardened::cshake::tests::in_place_reader_transition_clears_exact_source_owner ... ok
+test hardened::owner::assurance_contract::cshake_metadata_is_owned_and_cleared_independently ... ok
+test hardened::owner::assurance_contract::exhausted_counters_reject_work_without_mutation ... ok
+test hardened::owner::assurance_contract::registered_algorithm_sha3_shake_owner_contract_is_compiler_checked ... ok
+test hardened::sponge::tests::borrowed_buffer_updates_preserve_source_and_unused_capacity ... ok
+test hardened::sponge::tests::borrowed_input_split_retains_the_original_tail ... ok
+test hardened::sponge::tests::borrowed_staging_and_invalid_ranges_are_atomic ... ok
+test hardened_batch::control::tests::accounting_boundaries_are_atomic ... ok
+test hardened::in_place::xof::tests::cshake_empty_domain_matches_shake_and_byte_setup_matches_bits ... ok
+test hardened_batch::engine::tests::transfer_rejects_mismatched_lengths_without_mutation ... ok
+test hardened_batch::tests::accelerated_slot_mask_tracks_sparse_groups_not_selected_authority ... ok
+test batch::tests::shape_staging_empty_and_scalar_tail_boundaries ... ok
+test hardened::in_place::xof::tests::reader_failures_forgetting_and_unwind_clear_in_place ... ok
+test hardened_batch::tests::input_identity_width_and_customization_are_checked ... ok
+test hardened::sponge::tests::borrowed_fixed_public_commits_preserve_byte_and_bit_digests ... ok
+test hardened_batch::tests::lifecycle::native_work_and_cancellation_boundaries ... ok
+test hardened_batch::framing::tests::borrowed_fragments_cross_byte_boundaries_without_changing_other_bits ... ok
+test hardened_batch::tests::native_differential_uses_hardened_vector_authority ... ok
+test hardened::sponge::tests::borrowed_padding_crosses_rate_without_retaining_tail ... ok
+test tests::checked_length_is_exact ... ok
+test sp800185::tests::borrowed_prefix_failures_clear_scratch_and_preflight_counters ... ok
+test hardened_batch::tests::lifecycle::inactive_destination_and_required_ineligibility_fail_before_work ... ok
+test tests::implementation_claims_are_exact ... ok
+test tests::every_state_byte_has_one_valid_lane_location ... ok
+test hardened_batch::tests::lifecycle::focused_unwind_after_permutation_clears_every_owned_region ... ok
+test hardened_batch::tests::lifecycle::workspace_destructor_clears_real_partial_state ... ok
+test tests::public_preflight_is_non_mutating ... ok
+test hardened_batch::tests::output::commit_preflights_all_slices_and_preserves_sparse_slots ... ok
+test hardened::sponge::tests::borrowed_xof_chunks_preserve_values_counters_and_guards ... ok
+test hardened_batch::tests::output::declassification_is_atomic_and_clears_secret_slots ... ok
+test sp800185::tests::borrowed_prefix_keeps_bulk_and_unaligned_byte_paths ... ok
+test hardened_batch::tests::lifecycle::explicit_declassification_clears_source_and_preserves_failed_public_output ... ok
+test hardened_batch::tests::lifecycle::zero_output_still_frames_and_all_activity_masks_work ... ok
+test hardened::sponge::tests::borrowed_fixed_domain_byte_operations_are_total ... ok
+test sp800185::tests::borrowed_cshake_prefix_matches_bit_concatenation ... ok
+test hardened::sponge::tests::borrowed_partial_xof_output_matches_and_clears ... ok
+test sp800185::tests::borrowed_prefix_fragments_cover_every_byte_offset_and_width ... ok
+test hardened::in_place::xof::tests::shake128 ... ok
+test hardened::in_place::xof::tests::shake256 ... ok
+test hardened_batch::tests::lifecycle::malformed_destinations_and_short_staging_clear_without_quarantine ... ok
+test hardened::in_place::tests::sha256 ... ok
+test hardened::in_place::tests::sha384 ... ok
+test hardened::in_place::tests::sha224 ... ok
+test hardened::in_place::tests::sha512 ... ok
+test hardened::in_place::xof::tests::cshake256 ... ok
+test hardened::in_place::xof::tests::cshake128 ... ok
+test batch::tests::mixed_domains_bit_tails_prefixes_and_reordered_outputs ... ok
+test hardened_batch::tests::portable_mixed_domains_bit_tails_and_squeeze_boundaries ... ok
+test batch::tests::request_failures_are_atomic_and_reusable ... ok
+test hardened_batch::tests::lifecycle::all_work_cancel_revoke_and_unwind_boundaries ... ok
+test hardened::sponge::tests::borrowed_absorption_padding_matches_every_rate_and_suffix ... ok
+
+test result: ok. 82 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/bit_inputs.rs (target/debug/deps/bit_inputs-7f6d14bcef635ce6)
+
+running 7 tests
+test scoped_cshake_official_and_independent_vectors ... ok
+test low_bit_canonical_representation_is_exact ... ok
+test official_nist_five_bit_examples_match_all_six_identities ... ok
+test final_partial_shake_output_is_canonical_and_partitionable ... ok
+test every_byte_aligned_bit_api_equals_the_frozen_byte_api ... ok
+test curated_nist_cavp_vectors_cover_every_function_and_bit_residue ... ok
+test every_tail_width_and_suffix_rate_collision_is_stable ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/cshake.rs (target/debug/deps/cshake-233927b1b75b5bd0)
+
+running 6 tests
+test hardened_state_matches_and_clears_secret_output ... ok
+test arbitrary_bit_parameters_message_and_output_are_stable ... ok
+test strengths_and_domains_are_distinct ... ok
+test every_official_nist_cshake_example_matches ... ok
+test empty_name_and_customization_are_exactly_shake ... ok
+test streaming_and_partitioned_output_match_one_shot ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cshake_execution.rs (target/debug/deps/cshake_execution-a5039668527507d0)
+
+running 2 tests
+test required_cshake_static_route_if_compiled ... ok
+test portable_cshake_execution_vectors ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/execution.rs (target/debug/deps/execution-93187cba7e72c59e)
+
+running 4 tests
+test quarantine_and_wrong_operation_cannot_fallback_or_change_output ... ok
+test execution_smoke ... ok
+test explicit_public_inputs_cover_every_identity_and_byte_entry_point ... ok
+test portable_and_available_static_routes_match_all_cases ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.48s
+
+     Running tests/hardened.rs (target/debug/deps/hardened-852ac3b3c50c897a)
+
+running 13 tests
+test cancel_and_early_drop_cover_absorber_and_reader_lifecycles ... ok
+test sealed_capabilities_accept_only_registered_public_types ... ok
+test fixed_output_failure_is_atomic_by_classification ... ok
+test zero_length_secret_xof_output_is_a_valid_empty_owner ... ok
+test xof_secret_fragments_transfer_and_clear_independently ... ok
+test every_fixed_secret_output_transfers_and_clears ... ok
+test every_fixed_identity_matches_the_ordinary_algorithm ... ok
+test recoverable_unwind_clears_typed_secret_destination ... ok
+test bit_input_and_bit_output_match_both_ordinary_xofs ... ok
+test both_xofs_match_across_irregular_absorb_and_squeeze_boundaries ... ok
+test every_partial_secret_xof_width_matches_and_clears ... ok
+test every_partial_bit_width_matches_every_fixed_identity ... ok
+test every_rate_and_multiblock_boundary_matches ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/hardened_execution.rs (target/debug/deps/hardened_execution-6796ca3461cad996)
+
+running 5 tests
+test cancellation_and_backend_failure_clear_secrets_preserve_public_destinations ... ok
+test keccak_properties::replayable_operation_sequences ... ok
+test four_fixed_identities_all_tail_widths_and_padding_boundaries ... ok
+test inplace_cshake_transition_and_partial_message_match_portable ... ok
+test shake_and_cshake_streams_partial_outputs_and_secret_ownership ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/sha3_224.rs (target/debug/deps/sha3_224-eb518a67a7323c93)
+
+running 5 tests
+test trait_api_and_algorithm_identity_are_exact ... ok
+test official_fips202_zero_and_1600_bit_vectors_match ... ok
+test suffix_and_rate_boundaries_have_exact_digests ... ok
+test every_streaming_partition_matches_one_shot ... ok
+test standard_text_and_million_byte_vectors_match ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+     Running tests/sha3_256.rs (target/debug/deps/sha3_256-5a32eb32214f91a2)
+
+running 6 tests
+test sha3_domain_is_not_raw_keccak ... ok
+test trait_api_and_algorithm_identity_are_exact ... ok
+test suffix_and_rate_boundaries_have_exact_digests ... ok
+test official_fips202_zero_and_1600_bit_vectors_match ... ok
+test every_streaming_partition_matches_one_shot ... ok
+test standard_text_and_million_byte_vectors_match ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+     Running tests/sha3_384.rs (target/debug/deps/sha3_384-6e3211fdebe29211)
+
+running 6 tests
+test sha3_domain_is_not_raw_keccak ... ok
+test official_fips202_zero_and_1600_bit_vectors_match ... ok
+test trait_api_and_algorithm_identity_are_exact ... ok
+test suffix_and_rate_boundaries_have_exact_digests ... ok
+test every_streaming_partition_matches_one_shot ... ok
+test standard_text_and_million_byte_vectors_match ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running tests/sha3_512.rs (target/debug/deps/sha3_512-1310b73ab7429e4e)
+
+running 6 tests
+test sha3_domain_is_not_raw_keccak ... ok
+test trait_api_and_algorithm_identity_are_exact ... ok
+test suffix_and_rate_boundaries_have_exact_digests ... ok
+test official_fips202_zero_and_1600_bit_vectors_match ... ok
+test every_streaming_partition_matches_one_shot ... ok
+test standard_text_and_million_byte_vectors_match ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+
+     Running tests/shake128.rs (target/debug/deps/shake128-4e30dd3950c2deab)
+
+running 8 tests
+test shake_domain_is_distinct_from_fixed_output_sha3 ... ok
+test official_fips202_zero_and_1600_bit_vectors_match ... ok
+test zero_length_and_checked_state_transitions_are_exact ... ok
+test trait_api_and_algorithm_identity_are_exact ... ok
+test suffix_and_rate_boundaries_have_exact_output ... ok
+test every_output_partition_matches_one_shot_across_permutations ... ok
+test every_input_partition_matches_one_shot ... ok
+test standard_text_and_million_byte_outputs_match ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/shake256.rs (target/debug/deps/shake256-dc5da97f53b8b3f6)
+
+running 9 tests
+test zero_length_and_checked_state_transitions_are_exact ... ok
+test shake_strength_identities_are_distinct ... ok
+test official_fips202_zero_and_1600_bit_vectors_match ... ok
+test trait_api_and_algorithm_identity_are_exact ... ok
+test shake_domain_is_distinct_from_fixed_output_sha3 ... ok
+test suffix_and_rate_boundaries_have_exact_output ... ok
+test every_output_partition_matches_one_shot_across_permutations ... ok
+test every_input_partition_matches_one_shot ... ok
+test standard_text_and_million_byte_outputs_match ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running tests/sp800185.rs (target/debug/deps/sp800185-c2f95bb31a8cac9b)
+
+running 4 tests
+test bytepad_is_exact_and_transactional ... ok
+test encode_string_preserves_exact_arbitrary_bits ... ok
+test integer_encodings_cover_boundaries_and_complete_domain ... ok
+test noncanonical_integers_are_rejected ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

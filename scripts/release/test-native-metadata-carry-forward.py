@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
+from native_review_tests import NativeReviewTests
 
 import native_metadata_carry_forward as review
 
@@ -161,11 +162,13 @@ class CarryForwardTests(unittest.TestCase):
     def test_gate_runs_strict_validation_then_bounded_fallback(self):
         gate = (review.ROOT / 'scripts/tag_gate.sh').read_text()
         self.assertIn('if\npython3 scripts/tuplehash/check-tuplehash-execution-native.py\nthen\n'
-                      '    :\nelse\n    python3 scripts/release/native_metadata_carry_forward.py\nfi', gate)
+                      '    :\nelse\n    python3 scripts/release/native_metadata_carry_forward.py ||\n'
+                      '        python3 scripts/release/native_review_carry_forward.py --family tuplehash-execution\nfi', gate)
         checks = (review.ROOT / 'scripts/checks.sh').read_text()
         self.assertIn('python3 scripts/release/test-native-metadata-carry-forward.py\n', checks)
         self.assertIn('if\npython3 scripts/parallelhash/check-parallelhash-execution-native.py\nthen\n'
-                      '    :\nelse\n    python3 scripts/release/native_metadata_carry_forward.py --family parallelhash\nfi', gate)
+                      '    :\nelse\n    python3 scripts/release/native_metadata_carry_forward.py --family parallelhash ||\n'
+                      '        python3 scripts/release/native_review_carry_forward.py --family parallelhash-execution\nfi', gate)
 
 
 class ParallelCarryForwardTests(CarryForwardTests):

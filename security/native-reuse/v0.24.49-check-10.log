@@ -1,0 +1,9 @@
+......fatal: Not a valid commit name ffffffffffffffffffffffffffffffffffffffff
+.....CURRENT_NATIVE_REVIEW_CHECK: cargo +1.98.1 test --locked --offline -p brynja-legacy-sha1 --all-features --lib --tests
+CURRENT_NATIVE_REVIEW_CHECK: cargo +1.98.1 test --locked --offline -p brynja-legacy-sha1 --all-features --lib --tests
+...............fatal: Not a valid commit name ffffffffffffffffffffffffffffffffffffffff
+.
+----------------------------------------------------------------------
+Ran 27 tests in 1.212s
+
+OK

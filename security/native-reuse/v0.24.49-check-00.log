@@ -1,0 +1,83 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/brynja_legacy_sha1-1c0103d8334ba75b)
+
+running 38 tests
+test cpu::secret::tests::lane_wipe_clears_full_owner ... ok
+test cpu::secret::tests::rejected_callback_wipes_owner_and_cannot_revive ... ok
+test cpu::secret::tests::callback_unwind_wipes_owner_and_quarantines ... ok
+test cpu::secret::tests::native_hardened_kernel_matches_512_arbitrary_compressions ... ok
+test cpu::secret::tests::one_shot_callback_unwind_clears_destination_before_start ... ok
+test cpu::session::tests::byte_bit_and_irregular_streams_match_portable ... ok
+test cpu::secret::tests::scoped_execution_callback_unwind_clears_secret_output ... ok
+test cpu::session::tests::corrupted_kat_and_lost_features_are_permanent ... ok
+test cpu::session::tests::arbitrary_state_block_differential ... ok
+test cpu::session::tests::architecture_and_missing_features_reject_before_startup ... ok
+test cpu::session::tests::exact_identity_features_and_unadmitted_status ... ok
+test cpu::session::tests::operational_callback_revokes_live_streams_without_recovery ... ok
+test cpu::session::tests::operational_startup_and_revalidation_fail_closed ... ok
+test cpu::stream::tests::length_failure_preserves_state_and_finalization_checks_health ... ok
+test cpu::stream::tests::midstream_failure_clears_every_owned_region_and_latches ... ok
+test cpu::stream::tests::quarantined_model_clears_all_regions_without_instructions ... ok
+test engine::tests::exhaustion_rejects_before_any_state_mutation ... ok
+test hardened::tests::exhaustion_finalization_preserves_public_and_clears_secret_output ... ok
+test hardened_execution::in_place::tests::scoped_execution_length_failure_is_terminal_not_executor_failure ... ok
+test hardened_execution::in_place::tests::scoped_execution_forget_cancel_and_scope_unwind ... ok
+test hardened_execution::stream::tests::internal_bit_admission_retains_exact_domain_and_output_contracts ... ok
+test hardened_execution::stream::tests::invariant_failure_clears_all_owned_regions_and_quarantines ... ok
+test hardened_execution::stream::tests::update_guard_clears_during_recoverable_unwind ... ok
+test hardened_in_place::tests::scoped_sha1_initialization_overwrites_all_previous_storage ... ok
+test hardened_execution::in_place::tests::scoped_execution_revocation_and_invariant_never_fall_back ... ok
+test hardened_in_place::tests::scoped_sha1_update_failure_and_unwind_are_terminal ... ok
+test hardened_execution::stream::tests::length_rejection_is_atomic_and_does_not_revoke_siblings ... ok
+test owner::assurance_contract::registered_algorithm_sha1_owner_contract_is_compiler_checked ... ok
+test hardened_in_place::tests::scoped_sha1_guards_cover_forgotten_handle_and_unwind ... ok
+test hardened_execution::in_place::tests::scoped_execution_operation_unwind_clears_before_catch ... ok
+test hardened_execution::in_place::tests::scoped_execution_destinations_on_rejection ... ok
+test engine::tests::invalid_update_offsets_trip_before_mutation ... ok
+test hardened_in_place::tests::scoped_sha1_error_and_unwind_destinations ... ok
+test engine::tests::invalid_padding_offsets_trip_before_mutation ... ok
+test engine::tests::every_valid_offset_survives_absorption_and_padding ... ok
+test hardened_execution::in_place::tests::scoped_execution_streams_bits_and_reuses_cleared_storage ... ok
+test hardened_in_place::tests::scoped_sha1_streaming_bits_reuse_and_output_lifetime ... ok
+test engine::tests::borrowed_bulk_updates_match_single_bytes_at_every_boundary ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/api.rs (target/debug/deps/api-f32bd7588c7c88ed)
+
+running 6 tests
+test canonical_tails_and_capacity_probes ... ok
+test output_failures_are_atomic_or_clear_complete_secret_destination ... ok
+test recoverable_unwind_clears_typed_secret_output ... ok
+test dynamic_analysis_covers_padding_and_partial_bit_boundaries ... ok
+test standard_byte_vectors_and_million_a ... ok
+test official_nist_vectors_ordinary_hardened_and_streamed ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/cpu.rs (target/debug/deps/cpu-dc3862c4a3e4b828)
+
+running 1 test
+test ordinary_library_build_cannot_enter_candidate_instructions ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/execution.rs (target/debug/deps/execution-8034733cd73a4486)
+
+running 4 tests
+test revocation_empty_updates_capacity_and_finalization_fail_closed ... ok
+test static_execution_is_not_candidate_admission ... ok
+test all_529_nist_vectors_one_shot_and_partitioned_operational_routes ... ok
+test million_byte_and_byte_one_shot_match_standard ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/hardened_execution.rs (target/debug/deps/hardened_execution-7b6508656d2b2349)
+
+running 4 tests
+test required_route_executes_without_candidate_admission ... ok
+test revocation_cancellation_and_output_failures ... ok
+test byte_messages_and_million_byte_standard ... ok
+test nist_bit_vectors_and_all_output_profiles ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s

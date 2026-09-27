@@ -272,7 +272,7 @@
     "scripts/sha3/test-keccak-hardened-leaf.py": "dbca3dc5f7488efbac7c8c3ac87f232c84132685264150079d70d328a6ee31e3",
     "scripts/sha3/test-keccak-hardened-native.py": "a1ba3eda53c85f18d18d06c0a056bb993c949c3ae75921bc6fe918f78a6eca1e",
     "scripts/sha3/test-keccak-hardened.py": "3bc6ec495fb34a97d38249af0617ba4caadb13f00db09f762d30f750dbc9954c",
-    "scripts/tag_gate.sh": "626a2c6ecd41f20c91bb4272430c3355f194d143b3fc5f530a2a8466f0fa5c0a",
+    "scripts/tag_gate.sh": "4119e62723bd444b91ca67c45adc7d436f6d88df23940c89e414e46c57d022cf",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
   },

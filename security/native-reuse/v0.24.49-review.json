@@ -1,0 +1,207 @@
+{
+  "schema": 1,
+  "capture_commit": "7a9e9cc6d309d2b0e447498f340fd26a095e2866",
+  "reviewed_commit": "b31075ee038714a6ef2a4bd304324a74e74d635c",
+  "owner_review": "accepted-test-tooling-equivalence",
+  "changes": {
+    "crates/brynja-hash-parallel-std/src/execution/in_place/tests.rs": {
+      "before": "17f96a80d807674e14340a66f5b39ecff3a13c90088b7ddecf055d77d8c0f920",
+      "after": "934d5f323f4ecb2e3643ccd0943871f195e72620490ec2fe68ba43ddf51d119d",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel-std/src/execution/in_place/worker/tests.rs": {
+      "before": "7ffce6dbb0cb637161f361ecdaa3f1a3ee7bba62040ed18f32e7ef94d4201d21",
+      "after": "da108536190bfb5140572904d1de48f73d32dbc324f527979f67dd97c393ea45",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel-std/src/execution/tests.rs": {
+      "before": "4972c948eedd74af4cc229ca30648423c443a5f64e98511fcdd0ebd039ab9987",
+      "after": "2ce83c1ff6dec554653074fc04521ec69c4dbe2c00395ed290286ce41f96c448",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel-std/src/execution/worker/tests.rs": {
+      "before": "15837137e5485816030d45f85344b2fcf3d7074de1789c8c53e591775a2ceae6",
+      "after": "a38202400575f7d0a80c1ef4d94ab402414c09a5f867171b8faac594723d5d71",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel/src/backend/tests.rs": {
+      "before": "f6e8fcbf1f1b0f918f1f3d4a356b86abec6139f6db3487d5a7c6f8ff1a3d33e5",
+      "after": "4c5ab3140c8f6cab84ee47a58b4f86eb2fc7d45f65940813be1026d6c678c4a6",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel/src/core_state.rs": {
+      "before": "e7222da8a0c10e0f54c1d45dce17017c3150fff49db9bb7ee815dbcd61e657a8",
+      "after": "d09c158729f9854f5a0702ebd6a51119a085f4bed88628b4bf1aa29238015a62",
+      "disposition": "test-module",
+      "production_prefix": "#[cfg(test)]\npub(crate) mod assurance_contract {"
+    },
+    "crates/brynja-hash-parallel/src/core_state/assurance_contract/buffering.rs": {
+      "before": null,
+      "after": "974c33692925c7fc495f42411f5840f660914e76e8d4acae0a2cacf96dae5649",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel/src/execution/stream/tests.rs": {
+      "before": "8db711b410976394ca0f50c2cd4a7ce5973c087777b548e85c0c457cdade539a",
+      "after": "cd983fff7822a2f8d68a4abd86e9695f5d243931ee5d5e03a4c9e1100e211bce",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel/src/hardened_in_place/scheduled/tests.rs": {
+      "before": "be9f527936cc5d58c51fde736bb3652cb88017b70c225345cfeda79ad5ebade7",
+      "after": "40d908d453b5b699606c9165395859cb21140a407b38ffd86fd4bbdc7b65e77b",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel/src/hardened_in_place/tests.rs": {
+      "before": "cfaf9e764f03bb5f443ff27870ff1b0b59b789b2524a27af42d1a23afc65dff3",
+      "after": "79a3a6ffdc597cfafd54019e9b198f5dca05cf8665aaaa2e37b3f663482e674c",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel/src/hardened_in_place/xof/tests.rs": {
+      "before": "7750fd5ca5f6d520b7413aca30d85d2a69d5efad8fb56a38200784ae209cd43b",
+      "after": "d6615d21a9caa47c6c2409ed263aa56bb276418524e9d95b7e41838f4d29aaa6",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel/tests/official_vectors.rs": {
+      "before": "c2908295b594c5d683ed0a7d1ef550b47398841cac9d16265b411b4fc0524991",
+      "after": "7baed50076edfa85aa0ee5b115af12b85ac51cdf5243f4f943ba9b2fb24ccdb6",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-parallel/tests/scoped_scheduled.rs": {
+      "before": "27755c72031d3d24f44704daf493729565c007fe5440c404468d0d6f1df20a5e",
+      "after": "aca539ee182b978db43630126f5c09d96108ad6ba20cb946b195a51e9904253c",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-sha3/tests/hardened.rs": {
+      "before": "c0f18be6c64ef7f8e9b875d12e3ff1ef6492e39752fbf0c829b63d52112ced0a",
+      "after": "4b1bc960391fea854e0e70d281da15ac13a8015a83c321b2369395189094a94d",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-tuple/src/execution/core_state/tests.rs": {
+      "before": "738562f5d83cc67230c5cff7660fdc09fb128c89aa5f8a8e0de351840d152914",
+      "after": "ef7af9259d5cae4467efb3f1c6bff81ed03d8a229277f9d6443c4ce5f68785e4",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-tuple/src/hardened_in_place/tests.rs": {
+      "before": "c7b2624c1e51b6f05651ce98f4fd3cfba648c0850e0860517fc73508886c585b",
+      "after": "22d550592424950eff033ead263246aff6b83d972db8aa6f06e81b95459f6581",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-tuple/src/hardened_in_place/xof/tests.rs": {
+      "before": "909d451f406600e58f1a297cb3e7e4a105a2fbcfc20aad5a7616e6a129c7ccad",
+      "after": "aa71cce7ca0a29ee16da78c3e01b155024f9c3d1bed4f6b46a7385de6daf5234",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-hash-tuple/tests/execution.rs": {
+      "before": "7709df62259035f025ae0ac68ab84865a7bd657593a3df115b8f8599ff076834",
+      "after": "a1293109b6ced0e7b648fc6d00f243eec9d44d6ba535895d086ead8a382fcf69",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-legacy-md5/src/batch/tests.rs": {
+      "before": "70520292613104df45b27eea09d0ec1c3571db125ce84769afcf513cf17c4e38",
+      "after": "88d7ba99043613ad916b178eaf22ad7c524d2ef850c49f161cc4f1450b6d10cd",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-legacy-md5/src/engine.rs": {
+      "before": "546c367050297d3d4ce8dc77f1c19f45c0f293de837100f26cc3d374e5b76f0e",
+      "after": "1a52576b4d90ad72f80077ed7f8f069d45a98c91326753ad1544c68b029e05ac",
+      "disposition": "test-module",
+      "production_prefix": "#[cfg(test)]\nmod tests {"
+    },
+    "crates/brynja-legacy-md5/src/hardened_in_place/tests.rs": {
+      "before": "a6a5e09f1a5b025a0132ae3f97c16a862cd03f292c265f2755ce8838d860dfab",
+      "after": "238fd5a77e06b813bd4e57d6f1dd6946cd931850330951ce34f4c4db1123ec75",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-legacy-sha1/src/engine.rs": {
+      "before": "ffe120701d7676a122fa9cfea30f0bf16d2634f4f1aee6170e71303b2219b0fa",
+      "after": "3ca61d6198e7f9ffa1aca6c52e8c43300a7e0e79978dcb0590eeef17ea3e758d",
+      "disposition": "test-module",
+      "production_prefix": "#[cfg(test)]\nmod tests {"
+    },
+    "crates/brynja-legacy-sha1/src/hardened_in_place/tests.rs": {
+      "before": "6146cda4710bfaa1ec25cba38cd2cd5085ebc72edbcd63a628cdc30e626c9655",
+      "after": "74904b699d8885872089ccb501ce0b3946b5169e9d51a3314788afddf815d47d",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-mac-kmac/src/hardened_in_place/tests.rs": {
+      "before": "b13addc690eb803d7d8e3b940a9d5f4119b0f3b220f205b575dcd849e2d45a47",
+      "after": "f0bdc993b1cc6fc4584505dd99a4dff5ca0eb5fba623667fc8c2bac46579bfe4",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-mac-kmac/src/hardened_in_place/xof/tests.rs": {
+      "before": "165857814309ea88adb00ad24bdaeae2f539bc28675a5a600a74daca07196458",
+      "after": "b4c913ce716f982f3ec445a1e942c4d838bcd9b0d5bb6509ae375256d136e21c",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-mac-kmac/src/packer/framing_tests.rs": {
+      "before": "75edd151e15180b21499c0083ba0fbe7d4304cd09990dac8f04b2f37b1abb77a",
+      "after": "b7e981ad796b22a60f10b41855aa0fc525dd08857f18d9ca7580bfe87bfb4ba8",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "crates/brynja-mac-kmac/tests/official_vectors.rs": {
+      "before": "590c22f159980e40ad7a72b64e6c7b16e990d84c0d7f90ee31f47e1564480e27",
+      "after": "98cd80b52a2584446e71280d453435fb072ce2087671375a1a04ecf699edf276",
+      "disposition": "test-only",
+      "production_prefix": null
+    },
+    "scripts/kmac/kmac_reviewed_hashes.py": {
+      "before": "7c93cd46906fb5a2a292ef5cea9e062d8675ac003e057a38a445e92f9dd26033",
+      "after": "b022a13b2283337f09d7a5c07b22b55e4e488bc0a2f0577e81324c7372d3e3b4",
+      "disposition": "review-tooling",
+      "production_prefix": null
+    },
+    "scripts/parallelhash/parallelhash_policy.py": {
+      "before": "f5bc87240373677b30961131c8bfb1cfdf9b2d9e14f3e0aec242c7743c23e3f0",
+      "after": "b76104373538a4a28c3e28fba99102a1b15dc1d9737290c5e77c4653f808f607",
+      "disposition": "review-tooling",
+      "production_prefix": null
+    },
+    "scripts/parallelhash/parallelhash_reviewed_hashes.py": {
+      "before": "78947e0a8b0f34a7eefa923781ecef336d201374d62d403467e851e73c3bd3b8",
+      "after": "99efcba8f84a633fac97108edacdbfe781ff8992a10949a500d91d1a415c7f12",
+      "disposition": "review-tooling",
+      "production_prefix": null
+    },
+    "scripts/parallelhash/test-parallelhash.py": {
+      "before": "1604ea6f6b34ba4d0a1b7e6c0c8539de3b1949036d77c475d0abdca2aa748014",
+      "after": "f1d08d307baa11254f5c76ba90d03c57e77caaeeb909c5f606e93365574b54a8",
+      "disposition": "review-tooling",
+      "production_prefix": null
+    },
+    "scripts/tuplehash/check-tuplehash-execution-package.py": {
+      "before": "ddec4889838535edd2dc2fafd32188e15b084955e46d315ddff6fb76fa0f8cfe",
+      "after": "ef19ab0293456f50a399710899bbcbb1e50255b3c4409388a96ddaf9163ecabd",
+      "disposition": "review-tooling",
+      "production_prefix": null
+    },
+    "scripts/tuplehash/tuplehash_reviewed_hashes.py": {
+      "before": "288c0b179cc2528f9a2d6346be8afb273c4e0a6ae43d337ddda77b8a576af57a",
+      "after": "f137bb0a90d38a74399baea6a79adf14e6f5725ecd7153c9190c0ddb8ac98713",
+      "disposition": "review-tooling",
+      "production_prefix": null
+    }
+  },
+  "verification": "security/native-reuse/v0.24.49-checks.json"
+}

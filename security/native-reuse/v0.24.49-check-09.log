@@ -1,0 +1,36 @@
+Packaged TupleHash execution ownership: PASS; rejected=230
+Packaged TupleHash compiled cleanup/overflow mutants: PASS; rejected=34
+Packaged TupleHash algorithm/verification mutants: PASS; rejected=8
+Packaged TupleHash borrowed encoding mutants: PASS; rejected=10
+Scoped TupleHash mutation: core_state.rs: clear_owned_region(&mut self.pending)
+Scoped TupleHash mutation: core_state.rs: clear_owned_region(&mut self.used)
+Scoped TupleHash mutation: core_state.rs: clear_owned_region(&mut self.items)
+Scoped TupleHash mutation: core_state.rs: clear_owned_region(&mut self.remaining)
+Scoped TupleHash mutation: core_state.rs: clear_owned_region(&mut self.input_bits)
+Scoped TupleHash mutation: core_state.rs: clear_owned_region(&mut self.phase)
+Scoped TupleHash mutation: core_state.rs: clear_owned_region(&mut self.staging)
+Scoped TupleHash mutation: core_state.rs: core::slice::from_mut(target), &metadata.pending
+Scoped TupleHash mutation: core_state.rs: xor_secret_byte_bits(target, byte, 0, shift, used)
+Scoped TupleHash mutation: core_state.rs: xor_secret_byte_bits(&mut metadata.pending[0], byte, shift, used, 0)
+Scoped TupleHash mutation: core_state.rs: self.0.wipe();
+Scoped TupleHash mutation: core_state.rs: self.core.cancel();
+Scoped TupleHash mutation: core_state.rs: self.state = None;
+Scoped TupleHash mutation: core_state.rs: self.phase(1)?;
+Scoped TupleHash mutation: core_state.rs: if read(&core.cleanup.0.remaining) != 0
+Scoped TupleHash mutation: core_state.rs: total
+            .checked_add(bits)
+Scoped TupleHash mutation: core_state.rs: clear_owned_region(bytes)
+Scoped TupleHash mutation: core_state.rs: suffix.right(bits)?;
+Scoped TupleHash mutation: fixed.rs: bytes_input(b"TupleHash")?
+Scoped TupleHash mutation: fixed.rs: if !self.complete { self.core.cancel(); }
+Scoped TupleHash mutation: core_state.rs: self.finish(0)
+Scoped TupleHash mutation: reader.rs: *self.reader = None;
+Scoped TupleHash mutation: reader.rs: self.metadata.wipe();
+Scoped TupleHash mutation: reader.rs: if !self.complete {
+Scoped TupleHash mutation: reader.rs: clear_owned_region(output);
+        let mut guard
+Scoped TupleHash mutation: reader.rs: clear_owned_region(output);
+        let reader
+Scoped TupleHash mutation: backend.rs: self.squeeze_public(output, Sha3PublicDeclassification::acknowledge())
+Packaged scoped TupleHash mutants: PASS; rejected=54
+Packaged TupleHash hardened execution public API: PASS

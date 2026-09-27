@@ -15,26 +15,58 @@ python3 scripts/sha2/check-sha2-hardened-native-evidence.py
 verify() {
     python3 scripts/release/run-verification.py command -- "$@"
 }
+if
 python3 scripts/sha1/check-sha1-hardened-native.py
+then
+    :
+else
+    python3 scripts/release/native_review_carry_forward.py --family sha1-hardened
+fi
+if
 python3 scripts/md5/check-md5-execution-native.py
+then
+    :
+else
+    python3 scripts/release/native_review_carry_forward.py --family md5-execution
+fi
+if
 python3 scripts/md5/check-md5-hardened-native.py
+then
+    :
+else
+    python3 scripts/release/native_review_carry_forward.py --family md5-hardened
+fi
+if
 python3 scripts/sha3/check-keccak-hardened-native.py
+then
+    :
+else
+    python3 scripts/release/native_review_carry_forward.py --family keccak-hardened
+fi
+if
 python3 scripts/kmac/check-kmac-execution-native.py
+then
+    :
+else
+    python3 scripts/release/native_review_carry_forward.py --family kmac-execution
+fi
 # First require exact native equality. A failure is eligible only for the
-# separately checked facade-fixture version-only metadata carry-forward.
+# separately checked facade-fixture or exact reviewed test/tooling carry-forward.
 if
 python3 scripts/tuplehash/check-tuplehash-execution-native.py
 then
     :
 else
-    python3 scripts/release/native_metadata_carry_forward.py
+    python3 scripts/release/native_metadata_carry_forward.py ||
+        python3 scripts/release/native_review_carry_forward.py --family tuplehash-execution
 fi
 if
 python3 scripts/parallelhash/check-parallelhash-execution-native.py
 then
     :
 else
-    python3 scripts/release/native_metadata_carry_forward.py --family parallelhash
+    python3 scripts/release/native_metadata_carry_forward.py --family parallelhash ||
+        python3 scripts/release/native_review_carry_forward.py --family parallelhash-execution
 fi
 
 scripts/checks.sh

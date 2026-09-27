@@ -1,0 +1,68 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/brynja_mac_kmac-5bf8ebed96b3c2de)
+
+running 29 tests
+test core_state::assurance_contract::registered_algorithm_kmac_owner_contract_is_compiler_checked ... ok
+test hardened_in_place::reader::tests::consuming_reader_failures_clear_metadata_and_secret_output ... ok
+test execution::core_state::tests::every_metadata_region_is_cleared_on_cancel_and_guard_drop ... ok
+test execution::core_state::tests::overflow_clears_owner_and_secret_output_without_public_mutation ... ok
+test execution::core_state::tests::invalid_tail_width_clears_all_scratch_and_terminates ... ok
+test hardened_in_place::core_state::tests::outer_guard_clears_all_regions_even_after_forgotten_inner_guard ... ok
+test hardened_in_place::accelerated::tests::scoped_accelerated_scratch_guard_clears_on_exit ... ok
+test hardened_in_place::core_state::tests::setup_and_finalization_failures_clear_owned_metadata ... ok
+test hardened_in_place::reader::tests::reader_failure_and_unwind_clear_and_reject_every_followup ... ok
+test hardened_in_place::core_state::tests::rejected_and_unwinding_updates_destroy_state_immediately ... ok
+test hardened_in_place::core_state::tests::xof_production_rejects_weak_keys_and_terminal_states ... ok
+test execution::core_state::tests::recoverable_unwind_runs_guard_clearing ... ok
+test output::tests::borrowed_comparison_rejects_repeated_mismatches_and_lengths ... ok
+test packer::framing_tests::bytepad_retains_frame_and_clears_on_guard_drop ... ok
+test hardened_in_place::tests::scoped_known_answer_and_returned_secret ... ok
+test packer::framing_tests::invalid_fragment_shape_rejects_before_absorption_and_clears ... ok
+test packer::tests::corrupt_encoded_width_fails_closed ... ok
+test hardened_in_place::xof::tests::scoped_xof_returned_secret_matches_known_api ... ok
+test tests::implementation_claim_is_exact ... ok
+test packer::tests::large_partial_keys_keep_bulk_absorption ... ok
+test packer::framing_tests::partial_tail_borrows_final_frame_and_cleanup_covers_every_exit ... ok
+test packer::tests::large_final_chunks_keep_bulk_absorption ... ok
+test packer::framing_tests::encoded_integer_initializes_in_place_and_clears_reused_storage ... ok
+test hardened_in_place::xof::tests::scoped_xof_lifecycle_shapes_and_large_public_reads ... ok
+test hardened_in_place::tests::scoped_lifecycle_strength_and_verification_failures ... ok
+test hardened_in_place::xof::tests::scoped_xof_all_tails_streaming_and_mixed_reads ... ok
+test packer::framing_tests::borrowed_fragments_match_bit_oracle_at_every_alignment ... ok
+test hardened_in_place::tests::borrowed_verification_rejects_equal_mismatches_across_chunks ... ok
+test hardened_in_place::tests::scoped_all_bit_domains_match_existing_portable_api ... ok
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/api.rs (target/debug/deps/api-2502090131dcf9c4)
+
+running 6 tests
+test secret_output_is_cleared_when_ownership_ends ... ok
+test production_and_conformance_parameter_domains_are_separate ... ok
+test domain_substitution_changes_outputs_and_fixed_is_not_xof_prefix ... ok
+test arbitrary_bits_are_canonical_and_streaming_xof_tracks_output ... ok
+test verification_accepts_exact_tag_and_rejects_first_last_and_length_changes ... ok
+test streaming_and_one_shot_are_identical_at_rate_boundaries ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/execution.rs (target/debug/deps/execution-a342b94f8e3b16d2)
+
+running 7 tests
+test preferred_absence_is_portable_and_required_absence_fails ... ok
+test unwind_clears_secret_output_and_source_stays_terminal ... ok
+test secret_errors_and_drop_clear_entire_destinations ... ok
+test failed_xof_public_read_preserves_output_and_terminates ... ok
+test portable_execution_tags_match_and_outputs_are_transactional ... ok
+test xof_reader_retains_source_and_cannot_be_reopened ... ok
+test verification_rejects_content_length_and_domain_substitution ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/official_vectors.rs (target/debug/deps/official_vectors-a50f6686a2d7dda5)
+
+running 2 tests
+test all_six_official_kmac_examples_match ... ok
+test all_six_official_kmacxof_examples_match ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

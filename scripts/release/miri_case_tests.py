@@ -39,7 +39,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertEqual(catalog.selected(plan, ['matrix'], plan['fingerprint']), [])
         miri = catalog.selected(plan, ['miri'], plan['fingerprint'], miri_tasks=True,
                                 miri_profile='routine')
-        self.assertEqual(len(miri), 501)
+        self.assertEqual(len(miri), 542)
         old = {'phase': 'asan', 'command': 'cargo test -p brynja-hash-sha2',
                'argv': ['cargo', 'test', '-p', 'brynja-hash-sha2'], 'stdin': None,
                'environment': {}}
@@ -56,7 +56,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertTrue(plans.requires_full({**plan, 'full_phases': ['repository']}, 'command'))
 
     def test_profile_task_sets_are_unique_and_fit_detached_bound(self):
-        for profile, count in (('existing-full', 83), ('routine', 501), ('extended', 3621)):
+        for profile, count in (('existing-full', 83), ('routine', 542), ('extended', 3838)):
             commands = miri_tasks.commands(plans.ROOT, list(plans.scope.GROUPS), profile)
             self.assertEqual(len(commands), count)
             self.assertEqual(len({tuple(command) for command in commands}), count)
@@ -81,7 +81,7 @@ class MiriCaseTests(unittest.TestCase):
         commands = catalog.selected(plan, list(catalog.PHASES), None,
                                     miri_tasks=True, miri_profile='routine')
         self.assertEqual({command['phase'] for command in commands}, set(catalog.PHASES))
-        self.assertGreater(len(commands), 501)
+        self.assertGreater(len(commands), 542)
         self.assertLessEqual(len(commands), 4096)
 
     def test_routine_parallel_covers_widths_blocks_and_each_lifecycle_case_zero(self):
@@ -131,10 +131,10 @@ class MiriCaseTests(unittest.TestCase):
                 self.assertTrue(all(task['environment']['BRYNJA_MIRI_PROFILE'] == 'extended' for task in selected))
                 self.assertTrue(all(task['argv'][-2:] == ['--', '--exact'] for task in selected))
                 count += len(cases)
-        self.assertEqual(count, 3519)
+        self.assertEqual(count, 3727)
 
     def test_tuple_execution_splits_keep_every_strength_width_and_xof_case(self):
-        matrices = miri_cases.matrices('tuplehash')[1:]
+        matrices = miri_cases.matrices('tuplehash')[1:3]
         self.assertEqual([matrix['total'] for matrix in matrices], [16, 2])
         for matrix in matrices:
             self.assertEqual(matrix['routine'], list(range(matrix['total'])))
@@ -154,6 +154,44 @@ class MiriCaseTests(unittest.TestCase):
                                  'unwind_and_forgotten_reader_leave_the_parent_terminal',
                                  'future_unregistered_test'):
                     self.assertNotIn(retained, tasks[1]['argv'])
+
+    def test_tuple_scoped_chunks_cover_each_strength_length_tail_and_all_widths(self):
+        matrices = miri_cases.matrices('tuplehash')[3:]
+        self.assertEqual([matrix['total'] for matrix in matrices], [56, 56, 48, 48])
+        for matrix in matrices:
+            self.assertEqual(matrix['features'], [])
+            self.assertEqual(len(set(matrix['routine'])), 8)
+            self.assertEqual({case // 8 for case in matrix['routine']}, set(range(6)))
+            self.assertEqual({case % 8 for case in matrix['routine']}, set(range(8)))
+            self.assertEqual({(case % 8 + 1) % 5 for case in matrix['routine']}, set(range(5)))
+            # A bit-width label is meaningful only if input or output is nonempty.
+            self.assertTrue(all(case // 8 != 0 or (case % 8 + 1) % 5 != 0
+                                for case in matrix['routine']))
+            for profile in ('routine', 'extended'):
+                tasks = miri_tasks.task_inventory(plans.ROOT, 'tuplehash', profile)
+                self.assertEqual(tasks[3]['argv'].count(matrix['name']), 1)
+                exact = [task for task in tasks if task['marker'] and matrix['name'] in task['argv']]
+                expected = matrix['routine'] if profile == 'routine' else list(range(matrix['total']))
+                self.assertEqual([int(task['environment']['BRYNJA_MIRI_CASE']) for task in exact], expected)
+                self.assertTrue(all(task['argv'][:3] == ['-p', 'brynja-hash-tuple', '--lib'] for task in exact))
+                for retained in ('miri_chunks_reject_incomplete_or_duplicate_output_widths',
+                                 'future_unregistered_test'):
+                    self.assertNotIn(retained, tasks[3]['argv'])
+
+    def test_tuple_lifecycles_and_api_singles_keep_exact_selection_and_discovery(self):
+        names = miri_cases.singles('tuplehash')
+        self.assertEqual(len(set(names)), 9)
+        for profile in ('routine', 'extended'):
+            tasks = miri_tasks.task_inventory(plans.ROOT, 'tuplehash', profile)
+            for name in names:
+                target = ['--lib'] if name.startswith('hardened_in_place::') else ['--test', 'api']
+                self.assertEqual(tasks[3]['argv'].count(name), 1)
+                self.assertEqual(sum(task['argv'] == ['-p', 'brynja-hash-tuple', *target, name, '--', '--exact']
+                                     for task in tasks), 1)
+            retained = 'forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch'
+            self.assertIn(retained, tasks[2]['argv'])
+            self.assertNotIn(retained, tasks[3]['argv'])
+            self.assertNotIn('future_unregistered_test', tasks[3]['argv'])
 
     def test_official_vectors_and_scheduled_lifecycles_are_never_sampled(self):
         for matrix in [*miri_cases.matrices('kmac')[3:], *miri_cases.matrices('parallelhash')[10:12]]:

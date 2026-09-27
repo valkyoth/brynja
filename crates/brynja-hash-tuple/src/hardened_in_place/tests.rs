@@ -18,20 +18,124 @@ fn bits(input: &[u8], valid: u8) -> Fips202BitString<'_> {
     }
 }
 
+// Only interpreted runs accept case selection. Native tests retain the whole
+// matrix and its cross-case workspace reuse, even with hostile environment input.
+pub(super) fn miri_selection(total: usize) -> (Option<usize>, Option<usize>) {
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<usize>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(usize::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < total));
+    let width = if let Some(case) = selected {
+        let profile = std::env::var("BRYNJA_MIRI_PROFILE");
+        assert!(matches!(profile.as_deref(), Ok("routine" | "extended")));
+        if profile.as_deref() == Ok("routine") {
+            // Empty-input cases must have nonempty output, so their tail width
+            // is exercised rather than disappearing on both sides of the test.
+            Some((case % 8).saturating_add(1) % 5)
+        } else {
+            None
+        }
+    } else {
+        None
+    };
+    (selected, width)
+}
+
+pub(super) fn miri_complete(
+    selected: Option<usize>,
+    visited: usize,
+    executed: usize,
+    total: usize,
+    width: Option<usize>,
+    _name: &str,
+) {
+    assert_eq!(visited, total);
+    assert!(width.is_none_or(|index| index < 5 && selected.is_some()));
+    // Native/extended retain the whole width product; routine covers every
+    // dimension without the product, with its exact width selected above.
+    let expected = if selected.is_some() {
+        Some(if width.is_some() { 1 } else { 5 })
+    } else {
+        total.checked_mul(5)
+    };
+    assert_eq!(Some(executed), expected);
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+    }
+}
+
+#[test]
+fn miri_chunks_reject_incomplete_or_duplicate_output_widths() {
+    miri_complete(None, 48, 240, 48, None, "accounting");
+    assert!(
+        catch_unwind(|| {
+            miri_complete(None, usize::MAX, 0, usize::MAX, None, "overflow");
+        })
+        .is_err()
+    );
+    for (selected, visited, executed) in [
+        (Some(0), 47, 5),
+        (Some(0), 48, 0),
+        (Some(0), 48, 4),
+        (Some(0), 48, 6),
+        (None, 48, 239),
+        (None, 48, 241),
+    ] {
+        assert!(
+            catch_unwind(|| {
+                miri_complete(selected, visited, executed, 48, None, "accounting");
+            })
+            .is_err()
+        );
+    }
+    for (selected, executed, width) in [
+        (Some(0), 0, 0),
+        (Some(0), 2, 0),
+        (Some(0), 1, 5),
+        (None, 240, 0),
+    ] {
+        assert!(
+            catch_unwind(|| miri_complete(selected, 48, executed, 48, Some(width), "accounting"))
+                .is_err()
+        );
+    }
+}
+
 macro_rules! comparisons {
     ($test:ident, $workspace:ident, $ordinary:ident, $rate:literal) => {
         #[test]
         fn $test() -> Result<(), Error> {
+            let (selected, output_width) = miri_selection(56);
+            let mut visited = 0usize;
+            let mut executed = 0usize;
             let mut workspace = $workspace::new();
             for length in [0, 1, $rate - 1, $rate, $rate + 1, 2 * $rate + 1, 1024] {
                 for tail in 1..=8 {
+                    let case = visited;
+                    visited = visited.checked_add(1).ok_or(Error::StateConsumed)?;
+                    if selected.is_some_and(|wanted| wanted != case) {
+                        continue;
+                    }
                     let mut input = vec![0xa5; length];
                     if let Some(last) = input.last_mut() {
                         *last &= u8::MAX >> (8 - tail);
                     }
                     let valid = if length == 0 { 0 } else { tail };
                     let item = bits(&input, valid);
-                    for width in [0, 1, 32, $rate + 1, 2 * $rate + 1] {
+                    for (index, width) in
+                        [0, 1, 32, $rate + 1, 2 * $rate + 1].into_iter().enumerate()
+                    {
+                        if output_width.is_some_and(|wanted| wanted != index) {
+                            continue;
+                        }
+                        executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
                         let output_valid = if width == 0 { 0 } else { tail };
                         let mut expected = vec![0; width];
                         let custom = bits(&[5], 3);
@@ -93,6 +197,14 @@ macro_rules! comparisons {
                     }
                 }
             }
+            miri_complete(
+                selected,
+                visited,
+                executed,
+                56,
+                output_width,
+                stringify!($test),
+            );
             Ok(())
         }
     };

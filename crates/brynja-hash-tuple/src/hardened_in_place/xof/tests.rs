@@ -1,5 +1,6 @@
 extern crate std;
 use super::*;
+use crate::hardened_in_place::tests::{miri_complete, miri_selection};
 use crate::{Fips202Output, TupleHashError as Error, TupleHashPublicDeclassification as Public};
 use std::{
     panic::{AssertUnwindSafe, catch_unwind},
@@ -13,15 +14,29 @@ macro_rules! checks {
     ($comparison:ident, $lifecycle:ident, $workspace:ident, $ordinary:ident, $rate:literal) => {
         #[test]
         fn $comparison() -> Result<(), Error> {
+            let (selected, output_width) = miri_selection(48);
+            let mut visited = 0usize;
+            let mut executed = 0usize;
             let mut workspace = $workspace::new();
             for length in [0, 1, $rate - 1, $rate, $rate + 1, 2 * $rate + 1] {
                 for tail in 1..=8 {
+                    let case = visited;
+                    visited = visited.checked_add(1).ok_or(Error::StateConsumed)?;
+                    if selected.is_some_and(|wanted| wanted != case) {
+                        continue;
+                    }
                     let mut input = vec![0xa5; length];
                     if let Some(last) = input.last_mut() {
                         *last &= u8::MAX >> (8 - tail);
                     }
                     let valid = if length == 0 { 0 } else { tail };
-                    for width in [0, 1, 32, $rate + 1, 2 * $rate + 1] {
+                    for (index, width) in
+                        [0, 1, 32, $rate + 1, 2 * $rate + 1].into_iter().enumerate()
+                    {
+                        if output_width.is_some_and(|wanted| wanted != index) {
+                            continue;
+                        }
+                        executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
                         let output_valid = if width == 0 { 0 } else { tail };
                         let mut expected = vec![0; width];
                         let custom = bits(&[5], 3)?;
@@ -92,6 +107,14 @@ macro_rules! checks {
                     }
                 }
             }
+            miri_complete(
+                selected,
+                visited,
+                executed,
+                48,
+                output_width,
+                stringify!($comparison),
+            );
             Ok(())
         }
         #[test]

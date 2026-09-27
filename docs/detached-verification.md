@@ -138,12 +138,12 @@ local separate-process regression coverage; a real remote trial is still due.
 
 New foreground and detached runs default to **routine** for internal tags and
 **extended** for public checkpoints. Routine deliberately samples the registered
-SHA-1, MD5, SHA-3, KMAC, TupleHash and ParallelHash matrices: 399 case/chunk tasks
-rather than 3,519 extended tasks. KMAC chunks use representative byte values;
+SHA-1, MD5, SHA-3, KMAC, TupleHash and ParallelHash matrices: 431 case/chunk tasks
+rather than 3,727 extended tasks. KMAC chunks use representative byte values;
 ParallelHash uses smaller inputs for small leaf sizes. Full native matrices
 remain unchanged. The other 83 Cargo invocations retain their original
 selections, minus the registered matrices, nine SHA-3 lifecycle tests, four KMAC
-API tests and six ParallelHash API tests now
+API tests, nine TupleHash scoped/API tests and six ParallelHash API tests now
 executed separately. SHA-3 retains each identity's rate boundaries and every
 registered partial-bit combination; its original integration invocation still
 discovers new tests not registered for separate execution.

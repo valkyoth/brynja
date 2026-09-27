@@ -260,7 +260,7 @@ def scoped_mutations(roots, env):
     ]
     command = ['cargo', 'test', '--offline', '--lib', 'hardened_in_place::']
     for profile in ([], ['--release']):
-        if '15 passed; 0 failed' not in shared.run(command + profile, crate, env).stdout:
+        if '16 passed; 0 failed' not in shared.run(command + profile, crate, env).stdout:
             raise ValueError('scoped TupleHash mutation control incomplete')
     for name, before, after in cases:
         path = root / name

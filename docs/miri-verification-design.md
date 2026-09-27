@@ -14,7 +14,7 @@ post-command source/tool checks, immutable resume into a new job, and partial
 partition collection. It leaves the reviewed legacy Miri driver byte-for-byte
 unchanged. See [operator instructions](detached-verification.md).
 
-The case-splitting stage covers six families, including three TupleHash matrices and six
+The case-splitting stage covers six families, including seven TupleHash matrices and six
 ParallelHash fixed/XOF/scheduled matrices. For the initial staging/scoped matrices,
 routine Miri selects 16 TupleHash cases and 48 ParallelHash cases; extended Miri
 addresses all 896 and 240 original combinations respectively. Additional splits
@@ -66,13 +66,21 @@ TupleHash execution comparisons now run as 16 fixed-output cases (both strengths
 and all eight final-bit widths) and two XOF cases. Both profiles retain every
 case, including the original 1,025-byte fixed input, 340-byte XOF input, mixed
 secret/public reads, terminal-state assertions and destination clearing.
+The four scoped TupleHash/TupleHashXOF matrices use input-length/tail chunks.
+Routine selects eight cases per identity and cycles output widths, covering empty,
+one-byte, rate-1/rate/rate+1, multirate input, all tail widths and all five output
+width classes without their Cartesian product. Extended/native retain all five
+widths per chunk and cross-width workspace reuse: all 208 chunks
+(1,040 combinations), including the fixed-output 1,024-byte input class; the
+routine execution matrices separately retain their 1,025-byte messages.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-thirty-eight registered matrices now run separately. Thus a complete all-family
-routine catalog has 501 tasks (399 case/chunk tasks) and extended has 3,621
-(3,519 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
+forty-two registered matrices now run separately. Thus a complete all-family
+routine catalog has 542 tasks (431 case/chunk tasks) and extended has 3,838
+(3,727 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
 tests and six ParallelHash API tests additionally run as separate exact tests,
-with inputs/assertions unchanged.
+with inputs/assertions unchanged. Four TupleHash scoped lifecycle tests and five
+TupleHash API tests also run separately, without sampling or changed assertions.
 The original invocations keep the SHA-3 empty-owner and KMAC secret-output tests
 and the ParallelHash zero-block test, and discover future tests;
 only explicitly rescheduled tests are skipped there.
@@ -221,13 +229,30 @@ Both XOF cases passed in 95–97 seconds; the residual execution group passed al
 four lifecycle/error tests in 97.4 seconds.
 Native tests/doctests passed on Rust 1.90.0 and 1.98.1 (including hostile-selector
 coverage), as did scoped Clippy, packaged debug/release and mutation testing,
-91 runner regressions and 51 assurance tests. The still-unsplit scoped-owner
-group remains incomplete; these diagnostics are not a complete release receipt.
+91 runner regressions and 51 assurance tests. At that stage the scoped-owner
+group still needed decomposition; these diagnostics are not a release receipt.
 
-Capacity observation: the current complete internal routine catalog has 1,048
+Scoped TupleHash follow-up: initial five-width chunks passed in 360–381 host
+seconds, motivating the dimension-covering routine sample described above.
+Final largest-output probes for all four identities passed in 84–86 seconds;
+empty-input probes passed in 34–36 seconds. Empty inputs require nonempty output
+in the sample, so their selected bit width is actually exercised. The residual
+group passed its 15 retained tests in 315 seconds. Native tests/doctests passed
+255 checks per compiler on Rust 1.90.0 and 1.98.1, including hostile-selector
+coverage; scoped Clippy, 93 runner regressions and review-metadata checks passed.
+The new accounting regression also rejects missing/duplicate widths and overflow;
+packaged mutation controls now require the resulting 16 tests rather than 15.
+All four separately scheduled lifecycle tests passed in 153–170 seconds without
+changing their cancellation, forgotten-owner, invalid-output or unwind checks.
+All five separately scheduled API tests passed in 6–54 seconds. The final focused
+run passed all 15 selected matrix/lifecycle/API probes; the other routine cases
+still require their complete campaign before qualification.
+These remain focused diagnostics, not a completed all-family qualification.
+
+Capacity observation: the current complete internal routine catalog has 1,089
 commands including non-Miri phases, and has a regression check against the
-existing 4,096-command bound. The combined public/extended catalog has 4,168
-commands and exceeds that bound (Miri alone has 3,621). This capacity issue must
+existing 4,096-command bound. The combined public/extended catalog has 4,385
+commands and exceeds that bound (Miri alone has 3,838). This capacity issue must
 be resolved before a combined public sweep; no bound or evidence requirement
 has been changed by these test splits.
 

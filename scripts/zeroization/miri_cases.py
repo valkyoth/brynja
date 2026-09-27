@@ -78,7 +78,16 @@ def matrices(group: str) -> list[dict]:
                       ('all_fixed_profiles_match_portable_for_bit_items_and_customization',
                        'tuplehash-execution-fixed', 16),
                       ('all_xof_profiles_match_irregular_and_mixed_secret_public_output',
-                       'tuplehash-execution-xof', 2))]]
+                       'tuplehash-execution-xof', 2))],
+                *[dict(name='hardened_in_place::' + module + '::' + name,
+                       marker=name, total=total,
+                       routine=[bit % 6 * 8 + bit for bit in range(8)],
+                       package='brynja-hash-tuple', features=[])
+                  for module, total, suffix in (
+                      ('tests', 56, 'matches_portable_bits_and_streaming'),
+                      ('xof::tests', 48, 'differential'))
+                  for strength in (128, 256)
+                  for name in [f'scoped_tuple{"xof" if module.startswith("xof") else ""}{strength}_{suffix}']]]
     if group != "parallelhash":
         return []
     result = []
@@ -138,6 +147,18 @@ def matrices(group: str) -> list[dict]:
 
 
 def singles(group: str) -> list[str]:
+    if group == 'tuplehash':
+        return [
+            'hardened_in_place::tests::scoped_tuple128_terminal_writer_and_output_lifecycle',
+            'hardened_in_place::tests::scoped_tuple256_terminal_writer_and_output_lifecycle',
+            'hardened_in_place::xof::tests::scoped_tuplexof128_lifecycle',
+            'hardened_in_place::xof::tests::scoped_tuplexof256_lifecycle',
+            'tuple_boundaries_order_and_empty_items_are_distinct',
+            'exact_length_streaming_matches_whole_items',
+            'abandoned_or_incomplete_items_fail_closed',
+            'arbitrary_bit_items_and_outputs_are_canonical',
+            'xof_partitions_and_hardened_output_match',
+        ]
     if group == 'parallelhash':
         return [
             'streamed_scheduled_and_one_shot_are_identical',
@@ -198,6 +219,11 @@ def tasks(group: str, original: list[list[str]], profile: str) -> list[dict]:
                            "environment": {"BRYNJA_MIRI_CASE": str(index), "BRYNJA_MIRI_PROFILE": profile},
                            "marker": f"MIRI_CASE_PASS: {matrix['marker']}:{index}"})
     for name in singles(group):
+        if group == 'tuplehash':
+            target = ['--lib'] if name.startswith('hardened_in_place::') else ['--test', 'api']
+            result.append({'argv': ['-p', 'brynja-hash-tuple', *target, name, '--', '--exact'],
+                           'environment': {}, 'marker': None})
+            continue
         package, target = {'kmac': ('brynja-mac-kmac', 'api'),
                            'parallelhash': ('brynja-hash-parallel', 'api'),
                            'sha3': ('brynja-hash-sha3', 'hardened')}[group]

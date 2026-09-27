@@ -138,11 +138,12 @@ local separate-process regression coverage; a real remote trial is still due.
 
 New foreground and detached runs default to **routine** for internal tags and
 **extended** for public checkpoints. Routine deliberately samples the registered
-SHA-1, MD5, SHA-3, KMAC, TupleHash and ParallelHash matrices: 284 case/chunk tasks
-rather than 3,372 extended tasks. KMAC chunks use representative byte values;
+SHA-1, MD5, SHA-3, KMAC, TupleHash and ParallelHash matrices: 330 case/chunk tasks
+rather than 3,418 extended tasks. KMAC chunks use representative byte values;
 ParallelHash uses smaller inputs for small leaf sizes. Full native matrices
 remain unchanged. The other 83 Cargo invocations retain their original
-selections, minus the registered matrices, nine SHA-3 lifecycle tests and four KMAC API tests now
+selections, minus the registered matrices, nine SHA-3 lifecycle tests, four KMAC
+API tests and six ParallelHash API tests now
 executed separately. SHA-3 retains each identity's rate boundaries and every
 registered partial-bit combination; its original integration invocation still
 discovers new tests not registered for separate execution.
@@ -152,6 +153,9 @@ and both strengths and output-clearing assertions within each selected case.
 Its buffering matrix covers both strengths, all block sizes, length classes and
 tail widths with 16 routine / 672 extended cases, retaining fixed/XOF framing
 and clearing checks in every case.
+All 22 scheduled-owner lifecycle cases, all 12 official KMAC/KMACXOF vectors
+and all 12 official ParallelHash/ParallelHashXOF vectors
+remain selected in both profiles; only their scheduling is split.
 
 Use `start --miri-profile extended` for an internal extended campaign, or
 `--miri-profile existing-full` for the legacy unsplit matrices. A public job

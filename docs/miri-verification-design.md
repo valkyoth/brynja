@@ -14,8 +14,7 @@ post-command source/tool checks, immutable resume into a new job, and partial
 partition collection. It leaves the reviewed legacy Miri driver byte-for-byte
 unchanged. See [operator instructions](detached-verification.md).
 
-The next stage registers seventeen costly matrices across six families.
-One TupleHash matrix and six
+The case-splitting stage covers six families, including one TupleHash matrix and six
 ParallelHash fixed/XOF/scheduled matrices. Routine Miri selects 16 TupleHash
 cases and 48 ParallelHash cases; extended Miri addresses all 896 and 240 original
 combinations respectively. Each case has an exact completion marker and must
@@ -46,15 +45,25 @@ ParallelHash's buffering/final-tail differential matrix uses 16 routine cases
 covering both strengths, every block size, input-length class and tail width;
 extended/native retain all 672 combinations. Every selected case retains both
 fixed/XOF framing checks, streamed updates and workspace/output clearing.
+Scheduled-owner lifecycle checks run as 11 cases per strength, retaining every
+wrong-plan/order, duplicate-leaf, incomplete-root, cancellation/forgotten-owner,
+invalid-output and empty-output case in both profiles. All six official KMAC
+and six KMACXOF vectors also run individually in both profiles, preserving both
+ordinary and scoped-secret comparisons and destination clearing. All 12 official
+ParallelHash/ParallelHashXOF vectors likewise retain their complete native
+checks and run as separate cases in both profiles.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-twenty-one registered matrices now run separately. Thus a complete all-family
-routine catalog has 380 tasks (284 case/chunk tasks) and extended has 3,468
-(3,372 case/chunk tasks). Nine existing SHA-3 lifecycle tests and four KMAC API
-tests additionally run as separate exact tests, with inputs/assertions unchanged.
+twenty-seven registered matrices now run separately. Thus a complete all-family
+routine catalog has 432 tasks (330 case/chunk tasks) and extended has 3,520
+(3,418 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
+tests and six ParallelHash API tests additionally run as separate exact tests,
+with inputs/assertions unchanged.
 The original invocations keep the SHA-3 empty-owner and KMAC secret-output tests
-and discover future tests;
+and the ParallelHash zero-block test, and discover future tests;
 only explicitly rescheduled tests are skipped there.
+Each selected case starts a fresh interpreted test; native matrices retain their
+original cross-case workspace-reuse sequences as well as every input combination.
 Remaining grouped selections, including SHA-2/SHA-3,
 have not yet been fully timed. Broad legacy selections still discover new
 tests; a future complete per-test obligation inventory remains outstanding.
@@ -132,6 +141,19 @@ regressions, 51 assurance tests and source/review-metadata checks. A residual
 ParallelHash grouped probe reached scheduled-owner lifecycle tests but hit its
 180-second diagnostic cap; it is incomplete evidence, not a pass. Further
 grouped timing and remote split/resume qualification remain outstanding.
+
+Scheduled/vector follow-up: four final scheduled-owner lifecycle probes passed
+in 11.3–32.7 host seconds, including duplicate-leaf rejection, forgotten XOF
+ownership, invalid output and empty output. Representative long KMAC/KMACXOF
+official vectors passed in 47.5/43.5 seconds; an extended short KMAC vector
+passed in 32.4 seconds. All six separately scheduled ParallelHash API tests
+passed in 11.2–161.1 seconds, and its representative fixed/XOF official vectors
+passed in 55.8/53.8 seconds. Expected NIST digests are unchanged. The remaining
+KMAC grouped invocation passed all 19 selected tests in 101.2 seconds.
+Native all-feature library/vector checks passed all 99 tests on both Rust
+1.90.0 and 1.98.1, including the complete vectors and lifecycle matrices.
+Hostile-selector checks, strict scoped Clippy, no-default-feature compilation,
+86 runner regressions, scope/metadata policies and 51 assurance tests passed.
 A local overhead diagnostic measured source hashing (2,945 files) at
 0.27 seconds, tool identity at 1.83 seconds and planning at 0.17 seconds.
 Per-command source/tool seals deliberately remain in place; many tiny tasks

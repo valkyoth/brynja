@@ -29,7 +29,7 @@ REVIEWED_HASHES = {
     "crates/brynja-mac-kmac/src/verify.rs": "d4f48aaffcb354eec725f579eae18749222cd4f598d4de4129c9b0110112270e",
     "crates/brynja-mac-kmac/src/xof.rs": "0ea4b24c170c36109b237aa91d1807b1efc7deef0a9e05b6ba6352342c971ede",
     "crates/brynja-mac-kmac/tests/api.rs": "9709fa94906a0e18e3a4cfa7e56ab84ae67504337f8b25e7930898f59189bfad",
-    "crates/brynja-mac-kmac/tests/official_vectors.rs": "590c22f159980e40ad7a72b64e6c7b16e990d84c0d7f90ee31f47e1564480e27",
+    "crates/brynja-mac-kmac/tests/official_vectors.rs": "98cd80b52a2584446e71280d453435fb072ce2087671375a1a04ecf699edf276",
     "assurance/kmac-public-api/src/lib.rs": "6b83f70078bec568e180a486c15425ddd2d3dcc23bb6ab0d07deb57404f8a6c6",
     "assurance/kmac-differential/src/main.rs": "f201670b317bf0430cd16edb756faf0b34e7c60a4fbc9ae1e97746319e3d0fe7",
     "assurance/kmac-differential/Cargo.toml": "6c3b87ebd805b64d9df4e42cb1d413207037e277408f35ffa32019e9051007fa",

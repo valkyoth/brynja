@@ -89,10 +89,19 @@ macro_rules! check {
         }
         #[test]
         fn $lifecycle() -> Result<(), ParallelHashError> {
+            let (selected, _) = miri_selection(11)?;
+            let mut visited = 0_usize;
+            let mut executed = 0_usize;
             let plan = crate::$plan::new(b"first second", 8)?;
             let wrong = crate::$plan::new(b"first second", 8)?;
             let mut workspace = $workspace::new();
             for mode in 0..4 {
+                let index = visited;
+                visited = visited.checked_add(1).ok_or(Error::StateConsumed)?;
+                if selected.is_some_and(|case| case != index) {
+                    continue;
+                }
+                executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
                 let mut output = [0xa5; 32];
                 workspace.with(&plan, b"", |mut root| {
                     let mut leaf = [0xa5; $size];
@@ -130,6 +139,12 @@ macro_rules! check {
                 assert!(workspace.cleared());
             }
             for mode in 0..3 {
+                let index = visited;
+                visited = visited.checked_add(1).ok_or(Error::StateConsumed)?;
+                if selected.is_some_and(|case| case != index) {
+                    continue;
+                }
+                executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
                 workspace.with(&plan, b"", |mut root| {
                     let mut leaf = [0; $size];
                     root.merge(plan.job(0)?.execute(&mut leaf)?)?;
@@ -147,6 +162,12 @@ macro_rules! check {
             }
             let empty = crate::$plan::new(b"", 8)?;
             for valid in [0, 9, 255] {
+                let index = visited;
+                visited = visited.checked_add(1).ok_or(Error::StateConsumed)?;
+                if selected.is_some_and(|case| case != index) {
+                    continue;
+                }
+                executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
                 let mut output = [0xa5; 3];
                 assert!(
                     workspace
@@ -166,17 +187,22 @@ macro_rules! check {
                 );
                 assert_eq!(output, [0; 3]);
             }
-            workspace.with(&empty, b"", |root| {
-                root.finalize_public(&mut [], Public::acknowledge())
-            })??;
-            drop(workspace.with(&empty, b"", |root| root.finalize_secret(&mut []))??);
-            let mut output = [0xa5; 32];
-            workspace.with(&empty, b"", |root| {
-                root.finalize_xof()?
-                    .squeeze_public(&mut output, Public::acknowledge())
-            })??;
-            assert_ne!(output, [0xa5; 32]);
-            assert!(workspace.cleared());
+            if selected.is_none_or(|case| case == visited) {
+                executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
+                workspace.with(&empty, b"", |root| {
+                    root.finalize_public(&mut [], Public::acknowledge())
+                })??;
+                drop(workspace.with(&empty, b"", |root| root.finalize_secret(&mut []))??);
+                let mut output = [0xa5; 32];
+                workspace.with(&empty, b"", |root| {
+                    root.finalize_xof()?
+                        .squeeze_public(&mut output, Public::acknowledge())
+                })??;
+                assert_ne!(output, [0xa5; 32]);
+                assert!(workspace.cleared());
+            }
+            visited = visited.checked_add(1).ok_or(Error::StateConsumed)?;
+            miri_complete(selected, visited, executed, 11, stringify!($lifecycle));
             Ok(())
         }
     };

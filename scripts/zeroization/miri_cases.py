@@ -51,6 +51,11 @@ def matrices(group: str) -> list[dict]:
              'package': package, 'features': []},
         ]
     if group == 'kmac':
+        official = [dict(name=name, marker=marker, total=6, routine=list(range(6)),
+                         package='brynja-mac-kmac', features=[], target=['--test', 'official_vectors'])
+                    for name, marker in (
+                        ('all_six_official_kmac_examples_match', 'kmac-official'),
+                        ('all_six_official_kmacxof_examples_match', 'kmacxof-official'))]
         return [{'name': 'packer::framing_tests::borrowed_fragments_match_bit_oracle_at_every_alignment',
                  'marker': 'kmac-framing', 'total': 8, 'routine': list(range(8)),
                  'package': 'brynja-mac-kmac', 'features': []},
@@ -59,7 +64,7 @@ def matrices(group: str) -> list[dict]:
                  'package': 'brynja-mac-kmac', 'features': []},
                 {'name': 'hardened_in_place::xof::tests::scoped_xof_lifecycle_shapes_and_large_public_reads',
                  'marker': 'kmac-scoped-xof-lifecycle', 'total': 16, 'routine': list(range(16)),
-                 'package': 'brynja-mac-kmac', 'features': []}]
+                 'package': 'brynja-mac-kmac', 'features': []}, *official]
     if group == "tuplehash":
         # Both strengths, every initial residue and final width, all seven
         # staging lengths, without the full Cartesian product.
@@ -91,10 +96,29 @@ def matrices(group: str) -> list[dict]:
                    'routine': [wide * 336 + (bit % 7) * 48 + (bit % 6) * 8 + bit
                                for wide in range(2) for bit in range(8)],
                    'package': 'brynja-hash-parallel', 'features': []})
+    for strength in (128, 256):
+        name = f'scoped_scheduled{strength}_lifecycle'
+        result.append(dict(name='hardened_in_place::scheduled::tests::' + name,
+                           marker=name, total=11, routine=list(range(11)),
+                           package='brynja-hash-parallel', features=[]))
+    result.extend(dict(name=name, marker=marker, total=6, routine=list(range(6)),
+                       package='brynja-hash-parallel', features=[], target=['--test', 'official_vectors'])
+                  for name, marker in (
+                      ('all_six_official_fixed_examples_match', 'parallelhash-official'),
+                      ('all_six_official_xof_examples_match', 'parallelhashxof-official')))
     return result
 
 
 def singles(group: str) -> list[str]:
+    if group == 'parallelhash':
+        return [
+            'streamed_scheduled_and_one_shot_are_identical',
+            'empty_input_has_zero_leaves_and_b_one_is_valid',
+            'reordered_leaf_permanently_fails_closed',
+            'equal_shape_cross_plan_result_permanently_fails_closed',
+            'arbitrary_bit_input_and_output_partition_are_stable',
+            'hardened_output_and_workspace_clear_on_drop',
+        ]
     if group == 'kmac':
         return [
             'streaming_and_one_shot_are_identical_at_rate_boundaries',
@@ -146,7 +170,9 @@ def tasks(group: str, original: list[list[str]], profile: str) -> list[dict]:
                            "environment": {"BRYNJA_MIRI_CASE": str(index), "BRYNJA_MIRI_PROFILE": profile},
                            "marker": f"MIRI_CASE_PASS: {matrix['marker']}:{index}"})
     for name in singles(group):
-        package, target = ('brynja-mac-kmac', 'api') if group == 'kmac' else ('brynja-hash-sha3', 'hardened')
+        package, target = {'kmac': ('brynja-mac-kmac', 'api'),
+                           'parallelhash': ('brynja-hash-parallel', 'api'),
+                           'sha3': ('brynja-hash-sha3', 'hardened')}[group]
         result.append({'argv': ['-p', package, '--test', target, name, '--', '--exact'],
                        'environment': {}, 'marker': None})
     return result

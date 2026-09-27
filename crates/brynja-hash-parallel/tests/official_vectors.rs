@@ -7,6 +7,28 @@ use brynja_hash_parallel::{
 #[cfg(feature = "hardened-execution")]
 mod execution_vectors;
 
+fn miri_selection() -> Option<usize> {
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<usize>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(usize::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < 6));
+    selected
+}
+
+fn miri_complete(selected: Option<usize>, executed: usize, _name: &str) {
+    assert_eq!(executed, if selected.is_some() { 1 } else { 6 });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        println!("\nMIRI_CASE_PASS: {_name}:{case}");
+    }
+}
+
 const SHORT: [u8; 24] = [
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
     0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
@@ -21,70 +43,112 @@ const LONG: [u8; 72] = [
 
 #[test]
 fn all_six_official_fixed_examples_match() {
-    check128(
-        false,
-        false,
-        "BA8DC1D1D979331D3F813603C67F72609AB5E44B94A0B8F9AF46514454A2B4F5",
-    );
-    check128(
-        true,
-        false,
-        "FC484DCB3F84DCEEDC353438151BEE58157D6EFED0445A81F165E495795B7206",
-    );
-    check128(
-        true,
-        true,
-        "F7FD5312896C6685C828AF7E2ADB97E393E7F8D54E3C2EA4B95E5ACA3796E8FC",
-    );
-    check256(
-        false,
-        false,
-        "BC1EF124DA34495E948EAD207DD9842235DA432D2BBC54B4C110E64C451105531B7F2A3E0CE055C02805E7C2DE1FB746AF97A1DD01F43B824E31B87612410429",
-    );
-    check256(
-        true,
-        false,
-        "CDF15289B54F6212B4BC270528B49526006DD9B54E2B6ADD1EF6900DDA3963BB33A72491F236969CA8AFAEA29C682D47A393C065B38E29FAE651A2091C833110",
-    );
-    check256(
-        true,
-        true,
-        "69D0FCB764EA055DD09334BC6021CB7E4B61348DFF375DA262671CDEC3EFFA8D1B4568A6CCE16B1CAD946DDDE27F6CE2B8DEE4CD1B24851EBF00EB90D43813E9",
-    );
+    let selected = miri_selection();
+    let mut executed = 0;
+    if selected.is_none_or(|case| case == 0) {
+        executed += 1;
+        check128(
+            false,
+            false,
+            "BA8DC1D1D979331D3F813603C67F72609AB5E44B94A0B8F9AF46514454A2B4F5",
+        );
+    }
+    if selected.is_none_or(|case| case == 1) {
+        executed += 1;
+        check128(
+            true,
+            false,
+            "FC484DCB3F84DCEEDC353438151BEE58157D6EFED0445A81F165E495795B7206",
+        );
+    }
+    if selected.is_none_or(|case| case == 2) {
+        executed += 1;
+        check128(
+            true,
+            true,
+            "F7FD5312896C6685C828AF7E2ADB97E393E7F8D54E3C2EA4B95E5ACA3796E8FC",
+        );
+    }
+    if selected.is_none_or(|case| case == 3) {
+        executed += 1;
+        check256(
+            false,
+            false,
+            "BC1EF124DA34495E948EAD207DD9842235DA432D2BBC54B4C110E64C451105531B7F2A3E0CE055C02805E7C2DE1FB746AF97A1DD01F43B824E31B87612410429",
+        );
+    }
+    if selected.is_none_or(|case| case == 4) {
+        executed += 1;
+        check256(
+            true,
+            false,
+            "CDF15289B54F6212B4BC270528B49526006DD9B54E2B6ADD1EF6900DDA3963BB33A72491F236969CA8AFAEA29C682D47A393C065B38E29FAE651A2091C833110",
+        );
+    }
+    if selected.is_none_or(|case| case == 5) {
+        executed += 1;
+        check256(
+            true,
+            true,
+            "69D0FCB764EA055DD09334BC6021CB7E4B61348DFF375DA262671CDEC3EFFA8D1B4568A6CCE16B1CAD946DDDE27F6CE2B8DEE4CD1B24851EBF00EB90D43813E9",
+        );
+    }
+    miri_complete(selected, executed, "parallelhash-official");
 }
 
 #[test]
 fn all_six_official_xof_examples_match() {
-    check_xof128(
-        false,
-        false,
-        "FE47D661E49FFE5B7D999922C062356750CAF552985B8E8CE6667F2727C3C8D3",
-    );
-    check_xof128(
-        true,
-        false,
-        "EA2A793140820F7A128B8EB70A9439F93257C6E6E79B4A540D291D6DAE7098D7",
-    );
-    check_xof128(
-        true,
-        true,
-        "0127AD9772AB904691987FCC4A24888F341FA0DB2145E872D4EFD255376602F0",
-    );
-    check_xof256(
-        false,
-        false,
-        "C10A052722614684144D28474850B410757E3CBA87651BA167A5CBDDFF7F466675FBF84BCAE7378AC444BE681D729499AFCA667FB879348BFDDA427863C82F1C",
-    );
-    check_xof256(
-        true,
-        false,
-        "538E105F1A22F44ED2F5CC1674FBD40BE803D9C99BF5F8D90A2C8193F3FE6EA768E5C1A20987E2C9C65FEBED03887A51D35624ED12377594B5585541DC377EFC",
-    );
-    check_xof256(
-        true,
-        true,
-        "6B3E790B330C889A204C2FBC728D809F19367328D852F4002DC829F73AFD6BCEFB7FE5B607B13A801C0BE5C1170BDB794E339458FDB0E62A6AF3D42558970249",
-    );
+    let selected = miri_selection();
+    let mut executed = 0;
+    if selected.is_none_or(|case| case == 0) {
+        executed += 1;
+        check_xof128(
+            false,
+            false,
+            "FE47D661E49FFE5B7D999922C062356750CAF552985B8E8CE6667F2727C3C8D3",
+        );
+    }
+    if selected.is_none_or(|case| case == 1) {
+        executed += 1;
+        check_xof128(
+            true,
+            false,
+            "EA2A793140820F7A128B8EB70A9439F93257C6E6E79B4A540D291D6DAE7098D7",
+        );
+    }
+    if selected.is_none_or(|case| case == 2) {
+        executed += 1;
+        check_xof128(
+            true,
+            true,
+            "0127AD9772AB904691987FCC4A24888F341FA0DB2145E872D4EFD255376602F0",
+        );
+    }
+    if selected.is_none_or(|case| case == 3) {
+        executed += 1;
+        check_xof256(
+            false,
+            false,
+            "C10A052722614684144D28474850B410757E3CBA87651BA167A5CBDDFF7F466675FBF84BCAE7378AC444BE681D729499AFCA667FB879348BFDDA427863C82F1C",
+        );
+    }
+    if selected.is_none_or(|case| case == 4) {
+        executed += 1;
+        check_xof256(
+            true,
+            false,
+            "538E105F1A22F44ED2F5CC1674FBD40BE803D9C99BF5F8D90A2C8193F3FE6EA768E5C1A20987E2C9C65FEBED03887A51D35624ED12377594B5585541DC377EFC",
+        );
+    }
+    if selected.is_none_or(|case| case == 5) {
+        executed += 1;
+        check_xof256(
+            true,
+            true,
+            "6B3E790B330C889A204C2FBC728D809F19367328D852F4002DC829F73AFD6BCEFB7FE5B607B13A801C0BE5C1170BDB794E339458FDB0E62A6AF3D42558970249",
+        );
+    }
+    miri_complete(selected, executed, "parallelhashxof-official");
 }
 
 fn parameters(long: bool) -> (&'static [u8], usize) {

@@ -39,7 +39,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertEqual(catalog.selected(plan, ['matrix'], plan['fingerprint']), [])
         miri = catalog.selected(plan, ['miri'], plan['fingerprint'], miri_tasks=True,
                                 miri_profile='routine')
-        self.assertEqual(len(miri), 456)
+        self.assertEqual(len(miri), 483)
         old = {'phase': 'asan', 'command': 'cargo test -p brynja-hash-sha2',
                'argv': ['cargo', 'test', '-p', 'brynja-hash-sha2'], 'stdin': None,
                'environment': {}}
@@ -56,7 +56,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertTrue(plans.requires_full({**plan, 'full_phases': ['repository']}, 'command'))
 
     def test_profile_task_sets_are_unique_and_fit_detached_bound(self):
-        for profile, count in (('existing-full', 83), ('routine', 456), ('extended', 3576)):
+        for profile, count in (('existing-full', 83), ('routine', 483), ('extended', 3603)):
             commands = miri_tasks.commands(plans.ROOT, list(plans.scope.GROUPS), profile)
             self.assertEqual(len(commands), count)
             self.assertEqual(len({tuple(command) for command in commands}), count)
@@ -73,8 +73,19 @@ class MiriCaseTests(unittest.TestCase):
             self.assertEqual({case // 7 % 8 for case in selected}, set(range(8)))
             self.assertEqual({case % 7 for case in selected}, set(range(7)))
 
+    def test_internal_full_sweep_fits_with_non_miri_phases(self):
+        groups = list(plans.scope.GROUPS)
+        plan = {'stage': 'internal', 'approval_required': False, 'groups': groups,
+                'full_phases': list(catalog.PHASES),
+                'verifiers': {phase: groups for phase in ('miri', 'asan', 'kani')}}
+        commands = catalog.selected(plan, list(catalog.PHASES), None,
+                                    miri_tasks=True, miri_profile='routine')
+        self.assertEqual({command['phase'] for command in commands}, set(catalog.PHASES))
+        self.assertGreater(len(commands), 483)
+        self.assertLessEqual(len(commands), 4096)
+
     def test_routine_parallel_covers_widths_blocks_and_each_lifecycle_case_zero(self):
-        self.assertEqual(len(miri_cases.matrices('parallelhash')), 15)
+        self.assertEqual(len(miri_cases.matrices('parallelhash')), 21)
         for matrix in miri_cases.matrices('parallelhash')[:6]:
             cases = matrix['routine']
             self.assertEqual(len(cases), 8)
@@ -120,7 +131,7 @@ class MiriCaseTests(unittest.TestCase):
                 self.assertTrue(all(task['environment']['BRYNJA_MIRI_PROFILE'] == 'extended' for task in selected))
                 self.assertTrue(all(task['argv'][-2:] == ['--', '--exact'] for task in selected))
                 count += len(cases)
-        self.assertEqual(count, 3474)
+        self.assertEqual(count, 3501)
 
     def test_official_vectors_and_scheduled_lifecycles_are_never_sampled(self):
         for matrix in [*miri_cases.matrices('kmac')[3:], *miri_cases.matrices('parallelhash')[10:12]]:
@@ -161,6 +172,25 @@ class MiriCaseTests(unittest.TestCase):
             exact = [task for task in tasks if task['marker'] and matrix['name'] in task['argv']]
             self.assertTrue(all(task['argv'][:4] == ['-p', 'brynja-hash-parallel',
                                                   '--features', 'hardened-execution'] for task in exact))
+
+    def test_hosted_workers_retain_all_scenarios_and_threaded_feature(self):
+        matrices = miri_cases.matrices('parallelhash')[15:]
+        self.assertEqual([matrix['total'] for matrix in matrices], [6, 4, 4, 6, 3, 4])
+        for matrix in matrices:
+            self.assertEqual(matrix['routine'], list(range(matrix['total'])))
+            for profile in ('routine', 'extended'):
+                tasks = miri_tasks.task_inventory(plans.ROOT, 'parallelhash', profile)
+                self.assertEqual(tasks[4]['argv'].count(matrix['name']), 1)
+                exact = [task for task in tasks if task['marker'] and matrix['name'] in task['argv']]
+                self.assertEqual([task['environment']['BRYNJA_MIRI_CASE'] for task in exact],
+                                 [str(case) for case in range(matrix['total'])])
+                self.assertTrue(all(task['argv'][:5] == ['-p', 'brynja-hash-parallel-std',
+                                                      '--features', 'runtime-execution', '--lib'] for task in exact))
+                for retained in ('scoped_execution_gate_rejects_overlap_and_poison',
+                                 'operation_permit_rejects_reentry_without_touching_public_output',
+                                 'poisoned_permit_is_terminal_and_still_clears_destinations',
+                                 'storage_clear_visits_every_byte_of_every_live_slot', 'future_unregistered_test'):
+                    self.assertNotIn(retained, tasks[4]['argv'])
 
     def test_sha3_samples_cover_each_identity_rate_and_every_partial_width(self):
         boundary, fixed_bits, xof_bits = miri_cases.matrices('sha3')

@@ -58,11 +58,14 @@ unwind/forgotten-reader case retains comparison of the reused and fresh owners.
 The execution-stream comparison has 16 routine cases covering both strengths,
 all three block sizes and every final-bit width; extended/native retain all 48
 combinations, with the same streamed/planned comparisons and cleanup assertions.
+Hosted workers retain all 27 domain/output, spawn-failure, panic, cancellation,
+output-slot and reversed-completion scenarios in both profiles. Each scenario
+still runs its original cooperating threads, join checks and cleanup assertions.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-thirty registered matrices now run separately. Thus a complete all-family
-routine catalog has 456 tasks (354 case/chunk tasks) and extended has 3,576
-(3,474 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
+thirty-six registered matrices now run separately. Thus a complete all-family
+routine catalog has 483 tasks (381 case/chunk tasks) and extended has 3,603
+(3,501 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
 tests and six ParallelHash API tests additionally run as separate exact tests,
 with inputs/assertions unchanged.
 The original invocations keep the SHA-3 empty-owner and KMAC secret-output tests
@@ -191,8 +194,26 @@ remain intact. The residual library invocation passed all 11 retained tests in
 of Rust 1.90.0 and 1.98.1; hostile-selector tests, scoped Clippy, 88 runner
 regressions, 51 assurance tests and source/scope/review-metadata checks passed.
 The hosted-worker library group also hit its 180-second cap in
-`scoped_execution_fixed_xof_domains_and_zero_output`; it remains incomplete and
-needs decomposition/timing before qualification. Neither timeout is a pass.
+`scoped_execution_fixed_xof_domains_and_zero_output`; that attempt remains
+incomplete. Neither timeout is a pass.
+
+Hosted-worker follow-up: all 27 separately selected scenarios passed under the
+pinned Miri in 5.9–66.3 host seconds each. The residual grouped command passed
+its seven retained tests in 2.7 seconds. Splits retain the original worker counts,
+channel handshakes, join assertions, output clearing and serial comparisons;
+there is no sampling of these scenarios. A test-only case-accounting helper
+rejects missing, duplicate and unexecuted work. The complete hosted native
+tests/doctests passed 105 checks on each of Rust 1.90.0 and 1.98.1, including
+hostile-selector coverage; scoped Clippy, 90 runner regressions, 51 assurance
+tests and review/scope policies passed. These are diagnostic observations, not
+a combined all-family release receipt.
+
+Capacity observation: the current complete internal routine catalog has 1,030
+commands including non-Miri phases, and has a regression check against the
+existing 4,096-command bound. The combined public/extended catalog has 4,150
+commands and exceeds that bound (Miri alone has 3,603). This capacity issue must
+be resolved before a combined public sweep; no bound or evidence requirement
+has been changed by these test splits.
 
 ## Recommendation
 

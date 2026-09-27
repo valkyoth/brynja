@@ -50,6 +50,7 @@ fn scoped_execution_gate_rejects_overlap_and_poison() -> Result<(), Error> {
 
 #[test]
 fn scoped_execution_fixed_xof_domains_and_zero_output() -> Result<(), Error> {
+    let mut cases = crate::execution::tests::MiriCases::new(6);
     let executor = Executor::new(Config {
         workers: 2,
         max_leaves: 8,
@@ -72,11 +73,16 @@ fn scoped_execution_fixed_xof_domains_and_zero_output() -> Result<(), Error> {
         let mut a = [0; 32];
         let mut b = [0; 32];
         let mut scratch = [0; 32];
-        executor.hash_public(&request, &mut a, &mut scratch, &cancel)?;
-        request.identity = xof;
-        executor.hash_public(&request, &mut b, &mut scratch, &cancel)?;
-        assert_ne!(a, b);
+        if cases.run()? {
+            executor.hash_public(&request, &mut a, &mut scratch, &cancel)?;
+            request.identity = xof;
+            executor.hash_public(&request, &mut b, &mut scratch, &cancel)?;
+            assert_ne!(a, b);
+        }
         for identity in [fixed, xof] {
+            if !cases.run()? {
+                continue;
+            }
             request.identity = identity;
             let report = executor.hash_public_bits(&request, &mut [], 0, &mut [], &cancel)?;
             assert_eq!(report.leaves, 3);
@@ -93,5 +99,6 @@ fn scoped_execution_fixed_xof_domains_and_zero_output() -> Result<(), Error> {
             );
         }
     }
+    cases.finish("parallelhash-hosted-domains");
     Ok(())
 }

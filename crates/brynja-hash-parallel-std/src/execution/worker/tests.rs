@@ -78,6 +78,7 @@ fn config() -> Config {
 
 #[test]
 fn spawn_errors_panics_and_cancellation_join_and_close_root() -> Result<(), Error> {
+    let mut cases = crate::execution::tests::MiriCases::new(6);
     for (fail_at, panic_at, cancel_at, expected, started) in [
         (Some(0), None, None, Error::Resource, 0),
         (Some(1), None, None, Error::Resource, 1),
@@ -86,6 +87,9 @@ fn spawn_errors_panics_and_cancellation_join_and_close_root() -> Result<(), Erro
         (None, Some(2), None, Error::WorkerPanicked, 3),
         (None, None, Some(1), Error::Cancelled, 2),
     ] {
+        if !cases.run()? {
+            continue;
+        }
         let plan = Plan::new(Identity::ParallelHash128, b"abcdefghijkl", 4, 16)?;
         let mut root = Collector::new(&plan, Mode::Portable, &[])?;
         let token = CancellationToken::new();
@@ -110,12 +114,17 @@ fn spawn_errors_panics_and_cancellation_join_and_close_root() -> Result<(), Erro
         assert!(root.finalize_secret(&mut output).is_err());
         assert_eq!(output, [0; 32]);
     }
+    cases.finish("parallelhash-hosted-faults");
     Ok(())
 }
 
 #[test]
 fn every_completed_or_panicking_worker_clears_its_output_slot() -> Result<(), Error> {
+    let mut cases = crate::execution::tests::MiriCases::new(3);
     for (fail_at, panic_at) in [(None, None), (Some(2), None), (None, Some(1))] {
+        if !cases.run()? {
+            continue;
+        }
         let plan = Plan::new(Identity::ParallelHash256, b"abcdefghijkl", 4, 16)?;
         let mut root = Collector::new(&plan, Mode::Portable, &[])?;
         let token = CancellationToken::new();
@@ -151,6 +160,7 @@ fn every_completed_or_panicking_worker_clears_its_output_slot() -> Result<(), Er
             );
         }
     }
+    cases.finish("parallelhash-hosted-slots");
     Ok(())
 }
 
@@ -197,12 +207,16 @@ impl Spawner for Reverse {
 
 #[test]
 fn reversed_worker_completion_is_merged_in_submission_order() -> Result<(), Error> {
+    let mut cases = crate::execution::tests::MiriCases::new(4);
     for identity in [
         Identity::ParallelHash128,
         Identity::ParallelHash256,
         Identity::ParallelHashXof128,
         Identity::ParallelHashXof256,
     ] {
+        if !cases.run()? {
+            continue;
+        }
         let plan = Plan::new(identity, b"abcdefgh", 4, 4)?;
         let mut root = Collector::new(&plan, Mode::Portable, &[])?;
         let token = CancellationToken::new();
@@ -237,5 +251,6 @@ fn reversed_worker_completion_is_merged_in_submission_order() -> Result<(), Erro
         assert_eq!(output, [0; 173]);
         assert_eq!(expected, [0; 173]);
     }
+    cases.finish("parallelhash-hosted-order");
     Ok(())
 }

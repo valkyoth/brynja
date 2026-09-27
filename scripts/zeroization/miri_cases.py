@@ -114,6 +114,19 @@ def matrices(group: str) -> list[dict]:
                        marker='parallelhash-execution-stream', total=48,
                        routine=[wide * 24 + bit % 3 * 8 + bit for wide in range(2) for bit in range(8)],
                        package='brynja-hash-parallel'))
+    # Keep all worker/failure scenarios in both profiles. Split only between
+    # scenarios, never between threads participating in the same scenario.
+    for name, marker, total in (
+        ('in_place::tests::scoped_execution_fixed_xof_domains_and_zero_output', 'parallelhash-hosted-domains', 6),
+        ('in_place::worker::tests::scoped_execution_workers_join128', 'scoped_execution_workers_join128', 4),
+        ('in_place::worker::tests::scoped_execution_workers_join256', 'scoped_execution_workers_join256', 4),
+        ('worker::tests::spawn_errors_panics_and_cancellation_join_and_close_root', 'parallelhash-hosted-faults', 6),
+        ('worker::tests::every_completed_or_panicking_worker_clears_its_output_slot', 'parallelhash-hosted-slots', 3),
+        ('worker::tests::reversed_worker_completion_is_merged_in_submission_order', 'parallelhash-hosted-order', 4),
+    ):
+        result.append(dict(name='execution::' + name, marker=marker, total=total,
+                           routine=list(range(total)), package='brynja-hash-parallel-std',
+                           features=['runtime-execution']))
     return result
 
 

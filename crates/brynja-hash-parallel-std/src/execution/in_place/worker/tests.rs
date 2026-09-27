@@ -50,6 +50,7 @@ macro_rules! tests {
     ($faults:ident, $revocation:ident, $batch:ident, $leaf:ident, $plan:ident, $root:ident, $width:expr) => {
         #[test]
         fn $faults() -> Result<(), Error> {
+            let mut cases = crate::execution::tests::MiriCases::new(4);
             let plan = hash::$plan::new(b"AB", 1).map_err(crypto)?;
             for (fail, panic, cancel, expected) in [
                 (Some(1), false, None, Error::Resource),
@@ -62,6 +63,9 @@ macro_rules! tests {
                     crypto(hash::ParallelHashError::LeafIdentity),
                 ),
             ] {
+                if !cases.run()? {
+                    continue;
+                }
                 let token = CancellationToken::new();
                 let finished = Arc::new(AtomicUsize::new(0));
                 let mut spawner = Inject {
@@ -94,6 +98,7 @@ macro_rules! tests {
                 );
                 assert_eq!(slots, [[0; $width]; 2]);
             }
+            cases.finish(stringify!($faults));
             Ok(())
         }
         #[test]

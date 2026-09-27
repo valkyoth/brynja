@@ -86,10 +86,22 @@ def matrices(group: str) -> list[dict]:
                    'marker': 'parallelhash-leaf', 'total': 65,
                    'routine': [0, *(1 + length * 8 + length for length in range(8))],
                    'package': 'brynja-hash-parallel', 'features': []})
+    result.append({'name': 'core_state::assurance_contract::borrowed_buffering_and_tails_match_direct_leaves',
+                   'marker': 'parallelhash-buffering', 'total': 672,
+                   'routine': [wide * 336 + (bit % 7) * 48 + (bit % 6) * 8 + bit
+                               for wide in range(2) for bit in range(8)],
+                   'package': 'brynja-hash-parallel', 'features': []})
     return result
 
 
 def singles(group: str) -> list[str]:
+    if group == 'kmac':
+        return [
+            'streaming_and_one_shot_are_identical_at_rate_boundaries',
+            'domain_substitution_changes_outputs_and_fixed_is_not_xof_prefix',
+            'verification_accepts_exact_tag_and_rejects_first_last_and_length_changes',
+            'arbitrary_bits_are_canonical_and_streaming_xof_tracks_output',
+        ]
     if group != 'sha3':
         return []
     # Keep the empty-owner test (and any future tests) in the original broad
@@ -134,6 +146,7 @@ def tasks(group: str, original: list[list[str]], profile: str) -> list[dict]:
                            "environment": {"BRYNJA_MIRI_CASE": str(index), "BRYNJA_MIRI_PROFILE": profile},
                            "marker": f"MIRI_CASE_PASS: {matrix['marker']}:{index}"})
     for name in singles(group):
-        result.append({'argv': ['-p', 'brynja-hash-sha3', '--test', 'hardened', name, '--', '--exact'],
+        package, target = ('brynja-mac-kmac', 'api') if group == 'kmac' else ('brynja-hash-sha3', 'hardened')
+        result.append({'argv': ['-p', package, '--test', target, name, '--', '--exact'],
                        'environment': {}, 'marker': None})
     return result

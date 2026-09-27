@@ -13,7 +13,7 @@ from parallelhash_scoped_contracts import BORROWED_TOKENS, SCOPED_THREAD_TOKENS
 PORTABLE = Path("crates/brynja-hash-parallel")
 STD = Path("crates/brynja-hash-parallel-std")
 SOURCES = tuple(PORTABLE / "src" / name for name in (
-    "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "lib.rs",
+    "backend.rs", "core_state.rs", "core_state/assurance_contract/buffering.rs", "error.rs", "fixed.rs", "lib.rs",
     "output.rs", "scheduled.rs", "xof.rs", "secret_encoding.rs",
     "secret_encoding/tests.rs", "backend/tests.rs",
     "hardened_in_place.rs", "hardened_in_place/backend.rs", "hardened_in_place/core_state.rs",
@@ -184,6 +184,10 @@ def validate(root: Path) -> None:
         require(loaded[PORTABLE / "src" / parent], "#[cfg(test)]\nmod tests;",
                 "Miri matrix module remains test-only")
         test_only.add(PORTABLE / "src" / child)
+    require(loaded[PORTABLE / "src/core_state.rs"],
+            "#[cfg(test)]\npub(crate) mod assurance_contract {", "buffering matrix remains test-only")
+    require(loaded[PORTABLE / "src/core_state.rs"], "mod buffering;", "buffering matrix is reachable")
+    test_only.add(PORTABLE / "src/core_state/assurance_contract/buffering.rs")
     production = "\n".join(loaded[path] for path in (*SOURCES, *EXECUTION) if path not in test_only)
     for forbidden in (
         "unsafe", 'extern "C"', "std::", "alloc::", "Vec<", "Box<",

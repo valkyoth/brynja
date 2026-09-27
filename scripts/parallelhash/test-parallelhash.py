@@ -45,6 +45,11 @@ def main() -> int:
         reject("miri-matrix-test-only", parallelhash_policy.PORTABLE / "src" / parent,
                "#[cfg(test)]\nmod tests;", "mod tests;")
     print("ParallelHash Miri matrix modules reject four production-import regressions")
+    reject("buffering-test-only", parallelhash_policy.PORTABLE / "src/core_state.rs",
+           "#[cfg(test)]\npub(crate) mod assurance_contract {", "pub(crate) mod assurance_contract {")
+    reject("buffering-reachable", parallelhash_policy.PORTABLE / "src/core_state.rs",
+           "mod buffering;", "")
+    print("ParallelHash buffering matrix rejects production import and disconnected helper")
     reject("std", Path("crates/brynja-hash-parallel/src/lib.rs"), "#![no_std]", "extern crate std;")
     reject("unsafe", Path("crates/brynja-hash-parallel/src/backend.rs"), "use brynja_hash_sha3", "unsafe fn bypass() {}\nuse brynja_hash_sha3")
     reject("domain", Path("crates/brynja-hash-parallel/src/backend.rs"), 'b"ParallelHash"', 'b"RawHash"')

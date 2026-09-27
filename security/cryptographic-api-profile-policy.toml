@@ -1119,7 +1119,7 @@ sha256 = "0c3c783a21ce39ffbd37f236b8f5e0ccf9264a7cb60c6e3fef2ce962dcdd6bb4"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-parallel/src/core_state.rs"
-sha256 = "e7222da8a0c10e0f54c1d45dce17017c3150fff49db9bb7ee815dbcd61e657a8"
+sha256 = "d09c158729f9854f5a0702ebd6a51119a085f4bed88628b4bf1aa29238015a62"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-parallel/tests/api.rs"

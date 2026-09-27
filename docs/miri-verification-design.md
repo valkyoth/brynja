@@ -42,13 +42,18 @@ comparison assertions remain intact. ParallelHash's scoped leaf differential
 matrix runs as nine routine cases covering every original length and tail width,
 or all 65 extended cases; each case checks both strengths and output clearing.
 Conformance-only KMAC campaigns are unchanged and remain in native testing.
+ParallelHash's buffering/final-tail differential matrix uses 16 routine cases
+covering both strengths, every block size, input-length class and tail width;
+extended/native retain all 672 combinations. Every selected case retains both
+fixed/XOF framing checks, streamed updates and workspace/output clearing.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-twenty registered matrices now run separately. Thus a complete all-family
-routine catalog has 360 tasks (268 case/chunk tasks) and extended has 2,792
-(2,700 case/chunk tasks). Nine existing SHA-3 lifecycle tests additionally run
-as separate exact tests, with their inputs/assertions unchanged. The original
-integration invocation keeps the empty-owner test and discovers future tests;
+twenty-one registered matrices now run separately. Thus a complete all-family
+routine catalog has 380 tasks (284 case/chunk tasks) and extended has 3,468
+(3,372 case/chunk tasks). Nine existing SHA-3 lifecycle tests and four KMAC API
+tests additionally run as separate exact tests, with inputs/assertions unchanged.
+The original invocations keep the SHA-3 empty-owner and KMAC secret-output tests
+and discover future tests;
 only explicitly rescheduled tests are skipped there.
 Remaining grouped selections, including SHA-2/SHA-3,
 have not yet been fully timed. Broad legacy selections still discover new
@@ -116,6 +121,17 @@ library tests passed on both Rust 1.90.0 and 1.98.1; 45 default-feature tests
 passed with hostile Miri selectors. Scoped Clippy, 82 detached-runner tests,
 planner tests and source/metadata regression checks passed. These measurements
 cover the new splits, not every remaining grouped invocation.
+
+Buffering follow-up: all four separated KMAC API tasks passed (32.2–81.9 host
+seconds), retaining their original test bodies. A representative buffering case
+passed on the final helper in 171.3 host seconds. ParallelHash's moved test helper
+preserves every native input and both fixed/XOF comparisons; the production
+prefix of `core_state.rs` is byte-identical. All 108 affected all-feature library
+and API tests passed on Rust 1.90.0 and 1.98.1, along with Clippy, 84 runner
+regressions, 51 assurance tests and source/review-metadata checks. A residual
+ParallelHash grouped probe reached scheduled-owner lifecycle tests but hit its
+180-second diagnostic cap; it is incomplete evidence, not a pass. Further
+grouped timing and remote split/resume qualification remain outstanding.
 A local overhead diagnostic measured source hashing (2,945 files) at
 0.27 seconds, tool identity at 1.83 seconds and planning at 0.17 seconds.
 Per-command source/tool seals deliberately remain in place; many tiny tasks

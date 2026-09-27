@@ -75,9 +75,9 @@ widths per chunk and cross-width workspace reuse: all 208 chunks
 routine execution matrices separately retain their 1,025-byte messages.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-forty-two registered matrices now run separately. Thus a complete all-family
+forty-three registered matrices now run separately. Thus a complete all-family
 routine catalog has 562 tasks (451 case/chunk tasks) and extended has 4,094
-(3,727 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
+(3,983 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
 tests and six ParallelHash API tests additionally run as separate exact tests,
 with inputs/assertions unchanged. Four TupleHash scoped lifecycle tests and five
 TupleHash API tests also run separately, without sampling or changed assertions.
@@ -285,7 +285,7 @@ source even after merging. A separate real-child-process test explicitly cancels
 after a published PASS and confirms a new job restarts only the interrupted
 command; the parent's cancelled result remains unchanged and uncollectible.
 These fixtures substitute planning/tool discovery, not source hashing or process
-execution. They do not substitute for the pending real two-host Miri trial.
+execution. They do not substitute for the real two-host Miri trial recorded below.
 
 MD5 mask follow-up: the remote trial exposed a still-grouped 256-mask batch
 comparison. It now has exact per-mask tasks: routine selects 20 masks (empty,
@@ -317,8 +317,17 @@ validated inherited passes before executing missing commands. A regression
 first reproduced the failure, then passed a timeout/resume chain without
 rerunning or changing the later pass. All 97 runner regressions passed after
 this correction. This changes checkpoint bookkeeping, not coverage, approval,
-source/tool validation or release authority. A corrected remote trial is still
-required; the failed trial is not qualification evidence.
+source/tool validation or release authority. The failed trial is not
+qualification evidence.
+
+The corrected two-host trial on `83fbbd04` used explicit 120-second budgets.
+Both parents and the resumed job timed out as expected for this deliberately
+short diagnostic. All 28 parent passes survived transfer, restart and a second
+timeout; byte comparisons and the real source/tool/checkpoint validator passed.
+The incomplete job remained uncollectible as full evidence. See the
+[remote trial record](detached-verification.md#bounded-two-host-miri-resume-trial)
+for receipts and the immutable archive hash. Complete multi-host campaign
+collection and all-family qualification remain outstanding.
 
 Capacity observation: the current complete internal routine catalog has 1,109
 commands including non-Miri phases, and has a regression check against the

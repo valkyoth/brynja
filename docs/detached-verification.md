@@ -132,7 +132,9 @@ It can pass only when the complete original task set is present. Repeated
 passes do not count as missing tasks; a failed parent cannot be hidden by a
 passing copy. All hosts must have matching tool identities and source/plan
 inputs. This is not cross-platform substitution. Multi-host operation has
-local separate-process regression coverage; a real remote trial is still due.
+local separate-process regression coverage and a real two-host interrupted
+transfer/resume trial, recorded below. A complete successful multi-host Miri
+campaign has not yet been collected.
 
 ### Miri profiles
 
@@ -345,3 +347,32 @@ This closes the real Linux remote hand-off demonstration, not reboot survival
 or remote Miri execution. Subsequent release-tooling edits require their own
 checks. These receipts still identify the original snapshot; they cannot be
 imported as exact-snapshot evidence for a later commit.
+
+## Bounded two-host Miri resume trial
+
+On 2026-09-27, two Ubuntu x86-64 hosts with Intel Xeon 6975P-C CPUs, four
+logical CPUs and approximately 8 GiB RAM each ran complementary routine Miri
+partitions on `83fbbd04443d64fb08b4fffe720268651395d11b`. Both used Rust 1.98.1,
+Miri `nightly-2026-09-11`, Python 3.14.4, independent frozen source/build trees
+and an explicit 120-second budget per job. SSH launch sessions disconnected;
+fresh sessions inspected terminal records.
+
+The parent jobs timed out with four and 24 completed commands. The second job
+was transferred to the first host without build caches. A new job imported all
+28 passes without rerunning them, then restarted a missing MD5 command. When
+its own 120-second budget expired, all 28 imported command records and logs were
+still byte-for-byte identical, present in the terminal result and accepted by
+the source/tool/checkpoint validator. Full collection correctly rejected the
+incomplete campaign. No timeout was marked PASS.
+
+- First parent receipt: `9d359dcf07998167871e71120e565c8263eda1d7b7edf1a68fad89c6e4add8f9`.
+- Second parent receipt: `dc4159f2f13176dd0da469ee6a3aba9a628fc7549cf743535bf71747c74e3c57`.
+- Resumed receipt: `bc922b04c16a3b13d76d80314746fe319aa999e3084a1a74b605e84b6c936ac8`.
+- Archived frozen jobs/logs SHA-256: `82992263df13fe8e852b4be7502b7931091160a65e9462586954b9ea1303221b`.
+
+This demonstrates real remote transfer and checkpoint preservation across a
+second interruption, not successful all-task union, full Miri qualification or
+release authorization. The earlier failed trial remains immutable; its
+bookkeeping defect and regression fix are recorded in the
+[Miri design notes](miri-verification-design.md). Both archives are stored
+outside Cargo output directories and survive `cargo clean`.

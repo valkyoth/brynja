@@ -110,6 +110,10 @@ def matrices(group: str) -> list[dict]:
         name = f'scoped_scheduled{strength}_unwind_reuse'
         result.append(dict(name=name, marker=name, total=4, routine=list(range(4)),
                            package='brynja-hash-parallel', features=[], target=['--test', 'scoped_scheduled']))
+    result.append(dict(name='execution::stream::tests::borrowed_updates_and_tail_preserve_planned_digest',
+                       marker='parallelhash-execution-stream', total=48,
+                       routine=[wide * 24 + bit % 3 * 8 + bit for wide in range(2) for bit in range(8)],
+                       package='brynja-hash-parallel'))
     return result
 
 

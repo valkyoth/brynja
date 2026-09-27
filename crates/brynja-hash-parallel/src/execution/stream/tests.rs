@@ -1,4 +1,5 @@
 use super::*;
+extern crate std;
 
 fn config() -> StreamConfig {
     StreamConfig {
@@ -15,13 +16,36 @@ fn cleared(stream: &Stream<'_, '_>) {
     assert!(!stream.root.absorbing());
 }
 
+fn miri_selection() -> Option<usize> {
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<usize>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(usize::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < 48));
+    selected
+}
+
 #[test]
 fn borrowed_updates_and_tail_preserve_planned_digest() -> Result<(), Error> {
     use crate::ParallelHashPublicDeclassification as Public;
     use crate::execution::Plan;
+    let selected = miri_selection();
+    let mut visited = 0usize;
+    let mut executed = 0usize;
     for identity in [Identity::ParallelHash128, Identity::ParallelHash256] {
         for block in [1, 3, 7] {
             for valid in 1..=8 {
+                let case = visited;
+                visited = visited.checked_add(1).ok_or(Error::State)?;
+                if selected.is_some_and(|wanted| wanted != case) {
+                    continue;
+                }
+                executed = executed.checked_add(1).ok_or(Error::State)?;
                 let message = Fips202BitString::new(b"abc\x01", valid).map_err(|_| Error::State)?;
                 let plan = Plan::new_bits(identity, message, block, 8)?;
                 let mut root = Collector::new(&plan, Mode::Portable, b"")?;
@@ -53,6 +77,12 @@ fn borrowed_updates_and_tail_preserve_planned_digest() -> Result<(), Error> {
                 assert_eq!(expected, [0; 17]);
             }
         }
+    }
+    assert_eq!(visited, 48);
+    assert_eq!(executed, if selected.is_some() { 1 } else { 48 });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        std::println!("\nMIRI_CASE_PASS: parallelhash-execution-stream:{case}");
     }
     Ok(())
 }

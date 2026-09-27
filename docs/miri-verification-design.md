@@ -55,11 +55,14 @@ checks and run as separate cases in both profiles. Scheduled integration unwind
 and reuse tests run as four cases per strength: collector unwind, reader unwind,
 forgotten reader, and out-of-order computation with ordered merging. Every
 unwind/forgotten-reader case retains comparison of the reused and fresh owners.
+The execution-stream comparison has 16 routine cases covering both strengths,
+all three block sizes and every final-bit width; extended/native retain all 48
+combinations, with the same streamed/planned comparisons and cleanup assertions.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-twenty-nine registered matrices now run separately. Thus a complete all-family
-routine catalog has 440 tasks (338 case/chunk tasks) and extended has 3,528
-(3,426 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
+thirty registered matrices now run separately. Thus a complete all-family
+routine catalog has 456 tasks (354 case/chunk tasks) and extended has 3,576
+(3,474 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
 tests and six ParallelHash API tests additionally run as separate exact tests,
 with inputs/assertions unchanged.
 The original invocations keep the SHA-3 empty-owner and KMAC secret-output tests
@@ -176,6 +179,20 @@ planner, scope and review-binding regressions also passed. These diagnostics
 are not a completed all-family verification receipt. After this split the
 remaining broad ParallelHash `--tests` command passed its 15 retained tests in
 59.5 host seconds, under the same 300-second cap that previously expired.
+
+Execution-stream follow-up: the remaining streaming-failure and collector
+integration groups passed four tests each in 65.7 and 81.3 host seconds. The
+library group hit its 180-second cap in the 48-case streamed/planned comparison.
+After splitting that matrix, four routine cases spanning both strengths and
+single/multiple leaves passed in 43.6–75.8 seconds, and an extended-only case
+passed in 65.0 seconds. All original inputs, comparisons and clearing assertions
+remain intact. The residual library invocation passed all 11 retained tests in
+115.7 host seconds. Full native ParallelHash tests/doctests passed 350 checks on each
+of Rust 1.90.0 and 1.98.1; hostile-selector tests, scoped Clippy, 88 runner
+regressions, 51 assurance tests and source/scope/review-metadata checks passed.
+The hosted-worker library group also hit its 180-second cap in
+`scoped_execution_fixed_xof_domains_and_zero_output`; it remains incomplete and
+needs decomposition/timing before qualification. Neither timeout is a pass.
 
 ## Recommendation
 

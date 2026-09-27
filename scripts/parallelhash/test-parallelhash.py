@@ -41,10 +41,10 @@ def main() -> int:
     assert parallelhash_policy.BORROWED_TOKENS is parallelhash_scoped_contracts.BORROWED_TOKENS
     assert parallelhash_policy.SCOPED_THREAD_TOKENS is parallelhash_scoped_contracts.SCOPED_THREAD_TOKENS
     parallelhash_policy.validate(ROOT)
-    for parent in ("backend.rs", "hardened_in_place.rs", "hardened_in_place/xof.rs", "hardened_in_place/scheduled.rs"):
+    for parent in ("backend.rs", "execution/stream.rs", "hardened_in_place.rs", "hardened_in_place/xof.rs", "hardened_in_place/scheduled.rs"):
         reject("miri-matrix-test-only", parallelhash_policy.PORTABLE / "src" / parent,
                "#[cfg(test)]\nmod tests;", "mod tests;")
-    print("ParallelHash Miri matrix modules reject four production-import regressions")
+    print("ParallelHash Miri matrix modules reject five production-import regressions")
     reject("buffering-test-only", parallelhash_policy.PORTABLE / "src/core_state.rs",
            "#[cfg(test)]\npub(crate) mod assurance_contract {", "pub(crate) mod assurance_contract {")
     reject("buffering-reachable", parallelhash_policy.PORTABLE / "src/core_state.rs",

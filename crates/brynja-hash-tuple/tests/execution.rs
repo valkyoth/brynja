@@ -9,11 +9,35 @@ fn bits(bytes: &[u8], valid: u8) -> Result<Fips202BitString<'_>, Error> {
     Fips202BitString::new(bytes, valid).map_err(|_| Error::InvalidBitString)
 }
 
+// Runtime selection is interpreter-only; native campaigns always run every case.
+fn miri_selection(total: usize) -> Option<usize> {
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<usize>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(usize::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < total));
+    selected
+}
+
 #[test]
 fn all_fixed_profiles_match_portable_for_bit_items_and_customization() -> Result<(), Error> {
+    let selected = miri_selection(16);
+    let mut visited = 0usize;
+    let mut executed = 0usize;
     macro_rules! case {
         ($ordinary:ident, $hardened:ident) => {
             for valid in 1..=8 {
+                let case = visited;
+                visited = visited.checked_add(1).ok_or(Error::StateConsumed)?;
+                if selected.is_some_and(|wanted| wanted != case) {
+                    continue;
+                }
+                executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
                 let custom = bits(&[5], 3)?;
                 let partial = bits(&[1], valid)?;
                 let large = [0x95; 1025];
@@ -45,53 +69,73 @@ fn all_fixed_profiles_match_portable_for_bit_items_and_customization() -> Result
     }
     case!(TupleHash128, HardenedTupleHash128);
     case!(TupleHash256, HardenedTupleHash256);
+    assert_eq!(visited, 16);
+    assert_eq!(executed, if selected.is_some() { 1 } else { 16 });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        println!("\nMIRI_CASE_PASS: tuplehash-execution-fixed:{case}");
+    }
     Ok(())
 }
 
 #[test]
 fn all_xof_profiles_match_irregular_and_mixed_secret_public_output() -> Result<(), Error> {
+    let selected = miri_selection(2);
+    let mut visited = 0usize;
+    let mut executed = 0usize;
     macro_rules! case {
-        ($ordinary:ident, $hardened:ident) => {
-            let mut reference = tuple::$ordinary::new(b"partition")?;
-            let mut ordinary = cpu::$ordinary::new(cpu::Mode::Portable, b"partition")?;
-            let mut hardened = cpu::$hardened::new(cpu::Mode::Portable, b"partition")?;
-            for item in [bits(&[5], 3)?, bits(&[0xa5; 340], 8)?] {
-                reference.push_item_bits(item)?;
-                ordinary.push_item_bits(item)?;
-                hardened.push_item_bits(item)?;
+        ($ordinary:ident, $hardened:ident) => {{
+            let case = visited;
+            visited = visited.checked_add(1).ok_or(Error::StateConsumed)?;
+            if selected.is_none_or(|wanted| wanted == case) {
+                executed = executed.checked_add(1).ok_or(Error::StateConsumed)?;
+                let mut reference = tuple::$ordinary::new(b"partition")?;
+                let mut ordinary = cpu::$ordinary::new(cpu::Mode::Portable, b"partition")?;
+                let mut hardened = cpu::$hardened::new(cpu::Mode::Portable, b"partition")?;
+                for item in [bits(&[5], 3)?, bits(&[0xa5; 340], 8)?] {
+                    reference.push_item_bits(item)?;
+                    ordinary.push_item_bits(item)?;
+                    hardened.push_item_bits(item)?;
+                }
+                let mut expected = [0; 341];
+                reference.finalize_xof()?.squeeze_final_bits(
+                    Fips202Output::new(&mut expected, 5).map_err(|_| Error::InvalidBitString)?,
+                )?;
+                let mut actual = [0xa5; 341];
+                let mut reader = ordinary.finalize_xof()?;
+                reader.squeeze(&mut actual[..7])?;
+                reader.squeeze_with_scratch(&mut actual[7..340], &mut [0; 333])?;
+                reader.squeeze_final_bits(&mut actual[340..], 5, &mut [0; 1])?;
+                assert_eq!(actual, expected);
+                let mut reader = hardened.finalize_xof()?;
+                let secret = reader.squeeze_secret(&mut actual[..167])?;
+                assert_eq!(secret.expose(), &expected[..167]);
+                drop(secret);
+                reader.squeeze_public_with_scratch(
+                    &mut actual[167..340],
+                    &mut [0; 173],
+                    Public::acknowledge(),
+                )?;
+                assert_eq!(reader.output_bits(), 340 * 8);
+                let secret = reader.squeeze_final_bits_secret(&mut actual[340..], 5)?;
+                assert_eq!(secret.expose(), &expected[340..]);
+                drop(secret);
+                assert_eq!(&actual[..167], &[0; 167]);
+                assert_eq!(&actual[167..340], &expected[167..340]);
+                assert_eq!(actual[340], 0);
+                assert_eq!(ordinary.push_item(b"again"), Err(Error::StateConsumed));
+                assert!(hardened.finalize_xof().is_err());
             }
-            let mut expected = [0; 341];
-            reference.finalize_xof()?.squeeze_final_bits(
-                Fips202Output::new(&mut expected, 5).map_err(|_| Error::InvalidBitString)?,
-            )?;
-            let mut actual = [0xa5; 341];
-            let mut reader = ordinary.finalize_xof()?;
-            reader.squeeze(&mut actual[..7])?;
-            reader.squeeze_with_scratch(&mut actual[7..340], &mut [0; 333])?;
-            reader.squeeze_final_bits(&mut actual[340..], 5, &mut [0; 1])?;
-            assert_eq!(actual, expected);
-            let mut reader = hardened.finalize_xof()?;
-            let secret = reader.squeeze_secret(&mut actual[..167])?;
-            assert_eq!(secret.expose(), &expected[..167]);
-            drop(secret);
-            reader.squeeze_public_with_scratch(
-                &mut actual[167..340],
-                &mut [0; 173],
-                Public::acknowledge(),
-            )?;
-            assert_eq!(reader.output_bits(), 340 * 8);
-            let secret = reader.squeeze_final_bits_secret(&mut actual[340..], 5)?;
-            assert_eq!(secret.expose(), &expected[340..]);
-            drop(secret);
-            assert_eq!(&actual[..167], &[0; 167]);
-            assert_eq!(&actual[167..340], &expected[167..340]);
-            assert_eq!(actual[340], 0);
-            assert_eq!(ordinary.push_item(b"again"), Err(Error::StateConsumed));
-            assert!(hardened.finalize_xof().is_err());
-        };
+        }};
     }
     case!(TupleHashXof128, HardenedTupleHashXof128);
     case!(TupleHashXof256, HardenedTupleHashXof256);
+    assert_eq!(visited, 2);
+    assert_eq!(executed, if selected.is_some() { 1 } else { 2 });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        println!("\nMIRI_CASE_PASS: tuplehash-execution-xof:{case}");
+    }
     Ok(())
 }
 

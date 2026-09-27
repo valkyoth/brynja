@@ -278,7 +278,7 @@
     "crates/brynja-hash-tuple/src/secret_encoding.rs": "567cdd42eb1718fc6bfde6108337a14dd47adc8384aa9d3bc5c72f3c63cd5a73",
     "crates/brynja-hash-tuple/src/xof.rs": "b339ba24390cf0f54f1478c310f298cfe62b90e128754ac00cdfe4a6bb64153b",
     "crates/brynja-hash-tuple/tests/api.rs": "17496966efafd49bc57d882d68c4d68e345251eb7bcdbe8153c5b0c2cbb0dd67",
-    "crates/brynja-hash-tuple/tests/execution.rs": "7709df62259035f025ae0ac68ab84865a7bd657593a3df115b8f8599ff076834",
+    "crates/brynja-hash-tuple/tests/execution.rs": "a1293109b6ced0e7b648fc6d00f243eec9d44d6ba535895d086ead8a382fcf69",
     "crates/brynja-hash-tuple/tests/official_vectors.rs": "dc10909aaa0bd29950f98916e5afa46eb2c19157b572c4c1f01c22b2178cbbeb",
     "docs/tuplehash-accelerated-execution.md": "90bb61fc927eda892c5e2e704af03004f36b7d6e2eb926b9ea79ed5fa8641b49",
     "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",

@@ -14,10 +14,11 @@ post-command source/tool checks, immutable resume into a new job, and partial
 partition collection. It leaves the reviewed legacy Miri driver byte-for-byte
 unchanged. See [operator instructions](detached-verification.md).
 
-The case-splitting stage covers six families, including one TupleHash matrix and six
-ParallelHash fixed/XOF/scheduled matrices. Routine Miri selects 16 TupleHash
-cases and 48 ParallelHash cases; extended Miri addresses all 896 and 240 original
-combinations respectively. Each case has an exact completion marker and must
+The case-splitting stage covers six families, including three TupleHash matrices and six
+ParallelHash fixed/XOF/scheduled matrices. For the initial staging/scoped matrices,
+routine Miri selects 16 TupleHash cases and 48 ParallelHash cases; extended Miri
+addresses all 896 and 240 original combinations respectively. Additional splits
+are described below. Each case has an exact completion marker and must
 run exactly one test. Native tests ignore the Miri selectors and retain all
 original combinations and input lengths. ParallelHash routine inputs use at
 most `2*B+1` bytes, retaining leaf transitions without hundreds of tiny leaves.
@@ -61,11 +62,15 @@ combinations, with the same streamed/planned comparisons and cleanup assertions.
 Hosted workers retain all 27 domain/output, spawn-failure, panic, cancellation,
 output-slot and reversed-completion scenarios in both profiles. Each scenario
 still runs its original cooperating threads, join checks and cleanup assertions.
+TupleHash execution comparisons now run as 16 fixed-output cases (both strengths
+and all eight final-bit widths) and two XOF cases. Both profiles retain every
+case, including the original 1,025-byte fixed input, 340-byte XOF input, mixed
+secret/public reads, terminal-state assertions and destination clearing.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-thirty-six registered matrices now run separately. Thus a complete all-family
-routine catalog has 483 tasks (381 case/chunk tasks) and extended has 3,603
-(3,501 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
+thirty-eight registered matrices now run separately. Thus a complete all-family
+routine catalog has 501 tasks (399 case/chunk tasks) and extended has 3,621
+(3,519 case/chunk tasks). Nine existing SHA-3 lifecycle tests, four KMAC API
 tests and six ParallelHash API tests additionally run as separate exact tests,
 with inputs/assertions unchanged.
 The original invocations keep the SHA-3 empty-owner and KMAC secret-output tests
@@ -208,10 +213,21 @@ hostile-selector coverage; scoped Clippy, 90 runner regressions, 51 assurance
 tests and review/scope policies passed. These are diagnostic observations, not
 a combined all-family release receipt.
 
-Capacity observation: the current complete internal routine catalog has 1,030
+TupleHash execution follow-up: the unsplit execution and scoped-owner groups
+each exceeded a 180-second diagnostic cap. After splitting the execution
+comparisons, fixed cases 0, 7, 8 and 15 passed in 133–159 host seconds apiece,
+retaining both strengths and the 1/8-bit boundaries on the full input sizes.
+Both XOF cases passed in 95–97 seconds; the residual execution group passed all
+four lifecycle/error tests in 97.4 seconds.
+Native tests/doctests passed on Rust 1.90.0 and 1.98.1 (including hostile-selector
+coverage), as did scoped Clippy, packaged debug/release and mutation testing,
+91 runner regressions and 51 assurance tests. The still-unsplit scoped-owner
+group remains incomplete; these diagnostics are not a complete release receipt.
+
+Capacity observation: the current complete internal routine catalog has 1,048
 commands including non-Miri phases, and has a regression check against the
-existing 4,096-command bound. The combined public/extended catalog has 4,150
-commands and exceeds that bound (Miri alone has 3,603). This capacity issue must
+existing 4,096-command bound. The combined public/extended catalog has 4,168
+commands and exceeds that bound (Miri alone has 3,621). This capacity issue must
 be resolved before a combined public sweep; no bound or evidence requirement
 has been changed by these test splits.
 

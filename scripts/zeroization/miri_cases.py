@@ -71,7 +71,14 @@ def matrices(group: str) -> list[dict]:
         routine = [((wide * 8 + used) * 8 + used) * 7 + used % 7
                    for wide in range(2) for used in range(8)]
         return [{"name": TUPLE, "marker": "tuplehash-staging", "total": 896,
-                 "routine": routine, "package": "brynja-hash-tuple"}]
+                 "routine": routine, "package": "brynja-hash-tuple"},
+                *[dict(name=name, marker=marker, total=total, routine=list(range(total)),
+                       package='brynja-hash-tuple', target=['--test', 'execution'])
+                  for name, marker, total in (
+                      ('all_fixed_profiles_match_portable_for_bit_items_and_customization',
+                       'tuplehash-execution-fixed', 16),
+                      ('all_xof_profiles_match_irregular_and_mixed_secret_public_output',
+                       'tuplehash-execution-xof', 2))]]
     if group != "parallelhash":
         return []
     result = []

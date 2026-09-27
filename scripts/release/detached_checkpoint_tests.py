@@ -5,6 +5,7 @@ import contextlib
 import copy
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import threading
@@ -17,6 +18,8 @@ import detached_checkpoints as checkpoints
 import detached_job as jobs
 import detached_manifest as records
 import detached_process as processes
+import detached_catalog as catalog
+import verification_plan as plans
 
 
 @contextlib.contextmanager
@@ -97,6 +100,45 @@ class CheckpointTests(unittest.TestCase):
         self.assertEqual(self.run_job(merged), 0)
         with probes():
             self.assertEqual(jobs.collect(*merged, merged[0] / "source")["commands"], 4)
+
+    def test_explicit_cancellation_keeps_checkpoint_and_restarts_only_interrupted_task(self):
+        marker, finish = self.root / "once", self.root / "finish"
+        programs = [f'from pathlib import Path; Path({str(marker)!r}).touch(exist_ok=False)',
+                    f'from pathlib import Path; import time; print("started", flush=True); '
+                    f'time.sleep(0 if Path({str(finish)!r}).exists() else 30)']
+        parent = self.job("cancel-parent", programs)
+        observed = []
+        def cancel_after_pass():
+            deadline = time.monotonic() + 5
+            while time.monotonic() < deadline:
+                active = parent[0] / "command-0001.log"
+                if (parent[0] / "command-0000.json").exists() and active.exists() and active.stat().st_size:
+                    observed.append(True)
+                    break
+                time.sleep(0.01)
+            (parent[0] / "cancel").touch()
+        observer = threading.Thread(target=cancel_after_pass)
+        observer.start()
+        try:
+            self.assertEqual(self.run_job(parent), 1)
+        finally:
+            observer.join(timeout=6)
+        self.assertFalse(observer.is_alive())
+        self.assertEqual(observed, [True])
+        before = records.read(parent[0] / "result.json")
+        self.assertEqual(before["state"], "cancelled")
+        self.assertEqual([record["state"] for record in before["results"]], ["passed", "cancelled"])
+        finish.touch()
+        child = self.job("cancel-resumed", programs,
+                         resume={"job": str(parent[0]), "receipt": parent[1]})
+        self.assertEqual(self.run_job(child), 0)
+        with probes():
+            self.assertEqual(jobs.collect(*child, child[0] / "source")["commands"], 2)
+            with self.assertRaisesRegex(ValueError, "cancelled"):
+                jobs.collect(*parent, parent[0] / "source")
+        self.assertEqual(before, records.read(parent[0] / "result.json"))
+        self.assertEqual((parent[0] / "command-0000.json").read_bytes(),
+                         (child[0] / "command-0000.json").read_bytes())
 
     def test_missing_partition_is_not_complete_and_duplicates_do_not_fill_it(self):
         programs = ['print("zero")', 'print("one")']
@@ -186,6 +228,67 @@ class CheckpointTests(unittest.TestCase):
             self.assertEqual(jobs.collect(destination, job[1], destination / "source")["commands"], 1)
         self.assertEqual(records.read(job[0] / "manifest.json"),
                          records.read(destination / "manifest.json"))
+
+    def test_transferred_partitions_merge_with_real_source_integrity(self):
+        # Only catalog planning/tool discovery use fixture values. Git source
+        # snapshots, before/after seals, child commands and collection are real.
+        programs = [f'from pathlib import Path; Path({str(self.root / str(i))!r}).touch(exist_ok=False)'
+                    for i in range(4)]
+        parents = [self.job(f"origin-{i}", programs, partition=[i, 2]) for i in range(2)]
+        source = parents[0][0] / "source"
+        (source / "input").write_text("reviewed source\n")
+        (source / ".gitignore").write_text("/target/\n")
+        def git(*args):
+            subprocess.run(["git", *args], cwd=source, check=True, capture_output=True)
+        git("init", "-q")
+        git("add", ".")
+        git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+            "commit", "--no-gpg-sign", "-qm", "source fixture")
+        shutil.copytree(source, parents[1][0] / "source", dirs_exist_ok=True)
+        closure = records.sources(source)
+        template = records.read(parents[0][0] / "manifest.json")
+        plan = {**template["plan"], "base": "fixture", "head": closure["head"]}
+        def bind(job):
+            manifest = records.read(job[0] / "manifest.json")
+            manifest.update(sources=closure, plan=plan)
+            records.atomic(job[0] / "manifest.json", manifest)
+            return job[0], records.digest(manifest)
+        parents = [bind(job) for job in parents]
+        with patch.object(plans, "build", return_value=plan), \
+                patch.object(catalog, "selected", return_value=template["commands"]), \
+                patch.object(records, "tool_identity", return_value={}):
+            transferred = []
+            for index, job in enumerate(parents):
+                self.assertEqual(jobs.worker(*job), 0)
+                self.assertEqual(records.read(job[0] / "state.json")["state"], "partial")
+                with self.assertRaises(ValueError):
+                    jobs.collect(*job, job[0] / "source")
+                cache = job[0] / "source/target"
+                cache.mkdir()
+                (cache / "disposable").write_text("not evidence")
+                shutil.rmtree(cache)
+                destination = self.root / f"received-{index}"
+                shutil.copytree(job[0], destination)
+                transferred.append((destination, job[1]))
+            os.chdir(self.cwd)
+            # Retain originals under a different path: no accidental dependency
+            # on a remote worker's old absolute directory can satisfy collection.
+            for path, _ in parents:
+                path.rename(path.with_name(path.name + "-offline"))
+            child = self.job("merged-transfer", programs,
+                             resume=[{"job": str(path), "receipt": receipt}
+                                     for path, receipt in transferred])
+            shutil.copytree(transferred[0][0] / "source", child[0] / "source", dirs_exist_ok=True)
+            child = bind(child)
+            self.assertEqual(jobs.worker(*child), 0)
+            self.assertEqual(jobs.collect(*child, child[0] / "source")["commands"], 4)
+            for parent, _ in transferred:
+                for record in parent.glob("command-*.json"):
+                    self.assertEqual(record.read_bytes(), (child[0] / record.name).read_bytes())
+            # A transferred source is still load-bearing after a successful merge.
+            (transferred[0][0] / "source/input").write_text("changed after transfer\n")
+            with self.assertRaisesRegex(ValueError, "source closure changed"):
+                jobs.collect(*child, child[0] / "source")
 
     def test_post_command_source_drift_never_publishes_pass(self):
         job = self.job("drift", ['print("ok")'])

@@ -277,6 +277,16 @@ current acceptance review bindings, generated assurance and Miri scope checks
 also passed. No timeout or partial result was counted as success. These logs are
 development diagnostics, not immutable detached receipts or native qualification.
 
+Runner follow-up: 95 regressions now include transferred partial jobs with real
+Git source snapshots and per-command source validation. The test removes build
+caches, makes original job paths unavailable, combines transferred partitions,
+checks that completed commands did not rerun, and rejects a changed transferred
+source even after merging. A separate real-child-process test explicitly cancels
+after a published PASS and confirms a new job restarts only the interrupted
+command; the parent's cancelled result remains unchanged and uncollectible.
+These fixtures substitute planning/tool discovery, not source hashing or process
+execution. They do not substitute for the pending real two-host Miri trial.
+
 Capacity observation: the current complete internal routine catalog has 1,089
 commands including non-Miri phases, and has a regression check against the
 existing 4,096-command bound. The combined public/extended catalog has 4,385

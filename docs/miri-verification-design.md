@@ -249,6 +249,34 @@ run passed all 15 selected matrix/lifecycle/API probes; the other routine cases
 still require their complete campaign before qualification.
 These remain focused diagnostics, not a completed all-family qualification.
 
+Unchanged-group follow-up on source `091ad3eb` (2026-09-27): all nine selected
+routine tasks passed, covering 49 tests without changing inputs, assertions,
+production code or scheduling rules. Commands used the pinned runner, one
+interpreter at a time, with existing local build caches. Durations below are
+host-clock seconds from `MIRI_TASK_PASS`, not libtest's interpreted clock.
+
+| Group/task | Coverage retained | Tests passed | Host seconds |
+| --- | --- | ---: | ---: |
+| SHA-2 / 19 | All ordinary hardened identities, padding, bit tails, output failure and unwind | 8 | 42.9 |
+| SHA-2 / 11 | General SHA-512/t downstream fixture | 5 | 52.5 |
+| SHA-2 / 12 | General SHA-512/t dynamic lifecycle | 3 | 15.2 |
+| SHA-3 / 15 | Residual hardened integration selection | 1 | 6.1 |
+| SHA-3 / 14 | Curated NIST bit vectors | 1 | 47.0 |
+| SHA-3 / 16 | Official cSHAKE examples | 1 | 5.8 |
+| KMAC / 0 | Residual broad test selection | 19 | 104.0 |
+| KMAC / 1 | Internal execution cleanup/error tests | 4 | 125.9 |
+| KMAC / 2 | Public execution, verification, reader and unwind tests | 7 | 288.2 |
+
+The KMAC public group exceeds the usual three-minute sizing goal, but completed
+within the six-minute diagnostic cap; it remains intact rather than introducing
+another split without a demonstrated timeout. The SHA-2 hardened group needs no
+split based on this observation. All three residual KMAC commands are now timed,
+but this is not completion of KMAC's separately registered case tasks or the
+all-family campaign. The 93 detached-runner regressions, incremental planner,
+current acceptance review bindings, generated assurance and Miri scope checks
+also passed. No timeout or partial result was counted as success. These logs are
+development diagnostics, not immutable detached receipts or native qualification.
+
 Capacity observation: the current complete internal routine catalog has 1,089
 commands including non-Miri phases, and has a regression check against the
 existing 4,096-command bound. The combined public/extended catalog has 4,385

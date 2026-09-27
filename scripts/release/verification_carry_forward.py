@@ -14,11 +14,13 @@ import verification_commands as commands
 import verification_plan as plans
 
 
-def prepare(job: Path, receipt: str, root: Path, release_plan: dict) -> dict:
+def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
+            historical_reader=None) -> dict:
     job = records.safe_path(job)
     # Validate every exit record, log digest, tool identity and frozen source,
     # but do not pretend the historical checkout is the current checkout.
-    result = jobs.collect(job, receipt, job / 'source')
+    result = (jobs.collect(job, receipt, job / 'source') if historical_reader is None
+              else historical_reader.collect(receipt))
     manifest = jobs.load(job, receipt)
     source = manifest['sources']['head']
     if records.git(job / 'source', 'status', '--porcelain', '--untracked-files=all').strip():

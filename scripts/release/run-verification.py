@@ -43,6 +43,7 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="plan only; never run tests")
     parser.add_argument("--detached-job", type=Path)
     parser.add_argument("--detached-receipt")
+    parser.add_argument("--detached-receipts", type=Path, help="phase receipt registry, including relocated parent jobs")
     args, extra = parser.parse_known_args()
     if extra and args.phase != "command":
         parser.error("unexpected verification arguments")
@@ -51,11 +52,34 @@ def main() -> int:
     try:
         job = args.detached_job or os.environ.get("BRYNJA_DETACHED_JOB")
         receipt = args.detached_receipt or os.environ.get("BRYNJA_DETACHED_RECEIPT")
+        registry = args.detached_receipts or os.environ.get("BRYNJA_DETACHED_RECEIPTS")
+        if registry and (job or receipt):
+            raise ValueError("choose a phase registry or a single detached receipt, not both")
         if bool(job) != bool(receipt):
             raise ValueError("detached reuse requires both a job directory and its launch receipt")
-        if args.ci and (job or receipt):
+        if args.ci and (job or receipt or registry):
             raise ValueError("CI diagnostics cannot consume local detached release evidence")
         plan = plans.build(base=args.base)
+        if registry:
+            import phase_receipts
+            requested = extra[1:] if extra and extra[0] == '--' else extra
+            contexts, decisions = phase_receipts.prepare(
+                Path(registry), plans.ROOT, plan, args.phase, shlex.join(requested) if requested else None)
+            for context in contexts:
+                print(plans.explain(context['plan']), flush=True)
+                plans.authorize(context['plan'], args.approve_full or os.environ.get('BRYNJA_FULL_VERIFICATION_APPROVAL') or None)
+            for entry, reason in decisions:
+                print(reason.upper() + ': ' + entry['command'], flush=True)
+            if args.phase == 'plan' or args.check:
+                return 0
+            remaining = [entry for entry, reason in decisions if reason.startswith('run:')]
+            if args.phase == 'matrix' and remaining:
+                prepare_matrix([(entry['command'], entry['stdin']) for entry in remaining])
+            for entry in remaining:
+                execute(entry['command'], entry['stdin'])
+            print(f'Phase receipts: {len(decisions) - len(remaining)} unchanged checks; '
+                  f'{len(remaining)} current checks passed.', flush=True)
+            return 0
         if job and not args.ci:
             import verification_carry_forward as carry
             context = carry.prepare(Path(job), receipt, plans.ROOT, plan)

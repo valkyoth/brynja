@@ -80,6 +80,7 @@ def run(manifest: dict, job: Path, receipt: str, started: float, stamp, validate
                 # A verifier must execute, not recursively import an ancestor's receipt.
                 environment.pop("BRYNJA_DETACHED_JOB", None)
                 environment.pop("BRYNJA_DETACHED_RECEIPT", None)
+                environment.pop("BRYNJA_DETACHED_RECEIPTS", None)
                 environment.update(command["environment"])
                 before = stamp()
                 if manifest.get("schema") == 2:

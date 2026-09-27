@@ -226,6 +226,67 @@ qualify a skip. Tool identity changes still invalidate the imported evidence.
 CI diagnostics cannot import local evidence. Reuse grants no release approval.
 Records from another platform cannot silently replace this host's verifier runs.
 
+### Separate phase receipts and relocated historical jobs
+
+Use `--detached-receipts PATH` (or `BRYNJA_DETACHED_RECEIPTS=PATH` for the existing
+multi-step gate) when Miri and the other phases completed in separate jobs.
+The local JSON registry has this shape; replace each receipt placeholder with
+the full 64-character launch receipt and each directory with its absolute path:
+
+```json
+{
+  "schema": 1,
+  "phases": {
+    "miri": "MIRI_RECEIPT",
+    "repository": "OTHER_RECEIPT",
+    "matrix": "OTHER_RECEIPT",
+    "asan": "OTHER_RECEIPT",
+    "kani": "OTHER_RECEIPT"
+  },
+  "jobs": {
+    "MIRI_RECEIPT": "/archive/combined-miri",
+    "PARENT_ZERO_RECEIPT": "/archive/miri-part-zero",
+    "PARENT_ONE_RECEIPT": "/archive/miri-part-one",
+    "OTHER_RECEIPT": "/archive/non-miri"
+  }
+}
+```
+
+Include every parent receipt in `jobs`, even when the parent's recorded directory
+was on a different machine. Locations are resolved by the original receipt;
+do not edit the archived manifests, parent references, logs or terminal results.
+The registry is local operator routing, not a new success attestation. Keep it
+outside `target/` along with the jobs so `cargo clean` cannot remove evidence.
+A registry containing only Miri can check Miri, but the complete gate's `plan`
+requires explicit receipts for every phase. Missing evidence does not silently
+start a full sweep. A running job cannot yet serve as a successful receipt.
+
+```sh
+python3 scripts/release/run-verification.py miri --check --detached-receipts /archive/phases.json
+```
+
+Historical reading requires schema-2 per-command post-execution source/tool
+seals, complete successful phase coverage, immutable logs and validated parent
+ancestry. Resource-interrupted parents can contribute only their individually
+sealed successful commands through a completed child; failed parents and
+cancelled top-level jobs cannot qualify a phase. Schema-1 cancelled sweeps are
+not imported. Every frozen source and command catalog is rechecked by current
+trusted tooling, never by executing archived validator code.
+
+Historical tool records remain unchanged. The collector may have extra Rust
+installations and different Python/rustup inventory text. Its platform, default
+Rust/Cargo, all recorded compiler identities and selected verifier identities
+must still match. This is evidence of the original execution, not qualification
+of a different compiler, verifier or platform. Existing live collection and
+resume still use their stricter full-inventory equality checks.
+
+Current implementation/tool-policy deltas, command coverage, public checkpoints
+and approvals use the same carry-forward rules above, independently per receipt.
+Current repository baseline checks still run. CI cannot import the registry,
+and detached children remove all receipt environment variables so a new command
+executes instead of recursively claiming an old result. No tag/publication
+permission is granted by collection or reuse.
+
 ## Frozen inputs and result validation
 
 The worker uses a separate Git checkout with independent objects and a copy of

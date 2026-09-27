@@ -91,6 +91,7 @@ class ShardTests(unittest.TestCase):
                 nonlocal active, peak
                 self.assertNotIn("BRYNJA_DETACHED_JOB", kwargs["environment"])
                 self.assertNotIn("BRYNJA_DETACHED_RECEIPT", kwargs["environment"])
+                self.assertNotIn("BRYNJA_DETACHED_RECEIPTS", kwargs["environment"])
                 with lock:
                     active += 1
                     peak = max(peak, active)
@@ -101,7 +102,8 @@ class ShardTests(unittest.TestCase):
                     active -= 1
                 return {"state": "passed", "exit_code": 0, "elapsed_seconds": .03, "log_bytes": 2}
             with patch.object(shards.process, "execute", side_effect=execute), \
-                 patch.dict(os.environ, {"BRYNJA_DETACHED_JOB": "bad", "BRYNJA_DETACHED_RECEIPT": "bad"}):
+                 patch.dict(os.environ, {"BRYNJA_DETACHED_JOB": "bad", "BRYNJA_DETACHED_RECEIPT": "bad",
+                                         "BRYNJA_DETACHED_RECEIPTS": "bad"}):
                 results, state = shards.run(manifest, job, "r", time.monotonic(), jobs.stamp, lambda *_: None)
             self.assertEqual((state, len(results), peak, active), ("passed", 6, 2, 0))
             self.assertEqual(sorted(budgets), [2046] * 3 + [2048] * 3)

@@ -8,6 +8,35 @@ use brynja_hash_sha3::{
     sha3_384_bits, sha3_512, sha3_512_bits, shake128, shake128_bits, shake256, shake256_bits,
 };
 
+// Native acceptance always keeps the complete matrix, even with stale selectors.
+fn miri_case(total: usize) -> Option<usize> {
+    let selected = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_CASE").ok().map(|value| {
+            let parsed = value.parse::<usize>();
+            assert!(parsed.is_ok());
+            parsed.unwrap_or(usize::MAX)
+        })
+    } else {
+        None
+    };
+    assert!(selected.is_none_or(|case| case < total));
+    selected
+}
+
+fn miri_complete(selected: Option<usize>, executed: usize, total: usize, _name: &str) {
+    assert_eq!(executed, if selected.is_some() { 1 } else { total });
+    #[cfg(miri)]
+    if let Some(case) = selected {
+        std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+    }
+}
+
+fn matrix_index(row: usize, width: usize, column: usize) -> Result<usize, HardenedSha3Error> {
+    row.checked_mul(width)
+        .and_then(|base| base.checked_add(column))
+        .ok_or(HardenedSha3Error::MessageTooLong)
+}
+
 macro_rules! fixed_public_matches {
     ($state:ty, $ordinary:ident, $length:expr) => {{
         let mut state = <$state>::new();
@@ -55,14 +84,22 @@ fn every_fixed_secret_output_transfers_and_clears() -> Result<(), HardenedSha3Er
 }
 
 macro_rules! fixed_boundaries {
-    ($state:ty, $ordinary:ident, $output:expr) => {{
+    ($state:ty, $ordinary:ident, $output:expr, $identity:expr, $selected:ident, $executed:ident) => {{
         let mut input = [0_u8; 340];
         for (index, byte) in input.iter_mut().enumerate() {
             *byte = u8::try_from(index).unwrap_or_default();
         }
-        for length in [
+        for (offset, length) in [
             0, 1, 71, 72, 73, 103, 104, 105, 135, 136, 137, 143, 144, 145, 167, 168, 169, 339,
-        ] {
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            let index = matrix_index($identity, 18, offset)?;
+            if $selected.is_some_and(|case| case != index) {
+                continue;
+            }
+            $executed += 1;
             let message = input
                 .get(..length)
                 .ok_or(HardenedSha3Error::MessageTooLong)?;
@@ -81,10 +118,13 @@ macro_rules! fixed_boundaries {
 
 #[test]
 fn every_rate_and_multiblock_boundary_matches() -> Result<(), HardenedSha3Error> {
-    fixed_boundaries!(HardenedSha3_224, sha3_224, 28)?;
-    fixed_boundaries!(HardenedSha3_256, sha3_256, 32)?;
-    fixed_boundaries!(HardenedSha3_384, sha3_384, 48)?;
-    fixed_boundaries!(HardenedSha3_512, sha3_512, 64)?;
+    let selected = miri_case(72);
+    let mut executed = 0;
+    fixed_boundaries!(HardenedSha3_224, sha3_224, 28, 0, selected, executed)?;
+    fixed_boundaries!(HardenedSha3_256, sha3_256, 32, 1, selected, executed)?;
+    fixed_boundaries!(HardenedSha3_384, sha3_384, 48, 2, selected, executed)?;
+    fixed_boundaries!(HardenedSha3_512, sha3_512, 64, 3, selected, executed)?;
+    miri_complete(selected, executed, 72, "sha3-fixed-boundaries");
     Ok(())
 }
 
@@ -109,32 +149,71 @@ fn fixed_output_failure_is_atomic_by_classification() {
 }
 
 macro_rules! fixed_bits_match {
-    ($state:ty, $ordinary:ident, $input:expr, $output:expr) => {{
-        let expected = $ordinary($input).map_err(|_| HardenedSha3Error::MessageTooLong)?;
-        let mut actual = [0_u8; $output];
-        <$state>::new().finalize_bits_public(
-            $input,
-            &mut actual,
-            Sha3PublicDeclassification::acknowledge(),
-        )?;
-        assert_eq!(actual.as_slice(), expected.as_ref());
+    ($state:ty, $ordinary:ident, $input:expr, $output:expr, $case:expr, $selected:ident, $executed:ident) => {{
+        let index = $case;
+        if $selected.is_none_or(|case| case == index) {
+            $executed += 1;
+            let expected = $ordinary($input).map_err(|_| HardenedSha3Error::MessageTooLong)?;
+            let mut actual = [0_u8; $output];
+            <$state>::new().finalize_bits_public(
+                $input,
+                &mut actual,
+                Sha3PublicDeclassification::acknowledge(),
+            )?;
+            assert_eq!(actual.as_slice(), expected.as_ref());
+        }
         Ok::<(), HardenedSha3Error>(())
     }};
 }
 
 #[test]
 fn every_partial_bit_width_matches_every_fixed_identity() -> Result<(), HardenedSha3Error> {
+    let selected = miri_case(28);
+    let mut executed = 0;
     let tails = [0x01, 0x03, 0x05, 0x0d, 0x15, 0x35, 0x75];
     for (offset, valid) in (1_u8..=7).enumerate() {
         let tail = tails.get(offset).copied().unwrap_or_default();
         let bytes = [0x61, 0x62, tail];
         let input =
             Fips202BitString::new(&bytes, valid).map_err(|_| HardenedSha3Error::MessageTooLong)?;
-        fixed_bits_match!(HardenedSha3_224, sha3_224_bits, input, 28)?;
-        fixed_bits_match!(HardenedSha3_256, sha3_256_bits, input, 32)?;
-        fixed_bits_match!(HardenedSha3_384, sha3_384_bits, input, 48)?;
-        fixed_bits_match!(HardenedSha3_512, sha3_512_bits, input, 64)?;
+        fixed_bits_match!(
+            HardenedSha3_224,
+            sha3_224_bits,
+            input,
+            28,
+            matrix_index(offset, 4, 0)?,
+            selected,
+            executed
+        )?;
+        fixed_bits_match!(
+            HardenedSha3_256,
+            sha3_256_bits,
+            input,
+            32,
+            matrix_index(offset, 4, 1)?,
+            selected,
+            executed
+        )?;
+        fixed_bits_match!(
+            HardenedSha3_384,
+            sha3_384_bits,
+            input,
+            48,
+            matrix_index(offset, 4, 2)?,
+            selected,
+            executed
+        )?;
+        fixed_bits_match!(
+            HardenedSha3_512,
+            sha3_512_bits,
+            input,
+            64,
+            matrix_index(offset, 4, 3)?,
+            selected,
+            executed
+        )?;
     }
+    miri_complete(selected, executed, 28, "sha3-fixed-bits");
     Ok(())
 }
 
@@ -208,10 +287,16 @@ fn bit_input_and_bit_output_match_both_ordinary_xofs() -> Result<(), HardenedSha
 
 #[test]
 fn every_partial_secret_xof_width_matches_and_clears() -> Result<(), HardenedSha3Error> {
+    let selected = miri_case(7);
+    let mut executed = 0;
     let input_bytes = [0x13];
     let input =
         Fips202BitString::new(&input_bytes, 5).map_err(|_| HardenedSha3Error::MessageTooLong)?;
     for valid in 1_u8..=7 {
+        if selected.is_some_and(|case| case != usize::from(valid - 1)) {
+            continue;
+        }
+        executed += 1;
         let mut expected128 = [0_u8; 13];
         let expected_output = Fips202Output::new(&mut expected128, valid)
             .map_err(|_| HardenedSha3Error::OutputLength)?;
@@ -242,6 +327,7 @@ fn every_partial_secret_xof_width_matches_and_clears() -> Result<(), HardenedSha
         }
         assert_eq!(actual256, [0; 17]);
     }
+    miri_complete(selected, executed, 7, "sha3-secret-xof-bits");
     Ok(())
 }
 

@@ -20,6 +20,20 @@ def profile_for(stage: str, requested: str | None = None) -> str:
 
 
 def matrices(group: str) -> list[dict]:
+    if group == 'sha3':
+        # Each identity retains its own rate-1/rate/rate+1 transitions. Testing
+        # every other identity's rate as well remains extended/native work.
+        boundaries = [0, 1, 71, 72, 73, 103, 104, 105, 135, 136, 137,
+                      143, 144, 145, 167, 168, 169, 339]
+        sample = [identity * len(boundaries) + boundaries.index(length)
+                  for identity, rate in enumerate((144, 136, 104, 72))
+                  for length in (0, 1, rate - 1, rate, rate + 1, 339)]
+        return [dict(name=name, marker=marker, total=total, routine=indices,
+                     package='brynja-hash-sha3', features=[], target=['--test', 'hardened'])
+                for name, marker, total, indices in (
+                    ('every_rate_and_multiblock_boundary_matches', 'sha3-fixed-boundaries', 72, sample),
+                    ('every_partial_bit_width_matches_every_fixed_identity', 'sha3-fixed-bits', 28, list(range(28))),
+                    ('every_partial_secret_xof_width_matches_and_clears', 'sha3-secret-xof-bits', 7, list(range(7))))]
     if group in ('sha1', 'md5'):
         package = 'brynja-legacy-' + group
         return [
@@ -65,6 +79,25 @@ def matrices(group: str) -> list[dict]:
     return result
 
 
+def singles(group: str) -> list[str]:
+    if group != 'sha3':
+        return []
+    # Keep the empty-owner test (and any future tests) in the original broad
+    # invocation. Each moved test remains selected exactly once, independently
+    # resumable, without changing its input sizes or assertions.
+    return [
+        'every_fixed_identity_matches_the_ordinary_algorithm',
+        'every_fixed_secret_output_transfers_and_clears',
+        'fixed_output_failure_is_atomic_by_classification',
+        'both_xofs_match_across_irregular_absorb_and_squeeze_boundaries',
+        'xof_secret_fragments_transfer_and_clear_independently',
+        'bit_input_and_bit_output_match_both_ordinary_xofs',
+        'sealed_capabilities_accept_only_registered_public_types',
+        'cancel_and_early_drop_cover_absorber_and_reader_lifecycles',
+        'recoverable_unwind_clears_typed_secret_destination',
+    ]
+
+
 def tasks(group: str, original: list[list[str]], profile: str) -> list[dict]:
     if profile not in PROFILES:
         raise ValueError("unknown Miri coverage profile")
@@ -77,8 +110,8 @@ def tasks(group: str, original: list[list[str]], profile: str) -> list[dict]:
         if registered:
             if "--" not in argv:
                 argv.append("--")
-            for case in registered:
-                argv.extend(["--skip", case["name"]])
+            for name in [case['name'] for case in registered] + singles(group):
+                argv.extend(["--skip", name])
         result.append({"argv": argv, "environment": {}, "marker": None})
     for matrix in registered:
         indices = matrix["routine"] if profile == "routine" else range(matrix["total"])
@@ -87,7 +120,10 @@ def tasks(group: str, original: list[list[str]], profile: str) -> list[dict]:
             argv = ['-p', matrix['package']]
             if features:
                 argv += ['--features', ','.join(features)]
-            result.append({"argv": [*argv, "--lib", matrix["name"], "--", "--exact"],
+            result.append({"argv": [*argv, *matrix.get('target', ['--lib']), matrix["name"], "--", "--exact"],
                            "environment": {"BRYNJA_MIRI_CASE": str(index), "BRYNJA_MIRI_PROFILE": profile},
                            "marker": f"MIRI_CASE_PASS: {matrix['marker']}:{index}"})
+    for name in singles(group):
+        result.append({'argv': ['-p', 'brynja-hash-sha3', '--test', 'hardened', name, '--', '--exact'],
+                       'environment': {}, 'marker': None})
     return result

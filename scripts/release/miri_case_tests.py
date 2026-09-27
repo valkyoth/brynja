@@ -39,7 +39,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertEqual(catalog.selected(plan, ['matrix'], plan['fingerprint']), [])
         miri = catalog.selected(plan, ['miri'], plan['fingerprint'], miri_tasks=True,
                                 miri_profile='routine')
-        self.assertEqual(len(miri), 249)
+        self.assertEqual(len(miri), 317)
         old = {'phase': 'asan', 'command': 'cargo test -p brynja-hash-sha2',
                'argv': ['cargo', 'test', '-p', 'brynja-hash-sha2'], 'stdin': None,
                'environment': {}}
@@ -56,7 +56,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertTrue(plans.requires_full({**plan, 'full_phases': ['repository']}, 'command'))
 
     def test_profile_task_sets_are_unique_and_fit_detached_bound(self):
-        for profile, count in (('existing-full', 83), ('routine', 249), ('extended', 2577)):
+        for profile, count in (('existing-full', 83), ('routine', 317), ('extended', 2693)):
             commands = miri_tasks.commands(plans.ROOT, list(plans.scope.GROUPS), profile)
             self.assertEqual(len(commands), count)
             self.assertEqual(len({tuple(command) for command in commands}), count)
@@ -85,7 +85,7 @@ class MiriCaseTests(unittest.TestCase):
 
     def test_extended_matrix_union_has_no_omissions_or_duplicates(self):
         count = 0
-        for group in ('sha1', 'md5', 'kmac', 'tuplehash', 'parallelhash'):
+        for group in ('sha1', 'md5', 'sha3', 'kmac', 'tuplehash', 'parallelhash'):
             tasks = miri_tasks.task_inventory(plans.ROOT, group, 'extended')
             for matrix in miri_cases.matrices(group):
                 selected = [task for task in tasks if task['marker'] and matrix['name'] in task['argv']]
@@ -94,7 +94,19 @@ class MiriCaseTests(unittest.TestCase):
                 self.assertTrue(all(task['environment']['BRYNJA_MIRI_PROFILE'] == 'extended' for task in selected))
                 self.assertTrue(all(task['argv'][-2:] == ['--', '--exact'] for task in selected))
                 count += len(cases)
-        self.assertEqual(count, 2494)
+        self.assertEqual(count, 2601)
+
+    def test_sha3_samples_cover_each_identity_rate_and_every_partial_width(self):
+        boundary, fixed_bits, xof_bits = miri_cases.matrices('sha3')
+        lengths = [0, 1, 71, 72, 73, 103, 104, 105, 135, 136, 137,
+                   143, 144, 145, 167, 168, 169, 339]
+        for identity, rate in enumerate((144, 136, 104, 72)):
+            selected = [lengths[i % 18] for i in boundary['routine'] if i // 18 == identity]
+            self.assertEqual(selected, [0, 1, rate - 1, rate, rate + 1, 339])
+        self.assertEqual(fixed_bits['routine'], list(range(28)))
+        self.assertEqual(xof_bits['routine'], list(range(7)))
+        for matrix in (boundary, fixed_bits, xof_bits):
+            self.assertEqual(matrix['target'], ['--test', 'hardened'])
 
     def test_legacy_boundary_samples_retain_padding_block_chunk_and_bit_dimensions(self):
         for group in ('sha1', 'md5'):
@@ -121,7 +133,26 @@ class MiriCaseTests(unittest.TestCase):
                             expected.append('--')
                         for matrix in matrices:
                             expected += ['--skip', matrix['name']]
+                        for name in miri_cases.singles(group):
+                            expected += ['--skip', name]
                     self.assertEqual(task, {'argv': expected, 'environment': {}, 'marker': None})
+
+    def test_sha3_moved_lifecycles_have_exact_tasks_and_leave_future_tests_discoverable(self):
+        names = miri_cases.singles('sha3')
+        self.assertEqual(len(set(names)), 9)
+        source = (plans.ROOT / 'crates/brynja-hash-sha3/tests/hardened.rs').read_text()
+        for profile in ('routine', 'extended'):
+            tasks = miri_tasks.task_inventory(plans.ROOT, 'sha3', profile)
+            broad = tasks[15]['argv']
+            self.assertEqual(broad[:4], ['-p', 'brynja-hash-sha3', '--test', 'hardened'])
+            for name in names:
+                self.assertIn('#[test]\nfn ' + name + '(', source)
+                self.assertEqual(broad.count(name), 1)
+                exact = [task for task in tasks if task['argv'] ==
+                         ['-p', 'brynja-hash-sha3', '--test', 'hardened', name, '--', '--exact']]
+                self.assertEqual(len(exact), 1)
+            self.assertNotIn('zero_length_secret_xof_output_is_a_valid_empty_owner', broad)
+            self.assertNotIn('future_unregistered_test', broad)
 
     def test_public_profile_cannot_be_downgraded(self):
         self.assertEqual(miri_cases.profile_for('internal'), 'routine')

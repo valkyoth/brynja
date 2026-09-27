@@ -16,7 +16,7 @@ this status. Caller/platform residuals and informational instrumented-build
 limitations remain in force.
 
 - Add resumable, source/tool-bound detached checkpoints and disjoint Miri task
-  partitions. Internal runs use a bounded sample of costly SHA-1, MD5, KMAC,
+  partitions. Internal runs use a bounded sample of costly SHA-1, MD5, SHA-3, KMAC,
   TupleHash and ParallelHash matrices; public checkpoints use all original combinations.
   Full native test matrices remain unchanged, and no Miri safety checks are
   disabled. Timing and multi-host qualification are still in progress; the

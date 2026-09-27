@@ -1287,7 +1287,7 @@ sha256 = "fd97b9370dcc6b30d7c935c34300607ab4e471f62e9b12451b198cf9f4fc0a6a"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/tests/hardened.rs"
-sha256 = "c0f18be6c64ef7f8e9b875d12e3ff1ef6492e39752fbf0c829b63d52112ced0a"
+sha256 = "4b1bc960391fea854e0e70d281da15ac13a8015a83c321b2369395189094a94d"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/tests/cshake.rs"

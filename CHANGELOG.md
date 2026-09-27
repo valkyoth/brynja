@@ -3,7 +3,7 @@
 ## 0.24.49 candidate
 
 - Add resumable detached command checkpoints and disjoint task partitions.
-  Internal Miri runs now sample registered SHA-1/MD5/KMAC/TupleHash/ParallelHash matrices;
+  Internal Miri runs now sample registered SHA-1/MD5/SHA-3/KMAC/TupleHash/ParallelHash matrices;
   public checkpoints retain every original combination through exact case tasks.
   Native matrices and interpreter safety checks remain intact. Wider timing and
   remote qualification are pending; the cancelled full sweep remains incomplete.

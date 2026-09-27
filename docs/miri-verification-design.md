@@ -14,7 +14,7 @@ post-command source/tool checks, immutable resume into a new job, and partial
 partition collection. It leaves the reviewed legacy Miri driver byte-for-byte
 unchanged. See [operator instructions](detached-verification.md).
 
-The next stage registers fourteen costly matrices across five families.
+The next stage registers seventeen costly matrices across six families.
 One TupleHash matrix and six
 ParallelHash fixed/XOF/scheduled matrices. Routine Miri selects 16 TupleHash
 cases and 48 ParallelHash cases; extended Miri addresses all 896 and 240 original
@@ -31,11 +31,20 @@ all chunk widths and all final-bit widths, using 47 tasks per family instead of
 675. KMAC framing is split by initial bit residue into eight tasks: routine
 checks six representative byte values at every final-bit width (432 total
 combinations); extended and native tests retain all 256 values (18,432 total).
+SHA-3 hardened integration splits fixed-output rate boundaries, fixed-output
+partial bits and secret-XOF partial bits into 59 routine / 107 extended cases.
+Routine rate coverage uses each identity's own rate-1/rate/rate+1 plus empty,
+one-byte and 339-byte multiblock messages. Every original partial-bit combination
+remains selected in both profiles, including both XOF identities and clearing.
 
 The other 83 original Cargo invocations remain selected, excluding only those
-fourteen registered matrices now run separately. Thus a complete all-family
-routine catalog has 249 tasks (166 case/chunk tasks) and extended has 2,577
-(2,494 case/chunk tasks). Remaining grouped selections, including SHA-2/SHA-3,
+seventeen registered matrices now run separately. Thus a complete all-family
+routine catalog has 317 tasks (225 case/chunk tasks) and extended has 2,693
+(2,601 case/chunk tasks). Nine existing SHA-3 lifecycle tests additionally run
+as separate exact tests, with their inputs/assertions unchanged. The original
+integration invocation keeps the empty-owner test and discovers future tests;
+only explicitly rescheduled tests are skipped there.
+Remaining grouped selections, including SHA-2/SHA-3,
 have not yet been fully timed. Broad legacy selections still discover new
 tests; a future complete per-test obligation inventory remains outstanding.
 Legacy schema-1 partial evidence is not imported or marked successful.
@@ -54,7 +63,7 @@ Additional routine probes passed KMAC framing in 1.9 seconds, SHA-1 bulk updates
 in 11.0 seconds, MD5 padding in 1.5 seconds, and SHA-1/MD5 scoped-owner cases in
 3.2/1.5 seconds. These measurements are not a full-suite ETA or release receipt.
 
-Focused validation also passed 78 runner/profile/checkpoint regressions, 51
+Focused validation also passed 80 runner/profile/checkpoint regressions, 51
 assurance tests, both crates' 92 all-feature library tests on Rust 1.98.1 and
 62 hardened-execution library tests on Rust 1.90.0. Native tests with hostile
 Miri selectors, scoped Clippy, formatting, scope/policy mutations, review
@@ -81,9 +90,18 @@ expands an unrelated verifier's selection. Historical plans without per-phase
 scope retain their old conservative full-run interpretation.
 
 A further SHA-3 execution probe passed all eight selected tests in 8.2 host
-seconds. The broader SHA-3 hardened integration group hit its 180-second
-diagnostic cap while still executing its partial-bit matrix; this is incomplete
-evidence and remains a candidate for further splitting, not a successful run.
+seconds. Combined SHA-3 hardened integration probes hit their 180-second caps
+before the matrices and lifecycle tests were fully separated. Those attempts
+remain incomplete evidence, not passes. On the final split, representative
+rate-boundary, fixed partial-bit and secret-XOF cases passed in 30.2, 6.5 and
+12.6 seconds; an extended-only boundary case passed in 6.7 seconds. The remaining
+broad invocation passed its empty-owner test in 6.5 seconds. All 13 native
+integration tests passed with hostile selectors, on Rust 1.90.0, and with all
+features; scoped strict Clippy and refreshed review/metadata checks also passed.
+All nine separated lifecycle tests passed under Miri individually, ranging from
+0.6 to 36.2 host seconds. Together with the three matrix probes, extended-only
+probe and remaining broad invocation, these are 14 successful diagnostic tasks,
+not a complete SHA-3 extended campaign or release receipt.
 A local overhead diagnostic measured source hashing (2,945 files) at
 0.27 seconds, tool identity at 1.83 seconds and planning at 0.17 seconds.
 Per-command source/tool seals deliberately remain in place; many tiny tasks

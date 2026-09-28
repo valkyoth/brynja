@@ -88,3 +88,10 @@ expanded fourteen-test dump harness pass locally and natively. This identifies
 a candidate fixed-buffer mechanism, not complete worker protection: admission
 before secret input, erase-before-unlock, stack/TLS ownership and production
 signing remain unqualified. No shipped cryptographic behavior has changed.
+
+A native worker-inventory experiment now checks local-array and static-TLS
+clearing and rejects a compiled missing-clear mutant. Eight driver regressions
+pass locally and on Windows. Host and enclave allocation views differ and are
+recorded separately; neither a cleared array nor an idle worker's successful
+termination is claimed as complete stack/TLS cleanup. Full worker ownership,
+protection-before-input and clearing-before-release remain unresolved.

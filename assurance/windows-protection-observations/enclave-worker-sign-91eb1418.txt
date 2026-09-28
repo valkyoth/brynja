@@ -1,0 +1,25 @@
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\enclave-worker\worker.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SignTool Warning: Note that VBS enclave support is changing and updating your VBS enclave may cause you to lose support on older OSes. Please visit https://go.microsoft.com/fwlink/?linkid=2312918 for details.
+
+SIGNTOOL_EXIT: worker.dll = 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\enclave-worker\worker-mutant.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SignTool Warning: Note that VBS enclave support is changing and updating your VBS enclave may cause you to lose support on older OSes. Please visit https://go.microsoft.com/fwlink/?linkid=2312918 for details.
+
+SIGNTOOL_EXIT: worker-mutant.dll = 2
+EPHEMERAL_SIGNING_KEY_REMOVED
+Synthetic worker signing failed or warned; inspect transcript
+At C:\Users\azureuser\brynja-enclave-worker-sign.ps1:11 char:20
++ ... ($failed) { throw 'Synthetic worker signing failed or warned; inspect ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Synthetic worke...pect transc
+   ript:String) [], RuntimeException
+    + FullyQualifiedErrorId : Synthetic worker signing failed or warned; inspe
+   ct transcript

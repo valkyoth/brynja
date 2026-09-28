@@ -345,6 +345,10 @@ Downloaded hashes before line-ending normalization:
 
 ### Worker ownership proof still required
 
+The follow-up [native worker inventory review](windows-enclave-worker-design.md)
+records normal and compiled missing-clear experiments, distinct host/enclave
+mapping views, and the remaining complete-stack/TLS ownership requirements.
+
 The next prototype must account for these distinct lifetimes before admitting
 secret input. The fixed static marker does not stand in for all of them.
 

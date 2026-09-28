@@ -1,0 +1,474 @@
+{
+  "calls": [
+    {
+      "stack": {
+        "address_offset": 1105696,
+        "allocation_base_offset": 65536,
+        "allocation_ranges": {
+          "host_allocation_base_offset": 0,
+          "matches_enclave_allocation_base": false,
+          "ranges": [
+            {
+              "offset": 0,
+              "protect": 0,
+              "size": 1089536,
+              "state": 8192
+            },
+            {
+              "offset": 1089536,
+              "protect": 4,
+              "size": 24576,
+              "state": 4096
+            },
+            {
+              "offset": 1114112,
+              "protect": 0,
+              "size": 1310720,
+              "state": 8192
+            },
+            {
+              "offset": 2424832,
+              "protect": 4,
+              "size": 20480,
+              "state": 4096
+            },
+            {
+              "offset": 2445312,
+              "protect": 0,
+              "size": 265007104,
+              "state": 8192
+            },
+            {
+              "offset": 267452416,
+              "protect": 4,
+              "size": 8192,
+              "state": 4096
+            },
+            {
+              "offset": 267460608,
+              "protect": 0,
+              "size": 57344,
+              "state": 8192
+            },
+            {
+              "offset": 267517952,
+              "protect": 4,
+              "size": 4096,
+              "state": 4096
+            },
+            {
+              "offset": 267522048,
+              "protect": 0,
+              "size": 12288,
+              "state": 8192
+            },
+            {
+              "offset": 267534336,
+              "protect": 4,
+              "size": 901120,
+              "state": 4096
+            }
+          ]
+        },
+        "checked_marker_bytes": 8192,
+        "region_base_offset": 1101824,
+        "region_size": 12288
+      },
+      "tls": {
+        "address_offset": 2429008,
+        "allocation_base_offset": 2424832,
+        "allocation_ranges": {
+          "host_allocation_base_offset": 0,
+          "matches_enclave_allocation_base": false,
+          "ranges": [
+            {
+              "offset": 0,
+              "protect": 0,
+              "size": 1089536,
+              "state": 8192
+            },
+            {
+              "offset": 1089536,
+              "protect": 4,
+              "size": 24576,
+              "state": 4096
+            },
+            {
+              "offset": 1114112,
+              "protect": 0,
+              "size": 1310720,
+              "state": 8192
+            },
+            {
+              "offset": 2424832,
+              "protect": 4,
+              "size": 20480,
+              "state": 4096
+            },
+            {
+              "offset": 2445312,
+              "protect": 0,
+              "size": 265007104,
+              "state": 8192
+            },
+            {
+              "offset": 267452416,
+              "protect": 4,
+              "size": 8192,
+              "state": 4096
+            },
+            {
+              "offset": 267460608,
+              "protect": 0,
+              "size": 57344,
+              "state": 8192
+            },
+            {
+              "offset": 267517952,
+              "protect": 4,
+              "size": 4096,
+              "state": 4096
+            },
+            {
+              "offset": 267522048,
+              "protect": 0,
+              "size": 12288,
+              "state": 8192
+            },
+            {
+              "offset": 267534336,
+              "protect": 4,
+              "size": 901120,
+              "state": 4096
+            }
+          ]
+        },
+        "checked_marker_bytes": 8192,
+        "region_base_offset": 2428928,
+        "region_size": 16384
+      }
+    },
+    {
+      "stack": {
+        "address_offset": 1105696,
+        "allocation_base_offset": 65536,
+        "allocation_ranges": {
+          "host_allocation_base_offset": 0,
+          "matches_enclave_allocation_base": false,
+          "ranges": [
+            {
+              "offset": 0,
+              "protect": 0,
+              "size": 1089536,
+              "state": 8192
+            },
+            {
+              "offset": 1089536,
+              "protect": 4,
+              "size": 24576,
+              "state": 4096
+            },
+            {
+              "offset": 1114112,
+              "protect": 0,
+              "size": 1310720,
+              "state": 8192
+            },
+            {
+              "offset": 2424832,
+              "protect": 4,
+              "size": 20480,
+              "state": 4096
+            },
+            {
+              "offset": 2445312,
+              "protect": 0,
+              "size": 265007104,
+              "state": 8192
+            },
+            {
+              "offset": 267452416,
+              "protect": 4,
+              "size": 8192,
+              "state": 4096
+            },
+            {
+              "offset": 267460608,
+              "protect": 0,
+              "size": 57344,
+              "state": 8192
+            },
+            {
+              "offset": 267517952,
+              "protect": 4,
+              "size": 4096,
+              "state": 4096
+            },
+            {
+              "offset": 267522048,
+              "protect": 0,
+              "size": 12288,
+              "state": 8192
+            },
+            {
+              "offset": 267534336,
+              "protect": 4,
+              "size": 901120,
+              "state": 4096
+            }
+          ]
+        },
+        "checked_marker_bytes": 8192,
+        "region_base_offset": 1101824,
+        "region_size": 12288
+      },
+      "tls": {
+        "address_offset": 2429008,
+        "allocation_base_offset": 2424832,
+        "allocation_ranges": {
+          "host_allocation_base_offset": 0,
+          "matches_enclave_allocation_base": false,
+          "ranges": [
+            {
+              "offset": 0,
+              "protect": 0,
+              "size": 1089536,
+              "state": 8192
+            },
+            {
+              "offset": 1089536,
+              "protect": 4,
+              "size": 24576,
+              "state": 4096
+            },
+            {
+              "offset": 1114112,
+              "protect": 0,
+              "size": 1310720,
+              "state": 8192
+            },
+            {
+              "offset": 2424832,
+              "protect": 4,
+              "size": 20480,
+              "state": 4096
+            },
+            {
+              "offset": 2445312,
+              "protect": 0,
+              "size": 265007104,
+              "state": 8192
+            },
+            {
+              "offset": 267452416,
+              "protect": 4,
+              "size": 8192,
+              "state": 4096
+            },
+            {
+              "offset": 267460608,
+              "protect": 0,
+              "size": 57344,
+              "state": 8192
+            },
+            {
+              "offset": 267517952,
+              "protect": 4,
+              "size": 4096,
+              "state": 4096
+            },
+            {
+              "offset": 267522048,
+              "protect": 0,
+              "size": 12288,
+              "state": 8192
+            },
+            {
+              "offset": 267534336,
+              "protect": 4,
+              "size": 901120,
+              "state": 4096
+            }
+          ]
+        },
+        "checked_marker_bytes": 8192,
+        "region_base_offset": 2428928,
+        "region_size": 16384
+      }
+    },
+    {
+      "stack": {
+        "address_offset": 1105696,
+        "allocation_base_offset": 65536,
+        "allocation_ranges": {
+          "host_allocation_base_offset": 0,
+          "matches_enclave_allocation_base": false,
+          "ranges": [
+            {
+              "offset": 0,
+              "protect": 0,
+              "size": 1089536,
+              "state": 8192
+            },
+            {
+              "offset": 1089536,
+              "protect": 4,
+              "size": 24576,
+              "state": 4096
+            },
+            {
+              "offset": 1114112,
+              "protect": 0,
+              "size": 1310720,
+              "state": 8192
+            },
+            {
+              "offset": 2424832,
+              "protect": 4,
+              "size": 20480,
+              "state": 4096
+            },
+            {
+              "offset": 2445312,
+              "protect": 0,
+              "size": 265007104,
+              "state": 8192
+            },
+            {
+              "offset": 267452416,
+              "protect": 4,
+              "size": 8192,
+              "state": 4096
+            },
+            {
+              "offset": 267460608,
+              "protect": 0,
+              "size": 57344,
+              "state": 8192
+            },
+            {
+              "offset": 267517952,
+              "protect": 4,
+              "size": 4096,
+              "state": 4096
+            },
+            {
+              "offset": 267522048,
+              "protect": 0,
+              "size": 12288,
+              "state": 8192
+            },
+            {
+              "offset": 267534336,
+              "protect": 4,
+              "size": 901120,
+              "state": 4096
+            }
+          ]
+        },
+        "checked_marker_bytes": 8192,
+        "region_base_offset": 1101824,
+        "region_size": 12288
+      },
+      "tls": {
+        "address_offset": 2429008,
+        "allocation_base_offset": 2424832,
+        "allocation_ranges": {
+          "host_allocation_base_offset": 0,
+          "matches_enclave_allocation_base": false,
+          "ranges": [
+            {
+              "offset": 0,
+              "protect": 0,
+              "size": 1089536,
+              "state": 8192
+            },
+            {
+              "offset": 1089536,
+              "protect": 4,
+              "size": 24576,
+              "state": 4096
+            },
+            {
+              "offset": 1114112,
+              "protect": 0,
+              "size": 1310720,
+              "state": 8192
+            },
+            {
+              "offset": 2424832,
+              "protect": 4,
+              "size": 20480,
+              "state": 4096
+            },
+            {
+              "offset": 2445312,
+              "protect": 0,
+              "size": 265007104,
+              "state": 8192
+            },
+            {
+              "offset": 267452416,
+              "protect": 4,
+              "size": 8192,
+              "state": 4096
+            },
+            {
+              "offset": 267460608,
+              "protect": 0,
+              "size": 57344,
+              "state": 8192
+            },
+            {
+              "offset": 267517952,
+              "protect": 4,
+              "size": 4096,
+              "state": 4096
+            },
+            {
+              "offset": 267522048,
+              "protect": 0,
+              "size": 12288,
+              "state": 8192
+            },
+            {
+              "offset": 267534336,
+              "protect": 4,
+              "size": 901120,
+              "state": 4096
+            }
+          ]
+        },
+        "checked_marker_bytes": 8192,
+        "region_base_offset": 2428928,
+        "region_size": 16384
+      }
+    }
+  ],
+  "commit": "d9f24a41532c118f75edf468ef305276eb193812",
+  "deleted": true,
+  "full_worker_cleanup_proved": false,
+  "image_sha256": "8f2bd4446432e5fd9b580e234f61d7f8ffc376273fee516ac8ae392d8a25e32b",
+  "initialized_workers": 1,
+  "kind": "windows-enclave-worker-inventory-experiment",
+  "marker_clear_rejected": true,
+  "mode": "missing-clear-mutant",
+  "native_machine": "0x8664",
+  "normal_marker_clear_passed": false,
+  "os": 26100,
+  "production_signed": false,
+  "schema": 1,
+  "source_sha256": {
+    "assurance/windows-enclave-probe/synthetic.c": "34751a8b80406d216eb1a3597579a14fc01ce118e7504e394183e645c6bbdfc3",
+    "assurance/windows-enclave-probe/worker.c": "fffdbe536603db6d2c7ccbf0fb17c91ebeaadfb9dd37ab4deaea4b7287b02424",
+    "scripts/cryptography/test-windows-enclave-worker.py": "82a73f9f841215f87e7cb7610d89d0fc524d37e0954dc5c799851f01a77cb120",
+    "scripts/cryptography/windows_enclave_lifecycle.py": "0232dfa69625cfc757baec318c49edd304b118fcb34b876d2c832899298e5ea4",
+    "scripts/cryptography/windows_enclave_worker.py": "361e0eb2457156671e8a74d5cdf10572df7071b26f03074b184644fc5e1ab657",
+    "scripts/cryptography/windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "scripts/cryptography/windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09"
+  },
+  "stable_observed_layout": true,
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false,
+  "synthetic_only": true
+}

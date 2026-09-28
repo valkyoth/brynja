@@ -169,3 +169,84 @@ Downloaded JSON hashes before CRLF normalization:
 | Normal owned allocation | `7863991ae8141089b944f3854133fc60ad8728c34352c3607a49e8fadf7b7c45` |
 | Missing-clear mutant | `87e1fc715ac84978868f0eb08a4823e71802c98daceda030cd3d0fec98e02072` |
 | Cleanup/configuration | `32bcf006df64b95dcf7eb29a36372865ed5fee999b8afe2293099c7bc9060d14` |
+
+## Follow-up: host-side failure cleanup
+
+At clean commit `d2236a93cd965ced3c8b61e2d0b8c138fe34cb80`, the driver now attempts
+clearing after interrupted operations, rather than leaving every dirty failure
+for enclave teardown. It queries the operation phase, clears when necessary,
+requires complete zero readback and locked-page observations, and only then
+unlocks/releases. Cleanup cannot turn the original operation error into success.
+If cleanup itself fails, no explicit dirty unlock/release occurs and the run
+fails; enclosing synthetic enclave deletion is still not an erasure proof.
+
+The Azure run injected four one-shot **host Python exceptions**, around real
+native calls, using the unchanged signed normal image:
+
+| Injected point | Required recovery observed |
+| --- | --- |
+| [Before fill](../assurance/windows-protection-observations/owned-before-fill-d2236a93.json) | Verify initial zeros while locked, unlock, release |
+| [After fill](../assurance/windows-protection-observations/owned-after-fill-d2236a93.json) | Clear the written payload, read back zeros while locked, unlock, release |
+| [After clear](../assurance/windows-protection-observations/owned-after-clear-d2236a93.json) | Recover a lost successful-clear reply from phase plus zero readback; do not assume it never executed |
+| [Post-write query](../assurance/windows-protection-observations/owned-after-write-query-d2236a93.json) | Clear despite the query failure, then successfully re-observe locked pages before unlock/release |
+
+Every trace also requires subsequent termination/deletion and retention of the
+original injected error. Exact-trace tests reject missing, reordered or repeated
+cleanup events. All [17 regressions](../assurance/windows-protection-observations/owned-tests-d2236a93.txt)
+pass on Linux and Windows. The [missing-clear image under an injected failure](../assurance/windows-protection-observations/owned-failed-recovery-d2236a93.txt)
+returns exit 1 at the failure-path clearing check, not a successful recovery
+record. Refreshed [normal](../assurance/windows-protection-observations/owned-normal-d2236a93.json)
+and [mutant](../assurance/windows-protection-observations/owned-mutant-d2236a93.json)
+observations retain their original distinct signed image hashes.
+
+The C image and configuration source hashes did not change; their earlier build
+and signing records still identify those exact binaries. All nine driver/source
+hashes in the new records match the new commit. The exact
+[run script](../assurance/windows-protection-observations/brynja-owned-faults-run.cmd.txt),
+[run log](../assurance/windows-protection-observations/owned-run-d2236a93.txt) and
+[cleanup observation](../assurance/windows-protection-observations/owned-cleanup-d2236a93.json)
+are retained. The downloaded archive SHA-256 before transcript/CRLF normalization
+was `15a39a5636aec3f6c121b894bd87aad217f5354300f38d1f2193deb2bbfc1776`.
+
+These are not native exception, Rust unwind, forced cancellation, concurrent
+entry or process-crash tests. No production claim expands as a result.
+
+## Execution-boundary assessment
+
+The Linux `ProtectedStack::run` contract includes joining a fresh worker and
+clearing its owned stack after normal return or recoverable panic. It explicitly
+excludes unrelated heap allocations, dynamically allocated TLS, panic hooks and
+caller copies. Strict sessions constrain their own secret-bearing execution
+separately. The Windows design must account for actual secret-bearing regions;
+it must not invent a promise to erase every unrelated TLS object, nor use the
+generic resource exclusions to excuse new secret-bearing runtime copies.
+
+The reviewed [enclave initialization structure](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-enclave_init_info_vbs)
+accepts a thread count, not a caller-owned stack. The reviewed
+[Vertdll surface](https://learn.microsoft.com/en-us/windows/win32/trusted-execution/enclaves-available-in-vertdll)
+does not list the ordinary fiber-creation/switch APIs. This is not a claim that
+custom execution is impossible; it means the available evidence does not justify
+treating the enclave worker as the existing protected-stack adapter.
+
+A prospective fixed-operation trampoline needs independent evidence for:
+
+1. Stack alignment, shadow space, preserved registers and return-address
+   handling under the [Windows x64 ABI](https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention).
+2. Correct exception/unwind descriptions and behavior, not only a successful
+   normal return. Microsoft's [unwind contract](https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64)
+   describes metadata for stack-allocating/calling functions; a handwritten
+   stack switch must not omit or invent that metadata.
+3. Guard/stack-limit and control-flow-protection behavior on the actual platform.
+   No undocumented TEB edits or fallback to the unmanaged stack are approved.
+4. A fixed first-party operation body with reviewed runtime imports and secret
+   flow. Arbitrary Rust closures, panic payloads or host object layouts must not
+   cross the enclave boundary. TLS/runtime helpers need an actual source and
+   emitted-code review, not an assumption that `no_std` excludes every copy.
+5. Leaving execution storage before clearing its complete owned region, while
+   it remains locked, including supported error and recoverable-unwind paths.
+   Disabling unwind would narrow the current contract and cannot silently stand
+   in for implementing it.
+
+No stack-switch implementation is enabled by this review. The next execution
+prototype must resolve these requirements with synthetic work before crypto
+integration; the current array/allocation tests are not worker qualification.

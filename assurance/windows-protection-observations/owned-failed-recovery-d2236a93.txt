@@ -1,0 +1,46 @@
+Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned.py", line 209, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned.py", line 197, in main
+    record = bounded(command, args.missing_clear_mutant, args.fault)
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned.py", line 139, in bounded
+    require(result.returncode == 0 and not result.stderr and 0 < len(result.stdout) <= 32768,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'bounded clean owned child required: ' + result.stderr[-2048:])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: bounded clean owned child required: 0\repo\scripts\cryptography\windows_enclave_owned.py", line 68, in <lambda>
+    call = lambda operation: api.call(routine, operation)
+                             ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned_faults.py", line 44, in call
+    self.fault.inject('after-fill')
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned_faults.py", line 24, in inject
+    raise Injected(stage)
+windows_enclave_owned_faults.Injected: after-fill
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned.py", line 209, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned.py", line 181, in main
+    record = run_fault(WorkerNative(), Windows(), image, args.fault)
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned_faults.py", line 110, in exercise
+    run(Api(api, fault), Host(host, fault), image, False)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned.py", line 122, in exercise
+    cycles = [allocation_cycle(api, host, routine, base, mutant)]
+              ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned.py", line 104, in allocation_cycle
+    release_owned(call, host, address, locked)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_owned.py", line 59, in release_owned
+    require(call(3) == SIZE and call(6) == 3, 'failure-path clearing required')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: failure-path clearing required

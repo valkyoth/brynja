@@ -103,3 +103,9 @@ Two cycles pass; a compiled missing-clear mutant refuses release and never
 explicitly unlocks its dirty payload. Twelve focused regressions pass locally
 and on Windows. This is not yet an execution-stack adapter or failure-path
 erasure proof; strict Windows support and release policy remain unchanged.
+
+The owned-allocation driver now also clears on recoverable host-side failures
+without swallowing the original error. Four native one-shot fault-injection
+cases pass, including lost replies after a real write/clear; a missing-clear
+image fails recovery. Seventeen focused regressions pass on Linux and Windows.
+This does not yet establish native exception/unwind or execution-stack cleanup.

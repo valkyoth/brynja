@@ -1,0 +1,28 @@
+@echo off
+setlocal
+set PATH=C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;%PATH%
+cd /d C:\brynja-v0250\repo
+git fetch C:\Users\azureuser\brynja-enclave-owned-faults.bundle HEAD
+if errorlevel 1 exit /b 1
+git switch --detach d2236a93cd965ced3c8b61e2d0b8c138fe34cb80
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-owned.py > C:\brynja-v0250\owned-tests-d2236a93.txt 2>&1
+if errorlevel 1 exit /b 1
+python scripts\cryptography\windows_enclave_owned.py C:\brynja-v0250\enclave-owned\owned.dll > C:\brynja-v0250\owned-normal-d2236a93.json 2> C:\brynja-v0250\owned-normal-d2236a93.err
+if errorlevel 1 exit /b 1
+python scripts\cryptography\windows_enclave_owned.py C:\brynja-v0250\enclave-owned\owned-mutant.dll --missing-clear-mutant > C:\brynja-v0250\owned-mutant-d2236a93.json 2> C:\brynja-v0250\owned-mutant-d2236a93.err
+if errorlevel 1 exit /b 1
+for %%F in (before-fill after-fill after-clear after-write-query) do (
+  python scripts\cryptography\windows_enclave_owned.py C:\brynja-v0250\enclave-owned\owned.dll --fault %%F > C:\brynja-v0250\owned-%%F-d2236a93.json 2> C:\brynja-v0250\owned-%%F-d2236a93.err
+  if errorlevel 1 exit /b 1
+  echo OBSERVED: %%F
+)
+python scripts\cryptography\windows_enclave_owned.py C:\brynja-v0250\enclave-owned\owned-mutant.dll --fault after-fill > C:\brynja-v0250\owned-failed-recovery-d2236a93.txt 2>&1
+if errorlevel 2 exit /b 1
+if not errorlevel 1 exit /b 1
+echo EXPECTED_REJECTION: missing-clear image cannot recover
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\azureuser\brynja-enclave-dump-cleanup.ps1 > C:\brynja-v0250\owned-cleanup-d2236a93.json
+if errorlevel 1 exit /b 1
+git status --porcelain
+echo OWNED_FAULT_EXPERIMENT: COMPLETE
+exit /b 0

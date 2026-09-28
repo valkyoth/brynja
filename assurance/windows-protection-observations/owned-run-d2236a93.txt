@@ -1,0 +1,10 @@
+From C:\Users\azureuser\brynja-enclave-owned-faults.bundle
+ * branch              HEAD       -> FETCH_HEAD
+Previous HEAD position was 89e082e7 test(windows): probe owned enclave allocation cleanup ordering
+HEAD is now at d2236a93 test(windows): clear owned enclave storage after host failures
+OBSERVED: before-fill
+OBSERVED: after-fill
+OBSERVED: after-clear
+OBSERVED: after-write-query
+EXPECTED_REJECTION: missing-clear image cannot recover
+OWNED_FAULT_EXPERIMENT: COMPLETE

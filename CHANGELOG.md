@@ -5,11 +5,16 @@
 - Add resumable detached command checkpoints and disjoint task partitions.
   Internal Miri runs now sample registered SHA-1/MD5/SHA-3/KMAC/TupleHash/ParallelHash matrices;
   public checkpoints retain every original combination through exact case tasks.
-  Native matrices and interpreter safety checks remain intact. Wider timing and
-  remote qualification are pending; the cancelled full sweep remains incomplete.
+  Native matrices and interpreter safety checks remain intact. The two-host
+  routine campaign completed all 562 tasks; the cancelled earlier sweep remains
+  incomplete and is not imported as successful evidence.
   Bind full-fallback scope per phase so Miri-only driver changes do not rerun
   unrelated ASan/Kani campaigns merely because approval was required.
   See [Miri verification design](docs/miri-verification-design.md).
+- Complete and validate the separate 558-command repository/compiler-matrix/
+  ASan/Kani run at `f68d3a4d`; retain 560 unchanged AWS Miri tasks and refresh
+  the two affected legacy tasks successfully. Original receipts and source
+  identities remain unchanged. See the [verification record](docs/verification-v0.24.49.md).
 - Record both owner-supplied retests: no open Critical/High/Medium/Low findings;
   F1 is closed at the opaque-kernel boundary, not as whole-process erasure.
   Instrumented builds and platform/caller residuals retain their stated limits.
@@ -17,7 +22,7 @@
   Linux strict portable/accelerated checks pass; Apple/Windows strict sessions
   correctly reject and remain planned for v0.24.51/v0.24.50 respectively.
   Dedicated x86 SHA512 still has SDE evidence only, not native qualification.
-  Final local verification and GitHub approval remain pending. No crates are
+  Final release-gate checks and GitHub approval remain pending. No crates are
   selected for publication. The entries below retain implementation history;
   their incremental pending-work statements are superseded by this status and
   the [current pentest ledger](security/pentest/v0.24.49.md).

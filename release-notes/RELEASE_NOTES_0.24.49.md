@@ -9,7 +9,10 @@ Native Linux Intel/Arm, Apple M2 and Windows MSVC runtime collections passed.
 Linux strict portable/accelerated sessions passed; Apple/Windows strict sessions
 reject as designed, with support planned for v0.24.51/v0.24.50 respectively.
 Dedicated x86 SHA512 has SDE evidence only, not native-silicon qualification.
-Final local release verification and GitHub approval remain pending.
+The 558-command repository/compiler-matrix/ASan/Kani run is complete and its
+receipt validated. Miri has 560 unchanged AWS tasks reused plus two refreshed
+legacy tasks passed. See the [verification record](../docs/verification-v0.24.49.md).
+Final release-gate checks and GitHub approval remain pending.
 No crates are selected for publication. The incremental implementation notes
 below are historical; their pending-retest/integration wording is superseded by
 this status. Caller/platform residuals and informational instrumented-build
@@ -19,8 +22,8 @@ limitations remain in force.
   partitions. Internal runs use a bounded sample of costly SHA-1, MD5, SHA-3, KMAC,
   TupleHash and ParallelHash matrices; public checkpoints use all original combinations.
   Full native test matrices remain unchanged, and no Miri safety checks are
-  disabled. Timing and multi-host qualification are still in progress; the
-  cancelled full sweep is not a successful release receipt. See the
+  disabled. The two-host routine campaign passed all 562 tasks; the cancelled
+  earlier full sweep is not a successful release receipt. See the
   [Miri verification design](../docs/miri-verification-design.md).
 
 - Add the separate `brynja-strict` facade over protected modern SHA-2,

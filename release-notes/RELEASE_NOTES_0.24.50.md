@@ -33,3 +33,11 @@ dump exclusion; Windows strict constructors remain unsupported. Temporary test
 configuration and raw dumps were removed, with cleanup independently checked.
 Worker-stack review also tracks OS-owned fiber register state, which a stack-only
 wipe would not cover. No weaker deployment contract has been substituted.
+
+The follow-up AWE physical-memory experiment also found all 8 KiB of its
+synthetic payload in full local dumps on two native runs. Allocation, normal
+clearing/release and all 39 probe tests passed; dump exclusion did not. The
+temporary Lock Pages account right was removed and exact prior rights restored;
+a fresh-token negative test rejected the unprivileged AWE path. The observation
+is recorded without claiming Windows strict qualification. Production behavior
+and release gates remain unchanged.

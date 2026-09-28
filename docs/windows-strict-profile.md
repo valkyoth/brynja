@@ -188,7 +188,7 @@ The reviewed alternatives are not established substitutes:
   Those documented properties do not establish dump exclusion or a guarded
   worker-stack design. No privilege was granted or enabled for this experiment.
 
-### Worker-stack design review
+### AWE experiment and counterexample
 
 The next synthetic experiment uses `windows_awe_probe.py` through
 `windows_wer_probe.py --allow-app-local-dump --mapping-kind awe`. It does not
@@ -211,6 +211,43 @@ Local tests cover allocation bounds, partial allocation/free, opaque PFN
 preservation, acquisition/cleanup failures, privilege failure and mapping-kind
 selection. Native results must be recorded separately; these tests are not
 evidence that Windows excludes AWE memory from crash dumps.
+
+On 2026-09-28, two native runs at clean commit
+`c8f144d337d2b512a3964302acbf63b3a134bc07` on the same Windows Server 2025
+build 26100 host found all 8,192 bytes of the AWE payload in the full local
+crash dump, alongside all 8,192 control bytes. The
+[recorded observation](../assurance/windows-protection-observations/awe-local-dump-x86_64-c8f144d3.json)
+therefore rejects AWE alone as the missing dump-exclusion mechanism. Normal
+mapping cleanup passed before each crash. All 39 probe regression tests passed
+locally and on Windows. This is a negative platform observation, not a passed
+strict qualification or a defect in shipped Windows code.
+
+The downloaded repeat summary has SHA-256
+`3b940498ababc68e6ef2d730aeacbbae270e647cafc1b8705cda1b6c0ee2b913`;
+only line endings were normalized in the committed copy. All five source
+hashes matched the committed probe. Raw dumps were deleted remotely, never
+downloaded. The account-right grant was limited to `SeLockMemoryPrivilege`
+and removed afterward; the original explicit account-right set was restored
+exactly. A fresh SSH token no longer contained the right, and another native
+probe then failed closed without emitting success evidence. Independent cleanup
+inspection found no probe registry keys, executables or dump directories.
+
+The account grant itself is broader than the probe's token adjustment: Windows
+OpenSSH issued a new Administrator token with the right already enabled during
+this experiment. It would be inaccurate to claim the temporary grant affected
+only one process. No application deployment policy is inferred from this
+disposable-host setup, and no persistent grant is left in place.
+
+Changing to an enclave is a different architecture, not a fallback allocation.
+Microsoft's [VBS enclave requirements](https://learn.microsoft.com/en-us/windows/win32/trusted-execution/vbs-enclaves)
+include enabled VBS/HVCI, supported recent Windows versions, SDK/tooling and
+signing prerequisites. The sensitive workload must execute inside that boundary;
+ordinary host Rust workers cannot simply dereference it as protected storage.
+No enclave implementation, signing setup or Windows admission has been added.
+The remaining design decision must not turn these negative results into a
+silent weakening of the existing strict contract.
+
+### Worker-stack design review
 
 An OS fiber is a candidate for leaving a worker stack before cleanup, not yet
 an approved adapter. Microsoft's

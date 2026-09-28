@@ -22,3 +22,9 @@ checks allocation/guard geometry, page locking, WER registration and cleanup,
 with portable failure-injection regressions. Its output is explicitly not
 strict qualification; crash-dump exclusion and worker-stack protection remain
 unverified. No production Rust behavior or dependency is changed by this probe.
+
+A separate, explicitly approved local-crash-dump experiment is prepared with
+synthetic control mappings, bounded address-based dump parsing and cleanup of
+its own application-specific configuration. Parser and orchestration regressions
+pass locally; native execution is pending. Worker-stack review also tracks
+OS-owned fiber register state, which a stack-only wipe would not cover.

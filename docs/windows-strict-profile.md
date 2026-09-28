@@ -112,7 +112,51 @@ does not prove it is locked. Release uses the original reservation address,
 zero size and `MEM_RELEASE`, as specified by
 [VirtualFree](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualfree).
 
-### Host request
+### Crash-dump experiment (explicit approval required)
+
+`scripts/cryptography/windows_wer_probe.py --allow-app-local-dump` is a separate
+opt-in experiment for a disposable Windows host. It copies the installed Python
+executable to a unique probe name, creates only that application's `LocalDumps`
+subkey, and deliberately terminates its own synthetic child with
+[RaiseFailFastException](https://learn.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-raisefailfastexception).
+The child has two locked synthetic mappings: one registered for WER exclusion
+and an unregistered positive control. The parent requires a real full-memory
+dump and complete control bytes, then measures inclusion of the registered
+mapping at its exact virtual address. Missing dumps, truncated data and absent
+controls are errors, never evidence of exclusion. Partial inclusion is reported
+as inclusion. No broad substring search is used.
+
+Raw dumps are not printed, committed or downloaded. The test removes its own
+dump directory, application-specific policy and copied executable after the
+experiment; cleanup failures prevent a successful result. Existing application
+keys are rejected, and global WER settings are not modified. Only selected OS
+environment variables reach the child, not inherited developer/cloud tokens.
+The explicit flag is required before any native setup. Do not run this test on
+a production host or feed it real secrets. Native execution awaits owner
+approval; portable parser and rollback tests do not prove Windows exclusion.
+
+The bounded reader follows the
+[minidump header](https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_header)
+and [full-memory descriptor list](https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory64_list).
+It rejects duplicate/overlapping descriptors, out-of-file ranges and incorrect
+format/stream types before examining the two synthetic targets. This experiment
+tests local crash dumps, not custom dump writers or privileged snapshots.
+
+### Worker-stack design review
+
+An OS fiber is a candidate for leaving a worker stack before cleanup, not yet
+an approved adapter. Microsoft's
+[SwitchToFiber contract](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-switchtofiber)
+saves/restores fiber state; its
+[DeleteFiber contract](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-deletefiber)
+also names saved registers and fiber data in addition to the stack. Neither is
+a promise of protected allocation or compiler-resistant erasure. A candidate
+must account for saved state outside the stack, FLS/TLS destructors, stack-growth
+pages and recoverable unwinding before it can satisfy the existing contract.
+No Python fiber switching or unreviewed stack-pointer manipulation is being
+used to imply Rust worker qualification.
+
+### Available host
 
 Initial observation on 2026-09-28: the mapping probe and all 15 regression tests
 passed on native x86-64 Windows Server 2025 (build 26100), using Python 3.13.15

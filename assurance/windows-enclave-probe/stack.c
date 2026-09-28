@@ -76,11 +76,13 @@ __declspec(dllexport) void* CALLBACK PublicStack(void* context) {
         return (void*)stack_data;
     }
     if (operation == 2) { return (void*)geometry_ok(); }
-    if (operation >= 10 && operation <= 13 && geometry_ok()) {
+    if (operation >= 10 && operation <= 15 && geometry_ok()) {
         steps = 0;
         frame_address = 0;
         __try {
-            if (operation >= 12) {
+            if (operation >= 14) {
+                (void)PublicSwitch(NULL, operation & 1);
+            } else if (operation >= 12) {
                 (void)PublicSwitch((void*)(stack_data + STACK_BYTES), operation & 1);
             } else {
                 (void)PublicStackWork(operation & 1);

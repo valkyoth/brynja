@@ -12,7 +12,8 @@ from windows_protection_api import Windows
 from windows_protection_probe import require, Layout, locked_pages
 
 SIZE, PAGE, RESERVED = 65536, 4096, 131072
-MODES = {'os-normal': 10, 'os-unwind': 11, 'owned-normal': 12, 'owned-unwind': 13}
+MODES = {'os-normal': 10, 'os-unwind': 11, 'owned-normal': 12, 'owned-unwind': 13,
+         'trampoline-normal': 14, 'trampoline-unwind': 15}
 SOURCES = ('assurance/windows-enclave-probe/synthetic.c',
            'assurance/windows-enclave-probe/stack.c',
            'assurance/windows-enclave-probe/stack_x64.asm',

@@ -192,8 +192,11 @@ enclave-only options. Preserve `dumpbin /unwindinfo /disasm` output as well as
 the normal load-configuration/import and signing records. Use a disposable host:
 an unsupported alternate-stack exception may terminate the bounded child.
 
-Run the same image separately in `os-normal`, `os-unwind`, `owned-normal` and
-`owned-unwind` modes with `scripts/cryptography/windows_enclave_stack.py`.
+Run the same image separately in `os-normal`, `os-unwind`, `owned-normal`,
+`owned-unwind`, `trampoline-normal` and `trampoline-unwind` modes with
+`scripts/cryptography/windows_enclave_stack.py`. The two trampoline controls
+use the same assembly frame and call instruction without switching stacks,
+separating that control from a direct C call on the OS-managed stack.
 The original-stack modes are controls, not protected-stack claims. Each run
 allocates a guarded 64-KiB payload, locks every page and checks their residency
 before entry. The fixed worker writes a public local array and clears it in
@@ -205,7 +208,7 @@ then unlock/release and enclave teardown.
 
 Failure, wrong markers, native crash, or timeout is **inconclusive/failure**, not
 an expected rejection that qualifies a platform. A successful normal return
-does not establish exception support. Even all four passes would not qualify
+does not establish exception support. Even all six passes would not qualify
 Rust panic unwinding, TLS/runtime copies, full ABI/register preservation, stack
 growth, cancellation, dump exclusion or production signing. No production
 module links this prototype, and Windows strict constructors remain unsupported.

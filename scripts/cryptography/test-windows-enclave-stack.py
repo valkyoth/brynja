@@ -46,7 +46,7 @@ def setup(mode):
 
 
 class Tests(unittest.TestCase):
-    def test_four_modes_require_exact_markers_and_cleanup(self):
+    def test_six_modes_require_exact_markers_and_cleanup(self):
         for mode in probe.MODES:
             api, host = setup(mode)
             record = probe.exercise(api, host, 'stack.dll', mode)
@@ -150,7 +150,8 @@ class Tests(unittest.TestCase):
         code = [line.strip() for line in lines if line.strip() and not line.lstrip().startswith(';')]
         self.assertEqual(code, ['EXTERN PublicStackWork:PROC', 'PUBLIC PublicSwitch', '.code',
             'PublicSwitch PROC FRAME', 'push rbp', '.pushreg rbp', 'mov rbp, rsp',
-            '.setframe rbp, 0', '.endprolog', 'mov rsp, rcx', 'sub rsp, 32', 'mov rcx, rdx',
+            '.setframe rbp, 0', '.endprolog', 'test rcx, rcx', 'jz current_stack',
+            'mov rsp, rcx', 'current_stack:', 'sub rsp, 32', 'mov rcx, rdx',
             'call PublicStackWork', 'lea rsp, [rbp]', 'pop rbp', 'ret', 'PublicSwitch ENDP', 'END'])
 
 

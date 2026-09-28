@@ -51,3 +51,35 @@ one thread, image-ID-bound enclave runtime imports and the actual tools used.
 Records hash the supplied image and checked-out source, but do **not** prove that
 the image was built from that source. Preserve the build/signing transcript and
 review that association; these records are observations, not release admission.
+
+## Controlled full-local-dump experiment
+
+`dump.c` includes the same non-debuggable image configuration and adds an
+8-KiB volatile **public synthetic** region. `PublicRegion` only fills this fixed
+region, returns its diagnostic address, verifies the marker internally, or
+clears and verifies it. It does not accept user data or perform cryptography.
+Build this file instead of `synthetic.c`, following the same enclave build,
+identity-binding, ephemeral test-signing and transcript-preservation procedure.
+Do not overwrite an earlier evidence image without retaining its build record.
+
+On an authorized disposable Windows host, from a clean source checkout:
+
+```text
+python scripts/cryptography/test-windows-enclave-dump.py
+python scripts/cryptography/windows_enclave_dump.py X:\experiment\dump.dll --allow-app-local-dump
+```
+
+This deliberately crashes only a uniquely named copied Python child, with a
+temporary application-specific WER full-local-dump policy. It first verifies
+the enclave marker, clears/readbacks it, then refills/re-verifies it. A separate
+ordinary mapping contains a distinct positive-control marker. Analysis requires
+the exact child dump and the complete positive control; no dump or failed setup
+is **inconclusive**, never evidence of exclusion. Partial or zero-filled enclave
+coverage is not reported as absence. The raw dump stays on the host and is
+removed along with the owned policy and executable. No signing keys or tool
+credentials are passed into the child environment.
+
+Only normal-return/preflight clearing is tested; the intentional fail-fast skips
+destructors. Even a genuinely absent enclave region would establish only this
+dump-path observation, not nonpageability, arbitrary snapshot protection,
+complete worker/TLS/spill cleanup, production signing or strict qualification.

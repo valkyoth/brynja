@@ -1,0 +1,32 @@
+{
+  "app_policy_removed": true,
+  "child_exit_code": 3221227010,
+  "commit": "5a49e0e3e2e15d4492b641af0c685468d5052233",
+  "copied_executable_removed": true,
+  "kind": "windows-wer-local-dump-experiment",
+  "native_machine": "0x8664",
+  "observations": {
+    "control": {
+      "complete_marker": true,
+      "expected_bytes": 8192,
+      "included_bytes": 8192
+    },
+    "registered_region_absent_in_this_dump": false,
+    "wer_registered_region": {
+      "complete_marker": true,
+      "expected_bytes": 8192,
+      "included_bytes": 8192
+    }
+  },
+  "os": 26100,
+  "raw_dump_removed": true,
+  "schema": 1,
+  "source_sha256": {
+    "windows_minidump.py": "c38e8701f53be374d749cbc4fec1432e1ebcd0cc783887178126d4cd620b0574",
+    "windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09",
+    "windows_wer_probe.py": "aa36651ccd9dac4545d2d34d511e39f2e47d263f00db691fcdd84e283ccb623b"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false
+}

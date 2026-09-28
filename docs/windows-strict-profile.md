@@ -132,8 +132,9 @@ experiment; cleanup failures prevent a successful result. Existing application
 keys are rejected, and global WER settings are not modified. Only selected OS
 environment variables reach the child, not inherited developer/cloud tokens.
 The explicit flag is required before any native setup. Do not run this test on
-a production host or feed it real secrets. Native execution awaits owner
-approval; portable parser and rollback tests do not prove Windows exclusion.
+a production host or feed it real secrets. The owner approved this scoped
+experiment on 2026-09-28; portable parser and rollback tests alone do not prove
+Windows exclusion.
 
 The bounded reader follows the
 [minidump header](https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_header)
@@ -141,6 +142,51 @@ and [full-memory descriptor list](https://learn.microsoft.com/en-us/windows/win3
 It rejects duplicate/overlapping descriptors, out-of-file ranges and incorrect
 format/stream types before examining the two synthetic targets. This experiment
 tests local crash dumps, not custom dump writers or privileged snapshots.
+
+#### Native result: WER registration does not exclude this local dump
+
+Two runs on native x86-64 Windows Server 2025 build 26100, from clean commit
+`5a49e0e3e2e15d4492b641af0c685468d5052233`, included **all 8,192 bytes** of
+the locked, WER-registered mapping in the full local crash dump. Its synthetic
+marker matched completely, as did the separate unregistered control. The
+[observation record](../assurance/windows-protection-observations/wer-local-dump-x86_64-5a49e0e3.json)
+therefore reports `registered_region_absent_in_this_dump: false` and
+`strict_qualified: false`. All 29 mapping/parser/orchestration tests passed on
+the same host. Test success does not turn the negative OS result into admission.
+
+The first PowerShell wrapper did not retain its process exit-code property;
+the Python experiment nevertheless produced its completed result. Repeating
+with `Start-Process -Wait -PassThru` returned exit zero and reproduced the same
+summary. Both downloaded summary files have SHA-256
+`a13c40df445e95d9b0b72e93851b0024563c7e7c53a457da2cb69d892e2e60aa`;
+only line endings were normalized in the committed copy. Probe-source hashes
+were checked locally. Raw dumps were deleted on the host, not downloaded.
+An independent remote inspection confirmed that the unique application keys,
+copied executables and temporary dump directories were absent after each run.
+
+This rejects the proposed combination of `VirtualLock` plus WER registration
+as sufficient evidence for local crash-dump exclusion. It does not demonstrate
+that every possible Windows design is impossible, nor does it claim a defect
+in shipped Brynja code: Windows strict constructors still return unsupported.
+It is consistent with Microsoft's separate
+[LocalDumps configuration contract](https://learn.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps).
+
+Do not silently replace region protection with a requirement to disable dumps.
+Such a deployment-dependent contract would need an explicit owner decision and
+separate API/documentation review. Further design work must either demonstrate
+an adequate alternative or leave Windows strict support unavailable.
+
+The reviewed alternatives are not established substitutes:
+
+- [WerSetFlags](https://learn.microsoft.com/en-us/windows/win32/api/werapi/nf-werapi-wersetflags)
+  changes process-wide WER reporting, including optional heap omission; its
+  documentation does not establish exclusion of these independently configured
+  local dumps. No such process-wide flag was changed in this experiment.
+- [AWE](https://learn.microsoft.com/en-us/windows/win32/memory/address-windowing-extensions)
+  provides nonpaged physical storage but requires the Lock Pages in Memory
+  privilege and disallows ordinary page protection changes within AWE ranges.
+  Those documented properties do not establish dump exclusion or a guarded
+  worker-stack design. No privilege was granted or enabled for this experiment.
 
 ### Worker-stack design review
 

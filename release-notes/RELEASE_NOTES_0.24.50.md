@@ -26,5 +26,10 @@ unverified. No production Rust behavior or dependency is changed by this probe.
 A separate, explicitly approved local-crash-dump experiment is prepared with
 synthetic control mappings, bounded address-based dump parsing and cleanup of
 its own application-specific configuration. Parser and orchestration regressions
-pass locally; native execution is pending. Worker-stack review also tracks
-OS-owned fiber register state, which a stack-only wipe would not cover.
+pass locally and on Windows. Two native runs found that the full local crash
+dump still includes all bytes of the WER-registered synthetic mapping. This
+candidate protection mechanism is therefore insufficient for claiming local
+dump exclusion; Windows strict constructors remain unsupported. Temporary test
+configuration and raw dumps were removed, with cleanup independently checked.
+Worker-stack review also tracks OS-owned fiber register state, which a stack-only
+wipe would not cover. No weaker deployment contract has been substituted.

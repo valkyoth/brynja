@@ -83,3 +83,26 @@ Only normal-return/preflight clearing is tested; the intentional fail-fast skips
 destructors. Even a genuinely absent enclave region would establish only this
 dump-path observation, not nonpageability, arbitrary snapshot protection,
 complete worker/TLS/spill cleanup, production signing or strict qualification.
+
+## Host-side residency experiment
+
+The same `dump.c` image can be used without crashing or configuring WER:
+
+```text
+python scripts/cryptography/test-windows-enclave-residency.py
+python scripts/cryptography/windows_enclave_residency.py X:\experiment\dump.dll
+```
+
+This bounded child verifies an ordinary locked positive control, observes all
+pages touched by the enclave's synthetic region (including unaligned edges),
+attempts host-side `VirtualLock`, and records the complete before/after page
+observations and exact lock error. Invalid working-set entries do not establish
+either residency or nonresidency; their `Locked` union member is not interpreted.
+A successful lock is unlocked even if the follow-up query fails. Normal-return
+enclave marker clearing, termination/deletion and control cleanup must succeed.
+No working-set limits, account privileges or host configuration are changed.
+
+This only evaluates that host-side locking mechanism. Rejection does not prove
+enclave pages are pageable, and success would not establish protection of all
+enclave worker stacks, TLS or runtime copies. Production strict support remains
+unqualified. This is public-marker research, not secret processing.

@@ -1,0 +1,24 @@
+@echo off
+setlocal
+set PATH=C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;%PATH%
+cd /d C:\brynja-v0250\repo
+git fetch C:\Users\azureuser\brynja-enclave-stack.bundle HEAD
+if errorlevel 1 exit /b 1
+git switch --detach dfce95d5655ce52df0450e89bd8d14e44bd881ab
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-stack.py
+if errorlevel 1 exit /b 1
+call C:\brynja-v0250\buildtools\VC\Auxiliary\Build\vcvars64.bat
+if errorlevel 1 exit /b 1
+if not exist C:\brynja-v0250\enclave-stack mkdir C:\brynja-v0250\enclave-stack
+cd /d C:\brynja-v0250\enclave-stack
+ml64 /nologo /c /Fostack_x64.obj C:\brynja-v0250\repo\assurance\windows-enclave-probe\stack_x64.asm
+if errorlevel 1 exit /b 1
+cl /nologo /LD /O2 /W4 /WX /MT /guard:cf /Festack.dll C:\brynja-v0250\repo\assurance\windows-enclave-probe\stack.c stack_x64.obj /link /ENCLAVE /NODEFAULTLIB /INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED /LIBPATH:"%VCToolsInstallDir%lib\x64\enclave" /LIBPATH:"%WindowsSdkDir%Lib\%WindowsSDKVersion%ucrt_enclave\x64" libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib
+if errorlevel 1 exit /b 1
+"%WindowsSdkDir%bin\%WindowsSDKVersion%x64\veiid.exe" stack.dll
+if errorlevel 1 exit /b 1
+dumpbin /headers /loadconfig /imports stack.dll
+if errorlevel 1 exit /b 1
+dumpbin /unwindinfo /disasm stack.dll > C:\brynja-v0250\stack-disasm-dfce95d5.txt
+exit /b %ERRORLEVEL%

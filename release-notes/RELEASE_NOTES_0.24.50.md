@@ -109,3 +109,10 @@ without swallowing the original error. Four native one-shot fault-injection
 cases pass, including lost replies after a real write/clear; a missing-clear
 image fails recovery. Seventeen focused regressions pass on Linux and Windows.
 This does not yet establish native exception/unwind or execution-stack cleanup.
+
+Native paired stack tests now identify a concrete remaining blocker: the
+synthetic separate-mapping stack returns normally but terminates its child with
+an access violation during native unwinding. Direct OS-stack and matched
+assembly-trampoline OS-stack exception controls pass. Emitted frame/unwind
+metadata, failure records and nine focused regressions are retained; the failed
+prototype is not admitted, and Windows strict support remains Unsupported.

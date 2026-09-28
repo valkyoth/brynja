@@ -250,3 +250,8 @@ A prospective fixed-operation trampoline needs independent evidence for:
 No stack-switch implementation is enabled by this review. The next execution
 prototype must resolve these requirements with synthetic work before crypto
 integration; the current array/allocation tests are not worker qualification.
+
+The subsequent [native paired stack/unwind comparison](windows-enclave-stack-results.md)
+found that the separate-mapping trampoline returns normally but crashes during
+native exception handling. Direct and matched-trampoline OS-stack controls pass.
+That prototype must not be used as a strict execution adapter.

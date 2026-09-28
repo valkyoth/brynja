@@ -1,0 +1,12 @@
+@echo off
+setlocal EnableDelayedExpansion
+set PATH=C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;%PATH%
+cd /d C:\brynja-v0250\repo
+for %%M in (os-normal os-unwind owned-normal owned-unwind trampoline-normal trampoline-unwind) do (
+  python scripts\cryptography\windows_enclave_stack.py C:\brynja-v0250\enclave-stack-control\stack-control.dll %%M > C:\brynja-v0250\stack-%%M-febff2e2.json 2> C:\brynja-v0250\stack-%%M-febff2e2.err
+  echo %%M EXIT=!errorlevel!
+)
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\azureuser\brynja-enclave-dump-cleanup.ps1 > C:\brynja-v0250\stack-cleanup-febff2e2.json
+if errorlevel 1 exit /b 1
+git status --porcelain
+echo COMPARISON_FINISHED: inspect each outcome, not a qualification pass

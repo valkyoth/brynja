@@ -1,0 +1,7 @@
+os-normal EXIT=0
+os-unwind EXIT=0
+owned-normal EXIT=0
+owned-unwind EXIT=1
+trampoline-normal EXIT=0
+trampoline-unwind EXIT=0
+COMPARISON_FINISHED: inspect each outcome, not a qualification pass

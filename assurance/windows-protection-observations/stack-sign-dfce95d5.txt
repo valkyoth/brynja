@@ -1,0 +1,17 @@
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\enclave-stack\stack.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SignTool Warning: Note that VBS enclave support is changing and updating your VBS enclave may cause you to lose support on older OSes. Please visit https://go.microsoft.com/fwlink/?linkid=2312918 for details.
+
+SIGNTOOL_EXIT: 2
+EPHEMERAL_SIGNING_KEY_REMOVED
+Synthetic stack signing failed or warned; inspect transcript
+At C:\Users\azureuser\brynja-enclave-stack-sign.ps1:6 char:32
++ ... DE -ne 0) { throw 'Synthetic stack signing failed or warned; inspect  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Synthetic stack...pect transc
+   ript:String) [], RuntimeException
+    + FullyQualifiedErrorId : Synthetic stack signing failed or warned; inspec
+   t transcript

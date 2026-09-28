@@ -1,0 +1,27 @@
+Extract from stack-control-disasm-febff2e2.txt; dumpbin /unwindinfo /disasm.
+Full raw file SHA-256: c71258891377272e232bb9c5e8f51da44203f45056ba9b0be6e3ae93c961526a
+Lines 420-430 (PublicSwitch) and 3056-3065 (its unwind entry).
+This is metadata inspection, not successful alternate-stack unwind evidence.
+
+  0000000180001550: 55                 push        rbp
+  0000000180001551: 48 8B EC           mov         rbp,rsp
+  0000000180001554: 48 85 C9           test        rcx,rcx
+  0000000180001557: 74 03              je          000000018000155C
+  0000000180001559: 48 8B E1           mov         rsp,rcx
+  000000018000155C: 48 83 EC 20        sub         rsp,20h
+  0000000180001560: 48 8B CA           mov         rcx,rdx
+  0000000180001563: E8 48 FD FF FF     call        00000001800012B0
+  0000000180001568: 48 8D 65 00        lea         rsp,[rbp]
+  000000018000156C: 5D                 pop         rbp
+  000000018000156D: C3                 ret
+
+  00000024 00001550 0000156E 00005870
+    Unwind version: 1
+    Unwind flags: None
+    Size of prologue: 0x04
+    Count of codes: 2
+    Frame register: rbp
+    Frame offset: 0x0
+    Unwind codes:
+      04: SET_FPREG, register=rbp, offset=0x00
+      01: PUSH_NONVOL, register=rbp

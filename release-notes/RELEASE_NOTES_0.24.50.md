@@ -49,3 +49,11 @@ current EC2 host reports no VBS/SGX enclave support. The separate enclave design
 review identifies required operation/secret-output API changes, residency and
 worker cleanup questions, signing requirements and the host prerequisite.
 No enclave runtime, dependency or weaker Windows profile has been introduced.
+
+A subsequent Azure host reports VBS enclave support with VBS and HVCI running
+after an authorized, non-UEFI-locked configuration and reboot. Secure Boot remains
+enabled. All eight capability-probe tests passed natively and the source-bound
+observation is recorded. This clears the initial host prerequisite only; enclave
+loading/signing, residency, dump exclusion and complete worker cleanup remain
+unqualified. The local test-signing route requires a separate development boot
+configuration and is not production qualification.

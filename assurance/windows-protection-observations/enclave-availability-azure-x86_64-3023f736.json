@@ -1,0 +1,47 @@
+{
+  "commit": "3023f736611dad90e1fa6cbaab78d1a9531c4528",
+  "enclave_created": false,
+  "enclave_types": {
+    "sgx": {
+      "last_error": 0,
+      "supported": false
+    },
+    "sgx2": {
+      "last_error": 0,
+      "supported": false
+    },
+    "vbs": {
+      "last_error": 0,
+      "supported": true
+    }
+  },
+  "host_state": {
+    "processors": [
+      {
+        "Name": "AMD EPYC 9V45 96-Core Processor                ",
+        "SecondLevelAddressTranslationExtensions": true,
+        "VMMonitorModeExtensions": true,
+        "VirtualizationFirmwareEnabled": false
+      }
+    ],
+    "services_configured": [
+      2
+    ],
+    "services_running": [
+      2
+    ],
+    "vbs_status": 2
+  },
+  "kind": "windows-enclave-availability-experiment",
+  "machine_policy_changed": false,
+  "native_machine": "0x8664",
+  "os": 26100,
+  "schema": 1,
+  "source_sha256": {
+    "windows_enclave_probe.py": "fd62fe53082d087e60e6ba04c431b7833c347d6e7ad9054c7faa1865ec57aa27",
+    "windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false
+}

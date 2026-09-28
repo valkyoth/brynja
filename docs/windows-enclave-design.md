@@ -106,8 +106,48 @@ VBS availability and test the exact host before requesting expensive capacity.
 
 ## Next decision and proof sequence
 
+### Azure host prerequisite observation
+
+On 2026-09-28, a disposable Azure Windows Server 2025 Datacenter Azure Edition
+guest (10.0.26100.33438, AMD EPYC 9V45, two logical processors) reported VBS
+enclave support. Before setup, VBS was running but HVCI was not. With the
+owner's authorization, the original DeviceGuard settings were backed up,
+HVCI was enabled without UEFI lock using Microsoft's Secure-Boot-only settings,
+and the guest was rebooted. After reboot, Secure Boot remained enabled,
+`VirtualizationBasedSecurityStatus` was 2 and both service arrays contained 2
+(memory integrity). HVCI `Enabled=1` and `Locked=0` were also checked directly.
+[Microsoft HVCI setup and status definitions](https://learn.microsoft.com/en-us/windows/security/hardware-security/enable-virtualization-based-protection-of-code-integrity).
+
+The [source-bound capability record](../assurance/windows-protection-observations/enclave-availability-azure-x86_64-3023f736.json)
+was collected from clean commit `3023f736611dad90e1fa6cbaab78d1a9531c4528`.
+All eight probe tests passed natively, including the real PowerShell parser.
+Its three source hashes match that commit. The original downloaded JSON hash is
+`f27002b4680d04ed69b8ba02c83a87b700e37fa31290893e2c19b41523532abd`;
+only line endings were normalized for the committed record. Its
+`machine_policy_changed=false` describes the read-only probe itself, not the
+preceding authorized HVCI setup. SGX and SGX2 remain unavailable. The differing
+CPU virtualization observations are preserved rather than interpreted as an
+override of the actual enclave API or DeviceGuard results.
+
+This establishes host prerequisites only: no enclave has been loaded, no
+cryptography executed, and no residency, dump exclusion or cleanup guarantee
+qualified. The ordinary EC2 probe results remain valid negative observations;
+that disposable host is no longer needed for this investigation.
+
+Microsoft's local test-signing walkthrough requires Secure Boot off, test-signing
+mode enabled and memory integrity running. Such a development configuration
+must be recorded separately from the Secure-Boot-enabled observation above;
+it cannot qualify production signing or deployment. Secure Boot remains enabled
+at this checkpoint. An Azure control-plane change is needed before that local
+test-signing route can proceed; production Trusted Signing is a separate route.
+[Microsoft synthetic enclave walkthrough](https://github.com/microsoft/VbsEnclaveTooling/blob/main/docs/HelloWorldWalkthrough.md).
+
+### Remaining proof sequence
+
 1. Obtain a host where the read-only probe reports VBS support and running
    protection; separately establish exact OS revision and HVCI configuration.
+   The Azure observation above satisfies this initial prerequisite, not the
+   subsequent execution or production qualification steps.
 2. Resolve residency and full owned-worker cleanup from documented mechanisms
    plus a bounded synthetic experiment. Do not infer them from isolation.
 3. Review a minimal first-party scalar operation boundary and its new secret

@@ -82,18 +82,34 @@ def mapping(api, shape, value, excluded):
         api.release(base)
 
 
-def child():
+def candidate_mapping(api, shape, kind):
+    if kind == 'awe':
+        from windows_awe_probe import mapping as awe_mapping
+        return awe_mapping(api, shape, 0xa5)
+    require(kind == 'wer', 'known mapping kind required')
+    return mapping(api, shape, 0xa5, True)
+
+
+def child(kind='wer'):
     require(APP.fullmatch(Path(sys.executable).name.lower()) is not None,
             'crash child must use its unique disposable executable')
-    api = Windows()
+    if kind == 'awe':
+        from windows_awe_probe import Awe
+        api = Awe()
+    else:
+        api = Windows()
     api.bind('RaiseFailFastException', None, [PTR, PTR, U32])
     page, granularity = api.geometry()
     shape = layout(page, granularity, page + 1)
+    # Exercise ordinary cleanup before the deliberate fail-fast skips destructors.
+    with candidate_mapping(api, shape, kind):
+        pass
     with ExitStack() as stack:
-        excluded = stack.enter_context(mapping(api, shape, 0xa5, True))
+        excluded = stack.enter_context(candidate_mapping(api, shape, kind))
         control = stack.enter_context(mapping(api, shape, 0x5a, False))
         print(json.dumps({'pid': os.getpid(), 'excluded': excluded, 'control': control,
-                          'size': shape.payload, 'native_machine': api.native_machine}), flush=True)
+                          'size': shape.payload, 'native_machine': api.native_machine,
+                          'mapping_kind': kind, 'cleanup_preflight': True}), flush=True)
         api.dll.RaiseFailFastException(None, None, 0)
         raise ProbeError('RaiseFailFastException unexpectedly returned')
 
@@ -102,16 +118,23 @@ def analyze(blob, target):
     control = dump.observe(blob, target['control'], target['size'], 0x5a)
     require(control['complete_marker'], 'positive control absent/corrupt: exclusion is inconclusive')
     excluded = dump.observe(blob, target['excluded'], target['size'], 0xa5)
+    kind = target.get('mapping_kind', 'wer')
+    require(kind in ('wer', 'awe'), 'known dump mapping kind required')
+    if kind == 'awe':
+        return {'control': control, 'awe_region': excluded,
+                'awe_region_absent_in_this_dump': excluded['included_bytes'] == 0}
     return {'control': control, 'wer_registered_region': excluded,
             'registered_region_absent_in_this_dump': excluded['included_bytes'] == 0}
 
 
-def run_child(executable, source):
+def run_child(executable, source, kind='wer'):
     # Avoid inheriting unrelated tool credentials into the synthetic process dump.
     names = {'SYSTEMROOT', 'WINDIR', 'TEMP', 'TMP', 'USERPROFILE', 'LOCALAPPDATA',
              'APPDATA', 'PROGRAMDATA', 'SYSTEMDRIVE'}
     environment = {key: value for key, value in os.environ.items() if key.upper() in names}
-    with subprocess.Popen([str(executable), str(source), '--synthetic-crash-child'],
+    require(kind in ('wer', 'awe'), 'known child mapping kind required')
+    with subprocess.Popen([str(executable), str(source), '--synthetic-crash-child',
+                           '--mapping-kind', kind],
                           env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                           text=True) as process:
         try:
@@ -124,6 +147,8 @@ def run_child(executable, source):
         require(not errors and len(output) < 4096, 'child setup/diagnostic failure')
         target = json.loads(output)
         require(target['pid'] == process.pid, 'child identity mismatch')
+        require(target['mapping_kind'] == kind and target['cleanup_preflight'] is True,
+                'mapping selection/cleanup preflight mismatch')
         return target, process.returncode
 
 
@@ -131,9 +156,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--allow-app-local-dump', action='store_true')
     parser.add_argument('--synthetic-crash-child', action='store_true', help=argparse.SUPPRESS)
+    parser.add_argument('--mapping-kind', choices=('wer', 'awe'), default='wer')
     args = parser.parse_args()
     if args.synthetic_crash_child:
-        child()
+        child(args.mapping_kind)
         return
     require(args.allow_app_local_dump, 'explicit --allow-app-local-dump approval required')
     Windows()  # Reject unsupported hosts before copying files or changing registry.
@@ -151,7 +177,7 @@ def main():
         with tempfile.TemporaryDirectory(prefix='brynja-wer-dump-') as directory:
             folder = Path(directory)
             with application_policy(winreg, executable.name, folder):
-                target, exitcode = run_child(executable, source)
+                target, exitcode = run_child(executable, source, args.mapping_kind)
             files = list(folder.glob(executable.name + '.' + str(target['pid']) + '.dmp'))
             require(len(files) == 1, 'exactly one child crash dump required; no dump is not exclusion')
             require(32 <= files[0].stat().st_size <= dump.LIMIT, 'bounded dump size')
@@ -161,10 +187,12 @@ def main():
         executable.unlink()
     sources = {name: hashlib.sha256(source.with_name(name).read_bytes()).hexdigest()
                for name in ('windows_wer_probe.py', 'windows_minidump.py',
-                            'windows_protection_api.py', 'windows_protection_probe.py')}
+                            'windows_protection_api.py', 'windows_protection_probe.py',
+                            'windows_awe_probe.py')}
     print(json.dumps({'schema': 1, 'kind': 'windows-wer-local-dump-experiment',
                       'status': 'OBSERVATIONS_ONLY', 'strict_qualified': False,
                       'commit': commit, 'source_sha256': sources,
+                      'mapping_kind': args.mapping_kind, 'cleanup_preflight': target['cleanup_preflight'],
                       'native_machine': target['native_machine'], 'os': sys.getwindowsversion().build,
                       'child_exit_code': exitcode, 'app_policy_removed': True,
                       'raw_dump_removed': True, 'copied_executable_removed': True,

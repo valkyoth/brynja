@@ -190,6 +190,28 @@ The reviewed alternatives are not established substitutes:
 
 ### Worker-stack design review
 
+The next synthetic experiment uses `windows_awe_probe.py` through
+`windows_wer_probe.py --allow-app-local-dump --mapping-kind awe`. It does not
+register the AWE range with WER or substitute an ordinary allocation on failure.
+It maps only the middle payload pages, rejects partial physical allocation,
+and clears/readbacks the complete payload before unmapping, freeing physical
+pages and releasing the virtual reservation on normal cleanup. A cleanup
+preflight runs before the separate deliberate crash. The dump still must contain
+the ordinary-memory positive control. Unmapped boundary protection, dump
+exclusion and worker-stack suitability are not assumed from this design.
+
+This diagnostic requires an already-assigned `SeLockMemoryPrivilege`; it never
+grants account rights. It enables the right only in its short-lived process and
+rejects `ERROR_NOT_ALL_ASSIGNED` even if `AdjustTokenPrivileges` returns true.
+The owner approved a temporary account-right grant on the disposable Windows
+host for this experiment, with restoration afterward. This is not a deployment
+requirement adopted by Brynja and not admission of Windows strict support.
+
+Local tests cover allocation bounds, partial allocation/free, opaque PFN
+preservation, acquisition/cleanup failures, privilege failure and mapping-kind
+selection. Native results must be recorded separately; these tests are not
+evidence that Windows excludes AWE memory from crash dumps.
+
 An OS fiber is a candidate for leaving a worker stack before cleanup, not yet
 an approved adapter. Microsoft's
 [SwitchToFiber contract](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-switchtofiber)

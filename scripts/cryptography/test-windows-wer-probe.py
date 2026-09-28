@@ -131,6 +131,27 @@ class Tests(unittest.TestCase):
                 wer.main()
             native.assert_not_called()
 
+    def test_awe_observation_never_claims_wer_registration(self):
+        target = {'control': 0x20000, 'excluded': 0x10000, 'size': 32, 'mapping_kind': 'awe'}
+        for included in (0, 16, 32):
+            with patch.object(wer.dump, 'observe', side_effect=[{'complete_marker': True},
+                                                               {'included_bytes': included}]):
+                result = wer.analyze(b'', target)
+            self.assertEqual(result['awe_region_absent_in_this_dump'], included == 0)
+            self.assertNotIn('wer_registered_region', result)
+
+    def test_mapping_selection_never_substitutes_locked_storage(self):
+        import windows_awe_probe as awe
+        api, shape = Mock(), Mock()
+        with patch.object(awe, 'mapping') as physical, patch.object(wer, 'mapping') as virtual:
+            wer.candidate_mapping(api, shape, 'awe')
+            physical.assert_called_once_with(api, shape, 0xa5)
+            virtual.assert_not_called()
+            wer.candidate_mapping(api, shape, 'wer')
+            virtual.assert_called_once_with(api, shape, 0xa5, True)
+            with self.assertRaises(ProbeError):
+                wer.candidate_mapping(api, shape, 'other')
+
 
 if __name__ == '__main__':
     unittest.main()

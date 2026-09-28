@@ -140,3 +140,31 @@ TLS allocation padding, other TLS objects or registers. Observed layout reuse is
 not a worker-affinity guarantee. The experiment does not lock these mappings or
 change protection bits, and it does not erase a live stack. `full_worker_cleanup_proved`
 must stay false regardless of the result. Linux/production APIs are unchanged.
+
+## Owned allocation lifecycle experiment
+
+Build `owned.c` normally and with `/DBRYNJA_PROBE_SKIP_CLEAR` as separate images,
+using the same build/signing/transcript procedure. This reserves a distinct
+64-KiB enclave allocation with an 8-KiB committed payload between uncommitted
+guards. The driver checks the enclave's own allocation geometry, locks both
+payload pages before writing public markers, and requires valid/locked working-set
+observations before writes, after writes, and after complete zero readback.
+Only then does it unlock and request release. Two normal allocation cycles must
+pass, including rejection of dirty release, duplicate allocation and stale calls.
+
+```text
+python scripts/cryptography/test-windows-enclave-owned.py
+python scripts/cryptography/windows_enclave_owned.py X:\experiment\owned.dll
+python scripts/cryptography/windows_enclave_owned.py X:\experiment\owned-mutant.dll --missing-clear-mutant
+```
+
+The compiled mutant must reject clearing and release, without explicit host
+unlock of the dirty payload. Its synthetic-only enclave is terminated/deleted;
+that teardown is not claimed as erasure. Setup errors cannot stand in for mutant
+rejection. No privilege/working-set changes or crashes are requested.
+
+This tests host orchestration, not an enclave-verifiable lock attestation:
+an arbitrary caller could bypass the Python driver. No confidential input is
+accepted. The allocation is **not** used as an execution stack, no custom stack
+switch is performed, and OS-managed stack/TLS, register cleanup, dump exclusion,
+hostile-host residency and production signing are not qualified by this test.

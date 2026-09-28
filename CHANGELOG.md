@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.24.49 candidate
+## 0.24.50 candidate
+
+- Begin the Windows strict protected-profile milestone with an OS-contract
+  review and native-probe plan. Windows remains unsupported by strict sessions
+  until the mapping, residency, dump and worker-stack guarantees are established.
+  See [Windows strict-profile design](docs/windows-strict-profile.md).
+- Preserve explicit acceleration, existing Linux behavior and release-gate
+  policy. No support-crate version or crates.io publication is selected.
+
+## 0.24.49
 
 - Add resumable detached command checkpoints and disjoint task partitions.
   Internal Miri runs now sample registered SHA-1/MD5/SHA-3/KMAC/TupleHash/ParallelHash matrices;

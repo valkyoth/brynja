@@ -17,18 +17,18 @@ consolidated into the pre-1.0 roadmap, with final release gates through v0.495.0
 The [reusable cryptography additions](CRYPTO_REUSE_PLAN.md) cover standalone
 Brynja APIs, hardware/SIMD and error-preserving usability, not work in `eth`.
 Current generated planning coverage is 2159 non-RC rows
-(2160 milestones including the release candidate), 131 authorities, 4,462
+(2160 milestones including the release candidate), 131 authorities, 4,463
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.48 signed. The v0.24.48
+Status: v0.20.0 published; milestones through v0.24.49 signed. The v0.24.48
 [hardened multibuffer ownership milestone](hardened-multibuffer-owners.md),
 including scheduled, streaming and threaded ParallelHash integration, passed its
 release checks and GitHub. The v0.24.49 [dedicated x86 SHA-512 work](x86-sha512-execution.md)
-is awaiting owner retest and register-residual disposition: ordinary and hardened routes pass Intel
-SDE correctness, cleanup and emulated sanitizer checks, plus shared metadata and
-workspace integration checks. Pentest, final evidence and release verification
-remain pending. No native SHA512 host is available in the observed fleet.
+passed its retests, final verification and GitHub checks. Dedicated x86 SHA512
+execution remains emulator-qualified, not native-silicon-qualified. The current
+v0.24.50 [Windows strict-profile work](windows-strict-profile.md) starts with
+platform-contract review; Windows strict constructors remain unsupported.
 Existing ordinary SIMD remains public-only and non-erasing. No new crates.io
 publication, independent verification or FIPS validation is claimed.
 

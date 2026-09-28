@@ -53,8 +53,8 @@ FILES = (
     WORKFLOW,
 )
 EXPECTED_SHA256 = {
-    MANIFEST: "f121a710f97aff69c2887993d067e905571c20853a26d08701374b25dcaa40fe",
-    LOCK: "ebffe020b5bc7d77c2071dc778447321253799488168f2cfb2969d944248689b",
+    MANIFEST: "50e59556c885d29f5bb44bad95c4e0810adf07f80ba65361670a6c4126f53fd0",
+    LOCK: "481360ab84ed85ccbaf6c9a5a27528086a78eeaa84bf2481ca4e9abbfe5b51f9",
     LIB: "436b9262248d811103f88fd88004bbee101cef72e56130d1c24b207b437ebbe7",
     ALGORITHMS: "f5c798334508de76015c92f2929dee7b51e7b76a61fe3bc353bf67e4677a1e63",
     BIT_INPUTS: "8f882911914e82ce7dfef7713296a696f5d3966ea9f55ee9d0cdda8dfb65812d",
@@ -128,7 +128,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.49", ("src/lib.rs",)),
+    ("brynja", "0.24.50", ("src/lib.rs",)),
 )
 
 
@@ -171,7 +171,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.49", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.50", "default-features": False},
         "brynja-hash-sha2": {
             "path": "../../crates/brynja-hash-sha2", "version": "=0.1.0",
             "default-features": False, "features": ["cpu"],

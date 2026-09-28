@@ -4814,14 +4814,14 @@ Exit criteria:
 
 ### v0.24.49 - x86 Dedicated SHA-512 Backend
 
-Status: in progress
+Status: released
 
 Dedicated ordinary and owner-backed hardened kernels and
 SHA-512-family routing implemented; Intel SDE correctness, compiler cleanup,
 compiled lifecycle/route mutants and emulated ASan/LSan pass. Shared assurance
 metadata, workspace tests/doctests, Clippy and documentation checks pass;
-pentest remediation is awaiting owner retest and register-residual disposition,
-with final release verification pending. Native SHA512
+pentest retests, final release verification and GitHub checks passed before the
+signed tag. Native SHA512
 hardware is not available in the observed fleet; see the
 [implementation status](x86-sha512-execution.md).
 
@@ -4850,7 +4850,7 @@ Exit criteria:
 
 ### v0.24.50 - Windows Strict Protected Profiles
 
-Status: planned
+Status: in progress
 
 Plan scope: Implement Windows x86_64 and AArch64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support.
 

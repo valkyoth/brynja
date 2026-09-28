@@ -150,7 +150,7 @@ def test_current_bidirectional_closure() -> None:
     for minor in (*range(378, 392), 470):
         for patch in range(last_patches.get(minor, 7) + 1):
             assert plans[f"0.{minor}.{patch}"]["boundary"]["class"] == "planned-authority-admission"
-    assert len(artifact["surfaces"]) == 4462
+    assert len(artifact["surfaces"]) == 4463
     assert len(artifact["requirements"]) == 175
     assert len(artifact["local_rights"]) == 18
     assert len(artifact["mutable_authorities"]) == 15

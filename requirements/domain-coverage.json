@@ -5656,10 +5656,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "223c70a7c3f72e4271709fa047862c531ddbfdc4b48ee417af9f24a992ccd2ab",
+  "policy_sha256": "ab0bb782797aa2bd32892cfaf4fa9ecbe16b092e4499ffc95e34230787b62d73",
   "requirement_count": 41,
   "schema": 1,
-  "surface_count": 3333,
+  "surface_count": 3334,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -6492,6 +6492,14 @@
       "disposition": "caller-owned",
       "domain": "pkix",
       "id": "iana.smi-numbers.security-smime-0.id-mod-composite-mldsa-cms-2026.1",
+      "owner": "0.94.0",
+      "requirement_id": "BRY-REQ-PKIX-0004"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "pkix",
+      "id": "iana.smi-numbers.security-smime-0.id-mod-composite-mlkem-cms-2026.1",
       "owner": "0.94.0",
       "requirement_id": "BRY-REQ-PKIX-0004"
     },

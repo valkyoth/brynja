@@ -24,6 +24,32 @@ def test_current_security_boundaries() -> None:
     surface_security.validate(current_surfaces())
 
 
+def test_september_registry_refresh_does_not_admit_draft_authority() -> None:
+    surfaces = {item["id"]: item for item in current_surfaces()}
+    for name, value in (("mldsa44", "0x0904"), ("mldsa65", "0x0905"),
+                        ("mldsa87", "0x0906")):
+        entry = surfaces[f"iana.tls-parameters.tls-signaturescheme.{name}.1"]
+        assert entry["disposition"] == "future-work"
+        assert entry["owner"] == "0.51.0"
+        assert entry["record"]["fields"] == {
+            "description": name, "recommended": "N", "value": value,
+        }
+        assert entry["record"]["references"] == [
+            {"type": "draft", "data": "RFC-ietf-tls-mldsa-06"},
+        ]
+        assert entry["normative_sources"] == ["iana:tls-parameters", "rfc:9846"]
+    entry = surfaces[
+        "iana.smi-numbers.security-smime-0.id-mod-composite-mlkem-cms-2026.1"
+    ]
+    assert entry["disposition"] == "caller-owned"
+    assert entry["owner"] == "0.94.0"
+    assert entry["record"]["fields"]["value"] == "91"
+    assert entry["record"]["references"] == [
+        {"type": "draft", "data": "RFC-ietf-lamps-cms-composite-kem-03"},
+    ]
+    assert entry["normative_sources"] == ["iana:smi-numbers", "rfc:5280"]
+
+
 def test_dtls_rrc_boundary_drift_fails() -> None:
     broken = copy.deepcopy(current_surfaces())
     surface = next(

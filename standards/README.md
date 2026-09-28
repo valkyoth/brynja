@@ -167,6 +167,21 @@ is explicitly caller-owned rather than inherited future work.
 
 ## Reviewed Refresh
 
+The owner-authorized 2026-09-28 v0.24.49 refresh changes only TLS ML-DSA
+reference metadata and adds S/MIME module identifier 91. The three ML-DSA
+entries remain future work, and `id-mod-composite-mlkem-cms-2026` remains a
+caller-owned identifier under the existing SMI rule. Both RFC-shaped references
+are still typed as drafts by IANA; neither is admitted as final normative
+authority or implemented behavior. The official XML digests were reproduced
+using a separate DNS-over-HTTPS resolver and direct TLS retrieval, and the
+entries were cross-checked against official IANA HTML. Six other registries,
+the RFC index projection and the complete errata set were unchanged. Seven
+requirement revisions change only their pinned source metadata. The complete
+live authority observation passed with zero new observations on 2026-09-28;
+its SHA-256 is
+`84e303ebbad5ce39e3dfd6daf120035adbd448ed96468cac8d3e927014f8de9e`.
+No implementation, admission rule, or release-gate policy changed.
+
 Refreshing evidence is an explicit networked maintenance operation:
 
 ```bash

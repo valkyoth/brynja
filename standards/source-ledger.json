@@ -504,9 +504,9 @@
         "0.3.4",
         "0.164.0"
       ],
-      "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
+      "sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3",
       "title": "Transport Layer Security (TLS) Parameters",
-      "updated": "2026-09-10",
+      "updated": "2026-09-18",
       "url": "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
     },
     {
@@ -611,9 +611,9 @@
         "0.3.3",
         "0.89.0"
       ],
-      "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
+      "sha256": "3f547c6dd36be45fbcdd1e484de3731a9b34bbecd5a2ad295826d060e86afd03",
       "title": "Structure of Management Information (SMI) Numbers (MIB Module Registrations)",
-      "updated": "2026-08-18",
+      "updated": "2026-09-24",
       "url": "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
     },
     {

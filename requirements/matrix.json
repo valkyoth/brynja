@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "b18f4a7038b0c994c9e3b28b7d280c41811404115857f33c133ef7c54f31947e",
-  "domain_policy_sha256": "223c70a7c3f72e4271709fa047862c531ddbfdc4b48ee417af9f24a992ccd2ab",
-  "policy_sha256": "fd9c1068754c3e664f826384c4dd6c6ad989bc5056894160da7c463790015a13",
+  "domain_policy_sha256": "ab0bb782797aa2bd32892cfaf4fa9ecbe16b092e4499ffc95e34230787b62d73",
+  "policy_sha256": "2f64a5ba988d005617cb61d415b94820948d47fc17aa278e314d5bfeb5942946",
   "requirements": [
     {
       "applicability": "delegate",
@@ -11338,7 +11338,7 @@
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -11359,7 +11359,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
+          "sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3"
         },
         {
           "authority_role": "exclusion",
@@ -12194,7 +12194,7 @@
       "owner": "0.240.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 8,
+      "revision": 9,
       "scope": "protocol",
       "sources": [
         {
@@ -12215,7 +12215,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
+          "sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3"
         },
         {
           "authority_role": "legacy",
@@ -12428,7 +12428,7 @@
       "owner": "0.196.3",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -12449,7 +12449,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
+          "sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3"
         }
       ],
       "statement": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
@@ -17315,7 +17315,7 @@
       "owner": "0.94.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -17333,7 +17333,7 @@
             "0.3.3",
             "0.89.0"
           ],
-          "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55"
+          "sha256": "3f547c6dd36be45fbcdd1e484de3731a9b34bbecd5a2ad295826d060e86afd03"
         }
       ],
       "statement": "Unselected SMI namespaces are preserved as caller-owned identifiers and do not gain implicit PKIX semantics.",
@@ -20464,7 +20464,7 @@
       "owner": "0.155.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {
@@ -20504,7 +20504,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
+          "sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3"
         }
       ],
       "statement": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
@@ -20552,7 +20552,7 @@
       "owner": "0.155.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -20573,7 +20573,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250"
+          "sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3"
         }
       ],
       "statement": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
@@ -21059,7 +21059,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.111.0",
       "residual": "The registry assignment is necessary but does not replace cipher-suite, key-schedule, AEAD, transcript, or interoperability evidence.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "source": {
         "collection": "tls-parameters",
@@ -21067,7 +21067,7 @@
         "kind": "iana",
         "record_sha256": "02ae68b04d095bc13817c02fc9f27d4d3e3f90b6dff7bd86b8544060b0e031b0",
         "registry": "tls-parameters-4",
-        "snapshot_sha256": "e5ee302512c44e4f6adffc48b95651f544862e937194c42e6b5253ff1d222250",
+        "snapshot_sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3",
         "surface_id": "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
       },
       "statement": "TLS_AES_128_GCM_SHA256 remains an explicitly planned TLS 1.3 cipher suite with exact registry identity.",
@@ -30812,9 +30812,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "ba3d2e6299b1394ddd33cac06d5a1912ed6a34b21d3d2dd23ac87e4883b5077c",
+  "residual_policy_sha256": "278e23428fd436f4d3cae63362cff1e31c97b99f434b5eeeb5f47caa214daf46",
   "schema": 5,
-  "source_ledger_sha256": "e7f036acf65df4aa3466372a5b8d0a07e239520e820b377ae517de7bdd625321",
-  "surface_register_sha256": "3e66503ffefca585308e6048e26a96c576790a947de557e0881fa0e0b84a4467",
-  "transport_policy_sha256": "142abc8846499c37e6d032a2b2ae4abbbc4cc501514b6ebfc65b0a58e49cb123"
+  "source_ledger_sha256": "c38f2acd86d1024262f6433e0b21278d6a7dcc7644f34cebe19f40cb12c6e263",
+  "surface_register_sha256": "43ef9936b42fb47a1596668a6dfc6875aed981b1e431491ae2500a74b59f5d6b",
+  "transport_policy_sha256": "ab1e7818128beba36f862873e7595c1ebbf70334e1cdc142d474ec35ed72040d"
 }

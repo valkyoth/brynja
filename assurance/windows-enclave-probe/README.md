@@ -180,3 +180,32 @@ the call never executed. Exact event-order regressions reject missing, repeated
 or reordered cleanup. A missing-clear image must fail these recovery checks,
 not be reported as successful recovery. Fatal process failures, concurrent entry,
 and worker-stack/TLS cleanup are outside this bounded experiment.
+
+## Paired native stack/exception experiment (x64 only)
+
+`stack.c` plus `stack_x64.asm` form a separate **unqualified** synthetic image.
+The assembly trampoline declares a frame pointer and unwind metadata, preserves
+RBP, reserves the x64 shadow space and calls exactly one public-marker function.
+It changes no TEB/OS stack metadata and accepts no arbitrary callback. Build
+the assembly with `ml64 /c` and link its object with `stack.c` under the same
+enclave-only options. Preserve `dumpbin /unwindinfo /disasm` output as well as
+the normal load-configuration/import and signing records. Use a disposable host:
+an unsupported alternate-stack exception may terminate the bounded child.
+
+Run the same image separately in `os-normal`, `os-unwind`, `owned-normal` and
+`owned-unwind` modes with `scripts/cryptography/windows_enclave_stack.py`.
+The original-stack modes are controls, not protected-stack claims. Each run
+allocates a guarded 64-KiB payload, locks every page and checks their residency
+before entry. The fixed worker writes a public local array and clears it in
+`__finally`; unwind modes raise one exact application exception and require its
+handler. Mode-specific markers and the actual local array address distinguish
+OS-stack execution from the owned stack. After the call leaves the alternate
+stack, the driver requires complete owned-region clearing while still locked,
+then unlock/release and enclave teardown.
+
+Failure, wrong markers, native crash, or timeout is **inconclusive/failure**, not
+an expected rejection that qualifies a platform. A successful normal return
+does not establish exception support. Even all four passes would not qualify
+Rust panic unwinding, TLS/runtime copies, full ABI/register preservation, stack
+growth, cancellation, dump exclusion or production signing. No production
+module links this prototype, and Windows strict constructors remain unsupported.

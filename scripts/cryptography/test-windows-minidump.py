@@ -51,13 +51,27 @@ class Tests(unittest.TestCase):
                                    (8, '<I', 129), (12, '<I', 0xffffffff), (24, '<Q', 0),
                                    (32, '<I', 5), (36, '<I', 15), (40, '<I', 0xffffffff),
                                    (44, '<Q', 0), (44, '<Q', 65537), (52, '<Q', 0),
-                                   (52, '<Q', 2**64 - 1), (68, '<Q', 0),
+                                   (52, '<Q', 2**64 - 1),
                                    (60, '<Q', 2**64 - 1), (68, '<Q', 2**64 - 1),
                                    (76, '<Q', 0x10001)):
             blob = bytearray(fixture())
             struct.pack_into(fmt, blob, offset, value)
             with self.subTest(offset=offset, value=value), self.assertRaises(ProbeError):
                 dump.memory_ranges(blob)
+
+    def test_zero_sized_native_descriptors_never_add_coverage(self):
+        for index in range(3):
+            regions = [(0x10000, b'\xa5' * 32), (0x20000, b'\x5a' * 32)]
+            # Empty entries may even name addresses inside a nonempty range.
+            regions.insert(index, (0x10001, b''))
+            blob = fixture(regions)
+            self.assertEqual(len(dump.memory_ranges(blob)), 2)
+            self.assertTrue(dump.observe(blob, 0x10000, 32, 0xa5)['complete_marker'])
+            self.assertTrue(dump.observe(blob, 0x20000, 32, 0x5a)['complete_marker'])
+        blob = fixture(((0x10000, b''), (2**64 - 1, b'')))
+        self.assertEqual(dump.memory_ranges(blob), [])
+        self.assertEqual(dump.observe(blob, 0x10000, 32, 0xa5),
+                         {'included_bytes': 0, 'expected_bytes': 32, 'complete_marker': False})
 
     def test_duplicate_stream_rejected(self):
         blob = bytearray(fixture())

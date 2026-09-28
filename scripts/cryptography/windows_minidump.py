@@ -41,11 +41,14 @@ def memory_ranges(blob):
     ranges = []
     for index in range(count):
         address, length = unpack(blob, offset + 16 + index * 16, '<QQ')
-        require(0 < length and address + length <= 2**64,
-                f'virtual range bounds: descriptor={index}; zero_length={length == 0}; '
-                f'address_overflow={address + length > 2**64}')
+        require(address + length <= 2**64, 'virtual range bounds')
         require(length <= len(blob) - payload, 'memory payload file bounds')
-        ranges.append((address, length, payload))
+        # Native WER emits zero-sized descriptors when an enclave is loaded.
+        # DataSize contributes to the sequential payload offset; zero contributes
+        # no bytes and cannot establish marker coverage or overlap another range.
+        # Descriptor-count/file bounds still apply, including to empty entries.
+        if length:
+            ranges.append((address, length, payload))
         payload += length
     ordered = sorted(ranges)
     require(all(a + length <= b for (a, length, _), (b, _, _) in zip(ordered, ordered[1:])),

@@ -56,6 +56,13 @@ class Tests(unittest.TestCase):
         self.assertFalse(result['enclave_region_absent_in_this_dump'])
         self.assertFalse(result['enclave_region']['complete_marker'])
 
+    def test_empty_descriptors_do_not_substitute_for_positive_control(self):
+        blob = minidump([(0x10000, b''), (0x20000, b'')])
+        with self.assertRaisesRegex(ProbeError, 'positive control'):
+            probe.analyze(blob, target())
+        blob = minidump([(0x10000, b''), (0x20000, b'\x5a' * 8192)])
+        self.assertTrue(probe.analyze(blob, target())['enclave_region_absent_in_this_dump'])
+
     def test_invalid_attestation_addresses_and_overlap_reject(self):
         changes = [('pid', 124), ('pid', None), ('size', 1), ('native_machine', 'emulated'),
                    ('internal_verification', False), ('clear_preflight', False),

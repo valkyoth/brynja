@@ -113,3 +113,30 @@ observations for **every** touched page before crashing the child; the parent
 rejects an unlocked-mode record. The lock is held until that deliberate crash.
 This does not claim destructor execution at abort, or protection of any region
 beyond the fixed synthetic buffer. Missing/partial positive controls still fail.
+
+## Worker stack/TLS inventory experiment
+
+Build `worker.c` with the same enclave-only build procedure. Also build a
+distinct `worker-mutant.dll` with `/DBRYNJA_PROBE_SKIP_CLEAR`; keep separate
+artifacts/transcripts and test-sign both with an ephemeral development identity.
+The mutant intentionally leaves only public markers, never actual secrets.
+
+```text
+python scripts/cryptography/test-windows-enclave-worker.py
+python scripts/cryptography/windows_enclave_worker.py X:\experiment\worker.dll
+python scripts/cryptography/windows_enclave_worker.py X:\experiment\worker-mutant.dll --missing-clear-mutant
+```
+
+The enclave executes three public-marker fill/verify/clear/readback calls using
+an 8-KiB local array and an 8-KiB static TLS array. Address/region observations
+are diagnostic integers, not exported dereferenceable buffers. The parent
+requires exactly one initialized enclave worker and bounds mapping enumeration.
+The ordinary run must verify clearing; the compiled mutant must fail that same
+check and still provide valid inventory, so setup errors cannot masquerade as
+mutation rejection. Both reject unsupported operations and require cleanup.
+
+This clears only those two arrays: not the full stack, caller/runtime frames,
+TLS allocation padding, other TLS objects or registers. Observed layout reuse is
+not a worker-affinity guarantee. The experiment does not lock these mappings or
+change protection bits, and it does not erase a live stack. `full_worker_cleanup_proved`
+must stay false regardless of the result. Linux/production APIs are unchanged.

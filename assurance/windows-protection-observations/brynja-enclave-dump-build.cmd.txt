@@ -1,0 +1,13 @@
+@echo off
+setlocal
+call C:\brynja-v0250\buildtools\VC\Auxiliary\Build\vcvars64.bat
+if errorlevel 1 exit /b 1
+if not exist C:\brynja-v0250\enclave-dump mkdir C:\brynja-v0250\enclave-dump
+cd /d C:\brynja-v0250\enclave-dump
+cl /nologo /LD /O2 /W4 /WX /MT /guard:cf /Fedump.dll C:\brynja-v0250\repo\assurance\windows-enclave-probe\dump.c /link /ENCLAVE /NODEFAULTLIB /INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED /LIBPATH:"%VCToolsInstallDir%lib\x64\enclave" /LIBPATH:"%WindowsSdkDir%Lib\%WindowsSDKVersion%ucrt_enclave\x64" libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib
+if errorlevel 1 exit /b 1
+"%WindowsSdkDir%bin\%WindowsSDKVersion%x64\veiid.exe" dump.dll
+if errorlevel 1 exit /b 1
+copy /b dump.dll unsigned.dll
+if errorlevel 1 exit /b 1
+dumpbin /headers /loadconfig /imports dump.dll

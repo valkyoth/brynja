@@ -1,0 +1,43 @@
+{
+  "app_policy_removed": true,
+  "child_exit_code": 3221227010,
+  "clear_preflight": true,
+  "commit": "3ccc5034972e52b6253d825fb199d29b79599131",
+  "copied_executable_removed": true,
+  "dump_size": 54592913,
+  "image_sha256": "c26a7124e64121660fcd6f96cd759ba3d569cd671d94b3d6fe5eae059246a936",
+  "internal_verification": true,
+  "kind": "windows-enclave-full-local-dump-experiment",
+  "native_machine": "0x8664",
+  "observations": {
+    "control": {
+      "complete_marker": true,
+      "expected_bytes": 8192,
+      "included_bytes": 8192
+    },
+    "enclave_region": {
+      "complete_marker": false,
+      "expected_bytes": 8192,
+      "included_bytes": 0
+    },
+    "enclave_region_absent_in_this_dump": true
+  },
+  "os": 26100,
+  "production_signed": false,
+  "raw_dump_removed": true,
+  "schema": 1,
+  "source_sha256": {
+    "assurance/windows-enclave-probe/dump.c": "1023ac5a2aad431d3b832498cf456eb6b7e9d31a23f75a0b215f59c0c1ca55e8",
+    "assurance/windows-enclave-probe/synthetic.c": "34751a8b80406d216eb1a3597579a14fc01ce118e7504e394183e645c6bbdfc3",
+    "scripts/cryptography/test-windows-enclave-dump.py": "b08b429b85eadf5931d4f5829a77d0e283cd39d5aaef582ad69b10c735cfdb2c",
+    "scripts/cryptography/windows_enclave_dump.py": "4cae953bc638da20d18cc8e3d8809d5ce7638e846957ad20cdf2ccb61d35a8ec",
+    "scripts/cryptography/windows_enclave_lifecycle.py": "0232dfa69625cfc757baec318c49edd304b118fcb34b876d2c832899298e5ea4",
+    "scripts/cryptography/windows_minidump.py": "02416be578cde35f274509cb848e05a04d41093168194a800ba6e239c5e41969",
+    "scripts/cryptography/windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "scripts/cryptography/windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09",
+    "scripts/cryptography/windows_wer_probe.py": "ebca664888c08c2e29174f8447fb31a264e5661c6d96183d7503c1fa84291bcd"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false,
+  "synthetic_only": true
+}

@@ -233,13 +233,68 @@ production signing. Original downloaded hashes before line-ending normalization:
 | Build transcript | `288c489e343d2fdc2f5877a877d13df74d53c52fbd56e106c8bfc44dbace9f88` |
 | Signing transcript | `f343692cc2cdae25b60658938172f3acdd1f95ae40c37b20600316472c5c920e` |
 
-The next isolation experiment must initialize a synthetic region inside the
-enclave and verify it internally, then inspect that exact address range in a
-full local dump with a distinct ordinary-memory positive control. A missing
-dump, missing positive control or generic API failure is inconclusive, not
-exclusion. Raw dumps must stay on the disposable host and be removed after
-bounded analysis. This experiment has not yet run. A successful exclusion result
-would still not prove nonpageability or complete stack/TLS/spill clearing.
+### Controlled full-local-dump observation
+
+On 2026-09-28 the synthetic dump experiment ran twice from clean commit
+`3ccc5034972e52b6253d825fb199d29b79599131` on the same Azure x86-64 development
+configuration: VBS/HVCI running, Secure Boot off and test signing on. The
+non-debuggable enclave internally filled and verified an 8-KiB public marker,
+cleared/read back the whole region, then refilled/reverified it. A separate
+ordinary mapping held a distinct positive control before a deliberate child-only
+fail-fast. No cryptographic or real secret input was used.
+
+| Observation | First run | Repeat |
+| --- | --- | --- |
+| Full local dump size | 54,592,913 bytes | 54,363,377 bytes |
+| Ordinary control included and matched | 8,192 / 8,192 bytes | 8,192 / 8,192 bytes |
+| Enclave region included | 0 / 8,192 bytes | 0 / 8,192 bytes |
+| Internal verification and clear/refill preflight | passed | passed |
+
+The [first observation](../assurance/windows-protection-observations/enclave-dump-azure-3ccc5034.json)
+and [repeat](../assurance/windows-protection-observations/enclave-dump-repeat-azure-3ccc5034.json)
+bind nine source hashes and the same test-signed image hash. The image was built
+from `dump.c` at `3a25fdef`; that image source and its included `synthetic.c` are
+unchanged at the observation commit. The
+[build transcript](../assurance/windows-protection-observations/enclave-dump-build-3a25fdef.txt)
+confirms policy flags zero, one enclave thread and image-ID-bound enclave runtime
+imports. The [signing transcript](../assurance/windows-protection-observations/enclave-dump-sign-3a25fdef.txt)
+again retains the compatibility warning and resulting wrapper failure. Successful
+execution is not a clean signing-automation pass or production approval.
+
+The initial experiment was **inconclusive** because the parser rejected a
+zero-sized memory descriptor. A second bounded diagnostic identified descriptor
+56 as zero length without address overflow; the
+[diagnostic](../assurance/windows-protection-observations/enclave-dump-azure-745e31a2.err)
+is preserved. The parser now consumes zero-length descriptors as zero bytes,
+with bounded descriptor counts and unchanged positive-control requirements.
+Microsoft's [memory descriptor layout](https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory_descriptor64)
+defines sequential payload offsets by the sum of preceding `DataSize` values.
+Zero-byte entries neither advance this offset nor establish any marker coverage.
+Regressions cover empty descriptors before/between/after real ranges, all-empty
+lists, incomplete controls, partial enclave coverage, corrupted markers and
+zero-filled (but included) regions. Twelve enclave-dump, eight parser and nine
+WER orchestration tests passed locally and natively.
+
+The [separate cleanup observation](../assurance/windows-protection-observations/enclave-dump-cleanup-azure-3ccc5034.json)
+found no owned probe process, executable, dump directory, application WER rule or
+temporary signing certificate. Raw dumps were deleted on Azure and never
+downloaded. Only summaries, public build/signing transcripts and exact operator
+scripts were retained. Downloaded record hashes before CRLF normalization:
+
+| Record | SHA-256 |
+| --- | --- |
+| First dump observation | `fb11fd0bffb84d4031221665c7a19ca44790d5bb7e38dc622a73ec8c5b264d44` |
+| Repeat dump observation | `d98cec81feb4dfe09a365633be3171ea1d9fc2052dbe3daeb313cfbb138e0a16` |
+| Cleanup/configuration observation | `65f06fcea255acbdc6f4d5f9064284afa2245e6441a58d039c359e13ddac0b22` |
+
+This is evidence of exclusion for this full-local-dump path and configuration.
+It does **not** establish nonpageability, arbitrary snapshot protection, complete
+worker-stack/TLS/register cleanup or production signing. The intentional crash
+skips destructors; preflight clearing is not abort cleanup. Windows strict
+constructors remain unsupported. Next work is residency and complete enclave
+worker/resource ownership, not cryptographic integration based on isolation alone.
+
+### Remaining implementation sequence
 
 1. Obtain a host where the read-only probe reports VBS support and running
    protection; separately establish exact OS revision and HVCI configuration.

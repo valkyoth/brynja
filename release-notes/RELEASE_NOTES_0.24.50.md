@@ -71,3 +71,12 @@ eight failure-injection tests passing on Linux and Windows. Clean-commit native
 records cover unsigned rejection and repeated signed execution. Build/signing
 transcripts retain the warning rather than presenting the setup as a clean
 automation pass. This adds no production dependency and changes no release gate.
+
+The controlled enclave full-local-dump experiment now has two native Azure runs:
+each contains all 8 KiB of the ordinary positive control and none of the enclave
+region. Internal marker/clear/refill checks passed. A parser correction handles
+native zero-byte descriptors without counting them as coverage, with focused
+non-vacuity regressions. Raw dumps and owned temporary configuration were removed
+and cleanup independently checked. This establishes only the observed dump path;
+residency, complete worker cleanup and production signing remain unresolved.
+Windows strict constructors and release-gate policy are unchanged.

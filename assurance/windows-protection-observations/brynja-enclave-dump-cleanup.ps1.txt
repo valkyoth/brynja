@@ -1,0 +1,25 @@
+$ErrorActionPreference = 'Stop'
+$policies = @(Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps' -ErrorAction SilentlyContinue | Where-Object PSChildName -Match '^brynja-wer-[0-9a-f]{32}\.exe$')
+$executables = @(Get-ChildItem -LiteralPath 'C:\brynja-v0250\python' -Filter 'brynja-wer-*.exe')
+$folders = @(Get-ChildItem -LiteralPath $env:TEMP -Directory -Filter 'brynja-enclave-dump-*')
+$certificates = @(Get-ChildItem Cert:\CurrentUser\My | Where-Object Subject -EQ 'CN=BrynjaDisposableSyntheticEnclave')
+$processes = @(Get-Process | Where-Object ProcessName -Match '^brynja-wer-[0-9a-f]{32}$')
+if ($policies.Count -or $executables.Count -or $folders.Count -or $certificates.Count -or $processes.Count) { throw 'Owned probe resources remain; investigate before reporting cleanup' }
+$device = Get-CimInstance -Namespace root\Microsoft\Windows\DeviceGuard -ClassName Win32_DeviceGuard
+$os = Get-CimInstance Win32_OperatingSystem
+[ordered]@{
+    status = 'OBSERVATIONS_ONLY'
+    strict_qualified = $false
+    observed_utc = (Get-Date).ToUniversalTime().ToString('o')
+    os_version = $os.Version
+    last_boot_utc = $os.LastBootUpTime.ToUniversalTime().ToString('o')
+    secure_boot = (Confirm-SecureBootUEFI)
+    vbs_status = $device.VirtualizationBasedSecurityStatus
+    services_running = @($device.SecurityServicesRunning)
+    test_signing = @(& bcdedit /enum '{current}' | Select-String 'testsigning' | ForEach-Object { $_.Line.Trim() })
+    app_policy_count = $policies.Count
+    copied_executable_count = $executables.Count
+    dump_directory_count = $folders.Count
+    temporary_signing_certificate_count = $certificates.Count
+    probe_process_count = $processes.Count
+} | ConvertTo-Json -Depth 4

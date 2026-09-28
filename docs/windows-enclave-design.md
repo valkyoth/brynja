@@ -142,7 +142,69 @@ at this checkpoint. An Azure control-plane change is needed before that local
 test-signing route can proceed; production Trusted Signing is a separate route.
 [Microsoft synthetic enclave walkthrough](https://github.com/microsoft/VbsEnclaveTooling/blob/main/docs/HelloWorldWalkthrough.md).
 
-### Remaining proof sequence
+### Development-only lifecycle smoke observation
+
+Later on 2026-09-28, the owner disabled Secure Boot in the Azure portal, leaving
+vTPM enabled. That reboot initially left VBS enabled but not running: the guest
+still required Secure Boot. For this disposable development host only, the
+original boot/DeviceGuard settings were saved, `RequirePlatformSecurityFeatures`
+was set to 0 and test-signing was enabled. After the next reboot, VBS status was
+2, configured/running service arrays both contained 2, and the boot configuration
+reported test-signing enabled. This is a different, weaker boot configuration
+from the preceding prerequisite observation, not a production recommendation.
+[Microsoft's platform requirement values](https://learn.microsoft.com/en-us/sql/relational-databases/security/encryption/always-encrypted-enclaves-host-guardian-service-register).
+
+A temporary non-cryptographic C image and Python host exercised the enclave
+lifecycle with public integer values only. This research prototype is not linked
+into Brynja, does not add a production native dependency, and is not committed
+release-qualification evidence. MSVC build tools 14.44.35207 (linker
+14.44.35229.0) and the Windows SDK 10.0.26100.0 directory were used; that directory
+name alone is not a claim about the SDK servicing revision. The image was linked
+with enclave, integrity-check, mixed-CFG and enclave-only runtime libraries,
+then processed by VEIID. Inspection showed policy flags 0 (not debuggable), one
+enclave thread, and image-ID-bound imports of `ucrtbase_enclave.dll` and
+`vertdll.dll`.
+
+Both the initial and repeated native smoke runs observed:
+
+- An unsigned image was rejected by `LoadEnclaveImageW` with error 577; deletion
+  of the uninitialized enclave succeeded.
+- The locally test-signed image loaded and initialized. Four calls, using public
+  inputs 0, 1, 0x1234 and 0xffffffff, returned the expected XOR-with-0x4252594e
+  values. Calls did not wait for an available thread.
+- Termination and deletion succeeded. A parent process imposed a 30-second
+  bound on each smoke child; these successful calls do not establish complete
+  memory erasure or abnormal-termination behavior.
+- The ephemeral certificate was removed with private-key deletion requested,
+  and a separate certificate-store query confirmed its absence. No trusted-root
+  certificate was imported.
+
+The signing command produced a signed image but warned about changed VBS OS
+compatibility. The setup wrapper rejected its nonzero result, and is **not**
+recorded as a clean automated signing pass. The subsequent explicit loader test
+of the produced image succeeded. Likewise, an initial host prototype used a
+missing `kernel32` export; the corrected host used the documented
+`api-ms-win-core-enclave-l1-1-0.dll` contract. That failed attempt created no
+enclave and is not counted as execution evidence.
+
+Diagnostic SHA-256 identifiers (not source-review or qualification approvals):
+
+| Temporary artifact | SHA-256 |
+| --- | --- |
+| C public-value image source | `7b1f78931861542350bbe2f9256e343a19ecf431e45c724944102ba9540d240f` |
+| Python host prototype | `dd608298ae29ec06f2dc237887c06aa2b97103f66d23da08df21110d764a850b` |
+| Unsigned image | `354ee12b36337c6ab10c0233b79e56bfdc69abaac023f96e5a6e7c8d13ea3710` |
+| Test-signed image | `eeeeadb009b1d52bcac0c547286dca84ffdef525c0a55c45982f21e29c5baef3` |
+
+These observations demonstrate that synthetic enclave execution is feasible on
+this development host. They do **not** establish protected allocation residency,
+full-dump exclusion, worker-stack/TLS/register cleanup, interruption behavior,
+production signing, Rust runtime compatibility or any Brynja cryptographic API.
+Windows strict constructors therefore remain unsupported. Before this prototype
+can become an assurance lane, its source, failure regressions, signing-warning
+handling and complete experiment records must be made reproducible and reviewed.
+
+### Remaining proof sequence (after smoke test)
 
 1. Obtain a host where the read-only probe reports VBS support and running
    protection; separately establish exact OS revision and HVCI configuration.

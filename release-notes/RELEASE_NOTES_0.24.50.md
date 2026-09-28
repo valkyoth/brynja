@@ -57,3 +57,11 @@ observation is recorded. This clears the initial host prerequisite only; enclave
 loading/signing, residency, dump exclusion and complete worker cleanup remain
 unqualified. The local test-signing route requires a separate development boot
 configuration and is not production qualification.
+
+On the disposable Azure host, a separate test-signing configuration restored
+running VBS/HVCI with Secure Boot disabled. A temporary non-cryptographic smoke
+image was rejected when unsigned and executed four public-value calls when
+test-signed, with successful termination/deletion on repeat runs. The signing
+wrapper's compatibility warning failure is retained in the research notes;
+this is not a clean release-assurance lane. Residency, dump exclusion and full
+cleanup remain unproved, and no Windows strict implementation is enabled.

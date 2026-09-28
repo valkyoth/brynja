@@ -23,7 +23,7 @@ SHARED_CHANGED = tuple('crates/brynja-core/' + name for name in (
     'crates/brynja-hash-core/' + name for name in (
         'Cargo.toml', 'src/bit_string.rs', 'src/lib.rs', 'src/secret_memory_predicate.rs'))
 MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
-    'src/batch/owner.rs', 'src/engine.rs', 'src/output.rs', 'tests/api.rs',
+    'src/batch/owner.rs', 'src/batch/tests.rs', 'src/engine.rs', 'src/output.rs', 'tests/api.rs',
     'src/hardened_in_place.rs', 'src/hardened_in_place/tests.rs',
     'src/batch/hardened_execution/in_place.rs', 'src/batch/hardened_execution/in_place/tests.rs',
     'src/compress.rs', 'src/compress/native.rs',

@@ -53,6 +53,66 @@ def strict_inventory_regressions(root):
     print(f'Strict legacy source inventory rejects {count} missing/stale/source-drift regressions')
 
 
+def batch_test_delta_regressions(root):
+    """A reviewed test delta cannot rewrite the historical capture or lose its pin."""
+    import tomllib
+    path = 'crates/brynja-legacy-md5/src/batch/tests.rs'
+    snapshot = policy.read(root, policy.SNAPSHOT)
+    original_hash = tomllib.loads(snapshot)['md5']['files'][path]
+    delta = root / policy.MD5_DELTA
+    original_delta = delta.read_text()
+    current_hash = tomllib.loads(original_delta)['files'][path]
+    source = root / path
+    original_source = source.read_text()
+    assert path in policy.MD5_CHANGED
+    assert original_hash != current_hash == policy.sha(original_source)
+    line = f'"{path}" = "{current_hash}"'
+    assert original_delta.count(line) == 1
+    for mode in ('omitted', 'stale', 'source'):
+        try:
+            if mode == 'source':
+                source.write_text(original_source + '\n// unreviewed test change\n')
+            else:
+                replacement = '' if mode == 'omitted' else f'"{path}" = "{original_hash}"'
+                delta.write_text(original_delta.replace(line, replacement))
+            try:
+                policy.validate_native(root)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError('accepted MD5 batch test delta regression: ' + mode)
+        finally:
+            delta.write_text(original_delta)
+            source.write_text(original_source)
+    assert policy.read(root, policy.SNAPSHOT) == snapshot
+    policy.validate_native(root)
+    print('MD5 batch test delta rejects omission, stale pin and source drift; historical snapshot unchanged')
+
+
+def delta_review_binding_regressions(root):
+    """The enclosing review must bind both current operational-delta records."""
+    import tomllib
+    review = root / policy.HASHES
+    original = review.read_text()
+    hashes = tomllib.loads(original)['files']
+    for path in (policy.SHA1_DELTA, policy.MD5_DELTA):
+        line = f'"{path}" = "{hashes[path]}"'
+        assert original.count(line) == 1
+        for replacement in ('', f'"{path}" = "' + '0' * 64 + '"'):
+            try:
+                review.write_text(original.replace(line, replacement))
+                try:
+                    policy.validate(root)
+                except ValueError:
+                    pass
+                else:
+                    raise AssertionError('accepted missing/stale enclosing delta review: ' + path)
+            finally:
+                review.write_text(original)
+    policy.validate(root)
+    print('Legacy enclosing review rejects four missing/stale SHA-1/MD5 delta bindings')
+
+
 def main():
     policy.validate()
     mutations = [
@@ -109,6 +169,8 @@ def main():
             shutil.copyfile(policy.ROOT / path, destination)
         policy.validate(root)
         strict_inventory_regressions(root)
+        batch_test_delta_regressions(root)
+        delta_review_binding_regressions(root)
         # Simulate growth after the path's size check, without huge allocation.
         (root / 'read-bound.txt').write_bytes(b'old')
         with patch.object(policy, 'MAX_INPUT_BYTES', 1024):

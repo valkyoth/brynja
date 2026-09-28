@@ -2,6 +2,9 @@ version = "0.24.44"
 native = "fresh operational evidence required separately"
 
 [files]
+# Reviewed Miri case scheduling only; native execution still checks all 256 masks.
+# The original native-source-snapshot.toml and capture artifacts stay immutable.
+"crates/brynja-legacy-md5/src/batch/tests.rs" = "88d7ba99043613ad916b178eaf22ad7c524d2ef850c49f161cc4f1450b6d10cd"
 "crates/brynja-legacy-md5/src/batch/owner.rs" = "838dd5a8e47708f68912f7ac34dbf3e03a8108bbad743f6e4ba5f2d883e67861"
 "crates/brynja-legacy-md5/src/engine.rs" = "1a52576b4d90ad72f80077ed7f8f069d45a98c91326753ad1544c68b029e05ac"
 "crates/brynja-legacy-md5/src/output.rs" = "e9fa579738ee04c8d96553109f651d5764b02bf99a033467395da1a0c6e8acc4"

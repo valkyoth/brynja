@@ -28,21 +28,30 @@ done
 scripts/ci/install-ci-tools.sh --verify-only
 python3 scripts/assurance/check-assurance.py --network
 
-failed=0
-for workflow in .github/workflows/*.yml; do
-    while IFS= read -r ref; do
-        case "$ref" in
-            [0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]) ;;
-            *)
-                echo "GitHub Action is not pinned to a full SHA: ${ref}" >&2
-                failed=1
-                ;;
-        esac
-    done <<EOF
-$(sed -n 's/^[[:space:]]*uses: [^@][^@]*@\([^[:space:]]*\).*/\1/p' "$workflow")
-EOF
-done
-test "$failed" -eq 0
+# BEGIN ACTION PIN CHECK
+# Workflow block mappings may put uses: after a name or directly after a dash.
+# Inspect every declaration, including missing/empty refs; do not fabricate an
+# empty declaration for a workflow containing only run steps.
+awk '
+    /^[[:space:]]*(-[[:space:]]+)?uses:[[:space:]]*/ {
+        action = $0
+        sub(/^[[:space:]]*(-[[:space:]]+)?uses:[[:space:]]*/, "", action)
+        sub(/[[:space:]]+#.*$/, "", action)
+        sub(/[[:space:]]+$/, "", action)
+        quote = substr(action, 1, 1)
+        if ((quote == "\"" || quote == sprintf("%c", 39)) &&
+            substr(action, length(action), 1) == quote)
+            action = substr(action, 2, length(action) - 2)
+        count = split(action, parts, "@")
+        if (count != 2 || action !~ /^[^[:space:]@]+@[0-9a-f]+$/ ||
+            length(parts[2]) != 40) {
+            print FILENAME ":" FNR ": GitHub Action is not pinned to a full SHA: " action
+            failed = 1
+        }
+    }
+    END { exit failed }
+' .github/workflows/*.yml
+# END ACTION PIN CHECK
 
 pin_line="$(sed -n 's/.*uses: actions\/checkout@\([0-9a-f]\{40\}\) # \(v[0-9][0-9.]*\).*/\1 \2/p' "$ci_file" | head -n 1)"
 test -n "$pin_line"

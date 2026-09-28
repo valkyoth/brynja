@@ -37,3 +37,4 @@ if scripts/repository/check_shell_syntax.sh "$missing_shebang" >/dev/null 2>&1; 
 fi
 
 echo "shell syntax validation respects each script interpreter"
+python3 scripts/repository/test-action-pins.py

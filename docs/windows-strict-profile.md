@@ -114,6 +114,18 @@ zero size and `MEM_RELEASE`, as specified by
 
 ### Host request
 
+Initial observation on 2026-09-28: the mapping probe and all 15 regression tests
+passed on native x86-64 Windows Server 2025 (build 26100), using Python 3.13.15
+and the clean `4ea5abcd239a2a44c0f7bc8dd4305e2b034c658c` checkout. The
+[committed observation](../assurance/windows-protection-observations/mapping-x86_64-4ea5abcd.json)
+records 4 KiB pages, 64 KiB reservation granularity, two locked payload pages,
+successful WER registration, clearing readback and release. Source hashes were
+checked against the local committed probe before recording this result.
+Only line endings were normalized when importing the JSON; the downloaded raw
+file SHA-256 was `e5706631a1a42085c195060dd6d469b2ab2cfe5ba0e331823a935e73d0662091`.
+This is one platform experiment, not Windows strict-profile qualification.
+Dump exclusion, protected worker stacks and native Arm64 remain outstanding.
+
 The first useful host is native Windows x86-64 with Administrator SSH access,
 a current supported Windows SDK and the selected Rust MSVC toolchain. Request
 it once runnable probes are prepared, so it need not sit idle during design.

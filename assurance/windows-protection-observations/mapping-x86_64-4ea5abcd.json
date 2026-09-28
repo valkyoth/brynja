@@ -1,0 +1,31 @@
+{
+  "dump_exclusion_verified": false,
+  "identity": {
+    "commit": "4ea5abcd239a2a44c0f7bc8dd4305e2b034c658c",
+    "dirty": false,
+    "native_machine": "0x8664",
+    "platform": "Windows-2025Server-10.0.26100-SP0",
+    "python": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
+    "sources": {
+      "windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+      "windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09"
+    }
+  },
+  "kind": "windows-protection-experiment",
+  "observations": {
+    "allocation_granularity": 65536,
+    "clearing_readback": true,
+    "locked_pages_after": 2,
+    "locked_pages_before": 2,
+    "page_size": 4096,
+    "payload_bytes": 8192,
+    "release_succeeded": true,
+    "reserved_bytes": 65536,
+    "reserved_guards_observed": true,
+    "wer_registration_succeeded": true
+  },
+  "protected_worker_stack_verified": false,
+  "schema": 1,
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false
+}

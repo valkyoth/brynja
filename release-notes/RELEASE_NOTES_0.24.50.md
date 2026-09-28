@@ -16,7 +16,8 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
-An isolated synthetic Windows mapping probe is ready for native testing. It
+An isolated synthetic Windows mapping probe passed its first native Windows
+Server 2025 x86-64 run, alongside all 15 portable regression tests. It
 checks allocation/guard geometry, page locking, WER registration and cleanup,
 with portable failure-injection regressions. Its output is explicitly not
 strict qualification; crash-dump exclusion and worker-stack protection remain

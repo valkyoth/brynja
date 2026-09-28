@@ -206,6 +206,41 @@ handling and complete experiment records must be made reproducible and reviewed.
 
 ### Remaining proof sequence (after smoke test)
 
+The lifecycle prototype is now preserved as a
+[standalone synthetic experiment](../assurance/windows-enclave-probe/README.md),
+not a package dependency or a new release gate. Eight failure-injection tests
+pass on Linux and native Windows, covering wrong results, unsigned acceptance,
+wrong rejection errors, create/load/initialize/call failures, cleanup failures,
+retention of the original failure, timeouts and false qualification flags.
+After rebuilding from clean commit `f6d27d520b75161fe7636a64a2acf07a0b7e896b`,
+the [unsigned rejection](../assurance/windows-protection-observations/enclave-lifecycle-unsigned-azure-f6d27d52.json)
+and [signed execution](../assurance/windows-protection-observations/enclave-lifecycle-signed-azure-f6d27d52.json)
+checks passed on the same development host. Signed execution was repeated and
+the checkout remained clean. All five source hashes match that commit.
+
+The [build transcript](../assurance/windows-protection-observations/enclave-lifecycle-build-azure-f6d27d52.txt)
+and [signing transcript](../assurance/windows-protection-observations/enclave-lifecycle-sign-azure-f6d27d52.txt)
+are retained, including the compatibility warning and wrapper failure rather
+than replacing them with a PASS. The image-source association is an operator
+review of this build, not something established by hashing arbitrary image/source
+files together. The records still explicitly deny strict qualification and
+production signing. Original downloaded hashes before line-ending normalization:
+
+| Record | SHA-256 |
+| --- | --- |
+| Unsigned observation | `63ed83298a79f1fb35496fd61b5be7181e3f8f102d0561deb9bf771d766b7a65` |
+| Signed observation | `8cd9b85107be5a2eae1f068a0f411cff4ae4774820fb185c35eabeb2d3c1ea7e` |
+| Build transcript | `288c489e343d2fdc2f5877a877d13df74d53c52fbd56e106c8bfc44dbace9f88` |
+| Signing transcript | `f343692cc2cdae25b60658938172f3acdd1f95ae40c37b20600316472c5c920e` |
+
+The next isolation experiment must initialize a synthetic region inside the
+enclave and verify it internally, then inspect that exact address range in a
+full local dump with a distinct ordinary-memory positive control. A missing
+dump, missing positive control or generic API failure is inconclusive, not
+exclusion. Raw dumps must stay on the disposable host and be removed after
+bounded analysis. This experiment has not yet run. A successful exclusion result
+would still not prove nonpageability or complete stack/TLS/spill clearing.
+
 1. Obtain a host where the read-only probe reports VBS support and running
    protection; separately establish exact OS revision and HVCI configuration.
    The Azure observation above satisfies this initial prerequisite, not the

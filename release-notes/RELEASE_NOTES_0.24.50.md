@@ -65,3 +65,9 @@ test-signed, with successful termination/deletion on repeat runs. The signing
 wrapper's compatibility warning failure is retained in the research notes;
 this is not a clean release-assurance lane. Residency, dump exclusion and full
 cleanup remain unproved, and no Windows strict implementation is enabled.
+
+The synthetic lifecycle source and bounded host driver are now preserved with
+eight failure-injection tests passing on Linux and Windows. Clean-commit native
+records cover unsigned rejection and repeated signed execution. Build/signing
+transcripts retain the warning rather than presenting the setup as a clean
+automation pass. This adds no production dependency and changes no release gate.

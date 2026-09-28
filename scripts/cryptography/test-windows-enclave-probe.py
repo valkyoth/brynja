@@ -4,6 +4,7 @@ import copy
 import ctypes as c
 import json
 import subprocess
+import sys
 import unittest
 from unittest.mock import Mock, patch
 
@@ -16,6 +17,17 @@ class Tests(unittest.TestCase):
              'processors': [{'Name': 'synthetic CPU', 'VirtualizationFirmwareEnabled': False,
                              'VMMonitorModeExtensions': False,
                              'SecondLevelAddressTranslationExtensions': False}]}
+
+    def test_query_starts_with_valid_error_policy_assignment(self):
+        self.assertEqual(probe.QUERY.strip().splitlines()[0], "$ErrorActionPreference = 'Stop'")
+
+    @unittest.skipUnless(sys.platform == 'win32', 'PowerShell parser requires Windows host')
+    def test_real_powershell_parser_accepts_query(self):
+        command = ("$text = [Console]::In.ReadToEnd(); $tokens = $null; $errors = $null; "
+                   "[void][System.Management.Automation.Language.Parser]::ParseInput($text, "
+                   "[ref]$tokens, [ref]$errors); if ($errors.Count) { exit 1 }")
+        subprocess.run(['powershell.exe', '-NoProfile', '-NonInteractive', '-Command', command],
+                       input=probe.QUERY, capture_output=True, text=True, check=True, timeout=30)
 
     def test_exact_flags_and_last_error_reset_for_each_query(self):
         api = Mock()

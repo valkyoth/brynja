@@ -15,7 +15,7 @@ from windows_protection_api import Windows, U32
 from windows_protection_probe import require
 
 TYPES = {'sgx': 1, 'sgx2': 2, 'vbs': 0x10}
-QUERY = r"""+$ErrorActionPreference = 'Stop'
+QUERY = r"""$ErrorActionPreference = 'Stop'
 $guard = Get-CimInstance -Namespace root/Microsoft/Windows/DeviceGuard -ClassName Win32_DeviceGuard
 $cpu = @(Get-CimInstance Win32_Processor | Select-Object Name,VirtualizationFirmwareEnabled,VMMonitorModeExtensions,SecondLevelAddressTranslationExtensions)
 [ordered]@{

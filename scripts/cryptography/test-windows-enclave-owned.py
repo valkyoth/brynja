@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 import windows_enclave_owned as probe
+import windows_enclave_owned_faults as faults
 from windows_protection_probe import ProbeError
 
 BASE, ALLOCATION = 0x10000000, 0x10300000
@@ -119,8 +120,7 @@ class Tests(unittest.TestCase):
     def test_incomplete_or_unlocked_pages_prevent_admission(self):
         for flags in ([], [FLAGS], [FLAGS, 1], [FLAGS, 1 << 22], [FLAGS, True], [FLAGS, 1 << 64]):
             api, host, state, events = setup()
-            host.working_set.side_effect = None
-            host.working_set.return_value = flags
+            host.working_set.side_effect = [flags, [FLAGS, FLAGS]]
             with self.assertRaises(ProbeError):
                 probe.exercise(api, host, 'image.dll', False)
             self.assertEqual(events.count(('call', 2)), 1)
@@ -128,16 +128,16 @@ class Tests(unittest.TestCase):
             host.unlock.assert_called_once()
             api.delete.assert_called_once()
 
-    def test_post_write_failure_does_not_unlock_dirty_state(self):
+    def test_post_write_failure_clears_before_unlock_and_still_fails(self):
         api, host, state, _ = setup()
-        host.working_set.side_effect = [[FLAGS, FLAGS], ProbeError('post-write query')]
+        host.working_set.side_effect = [[FLAGS, FLAGS], ProbeError('post-write query'), [FLAGS, FLAGS]]
         with self.assertRaisesRegex(ProbeError, 'post-write query'):
             probe.exercise(api, host, 'image.dll', False)
-        self.assertEqual(state.phase, 2)
-        host.unlock.assert_not_called()
+        self.assertEqual(state.phase, 0)
+        host.unlock.assert_called_once()
         api.delete.assert_called_once()
 
-    def test_failed_fill_dispatch_is_treated_as_potentially_dirty(self):
+    def test_failed_fill_dispatch_is_cleared_even_if_reply_was_lost(self):
         api, host, _, _ = setup()
         original = api.call.side_effect
         def fail(routine, op):
@@ -148,8 +148,49 @@ class Tests(unittest.TestCase):
         api.call.side_effect = fail
         with self.assertRaisesRegex(ProbeError, 'failed dispatch'):
             probe.exercise(api, host, 'image.dll', False)
-        host.unlock.assert_not_called()
+        host.unlock.assert_called_once()
         api.delete.assert_called_once()
+
+    def test_failed_clear_reply_is_recovered_from_state_and_zero_readback(self):
+        api, host, state, _ = setup()
+        original = api.call.side_effect
+        def fail(routine, op):
+            value = original(routine, op)
+            if op == 3 and value:
+                raise ProbeError('lost clear reply')
+            return value
+        api.call.side_effect = fail
+        with self.assertRaisesRegex(ProbeError, 'lost clear reply'):
+            probe.exercise(api, host, 'image.dll', False)
+        self.assertEqual(state.phase, 0)
+        host.unlock.assert_called_once()
+
+    def test_cleanup_readback_or_lock_observation_failure_never_unlocks(self):
+        for stage in ('clear', 'phase', 'zero', 'pages'):
+            api, host, _, _ = setup()
+            original = api.call.side_effect
+            def fail(routine, op):
+                value = original(routine, op)
+                if (stage == 'clear' and op == 3 and value or
+                    stage == 'phase' and op == 6 and value == 3 or
+                    stage == 'zero' and op == 5 and value and ('call', 3) in events):
+                    raise ProbeError('cleanup ' + stage)
+                return value
+            # Attach to this setup's event list, not any previous case.
+            events = []
+            def observed(routine, op):
+                if op == 3:
+                    events.append(('call', op))
+                return fail(routine, op)
+            api.call.side_effect = observed
+            if stage == 'pages':
+                host.working_set.side_effect = [[FLAGS, FLAGS], [FLAGS, FLAGS],
+                                               ProbeError('cleanup pages'), ProbeError('cleanup pages')]
+            with self.assertRaisesRegex(ProbeError, 'cleanup'):
+                probe.exercise(api, host, 'image.dll', False)
+            if stage in ('phase', 'zero', 'pages'):
+                host.unlock.assert_not_called()
+            api.delete.assert_called_once()
 
     def test_cleanup_failures_are_not_success(self):
         for stage in ('unlock', 'terminate', 'delete'):
@@ -216,6 +257,46 @@ class Tests(unittest.TestCase):
         with patch.object(probe.subprocess, 'run', side_effect=subprocess.TimeoutExpired('child', 30)):
             with self.assertRaises(subprocess.TimeoutExpired):
                 probe.bounded(['child'], False)
+
+    def test_faults_preserve_original_failure_after_real_cleanup_calls(self):
+        for stage in faults.STAGES:
+            api, host, state, _ = setup()
+            result = faults.exercise(api, host, 'image.dll', stage)
+            self.assertTrue(result['original_error_retained'])
+            self.assertEqual(state.phase, 0)
+            self.assertFalse(state.locked)
+            with patch.object(probe.subprocess, 'run', return_value=Mock(
+                    returncode=0, stderr='', stdout=json.dumps(result))):
+                self.assertEqual(probe.bounded(['child'], False, stage), result)
+                with self.assertRaises(ProbeError):
+                    probe.bounded(['child'], True, stage)
+
+    def test_fault_trace_rejects_missing_reordered_or_duplicated_cleanup(self):
+        for stage in faults.STAGES:
+            api, host, _, _ = setup()
+            result = faults.exercise(api, host, 'image.dll', stage)
+            trace = result['trace']
+            for i in range(len(trace)):
+                for bad in (trace[:i] + trace[i + 1:], trace[:i] + [trace[i]] + trace[i:],
+                            trace[:i] + ['unrecognized'] + trace[i + 1:]):
+                    with self.assertRaises(ProbeError):
+                        faults.validate_trace(bad, stage)
+            for i in range(len(trace) - 1):
+                bad = trace.copy()
+                bad[i], bad[i + 1] = bad[i + 1], bad[i]
+                with self.assertRaises(ProbeError):
+                    faults.validate_trace(bad, stage)
+
+    def test_cleanup_failure_cannot_be_reported_as_successful_fault_recovery(self):
+        for stage in ('after-fill', 'after-write-query'):
+            api, host, _, _ = setup(True)
+            with self.assertRaisesRegex(ProbeError, 'failure-path clearing'):
+                faults.exercise(api, host, 'mutant.dll', stage)
+            host.unlock.assert_not_called()
+        api, host, _, _ = setup()
+        host.unlock.side_effect = ProbeError('unlock failure')
+        with self.assertRaisesRegex(ProbeError, 'unlock failure'):
+            faults.exercise(api, host, 'image.dll', 'after-fill')
 
 
 if __name__ == '__main__':

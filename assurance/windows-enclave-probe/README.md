@@ -168,3 +168,15 @@ an arbitrary caller could bypass the Python driver. No confidential input is
 accepted. The allocation is **not** used as an execution stack, no custom stack
 switch is performed, and OS-managed stack/TLS, register cleanup, dump exclusion,
 hostile-host residency and production signing are not qualified by this test.
+
+For host-side failure cleanup, run the normal image once for each `--fault`
+value: `before-fill`, `after-fill`, `after-clear`, and `after-write-query`.
+These inject a one-shot Python exception around real enclave calls/observations;
+they do not inject native faults or unwind through enclave code. The driver
+must retain the original operation error, clear/readback the payload while
+locked, then unlock/release and terminate/delete. A reply lost after successful
+clearing is recovered by checking the phase and zero readback, not by assuming
+the call never executed. Exact event-order regressions reject missing, repeated
+or reordered cleanup. A missing-clear image must fail these recovery checks,
+not be reported as successful recovery. Fatal process failures, concurrent entry,
+and worker-stack/TLS cleanup are outside this bounded experiment.

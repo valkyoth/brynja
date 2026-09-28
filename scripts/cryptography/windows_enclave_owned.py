@@ -16,6 +16,7 @@ SOURCES = ('assurance/windows-enclave-probe/synthetic.c',
            'assurance/windows-enclave-probe/owned.c',
            'scripts/cryptography/windows_enclave_owned.py',
            'scripts/cryptography/test-windows-enclave-owned.py',
+           'scripts/cryptography/windows_enclave_owned_faults.py',
            'scripts/cryptography/windows_enclave_worker.py',
            'scripts/cryptography/windows_enclave_lifecycle.py',
            'scripts/cryptography/windows_protection_api.py',
@@ -43,6 +44,24 @@ def snapshot(host, address):
             'complete owned working-set observation')
     locked_pages(flags)
     return flags
+
+
+def release_owned(call, host, address, locked):
+    """Recover an interrupted public-marker operation before releasing storage.
+
+    A failed cleanup leaves the enclave for outer teardown, never explicit
+    unlock of dirty storage. The original operation error remains an error.
+    """
+    phase = call(6)
+    require(phase in (1, 2, 3), 'known owned cleanup phase required')
+    if phase == 2:
+        require(locked, 'dirty cleanup must retain its lock')
+        require(call(3) == SIZE and call(6) == 3, 'failure-path clearing required')
+    require(call(5) == SIZE, 'zero verification before release required')
+    if locked:
+        snapshot(host, address)
+        host.unlock(address, SIZE)
+    require(call(4) == 1 and call(6) == 0, 'owned release required')
 
 
 def allocation_cycle(api, host, routine, base, mutant):
@@ -78,13 +97,11 @@ def allocation_cycle(api, host, routine, base, mutant):
         require(call(2) == 0, 'cleared state must reject refill')
         cleared = snapshot(host, address)
     finally:
-        # Never explicitly unlock/release an uncleared payload. The enclosing
-        # synthetic-only child terminates/deletes its enclave on every path.
-        if not dirty:
-            require(call(5) == SIZE, 'zero verification before release required')
-            if locked:
-                host.unlock(address, SIZE)
-            require(call(4) == 1 and call(6) == 0, 'owned release required')
+        # Expected missing-clear rejection is not an erasure result. Ordinary
+        # operation failures still attempt full clearing while the lock is held.
+        # Any cleanup failure propagates; outer enclave teardown is not erasure.
+        if not (mutant and dirty):
+            release_owned(call, host, address, locked)
     for op in (2, 3, 4, 5, 16):
         require(call(op) == 0, 'released state must reject access')
     return dict(shape, before=before, after=after, cleared=cleared,
@@ -117,7 +134,7 @@ def exercise(api, host, image, mutant):
             'missing-clear-mutant' if mutant else 'normal', 'cycles': cycles}
 
 
-def bounded(command, mutant):
+def bounded(command, mutant, fault=None):
     result = subprocess.run(command, capture_output=True, text=True, timeout=30)
     require(result.returncode == 0 and not result.stderr and 0 < len(result.stdout) <= 32768,
             'bounded clean owned child required: ' + result.stderr[-2048:])
@@ -126,6 +143,11 @@ def bounded(command, mutant):
             ('strict_qualified', 'production_signed', 'full_worker_cleanup_proved', 'dump_exclusion_verified'))
             and value.get('synthetic_only') is True and value.get('deleted') is True,
             'completed nonqualifying owned observation required')
+    if fault:
+        from windows_enclave_owned_faults import validate_record
+        require(not mutant, 'fault and mutant modes are distinct')
+        validate_record(value, fault)
+        return value
     require(value.get('mode') == ('missing-clear-mutant' if mutant else 'normal'), 'owned mode mismatch')
     cycles = value.get('cycles')
     require(type(cycles) is list and len(cycles) == (1 if mutant else 2), 'exact owned cycle count')
@@ -145,13 +167,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('image', type=Path)
     parser.add_argument('--missing-clear-mutant', action='store_true')
+    from windows_enclave_owned_faults import STAGES
+    parser.add_argument('--fault', choices=STAGES)
     parser.add_argument('--child', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
+    require(not (args.fault and args.missing_clear_mutant), 'fault and mutant modes are distinct')
     image = args.image.resolve(strict=True)
     require(image.suffix.lower() == '.dll' and 0 < image.stat().st_size <= 4 * 1024 * 1024,
             'bounded existing synthetic image required')
     if args.child:
-        print(json.dumps(exercise(WorkerNative(), Windows(), image, args.missing_clear_mutant)))
+        if args.fault:
+            from windows_enclave_owned_faults import exercise as run_fault
+            record = run_fault(WorkerNative(), Windows(), image, args.fault)
+        else:
+            record = exercise(WorkerNative(), Windows(), image, args.missing_clear_mutant)
+        print(json.dumps(record))
         return
     source = Path(__file__).resolve()
     root = source.parents[2]
@@ -162,7 +192,9 @@ def main():
     command = [sys.executable, str(source), str(image), '--child']
     if args.missing_clear_mutant:
         command.append('--missing-clear-mutant')
-    record = bounded(command, args.missing_clear_mutant)
+    if args.fault:
+        command.extend(['--fault', args.fault])
+    record = bounded(command, args.missing_clear_mutant, args.fault)
     require(image_hash == hashlib.sha256(image.read_bytes()).hexdigest(), 'image changed')
     require(hashes == {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in SOURCES},
             'sources changed')

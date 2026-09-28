@@ -1,0 +1,150 @@
+{
+  "commit": "7278e29add40c0343b42dc517a1e0ed322cd56b6",
+  "deleted": true,
+  "enclave": {
+    "after": {
+      "page_count": 3,
+      "pages": [
+        {
+          "locked": true,
+          "raw_flags": 88080449,
+          "valid": true
+        },
+        {
+          "locked": true,
+          "raw_flags": 88080449,
+          "valid": true
+        },
+        {
+          "locked": true,
+          "raw_flags": 88080449,
+          "valid": true
+        }
+      ],
+      "regions": [
+        {
+          "error": 0,
+          "protect": 4,
+          "state": 4096,
+          "success": true
+        },
+        {
+          "error": 0,
+          "protect": 4,
+          "state": 4096,
+          "success": true
+        },
+        {
+          "error": 0,
+          "protect": 4,
+          "state": 4096,
+          "success": true
+        }
+      ],
+      "working_set_error": 0,
+      "working_set_success": true
+    },
+    "before": {
+      "page_count": 3,
+      "pages": [
+        {
+          "locked": false,
+          "raw_flags": 83886145,
+          "valid": true
+        },
+        {
+          "locked": false,
+          "raw_flags": 83886145,
+          "valid": true
+        },
+        {
+          "locked": false,
+          "raw_flags": 83886145,
+          "valid": true
+        }
+      ],
+      "regions": [
+        {
+          "error": 0,
+          "protect": 4,
+          "state": 4096,
+          "success": true
+        },
+        {
+          "error": 0,
+          "protect": 4,
+          "state": 4096,
+          "success": true
+        },
+        {
+          "error": 0,
+          "protect": 4,
+          "state": 4096,
+          "success": true
+        }
+      ],
+      "working_set_error": 0,
+      "working_set_success": true
+    },
+    "lock": {
+      "error": 0,
+      "success": true
+    },
+    "unlock_succeeded": true
+  },
+  "image_sha256": "c26a7124e64121660fcd6f96cd759ba3d569cd671d94b3d6fe5eae059246a936",
+  "internal_marker_and_clear_preflight": true,
+  "kind": "windows-enclave-host-lock-experiment",
+  "native_machine": "0x8664",
+  "normal_return_clearing": true,
+  "ordinary_control": {
+    "page_count": 2,
+    "pages": [
+      {
+        "locked": true,
+        "raw_flags": 88080449,
+        "valid": true
+      },
+      {
+        "locked": true,
+        "raw_flags": 88080449,
+        "valid": true
+      }
+    ],
+    "regions": [
+      {
+        "error": 0,
+        "protect": 4,
+        "state": 4096,
+        "success": true
+      },
+      {
+        "error": 0,
+        "protect": 4,
+        "state": 4096,
+        "success": true
+      }
+    ],
+    "working_set_error": 0,
+    "working_set_success": true
+  },
+  "os": 26100,
+  "production_signed": false,
+  "schema": 1,
+  "source_sha256": {
+    "assurance/windows-enclave-probe/dump.c": "1023ac5a2aad431d3b832498cf456eb6b7e9d31a23f75a0b215f59c0c1ca55e8",
+    "assurance/windows-enclave-probe/synthetic.c": "34751a8b80406d216eb1a3597579a14fc01ce118e7504e394183e645c6bbdfc3",
+    "scripts/cryptography/test-windows-enclave-dump.py": "b08b429b85eadf5931d4f5829a77d0e283cd39d5aaef582ad69b10c735cfdb2c",
+    "scripts/cryptography/test-windows-enclave-residency.py": "cbe3d16c88898c971dbdc29b39cfb9c5ff373e5371a82661e7216dde2f2c463a",
+    "scripts/cryptography/windows_enclave_dump.py": "4cae953bc638da20d18cc8e3d8809d5ce7638e846957ad20cdf2ccb61d35a8ec",
+    "scripts/cryptography/windows_enclave_lifecycle.py": "0232dfa69625cfc757baec318c49edd304b118fcb34b876d2c832899298e5ea4",
+    "scripts/cryptography/windows_enclave_residency.py": "3b6f3e5a4ef14c41fe3a3e779000d0f02d922d2d277af51fb429241764751075",
+    "scripts/cryptography/windows_minidump.py": "02416be578cde35f274509cb848e05a04d41093168194a800ba6e239c5e41969",
+    "scripts/cryptography/windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "scripts/cryptography/windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09",
+    "scripts/cryptography/windows_wer_probe.py": "ebca664888c08c2e29174f8447fb31a264e5661c6d96183d7503c1fa84291bcd"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false,
+  "synthetic_only": true
+}

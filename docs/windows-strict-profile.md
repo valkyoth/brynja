@@ -6,7 +6,9 @@ backend, qualify an OS, or change release-gate policy. Existing Linux behavior
 and default-off acceleration remain unchanged.
 
 The [enclave feasibility review](windows-enclave-design.md) records the next
-candidate architecture, its API incompatibilities and the current host blocker.
+candidate architecture, its API incompatibilities and remaining worker-ownership
+proof obligations. Azure now has positive fixed-buffer enclave locking and
+local-dump exclusion observations; these do not establish full strict support.
 It is not authorization to substitute a weaker storage guarantee.
 
 ## Platform review

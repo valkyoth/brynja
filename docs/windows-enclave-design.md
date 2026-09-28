@@ -294,6 +294,84 @@ skips destructors; preflight clearing is not abort cleanup. Windows strict
 constructors remain unsupported. Next work is residency and complete enclave
 worker/resource ownership, not cryptographic integration based on isolation alone.
 
+### Fixed-buffer residency and combined dump observation
+
+On 2026-09-28, two runs at clean commit
+`7278e29add40c0343b42dc517a1e0ed322cd56b6` successfully locked the same synthetic
+8-KiB enclave region from the host. Its unaligned address touched three 4-KiB
+pages. All three working-set entries were valid/unlocked before `VirtualLock`
+and valid/locked afterwards. Unlocking, enclave marker clearing, termination
+and deletion succeeded. A distinct two-page ordinary mapping passed the locked
+positive control. The [first record](../assurance/windows-protection-observations/enclave-residency-azure-7278e29a.json)
+and [repeat](../assurance/windows-protection-observations/enclave-residency-repeat-azure-7278e29a.json)
+are identical, including eleven source hashes checked against that commit.
+
+Microsoft [documents](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtuallock)
+that successfully locked pages remain in physical memory and are not written to
+the pagefile while locked. The native result supports that host-side mechanism
+for this fixed enclave region; it is not proof that all enclave pages are locked
+automatically or that every worker/runtime allocation is covered. The probe
+does not interpret `Locked` when the working-set entry is invalid and does not
+change working-set limits or privileges. It uses public data; it fills before
+locking and clears after unlocking, so it is **not** a secret-admission or
+erase-before-unlock lifecycle test.
+
+The [combined first run](../assurance/windows-protection-observations/enclave-locked-dump-azure-6761b2c4.json)
+and [combined repeat](../assurance/windows-protection-observations/enclave-locked-dump-repeat-azure-6761b2c4.json)
+at `6761b2c4fb26c8148b20002f33867b003ac4bf91` additionally required successful
+host locking and valid/locked observations for all touched pages before the
+intentional crash. Full dump sizes were 54,515,093 and 54,240,613 bytes. Each
+contained all 8,192 positive-control bytes and zero enclave-region bytes. Thus
+locking did not defeat this observed dump exclusion. The parent rejects an
+unlocked-mode record when the combined mode was requested.
+
+Fourteen dump-harness and seven residency tests passed on Linux and native
+Windows. These include failed locking, failed page queries, partial/invalid page
+observations, unlock failures, mode substitution and timeout regressions. The
+[cleanup check](../assurance/windows-protection-observations/enclave-locked-dump-cleanup-azure-6761b2c4.json)
+again found no temporary application policy, executable, dump directory, signing
+certificate or probe process. Raw dumps stayed on Azure and were deleted.
+The image and development boot configuration are unchanged from the preceding
+dump experiment; production signing remains unqualified.
+
+Downloaded hashes before line-ending normalization:
+
+| Record | SHA-256 |
+| --- | --- |
+| Both residency records | `b66ef454dc67be0bc95c6fa81a3d9e09baef0ec18933c1d275737c6f5ffdc81b` |
+| First locked dump | `15a8ade5d7ac5dc8ea15c618f03292688fecd5ca46503dff47e6e51e8f37cfd7` |
+| Repeat locked dump | `115f20036d41c043a9934edec29ca4f2cf39d1a74082e889195636bd13dea48b` |
+| Cleanup/configuration | `1f8b3516d26b5a3176afd916b253e0846e3c6c2aa1a11453126aed046ae3389f` |
+
+### Worker ownership proof still required
+
+The next prototype must account for these distinct lifetimes before admitting
+secret input. The fixed static marker does not stand in for all of them.
+
+| Region | Required acquisition/ownership | Required retirement proof |
+| --- | --- | --- |
+| State, input staging, output and scratch | Bounded guarded allocations; lock every page before secret input; no late unprotected allocation | Clear full capacity while locked, including unused lanes/padding, then release |
+| Execution stack and spills | Establish complete stack bounds, guards and growth behavior before secret execution | Leave the secret stack, then clear its complete owned extent before reuse/release |
+| TLS and runtime-created copies | Enumerate potentially secret-bearing storage; protect it or prove it never holds secret material | Run applicable destructors before the final clearing; do not infer this from thread exit |
+| Thread/operation lifetime | Exclusive instance/generation ownership; no callback escape; bounded worker count | Prevent new entry, drain every active call, verify termination, clear resources, then delete |
+
+The [VBS initialization structure](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-enclave_init_info_vbs)
+requests a thread count and returns the actual count. It does not provide a
+caller-owned stack address. Therefore Linux's externally owned pthread-stack
+strategy cannot simply be presumed available here. The reviewed
+[Vertdll API list](https://learn.microsoft.com/en-us/windows/win32/trusted-execution/enclaves-available-in-vertdll)
+does not establish an equivalent externally owned enclave-worker stack API.
+This is an unresolved design question, not a claim that all alternatives are
+impossible. Do not erase a live stack or use a raw stack-pointer switch without
+separate ABI/unwind and runtime review.
+
+Likewise, [TerminateEnclave with `fWait=FALSE`](https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-terminateenclave)
+returns immediately. It is not a join. [DeleteEnclave](https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-deleteenclave)
+can reject while threads remain. Successful deletion in our idle single-thread
+probe does not prove active-worker cancellation, complete memory erasure or
+TLS cleanup. A production design must resolve these obligations rather than
+mark them passed from the existing lifecycle smoke tests.
+
 ### Remaining implementation sequence
 
 1. Obtain a host where the read-only probe reports VBS support and running

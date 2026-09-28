@@ -80,3 +80,11 @@ non-vacuity regressions. Raw dumps and owned temporary configuration were remove
 and cleanup independently checked. This establishes only the observed dump path;
 residency, complete worker cleanup and production signing remain unresolved.
 Windows strict constructors and release-gate policy are unchanged.
+
+Follow-up native runs successfully locked every page touched by the synthetic
+enclave buffer. Two combined locking/dump runs retained full positive-control
+coverage and zero enclave-region coverage. Seven residency regressions and the
+expanded fourteen-test dump harness pass locally and natively. This identifies
+a candidate fixed-buffer mechanism, not complete worker protection: admission
+before secret input, erase-before-unlock, stack/TLS ownership and production
+signing remain unqualified. No shipped cryptographic behavior has changed.

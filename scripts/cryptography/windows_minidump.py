@@ -41,7 +41,9 @@ def memory_ranges(blob):
     ranges = []
     for index in range(count):
         address, length = unpack(blob, offset + 16 + index * 16, '<QQ')
-        require(0 < length and address + length <= 2**64, 'virtual range bounds')
+        require(0 < length and address + length <= 2**64,
+                f'virtual range bounds: descriptor={index}; zero_length={length == 0}; '
+                f'address_overflow={address + length > 2**64}')
         require(length <= len(blob) - payload, 'memory payload file bounds')
         ranges.append((address, length, payload))
         payload += length

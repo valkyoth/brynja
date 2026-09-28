@@ -3,7 +3,8 @@
 Owner-authorized verification completed and collected on 2026-09-28. This is
 implementation-author evidence, separate from the two owner-supplied independent
 retests in the [security report](../security/pentest/v0.24.49.md). It does not
-authorize a tag or substitute for remaining release-gate and GitHub checks.
+authorize a tag. The final-gate result and remaining GitHub requirement are
+recorded below.
 
 ## Completed non-Miri run
 
@@ -49,6 +50,19 @@ Miri does not qualify native assembly or OS protected-memory implementations.
 
 ## Release hand-off
 
+The complete unchanged `scripts/tag_gate.sh v0.24.49` passed on 2026-09-28
+at `6c26d54ef5b6b02831ff382cb5ea232eb91548e9`. Its local log is
+`release-reports/v02449-final-gate-6c26d54e.log`, SHA-256
+`d693e80ea9a82707c8149c7179fbf11b6c6cac2a2afab5c6efdada01e81fb07f`.
+This includes current repository checks, native-evidence validation,
+supplemental CPU/timing checks, live standards/freshness and tool checks,
+sanitization admission, GitHub release controls, dependency audit, SBOM and
+committed-report readiness. All 240 compiler-matrix, 49 ASan and 12 Kani
+commands were reused after validation. Miri reused 560 tasks and passed the
+two current legacy tasks. The standards refresh and action-pin parser repair
+changed no production implementation or gate requirement. This hand-off note
+is a documentation-only follow-up, not a claim of new cryptographic execution.
+
 The phase registry `release-reports/v02449-phase-receipts.json` routes Miri to
 the original combined AWS receipt and the other phases to the new completed
 job. Existing rules compare each tested ancestor with the release checkout;
@@ -61,4 +75,5 @@ Native observations retain their original capture commits and the exact
 still has SDE evidence only; Windows/macOS strict protected sessions still
 reject. No certification or wider platform qualification is claimed.
 The internal release plan selects **zero crates** for crates.io publication.
-Final gate completion and green GitHub checks remain necessary before tagging.
+Green GitHub checks for the pushed candidate and owner authorization remain
+necessary before tagging. Nothing has been published or tagged by this check.

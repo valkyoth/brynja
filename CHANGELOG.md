@@ -22,7 +22,7 @@
   Linux strict portable/accelerated checks pass; Apple/Windows strict sessions
   correctly reject and remain planned for v0.24.51/v0.24.50 respectively.
   Dedicated x86 SHA512 still has SDE evidence only, not native qualification.
-  Final release-gate checks and GitHub approval remain pending. No crates are
+  The full final release gate passed at `6c26d54e`; GitHub approval remains pending. No crates are
   selected for publication. The entries below retain implementation history;
   their incremental pending-work statements are superseded by this status and
   the [current pentest ledger](security/pentest/v0.24.49.md).

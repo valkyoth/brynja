@@ -12,7 +12,7 @@ Dedicated x86 SHA512 has SDE evidence only, not native-silicon qualification.
 The 558-command repository/compiler-matrix/ASan/Kani run is complete and its
 receipt validated. Miri has 560 unchanged AWS tasks reused plus two refreshed
 legacy tasks passed. See the [verification record](../docs/verification-v0.24.49.md).
-Final release-gate checks and GitHub approval remain pending.
+The full final release gate passed at `6c26d54e`; GitHub approval remains pending.
 No crates are selected for publication. The incremental implementation notes
 below are historical; their pending-retest/integration wording is superseded by
 this status. Caller/platform residuals and informational instrumented-build

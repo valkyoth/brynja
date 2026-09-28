@@ -95,3 +95,11 @@ pass locally and on Windows. Host and enclave allocation views differ and are
 recorded separately; neither a cleared array nor an idle worker's successful
 termination is claimed as complete stack/TLS cleanup. Full worker ownership,
 protection-before-input and clearing-before-release remain unresolved.
+
+A separate owned-allocation probe now demonstrates the normal-return ordering
+on the Azure development host: reserved guards, full payload locking before
+public-marker writes, zero readback while still locked, then unlock and release.
+Two cycles pass; a compiled missing-clear mutant refuses release and never
+explicitly unlocks its dirty payload. Twelve focused regressions pass locally
+and on Windows. This is not yet an execution-stack adapter or failure-path
+erasure proof; strict Windows support and release policy remain unchanged.

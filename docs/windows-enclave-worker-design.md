@@ -104,3 +104,68 @@ Downloaded record hashes before CRLF normalization:
 | Normal worker | `5e234910c5dda6e1a1ffdfc5f7f14289c014feb2208f1d6c40f8ef92c825d7fa` |
 | Missing-clear mutant | `aab31145b6f87ca861f0f057cd125d31e6bf30410236a332645abedbd6fe8c0b` |
 | Cleanup/configuration | `c9b0f52f1efb7e085796c6eb639848223a96b9660f0c586ef809b93672090244` |
+
+## Follow-up: separately owned allocation lifecycle
+
+The next public-marker experiment, from clean commit
+`89e082e749a60f6a1aa9c32d15f717939edb8c0d`, uses a different `owned.c` image.
+It does not attempt to clear or replace an OS-managed live stack. Inside the
+enclave it reserves 64 KiB, commits only an 8-KiB payload, and checks the entire
+allocation geometry: 4 KiB reserved before the payload and 52 KiB reserved after
+it. It rejects duplicate allocation, dirty release, premature zero queries and
+stale operations. Addresses are public diagnostic integers only.
+
+The [normal Azure record](../assurance/windows-protection-observations/enclave-owned-azure-89e082e7.json)
+contains two successful allocation cycles. Host-side `VirtualLock` succeeded
+before any nonzero marker was written. Both payload pages had valid/locked
+working-set observations before writes, after writes, and after complete internal
+zero readback. Only after that readback did the driver unlock and request enclave
+release. This establishes this bounded normal-return ordering on the development
+host, not full worker protection.
+
+The [compiled missing-clear mutant](../assurance/windows-protection-observations/enclave-owned-mutant-azure-89e082e7.json)
+failed zero readback and refused payload release. Its driver did not explicitly
+unlock the dirty payload; the synthetic enclave was terminated/deleted instead.
+**That teardown is not an erasure result.** Unexpected dispatch/query failures
+also remain failures, not successful cleanup observations. The two
+[wrong-mode](../assurance/windows-protection-observations/enclave-owned-wrong-mode-89e082e7.txt)
+[runs](../assurance/windows-protection-observations/enclave-owned-wrong-mutant-mode-89e082e7.txt)
+returned exit 1 as required. Twelve focused regressions passed on Linux and
+[native Windows](../assurance/windows-protection-observations/enclave-owned-tests-89e082e7.txt),
+covering admission ordering, incomplete/unlocked page observations, dispatch and
+cleanup failures, mutation identity, geometry and false qualification claims.
+
+The [build transcript](../assurance/windows-protection-observations/enclave-owned-build-89e082e7.txt)
+records successful warning-as-error normal/mutant compilation and enclave-only
+imports. The [signing transcript](../assurance/windows-protection-observations/enclave-owned-sign-89e082e7.txt)
+again preserves compatibility-warning exit 2, not a clean signing pass, followed
+by temporary key removal. Exact
+[build](../assurance/windows-protection-observations/brynja-enclave-owned-build.cmd.txt)
+and [signing](../assurance/windows-protection-observations/brynja-enclave-owned-sign.ps1.txt)
+scripts are retained. The [cleanup record](../assurance/windows-protection-observations/enclave-owned-cleanup-89e082e7.json)
+reports no retained probe process, temporary signing certificate, dump directory,
+copied executable or app-specific WER policy. Both records' eight source hashes
+were checked against their exact commit; transcript whitespace/CRLF was normalized.
+
+This is a candidate owned-storage primitive, not a production adapter. The
+enclave cannot independently attest a host `VirtualLock` call: the tested driver
+orders it correctly, but an arbitrary caller could bypass that driver. Microsoft
+lists enclave allocation/protection APIs, not an enclave `VirtualLock` export.
+[Vertdll API list](https://learn.microsoft.com/en-us/windows/win32/trusted-execution/enclaves-available-in-vertdll).
+The host-side lock contract is therefore not a claim of residency against a
+hostile host. [VirtualLock contract](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtuallock).
+
+No execution stack was switched, no confidential input was accepted, and no dump
+was collected. Full stack/TLS ownership, failure-path clearing, ABI/unwind safety,
+register cleanup, dump exclusion for the new allocation and production signing
+remain to be established before strict Windows integration. The next execution
+design must avoid copying secret values onto the unmanaged bootstrap stack or
+TLS; successful allocation alone does not meet that obligation.
+
+Downloaded JSON hashes before CRLF normalization:
+
+| Record | SHA-256 |
+| --- | --- |
+| Normal owned allocation | `7863991ae8141089b944f3854133fc60ad8728c34352c3607a49e8fadf7b7c45` |
+| Missing-clear mutant | `87e1fc715ac84978868f0eb08a4823e71802c98daceda030cd3d0fec98e02072` |
+| Cleanup/configuration | `32bcf006df64b95dcf7eb29a36372865ed5fee999b8afe2293099c7bc9060d14` |

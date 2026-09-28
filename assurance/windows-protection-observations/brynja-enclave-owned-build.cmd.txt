@@ -1,0 +1,15 @@
+@echo off
+setlocal
+call C:\brynja-v0250\buildtools\VC\Auxiliary\Build\vcvars64.bat
+if errorlevel 1 exit /b 1
+if not exist C:\brynja-v0250\enclave-owned mkdir C:\brynja-v0250\enclave-owned
+cd /d C:\brynja-v0250\enclave-owned
+cl /nologo /LD /O2 /W4 /WX /MT /guard:cf /Feowned.dll C:\brynja-v0250\repo\assurance\windows-enclave-probe\owned.c /link /ENCLAVE /NODEFAULTLIB /INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED /LIBPATH:"%VCToolsInstallDir%lib\x64\enclave" /LIBPATH:"%WindowsSdkDir%Lib\%WindowsSDKVersion%ucrt_enclave\x64" libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib
+if errorlevel 1 exit /b 1
+"%WindowsSdkDir%bin\%WindowsSDKVersion%x64\veiid.exe" owned.dll
+if errorlevel 1 exit /b 1
+cl /nologo /LD /O2 /W4 /WX /MT /guard:cf /DBRYNJA_PROBE_SKIP_CLEAR /Feowned-mutant.dll C:\brynja-v0250\repo\assurance\windows-enclave-probe\owned.c /link /ENCLAVE /NODEFAULTLIB /INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED /LIBPATH:"%VCToolsInstallDir%lib\x64\enclave" /LIBPATH:"%WindowsSdkDir%Lib\%WindowsSDKVersion%ucrt_enclave\x64" libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib
+if errorlevel 1 exit /b 1
+"%WindowsSdkDir%bin\%WindowsSDKVersion%x64\veiid.exe" owned-mutant.dll
+if errorlevel 1 exit /b 1
+dumpbin /headers /loadconfig /imports owned.dll

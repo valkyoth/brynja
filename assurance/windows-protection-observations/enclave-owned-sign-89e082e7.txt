@@ -1,0 +1,25 @@
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\enclave-owned\owned.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SignTool Warning: Note that VBS enclave support is changing and updating your VBS enclave may cause you to lose support on older OSes. Please visit https://go.microsoft.com/fwlink/?linkid=2312918 for details.
+
+SIGNTOOL_EXIT: owned.dll = 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\enclave-owned\owned-mutant.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SignTool Warning: Note that VBS enclave support is changing and updating your VBS enclave may cause you to lose support on older OSes. Please visit https://go.microsoft.com/fwlink/?linkid=2312918 for details.
+
+SIGNTOOL_EXIT: owned-mutant.dll = 2
+EPHEMERAL_SIGNING_KEY_REMOVED
+Synthetic owned signing failed or warned; inspect transcript
+At C:\Users\azureuser\brynja-enclave-owned-sign.ps1:11 char:20
++ ... ($failed) { throw 'Synthetic owned signing failed or warned; inspect  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Synthetic owned...pect transc
+   ript:String) [], RuntimeException
+    + FullyQualifiedErrorId : Synthetic owned signing failed or warned; inspec
+   t transcript

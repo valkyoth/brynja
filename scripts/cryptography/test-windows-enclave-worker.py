@@ -27,9 +27,11 @@ def setup(mutant=False):
     api.call.side_effect = lambda routine, op: (0 if mutant else 8192) if op == 0 else (
         entries[op - 1] if 1 <= op <= 9 else 0)
     host = Mock()
-    host.query.side_effect = lambda address: SimpleNamespace(
-        allocation=address if address in (BASE + 0x10000, BASE + 0x30000) else 0,
-        base=address, size=0x10000, state=0x1000, protect=4)
+    def query(address):
+        start = address // 0x10000 * 0x10000
+        return SimpleNamespace(allocation=start if start in (BASE + 0x10000, BASE + 0x30000) else 0,
+                               base=start, size=0x10000, state=0x1000, protect=4)
+    host.query.side_effect = query
     return api, host
 
 
@@ -95,9 +97,20 @@ class Tests(unittest.TestCase):
                 probe.mapped_ranges(host, item, BASE)
         host = Mock()
         host.query.side_effect = lambda address: SimpleNamespace(allocation=item['allocation_base'],
-            base=address, size=1, state=4096, protect=4)
+            base=address, size=8192 if address == item['address'] else 1, state=4096, protect=4)
         with self.assertRaisesRegex(ValueError, 'descriptor limit'):
             probe.mapped_ranges(host, item, BASE)
+
+    def test_host_and_enclave_allocation_views_are_preserved_not_conflated(self):
+        item = probe.checked_inventory(values(), BASE, True)['stack']
+        host = Mock()
+        host.query.side_effect = lambda address: SimpleNamespace(
+            allocation=BASE if address < BASE + 0x100000 else 0,
+            base=BASE, size=0x100000, state=4096, protect=4)
+        result = probe.mapped_ranges(host, item, BASE)
+        self.assertEqual(result['host_allocation_base_offset'], 0)
+        self.assertFalse(result['matches_enclave_allocation_base'])
+        self.assertEqual(item['allocation_base'], BASE + 0x10000)
 
     def test_false_claims_child_errors_and_timeout_reject(self):
         api, host = setup()

@@ -47,22 +47,30 @@ def checked_inventory(values, base, cleared):
 
 
 def mapped_ranges(host, item, base):
-    # Enumerate this allocation only; bounded even for corrupted query results.
-    address = item['allocation_base']
+    # VTL0 and enclave VirtualQuery may report different allocation boundaries.
+    # Preserve both; never call the host's view a complete enclave-stack extent.
+    observed = host.query(item['address'])
+    allocation = observed.allocation
+    require(type(allocation) is int and base <= allocation <= observed.base <= item['address']
+            and item['address'] + SIZE <= observed.base + observed.size <= base + LIMIT,
+            'host region must cover complete marker within enclave')
+    address = allocation
     stop = base + LIMIT
     ranges = []
     for _ in range(128):
         info = host.query(address)
-        if info.allocation != item['allocation_base']:
+        if info.allocation != allocation:
             break
         require(info.base == address and 0 < info.size <= stop - address, 'bounded worker mapping')
-        ranges.append({'offset': address - item['allocation_base'], 'size': info.size,
+        ranges.append({'offset': address - allocation, 'size': info.size,
                        'state': info.state, 'protect': info.protect})
         address += info.size
     else:
         raise ValueError('worker mapping exceeds descriptor limit')
     require(ranges, 'worker allocation not observed')
-    return ranges
+    return {'host_allocation_base_offset': allocation - base,
+            'matches_enclave_allocation_base': allocation == item['allocation_base'],
+            'ranges': ranges}
 
 
 def exercise(api, host, image, mutant):

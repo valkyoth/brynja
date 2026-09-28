@@ -1,0 +1,56 @@
+First-party PublicWindowFrame excerpt; full raw dump SHA-256:
+47721c9498584ba158df2f55a323b7100c87e9bf41f8ddd3f4607bc43161f23b
+
+  0000000180001230: 55                 push        rbp
+  0000000180001231: 48 8B EC           mov         rbp,rsp
+  0000000180001234: 48 C7 C0 00 00 01  mov         rax,10000h
+                    00
+  000000018000123B: E8 80 01 00 00     call        00000001800013C0
+  0000000180001240: 48 2B E0           sub         rsp,rax
+  0000000180001243: 48 89 25 36 55 00  mov         qword ptr [0000000180006780h],rsp
+                    00
+  000000018000124A: 48 89 2D 27 55 00  mov         qword ptr [0000000180006778h],rbp
+                    00
+  0000000180001251: 4C 8B D4           mov         r10,rsp
+  0000000180001254: 49 BB A5 A5 A5 A5  mov         r11,0A5A5A5A5A5A5A5A5h
+                    A5 A5 A5 A5
+  000000018000125E: 4D 89 1A           mov         qword ptr [r10],r11
+  0000000180001261: 49 83 C2 08        add         r10,8
+  0000000180001265: 4C 3B D5           cmp         r10,rbp
+  0000000180001268: 72 F4              jb          000000018000125E
+  000000018000126A: 48 8D 65 E0        lea         rsp,[rbp-20h]
+  000000018000126E: E8 1D FE FF FF     call        0000000180001090
+  0000000180001273: 4C 8B C0           mov         r8,rax
+  0000000180001276: 48 8D A5 00 00 FF  lea         rsp,[rbp+FFFFFFFFFFFF0000h]
+                    FF
+  000000018000127D: 4C 8B D4           mov         r10,rsp
+  0000000180001280: 33 C0              xor         eax,eax
+  0000000180001282: 49 89 02           mov         qword ptr [r10],rax
+  0000000180001285: 49 83 C2 08        add         r10,8
+  0000000180001289: 4C 3B D5           cmp         r10,rbp
+  000000018000128C: 72 F4              jb          0000000180001282
+  000000018000128E: 4C 8B D4           mov         r10,rsp
+  0000000180001291: 45 33 C9           xor         r9d,r9d
+  0000000180001294: 4D 0B 0A           or          r9,qword ptr [r10]
+  0000000180001297: 49 83 C2 08        add         r10,8
+  000000018000129B: 4C 3B D5           cmp         r10,rbp
+  000000018000129E: 72 F4              jb          0000000180001294
+  00000001800012A0: 4D 85 C9           test        r9,r9
+  00000001800012A3: 75 09              jne         00000001800012AE
+  00000001800012A5: 49 8B C0           mov         rax,r8
+  00000001800012A8: 48 83 C8 40        or          rax,40h
+  00000001800012AC: EB 02              jmp         00000001800012B0
+  00000001800012AE: 33 C0              xor         eax,eax
+  00000001800012B0: 48 8D 65 00        lea         rsp,[rbp]
+  00000001800012B4: 5D                 pop         rbp
+  00000001800012B5: C3                 ret
+  00000018 00001230 000012B6 00005868
+    Unwind version: 1
+    Unwind flags: None
+    Size of prologue: 0x04
+    Count of codes: 2
+    Frame register: rbp
+    Frame offset: 0x0
+    Unwind codes:
+      04: SET_FPREG, register=rbp, offset=0x00
+      01: PUSH_NONVOL, register=rbp

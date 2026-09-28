@@ -116,3 +116,10 @@ an access violation during native unwinding. Direct OS-stack and matched
 assembly-trampoline OS-stack exception controls pass. Emitted frame/unwind
 metadata, failure records and nine focused regressions are retained; the failed
 prototype is not admitted, and Windows strict support remains Unsupported.
+
+A separate OS-managed-stack window prototype passes native normal return and
+an exact synthetic exception caught inside the window. Full-region readback
+rejects separately compiled missing-clear images, including after local-array
+finally cleanup. Seven focused regressions pass on Linux and Windows. This
+narrows the execution-stack design search; it does not yet prove residency,
+guard bounds, Rust panic handling, full worker cleanup or production support.

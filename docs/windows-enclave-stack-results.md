@@ -108,3 +108,7 @@ and present the limitation rather than weakening the profile.
 Even a future C SEH success would not qualify Rust panic unwinding, register
 cleanup, concurrent workers, dump exclusion, production signing or all compiler
 and architecture combinations. Those remain separate integration requirements.
+
+The follow-up [OS-managed stack window experiment](windows-enclave-window-results.md)
+passes its bounded synthetic normal/exception and missing-clear comparisons.
+It has not yet established residency, independent guards or Rust panic handling.

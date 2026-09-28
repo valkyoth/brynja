@@ -1,0 +1,18 @@
+@echo off
+setlocal
+set PATH=C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;%PATH%
+cd /d C:\brynja-v0250\repo
+python scripts\cryptography\windows_enclave_window.py C:\brynja-v0250\enclave-window\window.dll > C:\brynja-v0250\window-normal-17531ec3.json 2> C:\brynja-v0250\window-normal-17531ec3.err
+echo NORMAL_EXIT=%ERRORLEVEL%
+python scripts\cryptography\windows_enclave_window.py C:\brynja-v0250\enclave-window\window.dll --unwind > C:\brynja-v0250\window-unwind-17531ec3.json 2> C:\brynja-v0250\window-unwind-17531ec3.err
+echo UNWIND_EXIT=%ERRORLEVEL%
+python scripts\cryptography\windows_enclave_window.py C:\brynja-v0250\enclave-window\window-mutant.dll --missing-clear-mutant > C:\brynja-v0250\window-mutant-normal-17531ec3.json 2> C:\brynja-v0250\window-mutant-normal-17531ec3.err
+echo MUTANT_NORMAL_EXIT=%ERRORLEVEL%
+python scripts\cryptography\windows_enclave_window.py C:\brynja-v0250\enclave-window\window-mutant.dll --unwind --missing-clear-mutant > C:\brynja-v0250\window-mutant-unwind-17531ec3.json 2> C:\brynja-v0250\window-mutant-unwind-17531ec3.err
+echo MUTANT_UNWIND_EXIT=%ERRORLEVEL%
+python scripts\cryptography\windows_enclave_window.py C:\brynja-v0250\enclave-window\window-mutant.dll > C:\brynja-v0250\window-wrong-mutant-17531ec3.json 2> C:\brynja-v0250\window-wrong-mutant-17531ec3.err
+echo WRONG_MUTANT_EXPECTED_NONZERO=%ERRORLEVEL%
+python scripts\cryptography\windows_enclave_window.py C:\brynja-v0250\enclave-window\window.dll --missing-clear-mutant > C:\brynja-v0250\window-wrong-normal-17531ec3.json 2> C:\brynja-v0250\window-wrong-normal-17531ec3.err
+echo WRONG_NORMAL_EXPECTED_NONZERO=%ERRORLEVEL%
+git status --porcelain
+echo COMPARISON_FINISHED: inspect each exit; not a qualification pass

@@ -15,3 +15,9 @@ The milestone requires failure/rollback and cleanup tests, packaged consumers,
 Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
+
+An isolated synthetic Windows mapping probe is ready for native testing. It
+checks allocation/guard geometry, page locking, WER registration and cleanup,
+with portable failure-injection regressions. Its output is explicitly not
+strict qualification; crash-dump exclusion and worker-stack protection remain
+unverified. No production Rust behavior or dependency is changed by this probe.

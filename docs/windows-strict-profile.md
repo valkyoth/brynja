@@ -76,9 +76,49 @@ be explicit and confined to disposable test applications/hosts.
 
 ## Native hosts and claim limits
 
+### Initial mapping probe
+
+The isolated Python probe calls the Windows APIs directly with synthetic bytes;
+it has no dependency on Brynja's production memory or cryptographic code. On a
+disposable native 64-bit Windows host with Python 3.13 or newer and Git:
+
+```powershell
+python scripts/cryptography/test-windows-protection-probe.py
+if ($LASTEXITCODE -ne 0) { throw "Probe regression tests failed" }
+python scripts/cryptography/windows_protection_probe.py
+if ($LASTEXITCODE -ne 0) { throw "Windows API probe failed" }
+```
+
+The JSON records the commit, dirty-checkout flag, probe source hashes, Python/OS
+identity, geometry and page counts. Success means **observations only**, not
+strict qualification. It allocates a bounded reservation, commits two payload
+pages, observes reserved guards, locks the payload, verifies each page's valid
+and locked bits before/after synthetic writes, registers/unregisters WER
+exclusion, reads back complete clearing, and releases the original reservation.
+Failed protection or cleanup produces a nonzero exit, not a qualified record.
+No working-set limits, registry settings or machine security policy are changed.
+It neither collects a crash dump nor executes a protected worker: both remain
+separate outstanding experiments. The guard observation is a `VirtualQuery`
+state check, not a subprocess fault test. Python clearing/readback is not a
+compiler-resistant Rust cleanup claim.
+
+ABI layouts and working-set flags follow Microsoft's
+[memory-region structure](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-memory_basic_information),
+[system geometry](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/ns-sysinfoapi-system_info),
+[extended working-set query](https://learn.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-queryworkingsetex)
+and [page flags](https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-psapi_working_set_ex_block).
+The `Valid` bit must be set before interpreting `Locked`; a resident page alone
+does not prove it is locked. Release uses the original reservation address,
+zero size and `MEM_RELEASE`, as specified by
+[VirtualFree](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualfree).
+
+### Host request
+
 The first useful host is native Windows x86-64 with Administrator SSH access,
 a current supported Windows SDK and the selected Rust MSVC toolchain. Request
 it once runnable probes are prepared, so it need not sit idle during design.
+The initial Python mapping probe is now ready for that host; SDK/Rust installation
+is needed for subsequent compiled stack/ABI experiments, not this first probe.
 Native Windows AArch64 must be qualified separately before claiming that lane;
 Linux Arm, cross-compilation and emulation are not substitutes.
 

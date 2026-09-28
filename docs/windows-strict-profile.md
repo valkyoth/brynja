@@ -5,6 +5,10 @@ Windows strict constructors remain unsupported. This document does not admit a
 backend, qualify an OS, or change release-gate policy. Existing Linux behavior
 and default-off acceleration remain unchanged.
 
+The [enclave feasibility review](windows-enclave-design.md) records the next
+candidate architecture, its API incompatibilities and the current host blocker.
+It is not authorization to substitute a weaker storage guarantee.
+
 ## Platform review
 
 The first implementation must preserve the

@@ -41,3 +41,11 @@ temporary Lock Pages account right was removed and exact prior rights restored;
 a fresh-token negative test rejected the unprivileged AWE path. The observation
 is recorded without claiming Windows strict qualification. Production behavior
 and release gates remain unchanged.
+
+A read-only enclave capability probe now records negative results without
+confusing OS API availability with qualification. Its eight regression tests
+pass on Windows, including parsing the real embedded PowerShell query. The
+current EC2 host reports no VBS/SGX enclave support. The separate enclave design
+review identifies required operation/secret-output API changes, residency and
+worker cleanup questions, signing requirements and the host prerequisite.
+No enclave runtime, dependency or weaker Windows profile has been introduced.

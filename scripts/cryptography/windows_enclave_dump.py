@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Disposable Windows enclave/full-WER-dump experiment; public markers only."""
 import argparse
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 import hashlib
 import json
 import mmap
@@ -71,7 +71,25 @@ def validate_target(target, pid):
     require(abs(target['control'] - target['enclave']) >= SIZE, 'distinct positive control required')
 
 
-def child(image):
+@contextmanager
+def locked_region(address):
+    # Imported only for the explicitly selected combined experiment.
+    from windows_enclave_residency import Host
+    api = Host()
+    result = api.attempt_lock(address)
+    require(result['success'], f'enclave host lock failed: {result["error"]}')
+    try:
+        snapshot = api.snapshot(address)
+        require(snapshot['working_set_success'] and snapshot['page_count'] > 0
+                and len(snapshot['pages']) == snapshot['page_count']
+                and all(page['valid'] and page['locked'] for page in snapshot['pages']),
+                'all enclave pages must be observed locked')
+        yield
+    finally:
+        api.unlock(address, SIZE)
+
+
+def child(image, host_lock=False):
     require(wer.APP.fullmatch(Path(sys.executable).name.lower()) is not None,
             'crash child must use its unique disposable executable')
     api = Windows()
@@ -85,9 +103,11 @@ def child(image):
                       'size': SIZE, 'internal_verification': True, 'clear_preflight': True,
                       'native_machine': api.native_machine}
             validate_target(target, os.getpid())
-            print(json.dumps(target), flush=True)
-            api.dll.RaiseFailFastException(None, None, 0)
-            raise ProbeError('RaiseFailFastException unexpectedly returned')
+            with locked_region(address) if host_lock else nullcontext():
+                target['host_lock_verified'] = host_lock
+                print(json.dumps(target), flush=True)
+                api.dll.RaiseFailFastException(None, None, 0)
+                raise ProbeError('RaiseFailFastException unexpectedly returned')
 
 
 def analyze(blob, target):
@@ -99,11 +119,14 @@ def analyze(blob, target):
             'enclave_region_absent_in_this_dump': observation['included_bytes'] == 0}
 
 
-def run_child(executable, source, image):
+def run_child(executable, source, image, host_lock=False):
     names = {'SYSTEMROOT', 'WINDIR', 'TEMP', 'TMP', 'USERPROFILE', 'LOCALAPPDATA',
              'APPDATA', 'PROGRAMDATA', 'SYSTEMDRIVE'}
     environment = {key: value for key, value in os.environ.items() if key.upper() in names}
-    with subprocess.Popen([str(executable), str(source), str(image), '--synthetic-crash-child'],
+    command = [str(executable), str(source), str(image), '--synthetic-crash-child']
+    if host_lock:
+        command.append('--host-lock')
+    with subprocess.Popen(command,
                           env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                           text=True) as process:
         try:
@@ -118,6 +141,7 @@ def run_child(executable, source, image):
         require(not errors and len(output) < 4096, 'child setup/diagnostic failure')
         target = json.loads(output)
         validate_target(target, process.pid)
+        require(target.get('host_lock_verified') is host_lock, 'host locking mode mismatch')
         return target, process.returncode
 
 
@@ -125,13 +149,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('image', type=Path)
     parser.add_argument('--allow-app-local-dump', action='store_true')
+    parser.add_argument('--host-lock', action='store_true')
     parser.add_argument('--synthetic-crash-child', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
     image = args.image.resolve()
     require(image.suffix.lower() == '.dll' and image.is_file() and
             0 < image.stat().st_size <= 4 * 1024 * 1024, 'bounded existing enclave DLL required')
     if args.synthetic_crash_child:
-        child(image)
+        child(image, args.host_lock)
         return
     require(args.allow_app_local_dump, 'explicit --allow-app-local-dump approval required')
     Windows()
@@ -141,7 +166,9 @@ def main():
     commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
     require(not subprocess.check_output(['git', 'status', '--porcelain'], cwd=root), 'clean checkout required')
     image_hash = hashlib.sha256(image.read_bytes()).hexdigest()
-    sources = {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in SOURCES}
+    names = SOURCES + (('scripts/cryptography/windows_enclave_residency.py',
+                        'scripts/cryptography/test-windows-enclave-residency.py') if args.host_lock else ())
+    sources = {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in names}
     executable = Path(sys.executable).with_name('brynja-wer-' + uuid.uuid4().hex + '.exe')
     output = executable.open('xb')
     try:
@@ -150,7 +177,7 @@ def main():
         with tempfile.TemporaryDirectory(prefix='brynja-enclave-dump-') as directory:
             folder = Path(directory)
             with wer.application_policy(winreg, executable.name, folder):
-                target, exitcode = run_child(executable, source, image)
+                target, exitcode = run_child(executable, source, image, args.host_lock)
             files = list(folder.glob(executable.name + '.' + str(target['pid']) + '.dmp'))
             require(len(files) == 1, 'exactly one child dump required; no dump is inconclusive')
             require(32 <= files[0].stat().st_size <= dump.LIMIT, 'bounded dump size')
@@ -160,7 +187,7 @@ def main():
     finally:
         executable.unlink()
     require(image_hash == hashlib.sha256(image.read_bytes()).hexdigest(), 'image changed during experiment')
-    require(sources == {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in SOURCES},
+    require(sources == {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in names},
             'sources changed during experiment')
     require(not subprocess.check_output(['git', 'status', '--porcelain'], cwd=root), 'checkout became dirty')
     print(json.dumps({'schema': 1, 'kind': 'windows-enclave-full-local-dump-experiment',
@@ -169,6 +196,7 @@ def main():
                       'commit': commit, 'source_sha256': sources, 'image_sha256': image_hash,
                       'native_machine': target['native_machine'], 'os': sys.getwindowsversion().build,
                       'internal_verification': True, 'clear_preflight': True,
+                      'host_lock_verified': target['host_lock_verified'],
                       'child_exit_code': exitcode, 'dump_size': dump_size,
                       'app_policy_removed': True, 'raw_dump_removed': True,
                       'copied_executable_removed': True, 'observations': observation},

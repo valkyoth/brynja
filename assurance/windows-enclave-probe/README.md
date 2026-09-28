@@ -106,3 +106,10 @@ This only evaluates that host-side locking mechanism. Rejection does not prove
 enclave pages are pageable, and success would not establish protection of all
 enclave worker stacks, TLS or runtime copies. Production strict support remains
 unqualified. This is public-marker research, not secret processing.
+
+For the combined locking/full-local-dump experiment, add `--host-lock` to the
+dump command above. It requires a successful enclave lock and valid/locked
+observations for **every** touched page before crashing the child; the parent
+rejects an unlocked-mode record. The lock is held until that deliberate crash.
+This does not claim destructor execution at abort, or protection of any region
+beyond the fixed synthetic buffer. Missing/partial positive controls still fail.

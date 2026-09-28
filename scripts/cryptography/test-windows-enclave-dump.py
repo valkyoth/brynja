@@ -16,7 +16,8 @@ from windows_protection_probe import ProbeError
 
 def target():
     return {'pid': 123, 'enclave': 0x10000, 'control': 0x20000, 'size': 8192,
-            'internal_verification': True, 'clear_preflight': True, 'native_machine': '0x8664'}
+            'internal_verification': True, 'clear_preflight': True, 'native_machine': '0x8664',
+            'host_lock_verified': False}
 
 
 def minidump(regions):
@@ -142,6 +143,41 @@ class Tests(unittest.TestCase):
         with patch.object(probe.subprocess, 'Popen', return_value=context), self.assertRaisesRegex(ProbeError, '90 seconds'):
             probe.run_child('owned.exe', 'source.py', 'image.dll')
         process.kill.assert_called_once_with()
+
+    def test_locked_dump_demands_all_pages_and_preserves_unlock(self):
+        import windows_enclave_residency as residency
+        good = {'page_count': 3, 'working_set_success': True,
+                'pages': [{'valid': True, 'locked': True}] * 3}
+        bad = [good | {'working_set_success': False}, good | {'pages': []},
+               good | {'pages': [{'valid': True, 'locked': True}] * 2},
+               good | {'pages': [{'valid': True, 'locked': False}] * 3},
+               good | {'pages': [{'valid': False, 'locked': None}] * 3}]
+        for snapshot in [good] + bad:
+            api = Mock()
+            api.attempt_lock.return_value = {'success': True, 'error': 0}
+            api.snapshot.return_value = snapshot
+            with patch.object(residency, 'Host', return_value=api):
+                if snapshot == good:
+                    with probe.locked_region(0x10000):
+                        pass
+                else:
+                    with self.assertRaises(ProbeError):
+                        with probe.locked_region(0x10000):
+                            self.fail('must reject before crash')
+            api.unlock.assert_called_once_with(0x10000, 8192)
+        api = Mock()
+        api.attempt_lock.return_value = {'success': False, 'error': 487}
+        with patch.object(residency, 'Host', return_value=api), self.assertRaises(ProbeError):
+            with probe.locked_region(0x10000):
+                self.fail('must not crash')
+        api.unlock.assert_not_called()
+
+    def test_locked_mode_cannot_reuse_unlocked_child_record(self):
+        process = Mock(pid=123, returncode=0xc0000602)
+        process.communicate.return_value = (json.dumps(target()), '')
+        context = Mock(__enter__=Mock(return_value=process), __exit__=Mock(return_value=False))
+        with patch.object(probe.subprocess, 'Popen', return_value=context), self.assertRaisesRegex(ProbeError, 'mode mismatch'):
+            probe.run_child('owned.exe', 'source.py', 'image.dll', True)
 
     def test_no_approval_means_no_native_or_registry_changes(self):
         with tempfile.TemporaryDirectory() as directory:

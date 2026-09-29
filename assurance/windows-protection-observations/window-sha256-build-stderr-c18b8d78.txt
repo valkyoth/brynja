@@ -1,0 +1,19 @@
+From C:\Users\azureuser\sha256-window-c18b8d78.bundle
+ * branch              HEAD       -> FETCH_HEAD
+Previous HEAD position was d1243bb6 test(windows): prototype fixed Rust worker in guarded enclave window
+HEAD is now at c18b8d78 test(windows): normalize portable experiment source identities
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.079s
+
+OK
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.012s
+
+OK
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.008s
+
+OK

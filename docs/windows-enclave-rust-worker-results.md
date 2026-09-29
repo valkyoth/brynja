@@ -110,3 +110,7 @@ protocols, concurrency, production signing, exact-worker-layout dump exclusion
 or supported OS/compiler baselines. Next is a bounded operation adapter using
 existing first-party Rust implementation code with public vectors, accompanied
 by call-graph/import/frame review—not activation of the strict facade.
+
+That subsequent [public SHA-256 experiment](windows-enclave-sha256-results.md)
+now runs the existing portable implementation successfully. It retains the
+distinction between ordinary public data and protected secret processing.

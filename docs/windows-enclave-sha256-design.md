@@ -4,6 +4,8 @@ This v0.24.50 research step runs the existing, unchanged portable
 `brynja_hash_sha2::sha256` and `Sha256` APIs inside the guarded, locked 64 KiB
 window described by [the Rust worker experiment](windows-enclave-rust-worker-design.md).
 It does **not** enable Windows strict sessions or qualify secret processing.
+The [native observations and failure controls](windows-enclave-sha256-results.md)
+are now recorded separately.
 
 ## Scope and independent checks
 

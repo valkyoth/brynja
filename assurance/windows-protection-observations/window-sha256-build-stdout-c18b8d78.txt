@@ -1,0 +1,449 @@
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.14.41
+** Copyright (c) 2025 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+window_sha256.c
+   Creating library normal.lib and object normal.exp
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+window_sha256.c
+   Creating library missing-clear.lib and object missing-clear.exp
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+window_sha256.c
+   Creating library missing-local-clear.lib and object missing-local-clear.exp
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+window_sha256.c
+   Creating library wrong-digest.lib and object wrong-digest.exp
+Microsoft (R) COFF/PE Dumper Version 14.44.35229.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file normal.dll
+
+PE signature found
+
+File Type: DLL
+
+FILE HEADER VALUES
+            8664 machine (x64)
+               5 number of sections
+        6ABB8230 time date stamp Tue Sep 29 09:17:36 2026
+               0 file pointer to symbol table
+               0 number of symbols
+              F0 size of optional header
+            2022 characteristics
+                   Executable
+                   Application can handle large (>2GB) addresses
+                   DLL
+
+OPTIONAL HEADER VALUES
+             20B magic # (PE32+)
+           14.44 linker version
+            3600 size of code
+            3600 size of initialized data
+               0 size of uninitialized data
+            29E0 entry point (00000001800029E0)
+            1000 base of code
+       180000000 image base (0000000180000000 to 000000018000AFFF)
+            1000 section alignment
+             200 file alignment
+            6.00 operating system version
+            0.00 image version
+            6.00 subsystem version
+               0 Win32 version
+            B000 size of image
+             400 size of headers
+           15F56 checksum
+               2 subsystem (Windows GUI)
+            41E0 DLL characteristics
+                   High Entropy Virtual Addresses
+                   Dynamic base
+                   Check integrity
+                   NX compatible
+                   Control Flow Guard
+          100000 size of stack reserve
+            1000 size of stack commit
+          100000 size of heap reserve
+            1000 size of heap commit
+               0 loader flags
+              10 number of directories
+            7200 [      BC] RVA [size] of Export Directory
+            72BC [      3C] RVA [size] of Import Directory
+               0 [       0] RVA [size] of Resource Directory
+            9000 [     3E4] RVA [size] of Exception Directory
+               0 [       0] RVA [size] of Certificates Directory
+            A000 [     120] RVA [size] of Base Relocation Directory
+            6700 [      1C] RVA [size] of Debug Directory
+               0 [       0] RVA [size] of Architecture Directory
+               0 [       0] RVA [size] of Global Pointer Directory
+               0 [       0] RVA [size] of Thread Storage Directory
+            65C0 [     140] RVA [size] of Load Configuration Directory
+               0 [       0] RVA [size] of Bound Import Directory
+            5000 [      D8] RVA [size] of Import Address Table Directory
+               0 [       0] RVA [size] of Delay Import Directory
+               0 [       0] RVA [size] of COM Descriptor Directory
+               0 [       0] RVA [size] of Reserved Directory
+
+
+SECTION HEADER #1
+   .text name
+    35E0 virtual size
+    1000 virtual address (0000000180001000 to 00000001800045DF)
+    3600 size of raw data
+     400 file pointer to raw data (00000400 to 000039FF)
+       0 file pointer to relocation table
+       0 file pointer to line numbers
+       0 number of relocations
+       0 number of line numbers
+60000020 flags
+         Code
+         Execute Read
+
+SECTION HEADER #2
+  .rdata name
+    2588 virtual size
+    5000 virtual address (0000000180005000 to 0000000180007587)
+    2600 size of raw data
+    3A00 file pointer to raw data (00003A00 to 00005FFF)
+       0 file pointer to relocation table
+       0 file pointer to line numbers
+       0 number of relocations
+       0 number of line numbers
+40000040 flags
+         Initialized Data
+         Read Only
+
+  Debug Directories
+
+        Time Type        Size      RVA  Pointer
+    -------- ------- -------- -------- --------
+    6ABB8230 coffgrp      2AC 00006B98     5598
+
+  Section contains the following imports:
+
+    ucrtbase_enclave.dll
+             180005000 Import Address Table
+             1800072F8 Import Name Table
+                     0 time date stamp
+                     0 Index of first forwarder reference
+
+                          91 _initterm
+                          92 _initterm_e
+                          E8 _seh_filter_dll
+                          90 _initialize_onexit_table
+                          67 _execute_onexit_table
+                          4B _cexit
+                         298 terminate
+                         1F2 free
+                         15C abort
+                         181 calloc
+
+    vertdll.dll
+             180005058 Import Address Table
+             180007350 Import Name Table
+                     0 time date stamp
+                     0 Index of first forwarder reference
+
+                          6B RaiseException
+                          31 GetLastError
+                          AB VirtualProtect
+                          AC VirtualQuery
+                           2 CallEnclave
+                          4A InitializeSListHead
+                          95 RtlUnwindEx
+                          4D InterlockedFlushSList
+                          98 SetLastError
+                          A0 TlsAlloc
+                          A2 TlsGetValue
+                          A4 TlsSetValue
+                          A1 TlsFree
+                          49 InitializeCriticalSectionEx
+                           9 DeleteCriticalSection
+
+  Section contains the following load config:
+
+            00000140 size
+                   0 time date stamp
+                0.00 Version
+                   0 GlobalFlags Clear
+                   0 GlobalFlags Set
+                   0 Critical Section Default Timeout
+                   0 Decommit Free Block Threshold
+                   0 Decommit Total Free Threshold
+    0000000000000000 Lock Prefix Table
+                   0 Maximum Allocation Size
+                   0 Virtual Memory Threshold
+                   0 Process Affinity Mask
+                   0 Process Heap Flags
+                   0 CSD Version
+                0000 Dependent Load Flag
+    0000000000000000 Edit List
+    0000000180008000 Security Cookie
+    00000001800050D8 Guard CF address of check-function pointer
+    00000001800050E8 Guard CF address of dispatch-function pointer
+    0000000180005150 Guard CF function table
+                  1B Guard CF function count
+            10017500 Guard Flags
+                       CF instrumented
+                       FID table present
+                       Protect delayload IAT
+                       Delayload IAT in its own section
+                       Export suppression info present
+                       Long jump target table present
+                0000 Code Integrity Flags
+                0000 Code Integrity Catalog
+            00000000 Code Integrity Catalog Offset
+            00000000 Code Integrity Reserved
+    0000000000000000 Guard CF address taken IAT entry table
+                   0 Guard CF address taken IAT entry count
+    0000000000000000 Guard CF long jump target table
+                   0 Guard CF long jump target count
+    0000000000000000 Dynamic value relocation table
+    0000000000000000 Hybrid metadata pointer
+    0000000000000000 Guard RF address of failure-function
+    0000000000000000 Guard RF address of failure-function pointer
+            00000000 Dynamic value relocation table offset
+                0000 Dynamic value relocation table section
+                0000 Reserved2
+    0000000000000000 Guard RF address of stack pointer verification function pointer
+            00000000 Hot patching table offset
+                0000 Reserved3
+    00000001800051E0 Enclave configuration pointer
+    0000000180006980 Volatile metadata pointer
+    0000000000000000 Guard EH continuation table
+                   0 Guard EH continuation count
+    00000001800050E0 Guard XFG address of check-function pointer
+    00000001800050F0 Guard XFG address of dispatch-function pointer
+    00000001800050F8 Guard XFG address of dispatch-table-function pointer
+    0000000180005100 CastGuard OS determined failure mode
+    0000000180005108 Guard memcpy function pointer
+
+    Guard CF Function Table
+
+          Address
+          --------
+           00000001800015D0
+           00000001800015E0
+           0000000180001880
+           0000000180001AD0
+       E   0000000180001C30
+           0000000180001C80
+           0000000180001D70
+           0000000180001FD0
+       E   0000000180002040
+       E   0000000180002060
+       E   0000000180002170
+           0000000180002180
+           0000000180002190
+       E   00000001800021E0
+           0000000180002570
+           0000000180002670
+           00000001800026C0
+           00000001800029E0
+           0000000180002EA0
+           0000000180003420
+           00000001800034F0
+           0000000180003920
+           0000000180003930
+           0000000180003FE0
+           0000000180003FF0
+           0000000180004380
+           00000001800043A0
+
+    Enclave Configuration
+
+                00000050 size
+                0000004C minimum required config size
+                00000000 policy flags
+                00000002 number of enclave import descriptors
+                00006AF8 RVA to enclave import descriptors
+                00000050 size of an enclave import descriptor
+                00000001 image version
+                00000001 security version
+        0000000010000000 enclave size
+                00000001 number of threads
+                00000001 enclave flags
+
+                family ID : 42 52 59 4E 00 00 00 00 00 00 00 00 00 00 00 00
+                 image ID : 50 52 4F 42 00 00 00 00 00 00 00 00 00 00 00 00
+
+      ucrtbase_enclave.dll
+
+                 0 minimum security version
+                 0 reserved
+
+                   match type : image ID
+                    family ID : 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                     image ID : F0 3C CD A7 E8 7B 46 EB AA E7 1F 13 D5 CD DE 5D
+             unique/author ID : 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+      vertdll.dll
+
+                 0 minimum security version
+                 0 reserved
+
+                   match type : image ID
+                    family ID : 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                     image ID : 72 84 41 72 67 A8 4E 8D BF 01 28 4B 07 43 2B 1E
+             unique/author ID : 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+    Volatile Metadata
+
+                      18 size
+                       3 min version (8003)
+                       3 max version (8003)
+        0000000000006998 volatile access RVA table
+                     130 volatile access RVA table size
+        0000000000006AC8 volatile range info table
+                      30 volatile range info table size
+
+    Volatile Access RVA Table
+
+          Address
+          --------
+           0000000180001BD4
+           0000000180001BD9
+           0000000180001BEF
+           0000000180001BFD
+           0000000180001C02
+           0000000180001C0D
+           0000000180001C14
+           0000000180001C30
+           0000000180001D74
+           0000000180001F54
+           0000000180001F88
+           0000000180001F8F
+           0000000180001FF0
+           0000000180002040
+           0000000180002064
+           0000000180002082
+           000000018000208C
+           0000000180002097
+           000000018000209E
+           00000001800020A5
+           00000001800020AC
+           00000001800020B3
+           00000001800020BA
+           00000001800020C1
+           00000001800020C8
+           00000001800020D5
+           000000018000210E
+           0000000180002120
+           0000000180002132
+           0000000180002144
+           0000000180002156
+           00000001800021E0
+           0000000180002270
+           0000000180002277
+           0000000180002281
+           0000000180002299
+           00000001800022B4
+           00000001800022CB
+           00000001800022D6
+           00000001800022F5
+           0000000180002300
+           0000000180002307
+           0000000180002312
+           0000000180002320
+           0000000180002340
+           000000018000235E
+           0000000180002369
+           0000000180002B15
+           0000000180002B2B
+           0000000180002DD3
+           0000000180002FFB
+           000000018000300A
+           000000018000306C
+           00000001800030BC
+           000000018000310D
+           0000000180003504
+           0000000180003517
+           00000001800043E9
+           0000000180004409
+           0000000180004414
+           0000000180004429
+           0000000180004450
+           0000000180004475
+           0000000180004480
+           0000000180004532
+           000000018000453C
+           0000000180004543
+           0000000180004547
+           0000000180004553
+           000000018000455D
+           000000018000456A
+           0000000180004577
+           0000000180004589
+           0000000180004591
+           00000001800045A8
+           00000001800045AF
+
+    Volatile Info Range Table
+
+          Ranges
+          -------
+          0000000180001BD0 - 0000000180002480
+          0000000180002570 - 0000000180002630
+          00000001800026C0 - 00000001800034A0
+          0000000180003504 - 0000000180003760
+          00000001800037E0 - 00000001800038C0
+          00000001800043C0 - 00000001800045E0
+
+SECTION HEADER #3
+   .data name
+     850 virtual size
+    8000 virtual address (0000000180008000 to 000000018000884F)
+     200 size of raw data
+    6000 file pointer to raw data (00006000 to 000061FF)
+       0 file pointer to relocation table
+       0 file pointer to line numbers
+       0 number of relocations
+       0 number of line numbers
+C0000040 flags
+         Initialized Data
+         Read Write
+
+SECTION HEADER #4
+  .pdata name
+     3E4 virtual size
+    9000 virtual address (0000000180009000 to 00000001800093E3)
+     400 size of raw data
+    6200 file pointer to raw data (00006200 to 000065FF)
+       0 file pointer to relocation table
+       0 file pointer to line numbers
+       0 number of relocations
+       0 number of line numbers
+40000040 flags
+         Initialized Data
+         Read Only
+
+SECTION HEADER #5
+  .reloc name
+     120 virtual size
+    A000 virtual address (000000018000A000 to 000000018000A11F)
+     200 size of raw data
+    6600 file pointer to raw data (00006600 to 000067FF)
+       0 file pointer to relocation table
+       0 file pointer to line numbers
+       0 number of relocations
+       0 number of line numbers
+42000040 flags
+         Initialized Data
+         Discardable
+         Read Only
+
+  Summary
+
+        1000 .data
+        1000 .pdata
+        3000 .rdata
+        1000 .reloc
+        4000 .text

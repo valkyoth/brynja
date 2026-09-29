@@ -1,0 +1,25 @@
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\sha256-window\normal.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: normal.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\sha256-window\missing-clear.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: missing-clear.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\sha256-window\missing-local-clear.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: missing-local-clear.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\sha256-window\wrong-digest.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: wrong-digest.dll 2
+EPHEMERAL_SIGNING_KEY_REMOVED

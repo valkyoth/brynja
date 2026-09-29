@@ -93,8 +93,9 @@ changed during this step.
 ## Remaining scope
 
 Actual cross-instance protocol rejection remains untested natively; stale-token
-replay within one owner is not a substitute. Partial-copy writes and recoverable
-unwind remain component-test coverage; native builds use panic=abort. This new
+replay within one owner is not a substitute. A later separate image now has
+[native injected partial-copy coverage](windows-enclave-retained-partial-results.md).
+Recoverable unwind remains component-test coverage; native builds use panic=abort. This new
 image has no new dump, TLS or arbitrary-depth qualification. Production signing,
 Windows AArch64, other algorithms, acceleration and facade integration remain
 [pending](windows-v02450-remaining.md). Existing development-platform limitations,

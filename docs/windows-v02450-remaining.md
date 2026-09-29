@@ -19,8 +19,11 @@ explicit acceleration and unchanged release-gate policy.
   campaigns, including chaining, generation/replay rejection and seven compiled
   mutant controls. It exposes no enclave-private memory as host slices. These
   campaigns still use bounded public test data, not a production confidential API.
-- Complete integrated partial-copy and stale/cross-instance protocol controls
-  for those general operations. The current private token model and bounded
+- Native injected prefix-copy cleanup now covers all 33 header and 1,025 payload
+  boundaries, followed by quarantine rejection and confirmed destruction. This
+  uses a controlled failure after successful OS copying, not an observed OS
+  partial-copy failure. Complete actual cross-instance identity/rejection controls
+  for the general operations. The current private token model and bounded
   borrowed-input host campaign are not a production operation protocol or general residency
   qualification.
 
@@ -56,4 +59,4 @@ explicit acceleration and unchanged release-gate policy.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [retained secret-to-secret composition](windows-enclave-retained-rehash-design.md).
-Latest native platform step: [retained SHA-256 composition](windows-enclave-retained-rehash-results.md).
+Latest native platform step: [injected partial-copy cleanup](windows-enclave-retained-partial-results.md).

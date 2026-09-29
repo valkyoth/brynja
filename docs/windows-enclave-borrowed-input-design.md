@@ -128,8 +128,8 @@ payload serializer; its remaining full-runtime and production boundaries are
 recorded separately.
 Microsoft defines the copy source as outside the enclave; the native adapter must
 retain this boundary, not replace it with a raw pointer dereference. Invalid and
-page-boundary source failures have been exercised; enclave-internal source
-rejection remains an outstanding native case.
+page-boundary source failures and enclave-internal source rejection have now
+been exercised in the [native observations](windows-enclave-borrowed-input-results.md).
 [EnclaveCopyIntoEnclave](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyintoenclave).
 Only public diagnostic vectors may be used until these platform obligations and
 the complete worker/runtime coverage have been reviewed.
@@ -142,6 +142,9 @@ Instance/generation-bound handles must prevent stale, cross-instance and repeate
 use; cancellation, abandoned handles, failed copies and uncertain transport need
 explicit cleanup/quarantine behavior. Host handles must retain the actual instance,
 not just a token whose owner may have been deleted.
+The [retained-result lifecycle model](windows-enclave-persistent-result-design.md)
+now exercises these state transitions independently; native persistent allocation
+and host-handle integration remain unimplemented.
 
 The current Linux `Digest::expose` returns a borrowed protected slice. Returning
 enclave-private memory as a host slice is not a compatible implementation. A

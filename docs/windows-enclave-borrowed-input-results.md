@@ -79,7 +79,15 @@ The Python driver intentionally owns ordinary **public** test buffers. This
 campaign proves the new worker copy path, not a Rust host borrowing contract.
 The later [Rust-owned host experiment](windows-enclave-borrowed-host-results.md)
 retains that input borrow and removes the older payload-serializing request.
-Enclave-internal source-address rejection remains an untested native case.
+The follow-up at `671795bb6577e9703de12a49c2059a8840908eef` exercised
+enclave-internal source rejection three times using the unchanged signed worker.
+After window admission, the public descriptor selected a real address 4096 bytes
+inside that window. All three calls returned input-copy failure (11), with zero
+payload-copy acknowledgments, no result offers and untouched public output.
+Inner clearing, all 16 pages locked through clearing, outer clearing and enclave
+deletion passed. The [focused record](../assurance/windows-protection-observations/internal-input-671795bb.json)
+binds the new driver source closure separately from the unchanged image source
+at `33816b76`. No older campaign was relabeled or repeated.
 
 Persistent protected result ownership and the enclave-compatible API remain
 separate work. This experiment retains results only within one guarded worker

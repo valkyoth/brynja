@@ -23,6 +23,7 @@ SOURCES = tuple(sorted(set(base.SOURCES) | set(native.SOURCES) | {
     'scripts/cryptography/windows_enclave_hardened_build.py',
     'scripts/cryptography/windows_enclave_retained_worker_build.py',
     'scripts/cryptography/windows_enclave_retained_native.py',
+    'scripts/cryptography/test-windows-enclave-retained-worker.py',
     'scripts/cryptography/test-windows-enclave-retained-native.py'}))
 
 

@@ -15,8 +15,10 @@ const _: () = assert!(core::mem::align_of::<Sha256Workspace>() == 1);
 
 unsafe extern "C" {
     fn PublicRetainedCopy(destination: usize, source: *const u8, length: usize) -> i32;
+    #[cfg(not(test))]
     fn PublicProbeAbort() -> !;
 }
+#[cfg(not(test))]
 #[panic_handler]
 fn panic(_: &core::panic::PanicInfo<'_>) -> ! {
     // SAFETY: nonreturning linked research adapter; no abort cleanup claim.
@@ -68,15 +70,29 @@ fn hash(owner: &mut Placed<'_>, case: usize, low: usize, high: usize) -> (usize,
     {
         return (190, None);
     }
-    let Some(length) = fill(case, &mut input) else {
+    compute(owner, case, &mut workspace, &mut input, &mut staging)
+}
+
+fn compute(
+    owner: &mut Placed<'_>,
+    case: usize,
+    workspace: &mut Sha256Workspace,
+    input: &mut [u8; 1024],
+    staging: &mut [u8; 32],
+) -> (usize, Option<[u64; 4]>) {
+    // A fresh workspace contains the public IV. Clear it BEFORE the attempted
+    // operation so early Busy/Quarantined rejection has a meaningful zero check.
+    // No post-operation scope/wipe may conceal a failed operation's residue.
+    workspace.with(|state| state.cancel());
+    let Some(length) = fill(case, input) else {
         return (192, None);
     };
-    let result = owner.hash(&mut workspace, &mut staging, &input[..length]);
-    let _ = brynja_core::clear_owned_region(&mut input);
+    let result = owner.hash(workspace, staging, &input[..length]);
+    let _ = brynja_core::clear_owned_region(input);
     // SAFETY: builder checks the exact initialized eight-byte-array layout and
     // ZST marker; static size/alignment exclude padding. Operation borrow ended.
     let bytes =
-        unsafe { core::slice::from_raw_parts(core::ptr::from_ref(&workspace).cast::<u8>(), 1170) };
+        unsafe { core::slice::from_raw_parts(core::ptr::from_ref(&*workspace).cast::<u8>(), 1170) };
     if bytes
         .iter()
         .chain(input.iter())
@@ -91,6 +107,36 @@ fn hash(owner: &mut Placed<'_>, case: usize, low: usize, high: usize) -> (usize,
     match result {
         Ok(token) => (2 | (1_usize << 32), Some(token)),
         Err(error) => (code(Err(error), 0) | (1_usize << 32), None),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use core::mem::MaybeUninit;
+    #[repr(align(4096))]
+    struct Page([MaybeUninit<u8>; PAGE]);
+    #[unsafe(no_mangle)]
+    extern "C" fn PublicRetainedCopy(_: usize, _: *const u8, _: usize) -> i32 {
+        -1
+    }
+
+    #[test]
+    fn fresh_workspace_rejections_are_zero_without_masking_post_operation_cleanup() {
+        let mut page = Page([MaybeUninit::new(0); PAGE]);
+        let mut owner = Placed::new(&mut page.0, [1, 2]).unwrap();
+        let mut input = [0; 1024];
+        let mut staging = [0; 32];
+        for expected in [2, 101, 107] {
+            let mut workspace = Sha256Workspace::new();
+            let (status, _) = compute(&mut owner, 1, &mut workspace, &mut input, &mut staging);
+            assert_eq!(status, expected | (1_usize << 32));
+            assert_eq!(input, [0; 1024]);
+            assert_eq!(staging, [0; 32]);
+            if expected == 101 {
+                owner.quarantine();
+            }
+        }
     }
 }
 

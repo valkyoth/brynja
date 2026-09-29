@@ -1,10 +1,10 @@
 # Retained secret-to-secret composition
 
-Status: **component tests, focused Miri and Windows cross-compilation**, not
-native enclave execution or production strict qualification. This adds a fixed
-SHA-256 rehash operation to the isolated retained-owner model. The existing
-[native borrowed-input host](windows-enclave-retained-borrowed-host-results.md)
-and its signed image are unchanged; they do not yet expose this operation.
+Status: **tested research component**, not production strict qualification.
+This adds a fixed SHA-256 rehash operation to the isolated retained-owner model.
+A separate image and affine host now have
+[native composition observations](windows-enclave-retained-rehash-results.md).
+The earlier borrowed-input host and signed image remain unchanged.
 
 ## Operation and ownership
 
@@ -53,8 +53,8 @@ Tokens remain public routing metadata, not authentication capabilities. Tests
 reject tokens from owners assigned distinct identities, as well as stale and
 tampered fields. Those tests do **not** prove native cross-enclave uniqueness:
 the adapter must establish identities and instance routing rather than trusting
-caller-supplied labels. The signed native image still needs a composition command
-and integrated cross-instance rejection tests. No native cross-instance claim is
+caller-supplied labels. Integrated native cross-instance rejection tests remain
+pending even after native composition. No native cross-instance claim is
 inferred from the component tests.
 
 ## Verification
@@ -98,6 +98,7 @@ release-reports/windows-azure-replacement-2026-09-29/retained-rehash-component-f
 release-reports/windows-azure-replacement-2026-09-29/retained-rehash-focused/
 ```
 
-Next is native worker/host integration, source-bound storage and cleanup checks,
-and actual cross-instance protocol testing. See the [remaining release work](windows-v02450-remaining.md).
+Native worker/host integration and source-bound storage/cleanup observations are
+now recorded separately. Actual cross-instance protocol testing remains pending.
+See the [remaining release work](windows-v02450-remaining.md).
 No production crate, release gate or Windows availability claim changed.

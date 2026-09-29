@@ -41,7 +41,7 @@ class Tests(unittest.TestCase):
                 source.write_text('use retained_digest::Owner;\n' + body)
                 return subprocess.run(['rustc', '+1.98.1', '--edition=2024', '--crate-type', 'lib',
                     '--emit=metadata', '-L', 'dependency=' + str(path),
-                    '--extern', 'retained_digest=' + str(path / 'libretained_normal.rlib'),
+                    '--extern', 'retained_digest=' + str(path / 'libretained_digest_normal.rlib'),
                     str(source), '-o', str(path / 'consumer.rmeta')],
                     capture_output=True, text=True, timeout=30)
             prefix = 'fn check() { let mut bytes=[0;32]; let mut owner=Owner::new(&mut bytes,[7,9]).unwrap(); '

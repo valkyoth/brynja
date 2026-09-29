@@ -54,6 +54,11 @@ Cross-compilation is not native execution or protected-placement evidence.
 
 ## Next boundary
 
+The [placement component](windows-enclave-retained-placement-design.md) now tests
+checked in-page construction, exclusive ownership, destruction order and full-page
+clearing, including strict-provenance Miri execution. It is not yet connected to
+the native image.
+
 The [native allocation probe](windows-enclave-persistent-slot-results.md) already
 tests residency across worker returns, guards and erase-before-release. The next
 adapter must place and retain this Rust owner there without temporary secret

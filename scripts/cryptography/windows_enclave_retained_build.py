@@ -25,7 +25,7 @@ SOURCES = tuple(base.base.source_files()) + (
     'scripts/cryptography/windows_enclave_sha256_build.py')
 
 
-def build(directory, target, testing=False, level='2'):
+def build(directory, target, testing=False, level='2', panic='abort'):
     directory = directory.resolve()
     commands = base.prepare(directory, target)
     for name in ('retained_digest.rs', 'retained_digest_tests.rs'):
@@ -38,7 +38,7 @@ def build(directory, target, testing=False, level='2'):
     tests.write_text(tests.read_text() + '\n' + '\n'.join(oracle + ['}', '']))
     common = ['rustc', '+1.98.1', '--edition=2024', '--target', target, '-D', 'warnings',
               '-C', 'opt-level=' + level, '-C', 'overflow-checks=yes',
-              '-C', 'panic=' + ('unwind' if testing else 'abort'),
+              '-C', 'panic=' + ('unwind' if testing else panic),
               '-L', 'dependency=' + str(directory)]
     for dep in ('brynja_core', 'brynja_hash_sha2'):
         common += ['--extern', dep + '=' + str(directory / ('lib' + dep + '.rlib'))]
@@ -58,7 +58,7 @@ def build(directory, target, testing=False, level='2'):
             suffix = '.exe' if 'windows' in target else ''
             run(args + ['--test', '-o', str(directory / (variant + suffix))])
         else:
-            run(args + ['--crate-type', 'rlib', '-o', str(directory / ('libretained_' + variant + '.rlib'))])
+            run(args + ['--crate-type', 'rlib', '-o', str(directory / ('libretained_digest_' + variant.replace('-', '_') + '.rlib'))])
     return commands
 
 

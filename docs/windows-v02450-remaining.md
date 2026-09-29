@@ -8,8 +8,10 @@ explicit acceleration and unchanged release-gate policy.
 
 ## Next implementation boundary
 
-- Connect the tested retained SHA-256 owner to native resident storage, with
-  checked in-place construction, exclusive access and destruction before release.
+- Wire the memory-model-tested retained-owner placement into native resident
+  storage and the guarded worker. Check the combined native construction,
+  exclusive access and destruction-before-unlock/free path; isolated placement
+  tests do not establish platform residency.
 - Add an affine host result/session handle that retains the actual enclave
   instance. Finish the operation protocol, borrowed inputs, explicit public
   export and in-enclave result composition without exposing enclave-private
@@ -50,5 +52,5 @@ explicit acceleration and unchanged release-gate policy.
   then wait for green GitHub checks and explicit tagging authorization. No extra
   release-gate policy or crates.io publication is introduced by this work.
 
-Latest focused component: [retained SHA-256 ownership bridge](windows-enclave-retained-digest-design.md).
+Latest focused component: [retained owner placement](windows-enclave-retained-placement-design.md).
 Latest native platform step: [retained allocation probe](windows-enclave-persistent-slot-results.md).

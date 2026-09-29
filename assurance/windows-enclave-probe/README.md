@@ -247,3 +247,9 @@ including independent vectors, cleanup/token mutants and ownership negatives.
 It has not yet been placed in the native retained allocation. The consolidated
 [v0.24.50 remaining work](../../docs/windows-v02450-remaining.md) distinguishes
 these research results from production integration and release qualification.
+
+`retained_placement.rs` adds [checked in-page ownership](../../docs/windows-enclave-retained-placement-design.md),
+with component, mutation, ownership-negative and strict-provenance Miri tests.
+It drops the retained owner before wiping its borrowed page. This does not yet
+connect the Rust owner to the signed native retained-allocation image or attest
+enclave residency; that integration remains pending.

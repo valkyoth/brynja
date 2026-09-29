@@ -1,0 +1,67 @@
+[
+    {
+        "expected":  0,
+        "name":  "success",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "success-c-exception",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "cancel",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "cancel-c-exception",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "wrong-token",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "wrong-token-c-exception",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "copy-failure",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "copy-failure-c-exception",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "reusable",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "forgotten",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "wrong-token-mutant",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "implicit-public",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "missing-clear",
+        "exit":  1
+    }
+]

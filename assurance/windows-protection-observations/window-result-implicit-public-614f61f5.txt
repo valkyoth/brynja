@@ -1,0 +1,37 @@
+Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_result.py", line 169, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_result.py", line 158, in main
+    record = bounded_child(command, args.mode, args.c_exception_before)
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_result.py", line 99, in bounded_child
+    require(result.returncode == 0 and not result.stderr and 0 < len(result.stdout) <= 32768,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f'Rust child failed/inconclusive: exit={result.returncode} '
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f'(0x{result.returncode & 0xffffffff:08x}); ' + result.stderr[-4096:])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: Rust child failed/inconclusive: exit=1 (0x00000001); Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_result.py", line 169, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_result.py", line 138, in main
+    print(json.dumps(exercise(WorkerNative(), Windows(), image, args.mode,
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             args.c_exception_before)))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_result.py", line 82, in exercise
+    item['owner'] = validate_owner(report, base, values[1], values[2], mode)
+                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_result.py", line 40, in validate_owner
+    require(status == MODES[mode] + 1 and comparisons == (40 if mode == 'success' else 0)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            and lifecycles == (40 if mode == 'success' else 20) and cleared == 1 and size == 1170,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'exact hardened ownership outcome')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: exact hardened ownership outcome

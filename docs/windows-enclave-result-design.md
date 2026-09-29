@@ -5,6 +5,8 @@ Production cryptography and release gates are unchanged. This extends the
 [scoped-owner experiment](windows-enclave-hardened-owner-design.md), alongside
 the separate [public request-copy experiment](windows-enclave-request-design.md).
 It does not yet connect result handles to the host wire protocol.
+The [native lifecycle observations](windows-enclave-result-results.md) record
+this deliberately narrower scope and its rejected controls.
 
 ## Ownership and terminal outcomes
 

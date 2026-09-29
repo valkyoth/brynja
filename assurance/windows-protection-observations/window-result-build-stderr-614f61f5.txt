@@ -1,0 +1,19 @@
+From C:\Users\azureuser\result-window-614f61f5.bundle
+ * branch              HEAD       -> FETCH_HEAD
+Previous HEAD position was 334180d9 test(windows): exercise bounded enclave request snapshots and public output
+HEAD is now at 614f61f5 test(windows): model terminal scoped enclave result ownership
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.059s
+
+OK
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.012s
+
+OK
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.008s
+
+OK

@@ -1,0 +1,14 @@
+success: actual=0 expected=0
+success-c-exception: actual=0 expected=0
+cancel: actual=0 expected=0
+cancel-c-exception: actual=0 expected=0
+wrong-token: actual=0 expected=0
+wrong-token-c-exception: actual=0 expected=0
+copy-failure: actual=0 expected=0
+copy-failure-c-exception: actual=0 expected=0
+reusable: actual=1 expected=1
+forgotten: actual=1 expected=1
+wrong-token-mutant: actual=1 expected=1
+implicit-public: actual=1 expected=1
+missing-clear: actual=1 expected=1
+PUBLIC_RESULT_CONTROLS_COMPLETE; NOT_STRICT_QUALIFICATION

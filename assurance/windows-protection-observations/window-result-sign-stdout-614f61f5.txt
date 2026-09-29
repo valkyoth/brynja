@@ -1,0 +1,37 @@
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\result-window\normal.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: normal.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\result-window\missing-clear.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: missing-clear.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\result-window\reusable.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: reusable.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\result-window\forgotten.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: forgotten.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\result-window\wrong-token.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: wrong-token.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\result-window\implicit-public.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: implicit-public.dll 2
+EPHEMERAL_SIGNING_KEY_REMOVED

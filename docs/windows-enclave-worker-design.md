@@ -262,3 +262,9 @@ experiments instead keep the OS-managed stack. The latter observes all rounded
 window pages locked before its fixed body and after clearing, with native denial,
 exception and missing-clear controls. These bounded mechanics do not establish
 enforced window guards, complete worker storage or a production Rust adapter.
+
+The [guarded-window follow-up](windows-enclave-window-guard-results.md) adds
+separately tested no-access pages at both payload boundaries. Repeated exact
+read/write faults, page restoration, locked clearing and negative controls pass
+for that fixed body. Actual stack-depth exhaustion, exception headroom and the
+complete secret-bearing runtime footprint still require separate qualification.

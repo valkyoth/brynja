@@ -1,0 +1,18 @@
+normal: actual=0 expected=0
+normal-unwind: actual=0 expected=0
+read-low: actual=0 expected=0
+read-low-unwind: actual=0 expected=0
+write-low: actual=0 expected=0
+write-low-unwind: actual=0 expected=0
+read-high: actual=0 expected=0
+read-high-unwind: actual=0 expected=0
+write-high: actual=0 expected=0
+write-high-unwind: actual=0 expected=0
+deny: actual=0 expected=0
+deny-unwind: actual=0 expected=0
+mutant: actual=0 expected=0
+mutant-unwind: actual=0 expected=0
+wrong-normal: actual=1 expected=1
+wrong-mutant: actual=1 expected=1
+missing-guard: actual=1 expected=1
+SYNTHETIC_GUARD_CONTROLS_COMPLETE; NOT_STRICT_QUALIFICATION

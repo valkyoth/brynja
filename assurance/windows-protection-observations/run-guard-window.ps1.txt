@@ -1,0 +1,61 @@
+$ErrorActionPreference = 'Stop'
+$env:PATH = "C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;$env:PATH"
+Set-Location C:\brynja-v0250\repo
+$out = 'C:\brynja-v0250\guard-window'
+$script = 'scripts\cryptography\windows_enclave_window_guard.py'
+$jobs = @()
+foreach ($mode in @('normal','read-low','write-low','read-high','write-high')) {
+    $jobs += @{Name=$mode; Image='normal.dll'; Args=@($mode); Exit=0}
+    $jobs += @{Name="$mode-unwind"; Image='normal.dll'; Args=@($mode,'--unwind'); Exit=0}
+}
+$jobs += @(
+    @{Name='deny'; Image='normal.dll'; Args=@('normal','--deny'); Exit=0},
+    @{Name='deny-unwind'; Image='normal.dll'; Args=@('normal','--deny','--unwind'); Exit=0},
+    @{Name='mutant'; Image='missing-clear.dll'; Args=@('normal','--missing-clear-mutant'); Exit=0},
+    @{Name='mutant-unwind'; Image='missing-clear.dll'; Args=@('normal','--missing-clear-mutant','--unwind'); Exit=0},
+    @{Name='wrong-normal'; Image='missing-clear.dll'; Args=@('normal'); Exit=1; Error='exact execution/cleanup outcome'},
+    @{Name='wrong-mutant'; Image='normal.dll'; Args=@('normal','--missing-clear-mutant'); Exit=1; Error='exact execution/cleanup outcome'},
+    @{Name='missing-guard'; Image='missing-guard.dll'; Args=@('normal'); Exit=1; Error='guard handshake failed'}
+)
+$records = @()
+foreach ($job in $jobs) {
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = 'C:\brynja-v0250\python\python.exe'
+    $info.WorkingDirectory = 'C:\brynja-v0250\repo'
+    $info.Arguments = [string]::Join(' ', (@($script, "$out\$($job.Image)") + $job.Args))
+    $info.UseShellExecute = $false
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $info
+    if (-not $process.Start()) { throw 'Could not start bounded child' }
+    $stdout = $process.StandardOutput.ReadToEndAsync()
+    $stderr = $process.StandardError.ReadToEndAsync()
+    if (-not $process.WaitForExit(45000)) { $process.Kill(); throw "Outer job timeout: $($job.Name)" }
+    $process.WaitForExit()
+    $code = $process.ExitCode
+    [IO.File]::WriteAllText("$out\$($job.Name).json", $stdout.Result)
+    [IO.File]::WriteAllText("$out\$($job.Name).err", $stderr.Result)
+    $process.Dispose()
+    Write-Output "$($job.Name): actual=$code expected=$($job.Exit)"
+    if ($code -ne $job.Exit) { throw "Wrong exit: $($job.Name)" }
+    if ($job.Exit -eq 0) {
+        if ((Get-Item "$out\$($job.Name).err").Length -ne 0) { throw 'Unexpected stderr' }
+        $record = Get-Content "$out\$($job.Name).json" -Raw | ConvertFrom-Json
+        if ($record.strict_qualified -ne $false -or $record.status -ne 'OBSERVATIONS_ONLY') { throw 'Bad qualification claim' }
+    } else {
+        if (-not (Get-Content "$out\$($job.Name).err" -Raw).Contains($job.Error)) { throw 'Unexpected failure cause' }
+        if ((Get-Item "$out\$($job.Name).json").Length -ne 0) { throw 'Failed control emitted success JSON' }
+    }
+    $records += @{name=$job.Name; exit=$code; expected=$job.Exit}
+}
+$records | ConvertTo-Json | Set-Content "$out\run-exits.json"
+$cleanup = @{
+    synthetic_only = $true
+    strict_qualified = $false
+    process_count = @(Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'python.exe' -and $_.CommandLine -match 'window_guard' }).Count
+    temporary_certificates = @(Get-ChildItem Cert:\CurrentUser\My,Cert:\LocalMachine\My | Where-Object { $_.Subject -eq 'CN=BrynjaDisposableSyntheticEnclave' }).Count
+}
+$cleanup | ConvertTo-Json | Set-Content "$out\cleanup.json"
+if ($cleanup.process_count -ne 0 -or $cleanup.temporary_certificates -ne 0) { throw 'Cleanup incomplete' }
+Write-Output 'SYNTHETIC_GUARD_CONTROLS_COMPLETE; NOT_STRICT_QUALIFICATION'

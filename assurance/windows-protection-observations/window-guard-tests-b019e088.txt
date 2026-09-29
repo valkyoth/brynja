@@ -1,0 +1,14 @@
+From C:\Users\azureuser\guard-window-b019e088.bundle
+ * branch              HEAD       -> FETCH_HEAD
+Previous HEAD position was 5200086c test(windows): probe live enclave stack residency handshake
+HEAD is now at b019e088 test(windows): prototype guarded enclave stack boundaries
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.022s
+
+OK
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.008s
+
+OK

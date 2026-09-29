@@ -1,0 +1,20 @@
+$ErrorActionPreference = 'Stop'
+$info = New-Object System.Diagnostics.ProcessStartInfo
+$info.FileName = 'cmd.exe'
+$info.Arguments = '/d /c C:\Users\azureuser\build-guard-window.cmd'
+$info.UseShellExecute = $false
+$info.RedirectStandardOutput = $true
+$info.RedirectStandardError = $true
+$process = New-Object System.Diagnostics.Process
+$process.StartInfo = $info
+if (-not $process.Start()) { throw 'Build process did not start' }
+$stdout = $process.StandardOutput.ReadToEndAsync()
+$stderr = $process.StandardError.ReadToEndAsync()
+if (-not $process.WaitForExit(120000)) { $process.Kill(); throw 'Build timeout' }
+$process.WaitForExit()
+$code = $process.ExitCode
+[IO.File]::WriteAllText('C:\brynja-v0250\guard-build.stdout', $stdout.Result)
+[IO.File]::WriteAllText('C:\brynja-v0250\guard-build.stderr', $stderr.Result)
+$process.Dispose()
+Write-Output "BUILD_EXIT: $code"
+exit $code

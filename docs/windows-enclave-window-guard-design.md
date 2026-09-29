@@ -1,15 +1,16 @@
 # Guarded OS-stack window experiment
 
-Status: **prototype only; native compilation and execution pending**. No Windows
-strict support is enabled. No release gate, production Rust or cryptographic
-implementation changes are part of this experiment.
+Status: **synthetic native boundary controls passed; not strict qualification**.
+No Windows strict support is enabled. No release gate, production Rust or
+cryptographic implementation changes are part of this experiment.
 
 ## Why another image
 
 The [live-window residency probe](windows-enclave-window-lock-results.md) locks
 all pages covering its window, but does not independently enforce its boundaries.
 The new `window_guard.c` and `window_guard_x64.asm` preserve that earlier image
-and its evidence. They have no native results yet and must not inherit its pass.
+and its evidence. Their separate native results are recorded
+[here](windows-enclave-window-guard-results.md); they do not inherit its pass.
 
 The proposed frame stays on the OS-managed enclave stack. It probes/reserves
 alignment slack, a 64-KiB page-aligned payload, two separate boundary pages and
@@ -23,7 +24,8 @@ requires exact post-change observations before asking the existing trusted-host
 callback to lock the sixteen payload pages. The documentation lists
 [VirtualProtect among enclave APIs](https://learn.microsoft.com/en-us/windows/win32/trusted-execution/enclaves-available-in-vertdll),
 but that alone does not prove that changing these OS-stack pages is supported.
-That question requires native execution.
+That question required separate native execution, now recorded for this exact
+fixed-body experiment, not arbitrary runtime stack usage.
 
 `PAGE_NOACCESS` is deliberate: [PAGE_GUARD is a one-shot alarm](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect).
 The experiment attempts two reads or two writes at the same selected boundary,
@@ -41,13 +43,14 @@ payload lock until teardown; it cannot turn restoration into a cleanup claim.
 
 ## Local checks and required native controls
 
-Ten focused Python tests pass locally. They cover mode combinations, exact
+Ten focused Python tests pass locally and natively. They cover mode combinations, exact
 sixteen-page coverage, two faults per selected boundary, read/write and address
 identity, incomplete/false records, callback failures, teardown, crashes/timeouts,
 and source ordering. The existing fourteen live-window tests still pass.
 These tests use mock APIs and are **not** Windows page-protection evidence.
 
-Before interpreting this design as a usable mechanism, run:
+The following native controls have now been run and
+[recorded](windows-enclave-window-guard-results.md):
 
 1. Native `/W4 /WX` enclave compilation, emitted-frame review and development
    signing with warnings preserved, not relabeled as production signing success.

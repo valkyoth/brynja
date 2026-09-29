@@ -1,0 +1,15 @@
+$ErrorActionPreference = 'Stop'
+$cert = New-SelfSignedCertificate -CertStoreLocation Cert:\LocalMachine\My -DnsName 'BrynjaDisposableSyntheticEnclave' -KeyUsage DigitalSignature -KeySpec Signature -KeyLength 2048 -KeyAlgorithm RSA -HashAlgorithm SHA256 -KeyExportPolicy NonExportable -NotAfter (Get-Date).AddDays(3) -TextExtension '2.5.29.37={text}1.3.6.1.5.5.7.3.3,1.3.6.1.4.1.311.76.57.1.15,1.3.6.1.4.1.311.97.24450.1'
+$failed = $false
+try {
+    foreach ($name in @('normal.dll', 'missing-clear.dll', 'missing-guard.dll')) {
+        & 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe' sign /sm /ph /fd SHA256 /sha1 $cert.Thumbprint "C:\brynja-v0250\guard-window\$name"
+        Write-Output "SIGNTOOL_EXIT: $name $LASTEXITCODE"
+        if ($LASTEXITCODE -ne 0) { $failed = $true }
+    }
+} finally {
+    Remove-Item -LiteralPath "Cert:\LocalMachine\My\$($cert.Thumbprint)" -DeleteKey
+    if (Test-Path "Cert:\LocalMachine\My\$($cert.Thumbprint)") { throw 'Certificate cleanup failed' }
+    Write-Output 'EPHEMERAL_SIGNING_KEY_REMOVED'
+}
+if ($failed) { throw 'Synthetic signing failed or warned; inspect transcript before development-only use' }

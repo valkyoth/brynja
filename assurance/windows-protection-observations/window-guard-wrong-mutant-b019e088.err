@@ -1,0 +1,35 @@
+Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_guard.py", line 161, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_guard.py", line 150, in main
+    record = bounded(command, args.mode, args.unwind, args.missing_clear_mutant, args.deny)
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_guard.py", line 100, in bounded
+    require(result.returncode == 0 and not result.stderr and 0 < len(result.stdout) <= 32768,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f'guard child failed/inconclusive: exit={result.returncode}; ' + result.stderr[-4096:])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: guard child failed/inconclusive: exit=1; Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_guard.py", line 161, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_guard.py", line 133, in main
+    print(json.dumps(exercise(WorkerNative(), Windows(), image, args.mode, args.unwind,
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             args.missing_clear_mutant, args.deny)))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_guard.py", line 81, in exercise
+    item = validate(values, base, unwind, mutant, deny,
+                    handshake.trace, handshake.snapshots, handshake.locked)
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_lock.py", line 109, in validate
+    require(steps == expected and admitted == int(not deny)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            and cleared == int(not mutant)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            and result == (0 if mutant else expected | 64), 'exact execution/cleanup outcome')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: exact execution/cleanup outcome

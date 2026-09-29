@@ -48,8 +48,8 @@ def source_files(root=ROOT):
     paths = ['Cargo.toml']
     for crate in CRATES:
         folder = root / 'crates' / crate
-        paths.append(str((folder / 'Cargo.toml').relative_to(root)))
-        paths.extend(str(p.relative_to(root)) for p in sorted((folder / 'src').rglob('*.rs')))
+        paths.append((folder / 'Cargo.toml').relative_to(root).as_posix())
+        paths.extend(p.relative_to(root).as_posix() for p in sorted((folder / 'src').rglob('*.rs')))
     return paths
 
 

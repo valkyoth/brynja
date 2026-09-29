@@ -255,3 +255,10 @@ The subsequent [native paired stack/unwind comparison](windows-enclave-stack-res
 found that the separate-mapping trampoline returns normally but crashes during
 native exception handling. Direct and matched-trampoline OS-stack controls pass.
 That prototype must not be used as a strict execution adapter.
+
+The later [OS-stack window](windows-enclave-window-results.md) and
+[live-window residency handshake](windows-enclave-window-lock-results.md)
+experiments instead keep the OS-managed stack. The latter observes all rounded
+window pages locked before its fixed body and after clearing, with native denial,
+exception and missing-clear controls. These bounded mechanics do not establish
+enforced window guards, complete worker storage or a production Rust adapter.

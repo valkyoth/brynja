@@ -87,7 +87,8 @@ This experiment does **not** establish any of the following:
 - Rust panic handling, arbitrary closures, concurrency, full worker cleanup,
   dump exclusion for this layout, production signing or Windows Arm support.
 
-Next: prototype pre-secret host/enclave residency admission while the window is
-live, then enforce its bounds and failure cleanup. Do not import the previous
-separate-allocation locking result as proof for this stack window. Production
-integration remains blocked until the complete contract is demonstrated.
+The subsequent [live-window residency experiment](windows-enclave-window-lock-results.md)
+tests trusted-host admission before the fixed body and locking through clearing.
+That is a separate, source-bound experiment; this earlier image did not lock its
+window. Enforced bounds and the complete worker contract remain unproved, and
+production integration remains blocked.

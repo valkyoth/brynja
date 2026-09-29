@@ -1,0 +1,67 @@
+First-party PublicLockedFrame body and its emitted RBP unwind metadata.
+Full raw disassembly SHA-256: 1f01c46a4544690889f6c2d8f9e77d56edf90d7d5de25873605fcd726cf1ea06
+
+  0000000180001420: 55                 push        rbp
+  0000000180001421: 48 8B EC           mov         rbp,rsp
+  0000000180001424: 48 89 4D 10        mov         qword ptr [rbp+10h],rcx
+  0000000180001428: 48 C7 C0 20 00 01  mov         rax,10020h
+                    00
+  000000018000142F: E8 9C 01 00 00     call        00000001800015D0
+  0000000180001434: 48 2B E0           sub         rsp,rax
+  0000000180001437: 48 8D 44 24 20     lea         rax,[rsp+20h]
+  000000018000143C: 48 89 05 5D 53 00  mov         qword ptr [00000001800067A0h],rax
+                    00
+  0000000180001443: 48 89 2D 4E 53 00  mov         qword ptr [0000000180006798h],rbp
+                    00
+  000000018000144A: E8 C1 FB FF FF     call        0000000180001010
+  000000018000144F: 48 85 C0           test        rax,rax
+  0000000180001452: 74 2F              je          0000000180001483
+  0000000180001454: 4C 8D 95 00 00 FF  lea         r10,[rbp+FFFFFFFFFFFF0000h]
+                    FF
+  000000018000145B: 49 BB A5 A5 A5 A5  mov         r11,0A5A5A5A5A5A5A5A5h
+                    A5 A5 A5 A5
+  0000000180001465: 4D 89 1A           mov         qword ptr [r10],r11
+  0000000180001468: 49 83 C2 08        add         r10,8
+  000000018000146C: 4C 3B D5           cmp         r10,rbp
+  000000018000146F: 72 F4              jb          0000000180001465
+  0000000180001471: 48 8B 4D 10        mov         rcx,qword ptr [rbp+10h]
+  0000000180001475: 48 8D 65 E0        lea         rsp,[rbp-20h]
+  0000000180001479: E8 F2 FB FF FF     call        0000000180001070
+  000000018000147E: 4C 8B C0           mov         r8,rax
+  0000000180001481: EB 03              jmp         0000000180001486
+  0000000180001483: 45 33 C0           xor         r8d,r8d
+  0000000180001486: 48 8D A5 E0 FF FE  lea         rsp,[rbp+FFFFFFFFFFFEFFE0h]
+                    FF
+  000000018000148D: 4C 8D 54 24 20     lea         r10,[rsp+20h]
+  0000000180001492: 33 C0              xor         eax,eax
+  0000000180001494: 49 89 02           mov         qword ptr [r10],rax
+  0000000180001497: 49 83 C2 08        add         r10,8
+  000000018000149B: 4C 3B D5           cmp         r10,rbp
+  000000018000149E: 72 F4              jb          0000000180001494
+  00000001800014A0: 4C 8D 54 24 20     lea         r10,[rsp+20h]
+  00000001800014A5: 45 33 C9           xor         r9d,r9d
+  00000001800014A8: 4D 0B 0A           or          r9,qword ptr [r10]
+  00000001800014AB: 49 83 C2 08        add         r10,8
+  00000001800014AF: 4C 3B D5           cmp         r10,rbp
+  00000001800014B2: 72 F4              jb          00000001800014A8
+  00000001800014B4: 4D 85 C9           test        r9,r9
+  00000001800014B7: 75 0E              jne         00000001800014C7
+  00000001800014B9: 49 8B C8           mov         rcx,r8
+  00000001800014BC: 48 83 C9 40        or          rcx,40h
+  00000001800014C0: E8 FB FB FF FF     call        00000001800010C0
+  00000001800014C5: EB 02              jmp         00000001800014C9
+  00000001800014C7: 33 C0              xor         eax,eax
+  00000001800014C9: 48 8D 65 00        lea         rsp,[rbp]
+  00000001800014CD: 5D                 pop         rbp
+  00000001800014CE: C3                 ret
+
+  00000048 00001420 000014CF 000058E8
+    Unwind version: 1
+    Unwind flags: None
+    Size of prologue: 0x04
+    Count of codes: 2
+    Frame register: rbp
+    Frame offset: 0x0
+    Unwind codes:
+      04: SET_FPREG, register=rbp, offset=0x00
+      01: PUSH_NONVOL, register=rbp

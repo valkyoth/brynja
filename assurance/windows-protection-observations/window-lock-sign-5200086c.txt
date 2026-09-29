@@ -1,0 +1,26 @@
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\live-window\window-lock.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SignTool Warning: Note that VBS enclave support is changing and updating your VBS enclave may cause you to lose support on older OSes. Please visit https://go.microsoft.com/fwlink/?linkid=2312918 for details.
+
+SIGNTOOL_EXIT: window-lock.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\live-window\window-lock-mutant.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SignTool Warning: Note that VBS enclave support is changing and updating your VBS enclave may cause you to lose support on older OSes. Please visit https://go.microsoft.com/fwlink/?linkid=2312918 for details.
+
+SIGNTOOL_EXIT: window-lock-mutant.dll 2
+EPHEMERAL_SIGNING_KEY_REMOVED
+Synthetic signing failed or warned; inspect transcript before development-only
+use
+At C:\Users\azureuser\sign-live-window.ps1:15 char:16
++ ... ($failed) { throw 'Synthetic signing failed or warned; inspect transc ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Synthetic signi...opment-only
+    use:String) [], RuntimeException
+    + FullyQualifiedErrorId : Synthetic signing failed or warned; inspect tran
+   script before development-only use

@@ -1,0 +1,30 @@
+@echo off
+setlocal
+set PATH=C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;%PATH%
+cd /d C:\brynja-v0250\repo
+git fetch C:\Users\azureuser\live-window.bundle HEAD
+if errorlevel 1 exit /b 1
+git switch --detach 5200086c
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-window-lock.py
+if errorlevel 1 exit /b 1
+call C:\brynja-v0250\buildtools\VC\Auxiliary\Build\vcvars64.bat
+if errorlevel 1 exit /b 1
+if not exist C:\brynja-v0250\live-window mkdir C:\brynja-v0250\live-window
+cd /d C:\brynja-v0250\live-window
+ml64 /nologo /c /Fowindow_lock_asm.obj C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_lock_x64.asm
+if errorlevel 1 exit /b 1
+cl /nologo /LD /O2 /W4 /WX /MT /guard:cf /Fewindow-lock.dll C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_lock.c window_lock_asm.obj /link /ENCLAVE /NODEFAULTLIB /INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED /LIBPATH:"%VCToolsInstallDir%lib\x64\enclave" /LIBPATH:"%WindowsSdkDir%Lib\%WindowsSDKVersion%ucrt_enclave\x64" libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib
+if errorlevel 1 exit /b 1
+"%WindowsSdkDir%bin\%WindowsSDKVersion%x64\veiid.exe" window-lock.dll
+if errorlevel 1 exit /b 1
+dumpbin /headers /loadconfig /imports window-lock.dll
+if errorlevel 1 exit /b 1
+dumpbin /unwindinfo /disasm window-lock.dll > window-lock-disasm.txt
+if errorlevel 1 exit /b 1
+ml64 /nologo /c /DBRYNJA_PROBE_SKIP_LOCKED_CLEAR /Fowindow_lock_mutant.obj C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_lock_x64.asm
+if errorlevel 1 exit /b 1
+cl /nologo /LD /O2 /W4 /WX /MT /guard:cf /Fewindow-lock-mutant.dll C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_lock.c window_lock_mutant.obj /link /ENCLAVE /NODEFAULTLIB /INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED /LIBPATH:"%VCToolsInstallDir%lib\x64\enclave" /LIBPATH:"%WindowsSdkDir%Lib\%WindowsSDKVersion%ucrt_enclave\x64" libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib
+if errorlevel 1 exit /b 1
+"%WindowsSdkDir%bin\%WindowsSDKVersion%x64\veiid.exe" window-lock-mutant.dll
+exit /b %ERRORLEVEL%

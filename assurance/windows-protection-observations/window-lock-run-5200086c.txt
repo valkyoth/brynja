@@ -1,0 +1,12 @@
+normal: actual=0 expected=0
+unwind: actual=0 expected=0
+deny: actual=0 expected=0
+deny-unwind: actual=0 expected=0
+mutant: actual=0 expected=0
+mutant-unwind: actual=0 expected=0
+wrong-normal: actual=1 expected=1
+wrong-mutant: actual=1 expected=1
+fault-after-lock: actual=1 expected=1
+fault-after-observe: actual=1 expected=1
+fault-before-unlock: actual=1 expected=1
+SYNTHETIC_CONTROLS_COMPLETE; NOT_STRICT_QUALIFICATION

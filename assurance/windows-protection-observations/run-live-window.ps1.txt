@@ -1,0 +1,61 @@
+$ErrorActionPreference = 'Stop'
+$env:PATH = "C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;$env:PATH"
+Set-Location C:\brynja-v0250\repo
+$out = 'C:\brynja-v0250\live-window'
+$script = 'scripts\cryptography\check-windows-enclave-window-lock.py'
+$jobs = @(
+    @{Name='normal'; Image='window-lock.dll'; Args=@(); Exit=0},
+    @{Name='unwind'; Image='window-lock.dll'; Args=@('--unwind'); Exit=0},
+    @{Name='deny'; Image='window-lock.dll'; Args=@('--deny'); Exit=0},
+    @{Name='deny-unwind'; Image='window-lock.dll'; Args=@('--deny','--unwind'); Exit=0},
+    @{Name='mutant'; Image='window-lock-mutant.dll'; Args=@('--missing-clear-mutant'); Exit=0},
+    @{Name='mutant-unwind'; Image='window-lock-mutant.dll'; Args=@('--missing-clear-mutant','--unwind'); Exit=0},
+    @{Name='wrong-normal'; Image='window-lock-mutant.dll'; Args=@(); Exit=1; Error='exact execution/cleanup outcome'},
+    @{Name='wrong-mutant'; Image='window-lock.dll'; Args=@('--missing-clear-mutant'); Exit=1; Error='exact execution/cleanup outcome'},
+    @{Name='fault-after-lock'; Image='window-lock.dll'; Args=@('--fault','after-lock'); Exit=1; Error='injected callback fault: after-lock'},
+    @{Name='fault-after-observe'; Image='window-lock.dll'; Args=@('--fault','after-observe'); Exit=1; Error='injected callback fault: after-observe'},
+    @{Name='fault-before-unlock'; Image='window-lock.dll'; Args=@('--fault','before-unlock'); Exit=1; Error='injected callback fault: before-unlock'}
+)
+$records = @()
+foreach ($job in $jobs) {
+    $argsForJob = @($script, "$out\$($job.Image)") + $job.Args
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = 'C:\brynja-v0250\python\python.exe'
+    $info.Arguments = [string]::Join(' ', $argsForJob)
+    $info.UseShellExecute = $false
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $info
+    if (-not $process.Start()) { throw 'Could not start bounded child' }
+    $stdout = $process.StandardOutput.ReadToEndAsync()
+    $stderr = $process.StandardError.ReadToEndAsync()
+    if (-not $process.WaitForExit(45000)) { $process.Kill(); throw "Outer job timeout: $($job.Name)" }
+    $process.WaitForExit()
+    $exit = $process.ExitCode
+    [IO.File]::WriteAllText("$out\$($job.Name).json", $stdout.Result)
+    [IO.File]::WriteAllText("$out\$($job.Name).err", $stderr.Result)
+    $process.Dispose()
+    Write-Output "$($job.Name): actual=$exit expected=$($job.Exit)"
+    if ($exit -ne $job.Exit) { throw "Wrong exit: $($job.Name)" }
+    if ($job.Exit -eq 0) {
+        if ((Get-Item "$out\$($job.Name).err").Length -ne 0) { throw "Unexpected stderr: $($job.Name)" }
+        $record = Get-Content "$out\$($job.Name).json" -Raw | ConvertFrom-Json
+        if ($record.strict_qualified -ne $false -or $record.status -ne 'OBSERVATIONS_ONLY') { throw 'Bad qualification claim' }
+    } else {
+        $errorText = Get-Content "$out\$($job.Name).err" -Raw
+        if (-not $errorText.Contains($job.Error)) { throw "Failure was not expected cause: $($job.Name)" }
+        if ((Get-Item "$out\$($job.Name).json").Length -ne 0) { throw 'Failed control emitted success JSON' }
+    }
+    $records += @{name=$job.Name; exit=$exit; expected=$job.Exit}
+}
+$records | ConvertTo-Json | Set-Content "$out\run-exits.json"
+$cleanup = @{
+    synthetic_only = $true
+    strict_qualified = $false
+    process_count = @(Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'python.exe' -and $_.CommandLine -match 'window-lock' }).Count
+    temporary_certificates = @(Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.Subject -eq 'CN=BrynjaDisposableSyntheticEnclave' }).Count
+}
+$cleanup | ConvertTo-Json | Set-Content "$out\cleanup.json"
+if ($cleanup.process_count -ne 0 -or $cleanup.temporary_certificates -ne 0) { throw 'Cleanup incomplete' }
+Write-Output 'SYNTHETIC_CONTROLS_COMPLETE; NOT_STRICT_QUALIFICATION'

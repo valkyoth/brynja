@@ -1,0 +1,101 @@
+{
+  "calls": [
+    {
+      "locked_until_teardown": false,
+      "page_count": 17,
+      "rounded_start_offset": 1044480,
+      "snapshots": {},
+      "trace": [
+        "admit",
+        "deny",
+        "clear-confirmed",
+        "finish-ack"
+      ],
+      "values": [
+        64,
+        1048320,
+        1113856,
+        0,
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "locked_until_teardown": false,
+      "page_count": 17,
+      "rounded_start_offset": 1044480,
+      "snapshots": {},
+      "trace": [
+        "admit",
+        "deny",
+        "clear-confirmed",
+        "finish-ack"
+      ],
+      "values": [
+        64,
+        1048320,
+        1113856,
+        0,
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "locked_until_teardown": false,
+      "page_count": 17,
+      "rounded_start_offset": 1044480,
+      "snapshots": {},
+      "trace": [
+        "admit",
+        "deny",
+        "clear-confirmed",
+        "finish-ack"
+      ],
+      "values": [
+        64,
+        1048320,
+        1113856,
+        0,
+        0,
+        0,
+        1,
+        0
+      ]
+    }
+  ],
+  "commit": "5200086c20bbf8a6fa10253a5d3cfb62ec0c9425",
+  "deleted": true,
+  "denied": true,
+  "dump_exclusion_verified": false,
+  "full_worker_cleanup_proved": false,
+  "guard_bounds_verified": false,
+  "image_sha256": "235b19a434651e21881415ad786e7d01b6c7d65c10bfce76e827903dd7356cbd",
+  "kind": "windows-enclave-live-window-lock-experiment",
+  "malicious_host_residency_attestation": false,
+  "missing_clear_mutant": false,
+  "native_machine": "0x8664",
+  "os": 26100,
+  "production_signed": false,
+  "rust_unwind_qualified": false,
+  "schema": 1,
+  "source_sha256": {
+    "assurance/windows-enclave-probe/synthetic.c": "34751a8b80406d216eb1a3597579a14fc01ce118e7504e394183e645c6bbdfc3",
+    "assurance/windows-enclave-probe/window_lock.c": "c0f75a8567d08e7f04a40ae8cb31c3183b80e130c37caba1eb41a7e4be88218d",
+    "assurance/windows-enclave-probe/window_lock_x64.asm": "d66488705e7adb9612e198826ff82d2492877c363c3ea3861db625b2746e12af",
+    "scripts/cryptography/check-windows-enclave-window-lock.py": "3803efb4be9de2a140ef64655046721c7f8b7adca1dc6644c7ceb1f62b994529",
+    "scripts/cryptography/test-windows-enclave-window-lock.py": "568798316d44d7d55e0ae6eaa534de1ffeb8379eaaad184b82030287dede48eb",
+    "scripts/cryptography/windows_enclave_lifecycle.py": "0232dfa69625cfc757baec318c49edd304b118fcb34b876d2c832899298e5ea4",
+    "scripts/cryptography/windows_enclave_window_lock.py": "6f009eddcede04b39b47f5bcf2934a0939ea2aed0c58b2287b34e20cbe7047f8",
+    "scripts/cryptography/windows_enclave_worker.py": "361e0eb2457156671e8a74d5cdf10572df7071b26f03074b184644fc5e1ab657",
+    "scripts/cryptography/windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "scripts/cryptography/windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false,
+  "synthetic_only": true,
+  "unwind": true
+}

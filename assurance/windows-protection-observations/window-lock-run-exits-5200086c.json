@@ -1,0 +1,57 @@
+[
+    {
+        "expected":  0,
+        "name":  "normal",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "unwind",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "deny",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "deny-unwind",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "mutant",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "mutant-unwind",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "wrong-normal",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "wrong-mutant",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "fault-after-lock",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "fault-after-observe",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "fault-before-unlock",
+        "exit":  1
+    }
+]

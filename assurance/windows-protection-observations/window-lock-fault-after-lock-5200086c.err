@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\check-windows-enclave-window-lock.py", line 135, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\check-windows-enclave-window-lock.py", line 123, in main
+    record = bounded(command, args.unwind, args.missing_clear_mutant, args.deny)
+  File "C:\brynja-v0250\repo\scripts\cryptography\check-windows-enclave-window-lock.py", line 78, in bounded
+    require(result.returncode == 0 and not result.stderr and 0 < len(result.stdout) <= 32768,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f'window-lock child failed/inconclusive: exit={result.returncode}; ' + result.stderr[-4096:])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: window-lock child failed/inconclusive: exit=1; Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\check-windows-enclave-window-lock.py", line 135, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\check-windows-enclave-window-lock.py", line 109, in main
+    print(json.dumps(exercise(WorkerNative(), Windows(), image, args.unwind,
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             args.missing_clear_mutant, args.deny, args.fault)))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\check-windows-enclave-window-lock.py", line 60, in exercise
+    raise handshake.error
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_lock.py", line 73, in __call__
+    self.inject('after-lock')
+    ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_lock.py", line 52, in inject
+    raise RuntimeError('injected callback fault: ' + stage)
+RuntimeError: injected callback fault: after-lock

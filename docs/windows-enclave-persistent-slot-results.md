@@ -85,6 +85,7 @@ allocation. Host page-lock observations are not attestation against a malicious
 containing process. Cancellation, abandoned host handles, failed result copies,
 lost completion and OS teardown failure need integrated coverage.
 
-Next is connecting the [retained-result lifecycle model](windows-enclave-persistent-result-design.md)
-to independently resident storage and a host owner that retains the actual
-enclave. No enclave-private slice may be exposed as ordinary host memory.
+The later [retained Rust-worker fixture](windows-enclave-retained-worker-results.md)
+now connects the lifecycle model to independently resident storage for fixed
+public-vector hashing. A host owner retaining the actual enclave remains pending.
+No enclave-private slice may be exposed as ordinary host memory.

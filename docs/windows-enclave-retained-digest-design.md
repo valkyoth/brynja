@@ -1,7 +1,8 @@
 # Retained SHA-256 ownership bridge
 
-Status: **isolated component tests and Windows cross-build only**. This bridge is
-not linked to the native retained-allocation image and is not a shipping API.
+Status: **isolated research component**, now linked by the separate
+[native retained-worker fixture](windows-enclave-retained-worker-results.md).
+It is not a shipping API or production Windows qualification.
 Windows strict constructors, Linux behavior and release gates remain unchanged.
 
 [`retained_digest.rs`](../assurance/windows-enclave-probe/retained_digest.rs)
@@ -56,17 +57,17 @@ Cross-compilation is not native execution or protected-placement evidence.
 
 The [placement component](windows-enclave-retained-placement-design.md) now tests
 checked in-page construction, exclusive ownership, destruction order and full-page
-clearing, including strict-provenance Miri execution. It is not yet connected to
-the native image.
+clearing, including strict-provenance Miri execution. The separate native fixture
+now exercises that connection using public vectors.
 
 The [native allocation probe](windows-enclave-persistent-slot-results.md) already
-tests residency across worker returns, guards and erase-before-release. The next
-adapter must place and retain this Rust owner there without temporary secret
-copies on an ordinary host stack, self-referential lifetime violations, aliased
-mutable access or repeated initialization. It must drop the owner before clearing
-the full allocation and before allowing unlock/free. An affine host handle must
-retain the actual enclave instance; a saved token alone is insufficient.
+tests residency across worker returns, guards and erase-before-release. The
+retained-worker fixture adds placement of this owner and destruction before
+full-allocation clearing and unlock/free. The next host adapter must preserve
+those ownership/lifetime boundaries and retain the actual enclave instance;
+a saved token alone is insufficient.
 
-Native digest, replay, cancellation, abandoned-handle, failed-copy and uncertain-
-completion campaigns remain pending. Neither the public-marker native evidence
-nor these component tests alone establish that combined path.
+The native fixture covers digest retention, replay, cancellation, close with an
+unconsumed result and failed-copy quarantine. Affine host-handle abandonment and
+uncertain-completion campaigns remain pending; the fixture's internal token is
+not a host-owned result capability.

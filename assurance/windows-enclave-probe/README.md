@@ -244,12 +244,14 @@ shipping secret-result API or production Windows qualification.
 `retained_digest.rs` connects the lifecycle model to the first-party hardened
 SHA-256 workspace in [component tests](../../docs/windows-enclave-retained-digest-design.md),
 including independent vectors, cleanup/token mutants and ownership negatives.
-It has not yet been placed in the native retained allocation. The consolidated
+It is now placed by a separate native research image. The consolidated
 [v0.24.50 remaining work](../../docs/windows-v02450-remaining.md) distinguishes
 these research results from production integration and release qualification.
 
 `retained_placement.rs` adds [checked in-page ownership](../../docs/windows-enclave-retained-placement-design.md),
 with component, mutation, ownership-negative and strict-provenance Miri tests.
-It drops the retained owner before wiping its borrowed page. This does not yet
-connect the Rust owner to the signed native retained-allocation image or attest
-enclave residency; that integration remains pending.
+It drops the retained owner before wiping its borrowed page.
+`window_retained.c` / `window_retained.rs` now connect it to resident storage in
+[native public-vector experiments](../../docs/windows-enclave-retained-worker-results.md).
+These observations do not establish production Windows support or general
+enclave residency guarantees.

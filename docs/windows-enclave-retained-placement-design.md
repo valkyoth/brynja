@@ -1,7 +1,9 @@
 # Retained result placement boundary
 
-Status: isolated component, **not native enclave integration or Windows strict
-qualification**. Production code, API availability and release gates are unchanged.
+Status: isolated component, now linked by the separate
+[native retained-worker fixture](windows-enclave-retained-worker-results.md).
+This is **not Windows strict qualification**. Production code, API availability
+and release gates are unchanged.
 
 [`retained_placement.rs`](../assurance/windows-enclave-probe/retained_placement.rs)
 places the [retained SHA-256 owner](windows-enclave-retained-digest-design.md) in
@@ -64,10 +66,10 @@ unchanged and bound to their original source.
 
 ## Next step
 
-Wire this component into the [native retained allocation](windows-enclave-persistent-slot-results.md)
-and guarded worker, replacing the public-marker-only body with fixed public-vector
-SHA-256 operations. Keep the separate images and test native destruction before
-unlock/free, cross-return export, cancellation, stale tokens and failure paths.
+The separate [native fixture](windows-enclave-retained-worker-results.md) now links
+this component to resident storage and the guarded worker. Its fixed-vector tests
+cover destruction before unlock/free, cross-return export, cancellation, wrong
+tokens and copy failure; older marker images remain intact.
 An affine host handle owning the enclave instance, arbitrary borrowed-input
 protocol, composition and broader algorithm coverage remain separate work in the
 [release checklist](windows-v02450-remaining.md).

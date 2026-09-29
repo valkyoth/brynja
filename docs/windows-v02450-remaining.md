@@ -8,18 +8,18 @@ explicit acceleration and unchanged release-gate policy.
 
 ## Next implementation boundary
 
-- Wire the memory-model-tested retained-owner placement into native resident
-  storage and the guarded worker. Check the combined native construction,
-  exclusive access and destruction-before-unlock/free path; isolated placement
-  tests do not establish platform residency.
+- Build on the completed fixed-public-vector native retained-owner experiment;
+  it now covers placement, cross-return digest retention and destruction before
+  unlock/free, but is not a production API or general residency qualification.
 - Add an affine host result/session handle that retains the actual enclave
   instance. Finish the operation protocol, borrowed inputs, explicit public
   export and in-enclave result composition without exposing enclave-private
   memory as host slices.
-- Exercise the combined path across normal reuse, cancellation, abandoned or
+- Extend the fixed-vector coverage to the host-owned protocol: abandoned or
   forgotten handles, replay, stale/cross-instance identities, startup failures,
   partial copies, lost completion, quarantine and teardown failure. Component
-  tests and the public-marker native probe do not replace those integrated tests.
+  tests and fixed-vector native operations do not replace integrated host-handle
+  lifecycle tests.
 
 ## Broader implementation and qualification
 
@@ -53,4 +53,4 @@ explicit acceleration and unchanged release-gate policy.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [retained owner placement](windows-enclave-retained-placement-design.md).
-Latest native platform step: [retained allocation probe](windows-enclave-persistent-slot-results.md).
+Latest native platform step: [retained Rust-owner campaign](windows-enclave-retained-worker-results.md).

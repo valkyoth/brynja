@@ -53,9 +53,10 @@ Tokens remain public routing metadata, not authentication capabilities. Tests
 reject tokens from owners assigned distinct identities, as well as stale and
 tampered fields. Those tests do **not** prove native cross-enclave uniqueness:
 the adapter must establish identities and instance routing rather than trusting
-caller-supplied labels. Integrated native cross-instance rejection tests remain
-pending even after native composition. No native cross-instance claim is
-inferred from the component tests.
+caller-supplied labels. A later separate image has
+[two-live-enclave routing tests](windows-enclave-retained-cross-results.md), with
+an explicit lifetime-limited identity. No native cross-instance claim is inferred
+from these component tests alone.
 
 ## Verification
 
@@ -99,6 +100,6 @@ release-reports/windows-azure-replacement-2026-09-29/retained-rehash-focused/
 ```
 
 Native worker/host integration and source-bound storage/cleanup observations are
-now recorded separately. Actual cross-instance protocol testing remains pending.
+now recorded separately, as is the later lifetime-limited cross-instance experiment.
 See the [remaining release work](windows-v02450-remaining.md).
 No production crate, release gate or Windows availability claim changed.

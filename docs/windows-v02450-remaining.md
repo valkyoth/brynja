@@ -22,10 +22,15 @@ explicit acceleration and unchanged release-gate policy.
 - Native injected prefix-copy cleanup now covers all 33 header and 1,025 payload
   boundaries, followed by quarantine rejection and confirmed destruction. This
   uses a controlled failure after successful OS copying, not an observed OS
-  partial-copy failure. Complete actual cross-instance identity/rejection controls
-  for the general operations. The current private token model and bounded
-  borrowed-input host campaign are not a production operation protocol or general residency
-  qualification.
+  partial-copy failure. Two-live-enclave routing now also passes native foreign
+  token tests in both directions, unchanged-origin oracle checks, stale owner
+  epochs and all four token-field mutations.
+- Carry these boundaries into a production lifetime-bound enclave owner and
+  facade. The experimental mapping-address identity is not persistent across
+  enclave destruction/recreation or processes; stale handles must never cross
+  those lifetime boundaries. Diagnostic metadata exports are not shipping APIs.
+  The current experiments are not a production operation protocol or general
+  residency qualification.
 
 ## Broader implementation and qualification
 
@@ -59,4 +64,4 @@ explicit acceleration and unchanged release-gate policy.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [retained secret-to-secret composition](windows-enclave-retained-rehash-design.md).
-Latest native platform step: [injected partial-copy cleanup](windows-enclave-retained-partial-results.md).
+Latest native platform step: [two-live-enclave routing](windows-enclave-retained-cross-results.md).

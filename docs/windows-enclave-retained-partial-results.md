@@ -85,9 +85,10 @@ not a clean production-signing result. The ephemeral certificate/key was removed
 no probe child remains active, earlier retained image hashes are unchanged, and
 no host configuration changed.
 
-Actual native cross-instance identity and rejection remain pending. So do
-production facade integration, other algorithms, acceleration, deployment signing
-and the broader platform/worker/storage qualification listed in the
-[remaining work](windows-v02450-remaining.md). No new dump or Windows AArch64 claim
+The later [two-live-enclave experiment](windows-enclave-retained-cross-results.md)
+now covers native cross-instance routing within its explicitly limited lifetime
+scope. Production facade integration, other algorithms, acceleration, deployment signing
+and the broader platform/worker/storage qualification remain pending, as listed
+in the [remaining work](windows-v02450-remaining.md). No new dump or Windows AArch64 claim
 is established here. Recoverable unwind remains component-test coverage, not a
 native panic=abort result.

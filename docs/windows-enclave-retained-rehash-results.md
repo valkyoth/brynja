@@ -92,8 +92,9 @@ changed during this step.
 
 ## Remaining scope
 
-Actual cross-instance protocol rejection remains untested natively; stale-token
-replay within one owner is not a substitute. A later separate image now has
+Stale-token replay within one owner is not cross-instance proof. A later separate
+image now has [two-live-enclave routing observations](windows-enclave-retained-cross-results.md),
+without persistent or authenticated identity claims. Another separate image has
 [native injected partial-copy coverage](windows-enclave-retained-partial-results.md).
 Recoverable unwind remains component-test coverage; native builds use panic=abort. This new
 image has no new dump, TLS or arbitrary-depth qualification. Production signing,

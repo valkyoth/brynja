@@ -1,0 +1,112 @@
+[
+    {
+        "expected":  0,
+        "name":  "publish",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "mutate",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "cancel",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "foreign",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "stale",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "cross-instance",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "no-public",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "bad-slot",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "bad-version",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "bad-source",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "bad-destination",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "deny-first",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "deny-second",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "foreign-mutant",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "stale-mutant",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "reusable",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "forgotten",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "missing-clear",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "outer-clear",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "entropy-failure",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "zero-identity",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "exhausted-epoch",
+        "exit":  1
+    }
+]

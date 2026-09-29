@@ -1,0 +1,19 @@
+From C:\Users\azureuser\wire-window-53ec2efe.bundle
+ * branch              HEAD       -> FETCH_HEAD
+Previous HEAD position was 614f61f5 test(windows): model terminal scoped enclave result ownership
+HEAD is now at 53ec2efe style(windows): normalize wire runner trailing newline
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.022s
+
+OK
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.012s
+
+OK
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.008s
+
+OK

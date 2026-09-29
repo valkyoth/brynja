@@ -1,0 +1,23 @@
+publish: actual=0 expected=0
+mutate: actual=0 expected=0
+cancel: actual=0 expected=0
+foreign: actual=0 expected=0
+stale: actual=0 expected=0
+cross-instance: actual=0 expected=0
+no-public: actual=0 expected=0
+bad-slot: actual=0 expected=0
+bad-version: actual=0 expected=0
+bad-source: actual=0 expected=0
+bad-destination: actual=0 expected=0
+deny-first: actual=0 expected=0
+deny-second: actual=0 expected=0
+foreign-mutant: actual=1 expected=1
+stale-mutant: actual=1 expected=1
+reusable: actual=1 expected=1
+forgotten: actual=1 expected=1
+missing-clear: actual=1 expected=1
+outer-clear: actual=1 expected=1
+entropy-failure: actual=1 expected=1
+zero-identity: actual=1 expected=1
+exhausted-epoch: actual=1 expected=1
+PUBLIC_WIRE_CONTROLS_COMPLETE; NOT_STRICT_QUALIFICATION

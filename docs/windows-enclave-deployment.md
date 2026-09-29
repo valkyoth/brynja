@@ -57,14 +57,16 @@ automatically qualifications of later images.
 | Residency/dumps | Specific public-marker experiments observed page locking and exclusion from the selected full-local-dump path; not arbitrary snapshot protection or automatic coverage of every newer image |
 | Retained ownership | Native copy, lifetime, cleanup, quarantine, rehash and cross-instance routing campaigns; bounded public vectors and explicit negative controls |
 | Facade candidate | Two native 281-call campaigns and local ownership/surface tests; bounded scalar SHA-256, private fixture constructor, no production API activation |
+| Main-file pinning candidate | Two native campaigns rejected altered bytes and conflicting write/delete/rename operations while the reviewed facade ran; hash and write-sharing mutants rejected. Not signature-chain, imported-image or attestation verification |
 | Production deployment | Not executed or qualified: no production-signed candidate, production signature/identity/import integration or normal-production-configuration end-to-end result |
 | Architecture/algorithms | Windows AArch64, wider enclave algorithms and opt-in acceleration remain incomplete/unqualified |
 
 See [platform experiments](windows-strict-profile.md),
 [retained facade results](windows-enclave-retained-facade-results.md) and
 [remaining implementation work](windows-v02450-remaining.md) for exact scope.
-New image-file admission work is in progress; do not count an unfinished probe
-as a successful loading or signing test.
+The [development image-file pinning results](windows-enclave-image-pin-results.md)
+record a completed isolated experiment, not production image admission. Runtime
+identity/import binding and the reviewed deployment constructor remain unfinished.
 
 ## What this decision does not change
 

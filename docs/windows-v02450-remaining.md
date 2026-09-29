@@ -47,6 +47,11 @@ execution or waive implementation, runtime checks, pentest or existing gates.
   explicit public declassification and cancellation without generic drivers or
   host secret slices. Its constructor stays private to the fixture: production
   image verification and reviewed deployment/API construction are still required.
+- An isolated main-file pinning guard now passes two native campaigns, including
+  changed-byte, conflicting-writer, rename and compiled-mutant controls. It holds
+  the reviewed file while the existing facade executes. This does not verify a
+  signature chain, attest identity or bind imported DLLs, and is not a production
+  constructor. Carry only these tested guarantees into the admission design.
 
 ## Broader implementation and qualification
 
@@ -82,4 +87,4 @@ execution or waive implementation, runtime checks, pentest or existing gates.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [retained secret-to-secret composition](windows-enclave-retained-rehash-design.md).
-Latest native platform step: [concrete retained-output facade candidate](windows-enclave-retained-facade-results.md).
+Latest native platform step: [development image-file pinning](windows-enclave-image-pin-results.md).

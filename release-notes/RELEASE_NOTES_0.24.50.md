@@ -23,6 +23,12 @@ Azure x86-64 host. Production signing/deployment has not been validated, and the
 retained-output facade is still an integration candidate with a private fixture
 constructor. See the [deployment responsibilities and evidence limits](../docs/windows-enclave-deployment.md).
 
+A development-only main-image pinning fixture now passes two native campaigns:
+changed bytes and conflicting writer/rename access reject, the reviewed facade
+completes while pinned, and weakened hash/sharing mutants are caught. This is not
+signature-chain/import verification or production admission. See the
+[source-bound results and limitations](../docs/windows-enclave-image-pin-results.md).
+
 An isolated synthetic Windows mapping probe passed its first native Windows
 Server 2025 x86-64 run, alongside all 15 portable regression tests. It
 checks allocation/guard geometry, page locking, WER registration and cleanup,

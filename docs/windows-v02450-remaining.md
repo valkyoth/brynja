@@ -15,9 +15,10 @@ explicit acceleration and unchanged release-gate policy.
   the real enclave, retains results across calls, validates clearing before
   committing public output, and covers abandoned/forgotten handles, startup
   failures, copy rejection, simulated lost completion and deletion failure.
-  The new borrowed-input/retained-digest component is tested but not natively
-  integrated. Finish its header-copy/sequence/residency boundary and in-enclave
-  result composition without exposing enclave-private memory as host slices.
+  The borrowed-input/retained-digest worker now has native header-copy, private
+  sequence and residency observations through a bounded Python host. Connect
+  that protocol to the affine Rust host adapter, then finish in-enclave result
+  composition without exposing enclave-private memory as host slices.
 - Complete integrated partial-copy and stale/cross-instance protocol controls
   for those general operations. The current private token model and fixed-vector
   host campaign are not a production operation protocol or general residency
@@ -55,4 +56,4 @@ explicit acceleration and unchanged release-gate policy.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [borrowed-input retained-result composition](windows-enclave-retained-borrowed-design.md).
-Latest native platform step: [affine host/resource campaign](windows-enclave-retained-native-host-results.md).
+Latest native platform step: [borrowed-input retained worker](windows-enclave-retained-input-results.md).

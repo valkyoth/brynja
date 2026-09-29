@@ -1,9 +1,10 @@
 # Borrowed input with a retained result
 
-Status: **safe-Rust component tests and Windows cross-compilation only**. This is
-not yet connected to the native host/image, not a shipping API, and not Windows
-strict qualification. The previous [native affine-host observations](windows-enclave-retained-native-host-results.md)
-remain fixed-public-vector evidence; they do not qualify this new input path.
+Status: **research component with native worker observations**, not a shipping
+API or Windows strict qualification. The [new native campaign](windows-enclave-retained-input-results.md)
+connects this component to a separate enclave image through a bounded Python
+driver. The [affine Rust host adapter](windows-enclave-retained-native-host-results.md)
+remains fixed-public-vector evidence; its borrowed-input integration is pending.
 
 ## Descriptor and lifetime
 
@@ -71,10 +72,10 @@ instead of admitted length, and omitted quarantine. A positive downstream consum
 compiles; nine trait/lifetime/privacy/metadata-mutation examples are rejected with
 their expected diagnostics.
 
-The Windows build record explicitly says `native_executed: false` and
-`strict_qualified: false`. Next is native integration: copy the header once inside
-the admitted worker, retain independent instance/sequence state, bind snapshot
-addresses and copy counts to native observations, and exercise real copy-error,
-stale/cross-instance and cleanup paths. Retained-result composition and the broader
+The component-only Windows build record explicitly says `native_executed: false`
+and `strict_qualified: false`. The separate native-worker record covers header
+copying, private epoch checks, snapshot bounds, real invalid-address copy errors,
+stale-sequence rejection and cleanup. Affine host integration, cross-instance
+protocol controls, retained-result composition and the broader
 [v0.24.50 work](windows-v02450-remaining.md) are still pending. Release gates and
 production Windows availability are unchanged.

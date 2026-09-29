@@ -6,6 +6,10 @@ release gates are unchanged. This models the host side of the
 [tested scoped wire protocol](windows-enclave-wire-results.md); it does not yet
 load, own, terminate or delete a real enclave.
 
+A separate [native host experiment](windows-enclave-native-host-design.md) now
+binds a temporary copy of this unchanged model to an OS resource. That fixture
+does not turn this model's constructor into a native or production API.
+
 ## Ownership and admission
 
 The safe, `no_std` Rust fixture forbids unsafe code. A private-field `Session`

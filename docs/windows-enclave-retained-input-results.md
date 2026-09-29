@@ -3,9 +3,10 @@
 Status: **research observations only**, not production Windows strict support.
 The [borrowed-input component](windows-enclave-retained-borrowed-design.md) now
 runs inside a separate native enclave image, driven by a bounded Python host.
-The separate [affine Rust host adapter](windows-enclave-retained-native-host-results.md)
-still uses fixed public vectors; connecting its lifetime-bound request API to this
-worker remains pending. No production crate or release-gate policy changed.
+This worker checkpoint used Python; the subsequent
+[affine Rust host campaign](windows-enclave-retained-borrowed-host-results.md)
+connects its lifetime-bound input request API to the same unchanged worker image.
+No production crate or release-gate policy changed.
 
 Source: `e88a7f6be397d69c350101bd6969721cfd8bc0b3`.
 The [observation record](../assurance/windows-protection-observations/retained-input-worker-e88a7f6b.json)

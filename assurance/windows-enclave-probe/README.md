@@ -269,5 +269,7 @@ that bounded experiment qualify a production Windows backend.
 It copies payload into caller-provided worker scratch and keeps only the digest
 in the retained owner. Its [native worker campaign](../../docs/windows-enclave-retained-input-results.md)
 now checks header copying, private sequence state and residency through a bounded
-Python driver. Connecting that protocol to the affine Rust host adapter and
-composing retained results remain pending; this is not production qualification.
+Python driver. The [affine Rust host integration](../../docs/windows-enclave-retained-borrowed-host-results.md)
+now connects that protocol to a resource-owning session, with native borrowed-input
+and cleanup controls. Retained-result composition remains pending; this is not
+production qualification.

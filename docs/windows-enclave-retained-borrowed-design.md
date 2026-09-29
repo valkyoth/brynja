@@ -3,8 +3,8 @@
 Status: **research component with native worker observations**, not a shipping
 API or Windows strict qualification. The [new native campaign](windows-enclave-retained-input-results.md)
 connects this component to a separate enclave image through a bounded Python
-driver. The [affine Rust host adapter](windows-enclave-retained-native-host-results.md)
-remains fixed-public-vector evidence; its borrowed-input integration is pending.
+driver. A separate [native affine Rust host integration](windows-enclave-retained-borrowed-host-results.md)
+now connects lifetime-bound caller input to this worker; it remains research-only.
 
 ## Descriptor and lifetime
 
@@ -75,7 +75,7 @@ their expected diagnostics.
 The component-only Windows build record explicitly says `native_executed: false`
 and `strict_qualified: false`. The separate native-worker record covers header
 copying, private epoch checks, snapshot bounds, real invalid-address copy errors,
-stale-sequence rejection and cleanup. Affine host integration, cross-instance
-protocol controls, retained-result composition and the broader
+stale-sequence rejection and cleanup. The affine host integration now has native
+observations too. Cross-instance protocol controls, retained-result composition and the broader
 [v0.24.50 work](windows-v02450-remaining.md) are still pending. Release gates and
 production Windows availability are unchanged.

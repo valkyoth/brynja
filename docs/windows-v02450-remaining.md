@@ -11,17 +11,15 @@ explicit acceleration and unchanged release-gate policy.
 - Build on the completed fixed-public-vector native retained-owner experiment;
   it now covers placement, cross-return digest retention and destruction before
   unlock/free, but is not a production API or general residency qualification.
-- Extend the native affine host adapter beyond fixed public vectors. It now owns
-  the real enclave, retains results across calls, validates clearing before
-  committing public output, and covers abandoned/forgotten handles, startup
-  failures, copy rejection, simulated lost completion and deletion failure.
-  The borrowed-input/retained-digest worker now has native header-copy, private
-  sequence and residency observations through a bounded Python host. Connect
-  that protocol to the affine Rust host adapter, then finish in-enclave result
-  composition without exposing enclave-private memory as host slices.
+- Build on the connected native affine borrowed-input host and retained worker.
+  They now cover actual input copying, private epochs, retained digest ownership,
+  cleanup before public output, abandoned/forgotten handles, startup failures,
+  copy rejection, simulated lost completion and deletion failure. Next finish
+  in-enclave retained-result composition without exposing enclave-private memory
+  as host slices. The native campaigns still use bounded public test data.
 - Complete integrated partial-copy and stale/cross-instance protocol controls
-  for those general operations. The current private token model and fixed-vector
-  host campaign are not a production operation protocol or general residency
+  for those general operations. The current private token model and bounded
+  borrowed-input host campaign are not a production operation protocol or general residency
   qualification.
 
 ## Broader implementation and qualification
@@ -56,4 +54,4 @@ explicit acceleration and unchanged release-gate policy.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [borrowed-input retained-result composition](windows-enclave-retained-borrowed-design.md).
-Latest native platform step: [borrowed-input retained worker](windows-enclave-retained-input-results.md).
+Latest native platform step: [affine borrowed-input host](windows-enclave-retained-borrowed-host-results.md).

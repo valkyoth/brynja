@@ -61,6 +61,10 @@ A positive consumer and eleven compiled negatives check exclusive storage
 borrowing, nonescaping callback references, private fields and absence of
 Send/Sync/Copy/Clone/Debug. These are lifecycle tests, not native residency evidence.
 
+The subsequent [retained SHA-256 bridge](windows-enclave-retained-digest-design.md)
+now tests real first-party digests across worker-scratch scope exit. Its native
+in-place connection to the separately tested allocation remains pending.
+
 ## Native storage experiment and remaining integration
 
 Microsoft lists VirtualAlloc, VirtualFree, VirtualProtect and VirtualQuery among

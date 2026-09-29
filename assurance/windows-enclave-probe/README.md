@@ -240,3 +240,10 @@ full-page clearing, free/reuse, denied admission and two broken images. The
 separate safe Rust `persistent_result.rs` model tests result lifecycle and token
 replay rules; it is not yet linked to that allocation. Neither experiment is a
 shipping secret-result API or production Windows qualification.
+
+`retained_digest.rs` connects the lifecycle model to the first-party hardened
+SHA-256 workspace in [component tests](../../docs/windows-enclave-retained-digest-design.md),
+including independent vectors, cleanup/token mutants and ownership negatives.
+It has not yet been placed in the native retained allocation. The consolidated
+[v0.24.50 remaining work](../../docs/windows-v02450-remaining.md) distinguishes
+these research results from production integration and release qualification.

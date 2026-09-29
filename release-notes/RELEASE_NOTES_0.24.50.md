@@ -16,6 +16,13 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
+The chosen enclave distribution model is source/API/tooling with consumer-managed
+signing and deployment, not a Brynja-operated production-signing service. Native
+observations so far use development-signed images on a specifically configured
+Azure x86-64 host. Production signing/deployment has not been validated, and the
+retained-output facade is still an integration candidate with a private fixture
+constructor. See the [deployment responsibilities and evidence limits](../docs/windows-enclave-deployment.md).
+
 An isolated synthetic Windows mapping probe passed its first native Windows
 Server 2025 x86-64 run, alongside all 15 portable regression tests. It
 checks allocation/guard geometry, page locking, WER registration and cleanup,

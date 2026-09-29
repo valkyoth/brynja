@@ -5,6 +5,11 @@ Windows strict constructors remain unsupported. This document does not admit a
 backend, qualify an OS, or change release-gate policy. Existing Linux behavior
 and default-off acceleration remain unchanged.
 
+The current distribution decision and development-only evidence limits are
+summarized in [consumer-managed enclave deployment](windows-enclave-deployment.md).
+Production signing belongs to the deploying application publisher; runtime
+protection checks and honest qualification claims remain Brynja's responsibility.
+
 The [enclave feasibility review](windows-enclave-design.md) records the next
 candidate architecture, its API incompatibilities and remaining worker-ownership
 proof obligations. Azure now has positive fixed-buffer enclave locking and

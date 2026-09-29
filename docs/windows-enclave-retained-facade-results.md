@@ -87,6 +87,11 @@ flow protection. Native unwind is not claimed.
 
 ## Before production integration
 
+The owner selected [consumer-managed signing and deployment](windows-enclave-deployment.md).
+Brynja supplies the source/API/tooling; the application publisher supplies its
+production signature and environment. No Brynja-owned signing account is needed
+to continue development. Production-route validation is still unperformed.
+
 Keep the fixture constructor private. A deployable constructor must verify the
 intended image/identity/import contract before confidential input admission;
 successful loading of a development-signed DLL is insufficient. Microsoft's

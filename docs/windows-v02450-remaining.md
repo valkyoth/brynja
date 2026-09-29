@@ -6,6 +6,12 @@ components; it is not a completed production Windows backend. The release scope
 remains the [Windows strict protected profile](windows-strict-profile.md), with
 explicit acceleration and unchanged release-gate policy.
 
+Distribution follows the [consumer-managed deployment model](windows-enclave-deployment.md):
+Brynja supplies source/APIs/build and verification tooling; the application
+publisher supplies production signing and deployment. Development can proceed
+without a Brynja-owned signing subscription. This does not qualify production
+execution or waive implementation, runtime checks, pentest or existing gates.
+
 ## Next implementation boundary
 
 - Build on the completed fixed-public-vector native retained-owner experiment;
@@ -54,9 +60,11 @@ explicit acceleration and unchanged release-gate policy.
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or
   privileged snapshots. Existing dump observations bind older images only.
-- Resolve production image signing, identity/import binding and reproducible
-  deployment. Current test-signed images on a Secure-Boot-disabled development
-  host are not production qualification.
+- Implement identity/import binding and a reproducible consumer build/sign/load
+  workflow. Production signing credentials and costs belong to the application
+  publisher, not necessarily Brynja. Record production-route execution as
+  untested until it is actually exercised; current test-signed images on a
+  Secure-Boot-disabled development host are not production qualification.
 - Obtain native evidence for each claimed Windows architecture/configuration.
   Only x86-64 enclave experiments have run here; Windows AArch64 is not qualified.
   If the stated architecture scope cannot be delivered, obtain an explicit scope

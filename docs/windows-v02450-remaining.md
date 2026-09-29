@@ -36,6 +36,11 @@ explicit acceleration and unchanged release-gate policy.
   Diagnostic metadata exports are not shipping APIs.
   The current experiments are not a production operation protocol or general
   residency qualification.
+- A concrete retained-output facade candidate now passes local ownership/surface
+  checks and two native campaigns. It supports bounded SHA-256, retained rehash,
+  explicit public declassification and cancellation without generic drivers or
+  host secret slices. Its constructor stays private to the fixture: production
+  image verification and reviewed deployment/API construction are still required.
 
 ## Broader implementation and qualification
 
@@ -69,4 +74,4 @@ explicit acceleration and unchanged release-gate policy.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [retained secret-to-secret composition](windows-enclave-retained-rehash-design.md).
-Latest native platform step: [host lifetime and receipt identity](windows-enclave-retained-lifetime-results.md).
+Latest native platform step: [concrete retained-output facade candidate](windows-enclave-retained-facade-results.md).

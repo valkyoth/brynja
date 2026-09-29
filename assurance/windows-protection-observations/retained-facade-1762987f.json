@@ -1,0 +1,202 @@
+{
+  "archive_path": "release-reports/windows-azure-replacement-2026-09-29/retained-facade-complete.tar",
+  "archive_sha256": "4fae7e1fb2abe1994d4b245122ba9015dfac886353ce1a5855ca77b1d8caa48e",
+  "build_record_sha256": "964cfe9faf16d0f484b04462c0a007d5d39969ec40bcaa7a03e92b939d3c79b9",
+  "campaigns": [
+    {
+      "captured_at": "2026-09-29T18:45:55.676448+00:00",
+      "label": "first",
+      "record_sha256": "d6f130f87fb1a664d62900cd3379f014a0636d4c84645c0c0f5904b121eb37a0"
+    },
+    {
+      "captured_at": "2026-09-29T18:46:12.658663+00:00",
+      "label": "repeat",
+      "record_sha256": "e8244c8afd6973bc98bf1a49eabc8f6aeda660597c954d458d8b9da8c9fbca9a"
+    }
+  ],
+  "cleanup": {
+    "ephemeral_certificates": 0,
+    "host_configuration_changed": false,
+    "preserved_images": {
+      "retained-cross-corrected\\image": "a2a31eebf042e310a76b363eb0fa3bf24cd7d9fe81bcdec0353b95f4392de8cc",
+      "retained-input-worker": "e947aeeb45ca6dce2339f0c7545b4e1609b6d5d172ee7b17f17fd6090fc68879",
+      "retained-partial\\image": "3c628892528eebb453c92abc27666625ac1145fd4546f2d0e3b67356ab1aed34",
+      "retained-rehash-worker": "d1479908bf94512ff59e06c6b46f82b894945cf52c30bed0ee89b1bf01be12a0"
+    },
+    "probe_children": 0,
+    "signing_performed": false
+  },
+  "image_sha256": "a2a31eebf042e310a76b363eb0fa3bf24cd7d9fe81bcdec0353b95f4392de8cc",
+  "image_source_commit": "bce5cd2a9a76fb3908e421b0c8ed06d7b22de18e",
+  "kind": "windows-enclave-host-facade-observations",
+  "limits": [
+    "Facade constructor is private to fixture; no production API or verified image admission",
+    "Bounded scalar SHA-256 only; deliberate public output is not secret storage",
+    "Four native mutants exercise preceding lifecycle campaign; facade mutants are local tests",
+    "Host receipt IDs are unique within one linked runtime/process, not persistent or authenticated",
+    "Mock test forces allocation address reuse; native allocator reuse is not asserted",
+    "Enclave token identity remains live-mapping scoped; diagnostic exports are not a shipping API",
+    "Delete-failure control retains uncertain resource until child exit, not cleanup success",
+    "Unchanged development-signed image; Secure Boot disabled; no new signing",
+    "Native panic=abort, not native unwind, dump, production or Windows AArch64 qualification"
+  ],
+  "native_executed": true,
+  "public_vectors_only": true,
+  "records": [
+    {
+      "executable_sha256": "fac5f442fbc4a49a5c5a269f98ad22bcfe0f713fbe970b46c09e0961eb215de9",
+      "exit_code": 0,
+      "result": {
+        "calls": 281,
+        "cleanup_errors": 0,
+        "created": 14,
+        "deleted": 14,
+        "result": 0,
+        "retained": 0
+      },
+      "variant": "normal"
+    },
+    {
+      "executable_sha256": "723295ad35e49b348148ddd8ffeaf8adea85d57d3b67d126310466be7de86fa6",
+      "exit_code": 0,
+      "result": {
+        "calls": 0,
+        "cleanup_errors": 0,
+        "created": 1,
+        "deleted": 1,
+        "result": 10,
+        "retained": 0
+      },
+      "variant": "fail-create"
+    },
+    {
+      "executable_sha256": "93a5197bccb0209bf331e522e279f09b952c08d448f029f2f3abc64a5d683728",
+      "exit_code": 0,
+      "result": {
+        "calls": 0,
+        "cleanup_errors": 0,
+        "created": 1,
+        "deleted": 1,
+        "result": 10,
+        "retained": 0
+      },
+      "variant": "fail-load"
+    },
+    {
+      "executable_sha256": "c86cd2ccfae1db807254d32e26991d542b1915e4c95049623d5577cd2817f7af",
+      "exit_code": 0,
+      "result": {
+        "calls": 0,
+        "cleanup_errors": 0,
+        "created": 1,
+        "deleted": 1,
+        "result": 10,
+        "retained": 0
+      },
+      "variant": "fail-init"
+    },
+    {
+      "executable_sha256": "3ca32578ae56112704035641a04ec974f903588765b919e9a62f170ad6ffd616",
+      "exit_code": 0,
+      "result": {
+        "calls": 230,
+        "cleanup_errors": 3,
+        "created": 1,
+        "deleted": 0,
+        "result": 15,
+        "retained": 1
+      },
+      "variant": "fail-delete"
+    },
+    {
+      "executable_sha256": "2061f797f19df2ae4e124a6cb82bb7ec36046fb7a90fa28ceb3ba20329b80858",
+      "exit_code": 97,
+      "result": {
+        "calls": 242,
+        "cleanup_errors": 0,
+        "created": 4,
+        "deleted": 4,
+        "result": 32,
+        "retained": 0
+      },
+      "variant": "early"
+    },
+    {
+      "executable_sha256": "62b26a53f6b8360f8abd4152c9a131f973b3be314d7a2feed2aef34c1e1bcb60",
+      "exit_code": 97,
+      "result": {
+        "calls": 234,
+        "cleanup_errors": 0,
+        "created": 2,
+        "deleted": 2,
+        "result": 22,
+        "retained": 0
+      },
+      "variant": "reopen"
+    },
+    {
+      "executable_sha256": "7c06bd3dc7d1f03d7c929ec66447b6d7ecc796301d26c9fd40fd5f075dcd8046",
+      "exit_code": 97,
+      "result": {
+        "calls": 250,
+        "cleanup_errors": 0,
+        "created": 6,
+        "deleted": 6,
+        "result": 32,
+        "retained": 0
+      },
+      "variant": "receipt"
+    },
+    {
+      "executable_sha256": "b1abb1b88bbf455d51726497e65658385bb3465b76bc25af226fae3fbfef73f3",
+      "exit_code": 97,
+      "result": {
+        "calls": 261,
+        "cleanup_errors": 0,
+        "created": 11,
+        "deleted": 11,
+        "result": 70,
+        "retained": 0
+      },
+      "variant": "recycled"
+    }
+  ],
+  "schema": 1,
+  "source_commit": "1762987f23cbb87e53718d9a7dbc3f2f082c453c",
+  "source_sha256": {
+    "assurance/windows-enclave-probe/native_host.h": "defdb024a08fac2b646f10a23054e388b29b829f470984c36a80f808e7d82cec",
+    "assurance/windows-enclave-probe/native_host_resource.c": "95db42fa11e57ac641658e7e1ddeee2c340db10cd204161c5de75b18f379d24f",
+    "assurance/windows-enclave-probe/retained_facade.rs": "22a9d30326a36debc6b3f6a2f1f0d55f653a5e414f217a64f587f3c9382a3454",
+    "assurance/windows-enclave-probe/retained_facade_campaign.rs": "70b59e7e31269582aca63f9e7cabf142d44ab4143a94987066864445e01f69a3",
+    "assurance/windows-enclave-probe/retained_facade_tests.rs": "e1577bb74da91f0e3108330831ebcc38b5599418e803ce5dc639e87a04cde25c",
+    "assurance/windows-enclave-probe/retained_host.rs": "e7bd082ee335e589309cd9098b50f84ac74ae439afd3dc8f54d0ab19ba67c9ba",
+    "assurance/windows-enclave-probe/retained_input.rs": "d8d3598d491067beb146bb6b63c54c9ae13ec810cbe242d73b76c8d7b14d9a9d",
+    "assurance/windows-enclave-probe/retained_input_report.h": "97625e3885e593279e6806e685c762a507ccd008782024e627592f2b91624a01",
+    "assurance/windows-enclave-probe/retained_instance_id.rs": "0e559495784045e024f560332d99c86b810127a1bd3186466e8ec2a91c914863",
+    "assurance/windows-enclave-probe/retained_native_adapter_tests.rs": "9a46691940abb72268a7835186a793a8454303c2cf5a3cab56bc3965cf08eb7f",
+    "assurance/windows-enclave-probe/retained_native_campaign.rs": "0823d86aee2d0157605e0d5e06362f97fc137f66e3d2ae1e7ac5305f2fc8af6b",
+    "assurance/windows-enclave-probe/retained_native_host.rs": "76ae280a6f2c023643be99ad4208542ce769ee1bfe7081431148acdb2421e5fb",
+    "assurance/windows-enclave-probe/retained_native_transport.c": "7298ddaeee30542d89be707b66bc1ca620bde3a08c379fba4b421ebf66695d4f",
+    "assurance/windows-enclave-probe/retained_page_admission.h": "883f21d49b2efb284b7766036a843914799500860938730f9f4595011bfc7570",
+    "assurance/windows-enclave-probe/retained_rehash_report.h": "6b94755c2f426a23c2dacd6fd24d8f87b34026796410a54ed38f9bfc6f629307",
+    "scripts/cryptography/test-windows-enclave-retained-borrowed-host.py": "d67efaa7854e430de6913549b763fdfdabcda0cfa0f8400f6563f1fbf2d660b8",
+    "scripts/cryptography/test-windows-enclave-retained-facade.py": "004010c6a45f53680f21ec1021798dc8ca2d7449f9313e1192701310334bb1c1",
+    "scripts/cryptography/test-windows-enclave-retained-lifetime.py": "3436e3c31e32ca83ca9691b903fd2c27f258b1d53c5aecca336c94c7dba53168",
+    "scripts/cryptography/test-windows-enclave-retained-native-host.py": "54338f5fbead9176e3a4752d6ce808c3f8f2139a351d2879bdb03909bcf2b626",
+    "scripts/cryptography/test-windows-enclave-retained-rehash-host.py": "8b37ec72696df5123a7b9d8f32486e97a07d068daa738e8d70cf2d358ac76a74",
+    "scripts/cryptography/windows_enclave_retained_borrowed_host_build.py": "a126f2bcfdd7805a14b16d521c0538a7b66d126ad3b75e59f3032bcba03e5983",
+    "scripts/cryptography/windows_enclave_retained_borrowed_host_run.py": "6868eee256c24a97623edf754ad14fad4276146c9b3b1c72e4c4451db936cefc",
+    "scripts/cryptography/windows_enclave_retained_facade_build.py": "4c7d7595a749afe417ca0af13e0437c434915b74949c545777a991967d385f40",
+    "scripts/cryptography/windows_enclave_retained_facade_run.py": "61d8eddd3e4f614161cbb8a0a02100ae479428057c4f906827666e9d863c20f2",
+    "scripts/cryptography/windows_enclave_retained_lifetime_build.py": "9bc29ea2b3a4cc5975c8c3bd4c5c90d324c2e37704ef7cc93acbe9d8fabe03c9",
+    "scripts/cryptography/windows_enclave_retained_lifetime_run.py": "fc0d1adee373941746752ba5afe600fe37cc3681b7283eb1d9a0ee30569f4e37",
+    "scripts/cryptography/windows_enclave_retained_native_host_build.py": "de814297414736d7b70e17c3fd15c0fdbf841eeb77f1740da16753ad8f11a030",
+    "scripts/cryptography/windows_enclave_retained_native_host_run.py": "6a95e217013aebc3dcea84cf642ae6ea75b5035fa4b64f00012fe8ef0f2756a2",
+    "scripts/cryptography/windows_enclave_retained_partial_run.py": "86cd698b00152bc58e2fddb151dcbcd7c79b39cef79532468409c0ddde173bac",
+    "scripts/cryptography/windows_enclave_retained_rehash_host_build.py": "92c8180cb1b40b7532b991b50be71d15ee4a9e4378ba530510bca8d4ac53aad7",
+    "scripts/cryptography/windows_enclave_retained_rehash_host_run.py": "52e3c29949373a7274deac35875946f47a35fd7bc5d84fd1c82ce761ab06cce7",
+    "scripts/cryptography/windows_enclave_sha256_build.py": "330de8f6790ef5a94644058181779e3a7789cbff483651423d885cb4f4a02445"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false
+}

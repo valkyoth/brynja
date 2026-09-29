@@ -72,3 +72,7 @@ input, request copies and host staging here are public data. The containing
 process is not treated as trustworthy merely because Rust field privacy is used.
 The old signed enclave, production cryptography, Linux behavior and release gates
 were not changed.
+
+A subsequent [active-worker WER campaign](windows-enclave-active-dump-results.md)
+checks this real Rust exchange at two fixed pause points. That narrower dump-path
+observation does not establish the complete runtime or snapshot guarantees above.

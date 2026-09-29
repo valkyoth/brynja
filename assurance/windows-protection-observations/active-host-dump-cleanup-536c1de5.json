@@ -1,0 +1,10 @@
+{
+  "check_script_sha256": "316bd89d23fcd03f718db5eea8610d1ff01e3fee2971c0e5dca7329e523c541c",
+  "checked_at": "2026-09-29T11:42:09.8952904Z",
+  "raw_artifact_archive_sha256": "a06f8f8d948146dddea8d46fc08d4baaeb2608dd29fd094576d7236c109ecc5c",
+  "remaining_application_policies": 0,
+  "remaining_capture_directories": 0,
+  "remaining_crash_children": 0,
+  "strict_qualified": false,
+  "synthetic_only": true
+}

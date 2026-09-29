@@ -4,6 +4,9 @@ Status: isolated public-data research, **not Windows strict support**. This adds
 an observation lane for the [Rust-owned native host](windows-enclave-native-host-results.md)
 without changing its sources, the signed enclave DLL, production crypto or gates.
 
+The [native captures and repeats](windows-enclave-active-dump-results.md) record
+the two pause points, complete positive controls and cleanup observations.
+
 The previous dump campaign covered a synthetic enclave allocation. This campaign
 instead interrupts the actual SHA-256 result exchange while its enclave worker is
 active. A temporary copy of the host callback is instrumented immediately after

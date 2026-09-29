@@ -101,6 +101,42 @@ class Tests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 native.validate({**value, 'extra': 0}, variant)
 
+    @unittest.skipIf(os.name == 'nt', 'local C compiler shim; real MSVC host tested separately')
+    def test_generated_c_main_requires_updated_exact_counters(self):
+        source = (self.path / 'native_host_main.c').read_text()
+        source = build.replace_once(source, '#include "native_host.h"',
+            '#include <stdint.h>\nuint64_t HostCounter(uint64_t which);')
+        source += """
+static uint64_t counters[5] = {6,6,64,0,0};
+uint64_t HostCounter(uint64_t which) { return counters[which]; }
+uint32_t HostCampaign(const wchar_t *image, size_t length) {
+    (void)image; (void)length; return 0;
+}
+int main(void) {
+    wchar_t *arguments[2] = {L"probe", L"image"};
+    unsigned i;
+    if (wmain(2, arguments) != 0) return 1;
+    for (i=0; i<5; ++i) {
+        counters[i]++;
+        if (wmain(2, arguments) != 97) return 2;
+        counters[i]--;
+    }
+    counters[0]=5; counters[1]=5; counters[2]=63;
+    return wmain(2, arguments) == 97 ? 0 : 3;
+}
+"""
+        path = self.path / 'main-counter.c'
+        path.write_text(source)
+        binary = self.path / 'main-counter'
+        # GCC's uint64_t is unsigned long here, while MSVC uses unsigned long long.
+        # Use the Windows printf argument width in the stub to preserve /Werror.
+        path.write_text(source.replace('uint64_t HostCounter(', 'unsigned long long HostCounter('))
+        result = subprocess.run(['cc', '-std=c11', '-Wall', '-Wextra', '-Werror',
+            str(path), '-o', str(binary)], capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        result = subprocess.run([str(binary)], capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()

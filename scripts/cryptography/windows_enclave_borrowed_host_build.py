@@ -57,6 +57,12 @@ def prepare(directory, target):
     campaign = replace_once((SOURCE / 'native_host_campaign.rs').read_text(),
                             'for fault in 1..=3 {', 'for fault in [1, 2, 3, 5] {')
     (directory / 'campaign.rs').write_text(campaign)
+    main = replace_once((SOURCE / 'native_host_main.c').read_text(),
+        'result == 0 && HostCounter(0) == 5 && HostCounter(1) == 5\n'
+        '        && HostCounter(2) == 63',
+        'result == 0 && HostCounter(0) == 6 && HostCounter(1) == 6\n'
+        '        && HostCounter(2) == 64')
+    (directory / 'native_host_main.c').write_text(main)
     shutil.copyfile(SOURCE / 'native_borrowed_transport.c', directory / 'native_host_transport.c')
     rows = ['const VECTORS: &[(&[u8], &[u8; 32])] = &[']
     for message in previous.oracle.vectors():
@@ -88,7 +94,7 @@ def build(directory):
         subprocess.run(mutant, check=True, timeout=120)
         commands.append(mutant)
     generated = ('native_model.rs', 'host_session_wire.rs', 'native_host.rs',
-                 'campaign.rs', 'native_vectors.rs', 'native_host_transport.c')
+                 'campaign.rs', 'native_vectors.rs', 'native_host_transport.c', 'native_host_main.c')
     record = {'native_executed': False, 'strict_qualified': False, 'commands': commands,
               'rustc': subprocess.check_output(['rustc', '+1.98.1', '-vV'], text=True),
               'source_sha256': {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in SOURCES},

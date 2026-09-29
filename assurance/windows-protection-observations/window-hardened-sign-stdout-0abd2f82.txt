@@ -1,0 +1,31 @@
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\hardened-window\normal.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: normal.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\hardened-window\missing-clear.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: missing-clear.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\hardened-window\forgotten-output.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: forgotten-output.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\hardened-window\wrong-digest.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: wrong-digest.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\hardened-window\missing-owner-clear.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: missing-owner-clear.dll 2
+EPHEMERAL_SIGNING_KEY_REMOVED

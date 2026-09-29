@@ -1,0 +1,77 @@
+[
+    {
+        "expected":  0,
+        "name":  "success",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "success-c-exception",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "missing-owner-success",
+        "exit":  1
+    },
+    {
+        "expected":  0,
+        "name":  "cancel",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "cancel-c-exception",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "missing-owner-cancel",
+        "exit":  1
+    },
+    {
+        "expected":  0,
+        "name":  "invalid-output",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "invalid-output-c-exception",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "missing-owner-invalid-output",
+        "exit":  1
+    },
+    {
+        "expected":  0,
+        "name":  "forgotten-state",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "forgotten-state-c-exception",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "missing-owner-forgotten-state",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "forgotten-output",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "wrong-digest",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "missing-clear",
+        "exit":  1
+    }
+]

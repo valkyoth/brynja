@@ -5,6 +5,8 @@ This v0.24.50 research step replaces the ordinary hash in the previous
 `hardened_in_place::Sha256Workspace` and `SecretRegionInitialization` APIs.
 Production implementations and release gates are unchanged. Windows strict
 remains unsupported; no confidential input is accepted by this experiment.
+Its [native observations and failure controls](windows-enclave-hardened-owner-results.md)
+are recorded separately.
 
 ## Bounded ownership model
 

@@ -116,3 +116,7 @@ than relabeling this ordinary public-vector worker. Full worker/caller/runtime
 cleanup, exact-layout dump exclusion, concurrency, production signing and supported
 OS/compiler qualification remain open. Windows strict must stay unsupported until
 the required protection contract is actually established.
+
+The subsequent [scoped hardened-owner experiment](windows-enclave-hardened-owner-results.md)
+now exercises the existing hardened API's separate state/input/output lifetimes
+inside this window, still with public vectors and without strict activation.

@@ -1,0 +1,16 @@
+success: actual=0 expected=0
+success-c-exception: actual=0 expected=0
+missing-owner-success: actual=1 expected=1
+cancel: actual=0 expected=0
+cancel-c-exception: actual=0 expected=0
+missing-owner-cancel: actual=1 expected=1
+invalid-output: actual=0 expected=0
+invalid-output-c-exception: actual=0 expected=0
+missing-owner-invalid-output: actual=1 expected=1
+forgotten-state: actual=0 expected=0
+forgotten-state-c-exception: actual=0 expected=0
+missing-owner-forgotten-state: actual=1 expected=1
+forgotten-output: actual=1 expected=1
+wrong-digest: actual=1 expected=1
+missing-clear: actual=1 expected=1
+PUBLIC_HARDENED_CONTROLS_COMPLETE; NOT_STRICT_QUALIFICATION

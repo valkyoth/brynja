@@ -78,7 +78,8 @@ AArch64, arbitrary call depth, Rust unwind/abort cleanup, runtime/TLS copies,
 malicious-host residency attestation or the new allocation's dump exclusion.
 The old dump observations cover older images only.
 
-Next: an affine host handle owning the actual enclave instance, arbitrary borrowed
+Next: connect the [tested affine host model](windows-enclave-retained-host-design.md)
+to an adapter owning the actual enclave instance, arbitrary borrowed
 input and result-composition protocol, integrated failure/teardown tests, then
 production API/algorithm coverage and qualification. See the
 [remaining release work](windows-v02450-remaining.md).

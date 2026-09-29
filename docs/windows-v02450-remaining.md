@@ -11,8 +11,10 @@ explicit acceleration and unchanged release-gate policy.
 - Build on the completed fixed-public-vector native retained-owner experiment;
   it now covers placement, cross-return digest retention and destruction before
   unlock/free, but is not a production API or general residency qualification.
-- Add an affine host result/session handle that retains the actual enclave
-  instance. Finish the operation protocol, borrowed inputs, explicit public
+- Connect the tested affine host result/session model to a private adapter that
+  retains the actual enclave instance. The safe component now covers exclusive
+  ownership, abandonment, receipt validation and transactional public output;
+  its synthetic transport does not qualify Windows cleanup. Finish the operation protocol, borrowed inputs, explicit public
   export and in-enclave result composition without exposing enclave-private
   memory as host slices.
 - Extend the fixed-vector coverage to the host-owned protocol: abandoned or
@@ -52,5 +54,5 @@ explicit acceleration and unchanged release-gate policy.
   then wait for green GitHub checks and explicit tagging authorization. No extra
   release-gate policy or crates.io publication is introduced by this work.
 
-Latest focused component: [retained owner placement](windows-enclave-retained-placement-design.md).
+Latest focused component: [affine retained-result host model](windows-enclave-retained-host-design.md).
 Latest native platform step: [retained Rust-owner campaign](windows-enclave-retained-worker-results.md).

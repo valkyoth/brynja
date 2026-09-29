@@ -255,3 +255,9 @@ It drops the retained owner before wiping its borrowed page.
 [native public-vector experiments](../../docs/windows-enclave-retained-worker-results.md).
 These observations do not establish production Windows support or general
 enclave residency guarantees.
+
+`retained_host.rs` adds a separate [affine host/session model](../../docs/windows-enclave-retained-host-design.md).
+It tests result ownership, transactional public export, quarantine and truthful
+release-receipt handling with a synthetic transport. The private resource-owning
+Windows adapter is still pending; no native cleanup claim follows from its
+component tests or Windows cross-compilation.

@@ -1,0 +1,131 @@
+First-party outer and recursive frames only. Native raw disassembly SHA-256:
+fa167e760c035857d4c53adde90feee029d0ade044eb463b819324c58c86807d
+Source: 59b732d7bf830b7cc157502cc7a82d505c3ad950
+The referenced __chkstk and CRT runtime bodies are not reproduced here.
+
+  0000000180001A00: 55                 push        rbp
+  0000000180001A01: 48 8B EC           mov         rbp,rsp
+  0000000180001A04: 48 89 4D 10        mov         qword ptr [rbp+10h],rcx
+  0000000180001A08: 48 C7 C0 20 40 01  mov         rax,14020h
+                    00
+  0000000180001A0F: E8 4C 02 00 00     call        0000000180001C60
+  0000000180001A14: 48 2B E0           sub         rsp,rax
+  0000000180001A17: 48 8B C5           mov         rax,rbp
+  0000000180001A1A: 48 25 00 F0 FF FF  and         rax,0FFFFFFFFFFFFF000h
+  0000000180001A20: 48 2D 00 10 00 00  sub         rax,1000h
+  0000000180001A26: 48 89 05 7B 4E 00  mov         qword ptr [00000001800068A8h],rax
+                    00
+  0000000180001A2D: 48 2D 00 00 01 00  sub         rax,10000h
+  0000000180001A33: 48 89 05 76 4E 00  mov         qword ptr [00000001800068B0h],rax
+                    00
+  0000000180001A3A: 48 8D A0 E0 EF FF  lea         rsp,[rax+FFFFFFFFFFFFEFE0h]
+                    FF
+  0000000180001A41: E8 6A F9 FF FF     call        00000001800013B0
+  0000000180001A46: 48 85 C0           test        rax,rax
+  0000000180001A49: 74 36              je          0000000180001A81
+  0000000180001A4B: 4C 8B 15 5E 4E 00  mov         r10,qword ptr [00000001800068B0h]
+                    00
+  0000000180001A52: 48 8B 15 4F 4E 00  mov         rdx,qword ptr [00000001800068A8h]
+                    00
+  0000000180001A59: 49 BB A5 A5 A5 A5  mov         r11,0A5A5A5A5A5A5A5A5h
+                    A5 A5 A5 A5
+  0000000180001A63: 4D 89 1A           mov         qword ptr [r10],r11
+  0000000180001A66: 49 83 C2 08        add         r10,8
+  0000000180001A6A: 4C 3B D2           cmp         r10,rdx
+  0000000180001A6D: 72 F4              jb          0000000180001A63
+  0000000180001A6F: 48 8B 4D 10        mov         rcx,qword ptr [rbp+10h]
+  0000000180001A73: 48 8D 62 E0        lea         rsp,[rdx-20h]
+  0000000180001A77: E8 E4 F5 FF FF     call        0000000180001060
+  0000000180001A7C: 4C 8B C0           mov         r8,rax
+  0000000180001A7F: EB 03              jmp         0000000180001A84
+  0000000180001A81: 45 33 C0           xor         r8d,r8d
+  0000000180001A84: 4C 8B 15 25 4E 00  mov         r10,qword ptr [00000001800068B0h]
+                    00
+  0000000180001A8B: 49 8D A2 E0 EF FF  lea         rsp,[r10+FFFFFFFFFFFFEFE0h]
+                    FF
+  0000000180001A92: 48 8B 15 0F 4E 00  mov         rdx,qword ptr [00000001800068A8h]
+                    00
+  0000000180001A99: 33 C0              xor         eax,eax
+  0000000180001A9B: 49 89 02           mov         qword ptr [r10],rax
+  0000000180001A9E: 49 83 C2 08        add         r10,8
+  0000000180001AA2: 4C 3B D2           cmp         r10,rdx
+  0000000180001AA5: 72 F4              jb          0000000180001A9B
+  0000000180001AA7: 4C 8B 15 02 4E 00  mov         r10,qword ptr [00000001800068B0h]
+                    00
+  0000000180001AAE: 45 33 C9           xor         r9d,r9d
+  0000000180001AB1: 4D 0B 0A           or          r9,qword ptr [r10]
+  0000000180001AB4: 49 83 C2 08        add         r10,8
+  0000000180001AB8: 4C 3B D2           cmp         r10,rdx
+  0000000180001ABB: 72 F4              jb          0000000180001AB1
+  0000000180001ABD: 4D 85 C9           test        r9,r9
+  0000000180001AC0: 75 0E              jne         0000000180001AD0
+  0000000180001AC2: 49 8B C8           mov         rcx,r8
+  0000000180001AC5: 48 83 C9 40        or          rcx,40h
+  0000000180001AC9: E8 42 FB FF FF     call        0000000180001610
+  0000000180001ACE: EB 02              jmp         0000000180001AD2
+  0000000180001AD0: 33 C0              xor         eax,eax
+  0000000180001AD2: 48 89 45 18        mov         qword ptr [rbp+18h],rax
+  0000000180001AD6: E8 E5 F7 FF FF     call        00000001800012C0
+  0000000180001ADB: 48 85 C0           test        rax,rax
+  0000000180001ADE: 74 04              je          0000000180001AE4
+  0000000180001AE0: 48 8B 45 18        mov         rax,qword ptr [rbp+18h]
+  0000000180001AE4: 48 8D 65 00        lea         rsp,[rbp]
+  0000000180001AE8: 5D                 pop         rbp
+  0000000180001AE9: C3                 ret
+  0000000180001AEA: 55                 push        rbp
+  0000000180001AEB: 48 8B EC           mov         rbp,rsp
+  0000000180001AEE: 48 89 4D 10        mov         qword ptr [rbp+10h],rcx
+  0000000180001AF2: 48 83 3D 06 45 00  cmp         qword ptr [0000000180006000h],0
+                    00 00
+  0000000180001AFA: 74 13              je          0000000180001B0F
+  0000000180001AFC: 4C 8B 15 AD 4D 00  mov         r10,qword ptr [00000001800068B0h]
+                    00
+  0000000180001B03: 49 81 C2 00 50 00  add         r10,5000h
+                    00
+  0000000180001B0A: 49 3B E2           cmp         rsp,r10
+  0000000180001B0D: 72 3B              jb          0000000180001B4A
+  0000000180001B0F: 48 C7 C0 00 10 00  mov         rax,1000h
+                    00
+  0000000180001B16: E8 45 01 00 00     call        0000000180001C60
+  0000000180001B1B: 48 2B E0           sub         rsp,rax
+  0000000180001B1E: 48 8B CC           mov         rcx,rsp
+  0000000180001B21: 48 8B 55 10        mov         rdx,qword ptr [rbp+10h]
+  0000000180001B25: E8 C6 F6 FF FF     call        00000001800011F0
+  0000000180001B2A: 48 85 C0           test        rax,rax
+  0000000180001B2D: 74 27              je          0000000180001B56
+  0000000180001B2F: 48 8B 4D 10        mov         rcx,qword ptr [rbp+10h]
+  0000000180001B33: 48 85 C9           test        rcx,rcx
+  0000000180001B36: 74 0B              je          0000000180001B43
+  0000000180001B38: 48 83 E9 01        sub         rcx,1
+  0000000180001B3C: E8 A9 FF FF FF     call        0000000180001AEA
+  0000000180001B41: EB 13              jmp         0000000180001B56
+  0000000180001B43: E8 08 F6 FF FF     call        0000000180001150
+  0000000180001B48: EB 0C              jmp         0000000180001B56
+  0000000180001B4A: 48 8B CC           mov         rcx,rsp
+  0000000180001B4D: 48 83 EC 20        sub         rsp,20h
+  0000000180001B51: E8 4A F6 FF FF     call        00000001800011A0
+  0000000180001B56: 48 8D 65 00        lea         rsp,[rbp]
+  0000000180001B5A: 5D                 pop         rbp
+  0000000180001B5B: C3                 ret
+
+  000000B4 00001A00 00001AEA 000059F0
+    Unwind version: 1
+    Unwind flags: None
+    Size of prologue: 0x04
+    Count of codes: 2
+    Frame register: rbp
+    Frame offset: 0x0
+    Unwind codes:
+      04: SET_FPREG, register=rbp, offset=0x00
+      01: PUSH_NONVOL, register=rbp
+
+  000000C0 00001AEA 00001B5C 000059F8
+    Unwind version: 1
+    Unwind flags: None
+    Size of prologue: 0x04
+    Count of codes: 2
+    Frame register: rbp
+    Frame offset: 0x0
+    Unwind codes:
+      04: SET_FPREG, register=rbp, offset=0x00
+      01: PUSH_NONVOL, register=rbp

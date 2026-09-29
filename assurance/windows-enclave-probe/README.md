@@ -212,3 +212,14 @@ does not establish exception support. Even all six passes would not qualify
 Rust panic unwinding, TLS/runtime copies, full ABI/register preservation, stack
 growth, cancellation, dump exclusion or production signing. No production
 module links this prototype, and Windows strict constructors remain unsupported.
+
+## Guarded OS-stack window and bounded depth
+
+The later `window_lock`, `window_guard` and `window_depth` images preserve the
+OS-managed stack and test progressively narrower fixed synthetic bodies. Their
+separate records cover [live-window locking](../../docs/windows-enclave-window-lock-results.md),
+[persistent boundary pages](../../docs/windows-enclave-window-guard-results.md), and
+[fixed-frame admission and unwinding](../../docs/windows-enclave-window-depth-results.md).
+The last experiment rejects recursion before consuming a reserved margin;
+unchecked deep recursion crashes and is not a cleanup pass. None qualifies
+arbitrary callbacks, Rust panics, full worker/TLS ownership or production strict support.

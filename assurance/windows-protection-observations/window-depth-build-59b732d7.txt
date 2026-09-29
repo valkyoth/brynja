@@ -1,0 +1,82 @@
+Native build wrapper exit: 0
+
+@echo off
+setlocal
+set PATH=C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;%PATH%
+cd /d C:\brynja-v0250\repo
+git fetch C:\Users\azureuser\depth-window-59b732d7.bundle HEAD
+if errorlevel 1 exit /b 1
+git switch --detach 59b732d7
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-window-depth.py
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-window-guard.py
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-window-lock.py
+if errorlevel 1 exit /b 1
+call C:\brynja-v0250\buildtools\VC\Auxiliary\Build\vcvars64.bat
+if errorlevel 1 exit /b 1
+if not exist C:\brynja-v0250\depth-window mkdir C:\brynja-v0250\depth-window
+cd /d C:\brynja-v0250\depth-window
+call :build normal none none
+if errorlevel 1 exit /b 1
+call :build missing-clear /DBRYNJA_PROBE_SKIP_GUARDED_CLEAR none
+if errorlevel 1 exit /b 1
+call :build missing-admission /DBRYNJA_PROBE_SKIP_DEPTH_ADMISSION none
+if errorlevel 1 exit /b 1
+dumpbin /headers /loadconfig /imports normal.dll
+if errorlevel 1 exit /b 1
+dumpbin /unwindinfo /disasm normal.dll > depth-disasm.txt
+exit /b %ERRORLEVEL%
+:build
+set ASMFLAGS=%2
+set CFLAGS=%3
+if "%ASMFLAGS%"=="none" set ASMFLAGS=
+if "%CFLAGS%"=="none" set CFLAGS=
+ml64 /nologo /c %ASMFLAGS% /Fo%1_asm.obj C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_depth_x64.asm
+if errorlevel 1 exit /b 1
+cl /nologo /LD /O2 /W4 /WX /MT /guard:cf %CFLAGS% /Fe%1.dll C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_depth.c %1_asm.obj /link /ENCLAVE /NODEFAULTLIB /INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED /LIBPATH:"%VCToolsInstallDir%lib\x64\enclave" /LIBPATH:"%WindowsSdkDir%Lib\%WindowsSDKVersion%ucrt_enclave\x64" libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib
+if errorlevel 1 exit /b 1
+"%WindowsSdkDir%bin\%WindowsSDKVersion%x64\veiid.exe" %1.dll
+exit /b %ERRORLEVEL%
+
+Build stdout excerpt (full raw PE metadata kept locally):
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.14.41
+** Copyright (c) 2025 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_depth_x64.asm
+window_depth.c
+   Creating library normal.lib and object normal.exp
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_depth_x64.asm
+window_depth.c
+   Creating library missing-clear.lib and object missing-clear.exp
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_depth_x64.asm
+window_depth.c
+   Creating library missing-admission.lib and object missing-admission.exp
+Microsoft (R) COFF/PE Dumper Version 14.44.35229.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+
+Build stderr and regression tests:
+From C:\Users\azureuser\depth-window-59b732d7.bundle
+ * branch              HEAD       -> FETCH_HEAD
+Previous HEAD position was b019e088 test(windows): prototype guarded enclave stack boundaries
+HEAD is now at 59b732d7 test(windows): probe bounded enclave stack depth and unwind headroom
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.027s
+
+OK
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.012s
+
+OK
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.008s
+
+OK

@@ -1,6 +1,6 @@
 # Fixed-frame enclave depth experiment
 
-Status: **native execution pending; not strict qualification**.
+Status: **fixed-frame native controls passed; not strict qualification**.
 No production Rust, cryptographic implementation or release gate is changed.
 Windows strict support remains unsupported.
 
@@ -28,8 +28,9 @@ Ten local orchestration tests cover depth accounting, minimum retained headroom,
 early/late rejection, exact exception outcomes, residency/clear protocol reuse,
 malformed records, subprocess failures, teardown and source ordering. They are
 mock-based regressions, not native stack evidence. Native compilation, unwind
-inspection, repeated shallow/deep/at-budget execution, failure controls and
-artifact review are still required.
+inspection, repeated shallow/deep/at-budget execution and failure controls are
+now [recorded separately](windows-enclave-window-depth-results.md). Unchecked
+exhaustion crashed; it did not demonstrate recoverable stack overflow.
 
 Even successful fixed-frame tests would not qualify arbitrary recursion,
 variable-sized allocations, compiler/runtime scratch, asynchronous exceptions,

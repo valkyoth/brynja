@@ -83,7 +83,8 @@ machine stores. No crash dumps were requested or copied.
 
 ## Remaining boundary
 
-Next is actual bounded stack-depth and exception-headroom testing. A page access
+The subsequent [fixed-frame depth experiment](windows-enclave-window-depth-results.md)
+now records bounded rejection and exact-exception unwinding separately. A page access
 fault near the top of the window does not prove recovery with an exhausted stack,
 prevent a large frame from skipping a page, or bound the full runtime call graph.
 Rust ABI/panic handling, complete secret-bearing worker/TLS/register ownership,

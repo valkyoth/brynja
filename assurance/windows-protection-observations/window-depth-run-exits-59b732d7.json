@@ -1,0 +1,87 @@
+[
+    {
+        "expected":  0,
+        "name":  "depth-0",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "depth-0-unwind",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "depth-4",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "depth-4-unwind",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "depth-8",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "depth-8-unwind",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "depth-32",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "depth-32-unwind",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "unchecked-shallow",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "unchecked-shallow-unwind",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "mutant-shallow",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "mutant-shallow-unwind",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "missing-clear",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "wrong-leaf",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "wrong-rejection",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "unchecked-exhaustion",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "mutant-exhaustion",
+        "exit":  1
+    }
+]

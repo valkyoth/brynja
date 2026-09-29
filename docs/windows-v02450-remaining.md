@@ -46,12 +46,16 @@ execution or waive implementation, runtime checks, pentest or existing gates.
   checks and two native campaigns. It supports bounded SHA-256, retained rehash,
   explicit public declassification and cancellation without generic drivers or
   host secret slices. Its constructor stays private to the fixture: production
-  image verification and reviewed deployment/API construction are still required.
-- An isolated main-file pinning guard now passes two native campaigns, including
-  changed-byte, conflicting-writer, rename and compiled-mutant controls. It holds
-  the reviewed file while the existing facade executes. This does not verify a
-  signature chain, attest identity or bind imported DLLs, and is not a production
-  constructor. Carry only these tested guarantees into the admission design.
+  integration of the now-implemented admission component and reviewed production
+  API construction are still required.
+- The bounded x86-64 image-admission component and consumer workflow are now
+  implemented and development-tested: compiled trusted identity/hash policy,
+  bounded PE/import parsing, held file handles, separate development/production
+  profiles and Windows trust/load/initialization checks. Native tests prove
+  development success, production rejection of the untrusted test certificate,
+  and OS rejection of wrong import identities/versions at initialization.
+  This is not remote attestation, successful production deployment or a shipping
+  strict constructor. See the [completed development pass](windows-enclave-image-admission-results.md).
 
 ## Broader implementation and qualification
 
@@ -65,11 +69,12 @@ execution or waive implementation, runtime checks, pentest or existing gates.
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or
   privileged snapshots. Existing dump observations bind older images only.
-- Implement identity/import binding and a reproducible consumer build/sign/load
-  workflow. Production signing credentials and costs belong to the application
-  publisher, not necessarily Brynja. Record production-route execution as
-  untested until it is actually exercised; current test-signed images on a
-  Secure-Boot-disabled development host are not production qualification.
+- Integrate the implemented identity/import admission and documented consumer
+  build/sign/load workflow into the production facade. Production signing
+  credentials and costs belong to the application publisher, not necessarily
+  Brynja. Production success remains untested until actually exercised;
+  production-profile rejection tests and test-signed execution on a
+  Secure-Boot-disabled host are not production qualification.
 - Obtain native evidence for each claimed Windows architecture/configuration.
   Only x86-64 enclave experiments have run here; Windows AArch64 is not qualified.
   If the stated architecture scope cannot be delivered, obtain an explicit scope
@@ -87,4 +92,4 @@ execution or waive implementation, runtime checks, pentest or existing gates.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [retained secret-to-secret composition](windows-enclave-retained-rehash-design.md).
-Latest native platform step: [development image-file pinning](windows-enclave-image-pin-results.md).
+Latest native platform step: [trusted image-admission development results](windows-enclave-image-admission-results.md).

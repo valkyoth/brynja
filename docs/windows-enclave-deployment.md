@@ -42,8 +42,10 @@ These are intended deliverables, not a checklist already marked complete.
 Delegating signing does not delegate away Brynja's runtime checks or permit a
 caller to bypass protection with an unchecked boolean. Exact file hashing is
 not signature-chain verification, import identity validation or attestation.
-The final constructor and deployment-policy API still require implementation
-and review; there is no public arbitrary-DLL constructor today.
+The bounded admission component now implements a compiled, separately reviewed
+policy and Windows trust/import checks. Production facade/constructor integration
+still requires implementation and review; there is no public arbitrary-DLL
+constructor today. See the [consumer workflow](windows-enclave-image-admission.md).
 
 ## What has actually been tested
 
@@ -58,6 +60,7 @@ automatically qualifications of later images.
 | Retained ownership | Native copy, lifetime, cleanup, quarantine, rehash and cross-instance routing campaigns; bounded public vectors and explicit negative controls |
 | Facade candidate | Two native 281-call campaigns and local ownership/surface tests; bounded scalar SHA-256, private fixture constructor, no production API activation |
 | Main-file pinning candidate | Two native campaigns rejected altered bytes and conflicting write/delete/rename operations while the reviewed facade ran; hash and write-sharing mutants rejected. Not signature-chain, imported-image or attestation verification |
+| Admission integration | Two native development successes and production-profile rejections of an untrusted test signature; separately signed wrong-import-author/version controls rejected at initialization. Compiled trusted policy and import checks implemented, not production-facade integration |
 | Production deployment | Not executed or qualified: no production-signed candidate, production signature/identity/import integration or normal-production-configuration end-to-end result |
 | Architecture/algorithms | Windows AArch64, wider enclave algorithms and opt-in acceleration remain incomplete/unqualified |
 
@@ -65,8 +68,10 @@ See [platform experiments](windows-strict-profile.md),
 [retained facade results](windows-enclave-retained-facade-results.md) and
 [remaining implementation work](windows-v02450-remaining.md) for exact scope.
 The [development image-file pinning results](windows-enclave-image-pin-results.md)
-record a completed isolated experiment, not production image admission. Runtime
-identity/import binding and the reviewed deployment constructor remain unfinished.
+record the earlier isolated experiment. The subsequent
+[image-admission results](windows-enclave-image-admission-results.md) establish
+the development-tested identity/import component. Production API integration,
+successful production signing/deployment and final qualification remain unfinished.
 
 ## What this decision does not change
 

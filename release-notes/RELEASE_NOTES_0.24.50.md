@@ -29,6 +29,15 @@ completes while pinned, and weakened hash/sharing mutants are caught. This is no
 signature-chain/import verification or production admission. See the
 [source-bound results and limitations](../docs/windows-enclave-image-pin-results.md).
 
+The next development pass implements trusted compiled image-policy admission,
+bounded PE/import checks, Windows-author import constraints and separate
+development/production loader profiles, with a documented consumer build/sign/load
+workflow. Native repeats cover successful development execution, production
+rejection of the test certificate, mutated artifacts and wrong import identities
+or security versions. Windows rejects the latter at initialization, not loading
+alone. This does not enable production strict Windows APIs or claim successful
+production signing. See [admission results](../docs/windows-enclave-image-admission-results.md).
+
 An isolated synthetic Windows mapping probe passed its first native Windows
 Server 2025 x86-64 run, alongside all 15 portable regression tests. It
 checks allocation/guard geometry, page locking, WER registration and cleanup,

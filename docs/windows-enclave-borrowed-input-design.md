@@ -114,16 +114,19 @@ mutation for fault testing. It is not the Rust borrowing host adapter and does
 not establish a secret-input product contract. Binding the descriptor's lifetime
 to the owned native host remains separate work.
 
-## Native integration and persistent results still required
+## Host integration and persistent results still required
 
-The next input experiment must instantiate the snapshot inside the preacquired,
-guarded and locked enclave window, copy the metadata once through the documented
-OS boundary, and bind its input reader directly to the platform copy-in function.
-It must independently check full-capacity clearing before outer-window clearing
-and prove that no ordinary host request/staging copy of the payload was added.
+The [separate native experiment](windows-enclave-borrowed-input-results.md) now
+instantiates the snapshot inside the preacquired, guarded and locked enclave
+window, copies metadata once through the OS boundary, and binds the input reader
+directly to the platform copy-in function. Its capture independently checks
+full-capacity clearing before outer-window clearing. The Rust-owned host adapter
+must still retain the original input borrow and prove that it introduces no
+ordinary host request/staging copy of the payload.
 Microsoft defines the copy source as outside the enclave; the native adapter must
-retain this boundary and test invalid, enclave-internal and page-boundary sources,
-not replace it with a raw pointer dereference.
+retain this boundary, not replace it with a raw pointer dereference. Invalid and
+page-boundary source failures have been exercised; enclave-internal source
+rejection remains an outstanding native case.
 [EnclaveCopyIntoEnclave](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyintoenclave).
 Only public diagnostic vectors may be used until these platform obligations and
 the complete worker/runtime coverage have been reviewed.

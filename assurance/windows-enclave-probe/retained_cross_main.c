@@ -53,7 +53,7 @@ static int campaign(const wchar_t* image) {
         if(!token(origin,changed) || memcmp(original,changed,32)) { return 23; }
         if(!cross(origin,original,8)) { return 24; }
         memset(output,0xcc,32);
-        if(!run(origin,2,NULL,output,3) || memcmp(output,expected[round],32) ||
+        if(!run(origin,2,NULL,output,3) || memcmp(output,oracle_digest[round],32) ||
             !run(origin,3,NULL,NULL,4)) { return 25; }
     }
     /* Same live enclave, recreated owner: epoch prevents address/owner reuse. */

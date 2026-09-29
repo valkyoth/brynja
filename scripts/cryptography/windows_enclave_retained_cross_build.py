@@ -85,7 +85,7 @@ def prepare_host(directory):
     for name in ('retained_cross_main.c','retained_cross_report.h'):
         shutil.copyfile(SOURCE/name,directory/name)
     path = directory/'retained_cross_main.c'
-    rows = ['static const unsigned char expected[2][32] = {']
+    rows = ['static const unsigned char oracle_digest[2][32] = {']
     for message in (b'abc',b'xyz'):
         rows.append('{'+','.join(map(str,hashlib.sha256(hashlib.sha256(message).digest()).digest()))+'},')
     path.write_text(replace(path.read_text(),'/* ORACLE */','\n'.join(rows+['};'])))

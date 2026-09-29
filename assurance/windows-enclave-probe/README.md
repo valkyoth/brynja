@@ -263,3 +263,9 @@ release-receipt handling with a synthetic transport. The separate
 [native fixed-public-vector campaign](../../docs/windows-enclave-retained-native-host-results.md)
 with actual resource ownership and teardown controls. Neither component tests nor
 that bounded experiment qualify a production Windows backend.
+
+`retained_input.rs` / `retained_borrowed_digest.rs` add the separately tested
+[borrowed-input retained-result component](../../docs/windows-enclave-retained-borrowed-design.md).
+It copies payload into caller-provided worker scratch and keeps only the digest
+in the retained owner. Its native header-copy, sequence-state and residency
+integration are pending; earlier fixed-vector native results do not cover it.

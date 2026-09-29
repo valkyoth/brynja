@@ -143,8 +143,10 @@ use; cancellation, abandoned handles, failed copies and uncertain transport need
 explicit cleanup/quarantine behavior. Host handles must retain the actual instance,
 not just a token whose owner may have been deleted.
 The [retained-result lifecycle model](windows-enclave-persistent-result-design.md)
-now exercises these state transitions independently; native persistent allocation
-and host-handle integration remain unimplemented.
+now exercises these state transitions independently. A separate
+[native public-marker allocation probe](windows-enclave-persistent-slot-results.md)
+has passed; connecting that storage to the Rust model and host handles remains
+unimplemented.
 
 The current Linux `Digest::expose` returns a borrowed protected slice. Returning
 enclave-private memory as a host slice is not a compatible implementation. A

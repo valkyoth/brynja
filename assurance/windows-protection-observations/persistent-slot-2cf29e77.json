@@ -1,0 +1,432 @@
+{
+  "artifacts_sha256": {
+    "archive-persistent-slot.ps1": "dfad4f099ea408f3dcc9b30a3770e4eb51168e85f041bfa2e7a46bc0ccba3103",
+    "build-persistent-slot.cmd": "359b8b3e5e4231737c42b3756399c434d2552ac932f73245a069f8d896133819",
+    "cleanup.json": "be516c0316a27e1c3da249ecfba63b88cdb0725a5cf3d6b00c9310bf855f3f87",
+    "exits.json": "e88ad643e1b7e0fb904771204cc7be22818a32ef89821c7d4bfedee008356157",
+    "lost-slot-normal.repeat.stderr": "d39fddb93df422a07711c0b37d3c0bd09ef07978139a7de57ed6c22a4e236c41",
+    "lost-slot-normal.repeat.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lost-slot-normal.stderr": "8664ec1ee8371ee225030baf07bc7aa03a624e215a0cb8cf6e937dfc81481aae",
+    "lost-slot-normal.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lost-slot.dll": "79a0a96e15d49d294f37712fa8b97c37968d1457b98ef64aadf8db89805b47af",
+    "lost-slot.exp": "096a603ef7fd559f90f89beaf46212f841b04de3941207dcddecd38abf926831",
+    "lost-slot.lib": "98ec8a19840fc7841818333309b409d509c7bdf653c64036363cea1943930f97",
+    "lost-slot.obj": "5acf2f7585bd3f6747abe608bd668c4863d910f6bd3c04847b1543b1cfe80b7d",
+    "missing-clear-normal.repeat.stderr": "25917379fe4bb73134d4696e38243c817064bd82fec0cd47793dbf22d3aabc25",
+    "missing-clear-normal.repeat.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "missing-clear-normal.stderr": "32d3fb04af55d7f0dc50182eafa7a6153f2bcf4981cd4a81cc4426ff1d7504ab",
+    "missing-clear-normal.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "missing-clear.dll": "f4cef6fddb8e38688498b0118241cc8d5a1d8921aff7c518106dc52647630f2e",
+    "missing-clear.exp": "d98de43d885e3ce8b9929fe92f7a2dfa5542ee1e2bd9da67c48568150e412cb3",
+    "missing-clear.lib": "a22c628a65052b584b96e46e0fe586dfc42b287cf2eb39236a3da2da37ec77a7",
+    "missing-clear.obj": "5fcd5193716d1aa383bf30aaf6d87b3ca0d2732315cb8e9359bebc81e0962f17",
+    "normal-deny.repeat.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "normal-deny.repeat.stdout": "3e8eafee9ce90ee999e3bd8e15dc852406e52049c2010c30ba4af9a4668c117d",
+    "normal-deny.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "normal-deny.stdout": "3f7376cb76f3803bb491ed9457b4fb62977e1d3227f613696c89347a8a5323a4",
+    "normal-normal.repeat.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "normal-normal.repeat.stdout": "de28b08fdd3239baa084dd7dad70451ae9c36098ca510e9569416413056885e0",
+    "normal-normal.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "normal-normal.stdout": "4fef392b542a90b7e5d3306c9f39313d9179dbaf148fc14290cbe96ec7463032",
+    "normal.dll": "83cb50e8976c09c5db0fb5eaabedb98221069bd64c5692ca677556995adc6418",
+    "normal.exp": "cd6dd38216f1b56f1bebe4d32f72d7515fc5359cc6bba669a36ce74a667d0224",
+    "normal.lib": "58f31fd62bc5a80c15c66a88541f5afe10105208bf97cd87d3d385b402c532cc",
+    "normal.obj": "ae879175bb39dca55027fa406eb3a8657783cb1c99becb9b018ba79098d976b2",
+    "persistent-build.stderr": "568cbab707fe88a3a35f796040b61e66cb5f3851500f454627455257082ba7e7",
+    "persistent-build.stdout": "8fe295e193e8b64118e48bc651d7f05087b913e7fffebff809fa213d214be763",
+    "persistent-disasm.txt": "a48f3e53f7c6421eda84de10dc6e7e2a73d551cffdf44abef6804d2c36ddc65f",
+    "persistent-sign.stderr": "2a130c164caf185d4af33c7a8cc17df5ababb1b9857741141feac3b278fda0da",
+    "persistent-sign.stdout": "6aed83e94cea123ada9086a22a8ee6e924add8f8a2c6287899f5ee4ab1e5c475",
+    "repeat-exits.json": "c4f2e75250dcce8b8f11ebcbf9fad88122f68cdaccf9adae9d110e9583a3979c",
+    "repeat-persistent-slot.py": "8ffa518092265ec409261dba33e144aaa6082826256f3646640fd369c36896c7",
+    "run-persistent-slot.ps1": "650f8a46f7b7413607300c0d66f03ef3cd0517723c27e04a1b470c5a237060df",
+    "sign-persistent-slot.ps1": "d371f5a4c16aa906f2c1f45a1dde1ce50c011471dad92cd0bc58db95f2a70a68",
+    "window.obj": "e441cd4c2b73ba795f0796f7172bdac29da2ed539b0321c44ebc1a75b38f44ec"
+  },
+  "build_flags": "/O2 /W4 /WX /MT /guard:cf",
+  "captures": {
+    "normal-deny": {
+      "calls": 1,
+      "raw_sha256": "3f7376cb76f3803bb491ed9457b4fb62977e1d3227f613696c89347a8a5323a4",
+      "slot_reports": [
+        [
+          11,
+          2293760,
+          2297856,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    "normal-deny.repeat": {
+      "calls": 1,
+      "raw_sha256": "3e8eafee9ce90ee999e3bd8e15dc852406e52049c2010c30ba4af9a4668c117d",
+      "slot_reports": [
+        [
+          11,
+          1769472,
+          1773568,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    "normal-normal": {
+      "calls": 10,
+      "raw_sha256": "4fef392b542a90b7e5d3306c9f39313d9179dbaf148fc14290cbe96ec7463032",
+      "slot_reports": [
+        [
+          1,
+          3014656,
+          3018752,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          3014656,
+          3018752,
+          2,
+          4096,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          3,
+          3014656,
+          3018752,
+          2,
+          0,
+          4096,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          5,
+          3014656,
+          3018752,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          1
+        ],
+        [
+          3,
+          3014656,
+          3018752,
+          2,
+          0,
+          4096,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          4,
+          3014656,
+          3018752,
+          0,
+          0,
+          0,
+          4096,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          3014656,
+          3018752,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          3014656,
+          3018752,
+          2,
+          4096,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          4,
+          3014656,
+          3018752,
+          0,
+          0,
+          0,
+          4096,
+          1,
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    "normal-normal.repeat": {
+      "calls": 10,
+      "raw_sha256": "de28b08fdd3239baa084dd7dad70451ae9c36098ca510e9569416413056885e0",
+      "slot_reports": [
+        [
+          1,
+          2949120,
+          2953216,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          2949120,
+          2953216,
+          2,
+          4096,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          3,
+          2949120,
+          2953216,
+          2,
+          0,
+          4096,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          5,
+          2949120,
+          2953216,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          1
+        ],
+        [
+          3,
+          2949120,
+          2953216,
+          2,
+          0,
+          4096,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          4,
+          2949120,
+          2953216,
+          0,
+          0,
+          0,
+          4096,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          2949120,
+          2953216,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          2949120,
+          2953216,
+          2,
+          4096,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          4,
+          2949120,
+          2953216,
+          0,
+          0,
+          0,
+          4096,
+          1,
+          0,
+          0,
+          1
+        ]
+      ]
+    }
+  },
+  "cleanup": {
+    "child_count": 0,
+    "old_borrowed_image_sha256": "97cd72cf14508361603bc0f453f545362bd23af638f8b300a608ee1a685d9470",
+    "old_wire_image_sha256": "4bb0192b984a45e101e7031fdab8bc9e48667d300397b5344a37d52282288ba5",
+    "temporary_certificates": 0
+  },
+  "commit": "2cf29e7784b3e6e5c7db3a77b81d0d4d0c1c8364",
+  "development_signing": {
+    "each_signtool_exit": 2,
+    "warning": "VBS enclave compatibility warning; not a clean signing PASS",
+    "wrapper_exit": 1
+  },
+  "initial_wrapper_exits": "null; original transcripts preserved; short campaign repeated with Python subprocess",
+  "kind": "windows-enclave-persistent-allocation-reviewed-observations",
+  "native_build_exit": 0,
+  "production_adapter": false,
+  "production_signed": false,
+  "raw_archive_sha256": "821c9152c34659147c5f96404b1c8acbb71b4e09408727e808bacc00a096502d",
+  "remaining": [
+    "Rust persistent-result integration",
+    "affine host result owner",
+    "cryptographic result/composition/error/unwind coverage",
+    "new allocation dump checks",
+    "production signing and full-runtime qualification"
+  ],
+  "repeat_exits": [
+    {
+      "exit": 0,
+      "image": "normal",
+      "image_sha256": "83cb50e8976c09c5db0fb5eaabedb98221069bd64c5692ca677556995adc6418",
+      "mode": "normal"
+    },
+    {
+      "exit": 0,
+      "image": "normal",
+      "image_sha256": "83cb50e8976c09c5db0fb5eaabedb98221069bd64c5692ca677556995adc6418",
+      "mode": "deny"
+    },
+    {
+      "exit": 1,
+      "image": "missing-clear",
+      "image_sha256": "f4cef6fddb8e38688498b0118241cc8d5a1d8921aff7c518106dc52647630f2e",
+      "mode": "normal"
+    },
+    {
+      "exit": 1,
+      "image": "lost-slot",
+      "image_sha256": "79a0a96e15d49d294f37712fa8b97c37968d1457b98ef64aadf8db89805b47af",
+      "mode": "normal"
+    }
+  ],
+  "review": "Canonical captures and every source hash checked against capture commit and current bytes; images verified against exact-exit repeat records.",
+  "schema": 1,
+  "source_sha256": {
+    "assurance/windows-enclave-probe/synthetic.c": "34751a8b80406d216eb1a3597579a14fc01ce118e7504e394183e645c6bbdfc3",
+    "assurance/windows-enclave-probe/window_guard.c": "c43b321f14dfa4913fe97dae88d7beadacf76fd63738aa8f5f2d50d4980f3952",
+    "assurance/windows-enclave-probe/window_guard_x64.asm": "c91150650c15e5c4bbdf3b00524ad3a03f0cd1f3df65222482421580707137d3",
+    "assurance/windows-enclave-probe/window_lock.c": "c0f75a8567d08e7f04a40ae8cb31c3183b80e130c37caba1eb41a7e4be88218d",
+    "assurance/windows-enclave-probe/window_persistent.c": "f2345b55995fd9cbd428aa6c50410bddcc78aa8350f62e5093299d9f5d33df42",
+    "assurance/windows-enclave-probe/window_rust_x64.asm": "6f80e7151a687772e52040c795bc36fa52f0aed507fd5954e0dec10a47f3b916",
+    "scripts/cryptography/test-windows-enclave-persistent-native.py": "cc41244d87148bac0acdfd2da82a1cb70a2fab1fd1ccfda1a8449b5cc3214443",
+    "scripts/cryptography/test-windows-enclave-window-guard.py": "033b533cda77962ec9cdaac3c55cd76ab7f23bef192aa0c9c621b28656ed4936",
+    "scripts/cryptography/windows_enclave_lifecycle.py": "0232dfa69625cfc757baec318c49edd304b118fcb34b876d2c832899298e5ea4",
+    "scripts/cryptography/windows_enclave_persistent.py": "1a872fad6e36ed72494b513bc406219ad0935fc45372c874900a16dc46c2a40b",
+    "scripts/cryptography/windows_enclave_window_guard.py": "dc3d82cc1e8dac7a61420909ebb63254626688a64c89a1aa76bc91bfaeef8b76",
+    "scripts/cryptography/windows_enclave_window_lock.py": "6f009eddcede04b39b47f5bcf2934a0939ea2aed0c58b2287b34e20cbe7047f8",
+    "scripts/cryptography/windows_enclave_worker.py": "361e0eb2457156671e8a74d5cdf10572df7071b26f03074b184644fc5e1ab657",
+    "scripts/cryptography/windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "scripts/cryptography/windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "strict_qualified": false,
+  "synthetic_only": true
+}

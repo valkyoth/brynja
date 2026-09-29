@@ -230,3 +230,13 @@ Its [native observations](../../docs/windows-enclave-rust-worker-results.md) cov
 success, cancellation, explicit errors and compiled cleanup/outcome mutants.
 It uses `panic=abort`; any C exception completes before Rust entry. It adds no
 cryptographic operation, Cargo dependency or Windows strict support.
+
+## Retained allocation experiment
+
+`window_persistent.c` reuses the guarded worker scaffold but gives its public
+marker an independent three-page allocation. The [native observations](../../docs/windows-enclave-persistent-slot-results.md)
+cover retention across worker returns, two boundary pages, residency through
+full-page clearing, free/reuse, denied admission and two broken images. The
+separate safe Rust `persistent_result.rs` model tests result lifecycle and token
+replay rules; it is not yet linked to that allocation. Neither experiment is a
+shipping secret-result API or production Windows qualification.

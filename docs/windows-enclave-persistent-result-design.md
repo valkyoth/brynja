@@ -61,15 +61,17 @@ A positive consumer and eleven compiled negatives check exclusive storage
 borrowing, nonescaping callback references, private fields and absence of
 Send/Sync/Copy/Clone/Debug. These are lifecycle tests, not native residency evidence.
 
-## Native storage experiment still required
+## Native storage experiment and remaining integration
 
 Microsoft lists VirtualAlloc, VirtualFree, VirtualProtect and VirtualQuery among
 the APIs available inside VBS enclaves. That list alone does not demonstrate
 guard-page or residency behavior on our image and host.
 [Microsoft Vertdll API list](https://learn.microsoft.com/en-us/windows/win32/trusted-execution/enclaves-available-in-vertdll).
 
-The next separate public-marker image should establish these obligations before
-connecting this model to cryptographic results:
+The [separate public-marker image](windows-enclave-persistent-slot-results.md)
+now exercises allocation, guarded retention and clear-before-release. It is not
+yet connected to this Rust model or cryptographic results. The integration
+obligations remain:
 
 1. Allocate or reserve an independent page-aligned slot with two guard pages;
    verify its address lies inside the enclave and outside the worker window.
@@ -79,7 +81,8 @@ connecting this model to cryptographic results:
    Reject failed acquisition and overlapping/reused storage without a ready slot.
 3. Clear/read back the complete owned data allocation while it remains locked,
    then release it. Exercise cancellation, forgotten public token, failed copy,
-   uncertain completion and teardown failure. Bind observations to the new image;
+   uncertain completion and teardown failure (these integrated cases remain
+   pending). Bind observations to the new image;
    do not reuse the older worker's dump observation as proof for this allocation.
 
 Only after those controls work should the adapter add an affine host result

@@ -1,0 +1,3 @@
+raw-copy-confirm-publish: actual=1 expected=1
+raw-copy-confirm-discard: actual=1 expected=1
+PUBLIC_REQUEST_CONTROLS_COMPLETE; NOT_STRICT_QUALIFICATION

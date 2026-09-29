@@ -1,0 +1,12 @@
+[
+    {
+        "expected":  1,
+        "name":  "raw-copy-confirm-publish",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "raw-copy-confirm-discard",
+        "exit":  1
+    }
+]

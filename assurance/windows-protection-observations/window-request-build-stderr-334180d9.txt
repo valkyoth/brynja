@@ -1,0 +1,19 @@
+From C:\Users\azureuser\request-window-334180d9.bundle
+ * branch              HEAD       -> FETCH_HEAD
+Previous HEAD position was 0abd2f82 test(windows): exercise scoped hardened owners in enclave storage
+HEAD is now at 334180d9 test(windows): exercise bounded enclave request snapshots and public output
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.014s
+
+OK
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.019s
+
+OK
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.008s
+
+OK

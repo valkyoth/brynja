@@ -1,0 +1,6 @@
+Unexpected failure cause
+At C:\Users\azureuser\run-request-window.ps1:44 char:85
++ ... err" -Raw).Contains($job.Error)) { throw 'Unexpected failure cause' }
++                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Unexpected failure cause:String) [], RuntimeException
+    + FullyQualifiedErrorId : Unexpected failure cause

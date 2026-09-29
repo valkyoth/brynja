@@ -1,0 +1,37 @@
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\request-window\normal.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: normal.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\request-window\outer-clear.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: outer-clear.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\request-window\reread.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: reread.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\request-window\implicit-public.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: implicit-public.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\request-window\missing-clear.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: missing-clear.dll 2
+Done Adding Additional Store
+Successfully signed: C:\brynja-v0250\request-window\raw-copy.dll
+
+Number of files successfully Signed: 1
+Number of warnings: 1
+SIGNTOOL_EXIT: raw-copy.dll 2
+EPHEMERAL_SIGNING_KEY_REMOVED

@@ -1,0 +1,77 @@
+[
+    {
+        "expected":  0,
+        "name":  "publish",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "mutate",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "discard",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "bad-version",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "bad-length",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "no-public",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "bad-source",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "bad-destination",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "overflow-destination",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "hook-deny",
+        "exit":  0
+    },
+    {
+        "expected":  0,
+        "name":  "overlap",
+        "exit":  0
+    },
+    {
+        "expected":  1,
+        "name":  "reread",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "missing-clear",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "implicit-public",
+        "exit":  1
+    },
+    {
+        "expected":  1,
+        "name":  "outer-clear",
+        "exit":  1
+    }
+]

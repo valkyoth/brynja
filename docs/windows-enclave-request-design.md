@@ -4,6 +4,8 @@ This v0.24.50 research step extends the scoped hardened SHA-256 owner experiment
 with bounded host input and explicit public output. It is **not** a confidential
 host-to-enclave channel. Windows strict remains unsupported. Production crypto,
 release policy and existing native experiment sources are unchanged.
+The [native observations](windows-enclave-request-results.md) retain normal
+results, rejected mutations and the unexpected raw-read termination code.
 
 The fixed wire is 1072 bytes: six little-endian u64 fields followed by a 1024-byte
 inline payload. Fields are version (1), operation (1 publish, 2 discard), input

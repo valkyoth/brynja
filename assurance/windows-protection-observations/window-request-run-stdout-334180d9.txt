@@ -1,0 +1,16 @@
+publish: actual=0 expected=0
+mutate: actual=0 expected=0
+discard: actual=0 expected=0
+bad-version: actual=0 expected=0
+bad-length: actual=0 expected=0
+no-public: actual=0 expected=0
+bad-source: actual=0 expected=0
+bad-destination: actual=0 expected=0
+overflow-destination: actual=0 expected=0
+hook-deny: actual=0 expected=0
+overlap: actual=0 expected=0
+reread: actual=1 expected=1
+missing-clear: actual=1 expected=1
+implicit-public: actual=1 expected=1
+outer-clear: actual=1 expected=1
+raw-copy: actual=1 expected=1

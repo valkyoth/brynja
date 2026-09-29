@@ -1,0 +1,211 @@
+{
+  "build": {
+    "archives": {
+      "cleanup.lib": "c7c60b125ad65049f942dbce868844c5ff2fbb137b74bc3a8a14a2a5902760f3",
+      "early.lib": "269af35fab4660f0b172fd94b2d93d3053ba4af3ad24aad3e411c827417fe5a0",
+      "native_host.lib": "a3ce52e9299d26b1d626d9afbbf5c81921161bf75a2d8ce7b845e6fe9bbe3009"
+    },
+    "commands": [
+      [
+        "rustc",
+        "+1.98.1",
+        "--edition=2024",
+        "--target",
+        "x86_64-pc-windows-msvc",
+        "--crate-type",
+        "staticlib",
+        "--crate-name",
+        "native_host",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "-C",
+        "overflow-checks=yes",
+        "-D",
+        "warnings",
+        "/home/eldryoth/Work/codex-projects/brynja/release-reports/windows-azure-replacement-2026-09-29/native-host-build/native_host.rs",
+        "-o",
+        "/home/eldryoth/Work/codex-projects/brynja/release-reports/windows-azure-replacement-2026-09-29/native-host-build/native_host.lib"
+      ],
+      [
+        "rustc",
+        "+1.98.1",
+        "--edition=2024",
+        "--target",
+        "x86_64-pc-windows-msvc",
+        "--crate-type",
+        "staticlib",
+        "--crate-name",
+        "native_host",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "-C",
+        "overflow-checks=yes",
+        "-D",
+        "warnings",
+        "/home/eldryoth/Work/codex-projects/brynja/release-reports/windows-azure-replacement-2026-09-29/native-host-build/native_host.rs",
+        "-o",
+        "/home/eldryoth/Work/codex-projects/brynja/release-reports/windows-azure-replacement-2026-09-29/native-host-build/early.lib",
+        "--cfg",
+        "probe_host_commit_early"
+      ],
+      [
+        "rustc",
+        "+1.98.1",
+        "--edition=2024",
+        "--target",
+        "x86_64-pc-windows-msvc",
+        "--crate-type",
+        "staticlib",
+        "--crate-name",
+        "native_host",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "-C",
+        "overflow-checks=yes",
+        "-D",
+        "warnings",
+        "/home/eldryoth/Work/codex-projects/brynja/release-reports/windows-azure-replacement-2026-09-29/native-host-build/native_host.rs",
+        "-o",
+        "/home/eldryoth/Work/codex-projects/brynja/release-reports/windows-azure-replacement-2026-09-29/native-host-build/cleanup.lib",
+        "--cfg",
+        "probe_host_ignore_cleanup"
+      ]
+    ],
+    "native_executed": false,
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+    "source_sha256": {
+      "assurance/windows-enclave-probe/host_native_bridge.rs": "a81eaad122fb61faae160b69e97e82fa90aa5fb35a1d7ac470ec76cf7e84a5e1",
+      "assurance/windows-enclave-probe/host_native_bridge_tests.rs": "d272be83bd3871c2c368f7c267cf4a8f475863ff78b3e1179b8bf8130590536c",
+      "assurance/windows-enclave-probe/host_session.rs": "5cab8d2731e201abf731929f47363632d384b3bb3a18f62a4a69cc434eeb71d3",
+      "assurance/windows-enclave-probe/host_session_wire.rs": "9b4419bd0ab15eacd8f173c161dd8fffebf4014c91a57f678ba57edab3466265",
+      "assurance/windows-enclave-probe/native_host.h": "defdb024a08fac2b646f10a23054e388b29b829f470984c36a80f808e7d82cec",
+      "assurance/windows-enclave-probe/native_host.rs": "7b79801d613ee625681a774a7e9c4a628d65bbe8cc0646869c8f85c7d8842e8a",
+      "assurance/windows-enclave-probe/native_host_campaign.rs": "52b5c98d0c455d1543d6d28195276e3d5310f9f4f55441613a6968ac99de7215",
+      "assurance/windows-enclave-probe/native_host_main.c": "3cdf9d17f38ca55c8fabdb477ec08c82b08a289f5ce5d095b2284877df368848",
+      "assurance/windows-enclave-probe/native_host_resource.c": "95db42fa11e57ac641658e7e1ddeee2c340db10cd204161c5de75b18f379d24f",
+      "assurance/windows-enclave-probe/native_host_transport.c": "c19931a9b17000a5112bd4aeb49be97edbc713d73c542b1a41b90e9b53a65863",
+      "scripts/cryptography/test-windows-enclave-native-host.py": "a2ce3449c1764b1d8ef5b3c3a01396cc531a83f46ecdc3a0d0a7f00de25d02ce",
+      "scripts/cryptography/windows_enclave_native_host_build.py": "5436dcad352453d4534da11fea3e2c0d5f37679f787d3db1fa3081501e322e4e",
+      "scripts/cryptography/windows_enclave_native_host_run.py": "7da13385d2b03c63cc31a7b3509fa6b6b9f76f916f7d934b42b45c9f76db9a69",
+      "scripts/cryptography/windows_enclave_sha256_build.py": "330de8f6790ef5a94644058181779e3a7789cbff483651423d885cb4f4a02445"
+    },
+    "strict_qualified": false
+  },
+  "captured_at": "2026-09-29T11:27:09.082830+00:00",
+  "confidential_ingress": false,
+  "host_native_executed": true,
+  "host_source_commit": "ac1bddb8958c8003d8007bf99ec6e38efc324dfd",
+  "image_sha256": "4bb0192b984a45e101e7031fdab8bc9e48667d300397b5344a37d52282288ba5",
+  "image_source_commit": "53ec2efe1b39d70619b1f0b530f5d1865fc421f8",
+  "observation_kind": "research-rust-owned-native-host",
+  "owner_review": "checked-source-bindings-public-campaign-and-controls-not-qualification",
+  "platform": "Windows-2025Server-10.0.26100-SP0",
+  "raw_archive_sha256": "80e2e00f51f637848347b1e9a17e4ca2bf7588500116f688185cec8aa34bc69c",
+  "records": [
+    {
+      "executable_sha256": "2cfe34cec9a9f426c93ae163e132476e48a92de74ca0a1c2c2df279baeb3d874",
+      "exit_code": 0,
+      "result": {
+        "calls": 63,
+        "cleanup_errors": 0,
+        "created": 5,
+        "deleted": 5,
+        "result": 0,
+        "retained": 0
+      },
+      "variant": "normal"
+    },
+    {
+      "executable_sha256": "070c42cd1234949e2bd89c05e72313b09d19e32f1ee2c1a56aa6ac8ad83c9472",
+      "exit_code": 0,
+      "result": {
+        "calls": 0,
+        "cleanup_errors": 0,
+        "created": 1,
+        "deleted": 1,
+        "result": 10,
+        "retained": 0
+      },
+      "variant": "fail-create"
+    },
+    {
+      "executable_sha256": "a94a846b3732699fe4c73237a3d63a88c74836493b610c4b3ff4e495f4bb5360",
+      "exit_code": 0,
+      "result": {
+        "calls": 0,
+        "cleanup_errors": 0,
+        "created": 1,
+        "deleted": 1,
+        "result": 10,
+        "retained": 0
+      },
+      "variant": "fail-load"
+    },
+    {
+      "executable_sha256": "6b8d9bc9fdfb656cce4eb65484bc8ab0e6d07157a06643207e3d0ef1b5e160b0",
+      "exit_code": 0,
+      "result": {
+        "calls": 0,
+        "cleanup_errors": 0,
+        "created": 1,
+        "deleted": 1,
+        "result": 10,
+        "retained": 0
+      },
+      "variant": "fail-init"
+    },
+    {
+      "executable_sha256": "aefbe97322178fb0e5342fe7cb4b04965800b5a6f94cfe850cf78f2b8805acb4",
+      "exit_code": 0,
+      "result": {
+        "calls": 60,
+        "cleanup_errors": 2,
+        "created": 1,
+        "deleted": 0,
+        "result": 14,
+        "retained": 1
+      },
+      "variant": "fail-delete"
+    },
+    {
+      "executable_sha256": "e2171701073f77a2572e0bd1e3c18fa714e330b659269e7c553d351475bcd070",
+      "exit_code": 97,
+      "result": {
+        "calls": 62,
+        "cleanup_errors": 0,
+        "created": 3,
+        "deleted": 3,
+        "result": 21,
+        "retained": 0
+      },
+      "variant": "early"
+    },
+    {
+      "executable_sha256": "a3babdd9e43fe49de87ac52e02da89ac5f07697eaa3ebc1fc738e85c0d9bdd39",
+      "exit_code": 97,
+      "result": {
+        "calls": 63,
+        "cleanup_errors": 0,
+        "created": 4,
+        "deleted": 4,
+        "result": 21,
+        "retained": 0
+      },
+      "variant": "cleanup"
+    }
+  ],
+  "strict_qualified": false,
+  "support_artifacts_sha256": {
+    "build-native-host.cmd": "dcbdb0be037325bf1fa285dfab9475047dcaab13744f35f8ffbce52fefc6f481",
+    "native-host-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native-host-build.stdout": "03cf20c9dc4d94d148536d129ee5ad3c590784bda10369fac53eb5b33dbf6774",
+    "start-native-host-build.ps1": "3d7ea95af00a6c6934b2dc073d1ae363284cb18c634d17e7123a27cf32018967"
+  },
+  "synthetic_only": true
+}

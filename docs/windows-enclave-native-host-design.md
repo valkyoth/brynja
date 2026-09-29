@@ -3,6 +3,9 @@
 Status: isolated v0.24.50 **public-data research**, not a shipping backend or
 Windows strict qualification. Release policy and production crates are unchanged.
 
+The completed [native campaign](windows-enclave-native-host-results.md) records
+the normal path, startup cleanup, deliberate deletion failure and compiled mutants.
+
 This binds the [safe host ledger](windows-enclave-host-session-design.md) to a
 real Windows enclave. The previously signed scoped-wire DLL is reused byte for
 byte; only the host executable changes. Its development signing, platform and

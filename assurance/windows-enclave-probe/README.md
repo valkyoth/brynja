@@ -273,3 +273,9 @@ Python driver. The [affine Rust host integration](../../docs/windows-enclave-ret
 now connects that protocol to a resource-owning session, with native borrowed-input
 and cleanup controls. Retained-result composition remains pending; this is not
 production qualification.
+
+`persistent_transform.rs`, `retained_rehash.rs` and `retained_placement_rehash.rs`
+add an isolated [secret-to-secret composition component](../../docs/windows-enclave-retained-rehash-design.md).
+It rehashes a retained digest without public intermediate export, replaces its
+generation token and clears scratch/error state. Oracle, mutation, borrow and
+focused Miri checks pass; native worker/host integration is still pending.

@@ -14,9 +14,11 @@ explicit acceleration and unchanged release-gate policy.
 - Build on the connected native affine borrowed-input host and retained worker.
   They now cover actual input copying, private epochs, retained digest ownership,
   cleanup before public output, abandoned/forgotten handles, startup failures,
-  copy rejection, simulated lost completion and deletion failure. Next finish
-  in-enclave retained-result composition without exposing enclave-private memory
-  as host slices. The native campaigns still use bounded public test data.
+  copy rejection, simulated lost completion and deletion failure. A fixed
+  secret-to-secret SHA-256 rehash component now passes oracle, cleanup, ownership
+  and Miri checks. Connect it to the native worker and affine host without
+  exposing enclave-private memory as host slices. The existing native campaigns
+  still use bounded public test data and do not include composition.
 - Complete integrated partial-copy and stale/cross-instance protocol controls
   for those general operations. The current private token model and bounded
   borrowed-input host campaign are not a production operation protocol or general residency
@@ -53,5 +55,5 @@ explicit acceleration and unchanged release-gate policy.
   then wait for green GitHub checks and explicit tagging authorization. No extra
   release-gate policy or crates.io publication is introduced by this work.
 
-Latest focused component: [borrowed-input retained-result composition](windows-enclave-retained-borrowed-design.md).
+Latest focused component: [retained secret-to-secret composition](windows-enclave-retained-rehash-design.md).
 Latest native platform step: [affine borrowed-input host](windows-enclave-retained-borrowed-host-results.md).

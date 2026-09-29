@@ -1,0 +1,140 @@
+First-party PublicRustWork only; CRT routine bodies omitted.
+Raw native disassembly SHA-256:
+c0e602de872c3d9c4fddbe54331281d5a66a3d30589aefd90c3269498965a185
+Source: d1243bb6469284f590dbeb8391c17bbfa2a8e21c
+
+  0000000180001000: 41 57              push        r15
+  0000000180001002: 41 56              push        r14
+  0000000180001004: 56                 push        rsi
+  0000000180001005: 57                 push        rdi
+  0000000180001006: 53                 push        rbx
+  0000000180001007: 48 81 EC 20 04 00  sub         rsp,420h
+                    00
+  000000018000100E: 48 89 CE           mov         rsi,rcx
+  0000000180001011: 0F 57 C0           xorps       xmm0,xmm0
+  0000000180001014: 0F 11 41 10        movups      xmmword ptr [rcx+10h],xmm0
+  0000000180001018: 0F 11 01           movups      xmmword ptr [rcx],xmm0
+  000000018000101B: 48 83 FA 03        cmp         rdx,3
+  000000018000101F: 76 12              jbe         0000000180001033
+  0000000180001021: 48 89 F0           mov         rax,rsi
+  0000000180001024: 48 81 C4 20 04 00  add         rsp,420h
+                    00
+  000000018000102B: 5B                 pop         rbx
+  000000018000102C: 5F                 pop         rdi
+  000000018000102D: 5E                 pop         rsi
+  000000018000102E: 41 5E              pop         r14
+  0000000180001030: 41 5F              pop         r15
+  0000000180001032: C3                 ret
+  0000000180001033: 4D 89 CF           mov         r15,r9
+  0000000180001036: 4C 89 C3           mov         rbx,r8
+  0000000180001039: 48 89 D7           mov         rdi,rdx
+  000000018000103C: 4C 8D 74 24 20     lea         r14,[rsp+20h]
+  0000000180001041: 41 B8 00 04 00 00  mov         r8d,400h
+  0000000180001047: 4C 89 F1           mov         rcx,r14
+  000000018000104A: 31 D2              xor         edx,edx
+  000000018000104C: E8 AF 1E 00 00     call        0000000180002F00
+  0000000180001051: 4C 89 F8           mov         rax,r15
+  0000000180001054: 48 29 D8           sub         rax,rbx
+  0000000180001057: 0F 92 C1           setb        cl
+  000000018000105A: 49 81 C7 00 FC FF  add         r15,0FFFFFFFFFFFFFC00h
+                    FF
+  0000000180001061: 4D 39 F7           cmp         r15,r14
+  0000000180001064: 72 BB              jb          0000000180001021
+  0000000180001066: 84 C9              test        cl,cl
+  0000000180001068: 75 B7              jne         0000000180001021
+  000000018000106A: 48 3D 00 00 01 00  cmp         rax,10000h
+  0000000180001070: 75 AF              jne         0000000180001021
+  0000000180001072: 4C 39 F3           cmp         rbx,r14
+  0000000180001075: 77 AA              ja          0000000180001021
+  0000000180001077: 4C 89 76 08        mov         qword ptr [rsi+8],r14
+  000000018000107B: B8 00 04 00 00     mov         eax,400h
+  0000000180001080: 48 85 FF           test        rdi,rdi
+  0000000180001083: 74 11              je          0000000180001096
+  0000000180001085: 48 83 FF 03        cmp         rdi,3
+  0000000180001089: 74 0B              je          0000000180001096
+  000000018000108B: 48 83 FF 01        cmp         rdi,1
+  000000018000108F: 75 7F              jne         0000000180001110
+  0000000180001091: B8 00 02 00 00     mov         eax,200h
+  0000000180001096: 31 C9              xor         ecx,ecx
+  0000000180001098: 0F 1F 84 00 00 00  nop         dword ptr [rax+rax+0000000000000000h]
+                    00 00
+  00000001800010A0: C6 44 0C 20 A5     mov         byte ptr [rsp+rcx+20h],0A5h
+  00000001800010A5: C6 44 0C 21 A5     mov         byte ptr [rsp+rcx+21h],0A5h
+  00000001800010AA: C6 44 0C 22 A5     mov         byte ptr [rsp+rcx+22h],0A5h
+  00000001800010AF: C6 44 0C 23 A5     mov         byte ptr [rsp+rcx+23h],0A5h
+  00000001800010B4: C6 44 0C 24 A5     mov         byte ptr [rsp+rcx+24h],0A5h
+  00000001800010B9: C6 44 0C 25 A5     mov         byte ptr [rsp+rcx+25h],0A5h
+  00000001800010BE: C6 44 0C 26 A5     mov         byte ptr [rsp+rcx+26h],0A5h
+  00000001800010C3: C6 44 0C 27 A5     mov         byte ptr [rsp+rcx+27h],0A5h
+  00000001800010C8: 48 83 C1 08        add         rcx,8
+  00000001800010CC: 48 39 C8           cmp         rax,rcx
+  00000001800010CF: 75 CF              jne         00000001800010A0
+  00000001800010D1: 31 C9              xor         ecx,ecx
+  00000001800010D3: 66 66 66 66 2E 0F  nop         word ptr cs:[rax+rax+0000000000000000h]
+                    1F 84 00 00 00 00
+                    00
+  00000001800010E0: 48 81 F9 00 04 00  cmp         rcx,400h
+                    00
+  00000001800010E7: 74 29              je          0000000180001112
+  00000001800010E9: 0F B6 54 0C 20     movzx       edx,byte ptr [rsp+rcx+20h]
+  00000001800010EE: 80 FA A5           cmp         dl,0A5h
+  00000001800010F1: 0F 85 2A FF FF FF  jne         0000000180001021
+  00000001800010F7: 0F B6 54 0C 21     movzx       edx,byte ptr [rsp+rcx+21h]
+  00000001800010FC: 80 FA A5           cmp         dl,0A5h
+  00000001800010FF: 0F 85 1C FF FF FF  jne         0000000180001021
+  0000000180001105: 48 83 C1 02        add         rcx,2
+  0000000180001109: 48 39 C8           cmp         rax,rcx
+  000000018000110C: 75 D2              jne         00000001800010E0
+  000000018000110E: EB 02              jmp         0000000180001112
+  0000000180001110: 31 C0              xor         eax,eax
+  0000000180001112: 48 89 46 10        mov         qword ptr [rsi+10h],rax
+  0000000180001116: 31 C0              xor         eax,eax
+  0000000180001118: 0F 1F 84 00 00 00  nop         dword ptr [rax+rax+0000000000000000h]
+                    00 00
+  0000000180001120: C6 44 04 20 00     mov         byte ptr [rsp+rax+20h],0
+  0000000180001125: C6 44 04 21 00     mov         byte ptr [rsp+rax+21h],0
+  000000018000112A: C6 44 04 22 00     mov         byte ptr [rsp+rax+22h],0
+  000000018000112F: C6 44 04 23 00     mov         byte ptr [rsp+rax+23h],0
+  0000000180001134: C6 44 04 24 00     mov         byte ptr [rsp+rax+24h],0
+  0000000180001139: C6 44 04 25 00     mov         byte ptr [rsp+rax+25h],0
+  000000018000113E: C6 44 04 26 00     mov         byte ptr [rsp+rax+26h],0
+  0000000180001143: C6 44 04 27 00     mov         byte ptr [rsp+rax+27h],0
+  0000000180001148: 48 83 C0 08        add         rax,8
+  000000018000114C: 48 3D 00 04 00 00  cmp         rax,400h
+  0000000180001152: 75 CC              jne         0000000180001120
+  0000000180001154: 31 C0              xor         eax,eax
+  0000000180001156: 31 C9              xor         ecx,ecx
+  0000000180001158: 0F 1F 84 00 00 00  nop         dword ptr [rax+rax+0000000000000000h]
+                    00 00
+  0000000180001160: 0A 4C 04 20        or          cl,byte ptr [rsp+rax+20h]
+  0000000180001164: 0A 4C 04 21        or          cl,byte ptr [rsp+rax+21h]
+  0000000180001168: 0A 4C 04 22        or          cl,byte ptr [rsp+rax+22h]
+  000000018000116C: 0A 4C 04 23        or          cl,byte ptr [rsp+rax+23h]
+  0000000180001170: 0A 4C 04 24        or          cl,byte ptr [rsp+rax+24h]
+  0000000180001174: 0A 4C 04 25        or          cl,byte ptr [rsp+rax+25h]
+  0000000180001178: 0A 4C 04 26        or          cl,byte ptr [rsp+rax+26h]
+  000000018000117C: 0A 4C 04 27        or          cl,byte ptr [rsp+rax+27h]
+  0000000180001180: 48 83 C0 08        add         rax,8
+  0000000180001184: 48 3D 00 04 00 00  cmp         rax,400h
+  000000018000118A: 75 D4              jne         0000000180001160
+  000000018000118C: 31 C0              xor         eax,eax
+  000000018000118E: 84 C9              test        cl,cl
+  0000000180001190: 0F 94 C0           sete        al
+  0000000180001193: 48 89 46 18        mov         qword ptr [rsi+18h],rax
+  0000000180001197: 0F 85 84 FE FF FF  jne         0000000180001021
+  000000018000119D: 48 FF C7           inc         rdi
+  00000001800011A0: 48 89 3E           mov         qword ptr [rsi],rdi
+  00000001800011A3: E9 79 FE FF FF     jmp         0000000180001021
+
+  00000000 00001000 000011A8 000059E0
+    Unwind version: 1
+    Unwind flags: None
+    Size of prologue: 0x0E
+    Count of codes: 7
+    Unwind codes:
+      0E: ALLOC_LARGE, size=0x420
+      07: PUSH_NONVOL, register=rbx
+      06: PUSH_NONVOL, register=rdi
+      05: PUSH_NONVOL, register=rsi
+      04: PUSH_NONVOL, register=r14
+      02: PUSH_NONVOL, register=r15

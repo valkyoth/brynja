@@ -1,0 +1,13 @@
+Observed development signing, 2026-09-29. This is an outcome summary, not a
+byte-for-byte merged stdout/stderr transcript.
+normal.dll: SignTool exit 2, one VBS compatibility warning.
+missing-clear.dll: SignTool exit 2, one VBS compatibility warning.
+missing-local-clear.dll: SignTool exit 2, one VBS compatibility warning.
+wrong-result.dll: SignTool exit 2, one VBS compatibility warning.
+Warning: VBS enclave support is changing; updating may lose older OS support.
+SignTool reference: https://go.microsoft.com/fwlink/?linkid=2312918
+EPHEMERAL_SIGNING_KEY_REMOVED was printed before the wrapper failed.
+Signing wrapper exit 1: Synthetic signing failed or warned; inspect transcript
+before development-only use. No clean production signing pass is claimed.
+The warning was reviewed; resulting images used only for synthetic development
+execution on the existing test-signing-enabled disposable Azure host.

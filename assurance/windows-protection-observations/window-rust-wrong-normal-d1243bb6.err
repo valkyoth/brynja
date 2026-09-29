@@ -1,0 +1,37 @@
+Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_rust.py", line 164, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_rust.py", line 153, in main
+    record = bounded_child(command, args.mode, args.c_exception_before, args.missing_rust_clear_mutant)
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_rust.py", line 92, in bounded_child
+    require(result.returncode == 0 and not result.stderr and 0 < len(result.stdout) <= 32768,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f'Rust child failed/inconclusive: exit={result.returncode} '
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f'(0x{result.returncode & 0xffffffff:08x}); ' + result.stderr[-4096:])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: Rust child failed/inconclusive: exit=1 (0x00000001); Traceback (most recent call last):
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_rust.py", line 164, in <module>
+    main()
+    ~~~~^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_rust.py", line 132, in main
+    print(json.dumps(exercise(WorkerNative(), Windows(), image, args.mode,
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             args.c_exception_before, args.missing_rust_clear_mutant)))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_rust.py", line 75, in exercise
+    item['rust'] = validate_rust(report, base, values[1], values[2], mode, mutant)
+                   ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_enclave_window_rust.py", line 34, in validate_rust
+    require(status == (0 if mutant else MODES[mode] + 1)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            and filled == {'success': 1024, 'cancel': 512, 'reject': 0, 'error': 1024}[mode]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            and cleared == int(not mutant), 'exact Rust outcome and local clearing')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\brynja-v0250\repo\scripts\cryptography\windows_protection_probe.py", line 18, in require
+    raise ProbeError(message)
+windows_protection_probe.ProbeError: exact Rust outcome and local clearing

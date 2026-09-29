@@ -1,7 +1,9 @@
 # Fixed Rust worker ABI experiment
 
-Status: **native execution pending; no Windows strict activation**.
+Status: **fixed public Rust worker executed natively; no Windows strict activation**.
 This public-marker experiment changes neither production crypto nor release gates.
+The exact [observations and failure controls](windows-enclave-rust-worker-results.md)
+are recorded separately; they are not cryptographic or full-worker qualification.
 
 The [bounded depth results](windows-enclave-window-depth-results.md) establish a
 particular assembly/C frame budget and caught exception, not Rust compatibility.
@@ -46,6 +48,7 @@ TLS, runtime-copy or register clearing.
 Use the pinned local Rust 1.98.1 compiler to emit a Windows x64 COFF object,
 assembly and LLVM IR. Link that object on the disposable Windows enclave host
 with the existing MSVC C/assembly scaffold and enclave-only runtime libraries.
+Enable `/std:c11` for the C aggregate-layout assertions and retain `/W4 /WX`.
 Inspect unresolved object symbols, the final PE imports, stack frame and call
 graph. Do not import the general Windows Rust standard-library runtime into an
 enclave or infer enclave compatibility from the ordinary Windows target name.

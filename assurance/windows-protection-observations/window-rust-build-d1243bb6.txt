@@ -1,0 +1,139 @@
+Native build wrapper (retry) exit: 0
+The first build lacked /std:c11 and failed its static assertions.
+Its complete error log is retained in the local raw archive, not counted as a pass.
+
+
+build-rust-window-objects.sh:
+#!/bin/sh
+set -eu
+out=release-reports/windows-azure-replacement-2026-09-29/rust-window-build
+mkdir -p "$out"
+test "$(git rev-parse HEAD)" = "$(git rev-parse d1243bb6)"
+test -z "$(git status --porcelain)"
+for mode in normal missing-local-clear wrong-result; do
+    case "$mode" in
+        normal) set -- ;;
+        missing-local-clear) set -- --cfg probe_skip_rust_clear ;;
+        wrong-result) set -- --cfg probe_wrong_rust_result ;;
+    esac
+    rustc +1.98.1 --edition=2024 --crate-type lib -C opt-level=2 -C panic=abort -C force-unwind-tables=yes -C codegen-units=1 --target x86_64-pc-windows-msvc --emit="obj=$out/${mode}_rust.obj,asm=$out/${mode}_rust.s,llvm-ir=$out/${mode}_rust.ll" "$@" assurance/windows-enclave-probe/window_rust.rs
+done
+rustc +1.98.1 -vV
+sha256sum "$out/normal_rust.obj" "$out/missing-local-clear_rust.obj" "$out/wrong-result_rust.obj"
+
+rust-window-build/compile-transcript.txt:
+rustc 1.98.1 (48a229cea 2026-09-01)
+binary: rustc
+commit-hash: 48a229ceaefd4985c50990b14116b6d856af0985
+commit-date: 2026-09-01
+host: x86_64-unknown-linux-gnu
+release: 1.98.1
+LLVM version: 22.1.8
+6f21357036dedf617bbd1f6b992e47457d579e0fc8c2b4e90d6d47d43b01d58b  release-reports/windows-azure-replacement-2026-09-29/rust-window-build/normal_rust.obj
+f4861030a85eeacd6f2ebe46fb8415323f52027ac747486c3d11d59ba7eb4a1e  release-reports/windows-azure-replacement-2026-09-29/rust-window-build/missing-local-clear_rust.obj
+ecc3a887a6f66c81f1d19e7a10d9e833c40dfeb88f94b7ad6ff7ea76ecffa60e  release-reports/windows-azure-replacement-2026-09-29/rust-window-build/wrong-result_rust.obj
+
+build-rust-window.cmd:
+@echo off
+setlocal
+set PATH=C:\brynja-v0250\git\cmd;C:\brynja-v0250\python;%PATH%
+cd /d C:\brynja-v0250\repo
+git fetch C:\Users\azureuser\rust-window-d1243bb6.bundle HEAD
+if errorlevel 1 exit /b 1
+git switch --detach d1243bb6
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-window-rust.py RustWindowTests.test_all_fixed_outcomes_and_mutant_detection RustWindowTests.test_abi_fields_complete_and_in_bounds RustWindowTests.test_cleanup_omission_and_wrong_mutant_expectations_fail RustWindowTests.test_ownership_and_callback_failures_still_teardown RustWindowTests.test_claims_and_missing_fields_fail RustWindowTests.test_crashes_warnings_timeouts_and_invalid_json_fail RustWindowTests.test_fixed_nonunwinding_source_and_unchanged_outer_frame
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-window-guard.py
+if errorlevel 1 exit /b 1
+python scripts\cryptography\test-windows-enclave-window-lock.py
+if errorlevel 1 exit /b 1
+call C:\brynja-v0250\buildtools\VC\Auxiliary\Build\vcvars64.bat
+if errorlevel 1 exit /b 1
+if not exist C:\brynja-v0250\rust-window mkdir C:\brynja-v0250\rust-window
+cd /d C:\brynja-v0250\rust-window
+copy /b C:\Users\azureuser\normal_rust.obj normal_rust.obj
+if errorlevel 1 exit /b 1
+copy /b C:\Users\azureuser\missing-local-clear_rust.obj missing-local-clear_rust.obj
+if errorlevel 1 exit /b 1
+copy /b C:\Users\azureuser\wrong-result_rust.obj wrong-result_rust.obj
+if errorlevel 1 exit /b 1
+copy /b C:\Users\azureuser\rustc-info.txt rustc-info.txt
+if errorlevel 1 exit /b 1
+dumpbin /symbols /directives normal_rust.obj > rust-object-symbols.txt
+if errorlevel 1 exit /b 1
+call :build normal none normal_rust.obj
+if errorlevel 1 exit /b 1
+call :build missing-clear /DBRYNJA_PROBE_SKIP_GUARDED_CLEAR normal_rust.obj
+if errorlevel 1 exit /b 1
+call :build missing-local-clear none missing-local-clear_rust.obj
+if errorlevel 1 exit /b 1
+call :build wrong-result none wrong-result_rust.obj
+if errorlevel 1 exit /b 1
+dumpbin /headers /loadconfig /imports normal.dll
+if errorlevel 1 exit /b 1
+dumpbin /unwindinfo /disasm normal.dll > rust-disasm.txt
+exit /b %ERRORLEVEL%
+:build
+set ASMFLAGS=%2
+set RUSTOBJECT=%3
+if "%ASMFLAGS%"=="none" set ASMFLAGS=
+
+ml64 /nologo /c %ASMFLAGS% /Fo%1_asm.obj C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+if errorlevel 1 exit /b 1
+cl /nologo /std:c11 /LD /O2 /W4 /WX /MT /guard:cf /Fe%1.dll C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust.c %1_asm.obj %RUSTOBJECT% /link /ENCLAVE /NODEFAULTLIB /INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED /LIBPATH:"%VCToolsInstallDir%lib\x64\enclave" /LIBPATH:"%WindowsSdkDir%Lib\%WindowsSDKVersion%ucrt_enclave\x64" libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib
+if errorlevel 1 exit /b 1
+"%WindowsSdkDir%bin\%WindowsSDKVersion%x64\veiid.exe" %1.dll
+exit /b %ERRORLEVEL%
+
+rust-build-retry.stderr:
+From C:\Users\azureuser\rust-window-d1243bb6.bundle
+ * branch              HEAD       -> FETCH_HEAD
+HEAD is now at d1243bb6 test(windows): prototype fixed Rust worker in guarded enclave window
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.009s
+
+OK
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.012s
+
+OK
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.008s
+
+OK
+
+Native build stdout before PE dump:
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.14.41
+** Copyright (c) 2025 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+window_rust.c
+   Creating library normal.lib and object normal.exp
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+window_rust.c
+   Creating library missing-clear.lib and object missing-clear.exp
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+window_rust.c
+   Creating library missing-local-clear.lib and object missing-local-clear.exp
+ Assembling: C:\brynja-v0250\repo\assurance\windows-enclave-probe\window_rust_x64.asm
+window_rust.c
+   Creating library wrong-result.lib and object wrong-result.exp
+Microsoft (R) COFF/PE Dumper Version 14.44.35229.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file normal.dll
+
+PE signature found
+
+File Type: DLL

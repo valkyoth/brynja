@@ -85,6 +85,8 @@ dump was requested or downloaded.
 
 ## What remains
 
+The subsequent [fixed Rust worker experiment](windows-enclave-rust-worker-results.md)
+now establishes a narrow public-only ABI step, separately from depth unwinding.
 This experiment supports explicit frame-budget rejection before consuming the
 reserved margin, not recovery after exhaustion. Production work still requires
 a bounded real call graph, Rust ABI/panic integration, complete worker/TLS and

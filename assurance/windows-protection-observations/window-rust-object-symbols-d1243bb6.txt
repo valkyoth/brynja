@@ -1,0 +1,36 @@
+Microsoft (R) COFF/PE Dumper Version 14.44.35229.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file normal_rust.obj
+
+File Type: COFF OBJECT
+
+COFF SYMBOL TABLE
+000 00000000 SECT1  notype       Static       | .text
+    Section length    0, #relocs    0, #linenums    0, checksum        0
+002 00000000 SECT2  notype       Static       | .data
+    Section length    0, #relocs    0, #linenums    0, checksum        0
+004 00000000 SECT3  notype       Static       | .bss
+    Section length    0, #relocs    0, #linenums    0, checksum        0
+006 00000000 SECT4  notype       Static       | .text
+    Section length  1A8, #relocs    1, #linenums    0, checksum E1293BBB, selection    1 (pick no duplicates)
+008 00000000 SECT4  notype ()    External     | PublicRustWork
+009 00000000 SECT5  notype       Static       | .xdata
+    Section length   14, #relocs    0, #linenums    0, checksum DD03071C, selection    5 (pick associative Section 0x4)
+00B 00000000 SECT6  notype       Static       | .pdata
+    Section length    C, #relocs    3, #linenums    0, checksum DFDFF78D, selection    5 (pick associative Section 0x4)
+00D 00000000 ABS    notype       Static       | @feat.00
+00E 00000000 UNDEF  notype       External     | memset
+00F 00000000 DEBUG  notype       Filename     | .file
+    window_rust.49a4b1af263db38c-cgu.0
+
+String Table Size = 0x13 bytes
+
+  Summary
+
+           0 .bss
+           0 .data
+           C .pdata
+         1A8 .text
+          14 .xdata

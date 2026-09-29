@@ -223,3 +223,10 @@ separate records cover [live-window locking](../../docs/windows-enclave-window-l
 The last experiment rejects recursion before consuming a reserved margin;
 unchecked deep recursion crashes and is not a cleanup pass. None qualifies
 arbitrary callbacks, Rust panics, full worker/TLS ownership or production strict support.
+
+The separate `window_rust.rs`/`window_rust.c`/`window_rust_x64.asm` image then
+executes a fixed public-marker `no_std` Rust worker using a C-layout return value.
+Its [native observations](../../docs/windows-enclave-rust-worker-results.md) cover
+success, cancellation, explicit errors and compiled cleanup/outcome mutants.
+It uses `panic=abort`; any C exception completes before Rust entry. It adds no
+cryptographic operation, Cargo dependency or Windows strict support.

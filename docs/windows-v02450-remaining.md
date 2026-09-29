@@ -25,10 +25,15 @@ explicit acceleration and unchanged release-gate policy.
   partial-copy failure. Two-live-enclave routing now also passes native foreign
   token tests in both directions, unchanged-origin oracle checks, stale owner
   epochs and all four token-field mutations.
+- The affine host now uses checked, nonrecycled process-local receipt IDs rather
+  than allocation addresses. Forced address reuse, stale receipts, terminal
+  close, exhaustion and concurrency have focused tests; two native campaigns
+  pass against the unchanged image. This does not make the enclave's separate
+  mapping-address token identity persistent or authenticated.
 - Carry these boundaries into a production lifetime-bound enclave owner and
-  facade. The experimental mapping-address identity is not persistent across
-  enclave destruction/recreation or processes; stale handles must never cross
-  those lifetime boundaries. Diagnostic metadata exports are not shipping APIs.
+  facade. Enclave mapping addresses can still repeat across destruction/recreation
+  or processes; stale handles must never cross those lifetime boundaries.
+  Diagnostic metadata exports are not shipping APIs.
   The current experiments are not a production operation protocol or general
   residency qualification.
 
@@ -64,4 +69,4 @@ explicit acceleration and unchanged release-gate policy.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [retained secret-to-secret composition](windows-enclave-retained-rehash-design.md).
-Latest native platform step: [two-live-enclave routing](windows-enclave-retained-cross-results.md).
+Latest native platform step: [host lifetime and receipt identity](windows-enclave-retained-lifetime-results.md).

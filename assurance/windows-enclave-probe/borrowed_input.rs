@@ -110,6 +110,7 @@ fn admit(header: &[u8; HEADER]) -> Result<Admission, Error> {
 
 /// Must be constructed inside preacquired protected storage before real secrets
 /// are admitted. This model alone does not allocate, lock or qualify that storage.
+#[repr(C)]
 pub struct Snapshot {
     bytes: [u8; CAPACITY],
     thread_bound: PhantomData<*mut ()>,

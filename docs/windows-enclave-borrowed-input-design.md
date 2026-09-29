@@ -1,7 +1,7 @@
 # Borrowed caller-input boundary
 
-Status: isolated v0.24.50 Rust model and tests. **Not a native enclave adapter,
-secret-input qualification or shipping Windows API.** Production implementations,
+Status: isolated v0.24.50 Rust model and direct-copy worker experiment. **Not
+secret-input qualification or a shipping Windows API.** Production implementations,
 platform availability and release gates are unchanged.
 
 ## Preserve the existing contract
@@ -77,6 +77,42 @@ A positive consumer compiles and 16 negative consumers reject source mutation,
 escaped source lifetime, private storage access, returned snapshot borrows and
 escaped copy-reader borrows and Send/Sync/Copy/Clone/Debug on either owner. Windows cross-compilation alone is not
 native execution or a protected-memory test.
+
+## Separate native worker experiment
+
+`window_borrowed.rs` combines the model with the existing first-party SHA-256
+workspace and one-use result protocol. Its separately built image reuses the
+guarded, locked worker scaffold, without replacing the earlier signed image.
+The worker copies only the 64-byte header first, then copies the admitted payload
+directly from the original host address into its 1024-byte snapshot using
+`EnclaveCopyIntoEnclave`. A private fixed copy adapter replaces the model callback.
+The header, payload, command, workspace and output must all fit in the admitted
+64 KiB window; report validation checks bounds and disjointness.
+
+The snapshot has an explicit byte-array layout. The worker checks its full
+capacity is zero after the scope returns, before its Drop and before the outer
+assembly window wipe. Workspace and output clearing are checked independently.
+Input-copy failures cannot issue a result. Successful results retain the existing
+explicit public-export/cancel decision and terminal replay rejection.
+
+Seven compiled worker tests run at O0/O2, including all 1025 lengths, 20 independent
+digests, post-copy source mutation, partial input-copy failures, malformed
+metadata, transport failures and terminal result handling. Four broken model
+variants are linked into the actual worker and must fail. The native campaign
+also includes an input straddling a committed page and an inaccessible page.
+Mock capture tests are not evidence that this OS copy actually failed safely;
+that requires running the separate signed image on the development host.
+
+```text
+python3 scripts/cryptography/test-windows-enclave-borrowed-worker.py
+python3 scripts/cryptography/test-windows-enclave-borrowed-native.py
+python3 scripts/cryptography/windows_enclave_borrowed_worker_build.py <persistent-directory>
+```
+
+The Python native driver holds only public test data and deliberately permits
+mutation for fault testing. It is not the Rust borrowing host adapter and does
+not establish a secret-input product contract. Binding the descriptor's lifetime
+to the owned native host remains separate work.
 
 ## Native integration and persistent results still required
 

@@ -92,3 +92,7 @@ OS stack; it does not establish independent storage ownership. This callback
 handshake assumes trusted host cooperation and cannot establish residency in
 spite of a malicious host or hypervisor. Next: establish a bounded execution
 contract and its failure behavior before attempting production integration.
+
+The [guarded-window prototype](windows-enclave-window-guard-design.md) is the
+next experiment. Its local mock regressions do not extend these native results;
+native compilation and page-boundary execution are still pending.

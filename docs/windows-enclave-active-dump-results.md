@@ -67,3 +67,7 @@ The next unresolved design work remains secret-input handling and protected
 persistent output ownership, along with full worker/runtime coverage and
 production deployment/signing. Windows strict remains unavailable; this evidence
 does not change its API, admission policy or Linux guarantees.
+
+The subsequent [borrowed-input model](windows-enclave-borrowed-input-design.md)
+distinguishes preserving the existing caller-buffer exclusion from adding a new
+attested channel, and avoids the public fixture's ordinary host payload copy.

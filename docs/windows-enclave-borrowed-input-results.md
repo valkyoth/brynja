@@ -77,9 +77,9 @@ The archive contains no crash dumps or private signing key.
 
 The Python driver intentionally owns ordinary **public** test buffers. This
 campaign proves the new worker copy path, not a Rust host borrowing contract.
-The next adapter must retain the original Rust input borrow and must not reuse
-the older payload-serializing host request. Enclave-internal source-address
-rejection remains an untested native case.
+The later [Rust-owned host experiment](windows-enclave-borrowed-host-results.md)
+retains that input borrow and removes the older payload-serializing request.
+Enclave-internal source-address rejection remains an untested native case.
 
 Persistent protected result ownership and the enclave-compatible API remain
 separate work. This experiment retains results only within one guarded worker

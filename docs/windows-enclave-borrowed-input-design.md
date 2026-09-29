@@ -111,8 +111,10 @@ python3 scripts/cryptography/windows_enclave_borrowed_worker_build.py <persisten
 
 The Python native driver holds only public test data and deliberately permits
 mutation for fault testing. It is not the Rust borrowing host adapter and does
-not establish a secret-input product contract. Binding the descriptor's lifetime
-to the owned native host remains separate work.
+not establish a secret-input product contract. The subsequent
+[Rust-owned host experiment](windows-enclave-borrowed-host-results.md) binds the
+descriptor lifetime to the original input across the native call without payload
+serialization. That adapter is still isolated research, not a shipping API.
 
 ## Host integration and persistent results still required
 
@@ -120,9 +122,10 @@ The [separate native experiment](windows-enclave-borrowed-input-results.md) now
 instantiates the snapshot inside the preacquired, guarded and locked enclave
 window, copies metadata once through the OS boundary, and binds the input reader
 directly to the platform copy-in function. Its capture independently checks
-full-capacity clearing before outer-window clearing. The Rust-owned host adapter
-must still retain the original input borrow and prove that it introduces no
-ordinary host request/staging copy of the payload.
+full-capacity clearing before outer-window clearing. The subsequent Rust-owned
+host experiment retains the original input borrow and removes the ordinary host
+payload serializer; its remaining full-runtime and production boundaries are
+recorded separately.
 Microsoft defines the copy source as outside the enclave; the native adapter must
 retain this boundary, not replace it with a raw pointer dereference. Invalid and
 page-boundary source failures have been exercised; enclave-internal source

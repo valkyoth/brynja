@@ -11,17 +11,16 @@ explicit acceleration and unchanged release-gate policy.
 - Build on the completed fixed-public-vector native retained-owner experiment;
   it now covers placement, cross-return digest retention and destruction before
   unlock/free, but is not a production API or general residency qualification.
-- Connect the tested affine host result/session model to a private adapter that
-  retains the actual enclave instance. The safe component now covers exclusive
-  ownership, abandonment, receipt validation and transactional public output;
-  its synthetic transport does not qualify Windows cleanup. Finish the operation protocol, borrowed inputs, explicit public
-  export and in-enclave result composition without exposing enclave-private
-  memory as host slices.
-- Extend the fixed-vector coverage to the host-owned protocol: abandoned or
-  forgotten handles, replay, stale/cross-instance identities, startup failures,
-  partial copies, lost completion, quarantine and teardown failure. Component
-  tests and fixed-vector native operations do not replace integrated host-handle
-  lifecycle tests.
+- Extend the native affine host adapter beyond fixed public vectors. It now owns
+  the real enclave, retains results across calls, validates clearing before
+  committing public output, and covers abandoned/forgotten handles, startup
+  failures, copy rejection, simulated lost completion and deletion failure.
+  Finish borrowed inputs and in-enclave result composition without exposing
+  enclave-private memory as host slices.
+- Complete integrated partial-copy and stale/cross-instance protocol controls
+  for those general operations. The current private token model and fixed-vector
+  host campaign are not a production operation protocol or general residency
+  qualification.
 
 ## Broader implementation and qualification
 
@@ -55,4 +54,4 @@ explicit acceleration and unchanged release-gate policy.
   release-gate policy or crates.io publication is introduced by this work.
 
 Latest focused component: [affine retained-result host model](windows-enclave-retained-host-design.md).
-Latest native platform step: [retained Rust-owner campaign](windows-enclave-retained-worker-results.md).
+Latest native platform step: [affine host/resource campaign](windows-enclave-retained-native-host-results.md).

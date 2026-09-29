@@ -1,8 +1,9 @@
 # Affine retained-result host model
 
 Status: isolated safe-Rust component, **not a native Windows adapter or a shipping
-strict API**. It complements the [native retained-owner experiment](windows-enclave-retained-worker-results.md);
-that experiment and this component have not yet been connected. Windows strict
+strict API**. It complements the [native retained-owner experiment](windows-enclave-retained-worker-results.md).
+A separate private research adapter now connects this model to that image;
+see [native host observations](windows-enclave-retained-native-host-results.md). Windows strict
 constructors remain unsupported. No release-gate policy changes are involved.
 
 `assurance/windows-enclave-probe/retained_host.rs` owns its private transport by
@@ -40,8 +41,8 @@ retained storage protected throughout that interval. Forgetting the whole sessio
 process termination and fatal abort bypass destruction and do not promise cleanup.
 The private adapter's release operation must never unwind, must allow safe retries,
 and must not free callback/resource storage while OS deletion is unconfirmed.
-Those adapter requirements are still native implementation work, not guarantees
-proved by the synthetic driver.
+Those adapter requirements are not guarantees proved by the synthetic driver;
+the separate native experiment covers only its stated fixed-vector paths.
 
 ## Focused verification
 
@@ -72,9 +73,9 @@ not a Windows execution or cleanup result. Native builds must not include
 
 ## Next integration
 
-Connect a private resource-owning adapter to the existing retained native image.
-Validate cleanup reports before producing receipts, retain resource ownership on
-teardown failure, and run the integrated abandonment, partial-copy, stale identity,
-lost-completion and deletion-failure campaign. Then extend the fixed-vector
-protocol to borrowed inputs and in-enclave result composition. See the
+The private resource-owning adapter now checks native cleanup reports before
+producing receipts and has a bounded native lifecycle campaign. Extend this
+fixed-vector protocol to borrowed inputs and in-enclave result composition,
+including integrated partial-copy and stale/cross-instance protocol controls.
+See the
 [remaining release work](windows-v02450-remaining.md).

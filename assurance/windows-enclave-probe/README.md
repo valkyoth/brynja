@@ -258,6 +258,8 @@ enclave residency guarantees.
 
 `retained_host.rs` adds a separate [affine host/session model](../../docs/windows-enclave-retained-host-design.md).
 It tests result ownership, transactional public export, quarantine and truthful
-release-receipt handling with a synthetic transport. The private resource-owning
-Windows adapter is still pending; no native cleanup claim follows from its
-component tests or Windows cross-compilation.
+release-receipt handling with a synthetic transport. The separate
+`retained_native_host.rs` / `retained_native_transport.c` adapter now has a
+[native fixed-public-vector campaign](../../docs/windows-enclave-retained-native-host-results.md)
+with actual resource ownership and teardown controls. Neither component tests nor
+that bounded experiment qualify a production Windows backend.

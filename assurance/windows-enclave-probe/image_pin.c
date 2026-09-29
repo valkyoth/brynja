@@ -92,6 +92,6 @@ int ImagePinOpen(PINNED_IMAGE* pin, const wchar_t* path) {
 #endif
 done:
     if (bytes && !HeapFree(GetProcessHeap(), 0, bytes)) { ok = 0; }
-    if (!ok) { (void)ImagePinClose(pin); }
+    if (!ok && !ImagePinClose(pin)) { ProbeImageAbort(); }
     return ok;
 }

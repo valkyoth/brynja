@@ -7,6 +7,22 @@ The private Rust host owns the actual Windows enclave resource and connects the
 and digests remain fixed public test vectors. No signing, host configuration or
 release-gate changes were needed.
 
+Host source: `c0e5c2cd80b1ea842f18cc011def78cb784cf7e2`.
+The [reviewed observation record](../assurance/windows-protection-observations/retained-native-host-c0e5c2cd.json)
+binds that source closure, both campaigns, executable hashes and exact outcomes.
+The complete archive, including the initial rejected experiment, is saved outside
+Cargo's `target/` tree:
+
+```text
+release-reports/windows-azure-replacement-2026-09-29/retained-native-host-complete.tar
+SHA256 2648e7160c02e646e84098e377b60f30141a5b1a751f9b55ea608392833e786d
+```
+
+Archive review checked committed/current source hashes, generated native sources,
+Rust archives, both sets of executable hashes and raw stdout/stderr, native build
+transcripts and cleanup observations. No probe child remained active; the previous
+signed enclave image retained its hash. No signing keys or raw dumps are included.
+
 ## Ownership and receipts
 
 `retained_native_host.rs` owns the native instance, generation and live-result

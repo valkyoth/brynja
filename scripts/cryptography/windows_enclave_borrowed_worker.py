@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import struct
 import sys
 
 import windows_enclave_hardened as previous
@@ -60,6 +61,10 @@ def exercise(api, host, image, mode):
             last = validate_offers(request.offers, mode, iteration, last)
             item['copies'] = request.copies
             require(request.copies == copy_count(mode, iteration), 'exact payload copy count')
+            if mode == 'enclave-input':
+                selected = struct.unpack('<8Q', bytes(request.wire))[3]
+                require(selected == values[1] + 4096, 'actual enclave-internal source selected')
+                item['internal_source_offset'] = selected - base
             item['digest'] = request.check_output()
             calls.append(item)
             require(api.call(register, 0) == 1 and api.call(routine, 0) == 0, 'unregister callback')
@@ -92,6 +97,8 @@ def validate_record(value, mode):
         checked['offers'] = call.get('offers')
         last = validate_offers(checked['offers'], mode, iteration, last)
         checked['copies'] = copy_count(mode, iteration)
+        if mode == 'enclave-input':
+            checked['internal_source_offset'] = values[1] + 4096
         checked['digest'] = (hashlib.sha256(messages(mode)[iteration]).hexdigest()
                              if outcome(mode)[0] == 1 else None)
         require(checked == call and call['page_count'] == 16, 'canonical complete wire record')

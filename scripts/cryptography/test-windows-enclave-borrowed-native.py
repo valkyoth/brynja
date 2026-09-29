@@ -52,7 +52,8 @@ class Api(guard.Api):
             version, reserved, size, source, address, width, flags, tail = struct.unpack('<8Q', header)
             status = 10
             if version == 3 and reserved == flags == tail == 0 and size <= 1024 and width == 64:
-                snapshot = b'' if size == 0 else c.string_at(source, size) if source != 1 else None
+                rejected_source = source == 1 or LOW <= source < HIGH
+                snapshot = b'' if size == 0 else c.string_at(source, size) if not rejected_source else None
                 copied = snapshot is not None and (size == 0 or self.cb(LOW | 4))
                 if not copied:
                     self.report = [11, LOW + 40000, LOW + 42000, LOW + 44000, 0, 1, 0, 1170]
@@ -157,6 +158,19 @@ class WireHostTests(unittest.TestCase):
             for event in events:
                 hook(event)
             self.assertIsNotNone(hook.error)
+
+    def test_internal_source_is_inside_admitted_window_and_bound_in_record(self):
+        value = exercise('enclave-input')
+        self.assertEqual(child(value, 'enclave-input'), value)
+        for index in range(3):
+            call = value['calls'][index]
+            self.assertEqual(call['internal_source_offset'], call['values'][1] + 4096)
+            self.assertEqual((call['copies'], call['offers'], call['wire'][0]), (0, [], 11))
+            for bad in (None, 0, call['internal_source_offset'] + 1):
+                broken = copy.deepcopy(value)
+                broken['calls'][index]['internal_source_offset'] = bad
+                with self.assertRaises(ProbeError):
+                    child(broken, 'enclave-input')
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ from windows_enclave_sha256_build import vectors
 from windows_protection_probe import require
 
 MODES = ('publish', 'mutate', 'cancel', 'bad-header', 'bad-source', 'bad-input',
-         'page-fault', 'bad-destination', 'deny-copy')
+         'page-fault', 'bad-destination', 'deny-copy', 'enclave-input')
 
 
 def messages(mode):
@@ -18,7 +18,7 @@ def messages(mode):
 def outcome(mode):
     status = {'publish': 1, 'mutate': 1, 'cancel': 2, 'bad-header': 10,
               'bad-source': 11, 'bad-input': 11, 'page-fault': 11,
-              'bad-destination': 12, 'deny-copy': 11}[mode]
+              'bad-destination': 12, 'deny-copy': 11, 'enclave-input': 11}[mode]
     hooks = 2 if status in (1, 2, 12) else 0
     return status, 21 if hooks else 0, hooks
 
@@ -89,6 +89,14 @@ class Request:
 
 class BorrowedHandshake(WireHandshake):
     def __call__(self, argument):
+        if type(argument) is int and argument & 15 == 0 and self.request.mode == 'enclave-input':
+            admitted = super().__call__(argument)
+            if admitted == 1:
+                # Only alter our public header, never dereference enclave memory.
+                # This address is within the fully admitted 64 KiB window, not
+                # an invalid/null host pointer accidentally testing another case.
+                self.request.wire[24:32] = struct.pack('<Q', self.low + 4096)
+            return admitted
         if type(argument) is not int or argument & 15 != 4:
             return super().__call__(argument)
         try:
@@ -134,4 +142,4 @@ def validate_offers(offers, mode, iteration, previous):
 
 def copy_count(mode, iteration):
     return int(bool(messages(mode)[iteration]) and mode not in
-               ('bad-header', 'bad-source', 'bad-input', 'page-fault'))
+               ('bad-header', 'bad-source', 'bad-input', 'page-fault', 'enclave-input'))

@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "COMPONENT_TESTS_ONLY",
+  "baseline": "be74df87",
+  "production_qualified": false,
+  "native_enclave_execution": false,
+  "description": "Private sequential eight-slot SHA-2 batch owner over existing hardened dispatch. Tests passed locally and in an ordinary Windows process, not inside VBS. The Azure checkout uses source overlays, not an exact git checkout.",
+  "tests": 6,
+  "hashlib_cases": 72,
+  "activity_masks": 255,
+  "general_sha512_t_bit_cases": 4080,
+  "slots_per_differential_case": 8,
+  "compiled_mutants_rejected": 11,
+  "miri": {"toolchain": "nightly-2026-09-11", "test": "copy_failure_unwind_and_cancellation_clear_every_result", "result": "PASS"},
+  "source_sha256": {
+    "assurance/windows-enclave-probe/sha2_batch.rs": "06a915a0ea4ef50a0f9d7ffeb06cf0b10d515940dbc6fd3fcb7da91ddf550e8c",
+    "assurance/windows-enclave-probe/sha2_batch_tests.rs": "5cc51dac136bff136cb8934ce0d8a585146641777c0cd6e4b899c7c491ef2f50",
+    "scripts/cryptography/test-windows-enclave-sha2-batch.py": "868d982895795e1fdd1f737a0eb5c784f65d465cb6fd8290704ab842c9acfac3"
+  },
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-component-source.tar": "078a34956f497d2c4f5cfaf95bc9940f87d47a4d1c90527431ef74a80ec77613",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-component.log": "6ec3e226314e4752a78254d905ee74b8c1c54b0413bca0359693bf02a32ba8d4"
+  },
+  "limitations": ["No host batch API", "No wire or OS-copy adapter", "No native enclave execution", "No SIMD or parallel execution", "No placement/compiler qualification", "No independent review"]
+}

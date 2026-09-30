@@ -71,8 +71,8 @@ describe how the worker was developed, not outstanding constructor work.
 
 - Scalar SHA-2 streaming, bit tails, all named identities and general SHA-512/t
   are implemented in the [separate version-six worker/API](windows-enclave-sha2.md).
-  Complete the remaining passes in order: TupleHash,
-  batching and ParallelHash. Extend the integrated enclave-compatible strict facade.
+  Complete the remaining algorithm passes in order: batching and ParallelHash.
+  Extend the integrated enclave-compatible strict facade.
   Keep unsupported routes fail-closed and ordinary APIs unchanged. Do not claim
   the existing host-slice/closure APIs are transparently enclave-compatible.
   Scalar SHA-3/SHAKE/cSHAKE is now integrated in the
@@ -151,6 +151,18 @@ describe how the worker was developed, not outstanding constructor work.
   shared source used by the host API and the isolated parity fixture. Host-only
   mock tests cover abandonment, forgotten parent loans, output-copy failures,
   chunking and reuse; these are not native OS-copy evidence.
+- The first private scalar batch component covers eight ordered SHA-2 slots,
+  all named/general identities, streamed bounded input and arbitrary-bit final
+  tails. A public byte budget bounds input, inactive slots remain zero and
+  export requires completion of the entire declared plan plus an explicit seal.
+  Failed operations clear all retained results and quarantine. Six tests cover
+  72 independent hashlib cases, 255 activity masks and 4080 general-t bit cases;
+  eleven compiled mutants and a focused Miri cleanup/unwind test pass. This is
+  also tested in an ordinary Windows process; see the
+  [component observations](../assurance/windows-protection-observations/sha2-batch-component-20260930.json). It is
+  not a host batch API or native enclave evidence. Next: the bounded wire/OS-copy
+  adapter, placement receipts, affine host API, SHA-3/SHAKE/cSHAKE batching and
+  native campaigns. No SIMD or throughput gain is implied by sequential batching.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

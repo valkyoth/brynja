@@ -21,6 +21,15 @@ MUTANTS = (
      'let _ = (left, right);'),
     ('op.owner.last,', '8,'),
 )
+SETUP_MUTANTS = (
+    ('if input.as_bytes().len() > 1024', 'if input.as_bytes().len() > 2048'),
+    ('op.owner.state.custom(input)?;', 'let _ = input;'),
+    ('op.owner.state.finish_custom()?;', ''),
+    ('op.owner.state.key(input)?;', 'let _ = input;'),
+    ('op.owner.clear_output();', ''),
+    ('op.owner.last,', '8,'),
+    ('op.owner.phase = Phase::Key;', 'op.owner.phase = Phase::Streaming;'),
+)
 
 
 def main():
@@ -35,7 +44,7 @@ def main():
         def check(success):
             result=subprocess.run([str(executable)],capture_output=True,text=True,timeout=120)
             if success:
-                if result.returncode or '7 passed' not in result.stdout:
+                if result.returncode or '10 passed' not in result.stdout:
                     raise AssertionError(result.stdout+result.stderr)
             elif result.returncode==0 or 'FAILED' not in result.stdout:
                 raise AssertionError('Mutant survived or did not fail an assertion: '+result.stdout+result.stderr)
@@ -45,10 +54,18 @@ def main():
             if before not in original:raise AssertionError('Stale mutation anchor: '+before)
             source.write_text(original.replace(before,after))
             # Compile errors never count as mutant rejection.
-            build.run(command+['-A','unused_variables','-A','unused_imports','-A','unused_mut'])
+            build.run(command+['-A','unused_variables','-A','unused_imports','-A','unused_mut','-A','dead_code'])
             try:check(False)
             except AssertionError as error:raise AssertionError(before+': '+str(error)) from error
         source.write_text(original);build.run(command);check(True)
+        setup=directory/'kmac_stream_setup.rs';original_setup=setup.read_text()
+        for before,after in SETUP_MUTANTS:
+            if before not in original_setup:raise AssertionError('Stale setup mutation anchor: '+before)
+            setup.write_text(original_setup.replace(before,after))
+            build.run(command+['-A','unused_variables','-A','unused_imports','-A','unused_mut','-A','dead_code'])
+            try:check(False)
+            except AssertionError as error:raise AssertionError(before+': '+str(error)) from error
+        setup.write_text(original_setup);build.run(command);check(True)
         if args.miri_toolchain:
             fixture=directory/'fixture';fixture.mkdir()
             manifest='[package]\nname="enclave-kmac-lifecycle"\nversion="0.0.0"\nedition="2024"\n'
@@ -60,7 +77,7 @@ def main():
                 '--manifest-path',str(fixture/'Cargo.toml'),'--lib','focused_memory_lifecycle'])
             if '1 passed; 0 failed' not in output:raise AssertionError(output)
             print(output,flush=True)
-    print('KMAC worker component: seven tests, 256 independent bit cases, 128 retained rekey cases; eleven compiled mutants rejected; no native enclave claim')
+    print('KMAC worker component: ten tests, 256 independent streamed bit cases, 256 retained rekey cases; eighteen compiled mutants rejected; no native enclave claim')
 
 
 if __name__=='__main__':main()

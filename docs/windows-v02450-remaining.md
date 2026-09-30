@@ -89,10 +89,14 @@ describe how the worker was developed, not outstanding constructor work.
   cancellation/copy/unwind cleanup and eleven compiled mutations, with focused
   Miri. The library now supplies exact-length streamed key/customization setup
   for all four identities, including bit-fragmented inputs larger than 1024 bytes.
-  The private worker's bounded constructor uses that setup and its independent
-  oracle/mutation tests pass locally. Its cross-call setup protocol is still
-  pending: the worker currently retains the 1024-byte per-key/S limit.
-  This is not a shipping or enclave-executed KMAC API: complete versioned
+  The private worker now streams key/S setup across sequenced requests and
+  supports retained-output rekeying with streamed customization. Per-request
+  fragments remain bounded to 1024 bytes, not total key/S length. Ten local and
+  Windows component tests cover 256 independent fragmented bit-oracle cases
+  (including larger-than-1024-byte inputs) and 256 retained rekey combinations;
+  eighteen compiled mutations and focused lifecycle Miri pass locally. See
+  [cross-call component observations](../assurance/windows-protection-observations/kmac-crosscall-component-20260930.json).
+  This is not a shipping or enclave-executed KMAC API: complete versioned OS
   transport, affine host types, native enclave tests and qualification next.
   The previous bounded component's seven tests passed in an ordinary Windows process; this is
   [source-bound component evidence](../assurance/windows-protection-observations/kmac-component-20260930.json),

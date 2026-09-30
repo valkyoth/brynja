@@ -1,19 +1,19 @@
 use super::*;
 use std::vec;
-fn bits(data: &[u8], last: u8) -> Fips202BitString<'_> {
+pub(super) fn bits(data: &[u8], last: u8) -> Fips202BitString<'_> {
     Fips202BitString::new(data, last).unwrap()
 }
-fn empty() -> Fips202BitString<'static> {
+pub(super) fn empty() -> Fips202BitString<'static> {
     bits(&[], 0)
 }
-fn whole(data: &[u8]) -> Fips202BitString<'_> {
+pub(super) fn whole(data: &[u8]) -> Fips202BitString<'_> {
     bits(data, if data.is_empty() { 0 } else { 8 })
 }
-fn next(sequence: &mut u64) -> u64 {
+pub(super) fn next(sequence: &mut u64) -> u64 {
     *sequence = sequence.checked_add(1).unwrap();
     *sequence
 }
-fn clean(owner: &Owner) {
+pub(super) fn clean(owner: &Owner) {
     assert!(matches!(owner.state, State::Empty));
     assert_eq!(owner.output, [0; 1024]);
     assert_eq!(owner.width, 0);
@@ -25,7 +25,7 @@ fn start(id: u64) -> Owner {
     owner.begin(1, id, whole(&[0xa5; 32]), empty()).unwrap();
     owner
 }
-fn retain(id: u64) -> Owner {
+pub(super) fn retain(id: u64) -> Owner {
     let mut owner = start(id);
     if id <= 2 {
         owner.finish(2, empty(), 32, 8).unwrap();
@@ -50,13 +50,22 @@ fn check_case(
     let mut owner = Owner::new();
     let mut sequence = 0;
     owner
-        .begin(
+        .begin_setup(
             next(&mut sequence),
             id,
-            bits(key, key_last),
-            bits(custom, custom_last),
+            bits(key, key_last).bit_len() as u128,
+            bits(custom, custom_last).bit_len() as u128,
         )
         .unwrap();
+    super::kmac_stream_setup_tests::feed(
+        &mut owner,
+        &mut sequence,
+        bits(custom, custom_last),
+        false,
+    );
+    owner.finish_customization(next(&mut sequence)).unwrap();
+    super::kmac_stream_setup_tests::feed(&mut owner, &mut sequence, bits(key, key_last), true);
+    owner.finish_setup(next(&mut sequence)).unwrap();
     let complete = message
         .len()
         .saturating_sub(usize::from(message_last != 8 && !message.is_empty()));

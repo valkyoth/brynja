@@ -1,8 +1,8 @@
 //! Private scalar KMAC worker component, not a shipping API or qualification.
 //! Place this owner and every call frame inside admitted enclave memory. After
 //! Drop, clear its complete allocation including inactive enum storage/padding.
-//! Setup currently bounds the complete key/customization to 1024 bytes each;
-//! streamed setup and native transport remain separate work.
+//! Streamed setup binds exact public lengths across bounded requests. Native
+//! transport remains separate work; this component alone is not an enclave.
 #![no_std]
 #![forbid(unsafe_code)]
 use brynja_core::{
@@ -10,6 +10,7 @@ use brynja_core::{
 };
 use brynja_mac_kmac::Fips202BitString;
 use core::marker::PhantomData;
+mod kmac_stream_setup;
 mod kmac_stream_state;
 use kmac_stream_state::State;
 
@@ -55,6 +56,9 @@ pub enum Error {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum Phase {
     Empty,
+    Custom,
+    CustomRetained,
+    Key,
     Streaming,
     Squeezing,
     RetainedMore,
@@ -318,6 +322,9 @@ impl Owner {
         let mut op = self.operation(
             sequence,
             &[
+                Phase::Custom,
+                Phase::CustomRetained,
+                Phase::Key,
                 Phase::Streaming,
                 Phase::Squeezing,
                 Phase::RetainedMore,
@@ -346,5 +353,7 @@ fn shape(width: usize, last: u8) -> Result<(), Error> {
 }
 #[cfg(test)]
 extern crate std;
+#[cfg(test)]
+mod kmac_stream_setup_tests;
 #[cfg(test)]
 mod kmac_stream_tests;

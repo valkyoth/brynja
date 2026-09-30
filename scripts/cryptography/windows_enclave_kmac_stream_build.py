@@ -12,7 +12,8 @@ import windows_enclave_sha3_stream_build as base
 ROOT = base.ROOT
 SOURCE = base.SOURCE
 run = base.run
-FILES = ('kmac_stream.rs', 'kmac_stream_state.rs', 'kmac_stream_tests.rs')
+FILES = ('kmac_stream.rs', 'kmac_stream_state.rs', 'kmac_stream_tests.rs',
+         'kmac_stream_setup.rs', 'kmac_stream_setup_tests.rs')
 
 
 def oracle_tests():
@@ -25,8 +26,8 @@ def oracle_tests():
     count = 0
     for identity, rate, xof in ((1,168,False),(2,136,False),(3,168,True),(4,136,True)):
         for index in range(64):
-            key_bits = (256,257,271,511,1024,8191,8192)[index % 7]
-            custom_bits = (0,1,7,8,9,135*8+3)[index % 6]
+            key_bits = (256,257,271,511,1024,8191,8192,16385)[index % 8]
+            custom_bits = (0,1,7,8,9,135*8+3,16391)[index % 7]
             message_bits = (0,1,7,8,9,rate*8-1,rate*8,rate*8+1)[index % 8]
             output_bits = (256,257,511,512,rate*8+3)[index % 5]
             if xof and index % 11 == 0:

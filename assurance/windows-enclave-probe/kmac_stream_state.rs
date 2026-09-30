@@ -7,6 +7,8 @@ use brynja_mac_kmac::{
 };
 pub(super) enum State {
     Empty,
+    Setup128(Kmac128Setup),
+    Setup256(Kmac256Setup),
     A(Kmac128),
     B(Kmac256),
     X(KmacXof128),

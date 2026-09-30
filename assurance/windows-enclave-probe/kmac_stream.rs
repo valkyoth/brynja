@@ -12,6 +12,7 @@ use brynja_mac_kmac::Fips202BitString;
 use core::marker::PhantomData;
 mod kmac_stream_setup;
 mod kmac_stream_state;
+pub mod kmac_stream_wire;
 use kmac_stream_state::State;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -357,3 +358,5 @@ extern crate std;
 mod kmac_stream_setup_tests;
 #[cfg(test)]
 mod kmac_stream_tests;
+#[cfg(test)]
+mod kmac_stream_wire_tests;

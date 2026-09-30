@@ -30,6 +30,31 @@ SETUP_MUTANTS = (
     ('op.owner.last,', '8,'),
     ('op.owner.phase = Phase::Key;', 'op.owner.phase = Phase::Streaming;'),
 )
+WIRE_MUTANTS = (
+    ('version != VERSION', 'false'),
+    ('sequence == 0', 'false'),
+    ('length > 1024', 'length > 2048'),
+    ('(names && !(1..=4).contains(&identity))', 'false'),
+    ('source.checked_add(length).ok_or(Error::Length)?;', 'let _ = source;'),
+    ('self.width.div_ceil(8)', 'self.width'),
+    ('u8::from(matched)', 'u8::from(!matched)'),
+    ('guard.complete = result.is_ok();', 'guard.complete = true;'),
+)
+
+
+def placement(directory, miri_toolchain):
+    fixture=directory/'placement';fixture.mkdir()
+    manifest='[package]\nname="enclave-kmac-placement"\nversion="0.0.0"\nedition="2024"\n'
+    manifest+='[lib]\nname="kmac_stream"\npath='+json.dumps(str(build.SOURCE/'kmac_stream.rs'))+'\n'
+    manifest+='[[test]]\nname="placement"\npath='+json.dumps(str(build.SOURCE/'kmac_stream_worker.rs'))+'\n[dependencies]\n'
+    for name in ('brynja-core','brynja-mac-kmac'):
+        manifest+=name+'={path='+json.dumps(str(build.ROOT/'crates'/name))+'}\n'
+    (fixture/'Cargo.toml').write_text(manifest+'[workspace]\n')
+    command=['cargo','+'+(miri_toolchain or '1.98.1')]
+    if miri_toolchain:command+=['miri']
+    output=build.run(command+['test','--offline','--manifest-path',str(fixture/'Cargo.toml'),'--test','placement'])
+    if '1 passed; 0 failed' not in output:raise AssertionError(output)
+    print(output,flush=True)
 
 
 def main():
@@ -44,7 +69,7 @@ def main():
         def check(success):
             result=subprocess.run([str(executable)],capture_output=True,text=True,timeout=120)
             if success:
-                if result.returncode or '10 passed' not in result.stdout:
+                if result.returncode or '13 passed' not in result.stdout:
                     raise AssertionError(result.stdout+result.stderr)
             elif result.returncode==0 or 'FAILED' not in result.stdout:
                 raise AssertionError('Mutant survived or did not fail an assertion: '+result.stdout+result.stderr)
@@ -66,6 +91,15 @@ def main():
             try:check(False)
             except AssertionError as error:raise AssertionError(before+': '+str(error)) from error
         setup.write_text(original_setup);build.run(command);check(True)
+        wire=directory/'kmac_stream_wire.rs';original_wire=wire.read_text()
+        for before,after in WIRE_MUTANTS:
+            if before not in original_wire:raise AssertionError('Stale wire mutation anchor: '+before)
+            wire.write_text(original_wire.replace(before,after))
+            build.run(command+['-A','unused_variables','-A','unused_imports','-A','unused_mut','-A','dead_code'])
+            try:check(False)
+            except AssertionError as error:raise AssertionError(before+': '+str(error)) from error
+        wire.write_text(original_wire);build.run(command);check(True)
+        placement(directory,args.miri_toolchain)
         if args.miri_toolchain:
             fixture=directory/'fixture';fixture.mkdir()
             manifest='[package]\nname="enclave-kmac-lifecycle"\nversion="0.0.0"\nedition="2024"\n'
@@ -77,7 +111,7 @@ def main():
                 '--manifest-path',str(fixture/'Cargo.toml'),'--lib','focused_memory_lifecycle'])
             if '1 passed; 0 failed' not in output:raise AssertionError(output)
             print(output,flush=True)
-    print('KMAC worker component: ten tests, 256 independent streamed bit cases, 256 retained rekey cases; eighteen compiled mutants rejected; no native enclave claim')
+    print('KMAC worker component: thirteen tests, 256 independent bit cases through direct and wire paths, 256 retained rekey cases; twenty-six compiled mutants rejected; placement PASS; no native enclave claim')
 
 
 if __name__=='__main__':main()

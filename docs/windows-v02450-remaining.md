@@ -96,8 +96,16 @@ describe how the worker was developed, not outstanding constructor work.
   (including larger-than-1024-byte inputs) and 256 retained rekey combinations;
   eighteen compiled mutations and focused lifecycle Miri pass locally. See
   [cross-call component observations](../assurance/windows-protection-observations/kmac-crosscall-component-20260930.json).
-  This is not a shipping or enclave-executed KMAC API: complete versioned OS
-  transport, affine host types, native enclave tests and qualification next.
+  Version-eight worker transport now validates canonical public headers before
+  payload copying, supports exact-bit fixed tags, and separates explicit tag
+  export from the one-byte public verification decision. Thirteen component
+  tests pass on Linux and Windows, including the same 256 oracle cases through
+  direct and decoded-wire paths; twenty-six compiled mutants and two focused
+  Miri checks pass. The Rust entry/C OS-copy adapter also builds and links as a
+  Windows enclave image, but has not executed inside VBS. See
+  [wire/image build observations](../assurance/windows-protection-observations/kmac-wire-build-20260930.json).
+  This is not a shipping or enclave-executed KMAC API: complete host transport
+  receipt validation, affine host types, native enclave tests and qualification next.
   The previous bounded component's seven tests passed in an ordinary Windows process; this is
   [source-bound component evidence](../assurance/windows-protection-observations/kmac-component-20260930.json),
   not a VBS enclave execution claim.

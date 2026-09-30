@@ -47,6 +47,17 @@ fn check_case(
     expected: &[u8],
     last: u8,
 ) {
+    super::kmac_stream_wire_tests::check_case(
+        id,
+        key,
+        key_last,
+        custom,
+        custom_last,
+        message,
+        message_last,
+        expected,
+        last,
+    );
     let mut owner = Owner::new();
     let mut sequence = 0;
     owner

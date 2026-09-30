@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_COMPONENT_TESTED",
+  "date": "2026-09-30",
+  "baseline": "f8c01f484bf748b6d1e630f5d228eea4bc29f80f",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "shipping_acceleration_enabled": false,
+  "description": "Private retained SHA-224/256 SHA-NI component, explicit version-13 decoder and lifetime-bound in-page placement. Real hardened kernels tested in ordinary Linux and Windows processes, not in an enclave image. No shipping Rust or release-gate change.",
+  "targets": ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"],
+  "rust_toolchain": "1.98.1",
+  "rust_target_features": ["sha", "sse2", "avx", "avx2"],
+  "tests_per_target": {
+    "component_tests": 9,
+    "fragmented_arbitrary_bit_comparisons": 242,
+    "independent_hashlib_byte_comparisons": 32,
+    "retained_composition_pairs": 4,
+    "component_mutations_rejected": 15,
+    "component_ownership_negatives_rejected": 6,
+    "real_owner_placement_tests": 4,
+    "placement_mutations_rejected": 3,
+    "placement_ownership_negatives_rejected": 7
+  },
+  "placement_model": {
+    "toolchain": "nightly-2026-09-11",
+    "miriflags": "-Zmiri-strict-provenance",
+    "tests": 1,
+    "mutations_rejected": 3,
+    "scope": "Actual placement/destruction source; explicit non-cryptographic authority/owner lifetime doubles with alignment and padding. Narrowed provenance and overlapping slots cause Miri UB rejection; reversed destruction trips the lifetime assertion. Not cryptographic, native OS or enclave evidence."
+  },
+  "matching_windows_build_source_hashes": 251,
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-accelerated-component-products.tar.gz": "ac49d20be37a662f3e5cafa9400494c98f30ed61a0812b9d64076401c49ebbf3",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-accelerated-windows-products/sha2-accelerated-component-final/sha2-accelerated-results.json": "9ca02d418b3d8135973535cf696572ffbe3f317655a011c0b6418b7eb65ec21e",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-accelerated-component-final/sha2-accelerated-results.json": "4161cd5d4918d333dfd6815ead1eb5a79f6fce4a456ae5b7b4e93c64284f0405",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-resident-model-final/placement-model-results.json": "024474e8d1614a4afda68586e69cc8c9a4c3ac388912bf6550a43bbc01f50788"
+  },
+  "limitations": [
+    "Source overlay on Windows, not an exact native Git checkout; captured source hashes verified locally",
+    "Only SHA-224 and SHA-256 accepted; no wide/general SHA-2 or scalar fallback",
+    "No feature-checked enclave entry, trusted image binding or host-session API for this route yet",
+    "Page placement does not establish residency or protected worker-stack admission",
+    "Miri lifetime doubles do not exercise real owner internals or inline-assembly kernels",
+    "Integrated ABI/register/stack, dump/failure and independent-review qualification still pending"
+  ]
+}

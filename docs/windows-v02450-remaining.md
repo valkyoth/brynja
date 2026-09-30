@@ -238,6 +238,12 @@ describe how the worker was developed, not outstanding constructor work.
   496 comparisons pass across five existing hardened kernels, with startup KATs
   and post-quarantine rejection. Dedicated x86 SHA-512 is absent. This is not
   session integration or secret-placement/cleanup qualification; both remain.
+  The private retained SHA-NI SHA-224/256 component and version-13 decoder now
+  pass real-kernel Linux/Windows component tests. Its authority/stream placement
+  has native lifecycle tests and a separately labeled Miri lifetime model. The
+  feature-checked enclave entry and supported host API still need integration;
+  the [component evidence](../assurance/windows-protection-observations/sha2-accelerated-component-20260930.json)
+  must not be read as enclave or production qualification.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

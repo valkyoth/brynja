@@ -28,6 +28,10 @@ MUTANTS = (
     ('tuple_stream_wire.rs', 'length > 1024', 'length > 2048'),
     ('tuple_stream_wire.rs', 'source.checked_add(length).ok_or(Error::Length)?;', 'let _ = source;'),
     ('tuple_stream_wire.rs', 'guard.complete = result.is_ok();', 'guard.complete = true;'),
+    ('tuple_host_wire.rs', 'self.sequence == 0', 'false'),
+    ('tuple_host_wire.rs', 'self.width > 1024', 'self.width > 8192'),
+    ('tuple_host_wire.rs', 'self.item_bits.to_le_bytes()', 'self.custom_bits.to_le_bytes()'),
+    ('tuple_host_wire.rs', 'if self.op == 68', 'if self.op == 67'),
 )
 
 
@@ -73,7 +77,7 @@ def main():
         def check(success):
             result=subprocess.run([str(artifact)],capture_output=True,text=True,timeout=120)
             if success:
-                if result.returncode or '7 passed' not in result.stdout:
+                if result.returncode or '8 passed' not in result.stdout:
                     raise AssertionError(result.stdout+result.stderr)
             elif result.returncode==0 or 'FAILED' not in result.stdout:
                 raise AssertionError('Mutant survived or did not fail assertions: '+result.stdout+result.stderr)
@@ -103,7 +107,7 @@ def main():
                     '--manifest-path',str(fixture/'Cargo.toml'),'--lib',selected])
                 if '1 passed; 0 failed' not in output:raise AssertionError(output)
                 print(output,flush=True)
-    print('TupleHash component: seven tests, 272 independent bit cases through direct and wire paths, 128 retained rehash cases; nineteen compiled mutants rejected; no native enclave claim')
+    print('TupleHash component: eight tests, host/worker metadata parity, 272 independent bit cases through direct and wire paths, 128 retained rehash cases; 23 compiled mutants rejected; no native enclave claim')
 
 
 if __name__=='__main__':main()

@@ -10,7 +10,8 @@ import windows_enclave_sha3_stream_build as base
 
 ROOT, SOURCE, run = base.ROOT, base.SOURCE, base.run
 FILES = ('tuple_stream.rs', 'tuple_stream_state.rs', 'tuple_stream_tests.rs',
-         'tuple_stream_wire.rs', 'tuple_stream_wire_tests.rs')
+         'tuple_stream_wire.rs', 'tuple_stream_wire_tests.rs', 'tuple_host_wire_tests.rs')
+HOST_WIRE = SOURCE/'tuple_host_wire.rs'
 
 
 def oracle_tests():
@@ -46,6 +47,9 @@ def build(directory, target, testing=False):
     # fixture is built but is not linked into the TupleHash component.
     base.build(directory,target,testing)
     for name in FILES: shutil.copyfile(SOURCE/name,directory/name)
+    shutil.copyfile(HOST_WIRE,directory/'tuple_host_wire.rs')
+    entry=directory/'tuple_stream.rs'
+    entry.write_text(entry.read_text()+'\n#[cfg(test)]\nmod tuple_host_wire_tests;\n')
     generated,count=oracle_tests()
     tests=directory/'tuple_stream_tests.rs'
     tests.write_text(tests.read_text()+'\n'+generated)
@@ -58,7 +62,7 @@ def build(directory, target, testing=False):
     command+=['--test'] if testing else ['--crate-type','rlib']
     command+=['-o',str(artifact)]
     run(command)
-    sources=[Path(__file__),*(SOURCE/name for name in FILES),ROOT/'scripts/tuplehash/check-tuplehash-differential.py',
+    sources=[Path(__file__),HOST_WIRE,*(SOURCE/name for name in FILES),ROOT/'scripts/tuplehash/check-tuplehash-differential.py',
         ROOT/'scripts/sha3/check-cshake-differential.py',ROOT/'scripts/sha3/check-sha3-bit-differential.py']
     hashes=json.loads((directory/'sha3-stream-build.json').read_text())['source_sha256']
     hashes.update({str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources})

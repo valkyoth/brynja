@@ -70,6 +70,35 @@ fn streamed_customization_and_failures_are_bounded() -> Result<(), Error> {
     assert_eq!(owner.transport.calls.len(), count);
     Ok(())
 }
+
+#[test]
+fn empty_customization_does_not_reenter_completed_setup() -> Result<(), Error> {
+    let mut owner = Owner {
+        transport: Mock::default(),
+        state: State::Ready,
+        sequence: 0,
+        thread_bound: PhantomData,
+    };
+    owner.begin(
+        Algorithm::TupleHash128,
+        Bits::new(&[], 0).map_err(|_| Error::Bounds)?,
+    )?;
+    assert_eq!(
+        owner
+            .transport
+            .calls
+            .iter()
+            .map(|(r, _)| r.op)
+            .collect::<std::vec::Vec<_>>(),
+        [60, 62]
+    );
+    owner.chunks(64, Bits::new(&[], 0).map_err(|_| Error::Bounds)?)?;
+    assert_eq!(
+        owner.transport.calls.last().ok_or(Error::Protocol)?.0.op,
+        64
+    );
+    Ok(())
+}
 #[test]
 fn receipt_rejects_changed_counts_and_regions() -> Result<(), Error> {
     for op in 60..=70 {

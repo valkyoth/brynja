@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "status": "OBSERVATIONS_ONLY",
+  "baseline": "088787f3",
+  "source_description": "Archive of 088787f3 plus the preserved host lifecycle correction overlay. This is not an exact remote git checkout. All captured host/tuple/SHA-3 Rust source hashes match local source; worker build closure and initial failed diagnostics are preserved inside the products archive.",
+  "platform": "Windows Server 2025 x86-64, Azure D2as_v7, VBS/HVCI running, Secure Boot disabled, development testsigning",
+  "production_qualified": false,
+  "native_execution": true,
+  "cases_per_profile": 230,
+  "profiles": ["debug", "release"],
+  "shared_transport_regression": {"profiles": ["debug", "release"], "sha2_cases_per_profile": 631, "sha3_cases_per_profile": 1028, "kmac_cases_per_profile": 546, "tuplehash_cases_per_profile": 230},
+  "coverage": ["four TupleHash identities", "large streamed customization and items", "partial-bit input and output", "128 retained rehash combinations", "empty output", "incremental XOF", "cancellation", "forgotten-item rejection before backend entry and confirmed close"],
+  "corrections": ["Do not send an empty customization fragment after zero-length cSHAKE setup is complete", "Retain a host open-item latch so forgotten-item finalization is rejected before backend entry; preserve independent worker rejection"],
+  "local_checks": ["seven host tests under normal Rust and Miri", "25 ownership doctests and one API example", "Linux and Windows-target scoped Clippy", "eight component tests with 272 independent bit cases and 128 retained rehash cases", "23 component/encoder and two placement mutants"],
+  "signing": "Development-only self-signed image. SignTool signed the image but returned an SDK compatibility warning, causing the wrapper to fail. The private development harness requires production signature rejection. Temporary certificate/private key removal confirmed; zero test processes remained. Not production signing success.",
+  "image_sha256": "ec0818b0b844f313138ee2d6f4b40f8dd2711a481cc0130f47fa0f9a79a0a46c",
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-owner-products.tar.gz": "a2e4dab722096a408e1f78c301518146face72b868e300be8bff3853dcbb5efc",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-native-state.json": "2199a3be043d73b707e419676849812eab8a2a6c44291d5e585ed7b148e52829",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-owner-final.log": "34fb1baeadbc1f6176839a9c72f48e6292a43fafd19e57849c35bf510d696ff6",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-shared-regression.log": "d9dcb80ac4e9476718abfd97e78b424f3d3d2762fd50da6c7b6fa67886170505",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-owner-sign.log": "0d31f333443c6a7196ec787b61cd8902cb0492e75fa7191906d3a13bba9cb76a",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-owner-088787f3.tar": "045526fc90376df218fe966a74776640d614a20ebb0a9a6bacfa161ec508182d",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-owner-correction.tar": "78bb4d797579663c478081bc792a97a726d823770dea14ddf4754eb289a5621d"
+  },
+  "limitations": ["Scalar only", "No Windows ARM64 qualification", "Caller buffers remain outside enclave", "Independent review and compiler/register qualification pending", "No production deployment qualification", "Unexpected backend receipt failures retain existing conservative uncertain-owner behavior"]
+}

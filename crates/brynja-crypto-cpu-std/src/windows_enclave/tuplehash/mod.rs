@@ -91,7 +91,9 @@ impl<T: Channel> Owner<T> {
     }
     fn chunks(&mut self, op: usize, input: Bits<'_>) -> Result<(), Error> {
         if input.bit_len() == 0 {
-            return self.simple(op);
+            // Empty customization is already complete in cSHAKE's setup state.
+            // Item updates still enter the worker to enforce its item-phase latch.
+            return if op == 64 { self.simple(op) } else { Ok(()) };
         }
         let complete = input.bit_len() / 8;
         for chunk in input
@@ -186,6 +188,7 @@ impl Session {
             session: self,
             algorithm,
             active: true,
+            item_open: false,
         }))
     }
     /// Clear even forgotten loans; release only after confirmed destruction.
@@ -197,6 +200,7 @@ struct Loan<'a> {
     session: &'a mut Session,
     algorithm: Algorithm,
     active: bool,
+    item_open: bool,
 }
 impl Loan<'_> {
     fn cancel(mut self) -> Result<(), Error> {
@@ -225,6 +229,10 @@ impl<'a> Stream<'a> {
     /// Begin one tuple item with an exact public bit count. Empty items count.
     /// Abandoning an item quarantines the session; forgetting it cannot finish it.
     pub fn item(&mut self, bits: u128) -> Result<Item<'_, 'a>, Error> {
+        if self.0.item_open {
+            return Err(Error::Busy);
+        }
+        self.0.item_open = true;
         self.0.session.0.issue(
             Request {
                 op: 63,
@@ -241,7 +249,10 @@ impl<'a> Stream<'a> {
     }
     /// Retain fixed output, including an empty output. Partial bytes use low bits.
     pub fn finalize(self, width: usize, last: u8) -> Result<Retained<'a>, Error> {
-        if !self.0.algorithm.fixed() {
+        if self.0.session.0.state == State::Quarantined {
+            return Err(Error::Quarantined);
+        }
+        if self.0.item_open || !self.0.algorithm.fixed() {
             return Err(Error::Bounds);
         }
         self.0.session.0.issue(
@@ -263,7 +274,10 @@ impl<'a> Stream<'a> {
     }
     /// Finalize a TupleHashXOF tuple and retain the reader inside the enclave.
     pub fn finalize_xof(self) -> Result<Reader<'a>, Error> {
-        if self.0.algorithm.fixed() {
+        if self.0.session.0.state == State::Quarantined {
+            return Err(Error::Quarantined);
+        }
+        if self.0.item_open || self.0.algorithm.fixed() {
             return Err(Error::Bounds);
         }
         self.0.session.0.simple(66)?;
@@ -293,6 +307,7 @@ impl Item<'_, '_> {
     /// Finish only after the declared item length has been supplied.
     pub fn finish(mut self) -> Result<(), Error> {
         self.stream.0.session.0.simple(65)?;
+        self.stream.0.item_open = false;
         self.complete = true;
         Ok(())
     }

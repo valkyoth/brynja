@@ -59,12 +59,13 @@ fn development_tuplehash_streaming_campaign() -> Result<(), Box<dyn std::error::
         thread_bound: PhantomData,
     });
     let mut cases = 0_usize;
-    for algorithm in [
+    let algorithms = [
         Algorithm::TupleHash128,
         Algorithm::TupleHash256,
         Algorithm::TupleHashXof128,
         Algorithm::TupleHashXof256,
-    ] {
+    ];
+    for algorithm in algorithms {
         for size in [0, 1, 135, 136, 167, 168, 1024, 2049] {
             for last in [1, 7, 8] {
                 let input = std::vec![1;size];
@@ -91,6 +92,78 @@ fn development_tuplehash_streaming_campaign() -> Result<(), Box<dyn std::error::
             }
         }
     }
+    for source in algorithms {
+        for target in algorithms {
+            for last in 1..=8 {
+                let empty = bits(&[], 0)?;
+                let previous = reference(source, &[], empty, 33, last)?;
+                let custom = [1; 2049];
+                let custom = bits(&custom, 1)?;
+                let input = bits(b"abc", 8)?;
+                let expected = reference(target, &[bits(&previous, last)?, input], custom, 33, 3)?;
+                let mut stream =
+                    retain(session.stream(source, empty)?, 33, last)?.rehash(target, custom)?;
+                let mut item = stream.item(24)?;
+                item.update(input)?;
+                item.finish()?;
+                let mut actual = [0; 33];
+                assert!(
+                    retain(stream, 33, 3)?
+                        .declassify(&mut actual, PublicDeclassification::acknowledge())?
+                        .is_none()
+                );
+                assert_eq!(actual.as_slice(), expected);
+                cases = cases.checked_add(1).ok_or(Error::Bounds)?;
+            }
+        }
+        let result = retain(session.stream(source, bits(&[], 0)?)?, 0, 0)?;
+        assert!(
+            result
+                .declassify(&mut [], PublicDeclassification::acknowledge())?
+                .is_none()
+        );
+        cases = cases.checked_add(1).ok_or(Error::Bounds)?;
+    }
+    for algorithm in [Algorithm::TupleHashXof128, Algorithm::TupleHashXof256] {
+        let empty = bits(&[], 0)?;
+        let expected = reference(algorithm, &[], empty, 201, 3)?;
+        let reader = session.stream(algorithm, empty)?.finalize_xof()?;
+        let reader = reader
+            .retain(0, 0, false)?
+            .declassify(&mut [], PublicDeclassification::acknowledge())?
+            .ok_or(Error::Protocol)?;
+        let mut actual = [0; 201];
+        let reader = reader
+            .retain(17, 8, false)?
+            .declassify(
+                actual.get_mut(..17).ok_or(Error::Bounds)?,
+                PublicDeclassification::acknowledge(),
+            )?
+            .ok_or(Error::Protocol)?;
+        assert!(
+            reader
+                .retain(184, 3, true)?
+                .declassify(
+                    actual.get_mut(17..).ok_or(Error::Bounds)?,
+                    PublicDeclassification::acknowledge()
+                )?
+                .is_none()
+        );
+        assert_eq!(actual.as_slice(), expected);
+        cases = cases.checked_add(1).ok_or(Error::Bounds)?;
+    }
+    session
+        .stream(Algorithm::TupleHash128, bits(&[], 0)?)?
+        .cancel()?;
+    session
+        .stream(Algorithm::TupleHashXof128, bits(&[], 0)?)?
+        .finalize_xof()?
+        .cancel()?;
+    session
+        .stream(Algorithm::TupleHashXof256, bits(&[], 0)?)?
+        .finalize_xof()?
+        .retain(1, 8, false)?
+        .cancel()?;
     // A forgotten item cannot become an implicit completed tuple item.
     let mut stream = session.stream(Algorithm::TupleHash128, bits(&[], 0)?)?;
     core::mem::forget(stream.item(1)?);

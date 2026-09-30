@@ -132,17 +132,22 @@ describe how the worker was developed, not outstanding constructor work.
   enclave image, with bounded snapshots and public cleanup receipts. Placement
   tests cover destruction of an active partial item, wrong-page rejection,
   full-page clearing and recreation; Miri and two compiled placement mutants
-  pass. The image has not yet been signed, loaded or executed inside VBS.
+  pass. The version-nine image now executes inside VBS using development signing.
   The affine host interface now includes item writers, fixed/XOF results,
   retained-output rehashing and transactional public export. Its bounded
-  transport compiles for Windows x64; native enclave execution remains next.
+  transport passes 230 native differential cases in each debug/release profile,
+  including retained rehashing, incremental XOF and empty output. Empty
+  customization no longer reenters completed setup, and a host open-item latch
+  rejects forgotten-item finalization before backend entry, preserving clean
+  destruction. The worker retains its independent rejection. See the
+  [native development observations](../assurance/windows-protection-observations/tuple-owner-20260930.json).
   See the
   [component observations](../assurance/windows-protection-observations/tuple-component-20260930.json).
   The subsequent [entry/image observations](../assurance/windows-protection-observations/tuple-entry-build-20260930.json)
   preserve the separate source-bound build and placement checks.
   A candidate host metadata encoder is now tested against the actual enclave
   decoder across valid and rejected request shapes, including 128-bit item and
-  customization lengths. Four encoder mutations are rejected. This remains an
+  customization lengths. Four encoder mutations are rejected. This is
   shared source used by the host API and the isolated parity fixture. Host-only
   mock tests cover abandonment, forgotten parent loans, output-copy failures,
   chunking and reuse; these are not native OS-copy evidence.

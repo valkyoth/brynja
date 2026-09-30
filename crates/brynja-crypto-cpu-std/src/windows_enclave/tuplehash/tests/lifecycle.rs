@@ -31,6 +31,26 @@ fn abandoned_and_forgotten_loans_never_release_parent() -> Result<(), Error> {
     assert_eq!(s.state(), State::Quarantined);
     Ok(())
 }
+
+#[test]
+fn forgotten_item_is_rejected_before_backend_entry() -> Result<(), Error> {
+    for algorithm in [Algorithm::TupleHash128, Algorithm::TupleHashXof128] {
+        let mut s = session();
+        let mut stream = s.stream(algorithm, empty()?)?;
+        core::mem::forget(stream.item(1)?);
+        let calls = stream.0.session.0.transport.0.calls.len();
+        assert!(matches!(stream.item(0), Err(Error::Busy)));
+        if algorithm.fixed() {
+            assert!(matches!(stream.finalize(32, 8), Err(Error::Bounds)));
+        } else {
+            assert!(matches!(stream.finalize_xof(), Err(Error::Bounds)));
+        }
+        assert_eq!(s.0.transport.0.calls.len(), calls);
+        assert_eq!(s.state(), State::Quarantined);
+        s.close()?;
+    }
+    Ok(())
+}
 #[test]
 fn item_snapshots_and_export_failure_are_transactional() -> Result<(), Error> {
     let mut s = session();

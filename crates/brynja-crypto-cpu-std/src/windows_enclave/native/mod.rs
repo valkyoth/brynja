@@ -7,6 +7,8 @@ use std::path::Path;
 mod callback;
 #[cfg(feature = "strict-kmac")]
 pub(super) mod kmac;
+#[cfg(feature = "strict-sha3")]
+pub(super) mod parallelhash;
 mod pin;
 pub(super) mod sha2;
 pub(super) mod sha2_batch;
@@ -27,6 +29,8 @@ enum Protocol {
     Sha3,
     #[cfg(feature = "strict-sha3")]
     Sha3Batch,
+    #[cfg(feature = "strict-sha3")]
+    ParallelHash,
     #[cfg(feature = "strict-kmac")]
     Kmac,
     #[cfg(feature = "strict-tuplehash")]
@@ -133,6 +137,8 @@ impl Backend {
                     Protocol::Kmac => b"PublicKmacInputSource\0",
                     #[cfg(feature = "strict-tuplehash")]
                     Protocol::TupleHash => b"PublicTupleInputSource\0",
+                    #[cfg(feature = "strict-sha3")]
+                    Protocol::ParallelHash => b"PublicParallelInputSource\0",
                     Protocol::Legacy => b"PublicRetainedInput\0",
                 },
             )?,
@@ -157,6 +163,8 @@ impl Backend {
                 Protocol::Kmac => sys::export(owner.base, b"PublicKmacControl\0")?,
                 #[cfg(feature = "strict-tuplehash")]
                 Protocol::TupleHash => sys::export(owner.base, b"PublicTupleControl\0")?,
+                #[cfg(feature = "strict-sha3")]
+                Protocol::ParallelHash => sys::export(owner.base, b"PublicParallelControl\0")?,
                 Protocol::Legacy => 0,
             },
         };
@@ -257,6 +265,8 @@ impl Backend {
                 Protocol::Kmac => self.run_kmac(3, None, 0, None)?,
                 #[cfg(feature = "strict-tuplehash")]
                 Protocol::TupleHash => self.run_tuplehash(3, None, 0, None)?,
+                #[cfg(feature = "strict-sha3")]
+                Protocol::ParallelHash => self.run_parallelhash(3, None, 0, None)?,
                 Protocol::Legacy => self.run(3, None, 0, None)?,
             }
             self.live = false;

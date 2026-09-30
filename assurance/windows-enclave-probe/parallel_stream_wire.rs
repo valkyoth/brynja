@@ -10,6 +10,7 @@ pub const FINISH: usize = 104;
 pub const SQUEEZE: usize = 105;
 pub const EXPORT: usize = 106;
 pub const CANCEL: usize = 107;
+pub const REHASH: usize = 108;
 pub struct Header {
     operation: usize,
     sequence: u64,
@@ -48,9 +49,9 @@ impl Header {
         ] = words;
         let custom = u128::from(cl) | (u128::from(ch) << 64);
         let payload = matches!(operation, CUSTOM | UPDATE | FINISH);
-        let sized = matches!(operation, FINISH | SQUEEZE | EXPORT);
+        let sized = matches!(operation, FINISH | SQUEEZE | EXPORT | REHASH);
         if version != VERSION
-            || !(BEGIN..=CANCEL).contains(&operation)
+            || !(BEGIN..=REHASH).contains(&operation)
             || sequence == 0
             || reserved != 0
             || length > 1024
@@ -62,10 +63,10 @@ impl Header {
             || (!payload && (length != 0 || last != 0))
             || ((length == 0) != (source == 0))
             || (operation == UPDATE && last != if length == 0 { 0 } else { 8 })
-            || (matches!(operation, BEGIN | EXPORT) && !(1..=4).contains(&identity))
-            || (!matches!(operation, BEGIN | EXPORT) && identity != 0)
-            || (operation == BEGIN && block == 0)
-            || (operation != BEGIN && (block != 0 || budget != 0 || custom != 0))
+            || (matches!(operation, BEGIN | EXPORT | REHASH) && !(1..=4).contains(&identity))
+            || (!matches!(operation, BEGIN | EXPORT | REHASH) && identity != 0)
+            || (matches!(operation, BEGIN | REHASH) && block == 0)
+            || (!matches!(operation, BEGIN | REHASH) && (block != 0 || budget != 0 || custom != 0))
             || (!sized && (width != 0 || output_last != 0))
             || (operation != SQUEEZE && terminal != 0)
             || (operation == SQUEEZE
@@ -139,6 +140,14 @@ impl Header {
             SQUEEZE => owner.squeeze(n, self.width, self.output_last, self.terminal),
             EXPORT => owner.export(n, self.identity, self.width, self.output_last, copy),
             CANCEL => owner.cancel(n),
+            REHASH => owner.rehash(
+                n,
+                self.identity,
+                self.block,
+                self.custom,
+                self.budget,
+                (self.width, self.output_last),
+            ),
             _ => Err(Error::State),
         }
     }

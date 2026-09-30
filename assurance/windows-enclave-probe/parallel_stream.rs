@@ -29,6 +29,7 @@ pub enum Error {
 enum Phase {
     Empty,
     Custom,
+    CustomRetained,
     Streaming,
     Reader,
     Retained,
@@ -46,6 +47,8 @@ pub struct Owner {
     output: [u8; 1024],
     width: usize,
     last: u8,
+    next_width: usize,
+    next_last: u8,
     thread_bound: PhantomData<*mut ()>,
 }
 struct Operation<'a> {
@@ -77,6 +80,8 @@ impl Owner {
             output: [0; 1024],
             width: 0,
             last: 0,
+            next_width: 0,
+            next_last: 0,
             thread_bound: PhantomData,
         }
     }
@@ -107,6 +112,8 @@ impl Owner {
         let _ = clear_owned_region(&mut self.budget);
         self.identity = 0;
         self.block = 0;
+        self.next_width = 0;
+        self.next_last = 0;
     }
     pub fn quarantine(&mut self) {
         self.clear();
@@ -143,19 +150,33 @@ impl Owner {
         Ok(())
     }
     pub fn custom(&mut self, sequence: u64, input: Bits<'_>) -> Result<(), Error> {
-        let mut op = self.operation(sequence, &[Phase::Custom])?;
+        let mut op = self.operation(sequence, &[Phase::Custom, Phase::CustomRetained])?;
         op.owner.charge(input.as_bytes())?;
         op.owner.root.custom(input)?;
         op.complete = true;
         Ok(())
     }
     pub fn finish_custom(&mut self, sequence: u64) -> Result<(), Error> {
-        let mut op = self.operation(sequence, &[Phase::Custom])?;
+        let mut op = self.operation(sequence, &[Phase::Custom, Phase::CustomRetained])?;
         op.owner.root.finish_custom()?;
         let mut prefix = SecretEncodedInteger::empty();
         prefix.left(u128::from(op.owner.block))?;
         op.owner.root.update(prefix.bytes()?)?;
-        op.owner.phase = Phase::Streaming;
+        if op.owner.phase == Phase::CustomRetained {
+            let tail = Bits::new(
+                op.owner.output.get(..op.owner.width).ok_or(Error::Length)?,
+                op.owner.last,
+            )
+            .map_err(|_| Error::Bits)?;
+            op.owner.input.finish(&mut op.owner.root, tail)?;
+            op.owner.clear_output();
+            let (width, last) = (op.owner.next_width, op.owner.next_last);
+            op.owner.next_width = 0;
+            op.owner.next_last = 0;
+            op.owner.finish_root(width, last)?;
+        } else {
+            op.owner.phase = Phase::Streaming;
+        }
         op.complete = true;
         Ok(())
     }
@@ -182,6 +203,12 @@ impl Owner {
         }
         op.owner.charge(tail.as_bytes())?;
         op.owner.input.finish(&mut op.owner.root, tail)?;
+        op.owner.finish_root(width, last)?;
+        op.complete = true;
+        Ok(())
+    }
+    fn finish_root(&mut self, width: usize, last: u8) -> Result<(), Error> {
+        let fixed = self.identity <= 2;
         let bits = if width == 0 {
             0
         } else {
@@ -193,22 +220,52 @@ impl Owner {
         };
         let mut suffix = SecretEncodedInteger::empty();
         suffix.right(bits)?;
-        op.owner.root.update(suffix.bytes()?)?;
-        op.owner.root.finish(empty()?)?;
-        let _ = clear_owned_region(&mut op.owner.budget);
+        self.root.update(suffix.bytes()?)?;
+        self.root.finish(empty()?)?;
+        let _ = clear_owned_region(&mut self.budget);
         if fixed {
-            op.owner.root.squeeze(
-                op.owner.output.get_mut(..width).ok_or(Error::Length)?,
+            self.root.squeeze(
+                self.output.get_mut(..width).ok_or(Error::Length)?,
                 last,
                 true,
             )?;
-            op.owner.root = State::Empty;
-            op.owner.width = width;
-            op.owner.last = last;
-            op.owner.phase = Phase::Retained;
+            self.root = State::Empty;
+            self.width = width;
+            self.last = last;
+            self.phase = Phase::Retained;
         } else {
-            op.owner.phase = Phase::Reader;
+            self.phase = Phase::Reader;
         }
+        Ok(())
+    }
+    /// Rehash exactly the retained bits, discarding any old reader. Stream only
+    /// customization next; finish_custom finalizes the new complete message.
+    pub fn rehash(
+        &mut self,
+        sequence: u64,
+        identity: u64,
+        block: u64,
+        custom_bits: u128,
+        budget: u64,
+        output: (usize, u8),
+    ) -> Result<(), Error> {
+        let mut op = self.operation(sequence, &[Phase::Retained, Phase::More])?;
+        let (width, last) = output;
+        shape(width, last)?;
+        if identity > 2 && width != 0 {
+            return Err(Error::Length);
+        }
+        op.owner.input.begin(identity, block)?;
+        op.owner.root = State::setup(identity, custom_bits)?;
+        op.owner.budget = budget
+            .checked_sub(u64::try_from(op.owner.width).map_err(|_| Error::Length)?)
+            .ok_or(Error::Length)?
+            .to_le_bytes();
+        op.owner.identity = identity;
+        op.owner.block = block;
+        op.owner.next_width = width;
+        op.owner.next_last = last;
+        op.owner.phase = Phase::CustomRetained;
         op.complete = true;
         Ok(())
     }
@@ -277,6 +334,7 @@ impl Owner {
             sequence,
             &[
                 Phase::Custom,
+                Phase::CustomRetained,
                 Phase::Streaming,
                 Phase::Reader,
                 Phase::Retained,

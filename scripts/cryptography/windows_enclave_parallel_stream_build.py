@@ -12,7 +12,9 @@ import windows_enclave_sha3_stream_build as base
 ROOT, SOURCE, run = base.ROOT, base.SOURCE, base.run
 FILES = ('parallel_stream.rs', 'parallel_stream_state.rs', 'parallel_stream_input.rs',
          'parallel_stream_encoding.rs', 'parallel_stream_tests.rs',
-         'parallel_stream_wire.rs', 'parallel_stream_wire_tests.rs')
+         'parallel_stream_wire.rs', 'parallel_stream_wire_tests.rs',
+         'parallel_retained_tests.rs', 'parallel_host_wire_tests.rs')
+HOST_WIRE = ROOT/'crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_wire.rs'
 
 
 def oracle_tests():
@@ -53,22 +55,44 @@ def oracle_tests():
                     block, oracle.oracle.byte_bits(custom)[:custom_bits], out_bits, 'xof' in algorithm)
                 selected.append((algorithm,custom,custom_bits,message,size,block,out_bits,result))
     rows=['#[test]', 'fn independent_bit_oracle() {']
+    vectors=[]
     def array(data): return '&['+','.join(map(str,data))+']'
     for identity,custom,custom_bits,message,message_bits,block,out_bits,expected in selected:
         last = ((out_bits-1)%8+1) if out_bits else 0
         rows.append(f'check_case({identities.index(identity)+1},{block},{array(custom)},'
                     f'{custom_bits},{array(message)},{message_bits},{array(expected)},{last});')
+        vectors.append(' '.join(map(str,('D',identities.index(identity)+1,block,custom_bits,message_bits,last,
+            custom.hex() or '-',message.hex() or '-',expected.hex() or '-'))))
     rows.append('}')
-    return '\n'.join(rows)+'\n', len(selected)
+    retained=['#[test]', 'fn independent_retained_oracle() {']
+    for source in range(1,5):
+        for target in range(1,5):
+            for last in range(1,9):
+                for block in (1,7):
+                    previous=oracle.parallel_hash(168 if source%2 else 136,
+                        oracle.oracle.byte_bits(b'abc'),8,[],256+last,source>2)
+                    expected=oracle.parallel_hash(168 if target%2 else 136,
+                        oracle.oracle.byte_bits(previous)[:256+last],block,
+                        oracle.oracle.byte_bits(bytes([19]))[:5],259,target>2)
+                    retained.append(f'check_rehash({source},{target},{last},{block},{array(expected)});')
+                    vectors.append(f'R {source} {target} {last} {block} {expected.hex()}')
+    retained.append('}')
+    return '\n'.join(rows)+'\n', len(selected), '\n'.join(retained)+'\n', '\n'.join(vectors)+'\n'
 
 
 def build(directory, target, testing=False):
     directory=directory.resolve()
     base.build(directory,target,testing)
     for name in FILES: shutil.copyfile(SOURCE/name,directory/name)
-    generated,count=oracle_tests() if testing else ('',0)
+    shutil.copyfile(HOST_WIRE,directory/'parallel_host_wire.rs')
+    entry=directory/'parallel_stream.rs'
+    entry.write_text(entry.read_text()+'\n#[cfg(test)]\nmod parallel_retained_tests;\n#[cfg(test)]\nmod parallel_host_wire_tests;\n')
+    generated,count,retained,vectors=oracle_tests() if testing else ('',0,'','')
+    (directory/'parallel-vectors.txt').write_text(vectors)
     tests=directory/'parallel_stream_tests.rs'
     tests.write_text(tests.read_text()+'\n'+generated)
+    retained_tests=directory/'parallel_retained_tests.rs'
+    retained_tests.write_text(retained_tests.read_text()+'\n'+retained)
     artifact=directory/('parallel-tests.exe' if 'windows' in target else 'parallel-tests') if testing else directory/'libparallel_stream.rlib'
     command=['rustc','+1.98.1','--edition=2024','--target',target,'-D','warnings',
         '-C','opt-level=2','-C','overflow-checks=yes','-C','panic='+('unwind' if testing else 'abort'),
@@ -78,7 +102,7 @@ def build(directory, target, testing=False):
     command+=['--test'] if testing else ['--crate-type','rlib']
     command+=['-o',str(artifact)]
     run(command)
-    sources=[Path(__file__),*(SOURCE/name for name in FILES),
+    sources=[Path(__file__),HOST_WIRE,*(SOURCE/name for name in FILES),
         ROOT/'scripts/parallelhash/check-parallelhash-differential.py',
         ROOT/'scripts/sha3/check-cshake-differential.py',ROOT/'scripts/sha3/check-sha3-bit-differential.py',
         ROOT/'crates/brynja-hash-parallel/tests/official_vectors.rs']
@@ -102,7 +126,7 @@ def image(directory):
     anchor = '(operation & 255) > 7 || operation >> 8 > 19'
     if original.count(anchor)!=1: raise ValueError('Retained admission anchor changed')
     (directory/'window_retained.c').write_text(original.replace(anchor,
-        '!(operation == 0 || operation == 3 || (operation >= 100 && operation <= 107))'))
+        '!(operation == 0 || operation == 3 || (operation >= 100 && operation <= 108))'))
     command = ['rustc','+1.98.1','--edition=2024','--target','x86_64-pc-windows-msvc',
         '--crate-type','staticlib','--crate-name','parallel_stream_worker','-D','warnings',
         '-C','panic=abort','-C','opt-level=2','-C','lto=fat','-C','overflow-checks=yes',

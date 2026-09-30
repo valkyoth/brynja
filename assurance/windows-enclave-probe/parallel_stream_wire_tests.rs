@@ -32,7 +32,7 @@ fn metadata_bounds_are_canonical_before_payload_copy() {
             "{field} {value}"
         );
     }
-    for op in [99, 108, usize::MAX] {
+    for op in [99, 109, usize::MAX] {
         assert!(Header::decode(op, &header(begin)).is_err());
     }
     for op in [CUSTOM, UPDATE, FINISH] {

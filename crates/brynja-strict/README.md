@@ -41,12 +41,16 @@ choice, not certification or proof that all application code uses this profile.
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Sequential scalar version-eleven worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
 
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `kmac`, `tuplehash`, `parallelhash`
 and independent-message `batch`, plus the separate Windows `enclave` interface.
 Windows `enclave::sha2_batch` supports eight declared SHA-2 slots with retained
 all-plan output; see the [batch API example](../../docs/windows-enclave-sha2-batch.md).
+`enclave::parallelhash` supports all four fixed/XOF identities and retained exact-bit
+composition; see the [ParallelHash example](../../docs/windows-enclave-parallelhash.md).
+This Windows path is sequential scalar, not the Linux protected multicore API.
 No legacy hashes, ordinary digests, raw CPU
 execution authorities, generic protected callbacks or protocol APIs are exported.
 Even with default features disabled, dependencies enable the protected sessions.

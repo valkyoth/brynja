@@ -38,6 +38,24 @@ mod kmac_wire;
     not(kani)
 ))]
 mod native;
+#[cfg(all(
+    feature = "strict-sha3",
+    any(
+        test,
+        all(
+            target_os = "windows",
+            target_arch = "x86_64",
+            target_env = "msvc",
+            not(miri),
+            not(kani)
+        )
+    )
+))]
+mod parallel_receipt;
+#[cfg(feature = "strict-sha3")]
+mod parallel_wire;
+#[cfg(feature = "strict-sha3")]
+pub mod parallelhash;
 mod policy;
 #[cfg(any(
     test,

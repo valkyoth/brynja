@@ -81,9 +81,17 @@ The next private ParallelHash component supports all four fixed/XOF identities,
 streamed customization and leaves without a B-sized allocation, exact completion
 proof, clearing counters and retained output. Its version-twelve decoder checks
 metadata before copying bounded input, and its placement adapter destroys typed
-state before clearing the whole allocation. This is a sequential scalar building
-block, not yet a shipping host API or native enclave execution. See the
+state before clearing the whole allocation. This sequential scalar building
+block is integrated into the host API described below. See the
 [component contract and remaining work](../docs/windows-enclave-parallelhash.md).
+
+The subsequent `enclave::parallelhash` host API now supports all four identities,
+streamed customization/message input, bounded retained fixed/XOF output and
+exact-bit retained-to-retained composition without a host secret slice. Native
+development campaigns pass 332 direct and 256 composition cases per debug/release
+profile. Ownership, metadata parity, cleanup and mutation tests cover the new
+path. B never determines an allocation size. This is sequential scalar execution,
+not a multicore or hardware/SIMD route, independent review or production signing.
 
 The chosen enclave distribution model is source/API/tooling with consumer-managed
 signing and deployment, not a Brynja-operated production-signing service. Native

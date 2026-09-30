@@ -49,6 +49,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Sequential scalar version-eleven worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |
 | Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
@@ -96,6 +97,13 @@ full-width tag verification. Its separate version-eight image keeps tags and
 readers private until explicit public declassification; verification exports
 only a decision. Caller-owned input buffers remain outside enclave storage.
 This is scalar development-tested functionality, not production qualification.
+
+With `strict-sha2,strict-sha3`, `windows_enclave::parallelhash` provides all four
+ParallelHash identities, streamed leaves/customization, exact-bit retained
+results and incremental XOF fragments. Retained rehashing stays inside the
+enclave; explicit declassification is the only output export. B never sizes an
+allocation. The separate version-twelve worker is sequential scalar, not
+multicore or SIMD. See the [API example and limits](../../docs/windows-enclave-parallelhash.md).
 
 Default-off `strict-kmac-acceleration` adds `strict_kmac::CompiledSession` with
 explicit AVX2 or Arm NEON/SHA3 selection. Enable the complete build-wide features

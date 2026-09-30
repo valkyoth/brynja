@@ -11,7 +11,8 @@ FORBIDDEN = ('crypto', 'legacy', 'protected_memory', 'execution::Authority',
              'enclave::kmac::transport', 'enclave::kmac::Owner',
              'enclave::tuplehash::transport', 'enclave::tuplehash::Owner',
              'enclave::sha2_batch::transport', 'enclave::sha2_batch::Owner',
-             'enclave::sha3_batch::transport', 'enclave::sha3_batch::Owner')
+             'enclave::sha3_batch::transport', 'enclave::sha3_batch::Owner',
+             'enclave::parallelhash::transport', 'enclave::parallelhash::Owner')
 MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch', 'enclave')
 
 
@@ -59,6 +60,10 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         f"pub type EnclaveSha3Batch{kind}<'a> = brynja_strict::enclave::sha3_batch::{kind}<'a>;"
         for kind in ('Batch', 'Retained'))
     positive += "\npub type EnclaveSha3BatchItem<'s, 'a> = brynja_strict::enclave::sha3_batch::Item<'s, 'a>;"
+    positive += '\npub type EnclaveParallelSession = brynja_strict::enclave::parallelhash::Session;'
+    positive += '\n' + '\n'.join(
+        f"pub type EnclaveParallel{kind}<'a> = brynja_strict::enclave::parallelhash::{kind}<'a>;"
+        for kind in ('Stream', 'Reader', 'Retained', 'Finalized'))
     # Compile the actual deployment-guide example, not a second hand-written copy.
     guide = (root / 'docs/windows-enclave-sha3.md').read_text()
     example = guide.split('```rust,no_run\n')[1].split('```')[0]
@@ -68,6 +73,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
     batch_guide = (root / 'docs/windows-enclave-sha2-batch.md').read_text()
     batch_example = batch_guide.split('```rust,no_run\n')[1].split('```')[0]
     positive += '\nmod batch_example {\n' + batch_example + '\n}\n'
+    parallel_guide = (root / 'docs/windows-enclave-parallelhash.md').read_text()
+    positive += '\nmod parallel_example {\n' + parallel_guide.split('```rust,no_run\n')[1].split('```')[0] + '\n}\n'
     source.write_text(positive)
     (consumer / 'tests').mkdir()
     (consumer / 'tests/facade.rs').write_text(
@@ -89,7 +96,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                                      'enclave::kmac::transport','enclave::kmac::Owner',
                                      'enclave::tuplehash::transport','enclave::tuplehash::Owner',
                                      'enclave::sha2_batch::transport','enclave::sha2_batch::Owner',
-                                     'enclave::sha3_batch::transport','enclave::sha3_batch::Owner') else 'E0432')
+                                     'enclave::sha3_batch::transport','enclave::sha3_batch::Owner',
+                                     'enclave::parallelhash::transport','enclave::parallelhash::Owner') else 'E0432')
                  for name in FORBIDDEN]
         if not features:
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
@@ -109,6 +117,10 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                 cases.append((f'fn require<T: {trait}>() {{}}\n'
                     f'fn probe() {{ require::<brynja_strict::enclave::sha3::{kind}>(); }}','E0277'))
         try:
+            for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                for kind in ('Session', "Stream<'static>", "Reader<'static>", "Retained<'static>", "Finalized<'static>"):
+                    cases.append((f'fn require<T: {trait}>() {{}}\n'
+                        f'fn probe() {{ require::<brynja_strict::enclave::parallelhash::{kind}>(); }}', 'E0277'))
             for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
                 for kind in ('Session', "Batch<'static>", "Retained<'static>", "Item<'static, 'static>"):
                     cases.append((f'fn require<T: {trait}>() {{}}\n'

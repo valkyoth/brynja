@@ -1,7 +1,8 @@
 # v0.24.50 remaining work
 
 Current implementation status: the bounded SHA-256, scalar SHA-2/SHA-3/KMAC/TupleHash
-streaming and SHA-2/SHA-3 batch Windows enclave APIs are integrated and development-tested.
+streaming, SHA-2/SHA-3 batches and sequential scalar ParallelHash Windows enclave
+APIs are integrated and development-tested.
 Existing Linux-style host-slice
 sessions still reject Unsupported on Windows. Broader algorithms and production
 qualification remain incomplete. The release scope
@@ -72,7 +73,7 @@ describe how the worker was developed, not outstanding constructor work.
 
 - Scalar SHA-2 streaming, bit tails, all named identities and general SHA-512/t
   are implemented in the [separate version-six worker/API](windows-enclave-sha2.md).
-  Complete the remaining ParallelHash algorithm pass and wider qualification.
+  Scalar ParallelHash host integration is also implemented; complete wider qualification.
   Extend the integrated enclave-compatible strict facade.
   Keep unsupported routes fail-closed and ordinary APIs unchanged. Do not claim
   the existing host-slice/closure APIs are transparently enclave-compatible.
@@ -210,13 +211,26 @@ describe how the worker was developed, not outstanding constructor work.
   implements four scalar identities with streamed leaves/customization, exact
   leaf-count completion, clearing private counters, fixed retained output and
   incremental XOF fragments. Its version-twelve metadata and placement entry
-  retain bounded snapshots and full-page destruction. Host integration, retained
-  composition, native enclave execution, parallel workers and acceleration are
-  still pending; ordinary-process component tests do not qualify those paths.
+  retain bounded snapshots and full-page destruction. The initial component-only
+  step did not establish host integration, retained composition or native enclave
+  execution; subsequent results are recorded below. Parallel workers and
+  acceleration remain pending.
   Thirteen component tests, 332 independent cases, 24 compiled component/wire
   mutants and two placement mutants pass on Linux/Windows. Seven focused Miri
   checks pass locally; the unsigned Windows worker links. All 171 captured source
   hashes match. See [component observations](../assurance/windows-protection-observations/parallel-component-20260930.json).
+  The subsequent `enclave::parallelhash` Session/Stream/Reader/Retained API now
+  integrates that worker, including exact-bit secret-to-secret rehashing and
+  production-signature-only construction. Native development debug/release
+  campaigns each pass 332 direct oracle cases and 256 retained-composition cases.
+  Seven host tests pass normally and under Miri; 25 negative ownership doctests,
+  the packaged API example, 435 packaged forbidden-export/ownership probes,
+  31 component/encoder mutants and two placement mutants pass. Eight focused
+  component Miri checks pass. Shared native stream/batch regressions are green.
+  All 535 native source/manifest hashes match; artifacts are saved outside target/.
+  See [host observations](../assurance/windows-protection-observations/parallel-owner-20260930.json).
+  This finishes the sequential scalar algorithm/API pass, not multicore,
+  hardware/SIMD or production qualification.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

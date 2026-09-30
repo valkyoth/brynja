@@ -38,6 +38,13 @@ MUTANTS = (
     ('parallel_stream_wire.rs', 'guard.complete = result.is_ok();', 'guard.complete = true;'),
     ('parallel_stream_wire.rs', 'owner.begin(n, self.identity, self.block, self.custom, self.budget)',
      'owner.begin(n, self.identity, 1, self.custom, self.budget)'),
+    ('parallel_stream.rs', 'self.next_width = 0;', 'self.next_width = 1;'),
+    ('parallel_stream.rs', 'if op.owner.phase == Phase::CustomRetained', 'if false'),
+    ('parallel_stream.rs', '.checked_sub(u64::try_from(op.owner.width)', '.checked_add(u64::try_from(op.owner.width)'),
+    ('parallel_host_wire.rs', 'self.sequence == 0', 'false'),
+    ('parallel_host_wire.rs', 'self.width > 1024', 'self.width > 8192'),
+    ('parallel_host_wire.rs', 'self.custom_bits.to_le_bytes()', '0_u128.to_le_bytes()'),
+    ('parallel_host_wire.rs', 'if self.op == 106 {', 'if self.op == 105 {'),
 )
 
 
@@ -91,7 +98,7 @@ def main():
         def check(success):
             result=subprocess.run([str(artifact)],capture_output=True,text=True,timeout=120)
             if success:
-                if result.returncode or '13 passed; 0 failed' not in result.stdout: raise AssertionError(result.stdout+result.stderr)
+                if result.returncode or '16 passed; 0 failed' not in result.stdout: raise AssertionError(result.stdout+result.stderr)
                 print(result.stdout,flush=True)
             elif result.returncode==0 or 'FAILED' not in result.stdout:
                 raise AssertionError('Mutant survived or failed unexpectedly: '+result.stdout+result.stderr)
@@ -114,7 +121,8 @@ def main():
                              'copy_failure_unwind_and_cancel_xof128',
                              'copy_failure_unwind_and_cancel_xof256',
                              'exact_leaf_completion_and_counter_overflow_are_load_bearing',
-                             'copied_payload_failure_clears_an_active_owner'):
+                             'copied_payload_failure_clears_an_active_owner',
+                             'retained_setup_rejection_and_cancel_clear_previous_output'):
                 output=build.run(['cargo','+'+args.miri_toolchain,'miri','test','--offline',
                     '--manifest-path',str(fixture/'Cargo.toml'),'--lib',selected])
                 if '1 passed; 0 failed' not in output: raise AssertionError(output)
@@ -122,14 +130,14 @@ def main():
         build.run(command);check(True)
         build_record=json.loads((directory/'parallel-stream-build.json').read_text())
         record=dict(schema=1,status='COMPONENT_TESTS_PASS',production_qualified=False,
-            native_enclave_execution=False,tests=13,oracle_cases=build_record['oracle_cases'],
+            native_enclave_execution=False,tests=16,oracle_cases=build_record['oracle_cases'],retained_cases=256,
             compiled_mutants=len(MUTANTS),placement_mutants=2,miri_toolchain=args.miri_toolchain,
             clean_executable_sha256=hashlib.sha256(artifact.read_bytes()).hexdigest(),
             initial_build_record_sha256=hashlib.sha256((directory/'parallel-stream-build.json').read_bytes()).hexdigest(),
             source_sha256={str(p.relative_to(build.ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in (Path(__file__),build.SOURCE/'parallel_stream_worker.rs',build.SOURCE/'parallel_stream_placement_tests.rs')})
         (directory/'parallel-stream-tests.json').write_text(json.dumps(record,indent=2)+'\n')
-    print(f'ParallelHash scalar component: thirteen tests, 332 independent cases including 12 NIST samples, {len(MUTANTS)} compiled mutants; no native enclave claim')
+    print(f'ParallelHash scalar component: sixteen tests, 332 independent cases including 12 NIST samples, 256 retained-composition cases, {len(MUTANTS)} compiled mutants; no native enclave claim')
 
 
 if __name__=='__main__':main()

@@ -2,8 +2,8 @@
 use super::{Algorithm, Error, Scratch};
 use brynja_core::copy_secret_region;
 use brynja_mac_kmac::{
-    Fips202BitString, Fips202Output, Kmac128, Kmac256, KmacXof128, KmacXof128Reader, KmacXof256,
-    KmacXof256Reader,
+    Fips202BitString, Fips202Output, Kmac128, Kmac128Setup, Kmac256, Kmac256Setup, KmacXof128,
+    KmacXof128Reader, KmacXof256, KmacXof256Reader,
 };
 pub(super) enum State {
     Empty,
@@ -23,13 +23,28 @@ impl State {
         if key.as_bytes().len() > 1024 || custom.as_bytes().len() > 1024 {
             return Err(Error::Length);
         }
-        match algorithm {
-            Algorithm::Kmac128 => Kmac128::new_bits(key, custom).map(Self::A),
-            Algorithm::Kmac256 => Kmac256::new_bits(key, custom).map(Self::B),
-            Algorithm::KmacXof128 => KmacXof128::new_bits(key, custom).map(Self::X),
-            Algorithm::KmacXof256 => KmacXof256::new_bits(key, custom).map(Self::Y),
+        macro_rules! prepare {
+            ($setup:ident, $finish:ident, $variant:ident) => {{
+                let mut setup = $setup::new(
+                    u128::try_from(key.bit_len()).map_err(|_| Error::Length)?,
+                    u128::try_from(custom.bit_len()).map_err(|_| Error::Length)?,
+                )
+                .map_err(|_| Error::Crypto)?;
+                setup.customization(custom).map_err(|_| Error::Crypto)?;
+                setup.finish_customization().map_err(|_| Error::Crypto)?;
+                setup.key(key).map_err(|_| Error::Crypto)?;
+                setup
+                    .$finish()
+                    .map(Self::$variant)
+                    .map_err(|_| Error::Crypto)
+            }};
         }
-        .map_err(|_| Error::Crypto)
+        match algorithm {
+            Algorithm::Kmac128 => prepare!(Kmac128Setup, finish, A),
+            Algorithm::Kmac256 => prepare!(Kmac256Setup, finish, B),
+            Algorithm::KmacXof128 => prepare!(Kmac128Setup, finish_xof, X),
+            Algorithm::KmacXof256 => prepare!(Kmac256Setup, finish_xof, Y),
+        }
     }
     pub(super) fn update(&mut self, input: &[u8]) -> Result<(), Error> {
         match self {

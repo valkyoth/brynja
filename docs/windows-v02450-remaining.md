@@ -87,10 +87,14 @@ describe how the worker was developed, not outstanding constructor work.
   full-width tag verification and exact-bit retained-output rekeying. Its local
   author tests cover 256 independent oracle cases, 128 rekey combinations,
   cancellation/copy/unwind cleanup and eleven compiled mutations, with focused
-  Miri. This is not a shipping or enclave-executed KMAC API: complete streamed
-  key/customization setup (currently bounded to 1024 bytes each), versioned
+  Miri. The library now supplies exact-length streamed key/customization setup
+  for all four identities, including bit-fragmented inputs larger than 1024 bytes.
+  The private worker's bounded constructor uses that setup and its independent
+  oracle/mutation tests pass locally. Its cross-call setup protocol is still
+  pending: the worker currently retains the 1024-byte per-key/S limit.
+  This is not a shipping or enclave-executed KMAC API: complete versioned
   transport, affine host types, native enclave tests and qualification next.
-  The same seven component tests pass in an ordinary Windows process; this is
+  The previous bounded component's seven tests passed in an ordinary Windows process; this is
   [source-bound component evidence](../assurance/windows-protection-observations/kmac-component-20260930.json),
   not a VBS enclave execution claim.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows

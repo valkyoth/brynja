@@ -16,6 +16,7 @@ mod fixed;
 mod output;
 mod packer;
 mod policy;
+mod setup;
 mod verify;
 mod xof;
 
@@ -29,6 +30,7 @@ pub use error::KmacError;
 pub use fixed::{Kmac128, Kmac256};
 pub use output::{KmacPublicDeclassification, KmacSecretOutput, KmacTag, KmacVerification};
 pub use policy::{KmacKeyPolicy, KmacServiceStatus, KmacTagPolicy};
+pub use setup::{Kmac128Setup, Kmac256Setup};
 pub use xof::{KmacXof128, KmacXof128Reader, KmacXof256, KmacXof256Reader};
 
 /// Whether all four SP 800-185 KMAC identities are implemented.

@@ -115,6 +115,22 @@ fn cleared<const R: usize>(setup: &Setup<R>) {
     assert!(setup.phase == Phase::Dead);
 }
 #[test]
+fn in_place_completion_erases_source_on_success_and_error() {
+    for complete in [false, true] {
+        let mut setup = Setup::<168>::new(1, 0)
+            .unwrap_or_else(|e| std::panic::resume_unwind(std::boxed::Box::new(e)));
+        if complete {
+            setup
+                .push(Phase::Name, bits(&[1], 1))
+                .unwrap_or_else(|e| std::panic::resume_unwind(std::boxed::Box::new(e)));
+        }
+        assert_eq!(setup.finish_erasing_source().is_ok(), complete);
+        cleared(&setup);
+        assert!(setup.finish_erasing_source().is_err());
+        cleared(&setup);
+    }
+}
+#[test]
 fn errors_and_unwind_clear_and_cannot_reopen_setup() {
     let mut setup = Setup::<136>::new(3, 9)
         .unwrap_or_else(|error| std::panic::resume_unwind(std::boxed::Box::new(error)));

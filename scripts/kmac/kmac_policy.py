@@ -14,6 +14,7 @@ CRATE = Path("crates/brynja-mac-kmac")
 SOURCES = tuple(CRATE / "src" / name for name in (
     "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "lib.rs",
     "output.rs", "packer.rs", "policy.rs", "verify.rs", "xof.rs",
+    "setup.rs", "setup/engine.rs",
     "hardened_in_place.rs", "hardened_in_place/backend.rs",
     "hardened_in_place/core_state.rs", "hardened_in_place/fixed.rs",
     "hardened_in_place/reader.rs", "hardened_in_place/xof.rs",
@@ -22,6 +23,7 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "hardened_in_place/accelerated/xof.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
+         CRATE / "src/setup/tests.rs", CRATE / "src/setup/engine/tests.rs",
          CRATE / "src/packer/framing_tests.rs",
          CRATE / "src/hardened_in_place/tests.rs",
          CRATE / "src/hardened_in_place/core_state/tests.rs",
@@ -85,8 +87,10 @@ def without_comments(text: str) -> str:
 def validate(root: Path) -> None:
     actual = set((root / CRATE / "src").glob("*.rs"))
     actual.update((root / CRATE / "src/hardened_in_place").rglob("*.rs"))
+    actual.update((root / CRATE / "src/setup").rglob("*.rs"))
     expected = {root / source for source in SOURCES}
-    expected.update(root / source for source in TESTS if 'hardened_in_place' in source.parts)
+    expected.update(root / source for source in TESTS
+                    if 'hardened_in_place' in source.parts or 'setup' in source.parts)
     if actual != expected:
         fail("KMAC production source inventory changed")
     loaded = {path: read(root, path) for path in FILES}

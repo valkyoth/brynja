@@ -147,6 +147,15 @@ impl Drop for KmacMetadata {
     }
 }
 
+impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, STRENGTH> {
+    pub(crate) fn from_prepared(value: crate::setup::Prepared<S>) -> Self {
+        Self {
+            state: value.into_state(),
+            metadata: KmacMetadata::new(KmacKeyPolicy::FullStrength),
+        }
+    }
+}
+
 #[cfg(test)]
 pub(crate) mod assurance_contract {
     use brynja_hash_sha3::{Fips202BitString, HardenedCshake128};

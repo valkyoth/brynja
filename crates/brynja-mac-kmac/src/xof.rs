@@ -221,3 +221,18 @@ fn byte_string(input: &[u8]) -> Result<Fips202BitString<'_>, KmacError> {
     let valid = if input.is_empty() { 0 } else { 8 };
     Fips202BitString::new(input, valid).map_err(|_| KmacError::InvalidBitString)
 }
+
+impl KmacXof128 {
+    pub(crate) fn from_prepared(value: crate::setup::Prepared<HardenedCshake128>) -> Self {
+        Self {
+            core: KmacCore::from_prepared(value),
+        }
+    }
+}
+impl KmacXof256 {
+    pub(crate) fn from_prepared(value: crate::setup::Prepared<HardenedCshake256>) -> Self {
+        Self {
+            core: KmacCore::from_prepared(value),
+        }
+    }
+}

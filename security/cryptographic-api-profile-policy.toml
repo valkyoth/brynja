@@ -1067,7 +1067,7 @@ sha256 = "6b83f70078bec568e180a486c15425ddd2d3dcc23bb6ab0d07deb57404f8a6c6"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/core_state.rs"
-sha256 = "846e8faf8aff60286f0903fc26420e397aa48883313df3bef9226ee4aa6b6f18"
+sha256 = "40d724df9a1ecf421935df9f48340d0ef8940764515544d5461c0da85cbc1aed"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/output.rs"
@@ -1139,7 +1139,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "e1bb123f10dd5c400ba9d6d77c9950aa233f20d8c3f117bf78210961fdb90dfa"
+sha256 = "67e22b609b5ddd3006ed547fd403540346f4de4344a1a207e8afac5cc20f1ec2"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_operations.py"
@@ -1431,8 +1431,24 @@ sha256 = "58d54f5fe62ebaffb73bbd9d885610516246e2b49746fe65429c5726d241865b"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake/setup.rs"
-sha256 = "36f55679f83b9e0a7a96dbb9e6c770dd31a414c5a549478bf1e6974c54d9ac2c"
+sha256 = "d9d43a4442192a60616a9f1e5bf63de724db14f7d85a5dfbb2b81cd21d1183b7"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake/setup/tests.rs"
-sha256 = "e3c543e4e26e218ac7ad16af7bcf3ac7b275aa59cea95fa194ae7a7d3c1b3986"
+sha256 = "069b0270336b2aac344e70d0f212fcf7ed09a40d8c1cc9ca8f6bb0c4b190e5bf"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-kmac/src/setup/engine.rs"
+sha256 = "3c3547253b3c82a6b82cf720360a9fd289985420e6eaa3fcecbe8bcac9cfa100"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-kmac/src/setup/engine/tests.rs"
+sha256 = "3d246bdedac9cc385cf8cc115e33f71e58a0925785e4ca53b8229a9b31eaadb0"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-kmac/src/setup/tests.rs"
+sha256 = "036dc52cce7799735231c14490f88bd51056b225c45d340259193990cdd9c68f"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-kmac/src/setup.rs"
+sha256 = "d56d46173f3ae331a3120861c8191438a2c76fbd2d5efadda7093204f82f8462"

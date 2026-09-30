@@ -277,3 +277,18 @@ fn exact_output_bits(length: usize, valid: u8) -> Result<u128, KmacError> {
         .and_then(|value| value.checked_add(u128::from(valid)))
         .ok_or(KmacError::OutputTooLong)
 }
+
+impl Kmac128 {
+    pub(crate) fn from_prepared(value: crate::setup::Prepared<HardenedCshake128>) -> Self {
+        Self {
+            core: KmacCore::from_prepared(value),
+        }
+    }
+}
+impl Kmac256 {
+    pub(crate) fn from_prepared(value: crate::setup::Prepared<HardenedCshake256>) -> Self {
+        Self {
+            core: KmacCore::from_prepared(value),
+        }
+    }
+}

@@ -223,20 +223,30 @@ impl<const RATE: usize> Setup<RATE> {
         Ok(())
     }
     fn finish(mut self) -> Result<HardenedFips202Owner<RATE>, HardenedSha3Error> {
-        if self.phase != Phase::Complete
-            || self.remaining != 0
-            || self.used != 0
-            || self.emitted != self.expected
+        self.finish_erasing_source()
+    }
+    fn finish_erasing_source(&mut self) -> Result<HardenedFips202Owner<RATE>, HardenedSha3Error> {
+        let mut op = Operation {
+            setup: self,
+            complete: false,
+        };
+        if op.setup.phase != Phase::Complete
+            || op.setup.remaining != 0
+            || op.setup.used != 0
+            || op.setup.emitted != op.setup.expected
         {
             return Err(HardenedSha3Error::StateConsumed);
         }
-        let source = self
+        let source = op
+            .setup
             .owner
             .as_mut()
             .ok_or(HardenedSha3Error::StateConsumed)?;
         let mut owner = core::mem::replace(source, HardenedFips202Owner::new());
         source.wipe();
-        owner.remember_cshake_setup(self.customized);
+        owner.remember_cshake_setup(op.setup.customized);
+        op.setup.wipe();
+        op.complete = true;
         Ok(owner)
     }
     fn wipe(&mut self) {
@@ -301,6 +311,16 @@ macro_rules! setup {
                     lifecycle: CshakeLifecycle::Absorbing,
                 })
             }
+            /// Transfer completed setup while clearing this exact source object.
+            /// Success or error terminates setup; no incomplete state is returned.
+            pub fn finish_erasing_source(&mut self) -> Result<$state, HardenedSha3Error> {
+                Ok($state {
+                    owner: self.0.finish_erasing_source()?,
+                    lifecycle: CshakeLifecycle::Absorbing,
+                })
+            }
+            /// Clear this exact setup storage and permanently terminate it.
+            pub fn wipe_in_place(&mut self) { self.0.wipe(); }
             /// Destroy incomplete or complete setup without beginning a message.
             pub fn cancel(self) {}
         }

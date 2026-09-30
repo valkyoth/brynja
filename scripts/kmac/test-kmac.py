@@ -38,6 +38,11 @@ def reject(label: str, path: Path, old: str, new: str) -> None:
 
 def main() -> int:
     kmac_policy.validate(ROOT)
+    streamed = Path("crates/brynja-mac-kmac/src/setup")
+    reject("streamed-strength", streamed / "engine.rs", "key_bits < D::STRENGTH", "key_bits < 1")
+    reject("streamed-completion", streamed / "engine.rs", "op.setup.emitted != op.setup.expected", "false")
+    reject("streamed-cleanup", streamed / "engine.rs", "self.state.wipe_in_place();", "")
+    reject("streamed-test-removal", streamed / "tests.rs", "fn streamed_setup_matches_all_four_contiguous_identities", "fn removed_streamed_coverage")
     reject("std", Path("crates/brynja-mac-kmac/src/lib.rs"), "#![no_std]", "extern crate std;")
     reject("unsafe", Path("crates/brynja-mac-kmac/src/output.rs"), "use brynja_core", "unsafe fn bypass() {}\nuse brynja_core")
     reject("domain-name", Path("crates/brynja-mac-kmac/src/backend.rs"), "b\"KMAC\"", "b\"RAW\"")

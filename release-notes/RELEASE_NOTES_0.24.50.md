@@ -77,6 +77,14 @@ and packaged checks enforce ownership. The guide includes a compiled downstream
 example. This is bounded sequential scalar batching, not incremental multi-reader
 XOF batching, SIMD, independent review or production qualification.
 
+The next private ParallelHash component supports all four fixed/XOF identities,
+streamed customization and leaves without a B-sized allocation, exact completion
+proof, clearing counters and retained output. Its version-twelve decoder checks
+metadata before copying bounded input, and its placement adapter destroys typed
+state before clearing the whole allocation. This is a sequential scalar building
+block, not yet a shipping host API or native enclave execution. See the
+[component contract and remaining work](../docs/windows-enclave-parallelhash.md).
+
 The chosen enclave distribution model is source/API/tooling with consumer-managed
 signing and deployment, not a Brynja-operated production-signing service. Native
 observations so far use development-signed images on a specifically configured

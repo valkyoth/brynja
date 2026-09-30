@@ -1,7 +1,7 @@
 # v0.24.50 remaining work
 
 Current implementation status: the bounded SHA-256, scalar SHA-2/SHA-3/KMAC/TupleHash
-streaming and SHA-2 batch Windows enclave APIs are integrated and development-tested.
+streaming and SHA-2/SHA-3 batch Windows enclave APIs are integrated and development-tested.
 Existing Linux-style host-slice
 sessions still reject Unsupported on Windows. Broader algorithms and production
 qualification remain incomplete. The release scope
@@ -72,7 +72,7 @@ describe how the worker was developed, not outstanding constructor work.
 
 - Scalar SHA-2 streaming, bit tails, all named identities and general SHA-512/t
   are implemented in the [separate version-six worker/API](windows-enclave-sha2.md).
-  Complete the remaining algorithm passes in order: batching and ParallelHash.
+  Complete the remaining ParallelHash algorithm pass and wider qualification.
   Extend the integrated enclave-compatible strict facade.
   Keep unsupported routes fail-closed and ordinary APIs unchanged. Do not claim
   the existing host-slice/closure APIs are transparently enclave-compatible.
@@ -179,7 +179,7 @@ describe how the worker was developed, not outstanding constructor work.
   development debug/release campaigns each pass 355 batches/1822 digests, including
   all activity masks, mixed identities and every valid general SHA-512/t parameter.
   This finishes scalar SHA-2 batch host integration, not qualification or the
-  remaining SHA-3/SHAKE/cSHAKE batching and ParallelHash passes. No SIMD or
+  remaining ParallelHash pass. No SIMD or
   throughput gain is implied by sequential batching.
 - The private scalar SHA-3/SHAKE/cSHAKE batch component and version-eleven
   transport now implement eight ordered slots sharing 1024 retained output bytes.
@@ -200,6 +200,23 @@ describe how the worker was developed, not outstanding constructor work.
   The worker links as an unsigned Windows enclave image. Source-bound
   [component/build observations](../assurance/windows-protection-observations/sha3-batch-wire-build-20260930.json)
   distinguish this from native enclave execution and production qualification.
+  The subsequent `enclave::sha3_batch` host API is now integrated: eight host
+  tests pass normally and under Miri, twenty negative doctests enforce ownership,
+  and native development tests pass 323 batches/1344 digests per debug/release
+  profile. All 255 activity masks, long setup, exact-bit output, cancellation
+  and forgotten-item rejection are exercised. The shared stream/batch campaigns
+  also pass. See [host observations](../assurance/windows-protection-observations/sha3-batch-owner-20260930.json).
+- The [private ParallelHash component](windows-enclave-parallelhash.md) now
+  implements four scalar identities with streamed leaves/customization, exact
+  leaf-count completion, clearing private counters, fixed retained output and
+  incremental XOF fragments. Its version-twelve metadata and placement entry
+  retain bounded snapshots and full-page destruction. Host integration, retained
+  composition, native enclave execution, parallel workers and acceleration are
+  still pending; ordinary-process component tests do not qualify those paths.
+  Thirteen component tests, 332 independent cases, 24 compiled component/wire
+  mutants and two placement mutants pass on Linux/Windows. Seven focused Miri
+  checks pass locally; the unsigned Windows worker links. All 171 captured source
+  hashes match. See [component observations](../assurance/windows-protection-observations/parallel-component-20260930.json).
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

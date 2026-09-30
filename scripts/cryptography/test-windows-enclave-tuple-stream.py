@@ -3,6 +3,7 @@
 import argparse
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 import windows_enclave_tuple_stream_build as build
@@ -28,6 +29,36 @@ MUTANTS = (
     ('tuple_stream_wire.rs', 'source.checked_add(length).ok_or(Error::Length)?;', 'let _ = source;'),
     ('tuple_stream_wire.rs', 'guard.complete = result.is_ok();', 'guard.complete = true;'),
 )
+
+
+def placement(directory, miri_toolchain):
+    fixture=directory/'placement';fixture.mkdir()
+    worker=fixture/'tuple_stream_worker.rs'
+    for name in ('tuple_stream_worker.rs','tuple_stream_placement_tests.rs'):
+        shutil.copyfile(build.SOURCE/name,fixture/name)
+    manifest='[package]\nname="enclave-tuple-placement"\nversion="0.0.0"\nedition="2024"\n'
+    manifest+='[lib]\nname="tuple_stream"\npath='+json.dumps(str(build.SOURCE/'tuple_stream.rs'))+'\n'
+    manifest+='[[test]]\nname="placement"\npath='+json.dumps(str(worker))+'\n[dependencies]\n'
+    for name in ('brynja-core','brynja-hash-sha3'):
+        manifest+=name+'={path='+json.dumps(str(build.ROOT/'crates'/name))+'}\n'
+    (fixture/'Cargo.toml').write_text(manifest+'[workspace]\n')
+    command=['cargo','+'+(miri_toolchain or '1.98.1')]
+    if miri_toolchain:command+=['miri']
+    arguments=['test','--offline','--manifest-path',str(fixture/'Cargo.toml'),'--test','placement']
+    output=build.run(command+arguments)
+    if '1 passed; 0 failed' not in output:raise AssertionError(output)
+    print(output,flush=True)
+    original=worker.read_text()
+    for before,after in (('for offset in 0..4096 {','for offset in 0..0 {'),('*live = None;','')):
+        if original.count(before)!=1:raise AssertionError('Stale placement mutant: '+before)
+        try:
+            worker.write_text(original.replace(before,after))
+            build.run(['cargo','+1.98.1',*arguments,'--no-run'])
+            result=subprocess.run(['cargo','+1.98.1',*arguments],capture_output=True,text=True,timeout=120)
+            if result.returncode==0 or 'placed_owner_is_destroyed_before_full_page_clear_and_can_be_recreated ... FAILED' not in result.stdout:
+                raise AssertionError('Placement mutant survived or failed unexpectedly: '+result.stdout+result.stderr)
+        finally:worker.write_text(original)
+    print('TupleHash placement: two compiled allocation-clear/lifetime mutants rejected',flush=True)
 
 
 def main():
@@ -58,6 +89,7 @@ def main():
                 except AssertionError as error:raise AssertionError(before+': '+str(error)) from error
             finally:path.write_text(original)
         build.run(command);check(True)
+        placement(directory,args.miri_toolchain)
         if args.miri_toolchain:
             fixture=directory/'fixture';fixture.mkdir()
             manifest='[package]\nname="enclave-tuple-lifecycle"\nversion="0.0.0"\nedition="2024"\n'

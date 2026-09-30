@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "status": "OBSERVATIONS_ONLY",
+  "baseline": "bca6731c",
+  "production_qualified": false,
+  "native_enclave_execution": false,
+  "image": "Version-nine TupleHash Rust worker and C OS-copy adapter compiled/linked as an x86-64 Windows enclave DLL; VEIID completed; unsigned and not loaded",
+  "component_tests": 7,
+  "oracle_cases": 272,
+  "oracle_routes": ["direct", "decoded wire"],
+  "retained_rehash_cases": 128,
+  "compiled_component_mutants_rejected": 19,
+  "compiled_placement_mutants_rejected": 2,
+  "miri": {"toolchain": "nightly-2026-09-11", "result": "PASS", "tests": ["placed_owner_is_destroyed_before_full_page_clear_and_can_be_recreated", "copy_failure_unwind_cancel_and_shapes_clear_retained_storage", "malformed_copied_bits_quarantine_before_further_work"]},
+  "source_binding": "All Windows build source hashes matched the local files. Existing Azure checkout plus explicit overlay, not an exact git checkout. Build record includes commands and hashes for generated sources, static library and emitted compiler artifacts.",
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-wire-source.tar": "ca0831c55343fd79b4180b6a9e146b23de54f308743e7e165c7cb368c19106f7",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-wire/tuple-wire-products.tar.gz": "7346ee9eaeaac17f0ba1f7b891dcbacb41b727707b6611377bb519d3e7f7a18f",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-wire/tuple-wire.log": "11ea83ce91d011954963d6368f0b42a192c59f3b0a783ea7fdfdd03566e81626",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-wire/tuple-worker-build.json": "78db0523b2a27c50785ef49a8eaa3f33b052f1c8a439597f69905df20f8d6fd1",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-wire/normal.dll": "64041ca2606e156f3c99eb123ef0fcdd6135a88f121e9a70eb0d00fbb544d19c"
+  },
+  "limitations": ["Private development component only", "Scalar only", "No native enclave execution or OS-copy qualification", "Host API not integrated yet", "Compiler/register qualification and independent review pending", "No production deployment qualification"]
+}

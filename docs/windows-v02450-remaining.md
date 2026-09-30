@@ -128,9 +128,15 @@ describe how the worker was developed, not outstanding constructor work.
   setup/items; 128 retained rehash combinations pass. Nineteen compiled mutations
   reject protocol, framing, bounds and cleanup regressions; two focused Miri
   cleanup/quarantine tests pass. This is not native
-  enclave qualification: implement the OS-copy entry, allocation cleanup/receipts,
-  affine host interface and native enclave campaign next. See the
+  enclave qualification. The OS-copy entry now builds and links as a Windows
+  enclave image, with bounded snapshots and public cleanup receipts. Placement
+  tests cover destruction of an active partial item, wrong-page rejection,
+  full-page clearing and recreation; Miri and two compiled placement mutants
+  pass. The image has not yet been signed, loaded or executed inside VBS.
+  Complete the affine host interface and native enclave campaign next. See the
   [component observations](../assurance/windows-protection-observations/tuple-component-20260930.json).
+  The subsequent [entry/image observations](../assurance/windows-protection-observations/tuple-entry-build-20260930.json)
+  preserve the separate source-bound build and placement checks.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

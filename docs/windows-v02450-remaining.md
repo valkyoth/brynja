@@ -1,7 +1,8 @@
 # v0.24.50 remaining work
 
-Current implementation status: the bounded SHA-256 and scalar SHA-2/SHA-3/KMAC streaming
-Windows enclave APIs are integrated and development-tested. Existing Linux-style host-slice
+Current implementation status: the bounded SHA-256, scalar SHA-2/SHA-3/KMAC/TupleHash
+streaming and SHA-2 batch Windows enclave APIs are integrated and development-tested.
+Existing Linux-style host-slice
 sessions still reject Unsupported on Windows. Broader algorithms and production
 qualification remain incomplete. The release scope
 remains the [Windows strict protected profile](windows-strict-profile.md), with
@@ -180,6 +181,25 @@ describe how the worker was developed, not outstanding constructor work.
   This finishes scalar SHA-2 batch host integration, not qualification or the
   remaining SHA-3/SHAKE/cSHAKE batching and ParallelHash passes. No SIMD or
   throughput gain is implied by sequential batching.
+- The private scalar SHA-3/SHAKE/cSHAKE batch component and version-eleven
+  transport now implement eight ordered slots sharing 1024 retained output bytes.
+  Fixed digests require their exact width; XOF shapes declare their final-bit
+  width up front. cSHAKE name/customization and message input stream through
+  bounded snapshots. Independent oracle cases cover fractional setup/message/
+  output bits, rate boundaries and setup larger than one snapshot. All 255
+  active-slot masks cover mixed algorithms and packed output offsets, including
+  active empty-output slots. Export requires every declared slot and an explicit
+  seal; copy errors and recoverable unwind clear results and quarantine.
+  This is a bounded scalar building block, not incremental batch XOF readers,
+  a shipping batch host API or a SIMD/parallel throughput claim. The remaining
+  work is host ownership/receipt integration, native enclave execution and
+  qualification; existing single-stream XOF APIs retain their separate bounds.
+  Nine component/wire tests pass locally and in an ordinary Windows process:
+  604 independent oracle cases, 255 mixed-slot masks, 30 compiled component/
+  protocol mutants and two placement mutants. Three focused Miri checks pass.
+  The worker links as an unsigned Windows enclave image. Source-bound
+  [component/build observations](../assurance/windows-protection-observations/sha3-batch-wire-build-20260930.json)
+  distinguish this from native enclave execution and production qualification.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

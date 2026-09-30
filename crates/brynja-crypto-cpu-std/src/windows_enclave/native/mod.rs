@@ -5,6 +5,8 @@ use super::{
 };
 use std::path::Path;
 mod callback;
+#[cfg(feature = "strict-kmac")]
+pub(super) mod kmac;
 mod pin;
 pub(super) mod sha2;
 #[cfg(feature = "strict-sha3")]
@@ -17,6 +19,8 @@ enum Protocol {
     Sha2,
     #[cfg(feature = "strict-sha3")]
     Sha3,
+    #[cfg(feature = "strict-kmac")]
+    Kmac,
 }
 
 #[derive(Default)]
@@ -112,6 +116,8 @@ impl Backend {
                     Protocol::Sha2 => b"PublicSha2InputSource\0",
                     #[cfg(feature = "strict-sha3")]
                     Protocol::Sha3 => b"PublicSha3InputSource\0",
+                    #[cfg(feature = "strict-kmac")]
+                    Protocol::Kmac => b"PublicKmacInputSource\0",
                     Protocol::Legacy => b"PublicRetainedInput\0",
                 },
             )?,
@@ -129,6 +135,8 @@ impl Backend {
                 Protocol::Sha2 => sys::export(owner.base, b"PublicSha2Control\0")?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 => sys::export(owner.base, b"PublicSha3Control\0")?,
+                #[cfg(feature = "strict-kmac")]
+                Protocol::Kmac => sys::export(owner.base, b"PublicKmacControl\0")?,
                 Protocol::Legacy => 0,
             },
         };
@@ -222,6 +230,8 @@ impl Backend {
                 Protocol::Sha2 => self.run_sha2(3, None, 0, None)?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 => self.run_sha3(3, None, 0, None)?,
+                #[cfg(feature = "strict-kmac")]
+                Protocol::Kmac => self.run_kmac(3, None, 0, None)?,
                 Protocol::Legacy => self.run(3, None, 0, None)?,
             }
             self.live = false;

@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "status": "OBSERVATIONS_ONLY",
+  "baseline": "166d1afa",
+  "source_description": "Existing Azure checkout plus exact host source overlay; not an exact git checkout. Remote source hashes are retained in kmac-native-state.json; worker source/build closure remains in kmac-wire-build-20260930.json.",
+  "platform": "Windows Server 2025 x86-64, Azure D2as_v7, VBS/HVCI running, Secure Boot disabled, development testsigning",
+  "production_qualified": false,
+  "native_execution": true,
+  "cases_per_profile": 546,
+  "profiles": ["debug", "release"],
+  "shared_transport_regression": {"profiles": ["debug", "release"], "sha2_cases_per_profile": 631, "sha3_cases_per_profile": 1028, "kmac_cases_per_profile": 546},
+  "local_checks": ["20 shared enclave unit tests", "3 focused KMAC Miri tests", "20 KMAC ownership doctests", "Packaged strict-facade debug/release with 239 export/ownership rejections", "Linux and Windows-target scoped Clippy", "Acceptance metadata and unsafe policy"],
+  "coverage": ["four KMAC identities", "streamed key/customization", "partial-bit inputs and outputs", "full-width verification match and mismatch", "retained-output rekey", "incremental XOF", "cancellation", "abandonment quarantine"],
+  "signing": "Development-only self-signed image. SignTool signed the file but returned an SDK compatibility warning, causing the wrapper to fail. Authenticode reports an untrusted root. This is not a production signing success. Temporary certificate/private key removal confirmed; zero test processes remained.",
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/kmac-shared-regression.log": "9ae8c40dc07a9ca23f187c73629af78fb7b538a0f760c2848e86a7c7cf0172d3",
+    "release-reports/windows-azure-replacement-2026-09-30/kmac-owner-source.tar": "feda769641b7a72530dd618a5e5cd5d02b5f9e3397b5f8dbe9ae3b8434540610",
+    "release-reports/windows-azure-replacement-2026-09-30/kmac-owner.log": "8efecfeed31ef3dd261db6a85f06bea5e8a50199c746dc1d084e3689f722f103",
+    "release-reports/windows-azure-replacement-2026-09-30/kmac-native-state.json": "05a2eb6d5e44e4d65a6d2e80f03d0ece1f0f46c6f8d85c5e303866a34249b3db",
+    "release-reports/windows-azure-replacement-2026-09-30/kmac-signed.dll": "63fb2bfe60cd0e14173aa0a95a0525114fa9d803e91746dfba1d02aa8bff1f0f",
+    "release-reports/windows-azure-replacement-2026-09-30/kmac-owner-sign.log": "76d3801be388f5c66b2190abda1b0e1ac2c630988860dc1cce2a887c2fe7160b"
+  },
+  "limitations": ["Scalar only", "No Windows ARM64 qualification", "Caller-owned buffers remain outside enclave", "Independent review and compiler/register qualification pending", "No production deployment qualification"]
+}

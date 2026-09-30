@@ -7,7 +7,8 @@ FORBIDDEN = ('crypto', 'legacy', 'protected_memory', 'execution::Authority',
              'parallelhash::ParallelHashExecutor', 'enclave::Backend',
              'enclave::Driver', 'enclave::engine', 'enclave::policy',
              'enclave::sha2::transport', 'enclave::sha2::Owner',
-             'enclave::sha3::transport', 'enclave::sha3::Owner')
+             'enclave::sha3::transport', 'enclave::sha3::Owner',
+             'enclave::kmac::transport', 'enclave::kmac::Owner')
 MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch', 'enclave')
 
 
@@ -36,6 +37,10 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         f"pub type EnclaveSha3{kind}<'a> = brynja_strict::enclave::sha3::{kind}<'a>;"
         for kind in ('Stream', 'Reader', 'Retained', 'Finalized'))
     positive += '\npub type EnclaveSha3Session = brynja_strict::enclave::sha3::Session;'
+    positive += '\n' + '\n'.join(
+        f"pub type EnclaveKmac{kind}<'a> = brynja_strict::enclave::kmac::{kind}<'a>;"
+        for kind in ('Stream', 'Reader', 'Retained'))
+    positive += '\npub type EnclaveKmacSession = brynja_strict::enclave::kmac::Session;'
     # Compile the actual deployment-guide example, not a second hand-written copy.
     guide = (root / 'docs/windows-enclave-sha3.md').read_text()
     example = guide.split('```rust,no_run\n')[1].split('```')[0]
@@ -57,7 +62,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         cases = [(f'use brynja_strict::{name};',
                   'E0603' if name in ('enclave::Backend', 'enclave::engine', 'enclave::policy',
                                      'enclave::sha2::transport','enclave::sha2::Owner',
-                                     'enclave::sha3::transport','enclave::sha3::Owner') else 'E0432')
+                                     'enclave::sha3::transport','enclave::sha3::Owner',
+                                     'enclave::kmac::transport','enclave::kmac::Owner') else 'E0432')
                  for name in FORBIDDEN]
         if not features:
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
@@ -77,6 +83,10 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                 cases.append((f'fn require<T: {trait}>() {{}}\n'
                     f'fn probe() {{ require::<brynja_strict::enclave::sha3::{kind}>(); }}','E0277'))
         try:
+            for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                for kind in ('Session', "Stream<'static>", "Reader<'static>", "Retained<'static>"):
+                    cases.append((f'fn require<T: {trait}>() {{}}\n'
+                        f'fn probe() {{ require::<brynja_strict::enclave::kmac::{kind}>(); }}', 'E0277'))
             for negative, error in cases:
                 source.write_text('#![forbid(unsafe_code)]\n' + negative)
                 result = run(base, consumer, env)

@@ -26,6 +26,10 @@ mod engine;
     )
 ))]
 mod image;
+#[cfg(feature = "strict-kmac")]
+pub mod kmac;
+#[cfg(feature = "strict-kmac")]
+mod kmac_wire;
 #[cfg(all(
     target_os = "windows",
     target_arch = "x86_64",

@@ -71,7 +71,7 @@ describe how the worker was developed, not outstanding constructor work.
 
 - Scalar SHA-2 streaming, bit tails, all named identities and general SHA-512/t
   are implemented in the [separate version-six worker/API](windows-enclave-sha2.md).
-  Complete the remaining passes in order: KMAC, TupleHash,
+  Complete the remaining passes in order: TupleHash,
   batching and ParallelHash. Extend the integrated enclave-compatible strict facade.
   Keep unsupported routes fail-closed and ordinary APIs unchanged. Do not claim
   the existing host-slice/closure APIs are transparently enclave-compatible.
@@ -102,10 +102,18 @@ describe how the worker was developed, not outstanding constructor work.
   tests pass on Linux and Windows, including the same 256 oracle cases through
   direct and decoded-wire paths; twenty-six compiled mutants and two focused
   Miri checks pass. The Rust entry/C OS-copy adapter also builds and links as a
-  Windows enclave image, but has not executed inside VBS. See
+  Windows enclave image. Its initial build-only observations are retained in
   [wire/image build observations](../assurance/windows-protection-observations/kmac-wire-build-20260930.json).
-  This is not a shipping or enclave-executed KMAC API: complete host transport
-  receipt validation, affine host types, native enclave tests and qualification next.
+  The subsequent version-eight host API now supplies affine Session/Stream/
+  Reader/Retained types, bounded setup snapshots, receipt validation, retained
+  rekeying, explicit public export and full-width verification. Native VBS
+  development execution passes 546 cases in each debug/release build. These
+  include all four identities, partial bits, setup larger than one request,
+  incremental XOF output, cancellation and abandoned-handle quarantine. See
+  [host observations](../assurance/windows-protection-observations/kmac-owner-20260930.json).
+  Production trust is still mandatory at the public constructor; development
+  signing is available only to the private test harness. Independent review,
+  compiler/register qualification and production deployment remain pending.
   The previous bounded component's seven tests passed in an ordinary Windows process; this is
   [source-bound component evidence](../assurance/windows-protection-observations/kmac-component-20260930.json),
   not a VBS enclave execution claim.

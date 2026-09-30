@@ -72,6 +72,8 @@ pub enum Error {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum Phase {
     Empty,
+    Setup,
+    SetupRetained,
     Streaming,
     Squeezing,
     RetainedMore,
@@ -153,6 +155,64 @@ impl Owner {
             return Err(Error::Length);
         }
         op.owner.state.update(input)?;
+        op.complete = true;
+        Ok(())
+    }
+    /// Start incremental cSHAKE setup from public lengths. If a fragment is
+    /// retained, setup completion rehashes that exact fragment without export.
+    pub fn setup(
+        &mut self,
+        sequence: u64,
+        identity: u64,
+        name: u128,
+        custom: u128,
+    ) -> Result<(), Error> {
+        let mut op = self.operation(
+            sequence,
+            &[Phase::Empty, Phase::RetainedMore, Phase::RetainedFinal],
+        )?;
+        let algorithm = Algorithm::decode(identity)?;
+        op.owner.state = State::setup(algorithm, name, custom)?;
+        op.owner.algorithm = Some(algorithm);
+        op.owner.phase = if op.owner.phase == Phase::Empty {
+            Phase::Setup
+        } else {
+            Phase::SetupRetained
+        };
+        op.complete = true;
+        Ok(())
+    }
+    pub fn setup_chunk(
+        &mut self,
+        sequence: u64,
+        name: bool,
+        input: &[u8],
+        last: u8,
+    ) -> Result<(), Error> {
+        let mut op = self.operation(sequence, &[Phase::Setup, Phase::SetupRetained])?;
+        if input.len() > 1024 {
+            return Err(Error::Length);
+        }
+        let bits = Fips202BitString::new(input, last).map_err(|_| Error::Bits)?;
+        op.owner.state.setup_chunk(name, bits)?;
+        op.complete = true;
+        Ok(())
+    }
+    pub fn finish_setup(&mut self, sequence: u64) -> Result<(), Error> {
+        let mut op = self.operation(sequence, &[Phase::Setup, Phase::SetupRetained])?;
+        op.owner.state.finish_setup()?;
+        if op.owner.phase == Phase::SetupRetained {
+            let bits = Fips202BitString::new(
+                op.owner.output.get(..op.owner.width).ok_or(Error::Length)?,
+                op.owner.last,
+            )
+            .map_err(|_| Error::Bits)?;
+            op.owner.state.finish_xof(bits)?;
+            op.owner.clear_output()?;
+            op.owner.phase = Phase::Squeezing;
+        } else {
+            op.owner.phase = Phase::Streaming;
+        }
         op.complete = true;
         Ok(())
     }
@@ -283,6 +343,8 @@ impl Owner {
         let mut op = self.operation(
             sequence,
             &[
+                Phase::Setup,
+                Phase::SetupRetained,
                 Phase::Streaming,
                 Phase::Squeezing,
                 Phase::RetainedMore,

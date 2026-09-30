@@ -405,6 +405,8 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-hash-sha3/src/cshake.rs",
     "crates/brynja-hash-sha3/src/sp800185.rs",
     "crates/brynja-hash-sha3/src/hardened/cshake.rs",
+    "crates/brynja-hash-sha3/src/hardened/cshake/setup.rs",
+    "crates/brynja-hash-sha3/src/hardened/cshake/setup/tests.rs",
     "crates/brynja-hash-sha3/src/hardened/cshake/tests.rs",
     "crates/brynja-hash-sha3/src/hardened/fixed.rs",
     "crates/brynja-hash-sha3/src/hardened/mod.rs",

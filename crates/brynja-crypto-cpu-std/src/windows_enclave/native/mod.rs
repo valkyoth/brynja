@@ -7,7 +7,17 @@ use std::path::Path;
 mod callback;
 mod pin;
 pub(super) mod sha2;
+#[cfg(feature = "strict-sha3")]
+pub(super) mod sha3;
 mod sys;
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Protocol {
+    Legacy,
+    Sha2,
+    #[cfg(feature = "strict-sha3")]
+    Sha3,
+}
 
 #[derive(Default)]
 struct Entries {
@@ -35,7 +45,7 @@ pub(super) struct Backend {
     live: bool,
     epoch: u64,
     generation: u64,
-    sha2: bool,
+    protocol: Protocol,
 }
 impl Backend {
     pub(super) fn open(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
@@ -48,13 +58,13 @@ impl Backend {
         policy: &ImagePolicy,
         verify: impl FnOnce(&pin::Pin) -> Result<(), Error>,
     ) -> Result<Self, Error> {
-        Self::open_protocol(location, policy, verify, false)
+        Self::open_protocol(location, policy, verify, Protocol::Legacy)
     }
     fn open_protocol(
         location: &Path,
         policy: &ImagePolicy,
         verify: impl FnOnce(&pin::Pin) -> Result<(), Error>,
-        sha2: bool,
+        protocol: Protocol,
     ) -> Result<Self, Error> {
         if !sys::supported() {
             return Err(Error::Unsupported);
@@ -77,7 +87,7 @@ impl Backend {
             live: false,
             epoch: 0,
             generation: 0,
-            sha2,
+            protocol,
         };
         owner.base = sys::create()?;
         sys::load(
@@ -98,26 +108,28 @@ impl Backend {
             output: sys::export(owner.base, b"PublicRetainedOutput\0")?,
             input: sys::export(
                 owner.base,
-                if sha2 {
-                    b"PublicSha2InputSource\0"
-                } else {
-                    b"PublicRetainedInput\0"
+                match protocol {
+                    Protocol::Sha2 => b"PublicSha2InputSource\0",
+                    #[cfg(feature = "strict-sha3")]
+                    Protocol::Sha3 => b"PublicSha3InputSource\0",
+                    Protocol::Legacy => b"PublicRetainedInput\0",
                 },
             )?,
-            input_control: if sha2 {
+            input_control: if protocol != Protocol::Legacy {
                 0
             } else {
                 sys::export(owner.base, b"PublicInputControl\0")?
             },
-            rehash_control: if sha2 {
+            rehash_control: if protocol != Protocol::Legacy {
                 0
             } else {
                 sys::export(owner.base, b"PublicRehashControl\0")?
             },
-            sha2_control: if sha2 {
-                sys::export(owner.base, b"PublicSha2Control\0")?
-            } else {
-                0
+            sha2_control: match protocol {
+                Protocol::Sha2 => sys::export(owner.base, b"PublicSha2Control\0")?,
+                #[cfg(feature = "strict-sha3")]
+                Protocol::Sha3 => sys::export(owner.base, b"PublicSha3Control\0")?,
+                Protocol::Legacy => 0,
             },
         };
         Ok(owner)
@@ -206,10 +218,11 @@ impl Backend {
     }
     fn clear(&mut self) -> Result<(), Error> {
         if self.live {
-            if self.sha2 {
-                self.run_sha2(3, None, 0, None)?;
-            } else {
-                self.run(3, None, 0, None)?;
+            match self.protocol {
+                Protocol::Sha2 => self.run_sha2(3, None, 0, None)?,
+                #[cfg(feature = "strict-sha3")]
+                Protocol::Sha3 => self.run_sha3(3, None, 0, None)?,
+                Protocol::Legacy => self.run(3, None, 0, None)?,
             }
             self.live = false;
         }

@@ -1,6 +1,6 @@
 # v0.24.50 remaining work
 
-Current implementation status: the bounded SHA-256 and full scalar SHA-2 streaming
+Current implementation status: the bounded SHA-256 and scalar SHA-2/SHA-3 streaming
 Windows enclave APIs are integrated and development-tested. Existing Linux-style host-slice
 sessions still reject Unsupported on Windows. Broader algorithms and production
 qualification remain incomplete. The release scope
@@ -71,21 +71,17 @@ describe how the worker was developed, not outstanding constructor work.
 
 - Scalar SHA-2 streaming, bit tails, all named identities and general SHA-512/t
   are implemented in the [separate version-six worker/API](windows-enclave-sha2.md).
-  Complete the remaining passes in order: SHA-3/SHAKE/cSHAKE, KMAC, TupleHash,
+  Complete the remaining passes in order: KMAC, TupleHash,
   batching and ParallelHash. Extend the integrated enclave-compatible strict facade.
   Keep unsupported routes fail-closed and ordinary APIs unchanged. Do not claim
   the existing host-slice/closure APIs are transparently enclave-compatible.
-  The private scalar SHA-3/SHAKE/cSHAKE worker component now passes Linux and
-  Windows-native component tests: 628 cSHAKE vectors, 76 NIST bit vectors,
-  96 hashlib cases, 512 retained-fragment rehash cases and ten compiled mutants.
-  It supports incremental XOF fragments, terminal low-bit-first output and
-  clearing on cancellation/copy failure/unwind. Focused Miri covers ownership
-  and clearing without repeating the complete cryptographic campaign. This is
-  **not yet Windows enclave execution**: connect and test the versioned transport,
-  affine host API, placement/destruction and private native enclave campaign.
-  Setup currently bounds each N/S string to 1024 bytes; settle the streaming
-  setup transport before calling algorithm coverage complete. No shipping
-  SHA-3 enclave API, acceleration or production qualification is claimed here.
+  Scalar SHA-3/SHAKE/cSHAKE is now integrated in the
+  [version-seven worker/API](windows-enclave-sha3.md), including streamed N/S
+  setup, incremental XOF fragments and exact-bit retained rehashing. Native
+  development enclave campaigns pass 1028 cases in each debug/release build.
+  Worker vectors, compiled mutants, placement/lifecycle Miri and packaged
+  ownership tests pass. This completes the scalar algorithm implementation
+  pass, not acceleration, independent review or production qualification.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

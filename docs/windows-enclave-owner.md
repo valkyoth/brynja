@@ -7,6 +7,7 @@ production-signed deployment and independent qualification remain pending.
 This completes the bounded SHA-256 facade integration, not all Windows work.
 For full scalar SHA-2 streaming and general SHA-512/t, use the separate
 [version-six SHA-2 API](windows-enclave-sha2.md) and matching worker image.
+SHA-3/SHAKE/cSHAKE use the separate [version-seven API](windows-enclave-sha3.md).
 The [source-bound author results](windows-enclave-owner-results.md) describe
 the tests and their limits.
 

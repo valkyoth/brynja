@@ -65,5 +65,6 @@ register_state!(HardenedCshake128Reader);
 register_construction!(HardenedCshake256);
 register_state!(HardenedCshake256Reader);
 pub use cshake::{
-    HardenedCshake128, HardenedCshake128Reader, HardenedCshake256, HardenedCshake256Reader,
+    HardenedCshake128, HardenedCshake128Reader, HardenedCshake128Setup, HardenedCshake256,
+    HardenedCshake256Reader, HardenedCshake256Setup,
 };

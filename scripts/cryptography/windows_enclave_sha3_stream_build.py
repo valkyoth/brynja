@@ -83,10 +83,54 @@ def build(directory, target, testing=False):
     return artifact
 
 
+def image(directory):
+    directory = directory.resolve()
+    build(directory, 'x86_64-pc-windows-msvc')
+    names = ('window_sha3_stream.c','window_guard.c','window_lock.c','synthetic.c',
+             'window_rust_x64.asm','sha3_stream_worker.rs','sha3_stream_placement_tests.rs')
+    for name in names: shutil.copyfile(SOURCE/name,directory/name)
+    original = (SOURCE/'window_retained.c').read_text()
+    anchor = '(operation & 255) > 7 || operation >> 8 > 19'
+    if original.count(anchor)!=1: raise ValueError('Retained admission anchor changed')
+    (directory/'window_retained.c').write_text(original.replace(anchor,
+        '!(operation == 0 || operation == 3 || (operation >= 21 && operation <= 31))'))
+    command = ['rustc','+1.98.1','--edition=2024','--target','x86_64-pc-windows-msvc',
+        '--crate-type','staticlib','--crate-name','sha3_stream_worker','-D','warnings',
+        '-C','panic=abort','-C','opt-level=2','-C','lto=fat','-C','overflow-checks=yes',
+        '-L','dependency='+str(directory),str(directory/'sha3_stream_worker.rs'),
+        '--emit='+','.join(kind+'='+str(directory/('normal_rust.'+suffix))
+                          for kind,suffix in [('link','lib'),('asm','s'),('llvm-ir','ll')])]
+    for name in ('brynja_core','brynja_hash_sha3','sha3_stream'):
+        command+=['--extern',name+'='+str(directory/('lib'+name+'.rlib'))]
+    run(command)
+    (directory/'link.cmd').write_text('@echo off\nsetlocal\n'
+        'if "%VCToolsInstallDir%"=="" exit /b 90\ncd /d "%~dp0"\n'
+        'ml64 /nologo /c /Fowindow.obj window_rust_x64.asm\nif errorlevel 1 exit /b 1\n'
+        'cl /nologo /std:c11 /LD /O2 /W4 /WX /MT /guard:cf /Fonormal.obj /Fenormal.dll '
+        'window_sha3_stream.c window.obj normal_rust.lib /link /ENCLAVE /NODEFAULTLIB '
+        '/INCREMENTAL:NO /INTEGRITYCHECK /GUARD:MIXED '
+        '/LIBPATH:"%VCToolsInstallDir%lib\\x64\\enclave" '
+        '/LIBPATH:"%WindowsSdkDir%Lib\\%WindowsSDKVersion%ucrt_enclave\\x64" '
+        'libcmt.lib libvcruntime.lib ucrt.lib vertdll.lib bcrypt.lib\n'
+        'if errorlevel 1 exit /b 1\n'
+        '"%WindowsSdkDir%bin\\%WindowsSDKVersion%x64\\veiid.exe" normal.dll\n'
+        'exit /b %ERRORLEVEL%\n')
+    record=json.loads((directory/'sha3-stream-build.json').read_text())
+    record['commands'].append(command)
+    record['source_sha256'].update({'assurance/windows-enclave-probe/'+name:
+        hashlib.sha256((SOURCE/name).read_bytes()).hexdigest() for name in (*names,'window_retained.c')})
+    record['generated_sha256']={p.name:hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in sorted(directory.iterdir()) if p.suffix in ('.rs','.c','.asm','.lib','.s','.ll')}
+    (directory/'sha3-worker-build.json').write_text(json.dumps(record,indent=2)+'\n')
+    return directory/'normal_rust.lib'
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('directory',type=Path)
     parser.add_argument('--target',default='x86_64-pc-windows-msvc')
     parser.add_argument('--test',action='store_true')
+    parser.add_argument('--image',action='store_true')
     args = parser.parse_args()
-    print(build(args.directory,args.target,args.test))
+    if args.image and args.test: parser.error('--image and --test are distinct products')
+    print(image(args.directory) if args.image else build(args.directory,args.target,args.test))

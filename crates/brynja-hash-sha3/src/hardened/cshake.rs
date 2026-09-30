@@ -12,6 +12,9 @@ use super::{
 const CSHAKE_SUFFIX: u8 = 0x04;
 const CSHAKE_SUFFIX_BITS: u8 = 3;
 
+mod setup;
+pub use setup::{HardenedCshake128Setup, HardenedCshake256Setup};
+
 #[derive(Clone, Copy, Eq, PartialEq)]
 enum CshakeLifecycle {
     Absorbing,

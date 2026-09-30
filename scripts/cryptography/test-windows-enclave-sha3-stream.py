@@ -21,6 +21,24 @@ MUTANTS = (
 )
 
 
+def placement(directory, miri_toolchain):
+    fixture = directory / 'placement'
+    fixture.mkdir()
+    manifest = '[package]\nname="enclave-sha3-placement"\nversion="0.0.0"\nedition="2024"\n'
+    manifest += '[lib]\nname="sha3_stream"\npath=' + json.dumps(str(build.SOURCE / 'sha3_stream.rs')) + '\n'
+    manifest += '[[test]]\nname="placement"\npath=' + json.dumps(str(build.SOURCE / 'sha3_stream_worker.rs')) + '\n[dependencies]\n'
+    for name in ('brynja-core', 'brynja-hash-sha3'):
+        manifest += name + '={path=' + json.dumps(str(build.ROOT / 'crates' / name)) + '}\n'
+    (fixture / 'Cargo.toml').write_text(manifest + '[workspace]\n')
+    command = ['cargo', '+' + (miri_toolchain or '1.98.1')]
+    if miri_toolchain:
+        command += ['miri']
+    output = build.run(command + ['test', '--offline', '--manifest-path',
+        str(fixture / 'Cargo.toml'), '--test', 'placement'])
+    if '1 passed; 0 failed' not in output:
+        raise AssertionError(output)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--miri-toolchain')
@@ -33,7 +51,7 @@ def main():
         def check(success):
             result = subprocess.run([str(executable)],capture_output=True,text=True,timeout=180)
             if success:
-                if result.returncode or '6 passed' not in result.stdout:
+                if result.returncode or '7 passed' not in result.stdout:
                     raise AssertionError(result.stdout+result.stderr)
             elif result.returncode == 0 or 'FAILED' not in result.stdout:
                 raise AssertionError('Mutant survived or did not fail assertion: '+result.stdout+result.stderr)
@@ -47,6 +65,7 @@ def main():
             try: check(False)
             except AssertionError as error: raise AssertionError(before+': '+str(error)) from error
         source.write_text(original);build.run(command);check(True)
+        placement(directory, args.miri_toolchain)
         if args.miri_toolchain:
             fixture = directory/'fixture';fixture.mkdir()
             manifest='[package]\nname="enclave-sha3-lifecycle"\nversion="0.0.0"\nedition="2024"\n'
@@ -57,7 +76,7 @@ def main():
             for test in ('focused_memory_lifecycle',):
                 print(build.run(['cargo','+'+args.miri_toolchain,'miri','test','--offline',
                     '--manifest-path',str(fixture/'Cargo.toml'),'--lib',test]),flush=True)
-    print('Enclave SHA-3 worker: six tests and ten compiled mutants PASS; 628 cSHAKE, 76 NIST, 96 hashlib cases; 512 retained rehash cases')
+    print('Enclave SHA-3 worker: seven tests and ten compiled mutants PASS; 628 cSHAKE, 76 NIST, 96 hashlib cases; 512 retained rehash cases; streamed setup PASS')
 
 
 if __name__ == '__main__': main()

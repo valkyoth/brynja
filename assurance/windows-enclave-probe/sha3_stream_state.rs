@@ -3,8 +3,8 @@
 use super::{Algorithm, Error, Scratch};
 use brynja_core::copy_secret_region;
 use brynja_hash_sha3::{
-    Fips202BitString, Fips202Output, HardenedCshake128, HardenedCshake256, HardenedSha3_224,
-    HardenedSha3_256, HardenedSha3_384, HardenedSha3_512,
+    Fips202BitString, Fips202Output, HardenedCshake128, HardenedCshake128Setup, HardenedCshake256,
+    HardenedCshake256Setup, HardenedSha3_224, HardenedSha3_256, HardenedSha3_384, HardenedSha3_512,
 };
 
 pub(super) enum State {
@@ -15,8 +15,50 @@ pub(super) enum State {
     D(HardenedSha3_512),
     X(HardenedCshake128),
     Y(HardenedCshake256),
+    P(HardenedCshake128Setup),
+    Q(HardenedCshake256Setup),
 }
 impl State {
+    pub(super) fn setup(algorithm: Algorithm, name: u128, custom: u128) -> Result<Self, Error> {
+        match algorithm {
+            Algorithm::Cshake128 => HardenedCshake128Setup::new(name, custom).map(Self::P),
+            Algorithm::Cshake256 => HardenedCshake256Setup::new(name, custom).map(Self::Q),
+            _ => return Err(Error::Identity),
+        }
+        .map_err(|_| Error::Crypto)
+    }
+    pub(super) fn setup_chunk(
+        &mut self,
+        name: bool,
+        input: Fips202BitString<'_>,
+    ) -> Result<(), Error> {
+        match self {
+            Self::P(s) => {
+                if name {
+                    s.name(input)
+                } else {
+                    s.customization(input)
+                }
+            }
+            Self::Q(s) => {
+                if name {
+                    s.name(input)
+                } else {
+                    s.customization(input)
+                }
+            }
+            _ => return Err(Error::State),
+        }
+        .map_err(|_| Error::Crypto)
+    }
+    pub(super) fn finish_setup(&mut self) -> Result<(), Error> {
+        *self = match core::mem::replace(self, Self::Empty) {
+            Self::P(s) => Self::X(s.finish().map_err(|_| Error::Crypto)?),
+            Self::Q(s) => Self::Y(s.finish().map_err(|_| Error::Crypto)?),
+            _ => return Err(Error::State),
+        };
+        Ok(())
+    }
     pub(super) fn new(
         algorithm: Algorithm,
         name: Fips202BitString<'_>,
@@ -51,7 +93,7 @@ impl State {
             Self::D(s) => s.update(input),
             Self::X(s) => s.update(input),
             Self::Y(s) => s.update(input),
-            Self::Empty => return Err(Error::State),
+            Self::Empty | Self::P(_) | Self::Q(_) => return Err(Error::State),
         }
         .map_err(|_| Error::Crypto)
     }

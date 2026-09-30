@@ -76,6 +76,37 @@ fn quarantined(owner: &Owner) {
     assert_eq!(owner.phase, Phase::Quarantined);
     clean(owner);
 }
+fn setup_stream(
+    owner: &mut Owner,
+    seq: &mut u64,
+    id: u64,
+    n: Fips202BitString<'_>,
+    s: Fips202BitString<'_>,
+) {
+    owner
+        .setup(*seq, id, n.bit_len() as u128, s.bit_len() as u128)
+        .unwrap();
+    for (name, input) in [(true, n), (false, s)] {
+        let whole = input.bit_len() / 8;
+        for chunk in input.as_bytes()[..whole].chunks(1024) {
+            *seq += 1;
+            owner.setup_chunk(*seq, name, chunk, 8).unwrap();
+        }
+        if input.bit_len() % 8 != 0 {
+            *seq += 1;
+            owner
+                .setup_chunk(
+                    *seq,
+                    name,
+                    &input.as_bytes()[whole..],
+                    input.valid_bits_in_last_byte(),
+                )
+                .unwrap();
+        }
+    }
+    *seq += 1;
+    owner.finish_setup(*seq).unwrap();
+}
 fn check_case(
     id: u64,
     n: Fips202BitString<'_>,
@@ -88,7 +119,11 @@ fn check_case(
     for partition in [1, 17, 1024] {
         let mut owner = Owner::new();
         let mut seq = 1;
-        owner.begin(seq, id, n, s).unwrap();
+        if id >= 7 {
+            setup_stream(&mut owner, &mut seq, id, n, s);
+        } else {
+            owner.begin(seq, id, n, s).unwrap();
+        }
         let whole = if last == 8 {
             input.len()
         } else {
@@ -387,4 +422,78 @@ fn xof_terminal_bounds_and_identity() {
     quarantined(&owner);
     // This worker is intended for one existing 4096-byte retained allocation.
     assert!(core::mem::size_of::<Owner>() <= 4096);
+}
+
+#[test]
+fn large_streamed_setup_and_retained_setup_fail_closed() {
+    for id in [7, 8] {
+        let n = vec![0x35; 4097];
+        let s = vec![0x96; 8193];
+        let name = Fips202BitString::new(&n, 8).unwrap();
+        let custom = Fips202BitString::new(&s, 8).unwrap();
+        let mut expected = [0; 37];
+        if id == 7 {
+            brynja_hash_sha3::cshake128(b"abc", &n, &s, &mut expected).unwrap();
+        } else {
+            brynja_hash_sha3::cshake256(b"abc", &n, &s, &mut expected).unwrap();
+        }
+        check_case(id, name, custom, b"abc", 8, &expected, 8);
+        let mut owner = Owner::new();
+        owner.begin(1, 5, empty(), empty()).unwrap();
+        owner.finish(2, b"abc", 8).unwrap();
+        owner.squeeze(3, 1, 3, true).unwrap();
+        let source = owner.output[0];
+        let bits = Fips202BitString::new(core::slice::from_ref(&source), 3).unwrap();
+        let mut expected = [0; 37];
+        if id == 7 {
+            brynja_hash_sha3::cshake128_bits(
+                bits,
+                name,
+                custom,
+                brynja_hash_sha3::Fips202Output::new(&mut expected, 8).unwrap(),
+            )
+            .unwrap();
+        } else {
+            brynja_hash_sha3::cshake256_bits(
+                bits,
+                name,
+                custom,
+                brynja_hash_sha3::Fips202Output::new(&mut expected, 8).unwrap(),
+            )
+            .unwrap();
+        }
+        let mut seq = 4;
+        setup_stream(&mut owner, &mut seq, id, name, custom);
+        seq += 1;
+        owner.squeeze(seq, 37, 8, true).unwrap();
+        seq += 1;
+        owner
+            .export_public(seq, id, 37, 8, |b| {
+                assert_eq!(b, expected);
+                true
+            })
+            .unwrap();
+        clean(&owner);
+        for remaining in [true, false] {
+            let mut owner = Owner::new();
+            owner.setup(1, id, 1, 1).unwrap();
+            if !remaining {
+                owner.setup_chunk(2, true, &[1], 1).unwrap();
+            }
+            assert!(owner.finish_setup(if remaining { 2 } else { 3 }).is_err());
+            quarantined(&owner);
+        }
+        let mut owner = Owner::new();
+        owner.setup(1, id, 1, 1).unwrap();
+        assert!(owner.update(2, b"premature message").is_err());
+        quarantined(&owner);
+        let mut owner = Owner::new();
+        owner.setup(1, id, 1, 1).unwrap();
+        assert!(owner.setup_chunk(2, false, &[1], 1).is_err());
+        quarantined(&owner);
+        let mut owner = Owner::new();
+        owner.setup(1, id, 8193, 0).unwrap();
+        assert!(owner.setup_chunk(2, true, &[0; 1025], 1).is_err());
+        quarantined(&owner);
+    }
 }

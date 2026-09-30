@@ -1,4 +1,4 @@
-//! Private SHA-2 streaming protocol; reuses the same OS admission/lifetime owner.
+//! Private SHA-3 streaming protocol; reuses the same OS admission/lifetime owner.
 use super::super::engine::Driver;
 use super::{Backend, Context, Error, ImagePolicy, Registration, callback, sys};
 use std::path::Path;
@@ -10,28 +10,29 @@ impl Transport {
             location,
             policy,
             |pin| pin.signature(),
-            super::Protocol::Sha2,
+            super::Protocol::Sha3,
         )?))
     }
     pub(crate) fn request(
         &mut self,
-        operation: usize,
-        sequence: u64,
-        algorithm: u64,
+        request: super::super::sha3_wire::Request,
         input: &[u8],
-        last: u8,
         output: Option<&mut [u8]>,
     ) -> Result<(), Error> {
+        let operation = request.op;
         if !self.0.live {
-            if operation != 11 {
+            if !matches!(operation, 21 | 28) {
                 return Err(Error::Protocol);
             }
             self.0.live = true;
-            self.0.run_sha2(0, None, 0, None)?;
+            self.0.run_sha3(0, None, 0, None)?;
         }
-        let header = super::super::sha2_wire::header(sequence, algorithm, input, last)?;
+        let header = request.header(input)?;
+        if output.as_ref().is_some_and(|v| v.len() != request.width) {
+            return Err(Error::Bounds);
+        }
         self.0
-            .run_sha2(operation, Some(&header), input.len(), output)
+            .run_sha3(operation, Some(&header), input.len(), output)
     }
     pub(crate) fn close(&mut self) -> Result<(), Error> {
         self.0.close()
@@ -47,30 +48,28 @@ impl Transport {
                 }
                 Ok(())
             },
-            super::Protocol::Sha2,
+            super::Protocol::Sha3,
         )?))
     }
 }
 
 impl Backend {
-    pub(super) fn run_sha2(
+    pub(super) fn run_sha3(
         &mut self,
         operation: usize,
-        input: Option<&[u8; 48]>,
+        input: Option<&[u8; 96]>,
         length: usize,
         output: Option<&mut [u8]>,
     ) -> Result<(), Error> {
-        if self.protocol != super::Protocol::Sha2
+        if self.protocol != super::Protocol::Sha3
             || self.uncertain
             || self.terminated
             || self.base == 0
             || self.thread != sys::thread()
-            || !matches!(operation, 0 | 3 | 11..=16)
+            || !matches!(operation, 0 | 3 | 21..=31)
             || matches!(operation, 0 | 3) == input.is_some()
-            || (operation == 15) != output.is_some()
-            || output
-                .as_ref()
-                .is_some_and(|v| v.is_empty() || v.len() > 64)
+            || (operation == 25) != output.is_some()
+            || output.as_ref().is_some_and(|v| v.len() > 1024)
         {
             return Err(Error::Quarantined);
         }
@@ -116,8 +115,8 @@ impl Backend {
             3 => 4,
             _ => operation,
         };
-        context.inspect_common(returned, outer, guards, inner, expected, operation >= 11)?;
-        super::super::sha2_wire::receipt(context.low, operation, length, receipt)?;
+        context.inspect_common(returned, outer, guards, inner, expected, operation >= 21)?;
+        super::super::sha3_wire::receipt(context.low, operation, length, receipt)?;
         if operation == 3 {
             self.slot = 0;
         } else if !sys::pages(self.slot, 1, true) {

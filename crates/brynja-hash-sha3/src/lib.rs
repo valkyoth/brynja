@@ -48,11 +48,11 @@ pub use error::{
     Shake128Error, Shake256Error,
 };
 pub use hardened::{
-    HardenedCshake128, HardenedCshake128Reader, HardenedCshake256, HardenedCshake256Reader,
-    HardenedFips202Construction, HardenedFips202State, HardenedSha3_224, HardenedSha3_256,
-    HardenedSha3_384, HardenedSha3_512, HardenedSha3Error, HardenedSha3SecretOutput,
-    HardenedShake128, HardenedShake128Reader, HardenedShake256, HardenedShake256Reader,
-    Sha3PublicDeclassification,
+    HardenedCshake128, HardenedCshake128Reader, HardenedCshake128Setup, HardenedCshake256,
+    HardenedCshake256Reader, HardenedCshake256Setup, HardenedFips202Construction,
+    HardenedFips202State, HardenedSha3_224, HardenedSha3_256, HardenedSha3_384, HardenedSha3_512,
+    HardenedSha3Error, HardenedSha3SecretOutput, HardenedShake128, HardenedShake128Reader,
+    HardenedShake256, HardenedShake256Reader, Sha3PublicDeclassification,
 };
 pub use sha3_224::Sha3_224;
 pub use sha3_256::Sha3_256;

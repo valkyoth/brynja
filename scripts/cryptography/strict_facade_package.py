@@ -6,7 +6,8 @@ FORBIDDEN = ('crypto', 'legacy', 'protected_memory', 'execution::Authority',
              'sha2::Sha256', 'sha3::HardenedSha3_256',
              'parallelhash::ParallelHashExecutor', 'enclave::Backend',
              'enclave::Driver', 'enclave::engine', 'enclave::policy',
-             'enclave::sha2::transport', 'enclave::sha2::Owner')
+             'enclave::sha2::transport', 'enclave::sha2::Owner',
+             'enclave::sha3::transport', 'enclave::sha3::Owner')
 MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch', 'enclave')
 
 
@@ -31,6 +32,14 @@ brynja-strict = { version = "=0.1.0", default-features = false }
     positive = '#![forbid(unsafe_code)]\n'
     positive += '\n'.join(f'pub type {name.title()} = brynja_strict::{name}::Session;'
                           for name in MODULES)
+    positive += '\n' + '\n'.join(
+        f"pub type EnclaveSha3{kind}<'a> = brynja_strict::enclave::sha3::{kind}<'a>;"
+        for kind in ('Stream', 'Reader', 'Retained', 'Finalized'))
+    positive += '\npub type EnclaveSha3Session = brynja_strict::enclave::sha3::Session;'
+    # Compile the actual deployment-guide example, not a second hand-written copy.
+    guide = (root / 'docs/windows-enclave-sha3.md').read_text()
+    example = guide.split('```rust,no_run\n')[1].split('```')[0]
+    positive += '\n' + example.replace('fn public_example', 'pub fn public_example')
     source.write_text(positive)
     (consumer / 'tests').mkdir()
     (consumer / 'tests/facade.rs').write_text(
@@ -47,7 +56,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         base = [*cargo, 'check', '--locked', '--offline', *features]
         cases = [(f'use brynja_strict::{name};',
                   'E0603' if name in ('enclave::Backend', 'enclave::engine', 'enclave::policy',
-                                     'enclave::sha2::transport','enclave::sha2::Owner') else 'E0432')
+                                     'enclave::sha2::transport','enclave::sha2::Owner',
+                                     'enclave::sha3::transport','enclave::sha3::Owner') else 'E0432')
                  for name in FORBIDDEN]
         if not features:
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
@@ -62,6 +72,10 @@ brynja-strict = { version = "=0.1.0", default-features = false }
             for kind in ('Session',"Stream<'static>","Digest<'static>"):
                 cases.append((f'fn require<T: {trait}>() {{}}\n'
                     f'fn probe() {{ require::<brynja_strict::enclave::sha2::{kind}>(); }}','E0277'))
+            for kind in ('Session', "Stream<'static>", "Reader<'static>",
+                         "Retained<'static>", "Finalized<'static>"):
+                cases.append((f'fn require<T: {trait}>() {{}}\n'
+                    f'fn probe() {{ require::<brynja_strict::enclave::sha3::{kind}>(); }}','E0277'))
         try:
             for negative, error in cases:
                 source.write_text('#![forbid(unsafe_code)]\n' + negative)

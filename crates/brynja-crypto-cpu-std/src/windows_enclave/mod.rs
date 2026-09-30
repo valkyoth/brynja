@@ -58,6 +58,10 @@ pub mod sha2;
     )
 ))]
 mod sha2_wire;
+#[cfg(feature = "strict-sha3")]
+pub mod sha3;
+#[cfg(feature = "strict-sha3")]
+mod sha3_wire;
 mod unsupported;
 pub use brynja_hash_sha2::PublicDeclassification;
 #[cfg(all(

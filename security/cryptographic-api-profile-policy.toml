@@ -1139,7 +1139,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "93a7acffcf48a9a40b874490194b7ae5e8110392cb9e2bcef0231b5b005fa335"
+sha256 = "e1bb123f10dd5c400ba9d6d77c9950aa233f20d8c3f117bf78210961fdb90dfa"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_operations.py"
@@ -1255,11 +1255,11 @@ sha256 = "36366a3c7d13e691894bdcef1a2c4b3e85554e7121da76b68924a8412d24ba7f"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/mod.rs"
-sha256 = "83aa4e10f13f14e08844f9d5428bc5b1cc9f37132fb2093ed802b8dd8afb815d"
+sha256 = "49520e48c9790d409482f6b1d71a61d707fb254cc49fe5981ec4830c472c602a"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake.rs"
-sha256 = "830d8799fcc32b83c3b871ff5a9e76c563de914c3283173eb81138ead49b218f"
+sha256 = "fd7be780e4f7887ff3400a4eedcc7983279668cce7976058faec549e56ccd975"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake/tests.rs"
@@ -1428,3 +1428,11 @@ sha256 = "88d7ba99043613ad916b178eaf22ad7c524d2ef850c49f161cc4f1450b6d10cd"
 [[reviewed-source]]
 path = "assurance/md5-cpu-public-api/src/packaged.rs"
 sha256 = "58d54f5fe62ebaffb73bbd9d885610516246e2b49746fe65429c5726d241865b"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-sha3/src/hardened/cshake/setup.rs"
+sha256 = "36f55679f83b9e0a7a96dbb9e6c770dd31a414c5a549478bf1e6974c54d9ac2c"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-sha3/src/hardened/cshake/setup/tests.rs"
+sha256 = "e3c543e4e26e218ac7ad16af7bcf3ac7b275aa59cea95fa194ae7a7d3c1b3986"

@@ -36,6 +36,7 @@ choice, not certification or proof that all application code uses this profile.
 | Strict-only modern protected sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
 
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `kmac`, `tuplehash`, `parallelhash`
@@ -102,6 +103,9 @@ The separate `enclave::sha2::Session` supports all named SHA-2 identities,
 general SHA-512/t, streaming, final bit tails and retained cross-algorithm rehashing.
 It requires the matching version-six image. See the
 [streaming example and protection limits](../../docs/windows-enclave-sha2.md).
+`enclave::sha3::Session` adds all eight SHA-3/SHAKE/cSHAKE identities, streamed
+N/S, incremental XOF output and exact-bit retained rehashing using a separate
+version-seven image. See the [SHA-3 guide](../../docs/windows-enclave-sha3.md).
 No production signing service is bundled; deployment credentials belong to the
 application publisher. Development-signing success is not production qualification.
 

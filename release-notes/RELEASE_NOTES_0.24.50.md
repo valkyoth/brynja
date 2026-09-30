@@ -23,7 +23,14 @@ implements all six named identities and general SHA-512/t, bounded input
 snapshots for large streams, arbitrary-bit final tails and exact-bit retained
 rehashing. Native Windows development tests pass in debug/release. The worker
 is scalar; SIMD/hardware and production qualification remain separate unfinished
-work. SHA-3, KMAC, TupleHash, batching and ParallelHash remain subsequent passes.
+work. KMAC, TupleHash, batching and ParallelHash remain subsequent passes.
+
+The separate [SHA-3 enclave API](../docs/windows-enclave-sha3.md) implements all
+eight SHA-3/SHAKE/cSHAKE identities, incremental exact-bit output, streamed
+cSHAKE N/S setup and retained rehashing. Native development debug/release
+campaigns pass 1028 cases each. The version-seven worker uses scalar first-party
+Rust and requires the existing signed-image admission; no hardware/SIMD route,
+production signing success or independent qualification is claimed.
 
 The chosen enclave distribution model is source/API/tooling with consumer-managed
 signing and deployment, not a Brynja-operated production-signing service. Native

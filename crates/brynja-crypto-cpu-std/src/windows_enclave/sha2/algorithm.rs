@@ -35,7 +35,7 @@ impl Algorithm {
     pub const fn output_bytes(self) -> usize {
         self.bytes
     }
-    pub(super) const fn wire(self) -> u64 {
+    pub(in crate::windows_enclave) const fn wire(self) -> u64 {
         self.wire
     }
 }

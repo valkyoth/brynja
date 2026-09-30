@@ -47,6 +47,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
 | Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
@@ -82,6 +83,9 @@ The distinct `windows_enclave::sha2` module covers streaming, all named SHA-2
 identities, general SHA-512/t and bit tails with retained cross-algorithm rehashing.
 Its version-six image is not interchangeable with the bounded worker. See the
 [streaming API guide](../../docs/windows-enclave-sha2.md).
+`windows_enclave::sha2_batch` adds eight declared SHA-2 slots, streamed item
+writers and sealed retained results. Its separate version-ten worker is scalar,
+not SIMD or parallel. See the [batch API and example](../../docs/windows-enclave-sha2-batch.md).
 With both `strict-sha2` and `strict-sha3`, `windows_enclave::sha3` adds the eight
 SHA-3/SHAKE/cSHAKE identities, streamed N/S and retained incremental output.
 Use the separate version-seven image and [SHA-3 guide](../../docs/windows-enclave-sha3.md).

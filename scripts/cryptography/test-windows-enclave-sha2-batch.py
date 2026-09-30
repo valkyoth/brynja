@@ -37,6 +37,12 @@ WIRE_MUTANTS=(
     ('source.checked_add(length).ok_or(Error::Length)?;', 'let _ = source.wrapping_add(length);'),
     ('input.len() != self.length', 'false'),
 )
+HOST_MUTANTS=(
+    ('self.sequence == 0', 'false'),
+    ('self.slot >= 8', 'self.slot > 8'),
+    ('self.op != 80 && self.budget != 0', 'false'),
+    ('self.op == 85', 'self.op == 84'),
+)
 
 def build(directory,target):
     base.build(directory,target,testing=True)
@@ -45,6 +51,10 @@ def build(directory,target):
     base.run(previous[:-3]+['--crate-type','rlib','-o',str(directory/'libsha2_stream.rlib')])
     for name in ('sha2_batch.rs','sha2_batch_tests.rs','sha2_batch_wire.rs','sha2_batch_wire_tests.rs'):
         shutil.copyfile(SOURCE/name,directory/name)
+    shutil.copyfile(SOURCE/'sha2_batch_host_wire_tests.rs',directory/'sha2_batch_host_wire_tests.rs')
+    shutil.copyfile(base.ROOT/'crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch_wire.rs',directory/'sha2_batch_host_wire.rs')
+    entry=directory/'sha2_batch.rs'
+    entry.write_text(entry.read_text()+'\n#[cfg(test)]\nmod sha2_batch_host_wire_tests;\n')
     rows=['#[test]','fn independent_hashlib_named_batch_oracle() {']
     for identity,name in enumerate(('sha224','sha256','sha384','sha512','sha512_224','sha512_256'),1):
         for length in (0,1,55,56,63,64,111,112,127,128,1024,2049):
@@ -69,9 +79,9 @@ def main():
     with tempfile.TemporaryDirectory(prefix='enclave-sha2-batch-') as tmp:
         directory=Path(tmp);command,executable=build(directory,target)
         result=base.run([str(executable)])
-        if '9 passed; 0 failed' not in result:raise AssertionError(result)
+        if '10 passed; 0 failed' not in result:raise AssertionError(result)
         path=directory/'sha2_batch.rs';original=path.read_text()
-        for filename,mutants in (('sha2_batch.rs',MUTANTS),('sha2_batch_wire.rs',WIRE_MUTANTS)):
+        for filename,mutants in (('sha2_batch.rs',MUTANTS),('sha2_batch_wire.rs',WIRE_MUTANTS),('sha2_batch_host_wire.rs',HOST_MUTANTS)):
             mutant_path=directory/filename;original=mutant_path.read_text()
             for before,after in mutants:
                 if original.count(before)!=1:raise ValueError('Stale mutant '+before)
@@ -98,6 +108,6 @@ def main():
                                  '--lib',test])
                 if '1 passed; 0 failed' not in output:raise AssertionError(output)
                 print(output)
-    print('SHA-2 enclave batch: nine tests; 72 hashlib cases; 255 activity masks; 4080 general-t bit cases; 22 compiled mutants rejected; no native qualification')
+    print('SHA-2 enclave batch: ten tests; actual host/worker parity; 72 hashlib cases; 255 activity masks; 4080 general-t bit cases; 26 compiled mutants rejected; no native qualification')
 
 if __name__=='__main__':main()

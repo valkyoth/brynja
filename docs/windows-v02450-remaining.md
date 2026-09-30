@@ -169,8 +169,17 @@ describe how the worker was developed, not outstanding constructor work.
   three focused Miri checks pass. The Rust worker/C OS-copy adapter compiles and
   links as an unsigned enclave image, but has not executed inside VBS; see the
   [wire/build observations](../assurance/windows-protection-observations/sha2-batch-wire-build-20260930.json).
-  Next: affine host API and native batch execution, SHA-3/SHAKE/cSHAKE batching
-  and their native campaigns. No SIMD or throughput gain is implied by sequential batching.
+  The subsequent [batch host API](windows-enclave-sha2-batch.md) now supplies
+  affine Session/Batch/Item/Retained owners, a typed public plan, an open-item
+  latch, transactional declassification and reuse after confirmed cancellation.
+  Its actual encoder is checked against the worker decoder. Six host tests pass
+  normally and under Miri; twenty negative ownership doctests pass. Ten component
+  tests reject 26 compiled mutants, plus two placement mutants. Native VBS
+  development debug/release campaigns each pass 355 batches/1822 digests, including
+  all activity masks, mixed identities and every valid general SHA-512/t parameter.
+  This finishes scalar SHA-2 batch host integration, not qualification or the
+  remaining SHA-3/SHAKE/cSHAKE batching and ParallelHash passes. No SIMD or
+  throughput gain is implied by sequential batching.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

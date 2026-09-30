@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "status": "NATIVE_DEVELOPMENT_ONLY",
+  "baseline": "438024a5",
+  "production_qualified": false,
+  "independently_verified": false,
+  "description": "Version-ten sequential scalar SHA-2 batch host API executing in a development-signed VBS enclave on Azure Windows Server 2025 x86-64. Host code was supplied as a source overlay, not an exact git checkout. Worker sources and build are separately recorded by sha2-batch-wire-build-20260930.json. The public constructor remains production-signature-only.",
+  "native_batch_campaign": {
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "batches_per_profile": 355,
+    "digest_comparisons_per_profile": 1822,
+    "nonempty_activity_masks": 255,
+    "general_sha512_t_parameters": 510,
+    "cancellation": "PASS",
+    "forgotten_item_rejection_and_close": "PASS"
+  },
+  "shared_native_per_profile": {
+    "sha2": 631,
+    "sha3": 1028,
+    "kmac": 546,
+    "tuplehash": 230,
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "result": "PASS"
+  },
+  "local_checks": {
+    "host_tests": 6,
+    "host_miri_tests": 6,
+    "negative_ownership_doctests": 20,
+    "api_example": "PASS",
+    "component_tests": 10,
+    "component_encoder_mutants": 26,
+    "placement_mutants": 2,
+    "packaged_export_ownership_rejections": 337,
+    "clippy": "PASS; repository style compatibility allowance",
+    "windows_cross_compile": "PASS"
+  },
+  "matching_host_and_sha2_source_hashes": 133,
+  "source_sha256": {
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/tests/lifecycle.rs": "cb7f2fda9e582bfb6bc93ddc15869f18ccbb9f0e209798bf4447988df919bd00",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/mod.rs": "433bc74a860a4536f951793b7386ba93ed254508b0b9cf25181abd011faea26c",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/item.rs": "ea33d8f55fbada351509c25ed9ba1043c8ef40179d36a7b44615993759993d3e",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/mod.rs": "12d6177e9bcb8d8af2690648012e88c985c2a769ebc0c7dc6d647c9f559f974b",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/mod.rs": "02cad46b0a6a6e4467aa66a74e67d3028e967e7f558a917c9e836ee320211d6b",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha2_batch.rs": "d2e10d14cc74b370de32578d922f30beb10bede11c2c378d7c01f432e2ac46fd",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/transport.rs": "e8b7f0687808fad7b0f6e93d7de7c871a5b8a95613b56fe85cd611c25b4a460e",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch_wire.rs": "7818d5c86403859e8fbea408d413c5b371234cc9a22d86d2bcd2e22a17fe090a",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/tests.rs": "90d7234a6ba1f22aaa11f70743a56d60a64ba6a2f13fcde7c0b7aab5ac11c7b1",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2/algorithm.rs": "18dbd61d91b2d0d8dd406adfe2ff4536a278e59bde01155e173063f4e335d872",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch_receipt.rs": "5b2f03f398608c2f5e64ddd3989a222cd2ce823c3be222152201f58923e4365b",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/tests/native.rs": "2f675ecd8914ec1c9680c7167fb547c1e4d46f774e293f8d22f2d1dd698182aa"
+  },
+  "platform": {
+    "test_processes": 0,
+    "production_qualified": false,
+    "vbs_status": 2,
+    "services_running": [
+      2
+    ],
+    "worker_archive_sha256": "fb50308e9ef481ca1d9a49b0188df18c0c858f6478107caf116be69fee0cb728",
+    "captured_at": "2026-09-30T15:17:35.3194398Z",
+    "secure_boot": false,
+    "image_sha256": "6bf36af6b5540028ee33896735c84b21261370258bb6b6dd2bb82c6ba8a4fcca",
+    "status": "OBSERVATIONS_ONLY",
+    "temporary_certificates": 0
+  },
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-owner-source.tar": "4225946df3b6a4110a80a438d97dd576342316516f4ad970d92211e523c4edb1",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-owner-products.tar.gz": "44792572d61c7791ca06678f49b9d59ed6982c86db3639bfa99bc462105feb21",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-owner-signed.dll": "6bf36af6b5540028ee33896735c84b21261370258bb6b6dd2bb82c6ba8a4fcca",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-owner-sign.log": "74ca4c71ac1063af2c6c15caa2f62aeaf4b27f1b461f3d930c6a2b7ec3b46f07",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-owner.log": "73b82d029d557282695aa062f87a26ff7b80fb00f818902efe9bff7322db34c3",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-shared.log": "e2fde0f577c1b18a1f259c74e3bd118b66818932c49085a6a1d480200cef32fd",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-native-state.json": "d79c85edd8f299ab585770d241af3472d8a02df4738bf61e2eef158dc1d5ab09",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-owner-final-source.tar": "0acb357103bc29865406cee354f4bd6f5ce5a20cac1e378869bc15b51f0d7991",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-owner-final-products.tar.gz": "9eea9d8df31f094596fe64ae9cce7da374ba265144b73ddcfa0aa76a9f20e27c",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-owner-final.log": "9ddb71a12cecf791bba1b46650d53959ed04ba1d69a5565e4b6879c4592b70b6",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-final-state.json": "ffa8a8accf9116c01a5ca37ff5d99d288861306005b38454c2299e452a521308"
+  },
+  "limitations": [
+    "Sequential scalar only; no SIMD or parallel throughput claim",
+    "Development certificate only; production signature rejection required by private test constructor",
+    "SignTool reported its SDK compatibility warning; wrapper returned nonzero and warning remains recorded",
+    "Secure Boot disabled on this development host",
+    "No new dump exclusion, compiler/register, Windows ARM64 or independent qualification",
+    "SHA-3 batching and ParallelHash integration remain unfinished"
+  ],
+  "final_followup": "Windows-target Clippy required replacing indexing in the native test with bounded iteration. Production code and worker image were unchanged; both native batch profiles passed again. Initial/shared logs and the final test binaries are preserved separately."
+}

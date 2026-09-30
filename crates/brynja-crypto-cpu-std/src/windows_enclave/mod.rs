@@ -51,6 +51,19 @@ mod policy;
 ))]
 mod protocol;
 pub mod sha2;
+pub mod sha2_batch;
+#[cfg(any(
+    test,
+    all(
+        target_os = "windows",
+        target_arch = "x86_64",
+        target_env = "msvc",
+        not(miri),
+        not(kani)
+    )
+))]
+mod sha2_batch_receipt;
+mod sha2_batch_wire;
 #[cfg(any(
     test,
     all(

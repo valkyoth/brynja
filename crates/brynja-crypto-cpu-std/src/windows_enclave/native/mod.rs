@@ -9,6 +9,7 @@ mod callback;
 pub(super) mod kmac;
 mod pin;
 pub(super) mod sha2;
+pub(super) mod sha2_batch;
 #[cfg(feature = "strict-sha3")]
 pub(super) mod sha3;
 mod sys;
@@ -17,6 +18,7 @@ pub(super) mod tuplehash;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Protocol {
+    Sha2Batch,
     Legacy,
     Sha2,
     #[cfg(feature = "strict-sha3")]
@@ -118,6 +120,7 @@ impl Backend {
                 owner.base,
                 match protocol {
                     Protocol::Sha2 => b"PublicSha2InputSource\0",
+                    Protocol::Sha2Batch => b"PublicSha2BatchInputSource\0",
                     #[cfg(feature = "strict-sha3")]
                     Protocol::Sha3 => b"PublicSha3InputSource\0",
                     #[cfg(feature = "strict-kmac")]
@@ -139,6 +142,7 @@ impl Backend {
             },
             sha2_control: match protocol {
                 Protocol::Sha2 => sys::export(owner.base, b"PublicSha2Control\0")?,
+                Protocol::Sha2Batch => sys::export(owner.base, b"PublicSha2BatchControl\0")?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 => sys::export(owner.base, b"PublicSha3Control\0")?,
                 #[cfg(feature = "strict-kmac")]
@@ -236,6 +240,7 @@ impl Backend {
         if self.live {
             match self.protocol {
                 Protocol::Sha2 => self.run_sha2(3, None, 0, None)?,
+                Protocol::Sha2Batch => self.run_sha2_batch(3, None, 0, None)?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 => self.run_sha3(3, None, 0, None)?,
                 #[cfg(feature = "strict-kmac")]

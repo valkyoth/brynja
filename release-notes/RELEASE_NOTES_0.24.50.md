@@ -56,7 +56,12 @@ The private scalar SHA-2 batch component now supplies eight ordered slots,
 bounded streamed input, canonical bit tails and all-or-nothing sealed export.
 Its version-ten metadata, placement worker and OS-copy adapter pass focused
 component/mutation/Miri tests and build as an unsigned Windows enclave image.
-This is not yet a supported batch host API or native enclave execution evidence.
+The subsequent `enclave::sha2_batch` host API now provides a typed plan, exclusive
+item writers, sealed retained results, cancellation and transactional public
+export. Native VBS development tests pass 355 batches/1822 digest comparisons in
+each debug/release profile. Forgotten writers cannot finalize implicitly; twenty
+negative doctests and packaged consumer checks enforce ownership. See the
+[batch API example and limits](../docs/windows-enclave-sha2-batch.md).
 SHA-3 batching, ParallelHash, hardware/SIMD and qualification remain unfinished.
 
 The chosen enclave distribution model is source/API/tooling with consumer-managed

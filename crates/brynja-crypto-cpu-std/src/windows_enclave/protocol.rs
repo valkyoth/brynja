@@ -82,6 +82,35 @@ impl Context {
         input: [usize; 11],
         rehash: [usize; 9],
     ) -> Result<(), Error> {
+        let expected = match self.operation {
+            0 => 1,
+            1 => 2,
+            2 => 3,
+            3 => 4,
+            4 => 5,
+            8 => 8,
+            _ => return Err(Error::Protocol),
+        };
+        self.inspect_common(
+            returned,
+            outer,
+            guards,
+            inner,
+            expected,
+            matches!(self.operation, 1 | 8),
+        )?;
+        self.inspect_input(input)?;
+        self.inspect_rehash(rehash)
+    }
+    pub(super) fn inspect_common(
+        &self,
+        returned: usize,
+        outer: [usize; 7],
+        guards: [usize; 13],
+        inner: [usize; 10],
+        expected: usize,
+        work_cleared: bool,
+    ) -> Result<(), Error> {
         let [low, high, sp, redzone, flags, enter, clear] = outer;
         let [
             guard_low,
@@ -110,15 +139,6 @@ impl Context {
             borrow_revoked,
             operation,
         ] = inner;
-        let expected = match self.operation {
-            0 => 1,
-            1 => 2,
-            2 => 3,
-            3 => 4,
-            4 => 5,
-            8 => 8,
-            _ => return Err(Error::Protocol),
-        };
         let destroying = self.operation == 3;
         if returned != 95
             || low != self.low
@@ -138,7 +158,7 @@ impl Context {
             || self.slot.checked_sub(4096) != Some(slot_guard)
             || slot != self.slot
             || alive != usize::from(!destroying)
-            || has_digest != usize::from(matches!(self.operation, 1 | 8))
+            || has_digest != usize::from(work_cleared)
             || cleared != if destroying { 4096 } else { 0 }
             || freed != usize::from(destroying)
             || error != 0
@@ -149,8 +169,7 @@ impl Context {
         {
             return Err(Error::Protocol);
         }
-        self.inspect_input(input)?;
-        self.inspect_rehash(rehash)
+        Ok(())
     }
     fn inspect_input(&self, value: [usize; 11]) -> Result<(), Error> {
         if self.operation != 1 {

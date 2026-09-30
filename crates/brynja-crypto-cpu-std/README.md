@@ -43,6 +43,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
+| Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
 | Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
@@ -74,6 +75,10 @@ retained rehashing, cancellation and explicit public output. It does not expose
 enclave-private memory as host slices or make the Linux host-slice APIs work on
 Windows. No enclave hardware/SIMD route is implemented yet; production-signed
 qualification remains pending. See the [API guide](../../docs/windows-enclave-owner.md).
+The distinct `windows_enclave::sha2` module covers streaming, all named SHA-2
+identities, general SHA-512/t and bit tails with retained cross-algorithm rehashing.
+Its version-six image is not interchangeable with the bounded worker. See the
+[streaming API guide](../../docs/windows-enclave-sha2.md).
 
 Default-off `strict-kmac-acceleration` adds `strict_kmac::CompiledSession` with
 explicit AVX2 or Arm NEON/SHA3 selection. Enable the complete build-wide features

@@ -6,6 +6,7 @@ use super::{
 use std::path::Path;
 mod callback;
 mod pin;
+pub(super) mod sha2;
 mod sys;
 
 #[derive(Default)]
@@ -19,6 +20,7 @@ struct Entries {
     input: usize,
     input_control: usize,
     rehash_control: usize,
+    sha2_control: usize,
 }
 pub(super) struct Backend {
     pin: Option<pin::Pin>,
@@ -33,6 +35,7 @@ pub(super) struct Backend {
     live: bool,
     epoch: u64,
     generation: u64,
+    sha2: bool,
 }
 impl Backend {
     pub(super) fn open(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
@@ -44,6 +47,14 @@ impl Backend {
         location: &Path,
         policy: &ImagePolicy,
         verify: impl FnOnce(&pin::Pin) -> Result<(), Error>,
+    ) -> Result<Self, Error> {
+        Self::open_protocol(location, policy, verify, false)
+    }
+    fn open_protocol(
+        location: &Path,
+        policy: &ImagePolicy,
+        verify: impl FnOnce(&pin::Pin) -> Result<(), Error>,
+        sha2: bool,
     ) -> Result<Self, Error> {
         if !sys::supported() {
             return Err(Error::Unsupported);
@@ -66,6 +77,7 @@ impl Backend {
             live: false,
             epoch: 0,
             generation: 0,
+            sha2,
         };
         owner.base = sys::create()?;
         sys::load(
@@ -84,9 +96,29 @@ impl Backend {
             control: sys::export(owner.base, b"PublicRetainedControl\0")?,
             guard: sys::export(owner.base, b"PublicGuardControl\0")?,
             output: sys::export(owner.base, b"PublicRetainedOutput\0")?,
-            input: sys::export(owner.base, b"PublicRetainedInput\0")?,
-            input_control: sys::export(owner.base, b"PublicInputControl\0")?,
-            rehash_control: sys::export(owner.base, b"PublicRehashControl\0")?,
+            input: sys::export(
+                owner.base,
+                if sha2 {
+                    b"PublicSha2InputSource\0"
+                } else {
+                    b"PublicRetainedInput\0"
+                },
+            )?,
+            input_control: if sha2 {
+                0
+            } else {
+                sys::export(owner.base, b"PublicInputControl\0")?
+            },
+            rehash_control: if sha2 {
+                0
+            } else {
+                sys::export(owner.base, b"PublicRehashControl\0")?
+            },
+            sha2_control: if sha2 {
+                sys::export(owner.base, b"PublicSha2Control\0")?
+            } else {
+                0
+            },
         };
         Ok(owner)
     }
@@ -174,7 +206,11 @@ impl Backend {
     }
     fn clear(&mut self) -> Result<(), Error> {
         if self.live {
-            self.run(3, None, 0, None)?;
+            if self.sha2 {
+                self.run_sha2(3, None, 0, None)?;
+            } else {
+                self.run(3, None, 0, None)?;
+            }
             self.live = false;
         }
         Ok(())

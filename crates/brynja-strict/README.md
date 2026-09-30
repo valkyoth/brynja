@@ -35,6 +35,7 @@ choice, not certification or proof that all application code uses this profile.
 | --- | --- | --- |
 | Strict-only modern protected sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
+| Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
 
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `kmac`, `tuplehash`, `parallelhash`
@@ -97,6 +98,10 @@ supports retained rehashing and cancellation, and only releases bytes after
 explicit public declassification. Input is limited to 1024 bytes per request;
 caller-owned input storage remains outside protection. See the
 [owner/session example and deployment requirements](../../docs/windows-enclave-owner.md).
+The separate `enclave::sha2::Session` supports all named SHA-2 identities,
+general SHA-512/t, streaming, final bit tails and retained cross-algorithm rehashing.
+It requires the matching version-six image. See the
+[streaming example and protection limits](../../docs/windows-enclave-sha2.md).
 No production signing service is bundled; deployment credentials belong to the
 application publisher. Development-signing success is not production qualification.
 

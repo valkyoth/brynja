@@ -5,7 +5,8 @@ import json
 FORBIDDEN = ('crypto', 'legacy', 'protected_memory', 'execution::Authority',
              'sha2::Sha256', 'sha3::HardenedSha3_256',
              'parallelhash::ParallelHashExecutor', 'enclave::Backend',
-             'enclave::Driver', 'enclave::engine', 'enclave::policy')
+             'enclave::Driver', 'enclave::engine', 'enclave::policy',
+             'enclave::sha2::transport', 'enclave::sha2::Owner')
 MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch', 'enclave')
 
 
@@ -45,7 +46,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
             require(run([*cargo, 'test', '--locked', '--offline', *features, *profile], consumer, env))
         base = [*cargo, 'check', '--locked', '--offline', *features]
         cases = [(f'use brynja_strict::{name};',
-                  'E0603' if name in ('enclave::Backend', 'enclave::engine', 'enclave::policy') else 'E0432')
+                  'E0603' if name in ('enclave::Backend', 'enclave::engine', 'enclave::policy',
+                                     'enclave::sha2::transport','enclave::sha2::Owner') else 'E0432')
                  for name in FORBIDDEN]
         if not features:
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
@@ -57,6 +59,9 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
             cases.append((f'fn require<T: {trait}>() {{}}\n'
                           "fn probe() { require::<brynja_strict::enclave::Digest<'static>>(); }", 'E0277'))
+            for kind in ('Session',"Stream<'static>","Digest<'static>"):
+                cases.append((f'fn require<T: {trait}>() {{}}\n'
+                    f'fn probe() {{ require::<brynja_strict::enclave::sha2::{kind}>(); }}','E0277'))
         try:
             for negative, error in cases:
                 source.write_text('#![forbid(unsafe_code)]\n' + negative)

@@ -1,7 +1,7 @@
 # v0.24.50 remaining work
 
-Current implementation status: the bounded SHA-256 Windows enclave owner/session
-API is integrated and development-tested. Existing Linux-style host-slice
+Current implementation status: the bounded SHA-256 and full scalar SHA-2 streaming
+Windows enclave APIs are integrated and development-tested. Existing Linux-style host-slice
 sessions still reject Unsupported on Windows. Broader algorithms and production
 qualification remain incomplete. The release scope
 remains the [Windows strict protected profile](windows-strict-profile.md), with
@@ -69,8 +69,10 @@ describe how the worker was developed, not outstanding constructor work.
 
 ## Broader implementation and qualification
 
-- Extend the integrated enclave-compatible strict facade to cover
-  the remaining SHA-2/SHA-3, KMAC, TupleHash, batch and ParallelHash operations.
+- Scalar SHA-2 streaming, bit tails, all named identities and general SHA-512/t
+  are implemented in the [separate version-six worker/API](windows-enclave-sha2.md).
+  Complete the remaining passes in order: SHA-3/SHAKE/cSHAKE, KMAC, TupleHash,
+  batching and ParallelHash. Extend the integrated enclave-compatible strict facade.
   Keep unsupported routes fail-closed and ordinary APIs unchanged. Do not claim
   the existing host-slice/closure APIs are transparently enclave-compatible.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows

@@ -18,6 +18,13 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
+The separate [SHA-2 streaming enclave API](../docs/windows-enclave-sha2.md) now
+implements all six named identities and general SHA-512/t, bounded input
+snapshots for large streams, arbitrary-bit final tails and exact-bit retained
+rehashing. Native Windows development tests pass in debug/release. The worker
+is scalar; SIMD/hardware and production qualification remain separate unfinished
+work. SHA-3, KMAC, TupleHash, batching and ParallelHash remain subsequent passes.
+
 The chosen enclave distribution model is source/API/tooling with consumer-managed
 signing and deployment, not a Brynja-operated production-signing service. Native
 observations so far use development-signed images on a specifically configured

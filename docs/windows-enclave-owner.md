@@ -5,6 +5,8 @@ the bounded Windows x64 VBS SHA-256 worker. Its implementation is integrated int
 the crate, not a consumer-supplied driver. Development execution is tested;
 production-signed deployment and independent qualification remain pending.
 This completes the bounded SHA-256 facade integration, not all Windows work.
+For full scalar SHA-2 streaming and general SHA-512/t, use the separate
+[version-six SHA-2 API](windows-enclave-sha2.md) and matching worker image.
 The [source-bound author results](windows-enclave-owner-results.md) describe
 the tests and their limits.
 

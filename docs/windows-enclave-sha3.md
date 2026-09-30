@@ -98,3 +98,68 @@ public synthetic data and the private test-only development constructor.
 The signing attempt emitted Microsoft's VBS compatibility warning; no clean
 production signing result is claimed. See the
 [source-bound development record](../assurance/windows-protection-observations/sha3-streaming-20260930.json).
+
+## Batching
+
+`brynja_strict::enclave::sha3_batch` is a separate version-eleven protocol,
+not a reinterpretation of the streaming image. Direct users of
+`brynja-crypto-cpu-std` enable both `strict-sha2` (the shared enclave owner)
+and `strict-sha3`. No new default feature or hardware selection is introduced.
+
+The public plan declares up to eight active slots. Results are packed in slot
+order into a fixed 1024-byte export block; inactive slots occupy no bytes and
+the suffix beyond `Plan::output_bytes()` is zero. SHA-3 requires its fixed width;
+SHAKE/cSHAKE accept declared final-bit shapes, including empty output. Active
+empty-output slots must still be completed. This API does not provide independent
+incremental batch XOF readers or SIMD/parallel throughput.
+
+```rust,no_run
+use brynja_strict::enclave::{sha3_batch::{Algorithm, Bits, Output, Plan, Session},
+    Error, PublicDeclassification};
+
+pub fn public_batch(session: &mut Session) -> Result<[u8; 1024], Error> {
+    let plan = Plan::new([
+        Some(Output::new(Algorithm::Sha3_256, 32, 8)?),
+        Some(Output::new(Algorithm::Cshake128, 33, 1)?),
+        None, None, None, None, None, None,
+    ])?;
+    // Public budget counts supplied setup and message bytes, not permutations.
+    let mut batch = session.batch(plan, 64)?;
+    let mut first = batch.item()?;
+    first.update(b"abc")?;
+    first.finish()?;
+    let empty = Bits::new(&[], 0).map_err(|_| Error::Bounds)?;
+    let custom = Bits::new(b"example", 8).map_err(|_| Error::Bounds)?;
+    let mut second = batch.item_custom(empty, custom)?;
+    second.update(b"abc")?;
+    second.finish_bits(&[1], 1)?;
+    let mut public = [0; 1024];
+    batch.seal()?.declassify(&mut public, PublicDeclassification::acknowledge())?;
+    Ok(public)
+}
+```
+
+`item_custom` streams exact low-bit-first cSHAKE name/customization data through
+bounded snapshots; nonempty N/S is rejected for other identities. `Item` cannot
+be cloned or shared. Dropping an unfinished item or result quarantines; forgetting
+an item keeps the batch busy and cannot implicitly finalize it. Cancellation
+clears the entire batch without export and permits reuse on confirmed success.
+Failed output copying or validation leaves the caller's destination unchanged.
+All declared slots must finish and seal before explicit public declassification.
+
+Constructors require the same production signature and image policy as the
+streaming owner. Enclave results never become host secret slices; caller-owned
+input remains outside protection. Unsupported platforms fail closed. Scalar
+host integration is not production, compiler/register, SIMD or independent
+qualification. Build the matching image with
+`python3 scripts/cryptography/windows_enclave_sha3_batch_build.py worker-build --image`
+and run component/parity tests with
+`python3 scripts/cryptography/test-windows-enclave-sha3-batch.py`.
+
+Native development tests pass 323 batches and 1344 digest comparisons in each
+debug/release profile, covering all 255 nonempty activity masks, mixed identities,
+zero/partial/full output shapes, streamed cSHAKE setup, cancellation and forgotten
+item rejection. Eight portable host checks also pass under Miri. These are author
+checks using synthetic public data and the private development constructor, not
+independent review or production signing. See the
+[source-bound batch record](../assurance/windows-protection-observations/sha3-batch-owner-20260930.json).

@@ -45,6 +45,13 @@ WIRE_MUTANTS = (
     ('input.len() != self.length', 'false'),
     ('self.operation == NAME', 'self.operation == CUSTOM'),
 )
+HOST_MUTANTS = (
+    ('self.sequence == 0', 'false'),
+    ('self.slot >= 8', 'self.slot > 8'),
+    ('self.op != 90 && self.budget != 0', 'false'),
+    ('self.op != 91 && (self.name_bits != 0 || self.custom_bits != 0)', 'false'),
+    ('self.op == 98', 'self.op == 97'),
+)
 
 
 def miri(directory, toolchain):
@@ -82,9 +89,9 @@ def main():
         command, executable, count = builder.build(directory, target, testing=True)
         result = base.run([str(executable)])
         print(result)
-        if '9 passed; 0 failed' not in result:
+        if '10 passed; 0 failed' not in result:
             raise AssertionError(result)
-        for name, mutants in (('sha3_batch.rs', MUTANTS), ('sha3_batch_wire.rs', WIRE_MUTANTS)):
+        for name, mutants in (('sha3_batch.rs', MUTANTS), ('sha3_batch_wire.rs', WIRE_MUTANTS), ('sha3_batch_host_wire.rs', HOST_MUTANTS)):
             path = directory / name
             original = path.read_text()
             for before, after in mutants:
@@ -104,13 +111,13 @@ def main():
         # Retained products must contain the clean build, not the last mutant.
         base.run(command)
         result = base.run([str(executable)])
-        if '9 passed; 0 failed' not in result:
+        if '10 passed; 0 failed' not in result:
             raise AssertionError(result)
         record = {
             'schema': 1, 'status': 'COMPONENT_TESTS_PASS',
             'native_enclave_execution': False, 'production_qualified': False,
-            'tests': 9, 'independent_cases': count, 'activity_masks': 255,
-            'compiled_mutants': len(MUTANTS) + len(WIRE_MUTANTS),
+            'tests': 10, 'independent_cases': count, 'activity_masks': 255,
+            'compiled_mutants': len(MUTANTS) + len(WIRE_MUTANTS) + len(HOST_MUTANTS),
             'placement_mutants': 2, 'miri_toolchain': args.miri_toolchain,
             'clean_executable_sha256': hashlib.sha256(executable.read_bytes()).hexdigest(),
             'initial_build_record_sha256': hashlib.sha256((directory / 'sha3-batch-build.json').read_bytes()).hexdigest(),
@@ -119,8 +126,8 @@ def main():
                           base.SOURCE / 'sha3_batch_worker.rs', base.SOURCE / 'sha3_batch_placement_tests.rs')},
         }
         (directory / 'sha3-batch-tests.json').write_text(json.dumps(record, indent=2) + '\n')
-    print(f'SHA-3 scalar batch: nine tests; {count} independent cases; 255 mixed activity masks; '
-          f'{len(MUTANTS) + len(WIRE_MUTANTS)} compiled mutants rejected; no native qualification')
+    print(f'SHA-3 scalar batch: ten tests; {count} independent cases; 255 mixed activity masks; '
+          f'{len(MUTANTS) + len(WIRE_MUTANTS) + len(HOST_MUTANTS)} compiled mutants rejected; no native qualification')
 
 
 if __name__ == '__main__':

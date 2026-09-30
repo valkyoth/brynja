@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "status": "NATIVE_DEVELOPMENT_ONLY",
+  "date": "2026-09-30",
+  "baseline": "0208f211a34cdd628cfeb1b5cdfda8f4c5f25d5e",
+  "production_qualified": false,
+  "independently_verified": false,
+  "description": "Version-eleven sequential scalar SHA-3/SHAKE/cSHAKE batch host integration. Azure Windows x86-64 server uses source overlays, not an exact Git checkout. Worker build is recorded in sha3-batch-wire-build-20260930.json; the same unsigned image was prepared and development-signed for these tests. Public constructor remains production-signature-only.",
+  "native_batch_campaign": {
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "batches_per_profile": 323,
+    "digest_comparisons_per_profile": 1344,
+    "nonempty_activity_masks": 255,
+    "cancellation_forgotten_item_close": "PASS",
+    "combined_feature_rerun": "PASS"
+  },
+  "shared_native_per_profile": {
+    "sha2_streaming": 631,
+    "sha3_streaming": 1028,
+    "kmac": 546,
+    "tuplehash": 230,
+    "sha2_batches": 355,
+    "sha2_batch_digests": 1822,
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "result": "PASS"
+  },
+  "local_checks": {
+    "host_tests": 8,
+    "host_miri_tests": 8,
+    "miri_toolchain": "nightly-2026-09-11",
+    "shared_host_tests": 41,
+    "negative_ownership_doctests": 20,
+    "api_example": "PASS",
+    "component_tests": 10,
+    "component_oracle_cases": 604,
+    "compiled_mutants": 35,
+    "placement_mutants": 2,
+    "packaged_export_ownership_rejections": 381,
+    "clippy": "PASS; repository style compatibility allowance",
+    "windows_target_clippy": "PASS"
+  },
+  "matching_captured_source_hashes": 453,
+  "source_sha256": {
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/mod.rs": "e23b61a3fdbc39b508efea0310258557f1574c1ec1dd875dbb3e5c52de2b6d46",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/mod.rs": "6459dd6d871a001c985a66b009254722ae3eb028d37851cf7c05910ce71393b6",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha3_batch.rs": "c69689a459fb19cd8f3b40573b22eb7c65c4af93176b415b7f128b0de87ff413",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/mod.rs": "9a9880b290273092508009646c12cc5fcbd656a52ccbb1a9677546ec1969df26",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/item.rs": "84816cc32a7ef276973d9c7487cf73825492e28052929f87917c5932b6990c84",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/mod.rs": "552aabddbc55c8f07fb56ecc97ee0bd3ff4dba80b17e6cadafab5029b9245610",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/plan.rs": "71c8c7a1c66d8861ac4d9cdf752aceb8709cb3ba97b16a282754db8898361e96",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests.rs": "65d312aac7269e2b94f42b82151032f62411a3b67d4ad6ebaea5a7470aa785e2",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests/lifecycle.rs": "29df86a4cb8f484a2c91060df8e4025037ee9a933c572490d480c0ff651387a9",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests/native.rs": "5055acda43194c3627cab4487c57c686ac1337e3edfde9ad4762d1fae353b38d",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests/reference.rs": "fd6225d92ab4aa5925db4185be11992f56b7ca31c8fa5ba043cb2b47a26fa3b4",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/transport.rs": "73778b7e012c7e32ec3088f351951f7d017dcb648b9d69b5276bc35a4877713f",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch_receipt.rs": "92782b48874d24fbf6cb85837bcdf71f55f2604ba6c28e3bac069cc354baebf2",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch_wire.rs": "86878b0d929e1840909731220baa2667e2ab7fc304ae388f8adec9c239003626"
+  },
+  "platform": {
+    "status": "OBSERVATIONS_ONLY",
+    "production_qualified": false,
+    "captured_at": "2026-09-30T16:56:28.2492709Z",
+    "secure_boot": false,
+    "vbs_status": 2,
+    "services_running": [
+      2
+    ],
+    "temporary_certificates": 0,
+    "test_processes": 0,
+    "source_files": 453,
+    "image_sha256": "052c846c91cc367559f5ac607db08c67b951d51b61896cb6a38d8ed9bd5ebd83",
+    "archive_sha256": "6571e23afc80d7944c8680d6d02a46c721bff41fea76975047cd7f46c42d9479"
+  },
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-strict-package.log": "4c32ffeb150216bebf8414bf30ab4a9615fe4498f8192a1117680a374b887a9c",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-final-source.tar": "a77a37236139a99f12e9aa0a8575a1fc7072643faa701031edf7b0cc9370a217",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-products.tar.gz": "6571e23afc80d7944c8680d6d02a46c721bff41fea76975047cd7f46c42d9479",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-source-hashes.json": "e7ba58f005e81eb65ccddac59a13ac4874d7736717c505c324bacfa374b32a1f",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-state.json": "757b44b36b58d127965bdd95f223624593f3209990205fd660831d302495c7dc",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-signed.dll": "052c846c91cc367559f5ac607db08c67b951d51b61896cb6a38d8ed9bd5ebd83",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-unsigned.dll": "5b16311e4dce2a9afd2c7a1c356cc1f49d703cfbf1c22c6293347440cac492d2",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-prepared.dll": "fe3cf0f5f69763fa028fd39b1070af1a9635c95164e73e11fc34e4540259ea63",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-final.log": "7e9e1e9c602c45a4969286cdc5da8da4fa5f898d550d35a236a0f42c564a0fc8",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner.log": "8bba8b56a0a7002507df3674eee1f5baf2b1f9a20f382e93c4bf8669627c1f5a",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-diagnostic.log": "1ad4685f3f648b6d33864f25db1f3a59c37044100640ccb795089fbfd13bd223",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-owner-sign.log": "57b086781350fa831720969c7786f155a4dd9755211e9032de6487089ff71563",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-shared-streams.log": "7c817b5ad94c7aedc1dee13f4c374323dfee9edd569b6dfe64e381a677875272",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-shared-batches.log": "00645e90909ec5dd963c74182a418872fb751d39e6d8ea5814e4f09e33afbb25",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-host-miri.log": "3f5cc5e570eada8948eb5ce006d580c8035214e0bd137917567afb6b720b7bde",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-host-parity/sha3-batch-tests.json": "771d474c3ddfd199f6187de22a0f71b046e20b765788558fc478f9cbaa3eeef7",
+    "release-reports/windows-azure-replacement-2026-09-30/sha3-batch-host-parity/sha3-batch-build.json": "47fbbcb47dcb0a2526da97212c43a816b3dde916196fc36add24859e874ec001",
+    "release-reports/windows-azure-replacement-2026-09-30/sign-sha3-batch-owner.ps1": "754b05a7eff0cc1349d45eecedd61be193931ec9ebd09fcadd4275ab0465d536",
+    "release-reports/windows-azure-replacement-2026-09-30/run-sha3-batch-final.cmd": "6ec1868880465dd9b3c6effaa879422a34405aece0173a56ba9e527f15e24be9",
+    "release-reports/windows-azure-replacement-2026-09-30/run-sha3-batch-shared-batches.cmd": "b4bac0ac3c7bbd6600d07c678b3f72f38598b631b56a1b69da9a63cc2da8e205",
+    "release-reports/windows-azure-replacement-2026-09-30/collect-sha3-batch-owner.ps1": "28f2c1d69bc5c8695e37bc5372a590fc25785c23f1e7986043b2cf447d37032e"
+  },
+  "failed_test_disposition": "Initial and diagnostic native runs failed in the test oracle: SHAKE256/cSHAKE256 reference hard-coded last=3 instead of the declared output shape. Test-only correction uses shape.last(); portable regression covers zero/partial shapes for all four XOF identities and passes under Miri. Worker and shipping host code were unchanged for the correction. Failed logs retained.",
+  "signing_observation": "SignTool reported successful development signing plus its VBS compatibility warning in command output; the wrapper returned nonzero. PowerShell transcript retained the image hash but did not capture the native diagnostic text. No clean production-signing success is claimed. Temporary certificate and private key removed.",
+  "limitations": [
+    "Sequential scalar bounded output only; no SIMD, parallel throughput or independent incremental batch XOF readers",
+    "Development certificate and Secure Boot disabled; no production-signing qualification",
+    "No new dump-exclusion, compiler/register, Windows ARM64 or independent qualification",
+    "Caller inputs and copies remain outside enclave storage",
+    "ParallelHash integration and wider algorithm qualification remain unfinished"
+  ]
+}

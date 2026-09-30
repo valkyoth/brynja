@@ -35,7 +35,7 @@ pub enum Algorithm {
     Cshake256,
 }
 impl Algorithm {
-    fn wire(self) -> u64 {
+    pub(super) fn wire(self) -> u64 {
         match self {
             Self::Sha3_224 => 1,
             Self::Sha3_256 => 2,
@@ -47,7 +47,7 @@ impl Algorithm {
             Self::Cshake256 => 8,
         }
     }
-    fn width(self) -> Option<usize> {
+    pub(super) fn width(self) -> Option<usize> {
         match self {
             Self::Sha3_224 => Some(28),
             Self::Sha3_256 => Some(32),

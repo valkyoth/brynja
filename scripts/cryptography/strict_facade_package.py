@@ -10,7 +10,8 @@ FORBIDDEN = ('crypto', 'legacy', 'protected_memory', 'execution::Authority',
              'enclave::sha3::transport', 'enclave::sha3::Owner',
              'enclave::kmac::transport', 'enclave::kmac::Owner',
              'enclave::tuplehash::transport', 'enclave::tuplehash::Owner',
-             'enclave::sha2_batch::transport', 'enclave::sha2_batch::Owner')
+             'enclave::sha2_batch::transport', 'enclave::sha2_batch::Owner',
+             'enclave::sha3_batch::transport', 'enclave::sha3_batch::Owner')
 MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch', 'enclave')
 
 
@@ -53,10 +54,17 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         f"pub type EnclaveSha2Batch{kind}<'a> = brynja_strict::enclave::sha2_batch::{kind}<'a>;"
         for kind in ('Batch', 'Retained'))
     positive += "\npub type EnclaveSha2BatchItem<'s, 'a> = brynja_strict::enclave::sha2_batch::Item<'s, 'a>;"
+    positive += '\npub type EnclaveSha3BatchSession = brynja_strict::enclave::sha3_batch::Session;'
+    positive += '\n' + '\n'.join(
+        f"pub type EnclaveSha3Batch{kind}<'a> = brynja_strict::enclave::sha3_batch::{kind}<'a>;"
+        for kind in ('Batch', 'Retained'))
+    positive += "\npub type EnclaveSha3BatchItem<'s, 'a> = brynja_strict::enclave::sha3_batch::Item<'s, 'a>;"
     # Compile the actual deployment-guide example, not a second hand-written copy.
     guide = (root / 'docs/windows-enclave-sha3.md').read_text()
     example = guide.split('```rust,no_run\n')[1].split('```')[0]
     positive += '\n' + example.replace('fn public_example', 'pub fn public_example')
+    batch = guide.split('## Batching\n')[1].split('```rust,no_run\n')[1].split('```')[0]
+    positive += '\nmod sha3_batch_example {\n' + batch + '\n}\n'
     batch_guide = (root / 'docs/windows-enclave-sha2-batch.md').read_text()
     batch_example = batch_guide.split('```rust,no_run\n')[1].split('```')[0]
     positive += '\nmod batch_example {\n' + batch_example + '\n}\n'
@@ -80,7 +88,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                                      'enclave::sha3::transport','enclave::sha3::Owner',
                                      'enclave::kmac::transport','enclave::kmac::Owner',
                                      'enclave::tuplehash::transport','enclave::tuplehash::Owner',
-                                     'enclave::sha2_batch::transport','enclave::sha2_batch::Owner') else 'E0432')
+                                     'enclave::sha2_batch::transport','enclave::sha2_batch::Owner',
+                                     'enclave::sha3_batch::transport','enclave::sha3_batch::Owner') else 'E0432')
                  for name in FORBIDDEN]
         if not features:
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
@@ -100,6 +109,10 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                 cases.append((f'fn require<T: {trait}>() {{}}\n'
                     f'fn probe() {{ require::<brynja_strict::enclave::sha3::{kind}>(); }}','E0277'))
         try:
+            for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                for kind in ('Session', "Batch<'static>", "Retained<'static>", "Item<'static, 'static>"):
+                    cases.append((f'fn require<T: {trait}>() {{}}\n'
+                        f'fn probe() {{ require::<brynja_strict::enclave::sha3_batch::{kind}>(); }}', 'E0277'))
             for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
                 for kind in ('Session', "Batch<'static>", "Retained<'static>", "Item<'static, 'static>"):
                     cases.append((f'fn require<T: {trait}>() {{}}\n'

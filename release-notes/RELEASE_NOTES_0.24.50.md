@@ -62,15 +62,20 @@ export. Native VBS development tests pass 355 batches/1822 digest comparisons in
 each debug/release profile. Forgotten writers cannot finalize implicitly; twenty
 negative doctests and packaged consumer checks enforce ownership. See the
 [batch API example and limits](../docs/windows-enclave-sha2-batch.md).
-SHA-3 batching, ParallelHash, hardware/SIMD and qualification remain unfinished.
+ParallelHash, hardware/SIMD and qualification remain unfinished.
 
 The private SHA-3/SHAKE/cSHAKE batch component now supports eight ordered slots
 with a shared 1024-byte retained output bound, exact fixed/XOF bit shapes,
 streamed cSHAKE setup and sealed explicit export. Version-eleven metadata is
 validated before bounded payload copying; the worker destroys the typed owner
 before clearing its whole page. Focused oracle, mutation and placement tests
-cover these boundaries. Host API integration and native enclave execution are
-still pending, so this is not completion or qualification of SHA-3 batching.
+cover these boundaries. The `enclave::sha3_batch` host API now supplies a typed
+plan, exclusive item writers and sealed retained output with transactional public
+export. Native development tests pass 323 batches/1344 digest comparisons in each
+debug/release profile. Eight host tests pass under Miri; twenty negative doctests
+and packaged checks enforce ownership. The guide includes a compiled downstream
+example. This is bounded sequential scalar batching, not incremental multi-reader
+XOF batching, SIMD, independent review or production qualification.
 
 The chosen enclave distribution model is source/API/tooling with consumer-managed
 signing and deployment, not a Brynja-operated production-signing service. Native

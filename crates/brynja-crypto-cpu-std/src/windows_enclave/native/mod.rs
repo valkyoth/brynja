@@ -12,6 +12,8 @@ pub(super) mod sha2;
 pub(super) mod sha2_batch;
 #[cfg(feature = "strict-sha3")]
 pub(super) mod sha3;
+#[cfg(feature = "strict-sha3")]
+pub(super) mod sha3_batch;
 mod sys;
 #[cfg(feature = "strict-tuplehash")]
 pub(super) mod tuplehash;
@@ -23,6 +25,8 @@ enum Protocol {
     Sha2,
     #[cfg(feature = "strict-sha3")]
     Sha3,
+    #[cfg(feature = "strict-sha3")]
+    Sha3Batch,
     #[cfg(feature = "strict-kmac")]
     Kmac,
     #[cfg(feature = "strict-tuplehash")]
@@ -123,6 +127,8 @@ impl Backend {
                     Protocol::Sha2Batch => b"PublicSha2BatchInputSource\0",
                     #[cfg(feature = "strict-sha3")]
                     Protocol::Sha3 => b"PublicSha3InputSource\0",
+                    #[cfg(feature = "strict-sha3")]
+                    Protocol::Sha3Batch => b"PublicSha3BatchInputSource\0",
                     #[cfg(feature = "strict-kmac")]
                     Protocol::Kmac => b"PublicKmacInputSource\0",
                     #[cfg(feature = "strict-tuplehash")]
@@ -145,6 +151,8 @@ impl Backend {
                 Protocol::Sha2Batch => sys::export(owner.base, b"PublicSha2BatchControl\0")?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 => sys::export(owner.base, b"PublicSha3Control\0")?,
+                #[cfg(feature = "strict-sha3")]
+                Protocol::Sha3Batch => sys::export(owner.base, b"PublicSha3BatchControl\0")?,
                 #[cfg(feature = "strict-kmac")]
                 Protocol::Kmac => sys::export(owner.base, b"PublicKmacControl\0")?,
                 #[cfg(feature = "strict-tuplehash")]
@@ -243,6 +251,8 @@ impl Backend {
                 Protocol::Sha2Batch => self.run_sha2_batch(3, None, 0, None)?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 => self.run_sha3(3, None, 0, None)?,
+                #[cfg(feature = "strict-sha3")]
+                Protocol::Sha3Batch => self.run_sha3_batch(3, None, 0, None)?,
                 #[cfg(feature = "strict-kmac")]
                 Protocol::Kmac => self.run_kmac(3, None, 0, None)?,
                 #[cfg(feature = "strict-tuplehash")]

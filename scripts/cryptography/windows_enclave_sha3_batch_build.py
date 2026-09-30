@@ -24,6 +24,11 @@ def build(directory, target, testing=False):
         record['commands'].append(dependency)
     for name in FILES:
         shutil.copyfile(base.SOURCE / name, directory / name)
+    if testing:
+        shutil.copyfile(base.SOURCE / 'sha3_batch_host_wire_tests.rs', directory / 'sha3_batch_host_wire_tests.rs')
+        shutil.copyfile(base.ROOT / 'crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch_wire.rs', directory / 'sha3_batch_host_wire.rs')
+        entry = directory / 'sha3_batch.rs'
+        entry.write_text(entry.read_text() + '\n#[cfg(test)]\nmod sha3_batch_host_wire_tests;\n')
     count = oracle.generate(directory / 'sha3-batch-oracle.txt') if testing else 0
     artifact = directory / (('batch-tests.exe' if 'windows' in target else 'batch-tests')
                             if testing else 'libsha3_batch.rlib')
@@ -42,7 +47,9 @@ def build(directory, target, testing=False):
         for p in (Path(__file__), Path(oracle.__file__), *(base.SOURCE / name for name in FILES),
                   base.ROOT / 'scripts/sha3/check-sha3-bit-differential.py',
                   base.ROOT / 'scripts/sha3/check-cshake-differential.py',
-                  base.ROOT / 'crates/brynja-hash-sha3/tests/vectors/nist-bit-selected.txt')})
+                  base.ROOT / 'crates/brynja-hash-sha3/tests/vectors/nist-bit-selected.txt',
+                  base.SOURCE / 'sha3_batch_host_wire_tests.rs',
+                  base.ROOT / 'crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch_wire.rs')})
     record['artifact_sha256'] = hashlib.sha256(artifact.read_bytes()).hexdigest()
     if testing:
         record['test_corpus_sha256'] = hashlib.sha256((directory / 'sha3-batch-oracle.txt').read_bytes()).hexdigest()

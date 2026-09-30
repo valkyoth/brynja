@@ -8,7 +8,8 @@ FORBIDDEN = ('crypto', 'legacy', 'protected_memory', 'execution::Authority',
              'enclave::Driver', 'enclave::engine', 'enclave::policy',
              'enclave::sha2::transport', 'enclave::sha2::Owner',
              'enclave::sha3::transport', 'enclave::sha3::Owner',
-             'enclave::kmac::transport', 'enclave::kmac::Owner')
+             'enclave::kmac::transport', 'enclave::kmac::Owner',
+             'enclave::tuplehash::transport', 'enclave::tuplehash::Owner')
 MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch', 'enclave')
 
 
@@ -41,6 +42,11 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         f"pub type EnclaveKmac{kind}<'a> = brynja_strict::enclave::kmac::{kind}<'a>;"
         for kind in ('Stream', 'Reader', 'Retained'))
     positive += '\npub type EnclaveKmacSession = brynja_strict::enclave::kmac::Session;'
+    positive += '\n' + '\n'.join(
+        f"pub type EnclaveTuple{kind}<'a> = brynja_strict::enclave::tuplehash::{kind}<'a>;"
+        for kind in ('Stream', 'Reader', 'Retained'))
+    positive += '\npub type EnclaveTupleSession = brynja_strict::enclave::tuplehash::Session;'
+    positive += "\npub type EnclaveTupleItem<'s, 'a> = brynja_strict::enclave::tuplehash::Item<'s, 'a>;"
     # Compile the actual deployment-guide example, not a second hand-written copy.
     guide = (root / 'docs/windows-enclave-sha3.md').read_text()
     example = guide.split('```rust,no_run\n')[1].split('```')[0]
@@ -63,7 +69,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                   'E0603' if name in ('enclave::Backend', 'enclave::engine', 'enclave::policy',
                                      'enclave::sha2::transport','enclave::sha2::Owner',
                                      'enclave::sha3::transport','enclave::sha3::Owner',
-                                     'enclave::kmac::transport','enclave::kmac::Owner') else 'E0432')
+                                     'enclave::kmac::transport','enclave::kmac::Owner',
+                                     'enclave::tuplehash::transport','enclave::tuplehash::Owner') else 'E0432')
                  for name in FORBIDDEN]
         if not features:
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
@@ -83,6 +90,10 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                 cases.append((f'fn require<T: {trait}>() {{}}\n'
                     f'fn probe() {{ require::<brynja_strict::enclave::sha3::{kind}>(); }}','E0277'))
         try:
+            for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                for kind in ('Session', "Stream<'static>", "Reader<'static>", "Retained<'static>", "Item<'static, 'static>"):
+                    cases.append((f'fn require<T: {trait}>() {{}}\n'
+                        f'fn probe() {{ require::<brynja_strict::enclave::tuplehash::{kind}>(); }}', 'E0277'))
             for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
                 for kind in ('Session', "Stream<'static>", "Reader<'static>", "Retained<'static>"):
                     cases.append((f'fn require<T: {trait}>() {{}}\n'

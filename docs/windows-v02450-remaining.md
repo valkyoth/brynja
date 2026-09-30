@@ -133,14 +133,19 @@ describe how the worker was developed, not outstanding constructor work.
   tests cover destruction of an active partial item, wrong-page rejection,
   full-page clearing and recreation; Miri and two compiled placement mutants
   pass. The image has not yet been signed, loaded or executed inside VBS.
-  Complete the affine host interface and native enclave campaign next. See the
+  The affine host interface now includes item writers, fixed/XOF results,
+  retained-output rehashing and transactional public export. Its bounded
+  transport compiles for Windows x64; native enclave execution remains next.
+  See the
   [component observations](../assurance/windows-protection-observations/tuple-component-20260930.json).
   The subsequent [entry/image observations](../assurance/windows-protection-observations/tuple-entry-build-20260930.json)
   preserve the separate source-bound build and placement checks.
   A candidate host metadata encoder is now tested against the actual enclave
   decoder across valid and rejected request shapes, including 128-bit item and
   customization lengths. Four encoder mutations are rejected. This remains an
-  isolated fixture, not a shipping host session or native transport.
+  shared source used by the host API and the isolated parity fixture. Host-only
+  mock tests cover abandonment, forgotten parent loans, output-copy failures,
+  chunking and reuse; these are not native OS-copy evidence.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

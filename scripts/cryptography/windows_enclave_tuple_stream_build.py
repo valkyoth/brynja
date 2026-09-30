@@ -11,7 +11,7 @@ import windows_enclave_sha3_stream_build as base
 ROOT, SOURCE, run = base.ROOT, base.SOURCE, base.run
 FILES = ('tuple_stream.rs', 'tuple_stream_state.rs', 'tuple_stream_tests.rs',
          'tuple_stream_wire.rs', 'tuple_stream_wire_tests.rs', 'tuple_host_wire_tests.rs')
-HOST_WIRE = SOURCE/'tuple_host_wire.rs'
+HOST_WIRE = ROOT/'crates/brynja-crypto-cpu-std/src/windows_enclave/tuple_wire.rs'
 
 
 def oracle_tests():

@@ -1,4 +1,4 @@
-//! Candidate host encoder; not yet integrated into the shipping session API.
+//! Host metadata encoder shared with the isolated decoder parity tests.
 //! Version-nine TupleHash metadata. No secret bytes are stored in this header.
 use super::Error;
 #[derive(Clone, Copy, Default)]

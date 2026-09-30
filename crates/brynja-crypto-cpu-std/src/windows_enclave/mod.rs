@@ -66,6 +66,24 @@ mod sha2_wire;
 pub mod sha3;
 #[cfg(feature = "strict-sha3")]
 mod sha3_wire;
+#[cfg(all(
+    feature = "strict-tuplehash",
+    any(
+        test,
+        all(
+            target_os = "windows",
+            target_arch = "x86_64",
+            target_env = "msvc",
+            not(miri),
+            not(kani)
+        )
+    )
+))]
+mod tuple_receipt;
+#[cfg(feature = "strict-tuplehash")]
+mod tuple_wire;
+#[cfg(feature = "strict-tuplehash")]
+pub mod tuplehash;
 mod unsupported;
 pub use brynja_hash_sha2::PublicDeclassification;
 #[cfg(all(

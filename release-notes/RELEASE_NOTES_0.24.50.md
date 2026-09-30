@@ -23,7 +23,7 @@ implements all six named identities and general SHA-512/t, bounded input
 snapshots for large streams, arbitrary-bit final tails and exact-bit retained
 rehashing. Native Windows development tests pass in debug/release. The worker
 is scalar; SIMD/hardware and production qualification remain separate unfinished
-work. TupleHash, batching and ParallelHash remain subsequent passes.
+work. TupleHash native execution, batching and ParallelHash remain subsequent passes.
 
 The separate [SHA-3 enclave API](../docs/windows-enclave-sha3.md) implements all
 eight SHA-3/SHAKE/cSHAKE identities, incremental exact-bit output, streamed
@@ -40,6 +40,13 @@ the enclave until explicit public declassification; verification exports only
 the decision. The public constructor still requires production image trust.
 This completes scalar host integration, not independent or production
 qualification, compiler/register qualification, or hardware/SIMD coverage.
+
+The version-nine `enclave::tuplehash` host interface now provides all four
+TupleHash/TupleHashXOF identities, exact-length item writers, retained-output
+rehashing and transactional explicit public export. Its encoder shares source
+with the worker parity tests. Local lifecycle/mock-transport tests, ownership
+doctests, Miri and Windows cross-compilation pass; the native development
+campaign is prepared but has not run. This is not native VBS qualification.
 
 The chosen enclave distribution model is source/API/tooling with consumer-managed
 signing and deployment, not a Brynja-operated production-signing service. Native

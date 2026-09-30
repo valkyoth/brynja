@@ -12,6 +12,8 @@ pub(super) mod sha2;
 #[cfg(feature = "strict-sha3")]
 pub(super) mod sha3;
 mod sys;
+#[cfg(feature = "strict-tuplehash")]
+pub(super) mod tuplehash;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Protocol {
@@ -21,6 +23,8 @@ enum Protocol {
     Sha3,
     #[cfg(feature = "strict-kmac")]
     Kmac,
+    #[cfg(feature = "strict-tuplehash")]
+    TupleHash,
 }
 
 #[derive(Default)]
@@ -118,6 +122,8 @@ impl Backend {
                     Protocol::Sha3 => b"PublicSha3InputSource\0",
                     #[cfg(feature = "strict-kmac")]
                     Protocol::Kmac => b"PublicKmacInputSource\0",
+                    #[cfg(feature = "strict-tuplehash")]
+                    Protocol::TupleHash => b"PublicTupleInputSource\0",
                     Protocol::Legacy => b"PublicRetainedInput\0",
                 },
             )?,
@@ -137,6 +143,8 @@ impl Backend {
                 Protocol::Sha3 => sys::export(owner.base, b"PublicSha3Control\0")?,
                 #[cfg(feature = "strict-kmac")]
                 Protocol::Kmac => sys::export(owner.base, b"PublicKmacControl\0")?,
+                #[cfg(feature = "strict-tuplehash")]
+                Protocol::TupleHash => sys::export(owner.base, b"PublicTupleControl\0")?,
                 Protocol::Legacy => 0,
             },
         };
@@ -232,6 +240,8 @@ impl Backend {
                 Protocol::Sha3 => self.run_sha3(3, None, 0, None)?,
                 #[cfg(feature = "strict-kmac")]
                 Protocol::Kmac => self.run_kmac(3, None, 0, None)?,
+                #[cfg(feature = "strict-tuplehash")]
+                Protocol::TupleHash => self.run_tuplehash(3, None, 0, None)?,
                 Protocol::Legacy => self.run(3, None, 0, None)?,
             }
             self.live = false;

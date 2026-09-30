@@ -40,4 +40,3 @@ __declspec(dllexport) void* CALLBACK PublicSha3Control(void* context) {
     if (active || retained_call || word < 16 || word >= 23) { return 0; }
     return (void*)sha3_report[word-16];
 }
-

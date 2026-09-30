@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "status": "OBSERVATIONS_ONLY",
+  "baseline": "b97e981f",
+  "production_qualified": false,
+  "native_enclave_execution": false,
+  "execution": "Seven component tests passed on Linux x86-64 and in an ordinary Windows x86-64 process; not inside VBS",
+  "oracle_cases": 272,
+  "oracle_routes": ["direct", "decoded version-nine wire"],
+  "retained_rehash_cases": 128,
+  "compiled_mutants_rejected": 19,
+  "miri": {"toolchain": "nightly-2026-09-11", "result": "PASS", "tests": ["copy_failure_unwind_cancel_and_shapes_clear_retained_storage", "malformed_copied_bits_quarantine_before_further_work"]},
+  "source_binding": "All Windows build source hashes were compared against the local files and matched. Source overlay on existing checkout, not an exact git checkout. Build record includes generated oracle-test and executable hashes.",
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-component-source.tar": "4ad6cf28c78ae1edc4b2be8189f400cc48f5211f3a1be7373f2e4d572b46d45e",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-component.log": "6d465aa37d41071af19ab27d904339c801002c1ea8f12b04859e9bffc5f0dffb",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-stream-build.json": "35635ef8096493abf3f40c40356b03551d612f99b4d5b6a41e96552eb3862279",
+    "release-reports/windows-azure-replacement-2026-09-30/tuple-tests.exe": "5fad265e45e681f27ffe38b29eafd8dd86b35cb994f3834741bdc44800863f67"
+  },
+  "limitations": ["Private development component only", "Scalar only", "No Windows enclave entry or host transport yet", "No whole-allocation placement cleanup qualification", "Compiler/register qualification and independent review pending", "No production deployment qualification"]
+}

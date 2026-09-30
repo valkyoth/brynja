@@ -1,6 +1,6 @@
 # v0.24.50 remaining work
 
-Current implementation status: the bounded SHA-256 and scalar SHA-2/SHA-3 streaming
+Current implementation status: the bounded SHA-256 and scalar SHA-2/SHA-3/KMAC streaming
 Windows enclave APIs are integrated and development-tested. Existing Linux-style host-slice
 sessions still reject Unsupported on Windows. Broader algorithms and production
 qualification remain incomplete. The release scope
@@ -117,6 +117,20 @@ describe how the worker was developed, not outstanding constructor work.
   The previous bounded component's seven tests passed in an ordinary Windows process; this is
   [source-bound component evidence](../assurance/windows-protection-observations/kmac-component-20260930.json),
   not a VBS enclave execution claim.
+  The private TupleHash component now covers all four identities using hardened
+  cSHAKE, exact-length streamed customization/items, arbitrary-bit packing,
+  retained fixed/XOF output and exact-bit retained-output rehashing as one tuple
+  member. An unfinished item blocks finalization; empty members remain distinct
+  from absent members. Its version-nine metadata decoder bounds snapshots and
+  rejects noncanonical fields before payload copying. Seven component tests pass
+  locally and in an ordinary Windows process: 272 independent bit-oracle cases
+  run through both direct and decoded-wire paths, including larger-than-request
+  setup/items; 128 retained rehash combinations pass. Nineteen compiled mutations
+  reject protocol, framing, bounds and cleanup regressions; two focused Miri
+  cleanup/quarantine tests pass. This is not native
+  enclave qualification: implement the OS-copy entry, allocation cleanup/receipts,
+  affine host interface and native enclave campaign next. See the
+  [component observations](../assurance/windows-protection-observations/tuple-component-20260930.json).
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

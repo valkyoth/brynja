@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "NATIVE_DEVELOPMENT_ONLY",
+  "date": "2026-09-30",
+  "baseline": "ee8e6648fe2d454b193ae99230fa69ded6ff4d59",
+  "production_qualified": false,
+  "independently_verified": false,
+  "shipping_acceleration_enabled": false,
+  "secret_input_qualified": false,
+  "description": "Public-only in-enclave CPU queries and five existing hardened-kernel campaigns. Source overlays, not an exact native Git checkout. No production Rust changed.",
+  "platform": {
+    "windows_build": 26100,
+    "architecture": "x86_64",
+    "cpu": "AMD EPYC 9V45",
+    "logical_processors": 2,
+    "secure_boot": false,
+    "vbs_status": 2,
+    "temporary_certificates_after_capture": 0,
+    "test_processes_after_capture": 0
+  },
+  "observed_prerequisites": {
+    "sha256_sha_ni": true,
+    "avx2_batch_or_keccak": true,
+    "sha512_dedicated": false
+  },
+  "native_public_comparisons": {
+    "sha256_sha_ni": 32,
+    "keccak_avx2": 16,
+    "sha256_batch_avx2": 256,
+    "sha512_batch_avx2": 128,
+    "keccak_batch_avx2": 64,
+    "total": 496,
+    "startup_kats": "PASS; additional to comparison counts",
+    "post_quarantine_rejection": "PASS; all five routes",
+    "enclave_deleted": true
+  },
+  "local_and_windows_component_tests": 6,
+  "corrupted_oracle_tables_rejected": 3,
+  "inventory_schema_and_lifecycle_tests": 7,
+  "compiled_entry_guard_mutants_rejected": 11,
+  "matching_native_source_hashes": 166,
+  "matching_native_build_source_hashes": 166,
+  "rust_toolchain": "1.98.1",
+  "rust_target_features": ["sha", "sse2", "avx", "avx2"],
+  "vectors_sha256": "a417e09da86739b03f18c23c44f7c3f1c07230c52d98d06d07f871932a494a4b",
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/cpu-kernels-products.tar.gz": "09f8541dcb0a58fd08e25750826372f293ee8ce65cd5acd96e9c3d3a908b76aa",
+    "release-reports/windows-azure-replacement-2026-09-30/cpu-kernels-products/cpu-kernels-native.json": "c4685a44a2934f514141d0ec0239f2287cde716f7b6fa94e81a632ce38c9d2fd",
+    "release-reports/windows-azure-replacement-2026-09-30/cpu-kernels-products/cpu-kernels-final-image/signed.dll": "ec27f0cb524e093720115be23da0a8c8312979afab1f50bf70e951325591fb0e",
+    "release-reports/windows-azure-replacement-2026-09-30/cpu-kernels-products/cpu-kernels-final-image/kernels.s": "b7f0dab0611f08d49e314aaf7f990541922ed45edaa04ad922a3106e0ff06168"
+  },
+  "signing": "Development-only. SignTool reported success with its SDK compatibility warning; wrapper returned nonzero. Temporary certificate and private key removed.",
+  "limitations": [
+    "No supported session/worker protocol enables acceleration yet",
+    "Public vectors only, not protected secret inputs",
+    "Queries and KATs do not prove arbitrary scheduling or VM-migration safety",
+    "Integrated Windows ABI/register, scratch/stack, dump and failure-path qualification pending",
+    "Dedicated SHA512 unavailable on this guest; no execution claimed",
+    "No Windows ARM64, multicore ParallelHash, production signing or independent-review qualification"
+  ]
+}

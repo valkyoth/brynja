@@ -233,6 +233,11 @@ describe how the worker was developed, not outstanding constructor work.
   hardware/SIMD or production qualification.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
+  The [public-vector acceleration diagnostic](windows-enclave-acceleration.md)
+  now confirms SHA-NI and AVX2 execution inside the development VBS guest:
+  496 comparisons pass across five existing hardened kernels, with startup KATs
+  and post-quarantine rejection. Dedicated x86 SHA-512 is absent. This is not
+  session integration or secret-placement/cleanup qualification; both remain.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

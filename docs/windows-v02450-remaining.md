@@ -82,6 +82,17 @@ describe how the worker was developed, not outstanding constructor work.
   Worker vectors, compiled mutants, placement/lifecycle Miri and packaged
   ownership tests pass. This completes the scalar algorithm implementation
   pass, not acceleration, independent review or production qualification.
+  The next private KMAC worker component implements all four identities using
+  existing strength-enforcing KMAC states, retained fixed/XOF output,
+  full-width tag verification and exact-bit retained-output rekeying. Its local
+  author tests cover 256 independent oracle cases, 128 rekey combinations,
+  cancellation/copy/unwind cleanup and eleven compiled mutations, with focused
+  Miri. This is not a shipping or enclave-executed KMAC API: complete streamed
+  key/customization setup (currently bounded to 1024 bytes each), versioned
+  transport, affine host types, native enclave tests and qualification next.
+  The same seven component tests pass in an ordinary Windows process; this is
+  [source-bound component evidence](../assurance/windows-protection-observations/kmac-component-20260930.json),
+  not a VBS enclave execution claim.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

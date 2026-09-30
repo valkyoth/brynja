@@ -52,6 +52,13 @@ prevent reentering completed empty customization and dispatching finalization
 with a forgotten item. Production, compiler/register and independent
 qualification remain pending.
 
+The private scalar SHA-2 batch component now supplies eight ordered slots,
+bounded streamed input, canonical bit tails and all-or-nothing sealed export.
+Its version-ten metadata, placement worker and OS-copy adapter pass focused
+component/mutation/Miri tests and build as an unsigned Windows enclave image.
+This is not yet a supported batch host API or native enclave execution evidence.
+SHA-3 batching, ParallelHash, hardware/SIMD and qualification remain unfinished.
+
 The chosen enclave distribution model is source/API/tooling with consumer-managed
 signing and deployment, not a Brynja-operated production-signing service. Native
 observations so far use development-signed images on a specifically configured

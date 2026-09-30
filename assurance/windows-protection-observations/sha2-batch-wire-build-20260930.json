@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "status": "COMPONENT_TESTS_AND_UNSIGNED_IMAGE_BUILD_ONLY",
+  "baseline": "ba4e1073",
+  "production_qualified": false,
+  "native_enclave_execution": false,
+  "description": "Version-ten bounded SHA-2 batch wire, private Rust placement worker and fixed C OS-copy adapter. Tests passed locally and in an ordinary Windows process. The image compiled and linked with VEIID on the Azure development server; it is unsigned and was not loaded or executed in VBS. Azure uses a source overlay, not an exact git checkout.",
+  "component_tests": 9,
+  "placement_tests": 1,
+  "hashlib_cases": 72,
+  "activity_masks": 255,
+  "general_sha512_t_bit_cases": 4080,
+  "component_and_wire_mutants_rejected": 22,
+  "placement_mutants_rejected": 2,
+  "matching_remote_source_hashes": 176,
+  "miri": {
+    "toolchain": "nightly-2026-09-11",
+    "result": "PASS",
+    "tests": [
+      "copy_failure_unwind_and_cancellation_clear_every_result",
+      "copied_length_and_bits_fail_closed_and_copy_unwind_erases",
+      "placed_owner_is_destroyed_before_full_page_clear_and_can_be_recreated"
+    ]
+  },
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_sha2_batch_build.py": "b074da0c191a4a31bc47a467c729845917090b052de3238d0e43961aca32c13c",
+    "assurance/windows-enclave-probe/sha2_batch.rs": "50b6d2ee4c36aa315da6f8e9daea3092daec0b71263ed52947266302e0f5fd4c",
+    "assurance/windows-enclave-probe/sha2_batch_tests.rs": "5cc51dac136bff136cb8934ce0d8a585146641777c0cd6e4b899c7c491ef2f50",
+    "assurance/windows-enclave-probe/sha2_batch_wire.rs": "a058825ff6ff290d31622c0d50029ac8e6ee49fc60922de70d5e1bd49e22895c",
+    "assurance/windows-enclave-probe/sha2_batch_wire_tests.rs": "2fce6a3b8011070028675a0bf8801d5dbee557e854f9bd4d0a8f4c01ae5d9931",
+    "assurance/windows-enclave-probe/window_sha2_batch.c": "fc8330781c672455071d43bf6eb885e3584d5de08df7b661ff974f886f75899c",
+    "assurance/windows-enclave-probe/sha2_batch_worker.rs": "1caddac09e94846485c6d9f558015599a3db5c1e0a91ed1ece38820a211bc50b",
+    "assurance/windows-enclave-probe/sha2_batch_placement_tests.rs": "3a00d93e58a8cc5f4d7eeb443e0587e8afccc430c60fd888aa2fef2796fba615",
+    "scripts/cryptography/test-windows-enclave-sha2-batch.py": "c77098839200b568ee407346638d51aa5741cd928b4c4522d962eaf4e8f3d183",
+    "scripts/cryptography/windows_enclave_sha2_batch_placement.py": "1e3ed22482d0f43411cb23156bcd5c799f5bf42c66b5a816ed9b104dcd0fa182"
+  },
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-wire-products.tar.gz": "ac034045c14bc8e8660a412eddd726f48489421b2178ab6b0e2c2b57ce2a0789",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-wire.log": "ca7f962272edbc680090ffc020bdeb00fc38a9d5b4203a78dd6c3cd4f23889d6",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-wire-source.tar": "359ba7229fdf168f62629e276466a2ebce184dc7ae22c6b0de030d6c245e4966",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-worker-build.json": "a84daa2ad4310646bf4ebd7c1cd25c50018a5d682915de68a7094ad5b17ed3e2",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-wire-unsigned.dll": "1007f5b3bf6b9d9c2d3f2e47554621723976a088864de6de1c55dc7e08b48dc7",
+    "release-reports/windows-azure-replacement-2026-09-30/sha2-batch-wire-prepared.dll": "a358e3ce361a5f6897bdd6176c4b13ae952523b06e82e529fe07b57da617e7f7"
+  },
+  "limitations": [
+    "No supported batch host API yet",
+    "Unsigned image only; image admission rejects unsigned artifacts by design",
+    "No native enclave execution or OS-copy fault-injection evidence",
+    "No SIMD or parallel execution",
+    "No compiler/register qualification",
+    "No independent review"
+  ]
+}

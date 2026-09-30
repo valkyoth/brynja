@@ -160,9 +160,17 @@ describe how the worker was developed, not outstanding constructor work.
   eleven compiled mutants and a focused Miri cleanup/unwind test pass. This is
   also tested in an ordinary Windows process; see the
   [component observations](../assurance/windows-protection-observations/sha2-batch-component-20260930.json). It is
-  not a host batch API or native enclave evidence. Next: the bounded wire/OS-copy
-  adapter, placement receipts, affine host API, SHA-3/SHAKE/cSHAKE batching and
-  native campaigns. No SIMD or throughput gain is implied by sequential batching.
+  not a host batch API or native enclave evidence. The subsequent version-ten
+  protocol now validates its 128-byte header before bounded payload copying;
+  only explicit export authorizes copying the fixed 512-byte result block.
+  Nine component/wire tests and 22 compiled mutants pass locally and on Windows.
+  Placement tests cover retained output plus a live stream, wrong-page rejection,
+  full-page erasure after destruction and recreation. Two placement mutants and
+  three focused Miri checks pass. The Rust worker/C OS-copy adapter compiles and
+  links as an unsigned enclave image, but has not executed inside VBS; see the
+  [wire/build observations](../assurance/windows-protection-observations/sha2-batch-wire-build-20260930.json).
+  Next: affine host API and native batch execution, SHA-3/SHAKE/cSHAKE batching
+  and their native campaigns. No SIMD or throughput gain is implied by sequential batching.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

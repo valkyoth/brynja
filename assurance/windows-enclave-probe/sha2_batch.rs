@@ -10,6 +10,7 @@ pub use sha2_stream::{Algorithm, Error};
 #[path = "sha2_stream_state.rs"]
 mod state;
 use state::State;
+pub mod sha2_batch_wire;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum Phase {
@@ -239,3 +240,5 @@ impl Drop for Scratch {
 extern crate std;
 #[cfg(test)]
 mod sha2_batch_tests;
+#[cfg(test)]
+mod sha2_batch_wire_tests;

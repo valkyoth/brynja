@@ -75,6 +75,17 @@ describe how the worker was developed, not outstanding constructor work.
   batching and ParallelHash. Extend the integrated enclave-compatible strict facade.
   Keep unsupported routes fail-closed and ordinary APIs unchanged. Do not claim
   the existing host-slice/closure APIs are transparently enclave-compatible.
+  The private scalar SHA-3/SHAKE/cSHAKE worker component now passes Linux and
+  Windows-native component tests: 628 cSHAKE vectors, 76 NIST bit vectors,
+  96 hashlib cases, 512 retained-fragment rehash cases and ten compiled mutants.
+  It supports incremental XOF fragments, terminal low-bit-first output and
+  clearing on cancellation/copy failure/unwind. Focused Miri covers ownership
+  and clearing without repeating the complete cryptographic campaign. This is
+  **not yet Windows enclave execution**: connect and test the versioned transport,
+  affine host API, placement/destruction and private native enclave campaign.
+  Setup currently bounds each N/S string to 1024 bytes; settle the streaming
+  setup transport before calling algorithm coverage complete. No shipping
+  SHA-3 enclave API, acceleration or production qualification is claimed here.
 - Add and qualify the supported opt-in hardware/SIMD paths, including Windows
   ABI/register cleanup and bounded ParallelHash worker ownership/concurrency.
 - Finish compiler/runtime and protected worker/storage review. Test the new

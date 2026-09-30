@@ -4,8 +4,9 @@ import json
 
 FORBIDDEN = ('crypto', 'legacy', 'protected_memory', 'execution::Authority',
              'sha2::Sha256', 'sha3::HardenedSha3_256',
-             'parallelhash::ParallelHashExecutor')
-MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch')
+             'parallelhash::ParallelHashExecutor', 'enclave::Backend',
+             'enclave::Driver', 'enclave::engine', 'enclave::policy')
+MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch', 'enclave')
 
 
 def check(root, roots, destination, cargo, env, run, require):
@@ -37,20 +38,25 @@ brynja-strict = { version = "=0.1.0", default-features = false }
     count = 0
     for features in ([], ['--features', 'acceleration']):
         compiled = '\n'.join(f'pub type Compiled{name.title()} = brynja_strict::{name}::CompiledSession;'
-                             for name in MODULES if name != 'batch')
+                             for name in MODULES if name not in ('batch', 'enclave'))
         selected = positive + ('\n' + compiled if features else '')
         source.write_text(selected)
         for profile in ([], ['--release']):
             require(run([*cargo, 'test', '--locked', '--offline', *features, *profile], consumer, env))
         base = [*cargo, 'check', '--locked', '--offline', *features]
-        cases = [(f'use brynja_strict::{name};', 'E0432') for name in FORBIDDEN]
+        cases = [(f'use brynja_strict::{name};',
+                  'E0603' if name in ('enclave::Backend', 'enclave::engine', 'enclave::policy') else 'E0432')
+                 for name in FORBIDDEN]
         if not features:
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
-                      for name in MODULES if name != 'batch']
+                      for name in MODULES if name not in ('batch', 'enclave')]
         for module in MODULES:
             for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
                 cases.append((f'fn require<T: {trait}>() {{}}\n'
                               f'fn probe() {{ require::<brynja_strict::{module}::Session>(); }}', 'E0277'))
+        for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+            cases.append((f'fn require<T: {trait}>() {{}}\n'
+                          "fn probe() { require::<brynja_strict::enclave::Digest<'static>>(); }", 'E0277'))
         try:
             for negative, error in cases:
                 source.write_text('#![forbid(unsafe_code)]\n' + negative)

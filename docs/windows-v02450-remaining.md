@@ -1,8 +1,9 @@
 # v0.24.50 remaining work
 
-Current implementation status: Windows strict sessions still reject Unsupported.
-The work so far consists of isolated platform experiments and Rust ownership
-components; it is not a completed production Windows backend. The release scope
+Current implementation status: the bounded SHA-256 Windows enclave owner/session
+API is integrated and development-tested. Existing Linux-style host-slice
+sessions still reject Unsupported on Windows. Broader algorithms and production
+qualification remain incomplete. The release scope
 remains the [Windows strict protected profile](windows-strict-profile.md), with
 explicit acceleration and unchanged release-gate policy.
 
@@ -13,6 +14,14 @@ without a Brynja-owned signing subscription. This does not qualify production
 execution or waive implementation, runtime checks, pentest or existing gates.
 
 ## Next implementation boundary
+
+The image-admission and bounded SHA-256 owner/session integration items are now
+implemented. `brynja_strict::enclave` supplies public production-policy
+construction, lifetime-bound retained results, rehashing, cancellation,
+transactional public output and fail-closed cleanup. The shipping host adapter
+is Rust; no consumer-supplied driver or development bypass is exported. See the
+[API and limitations](windows-enclave-owner.md). The historical steps below
+describe how the worker was developed, not outstanding constructor work.
 
 - Build on the completed fixed-public-vector native retained-owner experiment;
   it now covers placement, cross-return digest retention and destruction before
@@ -36,7 +45,7 @@ execution or waive implementation, runtime checks, pentest or existing gates.
   close, exhaustion and concurrency have focused tests; two native campaigns
   pass against the unchanged image. This does not make the enclave's separate
   mapping-address token identity persistent or authenticated.
-- Carry these boundaries into a production lifetime-bound enclave owner and
+- These boundaries now have a crate-integrated lifetime-bound enclave owner and
   facade. Enclave mapping addresses can still repeat across destruction/recreation
   or processes; stale handles must never cross those lifetime boundaries.
   Diagnostic metadata exports are not shipping APIs.
@@ -46,20 +55,21 @@ execution or waive implementation, runtime checks, pentest or existing gates.
   checks and two native campaigns. It supports bounded SHA-256, retained rehash,
   explicit public declassification and cancellation without generic drivers or
   host secret slices. Its constructor stays private to the fixture: production
-  integration of the now-implemented admission component and reviewed production
-  API construction are still required.
+  integration of admission and public construction is now implemented separately
+  in the crate API; independent review remains required.
 - The bounded x86-64 image-admission component and consumer workflow are now
   implemented and development-tested: compiled trusted identity/hash policy,
   bounded PE/import parsing, held file handles, separate development/production
   profiles and Windows trust/load/initialization checks. Native tests prove
   development success, production rejection of the untrusted test certificate,
   and OS rejection of wrong import identities/versions at initialization.
-  This is not remote attestation, successful production deployment or a shipping
-  strict constructor. See the [completed development pass](windows-enclave-image-admission-results.md).
+  This is not remote attestation or successful production deployment. Public
+  construction is now integrated without a development fallback. See the
+  [completed development pass](windows-enclave-image-admission-results.md).
 
 ## Broader implementation and qualification
 
-- Integrate the enclave-compatible API into the intended strict facade and cover
+- Extend the integrated enclave-compatible strict facade to cover
   the remaining SHA-2/SHA-3, KMAC, TupleHash, batch and ParallelHash operations.
   Keep unsupported routes fail-closed and ordinary APIs unchanged. Do not claim
   the existing host-slice/closure APIs are transparently enclave-compatible.
@@ -69,8 +79,8 @@ execution or waive implementation, runtime checks, pentest or existing gates.
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or
   privileged snapshots. Existing dump observations bind older images only.
-- Integrate the implemented identity/import admission and documented consumer
-  build/sign/load workflow into the production facade. Production signing
+- Qualify the integrated identity/import admission and consumer build/sign/load
+  workflow in a production deployment. Production signing
   credentials and costs belong to the application publisher, not necessarily
   Brynja. Production success remains untested until actually exercised;
   production-profile rejection tests and test-signed execution on a
@@ -93,3 +103,4 @@ execution or waive implementation, runtime checks, pentest or existing gates.
 
 Latest focused component: [retained secret-to-secret composition](windows-enclave-retained-rehash-design.md).
 Latest native platform step: [trusted image-admission development results](windows-enclave-image-admission-results.md).
+Completed bounded API step: [Windows enclave owner integration results](windows-enclave-owner-results.md).

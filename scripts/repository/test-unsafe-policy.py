@@ -20,7 +20,7 @@ def fixture(root: Path) -> None:
         '[workspace.lints.rust]\nunsafe_code = "deny"\n', encoding="utf-8"
     )
     (source / "lib.rs").write_text(
-        "mod secret_memory_difference;\nmod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\nmod secret_memory_predicate;\npub mod safe {}\n", encoding="utf-8"
+        "use std::path::Path;\nmod secret_memory_difference;\nmod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\nmod secret_memory_predicate;\npub mod safe {}\n", encoding="utf-8"
     )
     shutil.copyfile(ROOT / 'crates/brynja-core/src/secret_memory.rs', source / 'secret_memory.rs')
     hash_root = root / 'crates/brynja-hash-core/src'
@@ -56,6 +56,8 @@ def test() -> None:
         fixture(root)
 
         extra = root / "crates/brynja-core/src/extra.rs"
+        extra.write_text('use std::path::Path;\n#[path="other.rs"] mod redirected;\n', encoding='utf-8')
+        require_rejection(root, 'code-inclusion')
         extra.write_text(
             "#[allow(unsafe_code)] fn escaped() { unsafe {} }\n", encoding="utf-8"
         )

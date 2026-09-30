@@ -9,7 +9,9 @@ worker stacks for the existing strict cryptographic APIs, preserving explicit
 opt-in SIMD/hardware acceleration and fail-closed resource acquisition.
 See the [platform design and open proof obligations](../docs/windows-strict-profile.md).
 
-Windows strict sessions remain unsupported today. This candidate does not
+Existing Linux-style host-slice sessions remain unsupported on Windows. The new
+`brynja_strict::enclave` owner integrates bounded scalar SHA-256 construction and
+retained results with mandatory image/signature/import admission. This candidate does not
 claim implementation completion, native qualification or a passed pentest.
 The milestone requires failure/rollback and cleanup tests, packaged consumers,
 Windows ABI/register inspection and native evidence for each claimed platform,
@@ -20,8 +22,19 @@ The chosen enclave distribution model is source/API/tooling with consumer-manage
 signing and deployment, not a Brynja-operated production-signing service. Native
 observations so far use development-signed images on a specifically configured
 Azure x86-64 host. Production signing/deployment has not been validated, and the
-retained-output facade is still an integration candidate with a private fixture
-constructor. See the [deployment responsibilities and evidence limits](../docs/windows-enclave-deployment.md).
+retained-output facade now has a public production-policy constructor backed by
+first-party Rust OS/ownership code. Native debug/release tests use a private
+test-only development constructor; the public constructor rejects that certificate.
+See the [deployment responsibilities and evidence limits](../docs/windows-enclave-deployment.md).
+
+The supported [owner/session API](../docs/windows-enclave-owner.md) covers bounded
+input, retained rehashing, cancellation, transactional public declassification,
+abandoned/forgotten results, caller unwinding and explicit closure. It exports no
+raw driver or host secret slices and adds no foreign crypto dependency. Source
+admission and ownership regression checks cover the packaged facade; unchanged
+Linux strict APIs retain their previous behavior. This finishes the bounded
+SHA-256 production API integration item, not the wider Windows algorithms,
+hardware/SIMD work, independent retest or production qualification.
 
 A development-only main-image pinning fixture now passes two native campaigns:
 changed bytes and conflicting writer/rename access reject, the reviewed facade

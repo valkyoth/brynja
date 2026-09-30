@@ -1,7 +1,9 @@
 # Windows strict protected profiles
 
 Status: design and platform-contract review in progress for v0.24.50.
-Windows strict constructors remain unsupported. This document does not admit a
+Existing host-slice Windows strict constructors remain unsupported. The separate
+[retained SHA-256 owner](windows-enclave-owner.md) is now integrated and
+development-tested, with production-signed qualification pending. This document does not admit a
 backend, qualify an OS, or change release-gate policy. Existing Linux behavior
 and default-off acceleration remain unchanged.
 

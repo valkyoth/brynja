@@ -1,9 +1,11 @@
 # Windows enclave image admission and consumer workflow
 
-This admission component is implemented as an isolated build/loader integration.
-It is not yet connected to the production strict facade. Its demonstration entry
-accepts public test data only; production Windows strict sessions remain
-Unsupported. See [deployment responsibilities](windows-enclave-deployment.md).
+This admission component now also backs the crate's bounded
+[`brynja_strict::enclave` owner/session API](windows-enclave-owner.md). The separate
+build/loader demonstration still accepts public test data only. Existing
+Linux-style host-slice constructors remain Unsupported on Windows. Development
+execution is tested; production-signed qualification remains pending.
+See [deployment responsibilities](windows-enclave-deployment.md).
 
 ## Trust comes from the application build, not the candidate DLL
 

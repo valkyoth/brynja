@@ -78,6 +78,37 @@ def policy_source(value):
             'digest: '+repr(value['sha256'])+',\nidentity: image_admission::Identity {\n'+identity+'\n}};\n')
 
 
+def owner_policy_source(value):
+    checked_policy(value, 'production')
+    if value['policy'] != 0:
+        raise ValueError('The supported SHA-256 owner requires enclave policy flags zero')
+    arguments=',\n'.join(repr(value[key]) for key in
+        ('sha256','family','image','version','security','minimum_import_security'))
+    return ('// Trusted build input, not runtime image metadata.\n'
+            'pub static ENCLAVE_POLICY: brynja_strict::enclave::ImagePolicy =\n'
+            '    brynja_strict::enclave::ImagePolicy::reviewed_sha256(\n'+arguments+'\n);\n')
+
+
+def owner_policy(image, policy_path, output):
+    if policy_path.stat().st_size > 16384:
+        raise ValueError('Oversized policy')
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('Duplicate policy key')
+            result[key] = value
+        return result
+    policy = json.loads(policy_path.read_bytes(), object_pairs_hook=pairs)
+    source = owner_policy_source(policy)
+    actual = inspect(image)
+    if {k:actual[k] for k in FIELDS-{'status'}} != {k:policy[k] for k in FIELDS-{'status'}}:
+        raise ValueError('Reviewed policy does not match image')
+    with output.open('x', encoding='utf-8') as stream:
+        stream.write(source)
+    print('Owner policy generated; signature and platform admission still required at runtime')
+
+
 def build(image, policy_path, directory, profile):
     raw=policy_path.read_bytes()
     if len(raw)>16384: raise ValueError('Oversized policy')
@@ -124,9 +155,12 @@ def main():
     make=sub.add_parser('build')
     for name in ('image','policy','directory'): make.add_argument(name,type=Path)
     make.add_argument('--profile',choices=('development','production'),required=True)
+    owner=sub.add_parser('owner-policy')
+    for name in ('image','policy','output'): owner.add_argument(name,type=Path)
     args=parser.parse_args()
     if args.operation=='inspect': print(json.dumps(inspect(args.image),indent=2))
     elif args.operation=='prepare-system-imports': print(inspect(args.image,args.output))
+    elif args.operation=='owner-policy': owner_policy(args.image,args.policy,args.output)
     else: build(args.image,args.policy,args.directory,args.profile)
 
 

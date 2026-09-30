@@ -3,7 +3,7 @@
 "assurance/sha3-execution/Cargo.toml" = "6f27476e455570be2c86a1203028bb85e59966df51bc3cf838c738557bb965d5"
 "assurance/sha3-execution/src/main.rs" = "39df791cc3ce258934a07fa5798d3729a9208f7cc6b5a4356f181004d095c826"
 "crates/brynja-crypto-cpu-std/Cargo.toml" = "44b0f99ab5f27c29d1665536f4c81358dc73036818109b4f10ce09cc6ac84708"
-"crates/brynja-crypto-cpu-std/src/lib.rs" = "c238e7211ad3456aa2fe8dfe649061c5e51a0651a76149520ddd4d0cb5c8d18e"
+"crates/brynja-crypto-cpu-std/src/lib.rs" = "a13b34f523a51917307cf2f4864af98d78748ae526879926a5bd874376bdfc74"
 "crates/brynja-crypto-cpu-std/src/sponge.rs" = "2f002bd2983762c82706b5fcb905e7bb435213001b8e8017eaf69ee12fb92d82"
 "crates/brynja-crypto-cpu-std/src/sponge/tests.rs" = "a5b427fb4eaf9613ec1f29cd5120eb25567c01645e6b01e41273a67c2f9d421a"
 "crates/brynja-hash-sha3/Cargo.toml" = "5049a02ff3a7fea3ed9d253bd9443c89808c0e44c8dc6f86d0449792be401da7"

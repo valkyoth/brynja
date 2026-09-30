@@ -7,10 +7,15 @@
 //! keep secret processing on these APIs and protect original caller storage.
 //!
 //! Every constructor acquires protected resources or returns an error. Supported
-//! native targets are GNU/Linux x86-64 and little-endian AArch64 (Linux 4.4,
+//! native targets for host-slice sessions are GNU/Linux x86-64 and little-endian AArch64 (Linux 4.4,
 //! glibc 2.27 or later). Other targets and verification models compile for
 //! portability checks but constructors reject: no successful weaker fallback.
 //! Native qualification and independent review remain pending.
+//! The separate [`enclave`] interface implements bounded scalar SHA-256 on
+//! Windows x64 VBS with application-signed images and trusted build policies.
+//! Its results stay enclave-private until explicit public declassification;
+//! existing Linux-style host-slice sessions remain unsupported on Windows.
+//! Development execution is tested; production-signed qualification is pending.
 //!
 //! Scalar sessions stay scalar. `acceleration` exposes the separate compiled
 //! session constructors; batch execution also requires an explicit route. The
@@ -67,6 +72,7 @@ pub use brynja_crypto_cpu_std::strict_kmac as kmac;
 pub use brynja_crypto_cpu_std::strict_sha2 as sha2;
 pub use brynja_crypto_cpu_std::strict_sha3 as sha3;
 pub use brynja_crypto_cpu_std::strict_tuplehash as tuplehash;
+pub use brynja_crypto_cpu_std::windows_enclave as enclave;
 pub use brynja_hash_parallel_std::strict_execution as parallelhash;
 
 #[cfg(test)]

@@ -1,8 +1,9 @@
 # Windows enclave deployment and evidence scope
 
-Status: development-route implementation and observations only. Windows strict
-constructors still return Unsupported. This is not a production deployment
-guide or a claim that the existing strict facade is enclave-compatible today.
+Status: the separate bounded `brynja_strict::enclave` SHA-256 owner is integrated
+and development-tested. Existing host-slice strict constructors still return
+Unsupported on Windows. This is not production-signed deployment qualification
+or a claim that all strict operations are enclave-compatible today.
 
 ## Source-library distribution model
 
@@ -43,9 +44,11 @@ Delegating signing does not delegate away Brynja's runtime checks or permit a
 caller to bypass protection with an unchecked boolean. Exact file hashing is
 not signature-chain verification, import identity validation or attestation.
 The bounded admission component now implements a compiled, separately reviewed
-policy and Windows trust/import checks. Production facade/constructor integration
-still requires implementation and review; there is no public arbitrary-DLL
-constructor today. See the [consumer workflow](windows-enclave-image-admission.md).
+policy and Windows trust/import checks. The public retained SHA-256 owner now
+uses those checks through its Rust OS adapter. It requires a trusted static
+policy, not an unchecked arbitrary-DLL constructor. Independent review remains
+pending. See the [consumer workflow](windows-enclave-image-admission.md) and
+[owner/session API](windows-enclave-owner.md).
 
 ## What has actually been tested
 
@@ -59,6 +62,7 @@ automatically qualifications of later images.
 | Residency/dumps | Specific public-marker experiments observed page locking and exclusion from the selected full-local-dump path; not arbitrary snapshot protection or automatic coverage of every newer image |
 | Retained ownership | Native copy, lifetime, cleanup, quarantine, rehash and cross-instance routing campaigns; bounded public vectors and explicit negative controls |
 | Facade candidate | Two native 281-call campaigns and local ownership/surface tests; bounded scalar SHA-256, private fixture constructor, no production API activation |
+| Integrated Rust owner | Public construction with mandatory trust verification; native debug/release author tests of hashing, retained rehash, cancellation and ownership cleanup through a private test-only development constructor; no production-signed success claimed |
 | Main-file pinning candidate | Two native campaigns rejected altered bytes and conflicting write/delete/rename operations while the reviewed facade ran; hash and write-sharing mutants rejected. Not signature-chain, imported-image or attestation verification |
 | Admission integration | Two native development successes and production-profile rejections of an untrusted test signature; separately signed wrong-import-author/version controls rejected at initialization. Compiled trusted policy and import checks implemented, not production-facade integration |
 | Production deployment | Not executed or qualified: no production-signed candidate, production signature/identity/import integration or normal-production-configuration end-to-end result |
@@ -70,8 +74,9 @@ See [platform experiments](windows-strict-profile.md),
 The [development image-file pinning results](windows-enclave-image-pin-results.md)
 record the earlier isolated experiment. The subsequent
 [image-admission results](windows-enclave-image-admission-results.md) establish
-the development-tested identity/import component. Production API integration,
-successful production signing/deployment and final qualification remain unfinished.
+the development-tested identity/import component. Bounded SHA-256 API integration
+is complete; broader algorithms, successful production signing/deployment and
+final qualification remain unfinished.
 
 ## What this decision does not change
 

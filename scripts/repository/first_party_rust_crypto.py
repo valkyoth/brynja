@@ -105,6 +105,53 @@ OS_THREAD_ABI = '''unsafe extern "C" {
     ) -> c_int;
     fn pthread_join(thread: c_ulong, result: *mut *mut c_void) -> c_int;
 }'''
+OS_ENCLAVE_ADAPTER = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs')
+OS_ENCLAVE_CALLBACK = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs')
+OS_ENCLAVE_ENTRY = 'extern "system" fn callback(parameter: usize) -> usize {'
+# Exact Windows loading, trust, residency and lifecycle ABI, not foreign crypto.
+OS_ENCLAVE_ABI = '''#[link(name = "onecore")]
+unsafe extern "system" {
+    fn GetCurrentProcess() -> Handle;
+    fn GetCurrentThreadId() -> u32;
+    fn IsWow64Process2(process: Handle, process_machine: *mut u16, native: *mut u16) -> i32;
+    fn IsEnclaveTypeSupported(kind: u32) -> i32;
+    fn GetSystemInfo(info: *mut SystemInfo);
+    fn CreateEnclave(
+        process: Handle,
+        address: Handle,
+        size: usize,
+        initial: usize,
+        kind: u32,
+        info: *const CreateInfo,
+        info_size: u32,
+        error: *mut u32,
+    ) -> Handle;
+    fn LoadEnclaveImageW(base: Handle, image: *const u16) -> i32;
+    fn InitializeEnclave(
+        process: Handle,
+        base: Handle,
+        info: *mut InitInfo,
+        size: u32,
+        error: *mut u32,
+    ) -> i32;
+    fn TerminateEnclave(base: Handle, wait: i32) -> i32;
+    fn DeleteEnclave(base: Handle) -> i32;
+    fn GetLastError() -> u32;
+    fn GetProcAddress(module: Handle, name: *const u8) -> Handle;
+    fn CallEnclave(routine: Handle, parameter: Handle, wait: i32, result: *mut Handle) -> i32;
+    fn VirtualLock(address: Handle, size: usize) -> i32;
+    fn VirtualUnlock(address: Handle, size: usize) -> i32;
+    fn CloseHandle(handle: Handle) -> i32;
+    fn GetFileType(handle: Handle) -> u32;
+}
+#[link(name = "psapi")]
+unsafe extern "system" {
+    fn QueryWorkingSetEx(process: Handle, entries: *mut WorkingSet, size: u32) -> i32;
+}
+#[link(name = "wintrust")]
+unsafe extern "system" {
+    fn WinVerifyTrust(window: Handle, action: *const Guid, data: *mut TrustData) -> i32;
+}'''
 NATIVE_LINK = re.compile(r"#\s*\[\s*link(?:_name|_section)?\b")
 NATIVE_INCLUDE = re.compile(
     r"include_bytes\s*!\s*\([^)]*\.(?:a|bc|dll|dylib|lib|ll|o|obj|so)[\"']",
@@ -174,6 +221,15 @@ def validate(root: Path) -> None:
         if path.suffix == ".rs":
             text = path.read_text(encoding="utf-8")
             abi_text = text
+            link_text = text
+            if relative == OS_ENCLAVE_ADAPTER:
+                if text.count(OS_ENCLAVE_ABI) != 1:
+                    fail('OS enclave ABI inventory changed')
+                abi_text = link_text = text.replace(OS_ENCLAVE_ABI, '', 1)
+            if relative == OS_ENCLAVE_CALLBACK:
+                if text.count(OS_ENCLAVE_ENTRY) != 1:
+                    fail('OS enclave callback inventory changed')
+                abi_text = text.replace(OS_ENCLAVE_ENTRY, '', 1)
             if relative == OS_MEMORY_ADAPTER:
                 if text.count(OS_MEMORY_ABI) != 1:
                     fail('OS memory ABI inventory changed')
@@ -248,7 +304,7 @@ def validate(root: Path) -> None:
                 abi_text = text.replace(signature, '', 1)
             if FOREIGN_ABI.search(abi_text):
                 fail(f"foreign ABI declaration is forbidden: {relative}")
-            if NATIVE_LINK.search(text):
+            if NATIVE_LINK.search(link_text):
                 fail(f"native link attribute is forbidden: {relative}")
             if NATIVE_INCLUDE.search(text):
                 fail(f"included native binary is forbidden: {relative}")

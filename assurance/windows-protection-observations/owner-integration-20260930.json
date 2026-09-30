@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "status": "OBSERVATIONS_ONLY",
+  "production_qualified": false,
+  "utc": "2026-09-30T07:32:01.4963299Z",
+  "platform": "Windows Server 2025 x86_64 Azure development VM",
+  "secure_boot": false,
+  "vbs_status": 2,
+  "services_running": [
+    2
+  ],
+  "owner_test_processes": 0,
+  "image_sha256": "a939358b9abca529c2c59b02c8226bdaf6648629331a29937d53d771afd5b945",
+  "source_sha256": {
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/engine.rs": "5b4ca117c68522d03b860a2b7ecc3033e3c853df638d4073b2b7664808b0e076",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/image.rs": "3e472b4932a0245fbdb7e1877762412988afe49ed10573e5cd62361f5c3fe559",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/image/tests.rs": "c21288f06240245418a9505b0032ff2e0c5fa1abe6b4b831db338946c587aa3e",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/mod.rs": "0d374ae7350a603828bf91bfad7a0984f196a982492ab6354152d4b570be25b8",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs": "d56e08cfd688724942707dee6d1a91f4b3f8315d963b78fe0a6fb7a1b5005f9b",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/mod.rs": "547b0f94759681a1e6cc74b67a75aa4375a237bf61854d2e7e1cab7f7f6642f0",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/pin.rs": "2504805dae8a3e86af66cc243598ddd88bc8c8845b05cf856214dd989b6651af",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs": "7e0dcdfaee429ad3c127fda944a155071da5bde097b80d83068f8620993c63f6",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/tests.rs": "00260f9acfb722c076653371e1c3042b30b171b2220fd196655d607f1197dc78",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/policy.rs": "e95d486ea6cd82c35a097a626993cfa16bf7b7d30cb1d1adecd8f4fbc69e7281",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/protocol.rs": "966141ab65591fcfee72b62107f0fcf3afd3c4bf2227748ca34dd4a2cc885ce3",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tests.rs": "ddc8af1d0dc9a269e7aab080b2cfef5eaae4f8d12040cc31808f9bbb1cb1d2b7",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/unsupported.rs": "f71e2db60272e673ce83d9e2782f309dd984f0cc4fb162c10d9d57d13e5411e7"
+  },
+  "sdk_enclave_error": "#define ERROR_ENCLAVE_NOT_TERMINATED     814L",
+  "baseline_commit": "053fc5ee90fd4a109a58ffa55cf324ad035dac50",
+  "source_state": "uncommitted owner integration; exact tested module bytes bound below",
+  "rustc": "1.98.1 (48a229cea 2026-09-01)",
+  "sdk": "10.0.26100.0",
+  "msvc": "14.44.35207",
+  "native_profiles": [
+    "debug",
+    "release"
+  ],
+  "per_profile": {
+    "unit_tests_passed": 12,
+    "explicit_development_campaign_passed": 1,
+    "public_message_vectors": 16,
+    "retained_rehash_rounds": 5,
+    "production_signature": "REJECTED",
+    "caller_unwind": "PASS"
+  },
+  "native_claim": "Author development observations only; test-only private constructor bypasses rejected development certificate; public constructor does not",
+  "local_artifacts": {
+    "release-reports/windows-azure-replacement-2026-09-30/owner-source.tar": "d85a282dd4bf68a1fc25341be001441770f443bb33b422f31b9b4e1570497e96",
+    "release-reports/windows-azure-replacement-2026-09-30/owner-native-debug-release.log": "87cf9cd9c91a38e00ec3955fd64653e51ad85ca70ac6f0e21d47648aff691e43"
+  }
+}

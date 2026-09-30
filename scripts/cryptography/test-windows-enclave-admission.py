@@ -5,11 +5,30 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 import windows_enclave_admission as workflow
 import windows_enclave_admission_native as native
 
 
 class Tests(unittest.TestCase):
+    def test_owner_policy_requires_review_and_never_overwrites(self):
+        policy=dict(status='OWNER_REVIEWED',schema=1,profile='production',reviewer='test authority',
+            source_commit='a'*40,sha256=[1]*32,family=[2]*16,image=[3]*16,version=1,security=1,
+            policy=0,size=0x10000000,threads=1,minimum_import_security=[0,0])
+        import json
+        with tempfile.TemporaryDirectory(prefix='owner-policy-test-') as tmp:
+            directory=Path(tmp); source=directory/'reviewed.json'; output=directory/'policy.rs'
+            source.write_text(json.dumps(policy))
+            with patch.object(workflow, 'inspect', return_value=policy):
+                workflow.owner_policy(directory/'candidate.dll', source, output)
+                original=output.read_bytes()
+                with self.assertRaises(FileExistsError): workflow.owner_policy(directory/'candidate.dll', source, output)
+                self.assertEqual(output.read_bytes(), original)
+            with patch.object(workflow, 'inspect', return_value=dict(policy, security=2)):
+                with self.assertRaises(ValueError): workflow.owner_policy(directory/'candidate.dll', source, directory/'mismatch.rs')
+            source.write_text(json.dumps(policy).replace('"schema": 1', '"schema": 1, "schema": 1'))
+            with self.assertRaises(ValueError): workflow.owner_policy(directory/'candidate.dll', source, directory/'duplicate.rs')
+
     def test_native_outcome_schema(self):
         for profile,stage in [('development',0),('production',2),('development',1)]:
             value=dict(profile=profile,stage=stage,trust_status=-1,os_error=0,
@@ -76,6 +95,13 @@ class Tests(unittest.TestCase):
         text=workflow.policy_source(policy)
         changed=dict(policy,reviewer='"; arbitrary injected text; //')
         self.assertEqual(workflow.policy_source(changed),text)
+        with self.assertRaises(ValueError): workflow.owner_policy_source(policy)
+        production = dict(policy, profile='production')
+        generated = workflow.owner_policy_source(production)
+        self.assertIn('brynja_strict::enclave::ImagePolicy::reviewed_sha256(', generated)
+        self.assertNotIn('test authority', generated)
+        self.assertEqual(workflow.owner_policy_source(dict(production, reviewer='injected text')), generated)
+        with self.assertRaises(ValueError): workflow.owner_policy_source(dict(production, policy=2))
 
 
 if __name__=='__main__': unittest.main()

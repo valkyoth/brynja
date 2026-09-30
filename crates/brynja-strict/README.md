@@ -34,10 +34,12 @@ choice, not certification or proof that all application code uses this profile.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Strict-only modern protected sessions | 🚧 Implemented; qualification pending | ❌ No |
+| Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
 
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `kmac`, `tuplehash`, `parallelhash`
-and independent-message `batch`. No legacy hashes, ordinary digests, raw CPU
+and independent-message `batch`, plus the separate Windows `enclave` interface.
+No legacy hashes, ordinary digests, raw CPU
 execution authorities, generic protected callbacks or protocol APIs are exported.
 Even with default features disabled, dependencies enable the protected sessions.
 
@@ -49,6 +51,8 @@ portable or compiled kernel route. Full build-wide CPU feature bundles and
 compatible deployment are required for compiled kernels. No CPU detection,
 affinity or live-migration guarantee is implied. Missing required features reject.
 There is no automatic switch to a weaker memory profile.
+The Windows `enclave` interface is scalar-only; enabling `acceleration` does not
+add a Windows enclave hardware/SIMD route.
 
 ## Usage
 
@@ -81,10 +85,20 @@ This is a hosted crate requiring `std` through its dependencies. Its local
 `#![no_std]` attribute avoids an implicit standard-library prelude; it is not a
 bare-metal portability claim.
 
-Constructors require native GNU/Linux x86-64 or little-endian AArch64, Linux 4.4
+Host-slice constructors require native GNU/Linux x86-64 or little-endian AArch64, Linux 4.4
 and glibc 2.27 or newer, plus successful eager page locking and dump/fork exclusion.
 Other supported hosted targets and verification models can compile for portability
 tests but constructors return errors. They never return a weaker implementation.
+
+The distinct `enclave::Session::open` targets native Windows x64 MSVC with VBS.
+It admits an application-reviewed signed image using a static `ImagePolicy` and
+Windows trust/load/initialization checks. It retains SHA-256 results privately,
+supports retained rehashing and cancellation, and only releases bytes after
+explicit public declassification. Input is limited to 1024 bytes per request;
+caller-owned input storage remains outside protection. See the
+[owner/session example and deployment requirements](../../docs/windows-enclave-owner.md).
+No production signing service is bundled; deployment credentials belong to the
+application publisher. Development-signing success is not production qualification.
 
 On 4 KiB pages, a SHA-256 session with a 262144-byte stack locks 266240 bytes:
 64 stack pages plus one digest page. Guard pages add virtual address space,

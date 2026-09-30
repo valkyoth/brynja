@@ -42,6 +42,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
@@ -64,6 +65,15 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 No named independent cryptographic review or FIPS 140-3 validation is claimed.
 
 ## Use
+
+`strict-sha2` also exposes `windows_enclave`, the separate retained-result Windows
+x64 VBS interface re-exported as `brynja_strict::enclave`. It uses a trusted static
+image policy and Windows signature/load/initialization checks, not a runtime
+development switch. It currently supports scalar SHA-256 up to 1024 bytes,
+retained rehashing, cancellation and explicit public output. It does not expose
+enclave-private memory as host slices or make the Linux host-slice APIs work on
+Windows. No enclave hardware/SIMD route is implemented yet; production-signed
+qualification remains pending. See the [API guide](../../docs/windows-enclave-owner.md).
 
 Default-off `strict-kmac-acceleration` adds `strict_kmac::CompiledSession` with
 explicit AVX2 or Arm NEON/SHA3 selection. Enable the complete build-wide features

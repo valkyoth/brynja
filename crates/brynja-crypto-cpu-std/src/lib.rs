@@ -19,6 +19,8 @@ pub mod strict_sha2;
 pub mod strict_sha3;
 #[cfg(feature = "strict-tuplehash")]
 pub mod strict_tuplehash;
+#[cfg(feature = "strict-sha2")]
+pub mod windows_enclave;
 
 #[cfg(feature = "keccak-hardened-batch")]
 pub mod keccak_hardened_batch;

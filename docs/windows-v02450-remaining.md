@@ -72,6 +72,15 @@ describe how the worker was developed, not outstanding constructor work.
 
 ## Broader implementation and qualification
 
+- The private sequential AVX2 ParallelHash resident/worker now passes native
+  Windows development execution (50 comparisons, 650 VBS calls), full-page
+  placement/destruction tests, copy/quarantine mutations and baseline CPU/OS
+  admission tests. Its placement-only Miri model is not kernel qualification.
+  Connect the version-eighteen worker to explicit opt-in public host selection
+  and mandatory trusted-image admission next. Multicore scheduling and current-
+  image ABI/register/spill/dump qualification remain separate outstanding work.
+  See the [worker observations](../assurance/windows-protection-observations/parallel-accelerated-worker-20261001.json).
+
 - The private sequential AVX2 SHA-3 batch resident/worker now passes native
   Windows development execution (50 comparisons, 614 VBS calls), full-page
   placement/destruction checks, copy/quarantine mutations and baseline CPU/OS

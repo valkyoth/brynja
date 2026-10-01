@@ -525,10 +525,49 @@ python3 scripts/cryptography/test-windows-enclave-parallel-accelerated.py parall
 
 This fixture requires a compatible native AVX2 host. It is single-state AVX2
 with sequential leaves, not independent-message SIMD or multicore scheduling.
-Resident placement, baseline CPU/OS admission, the VBS worker, public accelerated
-host selection and current-image ABI/register/spill/dump qualification remain
-pending. No Miri, production signing or independent qualification is claimed by
-this component campaign.
+The subsequent resident/worker pass below adds placement and development VBS
+coverage. Public accelerated host selection and current-image ABI/register/
+spill/dump qualification remain pending. The component campaign itself claims
+no Miri, production signing or independent qualification.
+
+### ParallelHash resident and native development worker
+
+The private version-eighteen worker places its authority and borrowing root/leaf
+owner in one exclusive aligned page. Destruction drops the borrowing owner
+before the authority and volatile-clears the complete page, including padding
+and inactive storage. Fixed header/payload snapshots occupy the admitted worker
+stack and are cleared before the public completion receipt. OS copy failures,
+noncanonical metadata and lost observations quarantine the retained owner.
+
+Baseline C validates the complete AVX2/OSXSAVE/XCR0 bundle before any specialized
+Rust entry, including destruction. Feature loss latches rejection; it must not
+attempt accelerated cleanup after instruction authority has been lost. The
+separate protocol query identifies this image without entering specialized Rust.
+
+Linux and Windows tests each pass 332 independent cases through resident wire
+placement, three resident mutations, seven lifetime/ownership negatives, nine
+compiled worker mutations and eighteen baseline-C admission mutations. A focused
+Miri model tests the actual placement/destruction source with explicitly
+noncryptographic lifetime doubles and rejects three provenance/order/overlap
+mutations. That model does not qualify cryptographic execution or the full image.
+
+Native development VBS execution passes 50 independent comparisons across 650
+calls: all four identities, bit-fragmented customization/input/output, sixteen
+retained cross-identity rehashes, two incremental XOF comparisons, cancellation
+and seven metadata/copy rejection campaigns. Source, generated artifacts,
+binaries and image hashes were reconciled with locally preserved records.
+The temporary development signing certificate/key were removed. SignTool's
+older-OS compatibility warning is retained, not counted as production signing.
+See the [worker observations](../assurance/windows-protection-observations/parallel-accelerated-worker-20261001.json).
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-parallel-resident.py parallel-resident-results
+python3 scripts/cryptography/test-windows-enclave-parallel-resident-model.py parallel-placement-results
+python3 scripts/cryptography/test-windows-enclave-parallel-worker.py parallel-worker-results --attest-native-bundle
+```
+
+This remains a private sequential AVX2 worker, not an integrated public
+accelerated host constructor, multicore scheduler or production qualification.
 
 ## Next integration boundary
 

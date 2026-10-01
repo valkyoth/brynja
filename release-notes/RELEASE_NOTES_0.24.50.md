@@ -26,9 +26,12 @@ places authority and state together, erases the full allocation and admits the
 complete CPU/OS bundle in baseline C before specialized entry. Linux/Windows
 placement, mutation and ownership tests plus placement-only Miri pass; the
 development-signed image passes 50 public-vector comparisons across 614 VBS
-calls. The supported host constructor and whole-image cleanup qualification
-remain pending. Multi-message SIMD and multicore batching are separate outstanding
-work; no shipping batch API or default has changed. The SDK signing compatibility
+calls. The supported host constructor now exposes explicit opt-in `open_avx2`
+with mandatory production image trust and no fallback. Native debug/release
+host campaigns pass 323 batches/1344 digests per scalar/AVX2 route; ten compiled
+encoder mutations, focused host Miri and packaged feature/ownership tests pass.
+Scalar defaults are unchanged. Whole-image cleanup qualification, multi-message
+SIMD and multicore batching remain outstanding. The SDK signing compatibility
 warning remains recorded; production signing is not qualified.
 
 The private accelerated TupleHash component now covers all four fixed/XOF

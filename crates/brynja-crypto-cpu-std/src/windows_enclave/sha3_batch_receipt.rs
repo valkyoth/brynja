@@ -5,6 +5,15 @@ pub(super) fn receipt(
     length: usize,
     value: [usize; 7],
 ) -> Result<(), Error> {
+    receipt_width(low, operation, length, value, 288)
+}
+pub(super) fn receipt_width(
+    low: usize,
+    operation: usize,
+    length: usize,
+    value: [usize; 7],
+    header_bytes: usize,
+) -> Result<(), Error> {
     if matches!(operation, 0 | 3) {
         return if value == [0; 7] {
             Ok(())
@@ -21,7 +30,7 @@ pub(super) fn receipt(
         || payloads != usize::from(length != 0)
         || exports != usize::from(matches!(operation, 98))
         || error != 0
-        || !super::protocol::regions(low, [header, payload], [288, 1024])
+        || !super::protocol::regions(low, [header, payload], [header_bytes, 1024])
     {
         return Err(Error::Protocol);
     }

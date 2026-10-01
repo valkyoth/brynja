@@ -44,7 +44,7 @@ choice, not certification or proof that all application code uses this profile.
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Sequential scalar version-eleven worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
 
@@ -82,6 +82,9 @@ host secret-output slices. Scalar `open` is unchanged; no fallback is allowed.
 `enclave::tuplehash::Session::open_avx2` requires the distinct version-sixteen
 image and the same complete AVX/AVX2/OS bundle. It preserves streamed tuple items,
 retained composition and incremental XOF output; default `open` remains scalar.
+`enclave::sha3_batch::Session::open_avx2` requires the distinct version-seventeen
+image and the same AVX/AVX2/OS bundle. Slots execute sequentially; this is not
+independent-message SIMD or multicore batching. Scalar `open` stays scalar.
 Other Windows algorithms remain scalar. Production and
 independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
 

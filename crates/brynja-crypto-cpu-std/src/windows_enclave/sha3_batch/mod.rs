@@ -121,6 +121,23 @@ impl Session {
             thread_bound: PhantomData,
         }))
     }
+    /// Explicitly select a reviewed version-seventeen AVX2 enclave image.
+    ///
+    /// Requires `strict-sha3-acceleration`, production trust and the complete
+    /// CPU/OS vector-state bundle. Failure never selects scalar execution.
+    /// Slots execute sequentially using single-state AVX2 Keccak; this is not
+    /// independent-message SIMD or multicore batching. Caller input remains
+    /// outside protected storage. Image and deployment qualification are still
+    /// required; development tests are not production signing or certification.
+    #[cfg(feature = "strict-sha3-acceleration")]
+    pub fn open_avx2(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
+        Ok(Self(Owner {
+            transport: Transport::open_avx2(location, policy)?,
+            state: State::Ready,
+            sequence: 0,
+            thread_bound: PhantomData,
+        }))
+    }
     /// Public lifecycle only.
     #[must_use]
     pub fn state(&self) -> State {

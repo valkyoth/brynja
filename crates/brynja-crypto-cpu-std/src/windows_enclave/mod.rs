@@ -140,6 +140,20 @@ pub mod sha3_batch;
         )
     )
 ))]
+mod sha3_batch_avx2_wire;
+#[cfg(all(
+    feature = "strict-sha3",
+    any(
+        test,
+        all(
+            target_os = "windows",
+            target_arch = "x86_64",
+            target_env = "msvc",
+            not(miri),
+            not(kani)
+        )
+    )
+))]
 mod sha3_batch_receipt;
 #[cfg(feature = "strict-sha3")]
 mod sha3_batch_wire;

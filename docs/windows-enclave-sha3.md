@@ -145,7 +145,14 @@ image register/spill cleanup, dump exclusion, production signing or real secrets
 `brynja_strict::enclave::sha3_batch` is a separate version-eleven protocol,
 not a reinterpretation of the streaming image. Direct users of
 `brynja-crypto-cpu-std` enable both `strict-sha2` (the shared enclave owner)
-and `strict-sha3`. No new default feature or hardware selection is introduced.
+and `strict-sha3`. No default hardware selection is introduced.
+Scalar `Session::open` remains version eleven. With the strict facade's
+`acceleration` feature (direct adapter: `strict-sha3-acceleration`),
+`sha3_batch::Session::open_avx2(image, policy)` explicitly requires the distinct
+version-seventeen image and the full AVX/AVX2/OS vector-state bundle. Unsupported
+images/platforms or missing authority reject without scalar fallback. It uses
+single-state AVX2 Keccak sequentially for each slot, not independent-message
+SIMD or multicore batching. The same Plan/Batch/Item/Retained interface applies.
 
 The public plan declares up to eight active slots. Results are packed in slot
 order into a fixed 1024-byte export block; inactive slots occupy no bytes and
@@ -204,3 +211,13 @@ item rejection. Eight portable host checks also pass under Miri. These are autho
 checks using synthetic public data and the private development constructor, not
 independent review or production signing. See the
 [source-bound batch record](../assurance/windows-protection-observations/sha3-batch-owner-20260930.json).
+
+The opt-in AVX2 host integration has separate
+[source-bound development observations](../assurance/windows-protection-observations/sha3-batch-accelerated-host-20261001.json).
+Build its private worker with
+`python3 scripts/cryptography/windows_enclave_sha3_batch_accelerated_worker_build.py worker-build --image`.
+Both public constructors require production trust; only the private test harness
+accepts the development certificate. Host encoder/worker parity, complete larger
+header receipts, wrong-image rejection, plan mismatch, unchanged failed-output
+destinations and feature-gated packaged consumers are covered separately from
+current-image register/spill/dump qualification, which remains pending.

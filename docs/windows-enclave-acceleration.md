@@ -453,8 +453,9 @@ and reuse, and seven malformed-metadata/OS-copy rejection campaigns. See
 The temporary signing certificate and private key were removed. The SDK
 compatibility warning is retained; this is not successful production signing.
 This remains sequential per-item AVX2, not independent-message SIMD or multicore.
-Public host selection, current-image ABI/register/spill/dump qualification,
-independent review and production deployment remain outstanding.
+Public host selection is now integrated as described below. Current-image
+ABI/register/spill/dump qualification, independent review and production
+deployment remain outstanding.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha3-batch-resident.py batch-resident-results
@@ -462,9 +463,41 @@ python3 scripts/cryptography/test-windows-enclave-sha3-batch-resident-model.py b
 python3 scripts/cryptography/test-windows-enclave-sha3-batch-worker.py batch-worker-results --attest-native-bundle
 ```
 
+### Supported sequential AVX2 batch host selection
+
+`brynja_strict::enclave::sha3_batch::Session::open_avx2` is available with the
+facade's `acceleration` feature. It requires mandatory production image trust
+and the distinct version-seventeen `PublicSha3BatchAvx2Protocol` identity.
+Scalar `open` remains version eleven; an accelerated request never falls back.
+The existing affine Session/Batch/Item/Retained owners and exact public plan
+remain unchanged. The host validates the entire 304-byte header region in
+completion receipts, rather than the scalar protocol's 288-byte region.
+
+Native Windows development debug/release campaigns each pass 323 batches and
+1344 digests for both scalar and AVX2 routes, including every nonempty activity
+mask, mixed identities, arbitrary-bit output, large setup and cancellation.
+Public constructors reject the development signatures; wrong images/identities
+and scalar images on the accelerated route are rejected. Test-only retained-plan
+corruption preserves the destination and quarantines the session. Uncertain
+backend completion deliberately makes explicit close fail with `Release` and
+retains resources until process exit; the test does not call that clean release.
+
+The actual shipping encoder matches the worker decoder and rejects ten compiled
+mutants. Ten focused host tests pass under Miri (mock transport, not VBS/kernel
+execution); packaged debug/release tests reject 440 feature/surface/ownership
+violations, including feature-off constructor use. See
+[host observations](../assurance/windows-protection-observations/sha3-batch-accelerated-host-20261001.json).
+This completes sequential per-slot host integration, not independent-message
+SIMD, multicore batching, production signing or whole-image qualification.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sha3-batch-host-wire.py batch-host-wire-results
+```
+
 ## Next integration boundary
 
-- Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE, KMAC and TupleHash, binding each route to its
+- Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE,
+  KMAC, TupleHash and sequential SHA-3 batches, binding each route to its
   trusted image policy. Scalar constructors remain scalar; failed acceleration
   must not silently choose scalar execution.
 - Keep backend owners and scratch in enclave storage. Preserve streamed

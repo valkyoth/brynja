@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "status": "EXPLICIT_AVX2_SHA3_BATCH_HOST_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "e91820bd",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "description": "Opt-in sequential per-slot AVX2 SHA-3/SHAKE/cSHAKE batch session with mandatory production image trust and distinct version-seventeen identity. Scalar open stays version eleven. Private development-only native execution, not multi-message SIMD or multicore.",
+  "host_features": [
+    "strict-sha2",
+    "strict-sha3-acceleration"
+  ],
+  "facade_feature": "acceleration",
+  "image_protocol": 17,
+  "scalar_protocol": 11,
+  "rust_toolchain": "1.98.1",
+  "native_target": "x86_64-pc-windows-msvc",
+  "image_target_features": [
+    "avx",
+    "avx2"
+  ],
+  "native_environment": {
+    "windows_build": 26100,
+    "processor": "AMD EPYC 9V45",
+    "vbs": true,
+    "hvci": true,
+    "secure_boot": false,
+    "test_signing": true,
+    "production_signing": false
+  },
+  "native_campaigns": {
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "routes": [
+      "scalar",
+      "AVX2"
+    ],
+    "batches_per_route_per_profile": 323,
+    "digests_per_route_per_profile": 1344,
+    "all_nonempty_activity_masks": 255,
+    "production_signature_rejections": true,
+    "scalar_image_rejected_for_avx2": true,
+    "wrong_hash_and_identity_rejected": true,
+    "corrupted_retained_plan_preserves_output_and_quarantines": true,
+    "uncertain_close": "Err(Release); resources intentionally retained until process exit, not clean release",
+    "streamed_setup_and_exact_bit_outputs": true,
+    "cancellation_and_reuse": true,
+    "forgotten_item_rejection": true,
+    "normal_explicit_close": true,
+    "windows_scoped_clippy": "PASS"
+  },
+  "other_tests": {
+    "all_feature_enclave_host_tests": 58,
+    "focused_miri_host_tests": 10,
+    "miri_scope": "Safe host owner, mock transport and receipt/header logic; not VBS or assembly kernels",
+    "shipping_encoder_actual_worker_parity": "PASS",
+    "compiled_encoder_mutants_rejected": 10,
+    "batch_ownership_compile_fail_doctests": 20,
+    "packaged_facade_export_ownership_negatives": 440,
+    "packaged_avx2_constructor": "Feature-on positive and feature-off negative",
+    "packaged_strict_debug_release_and_doctests": "PASS"
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "matching_host_source_hashes": 548,
+    "matching_scalar_worker_source_hashes": 168,
+    "matching_scalar_generated_artifacts": 18,
+    "all_command_log_hashes_verified": true,
+    "host_manifest_member": "sha3-batch-host-capture-checked-20261001/host-results.json",
+    "host_manifest_sha256": "9549ab88d783e118b035043cba64726088e31cb89d4da0c200fd0c841daa5834",
+    "avx2_worker_binding": "Unchanged image and worker from sha3-batch-accelerated-worker-20261001.json; prior capture retained separately"
+  },
+  "archive_members_sha256": {
+    "sha3-batch-host-capture-checked-20261001/binaries/brynja_crypto_cpu_std-1d538795ccdaca33.exe": "69a18b307c65b6e70995f3dd5a9f2899f0e68a49f092cc7fbf6a63dec240a673",
+    "sha3-batch-host-capture-checked-20261001/binaries/brynja_crypto_cpu_std-a3cd8250e74ce3d6.exe": "ca15bc9918c6e224937807e119bdc7032f371f595b25f4a4f37c1f8ed7011822",
+    "sha3-batch-host-capture-checked-20261001/avx2-signed.dll": "4386abbcb86097fd4ef4023634957fee33de2ff1e2eefd3f30a1e04f60b54aba",
+    "sha3-batch-host-capture-checked-20261001/scalar-signed.dll": "dea5009a63e5c35914b5fa8b9f4d88e1228f2e69079dc00dfb970855c01458fb",
+    "sha3-batch-host-capture-checked-20261001/capture-sha3-batch-host-20261001.py": "301037b6d67db0902f85022f044d15d1f1056d63bf6ac9fe4c137770286759ab"
+  },
+  "artifacts": {
+    "release-reports/sha3-batch-host-products-20261001.tar.gz": "f7b0722a95d6cc610bbd3aeb92fadc79e956925cc2ffeb0a7a46ad6d9050b8db",
+    "release-reports/sha3-batch-host-wire-linux-final3-20261001/sha3-batch-host-wire-results.json": "44a75ed4b68822c4c0e4385d75539164d17c9576335eb73129e133b4f29592b4",
+    "release-reports/sha3-batch-host-miri-20261001.log": "99bfd6f5ce28278f17f95fc9c85bdce1acf27d908f1fcd5e4ad28d1228856dc5",
+    "release-reports/sha3-batch-host-package-20261001.log": "274b84bd25ba16d13268c38e01494249d462b9c9203480d097fa2741b208be62",
+    "release-reports/sha3-batch-host-all-feature-20261001.log": "e08dd4d1dfb532ada313ad87c413eacba4e3d768db7ac45f24458358a475fe21"
+  },
+  "signing": {
+    "scalar_signtool_exit_code": 2,
+    "warning": "SDK VBS compatibility warning retained; not a clean production-signing result",
+    "temporary_scalar_signing_certificate_and_key_removed": true
+  },
+  "limitations": [
+    "Public synthetic-vector author regression evidence, not independent qualification or approval for real secrets",
+    "Current-image ABI/register/spill, protected-stack/dump and wider failure qualification remain pending",
+    "No Windows ARM64, dedicated x86 SHA-512, arbitrary CPU migration or production-signing qualification",
+    "Independent-message SIMD, wider accelerated batching and multicore integration remain pending",
+    "Release-gate policy unchanged; candidate remains RETEST REQUIRED"
+  ]
+}

@@ -89,8 +89,14 @@ fn case(
 #[test]
 #[ignore = "requires reviewed development-signed version-eleven worker on native Windows VBS"]
 fn development_sha3_batch_campaign() -> Result<(), Box<dyn std::error::Error>> {
-    let location = std::path::PathBuf::from(std::env::var("BRYNJA_ENCLAVE_SHA3_BATCH_IMAGE")?);
-    let expected = std::env::var("BRYNJA_ENCLAVE_SHA3_BATCH_SHA256")?;
+    let (location, policy) = image("BRYNJA_ENCLAVE_SHA3_BATCH")?;
+    campaign(Transport::development(&location, &policy)?, "scalar")
+}
+pub(super) fn image(
+    prefix: &str,
+) -> Result<(std::path::PathBuf, ImagePolicy), Box<dyn std::error::Error>> {
+    let location = std::path::PathBuf::from(std::env::var(std::format!("{prefix}_IMAGE"))?);
+    let expected = std::env::var(std::format!("{prefix}_SHA256"))?;
     if expected.len() != 64 {
         return Err("expected exact image hash".into());
     }
@@ -109,7 +115,12 @@ fn development_sha3_batch_campaign() -> Result<(), Box<dyn std::error::Error>> {
         .ok_or(Error::Bounds)?
         .copy_from_slice(b"PROB");
     let policy = ImagePolicy::reviewed_sha256(digest, family, image, 1, 1, [0, 0]);
-    let transport = Transport::development(&location, &policy)?;
+    Ok((location, policy))
+}
+pub(super) fn campaign(
+    transport: Transport,
+    route: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     let mut session = Session(Owner {
         transport,
         state: State::Ready,
@@ -180,7 +191,12 @@ fn development_sha3_batch_campaign() -> Result<(), Box<dyn std::error::Error>> {
                 if bits == 0 {
                     0
                 } else {
-                    u8::try_from((bits - 1) % 8 + 1).map_err(|_| Error::Bounds)?
+                    let tail = bits
+                        .checked_sub(1)
+                        .and_then(|value| value.checked_rem(8))
+                        .and_then(|value| value.checked_add(1))
+                        .ok_or(Error::Bounds)?;
+                    u8::try_from(tail).map_err(|_| Error::Bounds)?
                 },
             )?);
             digests = digests
@@ -203,7 +219,7 @@ fn development_sha3_batch_campaign() -> Result<(), Box<dyn std::error::Error>> {
     session.close()?;
     assert_eq!(session.state(), State::Closed);
     println!(
-        "WINDOWS_ENCLAVE_SHA3_BATCH: batches={batches}; digests={digests}; cancellation/forgotten-item=PASS; scalar development-only"
+        "WINDOWS_ENCLAVE_SHA3_BATCH: batches={batches}; digests={digests}; cancellation/forgotten-item=PASS; route={route}; development-only"
     );
     Ok(())
 }

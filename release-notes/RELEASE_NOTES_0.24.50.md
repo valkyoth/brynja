@@ -75,8 +75,13 @@ The separate private AVX2 KMAC component now streams keys/customization over the
 existing accelerated cSHAKE engine and unchanged KMAC suffix packer. Native
 Linux/Windows component tests pass 256 independent bit cases, 128 retained rekeys,
 22 compiled mutations and six ownership/lifetime negatives. A focused Miri
-key-prefix model passes. Resident placement, enclave image/entry and the opt-in
-host route remain unfinished; this does not add shipping KMAC acceleration yet.
+key-prefix model passes. The subsequent private version-fifteen resident/worker
+passes 29 wire/placement, nine transport and 18 baseline C admission mutations,
+seven ownership negatives and a focused Miri placement model. Its development
+VBS image passes 50 comparisons across 672 calls, including all sixteen retained
+rekey pairs. Evidence and the SDK signing warning are preserved locally. The
+opt-in host route and current-image qualification remain unfinished; this does
+not add shipping KMAC acceleration yet or change release gates.
 
 The version-nine `enclave::tuplehash` host interface now provides all four
 TupleHash/TupleHashXOF identities, exact-length item writers, retained-output

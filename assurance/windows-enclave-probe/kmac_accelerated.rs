@@ -17,7 +17,7 @@ mod kmac_accelerated_state;
 use brynja_crypto_cpu::static_execution::{Authority, Kernel};
 pub use brynja_mac_kmac::KmacError;
 use kmac_accelerated_framing::{backend, error, packer};
-// Wire/image binding is a separate integration step.
+pub mod kmac_accelerated_wire;
 use kmac_accelerated_state::State;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

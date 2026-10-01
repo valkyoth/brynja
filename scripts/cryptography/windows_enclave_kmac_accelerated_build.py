@@ -13,7 +13,7 @@ ROOT, SOURCE = base.ROOT, base.SOURCE
 FILES = ('kmac_accelerated.rs', 'kmac_accelerated_setup.rs',
          'kmac_accelerated_state.rs', 'kmac_accelerated_key.rs',
          'kmac_accelerated_framing.rs', 'kmac_accelerated_tests.rs',
-         'kmac_accelerated_authority_tests.rs')
+         'kmac_accelerated_authority_tests.rs', 'kmac_accelerated_wire.rs')
 
 
 def build(directory, target):

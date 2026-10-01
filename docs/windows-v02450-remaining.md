@@ -281,8 +281,13 @@ describe how the worker was developed, not outstanding constructor work.
   tags, XOF suffixes, verification and terminal authority failures are covered;
   a focused actual-key-prefix Miri model passes with a noncryptographic sink.
   See [KMAC component observations](../assurance/windows-protection-observations/kmac-accelerated-component-20261001.json).
-  KMAC resident placement, wire/feature-checked worker image and supported host
-  constructor remain next; no accelerated KMAC enclave execution is claimed yet.
+  The subsequent private version-fifteen KMAC resident and feature-checked worker
+  now pass Linux/Windows mutation tests and a focused Miri placement model.
+  Development VBS execution passes 50 public-vector comparisons across 672 calls,
+  including all sixteen retained rekey pairs. See
+  [KMAC worker observations](../assurance/windows-protection-observations/kmac-accelerated-worker-20261001.json).
+  The supported opt-in host constructor and current-image qualification remain
+  next; development execution is not a production signing or independent pass.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

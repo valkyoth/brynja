@@ -249,18 +249,43 @@ executes the actual incremental key packer against a noncryptographic byte sink;
 it does not execute AVX2 or prove enclave placement. See
 [component observations](../assurance/windows-protection-observations/kmac-accelerated-component-20261001.json).
 
-This is not an enclave image, a supported accelerated KMAC host constructor, or
-production qualification. Resident authority/owner placement, a distinct wire
-protocol, feature-checked C entry, enclave execution and host integration remain
-next. Full-allocation clearing (including inactive variants/padding), current-image
-ABI/register/spill/dump review and independent retest remain separate obligations.
-The existing scalar KMAC worker and shipping APIs are unchanged.
+That component evidence alone does not qualify an enclave image. The subsequent
+private version-fifteen worker now places the authority and borrowing KMAC owner
+separately in one retained page, destroys the owner before its authority and
+clears the complete page, including inactive variants and padding. A distinct
+112-byte protocol rejects scalar headers and noncanonical route/reserved fields
+before payload copying. Baseline C checks the complete AVX2/OS state bundle before
+specialized Rust entry, including destruction; rejected authority stays latched.
+
+Native Linux and Windows resident tests pass 256 independent bit cases, all 16
+wire-level retained rekey pairs and incremental XOF output across rate boundaries.
+They reject 29 compiled wire/placement mutants and seven ownership/lifetime
+probes. Worker tests reject nine transport/cleanup mutants and 18 baseline C
+admission mutants. A focused Miri placement model rejects narrowed provenance,
+overlapping objects and reversed destruction order using noncryptographic
+lifetime doubles, not the AVX2 kernel.
+
+The development-signed worker executes inside VBS: 50 public-vector comparisons
+across 672 calls cover all four identities, fractional setup, retained rekeying,
+verification, cancellation and rejected metadata/copy paths. Source and artifact
+hashes reconcile with the local checkout; evidence is saved outside `target/`.
+The SDK signing warning (exit 2, older-OS compatibility) remains recorded, and the
+temporary signing certificate/key were removed. See
+[worker observations](../assurance/windows-protection-observations/kmac-accelerated-worker-20261001.json).
+
+The supported accelerated KMAC host constructor, production image-policy
+integration, current-image ABI/register/spill/dump review and independent retest
+remain unfinished. This is development evidence, not production qualification.
+The existing scalar KMAC worker, shipping APIs and release gates are unchanged.
 
 Author commands (native AVX2 host required):
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-kmac-accelerated.py component-results
 python3 scripts/cryptography/test-windows-enclave-kmac-key-model.py key-model-results --miri-toolchain nightly-2026-09-11
+python3 scripts/cryptography/test-windows-enclave-kmac-resident.py resident-results --attest-native-bundle
+python3 scripts/cryptography/test-windows-enclave-kmac-resident-model.py placement-model-results
+python3 scripts/cryptography/test-windows-enclave-kmac-worker.py worker-results --attest-native-bundle
 ```
 
 ## Next integration boundary

@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_KMAC_AVX2_RESIDENT_WORKER_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "1143b4b3a76606e159dc91c97ded6c995dda5f73",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "public_host_acceleration_available": false,
+  "description": "Private version-15 KMAC/KMACXOF retained worker with separately placed authority/owner, exact bounded wire metadata and baseline C feature admission before AVX2 Rust entry. Development-only public-vector VBS execution, not production qualification.",
+  "targets": [
+    "x86_64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc"
+  ],
+  "toolchain": "1.98.1",
+  "component_tests_per_target": {
+    "owner_tests": 16,
+    "resident_wire_tests": 7,
+    "independent_bit_cases": 256,
+    "wire_retained_rekey_pairs": 16,
+    "resident_wire_mutants_rejected": 29,
+    "resident_ownership_negatives": 7,
+    "worker_tests": 1,
+    "worker_mutants_rejected": 9,
+    "baseline_c_mutants_rejected": 18
+  },
+  "miri": {
+    "toolchain": "nightly-2026-09-11",
+    "tests": 1,
+    "mutants_rejected": 3,
+    "scope": "Actual placement/destruction source with noncryptographic lifetime doubles. No kernel/enclave/whole-image qualification."
+  },
+  "native_vbs": {
+    "windows_build": 26100,
+    "comparisons": 50,
+    "calls": 672,
+    "bit_cases": 32,
+    "retained_rekey_pairs": 16,
+    "verification_decisions": 2,
+    "negative_campaigns": 7,
+    "image_sha256": "f5f63575f64bf64a66fab6569c83080f56bd028e7e52e134bce08c31b3c6d578",
+    "signed_with": "Temporary self-signed development certificate; certificate and private key removed",
+    "signtool_exit": 2,
+    "signing_wrapper_exit": 1,
+    "signing_warning": "SDK VBS support/older-OS compatibility warning retained; signature written and image subsequently loaded by development VBS, not a production signing pass."
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "resident_source_files": 295,
+    "worker_source_files": 305,
+    "native_source_files": 389,
+    "source_and_generated_hashes_reconciled": true
+  },
+  "artifacts": {
+    "release-reports/kmac-resident-20261001-d/kmac-resident-results.json": "82c7b92ecd9138ebff37aeb3431bd69797dc71e19e72cad23a1f8ce0a267e369",
+    "release-reports/kmac-worker-20261001-b/kmac-worker-build.json": "4452ac3e49f41a49d4bd799ef15229195875bc58f13c98193bea3edf809f2b43",
+    "release-reports/kmac-worker-20261001-b/kmac-worker-results.json": "8ec058515efd7c3854c5b6bd4ef791cbba29a4761d442556b3e8a11deff397a2",
+    "release-reports/kmac-resident-model-20261001/placement-model-results.json": "b9f607f93260b77c0ab56fdcf8a7d11e39e76f91556292272b964852b71af574",
+    "release-reports/windows-kmac-worker-collected-20261001/kmac-resident-20261001/kmac-resident-results.json": "2b1e1bc56b035b3ba0d0797888893db138f3b54c2680d0d386ac1b48b5f4928b",
+    "release-reports/windows-kmac-worker-collected-20261001/kmac-worker-20261001/kmac-worker-build.json": "3dd133a02c4687f8685440aa626a0d897ae929db97dbc9119a837d91070c08f4",
+    "release-reports/windows-kmac-worker-collected-20261001/kmac-worker-20261001/kmac-worker-results.json": "b47a17899164591ad5792e0643a2e14be1ad650ab2f20a6794fdb4cc7d4f9c81",
+    "release-reports/windows-kmac-worker-collected-20261001/kmac-worker-20261001/native-results.json": "c5209d20da49958ff9628533fa2b54b8f128e027c7b315220d4c6133a719d75d",
+    "release-reports/kmac-resident-worker-products-20261001.tar.gz": "c2f12ac7c4bc4270902c34e73a62da6adfaea484545c566a5456004279fa8ce7",
+    "release-reports/windows-kmac-worker-collected-20261001/kmac-worker-sign.log": "c276fc44bd17da35090ebbfe7972544a0dce54c350c718081aac8cc1dcc3bf62"
+  },
+  "limitations": [
+    "Public opt-in accelerated KMAC host constructor and production image-policy integration still pending",
+    "Current-image ABI/register/spill/dump and complete secret-storage qualification remain pending; model tests alone do not establish these",
+    "No production signing, Windows ARM64, arbitrary migration, independent cryptographic review or certification claim",
+    "Shipping crate behavior, kernel implementations, dependencies and release-gate policy unchanged",
+    "Candidate remains RETEST REQUIRED"
+  ]
+}

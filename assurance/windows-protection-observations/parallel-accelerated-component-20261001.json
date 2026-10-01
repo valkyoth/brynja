@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "SEQUENTIAL_AVX2_PARALLELHASH_COMPONENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "08e0398b",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "multi_message_simd": false,
+  "multicore": false,
+  "shipping_api_changed": false,
+  "description": "Private sequential ParallelHash128/256 and XOF retained owner over the unchanged hardened AVX2 root/leaf engine, with separate version-eighteen metadata. Ordinary native-process tests only.",
+  "rust_toolchain": "1.98.1",
+  "target_features": [
+    "avx",
+    "avx2"
+  ],
+  "protocol": {
+    "version": 18,
+    "header_bytes": 128,
+    "retained_bytes": 1024,
+    "payload_bytes": 1024,
+    "accelerated_route": 1,
+    "route_reserved": 0
+  },
+  "tests": {
+    "native_tests_per_platform": 20,
+    "independent_cases_per_platform": 332,
+    "included_nist_samples": 12,
+    "retained_compositions_per_platform": 256,
+    "compiled_runtime_mutants_per_platform": 32,
+    "ownership_negatives_per_platform": 6,
+    "oracle": "Existing independent ParallelHash bit oracle, cross-checked with 12 NIST fixed/XOF samples",
+    "source_adaptation": "Existing scalar direct/wire/retained tests adapted only for borrowed authority lifetimes and explicit version-eighteen metadata",
+    "authority": "Every operation including zero work and post-copy revalidation; failures/unwind/drop revoke authority; successful cancel/export permit reuse",
+    "cleanup": "Active owned state/results/counters; future resident placement must erase complete allocation including padding and inactive enum storage",
+    "compilation_failures_count_as_mutant_rejections": false,
+    "clean_restored_after_mutants": true
+  },
+  "source_binding": {
+    "windows_checkout": "Restored development checkout plus exact source overlay, not a clean exact Git checkout",
+    "all_source_hashes_match_local": true,
+    "all_generated_hashes_match_records": true,
+    "linux": {
+      "source_files": 256,
+      "generated_files": 22,
+      "binary_sha256": "db9517fbbe2cecc92df9e531e6a7a9b66d7a345bdb1fe1359bc2c98c8a82e628",
+      "target": "x86_64-unknown-linux-gnu"
+    },
+    "windows": {
+      "source_files": 256,
+      "generated_files": 22,
+      "binary_sha256": "c7ad48ef1936aa65aad59cce0f55b7fe5a5fb98d62cbdc790b947bd8652227bd",
+      "target": "x86_64-pc-windows-msvc",
+      "manifest_member": "parallel-component-20261001/parallel-accelerated-results.json",
+      "manifest_sha256": "1c5ba2fe24bf283daa7d06c0c399023b98111da3492b84824372440a64c5e478"
+    },
+    "artifacts": {
+      "release-reports/parallel-component-products-20261001.tar.gz": "0f95cd13c6e41dbbf06cc708572fa34a5dec981a622eb7ebb29827c1489e9e5e",
+      "release-reports/parallel-avx2-component-linux-final2-20261001/parallel-accelerated-results.json": "e8b6ef984c34fcbd894d6630a315cf11cf0c4091558c4b1ab8d9baab4164528a"
+    }
+  },
+  "limitations": [
+    "Not native VBS execution, a signed worker image or Miri qualification",
+    "No current-image ABI/register/spill, protected-frame, residency or dump qualification",
+    "Not independent-message SIMD or multicore ParallelHash",
+    "No new whole-allocation or fatal-abort cleanup guarantee",
+    "Resident/worker, baseline CPU/OS admission and supported accelerated host API remain pending",
+    "No production source, dependency or release-gate policy changed; RETEST REQUIRED remains"
+  ]
+}

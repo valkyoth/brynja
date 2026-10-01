@@ -18,6 +18,14 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
+The private sequential AVX2 ParallelHash component now covers all four fixed/XOF
+identities, streamed bit inputs, bounded-memory leaves and retained-output
+rehashing. Root and leaves share borrowed authority over the unchanged hardened
+engine; failures clear and quarantine without fallback. Independent component
+oracle, mutation and ownership tests are separate from pending resident/worker,
+native VBS and accelerated host integration. This is not multicore ParallelHash
+or a production qualification claim.
+
 The private sequential accelerated SHA-3 batch component preserves eight-slot
 streaming, exact-bit cSHAKE setup, retained outputs, work budgets and sparse
 ordering over the unchanged single-state AVX2 engine. Its separate version-17

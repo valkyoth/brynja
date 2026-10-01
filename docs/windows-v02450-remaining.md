@@ -329,8 +329,16 @@ describe how the worker was developed, not outstanding constructor work.
   decoder. Its component/oracle, authority, mutation and ownership checks are
   recorded in [batch observations](../assurance/windows-protection-observations/sha3-batch-accelerated-component-20261001.json).
   This is single-state acceleration per item, not independent-message SIMD or
-  multicore batching. The batch resident/worker, feature-checked image and host
-  integration remain next; current-image cleanup and wider batch routes remain.
+  multicore batching. The subsequent batch resident/worker and opt-in host are
+  now development-tested; current-image cleanup and wider batch routes remain.
+- The private sequential AVX2 ParallelHash component now implements all four
+  fixed/XOF identities over the unchanged hardened root/leaf engine. Its
+  version-eighteen decoder binds explicit acceleration and canonical metadata.
+  Component tests cover independent bit vectors, retained rehashing, exact leaf
+  completion, bounded work, authority revocation and error/unwind cleanup. This
+  is not yet resident placement, a feature-checked VBS worker image, a shipping
+  accelerated host API or multicore ParallelHash. Next integrate that resident
+  and worker while retaining the separate current-image qualification work.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

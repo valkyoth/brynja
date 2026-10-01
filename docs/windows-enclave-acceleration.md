@@ -494,6 +494,42 @@ SIMD, multicore batching, production signing or whole-image qualification.
 python3 scripts/cryptography/test-windows-enclave-sha3-batch-host-wire.py batch-host-wire-results
 ```
 
+## Sequential AVX2 ParallelHash component
+
+The private `parallel_accelerated` component covers ParallelHash128/256 and both
+XOF identities, using the unchanged hardened AVX2 Keccak engine for root and
+leaves. One borrowed authority outlives both states; every operation, including
+zero-work requests, checks its health. Copy failure, recoverable unwind and
+revocation clear owned results/counters and quarantine; successful cancellation
+allows reuse. Drop revokes authority. Placement must still erase the complete
+allocation, including inactive enum storage and padding, before release.
+
+The scalar framing is preserved: streamed exact-bit customization, positive B,
+bounded fragments without a B-sized allocation, exact leaf-count completion,
+right-encoded leaf count/output length, incremental XOF output and exact-bit
+retained-output rehashing. Version eighteen has a separate 128-byte header with
+an explicit accelerated route and zero reserved words. Invalid metadata is
+rejected before payload access; copied-length failure quarantines active state.
+
+The ordinary-process component campaign covers 332 independent bit cases,
+including 12 NIST samples, and 256 retained compositions. It rejects 32 compiled
+framing, authority, cleanup and protocol mutations plus six ownership/lifetime
+violations. The source-bound records distinguish this from native enclave
+execution: [component observations](../assurance/windows-protection-observations/parallel-accelerated-component-20261001.json).
+Compilation failure is not counted as runtime mutant rejection. Clean source is
+restored, recompiled and rerun at the end of each campaign.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-parallel-accelerated.py parallel-component-results
+```
+
+This fixture requires a compatible native AVX2 host. It is single-state AVX2
+with sequential leaves, not independent-message SIMD or multicore scheduling.
+Resident placement, baseline CPU/OS admission, the VBS worker, public accelerated
+host selection and current-image ABI/register/spill/dump qualification remain
+pending. No Miri, production signing or independent qualification is claimed by
+this component campaign.
+
 ## Next integration boundary
 
 - Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE,

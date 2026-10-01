@@ -1,8 +1,9 @@
-//! Scalar KMAC/KMACXOF using a version-eight enclave worker.
+//! KMAC/KMACXOF using a scalar version-eight or explicit AVX2 version-fifteen worker.
 //! Caller-owned key/message buffers remain outside enclave storage. Retained
 //! tags/readers never expose host secret slices. Only explicit declassification
-//! or a public verification decision leaves the enclave. No hardware route,
-//! production-signing qualification or Windows ARM64 support is implied.
+//! or a public verification decision leaves the enclave. Scalar is the default;
+//! acceleration is explicit and never falls back. No production-signing
+//! qualification or Windows ARM64 support is implied.
 //! Requires `strict-sha2` (the enclave owner) and `strict-kmac`. Fatal abort is
 //! outside Drop cleanup; abandoned handles quarantine their owning session.
 use super::kmac_wire::Request;
@@ -197,6 +198,26 @@ impl Session {
     pub fn open(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
         Ok(Self(Owner {
             transport: Transport::open(location, policy)?,
+            state: State::Ready,
+            sequence: 0,
+            thread_bound: PhantomData,
+        }))
+    }
+    /// Explicit AVX2 execution for all four KMAC/KMACXOF identities.
+    /// Requires `strict-kmac-acceleration` (facade: `acceleration`), the reviewed
+    /// version-fifteen image and mandatory production signature/import policy.
+    /// Baseline enclave entry checks the complete AVX/AVX2 and OS vector-state
+    /// bundle before specialized Rust, including destruction. Missing image,
+    /// platform or instruction support fails closed; never falls back to scalar.
+    ///
+    /// Development execution is not production qualification. Deployment must
+    /// preserve these features across scheduling and migration; losing support
+    /// rejects entry and cannot promise specialized cleanup. Fatal abort cannot
+    /// run Drop. Caller buffers and application-created copies are not protected.
+    #[cfg(feature = "strict-kmac-acceleration")]
+    pub fn open_avx2(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
+        Ok(Self(Owner {
+            transport: Transport::open_avx2(location, policy)?,
             state: State::Ready,
             sequence: 0,
             thread_bound: PhantomData,

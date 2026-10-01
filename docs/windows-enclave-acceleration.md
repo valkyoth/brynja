@@ -273,10 +273,36 @@ The SDK signing warning (exit 2, older-OS compatibility) remains recorded, and t
 temporary signing certificate/key were removed. See
 [worker observations](../assurance/windows-protection-observations/kmac-accelerated-worker-20261001.json).
 
-The supported accelerated KMAC host constructor, production image-policy
-integration, current-image ABI/register/spill/dump review and independent retest
-remain unfinished. This is development evidence, not production qualification.
-The existing scalar KMAC worker, shipping APIs and release gates are unchanged.
+The subsequent host integration now exposes feature-gated
+`kmac::Session::open_avx2` with mandatory production image/signature/import
+admission and the distinct version-fifteen protocol query. Enable
+`strict-sha2,strict-kmac-acceleration` on the hosted crate, or `acceleration` on
+`brynja-strict`. The host needs no build-wide AVX2 flags. Scalar `open` remains
+version eight; unsupported platforms, images or instruction bundles reject
+without scalar fallback. Losing CPU support cannot promise specialized cleanup;
+deployment must preserve features across scheduling and migration.
+
+Native debug/release host campaigns pass 546 cases per route for AVX2 and a
+freshly rebuilt scalar image, including retained composition and exact-bit
+verification. Public constructors reject development signatures; the private
+test-only route also rejects wrong image hashes/identities and a scalar image
+requested as AVX2. Actual host/worker encoder parity rejects ten compiled
+mutations. Packaged consumers verify feature-on availability and feature-off
+absence. Focused host Miri checks use mock transport, not VBS or AVX2.
+
+Current-image ABI/register/spill/dump review and independent retest remain
+unfinished. This is development evidence, not production qualification. The
+SDK signing warning remains recorded. No release-gate policy changed.
+
+```rust,no_run
+# #[cfg(feature = "acceleration")]
+fn accelerated_kmac(image: &std::path::Path,
+    policy: &'static brynja_strict::enclave::ImagePolicy)
+    -> Result<brynja_strict::enclave::kmac::Session, brynja_strict::enclave::Error>
+{
+    brynja_strict::enclave::kmac::Session::open_avx2(image, policy)
+}
+```
 
 Author commands (native AVX2 host required):
 

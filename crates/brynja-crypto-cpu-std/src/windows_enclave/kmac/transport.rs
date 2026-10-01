@@ -55,6 +55,13 @@ impl Transport {
     pub(super) fn open(_: &std::path::Path, _: &'static super::ImagePolicy) -> Result<Self, Error> {
         Err(Error::Unsupported)
     }
+    #[cfg(feature = "strict-kmac-acceleration")]
+    pub(super) fn open_avx2(
+        _: &std::path::Path,
+        _: &'static super::ImagePolicy,
+    ) -> Result<Self, Error> {
+        Err(Error::Unsupported)
+    }
 }
 #[cfg(not(all(
     target_os = "windows",

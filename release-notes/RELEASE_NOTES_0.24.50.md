@@ -80,8 +80,13 @@ passes 29 wire/placement, nine transport and 18 baseline C admission mutations,
 seven ownership negatives and a focused Miri placement model. Its development
 VBS image passes 50 comparisons across 672 calls, including all sixteen retained
 rekey pairs. Evidence and the SDK signing warning are preserved locally. The
-opt-in host route and current-image qualification remain unfinished; this does
-not add shipping KMAC acceleration yet or change release gates.
+opt-in host route now exposes `kmac::Session::open_avx2`, feature-gated through
+`strict-kmac-acceleration` or the strict facade's `acceleration`. It requires
+production image trust and the distinct version-fifteen protocol, never scalar
+fallback. Native debug/release campaigns pass 546 cases per route for AVX2 and
+scalar, plus image/trust/output negatives. Encoder parity, focused host Miri and
+packaged feature tests pass. Current-image qualification and independent review
+remain pending; release-gate policy is unchanged.
 
 The version-nine `enclave::tuplehash` host interface now provides all four
 TupleHash/TupleHashXOF identities, exact-length item writers, retained-output

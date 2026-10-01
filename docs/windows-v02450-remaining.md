@@ -286,8 +286,14 @@ describe how the worker was developed, not outstanding constructor work.
   Development VBS execution passes 50 public-vector comparisons across 672 calls,
   including all sixteen retained rekey pairs. See
   [KMAC worker observations](../assurance/windows-protection-observations/kmac-accelerated-worker-20261001.json).
-  The supported opt-in host constructor and current-image qualification remain
-  next; development execution is not a production signing or independent pass.
+  The supported opt-in `kmac::Session::open_avx2` constructor now preserves
+  production trust and the separate version-fifteen protocol with no fallback.
+  Native debug/release campaigns pass 546 cases per route against AVX2 and a
+  freshly rebuilt scalar image; encoder mutations and feature-gated packaged
+  consumer checks pass. See
+  [KMAC host observations](../assurance/windows-protection-observations/kmac-accelerated-host-20261001.json).
+  Current-image qualification remains unfinished;
+  development execution is not a production signing or independent pass.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

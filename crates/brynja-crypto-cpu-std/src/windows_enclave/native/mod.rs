@@ -36,6 +36,8 @@ enum Protocol {
     ParallelHash,
     #[cfg(feature = "strict-kmac")]
     Kmac,
+    #[cfg(feature = "strict-kmac")]
+    KmacAvx2,
     #[cfg(feature = "strict-tuplehash")]
     TupleHash,
 }
@@ -137,7 +139,7 @@ impl Backend {
                     #[cfg(feature = "strict-sha3")]
                     Protocol::Sha3Batch => b"PublicSha3BatchInputSource\0",
                     #[cfg(feature = "strict-kmac")]
-                    Protocol::Kmac => b"PublicKmacInputSource\0",
+                    Protocol::Kmac | Protocol::KmacAvx2 => b"PublicKmacInputSource\0",
                     #[cfg(feature = "strict-tuplehash")]
                     Protocol::TupleHash => b"PublicTupleInputSource\0",
                     #[cfg(feature = "strict-sha3")]
@@ -167,7 +169,9 @@ impl Backend {
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3Batch => sys::export(owner.base, b"PublicSha3BatchControl\0")?,
                 #[cfg(feature = "strict-kmac")]
-                Protocol::Kmac => sys::export(owner.base, b"PublicKmacControl\0")?,
+                Protocol::Kmac | Protocol::KmacAvx2 => {
+                    sys::export(owner.base, b"PublicKmacControl\0")?
+                }
                 #[cfg(feature = "strict-tuplehash")]
                 Protocol::TupleHash => sys::export(owner.base, b"PublicTupleControl\0")?,
                 #[cfg(feature = "strict-sha3")]
@@ -185,6 +189,13 @@ impl Backend {
         if protocol == Protocol::Sha3Avx2 {
             let identity = sys::export(owner.base, b"PublicSha3Avx2Protocol\0")?;
             if sys::call(identity, 0)? != super::sha3_avx2_wire::PROTOCOL {
+                return Err(Error::Unsupported);
+            }
+        }
+        #[cfg(feature = "strict-kmac")]
+        if protocol == Protocol::KmacAvx2 {
+            let identity = sys::export(owner.base, b"PublicKmacAvx2Protocol\0")?;
+            if sys::call(identity, 0)? != super::kmac_avx2_wire::PROTOCOL {
                 return Err(Error::Unsupported);
             }
         }
@@ -282,7 +293,7 @@ impl Backend {
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3Batch => self.run_sha3_batch(3, None, 0, None)?,
                 #[cfg(feature = "strict-kmac")]
-                Protocol::Kmac => self.run_kmac(3, None, 0, None)?,
+                Protocol::Kmac | Protocol::KmacAvx2 => self.run_kmac(3, None, 0, None)?,
                 #[cfg(feature = "strict-tuplehash")]
                 Protocol::TupleHash => self.run_tuplehash(3, None, 0, None)?,
                 #[cfg(feature = "strict-sha3")]

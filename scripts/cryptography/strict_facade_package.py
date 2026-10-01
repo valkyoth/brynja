@@ -16,6 +16,17 @@ FORBIDDEN = ('crypto', 'legacy', 'protected_memory', 'execution::Authority',
 MODULES = ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'batch', 'enclave')
 
 
+def section_example(document, heading):
+    """Select the named API example, not whichever fenced block appears first."""
+    marker = '## ' + heading + '\n'
+    if document.count(marker) != 1:
+        raise ValueError('missing or ambiguous guide section: ' + heading)
+    section = document.split(marker, 1)[1].split('\n## ', 1)[0]
+    if section.count('```rust,no_run\n') != 1:
+        raise ValueError('missing or ambiguous Rust example: ' + heading)
+    return section.split('```rust,no_run\n', 1)[1].split('```', 1)[0]
+
+
 def check(root, roots, destination, cargo, env, run, require):
     consumer = destination / 'strict-facade-consumer'
     (consumer / 'src').mkdir(parents=True)
@@ -66,7 +77,7 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         for kind in ('Stream', 'Reader', 'Retained', 'Finalized'))
     # Compile the actual deployment-guide example, not a second hand-written copy.
     guide = (root / 'docs/windows-enclave-sha3.md').read_text()
-    example = guide.split('```rust,no_run\n')[1].split('```')[0]
+    example = section_example(guide, 'Stream and retain output')
     positive += '\n' + example.replace('fn public_example', 'pub fn public_example')
     batch = guide.split('## Batching\n')[1].split('```rust,no_run\n')[1].split('```')[0]
     positive += '\nmod sha3_batch_example {\n' + batch + '\n}\n'
@@ -87,6 +98,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         compiled += "\npub fn enclave_sha_ni_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha2::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha2::Session::open_sha_ni(path, policy) }"
         compiled += "\npub fn enclave_sha3_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha3::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha3::Session::open_avx2(path, policy) }"
         selected = positive + ('\n' + compiled if features else '')
+        if features:
+            selected += "\npub fn enclave_kmac_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::kmac::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::kmac::Session::open_avx2(path, policy) }"
         source.write_text(selected)
         for profile in ([], ['--release']):
             require(run([*cargo, 'test', '--locked', '--offline', *features, *profile], consumer, env))
@@ -107,6 +120,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
             cases += [('fn probe() { let _ = brynja_strict::enclave::sha2::Session::open_sha_ni; }', 'E0599')]
             cases += [('fn probe() { let _ = brynja_strict::enclave::sha3::Session::open_avx2; }', 'E0599')]
         for module in MODULES:
+            if module == 'enclave' and not features:
+                cases.append(('fn probe() { let _ = brynja_strict::enclave::kmac::Session::open_avx2; }', 'E0599'))
             for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
                 cases.append((f'fn require<T: {trait}>() {{}}\n'
                               f'fn probe() {{ require::<brynja_strict::{module}::Session>(); }}', 'E0277'))

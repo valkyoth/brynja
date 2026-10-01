@@ -48,6 +48,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Sequential scalar version-eleven worker; development-tested; qualification pending | ❌ No |
@@ -110,6 +111,12 @@ full-width tag verification. Its separate version-eight image keeps tags and
 readers private until explicit public declassification; verification exports
 only a decision. Caller-owned input buffers remain outside enclave storage.
 This is scalar development-tested functionality, not production qualification.
+For explicit AVX2, enable `strict-sha2` and `strict-kmac-acceleration`, then use
+`windows_enclave::kmac::Session::open_avx2` with the separate version-fifteen
+image. Complete AVX/AVX2 and OS vector-state checks happen inside the enclave;
+host builds need no AVX2 flags. Image trust remains mandatory and failed
+acceleration never falls back to scalar. Caller inputs remain caller-owned;
+production, independent and current-image cleanup qualification remain pending.
 
 With `strict-sha2,strict-sha3`, `windows_enclave::parallelhash` provides all four
 ParallelHash identities, streamed leaves/customization, exact-bit retained

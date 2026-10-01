@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "status": "EXPLICIT_AVX2_KMAC_HOST_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "9b0c95cb",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "description": "Opt-in AVX2 KMAC/KMACXOF session with mandatory production image trust and distinct version-fifteen protocol. Private development-only native execution; public constructors reject development signatures. Scalar open remains version eight.",
+  "host_features": ["strict-sha2", "strict-kmac-acceleration"],
+  "facade_feature": "acceleration",
+  "image_protocol": 15,
+  "scalar_protocol": 8,
+  "rust_toolchain": "1.98.1",
+  "native_target": "x86_64-pc-windows-msvc",
+  "image_target_features": ["avx", "avx2"],
+  "native_environment": {
+    "windows_build": 26100,
+    "processor": "AMD EPYC 9V45",
+    "vbs": true,
+    "hvci": true,
+    "secure_boot": false,
+    "test_signing": true,
+    "production_signing": false
+  },
+  "native_campaigns": {
+    "profiles": ["debug", "release"],
+    "avx2_cases_per_profile": 546,
+    "scalar_cases_per_profile": 546,
+    "production_signature_rejections": true,
+    "scalar_image_rejected_for_avx2": true,
+    "wrong_hash_and_identity_rejected": true,
+    "invalid_output_unchanged_and_quarantined": true,
+    "retained_rekey": true,
+    "full_width_verification": true,
+    "incremental_xof": true,
+    "cancellation_and_reuse": true,
+    "abandonment_quarantines": true,
+    "explicit_close": true,
+    "windows_scoped_clippy": "PASS"
+  },
+  "other_tests": {
+    "all_feature_enclave_host_tests": 54,
+    "focused_miri_host_tests": 5,
+    "miri_scope": "Safe host owner, mock transport and receipt/header logic, not native VBS or assembly kernels",
+    "shipping_encoder_actual_worker_parity": "PASS",
+    "compiled_encoder_mutants_rejected": 10,
+    "packaged_facade_export_ownership_negatives": 438,
+    "packaged_avx2_constructor": "Feature-on positive and feature-off negative",
+    "packaged_strict_debug_release_and_doctests": "PASS",
+    "guide_example_selection": "Two insertion variants accepted; four missing/ambiguous/malformed section variants rejected"
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "matching_host_source_hashes": 508,
+    "matching_scalar_worker_source_hashes": 207,
+    "matching_scalar_generated_artifacts": 21,
+    "all_command_log_hashes_verified": true,
+    "host_manifest_member": "kmac-host-capture-20261001/host-results.json",
+    "host_manifest_sha256": "e73ced42c9b4f2e352514cfd77cf76e2d685e01b76e3f627163928cdd7a5c879",
+    "avx2_worker_binding": "Unchanged image and worker from kmac-accelerated-worker-20261001.json; prior capture retained separately"
+  },
+  "artifacts": {
+    "release-reports/kmac-host-products-20261001.tar.gz": "b9556df0e8791178b378d579941d486b868e717ff8fd154fd42d12a4f2f9058c",
+    "release-reports/kmac-host-wire-20261001/kmac-host-wire-results.json": "976bef5bf51abd476e2e67bae72a9cb0cfb0a5431de4a796b5ebbfb6f2385dbf",
+    "release-reports/kmac-host-package-20261001.log": "32fd09dd2272a7c0ee1e8274235d399085cd92c69b0ae7f5dcdd5ccbab3d341b",
+    "release-reports/kmac-host-miri-20261001.log": "664f2cfb4f0d2ea893d169b4895efb2c63553944f105696a64c81f5b7b77cd78",
+    "release-reports/kmac-host-all-feature-20261001.log": "92b8df2cdc41aed5381eef3f21456c351c50d9efd3e4fb3595bbfafd882c5acd"
+  },
+  "archive_members_sha256": {
+    "kmac-host-capture-20261001/avx2-signed.dll": "f5f63575f64bf64a66fab6569c83080f56bd028e7e52e134bce08c31b3c6d578",
+    "kmac-host-capture-20261001/scalar-signed.dll": "77821effe8787744743f37545d9809c5652b6fb5b7879db61c4dc67cdc579d25",
+    "kmac-host-capture-20261001/capture-kmac-host-20261001.py": "d69c977f441d0e693afbccbd54afa0ce6c67adea10690bb118d998f525543d09",
+    "kmac-host-capture-20261001/binaries/brynja_crypto_cpu_std-1498efc76f47ecba.exe": "7e9dac2fe3d6fa50b5e557075fae3faf2a28cec5e3eb6f2e4dfd513871f95816",
+    "kmac-host-capture-20261001/binaries/brynja_crypto_cpu_std-2b167518788ade73.exe": "ef89103ab7aa288fa95c6a83a709008ccdb271479bbd83ef2c3524a729e993e9"
+  },
+  "signing": {
+    "scalar_signtool_exit_code": 2,
+    "warning": "SDK VBS compatibility warning retained; not a clean production-signing result",
+    "temporary_scalar_signing_certificate_and_key_removed": true
+  },
+  "limitations": [
+    "Public synthetic-vector author regression evidence, not independent qualification or approval for real secrets",
+    "Current-image ABI/register/spill, protected-stack/dump and wider failure qualification remain pending",
+    "No Windows ARM64, dedicated x86 SHA-512, arbitrary CPU migration or production-signing qualification",
+    "Wider accelerated algorithms and multicore integration remain pending",
+    "Release-gate policy unchanged; candidate remains RETEST REQUIRED"
+  ]
+}

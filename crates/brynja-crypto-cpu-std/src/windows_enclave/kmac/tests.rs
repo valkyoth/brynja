@@ -1,4 +1,5 @@
 use super::*;
+mod avx2;
 #[cfg(all(
     target_os = "windows",
     target_arch = "x86_64",
@@ -7,6 +8,15 @@ use super::*;
     not(kani)
 ))]
 mod native;
+#[cfg(all(
+    feature = "strict-kmac-acceleration",
+    target_os = "windows",
+    target_arch = "x86_64",
+    target_env = "msvc",
+    not(miri),
+    not(kani)
+))]
+mod native_avx2;
 #[derive(Default)]
 struct Mock {
     fail: bool,

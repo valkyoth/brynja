@@ -30,6 +30,20 @@ mod engine;
 mod image;
 #[cfg(feature = "strict-kmac")]
 pub mod kmac;
+#[cfg(all(
+    feature = "strict-kmac",
+    any(
+        test,
+        all(
+            target_os = "windows",
+            target_arch = "x86_64",
+            target_env = "msvc",
+            not(miri),
+            not(kani)
+        )
+    )
+))]
+mod kmac_avx2_wire;
 #[cfg(feature = "strict-kmac")]
 mod kmac_wire;
 #[cfg(all(

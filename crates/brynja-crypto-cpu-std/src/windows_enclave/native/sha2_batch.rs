@@ -13,6 +13,18 @@ impl Transport {
             super::Protocol::Sha2Batch,
         )?))
     }
+    #[cfg(feature = "strict-sha2-acceleration")]
+    pub(crate) fn open_sha_ni(
+        location: &Path,
+        policy: &'static ImagePolicy,
+    ) -> Result<Self, Error> {
+        Ok(Self(Backend::open_protocol(
+            location,
+            policy,
+            |pin| pin.signature(),
+            super::Protocol::Sha2BatchShaNi,
+        )?))
+    }
     pub(crate) fn request(
         &mut self,
         request: super::super::sha2_batch_wire::Request,
@@ -27,18 +39,36 @@ impl Transport {
             self.0.live = true;
             self.0.run_sha2_batch(0, None, 0, None)?;
         }
-        let header = request.header(input)?;
         if output.as_ref().map(|v| v.len()) != request.output_width() {
             return Err(Error::Bounds);
         }
-        self.0
-            .run_sha2_batch(operation, Some(&header), input.len(), output)
+        if self.0.protocol == super::Protocol::Sha2BatchShaNi {
+            let header = super::super::sha2_batch_sha_ni_wire::header(request, input)?;
+            self.0
+                .run_sha2_batch(operation, Some(&header), input.len(), output)
+        } else {
+            let header = request.header(input)?;
+            self.0
+                .run_sha2_batch(operation, Some(&header), input.len(), output)
+        }
     }
     pub(crate) fn close(&mut self) -> Result<(), Error> {
         self.0.close()
     }
     #[cfg(test)]
     pub(crate) fn development(location: &Path, policy: &ImagePolicy) -> Result<Self, Error> {
+        Self::development_route(location, policy, super::Protocol::Sha2Batch)
+    }
+    #[cfg(all(test, feature = "strict-sha2-acceleration"))]
+    pub(crate) fn development_sha_ni(location: &Path, policy: &ImagePolicy) -> Result<Self, Error> {
+        Self::development_route(location, policy, super::Protocol::Sha2BatchShaNi)
+    }
+    #[cfg(test)]
+    fn development_route(
+        location: &Path,
+        policy: &ImagePolicy,
+        route: super::Protocol,
+    ) -> Result<Self, Error> {
         Ok(Self(Backend::open_protocol(
             location,
             policy,
@@ -48,7 +78,7 @@ impl Transport {
                 }
                 Ok(())
             },
-            super::Protocol::Sha2Batch,
+            route,
         )?))
     }
 }
@@ -57,17 +87,21 @@ impl Backend {
     pub(super) fn run_sha2_batch(
         &mut self,
         operation: usize,
-        input: Option<&[u8; 128]>,
+        input: Option<&[u8]>,
         length: usize,
         output: Option<&mut [u8]>,
     ) -> Result<(), Error> {
-        if self.protocol != super::Protocol::Sha2Batch
-            || self.uncertain
+        let accelerated = self.protocol == super::Protocol::Sha2BatchShaNi;
+        if !matches!(
+            self.protocol,
+            super::Protocol::Sha2Batch | super::Protocol::Sha2BatchShaNi
+        ) || self.uncertain
             || self.terminated
             || self.base == 0
             || self.thread != sys::thread()
             || !matches!(operation, 0 | 3 | 80..=86)
             || matches!(operation, 0 | 3) == input.is_some()
+            || input.is_some_and(|v| v.len() != if accelerated { 144 } else { 128 })
             || (matches!(operation, 85)) != output.is_some()
             || output.as_ref().is_some_and(|v| v.len() != 512)
         {
@@ -116,7 +150,11 @@ impl Backend {
             _ => operation,
         };
         context.inspect_common(returned, outer, guards, inner, expected, operation >= 80)?;
-        super::super::sha2_batch_receipt::receipt(context.low, operation, length, receipt)?;
+        if accelerated {
+            super::super::sha2_batch_sha_ni_wire::receipt(context.low, operation, length, receipt)?;
+        } else {
+            super::super::sha2_batch_receipt::receipt(context.low, operation, length, receipt)?;
+        }
         if operation == 3 {
             self.slot = 0;
         } else if !sys::pages(self.slot, 1, true) {

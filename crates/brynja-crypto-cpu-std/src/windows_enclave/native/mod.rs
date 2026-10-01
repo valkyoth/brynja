@@ -23,6 +23,7 @@ pub(super) mod tuplehash;
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Protocol {
     Sha2Batch,
+    Sha2BatchShaNi,
     Legacy,
     Sha2,
     Sha2ShaNi,
@@ -139,7 +140,9 @@ impl Backend {
                 owner.base,
                 match protocol {
                     Protocol::Sha2 | Protocol::Sha2ShaNi => b"PublicSha2InputSource\0",
-                    Protocol::Sha2Batch => b"PublicSha2BatchInputSource\0",
+                    Protocol::Sha2Batch | Protocol::Sha2BatchShaNi => {
+                        b"PublicSha2BatchInputSource\0"
+                    }
                     #[cfg(feature = "strict-sha3")]
                     Protocol::Sha3 | Protocol::Sha3Avx2 => b"PublicSha3InputSource\0",
                     #[cfg(feature = "strict-sha3")]
@@ -171,7 +174,9 @@ impl Backend {
                 Protocol::Sha2 | Protocol::Sha2ShaNi => {
                     sys::export(owner.base, b"PublicSha2Control\0")?
                 }
-                Protocol::Sha2Batch => sys::export(owner.base, b"PublicSha2BatchControl\0")?,
+                Protocol::Sha2Batch | Protocol::Sha2BatchShaNi => {
+                    sys::export(owner.base, b"PublicSha2BatchControl\0")?
+                }
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 | Protocol::Sha3Avx2 => {
                     sys::export(owner.base, b"PublicSha3Control\0")?
@@ -212,6 +217,12 @@ impl Backend {
         if protocol == Protocol::ParallelHashAvx2 {
             let identity = sys::export(owner.base, b"PublicParallelAvx2Protocol\0")?;
             if sys::call(identity, 0)? != super::parallel_avx2_wire::PROTOCOL {
+                return Err(Error::Unsupported);
+            }
+        }
+        if protocol == Protocol::Sha2BatchShaNi {
+            let identity = sys::export(owner.base, b"PublicSha2BatchShaNiProtocol\0")?;
+            if sys::call(identity, 0)? != super::sha2_batch_sha_ni_wire::PROTOCOL {
                 return Err(Error::Unsupported);
             }
         }
@@ -324,7 +335,9 @@ impl Backend {
         if self.live {
             match self.protocol {
                 Protocol::Sha2 | Protocol::Sha2ShaNi => self.run_sha2(3, None, 0, None)?,
-                Protocol::Sha2Batch => self.run_sha2_batch(3, None, 0, None)?,
+                Protocol::Sha2Batch | Protocol::Sha2BatchShaNi => {
+                    self.run_sha2_batch(3, None, 0, None)?
+                }
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 | Protocol::Sha3Avx2 => self.run_sha3(3, None, 0, None)?,
                 #[cfg(feature = "strict-sha3")]

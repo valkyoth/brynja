@@ -51,7 +51,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS KMAC/KMACXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-2 batches | 🚧 Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
@@ -96,7 +96,11 @@ without scalar fallback. Default constructors stay scalar. This development-test
 route still needs production, register/dump and independent qualification.
 `windows_enclave::sha2_batch` adds eight declared SHA-2 slots, streamed item
 writers and sealed retained results. Its separate version-ten worker is scalar,
-not SIMD or parallel. See the [batch API and example](../../docs/windows-enclave-sha2-batch.md).
+not SIMD or parallel. With `strict-sha2-acceleration`, explicit
+`sha2_batch::Session::open_sha_ni` uses the distinct version-nineteen image and
+complete SHA/SSE2/AVX/AVX2/OS bundle for ordered SHA-224/256 items. Wide plans reject;
+scalar `open` stays scalar. This is not independent-message SIMD.
+See the [batch API and example](../../docs/windows-enclave-sha2-batch.md).
 With both `strict-sha2` and `strict-sha3`, `windows_enclave::sha3` adds the eight
 SHA-3/SHAKE/cSHAKE identities, streamed N/S and retained incremental output.
 Use the separate version-seven image and [SHA-3 guide](../../docs/windows-enclave-sha3.md).

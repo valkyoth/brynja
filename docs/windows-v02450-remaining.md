@@ -356,8 +356,13 @@ describe how the worker was developed, not outstanding constructor work.
   comparisons across 466 VBS calls, three resident and nine worker mutations,
   nineteen baseline-C mutations and seven resident ownership negatives. A focused
   Miri placement/rollback model rejects six mutations; it is not kernel evidence.
-  Next integrate explicit supported host selection and trusted image identity.
-  Current-image qualification remains separate. See the
+  Explicit `sha2_batch::Session::open_sha_ni` host selection now enforces distinct
+  image identity and production trust. Native debug/release host campaigns pass
+  291 batches/1312 digests for SHA-NI and 355 batches/1822 digests for scalar per
+  profile; wide plans reject without fallback. Encoder mutation, Miri and
+  packaged feature/ownership tests pass. See the
+  [host observations](../assurance/windows-protection-observations/sha2-batch-accelerated-host-20261001.json).
+  Current-image qualification remains separate from the
   [worker observations](../assurance/windows-protection-observations/sha2-batch-accelerated-worker-20261001.json).
   Independent-message SIMD and wider SHA-2 acceleration remain separate work.
   Earlier [component observations](../assurance/windows-protection-observations/sha2-batch-accelerated-component-20261001.json)

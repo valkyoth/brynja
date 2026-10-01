@@ -1,6 +1,6 @@
 # Windows enclave acceleration development
 
-Scalar constructors remain scalar. Explicit SHA-NI SHA-224/256 and AVX2
+Scalar constructors remain scalar. Explicit SHA-NI SHA-224/256 streaming/batches and AVX2
 SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, sequential SHA-3 batch and ParallelHash host
 routes are development-tested; wider accelerated
 session routes are still pending.
@@ -25,7 +25,8 @@ rejects 29 compiled runtime mutations and six ownership/lifetime negatives.
 See the [source-bound component observations](../assurance/windows-protection-observations/sha2-batch-accelerated-component-20261001.json).
 That component result does not itself establish resident placement, VBS execution
 or host integration. The subsequent private resident and worker are now tested
-separately, as described below; a supported host constructor remains next.
+separately, as described below; the explicit host constructor now has its own
+development campaign.
 
 ## Sequential SHA-NI batch resident and worker
 
@@ -54,8 +55,17 @@ calls, including partial bits, mixed/sparse plans, cancellation/reuse and seven
 metadata/OS-copy failure campaigns. The temporary signing certificate/key was
 removed. The SDK older-OS compatibility warning remains recorded, not a clean
 production signing pass. The [source-bound observations](../assurance/windows-protection-observations/sha2-batch-accelerated-worker-20261001.json)
-bind the retained artifacts. Supported host selection, current-image ABI/register/
-spill/dump qualification, wider SHA-2 routes and independent review remain open.
+bind the retained artifacts. Current-image ABI/register/spill/dump qualification,
+wider SHA-2 routes and independent review remain open.
+
+The supported `sha2_batch::Session::open_sha_ni` host route now requires the
+separate image identity and production trust. Scalar `open` is unchanged; wide
+plans reject without fallback. Native debug/release tests pass 291 batches/1312
+digests for SHA-NI and 355 batches/1822 digests for scalar per profile. Ten compiled
+encoder mutations, focused host Miri, packaged feature/ownership negatives and
+Windows Clippy pass. See the [source-bound host observations](../assurance/windows-protection-observations/sha2-batch-accelerated-host-20261001.json).
+This finishes sequential narrow batch host integration, not multi-message SIMD,
+whole-image cleanup qualification or production signing.
 
 ## Platform observations
 

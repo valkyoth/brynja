@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "status": "EXPLICIT_SHA_NI_SHA2_BATCH_HOST_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "ecd6662c",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "description": "Explicit sequential per-slot SHA-NI SHA-224/256 session with mandatory production image trust and distinct version-nineteen identity. Scalar open stays version ten. Private development-only native execution, not independent-message SIMD or multicore.",
+  "host_features": [
+    "strict-sha2",
+    "strict-sha2-acceleration"
+  ],
+  "facade_feature": "acceleration",
+  "image_protocol": 19,
+  "scalar_protocol": 10,
+  "rust_toolchain": "1.98.1",
+  "native_target": "x86_64-pc-windows-msvc",
+  "image_target_features": [
+    "sha",
+    "sse2",
+    "avx",
+    "avx2"
+  ],
+  "native_environment": {
+    "windows_build": 26100,
+    "processor": "AMD EPYC 9V45",
+    "vbs": true,
+    "hvci": true,
+    "secure_boot": false,
+    "test_signing": true,
+    "production_signing": false
+  },
+  "native_campaigns": {
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "sha_ni_batches_per_profile": 291,
+    "sha_ni_digests_per_profile": 1312,
+    "scalar_batches_per_profile": 355,
+    "scalar_digests_per_profile": 1822,
+    "all_nonempty_activity_masks": 255,
+    "production_signature_rejections": true,
+    "scalar_image_rejected_for_sha_ni": true,
+    "wrong_hash_and_identity_rejected": true,
+    "wide_plan_rejection_quarantines_without_fallback": true,
+    "corrupted_retained_plan_preserves_output_and_quarantines": true,
+    "uncertain_close": "Err(Release); resources intentionally retained until process exit, not clean release",
+    "bit_tails_and_fragmented_inputs": true,
+    "cancellation_and_reuse": true,
+    "forgotten_item_rejection": true,
+    "normal_explicit_close": true,
+    "windows_scoped_clippy": "PASS"
+  },
+  "other_tests": {
+    "all_feature_enclave_host_tests": 62,
+    "focused_miri_host_tests": 8,
+    "miri_scope": "Safe host owner, mock transport and receipt/header logic; not VBS or assembly kernels",
+    "shipping_encoder_actual_worker_parity": "PASS",
+    "compiled_encoder_mutants_rejected": 10,
+    "batch_ownership_compile_fail_doctests": 20,
+    "packaged_facade_export_ownership_negatives": 442,
+    "packaged_sha_ni_constructor": "Feature-on positive and feature-off negative",
+    "packaged_strict_debug_release_and_doctests": "PASS"
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "matching_host_source_hashes": 554,
+    "matching_scalar_worker_source_hashes": 176,
+    "matching_scalar_generated_artifacts": 18,
+    "all_command_log_hashes_verified": true,
+    "host_manifest_member": "sha2-batch-host-capture-final-20261001/host-results.json",
+    "host_manifest_sha256": "affa61a67a75f15a732c989d56e70d0ce3036c664712a9704ce86fdb698ff7ef",
+    "sha_ni_worker_binding": "Unchanged image and worker from sha2-batch-accelerated-worker-20261001.json; prior capture retained separately"
+  },
+  "archive_members_sha256": {
+    "sha2-batch-host-capture-final-20261001/binaries/brynja_crypto_cpu_std-48f818b8b87c9def.exe": "c286a3112f2b20fa8d627ba14ba45e73f3f4e82e5d7e36302182fddb126e8e5b",
+    "sha2-batch-host-capture-final-20261001/binaries/brynja_crypto_cpu_std-90f07c53e1c4df9d.exe": "f36ad3315cc6e4cfbb8b2e4f83bd4e8b94a053c4577216cb1154492918a423eb",
+    "sha2-batch-host-capture-final-20261001/sha-ni-signed.dll": "3c7b24092db60215013b1c06caad1ba0e55cb55f7e3046bde86ea323fd218281",
+    "sha2-batch-host-capture-final-20261001/scalar-signed.dll": "6f3ed5ce47224fc87c7d710089241ca03f3a2852f5e6e8d069f6a0fea9520a79",
+    "sha2-batch-host-capture-final-20261001/capture-sha2-batch-host-20261001.py": "074a74d2cd6ff1319c9bc9a58bcb8612d64acfa06d6dc4fbc71e72d702072d19",
+    "sha2-batch-host-capture-final-20261001/sha2-batch-host-scalar-sign.log": "bda303b88d0a1ff61cbfa2819be6b97caa903f45809397508b7b87cf063e72f2"
+  },
+  "artifacts": {
+    "release-reports/sha2-batch-host-products-20261001.tar.gz": "58c3757db9696c7db3a1a9c7e84bbcfab4d42c71160b6b14aaf299b0dc75e0fa",
+    "release-reports/sha2-batch-host-wire-20261001/sha2-batch-host-wire-results.json": "2c7d7f842fdeb05ea0db1b8bc116299bafc7636d8b2ad7ec73f8f9261c42d981",
+    "release-reports/sha2-batch-host-miri-20261001.log": "9811bf4e07ed1b3fcdb0646d019ca0579b10e2d94f2510347d6dfb46c181c24e",
+    "release-reports/sha2-batch-host-package-20261001.log": "40b44816eb4b41020993bf8eed2647f061a545c507cb7eb5a0de74aed2988ca0",
+    "release-reports/sha2-batch-host-all-feature-20261001.log": "8fda8cfb4124df8f8dd146b5ef025270bcf119a05f3a99fb5aeecb8f1ee2bec5",
+    "release-reports/sha2-batch-host-doc-20261001.log": "663ef97ae463c55b63fa27821d3c4b70bc708c094aa100e56e6420b421b11fab"
+  },
+  "signing": {
+    "scalar_signtool_exit_code": 2,
+    "wrapper_exit_code": 1,
+    "warning": "SDK VBS compatibility warning retained; not a clean production-signing result",
+    "temporary_scalar_signing_certificate_and_key_removed": true
+  },
+  "initial_failure": "Initial native comparisons passed but Windows Clippy rejected test-array indexing; corrected test rerun passed all campaigns and lint. Initial transcript preserved in archive.",
+  "limitations": [
+    "Public synthetic-vector author regression evidence, not independent qualification or approval for real secrets",
+    "Current-image ABI/register/spill, protected-stack/dump and wider failure qualification remain pending",
+    "No Windows ARM64, dedicated x86 SHA-512, arbitrary CPU migration or production-signing qualification",
+    "Independent-message SIMD, wider accelerated batching and multicore integration remain pending",
+    "Release-gate policy unchanged; candidate remains RETEST REQUIRED"
+  ]
+}

@@ -3,9 +3,10 @@
 `brynja_strict::enclave::sha2_batch` provides sequential scalar batches through a
 separate version-ten enclave worker. The lower-level interface is also available
 from `brynja_crypto_cpu_std::windows_enclave::sha2_batch` with `strict-sha2`.
-It is not SIMD or multithreaded execution, and does not replace the existing
-Linux protected batching APIs. Hardware acceleration, production deployment and
-independent qualification remain separate work.
+An explicit `Session::open_sha_ni` constructor adds sequential SHA-NI SHA-224/256
+through a distinct version-nineteen image. Neither route is independent-message
+SIMD or multithreaded execution; neither replaces the existing Linux protected
+batching APIs. Production deployment and independent qualification remain pending.
 
 The application supplies a reviewed image and a trusted compiled `ImagePolicy`.
 `Session::open` requires production signature verification and successful Windows
@@ -16,8 +17,10 @@ See [deployment responsibilities](windows-enclave-deployment.md).
 ## Plan and ownership
 
 A `Plan` contains eight public `Option<Algorithm>` slots. At least one is active.
-All six named SHA-2 identities and every valid general SHA-512/t parameter are
-supported. `None` is an inactive slot, distinct from an active empty message.
+The scalar route supports all six named SHA-2 identities and every valid general
+SHA-512/t parameter. The SHA-NI route accepts only SHA-224/256; a wide/general plan
+rejects and quarantines the session without scalar fallback.
+`None` is an inactive slot, distinct from an active empty message.
 Items are submitted in increasing active-slot order. One exclusive writer exists
 at a time; finishing an item retains its digest inside the enclave.
 
@@ -45,6 +48,8 @@ SHA-512/t output has canonical unused bits. The destination is committed only
 after transport and cleanup receipts succeed. Caller-owned inputs and explicitly
 declassified outputs are ordinary host memory, outside enclave protection.
 
+The following mixed-width example requires a scalar session:
+
 ```rust,no_run
 use brynja_strict::enclave::{sha2_batch::{Algorithm, Plan, Session}, Error, PublicDeclassification};
 
@@ -69,6 +74,21 @@ Send/Sync/Copy/Clone/Debug. Public plans and algorithm identities are copyable;
 they do not contain secret state. An application must not treat a constructor
 failure as permission to fall back to ordinary processing.
 
+## Explicit SHA-NI selection
+
+Enable `brynja-strict`'s `acceleration` feature, or the lower-level
+`strict-sha2-acceleration` feature, and call `Session::open_sha_ni` with a reviewed
+version-nineteen image and trusted static `ImagePolicy`. This retains mandatory
+production signature/import/identity checks; enabling a feature does not select
+acceleration automatically. Default `open` remains scalar. A scalar image cannot
+stand in for the accelerated protocol.
+
+The baseline enclave entry requires the full SHA/SSE2/AVX/AVX2 bundle and enabled
+OS XMM/YMM state before specialized entry. Host compilation needs no build-wide
+SHA/AVX flags. This is hardware acceleration of each ordered item, not concurrent
+SIMD lanes. Feature detection does not prove arbitrary migration safety; deployment
+must preserve the advertised instruction set throughout the enclave's lifetime.
+
 ## Qualification boundary
 
 Component tests, host/worker wire parity, mutation tests, Miri placement/lifecycle
@@ -77,7 +97,7 @@ The worker and the fixed OS-copy adapter build separately from the host API.
 The earlier [unsigned build record](../assurance/windows-protection-observations/sha2-batch-wire-build-20260930.json)
 does not establish native execution. Production signing, compiler/register and
 platform qualification remain pending even after development execution succeeds.
-No Windows ARM64 or SIMD/hardware support is implied.
+No Windows ARM64 or independent-message SIMD support is implied.
 
 The subsequent native development campaign passes in debug and release with
 355 batches and 1822 individual digest comparisons per profile. It covers all
@@ -86,3 +106,13 @@ SHA-512/t parameter, padding boundaries, partial-bit tails, larger-than-request
 inputs, cancellation and forgotten-item rejection. Source-bound
 [native observations](../assurance/windows-protection-observations/sha2-batch-owner-20260930.json)
 record the specific development image; they are not production trust evidence.
+
+The explicit SHA-NI host campaign passes in debug and release with 291 batches
+and 1312 digest comparisons per profile, including all 255 nonempty mixed
+SHA-224/256 masks, partial bits and fragmented input. The scalar campaign also
+passes again. Wrong images, production trust of development signatures, wide
+plans and corrupted retained plans reject; failed export preserves the destination.
+Ten compiled encoder mutations, focused host Miri and packaged feature/ownership
+checks pass. The [accelerated host observations](../assurance/windows-protection-observations/sha2-batch-accelerated-host-20261001.json)
+bind the tested source and artifacts. These remain author development tests,
+not whole-image ABI/register/spill/dump or production qualification.

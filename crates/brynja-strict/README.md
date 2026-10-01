@@ -43,7 +43,7 @@ choice, not certification or proof that all application code uses this profile.
 | Windows x64 VBS KMAC/KMACXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-2 batches | 🚧 Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
@@ -89,6 +89,10 @@ retained composition and incremental XOF output; default `open` remains scalar.
 `enclave::sha3_batch::Session::open_avx2` requires the distinct version-seventeen
 image and the same AVX/AVX2/OS bundle. Slots execute sequentially; this is not
 independent-message SIMD or multicore batching. Scalar `open` stays scalar.
+`enclave::sha2_batch::Session::open_sha_ni` requires `acceleration` and the distinct
+version-nineteen image with the full SHA/SSE2/AVX/AVX2/OS bundle. It supports only
+ordered SHA-224/256 items; wide plans reject without scalar fallback. This is
+sequential hardware acceleration, not independent-message SIMD.
 Other Windows algorithms remain scalar. Production and
 independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
 

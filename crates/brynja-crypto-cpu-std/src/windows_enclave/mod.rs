@@ -111,6 +111,17 @@ pub mod sha2_batch;
     )
 ))]
 mod sha2_batch_receipt;
+#[cfg(any(
+    test,
+    all(
+        target_os = "windows",
+        target_arch = "x86_64",
+        target_env = "msvc",
+        not(miri),
+        not(kani)
+    )
+))]
+mod sha2_batch_sha_ni_wire;
 mod sha2_batch_wire;
 #[cfg(any(
     test,

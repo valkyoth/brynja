@@ -1,7 +1,8 @@
-//! Sequential scalar SHA-2 batching through a separate version-ten enclave.
+//! Sequential SHA-2 batching: scalar version ten or opt-in SHA-NI version nineteen.
 //! Eight public plan slots retain digests until the entire plan is sealed.
 //! Inactive slots and unused digest suffixes export as zero. This is not SIMD
-//! or parallel execution. Caller input remains outside enclave protection.
+//! or parallel execution. SHA-NI supports only SHA-224/256; wider plans reject.
+//! Caller input remains outside enclave protection.
 //! Construction requires production image trust; no portable fallback exists.
 //! Dropped unfinished handles quarantine; fatal abort is outside Drop cleanup.
 //!
@@ -101,6 +102,23 @@ impl Session {
     pub fn open(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
         Ok(Self(Owner {
             transport: Transport::open(location, policy)?,
+            state: State::Ready,
+            sequence: 0,
+            thread_bound: PhantomData,
+        }))
+    }
+    /// Explicitly select a reviewed version-nineteen SHA-NI batch enclave image.
+    ///
+    /// Requires `strict-sha2-acceleration`, production image trust and the full
+    /// compiled SHA/SSE2/AVX/AVX2 CPU/OS bundle. Only SHA-224/256 plans are accepted;
+    /// wide/general SHA-512 plans fail closed and quarantine the session.
+    /// Scalar `open` remains unchanged. Slots execute sequentially, not as
+    /// independent-message SIMD or multicore work. Caller input is not protected
+    /// by this owner. Development execution is not production qualification.
+    #[cfg(feature = "strict-sha2-acceleration")]
+    pub fn open_sha_ni(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
+        Ok(Self(Owner {
+            transport: Transport::open_sha_ni(location, policy)?,
             state: State::Ready,
             sequence: 0,
             thread_bound: PhantomData,

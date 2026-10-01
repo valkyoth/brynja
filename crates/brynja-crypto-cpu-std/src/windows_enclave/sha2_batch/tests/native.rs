@@ -37,7 +37,7 @@ fn reference(algorithm: Algorithm, input: &[u8], last: u8) -> Result<std::vec::V
         .to_vec(),
     })
 }
-fn case(s: &mut Session, plan: Plan, length: usize, last: u8) -> Result<usize, Error> {
+pub(super) fn case(s: &mut Session, plan: Plan, length: usize, last: u8) -> Result<usize, Error> {
     let mut batch = s.batch(
         plan,
         u64::try_from(length)

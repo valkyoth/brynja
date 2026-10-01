@@ -15,6 +15,16 @@ mod lifecycle;
     not(kani)
 ))]
 mod native;
+#[cfg(all(
+    feature = "strict-sha2-acceleration",
+    target_os = "windows",
+    target_arch = "x86_64",
+    target_env = "msvc",
+    not(miri),
+    not(kani)
+))]
+mod native_sha_ni;
+mod sha_ni;
 #[derive(Default)]
 pub(super) struct Mock {
     calls: std::vec::Vec<(Request, usize)>,

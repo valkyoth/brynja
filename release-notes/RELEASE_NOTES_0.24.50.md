@@ -30,9 +30,13 @@ VBS worker admits the entire SHA/SSE2/AVX/AVX2 bundle in baseline C before Rust
 entry. Linux/Windows placement and worker regressions, nineteen C admission
 mutations and a placement-only Miri rollback model pass. Development-signed VBS
 execution passes 40 comparisons across 466 calls, including mixed/sparse plans
-and terminal copy failures. The SDK signing warning remains recorded. Supported
-host integration and current-image qualification remain next; no independent-
-message SIMD or production qualification is claimed.
+and terminal copy failures. The SDK signing warning remains recorded. Explicit
+`sha2_batch::Session::open_sha_ni` now enforces a separate image identity and
+production trust. Native debug/release campaigns pass 291 batches/1312 digests
+for SHA-NI and 355 batches/1822 digests for scalar per profile. Wide plans reject
+without fallback; scalar defaults are unchanged. Encoder mutations, focused host
+Miri and packaged feature/ownership checks pass. Current-image qualification
+remains pending; no independent-message SIMD or production qualification is claimed.
 
 The private sequential AVX2 ParallelHash component now covers all four fixed/XOF
 identities, streamed bit inputs, bounded-memory leaves and retained-output

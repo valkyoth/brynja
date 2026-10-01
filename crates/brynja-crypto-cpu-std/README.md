@@ -53,7 +53,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
@@ -140,7 +140,12 @@ With `strict-sha2,strict-sha3`, `windows_enclave::parallelhash` provides all fou
 ParallelHash identities, streamed leaves/customization, exact-bit retained
 results and incremental XOF fragments. Retained rehashing stays inside the
 enclave; explicit declassification is the only output export. B never sizes an
-allocation. The separate version-twelve worker is sequential scalar, not
+allocation. `Session::open` selects the sequential scalar version-twelve worker. For AVX2,
+enable `strict-sha2,strict-sha3-acceleration` and use
+`windows_enclave::parallelhash::Session::open_avx2` with the reviewed
+version-eighteen image. Complete AVX/AVX2/OS checks run inside the enclave; the
+host needs no build-wide AVX2 flags. Production image trust stays mandatory;
+failed selection never retries scalar. Root and leaves remain sequential, not
 multicore or SIMD. See the [API example and limits](../../docs/windows-enclave-parallelhash.md).
 
 Default-off `strict-kmac-acceleration` adds `strict_kmac::CompiledSession` with

@@ -36,6 +36,8 @@ enum Protocol {
     Sha3BatchAvx2,
     #[cfg(feature = "strict-sha3")]
     ParallelHash,
+    #[cfg(feature = "strict-sha3")]
+    ParallelHashAvx2,
     #[cfg(feature = "strict-kmac")]
     Kmac,
     #[cfg(feature = "strict-kmac")]
@@ -149,7 +151,9 @@ impl Backend {
                     #[cfg(feature = "strict-tuplehash")]
                     Protocol::TupleHash | Protocol::TupleHashAvx2 => b"PublicTupleInputSource\0",
                     #[cfg(feature = "strict-sha3")]
-                    Protocol::ParallelHash => b"PublicParallelInputSource\0",
+                    Protocol::ParallelHash | Protocol::ParallelHashAvx2 => {
+                        b"PublicParallelInputSource\0"
+                    }
                     Protocol::Legacy => b"PublicRetainedInput\0",
                 },
             )?,
@@ -185,7 +189,9 @@ impl Backend {
                     sys::export(owner.base, b"PublicTupleControl\0")?
                 }
                 #[cfg(feature = "strict-sha3")]
-                Protocol::ParallelHash => sys::export(owner.base, b"PublicParallelControl\0")?,
+                Protocol::ParallelHash | Protocol::ParallelHashAvx2 => {
+                    sys::export(owner.base, b"PublicParallelControl\0")?
+                }
                 Protocol::Legacy => 0,
             },
         };
@@ -199,6 +205,13 @@ impl Backend {
         if protocol == Protocol::Sha3Avx2 {
             let identity = sys::export(owner.base, b"PublicSha3Avx2Protocol\0")?;
             if sys::call(identity, 0)? != super::sha3_avx2_wire::PROTOCOL {
+                return Err(Error::Unsupported);
+            }
+        }
+        #[cfg(feature = "strict-sha3")]
+        if protocol == Protocol::ParallelHashAvx2 {
+            let identity = sys::export(owner.base, b"PublicParallelAvx2Protocol\0")?;
+            if sys::call(identity, 0)? != super::parallel_avx2_wire::PROTOCOL {
                 return Err(Error::Unsupported);
             }
         }
@@ -325,7 +338,9 @@ impl Backend {
                     self.run_tuplehash(3, None, 0, None)?
                 }
                 #[cfg(feature = "strict-sha3")]
-                Protocol::ParallelHash => self.run_parallelhash(3, None, 0, None)?,
+                Protocol::ParallelHash | Protocol::ParallelHashAvx2 => {
+                    self.run_parallelhash(3, None, 0, None)?
+                }
                 Protocol::Legacy => self.run(3, None, 0, None)?,
             }
             self.live = false;

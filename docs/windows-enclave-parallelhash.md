@@ -1,12 +1,22 @@
 # Windows enclave ParallelHash sessions
 
-The sequential scalar `brynja_strict::enclave::parallelhash` API binds a
-version-twelve worker to the existing production image/signature policy. The
+The sequential `brynja_strict::enclave::parallelhash` API binds a scalar
+version-twelve or opt-in AVX2 version-eighteen worker to production image/signature policy. The
 lower-level hosted crate requires `strict-sha2,strict-sha3`. Unsupported platforms
 reject construction; no ordinary-memory fallback or development-signature switch
-is exposed. Production qualification, acceleration and multicore scheduling
+is exposed. Production qualification and multicore scheduling
 remain separate. The worker uses existing first-party hardened cSHAKE states,
 not another permutation implementation.
+
+For explicit AVX2, enable the facade's `acceleration` feature and construct with
+`Session::open_avx2`. The lower-level hosted crate requires
+`strict-sha2,strict-sha3-acceleration`. The reviewed image must identify the
+version-eighteen route and pass production signature and identity checks.
+Baseline enclave code checks AVX/AVX2 and OS vector state before specialized
+entry, including destruction. No host-wide target-feature flags are needed;
+missing support or failed admission never selects scalar execution. Root and
+leaf computations remain sequential single-state AVX2, not independent-message
+SIMD or multicore scheduling. `Session::open` remains scalar.
 
 ## API example
 
@@ -79,12 +89,18 @@ The budget includes the retained message bytes as well as customization bytes.
 | 107 | Cancel and clear, permitting reuse only after success |
 | 108 | Rehash retained exact bits under a new identity/B/customization domain |
 
-The 112-byte header binds version, sequence, identity, B, budget, customization
+The scalar 112-byte header binds version, sequence, identity, B, budget, customization
 length, payload and output shapes, terminal flag and source address. Reserved or
 irrelevant fields must be zero. The worker validates it before bounded payload
 copying. Sequences cannot wrap or replay. Copy/protocol/algorithm errors and
 recoverable unwinding clear owned state and quarantine the component. Fatal
 abort does not imply destructor cleanup.
+
+The accelerated header is 128 bytes: the same fields plus an explicit route and
+reserved word, with version eighteen. The host validates the larger receipt
+regions and binds the accelerated image through its separate protocol query.
+Actual shipping encoder/worker parity and ten compiled encoder mutations are
+tested; scalar and accelerated metadata are not interchangeable.
 
 The one-thread placement entry requires one aligned, resident 4096-byte owner
 page and the existing protected stack window. Destruction ends the typed

@@ -76,8 +76,12 @@ describe how the worker was developed, not outstanding constructor work.
   Windows development execution (50 comparisons, 650 VBS calls), full-page
   placement/destruction tests, copy/quarantine mutations and baseline CPU/OS
   admission tests. Its placement-only Miri model is not kernel qualification.
-  Connect the version-eighteen worker to explicit opt-in public host selection
-  and mandatory trusted-image admission next. Multicore scheduling and current-
+  The version-eighteen worker is now connected to explicit opt-in `open_avx2`
+  host selection and mandatory production trusted-image admission. Native
+  debug/release campaigns each pass 332 direct and 256 retained cases on both
+  scalar and AVX2 routes, with wrong-image/identity and transactional rejection
+  tests. See the [host observations](../assurance/windows-protection-observations/parallel-accelerated-host-20261001.json).
+  Multicore scheduling and current-
   image ABI/register/spill/dump qualification remain separate outstanding work.
   See the [worker observations](../assurance/windows-protection-observations/parallel-accelerated-worker-20261001.json).
 

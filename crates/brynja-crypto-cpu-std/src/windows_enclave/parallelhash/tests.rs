@@ -1,4 +1,5 @@
 use super::*;
+mod avx2;
 #[cfg(not(all(
     target_os = "windows",
     target_arch = "x86_64",
@@ -15,6 +16,15 @@ mod lifecycle;
     not(kani)
 ))]
 mod native;
+#[cfg(all(
+    feature = "strict-sha3-acceleration",
+    target_os = "windows",
+    target_arch = "x86_64",
+    target_env = "msvc",
+    not(miri),
+    not(kani)
+))]
+mod native_avx2;
 #[derive(Default)]
 pub(super) struct Mock {
     calls: std::vec::Vec<(Request, usize)>,

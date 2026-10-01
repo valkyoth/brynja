@@ -566,13 +566,38 @@ python3 scripts/cryptography/test-windows-enclave-parallel-resident-model.py par
 python3 scripts/cryptography/test-windows-enclave-parallel-worker.py parallel-worker-results --attest-native-bundle
 ```
 
-This remains a private sequential AVX2 worker, not an integrated public
-accelerated host constructor, multicore scheduler or production qualification.
+The worker campaign itself is private development evidence, not multicore or
+production qualification. The subsequent host integration is described below.
+
+### Explicit ParallelHash host selection
+
+`windows_enclave::parallelhash::Session::open_avx2` now binds the version-eighteen
+image to the existing production signature/identity policy. Enable
+`strict-sha2,strict-sha3-acceleration`, or use the strict facade's `acceleration`
+feature. Scalar `open` remains scalar; failed accelerated construction never
+retries another route. The baseline enclave query validates the complete
+CPU/OS bundle before any specialized Rust entry. Host builds need no AVX2 flags.
+
+All four identities retain the existing affine stream/reader/result API,
+streamed customization and input, exact-bit output, retained-output rehashing,
+transactional public export and quarantine behavior. Receipt validation accounts
+for the full 128-byte header; even an overlap confined to its new tail rejects.
+
+Native debug/release development campaigns each pass 332 direct and 256 retained
+oracle cases on each scalar/AVX2 route. Wrong image/hash/identity and production
+signature rejection pass; corrupting a retained identity rejects without changing
+the public destination and leaves release uncertain, as required by the existing
+resource-retention contract. Ten compiled encoder mutations, focused host Miri,
+ownership doctests and packaged feature-on/off tests also pass. See the
+[host observations](../assurance/windows-protection-observations/parallel-accelerated-host-20261001.json).
+
+This completes sequential AVX2 host integration, not multicore scheduling,
+current-image register/spill/dump qualification or independent review.
 
 ## Next integration boundary
 
 - Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE,
-  KMAC, TupleHash and sequential SHA-3 batches, binding each route to its
+  KMAC, TupleHash, sequential SHA-3 batches and sequential ParallelHash, binding each route to its
   trusted image policy. Scalar constructors remain scalar; failed acceleration
   must not silently choose scalar execution.
 - Keep backend owners and scratch in enclave storage. Preserve streamed

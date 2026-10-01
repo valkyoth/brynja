@@ -25,8 +25,11 @@ engine; failures clear and quarantine without fallback. Independent component
 oracle, mutation and ownership tests are separate from the subsequent private
 resident/worker development campaign: 50 independent comparisons across 650
 native VBS calls now pass, together with placement, copy/quarantine and baseline
-CPU/OS admission regressions. Accelerated host integration and current-image
-qualification remain pending. This is not multicore ParallelHash
+CPU/OS admission regressions. The subsequent opt-in `parallelhash::Session::open_avx2`
+host integration now passes debug/release native campaigns on both routes, each
+with 332 direct cases and 256 retained compositions. Production trust remains
+mandatory, scalar defaults stay unchanged and failed acceleration never falls
+back. Current-image qualification remains pending. This is not multicore ParallelHash
 or a production qualification claim.
 
 The private sequential accelerated SHA-3 batch component preserves eight-slot

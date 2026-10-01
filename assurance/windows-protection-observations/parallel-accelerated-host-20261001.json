@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "status": "EXPLICIT_AVX2_PARALLELHASH_HOST_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "2d02259c",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "description": "Opt-in sequential AVX2 ParallelHash session with mandatory production image trust and distinct version-eighteen identity. Scalar open stays version twelve. Private development-only native execution, not multicore leaf scheduling.",
+  "host_features": [
+    "strict-sha2",
+    "strict-sha3-acceleration"
+  ],
+  "facade_feature": "acceleration",
+  "image_protocol": 18,
+  "scalar_protocol": 12,
+  "rust_toolchain": "1.98.1",
+  "native_target": "x86_64-pc-windows-msvc",
+  "image_target_features": [
+    "avx",
+    "avx2"
+  ],
+  "native_environment": {
+    "windows_build": 26100,
+    "processor": "AMD EPYC 9V45",
+    "vbs": true,
+    "hvci": true,
+    "secure_boot": false,
+    "test_signing": true,
+    "production_signing": false
+  },
+  "native_campaigns": {
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "routes": [
+      "scalar",
+      "AVX2"
+    ],
+    "direct_cases_per_route_per_profile": 332,
+    "retained_cases_per_route_per_profile": 256,
+    "production_signature_rejections": true,
+    "scalar_image_rejected_for_avx2": true,
+    "wrong_hash_and_identity_rejected": true,
+    "corrupted_retained_identity_preserves_output_and_quarantines": true,
+    "uncertain_close": "Err(Release); resources intentionally retained until process exit, not clean release",
+    "streamed_setup_and_exact_bit_outputs": true,
+    "incremental_xof": true,
+    "cancellation_and_reuse": true,
+    "forgotten_stream_rejection": true,
+    "normal_explicit_close": true,
+    "windows_scoped_clippy": "PASS"
+  },
+  "other_tests": {
+    "all_feature_enclave_host_tests": 60,
+    "focused_miri_host_tests": 9,
+    "miri_scope": "Safe host owner, mock transport and receipt/header logic; not VBS or assembly kernels",
+    "shipping_encoder_actual_worker_parity": "PASS",
+    "compiled_encoder_mutants_rejected": 10,
+    "ownership_compile_fail_doctests": 25,
+    "packaged_facade_export_ownership_negatives": 441,
+    "packaged_avx2_constructor": "Feature-on positive and feature-off negative",
+    "packaged_strict_debug_release_and_doctests": "PASS"
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "matching_host_source_hashes": 551,
+    "matching_scalar_worker_source_hashes": 173,
+    "matching_scalar_generated_artifacts": 24,
+    "all_command_log_hashes_verified": true,
+    "host_manifest_member": "parallel-host-capture-checked-20261001/host-results.json",
+    "host_manifest_sha256": "06ac4f55895619710578ed283aebc3a8c19fa5d5235bc184438bef00a8c8b847",
+    "avx2_worker_binding": "Unchanged image and worker from parallel-accelerated-worker-20261001.json; prior capture retained separately"
+  },
+  "archive_members_sha256": {
+    "parallel-host-capture-checked-20261001/binaries/brynja_crypto_cpu_std-1d538795ccdaca33.exe": "3b5f63fa840b4d824bf7c3c40b119e2b304569fd401688d3cd0f72f4e72096da",
+    "parallel-host-capture-checked-20261001/binaries/brynja_crypto_cpu_std-a3cd8250e74ce3d6.exe": "45b8f63a998cde1e649670bf7450403ed99cb7f71aa89b749c2087f418645d8e",
+    "parallel-host-capture-checked-20261001/avx2-signed.dll": "d43d8defbfaefc08d6bbedd5eb5109905aaef48e137900c1f27df021814f4665",
+    "parallel-host-capture-checked-20261001/scalar-signed.dll": "88a8ddd020c3fb69bbc42102248c7bed31283c7f35380774276b662e4f016304",
+    "parallel-host-capture-checked-20261001/capture-parallel-host-20261001.py": "03a056a42c63c17374a95f8310f93619e7d839b02fe1a10f8110998b6b77fabb"
+  },
+  "artifacts": {
+    "release-reports/parallel-host-products-20261001.tar.gz": "b56f437887c4e13a70548d4e234d1bd1a38a839dc6be0ff20fd1aa3ebe69f2a5",
+    "release-reports/parallel-host-wire-20261001/parallel-host-wire-results.json": "dbd1daef8430a74036af0173c72ea21b0e16acccaff23695c9c7076724ebff5a",
+    "release-reports/parallel-host-miri-20261001.log": "9c1246695ba1d47b7243a4a4759b296ba507e9af56010ba4bb1c310fbd0110ee",
+    "release-reports/parallel-host-package-20261001.log": "74264d0b37eb0be377d808ac35a18a6484ac53de0607196ac4275852a4dcf8f3",
+    "release-reports/parallel-host-all-feature-20261001.log": "81be4a2ce8934f3f9802845197a74395e366e7130068baa06756b18f01c68221"
+  },
+  "signing": {
+    "scalar_signtool_exit_code": 2,
+    "warning": "SDK VBS compatibility warning retained; not a clean production-signing result",
+    "temporary_scalar_signing_certificate_and_key_removed": true
+  },
+  "limitations": [
+    "Public synthetic-vector author regression evidence, not independent qualification or approval for real secrets",
+    "Current-image ABI/register/spill, protected-stack/dump and wider failure qualification remain pending",
+    "No Windows ARM64, dedicated x86 SHA-512, arbitrary CPU migration or production-signing qualification",
+    "Independent-message SIMD, wider accelerated batching and multicore integration remain pending",
+    "Release-gate policy unchanged; candidate remains RETEST REQUIRED"
+  ]
+}

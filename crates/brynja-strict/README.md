@@ -45,7 +45,7 @@ choice, not certification or proof that all application code uses this profile.
 | Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
 
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `kmac`, `tuplehash`, `parallelhash`
@@ -54,7 +54,11 @@ Windows `enclave::sha2_batch` supports eight declared SHA-2 slots with retained
 all-plan output; see the [batch API example](../../docs/windows-enclave-sha2-batch.md).
 `enclave::parallelhash` supports all four fixed/XOF identities and retained exact-bit
 composition; see the [ParallelHash example](../../docs/windows-enclave-parallelhash.md).
-This Windows path is sequential scalar, not the Linux protected multicore API.
+This Windows path is sequential scalar or explicitly selected AVX2, not the Linux
+protected multicore API. With `acceleration`, use
+`enclave::parallelhash::Session::open_avx2` and the reviewed version-eighteen
+image. CPU/OS admission runs inside the enclave; failed selection never falls
+back. Production trust and current-image qualification remain required.
 No legacy hashes, ordinary digests, raw CPU
 execution authorities, generic protected callbacks or protocol APIs are exported.
 Even with default features disabled, dependencies enable the protected sessions.

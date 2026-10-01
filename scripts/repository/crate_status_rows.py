@@ -18,7 +18,7 @@ ROWS = {
         "| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |",
         "| Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |",
         "| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |",
-        "| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |",
+        "| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |",
         "| Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |",
     ],
     "crates/brynja-crypto-cpu/README.md": [
@@ -187,7 +187,7 @@ ROWS = {
         "| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |",
         "| Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |",
         "| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |",
-        "| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |",
+        "| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |",
         "| Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |",
         "| Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |",
         "| Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |",

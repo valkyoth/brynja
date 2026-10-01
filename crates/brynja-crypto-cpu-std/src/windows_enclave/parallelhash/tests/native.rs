@@ -57,8 +57,12 @@ fn retain<'a>(stream: Stream<'a>, tail: Bits<'_>, width: usize, last: u8) -> Res
 #[test]
 #[ignore = "requires reviewed development-signed version-twelve worker on native Windows VBS"]
 fn development_parallelhash_streaming_campaign() -> Result<()> {
-    let location = std::path::PathBuf::from(std::env::var("BRYNJA_ENCLAVE_PARALLEL_IMAGE")?);
-    let digest = bytes(&std::env::var("BRYNJA_ENCLAVE_PARALLEL_SHA256")?)?;
+    let (location, policy) = image("BRYNJA_ENCLAVE_PARALLEL")?;
+    campaign(Transport::development(&location, &policy)?, "scalar")
+}
+pub(super) fn image(prefix: &str) -> Result<(std::path::PathBuf, ImagePolicy)> {
+    let location = std::path::PathBuf::from(std::env::var(std::format!("{prefix}_IMAGE"))?);
+    let digest = bytes(&std::env::var(std::format!("{prefix}_SHA256"))?)?;
     let digest: [u8; 32] = digest
         .try_into()
         .map_err(|_| "exact image digest required")?;
@@ -73,8 +77,9 @@ fn development_parallelhash_streaming_campaign() -> Result<()> {
         .ok_or(Error::Bounds)?
         .copy_from_slice(b"PROB");
     let policy = ImagePolicy::reviewed_sha256(digest, family, image, 1, 1, [0, 0]);
-    // This private constructor first requires the production signature rejection.
-    let transport = Transport::development(&location, &policy)?;
+    Ok((location, policy))
+}
+pub(super) fn campaign(transport: Transport, route: &str) -> Result<()> {
     let mut session = Session(Owner {
         transport,
         state: State::Ready,
@@ -184,7 +189,7 @@ fn development_parallelhash_streaming_campaign() -> Result<()> {
     session.close()?;
     assert_eq!(session.state(), State::Closed);
     std::println!(
-        "WINDOWS_PARALLELHASH_ENCLAVE: PASS; direct={direct}; retained={retained}; scalar; development-only"
+        "WINDOWS_PARALLELHASH_ENCLAVE: PASS; direct={direct}; retained={retained}; route={route}; development-only"
     );
     Ok(())
 }

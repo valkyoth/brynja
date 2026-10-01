@@ -1,7 +1,8 @@
-//! Sequential scalar ParallelHash/ParallelHashXOF in a version-twelve enclave.
+//! Sequential ParallelHash/ParallelHashXOF in a scalar or opt-in AVX2 enclave.
 //! Caller input is outside protected storage. Retained results have no host
 //! secret-slice API. Requires strict-sha2 and strict-sha3; unsupported hosts fail
-//! closed. SIMD, multicore scheduling and production qualification are separate.
+//! closed. AVX2 is single-state acceleration, not multicore leaf scheduling.
+//! Production qualification remains separate.
 //! Abandoned handles quarantine; fatal abort cannot run Drop cleanup.
 use super::parallel_wire::Request;
 use super::{Error, ImagePolicy, PublicDeclassification, State};
@@ -132,6 +133,21 @@ impl<T: Channel> Drop for Owner<T> {
 #[doc = "```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<brynja_crypto_cpu_std::windows_enclave::parallelhash::Session>();\n```"]
 pub struct Session(Owner<Transport>);
 impl Session {
+    /// Explicitly select a reviewed version-eighteen AVX2 enclave image.
+    /// Requires production image trust and the complete enclave CPU/OS bundle;
+    /// rejection never retries the scalar route. Root and leaves execute
+    /// sequentially using AVX2 Keccak, not independent-message SIMD or multicore.
+    /// Caller inputs remain outside protected storage; current-image qualification
+    /// and deployment guarantees are still required. Scalar `open` is unchanged.
+    #[cfg(feature = "strict-sha3-acceleration")]
+    pub fn open_avx2(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
+        Ok(Self(Owner {
+            transport: Transport::open_avx2(location, policy)?,
+            state: State::Ready,
+            sequence: 0,
+            thread_bound: PhantomData,
+        }))
+    }
     /// Requires production image trust, never development-signature fallback.
     pub fn open(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
         Ok(Self(Owner {

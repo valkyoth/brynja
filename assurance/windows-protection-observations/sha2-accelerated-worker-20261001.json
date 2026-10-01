@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_WORKER_PUBLIC_VECTOR_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "5bab5a3750f7a0da4874c3e3cb38923fbcf61f93",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "shipping_acceleration_enabled": false,
+  "description": "Private version-13 retained SHA-224/256 worker integrated with the feature-checked baseline C entry, guarded resident page and protected worker window. Public vectors only; supported host route and current-image secret qualification remain pending. No shipping Rust or release-gate policy changed.",
+  "targets": ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"],
+  "rust_toolchain": "1.98.1",
+  "rust_target_features": ["sha", "sse2", "avx", "avx2"],
+  "native_environment": {
+    "windows_build": 26100,
+    "processor": "AMD EPYC 9V45",
+    "vbs": true,
+    "hvci": true,
+    "secure_boot": false,
+    "test_signing": true,
+    "production_signing": false
+  },
+  "worker_tests_per_target": {
+    "serialized_real_owner_test": 1,
+    "compiled_rust_mutants_rejected": 9,
+    "compiled_baseline_feature_gate_mutants_rejected": 11,
+    "compiled_actual_c_entry_mutants_rejected": 4,
+    "exact_generated_artifact_restoration": true
+  },
+  "native_campaign": {
+    "independent_hashlib_comparisons": 21,
+    "worker_calls": 151,
+    "retained_page_events": 207,
+    "malformed_or_copy_failure_cases": 7,
+    "identities": ["SHA-224", "SHA-256"],
+    "message_lengths": [0, 1, 55, 56, 63, 64, 65, 1024, 1025, 2049],
+    "retained_rehash": true,
+    "cancellation_and_reuse": true,
+    "terminal_quarantine": true,
+    "private_exports_absent": ["RetainedWork", "PublicRustBody", "PublicSha2Input", "PublicSha2Output"],
+    "protected_snapshot_clear_receipts": true,
+    "full_page_clear_before_release": true,
+    "enclave_deleted": true
+  },
+  "matching_build_source_hashes": 264,
+  "matching_native_capture_source_hashes": 344,
+  "matching_generated_artifact_hashes": 24,
+  "signed_image_sha256": "17ab08d744e019ee9f4572f67cccdffc97957d336d15de0847d95f80c83debca",
+  "signing": {
+    "signtool_reported_signed": true,
+    "signtool_exit_code": 2,
+    "warning": "SDK VBS enclave compatibility warning; nonzero wrapper exit retained, not a clean production signing result",
+    "temporary_certificate_and_private_key_removed": true
+  },
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-10-01/sha2-worker-final-products.tar.gz": "301b127363066c6055e37a5d28d10512d0379600b4d25b806dcbd6972c7aa3e3",
+    "release-reports/windows-azure-replacement-2026-10-01/sha2-worker-linux-final/sha2-worker-results.json": "09c38a50a3e38d3acd0ec9ee9c1c9e8fdf0e4cec669266218532bf3c88244f9b",
+    "release-reports/windows-azure-replacement-2026-10-01/sha2-worker-windows-final/sha2-worker-final-20261001/sha2-worker-results.json": "1efe7eefb712a8794df7cfbc4d0927d9e2ccc41e06dfbc33e7b5c0aa6468fc47",
+    "release-reports/windows-azure-replacement-2026-10-01/sha2-worker-private-exports-native.json": "2898154c3575b4bfee2c4de34bb4b5557e7550aa60bb3e05508afae19264b2ad"
+  },
+  "native_recheck": "The separate private-exports capture repeats the complete native campaign against the same signed image and additionally requires four internal entry points to be absent from the image exports. Its source closure is current; the image archive also preserves the preceding successful capture.",
+  "superseded_attempt": "Initial native run passed, but subsequent archive reconciliation found CRLF restoration drift in two generated source files. The mutation runner now restores original bytes and checks all generated hashes; fresh builds and native execution passed. Initial archive/logs remain saved locally and are not the current artifact binding.",
+  "limitations": [
+    "Source overlay on the restored development server, not a native exact Git checkout; source hashes reconciled locally",
+    "Public vectors only, not independent review or real-secret qualification",
+    "No supported accelerated host/image selection API yet; scalar API remains unchanged",
+    "Loss of required CPU features latches failure before Rust, including destruction; no cleanup claim is made for unsupported execution",
+    "Current-image ABI/register/spill, dump, hostile-platform and wider failure qualification remain pending",
+    "No Windows ARM64, dedicated x86 SHA-512, arbitrary CPU migration or production-signing qualification"
+  ]
+}

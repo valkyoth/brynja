@@ -96,10 +96,49 @@ alignment and full-page provenance, and rejects narrowed pointer provenance,
 overlapping slots and reversed destruction order. This is not Miri coverage of
 SHA-NI, the real owner internals, Windows OS admission or enclave execution.
 
-The component still needs integration into the feature-checked enclave entry,
-trusted image selection and host session interface. The existing scalar API and
-release-gate policy remain unchanged. Current-image register/stack qualification
-and independent review are still pending.
+## Retained SHA-NI enclave worker
+
+The private version-13 component is now connected to the existing admitted
+64-KiB worker window and guarded retained page in a development image. The
+baseline C entry validates the complete SHA/SSE2/AVX/AVX2 bundle before **any**
+specialized Rust entry, including destruction. A rejected feature query latches
+failure; restoring advertised features does not reopen it. If features disappear,
+the adapter must not call an unsupported Rust destructor and pretend cleanup
+completed. Arbitrary CPU migration is not qualified by this check.
+
+Only allocation/lifetime metadata lives in the worker's static slot. The page
+keeps the borrowing owner and authority alive across returns. The worker copies
+and validates the 64-byte header before copying its bounded payload, revokes the
+owner after copy/decoding/receipt failures, and clears both snapshot buffers before
+reporting completion. Destruction drops the stream before its authority; C then
+checks all 4096 backing bytes are zero before unlock/free.
+
+One sequential real-owner worker test passes on Linux and ordinary Windows,
+rejecting nine compiled Rust mutations. Eleven compiled feature-gate mutations
+and four mutations of the actual generated C entry are rejected as well. These
+include entry without feature validation and entry after restriction failure.
+The mutation runner restores original **bytes**, including line endings, and
+checks every generated build artifact against its recorded digest. An initial
+Windows run exposed CRLF restoration drift; the corrected run is recorded
+separately rather than treating its first artifact manifest as current.
+
+The final development VBS image passes 21 independent hashlib comparisons in
+151 calls, covering SHA-224/256 boundaries, fragmented input, retained rehash,
+cancellation/reuse, seven malformed/copy-failure cases and terminal rejection.
+There are 207 page-residency/lifecycle events. The native adapter checks worker
+and allocation geometry, copy/clear receipts, locked-page observations and
+zero-before-release outcomes. It also verifies that the internal Rust and copy
+entry points are not exported, preventing direct bypass of the baseline gate.
+These are public-vector author experiments, **not**
+current-image dump/register qualification or approval for real secret inputs.
+All 344 capture-source hashes and 24 generated artifact hashes match the
+[saved worker observations](../assurance/windows-protection-observations/sha2-accelerated-worker-20261001.json).
+SignTool's compatibility warning/nonzero exit is preserved; temporary signing
+certificates and keys were removed, and native enclave deletion succeeded.
+
+Trusted image selection and the supported host session interface still need the
+explicit accelerated route. The existing scalar API and release-gate policy are
+unchanged. Current-image ABI/register/stack review and independent review remain.
 
 ## Next integration boundary
 

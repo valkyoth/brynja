@@ -241,7 +241,13 @@ describe how the worker was developed, not outstanding constructor work.
   The private retained SHA-NI SHA-224/256 component and version-13 decoder now
   pass real-kernel Linux/Windows component tests. Its authority/stream placement
   has native lifecycle tests and a separately labeled Miri lifetime model. The
-  feature-checked enclave entry and supported host API still need integration;
+  feature-checked enclave entry now has a separate private worker image: 21
+  native public-vector comparisons across 151 calls pass, including copy faults,
+  terminal rejection, cancellation and retained rehash. Nine Rust and fifteen C
+  entry/gate mutations are rejected on Linux and Windows. Generated artifact
+  bytes are checked after mutation restoration. The supported host route still
+  needs integration; current-image ABI/register/dump review is not complete. See
+  [worker observations](../assurance/windows-protection-observations/sha2-accelerated-worker-20261001.json);
   the [component evidence](../assurance/windows-protection-observations/sha2-accelerated-component-20260930.json)
   must not be read as enclave or production qualification.
 - Finish compiler/runtime and protected worker/storage review. Test the new

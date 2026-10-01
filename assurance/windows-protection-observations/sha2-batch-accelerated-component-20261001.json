@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "status": "SEQUENTIAL_SHA2_BATCH_SHA_NI_COMPONENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "20e189b9",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "multi_message_simd": false,
+  "description": "Private eight-slot sequential SHA-224/256 component over unchanged hardened SHA-NI streams; ordinary native Linux and Windows processes, not VBS execution or a shipping host route.",
+  "protocol": 19,
+  "header_bytes": 144,
+  "rust_toolchain": "1.98.1",
+  "target_features": ["sha", "sse2", "avx", "avx2"],
+  "build_profile": "opt-level=2, overflow-checks=yes, panic=unwind, warnings denied",
+  "tests_per_platform": {
+    "rust_tests": 12,
+    "independent_oracle_cases_each_checked_in_all_eight_slots": 244,
+    "oracle_composition": "242 arbitrary-bit/byte cases plus two million-byte hashlib cases; byte-aligned bit-oracle results cross-checked with hashlib",
+    "mixed_sha224_sha256_activity_masks": 255,
+    "wire_output_checked_against_hashlib": true,
+    "compiled_runtime_mutants_rejected": 29,
+    "compiler_failures_count_as_runtime_rejections": false,
+    "ownership_and_lifetime_negatives": 6,
+    "checks": [
+      "Exact static SHA-NI route; wide/unknown identities and wrong authority rejected",
+      "Sequence, phase, ordering, budget, bounds, complete plan and seal",
+      "Canonical protocol/route/reserved metadata and copied payload length",
+      "Non-compressing boundaries and post-copy authority revocation",
+      "Copy failure, recoverable unwind, owner drop and retained-output clearing",
+      "Healthy export/cancellation reuse and zero inactive/output suffix bytes"
+    ]
+  },
+  "source_binding": {
+    "windows_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "all_source_hashes_match_local": true,
+    "all_generated_hashes_match_records": true,
+    "linux": {
+      "source_files": 259,
+      "generated_files": 14,
+      "binary_sha256": "6e8249a050635c010628289afbad5b81501c6bce004db0b2c85beaabdfa8f015",
+      "target": "x86_64-unknown-linux-gnu"
+    },
+    "windows": {
+      "source_files": 259,
+      "generated_files": 14,
+      "binary_sha256": "d88b721c791908b3449ac1f1155ced2771104d92ab4b7a3da5d8e050dd81c390",
+      "target": "x86_64-pc-windows-msvc",
+      "manifest_member": "sha2-batch-component-checked-20261001/sha2-batch-accelerated-results.json",
+      "manifest_sha256": "08057bec1e0543c26798c3c07a8f1787a1f55e2749599cb1344a80d3717c11c5"
+    }
+  },
+  "artifacts": {
+    "release-reports/sha2-batch-component-checked-products-20261001.tar.gz": "3cb72458a940f3f5068b267333f0c8d46db27618447848c96add15c15e4d92e8",
+    "release-reports/sha2-batch-component-linux-checked-20261001/sha2-batch-accelerated-results.json": "5393c57ff647669d32876438a7c57c7bb197725659f2ecd750a1d84696a97499"
+  },
+  "limitations": [
+    "Author regression evidence using public synthetic inputs, not independent review",
+    "No resident full-page/padding erasure, protected worker stack or VBS OS-copy qualification in this component campaign",
+    "No supported host constructor or native enclave execution for protocol nineteen yet",
+    "No SIMD across independent messages, dedicated x86 SHA-512, multicore or Windows ARM64 claim",
+    "No current-image register/spill/dump, arbitrary CPU migration or production signing qualification",
+    "No Miri or sanitizer claim for this campaign; release-gate policy and RETEST REQUIRED unchanged"
+  ]
+}

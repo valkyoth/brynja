@@ -1,10 +1,31 @@
 # Windows enclave acceleration development
 
 Scalar constructors remain scalar. Explicit SHA-NI SHA-224/256 and AVX2
-SHA-3/SHAKE/cSHAKE, KMAC and TupleHash host routes are development-tested; wider accelerated
+SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, sequential SHA-3 batch and ParallelHash host
+routes are development-tested; wider accelerated
 session routes are still pending.
 The historical public-vector diagnostics below are not, by themselves, secret
 input qualification. Release-gate policy and dependencies are unchanged.
+
+## Sequential SHA-NI batch component
+
+The private version-19 component processes up to eight ordered SHA-224/256
+slots over the existing hardened SHA-NI streams. This is sequential hardware
+acceleration, not independent-message SIMD. Its 144-byte header binds the route,
+plan, sequence, public byte budget and canonical fields; wide/general SHA-512
+identities reject rather than falling back. Authority is checked even at
+non-compressing boundaries and after output copying. Failures and owner drop
+clear retained state and revoke authority; successful export/cancellation permits
+reuse while healthy.
+
+Native Linux and ordinary Windows-process tests each pass 12 tests, covering
+244 independent byte/bit oracle cases in every slot, all 255 nonempty mixed
+SHA-224/256 activity masks, output tails and lifecycle failures. Each campaign
+rejects 29 compiled runtime mutations and six ownership/lifetime negatives.
+See the [source-bound component observations](../assurance/windows-protection-observations/sha2-batch-accelerated-component-20261001.json).
+Resident full-page placement, VBS worker integration, a supported host constructor
+and current-image qualification remain next; this component result does not
+establish any of them.
 
 ## Platform observations
 

@@ -18,6 +18,16 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
+The private sequential SHA-NI SHA-224/256 batch component now preserves eight
+ordered slots, bounded fragments, public work budgets and retained output over
+the unchanged hardened streaming engine. Its separate version-19 decoder rejects
+wide identities and noncanonical metadata without portable fallback. Native
+Linux and ordinary Windows-process tests each pass 244 independent oracle cases,
+255 mixed activity masks, 29 compiled mutations and six ownership negatives.
+These are component tests, not VBS execution: resident placement, worker and host
+integration remain next. No independent-message SIMD or production qualification
+is claimed.
+
 The private sequential AVX2 ParallelHash component now covers all four fixed/XOF
 identities, streamed bit inputs, bounded-memory leaves and retained-output
 rehashing. Root and leaves share borrowed authority over the unchanged hardened

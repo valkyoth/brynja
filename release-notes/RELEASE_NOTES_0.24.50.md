@@ -25,6 +25,14 @@ SHA-512 is absent on this guest. That diagnostic alone does not qualify protecte
 secret inputs. The SHA-NI host integration below is now development-tested;
 wider integration and Windows ABI/register qualification remain pending.
 
+The private accelerated SHA-3/SHAKE/cSHAKE component adds exact-length streamed
+N/S prefix handling and retained output/rehash on the unchanged hardened AVX2
+engine. It rejects incomplete setup, stale authority and noncanonical operations
+without fallback. Component oracle, lifecycle, ownership-negative and compiled
+mutation checks are separate from native enclave execution; resident placement,
+the image entry and supported SHA-3 host route remain unfinished. The scalar API
+and production library code are unchanged by this component step.
+
 The separate [SHA-2 streaming enclave API](../docs/windows-enclave-sha2.md) now
 implements all six named identities and general SHA-512/t, bounded input
 snapshots for large streams, arbitrary-bit final tails and exact-bit retained

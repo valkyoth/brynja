@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_AVX2_COMPONENT_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "52bcf040e98745c17ee0647262b52b56b1789195",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "description": "Private retained SHA-3/SHAKE/cSHAKE AVX2 component with streamed exact-bit N/S prefix, affine authority, output/rehash and fail-closed cleanup. Runs in ordinary native processes, not inside VBS. Production crate sources and release gates unchanged.",
+  "targets": ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"],
+  "toolchain": "1.98.1",
+  "target_features": ["avx", "avx2"],
+  "shared_engine": "crates/brynja-hash-sha3/src/hardened/accelerated/engine.rs",
+  "engine_source_copied_unchanged": true,
+  "component_tests_per_target": {
+    "passed": 11,
+    "compiled_mutants_rejected": 21,
+    "ownership_and_lifetime_negatives_rejected": 6,
+    "cshake_vector_cases": 628,
+    "nist_bit_cases": 76,
+    "independent_hashlib_cases": 96,
+    "retained_rehash_cases": 512,
+    "fractional_setup_comparisons": 578,
+    "large_streamed_setup": true,
+    "revocation_at_non_permuting_operations": true,
+    "revocation_during_copy": true,
+    "copy_failure_and_recoverable_unwind": true,
+    "overflow_and_incomplete_setup_rejection": true
+  },
+  "miri": {
+    "toolchain": "nightly-2026-09-11",
+    "passed": 3,
+    "scope": "Actual prefix source with a synthetic byte sink: independent bit concatenation, separate completion-proof fields, overflow/wrong-phase/excess rejection. Not real engine, AVX2, VBS or protected-memory qualification.",
+    "initial_attempt": "Sandbox prevented creation of the Miri sysroot cache. Retried with permission; all three tests passed. No test semantics changed."
+  },
+  "source_binding": {
+    "windows_checkout": "Restored development checkout plus explicit source overlay, not a clean exact Git checkout",
+    "matching_source_hashes_per_target": 239,
+    "matching_generated_source_artifacts_per_target": 13,
+    "scalar_test_adaptation": "Existing oracle/lifecycle assertions retained; explicit authority construction and lifetime annotations substituted, plus new separate authority tests and generated hashlib vectors"
+  },
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-10-01/sha3-prefix-miri/prefix-model-miri.json": "04722c8440827bfaaa1cda2dbf63f5b6935ff80b95ea98029e638c187e0af5b7",
+    "release-reports/windows-azure-replacement-2026-10-01/sha3-component-products.tar.gz": "65c8d65e6325bfb08ad597a5fc7aae4ec7338d763d3f8508b22a1d62f717e34c",
+    "release-reports/windows-azure-replacement-2026-10-01/sha3-component-linux-complete/sha3-accelerated-build.json": "42dfde7ea6ef5f426cd6ef52e1569c90d6c88849b70be1c050074e71318d07e3",
+    "release-reports/windows-azure-replacement-2026-10-01/sha3-component-linux-complete/sha3-accelerated-results.json": "cf47c7302f917d42115d9402fb2b4a08e26510ace4c6d97ba335eaf80980b6cb",
+    "release-reports/windows-azure-replacement-2026-10-01/sha3-component-linux-complete/sha3-accelerated-test": "d213d8380799919c1217586daae1c4cd4bd417420a71ae85c6ee825b54fd830d"
+  },
+  "windows_archive_members_sha256": {
+    "sha3-component-complete-20261001/sha3-accelerated-build.json": "3083472d6ca2ad292e0b06b7fd739632e67d9f56446d4b5948223466dee2c79e",
+    "sha3-component-complete-20261001/sha3-accelerated-results.json": "190c3057de6b43c4426d66cf3cbe0be40a99f46f347dfcabbfe584efc97ccd42",
+    "sha3-component-complete-20261001/sha3-accelerated-test": "6e5c0b17852da9c20cb0449e7c5e0bfeaa8598e50440335eab710a51100db0ce"
+  },
+  "limitations": [
+    "No enclave entry/image, resident placement or supported accelerated SHA-3 host constructor yet",
+    "No full-page erasure, caller-frame/register/spill, dump or protected-stack qualification for this component",
+    "Miri uses an explicitly non-cryptographic sink; it does not execute inline assembly",
+    "Only native x86-64 AVX2 component execution; no Windows ARM64, production signing or migration qualification",
+    "Independent retest remains pending; candidate remains RETEST REQUIRED"
+  ]
+}

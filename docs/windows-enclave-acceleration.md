@@ -165,6 +165,47 @@ wider algorithm acceleration and Windows ARM64. See the
 [host observations](../assurance/windows-protection-observations/sha2-accelerated-host-20261001.json)
 and [API guide](windows-enclave-sha2.md).
 
+## Private AVX2 SHA-3/SHAKE/cSHAKE component
+
+A separate private component now implements all eight SHA-3/SHAKE/cSHAKE
+identities with an exact borrowed `X86Keccak` authority. It compiles the existing
+hardened Keccak engine source unchanged, rather than introducing another
+permutation implementation or using an ordinary non-erasing state. Production
+crate sources and the existing scalar enclave API are unchanged by this step.
+
+The new prefix adapter supports exact public N/S bit lengths streamed across
+calls. Fractional fragments concatenate without intermediate padding; setup
+cannot transition into message absorption until the phase, remaining length,
+pending bits and exact padded byte count all agree. Empty N/S retains SHAKE
+semantics. State, the pending byte and staging are owned and cleared; the eventual
+placement adapter must also destroy live objects and clear their entire backing
+allocation, including padding and inactive variants. This private component does
+not establish residency or erase arbitrary caller frames.
+
+Retained fixed/XOF output, partial final bits, incremental squeeze, retained
+rehash and streamed rehash customization retain the scalar protocol's ownership
+rules. Every operation checks authority health, even empty updates, cancellation
+and output export. Errors and recoverable unwind clear the owner and quarantine
+its authority. There is no portable fallback.
+
+The component tests reuse the scalar oracle/lifecycle tests with only explicit
+authority construction and lifetime annotations adapted. Additional tests cover
+578 one-bit-fragmented setup combinations, revocation at non-permuting operations,
+revocation during copy, overflow and incomplete setup. The native campaign also
+covers 628 cSHAKE vectors, 76 NIST bit vectors, 96 hashlib cases (including
+million-byte messages) and 512 retained-rehash cases. Compiled mutants must fail
+at runtime, not merely fail compilation; generated source bytes are restored and
+checked against the build manifest before a successful result is written.
+
+A separately labeled Miri prefix model uses the **actual prefix source** and a
+synthetic byte sink. It checks independent bit concatenation and each completion
+proof field, but does not execute AVX2 or qualify the real engine, owner placement,
+Windows APIs or enclave memory. See the
+[component observations](../assurance/windows-protection-observations/sha3-accelerated-component-20261001.json)
+for results and saved artifacts. A feature-checked enclave entry, placement,
+image protocol and supported accelerated SHA-3 host constructor remain to be
+connected and tested; an ordinary Windows-process pass is not VBS execution.
+
 ## Next integration boundary
 
 - Extend explicit opt-in selection beyond SHA-224/256 and bind each route to its

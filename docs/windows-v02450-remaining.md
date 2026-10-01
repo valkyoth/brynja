@@ -255,6 +255,14 @@ describe how the worker was developed, not outstanding constructor work.
   [worker observations](../assurance/windows-protection-observations/sha2-accelerated-worker-20261001.json);
   the [component evidence](../assurance/windows-protection-observations/sha2-accelerated-component-20260930.json)
   must not be read as enclave or production qualification.
+  The private AVX2 SHA-3/SHAKE/cSHAKE component now covers all eight identities,
+  streamed exact-bit N/S, retained output/rehash and terminal authority failure.
+  It reuses the existing hardened engine source unchanged. Its differential,
+  lifecycle, compiled-mutation and prefix-only Miri checks are recorded in
+  [SHA-3 component observations](../assurance/windows-protection-observations/sha3-accelerated-component-20261001.json).
+  The next SHA-3 step is resident placement plus the feature-checked enclave
+  entry/image protocol and host constructor; this component alone is not a VBS
+  execution or protected-memory qualification claim.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

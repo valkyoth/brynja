@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_TUPLEHASH_AVX2_COMPONENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "ef3b9cdd",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "description": "Private TupleHash/TupleHashXOF component over the existing accelerated cSHAKE engine, with streamed customization, exact item framing and retained composition. Ordinary native processes, not VBS.",
+  "algorithms": ["TupleHash128", "TupleHash256", "TupleHashXOF128", "TupleHashXOF256"],
+  "targets": ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"],
+  "toolchain": "1.98.1",
+  "target_features": ["avx", "avx2"],
+  "unchanged_sources": [
+    "crates/brynja-hash-sha3/src/hardened/accelerated/engine.rs",
+    "assurance/windows-enclave-probe/sha3_accelerated_state.rs"
+  ],
+  "framing": "Scalar owner framing retained; scalar bit packer equality enforced apart from borrowed-state lifetime annotations",
+  "tests_per_target": {
+    "rust_tests": 9,
+    "independent_bit_cases": 272,
+    "retained_rehash_cases": 128,
+    "compiled_mutants_rejected": 22,
+    "ownership_lifetime_negatives": 6,
+    "source_restored_after_mutations": true,
+    "post_copy_revocation_mutant_separately_rejected": true
+  },
+  "miri": {
+    "toolchain": "nightly-2026-09-11",
+    "tests": 2,
+    "compiled_mutants_rejected": 3,
+    "scope": "Actual bit-packer source with a noncryptographic byte sink; eight initial alignments and ten input widths, plus failure/clear/reuse; no kernel, enclave, placement or whole-owner cleanup claim"
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "matching_windows_source_files": 252,
+    "matching_windows_generated_files": 17,
+    "windows_binary_sha256": "8d6adb3688ad3990c25ed500b8a15160cc71de5264e8955af46fe72b47c8595a",
+    "linux_binary_sha256": "8d82c577c507f069df2af7c74a995da122c7a9b59e1f4249a28ce33361e66745"
+  },
+  "artifacts": {
+    "release-reports/tuple-component-linux-final-20261001/tuple-accelerated-results.json": "9b5fbb866592127f4e26fdd9251b036bc2440fac441fed40f5d8a7ab16e66146",
+    "release-reports/windows-tuple-component-collected-20261001/tuple-component-20261001/tuple-accelerated-results.json": "e0543793fe563c281a5bd2678c5e08f9660d21fa5aaf307e74ac5a24556167f4",
+    "release-reports/tuple-packer-miri-final-20261001/tuple-packer-results.json": "0bf74d85af2d25b167d49bdf262bf87f3f771a7ebf987a692b8d2f8c39d1204d",
+    "release-reports/tuple-component-products-20261001.tar.gz": "f2a9e22bb5591e56cdcd80e1802655ea168c4b34fbae5fd80f5d1ce3a8cb0480"
+  },
+  "limitations": [
+    "Component only: no accelerated TupleHash enclave image, wire protocol, resident placement or supported host constructor yet",
+    "Whole-allocation erasure including inactive variants/padding and current-image ABI/register/spill/dump review remain pending",
+    "No production signing, Windows ARM64, arbitrary migration, independent cryptographic review or certification claim",
+    "Existing scalar worker, shipping APIs, kernels, dependencies and release-gate policy unchanged",
+    "Candidate remains RETEST REQUIRED"
+  ]
+}

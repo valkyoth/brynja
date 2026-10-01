@@ -18,6 +18,14 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
+The private accelerated TupleHash component now covers all four fixed/XOF
+identities over the existing AVX2 cSHAKE engine, with exact streamed item framing
+and retained composition. Linux/Windows component tests pass 272 independent bit
+cases and 128 retained compositions, reject 22 compiled mutants and six ownership
+violations; a focused bit-packer Miri model rejects three mutants. These are
+ordinary native-process tests, not enclave execution. Accelerated TupleHash
+placement, worker/image, host API and current-image qualification remain pending.
+
 A separate [public-vector VBS acceleration diagnostic](../docs/windows-enclave-acceleration.md)
 now executes five existing hardened SHA-NI/AVX2 kernels natively, with 496
 independent comparisons, startup KATs and quarantine rejection. Dedicated x86

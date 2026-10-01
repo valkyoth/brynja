@@ -294,6 +294,13 @@ describe how the worker was developed, not outstanding constructor work.
   [KMAC host observations](../assurance/windows-protection-observations/kmac-accelerated-host-20261001.json).
   Current-image qualification remains unfinished;
   development execution is not a production signing or independent pass.
+  The private TupleHash AVX2 component now passes Linux/Windows tests: 272
+  independent bit cases, 128 retained compositions, 22 compiled mutants and six
+  ownership/lifetime negatives. A focused Miri model of the actual bit packer
+  passes and rejects three mutants; it does not run AVX2 or VBS. See
+  [TupleHash component observations](../assurance/windows-protection-observations/tuple-accelerated-component-20261001.json).
+  Its accelerated resident, worker/image and supported host constructor remain
+  the next integration work.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

@@ -1,7 +1,8 @@
 # Windows enclave acceleration development
 
-Scalar constructors remain scalar. An explicit SHA-NI SHA-224/256 host route is
-now development-tested; other accelerated session routes are still pending.
+Scalar constructors remain scalar. Explicit SHA-NI SHA-224/256 and AVX2
+SHA-3/SHAKE/cSHAKE and KMAC host routes are development-tested; wider accelerated
+session routes are still pending.
 The historical public-vector diagnostics below are not, by themselves, secret
 input qualification. Release-gate policy and dependencies are unchanged.
 
@@ -314,9 +315,44 @@ python3 scripts/cryptography/test-windows-enclave-kmac-resident-model.py placeme
 python3 scripts/cryptography/test-windows-enclave-kmac-worker.py worker-results --attest-native-bundle
 ```
 
+## Retained AVX2 TupleHash component
+
+A separate private TupleHash/TupleHashXOF component now reuses the existing
+accelerated cSHAKE engine. The scalar item framing is preserved, and the builder
+requires the clearing bit packer to match its scalar counterpart apart from
+borrowed-state lifetime annotations. Streamed customization and items bind exact
+declared lengths; fixed output encodes its bit length and XOF encodes zero.
+Retained output can become exactly one item of the next tuple without host export.
+
+The owner borrows an explicit AVX2 authority and checks it on every operation,
+including empty/non-permuting calls and after its private trusted-copy seam.
+Errors and recoverable unwind clear active state, pending bits and retained
+output, and latch quarantine. Cancellation permits reuse; owner destruction
+revokes its authority. Whole-allocation erasure, including inactive variants and
+padding, still requires the future enclave placement adapter.
+
+Native Linux and Windows component tests pass 272 independent bit cases,
+128 retained compositions and lifecycle/authority tests. Twenty-two compiled
+mutations and six ownership/lifetime negatives are rejected on both targets.
+A focused Miri model executes the actual bit packer with a noncryptographic sink
+and rejects three compiled mutations; it does not execute AVX2 or VBS.
+All Windows source and generated artifact hashes reconcile locally. See
+[TupleHash component observations](../assurance/windows-protection-observations/tuple-accelerated-component-20261001.json).
+
+The accelerated resident/worker protocol, native VBS image, public host route
+and current-image ABI/register/spill/dump qualification remain unfinished.
+Shipping APIs, scalar defaults, dependencies and release-gate policy are unchanged.
+
+Author commands (the component run requires a native AVX2 host):
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-tuple-accelerated.py tuple-component-results
+python3 scripts/cryptography/test-windows-enclave-tuple-packer.py tuple-packer-results --miri-toolchain nightly-2026-09-11
+```
+
 ## Next integration boundary
 
-- Extend explicit opt-in selection beyond SHA-224/256 and SHA-3/SHAKE/cSHAKE, binding each route to its
+- Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE and KMAC, binding each route to its
   trusted image policy. Scalar constructors remain scalar; failed acceleration
   must not silently choose scalar execution.
 - Keep backend owners and scratch in enclave storage. Preserve streamed

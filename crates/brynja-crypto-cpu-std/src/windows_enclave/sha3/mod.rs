@@ -1,7 +1,8 @@
-//! Scalar SHA-3/SHAKE/cSHAKE using a reviewed version-seven enclave worker.
+//! SHA-3/SHAKE/cSHAKE with scalar-by-default enclave execution.
 //! No enclave-private output is exposed as a host secret slice. Caller input
-//! buffers remain outside protected storage. Hardware acceleration, production
-//! signing and platform qualification are separate from this protocol.
+//! buffers remain outside protected storage. `Session::open_avx2` explicitly
+//! selects the separate version-fourteen image with complete feature admission.
+//! Production signing and platform qualification remain separate obligations.
 //! Handles quarantine on abandonment/unwind; fatal abort cannot run Drop.
 use super::sha3_wire::Request;
 use super::{Error, ImagePolicy, PublicDeclassification, State};
@@ -162,10 +163,30 @@ impl<T: Channel> Drop for Owner<T> {
 /// Owning, thread-bound enclave session. Unsupported hosts fail closed.
 pub struct Session(Owner<Transport>);
 impl Session {
-    /// Verify production trust and load only the matching reviewed worker.
+    /// Verify production trust and load the reviewed scalar version-seven worker.
     pub fn open(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
         Ok(Self(Owner {
             transport: Transport::open(location, policy)?,
+            state: State::Ready,
+            sequence: 0,
+            thread_bound: PhantomData,
+        }))
+    }
+    /// Explicit AVX2 execution for all eight SHA-3/SHAKE/cSHAKE identities.
+    /// Requires `strict-sha3-acceleration` (facade: `acceleration`), the reviewed
+    /// version-fourteen image and mandatory production signature/import policy.
+    /// Baseline enclave entry checks the complete AVX/AVX2 and OS vector-state
+    /// bundle before any specialized Rust, including destruction. Missing image,
+    /// platform or instruction support fails closed; never falls back to scalar.
+    ///
+    /// Development execution is not production qualification. Deployment must
+    /// preserve these features across scheduling and migration; losing support
+    /// rejects entry and cannot promise specialized cleanup. Fatal abort cannot
+    /// run Drop. Caller buffers and application-created copies are not protected.
+    #[cfg(feature = "strict-sha3-acceleration")]
+    pub fn open_avx2(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
+        Ok(Self(Owner {
+            transport: Transport::open_avx2(location, policy)?,
             state: State::Ready,
             sequence: 0,
             thread_bound: PhantomData,

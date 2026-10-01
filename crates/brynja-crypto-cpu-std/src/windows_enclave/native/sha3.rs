@@ -13,6 +13,15 @@ impl Transport {
             super::Protocol::Sha3,
         )?))
     }
+    #[cfg(feature = "strict-sha3-acceleration")]
+    pub(crate) fn open_avx2(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
+        Ok(Self(Backend::open_protocol(
+            location,
+            policy,
+            |pin| pin.signature(),
+            super::Protocol::Sha3Avx2,
+        )?))
+    }
     pub(crate) fn request(
         &mut self,
         request: super::super::sha3_wire::Request,
@@ -27,18 +36,36 @@ impl Transport {
             self.0.live = true;
             self.0.run_sha3(0, None, 0, None)?;
         }
-        let header = request.header(input)?;
         if output.as_ref().is_some_and(|v| v.len() != request.width) {
             return Err(Error::Bounds);
         }
-        self.0
-            .run_sha3(operation, Some(&header), input.len(), output)
+        if self.0.protocol == super::Protocol::Sha3Avx2 {
+            let header = super::super::sha3_avx2_wire::header(request, input)?;
+            self.0
+                .run_sha3(operation, Some(&header), input.len(), output)
+        } else {
+            let header = request.header(input)?;
+            self.0
+                .run_sha3(operation, Some(&header), input.len(), output)
+        }
     }
     pub(crate) fn close(&mut self) -> Result<(), Error> {
         self.0.close()
     }
     #[cfg(test)]
     pub(crate) fn development(location: &Path, policy: &ImagePolicy) -> Result<Self, Error> {
+        Self::development_route(location, policy, super::Protocol::Sha3)
+    }
+    #[cfg(all(test, feature = "strict-sha3-acceleration"))]
+    pub(crate) fn development_avx2(location: &Path, policy: &ImagePolicy) -> Result<Self, Error> {
+        Self::development_route(location, policy, super::Protocol::Sha3Avx2)
+    }
+    #[cfg(test)]
+    fn development_route(
+        location: &Path,
+        policy: &ImagePolicy,
+        route: super::Protocol,
+    ) -> Result<Self, Error> {
         Ok(Self(Backend::open_protocol(
             location,
             policy,
@@ -48,7 +75,7 @@ impl Transport {
                 }
                 Ok(())
             },
-            super::Protocol::Sha3,
+            route,
         )?))
     }
 }
@@ -57,17 +84,21 @@ impl Backend {
     pub(super) fn run_sha3(
         &mut self,
         operation: usize,
-        input: Option<&[u8; 96]>,
+        input: Option<&[u8]>,
         length: usize,
         output: Option<&mut [u8]>,
     ) -> Result<(), Error> {
-        if self.protocol != super::Protocol::Sha3
-            || self.uncertain
+        let accelerated = self.protocol == super::Protocol::Sha3Avx2;
+        if !matches!(
+            self.protocol,
+            super::Protocol::Sha3 | super::Protocol::Sha3Avx2
+        ) || self.uncertain
             || self.terminated
             || self.base == 0
             || self.thread != sys::thread()
             || !matches!(operation, 0 | 3 | 21..=31)
             || matches!(operation, 0 | 3) == input.is_some()
+            || input.is_some_and(|v| v.len() != if accelerated { 112 } else { 96 })
             || (operation == 25) != output.is_some()
             || output.as_ref().is_some_and(|v| v.len() > 1024)
         {
@@ -116,7 +147,11 @@ impl Backend {
             _ => operation,
         };
         context.inspect_common(returned, outer, guards, inner, expected, operation >= 21)?;
-        super::super::sha3_wire::receipt(context.low, operation, length, receipt)?;
+        if accelerated {
+            super::super::sha3_avx2_wire::receipt(context.low, operation, length, receipt)?;
+        } else {
+            super::super::sha3_wire::receipt(context.low, operation, length, receipt)?;
+        }
         if operation == 3 {
             self.slot = 0;
         } else if !sys::pages(self.slot, 1, true) {

@@ -29,6 +29,8 @@ enum Protocol {
     #[cfg(feature = "strict-sha3")]
     Sha3,
     #[cfg(feature = "strict-sha3")]
+    Sha3Avx2,
+    #[cfg(feature = "strict-sha3")]
     Sha3Batch,
     #[cfg(feature = "strict-sha3")]
     ParallelHash,
@@ -131,7 +133,7 @@ impl Backend {
                     Protocol::Sha2 | Protocol::Sha2ShaNi => b"PublicSha2InputSource\0",
                     Protocol::Sha2Batch => b"PublicSha2BatchInputSource\0",
                     #[cfg(feature = "strict-sha3")]
-                    Protocol::Sha3 => b"PublicSha3InputSource\0",
+                    Protocol::Sha3 | Protocol::Sha3Avx2 => b"PublicSha3InputSource\0",
                     #[cfg(feature = "strict-sha3")]
                     Protocol::Sha3Batch => b"PublicSha3BatchInputSource\0",
                     #[cfg(feature = "strict-kmac")]
@@ -159,7 +161,9 @@ impl Backend {
                 }
                 Protocol::Sha2Batch => sys::export(owner.base, b"PublicSha2BatchControl\0")?,
                 #[cfg(feature = "strict-sha3")]
-                Protocol::Sha3 => sys::export(owner.base, b"PublicSha3Control\0")?,
+                Protocol::Sha3 | Protocol::Sha3Avx2 => {
+                    sys::export(owner.base, b"PublicSha3Control\0")?
+                }
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3Batch => sys::export(owner.base, b"PublicSha3BatchControl\0")?,
                 #[cfg(feature = "strict-kmac")]
@@ -174,6 +178,13 @@ impl Backend {
         if protocol == Protocol::Sha2ShaNi {
             let identity = sys::export(owner.base, b"PublicSha2ShaNiProtocol\0")?;
             if sys::call(identity, 0)? != super::sha2_wire::SHA_NI_PROTOCOL {
+                return Err(Error::Unsupported);
+            }
+        }
+        #[cfg(feature = "strict-sha3")]
+        if protocol == Protocol::Sha3Avx2 {
+            let identity = sys::export(owner.base, b"PublicSha3Avx2Protocol\0")?;
+            if sys::call(identity, 0)? != super::sha3_avx2_wire::PROTOCOL {
                 return Err(Error::Unsupported);
             }
         }
@@ -267,7 +278,7 @@ impl Backend {
                 Protocol::Sha2 | Protocol::Sha2ShaNi => self.run_sha2(3, None, 0, None)?,
                 Protocol::Sha2Batch => self.run_sha2_batch(3, None, 0, None)?,
                 #[cfg(feature = "strict-sha3")]
-                Protocol::Sha3 => self.run_sha3(3, None, 0, None)?,
+                Protocol::Sha3 | Protocol::Sha3Avx2 => self.run_sha3(3, None, 0, None)?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3Batch => self.run_sha3_batch(3, None, 0, None)?,
                 #[cfg(feature = "strict-kmac")]

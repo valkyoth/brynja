@@ -267,8 +267,13 @@ describe how the worker was developed, not outstanding constructor work.
   ownership negatives, nine worker and eighteen baseline C mutants pass on
   Linux/Windows. A placement-only Miri model rejects three memory regressions.
   See [worker observations](../assurance/windows-protection-observations/sha3-accelerated-worker-20261001.json).
-  The next SHA-3 step is the supported opt-in host constructor with production
-  image/trust admission. Current-image secret-storage/ABI qualification is still
+  The supported opt-in `sha3::Session::open_avx2` constructor now preserves
+  production image/trust admission and scalar defaults. Native debug/release
+  campaigns pass 1028 cases per route on AVX2 and the freshly rebuilt scalar
+  image; nine compiled encoder mutations, focused host Miri and packaged
+  feature/ownership negatives pass. See
+  [host observations](../assurance/windows-protection-observations/sha3-accelerated-host-20261001.json).
+  Current-image secret-storage/ABI qualification is still
   separate; the development image does not close that work.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and

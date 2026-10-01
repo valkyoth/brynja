@@ -1,10 +1,11 @@
 # Windows enclave SHA-3 streaming
 
-`brynja_strict::enclave::sha3` implements scalar SHA3-224/256/384/512,
-SHAKE128/256 and cSHAKE128/256 with retained enclave output. The version-seven
-worker and host API pass development tests on Windows x64 VBS. Production
+`brynja_strict::enclave::sha3` implements SHA3-224/256/384/512,
+SHAKE128/256 and cSHAKE128/256 with retained enclave output. The scalar
+version-seven and opt-in AVX2 version-fourteen workers and host API pass
+development tests on Windows x64 VBS. Production
 signing, independent review and final compiler/platform qualification remain
-pending. This is not a hardware/SIMD implementation or Windows ARM64 evidence.
+pending. This is not Windows ARM64 evidence.
 
 Use a reviewed version-seven worker image with the existing
 [consumer-managed image admission](windows-enclave-image-admission.md) workflow.
@@ -13,6 +14,33 @@ checks. It exposes no development bypass or consumer-supplied transport. A
 version-four SHA-256 or version-six SHA-2 image is not interchangeable with it.
 Low-level `brynja-crypto-cpu-std` consumers need both `strict-sha2` and
 `strict-sha3`; `brynja-strict` already enables both.
+
+## Explicit AVX2 selection
+
+`Session::open(image, policy)` remains scalar. Enable `brynja-strict`'s
+`acceleration` feature and call `Session::open_avx2(image, policy)` to require
+the distinct version-fourteen image. Direct hosted-crate users enable
+`strict-sha2` and `strict-sha3-acceleration`. No build-wide host AVX2 flags are
+required: the enclave image contains the specialized engine, and its baseline
+entry validates AVX, AVX2 and enabled OS vector state before entering it.
+
+The accelerated constructor keeps mandatory production image signature,
+identity and import checks. Wrong images and unavailable authority fail closed;
+there is no scalar fallback. Subsequent stream, customization, retained-output
+and rehash APIs are the same for both routes. The complete 112-byte accelerated
+header is excluded from output receipts, rather than the scalar 96-byte header.
+Feature loss can prevent specialized cleanup; migration and scheduler guarantees
+remain a deployment obligation, not something these feature checks establish.
+
+```rust,no_run
+# #[cfg(feature = "acceleration")]
+fn accelerated(image: &std::path::Path,
+    policy: &'static brynja_strict::enclave::ImagePolicy)
+    -> Result<brynja_strict::enclave::sha3::Session, brynja_strict::enclave::Error>
+{
+    brynja_strict::enclave::sha3::Session::open_avx2(image, policy)
+}
+```
 
 ## Stream and retain output
 
@@ -90,6 +118,12 @@ then sign and inspect the final image as described in the admission guide.
 Compile the independently reviewed final-image policy into the application.
 File hashing alone is not approval.
 
+For the separate AVX2 image, use
+`windows_enclave_sha3_accelerated_worker_build.py worker-avx2 --image` in the same
+scripts directory and follow the same signing/admission workflow.
+`test-windows-enclave-sha3-host-wire.py` checks the shipping host encoder against
+the actual worker decoder and rejects nine compiled encoder regressions.
+
 Author checks cover 628 cSHAKE vectors, 76 NIST bit vectors, 96 hashlib cases,
 512 retained rehash cases, lifecycle/cleanup mutants, focused Miri and packaged
 ownership negatives. Native enclave tests passed 1028 cases in both debug and
@@ -98,6 +132,13 @@ public synthetic data and the private test-only development constructor.
 The signing attempt emitted Microsoft's VBS compatibility warning; no clean
 production signing result is claimed. See the
 [source-bound development record](../assurance/windows-protection-observations/sha3-streaming-20260930.json).
+
+The subsequent [AVX2 host record](../assurance/windows-protection-observations/sha3-accelerated-host-20261001.json)
+records 1028 cases per route in each native debug/release profile, with a freshly
+built scalar regression image. Public constructors reject development signatures;
+private test-only construction enables synthetic-vector execution. Wrong image,
+hash, identity and output-shape tests pass. These checks do not qualify current
+image register/spill cleanup, dump exclusion, production signing or real secrets.
 
 ## Batching
 

@@ -94,8 +94,14 @@ fn export(output: Finalized<'_>, expected: &[u8]) -> Result<(), Error> {
 #[test]
 #[ignore = "requires reviewed development-signed version-seven worker on native Windows VBS"]
 fn development_sha3_streaming_campaign() -> Result<(), Box<dyn std::error::Error>> {
-    let location = std::path::PathBuf::from(std::env::var("BRYNJA_ENCLAVE_SHA3_IMAGE")?);
-    let expected = std::env::var("BRYNJA_ENCLAVE_SHA3_SHA256")?;
+    let (location, policy) = image("BRYNJA_ENCLAVE_SHA3")?;
+    campaign(Transport::development(&location, &policy)?, "SCALAR")
+}
+pub(super) fn image(
+    prefix: &str,
+) -> Result<(std::path::PathBuf, ImagePolicy), Box<dyn std::error::Error>> {
+    let location = std::path::PathBuf::from(std::env::var(format!("{prefix}_IMAGE"))?);
+    let expected = std::env::var(format!("{prefix}_SHA256"))?;
     if expected.len() != 64 {
         return Err("expected exact image hash".into());
     }
@@ -114,7 +120,12 @@ fn development_sha3_streaming_campaign() -> Result<(), Box<dyn std::error::Error
         .ok_or(Error::Bounds)?
         .copy_from_slice(b"PROB");
     let policy = ImagePolicy::reviewed_sha256(digest, family, image, 1, 1, [0, 0]);
-    let transport = Transport::development(&location, &policy)?;
+    Ok((location, policy))
+}
+pub(super) fn campaign(
+    transport: Transport,
+    route: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     let mut session = Session(Owner {
         transport,
         state: State::Ready,
@@ -210,7 +221,7 @@ fn development_sha3_streaming_campaign() -> Result<(), Box<dyn std::error::Error
     assert_eq!(session.state(), State::Quarantined);
     session.close()?;
     println!(
-        "WINDOWS_ENCLAVE_SHA3: PASS; cases={cases}; streamed_setup=PASS; retained_rehash=PASS; abandonment=PASS; development_only=true"
+        "WINDOWS_ENCLAVE_SHA3: PASS; cases={cases}; route={route}; streamed_setup=PASS; retained_rehash=PASS; abandonment=PASS; development_only=true"
     );
     Ok(())
 }

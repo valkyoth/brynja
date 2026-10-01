@@ -34,8 +34,11 @@ private version-fourteen resident/entry now has development VBS coverage: 57
 independent comparisons across 419 calls pass, alongside Linux/Windows mutation
 tests and a focused Miri placement model. Authority/owner placement and full-page
 destruction are explicit; baseline AVX2 admission precedes every specialized
-entry. The supported SHA-3 host route and current-image qualification remain
-unfinished. The scalar API, production library code and release gates are
+entry. The supported SHA-3 host route now exposes feature-gated `open_avx2`,
+retaining production image/trust checks with no fallback. Native debug/release
+campaigns pass 1028 cases per route for AVX2 and a freshly rebuilt scalar image;
+nine compiled host-encoder mutations and packaged feature negatives pass.
+Current-image qualification remains unfinished. Scalar defaults and release gates are
 unchanged by these component/worker steps. The SDK signing warning and
 development-only scope remain recorded.
 
@@ -55,8 +58,9 @@ The separate [SHA-3 enclave API](../docs/windows-enclave-sha3.md) implements all
 eight SHA-3/SHAKE/cSHAKE identities, incremental exact-bit output, streamed
 cSHAKE N/S setup and retained rehashing. Native development debug/release
 campaigns pass 1028 cases each. The version-seven worker uses scalar first-party
-Rust and requires the existing signed-image admission; no hardware/SIMD route,
-production signing success or independent qualification is claimed.
+Rust and requires the existing signed-image admission. The explicit
+version-fourteen AVX2 route is described above; neither route claims production
+signing success or independent qualification.
 
 The version-eight `enclave::kmac` API implements KMAC128/256 and KMACXOF128/256,
 streamed exact-length key/customization setup, retained-output rekeying,

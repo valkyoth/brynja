@@ -46,6 +46,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
@@ -97,6 +98,12 @@ not SIMD or parallel. See the [batch API and example](../../docs/windows-enclave
 With both `strict-sha2` and `strict-sha3`, `windows_enclave::sha3` adds the eight
 SHA-3/SHAKE/cSHAKE identities, streamed N/S and retained incremental output.
 Use the separate version-seven image and [SHA-3 guide](../../docs/windows-enclave-sha3.md).
+For explicit AVX2, enable `strict-sha2` and `strict-sha3-acceleration`, then use
+`windows_enclave::sha3::Session::open_avx2` with the version-fourteen image.
+The baseline enclave entry validates AVX/AVX2 and OS vector state; the host needs
+no build-wide AVX2 flags. Trust checks remain mandatory, scalar `open` stays
+scalar, and failed acceleration never selects a fallback. Development tests
+pass; production and independent qualification remain pending.
 With `strict-sha2` and `strict-kmac`, `windows_enclave::kmac` supports all four
 KMAC identities, streamed key/customization setup, retained-output rekeying and
 full-width tag verification. Its separate version-eight image keeps tags and

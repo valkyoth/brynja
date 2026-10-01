@@ -216,13 +216,18 @@ independent comparisons across 419 calls, including fractional cSHAKE prefixes,
 retained rehash, copy faults and quarantine. All captured source and generated
 artifact hashes reconcile locally; artifacts are saved outside `target/`.
 See [worker observations](../assurance/windows-protection-observations/sha3-accelerated-worker-20261001.json).
-The supported accelerated SHA-3 host constructor and current-image qualification
-remain unfinished. The SDK signing warning is retained; development execution
+The supported accelerated SHA-3 host constructor is now available through
+`sha3::Session::open_avx2` under explicit acceleration. Native debug/release tests
+pass 1028 cases per route for both AVX2 and a freshly rebuilt scalar image;
+production signature, image, identity and transactional-output rejections pass.
+The shipping encoder agrees with the actual worker decoder, with nine compiled
+regressions rejected. See [host observations](../assurance/windows-protection-observations/sha3-accelerated-host-20261001.json).
+Current-image qualification remains unfinished. The SDK signing warning is retained; development execution
 does not qualify production signing, secret placement or register/spill cleanup.
 
 ## Next integration boundary
 
-- Extend explicit opt-in selection beyond SHA-224/256 and bind each route to its
+- Extend explicit opt-in selection beyond SHA-224/256 and SHA-3/SHAKE/cSHAKE, binding each route to its
   trusted image policy. Scalar constructors remain scalar; failed acceleration
   must not silently choose scalar execution.
 - Keep backend owners and scratch in enclave storage. Preserve streamed

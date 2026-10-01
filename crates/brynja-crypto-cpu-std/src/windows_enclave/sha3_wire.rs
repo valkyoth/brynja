@@ -80,6 +80,25 @@ pub(super) fn receipt(
     length: usize,
     value: [usize; 7],
 ) -> Result<(), Error> {
+    receipt_width(low, operation, length, value, 96)
+}
+#[cfg(any(
+    test,
+    all(
+        target_os = "windows",
+        target_arch = "x86_64",
+        target_env = "msvc",
+        not(miri),
+        not(kani)
+    )
+))]
+pub(super) fn receipt_width(
+    low: usize,
+    operation: usize,
+    length: usize,
+    value: [usize; 7],
+    header_width: usize,
+) -> Result<(), Error> {
     if matches!(operation, 0 | 3) {
         return if value == [0; 7] {
             Ok(())
@@ -96,7 +115,7 @@ pub(super) fn receipt(
         || payloads != usize::from(length != 0)
         || exports != usize::from(operation == 25)
         || error != 0
-        || !super::protocol::regions(low, [header, payload], [96, 1024])
+        || !super::protocol::regions(low, [header, payload], [header_width, 1024])
     {
         return Err(Error::Protocol);
     }

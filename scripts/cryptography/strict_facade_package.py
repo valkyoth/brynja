@@ -85,6 +85,7 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         compiled = '\n'.join(f'pub type Compiled{name.title()} = brynja_strict::{name}::CompiledSession;'
                              for name in MODULES if name not in ('batch', 'enclave'))
         compiled += "\npub fn enclave_sha_ni_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha2::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha2::Session::open_sha_ni(path, policy) }"
+        compiled += "\npub fn enclave_sha3_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha3::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha3::Session::open_avx2(path, policy) }"
         selected = positive + ('\n' + compiled if features else '')
         source.write_text(selected)
         for profile in ([], ['--release']):
@@ -104,6 +105,7 @@ brynja-strict = { version = "=0.1.0", default-features = false }
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
                       for name in MODULES if name not in ('batch', 'enclave')]
             cases += [('fn probe() { let _ = brynja_strict::enclave::sha2::Session::open_sha_ni; }', 'E0599')]
+            cases += [('fn probe() { let _ = brynja_strict::enclave::sha3::Session::open_avx2; }', 'E0599')]
         for module in MODULES:
             for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
                 cases.append((f'fn require<T: {trait}>() {{}}\n'

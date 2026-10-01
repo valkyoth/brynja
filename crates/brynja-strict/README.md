@@ -38,6 +38,7 @@ choice, not certification or proof that all application code uses this profile.
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
@@ -68,7 +69,11 @@ On Windows, `acceleration` exposes the distinct `enclave::sha2::Session::open_sh
 constructor for SHA-224/256 only. It requires a reviewed version-thirteen image
 and the full SHA/SSE2/AVX/AVX2 bundle inside the enclave, not build-wide host flags.
 Scalar `open` stays scalar; unsupported identities, platforms and images reject
-without fallback. Other Windows algorithms remain scalar. Production and
+without fallback. `enclave::sha3::Session::open_avx2` separately requires the
+version-fourteen image and AVX/AVX2 plus enabled OS vector state. It covers all
+eight SHA-3/SHAKE/cSHAKE identities with the same retained-output interface;
+see the [SHA-3 guide](../../docs/windows-enclave-sha3.md). Other Windows algorithms
+remain scalar. Production and
 independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
 
 ## Usage

@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_WORKER_PUBLIC_VECTOR_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "1d71c6eea3d364b71dafcc356d4d995fd85295d9",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "shipping_sha3_acceleration_enabled": false,
+  "description": "Private version-14 AVX2 SHA-3/SHAKE/cSHAKE resident and worker, integrated with baseline C admission and fixed OS-copy seams. No shipping crate source, dependency or release-gate policy changed.",
+  "targets": ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"],
+  "rust_toolchain": "1.98.1",
+  "rust_target_features": ["avx", "avx2"],
+  "resident_tests_per_target": {
+    "component_tests": 11,
+    "resident_and_wire_tests": 5,
+    "compiled_wire_and_placement_mutants_rejected": 25,
+    "compiled_ownership_and_lifetime_negatives_rejected": 7,
+    "full_page_clear_after_drop": true,
+    "authority_outlives_borrowing_owner": true,
+    "all_eight_identities": true,
+    "fractional_streamed_cshake_prefix": true,
+    "retained_rehash_and_incremental_xof": true,
+    "decode_copy_unwind_quarantine": true
+  },
+  "placement_model": {
+    "toolchain": "nightly-2026-09-11",
+    "miriflags": "-Zmiri-strict-provenance",
+    "actual_placement_and_destruction_source": true,
+    "explicit_noncryptographic_lifetime_doubles": true,
+    "clean_and_restored_tests_pass": true,
+    "mutants_rejected": ["narrowed-provenance", "wrong-drop-order", "overlap"],
+    "cryptographic_or_enclave_execution": false
+  },
+  "worker_tests_per_target": {
+    "serialized_real_owner_test": 1,
+    "compiled_rust_mutants_rejected": 9,
+    "compiled_baseline_feature_gate_mutants_rejected": 10,
+    "compiled_actual_c_entry_mutants_rejected": 4,
+    "compiled_actual_protocol_mutants_rejected": 4,
+    "exact_generated_artifact_restoration": true,
+    "does_not_require_unrelated_sha_ni": true
+  },
+  "native_campaign": {
+    "windows_build": 26100,
+    "native_machine": "0x8664",
+    "hashlib_comparisons": 49,
+    "existing_independent_cshake_bit_oracle_comparisons": 8,
+    "comparisons": 57,
+    "worker_calls": 419,
+    "retained_page_events": 547,
+    "identities": ["SHA3-224", "SHA3-256", "SHA3-384", "SHA3-512", "SHAKE128", "SHAKE256", "cSHAKE128", "cSHAKE256"],
+    "hashlib_message_lengths": [0, 1, 135, 136, 168, 1025],
+    "malformed_or_copy_failure_cases": 7,
+    "retained_rehash": true,
+    "cancellation_and_reuse": true,
+    "terminal_quarantine": true,
+    "distinct_image_protocol": true,
+    "private_exports_absent": ["RetainedWork", "PublicRustBody", "PublicSha3Input", "PublicSha3Output"],
+    "protected_snapshot_clear_receipts": true,
+    "full_page_clear_before_release": true,
+    "enclave_deleted": true
+  },
+  "matching_resident_source_hashes": 243,
+  "matching_worker_build_source_hashes": 254,
+  "matching_native_capture_source_hashes": 337,
+  "matching_generated_artifact_hashes": 28,
+  "signed_image_sha256": "99ed652f5d898ad483436fdead4bdfc4a464ea117737665eba7399ebb9a103e6",
+  "signing": {
+    "development_only": true,
+    "signtool_reported_signed": true,
+    "signtool_exit_code": 2,
+    "warning": "SDK VBS compatibility warning retained; not a clean production signing result",
+    "temporary_certificate_and_private_key_removed": true
+  },
+  "artifacts": {
+    "release-reports/sha3-worker-products-20261001.tar.gz": "156fc2e60871cc9144c07e809f6d49593570b0e3d9709033de22ae1af732df07",
+    "release-reports/windows-sha3-worker-collected-20261001/sha3-worker-native.json": "96d9b226112d97074d5350dd2e9d923ba0e3183ab9a39d52146b44596d17ceee",
+    "release-reports/windows-sha3-worker-collected-20261001/sha3-worker-20261001/sha3-worker-results.json": "8e802cca8f2160463987b2153de7c50884d1d4614951ba4fc589c24e3150d809",
+    "release-reports/windows-sha3-worker-collected-20261001/sha3-resident-20261001/sha3-resident-results.json": "03a89dc7b61d919fc9f3a9ace77ab29472909de887696c91d7689f6d77c46fda",
+    "release-reports/windows-sha3-worker-linux-final-20261001/sha3-worker-results.json": "23f1df77866563ec62a88104c3d0a11d9103387f748138e493672e344d5bf522",
+    "release-reports/windows-sha3-resident-linux-final-20261001/sha3-resident-results.json": "4b8f1405fec4055859ac3ab55896112b7355f183a597fa5635d109ba798f57e1",
+    "release-reports/windows-sha3-resident-model-final-20261001/placement-model-results.json": "87264c228021648c39abb59a57341226c217bddf892779a0ad0f2587de5fbee7"
+  },
+  "limitations": [
+    "Restored development-server source overlay, not a clean exact Git checkout; captured source hashes reconciled locally",
+    "Public test vectors only; not independent review or real-secret qualification",
+    "No supported accelerated SHA-3 host constructor yet; existing scalar host API unchanged",
+    "Feature loss latches failure before specialized Rust including destruction; unsupported execution makes no cleanup claim",
+    "Current-image Windows ABI/register/spill, dump and wider failure qualification remain pending",
+    "No Windows ARM64, arbitrary CPU migration, production signing or production deployment qualification"
+  ]
+}

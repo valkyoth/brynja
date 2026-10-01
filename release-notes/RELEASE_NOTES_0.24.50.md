@@ -29,9 +29,15 @@ The private accelerated SHA-3/SHAKE/cSHAKE component adds exact-length streamed
 N/S prefix handling and retained output/rehash on the unchanged hardened AVX2
 engine. It rejects incomplete setup, stale authority and noncanonical operations
 without fallback. Component oracle, lifecycle, ownership-negative and compiled
-mutation checks are separate from native enclave execution; resident placement,
-the image entry and supported SHA-3 host route remain unfinished. The scalar API
-and production library code are unchanged by this component step.
+mutation checks are separate from native enclave execution. The subsequent
+private version-fourteen resident/entry now has development VBS coverage: 57
+independent comparisons across 419 calls pass, alongside Linux/Windows mutation
+tests and a focused Miri placement model. Authority/owner placement and full-page
+destruction are explicit; baseline AVX2 admission precedes every specialized
+entry. The supported SHA-3 host route and current-image qualification remain
+unfinished. The scalar API, production library code and release gates are
+unchanged by these component/worker steps. The SDK signing warning and
+development-only scope remain recorded.
 
 The separate [SHA-2 streaming enclave API](../docs/windows-enclave-sha2.md) now
 implements all six named identities and general SHA-512/t, bounded input

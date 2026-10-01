@@ -15,6 +15,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / 'assurance/windows-enclave-probe'
 FILES = ('sha3_accelerated.rs', 'sha3_accelerated_state.rs',
+         'sha3_accelerated_wire.rs',
          'sha3_accelerated_prefix.rs', 'sha3_accelerated_authority_tests.rs',
          'sha3_accelerated_prefix_model.rs', 'sha3_accelerated_prefix_tests.rs',
          'sha3_stream.rs', 'sha3_stream_state.rs', 'sha3_stream_tests.rs')

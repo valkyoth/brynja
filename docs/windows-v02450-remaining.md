@@ -260,9 +260,16 @@ describe how the worker was developed, not outstanding constructor work.
   It reuses the existing hardened engine source unchanged. Its differential,
   lifecycle, compiled-mutation and prefix-only Miri checks are recorded in
   [SHA-3 component observations](../assurance/windows-protection-observations/sha3-accelerated-component-20261001.json).
-  The next SHA-3 step is resident placement plus the feature-checked enclave
-  entry/image protocol and host constructor; this component alone is not a VBS
-  execution or protected-memory qualification claim.
+  The subsequent private version-14 resident and feature-checked worker now
+  execute inside development VBS: 57 independent comparisons across 419 calls
+  pass, including exact-bit cSHAKE setup, retained rehash and copy-failure
+  quarantine. Native placement/wire tests, 25 compiled regressions, seven
+  ownership negatives, nine worker and eighteen baseline C mutants pass on
+  Linux/Windows. A placement-only Miri model rejects three memory regressions.
+  See [worker observations](../assurance/windows-protection-observations/sha3-accelerated-worker-20261001.json).
+  The next SHA-3 step is the supported opt-in host constructor with production
+  image/trust admission. Current-image secret-storage/ABI qualification is still
+  separate; the development image does not close that work.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

@@ -13,6 +13,7 @@ use core::marker::PhantomData;
 use sha3_accelerated_state::State;
 
 pub use sha3_stream::Algorithm;
+pub mod sha3_accelerated_wire;
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Error {
     Identity,

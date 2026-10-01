@@ -202,9 +202,23 @@ synthetic byte sink. It checks independent bit concatenation and each completion
 proof field, but does not execute AVX2 or qualify the real engine, owner placement,
 Windows APIs or enclave memory. See the
 [component observations](../assurance/windows-protection-observations/sha3-accelerated-component-20261001.json)
-for results and saved artifacts. A feature-checked enclave entry, placement,
-image protocol and supported accelerated SHA-3 host constructor remain to be
-connected and tested; an ordinary Windows-process pass is not VBS execution.
+for results and saved artifacts. The subsequent private version-fourteen worker
+now places the authority and borrowing owner together in a retained page, drops
+them in order and clears the entire page. Its bounded decoder is distinct from
+the scalar protocol. Baseline C checks AVX/AVX2 and OS vector-state support before
+every specialized Rust entry, including destruction; rejection is terminal.
+It does not unnecessarily require SHA-NI.
+
+Resident/wire and worker mutation campaigns pass on Linux and ordinary Windows;
+a separately labeled Miri model checks actual placement/destruction with
+noncryptographic lifetime doubles. Native VBS development execution passes 57
+independent comparisons across 419 calls, including fractional cSHAKE prefixes,
+retained rehash, copy faults and quarantine. All captured source and generated
+artifact hashes reconcile locally; artifacts are saved outside `target/`.
+See [worker observations](../assurance/windows-protection-observations/sha3-accelerated-worker-20261001.json).
+The supported accelerated SHA-3 host constructor and current-image qualification
+remain unfinished. The SDK signing warning is retained; development execution
+does not qualify production signing, secret placement or register/spill cleanup.
 
 ## Next integration boundary
 

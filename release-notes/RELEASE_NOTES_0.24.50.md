@@ -24,9 +24,15 @@ the unchanged hardened streaming engine. Its separate version-19 decoder rejects
 wide identities and noncanonical metadata without portable fallback. Native
 Linux and ordinary Windows-process tests each pass 244 independent oracle cases,
 255 mixed activity masks, 29 compiled mutations and six ownership negatives.
-These are component tests, not VBS execution: resident placement, worker and host
-integration remain next. No independent-message SIMD or production qualification
-is claimed.
+These are component tests, distinct from the subsequent resident/worker campaign.
+The resident now destroys authority last and erases the full page. Its guarded
+VBS worker admits the entire SHA/SSE2/AVX/AVX2 bundle in baseline C before Rust
+entry. Linux/Windows placement and worker regressions, nineteen C admission
+mutations and a placement-only Miri rollback model pass. Development-signed VBS
+execution passes 40 comparisons across 466 calls, including mixed/sparse plans
+and terminal copy failures. The SDK signing warning remains recorded. Supported
+host integration and current-image qualification remain next; no independent-
+message SIMD or production qualification is claimed.
 
 The private sequential AVX2 ParallelHash component now covers all four fixed/XOF
 identities, streamed bit inputs, bounded-memory leaves and retained-output

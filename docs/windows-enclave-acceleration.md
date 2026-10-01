@@ -23,9 +23,39 @@ Native Linux and ordinary Windows-process tests each pass 12 tests, covering
 SHA-224/256 activity masks, output tails and lifecycle failures. Each campaign
 rejects 29 compiled runtime mutations and six ownership/lifetime negatives.
 See the [source-bound component observations](../assurance/windows-protection-observations/sha2-batch-accelerated-component-20261001.json).
-Resident full-page placement, VBS worker integration, a supported host constructor
-and current-image qualification remain next; this component result does not
-establish any of them.
+That component result does not itself establish resident placement, VBS execution
+or host integration. The subsequent private resident and worker are now tested
+separately, as described below; a supported host constructor remains next.
+
+## Sequential SHA-NI batch resident and worker
+
+The private version-19 resident places the authority and borrowing batch owner in
+aligned, disjoint regions of one exclusively borrowed page. It destroys the owner
+first, then authority, and volatile-clears all 4096 bytes, including padding and
+inactive storage. Linux and ordinary Windows tests pass 242 independent bit cases
+in each of eight slots, 255 mixed activity masks, cancellation/reuse, retained plus
+active-state destruction and three cleanup/quarantine mutations. Seven compiled
+ownership/lifetime negatives reject. A separate strict-provenance Miri model runs
+the actual placement/destruction code with noncryptographic lifetime doubles and
+rejects six provenance, ordering, overlap and constructor-rollback mutations. It
+does not execute the real assembly kernels or qualify OS residency.
+
+The worker now connects that resident to the guarded page and 64-KiB worker
+window in a development image. Baseline C requires the whole compiled
+SHA/SSE2/AVX/AVX2 bundle and OS XMM/YMM state before every specialized Rust entry,
+including destruction. Feature rejection is terminal, not permission to run an
+unsupported cleanup routine. Rust validates metadata before bounded payload
+copying; copy errors, wrong-page/repeated initialization and cleanup-receipt
+failures quarantine. Nine worker and nineteen baseline-C compiled mutations are
+rejected on Linux and Windows.
+
+The development-signed image passes 40 independent comparisons across 466 VBS
+calls, including partial bits, mixed/sparse plans, cancellation/reuse and seven
+metadata/OS-copy failure campaigns. The temporary signing certificate/key was
+removed. The SDK older-OS compatibility warning remains recorded, not a clean
+production signing pass. The [source-bound observations](../assurance/windows-protection-observations/sha2-batch-accelerated-worker-20261001.json)
+bind the retained artifacts. Supported host selection, current-image ABI/register/
+spill/dump qualification, wider SHA-2 routes and independent review remain open.
 
 ## Platform observations
 

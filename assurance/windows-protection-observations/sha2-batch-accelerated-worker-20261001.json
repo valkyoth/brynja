@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_SEQUENTIAL_SHA2_BATCH_SHA_NI_RESIDENT_WORKER_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "3de270b7",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "public_host_acceleration_available": false,
+  "multi_message_simd": false,
+  "description": "Private version-nineteen sequential SHA-NI SHA-224/256 batch resident/worker. Authority and borrowing owner share an exclusive page; baseline C admits the complete SHA/SSE2/AVX/AVX2 and OS XMM/YMM bundle before specialized Rust entry. Public-vector VBS development tests, not production qualification.",
+  "targets": [
+    "x86_64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc"
+  ],
+  "toolchain": "1.98.1",
+  "component_tests_per_target": {
+    "owner_and_wire_tests": 12,
+    "owner_independent_cases": 244,
+    "resident_tests": 3,
+    "resident_independent_bit_cases_each_in_eight_slots": 242,
+    "resident_mixed_activity_masks": 255,
+    "resident_mutants_rejected": 3,
+    "resident_ownership_negatives": 7,
+    "worker_tests": 1,
+    "worker_mutants_rejected": 9,
+    "baseline_c_mutants_rejected": 19
+  },
+  "miri": {
+    "toolchain": "nightly-2026-09-11",
+    "tests": 1,
+    "mutants_rejected": 6,
+    "scope": "Actual resident placement/destruction source with explicit noncryptographic lifetime doubles; tests constructor rollback, destruction order, nonoverlap and full-page provenance. No hardware kernel, real constructor internals or whole-image qualification."
+  },
+  "native_vbs": {
+    "windows_build": 26100,
+    "comparisons": 40,
+    "calls": 466,
+    "individual_cases": 38,
+    "mixed_and_sparse_batches": 2,
+    "negative_campaigns": 7,
+    "deleted": true,
+    "image_sha256": "3c7b24092db60215013b1c06caad1ba0e55cb55f7e3046bde86ea323fd218281",
+    "signed_with": "Temporary nonexportable self-signed development certificate; certificate and private key removed",
+    "signtool_exit": 2,
+    "signing_wrapper_exit": 1,
+    "signing_warning": "SDK VBS older-OS compatibility warning retained. Signature written and accepted by development VBS; not a production signing pass."
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "resident_source_files": 261,
+    "worker_source_files": 272,
+    "native_source_files": 369,
+    "generated_worker_artifacts": 30,
+    "source_and_generated_hashes_reconciled": true,
+    "windows_resident_binary_sha256": "099ff98de6c25a26b384d054af52b8542c28c6bdaa1c7092190997dc2d30fc8c",
+    "windows_worker_binary_sha256": "231b3fa4a4ebc78428cb951d730972aed7c3004c32bf6e0a478832ac42e8609d"
+  },
+  "artifacts": {
+    "windows-archive:sha2-batch-resident-20261001/sha2-batch-resident-results.json": "ec0f79c2463bf40e67ae35402ae82cfecdc47a96777bd4de2bd91e21323db928",
+    "windows-archive:sha2-batch-worker-20261001/sha2-batch-worker-build.json": "6ad3ff8be0b0d5823533e433fa2f342643051592dbea41e4576207152e1c4c07",
+    "windows-archive:sha2-batch-worker-20261001/sha2-batch-worker-results.json": "da764c119940a1ab18b3cbfa2a2b3ec30904c2df107a54390752cdadd8824201",
+    "windows-archive:sha2-batch-worker-20261001/native-results.json": "ebbf83b4c3455f0566fd0d82aacec71931f76eb673953474fe661abef4009fef",
+    "release-reports/sha2-batch-resident-linux-checked-20261001/sha2-batch-resident-results.json": "841cd3bd52b462e15eddd2b496de83616b04ccdcff1300b0bc8239bc0bf00583",
+    "release-reports/sha2-batch-worker-linux-checked-20261001/sha2-batch-worker-build.json": "265b32487db9bc06028263950709d1d686f4d4d04c88395e2d73f96ff7ed527f",
+    "release-reports/sha2-batch-worker-linux-checked-20261001/sha2-batch-worker-results.json": "d582ced2d6fcd816eea4b707ddf3b1ce4530cff632ec959c4020fbb30c966978",
+    "release-reports/sha2-batch-resident-miri-final-20261001/placement-model-results.json": "92ce4723bda09758c025e5994f4dfe76b28a24ecf37c8d1a92069b19e73c7331",
+    "release-reports/sha2-batch-resident-worker-products-20261001.tar.gz": "0c41298957d4131e2b062c32e93ff88d529b9f790682c3eff8dc0fd19ec2c0af"
+  },
+  "limitations": [
+    "Supported public accelerated SHA-2 batch host constructor and trusted image-policy integration remain pending",
+    "Sequential SHA-224/256 only; wide identities reject, no dedicated x86 SHA-512, independent-message SIMD or multicore claim",
+    "Current-image ABI/register/spill/dump and complete secret-storage qualification remain pending",
+    "No production signing, Windows ARM64, arbitrary migration, independent cryptographic review or certification claim",
+    "Shipping crate behavior, cryptographic kernels, dependencies and release-gate policy unchanged; candidate remains RETEST REQUIRED"
+  ]
+}

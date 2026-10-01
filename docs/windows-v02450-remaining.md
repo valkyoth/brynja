@@ -351,10 +351,17 @@ describe how the worker was developed, not outstanding constructor work.
   Linux and ordinary Windows-process tests: 244 independent cases in all eight
   slots, 255 mixed activity masks, 29 compiled mutations and six ownership
   negatives. Its separate version-nineteen decoder binds the narrow route;
-  wide identities reject without fallback. Next integrate full-page resident
-  placement, the feature-checked VBS worker and explicit host selection.
+  wide identities reject without fallback. The subsequent full-page resident
+  and feature-checked VBS worker now pass native development tests: 40 independent
+  comparisons across 466 VBS calls, three resident and nine worker mutations,
+  nineteen baseline-C mutations and seven resident ownership negatives. A focused
+  Miri placement/rollback model rejects six mutations; it is not kernel evidence.
+  Next integrate explicit supported host selection and trusted image identity.
+  Current-image qualification remains separate. See the
+  [worker observations](../assurance/windows-protection-observations/sha2-batch-accelerated-worker-20261001.json).
   Independent-message SIMD and wider SHA-2 acceleration remain separate work.
-  See the [component observations](../assurance/windows-protection-observations/sha2-batch-accelerated-component-20261001.json).
+  Earlier [component observations](../assurance/windows-protection-observations/sha2-batch-accelerated-component-20261001.json)
+  retain the distinct ordinary-process campaign.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

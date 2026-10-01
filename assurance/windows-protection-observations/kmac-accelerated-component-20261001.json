@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_KMAC_AVX2_COMPONENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "485a89d628c1d719be69324dab85b5deb9dacab5",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "description": "Private retained KMAC/KMACXOF component over existing AVX2 cSHAKE with streamed key/customization, exact completion, retained rekeying and constant-work verification. Ordinary native processes, not VBS.",
+  "algorithms": [
+    "KMAC128",
+    "KMAC256",
+    "KMACXOF128",
+    "KMACXOF256"
+  ],
+  "targets": [
+    "x86_64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc"
+  ],
+  "toolchain": "1.98.1",
+  "target_features": [
+    "avx",
+    "avx2"
+  ],
+  "unchanged_sources": [
+    "crates/brynja-mac-kmac/src/packer.rs",
+    "crates/brynja-hash-sha3/src/hardened/accelerated/engine.rs",
+    "assurance/windows-enclave-probe/sha3_accelerated_state.rs"
+  ],
+  "tests_per_target": {
+    "rust_tests": 16,
+    "independent_bit_cases": 256,
+    "retained_rekey_cases": 128,
+    "compiled_mutants_rejected": 22,
+    "ownership_lifetime_negatives": 6,
+    "source_restored_after_mutations": true
+  },
+  "miri": {
+    "toolchain": "nightly-2026-09-11",
+    "tests": 2,
+    "scope": "Actual incremental key-bytepad implementation with noncryptographic byte sink; no kernel, enclave, placement, or complete cleanup claim"
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout with source overlay, not a clean exact Git checkout",
+    "matching_windows_source_files": 291,
+    "matching_windows_generated_files": 21,
+    "windows_binary_sha256": "601a02c62f888657ca074325b93b7776f3ff7856b0833f91541eee505a3f4f81",
+    "linux_binary_sha256": "74a70a6e46a9c4e5e58614eac87c20745e01a35800f3aecdd4c46d3299636801"
+  },
+  "artifacts": {
+    "release-reports/kmac-accelerated-mutations-linux-20261001-c/kmac-accelerated-results.json": "d800143b6d8ba2d8b299b70eb1cbf4837fd5425697dd817a374573e82dad6660",
+    "release-reports/windows-kmac-component-collected-20261001/kmac-component-20261001/kmac-accelerated-results.json": "1685131ab1adf88cb8830c2f98c7292b589e94095cf6f67c1408239d76c91a8a",
+    "release-reports/kmac-key-model-miri-20261001/key-model-results.json": "b3c6e4a24756df8ee98b983dabcc720e7e1b3354447e480ae3a4c41f401369e1",
+    "release-reports/kmac-component-products-20261001.tar.gz": "80278c9fce65d3a8e7e7abdd83f75ad4c86aea5feb4737e66fded50913c139ee",
+    "release-reports/kmac-accelerated-mutations-linux-20261001-c.log": "af0400ce8e4b87c7ce6a539198251086861e57bb11a560393f21d7968fb441a4",
+    "release-reports/kmac-key-model-miri-20261001.log": "4340e4df86a2c27a6ef5c5109c6451bee7271b571574eb40ef1e47e0766bc262"
+  },
+  "limitations": [
+    "Component only: no accelerated KMAC enclave image, wire protocol, resident placement or supported host constructor yet",
+    "Whole-allocation erasure including inactive variants/padding and current-image ABI/register/spill/dump review remain pending",
+    "No production signing, Windows ARM64, arbitrary migration, independent cryptographic review or certification claim",
+    "Existing scalar worker, shipping APIs, kernels, dependencies and release-gate policy unchanged",
+    "Candidate remains RETEST REQUIRED"
+  ]
+}

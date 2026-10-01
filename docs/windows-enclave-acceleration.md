@@ -225,6 +225,44 @@ regressions rejected. See [host observations](../assurance/windows-protection-ob
 Current-image qualification remains unfinished. The SDK signing warning is retained; development execution
 does not qualify production signing, secret placement or register/spill cleanup.
 
+## Private AVX2 KMAC component
+
+The private KMAC128/256 and KMACXOF128/256 component now reuses the existing
+accelerated cSHAKE state and the unchanged first-party KMAC suffix packer. It
+streams exact-length customization and keys through bounded snapshots, including
+fractional-bit fragments. Key bytepad completion checks both consumed input and
+the exact padded length. Key/tag strength checks remain mandatory. Fixed KMAC
+binds `right_encode(L)` while KMACXOF binds `right_encode(0)`.
+
+The affine owner retains the exact AVX2 authority. Every operation, including
+non-permuting export, cancel and verification, checks authority; copy failure,
+unwind, stale sequence and backend failure clear active/retained state and latch
+quarantine. Retained outputs can become the next key without host export.
+Verification releases only its explicit comparison result; mismatch clears the
+tag but permits reuse. The cSHAKE engine and permutation sources are unchanged.
+
+Linux and Windows native **component** tests pass 256 independent arbitrary-bit
+oracle cases, 128 cross-identity retained rekeys, lifecycle/strength tests and the
+suffix packer's own framing tests. Twenty-two compiled mutants and six
+ownership/lifetime negatives are rejected on both targets. A focused Miri model
+executes the actual incremental key packer against a noncryptographic byte sink;
+it does not execute AVX2 or prove enclave placement. See
+[component observations](../assurance/windows-protection-observations/kmac-accelerated-component-20261001.json).
+
+This is not an enclave image, a supported accelerated KMAC host constructor, or
+production qualification. Resident authority/owner placement, a distinct wire
+protocol, feature-checked C entry, enclave execution and host integration remain
+next. Full-allocation clearing (including inactive variants/padding), current-image
+ABI/register/spill/dump review and independent retest remain separate obligations.
+The existing scalar KMAC worker and shipping APIs are unchanged.
+
+Author commands (native AVX2 host required):
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-kmac-accelerated.py component-results
+python3 scripts/cryptography/test-windows-enclave-kmac-key-model.py key-model-results --miri-toolchain nightly-2026-09-11
+```
+
 ## Next integration boundary
 
 - Extend explicit opt-in selection beyond SHA-224/256 and SHA-3/SHAKE/cSHAKE, binding each route to its

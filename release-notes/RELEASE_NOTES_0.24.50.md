@@ -71,6 +71,13 @@ the decision. The public constructor still requires production image trust.
 This completes scalar host integration, not independent or production
 qualification, compiler/register qualification, or hardware/SIMD coverage.
 
+The separate private AVX2 KMAC component now streams keys/customization over the
+existing accelerated cSHAKE engine and unchanged KMAC suffix packer. Native
+Linux/Windows component tests pass 256 independent bit cases, 128 retained rekeys,
+22 compiled mutations and six ownership/lifetime negatives. A focused Miri
+key-prefix model passes. Resident placement, enclave image/entry and the opt-in
+host route remain unfinished; this does not add shipping KMAC acceleration yet.
+
 The version-nine `enclave::tuplehash` host interface now provides all four
 TupleHash/TupleHashXOF identities, exact-length item writers, retained-output
 rehashing and transactional explicit public export. Its encoder shares source

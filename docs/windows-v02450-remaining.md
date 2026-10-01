@@ -275,6 +275,14 @@ describe how the worker was developed, not outstanding constructor work.
   [host observations](../assurance/windows-protection-observations/sha3-accelerated-host-20261001.json).
   Current-image secret-storage/ABI qualification is still
   separate; the development image does not close that work.
+  The next private KMAC AVX2 component now passes native Linux/Windows tests:
+  256 independent bit cases, 128 retained rekeys, 22 compiled mutants and six
+  ownership/lifetime negatives. Streamed key/customization completion, full-strength
+  tags, XOF suffixes, verification and terminal authority failures are covered;
+  a focused actual-key-prefix Miri model passes with a noncryptographic sink.
+  See [KMAC component observations](../assurance/windows-protection-observations/kmac-accelerated-component-20261001.json).
+  KMAC resident placement, wire/feature-checked worker image and supported host
+  constructor remain next; no accelerated KMAC enclave execution is claimed yet.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

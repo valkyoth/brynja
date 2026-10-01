@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_TUPLEHASH_AVX2_RESIDENT_WORKER_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "415a0471",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "public_host_acceleration_available": false,
+  "description": "Private version-sixteen retained TupleHash/TupleHashXOF worker with separately placed authority/owner, bounded wire metadata and baseline C feature admission before AVX2 Rust entry. Development-only public-vector VBS execution, not production qualification.",
+  "targets": ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"],
+  "toolchain": "1.98.1",
+  "component_tests_per_target": {
+    "owner_tests": 9,
+    "resident_wire_tests": 5,
+    "independent_bit_cases": 272,
+    "wire_retained_composition_pairs": 16,
+    "resident_wire_mutants_rejected": 29,
+    "resident_ownership_negatives": 7,
+    "worker_tests": 1,
+    "worker_mutants_rejected": 9,
+    "baseline_c_mutants_rejected": 18
+  },
+  "miri": {
+    "toolchain": "nightly-2026-09-11",
+    "tests": 1,
+    "mutants_rejected": 3,
+    "scope": "Actual placement/destruction source with noncryptographic lifetime doubles. No kernel/enclave/whole-image qualification."
+  },
+  "native_vbs": {
+    "windows_build": 26100,
+    "comparisons": 50,
+    "calls": 853,
+    "bit_cases": 32,
+    "retained_composition_pairs": 16,
+    "incremental_xof_cases": 2,
+    "negative_campaigns": 7,
+    "image_sha256": "cdf81bd00355bb5f7659cb17aa343737b3cef7bc1b5b62450d6d5f810b92f878",
+    "signed_with": "Temporary self-signed development certificate; certificate and private key removed",
+    "signtool_exit": 2,
+    "signing_wrapper_exit": 1,
+    "signing_warning": "SDK VBS support/older-OS compatibility warning retained; signature written and image subsequently loaded by development VBS, not a production signing pass."
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "resident_source_files": 255,
+    "worker_source_files": 266,
+    "native_source_files": 353,
+    "generated_worker_artifacts": 34,
+    "source_and_generated_hashes_reconciled": true,
+    "windows_resident_binary_sha256": "32336fe80992c10f5deaffea47d9161c37e7a2968fa1b2c23f74decdac29d6d4",
+    "windows_worker_binary_sha256": "2d5d38d5d6a30999d64aabdcbf6a095f228e63f6b014873c882077f43b5c29d7"
+  },
+  "artifacts": {
+    "release-reports/tuple-component-wire-linux-20261001/tuple-accelerated-results.json": "3b0e0744808febcb141a68f49bfefdd7dc3e18bfb433100e291502077f45333e",
+    "release-reports/tuple-resident-linux-final2-20261001/tuple-resident-results.json": "4bb5024750ce1656ecb5422c97d89e974e32facce9329adcd34fa10027af46fc",
+    "release-reports/tuple-worker-linux-20261001/tuple-worker-results.json": "04716708b63ed1644a1a5c7c868979fbede803c8371a8d1ff0075640d0d45e3f",
+    "release-reports/tuple-placement-miri-20261001/placement-model-results.json": "37cd513498fe7cae8dba61358743d6bf61e6e7e65b3ccc07c937290c162ccc68",
+    "release-reports/windows-tuple-worker-collected-20261001/tuple-worker-20261001/native-results.json": "3d874eb324ed424ca27deff936b8490625cdf579e7526eb8a01ff16bcdc880e7",
+    "release-reports/windows-tuple-worker-collected-20261001/tuple-worker-20261001/tuple-worker-build.json": "d4d36ae8e48a31a75fda8f6bd5ab1355113d85e943531dfaf496fdbc9781ccc9",
+    "release-reports/windows-tuple-worker-collected-20261001/tuple-worker-20261001/tuple-worker-results.json": "5d42ad1d216c65199e2bc3393a9123911329362aa5b6dedcd3318a13657024d1",
+    "release-reports/windows-tuple-worker-collected-20261001/tuple-resident-20261001/tuple-resident-results.json": "abaa191a0f8fac036fc503de383cac9c6bdb529c4d05e5827df569f36528f668",
+    "release-reports/tuple-resident-worker-products-20261001.tar.gz": "4935da8956b39311b470fcf60c51cf6e96b0382bbe74325b53d876d7712831a1"
+  },
+  "limitations": [
+    "Public opt-in accelerated TupleHash host constructor and production image-policy integration still pending",
+    "Current-image ABI/register/spill/dump and complete secret-storage qualification remain pending; model tests alone do not establish these",
+    "No production signing, Windows ARM64, arbitrary migration, independent cryptographic review or certification claim",
+    "Shipping crate behavior, kernel implementations, dependencies and release-gate policy unchanged",
+    "Candidate remains RETEST REQUIRED"
+  ]
+}

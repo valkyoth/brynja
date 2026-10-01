@@ -9,6 +9,7 @@ use brynja_hash_sha3::{Fips202BitString as Bits, left_encode_u128, right_encode_
 use core::marker::PhantomData;
 mod tuple_accelerated_packer;
 mod tuple_accelerated_state;
+pub mod tuple_accelerated_wire;
 use brynja_crypto_cpu::static_execution::{Authority, Kernel};
 use tuple_accelerated_packer::Packer;
 use tuple_accelerated_state::State;

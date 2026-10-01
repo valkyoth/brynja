@@ -339,15 +339,39 @@ and rejects three compiled mutations; it does not execute AVX2 or VBS.
 All Windows source and generated artifact hashes reconcile locally. See
 [TupleHash component observations](../assurance/windows-protection-observations/tuple-accelerated-component-20261001.json).
 
-The accelerated resident/worker protocol, native VBS image, public host route
-and current-image ABI/register/spill/dump qualification remain unfinished.
-Shipping APIs, scalar defaults, dependencies and release-gate policy are unchanged.
+The subsequent private version-sixteen worker now places the authority and owner
+in separate aligned slots in one retained page. It destroys the borrowing owner
+first, then clears the complete page including inactive variants/padding.
+Its distinct 112-byte header rejects scalar versions and noncanonical route or
+reserved fields before payload copying. Baseline C admits the complete AVX2/OS
+state bundle before every specialized Rust entry and latches feature rejection.
+
+Linux and Windows resident tests cover 272 independent bit cases and all sixteen
+wire-level retained compositions, rejecting 29 wire/placement mutants and seven
+ownership/lifetime probes. Worker tests reject nine transport/cleanup mutations
+and eighteen baseline-C admission mutations. A focused Miri placement model
+rejects narrowed provenance, overlapping objects and reversed destruction order.
+
+The development-signed image passes 50 independent public-vector comparisons
+across 853 VBS calls: all four identities, fractional customization/items,
+retained composition, incremental XOF output and seven metadata/OS-copy rejection
+campaigns. Source, generated artifacts and executed binaries reconcile locally.
+The SDK compatibility warning is retained, not called clean production signing;
+the temporary development certificate and private key were removed. See
+[TupleHash worker observations](../assurance/windows-protection-observations/tuple-accelerated-worker-20261001.json).
+
+The public accelerated host route and current-image ABI/register/spill/dump
+qualification remain unfinished. Shipping APIs, scalar defaults, dependencies
+and release-gate policy are unchanged.
 
 Author commands (the component run requires a native AVX2 host):
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-tuple-accelerated.py tuple-component-results
 python3 scripts/cryptography/test-windows-enclave-tuple-packer.py tuple-packer-results --miri-toolchain nightly-2026-09-11
+python3 scripts/cryptography/test-windows-enclave-tuple-resident.py tuple-resident-results --attest-native-bundle
+python3 scripts/cryptography/test-windows-enclave-tuple-resident-model.py tuple-placement-results
+python3 scripts/cryptography/test-windows-enclave-tuple-worker.py tuple-worker-results --attest-native-bundle
 ```
 
 ## Next integration boundary

@@ -299,8 +299,13 @@ describe how the worker was developed, not outstanding constructor work.
   ownership/lifetime negatives. A focused Miri model of the actual bit packer
   passes and rejects three mutants; it does not run AVX2 or VBS. See
   [TupleHash component observations](../assurance/windows-protection-observations/tuple-accelerated-component-20261001.json).
-  Its accelerated resident, worker/image and supported host constructor remain
-  the next integration work.
+  Its subsequent version-sixteen resident/worker now passes Linux/Windows
+  mutations and a focused Miri placement model. Development VBS execution passes
+  50 public-vector comparisons across 853 calls, including retained composition
+  and incremental XOF output. See
+  [TupleHash worker observations](../assurance/windows-protection-observations/tuple-accelerated-worker-20261001.json).
+  The supported accelerated host constructor and current-image qualification
+  remain the next work.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

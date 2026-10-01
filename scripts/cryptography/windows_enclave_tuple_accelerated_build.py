@@ -11,7 +11,8 @@ import windows_enclave_tuple_stream_build as scalar
 
 ROOT, SOURCE = base.ROOT, base.SOURCE
 FILES = ('tuple_accelerated.rs', 'tuple_accelerated_state.rs',
-         'tuple_accelerated_packer.rs', 'tuple_accelerated_authority_tests.rs')
+         'tuple_accelerated_packer.rs', 'tuple_accelerated_authority_tests.rs',
+         'tuple_accelerated_wire.rs')
 
 
 def build(directory, target):

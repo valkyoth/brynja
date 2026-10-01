@@ -23,8 +23,13 @@ identities over the existing AVX2 cSHAKE engine, with exact streamed item framin
 and retained composition. Linux/Windows component tests pass 272 independent bit
 cases and 128 retained compositions, reject 22 compiled mutants and six ownership
 violations; a focused bit-packer Miri model rejects three mutants. These are
-ordinary native-process tests, not enclave execution. Accelerated TupleHash
-placement, worker/image, host API and current-image qualification remain pending.
+ordinary native-process tests, not enclave execution. The subsequent private
+version-sixteen resident/worker now passes Linux/Windows wire, placement and
+transport mutations plus a focused Miri placement model. Its development-signed
+image passes 50 independent public-vector comparisons across 853 VBS calls,
+including retained compositions and incremental XOF output. The accelerated
+host API and current-image qualification remain pending; the SDK signing warning
+is retained and production signing remains unqualified.
 
 A separate [public-vector VBS acceleration diagnostic](../docs/windows-enclave-acceleration.md)
 now executes five existing hardened SHA-NI/AVX2 kernels natively, with 496

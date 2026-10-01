@@ -21,10 +21,15 @@ No release-gate policy is being changed.
 The private sequential accelerated SHA-3 batch component preserves eight-slot
 streaming, exact-bit cSHAKE setup, retained outputs, work budgets and sparse
 ordering over the unchanged single-state AVX2 engine. Its separate version-17
-decoder binds the route and complete plan. Component and mutation testing are
-not VBS execution: the batch resident/worker image, host constructor and cleanup
-qualification remain pending. Multi-message SIMD and multicore batching are
-separate outstanding work; no shipping batch API or default has changed.
+decoder binds the route and complete plan. The subsequent private resident/worker
+places authority and state together, erases the full allocation and admits the
+complete CPU/OS bundle in baseline C before specialized entry. Linux/Windows
+placement, mutation and ownership tests plus placement-only Miri pass; the
+development-signed image passes 50 public-vector comparisons across 614 VBS
+calls. The supported host constructor and whole-image cleanup qualification
+remain pending. Multi-message SIMD and multicore batching are separate outstanding
+work; no shipping batch API or default has changed. The SDK signing compatibility
+warning remains recorded; production signing is not qualified.
 
 The private accelerated TupleHash component now covers all four fixed/XOF
 identities over the existing AVX2 cSHAKE engine, with exact streamed item framing

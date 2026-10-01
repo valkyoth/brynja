@@ -72,6 +72,16 @@ describe how the worker was developed, not outstanding constructor work.
 
 ## Broader implementation and qualification
 
+- The private sequential AVX2 SHA-3 batch resident/worker now passes native
+  Windows development execution (50 comparisons, 614 VBS calls), full-page
+  placement/destruction checks, copy/quarantine mutations and baseline CPU/OS
+  admission tests. Its placement-only Miri model is not kernel qualification.
+  Next connect this version-seventeen route to the supported affine batch host
+  constructor and trusted image policy, with encoder parity, debug/release and
+  packaged ownership tests. Independent-message SIMD, multicore batching and
+  current-image cleanup qualification remain separate work. See the
+  [batch worker observations](../assurance/windows-protection-observations/sha3-batch-accelerated-worker-20261001.json).
+
 - Scalar SHA-2 streaming, bit tails, all named identities and general SHA-512/t
   are implemented in the [separate version-six worker/API](windows-enclave-sha2.md).
   Scalar ParallelHash host integration is also implemented; complete wider qualification.

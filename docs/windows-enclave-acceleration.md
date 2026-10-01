@@ -402,8 +402,8 @@ not multi-message SIMD or multicore throughput. Those integrations remain open.
 An explicitly borrowed authority is checked at every operation, including
 zero-work cancellation and sealing, and again after the fixed copy seam. Failures
 and recoverable unwind clear owned state and quarantine the authority; successful
-cancellation/export permit reuse. Drop revokes the authority. The later placement
-adapter must also erase the entire allocation, including padding and inactive
+cancellation/export permit reuse. Drop revokes the authority. The resident
+adapter below also erases the entire allocation, including padding and inactive
 enum storage; field cleanup alone is not claimed as that guarantee.
 
 A separate version-seventeen, 304-byte metadata decoder binds the acceleration
@@ -414,9 +414,10 @@ oracle rather than comparing AVX2 with itself. Native Linux/Windows component
 results are recorded in
 [batch component observations](../assurance/windows-protection-observations/sha3-batch-accelerated-component-20261001.json).
 
-The resident/worker image, baseline CPU/OS admission, supported host constructor,
-native VBS execution and whole-image cleanup qualification remain pending for
-this batch route. No shipping API or release gate changes in this component step.
+The subsequent private resident/worker image and baseline CPU/OS admission now
+pass development testing. The supported host constructor and whole-image cleanup
+qualification remain pending. No shipping API or release gate changes in these
+private integration steps.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha3-batch-accelerated.py batch-component-results
@@ -424,6 +425,42 @@ python3 scripts/cryptography/test-windows-enclave-sha3-batch-accelerated.py batc
 
 This standalone test binary requires a native AVX2-compatible host. It is not a
 portable feature detector, VBS capture or production-signing result.
+
+### Batch resident and native development worker
+
+The version-seventeen worker places its authority and borrowing batch owner in
+one exclusive aligned page, destroys the owner before its authority, and erases
+the full allocation before release. Only pointer metadata remains in the worker
+static. Copied request and payload buffers stay within the admitted worker
+window and are cleared before the public completion receipt. Rejected copies,
+wrong page/window identity, repeated initialization and malformed requests
+quarantine retained state. Baseline C checks the complete AVX2/OS-managed vector
+state bundle before any specialized Rust entry, including destruction; rejected
+authority is terminal. No fallback route is provided.
+
+Linux and Windows tests each pass 604 independent cases through resident wire
+placement, three resident mutations, seven lifetime/ownership rejection probes,
+nine worker mutations and eighteen baseline C admission/protocol mutations.
+Placement-only Miri runs the actual placement/destruction source against explicit
+noncryptographic lifetime doubles and rejects three unsafe memory regressions.
+It does not interpret the hardware kernels or qualify the enclave image.
+
+The development-signed image passes 50 independent public-vector comparisons
+across 614 native VBS calls, covering all eight identities, fractional setup and
+message/output bits, large setup/input, mixed and sparse slot plans, cancellation
+and reuse, and seven malformed-metadata/OS-copy rejection campaigns. See
+[batch worker observations](../assurance/windows-protection-observations/sha3-batch-accelerated-worker-20261001.json).
+The temporary signing certificate and private key were removed. The SDK
+compatibility warning is retained; this is not successful production signing.
+This remains sequential per-item AVX2, not independent-message SIMD or multicore.
+Public host selection, current-image ABI/register/spill/dump qualification,
+independent review and production deployment remain outstanding.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sha3-batch-resident.py batch-resident-results
+python3 scripts/cryptography/test-windows-enclave-sha3-batch-resident-model.py batch-placement-results
+python3 scripts/cryptography/test-windows-enclave-sha3-batch-worker.py batch-worker-results --attest-native-bundle
+```
 
 ## Next integration boundary
 

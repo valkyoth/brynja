@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "status": "EXPLICIT_AVX2_TUPLEHASH_HOST_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "9e197005",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "description": "Opt-in AVX2 TupleHash/TupleHashXOF session with mandatory production image trust and distinct version-sixteen protocol. Private development-only native execution; public constructors reject development signatures. Scalar open remains version nine.",
+  "host_features": [
+    "strict-sha2",
+    "strict-tuplehash-acceleration"
+  ],
+  "facade_feature": "acceleration",
+  "image_protocol": 16,
+  "scalar_protocol": 9,
+  "rust_toolchain": "1.98.1",
+  "native_target": "x86_64-pc-windows-msvc",
+  "image_target_features": [
+    "avx",
+    "avx2"
+  ],
+  "native_environment": {
+    "windows_build": 26100,
+    "processor": "AMD EPYC 9V45",
+    "vbs": true,
+    "hvci": true,
+    "secure_boot": false,
+    "test_signing": true,
+    "production_signing": false
+  },
+  "native_campaigns": {
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "avx2_cases_per_profile": 230,
+    "scalar_cases_per_profile": 230,
+    "production_signature_rejections": true,
+    "scalar_image_rejected_for_avx2": true,
+    "wrong_hash_and_identity_rejected": true,
+    "invalid_output_unchanged_and_quarantined": true,
+    "streamed_item_boundaries": true,
+    "retained_composition": true,
+    "incremental_xof": true,
+    "cancellation_and_reuse": true,
+    "forgotten_item_quarantines": true,
+    "explicit_close": true,
+    "windows_scoped_clippy": "PASS"
+  },
+  "other_tests": {
+    "all_feature_enclave_host_tests": 56,
+    "focused_miri_host_tests": 9,
+    "miri_scope": "Safe host owner, mock transport and receipt/header logic, not native VBS or assembly kernels",
+    "shipping_encoder_actual_worker_parity": "PASS",
+    "compiled_encoder_mutants_rejected": 10,
+    "packaged_facade_export_ownership_negatives": 439,
+    "packaged_avx2_constructor": "Feature-on positive and feature-off negative",
+    "packaged_strict_debug_release_and_doctests": "PASS"
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "matching_host_source_hashes": 545,
+    "matching_scalar_worker_source_hashes": 169,
+    "matching_scalar_generated_artifacts": 21,
+    "all_command_log_hashes_verified": true,
+    "host_manifest_member": "tuple-host-capture-20261001/host-results.json",
+    "host_manifest_sha256": "e1fafef5627153f1e51bc48ed4a2acde0e02bb17289ad72f4bb5aa71be1649dc",
+    "avx2_worker_binding": "Unchanged image and worker from tuple-accelerated-worker-20261001.json; prior capture retained separately"
+  },
+  "archive_members_sha256": {
+    "tuple-host-capture-20261001/binaries/brynja_crypto_cpu_std-bd7c3a2d6b6cd7a8.exe": "967224fbe576ae41366dff1a0e8cad5fb5f453d9c5c70bbbe3d8aaa7f809cdb4",
+    "tuple-host-capture-20261001/binaries/brynja_crypto_cpu_std-b649b5b524a2c61c.exe": "b9c8eb3bca8ce454663d12f3edb51c19d6874496a17c10ba8ab2634781c95cd6",
+    "tuple-host-capture-20261001/avx2-signed.dll": "cdf81bd00355bb5f7659cb17aa343737b3cef7bc1b5b62450d6d5f810b92f878",
+    "tuple-host-capture-20261001/scalar-signed.dll": "1fb08e5810a93cc57259dca56c160d82a1b249ffef12ac4b7452869da285f337",
+    "tuple-host-capture-20261001/capture-tuple-host-20261001.py": "6a3687a8866b4e0e60eb51e9ac8966db9e81e593001b7afb60771410b17b66a1"
+  },
+  "artifacts": {
+    "release-reports/tuple-host-products-20261001.tar.gz": "27ca6f4355fde5dc0b6b87bbdb3855d7c8c912582144d401040d1a79c9637ad4",
+    "release-reports/tuple-host-wire-linux-20261001/tuple-host-wire-results.json": "f3995db3b7995b3e77320aab0c43bcc68f45a95440314016cad8e7486f2126dc",
+    "release-reports/tuple-host-miri-20261001.log": "55bab1e021ef715a41528c9326641cfc07fe6f6e7e56092516fd5c50d9c17e88",
+    "release-reports/tuple-host-package-20261001.log": "3635a1bb116a953eeee02eaed7c08dc0c9dbc70114119f4678b59b3f4a9eb4ae",
+    "release-reports/tuple-host-all-feature-20261001.log": "86c8407bafac8f46b354bffffb6b7fd866c287bf6580ca149660519252276249"
+  },
+  "signing": {
+    "scalar_signtool_exit_code": 2,
+    "warning": "SDK VBS compatibility warning retained; not a clean production-signing result",
+    "temporary_scalar_signing_certificate_and_key_removed": true
+  },
+  "limitations": [
+    "Public synthetic-vector author regression evidence, not independent qualification or approval for real secrets",
+    "Current-image ABI/register/spill, protected-stack/dump and wider failure qualification remain pending",
+    "No Windows ARM64, dedicated x86 SHA-512, arbitrary CPU migration or production-signing qualification",
+    "Accelerated batching and multicore integration remain pending",
+    "Release-gate policy unchanged; candidate remains RETEST REQUIRED"
+  ]
+}

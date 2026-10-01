@@ -99,6 +99,7 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         compiled += "\npub fn enclave_sha3_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha3::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha3::Session::open_avx2(path, policy) }"
         selected = positive + ('\n' + compiled if features else '')
         if features:
+            selected += "\npub fn enclave_tuple_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::tuplehash::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::tuplehash::Session::open_avx2(path, policy) }"
             selected += "\npub fn enclave_kmac_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::kmac::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::kmac::Session::open_avx2(path, policy) }"
         source.write_text(selected)
         for profile in ([], ['--release']):
@@ -121,6 +122,7 @@ brynja-strict = { version = "=0.1.0", default-features = false }
             cases += [('fn probe() { let _ = brynja_strict::enclave::sha3::Session::open_avx2; }', 'E0599')]
         for module in MODULES:
             if module == 'enclave' and not features:
+                cases.append(('fn probe() { let _ = brynja_strict::enclave::tuplehash::Session::open_avx2; }', 'E0599'))
                 cases.append(('fn probe() { let _ = brynja_strict::enclave::kmac::Session::open_avx2; }', 'E0599'))
             for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
                 cases.append((f'fn require<T: {trait}>() {{}}\n'

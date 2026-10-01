@@ -42,6 +42,7 @@ choice, not certification or proof that all application code uses this profile.
 | Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS KMAC/KMACXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Sequential scalar version-eleven worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |
@@ -78,6 +79,9 @@ see the [SHA-3 guide](../../docs/windows-enclave-sha3.md).
 and the same AVX/AVX2 plus OS vector-state bundle. All four identities preserve
 streamed key/customization setup, retained rekeying and verification without
 host secret-output slices. Scalar `open` is unchanged; no fallback is allowed.
+`enclave::tuplehash::Session::open_avx2` requires the distinct version-sixteen
+image and the same complete AVX/AVX2/OS bundle. It preserves streamed tuple items,
+retained composition and incremental XOF output; default `open` remains scalar.
 Other Windows algorithms remain scalar. Production and
 independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
 

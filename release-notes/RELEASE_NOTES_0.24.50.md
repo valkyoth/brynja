@@ -28,8 +28,11 @@ version-sixteen resident/worker now passes Linux/Windows wire, placement and
 transport mutations plus a focused Miri placement model. Its development-signed
 image passes 50 independent public-vector comparisons across 853 VBS calls,
 including retained compositions and incremental XOF output. The accelerated
-host API and current-image qualification remain pending; the SDK signing warning
-is retained and production signing remains unqualified.
+host API now exposes opt-in `open_avx2` with mandatory trust and a distinct image
+identity. Native debug/release host tests pass 230 cases per scalar/AVX2 route;
+encoder mutations, focused Miri and packaged feature gating also pass.
+Current-image qualification remains pending; the SDK signing warning is retained
+and production signing remains unqualified.
 
 A separate [public-vector VBS acceleration diagnostic](../docs/windows-enclave-acceleration.md)
 now executes five existing hardened SHA-NI/AVX2 kernels natively, with 496

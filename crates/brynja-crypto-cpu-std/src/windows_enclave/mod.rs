@@ -158,6 +158,20 @@ mod sha3_wire;
         )
     )
 ))]
+mod tuple_avx2_wire;
+#[cfg(all(
+    feature = "strict-tuplehash",
+    any(
+        test,
+        all(
+            target_os = "windows",
+            target_arch = "x86_64",
+            target_env = "msvc",
+            not(miri),
+            not(kani)
+        )
+    )
+))]
 mod tuple_receipt;
 #[cfg(feature = "strict-tuplehash")]
 mod tuple_wire;

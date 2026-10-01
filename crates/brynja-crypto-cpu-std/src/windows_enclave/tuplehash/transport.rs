@@ -64,6 +64,13 @@ pub(super) struct Transport(pub(super) super::tests::Mock);
     not(kani)
 )))]
 impl Transport {
+    #[cfg(feature = "strict-tuplehash-acceleration")]
+    pub(super) fn open_avx2(
+        _: &std::path::Path,
+        _: &'static super::ImagePolicy,
+    ) -> Result<Self, Error> {
+        Err(Error::Unsupported)
+    }
     pub(super) fn open(_: &std::path::Path, _: &'static super::ImagePolicy) -> Result<Self, Error> {
         Err(Error::Unsupported)
     }

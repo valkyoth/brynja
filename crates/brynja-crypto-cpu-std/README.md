@@ -50,6 +50,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS KMAC/KMACXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Sequential scalar version-ten worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Sequential scalar version-eleven worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Sequential scalar version-twelve worker; development-tested; qualification pending | ❌ No |
@@ -117,6 +118,15 @@ image. Complete AVX/AVX2 and OS vector-state checks happen inside the enclave;
 host builds need no AVX2 flags. Image trust remains mandatory and failed
 acceleration never falls back to scalar. Caller inputs remain caller-owned;
 production, independent and current-image cleanup qualification remain pending.
+
+With `strict-sha2,strict-tuplehash`, `windows_enclave::tuplehash` supports all four
+TupleHash identities, streamed item framing, retained composition and incremental
+XOF output. `Session::open` uses the scalar version-nine image. Explicit
+`Session::open_avx2` additionally requires `strict-tuplehash-acceleration` and the
+version-sixteen image, with complete AVX/AVX2 and OS vector-state checks inside
+the enclave. It retains mandatory image trust and never falls back to scalar.
+Caller buffers remain outside enclave protection; development execution does
+not establish production or current-image cleanup qualification.
 
 With `strict-sha2,strict-sha3`, `windows_enclave::parallelhash` provides all four
 ParallelHash identities, streamed leaves/customization, exact-bit retained

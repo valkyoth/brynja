@@ -304,7 +304,12 @@ describe how the worker was developed, not outstanding constructor work.
   50 public-vector comparisons across 853 calls, including retained composition
   and incremental XOF output. See
   [TupleHash worker observations](../assurance/windows-protection-observations/tuple-accelerated-worker-20261001.json).
-  The supported accelerated host constructor and current-image qualification
+  The supported accelerated host constructor is now development-tested:
+  feature-gated `open_avx2` retains mandatory image trust and rejects scalar
+  images. Native debug/release tests pass 230 cases per scalar/AVX2 route,
+  alongside encoder mutations, host Miri and packaged feature-on/off checks.
+  See [TupleHash host observations](../assurance/windows-protection-observations/tuple-accelerated-host-20261001.json).
+  Current-image qualification
   remain the next work.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and

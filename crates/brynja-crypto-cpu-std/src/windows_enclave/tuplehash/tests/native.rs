@@ -31,8 +31,14 @@ fn reference(
 #[test]
 #[ignore = "requires reviewed development-signed version-nine worker on native Windows VBS"]
 fn development_tuplehash_streaming_campaign() -> Result<(), Box<dyn std::error::Error>> {
-    let location = std::path::PathBuf::from(std::env::var("BRYNJA_ENCLAVE_TUPLEHASH_IMAGE")?);
-    let expected = std::env::var("BRYNJA_ENCLAVE_TUPLEHASH_SHA256")?;
+    let (location, policy) = image("BRYNJA_ENCLAVE_TUPLEHASH")?;
+    campaign(Transport::development(&location, &policy)?, "SCALAR")
+}
+pub(super) fn image(
+    prefix: &str,
+) -> Result<(std::path::PathBuf, ImagePolicy), Box<dyn std::error::Error>> {
+    let location = std::path::PathBuf::from(std::env::var(std::format!("{prefix}_IMAGE"))?);
+    let expected = std::env::var(std::format!("{prefix}_SHA256"))?;
     if expected.len() != 64 {
         return Err("expected exact image hash".into());
     }
@@ -51,7 +57,12 @@ fn development_tuplehash_streaming_campaign() -> Result<(), Box<dyn std::error::
         .ok_or(Error::Bounds)?
         .copy_from_slice(b"PROB");
     let policy = ImagePolicy::reviewed_sha256(digest, family, image, 1, 1, [0, 0]);
-    let transport = Transport::development(&location, &policy)?;
+    Ok((location, policy))
+}
+pub(super) fn campaign(
+    transport: Transport,
+    route: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     let mut session = Session(Owner {
         transport,
         state: State::Ready,
@@ -171,6 +182,9 @@ fn development_tuplehash_streaming_campaign() -> Result<(), Box<dyn std::error::
     assert_eq!(session.state(), State::Quarantined);
     session.close()?;
     assert_eq!(session.state(), State::Closed);
-    println!("WINDOWS_ENCLAVE_TUPLEHASH: cases={cases}; forgotten-item rejected; development-only");
+    assert_eq!(cases, 230);
+    println!(
+        "WINDOWS_ENCLAVE_TUPLEHASH: route={route}; cases={cases}; forgotten-item rejected; development-only"
+    );
     Ok(())
 }

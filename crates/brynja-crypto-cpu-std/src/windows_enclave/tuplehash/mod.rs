@@ -1,7 +1,7 @@
-//! Scalar TupleHash/TupleHashXOF using a version-nine enclave worker.
+//! TupleHash/TupleHashXOF using a scalar or explicitly selected AVX2 enclave worker.
 //! Caller inputs remain outside enclave protection. Only explicit public
 //! declassification exports output. Requires strict-sha2 and strict-tuplehash.
-//! Native qualification, production signing and hardware routes remain pending.
+//! Native qualification and production signing remain pending; AVX2 is opt-in.
 //! Abandoned handles quarantine; fatal abort is outside Drop cleanup.
 //!
 //! ```no_run
@@ -167,6 +167,26 @@ impl Session {
     pub fn open(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
         Ok(Self(Owner {
             transport: Transport::open(location, policy)?,
+            state: State::Ready,
+            sequence: 0,
+            thread_bound: PhantomData,
+        }))
+    }
+    /// Explicit AVX2 execution for all four TupleHash/TupleHashXOF identities.
+    /// Requires `strict-tuplehash-acceleration` (facade: `acceleration`), the
+    /// reviewed version-sixteen image and mandatory production signature/import
+    /// policy. Baseline enclave entry checks the complete AVX/AVX2 and OS
+    /// vector-state bundle before specialized Rust, including destruction.
+    /// Missing image, platform or instruction support fails closed; no scalar fallback.
+    ///
+    /// Development execution is not production qualification. Deployment must
+    /// preserve these features across scheduling and migration; losing support
+    /// rejects entry and cannot promise specialized cleanup. Fatal abort cannot
+    /// promise destruction or clearing. The default `open` remains scalar.
+    #[cfg(feature = "strict-tuplehash-acceleration")]
+    pub fn open_avx2(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
+        Ok(Self(Owner {
+            transport: Transport::open_avx2(location, policy)?,
             state: State::Ready,
             sequence: 0,
             thread_bound: PhantomData,

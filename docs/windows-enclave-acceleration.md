@@ -1,7 +1,7 @@
 # Windows enclave acceleration development
 
 Scalar constructors remain scalar. Explicit SHA-NI SHA-224/256 and AVX2
-SHA-3/SHAKE/cSHAKE and KMAC host routes are development-tested; wider accelerated
+SHA-3/SHAKE/cSHAKE, KMAC and TupleHash host routes are development-tested; wider accelerated
 session routes are still pending.
 The historical public-vector diagnostics below are not, by themselves, secret
 input qualification. Release-gate policy and dependencies are unchanged.
@@ -360,9 +360,24 @@ The SDK compatibility warning is retained, not called clean production signing;
 the temporary development certificate and private key were removed. See
 [TupleHash worker observations](../assurance/windows-protection-observations/tuple-accelerated-worker-20261001.json).
 
-The public accelerated host route and current-image ABI/register/spill/dump
-qualification remain unfinished. Shipping APIs, scalar defaults, dependencies
-and release-gate policy are unchanged.
+The supported accelerated host route now exposes feature-gated
+`enclave::tuplehash::Session::open_avx2`. It requires a separately reviewed
+version-sixteen image, mandatory production signature/import admission and the
+distinct `PublicTupleAvx2Protocol` identity. Scalar `open` remains version nine;
+an unavailable accelerated route never falls back. Enable facade `acceleration`
+or hosted `strict-sha2,strict-tuplehash-acceleration`. Host builds require no
+build-wide AVX2 flags; the baseline enclave entry checks the complete CPU/OS
+bundle. Deployment must preserve that bundle across scheduling and migration.
+
+Native debug/release host campaigns pass 230 cases per route against AVX2 and
+a freshly built scalar image. Tests reject development signatures through public
+constructors, scalar images on the AVX2 route, wrong image hashes/identities and
+invalid public output without mutation. Ten compiled shipping-encoder mutants,
+host Miri and packaged feature-on/off constructor checks accompany the native
+tests. See [host observations](../assurance/windows-protection-observations/tuple-accelerated-host-20261001.json).
+Current-image ABI/register/spill/dump qualification remains unfinished. These
+are author development results, not production signing or independent review.
+Dependencies, scalar defaults and release-gate policy are unchanged.
 
 Author commands (the component run requires a native AVX2 host):
 
@@ -372,11 +387,12 @@ python3 scripts/cryptography/test-windows-enclave-tuple-packer.py tuple-packer-r
 python3 scripts/cryptography/test-windows-enclave-tuple-resident.py tuple-resident-results --attest-native-bundle
 python3 scripts/cryptography/test-windows-enclave-tuple-resident-model.py tuple-placement-results
 python3 scripts/cryptography/test-windows-enclave-tuple-worker.py tuple-worker-results --attest-native-bundle
+python3 scripts/cryptography/test-windows-enclave-tuple-host-wire.py tuple-host-wire-results
 ```
 
 ## Next integration boundary
 
-- Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE and KMAC, binding each route to its
+- Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE, KMAC and TupleHash, binding each route to its
   trusted image policy. Scalar constructors remain scalar; failed acceleration
   must not silently choose scalar execution.
 - Keep backend owners and scratch in enclave storage. Preserve streamed

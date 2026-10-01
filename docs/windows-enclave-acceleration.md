@@ -390,6 +390,41 @@ python3 scripts/cryptography/test-windows-enclave-tuple-worker.py tuple-worker-r
 python3 scripts/cryptography/test-windows-enclave-tuple-host-wire.py tuple-host-wire-results
 ```
 
+## Sequential accelerated SHA-3 batches: private component
+
+The private `sha3_batch_accelerated` component preserves the existing eight-slot
+streaming batch model while using the unchanged single-state AVX2 Keccak engine
+for each active item. All eight SHA-3/SHAKE/cSHAKE identities, arbitrary-bit N/S
+setup and final tails, exact output shapes, sparse slot order and finite input
+budgets retain their scalar semantics. This is sequential accelerated execution,
+not multi-message SIMD or multicore throughput. Those integrations remain open.
+
+An explicitly borrowed authority is checked at every operation, including
+zero-work cancellation and sealing, and again after the fixed copy seam. Failures
+and recoverable unwind clear owned state and quarantine the authority; successful
+cancellation/export permit reuse. Drop revokes the authority. The later placement
+adapter must also erase the entire allocation, including padding and inactive
+enum storage; field cleanup alone is not claimed as that guarantee.
+
+A separate version-seventeen, 304-byte metadata decoder binds the acceleration
+route and reserved word in addition to the full eight-slot output plan. It
+validates metadata before a future OS payload copy, and copied-length mismatch
+quarantines retained results. The component tests preserve the existing scalar
+oracle rather than comparing AVX2 with itself. Native Linux/Windows component
+results are recorded in
+[batch component observations](../assurance/windows-protection-observations/sha3-batch-accelerated-component-20261001.json).
+
+The resident/worker image, baseline CPU/OS admission, supported host constructor,
+native VBS execution and whole-image cleanup qualification remain pending for
+this batch route. No shipping API or release gate changes in this component step.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sha3-batch-accelerated.py batch-component-results
+```
+
+This standalone test binary requires a native AVX2-compatible host. It is not a
+portable feature detector, VBS capture or production-signing result.
+
 ## Next integration boundary
 
 - Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE, KMAC and TupleHash, binding each route to its

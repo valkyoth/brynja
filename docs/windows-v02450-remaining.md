@@ -309,8 +309,14 @@ describe how the worker was developed, not outstanding constructor work.
   images. Native debug/release tests pass 230 cases per scalar/AVX2 route,
   alongside encoder mutations, host Miri and packaged feature-on/off checks.
   See [TupleHash host observations](../assurance/windows-protection-observations/tuple-accelerated-host-20261001.json).
-  Current-image qualification
-  remain the next work.
+  Current-image qualification remains open.
+  The private sequential SHA-3 batch component now preserves eight-slot streaming
+  semantics over the existing AVX2 engine, with a separate version-seventeen
+  decoder. Its component/oracle, authority, mutation and ownership checks are
+  recorded in [batch observations](../assurance/windows-protection-observations/sha3-batch-accelerated-component-20261001.json).
+  This is single-state acceleration per item, not independent-message SIMD or
+  multicore batching. The batch resident/worker, feature-checked image and host
+  integration remain next; current-image cleanup and wider batch routes remain.
 - Finish compiler/runtime and protected worker/storage review. Test the new
   retained allocation in controlled dump experiments; cover supported error and
   unwind paths without extending claims to fatal abort, caller copies or

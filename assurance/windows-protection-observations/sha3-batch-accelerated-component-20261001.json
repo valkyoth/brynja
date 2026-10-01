@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "SEQUENTIAL_AVX2_SHA3_BATCH_COMPONENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "7a907135",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "multi_message_simd": false,
+  "multicore": false,
+  "shipping_api_changed": false,
+  "description": "Private eight-slot sequential retained SHA-3/SHAKE/cSHAKE batch owner using the unchanged single-state AVX2 engine, plus a distinct version-seventeen decoder. Ordinary native-process tests only.",
+  "rust_toolchain": "1.98.1",
+  "target_features": [
+    "avx",
+    "avx2"
+  ],
+  "protocol": {
+    "version": 17,
+    "header_bytes": 304,
+    "slots": 8,
+    "retained_bytes": 1024,
+    "payload_bytes": 1024,
+    "accelerated_route": 1,
+    "route_reserved": 0
+  },
+  "tests": {
+    "native_tests_per_platform": 12,
+    "independent_cases_per_platform": 604,
+    "nonempty_activity_masks": 255,
+    "compiled_runtime_mutants_per_platform": 36,
+    "ownership_negatives_per_platform": 6,
+    "oracle": "Existing independent bit/cSHAKE oracle cross-checked with NIST and hashlib; unchanged scalar state for mixed-slot comparison",
+    "source_adaptation": "Existing scalar component/wire tests adapted for borrowed authority, explicit lifetimes and distinct header. Scalar oracle preserved.",
+    "authority": "Every operation including zero work; post-copy revalidation; terminal errors/unwind/drop; cancel/export allow reuse",
+    "cleanup": "Owned output and active state only; whole-allocation/inactive storage clearing requires the future placement adapter",
+    "compilation_failures_count_as_mutant_rejections": false,
+    "clean_restored_after_mutants": true
+  },
+  "source_binding": {
+    "windows_checkout": "Restored development checkout plus exact source overlay, not a clean exact Git checkout",
+    "all_source_hashes_match_local": true,
+    "all_generated_hashes_match_records": true,
+    "linux": {
+      "source_files": 250,
+      "generated_files": 20,
+      "binary_sha256": "26eca892d0119e73f5436f1ad7b9ae0524d1e05f7a3204a4124f3f3d20fb2fd3",
+      "target": "x86_64-unknown-linux-gnu"
+    },
+    "windows": {
+      "source_files": 250,
+      "generated_files": 20,
+      "binary_sha256": "01ffc89feaa934002678c69b35772205d808201519733c96aa7dec266487be86",
+      "target": "x86_64-pc-windows-msvc",
+      "manifest_sha256": "808a0fe98eba3fd1c0ce29d293222b5e02ed7c0bafef4835d1ad846004bda0ec",
+      "manifest_member": "sha3-batch-accelerated-wire-20261001/sha3-batch-accelerated-results.json"
+    },
+    "artifacts": {
+      "release-reports/sha3-batch-accelerated-component-products-20261001.tar.gz": "584b964cf2a151c1bbd4af1c953eeb7b1e922cc0fa2f78862ce02dcaec053ddb",
+      "release-reports/sha3-batch-accelerated-wire-linux-20261001/sha3-batch-accelerated-results.json": "c39112d7a88d6512dacbf58abd881ae81b1af1df85e2d45d033bc423dd5ab019"
+    }
+  },
+  "limitations": [
+    "Not native VBS execution or a signed worker image",
+    "No current-image ABI/register/spill, protected-frame, residency or dump qualification",
+    "Not independent-message SIMD or multicore batching",
+    "No new whole-allocation or fatal-abort cleanup guarantee",
+    "Resident/worker, baseline instruction admission and supported accelerated host API remain pending",
+    "No production source, dependency or release-gate policy changed; RETEST REQUIRED remains"
+  ]
+}

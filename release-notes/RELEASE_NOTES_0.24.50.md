@@ -18,6 +18,14 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
+The private sequential accelerated SHA-3 batch component preserves eight-slot
+streaming, exact-bit cSHAKE setup, retained outputs, work budgets and sparse
+ordering over the unchanged single-state AVX2 engine. Its separate version-17
+decoder binds the route and complete plan. Component and mutation testing are
+not VBS execution: the batch resident/worker image, host constructor and cleanup
+qualification remain pending. Multi-message SIMD and multicore batching are
+separate outstanding work; no shipping batch API or default has changed.
+
 The private accelerated TupleHash component now covers all four fixed/XOF
 identities over the existing AVX2 cSHAKE engine, with exact streamed item framing
 and retained composition. Linux/Windows component tests pass 272 independent bit

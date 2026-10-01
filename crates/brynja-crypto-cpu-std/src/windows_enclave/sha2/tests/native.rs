@@ -29,6 +29,7 @@ fn development_sha2_streaming_campaign() -> Result<(), Box<dyn std::error::Error
         transport,
         state: State::Ready,
         sequence: 0,
+        route: Route::Scalar,
         thread_bound: PhantomData,
     });
     let mut cases = 0_usize;

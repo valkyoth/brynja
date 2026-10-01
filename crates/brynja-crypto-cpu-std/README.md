@@ -44,6 +44,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | --- | --- | --- |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
@@ -79,12 +80,17 @@ image policy and Windows signature/load/initialization checks, not a runtime
 development switch. It currently supports scalar SHA-256 up to 1024 bytes,
 retained rehashing, cancellation and explicit public output. It does not expose
 enclave-private memory as host slices or make the Linux host-slice APIs work on
-Windows. No enclave hardware/SIMD route is implemented yet; production-signed
-qualification remains pending. See the [API guide](../../docs/windows-enclave-owner.md).
+Windows. Production-signed qualification remains pending.
+See the [API guide](../../docs/windows-enclave-owner.md).
 The distinct `windows_enclave::sha2` module covers streaming, all named SHA-2
 identities, general SHA-512/t and bit tails with retained cross-algorithm rehashing.
 Its version-six image is not interchangeable with the bounded worker. See the
 [streaming API guide](../../docs/windows-enclave-sha2.md).
+With `strict-sha2-acceleration`, explicitly use `sha2::Session::open_sha_ni`
+and a reviewed version-thirteen image for SHA-224/256. The enclave requires its
+complete SHA/SSE2/AVX/AVX2 bundle; other identities and mismatched images reject
+without scalar fallback. Default constructors stay scalar. This development-tested
+route still needs production, register/dump and independent qualification.
 `windows_enclave::sha2_batch` adds eight declared SHA-2 slots, streamed item
 writers and sealed retained results. Its separate version-ten worker is scalar,
 not SIMD or parallel. See the [batch API and example](../../docs/windows-enclave-sha2-batch.md).

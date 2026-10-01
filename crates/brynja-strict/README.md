@@ -36,6 +36,7 @@ choice, not certification or proof that all application code uses this profile.
 | Strict-only modern protected sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
@@ -63,8 +64,12 @@ portable or compiled kernel route. Full build-wide CPU feature bundles and
 compatible deployment are required for compiled kernels. No CPU detection,
 affinity or live-migration guarantee is implied. Missing required features reject.
 There is no automatic switch to a weaker memory profile.
-The Windows `enclave` interface is scalar-only; enabling `acceleration` does not
-add a Windows enclave hardware/SIMD route.
+On Windows, `acceleration` exposes the distinct `enclave::sha2::Session::open_sha_ni`
+constructor for SHA-224/256 only. It requires a reviewed version-thirteen image
+and the full SHA/SSE2/AVX/AVX2 bundle inside the enclave, not build-wide host flags.
+Scalar `open` stays scalar; unsupported identities, platforms and images reject
+without fallback. Other Windows algorithms remain scalar. Production and
+independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
 
 ## Usage
 

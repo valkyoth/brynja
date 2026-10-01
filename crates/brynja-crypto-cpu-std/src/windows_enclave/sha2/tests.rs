@@ -5,6 +5,7 @@ struct Mock {
     fail: bool,
     panic: bool,
     closed: bool,
+    requests: usize,
 }
 impl Channel for Mock {
     fn request(
@@ -16,6 +17,7 @@ impl Channel for Mock {
         _: u8,
         output: Option<&mut [u8]>,
     ) -> Result<(), Error> {
+        self.requests = self.requests.checked_add(1).ok_or(Error::Bounds)?;
         if let Some(output) = output {
             output.fill(42);
         }
@@ -37,9 +39,11 @@ fn owner() -> Owner<Mock> {
             fail: false,
             panic: false,
             closed: false,
+            requests: 0,
         },
         state: State::Ready,
         sequence: 0,
+        route: Route::Scalar,
         thread_bound: PhantomData,
     }
 }
@@ -78,6 +82,90 @@ fn request_failures_and_unwind_never_reopen_the_owner() -> Result<(), Error> {
     not(kani)
 ))]
 mod native;
+#[cfg(all(
+    target_os = "windows",
+    target_arch = "x86_64",
+    target_env = "msvc",
+    not(miri),
+    not(kani)
+))]
+#[cfg(feature = "strict-sha2-acceleration")]
+mod native_sha_ni;
+
+#[test]
+fn sha_ni_identity_rejection_is_terminal_without_transport_or_fallback() -> Result<(), Error> {
+    for algorithm in [
+        Algorithm::SHA384,
+        Algorithm::SHA512,
+        Algorithm::SHA512_224,
+        Algorithm::SHA512_256,
+        Algorithm::sha512_t(224)?,
+    ] {
+        for op in [11, 14, 15] {
+            let mut o = owner();
+            o.route = Route::ShaNi;
+            assert_eq!(o.issue(op, algorithm, &[], 0, None), Err(Error::Bounds));
+            assert_eq!(o.state, State::Quarantined);
+            assert_eq!(o.transport.requests, 0);
+            assert_eq!(
+                o.issue(11, Algorithm::SHA256, &[], 0, None),
+                Err(Error::Quarantined)
+            );
+        }
+        let mut scalar = owner();
+        scalar.issue(11, algorithm, &[], 0, None)?;
+        assert_eq!(scalar.transport.requests, 1);
+    }
+    for algorithm in [Algorithm::SHA224, Algorithm::SHA256] {
+        let mut o = owner();
+        o.route = Route::ShaNi;
+        o.issue(11, algorithm, &[], 0, None)?;
+        o.transport.fail = true;
+        assert_eq!(
+            o.issue(12, algorithm, b"abc", 8, None),
+            Err(Error::Protocol)
+        );
+        assert_eq!(o.transport.requests, 2);
+        assert_eq!(o.state, State::Quarantined);
+    }
+    Ok(())
+}
+
+#[test]
+fn sha_ni_wire_identity_and_full_header_receipts_are_distinct() -> Result<(), Error> {
+    use super::super::sha2_wire as wire;
+    assert_eq!(wire::SHA_NI_PROTOCOL, 0x42525331);
+    let data = b"abc";
+    let scalar = wire::header(2, 0, data, 8)?;
+    let accelerated = wire::sha_ni_header(2, 0, data, 8)?;
+    assert_eq!(accelerated.get(..8), Some(13_u64.to_le_bytes().as_slice()));
+    assert_eq!(accelerated.get(8..48), scalar.get(8..48));
+    assert_eq!(
+        accelerated.get(48..56),
+        Some(1_u64.to_le_bytes().as_slice())
+    );
+    assert_eq!(accelerated.get(56..), Some([0; 8].as_slice()));
+    assert_eq!(wire::sha_ni_header(0, 1, &[], 0), Err(Error::Bounds));
+    assert_eq!(wire::sha_ni_header(1, 1, &[0; 1025], 8), Err(Error::Bounds));
+    // Valid scalar geometry overlaps the last sixteen accelerated header bytes.
+    let overlapping = [0x10000, 0x10030, 1, 1, 1, 0, 0];
+    wire::receipt(0x10000, 12, 1, overlapping)?;
+    assert_eq!(
+        wire::sha_ni_receipt(0x10000, 12, 1, overlapping),
+        Err(Error::Protocol)
+    );
+    let good = [0x10000, 0x10040, 1, 1, 1, 0, 0];
+    wire::sha_ni_receipt(0x10000, 12, 1, good)?;
+    for i in 0..7 {
+        let mut bad = good;
+        *bad.get_mut(i).ok_or(Error::Bounds)? = usize::MAX;
+        assert_eq!(
+            wire::sha_ni_receipt(0x10000, 12, 1, bad),
+            Err(Error::Protocol)
+        );
+    }
+    Ok(())
+}
 #[test]
 fn checked_sequences_and_identity_boundaries() -> Result<(), Error> {
     let mut owner = owner();

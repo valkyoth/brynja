@@ -1,5 +1,7 @@
 use super::Error;
 
+pub(super) const SHA_NI_PROTOCOL: usize = 0x42525331;
+
 pub(super) fn header(
     sequence: u64,
     algorithm: u64,
@@ -43,6 +45,49 @@ pub(super) fn receipt(
     length: usize,
     value: [usize; 7],
 ) -> Result<(), Error> {
+    receipt_width(low, operation, length, value, 48)
+}
+
+pub(super) fn sha_ni_header(
+    sequence: u64,
+    algorithm: u64,
+    input: &[u8],
+    last: u8,
+) -> Result<[u8; 64], Error> {
+    // Reuse bounds/address validation, never the scalar protocol identity.
+    let scalar = header(sequence, algorithm, input, last)?;
+    let mut bytes = [0; 64];
+    bytes
+        .get_mut(..48)
+        .ok_or(Error::Bounds)?
+        .copy_from_slice(&scalar);
+    bytes
+        .get_mut(..8)
+        .ok_or(Error::Bounds)?
+        .copy_from_slice(&13_u64.to_le_bytes());
+    bytes
+        .get_mut(48..56)
+        .ok_or(Error::Bounds)?
+        .copy_from_slice(&1_u64.to_le_bytes());
+    Ok(bytes)
+}
+
+pub(super) fn sha_ni_receipt(
+    low: usize,
+    operation: usize,
+    length: usize,
+    value: [usize; 7],
+) -> Result<(), Error> {
+    receipt_width(low, operation, length, value, 64)
+}
+
+fn receipt_width(
+    low: usize,
+    operation: usize,
+    length: usize,
+    value: [usize; 7],
+    header_width: usize,
+) -> Result<(), Error> {
     if matches!(operation, 0 | 3) {
         return if value == [0; 7] {
             Ok(())
@@ -59,7 +104,7 @@ pub(super) fn receipt(
         || payloads != usize::from(length != 0)
         || exports != usize::from(operation == 15)
         || error != 0
-        || !super::protocol::regions(low, [header, payload], [48, 1024])
+        || !super::protocol::regions(low, [header, payload], [header_width, 1024])
     {
         return Err(Error::Protocol);
     }

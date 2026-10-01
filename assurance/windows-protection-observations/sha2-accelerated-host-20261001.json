@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "status": "EXPLICIT_SHA_NI_HOST_DEVELOPMENT_PASS",
+  "date": "2026-10-01",
+  "baseline": "e909bb40a4a86efaa4fb8c8d936b46bea24abd19",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": true,
+  "description": "Feature-gated SHA-224/256 SHA-NI session with mandatory production image trust, additional route identity and complete in-enclave feature admission; scalar open is unchanged. Development-only native execution through a private test constructor; public constructors reject development signatures.",
+  "host_feature": "strict-sha2-acceleration",
+  "facade_feature": "acceleration",
+  "image_protocol": 13,
+  "scalar_protocol": 6,
+  "rust_toolchain": "1.98.1",
+  "native_target": "x86_64-pc-windows-msvc",
+  "image_target_features": ["sha", "sse2", "avx", "avx2"],
+  "native_environment": {
+    "windows_build": 26100,
+    "processor": "AMD EPYC 9V45",
+    "vbs": true,
+    "hvci": true,
+    "secure_boot": false,
+    "test_signing": true,
+    "production_signing": false
+  },
+  "native_campaigns": {
+    "profiles": ["debug", "release"],
+    "sha_ni_cases_per_profile": 46,
+    "scalar_cases_per_profile": 631,
+    "production_signature_rejections": true,
+    "scalar_image_rejected_for_sha_ni": true,
+    "wrong_hash_and_identity_rejected": true,
+    "unsupported_algorithms_quarantine": true,
+    "retained_rehash": true,
+    "cancellation_and_reuse": true,
+    "abandonment_quarantines": true,
+    "invalid_output_unchanged": true,
+    "explicit_close": true,
+    "windows_scoped_clippy": "PASS"
+  },
+  "other_tests": {
+    "all_feature_enclave_host_tests": 50,
+    "all_feature_host_clippy": "PASS",
+    "linux_sha2_tests_with_and_without_acceleration": "PASS",
+    "focused_miri_host_protocol_tests": 6,
+    "miri_scope": "Safe host owner, mock transport and wire validation; not native VBS or assembly kernels",
+    "worker_rust_mutants_per_target": 9,
+    "worker_c_mutants_per_target": 19,
+    "worker_targets": ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"],
+    "packaged_facade_export_ownership_negatives": 436,
+    "packaged_optional_sha_ni_method": "available only with acceleration",
+    "packaged_strict_debug_release_and_doctests": "PASS"
+  },
+  "source_binding": {
+    "remote_checkout": "Restored development checkout plus source overlay, not a clean exact Git checkout",
+    "matching_host_source_hashes": 396,
+    "matching_sha_ni_worker_source_hashes": 264,
+    "matching_scalar_worker_source_hashes": 171,
+    "matching_sha_ni_generated_artifacts": 24,
+    "matching_scalar_generated_artifacts": 13,
+    "host_manifest_member": "sha2-host-capture/host-source-sha256.json",
+    "host_manifest_sha256": "f8154f4fc0dca00277a955826cca3f435da2f21ef255bec22d22d3fdff85146c"
+  },
+  "artifacts": {
+    "release-reports/windows-azure-replacement-2026-10-01/sha2-host-products.tar.gz": "d44e34891496a3baea4233c83b701bac06003e7ee25e190d0970714bf758f494"
+  },
+  "archive_members_sha256": {
+    "sha2-host-capture/sha2-host-native.log": "41b7a5e94457b2e7dc4b2183088835aac950fa2145bbc3fdaf405de0c780a2c8",
+    "sha2-host-capture/debug/brynja_crypto_cpu_std-48f818b8b87c9def.exe": "e6326b40f2377bd3c72d4a933b8b90b3b88ba65ae904002bcce10c3afe026e95",
+    "sha2-host-capture/release/brynja_crypto_cpu_std-90f07c53e1c4df9d.exe": "8555cd2214fa1dc838a44cfec4d1e3cfdc84608ce4cbe7390ec18e798b2b2ecf",
+    "sha2-host-capture/sha2-host-signed.dll": "c03a967ec3d0269cfae8e3913d116791f1870d87cff2a95f41b15fabaf474c04",
+    "sha2-host-capture/sha2-scalar-regression-signed.dll": "923fefa7f65f5c237aa55bcbcb48c4207d4d4c0949132de776128558b1c93304"
+  },
+  "signing": {
+    "signtool_reported_signed": true,
+    "signtool_exit_code_each_image": 2,
+    "warning": "SDK VBS enclave compatibility warning preserved; not a clean production-signing result",
+    "temporary_certificate_and_private_key_removed": true
+  },
+  "limitations": [
+    "Public-vector author regression tests, not independent qualification or approval for real secrets",
+    "Only SHA-224/256 host acceleration integrated; wider algorithms remain pending",
+    "Current-image ABI/register/spill, protected-stack/dump and wider failure qualification remain pending",
+    "No Windows ARM64, dedicated x86 SHA-512, arbitrary CPU migration or production-signing qualification",
+    "No release-gate policy changed; candidate remains RETEST REQUIRED"
+  ]
+}

@@ -25,6 +25,7 @@ enum Protocol {
     Sha2Batch,
     Legacy,
     Sha2,
+    Sha2ShaNi,
     #[cfg(feature = "strict-sha3")]
     Sha3,
     #[cfg(feature = "strict-sha3")]
@@ -127,7 +128,7 @@ impl Backend {
             input: sys::export(
                 owner.base,
                 match protocol {
-                    Protocol::Sha2 => b"PublicSha2InputSource\0",
+                    Protocol::Sha2 | Protocol::Sha2ShaNi => b"PublicSha2InputSource\0",
                     Protocol::Sha2Batch => b"PublicSha2BatchInputSource\0",
                     #[cfg(feature = "strict-sha3")]
                     Protocol::Sha3 => b"PublicSha3InputSource\0",
@@ -153,7 +154,9 @@ impl Backend {
                 sys::export(owner.base, b"PublicRehashControl\0")?
             },
             sha2_control: match protocol {
-                Protocol::Sha2 => sys::export(owner.base, b"PublicSha2Control\0")?,
+                Protocol::Sha2 | Protocol::Sha2ShaNi => {
+                    sys::export(owner.base, b"PublicSha2Control\0")?
+                }
                 Protocol::Sha2Batch => sys::export(owner.base, b"PublicSha2BatchControl\0")?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 => sys::export(owner.base, b"PublicSha3Control\0")?,
@@ -168,6 +171,12 @@ impl Backend {
                 Protocol::Legacy => 0,
             },
         };
+        if protocol == Protocol::Sha2ShaNi {
+            let identity = sys::export(owner.base, b"PublicSha2ShaNiProtocol\0")?;
+            if sys::call(identity, 0)? != super::sha2_wire::SHA_NI_PROTOCOL {
+                return Err(Error::Unsupported);
+            }
+        }
         Ok(owner)
     }
     fn read<const N: usize>(routine: usize, start: usize) -> Result<[usize; N], Error> {
@@ -255,7 +264,7 @@ impl Backend {
     fn clear(&mut self) -> Result<(), Error> {
         if self.live {
             match self.protocol {
-                Protocol::Sha2 => self.run_sha2(3, None, 0, None)?,
+                Protocol::Sha2 | Protocol::Sha2ShaNi => self.run_sha2(3, None, 0, None)?,
                 Protocol::Sha2Batch => self.run_sha2_batch(3, None, 0, None)?,
                 #[cfg(feature = "strict-sha3")]
                 Protocol::Sha3 => self.run_sha3(3, None, 0, None)?,

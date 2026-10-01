@@ -21,16 +21,21 @@ No release-gate policy is being changed.
 A separate [public-vector VBS acceleration diagnostic](../docs/windows-enclave-acceleration.md)
 now executes five existing hardened SHA-NI/AVX2 kernels natively, with 496
 independent comparisons, startup KATs and quarantine rejection. Dedicated x86
-SHA-512 is absent on this guest. This does not enable acceleration in the
-supported enclave APIs or qualify protected secret inputs; integration and
-Windows ABI/register qualification remain pending.
+SHA-512 is absent on this guest. That diagnostic alone does not qualify protected
+secret inputs. The SHA-NI host integration below is now development-tested;
+wider integration and Windows ABI/register qualification remain pending.
 
 The separate [SHA-2 streaming enclave API](../docs/windows-enclave-sha2.md) now
 implements all six named identities and general SHA-512/t, bounded input
 snapshots for large streams, arbitrary-bit final tails and exact-bit retained
 rehashing. Native Windows development tests pass in debug/release. The worker
-is scalar; SIMD/hardware and production qualification remain separate unfinished
-work. The completed scalar batching and ParallelHash passes are described below.
+is scalar by default. A separate feature-gated `Session::open_sha_ni` constructor
+now requires the reviewed version-thirteen SHA-224/256 image, with mandatory
+production trust and explicit protocol/complete-feature admission. Wide identities
+reject before transport and never fall back. Development debug/release host tests
+pass 46 accelerated and 631 scalar cases each, plus trust/image/lifecycle rejection
+checks. This is not production or independent qualification. Wider hardware work
+remains; the completed scalar batching and ParallelHash passes are described below.
 
 The separate [SHA-3 enclave API](../docs/windows-enclave-sha3.md) implements all
 eight SHA-3/SHAKE/cSHAKE identities, incremental exact-bit output, streamed

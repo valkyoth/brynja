@@ -2,7 +2,8 @@
 
 Current implementation status: the bounded SHA-256, scalar SHA-2/SHA-3/KMAC/TupleHash
 streaming, SHA-2/SHA-3 batches and sequential scalar ParallelHash Windows enclave
-APIs are integrated and development-tested.
+APIs are integrated and development-tested. Explicit opt-in SHA-NI SHA-224/256
+sessions now have native debug/release host coverage; wider acceleration remains.
 Existing Linux-style host-slice
 sessions still reject Unsupported on Windows. Broader algorithms and production
 qualification remain incomplete. The release scope
@@ -245,8 +246,12 @@ describe how the worker was developed, not outstanding constructor work.
   native public-vector comparisons across 151 calls pass, including copy faults,
   terminal rejection, cancellation and retained rehash. Nine Rust and fifteen C
   entry/gate mutations are rejected on Linux and Windows. Generated artifact
-  bytes are checked after mutation restoration. The supported host route still
-  needs integration; current-image ABI/register/dump review is not complete. See
+  bytes are checked after mutation restoration. The supported SHA-NI host route
+  is now integrated behind explicit acceleration: 46 accelerated and 631 scalar
+  cases pass in each native debug/release campaign, including trust, image,
+  identity and lifecycle rejection. Four additional actual-C protocol mutants
+  are rejected. Wider routes and current-image ABI/register/dump review remain. See
+  [host observations](../assurance/windows-protection-observations/sha2-accelerated-host-20261001.json),
   [worker observations](../assurance/windows-protection-observations/sha2-accelerated-worker-20261001.json);
   the [component evidence](../assurance/windows-protection-observations/sha2-accelerated-component-20260930.json)
   must not be read as enclave or production qualification.

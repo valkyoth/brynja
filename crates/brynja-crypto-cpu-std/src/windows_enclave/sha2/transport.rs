@@ -61,6 +61,13 @@ impl Transport {
     pub(super) fn open(_: &std::path::Path, _: &'static super::ImagePolicy) -> Result<Self, Error> {
         Err(Error::Unsupported)
     }
+    #[cfg(feature = "strict-sha2-acceleration")]
+    pub(super) fn open_sha_ni(
+        _: &std::path::Path,
+        _: &'static super::ImagePolicy,
+    ) -> Result<Self, Error> {
+        Err(Error::Unsupported)
+    }
 }
 #[cfg(not(all(
     target_os = "windows",

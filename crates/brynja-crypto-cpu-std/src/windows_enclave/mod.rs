@@ -10,7 +10,9 @@
 //! enclave initialization; there is no development-mode runtime fallback.
 //! The current protocol admits scalar SHA-256 inputs of at most 1024 bytes.
 //! The separate [`sha2`] module uses a version-six worker for full scalar SHA-2
-//! streaming. Hardware routes and Windows ARM64 are not implied by either API.
+//! streaming. With `strict-sha2-acceleration`, its distinct `open_sha_ni`
+//! constructor requires a matching SHA-224/256 image; scalar opening stays scalar.
+//! Other hardware routes and Windows ARM64 are not implied by these APIs.
 //! Development execution is tested separately; production-signed deployment
 //! and independent qualification remain pending. Not certification.
 

@@ -1,9 +1,12 @@
 //! Retained enclave SHA-2 streaming, using the separate version-six worker.
 //!
-//! All six named identities and every valid general SHA-512/t parameter are
-//! supported by this protocol. Worker arithmetic is scalar; this interface does
-//! not imply SIMD/hardware qualification. A version-four SHA-256 image is not
-//! compatible. A reviewed image policy and production signature are mandatory.
+//! [`Session::open`] remains scalar, supporting all six named identities and
+//! every valid general SHA-512/t parameter. With `strict-sha2-acceleration`,
+//! `Session::open_sha_ni` explicitly
+//! requires the separate version-thirteen SHA-NI image, for SHA-224/256 only;
+//! failed acceleration never falls back. Neither choice implies independent
+//! hardware qualification. A version-four SHA-256 image is not compatible.
+//! A reviewed image policy and production signature are mandatory.
 //! Caller input remains outside protected storage; no secret output slice or
 //! generic caller closure is exposed. Declassification is deliberate.
 use super::{Error, ImagePolicy, PublicDeclassification, State};
@@ -14,10 +17,16 @@ mod transport;
 pub use algorithm::Algorithm;
 use transport::{Channel, Transport};
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Route {
+    Scalar,
+    ShaNi,
+}
 struct Owner<T: Channel> {
     transport: T,
     state: State,
     sequence: u64,
+    route: Route,
     thread_bound: PhantomData<*mut ()>,
 }
 impl<T: Channel> Owner<T> {
@@ -34,6 +43,12 @@ impl<T: Channel> Owner<T> {
         }
         // Errors and unwind never authorize another operation.
         self.state = State::Quarantined;
+        if self.route == Route::ShaNi
+            && matches!(op, 11 | 14 | 15)
+            && !matches!(algorithm, Algorithm::SHA224 | Algorithm::SHA256)
+        {
+            return Err(Error::Bounds);
+        }
         self.sequence = self.sequence.checked_add(1).ok_or(Error::Exhausted)?;
         self.transport.request(
             op,
@@ -79,6 +94,24 @@ impl Session {
             transport: Transport::open(location, policy)?,
             state: State::Ready,
             sequence: 0,
+            route: Route::Scalar,
+            thread_bound: PhantomData,
+        }))
+    }
+    /// Require the reviewed version-thirteen SHA-NI image, with no fallback.
+    /// Only SHA-224/256 may be started or used for retained rehashing; other
+    /// identities reject and quarantine this session. The enclave validates
+    /// its complete SHA/SSE2/AVX/AVX2 build bundle before specialized entry.
+    /// Unsupported platforms, missing capabilities or mismatched images reject.
+    /// This does not establish arbitrary CPU-migration safety or production
+    /// qualification; the publisher must review and sign the exact image.
+    #[cfg(feature = "strict-sha2-acceleration")]
+    pub fn open_sha_ni(location: &Path, policy: &'static ImagePolicy) -> Result<Self, Error> {
+        Ok(Self(Owner {
+            transport: Transport::open_sha_ni(location, policy)?,
+            state: State::Ready,
+            sequence: 0,
+            route: Route::ShaNi,
             thread_bound: PhantomData,
         }))
     }

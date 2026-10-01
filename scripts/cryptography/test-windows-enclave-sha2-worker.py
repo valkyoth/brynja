@@ -98,6 +98,11 @@ static void entry_reset(void) {
 }
 int main(void) {
     (void)Sha2AcceleratedReady;
+    entry_reset(); assert(PublicSha2ShaNiProtocol(0)==(void*)(uintptr_t)0x42525331); assert(!windows);
+    entry_reset(); assert(!PublicSha2ShaNiProtocol((void*)1)); assert(!windows && !queries);
+    entry_reset(); active=TRUE; assert(!PublicSha2ShaNiProtocol(0)); assert(!windows);
+    entry_reset(); retained_call=TRUE; assert(!PublicSha2ShaNiProtocol(0)); assert(!windows);
+    entry_reset(); inventory[6]=0; assert(!PublicSha2ShaNiProtocol(0)); assert(!windows);
     const unsigned accepted[]={0,3,11,12,13,14,15,16};
     for(unsigned i=0;i<sizeof(accepted)/sizeof(accepted[0]);++i) {
         entry_reset(); assert(PublicRetained((void*)(uintptr_t)accepted[i])==(void*)42);
@@ -148,8 +153,10 @@ def c_gate(directory,target):
         start=retained.index('__declspec(dllexport) void* CALLBACK PublicRetained(void* context)')
         end=retained.index('__declspec(dllexport) void* CALLBACK PublicRetainedControl',start)
         entry=retained[start:end]
+        wrapper=(build.SOURCE/'window_sha2_accelerated.c').read_text()
+        protocol=wrapper[wrapper.index('__declspec(dllexport) void* CALLBACK PublicSha2ShaNiProtocol'):]
         prefix=C_STUB[:C_STUB.index('static void rejected(void)')]+ENTRY_STUB
-        test(original,True,prefix+entry+ENTRY_TEST)
+        test(original,True,prefix+entry+protocol+ENTRY_TEST)
         for before,after in (
             (' || !Sha2AcceleratedReady()', ''),
             ('!(operation == 0 || operation == 3 || (operation >= 11 && operation <= 16))', '0'),
@@ -157,10 +164,16 @@ def c_gate(directory,target):
             ('!= S_OK', '== 999'),
         ):
             if entry.count(before)!=1:raise AssertionError('Stale entry mutation: '+before)
-            test(original,False,prefix+entry.replace(before,after)+ENTRY_TEST)
-        test(original,True,prefix+entry+ENTRY_TEST)
+            test(original,False,prefix+entry.replace(before,after)+protocol+ENTRY_TEST)
+        for before,after in (
+            ('context || ', '(context && 0) || '), ('active || retained_call || ', ''),
+            ('!Sha2AcceleratedReady()', '0'), ('0x42525331','0x42525330'),
+        ):
+            if protocol.count(before)!=1:raise AssertionError('Stale protocol mutation: '+before)
+            test(original,False,prefix+entry+protocol.replace(before,after)+ENTRY_TEST)
+        test(original,True,prefix+entry+protocol+ENTRY_TEST)
     finally:source.write_bytes(original_bytes)
-    return len(C_MUTANTS)+4
+    return len(C_MUTANTS)+8
 
 
 def run(directory,target,image=False):

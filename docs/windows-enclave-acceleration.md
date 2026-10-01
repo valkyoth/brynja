@@ -1,9 +1,9 @@
 # Windows enclave acceleration development
 
-The supported enclave session APIs remain scalar. This pass establishes native
-execution of existing hardened kernels in a separate public-vector diagnostic
-image. It does **not** enable acceleration in those APIs or qualify secret inputs.
-Release-gate policy, dependencies and shipping Rust code are unchanged.
+Scalar constructors remain scalar. An explicit SHA-NI SHA-224/256 host route is
+now development-tested; other accelerated session routes are still pending.
+The historical public-vector diagnostics below are not, by themselves, secret
+input qualification. Release-gate policy and dependencies are unchanged.
 
 ## Platform observations
 
@@ -136,15 +136,40 @@ All 344 capture-source hashes and 24 generated artifact hashes match the
 SignTool's compatibility warning/nonzero exit is preserved; temporary signing
 certificates and keys were removed, and native enclave deletion succeeded.
 
-Trusted image selection and the supported host session interface still need the
-explicit accelerated route. The existing scalar API and release-gate policy are
-unchanged. Current-image ABI/register/stack review and independent review remain.
+## Explicit host session route
+
+The existing `sha2::Session` now has a separate `open_sha_ni` constructor behind
+`strict-sha2-acceleration` (facade feature `acceleration`). Mandatory production
+signature, image identity and imports remain enforced. An additional baseline
+enclave export identifies the version-13 route and checks its full feature bundle;
+missing or wrong protocol rejects construction. This identity check supplements,
+and never replaces, the trusted signed-image policy.
+
+Only SHA-224/256 may start or receive a retained rehash. Wide/general identities
+reject and quarantine before transport, and failures never select scalar hashing.
+The existing `open` constructor and 48-byte scalar protocol remain unchanged;
+the new route checks the entire 64-byte accelerated header and receipt.
+
+Native development debug/release tests each pass 46 accelerated cases and 631
+scalar cases. They also reject development signatures through both public
+constructors, mismatched scalar images, incorrect image policies, unsupported
+identities and invalid output sizes, and cover cancellation/reuse and abandonment.
+Windows scoped Clippy passes. Linux packaged consumers check that the new method
+is absent without acceleration and available when explicitly enabled. The actual
+C protocol export adds four compiled mutants to the worker checks (nine Rust and
+nineteen C mutants rejected on Linux and Windows).
+
+These are source-bound author tests, not production signing or independent
+qualification. Current-image ABI/register/stack/dump review remains open, as do
+wider algorithm acceleration and Windows ARM64. See the
+[host observations](../assurance/windows-protection-observations/sha2-accelerated-host-20261001.json)
+and [API guide](windows-enclave-sha2.md).
 
 ## Next integration boundary
 
-- Add explicit opt-in selection to protected session/worker protocols and bind
-  it to trusted image policy. Scalar constructors remain scalar; failed
-  acceleration must not silently choose scalar execution.
+- Extend explicit opt-in selection beyond SHA-224/256 and bind each route to its
+  trusted image policy. Scalar constructors remain scalar; failed acceleration
+  must not silently choose scalar execution.
 - Keep backend owners and scratch in enclave storage. Preserve streamed
   framing, retained composition, output transactionality and quarantine.
 - Inspect Windows ABI/register behavior for the actual integrated image. This

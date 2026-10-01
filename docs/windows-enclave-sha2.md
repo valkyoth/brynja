@@ -4,8 +4,9 @@
 SHA-256, SHA-384, SHA-512, named SHA-512/224 and SHA-512/256, and all 510 valid
 general SHA-512/t parameters. The host API and version-six worker are implemented;
 development execution is tested. Production signing, independent review and
-full compiler/platform qualification remain pending. No SIMD or hardware route
-is implied by this implementation.
+full compiler/platform qualification remain pending. `Session::open` stays scalar.
+With the facade's `acceleration` feature, the distinct `Session::open_sha_ni`
+constructor selects the version-thirteen SHA-224/256 image described below.
 
 This is a separate protocol from the bounded version-four SHA-256 API at
 `brynja_strict::enclave::Session`. Use the matching reviewed worker and image
@@ -51,6 +52,37 @@ reuse; abandonment, protocol failure or unwind quarantines the owner. Forgotten
 handles leave it Busy. Explicit `close` still owns resource destruction. Public
 declassification requires exact output width and leaves the caller's destination
 unchanged on failure. Do not declassify merely to obtain a convenient secret slice.
+
+## Explicit SHA-NI selection
+
+Enable `brynja-strict`'s `acceleration` feature (or the hosted crate's
+`strict-sha2-acceleration`) and explicitly call `Session::open_sha_ni(image, policy)`.
+The ordinary `open` constructor does not change route when this feature is enabled.
+The accelerated constructor retains mandatory production signature, reviewed image
+identity and import validation. It additionally requires the matching version-13
+protocol export; a scalar image cannot satisfy it. A protocol marker alone is
+not image authentication: the trusted policy must bind the reviewed signed image.
+
+Only `Algorithm::SHA224` and `Algorithm::SHA256` may start a stream or be retained
+rehash destinations. Other identities return `Error::Bounds` and quarantine the
+session before issuing an operation. Construction or execution failure never
+retries with scalar hashing. Bit tails, exclusive stream ownership, retained
+composition and deliberate public declassification use the same session API.
+
+The enclave image, not the host application, is compiled with the complete
+SHA/SSE2/AVX/AVX2 bundle. Its baseline C gate validates that bundle inside the
+enclave before any specialized Rust entry. This is not a scheduler lock or proof
+of arbitrary hotplug/VM migration safety. Publishers must establish deployment
+compatibility and qualify the exact image; the development tests do not establish
+production trust, current-image register/dump qualification or independent review.
+
+Build the distinct worker with
+`python3 scripts/cryptography/test-windows-enclave-sha2-worker.py worker-build --attest-native-bundle --image`
+on a compatible development host, then follow the existing link/import/sign workflow.
+Do not substitute the scalar version-six image. The development native test
+`windows_enclave::sha2::tests::native_sha_ni::development_sha_ni_host_campaign`
+uses a test-only constructor; it also verifies both public constructors reject
+development-only signatures. No public trust bypass is added.
 
 ## Worker ownership
 

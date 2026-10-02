@@ -80,10 +80,18 @@ describe how the worker was developed, not outstanding constructor work.
   component and eight resident ownership negatives. Strict-provenance Miri
   rejects six allocation/lifetime/rollback mutants in a placement-only model.
   This reuses the existing hardened independent-message engine, not the
-  sequential single-state route. The VBS worker/copy protocol, native enclave
-  execution and supported host API remain next; process execution and model
-  checks do not establish OS protection or whole-image cleanup. See the
+  sequential single-state route. Process execution and model checks do not
+  establish OS protection or whole-image cleanup. See the
   [component and resident observations](../assurance/windows-protection-observations/keccak-simd-component-20261002.json).
+  The version-22 worker and baseline C adapter now also pass native Linux/Windows
+  tests: 520 oracle cases, 3954 injected partial-copy prefixes, fourteen Rust
+  worker mutations and twenty-one C admission/entry/copy mutations. The real
+  development-signed VBS worker passes 53 batches/212 lane digests across 318
+  calls, including twelve actual OS payload-copy failures and retained reuse.
+  Windows rejects the unsigned image; the temporary signing key was removed.
+  The supported host API is next. Whole-image cleanup and production qualification
+  remain separate. See the
+  [worker and native observations](../assurance/windows-protection-observations/keccak-simd-worker-20261002.json).
 
 - The private eight-message SHA-224/256 AVX2 component, resident and version-21
   worker now pass native Linux/Windows process campaigns: 402 independent cases

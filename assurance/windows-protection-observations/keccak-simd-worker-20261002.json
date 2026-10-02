@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "status": "NATIVE_PRIVATE_WORKER_DEVELOPMENT_PASS",
+  "date": "2026-10-02",
+  "scope": "Version-22 bounded four-message Keccak AVX2 worker, copy adapter and native development enclave execution",
+  "implementation_parent": "69a5f5dd",
+  "production_qualified": false,
+  "independently_verified": false,
+  "platforms": [
+    "Native Linux x86_64 worker/OS-copy doubles",
+    "Native Windows 11 x64 MSVC worker/OS-copy doubles",
+    "Development-signed VBS enclave in local Windows 11 KVM guest on Ryzen 9 9950X3D"
+  ],
+  "compiler": "Rust 1.98.1; MSVC 14.44.35207; Windows SDK 10.0.26100.0",
+  "windows_checkout": "Restored development checkout plus verified source-bound overlay, not a clean exact Git checkout",
+  "protocol": {
+    "version": 22,
+    "identity": "0x42524235",
+    "header_bytes": 384,
+    "payload_capacity_bytes": 12288,
+    "retained_page_bytes": 4096,
+    "worker_window_bytes": 65536,
+    "lanes": 4,
+    "source_order": "message/name/customization per lane; canonical empty sources skipped; all metadata decoded before payload copying",
+    "output": "Four 256-byte zero-padded slots; retained identity and exact output bit count checked at export",
+    "cpu_admission": "Baseline C validates complete AVX2/OS bundle before every specialized entry, including destruction; failure latches rejection"
+  },
+  "ordinary_process_campaigns": {
+    "per_platform_oracle_cases": 520,
+    "per_platform_lane_comparisons": 2080,
+    "per_platform_copy_failure_prefixes": 3954,
+    "rust_worker_mutants_rejected": 14,
+    "c_admission_entry_copy_mutants_rejected": 21,
+    "notes": "Injected partial-copy failures are OS-copy doubles, not observed partial failures of the Windows primitive. Includes decode-before-copy, snapshot immutability, sequence/page identity, export/cancel, quarantine and full-page cleanup."
+  },
+  "native_vbs": {
+    "comparisons": 53,
+    "lane_digests": 212,
+    "calls": 318,
+    "rejection_campaigns": 25,
+    "actual_os_payload_copy_failures": 12,
+    "unsigned_image_rejected_with_error": 577,
+    "temporary_certificate_and_key_removed": true,
+    "signature": "Development self-signed certificate only; no production Trusted Signing profile",
+    "signing_warning": "SignTool compatibility warning/exit 2 retained; not treated as production qualification",
+    "scope": "Selected public vectors cover all eight identities, mixed rates, bit tails, cSHAKE N/S and empty fields/output. Copy receipts, retained reuse, unchanged public destination on failures, quarantine and page release checked. No public Rust host API is exposed by this private worker."
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261002/keccak-simd-worker-linux-checked/keccak-simd-worker-results.json": "3260e316e9b293ace06567c8c6161a07caa25a4d88607859598044b9cd762f63",
+    "release-reports/windows-local-20261002/keccak-simd-worker-20261002/keccak-simd-worker-results.json": "7ddc289059115b685882879a359986276a811b8adbb6c280a38548b2cefd5852",
+    "release-reports/windows-local-20261002/keccak-simd-gate-linux/keccak-simd-gate-results.json": "e9392cf753100c4fecc5f313302c3fc3f2d452677605a017f9b8f98aa52c8c50",
+    "release-reports/windows-local-20261002/keccak-simd-gate-20261002/keccak-simd-gate-results.json": "58784146f9616f448adeb525a05e060857f4fda2406d2e52aa1f818c17fd3c9b",
+    "release-reports/windows-local-20261002/keccak-simd-worker-20261002/keccak-simd-image-build.json": "ea9f1072f53ecb228beacc224b0fdb315f2e63e721a1f472cd43b2dc98a828f6",
+    "release-reports/windows-local-20261002/keccak-simd-native-20261002/native.json": "1000d4054788ffe18e418681122f7e909773d90b04c6c62ab1886f8b37aa4e3b",
+    "release-reports/windows-local-20261002/keccak-simd-signed-20261002/signing.json": "d6d252a834884af3e66c43cd758ac2cef4da84164de1138d58302083b47b0b77",
+    "release-reports/windows-local-20261002/keccak-simd-signed-20261002/signed.dll": "8d65c9a260f537725cda9ad081d01d5409cc97a11c2822c8c818adeccb9acf1c",
+    "release-reports/windows-local-20261002/keccak-simd-native-20261002/unsigned.json": "a7f1d1944a656eb0c4668875474cce6a4ec723ffa7ce8a19851338b6e281bc4f"
+  },
+  "artifact_validation": "Current sources, generated sources/vectors, test binaries, built artifacts, image/signing hashes and native completion verified locally. Preserved outside target/.",
+  "remaining": [
+    "Supported affine host API with production trusted-image construction",
+    "Current-image ABI/register/spill/dump qualification",
+    "Independent review and production deployment qualification"
+  ]
+}

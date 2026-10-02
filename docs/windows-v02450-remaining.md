@@ -72,6 +72,17 @@ describe how the worker was developed, not outstanding constructor work.
 
 ## Broader implementation and qualification
 
+- The private four-message SHA-512-family AVX2 component now passes Linux and
+  local Windows native-process campaigns: 602 independent cases/2408 lane
+  comparisons, twelve compiled runtime mutations and six ownership/lifetime
+  negatives. Mixed identities, unequal lengths and every general-t parameter
+  are covered. It is bounded to 1024 bytes per lane and requires a common full
+  block; no portable fallback or arbitrary-length streaming is claimed. Next
+  connect it to protected resident placement, a bounded OS-copy worker and an
+  explicit host route, with current-image cleanup qualification. The public
+  VBS kernel diagnostic does not substitute for that integration. See the
+  [component observations](../assurance/windows-protection-observations/sha512-simd-component-20261002.json).
+
 - The private sequential AVX2 ParallelHash resident/worker now passes native
   Windows development execution (50 comparisons, 650 VBS calls), full-page
   placement/destruction tests, copy/quarantine mutations and baseline CPU/OS

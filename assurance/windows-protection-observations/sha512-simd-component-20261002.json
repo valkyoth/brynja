@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "status": "BOUNDED_SHA512_AVX2_COMPONENT_PASS",
+  "date": "2026-10-02",
+  "baseline": "ee9c113858d1c812380af94c0e28db306c34647c",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "multi_message_simd": true,
+  "description": "Private four-message SHA-512-family component over existing clearing AVX2 batch kernels; ordinary native Linux and local Windows processes, not an enclave resident or supported host API.",
+  "bounds": {
+    "lanes": 4,
+    "maximum_bytes_per_lane": 1024,
+    "minimum_common_complete_blocks": 1,
+    "retained_output_bytes": 256,
+    "scalar_tails_padding_and_general_t_iv_work": true,
+    "arbitrary_length_streaming": false
+  },
+  "toolchain": "1.98.1",
+  "target_features": ["avx", "avx2"],
+  "build_profile": "opt-level=2, overflow-checks=yes, panic=unwind, warnings denied",
+  "tests_per_platform": {
+    "rust_tests": 8,
+    "independent_cases": 602,
+    "lane_comparisons": 2408,
+    "named_identity_boundary_cases": 60,
+    "general_sha512_t_parameters": 510,
+    "mixed_identity_unequal_length_cases": 32,
+    "compiled_runtime_mutants_rejected": 12,
+    "ownership_lifetime_negatives": 6,
+    "compiler_failures_count_as_runtime_rejections": false,
+    "checks": [
+      "SHA-384, SHA-512, SHA-512/224, SHA-512/256 and every valid general-t parameter",
+      "Independent bit oracle, byte-aligned hashlib cross-checks, partial bits and lane isolation",
+      "Required vector work, no common group rejection, bounds and canonical tails",
+      "Budget exhaustion, exact sequences, terminal phases and retained-plan binding",
+      "Copy failures, revocation, recoverable unwind, retained-output clearing and reuse",
+      "Send/Sync/Copy/Clone/Debug and escaping borrowed authority rejected"
+    ]
+  },
+  "source_binding": {
+    "all_source_hashes_match_local": true,
+    "all_generated_and_binary_hashes_verified": true,
+    "source_files_per_platform": 246,
+    "generated_files_per_platform": 3,
+    "windows_checkout": "ee9c1138 plus the three component source/test files; source-bound overlay, not a clean exact Git checkout",
+    "linux": {
+      "record": "release-reports/windows-local-20261002/sha512-simd-linux-variants/sha512-simd-results.json",
+      "record_sha256": "02c3af954fad26274c5c600c745592ad1e8f0786e1025b6984d4fa66ae652187",
+      "target": "x86_64-unknown-linux-gnu",
+      "binary_sha256": "403fbd0ddd504bd9fe879bfaf430d4fe37236e65b1295ef211590ee3971911e4"
+    },
+    "windows": {
+      "record": "release-reports/windows-local-20261002/sha512-simd-component-final-20261002/sha512-simd-results.json",
+      "record_sha256": "0bb6ee6b5f444a77ada6ed7873542a9abcbb729a990ebdef24b4442f27c543db",
+      "target": "x86_64-pc-windows-msvc",
+      "binary_sha256": "ba09c058a5ed5666b988c0d972d3505861a12d8f68c6ba124d5a6346fa684d29"
+    }
+  },
+  "test_runner_notes": [
+    "Shared runtime oracle loop avoids separately optimizing hundreds of identical harness bodies without dropping cases",
+    "Each compiled mutation has a unique preserved executable; a Windows LNK1104 on an earlier overwritten executable failed that campaign and is not counted as a pass",
+    "Source hashes are rechecked at completion; clean source is rebuilt and rerun after mutations"
+  ],
+  "limitations": [
+    "Public synthetic inputs and author checks, not independent review",
+    "Private component has no protected-page resident, OS-copy protocol or supported host constructor yet",
+    "No current-image stack/register/spill/dump qualification; enclosing owner and all execution frames still require protected integration",
+    "No Miri, sanitizer, AVX-512, dedicated SHA512 instruction, multicore or Windows ARM64 qualification in this campaign",
+    "No production signing or release-readiness claim; existing gates unchanged"
+  ]
+}

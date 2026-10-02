@@ -18,6 +18,16 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
+The private four-message SHA-512-family AVX2 component now has native Linux and
+Windows-process coverage: 602 independent cases/2408 lane comparisons, all valid
+general-t parameters, mixed identities and unequal lengths, twelve compiled
+runtime mutations and six ownership/lifetime negatives. It requires real vector
+work and retains clearing output with exact plan/sequence binding. Inputs are
+bounded to 1024 bytes per lane with a common complete block. Protected resident,
+VBS transport and supported host integration remain pending; this is not
+AVX-512, dedicated SHA512 instructions or current-image cleanup qualification.
+See the [component scope](../docs/windows-enclave-acceleration.md).
+
 The private sequential SHA-NI SHA-224/256 batch component now preserves eight
 ordered slots, bounded fragments, public work budgets and retained output over
 the unchanged hardened streaming engine. Its separate version-19 decoder rejects

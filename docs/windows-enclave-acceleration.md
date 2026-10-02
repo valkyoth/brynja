@@ -7,6 +7,33 @@ session routes are still pending.
 The historical public-vector diagnostics below are not, by themselves, secret
 input qualification. Release-gate policy and dependencies are unchanged.
 
+## Bounded independent-message SHA-512 AVX2 component
+
+The next private component performs four independent SHA-512-family messages
+through the existing clearing AVX2 batch engine. It supports SHA-384, SHA-512,
+SHA-512/224, SHA-512/256 and all valid general SHA-512/t identities, including
+mixed identities, unequal lengths and canonical partial bits. Each lane is
+bounded to 1024 bytes and all four must share at least one complete 128-byte
+block. Required vector work cannot silently become portable execution; scalar
+tails, padding and general-t IV derivation remain explicitly accounted work.
+Successful results stay in a clearing 256-byte owner until matching-plan export
+or cancellation. Error/unwind paths clear and quarantine; healthy completion
+permits sequenced reuse.
+
+Linux and local Windows native-process campaigns each pass eight tests, 602
+independent cases and 2408 lane comparisons, rejecting twelve compiled runtime
+mutations and six ownership/lifetime violations. The cases cover all 510 valid
+general-t parameters and 32 mixed-identity/unequal-length plans. The generated
+oracle runs as a shared loop to reduce repeated compilation; mutation binaries
+have distinct names and are retained. A prior Windows link failure was not
+counted as a rejected mutation. See the
+[source-bound component observations](../assurance/windows-protection-observations/sha512-simd-component-20261002.json).
+
+This is not yet a protected-page resident, VBS worker or supported host route.
+It does not qualify current-image caller frames, spills or registers. Bounded
+component tests are not arbitrary-length streaming, production signing or
+independent review. This uses AVX2, not AVX-512 or dedicated SHA512 instructions.
+
 ## Sequential SHA-NI batch component
 
 The private version-19 component processes up to eight ordered SHA-224/256

@@ -101,6 +101,12 @@ not SIMD or parallel. With `strict-sha2-acceleration`, explicit
 complete SHA/SSE2/AVX/AVX2/OS bundle for ordered SHA-224/256 items. Wide plans reject;
 scalar `open` stays scalar. This is not independent-message SIMD.
 See the [batch API and example](../../docs/windows-enclave-sha2-batch.md).
+The separate `windows_enclave::sha512_simd` interface requires
+`strict-sha2-acceleration` and explicit `Session::open_avx2` with a reviewed
+version-twenty image. It computes four independent wide SHA-2 messages in AVX2
+lanes, bounded to 128..=1024 bytes per lane; no scalar fallback or unbounded
+streaming is promised. Production signature/import admission remains mandatory.
+Development host tests pass; current-image and independent qualification remain pending.
 With both `strict-sha2` and `strict-sha3`, `windows_enclave::sha3` adds the eight
 SHA-3/SHAKE/cSHAKE identities, streamed N/S and retained incremental output.
 Use the separate version-seven image and [SHA-3 guide](../../docs/windows-enclave-sha3.md).

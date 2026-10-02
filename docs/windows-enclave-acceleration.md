@@ -1,8 +1,8 @@
 # Windows enclave acceleration development
 
 Scalar constructors remain scalar. Explicit SHA-NI SHA-224/256 streaming/batches and AVX2
-SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, sequential SHA-3 batch and ParallelHash host
-routes are development-tested; wider accelerated
+SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, sequential SHA-3 batch, ParallelHash and bounded
+four-message SHA-512-family SIMD host routes are development-tested; other accelerated
 session routes are still pending.
 The historical public-vector diagnostics below are not, by themselves, secret
 input qualification. Release-gate policy and dependencies are unchanged.
@@ -29,8 +29,13 @@ have distinct names and are retained. A prior Windows link failure was not
 counted as a rejected mutation. See the
 [source-bound component observations](../assurance/windows-protection-observations/sha512-simd-component-20261002.json).
 
-This is not yet a protected-page resident, VBS worker or supported host route.
-It does not qualify current-image caller frames, spills or registers. Bounded
+The component evidence alone does not establish a protected-page resident or VBS
+worker. Subsequent placement/worker tests and the explicit version-20
+`enclave::sha512_simd::Session::open_avx2` host route are now development-tested:
+559 batches/2236 digests per debug/release profile, with sixteen compiled host
+mutations and ten ownership rejections. See the
+[bounded API](windows-enclave-sha2-batch.md#four-message-wide-simd).
+These tests do not qualify current-image caller frames, spills or registers. Bounded
 component tests are not arbitrary-length streaming, production signing or
 independent review. This uses AVX2, not AVX-512 or dedicated SHA512 instructions.
 

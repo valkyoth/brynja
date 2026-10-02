@@ -184,6 +184,8 @@ mod sha3_batch_receipt;
 mod sha3_batch_wire;
 #[cfg(feature = "strict-sha3")]
 mod sha3_wire;
+#[cfg(feature = "strict-sha2-acceleration")]
+pub mod sha512_simd;
 #[cfg(all(
     feature = "strict-tuplehash",
     any(

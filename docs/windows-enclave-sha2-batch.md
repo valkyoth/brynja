@@ -89,6 +89,47 @@ SHA/AVX flags. This is hardware acceleration of each ordered item, not concurren
 SIMD lanes. Feature detection does not prove arbitrary migration safety; deployment
 must preserve the advertised instruction set throughout the enclave's lifetime.
 
+## Four-message wide SIMD
+
+With `acceleration`, `enclave::sha512_simd::Session::open_avx2` selects the
+separate version-twenty image. This is four independent AVX2 lanes, not SHA-NI,
+AVX-512, dedicated SHA512 instructions or multicore scheduling. It accepts
+SHA-384, SHA-512, named /224 and /256 and every valid general SHA-512/t parameter.
+Each lane must contain 128..=1024 bytes and at least one complete 128-byte block.
+Partial final bytes use high-order bits with zero unused bits; validation happens
+inside the enclave after copying. Unsupported shapes reject without fallback.
+
+Caller input storage remains outside the enclave. Plans, lengths and budgets
+are public metadata. The affine retained handle borrows its session and cannot
+be copied, cloned, shared or moved between threads. Explicit declassification
+returns four 64-byte slots in plan order, with unused output bytes zeroed.
+Cancellation permits reuse; abandonment, work failure or backend failure
+quarantines. Forgetting a handle leaves the session busy until closed.
+
+```rust,no_run
+use brynja_strict::enclave::{sha512_simd::{Algorithm, Input, Plan, Session}, Error, PublicDeclassification};
+
+pub fn public_wide_batch(session: &mut Session) -> Result<[u8; 256], Error> {
+    let message = [0x80; 128]; // Public example, not caller-storage protection.
+    let plan = Plan::new([Algorithm::SHA512; 4])?;
+    let input = core::array::from_fn(|_| Input::bytes(&message));
+    let retained = session.digest(plan, input, 100)?;
+    let mut public = [0; 256];
+    retained.declassify(&mut public, PublicDeclassification::acknowledge())?;
+    Ok(public)
+}
+```
+
+Production opening still requires a reviewed static policy, prepared system-import
+identities and successful Windows signature verification. The existing image
+preparation/signing workflow applies; merely signing the earlier private diagnostic
+image does not satisfy host import admission. There is no public development bypass.
+Native development-image host tests pass 559 batches/2236 digests per debug/release
+profile; all general-t parameters, mixed plans, cancellation, forgetting, quarantine
+and transactional rejection are exercised. Production trust rejects that test
+signature. See the [host observations](../assurance/windows-protection-observations/sha512-simd-host-20261002.json).
+Whole-image cleanup, production signing and independent qualification remain pending.
+
 ## Qualification boundary
 
 Component tests, host/worker wire parity, mutation tests, Miri placement/lifecycle
@@ -97,7 +138,9 @@ The worker and the fixed OS-copy adapter build separately from the host API.
 The earlier [unsigned build record](../assurance/windows-protection-observations/sha2-batch-wire-build-20260930.json)
 does not establish native execution. Production signing, compiler/register and
 platform qualification remain pending even after development execution succeeds.
-No Windows ARM64 or independent-message SIMD support is implied.
+No Windows ARM64 support is implied. The streaming `sha2_batch` interface is
+sequential; only the separately bounded `sha512_simd` interface above claims
+independent-message SIMD.
 
 The subsequent native development campaign passes in debug and release with
 355 batches and 1822 individual digest comparisons per profile. It covers all

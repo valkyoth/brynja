@@ -93,6 +93,10 @@ independent-message SIMD or multicore batching. Scalar `open` stays scalar.
 version-nineteen image with the full SHA/SSE2/AVX/AVX2/OS bundle. It supports only
 ordered SHA-224/256 items; wide plans reject without scalar fallback. This is
 sequential hardware acceleration, not independent-message SIMD.
+`enclave::sha512_simd::Session::open_avx2` selects the separate version-twenty
+four-message SHA-512-family AVX2 image. Each lane is bounded to 128..=1024 bytes
+with a common complete block; retained results require explicit declassification.
+It never falls back. See the [bounded SIMD example](../../docs/windows-enclave-sha2-batch.md#four-message-wide-simd).
 Other Windows algorithms remain scalar. Production and
 independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
 

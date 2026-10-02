@@ -99,6 +99,9 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         compiled += "\npub fn enclave_sha3_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha3::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha3::Session::open_avx2(path, policy) }"
         selected = positive + ('\n' + compiled if features else '')
         if features:
+            selected += '\nmod wide_simd_example {\n' + section_example(batch_guide, 'Four-message wide SIMD') + '\n}\n'
+            selected += "\npub fn enclave_sha512_simd_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha512_simd::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha512_simd::Session::open_avx2(path, policy) }"
+            selected += "\npub type EnclaveSha512SimdRetained<'a> = brynja_strict::enclave::sha512_simd::Retained<'a>;"
             selected += "\npub fn enclave_sha2_batch_sha_ni_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha2_batch::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha2_batch::Session::open_sha_ni(path, policy) }"
             selected += "\npub fn enclave_parallelhash_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::parallelhash::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::parallelhash::Session::open_avx2(path, policy) }"
             selected += "\npub fn enclave_sha3_batch_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha3_batch::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha3_batch::Session::open_avx2(path, policy) }"
@@ -119,6 +122,7 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                                      'enclave::parallelhash::transport','enclave::parallelhash::Owner') else 'E0432')
                  for name in FORBIDDEN]
         if not features:
+            cases += [('use brynja_strict::enclave::sha512_simd;', 'E0432')]
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
                       for name in MODULES if name not in ('batch', 'enclave')]
             cases += [('fn probe() { let _ = brynja_strict::enclave::sha2::Session::open_sha_ni; }', 'E0599')]
@@ -144,6 +148,13 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                 cases.append((f'fn require<T: {trait}>() {{}}\n'
                     f'fn probe() {{ require::<brynja_strict::enclave::sha3::{kind}>(); }}','E0277'))
         try:
+            if features:
+                for name in ('Owner', 'Lease', 'transport', 'wire'):
+                    cases.append((f'use brynja_strict::enclave::sha512_simd::{name};', 'E0603'))
+                for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                    for kind in ('Session', "Retained<'static>"):
+                        cases.append((f'fn require<T: {trait}>() {{}}\n'
+                            f'fn probe() {{ require::<brynja_strict::enclave::sha512_simd::{kind}>(); }}', 'E0277'))
             for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
                 for kind in ('Session', "Stream<'static>", "Reader<'static>", "Retained<'static>", "Finalized<'static>"):
                     cases.append((f'fn require<T: {trait}>() {{}}\n'

@@ -35,7 +35,10 @@ OS-copy worker now passes Linux/Windows oracle, prefix-copy failure and compiled
 mutation tests. Its Windows image now executes in development-signed VBS:
 61 four-message comparisons/244 lane digests, 318 calls and seventeen rejection
 campaigns pass. Unsigned loading rejects; the temporary signing key was removed.
-Supported host integration remains pending; this is not
+The explicit `enclave::sha512_simd::Session::open_avx2` host route now passes
+559 batches/2236 digests per native debug/release profile, with prepared import
+identities and mandatory production trust (the development signature rejects).
+Sixteen compiled host mutations and ten ownership negatives reject. This is not
 AVX-512, dedicated SHA512 instructions or current-image cleanup qualification.
 See the [component scope](../docs/windows-enclave-acceleration.md).
 

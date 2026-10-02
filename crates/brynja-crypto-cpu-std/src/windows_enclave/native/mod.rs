@@ -16,12 +16,16 @@ pub(super) mod sha2_batch;
 pub(super) mod sha3;
 #[cfg(feature = "strict-sha3")]
 pub(super) mod sha3_batch;
+#[cfg(feature = "strict-sha2-acceleration")]
+pub(super) mod sha512_simd;
 mod sys;
 #[cfg(feature = "strict-tuplehash")]
 pub(super) mod tuplehash;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Protocol {
+    #[cfg(feature = "strict-sha2-acceleration")]
+    Sha512Simd,
     Sha2Batch,
     Sha2BatchShaNi,
     Legacy,
@@ -139,6 +143,8 @@ impl Backend {
             input: sys::export(
                 owner.base,
                 match protocol {
+                    #[cfg(feature = "strict-sha2-acceleration")]
+                    Protocol::Sha512Simd => b"PublicSha512SimdInputSource\0",
                     Protocol::Sha2 | Protocol::Sha2ShaNi => b"PublicSha2InputSource\0",
                     Protocol::Sha2Batch | Protocol::Sha2BatchShaNi => {
                         b"PublicSha2BatchInputSource\0"
@@ -171,6 +177,8 @@ impl Backend {
                 sys::export(owner.base, b"PublicRehashControl\0")?
             },
             sha2_control: match protocol {
+                #[cfg(feature = "strict-sha2-acceleration")]
+                Protocol::Sha512Simd => sys::export(owner.base, b"PublicSha512SimdControl\0")?,
                 Protocol::Sha2 | Protocol::Sha2ShaNi => {
                     sys::export(owner.base, b"PublicSha2Control\0")?
                 }
@@ -200,6 +208,13 @@ impl Backend {
                 Protocol::Legacy => 0,
             },
         };
+        #[cfg(feature = "strict-sha2-acceleration")]
+        if protocol == Protocol::Sha512Simd {
+            let identity = sys::export(owner.base, b"PublicSha512SimdProtocol\0")?;
+            if sys::call(identity, 0)? != super::sha512_simd::wire::PROTOCOL {
+                return Err(Error::Unsupported);
+            }
+        }
         if protocol == Protocol::Sha2ShaNi {
             let identity = sys::export(owner.base, b"PublicSha2ShaNiProtocol\0")?;
             if sys::call(identity, 0)? != super::sha2_wire::SHA_NI_PROTOCOL {
@@ -354,6 +369,8 @@ impl Backend {
                 Protocol::ParallelHash | Protocol::ParallelHashAvx2 => {
                     self.run_parallelhash(3, None, 0, None)?
                 }
+                #[cfg(feature = "strict-sha2-acceleration")]
+                Protocol::Sha512Simd => self.run_sha512_simd(3, None, None)?,
                 Protocol::Legacy => self.run(3, None, 0, None)?,
             }
             self.live = false;

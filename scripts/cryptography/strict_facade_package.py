@@ -100,6 +100,9 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         selected = positive + ('\n' + compiled if features else '')
         if features:
             selected += '\nmod wide_simd_example {\n' + section_example(batch_guide, 'Four-message wide SIMD') + '\n}\n'
+            selected += '\nmod narrow_simd_example {\n' + section_example(batch_guide, 'Eight-message narrow SIMD') + '\n}\n'
+            selected += "\npub fn enclave_sha256_simd_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha256_simd::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha256_simd::Session::open_avx2(path, policy) }"
+            selected += "\npub type EnclaveSha256SimdRetained<'a> = brynja_strict::enclave::sha256_simd::Retained<'a>;"
             selected += "\npub fn enclave_sha512_simd_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha512_simd::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha512_simd::Session::open_avx2(path, policy) }"
             selected += "\npub type EnclaveSha512SimdRetained<'a> = brynja_strict::enclave::sha512_simd::Retained<'a>;"
             selected += "\npub fn enclave_sha2_batch_sha_ni_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha2_batch::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha2_batch::Session::open_sha_ni(path, policy) }"
@@ -123,6 +126,7 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                  for name in FORBIDDEN]
         if not features:
             cases += [('use brynja_strict::enclave::sha512_simd;', 'E0432')]
+            cases += [('use brynja_strict::enclave::sha256_simd;', 'E0432')]
             cases += [(f'use brynja_strict::{name}::CompiledSession;', 'E0432')
                       for name in MODULES if name not in ('batch', 'enclave')]
             cases += [('fn probe() { let _ = brynja_strict::enclave::sha2::Session::open_sha_ni; }', 'E0599')]
@@ -149,6 +153,12 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                     f'fn probe() {{ require::<brynja_strict::enclave::sha3::{kind}>(); }}','E0277'))
         try:
             if features:
+                for name in ('Owner', 'Lease', 'transport', 'wire'):
+                    cases.append((f'use brynja_strict::enclave::sha256_simd::{name};', 'E0603'))
+                for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                    for kind in ('Session', "Retained<'static>"):
+                        cases.append((f'fn require<T: {trait}>() {{}}\n'
+                            f'fn probe() {{ require::<brynja_strict::enclave::sha256_simd::{kind}>(); }}', 'E0277'))
                 for name in ('Owner', 'Lease', 'transport', 'wire'):
                     cases.append((f'use brynja_strict::enclave::sha512_simd::{name};', 'E0603'))
                 for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):

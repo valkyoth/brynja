@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "NATIVE_HOST_DEVELOPMENT_PASS",
+  "date": "2026-10-02",
+  "scope": "Explicit version-21 eight-message SHA-224/256 AVX2 enclave host API",
+  "implementation_parent": "765574d0",
+  "production_qualified": false,
+  "independently_verified": false,
+  "platform": "Local Windows 11 x64 KVM guest on Ryzen 9 9950X3D; VBS/HVCI running; Secure Boot off; development test signing",
+  "compiler": "1.98.1-x86_64-pc-windows-msvc",
+  "remote_checkout": "Restored development checkout plus source-bound overlay, not a clean exact Git checkout",
+  "host_source_hashes_verified": 427,
+  "per_profile": {
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "batches": 403,
+    "lane_digests": 3224,
+    "production_constructor_rejects_development_signature": true,
+    "wrong_hash_family_and_correctly_hashed_other_protocol_rejected": true,
+    "cancellation_forgetting_abandonment_budget_bits_and_wrong_plan_checked": true,
+    "failed_export_leaves_destination_unchanged": true,
+    "uncertain_close_reports_release_error": true
+  },
+  "linux_host_model": {
+    "tests": 5,
+    "compiled_runtime_mutations_rejected": 18,
+    "compiled_ownership_negatives_rejected": 10,
+    "miri": "Five host-only tests passed under nightly-2026-09-11 with strict provenance; no VBS or SIMD execution claim"
+  },
+  "additional_checks": {
+    "packaged_facade": "Debug/release examples compile; 472 export/ownership/default-feature negatives rejected across the full facade",
+    "all_feature_crate_tests": "179 unit tests, 23 integration tests and 243 doctests passed; four explicitly ignored tests remain ignored",
+    "compatibility": "Strict facade all-feature compilation passed under Rust 1.90.0 and 1.99.0",
+    "clippy": "Linux and native Windows passed with the existing chunks_exact_to_as_chunks compatibility allowance",
+    "sha512_shared_owner_regression": "Native debug/release each passed 559 batches/2236 lane digests; 427 current source hashes, logs, binaries and image verified"
+  },
+  "image_admission": {
+    "preparation": "Existing prepare-system-imports workflow followed by separate development signing; no admission rule relaxed",
+    "signature": "Self-signed development certificate, not a production Trusted Signing profile",
+    "temporary_certificate_and_key_removed": true,
+    "sdk_compatibility_warning": "SignTool exit 2 retained; signed image runs in development VBS; no production qualification"
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261002/sha256-host-20261002/host-results.json": "e84dcdc5f052d4065004c51771815afc537952a42ff107cb9f283e8c8737839b",
+    "release-reports/windows-local-20261002/sha256-host-admitted-20261002/signed.dll": "3c35d9b9b959ca117e56c228e251e934f1361fb767f541de965e7733ff2e44b5",
+    "release-reports/windows-local-20261002/sha256-host-admitted-20261002/signing.json": "ee7cdb2ed76de41c71ba62c48ef8bd7726bf5d182ae53e6837f6e31e68f055cf",
+    "release-reports/windows-local-20261002/sha256-host-prepared.dll": "ead3fbbaccb02ea6984a6d7a55920fa59d51b5f75984589558f39666910110f4",
+    "release-reports/windows-local-20261002/sha256-host-model/host-model-results.json": "2bd0ca519df0bdc48f34e6502d23deac0e282e4e7c835eaf9fa8599b5440d9bb",
+    "release-reports/windows-local-20261002/sha256-host-miri.log": "f91d962b187f360fd38ad712253630b24922988bd507fc13d04359a963a2c846",
+    "release-reports/windows-local-20261002/sha256-host-all-features.log": "31d6ec5c5d1fe695cd718ccb4c1ab88dfae4ecb5c26502c448cf143c97e072ef",
+    "release-reports/windows-local-20261002/sha512-host-regression-20261002/host-results.json": "79621404f4d6b852ca925dfc67ffb4968ae8dd9058d96a48a4a8d05fcbf9384d"
+  },
+  "remaining": [
+    "Current-image ABI/register/spill/dump qualification",
+    "Production signing and independent review",
+    "Independent-message Keccak SIMD and multicore ParallelHash",
+    "Windows ARM64 qualification"
+  ]
+}

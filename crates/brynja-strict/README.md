@@ -97,6 +97,12 @@ sequential hardware acceleration, not independent-message SIMD.
 four-message SHA-512-family AVX2 image. Each lane is bounded to 128..=1024 bytes
 with a common complete block; retained results require explicit declassification.
 It never falls back. See the [bounded SIMD example](../../docs/windows-enclave-sha2-batch.md#four-message-wide-simd).
+With `acceleration`, `enclave::sha256_simd::Session::open_avx2` selects the
+distinct version-twenty-one image for eight independent SHA-224/256 AVX2 lanes.
+Each lane is bounded to 64..=1024 bytes with a complete block; wide identities
+reject. Retained results require explicit declassification into eight 32-byte
+slots. Production signature and import admission remain mandatory; there is no
+fallback. See the [narrow SIMD example](../../docs/windows-enclave-sha2-batch.md#eight-message-narrow-simd).
 Other Windows algorithms remain scalar. Production and
 independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
 

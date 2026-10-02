@@ -99,6 +99,8 @@ mod policy;
 ))]
 mod protocol;
 pub mod sha2;
+#[cfg(feature = "strict-sha2-acceleration")]
+pub mod sha256_simd;
 pub mod sha2_batch;
 #[cfg(any(
     test,

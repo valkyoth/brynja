@@ -83,9 +83,16 @@ describe how the worker was developed, not outstanding constructor work.
   53 batches/424 lane comparisons across 302 calls, including all eight actual
   OS lane-copy failures, retained reuse and quarantine. Windows rejects the
   unsigned image; the temporary signing key was removed. Sources and preserved
-  artifacts match their recorded hashes. The supported host API is still the
-  next integration step; whole-image cleanup and production qualification remain
-  separate. See the
+  artifacts match their recorded hashes. The supported version-21
+  `sha256_simd::Session::open_avx2` host API is now integrated: development-signed
+  native debug/release campaigns each pass 403 batches/3224 digest comparisons.
+  Eighteen compiled host mutations, ten ownership negatives and five host-only
+  Miri tests pass; the packaged facade rejects 472 export/ownership cases.
+  Production construction still rejects the development signature. The existing
+  SHA-512 SIMD host regression also passes against the updated shared owner.
+  Whole-image cleanup and production qualification remain separate. See the
+  [host observations](../assurance/windows-protection-observations/sha256-simd-host-20261002.json)
+  and the
   [component, worker and native observations](../assurance/windows-protection-observations/sha256-simd-worker-20261002.json).
 
 - The private four-message SHA-512-family AVX2 component now passes Linux and

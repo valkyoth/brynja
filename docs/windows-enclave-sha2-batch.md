@@ -130,6 +130,51 @@ and transactional rejection are exercised. Production trust rejects that test
 signature. See the [host observations](../assurance/windows-protection-observations/sha512-simd-host-20261002.json).
 Whole-image cleanup, production signing and independent qualification remain pending.
 
+## Eight-message narrow SIMD
+
+With `acceleration`, `enclave::sha256_simd::Session::open_avx2` selects the
+distinct version-twenty-one image. It executes eight independent SHA-224/256
+AVX2 lanes, not sequential SHA-NI or multicore work. All eight slots must be
+present, each containing 64..=1024 bytes with at least one complete 64-byte block.
+Both identities may be mixed; wide SHA-2 identities and incompatible shapes
+reject without fallback. Partial bytes use high-order bits with unused bits zero,
+validated only after enclave copying. Scalar tails and padding are explicit.
+
+```rust,no_run
+use brynja_strict::enclave::{sha256_simd::{Algorithm, Input, Plan, Session}, Error, PublicDeclassification};
+
+pub fn public_narrow_batch(session: &mut Session) -> Result<[u8; 256], Error> {
+    let message = [0x80; 64]; // Public example, not caller-storage protection.
+    let plan = Plan::new([Algorithm::SHA256; 8])?;
+    let input = core::array::from_fn(|_| Input::bytes(&message));
+    let retained = session.digest(plan, input, 100)?;
+    let mut public = [0; 256];
+    retained.declassify(&mut public, PublicDeclassification::acknowledge())?;
+    Ok(public)
+}
+```
+
+Results stay enclave-resident until explicit declassification into eight 32-byte
+slots in plan order; SHA-224 uses 28 bytes followed by four zeros. Public output
+is transactional. Caller input storage is not protected by borrowing it. Lengths,
+identities and compression-work budgets are public metadata. Session and retained
+handles are thread-bound, non-copyable and non-cloneable. Cancellation permits
+reuse; abandonment or failure quarantines, and forgetting a handle leaves the
+session busy until closed. `panic=abort` cannot run Drop cleanup.
+
+The constructor requires production signature verification, reviewed image/import
+identity and successful VBS initialization. Merely enabling a Cargo feature does
+not select SIMD. The host requires no build-wide AVX flags; the enclave admission
+boundary checks its full AVX2/OS bundle. Deployment must preserve that bundle:
+revalidation is not a scheduling lock or live-migration guarantee. Unsupported
+platforms, capabilities and wrong images reject, never retry with scalar code.
+Development-image tests are not production trust or whole-image qualification.
+
+Native development debug/release host campaigns each pass 403 batches and 3224
+lane digests, including mixed identities and failure/lifecycle checks. Host-only
+Miri and compiled mutation/ownership checks provide additional author evidence.
+See the [host observations](../assurance/windows-protection-observations/sha256-simd-host-20261002.json).
+
 ## Qualification boundary
 
 Component tests, host/worker wire parity, mutation tests, Miri placement/lifecycle
@@ -139,7 +184,7 @@ The earlier [unsigned build record](../assurance/windows-protection-observations
 does not establish native execution. Production signing, compiler/register and
 platform qualification remain pending even after development execution succeeds.
 No Windows ARM64 support is implied. The streaming `sha2_batch` interface is
-sequential; only the separately bounded `sha512_simd` interface above claims
+sequential; only the separately bounded `sha256_simd` and `sha512_simd` interfaces claim
 independent-message SIMD.
 
 The subsequent native development campaign passes in debug and release with

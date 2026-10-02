@@ -107,6 +107,12 @@ version-twenty image. It computes four independent wide SHA-2 messages in AVX2
 lanes, bounded to 128..=1024 bytes per lane; no scalar fallback or unbounded
 streaming is promised. Production signature/import admission remains mandatory.
 Development host tests pass; current-image and independent qualification remain pending.
+The distinct `windows_enclave::sha256_simd::Session::open_avx2` interface uses
+the same opt-in feature and a reviewed version-twenty-one image for eight
+independent SHA-224/256 lanes. Each lane contains 64..=1024 bytes with a common
+complete block; results remain retained until explicit public declassification.
+No fallback, unbounded streaming or multicore behavior is implied. The same
+production trust and qualification limits apply.
 With both `strict-sha2` and `strict-sha3`, `windows_enclave::sha3` adds the eight
 SHA-3/SHAKE/cSHAKE identities, streamed N/S and retained incremental output.
 Use the separate version-seven image and [SHA-3 guide](../../docs/windows-enclave-sha3.md).

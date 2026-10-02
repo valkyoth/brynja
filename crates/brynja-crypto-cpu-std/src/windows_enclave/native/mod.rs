@@ -11,6 +11,8 @@ pub(super) mod kmac;
 pub(super) mod parallelhash;
 mod pin;
 pub(super) mod sha2;
+#[cfg(feature = "strict-sha2-acceleration")]
+pub(super) mod sha256_simd;
 pub(super) mod sha2_batch;
 #[cfg(feature = "strict-sha3")]
 pub(super) mod sha3;
@@ -26,6 +28,8 @@ pub(super) mod tuplehash;
 enum Protocol {
     #[cfg(feature = "strict-sha2-acceleration")]
     Sha512Simd,
+    #[cfg(feature = "strict-sha2-acceleration")]
+    Sha256Simd,
     Sha2Batch,
     Sha2BatchShaNi,
     Legacy,
@@ -145,6 +149,8 @@ impl Backend {
                 match protocol {
                     #[cfg(feature = "strict-sha2-acceleration")]
                     Protocol::Sha512Simd => b"PublicSha512SimdInputSource\0",
+                    #[cfg(feature = "strict-sha2-acceleration")]
+                    Protocol::Sha256Simd => b"PublicSha256SimdInputSource\0",
                     Protocol::Sha2 | Protocol::Sha2ShaNi => b"PublicSha2InputSource\0",
                     Protocol::Sha2Batch | Protocol::Sha2BatchShaNi => {
                         b"PublicSha2BatchInputSource\0"
@@ -179,6 +185,8 @@ impl Backend {
             sha2_control: match protocol {
                 #[cfg(feature = "strict-sha2-acceleration")]
                 Protocol::Sha512Simd => sys::export(owner.base, b"PublicSha512SimdControl\0")?,
+                #[cfg(feature = "strict-sha2-acceleration")]
+                Protocol::Sha256Simd => sys::export(owner.base, b"PublicSha256SimdControl\0")?,
                 Protocol::Sha2 | Protocol::Sha2ShaNi => {
                     sys::export(owner.base, b"PublicSha2Control\0")?
                 }
@@ -212,6 +220,13 @@ impl Backend {
         if protocol == Protocol::Sha512Simd {
             let identity = sys::export(owner.base, b"PublicSha512SimdProtocol\0")?;
             if sys::call(identity, 0)? != super::sha512_simd::wire::PROTOCOL {
+                return Err(Error::Unsupported);
+            }
+        }
+        #[cfg(feature = "strict-sha2-acceleration")]
+        if protocol == Protocol::Sha256Simd {
+            let identity = sys::export(owner.base, b"PublicSha256SimdProtocol\0")?;
+            if sys::call(identity, 0)? != super::sha256_simd::wire::PROTOCOL {
                 return Err(Error::Unsupported);
             }
         }
@@ -371,6 +386,8 @@ impl Backend {
                 }
                 #[cfg(feature = "strict-sha2-acceleration")]
                 Protocol::Sha512Simd => self.run_sha512_simd(3, None, None)?,
+                #[cfg(feature = "strict-sha2-acceleration")]
+                Protocol::Sha256Simd => self.run_sha256_simd(3, None, None)?,
                 Protocol::Legacy => self.run(3, None, 0, None)?,
             }
             self.live = false;

@@ -79,6 +79,23 @@ def main():
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
+        # Reproduce the compiler-matrix/workflow review drift seen after adding
+        # Rust 1.99. Test the actual host validators without starting Cargo.
+        for module in (metadata.sha256_public_api, metadata.sha2_public_api, metadata.sha3_public_api):
+            for source in (module.RUST_MATRIX, module.WORKFLOW):
+                for missing in (False, True):
+                    hashes = dict(module.EXPECTED_SHA256)
+                    if missing:
+                        del hashes[source]
+                    else:
+                        hashes[source] = '0' * 64
+                    with patch.object(module, 'EXPECTED_SHA256', hashes):
+                        try:
+                            module.validate_repository(metadata.ROOT)
+                        except module.AcceptancePolicyError:
+                            pass
+                        else:
+                            raise AssertionError('compiler/CI review drift accepted')
         parallel = metadata.parallelhash_policy
         for missing in (False, True):
             hashes = dict(parallel.HASHES)

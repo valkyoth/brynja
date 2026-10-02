@@ -10,6 +10,7 @@ import os
 import shlex
 import subprocess
 import tempfile
+import tomllib
 from pathlib import Path
 from unittest.mock import patch
 
@@ -73,7 +74,18 @@ def selection_tests() -> None:
         rejects(commands.owners, command)
     matrix = commands.matrix_commands()
     selected_matrix = [c for c, _ in matrix if commands.selected([c], ["sha2"])]
-    assert len({c.split()[1] for c in selected_matrix}) == 12
+    # Bind to the independently checked coverage matrix, not a stale count.
+    # Exact membership also catches substitution of one compiler for another.
+    coverage = tomllib.loads((plans.ROOT / 'assurance/zeroization-matrix.toml').read_text())
+    expected = {'+' + version for version in coverage['coverage']['compilers']}
+    selected_versions = {shlex.split(c)[1] for c in selected_matrix}
+    assert selected_versions == expected
+    assert '+1.99.0' in selected_versions
+    for version in expected:
+        per_version = [c for c in selected_matrix if shlex.split(c)[1] == version]
+        assert any('sha256-public-api' in c for c in per_version)
+        assert any('sha2-public-api' in c for c in per_version)
+        assert any('general-sha512-t' in c for c in per_version)
     assert any("general-sha512-t" in c for c in selected_matrix)
     assert not any("legacy-md5" in c or "sha3-public-api" in c for c in selected_matrix)
     assert plans.scope.closure({"sha3"}) == ("sha3", "kmac", "tuplehash", "parallelhash")

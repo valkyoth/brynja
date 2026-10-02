@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "SIMD_WORKER_DOUBLES_AND_WINDOWS_IMAGE_BUILD_PASS",
+  "date": "2026-10-02",
+  "baseline": "cbece476",
+  "enclave_execution": false,
+  "production_qualified": false,
+  "independently_verified": false,
+  "toolchain": "1.98.1",
+  "protocol": {
+    "version": 20,
+    "route": 2,
+    "header_bytes": 160,
+    "lanes": 4,
+    "maximum_payload_bytes_per_lane": 1024,
+    "retained_output_bytes": 256,
+    "operations": {"digest": 90, "public_export": 91, "cancel": 92},
+    "common_complete_block_required": true
+  },
+  "tests_per_platform": {
+    "independent_cases": 602,
+    "lane_comparisons": 2408,
+    "copy_failure_prefixes": 1813,
+    "worker_mutations_rejected": 14,
+    "baseline_c_mutations_rejected": 19,
+    "component_campaign_rerun": true,
+    "checks": [
+      "All four lane descriptors validated before any payload copying",
+      "Header snapshot remains authoritative after simulated host metadata edits",
+      "Every prefix of header and selected lane copies, including complete copies reported as failures",
+      "Replay, wrong output plan, invalid page/span, repeated construction and lost cleanup receipt",
+      "Full snapshot clearing, terminal rejection and full-page destruction",
+      "Baseline CPU/OS feature rejection before Rust entry, with terminal feature-loss latch",
+      "C copy ordering, length/address bounds, explicit export and sticky copy errors"
+    ]
+  },
+  "windows_build": {
+    "linked_enclave_image": true,
+    "signed": false,
+    "loaded": false,
+    "executed": false,
+    "panic": "abort",
+    "lto": "fat"
+  },
+  "source_binding": {
+    "current_source_and_saved_artifacts_verified": true,
+    "native_worker_source_files_per_platform": 251,
+    "windows_checkout": "ee9c1138 with source-bound component/resident/worker overlays; not a clean exact Git checkout",
+    "linux_worker": {
+      "record": "release-reports/windows-local-20261002/sha512-worker-linux-verified/sha512-simd-worker-results.json",
+      "sha256": "378a9af8340f91b30cffbd61027340db98a62a665318646e46326f15a207de6c"
+    },
+    "windows_worker": {
+      "record": "release-reports/windows-local-20261002/sha512-worker-verified-20261002/sha512-simd-worker-results.json",
+      "sha256": "44bd61c2ed30d7eaa3cef29e409e81d27036e193bae3575a0d35ea40af91e88d"
+    },
+    "linux_gate": {
+      "record": "release-reports/windows-local-20261002/sha512-gate-linux-verified/sha512-simd-gate-results.json",
+      "sha256": "85b9543542af4855f4e8a58793e9cb8b2e9f24ac7f3c3195109a3514dc053559"
+    },
+    "windows_gate": {
+      "record": "release-reports/windows-local-20261002/sha512-gate-20261002/sha512-simd-gate-results.json",
+      "sha256": "ba4617cf3db124beee23da52f9420e7b858cab4a2694456905da3eeb5fc471a0"
+    },
+    "windows_image": {
+      "record": "release-reports/windows-local-20261002/sha512-worker-verified-20261002/sha512-simd-image-build.json",
+      "sha256": "362826020148fccf4c91ef49a5fb2e05c0f776de92ee74083a2271e813528519"
+    }
+  },
+  "limitations": [
+    "Ordinary-process copy doubles and unsigned image build, not actual VBS worker execution",
+    "Public synthetic data and implementation-author tests, not independent review",
+    "Native VBS copy/lifecycle checks and supported host API integration remain pending",
+    "No whole-image stack/register/spill/dump, Windows ARM64, AVX-512 or dedicated SHA512 qualification",
+    "No release-gate changes or production-signing claim"
+  ]
+}

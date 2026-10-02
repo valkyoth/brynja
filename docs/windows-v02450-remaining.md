@@ -78,7 +78,7 @@ describe how the worker was developed, not outstanding constructor work.
   negatives. Mixed identities, unequal lengths and every general-t parameter
   are covered. It is bounded to 1024 bytes per lane and requires a common full
   block; no portable fallback or arbitrary-length streaming is claimed. Next
-  connect it to a bounded OS-copy worker and an
+  qualify the bounded OS-copy worker in VBS and connect an
   explicit host route, with current-image cleanup qualification. The public
   VBS kernel diagnostic does not substitute for that integration. See the
   [component observations](../assurance/windows-protection-observations/sha512-simd-component-20261002.json).
@@ -88,6 +88,13 @@ describe how the worker was developed, not outstanding constructor work.
   constructor-rollback mutations. Full-page clearing is tested; OS protection,
   VBS execution and protected worker frames are not established by those tests.
   See the [resident observations](../assurance/windows-protection-observations/sha512-simd-resident-20261002.json).
+  The version-20 worker and baseline C adapter are now implemented privately.
+  Linux and Windows OS-copy-double tests each pass 602 oracle cases, 1813
+  copy-failure prefixes, fourteen Rust mutations and nineteen C mutations.
+  The unsigned Windows enclave image builds and links. Actual VBS execution,
+  supported host selection and current-image qualification remain outstanding;
+  an image build is not proof of runtime protection. See the
+  [worker/build observations](../assurance/windows-protection-observations/sha512-simd-worker-20261002.json).
 
 - The private sequential AVX2 ParallelHash resident/worker now passes native
   Windows development execution (50 comparisons, 650 VBS calls), full-page

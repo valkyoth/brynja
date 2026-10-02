@@ -30,8 +30,10 @@ runtime mutations and six ownership/lifetime negatives. It requires real vector
 work and retains clearing output with exact plan/sequence binding. Inputs are
 bounded to 1024 bytes per lane with a common complete block. Private resident
 placement now also passes Linux/Windows oracle, cleanup, mutation and ownership
-tests, plus a placement-only strict-provenance Miri model. OS-protected storage,
-VBS transport and supported host integration remain pending; this is not
+tests, plus a placement-only strict-provenance Miri model. A private version-20
+OS-copy worker now passes Linux/Windows oracle, prefix-copy failure and compiled
+mutation tests. Its unsigned Windows image builds and links. Actual VBS worker
+execution and supported host integration remain pending; this is not
 AVX-512, dedicated SHA512 instructions or current-image cleanup qualification.
 See the [component scope](../docs/windows-enclave-acceleration.md).
 

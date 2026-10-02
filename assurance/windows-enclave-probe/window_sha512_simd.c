@@ -1,0 +1,51 @@
+/* Private version-20 four-lane worker transport. Development fixture only. */
+#include <winenclave.h>
+#include "cpu_inventory.c"
+#include "sha512_simd_gate.h"
+#include "window_retained.c"
+static ULONG_PTR simd_source, simd_report[7];
+ULONG_PTR PublicSha512SimdSource(void) { return active && retained_call ? simd_source : 0; }
+int PublicSha512SimdInput(ULONG_PTR kind, unsigned char* destination, ULONG_PTR source, SIZE_T size) {
+    ULONG_PTR address = (ULONG_PTR)destination;
+    int result;
+    if (!active || !retained_call || kind > 4 || address < PublicLockedLow ||
+        address > PublicLockedHigh || size > PublicLockedHigh-address || size > 1024 ||
+        (kind == 0 && (size != 160 || simd_report[3] != 0)) ||
+        (kind != 0 && (retained_operation != 90 || size < 128 || simd_report[3] != 1 ||
+                       simd_report[4] != kind-1)) || simd_report[6]) { return E_FAIL; }
+    result = EnclaveCopyIntoEnclave(destination, (const void*)source, size);
+    if (result == S_OK) {
+        if (kind == 0) { simd_report[3] = 1; } else { simd_report[4] = kind; }
+    } else { simd_report[6] = 1; }
+    return result;
+}
+int PublicSha512SimdOutput(const unsigned char* source, SIZE_T size) {
+    int result;
+    if (!active || !retained_call || !retained_live || retained_operation != 91 ||
+        !retained_output || size != 256 || simd_report[3] != 1 || simd_report[4] != 0 ||
+        simd_report[5] != 0 || simd_report[6]) { return E_FAIL; }
+    result = EnclaveCopyOutOfEnclave((void*)retained_output, source, size);
+    if (result == S_OK) { simd_report[5] = 1; } else { simd_report[6] = 1; }
+    return result;
+}
+int PublicSha512SimdObserve(ULONG_PTR header, ULONG_PTR payload, ULONG_PTR clear) {
+    if (!active || !retained_call) { return 0; }
+    simd_report[0]=header; simd_report[1]=payload; simd_report[2]=clear;
+    return 1;
+}
+__declspec(dllexport) void* CALLBACK PublicSha512SimdInputSource(void* context) {
+    SIZE_T i;
+    if (active || retained_call) { return 0; }
+    simd_source=(ULONG_PTR)context;
+    for (i=0;i<7;++i) { simd_report[i]=0; }
+    return (void*)1;
+}
+__declspec(dllexport) void* CALLBACK PublicSha512SimdControl(void* context) {
+    ULONG_PTR word=(ULONG_PTR)context;
+    if (active || retained_call || word < 16 || word >= 23) { return 0; }
+    return (void*)simd_report[word-16];
+}
+__declspec(dllexport) void* CALLBACK PublicSha512SimdProtocol(void* context) {
+    if (context || active || retained_call || !Sha512SimdReady()) { return 0; }
+    return (void*)(ULONG_PTR)0x42524233;
+}

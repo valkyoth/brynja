@@ -692,9 +692,22 @@ comparisons, four compiled resident mutations and eight ownership negatives.
 A strict-provenance Miri model uses noncryptographic lifetime doubles to check
 the placement code and rejects six provenance/order/rollback mutations; it does
 not execute or qualify SIMD. These tests do not make an aligned page protected
-memory. OS-copy integration, protected worker frames and the explicit host route
+memory. Native OS-copy and protected-worker validation plus the explicit host route
 remain required. See the
 [resident observations](../assurance/windows-protection-observations/sha512-simd-resident-20261002.json).
+
+The private version-20 worker now decodes a 160-byte header for all four lanes
+before copying any payload. Its fixed C adapter enforces copy order, bounded
+destinations, explicit public export and sticky copy failures. Baseline C checks
+the complete SSE2/AVX/AVX2 and OS-state bundle before entering specialized Rust;
+lost support latches rejection, including destruction, without claiming cleanup.
+Native Linux/Windows process tests with OS-copy doubles pass 602 independent
+cases, all 1813 prefixes of selected header/payload failures, fourteen worker
+mutations and nineteen C admission/entry/copy mutations. The Windows image builds
+and links with abort semantics and fat LTO, but has not been signed, loaded or
+executed in this campaign. The earlier public-kernel VBS diagnostic does not
+qualify this new worker. See the
+[worker/build observations](../assurance/windows-protection-observations/sha512-simd-worker-20261002.json).
 
 - Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE,
   KMAC, TupleHash, sequential SHA-3 batches and sequential ParallelHash, binding each route to its

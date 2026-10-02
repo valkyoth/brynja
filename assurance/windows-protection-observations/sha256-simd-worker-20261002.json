@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_SHA256_SIMD_VBS_DEVELOPMENT_PASS",
+  "date": "2026-10-02",
+  "baseline": "df5dc6b0",
+  "production_qualified": false,
+  "independently_verified": false,
+  "supported_host_api_integrated": false,
+  "description": "Private bounded eight-message SHA-224/256 AVX2 component, page resident and version-21 VBS worker; production kernels and release gates unchanged.",
+  "bounds": {
+    "lanes": 8,
+    "maximum_bytes_per_lane": 1024,
+    "minimum_common_complete_blocks": 1,
+    "retained_output_bytes": 256,
+    "header_bytes": 288,
+    "protected_payload_bytes": 8192,
+    "scalar_tails_and_padding": true,
+    "arbitrary_length_streaming": false
+  },
+  "platform": {
+    "host": "Local QEMU/KVM Windows development guest on AMD Ryzen 9 9950X3D",
+    "windows_build": 26300,
+    "architecture": "x86-64",
+    "toolchain": "1.98.1",
+    "development_test_signing": true,
+    "secure_boot": false,
+    "actual_route": "Eight independent SHA-224/256 lanes, AVX2, private protocol 21"
+  },
+  "native_process_campaigns": {
+    "platforms": [
+      "x86_64-unknown-linux-gnu",
+      "x86_64-pc-windows-msvc"
+    ],
+    "independent_cases_per_stage": 402,
+    "lane_comparisons_per_stage": 3216,
+    "bit_and_padding_boundary_cases": 146,
+    "mixed_identity_unequal_length_plans": 256,
+    "component_tests": 8,
+    "component_runtime_mutants_rejected": 12,
+    "component_ownership_negatives": 6,
+    "resident_tests": 4,
+    "resident_runtime_mutants_rejected": 4,
+    "resident_ownership_negatives": 8,
+    "worker_tests": 2,
+    "worker_runtime_mutants_rejected": 14,
+    "copy_failure_prefixes": 3032,
+    "baseline_C_mutants_rejected": 19,
+    "compiler_errors_count_as_runtime_mutant_rejection": false
+  },
+  "placement_miri": {
+    "toolchain": "nightly-2026-09-11",
+    "strict_provenance": true,
+    "noncryptographic_lifetime_doubles": true,
+    "mutants_rejected": 6,
+    "cryptographic_execution": false,
+    "enclave_execution": false,
+    "checks": [
+      "Full-allocation pointer provenance",
+      "Disjoint placement and owner-before-authority destruction",
+      "Constructor rollback, authority destruction and full-page clearing"
+    ]
+  },
+  "vbs_campaign": {
+    "oracle_batches": 52,
+    "cancellation_reuse_batches": 1,
+    "lane_comparisons": 424,
+    "vbs_calls": 302,
+    "rejection_campaigns": 21,
+    "post_failure_quarantine_checked": true,
+    "checks": [
+      "Independent exact-bit oracle; byte-aligned results cross-checked with hashlib",
+      "Required AVX2/OS bundle admission inside VBS; no exported specialized Rust entry",
+      "All eight lane copies, bounded header snapshot, actual OS copy errors, zeroization receipts",
+      "Sequence, route, plan, bounds, canonical bits, work budget, replay and explicit export",
+      "Protected frame and retained-page geometry, callback locking, destruction and release",
+      "Unsigned image rejected with error 577; enclave terminated and deleted"
+    ]
+  },
+  "signing": {
+    "production_signed": false,
+    "signtool_exit": 2,
+    "warning": "SDK compatibility warning retained in sign.log",
+    "authenticode_chain": "Untrusted self-signed development root, not production trust",
+    "temporary_nonexportable_certificate_and_key_removed": true
+  },
+  "source_binding": {
+    "all_recorded_source_hashes_match_local": true,
+    "generated_sources_and_preserved_binary_hashes_verified": true,
+    "windows_checkout": "ee9c1138 plus reviewed source overlays; not a clean exact Git checkout",
+    "records": {
+      "linux_resident": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-resident-linux/sha256-simd-resident-results.json",
+        "sha256": "fc6977ad7021b2f180c6aee1ef9a854454f2f024a48c99fb7739745abab28d94",
+        "source_files": 247
+      },
+      "linux_resident_component": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-resident-linux/component/sha256-simd-results.json",
+        "sha256": "959a73f2277107978bd94e4145d683659e4e8e001a70d51d9af5b8d7a1ed8d4c",
+        "source_files": 244
+      },
+      "windows_resident": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-resident-20261002/sha256-simd-resident-results.json",
+        "sha256": "cde8807acfd00ef431aaf73cf05ae6a9daea269254a1815210aa6e1c5df0f7da",
+        "source_files": 247
+      },
+      "windows_resident_component": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-resident-20261002/component/sha256-simd-results.json",
+        "sha256": "2d01ec3ef0e48962877ccca3673a16888d56952b4c4addaec3b9cbe4306e4f7c",
+        "source_files": 244
+      },
+      "linux_worker": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-worker-linux/sha256-simd-worker-results.json",
+        "sha256": "61e72a4724ec8d541b1dab1987de6ca79d971d7e9f72807eb6b69cbfba0ccdf3",
+        "source_files": 249
+      },
+      "linux_worker_component": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-worker-linux/component/sha256-simd-results.json",
+        "sha256": "99e011e633c65ee776032d6d41ca81c5aa68bbd83f626a2c0c672390a030750a",
+        "source_files": 244
+      },
+      "windows_worker": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-worker-20261002/sha256-simd-worker-results.json",
+        "sha256": "3a943a3c24bf1ccd5bf25694b6d274e71aef2e22a75495ad70bdcd6eb1745c9b",
+        "source_files": 249
+      },
+      "windows_worker_component": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-worker-20261002/component/sha256-simd-results.json",
+        "sha256": "f89674fc7e00f66a4f0071645eed1fcb68a9d31012dd45c5bfa23dc6ce34e328",
+        "source_files": 244
+      },
+      "linux_gate": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-gate-linux/sha256-simd-gate-results.json",
+        "sha256": "fab576312df284f3465130307b3ded0735450e0431a98e058c7cf5b93ba45247",
+        "source_files": 11
+      },
+      "windows_gate": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-gate-20261002/sha256-simd-gate-results.json",
+        "sha256": "05b89d7f0febe4400d2ea9767f3ee43c70b07faae3eb47c584f2a91e15674d98",
+        "source_files": 11
+      },
+      "miri": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-resident-model/placement-model-results.json",
+        "sha256": "84cdf96be7464aaebfd8b6dd1d70f638d072e848db6f447394056add8936ddad",
+        "source_files": 3
+      },
+      "windows_image": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-worker-20261002/sha256-simd-image-build.json",
+        "sha256": "221967895ebc7191b8472388d91f461520318bc8f02970602ba4f5e4fe58ccec",
+        "source_files": 9
+      },
+      "native": {
+        "record": "release-reports/windows-local-20261002/sha256-simd-worker-20261002/native.json",
+        "sha256": "1001a3587cc5ee950b6fe66794b54829cb5a531174e060345bc2e99450c470a5",
+        "source_files": 362,
+        "signed_image_sha256": "9255158a63bfb8edd9fb620162b208d82411db61e3de1bd5fb0e2c99fae3e032",
+        "unsigned_image_sha256": "7642eec86c70c97b7a19a73c1825328f7d75b451fa30c03a25f19ce0391a0f95",
+        "signing_sha256": "10b55d4d2b824b7e8e2c937bc9aa4ca28dfd72eb851a45c3a5d9bb9ab3f8ccff",
+        "unsigned_rejection_sha256": "eef3e929a3255f9a9db71628cff7bcd541cbe0171c5400f260ab063f49664726"
+      }
+    }
+  },
+  "limitations": [
+    "Public synthetic inputs and implementation-author tests, not independent qualification",
+    "Public host API integration remains pending",
+    "Page alignment/model tests alone do not establish OS protection; separate native VBS evidence is recorded above",
+    "No current-image complete register/spill/dump, fatal-abort or arbitrary migration guarantee",
+    "Actual invalid-pointer copy failures do not establish all OS partial-copy behavior; injected prefix tests are separate",
+    "No AVX-512, dedicated SHA instructions, multicore, Windows ARM64 or production-signing claim",
+    "Existing release gates unchanged; not release-ready"
+  ]
+}

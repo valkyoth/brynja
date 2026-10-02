@@ -72,6 +72,22 @@ describe how the worker was developed, not outstanding constructor work.
 
 ## Broader implementation and qualification
 
+- The private eight-message SHA-224/256 AVX2 component, resident and version-21
+  worker now pass native Linux/Windows process campaigns: 402 independent cases
+  and 3216 lane comparisons per stage, including every mixed SHA-224/256 lane
+  plan. Component/resident/worker tests reject 12/4/14 compiled mutations;
+  baseline C admission/entry/copy tests reject nineteen more. All 3032 injected
+  copy-failure prefixes fail closed. A placement-only Miri model rejects six
+  provenance/destruction/rollback mutations; this model does not execute SIMD.
+  Development-signed execution inside the local Windows VBS enclave now passes
+  53 batches/424 lane comparisons across 302 calls, including all eight actual
+  OS lane-copy failures, retained reuse and quarantine. Windows rejects the
+  unsigned image; the temporary signing key was removed. Sources and preserved
+  artifacts match their recorded hashes. The supported host API is still the
+  next integration step; whole-image cleanup and production qualification remain
+  separate. See the
+  [component, worker and native observations](../assurance/windows-protection-observations/sha256-simd-worker-20261002.json).
+
 - The private four-message SHA-512-family AVX2 component now passes Linux and
   local Windows native-process campaigns: 602 independent cases/2408 lane
   comparisons, twelve compiled runtime mutations and six ownership/lifetime

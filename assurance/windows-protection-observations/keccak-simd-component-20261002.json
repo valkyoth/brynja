@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "status": "NATIVE_COMPONENT_AND_RESIDENT_PASS",
+  "date": "2026-10-02",
+  "scope": "Private bounded four-message AVX2 SHA-3/SHAKE/cSHAKE component and fixed-page resident",
+  "implementation_parent": "8504b7ea",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "platforms": [
+    "Native Linux x86_64 on AMD Ryzen 9 9950X3D",
+    "Local Windows 11 x64 KVM guest; native-process MSVC tests, not VBS enclave execution"
+  ],
+  "compiler": "Rust 1.98.1; opt-level=2; overflow-checks=yes; panic=unwind; +avx,+avx2",
+  "windows_checkout": "Restored development checkout plus source-bound overlay, not a clean exact Git checkout",
+  "contract": {
+    "lanes": 4,
+    "input_bytes_per_message_name_or_customization": 1024,
+    "output_bits_per_lane": 2048,
+    "output_slots": "Four zero-padded 256-byte retained slots; exact identity and bit length bound on export",
+    "identities": "SHA3-224/256/384/512, SHAKE128/256, cSHAKE128/256",
+    "route": "Require actual four-state AVX2 dispatch; scalar tails counted explicitly; no portable fallback",
+    "metadata": "Lengths, identity, output shape and work budget are public",
+    "placement": "Owner and borrowed authority occupy disjoint aligned regions of one exclusively borrowed 4096-byte page; destroy borrower before authority, then clear the entire page"
+  },
+  "per_platform": {
+    "component_tests": 8,
+    "resident_tests": 4,
+    "independent_cases_per_stage": 520,
+    "lane_comparisons_per_stage": 2080,
+    "component_mutants_rejected": 14,
+    "resident_mutants_rejected": 4,
+    "component_ownership_negatives": 6,
+    "resident_ownership_negatives": 8
+  },
+  "oracle": "Separate Python Keccak/SP 800-185 implementation cross-checked against the NIST bit-vector file, cSHAKE examples and byte-aligned hashlib results; mixed identities/rates, empty messages/output, canonical partial bits, N/S and input/output bounds",
+  "placement_model": {
+    "toolchain": "nightly-2026-09-11",
+    "miriflags": "-Zmiri-strict-provenance",
+    "tests": 1,
+    "mutants_rejected": 6,
+    "scope": "Lifetime doubles exercise allocation provenance, disjoint placement, drop ordering, full-page clear and constructor rollback. No cryptography, OS protection or enclave execution."
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261002/keccak-simd-resident-linux/component/keccak-simd-results.json": "8170530f307f6d1d6938fd8c9ebfbe1bd6a05985e095578cccb5ad245f7ce731",
+    "release-reports/windows-local-20261002/keccak-simd-resident-linux/keccak-simd-resident-results.json": "75ed7baa39d4f5c02d3922b3ce00d24ccb1b9c0d0cd9726143aacadddfadf3a6",
+    "release-reports/windows-local-20261002/keccak-simd-resident-20261002/component/keccak-simd-results.json": "a0116a839850ba46f41c5359315bca658614a503d3330d3d57d82f770535ea07",
+    "release-reports/windows-local-20261002/keccak-simd-resident-20261002/keccak-simd-resident-results.json": "128df093879eca23377ad76b82b9abfa104e087eb3e40ccef4af4d70348b55f6",
+    "release-reports/windows-local-20261002/keccak-simd-placement-model/placement-model-results.json": "cdddcb5f86db9aa549e57487392541144cbf885ae4f88882af9795bc12c4c5b8"
+  },
+  "artifact_validation": "Source hashes match the working tree; generated sources/vectors and recorded native executables match their hashes; child component record is bound by the resident record. Preserved outside target/.",
+  "remaining": [
+    "VBS worker wire protocol, bounded OS-copy transport and admission",
+    "Development-signed execution inside VBS",
+    "Supported affine host API and mandatory production image policy",
+    "Current-image ABI/register/spill/dump qualification",
+    "Independent review and production deployment qualification"
+  ]
+}

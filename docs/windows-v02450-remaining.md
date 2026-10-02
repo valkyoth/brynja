@@ -72,6 +72,19 @@ describe how the worker was developed, not outstanding constructor work.
 
 ## Broader implementation and qualification
 
+- The private four-message Keccak AVX2 component and fixed-page resident now
+  pass native Linux and Windows process campaigns: each stage covers 520
+  independent cases/2080 lane comparisons across SHA-3/SHAKE/cSHAKE, mixed rates,
+  bit tails, arbitrary-bit N/S, empty messages/outputs and bounded lengths.
+  Fourteen component and four placement mutants are rejected, alongside six
+  component and eight resident ownership negatives. Strict-provenance Miri
+  rejects six allocation/lifetime/rollback mutants in a placement-only model.
+  This reuses the existing hardened independent-message engine, not the
+  sequential single-state route. The VBS worker/copy protocol, native enclave
+  execution and supported host API remain next; process execution and model
+  checks do not establish OS protection or whole-image cleanup. See the
+  [component and resident observations](../assurance/windows-protection-observations/keccak-simd-component-20261002.json).
+
 - The private eight-message SHA-224/256 AVX2 component, resident and version-21
   worker now pass native Linux/Windows process campaigns: 402 independent cases
   and 3216 lane comparisons per stage, including every mixed SHA-224/256 lane

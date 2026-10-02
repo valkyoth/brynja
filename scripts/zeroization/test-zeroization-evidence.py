@@ -68,6 +68,14 @@ def test() -> None:
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 
+        replace(workflow, ", 1.99.0]", "]")
+        require_rejection(root, "compiler matrix")
+        copy_fixture(root)
+
+        replace(matrix, '  "1.99.0",\n', "")
+        require_rejection(root, "compiler or target coverage")
+        copy_fixture(root)
+
         replace(tag_gate, "scripts/zeroization/check-tag-miri.sh", "true")
         require_rejection(root, "local tag gate")
         copy_fixture(root)
@@ -107,4 +115,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("zeroization evidence rejects twelve claim, coverage, and execution-boundary regressions")
+    print("zeroization evidence rejects fourteen claim, coverage, and execution-boundary regressions")

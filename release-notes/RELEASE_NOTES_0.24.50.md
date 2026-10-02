@@ -18,12 +18,19 @@ Windows ABI/register inspection and native evidence for each claimed platform,
 followed by the existing exceptional pentest/retest and release checks.
 No release-gate policy is being changed.
 
+Rust 1.99.0 joins the compatibility and emitted-code matrices. Linux public-API
+acceptance, Linux/Windows workspace checks and x86-64 clearing/constant-time
+code-generation checks pass. The default full-check and existing native-evidence
+compiler stays pinned to 1.98.1; prior compiler-bound evidence is not relabeled.
+
 The private four-message SHA-512-family AVX2 component now has native Linux and
 Windows-process coverage: 602 independent cases/2408 lane comparisons, all valid
 general-t parameters, mixed identities and unequal lengths, twelve compiled
 runtime mutations and six ownership/lifetime negatives. It requires real vector
 work and retains clearing output with exact plan/sequence binding. Inputs are
-bounded to 1024 bytes per lane with a common complete block. Protected resident,
+bounded to 1024 bytes per lane with a common complete block. Private resident
+placement now also passes Linux/Windows oracle, cleanup, mutation and ownership
+tests, plus a placement-only strict-provenance Miri model. OS-protected storage,
 VBS transport and supported host integration remain pending; this is not
 AVX-512, dedicated SHA512 instructions or current-image cleanup qualification.
 See the [component scope](../docs/windows-enclave-acceleration.md).

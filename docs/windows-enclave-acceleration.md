@@ -684,6 +684,18 @@ current-image register/spill/dump qualification or independent review.
 
 ## Next integration boundary
 
+The private four-message SHA-512 AVX2 resident now places the bounded component
+and its borrowed authority into one aligned 4096-byte page. It destroys the
+component first, then authority, and clears the entire allocation. Linux and
+Windows native-process campaigns each pass 602 independent cases/2408 lane
+comparisons, four compiled resident mutations and eight ownership negatives.
+A strict-provenance Miri model uses noncryptographic lifetime doubles to check
+the placement code and rejects six provenance/order/rollback mutations; it does
+not execute or qualify SIMD. These tests do not make an aligned page protected
+memory. OS-copy integration, protected worker frames and the explicit host route
+remain required. See the
+[resident observations](../assurance/windows-protection-observations/sha512-simd-resident-20261002.json).
+
 - Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE,
   KMAC, TupleHash, sequential SHA-3 batches and sequential ParallelHash, binding each route to its
   trusted image policy. Scalar constructors remain scalar; failed acceleration

@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "status": "BOUNDED_SHA512_AVX2_RESIDENT_PLACEMENT_PASS",
+  "date": "2026-10-02",
+  "baseline": "739ce325",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "description": "Private four-message AVX2 component placed with its borrowed authority in one aligned page; native process tests, not OS-protected storage or VBS worker integration.",
+  "toolchain": "1.98.1",
+  "tests_per_native_platform": {
+    "rust_tests": 4,
+    "independent_cases": 602,
+    "lane_comparisons": 2408,
+    "compiled_runtime_mutants_rejected": 4,
+    "ownership_lifetime_negatives": 8,
+    "page_bytes_cleared": 4096,
+    "component_campaign_rerun": true,
+    "checks": [
+      "Owner destroyed before borrowed authority; entire allocation including padding erased",
+      "Retained export, cancellation, recreation and exact sequence/plan binding",
+      "Copy failure, explicit revocation, recoverable unwind and budget rejection",
+      "Exclusive backing-page lifetime and nonescaping owner references"
+    ]
+  },
+  "placement_miri": {
+    "toolchain": "nightly-2026-09-11",
+    "strict_provenance": true,
+    "noncryptographic_lifetime_doubles": true,
+    "mutations_rejected": 6,
+    "checks": ["Full-allocation provenance", "Destruction order", "Nonoverlapping placement", "Constructor rollback and page clearing"],
+    "simd_execution_qualified": false
+  },
+  "source_binding": {
+    "all_source_hashes_match_local": true,
+    "native_generated_and_binary_hashes_verified": true,
+    "native_source_files_per_platform": 249,
+    "miri_source_files": 3,
+    "windows_checkout": "ee9c1138 plus source-bound component and resident overlays; not a clean exact Git checkout",
+    "linux": {
+      "record": "release-reports/windows-local-20261002/sha512-resident-linux-final/sha512-simd-resident-results.json",
+      "record_sha256": "f32e5301fd64a70af6fe3f2038fc4c54c04716797fd12afc268db1ccd2f291d2"
+    },
+    "windows": {
+      "record": "release-reports/windows-local-20261002/sha512-resident-20261002/sha512-simd-resident-results.json",
+      "record_sha256": "274ce4cfc9783b5fba8be8b42ab470c3fe28d00b9f911681ee67acceb1865766"
+    },
+    "miri": {
+      "record": "release-reports/windows-local-20261002/sha512-resident-model/placement-model-results.json",
+      "record_sha256": "c34090e6273011e782b35ac34415b9d204752d234efa9ae9f0a01a53a3f7d2a5"
+    }
+  },
+  "limitations": [
+    "Public synthetic inputs and author tests; no independent review",
+    "Page alignment alone does not establish protected storage or protected execution frames",
+    "OS-copy worker, explicit host route and current-image cleanup qualification remain pending",
+    "No AVX-512, dedicated SHA512 instructions, multicore, Windows ARM64 or production-signing claim",
+    "No release-gate policy change"
+  ]
+}

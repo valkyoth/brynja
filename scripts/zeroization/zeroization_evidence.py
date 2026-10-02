@@ -21,6 +21,7 @@ COMPILERS = (
     "1.97.1",
     "1.98.0",
     "1.98.1",
+    "1.99.0",
 )
 TARGETS = (
     "x86_64-unknown-linux-gnu",

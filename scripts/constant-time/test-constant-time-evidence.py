@@ -58,6 +58,14 @@ def test() -> None:
         require_rejection(root, "compiler or target coverage")
         copy_fixture(root)
 
+        replace(matrix, '  "1.99.0",\n', "")
+        require_rejection(root, "compiler or target coverage")
+        copy_fixture(root)
+
+        replace(root / ".github/workflows/ci.yml", ", 1.99.0]", "]")
+        require_rejection(root, "compiler matrix")
+        copy_fixture(root)
+
         matrix = root / "assurance/constant-time-matrix.toml"
         replace(matrix, "array_witness_width = 32", "array_witness_width = 31")
         require_rejection(root, "claim or artifact")
@@ -84,4 +92,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("constant-time evidence rejects six claim, coverage, CI, and local-gate regressions")
+    print("constant-time evidence rejects eight claim, coverage, CI, and local-gate regressions")

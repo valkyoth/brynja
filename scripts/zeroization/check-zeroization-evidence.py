@@ -8,7 +8,8 @@ import zeroization_evidence
 
 def main() -> int:
     zeroization_evidence.validate(Path(__file__).resolve().parents[2])
-    print("zeroization evidence binds 12 compilers, 9 targets, and 3 artifact levels")
+    print(f"zeroization evidence binds {len(zeroization_evidence.COMPILERS)} compilers, "
+          f"{len(zeroization_evidence.TARGETS)} targets, and 3 artifact levels")
     return 0
 
 

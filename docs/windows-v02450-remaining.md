@@ -78,10 +78,16 @@ describe how the worker was developed, not outstanding constructor work.
   negatives. Mixed identities, unequal lengths and every general-t parameter
   are covered. It is bounded to 1024 bytes per lane and requires a common full
   block; no portable fallback or arbitrary-length streaming is claimed. Next
-  connect it to protected resident placement, a bounded OS-copy worker and an
+  connect it to a bounded OS-copy worker and an
   explicit host route, with current-image cleanup qualification. The public
   VBS kernel diagnostic does not substitute for that integration. See the
   [component observations](../assurance/windows-protection-observations/sha512-simd-component-20261002.json).
+  Private resident placement now passes native Linux/Windows tests with the same
+  602 cases, four additional compiled mutations and eight ownership negatives.
+  A placement-only Miri model rejects six provenance, destruction-order and
+  constructor-rollback mutations. Full-page clearing is tested; OS protection,
+  VBS execution and protected worker frames are not established by those tests.
+  See the [resident observations](../assurance/windows-protection-observations/sha512-simd-resident-20261002.json).
 
 - The private sequential AVX2 ParallelHash resident/worker now passes native
   Windows development execution (50 comparisons, 650 VBS calls), full-page

@@ -32,8 +32,10 @@ bounded to 1024 bytes per lane with a common complete block. Private resident
 placement now also passes Linux/Windows oracle, cleanup, mutation and ownership
 tests, plus a placement-only strict-provenance Miri model. A private version-20
 OS-copy worker now passes Linux/Windows oracle, prefix-copy failure and compiled
-mutation tests. Its unsigned Windows image builds and links. Actual VBS worker
-execution and supported host integration remain pending; this is not
+mutation tests. Its Windows image now executes in development-signed VBS:
+61 four-message comparisons/244 lane digests, 318 calls and seventeen rejection
+campaigns pass. Unsigned loading rejects; the temporary signing key was removed.
+Supported host integration remains pending; this is not
 AVX-512, dedicated SHA512 instructions or current-image cleanup qualification.
 See the [component scope](../docs/windows-enclave-acceleration.md).
 

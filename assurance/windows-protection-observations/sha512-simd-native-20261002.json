@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "status": "PRIVATE_SHA512_SIMD_VBS_DEVELOPMENT_PASS",
+  "date": "2026-10-02",
+  "worker_baseline": "294017021b1278e99997751770a6a948cfcc4e32",
+  "enclave_execution": true,
+  "production_qualified": false,
+  "independently_verified": false,
+  "supported_host_api_integrated": false,
+  "platform": {
+    "host": "Local QEMU/KVM Windows development guest",
+    "windows_build": 26300,
+    "architecture": "x86-64",
+    "toolchain": "1.98.1",
+    "development_test_signing": true,
+    "secure_boot": false,
+    "actual_route": "Four independent SHA-512-family lanes, AVX2, private protocol 20"
+  },
+  "campaign": {
+    "oracle_batches": 60,
+    "cancellation_reuse_batches": 1,
+    "lane_comparisons": 244,
+    "vbs_calls": 318,
+    "named_sha2_identities": 4,
+    "selected_general_t_parameters": 12,
+    "mixed_identity_length_bit_cases": 16,
+    "rejection_campaigns": 17,
+    "post_failure_quarantine_checked": true,
+    "checks": [
+      "Independent exact-bit oracle; named byte-aligned cases cross-checked with hashlib",
+      "Explicit export and reuse after cancellation",
+      "Version, sequence, route, identity, length and final-bit metadata rejection",
+      "Actual OS header-copy and each of four lane-copy failures",
+      "Budget and noncanonical bit-tail rejection",
+      "Wrong export plan, replay, export-budget and actual OS output-copy rejection",
+      "Protected snapshot bounds, clearing receipts, retained-page guards and lock/release callbacks",
+      "No exported specialized Rust entry bypass; complete AVX2/OS admission inside VBS",
+      "Enclave terminated and deleted; retained pages released"
+    ]
+  },
+  "signing": {
+    "production_signed": false,
+    "signtool_exit": 2,
+    "warning": "SDK warning about compatibility with older Windows versions retained in sign.log",
+    "authenticode_chain": "Self-signed development root is untrusted; not production trust",
+    "temporary_nonexportable_certificate_and_key_removed": true,
+    "unsigned_image_rejected": true,
+    "unsigned_load_error": 577
+  },
+  "source_binding": {
+    "all_361_recorded_source_hashes_match_local": true,
+    "saved_artifacts_verified": true,
+    "native_record": "release-reports/windows-local-20261002/sha512-worker-verified-20261002/native.json",
+    "native_record_sha256": "591554a6034d0f5a5c37b4a286915aba4fc171718bc035f4abd0fd8f484b7f9a",
+    "image_build_record_sha256": "362826020148fccf4c91ef49a5fb2e05c0f776de92ee74083a2271e813528519",
+    "signed_image_sha256": "3c22f91220009284a95d6d784131ddbcc12cc7476a9c29fe19f21b43c478bda6",
+    "unsigned_image_sha256": "11fb46a1d479b9b7fb60f0441c6990d7ed68b75f05561381e6689dd47c8ddbf3",
+    "signing_record_sha256": "41f32ae0475c717f1fb99633a97091ece45e01df7e9f38bcba193e7be4c68719",
+    "unsigned_rejection_record_sha256": "07f83b78ea4050695edb9a74d005c99a68b714548012a61381130c1caf74bbd1",
+    "checkout": "Source-bound guest overlay, not a clean exact Git checkout"
+  },
+  "limitations": [
+    "Public synthetic vectors and author tests, not independent review or production qualification",
+    "No public host constructor or application-facing SIMD route yet",
+    "No whole-image register/spill/dump or arbitrary scheduling/migration qualification",
+    "No Windows ARM64, AVX-512, dedicated SHA512 instructions, multicore or unbounded streaming claim",
+    "Actual invalid-pointer OS failures do not establish every possible partial-copy behavior; process-double prefix tests are separate",
+    "Existing release-gate policy unchanged"
+  ]
+}

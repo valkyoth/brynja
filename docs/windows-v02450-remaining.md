@@ -78,7 +78,7 @@ describe how the worker was developed, not outstanding constructor work.
   negatives. Mixed identities, unequal lengths and every general-t parameter
   are covered. It is bounded to 1024 bytes per lane and requires a common full
   block; no portable fallback or arbitrary-length streaming is claimed. Next
-  qualify the bounded OS-copy worker in VBS and connect an
+  connect the VBS-tested bounded OS-copy worker to an
   explicit host route, with current-image cleanup qualification. The public
   VBS kernel diagnostic does not substitute for that integration. See the
   [component observations](../assurance/windows-protection-observations/sha512-simd-component-20261002.json).
@@ -91,10 +91,16 @@ describe how the worker was developed, not outstanding constructor work.
   The version-20 worker and baseline C adapter are now implemented privately.
   Linux and Windows OS-copy-double tests each pass 602 oracle cases, 1813
   copy-failure prefixes, fourteen Rust mutations and nineteen C mutations.
-  The unsigned Windows enclave image builds and links. Actual VBS execution,
-  supported host selection and current-image qualification remain outstanding;
+  The unsigned Windows enclave image builds and links. Supported host selection
+  and current-image qualification remain outstanding;
   an image build is not proof of runtime protection. See the
   [worker/build observations](../assurance/windows-protection-observations/sha512-simd-worker-20261002.json).
+  Subsequent development-signed VBS execution now passes 61 four-message
+  comparisons/244 lane digests across 318 calls, including seventeen rejection
+  campaigns and cancellation/reuse. The unsigned image rejects with error 577;
+  the temporary signing key was removed. This is native private-worker evidence,
+  not a supported host API or whole-image qualification. See the
+  [native observations](../assurance/windows-protection-observations/sha512-simd-native-20261002.json).
 
 - The private sequential AVX2 ParallelHash resident/worker now passes native
   Windows development execution (50 comparisons, 650 VBS calls), full-page

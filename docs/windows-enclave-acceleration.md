@@ -709,6 +709,19 @@ executed in this campaign. The earlier public-kernel VBS diagnostic does not
 qualify this new worker. See the
 [worker/build observations](../assurance/windows-protection-observations/sha512-simd-worker-20261002.json).
 
+The subsequent private development-signed image now executes inside the local
+Windows VBS guest: 61 four-message comparisons/244 lane digests across 318 calls.
+The campaign covers all four named identities, twelve general-t selections,
+mixed identities/lengths/partial bits, cancellation/reuse, seventeen malformed
+metadata/copy/budget/output rejection campaigns and post-failure quarantine.
+Protected snapshot bounds, cleanup receipts and resident page release are checked
+on each relevant call. Windows rejects the unsigned image with error 577. The
+temporary nonexportable signing key was removed; the SDK's older-OS compatibility
+warning and untrusted development root remain recorded. These are public-vector
+author checks, not production signing, supported host integration or whole-image
+register/spill/dump qualification. See the
+[native observations](../assurance/windows-protection-observations/sha512-simd-native-20261002.json).
+
 - Extend explicit opt-in selection beyond SHA-224/256, SHA-3/SHAKE/cSHAKE,
   KMAC, TupleHash, sequential SHA-3 batches and sequential ParallelHash, binding each route to its
   trusted image policy. Scalar constructors remain scalar; failed acceleration

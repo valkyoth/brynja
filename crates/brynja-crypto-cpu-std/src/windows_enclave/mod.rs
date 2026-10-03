@@ -28,6 +28,8 @@ mod engine;
     )
 ))]
 mod image;
+#[cfg(feature = "strict-sha3-acceleration")]
+pub mod keccak_simd;
 #[cfg(feature = "strict-kmac")]
 pub mod kmac;
 #[cfg(all(

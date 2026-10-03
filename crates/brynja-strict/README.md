@@ -103,7 +103,12 @@ Each lane is bounded to 64..=1024 bytes with a complete block; wide identities
 reject. Retained results require explicit declassification into eight 32-byte
 slots. Production signature and import admission remain mandatory; there is no
 fallback. See the [narrow SIMD example](../../docs/windows-enclave-sha2-batch.md#eight-message-narrow-simd).
-Other Windows algorithms remain scalar. Production and
+With `acceleration`, `enclave::keccak_simd::Session::open_avx2` selects the
+version-twenty-two image for four independent SHA-3/SHAKE/cSHAKE messages.
+Message/N/S fields are bounded to 1024 bytes each, output to 2048 bits per lane;
+mixed identities are supported. Trust checks and explicit declassification
+remain mandatory. See the [Keccak SIMD example](../../docs/windows-enclave-keccak-simd.md).
+Production and
 independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
 
 ## Usage

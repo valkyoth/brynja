@@ -89,8 +89,15 @@ describe how the worker was developed, not outstanding constructor work.
   development-signed VBS worker passes 53 batches/212 lane digests across 318
   calls, including twelve actual OS payload-copy failures and retained reuse.
   Windows rejects the unsigned image; the temporary signing key was removed.
-  The supported host API is next. Whole-image cleanup and production qualification
-  remain separate. See the
+  The supported `keccak_simd::Session::open_avx2` host API is now connected:
+  native debug/release campaigns each pass 521 batches/2084 lane comparisons.
+  Twenty-one host mutations, ten ownership negatives, five host-only Miri tests
+  and the packaged facade's 487 export/ownership checks pass. Production opening
+  rejects the development signature. Shared admission was split without changing
+  its trust rules; native SHA-256 SIMD regression passes in both profiles.
+  See the [host observations](../assurance/windows-protection-observations/keccak-simd-host-20261003.json)
+  and [API example](windows-enclave-keccak-simd.md). Whole-image cleanup,
+  multicore ParallelHash and production qualification remain separate. See the
   [worker and native observations](../assurance/windows-protection-observations/keccak-simd-worker-20261002.json).
 
 - The private eight-message SHA-224/256 AVX2 component, resident and version-21

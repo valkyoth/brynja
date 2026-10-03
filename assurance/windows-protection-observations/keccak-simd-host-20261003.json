@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "status": "NATIVE_HOST_DEVELOPMENT_PASS",
+  "date": "2026-10-03",
+  "scope": "Explicit version-22 four-message SHA-3/SHAKE/cSHAKE AVX2 enclave host API",
+  "implementation_parent": "69662462",
+  "production_qualified": false,
+  "independently_verified": false,
+  "platform": "Local Windows 11 x64 KVM guest on Ryzen 9 9950X3D; VBS/HVCI running; development test signing",
+  "compiler": "1.98.1-x86_64-pc-windows-msvc",
+  "remote_checkout": "Restored development checkout plus source-bound overlay, not a clean exact Git checkout",
+  "host_source_hashes_verified": 506,
+  "per_profile": {
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "batches": 521,
+    "lane_digests": 2084,
+    "independent_oracle_batches": 520,
+    "known_empty_sha3_reuse_batches": 1,
+    "mixed_identities_rates_arbitrary_bit_messages_and_cshake_parameters": true,
+    "production_constructor_rejects_development_signature": true,
+    "wrong_hash_family_and_correctly_hashed_other_protocol_rejected": true,
+    "cancellation_forgetting_abandonment_budget_bits_identity_and_output_length_binding_checked": true,
+    "failed_export_leaves_destination_unchanged": true,
+    "uncertain_close_reports_release_error": true
+  },
+  "linux_host_model": {
+    "tests": 5,
+    "compiled_runtime_mutations_rejected": 21,
+    "compiled_ownership_negatives_rejected": 10,
+    "miri": "Five host-only tests passed under nightly-2026-09-11; no VBS or SIMD execution claim"
+  },
+  "additional_checks": {
+    "packaged_facade": "Debug/release examples compile; 487 export/ownership/default-feature negatives rejected across the full facade",
+    "all_feature_crate_tests": "184 unit tests, 23 integration tests and 243 doctests passed; four explicitly ignored tests remain ignored",
+    "compatibility": "Strict facade all-feature compilation passed under Rust 1.90.0 and 1.99.0",
+    "clippy": "Linux all-feature and native Windows focused checks passed with the existing chunks_exact_to_as_chunks compatibility allowance",
+    "sha256_shared_admission_regression": "Native debug/release each passed 403 batches/3224 lane digests; 434 current source hashes, logs, binaries and image verified"
+  },
+  "image_admission": {
+    "preparation": "Existing prepare-system-imports workflow followed by development signing; mandatory trust/import/protocol checks preserved",
+    "signature": "Self-signed development certificate, not production Trusted Signing",
+    "temporary_certificate_and_key_removed": true,
+    "sdk_compatibility_warning": "SignTool exit 2 retained; not production qualification",
+    "raw_record_note": "Original signing.json uses misnamed image_keccak/prepared_keccak fields. Launcher used Get-FileHash -Algorithm SHA256; local SHA-256 recomputation verified both. Raw record is preserved unchanged."
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/keccak-host-verified-20261003/host-results.json": "48d9d9e08a0b7955d8c6d3336079e6c52cc95c90ae47516c761da72e59117167",
+    "release-reports/windows-local-20261003/sha256-host-regression-20261003/host-results.json": "9160a0b1c2c07f38744b668d03425d6e831dced1877685a0e59a0fcd76e348dc",
+    "release-reports/windows-local-20261003/keccak-host-model-verified/host-model-results.json": "4eb9c0c7e3aec1afd374b4fb5fee35745cc7480990f0f67f69f62cb81c742e98",
+    "release-reports/windows-local-20261003/keccak-host-admitted-20261003/signing.json": "14c940aeb10a57f3ab249378f0f10c2fff143e17d08ec2cabbe2674d97e24efc",
+    "release-reports/windows-local-20261003/keccak-host-admitted-20261003/signed.dll": "75a8561ba7aea14088f2ecc8e827e267a0a49bfcd878676bd4a17ad8a4d766c5",
+    "release-reports/windows-local-20261003/keccak-host-prepared.dll": "b0c83787f825e060e7f8717cbf0fbc2422cd187b3c17be2bcce259a55d03c2e5",
+    "release-reports/windows-local-20261003/keccak-host-miri.log": "9d1c7e04d7ceeb4f9a6a6063bd0af1823b04c2c62f3d3b391f43bf2b43e82457",
+    "release-reports/windows-local-20261003/strict-package.log": "42976a42cff6c4a2a0d06b4ecb4f5624379c20aad0a62675c4dfc902f308327d",
+    "release-reports/windows-local-20261003/cpu-std-all-features.log": "9d9c58c01093d2a2cca1a184bfd6ca5934981a45c368413bfbf12c048c978a77",
+    "release-reports/windows-local-20261003/cpu-std-clippy.log": "45b11be67d57ee59dbe1b85e6ed6a7e89c1bdd9405b7a252fe6f615f3ab5682e",
+    "release-reports/windows-local-20261003/compat-1.90.0.log": "4fff2a7944f4a5d9a1345f0de9592e5833f0cbbc19d0e085470782d698911f7d",
+    "release-reports/windows-local-20261003/compat-1.99.0.log": "fed747888b9fed91176330da736264b2fdc12a7153f744824729174687971b5e"
+  },
+  "remaining": [
+    "Multicore ParallelHash integration",
+    "Current-image ABI/register/spill/dump qualification",
+    "Production deployment and independent review",
+    "Windows ARM64 port and qualification"
+  ]
+}

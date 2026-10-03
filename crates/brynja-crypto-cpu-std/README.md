@@ -113,6 +113,12 @@ independent SHA-224/256 lanes. Each lane contains 64..=1024 bytes with a common
 complete block; results remain retained until explicit public declassification.
 No fallback, unbounded streaming or multicore behavior is implied. The same
 production trust and qualification limits apply.
+With `strict-sha2` and `strict-sha3-acceleration`,
+`windows_enclave::keccak_simd::Session::open_avx2` selects the version-twenty-two
+four-message SHA-3/SHAKE/cSHAKE image. Each message/N/S field is bounded to 1024
+bytes and output to 2048 bits per lane. Explicit declassification, mandatory
+image trust and no-fallback behavior remain unchanged. See the
+[Keccak SIMD API and example](../../docs/windows-enclave-keccak-simd.md).
 With both `strict-sha2` and `strict-sha3`, `windows_enclave::sha3` adds the eight
 SHA-3/SHAKE/cSHAKE identities, streamed N/S and retained incremental output.
 Use the separate version-seven image and [SHA-3 guide](../../docs/windows-enclave-sha3.md).

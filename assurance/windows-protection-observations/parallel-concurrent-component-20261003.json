@@ -1,0 +1,57 @@
+{
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/parallel-concurrent-checked.log": "e658faf9894bc0f1430deb06200f7a12ed5d98a798058c6bfd2928e0803f500c",
+    "release-reports/windows-local-20261003/parallel-concurrent-checked/clippy-0.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release-reports/windows-local-20261003/parallel-concurrent-checked/clippy-1.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release-reports/windows-local-20261003/parallel-concurrent-checked/libparallel_concurrent.rlib": "acacaa59021d259eec0fa050c5c79208fb291acc5af907e5b2a52b65ae214d15",
+    "release-reports/windows-local-20261003/parallel-concurrent-checked/parallel-concurrent-build.json": "b6738626c089bbf11e0c72c8203581f0f3ba517747af9620a08a7db95fe5891a",
+    "release-reports/windows-local-20261003/parallel-concurrent-checked/parallel-concurrent-final": "067f169fcb716c519c7c467377070d92856eddb085e8ca743758cec866584279",
+    "release-reports/windows-local-20261003/parallel-concurrent-checked/parallel-concurrent-results.json": "29bb2e1429872f6dbd9fd9850f6b6d6720ac0873eb344ad49bacfec45ccb3cd8",
+    "release-reports/windows-local-20261003/parallel-concurrent-checked/parallel-concurrent-vectors.txt": "5dff0c476a0e993e9965eaf0c760098b3fc7ea4e90e3025815a1c18a56f089fd",
+    "release-reports/windows-local-20261003/parallel-concurrent-final.log": "0669eaeee08a7a7298ff8ec05c46f758b5a6cd98d7e030a009f223c52cc1df7f",
+    "release-reports/windows-local-20261003/windows-parallel-concurrent-checked/libparallel_concurrent.rlib": "8908c6ffcbb51939aa3edcbf8fffc7828a468ab6264459acb09a4908f2ec4eca",
+    "release-reports/windows-local-20261003/windows-parallel-concurrent-checked/parallel-concurrent-build.json": "5ec83587bfffdf70ed63b3708db55eeddec2a71feceb6e4086e735e54559a3b3",
+    "release-reports/windows-local-20261003/windows-parallel-concurrent-checked/parallel-concurrent-final.exe": "73db0d7e8ffda3dbcaa5c7dcc6297cfe6aaa0f8cd7623c5fb7410b1c2ee017e0",
+    "release-reports/windows-local-20261003/windows-parallel-concurrent-checked/parallel-concurrent-results.json": "f496f4f9eb233b458811908ce655715061bf826dfec8b37bb152d474d8b363fe",
+    "release-reports/windows-local-20261003/windows-parallel-concurrent-checked/parallel-concurrent-vectors.txt": "53572fbe12e11999f673cd022611628bbfdd75b498fdfc17206462755711db4b"
+  },
+  "clippy": "Library and tests passed locally; existing chunks_exact allowance plus documented inline-state/test-helper allowances",
+  "compiler": "1.98.1",
+  "date": "2026-10-03",
+  "enclave_execution": false,
+  "failures_preserved": "Initial Windows mutation run could not replace a just-executed executable. Corrected runner uses unique artifact paths; no security setting changed.",
+  "implementation_parent": "9c519b55",
+  "independently_verified": false,
+  "limits": [
+    "At most four leaves, B 1..1024 bytes, customization and terminal output <=8192 bits",
+    "Public shape metadata; no hidden message-length claim",
+    "Ordinary processes only; protected stack/slot placement and worker ABI not integrated",
+    "No whole-image register/spill/dump or arbitrary fatal-exit qualification",
+    "Larger streaming schedules and public multicore API remain pending"
+  ],
+  "platforms": {
+    "linux": {
+      "comparisons": 760,
+      "compiled_mutants_rejected": 15,
+      "compiled_negatives_rejected": 13,
+      "oracle_cases": 380,
+      "source_hashes_verified": 252,
+      "target": "x86_64-unknown-linux-gnu",
+      "tests": 12
+    },
+    "windows": {
+      "comparisons": 760,
+      "compiled_mutants_rejected": 15,
+      "compiled_negatives_rejected": 13,
+      "oracle_cases": 380,
+      "source_hashes_verified": 252,
+      "target": "x86_64-pc-windows-msvc",
+      "tests": 12
+    }
+  },
+  "production_qualified": false,
+  "remote_checkout": "Restored Windows development checkout plus source-bound overlays",
+  "schema": 1,
+  "shared_engine": "Existing hardened Keccak engine and accelerated cSHAKE/SHAKE adapter unchanged",
+  "status": "COMPONENT_PROCESS_PASS"
+}

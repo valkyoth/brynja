@@ -84,6 +84,12 @@ describe how the worker was developed, not outstanding constructor work.
   window. Explicit child-process working-set budgeting is recorded after the
   default lock allowance rejected extra workers. This is public-marker stack
   isolation, not yet protected Rust owners or ParallelHash leaf processing.
+  The private safe-Rust concurrent leaf/root component now passes Linux and
+  Windows process tests: four bounded leaf slots, one-use plan identity, ordered
+  reduction, cancellation and cleanup; 380 oracle cases in two orders, fifteen
+  compiled mutations and thirteen ownership/API negatives. This logic is not
+  connected to the protected stack/storage adapter yet. See the
+  [component scope and remaining integration](windows-enclave-parallel-concurrent.md).
 
 - The private four-message Keccak AVX2 component and fixed-page resident now
   pass native Linux and Windows process campaigns: each stage covers 520

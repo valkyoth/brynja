@@ -1,0 +1,58 @@
+{
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/concurrent-entry-admitted/observation-final-1.json": "f11fe82e99d0eb7ba412a5d1478aaf1780c3070c86ea837de30ec62c607b8092",
+    "release-reports/windows-local-20261003/concurrent-entry-admitted/observation-final-2.json": "f11fe82e99d0eb7ba412a5d1478aaf1780c3070c86ea837de30ec62c607b8092",
+    "release-reports/windows-local-20261003/concurrent-entry-admitted/observation-final-3.json": "f11fe82e99d0eb7ba412a5d1478aaf1780c3070c86ea837de30ec62c607b8092",
+    "release-reports/windows-local-20261003/concurrent-entry-admitted/signed.dll": "4b14f8fc4ca54d5530b413bd5772aa3cd46e1fea520f55f9fe1bf8e282cf981f",
+    "release-reports/windows-local-20261003/concurrent-entry-admitted/signing.json": "f0a4170e6ae77badb1951fb6a0992f1ed699738e7a24883232cd4b5dab3d6bd0",
+    "release-reports/windows-local-20261003/concurrent-entry-build/normal.dll": "8edd2a676be156e8348026f4b46337e42d38a94b0dc4d23dda07eb37f78d447d"
+  },
+  "author_checks": {
+    "failure_subcases": 12,
+    "live_worker_deletion_rejected": true,
+    "orchestration_tests": 3,
+    "posix_shim_compiled_mutants_rejected": 7
+  },
+  "cryptographic_execution_tested": false,
+  "date": "2026-10-03",
+  "deleted": true,
+  "image_sha256": "4b14f8fc4ca54d5530b413bd5772aa3cd46e1fea520f55f9fe1bf8e282cf981f",
+  "implementation_parent": "ed54ff9d",
+  "independently_verified": false,
+  "initialized_threads": 5,
+  "joined": true,
+  "limitations": [
+    "No secret input or cryptographic execution",
+    "No protected worker stack or ParallelHash integration",
+    "No physical-core placement or performance claim",
+    "No production signing or independent qualification"
+  ],
+  "overlapping_worker_mask": 15,
+  "production_qualified": false,
+  "remote_checkout": "Source-bound overlay, not a clean exact Git checkout",
+  "repetitions": 3,
+  "results": [
+    100,
+    101,
+    102,
+    103
+  ],
+  "schema": 1,
+  "signing": {
+    "development_only": true,
+    "signtool_compatibility_warning_retained": true,
+    "temporary_key_removed": true
+  },
+  "source_sha256": {
+    "assurance/windows-enclave-probe/concurrent_entry.c": "50f504741418ecaa06bbeac5225a67ad580a743ea665bae3cb96b4fc80a33691",
+    "scripts/cryptography/test-windows-enclave-concurrent-c.py": "3ccd35ef70fb977a7236f25961102bc4bb13a04403e7267ac944c36adf5b982a",
+    "scripts/cryptography/test-windows-enclave-concurrent.py": "e23d2b23d9a9b7688f6c9b1c1f323985813a8f7eae38743756d4623a1748ce24",
+    "scripts/cryptography/windows_enclave_concurrent.py": "eb31c37d8bf66966c00e5385f5a57e389a19f7569f14bce0a4c7907152a1c8a4",
+    "scripts/cryptography/windows_enclave_lifecycle.py": "0232dfa69625cfc757baec318c49edd304b118fcb34b876d2c832899298e5ea4",
+    "scripts/cryptography/windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "scripts/cryptography/windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "synthetic_only": true,
+  "windows_build": 26300
+}

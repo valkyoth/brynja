@@ -72,6 +72,13 @@ describe how the worker was developed, not outstanding constructor work.
 
 ## Broader implementation and qualification
 
+- The separate public-data concurrency probe now observes four overlapping
+  worker calls plus a controller in one five-thread development VBS enclave.
+  Duplicate/replayed lanes reject and workers join before deletion. This does
+  not yet implement protected multicore ParallelHash: per-worker protected
+  stacks/owners, enclave-local leaf storage and ordered root reduction remain.
+  See the [concurrency boundary and next design](windows-enclave-concurrent-design.md).
+
 - The private four-message Keccak AVX2 component and fixed-page resident now
   pass native Linux and Windows process campaigns: each stage covers 520
   independent cases/2080 lane comparisons across SHA-3/SHAKE/cSHAKE, mixed rates,

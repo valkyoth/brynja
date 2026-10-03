@@ -3,7 +3,9 @@
 Status: safe-Rust component tested in ordinary Linux and Windows processes;
 a separate private fixed-input bridge now executes inside native VBS with
 distinct admitted root/leaf windows, including the bounded three-wave experiment
-below. **Neither is a shipping multicore API or
+below. A separate copied-ingress component now validates/stages arbitrary-bit
+input in ordinary Linux/Windows process tests; its OS-copy integration remains
+pending. **None is a shipping multicore API or
 native secret-processing qualification.** Production APIs and gates are unchanged.
 
 ## Implemented boundary
@@ -292,6 +294,56 @@ dependency versions and release gates are unchanged.
 Next: arbitrary-input admission/copying and the supported public host scheduling
 API, followed by current-image ABI/register/spill/dump qualification. The fixed
 three-wave diagnostic is not a substitute for these remaining steps.
+
+## Copied arbitrary-input staging (process tests only)
+
+`parallel_wave_input.rs` is a private safe `no_std` component, not an exported
+host API or a replacement for the native copy boundary. It copies a 128-byte
+header once, validates every field before requesting payload, and retains
+bounded customization (1024 bytes) and one four-leaf input wave (4096 bytes).
+The root selects each offset/length internally. Bit tails must be canonical;
+invalid high bits reject rather than being silently masked. Lengths, identities,
+addresses and batch shape are public metadata, not secret-length protection.
+
+The frame is thread-bound and non-copyable. A returned chunk borrows its storage,
+preventing the next copy, cancellation or destruction while scoped workers use
+it. Before a new wave, the entire old wave buffer is cleared, including any tail
+outside the new payload. Failed copies may have written a prefix; both rejection
+and Rust unwind clear header/customization/wave storage and make the frame
+terminal. Completion also clears. Ingress consumption is **not** a proof of
+hashing completion: the distinct `Waves` owner still requires exact processed
+bits and completed leaves before finalizing.
+
+Host memory can change between copies. This does not promise a whole-message
+atomic snapshot or hide caller-owned inputs. The private `CopyIn` test seam is
+not consumer callback authority and does not authorize raw address dereferences.
+Native integration must use the existing bounded OS copy primitive and prove
+that staging stays inside an admitted root frame until every worker joins.
+There is deliberately no output pointer/export operation in this ingress header.
+
+The [copied-ingress record](../assurance/windows-protection-observations/parallel-wave-input-20261003.json)
+records Rust 1.98.1 Linux and Windows x64 AVX2 **ordinary-process** checks:
+
+- Seven tests, including malformed fields, address overflow/null rules, partial
+  copy failure/unwind, canonical tails, exact offsets, stale-tail clearing and
+  terminal lifecycle. The maximum message metadata is checked without allocating
+  that entire message.
+- 532 independent cases, each in reverse and actual scoped-worker order: 1064
+  comparisons per platform, through copied staging and the existing wave root.
+- Eleven compiled runtime mutations rejected by failed tests, and ten compiled
+  ownership/private-storage rejections. Runtime crashes, compiler failures and
+  timeouts do not count as successful mutation rejection.
+- Focused local test/library Clippy with warnings denied, without lint allowances.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-parallel-input.py input-check
+```
+
+Artifacts and source bindings are retained outside `target/`. Windows uses a
+source-bound overlay. **This does not establish native OS-copy execution,
+protected placement, whole-image cleanup or production qualification.** Next is
+binding this staging to the generation-bound native transport, then exposing the
+supported public scheduling API and qualifying the resulting image.
 
 ## Author verification
 

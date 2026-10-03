@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "date": "2026-10-03",
+  "status": "PRIVATE_COPIED_INGRESS_PROCESS_PASS",
+  "implementation_parent": "06b881c9",
+  "compiler": "1.98.1",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "scope": "Safe arbitrary-bit ingress staging connected to the existing multi-wave ParallelHash owner, ordinary native AVX2 processes only; native VBS images unchanged",
+  "remote_checkout": "Windows source-bound overlay, not an exact clean Git checkout",
+  "platforms": {
+    "linux": {
+      "target": "x86_64-unknown-linux-gnu",
+      "tests": 7,
+      "oracle_cases": 532,
+      "scheduling_orders": 2,
+      "compiled_runtime_mutants_rejected": 11,
+      "compiled_negatives_rejected": 10,
+      "source_bindings_verified": 261
+    },
+    "windows": {
+      "target": "x86_64-pc-windows-msvc",
+      "tests": 7,
+      "oracle_cases": 532,
+      "scheduling_orders": 2,
+      "compiled_runtime_mutants_rejected": 11,
+      "compiled_negatives_rejected": 10,
+      "source_bindings_verified": 261
+    }
+  },
+  "clippy": "New ingress library and tests passed locally with warnings denied and no lint allowances",
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/input-linux-final/parallel-input-build.json": "14904bb376b448ab17495c755e045dec3fa6e39b07f952a2d0a226806e07f507",
+    "release-reports/windows-local-20261003/input-linux-final/parallel-input-results.json": "88369fb7f701b9a21bc20c7633b6b595b27f7e69bae44e46de8b0c5b5cd6e0e8",
+    "release-reports/windows-local-20261003/input-linux-final/parallel-input-test": "56640cf05a5078a9218b5fa5293c2143d41ca1432b707c7b9dd1cf04734ec28e",
+    "release-reports/windows-local-20261003/input-final/parallel-input-build.json": "185c9fa43b5e3babff38b2587a0e603a7cd8e8fa154f7d0aa3c358dabebdd19b",
+    "release-reports/windows-local-20261003/input-final/parallel-input-results.json": "325cdb898f5e84f20086def548f34a71191a9b2c365607a93f198f951159bc78",
+    "release-reports/windows-local-20261003/input-final/parallel-input-test.exe": "7c27ce2be4e2397eca79d4dd231619d1e5566497350f9df495541be48b637892"
+  },
+  "limits": [
+    "CopyIn is a private fake-transport seam in this campaign, not a consumer callback, pointer authority or OS-copy implementation",
+    "Lengths, shape and addresses are public metadata; caller buffers and changing host memory are outside the owned staging guarantee",
+    "Consumed ingress does not prove hashing completion; the distinct wave owner enforces exact processed-bit and completed-leaf counts",
+    "No native enclave placement/residency, whole-image register/spill/dump, fatal-exit cleanup, production-signing or independent-review claim",
+    "No shipping API, production crate, dependency or release-gate policy changed"
+  ],
+  "next": "Bind staged copying to the generation-bound native OS-copy transport and admitted root frame; then supported public scheduling API and current-image qualification"
+}

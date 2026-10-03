@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "date": "2026-10-03",
+  "status": "PRIVATE_THREE_WAVE_VBS_PUBLIC_FIXTURE_PASS",
+  "implementation_parent": "43beba82",
+  "compiler": "1.98.1",
+  "windows_build": 26300,
+  "target": "x86_64-pc-windows-msvc",
+  "enclave_execution": true,
+  "production_qualified": false,
+  "production_signed": false,
+  "independently_verified": false,
+  "whole_image_cleanup_qualified": false,
+  "temporary_signing_certificate_and_key_removed": true,
+  "signing_warning": "SDK VBS compatibility warning retained (signtool exit 2)",
+  "source_bindings_verified": 287,
+  "native_cases": 17,
+  "host_observation_tests": 6,
+  "compiled_native_gate_mutants_rejected": 10,
+  "gate_mutation_platform": "Linux with POSIX atomic shims, not Windows/VBS execution",
+  "remote_checkout": "Windows source-bound overlay, not a clean exact commit checkout",
+  "scope": "One private operation with three waves and ten leaves; fixed public oracle input and enclave-local comparison",
+  "bounds": {"waves": 3, "leaves": 10, "input_bits": 2307, "block_bytes": 32, "custom_bits": 0, "output_bits": 512, "enclave_threads": 5, "window_bytes": 65536},
+  "observed": [
+    "All four ParallelHash128/256 and XOF identities matched the independent oracle inside the enclave",
+    "Root stayed live on its original guarded/locked frame across successive worker waves",
+    "Native admission rejected stale/future/inactive/duplicate contexts before slot access",
+    "Native ticket release followed full-window clear/readback, host unlock acknowledgement and guard restoration",
+    "Root independently joined native tickets after early host return, before Rust reduction and subsequent wave",
+    "Per-wave disjoint overlapping windows, complete page observations and rejected live host-read probes",
+    "Denied admission, empty work, missing work and early return at each wave plus root denial rejected or completed as specified"
+  ],
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/wave-native-build-final/parallel-wave-image-build.json": "eb42a52f80266ae8772674ba9241a7210e19d0c315258000886d9ef7426ed6b0",
+    "release-reports/windows-local-20261003/wave-native-build-final/normal.dll": "668a4a1155410be588d4a1b7d9ee176556018996961b8e1577278b149ba4cfba",
+    "release-reports/windows-local-20261003/wave-native-build-final/normal_rust.lib": "d33ae43e5db020d6f2a7e7b7e0a33a9e5466e96acc086aa9c4bdaf10aed67ea2",
+    "release-reports/windows-local-20261003/wave-native-build-final/normal_rust.s": "7d8fbfacf35f80c9fc0076528a4025e53b9fcb58abccd69bdbf8d81819ccda1b",
+    "release-reports/windows-local-20261003/wave-native-build-final/normal_rust.ll": "0c72461b79ae873bbd398d67414e750888bec4d13f2a92009f3855eb502a37f0",
+    "release-reports/windows-local-20261003/wave-native-admitted-final/signed.dll": "2cb057b3b53c347a5ee141147f594502ab962cbe9b4d43ceaa2ad44ed91f4e51",
+    "release-reports/windows-local-20261003/wave-native-admitted-final/signing.json": "a6530450ecbd344a760ace565cb1e849580b5f1615634000973e4cdc5545e6c7",
+    "release-reports/windows-local-20261003/wave-native-admitted-final/observations.json": "2ba6d57e1fce0471a8dfecdd285b88d5184c0aae5bb15ca5cc790a5fef256881"
+  },
+  "corrected_test_issue": "Denied entry could finish before peers admitted; final barrier includes denied callbacks, retains disjointness validation and tests all admissions precede every finish",
+  "limits": [
+    "Private one-operation fixed-input image, not an arbitrary-input or reusable shipping API",
+    "Three distinct native gate/metadata records never reset; not an unbounded native generation implementation",
+    "Trusted-host page-lock acknowledgements are not protection against host lock revocation",
+    "Overlapping enclave calls do not prove physical-core parallelism or throughput",
+    "No whole-image register/spill/dump, arbitrary-unwind, fatal-abort or deployment migration qualification"
+  ],
+  "next": "Arbitrary-input copying/admission and public host scheduling, then current-image cleanup qualification"
+}

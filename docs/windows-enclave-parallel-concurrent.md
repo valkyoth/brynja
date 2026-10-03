@@ -2,7 +2,8 @@
 
 Status: safe-Rust component tested in ordinary Linux and Windows processes;
 a separate private fixed-input bridge now executes inside native VBS with
-distinct admitted root/leaf windows. **Neither is a shipping multicore API or
+distinct admitted root/leaf windows, including the bounded three-wave experiment
+below. **Neither is a shipping multicore API or
 native secret-processing qualification.** Production APIs and gates are unchanged.
 
 ## Implemented boundary
@@ -224,11 +225,73 @@ python3 scripts/cryptography/windows_enclave_parallel_wave_bridge_build.py wave-
 python3 scripts/cryptography/test-windows-enclave-parallel-wave-bridge.py wave-bridge
 ```
 
-Remaining: bind generation contexts to actual enclave C/MASM worker-window
-admission, verify cleanup/unlock/join before window reuse, and execute multi-wave
-VBS rejection campaigns. A Rust ticket release alone does not prove completion
-of the enclosing C/MASM stack cleanup. Arbitrary host-input copying, public API
-integration and current-image register/spill/dump qualification remain pending.
+The native experiment below separately binds generation contexts to C/MASM
+worker windows for its fixed fixture. A Rust ticket release alone does not prove
+completion of the enclosing C/MASM stack cleanup. Arbitrary host-input copying,
+public API integration and current-image register/spill/dump qualification remain
+pending.
+
+## Private native three-wave experiment
+
+`windows_enclave_parallel_wave_image.py` links the unchanged tested Rust adapter
+with a separate C/MASM image. The original root call and authority remain on the
+same admitted 64 KiB frame across three waves. Four worker entries are available;
+the final wave uses only two. The image has one operation and three distinct,
+never-reset native gate records, with separate diagnostic slot metadata for each
+generation. This is **not a general reusable-image or arbitrary-length API**.
+
+Public worker contexts carry generation/lane, never pointers. Native admission
+rejects unopened future waves, closed old waves, inactive lanes and permanent
+duplicate claims before accessing a slot. Each native ticket outlives the Rust
+worker call: its last release follows whole-window assembly clear/readback,
+trusted-host unlock acknowledgement, guard restoration and final metadata writes.
+The root independently closes admission and waits for these native releases
+before returning from dispatch to Rust, which then independently joins its own
+slot tickets and completes typed reduction/clearing before retirement.
+
+The host's early-return experiment holds workers inside admission callbacks,
+returns success without joining, and releases them only after an explicit native
+close notification. The root still waits for their cleanup. Later waves may use
+the same OS-managed stack addresses, but never simultaneously reuse live windows
+or reset prior claims. Host thread joins and per-wave page/cleanup observations
+are recorded before continuing. An exhausted native join budget terminates the
+process; it never authorizes releasing live storage.
+
+The [native three-wave record](../assurance/windows-protection-observations/parallel-wave-native-20261003.json)
+records 17 real Windows 11 x64 VBS cases: four normal ParallelHash identities,
+denied admission, dishonest empty success, missing work and early return at each
+of the three waves, plus root-admission denial. Normal inputs are fixed public
+fixtures (2307 bits, B=32, empty customization, 512 output bits); the result is
+compared to the independent oracle inside the enclave. Every case checks stale,
+future, duplicate and post-close rejection. Successful overlapping windows have
+complete page-lock observations and three rejected host-read probes per frame.
+This demonstrates overlapping enclave calls, not five physical cores or speedup.
+
+The first denial campaign exposed an orchestration mismatch: a denied entry
+could finish before all peers entered, allowing legal OS stack reuse within a
+wave. The final host barrier includes denied admissions, and a regression now
+requires all admissions before any finish in each denied wave. The strict
+disjointness check was retained; all 17 native cases were rerun. Six host/evidence
+tests and ten compiled native-gate mutations using POSIX atomic shims also pass;
+the latter are explicitly not Windows/VBS proof.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-parallel-wave-native.py
+python3 scripts/cryptography/test-windows-enclave-wave-native-gate.py
+```
+
+Build the image on Windows with `windows_enclave_parallel_wave_image.py`, run
+its `link.cmd`, development-sign a separate copy, then run
+`windows_enclave_parallel_wave_native.py SIGNED_DLL OUTPUT_JSON`. Final artifacts
+and 287 source bindings are saved locally outside `target/`. The temporary
+development certificate/private key was removed; the SDK compatibility warning
+is retained. No production-signing, independent-review, arbitrary-unwind or
+whole-image cleanup qualification is claimed. Production crates, API defaults,
+dependency versions and release gates are unchanged.
+
+Next: arbitrary-input admission/copying and the supported public host scheduling
+API, followed by current-image ABI/register/spill/dump qualification. The fixed
+three-wave diagnostic is not a substitute for these remaining steps.
 
 ## Author verification
 

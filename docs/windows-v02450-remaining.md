@@ -78,6 +78,12 @@ describe how the worker was developed, not outstanding constructor work.
   not yet implement protected multicore ParallelHash: per-worker protected
   stacks/owners, enclave-local leaf storage and ordered root reduction remain.
   See the [concurrency boundary and next design](windows-enclave-concurrent-design.md).
+  A separate per-slot guarded-stack image now also passes four-worker overlap,
+  denial and after-lock failure cleanup, and a native missing-clear negative
+  control. Live host reads reject at three sampled addresses per admitted
+  window. Explicit child-process working-set budgeting is recorded after the
+  default lock allowance rejected extra workers. This is public-marker stack
+  isolation, not yet protected Rust owners or ParallelHash leaf processing.
 
 - The private four-message Keccak AVX2 component and fixed-page resident now
   pass native Linux and Windows process campaigns: each stage covers 520

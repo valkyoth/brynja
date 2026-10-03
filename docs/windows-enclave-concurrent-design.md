@@ -62,6 +62,62 @@ Before public integration, exercise ordering, cancellation, replay, exhausted
 budgets, copy/entry failure and cleanup under overlapping calls. Run independent
 oracle comparisons and current-image stack/register/dump qualification afterward.
 
+## Per-worker guarded-stack experiment
+
+The [subsequent stack observation](../assurance/windows-protection-observations/concurrent-stack-20261003.json)
+uses a separate C/MASM public-marker image. Each of four one-shot slots owns its
+stack bounds, marker address, guard protections and completion state. Atomic
+admission rejects duplicates; completion publishes observations only after the
+frame has returned. The trampoline uses its passed slot pointer, not shared
+stack-bound globals. Callback registration is immutable before workers enter.
+
+Four admitted workers overlap in disjoint 64 KiB windows, with separate boundary
+pages. Each window is locked before body entry, cleared and read back in full
+from outside the window, then unlocked; boundary protections are restored before
+return. Each body verifies its distinct marker after peer execution. The host
+checks all sixteen payload pages are locked at admission and still locked at
+the clear acknowledgement. Three sampled host reads per live admitted window
+fail without copying bytes. These samples do not establish whole-image dump
+exclusion or protection of arbitrary caller frames.
+
+Native development tests cover all four workers, denial of slot 2, and injected
+slot-2 callback failure after locking. The denied worker never enters its body;
+its cleanup does not alter peer results. A separately built missing-clear mutant
+returns errors, never receives normal unlock acknowledgement, and is rejected
+by normal acceptance. Its remaining locks live until enclave/process teardown.
+All host worker calls join before enclave deletion, including error handling.
+
+The first run exposed the default process locking limit: after two 64 KiB locks,
+other workers failed with Windows error 1453. Final captures explicitly set the
+**test child process only** to an 8 MiB minimum / 16 MiB maximum working-set
+allowance, verify the actual values, and still require every `VirtualLock` and
+working-set observation to succeed. No machine-wide policy changed. Microsoft
+documents the connection between the working-set minimum and the
+[VirtualLock limit](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtuallock).
+Changing the allowance is resource setup, not proof of residency; the individual
+lock checks remain necessary. Production API resource budgeting remains pending.
+
+This establishes a **public-marker stack-isolation foundation**, not protected
+Rust worker ownership or ParallelHash. Fatal errors, arbitrary unwinding,
+register cleanup, trusted-host attacks and whole-image qualification are not
+covered. The existing single-thread production adapters are unchanged. Next is
+enclave-local leaf ownership and ordered root reduction on these distinct worker
+contexts, followed by algorithm/cleanup tests and public integration.
+
+Additional author checks:
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-concurrent-stack.py
+python3 scripts/cryptography/windows_enclave_concurrent_stack_build.py stack-build
+python3 scripts/cryptography/windows_enclave_concurrent_stack_build.py mutant-build --missing-clear-mutant
+```
+
+Build and separately development-sign each image. Capture normal/deny/after-lock
+modes using `windows_enclave_concurrent_stack.py IMAGE MODE`. The missing-clear
+image is a negative control only, never a usable implementation. Source/image
+hashes, four native captures, original linked images and signing records are
+saved outside `target/`; temporary signing keys were removed.
+
 ## Reproduce author checks
 
 ```sh

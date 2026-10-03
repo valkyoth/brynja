@@ -1,0 +1,200 @@
+{
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/concurrent-stack-admitted/observation-after-lock.json": "949646c618e8c7bae0c3a977950da3e6a402468d2df88ae05f717a2b7b593d68",
+    "release-reports/windows-local-20261003/concurrent-stack-admitted/observation-deny.json": "89b58253b22c08cebd3d3f524186070610f73b5f1b732ddb4ab2140bc1932be8",
+    "release-reports/windows-local-20261003/concurrent-stack-admitted/observation-normal.json": "93ebbc8340173fb4f99d05c3166c1efef9be4e168fc0b5d450334119eb2b2991",
+    "release-reports/windows-local-20261003/concurrent-stack-admitted/signed.dll": "f52838d022e0499211aed2980bd1efebeee90cb7e42f9df4ec002d5d6d1ac400",
+    "release-reports/windows-local-20261003/concurrent-stack-admitted/signing.json": "ec3b13e0ba10c734b083c1a7af6d7bb03d6efe3d74723c54d2a9fb5834ae4e79",
+    "release-reports/windows-local-20261003/concurrent-stack-build/link.cmd": "03813bf50cba426d922f8669b206c54be4f1e06783ffa4954056b04bac3390c9",
+    "release-reports/windows-local-20261003/concurrent-stack-build/normal.dll": "6e03ff770f4b71cfe594d488dca9c4c237d0bd59fc96d4ac8f45ce9e056f7f99",
+    "release-reports/windows-local-20261003/concurrent-stack-mutant-admitted/normal-rejection.json": "2513e471ea34fcdc50eb5aa9074aeb24c619cc41c366a6de988f4a6088335bd7",
+    "release-reports/windows-local-20261003/concurrent-stack-mutant-admitted/normal-rejection.log": "4080227032527ca6566c47a31cddf02bf3e743483cd1060a2f9840293c3f8763",
+    "release-reports/windows-local-20261003/concurrent-stack-mutant-admitted/observation-missing-clear.json": "64290e788f06af65e781f41cb47feffacc26fa06b850b0ae2793d3fb0f86ea21",
+    "release-reports/windows-local-20261003/concurrent-stack-mutant-admitted/signed.dll": "8f5f1d66b34b9b0dc29978f2e30c9c04cdf8a1f3869d37b7be7580f03e1e949e",
+    "release-reports/windows-local-20261003/concurrent-stack-mutant-admitted/signing.json": "aadd2928604d66f78c3b27c920ea74e04f86cb3312d750b7a303d3158799b9e6",
+    "release-reports/windows-local-20261003/concurrent-stack-mutant-build/link.cmd": "ff4d779292608a26f6efefa1d0db2b7a2198d5db6ab3f7c4e4deaaf8f349b45f",
+    "release-reports/windows-local-20261003/concurrent-stack-mutant-build/normal.dll": "122abc50071bb196b28eade05aeb6c802bcd7273bc814b80910ea1b157ca86ac"
+  },
+  "author_checks": {
+    "native_missing_clear_rejected_as_normal": true,
+    "new_unit_tests": 7,
+    "previous_concurrent_compiled_mutants": 7,
+    "previous_concurrent_tests": 3,
+    "previous_window_guard_tests": 10,
+    "previous_window_lock_tests": 14
+  },
+  "captures": {
+    "after-lock": {
+      "completed_mask": 11,
+      "deleted": true,
+      "host_read_rejections": 9,
+      "joined": true,
+      "locked_until_teardown": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "overlapping_mask": 11,
+      "results": [
+        100,
+        101,
+        18446744073709551615,
+        103
+      ],
+      "working_set_budget": {
+        "after": [
+          8388608,
+          16777216
+        ],
+        "before": [
+          204800,
+          1413120
+        ],
+        "child_process_only": true,
+        "requested": [
+          8388608,
+          16777216
+        ]
+      }
+    },
+    "deny": {
+      "completed_mask": 11,
+      "deleted": true,
+      "host_read_rejections": 9,
+      "joined": true,
+      "locked_until_teardown": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "overlapping_mask": 11,
+      "results": [
+        100,
+        101,
+        18446744073709551615,
+        103
+      ],
+      "working_set_budget": {
+        "after": [
+          8388608,
+          16777216
+        ],
+        "before": [
+          204800,
+          1413120
+        ],
+        "child_process_only": true,
+        "requested": [
+          8388608,
+          16777216
+        ]
+      }
+    },
+    "missing-clear": {
+      "completed_mask": 15,
+      "deleted": true,
+      "host_read_rejections": 12,
+      "joined": true,
+      "locked_until_teardown": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "overlapping_mask": 15,
+      "results": [
+        18446744073709551615,
+        18446744073709551615,
+        18446744073709551615,
+        18446744073709551615
+      ],
+      "working_set_budget": {
+        "after": [
+          8388608,
+          16777216
+        ],
+        "before": [
+          204800,
+          1413120
+        ],
+        "child_process_only": true,
+        "requested": [
+          8388608,
+          16777216
+        ]
+      }
+    },
+    "normal": {
+      "completed_mask": 15,
+      "deleted": true,
+      "host_read_rejections": 12,
+      "joined": true,
+      "locked_until_teardown": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "overlapping_mask": 15,
+      "results": [
+        100,
+        101,
+        102,
+        103
+      ],
+      "working_set_budget": {
+        "after": [
+          8388608,
+          16777216
+        ],
+        "before": [
+          204800,
+          1413120
+        ],
+        "child_process_only": true,
+        "requested": [
+          8388608,
+          16777216
+        ]
+      }
+    }
+  },
+  "cryptographic_execution_tested": false,
+  "date": "2026-10-03",
+  "implementation_parent": "d2aded32",
+  "independently_verified": false,
+  "limitations": [
+    "Public markers, no cryptographic state or protected Rust worker owners",
+    "No arbitrary unwind, register/spill, signal-frame or whole-image dump qualification",
+    "Host-read rejection sampled three addresses per live admitted window",
+    "Trusted host lock/cleanup handshake, not malicious-host residency attestation",
+    "Enclave deletion and child-process exit reclaim the deliberately broken negative-control image",
+    "Ordered ParallelHash reduction and public multicore API remain pending"
+  ],
+  "platform": "Local Windows 11 x64 build 26300 VBS development guest",
+  "production_qualified": false,
+  "remote_checkout": "Source-bound overlay, not a clean exact Git checkout",
+  "resource_observation": "Unadjusted process allowed two 64 KiB locks; further workers failed VirtualLock error 1453. Explicit child-only 8/16 MiB working-set allowance used for final captures.",
+  "schema": 1,
+  "signing": "Development only; both temporary certificates/private keys removed; SDK compatibility warnings retained",
+  "source_sha256": {
+    "assurance/windows-enclave-probe/concurrent_entry.c": "50f504741418ecaa06bbeac5225a67ad580a743ea665bae3cb96b4fc80a33691",
+    "assurance/windows-enclave-probe/concurrent_stack.c": "ab60b74b490ce65a65f0045bceb9b893301bae0bebeb8a4535f5eed59a5f873c",
+    "assurance/windows-enclave-probe/concurrent_stack_x64.asm": "4503af6f7bfb0726ff7fb9254c3075791798f78d47f50a8347a74783c8e2fc6c",
+    "scripts/cryptography/test-windows-enclave-concurrent-c.py": "3ccd35ef70fb977a7236f25961102bc4bb13a04403e7267ac944c36adf5b982a",
+    "scripts/cryptography/test-windows-enclave-concurrent-stack.py": "6658fd8840405eef9b6ddf00fea213676d078003249301643eb7dcabcafa3cfe",
+    "scripts/cryptography/test-windows-enclave-concurrent.py": "e23d2b23d9a9b7688f6c9b1c1f323985813a8f7eae38743756d4623a1748ce24",
+    "scripts/cryptography/windows_enclave_concurrent.py": "eb31c37d8bf66966c00e5385f5a57e389a19f7569f14bce0a4c7907152a1c8a4",
+    "scripts/cryptography/windows_enclave_concurrent_stack.py": "29eccfc8b69077a96722a6f1b37c061d99a0c913132773fed30b18b6b29b82e2",
+    "scripts/cryptography/windows_enclave_concurrent_stack_build.py": "e74790c21e4c3d56159fd983a153ed9a851abf1e582a89db3fb4aa8450c3aeb1",
+    "scripts/cryptography/windows_enclave_lifecycle.py": "0232dfa69625cfc757baec318c49edd304b118fcb34b876d2c832899298e5ea4",
+    "scripts/cryptography/windows_enclave_window_lock.py": "6f009eddcede04b39b47f5bcf2934a0939ea2aed0c58b2287b34e20cbe7047f8",
+    "scripts/cryptography/windows_enclave_worker.py": "361e0eb2457156671e8a74d5cdf10572df7071b26f03074b184644fc5e1ab657",
+    "scripts/cryptography/windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "scripts/cryptography/windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09"
+  },
+  "status": "OBSERVATIONS_ONLY",
+  "synthetic_only": true
+}

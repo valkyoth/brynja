@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "date": "2026-10-03",
+  "status": "PRIVATE_BOUNDED_COPIED_INPUT_VBS_PASS",
+  "implementation_parent": "81419f5a",
+  "compiler": "1.98.1",
+  "platform": "x86_64-pc-windows-msvc; local Windows 11 VBS VM",
+  "enclave_execution": true,
+  "production_qualified": false,
+  "independently_verified": false,
+  "whole_image_cleanup_qualified": false,
+  "production_signed": false,
+  "remote_checkout": "Source-bound overlay; not a clean exact-commit checkout",
+  "native_cases": 31,
+  "normal_oracle_cases": 10,
+  "copy_or_header_rejections": 8,
+  "worker_failure_or_early_return_cases": 12,
+  "root_denial_cases": 1,
+  "native_source_bindings_verified": 295,
+  "ordinary_process_campaigns": {
+    "linux": {"identity_fault_cases": 64, "publication_mutants_rejected": 3, "source_bindings_verified": 269},
+    "windows": {"identity_fault_cases": 64, "publication_mutants_rejected": 3, "source_bindings_verified": 269}
+  },
+  "additional_tests": {
+    "stubbed_C_copy_boundary_mutants_rejected": 9,
+    "synthetic_evidence_tests": 3,
+    "clippy": "Local generated adapter test target passes with warnings denied and no allowances"
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/input-bridge-linux-verified/parallel-input-bridge-results.json": "f0b2f7bcca80d70e5fe5ae2b29e8873e2e158dd51ec5534afc179ae5f7d60990",
+    "release-reports/windows-local-20261003/input-bridge-linux-verified/input-bridge-test": "f70061805dcac82abfd5947c93842fb1e51c603c4541606d4076a42dba024972",
+    "release-reports/windows-local-20261003/input-bridge-final/parallel-input-bridge-results.json": "43e159d8912e1482cc2a4e38f7acc268073b959a7437d63bb556125d9f91e532",
+    "release-reports/windows-local-20261003/input-bridge-final/input-bridge-test.exe": "30253c3736409ce48967c91b07f76449bca28f9e079faf8ffee80a93ee2c11b9",
+    "release-reports/windows-local-20261003/input-native-build-final/parallel-input-image-build.json": "b25a60498c18847b416de0243081a9dc6723bf9bdb2c810ac982cd6352a626b8",
+    "release-reports/windows-local-20261003/input-native-build-final/normal.dll": "95010e812e39ab64b485ab3fae20f658e829031a24326292350188594c0a28e8",
+    "release-reports/windows-local-20261003/input-native-admitted-final/signing.json": "cec3bd8013f5020dbb5f90b6c54203651a3ede880510413383fc8467eb4d36f1",
+    "release-reports/windows-local-20261003/input-native-admitted-final/observations.json": "e361c91e33936d8d56b9c59eb21eeedd500fdf0a7be8040d517b04fa6a79810a",
+    "release-reports/windows-local-20261003/input-native-admitted-final/signed.dll": "2f809e76f47f82a42f793af7470ca90f6a02dd6a348cfef1bedac19b7c2aedfe"
+  },
+  "limits": [
+    "Exactly ten leaves in three waves, one operation per image; not general scheduling or supported public host API",
+    "Explicit public output declassification; OS output-copy failure may modify a host prefix and is not transactional",
+    "Public fixtures only; caller copies, lengths, changing host inputs and whole-message snapshot guarantees are outside scope",
+    "No arbitrary-unwind/fatal-exit cleanup, whole-image register/spill/dump qualification, independent review or Windows ARM64 claim",
+    "Exploratory stride mutation aborted in a test-only C callback assertion; excluded from successful mutation counts",
+    "Development certificate and private key removed; SDK compatibility warning retained; no production signing",
+    "Production crates, kernel implementations, defaults and release gates unchanged"
+  ],
+  "next": "Checked general wave scheduling, supported public host API and final-image qualification"
+}

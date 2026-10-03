@@ -3,9 +3,9 @@
 Status: safe-Rust component tested in ordinary Linux and Windows processes;
 a separate private fixed-input bridge now executes inside native VBS with
 distinct admitted root/leaf windows, including the bounded three-wave experiment
-below. A separate copied-ingress component now validates/stages arbitrary-bit
-input in ordinary Linux/Windows process tests; its OS-copy integration remains
-pending. **None is a shipping multicore API or
+below. Copied-ingress staging is tested in ordinary Linux/Windows processes and
+in a separate bounded native VBS OS-copy image, described below.
+**None is a shipping multicore API or
 native secret-processing qualification.** Production APIs and gates are unchanged.
 
 ## Implemented boundary
@@ -342,8 +342,76 @@ python3 scripts/cryptography/test-windows-enclave-parallel-input.py input-check
 Artifacts and source bindings are retained outside `target/`. Windows uses a
 source-bound overlay. **This does not establish native OS-copy execution,
 protected placement, whole-image cleanup or production qualification.** Next is
-binding this staging to the generation-bound native transport, then exposing the
-supported public scheduling API and qualifying the resulting image.
+binding this staging to the generation-bound native transport. The bounded
+experiment below now covers that step; general scheduling, the supported public
+API and resulting-image qualification remain pending.
+
+## Bounded native copied-input integration
+
+The separate `parallel_input_bridge_body.rs` and `parallel_input_copy.h` image
+connect the staging component to **real Windows enclave copy primitives**. The
+native experiment still requires exactly ten leaves in three waves. B, input
+bytes and final bits, customization, identity and output length now come from a
+copied header rather than compiled-in message bytes. This is not unrestricted
+scheduling or a reusable multi-operation enclave API.
+
+The root verifies that its input frame, root state, authority and output buffer
+are within its admitted window. Every incoming copy independently checks its
+destination against that window. Host addresses remain metadata: Rust does not
+dereference them. A generation publication contains only the immutable slice
+from the root's staged wave, with checked lane offsets and lengths. Workers hold
+generation tickets; native window cleanup and the Rust slot join both finish
+before reduction, retirement or the next input copy. Publication pointers and
+shape are erased after join. The existing gates are not reset or bypassed.
+
+Output is explicitly **public declassification** to a separately registered,
+one-shot destination. An OS-copy failure may modify a destination prefix; the
+image does not promise transactional host output or erasure of caller buffers.
+The bad-output-address test observes rejection, not recovery of an arbitrary
+partially written host buffer. Shape/lengths remain public. Host input mutation
+between copies is outside any whole-message snapshot guarantee.
+
+The [native copied-input record](../assurance/windows-protection-observations/parallel-input-native-20261003.json)
+records 31 real VBS cases under Rust 1.98.1:
+
+- Ten normal oracle cases across all four identities, B=1/7/168/1024, partial
+  input/customization bits, output lengths including zero and 8192 bits, and
+  customization up to 8191 bits.
+- Eight copy/admission rejections: invalid header/customization/input/output
+  addresses, reserved metadata, noncanonical customization/input tails and a
+  shape outside this bounded diagnostic.
+- Denied, empty, partial and early-return worker dispatch at every wave, plus
+  root denial. Invalid copies do not authorize fallback or output publication.
+- Admitted frame page observations, full-window clear/readback before unlock,
+  guard restoration, exact join/replay events and source-bound transfer counts.
+
+Ordinary Linux/Windows adapter checks each pass 64 identity/error/unwind cases
+and three compiled publication-cleanup mutations. Nine compiled mutations of the
+real C copy boundary pass using stubbed OS calls; these are **not** native OS
+evidence. Three synthetic evidence tests reject altered stage counts, scope,
+cleanup, residency, join events and missing observations. An exploratory stride
+mutation aborted in a test-only C callback assertion and was not counted as a
+passing mutation rejection. Focused local adapter Clippy passes with warnings
+denied. No hash/permutation implementation changed.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-parallel-input-bridge.py bridge-input-check
+python3 scripts/cryptography/test-windows-enclave-parallel-input-copy.py
+python3 scripts/cryptography/test-windows-enclave-parallel-input-native.py
+```
+
+On Windows, build with `windows_enclave_parallel_input_image.py`, run `link.cmd`,
+development-sign a separate image and capture with
+`windows_enclave_parallel_input_native.py SIGNED_DLL OUTPUT_JSON`. Artifacts
+are saved locally outside `target/`; 295 native source bindings and 269 bindings
+per process campaign were verified. The temporary signing certificate/private
+key was removed; the SDK compatibility warning is retained. This remains
+development-signed public-fixture evidence, not production signing, independent
+review or complete ABI/register/spill/dump qualification. Windows ARM64 is not
+covered. Production crates and release gates are unchanged.
+
+Next: remove the diagnostic's fixed wave population through a checked general
+scheduler, integrate the supported public host API, and qualify that final image.
 
 ## Author verification
 

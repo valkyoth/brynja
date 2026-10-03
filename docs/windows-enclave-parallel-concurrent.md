@@ -178,6 +178,58 @@ supported public interface, followed by current-image cleanup qualification.
 Do not reset the existing one-shot gate or reuse raw pointers merely because
 the host reports that a previous wave finished.
 
+## Generation-bound multi-wave adapter (process tests only)
+
+The private `parallel_wave_gate.rs` and `parallel_wave_bridge.rs` now connect
+the wave scheduler to an FFI-shaped worker boundary in **ordinary native
+Linux/Windows processes, not native multi-wave VBS calls**. They do not replace
+the earlier one-shot enclave image. No shipping API or release gate changes.
+
+The gate binds a nonzero, monotonically increasing generation, active lane mask,
+permanent claims, live tickets and success bits in one atomic word. Old/future
+generations, inactive lanes and duplicate calls reject before loading a slot
+pointer or its shape. Publication uses release/acquire. Closing admission races
+worker claims on the same word; a closed wave cannot reopen, including when no
+worker entered. Generation exhaustion fails closed rather than wrapping.
+
+The thread-bound root lease permits retirement only after closing admission and
+observing every worker's final release. Retirement is an explicit adapter
+acknowledgement: **the gate itself cannot prove storage clearing or pointer
+lifetimes**. Dropping a non-retired lease seals the gate, including on unwind.
+The adapter independently joins, erases published pointers and metadata, and
+waits for typed reduction/slot cleanup before allowing the next generation.
+Worker authorities remain worker-local; the original root authority stays live
+on its creating thread for all three waves. CVs are never host-relayed.
+
+The [generation-adapter record](../assurance/windows-protection-observations/parallel-wave-bridge-20261003.json)
+records Rust 1.98.1 native AVX2 process checks on both platforms:
+
+- Ten gate tests, including competing roots, close/claim races, live-ticket
+  retirement rejection and delayed requests during the next open publication.
+- 64 identity/fault cases: four ParallelHash identities; three waves/ten leaves
+  with a three-bit final leaf; normal execution, early host return, missing/empty
+  work, cancellation and internal Rust unwind at each wave boundary.
+- Fifteen gate and four adapter compiled runtime mutants rejected by failing
+  tests, not compilation errors, crashes or timeouts; nine compiled ownership,
+  private-field and lifetime rejections. Focused local Clippy passes.
+
+Inputs and results are fixed **public oracle fixtures**. The ordinary-process
+region-check stub does not establish enclave placement or protection. Root
+unwind is tested through a private Rust entry, never by unwinding across C ABI.
+Fatal abort and a nonreturning worker are not successful cleanup paths; an
+exhausted join budget terminates rather than freeing a borrowed root.
+
+```sh
+python3 scripts/cryptography/windows_enclave_parallel_wave_bridge_build.py wave-bridge
+python3 scripts/cryptography/test-windows-enclave-parallel-wave-bridge.py wave-bridge
+```
+
+Remaining: bind generation contexts to actual enclave C/MASM worker-window
+admission, verify cleanup/unlock/join before window reuse, and execute multi-wave
+VBS rejection campaigns. A Rust ticket release alone does not prove completion
+of the enclosing C/MASM stack cleanup. Arbitrary host-input copying, public API
+integration and current-image register/spill/dump qualification remain pending.
+
 ## Author verification
 
 ```sh

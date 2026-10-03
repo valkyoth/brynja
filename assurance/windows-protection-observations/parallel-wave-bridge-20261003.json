@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "date": "2026-10-03",
+  "status": "PRIVATE_GENERATION_BRIDGE_PROCESS_PASS",
+  "implementation_parent": "1ef946b4",
+  "compiler": "1.98.1",
+  "production_qualified": false,
+  "independently_verified": false,
+  "enclave_execution": false,
+  "scope": "New generation gate and multi-wave raw-pointer adapter, ordinary native AVX2 processes only; prior one-wave VBS image unchanged",
+  "remote_checkout": "Windows source-bound overlay, not an exact clean Git checkout",
+  "platforms": {
+    "linux": {
+      "target": "x86_64-unknown-linux-gnu",
+      "gate_tests": 10,
+      "identity_fault_cases": 64,
+      "compiled_gate_mutants_rejected": 15,
+      "compiled_adapter_mutants_rejected": 4,
+      "compiled_negatives_rejected": 9,
+      "source_bindings_verified": 262
+    },
+    "windows": {
+      "target": "x86_64-pc-windows-msvc",
+      "gate_tests": 10,
+      "identity_fault_cases": 64,
+      "compiled_gate_mutants_rejected": 15,
+      "compiled_adapter_mutants_rejected": 4,
+      "compiled_negatives_rejected": 9,
+      "source_bindings_verified": 262
+    }
+  },
+  "clippy": "New gate library, gate tests and adapter tests passed locally with warnings denied",
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/wave-bridge-linux-final/parallel-wave-bridge-build.json": "35ff55de9785e8b722267d74caa2bf791deae2d3cd297b931baf74b9dbcec780",
+    "release-reports/windows-local-20261003/wave-bridge-linux-final/parallel-wave-bridge-results.json": "81e375d916fac3380e31cc83a03c92a7315a0ef1217c9b766affeb12988d684a",
+    "release-reports/windows-local-20261003/wave-bridge-linux-final/wave-gate-test": "ee98d0f213805649595481f0361a735002724360db244e2daf022c361afec20e",
+    "release-reports/windows-local-20261003/wave-bridge-linux-final/wave-bridge-test": "14440a957808bd8c05acce484ce49dd3b925584b4f770bdda1dd6e6af69e6fe8",
+    "release-reports/windows-local-20261003/wave-bridge-final/parallel-wave-bridge-build.json": "b41262477f33960cc897934e34b1812c539559647d586fb4fc60e1085615fc9b",
+    "release-reports/windows-local-20261003/wave-bridge-final/parallel-wave-bridge-results.json": "f151d8887bae383f572ebb81a396d37905ac95863bf3fc0eade995b3f99b9560",
+    "release-reports/windows-local-20261003/wave-bridge-final/wave-gate-test.exe": "c34da5c00b3253bc7a7289eb9ca5a4958e77f3e62506cadc44434fa9c79d469a",
+    "release-reports/windows-local-20261003/wave-bridge-final/wave-bridge-test.exe": "5cb482b40a14da785ebe63eddd8c711f739f7fbe73bc4232439dbb9bd3e9c6eb"
+  },
+  "limits": [
+    "Fixed public oracle fixture, 2307 input bits, B=32, empty customization, 512 output bits; four identities and three waves",
+    "Ordinary-process root-region stub does not prove enclave protection or residency",
+    "Generation gate cannot prove storage cleanup; adapter explicitly joins and erases publication before retirement",
+    "Rust ticket release does not qualify enclosing native C/MASM window cleanup or unlock",
+    "No arbitrary host-input copying, shipping multi-wave API, whole-image register/spill/dump qualification or fatal-exit cleanup claim",
+    "Root unwind tested via internal Rust call, not unwinding across C ABI"
+  ],
+  "next": "Bind generations to native C/MASM worker-window admission and cleanup/join-before-reuse, then run real VBS multi-wave rejection cases"
+}

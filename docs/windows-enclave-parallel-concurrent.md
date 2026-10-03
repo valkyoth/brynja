@@ -410,8 +410,64 @@ development-signed public-fixture evidence, not production signing, independent
 review or complete ABI/register/spill/dump qualification. Windows ARM64 is not
 covered. Production crates and release gates are unchanged.
 
-Next: remove the diagnostic's fixed wave population through a checked general
-scheduler, integrate the supported public host API, and qualify that final image.
+The following separate image removes that fixed population; the historical
+bounded capture above remains unchanged.
+
+## Private variable-wave native scheduler
+
+`windows_enclave_parallel_scheduler_image.py` builds a separate AVX2 image with
+four reusable worker records and one root record. The root stays on its original
+admitted frame. A single interlocked word binds generation, active lanes, claims,
+live workers, successful cleanup and diagnostic reader pins. Record reuse requires
+closed entry, all native workers released after window cleanup, typed Rust slot
+cleanup, and zero diagnostic readers. Generations increase without reset or wrap.
+Stale workers are rejected before record lookup; diagnostic queries pin their
+generation before accessing a worker record, preventing check-then-reuse races.
+
+The [variable-wave native record](../assurance/windows-protection-observations/parallel-scheduler-native-20261003.json)
+records 31 real VBS cases under Rust 1.98.1, with 305 verified source bindings:
+
+- Twenty-five normal cases across all four identities, empty messages and output,
+  all one-to-four-worker final waves, B=1/7/1024, partial bits, customization up to
+  8191 bits and output up to 8192 bits. The longest case completes 33 waves.
+- Early host return at the first and fifth waves, denied and partial worker
+  dispatch, empty dispatch, and root denial. Native joins remain independent of
+  the host's claimed completion; unsuccessful generations cannot be recycled.
+- Per-generation cleanup/readback, guard restoration, residency observations,
+  sampled rejected live host reads, and stale/future/duplicate entry/query probes.
+
+The admitted input bound remains 65,536 leaves / 16,384 waves, not a claim that
+the native campaign exercised that maximum. Zero input completes without worker
+dispatch. A nonreturning worker or pinned diagnostic query cannot authorize reuse;
+the bounded native wait terminates the process rather than returning success.
+
+The real C gate also passes a POSIX-atomic-shim campaign with fourteen compiled
+runtime mutations, including stale-generation, reader-pin, failed-cleanup and
+exhaustion cases. This is not Windows atomics or VBS qualification. Three
+synthetic host/evidence tests pass on Linux and Windows and exercise all 31 case
+shapes plus tampered cleanup/join records. The generated Rust adapter passes
+focused local Clippy with warnings denied.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-scheduler-gate.py scheduler-gate-check
+python3 scripts/cryptography/test-windows-enclave-parallel-scheduler.py
+```
+
+On Windows, build using `windows_enclave_parallel_scheduler_image.py`, run its
+`link.cmd`, development-sign a separate image, then capture using
+`windows_enclave_parallel_scheduler_native.py SIGNED_DLL OUTPUT_JSON`.
+Source-bound artifacts are retained locally outside `target/`. The temporary
+signing key was removed and the SDK compatibility warning retained.
+
+This remains a private, one-operation-per-image diagnostic, **not the supported
+public host API**. Host threads are created per wave and diagnostic history is
+retained; no throughput claim is made. Shape metadata and output are public.
+Caller copies, changing input snapshots and potentially partial host-output copies
+retain the limits above. Whole-image ABI/register/spill/dump qualification,
+Windows ARM64, production signing and independent review remain unclaimed.
+Production crates, kernel implementations and release gates are unchanged.
+
+Next: integrate the supported public host scheduler API, then qualify that image.
 
 ## Author verification
 

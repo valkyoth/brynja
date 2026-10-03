@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "date": "2026-10-03",
+  "status": "PRIVATE_VARIABLE_WAVE_VBS_PASS",
+  "implementation_parent": "c27608a4",
+  "compiler": "1.98.1",
+  "platform": "x86_64-pc-windows-msvc; local Windows 11 VBS VM",
+  "enclave_execution": true,
+  "production_qualified": false,
+  "independently_verified": false,
+  "whole_image_cleanup_qualified": false,
+  "production_signed": false,
+  "remote_checkout": "Source-bound overlay; not a clean exact-commit checkout",
+  "native_cases": 31,
+  "normal_oracle_cases": 25,
+  "worker_failure_or_early_return_cases": 5,
+  "root_denial_cases": 1,
+  "maximum_native_waves_tested": 33,
+  "native_source_bindings_verified": 305,
+  "additional_tests": {
+    "C_gate_baseline": "PASS using POSIX atomic shims; not Windows/VBS evidence",
+    "compiled_C_gate_mutants_rejected": 14,
+    "synthetic_host_and_evidence_tests_per_platform": 3,
+    "synthetic_platforms": ["Linux", "Windows"],
+    "clippy": "Local generated Rust adapter passes with warnings denied"
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/scheduler-build-verified/parallel-scheduler-image-build.json": "8467569af1a51173533255fccf33ab11be5b41d7133c74e7ffcdb93b1b88d63a",
+    "release-reports/windows-local-20261003/scheduler-build-verified/normal.dll": "5cc9482598a3ba4b3afb568b3f864dadf57844947a7e0ce48370b8fec035ea19",
+    "release-reports/windows-local-20261003/scheduler-admitted-verified/signing.json": "f18c0e972d8f3631a173b6e891b3b13554e7beee0a25fd2ae4ab35076066a14a",
+    "release-reports/windows-local-20261003/scheduler-admitted-verified/observations.json": "9b9e5db245e62942ac5427ecb3439cc3bb9fd7356ee8748630b8cc0d20edd78f",
+    "release-reports/windows-local-20261003/scheduler-admitted-verified/signed.dll": "7529bf3fe165865f8cee426bcd7a12bdcb97e09fb813e0318d91025c12c317c8",
+    "release-reports/windows-local-20261003/scheduler-gate-verified/results.json": "251ed7dbea62f9d0bf6a4de7d89b0dbd4fa0b8c3c90dd199c1566760600c1db8"
+  },
+  "limits": [
+    "Private AVX2 diagnostic, one operation per image; supported public host API not integrated",
+    "Admission bound is 65536 leaves / 16384 waves; maximum native execution here is 33 waves",
+    "Four reusable worker records plus root; diagnostic host retains history and creates threads per wave; no throughput claim",
+    "Public fixtures, lengths and explicitly declassified output; no caller-copy, snapshot or transactional host-output guarantee",
+    "No arbitrary-unwind/fatal-exit cleanup, whole-image register/spill/dump qualification, independent review or Windows ARM64 claim",
+    "Development certificate and private key removed; SDK compatibility warning retained; no production signing",
+    "Production crates, kernel implementations, defaults and release gates unchanged"
+  ],
+  "next": "Supported public host scheduling API and final-image qualification"
+}

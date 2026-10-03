@@ -1,0 +1,64 @@
+{
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/parallel-waves-final/libparallel_waves.rlib": "82f7a2eb77488a85574b790980b09b179322e89477344da8d546f04f22af0689",
+    "release-reports/windows-local-20261003/parallel-waves-final/parallel-waves-build.json": "4b72e021f34c85c1a61ac68a8f357cbf2bd120878b925175b26da7451dfaebd5",
+    "release-reports/windows-local-20261003/parallel-waves-final/parallel-waves-results.json": "b07321d53201430fbaae4b77fbf5b012c7718a87c54603cd3322ca8841ae1567",
+    "release-reports/windows-local-20261003/parallel-waves-final/parallel-waves-test.exe": "ebc79ec7155191d31c40f67bb486b3b387a7a16149182bc2dff0f39997edf12b",
+    "release-reports/windows-local-20261003/parallel-waves-final/parallel-waves-vectors.txt": "f8fd5a97cc32a07429bd8b28da83280f0a0a97f0b07dcae14736aeee1cf62cbd",
+    "release-reports/windows-local-20261003/parallel-waves-linux-final/clippy-waves-0.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release-reports/windows-local-20261003/parallel-waves-linux-final/clippy-waves-1.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release-reports/windows-local-20261003/parallel-waves-linux-final/libparallel_waves.rlib": "ff6a77d344261a7fc7e445f9049df5e93868c31382b213e1cdbfd46f14aa3103",
+    "release-reports/windows-local-20261003/parallel-waves-linux-final/parallel-waves-build.json": "3f2dc5b4b98278377d803ff642b101d7b148ebf7105d29a0480e1f168fe0c03e",
+    "release-reports/windows-local-20261003/parallel-waves-linux-final/parallel-waves-results.json": "83781e02c1dba113b6f2dd50eaa9b2f4ced17d6038db7bf1e7365eee51f03d2f",
+    "release-reports/windows-local-20261003/parallel-waves-linux-final/parallel-waves-test": "3c9701e1009998121e56f924db9ecced75fb43ddf80d7d3a6836fb0ef07c2a22",
+    "release-reports/windows-local-20261003/parallel-waves-linux-final/parallel-waves-vectors.txt": "c9d62f9c1024c547ee8a4c96f802613c2244291194885a891e9fae28b9906e18"
+  },
+  "clippy": "Library and tests passed locally with the existing chunks_exact compatibility allowance",
+  "compiler": "1.98.1",
+  "date": "2026-10-03",
+  "enclave_execution": false,
+  "implementation_parent": "3672e4c90ad59c2fe8b6b93c8dd50b4a3b4b790d",
+  "independently_verified": false,
+  "limits": [
+    "At most 65536 leaves, B 1..1024 bytes, custom/output <=8192 bits; four CV slots per wave",
+    "Input length, wave offset and scheduling shape are public metadata",
+    "No native multi-wave VBS dispatch, arbitrary host-input copying or shipping multicore API yet",
+    "Internal scoped callback is not a production consumer callback API",
+    "No protected-memory, full-frame/register/spill/dump or fatal-abort cleanup qualification"
+  ],
+  "new_external_dependencies": false,
+  "new_unsafe": false,
+  "next": "Generation-bound enclave wave dispatch and join-before-reuse, then host copying/public API and cleanup qualification",
+  "platforms": {
+    "linux": {
+      "compiled_mutants_rejected": 14,
+      "compiled_negatives_rejected": 11,
+      "previous_bounded_comparisons": 760,
+      "source_hashes_verified": 256,
+      "target": "x86_64-unknown-linux-gnu",
+      "tests": 21,
+      "wave_comparisons": 1064,
+      "wave_oracle_cases": 532
+    },
+    "windows": {
+      "compiled_mutants_rejected": 14,
+      "compiled_negatives_rejected": 11,
+      "previous_bounded_comparisons": 760,
+      "source_hashes_verified": 256,
+      "target": "x86_64-pc-windows-msvc",
+      "tests": 21,
+      "wave_comparisons": 1064,
+      "wave_oracle_cases": 532
+    }
+  },
+  "production_qualified": false,
+  "remote_checkout": "Restored Windows checkout plus source-bound overlays, not clean exact HEAD",
+  "schema": 1,
+  "scope": "Safe root/leaf scheduling component only; previous fixed-input native bridge is unchanged",
+  "status": "PRIVATE_MULTI_WAVE_COMPONENT_PROCESS_PASS",
+  "wave_source_sha256": {
+    "assurance/windows-enclave-probe/parallel_concurrent_waves.rs": "2eaa0f6cdb318a48ce7c874e13ae2f7394796eb5182a55f96f1389d0e8931073",
+    "assurance/windows-enclave-probe/parallel_concurrent_waves_tests.rs": "2a049e22fd4112630e7397e498b1081dc73b1c0f7de33a125267d359d605e1c6",
+    "scripts/cryptography/windows_enclave_parallel_waves_build.py": "210338099c46cb09c7f3b6995df451bf68d8451800222e0a43e7ede79627af64"
+  }
+}

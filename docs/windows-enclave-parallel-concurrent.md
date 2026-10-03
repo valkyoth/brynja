@@ -45,13 +45,14 @@ untouched on rejection; completion clears the retained batch too.
 - At most four leaves per batch; B is 1–1024 bytes.
 - Arbitrary-bit final input and customization; customization is at most 8192 bits.
 - Fixed output or a terminal XOF prefix is at most 8192 bits. No incremental
-  XOF reader or multi-wave streaming scheduler is implemented here.
+  XOF reader is implemented here. `Batch` is single-wave; the separate private
+  `Waves` component below retains a root across successive bounded waves.
 - Normal typed clearing does not prove complete frame/register/spill erasure.
   Caller copies and ordinary-process storage are not protected by this component.
 
 The private bridge below places the bounded root/slots on an admitted root frame
 and runs leaves on the [distinct guarded stacks](windows-enclave-concurrent-design.md).
-Arbitrary-input copying, multi-wave schedules, cancellation across actual enclave
+Arbitrary-input copying, multi-wave enclave dispatch, cancellation across actual enclave
 calls, supported public host integration and current-image cleanup/dump
 qualification remain pending. The earlier synthetic stack experiment and ordinary
 process tests alone must not be combined into a protected-execution claim.
@@ -117,6 +118,65 @@ development-sign the diagnostic image. Run `windows_enclave_parallel_concurrent_
 SIGNED_DLL OUTPUT_JSON` for eight bounded fresh-process cases. No signing key is
 retained. A Windows mutation-runner newline restoration failure was corrected by
 restoring exact original bytes; failed and superseded artifacts remain available.
+
+## Private multi-wave component
+
+`parallel_concurrent_waves.rs` adds a safe `no_std`, fixed-storage root scheduler
+for all four ParallelHash identities. It reuses the same accelerated state and
+leaf implementation; no permutation, unsafe code or external dependency is added.
+It is **not yet connected to the native multi-call bridge or a shipping API**.
+
+The root fixes the total message length, B, customization and output length at
+construction. It absorbs the cSHAKE prefix and B once, then owns the next byte
+offset and the expected global leaf count. Each operation creates a fresh scoped
+plan and at most four exclusive slots. The internal scheduling callback can run
+those slots on scoped workers, but cannot retain them, re-enter or destroy the
+borrowed root, or manufacture a second batch with the same plan. The native FFI
+adapter must provide equivalent lifetime guarantees; safe Rust callbacks alone
+do not prove raw-pointer or OS-call safety.
+
+Successful waves absorb CVs in canonical order, clear each consumed slot and
+commit checked global counters. Missing, reordered or replayed slots, callback
+failure, cancellation, revocation and unwind make the root terminal and clear
+its state/output. Finalization requires **both exact total-bit completion and
+the exact global leaf count**, then encodes the count and fixed/XOF output suffix
+once. Public export is transactional and clears retained bytes. Caller-owned
+inputs remain outside this component's ownership/erasure guarantee.
+
+Bounds remain explicit: B is 1–1024 bytes, at most 65,536 leaves, customization
+and terminal output at most 8192 bits, and only four CV slots per wave. Storage
+does not grow with the message. These are private prototype bounds, not a new
+production API contract. Shape/offset/count information is public metadata.
+
+The [multi-wave component record](../assurance/windows-protection-observations/parallel-waves-component-20261003.json)
+records ordinary native-process tests on Linux and Windows x64 AVX2:
+
+- 532 oracle cases in reverse and real scoped-thread order: 1,064 comparisons
+  per platform, including bit tails, empty input, wave boundaries, 128 leaves,
+  1024-byte blocks and all twelve retained NIST samples via the independent oracle.
+- The existing 380-case bounded-component campaign remains in the same binary.
+- 21 tests include cancellation racing workers at each wave boundary, exact
+  completion/counter corruption, output transactionality, revocation and unwind.
+- Fourteen compiled runtime mutants and eleven compiled ownership/API negatives
+  are rejected. Mutants must compile; compile failure is not a runtime rejection.
+- Library and test Clippy pass locally with the existing compatibility allowance.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-parallel-waves.py waves-check
+```
+
+The builder creates a separate generated crate root adding the wave module; it
+does not edit the existing bounded component or its prior native bridge. Sources,
+generated files and restored mutation inputs are hash-checked. Windows uses
+source-bound overlays, not an exact clean-checkout claim. Production interfaces,
+release gates, protected-stack admission and signing are unchanged by this step.
+
+Next: integrate successive waves into the enclave transport with checked
+publication generations, stale/replayed call rejection and join-before-reuse
+for every worker window. Then implement arbitrary-input copy/admission and the
+supported public interface, followed by current-image cleanup qualification.
+Do not reset the existing one-shot gate or reuse raw pointers merely because
+the host reports that a previous wave finished.
 
 ## Author verification
 

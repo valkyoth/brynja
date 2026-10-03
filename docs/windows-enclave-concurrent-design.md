@@ -104,6 +104,11 @@ covered. The existing single-thread production adapters are unchanged. Next is
 enclave-local leaf ownership and ordered root reduction on these distinct worker
 contexts, followed by algorithm/cleanup tests and public integration.
 
+The subsequent [private root/leaf bridge](windows-enclave-parallel-concurrent.md#private-native-rootleaf-bridge)
+now executes a bounded fixed-input ParallelHash batch inside five admitted VBS
+frames. Its separate observation record must not be read as upgrading this
+earlier public-marker experiment, or as completing public multicore integration.
+
 Additional author checks:
 
 ```sh

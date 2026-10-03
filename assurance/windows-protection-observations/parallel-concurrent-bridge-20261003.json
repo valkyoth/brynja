@@ -1,0 +1,97 @@
+{
+  "artifact_sha256": {
+    "release-reports/windows-local-20261003/parallel-bridge-linux-verified/bridge-regressions.json": "14aaa5a004574b2857a828b4afed48e40a2c232bb09444f2fa43f86002b91bf6",
+    "release-reports/windows-local-20261003/parallel-bridge-linux-verified/bridge-test": "9869a0188ad32e4a78accd791416b292689710d6101e72d09f0da7bb1463e8c3",
+    "release-reports/windows-local-20261003/parallel-bridge-linux-verified/clippy-bridge.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "release-reports/windows-local-20261003/parallel-bridge-linux-verified/parallel-concurrent-image-build.json": "99d3d2b6b08bcd0cd87372de0fda255168e566cf7ce531cbe9951121aff14287",
+    "release-reports/windows-local-20261003/parallel-concurrent-admitted-verified/observations.json": "47cc2b676109c8f0f0a6ada3f9ec307d812f64f15198c4bd8345d8f747274368",
+    "release-reports/windows-local-20261003/parallel-concurrent-admitted-verified/sign.log": "49c14ffae4423ee6d683e0ce82414aa24d6031da7936e223a43459ee41a23a78",
+    "release-reports/windows-local-20261003/parallel-concurrent-admitted-verified/signed.dll": "cf5e45089bfee21136dd784b216fdf38a653bde87eb4c407081fd7d833552647",
+    "release-reports/windows-local-20261003/parallel-concurrent-admitted-verified/signing.json": "a079ef737c84ebdc45c25bfd62d908329473cc9a51270094ec67dbaced9d3f62",
+    "release-reports/windows-local-20261003/parallel-concurrent-image-build-verified/bridge-regressions.json": "0a97341823ac8a18ef77c893c92c7e59ba18ca97272addbfd8ccb6581f24af23",
+    "release-reports/windows-local-20261003/parallel-concurrent-image-build-verified/bridge-test.exe": "cea8d5504db04a8735a32b1acc25b72e90fc151f0a30d918e8a2e02e9ce348b8",
+    "release-reports/windows-local-20261003/parallel-concurrent-image-build-verified/normal.dll": "82cad8ed78d39212debd6bb09eea31f84f2bd4e66389dd46f2e03282c2ff105d",
+    "release-reports/windows-local-20261003/parallel-concurrent-image-build-verified/normal_rust.ll": "c6cbac4560fb6400edd44d813c528cbc2cdb442b42ec2bc6c9d5cca2200f11bf",
+    "release-reports/windows-local-20261003/parallel-concurrent-image-build-verified/normal_rust.s": "9651962fd75dc0c307686caa15a5a1d6bd3a512eed1ec44501310cb12836449c",
+    "release-reports/windows-local-20261003/parallel-concurrent-image-build-verified/parallel-concurrent-image-build.json": "7ce1d05dc2fd9dfbfe585b59be123382529de913e865ca3453658c80daeffcf0"
+  },
+  "bridge_source_sha256": {
+    "assurance/windows-enclave-probe/parallel_concurrent_body.h": "6603083585827d199d3b20d29cc3792189ed613ff0a238f2fbc7a2116d17ff7f",
+    "assurance/windows-enclave-probe/parallel_concurrent_bridge.rs": "f7cee2a215408316aa7de5354b365d170ece28c192e027d663193aedfc765433",
+    "assurance/windows-enclave-probe/parallel_concurrent_bridge_tests.rs": "baa66699360cc7b913d240852926f77e02e0ed1d86d5cf080297a37d1014ca19",
+    "assurance/windows-enclave-probe/parallel_concurrent_gate.rs": "39ce1a07c4090c0d1518c75d94f3584d0ddb67a7720ea24253a5b405f5e9cf7b",
+    "assurance/windows-enclave-probe/parallel_concurrent_image.h": "806d26488920290206a86e7d7580e372e928e009c9af6a718cac201abda7eeb3",
+    "assurance/windows-enclave-probe/parallel_concurrent_slot.rs": "6b73bc21e3f7ad96fa1132d19c0073261d1002f4b824cdfc42047be1aa079949",
+    "assurance/windows-enclave-probe/parallel_concurrent_tests.rs": "4519c3e86b333d66540c85a0c0ce3da55a6a6a5c5e3094940694bce4d2806e21",
+    "scripts/cryptography/windows_enclave_parallel_concurrent_build.py": "15b5e391898a692c851017077c2d76dcf7fd769b800171fd729f9c5ef5eb7c2a",
+    "scripts/cryptography/windows_enclave_parallel_concurrent_image.py": "b7ce672b0cfb743262655846caf2fdf329dc212ac1b659f8bd0a463a1adba7bf",
+    "scripts/cryptography/windows_enclave_parallel_concurrent_native.py": "5b12435e9a53befa4886dae10076ad4d9ae818a637ff328fbde7393fb19f81e5"
+  },
+  "clippy": "Local bridge tests passed, existing chunks_exact compatibility allowance only",
+  "compiler": "1.98.1",
+  "component_checks": {
+    "linux": {
+      "compiled_gate_mutants_rejected": 6,
+      "identity_scheduling_cases": 12,
+      "source_hashes_verified": 277,
+      "tests_per_case": 4
+    },
+    "windows": {
+      "compiled_gate_mutants_rejected": 6,
+      "identity_scheduling_cases": 12,
+      "source_hashes_verified": 277,
+      "tests_per_case": 4
+    }
+  },
+  "concurrency": "One live root plus four overlapping guarded leaf calls, not proof of physical-core parallelism",
+  "corrected_test_failures": [
+    "Windows mutation restoration changed line endings; exact original bytes now restored",
+    "Focused Clippy rejected redundant drop of a non-Drop authority; now lexical scope"
+  ],
+  "date": "2026-10-03",
+  "development_signed": true,
+  "enclave_execution": true,
+  "implementation_parent": "ce2e1df59264e76db9e3470f276e7d48fa4b3949",
+  "independently_verified": false,
+  "limits": [
+    "Private one-shot public fixtures only; no supported multicore host API",
+    "Larger streaming waves, arbitrary inputs and real cancellation integration pending",
+    "Trusted-host residency acknowledgement and deployment/CPU-migration constraints remain",
+    "No whole-image register/spill/dump, arbitrary-unwind or fatal-abort cleanup qualification",
+    "No production signing or independent qualification"
+  ],
+  "native_cases": 8,
+  "native_fixture": {
+    "block_bytes": 32,
+    "customization_bits": 0,
+    "input_bytes": 128,
+    "output_bits": 512
+  },
+  "native_identities": [
+    "ParallelHash128",
+    "ParallelHash256",
+    "ParallelHashXof128",
+    "ParallelHashXof256"
+  ],
+  "native_rejections": [
+    "leaf admission denied",
+    "host success without workers",
+    "missing leaf",
+    "root admission denied"
+  ],
+  "observation_regression_tests": 5,
+  "production_qualified": false,
+  "remote_checkout": "Restored development checkout plus source-bound overlays, not clean exact HEAD",
+  "schema": 1,
+  "status": "PRIVATE_CONCURRENT_VBS_PUBLIC_FIXTURE_PASS",
+  "windows": {
+    "bytes_per_frame": 65536,
+    "clear_and_readback_before_unlock": true,
+    "frames": 5,
+    "payload_pages_per_frame": 16,
+    "restored_guards": true,
+    "sampled_host_reads_reject": true,
+    "temporary_signing_key_removed": true
+  },
+  "windows_build": 26300
+}

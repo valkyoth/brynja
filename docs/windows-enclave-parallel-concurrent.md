@@ -1,8 +1,9 @@
 # Private concurrent ParallelHash component
 
-Status: safe-Rust component tested in ordinary Linux and Windows processes.
-**Not a shipping API, enclave execution, protected-memory admission or native
-secret-processing qualification.** Production APIs and release gates are unchanged.
+Status: safe-Rust component tested in ordinary Linux and Windows processes;
+a separate private fixed-input bridge now executes inside native VBS with
+distinct admitted root/leaf windows. **Neither is a shipping multicore API or
+native secret-processing qualification.** Production APIs and gates are unchanged.
 
 ## Implemented boundary
 
@@ -48,13 +49,74 @@ untouched on rejection; completion clears the retained batch too.
 - Normal typed clearing does not prove complete frame/register/spill erasure.
   Caller copies and ordinary-process storage are not protected by this component.
 
-Next: place plans, root and slots in admitted enclave storage; construct workers
-on the [distinct guarded stacks](windows-enclave-concurrent-design.md); implement
-the checked worker ABI and ordered completion protocol; qualify copy failure,
-entry failure, destruction and cancellation across real enclave calls. Larger
-streaming schedules, public host integration and current-image cleanup/dump
-qualification remain pending. The synthetic stack experiment and ordinary
-process component tests must not be combined into a claim of protected execution.
+The private bridge below places the bounded root/slots on an admitted root frame
+and runs leaves on the [distinct guarded stacks](windows-enclave-concurrent-design.md).
+Arbitrary-input copying, multi-wave schedules, cancellation across actual enclave
+calls, supported public host integration and current-image cleanup/dump
+qualification remain pending. The earlier synthetic stack experiment and ordinary
+process tests alone must not be combined into a protected-execution claim.
+
+## Private native root/leaf bridge
+
+`parallel_concurrent_bridge.rs` is a separate unsafe FFI adapter, not part of the
+safe component or shipping crates. The image uses five enclave threads: the root
+call remains live on its original admitted 64 KiB window, while a host dispatch
+callback starts four leaf calls with independent admitted windows. The root
+constructs its authority on that same thread and checks that the plan, batch
+and authority addresses lie inside its live window. Leaf authorities are created
+on their own threads. CVs remain in root-owned enclave slots, never host buffers.
+
+One atomic word binds admission, permanent per-lane claims, active borrows and
+successful completion. Publication is release/acquire; each worker obtains a
+unique ticket before loading its slot pointer. Closing admission and claiming a
+slot race on the same word. The root independently waits for all tickets to be
+released before reducing or dropping the batch, even if the host returns early
+or falsely reports success. Pointers are erased before root reuse/destruction;
+each image permits only one batch, avoiding generation/ABA reuse. An exhausted
+join budget is process-fatal, never permission to free live borrowed storage.
+
+The baseline C boundary validates AVX2 and OS vector-state support before each
+Rust body. Its rejection latch is atomic in this concurrent image. The retained
+single-thread image and its nonconcurrent state are not reused concurrently.
+Deployment/migration guarantees remain required; these checks are not a scheduler
+lock. Page residency uses the existing trusted-host lock acknowledgement and
+page checks, not a claim that an adversarial host cannot revoke a lock.
+
+The [native bridge record](../assurance/windows-protection-observations/parallel-concurrent-bridge-20261003.json)
+covers four fixed public oracle fixtures: ParallelHash128/256 and both XOFs,
+128 input bytes, B=32, empty customization and 512 output bits. Actual VBS calls
+verify ordered reduction against the independent oracle. Four leaves and the
+root occupy five disjoint guarded/locked windows. Whole-window zero/readback
+precedes unlock; guards are restored; sampled live host reads reject without
+copying data. This establishes overlapping enclave calls, **not simultaneous
+instruction execution on five physical cores or a throughput claim**.
+
+Additional native cases reject a denied leaf, a denied root, a missing leaf and
+a host claiming success without starting work. Ordinary-process bridge tests
+also force an early host return while four workers still borrow slots. Six
+compiled atomic-protocol mutants must fail actual tests, not compilation.
+Evidence regression tests reject missing frames, page observations, cleanup,
+overlapping windows, early root finish and unsupported qualification claims.
+
+This is a development-signed, public-fixture experiment. Arbitrary host inputs,
+streaming waves, supported API ergonomics, complete compiler/register/spill/dump
+qualification and independent review remain outstanding. Fatal termination is
+not a successful cleanup path. The existing 8/16 MiB test-child working-set
+allowance remains explicit; no system-wide memory policy is changed.
+
+Author checks (build requires native AVX2, image linking requires Windows MSVC):
+
+```sh
+python3 scripts/cryptography/windows_enclave_parallel_concurrent_image.py bridge-build
+python3 scripts/cryptography/test-windows-enclave-parallel-bridge.py bridge-build
+python3 scripts/cryptography/test-windows-enclave-parallel-concurrent-native.py
+```
+
+Use `--image` on the builder for Windows, run its `link.cmd`, and separately
+development-sign the diagnostic image. Run `windows_enclave_parallel_concurrent_native.py
+SIGNED_DLL OUTPUT_JSON` for eight bounded fresh-process cases. No signing key is
+retained. A Windows mutation-runner newline restoration failure was corrected by
+restoring exact original bytes; failed and superseded artifacts remain available.
 
 ## Author verification
 
@@ -82,4 +144,5 @@ executed EXE. The corrected runner keeps a distinct executable for each mutation
 and the final clean run; no security setting was disabled. The failed log is
 retained. Passing source hashes, generated sources and final binaries are saved
 outside `target/`. The Windows checkout uses source-bound overlays, not a claim
-of an exact clean Git checkout. No independent review or VBS execution is claimed.
+of an exact clean Git checkout. That component record claims no independent review
+or VBS execution; the later private bridge has its own separate native record.

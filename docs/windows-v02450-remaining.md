@@ -88,6 +88,13 @@ places fatal register capture in SDK globals outside the clearing stack window.
 Extended-context helpers, exception dispatch/restore and fatal diagnostic
 callees remain unqualified. This does not add arbitrary exception or fatal-path
 cleanup guarantees; no production code or release-gate policy changed.
+The subsequent [context-helper review](windows-enclave-sdk-unwind.md#context-sizing-initialization-and-selected-capture)
+accounts for size/initialization frames and the selected capture entry. Ten
+regressions and 1,280 byte mutations pass on Linux and Windows. Conditional
+layout models retain DWORD wrap and reject malformed-table write-fit claims;
+they do not establish live OS feature-table values. The capture entry saves
+nonvolatile registers, not full extended state. Exception dispatch/restore,
+fatal-path disposition and whole-image qualification remain open.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

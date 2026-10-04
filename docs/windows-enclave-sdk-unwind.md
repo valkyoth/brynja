@@ -190,3 +190,69 @@ release-gate policy are unchanged.
 python3 scripts/cryptography/test-windows-enclave-sdk-exception.py
 python3 scripts/cryptography/windows_enclave_sdk_exception.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+## Context sizing, initialization and selected capture
+
+The [context-helper observation](../assurance/windows-protection-observations/sdk-context-20261004.json)
+binds seven ranges totaling 1,280 bytes: size adapter/worker, initialization,
+extended-state size, shape, mask and the capture body containing two entry
+points. Nine call/tail transfers and twelve instruction anchors have separate
+checks. Ten regressions and all 1,280 actual-body byte mutations pass on Linux
+and Windows; saved-file reports match. This is an offline continuation of the
+review, not a new native campaign or release gate.
+
+The size adapter tail-jumps to a worker with a 72-byte fixed frame. The
+initializer has an 88-byte fixed frame; the selected capture entry uses
+56 bytes. Model spans account for pushes, caller homes, flags, mask scratch
+and the size worker's three DWORD locals. Initialization also replaces the
+caller's four-byte size output with an **eight-byte metadata pointer** in the
+same slot; this remains before the next local in the inspected exception frame.
+These are sibling calls at different allocation stages, not one nested chain.
+
+The selected x64 basic layout has a `0x4d0`-byte base and sixteen-byte alignment.
+After successful flags validation, its size result is 1,279 bytes, rounded by
+the caller to 1,280. Extended initialization aligns its region to 64 bytes,
+zeros `state_size - 512` bytes, and can store a compacted-feature mask there.
+The corresponding size result is `815 + state_size`, using DWORD arithmetic.
+Models check all four possible 16-byte-aligned residues within a 64-byte block,
+and independently account for the eight-byte mask store rather than assuming
+it fits a malformed or empty fill.
+
+The extended-state size helper either reads a Windows table value or starts
+at 576 and accumulates selected feature sizes for bits 2 through 63, with
+table-selected 64-byte alignment. Tests cover every selector, omitted bits,
+mixed masks, alignment, addition wrap and fill underflow. **The SDK arithmetic
+is not changed into checked arithmetic in these models.** Intentionally invalid
+table examples fail the modeled write-fit condition rather than being certified.
+This is not a finding of a reachable bad Windows configuration: the table is
+OS-owned, and neither its live contents nor arbitrary-table safety is established
+by the saved DLL. Other architecture/layout branches are not qualified by the
+selected x64 model.
+
+The exception caller enters capture at `0x1500`. That path jumps over the
+alternate `0x1580` entry's volatile-register saves and FXSAVE instruction.
+Its actual stores cover nonvolatile GPRs, RSP/RIP, control/segment/flags fields
+and **XMM6 through XMM15**, not all extended processor state. It replaces the
+context flags with `0x10000f`. Calling this entry an extended-state capture
+would overstate what the inspected instructions do. Saved registers and
+initialization zeros do not constitute exit erasure.
+
+For illustration only, capacity 512 on the copy diagnostic path and the basic
+1,279-byte size output give RSP values H-13040 (size worker), H-14336
+(initializer) and H-14304 (capture). Thirteen selected stack spans and six
+capture destination spans fit the window in this conditional model. The
+observation also models a synthetic 576-byte extended-state result. Neither
+example is a measured runtime allocation or a maximum transitive-depth bound.
+
+The size/initialization/capture bodies introduce no further unreviewed direct
+callees beyond the previously inspected flags and fill helpers. Remaining
+exception instruction-pointer, dispatch/restore and fatal diagnostic paths
+still need disposition within the documented guarantee; arbitrary exceptions
+and fatal failures are not silently added to it. Loaded-module identity,
+OS-owned state, remaining-image dumps and whole-image qualification also remain
+separate. Production cryptography and gate policy are unchanged.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-context.py
+python3 scripts/cryptography/windows_enclave_sdk_context.py PATH_TO_SAVED_VERTDLL --mutations
+```

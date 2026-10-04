@@ -1,0 +1,233 @@
+{
+  "schema": 1,
+  "status": "SAVED_CONTEXT_HELPERS_CONDITIONAL_LAYOUT_ONLY",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "size_adapter": {
+      "rva": 90532,
+      "bytes": 19,
+      "sha256": "20598934b3ef7b32a95e2307ca8da9bc6e1fd4796c133e58254b4e28c4f10ccc"
+    },
+    "size_worker": {
+      "rva": 90560,
+      "bytes": 235,
+      "sha256": "9b6fb9b196944b630710dc6eeca258898e0414a93a74c83a03747b3412f36d5c"
+    },
+    "initialize": {
+      "rva": 90804,
+      "bytes": 487,
+      "sha256": "c5b9b8661c8f2c74111dea8de9f40eb4e05ac05b3a2ba7a998958a77fec4ffe6"
+    },
+    "xstate_size": {
+      "rva": 91604,
+      "bytes": 76,
+      "sha256": "efff0365f606ce2f30bec449175d48508ed419be9dcf8ba92d88e4f77c09a554"
+    },
+    "shape": {
+      "rva": 91688,
+      "bytes": 90,
+      "sha256": "c4756dbbca8ab5f3cd88b0b596f1c27e66e518a7e779b105cc14c0dec9a5ff03"
+    },
+    "mask": {
+      "rva": 91832,
+      "bytes": 56,
+      "sha256": "d6262ddbe604861cc62266f3b0ec36b480753001a3662a9c268c6eac478597f8"
+    },
+    "capture": {
+      "rva": 5376,
+      "bytes": 317,
+      "sha256": "32630bc6937feef852d46b9d63d41666c7b2cc88fc1f4663dc78b6f0ee743d20"
+    }
+  },
+  "direct_transfers": 9,
+  "instruction_anchors": 12,
+  "body_byte_mutations_rejected": 1280,
+  "illustrative_layouts": {
+    "basic": {
+      "size_output": 1279,
+      "allocation_bytes": 1280,
+      "writes": [
+        {
+          "name": "context flags",
+          "offset": 48,
+          "bytes": 4
+        },
+        {
+          "name": "selected metadata fields",
+          "offset": 1232,
+          "bytes": 24
+        }
+      ],
+      "writes_fit_size_output": true,
+      "configuration_validated": false,
+      "erasure_qualified": false
+    },
+    "extended_576": {
+      "size_output": 1391,
+      "allocation_bytes": 1392,
+      "writes": [
+        {
+          "name": "context flags",
+          "offset": 48,
+          "bytes": 4
+        },
+        {
+          "name": "selected metadata fields",
+          "offset": 1232,
+          "bytes": 24
+        },
+        {
+          "name": "extended initialization fill",
+          "offset": 1280,
+          "bytes": 64
+        },
+        {
+          "name": "possible compacted mask",
+          "offset": 1288,
+          "bytes": 8
+        }
+      ],
+      "writes_fit_size_output": true,
+      "configuration_validated": false,
+      "erasure_qualified": false
+    }
+  },
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "runtime_feature_table_validated": false,
+  "maximum_transitive_depth_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "complete_extended_register_capture": false,
+  "sdk_self_erasure_claimed": false,
+  "side_effects": [
+    "size and layout depend on a Windows-owned feature table not established by saved DLL bytes",
+    "SDK size and fill arithmetic uses DWORD wrap; models do not certify malformed tables",
+    "initialization clearing is not exit erasure",
+    "selected capture entry skips volatile GPR and FXSAVE alternate entry",
+    "capture saves XMM6-XMM15 and nonvolatile GPRs then replaces flags with 0x10000f",
+    "initializer replaces the caller DWORD size slot with an eight-byte metadata pointer"
+  ],
+  "unresolved": [
+    {
+      "rva": 6992,
+      "reason": "context/raise helper and recursive exceptional path"
+    },
+    {
+      "rva": 6976,
+      "reason": "exception instruction-pointer helper"
+    },
+    {
+      "rva": 34704,
+      "reason": "exception dispatcher"
+    },
+    {
+      "rva": 5712,
+      "reason": "context restore"
+    },
+    {
+      "rva": 48944,
+      "reason": "fatal diagnostic wrapper and transitive calls"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage",
+    "runtime feature table sizes masks and alignment validity"
+  ],
+  "modeled_capacities": [
+    128,
+    256,
+    384,
+    512
+  ],
+  "illustrative_geometry_capacity_512": {
+    "1279": {
+      "copy": {
+        "illustrative_size_output": 1279,
+        "frames": {
+          "size": -13040,
+          "initialize": -14336,
+          "capture": -14304
+        },
+        "actual_runtime_size_observed": false,
+        "transitive_depth_bound": null,
+        "cleanup_qualified": false,
+        "selected_stack_spans": 13,
+        "selected_capture_spans": 6
+      },
+      "call_error": {
+        "illustrative_size_output": 1279,
+        "frames": {
+          "size": -13296,
+          "initialize": -14592,
+          "capture": -14560
+        },
+        "actual_runtime_size_observed": false,
+        "transitive_depth_bound": null,
+        "cleanup_qualified": false,
+        "selected_stack_spans": 13,
+        "selected_capture_spans": 6
+      }
+    },
+    "1391": {
+      "copy": {
+        "illustrative_size_output": 1391,
+        "frames": {
+          "size": -13040,
+          "initialize": -14448,
+          "capture": -14416
+        },
+        "actual_runtime_size_observed": false,
+        "transitive_depth_bound": null,
+        "cleanup_qualified": false,
+        "selected_stack_spans": 13,
+        "selected_capture_spans": 6
+      },
+      "call_error": {
+        "illustrative_size_output": 1391,
+        "frames": {
+          "size": -13296,
+          "initialize": -14704,
+          "capture": -14672
+        },
+        "actual_runtime_size_observed": false,
+        "transitive_depth_bound": null,
+        "cleanup_qualified": false,
+        "selected_stack_spans": 13,
+        "selected_capture_spans": 6
+      }
+    }
+  },
+  "date": "2026-10-04",
+  "parent_commit": "8c626286",
+  "review": "Implementation-author saved SDK context review and conditional arithmetic models. No SDK execution, observed runtime sizes, OS table validity, arbitrary exception safety or production qualification.",
+  "tests": {
+    "linux_synthetic": 10,
+    "windows_synthetic": 10,
+    "real_body_mutations_rejected_each_host": 1280,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_context.py": "5dc989fb47c8ab8a203d3c1375e9128cd6c5b12772c90b4180a4f24192fee696",
+    "scripts/cryptography/test-windows-enclave-sdk-context.py": "572e98c0e8079c633f4aa5cab62e08199562dc7df5635927ab4a57eb38a7137d",
+    "scripts/cryptography/windows_enclave_sdk_exception.py": "7dd1c3cf0a77385ecdf52820fd9357509f7e96f99de95ded41140b5d49d6a73a",
+    "scripts/cryptography/windows_enclave_sdk_decoders.py": "f2fecab13a96c421a1a7b100459c1b68a1c801d40c930c280913cf1b4b3a3e28",
+    "scripts/cryptography/windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "scripts/cryptography/windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "scripts/cryptography/windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "scripts/cryptography/windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "scripts/cryptography/windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-context-linux.json": "684ec86a9b8c7fceb95e56eef55b8df40de963d588eaa60ed0234a8b821a8aea",
+    "release-reports/windows-local-20261004/sdk-context-windows.json": "684ec86a9b8c7fceb95e56eef55b8df40de963d588eaa60ed0234a8b821a8aea"
+  }
+}

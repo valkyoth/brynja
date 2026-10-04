@@ -1,0 +1,198 @@
+{
+  "schema": 1,
+  "status": "SAVED_SDK_FORMATTER_FRAMES_NOT_TRANSITIVE_QUALIFICATION",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "format_engine": {
+      "rva": 10600,
+      "bytes": 2160,
+      "sha256": "b294c72e1b49d47aa91eba79215f139cdc34415a952c058fd2589c9dfedc953b"
+    },
+    "output_error": {
+      "rva": 10584,
+      "bytes": 8,
+      "sha256": "86fad30a60e4e6a65ef2493138b94ab29108aecc62b05d7f8b36b9d51796eaef"
+    },
+    "put": {
+      "rva": 12768,
+      "bytes": 71,
+      "sha256": "b942e19a16927b86cbe9d466b703968a77732515027225d56dc48364cae5c022"
+    },
+    "pad": {
+      "rva": 12848,
+      "bytes": 81,
+      "sha256": "f00f38a9348bb49bfd9177fca51b5dd5fd95f048e6f42aa2fc9d8ae960fbbfb9"
+    },
+    "write": {
+      "rva": 12936,
+      "bytes": 128,
+      "sha256": "bf32dae453fb05cddea6a35734be79aa558900bb0f7bda73f9e24fc7def4f321"
+    },
+    "errno_pointer": {
+      "rva": 15428,
+      "bytes": 16,
+      "sha256": "63d9fa50d9af44b94e3b7b5bc3cf6d9cd81264fec3100c7e241b62fbde87d6d0"
+    },
+    "count_enabled": {
+      "rva": 13080,
+      "bytes": 24,
+      "sha256": "2a2d2588c3e14a5087423ad0e3d245847e2411cde8312f74e8189a53c7ed27b5"
+    },
+    "fill_thunk": {
+      "rva": 127024,
+      "bytes": 5,
+      "sha256": "18d84f906432bd864ff1649a605031967ee0733f8197c640e70758ed63341e3c"
+    },
+    "fill": {
+      "rva": 121792,
+      "bytes": 486,
+      "sha256": "3a490a60c3543f00d65030a9686c60ab08587adf7d3459c5f43798344d5a0b75"
+    },
+    "fill_large": {
+      "rva": 122304,
+      "bytes": 51,
+      "sha256": "7a12a41499a9caa3b4e73de18044e0ba7fabf28570c3fef325c1ea2444cfb6ee"
+    }
+  },
+  "direct_transfers": 19,
+  "body_byte_mutations_rejected": 3030,
+  "geometry": {
+    "128": {
+      "copy": {
+        "frames": {
+          "engine": -13088,
+          "writer_or_padder": -13136,
+          "put": -13184
+        },
+        "selected_leaf_low_from_high": -13192,
+        "selected_spans": 11
+      },
+      "call_error": {
+        "frames": {
+          "engine": -13344,
+          "writer_or_padder": -13392,
+          "put": -13440
+        },
+        "selected_leaf_low_from_high": -13448,
+        "selected_spans": 11
+      }
+    },
+    "256": {
+      "copy": {
+        "frames": {
+          "engine": -13216,
+          "writer_or_padder": -13264,
+          "put": -13312
+        },
+        "selected_leaf_low_from_high": -13320,
+        "selected_spans": 11
+      },
+      "call_error": {
+        "frames": {
+          "engine": -13472,
+          "writer_or_padder": -13520,
+          "put": -13568
+        },
+        "selected_leaf_low_from_high": -13576,
+        "selected_spans": 11
+      }
+    },
+    "384": {
+      "copy": {
+        "frames": {
+          "engine": -13344,
+          "writer_or_padder": -13392,
+          "put": -13440
+        },
+        "selected_leaf_low_from_high": -13448,
+        "selected_spans": 11
+      },
+      "call_error": {
+        "frames": {
+          "engine": -13600,
+          "writer_or_padder": -13648,
+          "put": -13696
+        },
+        "selected_leaf_low_from_high": -13704,
+        "selected_spans": 11
+      }
+    },
+    "512": {
+      "copy": {
+        "frames": {
+          "engine": -13472,
+          "writer_or_padder": -13520,
+          "put": -13568
+        },
+        "selected_leaf_low_from_high": -13576,
+        "selected_spans": 11
+      },
+      "call_error": {
+        "frames": {
+          "engine": -13728,
+          "writer_or_padder": -13776,
+          "put": -13824
+        },
+        "selected_leaf_low_from_high": -13832,
+        "selected_spans": 11
+      }
+    }
+  },
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "maximum_transitive_depth_qualified": false,
+  "arbitrary_formats_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "thread_relative_read": {
+    "base": "value at GS:0x30",
+    "offset": 5376,
+    "bytes": 4
+  },
+  "unresolved": [
+    {
+      "rva": 13300,
+      "reason": "wide-character conversion path"
+    },
+    {
+      "rva": 4184,
+      "reason": "invalid-argument path"
+    },
+    {
+      "rva": 48272,
+      "reason": "exception dispatch with runtime-sized context allocation"
+    },
+    {
+      "rva": 4448,
+      "reason": "fatal cookie-failure path"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage"
+  ],
+  "buffer_full_wipe_on_exit_observed": false,
+  "date": "2026-10-04",
+  "parent_commit": "c84f6c51",
+  "review": "Implementation-author selected-frame review; no independent or runtime qualification.",
+  "tests": {
+    "linux_synthetic": 7,
+    "windows_synthetic": 7,
+    "real_body_mutations_rejected_each_host": 3030,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/test-windows-enclave-sdk-formatter.py": "0a2539158614cccaef75b68c0f4c1590f1c498030d0b29cbe26432a141c36f19",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-formatter-linux.json": "449e3ddab34d9cffe7f5e845018e6eb75db00814f2084f52850c26e756f6b6d3",
+    "release-reports/windows-local-20261004/sdk-formatter-windows.json": "449e3ddab34d9cffe7f5e845018e6eb75db00814f2084f52850c26e756f6b6d3"
+  }
+}

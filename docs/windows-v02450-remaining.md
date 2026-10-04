@@ -43,7 +43,11 @@ writes and stops at the deeper diagnostic callee. A further saved-file extension
 now binds eight diagnostic/formatter-adapter bodies and models all four bounded
 retry capacities; eight more regressions pass on Linux and Windows. Deeper
 formatting, exception/fatal helpers and stack-probe page addresses remain
-unqualified; these are not a transitive stack-depth or unwind proof. Loaded-module identity,
+unqualified; these are not a transitive stack-depth or unwind proof. A formatter
+extension now binds ten further ranges and maps its scratch/output-helper frames;
+seven regressions and 3,030 real-body byte mutations pass on Linux and Windows.
+Wide conversion and exceptional/fatal callees still have no transitive bound.
+Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,
 completing the primary Rust object's 64-function identity inventory (73 entries

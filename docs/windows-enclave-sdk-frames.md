@@ -178,3 +178,57 @@ production signing claim, production-code change or release-gate change.
 python3 scripts/cryptography/test-windows-enclave-sdk-diagnostic.py
 python3 scripts/cryptography/windows_enclave_sdk_diagnostic.py PATH_TO_SAVED_VERTDLL
 ```
+
+## Formatter scratch and output-helper review
+
+The [formatter-frame record](../assurance/windows-protection-observations/sdk-formatter-20261004.json)
+adds ten complete instruction ranges from the same saved file, totaling 3,030
+bytes. These are the format engine, character/padding/string output helpers,
+output-error helper, thread-relative error pointer, count-output enable check,
+fill thunk and two fill implementation ranges. Their hashes bind this manual
+frame/call review; they are not a proof of general formatting correctness.
+
+Seven synthetic regressions pass on Linux and Windows. Separately, inspection
+of the **actual saved DLL** rejects all 3,030 single-byte body mutations on both
+hosts, without relying on the outer whole-file hash to reject them. Nineteen
+selected direct call/tail-transfer targets are checked. Both hosts produce
+identical inspection reports. No SDK instructions are executed by these tools.
+
+The format engine pushes seven GPRs and allocates `0x280` bytes (696 bytes total
+below entry RSP), plus a saved RBX in caller home space. Its scratch is 512 bytes
+at post-prologue RSP + 112; a six-byte wide-character temporary and cookie follow
+it. The output helpers allocate fixed 40-byte frames and restore their saved
+registers without wiping those save slots. Their loops reuse the same frames.
+The enclosing normal-return clearing window is still required.
+
+| Selected RSP at diagnostic capacity 512 | Copy-result path | CallEnclave error path |
+| --- | --- | --- |
+| Format engine | H - 13472 | H - 13728 |
+| String/padding helper | H - 13520 | H - 13776 |
+| Character helper | H - 13568 | H - 13824 |
+| Output-error leaf return address | H - 13576 | H - 13832 |
+
+Eleven selected spans per path, at each of the four retry capacities, fit the
+modeled window. The last row is a selected chain's low address, **not** a maximum
+transitive bound for all formatter or exception paths.
+
+The earlier record called `0x2958` a termination helper. Its complete body shows
+the more precise role: it sets bit `0x20` in the output descriptor and returns
+`-1`; it does not clear the buffer. The write helper can also read a four-byte
+error value through the pointer returned from `GS:0x30` + `0x1500`. That storage
+is not established as inside the clearing window. The fill thunk tail-jumps,
+so it adds no second return address; the large-fill branch's optional RDI save
+is included conservatively. Initialization with zeros is not an exit wipe.
+
+The exception routine inspected during this pass computes a dynamic context
+allocation from another runtime helper's result. It is intentionally **not**
+assigned a guessed fixed size. Wide-character conversion (`0x33f4`), invalid
+arguments (`0x1058`), exception dispatch (`0xbc90`), fatal cookie failure
+(`0x1160`), probe page touches and kernel/interruption handling remain outside
+this qualified frame subset. Loaded-module identity is still unproven.
+No production code, release gate, native campaign or production claim changed.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-formatter.py
+python3 scripts/cryptography/windows_enclave_sdk_formatter.py PATH_TO_SAVED_VERTDLL --mutations
+```

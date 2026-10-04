@@ -379,7 +379,56 @@ paths. Six geometry regressions pass on Linux and Windows, covering exact
 offsets, translated addresses, complete spans, home-space bounds and alignment
 underflow. These are model tests, not runtime stack-placement measurements.
 
+## No-unwind helpers in the primary Rust object
+
+The [additional helper record](../assurance/windows-protection-observations/caller-leaves-20261004.json)
+closes an inventory gap: seven functions in the primary Rust object have no
+runtime unwind entries. The earlier 57-entry Rust unwind inventory did not
+include them. All **64 primary-object functions** are now byte-bound to the
+saved image; combined with the selected nine C functions, this is 73 entries.
+It is not the complete population of the linked image or its libraries.
+
+| Helper | Reviewed emitted behavior |
+| --- | --- |
+| `zeroize_region_volatile` | Writes zero bytes without loading the previous contents; remainder and eight-byte-unrolled loops; no stack stores |
+| `copy_bytes` | Bounded word/byte copy; clears RAX/RCX/RDX on return; no stack stores |
+| `xor_bits` | Loads its fifth mask argument from caller stack; clears payload working RAX and shift-count RCX; no stack stores |
+| `mask_byte` | This image's specialization sets no additional bits; clears working EAX; no stack stores |
+| `mask_is_zero` | Clears working R10D, retaining the intended boolean result in EAX; no stack stores |
+| `apply_secret_byte_mask` | Five-byte tail jump to the bound mask implementation |
+| `check_authority` | Reads authority metadata and returns its status; no stack stores |
+
+Absence of unwind metadata alone proves none of those semantic claims. They
+come from manual review of the emitted instructions, pinned by object-body
+hashes and exact linked bytes. Independently reproduced incoming references
+identify the selected functions, including the mask tail target. Seven synthetic
+tests pass on Linux and Windows, rejecting mismatched bytes, wrong-image or
+conflicting anchors, unwind overlaps, writable/unmapped code and unsupported
+relocation shapes. No production code, signed image or release gate changed.
+This does not establish all caller data-flow, maximum stack depth, arbitrary
+exception cleanup or the behavior of other archive/runtime functions.
+
 ## Remaining boundary work
+
+The subsequent [SHA-2 SIMD refresh](../assurance/windows-protection-observations/sha2-wrapper-refresh-20261004.json)
+rebuilt both SHA-224/256 and SHA-512-family AVX2 worker images with the current
+wrapper. Each passed fresh component/worker tests: 402 and 602 independent
+oracle cases respectively, twelve component mutations, fourteen worker mutations
+and six ownership negatives per family. Four combined cleanup-mutant runs had
+an assertion-failure marker but no final suite summary; the **same four saved
+binaries** were additionally run with the failing oracle test isolated. All four
+completed with Rust test exit 101 and an explicit one-test assertion-failure
+summary. The original partial output and the isolated replay are both retained;
+an unexplained crash is not substituted for that completed rejection.
+
+Development-signed native VBS runs then passed 302 calls/53 comparisons/424 lanes
+for SHA-224/256 and 318 calls/61 comparisons/244 lanes for SHA-512-family.
+Both images bind the exact already mutation-tested 392-byte `PublicLockedFrame`.
+Prepared import transformations reproduced byte-for-byte locally; build, native
+source and artifact hashes reconcile. Temporary signing keys were removed and
+compatibility warnings retained. This refresh uses Rust 1.98.1 and AVX2, not
+dedicated x86 SHA512 instructions. It does not add a fresh public-host-facade
+campaign, remaining-image dump coverage or whole-image qualification.
 
 The subsequent [selected SDK-frame inspection](windows-enclave-sdk-frames.md)
 maps the saved System32 library's `RtlCallEnclave` register saves and copy-entry
@@ -390,7 +439,7 @@ unqualified.
 1. Complete actual linked worker/caller and SDK-boundary review. The instrumented
    callback-frame and register campaigns above are complete for their stated
    scope, not a universal transition guarantee or uninstrumented-image proof.
-   The 66 selected uninstrumented caller identities are now accounted for;
+   The 73 selected uninstrumented caller/helper identities are now accounted for;
    seven caller bodies have the scoped spill review above. Complete the remaining
    semantic spill/handler review and linked/SDK paths.
 2. Qualify final linked caller/spill/cleanup paths and remaining-image dump behavior.
@@ -401,6 +450,12 @@ unqualified.
 3. Refresh other affected algorithm images before claiming their new-image
    qualification, reconcile compiler/platform coverage, then obtain independent
    pentest. The two rebuilt routes do not silently qualify the remaining images.
+   Specifically, the saved October 2 SHA-256 and SHA-512 SIMD image-build
+   manifests both mismatch the current `window_rust_x64.asm` hash; their other
+   eight directly recorded build-source hashes still match. Their rebuild and
+   private native retest are now completed above. The October 4 Keccak SIMD image-build
+   manifest matches all nine directly recorded build sources. This comparison
+   is limited to those manifests, not an exhaustive algorithm-image inventory.
 
 The Windows ABI distinguishes volatile XMM0–5 from nonvolatile XMM6–15, while
 upper YMM halves are volatile. A blanket `vzeroall` would violate ordinary

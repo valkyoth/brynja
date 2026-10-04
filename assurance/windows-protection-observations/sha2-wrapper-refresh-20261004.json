@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "implementation_parent": "9cee4007",
+  "status": "REFRESHED_SHA2_SIMD_NATIVE_DEVELOPMENT_PASS",
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_qualified": false,
+  "release_gate_changed": false,
+  "toolchain": "1.98.1",
+  "records": {
+    "sha256": {
+      "component_cases": 402,
+      "component_lanes": 3216,
+      "worker_cases": 402,
+      "worker_lanes": 3216,
+      "component_mutants": 12,
+      "worker_mutants": 14,
+      "ownership_negatives": 6,
+      "cleanup_mutants_with_isolated_replay": 2,
+      "native_calls": 302,
+      "native_comparisons": 53,
+      "native_lanes": 424,
+      "windows_build": 26300,
+      "native_machine": "0x8664",
+      "image_sha256": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee",
+      "build_sha256": "fa6259ae524285f8ec1b6415067364e12161b779ed98cb3152d7348d976a040c",
+      "signing_warning": true
+    },
+    "sha512": {
+      "component_cases": 602,
+      "component_lanes": 2408,
+      "worker_cases": 602,
+      "worker_lanes": 2408,
+      "component_mutants": 12,
+      "worker_mutants": 14,
+      "ownership_negatives": 6,
+      "cleanup_mutants_with_isolated_replay": 2,
+      "native_calls": 318,
+      "native_comparisons": 61,
+      "native_lanes": 244,
+      "windows_build": 26300,
+      "native_machine": "0x8664",
+      "image_sha256": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510",
+      "build_sha256": "f6744e17b4c3c9576eb84b6a431b6a301c4c291cc461658064fa5e5754a6c192",
+      "signing_warning": true
+    }
+  },
+  "wrapper_bindings": {
+    "sha256": {
+      "status": "EXACT_WRAPPER_BYTES_BOUND",
+      "entry": "PublicLockedFrame",
+      "rva": 25904,
+      "size": 392,
+      "call_target_rvas": {
+        "__chkstk": 26560,
+        "PublicLockedAdmit": 21760,
+        "PublicRustBody": 23056,
+        "PublicLockedFinish": 22368,
+        "PublicGuardRestore": 21520
+      },
+      "callees_semantically_qualified": false,
+      "whole_image_qualified": false,
+      "object_sha256": "9eaba4a1d7ed3e7e180ff915865e294eaee86fa4a0fc4b567bac77f6b2fb25b8",
+      "image_sha256": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee",
+      "global_target_rvas": {
+        "PublicLockedHigh": 59720,
+        "PublicLockedLow": 59728
+      }
+    },
+    "sha512": {
+      "status": "EXACT_WRAPPER_BYTES_BOUND",
+      "entry": "PublicLockedFrame",
+      "rva": 28128,
+      "size": 392,
+      "call_target_rvas": {
+        "__chkstk": 28784,
+        "PublicLockedAdmit": 23984,
+        "PublicRustBody": 25280,
+        "PublicLockedFinish": 24592,
+        "PublicGuardRestore": 23744
+      },
+      "callees_semantically_qualified": false,
+      "whole_image_qualified": false,
+      "object_sha256": "9eaba4a1d7ed3e7e180ff915865e294eaee86fa4a0fc4b567bac77f6b2fb25b8",
+      "image_sha256": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510",
+      "global_target_rvas": {
+        "PublicLockedHigh": 67912,
+        "PublicLockedLow": 67920
+      }
+    }
+  },
+  "artifact_directory": "release-reports/windows-local-20261004",
+  "artifact_sha256": {
+    "verify_sha2_cleanup.py": "6fa5b2175876d3b40281eb7667d906b44c066d358a1cd2165d24d3bfdc11d4cd",
+    "build-sha2-cleanup.cmd": "823e5190bc91682d99bc5396eb5edd7accb30039e4c9df2201ea4edd2ad4cd50",
+    "collect-sha2-cleanup.ps1": "62e62dcf319a6572f4c4be110d2b5a9773aea9045e53aa9a4b0431504992964e",
+    "replay_cleanup_mutants.py": "6f40c4fe00d37d90dab069f36c84935d1b756543905420c469d1cf531deabec6",
+    "sha2-cleanup-mutant-replay.json": "b41f9c6e96778f9464d211cab61045f000fdecc4e867929258c15c44375ce417",
+    "register-cleanup-nospill/baseline/window_rust_x64.obj": "9eaba4a1d7ed3e7e180ff915865e294eaee86fa4a0fc4b567bac77f6b2fb25b8",
+    "sha256-register-cleanup/sha256-simd-image-build.json": "fa6259ae524285f8ec1b6415067364e12161b779ed98cb3152d7348d976a040c",
+    "sha256-register-cleanup/sha256-simd-worker-results.json": "92502974efbbe1f80ae58cc8594d31ff73d378f98c0567d39f603eed6fe05a7d",
+    "sha256-register-cleanup/component/sha256-simd-results.json": "679f35be326ec36a6999c40238b8fc3fc6f3f1c87416c18a60319023f89d436e",
+    "sha256-cleanup-admitted/signed.dll": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee",
+    "sha256-cleanup-admitted/signing.json": "f36002ccb9783385bf2d11b8c7ed874294233901d1916a416c3695c2549c3c70",
+    "sha256-cleanup-admitted/sign.log": "81567d991f3a3aab8cd6a3c6583aba1f303592ddbc3cb4dfbc64738abaf13714",
+    "sha256-cleanup-admitted/observations.json": "13d87807fb806f7b288835e968dbb4e3920d9dd2d214bb0840bd64ea69f1b88c",
+    "sha256-cleanup-admitted/native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha256-cleanup-prepared.dll": "bbeb5de12a1490dc5639f47421306cd722ca6c5539a7d64924facd723311dd7d",
+    "sha256-cleanup-reproduced.dll": "bbeb5de12a1490dc5639f47421306cd722ca6c5539a7d64924facd723311dd7d",
+    "sha512-register-cleanup/sha512-simd-image-build.json": "f6744e17b4c3c9576eb84b6a431b6a301c4c291cc461658064fa5e5754a6c192",
+    "sha512-register-cleanup/sha512-simd-worker-results.json": "949b928c79489ccd7f2bcb8a4c6fc28b47b8e7f1790a71a841bcebb15cb84508",
+    "sha512-register-cleanup/component/sha512-simd-results.json": "bd7b8213182073aeda5a4c0bb47e46e833da960af1e306bbf42220922d2e301e",
+    "sha512-cleanup-admitted/signed.dll": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510",
+    "sha512-cleanup-admitted/signing.json": "fce56b5ecf8816c2adba851f1fa6592418e1a16b301c41f5da6d7fa9174d0caa",
+    "sha512-cleanup-admitted/sign.log": "09d734bdd646b21b5906bb839105675802dc6c949e524a61d67e7c5b1625c4d2",
+    "sha512-cleanup-admitted/observations.json": "e45c48e68787325d5ca3f7caa77ce37824fff30e7bf7d9066b227d2d7d8c0277",
+    "sha512-cleanup-admitted/native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha512-cleanup-prepared.dll": "c3f123c75be55ef2435b16d94e69e85c404acd970788773330f46921afa847fa",
+    "sha512-cleanup-reproduced.dll": "c3f123c75be55ef2435b16d94e69e85c404acd970788773330f46921afa847fa"
+  },
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a"
+  },
+  "limits": [
+    "Private native worker campaign, not a new supported-host-facade campaign.",
+    "Actual current wrapper bytes bound; callee semantics and whole-image cleanup remain separate.",
+    "Development signatures only; temporary signing keys removed; compatibility warnings retained.",
+    "No dedicated x86 SHA512 instructions; these are AVX2 multibuffer routes."
+  ]
+}

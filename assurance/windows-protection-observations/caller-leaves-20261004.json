@@ -1,0 +1,298 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "implementation_parent": "9cee4007",
+  "status": "SELECTED_NO_UNWIND_HELPER_REVIEW_NOT_WHOLE_IMAGE_QUALIFICATION",
+  "primary_rust_object_functions": 64,
+  "previous_selected_entries": 66,
+  "added_helpers": 7,
+  "combined_selected_entries": 73,
+  "focused_tests": 7,
+  "focused_platforms": [
+    "linux",
+    "windows"
+  ],
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "release_gate_changed": false,
+  "entries": {
+    "_RNvCs2u1vj83u0E8_14parallel_waves15check_authority": {
+      "entry": "_RNvCs2u1vj83u0E8_14parallel_waves15check_authority",
+      "rva": 15696,
+      "size": 20,
+      "incoming": [
+        [
+          "PrivateWaveRoot",
+          15696
+        ]
+      ],
+      "byte_candidates": 1,
+      "reference_targets": {},
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "code_sha256": "4649f46d87baa89f9f3716b163defb9aa62b3c17477d83db0a1a021898e31ab8",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask",
+      "rva": 11472,
+      "size": 5,
+      "incoming": [
+        [
+          "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7squeeze",
+          11472
+        ]
+      ],
+      "byte_candidates": 186,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte": 11120
+      },
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "code_sha256": "53c43881250608a75548e4451ccaeefaec6ac15584d465b0f8244292af1600d6",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core17secret_memory_xor8xor_bits": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core17secret_memory_xor8xor_bits",
+      "rva": 11088,
+      "size": 32,
+      "incoming": [
+        [
+          "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          11088
+        ]
+      ],
+      "byte_candidates": 1,
+      "reference_targets": {},
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "code_sha256": "446db9bc5866729cb70f723a3065519795e8e169af7ab99ccb3e1048b944df4d",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+      "rva": 11136,
+      "size": 68,
+      "incoming": [
+        [
+          "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          11136
+        ]
+      ],
+      "byte_candidates": 1,
+      "reference_targets": {},
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "code_sha256": "820c2a4fdf11073053919c00ab6524a905846dd6347f14a23b9371c1b0fda7e4",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+      "rva": 11216,
+      "size": 89,
+      "incoming": [
+        [
+          "PrivateWaveRoot",
+          11216
+        ],
+        [
+          "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueANtNtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slot4Slotj4_ECsk1CFy3R4N16_20parallel_wave_bridge",
+          11216
+        ],
+        [
+          "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_waves5WavesECsk1CFy3R4N16_20parallel_wave_bridge",
+          11216
+        ],
+        [
+          "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          11216
+        ],
+        [
+          "_RNvMs1_Cs8LdeoEVKasr_14parallel_inputNtB5_10InputFrame6finish",
+          11216
+        ],
+        [
+          "_RNvXs_Cs8LdeoEVKasr_14parallel_inputNtB4_9OperationNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+          11216
+        ],
+        [
+          "_RNvMNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encodingNtB2_20SecretEncodedInteger4left",
+          11216
+        ],
+        [
+          "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encoding20SecretEncodedIntegerEBF_",
+          11216
+        ],
+        [
+          "_RNvMNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encodingNtB2_20SecretEncodedInteger5right",
+          11216
+        ],
+        [
+          "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves",
+          11216
+        ],
+        [
+          "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot6absorb",
+          11216
+        ],
+        [
+          "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves13declassify_to",
+          11216
+        ],
+        [
+          "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_waves9OperationEBF_",
+          11216
+        ],
+        [
+          "_RNvXNtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB2_9OperationNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+          11216
+        ],
+        [
+          "_RNvXs0_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB5_5WavesNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+          11216
+        ],
+        [
+          "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State10finish_xof",
+          11216
+        ],
+        [
+          "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6finish",
+          11216
+        ],
+        [
+          "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          11216
+        ],
+        [
+          "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State11setup_chunk",
+          11216
+        ],
+        [
+          "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance",
+          11216
+        ],
+        [
+          "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits",
+          11216
+        ],
+        [
+          "_RNvMs_CscBEH4D3OuJh_22sha3_accelerated_stateNtB4_4Core5clear",
+          11216
+        ],
+        [
+          "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state4CoreEBD_",
+          11216
+        ],
+        [
+          "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_setup",
+          11216
+        ],
+        [
+          "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State6update",
+          11216
+        ],
+        [
+          "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7squeeze",
+          11216
+        ],
+        [
+          "_RNvXs0_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_4CoreNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+          11216
+        ],
+        [
+          "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run",
+          11216
+        ],
+        [
+          "?dtor$28@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run@4HA",
+          11216
+        ],
+        [
+          "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          11216
+        ],
+        [
+          "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish",
+          11216
+        ]
+      ],
+      "byte_candidates": 1,
+      "reference_targets": {},
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "code_sha256": "c0bc244ea4f39b7eef6d89558938bd751d42f7cb67bdbf414c17462b44be98e2",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core23secret_memory_predicate12mask_is_zero": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core23secret_memory_predicate12mask_is_zero",
+      "rva": 11312,
+      "size": 20,
+      "incoming": [
+        [
+          "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory24secret_byte_mask_is_zero",
+          11312
+        ]
+      ],
+      "byte_candidates": 1,
+      "reference_targets": {},
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "code_sha256": "abfd6d579afbeae45b4743454f4814533f72ce0edfef7bf25665e3c5201a4d45",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte",
+      "rva": 11120,
+      "size": 16,
+      "incoming": [
+        [
+          "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask",
+          11120
+        ]
+      ],
+      "byte_candidates": 1,
+      "reference_targets": {},
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "code_sha256": "fe10033c91418ee361524797da612bf9a4346f4a267a1dc137b4451cbc783acb",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    }
+  },
+  "reviewed_object_body_sha256": {
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core17secret_memory_xor8xor_bits": "446db9bc5866729cb70f723a3065519795e8e169af7ab99ccb3e1048b944df4d",
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte": "fe10033c91418ee361524797da612bf9a4346f4a267a1dc137b4451cbc783acb",
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": "820c2a4fdf11073053919c00ab6524a905846dd6347f14a23b9371c1b0fda7e4",
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": "c0bc244ea4f39b7eef6d89558938bd751d42f7cb67bdbf414c17462b44be98e2",
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core23secret_memory_predicate12mask_is_zero": "abfd6d579afbeae45b4743454f4814533f72ce0edfef7bf25665e3c5201a4d45",
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask": "e8ebd827d1f36d7cfa5e5220610aa6370284d1589989363f48ac40166362d449",
+    "_RNvCs2u1vj83u0E8_14parallel_waves15check_authority": "4649f46d87baa89f9f3716b163defb9aa62b3c17477d83db0a1a021898e31ab8"
+  },
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "scripts/cryptography/test-windows-enclave-leaf-binding.py": "6360e0894db1385c157fd01a6db426daeb7acbdc1cfd8e37cb7181da0092ca2b",
+    "scripts/cryptography/windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "scripts/cryptography/windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "assurance/windows-protection-observations/caller-handlers-20261004.json": "3abcefd77c884e8eaab61ffc340c9047a0166aa88b140ffaf815a2f736d36fc9"
+  },
+  "artifact_directory": "release-reports/windows-local-20261004",
+  "artifact_sha256": {
+    "review_linked_leaves.py": "06831dc71141fed171a5bcf5bc8a8796ebe91e94bfff5ed36a2547a470d2184b",
+    "review_linked_handlers.py": "8c1dd5e52b1225fbba9cba539124e9d015f20d53ee17a18ae325f13530952d86",
+    "scheduler-register-nospill/parallel_wave_bridge.parallel_wave_bridge.e941e58632d8bada-cgu.0.rcgu.o": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+    "scheduler-nospill-admitted/signed.dll": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee"
+  },
+  "limits": [
+    "All functions in the primary Rust object are byte-bound, not all linked archive/runtime functions.",
+    "No unwind entries does not itself prove absence of stack accesses.",
+    "xor_bits reads its fifth public mask argument from caller stack; no helper stack stores were observed.",
+    "Predicate retains its intentional boolean result; payload working register is cleared.",
+    "Caller data-flow, arbitrary exceptions, fatal paths and OS storage are not qualified."
+  ]
+}

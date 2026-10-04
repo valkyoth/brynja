@@ -38,7 +38,14 @@ with six geometry regressions passing on Linux and Windows. A subsequent
 nonvolatile register saves and copy-entry frames into that window; six additional
 tests pass on Linux and Windows. Loaded-module identity, kernel storage and
 remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
-proof. Whole-image caller/spill review,
+proof. Seven additional no-unwind helpers are now byte-bound and reviewed,
+completing the primary Rust object's 64-function identity inventory (73 entries
+with the selected C functions). This is not all linked runtime/library code.
+The old SHA-256 and SHA-512 SIMD images have now been rebuilt with the clearing
+wrapper and passed fresh component/worker mutations plus native campaigns
+(302 and 318 calls). Their signed bytes bind the reviewed wrapper. This refresh
+does not replace public-host-facade or remaining-image dump qualification.
+Whole-image caller/spill review,
 remaining-image dump coverage and image refresh are unfinished. The
 chronological development entries below retain their original scope and should
 not be read as a current claim that the concurrent crate API is still absent.

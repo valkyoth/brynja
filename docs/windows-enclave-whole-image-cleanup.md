@@ -199,6 +199,57 @@ thread-context register records, prove SDK/caller spill cleanup, test arbitrary
 mid-compression interruptions, or establish destructor execution after fail-fast.
 Other algorithm images still require their own applicable qualification.
 
+## Selected linked caller review, 2026-10-04
+
+A bounded COFF/PE review helper now examines the **same uninstrumented scheduler
+image** used for the dump observations. It binds 56 of 66 selected function
+entries to saved compiler objects, matching every non-relocated instruction byte,
+resolving all enumerated REL32 references and requiring exact runtime-function
+extents. The selection comprises the primary Rust object's 57 emitted unwind
+entries and nine C adapter functions, not every function in the image. Eleven
+synthetic regression tests pass on Linux and Windows; malformed identities,
+relocations, permissions, extents and unwind chains reject. The image was neither
+rebuilt nor rerun for this inspection.
+
+The actual uninstrumented `PrivateWaveDispatch` inlines its three active
+`CallEnclave` callbacks. Its 735-byte body has four contiguous chained unwind
+regions, including delayed nonvolatile-register saves; the primary fixed
+allocation plus pushes is 72 bytes. This differs from the separate 177-byte
+instrumented callback used in the earlier frame-placement campaign. Neither
+campaign is silently treated as proof of the other's emitted code.
+
+The selected Rust root has 11,160 bytes of fixed allocation plus pushes and
+additional alignment adjustment; the leaf has 136 bytes. The root closure's
+references are bound to the actual C dispatcher, and the root's input/output
+references are bound to the actual copy adapters. The copy adapters reach
+six-byte indirect jump thunks for `EnclaveCopyIntoEnclave` and
+`EnclaveCopyOutOfEnclave`; the import table also identifies `CallEnclave` in
+`vertdll.dll`. These are **local frame and import identities**, not maximum
+transitive stack depth, runtime placement or SDK-implementation spill proofs.
+Caller home-space saves and nonvolatile vector saves outside opaque kernel
+blocks still require caller-level reasoning. Opaque-block no-spill evidence
+does not erase those ABI obligations.
+
+Ten selected entries remain explicitly unresolved: two panic helpers lack a
+unique byte match; three Rust functions share sections with four exception
+funclets; and `PublicStackBody` uses security-cookie handler metadata outside
+this decoder's supported subset. Missing matches are not declared dead code,
+and unsupported unwind layouts are not counted as passes or vulnerabilities.
+Dependency objects retain exception funclets despite the top-level archive's
+abort setting; that setting alone is not evidence that all handler paths are
+absent. The review uses Microsoft's
+[x64 unwind format](https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64)
+for version-one records and in-function chains, not as an assertion that fatal
+aborts run destructors.
+
+The [partial-review record](../assurance/windows-protection-observations/caller-binding-20261004.json)
+binds the signed image, extracted archive member, build manifest, full caller
+records, disassembly, import listing and review sources. The local repeatable
+verifier is `release-reports/windows-local-20261004/review_linked_callers.py`;
+it also verifies the earlier saved build/signing/wrapper chain. The artifacts
+are outside `target/`. This is author inspection, not independent review,
+production signing, whole-image cleanup qualification or a new release gate.
+
 ## Historical diagnosis before the change
 
 The sequential `PublicLockedFrame` and concurrent `PublicStackFrame` wrappers
@@ -240,6 +291,8 @@ it must not be presented as a check of the changed wrappers or new images.
 1. Complete actual linked worker/caller and SDK-boundary review. The instrumented
    callback-frame and register campaigns above are complete for their stated
    scope, not a universal transition guarantee or uninstrumented-image proof.
+   The selected uninstrumented caller binding above is partial: resolve the ten
+   unsupported/ambiguous entries and review the remaining linked/SDK paths.
 2. Qualify final linked caller/spill/cleanup paths and remaining-image dump behavior.
    The concurrent scheduler's current-image WER observations above are complete
    only for their stated scope. Nonvolatile caller state is preserved, not erased.

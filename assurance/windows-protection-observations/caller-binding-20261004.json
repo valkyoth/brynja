@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "implementation_parent": "52f3e06a",
+  "status": "PARTIAL_LINKED_CALLER_REVIEW_NOT_WHOLE_IMAGE_QUALIFICATION",
+  "bound_callers": 56,
+  "selected_functions": 66,
+  "focused_regressions": 11,
+  "focused_regression_platforms": [
+    "linux",
+    "windows"
+  ],
+  "unresolved": {
+    "_RNvNtCs8xEFJqa6dYS_4core9panicking9panic_fmt": "caller binding: caller bytes absent or ambiguous",
+    "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow": "caller binding: caller bytes absent or ambiguous",
+    "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run": "caller binding: single function in section",
+    "\"?dtor$28@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run@4HA\"": "caller binding: unique function at section start",
+    "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new": "caller binding: single function in section",
+    "\"?dtor$59@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA\"": "caller binding: unique function at section start",
+    "\"?dtor$62@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA\"": "caller binding: unique function at section start",
+    "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish": "caller binding: single function in section",
+    "\"?dtor$54@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish@4HA\"": "caller binding: unique function at section start",
+    "PublicStackBody": "caller unwind: supported unwind header"
+  },
+  "whole_image_qualified": false,
+  "release_gate_changed": false,
+  "native_run_added": false,
+  "independently_verified": false,
+  "production_qualified": false,
+  "signed_image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "sdk_imports": {
+    "EnclaveCopyIntoEnclave": {
+      "thunk_rva": 46457,
+      "iat_rva": 53408,
+      "thunk_bytes": 6,
+      "implementation_qualified": false
+    },
+    "EnclaveCopyOutOfEnclave": {
+      "thunk_rva": 46463,
+      "iat_rva": 53416,
+      "thunk_bytes": 6,
+      "implementation_qualified": false
+    }
+  },
+  "selected_frames": {
+    "PrivateWaveRoot": {
+      "rva": 4544,
+      "bytes": 3656,
+      "unwind_parts": 1,
+      "fixed_stack_and_push_bytes": 11160
+    },
+    "PrivateWaveLeaf": {
+      "rva": 4096,
+      "bytes": 446,
+      "unwind_parts": 1,
+      "fixed_stack_and_push_bytes": 136
+    },
+    "_RNCNvCsk1CFy3R4N16_20parallel_wave_bridge4root0B3_": {
+      "rva": 9280,
+      "bytes": 1516,
+      "unwind_parts": 1,
+      "fixed_stack_and_push_bytes": 168
+    },
+    "PrivateWaveDispatch": {
+      "rva": 29616,
+      "bytes": 735,
+      "unwind_parts": 4,
+      "fixed_stack_and_push_bytes": 72
+    },
+    "PrivateInputCopy": {
+      "rva": 28768,
+      "bytes": 242,
+      "unwind_parts": 1,
+      "fixed_stack_and_push_bytes": 40
+    },
+    "PrivateInputOutput": {
+      "rva": 29024,
+      "bytes": 162,
+      "unwind_parts": 1,
+      "fixed_stack_and_push_bytes": 40
+    },
+    "notify": {
+      "rva": 33120,
+      "bytes": 88,
+      "unwind_parts": 1,
+      "fixed_stack_and_push_bytes": 40
+    }
+  },
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "scripts/cryptography/windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "scripts/cryptography/test-windows-enclave-caller-binding.py": "9a7db6395df0954d55df22c4d4d75f2394a130a6d0a09c1c4c3b91a14c930613",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "scripts/cryptography/test-windows-enclave-wrapper-binding.py": "2cf641a1b3929872b47bcc4e02bcea85c63bfd29ade1e1b42ec15d23e38f0b54"
+  },
+  "artifact_directory": "release-reports/windows-local-20261004",
+  "artifact_sha256": {
+    "review_linked_callers.py": "3ef10bdb986678ba5162af35c2d679ad8ee91c7cd390ee2428fd2ca77c3f501d",
+    "caller-bindings.json": "df180576a36b4da85143a65b07da9102c0e17137ad729297f4de7782582a938d",
+    "caller-imports.txt": "135f8e075372d6aaf2195cf49f243ba0bc6ebfcd9126d9256a1fbf0a498475e5",
+    "scheduler-register-nospill/parallel_wave_bridge.parallel_wave_bridge.e941e58632d8bada-cgu.0.rcgu.o": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+    "scheduler-register-nospill/normal_rust.lib": "b0b189e93f201a4ccd6c400b6aa264b447c308b4645b7f709c998a82784c0dee",
+    "scheduler-register-nospill/normal_rust.s": "2573bb52004b529211d48af92fa83175b95f2bb609bcdd090fb889dd97100c2a",
+    "scheduler-register-nospill/concurrent.obj": "fdd82832930eff919311de11e4603ab01ec64c65752dd477e544b5908782db37",
+    "scheduler-register-nospill/parallel-scheduler-image-build.json": "f297af4853c3d6a4f3438c4bb31e949408e586547cd1294bb300d99708f52cdc",
+    "scheduler-nospill-admitted/signed.dll": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+    "caller-PrivateWaveLeaf.txt": "e4f0f3dfd10dc04210bce7b419b747665c33697edd7a495164b9e443fae19d13",
+    "caller-PrivateWaveRoot.txt": "25a281a8776bec38aa1595c16525cf726fa23a2c1dfb04edc5f1c441166f170d",
+    "caller-PrivateWaveDispatch.txt": "b7dc27d7581714728b34a2fdb13201dcb56bf6f5a0125b99056bab80c5b6733b",
+    "caller-PrivateInputCopy.txt": "7d7c077b9f5bde28670912b576cff2c9107638003237f7f015c45fecc5b2328b",
+    "caller-PrivateInputOutput.txt": "5fda38680176192258d9580e89fb36a1220beaf08f82eb7904db2b0ce85754d4",
+    "caller-notify.txt": "367cd958970a855c9b6ea092ade4238f302adb7fcb0ab509c79033d4fa5def2a"
+  },
+  "limitations": [
+    "Selected single-function COFF sections only; ambiguous matches and EH funclets remain explicit unresolved items.",
+    "Fixed-frame metadata is not a maximum transitive stack-depth or runtime-placement proof.",
+    "Unwind metadata presence does not promise fatal abort cleanup or safe arbitrary unwinding.",
+    "SDK imports and thunk identities are bound; external SDK implementation spills are not inspected."
+  ]
+}

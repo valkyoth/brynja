@@ -256,3 +256,70 @@ separate. Production cryptography and gate policy are unchanged.
 python3 scripts/cryptography/test-windows-enclave-sdk-context.py
 python3 scripts/cryptography/windows_enclave_sdk_context.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+## Dispatch, restore and external continuations
+
+The [dispatch/restore observation](../assurance/windows-protection-observations/sdk-dispatch-20261004.json)
+binds seven ranges totaling 2,469 bytes: dispatch, restore, a one-byte hook,
+the context-raise helper, its capture prefix, a handler adapter and a syscall
+stub. Twenty-four direct transfers and nineteen frame/control-flow anchors
+have separate checks. Eight regressions pass on Linux and Windows, all 2,469
+byte mutations are rejected on each, and the saved-file reports match.
+This is offline author review, not execution of these SDK paths.
+
+Dispatch has a 568-byte fixed frame, including seven pushed registers. Its
+locals contain a handler record, non-null history table, original-context
+pointer, cookie and unwind outputs. It requests the basic x64 layout described
+above, then allocates the rounded size and places its context at dynamic
+RSP+112. The modeled 1,280-byte allocation is conditional on successful sizing,
+not a measured live allocation or a proof of every possible exception input.
+
+The handler adapter adds 40 bytes and calls the address in the dispatcher
+record. Its return/home area is known; the target's frame, recursion, side
+effects and cleanup are not. Dispatch can update the exception record and
+loop through frames, invoke handlers, fail fast or call the recursive status
+raiser. Such calls cannot be folded into a finite all-path bound by counting
+the adapter alone.
+
+Restore is a sibling call with a 72-byte fixed frame. It has a syscall path
+and direct `IRETQ` paths that resume context-selected instruction and stack
+pointers. The selected staging writes occupy offsets 0/8/16/24/32 with
+widths 8/2/4/8/2; this records written bytes, not a claim that every byte read
+by IRET is initialized or that the target is valid. Other branches update
+context registers from an external record. XRSTOR branches temporarily
+exchange an MXCSR field in context-derived extended storage. Neither arbitrary
+record bounds nor extended-state provenance is established here.
+
+A special restore branch subtracts another 1,312 bytes, copies 1,232 context
+bytes, adjusts metadata, stages auxiliary RIP/RSP values and invokes a callback
+from the exception record. Subsequent IRET staging overlaps the copied context.
+The copy, staging and callback entry fit the conditional model; the callback's
+body and continuation remain unknown. **Restoring state is not erasing it**:
+an IRET can abandon the current frame without wiping its saved contents.
+
+The context-raise helper reserves 56 bytes, calls a capture prefix and then
+restores its own stack before tail-jumping to dispatch or a syscall stub.
+The capture prefix saves nonvolatile state and jumps into the previously
+reviewed capture helper at `0x1477`; it is not an independent full capture body.
+Tests preserve tail-call reuse rather than adding an extra frame. The hook
+at `0x1b40` is just `RET` in this particular saved SDK image; that says nothing
+about other Windows versions or a loaded module with different bytes.
+
+At diagnostic capacity 512 with an illustrative outer size output of 1,279,
+the copy path has dispatcher fixed/dynamic RSP at H-14816/H-16096, handler
+RSP at H-16144, and sibling restore/special-restore RSP at H-14320/H-15632.
+Nineteen selected spans fit the clearing window; first-frame exceptional
+accounting does not provide a recursive bound. Both external call targets,
+continuation validity and exception cleanup remain explicitly unqualified.
+
+Remaining direct dispatch helpers are the initial stack-bound query, stack
+progression check, context copy and alternate unwind adapter. Fatal diagnostic
+disposition, loaded-module identity and broader image/dump qualification also
+remain. This review does not expand the supported guarantee to arbitrary
+callbacks, fatal failure or general Windows exception handling, and changes
+neither production cryptography nor release-gate policy.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-dispatch.py
+python3 scripts/cryptography/windows_enclave_sdk_dispatch.py PATH_TO_SAVED_VERTDLL --mutations
+```

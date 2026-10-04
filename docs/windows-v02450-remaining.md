@@ -95,6 +95,13 @@ layout models retain DWORD wrap and reject malformed-table write-fit claims;
 they do not establish live OS feature-table values. The capture entry saves
 nonvolatile registers, not full extended state. Exception dispatch/restore,
 fatal-path disposition and whole-image qualification remain open.
+The subsequent [dispatch/restore review](windows-enclave-sdk-unwind.md#dispatch-restore-and-external-continuations)
+binds seven additional ranges; eight regressions and 2,469 byte mutations pass
+on Linux and Windows. It accounts for selected fixed/context-copy spans and
+tail-call reuse, while retaining unknown handler/callback targets and IRET
+continuations. Stack-bound/progression, context-copy and alternate-unwind
+helpers remain direct review boundaries; no general exception-cleanup or
+finite recursive-depth claim has been added.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

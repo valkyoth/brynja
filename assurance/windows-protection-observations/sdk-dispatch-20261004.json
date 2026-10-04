@@ -1,0 +1,266 @@
+{
+  "schema": 1,
+  "status": "SAVED_DISPATCH_RESTORE_EXTERNAL_CONTINUATIONS_UNQUALIFIED",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "dispatch": {
+      "rva": 34704,
+      "bytes": 956,
+      "sha256": "17540f0c172e6cf304e0cc9cadcd2b8ec4c2ab085afd1f7f03e16a756fc3319d"
+    },
+    "restore": {
+      "rva": 5712,
+      "bytes": 1256,
+      "sha256": "5bd226a61890d63b640f8f8c28faac10d50629809bcdd480ee218b06c1be13d0"
+    },
+    "ip_hook": {
+      "rva": 6976,
+      "bytes": 1,
+      "sha256": "ae3f4619b0413d70d3004b9131c3752153074e45725be13b9a148978895e359e"
+    },
+    "raise": {
+      "rva": 6992,
+      "bytes": 112,
+      "sha256": "331891b1795a59a399395758c891d189a950fbdbf2d460750660743ae9818024"
+    },
+    "capture_prefix": {
+      "rva": 5056,
+      "bytes": 112,
+      "sha256": "ff2b2fd0a050aa290bcfecde3b6a290be3d37deab2b6033a4fb4458bf49217a6"
+    },
+    "handler": {
+      "rva": 120176,
+      "bytes": 21,
+      "sha256": "dc05021d8eb9e0c825296d890625aa16daf4061c7ac874594fd905ecfe62e26f"
+    },
+    "continue_stub": {
+      "rva": 118064,
+      "bytes": 11,
+      "sha256": "a21bf8e175288351b76ae6920de8cbb6766cf7b475f4537cee07bda8859749ac"
+    }
+  },
+  "direct_transfers": 24,
+  "instruction_anchors": 19,
+  "body_byte_mutations_rejected": 2469,
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "external_callback_cleanup_qualified": false,
+  "continuation_targets_validated": false,
+  "arbitrary_context_bounds_qualified": false,
+  "sdk_self_erasure_claimed": false,
+  "side_effects": [
+    "dispatch copies context and updates exception flags and nonnull history storage",
+    "dispatch calls a metadata-selected handler and restore can call an exception-record callback",
+    "IRET restores context-selected stack and instruction pointers instead of wiping the abandoned frame",
+    "special restore copies 1232 context bytes and adjusts metadata on its own stack",
+    "XRSTOR paths temporarily exchange MXCSR in context-derived extended storage",
+    "raise helper restores its own frame before tail dispatch or kernel transition",
+    "the selected instruction-pointer hook is one RET byte in this saved image"
+  ],
+  "unresolved": [
+    {
+      "rva": 48944,
+      "reason": "fatal diagnostic wrapper and transitive calls"
+    },
+    {
+      "rva": 93596,
+      "reason": "initial stack bounds"
+    },
+    {
+      "rva": 94972,
+      "reason": "stack-frame bounds/progression"
+    },
+    {
+      "rva": 37816,
+      "reason": "context copy"
+    },
+    {
+      "rva": 50160,
+      "reason": "alternate unwind adapter"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage",
+    "runtime feature table sizes masks and alignment validity",
+    "external handler and continuation targets; recursive exceptions and fatal transitions"
+  ],
+  "modeled_capacities": [
+    128,
+    256,
+    384,
+    512
+  ],
+  "illustrative_geometry_capacity_512": {
+    "copy": {
+      "illustrative_exception_size": 1279,
+      "frames": {
+        "dispatch_fixed": -14816,
+        "dispatch_dynamic": -16096,
+        "handler": -16144,
+        "restore": -14320,
+        "special_restore": -15632,
+        "first_status_raise": -17536,
+        "raise_context": -17600,
+        "tail_dispatch_fixed": -18112
+      },
+      "iret_field_writes": [
+        {
+          "name": "direct IRET RIP",
+          "offset_from_low": 51216,
+          "offset_from_high": -14320,
+          "bytes": 8
+        },
+        {
+          "name": "direct IRET CS",
+          "offset_from_low": 51224,
+          "offset_from_high": -14312,
+          "bytes": 2
+        },
+        {
+          "name": "direct IRET EFLAGS",
+          "offset_from_low": 51232,
+          "offset_from_high": -14304,
+          "bytes": 4
+        },
+        {
+          "name": "direct IRET RSP",
+          "offset_from_low": 51240,
+          "offset_from_high": -14296,
+          "bytes": 8
+        },
+        {
+          "name": "direct IRET SS",
+          "offset_from_low": 51248,
+          "offset_from_high": -14288,
+          "bytes": 2
+        }
+      ],
+      "external_entries": [
+        {
+          "name": "unwind handler from dispatcher record",
+          "offset_from_low": 49384,
+          "offset_from_high": -16152,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        },
+        {
+          "name": "restore callback from exception record",
+          "offset_from_low": 49896,
+          "offset_from_high": -15640,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      ],
+      "actual_runtime_allocation_observed": false,
+      "continuation_target_validated": false,
+      "maximum_transitive_depth": null,
+      "cleanup_qualified": false,
+      "selected_stack_spans": 19
+    },
+    "call_error": {
+      "illustrative_exception_size": 1279,
+      "frames": {
+        "dispatch_fixed": -15072,
+        "dispatch_dynamic": -16352,
+        "handler": -16400,
+        "restore": -14576,
+        "special_restore": -15888,
+        "first_status_raise": -17792,
+        "raise_context": -17856,
+        "tail_dispatch_fixed": -18368
+      },
+      "iret_field_writes": [
+        {
+          "name": "direct IRET RIP",
+          "offset_from_low": 50960,
+          "offset_from_high": -14576,
+          "bytes": 8
+        },
+        {
+          "name": "direct IRET CS",
+          "offset_from_low": 50968,
+          "offset_from_high": -14568,
+          "bytes": 2
+        },
+        {
+          "name": "direct IRET EFLAGS",
+          "offset_from_low": 50976,
+          "offset_from_high": -14560,
+          "bytes": 4
+        },
+        {
+          "name": "direct IRET RSP",
+          "offset_from_low": 50984,
+          "offset_from_high": -14552,
+          "bytes": 8
+        },
+        {
+          "name": "direct IRET SS",
+          "offset_from_low": 50992,
+          "offset_from_high": -14544,
+          "bytes": 2
+        }
+      ],
+      "external_entries": [
+        {
+          "name": "unwind handler from dispatcher record",
+          "offset_from_low": 49128,
+          "offset_from_high": -16408,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        },
+        {
+          "name": "restore callback from exception record",
+          "offset_from_low": 49640,
+          "offset_from_high": -15896,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      ],
+      "actual_runtime_allocation_observed": false,
+      "continuation_target_validated": false,
+      "maximum_transitive_depth": null,
+      "cleanup_qualified": false,
+      "selected_stack_spans": 19
+    }
+  },
+  "date": "2026-10-04",
+  "parent_commit": "e2085ad1",
+  "review": "Implementation-author saved-file dispatch/restore review. Conditional frame accounting is not SDK execution, handler/continuation qualification, recursive-depth proof or exception cleanup.",
+  "tests": {
+    "linux_synthetic": 8,
+    "windows_synthetic": 8,
+    "real_body_mutations_rejected_each_host": 2469,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_dispatch.py": "1f3c17ade072651320a2f6cd4a752c128fffe6aeb94da3df0eb22912417746ee",
+    "scripts/cryptography/test-windows-enclave-sdk-dispatch.py": "2b799d17c18741e5e5a68d2544a8b84ad0c8f6f9b051390bc30563ad77fdf12c",
+    "scripts/cryptography/windows_enclave_sdk_context.py": "5dc989fb47c8ab8a203d3c1375e9128cd6c5b12772c90b4180a4f24192fee696",
+    "scripts/cryptography/windows_enclave_sdk_exception.py": "7dd1c3cf0a77385ecdf52820fd9357509f7e96f99de95ded41140b5d49d6a73a",
+    "scripts/cryptography/windows_enclave_sdk_decoders.py": "f2fecab13a96c421a1a7b100459c1b68a1c801d40c930c280913cf1b4b3a3e28",
+    "scripts/cryptography/windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "scripts/cryptography/windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "scripts/cryptography/windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "scripts/cryptography/windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "scripts/cryptography/windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-dispatch-linux.json": "95a03072904e353829b8512704ab431e81fa35ee78e9148564a161b69bce8a1e",
+    "release-reports/windows-local-20261004/sdk-dispatch-windows.json": "95a03072904e353829b8512704ab431e81fa35ee78e9148564a161b69bce8a1e"
+  }
+}

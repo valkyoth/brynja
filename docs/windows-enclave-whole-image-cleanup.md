@@ -468,9 +468,11 @@ unqualified.
    TupleHash streaming manifests. SHA-2 additionally differs in its C entry and
    worker-test script; the other three differ only in the recorded wrapper.
    The subsequent [streaming refresh](windows-enclave-stream-refresh.md) completes
-   rebuilds and native worker/debug-release host tests for SHA-2 and SHA-3,
-   binding both to the reviewed wrapper. KMAC, TupleHash and other unreconciled
-   images remain; the historical inventory is not relabeled as current evidence.
+   rebuilds and native worker/debug-release host tests for SHA-2, SHA-3, KMAC and
+   TupleHash, binding all four to the reviewed wrapper. Other unreconciled images
+   remain; the historical inventory is not relabeled as current evidence. Three
+   failed TupleHash test attempts are excluded; the corrected test-only harness
+   preserves assertion checks and passes completely on Linux and Windows.
 
 The Windows ABI distinguishes volatile XMM0–5 from nonvolatile XMM6–15, while
 upper YMM halves are volatile. A blanket `vzeroall` would violate ordinary

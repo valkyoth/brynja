@@ -54,7 +54,12 @@ A [four-stream manifest review](../assurance/windows-protection-observations/str
 identified older wrappers in the saved SHA-NI SHA-2, AVX2 SHA-3, KMAC and TupleHash
 streaming images. The subsequent [streaming refresh](windows-enclave-stream-refresh.md)
 now covers SHA-2 and SHA-3: rebuilt images, native VBS campaigns and debug/release
-host tests pass with the reviewed wrapper. KMAC and TupleHash remain to refresh.
+host tests pass with the reviewed wrapper. The subsequent KMAC/TupleHash refresh
+also passes native execution and debug/release host tests (546/230 cases per
+profile), with exact wrapper binding. All four accelerated streams are refreshed;
+other affected images still need reconciliation. Three incomplete TupleHash
+attempts are excluded; its corrected test harness passes on Linux and Windows
+without changing production code, the timeout or release-gate policy.
 These are distinct from the three multibuffer images; the inventory is not exhaustive.
 Whole-image caller/spill review,
 remaining-image dump coverage and image refresh are unfinished. The

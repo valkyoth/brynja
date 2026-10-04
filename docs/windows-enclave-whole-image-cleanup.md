@@ -151,6 +151,54 @@ interruption/fatal paths, SDK-internal spills, dumps, or equivalence of the
 instrumented image to every production image. No production cryptographic code,
 public API or release gate changed.
 
+## Current scheduler dump observations, 2026-10-04
+
+The **uninstrumented** concurrent scheduler image from the wrapper-cleanup pass
+has now been exercised under a narrowly scoped full-WER-dump experiment. The
+image was not rebuilt or modified for the experiment. Only the diagnostic host
+adds deliberate fail-fast checkpoints; all inputs are deterministic public
+fixtures. Each child uses a unique executable name and a temporary application
+LocalDumps subkey, without changing the global dump policy.
+
+Two repetitions cover each of three checkpoints:
+
+- Root admitted and locked, before its first dispatch: one live 64-KiB window.
+- Second-wave admission barrier, after the first four leaves completed: the
+  root and four workers have five disjoint locked windows. The workers are held
+  **before** their current bodies, not sampled during compression.
+- Successful public output, before enclave teardown: the independent oracle,
+  scoped joins and all eighteen frame cleanup/unlock records have passed.
+
+Each dump must contain an ordinary 8,192-byte positive control and the exact
+33-byte public output staging region: untouched `0xa5` before export, or the
+independent expected result after export. Missing, corrupt or partial controls,
+the wrong crash code and missing dumps all reject. Zero-filled included enclave
+bytes are counted as inclusion, never mistaken for absence.
+
+In the six observed dumps on Windows build 26300.9457, those ordinary controls
+were present, while no bytes from the measured windows or the entire 256-MiB
+enclave reservation were included. Live checkpoints also checked all sixteen
+pages per window were locked. The normal 31-case scheduler suite passed after
+the first campaign. Nine focused regressions cover parsing, phase/population,
+source binding, false-exclusion controls, timeout and temporary-file/policy
+cleanup. The independent oracle files are explicitly bound because their dynamic
+loader does not register them in Python's module table.
+
+The [source-bound observation record](../assurance/windows-protection-observations/scheduler-dump-20261004.json)
+binds the existing signed image/build chain, diagnostic sources and redacted
+results. Raw dumps were analyzed **inside the guest and deleted**, never copied
+to the repository. The unique executable, child, temporary dump folder and
+application policy were confirmed absent afterward. The saved local verifier
+checks source/image bindings and redacted results; it cannot reparse deleted
+raw dumps. This is development-overlay evidence, not a clean-commit or
+production-signing claim.
+
+This qualifies only the observed WER path and this scheduler image. It does not
+establish absence of secret-derived copies elsewhere in the process, inspect
+thread-context register records, prove SDK/caller spill cleanup, test arbitrary
+mid-compression interruptions, or establish destructor execution after fail-fast.
+Other algorithm images still require their own applicable qualification.
+
 ## Historical diagnosis before the change
 
 The sequential `PublicLockedFrame` and concurrent `PublicStackFrame` wrappers
@@ -192,9 +240,11 @@ it must not be presented as a check of the changed wrappers or new images.
 1. Complete actual linked worker/caller and SDK-boundary review. The instrumented
    callback-frame and register campaigns above are complete for their stated
    scope, not a universal transition guarantee or uninstrumented-image proof.
-2. Qualify final linked caller/spill/cleanup paths and current-image dump behavior.
-   Nonvolatile caller state is preserved, not erased. AVX-512-only state, fatal
-   aborts and interruption contexts are not covered by this wrapper probe.
+2. Qualify final linked caller/spill/cleanup paths and remaining-image dump behavior.
+   The concurrent scheduler's current-image WER observations above are complete
+   only for their stated scope. Nonvolatile caller state is preserved, not erased.
+   AVX-512-only state, fatal aborts and interruption contexts are not covered by
+   the wrapper probe.
 3. Refresh other affected algorithm images before claiming their new-image
    qualification, reconcile compiler/platform coverage, then obtain independent
    pentest. The two rebuilt routes do not silently qualify the remaining images.

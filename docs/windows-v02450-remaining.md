@@ -23,8 +23,13 @@ across 31 scheduler cases, with compiled measurement controls. A further
 instrumented register campaign covers 552 active VBS callbacks, all sixteen
 XMM/YMM registers and eleven non-argument GPRs, with direct positive and compiled
 omission controls. No four-byte test pattern was observed at host callback entry on the tested
-Windows build; this is not a universal register-erasure guarantee. Whole-image
-caller/spill/dump review and remaining-image refresh are unfinished. The
+Windows build; this is not a universal register-erasure guarantee. Six scoped
+full-WER-dump observations now cover the unchanged concurrent scheduler image:
+root admission, a five-window worker barrier and completed public output, with
+ordinary-memory positive controls. No enclave-reservation bytes were included in
+those dumps; raw dumps were deleted in the guest. This does not qualify SDK/caller
+spills or other images. Whole-image caller/spill review, remaining-image dump
+coverage and image refresh are unfinished. The
 chronological development entries below retain their original scope and should
 not be read as a current claim that the concurrent crate API is still absent.
 

@@ -31,8 +31,11 @@ those dumps; raw dumps were deleted in the guest. This does not qualify SDK/call
 spills or other images. All 66 selected caller identities in the saved
 uninstrumented image are now accounted for, including interior destructor
 funclets and reference-disambiguated panic helpers. Handler metadata is bound
-to the objects, not qualified for safe unwinding or erasure. This remains partial
-inspection, not whole-image stack-depth or cleanup proof. Whole-image caller/spill review,
+to the objects, not qualified for safe unwinding or erasure. A selected seven-body
+caller review now maps fifteen saved-register/reply spans into the cleared window,
+with six geometry regressions passing on Linux and Windows. SDK-internal frames
+remain unknown; this is partial inspection, not whole-image stack-depth or cleanup
+proof. Whole-image caller/spill review,
 remaining-image dump coverage and image refresh are unfinished. The
 chronological development entries below retain their original scope and should
 not be read as a current claim that the concurrent crate API is still absent.

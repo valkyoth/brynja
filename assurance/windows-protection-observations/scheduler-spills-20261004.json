@@ -1,0 +1,198 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "implementation_parent": "73b1b0c8",
+  "status": "AUTHOR_SELECTED_CALLER_SPILL_REVIEW_NOT_WHOLE_IMAGE_QUALIFICATION",
+  "native_run_added": false,
+  "independently_verified": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "release_gate_changed": false,
+  "focused_geometry_tests": 6,
+  "focused_regression_platforms": [
+    "linux",
+    "windows"
+  ],
+  "model": {
+    "spans": [
+      {
+        "name": "body saved RBX",
+        "offset_from_low": 65512,
+        "offset_from_high": -24,
+        "bytes": 8
+      },
+      {
+        "name": "body saved RSI",
+        "offset_from_low": 65520,
+        "offset_from_high": -16,
+        "bytes": 8
+      },
+      {
+        "name": "body saved RDI",
+        "offset_from_low": 65488,
+        "offset_from_high": -48,
+        "bytes": 8
+      },
+      {
+        "name": "body security cookie",
+        "offset_from_low": 65472,
+        "offset_from_high": -64,
+        "bytes": 8
+      },
+      {
+        "name": "body CPU inventory",
+        "offset_from_low": 65360,
+        "offset_from_high": -176,
+        "bytes": 88
+      },
+      {
+        "name": "body marker",
+        "offset_from_low": 65456,
+        "offset_from_high": -80,
+        "bytes": 16
+      },
+      {
+        "name": "root pushes",
+        "offset_from_low": 65256,
+        "offset_from_high": -280,
+        "bytes": 64
+      },
+      {
+        "name": "closure pushes",
+        "offset_from_low": 54072,
+        "offset_from_high": -11464,
+        "bytes": 64
+      },
+      {
+        "name": "dispatch saved RBX",
+        "offset_from_low": 53976,
+        "offset_from_high": -11560,
+        "bytes": 8
+      },
+      {
+        "name": "dispatch saved RBP",
+        "offset_from_low": 53968,
+        "offset_from_high": -11568,
+        "bytes": 8
+      },
+      {
+        "name": "dispatch pushes",
+        "offset_from_low": 53936,
+        "offset_from_high": -11600,
+        "bytes": 24
+      },
+      {
+        "name": "dispatch reply",
+        "offset_from_low": 53984,
+        "offset_from_high": -11552,
+        "bytes": 8
+      },
+      {
+        "name": "close reply",
+        "offset_from_low": 53992,
+        "offset_from_high": -11544,
+        "bytes": 8
+      },
+      {
+        "name": "join reply",
+        "offset_from_low": 53920,
+        "offset_from_high": -11616,
+        "bytes": 8
+      },
+      {
+        "name": "copy adapter saved RBX",
+        "offset_from_low": 54128,
+        "offset_from_high": -11408,
+        "bytes": 8
+      }
+    ],
+    "frames": {
+      "body": {
+        "entry_from_high": -40,
+        "current_from_high": -208
+      },
+      "root": {
+        "entry_from_high": -216,
+        "current_from_high": -11392
+      },
+      "leaf": {
+        "entry_from_high": -216,
+        "current_from_high": -352
+      },
+      "closure": {
+        "entry_from_high": -11400,
+        "current_from_high": -11568
+      },
+      "dispatch": {
+        "entry_from_high": -11576,
+        "current_from_high": -11648
+      },
+      "copy_adapter": {
+        "entry_from_high": -11400,
+        "current_from_high": -11440
+      }
+    },
+    "unknown_callees": [
+      {
+        "name": "CallEnclave entry/home",
+        "offset_from_low": 53880,
+        "offset_from_high": -11656,
+        "bytes": 40,
+        "callee_frame_bytes": null,
+        "callee_spills_qualified": false
+      },
+      {
+        "name": "SDK copy entry/home",
+        "offset_from_low": 54088,
+        "offset_from_high": -11448,
+        "bytes": 40,
+        "callee_frame_bytes": null,
+        "callee_spills_qualified": false
+      }
+    ],
+    "maximum_transitive_depth_qualified": false,
+    "runtime_placement_measured": false
+  },
+  "prologue_bytes": {
+    "PublicStackBody": "4c8bdc49895b1049897318574881eca0000000",
+    "PrivateWaveRoot": "554157415641554154565753b8582b0000e8000000004829c4488dac24800000004883e4e0",
+    "PrivateWaveLeaf": "56574883ec78",
+    "_RNCNvCsk1CFy3R4N16_20parallel_wave_bridge4root0B3_": "4157415641554154565755534883ec68",
+    "PrivateWaveDispatch": "48895c2410565741564883ec30",
+    "PrivateInputCopy": "40534883ec20",
+    "PrivateInputOutput": "40534883ec20"
+  },
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/test-windows-enclave-frame-geometry.py": "1b4ec92d88c88da9d2ae121415626dd307580ec1f387e48f698820b13115568e"
+  },
+  "artifact_directory": "release-reports/windows-local-20261004",
+  "artifact_sha256": {
+    "review_scheduler_spills.py": "e19e44084df238cbac9a885560dac659a9d71d15d460203f9dfe9005a09a3a38",
+    "review_linked_handlers.py": "8c1dd5e52b1225fbba9cba539124e9d015f20d53ee17a18ae325f13530952d86",
+    "handler-bindings.json": "193822ac6c9a37d67b45f0251074145426eb19e13e83f8c17054119638558339",
+    "caller-bindings.json": "df180576a36b4da85143a65b07da9102c0e17137ad729297f4de7782582a938d",
+    "caller-PrivateWaveRoot.txt": "25a281a8776bec38aa1595c16525cf726fa23a2c1dfb04edc5f1c441166f170d",
+    "caller-PrivateWaveLeaf.txt": "e4f0f3dfd10dc04210bce7b419b747665c33697edd7a495164b9e443fae19d13",
+    "caller-PrivateWaveDispatch.txt": "b7dc27d7581714728b34a2fdb13201dcb56bf6f5a0125b99056bab80c5b6733b",
+    "caller-PrivateInputCopy.txt": "7d7c077b9f5bde28670912b576cff2c9107638003237f7f015c45fecc5b2328b",
+    "caller-PrivateInputOutput.txt": "5fda38680176192258d9580e89fb36a1220beaf08f82eb7904db2b0ce85754d4",
+    "handlers-c-disassembly.txt": "e76f20f0216687fbf8c0654aba668d2ab10ded716b9ed66a4a565aa8e50f5262",
+    "scheduler-register-nospill/parallel_input_bridge.rs": "ec1bb885a5a6a589e86aac56991d62a2a7f53ceb7060199919a9a3539edd4af2",
+    "scheduler-register-nospill/parallel_input_bridge_body.rs": "c21e82a98a54f82019d6862b9d6a784516a58aafc359d319bb71ea503d0af846",
+    "scheduler-register-nospill/concurrent_stack_x64.asm": "001f18f1855514d408ad4f4b44a513983f7d6751615fdf7b0a9703c500561ed7",
+    "scheduler-register-nospill/concurrent_stack.c": "1cce72dbe96480b6e228e6125375e0f7a0c4c87fce3253dcb523e76ac2b15817",
+    "scheduler-register-nospill/concurrent.obj": "fdd82832930eff919311de11e4603ab01ec64c65752dd477e544b5908782db37",
+    "scheduler-register-nospill/parallel_wave_bridge.parallel_wave_bridge.e941e58632d8bada-cgu.0.rcgu.o": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+    "scheduler-nospill-admitted/signed.dll": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee"
+  },
+  "scope": [
+    "Manual instruction/source review of the seven named callers, with exact-image byte binding.",
+    "Root and leaf frames are separate per-thread windows, never summed as one concurrent frame.",
+    "Copy adapters carry pointers/lengths/status; payload copying occurs in SDK imports.",
+    "Saved nonvolatile registers are conservatively treated as possibly carrying caller data.",
+    "Arithmetic covers the selected fixed caller chains and listed slots only; SDK frames are unknown.",
+    "Normal-return full-window reclamation and prior native clear/readback tests are separate evidence.",
+    "No complete secret taint proof, maximum total stack depth, arbitrary unwind or fatal cleanup claim."
+  ]
+}

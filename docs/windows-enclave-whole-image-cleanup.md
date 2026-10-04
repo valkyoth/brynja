@@ -331,13 +331,62 @@ out-of-image targets. This establishes wrapper identity, **not** callee semantic
 signature validity or whole-image qualification. That record is historical;
 it must not be presented as a check of the changed wrappers or new images.
 
+## Selected caller spill review (2026-10-04)
+
+The [selected caller observation](../assurance/windows-protection-observations/scheduler-spills-20261004.json)
+binds seven caller bodies to the unchanged signed scheduler image, their actual
+COFF objects and generated input-bridge sources. It records a manual
+instruction/source review plus a tested arithmetic model, not a new native run
+or an automatic whole-program taint analysis.
+
+For a page-aligned 64-KiB window with exclusive upper address `H`, the selected
+call chains have these stack-pointer offsets after their emitted prologues:
+
+| Caller | Entry RSP | RSP after prologue |
+| --- | --- | --- |
+| PublicStackBody | H - 40 | H - 208 |
+| PrivateWaveRoot | H - 216 | H - 11392 |
+| PrivateWaveLeaf | H - 216 | H - 352 |
+| Root closure | H - 11400 | H - 11568 |
+| PrivateWaveDispatch | H - 11576 | H - 11648 |
+| Input/output copy adapter | H - 11400 | H - 11440 |
+
+Root and leaf use separate per-thread windows; their depths are not added.
+The root calculation includes its emitted 32-byte alignment adjustment.
+Fifteen selected spans cover saved registers, the body cookie/inventory/marker
+and callback replies. The dispatcher's first two replies occupy caller-provided
+home space; the third occupies a local slot. All listed spans are inside the
+admitted window. Saved nonvolatile registers are conservatively treated as
+potential caller data, not assumed public because they appear in an ABI prologue.
+Microsoft's [x64 calling convention](https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention)
+defines the caller home space and register-preservation obligations.
+
+The C copy adapters manipulate pointers, lengths and status rather than directly
+loading payload bytes. Actual payload copying crosses
+[EnclaveCopyIntoEnclave](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyintoenclave)
+or [EnclaveCopyOutOfEnclave](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyoutofenclave).
+Those API contracts do not establish their implementations' spill erasure.
+The model therefore records only the SDK entry return-address/home-space span:
+callee frame size and spill qualification remain explicitly unknown. It does
+not establish maximum transitive stack depth or transactional host copying on
+an SDK output-copy failure.
+
+On supported normal returns, including ordinary rejection, the reviewed wrapper
+reclaims and clears the whole window and checks it before the finish callback.
+This connects the selected locations to the earlier clear/readback campaign;
+it does not turn fatal exits, arbitrary unwinding or SDK internals into qualified
+paths. Six geometry regressions pass on Linux and Windows, covering exact
+offsets, translated addresses, complete spans, home-space bounds and alignment
+underflow. These are model tests, not runtime stack-placement measurements.
+
 ## Remaining boundary work
 
 1. Complete actual linked worker/caller and SDK-boundary review. The instrumented
    callback-frame and register campaigns above are complete for their stated
    scope, not a universal transition guarantee or uninstrumented-image proof.
    The 66 selected uninstrumented caller identities are now accounted for;
-   complete their semantic spill/handler review and the remaining linked/SDK paths.
+   seven caller bodies have the scoped spill review above. Complete the remaining
+   semantic spill/handler review and linked/SDK paths.
 2. Qualify final linked caller/spill/cleanup paths and remaining-image dump behavior.
    The concurrent scheduler's current-image WER observations above are complete
    only for their stated scope. Nonvolatile caller state is preserved, not erased.

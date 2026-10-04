@@ -67,6 +67,12 @@ and records publication of the stack wait node through shared lock state.
 Node reclamation and concurrency are not thereby qualified. The invalid-unlock
 status raiser is recursive: only its first frame is mapped, with no finite
 transitive bound. Unwind/exception/fatal cleanup remains unfinished.
+The subsequent [unwind-engine review](windows-enclave-sdk-unwind.md) binds
+three ranges and a read-only slot table, including the caller-owned flag slot.
+Eight regressions pass on both hosts; 2,417 body-byte and eleven table-byte
+mutations are rejected. Its fixed frames are accounted for, not its complete
+decoder or exception behavior. The epilogue interpreter and opcode decoder
+remain the next normal-path boundaries.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

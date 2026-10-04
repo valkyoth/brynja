@@ -1,0 +1,279 @@
+{
+  "schema": 1,
+  "status": "SAVED_UNWIND_ENGINE_FRAMES_NOT_UNWIND_QUALIFICATION",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "engine": {
+      "rva": 53112,
+      "bytes": 2281,
+      "sha256": "cd977cc7c29997eca97e1c6c969c36dba96def64d2ec2ec3cb9b1da9e5b15fe4"
+    },
+    "chain_entry": {
+      "rva": 50408,
+      "bytes": 72,
+      "sha256": "fa605d58409ea8288f78868b98fdd3eb627eb014092afb7e845aac22bfe2d9f5"
+    },
+    "code_slots": {
+      "rva": 51460,
+      "bytes": 64,
+      "sha256": "0f9ec12dccbccc31b27524f5a399ba3b1605ef562262546172fd95d805f8fd49"
+    }
+  },
+  "table": {
+    "rva": 146704,
+    "bytes": 11,
+    "sha256": "582300d33255d04975650e41052b21d6c952f080e592897c15abb33d0024ae68"
+  },
+  "direct_transfers": 9,
+  "mutations_rejected": {
+    "body_bytes": 2417,
+    "table_bytes": 11
+  },
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "maximum_transitive_depth_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "arbitrary_metadata_bounds_qualified": false,
+  "context_destination_bounds_qualified": false,
+  "sdk_self_erasure_claimed": false,
+  "side_effects": [
+    "engine updates supplied context including register bank stack pointer and instruction pointer",
+    "optional output pointers can receive handler addresses and saved-register locations",
+    "engine reuses adapter stack slot at adapter RSP+80",
+    "nested lookup passes null history but has its own transitive callees",
+    "invalid chained metadata or opcode can call recursive status raiser",
+    "normal epilogue restores saved registers without erasing the save slots"
+  ],
+  "unresolved": [
+    {
+      "rva": 48272,
+      "reason": "exception dispatch"
+    },
+    {
+      "rva": 4448,
+      "reason": "fatal cookie-failure path"
+    },
+    {
+      "rva": 6992,
+      "reason": "context/raise helper and recursive exceptional path"
+    },
+    {
+      "rva": 50488,
+      "reason": "epilogue interpreter"
+    },
+    {
+      "rva": 51532,
+      "reason": "unwind opcode decoder"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage"
+  ],
+  "modeled_capacities": [
+    128,
+    256,
+    384,
+    512
+  ],
+  "geometry_capacity_512": {
+    "copy": {
+      "engine": {
+        "frames": {
+          "engine": -15312,
+          "code_slots": -15360,
+          "chain_entry": -15360,
+          "lookup": -15392
+        },
+        "unknown_callees": [
+          {
+            "name": "epilogue interpreter entry 0xc538",
+            "offset_from_low": 50216,
+            "offset_from_high": -15320,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          },
+          {
+            "name": "unwind opcode decoder entry 0xc94c",
+            "offset_from_low": 50216,
+            "offset_from_high": -15320,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          },
+          {
+            "name": "lookup transitive callees not composed here",
+            "offset_from_low": 50136,
+            "offset_from_high": -15400,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          }
+        ],
+        "exceptional": {
+          "direct_first_raise_from_high": -16752,
+          "helper_first_raise_from_high": -16800,
+          "transitive_depth_bound": null,
+          "cleanup_qualified": false
+        },
+        "selected_spans": 9
+      },
+      "wide_helper": {
+        "frames": {
+          "engine": -15440,
+          "code_slots": -15488,
+          "chain_entry": -15488,
+          "lookup": -15520
+        },
+        "unknown_callees": [
+          {
+            "name": "epilogue interpreter entry 0xc538",
+            "offset_from_low": 50088,
+            "offset_from_high": -15448,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          },
+          {
+            "name": "unwind opcode decoder entry 0xc94c",
+            "offset_from_low": 50088,
+            "offset_from_high": -15448,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          },
+          {
+            "name": "lookup transitive callees not composed here",
+            "offset_from_low": 50008,
+            "offset_from_high": -15528,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          }
+        ],
+        "exceptional": {
+          "direct_first_raise_from_high": -16880,
+          "helper_first_raise_from_high": -16928,
+          "transitive_depth_bound": null,
+          "cleanup_qualified": false
+        },
+        "selected_spans": 9
+      }
+    },
+    "call_error": {
+      "engine": {
+        "frames": {
+          "engine": -15568,
+          "code_slots": -15616,
+          "chain_entry": -15616,
+          "lookup": -15648
+        },
+        "unknown_callees": [
+          {
+            "name": "epilogue interpreter entry 0xc538",
+            "offset_from_low": 49960,
+            "offset_from_high": -15576,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          },
+          {
+            "name": "unwind opcode decoder entry 0xc94c",
+            "offset_from_low": 49960,
+            "offset_from_high": -15576,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          },
+          {
+            "name": "lookup transitive callees not composed here",
+            "offset_from_low": 49880,
+            "offset_from_high": -15656,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          }
+        ],
+        "exceptional": {
+          "direct_first_raise_from_high": -17008,
+          "helper_first_raise_from_high": -17056,
+          "transitive_depth_bound": null,
+          "cleanup_qualified": false
+        },
+        "selected_spans": 9
+      },
+      "wide_helper": {
+        "frames": {
+          "engine": -15696,
+          "code_slots": -15744,
+          "chain_entry": -15744,
+          "lookup": -15776
+        },
+        "unknown_callees": [
+          {
+            "name": "epilogue interpreter entry 0xc538",
+            "offset_from_low": 49832,
+            "offset_from_high": -15704,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          },
+          {
+            "name": "unwind opcode decoder entry 0xc94c",
+            "offset_from_low": 49832,
+            "offset_from_high": -15704,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          },
+          {
+            "name": "lookup transitive callees not composed here",
+            "offset_from_low": 49752,
+            "offset_from_high": -15784,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          }
+        ],
+        "exceptional": {
+          "direct_first_raise_from_high": -17136,
+          "helper_first_raise_from_high": -17184,
+          "transitive_depth_bound": null,
+          "cleanup_qualified": false
+        },
+        "selected_spans": 9
+      }
+    }
+  },
+  "date": "2026-10-04",
+  "parent_commit": "f8d28c57",
+  "review": "Implementation-author saved-file frame review; not SDK execution, unwinder correctness, arbitrary metadata validation or exceptional cleanup qualification.",
+  "tests": {
+    "linux_synthetic": 8,
+    "windows_synthetic": 8,
+    "real_body_mutations_rejected_each_host": 2417,
+    "real_table_mutations_rejected_each_host": 11,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "scripts/cryptography/test-windows-enclave-sdk-unwind.py": "e2d1d362a89c07cffaf00435a2641c10a01128e1e9ad80f19a740dd95f8aac5d",
+    "scripts/cryptography/windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "scripts/cryptography/windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "scripts/cryptography/windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "scripts/cryptography/windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-unwind-linux.json": "e07f8c92326716e421ac38c0a52ee335cc40b490fc17a2daf8a3d9963a73b622",
+    "release-reports/windows-local-20261004/sdk-unwind-windows.json": "e07f8c92326716e421ac38c0a52ee335cc40b490fc17a2daf8a3d9963a73b622"
+  }
+}

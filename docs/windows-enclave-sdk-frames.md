@@ -449,3 +449,7 @@ changed in this review.
 python3 scripts/cryptography/test-windows-enclave-sdk-locking.py
 python3 scripts/cryptography/windows_enclave_sdk_locking.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+The subsequent [unwind-engine frame review](windows-enclave-sdk-unwind.md)
+accounts for its fixed allocation, caller-owned flag slot and two metadata
+helpers. It retains explicit decoder, exception and generic-context limitations.

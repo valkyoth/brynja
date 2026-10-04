@@ -50,7 +50,10 @@ The conversion/context extension binds five further bodies and the observed
 invalid-argument context destination; eight regressions and 641 real-body
 mutations pass on Linux and Windows. The saved SDK's conversion leaf rejects;
 thread-relative error writes and guarded diagnostic re-entry are documented.
-Runtime lookup/unwind and exceptional/fatal callees still have no transitive bound.
+The runtime-adapter extension adds nine ranges, including lookup/unwind entry
+frames and the context-flag helper chain; eight regressions and 1,718 actual-body
+mutations pass on Linux and Windows. Deeper cache locking, directory parsing,
+the unwind engine and exceptional/fatal callees still have no transitive bound.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

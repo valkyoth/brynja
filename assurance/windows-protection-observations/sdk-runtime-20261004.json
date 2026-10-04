@@ -1,0 +1,326 @@
+{
+  "schema": 1,
+  "status": "SAVED_SDK_RUNTIME_ADAPTERS_NOT_UNWIND_QUALIFICATION",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "lookup": {
+      "rva": 35680,
+      "bytes": 679,
+      "sha256": "3ac1ecb56ca3376765deb892ac6c85ef27082a0e7bf96430006d451f9fcf82d6"
+    },
+    "module_lookup": {
+      "rva": 89320,
+      "bytes": 351,
+      "sha256": "81c18041e2a82be1b3b57b8e302a9fc40ccf23bc3b81849fa721f40cac018ef6"
+    },
+    "normalize_entry": {
+      "rva": 50376,
+      "bytes": 23,
+      "sha256": "b25322a66e233567793bf4aa71abcac1465d9964db6c1d5effd9ba513a6d8873"
+    },
+    "unwind_adapter": {
+      "rva": 49952,
+      "bytes": 198,
+      "sha256": "2337c861aeaae91384c048201bcd48ea02207671d3777efb4821cf1b34d68e54"
+    },
+    "context_flags": {
+      "rva": 91896,
+      "bytes": 192,
+      "sha256": "8e7d5a011323c8e0b9f2d1d5e3001a9cc87ad058eb593b1df9fbbf676d564637"
+    },
+    "flags_adapter": {
+      "rva": 92096,
+      "bytes": 19,
+      "sha256": "ac13382edfad44a4a696c3a0159d0c85b8a8412f27fdb7e8d7e555a87b12443f"
+    },
+    "flags_check": {
+      "rva": 92124,
+      "bytes": 192,
+      "sha256": "dae4b78724a09fe3e60ba85f8fb8443918bf2a86edb48034be39c23a49ec8433"
+    },
+    "module_query": {
+      "rva": 117984,
+      "bytes": 11,
+      "sha256": "d9bc08a78b194736485339427e2ade4e81302903fa39b595f82e0dceca889790"
+    },
+    "directory_adapter": {
+      "rva": 88568,
+      "bytes": 53,
+      "sha256": "99b45420d0cd2d2e92437b93133317e6d90a4d2ad40071d040b4de5784967cbd"
+    }
+  },
+  "direct_transfers": 11,
+  "body_byte_mutations_rejected": 1718,
+  "geometry": {
+    "128": {
+      "copy": {
+        "engine": {
+          "frames": {
+            "lookup": -14688,
+            "module": -14784,
+            "directory": -14832,
+            "unwind": -14752,
+            "flags": -14800
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        },
+        "wide_helper": {
+          "frames": {
+            "lookup": -14816,
+            "module": -14912,
+            "directory": -14960,
+            "unwind": -14880,
+            "flags": -14928
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        }
+      },
+      "call_error": {
+        "engine": {
+          "frames": {
+            "lookup": -14944,
+            "module": -15040,
+            "directory": -15088,
+            "unwind": -15008,
+            "flags": -15056
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        },
+        "wide_helper": {
+          "frames": {
+            "lookup": -15072,
+            "module": -15168,
+            "directory": -15216,
+            "unwind": -15136,
+            "flags": -15184
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        }
+      }
+    },
+    "256": {
+      "copy": {
+        "engine": {
+          "frames": {
+            "lookup": -14816,
+            "module": -14912,
+            "directory": -14960,
+            "unwind": -14880,
+            "flags": -14928
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        },
+        "wide_helper": {
+          "frames": {
+            "lookup": -14944,
+            "module": -15040,
+            "directory": -15088,
+            "unwind": -15008,
+            "flags": -15056
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        }
+      },
+      "call_error": {
+        "engine": {
+          "frames": {
+            "lookup": -15072,
+            "module": -15168,
+            "directory": -15216,
+            "unwind": -15136,
+            "flags": -15184
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        },
+        "wide_helper": {
+          "frames": {
+            "lookup": -15200,
+            "module": -15296,
+            "directory": -15344,
+            "unwind": -15264,
+            "flags": -15312
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        }
+      }
+    },
+    "384": {
+      "copy": {
+        "engine": {
+          "frames": {
+            "lookup": -14944,
+            "module": -15040,
+            "directory": -15088,
+            "unwind": -15008,
+            "flags": -15056
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        },
+        "wide_helper": {
+          "frames": {
+            "lookup": -15072,
+            "module": -15168,
+            "directory": -15216,
+            "unwind": -15136,
+            "flags": -15184
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        }
+      },
+      "call_error": {
+        "engine": {
+          "frames": {
+            "lookup": -15200,
+            "module": -15296,
+            "directory": -15344,
+            "unwind": -15264,
+            "flags": -15312
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        },
+        "wide_helper": {
+          "frames": {
+            "lookup": -15328,
+            "module": -15424,
+            "directory": -15472,
+            "unwind": -15392,
+            "flags": -15440
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        }
+      }
+    },
+    "512": {
+      "copy": {
+        "engine": {
+          "frames": {
+            "lookup": -15072,
+            "module": -15168,
+            "directory": -15216,
+            "unwind": -15136,
+            "flags": -15184
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        },
+        "wide_helper": {
+          "frames": {
+            "lookup": -15200,
+            "module": -15296,
+            "directory": -15344,
+            "unwind": -15264,
+            "flags": -15312
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        }
+      },
+      "call_error": {
+        "engine": {
+          "frames": {
+            "lookup": -15328,
+            "module": -15424,
+            "directory": -15472,
+            "unwind": -15392,
+            "flags": -15440
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        },
+        "wide_helper": {
+          "frames": {
+            "lookup": -15456,
+            "module": -15552,
+            "directory": -15600,
+            "unwind": -15520,
+            "flags": -15568
+          },
+          "selected_spans": 18,
+          "unknown_callee_frames_qualified": false
+        }
+      }
+    }
+  },
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "maximum_transitive_depth_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "generic_context_bounds_qualified": false,
+  "kernel_query_storage_qualified": false,
+  "history_storage_cleared_by_window_proven": false,
+  "side_effects": [
+    "lookup writes output image base and can update non-null caller history",
+    "reviewed invalid-argument caller passes a null history pointer",
+    "module lookup reads cache globals and calls locking/query helpers",
+    "context validator updates four-byte context flags at offset 0x30",
+    "flags leaf may write optional result; reviewed validator passes null"
+  ],
+  "unresolved": [
+    {
+      "rva": 38480,
+      "reason": "module-cache locking"
+    },
+    {
+      "rva": 38624,
+      "reason": "module-cache unlocking"
+    },
+    {
+      "rva": 57236,
+      "reason": "image directory parsing"
+    },
+    {
+      "rva": 53112,
+      "reason": "unwind engine"
+    },
+    {
+      "rva": 48272,
+      "reason": "exception dispatch"
+    },
+    {
+      "rva": 4448,
+      "reason": "fatal cookie-failure path"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage"
+  ],
+  "date": "2026-10-04",
+  "parent_commit": "51619029",
+  "review": "Implementation-author offline selected-frame review; not independent, native, OS or unwind qualification.",
+  "tests": {
+    "linux_synthetic": 8,
+    "windows_synthetic": 8,
+    "real_body_mutations_rejected_each_host": 1718,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "scripts/cryptography/test-windows-enclave-sdk-runtime.py": "32aacc2a4c533a54987ea7348991c6715bd543fca580cc0618ab249e19bdc451",
+    "scripts/cryptography/windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-runtime-linux.json": "4df66025c667503af2b0aaa051fc7028f5af1f2292c5cdd71f92abd2c4b0fa55",
+    "release-reports/windows-local-20261004/sdk-runtime-windows.json": "4df66025c667503af2b0aaa051fc7028f5af1f2292c5cdd71f92abd2c4b0fa55"
+  }
+}

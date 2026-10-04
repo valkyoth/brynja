@@ -285,3 +285,58 @@ unqualified. No production code, release gates or native evidence changed.
 python3 scripts/cryptography/test-windows-enclave-sdk-conversion.py
 python3 scripts/cryptography/windows_enclave_sdk_conversion.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+## Runtime lookup and unwind adapters
+
+The [runtime-adapter record](../assurance/windows-protection-observations/sdk-runtime-20261004.json)
+binds nine further instruction ranges (1,718 bytes): runtime lookup, module
+lookup, entry normalization, the unwind adapter, context-flag validation and
+its two helpers, a module-query syscall stub and the directory-query adapter.
+Eight regressions and 1,718 actual saved-body byte mutations pass on Linux and
+Windows; reports from the saved DLL are identical. Eleven direct transfers are
+checked. These are author-reviewed adapters, **not** a verified Windows unwinder.
+
+The lookup uses a 72-byte fixed frame; module lookup adds 88 bytes, while its
+directory adapter adds 40. The unwind adapter is a separate branch from the
+invalid-argument caller, with a 136-byte frame; context validation adds 40.
+The flag adapter tail-jumps to a leaf which saves RBX in caller home space:
+there is no additional nested return address for that tail jump.
+
+| Selected RSP, direct formatter-invalid path at capacity 512 | Copy-result path | CallEnclave error path |
+| --- | --- | --- |
+| Runtime lookup | H - 15072 | H - 15328 |
+| Module lookup | H - 15168 | H - 15424 |
+| Directory adapter | H - 15216 | H - 15472 |
+| Unwind adapter (separate branch) | H - 15136 | H - 15392 |
+| Context validator | H - 15184 | H - 15440 |
+
+The conservative wide-helper-invalid entry shifts these by a further 128 bytes.
+Eighteen selected spans per entry account for GPR saves, staged arguments and
+results, module descriptors, leaf return/home areas and the known context-flags
+destination. Both invalid-argument entries and all four diagnostic capacities
+fit the existing modeled window. These are not bounds for deeper callees.
+
+Lookup writes an output image base and can mutate a **non-null caller-supplied
+history table**. The inspected invalid-argument caller passes null for history,
+but the generic lookup body must not be described as read-only. Module lookup
+reads cache globals and can call cache lock/unlock helpers, a syscall and image
+directory parsing. Their external storage and concurrency behavior are not
+qualified by accounting for local stack slots or pinning the syscall bytes.
+
+Context validation can update four-byte flags at context offset `0x30`. For
+the known invalid-argument caller, this destination lies in its reviewed stack
+context. Extended-context metadata reads have conditional paths; this review
+does not establish bounds for arbitrary context pointers or malformed metadata.
+The leaf can also write an optional result pointer; the reviewed validator
+passes null. Saved registers are restored, not erased by these helpers.
+
+Remaining boundaries include module-cache locking (`0x9650`, `0x96e0`), directory
+parsing (`0xdf94`), the actual unwind engine (`0xcf78`), exception dispatch
+(`0xbc90`) and fatal cookie failure (`0x1160`). Kernel storage, loaded-module
+identity, arbitrary unwinding and maximum transitive depth remain unqualified.
+Production code, existing native records and release gates are unchanged.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-runtime.py
+python3 scripts/cryptography/windows_enclave_sdk_runtime.py PATH_TO_SAVED_VERTDLL --mutations
+```

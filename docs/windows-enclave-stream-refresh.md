@@ -149,3 +149,58 @@ saved outside `target/` in the same local evidence directory, under
 `verify_scalar_cleanup.py` reproduces the scalar observation;
 `review_current_image_routes.py` reproduces the constructor snapshot and verifies
 its recorded evidence references. Both helpers are retained with the raw evidence.
+
+## Sequential batch and ParallelHash follow-up
+
+The subsequent [SHA-2/SHA-3 batch record](../assurance/windows-protection-observations/sequential-batch-refresh-20261004.json)
+and [ParallelHash record](../assurance/windows-protection-observations/sequential-parallel-refresh-20261004.json)
+cover six additional rebuilt images, each containing the reviewed 392-byte
+`PublicLockedFrame`. Prepared imports reproduce byte-for-byte locally; build
+and host source hashes reconcile with the implementation at `3b950c64`.
+
+| Sequential route | Native host work per debug/release profile |
+| --- | --- |
+| Scalar SHA-2 batch | 355 batches, 1,822 digests |
+| SHA-NI SHA-2 batch | 291 batches, 1,312 digests |
+| Scalar SHA-3/SHAKE/cSHAKE batch | 323 batches, 1,344 digests |
+| AVX2 SHA-3/SHAKE/cSHAKE batch | 323 batches, 1,344 digests |
+| Scalar ParallelHash | 332 direct and 256 retained comparisons |
+| AVX2 ParallelHash | 332 direct and 256 retained comparisons |
+
+Scalar component suites pass 10, 10 and 16 tests respectively. Accelerated
+component/resident/worker suites pass 9/4/12/1 for SHA-2, 11/12/1 for SHA-3 and
+11/20/1 for ParallelHash. Host lifecycle checks pass 32 tests (7 ignored) for
+the shared SHA-2 feature profile and 45 (11 ignored) for the shared SHA-3 and
+ParallelHash profile, in debug and release. These shared checks are not counted
+again for every image. Each native campaign is selected explicitly despite its
+normal ignored status. Scoped Windows Clippy passes for all three families.
+ParallelHash's saved oracle is regenerated and compared locally.
+
+One incomplete SHA-3 capture is excluded: the native scalar test passed, but
+the capture helper expected `SCALAR` instead of the test's `scalar` marker.
+After correcting that exact marker check, the complete SHA-3 campaign was
+rerun in a fresh directory and passed. Original logs remain retained.
+No production code changed, and this refresh is not a fresh mutation campaign
+or all-toolchain sweep.
+
+Accelerated negative tests deliberately corrupt export metadata. They verify
+rejection without output commit and quarantine, then observe `Error::Release`:
+uncertain resources remain until the isolated child process exits. That result
+is **not** evidence of confirmed clean release on those injected paths.
+Positive execution uses development transport; production constructors reject
+the development signatures. Temporary signing keys were removed, and signing
+compatibility warnings remain recorded. These sequential routes do not prove
+multibuffer SIMD, concurrent scheduling or dedicated x86 SHA512 execution.
+
+The [updated constructor snapshot](../assurance/windows-protection-observations/current-image-routes-sequential-20261004.json)
+now records development refreshes for 18 of 19 public opening routes. Only the
+bounded retained SHA-256 image refresh remains; the earlier 12-route snapshot
+is preserved as a historical observation. Whole-image caller/spill and SDK
+review, remaining-image dump coverage and independent retest are still open.
+Release-gate policy and production-signing requirements are unchanged.
+
+Raw builds, signed images, binaries and logs remain outside `target/`, beside
+the earlier captures, in `sha2-seq-*`, `sha3-seq-*` and `parallel-seq-*`
+directories. `verify_sequential_batch_cleanup.py` and
+`verify_sequential_parallel_cleanup.py` reproduce the new records;
+`review_sequential_image_routes.py` checks their constructor references.

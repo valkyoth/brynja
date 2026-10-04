@@ -467,7 +467,10 @@ unqualified.
    also identifies old wrappers in saved SHA-NI SHA-2, AVX2 SHA-3, KMAC and
    TupleHash streaming manifests. SHA-2 additionally differs in its C entry and
    worker-test script; the other three differ only in the recorded wrapper.
-   Refresh these distinct streaming images before claiming new-wrapper coverage.
+   The subsequent [streaming refresh](windows-enclave-stream-refresh.md) completes
+   rebuilds and native worker/debug-release host tests for SHA-2 and SHA-3,
+   binding both to the reviewed wrapper. KMAC, TupleHash and other unreconciled
+   images remain; the historical inventory is not relabeled as current evidence.
 
 The Windows ABI distinguishes volatile XMM0–5 from nonvolatile XMM6–15, while
 upper YMM halves are volatile. A blanket `vzeroall` would violate ordinary

@@ -51,9 +51,11 @@ batches per profile, plus lifecycle tests and scoped Clippy. Positive execution
 uses internal development transport; production constructors still reject the
 development signatures. This does not replace remaining-image dump qualification.
 A [four-stream manifest review](../assurance/windows-protection-observations/stream-refresh-inventory-20261004.json)
-confirms the saved SHA-NI SHA-2, AVX2 SHA-3, KMAC and TupleHash streaming images
-still record the older wrapper and need refresh. These are distinct from the
-three refreshed multibuffer images; this is not an exhaustive image inventory.
+identified older wrappers in the saved SHA-NI SHA-2, AVX2 SHA-3, KMAC and TupleHash
+streaming images. The subsequent [streaming refresh](windows-enclave-stream-refresh.md)
+now covers SHA-2 and SHA-3: rebuilt images, native VBS campaigns and debug/release
+host tests pass with the reviewed wrapper. KMAC and TupleHash remain to refresh.
+These are distinct from the three multibuffer images; the inventory is not exhaustive.
 Whole-image caller/spill review,
 remaining-image dump coverage and image refresh are unfinished. The
 chronological development entries below retain their original scope and should

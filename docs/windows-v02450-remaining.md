@@ -80,6 +80,14 @@ No additional ordinary callees were introduced by those two decoders. Generic
 unwind correctness, arbitrary context/metadata bounds and exception cleanup
 remain unqualified; the next work is the exception/fatal boundary and broader
 whole-image qualification.
+The subsequent [exception/fatal storage review](windows-enclave-sdk-unwind.md#exception-and-fatal-storage-boundary)
+now binds those two bodies and their syscall stubs: ten regressions and 929
+actual-body byte mutations pass on Linux and Windows. It accounts for selected
+fixed frames while leaving runtime-sized context writes unknown, and explicitly
+places fatal register capture in SDK globals outside the clearing stack window.
+Extended-context helpers, exception dispatch/restore and fatal diagnostic
+callees remain unqualified. This does not add arbitrary exception or fatal-path
+cleanup guarantees; no production code or release-gate policy changed.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

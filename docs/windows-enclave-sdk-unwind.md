@@ -126,3 +126,67 @@ campaign or release-gate policy changed.
 python3 scripts/cryptography/test-windows-enclave-sdk-decoders.py
 python3 scripts/cryptography/windows_enclave_sdk_decoders.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+## Exception and fatal storage boundary
+
+The [exceptional-storage observation](../assurance/windows-protection-observations/sdk-exception-20261004.json)
+binds the complete exception body `0xbc90..0xbea6`, cookie-failure body
+`0x1160..0x12d5`, and two eleven-byte syscall stubs. Eighteen direct calls,
+eight instruction anchors and fifteen RIP-relative global references have
+separate checks. Ten regressions pass on Linux and Windows; all 929 body-byte
+mutations are rejected on each host, and the saved-file reports match.
+These remain offline author-review results, not SDK execution or a new gate.
+
+The exception function pushes three registers and reserves 336 bytes, making
+a 360-byte fixed frame. It saves three other registers in caller home space,
+initializes a 216-byte history table and uses fixed locals for its cookie,
+context size, image base and unwind outputs. Unlike the previously reviewed
+invalid-argument and fatal callers, its runtime lookup receives a **non-null
+history table**. Accounting for that table is not a proof of arbitrary history
+write bounds or general unwinder correctness. It also modifies the supplied
+exception record's flags and instruction-pointer field.
+
+The context size comes from a helper and is loaded as an unsigned DWORD.
+The emitted caller rounds `(size + 15)` down to a multiple of sixteen in
+64-bit arithmetic, probes the stack, and subtracts the result from RSP.
+Even `0xffffffff` rounds to `0x100000000`, not zero. Model regressions cover
+zero, alignment edges, the maximum DWORD and crossing the clearing-window
+boundary. These are arithmetic tests, **not observed runtime sizes**.
+
+The context pointer is dynamic RSP+64. A pointer and an allocation are not
+the same as a proven write envelope: context initialization/capture and their
+feature-dependent storage still need review. The saved observation therefore
+leaves actual dynamic allocation, context write extent and maximum transitive
+depth unknown. The normal epilogue resets RSP and restores registers without
+an explicit context wipe. Dispatch, context restoration, recursive raising,
+stack-probe page addresses and kernel state are not qualified by this record.
+
+The cookie checker tail-jumps to the fatal function, reusing its return slot.
+The fatal function reserves 136 bytes and stages pointers, arguments and two
+security-cookie copies on its stack. Crucially, its register-capture destination
+is **SDK global storage at RVA `0x28860`**, with the previously inspected
+capture helper's 768-byte envelope. Selected fatal-record writes occupy an
+envelope at RVA `0x287c0` of 40 bytes. Both must belong to one writable,
+non-executable image section; zero-initialized virtual storage need not have
+raw bytes in the file. Neither region belongs to the clearing stack window.
+The review does not claim these globals are erased, resident, concurrency-safe
+or covered by a successful-return guarantee.
+
+For the selected diagnostic-buffer origin at capacity 512, the exception fixed
+RSP is H-12960 and the fatal RSP is H-12736 on the copy-result path. The
+CallEnclave-error path shifts each by another 256 bytes. Twelve selected fixed
+spans fit the existing window at all four diagnostic capacities. No fixed
+number here includes the runtime context allocation or every transitive callee.
+The two syscall stubs identify transitions only; their presence does not prove
+kernel cleanup or unconditional termination.
+
+This narrows the remaining work to extended-context helpers, dispatch/restore,
+fatal diagnostic callees and the previously recorded loaded-module, external
+storage and whole-image limits. It does not expand the product guarantee to
+fatal failure or arbitrary exception handling. Production cryptography and
+release-gate policy are unchanged.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-exception.py
+python3 scripts/cryptography/windows_enclave_sdk_exception.py PATH_TO_SAVED_VERTDLL --mutations
+```

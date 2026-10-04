@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "status": "PRIVATE_RUST_SCOPED_VBS_HOST_PASS",
+  "implementation_parent": "f977f1c0",
+  "compiler": "1.98.1",
+  "platform": "x86_64-pc-windows-msvc",
+  "enclave_execution": true,
+  "production_qualified": false,
+  "production_signed": false,
+  "independently_verified": false,
+  "whole_image_cleanup_qualified": false,
+  "native_cases": 28,
+  "oracle_cases": 25,
+  "failure_cases": 3,
+  "maximum_executed_waves": 33,
+  "runtime_mutations_rejected": 8,
+  "compiled_ownership_negatives": 10,
+  "runner_regressions": 3,
+  "clippy": "Isolated Windows host passes with warnings denied",
+  "development_image": {
+    "sha256": "5fbb52089ed1627604acf91f2127d900d3429c1fbe0491165388253fa2dc536f",
+    "threads": 5,
+    "system_imports_prepared_before_signing": true,
+    "prepared_image_reproduced_byte_for_byte_from_retained_build": true,
+    "production_signature_rejected": true,
+    "temporary_key_removed": true,
+    "signing_compatibility_warning_retained": true
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261004/rust-parallel-host-owner-checked/rust-host-results.json": "58b87f1d15c4e9af9d2d6a0fe210d49a343d2774971efc66f5455ac7a464a7af",
+    "release-reports/windows-local-20261004/rust-parallel-host-owner-checked/rust-host-build.json": "e5eef0a15c4e596e1bd1d2582691d4650f134e5c12b9377c2aab6801d0aa7016",
+    "release-reports/windows-local-20261004/rust-parallel-host-owner-checked/rust-host.exe": "5377c4f6200edd6af21faae8cb4e4db41be3c4fc8bfbe00b6a48f4b785b7a627",
+    "release-reports/windows-local-20261004/scheduler-rust-admitted/signed.dll": "5fbb52089ed1627604acf91f2127d900d3429c1fbe0491165388253fa2dc536f",
+    "release-reports/windows-local-20261004/scheduler-rust-admitted/signing.json": "9056f89eda4bd3346c60d3b773973d4f69360e2066a7d13cc145767e7f4ff04f",
+    "release-reports/windows-local-20261004/scheduler-rust-admitted/sign.log": "42e2f7727b8e653aff219056f18d0d03dd6f8ba65c0eefaa0149f1fc0899a792",
+    "release-reports/windows-local-20261004/scheduler-import-prepared.dll": "672f7f7e38aaa5be6b63df431edcb65a9ffd41f589a4a95f510448297436c0c3"
+  },
+  "limits": [
+    "Private one-shot executable and raw fixture header, not the supported public host API",
+    "Compiled source-bound five-thread loader adaptation; shipping one-thread admission unchanged",
+    "Public oracle data only; typed application inputs and output/declassification integration remain pending",
+    "Development signature rejected by production opening; private development branch is not a shipping fallback",
+    "Child-only working-set allowance does not waive real VirtualLock or page observations",
+    "Per-wave scoped workers; no throughput or peak native overlap measurement in this adapter",
+    "No successful cleanup claim for fatal abort, permanently blocked workers or privileged snapshots",
+    "Windows ARM64, production signing, independent review and whole-image qualification remain pending",
+    "Earlier intermediate campaigns failed; only the complete owner-checked campaign is counted",
+    "No production crate, dependency, kernel or release-gate change"
+  ],
+  "next": "Supported public host scheduler interface and final-image qualification"
+}

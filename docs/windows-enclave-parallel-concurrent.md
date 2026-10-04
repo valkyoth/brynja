@@ -496,7 +496,7 @@ checking is boundary injection, not 16,384 executed native waves.
 python3 scripts/cryptography/test-windows-enclave-host-scheduler.py host-scheduler-check
 ```
 
-These are ordinary process tests, **not a connected Rust/VBS host API**. The
+These component tests are ordinary process tests, **not connected Rust/VBS tests**. The
 internal worker closure must eventually be provided only by the pinned-image OS
 transport; it is not an application callback contract. The adapter still needs
 per-thread residency callbacks, exact image entry/import admission, disjoint
@@ -504,8 +504,67 @@ window observations and cleanup validation. The existing 31-case Python-driven
 VBS capture also passed after reboot, using the unchanged development-signed
 image; it does not qualify this new Rust transport component inside VBS.
 
-Next: connect this scoped host component to the trusted Windows loader and
-callbacks, expose the supported public scheduler API, then qualify that image.
+The later private transport experiment below connects this component; neither
+step alone establishes a supported public scheduler API.
+
+## Private Rust/VBS transport
+
+The [native Rust-host record](../assurance/windows-protection-observations/parallel-rust-host-20261004.json)
+connects the scoped scheduler to real Windows VBS enclave entries. Image and
+directory handles remain pinned through root execution, all worker joins and
+confirmed enclave teardown. Each scoped worker installs its own thread-bound
+callback context; neither that guard nor the root owner implements
+Send/Sync/Copy/Clone/Debug. Callback errors are latched without suppressing later
+cleanup notifications, and unwinding cannot cross the Windows callback ABI.
+
+Before admission, each root/worker window must be aligned, inside the enclave,
+disjoint from other tracked windows and actually locked by `VirtualLock`.
+Completion checks native body/full-frame clearing and guard restoration, then
+observes that pages are unlocked. Failed computations must pass these cleanup
+checks too. Worker records cannot be reused before joins and verification.
+
+Under Rust 1.98.1 on the local Windows x64 VBS development VM:
+
+- 25 oracle cases passed across all four identities, empty inputs/output,
+  partial-bit framing and up to 33 waves.
+- Three failure cases passed: root and worker admission denial before locking,
+  and worker denial after locking. Output stayed untouched, cleanup completed
+  and subsequent execution was rejected.
+- Eight compiled runtime mutations were rejected, covering lock tracking,
+  actual unlock, verified/finished state, root/leaf result handling, image thread
+  count and production signature checking. Compiler failures do not count.
+- Ten compiled ownership negatives and host Clippy with warnings denied passed.
+  Three runner regressions cover exact-anchor mutation and LF/CRLF preservation.
+
+The existing one-thread shipping loader is unchanged. This isolated probe copies
+its pinning, PE/import validation and signature checks, with an exact five-thread
+image contract. The earlier diagnostic image's SDK import records were correctly
+rejected. A separate copy passed the existing offline system-import preparation
+after VEIID and before development signing; the parser was not relaxed. The
+temporary signing key was removed and the SDK compatibility warning retained.
+The signed image hash is a compiled probe policy input, not runtime sidecar trust.
+
+Production opening must reject that development signature. Only the private
+probe branch proceeds, and only after observing that rejection. This is **not
+production signing or qualification**. The child process receives an explicit
+working-set allowance; each actual lock and page observation remains mandatory.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-rust-host-runner.py
+python3 scripts/cryptography/test-windows-enclave-parallel-rust-host.py FRESH_DIRECTORY SIGNED_DLL
+```
+
+This executable still uses a private raw fixture header and one operation per
+image with public oracle inputs/output. Typed borrowed application inputs and the
+supported public output/declassification interface are not integrated yet. Scoped
+threads are created per wave; this campaign claims neither throughput nor a
+measured peak overlap. Fatal abort, permanently blocked workers, caller copies
+and privileged snapshots retain their documented limits. Whole-image
+register/spill/dump qualification, Windows ARM64, production signing and
+independent review remain pending. No production crypto or release gate changed.
+
+Next: integrate the supported public host scheduler interface, then complete
+final-image qualification and review.
 
 ## Author verification
 

@@ -33,8 +33,11 @@ uninstrumented image are now accounted for, including interior destructor
 funclets and reference-disambiguated panic helpers. Handler metadata is bound
 to the objects, not qualified for safe unwinding or erasure. A selected seven-body
 caller review now maps fifteen saved-register/reply spans into the cleared window,
-with six geometry regressions passing on Linux and Windows. SDK-internal frames
-remain unknown; this is partial inspection, not whole-image stack-depth or cleanup
+with six geometry regressions passing on Linux and Windows. A subsequent
+[saved SDK-file review](windows-enclave-sdk-frames.md) maps the transition's
+nonvolatile register saves and copy-entry frames into that window; six additional
+tests pass on Linux and Windows. Loaded-module identity, kernel storage and
+remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Whole-image caller/spill review,
 remaining-image dump coverage and image refresh are unfinished. The
 chronological development entries below retain their original scope and should

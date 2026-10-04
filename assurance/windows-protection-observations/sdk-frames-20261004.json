@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "status": "SAVED_SDK_SELECTED_FRAMES_NOT_OS_QUALIFICATION",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "bodies": {
+    "CallEnclave": {
+      "rva": 4112,
+      "bytes": 63,
+      "sha256": "64b09215565fd3f4ce7831fd35b92e9e9a2596abb4fa312fc416f715b33bb4c5"
+    },
+    "EnclaveCopyIntoEnclave": {
+      "rva": 16528,
+      "bytes": 23,
+      "sha256": "bfeef0b3ce83c8fd908bc4ebd92ce7fefc23a61e9b1beb32bfe4f7246c1b554a"
+    },
+    "EnclaveCopyOutOfEnclave": {
+      "rva": 16560,
+      "bytes": 23,
+      "sha256": "0fd439b6ff795ba2d7ee7ae117ed159fc01dcd4cacad84348099d67c2b6af116"
+    },
+    "RtlCallEnclave": {
+      "rva": 118944,
+      "bytes": 207,
+      "sha256": "04ca5aa3cd4a2ee2291719543173fc3a8f3571d2f72693cdc8c1ae2846a4d4bf"
+    },
+    "copy_syscall_stub": {
+      "rva": 117872,
+      "bytes": 11,
+      "sha256": "a00316bad363f3a27d8074a96733391f440f0d996d91a66a869f1bf93fd459d8"
+    },
+    "call_syscall_stub": {
+      "rva": 118160,
+      "bytes": 11,
+      "sha256": "d8ff88f0291026c4649326ab8909b81b9eae746f61d66e8dbad2df54485d636c"
+    }
+  },
+  "geometry": {
+    "spans": [
+      {
+        "name": "CallEnclave saved RBX",
+        "offset_from_low": 53872,
+        "offset_from_high": -11664,
+        "bytes": 8
+      },
+      {
+        "name": "CallEnclave argument/result home",
+        "offset_from_low": 53896,
+        "offset_from_high": -11640,
+        "bytes": 8
+      },
+      {
+        "name": "RtlCallEnclave XMM6",
+        "offset_from_low": 53568,
+        "offset_from_high": -11968,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM7",
+        "offset_from_low": 53584,
+        "offset_from_high": -11952,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM8",
+        "offset_from_low": 53600,
+        "offset_from_high": -11936,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM9",
+        "offset_from_low": 53616,
+        "offset_from_high": -11920,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM10",
+        "offset_from_low": 53632,
+        "offset_from_high": -11904,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM11",
+        "offset_from_low": 53648,
+        "offset_from_high": -11888,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM12",
+        "offset_from_low": 53664,
+        "offset_from_high": -11872,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM13",
+        "offset_from_low": 53680,
+        "offset_from_high": -11856,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM14",
+        "offset_from_low": 53696,
+        "offset_from_high": -11840,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave XMM15",
+        "offset_from_low": 53712,
+        "offset_from_high": -11824,
+        "bytes": 16
+      },
+      {
+        "name": "RtlCallEnclave RBP",
+        "offset_from_low": 53768,
+        "offset_from_high": -11768,
+        "bytes": 8
+      },
+      {
+        "name": "RtlCallEnclave RBX",
+        "offset_from_low": 53776,
+        "offset_from_high": -11760,
+        "bytes": 8
+      },
+      {
+        "name": "RtlCallEnclave RDI",
+        "offset_from_low": 53784,
+        "offset_from_high": -11752,
+        "bytes": 8
+      },
+      {
+        "name": "RtlCallEnclave RSI",
+        "offset_from_low": 53792,
+        "offset_from_high": -11744,
+        "bytes": 8
+      },
+      {
+        "name": "RtlCallEnclave R12",
+        "offset_from_low": 53800,
+        "offset_from_high": -11736,
+        "bytes": 8
+      },
+      {
+        "name": "RtlCallEnclave R13",
+        "offset_from_low": 53808,
+        "offset_from_high": -11728,
+        "bytes": 8
+      },
+      {
+        "name": "RtlCallEnclave R14",
+        "offset_from_low": 53816,
+        "offset_from_high": -11720,
+        "bytes": 8
+      },
+      {
+        "name": "RtlCallEnclave R15",
+        "offset_from_low": 53824,
+        "offset_from_high": -11712,
+        "bytes": 8
+      },
+      {
+        "name": "call syscall return",
+        "offset_from_low": 53512,
+        "offset_from_high": -12024,
+        "bytes": 8
+      },
+      {
+        "name": "copy syscall return",
+        "offset_from_low": 54040,
+        "offset_from_high": -11496,
+        "bytes": 8
+      }
+    ],
+    "rtl_frame_from_high": -12016,
+    "copy_frame_from_high": -11488,
+    "kernel_storage_qualified": false,
+    "status_helper_depth_qualified": false,
+    "sdk_self_erasure_claimed": false,
+    "maximum_transitive_depth_qualified": false
+  },
+  "date": "2026-10-04",
+  "implementation_parent": "aee4ba21",
+  "focused_tests": 6,
+  "focused_platforms": [
+    "linux",
+    "windows"
+  ],
+  "body_byte_mutations": 338,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/test-windows-enclave-sdk-frames.py": "f859b627622c2ded45bec9148e4d80db86fb56335463dba97245d731dcc2fc34",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "assurance/windows-protection-observations/scheduler-spills-20261004.json": "dba32e9f5cbe3df53f7a7a2c895376cbd994eca0c0c82414f86054ce6bf26298"
+  },
+  "artifact_path": "release-reports/windows-local-20261004/sdk-system32-review/vertdll.dll",
+  "limitations": [
+    "File copied from the VM System32 directory; actual historically loaded enclave-module identity is not established.",
+    "Build-specific manual instruction review; no SDK-wide or OS-kernel taint/erasure proof.",
+    "Normal-return selected stack locations only; no fatal or arbitrary unwind cleanup claim.",
+    "Error/status helpers and remaining linked callees are not included in the depth model.",
+    "SDK register saves are restored, not explicitly wiped by these SDK bodies; the separate caller window cleanup is required."
+  ]
+}

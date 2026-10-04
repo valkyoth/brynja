@@ -381,6 +381,12 @@ underflow. These are model tests, not runtime stack-placement measurements.
 
 ## Remaining boundary work
 
+The subsequent [selected SDK-frame inspection](windows-enclave-sdk-frames.md)
+maps the saved System32 library's `RtlCallEnclave` register saves and copy-entry
+frames into this scheduler window. It narrows the earlier SDK unknowns for one
+file only; loaded-module identity, kernel storage and full callee depth remain
+unqualified.
+
 1. Complete actual linked worker/caller and SDK-boundary review. The instrumented
    callback-frame and register campaigns above are complete for their stated
    scope, not a universal transition guarantee or uninstrumented-image proof.

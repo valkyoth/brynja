@@ -15,6 +15,12 @@ explicit acceleration and unchanged release-gate policy.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.
+The latest [loaded SDK observation](windows-enclave-loaded-sdk.md) matches all
+121,931 saved `.text` bytes inside a separate native diagnostic enclave, with
+three rejection controls and eight regressions per host. It does not qualify
+other SDK sections or retrospectively bind the nineteen application images.
+Exact image-hash reconciliation confirms the six existing WER observations cover
+only the current concurrent image; the other eighteen lack those dump observations.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

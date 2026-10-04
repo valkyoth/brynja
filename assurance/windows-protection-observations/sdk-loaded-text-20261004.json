@@ -1,0 +1,88 @@
+{
+  "all_existing_images_qualified": false,
+  "attestation_verified": false,
+  "deleted": true,
+  "image_sha256": "e7e494b316cf7e401c0b01b88818ae36c964f8a5c9bb65dec87ad1837481374f",
+  "loaded_text_matches_saved": true,
+  "production_qualified": false,
+  "samples": [
+    [
+      1112693065,
+      4096,
+      18446744073709552000,
+      18446744073709552000
+    ],
+    [
+      1112693065,
+      4096,
+      18446744073709552000,
+      18446744073709552000
+    ],
+    [
+      1112693065,
+      4096,
+      18446744073709552000,
+      18446744073709552000
+    ]
+  ],
+  "saved_file_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "schema": 1,
+  "source_sha256": {
+    "assurance/windows-enclave-probe/sdk_identity.c": "09bafdf713a13990d1e7a272fa4c2c2368831a85cc8e90aaf2153ee6296ec2b4",
+    "assurance/windows-enclave-probe/synthetic.c": "34751a8b80406d216eb1a3597579a14fc01ce118e7504e394183e645c6bbdfc3",
+    "scripts/cryptography/windows_enclave_lifecycle.py": "0232dfa69625cfc757baec318c49edd304b118fcb34b876d2c832899298e5ea4",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_sdk_identity.py": "4fbc91a2907f9d3ecadc5504b523e7bb97957f094ab5a2dce3024f15d4189208",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "scripts/cryptography/windows_protection_api.py": "38295962fd05343bf0527abf468da3009c2ab00e4f8ae1c8b2a434f5558860f7",
+    "scripts/cryptography/windows_protection_probe.py": "17d18806439f6e1ef5eadbbd669307861c358dfabc504eb8afe8ee5e42e36e09",
+    "scripts/cryptography/test-windows-enclave-sdk-identity.py": "bc1b831f1cfe4d3c0633e47ceae0708484f573f783bbee01120a817a67611b32"
+  },
+  "status": "DEVELOPMENT_LOADED_TEXT_COMPARISON",
+  "terminated": true,
+  "whole_image_qualified": false,
+  "whole_module_identity_proven": false,
+  "windows_build": 26300,
+  "date": "2026-10-04",
+  "implementation_parent": "cf703aa3",
+  "secret_material_used": false,
+  "release_gate_changed": false,
+  "development_signing_only": true,
+  "text": {
+    "rva": 4096,
+    "bytes": 121931,
+    "sha256": "6fbe9e88230032331d8b39d683a63538762ce58b752a7d7df712230a9faa9998"
+  },
+  "focused_regressions": {
+    "linux": 8,
+    "windows": 8
+  },
+  "artifact_directory": "release-reports/windows-local-20261004",
+  "artifact_sha256": {
+    "sdk-loaded-identity-native.json": "dd9b48e6c38c63cc718e3ea112dfa4a6dce52b4c8953970871abfc1cb8b3dc75",
+    "sdk-loaded-identity/reference.json": "d20fd61b88baf01282d3db25a4ea3e3cfc9f6ec16cd401473919f5956d05c9d5",
+    "sdk-loaded-identity/sdk_expected.h": "032e22282e92b432b22c2870f53e79a7082a8974379d2da91377dd515316066c",
+    "sdk-loaded-identity/normal.dll": "58a75639537e90586ebdf3776a255bcb44d2c934b6bea8eba278d7bdb1befea5",
+    "sdk-loaded-identity/sdk.obj": "e34878ce3140704afabf0ee436cec5e420d2ae4222abbdb68896e26c53c5dd54",
+    "sdk-loaded-identity-signed-v2/signed.dll": "e7e494b316cf7e401c0b01b88818ae36c964f8a5c9bb65dec87ad1837481374f",
+    "sdk-loaded-identity-signed-v2/signing.json": "a1904945288019d1b7aa305f3aa3f946c21781bd6a6f4564bafba5440906aaab"
+  },
+  "dump_reconciliation": {
+    "inventory": "current-image-routes-complete-20261004.json",
+    "inventory_sha256": "a595ef2626e23aee215f7c215f928f8f16634488e1d38cb7f866face0f6bba20",
+    "dump_record": "scheduler-dump-20261004.json",
+    "dump_record_sha256": "628c56a470ea43757f732dafb3523f458c729157ddb4b833f30c3b2c81d408c7",
+    "current_image_routes": 19,
+    "scoped_dump_observations": 6,
+    "matching_route": "parallel_concurrent/mod.rs::open_avx2",
+    "other_current_images_without_this_dump_evidence": 18,
+    "new_dumps_collected": false
+  },
+  "limitations": [
+    "Public diagnostic image only; not retrospective loaded-code evidence for the 19 application images.",
+    "Complete saved .text virtual extent compared; fothk, readonly data, writable data and ucrtbase_enclave are not compared.",
+    "Runtime comparison is not full-file hashing, enclave UniqueId verification, attestation or production signing.",
+    "No secret payloads, stack clearing, dump exclusion or all-path cleanup proved by this comparison.",
+    "Six earlier scoped WER observations bind only the current concurrent scheduler image, not the other eighteen current images."
+  ]
+}

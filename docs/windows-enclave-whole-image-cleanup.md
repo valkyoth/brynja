@@ -6,6 +6,12 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The later [current sequential-image campaign](windows-enclave-current-image-dumps.md)
+adds 72 scoped dump observations and exact shared-wrapper bindings across all
+eighteen sequential images. Combined with the concurrent scheduler results below,
+every current image has scoped dump evidence, not complete caller/runtime
+qualification. Historical subsections retain the limits of their own campaigns.
+
 ## Completed wrapper boundary, 2026-10-04
 
 Both `PublicLockedFrame` and `PublicStackFrame` now clear XMM0–5 and, when

@@ -53,3 +53,7 @@ the six root/worker/output WER observations match only
 current images. This reconciliation collected no new dumps and promotes no
 route to whole-image-qualified status. Further current-image evidence and the
 remaining caller/runtime cleanup review precede independent retest.
+
+Subsequently, the [current-image dump campaign](windows-enclave-current-image-dumps.md)
+collected 72 new observations for those eighteen sequential images. This does not
+expand this SDK diagnostic's loaded-code identity claim to those images.

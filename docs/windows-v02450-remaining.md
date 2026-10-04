@@ -19,8 +19,14 @@ The latest [loaded SDK observation](windows-enclave-loaded-sdk.md) matches all
 121,931 saved `.text` bytes inside a separate native diagnostic enclave, with
 three rejection controls and eight regressions per host. It does not qualify
 other SDK sections or retrospectively bind the nineteen application images.
-Exact image-hash reconciliation confirms the six existing WER observations cover
-only the current concurrent image; the other eighteen lack those dump observations.
+The subsequent [current-image dump campaign](windows-enclave-current-image-dumps.md)
+adds 72 observations across the eighteen unchanged sequential images, with real
+ordinary-memory controls and confirmed cleanup. Together with the six existing
+concurrent-image observations, all nineteen current images now have scoped dump
+evidence at their explicitly different checkpoints. All eighteen sequential
+images also bind to the tested clearing wrapper's exact bytes. Whole-image
+caller/runtime qualification remains separate; these results do not add
+arbitrary-exception, fatal-path, mid-compression or production-signing guarantees.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

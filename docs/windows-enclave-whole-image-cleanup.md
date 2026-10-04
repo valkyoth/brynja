@@ -230,11 +230,11 @@ Caller home-space saves and nonvolatile vector saves outside opaque kernel
 blocks still require caller-level reasoning. Opaque-block no-spill evidence
 does not erase those ABI obligations.
 
-Ten selected entries remain explicitly unresolved: two panic helpers lack a
+That initial inspection left ten selected entries unresolved: two panic helpers lacked a
 unique byte match; three Rust functions share sections with four exception
 funclets; and `PublicStackBody` uses security-cookie handler metadata outside
 this decoder's supported subset. Missing matches are not declared dead code,
-and unsupported unwind layouts are not counted as passes or vulnerabilities.
+and unsupported unwind layouts were not counted as passes or vulnerabilities.
 Dependency objects retain exception funclets despite the top-level archive's
 abort setting; that setting alone is not evidence that all handler paths are
 absent. The review uses Microsoft's
@@ -249,6 +249,51 @@ verifier is `release-reports/windows-local-20261004/review_linked_callers.py`;
 it also verifies the earlier saved build/signing/wrapper chain. The artifacts
 are outside `target/`. This is author inspection, not independent review,
 production signing, whole-image cleanup qualification or a new release gate.
+
+### Follow-up: handler and funclet identities
+
+The ten identity gaps above are now accounted for against the same signed image.
+A separate helper reads the **actual object's** `.pdata` relocation records to
+derive exact function ranges, including interior destructor funclets. It does
+not infer a function's end from the next symbol or include alignment padding.
+The saved assembly listing calls one destructor `dtor$54`, while the linked
+object names it `dtor$55`; the object record is authoritative. The reconciled
+selection remains 57 Rust runtime entries plus nine C entries, not an inventory
+of every linked or external function.
+
+For the three Rust parents, four destructor funclets and `PublicStackBody`, the
+review binds the actual function bytes and the complete associated `.xdata`
+section, allowing only enumerated image-relative relocations. The parents'
+handler references agree on `__CxxFrameHandler3`; all four destructor targets
+match their bound code ranges. The C body's handler reference identifies
+`__GSHandlerCheck`. This binds compiler metadata and reference targets; it does
+**not** interpret the language-specific tables as proof that an exception can
+unwind safely, run all clearing operations or preserve protected residency.
+
+The two panic helpers have identical non-relocated code shapes but different
+targets. Already-verified caller references disambiguate them. Their call chain
+reaches the bound Rust panic handler, then the exact C `PrivateWaveAbort` body:
+`mov ecx,7; int 0x29; ret`. Microsoft's
+[fast-fail contract](https://learn.microsoft.com/en-us/cpp/intrinsics/fastfail)
+does not return or invoke exception handlers. The trailing emitted `ret` is not
+a recovery path; retained destructor metadata is not panic-cleanup evidence.
+This is static inspection of the existing image, not a new fatal-path experiment.
+
+Eleven new synthetic tests pass on Linux and Windows, covering interior ranges,
+padding/alias rejection, malformed runtime relocations, metadata mutations,
+handler targets, ambiguous code and conflicting incoming references. All 49
+existing focused caller/wrapper/register/callback/transition/dump tests still
+pass. The earlier verifier is rerun to regenerate the incoming reference anchors;
+an arbitrary user-supplied RVA is not accepted as an observation by that workflow.
+The helpers themselves are review tools, not hardened untrusted-evidence loaders.
+
+The [follow-up record](../assurance/windows-protection-observations/caller-handlers-20261004.json)
+binds all ten additional records and the object/listing identity reconciliation.
+Run the saved `release-reports/windows-local-20261004/review_linked_handlers.py`
+to reproduce this inspection. All 66 selected caller identities are accounted
+for, but actual caller/SDK spill semantics, total stack depth and whole-image
+cleanup remain unfinished. No image, cryptographic implementation, public API
+or release gate changed.
 
 ## Historical diagnosis before the change
 
@@ -291,8 +336,8 @@ it must not be presented as a check of the changed wrappers or new images.
 1. Complete actual linked worker/caller and SDK-boundary review. The instrumented
    callback-frame and register campaigns above are complete for their stated
    scope, not a universal transition guarantee or uninstrumented-image proof.
-   The selected uninstrumented caller binding above is partial: resolve the ten
-   unsupported/ambiguous entries and review the remaining linked/SDK paths.
+   The 66 selected uninstrumented caller identities are now accounted for;
+   complete their semantic spill/handler review and the remaining linked/SDK paths.
 2. Qualify final linked caller/spill/cleanup paths and remaining-image dump behavior.
    The concurrent scheduler's current-image WER observations above are complete
    only for their stated scope. Nonvolatile caller state is preserved, not erased.

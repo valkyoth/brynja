@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "implementation_parent": "2805e601",
+  "status": "SELECTED_CALLER_IDENTITIES_ACCOUNTED_FOR_NOT_WHOLE_IMAGE_QUALIFICATION",
+  "selected_entries": 66,
+  "previous_bound_entries": 56,
+  "additional_bound_entries": 10,
+  "focused_regressions": 11,
+  "focused_regression_platforms": [
+    "linux",
+    "windows"
+  ],
+  "signed_image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "native_run_added": false,
+  "whole_image_qualified": false,
+  "exception_semantics_qualified": false,
+  "sdk_spills_qualified": false,
+  "independently_verified": false,
+  "production_qualified": false,
+  "release_gate_changed": false,
+  "assembly_only_names": [
+    "?dtor$54@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish@4HA"
+  ],
+  "object_only_names": [
+    "?dtor$55@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish@4HA"
+  ],
+  "entries": {
+    "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow": {
+      "rva": 49776,
+      "size": 17,
+      "byte_candidates": 2,
+      "incoming": [
+        {
+          "caller": "_RNvMNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encodingNtB2_20SecretEncodedInteger4left",
+          "rva": 49776
+        },
+        {
+          "caller": "_RNvMNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encodingNtB2_20SecretEncodedInteger5right",
+          "rva": 49776
+        }
+      ],
+      "xdata_rva": 63364,
+      "xdata_bytes": 12,
+      "handler": null
+    },
+    "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run": {
+      "rva": 16784,
+      "size": 586,
+      "byte_candidates": 1,
+      "incoming": [
+        {
+          "caller": "PrivateWaveLeaf",
+          "rva": 16784
+        }
+      ],
+      "xdata_rva": 63580,
+      "xdata_bytes": 132,
+      "handler": {
+        "offset": 28,
+        "symbol": "__CxxFrameHandler3",
+        "target_rva": 39956,
+        "symbol_rva": 39956,
+        "section": 0
+      }
+    },
+    "?dtor$28@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run@4HA": {
+      "rva": 17376,
+      "size": 92,
+      "byte_candidates": 1,
+      "incoming": [],
+      "xdata_rva": 63580,
+      "xdata_bytes": 132,
+      "handler": null
+    },
+    "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new": {
+      "rva": 18000,
+      "size": 2390,
+      "byte_candidates": 1,
+      "incoming": [
+        {
+          "caller": "PrivateWaveRoot",
+          "rva": 18000
+        }
+      ],
+      "xdata_rva": 63744,
+      "xdata_bytes": 180,
+      "handler": {
+        "offset": 28,
+        "symbol": "__CxxFrameHandler3",
+        "target_rva": 39956,
+        "symbol_rva": 39956,
+        "section": 0
+      }
+    },
+    "?dtor$59@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA": {
+      "rva": 20400,
+      "size": 74,
+      "byte_candidates": 1,
+      "incoming": [],
+      "xdata_rva": 63744,
+      "xdata_bytes": 180,
+      "handler": null
+    },
+    "?dtor$62@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA": {
+      "rva": 20480,
+      "size": 65,
+      "byte_candidates": 1,
+      "incoming": [],
+      "xdata_rva": 63744,
+      "xdata_bytes": 180,
+      "handler": null
+    },
+    "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish": {
+      "rva": 20560,
+      "size": 982,
+      "byte_candidates": 1,
+      "incoming": [
+        {
+          "caller": "PrivateWaveRoot",
+          "rva": 20560
+        }
+      ],
+      "xdata_rva": 63924,
+      "xdata_bytes": 124,
+      "handler": {
+        "offset": 24,
+        "symbol": "__CxxFrameHandler3",
+        "target_rva": 39956,
+        "symbol_rva": 39956,
+        "section": 0
+      }
+    },
+    "?dtor$55@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish@4HA": {
+      "rva": 21552,
+      "size": 59,
+      "byte_candidates": 1,
+      "incoming": [],
+      "xdata_rva": 63924,
+      "xdata_bytes": 124,
+      "handler": null
+    },
+    "_RNvNtCs8xEFJqa6dYS_4core9panicking9panic_fmt": {
+      "rva": 49744,
+      "size": 17,
+      "byte_candidates": 2,
+      "incoming": [
+        {
+          "caller": "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow",
+          "rva": 49744
+        }
+      ],
+      "xdata_rva": 63364,
+      "xdata_bytes": 12,
+      "handler": null
+    },
+    "PublicStackBody": {
+      "rva": 31344,
+      "size": 340,
+      "byte_candidates": 1,
+      "incoming": [],
+      "xdata_rva": 62172,
+      "xdata_bytes": 28,
+      "handler": {
+        "offset": 20,
+        "symbol": "__GSHandlerCheck",
+        "target_rva": 33924,
+        "symbol_rva": 33924,
+        "section": 0
+      }
+    }
+  },
+  "panic_abort": {
+    "overflow_rva": 49776,
+    "panic_rva": 49744,
+    "panic_handler_rva": 10800,
+    "fastfail_rva": 29600,
+    "terminal_bytes": "b907000000cd29c3",
+    "destructor_execution_claimed": false
+  },
+  "artifact_directory": "release-reports/windows-local-20261004",
+  "artifact_sha256": {
+    "review_linked_handlers.py": "8c1dd5e52b1225fbba9cba539124e9d015f20d53ee17a18ae325f13530952d86",
+    "handler-bindings.json": "193822ac6c9a37d67b45f0251074145426eb19e13e83f8c17054119638558339",
+    "handlers-rust-disassembly.txt": "2a064352b7ff91a49c198320e69eb0ca9728e20521e51539036e670551332d5d",
+    "handlers-c-disassembly.txt": "e76f20f0216687fbf8c0654aba668d2ab10ded716b9ed66a4a565aa8e50f5262",
+    "review_linked_callers.py": "3ef10bdb986678ba5162af35c2d679ad8ee91c7cd390ee2428fd2ca77c3f501d",
+    "caller-bindings.json": "df180576a36b4da85143a65b07da9102c0e17137ad729297f4de7782582a938d",
+    "scheduler-register-nospill/parallel_wave_bridge.parallel_wave_bridge.e941e58632d8bada-cgu.0.rcgu.o": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+    "scheduler-register-nospill/concurrent.obj": "fdd82832930eff919311de11e4603ab01ec64c65752dd477e544b5908782db37",
+    "scheduler-register-nospill/normal_rust.s": "2573bb52004b529211d48af92fa83175b95f2bb609bcdd090fb889dd97100c2a",
+    "scheduler-nospill-admitted/signed.dll": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee"
+  },
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "scripts/cryptography/windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "scripts/cryptography/test-windows-enclave-caller-handlers.py": "5bb82977cb2faf295b9b43eb653b620ef6a2035e464142658682293ee9b2b842",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "scripts/cryptography/test-windows-enclave-wrapper-binding.py": "2cf641a1b3929872b47bcc4e02bcea85c63bfd29ade1e1b42ec15d23e38f0b54"
+  },
+  "llvm_version": "LLVM (http://llvm.org/):",
+  "limitations": [
+    "Only the prior 66 selected entries, not all linked functions or external SDK code.",
+    "Handler metadata is byte-bound, not interpreted as proof of exception cleanup.",
+    "Incoming anchors are regenerated by the previous exact-image verifier, not user-supplied RVAs.",
+    "The actual panic path ends in fast fail; retained EH funclets do not imply panic cleanup.",
+    "No native exception, fatal-path cleanup, transitive stack-depth or secret spill qualification."
+  ]
+}

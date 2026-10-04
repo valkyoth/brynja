@@ -15,9 +15,10 @@ explicit acceleration and unchanged release-gate policy.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.
-A native public-sentinel probe now confirms the shared stack wrappers are not
-themselves vector-register scrubbers. It does not establish a real secret leak;
-actual worker/caller and VBS-boundary qualification remains unfinished. The
+A native public-sentinel probe identified missing wrapper register clearing;
+both wrappers now clear the volatile return boundary, with ABI-preservation and
+compiled omission tests plus two rebuilt native VBS routes. Active callbacks,
+whole-image caller/spill/dump review and remaining-image refresh are unfinished. The
 chronological development entries below retain their original scope and should
 not be read as a current claim that the concurrent crate API is still absent.
 

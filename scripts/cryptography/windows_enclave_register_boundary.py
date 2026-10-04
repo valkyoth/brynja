@@ -1,8 +1,8 @@
-"""Characterize actual stack wrappers with public register sentinels on Windows.
+"""Test actual stack-wrapper register clearing with public Windows sentinels.
 
 Not an enclave test: admission, finish and restore are assembly stubs. A surviving
 sentinel proves the wrapper is not a register scrubber, NOT a shipped secret leak.
-This diagnostic intentionally records the current gap, never qualification PASS.
+This proves the wrapper boundary only, never whole-image qualification.
 """
 import argparse
 import hashlib
@@ -18,26 +18,35 @@ SOURCE = ROOT / 'assurance/windows-enclave-probe'
 FILES = ('window_rust_x64.asm', 'concurrent_stack_x64.asm',
          'register_boundary_probe.asm', 'register_boundary_probe.c')
 CASES = tuple(itertools.product(('sequential', 'concurrent'), ('sse2', 'avx'),
-                               ('admit', 'deny'), (90, 165)))
+                               ('admit', 'deny'), (90, 165), ('restore-ok', 'restore-fail')))
 FIELDS = {'wrapper', 'isa', 'admission', 'seed', 'result', 'body_calls',
-          'finish_calls', 'finish', 'returned'}
+          'finish_calls', 'finish', 'returned', 'body', 'restore_poison',
+          'restore', 'nonvolatile', 'rbx', 'gpr'}
 
 
 def validate(value, case):
-    """Exact characterization of the current unmodified wrapper, not a gate."""
-    wrapper, isa, admission, seed = case
+    """Scope: XMM0..5, upper YMM0..15, return GPRs and preserved XMM6..15/RBX."""
+    wrapper, isa, admission, seed, restore = case
     if type(value) is not dict or set(value) != FIELDS:
         raise ValueError('exact observation fields required')
-    expected = dict(wrapper=wrapper, isa=isa, admission=admission, seed=seed,
-                    result=91, body_calls=int(admission == 'admit'), finish_calls=1)
+    result = 91 if restore == 'restore-ok' else (0 if wrapper == 'sequential' else (1 << 64) - 1)
+    expected = dict(wrapper=wrapper, isa=isa, admission=admission, seed=seed, restore=restore,
+                    result=result, body_calls=int(admission == 'admit'), finish_calls=1,
+                    rbx=int.from_bytes(bytes([seed] * 8), 'little'))
     if case not in CASES or any(type(value[k]) is not type(v) or value[k] != v
                                for k, v in expected.items()):
         raise ValueError('case identity or execution count mismatch')
     width = 32 if isa == 'avx' else 16
-    sentinel = bytes([seed if admission == 'admit' else 0] * width).hex()
-    for name in ('finish', 'returned'):
-        if value[name] != [sentinel] * 6:
-            raise ValueError('register characterization changed: ' + name)
+    vectors = {'body': [bytes([seed if admission == 'admit' else 0] * width).hex()] * 6,
+               'restore_poison': [bytes([seed] * width).hex()] * 6,
+               'finish': [bytes(width).hex()] * 6, 'returned': [bytes(width).hex()] * 6,
+               'nonvolatile': [(bytes([seed] * 16) + bytes(width - 16)).hex()] * 10}
+    for name, expected_vectors in vectors.items():
+        if value[name] != expected_vectors:
+            raise ValueError('register boundary mismatch: ' + name)
+    if (type(value['gpr']) is not list or len(value['gpr']) != 6 or
+            any(type(v) is not int or v != 0 for v in value['gpr'])):
+        raise ValueError('register boundary mismatch: gpr')
     return value
 
 
@@ -82,19 +91,31 @@ def execute(directory):
     compiler_identity = compiler.stdout + compiler.stderr
     if 'C/C++ Optimizing Compiler Version' not in compiler_identity or 'for x64' not in compiler_identity:
         raise RuntimeError('MSVC x64 compiler identity required')
-    original = (SOURCE / FILES[2]).read_text()
-    # Mutate the measuring apparatus, never the wrappers. Missing poison and
-    # missing snapshots must both invalidate the observation, not pass vacuously.
-    variants = {'baseline': original,
-                'poison-omitted': original.replace('ProbePoison', 'ProbeZero'),
-                'snapshot-omitted': original.replace('SNAPSHOT ProbeFinish', '; omitted snapshot')}
+    originals = {name: (SOURCE / name).read_text() for name in FILES}
+    variants = {
+        'baseline': None,
+        'poison-omitted': ('probe', '    POISON_VECTORS\n    SNAPSHOT ProbeBody', '    SNAPSHOT ProbeBody'),
+        'snapshot-omitted': ('probe', '    SNAPSHOT ProbeBody', '    ; no body snapshot'),
+        'pre-clear-omitted': ('wrapper', '    BRYNJA_REGISTER_CLEAR 0, 1', '    ; missing pre-clear'),
+        'return-clear-omitted': ('wrapper', '    BRYNJA_REGISTER_CLEAR 1, 0', '    ; missing return clear'),
+        'xmm-clear-omitted': ('wrapper', '    pxor xmm3, xmm3', '    ; missing XMM clear'),
+        'upper-clear-omitted': ('wrapper', '    vzeroupper', '    ; missing upper clear'),
+        'gpr-clear-omitted': ('wrapper', '    xor r10d, r10d\n    xor r11d, r11d', '    xor r11d, r11d'),
+        'rbx-preserve-omitted': ('wrapper', '    mov rbx, r10', '    ; missing RBX restore'),
+        'force-baseline-state': ('wrapper', '    mov QWORD PTR [rbp + 32], 1', '    ; retain conservative baseline state'),
+    }
     reports = {}
-    for variant, asm in variants.items():
+    for variant, mutation in variants.items():
         work = directory / variant
         work.mkdir()
         for name in FILES:
             shutil.copyfile(SOURCE / name, work / name)
-        (work / FILES[2]).write_text(asm, encoding='utf-8')
+        if mutation is not None:
+            scope, before, after = mutation
+            for name in (FILES[:2] if scope == 'wrapper' else (FILES[2],)):
+                if originals[name].count(before) != 1:
+                    raise AssertionError('mutation anchor: ' + name + ': ' + before)
+                (work / name).write_text(originals[name].replace(before, after), encoding='utf-8')
         build(work)
         reports[variant] = []
         for case in CASES:
@@ -107,29 +128,32 @@ def execute(directory):
             try:
                 decode(result, case)
             except ValueError as error:
-                if variant == 'baseline' or case[2] == 'deny':
-                    raise
-                if not str(error).startswith('register characterization changed:'):
+                if variant == 'baseline': raise
+                if not str(error).startswith(('register boundary mismatch:', 'case identity or execution count mismatch')):
                     raise
                 rejected = True
-            if rejected != (variant != 'baseline' and case[2] == 'admit'):
+            wanted = variant != 'baseline'
+            if variant in ('poison-omitted', 'snapshot-omitted', 'pre-clear-omitted'):
+                wanted = case[2] == 'admit'
+            if variant in ('upper-clear-omitted', 'force-baseline-state'): wanted = case[1] == 'avx'
+            if rejected != wanted:
                 raise AssertionError('measurement mutant escaped')
             reports[variant].append(dict(case=case, stdout=result.stdout, rejected=rejected))
-        print('REGISTER_PROBE: ' + variant + '; 16 cases', flush=True)
+        print('REGISTER_PROBE: ' + variant + '; 32 cases', flush=True)
     sources = [SOURCE / name for name in FILES] + [Path(__file__).resolve(),
         ROOT / 'scripts/cryptography/test-windows-enclave-register-boundary.py']
-    record = dict(schema=1, status='WRAPPER_REGISTER_RESIDUE_OBSERVED',
+    record = dict(schema=2, status='WRAPPER_REGISTER_CLEANUP_PASS',
                   native_windows_process=True, platform=platform.platform(),
                   compiler_identity=compiler_identity,
                   enclave_execution=False, secret_material_used=False,
                   whole_image_qualified=False, production_qualified=False,
-                  tested_vectors='XMM0..5; YMM0..5 when OS AVX available',
+                  tested_vectors='XMM0..5 and upper YMM0..15 cleared; XMM6..15 and RBX preserved; return volatile GPRs cleared',
                   source_sha256={p.relative_to(ROOT).as_posix(): digest(p) for p in sources},
                   artifact_sha256={p.relative_to(directory).as_posix(): digest(p)
                                    for p in sorted(directory.rglob('*')) if p.is_file()},
                   reports=reports)
     (directory / 'register-boundary.json').write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
-    print('Wrapper register residue characterized; enclave qualification: NOT ESTABLISHED')
+    print('Wrapper register cleanup: PASS; whole-image enclave qualification: NOT ESTABLISHED')
 
 
 if __name__ == '__main__':

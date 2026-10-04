@@ -12,23 +12,34 @@ def put(data, offset, fmt, *values):
     struct.pack_into(fmt, data, offset, *values)
 
 
-def fixture():
-    code = b'\x55' + b'\xe8\0\0\0\0\x90' * 5 + b'\x5d\xc3'
+def fixture(entry=ENTRY):
+    names = NAMES if entry == ENTRY else ('__chkstk', 'PublicLockedAdmit', 'PublicRustBody',
+                                          'PublicLockedFinish', 'PublicGuardRestore')
+    globals_ = () if entry == ENTRY else ('PublicLockedLow', 'PublicLockedHigh')
+    refs = [(2 + index * 6, index) for index in range(5)]
+    code = b'\x55' + b'\xe8\0\0\0\0\x90' * 5
+    for symbol, count in ((5, 4), (6, 3)) if globals_ else ():
+        for _ in range(count):
+            refs.append((len(code) + 3, symbol))
+            code += b'\x48\x8b\x05\0\0\0\0'
+    code += b'\x5d\xc3'
     obj = bytearray(1024)
     strings = bytearray(4)
-    for index, name in enumerate((*NAMES, ENTRY)):
+    symbols = (*names, *globals_, entry)
+    for index, name in enumerate(symbols):
         offset = len(strings)
         strings.extend(name.encode() + b'\0')
         put(obj, 400 + index * 18, '<IIIhHBB', 0, offset, 0,
-            1 if name == ENTRY else 0, 0x20 if name == ENTRY else 0, 2, 0)
+            1 if name == entry else 0, 0x20 if name == entry else 0, 2, 0)
     put(strings, 0, '<I', len(strings))
-    obj[508:508 + len(strings)] = strings
-    put(obj, 0, '<HHIIIHH', 0x8664, 1, 0, 400, 6, 0, 0)
+    string_offset = 400 + len(symbols) * 18
+    obj[string_offset:string_offset + len(strings)] = strings
+    put(obj, 0, '<HHIIIHH', 0x8664, 1, 0, 400, len(symbols), 0, 0)
     obj[20:28] = b'.text$mn'
-    put(obj, 28, '<IIIIIIHHI', 0, 0, len(code), 100, 200, 0, 5, 0, 0x60500020)
+    put(obj, 28, '<IIIIIIHHI', 0, 0, len(code), 100, 200, 0, len(refs), 0, 0x60500020)
     obj[100:100 + len(code)] = code
-    for index in range(5):
-        put(obj, 200 + index * 10, '<IIH', 2 + index * 6, index, 4)
+    for index, (offset, symbol) in enumerate(refs):
+        put(obj, 200 + index * 10, '<IIH', offset, symbol, 4)
     image = bytearray(2048)
     image[:2] = b'MZ'
     put(image, 0x3c, '<I', 64)
@@ -40,16 +51,44 @@ def fixture():
     image[328:336] = b'.text\0\0\0'
     put(image, 336, '<IIIIIIHHI', 512, 0x1000, 512, 512, 0, 0, 0, 0, 0x60000020)
     image[368:376] = b'.pdata\0\0'
-    put(image, 376, '<IIIIIIHHI', 512, 0x2000, 512, 1024, 0, 0, 0, 0, 0x40000040)
+    put(image, 376, '<IIIIIIHHI', 512, 0x2000, 512, 1024, 0, 0, 0, 0, 0xc0000040)
     image[512:512 + len(code)] = code
-    for index in range(5):
-        offset = 2 + index * 6
-        put(image, 512 + offset, '<i', 128 + index * 16 - (offset + 4))
+    for offset, symbol in refs:
+        target = 128 + symbol * 16 if symbol < 5 else 0x1090 + (symbol - 5) * 8
+        put(image, 512 + offset, '<i', target - (offset + 4))
     put(image, 1024, '<III', 0x1000, 0x1000 + len(code), 0x2020)
     return obj, image
 
 
 class BindingTests(unittest.TestCase):
+    def test_sequential_globals_bound_without_treating_them_as_calls(self):
+        obj, image = fixture('PublicLockedFrame')
+        result = model.bind(obj, image, 'PublicLockedFrame')
+        self.assertEqual(result['global_target_rvas'], {'PublicLockedLow': 0x2090, 'PublicLockedHigh': 0x2098})
+        self.assertEqual(len(result['call_target_rvas']), 5)
+
+    def test_global_type_identity_storage_and_alias_mutations(self):
+        obj, image = fixture('PublicLockedFrame')
+        refs = model.coff(obj, 'PublicLockedFrame')[1]
+        globals_ = [(offset, name) for offset, name in refs if name.startswith('PublicLockedL') or name.startswith('PublicLockedH')]
+        for target in (0x1000, 0x2091, 0x3000, 0x2098):
+            changed = image.copy()
+            offset = globals_[0][0]
+            put(changed, 512 + offset, '<i', target - (0x1000 + offset + 4))
+            with self.assertRaises(ValueError): model.bind(obj, changed, 'PublicLockedFrame')
+        changed = image.copy()
+        put(changed, 368 + 36, '<I', 0x40000040)
+        with self.assertRaises(ValueError): model.bind(obj, changed, 'PublicLockedFrame')
+        changed = obj.copy()
+        changed[100 + globals_[0][0] - 3] = 0x90
+        with self.assertRaises(ValueError): model.bind(changed, image, 'PublicLockedFrame')
+        changed = image.copy()
+        for offset, name in globals_:
+            target = 0x2090
+            put(changed, 512 + offset, '<i', target - (0x1000 + offset + 4))
+        with self.assertRaisesRegex(ValueError, 'aliased wrapper globals'):
+            model.bind(obj, changed, 'PublicLockedFrame')
+
     def test_exact_match_and_nonclaims(self):
         obj, image = fixture()
         result = model.bind(obj, image, ENTRY)

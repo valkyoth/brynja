@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "implementation_parent": "e554fc75",
+  "status": "AUTHOR_WRAPPER_CLEANUP_AND_VBS_REGRESSIONS_PASS",
+  "whole_image_qualified": false,
+  "probe_cases": 320,
+  "rejected": 208,
+  "controls": 80,
+  "concurrent_cases": 31,
+  "crate_host_cases_per_profile": 68,
+  "keccak_calls": 318,
+  "keccak_lane_comparisons": 212,
+  "linked_wrappers": {
+    "PublicStackFrame": {
+      "status": "EXACT_WRAPPER_BYTES_BOUND",
+      "entry": "PublicStackFrame",
+      "rva": 33520,
+      "size": 402,
+      "call_target_rvas": {
+        "__chkstk": 34128,
+        "PublicStackAdmit": 31056,
+        "PublicStackBody": 31344,
+        "PublicStackFinish": 31696,
+        "PublicStackRestore": 32352
+      },
+      "callees_semantically_qualified": false,
+      "whole_image_qualified": false,
+      "object_sha256": "b9f10f1a6c18de9cfb64859eb4248b8b562299aa964d9494789f923acf99dc7b",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee"
+    },
+    "PublicLockedFrame": {
+      "status": "EXACT_WRAPPER_BYTES_BOUND",
+      "entry": "PublicLockedFrame",
+      "rva": 30592,
+      "size": 392,
+      "call_target_rvas": {
+        "__chkstk": 31248,
+        "PublicLockedAdmit": 27408,
+        "PublicRustBody": 28704,
+        "PublicLockedFinish": 28016,
+        "PublicGuardRestore": 26448
+      },
+      "callees_semantically_qualified": false,
+      "whole_image_qualified": false,
+      "object_sha256": "9eaba4a1d7ed3e7e180ff915865e294eaee86fa4a0fc4b567bac77f6b2fb25b8",
+      "image_sha256": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330",
+      "global_target_rvas": {
+        "PublicLockedHigh": 67944,
+        "PublicLockedLow": 67952
+      }
+    }
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261004/register-cleanup-nospill/register-boundary.json": "7222af475f3d2526d988321b5f5eadf5f44b336613351d3885524dfff6863d31",
+    "release-reports/windows-local-20261004/scheduler-register-nospill/parallel-scheduler-image-build.json": "f297af4853c3d6a4f3438c4bb31e949408e586547cd1294bb300d99708f52cdc",
+    "release-reports/windows-local-20261004/scheduler-register-nospill/normal.dll": "969ec2bf87b7bcde0a3527421c634e4e3f0dabd82627e6a15c0cfeb331cd35fb",
+    "release-reports/windows-local-20261004/scheduler-nospill-admitted/signing.json": "df032b42f46e9a889897ba9597a74a857ee586e977ff0f4feb49673331d8266e",
+    "release-reports/windows-local-20261004/scheduler-nospill-admitted/signed.dll": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+    "release-reports/windows-local-20261004/scheduler-nospill-admitted/observations.json": "5e1efec843782026788aa3b68afdba3739f748dc3b72e5038b42065e5f1d019a",
+    "release-reports/windows-local-20261004/shipping-parallel-nospill/host-results.json": "d331121bd0b5013318d0eb2e0b6802546bd7a0d4f3be5f5fe351034f30e492a3",
+    "release-reports/windows-local-20261004/keccak-register-cleanup/keccak-simd-image-build.json": "e5f83c6c825a9373101a437b074e85218cdb916dc34bf4b67ef26c32b4043992",
+    "release-reports/windows-local-20261004/keccak-register-cleanup/keccak-simd-worker-results.json": "4100949f82088e089cd66bf80d69deb45612d4153f01e5986341fec65bd01260",
+    "release-reports/windows-local-20261004/keccak-register-cleanup/component/keccak-simd-results.json": "d27ba1163e0380f206e67696c35f0a41a963dd5341146ff7343e1b8db21ad980",
+    "release-reports/windows-local-20261004/keccak-register-cleanup/normal.dll": "caafadba6a6a566879b45c4091114466e6b29d87638131462721e7324b69d328",
+    "release-reports/windows-local-20261004/keccak-cleanup-admitted/signing.json": "32af6c0220adbfe1bc1b3d18b0b7c667631b82b534931f3f6f37ee3a8cf23a9d",
+    "release-reports/windows-local-20261004/keccak-cleanup-admitted/signed.dll": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330",
+    "release-reports/windows-local-20261004/keccak-cleanup-admitted/native.json": "15c70c5efd56123091949edc58b8b5136e76fc1bbc0e40da815505973bed00ac",
+    "release-reports/windows-local-20261004/scheduler-nospill-prepared.dll": "98ebdd3dabad90e66585da31576e114048faa9b2a42b251ba17f2674b2807e4b",
+    "release-reports/windows-local-20261004/keccak-cleanup-prepared.dll": "0f2fe84239596f63c869cd63a6d93f9ea5c8d59900ba77322e55bdcb89c409e5",
+    "release-reports/windows-local-20261004/verify_register_cleanup.py": "39863785af989eb7b50744ac2c251b9341d00633ea05b81e9900e75208ccf953"
+  },
+  "source_sha256": {
+    "assurance/windows-enclave-probe/window_guard_x64.asm": "fccea00aeae766550e3029d3e951567b77b17f2837eb9223f28954c4b53b2f21",
+    "assurance/windows-enclave-probe/window_rust_x64.asm": "17c78ba8c3f0d521812f979dbfb8e46eaed5f92aaf3bf6395f5103117104d4a2",
+    "assurance/windows-enclave-probe/concurrent_stack_x64.asm": "001f18f1855514d408ad4f4b44a513983f7d6751615fdf7b0a9703c500561ed7",
+    "assurance/windows-enclave-probe/register_boundary_probe.asm": "7fa3a16122080d62bc8fba0c08df625ed87c3fdd71a6df2f8aa1ad40bb1d9b70",
+    "assurance/windows-enclave-probe/register_boundary_probe.c": "b340342df5939b4d8b961fecdf0b8383d324ebf670f6420b614f86357a0b7c77",
+    "scripts/cryptography/windows_enclave_register_boundary.py": "80f6a1f630d81ca931d33e032a0c70ac0e3d70394713e17fef2dbe3b01efa55c",
+    "scripts/cryptography/test-windows-enclave-register-boundary.py": "90474f6d1aaf726ef149478da48835772d12885f268ef2854ed7f5597e51f7af",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "scripts/cryptography/test-windows-enclave-wrapper-binding.py": "2cf641a1b3929872b47bcc4e02bcea85c63bfd29ade1e1b42ec15d23e38f0b54"
+  },
+  "compiler_identity": "usage: cl [ option... ] filename... [ /link linkoption... ]\nMicrosoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64\nCopyright (C) Microsoft Corporation.  All rights reserved.\n\n",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "baseline_register_cases": 32,
+  "compiled_register_variants": 9,
+  "validator_tests": 6,
+  "binding_parser_tests": 9,
+  "crate_host_compiled_mutants": 5,
+  "sequential_component_oracle_cases": 520,
+  "sequential_component_mutants": 14,
+  "sequential_worker_oracle_cases": 520,
+  "sequential_worker_mutants": 14,
+  "production_signed": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "scope": "Both shared return/reclamation wrapper boundaries; synthetic public-sentinel process probes plus functional native VBS regression campaigns. Not active-callback/VBS-transition register capture, all-algorithm image refresh, current-image dump qualification, or whole-image qualification.",
+  "historical_record": "assurance/windows-protection-observations/register-boundary-20261004.json"
+}

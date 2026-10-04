@@ -1,9 +1,10 @@
-"""Bind the concurrent MASM wrapper's COFF bytes to a linked AMD64 PE image.
+"""Bind a guarded MASM wrapper's COFF bytes to a linked AMD64 PE image.
 
 Exact code match except enumerated REL32 call relocations; not an image loader,
 signature verifier, callee audit, or proof of register/whole-image cleanup.
 """
 import argparse
+from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -13,7 +14,10 @@ import struct
 CALLS = {
     'PublicStackFrame': {'__chkstk', 'PublicStackAdmit', 'PublicStackBody',
                          'PublicStackFinish', 'PublicStackRestore'},
+    'PublicLockedFrame': {'__chkstk', 'PublicLockedAdmit', 'PublicRustBody',
+                          'PublicLockedFinish', 'PublicGuardRestore'},
 }
+GLOBALS = {'PublicStackFrame': {}, 'PublicLockedFrame': {'PublicLockedLow': 4, 'PublicLockedHigh': 3}}
 
 
 def require(ok, message):
@@ -74,18 +78,25 @@ def coff(data, entry):
         index += 1 + aux
     entries = [s for s in symbols.values() if s[0] == entry]
     require(entries == [(entry, 0, section_number, 0x20, 2)], 'exact wrapper function at section start')
-    require(text['nrelocs'] == len(CALLS[entry]), 'exact relocation count')
+    expected = Counter({name: 1 for name in CALLS[entry]}) + Counter(GLOBALS[entry])
+    require(text['nrelocs'] == sum(expected.values()), 'exact relocation count')
     calls = []
     for index in range(text['nrelocs']):
         offset, symbol, kind = unpack('<IIH', data, text['relocs'] + index * 10)
         require(symbol in symbols, 'relocation symbol')
         name, value, section, _, storage = symbols[symbol]
-        require(kind == 4 and section == value == 0 and storage == 2 and name in CALLS[entry],
-                'only reviewed external REL32 calls')
-        require(offset > 0 and span(code, offset - 1, 5) == b'\xe8\0\0\0\0', 'call encoding')
+        require(kind == 4 and section == value == 0 and storage == 2 and name in expected,
+                'only reviewed external REL32 references')
+        if name in CALLS[entry]:
+            require(offset > 0 and span(code, offset - 1, 5) == b'\xe8\0\0\0\0', 'call encoding')
+        else:
+            prefix = span(code, offset - 3, 3)
+            require(prefix[0] in (0x48, 0x4c) and prefix[1] in (0x89, 0x8b)
+                    and prefix[2] & 0xc7 == 5 and span(code, offset, 4) == bytes(4),
+                    'RIP-relative 64-bit global load/store')
         calls.append((offset, name))
     calls.sort()
-    require({name for _, name in calls} == CALLS[entry], 'complete call identities')
+    require(Counter(name for _, name in calls) == expected, 'complete reference identities')
     require(all(b[0] >= a[0] + 5 for a, b in zip(calls, calls[1:])), 'overlapping relocations')
     return code, calls
 
@@ -114,7 +125,7 @@ def linked(data):
     functions = [unpack('<III', tables[0], offset) for offset in range(0, size, 12)]
     executable = [r for r in rows if r['flags'] & 0x20000000 and r['code']]
     require(bool(executable), 'executable sections')
-    return executable, functions
+    return rows, functions
 
 
 def bind(obj, image, entry):
@@ -125,7 +136,8 @@ def bind(obj, image, entry):
         cursor = offset + 4
     parts.append(re.escape(code[cursor:]))
     pattern = re.compile(b''.join(parts), re.DOTALL)
-    executable, functions = linked(image)
+    rows, functions = linked(image)
+    executable = [r for r in rows if r['flags'] & 0x20000000 and r['code']]
     matches = [(row, match.start()) for row in executable
                for match in re.finditer(b'(?=(' + pattern.pattern + b'))', row['code'], re.DOTALL)]
     require(len(matches) == 1, 'wrapper absent or ambiguous in executable image')
@@ -133,19 +145,29 @@ def bind(obj, image, entry):
     start, end = row['rva'] + offset, row['rva'] + offset + len(code)
     require(len([f for f in functions if f[0] == start and f[1] == end]) == 1,
             'exact linked wrapper function extent')
-    targets = {}
+    targets, globals_ = {}, {}
     for relocation, name in calls:
         delta, = unpack('<i', row['code'], offset + relocation)
         target = start + relocation + 4 + delta
+        if name in GLOBALS[entry]:
+            require(target % 8 == 0 and any(r['flags'] & 0xe0000000 == 0xc0000000
+                    and r['rva'] <= target and target + 8 <= r['rva'] + r['virtual_size'] for r in rows),
+                    'global target outside writable nonexecutable image storage')
+            require(name not in globals_ or globals_[name] == target, 'inconsistent global reference')
+            globals_[name] = target
+            continue
         require(any(r['rva'] <= target < r['rva'] + min(len(r['code']), r['virtual_size'])
                     for r in executable), 'call target outside executable image')
         require(not start <= target < end, 'call target inside wrapper')
         targets[name] = target
     require(len(set(targets.values())) == len(targets), 'aliased wrapper callees')
-    return dict(status='EXACT_WRAPPER_BYTES_BOUND', entry=entry, rva=start, size=len(code),
+    require(len(set(globals_.values())) == len(globals_), 'aliased wrapper globals')
+    result = dict(status='EXACT_WRAPPER_BYTES_BOUND', entry=entry, rva=start, size=len(code),
                 call_target_rvas=targets, callees_semantically_qualified=False,
                 whole_image_qualified=False, object_sha256=hashlib.sha256(obj).hexdigest(),
                 image_sha256=hashlib.sha256(image).hexdigest())
+    if globals_: result['global_target_rvas'] = globals_
+    return result
 
 
 if __name__ == '__main__':

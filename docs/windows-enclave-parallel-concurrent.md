@@ -467,7 +467,45 @@ retain the limits above. Whole-image ABI/register/spill/dump qualification,
 Windows ARM64, production signing and independent review remain unclaimed.
 Production crates, kernel implementations and release gates are unchanged.
 
-Next: integrate the supported public host scheduler API, then qualify that image.
+## Scoped Rust host lifecycle component
+
+The private `parallel_host_scheduler.rs` component replaces the diagnostic
+thread-lifetime strategy with borrowed Rust scoped workers. At most four workers
+are started per wave; they carry public generation/lane tokens, not hash state.
+The root scheduler is not Send/Sync/Copy/Clone/Debug. A worker error or panic,
+partial thread creation, or recoverable root unwinding joins every started worker
+before its borrowed transport can expire. No timeout detaches a live worker.
+Fatal abort and a worker that never returns are not successful-cleanup cases.
+
+Callback sequencing matches the native image: dispatch, close, joined receipt.
+There is **no separate retirement callback**. A subsequent exact OPEN state is
+possible only after the trusted native gate retired its preceding generation;
+the last retired word is checked after the root entry returns. Missing waves,
+replayed callbacks and every unexpected bit in entry/completion/final metadata
+reject. Errors leave the scheduler terminal rather than permitting reuse.
+
+The [scoped host component record](../assurance/windows-protection-observations/parallel-host-scheduler-20261004.json)
+records eight tests, twelve compiled runtime mutations, nine ownership/API
+negatives and warning-free library Clippy on both Linux and Windows under Rust
+1.98.1. Tests use genuinely overlapping scoped threads, inject spawn failure into
+the same result-handling path as an OS error, and cover worker/root panic paths.
+They do not claim an actual OS resource-exhaustion experiment. Maximum-generation
+checking is boundary injection, not 16,384 executed native waves.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-host-scheduler.py host-scheduler-check
+```
+
+These are ordinary process tests, **not a connected Rust/VBS host API**. The
+internal worker closure must eventually be provided only by the pinned-image OS
+transport; it is not an application callback contract. The adapter still needs
+per-thread residency callbacks, exact image entry/import admission, disjoint
+window observations and cleanup validation. The existing 31-case Python-driven
+VBS capture also passed after reboot, using the unchanged development-signed
+image; it does not qualify this new Rust transport component inside VBS.
+
+Next: connect this scoped host component to the trusted Windows loader and
+callbacks, expose the supported public scheduler API, then qualify that image.
 
 ## Author verification
 

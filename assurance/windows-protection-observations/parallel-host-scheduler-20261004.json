@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "status": "PRIVATE_SCOPED_HOST_COMPONENT_PASS",
+  "implementation_parent": "12600a2b",
+  "compiler": "1.98.1",
+  "component_enclave_execution": false,
+  "production_qualified": false,
+  "independently_verified": false,
+  "whole_image_cleanup_qualified": false,
+  "platforms": ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"],
+  "tests_per_platform": 8,
+  "runtime_mutants_per_platform": 12,
+  "compiled_negatives_per_platform": 9,
+  "clippy": "Library passes with warnings denied on both platforms",
+  "native_reboot_regression": {
+    "cases": 31,
+    "enclave_execution": true,
+    "image_changed": false,
+    "new_Rust_host_connected": false,
+    "production_signed": false,
+    "image_sha256": "7529bf3fe165865f8cee426bcd7a12bdcb97e09fb813e0318d91025c12c317c8",
+    "vbs_status": 2,
+    "security_services_running": [2]
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261004/host-scheduler-linux-checked/host-scheduler-results.json": "b4ec4bba18997cada7d45d55761108d580cd8711b715f4c64705465c71ef97b7",
+    "release-reports/windows-local-20261004/host-scheduler-linux-checked/host-scheduler": "841a21133d7c9d713e096efa240e85ae3f4d0f9d6b23045c5274b84e0c3e5595",
+    "release-reports/windows-local-20261004/host-scheduler-20261004/host-scheduler-results.json": "cfdc967f358b25591e6584584ce777c77b5d4184a85d507e6191a0fd1e7e5ae2",
+    "release-reports/windows-local-20261004/host-scheduler-20261004/host-scheduler.exe": "6664be7ce73e5fbdb09cc7eeb7a9a33b424651ea2851bf31772015c3877ddb9a",
+    "release-reports/windows-local-20261004/scheduler-reboot-20261004.json": "c7f7877fca99e805f54f7286adbfdcfa3454d546470cb5597f8278c452db66c6"
+  },
+  "limits": [
+    "Private safe-Rust lifecycle component; no supported public host API or native Rust transport integration yet",
+    "Scoped closures are internal transport seams, not application callbacks or CPU authority",
+    "Native image identity, per-thread OS residency and page/cleanup checks must be bound by the future adapter",
+    "Spawn failure is injected at the same handling branch, not actual OS thread exhaustion; generation maximum is boundary injection",
+    "No successful cleanup claim for fatal abort or permanently blocked workers",
+    "The separate reboot capture uses yesterday's image and Python diagnostic, not the new Rust scheduler",
+    "Initial local mutation campaign stopped on a compilation warning; only checked complete campaigns counted",
+    "No production kernel, dependency, default or release-gate changes"
+  ],
+  "next": "Trusted Windows loader/callback adapter and supported public host scheduler API, followed by final-image qualification"
+}

@@ -1,0 +1,233 @@
+{
+  "schema": 1,
+  "status": "SAVED_SDK_STATUS_PATH_REVIEW_NOT_OS_QUALIFICATION",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "bodies": {
+    "copy_status": {
+      "rva": 15500,
+      "bytes": 26,
+      "sha256": "601a43d505cc4a700dff1b8e60fe1336c78dc66c5895880a704a2e3427380cd1"
+    },
+    "call_status": {
+      "rva": 15536,
+      "bytes": 23,
+      "sha256": "0fc00bc7deabcfc191e401f120b0b4b978ec2cd3db54550cc0e3bbeaeaf29b67"
+    },
+    "status_to_error": {
+      "rva": 46544,
+      "bytes": 44,
+      "sha256": "06034815bc967cc9895e28b133cfc24c058f22575e43e56df0cf5d94825948c0"
+    },
+    "status_lookup": {
+      "rva": 46596,
+      "bytes": 299,
+      "sha256": "90046e5285c46a2b0961350117896dbebc320cc976d81bdd2e333cf6358c5448"
+    },
+    "set_last_error": {
+      "rva": 46904,
+      "bytes": 33,
+      "sha256": "8f3874aa760fa6f64f17733f31a7c523147dd3b440a3ade9b63ed74c89c5a98d"
+    },
+    "diagnostic_entry": {
+      "rva": 92324,
+      "bytes": 53,
+      "sha256": "781820477891797b6a5767eefc41cc539ca4ef8725304ddfb5ec94769396164f"
+    }
+  },
+  "geometry": {
+    "paths": {
+      "copy": {
+        "frames": {
+          "status": -11488,
+          "convert": -11536,
+          "lookup": -11584,
+          "diagnostic_entry": -11664
+        },
+        "spans": [
+          {
+            "name": "status home spill",
+            "offset_from_low": 54048,
+            "offset_from_high": -11488,
+            "bytes": 4
+          },
+          {
+            "name": "lookup saved RBX",
+            "offset_from_low": 53984,
+            "offset_from_high": -11552,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic RCX",
+            "offset_from_low": 53952,
+            "offset_from_high": -11584,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic RDX",
+            "offset_from_low": 53960,
+            "offset_from_high": -11576,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic R8",
+            "offset_from_low": 53968,
+            "offset_from_high": -11568,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic R9",
+            "offset_from_low": 53976,
+            "offset_from_high": -11560,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic varargs pointer",
+            "offset_from_low": 53904,
+            "offset_from_high": -11632,
+            "bytes": 8
+          }
+        ],
+        "unknown_callee": {
+          "name": "deeper diagnostic entry/home",
+          "offset_from_low": 53864,
+          "offset_from_high": -11672,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      },
+      "call_error": {
+        "frames": {
+          "status": -11744,
+          "convert": -11792,
+          "lookup": -11840,
+          "diagnostic_entry": -11920
+        },
+        "spans": [
+          {
+            "name": "status home spill",
+            "offset_from_low": 53792,
+            "offset_from_high": -11744,
+            "bytes": 4
+          },
+          {
+            "name": "lookup saved RBX",
+            "offset_from_low": 53728,
+            "offset_from_high": -11808,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic RCX",
+            "offset_from_low": 53696,
+            "offset_from_high": -11840,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic RDX",
+            "offset_from_low": 53704,
+            "offset_from_high": -11832,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic R8",
+            "offset_from_low": 53712,
+            "offset_from_high": -11824,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic R9",
+            "offset_from_low": 53720,
+            "offset_from_high": -11816,
+            "bytes": 8
+          },
+          {
+            "name": "diagnostic varargs pointer",
+            "offset_from_low": 53648,
+            "offset_from_high": -11888,
+            "bytes": 8
+          },
+          {
+            "name": "last-error leaf return/home",
+            "offset_from_low": 53784,
+            "offset_from_high": -11752,
+            "bytes": 40
+          }
+        ],
+        "unknown_callee": {
+          "name": "deeper diagnostic entry/home",
+          "offset_from_low": 53608,
+          "offset_from_high": -11928,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      }
+    },
+    "copy_status_is_tail_transfer": true,
+    "kernel_storage_qualified": false,
+    "loaded_module_identity_proven": false,
+    "diagnostic_callee_depth_qualified": false,
+    "maximum_transitive_depth_qualified": false,
+    "thread_relative_status_storage_cleared_by_window": false
+  },
+  "thread_relative_writes": [
+    {
+      "body": "status_to_error",
+      "base": "value at GS:0x30",
+      "offset": 4688,
+      "bytes": 4,
+      "value": "incoming 32-bit status",
+      "inside_cleared_window_proven": false
+    },
+    {
+      "body": "set_last_error",
+      "base": "value at GS:0x30",
+      "offset": 104,
+      "bytes": 4,
+      "value": "converted 32-bit error",
+      "inside_cleared_window_proven": false
+    }
+  ],
+  "unresolved": [
+    {
+      "rva": 92432,
+      "reason": "deeper diagnostic implementation"
+    },
+    {
+      "body": "set_last_error",
+      "reason": "conditional INT3 and interruption paths"
+    },
+    {
+      "reason": "kernel transfer storage and loaded-module identity"
+    }
+  ],
+  "date": "2026-10-04",
+  "implementation_parent": "598d8dff",
+  "focused_tests": 8,
+  "focused_platforms": [
+    "linux",
+    "windows"
+  ],
+  "body_byte_mutations": 478,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/test-windows-enclave-sdk-status.py": "fc1d60da2dc28ef53b05ee5cf5331159ea6693b79354bd181525831c5a63347c",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "assurance/windows-protection-observations/scheduler-spills-20261004.json": "dba32e9f5cbe3df53f7a7a2c895376cbd994eca0c0c82414f86054ce6bf26298"
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261004/sdk-status-linux-tests.log": "7bc7a18ac9ac1fbebe55119bbb691a7ce764ce064d55f585dca8d50945f0c365",
+    "release-reports/windows-local-20261004/sdk-status-windows-tests.log": "133449d6f429f0588126e0403937f271f33f90517460d5c4b39d69c2eeda0f25",
+    "release-reports/windows-local-20261004/sdk-status-linux.json": "bfe11d6a0e69593b62e7b8c7afc9d426a6d9cae0af8eda8d0e410d5ff15afaa0",
+    "release-reports/windows-local-20261004/sdk-status-windows.json": "bfe11d6a0e69593b62e7b8c7afc9d426a6d9cae0af8eda8d0e410d5ff15afaa0"
+  },
+  "artifact_path": "release-reports/windows-local-20261004/sdk-system32-review/vertdll.dll"
+}

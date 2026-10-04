@@ -440,8 +440,12 @@ This adds no remaining-image dump coverage or whole-image qualification.
 The subsequent [selected SDK-frame inspection](windows-enclave-sdk-frames.md)
 maps the saved System32 library's `RtlCallEnclave` register saves and copy-entry
 frames into this scheduler window. It narrows the earlier SDK unknowns for one
-file only; loaded-module identity, kernel storage and full callee depth remain
-unqualified.
+file only. The subsequent status-path review binds six more bodies, including
+the error adapters and diagnostic entry, and maps fifteen selected spans.
+Copy-export tail transfers do not add a second copy frame. Thread-relative
+status writes and the deeper diagnostic callee are explicitly outside the
+window-erasure/depth claim. Loaded-module identity, kernel storage and full
+callee depth remain unqualified.
 
 1. Complete actual linked worker/caller and SDK-boundary review. The instrumented
    callback-frame and register campaigns above are complete for their stated

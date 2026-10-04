@@ -36,8 +36,11 @@ caller review now maps fifteen saved-register/reply spans into the cleared windo
 with six geometry regressions passing on Linux and Windows. A subsequent
 [saved SDK-file review](windows-enclave-sdk-frames.md) maps the transition's
 nonvolatile register saves and copy-entry frames into that window; six additional
-tests pass on Linux and Windows. Loaded-module identity, kernel storage and
-remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
+tests pass on Linux and Windows. The subsequent SDK status-helper review binds
+six more bodies and maps fifteen selected spills/home slots; eight regressions
+pass on Linux and Windows. It explicitly identifies thread-relative status
+writes and stops at the deeper diagnostic callee. Loaded-module identity,
+kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,
 completing the primary Rust object's 64-function identity inventory (73 entries
 with the selected C functions). This is not all linked runtime/library code.

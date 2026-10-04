@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "parent_commit": "d5e4cc3e",
+  "status": "SAVED_SDK_DIAGNOSTIC_REVIEW_NOT_OS_QUALIFICATION",
+  "scope": "Implementation-author offline inspection of selected bodies in one saved SDK file; not loaded-module, whole-image or OS qualification.",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "retry": {
+      "rva": 92432,
+      "bytes": 131,
+      "sha256": "686bcdf1f5064d6cab13c38e66726e53e7d5e9ed9f0fd29127f108ee4a78f88c"
+    },
+    "buffer": {
+      "rva": 92572,
+      "bytes": 570,
+      "sha256": "f14bda2e077f086348199a96fcbd1622b7714b0138259f6b3542a5edc881cb48"
+    },
+    "probe": {
+      "rva": 119280,
+      "bytes": 77,
+      "sha256": "f25fcfe628f46c13226ad1bae24beb443be5580b005899bf8f97df2242fc0cee"
+    },
+    "format_adapter": {
+      "rva": 10200,
+      "bytes": 22,
+      "sha256": "2d9d3ffc91caa9cfc9be9f994cd251f8007c5e68159ae04090e4b1709466290d"
+    },
+    "format_wrapper": {
+      "rva": 10228,
+      "bytes": 185,
+      "sha256": "01ee4af94221db9bc54d3ba98853c04e4b9d6026b43b93766d9d0201ca81f7eb"
+    },
+    "trap": {
+      "rva": 7152,
+      "bytes": 2,
+      "sha256": "2a2844fca61eaf46ace55aec60d351479b92df2a14e0a28db5f89d9dd0cec799"
+    },
+    "debug_output": {
+      "rva": 7168,
+      "bytes": 22,
+      "sha256": "3bc303c19e9ffa07f905d26280f8f6167acd50a8a7f2797c137fcbf674a381f4"
+    },
+    "cookie": {
+      "rva": 118304,
+      "bytes": 30,
+      "sha256": "45de6787d0ddafab94532da42a4b1ef8a2175ae6b7e6d36f9c1821c0eaa881aa"
+    }
+  },
+  "formats": {
+    "0x20950": "RTL: RtlNtStatusToDosError(0x%lx): No Valid Win32 Error Mapping\n",
+    "0x20998": "RTL: Edit ntos\\rtl\\generr.c to correct the problem\n",
+    "0x209d0": "RTL: ERROR_MR_MID_NOT_FOUND is being returned\n"
+  },
+  "capacities": [
+    128,
+    256,
+    384,
+    512
+  ],
+  "selected_frames": {
+    "128": {
+      "copy": {
+        "retry": -11744,
+        "buffer_fixed": -12080,
+        "buffer_dynamic": -12208,
+        "format_adapter": -12272,
+        "format_wrapper": -12384
+      },
+      "call_error": {
+        "retry": -12000,
+        "buffer_fixed": -12336,
+        "buffer_dynamic": -12464,
+        "format_adapter": -12528,
+        "format_wrapper": -12640
+      }
+    },
+    "256": {
+      "copy": {
+        "retry": -11744,
+        "buffer_fixed": -12080,
+        "buffer_dynamic": -12336,
+        "format_adapter": -12400,
+        "format_wrapper": -12512
+      },
+      "call_error": {
+        "retry": -12000,
+        "buffer_fixed": -12336,
+        "buffer_dynamic": -12592,
+        "format_adapter": -12656,
+        "format_wrapper": -12768
+      }
+    },
+    "384": {
+      "copy": {
+        "retry": -11744,
+        "buffer_fixed": -12080,
+        "buffer_dynamic": -12464,
+        "format_adapter": -12528,
+        "format_wrapper": -12640
+      },
+      "call_error": {
+        "retry": -12000,
+        "buffer_fixed": -12336,
+        "buffer_dynamic": -12720,
+        "format_adapter": -12784,
+        "format_wrapper": -12896
+      }
+    },
+    "512": {
+      "copy": {
+        "retry": -11744,
+        "buffer_fixed": -12080,
+        "buffer_dynamic": -12592,
+        "format_adapter": -12656,
+        "format_wrapper": -12768
+      },
+      "call_error": {
+        "retry": -12000,
+        "buffer_fixed": -12336,
+        "buffer_dynamic": -12848,
+        "format_adapter": -12912,
+        "format_wrapper": -13024
+      }
+    }
+  },
+  "tests": {
+    "linux": 8,
+    "windows": 8,
+    "single_byte_body_mutations_rejected": 1039,
+    "selected_direct_transfers": 13,
+    "actual_saved_file_reports_identical": true
+  },
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "maximum_transitive_depth_qualified": false,
+  "probe_page_touches_bounded_by_window": false,
+  "thread_relative_flag": {
+    "base": "value at GS:0x30",
+    "offset": 6126,
+    "bytes": 2,
+    "mask": 2
+  },
+  "thread_relative_storage_cleared_by_window": false,
+  "buffer_full_wipe_in_body_observed": false,
+  "unresolved": [
+    {
+      "rva": 10600,
+      "reason": "format engine"
+    },
+    {
+      "rva": 10584,
+      "reason": "format termination helper"
+    },
+    {
+      "rva": 4184,
+      "reason": "invalid-argument path"
+    },
+    {
+      "rva": 127024,
+      "reason": "exception-record initialization helper"
+    },
+    {
+      "rva": 48272,
+      "reason": "exception dispatch"
+    },
+    {
+      "rva": 4448,
+      "reason": "fatal cookie-failure path"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage"
+  ],
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/test-windows-enclave-sdk-diagnostic.py": "763588b49ed4771a8c21de3f94bd362af4be006915390228d4b42eb732629fff",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-diagnostic-linux.json": "80b0f014d7b11b157b04337c78a9ea7b9121daf7de1836fc4d3d8f88844d2d1c",
+    "release-reports/windows-local-20261004/sdk-diagnostic-windows.json": "80b0f014d7b11b157b04337c78a9ea7b9121daf7de1836fc4d3d8f88844d2d1c"
+  }
+}

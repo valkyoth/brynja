@@ -126,3 +126,55 @@ is preserved with its original narrower scope.
 python3 scripts/cryptography/test-windows-enclave-sdk-status.py
 python3 scripts/cryptography/windows_enclave_sdk_status.py PATH_TO_SAVED_VERTDLL
 ```
+
+## Diagnostic retry and formatter-frame extension
+
+The [diagnostic observation](../assurance/windows-protection-observations/sdk-diagnostic-20261004.json)
+extends the earlier stop at `0x16910` for the **same saved SDK file**. Eight
+complete bodies (1,039 bytes) cover the retry wrapper, diagnostic buffer owner,
+stack probe, two formatter adapters, debug output/trap and cookie checker.
+Eight regressions pass on Linux and Windows, rejecting every single-byte body
+mutation, changed direct-transfer targets, format-string changes including NUL
+terminators, and ambiguous/truncated/writable section mappings. Actual saved-file
+inspection reports are identical on both hosts. This is not SDK execution.
+
+The retry caller starts at 128 bytes and increments by 128 only after a truncated
+result, stopping at 512. These are sequential calls, not cumulative live buffers.
+The buffer routine rounds this capacity to 16 bytes, then allocates it below its
+328-byte fixed frame. The modeled output begins 32 bytes above the resulting
+RSP. The three pinned status messages contain one `%lx` conversion in total;
+there is no string-pointer conversion in those messages. This observation does
+not qualify the formatter's complete implementation or arbitrary callers.
+
+| Selected RSP at capacity 512 | Copy-result path | CallEnclave error path |
+| --- | --- | --- |
+| Retry wrapper | H - 11744 | H - 12000 |
+| Diagnostic fixed frame | H - 12080 | H - 12336 |
+| After dynamic allocation | H - 12592 | H - 12848 |
+| Formatter adapter | H - 12656 | H - 12912 |
+| Formatter wrapper | H - 12768 | H - 13024 |
+
+Fifteen selected spans per path account for GPR/home saves, format and thread
+pointers, output descriptor/buffer, a 152-byte exception record, cookie and probe
+register saves. All four caller-provided capacities fit the modeled window.
+The probe also touches pages using a `GS:0x10` stack-limit value: those addresses
+are **not** qualified merely by accounting for its 16-byte save area. No maximum
+transitive stack depth or arbitrary exception/unwind cleanup is established.
+
+The routine sets and clears bit 2 in a two-byte field at offset `0x17ee` from the
+pointer read at `GS:0x30`. That is outside the proven stack-window storage. It
+does not wipe the complete diagnostic buffer in its own body. Normal-return
+window clearing therefore remains necessary, and cannot establish cleanup of
+thread-relative storage, debug traps or exception machinery.
+
+Explicit remaining callees are the formatter at `0x2968`, termination helper at
+`0x2958`, invalid-argument path at `0x1058`, exception-record initialization at
+`0x1f030`, exception dispatch at `0xbc90`, and fatal cookie path at `0x1160`.
+Loaded-module identity and kernel storage also remain unqualified. Earlier
+records retain their original scope; this extension adds no native campaign,
+production signing claim, production-code change or release-gate change.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-diagnostic.py
+python3 scripts/cryptography/windows_enclave_sdk_diagnostic.py PATH_TO_SAVED_VERTDLL
+```

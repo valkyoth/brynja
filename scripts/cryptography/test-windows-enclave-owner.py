@@ -49,7 +49,7 @@ def main():
                 raise AssertionError('Compilation failure is not mutant rejection: '+result.stderr)
             result = subprocess.run([str(directory/'tests')], capture_output=True, text=True, timeout=60)
             if success:
-                if result.returncode or '15 passed' not in result.stdout:
+                if result.returncode or 'test result: ok. 25 passed; 0 failed; 0 ignored;' not in result.stdout:
                     raise AssertionError(result.stdout+result.stderr)
             elif result.returncode == 0 or 'FAILED' not in result.stdout:
                 raise AssertionError('Mutant survived or did not fail its tests: '+result.stdout+result.stderr)
@@ -65,7 +65,7 @@ def main():
             finally:
                 file.write_text(original)
         run(True)
-    print('Windows enclave owner: fifteen real-source tests; nine compiled admission/lifecycle mutants rejected')
+    print('Windows enclave owner: twenty-five real-source tests; nine compiled admission/lifecycle mutants rejected')
 
 
 if __name__ == '__main__':

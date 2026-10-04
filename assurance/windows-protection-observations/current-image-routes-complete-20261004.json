@@ -1,0 +1,201 @@
+{
+  "date": "2026-10-04",
+  "development_refreshes_recorded": 19,
+  "implementation_commit": "4a17ad7d",
+  "production_qualified": false,
+  "public_opening_routes": 19,
+  "release_gate_changed": false,
+  "remaining_refreshes": 0,
+  "routes": [
+    {
+      "constructor": "open",
+      "evidence": "bounded-refresh-20261004.json",
+      "evidence_sha256": "d0600a3453a77f774e847eb13bd4e853c9798a1314785b87e7380994fd250dd0",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "module": "mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open",
+      "evidence": "stream-scalar-refresh-20261004.json",
+      "evidence_sha256": "0b414691c275084611c31b54a753bcd946cbb89253e73743345038487678500f",
+      "image_sha256": "bc8932575def29277263f49c1fe9b912f9a1166e6703ac1f609eef90f63beeab",
+      "module": "sha2/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_sha_ni",
+      "evidence": "stream-sha-refresh-20261004.json",
+      "evidence_sha256": "38f63082835f761bf2efc528c324301554a63541ffa5554be77878ce65cf6698",
+      "image_sha256": "ca5806be2e78ae43f4942b0733bb94bef1e5c75dfa2250d98408dfda74c77d0a",
+      "module": "sha2/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open",
+      "evidence": "stream-scalar-refresh-20261004.json",
+      "evidence_sha256": "0b414691c275084611c31b54a753bcd946cbb89253e73743345038487678500f",
+      "image_sha256": "76bdf18e31b935535ca7a36a5d694abbe14de4a3179076a2fd452d3c5f259718",
+      "module": "sha3/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "stream-sha-refresh-20261004.json",
+      "evidence_sha256": "38f63082835f761bf2efc528c324301554a63541ffa5554be77878ce65cf6698",
+      "image_sha256": "28d01c3b932d22daad5cd2256aa9c31c5fb937a4846067eb991345ee7c7449fa",
+      "module": "sha3/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open",
+      "evidence": "stream-scalar-refresh-20261004.json",
+      "evidence_sha256": "0b414691c275084611c31b54a753bcd946cbb89253e73743345038487678500f",
+      "image_sha256": "bbe6218b52e86b49379597a13129604f8fc7708f4a62b4c7bbc0e387d4173e33",
+      "module": "kmac/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "stream-kmac-tuple-refresh-20261004.json",
+      "evidence_sha256": "25b2d49ef9f199c3efef6483b271f079ed3156a1fe1c092a8adfa7dfb8cfc789",
+      "image_sha256": "4c0f67100277e7750853ba7018ca73f0f68482133c3fdc6ee43ff975fe3abaae",
+      "module": "kmac/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open",
+      "evidence": "stream-scalar-refresh-20261004.json",
+      "evidence_sha256": "0b414691c275084611c31b54a753bcd946cbb89253e73743345038487678500f",
+      "image_sha256": "43b9c988e2a622cc722311d33bfef5de67414357bc32f6c1692c7b09650cf09d",
+      "module": "tuplehash/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "stream-kmac-tuple-refresh-20261004.json",
+      "evidence_sha256": "25b2d49ef9f199c3efef6483b271f079ed3156a1fe1c092a8adfa7dfb8cfc789",
+      "image_sha256": "c5942cba859ffdacd7e657d81ff2d3e25c5582cdb3aeb9754da511cb5f35bd38",
+      "module": "tuplehash/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open",
+      "evidence": "sequential-batch-refresh-20261004.json",
+      "evidence_sha256": "e1c9ed7262bfe68f0e0bb2a72c68fb1c281bbaa97cc1d3761c44dbd2e7f619ff",
+      "image_sha256": "042589239016c308226ab0a6d360d0fd7fc31b20368dd1beecc31cb1214a8e9e",
+      "module": "sha2_batch/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_sha_ni",
+      "evidence": "sequential-batch-refresh-20261004.json",
+      "evidence_sha256": "e1c9ed7262bfe68f0e0bb2a72c68fb1c281bbaa97cc1d3761c44dbd2e7f619ff",
+      "image_sha256": "3dc8f854c97f7371411797daf2f88cbf54473f816fcfbf93dc52954d3c8905af",
+      "module": "sha2_batch/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open",
+      "evidence": "sequential-batch-refresh-20261004.json",
+      "evidence_sha256": "e1c9ed7262bfe68f0e0bb2a72c68fb1c281bbaa97cc1d3761c44dbd2e7f619ff",
+      "image_sha256": "15ff86cc7baf709230411a0ce954ef5fb84ae249f132b4186b0ac186b428c4a8",
+      "module": "sha3_batch/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "sequential-batch-refresh-20261004.json",
+      "evidence_sha256": "e1c9ed7262bfe68f0e0bb2a72c68fb1c281bbaa97cc1d3761c44dbd2e7f619ff",
+      "image_sha256": "2d169d513ca393fe16f4ba25d88d5c4845dafe96532f22b8c9d47e0028a9e78c",
+      "module": "sha3_batch/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open",
+      "evidence": "sequential-parallel-refresh-20261004.json",
+      "evidence_sha256": "d3f32db80f6ebd2724557cd88222de9feb9a25f1232b96735a6662656bada3f1",
+      "image_sha256": "9fbeb3d6d940daf0ecd5172969d4160c3e6e71eb7465b279a11bbc1a77c3da13",
+      "module": "parallelhash/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "sequential-parallel-refresh-20261004.json",
+      "evidence_sha256": "d3f32db80f6ebd2724557cd88222de9feb9a25f1232b96735a6662656bada3f1",
+      "image_sha256": "f6eac516db512c188abc547ff27ade796ed73a8281363b68fd3fb89ff6996e79",
+      "module": "parallelhash/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "simd-host-refresh-20261004.json",
+      "evidence_sha256": "07bf5ae196dbd331d40160871699f7fe1ab4b4fd4ee9378d79bdd5b11c99ac18",
+      "image_sha256": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee",
+      "module": "sha256_simd/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "simd-host-refresh-20261004.json",
+      "evidence_sha256": "07bf5ae196dbd331d40160871699f7fe1ab4b4fd4ee9378d79bdd5b11c99ac18",
+      "image_sha256": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510",
+      "module": "sha512_simd/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "simd-host-refresh-20261004.json",
+      "evidence_sha256": "07bf5ae196dbd331d40160871699f7fe1ab4b4fd4ee9378d79bdd5b11c99ac18",
+      "image_sha256": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330",
+      "module": "keccak_simd/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    },
+    {
+      "constructor": "open_avx2",
+      "evidence": "register-cleanup-20261004.json",
+      "evidence_sha256": "e02bda17757e5682a9f3bd76fcf350c5fbcc86528455a2d778f1400ba24ef617",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "module": "parallel_concurrent/mod.rs",
+      "status": "DEVELOPMENT_REFRESH_RECORDED",
+      "whole_image_qualified": false
+    }
+  ],
+  "schema": 1,
+  "scope": "Current module-root public Session open constructors, including feature-gated routes. Source snapshot and historical evidence references (bounded test-only pin refreshed separately), not semantic parsing, all historical proof images or whole-image qualification.",
+  "source_sha256": {
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/keccak_simd/mod.rs": "bdd30a9a2db83180a441214d9ec58b276d5ee273b77cc5aaed5791e9d51cc28b",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac/mod.rs": "88a0ceb751c1b00b1dba93da9eeac5b09aa069ab8aa363de74713c840d131738",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/mod.rs": "47e4a3f3af2b38081f0878c6eba59c8b2d726401f79e6537d3ce15269ede5769",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_concurrent/mod.rs": "0cce887cfd479ed0985360b90db3c9bf40a3f481b0299885f591dc437409e92a",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/mod.rs": "331c4c4e6d0db821a0cb52f2e00c80e8389c1c27ec33ffca56e3fbead2057244",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2/mod.rs": "6a186890d593393098f40fe68f12f3ba7c822e4e3ca286b28fcc6ee53b90038c",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha256_simd/mod.rs": "fff132fd274427cc2ce0261b5ddc1875966310012f6ee5803de7ccc5882056ce",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/mod.rs": "0af2d4245df9906e90731a090e43020a57d5cb03fda4ba060159115db89df4ca",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/mod.rs": "057427bdbe464aac13f27c17599f6903e161b200948cbacdab0731f1ed392b06",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/mod.rs": "e3bfb0da7e1c8bf54e19ff8137555f18804f33233c1c70a359dd6a4c9defce00",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha512_simd/mod.rs": "faa5a5e3cc9cb299343c292da4d0ede8c1a66108b2ba896af4ead6b01eb1d986",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/mod.rs": "256710ef667acc6d4fb08a5ba58703fc823309598e5aca88274f000ae3b6f6f1"
+  },
+  "status": "PUBLIC_OPENING_ROUTE_REFRESH_INVENTORY",
+  "verifier_sha256": "d618561bc8f18d86dc52a80723b3738726151976750f2ba77b45e014fa4ebc18",
+  "whole_image_qualified": false
+}

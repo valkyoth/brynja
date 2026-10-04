@@ -9,8 +9,8 @@ use super::super::{
 use std::path::Path;
 static POLICY: ImagePolicy = ImagePolicy::reviewed_sha256(
     [
-        169, 57, 53, 139, 154, 188, 165, 41, 194, 197, 155, 2, 200, 34, 107, 218, 246, 100, 134,
-        41, 51, 26, 41, 147, 125, 83, 215, 113, 175, 213, 185, 69,
+        236, 109, 173, 213, 89, 40, 183, 203, 231, 253, 14, 239, 116, 144, 9, 129, 228, 5, 66, 71,
+        71, 122, 212, 96, 128, 2, 64, 3, 99, 125, 84, 148,
     ],
     [66, 82, 89, 78, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [80, 82, 79, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -42,6 +42,27 @@ fn native_development_owner_campaign() -> Result<(), Box<dyn std::error::Error>>
     let location = std::env::var_os("BRYNJA_ENCLAVE_TEST_IMAGE")
         .ok_or("BRYNJA_ENCLAVE_TEST_IMAGE required")?;
     let location = Path::new(&location);
+    // A different complete-file pin must reject before signature verification,
+    // even through this test-only development transport.
+    let mut wrong_digest = POLICY.digest;
+    wrong_digest[0] ^= 1;
+    let wrong_policy = ImagePolicy::reviewed_sha256(
+        wrong_digest,
+        POLICY.family,
+        POLICY.image,
+        POLICY.version,
+        POLICY.security,
+        POLICY.minimum_import_security,
+    );
+    let mut signature_called = false;
+    assert!(matches!(
+        super::Backend::open_with(location, &wrong_policy, |_| {
+            signature_called = true;
+            Err(Error::Signature)
+        }),
+        Err(Error::Image)
+    ));
+    assert!(!signature_called);
     assert!(matches!(
         Session::open(location, &POLICY),
         Err(Error::Signature)

@@ -476,8 +476,10 @@ unqualified.
    later scalar streaming refresh adds four rebuilt images with positive
    debug/release native host campaigns. Six subsequent sequential batch and
    ParallelHash images also pass debug/release host campaigns with exact wrapper
-   binding. The [updated public-route inventory](../assurance/windows-protection-observations/current-image-routes-sequential-20261004.json)
-   records 18 of 19 opening routes refreshed; bounded SHA-256 remains. This
+   binding. The bounded SHA-256 refresh subsequently passes debug/release native
+   tests and scoped Clippy. The [completed public-route inventory](../assurance/windows-protection-observations/current-image-routes-complete-20261004.json)
+   records all 19 opening routes refreshed, with historical source snapshots
+   retained and only the bounded native test's image pin/negative check updated. This
    checklist does not qualify whole-image cleanup or add a release gate.
 
 The Windows ABI distinguishes volatile XMM0–5 from nonvolatile XMM6–15, while

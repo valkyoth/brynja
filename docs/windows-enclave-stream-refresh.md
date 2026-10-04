@@ -204,3 +204,44 @@ the earlier captures, in `sha2-seq-*`, `sha3-seq-*` and `parallel-seq-*`
 directories. `verify_sequential_batch_cleanup.py` and
 `verify_sequential_parallel_cleanup.py` reproduce the new records;
 `review_sequential_image_routes.py` checks their constructor references.
+
+## Bounded SHA-256 refresh completes the public-route checklist
+
+The [bounded refresh record](../assurance/windows-protection-observations/bounded-refresh-20261004.json)
+binds a fresh development-signed retained-input/rehash worker to the same
+392-byte clearing wrapper. The source-bound build uses the cross-instance worker
+composition, preserves its mapping-address identity, and reproduces the import
+transform exactly. Five component tests pass and three compiled scratch/token/
+generation mutants reject. Native public-host campaigns pass in debug and
+release: 16 message vectors, five retained rehash rounds, cancellation,
+abandonment, forgotten results, caller unwinding and held-file release checks.
+Each profile also passes 22 lifecycle tests (3 ignored); scoped Windows Clippy
+passes. Separate local real-source owner tests pass all 25 cases and reject
+nine admission/lifecycle mutants; the cross-instance harness's three tests pass.
+
+The historical hardcoded development image pin in the native test is replaced
+with the reviewed new artifact hash. A negative test changes one digest byte
+and requires rejection before signature verification. The public constructor
+still rejects the development signature. No production constructor, primitive,
+wrapper, policy algorithm or release gate changed. Five source-review pins were
+updated only for the changed native test file. The local owner harness's stale
+15-test expectation is corrected to its actual 25-test population.
+
+The initial host attempt passed its native tests but failed Clippy because the
+new negative assertion used a forbidden `panic!` macro. That attempt remains
+excluded from completion. An explicit assertion that verification was never
+called replaces the macro; the full debug/release/Clippy campaign then passes
+in a fresh directory. No lint allowance was added.
+
+The [completed constructor snapshot](../assurance/windows-protection-observations/current-image-routes-complete-20261004.json)
+records development refresh coverage for **19 of 19 public opening routes**.
+Earlier records keep their original image and host-source snapshots: the
+bounded test-only change does not relabel them as fresh full-candidate runs.
+All counts describe author development tests, not production-signed deployment,
+independent review, whole-image register/spill/dump qualification or Windows
+ARM64 support. Remaining caller/SDK paths and dump coverage still need review.
+
+Raw evidence is retained outside `target/` under `bounded-cleanup-*`, including
+both host attempts and the removed-key signing record. The local helpers
+`verify_bounded_cleanup.py` and `review_complete_image_routes.py` reproduce the
+bounded observation and constructor checklist. Earlier snapshots are preserved.

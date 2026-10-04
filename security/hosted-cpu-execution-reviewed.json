@@ -119,7 +119,7 @@
     "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha3_batch.rs": "4a20fca7713fe007a57192d753d84d83432078874376b8993fa8c2c621117d0d",
     "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha512_simd.rs": "d77fb6870eae645acca667836ac03ccbedbc577613a1adc3b5ee7a54dd4c7f4a",
     "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs": "0517bba86b0973436eef3b483296a87b38d9fec15ddbde41d7a01d8a9392bcd1",
-    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/tests.rs": "00260f9acfb722c076653371e1c3042b30b171b2220fd196655d607f1197dc78",
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/tests.rs": "e3a04457ff86555688a9f66b3236302b15a1f6ce576d7d76b6adc84b1da3ffb7",
     "crates/brynja-crypto-cpu-std/src/windows_enclave/native/tuplehash.rs": "f69e2c786ee6028d8e7521b09e745fa31cf306c34e3007d8b684b46521701f68",
     "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_avx2_wire.rs": "1bd7eed2301353edab561e16d5e4b40aa1569b1f2154d4eccbe116f1076e9637",
     "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_concurrent/mod.rs": "0cce887cfd479ed0985360b90db3c9bf40a3f481b0299885f591dc437409e92a",

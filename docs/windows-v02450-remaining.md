@@ -65,12 +65,17 @@ streaming refresh also passes debug/release native host campaigns for SHA-2,
 SHA-3, KMAC and TupleHash (631/1,028/546/230 cases per profile), with exact wrapper
 binding. The subsequent sequential batch and ParallelHash refresh adds six
 images with debug/release native host campaigns and scoped Clippy passing.
-The [updated public-opening-route snapshot](../assurance/windows-protection-observations/current-image-routes-sequential-20261004.json)
-counts all 19 current module-root `Session::open*` routes: 18 have recorded
-development refresh coverage; only bounded SHA-256 remains to reconcile.
+The final bounded SHA-256 refresh also passes debug/release native host tests,
+including rejection of a mismatched hash before signature verification.
+The [completed public-opening-route snapshot](../assurance/windows-protection-observations/current-image-routes-complete-20261004.json)
+counts all 19 current module-root `Session::open*` routes with recorded
+development refresh coverage. Only the bounded native test's image pin and
+negative assertion changed; earlier observations retain their historical source
+snapshots, not a claim of a new whole-candidate rerun.
 This is a source-bound checklist, not a new gate or whole-image qualification.
 Whole-image caller/spill review,
-remaining-image dump coverage and image refresh are unfinished. The
+remaining SDK paths, remaining-image dump coverage and independent retest are
+unfinished. Current public-route image refresh is complete. The
 chronological development entries below retain their original scope and should
 not be read as a current claim that the concurrent crate API is still absent.
 

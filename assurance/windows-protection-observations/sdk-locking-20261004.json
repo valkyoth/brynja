@@ -1,0 +1,234 @@
+{
+  "schema": 1,
+  "status": "SAVED_SDK_LOCK_FRAMES_NOT_CONCURRENCY_QUALIFICATION",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "lock": {
+      "rva": 38480,
+      "bytes": 31,
+      "sha256": "f4ac1d555a85abe97a89c9fd5d316cb08b9950ec1c0d2a91e7139ee31faa8ddf"
+    },
+    "unlock": {
+      "rva": 38624,
+      "bytes": 183,
+      "sha256": "f91912ff24a276c6ca047f069d09c91ddc614d31b933baba93d6fdd9f4f7a149"
+    },
+    "acquire_slow": {
+      "rva": 39448,
+      "bytes": 479,
+      "sha256": "001e14901046cbaa5720f7301c20085e1b4b26df551fa757e35b0449f6329125"
+    },
+    "queue_link": {
+      "rva": 39936,
+      "bytes": 79,
+      "sha256": "ae8dc3748de847944c8dc01f5f084ce33e5df41327093cc0d455066215fb0440"
+    },
+    "wake": {
+      "rva": 40252,
+      "bytes": 182,
+      "sha256": "72d36ed4995a7367ccb7035214ccfff0a791c7acd2b73a332e10acfedfde04c5"
+    },
+    "backoff": {
+      "rva": 95608,
+      "bytes": 133,
+      "sha256": "8ecc1b16b5435a77885623874f93d304ed5a96b4fe1ef7b3bf37790f40167d44"
+    },
+    "wait_stub": {
+      "rva": 118272,
+      "bytes": 11,
+      "sha256": "6b8fb6afe43835d4ca5f7413270bf612173878b83b1df8131b0b1a699808a02a"
+    },
+    "signal_stub": {
+      "rva": 118112,
+      "bytes": 11,
+      "sha256": "69f61928d3c7e7baa1ebffdd6431f0460947a29cae02831ddd5faacd125bfd68"
+    },
+    "raise_status": {
+      "rva": 48816,
+      "bytes": 107,
+      "sha256": "88b0ea51f2e4750f18499e34df74eff52478502d194ed40a69ae8594e353aa1f"
+    }
+  },
+  "direct_transfers": 11,
+  "body_byte_mutations_rejected": 1216,
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "maximum_transitive_depth_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "lock_concurrency_qualified": false,
+  "wait_node_reclamation_proven": false,
+  "external_storage_erasure_proven": false,
+  "kernel_storage_qualified": false,
+  "sdk_self_erasure_claimed": false,
+  "side_effects": [
+    "module caller uses shared lock at saved-image RVA 0x28d68",
+    "slow acquire publishes a tagged pointer to its stack wait node",
+    "queue and wake modify linked wait nodes potentially owned by other threads",
+    "wait node initialization is not an exit wipe",
+    "backoff uses thread/system data and modifies the supplied counter",
+    "wait and signal syscalls have no software stack adjustment in these stubs",
+    "invalid unlock can enter a recursive status-raising path"
+  ],
+  "unresolved": [
+    {
+      "rva": 53112,
+      "reason": "unwind engine"
+    },
+    {
+      "rva": 48272,
+      "reason": "exception dispatch"
+    },
+    {
+      "rva": 4448,
+      "reason": "fatal cookie-failure path"
+    },
+    {
+      "rva": 6992,
+      "reason": "context/raise helper and recursive exceptional path"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage"
+  ],
+  "modeled_capacities": [
+    128,
+    256,
+    384,
+    512
+  ],
+  "geometry_capacity_512": {
+    "copy": {
+      "engine": {
+        "frames": {
+          "lock": -15216,
+          "slow": -15328,
+          "tail_wake": -15376,
+          "unlock": -15216,
+          "direct_wake": -15264
+        },
+        "selected_ordinary_low_from_high": -15384,
+        "exceptional": {
+          "first_raise_frame_from_high": -16656,
+          "recursive_frame_step_bytes": 1440,
+          "transitive_depth_bound": null,
+          "cleanup_qualified": false,
+          "unknown_callee": {
+            "name": "context/raise helper entry",
+            "offset_from_low": 48872,
+            "offset_from_high": -16664,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          }
+        },
+        "selected_spans": 13
+      },
+      "wide_helper": {
+        "frames": {
+          "lock": -15344,
+          "slow": -15456,
+          "tail_wake": -15504,
+          "unlock": -15344,
+          "direct_wake": -15392
+        },
+        "selected_ordinary_low_from_high": -15512,
+        "exceptional": {
+          "first_raise_frame_from_high": -16784,
+          "recursive_frame_step_bytes": 1440,
+          "transitive_depth_bound": null,
+          "cleanup_qualified": false,
+          "unknown_callee": {
+            "name": "context/raise helper entry",
+            "offset_from_low": 48744,
+            "offset_from_high": -16792,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          }
+        },
+        "selected_spans": 13
+      }
+    },
+    "call_error": {
+      "engine": {
+        "frames": {
+          "lock": -15472,
+          "slow": -15584,
+          "tail_wake": -15632,
+          "unlock": -15472,
+          "direct_wake": -15520
+        },
+        "selected_ordinary_low_from_high": -15640,
+        "exceptional": {
+          "first_raise_frame_from_high": -16912,
+          "recursive_frame_step_bytes": 1440,
+          "transitive_depth_bound": null,
+          "cleanup_qualified": false,
+          "unknown_callee": {
+            "name": "context/raise helper entry",
+            "offset_from_low": 48616,
+            "offset_from_high": -16920,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          }
+        },
+        "selected_spans": 13
+      },
+      "wide_helper": {
+        "frames": {
+          "lock": -15600,
+          "slow": -15712,
+          "tail_wake": -15760,
+          "unlock": -15600,
+          "direct_wake": -15648
+        },
+        "selected_ordinary_low_from_high": -15768,
+        "exceptional": {
+          "first_raise_frame_from_high": -17040,
+          "recursive_frame_step_bytes": 1440,
+          "transitive_depth_bound": null,
+          "cleanup_qualified": false,
+          "unknown_callee": {
+            "name": "context/raise helper entry",
+            "offset_from_low": 48488,
+            "offset_from_high": -17048,
+            "bytes": 40,
+            "callee_frame_bytes": null,
+            "callee_spills_qualified": false
+          }
+        },
+        "selected_spans": 13
+      }
+    }
+  },
+  "date": "2026-10-04",
+  "parent_commit": "f7aee1e7",
+  "review": "Implementation-author saved-file frame review, not SDK execution, lock correctness or exceptional cleanup qualification.",
+  "tests": {
+    "linux_synthetic": 8,
+    "windows_synthetic": 8,
+    "real_body_mutations_rejected_each_host": 1216,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "scripts/cryptography/test-windows-enclave-sdk-locking.py": "235745127135d53180e6f4cc26238baa405a01de7617111819abb35fe624c970",
+    "scripts/cryptography/windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "scripts/cryptography/windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "scripts/cryptography/windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-locking-linux.json": "c36677836c082daf1d5fe37759827bc6e3a5ecaf5ca8353c142d96cf7700faa7",
+    "release-reports/windows-local-20261004/sdk-locking-windows.json": "c36677836c082daf1d5fe37759827bc6e3a5ecaf5ca8353c142d96cf7700faa7"
+  }
+}

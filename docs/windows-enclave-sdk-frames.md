@@ -393,3 +393,59 @@ Production cryptography and release gates are unchanged.
 python3 scripts/cryptography/test-windows-enclave-sdk-directory.py
 python3 scripts/cryptography/windows_enclave_sdk_directory.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+## Cache-lock frames and exceptional stop boundary
+
+The [locking record](../assurance/windows-protection-observations/sdk-locking-20261004.json)
+binds nine additional ranges (1,216 bytes) and eleven direct transfers: lock,
+unlock, slow acquisition, queue linking, waking, backoff, two syscall stubs and
+status raising. Eight focused regressions and 1,216 actual-body byte mutations
+pass on Linux and Windows; the saved-file reports match. As before, hashing
+detects drift in manually reviewed code; it does not prove concurrency safety.
+
+The module lookup passes the saved image's shared lock at RVA `0x28d68`.
+Lock and unlock each reserve 40 bytes. Slow acquisition adds three pushes and
+80 bytes of local space (104 total), with a 48-byte wait node at current RSP+32.
+Backoff is a leaf but writes a counter in caller home space and updates its
+supplied counter. The queue helper is also a leaf; its tail jump to the waking
+helper reuses the existing return address. Waking adds 40 bytes, saves RBX in
+home space and pushes RDI. A direct unlock-to-wake call is a separate path.
+
+| Selected RSP, direct formatter-invalid path at capacity 512 | Copy-result path | CallEnclave error path |
+| --- | --- | --- |
+| Lock/unlock | H - 15216 | H - 15472 |
+| Slow acquisition | H - 15328 | H - 15584 |
+| Wake reached through queue tail jump | H - 15376 | H - 15632 |
+| Its syscall return address | H - 15384 | H - 15640 |
+| Wake called directly from unlock | H - 15264 | H - 15520 |
+
+The wide-helper-invalid origin shifts these by 128 further bytes. Thirteen
+selected spans per origin cover saved registers, the wait node, counters and
+leaf/syscall return slots, for all four diagnostic capacities. The syscall
+stubs have no software stack adjustment; their kernel storage is not modeled.
+
+Slow acquisition **publishes a tagged pointer to its stack wait node** through
+the shared lock state. Queue/wake code follows and updates linked nodes, which
+can belong to other threads. This review does not prove node reclamation,
+external-storage erasure, lock correctness or progress under contention. The
+node is initially zeroed and then populated; that is not an exit wipe. Saved
+registers are restored without erasing their slots. Reads of thread/system
+data, pauses, timing instructions and wait/signal calls are not execution-tested
+by the Python inspectors.
+
+Invalid unlock state can call the status raiser (`0xbeb0`). That routine has a
+1,432-byte fixed frame and calls itself on one path, adding another 1,440 bytes
+including the return address each time. Only the **first** frame is accounted
+for; the result explicitly leaves transitive depth unknown. Its context/raise
+helper (`0x1b50`), recursion, exceptions and interruption cleanup are not
+qualified. No finite exceptional bound is inferred from the ordinary frames.
+
+The ordinary cache-lock frames are now accounted for. The actual unwind engine,
+exception/fatal paths, loaded-module identity and broader whole-image cleanup
+remain unfinished. No production cryptography, native campaign or release gate
+changed in this review.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-locking.py
+python3 scripts/cryptography/windows_enclave_sdk_locking.py PATH_TO_SAVED_VERTDLL --mutations
+```

@@ -60,6 +60,13 @@ mutations pass on both hosts. The header call disables optional size checks,
 so this is deliberately not a malformed-image safety or exception-path proof.
 The ordinary directory frames are accounted for; cache slow paths and the
 unwind/exception/fatal boundaries remain unfinished.
+A subsequent locking extension binds nine ranges and thirteen selected spans;
+eight regressions and 1,216 real-body mutations pass on Linux and Windows.
+It accounts for ordinary cache-lock frames, including queue tail-call reuse,
+and records publication of the stack wait node through shared lock state.
+Node reclamation and concurrency are not thereby qualified. The invalid-unlock
+status raiser is recursive: only its first frame is mapped, with no finite
+transitive bound. Unwind/exception/fatal cleanup remains unfinished.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

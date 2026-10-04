@@ -1,0 +1,254 @@
+{
+  "schema": 1,
+  "status": "SAVED_DISPATCH_HELPERS_POINT_AND_SELECTED_WRITE_REVIEW",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "stack_bounds": {
+      "rva": 93596,
+      "bytes": 44,
+      "sha256": "17f1673070558f0128c80020dc2593bc554374dfe6080b14ff1e5042a655cb17"
+    },
+    "stack_point": {
+      "rva": 94972,
+      "bytes": 21,
+      "sha256": "9d76b03da7427496b484290e61dec6393970933d8e36b274803366c86690989f"
+    },
+    "copy": {
+      "rva": 37816,
+      "bytes": 452,
+      "sha256": "cc35daace57068b0fec72c8ef6c44a0682f6fa6ea19c1de6dd92d938bb1368b8"
+    },
+    "adapter": {
+      "rva": 50160,
+      "bytes": 207,
+      "sha256": "6324a08dc257952d12358001750825387caff6f9393ff35040e3eedfba24f6eb"
+    }
+  },
+  "direct_transfers": 2,
+  "instruction_anchors": 8,
+  "body_byte_mutations_rejected": 724,
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "arbitrary_context_bounds_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "maximum_transitive_depth_qualified": false,
+  "sdk_self_erasure_claimed": false,
+  "side_effects": [
+    "initial stack bounds are read through GS:0x30 and written to caller locals",
+    "stack-point helper validates alignment and a point only, not access width or progress",
+    "context copy masks flags differently for exact self-copy and distinct pointers",
+    "distinct copy writes selected scalar and floating/vector fields, not a whole context",
+    "copy leaves intermediate register contents and destination data; it is not erasure",
+    "alternate adapter calls previously inspected flags and unwind engine with caller outputs"
+  ],
+  "unresolved": [
+    {
+      "rva": 48944,
+      "reason": "fatal diagnostic wrapper and transitive calls"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage",
+    "runtime feature table sizes masks and alignment validity",
+    "external handler and continuation targets; recursive exceptions and fatal transitions"
+  ],
+  "modeled_capacities": [
+    128,
+    256,
+    384,
+    512
+  ],
+  "illustrative_geometry_capacity_512": {
+    "copy": {
+      "illustrative_exception_size": 1279,
+      "frames": {
+        "adapter": -16240,
+        "flags": -16288,
+        "engine": -16416
+      },
+      "copy_destination_writes": [
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49600,
+          "offset_from_high": -15936,
+          "bytes": 4
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49604,
+          "offset_from_high": -15932,
+          "bytes": 4
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49608,
+          "offset_from_high": -15928,
+          "bytes": 2
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49618,
+          "offset_from_high": -15918,
+          "bytes": 2
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49620,
+          "offset_from_high": -15916,
+          "bytes": 4
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49696,
+          "offset_from_high": -15840,
+          "bytes": 40
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49768,
+          "offset_from_high": -15768,
+          "bytes": 40
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49808,
+          "offset_from_high": -15728,
+          "bytes": 160
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 50064,
+          "offset_from_high": -15472,
+          "bytes": 160
+        }
+      ],
+      "same_object_writes": [
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49600,
+          "offset_from_high": -15936,
+          "bytes": 4
+        }
+      ],
+      "os_stack_bounds_equal_clearing_window_proven": false,
+      "arbitrary_source_or_overlap_validated": false,
+      "forward_progress_proven": false,
+      "actual_runtime_allocation_observed": false,
+      "cleanup_qualified": false,
+      "selected_stack_spans": 11
+    },
+    "call_error": {
+      "illustrative_exception_size": 1279,
+      "frames": {
+        "adapter": -16496,
+        "flags": -16544,
+        "engine": -16672
+      },
+      "copy_destination_writes": [
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49344,
+          "offset_from_high": -16192,
+          "bytes": 4
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49348,
+          "offset_from_high": -16188,
+          "bytes": 4
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49352,
+          "offset_from_high": -16184,
+          "bytes": 2
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49362,
+          "offset_from_high": -16174,
+          "bytes": 2
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49364,
+          "offset_from_high": -16172,
+          "bytes": 4
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49440,
+          "offset_from_high": -16096,
+          "bytes": 40
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49512,
+          "offset_from_high": -16024,
+          "bytes": 40
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49552,
+          "offset_from_high": -15984,
+          "bytes": 160
+        },
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49808,
+          "offset_from_high": -15728,
+          "bytes": 160
+        }
+      ],
+      "same_object_writes": [
+        {
+          "name": "context copy destination",
+          "offset_from_low": 49344,
+          "offset_from_high": -16192,
+          "bytes": 4
+        }
+      ],
+      "os_stack_bounds_equal_clearing_window_proven": false,
+      "arbitrary_source_or_overlap_validated": false,
+      "forward_progress_proven": false,
+      "actual_runtime_allocation_observed": false,
+      "cleanup_qualified": false,
+      "selected_stack_spans": 11
+    }
+  },
+  "date": "2026-10-04",
+  "parent_commit": "d1156ef0",
+  "review": "Implementation-author saved-file review of four direct dispatch helpers, not live OS stack limits, arbitrary pointer/overlap safety, forward progress or exception cleanup.",
+  "tests": {
+    "linux_synthetic": 8,
+    "windows_synthetic": 8,
+    "real_body_mutations_rejected_each_host": 724,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_dispatch_helpers.py": "929c9a0fd31991c73d35eb9b4edaebf1b0b35092b8752bc16bee90c8c9d3b9f9",
+    "scripts/cryptography/test-windows-enclave-sdk-dispatch-helpers.py": "dbf3ea57947c50cb0f095c0815b3906ef351f219972dcfd6b6fedf6b481c007f",
+    "scripts/cryptography/windows_enclave_sdk_dispatch.py": "1f3c17ade072651320a2f6cd4a752c128fffe6aeb94da3df0eb22912417746ee",
+    "scripts/cryptography/windows_enclave_sdk_context.py": "5dc989fb47c8ab8a203d3c1375e9128cd6c5b12772c90b4180a4f24192fee696",
+    "scripts/cryptography/windows_enclave_sdk_exception.py": "7dd1c3cf0a77385ecdf52820fd9357509f7e96f99de95ded41140b5d49d6a73a",
+    "scripts/cryptography/windows_enclave_sdk_decoders.py": "f2fecab13a96c421a1a7b100459c1b68a1c801d40c930c280913cf1b4b3a3e28",
+    "scripts/cryptography/windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "scripts/cryptography/windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "scripts/cryptography/windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "scripts/cryptography/windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "scripts/cryptography/windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-dispatch-helpers-linux.json": "bc5eb78af98836ccbb9b61e168f05aa784c4486dc3a7b6eb40880e9bb859f883",
+    "release-reports/windows-local-20261004/sdk-dispatch-helpers-windows.json": "bc5eb78af98836ccbb9b61e168f05aa784c4486dc3a7b6eb40880e9bb859f883"
+  }
+}

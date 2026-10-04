@@ -102,6 +102,13 @@ tail-call reuse, while retaining unknown handler/callback targets and IRET
 continuations. Stack-bound/progression, context-copy and alternate-unwind
 helpers remain direct review boundaries; no general exception-cleanup or
 finite recursive-depth claim has been added.
+The subsequent [direct helper review](windows-enclave-sdk-unwind.md#direct-dispatch-helpers)
+now accounts for those four bodies, with eight Linux/Windows regressions and
+724 actual-byte mutations rejected per host. The point-versus-range distinction,
+selected context writes and adapter/engine flag alias are regression-tested.
+No further unreviewed direct callees arise from these helpers. Fatal diagnostic
+behavior, external handlers and arbitrary exceptions remain outside a cleanup
+guarantee; loaded-module and broader whole-image qualification remain open.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

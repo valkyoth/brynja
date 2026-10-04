@@ -323,3 +323,58 @@ neither production cryptography nor release-gate policy.
 python3 scripts/cryptography/test-windows-enclave-sdk-dispatch.py
 python3 scripts/cryptography/windows_enclave_sdk_dispatch.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+## Direct dispatch helpers
+
+The [dispatch-helper observation](../assurance/windows-protection-observations/sdk-dispatch-helpers-20261004.json)
+binds all four remaining direct helper bodies: initial stack bounds at
+`0x16d9c`, stack-point validation at `0x172fc`, selected context copying at
+`0x93b8` and the alternate unwind adapter at `0xc3f0`. Eight focused tests
+pass on Linux and Windows, with identical saved-file reports and rejection of
+all 724 body-byte mutations. Two direct calls and eight instruction anchors
+are checked separately from the whole-body hashes.
+
+The initial bounds helper reads low/high values through `GS:0x30`, writes both
+to caller locals and checks that its own entry RSP is inside that interval.
+The second helper checks eight-byte alignment and `low <= address < high`.
+Neither establishes an entire access range, strictly advancing frame addresses,
+or equivalence between OS stack limits and Brynja's clearing window. Tests
+deliberately accept a point whose eight-byte access would cross the upper
+bound, and repeated identical points: adding stronger checks to the model
+would misrepresent these SDK instructions. Both helpers are leaf functions.
+
+The copy helper is also a leaf. Exact source/destination equality only masks
+the flags with `0x10004f`. Distinct pointers use `0x10000f` and copy selected
+GPR/control fields, a 160-byte region at offset `0x100`, and ten vector slots
+at `0x200..0x2a0`. Nine destination intervals cover 416 distinct written bytes;
+they deliberately exclude untouched segment fields and the gap before the
+vector slots. This is not whole-context copying, zeroization, partial-overlap
+safety or arbitrary source-pointer validation. The XMM intermediates are not
+explicitly erased by this helper.
+
+The alternate adapter uses a 136-byte fixed frame, with four register saves
+in caller home space, a pushed R14, outgoing arguments and a three-pointer
+descriptor. Its only calls reach the already-inspected flags helper and unwind
+engine. The engine's working flag at its own RSP+256 aliases adapter RSP+80;
+tests check that exact equality. The flags helper and engine are sibling
+calls, not cumulative nesting. The initial bound outputs occupy dispatcher
+fixed RSP+152 and +160.
+
+At diagnostic capacity 512 and illustrative outer size 1,279, the copy path's
+adapter/flags/engine RSP values are H-16240/H-16288/H-16416. Eleven selected
+stack spans and the conditional context-copy destination ranges fit the
+modeled clearing window. No runtime placement measurement or arbitrary unwind
+proof is implied. These four bodies add no further unreviewed direct callees.
+
+This finishes the selected direct dispatch-helper inventory, not whole-image
+qualification. External handlers, continuation targets, recursive exceptions,
+OS-owned state and fatal diagnostic behavior retain their prior limits.
+The fatal diagnostic wrapper remains outside this completed helper inventory;
+fatal cleanup is not a supported guarantee. Loaded-module identity and broader
+image/dump qualification remain separate work. Production code and release-gate
+policy are unchanged.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-dispatch-helpers.py
+python3 scripts/cryptography/windows_enclave_sdk_dispatch_helpers.py PATH_TO_SAVED_VERTDLL --mutations
+```

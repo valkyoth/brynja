@@ -43,8 +43,17 @@ completing the primary Rust object's 64-function identity inventory (73 entries
 with the selected C functions). This is not all linked runtime/library code.
 The old SHA-256 and SHA-512 SIMD images have now been rebuilt with the clearing
 wrapper and passed fresh component/worker mutations plus native campaigns
-(302 and 318 calls). Their signed bytes bind the reviewed wrapper. This refresh
-does not replace public-host-facade or remaining-image dump qualification.
+(302 and 318 calls). Their signed bytes bind the reviewed wrapper. Fresh
+[public-host campaigns](../assurance/windows-protection-observations/simd-host-refresh-20261004.json)
+now pass debug/release against those SHA-2 images and the refreshed Keccak image:
+403 eight-lane SHA-224/256, 559 four-lane SHA-512-family and 521 four-lane Keccak
+batches per profile, plus lifecycle tests and scoped Clippy. Positive execution
+uses internal development transport; production constructors still reject the
+development signatures. This does not replace remaining-image dump qualification.
+A [four-stream manifest review](../assurance/windows-protection-observations/stream-refresh-inventory-20261004.json)
+confirms the saved SHA-NI SHA-2, AVX2 SHA-3, KMAC and TupleHash streaming images
+still record the older wrapper and need refresh. These are distinct from the
+three refreshed multibuffer images; this is not an exhaustive image inventory.
 Whole-image caller/spill review,
 remaining-image dump coverage and image refresh are unfinished. The
 chronological development entries below retain their original scope and should

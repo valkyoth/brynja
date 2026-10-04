@@ -1,0 +1,69 @@
+{
+  "complete_image_inventory": false,
+  "date": "2026-10-04",
+  "implementation_commit": "5db238cb",
+  "records": {
+    "kmac-avx2": {
+      "changed_sources": {
+        "assurance/windows-enclave-probe/window_rust_x64.asm": {
+          "current": "17c78ba8c3f0d521812f979dbfb8e46eaed5f92aaf3bf6395f5103117104d4a2",
+          "recorded": "6f80e7151a687772e52040c795bc36fa52f0aed507fd5954e0dec10a47f3b916"
+        }
+      },
+      "manifest": "windows-kmac-worker-collected-20261001/kmac-worker-20261001/kmac-worker-build.json",
+      "manifest_sha256": "3dd133a02c4687f8685440aa626a0d897ae929db97dbc9119a837d91070c08f4",
+      "recorded_source_count": 305,
+      "status": "HISTORICAL_IMAGE_REQUIRES_REFRESH"
+    },
+    "sha2-sha-ni": {
+      "changed_sources": {
+        "assurance/windows-enclave-probe/window_rust_x64.asm": {
+          "current": "17c78ba8c3f0d521812f979dbfb8e46eaed5f92aaf3bf6395f5103117104d4a2",
+          "recorded": "6f80e7151a687772e52040c795bc36fa52f0aed507fd5954e0dec10a47f3b916"
+        },
+        "assurance/windows-enclave-probe/window_sha2_accelerated.c": {
+          "current": "0e0d240a000374e8ffc8c9547e427904f179e2afadb2db5783d9605b5246ac9d",
+          "recorded": "0349f2cb71e05544917909856202bd1baede9c32150dd288c583057bd8e4be48"
+        },
+        "scripts/cryptography/test-windows-enclave-sha2-worker.py": {
+          "current": "1d6d110427765b152d2fd7ad83edd50449bdd315c51e2a6dbe30ad160cb0025c",
+          "recorded": "2b357fe69143b2e18aa6405a7e7fdbae9f79c0263932e1943d167df237b5682e"
+        }
+      },
+      "manifest": "windows-azure-replacement-2026-10-01/sha2-worker-windows-final/sha2-worker-final-20261001/sha2-worker-build.json",
+      "manifest_sha256": "44390994999f21eecbbaa16a2e03c91053a7985518d9de8e68e08a7f6088901b",
+      "recorded_source_count": 264,
+      "status": "HISTORICAL_IMAGE_REQUIRES_REFRESH"
+    },
+    "sha3-avx2": {
+      "changed_sources": {
+        "assurance/windows-enclave-probe/window_rust_x64.asm": {
+          "current": "17c78ba8c3f0d521812f979dbfb8e46eaed5f92aaf3bf6395f5103117104d4a2",
+          "recorded": "6f80e7151a687772e52040c795bc36fa52f0aed507fd5954e0dec10a47f3b916"
+        }
+      },
+      "manifest": "windows-sha3-worker-collected-20261001/sha3-worker-20261001/sha3-worker-build.json",
+      "manifest_sha256": "83918243f74fa943b3391891ea2c77951a6dba9f2ee90dee34c695e40d729242",
+      "recorded_source_count": 254,
+      "status": "HISTORICAL_IMAGE_REQUIRES_REFRESH"
+    },
+    "tuplehash-avx2": {
+      "changed_sources": {
+        "assurance/windows-enclave-probe/window_rust_x64.asm": {
+          "current": "17c78ba8c3f0d521812f979dbfb8e46eaed5f92aaf3bf6395f5103117104d4a2",
+          "recorded": "6f80e7151a687772e52040c795bc36fa52f0aed507fd5954e0dec10a47f3b916"
+        }
+      },
+      "manifest": "windows-tuple-worker-collected-20261001/tuple-worker-20261001/tuple-worker-build.json",
+      "manifest_sha256": "d4d36ae8e48a31a75fda8f6bd5ab1355113d85e943531dfaf496fdbc9781ccc9",
+      "recorded_source_count": 266,
+      "status": "HISTORICAL_IMAGE_REQUIRES_REFRESH"
+    }
+  },
+  "release_gate_changed": false,
+  "schema": 1,
+  "scope": "Recorded build-source hashes only; no claim that unrecorded dependencies or all supported routes were inspected.",
+  "status": "FOUR_SAVED_STREAMING_BUILD_MANIFESTS_RECONCILED",
+  "verifier_sha256": "8dddbfea229ac0f0f1dba585703cd752ba747f42cc8dc15e156c7c09cc289aed",
+  "whole_image_qualified": false
+}

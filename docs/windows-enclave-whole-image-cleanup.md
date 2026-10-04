@@ -427,8 +427,15 @@ Both images bind the exact already mutation-tested 392-byte `PublicLockedFrame`.
 Prepared import transformations reproduced byte-for-byte locally; build, native
 source and artifact hashes reconcile. Temporary signing keys were removed and
 compatibility warnings retained. This refresh uses Rust 1.98.1 and AVX2, not
-dedicated x86 SHA512 instructions. It does not add a fresh public-host-facade
-campaign, remaining-image dump coverage or whole-image qualification.
+dedicated x86 SHA512 instructions. The subsequent
+[host refresh](../assurance/windows-protection-observations/simd-host-refresh-20261004.json)
+passes debug/release against both SHA-2 images and the refreshed Keccak image:
+403/559/521 batches and 3224/2236/2084 lane digests respectively per profile.
+SHA-2 runs 32 lifecycle tests per profile; Keccak runs 45. Seven/eleven ignored
+cases are not counted as execution. Scoped Clippy passes; all saved log, binary,
+image and source hashes reconcile, and the 520-case Keccak oracle reproduces.
+Positive execution uses internal development transport, not production signing.
+This adds no remaining-image dump coverage or whole-image qualification.
 
 The subsequent [selected SDK-frame inspection](windows-enclave-sdk-frames.md)
 maps the saved System32 library's `RtlCallEnclave` register saves and copy-entry
@@ -456,6 +463,11 @@ unqualified.
    private native retest are now completed above. The October 4 Keccak SIMD image-build
    manifest matches all nine directly recorded build sources. This comparison
    is limited to those manifests, not an exhaustive algorithm-image inventory.
+   A [four-stream inventory](../assurance/windows-protection-observations/stream-refresh-inventory-20261004.json)
+   also identifies old wrappers in saved SHA-NI SHA-2, AVX2 SHA-3, KMAC and
+   TupleHash streaming manifests. SHA-2 additionally differs in its C entry and
+   worker-test script; the other three differ only in the recorded wrapper.
+   Refresh these distinct streaming images before claiming new-wrapper coverage.
 
 The Windows ABI distinguishes volatile XMM0–5 from nonvolatile XMM6–15, while
 upper YMM halves are volatile. A blanket `vzeroall` would violate ordinary

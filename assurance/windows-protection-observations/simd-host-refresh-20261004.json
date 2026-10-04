@@ -1,0 +1,139 @@
+{
+  "artifacts_sha256": {
+    "keccak-cleanup-host/build-debug.stderr": "cdee14ce3d5d8f1305d78dcbde839e7bb4ab8f11d495b0b9056d6fec51453123",
+    "keccak-cleanup-host/build-debug.stdout": "bf5b68a8330dd3614cb78f026b8ba13f72082d5f6c3751cc3b4308ad36fcefbe",
+    "keccak-cleanup-host/build-release.stderr": "4124a81d607d73e5456004d83f56fd6ac25a4a405d9361417d9d5237e83e71be",
+    "keccak-cleanup-host/build-release.stdout": "3e06df6eb51ff2aceec2f3d9f5f96e6cc9b572d3d73d7e673499c7304a0af9d0",
+    "keccak-cleanup-host/clippy.stderr": "f26cd56630aa513df687ba9ca2d570f5a86cfc9624c77390d29fabcf36353aba",
+    "keccak-cleanup-host/clippy.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "keccak-cleanup-host/debug-host-tests.exe": "0e4f8e4556e34c62731c742c6915f2bff56710d62e48e8894c043162938d2595",
+    "keccak-cleanup-host/debug-lifecycle.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "keccak-cleanup-host/debug-lifecycle.stdout": "5351e22fff97f8a44d3250a05eb661244ab4c9c6feb179f5c7211697c1d3c116",
+    "keccak-cleanup-host/debug-native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "keccak-cleanup-host/debug-native.stdout": "cf60206cdfc194f1c714ab44aaa93f28e937e65160f3e46ee5c7a0f5e4c9affb",
+    "keccak-cleanup-host/host-results.json": "2dfdf886933e1ff7b40966ee8ff93b41923de301bdb1f6d87ae4be1cb28dc56d",
+    "keccak-cleanup-host/keccak-simd-vectors.txt": "517f793a07ce6e69dc5caca5eda39a33a28dd1c3ec8a7bcef13b04cb4c319158",
+    "keccak-cleanup-host/release-host-tests.exe": "3f21a93fe63c2f10dcf7d8794f244598874ca6870bb1ae19902ff9202508d57f",
+    "keccak-cleanup-host/release-lifecycle.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "keccak-cleanup-host/release-lifecycle.stdout": "0e0c458349001e12933a6cbf3d5f89efcdce9ab14c50b64a6fbfec5333a3b473",
+    "keccak-cleanup-host/release-native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "keccak-cleanup-host/release-native.stdout": "1fa24094d42646ba85908a986c9a7f16035f30f474d917997c1df62c9cf41ddd",
+    "keccak-cleanup-host/rustc.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "keccak-cleanup-host/rustc.stdout": "67d86fbf74071a3c2fbf23eb9e4e28e3ecc0f81b6fce3d35f5bbc88b7de1ecfb",
+    "sha256-cleanup-host/build-debug.stderr": "ba3bf41588b555b3e78cec505a74b99673921746a06823d84aaeca584c6fb248",
+    "sha256-cleanup-host/build-debug.stdout": "b619ec48d6cbaf2bcf0f555cc00f184f45be5dae5045ad876160f75295f885c5",
+    "sha256-cleanup-host/build-release.stderr": "6cff3e1bde20c5e551b53763f665606e96dce94d512b8ad2bdaf1187fffce0c8",
+    "sha256-cleanup-host/build-release.stdout": "3da597757b04b8a67c83334ce45b6bd6a3593d45a543bd51326fed1b2ba2a309",
+    "sha256-cleanup-host/clippy.stderr": "dda3aa44b2aa7163ffb8a2c759df225e4d6781442015890cdf25f1b07ca572a7",
+    "sha256-cleanup-host/clippy.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha256-cleanup-host/debug-host-tests.exe": "b4b3dbee0611ecf5016d60799a4f9debc3c46cd2b3128cfb1a06a0c87de0d65a",
+    "sha256-cleanup-host/debug-lifecycle.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha256-cleanup-host/debug-lifecycle.stdout": "230b088401f7b073826516092458c699460c643695a66f3a90992fda9d5356cd",
+    "sha256-cleanup-host/debug-native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha256-cleanup-host/debug-native.stdout": "f8416300663018f18d7837008137e79b3f90ef0dc59f28a7cb02d21cc8baf8ba",
+    "sha256-cleanup-host/host-results.json": "74231f3c48376807f303d651c7f815a39dbf1f5233aa105220be002c984be35c",
+    "sha256-cleanup-host/release-host-tests.exe": "b9564df9cad2a363e6a4d4f569efd23e27985b89dd5ecac618e2be1fdd8f3c96",
+    "sha256-cleanup-host/release-lifecycle.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha256-cleanup-host/release-lifecycle.stdout": "b4dbcc0f8172934997d7af6df66007a22504839eef9cfbe6a5c2c256f717be08",
+    "sha256-cleanup-host/release-native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha256-cleanup-host/release-native.stdout": "42ac492fe2ea01d2c3f589193b3168eafd68bdc10b75caba49e8a886d0fd4831",
+    "sha256-cleanup-host/rustc.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha256-cleanup-host/rustc.stdout": "67d86fbf74071a3c2fbf23eb9e4e28e3ecc0f81b6fce3d35f5bbc88b7de1ecfb",
+    "sha512-cleanup-host/build-debug.stderr": "3d34c425e6e931ce85124e032fd6e10c50d508de77910a680393c6268ae8ee71",
+    "sha512-cleanup-host/build-debug.stdout": "d89a4ea01a14f2ad1aad60aacff44e4ba40fde2da9eaf6f3c52ddd432bdddc7c",
+    "sha512-cleanup-host/build-release.stderr": "66794669008acf238999a7a663830d7a435b47d7197a5ec07b30a081f13cb703",
+    "sha512-cleanup-host/build-release.stdout": "e20c3d94c9912a3906d52b1c19f972985cc735cd6bc3592d879940c014ea6bbb",
+    "sha512-cleanup-host/clippy.stderr": "f5bdf0d7b5b9a43f4c1ac1ee87c6fc4ecd701681507fcc3213091bcae264cf89",
+    "sha512-cleanup-host/clippy.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha512-cleanup-host/debug-host-tests.exe": "b4b3dbee0611ecf5016d60799a4f9debc3c46cd2b3128cfb1a06a0c87de0d65a",
+    "sha512-cleanup-host/debug-lifecycle.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha512-cleanup-host/debug-lifecycle.stdout": "f685d96e3f46f4b0bc6b9744c585a372aa6f3995ea1cd19649cc947af7d3578d",
+    "sha512-cleanup-host/debug-native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha512-cleanup-host/debug-native.stdout": "0a0b5667dbba2b23c468da689e5951f46f5f49e0c96dafc46fc2067b99120cc9",
+    "sha512-cleanup-host/host-results.json": "46c769bba0c9795a3335d9ba457332b51dae4c872de2cebb1bab3ff3145136f9",
+    "sha512-cleanup-host/release-host-tests.exe": "b9564df9cad2a363e6a4d4f569efd23e27985b89dd5ecac618e2be1fdd8f3c96",
+    "sha512-cleanup-host/release-lifecycle.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha512-cleanup-host/release-lifecycle.stdout": "240c7193ece26d67fe957a63f5d5904d399674b02eea473cdcc1d38bdeb71f04",
+    "sha512-cleanup-host/release-native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha512-cleanup-host/release-native.stdout": "46a44723a74f00aecca34fe151f866986ffe669545c10f0988c3d24930742962",
+    "sha512-cleanup-host/rustc.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha512-cleanup-host/rustc.stdout": "67d86fbf74071a3c2fbf23eb9e4e28e3ecc0f81b6fce3d35f5bbc88b7de1ecfb",
+    "test-keccak-cleanup-host.cmd": "76a63c06b0954bd963292489da1fe276159c8b2e02742c04da0f50a1e885492b",
+    "test-sha2-cleanup-host.cmd": "26eadaa7d8445aac711600a0bd79c524c9a3406aeefc986d163f378f99d40b06",
+    "verify_simd_host_cleanup.py": "2c2cadf40cddba6c0b38aae835f08d1151d5cd717f93038e7524426ed364e334"
+  },
+  "date": "2026-10-04",
+  "implementation_commit": "5db238cb",
+  "independently_verified": false,
+  "limitations": [
+    "Development-signed images: positive tests use internal test-only development transport.",
+    "Production constructor rejects development signatures; no production signing qualification.",
+    "AVX2 multibuffer SHA-2/Keccak routes, not dedicated x86 SHA512 instructions.",
+    "Ignored lifecycle cases are not counted as executed; exact native campaigns run separately.",
+    "Functional host refresh does not complete whole-image caller/spill or remaining-image dump review."
+  ],
+  "production_qualified": false,
+  "records": {
+    "keccak": {
+      "batches_per_profile": 521,
+      "binaries": {
+        "debug-host-tests.exe": "0e4f8e4556e34c62731c742c6915f2bff56710d62e48e8894c043162938d2595",
+        "release-host-tests.exe": "3f21a93fe63c2f10dcf7d8794f244598874ca6870bb1ae19902ff9202508d57f"
+      },
+      "digests_per_profile": 2084,
+      "host_record_sha256": "2dfdf886933e1ff7b40966ee8ff93b41923de301bdb1f6d87ae4be1cb28dc56d",
+      "image_sha256": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330",
+      "lifecycle_ignored_per_profile": 11,
+      "lifecycle_passed_per_profile": 45,
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "scoped_clippy_passed": true,
+      "source_files": 513
+    },
+    "sha256": {
+      "batches_per_profile": 403,
+      "binaries": {
+        "debug-host-tests.exe": "b4b3dbee0611ecf5016d60799a4f9debc3c46cd2b3128cfb1a06a0c87de0d65a",
+        "release-host-tests.exe": "b9564df9cad2a363e6a4d4f569efd23e27985b89dd5ecac618e2be1fdd8f3c96"
+      },
+      "digests_per_profile": 3224,
+      "host_record_sha256": "74231f3c48376807f303d651c7f815a39dbf1f5233aa105220be002c984be35c",
+      "image_sha256": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee",
+      "lifecycle_ignored_per_profile": 7,
+      "lifecycle_passed_per_profile": 32,
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "scoped_clippy_passed": true,
+      "source_files": 441
+    },
+    "sha512": {
+      "batches_per_profile": 559,
+      "binaries": {
+        "debug-host-tests.exe": "b4b3dbee0611ecf5016d60799a4f9debc3c46cd2b3128cfb1a06a0c87de0d65a",
+        "release-host-tests.exe": "b9564df9cad2a363e6a4d4f569efd23e27985b89dd5ecac618e2be1fdd8f3c96"
+      },
+      "digests_per_profile": 2236,
+      "host_record_sha256": "46c769bba0c9795a3335d9ba457332b51dae4c872de2cebb1bab3ff3145136f9",
+      "image_sha256": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510",
+      "lifecycle_ignored_per_profile": 7,
+      "lifecycle_passed_per_profile": 32,
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "scoped_clippy_passed": true,
+      "source_files": 441
+    }
+  },
+  "refresh_record_sha256": "bd7bc890a1bec946f23236fcb0307098b966fb10fa25d36c9252cd5dab4ff987",
+  "release_gate_changed": false,
+  "schema": 1,
+  "status": "REFRESHED_SIMD_PUBLIC_HOST_DEVELOPMENT_PASS",
+  "target": "x86_64-pc-windows-msvc",
+  "toolchain": "1.98.1",
+  "whole_image_qualified": false
+}

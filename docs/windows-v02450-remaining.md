@@ -46,7 +46,11 @@ formatting, exception/fatal helpers and stack-probe page addresses remain
 unqualified; these are not a transitive stack-depth or unwind proof. A formatter
 extension now binds ten further ranges and maps its scratch/output-helper frames;
 seven regressions and 3,030 real-body byte mutations pass on Linux and Windows.
-Wide conversion and exceptional/fatal callees still have no transitive bound.
+The conversion/context extension binds five further bodies and the observed
+invalid-argument context destination; eight regressions and 641 real-body
+mutations pass on Linux and Windows. The saved SDK's conversion leaf rejects;
+thread-relative error writes and guarded diagnostic re-entry are documented.
+Runtime lookup/unwind and exceptional/fatal callees still have no transitive bound.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

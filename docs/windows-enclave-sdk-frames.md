@@ -232,3 +232,56 @@ No production code, release gate, native campaign or production claim changed.
 python3 scripts/cryptography/test-windows-enclave-sdk-formatter.py
 python3 scripts/cryptography/windows_enclave_sdk_formatter.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+## Wide conversion and invalid-argument context
+
+The [conversion/context record](../assurance/windows-protection-observations/sdk-conversion-20261004.json)
+binds five more complete bodies (641 bytes) in the same saved DLL: the wide
+adapter, wide helper, conversion leaf, invalid-argument helper and its context
+capture helper. Eight focused regressions and 641 real-body byte mutations pass
+on both Linux and Windows; the saved-file reports are identical. This remains
+offline, implementation-author inspection, not execution or independent review.
+
+The conversion leaf at `0x5468` is just `mov eax, 0xc00000bb; ret` in this build.
+After that failure, the wide helper writes four-byte value 42 through the
+thread-relative error pointer (`GS:0x30` + `0x1500`) and returns 42. It does not
+perform a successful character conversion on that branch. This is not a claim
+about every Windows SDK build, and the thread-relative write is not erased by
+the modeled stack window.
+
+The adapter and helper each use a 56-byte fixed frame. The invalid-argument
+helper pushes RBP and allocates `0x5e0` bytes, totaling 1,512 bytes below entry.
+Its context destination is post-prologue RSP + 256. The inspected capture stores
+scalar state there and performs a 512-byte `FXSAVE` at destination + 256. Those
+destinations fit below the invalid-argument helper's cookie. This accounts for
+the observed stores, not complete extended processor state or erasure: the
+capture helper does not wipe its destination before returning.
+
+| Selected RSP at diagnostic capacity 512 | Copy-result path | CallEnclave error path |
+| --- | --- | --- |
+| Wide adapter | H - 13536 | H - 13792 |
+| Wide helper | H - 13600 | H - 13856 |
+| Invalid argument, direct from formatter | H - 14992 | H - 15248 |
+| Invalid argument, conservative wide-helper branch | H - 15120 | H - 15376 |
+
+The wide-helper invalid branch requires a size greater than `0x7fffffff`; the
+formatter's inspected calls supply 6 or 512. Its frame is nevertheless modeled
+conservatively, not asserted reached by those calls. Six conversion spans and
+eight spans for each selected invalid-argument entry fit the window for all
+four diagnostic capacities. Unknown callee bodies are not included in that
+claim.
+
+The invalid-argument helper can call the diagnostic entry again. The previously
+bound buffer routine tests thread-relative bit 2 before dynamic allocation and
+formatting, so nested formatting is skipped **if that flag remains set**. This
+records the cycle and guard rather than treating the graph as acyclic. It is
+not proof of the guard's behavior across arbitrary exceptions or interruption.
+Runtime lookup (`0x8b60`), unwind processing (`0xc320`), exception dispatch
+(`0xbc90`) and fatal cookie failure (`0x1160`) still need separate treatment.
+Loaded-module identity, kernel storage and maximum transitive stack depth remain
+unqualified. No production code, release gates or native evidence changed.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-conversion.py
+python3 scripts/cryptography/windows_enclave_sdk_conversion.py PATH_TO_SAVED_VERTDLL --mutations
+```

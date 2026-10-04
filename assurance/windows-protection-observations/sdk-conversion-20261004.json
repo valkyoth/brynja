@@ -1,0 +1,325 @@
+{
+  "schema": 1,
+  "status": "SAVED_SDK_CONVERSION_CONTEXT_NOT_EXCEPTION_QUALIFICATION",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "wide_adapter": {
+      "rva": 13300,
+      "bytes": 20,
+      "sha256": "37b06291f160bc15c3b8a4379d5eca9b103e39a28c470db3e823d78ce9cf356e"
+    },
+    "wide_helper": {
+      "rva": 13112,
+      "bytes": 182,
+      "sha256": "1758d1be1606ceb8e39395dfb2596c84411ad70fbaff9e09e7f5d185931e65c7"
+    },
+    "wide_unsupported": {
+      "rva": 21608,
+      "bytes": 6,
+      "sha256": "4807e08e2c30c197bced82f7ec820a50ba15c4b5c05ffbd737b763637b3e9c5a"
+    },
+    "invalid_argument": {
+      "rva": 4184,
+      "bytes": 258,
+      "sha256": "f0a312f0786b150fcee4885f9fcb73313665f9528aacd6391b4b075ba6b1a51c"
+    },
+    "capture_context": {
+      "rva": 5184,
+      "bytes": 175,
+      "sha256": "178aaab860c4f1714765f5d0a9052a3de48f9e165cb81395e1c5b4bb2998769e"
+    }
+  },
+  "body_byte_mutations_rejected": 641,
+  "geometry": {
+    "128": {
+      "copy": {
+        "frames": {
+          "adapter": -13152,
+          "helper": -13216
+        },
+        "conversion_spans": 6,
+        "invalid_paths": {
+          "engine": {
+            "frame_from_high": -14608,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -14688,
+              "retry": -14768,
+              "guarded_buffer": -15104
+            }
+          },
+          "wide_helper": {
+            "frame_from_high": -14736,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -14816,
+              "retry": -14896,
+              "guarded_buffer": -15232
+            }
+          }
+        }
+      },
+      "call_error": {
+        "frames": {
+          "adapter": -13408,
+          "helper": -13472
+        },
+        "conversion_spans": 6,
+        "invalid_paths": {
+          "engine": {
+            "frame_from_high": -14864,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -14944,
+              "retry": -15024,
+              "guarded_buffer": -15360
+            }
+          },
+          "wide_helper": {
+            "frame_from_high": -14992,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15072,
+              "retry": -15152,
+              "guarded_buffer": -15488
+            }
+          }
+        }
+      }
+    },
+    "256": {
+      "copy": {
+        "frames": {
+          "adapter": -13280,
+          "helper": -13344
+        },
+        "conversion_spans": 6,
+        "invalid_paths": {
+          "engine": {
+            "frame_from_high": -14736,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -14816,
+              "retry": -14896,
+              "guarded_buffer": -15232
+            }
+          },
+          "wide_helper": {
+            "frame_from_high": -14864,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -14944,
+              "retry": -15024,
+              "guarded_buffer": -15360
+            }
+          }
+        }
+      },
+      "call_error": {
+        "frames": {
+          "adapter": -13536,
+          "helper": -13600
+        },
+        "conversion_spans": 6,
+        "invalid_paths": {
+          "engine": {
+            "frame_from_high": -14992,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15072,
+              "retry": -15152,
+              "guarded_buffer": -15488
+            }
+          },
+          "wide_helper": {
+            "frame_from_high": -15120,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15200,
+              "retry": -15280,
+              "guarded_buffer": -15616
+            }
+          }
+        }
+      }
+    },
+    "384": {
+      "copy": {
+        "frames": {
+          "adapter": -13408,
+          "helper": -13472
+        },
+        "conversion_spans": 6,
+        "invalid_paths": {
+          "engine": {
+            "frame_from_high": -14864,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -14944,
+              "retry": -15024,
+              "guarded_buffer": -15360
+            }
+          },
+          "wide_helper": {
+            "frame_from_high": -14992,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15072,
+              "retry": -15152,
+              "guarded_buffer": -15488
+            }
+          }
+        }
+      },
+      "call_error": {
+        "frames": {
+          "adapter": -13664,
+          "helper": -13728
+        },
+        "conversion_spans": 6,
+        "invalid_paths": {
+          "engine": {
+            "frame_from_high": -15120,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15200,
+              "retry": -15280,
+              "guarded_buffer": -15616
+            }
+          },
+          "wide_helper": {
+            "frame_from_high": -15248,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15328,
+              "retry": -15408,
+              "guarded_buffer": -15744
+            }
+          }
+        }
+      }
+    },
+    "512": {
+      "copy": {
+        "frames": {
+          "adapter": -13536,
+          "helper": -13600
+        },
+        "conversion_spans": 6,
+        "invalid_paths": {
+          "engine": {
+            "frame_from_high": -14992,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15072,
+              "retry": -15152,
+              "guarded_buffer": -15488
+            }
+          },
+          "wide_helper": {
+            "frame_from_high": -15120,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15200,
+              "retry": -15280,
+              "guarded_buffer": -15616
+            }
+          }
+        }
+      },
+      "call_error": {
+        "frames": {
+          "adapter": -13792,
+          "helper": -13856
+        },
+        "conversion_spans": 6,
+        "invalid_paths": {
+          "engine": {
+            "frame_from_high": -15248,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15328,
+              "retry": -15408,
+              "guarded_buffer": -15744
+            }
+          },
+          "wide_helper": {
+            "frame_from_high": -15376,
+            "spans": 8,
+            "reentry_frames": {
+              "entry": -15456,
+              "retry": -15536,
+              "guarded_buffer": -15872
+            }
+          }
+        }
+      }
+    }
+  },
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "maximum_transitive_depth_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "context_erased_by_capture_helper": false,
+  "conversion_leaf_return": "0xc00000bb",
+  "thread_relative_write": {
+    "base": "value at GS:0x30",
+    "offset": 5376,
+    "bytes": 4,
+    "value": 42,
+    "cleared_by_window_proven": false
+  },
+  "diagnostic_reentry": {
+    "cycle_observed": true,
+    "guard": "buffer tests bit 2 at pointer GS:0x30 + 0x17ee before dynamic allocation",
+    "nested_formatting_skipped_if_flag_preserved": true,
+    "exception_safe_guard_lifecycle_qualified": false
+  },
+  "unresolved": [
+    {
+      "rva": 35680,
+      "reason": "runtime lookup"
+    },
+    {
+      "rva": 49952,
+      "reason": "runtime unwind processing"
+    },
+    {
+      "rva": 48272,
+      "reason": "exception dispatch with runtime-sized context allocation"
+    },
+    {
+      "rva": 4448,
+      "reason": "fatal cookie-failure path"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage"
+  ],
+  "date": "2026-10-04",
+  "parent_commit": "3aac786a",
+  "review": "Implementation-author saved-file review; not execution, independent review, or transitive cleanup qualification.",
+  "tests": {
+    "linux_synthetic": 8,
+    "windows_synthetic": 8,
+    "real_body_mutations_rejected_each_host": 641,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "scripts/cryptography/test-windows-enclave-sdk-conversion.py": "037dcad55441864f6c9d95bd113e76f1a764fb277103aea4522071e5e4c77aa9",
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-conversion-linux.json": "7b5f2f66115a255245a0ec9a00954a9b29c3f1557d639a9c91b475046624c920",
+    "release-reports/windows-local-20261004/sdk-conversion-windows.json": "7b5f2f66115a255245a0ec9a00954a9b29c3f1557d639a9c91b475046624c920"
+  }
+}

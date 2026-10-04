@@ -19,9 +19,12 @@ A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented
 VBS campaign now verifies frame/reply/shadow placement for 270 active callbacks
-across 31 scheduler cases, with compiled measurement controls. Active-callback
-register transitions, whole-image caller/spill/dump review and remaining-image
-refresh are unfinished. The
+across 31 scheduler cases, with compiled measurement controls. A further
+instrumented register campaign covers 552 active VBS callbacks, all sixteen
+XMM/YMM registers and eleven non-argument GPRs, with direct positive and compiled
+omission controls. No four-byte test pattern was observed at host callback entry on the tested
+Windows build; this is not a universal register-erasure guarantee. Whole-image
+caller/spill/dump review and remaining-image refresh are unfinished. The
 chronological development entries below retain their original scope and should
 not be read as a current claim that the concurrent crate API is still absent.
 

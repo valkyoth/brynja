@@ -1,0 +1,248 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "implementation_parent": "8ef96b7b",
+  "status": "AUTHOR_VBS_TRANSITION_MEASUREMENTS_COMPLETE",
+  "native_vbs": true,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "secret_material_used": false,
+  "variants": {
+    "baseline": {
+      "native_cases": 20,
+      "callbacks": 552,
+      "direct_controls": 40,
+      "rejected": 0,
+      "register_classes": {
+        "zero": 8280,
+        "other": 6624
+      },
+      "image_sha256": "2e4d4df5d6c276691fd4628ab399f34750de9914118c3590a980bca0cb7f376d",
+      "bindings": {
+        "enclave": {
+          "object_sha256": "3f526b0446ffab421b020ddab04885a24f98d417a1370a99658627850db44343",
+          "image_sha256": "2e4d4df5d6c276691fd4628ab399f34750de9914118c3590a980bca0cb7f376d",
+          "rva": 34304,
+          "bytes": 1275,
+          "references": {
+            "PrivateTransitionAdmit": 29600,
+            "ProbeAvx": 72832,
+            "ProbePoison": 72800,
+            "ProbeBefore": 72192,
+            "ProbeCount": 72176,
+            "__imp_CallEnclave": 53392
+          },
+          "whole_image_qualified": false
+        },
+        "host": {
+          "object_sha256": "94378d13414a9c2dc5e6f717f206f6102a7ea9c60f77e329f87ae044b9d951ad",
+          "image_sha256": "831f1837f09982785cf3ca96dfa7f1eb05c76ac2f6307e320cc297a844067b8a",
+          "rva": 4528,
+          "bytes": 390,
+          "references": {
+            "ProbeHost": 109440,
+            "ProbeAvx": 110688,
+            "ProbeHostCount": 109416,
+            "ProbeTarget": 109408
+          },
+          "whole_image_qualified": false
+        },
+        "missing_host": {
+          "object_sha256": "58d2a9fd45d359c89cbe288f3a0100a88bafa4da39936b7b5af8dcf65e2963b8",
+          "image_sha256": "ee7f32f0d5afbf09323e478137dfae0996884518bb9213a6f08065c52881ee13",
+          "rva": 4528,
+          "bytes": 23,
+          "references": {
+            "ProbeHostCount": 109416,
+            "ProbeTarget": 109408
+          },
+          "whole_image_qualified": false
+        },
+        "direct": {
+          "object_sha256": "631dd9909bc031604e1cb3155c5bd4c08dce85515b60410bb97490d65995c554",
+          "image_sha256": "831f1837f09982785cf3ca96dfa7f1eb05c76ac2f6307e320cc297a844067b8a",
+          "rva": 4928,
+          "bytes": 1294,
+          "references": {
+            "PrivateTransitionAdmit": 4096,
+            "ProbeAvx": 110688,
+            "ProbePoison": 110656,
+            "ProbeBefore": 110048,
+            "ProbeCount": 110040
+          },
+          "whole_image_qualified": false
+        }
+      }
+    },
+    "missing-poison": {
+      "native_cases": 4,
+      "callbacks": 60,
+      "direct_controls": 8,
+      "rejected": 4,
+      "register_classes": {
+        "zero": 900,
+        "other": 720
+      },
+      "image_sha256": "91361dd4fc141ae4a30c17c9d9c4a04fb0b3f67ffc394e113b92e5e66d4bfe14",
+      "bindings": {
+        "enclave": {
+          "object_sha256": "916b6f68287b6ef0c2e4010a6fcf2fbf74cd6ecba0697bc2f6591341b405f7f5",
+          "image_sha256": "91361dd4fc141ae4a30c17c9d9c4a04fb0b3f67ffc394e113b92e5e66d4bfe14",
+          "rva": 34304,
+          "bytes": 916,
+          "references": {
+            "PrivateTransitionAdmit": 29600,
+            "ProbeAvx": 72832,
+            "ProbeBefore": 72192,
+            "ProbeCount": 72176,
+            "__imp_CallEnclave": 53392
+          },
+          "whole_image_qualified": false
+        },
+        "host": {
+          "object_sha256": "36804184a3e14d68ddbf28ea3667389ab2f6889ab2d1cb4e5b4d7788525569fc",
+          "image_sha256": "f9514e507ecbab84f72b2606a72dd2f6ce5476d8ee500531f737dcdc109b64a4",
+          "rva": 4528,
+          "bytes": 390,
+          "references": {
+            "ProbeHost": 109440,
+            "ProbeAvx": 110688,
+            "ProbeHostCount": 109416,
+            "ProbeTarget": 109408
+          },
+          "whole_image_qualified": false
+        },
+        "missing_host": {
+          "object_sha256": "6e239a593a1fd9f49af486463f0caa245dcbced31d435ffe94d4f4c7fe092c01",
+          "image_sha256": "6eaaeae23abcb6e627f54c878c147be94455af6ff17d75a3583ebfef1eb2fdd0",
+          "rva": 4528,
+          "bytes": 23,
+          "references": {
+            "ProbeHostCount": 109416,
+            "ProbeTarget": 109408
+          },
+          "whole_image_qualified": false
+        },
+        "direct": {
+          "object_sha256": "cb796001d82ba73bc7494a0ca4a3ed8d005ca4a3fb69e4c3981b147ec62ce098",
+          "image_sha256": "f9514e507ecbab84f72b2606a72dd2f6ce5476d8ee500531f737dcdc109b64a4",
+          "rva": 4928,
+          "bytes": 1294,
+          "references": {
+            "PrivateTransitionAdmit": 4096,
+            "ProbeAvx": 110688,
+            "ProbePoison": 110656,
+            "ProbeBefore": 110048,
+            "ProbeCount": 110040
+          },
+          "whole_image_qualified": false
+        }
+      }
+    },
+    "missing-before": {
+      "native_cases": 4,
+      "callbacks": 60,
+      "direct_controls": 8,
+      "rejected": 4,
+      "register_classes": {
+        "zero": 900,
+        "other": 720
+      },
+      "image_sha256": "198bb46779a38bdcf366dd32d07babf1640e55d423c11b756b69f2ddc2798430",
+      "bindings": {
+        "enclave": {
+          "object_sha256": "c35ede8a739885be5577a1288909bbe242b1e0f54b25ae779ead292968281f42",
+          "image_sha256": "198bb46779a38bdcf366dd32d07babf1640e55d423c11b756b69f2ddc2798430",
+          "rva": 34304,
+          "bytes": 916,
+          "references": {
+            "PrivateTransitionAdmit": 29600,
+            "ProbeAvx": 72832,
+            "ProbePoison": 72800,
+            "ProbeCount": 72176,
+            "__imp_CallEnclave": 53392
+          },
+          "whole_image_qualified": false
+        },
+        "host": {
+          "object_sha256": "e51fe0f1d538f3678290b1e4ddbcedd6a448e2cdb3940429a39e63eebfb2c546",
+          "image_sha256": "efefc37a5fa6c1772055d54f1789e183ca0accd1f66bb162e06761984d2bedf9",
+          "rva": 4528,
+          "bytes": 390,
+          "references": {
+            "ProbeHost": 109440,
+            "ProbeAvx": 110688,
+            "ProbeHostCount": 109416,
+            "ProbeTarget": 109408
+          },
+          "whole_image_qualified": false
+        },
+        "missing_host": {
+          "object_sha256": "18b2903be724e7b1fcacffc7beecff13d0e338988a9e32f462dde07957914945",
+          "image_sha256": "38d34ba08bc40fefdd926329681df5521bd9d54a95550b2599e28789df2cbb9b",
+          "rva": 4528,
+          "bytes": 23,
+          "references": {
+            "ProbeHostCount": 109416,
+            "ProbeTarget": 109408
+          },
+          "whole_image_qualified": false
+        },
+        "direct": {
+          "object_sha256": "e3909498f280abf0ca2ac4e24642a3aab5e612bfa603fe68128cc3b4eb54028a",
+          "image_sha256": "efefc37a5fa6c1772055d54f1789e183ca0accd1f66bb162e06761984d2bedf9",
+          "rva": 4928,
+          "bytes": 1294,
+          "references": {
+            "PrivateTransitionAdmit": 4096,
+            "ProbeAvx": 110688,
+            "ProbePoison": 110656,
+            "ProbeBefore": 110048,
+            "ProbeCount": 110040
+          },
+          "whole_image_qualified": false
+        }
+      }
+    }
+  },
+  "source_sha256": {
+    "assurance/windows-enclave-probe/transition_vectors.inc": "1d4ddc5a98232a3c2a057ce7c91a354529db784c0a48eea271b8a484dd0a8118",
+    "assurance/windows-enclave-probe/transition_call_probe.asm": "2f679603c66d917af0e0b11b910c1464b79a8ac39858a5f8f19ed0373d63c046",
+    "assurance/windows-enclave-probe/transition_host_probe.asm": "9a50385901a7d3152176a599873ad1a2ea239aa6929cd59be3636d4389b3df0b",
+    "assurance/windows-enclave-probe/transition_enclave_probe.h": "60bb62ea18c057b325c61f283badded050798ce0182b589695a097a4ea0370ec",
+    "assurance/windows-enclave-probe/transition_host_probe.c": "c5292e86e92f29e8d7e4cccd20621426b5784fcf7f7b156458fa079659d525e4",
+    "scripts/cryptography/windows_enclave_transition_probe.py": "0cb945157df75b946a43a880eae8051e49317e55bbda33490ae7f6c76e09c419",
+    "scripts/cryptography/windows_enclave_transition_native.py": "18f51dcce20def65f90de41f88c2e8e28c33bcab28620d838f6b5f8a18c660ea",
+    "scripts/cryptography/windows_enclave_transition_model.py": "51ee41b9209b39b831b080d50703a0245a216cd8b361fc055ec0692477331038",
+    "scripts/cryptography/test-windows-enclave-transition.py": "e82b89204fa91de06ce3a5ce5abd87dca242812b6f8765d6eef5603e6087d4b8"
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261004/scheduler-register-nospill/parallel-scheduler-image-build.json": "f297af4853c3d6a4f3438c4bb31e949408e586547cd1294bb300d99708f52cdc",
+    "release-reports/windows-local-20261004/verify_transition.py": "d51ea620a732e0cc9e8a467b9cc8708acc3a4d50e05b3e33a343dac8414d01d9",
+    "release-reports/windows-local-20261004/transition-v4-artifacts.tar.gz": "16c87131752d2060776df49dbe19efcaeb980825f70f6d542e9906654a011531",
+    "release-reports/windows-local-20261004/transition-v4-baseline/transition-build.json": "846aa3fdc074711e015a8cc0d9961c81a0d6c533b0d6a39697ed2dcc1153274d",
+    "release-reports/windows-local-20261004/transition-v4-baseline/transition-observations.json": "78bb33d6ac82a1b251f0481f568db2dcd61555773fc3d47856e6215e36f99e2f",
+    "release-reports/windows-local-20261004/transition-v4-baseline/signing.json": "bf28969aa3bc5bf496071c5d9aaad7ee3af9fb6025f5ef13938111c0a88e3ace",
+    "release-reports/windows-local-20261004/transition-v4-baseline/transition.obj.disassembly.txt": "3dfa3187bc9bba6c0ec38495daf9d06e69b3ca12d0a5cca7e732662f9ffa8a5a",
+    "release-reports/windows-local-20261004/transition-v4-baseline/host.obj.disassembly.txt": "0139d9a352085bf528e15afcffd53ab10826bc5206725d39625c8f998e336053",
+    "release-reports/windows-local-20261004/transition-v4-baseline/missing-host.obj.disassembly.txt": "a8c4d1d4598334c7ecac2a517e1bcb85d7d4565143bd7d99775beed8b4dcd5a6",
+    "release-reports/windows-local-20261004/transition-v4-baseline/direct.obj.disassembly.txt": "2fa9d211f557d3f51ee073b7d3f7a7dce6f5c6624abf20a71f5b2c8bb5c45df8",
+    "release-reports/windows-local-20261004/transition-v4-missing-poison/transition-build.json": "826c05bc1b8ca8c042f2626c63d1dc19c283bc28bf7d44b854aadbfb75841fe4",
+    "release-reports/windows-local-20261004/transition-v4-missing-poison/transition-observations.json": "0f240154d7481ff4c95ff14ed869b0e71f3aaa3590f4c73da1f65f59b5abaae5",
+    "release-reports/windows-local-20261004/transition-v4-missing-poison/signing.json": "2e01c4f2de14b27e04aaf061c2400e28560568b2870e8c530fe43ef283075b7f",
+    "release-reports/windows-local-20261004/transition-v4-missing-poison/transition.obj.disassembly.txt": "699329f8b2aade693f1a7f816da015aa6928d8cfa3626a94b3f8eec878d57a6e",
+    "release-reports/windows-local-20261004/transition-v4-missing-poison/host.obj.disassembly.txt": "517694dc8329894742152645155f9c80d4b61b06bddc6f9589bac2e37dd1c835",
+    "release-reports/windows-local-20261004/transition-v4-missing-poison/missing-host.obj.disassembly.txt": "5e82c5661cb0fcae0331d57d08c218bc86c18373cb051dba446949306061a7ee",
+    "release-reports/windows-local-20261004/transition-v4-missing-poison/direct.obj.disassembly.txt": "17ef76792512859207650aeda94013419fffb50f8d661ad70f384539c2c3afa8",
+    "release-reports/windows-local-20261004/transition-v4-missing-before/transition-build.json": "09e3d56e05718ab1cac58b3b378abc71f9cd0629639061dd6a744d081f0a0458",
+    "release-reports/windows-local-20261004/transition-v4-missing-before/transition-observations.json": "913601dd0ddeabdb1f8a0b78ac5bc4f75a04090ef393a6a82068fc52e117b732",
+    "release-reports/windows-local-20261004/transition-v4-missing-before/signing.json": "93776770931e0a600002a4890e706e42ea830967007b97be1ce180ed410f6434",
+    "release-reports/windows-local-20261004/transition-v4-missing-before/transition.obj.disassembly.txt": "498b6b8dfcc18ad36a09df56444f4f5a592cea31bff853acc0b0effd8969a2f7",
+    "release-reports/windows-local-20261004/transition-v4-missing-before/host.obj.disassembly.txt": "931173069570993b81ea652c122b0a622a5d001a6abfb8b21803546894ac604c",
+    "release-reports/windows-local-20261004/transition-v4-missing-before/missing-host.obj.disassembly.txt": "68dd4d4ff41040990ee8055935dd4bb02d2cfa87114c352f14991e3446d74d16",
+    "release-reports/windows-local-20261004/transition-v4-missing-before/direct.obj.disassembly.txt": "2adde66aedd2f2e0b1caa489b18b998f7e06964655529cc1ea2a183352890f85"
+  },
+  "scope": "Instrumented public-pattern image only. XMM/YMM0..15 and eleven non-argument GPRs; detects runs of four sentinel bytes, not arbitrary transformed remnants. Before measurement retains the last call snapshot plus total count; host observations are captured per active callback. No AVX-512, flags, interrupted/fatal path, dump, SDK-internal spill, uninstrumented-image or universal OS guarantee."
+}

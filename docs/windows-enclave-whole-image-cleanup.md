@@ -96,6 +96,61 @@ signal/interrupt state or dump inclusion. In particular, it is not evidence
 that the OS clears every register at an active callback. Those remain separate
 review and qualification tasks.
 
+## Active callback-register observations, 2026-10-04
+
+A separate instrumented scheduler image now places public `0x5a` or `0xa5`
+patterns in all sixteen XMM/YMM registers and eleven general registers before
+calling the real `CallEnclave` import. The measured GPRs are RAX, RBX, RBP, RSI,
+RDI and R10–R15. RCX, RDX, R8 and R9 carry the API's public arguments; RSP remains
+the stack pointer. The diagnostic saves/restores nonvolatile caller state in a
+312-byte frame, checks that frame against the live admitted root window, and
+erases its saved copies on normal return. AVX entry and `vzeroupper` require
+CPUID XSAVE/OSXSAVE/AVX and the XCR0 XMM/YMM state bits. It is a measurement
+fixture, **not** a production callback scrubber or arbitrary-unwind qualification.
+
+A host assembly callback captures registers before entering C or Python. Only
+root dispatch/close/join callbacks write the capture buffer; leaf callbacks do
+not race that buffer. The results retain `zero`, `pattern` or `other` classifications,
+not raw host-register values. A pattern match means at least four consecutive
+sentinel bytes, including partial-register/zero-extended remnants; it does not
+detect arbitrary transformations or shorter remnants. The enclave-side record
+retains the last pre-call snapshot and a total execution count, while host-side
+observations are recorded separately for every active callback.
+
+On this development Windows 11 build **26300.9457**, twenty native cases cover
+SSE2/AVX, two patterns, zero-input, five-wave and 33-wave operation, early host
+return and worker denial. All existing scheduler functional/lifetime checks
+passed. Both measurement modes run on an AVX-capable host; this is not native
+qualification on AVX-unavailable hardware. Across **552 active callbacks**, none of the 14,904 measured register
+classifications contained the four-byte pattern: 8,280 were zero and 6,624 were
+other values. This does **not** mean every register was zeroed, nor does it prove
+where the SDK/OS saved the live enclave state.
+
+The capture apparatus has ordinary-process positive controls: calling the same
+assembly host callback directly captures all 27 patterns. A compiled host
+snapshot-omission control yields zero observations and is distinguished from
+that positive result. Separately, eight real VBS runs with omitted enclave
+poisoning or omitted pre-call snapshots are rejected as invalid measurements;
+their scheduler operations still complete successfully. Across the complete
+campaign, 28 positive and 28 host-omission controls ran. Seven focused regression
+tests include partial patterns at every byte offset in all measured registers.
+
+The [source-bound transition record](../assurance/windows-protection-observations/transition-registers-20261004.json)
+binds sources, signed images, ordinary-process DLLs, full observations and local
+disassembly. The local verifier compares exact MASM bytes with their linked
+images, allowing only enumerated REL32/REL32_1 references; the framed probe must
+also match its runtime-function extent. This remains an author review aid, not
+a general whole-image verifier. Temporary signing keys were removed. Final
+artifacts are in `release-reports/windows-local-20261004/transition-v4-*`, outside
+`target/`; earlier v3 observations cover fewer GPRs and are not the final record.
+
+Microsoft documents [calls from an enclave to an outside callback](https://learn.microsoft.com/en-us/windows/win32/api/enclaveapi/nf-enclaveapi-callenclave).
+These observations cover that SDK/OS path on the tested build, not a new universal
+register-erasure guarantee. They do not cover AVX-512-only state, flags,
+interruption/fatal paths, SDK-internal spills, dumps, or equivalence of the
+instrumented image to every production image. No production cryptographic code,
+public API or release gate changed.
+
 ## Historical diagnosis before the change
 
 The sequential `PublicLockedFrame` and concurrent `PublicStackFrame` wrappers
@@ -134,10 +189,9 @@ it must not be presented as a check of the changed wrappers or new images.
 
 ## Remaining boundary work
 
-1. Complete actual linked worker/caller flow and active-callback register review.
-   The instrumented callback-frame observations above pass; they and the completed
-   **return** boundary do not prove VBS transition register handling or sanitize
-   every active callback boundary.
+1. Complete actual linked worker/caller and SDK-boundary review. The instrumented
+   callback-frame and register campaigns above are complete for their stated
+   scope, not a universal transition guarantee or uninstrumented-image proof.
 2. Qualify final linked caller/spill/cleanup paths and current-image dump behavior.
    Nonvolatile caller state is preserved, not erased. AVX-512-only state, fatal
    aborts and interruption contexts are not covered by this wrapper probe.

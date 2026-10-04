@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "status": "WRAPPER_REGISTER_RESIDUE_OBSERVED",
+  "implementation_parent": "75940405",
+  "native_windows_process": true,
+  "enclave_execution": false,
+  "secret_material_used": false,
+  "production_qualified": false,
+  "whole_image_cleanup_qualified": false,
+  "baseline_cases": 16,
+  "measurement_mutants": 2,
+  "mutant_admitted_cases_rejected": 16,
+  "mutant_denied_controls_passed": 16,
+  "validator_tests": 5,
+  "wrapper_binding_tests": 7,
+  "compiler_identity": "usage: cl [ option... ] filename... [ /link linkoption... ]\nMicrosoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64\nCopyright (C) Microsoft Corporation.  All rights reserved.\n\n",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "source_sha256": {
+    "assurance/windows-enclave-probe/window_rust_x64.asm": "6f80e7151a687772e52040c795bc36fa52f0aed507fd5954e0dec10a47f3b916",
+    "assurance/windows-enclave-probe/concurrent_stack_x64.asm": "4503af6f7bfb0726ff7fb9254c3075791798f78d47f50a8347a74783c8e2fc6c",
+    "assurance/windows-enclave-probe/register_boundary_probe.asm": "959c9b57631a4e8ae9b5c39fbb7a726a565e54d3d72a88d2213d763cb2ff1286",
+    "assurance/windows-enclave-probe/register_boundary_probe.c": "25ad130680abeb5fa37f5786218f2714739768bd365cdbda219a7aca69cf23e9",
+    "scripts/cryptography/windows_enclave_register_boundary.py": "6e0591b024df9110ae4126302696d425b11a70f805f5033f8b9b54cccc31b912",
+    "scripts/cryptography/test-windows-enclave-register-boundary.py": "9ac1cee58df7b965179abe057b4c9cf2d5009adeea0531a77e591177a6171468",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "bf4896c33fdb50505ef5daa5fc476b695dc754805223762564867b2e1439d4fa",
+    "scripts/cryptography/test-windows-enclave-wrapper-binding.py": "2d0fb93566cf0bd4b350f7d430c5a7c52a0956e20355abf0e028808341434308"
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261004/register-boundary-final-20261004/register-boundary.json": "13b654c3d4fa2f7e898d7a675187d045e1d973135c68756dcf52cd6ddd8edbb6",
+    "release-reports/windows-local-20261004/register-boundary-final-20261004/baseline/concurrent_stack_x64.obj": "ceba1fb876a2b27fe635ff738872b417a8f457210806e1db775e6556cb85446a",
+    "release-reports/windows-local-20261004/scheduler-rust-admitted/signed.dll": "5fbb52089ed1627604acf91f2127d900d3429c1fbe0491165388253fa2dc536f"
+  },
+  "linked_wrapper": {
+    "status": "EXACT_WRAPPER_BYTES_BOUND",
+    "entry": "PublicStackFrame",
+    "rva": 33520,
+    "size": 244,
+    "call_target_rvas": {
+      "__chkstk": 33968,
+      "PublicStackAdmit": 31056,
+      "PublicStackBody": 31344,
+      "PublicStackFinish": 31696,
+      "PublicStackRestore": 32352
+    },
+    "callees_semantically_qualified": false,
+    "whole_image_qualified": false,
+    "object_sha256": "ceba1fb876a2b27fe635ff738872b417a8f457210806e1db775e6556cb85446a",
+    "image_sha256": "5fbb52089ed1627604acf91f2127d900d3429c1fbe0491165388253fa2dc536f"
+  },
+  "scope": "Unmodified wrappers; synthetic public vector sentinels; stub admission/finish/restore. No VBS transition or real Rust body executes. The same concurrent wrapper bytes are present in the saved signed image; callee semantics are not established."
+}

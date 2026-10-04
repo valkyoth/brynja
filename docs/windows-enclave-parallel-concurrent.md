@@ -669,7 +669,9 @@ receipt checking, unlocking and cleanup verification; all must fail an actual
 test assertion, not compilation or an unexplained process crash. Restored sources
 rerun all 68 cases. The dev-only opening and process
 working-set allowance exist only in test builds. Final whole-image qualification
-and independent retest remain pending; Windows ARM64 is not claimed.
+and independent retest remain pending; Windows ARM64 is not claimed. The
+[whole-image cleanup status](windows-enclave-whole-image-cleanup.md) records the
+native stack-wrapper register diagnostic and its deliberately limited scope.
 
 The [crate integration record](../assurance/windows-protection-observations/parallel-crate-host-20261004.json)
 binds the saved debug/release binaries, native logs and component campaigns.

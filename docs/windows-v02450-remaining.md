@@ -3,12 +3,23 @@
 Current implementation status: the bounded SHA-256, scalar SHA-2/SHA-3/KMAC/TupleHash
 streaming, SHA-2/SHA-3 batches and sequential scalar ParallelHash Windows enclave
 APIs are integrated and development-tested. Explicit opt-in SHA-NI SHA-224/256
-sessions now have native debug/release host coverage; wider acceleration remains.
+sessions now have native debug/release host coverage. The explicit AVX2 routes
+and bounded concurrent ParallelHash API have subsequent development coverage;
+see the [current acceleration status](windows-enclave-acceleration.md) and
+[crate-integrated concurrent API](windows-enclave-parallel-concurrent.md).
 Existing Linux-style host-slice
 sessions still reject Unsupported on Windows. Broader algorithms and production
 qualification remain incomplete. The release scope
 remains the [Windows strict protected profile](windows-strict-profile.md), with
 explicit acceleration and unchanged release-gate policy.
+
+The next qualification item is [final-image ABI/register/spill and dump
+cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.
+A native public-sentinel probe now confirms the shared stack wrappers are not
+themselves vector-register scrubbers. It does not establish a real secret leak;
+actual worker/caller and VBS-boundary qualification remains unfinished. The
+chronological development entries below retain their original scope and should
+not be read as a current claim that the concurrent crate API is still absent.
 
 Distribution follows the [consumer-managed deployment model](windows-enclave-deployment.md):
 Brynja supplies source/APIs/build and verification tooling; the application

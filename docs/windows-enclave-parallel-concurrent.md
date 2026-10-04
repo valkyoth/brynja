@@ -554,17 +554,71 @@ python3 scripts/cryptography/test-windows-enclave-rust-host-runner.py
 python3 scripts/cryptography/test-windows-enclave-parallel-rust-host.py FRESH_DIRECTORY SIGNED_DLL
 ```
 
-This executable still uses a private raw fixture header and one operation per
-image with public oracle inputs/output. Typed borrowed application inputs and the
-supported public output/declassification interface are not integrated yet. Scoped
+This transport-only executable uses a private raw fixture header and one operation per
+image with public oracle inputs/output. It predates the typed candidate below;
+neither executable establishes a supported crate interface yet. Scoped
 threads are created per wave; this campaign claims neither throughput nor a
 measured peak overlap. Fatal abort, permanently blocked workers, caller copies
 and privileged snapshots retain their documented limits. Whole-image
 register/spill/dump qualification, Windows ARM64, production signing and
 independent review remain pending. No production crypto or release gate changed.
 
-Next: integrate the supported public host scheduler interface, then complete
-final-image qualification and review.
+The following typed-contract step removes raw headers from its candidate caller
+interface; shipping loader integration and crate export are still pending.
+
+## Typed host contract candidate
+
+`parallel_host_contract.rs` wraps the private transport with closed algorithm
+identities, checked plans and borrowed message/customization parts. No caller
+can construct a raw request, provide a transport implementation, or pass fault
+controls through its public interface. Borrowed slices remain live through the
+synchronous root call and scoped worker joins. Host constructors validate only
+metadata; the enclave validates canonical partial-byte content after copying.
+
+The concurrent image currently computes and exports one result per image. It
+does not implement the sequential API's retained-result protocol. Accordingly,
+the candidate requires `PublicDeclassification` at `digest_public`, **before**
+the operation can write ordinary host staging. This is explicit output release,
+not a provenance check or a promise to erase the caller's inputs. A fixed-size
+staging buffer keeps the caller destination unchanged on transport failure,
+cleanup failure, noncanonical output or recoverable unwind. Successful completion
+and post-entry failure both prevent image reuse. Invalid metadata/output width
+reject before entry and leave the fresh session available for a corrected request.
+
+The [typed-contract record](../assurance/windows-protection-observations/parallel-typed-host-20261004.json)
+records Rust 1.98.1 results:
+
+- Eight component tests, thirteen compiled runtime mutations and thirteen
+  compiled ownership/privacy/borrowing negatives on both Linux and Windows.
+  Their stub transport rejects as unsupported; these are not VBS tests.
+- Thirty real VBS cases through the typed contract: the 25 oracle cases, three
+  residency-admission failures and two noncanonical input-tail rejections.
+  Every case also rejects a wrong output width before entry, checks terminal
+  reuse rejection, and preserves caller destination guard bytes.
+- Seven compiled native mutations rejected, including dropped transport errors,
+  state/width errors, wrong XOF identity, wrong customization address and skipped
+  unlock. Library/host Clippy passes with warnings denied.
+
+Mutation testing exposed a masked transport-error regression in the initial
+test: its noncanonical output independently caused rejection. The strengthened
+test uses byte-aligned output for that failure so dropping the transport error
+is caught independently. An initial native build also stopped on an unused byte
+constructor; the final driver exercises it for byte-aligned inputs. Neither
+incomplete campaign is counted as a pass.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-parallel-host-contract.py FRESH_COMPONENT_DIRECTORY
+python3 scripts/cryptography/test-windows-enclave-parallel-typed-host.py FRESH_NATIVE_DIRECTORY SIGNED_DLL
+```
+
+This remains an **isolated candidate, not a crate-exported supported API**. Its
+compiled-negative consumers and native driver exercise the intended interface;
+the test-only constructor seam, generated fault selector and development opening
+are not shipping features. The existing development-signed five-thread image is
+unchanged. The one-thread production loader and all release gates remain unchanged.
+No retained secret-result, new Windows ARM64 or whole-image qualification claim is
+made. Next: integrate the typed interface with exact five-thread production image
+admission and crate exports, then complete final-image qualification and review.
 
 ## Author verification
 

@@ -60,8 +60,9 @@ Both metadata helpers and the engine can call the previously reviewed recursive
 status raiser. Only the first exceptional frame is mapped, with transitive
 depth explicitly unknown. No all-path erasure claim follows from these frames.
 
-The next unreviewed normal decoder boundaries are `0xc538` (epilogue
-interpreter) and `0xc94c` (unwind opcode decoder). Exception dispatch, fatal
+This engine-only record stopped at `0xc538` (epilogue interpreter) and `0xc94c`
+(unwind opcode decoder); the subsequent review below accounts for their
+selected frames and context writes. Exception dispatch, fatal
 paths, loaded-module identity, external storage and kernel behavior also remain
 outside qualification. Earlier lock/node-reclamation limits still apply.
 Production cryptography and release-gate policy are unchanged.
@@ -69,4 +70,59 @@ Production cryptography and release-gate policy are unchanged.
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sdk-unwind.py
 python3 scripts/cryptography/windows_enclave_sdk_unwind.py PATH_TO_SAVED_VERTDLL --mutations
+```
+
+## Epilogue and opcode decoders
+
+The [decoder observation](../assurance/windows-protection-observations/sdk-decoders-20261004.json)
+binds both complete bodies: `0xc538..0xc8fa` (962 bytes) and `0xc94c..0xcf70`
+(1,572 bytes). Three direct calls reach the already-reviewed slot helper and
+status raiser. The fixed-frame prologues and paired vector-load/store sequence
+have additional instruction checks independent of the whole-body hashes.
+Nine regressions and 2,534 actual-body byte mutations pass on Linux and Windows;
+the saved-file reports match. This remains offline, implementation-author review.
+
+The epilogue interpreter pushes seven registers and reserves 80 bytes: a
+136-byte fixed frame. The opcode decoder pushes four registers and reserves
+120 bytes: a 152-byte fixed frame. Both reuse argument home slots and local
+scratch for counters and pointers. Their slot-helper calls add 40-byte frames;
+the decoder paths are alternatives, not nested together.
+
+| Selected RSP, direct formatter-invalid path at capacity 512 | Copy-result path | CallEnclave error path |
+| --- | --- | --- |
+| Epilogue interpreter | H - 15456 | H - 15712 |
+| Opcode decoder | H - 15472 | H - 15728 |
+| Epilogue slot helper | H - 15504 | H - 15760 |
+| Opcode slot helper | H - 15520 | H - 15776 |
+
+The wide-helper-invalid origin shifts these by another 128 bytes. Nine selected
+stack spans per origin fit the clearing window at each diagnostic capacity.
+Restore instructions do not erase these saves or locals.
+
+For the two modeled invalid-argument origins, the captured context begins at
+engine RSP+576. The selected scalar-register writes occupy offsets `0x78..0xf8`,
+the instruction-pointer write `0xf8..0x100`, and the sixteen vector slots
+`0x1a0..0x2a0` (end-exclusive). The stack pointer is inside the scalar bank.
+All fit inside that caller's previously reviewed 768-byte context envelope.
+Tests enumerate every four-bit register selector and reject model inputs beyond
+the inspected range; they do not add validation to Windows itself.
+
+Each vector slot is restored using **two eight-byte loads and stores**, covering
+sixteen bytes. This is not a claim about complete AVX/YMM/ZMM or other extended
+processor state. Nor does the known-context bound apply to arbitrary context
+pointers, malformed metadata, reads from a reconstructed stack, or optional
+saved-location arrays supplied by other callers. Those arrays may receive
+source addresses and remain outside this bounded destination claim.
+
+Excessive chained metadata makes the epilogue interpreter return an error;
+the opcode decoder can instead invoke the recursive status raiser. Slot-helper
+errors can also raise. Only first exceptional frames are represented; transitive
+depth and exception cleanup remain unknown. The decoder frame review adds no
+new unreviewed ordinary callees, but it does not prove general unwind correctness,
+loaded-module identity or whole-image cleanup. No production code, native
+campaign or release-gate policy changed.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-decoders.py
+python3 scripts/cryptography/windows_enclave_sdk_decoders.py PATH_TO_SAVED_VERTDLL --mutations
 ```

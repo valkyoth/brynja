@@ -73,6 +73,13 @@ Eight regressions pass on both hosts; 2,417 body-byte and eleven table-byte
 mutations are rejected. Its fixed frames are accounted for, not its complete
 decoder or exception behavior. The epilogue interpreter and opcode decoder
 remain the next normal-path boundaries.
+The subsequent decoder review now accounts for both fixed frames, their reused
+home slots and selected scalar/vector writes into the known captured context.
+Nine regressions and 2,534 actual-body byte mutations pass on Linux and Windows.
+No additional ordinary callees were introduced by those two decoders. Generic
+unwind correctness, arbitrary context/metadata bounds and exception cleanup
+remain unqualified; the next work is the exception/fatal boundary and broader
+whole-image qualification.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

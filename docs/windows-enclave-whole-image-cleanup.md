@@ -472,7 +472,11 @@ unqualified.
    TupleHash, binding all four to the reviewed wrapper. Other unreconciled images
    remain; the historical inventory is not relabeled as current evidence. Three
    failed TupleHash test attempts are excluded; the corrected test-only harness
-   preserves assertion checks and passes completely on Linux and Windows.
+   preserves assertion checks and passes completely on Linux and Windows. The
+   later scalar streaming refresh adds four rebuilt images with positive
+   debug/release native host campaigns. The [current public-route inventory](../assurance/windows-protection-observations/current-image-routes-20261004.json)
+   records 12 of 19 opening routes refreshed, seven still to reconcile; this
+   checklist does not qualify whole-image cleanup or add a release gate.
 
 The Windows ABI distinguishes volatile XMM0–5 from nonvolatile XMM6–15, while
 upper YMM halves are volatile. A blanket `vzeroall` would violate ordinary

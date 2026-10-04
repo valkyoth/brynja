@@ -87,7 +87,8 @@ The original timeout is unchanged, not increased or waived.
 All signing, historical-scalar-control and qualification limits above still
 apply. These four accelerated streaming refreshes do not exhaust the image
 inventory or qualify whole-image spills, dumps, production signing or Windows
-ARM64. Other affected scalar/sequential/batch images still need reconciliation.
+ARM64. Other affected images still need reconciliation; the subsequent scalar
+refresh and public-route inventory below make that remaining scope explicit.
 Release-gate policy is unchanged.
 
 Raw evidence is saved alongside the earlier captures, under `kmac-stream-cleanup`,
@@ -96,3 +97,55 @@ Raw evidence is saved alongside the earlier captures, under `kmac-stream-cleanup
 observation and checks source, binary, image and command-log hashes. Failed
 attempt logs remain in their separate directories; none contributes passing
 TupleHash evidence.
+
+## Scalar streaming follow-up and route inventory
+
+The subsequent [scalar refresh](../assurance/windows-protection-observations/stream-scalar-refresh-20261004.json)
+rebuilds the four separate scalar streaming images with the current wrapper.
+Each now has positive native host execution, not merely use as a historical
+rejection control. Source/generated-artifact hashes reconcile with the checkout,
+import preparation reproduces byte-for-byte, and each signed image contains the
+reviewed 392-byte `PublicLockedFrame`.
+
+| Check | SHA-2 | SHA-3/SHAKE/cSHAKE | KMAC | TupleHash |
+| --- | --- | --- | --- | --- |
+| Component tests | 7 | 7 | 13 | 8 |
+| Native host cases per debug/release profile | 631 | 1,028 | 546 | 230 |
+| Lifecycle tests per profile | 22 passed, 3 ignored | 33 passed, 6 ignored | 26 passed, 4 ignored | 26 passed, 4 ignored |
+| Scoped Windows Clippy | PASS | PASS | PASS | PASS |
+
+These are fresh functional/component tests under Rust 1.98.1, not a fresh
+mutation campaign or an all-toolchain sweep. Explicit ignored native campaigns
+were selected individually and required to execute; other ignored lifecycle
+tests are not counted as passes. Production code and release-gate policy did
+not change. Signing remains development-only, with temporary signing keys removed.
+Wrapper identity does not establish linked caller/callee spill semantics or
+whole-image dump behavior.
+
+The [public-opening-route snapshot](../assurance/windows-protection-observations/current-image-routes-20261004.json)
+enumerates all 19 current module-root public `Session::open*` constructors,
+including feature-gated routes, against the recorded refreshes:
+
+| Public route group | Routes | Wrapper refresh and native host record |
+| --- | --- | --- |
+| Bounded retained SHA-256 | 1 | Not yet reconciled |
+| Scalar SHA-2/SHA-3/KMAC/TupleHash streaming | 4 | Recorded above |
+| SHA-NI/AVX2 streaming | 4 | Recorded above |
+| Sequential SHA-2/SHA-3 batches, scalar and accelerated | 4 | Not yet reconciled |
+| Independent-message SHA-256/SHA-512/Keccak SIMD | 3 | Recorded in the [SIMD refresh](../assurance/windows-protection-observations/simd-host-refresh-20261004.json) |
+| Sequential ParallelHash, scalar and AVX2 | 2 | Not yet reconciled |
+| Concurrent AVX2 ParallelHash | 1 | Recorded in the [wrapper cleanup campaign](../assurance/windows-protection-observations/register-cleanup-20261004.json) |
+
+Thus 12 opening routes have recorded development refresh coverage and seven
+remain to reconcile. This is a source-bound checklist, **not a new release gate**,
+semantic Rust parser, inventory of every historical proof DLL or whole-image
+qualification. None of the 19 routes is promoted to whole-image qualification by
+this count. Earlier concurrent/accelerated records were rechecked against their
+saved observations and current source hashes; their limits remain unchanged.
+
+Raw scalar builds, component binaries, prepared/signed images and host logs are
+saved outside `target/` in the same local evidence directory, under
+`*-scalar-cleanup-{component,image,admitted,host}` and `scalar-stream-cleanup-logs`.
+`verify_scalar_cleanup.py` reproduces the scalar observation;
+`review_current_image_routes.py` reproduces the constructor snapshot and verifies
+its recorded evidence references. Both helpers are retained with the raw evidence.

@@ -60,7 +60,14 @@ profile), with exact wrapper binding. All four accelerated streams are refreshed
 other affected images still need reconciliation. Three incomplete TupleHash
 attempts are excluded; its corrected test harness passes on Linux and Windows
 without changing production code, the timeout or release-gate policy.
-These are distinct from the three multibuffer images; the inventory is not exhaustive.
+These are distinct from the three multibuffer images. The subsequent scalar
+streaming refresh also passes debug/release native host campaigns for SHA-2,
+SHA-3, KMAC and TupleHash (631/1,028/546/230 cases per profile), with exact wrapper
+binding. The [public-opening-route snapshot](../assurance/windows-protection-observations/current-image-routes-20261004.json)
+now counts all 19 current module-root `Session::open*` routes: 12 have recorded
+development refresh coverage; seven remain to reconcile (bounded SHA-256, four
+sequential SHA-2/SHA-3 batch routes, and scalar/AVX2 sequential ParallelHash).
+This is a source-bound checklist, not a new gate or whole-image qualification.
 Whole-image caller/spill review,
 remaining-image dump coverage and image refresh are unfinished. The
 chronological development entries below retain their original scope and should

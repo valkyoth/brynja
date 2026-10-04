@@ -17,8 +17,11 @@ The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
-compiled omission tests plus two rebuilt native VBS routes. Active callbacks,
-whole-image caller/spill/dump review and remaining-image refresh are unfinished. The
+compiled omission tests plus two rebuilt native VBS routes. A separate instrumented
+VBS campaign now verifies frame/reply/shadow placement for 270 active callbacks
+across 31 scheduler cases, with compiled measurement controls. Active-callback
+register transitions, whole-image caller/spill/dump review and remaining-image
+refresh are unfinished. The
 chronological development entries below retain their original scope and should
 not be read as a current claim that the concurrent crate API is still absent.
 

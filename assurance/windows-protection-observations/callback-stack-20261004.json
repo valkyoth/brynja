@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_ACTIVE_CALLBACK_FRAME_OBSERVATIONS_PASS",
+  "date": "2026-10-04",
+  "implementation_parent": "e1bb94e9",
+  "native_vbs": true,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "independently_verified": false,
+  "secret_material_used": false,
+  "release_gate_changed": false,
+  "variants": {
+    "baseline": {
+      "cases": 31,
+      "active_callbacks": 270,
+      "signed_image_sha256": "b453955b3132fdbd2b11c7b1de5578123e1ebd10c0319f08cc0070e50ee38910",
+      "notify_binding": {
+        "notify_rva": 32960,
+        "notify_bytes": 177,
+        "targets": {
+          "PrivateCallbackStack": 34192,
+          "observe_callback": 33152,
+          "stack_callback": 70312,
+          "__imp_CallEnclave": 53392
+        },
+        "frame_allocation_bytes": 48,
+        "helper": "mov rax,rsp; ret",
+        "whole_image_qualified": false
+      },
+      "wrapper_rva": 33776,
+      "rejected": 0
+    },
+    "missing-before": {
+      "cases": 2,
+      "active_callbacks": 15,
+      "signed_image_sha256": "20b59464e76fb8ecd4ab27b57241c4a39e33ef5a6143e9567f4c77bd528462c8",
+      "notify_binding": {
+        "notify_rva": 32960,
+        "notify_bytes": 177,
+        "targets": {
+          "PrivateCallbackStack": 34192,
+          "observe_callback": 33152,
+          "stack_callback": 70312,
+          "__imp_CallEnclave": 53392
+        },
+        "frame_allocation_bytes": 48,
+        "helper": "mov rax,rsp; ret",
+        "whole_image_qualified": false
+      },
+      "wrapper_rva": 33776,
+      "rejected": 1
+    },
+    "outside-reply": {
+      "cases": 2,
+      "active_callbacks": 15,
+      "signed_image_sha256": "80bd73a3ef97cf48b215ddd17497d9e97ddce8a3e435210bff92e91ba84e6df7",
+      "notify_binding": {
+        "notify_rva": 32960,
+        "notify_bytes": 177,
+        "targets": {
+          "PrivateCallbackStack": 34208,
+          "observe_callback": 33152,
+          "stack_callback": 70312,
+          "__imp_CallEnclave": 53392
+        },
+        "frame_allocation_bytes": 48,
+        "helper": "mov rax,rsp; ret",
+        "whole_image_qualified": false
+      },
+      "wrapper_rva": 33792,
+      "rejected": 1
+    }
+  },
+  "source_sha256": {
+    "assurance/windows-enclave-probe/callback_stack_probe.h": "ead0b2abd78f180616742127c40bbda8a6a539ca928530a83b32c4d2429ba450",
+    "assurance/windows-enclave-probe/callback_stack_probe.asm": "4a806a1323c25e5157b07c5ba1433c90e07f525190ee915ce35f2299d352f331",
+    "scripts/cryptography/windows_enclave_callback_stack.py": "c52c1c162c596bcabf47c62f3364ab73e266addc0c423a52342df5e43c728317",
+    "scripts/cryptography/windows_enclave_callback_stack_native.py": "81d4807da6456494d867d8261c6936c8307ac403b8f692b07e6df81e3c7004c9",
+    "scripts/cryptography/test-windows-enclave-callback-stack.py": "d5ddaec620336a9dcfc88650d14bb7e5c053c43f7e877b2bce98b51354240eb3"
+  },
+  "artifact_sha256": {
+    "release-reports/windows-local-20261004/callback-stack-artifacts.tar.gz": "cc584315f1661fcb8d31e231ef0d709b501191596f2ff3827baffbb5897d5e56",
+    "release-reports/windows-local-20261004/verify_callback_stack.py": "48f4614e4188bbc22b05a70fc49972d6b3b1de5098f9aecc8a399331eeef3877",
+    "release-reports/windows-local-20261004/scheduler-register-nospill/parallel-scheduler-image-build.json": "f297af4853c3d6a4f3438c4bb31e949408e586547cd1294bb300d99708f52cdc",
+    "release-reports/windows-local-20261004/callback-stack-baseline/callback-stack-build.json": "6a80f668d063766934b1d6f44929193f8a36bb588b9733bb67eecf38d2ef0eb1",
+    "release-reports/windows-local-20261004/callback-stack-baseline/observations.json": "f67f236f961acd07a994db4f9dab6fd5cce621323ee2c2986b27f031ea12c15d",
+    "release-reports/windows-local-20261004/callback-stack-baseline/signing.json": "45ddf8f4d976db6fe3ddcc082c92e882c931ad030223e22e8a3a5deaa482bff9",
+    "release-reports/windows-local-20261004/callback-stack-baseline/concurrent.obj": "73024a5b507e2c918fb689c0c9ec8dfb681320474f5d32959352340d9faabd30",
+    "release-reports/windows-local-20261004/callback-stack-baseline/callback.obj": "473aca6e39d81946dfc3ca2a881d58d81f8ebcadde91d822f411cfa9dc73ae9a",
+    "release-reports/windows-local-20261004/callback-stack-baseline/notify-disassembly.txt": "cd81e763ef1cd73546e15fe5619167fc0d038ca60acbcefa28e8fbe40c77be35",
+    "release-reports/windows-local-20261004/callback-stack-missing-before/callback-stack-build.json": "9d5e4a7f94c5d77e6110ef01e3bc4ae7656c82152227b14ed6f798cb205e092a",
+    "release-reports/windows-local-20261004/callback-stack-missing-before/observations.json": "32926060400d311c0b64db6cf4da10ff35bd342a2e2c89fe07cf896a462df34a",
+    "release-reports/windows-local-20261004/callback-stack-missing-before/signing.json": "3528229b13e0d226be5b647ef83ddf67e6a2fdd20acb78a0eb1dfacf5ea1c356",
+    "release-reports/windows-local-20261004/callback-stack-missing-before/concurrent.obj": "a2136c1188e0dcf855840ef45d22ce727a8c8be46f830222de6108ae83db6844",
+    "release-reports/windows-local-20261004/callback-stack-missing-before/callback.obj": "2bc9a5edaa3fe73815296405fc9031347ca4fb00d7ac5aeed1ba25b5d7a900b7",
+    "release-reports/windows-local-20261004/callback-stack-missing-before/notify-disassembly.txt": "3b998b0ce3884ea07df3efd9a526e2be742132af154348a48409cac0bc19477b",
+    "release-reports/windows-local-20261004/callback-stack-outside-reply/callback-stack-build.json": "0782be35cd6d030dd358a888175ea29997e06ff36d65fb6feb35a00272cb980e",
+    "release-reports/windows-local-20261004/callback-stack-outside-reply/observations.json": "77187a9595ceb0ad41640a09fd1f2b544f4e942b417599ce5733372d109f5838",
+    "release-reports/windows-local-20261004/callback-stack-outside-reply/signing.json": "fe9126bc38dc1cf4d9373b174c775b48c0991aa53abf9927857c2cfe4e33350b",
+    "release-reports/windows-local-20261004/callback-stack-outside-reply/concurrent.obj": "fb57c8c76c68763011821c9464a3bc64c7f95f0e2abda91dc547999bbbc0d1d9",
+    "release-reports/windows-local-20261004/callback-stack-outside-reply/callback.obj": "adc9a216a017bbf6b0806e155c94370a7e3087bce64b093100b5d9dedb9c8794",
+    "release-reports/windows-local-20261004/callback-stack-outside-reply/notify-disassembly.txt": "a55a008aa49992c6fb1007e4052c3a1875d5655e5070e8d88fc939965415924c"
+  },
+  "scope": "Instrumented concurrent scheduler notify frame, reply and call-entry shadow-space addresses only. Real VBS execution with original Rust archive; no register-transition, SDK-internal stack, dump, uninstrumented-image equivalence or whole-image qualification."
+}

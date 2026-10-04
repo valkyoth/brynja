@@ -54,6 +54,48 @@ globals and rejects inconsistent or aliased references. Nine parser tests cover
 malformed inputs and binding substitutions. This is not signature verification
 or proof of callee semantics.
 
+## Active callback-frame observations, 2026-10-04
+
+The concurrent scheduler calls the host for dispatch, close and join while the
+root worker is still live. These are distinct from the final cleanup callback.
+A separately instrumented development image retains the original Rust archive
+and stack wrapper and measures the C callback's return-address slot, reply slot
+and call-entry stack pointer before and after each active callback. It records
+only public addresses and counts, never register contents or payload bytes.
+
+All 31 native VBS scheduler cases passed, including zero-input, partial waves,
+denial, partial dispatch and early-return paths. Across 270 active callbacks,
+the measured frame/reply/shadow-space extents stayed inside the admitted root
+window. Counts are checked against the separately recorded host event sequence;
+each callback requires both before and after observations. Existing functional,
+join, error, stack-clear and residency checks remain in the campaign.
+Two additional compiled measurement variants omit the before-count or report
+an out-of-window reply address. Both are rejected on a five-wave run while
+their zero-wave controls pass. Crashes and compilation failures do not count as
+measurement rejection. Seven focused Python tests cover the validator and probe.
+
+The emitted diagnostic `notify` function has one fixed 48-byte allocation and
+one saved RDI; RBX/RSI are saved in caller home space. Its RSP does not change
+between the two measurements and the actual `CallEnclave` call. The four-byte
+measurement helper is `mov rax,rsp; ret`. The local review verifier matches the
+177-byte `notify` body to each signed image, allowing only six named REL32
+references, and checks the exact runtime-function extent and measurement-helper
+target. It also binds the unchanged stack wrapper. This is a review aid, not a
+new release gate or a general disassembly verifier.
+
+The [source-bound observation record](../assurance/windows-protection-observations/callback-stack-20261004.json)
+binds the three images, source closures, original build manifest and native
+results. Artifacts and the repeatable local verifier are saved under
+`release-reports/windows-local-20261004/`, outside `target/`. Temporary development
+signing keys were removed; signing compatibility warnings remain recorded.
+
+This establishes the **measured instrumented callback-frame placement**, not
+equivalence to the uninstrumented image or whole-image spill cleanup. It does
+not measure live registers across the VBS transition, SDK-internal stack depth,
+signal/interrupt state or dump inclusion. In particular, it is not evidence
+that the OS clears every register at an active callback. Those remain separate
+review and qualification tasks.
+
 ## Historical diagnosis before the change
 
 The sequential `PublicLockedFrame` and concurrent `PublicStackFrame` wrappers
@@ -92,9 +134,10 @@ it must not be presented as a check of the changed wrappers or new images.
 
 ## Remaining boundary work
 
-1. Review actual linked worker/caller flow and callbacks made while workers are
-   still running. The completed **return** boundary does not prove VBS transition
-   register handling or sanitize every active callback boundary.
+1. Complete actual linked worker/caller flow and active-callback register review.
+   The instrumented callback-frame observations above pass; they and the completed
+   **return** boundary do not prove VBS transition register handling or sanitize
+   every active callback boundary.
 2. Qualify final linked caller/spill/cleanup paths and current-image dump behavior.
    Nonvolatile caller state is preserved, not erased. AVX-512-only state, fatal
    aborts and interruption contexts are not covered by this wrapper probe.

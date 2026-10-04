@@ -340,3 +340,56 @@ Production code, existing native records and release gates are unchanged.
 python3 scripts/cryptography/test-windows-enclave-sdk-runtime.py
 python3 scripts/cryptography/windows_enclave_sdk_runtime.py PATH_TO_SAVED_VERTDLL --mutations
 ```
+
+## Directory-result and image-header frames
+
+The [directory record](../assurance/windows-protection-observations/sdk-directory-20261004.json)
+extends the same saved-file review through the directory-result wrapper, parser,
+header finder, RVA translator and section finder: five complete ranges, 668
+bytes and four direct calls. Seven focused regressions and 668 actual-body byte
+mutations pass on both Linux and Windows; the saved-file inspection reports
+match. Hash mutations establish drift detection, not semantic correctness.
+The frame and storage interpretation below is an implementation-author review.
+
+The result wrapper pushes RBX and reserves 64 bytes (72 total). Its parser
+pushes three registers and reserves 32 bytes (56 total), saving three other
+registers in caller home space. Header finding adds a separate 72-byte frame;
+the alternative RVA-translation call adds 40 bytes and calls a section-finder
+leaf with no stack adjustment, stores or calls. These sibling calls must not
+be added together as though nested.
+
+| Selected RSP, direct formatter-invalid path at capacity 512 | Copy-result path | CallEnclave error path |
+| --- | --- | --- |
+| Directory-result wrapper | H - 15296 | H - 15552 |
+| Directory parser | H - 15360 | H - 15616 |
+| Header finder | H - 15440 | H - 15696 |
+| RVA translator (alternative) | H - 15408 | H - 15664 |
+| Section leaf entry | H - 15416 | H - 15672 |
+
+The wide-helper-invalid origin shifts these by 128 further bytes. Eleven
+selected spans per origin account for pushes, home saves, outgoing arguments,
+result pointers and header status/offset/pointer locals. The known caller's
+NT-header destination is its own home slot, and the directory-result pointer
+is the wrapper's local slot. All selected spans fit the modeled clearing
+window for capacities 128, 256, 384 and 512. The helpers restore registers
+without clearing the slots; this remains dependent on enclosing cleanup.
+
+This is **not an arbitrary-image bounds proof**. The parser invokes the header
+finder with flag 1 and size 0, disabling that helper's optional size checks.
+The call setup is explicitly byte-bound and mutation-tested. Header finding
+still checks signatures and selected offset conditions; that does not make
+untrusted pointers or malformed PE metadata safe. Directory sizes and returned
+pointers are written through supplied destinations. Image/section reads and
+exception-handler behavior are outside this selected stack-slot conclusion.
+
+The directory branch's ordinary fixed frames are now accounted for; cache
+locking/slow paths, the unwind engine, exception dispatch and fatal-cookie
+paths remain separate unfinished work. No SDK code was executed by these
+inspectors, no native enclave run was added, and loaded-module identity,
+maximum transitive depth and whole-image cleanup remain unqualified.
+Production cryptography and release gates are unchanged.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-sdk-directory.py
+python3 scripts/cryptography/windows_enclave_sdk_directory.py PATH_TO_SAVED_VERTDLL --mutations
+```

@@ -1,0 +1,302 @@
+{
+  "schema": 1,
+  "status": "SAVED_SDK_DIRECTORY_FRAMES_NOT_PE_SAFETY_PROOF",
+  "image_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "version_observed": "10.0.26100.9444",
+  "bodies": {
+    "directory_result": {
+      "rva": 57236,
+      "bytes": 48,
+      "sha256": "88c2496ff67439bfeee4e93b830f5c6f76b236b11b7bc1992a98761eef8cb4a1"
+    },
+    "directory_parse": {
+      "rva": 57360,
+      "bytes": 264,
+      "sha256": "35531ae6298ffc6fa5e0aa2ca41f29fbcdad180a23c15a492a170b441cd9cc9a"
+    },
+    "rva_translate": {
+      "rva": 57188,
+      "bytes": 40,
+      "sha256": "cdf2fc5d4b1b3d7c27021963bc2b84a0ac56f9e2d99710d1e62c9a5e7ecbea0a"
+    },
+    "section_find": {
+      "rva": 57292,
+      "bytes": 58,
+      "sha256": "491782c04b79e1dbc2655b5861ee6b11f3531cf2a07bcdc3c3964190b86b8396"
+    },
+    "header_find": {
+      "rva": 47648,
+      "bytes": 258,
+      "sha256": "524f705b302e91ddb57885d6241b62ba1e2e7c25ee43ecc20971342696a2835b"
+    }
+  },
+  "direct_transfers": 4,
+  "body_byte_mutations_rejected": 668,
+  "geometry": {
+    "128": {
+      "copy": {
+        "engine": {
+          "frames": {
+            "result": -14912,
+            "parser": -14976,
+            "header": -15056,
+            "translate": -15024
+          },
+          "section_leaf_entry_from_high": -15032,
+          "selected_low_from_high": -15056,
+          "selected_spans": 11
+        },
+        "wide_helper": {
+          "frames": {
+            "result": -15040,
+            "parser": -15104,
+            "header": -15184,
+            "translate": -15152
+          },
+          "section_leaf_entry_from_high": -15160,
+          "selected_low_from_high": -15184,
+          "selected_spans": 11
+        }
+      },
+      "call_error": {
+        "engine": {
+          "frames": {
+            "result": -15168,
+            "parser": -15232,
+            "header": -15312,
+            "translate": -15280
+          },
+          "section_leaf_entry_from_high": -15288,
+          "selected_low_from_high": -15312,
+          "selected_spans": 11
+        },
+        "wide_helper": {
+          "frames": {
+            "result": -15296,
+            "parser": -15360,
+            "header": -15440,
+            "translate": -15408
+          },
+          "section_leaf_entry_from_high": -15416,
+          "selected_low_from_high": -15440,
+          "selected_spans": 11
+        }
+      }
+    },
+    "256": {
+      "copy": {
+        "engine": {
+          "frames": {
+            "result": -15040,
+            "parser": -15104,
+            "header": -15184,
+            "translate": -15152
+          },
+          "section_leaf_entry_from_high": -15160,
+          "selected_low_from_high": -15184,
+          "selected_spans": 11
+        },
+        "wide_helper": {
+          "frames": {
+            "result": -15168,
+            "parser": -15232,
+            "header": -15312,
+            "translate": -15280
+          },
+          "section_leaf_entry_from_high": -15288,
+          "selected_low_from_high": -15312,
+          "selected_spans": 11
+        }
+      },
+      "call_error": {
+        "engine": {
+          "frames": {
+            "result": -15296,
+            "parser": -15360,
+            "header": -15440,
+            "translate": -15408
+          },
+          "section_leaf_entry_from_high": -15416,
+          "selected_low_from_high": -15440,
+          "selected_spans": 11
+        },
+        "wide_helper": {
+          "frames": {
+            "result": -15424,
+            "parser": -15488,
+            "header": -15568,
+            "translate": -15536
+          },
+          "section_leaf_entry_from_high": -15544,
+          "selected_low_from_high": -15568,
+          "selected_spans": 11
+        }
+      }
+    },
+    "384": {
+      "copy": {
+        "engine": {
+          "frames": {
+            "result": -15168,
+            "parser": -15232,
+            "header": -15312,
+            "translate": -15280
+          },
+          "section_leaf_entry_from_high": -15288,
+          "selected_low_from_high": -15312,
+          "selected_spans": 11
+        },
+        "wide_helper": {
+          "frames": {
+            "result": -15296,
+            "parser": -15360,
+            "header": -15440,
+            "translate": -15408
+          },
+          "section_leaf_entry_from_high": -15416,
+          "selected_low_from_high": -15440,
+          "selected_spans": 11
+        }
+      },
+      "call_error": {
+        "engine": {
+          "frames": {
+            "result": -15424,
+            "parser": -15488,
+            "header": -15568,
+            "translate": -15536
+          },
+          "section_leaf_entry_from_high": -15544,
+          "selected_low_from_high": -15568,
+          "selected_spans": 11
+        },
+        "wide_helper": {
+          "frames": {
+            "result": -15552,
+            "parser": -15616,
+            "header": -15696,
+            "translate": -15664
+          },
+          "section_leaf_entry_from_high": -15672,
+          "selected_low_from_high": -15696,
+          "selected_spans": 11
+        }
+      }
+    },
+    "512": {
+      "copy": {
+        "engine": {
+          "frames": {
+            "result": -15296,
+            "parser": -15360,
+            "header": -15440,
+            "translate": -15408
+          },
+          "section_leaf_entry_from_high": -15416,
+          "selected_low_from_high": -15440,
+          "selected_spans": 11
+        },
+        "wide_helper": {
+          "frames": {
+            "result": -15424,
+            "parser": -15488,
+            "header": -15568,
+            "translate": -15536
+          },
+          "section_leaf_entry_from_high": -15544,
+          "selected_low_from_high": -15568,
+          "selected_spans": 11
+        }
+      },
+      "call_error": {
+        "engine": {
+          "frames": {
+            "result": -15552,
+            "parser": -15616,
+            "header": -15696,
+            "translate": -15664
+          },
+          "section_leaf_entry_from_high": -15672,
+          "selected_low_from_high": -15696,
+          "selected_spans": 11
+        },
+        "wide_helper": {
+          "frames": {
+            "result": -15680,
+            "parser": -15744,
+            "header": -15824,
+            "translate": -15792
+          },
+          "section_leaf_entry_from_high": -15800,
+          "selected_low_from_high": -15824,
+          "selected_spans": 11
+        }
+      }
+    }
+  },
+  "loaded_module_identity_proven": false,
+  "native_enclave_run_added": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "maximum_transitive_depth_qualified": false,
+  "exception_unwind_cleanup_qualified": false,
+  "arbitrary_image_bounds_qualified": false,
+  "sdk_self_erasure_claimed": false,
+  "header_optional_size_checks_active": false,
+  "side_effects": [
+    "directory parser writes result pointer and size through supplied pointers",
+    "header finder reads caller image and writes its supplied output pointer",
+    "section finder reads section metadata without stack stores or calls",
+    "normal returns restore registers but do not erase the reviewed save slots"
+  ],
+  "unresolved": [
+    {
+      "rva": 38480,
+      "reason": "module-cache locking"
+    },
+    {
+      "rva": 38624,
+      "reason": "module-cache unlocking"
+    },
+    {
+      "rva": 53112,
+      "reason": "unwind engine"
+    },
+    {
+      "rva": 48272,
+      "reason": "exception dispatch"
+    },
+    {
+      "rva": 4448,
+      "reason": "fatal cookie-failure path"
+    }
+  ],
+  "residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage"
+  ],
+  "date": "2026-10-04",
+  "parent_commit": "f28385fcfa800f6ae55816265963ffdb6e8f9744",
+  "review": "Implementation-author saved-file frame review, not native SDK execution, arbitrary-image validation or exception qualification.",
+  "tests": {
+    "linux_synthetic": 7,
+    "windows_synthetic": 7,
+    "real_body_mutations_rejected_each_host": 668,
+    "actual_saved_file_reports_identical": true
+  },
+  "source_and_local_artifact_sha256": {
+    "scripts/cryptography/windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "scripts/cryptography/test-windows-enclave-sdk-directory.py": "f052dd517d2911eaa7858b7ede8f44bb55627654fc0036de35d764ea8d5b7448",
+    "scripts/cryptography/windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "scripts/cryptography/windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "scripts/cryptography/windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "scripts/cryptography/windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "scripts/cryptography/windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "release-reports/windows-local-20261004/sdk-directory-linux.json": "cbe4acd7985c052f52702cbf1b4d8f3c40c8a8f06fadf7a4e510b866c65449a5",
+    "release-reports/windows-local-20261004/sdk-directory-windows.json": "cbe4acd7985c052f52702cbf1b4d8f3c40c8a8f06fadf7a4e510b866c65449a5"
+  }
+}

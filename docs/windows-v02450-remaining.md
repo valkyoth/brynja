@@ -54,6 +54,12 @@ The runtime-adapter extension adds nine ranges, including lookup/unwind entry
 frames and the context-flag helper chain; eight regressions and 1,718 actual-body
 mutations pass on Linux and Windows. Deeper cache locking, directory parsing,
 the unwind engine and exceptional/fatal callees still have no transitive bound.
+A subsequent directory extension accounts for five fixed-frame bodies and
+eleven selected spans per origin; seven regressions and 668 real-body byte
+mutations pass on both hosts. The header call disables optional size checks,
+so this is deliberately not a malformed-image safety or exception-path proof.
+The ordinary directory frames are accounted for; cache slow paths and the
+unwind/exception/fatal boundaries remain unfinished.
 Loaded-module identity,
 kernel storage and remaining SDK paths remain unqualified. This is not whole-image stack-depth or cleanup
 proof. Seven additional no-unwind helpers are now byte-bound and reviewed,

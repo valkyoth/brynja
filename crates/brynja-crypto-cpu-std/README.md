@@ -54,6 +54,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS SHA-2 batches | 🚧 Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | 🚧 Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
 | Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |
 | Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
@@ -169,6 +170,16 @@ version-eighteen image. Complete AVX/AVX2/OS checks run inside the enclave; the
 host needs no build-wide AVX2 flags. Production image trust stays mandatory;
 failed selection never retries scalar. Root and leaves remain sequential, not
 multicore or SIMD. See the [API example and limits](../../docs/windows-enclave-parallelhash.md).
+
+The separate `windows_enclave::parallel_concurrent` API (features
+`strict-sha2,strict-sha3-acceleration`) selects a reviewed **five-thread** image:
+one root and up to four scoped AVX2 leaf workers per wave. All four ParallelHash
+identities accept borrowed byte/bit inputs and require explicit public-output
+declassification. It is one-shot, not a retained-secret-result API; worker joins
+and enclave destruction finish before the input borrows end. Existing sequential
+constructors still require one-thread images. Production signing and final-image
+cleanup qualification remain pending; development VBS execution is not independent
+verification. See the [concurrent API example and limits](../../docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
 
 Default-off `strict-kmac-acceleration` adds `strict_kmac::CompiledSession` with
 explicit AVX2 or Arm NEON/SHA3 selection. Enable the complete build-wide features

@@ -46,6 +46,7 @@ choice, not certification or proof that all application code uses this profile.
 | Windows x64 VBS SHA-2 batches | 🚧 Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | 🚧 Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
 
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `kmac`, `tuplehash`, `parallelhash`
@@ -59,6 +60,11 @@ protected multicore API. With `acceleration`, use
 `enclave::parallelhash::Session::open_avx2` and the reviewed version-eighteen
 image. CPU/OS admission runs inside the enclave; failed selection never falls
 back. Production trust and current-image qualification remain required.
+The separate `enclave::parallel_concurrent` API, also under `acceleration`, uses
+an exact five-thread image with up to four scoped AVX2 leaf workers. It borrows
+caller inputs and requires explicit public declassification; it does not retain
+secret results. All joins and destruction precede borrow release. Production
+qualification remains pending. See the [concurrent example and limits](../../docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
 No legacy hashes, ordinary digests, raw CPU
 execution authorities, generic protected callbacks or protocol APIs are exported.
 Even with default features disabled, dependencies enable the protected sessions.

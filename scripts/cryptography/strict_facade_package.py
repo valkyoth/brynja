@@ -99,6 +99,8 @@ brynja-strict = { version = "=0.1.0", default-features = false }
         compiled += "\npub fn enclave_sha3_avx2_open(path: &std::path::Path, policy: &'static brynja_strict::enclave::ImagePolicy) -> Result<brynja_strict::enclave::sha3::Session, brynja_strict::enclave::Error> { brynja_strict::enclave::sha3::Session::open_avx2(path, policy) }"
         selected = positive + ('\n' + compiled if features else '')
         if features:
+            concurrent = section_example((root / 'docs/windows-enclave-parallel-concurrent.md').read_text(), 'Crate API integration')
+            selected += '\nmod parallel_concurrent_example {\n' + concurrent.replace('brynja_crypto_cpu_std::windows_enclave', 'brynja_strict::enclave') + '\n}\n'
             selected += '\nmod keccak_simd_example {\n' + section_example((root / 'docs/windows-enclave-keccak-simd.md').read_text(), 'Example') + '\n}\n'
             selected += '\nmod wide_simd_example {\n' + section_example(batch_guide, 'Four-message wide SIMD') + '\n}\n'
             selected += '\nmod narrow_simd_example {\n' + section_example(batch_guide, 'Eight-message narrow SIMD') + '\n}\n'
@@ -126,6 +128,7 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                                      'enclave::parallelhash::transport','enclave::parallelhash::Owner') else 'E0432')
                  for name in FORBIDDEN]
         if not features:
+            cases += [('use brynja_strict::enclave::parallel_concurrent;', 'E0432')]
             cases += [('use brynja_strict::enclave::keccak_simd;', 'E0432')]
             cases += [('use brynja_strict::enclave::sha512_simd;', 'E0432')]
             cases += [('use brynja_strict::enclave::sha256_simd;', 'E0432')]
@@ -155,6 +158,11 @@ brynja-strict = { version = "=0.1.0", default-features = false }
                     f'fn probe() {{ require::<brynja_strict::enclave::sha3::{kind}>(); }}','E0277'))
         try:
             if features:
+                for name in ('Owner', 'Request', 'Channel', 'transport'):
+                    cases.append((f'use brynja_strict::enclave::parallel_concurrent::{name};', 'E0603'))
+                for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+                    cases.append((f'fn require<T: {trait}>() {{}}\n'
+                        'fn probe() { require::<brynja_strict::enclave::parallel_concurrent::Session>(); }', 'E0277'))
                 for name in ('Owner', 'Lease', 'transport', 'wire'):
                     cases.append((f'use brynja_strict::enclave::keccak_simd::{name};', 'E0603'))
                 for trait in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):

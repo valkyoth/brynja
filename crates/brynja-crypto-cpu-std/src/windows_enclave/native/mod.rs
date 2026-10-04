@@ -10,6 +10,8 @@ mod callback;
 pub(super) mod keccak_simd;
 #[cfg(feature = "strict-kmac")]
 pub(super) mod kmac;
+#[cfg(feature = "strict-sha3-acceleration")]
+pub(super) mod parallel_concurrent;
 #[cfg(feature = "strict-sha3")]
 pub(super) mod parallelhash;
 mod pin;

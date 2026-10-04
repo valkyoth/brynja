@@ -184,6 +184,9 @@ def os_enclave_imports() -> None:
     for relative, needle, expected in (
         (first_party_rust_crypto.OS_ENCLAVE_ADAPTER, 'fn CallEnclave(', 'OS enclave ABI'),
         (first_party_rust_crypto.OS_ENCLAVE_CALLBACK, 'fn callback(', 'OS enclave callback'),
+        (first_party_rust_crypto.OS_ENCLAVE_CONCURRENT_CALLBACK, 'fn callback(', 'OS enclave callback'),
+        (first_party_rust_crypto.OS_ENCLAVE_ADAPTER, 'fn GetProcessWorkingSetSize(', 'OS enclave test ABI'),
+        (first_party_rust_crypto.OS_ENCLAVE_ADAPTER, '#[cfg(all(test, feature = "strict-sha3-acceleration"))]', 'OS enclave test ABI'),
     ):
         source = (repository / relative).read_text()
         with tempfile.TemporaryDirectory(prefix='brynja-os-enclave-') as temporary:
@@ -198,7 +201,7 @@ def os_enclave_imports() -> None:
                 (source + '\nunsafe extern "C" { fn crypto(); }', 'foreign ABI'),
                 (source + '\nunsafe extern "system" { fn crypto(); }', 'foreign ABI'),
                 (source + '\n#[link(name="crypto")] mod native {}', 'native link'),
-                (source + '\n' + source, expected),
+                (source + '\n' + source, 'OS enclave ABI' if relative == first_party_rust_crypto.OS_ENCLAVE_ADAPTER else expected),
             ):
                 assert mutated != source
                 destination.write_text(mutated)
@@ -218,4 +221,4 @@ if __name__ == "__main__":
     print(f"local Rust ABI definitions reject {len(first_party_rust_crypto.LOCAL_C_ABI) * 5} foreign import/link/relocation regressions")
     print('OS memory adapter rejects eight import/signature/link/relocation regressions')
     print('OS thread adapter rejects nine import/signature/link/relocation regressions')
-    print('Windows enclave adapters reject twelve ABI/link/relocation regressions')
+    print('Windows enclave adapters reject thirty ABI/test-only/link/relocation regressions')

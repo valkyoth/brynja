@@ -611,14 +611,78 @@ python3 scripts/cryptography/test-windows-enclave-parallel-host-contract.py FRES
 python3 scripts/cryptography/test-windows-enclave-parallel-typed-host.py FRESH_NATIVE_DIRECTORY SIGNED_DLL
 ```
 
-This remains an **isolated candidate, not a crate-exported supported API**. Its
+At that checkpoint this was an **isolated candidate, not a crate-exported API**. Its
 compiled-negative consumers and native driver exercise the intended interface;
 the test-only constructor seam, generated fault selector and development opening
 are not shipping features. The existing development-signed five-thread image is
 unchanged. The one-thread production loader and all release gates remain unchanged.
 No retained secret-result, new Windows ARM64 or whole-image qualification claim is
-made. Next: integrate the typed interface with exact five-thread production image
-admission and crate exports, then complete final-image qualification and review.
+made by that record. The crate integration below supersedes the export/admission
+gap; final-image qualification and review are still pending.
+
+## Crate API integration
+
+The candidate above is now integrated as `windows_enclave::parallel_concurrent`
+in `brynja-crypto-cpu-std`, under `strict-sha2,strict-sha3-acceleration`.
+`Session::open_avx2` requires a caller-published, statically reviewed image policy
+and production signature. It admits exactly five threads; existing constructors
+continue to admit exactly one. There is no production development-opening switch,
+raw request, generic transport, user callback or scalar fallback.
+
+```rust,no_run
+use brynja_crypto_cpu_std::windows_enclave::{Error, ImagePolicy, PublicDeclassification};
+use brynja_crypto_cpu_std::windows_enclave::parallel_concurrent::{Algorithm, Input, Part, Plan, Session};
+
+// Supply the publisher's exact reviewed identity; do not derive trust from a
+// file hash received alongside an untrusted image.
+fn hash(image: &std::path::Path, policy: &'static ImagePolicy,
+        message: &[u8]) -> Result<[u8; 32], Error> {
+    let mut session = Session::open_avx2(image, policy)?;
+    let plan = Plan::new(Algorithm::ParallelHash256, 1024, 256)?;
+    let input = Input::new(Part::bytes(message)?, Part::bytes(&[])?);
+    let mut public = [0; 32];
+    session.digest_public(plan, input, &mut public, PublicDeclassification::acknowledge())?;
+    Ok(public)
+}
+```
+
+Inputs and customization are immutable caller-owned borrows, not protected host
+storage. Metadata is public; noncanonical partial-byte contents are checked
+inside the enclave after copying. B is 1..=1024 bytes, message size is at most
+65,536 leaves, customization and output are at most 8192 bits. Output destination
+width must match exactly. Preflight errors permit correcting the request; once
+entry starts, errors/unwind are terminal. Caller output remains unchanged on
+failure. Every worker is joined, and the one-shot enclave is destroyed, before
+the synchronous transport returns and any input loan can expire. Unconfirmed
+destruction is fail-stop; fatal abort does not promise cleanup.
+
+The actual-crate development campaign runs 68 cases in each of debug/release:
+25 oracle cases, 20 malformed message tails and 23 malformed customization tails.
+It also checks wrong-width preflight, output guards, terminal reuse rejection,
+destruction before borrow release, rejection of the development signature by the
+production constructor, and rejection of the five-thread image by the ordinary
+single-thread constructor. Component campaigns compile the actual API/scheduler
+sources and inject lifecycle/receipt mutations. These are author checks, not
+production-signed or independent qualification. Five native compiled mutations
+independently disable teardown, production signature checking, successful root
+receipt checking, unlocking and cleanup verification; all must fail an actual
+test assertion, not compilation or an unexplained process crash. Restored sources
+rerun all 68 cases. The dev-only opening and process
+working-set allowance exist only in test builds. Final whole-image qualification
+and independent retest remain pending; Windows ARM64 is not claimed.
+
+The [crate integration record](../assurance/windows-protection-observations/parallel-crate-host-20261004.json)
+binds the saved debug/release binaries, native logs and component campaigns.
+The strict facade re-exports this module under `acceleration`; packaged consumers
+compile this same example through that facade and reject access without the
+feature, private internals and forbidden ownership traits.
+
+```sh
+python3 scripts/cryptography/test-windows-enclave-parallel-host-contract.py FRESH_CONTRACT_DIRECTORY --shipping
+python3 scripts/cryptography/test-windows-enclave-host-scheduler.py FRESH_SCHEDULER_DIRECTORY --shipping
+# Native Windows with a reviewed development image and VBS enabled:
+python scripts/cryptography/windows_enclave_parallel_concurrent_host.py SIGNED_DLL FRESH_NATIVE_DIRECTORY
+```
 
 ## Author verification
 

@@ -54,9 +54,9 @@ def build(directory, image):
     for name in ('policy.rs', 'image.rs'): shutil.copyfile(HOST / name, directory / name)
     for name in ('pin.rs', 'sys.rs'): shutil.copyfile(HOST / 'native' / name, adapter / name)
     path = directory / 'image.rs'
-    path.write_text(replace(path.read_text(), 'u32_at(b, add(c, 72)?)? == 1', 'u32_at(b, add(c, 72)?)? == 5'))
+    path.write_text(replace(path.read_text(), 'admit_threads(b, policy, 1)', 'admit_threads(b, policy, 5)'))
     path = adapter / 'sys.rs'
-    path.write_text(replace(path.read_text(), 'threads: 1,', 'threads: 5,') + '''
+    path.write_text(replace(path.read_text(), 'initialize_threads(base, 1)', 'initialize_threads(base, 5)') + '''
 #[link(name="onecore")]
 unsafe extern "system" {
     fn GetProcessWorkingSetSize(process: Handle, low: *mut usize, high: *mut usize) -> i32;

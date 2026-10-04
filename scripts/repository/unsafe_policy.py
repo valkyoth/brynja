@@ -9,7 +9,8 @@ from pathlib import Path
 
 
 ALLOWED = {
-    Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs"): ("7e0dcdfaee429ad3c127fda944a155071da5bde097b80d83068f8620993c63f6", 15, 0, 15),
+    Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs"): ("0517bba86b0973436eef3b483296a87b38d9fec15ddbde41d7a01d8a9392bcd1", 16, 0, 16),
+    Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/callbacks.rs"): ("45a4e35f9e9297fa0f9e3ca5d2a58bfe2f67f0c9790857204d361e1fa92fb6b0", 0, 0, 0),
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs"): ("d56e08cfd688724942707dee6d1a91f4b3f8315d963b78fe0a6fb7a1b5005f9b", 0, 0, 0),
     Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform.rs"): ("35e77466f3e2400ae70de5aed806d14ea4c5d8ea6f59bf8e89099313fcd3bf7e", 4, 0, 4),
     Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform/thread.rs"): ("ad5929a5b0f283aa57ef2b7c5801fb86e5ede6bbdee48f3d1b72cb8549797ed9", 8, 0, 8),

@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: eighty-five exact source-hash-bound exceptions inventoried, including three Linux OS-resource modules and two Windows enclave boundary modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: eighty-six exact source-hash-bound exceptions inventoried, including three Linux OS-resource modules and three Windows enclave boundary modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only eighty-five exact modules: the private core volatile clearer and
+Rust in only eighty-six exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -18,7 +18,7 @@ AVX2/NEON kernels and hosted bridge; plus the independent-state Keccak batch
 platform import, AVX2/NEON kernels and hosted bridge; and the distinct hardened
 SHA-224/256, SHA-512-family and Keccak batch platform imports and AVX2/NEON kernels,
 with three distinct hosted hardened-batch platform imports; and the three bounded
-OS-resource modules and two Windows enclave modules described below. The cryptographic modules use fixed-size
+OS-resource modules and three Windows enclave modules described below. The cryptographic modules use fixed-size
 arrays and documented whole-lifetime feature authority. Portable safe Rust
 cannot express the required SIMD intrinsics; unsafe remains confined to these
 instruction/import boundaries and the reviewed private memory primitives, never
@@ -40,8 +40,13 @@ when hidden behind build tooling.
 
 ## Windows enclave owner development boundary
 
-The approved Windows owner/session integration adds two private modules under
-`brynja-crypto-cpu-std/src/windows_enclave/native`: `sys.rs` and `callback.rs`.
+The approved Windows owner/session integration adds three private modules under
+`brynja-crypto-cpu-std/src/windows_enclave/native`: `sys.rs`, `callback.rs` and
+`parallel_concurrent/callbacks.rs`. The concurrent callback adds a separate safe
+Windows ABI entry with zero unsafe blocks/items; its exact hash is still bound.
+The OS module retains exact one-thread default admission and a distinct
+five-thread initialization path. Its extra unsafe block is test-only working-set
+allowance setup in the child campaign, not a shipping process-quota adjustment.
 Safe standard-library operations cannot create/call VBS enclaves, acquire eager
 page residency or enforce Windows image trust. Rejecting Windows remains the
 alternative; substituting ordinary-memory hashing is not permitted.
@@ -50,8 +55,8 @@ The exact OS ABI inventory permits only enclave creation/loading/initialization/
 calls/destruction, native capability and thread queries, page residency/locking,
 file handle checks/closure and Authenticode verification through onecore, psapi
 and wintrust. No imported cryptographic primitive or new package dependency is
-allowed. The source hashes bind SDK layouts, target restrictions, all fifteen
-local safety proofs and the single Rust-defined OS residency callback. Extra
+allowed. The source hashes bind SDK layouts, target restrictions, all sixteen
+local safety proofs and both Rust-defined OS residency callbacks. Extra
 imports, link directives or relocated callbacks fail regression-tested policy.
 
 The callback uses thread-local public integer metadata, never a pointer to a

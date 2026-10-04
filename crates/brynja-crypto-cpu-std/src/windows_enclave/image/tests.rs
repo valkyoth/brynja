@@ -197,3 +197,22 @@ fn malformed_metadata_rejects_even_with_matching_hash() -> Result<()> {
     }
     Ok(())
 }
+
+#[test]
+fn single_and_five_thread_admission_remain_exact_and_separate() -> Result<()> {
+    for actual in [0_u32, 1, 2, 4, 5, 6, u32::MAX] {
+        let mut b = fixture()?;
+        put(&mut b, 1608, &actual.to_le_bytes())?;
+        let p = policy(&b)?;
+        assert_eq!(admit(&b, &p).is_ok(), actual == 1);
+        for expected in [0_u32, 1, 2, 4, 5, 6, u32::MAX] {
+            assert_eq!(
+                admit_threads(&b, &p, expected).is_ok(),
+                matches!(expected, 1 | 5) && actual == expected
+            );
+        }
+        *b.get_mut(1608).ok_or(Error::Image)? ^= 1;
+        assert!(admit_threads(&b, &p, 5).is_err());
+    }
+    Ok(())
+}

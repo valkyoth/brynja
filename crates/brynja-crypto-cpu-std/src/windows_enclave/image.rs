@@ -240,6 +240,11 @@ impl<'a> Pe<'a> {
     }
 }
 pub(super) fn admit(b: &[u8], policy: &ImagePolicy) -> Result<()> {
+    admit_threads(b, policy, 1)
+}
+// Internal exact protocol geometry; never an image-selected thread count.
+pub(super) fn admit_threads(b: &[u8], policy: &ImagePolicy, threads: u32) -> Result<()> {
+    need(matches!(threads, 1 | 5))?;
     need(policy.valid() && b.len() <= 16777216)?;
     let hash = brynja_hash_sha2::sha256(b).map_err(|_| Error::Image)?;
     need(hash.as_bytes() == &policy.digest)?;
@@ -252,7 +257,7 @@ pub(super) fn admit(b: &[u8], policy: &ImagePolicy) -> Result<()> {
             && u32_at(b, add(c, 60)?)? == policy.security
             && u32_at(b, add(c, 8)?)? == 0
             && u64_at(b, add(c, 64)?)? == 0x10000000
-            && u32_at(b, add(c, 72)?)? == 1
+            && u32_at(b, add(c, 72)?)? == threads
             && u32_at(b, add(c, 76)?)? == 1
             && minimum == policy.minimum_import_security,
     )

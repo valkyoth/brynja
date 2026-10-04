@@ -70,6 +70,8 @@ mod native;
     )
 ))]
 mod parallel_avx2_wire;
+#[cfg(feature = "strict-sha3-acceleration")]
+pub mod parallel_concurrent;
 #[cfg(all(
     feature = "strict-sha3",
     any(

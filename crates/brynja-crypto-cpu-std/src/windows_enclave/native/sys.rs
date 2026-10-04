@@ -166,10 +166,42 @@ pub(super) fn load(base: usize, path: &[u16]) -> Result<(), Error> {
     }
 }
 pub(super) fn initialize(base: usize) -> Result<u32, Error> {
-    let mut info = InitInfo {
-        size: 8,
-        threads: 1,
-    };
+    initialize_threads(base, 1)
+}
+
+#[cfg(all(test, feature = "strict-sha3-acceleration"))]
+#[link(name = "onecore")]
+unsafe extern "system" {
+    fn GetProcessWorkingSetSize(process: Handle, low: *mut usize, high: *mut usize) -> i32;
+    fn SetProcessWorkingSetSize(process: Handle, low: usize, high: usize) -> i32;
+}
+// Child-test process only. Shipping constructors never adjust a process quota.
+#[cfg(all(test, feature = "strict-sha3-acceleration"))]
+pub(super) fn test_parallel_budget() -> Result<(), Error> {
+    let (mut low, mut high) = (0, 0);
+    // SAFETY: current-process handle and initialized fixed ABI outputs. The test
+    // raises its own allowance; every real VirtualLock/page check still applies.
+    unsafe {
+        let process = GetCurrentProcess();
+        if GetProcessWorkingSetSize(process, &mut low, &mut high) == 0 {
+            return Err(Error::Platform);
+        }
+        let requested = (low.max(8 * 1024 * 1024), high.max(16 * 1024 * 1024));
+        if SetProcessWorkingSetSize(process, requested.0, requested.1) == 0
+            || GetProcessWorkingSetSize(process, &mut low, &mut high) == 0
+            || low < requested.0
+            || high < requested.1
+        {
+            return Err(Error::Platform);
+        }
+    }
+    Ok(())
+}
+pub(super) fn initialize_threads(base: usize, threads: u32) -> Result<u32, Error> {
+    if !matches!(threads, 1 | 5) {
+        return Err(Error::Bounds);
+    }
+    let mut info = InitInfo { size: 8, threads };
     // SAFETY: private mapping loaded by OS, exclusive initialization, fixed output.
     if unsafe {
         InitializeEnclave(

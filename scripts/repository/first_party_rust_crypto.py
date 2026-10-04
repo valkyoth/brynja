@@ -108,6 +108,15 @@ OS_THREAD_ABI = '''unsafe extern "C" {
 OS_ENCLAVE_ADAPTER = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs')
 OS_ENCLAVE_CALLBACK = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs')
 OS_ENCLAVE_ENTRY = 'extern "system" fn callback(parameter: usize) -> usize {'
+OS_ENCLAVE_CONCURRENT_CALLBACK = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/callbacks.rs')
+OS_ENCLAVE_CONCURRENT_ENTRY = 'extern "system" fn callback(word: usize) -> usize {'
+# Exact test-only child allowance setup; never a shipping quota adjustment.
+OS_ENCLAVE_TEST_ABI = '''#[cfg(all(test, feature = "strict-sha3-acceleration"))]
+#[link(name = "onecore")]
+unsafe extern "system" {
+    fn GetProcessWorkingSetSize(process: Handle, low: *mut usize, high: *mut usize) -> i32;
+    fn SetProcessWorkingSetSize(process: Handle, low: usize, high: usize) -> i32;
+}'''
 # Exact Windows loading, trust, residency and lifecycle ABI, not foreign crypto.
 OS_ENCLAVE_ABI = '''#[link(name = "onecore")]
 unsafe extern "system" {
@@ -226,10 +235,17 @@ def validate(root: Path) -> None:
                 if text.count(OS_ENCLAVE_ABI) != 1:
                     fail('OS enclave ABI inventory changed')
                 abi_text = link_text = text.replace(OS_ENCLAVE_ABI, '', 1)
+                if abi_text.count(OS_ENCLAVE_TEST_ABI) != 1:
+                    fail('OS enclave test ABI inventory changed')
+                abi_text = link_text = abi_text.replace(OS_ENCLAVE_TEST_ABI, '', 1)
             if relative == OS_ENCLAVE_CALLBACK:
                 if text.count(OS_ENCLAVE_ENTRY) != 1:
                     fail('OS enclave callback inventory changed')
                 abi_text = text.replace(OS_ENCLAVE_ENTRY, '', 1)
+            if relative == OS_ENCLAVE_CONCURRENT_CALLBACK:
+                if text.count(OS_ENCLAVE_CONCURRENT_ENTRY) != 1:
+                    fail('OS enclave callback inventory changed')
+                abi_text = text.replace(OS_ENCLAVE_CONCURRENT_ENTRY, '', 1)
             if relative == OS_MEMORY_ADAPTER:
                 if text.count(OS_MEMORY_ABI) != 1:
                     fail('OS memory ABI inventory changed')

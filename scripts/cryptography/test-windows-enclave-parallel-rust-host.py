@@ -14,7 +14,7 @@ MUTANTS = (
     ('adapter/transport/callbacks.rs', 'frame.phase = 2;', 'frame.phase = 1;'),
     ('adapter/transport/callbacks.rs', 'if result == Ok(1)', 'if result == Ok(2)'),
     ('adapter/transport.rs', 'returned != 1', 'returned != 2'),
-    ('image.rs', 'u32_at(b, add(c, 72)?)? == 5', 'u32_at(b, add(c, 72)?)? == 1'),
+    ('image.rs', 'admit_threads(b, policy, 5)', 'admit_threads(b, policy, 1)'),
     ('adapter/transport.rs', 'pin.signature()?;', '/* production signature bypass */'),
 )
 

@@ -20,6 +20,16 @@ pub(super) struct Pin {
 }
 impl Pin {
     pub(super) fn open(location: &Path, policy: &ImagePolicy) -> Result<Self, Error> {
+        Self::open_threads(location, policy, 1)
+    }
+    pub(super) fn open_threads(
+        location: &Path,
+        policy: &ImagePolicy,
+        threads: u32,
+    ) -> Result<Self, Error> {
+        if !matches!(threads, 1 | 5) {
+            return Err(Error::Image);
+        }
         let mut wide = Vec::new();
         wide.try_reserve_exact(1024).map_err(|_| Error::Platform)?;
         wide.extend(location.as_os_str().encode_wide().take(1024));
@@ -62,7 +72,11 @@ impl Pin {
         if file.read(&mut [0; 1]).map_err(|_| Error::Image)? != 0 {
             return Err(Error::Image);
         }
-        image::admit(&bytes, policy)?;
+        if threads == 1 {
+            image::admit(&bytes, policy)?;
+        } else {
+            image::admit_threads(&bytes, policy, threads)?;
+        }
         pin.location.push(0);
         Ok(pin)
     }

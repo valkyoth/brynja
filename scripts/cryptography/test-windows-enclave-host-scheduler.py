@@ -43,10 +43,14 @@ def require_compile(command):
     return result
 
 
-def check(directory):
+def check(directory, shipping=False):
     directory.mkdir(parents=True, exist_ok=False)
     for name in FILES:
         shutil.copyfile(SOURCE / name, directory / name)
+    shipping_source = ROOT / 'crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/scheduler.rs'
+    if shipping:
+        (directory / FILES[0]).write_text(shipping_source.read_text() +
+            '\n#[cfg(test)]\n#[path="parallel_host_scheduler_tests.rs"]\nmod tests;\n')
     host = require_compile(['rustc', '+1.98.1', '-vV']).stdout
     suffix = '.exe' if 'host: x86_64-pc-windows-msvc' in host else ''
     source = directory / FILES[0]
@@ -68,7 +72,10 @@ def check(directory):
     original = source.read_text()
     mutations = []
     try:
-        for index, mutation in enumerate(MUTANTS):
+        mutants = list(MUTANTS)
+        if shipping:
+            mutants[-1] = ('u64::from(self.generation) << 4', 'u64::from(self.generation) << 5')
+        for index, mutation in enumerate(mutants):
             before, after = mutation[:2]
             count = mutation[2] if len(mutation) == 3 else 1
             if original.count(before) != count:
@@ -107,7 +114,8 @@ def check(directory):
     if final.returncode or '8 passed; 0 failed' not in final.stdout:
         raise AssertionError('final baseline failed: ' + final.stdout + final.stderr)
     source_paths = [SOURCE / name for name in FILES] + [Path(__file__).resolve()]
-    record = dict(status='PRIVATE_SCOPED_HOST_COMPONENT_PASS', enclave_execution=False,
+    if shipping: source_paths.append(shipping_source)
+    record = dict(status='CRATE_SCOPED_HOST_COMPONENT_PASS' if shipping else 'PRIVATE_SCOPED_HOST_COMPONENT_PASS', enclave_execution=False,
                   production_qualified=False, compiler=host, baseline=baseline, final=final.stdout,
                   commands=[common + ['--crate-type=rlib', str(source), '-o', str(library)],
                             command + [str(binary)], clippy], mutations=mutations, negatives=negatives,
@@ -121,4 +129,6 @@ def check(directory):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('directory', type=Path)
-    check(parser.parse_args().directory.resolve())
+    parser.add_argument('--shipping', action='store_true', help='test the actual crate scheduler with the same adversarial suite')
+    args = parser.parse_args()
+    check(args.directory.resolve(), args.shipping)

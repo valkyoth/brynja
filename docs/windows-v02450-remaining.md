@@ -24,6 +24,14 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [terminal cSHAKE output review](windows-enclave-sha3-terminal.md) binds both
+scalar adapters, exact initialization, partial-byte masking and admitted-path
+owner/output cleanup. Nine tests and matching reports pass on both hosts,
+rejecting 1,452 body-byte mutations each; the Rust sponge and worker/oracle
+campaigns also pass. Streamed setup helpers, scalar permutation internals and
+maximum whole-image depth remain open. Earlier progress entries below retain
+the scope of their own reviews, extended by subsequent entries.
+
 The [scalar finalization/squeezing review](windows-enclave-sha3-finalize.md)
 adds six rate-specific finalizer, typed-squeeze and cSHAKE transition bodies.
 Nine review tests and matching reports pass on both hosts; each rejects 3,712

@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "scope": "Saved scalar cSHAKE terminal typed-output adapters; permutation remains separate",
+  "functions": {
+    "136": {
+      "name": "_RNvMs6_NtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6cshakeNtB5_17HardenedCshake25634squeeze_final_bits_secret_in_place",
+      "code_hex": "4157415641554154565755534883ec484889cf803a010f85ef0000004889d3c60202488d72014d8b70084d85f60f84f40000004d8b38410fb668184c89f94c89f2e8000000004489f84c89f948c1e9084c89fa48c1ea388854243749c1ef286644897c2435894c24314c8974243848c74424400000000048c744242801000000884424304d89f740f6c5f7740b4983fe014d89f74983d7ff89e8c0e80331c94080fd080fb6c00f44c10fb6c031c94c01f80f92c14803431148134b19b0027218488d5424304889f14d89f8e8000000003cff0f849600000088470848837c24280048c707020000000f84a5000000488b4c24304885c90f8497000000488b542438e800000000e988000000c647080048c707020000004883c4485b5d5f5e415c415d415e415fc348c7442428000000000f57c00f1144243148c7442440000000004531ff48837c242801751e488b4c24304885c974314939df752448894f084c897f10b801000000eb2631c0eb224d39f77538488b5c24384c8b7c2440ebc54889dae800000000c6470804b8020000004889074889f14883c4485b5d5f5e415c415d415e415fe9000000004c8d7b314c8db349020000440fb6a3100400004180fc88760731c0e90dffffff75584c8da3f10200004c8dab190300004c8d8b410300004c89f94c89e24d89e8e800000000ba280000004c89e1e800000000ba280000004c89e9e800000000bac8000000488d8b41030000e800000000c68310040000004531e4410fb6c44901c7ba0100000041b9010000004c89f14d89f8e80000000089c1b00480f9ff0f8589feffff41fec44488a31004000031c0b1084028e90fb6c90f42c8b2ffd2ea80f9080fb6d20f43d04c89f14531c0e800000000488b4c24304885c97417488b4424404989c749ffc7740a488b5c24384939df7614baa80000004c89f1e800000000b004e925feffff4801c141b8010000004c89f2e800000000baa80000004c89f1e800000000e96efeffff",
+      "references": [
+        {
+          "offset": 66,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 204,
+          "symbol": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6spongeINtNtB4_5owner20HardenedFips202OwnerKj88_E14squeeze_secretB6_",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 258,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 387,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 423,
+          "symbol": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened5ownerINtB2_20HardenedFips202OwnerKj48_E4wipeB6_",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 492,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 505,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 518,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 535,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 574,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 634,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 680,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 704,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 717,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 136,
+      "saved_registers": []
+    },
+    "168": {
+      "name": "_RNvMs4_NtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6cshakeNtB5_17HardenedCshake12834squeeze_final_bits_secret_in_place",
+      "code_hex": "4157415641554154565755534883ec484889cf803a010f85ef0000004889d3c60202488d72014d8b70084d85f60f84f40000004d8b38410fb668184c89f94c89f2e8000000004489f84c89f948c1e9084c89fa48c1ea388854243749c1ef286644897c2435894c24314c8974243848c74424400000000048c744242801000000884424304d89f740f6c5f7740b4983fe014d89f74983d7ff89e8c0e80331c94080fd080fb6c00f44c10fb6c031c94c01f80f92c14803431148134b19b0027218488d5424304889f14d89f8e8000000003cff0f849600000088470848837c24280048c707020000000f84a5000000488b4c24304885c90f8497000000488b542438e800000000e988000000c647080048c707020000004883c4485b5d5f5e415c415d415e415fc348c7442428000000000f57c00f1144243148c7442440000000004531ff48837c242801751e488b4c24304885c974314939df752448894f084c897f10b801000000eb2631c0eb224d39f77538488b5c24384c8b7c2440ebc54889dae800000000c6470804b8020000004889074889f14883c4485b5d5f5e415c415d415e415fe9000000004c8d7b314c8db349020000440fb6a3100400004180fca8760731c0e90dffffff75584c8da3f10200004c8dab190300004c8d8b410300004c89f94c89e24d89e8e800000000ba280000004c89e1e800000000ba280000004c89e9e800000000bac8000000488d8b41030000e800000000c68310040000004531e4410fb6c44901c7ba0100000041b9010000004c89f14d89f8e80000000089c1b00480f9ff0f8589feffff41fec44488a31004000031c0b1084028e90fb6c90f42c8b2ffd2ea80f9080fb6d20f43d04c89f14531c0e800000000488b4c24304885c97417488b4424404989c749ffc7740a488b5c24384939df7614baa80000004c89f1e800000000b004e925feffff4801c141b8010000004c89f2e800000000baa80000004c89f1e800000000e96efeffff",
+      "references": [
+        {
+          "offset": 66,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 204,
+          "symbol": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6spongeINtNtB4_5owner20HardenedFips202OwnerKja8_E14squeeze_secretB6_",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 258,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 387,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 423,
+          "symbol": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened5ownerINtB2_20HardenedFips202OwnerKj48_E4wipeB6_",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 492,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 505,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 518,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 535,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 574,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 634,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 680,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 704,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 717,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 136,
+      "saved_registers": []
+    }
+  }
+}

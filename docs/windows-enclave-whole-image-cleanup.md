@@ -6,6 +6,13 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [terminal cSHAKE output review](windows-enclave-sha3-terminal.md) binds both
+scalar adapters and their owner/output cleanup, partial masks and exact output
+initialization. Nine tests and matching reports pass on both hosts; each rejects
+1,452 body-byte mutations. Streamed setup helpers, scalar permutation internals
+and whole-image depth remain open. Earlier entries retain their historical
+scope and are extended, not contradicted, by later reviews.
+
 The [scalar finalization/squeezing review](windows-enclave-sha3-finalize.md)
 binds six finalizer/squeezer/transition bodies and eight immediate permutation
 erasure sites. Nine tests and matching reports pass on both hosts; each rejects

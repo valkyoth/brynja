@@ -24,6 +24,12 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [streamed cSHAKE setup review](windows-enclave-sha3-setup.md) binds all six
+rate-specific push/bit/advance bodies, failure cleanup and exact completion.
+Eight tests and matching reports pass on both hosts, rejecting 2,537 body-byte
+mutations each; four actual Rust setup tests pass. Scalar permutation internals,
+the public remainder runtime helper and maximum whole-image depth remain open.
+
 The [terminal cSHAKE output review](windows-enclave-sha3-terminal.md) binds both
 scalar adapters, exact initialization, partial-byte masking and admitted-path
 owner/output cleanup. Nine tests and matching reports pass on both hosts,

@@ -6,6 +6,12 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [streamed cSHAKE setup review](windows-enclave-sha3-setup.md) binds six
+push/bit/advance bodies and their actual owner/helper connections. Eight tests
+and matching reports pass on both hosts, rejecting 2,537 body-byte mutations
+each; four actual Rust setup tests pass. Scalar permutation, the public remainder
+runtime helper and whole-image depth remain separate obligations.
+
 The [terminal cSHAKE output review](windows-enclave-sha3-terminal.md) binds both
 scalar adapters and their owner/output cleanup, partial masks and exact output
 initialization. Nine tests and matching reports pass on both hosts; each rejects

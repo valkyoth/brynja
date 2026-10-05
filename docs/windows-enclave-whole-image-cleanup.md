@@ -547,8 +547,10 @@ work is:
    caller-level cleanup decisions. The [state construction/consumption review](windows-enclave-sha2-state-review.md)
    adds the constructor and state finalizer, their constants/tables, copied
    workspace and staging cleanup, compiler preconditions and XMM-save extent.
-   Called crypto/render/copy/runtime implementations and other image families
-   remain separate obligations.
+   The [scalar primitive review](windows-enclave-sha2-primitives.md) adds twelve
+   update/finalize/compression/output/copy/mask bodies, two linked round tables
+   and selected fixed-frame depth. Scalar runtime/export connections and other
+   image families remain separate obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

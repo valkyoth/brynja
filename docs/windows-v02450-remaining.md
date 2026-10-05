@@ -1,5 +1,27 @@
 # v0.24.50 remaining work
 
+## Current completion checklist (2026-10-05)
+
+- Finish whole-image normal-return cleanup qualification for the remaining
+  distinct workers: scalar SHA-2 runtime/export connections, the separate
+  SHA-NI worker, and the remaining SHA-3/KMAC/TupleHash/batch/ParallelHash paths.
+  Reuse identical reviewed helpers only after binding their actual image edges.
+- Reconcile final compiler/platform, runtime/SDK and loaded-image boundaries
+  into the precise supported claim; finish documentation and support matrices.
+- Prepare the candidate and obtain independent retest; remediate and test any
+  findings. Current offline author reviews are not that retest.
+- Complete the existing selected final verification, reusing valid evidence and
+  refreshing native evidence only where relevant implementation changes require
+  it. Then require green GitHub and explicit authorization to tag/push.
+
+The nineteen image refreshes and scoped dump campaigns are already complete;
+the main remaining work is assurance, not reimplementing every algorithm.
+Consumer production signing remains a deployment responsibility, not a paid
+project-signing prerequisite. Windows ARM64 remains unqualified and must not be
+advertised as supported by this x64 development evidence.
+
+## Detailed progress and review scope
+
 Current implementation status: the bounded SHA-256, scalar SHA-2/SHA-3/KMAC/TupleHash
 streaming, SHA-2/SHA-3 batches and sequential scalar ParallelHash Windows enclave
 APIs are integrated and development-tested. Explicit opt-in SHA-NI SHA-224/256
@@ -71,8 +93,11 @@ The [state construction/consumption review](windows-enclave-sha2-state-review.md
 now adds the constructor and state finalizer, nine dispatch tables, five constant
 regions and explicit compiler preconditions. Nine tests and matching reports
 pass on both hosts, rejecting 5,838 body-byte and 252 table-byte mutations per
-host. Called update/finalize primitives, render/copy helpers and runtime routines
-remain; these caller bindings do not qualify their implementations.
+host. The subsequent [primitive review](windows-enclave-sha2-primitives.md) now
+binds twelve update/finalize/compression/output/copy/mask bodies and both round
+tables to this image. Nine tests and identical reports pass on both hosts,
+rejecting 3,731 actual body-byte mutations. Scalar runtime/export connections
+and other workers remain; selected helper review is not whole-image qualification.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

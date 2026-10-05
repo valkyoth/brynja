@@ -7,6 +7,11 @@ in the same scalar streaming image. It binds the complete `State::new` and
 and their actual caller/callee connections. These are offline author-review
 results, not independent retest or complete cryptographic/runtime qualification.
 
+Subsequent work: the [primitive review](windows-enclave-sha2-primitives.md) adds
+the called update/finalize/compression/output/copy/mask helpers. The open-callee
+statements below describe the scope of this state-only checkpoint, not a claim
+that those later helper reviews have not happened.
+
 | Body | RVA | Bytes | Fixed frame, including pushes |
 | --- | ---: | ---: | ---: |
 | `State::new` | 10,736 | 3,100 | 1,304 |

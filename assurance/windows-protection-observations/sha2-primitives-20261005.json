@@ -1,0 +1,659 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_SCALAR_SHA2_PRIMITIVE_REVIEW",
+  "image_sha256": "bc8932575def29277263f49c1fe9b912f9a1166e6703ac1f609eef90f63beeab",
+  "object_sha256": "2c4cfe8710f30f82321e44cde3dcacbe050ea7e86e9e95b1adc63b1d874bc555",
+  "records": {
+    "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state32NtNtB4_5owner17HardenedSha2Owner8update32": {
+      "rva": 7056,
+      "size": 525,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": 6112,
+        "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar": 9536,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 7056,
+          "end": 7581,
+          "unwind_rva": 41640,
+          "prolog_bytes": 16,
+          "frame": 0,
+          "stack_bytes": 120,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 16,
+              "opcode": 2,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 12,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 11,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 10,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 9,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 8,
+              "opcode": 0,
+              "info": 12,
+              "operand": 0
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 13,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 15,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": {
+      "rva": 6112,
+      "size": 32,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": 6032
+      },
+      "unwind": [
+        {
+          "start": 6112,
+          "end": 6144,
+          "unwind_rva": 40752,
+          "prolog_bytes": 4,
+          "frame": 0,
+          "stack_bytes": 40,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 4,
+              "opcode": 2,
+              "info": 4,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state64NtNtB4_5owner17HardenedSha2Owner8update64": {
+      "rva": 8288,
+      "size": 549,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": 6112,
+        "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress646native6scalar": 8848,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 8288,
+          "end": 8837,
+          "unwind_rva": 41640,
+          "prolog_bytes": 16,
+          "frame": 0,
+          "stack_bytes": 120,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 16,
+              "opcode": 2,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 12,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 11,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 10,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 9,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 8,
+              "opcode": 0,
+              "info": 12,
+              "operand": 0
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 13,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 15,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state32NtNtB4_5owner17HardenedSha2Owner10finalize32": {
+      "rva": 6368,
+      "size": 674,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": 6112,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask": 6144,
+        "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar": 9536,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920,
+        "memset": 30064,
+        "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow": 31008
+      },
+      "unwind": [
+        {
+          "start": 6368,
+          "end": 7042,
+          "unwind_rva": 41616,
+          "prolog_bytes": 16,
+          "frame": 0,
+          "stack_bytes": 104,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 16,
+              "opcode": 2,
+              "info": 4,
+              "operand": 0
+            },
+            {
+              "code_offset": 12,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 11,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 10,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 9,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 8,
+              "opcode": 0,
+              "info": 12,
+              "operand": 0
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 13,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 15,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state64NtNtB4_5owner17HardenedSha2Owner10finalize64": {
+      "rva": 7584,
+      "size": 698,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": 6112,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask": 6144,
+        "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress646native6scalar": 8848,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920,
+        "memset": 30064,
+        "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow": 31008
+      },
+      "unwind": [
+        {
+          "start": 7584,
+          "end": 8282,
+          "unwind_rva": 41616,
+          "prolog_bytes": 16,
+          "frame": 0,
+          "stack_bytes": 104,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 16,
+              "opcode": 2,
+              "info": 4,
+              "operand": 0
+            },
+            {
+              "code_offset": 12,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 11,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 10,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 9,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 8,
+              "opcode": 0,
+              "info": 12,
+              "operand": 0
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 13,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 15,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened6output12write_secret": {
+      "rva": 9408,
+      "size": 120,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": 6032
+      },
+      "unwind": [
+        {
+          "start": 9408,
+          "end": 9528,
+          "unwind_rva": 41676,
+          "prolog_bytes": 11,
+          "frame": 0,
+          "stack_bytes": 72,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 11,
+              "opcode": 2,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 7,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 5,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 15,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar": {
+      "rva": 9536,
+      "size": 482,
+      "reference_targets": {
+        "anon.7b9e5a485f344afc4b021075be1f825c.1": 37840
+      },
+      "unwind": [
+        {
+          "start": 9536,
+          "end": 10018,
+          "unwind_rva": 41692,
+          "prolog_bytes": 2,
+          "frame": 0,
+          "stack_bytes": 16,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress646native6scalar": {
+      "rva": 8848,
+      "size": 545,
+      "reference_targets": {
+        "anon.7b9e5a485f344afc4b021075be1f825c.0": 37200
+      },
+      "unwind": [
+        {
+          "start": 8848,
+          "end": 9393,
+          "unwind_rva": 41664,
+          "prolog_bytes": 5,
+          "frame": 0,
+          "stack_bytes": 32,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 5,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 3,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": {
+      "rva": 6032,
+      "size": 68,
+      "reference_targets": {}
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask": {
+      "rva": 6144,
+      "size": 5,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte": 6160
+      }
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte": {
+      "rva": 6160,
+      "size": 13,
+      "reference_targets": {}
+    },
+    "_RNvNtCscJA3KwNFXab_16brynja_hash_core23secret_memory_predicate12mask_is_zero": {
+      "rva": 6176,
+      "size": 20,
+      "reference_targets": {}
+    }
+  },
+  "constants": {
+    "anon.7b9e5a485f344afc4b021075be1f825c.1": {
+      "rva": 37840,
+      "bytes": 256,
+      "sha256": "74ef7306e7452d6859b6463ce496b8df30925f69e1b2969e1f3f34bbc9c6af04"
+    },
+    "anon.7b9e5a485f344afc4b021075be1f825c.0": {
+      "rva": 37200,
+      "bytes": 640,
+      "sha256": "125cf2084d7eec18dc9795be4baa221655c0eabab89e90a74fb0370378a60293"
+    }
+  },
+  "geometry": {
+    "deepest_selected_caller_rsp_from_high": -5232,
+    "update_rsp_from_high": -5360,
+    "finalize_rsp_from_high": -5344,
+    "write_rsp_from_high": -5312,
+    "copy_rsp_from_high": -5408,
+    "deepest_selected_leaf_rsp_from_high": -5416,
+    "spans": [
+      {
+        "name": "update saved GPRs",
+        "offset_from_low": 60232,
+        "offset_from_high": -5304,
+        "bytes": 64
+      },
+      {
+        "name": "saved input pointer and complete-byte length",
+        "offset_from_low": 60216,
+        "offset_from_high": -5320,
+        "bytes": 16
+      },
+      {
+        "name": "finalize saved GPRs",
+        "offset_from_low": 60232,
+        "offset_from_high": -5304,
+        "bytes": 64
+      },
+      {
+        "name": "caller bit-length and output-width arguments",
+        "offset_from_low": 60336,
+        "offset_from_high": -5200,
+        "bytes": 16
+      },
+      {
+        "name": "output length argument",
+        "offset_from_low": 60336,
+        "offset_from_high": -5200,
+        "bytes": 8
+      },
+      {
+        "name": "scalar32 leaf saves/return/home",
+        "offset_from_low": 60152,
+        "offset_from_high": -5384,
+        "bytes": 56
+      },
+      {
+        "name": "scalar64 leaf saves/return/home",
+        "offset_from_low": 60136,
+        "offset_from_high": -5400,
+        "bytes": 72
+      },
+      {
+        "name": "copy leaf return/home",
+        "offset_from_low": 60120,
+        "offset_from_high": -5416,
+        "bytes": 40
+      }
+    ],
+    "runtime_entry": {
+      "name": "memset entry/home only",
+      "offset_from_low": 60184,
+      "offset_from_high": -5352,
+      "bytes": 40,
+      "callee_frame_bytes": null,
+      "callee_spills_qualified": false
+    },
+    "selected_chain_only": true,
+    "maximum_transitive_depth_qualified": false,
+    "final_clear_and_write_error_clear_tail_reuse_entry": true,
+    "outer_window_cleanup_required": true,
+    "individual_caller_spills_erased": false
+  },
+  "actual_body_byte_mutations_rejected": 3731,
+  "exact_bounded_sha256_body_and_reference_reuse": [
+    "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state32NtNtB4_5owner17HardenedSha2Owner8update32",
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes"
+  ],
+  "scalar32_same_body_but_different_constant_reference": true,
+  "private_caller_preconditions_required": true,
+  "panic_branch_excluded_by_admitted_partial_bits": true,
+  "standalone_unbounded_call_claimed": false,
+  "padding_memset_is_not_volatile_erasure": true,
+  "unqualified_runtime_callees": [
+    "memset"
+  ],
+  "arbitrary_exception_cleanup_qualified": false,
+  "other_image_workers_qualified": false,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "test-windows-enclave-sha2-primitives.py": "503a6ff5420cb48518c046730f20085c01b38ebb99152b8e922c530d60c0b47a",
+    "windows_enclave_bounded_dispatch.py": "2b06da5690425237176affbd7b1ea3492aee6563488ddea8b530614e06d67b54",
+    "windows_enclave_bounded_input.py": "78af4234d95ae7469aa001099d8bdd6965b9d074de27eec3e331ee76637e57b2",
+    "windows_enclave_bounded_owner.py": "3960351f4ebda9dd81b4f1ac431d2e0a1ada38cc6e86bbe4cbc27fee0f0307f3",
+    "windows_enclave_bounded_rehash.py": "9d8df50b4355913c5ca56b677733d64422fc59d963230a1b4892e812e03bd04a",
+    "windows_enclave_bounded_sha256.py": "13657b2f79684b2373259bd047481e2141b24ac711cf772bed2d9e774e059bad",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_construction_review.py": "7b8000c8b682705421ff05d53f91d42e74622018ecea023d3b6fa87ea53668c6",
+    "windows_enclave_engine_review.py": "585d45e2f087fe00e0f37553d6bb9a541c2e29d59deffda5ca320ea62a6ccf09",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_publication_review.py": "a0ef511be73e3cd74714a862e0efd1c0dce9a2477d22853ad22e4aa6e78fb61a",
+    "windows_enclave_retirement_review.py": "117a0dab27a47b90496f5f7a5fda418ba951cb058cfe29cd0a6904d169ca4808",
+    "windows_enclave_root_return.py": "7b078894de02b1f1bf77a286ad30dc65cfe4e3a94733120bba31a0c83b59a198",
+    "windows_enclave_sdk_context.py": "5dc989fb47c8ab8a203d3c1375e9128cd6c5b12772c90b4180a4f24192fee696",
+    "windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "windows_enclave_sdk_decoders.py": "f2fecab13a96c421a1a7b100459c1b68a1c801d40c930c280913cf1b4b3a3e28",
+    "windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "windows_enclave_sdk_dispatch.py": "1f3c17ade072651320a2f6cd4a752c128fffe6aeb94da3df0eb22912417746ee",
+    "windows_enclave_sdk_dispatch_helpers.py": "929c9a0fd31991c73d35eb9b4edaebf1b0b35092b8752bc16bee90c8c9d3b9f9",
+    "windows_enclave_sdk_exception.py": "7dd1c3cf0a77385ecdf52820fd9357509f7e96f99de95ded41140b5d49d6a73a",
+    "windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_sha2_primitive_shapes.py": "ad5d571ee78c27ae316ecdaccce0a62b672ea8cd08f4375ca87d26f9687da94d",
+    "windows_enclave_sha2_primitives.py": "f960412d04c105a4c6bfa0b1b48d382c66891240ea0905220f424f831640eeb9",
+    "windows_enclave_sha2_state_review.py": "4b8400b3b5d5ee5f8b53d53b9ff91800cb50f6daa63226e0e8173031a6f75f58",
+    "windows_enclave_sha2_state_shapes.py": "791ffb3bffbe290bc88ea1296a044a8566606c6ea7ccd41f282974752e35b700",
+    "windows_enclave_sha2_stream_entry.py": "76db485857ea71e9aba19519eaacc902348be254fa098030fd7f5017f737a020",
+    "windows_enclave_sha2_stream_lifecycle.py": "8491091f7cba7bf5d5dfed4c8e5a187c0d3730f46083ef26c65f5b0ea2b103e2",
+    "windows_enclave_sha2_stream_operation_shapes.py": "e5206197ed0f769000199f8a30cbd95bf18bfbf97931a2a7a18cc4e3f4f40755",
+    "windows_enclave_sha2_stream_operations.py": "9b8a76fe0f37de329acd24ed04fd21e49a0ffe0c9dbfb25fbe54aed295b56a36",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_state_operations.py": "748dc2e2f053035f0c296be4efc4ca1fc917e2f49dd75ec0ccadf1b08db3a64f",
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a"
+  }
+}

@@ -1,0 +1,2805 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_SHARED_SEQUENTIAL_C_BINDINGS",
+  "catalog_sha256": "c6585463c9e930cd9d8eacf47abdf308cd7b5af65f10c1b5a6a5622849b5895a",
+  "wrapper_object_sha256": "9eaba4a1d7ed3e7e180ff915865e294eaee86fa4a0fc4b567bac77f6b2fb25b8",
+  "images": 18,
+  "complete_function_bindings": 72,
+  "unique_template_bytes": 1815,
+  "templates": {
+    "PublicLockedAdmit": {
+      "bytes": 604,
+      "references": 46,
+      "body_sha256": "669e46ed7445b65b9bae313c3040e98872ed621b82c2ab98182ab7630c3cb387",
+      "references_sha256": "f4f7632ee227f8282d18449c32f0d476151913373a9cbe2ec660bf5e420433d9"
+    },
+    "PublicLockedFinish": {
+      "bytes": 111,
+      "references": 4,
+      "body_sha256": "6ce889882a081e3c1eca1fa62282be1876eaac9f5d53e95fa367b58830e0f3f6",
+      "references_sha256": "4b053b2f66afc83d68d38b87d72afdfaa6ca674a1da0b3b584f6043a12eba93c"
+    },
+    "PublicGuardRestore": {
+      "bytes": 230,
+      "references": 18,
+      "body_sha256": "676fb391a0a2b23f3fa173844f5463aeb3e8d0b99da2b0c110849a4f02ad6cbf",
+      "references_sha256": "2dcf0c996d8ce3b5ed7b576d8c07943e40d75f6420dc9ccf03002a5958dfab0c"
+    },
+    "PublicRustBody": {
+      "bytes": 870,
+      "references": 63,
+      "body_sha256": "50b2f7a2167340cfe40bd34d8cc7086109200832d827467055ea20c8f764a5c0",
+      "references_sha256": "1545c05f626156a248ac7979e59cd4e9307faf15627cc0147b6db60ea15712c9"
+    }
+  },
+  "records": [
+    {
+      "route": "mod.rs::open",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 15120,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 15120,
+              "end": 15331,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 15331,
+              "end": 15412,
+              "stack_bytes": 0,
+              "chain": [
+                15120,
+                15331,
+                35648
+              ]
+            },
+            {
+              "start": 15412,
+              "end": 15683,
+              "stack_bytes": 0,
+              "chain": [
+                15120,
+                15331,
+                35648
+              ]
+            },
+            {
+              "start": 15683,
+              "end": 15706,
+              "stack_bytes": 0,
+              "chain": [
+                15120,
+                15331,
+                35648
+              ]
+            },
+            {
+              "start": 15706,
+              "end": 15724,
+              "stack_bytes": 0,
+              "chain": [
+                15120,
+                15331,
+                35648
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 15728,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 15728,
+              "end": 15839,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 14464,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 14464,
+              "end": 14694,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 16912,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 16912,
+              "end": 16949,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 16949,
+              "end": 17776,
+              "stack_bytes": 0,
+              "chain": [
+                16912,
+                16949,
+                35864
+              ]
+            },
+            {
+              "start": 17776,
+              "end": 17782,
+              "stack_bytes": 0,
+              "chain": [
+                16912,
+                16949,
+                35864
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 18800,
+      "reference_targets": {
+        "PublicLockedHigh": 43440,
+        "PublicLockedLow": 43448,
+        "active": 41128,
+        "stats": 41184,
+        "low_changed": 41284,
+        "high_changed": 41288,
+        "page_info": 18224,
+        "low_old": 41132,
+        "__imp_VirtualProtect": 28784,
+        "__imp_GetLastError": 28768,
+        "high_old": 41280,
+        "notify_host": 18144,
+        "admitted": 41160,
+        "host_callback": 41120,
+        "cleared": 41168,
+        "__imp_CallEnclave": 28808,
+        "BaseLockedBody": 14000,
+        "retained_call": 41292,
+        "retained_region": 41296,
+        "retained_report": 41328,
+        "retained_operation": 41304,
+        "retained_live": 41320,
+        "__imp_VirtualAlloc": 28776,
+        "retained_guards": 18464,
+        "retained_notify": 18576,
+        "retained_free": 18368,
+        "RetainedWork": 4128,
+        "retained_output": 41312
+      },
+      "retained_worker_rva": 4128,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha2/mod.rs::open",
+      "image_sha256": "bc8932575def29277263f49c1fe9b912f9a1166e6703ac1f609eef90f63beeab",
+      "object_sha256": "aa83148405eebce8327a0e9620cfa18761fc76d21487aca0287d2a0f1191ddf7",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 19088,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 19088,
+              "end": 19299,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 19299,
+              "end": 19380,
+              "stack_bytes": 0,
+              "chain": [
+                19088,
+                19299,
+                40752
+              ]
+            },
+            {
+              "start": 19380,
+              "end": 19651,
+              "stack_bytes": 0,
+              "chain": [
+                19088,
+                19299,
+                40752
+              ]
+            },
+            {
+              "start": 19651,
+              "end": 19674,
+              "stack_bytes": 0,
+              "chain": [
+                19088,
+                19299,
+                40752
+              ]
+            },
+            {
+              "start": 19674,
+              "end": 19692,
+              "stack_bytes": 0,
+              "chain": [
+                19088,
+                19299,
+                40752
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 19696,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 19696,
+              "end": 19807,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 18848,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 18848,
+              "end": 19078,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 20368,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 20368,
+              "end": 20405,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 20405,
+              "end": 21232,
+              "stack_bytes": 0,
+              "chain": [
+                20368,
+                20405,
+                40968
+              ]
+            },
+            {
+              "start": 21232,
+              "end": 21238,
+              "stack_bytes": 0,
+              "chain": [
+                20368,
+                20405,
+                40968
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 22864,
+      "reference_targets": {
+        "PublicLockedHigh": 47296,
+        "PublicLockedLow": 47304,
+        "active": 45224,
+        "stats": 45280,
+        "low_changed": 45380,
+        "high_changed": 45384,
+        "page_info": 22288,
+        "low_old": 45228,
+        "__imp_VirtualProtect": 32880,
+        "__imp_GetLastError": 32864,
+        "high_old": 45376,
+        "notify_host": 22208,
+        "admitted": 45256,
+        "host_callback": 45216,
+        "cleared": 45264,
+        "__imp_CallEnclave": 32904,
+        "BaseLockedBody": 18672,
+        "retained_call": 45388,
+        "retained_region": 45392,
+        "retained_report": 45424,
+        "retained_operation": 45400,
+        "retained_live": 45416,
+        "__imp_VirtualAlloc": 32872,
+        "retained_guards": 22528,
+        "retained_notify": 22640,
+        "retained_free": 22432,
+        "RetainedWork": 4096,
+        "retained_output": 45408
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha2/mod.rs::open_sha_ni",
+      "image_sha256": "ca5806be2e78ae43f4942b0733bb94bef1e5c75dfa2250d98408dfda74c77d0a",
+      "object_sha256": "6360c25108d3a72a0a4760f74a90577afb16ed0abe94e126bcd320b320d4180c",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 18768,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 18768,
+              "end": 18979,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 18979,
+              "end": 19060,
+              "stack_bytes": 0,
+              "chain": [
+                18768,
+                18979,
+                50160
+              ]
+            },
+            {
+              "start": 19060,
+              "end": 19331,
+              "stack_bytes": 0,
+              "chain": [
+                18768,
+                18979,
+                50160
+              ]
+            },
+            {
+              "start": 19331,
+              "end": 19354,
+              "stack_bytes": 0,
+              "chain": [
+                18768,
+                18979,
+                50160
+              ]
+            },
+            {
+              "start": 19354,
+              "end": 19372,
+              "stack_bytes": 0,
+              "chain": [
+                18768,
+                18979,
+                50160
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 19376,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 19376,
+              "end": 19487,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 18528,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 18528,
+              "end": 18758,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 20064,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 20064,
+              "end": 20101,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 20101,
+              "end": 20928,
+              "stack_bytes": 0,
+              "chain": [
+                20064,
+                20101,
+                50376
+              ]
+            },
+            {
+              "start": 20928,
+              "end": 20934,
+              "stack_bytes": 0,
+              "chain": [
+                20064,
+                20101,
+                50376
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 22832,
+      "reference_targets": {
+        "PublicLockedHigh": 59720,
+        "PublicLockedLow": 59728,
+        "active": 57620,
+        "stats": 57680,
+        "low_changed": 57784,
+        "high_changed": 57788,
+        "page_info": 22256,
+        "low_old": 57776,
+        "__imp_VirtualProtect": 41112,
+        "__imp_GetLastError": 41088,
+        "high_old": 57780,
+        "notify_host": 22176,
+        "admitted": 57656,
+        "host_callback": 57624,
+        "cleared": 57664,
+        "__imp_CallEnclave": 41136,
+        "BaseLockedBody": 17904,
+        "retained_call": 57816,
+        "retained_region": 57792,
+        "retained_report": 57824,
+        "retained_operation": 57800,
+        "retained_live": 57820,
+        "__imp_VirtualAlloc": 41104,
+        "retained_guards": 22496,
+        "retained_notify": 22608,
+        "retained_free": 22400,
+        "RetainedWork": 4096,
+        "retained_output": 57808
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha3/mod.rs::open",
+      "image_sha256": "76bdf18e31b935535ca7a36a5d694abbe14de4a3179076a2fd452d3c5f259718",
+      "object_sha256": "0f26e3249d40ccd61f21d158ce5df88100fc0036bc70fa890050bddddd5ced39",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 41680,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 41680,
+              "end": 41891,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 41891,
+              "end": 41972,
+              "stack_bytes": 0,
+              "chain": [
+                41680,
+                41891,
+                64536
+              ]
+            },
+            {
+              "start": 41972,
+              "end": 42243,
+              "stack_bytes": 0,
+              "chain": [
+                41680,
+                41891,
+                64536
+              ]
+            },
+            {
+              "start": 42243,
+              "end": 42266,
+              "stack_bytes": 0,
+              "chain": [
+                41680,
+                41891,
+                64536
+              ]
+            },
+            {
+              "start": 42266,
+              "end": 42284,
+              "stack_bytes": 0,
+              "chain": [
+                41680,
+                41891,
+                64536
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 42288,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 42288,
+              "end": 42399,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 41440,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 41440,
+              "end": 41670,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 42944,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 42944,
+              "end": 42981,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 42981,
+              "end": 43808,
+              "stack_bytes": 0,
+              "chain": [
+                42944,
+                42981,
+                64752
+              ]
+            },
+            {
+              "start": 43808,
+              "end": 43814,
+              "stack_bytes": 0,
+              "chain": [
+                42944,
+                42981,
+                64752
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 45456,
+      "reference_targets": {
+        "PublicLockedHigh": 71872,
+        "PublicLockedLow": 71880,
+        "active": 69800,
+        "stats": 69856,
+        "low_changed": 69956,
+        "high_changed": 69960,
+        "page_info": 44880,
+        "low_old": 69804,
+        "__imp_VirtualProtect": 57456,
+        "__imp_GetLastError": 57440,
+        "high_old": 69952,
+        "notify_host": 44800,
+        "admitted": 69832,
+        "host_callback": 69792,
+        "cleared": 69840,
+        "__imp_CallEnclave": 57480,
+        "BaseLockedBody": 41264,
+        "retained_call": 69964,
+        "retained_region": 69968,
+        "retained_report": 70000,
+        "retained_operation": 69976,
+        "retained_live": 69992,
+        "__imp_VirtualAlloc": 57448,
+        "retained_guards": 45120,
+        "retained_notify": 45232,
+        "retained_free": 45024,
+        "RetainedWork": 4096,
+        "retained_output": 69984
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha3/mod.rs::open_avx2",
+      "image_sha256": "28d01c3b932d22daad5cd2256aa9c31c5fb937a4846067eb991345ee7c7449fa",
+      "object_sha256": "e9f47eb364335d3d9ed4edbcae7d60b86cc716a826167bb6851624b29bbc88aa",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 27968,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 27968,
+              "end": 28179,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 28179,
+              "end": 28260,
+              "stack_bytes": 0,
+              "chain": [
+                27968,
+                28179,
+                62296
+              ]
+            },
+            {
+              "start": 28260,
+              "end": 28531,
+              "stack_bytes": 0,
+              "chain": [
+                27968,
+                28179,
+                62296
+              ]
+            },
+            {
+              "start": 28531,
+              "end": 28554,
+              "stack_bytes": 0,
+              "chain": [
+                27968,
+                28179,
+                62296
+              ]
+            },
+            {
+              "start": 28554,
+              "end": 28572,
+              "stack_bytes": 0,
+              "chain": [
+                27968,
+                28179,
+                62296
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 28576,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 28576,
+              "end": 28687,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 27728,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 27728,
+              "end": 27958,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 29248,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 29248,
+              "end": 29285,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 29285,
+              "end": 30112,
+              "stack_bytes": 0,
+              "chain": [
+                29248,
+                29285,
+                62512
+              ]
+            },
+            {
+              "start": 30112,
+              "end": 30118,
+              "stack_bytes": 0,
+              "chain": [
+                29248,
+                29285,
+                62512
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 32032,
+      "reference_targets": {
+        "PublicLockedHigh": 72024,
+        "PublicLockedLow": 72032,
+        "active": 69924,
+        "stats": 69984,
+        "low_changed": 70088,
+        "high_changed": 70092,
+        "page_info": 31456,
+        "low_old": 70080,
+        "__imp_VirtualProtect": 53400,
+        "__imp_GetLastError": 53376,
+        "high_old": 70084,
+        "notify_host": 31376,
+        "admitted": 69960,
+        "host_callback": 69928,
+        "cleared": 69968,
+        "__imp_CallEnclave": 53424,
+        "BaseLockedBody": 27104,
+        "retained_call": 70120,
+        "retained_region": 70096,
+        "retained_report": 70128,
+        "retained_operation": 70104,
+        "retained_live": 70124,
+        "__imp_VirtualAlloc": 53392,
+        "retained_guards": 31696,
+        "retained_notify": 31808,
+        "retained_free": 31600,
+        "RetainedWork": 4096,
+        "retained_output": 70112
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "kmac/mod.rs::open",
+      "image_sha256": "bbe6218b52e86b49379597a13129604f8fc7708f4a62b4c7bbc0e387d4173e33",
+      "object_sha256": "13234beb67ac1bf7b5f7e70e5fc66d6fa33a5331836ffbefa42757e9033f6cd5",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 46592,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 46592,
+              "end": 46803,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 46803,
+              "end": 46884,
+              "stack_bytes": 0,
+              "chain": [
+                46592,
+                46803,
+                68632
+              ]
+            },
+            {
+              "start": 46884,
+              "end": 47155,
+              "stack_bytes": 0,
+              "chain": [
+                46592,
+                46803,
+                68632
+              ]
+            },
+            {
+              "start": 47155,
+              "end": 47178,
+              "stack_bytes": 0,
+              "chain": [
+                46592,
+                46803,
+                68632
+              ]
+            },
+            {
+              "start": 47178,
+              "end": 47196,
+              "stack_bytes": 0,
+              "chain": [
+                46592,
+                46803,
+                68632
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 47200,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 47200,
+              "end": 47311,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 45696,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 45696,
+              "end": 45926,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 47856,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 47856,
+              "end": 47893,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 47893,
+              "end": 48720,
+              "stack_bytes": 0,
+              "chain": [
+                47856,
+                47893,
+                68848
+              ]
+            },
+            {
+              "start": 48720,
+              "end": 48726,
+              "stack_bytes": 0,
+              "chain": [
+                47856,
+                47893,
+                68848
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 49744,
+      "reference_targets": {
+        "PublicLockedHigh": 75968,
+        "PublicLockedLow": 75976,
+        "active": 73896,
+        "stats": 73952,
+        "low_changed": 74052,
+        "high_changed": 74056,
+        "page_info": 49168,
+        "low_old": 73900,
+        "__imp_VirtualProtect": 61552,
+        "__imp_GetLastError": 61536,
+        "high_old": 74048,
+        "notify_host": 49088,
+        "admitted": 73928,
+        "host_callback": 73888,
+        "cleared": 73936,
+        "__imp_CallEnclave": 61576,
+        "BaseLockedBody": 45520,
+        "retained_call": 74060,
+        "retained_region": 74064,
+        "retained_report": 74096,
+        "retained_operation": 74072,
+        "retained_live": 74088,
+        "__imp_VirtualAlloc": 61544,
+        "retained_guards": 49408,
+        "retained_notify": 49520,
+        "retained_free": 49312,
+        "RetainedWork": 4096,
+        "retained_output": 74080
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "kmac/mod.rs::open_avx2",
+      "image_sha256": "4c0f67100277e7750853ba7018ca73f0f68482133c3fdc6ee43ff975fe3abaae",
+      "object_sha256": "b2660b8a15192791f920c9f66a45309cc830c8ee40896f33dbca73b706dacaaa",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 34128,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 34128,
+              "end": 34339,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 34339,
+              "end": 34420,
+              "stack_bytes": 0,
+              "chain": [
+                34128,
+                34339,
+                66264
+              ]
+            },
+            {
+              "start": 34420,
+              "end": 34691,
+              "stack_bytes": 0,
+              "chain": [
+                34128,
+                34339,
+                66264
+              ]
+            },
+            {
+              "start": 34691,
+              "end": 34714,
+              "stack_bytes": 0,
+              "chain": [
+                34128,
+                34339,
+                66264
+              ]
+            },
+            {
+              "start": 34714,
+              "end": 34732,
+              "stack_bytes": 0,
+              "chain": [
+                34128,
+                34339,
+                66264
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 34736,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 34736,
+              "end": 34847,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 33168,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 33168,
+              "end": 33398,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 35408,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 35408,
+              "end": 35445,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 35445,
+              "end": 36272,
+              "stack_bytes": 0,
+              "chain": [
+                35408,
+                35445,
+                66480
+              ]
+            },
+            {
+              "start": 36272,
+              "end": 36278,
+              "stack_bytes": 0,
+              "chain": [
+                35408,
+                35445,
+                66480
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 37296,
+      "reference_targets": {
+        "PublicLockedHigh": 76120,
+        "PublicLockedLow": 76128,
+        "active": 74020,
+        "stats": 74080,
+        "low_changed": 74184,
+        "high_changed": 74188,
+        "page_info": 36720,
+        "low_old": 74176,
+        "__imp_VirtualProtect": 57496,
+        "__imp_GetLastError": 57472,
+        "high_old": 74180,
+        "notify_host": 36640,
+        "admitted": 74056,
+        "host_callback": 74024,
+        "cleared": 74064,
+        "__imp_CallEnclave": 57520,
+        "BaseLockedBody": 32336,
+        "retained_call": 74216,
+        "retained_region": 74192,
+        "retained_report": 74224,
+        "retained_operation": 74200,
+        "retained_live": 74220,
+        "__imp_VirtualAlloc": 57488,
+        "retained_guards": 36960,
+        "retained_notify": 37072,
+        "retained_free": 36864,
+        "RetainedWork": 4096,
+        "retained_output": 74208
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "tuplehash/mod.rs::open",
+      "image_sha256": "43b9c988e2a622cc722311d33bfef5de67414357bc32f6c1692c7b09650cf09d",
+      "object_sha256": "5d37b79c17ac9b98e9c1aeaf5f54fd8bb88875475097918e67e6b68950ae0b5a",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 27888,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 27888,
+              "end": 28099,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 28099,
+              "end": 28180,
+              "stack_bytes": 0,
+              "chain": [
+                27888,
+                28099,
+                47920
+              ]
+            },
+            {
+              "start": 28180,
+              "end": 28451,
+              "stack_bytes": 0,
+              "chain": [
+                27888,
+                28099,
+                47920
+              ]
+            },
+            {
+              "start": 28451,
+              "end": 28474,
+              "stack_bytes": 0,
+              "chain": [
+                27888,
+                28099,
+                47920
+              ]
+            },
+            {
+              "start": 28474,
+              "end": 28492,
+              "stack_bytes": 0,
+              "chain": [
+                27888,
+                28099,
+                47920
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 28496,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 28496,
+              "end": 28607,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 27648,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 27648,
+              "end": 27878,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 29168,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 29168,
+              "end": 29205,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 29205,
+              "end": 30032,
+              "stack_bytes": 0,
+              "chain": [
+                29168,
+                29205,
+                48136
+              ]
+            },
+            {
+              "start": 30032,
+              "end": 30038,
+              "stack_bytes": 0,
+              "chain": [
+                29168,
+                29205,
+                48136
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 31680,
+      "reference_targets": {
+        "PublicLockedHigh": 55488,
+        "PublicLockedLow": 55496,
+        "active": 53416,
+        "stats": 53472,
+        "low_changed": 53572,
+        "high_changed": 53576,
+        "page_info": 31104,
+        "low_old": 53420,
+        "__imp_VirtualProtect": 41072,
+        "__imp_GetLastError": 41056,
+        "high_old": 53568,
+        "notify_host": 31024,
+        "admitted": 53448,
+        "host_callback": 53408,
+        "cleared": 53456,
+        "__imp_CallEnclave": 41096,
+        "BaseLockedBody": 27472,
+        "retained_call": 53580,
+        "retained_region": 53584,
+        "retained_report": 53616,
+        "retained_operation": 53592,
+        "retained_live": 53608,
+        "__imp_VirtualAlloc": 41064,
+        "retained_guards": 31344,
+        "retained_notify": 31456,
+        "retained_free": 31248,
+        "RetainedWork": 4096,
+        "retained_output": 53600
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "tuplehash/mod.rs::open_avx2",
+      "image_sha256": "c5942cba859ffdacd7e657d81ff2d3e25c5582cdb3aeb9754da511cb5f35bd38",
+      "object_sha256": "02a474a495111c306f026618cf1464413030f44fd0339bd2f7893497c0d82c2e",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 28864,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 28864,
+              "end": 29075,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 29075,
+              "end": 29156,
+              "stack_bytes": 0,
+              "chain": [
+                28864,
+                29075,
+                62168
+              ]
+            },
+            {
+              "start": 29156,
+              "end": 29427,
+              "stack_bytes": 0,
+              "chain": [
+                28864,
+                29075,
+                62168
+              ]
+            },
+            {
+              "start": 29427,
+              "end": 29450,
+              "stack_bytes": 0,
+              "chain": [
+                28864,
+                29075,
+                62168
+              ]
+            },
+            {
+              "start": 29450,
+              "end": 29468,
+              "stack_bytes": 0,
+              "chain": [
+                28864,
+                29075,
+                62168
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 29472,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 29472,
+              "end": 29583,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 28624,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 28624,
+              "end": 28854,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 30144,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 30144,
+              "end": 30181,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 30181,
+              "end": 31008,
+              "stack_bytes": 0,
+              "chain": [
+                30144,
+                30181,
+                62384
+              ]
+            },
+            {
+              "start": 31008,
+              "end": 31014,
+              "stack_bytes": 0,
+              "chain": [
+                30144,
+                30181,
+                62384
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 32928,
+      "reference_targets": {
+        "PublicLockedHigh": 72024,
+        "PublicLockedLow": 72032,
+        "active": 69924,
+        "stats": 69984,
+        "low_changed": 70088,
+        "high_changed": 70092,
+        "page_info": 32352,
+        "low_old": 70080,
+        "__imp_VirtualProtect": 53400,
+        "__imp_GetLastError": 53376,
+        "high_old": 70084,
+        "notify_host": 32272,
+        "admitted": 69960,
+        "host_callback": 69928,
+        "cleared": 69968,
+        "__imp_CallEnclave": 53424,
+        "BaseLockedBody": 28000,
+        "retained_call": 70120,
+        "retained_region": 70096,
+        "retained_report": 70128,
+        "retained_operation": 70104,
+        "retained_live": 70124,
+        "__imp_VirtualAlloc": 53392,
+        "retained_guards": 32592,
+        "retained_notify": 32704,
+        "retained_free": 32496,
+        "RetainedWork": 4096,
+        "retained_output": 70112
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha2_batch/mod.rs::open",
+      "image_sha256": "042589239016c308226ab0a6d360d0fd7fc31b20368dd1beecc31cb1214a8e9e",
+      "object_sha256": "8e06c89dc7488c5c0c9e84c6fa74cb583142b5d900fff219714c3adfebcbc31f",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 21248,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 21248,
+              "end": 21459,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 21459,
+              "end": 21540,
+              "stack_bytes": 0,
+              "chain": [
+                21248,
+                21459,
+                44848
+              ]
+            },
+            {
+              "start": 21540,
+              "end": 21811,
+              "stack_bytes": 0,
+              "chain": [
+                21248,
+                21459,
+                44848
+              ]
+            },
+            {
+              "start": 21811,
+              "end": 21834,
+              "stack_bytes": 0,
+              "chain": [
+                21248,
+                21459,
+                44848
+              ]
+            },
+            {
+              "start": 21834,
+              "end": 21852,
+              "stack_bytes": 0,
+              "chain": [
+                21248,
+                21459,
+                44848
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 21856,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 21856,
+              "end": 21967,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 21008,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 21008,
+              "end": 21238,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 22528,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 22528,
+              "end": 22565,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 22565,
+              "end": 23392,
+              "stack_bytes": 0,
+              "chain": [
+                22528,
+                22565,
+                45064
+              ]
+            },
+            {
+              "start": 23392,
+              "end": 23398,
+              "stack_bytes": 0,
+              "chain": [
+                22528,
+                22565,
+                45064
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 25024,
+      "reference_targets": {
+        "PublicLockedHigh": 51408,
+        "PublicLockedLow": 51416,
+        "active": 49336,
+        "stats": 49392,
+        "low_changed": 49492,
+        "high_changed": 49496,
+        "page_info": 24448,
+        "low_old": 49340,
+        "__imp_VirtualProtect": 36976,
+        "__imp_GetLastError": 36960,
+        "high_old": 49488,
+        "notify_host": 24368,
+        "admitted": 49368,
+        "host_callback": 49328,
+        "cleared": 49376,
+        "__imp_CallEnclave": 37000,
+        "BaseLockedBody": 20832,
+        "retained_call": 49500,
+        "retained_region": 49504,
+        "retained_report": 49536,
+        "retained_operation": 49512,
+        "retained_live": 49528,
+        "__imp_VirtualAlloc": 36968,
+        "retained_guards": 24688,
+        "retained_notify": 24800,
+        "retained_free": 24592,
+        "RetainedWork": 4096,
+        "retained_output": 49520
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha2_batch/mod.rs::open_sha_ni",
+      "image_sha256": "3dc8f854c97f7371411797daf2f88cbf54473f816fcfbf93dc52954d3c8905af",
+      "object_sha256": "9fd0a64c3da00271ed7687c929e22a9f113ae7f5ca64a057075de5190488c0e5",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 19840,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 19840,
+              "end": 20051,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 20051,
+              "end": 20132,
+              "stack_bytes": 0,
+              "chain": [
+                19840,
+                20051,
+                54000
+              ]
+            },
+            {
+              "start": 20132,
+              "end": 20403,
+              "stack_bytes": 0,
+              "chain": [
+                19840,
+                20051,
+                54000
+              ]
+            },
+            {
+              "start": 20403,
+              "end": 20426,
+              "stack_bytes": 0,
+              "chain": [
+                19840,
+                20051,
+                54000
+              ]
+            },
+            {
+              "start": 20426,
+              "end": 20444,
+              "stack_bytes": 0,
+              "chain": [
+                19840,
+                20051,
+                54000
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 20448,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 20448,
+              "end": 20559,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 19600,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 19600,
+              "end": 19830,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 21136,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 21136,
+              "end": 21173,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 21173,
+              "end": 22000,
+              "stack_bytes": 0,
+              "chain": [
+                21136,
+                21173,
+                54216
+              ]
+            },
+            {
+              "start": 22000,
+              "end": 22006,
+              "stack_bytes": 0,
+              "chain": [
+                21136,
+                21173,
+                54216
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 23904,
+      "reference_targets": {
+        "PublicLockedHigh": 63816,
+        "PublicLockedLow": 63824,
+        "active": 61716,
+        "stats": 61776,
+        "low_changed": 61880,
+        "high_changed": 61884,
+        "page_info": 23328,
+        "low_old": 61872,
+        "__imp_VirtualProtect": 45208,
+        "__imp_GetLastError": 45184,
+        "high_old": 61876,
+        "notify_host": 23248,
+        "admitted": 61752,
+        "host_callback": 61720,
+        "cleared": 61760,
+        "__imp_CallEnclave": 45232,
+        "BaseLockedBody": 18976,
+        "retained_call": 61912,
+        "retained_region": 61888,
+        "retained_report": 61920,
+        "retained_operation": 61896,
+        "retained_live": 61916,
+        "__imp_VirtualAlloc": 45200,
+        "retained_guards": 23568,
+        "retained_notify": 23680,
+        "retained_free": 23472,
+        "RetainedWork": 4096,
+        "retained_output": 61904
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha3_batch/mod.rs::open",
+      "image_sha256": "15ff86cc7baf709230411a0ce954ef5fb84ae249f132b4186b0ac186b428c4a8",
+      "object_sha256": "a299c411b1eac0719349c372f94572e7cf7c6a3b87cf91acf20613216146120f",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 45312,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 45312,
+              "end": 45523,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 45523,
+              "end": 45604,
+              "stack_bytes": 0,
+              "chain": [
+                45312,
+                45523,
+                68632
+              ]
+            },
+            {
+              "start": 45604,
+              "end": 45875,
+              "stack_bytes": 0,
+              "chain": [
+                45312,
+                45523,
+                68632
+              ]
+            },
+            {
+              "start": 45875,
+              "end": 45898,
+              "stack_bytes": 0,
+              "chain": [
+                45312,
+                45523,
+                68632
+              ]
+            },
+            {
+              "start": 45898,
+              "end": 45916,
+              "stack_bytes": 0,
+              "chain": [
+                45312,
+                45523,
+                68632
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 45920,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 45920,
+              "end": 46031,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 45072,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 45072,
+              "end": 45302,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 46576,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 46576,
+              "end": 46613,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 46613,
+              "end": 47440,
+              "stack_bytes": 0,
+              "chain": [
+                46576,
+                46613,
+                68848
+              ]
+            },
+            {
+              "start": 47440,
+              "end": 47446,
+              "stack_bytes": 0,
+              "chain": [
+                46576,
+                46613,
+                68848
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 49072,
+      "reference_targets": {
+        "PublicLockedHigh": 75968,
+        "PublicLockedLow": 75976,
+        "active": 73896,
+        "stats": 73952,
+        "low_changed": 74052,
+        "high_changed": 74056,
+        "page_info": 48496,
+        "low_old": 73900,
+        "__imp_VirtualProtect": 61552,
+        "__imp_GetLastError": 61536,
+        "high_old": 74048,
+        "notify_host": 48416,
+        "admitted": 73928,
+        "host_callback": 73888,
+        "cleared": 73936,
+        "__imp_CallEnclave": 61576,
+        "BaseLockedBody": 44896,
+        "retained_call": 74060,
+        "retained_region": 74064,
+        "retained_report": 74096,
+        "retained_operation": 74072,
+        "retained_live": 74088,
+        "__imp_VirtualAlloc": 61544,
+        "retained_guards": 48736,
+        "retained_notify": 48848,
+        "retained_free": 48640,
+        "RetainedWork": 4096,
+        "retained_output": 74080
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha3_batch/mod.rs::open_avx2",
+      "image_sha256": "2d169d513ca393fe16f4ba25d88d5c4845dafe96532f22b8c9d47e0028a9e78c",
+      "object_sha256": "d232297bcdbaacb89692292e989600cb7948ea661d6f2db0875ef38750756eee",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 31968,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 31968,
+              "end": 32179,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 32179,
+              "end": 32260,
+              "stack_bytes": 0,
+              "chain": [
+                31968,
+                32179,
+                66392
+              ]
+            },
+            {
+              "start": 32260,
+              "end": 32531,
+              "stack_bytes": 0,
+              "chain": [
+                31968,
+                32179,
+                66392
+              ]
+            },
+            {
+              "start": 32531,
+              "end": 32554,
+              "stack_bytes": 0,
+              "chain": [
+                31968,
+                32179,
+                66392
+              ]
+            },
+            {
+              "start": 32554,
+              "end": 32572,
+              "stack_bytes": 0,
+              "chain": [
+                31968,
+                32179,
+                66392
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 32576,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 32576,
+              "end": 32687,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 31728,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 31728,
+              "end": 31958,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 33248,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 33248,
+              "end": 33285,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 33285,
+              "end": 34112,
+              "stack_bytes": 0,
+              "chain": [
+                33248,
+                33285,
+                66608
+              ]
+            },
+            {
+              "start": 34112,
+              "end": 34118,
+              "stack_bytes": 0,
+              "chain": [
+                33248,
+                33285,
+                66608
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 36016,
+      "reference_targets": {
+        "PublicLockedHigh": 76120,
+        "PublicLockedLow": 76128,
+        "active": 74020,
+        "stats": 74080,
+        "low_changed": 74184,
+        "high_changed": 74188,
+        "page_info": 35440,
+        "low_old": 74176,
+        "__imp_VirtualProtect": 57496,
+        "__imp_GetLastError": 57472,
+        "high_old": 74180,
+        "notify_host": 35360,
+        "admitted": 74056,
+        "host_callback": 74024,
+        "cleared": 74064,
+        "__imp_CallEnclave": 57520,
+        "BaseLockedBody": 31104,
+        "retained_call": 74216,
+        "retained_region": 74192,
+        "retained_report": 74224,
+        "retained_operation": 74200,
+        "retained_live": 74220,
+        "__imp_VirtualAlloc": 57488,
+        "retained_guards": 35680,
+        "retained_notify": 35792,
+        "retained_free": 35584,
+        "RetainedWork": 4096,
+        "retained_output": 74208
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "parallelhash/mod.rs::open",
+      "image_sha256": "9fbeb3d6d940daf0ecd5172969d4160c3e6e71eb7465b279a11bbc1a77c3da13",
+      "object_sha256": "7ea6e4d43ed2d49fba7ccc2cf69be10db3f3bcb566a55845aea9408405bf245f",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 33280,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 33280,
+              "end": 33491,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 33491,
+              "end": 33572,
+              "stack_bytes": 0,
+              "chain": [
+                33280,
+                33491,
+                56240
+              ]
+            },
+            {
+              "start": 33572,
+              "end": 33843,
+              "stack_bytes": 0,
+              "chain": [
+                33280,
+                33491,
+                56240
+              ]
+            },
+            {
+              "start": 33843,
+              "end": 33866,
+              "stack_bytes": 0,
+              "chain": [
+                33280,
+                33491,
+                56240
+              ]
+            },
+            {
+              "start": 33866,
+              "end": 33884,
+              "stack_bytes": 0,
+              "chain": [
+                33280,
+                33491,
+                56240
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 33888,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 33888,
+              "end": 33999,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 33040,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 33040,
+              "end": 33270,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 35184,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 35184,
+              "end": 35221,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 35221,
+              "end": 36048,
+              "stack_bytes": 0,
+              "chain": [
+                35184,
+                35221,
+                56456
+              ]
+            },
+            {
+              "start": 36048,
+              "end": 36054,
+              "stack_bytes": 0,
+              "chain": [
+                35184,
+                35221,
+                56456
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 37072,
+      "reference_targets": {
+        "PublicLockedHigh": 63680,
+        "PublicLockedLow": 63688,
+        "active": 61608,
+        "stats": 61664,
+        "low_changed": 61764,
+        "high_changed": 61768,
+        "page_info": 36496,
+        "low_old": 61612,
+        "__imp_VirtualProtect": 49264,
+        "__imp_GetLastError": 49248,
+        "high_old": 61760,
+        "notify_host": 36416,
+        "admitted": 61640,
+        "host_callback": 61600,
+        "cleared": 61648,
+        "__imp_CallEnclave": 49288,
+        "BaseLockedBody": 32864,
+        "retained_call": 61772,
+        "retained_region": 61776,
+        "retained_report": 61808,
+        "retained_operation": 61784,
+        "retained_live": 61800,
+        "__imp_VirtualAlloc": 49256,
+        "retained_guards": 36736,
+        "retained_notify": 36848,
+        "retained_free": 36640,
+        "RetainedWork": 4096,
+        "retained_output": 61792
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "parallelhash/mod.rs::open_avx2",
+      "image_sha256": "f6eac516db512c188abc547ff27ade796ed73a8281363b68fd3fb89ff6996e79",
+      "object_sha256": "f02eae85b3bf0ed9f16ff482bd148bf7f1cf981b154575ead80b78ee9430a1f6",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 30976,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 30976,
+              "end": 31187,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 31187,
+              "end": 31268,
+              "stack_bytes": 0,
+              "chain": [
+                30976,
+                31187,
+                62192
+              ]
+            },
+            {
+              "start": 31268,
+              "end": 31539,
+              "stack_bytes": 0,
+              "chain": [
+                30976,
+                31187,
+                62192
+              ]
+            },
+            {
+              "start": 31539,
+              "end": 31562,
+              "stack_bytes": 0,
+              "chain": [
+                30976,
+                31187,
+                62192
+              ]
+            },
+            {
+              "start": 31562,
+              "end": 31580,
+              "stack_bytes": 0,
+              "chain": [
+                30976,
+                31187,
+                62192
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 31584,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 31584,
+              "end": 31695,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 30736,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 30736,
+              "end": 30966,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 32960,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 32960,
+              "end": 32997,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 32997,
+              "end": 33824,
+              "stack_bytes": 0,
+              "chain": [
+                32960,
+                32997,
+                62408
+              ]
+            },
+            {
+              "start": 33824,
+              "end": 33830,
+              "stack_bytes": 0,
+              "chain": [
+                32960,
+                32997,
+                62408
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 34848,
+      "reference_targets": {
+        "PublicLockedHigh": 72024,
+        "PublicLockedLow": 72032,
+        "active": 69924,
+        "stats": 69984,
+        "low_changed": 70088,
+        "high_changed": 70092,
+        "page_info": 34272,
+        "low_old": 70080,
+        "__imp_VirtualProtect": 53400,
+        "__imp_GetLastError": 53376,
+        "high_old": 70084,
+        "notify_host": 34192,
+        "admitted": 69960,
+        "host_callback": 69928,
+        "cleared": 69968,
+        "__imp_CallEnclave": 53424,
+        "BaseLockedBody": 29904,
+        "retained_call": 70120,
+        "retained_region": 70096,
+        "retained_report": 70128,
+        "retained_operation": 70104,
+        "retained_live": 70124,
+        "__imp_VirtualAlloc": 53392,
+        "retained_guards": 34512,
+        "retained_notify": 34624,
+        "retained_free": 34416,
+        "RetainedWork": 4096,
+        "retained_output": 70112
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha256_simd/mod.rs::open_avx2",
+      "image_sha256": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee",
+      "object_sha256": "fbdb1a4047ed90da3a39310fce3dcb46f5b294a0270311e193a65da4d94ddab8",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 21760,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 21760,
+              "end": 21971,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 21971,
+              "end": 22052,
+              "stack_bytes": 0,
+              "chain": [
+                21760,
+                21971,
+                52976
+              ]
+            },
+            {
+              "start": 22052,
+              "end": 22323,
+              "stack_bytes": 0,
+              "chain": [
+                21760,
+                21971,
+                52976
+              ]
+            },
+            {
+              "start": 22323,
+              "end": 22346,
+              "stack_bytes": 0,
+              "chain": [
+                21760,
+                21971,
+                52976
+              ]
+            },
+            {
+              "start": 22346,
+              "end": 22364,
+              "stack_bytes": 0,
+              "chain": [
+                21760,
+                21971,
+                52976
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 22368,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 22368,
+              "end": 22479,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 21520,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 21520,
+              "end": 21750,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 23056,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 23056,
+              "end": 23093,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 23093,
+              "end": 23920,
+              "stack_bytes": 0,
+              "chain": [
+                23056,
+                23093,
+                53192
+              ]
+            },
+            {
+              "start": 23920,
+              "end": 23926,
+              "stack_bytes": 0,
+              "chain": [
+                23056,
+                23093,
+                53192
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 25904,
+      "reference_targets": {
+        "PublicLockedHigh": 59720,
+        "PublicLockedLow": 59728,
+        "active": 57620,
+        "stats": 57680,
+        "low_changed": 57784,
+        "high_changed": 57788,
+        "page_info": 25328,
+        "low_old": 57776,
+        "__imp_VirtualProtect": 45208,
+        "__imp_GetLastError": 45184,
+        "high_old": 57780,
+        "notify_host": 25248,
+        "admitted": 57656,
+        "host_callback": 57624,
+        "cleared": 57664,
+        "__imp_CallEnclave": 45232,
+        "BaseLockedBody": 20896,
+        "retained_call": 57816,
+        "retained_region": 57792,
+        "retained_report": 57824,
+        "retained_operation": 57800,
+        "retained_live": 57820,
+        "__imp_VirtualAlloc": 45200,
+        "retained_guards": 25568,
+        "retained_notify": 25680,
+        "retained_free": 25472,
+        "RetainedWork": 4096,
+        "retained_output": 57808
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "sha512_simd/mod.rs::open_avx2",
+      "image_sha256": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510",
+      "object_sha256": "091ab1f7f3eac1876705a481c5c3d95c27cc49be85e5d053a53610b0b79e0269",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 23984,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 23984,
+              "end": 24195,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 24195,
+              "end": 24276,
+              "stack_bytes": 0,
+              "chain": [
+                23984,
+                24195,
+                57840
+              ]
+            },
+            {
+              "start": 24276,
+              "end": 24547,
+              "stack_bytes": 0,
+              "chain": [
+                23984,
+                24195,
+                57840
+              ]
+            },
+            {
+              "start": 24547,
+              "end": 24570,
+              "stack_bytes": 0,
+              "chain": [
+                23984,
+                24195,
+                57840
+              ]
+            },
+            {
+              "start": 24570,
+              "end": 24588,
+              "stack_bytes": 0,
+              "chain": [
+                23984,
+                24195,
+                57840
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 24592,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 24592,
+              "end": 24703,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 23744,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 23744,
+              "end": 23974,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 25280,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 25280,
+              "end": 25317,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 25317,
+              "end": 26144,
+              "stack_bytes": 0,
+              "chain": [
+                25280,
+                25317,
+                58056
+              ]
+            },
+            {
+              "start": 26144,
+              "end": 26150,
+              "stack_bytes": 0,
+              "chain": [
+                25280,
+                25317,
+                58056
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 28128,
+      "reference_targets": {
+        "PublicLockedHigh": 67912,
+        "PublicLockedLow": 67920,
+        "active": 65812,
+        "stats": 65872,
+        "low_changed": 65976,
+        "high_changed": 65980,
+        "page_info": 27552,
+        "low_old": 65968,
+        "__imp_VirtualProtect": 49304,
+        "__imp_GetLastError": 49280,
+        "high_old": 65972,
+        "notify_host": 27472,
+        "admitted": 65848,
+        "host_callback": 65816,
+        "cleared": 65856,
+        "__imp_CallEnclave": 49328,
+        "BaseLockedBody": 23120,
+        "retained_call": 66008,
+        "retained_region": 65984,
+        "retained_report": 66016,
+        "retained_operation": 65992,
+        "retained_live": 66012,
+        "__imp_VirtualAlloc": 49296,
+        "retained_guards": 27792,
+        "retained_notify": 27904,
+        "retained_free": 27696,
+        "RetainedWork": 4096,
+        "retained_output": 66000
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    {
+      "route": "keccak_simd/mod.rs::open_avx2",
+      "image_sha256": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330",
+      "object_sha256": "50d542fb017ec2375d693afd9e95e91a0a785ee9c6acb20181275c3e25137788",
+      "entries": {
+        "PublicLockedAdmit": {
+          "rva": 27408,
+          "bytes": 604,
+          "references": 46,
+          "runtime_fragments": [
+            {
+              "start": 27408,
+              "end": 27619,
+              "stack_bytes": 40,
+              "chain": null
+            },
+            {
+              "start": 27619,
+              "end": 27700,
+              "stack_bytes": 0,
+              "chain": [
+                27408,
+                27619,
+                57584
+              ]
+            },
+            {
+              "start": 27700,
+              "end": 27971,
+              "stack_bytes": 0,
+              "chain": [
+                27408,
+                27619,
+                57584
+              ]
+            },
+            {
+              "start": 27971,
+              "end": 27994,
+              "stack_bytes": 0,
+              "chain": [
+                27408,
+                27619,
+                57584
+              ]
+            },
+            {
+              "start": 27994,
+              "end": 28012,
+              "stack_bytes": 0,
+              "chain": [
+                27408,
+                27619,
+                57584
+              ]
+            }
+          ]
+        },
+        "PublicLockedFinish": {
+          "rva": 28016,
+          "bytes": 111,
+          "references": 4,
+          "runtime_fragments": [
+            {
+              "start": 28016,
+              "end": 28127,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicGuardRestore": {
+          "rva": 26448,
+          "bytes": 230,
+          "references": 18,
+          "runtime_fragments": [
+            {
+              "start": 26448,
+              "end": 26678,
+              "stack_bytes": 40,
+              "chain": null
+            }
+          ]
+        },
+        "PublicRustBody": {
+          "rva": 28704,
+          "bytes": 870,
+          "references": 63,
+          "runtime_fragments": [
+            {
+              "start": 28704,
+              "end": 28741,
+              "stack_bytes": 56,
+              "chain": null
+            },
+            {
+              "start": 28741,
+              "end": 29568,
+              "stack_bytes": 0,
+              "chain": [
+                28704,
+                28741,
+                57800
+              ]
+            },
+            {
+              "start": 29568,
+              "end": 29574,
+              "stack_bytes": 0,
+              "chain": [
+                28704,
+                28741,
+                57800
+              ]
+            }
+          ]
+        }
+      },
+      "wrapper_rva": 30592,
+      "reference_targets": {
+        "PublicLockedHigh": 67944,
+        "PublicLockedLow": 67952,
+        "active": 65828,
+        "stats": 65888,
+        "low_changed": 65992,
+        "high_changed": 65996,
+        "page_info": 30016,
+        "low_old": 65984,
+        "__imp_VirtualProtect": 49304,
+        "__imp_GetLastError": 49280,
+        "high_old": 65988,
+        "notify_host": 29936,
+        "admitted": 65864,
+        "host_callback": 65832,
+        "cleared": 65872,
+        "__imp_CallEnclave": 49328,
+        "BaseLockedBody": 25616,
+        "retained_call": 66024,
+        "retained_region": 66000,
+        "retained_report": 66032,
+        "retained_operation": 66008,
+        "retained_live": 66028,
+        "__imp_VirtualAlloc": 49296,
+        "retained_guards": 30256,
+        "retained_notify": 30368,
+        "retained_free": 30160,
+        "RetainedWork": 4096,
+        "retained_output": 66016
+      },
+      "retained_worker_rva": 4096,
+      "callee_semantics_qualified": false,
+      "whole_image_qualified": false
+    }
+  ],
+  "shared_template_implies_shared_callee_semantics": false,
+  "worker_review_transferred": false,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "test-windows-enclave-sequential-c.py": "f284fc32ce5ba02238acba02f644fa685f95e39d16e2f308acf2c5e2019bae44",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af"
+  }
+}

@@ -86,9 +86,12 @@ do not transfer the scheduler's caller/body review to those other images.
 | TupleHash | 2 |
 | Sequential ParallelHash | 2 |
 
-The next step is to reconcile their distinct caller/storage paths, reusing an
-inspection only when equivalent emitted bodies and references are actually
-established. The existing nineteen-image and scoped dump campaigns should not
+The subsequent [shared sequential C review](windows-enclave-sequential-c-review.md)
+establishes complete byte/reference identity for four common functions across
+these eighteen images, including their chained runtime fragments. It binds each
+to its own wrapper/imports without transferring the distinct Rust worker reviews.
+The next step is their helper and caller/storage reconciliation. The existing
+nineteen-image and scoped dump campaigns should not
 be repeated for these offline documentation/review changes. Final compiler/SDK
 scope reconciliation and independent retest remain; no production code, signed
 image, release-gate policy or qualification claim changed in this step.

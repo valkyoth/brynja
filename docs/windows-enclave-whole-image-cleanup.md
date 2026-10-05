@@ -507,6 +507,10 @@ work is:
    clear/readback and returned callback/restoration outcomes. It does not transfer
    caller qualification to the eighteen other images merely because their shared
    wrapper bytes match.
+   The subsequent [sequential C reconciliation](windows-enclave-sequential-c-review.md)
+   binds four complete common functions across all eighteen images, including
+   their chained runtime fragments and per-image imports/globals. Their retained
+   Rust workers and transitive helpers remain distinct review obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

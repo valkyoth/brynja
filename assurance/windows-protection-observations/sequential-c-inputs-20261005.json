@@ -1,0 +1,128 @@
+[
+  {
+    "route": "mod.rs::open",
+    "image": "bounded-cleanup-admitted/signed.dll",
+    "sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+    "object": "bounded-cleanup-image/normal.obj",
+    "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e"
+  },
+  {
+    "route": "sha2/mod.rs::open",
+    "image": "sha2-scalar-cleanup-admitted/signed.dll",
+    "sha256": "bc8932575def29277263f49c1fe9b912f9a1166e6703ac1f609eef90f63beeab",
+    "object": "sha2-scalar-cleanup-image/normal.obj",
+    "object_sha256": "aa83148405eebce8327a0e9620cfa18761fc76d21487aca0287d2a0f1191ddf7"
+  },
+  {
+    "route": "sha2/mod.rs::open_sha_ni",
+    "image": "sha2-stream-cleanup-admitted/signed.dll",
+    "sha256": "ca5806be2e78ae43f4942b0733bb94bef1e5c75dfa2250d98408dfda74c77d0a",
+    "object": "sha2-stream-cleanup/normal.obj",
+    "object_sha256": "6360c25108d3a72a0a4760f74a90577afb16ed0abe94e126bcd320b320d4180c"
+  },
+  {
+    "route": "sha3/mod.rs::open",
+    "image": "sha3-scalar-cleanup-admitted/signed.dll",
+    "sha256": "76bdf18e31b935535ca7a36a5d694abbe14de4a3179076a2fd452d3c5f259718",
+    "object": "sha3-scalar-cleanup-image/normal.obj",
+    "object_sha256": "0f26e3249d40ccd61f21d158ce5df88100fc0036bc70fa890050bddddd5ced39"
+  },
+  {
+    "route": "sha3/mod.rs::open_avx2",
+    "image": "sha3-stream-cleanup-admitted/signed.dll",
+    "sha256": "28d01c3b932d22daad5cd2256aa9c31c5fb937a4846067eb991345ee7c7449fa",
+    "object": "sha3-stream-cleanup-retry/normal.obj",
+    "object_sha256": "e9f47eb364335d3d9ed4edbcae7d60b86cc716a826167bb6851624b29bbc88aa"
+  },
+  {
+    "route": "kmac/mod.rs::open",
+    "image": "kmac-scalar-cleanup-admitted/signed.dll",
+    "sha256": "bbe6218b52e86b49379597a13129604f8fc7708f4a62b4c7bbc0e387d4173e33",
+    "object": "kmac-scalar-cleanup-image/normal.obj",
+    "object_sha256": "13234beb67ac1bf7b5f7e70e5fc66d6fa33a5331836ffbefa42757e9033f6cd5"
+  },
+  {
+    "route": "kmac/mod.rs::open_avx2",
+    "image": "kmac-stream-cleanup-admitted/signed.dll",
+    "sha256": "4c0f67100277e7750853ba7018ca73f0f68482133c3fdc6ee43ff975fe3abaae",
+    "object": "kmac-stream-cleanup/normal.obj",
+    "object_sha256": "b2660b8a15192791f920c9f66a45309cc830c8ee40896f33dbca73b706dacaaa"
+  },
+  {
+    "route": "tuplehash/mod.rs::open",
+    "image": "tuple-scalar-cleanup-admitted/signed.dll",
+    "sha256": "43b9c988e2a622cc722311d33bfef5de67414357bc32f6c1692c7b09650cf09d",
+    "object": "tuple-scalar-cleanup-image/normal.obj",
+    "object_sha256": "5d37b79c17ac9b98e9c1aeaf5f54fd8bb88875475097918e67e6b68950ae0b5a"
+  },
+  {
+    "route": "tuplehash/mod.rs::open_avx2",
+    "image": "tuple-stream-cleanup-admitted/signed.dll",
+    "sha256": "c5942cba859ffdacd7e657d81ff2d3e25c5582cdb3aeb9754da511cb5f35bd38",
+    "object": "tuple-stream-cleanup-complete/normal.obj",
+    "object_sha256": "02a474a495111c306f026618cf1464413030f44fd0339bd2f7893497c0d82c2e"
+  },
+  {
+    "route": "sha2_batch/mod.rs::open",
+    "image": "sha2-seq-scalar-cleanup-admitted/signed.dll",
+    "sha256": "042589239016c308226ab0a6d360d0fd7fc31b20368dd1beecc31cb1214a8e9e",
+    "object": "sha2-seq-scalar-cleanup-image/normal.obj",
+    "object_sha256": "8e06c89dc7488c5c0c9e84c6fa74cb583142b5d900fff219714c3adfebcbc31f"
+  },
+  {
+    "route": "sha2_batch/mod.rs::open_sha_ni",
+    "image": "sha2-seq-accelerated-cleanup-admitted/signed.dll",
+    "sha256": "3dc8f854c97f7371411797daf2f88cbf54473f816fcfbf93dc52954d3c8905af",
+    "object": "sha2-seq-accelerated-cleanup-image/normal.obj",
+    "object_sha256": "9fd0a64c3da00271ed7687c929e22a9f113ae7f5ca64a057075de5190488c0e5"
+  },
+  {
+    "route": "sha3_batch/mod.rs::open",
+    "image": "sha3-seq-scalar-cleanup-admitted/signed.dll",
+    "sha256": "15ff86cc7baf709230411a0ce954ef5fb84ae249f132b4186b0ac186b428c4a8",
+    "object": "sha3-seq-scalar-cleanup-image/normal.obj",
+    "object_sha256": "a299c411b1eac0719349c372f94572e7cf7c6a3b87cf91acf20613216146120f"
+  },
+  {
+    "route": "sha3_batch/mod.rs::open_avx2",
+    "image": "sha3-seq-accelerated-cleanup-admitted/signed.dll",
+    "sha256": "2d169d513ca393fe16f4ba25d88d5c4845dafe96532f22b8c9d47e0028a9e78c",
+    "object": "sha3-seq-accelerated-cleanup-image/normal.obj",
+    "object_sha256": "d232297bcdbaacb89692292e989600cb7948ea661d6f2db0875ef38750756eee"
+  },
+  {
+    "route": "parallelhash/mod.rs::open",
+    "image": "parallel-seq-scalar-cleanup-admitted/signed.dll",
+    "sha256": "9fbeb3d6d940daf0ecd5172969d4160c3e6e71eb7465b279a11bbc1a77c3da13",
+    "object": "parallel-seq-scalar-cleanup-image/normal.obj",
+    "object_sha256": "7ea6e4d43ed2d49fba7ccc2cf69be10db3f3bcb566a55845aea9408405bf245f"
+  },
+  {
+    "route": "parallelhash/mod.rs::open_avx2",
+    "image": "parallel-seq-accelerated-cleanup-admitted/signed.dll",
+    "sha256": "f6eac516db512c188abc547ff27ade796ed73a8281363b68fd3fb89ff6996e79",
+    "object": "parallel-seq-accelerated-cleanup-image/normal.obj",
+    "object_sha256": "f02eae85b3bf0ed9f16ff482bd148bf7f1cf981b154575ead80b78ee9430a1f6"
+  },
+  {
+    "route": "sha256_simd/mod.rs::open_avx2",
+    "image": "sha256-cleanup-admitted/signed.dll",
+    "sha256": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee",
+    "object": "sha256-register-cleanup/normal.obj",
+    "object_sha256": "fbdb1a4047ed90da3a39310fce3dcb46f5b294a0270311e193a65da4d94ddab8"
+  },
+  {
+    "route": "sha512_simd/mod.rs::open_avx2",
+    "image": "sha512-cleanup-admitted/signed.dll",
+    "sha256": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510",
+    "object": "sha512-register-cleanup/normal.obj",
+    "object_sha256": "091ab1f7f3eac1876705a481c5c3d95c27cc49be85e5d053a53610b0b79e0269"
+  },
+  {
+    "route": "keccak_simd/mod.rs::open_avx2",
+    "image": "keccak-cleanup-admitted/signed.dll",
+    "sha256": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330",
+    "object": "keccak-register-cleanup/normal.obj",
+    "object_sha256": "50d542fb017ec2375d693afd9e95e91a0a785ee9c6acb20181275c3e25137788"
+  }
+]

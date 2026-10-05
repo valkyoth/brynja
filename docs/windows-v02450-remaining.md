@@ -13,6 +13,13 @@ qualification remain incomplete. The release scope
 remains the [Windows strict protected profile](windows-strict-profile.md), with
 explicit acceleration and unchanged release-gate policy.
 
+Latest cross-image step: the [shared sequential C review](windows-enclave-sequential-c-review.md)
+binds four complete common functions across all eighteen sequential images,
+including chained runtime fragments, wrapper callees and named SDK imports.
+Six focused tests and identical saved-artifact reports pass on Linux and Windows.
+Shared helpers and distinct retained Rust workers still need reconciliation;
+this does not transfer worker semantics or claim whole-image qualification.
+
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.
 The latest [loaded SDK observation](windows-enclave-loaded-sdk.md) matches all

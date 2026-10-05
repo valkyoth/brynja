@@ -282,3 +282,63 @@ Component artifacts are preserved under `release-reports/windows-local-20261005-
 State construction, update/finish/squeeze internals, outer-root/SDK terminal
 reconciliation and other image families remain; no production code, signed image
 or release-gate policy changed.
+
+## State operation adapters and staged output
+
+The next saved-image inspection follows `State::update`, `finish_xof` and the
+terminal specialization of `squeeze`, plus `Core::clear` and Core destruction.
+These five bodies are bound to the same original scheduler object and signed
+image, and their owner-level call edges resolve to the previously reviewed
+finalization bodies. This is an adapter review, **not** qualification of the
+engine's absorb/finish/read implementations or its complete transitive call graph.
+
+Update and XOF finalization reject an Empty state before touching its inactive
+payload. Live-state admission checks phase, engine status and authority identity
+and health. Returned failures clear engine memory and any pending prefix byte,
+remove the prefix and set Dead. Successful update retains Absorbing; successful
+XOF finalization sets Squeezing only after the engine returns success. Fixed-output
+identities cannot take the XOF finalization path. Public counters and terminal
+tags use ordinary writes, not secret-erasure claims.
+
+Squeeze reserves 1,056 stack bytes and saves five registers. Its separate
+1,024-byte staging buffer starts at post-prologue RSP+32. The reviewed code reads
+engine output into staging, masks a fractional last byte there, and only then
+calls the secret-region copy helper. Every reviewed returned path after staging
+initialization clears all 1,024 bytes: malformed output shape, engine error,
+copy failure and success. Earlier admission failures never initialize staging.
+These fixed-frame observations do not bound the engine's deeper stack usage.
+
+`Core::clear` cancels engine memory and clears the optional prefix, but does not
+itself wipe the session scratch. Successful terminal squeezing then destroys Core,
+whose nested destruction reaches the separately reviewed scratch wipe, and writes
+the Empty tag. On returned errors the enclosing owner/slot destruction retains
+its separate cleanup obligation. Neither the Empty/Dead tags nor ordinary public
+metadata stores imply that padding, earlier moved copies or all caller registers
+were erased.
+
+This image has only terminal squeeze callers in the selected slot/root paths.
+Its emitted body therefore omits a general terminal-argument branch; it must not
+be used as machine-code evidence for nonterminal squeezing in other images.
+Similarly, bounds optimized away under these callers' known arguments are not
+evidence about arbitrary external calls. The general source API has its own
+component tests. Arbitrary exceptions and fatal termination remain outside this
+normal-return inspection.
+
+Four focused review tests and identical saved-image records pass on Linux and
+Windows. All 1,452 single-byte mutations of these five bodies are rejected by
+their review pins; those are identity checks, not algorithm test cases.
+Separately, the native AVX2 component campaign passes eleven tests, twenty-one
+compiled mutants and six ownership negatives on both hosts. The tests cover
+oracle outputs, partial bits, authority revocation, prefix completion, terminal
+states, failed copies and recoverable Rust unwinding. Source-hash maps agree
+between hosts; state, prefix and engine sources match the saved image's build
+copies. These are process-level tests, not new enclave execution or dump evidence.
+
+The [state-operation record](../assurance/windows-protection-observations/state-operations-20261005.json)
+names the unresolved engine, masking, copying and initialization callees rather
+than treating call-site checks as their semantic qualification. Reproduce with
+`python3 scripts/cryptography/windows_enclave_state_operations.py OBJECT IMAGE --mutate`.
+Both component campaigns and the Windows inspection record are retained in
+`release-reports/windows-local-20261005-state-operations/`. Construction, deeper
+engine operations, outer-root/SDK return handling and cross-image reconciliation
+remain. No production code, signed image or release-gate policy changed.

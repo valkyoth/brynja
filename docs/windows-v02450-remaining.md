@@ -60,6 +60,15 @@ update/finish/squeeze callees explicitly unresolved by this review. Component
 oracle, cleanup mutations and ownership tests supplement the machine-code
 inspection; no new enclave image campaign is claimed. Next are state construction
 and operation internals, outer-root/SDK terminal reconciliation and other images.
+The subsequent [state-operation adapter review](windows-enclave-slot-cleanup.md#state-operation-adapters-and-staged-output)
+now covers update, XOF finalization, terminal squeeze and Core clearing/destruction
+in five saved bodies. Four review tests and 1,452 body-pin mutations pass on both
+hosts; separate native AVX2 component tests pass eleven tests, twenty-one compiled
+mutants and six ownership negatives per host with identical source hashes.
+The distinction between memory cancellation and scratch destruction is explicit.
+Next are construction and deeper engine/helper internals, then outer-root/SDK
+return handling and cross-image reconciliation; completed enclave campaigns remain
+valid for their recorded scope and were not repeated.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

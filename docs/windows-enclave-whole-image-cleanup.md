@@ -41,6 +41,12 @@ accounts for finish/export admission, cancellation, retained-output destruction
 and encoded-suffix clearing in six exact saved bodies. State operation internals
 and outer-root/SDK return paths remain separate obligations; the record names
 unresolved terminal callees rather than claiming the complete call graph is closed.
+The following [state adapter review](windows-enclave-slot-cleanup.md#state-operation-adapters-and-staged-output)
+binds update, XOF finalization, terminal squeeze and Core cleanup/destruction.
+It traces the 1,024-byte staged output's returned paths while distinguishing
+memory cancellation from scratch destruction. Four review regressions pass on
+Linux and Windows, supplemented by the native component oracle/mutation suite.
+Engine internals and cross-image semantics remain separate, explicitly open work.
 
 ## Completed wrapper boundary, 2026-10-04
 
@@ -452,8 +458,9 @@ review or documentation record changes. The remaining implementation-assurance
 work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
-   its now-closed direct destruction chain: state construction and operation
-   internals, outer-root/SDK terminal reconciliation, then the other image families.
+   its now-closed direct destruction chain and operation adapters: state
+   construction and deeper engine/helper internals, outer-root/SDK terminal
+   reconciliation, then the other image families.
    Selected publication joining, ordered reduction, explicit generation retirement
    and owner-level finish/export/destruction are now reviewed; that does not prove
    all remaining caller lifetime obligations or transitive state operations.

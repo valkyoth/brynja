@@ -1,0 +1,330 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "AUTHOR_SELECTED_MEMORY_RUNTIME_REVIEW",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "bodies": {
+    "copy_rep": {
+      "rva": 46864,
+      "bytes": 16,
+      "sha256": "25b23c83d168ccbe2481d06e4096e25d14b8d1745a23fa1a009f3c023f2d533f"
+    },
+    "copy": {
+      "rva": 46880,
+      "bytes": 1677,
+      "sha256": "e16a8525a5c6326ba266e7c9ce85720fe639dd512663f6635e45ae04eacc7b27"
+    },
+    "fill_rep": {
+      "rva": 48592,
+      "bytes": 16,
+      "sha256": "b8721ef30a9f19d1d9aee591d1ccc36ad691dc4c7b9c04ac8e6e771202f9d9fe"
+    },
+    "fill": {
+      "rva": 48608,
+      "bytes": 908,
+      "sha256": "c425589d68efc92cc45d536e6078970c5ce1d32d9ab2d900e736e9917ae86c11"
+    }
+  },
+  "frames": {
+    "copy_rep": {
+      "unwind_rva": 62832,
+      "bytes_hex": "020204000316000602600170",
+      "version": 2,
+      "instruction_review_fixed_frame_bytes": 16,
+      "unwind_semantics_qualified": false
+    },
+    "copy": {
+      "unwind_rva": 62712,
+      "bytes_hex": "01000000",
+      "version": 1,
+      "instruction_review_fixed_frame_bytes": 0,
+      "unwind_semantics_qualified": false
+    },
+    "fill_rep": {
+      "unwind_rva": 62848,
+      "bytes_hex": "020103000216000601700000",
+      "version": 2,
+      "instruction_review_fixed_frame_bytes": 8,
+      "unwind_semantics_qualified": false
+    },
+    "fill": {
+      "unwind_rva": 62712,
+      "bytes_hex": "01000000",
+      "version": 1,
+      "instruction_review_fixed_frame_bytes": 0,
+      "unwind_semantics_qualified": false
+    }
+  },
+  "tables": {
+    "0xe900": {
+      "rva": 59648,
+      "bytes": 64,
+      "sha256": "1c5bbe0c39d3ceb44a73a33d5a1146996ebce0c059c2864240d9535f8214aa76",
+      "readonly": true,
+      "targets": [
+        46930,
+        47172,
+        47000,
+        47055,
+        47178,
+        47151,
+        47136,
+        47008,
+        47165,
+        47109,
+        47094,
+        46976,
+        47123,
+        47072,
+        47032,
+        46944
+      ]
+    },
+    "0xe940": {
+      "rva": 59712,
+      "bytes": 64,
+      "sha256": "1cc0d8d56bd9e68e39eca82d779b8a9d076baad12c3c81b5500c3520868bc407",
+      "readonly": true,
+      "targets": [
+        47658,
+        47651,
+        47637,
+        47623,
+        47609,
+        47589,
+        47569,
+        47549,
+        47529,
+        47658,
+        47658,
+        47658,
+        47658,
+        47658,
+        47658,
+        47658
+      ]
+    },
+    "0xe980": {
+      "rva": 59776,
+      "bytes": 64,
+      "sha256": "a39973d1514ca0c026a6abb2c3b0da9b4854712ded9555376594018457fbb3af",
+      "readonly": true,
+      "targets": [
+        47978,
+        47971,
+        47957,
+        47943,
+        47929,
+        47909,
+        47889,
+        47869,
+        47849,
+        47658,
+        47658,
+        47658,
+        47658,
+        47658,
+        47658,
+        47658
+      ]
+    },
+    "0xe9c0": {
+      "rva": 59840,
+      "bytes": 64,
+      "sha256": "0bad1f5403e0b4d179e49d401ab4e00862fa4e0bccf9b6a9d776fb3bb4dcb553",
+      "readonly": true,
+      "targets": [
+        48326,
+        48319,
+        48305,
+        48291,
+        48277,
+        48263,
+        48249,
+        48235,
+        48221,
+        48326,
+        48326,
+        48326,
+        48326,
+        48326,
+        48326,
+        48326
+      ]
+    },
+    "0xea00": {
+      "rva": 59904,
+      "bytes": 64,
+      "sha256": "140052eb7870015ef9015cc23aa086bd3a064ec6b08d8d00316e0c4d928acd88",
+      "readonly": true,
+      "targets": [
+        48694,
+        48690,
+        48703,
+        48685,
+        48740,
+        48724,
+        48699,
+        48681,
+        48778,
+        48759,
+        48768,
+        48745,
+        48736,
+        48720,
+        48695,
+        48677
+      ]
+    },
+    "0xea40": {
+      "rva": 59968,
+      "bytes": 64,
+      "sha256": "1a1ab91d622494a15f04726bf9a69f37f696799cd963428088326b352a3d1796",
+      "readonly": true,
+      "targets": [
+        49087,
+        49080,
+        49073,
+        49066,
+        49059,
+        49049,
+        49039,
+        49029,
+        49019,
+        49087,
+        49087,
+        49087,
+        49087,
+        49087,
+        49087,
+        49087
+      ]
+    },
+    "0xea80": {
+      "rva": 60032,
+      "bytes": 64,
+      "sha256": "a3d2ffca8a8b2cc09ba42359a28f8bb27b00c9c14be611b74c7787e922aba15c",
+      "readonly": true,
+      "targets": [
+        49279,
+        49272,
+        49265,
+        49258,
+        49251,
+        49241,
+        49231,
+        49221,
+        49211,
+        49279,
+        49279,
+        49279,
+        49279,
+        49279,
+        49279,
+        49279
+      ]
+    },
+    "0xeac0": {
+      "rva": 60096,
+      "bytes": 64,
+      "sha256": "f9b982c84b9544665993eb8676b9a8dc156da349d14849d81be79a9891bb7672",
+      "readonly": true,
+      "targets": [
+        49511,
+        49504,
+        49497,
+        49490,
+        49483,
+        49476,
+        49469,
+        49462,
+        49455,
+        49511,
+        49511,
+        49511,
+        49511,
+        49511,
+        49511,
+        49511
+      ]
+    }
+  },
+  "mutable_selectors": [
+    {
+      "rva": 69728,
+      "bytes": 4,
+      "live_value_established": false,
+      "written_by_helpers": false
+    },
+    {
+      "rva": 69736,
+      "bytes": 8,
+      "live_value_established": false,
+      "written_by_helpers": false
+    },
+    {
+      "rva": 69744,
+      "bytes": 8,
+      "live_value_established": false,
+      "written_by_helpers": false
+    },
+    {
+      "rva": 71868,
+      "bytes": 1,
+      "live_value_established": false,
+      "written_by_helpers": false
+    }
+  ],
+  "geometry": {
+    "root_constructor_spans": [
+      {
+        "name": "copy_rep saved caller GPRs",
+        "offset_from_low": 46376,
+        "offset_from_high": -19160,
+        "bytes": 16
+      },
+      {
+        "name": "fill_rep saved caller GPRs",
+        "offset_from_low": 46384,
+        "offset_from_high": -19152,
+        "bytes": 8
+      }
+    ],
+    "vector_paths_fixed_frame_bytes": 0,
+    "rep_paths_are_tail_transfers": true,
+    "saved_register_slots_individually_erased": false,
+    "volatile_payload_registers_erased": false,
+    "maximum_transitive_depth_qualified": false
+  },
+  "body_byte_mutations_rejected": 2617,
+  "table_byte_mutations_rejected": 512,
+  "unreviewed_direct_callees": [],
+  "payload_registers_require_outer_return_cleanup": true,
+  "general_memmove_correctness_qualified": false,
+  "live_dispatch_values_qualified": false,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "independently_verified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "source_sha256": {
+    "test-windows-enclave-memory-runtime.py": "a8acf5ad6f55590c99b496e97acdc9f559b5423908efe2b005f45858a5597ce8",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_construction_review.py": "7b8000c8b682705421ff05d53f91d42e74622018ecea023d3b6fa87ea53668c6",
+    "windows_enclave_engine_review.py": "585d45e2f087fe00e0f37553d6bb9a541c2e29d59deffda5ca320ea62a6ccf09",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_memory_runtime.py": "b746c52d04d52c514e17b31445a5bd192aace02e967b1a6b618a18d3e8514920",
+    "windows_enclave_root_setup.py": "99d65c886852dfd877d7382ea60cf4c16766ca4cb01d8486815bd35822dd6eea",
+    "windows_enclave_session_runtime.py": "d6dffc31963f18f7c5325170d9d5d3424114a8cf695bc581d57bd96f42da76a7",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_state_operations.py": "748dc2e2f053035f0c296be4efc4ca1fc917e2f49dd75ec0ccadf1b08db3a64f",
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a"
+  }
+}

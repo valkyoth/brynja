@@ -75,6 +75,13 @@ scratch are cleared, but ABI register-save slots still require the enclosing
 window clear. `memcpy`/`memset`, outer returns and cross-image reconciliation
 remain; no arbitrary-exception or full-depth claim is added.
 
+The following [memory-runtime review](windows-enclave-memory-runtime.md) now
+accounts for the root's copy/fill targets, two REP tail helpers and eight exact
+dispatch tables. Eight focused tests and identical saved-image inspections pass
+on Linux and Windows. Volatile payload residue and restored stack-save slots
+still require the enclosing cleanup boundary. Runtime selector initialization,
+outer returns and cross-image reconciliation are not qualified by this review.
+
 ## Completed wrapper boundary, 2026-10-04
 
 Both `PublicLockedFrame` and `PublicStackFrame` now clear XMM0–5 and, when
@@ -486,12 +493,13 @@ work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
    its now-closed direct destruction chain and operation adapters:
-   remaining memory-runtime internals, outer-root/SDK terminal
+   outer-root/SDK terminal
    reconciliation, then the other image families.
    Selected publication joining, ordered reduction, explicit generation retirement
    and owner-level finish/export/destruction, selected construction and streamed
    prefix operations, inline root initialization, permutation-session/kernel
-   returns and public remainder/probe frames are now reviewed; that does not prove
+   returns, public remainder/probe frames and selected memory-runtime dispatch
+   are now reviewed; that does not prove
    all remaining caller lifetime obligations or transitive state operations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,

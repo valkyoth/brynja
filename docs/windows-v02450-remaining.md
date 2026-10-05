@@ -98,6 +98,13 @@ pass on both hosts, with identical saved-image reports. The kernel's ABI saves
 are restored, not individually erased; the enclosing normal-return window remains
 necessary. Memory-runtime dispatch, outer-root/SDK return handling and cross-image
 reconciliation are next, without repeating completed enclave/dump campaigns.
+The subsequent [memory-runtime review](windows-enclave-memory-runtime.md) binds
+the copy/fill bodies, REP tails and eight dispatch tables, with eight focused
+tests passing on both hosts. Exact saved-image reports match; modeled forward
+spans stay in range for the tested bounded lengths and alignments. These helpers
+do not erase volatile payload registers or their restored save slots. Outer
+return/SDK reconciliation and other image families remain; completed native
+campaigns and the release-gate policy are unchanged.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

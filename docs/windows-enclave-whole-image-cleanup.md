@@ -517,6 +517,9 @@ work is:
    The [bounded SHA-256 dispatcher](windows-enclave-bounded-dispatch.md) now has
    an image-specific lifecycle, dispatch-table and local-frame review. Its
    hashing/rehashing callees are not qualified by that dispatcher inspection.
+   The subsequent [borrowed-input review](windows-enclave-bounded-input.md)
+   adds the complete `hash`/`receive` caller bodies and returning cleanup paths;
+   rehash and deeper placement/wipe/copy callees remain separate obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

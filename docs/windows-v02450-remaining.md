@@ -25,7 +25,11 @@ worker semantics or claim whole-image qualification.
 The next [bounded SHA-256 dispatcher review](windows-enclave-bounded-dispatch.md)
 now binds its retained lifecycle, exact jump-table destinations and clearing
 helper to the saved bounded image. Six tests and matching reports pass on both
-hosts; borrowed-input/rehash callees and the other Rust workers remain open.
+hosts. The subsequent [borrowed-input caller review](windows-enclave-bounded-input.md)
+binds the bounded `hash`/`receive` bodies, admission/cleanup return paths and known
+frames; six tests and identical reports pass on both hosts, rejecting 3,366 actual
+body-byte mutations. Rehash, deeper placement/wipe/copy callees and the other
+Rust workers remain open; this is not whole-image qualification.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

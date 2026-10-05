@@ -69,6 +69,14 @@ The distinction between memory cancellation and scratch destruction is explicit.
 Next are construction and deeper engine/helper internals, then outer-root/SDK
 return handling and cross-image reconciliation; completed enclave campaigns remain
 valid for their recorded scope and were not repeated.
+The following [engine and transfer-helper review](windows-enclave-slot-cleanup.md#engine-operations-and-transfer-helpers)
+now accounts for absorb/finish/read loops and their byte-transfer adapters in
+the same saved scheduler image. Six inspector tests and the seven existing
+native AVX2 engine tests pass on both hosts. The review explicitly preserves
+caller cancellation for private absorb and staged-output cleanup for a late
+read error; relative frames do not establish transitive stack bounds. Construction
+and prefix setup, permutation-session reconciliation and root/SDK return handling
+are the next boundaries before cross-image reconciliation and independent retest.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

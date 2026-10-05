@@ -342,3 +342,76 @@ Both component campaigns and the Windows inspection record are retained in
 `release-reports/windows-local-20261005-state-operations/`. Construction, deeper
 engine operations, outer-root/SDK return handling and cross-image reconciliation
 remain. No production code, signed image or release-gate policy changed.
+
+## Engine operations and transfer helpers
+
+The next saved-image review follows the adapter calls into `Engine::absorb`,
+`finish` and `read`. It also binds the copy/XOR argument adapters and mask tail
+thunk to the three already inspected opaque byte-transfer helpers. Nine exact
+bodies are recorded, including those reused helpers. This closes the selected
+engine-loop and transfer-adapter inspection, not construction, permutation-session
+internals or all transitive runtime behavior.
+
+Absorption checks the engine phase and authority before its checked 128-bit
+message-count addition. Each byte index is bounded to the 200-byte lane array;
+position increments are checked, and a rate boundary rechecks authority identity,
+health and the AVX2 kernel identity before permutation. The returned kernel path
+clears session scratch and resets position. Count bytes are committed only after
+the complete input succeeds. The **private absorb helper does not cancel by
+itself**: returned errors reach cancellation in the reviewed state-update or
+engine-finish caller. This is not an independently transactional absorb API.
+
+Finalization absorbs the complete-byte prefix, incorporates the fractional byte,
+then appends suffix bits and the final padding bit. The saved padding-byte
+reference is verified as `0x80` in nonwritable, nonexecutable mapped data, not
+merely inferred from a relocation name. Rate-boundary permutations and lane-index
+checks precede the final permutation call. Success enters squeezing and volatile-
+clears the two engine suffix bytes. Returned errors cancel and clear engine
+memory. Saturating bit-position/rate expressions are reviewed in conjunction
+with valid constructed rates and bounded indices, not claimed to admit arbitrary
+forged engine layouts safely.
+
+Reading checks squeezing/authority and output-counter overflow before work.
+At each iteration it rejects a zero/underflowing rate remainder, checks the end
+index and lane bounds, copies the admitted range, and then advances position.
+The 128-bit output count is committed only after the whole request succeeds.
+A late failure cancels engine memory but can leave an earlier prefix written to
+the internal destination. The selected caller supplies the separate staging
+buffer reviewed above and clears it on rejection; the engine read itself is
+**not** a transactional-output guarantee. This is separate from the public
+Windows copy API's possible partial-copy behavior.
+
+The copy adapter rejects unequal lengths before touching data. Its opaque helper
+copies bounded words and trailing bytes and clears its payload working register.
+The XOR adapter admits only nonzero bit counts up to eight and source/destination
+positions fitting that count; it passes a public mask in the fifth argument slot.
+The opaque XOR helper clears its payload working register. The mask helper is
+this image's specialization with no additional set bits. These helpers have no
+payload stack stores, but that does not establish erasure of arbitrary caller
+registers or copies. Their exact call/tail edges are checked against the saved
+linked image.
+
+Relative frame layouts account for 104 bytes of pushes/allocation in absorb and
+read, 120 in finish, 40 in the copy adapter and 56 in the XOR adapter. Read spills
+the upper output-counter word at RSP+32. Finish retains a suffix argument byte at
+RSP+55; XOR call sites use public mask/position argument slots. These locations
+are not individually scrubbed by the engine's memory wipe. Full-window clearing
+and the remaining transitive caller/SDK reconciliation retain responsibility;
+the new relative-frame model deliberately does not claim a root-to-kernel bound.
+
+Six inspector tests and identical saved-image records pass on Linux and Windows.
+All 2,453 single-byte changes to the nine bodies are rejected by their identity
+pins; this count includes the reused helpers and is not a behavioral test count.
+The seven existing engine tests also pass on both hosts with explicit AVX2 under
+Rust 1.98.1. They exercise rate-boundary output, partial bits, overflow, malformed
+positions, late failures, memory clearing and recoverable Rust unwinding. Test
+source hashes match between hosts. These are native process tests, not new
+enclave execution or arbitrary-exception qualification.
+
+The [engine record](../assurance/windows-protection-observations/engine-cleanup-20261005.json)
+retains the kernel/session calls as direct review boundaries. Reproduce using
+`python3 scripts/cryptography/windows_enclave_engine_review.py OBJECT IMAGE --mutate`.
+The Windows record and focused-test launcher are retained under
+`release-reports/windows-local-20261005-engine-review/`. State construction and
+prefix setup, remaining root/SDK return handling and cross-image reconciliation
+remain open. No production code, signed image or release gate changed.

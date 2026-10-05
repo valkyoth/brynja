@@ -47,6 +47,11 @@ It traces the 1,024-byte staged output's returned paths while distinguishing
 memory cancellation from scratch destruction. Four review regressions pass on
 Linux and Windows, supplemented by the native component oracle/mutation suite.
 Engine internals and cross-image semantics remain separate, explicitly open work.
+The subsequent [engine-loop review](windows-enclave-slot-cleanup.md#engine-operations-and-transfer-helpers)
+now follows absorb/finish/read into their transfer helpers, including output-counter
+spills and returned-error ownership. Six inspector tests and seven native AVX2
+engine tests pass on both hosts. Construction, permutation-session internals,
+transitive frame reconciliation and other images remain separate obligations.
 
 ## Completed wrapper boundary, 2026-10-04
 
@@ -459,7 +464,7 @@ work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
    its now-closed direct destruction chain and operation adapters: state
-   construction and deeper engine/helper internals, outer-root/SDK terminal
+   construction/prefix setup and permutation-session internals, outer-root/SDK terminal
    reconciliation, then the other image families.
    Selected publication joining, ordered reduction, explicit generation retirement
    and owner-level finish/export/destruction are now reviewed; that does not prove

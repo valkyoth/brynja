@@ -12,6 +12,15 @@ eighteen sequential images. Combined with the concurrent scheduler results below
 every current image has scoped dump evidence, not complete caller/runtime
 qualification. Historical subsections retain the limits of their own campaigns.
 
+The [selected ParallelHash slot review](windows-enclave-slot-cleanup.md), added
+2026-10-05, accounts for four more linked lifecycle bodies and the two distinct
+compiler-created state regions in the worker frame. Its focused tests and
+exact-image inspection pass on Linux and Windows, including 896 actual-body
+byte mutations. These mutations enforce review identity, not algorithm behavior.
+Normal-return window reclamation remains responsible for earlier moved copies;
+the retained destructor funclet does not establish OS-exception cleanup.
+Other caller/state/runtime bodies still need their own semantic review.
+
 ## Completed wrapper boundary, 2026-10-04
 
 Both `PublicLockedFrame` and `PublicStackFrame` now clear XMM0–5 and, when

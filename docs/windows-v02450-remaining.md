@@ -27,6 +27,14 @@ evidence at their explicitly different checkpoints. All eighteen sequential
 images also bind to the tested clearing wrapper's exact bytes. Whole-image
 caller/runtime qualification remains separate; these results do not add
 arbitrary-exception, fatal-path, mid-compression or production-signing guarantees.
+The 2026-10-05 [slot lifecycle review](windows-enclave-slot-cleanup.md) adds four
+linked ParallelHash bodies: worker result/error cleanup, its retained funclet,
+root consumption and four-slot destruction. Seven focused regressions and the
+exact-image review pass on Linux and Windows. Two separate compiler-generated
+state copies are mapped into the worker's cleared window; they are not claimed
+individually erased by the active-owner destructor. Remaining caller/state/runtime
+semantic review and independent retest are the next tasks, not another rerun of
+the completed image-refresh/dump campaigns.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented
@@ -158,9 +166,9 @@ development refresh coverage. Only the bounded native test's image pin and
 negative assertion changed; earlier observations retain their historical source
 snapshots, not a claim of a new whole-candidate rerun.
 This is a source-bound checklist, not a new gate or whole-image qualification.
-Whole-image caller/spill review,
-remaining SDK paths, remaining-image dump coverage and independent retest are
-unfinished. Current public-route image refresh is complete. The
+Whole-image caller/spill and runtime review and independent retest are
+unfinished. Current public-route image refresh and scoped dump coverage are
+complete, as recorded at the top of this page. The
 chronological development entries below retain their original scope and should
 not be read as a current claim that the concurrent crate API is still absent.
 

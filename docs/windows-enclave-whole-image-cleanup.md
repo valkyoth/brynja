@@ -28,8 +28,14 @@ owned writes and tail-call stack reuse, not all state bytes or prior moved copie
 The subsequent [publication join/drop review](windows-enclave-slot-cleanup.md#publication-join-and-destruction)
 binds the three emitted join/destructor bodies and their eleven metadata-clearing
 stores. Seven review tests and the ten existing Rust gate tests pass on Linux
-and Windows. The normal join boundary is accounted for; root reduction and
-explicit generation retirement remain separate from this review.
+and Windows. The normal join boundary is accounted for. The following
+[reduction/retirement review](windows-enclave-slot-cleanup.md#ordered-reduction-and-generation-retirement)
+now binds the actual copied-input root, its dispatch closure and native retirement
+body. It accounts for ordered slot consumption, destruction before reuse, both
+generation retirements and native diagnostic-reader exclusion. Seven focused
+tests pass on both hosts; the real C gate baseline and fourteen compiled mutation
+rejections pass on Linux. This does not finish root finalization or other state
+operations, and adds no whole-image or arbitrary-exception claim.
 
 ## Completed wrapper boundary, 2026-10-04
 
@@ -441,10 +447,10 @@ review or documentation record changes. The remaining implementation-assurance
 work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
-   its now-closed direct destruction chain: construction, update/finalization,
-   root/wave reduction and explicit retirement paths, then reconcile the other
-   image families. The selected publication join/drop bodies are now reviewed;
-   that does not by itself prove all caller ordering or lifetime obligations.
+   its now-closed direct destruction chain: construction, update/finalization and
+   full root terminal cleanup, then reconcile the other image families. Selected
+   publication joining, ordered reduction and explicit generation retirement are
+   now reviewed; that does not prove all remaining caller lifetime obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

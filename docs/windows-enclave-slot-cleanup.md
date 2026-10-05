@@ -163,3 +163,63 @@ preserved under `release-reports/windows-local-20261005-publication/`. Reproduce
 the review with `python3 scripts/cryptography/windows_enclave_publication_review.py OBJECT IMAGE --mutate`.
 Root reduction, explicit retirement and the remaining state-operation/cross-image
 review are still separate work; publication joining alone does not qualify them.
+
+## Ordered reduction and generation retirement
+
+The subsequent saved-image review follows the actual **copied-input** root and
+its emitted dispatch closure, not the earlier fixed-public-input bridge. Both
+Rust bodies and the native `PrivateSchedulerRetire` body are bound to their
+original objects and the same signed image. This accounts for normal returned
+success/error ordering; it is not a general concurrency or arbitrary-exception
+proof, and does not change a release gate.
+
+The dispatch closure calls native dispatch, then `Publication::join`, **before**
+checking the dispatch result. Successful return additionally requires matching
+claimed/success masks and a closed, quiescent Rust gate. Its ordinary failure
+cleanup also joins before returning and clears publication metadata. The root
+therefore does not reduce or destroy slots still borrowed by those workers.
+Pre-publication failures have no dispatched workers to join. Fatal poll exhaustion
+does not return into slot reclamation.
+
+The root consumes up to four slots in index order, with the same plan and root
+state passed to the previously reviewed `Slot::absorb`. Slots are at root RSP
+offsets 448, 536, 624 and 712 (88-byte stride). Unused slots must have their empty
+phase and zero CV; they are not silently accepted as completed leaves. Checked
+additions and expected-count bounds precede committing merged-leaf/input-bit
+accounting. Any returned reduction failure reaches four-slot destruction and
+the root operation's cancellation path, not the next wave.
+
+On success, four-slot destruction precedes reuse of that stack area for the
+publication record. Rust retirement then requires quiescence, rejects an already
+retired handle, and atomically replaces the gate with its generation and zero
+low bits. Only after that succeeds does the root call native retirement with
+the same generation. A native return other than one leads to publication/root
+cleanup, never the loop back-edge. The next input copy is reachable only after
+both retirements succeed. These distinct retirements are not interchangeable.
+
+The emitted native retirement rechecks the generation, nonempty expected mask,
+all claimed/success bits, CLOSED with neither OPEN nor RESERVED, zero live
+workers, and **zero diagnostic readers** before its compare/exchange clears the
+low gate word. A reader entering between the load and compare/exchange changes
+that word and prevents retirement on that attempt. Its `2^32` retry budget ends
+in fast fail rather than authorizing reuse. This is not a wall-clock or fairness
+guarantee. Three inlined metadata-cleanup sequences resolve to the same eleven
+zero-qword targets already reviewed; none is represented as a payload wipe.
+
+Seven focused Python regressions and exact-image inspection pass on both hosts
+with identical parsed results. The review pins reject 5,490 actual-body byte
+mutations; that number measures identity protection, not executed schedules.
+Separate predicate tests cover all claimed/success/expected masks and every
+nonzero 12-bit reader count. The existing real C gate test was rerun on Linux:
+baseline plus fourteen compiled mutation rejections pass, including removal of
+the reader exclusion. Its tested header exactly matches the saved build's header
+(`8d4cc0e083bb19fbaf1aa60f104ad26ddf547326bef2156e02947cf1c7a6b602`).
+These are ordinary-process tests, not a new enclave campaign.
+
+The [retirement record](../assurance/windows-protection-observations/retirement-cleanup-20261005.json)
+binds the exact bodies, call edges and inspector sources. Reproduce using
+`python3 scripts/cryptography/windows_enclave_retirement_review.py OBJECT NATIVE_OBJECT IMAGE --mutate`.
+The C test logs are in `release-reports/windows-local-20261005-native-retirement/`.
+State construction/update/finalization, full root terminal cleanup and cross-image
+runtime reconciliation remain separate; this review does not close whole-image
+qualification or add production-signing, fatal-exit or privileged-snapshot claims.

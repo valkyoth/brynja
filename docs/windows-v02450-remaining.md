@@ -45,9 +45,14 @@ and cross-image/runtime reconciliation remain; no whole-image claim is added.
 The following [publication join/drop review](windows-enclave-slot-cleanup.md#publication-join-and-destruction)
 now accounts for its three emitted bodies and eleven pointer/length clearing
 stores. Seven review regressions, 919 real-body byte mutations and ten existing
-Rust gate tests pass on Linux and Windows. Root reduction, explicit retirement,
-other state operations and cross-image/runtime reconciliation remain outstanding;
-the join review does not claim payload erasure or fatal-exit cleanup.
+Rust gate tests pass on Linux and Windows. The subsequent
+[reduction/retirement review](windows-enclave-slot-cleanup.md#ordered-reduction-and-generation-retirement)
+now accounts for the copied-input root's normal reduction/reuse ordering and
+both Rust/native generation retirements. Seven review tests pass on both hosts;
+the real C gate baseline and fourteen compiled mutants pass on Linux. State
+construction/update/finalization, full root terminal cleanup and cross-image/runtime
+reconciliation remain outstanding. These reviews do not claim payload erasure
+from metadata stores or fatal-exit cleanup.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

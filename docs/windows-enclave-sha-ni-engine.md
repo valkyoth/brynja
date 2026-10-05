@@ -103,3 +103,7 @@ cleanup and partial-bit padding/output checks.
 Reports are retained outside Cargo target directories at
 `release-reports/windows-worker-review-20261005/offline/sha-ni-engine-*.json`.
 No production code, saved image or release-gate policy changed.
+
+The subsequent [owner/decoder review](windows-enclave-sha-ni-owner.md) closes
+the selected SHA-NI normal-return owner call paths and request decoding. The
+older engine-only record retains its original narrower scope.

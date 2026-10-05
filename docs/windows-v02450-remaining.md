@@ -3,7 +3,7 @@
 ## Current completion checklist (2026-10-05)
 
 - Finish transitive normal-return cleanup qualification inside the remaining
-  distinct SHA-NI, SHA-3/KMAC/TupleHash/batch/ParallelHash workers, especially
+  distinct SHA-3/KMAC/TupleHash/batch/ParallelHash workers, especially
   indirect SIMD dispatch and deepest caller/stack paths. Scalar SHA-2 runtime/
   export connections are now closed; all seventeen family worker entry,
   transport and direct memory-call boundaries are bound. Those boundary reviews
@@ -23,6 +23,15 @@ project-signing prerequisite. Windows ARM64 remains unqualified and must not be
 advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
+
+The [SHA-NI owner/decoder review](windows-enclave-sha-ni-owner.md) completes this
+selected route's normal-return owner paths, including all four width tables,
+partial-bit validation and the actual request decoder. Eight review tests pass
+on both hosts with identical reports; 3,083 body-byte and 112 table-byte mutants
+are rejected per host. The existing Linux component/placement campaign also
+passes thirteen tests, rejects eighteen compiled mutants and thirteen ownership
+negatives. Bound cleanup funclets do not establish arbitrary OS-unwind behavior;
+remaining whole-image/runtime and other-family obligations are unchanged.
 
 The [SHA-NI engine/session review](windows-enclave-sha-ni-engine.md) now covers
 the selected normal update/finalize/padding paths, startup self-test, session

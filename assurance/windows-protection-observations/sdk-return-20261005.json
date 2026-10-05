@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_ROOT_SDK_OUTPUT_RETURN_RECONCILIATION",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "native_object_sha256": "fdd82832930eff919311de11e4603ab01ec64c65752dd477e544b5908782db37",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "sdk_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "root_rva": 4544,
+  "adapter_rva": 29024,
+  "import_module": "vertdll.dll",
+  "import_symbol": "EnclaveCopyOutOfEnclave",
+  "iat_rva": 53416,
+  "thunk_rva": 46463,
+  "thunk_hex": "ff25231b0000",
+  "saved_export_rva": 16560,
+  "copy_syscall_rva": 117872,
+  "copy_status_rva": 15500,
+  "root_frame_from_high": -11392,
+  "output_adapter_frame_from_high": -11440,
+  "sdk_copy_frame_from_high": -11488,
+  "status_geometry": {
+    "frames": {
+      "status": -11488,
+      "convert": -11536,
+      "lookup": -11584,
+      "diagnostic_entry": -11664
+    },
+    "spans": [
+      {
+        "name": "status home spill",
+        "offset_from_low": 54048,
+        "offset_from_high": -11488,
+        "bytes": 4
+      },
+      {
+        "name": "lookup saved RBX",
+        "offset_from_low": 53984,
+        "offset_from_high": -11552,
+        "bytes": 8
+      },
+      {
+        "name": "diagnostic RCX",
+        "offset_from_low": 53952,
+        "offset_from_high": -11584,
+        "bytes": 8
+      },
+      {
+        "name": "diagnostic RDX",
+        "offset_from_low": 53960,
+        "offset_from_high": -11576,
+        "bytes": 8
+      },
+      {
+        "name": "diagnostic R8",
+        "offset_from_low": 53968,
+        "offset_from_high": -11568,
+        "bytes": 8
+      },
+      {
+        "name": "diagnostic R9",
+        "offset_from_low": 53976,
+        "offset_from_high": -11560,
+        "bytes": 8
+      },
+      {
+        "name": "diagnostic varargs pointer",
+        "offset_from_low": 53904,
+        "offset_from_high": -11632,
+        "bytes": 8
+      }
+    ],
+    "unknown_callee": {
+      "name": "deeper diagnostic entry/home",
+      "offset_from_low": 53864,
+      "offset_from_high": -11672,
+      "bytes": 40,
+      "callee_frame_bytes": null,
+      "callee_spills_qualified": false
+    }
+  },
+  "sdk_review_unresolved": [
+    {
+      "rva": 48944,
+      "reason": "fatal diagnostic wrapper and transitive calls"
+    }
+  ],
+  "sdk_review_residuals": [
+    "INT3/INT2D and exception/unwind behavior",
+    "GS stack-limit-dependent probe addresses",
+    "runtime loaded-module identity and kernel context storage",
+    "runtime feature table sizes masks and alignment validity",
+    "external handler and continuation targets; recursive exceptions and fatal transitions"
+  ],
+  "saved_import_export_chain_reconciled": true,
+  "loaded_application_iat_proven": false,
+  "loaded_module_identity_proven": false,
+  "kernel_storage_qualified": false,
+  "sdk_self_erasure_claimed": false,
+  "public_output_transactional": false,
+  "maximum_transitive_depth_qualified": false,
+  "native_run_added": false,
+  "whole_image_qualified": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "test-windows-enclave-sdk-return.py": "22af3bcd5cb1a91f6024cbca5fcd3acc753846309580d110500e0cbb059f1920",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "windows_enclave_root_return.py": "7b078894de02b1f1bf77a286ad30dc65cfe4e3a94733120bba31a0c83b59a198",
+    "windows_enclave_sdk_context.py": "5dc989fb47c8ab8a203d3c1375e9128cd6c5b12772c90b4180a4f24192fee696",
+    "windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "windows_enclave_sdk_decoders.py": "f2fecab13a96c421a1a7b100459c1b68a1c801d40c930c280913cf1b4b3a3e28",
+    "windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "windows_enclave_sdk_dispatch.py": "1f3c17ade072651320a2f6cd4a752c128fffe6aeb94da3df0eb22912417746ee",
+    "windows_enclave_sdk_dispatch_helpers.py": "929c9a0fd31991c73d35eb9b4edaebf1b0b35092b8752bc16bee90c8c9d3b9f9",
+    "windows_enclave_sdk_exception.py": "7dd1c3cf0a77385ecdf52820fd9357509f7e96f99de95ded41140b5d49d6a73a",
+    "windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "windows_enclave_sdk_identity.py": "4fbc91a2907f9d3ecadc5504b523e7bb97957f094ab5a2dce3024f15d4189208",
+    "windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a"
+  }
+}

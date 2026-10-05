@@ -113,6 +113,12 @@ Host copying is explicitly nontransactional, and failed export stays reserved.
 The root's normal-return cleanup is now traced; SDK/output-return reconciliation
 and other image families remain before independent retest. No native campaign,
 production code or release-gate change was needed for this offline review.
+The subsequent [SDK output-return reconciliation](windows-enclave-sdk-return.md)
+binds the saved root's import thunk and named IAT entry to the saved SDK's actual
+export, syscall and status-tail paths. Six new regressions pass on both hosts,
+with matching reports; the existing SDK review suites pass on Linux. This closes
+that selected saved-file linkage, not runtime IAT attestation, kernel storage or
+exception cleanup. Final C-body/wrapper handoff and other image families remain.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

@@ -42,6 +42,12 @@ eight focused tests and 495 actual-body byte mutations pass on Linux and Windows
 The modeled owned writes distinguish volatile secret erasure from public metadata
 stores and padding. Construction/update/finalization, root/wave/publication paths
 and cross-image/runtime reconciliation remain; no whole-image claim is added.
+The following [publication join/drop review](windows-enclave-slot-cleanup.md#publication-join-and-destruction)
+now accounts for its three emitted bodies and eleven pointer/length clearing
+stores. Seven review regressions, 919 real-body byte mutations and ten existing
+Rust gate tests pass on Linux and Windows. Root reduction, explicit retirement,
+other state operations and cross-image/runtime reconciliation remain outstanding;
+the join review does not claim payload erasure or fatal-exit cleanup.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

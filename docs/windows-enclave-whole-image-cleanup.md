@@ -25,6 +25,11 @@ closes that selected normal cleanup call chain: state drop, memory wipe, scratch
 wipe and the volatile clearer. Eight tests and exact saved-image inspection pass
 on Linux and Windows, with 495 actual-body byte mutations rejected. This maps
 owned writes and tail-call stack reuse, not all state bytes or prior moved copies.
+The subsequent [publication join/drop review](windows-enclave-slot-cleanup.md#publication-join-and-destruction)
+binds the three emitted join/destructor bodies and their eleven metadata-clearing
+stores. Seven review tests and the ten existing Rust gate tests pass on Linux
+and Windows. The normal join boundary is accounted for; root reduction and
+explicit generation retirement remain separate from this review.
 
 ## Completed wrapper boundary, 2026-10-04
 
@@ -437,7 +442,9 @@ work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
    its now-closed direct destruction chain: construction, update/finalization,
-   root/wave and publication/join paths, then reconcile the other image families.
+   root/wave reduction and explicit retirement paths, then reconcile the other
+   image families. The selected publication join/drop bodies are now reviewed;
+   that does not by itself prove all caller ordering or lifetime obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

@@ -112,3 +112,54 @@ four object bodies are rejected by the review pins. The
 binds this review and its Python source closure. The command is
 `python3 scripts/cryptography/windows_enclave_state_cleanup.py OBJECT IMAGE --mutate`.
 It is an offline author tool, not a release gate or independent qualification.
+
+## Publication join and destruction
+
+The next saved-image review covers `Publication::join`, publication destruction
+and `Option<Publication>` destruction. These are three distinct emitted bodies,
+including the option's absent-value branch, not three names assumed to share
+one implementation. Their only call is the reviewed `PrivateWaveAbort` fast-fail
+target; the admission and polling operations are inlined.
+
+The emitted locked compare/exchange loop closes admission while preserving the
+generation, claimed/success bits and live-ticket bits. The polling predicate
+requires CLOSED, not OPEN, and zero live tickets. It deliberately does **not**
+require successful worker results: a failed operation must still finish joining
+before its storage can be reclaimed. Join does not retire the generation or
+authorize another wave. A previously retired publication bypasses its old
+pointer cleanup; this prevents a late destructor from clearing a new wave's
+publication. Empty options skip the publication entirely.
+
+After observing quiescence the code writes eleven zero qwords: four slot
+pointers, four bit lengths, and the input pointer, width and block metadata.
+The inspector resolves each instruction's actual RIP-relative write address,
+including the four-byte immediate following its displacement. All 88 bytes fit
+in five disjoint writable, non-executable image globals, and the three bodies
+agree on those targets. These are pointer/shape cleanup writes, **not payload
+zeroization**. Slot CVs, input buffers and root/worker state retain their separate
+clearing obligations. The emitted copied-input variant has no live `OFFSET`
+global store in this cleanup sequence.
+
+The polling loop has a `2^32` iteration budget and ends in fast fail if exhausted;
+there is no timeout return that frees a root still borrowed by workers. This is
+not a wall-clock bound, and it does not bound compare/exchange retries under
+arbitrary contention. No fatal-exit cleanup or scheduler-fairness guarantee is
+added. The selected direct call from the root uses a 40-byte stack allocation;
+it does not load payload bytes or create a new payload spill.
+
+Seven focused review tests and exact saved-image inspection pass on Linux and
+Windows with identical parsed results. All 919 single-byte body mutations are
+rejected by the review pins. A model exhausts all 19 relevant low gate bits,
+checking that close preserves live tickets and that quiescence is distinct from
+success and retirement; this is not a universal concurrent execution proof.
+The existing ten real Rust gate tests also pass on both hosts under Rust 1.98.1,
+including close/claim races, delayed generations and competing root reservations.
+The tested gate source matches the gate source saved with the original image.
+These fresh process tests do not rebuild or re-execute an enclave image.
+
+The [publication record](../assurance/windows-protection-observations/publication-cleanup-20261005.json)
+binds the offline review and its Python source closure. Process-test logs are
+preserved under `release-reports/windows-local-20261005-publication/`. Reproduce
+the review with `python3 scripts/cryptography/windows_enclave_publication_review.py OBJECT IMAGE --mutate`.
+Root reduction, explicit retirement and the remaining state-operation/cross-image
+review are still separate work; publication joining alone does not qualify them.

@@ -1,0 +1,202 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "AUTHOR_SELECTED_PUBLICATION_JOIN_DROP_REVIEW",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "entries": {
+    "join": {
+      "entry": "_RNvMCsk1CFy3R4N16_20parallel_wave_bridgeNtB2_11Publication4join",
+      "rva": 10816,
+      "size": 271,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5SLOTS": 72128,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge4BITS": 72072,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5INPUT.0": 72120,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5WIDTH.0": 72160,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5BLOCK.0": 72112,
+        "PrivateWaveAbort": 29600
+      },
+      "xdata_rva": 62008,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 62008,
+      "unwind_header": [
+        1,
+        4,
+        1,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "drop": {
+      "entry": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsk1CFy3R4N16_20parallel_wave_bridge11PublicationEBD_",
+      "rva": 8672,
+      "size": 308,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5SLOTS": 72128,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge4BITS": 72072,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5INPUT.0": 72120,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5WIDTH.0": 72160,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5BLOCK.0": 72112,
+        "PrivateWaveAbort": 29600
+      },
+      "xdata_rva": 62008,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 62008,
+      "unwind_header": [
+        1,
+        4,
+        1,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "option_drop": {
+      "entry": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueINtNtB4_6option6OptionNtCsk1CFy3R4N16_20parallel_wave_bridge11PublicationEEBZ_",
+      "rva": 8320,
+      "size": 340,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5SLOTS": 72128,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge4BITS": 72072,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5INPUT.0": 72120,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5WIDTH.0": 72160,
+        "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5BLOCK.0": 72112,
+        "PrivateWaveAbort": 29600
+      },
+      "xdata_rva": 62008,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 62008,
+      "unwind_header": [
+        1,
+        4,
+        1,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    }
+  },
+  "publication_globals": [
+    {
+      "symbol": "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5SLOTS",
+      "rva": 72128,
+      "bytes": 32
+    },
+    {
+      "symbol": "_RNvCsk1CFy3R4N16_20parallel_wave_bridge4BITS",
+      "rva": 72072,
+      "bytes": 32
+    },
+    {
+      "symbol": "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5INPUT.0",
+      "rva": 72120,
+      "bytes": 8
+    },
+    {
+      "symbol": "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5WIDTH.0",
+      "rva": 72160,
+      "bytes": 8
+    },
+    {
+      "symbol": "_RNvCsk1CFy3R4N16_20parallel_wave_bridge5BLOCK.0",
+      "rva": 72112,
+      "bytes": 8
+    }
+  ],
+  "zero_stores": [
+    {
+      "rva": 72128,
+      "bytes": 8
+    },
+    {
+      "rva": 72136,
+      "bytes": 8
+    },
+    {
+      "rva": 72144,
+      "bytes": 8
+    },
+    {
+      "rva": 72152,
+      "bytes": 8
+    },
+    {
+      "rva": 72072,
+      "bytes": 8
+    },
+    {
+      "rva": 72080,
+      "bytes": 8
+    },
+    {
+      "rva": 72088,
+      "bytes": 8
+    },
+    {
+      "rva": 72096,
+      "bytes": 8
+    },
+    {
+      "rva": 72120,
+      "bytes": 8
+    },
+    {
+      "rva": 72160,
+      "bytes": 8
+    },
+    {
+      "rva": 72112,
+      "bytes": 8
+    }
+  ],
+  "fastfail_rva": 29600,
+  "body_byte_mutations_rejected": 919,
+  "poll_budget": 4294967296,
+  "scoped_frame_from_high": -11440,
+  "abort_entry_home": {
+    "name": "fastfail entry/home",
+    "offset_from_low": 54088,
+    "offset_from_high": -11448,
+    "bytes": 40,
+    "callee_frame_bytes": null,
+    "callee_spills_qualified": false
+  },
+  "payload_erasure_claimed": false,
+  "retirement_qualified": false,
+  "universal_concurrency_proof": false,
+  "fatal_cleanup_qualified": false,
+  "native_run_added": false,
+  "whole_image_qualified": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_publication_review.py": "a0ef511be73e3cd74714a862e0efd1c0dce9a2477d22853ad22e4aa6e78fb61a",
+    "test-windows-enclave-publication-review.py": "abdb27ae6af92aeaa0da6358a5ae0f72931644570720fc00cbd3132875ed047c",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

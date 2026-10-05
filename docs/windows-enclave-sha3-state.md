@@ -7,6 +7,10 @@ fixed-output finalizer and XOF-finalizer dispatcher. It does not qualify all
 transitive sponge, prefix, output or permutation helpers, or arbitrary exception
 paths. No production code, native image or release-gate policy changed.
 
+The subsequent [transfer/output review](windows-enclave-sha3-transfers.md)
+extends coverage to ten copy, bit, mask, predicate, typed-output and public-length
+helpers. Remaining prefix/sponge/permutation internals are not qualified by it.
+
 The [observation](../assurance/windows-protection-observations/sha3-state-review-20261005.json)
 binds reviewer sources, image/object identities and matching parsed reports from
 Linux and Windows. The [specification](../assurance/windows-protection-observations/sha3-state-20261005.json)

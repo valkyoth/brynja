@@ -24,13 +24,21 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [scalar SHA-3 transfer/output review](windows-enclave-sha3-transfers.md)
+adds ten private helpers, exact initialization/publication, copy/bit/mask
+contracts and public-length encoding. Nine tests and matching parsed reports
+pass on both hosts; each rejects 756 body-byte mutations. Actual Rust helper
+tests and the component/oracle campaign also pass. Prefix/sponge/permutation
+internals and maximum whole-image depth remain open.
+
 The [scalar SHA-3 state review](windows-enclave-sha3-state.md) adds construction,
 fixed-output consumption and XOF dispatch, with both exact tables and all fifteen
 inlined permutation-site scratch erasures checked. Eight tests and identical
 parsed reports pass on Linux and Windows; 10,496 body-byte and 48 table-byte
 mutants are rejected per host. The existing component/oracle campaign also
-passes. Transitive sponge/prefix/output/permutation helpers and maximum
-whole-image depth remain open.
+passes. The subsequent transfer/output review above extends its helper coverage;
+transitive sponge/prefix/permutation helpers and maximum whole-image depth remain
+open.
 
 The [scalar SHA-3 owner operation review](windows-enclave-sha3-operations.md) now
 binds nine owner operations and the actual receiver, including streamed setup,

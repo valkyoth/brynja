@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "scope": "scalar SHA-3 transfer, typed-output completion and public prefix-integer helper review; not complete sponge qualification",
+  "functions": {
+    "copy": {
+      "name": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+      "code_hex": "4883ec28b0024c39ca75104989d24c89c24d89d0e800000000b0ff4883c428c3",
+      "references": [
+        {
+          "offset": 21,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 40
+    },
+    "copy_bytes": {
+      "name": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+      "code_hex": "4989d14989ca31c94c89c24883fa087216498b04094989040a4883c1084883ea084883fa0873ea4885d27411410fb604094188040a48ffc148ffca75ef31c031c931d2c3",
+      "references": [],
+      "stack_bytes": 0
+    },
+    "xor": {
+      "name": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+      "code_hex": "56534883ec28440fb65c2460b0084428c84584c9410f94c14138c00f97c34138c3410f97c24408cb4408d3752340b6ff4989ca89c140d2ee450fb6c0450fb6cb400fb6c6894424204c89d1e80000000089d84883c4285b5ec3",
+      "references": [
+        {
+          "offset": 76,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core17secret_memory_xor8xor_bits",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 56
+    },
+    "xor_bits": {
+      "name": "_RNvNtCsjNKEhcqdpKw_11brynja_core17secret_memory_xor8xor_bits",
+      "code_hex": "4989ca448b5c24280fb6024489c1d3e84421d84489c9d3e041300231c031c9c3",
+      "references": [],
+      "stack_bytes": 0
+    },
+    "mask": {
+      "name": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask",
+      "code_hex": "e900000000",
+      "references": [
+        {
+          "offset": 1,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 0
+    },
+    "mask_byte": {
+      "name": "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte",
+      "code_hex": "0fb60120d04408c0880131c0c3",
+      "references": [],
+      "stack_bytes": 0
+    },
+    "predicate": {
+      "name": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory24secret_byte_mask_is_zero",
+      "code_hex": "4883ec28e80000000083f8010f94c04883c428c3",
+      "references": [
+        {
+          "offset": 5,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core23secret_memory_predicate12mask_is_zero",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 40
+    },
+    "predicate_leaf": {
+      "name": "_RNvNtCsjNKEhcqdpKw_11brynja_core23secret_memory_predicate12mask_is_zero",
+      "code_hex": "0fb6d2440fb6114121d20f94c00fb6c04531d2c3",
+      "references": [],
+      "stack_bytes": 0
+    },
+    "output": {
+      "name": "_RNvNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6output13finish_secret",
+      "code_hex": "564883ec20833a017522488b42084885c0742e4c8b42104c3942187513488941084c894110b801000000eb1e31c0eb1a4889ce4889c14c89c2e8000000004889f1c6410804b8020000004889014883c4205ec3",
+      "references": [
+        {
+          "offset": 58,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 40
+    },
+    "encode": {
+      "name": "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018511encode_u128",
+      "code_hex": "41565657534881ec380100004c89c0480fc8480fca4889ce4889542428488944242084c074084531c0e9f800000041b801000000a900ff00000f85e700000041b802000000a90000ff000f85d60000004889c148c1e91841b80300000084c90f85c10000004889c148c1e92041b80400000084c90f85ac0000004889c148c1e92841b80500000084c90f85970000004889c148c1e93041b80600000084c90f858200000048c1e83841b80700000075764889d048c1e03841b808000000756741b809000000f7c200ff0000755941b80a000000f7c20000ff00754b4889d048c1e81841b80b00000084c0753a4889d048c1e82041b80c00000084c075294889d048c1e82841b80d00000084c0751848b8000000000000ff004821c24531c04883fa014983d00ebf100000004c29c74a8d1c044883c3204981c0ef000000488d0c3c4883c13931d2e8000000004c8d7424394c89f14889da4989f8e80000000040883e488d4e0141b8ff0000004c89f2e800000000ffc76689be000100004881c4380100005b5f5e415ec3",
+      "references": [
+        {
+          "offset": 328,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 347,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 368,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 344
+    }
+  }
+}

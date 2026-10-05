@@ -24,6 +24,14 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [scalar SHA-3 lifecycle review](windows-enclave-sha3-lifecycle.md) now binds
+cancellation, quarantine, active-state destruction, all thirteen sponge erasure
+regions and enclosing page teardown. Ten tests and identical reports pass on
+Linux and Windows, rejecting 774 body-byte and 32 dispatch-table byte mutations
+per host. The existing component campaign also passes seven component tests,
+one placement test and ten compiled mutants. Other SHA-3 operations and deeper
+call paths remain open; this is not whole-image qualification.
+
 The [SHA-NI owner/decoder review](windows-enclave-sha-ni-owner.md) completes this
 selected route's normal-return owner paths, including all four width tables,
 partial-bit validation and the actual request decoder. Eight review tests pass

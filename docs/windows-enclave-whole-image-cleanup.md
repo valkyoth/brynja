@@ -6,6 +6,11 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [scalar SHA-3 lifecycle review](windows-enclave-sha3-lifecycle.md) binds
+cancellation, quarantine and active-state destruction to thirteen complete
+sponge erasure regions and full-page teardown. Ten tests and matching reports
+pass on both hosts. Other SHA-3 operations and whole-image depth remain open.
+
 The [SHA-NI owner/decoder review](windows-enclave-sha-ni-owner.md) closes the
 selected route's normal-return begin/update/finish/rehash and decoding paths.
 Eight tests pass on each host, with matching reports and exact width-table

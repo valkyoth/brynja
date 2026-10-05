@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "scope": "scalar SHA-3 owner operations and receiver; not all transitive callees",
+  "functions": {
+    "begin": {
+      "name": "_RNvMs0_Csgp9hxIs16B4_11sha3_streamNtB5_5Owner5begin",
+      "bytes": 296,
+      "sha256": "44e0a4543e4c1257caead7f1410a6a04dd538c4229fa427134afbc93b42056fb",
+      "references_sha256": "6fa1d811d0d296deb15042602bd9d5d4e46ec232d99268dce8e7ae32764b2469",
+      "stack_bytes": 2344,
+      "saved_registers": []
+    },
+    "setup": {
+      "name": "_RNvMs0_Csgp9hxIs16B4_11sha3_streamNtB5_5Owner5setup",
+      "bytes": 2778,
+      "sha256": "331e0da5bd68bd964a4ecb41d8771585c971bae29a07d253b42e5e27362b33c7",
+      "references_sha256": "a91e0322da8498dfb1ff99c8e5cc793a364615b4baaadd23909f5992e81907ba",
+      "stack_bytes": 6072,
+      "saved_registers": [
+        {
+          "register_class": "xmm",
+          "register": 6,
+          "offset": 5984
+        }
+      ]
+    },
+    "setup_chunk": {
+      "name": "_RNvMs0_Csgp9hxIs16B4_11sha3_streamNtB5_5Owner11setup_chunk",
+      "bytes": 418,
+      "sha256": "9c78762af39b4f59c6430913143f4dfc730ce22cc511544a67808ea26ece1ac3",
+      "references_sha256": "3182b2bcaa6acf77f85612bf9456469fbcf6a3f2dac09e735c37b0d287866490",
+      "stack_bytes": 120,
+      "saved_registers": []
+    },
+    "finish_setup": {
+      "name": "_RNvMs0_Csgp9hxIs16B4_11sha3_streamNtB5_5Owner12finish_setup",
+      "bytes": 2406,
+      "sha256": "8358d240bf1bff44523d687805f8240e508c9b3070e9f9552da7be1177a3f761",
+      "references_sha256": "d4b10000431e146284bbd248c8c02121a1d58083ff5f91d183f8311979be4377",
+      "stack_bytes": 5496,
+      "saved_registers": []
+    },
+    "update": {
+      "name": "_RNvMs0_Csgp9hxIs16B4_11sha3_streamNtB5_5Owner6update",
+      "bytes": 323,
+      "sha256": "bbdfe16e9ba793ffe994aa992b384277947f102a84f2c4785da9765b7cb5727e",
+      "references_sha256": "1bb581ef98f78f9136d91550aac2efaacd68013664551aa767f22020424242fc",
+      "stack_bytes": 56,
+      "saved_registers": []
+    },
+    "finish": {
+      "name": "_RNvMs0_Csgp9hxIs16B4_11sha3_streamNtB5_5Owner6finish",
+      "bytes": 501,
+      "sha256": "626f83645989d2b4012e83e6d126f41a00558d11ba7a09f0a77d39c3854747b1",
+      "references_sha256": "7bb5935695775b7ecb47c5bf7b43840b2da70d73e9b5bfaa44f35de76798849f",
+      "stack_bytes": 120,
+      "saved_registers": []
+    },
+    "rehash": {
+      "name": "_RNvMs0_Csgp9hxIs16B4_11sha3_streamNtB5_5Owner6rehash",
+      "bytes": 766,
+      "sha256": "e3629c79aa3f1475c6d479715d9c42afb92d82040aeed8405258651d52deb206",
+      "references_sha256": "7195a9ab48aba48bb5b5d6167e7d36848f91e37bb74016494e51834603e62c2f",
+      "stack_bytes": 3416,
+      "saved_registers": []
+    },
+    "squeeze": {
+      "name": "_RNvMs0_Csgp9hxIs16B4_11sha3_streamNtB5_5Owner7squeeze",
+      "bytes": 1404,
+      "sha256": "131fd8d5a3fba6c99fafccdf367e3ad26ffbb49978fd30058d74d3fcf0944f16",
+      "references_sha256": "d43e5b1ac5c41056850a4b2b9e464413374dd30b9403501c94dfe13cb740e2f4",
+      "stack_bytes": 1240,
+      "saved_registers": []
+    },
+    "export": {
+      "name": "_RINvMs0_Csgp9hxIs16B4_11sha3_streamNtB6_5Owner13export_publicNCNvCsgzEJPm6isiJ_18sha3_stream_worker7receive0EB11_",
+      "bytes": 400,
+      "sha256": "5ab8a0001b7ba3f9d5a3a652dfba4b7e3a64f610f1d983e1a41ab5158cb53a61",
+      "references_sha256": "c0745871653a166c7fddf1bb7eba122817f4e2a575a825629653c8fcc1109bb7",
+      "stack_bytes": 56,
+      "saved_registers": []
+    },
+    "receive": {
+      "name": "_RNvCsgzEJPm6isiJ_18sha3_stream_worker7receive",
+      "bytes": 899,
+      "sha256": "62d10495bf4f42702cbd0389cf29c088fbbbbd2915a2b5ff728fe1b8b6f40d5d",
+      "references_sha256": "cc837e2550d86a084af3e0d9b597ac93183c05f4ada47c20f4aec2feef139538",
+      "stack_bytes": 200,
+      "saved_registers": []
+    }
+  },
+  "tables": {
+    "update": {
+      "object_hex": "030100006d000000ef000000a8000000c000000091000000dc0000001f01000023010000",
+      "operands": [
+        [
+          86,
+          0
+        ]
+      ],
+      "subtable_bytes": [
+        36
+      ]
+    },
+    "finish": {
+      "object_hex": "090100005b010000510100005c010000",
+      "operands": [
+        [
+          248,
+          0
+        ]
+      ],
+      "subtable_bytes": [
+        16
+      ]
+    },
+    "export": {
+      "object_hex": "6000000062010000f40000004a0100007f00000082010000990100006a010000",
+      "operands": [
+        [
+          79,
+          0
+        ]
+      ],
+      "subtable_bytes": [
+        32
+      ]
+    },
+    "receive": {
+      "object_hex": "470100006a0100006e010000530100006f0100007a0100007e010000630100001103000031030000ad020000ce020000980200005603000078030000fd020000460200004a02000079030000",
+      "operands": [
+        [
+          310,
+          0
+        ],
+        [
+          533,
+          32
+        ]
+      ],
+      "subtable_bytes": [
+        32,
+        44
+      ]
+    }
+  }
+}

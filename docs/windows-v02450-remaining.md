@@ -24,13 +24,21 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [scalar SHA-3 owner operation review](windows-enclave-sha3-operations.md) now
+binds nine owner operations and the actual receiver, including streamed setup,
+finalization, retained rehash, squeeze and public export. Ten tests and identical
+parsed reports pass on Linux and Windows; each host rejects 10,191 body-byte and
+160 table-byte mutations. The component/oracle campaign also passes. Compiler-
+created state copies still depend on full-window reclamation; transitive state/
+sponge/prefix callees and maximum whole-image depth remain open.
+
 The [scalar SHA-3 lifecycle review](windows-enclave-sha3-lifecycle.md) now binds
 cancellation, quarantine, active-state destruction, all thirteen sponge erasure
 regions and enclosing page teardown. Ten tests and identical reports pass on
 Linux and Windows, rejecting 774 body-byte and 32 dispatch-table byte mutations
 per host. The existing component campaign also passes seven component tests,
-one placement test and ten compiled mutants. Other SHA-3 operations and deeper
-call paths remain open; this is not whole-image qualification.
+one placement test and ten compiled mutants. The subsequent owner review above
+extends these paths; deeper callees remain open, not whole-image qualified.
 
 The [SHA-NI owner/decoder review](windows-enclave-sha-ni-owner.md) completes this
 selected route's normal-return owner paths, including all four width tables,

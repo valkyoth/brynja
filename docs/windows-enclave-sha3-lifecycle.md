@@ -83,5 +83,7 @@ process execution, not a new native enclave run. Saved-artifact reports remain
 outside Cargo target directories in
 `release-reports/windows-worker-review-20261005/offline/`.
 
-Next are the remaining SHA-3 operations, distinct accelerated/family workers and
-runtime/whole-image reconciliation. See the [checklist](windows-v02450-remaining.md).
+The subsequent [owner operation review](windows-enclave-sha3-operations.md) binds
+setup, finalization and retained-output operations. Transitive SHA-3 helpers,
+distinct accelerated/family workers and runtime/whole-image reconciliation remain.
+See the [checklist](windows-v02450-remaining.md).

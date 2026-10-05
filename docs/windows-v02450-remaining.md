@@ -24,6 +24,14 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [scalar SHA-3 state review](windows-enclave-sha3-state.md) adds construction,
+fixed-output consumption and XOF dispatch, with both exact tables and all fifteen
+inlined permutation-site scratch erasures checked. Eight tests and identical
+parsed reports pass on Linux and Windows; 10,496 body-byte and 48 table-byte
+mutants are rejected per host. The existing component/oracle campaign also
+passes. Transitive sponge/prefix/output/permutation helpers and maximum
+whole-image depth remain open.
+
 The [scalar SHA-3 owner operation review](windows-enclave-sha3-operations.md) now
 binds nine owner operations and the actual receiver, including streamed setup,
 finalization, retained rehash, squeeze and public export. Ten tests and identical

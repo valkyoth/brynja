@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "scope": "saved scalar SHA-3 state construction and finalization; not transitive whole-image qualification",
+  "functions": {
+    "new": {
+      "name": "_RNvMNtCsgp9hxIs16B4_11sha3_stream17sha3_stream_stateNtB2_5State3new",
+      "bytes": 5607,
+      "sha256": "603a8a322c2ac11c388c66b07790a9456505365d5f8b5d6d7886aafe5087e3a5",
+      "references_sha256": "78058c4d964d2a778b02a9ace5ba8d83202899144ad88e938e868dcd1a7bd9c6",
+      "stack_bytes": 2792,
+      "saved_registers": []
+    },
+    "finish_fixed": {
+      "name": "_RNvMNtCsgp9hxIs16B4_11sha3_stream17sha3_stream_stateNtB2_5State12finish_fixed",
+      "bytes": 4835,
+      "sha256": "9021d841916afbca256ec259ec332a7584413953d112aa8f6298e01c2cfc60f3",
+      "references_sha256": "d09e4bf1952d3dfff81ae471586695c641f0bb068f0b7dfc6a686833c65a203c",
+      "stack_bytes": 3368,
+      "saved_registers": []
+    },
+    "finish_xof": {
+      "name": "_RNvMNtCsgp9hxIs16B4_11sha3_stream17sha3_stream_stateNtB2_5State10finish_xof",
+      "bytes": 54,
+      "sha256": "937593bd02c34ccfa2b8e94db101efc151a4e7199100af18be295c792216198e",
+      "references_sha256": "40f28b8baf75a55ce4fd515e9a3009b80e129e7bd0de4d415b4cf7f4d4f12850",
+      "stack_bytes": 40,
+      "saved_registers": []
+    }
+  },
+  "tables": {
+    "new": {
+      "object_hex": "590b0000be0d00009f0600000409000084000000900300008c00000098030000",
+      "operands": [
+        [
+          99,
+          0
+        ]
+      ],
+      "subtable_bytes": [
+        32
+      ]
+    },
+    "finish_fixed": {
+      "object_hex": "75000000d2010000f000000067010000",
+      "operands": [
+        [
+          100,
+          0
+        ]
+      ],
+      "subtable_bytes": [
+        16
+      ]
+    }
+  }
+}

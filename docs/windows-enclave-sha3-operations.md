@@ -97,3 +97,6 @@ The ordinary Linux component campaign also passes seven component tests, one
 placement test, ten compiled mutation rejections, 628 cSHAKE, 76 NIST and 96
 hashlib cases, 512 retained-rehash cases and streamed setup. Remaining worker,
 runtime and retest work is tracked in the [checklist](windows-v02450-remaining.md).
+The subsequent [state review](windows-enclave-sha3-state.md) extends this work
+through construction and fixed-output consumption; deeper helper semantics
+remain separate obligations.

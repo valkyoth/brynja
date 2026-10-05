@@ -6,6 +6,12 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [scalar SHA-3 state review](windows-enclave-sha3-state.md) adds construction,
+fixed-output consumption and XOF dispatch. Eight tests and matching reports pass
+on both hosts, with all fifteen inlined permutation-site erasures checked.
+Moved copies still require window reclamation; deeper helpers and maximum
+whole-image depth remain open.
+
 The [scalar SHA-3 owner operation review](windows-enclave-sha3-operations.md) binds
 nine operations and their receiver, including setup completion, retained-output
 handling and compiler-enforced private argument ranges. Ten tests and identical

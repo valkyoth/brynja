@@ -544,8 +544,11 @@ work is:
    complete active-workspace wipe, and records the moved-copy/inactive-page and
    nonzero-sequence preconditions. The [scalar operation caller review](windows-enclave-sha2-stream-operations.md)
    now binds begin/update/finish/rehash/export, algorithm tables and their
-   caller-level cleanup decisions. Transitive state, crypto, copy/runtime
-   implementations and other image families remain separate obligations.
+   caller-level cleanup decisions. The [state construction/consumption review](windows-enclave-sha2-state-review.md)
+   adds the constructor and state finalizer, their constants/tables, copied
+   workspace and staging cleanup, compiler preconditions and XMM-save extent.
+   Called crypto/render/copy/runtime implementations and other image families
+   remain separate obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

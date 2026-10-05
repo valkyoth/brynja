@@ -110,3 +110,7 @@ read-only mapping bounds and translated stack geometry. These are regression
 checks on the reviewed artifact and interpretation, not a formal proof or a
 new native cryptographic campaign. Production code, images and release gates
 are unchanged; independent retest and whole-image qualification remain open.
+
+The subsequent [state construction/consumption review](windows-enclave-sha2-state-review.md)
+binds the constructor and state finalizer in this image. Their update/finalize,
+render/copy and runtime implementations remain separate obligations.

@@ -67,7 +67,11 @@ teardown. The subsequent [scalar operation caller review](windows-enclave-sha2-s
 binds begin/update/finish/rehash/export, their six algorithm tables and explicit
 quarantine/staging/export cleanup paths. Eight tests and identical reports pass
 on both hosts, rejecting 2,573 body-byte and 168 table-byte mutations per host.
-Transitive state construction/finalization, crypto, copy and runtime routines
+The [state construction/consumption review](windows-enclave-sha2-state-review.md)
+now adds the constructor and state finalizer, nine dispatch tables, five constant
+regions and explicit compiler preconditions. Nine tests and matching reports
+pass on both hosts, rejecting 5,838 body-byte and 252 table-byte mutations per
+host. Called update/finalize primitives, render/copy helpers and runtime routines
 remain; these caller bindings do not qualify their implementations.
 
 The next qualification item is [final-image ABI/register/spill and dump

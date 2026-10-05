@@ -1,5 +1,8 @@
 # Saved bounded cross-copy and output export
 
+Follow-up: [bounded memory-runtime reconciliation](windows-enclave-bounded-memory.md)
+binds the saved image's compiler-emitted copy/fill routines and their Rust callers.
+
 The [saved observation](../assurance/windows-protection-observations/bounded-export-20261005.json)
 continues the [input/observer review](windows-enclave-bounded-callbacks.md) in the
 same signed bounded image. It binds six additional complete C/Rust bodies:

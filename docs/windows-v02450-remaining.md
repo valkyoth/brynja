@@ -45,8 +45,13 @@ and matching reports pass on both hosts, rejecting 798 actual-body mutations.
 The [cross-copy/export review](windows-enclave-bounded-export.md) adds six linked
 C/Rust bodies, public-token/report bounds, exact SDK copy directions and the
 existing Rust failure cleanup. Seven focused tests and matching reports pass
-on both hosts, rejecting 420 actual body-byte mutations. Memory-runtime paths
-and the other Rust workers remain open; this is not whole-image qualification.
+on both hosts, rejecting 420 actual body-byte mutations. The
+[bounded memory-runtime reconciliation](windows-enclave-bounded-memory.md) now
+binds four runtime bodies, twenty relocation operands, eight dispatch tables
+and five actual Rust calls. Nine tests and matching reports pass on both hosts,
+rejecting 2,617 actual body-byte and 512 table-byte mutations per host. Live
+runtime-selector initialization and the other Rust workers remain open; this
+is not whole-image qualification.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

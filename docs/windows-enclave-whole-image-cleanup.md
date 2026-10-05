@@ -529,9 +529,12 @@ work is:
    input/observer/reset/readout bodies and their exact Rust/global/SDK linkage.
    The [cross-copy/export review](windows-enclave-bounded-export.md) adds six
    C/Rust bodies, public-token readout, explicit outbound transfer and its
-   normal-return cleanup connection. Memory-runtime paths and other image
-   families remain separate obligations; saved SDK linkage is not loaded-module
-   attestation.
+   normal-return cleanup connection. The
+   [bounded memory-runtime reconciliation](windows-enclave-bounded-memory.md)
+   now validates all address differences from the selected scheduler runtime,
+   complete bodies/tables, five actual Rust calls and their bounded stack spans.
+   Live selector initialization and other image families remain separate
+   obligations; saved SDK linkage is not loaded-module attestation.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

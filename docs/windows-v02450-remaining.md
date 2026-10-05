@@ -52,6 +52,12 @@ and five actual Rust calls. Nine tests and matching reports pass on both hosts,
 rejecting 2,617 actual body-byte and 512 table-byte mutations per host. Live
 runtime-selector initialization and the other Rust workers remain open; this
 is not whole-image qualification.
+The [scalar SHA-2 streaming entry review](windows-enclave-sha2-stream-entry.md)
+now binds its distinct worker, receiver and buffer destructor, six-operation
+table and complete header/payload readback. Eight tests and matching reports
+pass on both hosts, rejecting 1,217 actual body-byte and 24 table-byte mutations.
+Its transitive owners/copy adapters and the separate accelerated worker remain
+explicitly unqualified by this entry review.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

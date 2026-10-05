@@ -535,6 +535,10 @@ work is:
    complete bodies/tables, five actual Rust calls and their bounded stack spans.
    Live selector initialization and other image families remain separate
    obligations; saved SDK linkage is not loaded-module attestation.
+   The [scalar SHA-2 streaming entry review](windows-enclave-sha2-stream-entry.md)
+   now binds that distinct worker's admission/teardown, six-operation receiver,
+   exact buffer clearing/readback and destructor tail. It does not transfer
+   qualification to downstream owners or the separate SHA-NI resident worker.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

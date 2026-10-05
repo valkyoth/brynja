@@ -97,8 +97,9 @@ shared storage/clearer/wipe addresses, and complete fixed-frame inventories.
 These tests guard this offline inspection, not a fresh cryptographic campaign
 or independent retest.
 
-Next: the bounded placement-hash, SHA-256 update/finalize/wipe and copy/observer
-callees, followed by the other distinct worker families. Whole-image qualification
+The subsequent [owner review](windows-enclave-bounded-owner.md) binds placement
+hashing and the full workspace wipe. Next: SHA-256 update/finalize and
+copy/observer/runtime callees, followed by other distinct worker families. Whole-image qualification
 remains incomplete. Production code, images and release gates are unchanged;
 the completed native/dump campaigns were not rerun.
 

@@ -520,8 +520,10 @@ work is:
    The subsequent [borrowed-input review](windows-enclave-bounded-input.md)
    adds the complete `hash`/`receive` caller bodies and returning cleanup paths;
    the following [rehash review](windows-enclave-bounded-rehash.md) adds its
-   token/generation/commit and returning cleanup paths. Deeper placement,
-   update/finalize/wipe/copy callees remain separate obligations.
+   token/generation/commit and returning cleanup paths. The
+   [owner-clearing review](windows-enclave-bounded-owner.md) binds placement hashing
+   and complete workspace erasure. Update/finalize/copy/runtime callees remain
+   separate obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

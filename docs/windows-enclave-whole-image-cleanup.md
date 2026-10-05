@@ -514,6 +514,9 @@ work is:
    also reconciled, including the public-marker routine and local frame model.
    Their distinct retained Rust workers and SDK semantics remain separate review
    obligations; no arbitrary-exception guarantee is inferred.
+   The [bounded SHA-256 dispatcher](windows-enclave-bounded-dispatch.md) now has
+   an image-specific lifecycle, dispatch-table and local-frame review. Its
+   hashing/rehashing callees are not qualified by that dispatcher inspection.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

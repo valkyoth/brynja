@@ -1,0 +1,583 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_BOUNDED_DISPATCH_LIFECYCLE_REVIEW",
+  "dispatcher": {
+    "entry": "RetainedWork",
+    "rva": 4128,
+    "size": 1603,
+    "reference_targets": {
+      "_RNvCs7RQXX2qQXJA_22retained_rehash_worker4LIVE": 43384,
+      "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5EPOCH.0": 43400,
+      "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11520,
+      "_RNvCs7RQXX2qQXJA_22retained_rehash_worker15INSTANCE_ANCHOR": 33024,
+      "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN": 43408,
+      "_RNvCs7RQXX2qQXJA_22retained_rehash_worker14PREVIOUS_TOKEN": 43352,
+      ".rdata": 33284,
+      "_RNvNtCs7RQXX2qQXJA_22retained_rehash_worker22retained_rehash_worker6rehash": 7264,
+      "_RNvNtCs7RQXX2qQXJA_22retained_rehash_worker24retained_borrowed_worker4hash": 9568,
+      "PublicRetainedCopy": 16592,
+      "PublicCrossCopy": 14176
+    },
+    "references": [
+      {
+        "offset": 16,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker4LIVE",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43384,
+        "symbol_rva": 43384
+      },
+      {
+        "offset": 57,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5EPOCH.0",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43400,
+        "symbol_rva": 43400
+      },
+      {
+        "offset": 175,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 236,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker15INSTANCE_ANCHOR",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 33024,
+        "symbol_rva": 33024
+      },
+      {
+        "offset": 275,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5EPOCH.0",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43400,
+        "symbol_rva": 43400
+      },
+      {
+        "offset": 282,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker4LIVE",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43384,
+        "symbol_rva": 43384
+      },
+      {
+        "offset": 289,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker4LIVE",
+        "trailing": 0,
+        "addend": 8,
+        "target_rva": 43392,
+        "symbol_rva": 43384
+      },
+      {
+        "offset": 306,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker4LIVE",
+        "trailing": 0,
+        "addend": 8,
+        "target_rva": 43392,
+        "symbol_rva": 43384
+      },
+      {
+        "offset": 313,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker4LIVE",
+        "trailing": 0,
+        "addend": -4,
+        "target_rva": 43380,
+        "symbol_rva": 43384
+      },
+      {
+        "offset": 339,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 411,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43424,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 419,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43408,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 427,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker14PREVIOUS_TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43352,
+        "symbol_rva": 43352
+      },
+      {
+        "offset": 435,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker14PREVIOUS_TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43368,
+        "symbol_rva": 43352
+      },
+      {
+        "offset": 486,
+        "symbol": ".rdata",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 33284,
+        "symbol_rva": 33284
+      },
+      {
+        "offset": 502,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43424,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 518,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43408,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 673,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 702,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker14PREVIOUS_TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43368,
+        "symbol_rva": 43352
+      },
+      {
+        "offset": 717,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker14PREVIOUS_TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43352,
+        "symbol_rva": 43352
+      },
+      {
+        "offset": 726,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43424,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 741,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43408,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 756,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5EPOCH.0",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43400,
+        "symbol_rva": 43400
+      },
+      {
+        "offset": 782,
+        "symbol": "_RNvNtCs7RQXX2qQXJA_22retained_rehash_worker22retained_rehash_worker6rehash",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 7264,
+        "symbol_rva": 7264
+      },
+      {
+        "offset": 837,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43424,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 844,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker14PREVIOUS_TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43368,
+        "symbol_rva": 43352
+      },
+      {
+        "offset": 851,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43408,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 858,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker14PREVIOUS_TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43352,
+        "symbol_rva": 43352
+      },
+      {
+        "offset": 884,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43408,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 892,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43424,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 910,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 937,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5EPOCH.0",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43400,
+        "symbol_rva": 43400
+      },
+      {
+        "offset": 947,
+        "symbol": "_RNvNtCs7RQXX2qQXJA_22retained_rehash_worker24retained_borrowed_worker4hash",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 9568,
+        "symbol_rva": 9568
+      },
+      {
+        "offset": 1017,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43424,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 1025,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43408,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 1037,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5EPOCH.0",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43400,
+        "symbol_rva": 43400
+      },
+      {
+        "offset": 1109,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 1140,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 16,
+        "target_rva": 43424,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 1153,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43408,
+        "symbol_rva": 43408
+      },
+      {
+        "offset": 1254,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 1341,
+        "symbol": "PublicRetainedCopy",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 16592,
+        "symbol_rva": 16592
+      },
+      {
+        "offset": 1356,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 1393,
+        "symbol": "PublicCrossCopy",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 14176,
+        "symbol_rva": 14176
+      },
+      {
+        "offset": 1438,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 1449,
+        "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker4LIVE",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 43384,
+        "symbol_rva": 43384
+      },
+      {
+        "offset": 1462,
+        "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 11520,
+        "symbol_rva": 11520
+      },
+      {
+        "offset": 1522,
+        "symbol": "_RNvNtCs7RQXX2qQXJA_22retained_rehash_worker22retained_rehash_worker6rehash",
+        "trailing": 0,
+        "addend": 0,
+        "target_rva": 7264,
+        "symbol_rva": 7264
+      }
+    ],
+    "unwind": [
+      {
+        "start": 4128,
+        "end": 5731,
+        "unwind_rva": 36464,
+        "prolog_bytes": 13,
+        "frame": 0,
+        "stack_bytes": 360,
+        "saved_registers": [],
+        "operations": [
+          {
+            "code_offset": 13,
+            "opcode": 1,
+            "info": 0,
+            "operand": 40
+          },
+          {
+            "code_offset": 6,
+            "opcode": 0,
+            "info": 3,
+            "operand": 0
+          },
+          {
+            "code_offset": 5,
+            "opcode": 0,
+            "info": 5,
+            "operand": 0
+          },
+          {
+            "code_offset": 4,
+            "opcode": 0,
+            "info": 7,
+            "operand": 0
+          },
+          {
+            "code_offset": 3,
+            "opcode": 0,
+            "info": 6,
+            "operand": 0
+          },
+          {
+            "code_offset": 2,
+            "opcode": 0,
+            "info": 14,
+            "operand": 0
+          }
+        ],
+        "chain": null
+      }
+    ],
+    "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+    "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+    "whole_image_qualified": false,
+    "callee_semantics_qualified": false
+  },
+  "clearing_leaf": {
+    "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+    "rva": 11520,
+    "size": 105,
+    "incoming": [
+      [
+        "RetainedWork",
+        11520
+      ]
+    ],
+    "byte_candidates": 1,
+    "reference_targets": {},
+    "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+    "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+    "code_sha256": "1d1fb26eaddd4029151c3bce70b49cba0f5a2678f6b0a30d8bc8a3f70893d9b6",
+    "whole_image_qualified": false,
+    "instruction_semantics_qualified": false
+  },
+  "jump_table": {
+    "rva": 33284,
+    "bytes": 40,
+    "operation_offsets": [
+      934,
+      499,
+      1289,
+      1137,
+      499,
+      499,
+      901,
+      691,
+      691,
+      1034
+    ]
+  },
+  "geometry": {
+    "worker_rsp_from_high": -464,
+    "slots": [
+      {
+        "name": "saved nonvolatile GPRs",
+        "offset_from_low": 65392,
+        "offset_from_high": -144,
+        "bytes": 40
+      },
+      {
+        "name": "callee result",
+        "offset_from_low": 65120,
+        "offset_from_high": -416,
+        "bytes": 48
+      },
+      {
+        "name": "token/candidate copy",
+        "offset_from_low": 65168,
+        "offset_from_high": -368,
+        "bytes": 32
+      },
+      {
+        "name": "token/candidate copy",
+        "offset_from_low": 65200,
+        "offset_from_high": -336,
+        "bytes": 32
+      },
+      {
+        "name": "token/candidate copy",
+        "offset_from_low": 65232,
+        "offset_from_high": -304,
+        "bytes": 32
+      },
+      {
+        "name": "token/candidate copy",
+        "offset_from_low": 65264,
+        "offset_from_high": -272,
+        "bytes": 32
+      },
+      {
+        "name": "token/candidate copy",
+        "offset_from_low": 65296,
+        "offset_from_high": -240,
+        "bytes": 32
+      },
+      {
+        "name": "token/candidate copy",
+        "offset_from_low": 65328,
+        "offset_from_high": -208,
+        "bytes": 32
+      },
+      {
+        "name": "token/candidate copy",
+        "offset_from_low": 65360,
+        "offset_from_high": -176,
+        "bytes": 32
+      },
+      {
+        "name": "opaque output argument",
+        "offset_from_low": 65472,
+        "offset_from_high": -64,
+        "bytes": 8
+      }
+    ],
+    "unknown_callee": {
+      "name": "hash/rehash/copy entry and home",
+      "offset_from_low": 65064,
+      "offset_from_high": -472,
+      "bytes": 40,
+      "callee_frame_bytes": null,
+      "callee_spills_qualified": false
+    },
+    "maximum_transitive_depth_qualified": false,
+    "individual_stack_copies_erased": false
+  },
+  "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+  "archive_sha256": "ca26f3d5fe8f2148377ed3de9cfc7fb2e021f7482f7a09c3cd709133c4837ab5",
+  "archive_member": "retained_rehash_worker.retained_rehash_worker.5ba691928e62cbf8-cgu.0.rcgu.o",
+  "actual_body_byte_mutations_rejected": 1708,
+  "hash_and_rehash_callees_qualified": false,
+  "public_copy_sdk_semantics_qualified": false,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_bounded_dispatch.py": "2b06da5690425237176affbd7b1ea3492aee6563488ddea8b530614e06d67b54",
+    "test-windows-enclave-bounded-dispatch.py": "42445ca16c373164e9645186376ad10dd9fadaabe30abf79bea7903e78697b3e",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

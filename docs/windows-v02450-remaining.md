@@ -22,6 +22,10 @@ shared called C bodies across those images; six focused tests and matching
 reports pass on both hosts, including 1,028 actual-template byte mutations.
 Distinct retained Rust workers still need reconciliation; this does not transfer
 worker semantics or claim whole-image qualification.
+The next [bounded SHA-256 dispatcher review](windows-enclave-bounded-dispatch.md)
+now binds its retained lifecycle, exact jump-table destinations and clearing
+helper to the saved bounded image. Six tests and matching reports pass on both
+hosts; borrowed-input/rehash callees and the other Rust workers remain open.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

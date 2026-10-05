@@ -98,8 +98,10 @@ The actual saved templates reject 1,028 single-byte mutations on each host.
 The translated frame model has the same offsets at three aligned window bases.
 These are inspection regressions, not fresh cryptographic or enclave tests.
 
-The selected shared C helper normal paths are now reconciled. Next are the
-distinct retained Rust workers and their storage/copy/return paths, followed by
+The selected shared C helper normal paths are now reconciled. The subsequent
+[bounded dispatcher review](windows-enclave-bounded-dispatch.md) starts the
+distinct retained Rust worker/storage review without qualifying its callees.
+Remaining storage/copy/return paths are followed by
 the remaining compiler/SDK scope reconciliation and independent retest. Shared
 C helpers do not transfer a Rust-worker review across algorithms. The completed
 nineteen-image and scoped dump campaigns are unchanged and were not rerun.

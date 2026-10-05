@@ -79,9 +79,10 @@ syscall/status-tail changes. All existing SDK inspection suites and the seven
 outer-root regressions also pass on Linux. These tests are parser/linkage
 regressions, not live SDK execution or cryptographic comparisons.
 
-The selected saved-file output-return chain is now reconciled. Final C-body to
-clearing-wrapper return reconciliation and the other image families remain
-before the whole-image scope can be finalized for independent retest. The
+The selected saved-file output-return chain is now reconciled. The subsequent
+[clearing-wrapper handoff review](windows-enclave-wrapper-return.md) accounts for
+the final C-body return. Other image families remain before the whole-image
+scope can be finalized for independent retest. The
 completed native and dump campaigns were not repeated; no production code,
 signed image or release-gate policy changed.
 

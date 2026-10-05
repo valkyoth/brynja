@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_NORMAL_RETURN_CLEARING_WRAPPER_HANDOFF",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "native_object_sha256": "fdd82832930eff919311de11e4603ab01ec64c65752dd477e544b5908782db37",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "wrapper_object_sha256": "b9f10f1a6c18de9cfb64859eb4248b8b562299aa964d9494789f923acf99dc7b",
+  "entries": {
+    "body": {
+      "entry": "PublicStackBody",
+      "rva": 31344,
+      "size": 340,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "__security_cookie": 69632,
+        "accelerated_rejected": 69920,
+        "PublicCpuInventory": 30416,
+        "root_source": 69936,
+        "PrivateWaveRoot": 4544,
+        "scheduler_state": 69928,
+        "PrivateWaveLeaf": 4096,
+        "__security_check_cookie": 34080
+      },
+      "xdata_rva": 62172,
+      "xdata_bytes": 28,
+      "metadata": [
+        {
+          "offset": 20,
+          "symbol": "__GSHandlerCheck",
+          "target_rva": 33924,
+          "symbol_rva": 33924,
+          "section": 0
+        }
+      ],
+      "unwind_rva": 62172,
+      "unwind_header": [
+        25,
+        37,
+        7,
+        0
+      ],
+      "handler": {
+        "offset": 20,
+        "symbol": "__GSHandlerCheck",
+        "target_rva": 33924,
+        "symbol_rva": 33924,
+        "section": 0
+      },
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "fdd82832930eff919311de11e4603ab01ec64c65752dd477e544b5908782db37",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "finish": {
+      "entry": "PublicStackFinish",
+      "rva": 31696,
+      "size": 110,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "stack_callback": 70312,
+        "__imp_CallEnclave": 53392
+      },
+      "xdata_rva": 62200,
+      "xdata_bytes": 12,
+      "metadata": [],
+      "unwind_rva": 62200,
+      "unwind_header": [
+        1,
+        10,
+        4,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "fdd82832930eff919311de11e4603ab01ec64c65752dd477e544b5908782db37",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "restore": {
+      "entry": "PublicStackRestore",
+      "rva": 32352,
+      "size": 186,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "__imp_VirtualProtect": 53376,
+        "page": 33216
+      },
+      "xdata_rva": 62212,
+      "xdata_bytes": 16,
+      "metadata": [],
+      "unwind_rva": 62212,
+      "unwind_header": [
+        1,
+        15,
+        6,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "fdd82832930eff919311de11e4603ab01ec64c65752dd477e544b5908782db37",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "wrapper": {
+      "status": "EXACT_WRAPPER_BYTES_BOUND",
+      "entry": "PublicStackFrame",
+      "rva": 33520,
+      "size": 402,
+      "call_target_rvas": {
+        "__chkstk": 34128,
+        "PublicStackAdmit": 31056,
+        "PublicStackBody": 31344,
+        "PublicStackFinish": 31696,
+        "PublicStackRestore": 32352
+      },
+      "callees_semantically_qualified": false,
+      "whole_image_qualified": false,
+      "object_sha256": "b9f10f1a6c18de9cfb64859eb4248b8b562299aa964d9494789f923acf99dc7b",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee"
+    }
+  },
+  "cookie": {
+    "rva": 34080,
+    "bytes": 30,
+    "normal_return_offset": 20,
+    "fatal_tail_rva": 35072,
+    "normal_path_preserves_rax": true,
+    "secret_payload_processed": false,
+    "failure_cleanup_qualified": false
+  },
+  "geometry": {
+    "words": 8192,
+    "bytes": 65536,
+    "first": {
+      "name": "clear/readback word",
+      "offset_from_low": 0,
+      "offset_from_high": -65536,
+      "bytes": 8
+    },
+    "last": {
+      "name": "clear/readback word",
+      "offset_from_low": 65528,
+      "offset_from_high": -8,
+      "bytes": 8
+    },
+    "callback_rsp_from_low": -4128,
+    "callback_stack_inside_cleared_window": false,
+    "runtime_placement_measured": false
+  },
+  "body_byte_mutations_rejected": 1038,
+  "instruction_landmarks": 27,
+  "branch_landmarks": 23,
+  "normal_order": [
+    "root returns public result",
+    "body cookie check and ABI restore",
+    "pre-callback volatile register clear",
+    "whole-window clear and readback",
+    "finish callback only if readback clean",
+    "guard restoration attempt",
+    "final volatile register clear",
+    "wrapper returns public result"
+  ],
+  "nonvolatile_xmm_low_halves_preserved": true,
+  "callback_payload_is_public": true,
+  "callback_sdk_and_page_helper_semantics_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_wrapper_return.py": "881a61011c3b01ee86fa9fc8e6b1e32ce8b12a00482baf82fdc3d948ef23cb8d",
+    "test-windows-enclave-wrapper-return.py": "38ef85f379058dcef5f58b2de4ab128af18c3620268c1945946fecbe762e046d",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_root_return.py": "7b078894de02b1f1bf77a286ad30dc65cfe4e3a94733120bba31a0c83b59a198",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

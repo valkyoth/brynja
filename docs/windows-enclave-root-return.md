@@ -81,8 +81,9 @@ These are inspection-tool regressions, not cryptographic comparisons, live
 enclave executions or a universal machine-code proof.
 
 The subsequent [SDK return reconciliation](windows-enclave-sdk-return.md) now
-connects the selected saved-file output path. Final C-body/wrapper handoff and
-coverage of the other image families remain, followed by independent retest. Whole-image cleanup is
+connects the selected saved-file output path, and the
+[wrapper handoff review](windows-enclave-wrapper-return.md) covers the final
+C-body return. Coverage of other image families remains, followed by independent retest. Whole-image cleanup is
 still not qualified. Arbitrary exceptions, fatal termination, caller copies and
 privileged snapshots retain their documented limits. No production code, image
 or release-gate policy changed, and the completed enclave/dump campaigns were

@@ -119,6 +119,13 @@ export, syscall and status-tail paths. Six new regressions pass on both hosts,
 with matching reports; the existing SDK review suites pass on Linux. This closes
 that selected saved-file linkage, not runtime IAT attestation, kernel storage or
 exception cleanup. Final C-body/wrapper handoff and other image families remain.
+The following [clearing-wrapper handoff review](windows-enclave-wrapper-return.md)
+now closes that selected normal-return step. Five tests pass on both hosts with
+identical reports; the original wrapper probe's source/artifact hashes and its
+32 baseline/208 rejected/80 control cases revalidate separately from an older
+host-test record whose source changed. All eighteen sequential wrapper bindings
+still match. Their distinct caller/storage paths and final scope reconciliation
+remain before independent retest; no completed native campaign was rerun.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

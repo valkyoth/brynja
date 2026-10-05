@@ -493,7 +493,7 @@ work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
    its now-closed direct destruction chain and operation adapters:
-   final C-body/clearing-wrapper return reconciliation, then the other image families.
+   the other image families, grouped by their distinct emitted caller/storage paths.
    Selected publication joining, ordered reduction, explicit generation retirement
    and owner-level finish/export/destruction, selected construction and streamed
    prefix operations, inline root initialization, permutation-session/kernel
@@ -502,6 +502,11 @@ work is:
    are now reviewed. The [saved SDK output-return chain](windows-enclave-sdk-return.md)
    is linked through the actual named import/export and status tail; that does not prove
    all remaining caller lifetime obligations or transitive state operations.
+   The [C-body/clearing-wrapper handoff](windows-enclave-wrapper-return.md) now
+   connects that selected normal return to register clearing, complete window
+   clear/readback and returned callback/restoration outcomes. It does not transfer
+   caller qualification to the eighteen other images merely because their shared
+   wrapper bytes match.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

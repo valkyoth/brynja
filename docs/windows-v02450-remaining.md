@@ -91,6 +91,13 @@ in the original image. Seven inspector/model tests and identical saved-image
 records pass on both hosts. Runtime callees, remaining permutation-session work,
 outer-root/SDK returns and cross-image reconciliation remain; whole-image cleanup
 is not yet qualified and the completed native campaigns were not repeated.
+The following [session/runtime review](windows-enclave-session-runtime.md) now
+accounts for the static permutation session, its linked kernel, public remainder
+and stack-probe frames. Ten inspector/model tests and four native Keccak tests
+pass on both hosts, with identical saved-image reports. The kernel's ABI saves
+are restored, not individually erased; the enclosing normal-return window remains
+necessary. Memory-runtime dispatch, outer-root/SDK return handling and cross-image
+reconciliation are next, without repeating completed enclave/dump campaigns.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

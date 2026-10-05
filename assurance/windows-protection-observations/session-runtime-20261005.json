@@ -1,0 +1,357 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "AUTHOR_SELECTED_SESSION_AND_RUNTIME_REVIEW",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "entries": {
+    "session": {
+      "entry": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution6keccakNtB2_13KeccakSession7permute",
+      "rva": 14416,
+      "size": 107,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute": 13264,
+        "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe": 13136
+      },
+      "xdata_rva": 63320,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 63320,
+      "unwind_header": [
+        1,
+        5,
+        2,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "kernel": {
+      "entry": "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute",
+      "rva": 13264,
+      "size": 1142,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.1": 58536
+      },
+      "xdata_rva": 63444,
+      "xdata_bytes": 48,
+      "metadata": [],
+      "unwind_rva": 63444,
+      "unwind_header": [
+        1,
+        72,
+        22,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "__umodti3": {
+      "rva": 28528,
+      "bytes": 213,
+      "unwind": [
+        {
+          "start": 28528,
+          "end": 28741,
+          "unwind_rva": 64200,
+          "prolog_bytes": 2,
+          "frame": 0,
+          "stack_bytes": 16,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "__chkstk": {
+      "rva": 34128,
+      "bytes": 78,
+      "unwind": [
+        {
+          "start": 34128,
+          "end": 34206,
+          "unwind_rva": 62336,
+          "prolog_bytes": 4,
+          "frame": 0,
+          "stack_bytes": 16,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 4,
+              "opcode": 2,
+              "info": 1,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    }
+  },
+  "round_constants": {
+    "rva": 58536,
+    "bytes": 192,
+    "sha256": "f8e6964adffc257265537256d21e93496a17b9271dc5d64f40869eeeaaff6fbb",
+    "readonly": true
+  },
+  "geometry": {
+    "relative_session_frame_bytes": 40,
+    "relative_kernel_frame_bytes": 168,
+    "spans": [
+      {
+        "name": "session saved RSI",
+        "offset_from_low": 65488,
+        "offset_from_high": -48,
+        "bytes": 8
+      },
+      {
+        "name": "kernel saved caller XMM6-XMM15",
+        "offset_from_low": 65280,
+        "offset_from_high": -256,
+        "bytes": 160
+      },
+      {
+        "name": "scratch wipe saved RSI",
+        "offset_from_low": 65440,
+        "offset_from_high": -96,
+        "bytes": 8
+      },
+      {
+        "name": "public remainder RSI/RDI saves",
+        "offset_from_low": 46376,
+        "offset_from_high": -19160,
+        "bytes": 16
+      },
+      {
+        "name": "probe R10/R11 saves",
+        "offset_from_low": 54048,
+        "offset_from_high": -11488,
+        "bytes": 16
+      }
+    ],
+    "kernel_saves_individually_erased": false,
+    "probe_page_addresses_qualified": false,
+    "transitive_depth_qualified": false,
+    "kernel_and_scratch_calls_are_sequential": true
+  },
+  "frames": {
+    "session": [
+      {
+        "start": 14416,
+        "end": 14523,
+        "unwind_rva": 63320,
+        "prolog_bytes": 5,
+        "frame": 0,
+        "stack_bytes": 40,
+        "saved_registers": [],
+        "operations": [
+          {
+            "code_offset": 5,
+            "opcode": 2,
+            "info": 3,
+            "operand": 0
+          },
+          {
+            "code_offset": 1,
+            "opcode": 0,
+            "info": 6,
+            "operand": 0
+          }
+        ],
+        "chain": null
+      }
+    ],
+    "kernel": [
+      {
+        "start": 13264,
+        "end": 14406,
+        "unwind_rva": 63444,
+        "prolog_bytes": 72,
+        "frame": 0,
+        "stack_bytes": 168,
+        "saved_registers": [
+          {
+            "register_class": "xmm",
+            "register": 6,
+            "offset": 0
+          },
+          {
+            "register_class": "xmm",
+            "register": 7,
+            "offset": 16
+          },
+          {
+            "register_class": "xmm",
+            "register": 8,
+            "offset": 32
+          },
+          {
+            "register_class": "xmm",
+            "register": 9,
+            "offset": 48
+          },
+          {
+            "register_class": "xmm",
+            "register": 10,
+            "offset": 64
+          },
+          {
+            "register_class": "xmm",
+            "register": 11,
+            "offset": 80
+          },
+          {
+            "register_class": "xmm",
+            "register": 12,
+            "offset": 96
+          },
+          {
+            "register_class": "xmm",
+            "register": 13,
+            "offset": 112
+          },
+          {
+            "register_class": "xmm",
+            "register": 14,
+            "offset": 128
+          },
+          {
+            "register_class": "xmm",
+            "register": 15,
+            "offset": 144
+          }
+        ],
+        "operations": [
+          {
+            "code_offset": 72,
+            "opcode": 8,
+            "info": 6,
+            "operand": 0
+          },
+          {
+            "code_offset": 67,
+            "opcode": 8,
+            "info": 7,
+            "operand": 1
+          },
+          {
+            "code_offset": 61,
+            "opcode": 8,
+            "info": 8,
+            "operand": 2
+          },
+          {
+            "code_offset": 55,
+            "opcode": 8,
+            "info": 9,
+            "operand": 3
+          },
+          {
+            "code_offset": 49,
+            "opcode": 8,
+            "info": 10,
+            "operand": 4
+          },
+          {
+            "code_offset": 43,
+            "opcode": 8,
+            "info": 11,
+            "operand": 5
+          },
+          {
+            "code_offset": 37,
+            "opcode": 8,
+            "info": 12,
+            "operand": 6
+          },
+          {
+            "code_offset": 31,
+            "opcode": 8,
+            "info": 13,
+            "operand": 7
+          },
+          {
+            "code_offset": 25,
+            "opcode": 8,
+            "info": 14,
+            "operand": 8
+          },
+          {
+            "code_offset": 16,
+            "opcode": 8,
+            "info": 15,
+            "operand": 9
+          },
+          {
+            "code_offset": 7,
+            "opcode": 1,
+            "info": 0,
+            "operand": 21
+          }
+        ],
+        "chain": null
+      }
+    ]
+  },
+  "body_byte_mutations_rejected": 1540,
+  "reviewed_body_sha256": {
+    "session": "6249e31d1445bc78afcee97aee5489b3712d193f5fb90acc4affd11bf3e6ae13",
+    "kernel": "967732a334f2d893eb84fdeeab0d0c47dab8a73fbce4409322faca357edc01e5",
+    "__umodti3": "60856d8bee3328cb0530ddcdb4c4711a6778f54c71829adb17578e7b398160df",
+    "__chkstk": "24ba2f8e6f97e3f8dec9771f775f11294b7da43ba09efabbb1bd3c079ac25b6e"
+  },
+  "session_rejections_precede_state_mutation": true,
+  "saved_session_has_exception_cleanup_handler": false,
+  "kernel_work_registers_cleared_before_abi_restores": true,
+  "public_remainder_general_u128_correctness_qualified": false,
+  "remaining_runtime_callees": [
+    "memcpy",
+    "memset"
+  ],
+  "native_run_added": false,
+  "whole_image_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "release_gate_changed": false,
+  "independently_verified": false,
+  "source_sha256": {
+    "test-windows-enclave-session-runtime.py": "78e36a8318fce34fc1f4fa9fea23140d1aa92b74f9630bcfafe84947e38ec5d3",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_construction_review.py": "7b8000c8b682705421ff05d53f91d42e74622018ecea023d3b6fa87ea53668c6",
+    "windows_enclave_engine_review.py": "585d45e2f087fe00e0f37553d6bb9a541c2e29d59deffda5ca320ea62a6ccf09",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_root_setup.py": "99d65c886852dfd877d7382ea60cf4c16766ca4cb01d8486815bd35822dd6eea",
+    "windows_enclave_session_runtime.py": "d6dffc31963f18f7c5325170d9d5d3424114a8cf695bc581d57bd96f42da76a7",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_state_operations.py": "748dc2e2f053035f0c296be4efc4ca1fc917e2f49dd75ec0ccadf1b08db3a64f",
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a"
+  }
+}

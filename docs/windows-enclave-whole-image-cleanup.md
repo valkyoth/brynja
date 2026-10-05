@@ -67,6 +67,14 @@ rejected. Earlier moved state copies remain covered by the normal whole-window
 clear, not individual destructor writes. Runtime and cross-image reconciliation
 remain separate obligations.
 
+The [session/runtime review](windows-enclave-session-runtime.md) now binds the
+static permutation session, its exact AVX2 secret kernel, public remainder and
+stack probe. Ten inspector/model tests and four native Keccak unit tests pass
+on Linux and Windows; saved-image reports agree. Kernel work registers and
+scratch are cleared, but ABI register-save slots still require the enclosing
+window clear. `memcpy`/`memset`, outer returns and cross-image reconciliation
+remain; no arbitrary-exception or full-depth claim is added.
+
 ## Completed wrapper boundary, 2026-10-04
 
 Both `PublicLockedFrame` and `PublicStackFrame` now clear XMM0–5 and, when
@@ -477,12 +485,13 @@ review or documentation record changes. The remaining implementation-assurance
 work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
-   its now-closed direct destruction chain and operation adapters: state
-   remaining permutation-session/runtime internals, outer-root/SDK terminal
+   its now-closed direct destruction chain and operation adapters:
+   remaining memory-runtime internals, outer-root/SDK terminal
    reconciliation, then the other image families.
    Selected publication joining, ordered reduction, explicit generation retirement
    and owner-level finish/export/destruction, selected construction and streamed
-   prefix operations and inline root initialization are now reviewed; that does not prove
+   prefix operations, inline root initialization, permutation-session/kernel
+   returns and public remainder/probe frames are now reviewed; that does not prove
    all remaining caller lifetime obligations or transitive state operations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,

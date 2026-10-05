@@ -1,0 +1,414 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_BOUNDED_CROSS_AND_EXPORT_REVIEW",
+  "records": {
+    "PublicCrossCopy": {
+      "rva": 14176,
+      "bytes": 194,
+      "linked_sha256": "5fdef601a92a6544ba6125b816d6f25f1afc3dbc48841549da7b35f5dff3e655",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 25,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 39,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 53,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 62,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 83,
+          "symbol": "cross_report",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 93,
+          "symbol": "input_source",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 106,
+          "symbol": "cross_report",
+          "trailing": 4,
+          "addend": 0
+        },
+        {
+          "offset": 115,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 126,
+          "symbol": "cross_report",
+          "trailing": 4,
+          "addend": 8
+        },
+        {
+          "offset": 140,
+          "symbol": "cross_report",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 151,
+          "symbol": "cross_report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 162,
+          "symbol": "cross_report",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 173,
+          "symbol": "cross_report",
+          "trailing": 0,
+          "addend": 40
+        }
+      ],
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "retained_operation": 41304,
+        "PublicLockedLow": 43448,
+        "PublicLockedHigh": 43440,
+        "cross_report": 41416,
+        "input_source": 41464,
+        "EnclaveCopyIntoEnclave": 23922
+      }
+    },
+    "PublicCrossControl": {
+      "rva": 14096,
+      "bytes": 75,
+      "linked_sha256": "f82e91b50858d8af995a38858cd3417a5258215c660eb5b84f80806ed223dbab",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 30,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 42,
+          "symbol": "RetainedTokenWord",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 59,
+          "symbol": "cross_report",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "retained_live": 41320,
+        "RetainedTokenWord": 4096,
+        "cross_report": 41416
+      }
+    },
+    "PublicRetainedCopy": {
+      "rva": 16592,
+      "bytes": 52,
+      "linked_sha256": "b7848ac0f2f8ab9973c0525e49101f6e25c3c7eb63a446a2b489b89715e7d094",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 21,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 37,
+          "symbol": "public_copy_calls",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 42,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "retained_live": 41320,
+        "public_copy_calls": 41408,
+        "EnclaveCopyOutOfEnclave": 23928
+      }
+    },
+    "PublicRetainedOutput": {
+      "rva": 16864,
+      "bytes": 34,
+      "linked_sha256": "4a9146d62c844bc0afb466e0f27a1fe8e5f65855ebcfca174335b49af355501a",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 21,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "retained_output": 41312
+      }
+    },
+    "PublicRetainedControl": {
+      "rva": 16544,
+      "bytes": 44,
+      "linked_sha256": "b9e410b06c1fef4abbe58bf6a437f17fedb3540207672bf0280b2f0cf73411a6",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_report",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "retained_report": 41328
+      }
+    },
+    "RetainedTokenWord": {
+      "rva": 4096,
+      "bytes": 21,
+      "linked_sha256": "cf1c50de57640d5f4e8070812f61c9cd1890ff446eecbf6a821bef0aca65ae4c",
+      "references": [
+        {
+          "offset": 12,
+          "symbol": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "reference_targets": {
+        "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN": 43408
+      }
+    }
+  },
+  "metadata_regions": [
+    {
+      "name": "active",
+      "rva": 41128,
+      "bytes": 4
+    },
+    {
+      "name": "retained_call",
+      "rva": 41292,
+      "bytes": 4
+    },
+    {
+      "name": "retained_operation",
+      "rva": 41304,
+      "bytes": 8
+    },
+    {
+      "name": "PublicLockedLow",
+      "rva": 43448,
+      "bytes": 8
+    },
+    {
+      "name": "PublicLockedHigh",
+      "rva": 43440,
+      "bytes": 8
+    },
+    {
+      "name": "cross_report",
+      "rva": 41416,
+      "bytes": 48
+    },
+    {
+      "name": "input_source",
+      "rva": 41464,
+      "bytes": 8
+    },
+    {
+      "name": "retained_live",
+      "rva": 41320,
+      "bytes": 4
+    },
+    {
+      "name": "public_copy_calls",
+      "rva": 41408,
+      "bytes": 8
+    },
+    {
+      "name": "retained_output",
+      "rva": 41312,
+      "bytes": 8
+    },
+    {
+      "name": "retained_report",
+      "rva": 41328,
+      "bytes": 80
+    },
+    {
+      "name": "_RNvCs7RQXX2qQXJA_22retained_rehash_worker5TOKEN",
+      "rva": 43408,
+      "bytes": 32
+    }
+  ],
+  "geometry": {
+    "cross_rsp_from_high": -512,
+    "inbound_rsp_from_high": -560,
+    "outbound_rsp_from_high": -512,
+    "spans": [
+      {
+        "name": "cross-copy input staging",
+        "offset_from_low": 65200,
+        "offset_from_high": -336,
+        "bytes": 32
+      },
+      {
+        "name": "copied public token",
+        "offset_from_low": 65168,
+        "offset_from_high": -368,
+        "bytes": 32
+      },
+      {
+        "name": "saved RBX",
+        "offset_from_low": 65056,
+        "offset_from_high": -480,
+        "bytes": 8
+      },
+      {
+        "name": "inbound syscall return",
+        "offset_from_low": 64968,
+        "offset_from_high": -568,
+        "bytes": 8
+      },
+      {
+        "name": "outbound syscall return",
+        "offset_from_low": 65016,
+        "offset_from_high": -520,
+        "bytes": 8
+      }
+    ],
+    "exported_host_controls_inside_window_claimed": false,
+    "maximum_transitive_depth_qualified": false,
+    "output_adapter_is_tail_transfer": true,
+    "kernel_storage_qualified": false
+  },
+  "sdk_edges": {
+    "EnclaveCopyIntoEnclave": {
+      "thunk_rva": 23922,
+      "bytes": "ff2520130000",
+      "import_rva": 28824,
+      "sdk_export_rva": 16528
+    },
+    "EnclaveCopyOutOfEnclave": {
+      "thunk_rva": 23928,
+      "bytes": "ff2522130000",
+      "import_rva": 28832,
+      "sdk_export_rva": 16560
+    }
+  },
+  "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+  "sdk_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+  "actual_body_byte_mutations_rejected": 420,
+  "public_token_protocol_required": true,
+  "loaded_sdk_identity_proven": false,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_bounded_export.py": "5cab689e426d3d227fb88352afdd3492748b2d169089f0094e698574b4093199",
+    "test-windows-enclave-bounded-export.py": "24e458f2dc919eeeac0a8c35919e6ca09cb45f84f1cb0082e035cc4c22e6c44e",
+    "windows_enclave_bounded_callbacks.py": "392c7e44893cdd657628484a22820315542062e16ff606738120d73986b592d2",
+    "windows_enclave_bounded_sha256.py": "13657b2f79684b2373259bd047481e2141b24ac711cf772bed2d9e774e059bad",
+    "windows_enclave_bounded_owner.py": "3960351f4ebda9dd81b4f1ac431d2e0a1ada38cc6e86bbe4cbc27fee0f0307f3",
+    "windows_enclave_bounded_rehash.py": "9d8df50b4355913c5ca56b677733d64422fc59d963230a1b4892e812e03bd04a",
+    "windows_enclave_bounded_input.py": "78af4234d95ae7469aa001099d8bdd6965b9d074de27eec3e331ee76637e57b2",
+    "windows_enclave_bounded_dispatch.py": "2b06da5690425237176affbd7b1ea3492aee6563488ddea8b530614e06d67b54",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

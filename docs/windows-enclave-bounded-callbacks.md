@@ -101,8 +101,9 @@ Rust edges, global identity/placement, chained frame geometry and every byte of
 the SDK inbound-copy body. These are inspection-tool regressions, not an
 independent retest or a new native cryptographic campaign.
 
-Next are the distinct cross-copy/export paths, memory-runtime reconciliation
-and other image families. Whole-image qualification remains open. Production
+The subsequent [cross-copy/export review](windows-enclave-bounded-export.md)
+adds those distinct paths. Next are memory-runtime reconciliation and other
+image families. Whole-image qualification remains open. Production
 code, signed images and release gates are unchanged.
 
 ```sh

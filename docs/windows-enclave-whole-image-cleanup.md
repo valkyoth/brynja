@@ -52,6 +52,13 @@ now follows absorb/finish/read into their transfer helpers, including output-cou
 spills and returned-error ownership. Six inspector tests and seven native AVX2
 engine tests pass on both hosts. Construction, permutation-session internals,
 transitive frame reconciliation and other images remain separate obligations.
+The following [constructor/prefix review](windows-enclave-construction-cleanup.md)
+accounts for seven selected emitted bodies and their actual KAT/rate/padding
+constants. Five inspector tests pass on both hosts, with matching saved-image
+records and 3,226 body-pin mutation rejections. The prior native component campaign
+is reused with unchanged source hashes. Inline root initialization, remaining
+session/runtime calls and outer-root/SDK reconciliation are not closed by this
+selected review.
 
 ## Completed wrapper boundary, 2026-10-04
 
@@ -464,10 +471,12 @@ work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
    its now-closed direct destruction chain and operation adapters: state
-   construction/prefix setup and permutation-session internals, outer-root/SDK terminal
+   inline root prefix initialization and remaining permutation-session/runtime
+   internals, outer-root/SDK terminal
    reconciliation, then the other image families.
    Selected publication joining, ordered reduction, explicit generation retirement
-   and owner-level finish/export/destruction are now reviewed; that does not prove
+   and owner-level finish/export/destruction, selected construction and streamed
+   prefix operations are now reviewed; that does not prove
    all remaining caller lifetime obligations or transitive state operations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,

@@ -77,6 +77,13 @@ caller cancellation for private absorb and staged-output cleanup for a late
 read error; relative frames do not establish transitive stack bounds. Construction
 and prefix setup, permutation-session reconciliation and root/SDK return handling
 are the next boundaries before cross-image reconciliation and independent retest.
+The subsequent [constructor/prefix review](windows-enclave-construction-cleanup.md)
+binds seven more saved bodies, the complete startup KAT constants, specialized
+rate table and padding buffer. Five inspector tests and identical records pass
+on both hosts; 3,226 body-pin mutations are rejected. The unchanged native
+component campaign is reused after checking all 240 source hashes. Inline root
+prefix initialization, remaining session/runtime callees and outer-root/SDK return
+handling remain open; this does not qualify every constructor or image family.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

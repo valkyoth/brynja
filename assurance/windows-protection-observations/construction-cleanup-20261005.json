@@ -1,0 +1,306 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "AUTHOR_SELECTED_CONSTRUCTION_PREFIX_REVIEW",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "entries": {
+    "initial": {
+      "entry": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+      "rva": 26624,
+      "size": 1028,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "memset": 48608,
+        "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe": 13136,
+        "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute": 13264,
+        "__ymm@bd1547306f80494dd598261ea65aa9ee84d5ccf933c0478af1258f7940e1dde7": 58144,
+        "__ymm@8c5bda0cd6192e7690fee5a0a44647c4ff97a42d7f8e6fd48b284e056253d057": 58176,
+        "__ymm@a9a6e6260d712103eb5aa93f2317d63530935ab7d08ffc64ad30a6f71b19059c": 58208,
+        "__ymm@05e5635a21d9ae6101f22f1a11a5569f43b831cd0347c82681a57c16dbcf555f": 58240,
+        "__ymm@8c3ee88a1ccf32c8b87c5a554fd00ecb613670957bc4661164befef28cc970f2": 58272,
+        "__ymm@75f644e97f30a13b16f53526e70465c21841f924a2c509e4940c7922ae3a2614": 58304,
+        "memcpy": 46880,
+        "switch.table._RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial": 59248
+      },
+      "xdata_rva": 64156,
+      "xdata_bytes": 24,
+      "metadata": [],
+      "unwind_rva": 64156,
+      "unwind_header": [
+        1,
+        25,
+        10,
+        133
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "leaf": {
+      "entry": "_RNvMNtCs2u1vj83u0E8_14parallel_waves5stateNtB2_5State4leaf",
+      "rva": 17472,
+      "size": 248,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial": 26624,
+        "memcpy": 46880
+      },
+      "xdata_rva": 63712,
+      "xdata_bytes": 20,
+      "metadata": [],
+      "unwind_rva": 63712,
+      "unwind_header": [
+        1,
+        21,
+        8,
+        133
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "setup": {
+      "entry": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State11setup_chunk",
+      "rva": 23584,
+      "size": 491,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": 22848,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix5bytes": 24080,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits": 24848,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance": 24272
+      },
+      "xdata_rva": 64092,
+      "xdata_bytes": 24,
+      "metadata": [],
+      "unwind_rva": 64092,
+      "unwind_header": [
+        1,
+        16,
+        9,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "complete": {
+      "entry": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_setup",
+      "rva": 26224,
+      "size": 395,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": 22848,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216
+      },
+      "xdata_rva": 63568,
+      "xdata_bytes": 12,
+      "metadata": [],
+      "unwind_rva": 63568,
+      "unwind_header": [
+        1,
+        6,
+        3,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "bytes": {
+      "entry": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix5bytes",
+      "rva": 24080,
+      "size": 187,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits": 24848,
+        "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb": 22928,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": 22848
+      },
+      "xdata_rva": 64116,
+      "xdata_bytes": 20,
+      "metadata": [],
+      "unwind_rva": 64116,
+      "unwind_header": [
+        1,
+        15,
+        8,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "bits": {
+      "entry": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits",
+      "rva": 24848,
+      "size": 312,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits": 11376,
+        "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb": 22928,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": 22848
+      },
+      "xdata_rva": 64092,
+      "xdata_bytes": 24,
+      "metadata": [],
+      "unwind_rva": 64092,
+      "unwind_header": [
+        1,
+        16,
+        9,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "advance": {
+      "entry": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance",
+      "rva": 24272,
+      "size": 565,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128": 14528,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits": 24848,
+        "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb": 22928,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216,
+        "__umodti3": 28528,
+        "anon.3a19b6b51e69661c8cb0ff666193b4ce.0": 59044,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": 22848
+      },
+      "xdata_rva": 64136,
+      "xdata_bytes": 20,
+      "metadata": [],
+      "unwind_rva": 64136,
+      "unwind_header": [
+        1,
+        16,
+        8,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    }
+  },
+  "constants": {
+    "bd1547306f80494dd598261ea65aa9ee84d5ccf933c0478af1258f7940e1dde7": {
+      "rva": 58144,
+      "bytes": 32,
+      "sha256": "301221ca00aa0f9d87dac66c08242f818e0aedddc746974152258d22126f083e",
+      "readonly": true
+    },
+    "8c5bda0cd6192e7690fee5a0a44647c4ff97a42d7f8e6fd48b284e056253d057": {
+      "rva": 58176,
+      "bytes": 32,
+      "sha256": "a9a55cffda7551347f35af96e080c122353f78f753d7b8ee1ee5f61ebbaa23c8",
+      "readonly": true
+    },
+    "a9a6e6260d712103eb5aa93f2317d63530935ab7d08ffc64ad30a6f71b19059c": {
+      "rva": 58208,
+      "bytes": 32,
+      "sha256": "7b53a4e1da86ab6f8d18129fd5398a4cb5fce222805b227b049398d816f60bed",
+      "readonly": true
+    },
+    "05e5635a21d9ae6101f22f1a11a5569f43b831cd0347c82681a57c16dbcf555f": {
+      "rva": 58240,
+      "bytes": 32,
+      "sha256": "6994c82666196f93ef522fb2020e563ba0905d8aaa4f44095447c616f60f7bd3",
+      "readonly": true
+    },
+    "8c3ee88a1ccf32c8b87c5a554fd00ecb613670957bc4661164befef28cc970f2": {
+      "rva": 58272,
+      "bytes": 32,
+      "sha256": "5240766595e370ad302e36bdf15574305ded8cfc935e826a10dc7807874a3d2d",
+      "readonly": true
+    },
+    "75f644e97f30a13b16f53526e70465c21841f924a2c509e4940c7922ae3a2614": {
+      "rva": 58304,
+      "bytes": 32,
+      "sha256": "b6cadf7fad14151cd6ada210d3ac699a081542d72ea4ed0e7fe74d4925dab7aa",
+      "readonly": true
+    },
+    "rates": {
+      "rva": 59248,
+      "bytes": 32,
+      "sha256": "c5c151260bc40501874a714708d6dc4aa62cc71bbc09c4de501da1ce0bde5c34",
+      "readonly": true
+    },
+    "padding": {
+      "rva": 59044,
+      "bytes": 168,
+      "sha256": "e3c2af35d1dfc500e16f826a071cc311bf55003a3de77de7ea3376c6b6fa2857",
+      "readonly": true
+    }
+  },
+  "body_byte_mutations_rejected": 3226,
+  "unreviewed_direct_callees": [
+    "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128",
+    "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute",
+    "__umodti3",
+    "memcpy",
+    "memset"
+  ],
+  "initial_specialized_algorithm_domain": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "leaf_identity_to_algorithm": [
+    4,
+    5,
+    4,
+    5
+  ],
+  "inline_root_prefix_initialization_qualified": false,
+  "prefix_error_requires_caller_cancellation": true,
+  "constructor_kat_data_public": true,
+  "earlier_copies_individually_erased": false,
+  "maximum_transitive_stack_depth_qualified": false,
+  "whole_image_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_construction_review.py": "7b8000c8b682705421ff05d53f91d42e74622018ecea023d3b6fa87ea53668c6",
+    "test-windows-enclave-construction-review.py": "d100c59c352b0659bb075e32f76d69965a44f259629ddabb9e9138abf1d33730",
+    "windows_enclave_engine_review.py": "585d45e2f087fe00e0f37553d6bb9a541c2e29d59deffda5ca320ea62a6ccf09",
+    "windows_enclave_state_operations.py": "748dc2e2f053035f0c296be4efc4ca1fc917e2f49dd75ec0ccadf1b08db3a64f",
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

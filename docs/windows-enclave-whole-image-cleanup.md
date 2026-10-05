@@ -6,6 +6,13 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [SHA-NI lifecycle/receiver review](windows-enclave-sha-ni-lifecycle.md) binds
+eight admission/teardown bodies, two receiver dispatch tables, bounded-input
+compiler preconditions and explicit public-export checks. Eleven regressions
+pass on both hosts with matching parsed reports. Inactive state copies still
+depend on outer-window/page clearing; inner state/engine and whole-image depth
+remain unqualified by this review.
+
 The extended [worker runtime/transport reconciliation](windows-enclave-worker-reconciliation.md)
 closes the saved scalar SHA-2 runtime/export links and binds all seventeen
 family workers' entry/transport boundaries and 590 memory calls. Both hosts

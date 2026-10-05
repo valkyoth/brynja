@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "route": "sha2/mod.rs::open_sha_ni",
+  "functions": {
+    "_RNvMs_Cs11e1ovcwz1T_16sha2_acceleratedNtB4_5Owner10quarantine": {
+      "bytes": 166,
+      "code_sha256": "54c0280b52a2318f02fed8764c88667ebbd0ced9f8ac03e0962af5029cb9ac8b",
+      "refs_sha256": "d22fdba0129f735993068f7e216bf76ef2065f01882f73625dcb80afdd5cee2c",
+      "stack_bytes": 2040
+    },
+    "_RNvMs_Cs11e1ovcwz1T_16sha2_acceleratedNtB4_5Owner9operation": {
+      "bytes": 582,
+      "code_sha256": "f0453ecd5a79b81a60001097185a5e895361f80adb18c1d9d9d2e2563dbd9cec",
+      "refs_sha256": "67e30cefd2455b61d8410ea22590fb1492c76bec36112ea2d301d964b61d9e2b",
+      "stack_bytes": 2056
+    },
+    "_RNvMs_Cs11e1ovcwz1T_16sha2_acceleratedNtB4_5Owner5clear": {
+      "bytes": 135,
+      "code_sha256": "dc049eef39ab16bb498cf957314e3217f705e297c7a75a606ee6cce7cef30992",
+      "refs_sha256": "d22fdba0129f735993068f7e216bf76ef2065f01882f73625dcb80afdd5cee2c",
+      "stack_bytes": 2040
+    },
+    "_RNvMs_Cs11e1ovcwz1T_16sha2_acceleratedNtB4_5Owner6cancel": {
+      "bytes": 355,
+      "code_sha256": "cf13c8064a479ff535159d6c7b886e868d50a6af81585d09d5f8bfe21732ee71",
+      "refs_sha256": "b0a3acf299888c5a4f90395e6c6626ac8bb9a046b1691f4be48170226168eeca",
+      "stack_bytes": 2040
+    },
+    "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCs11e1ovcwz1T_16sha2_accelerated9OperationEBD_": {
+      "bytes": 175,
+      "code_sha256": "0d7e1ae45720fca6418c5d71714cc0251cbafa135d53ed7938b5f663734eb786",
+      "refs_sha256": "9ef2cceca7637ee8555b4526647eea9df3e1f7f8cab1cb3aae094fec99e12785",
+      "stack_bytes": 2040
+    },
+    "_RNvMs_Cs6XEeBPE9QTS_25sha2_accelerated_residentNtB4_8Resident3new": {
+      "bytes": 267,
+      "code_sha256": "0e29baedb20a4494f0cb3103a6f96cebbb439a004af56c2a4e9ad413aa6966f9",
+      "refs_sha256": "b716a99fe3b27513faacb87bd36fc49710f26bd398fbd16a579abc445093955d",
+      "stack_bytes": 4104
+    },
+    "_RNvXs0_Cs6XEeBPE9QTS_25sha2_accelerated_residentNtB5_8ResidentNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop": {
+      "bytes": 253,
+      "code_sha256": "738ac0fa75da5b104de312f877b5270c6cf93393dd1c67ab93e58475bbd460a2",
+      "refs_sha256": "94b55e4f2e2e297f1f302c38e69e8882dfe0163ca220836def8e69f0596d96e3",
+      "stack_bytes": 2056
+    },
+    "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution7scratchNtB2_7Scratch4wipe": {
+      "bytes": 43,
+      "code_sha256": "89329598224317de6d3d4c20100988c1012a9a4bd3d78cd30aee54706530dc32",
+      "refs_sha256": "d75991e3ec150cca2146b8c4867bbd36eb1f2dfb5e226e2ec1d3364b7dbd2b9e",
+      "stack_bytes": 40
+    }
+  }
+}

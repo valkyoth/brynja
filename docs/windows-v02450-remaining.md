@@ -24,6 +24,15 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [SHA-NI lifecycle/receiver review](windows-enclave-sha-ni-lifecycle.md) now
+binds admission, cancellation, quarantine, resident construction/destruction and
+scratch clearing, plus receiver bounds, dispatch tables and explicit public
+export. Eleven tests and identical parsed reports pass on Linux and Windows;
+1,976 body-byte and 52 table-byte mutants are rejected per host. Review records
+the moved enum's dependence on outer-window/page clearing and the compiler's
+private bounded-input precondition. Inner state/engine callees and maximum
+transitive depth remain open; this is not whole-image qualification.
+
 The extended [worker reconciliation](windows-enclave-worker-reconciliation.md)
 closes forty scalar SHA-2 memory calls and its five transport connections,
 rebinds memory runtimes in all eighteen sequential images, and covers 102 C

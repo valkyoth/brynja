@@ -105,6 +105,14 @@ spans stay in range for the tested bounded lengths and alignments. These helpers
 do not erase volatile payload registers or their restored save slots. Outer
 return/SDK reconciliation and other image families remain; completed native
 campaigns and the release-gate policy are unchanged.
+The following [outer-root return review](windows-enclave-root-return.md) binds
+input completion, native completion/output admission, staging cleanup and normal
+success/error return paths in five saved bodies. Seven focused tests and 4,131
+actual-body byte mutations pass on both hosts, with identical parsed records.
+Host copying is explicitly nontransactional, and failed export stays reserved.
+The root's normal-return cleanup is now traced; SDK/output-return reconciliation
+and other image families remain before independent retest. No native campaign,
+production code or release-gate change was needed for this offline review.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

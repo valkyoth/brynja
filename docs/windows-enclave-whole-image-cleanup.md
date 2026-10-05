@@ -493,12 +493,12 @@ work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
    its now-closed direct destruction chain and operation adapters:
-   outer-root/SDK terminal
-   reconciliation, then the other image families.
+   remaining SDK/output-return reconciliation, then the other image families.
    Selected publication joining, ordered reduction, explicit generation retirement
    and owner-level finish/export/destruction, selected construction and streamed
    prefix operations, inline root initialization, permutation-session/kernel
    returns, public remainder/probe frames and selected memory-runtime dispatch
+   and [outer-root normal-return cleanup](windows-enclave-root-return.md)
    are now reviewed; that does not prove
    all remaining caller lifetime obligations or transitive state operations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise

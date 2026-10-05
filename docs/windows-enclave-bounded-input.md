@@ -87,8 +87,10 @@ changed frame sizes and extra unwind fragments. The geometry is checked at three
 window bases. These are offline review regressions, not native cryptographic
 execution, a symbolic data-flow proof or an independent security retest.
 
-Next: the bounded rehash routine, placement-hash/workspace-wipe callees and
-copy/observation adapters, followed by the other distinct workers. SDK copy and
+The subsequent [rehash review](windows-enclave-bounded-rehash.md) now binds its
+caller and inlined retained-slot transform, including token/commit/cleanup paths.
+Next: placement-hash, update/finalize/workspace-wipe callees and copy/observation
+adapters, followed by the other distinct workers. SDK copy and
 memory-runtime semantics are not inferred from their names or addresses.
 Whole-image qualification remains open. Native campaigns were not rerun;
 production code, signed images and release-gate policy are unchanged.

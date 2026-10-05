@@ -28,8 +28,11 @@ helper to the saved bounded image. Six tests and matching reports pass on both
 hosts. The subsequent [borrowed-input caller review](windows-enclave-bounded-input.md)
 binds the bounded `hash`/`receive` bodies, admission/cleanup return paths and known
 frames; six tests and identical reports pass on both hosts, rejecting 3,366 actual
-body-byte mutations. Rehash, deeper placement/wipe/copy callees and the other
-Rust workers remain open; this is not whole-image qualification.
+body-byte mutations. The [rehash caller review](windows-enclave-bounded-rehash.md)
+now adds the emitted token, generation, commit and cleanup paths; six focused
+tests and matching reports pass on both hosts, with 2,284 actual-body mutations
+rejected per host. Deeper placement/update/finalize/wipe/copy callees and the
+other Rust workers remain open; this is not whole-image qualification.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

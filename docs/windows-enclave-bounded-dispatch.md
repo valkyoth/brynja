@@ -101,8 +101,9 @@ These are offline inspection regressions, not fresh native crypto tests.
 
 The subsequent [borrowed-input caller review](windows-enclave-bounded-input.md)
 now binds `hash`/`receive`, their returning cleanup branches and known frames.
-Next: rehash, deeper placement/wipe callees and copy adapters; then the other
-distinct worker families. Whole-image
+The [rehash caller review](windows-enclave-bounded-rehash.md) also now binds its
+token/commit/cleanup paths. Next: deeper placement/update/finalize/wipe callees
+and copy adapters; then the other distinct worker families. Whole-image
 qualification and independent retest remain outstanding. Existing native/dump
 campaigns were not rerun, and no production code, image or release gate changed.
 

@@ -524,8 +524,11 @@ work is:
    [owner-clearing review](windows-enclave-bounded-owner.md) binds placement hashing
    and complete workspace erasure. The [SHA-256 operation review](windows-enclave-bounded-sha256.md)
    adds update/finalize, scalar compression, both copy helpers and linked round
-   constants, with their local normal-return depth. Enclosing C copy/observer/runtime
-   paths and other image families remain separate obligations.
+   constants, with their local normal-return depth. The
+   [bounded callback review](windows-enclave-bounded-callbacks.md) adds seven C
+   input/observer/reset/readout bodies and their exact Rust/global/SDK linkage.
+   Cross-copy/export, memory-runtime paths and other image families remain
+   separate obligations; saved SDK linkage is not loaded-module attestation.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

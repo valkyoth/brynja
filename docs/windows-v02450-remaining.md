@@ -38,8 +38,12 @@ mutations rejected per host. The [SHA-256 operation review](windows-enclave-boun
 now binds update/finalize, scalar compression and both copy helpers, including
 their linked constants and local call depth. Eight focused tests and matching
 reports pass on both hosts; 1,798 actual body-byte mutations are rejected per
-host. Enclosing C copy/observer/runtime paths and the other Rust workers remain
-open; this is not whole-image qualification.
+host. The [bounded callback review](windows-enclave-bounded-callbacks.md) adds
+seven input-copy, observer and reset/readout bodies, exact metadata placement,
+Rust call edges and the named SDK inbound-copy connection. Nine focused tests
+and matching reports pass on both hosts, rejecting 798 actual-body mutations.
+Cross-copy/export, memory-runtime paths and the other Rust workers remain open;
+this is not whole-image qualification.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

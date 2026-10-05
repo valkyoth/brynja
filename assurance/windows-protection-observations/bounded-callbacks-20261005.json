@@ -1,0 +1,442 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_BOUNDED_CALLBACK_NORMAL_PATH_REVIEW",
+  "records": {
+    "PublicInputCopy": {
+      "entry": "PublicInputCopy",
+      "rva": 14752,
+      "size": 182,
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "PublicLockedLow": 43448,
+        "PublicLockedHigh": 43440,
+        "input_report": 41472,
+        "EnclaveCopyIntoEnclave": 23922
+      },
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 41128,
+          "symbol_rva": 41128
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0,
+          "target_rva": 41292,
+          "symbol_rva": 41292
+        },
+        {
+          "offset": 51,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 43448,
+          "symbol_rva": 43448
+        },
+        {
+          "offset": 69,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 43440,
+          "symbol_rva": 43440
+        },
+        {
+          "offset": 111,
+          "symbol": "input_report",
+          "trailing": 0,
+          "addend": 8,
+          "target_rva": 41480,
+          "symbol_rva": 41472
+        },
+        {
+          "offset": 135,
+          "symbol": "input_report",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 41472,
+          "symbol_rva": 41472
+        },
+        {
+          "offset": 147,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 23922,
+          "symbol_rva": 23922
+        }
+      ],
+      "unwind": [
+        {
+          "start": 14752,
+          "end": 14876,
+          "unwind_rva": 35856,
+          "prolog_bytes": 6,
+          "frame": 0,
+          "stack_bytes": 40,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 6,
+              "opcode": 2,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        },
+        {
+          "start": 14876,
+          "end": 14923,
+          "unwind_rva": 35948,
+          "prolog_bytes": 5,
+          "frame": 0,
+          "stack_bytes": 0,
+          "saved_registers": [
+            {
+              "register_class": "gpr",
+              "register": 7,
+              "offset": 48
+            }
+          ],
+          "operations": [
+            {
+              "code_offset": 5,
+              "opcode": 4,
+              "info": 7,
+              "operand": 6
+            }
+          ],
+          "chain": [
+            14752,
+            14876,
+            35856
+          ]
+        },
+        {
+          "start": 14923,
+          "end": 14934,
+          "unwind_rva": 35968,
+          "prolog_bytes": 0,
+          "frame": 0,
+          "stack_bytes": 0,
+          "saved_registers": [],
+          "operations": [],
+          "chain": [
+            14752,
+            14876,
+            35856
+          ]
+        }
+      ],
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "whole_image_qualified": false,
+      "callee_semantics_qualified": false
+    },
+    "PublicInputObserve": {
+      "entry": "PublicInputObserve",
+      "rva": 14944,
+      "size": 134,
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "PublicLockedLow": 43448,
+        "PublicLockedHigh": 43440,
+        "input_report": 41472
+      },
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "no_unwind": true,
+      "whole_image_qualified": false
+    },
+    "PublicInputSource": {
+      "entry": "PublicInputSource",
+      "rva": 15088,
+      "size": 30,
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "input_source": 41464
+      },
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "no_unwind": true,
+      "whole_image_qualified": false
+    },
+    "PublicRehashObserve": {
+      "entry": "PublicRehashObserve",
+      "rva": 16240,
+      "size": 149,
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "PublicLockedLow": 43448,
+        "PublicLockedHigh": 43440,
+        "rehash_report": 41568
+      },
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "no_unwind": true,
+      "whole_image_qualified": false
+    },
+    "PublicRetainedInput": {
+      "entry": "PublicRetainedInput",
+      "rva": 16656,
+      "size": 201,
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "input_source": 41464,
+        "rehash_report": 41568,
+        "input_report": 41472,
+        "cross_report": 41416
+      },
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "no_unwind": true,
+      "whole_image_qualified": false
+    },
+    "PublicInputControl": {
+      "entry": "PublicInputControl",
+      "rva": 14704,
+      "size": 44,
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "input_report": 41472
+      },
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "no_unwind": true,
+      "whole_image_qualified": false
+    },
+    "PublicRehashControl": {
+      "entry": "PublicRehashControl",
+      "rva": 16176,
+      "size": 58,
+      "reference_targets": {
+        "active": 41128,
+        "retained_call": 41292,
+        "public_copy_calls": 41408,
+        "rehash_report": 41568
+      },
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "no_unwind": true,
+      "whole_image_qualified": false
+    }
+  },
+  "report_writes": {
+    "PublicInputObserve": [
+      {
+        "source": 0,
+        "destination": 32,
+        "bytes": 8
+      },
+      {
+        "source": 8,
+        "destination": 40,
+        "bytes": 8
+      },
+      {
+        "source": 16,
+        "destination": 48,
+        "bytes": 8
+      },
+      {
+        "source": 24,
+        "destination": 56,
+        "bytes": 8
+      },
+      {
+        "source": 32,
+        "destination": 64,
+        "bytes": 8
+      },
+      {
+        "source": 40,
+        "destination": 72,
+        "bytes": 8
+      },
+      {
+        "source": 48,
+        "destination": 80,
+        "bytes": 8
+      }
+    ],
+    "PublicRehashObserve": [
+      {
+        "source": 0,
+        "destination": 0,
+        "bytes": 8
+      },
+      {
+        "source": 8,
+        "destination": 8,
+        "bytes": 8
+      },
+      {
+        "source": 16,
+        "destination": 16,
+        "bytes": 8
+      },
+      {
+        "source": 24,
+        "destination": 24,
+        "bytes": 8
+      },
+      {
+        "source": 32,
+        "destination": 32,
+        "bytes": 8
+      },
+      {
+        "source": 40,
+        "destination": 40,
+        "bytes": 8
+      },
+      {
+        "source": 48,
+        "destination": 48,
+        "bytes": 8
+      },
+      {
+        "source": 56,
+        "destination": 56,
+        "bytes": 8
+      }
+    ]
+  },
+  "metadata_regions": [
+    {
+      "name": "active",
+      "rva": 41128,
+      "bytes": 4
+    },
+    {
+      "name": "retained_call",
+      "rva": 41292,
+      "bytes": 4
+    },
+    {
+      "name": "PublicLockedLow",
+      "rva": 43448,
+      "bytes": 8
+    },
+    {
+      "name": "PublicLockedHigh",
+      "rva": 43440,
+      "bytes": 8
+    },
+    {
+      "name": "input_source",
+      "rva": 41464,
+      "bytes": 8
+    },
+    {
+      "name": "input_report",
+      "rva": 41472,
+      "bytes": 88
+    },
+    {
+      "name": "rehash_report",
+      "rva": 41568,
+      "bytes": 64
+    },
+    {
+      "name": "cross_report",
+      "rva": 41416,
+      "bytes": 48
+    },
+    {
+      "name": "public_copy_calls",
+      "rva": 41408,
+      "bytes": 8
+    }
+  ],
+  "geometry": {
+    "copy_rsp_from_high": -3408,
+    "sdk_copy_rsp_from_high": -3456,
+    "spans": [
+      {
+        "name": "saved RBX",
+        "offset_from_low": 62160,
+        "offset_from_high": -3376,
+        "bytes": 8
+      },
+      {
+        "name": "conditional saved RDI",
+        "offset_from_low": 62176,
+        "offset_from_high": -3360,
+        "bytes": 8
+      },
+      {
+        "name": "input observer return/home",
+        "offset_from_low": 62472,
+        "offset_from_high": -3064,
+        "bytes": 40
+      },
+      {
+        "name": "copy syscall return",
+        "offset_from_low": 62072,
+        "offset_from_high": -3464,
+        "bytes": 8
+      }
+    ],
+    "unknown_callee": {
+      "name": "SDK syscall entry/home, not kernel storage",
+      "offset_from_low": 62072,
+      "offset_from_high": -3464,
+      "bytes": 40,
+      "callee_frame_bytes": null,
+      "callee_spills_qualified": false
+    },
+    "exported_control_frames_included": false,
+    "maximum_transitive_depth_qualified": false,
+    "kernel_storage_qualified": false,
+    "sdk_self_erasure_claimed": false
+  },
+  "sdk_copy": {
+    "thunk_rva": 23922,
+    "thunk": "ff2520130000",
+    "import_rva": 28824,
+    "export_rva": 16528,
+    "sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f"
+  },
+  "actual_body_byte_mutations_rejected": 798,
+  "loaded_sdk_identity_proven": false,
+  "sdk_status_tail_review_reused": true,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_bounded_callbacks.py": "392c7e44893cdd657628484a22820315542062e16ff606738120d73986b592d2",
+    "test-windows-enclave-bounded-callbacks.py": "317c77496368aa7f0eb8c9a4ca32d0148d918b4a1c6577ee794ddadec70f8976",
+    "windows_enclave_bounded_sha256.py": "13657b2f79684b2373259bd047481e2141b24ac711cf772bed2d9e774e059bad",
+    "windows_enclave_bounded_owner.py": "3960351f4ebda9dd81b4f1ac431d2e0a1ada38cc6e86bbe4cbc27fee0f0307f3",
+    "windows_enclave_bounded_rehash.py": "9d8df50b4355913c5ca56b677733d64422fc59d963230a1b4892e812e03bd04a",
+    "windows_enclave_bounded_input.py": "78af4234d95ae7469aa001099d8bdd6965b9d074de27eec3e331ee76637e57b2",
+    "windows_enclave_bounded_dispatch.py": "2b06da5690425237176affbd7b1ea3492aee6563488ddea8b530614e06d67b54",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

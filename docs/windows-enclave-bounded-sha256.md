@@ -91,8 +91,9 @@ reuses the original entry rather than retaining the finalization frame.
 The saved-GPR, pointer/count and return/home spans fit the existing 64-KiB
 wrapper-cleared window at three tested base addresses. This closes the local
 operation-depth uncertainty, not the maximum depth of the entire image. The
-enclosing C copy/observer/runtime paths and other distinct image families still
-need reconciliation.
+subsequent [callback review](windows-enclave-bounded-callbacks.md) adds the C
+input-copy/observer/reset/readout paths. Cross-copy/export, memory-runtime paths
+and other distinct image families still need reconciliation.
 
 Eight focused tests pass on Linux and Windows; parsed saved-image reports are
 identical. All 1,798 actual body-byte mutations are rejected per host. Focused

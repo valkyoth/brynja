@@ -24,6 +24,13 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [scalar finalization/squeezing review](windows-enclave-sha3-finalize.md)
+adds six rate-specific finalizer, typed-squeeze and cSHAKE transition bodies.
+Nine review tests and matching reports pass on both hosts; each rejects 3,712
+body-byte mutations. Nine actual sponge tests and the worker/oracle campaign
+pass. Terminal output adapters, scalar permutation internals and maximum
+whole-image depth remain open.
+
 The [scalar sponge-update review](windows-enclave-sha3-update.md) covers all five
 rates, counter admission, buffered/direct/tail partitioning and ten immediate
 permutation-scratch erasure sites. Eight tests and matching reports pass on both

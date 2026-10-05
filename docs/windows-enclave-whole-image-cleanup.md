@@ -6,6 +6,12 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [scalar finalization/squeezing review](windows-enclave-sha3-finalize.md)
+binds six finalizer/squeezer/transition bodies and eight immediate permutation
+erasure sites. Nine tests and matching reports pass on both hosts; each rejects
+3,712 body-byte mutations. Terminal output adapters, scalar permutation internals
+and maximum whole-image depth remain open.
+
 The [scalar sponge-update review](windows-enclave-sha3-update.md) binds all five
 rates, checked message counters, block partitioning and ten immediate scratch
 erasure sites. Eight tests and matching reports pass on both hosts; each rejects

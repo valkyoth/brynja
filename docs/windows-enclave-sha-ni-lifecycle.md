@@ -91,7 +91,9 @@ Results are stored outside Cargo target directories in
 [observation](../assurance/windows-protection-observations/sha-ni-review-20261005.json)
 records their identities and limitations.
 
-Still open: distinct begin/update/finalize/rehash state and engine call chains,
+The subsequent [state review](windows-enclave-sha-ni-state.md) binds construction
+and consuming finalization, their owner call edges, IVs and copy helpers.
+Still open: complete begin/update/finalize/rehash operation and engine call chains,
 startup KAT depth, decoder semantics, exception-handler behavior, remaining
 family workers and indirect SIMD dispatch, full transitive stack depth, and
 live runtime-selector/application-image SDK reconciliation. Guard body review

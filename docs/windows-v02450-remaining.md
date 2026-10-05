@@ -24,6 +24,14 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [SHA-NI state review](windows-enclave-sha-ni-state.md) now binds the saved
+constructor/finalizer, their owner call edges, two IV constants and private copy
+helpers. Eight tests pass on Linux and Windows with identical parsed reports;
+2,286 actual body-byte mutants are rejected per host. Selected constructor depth
+reaches `H-13504`; saved XMM6 and moved copies still require enclosing-window
+clearing. Engine/KAT internals, complete owner-operation semantics and maximum
+transitive depth remain open; this is not whole-image qualification.
+
 The [SHA-NI lifecycle/receiver review](windows-enclave-sha-ni-lifecycle.md) now
 binds admission, cancellation, quarantine, resident construction/destruction and
 scratch clearing, plus receiver bounds, dispatch tables and explicit public

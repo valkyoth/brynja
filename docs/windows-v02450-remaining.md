@@ -17,8 +17,11 @@ Latest cross-image step: the [shared sequential C review](windows-enclave-sequen
 binds four complete common functions across all eighteen sequential images,
 including chained runtime fragments, wrapper callees and named SDK imports.
 Six focused tests and identical saved-artifact reports pass on Linux and Windows.
-Shared helpers and distinct retained Rust workers still need reconciliation;
-this does not transfer worker semantics or claim whole-image qualification.
+The subsequent [helper review](windows-enclave-sequential-helpers.md) binds eight
+shared called C bodies across those images; six focused tests and matching
+reports pass on both hosts, including 1,028 actual-template byte mutations.
+Distinct retained Rust workers still need reconciliation; this does not transfer
+worker semantics or claim whole-image qualification.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

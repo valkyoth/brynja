@@ -1,0 +1,2147 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_SEQUENTIAL_HELPER_NORMAL_PATH_REVIEW",
+  "catalog_sha256": "c6585463c9e930cd9d8eacf47abdf308cd7b5af65f10c1b5a6a5622849b5895a",
+  "images": 18,
+  "complete_helper_bindings": 144,
+  "unique_template_bytes": 1028,
+  "actual_template_byte_mutations_rejected": 1028,
+  "records": [
+    {
+      "route": "mod.rs::open",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "object_sha256": "ea23691a9e4a420ef91ebe000e19d18b4e684bc41069dab940ea159a585be63e",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 14000,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 22240,
+            "symbol_rva": 22240,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 18224,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 18144,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 18464,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 18672,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 18576,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 18368,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 17792,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 19252,
+            "symbol_rva": 19252,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 43440,
+        "PublicLockedLow": 43448,
+        "active": 41128,
+        "stats": 41184,
+        "low_changed": 41284,
+        "high_changed": 41288,
+        "page_info": 18224,
+        "low_old": 41132,
+        "__imp_VirtualProtect": 28784,
+        "__imp_GetLastError": 28768,
+        "high_old": 41280,
+        "notify_host": 18144,
+        "admitted": 41160,
+        "host_callback": 41120,
+        "cleared": 41168,
+        "__imp_CallEnclave": 28808,
+        "BaseLockedBody": 14000,
+        "retained_call": 41292,
+        "retained_region": 41296,
+        "retained_report": 41328,
+        "retained_operation": 41304,
+        "retained_live": 41320,
+        "__imp_VirtualAlloc": 28776,
+        "retained_guards": 18464,
+        "retained_notify": 18576,
+        "retained_free": 18368,
+        "RetainedWork": 4128,
+        "retained_output": 41312,
+        "retained_page": 18672,
+        "locked_work": 17792,
+        "handler_address": 41144,
+        "steps": 41152,
+        "__imp_VirtualQuery": 28800,
+        "__imp_VirtualFree": 28792,
+        "__security_cookie": 40960,
+        "marker_address": 41136,
+        "__imp_RaiseException": 28760,
+        "__security_check_cookie": 19408
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha2/mod.rs::open",
+      "image_sha256": "bc8932575def29277263f49c1fe9b912f9a1166e6703ac1f609eef90f63beeab",
+      "object_sha256": "aa83148405eebce8327a0e9620cfa18761fc76d21487aca0287d2a0f1191ddf7",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 18672,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 26304,
+            "symbol_rva": 26304,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 22288,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 22208,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 22528,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 22736,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 22640,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 22432,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 21856,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 23316,
+            "symbol_rva": 23316,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 47296,
+        "PublicLockedLow": 47304,
+        "active": 45224,
+        "stats": 45280,
+        "low_changed": 45380,
+        "high_changed": 45384,
+        "page_info": 22288,
+        "low_old": 45228,
+        "__imp_VirtualProtect": 32880,
+        "__imp_GetLastError": 32864,
+        "high_old": 45376,
+        "notify_host": 22208,
+        "admitted": 45256,
+        "host_callback": 45216,
+        "cleared": 45264,
+        "__imp_CallEnclave": 32904,
+        "BaseLockedBody": 18672,
+        "retained_call": 45388,
+        "retained_region": 45392,
+        "retained_report": 45424,
+        "retained_operation": 45400,
+        "retained_live": 45416,
+        "__imp_VirtualAlloc": 32872,
+        "retained_guards": 22528,
+        "retained_notify": 22640,
+        "retained_free": 22432,
+        "RetainedWork": 4096,
+        "retained_output": 45408,
+        "retained_page": 22736,
+        "locked_work": 21856,
+        "handler_address": 45240,
+        "steps": 45248,
+        "__imp_VirtualQuery": 32896,
+        "__imp_VirtualFree": 32888,
+        "__security_cookie": 45056,
+        "marker_address": 45232,
+        "__imp_RaiseException": 32856,
+        "__security_check_cookie": 23472
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha2/mod.rs::open_sha_ni",
+      "image_sha256": "ca5806be2e78ae43f4942b0733bb94bef1e5c75dfa2250d98408dfda74c77d0a",
+      "object_sha256": "6360c25108d3a72a0a4760f74a90577afb16ed0abe94e126bcd320b320d4180c",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 17904,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 26304,
+            "symbol_rva": 26304,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 22256,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 22176,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 22496,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 22704,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 22608,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 22400,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 21824,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 23284,
+            "symbol_rva": 23284,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 59720,
+        "PublicLockedLow": 59728,
+        "active": 57620,
+        "stats": 57680,
+        "low_changed": 57784,
+        "high_changed": 57788,
+        "page_info": 22256,
+        "low_old": 57776,
+        "__imp_VirtualProtect": 41112,
+        "__imp_GetLastError": 41088,
+        "high_old": 57780,
+        "notify_host": 22176,
+        "admitted": 57656,
+        "host_callback": 57624,
+        "cleared": 57664,
+        "__imp_CallEnclave": 41136,
+        "BaseLockedBody": 17904,
+        "retained_call": 57816,
+        "retained_region": 57792,
+        "retained_report": 57824,
+        "retained_operation": 57800,
+        "retained_live": 57820,
+        "__imp_VirtualAlloc": 41104,
+        "retained_guards": 22496,
+        "retained_notify": 22608,
+        "retained_free": 22400,
+        "RetainedWork": 4096,
+        "retained_output": 57808,
+        "retained_page": 22704,
+        "locked_work": 21824,
+        "handler_address": 57640,
+        "steps": 57648,
+        "__imp_VirtualQuery": 41128,
+        "__imp_VirtualFree": 41120,
+        "__security_cookie": 57344,
+        "marker_address": 57632,
+        "__imp_RaiseException": 41080,
+        "__security_check_cookie": 23440
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha3/mod.rs::open",
+      "image_sha256": "76bdf18e31b935535ca7a36a5d694abbe14de4a3179076a2fd452d3c5f259718",
+      "object_sha256": "0f26e3249d40ccd61f21d158ce5df88100fc0036bc70fa890050bddddd5ced39",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 41264,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 48896,
+            "symbol_rva": 48896,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 44880,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 44800,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 45120,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 45328,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 45232,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 45024,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 44448,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 45908,
+            "symbol_rva": 45908,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 71872,
+        "PublicLockedLow": 71880,
+        "active": 69800,
+        "stats": 69856,
+        "low_changed": 69956,
+        "high_changed": 69960,
+        "page_info": 44880,
+        "low_old": 69804,
+        "__imp_VirtualProtect": 57456,
+        "__imp_GetLastError": 57440,
+        "high_old": 69952,
+        "notify_host": 44800,
+        "admitted": 69832,
+        "host_callback": 69792,
+        "cleared": 69840,
+        "__imp_CallEnclave": 57480,
+        "BaseLockedBody": 41264,
+        "retained_call": 69964,
+        "retained_region": 69968,
+        "retained_report": 70000,
+        "retained_operation": 69976,
+        "retained_live": 69992,
+        "__imp_VirtualAlloc": 57448,
+        "retained_guards": 45120,
+        "retained_notify": 45232,
+        "retained_free": 45024,
+        "RetainedWork": 4096,
+        "retained_output": 69984,
+        "retained_page": 45328,
+        "locked_work": 44448,
+        "handler_address": 69816,
+        "steps": 69824,
+        "__imp_VirtualQuery": 57472,
+        "__imp_VirtualFree": 57464,
+        "__security_cookie": 69632,
+        "marker_address": 69808,
+        "__imp_RaiseException": 57432,
+        "__security_check_cookie": 46064
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha3/mod.rs::open_avx2",
+      "image_sha256": "28d01c3b932d22daad5cd2256aa9c31c5fb937a4846067eb991345ee7c7449fa",
+      "object_sha256": "e9f47eb364335d3d9ed4edbcae7d60b86cc716a826167bb6851624b29bbc88aa",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 27104,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 35504,
+            "symbol_rva": 35504,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 31456,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 31376,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 31696,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 31904,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 31808,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 31600,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 31024,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 32484,
+            "symbol_rva": 32484,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 72024,
+        "PublicLockedLow": 72032,
+        "active": 69924,
+        "stats": 69984,
+        "low_changed": 70088,
+        "high_changed": 70092,
+        "page_info": 31456,
+        "low_old": 70080,
+        "__imp_VirtualProtect": 53400,
+        "__imp_GetLastError": 53376,
+        "high_old": 70084,
+        "notify_host": 31376,
+        "admitted": 69960,
+        "host_callback": 69928,
+        "cleared": 69968,
+        "__imp_CallEnclave": 53424,
+        "BaseLockedBody": 27104,
+        "retained_call": 70120,
+        "retained_region": 70096,
+        "retained_report": 70128,
+        "retained_operation": 70104,
+        "retained_live": 70124,
+        "__imp_VirtualAlloc": 53392,
+        "retained_guards": 31696,
+        "retained_notify": 31808,
+        "retained_free": 31600,
+        "RetainedWork": 4096,
+        "retained_output": 70112,
+        "retained_page": 31904,
+        "locked_work": 31024,
+        "handler_address": 69944,
+        "steps": 69952,
+        "__imp_VirtualQuery": 53416,
+        "__imp_VirtualFree": 53408,
+        "__security_cookie": 69632,
+        "marker_address": 69936,
+        "__imp_RaiseException": 53368,
+        "__security_check_cookie": 32640
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "kmac/mod.rs::open",
+      "image_sha256": "bbe6218b52e86b49379597a13129604f8fc7708f4a62b4c7bbc0e387d4173e33",
+      "object_sha256": "13234beb67ac1bf7b5f7e70e5fc66d6fa33a5331836ffbefa42757e9033f6cd5",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 45520,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 53184,
+            "symbol_rva": 53184,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 49168,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 49088,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 49408,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 49616,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 49520,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 49312,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 48736,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 50196,
+            "symbol_rva": 50196,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 75968,
+        "PublicLockedLow": 75976,
+        "active": 73896,
+        "stats": 73952,
+        "low_changed": 74052,
+        "high_changed": 74056,
+        "page_info": 49168,
+        "low_old": 73900,
+        "__imp_VirtualProtect": 61552,
+        "__imp_GetLastError": 61536,
+        "high_old": 74048,
+        "notify_host": 49088,
+        "admitted": 73928,
+        "host_callback": 73888,
+        "cleared": 73936,
+        "__imp_CallEnclave": 61576,
+        "BaseLockedBody": 45520,
+        "retained_call": 74060,
+        "retained_region": 74064,
+        "retained_report": 74096,
+        "retained_operation": 74072,
+        "retained_live": 74088,
+        "__imp_VirtualAlloc": 61544,
+        "retained_guards": 49408,
+        "retained_notify": 49520,
+        "retained_free": 49312,
+        "RetainedWork": 4096,
+        "retained_output": 74080,
+        "retained_page": 49616,
+        "locked_work": 48736,
+        "handler_address": 73912,
+        "steps": 73920,
+        "__imp_VirtualQuery": 61568,
+        "__imp_VirtualFree": 61560,
+        "__security_cookie": 73728,
+        "marker_address": 73904,
+        "__imp_RaiseException": 61528,
+        "__security_check_cookie": 50352
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "kmac/mod.rs::open_avx2",
+      "image_sha256": "4c0f67100277e7750853ba7018ca73f0f68482133c3fdc6ee43ff975fe3abaae",
+      "object_sha256": "b2660b8a15192791f920c9f66a45309cc830c8ee40896f33dbca73b706dacaaa",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 32336,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 40768,
+            "symbol_rva": 40768,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 36720,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 36640,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 36960,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 37168,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 37072,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 36864,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 36288,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 37748,
+            "symbol_rva": 37748,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 76120,
+        "PublicLockedLow": 76128,
+        "active": 74020,
+        "stats": 74080,
+        "low_changed": 74184,
+        "high_changed": 74188,
+        "page_info": 36720,
+        "low_old": 74176,
+        "__imp_VirtualProtect": 57496,
+        "__imp_GetLastError": 57472,
+        "high_old": 74180,
+        "notify_host": 36640,
+        "admitted": 74056,
+        "host_callback": 74024,
+        "cleared": 74064,
+        "__imp_CallEnclave": 57520,
+        "BaseLockedBody": 32336,
+        "retained_call": 74216,
+        "retained_region": 74192,
+        "retained_report": 74224,
+        "retained_operation": 74200,
+        "retained_live": 74220,
+        "__imp_VirtualAlloc": 57488,
+        "retained_guards": 36960,
+        "retained_notify": 37072,
+        "retained_free": 36864,
+        "RetainedWork": 4096,
+        "retained_output": 74208,
+        "retained_page": 37168,
+        "locked_work": 36288,
+        "handler_address": 74040,
+        "steps": 74048,
+        "__imp_VirtualQuery": 57512,
+        "__imp_VirtualFree": 57504,
+        "__security_cookie": 73728,
+        "marker_address": 74032,
+        "__imp_RaiseException": 57464,
+        "__security_check_cookie": 37904
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "tuplehash/mod.rs::open",
+      "image_sha256": "43b9c988e2a622cc722311d33bfef5de67414357bc32f6c1692c7b09650cf09d",
+      "object_sha256": "5d37b79c17ac9b98e9c1aeaf5f54fd8bb88875475097918e67e6b68950ae0b5a",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 27472,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 35120,
+            "symbol_rva": 35120,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 31104,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 31024,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 31344,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 31552,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 31456,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 31248,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 30672,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 32132,
+            "symbol_rva": 32132,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 55488,
+        "PublicLockedLow": 55496,
+        "active": 53416,
+        "stats": 53472,
+        "low_changed": 53572,
+        "high_changed": 53576,
+        "page_info": 31104,
+        "low_old": 53420,
+        "__imp_VirtualProtect": 41072,
+        "__imp_GetLastError": 41056,
+        "high_old": 53568,
+        "notify_host": 31024,
+        "admitted": 53448,
+        "host_callback": 53408,
+        "cleared": 53456,
+        "__imp_CallEnclave": 41096,
+        "BaseLockedBody": 27472,
+        "retained_call": 53580,
+        "retained_region": 53584,
+        "retained_report": 53616,
+        "retained_operation": 53592,
+        "retained_live": 53608,
+        "__imp_VirtualAlloc": 41064,
+        "retained_guards": 31344,
+        "retained_notify": 31456,
+        "retained_free": 31248,
+        "RetainedWork": 4096,
+        "retained_output": 53600,
+        "retained_page": 31552,
+        "locked_work": 30672,
+        "handler_address": 53432,
+        "steps": 53440,
+        "__imp_VirtualQuery": 41088,
+        "__imp_VirtualFree": 41080,
+        "__security_cookie": 53248,
+        "marker_address": 53424,
+        "__imp_RaiseException": 41048,
+        "__security_check_cookie": 32288
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "tuplehash/mod.rs::open_avx2",
+      "image_sha256": "c5942cba859ffdacd7e657d81ff2d3e25c5582cdb3aeb9754da511cb5f35bd38",
+      "object_sha256": "02a474a495111c306f026618cf1464413030f44fd0339bd2f7893497c0d82c2e",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 28000,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 36400,
+            "symbol_rva": 36400,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 32352,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 32272,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 32592,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 32800,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 32704,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 32496,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 31920,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 33380,
+            "symbol_rva": 33380,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 72024,
+        "PublicLockedLow": 72032,
+        "active": 69924,
+        "stats": 69984,
+        "low_changed": 70088,
+        "high_changed": 70092,
+        "page_info": 32352,
+        "low_old": 70080,
+        "__imp_VirtualProtect": 53400,
+        "__imp_GetLastError": 53376,
+        "high_old": 70084,
+        "notify_host": 32272,
+        "admitted": 69960,
+        "host_callback": 69928,
+        "cleared": 69968,
+        "__imp_CallEnclave": 53424,
+        "BaseLockedBody": 28000,
+        "retained_call": 70120,
+        "retained_region": 70096,
+        "retained_report": 70128,
+        "retained_operation": 70104,
+        "retained_live": 70124,
+        "__imp_VirtualAlloc": 53392,
+        "retained_guards": 32592,
+        "retained_notify": 32704,
+        "retained_free": 32496,
+        "RetainedWork": 4096,
+        "retained_output": 70112,
+        "retained_page": 32800,
+        "locked_work": 31920,
+        "handler_address": 69944,
+        "steps": 69952,
+        "__imp_VirtualQuery": 53416,
+        "__imp_VirtualFree": 53408,
+        "__security_cookie": 69632,
+        "marker_address": 69936,
+        "__imp_RaiseException": 53368,
+        "__security_check_cookie": 33536
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha2_batch/mod.rs::open",
+      "image_sha256": "042589239016c308226ab0a6d360d0fd7fc31b20368dd1beecc31cb1214a8e9e",
+      "object_sha256": "8e06c89dc7488c5c0c9e84c6fa74cb583142b5d900fff219714c3adfebcbc31f",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 20832,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 28464,
+            "symbol_rva": 28464,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 24448,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 24368,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 24688,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 24896,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 24800,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 24592,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 24016,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 25476,
+            "symbol_rva": 25476,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 51408,
+        "PublicLockedLow": 51416,
+        "active": 49336,
+        "stats": 49392,
+        "low_changed": 49492,
+        "high_changed": 49496,
+        "page_info": 24448,
+        "low_old": 49340,
+        "__imp_VirtualProtect": 36976,
+        "__imp_GetLastError": 36960,
+        "high_old": 49488,
+        "notify_host": 24368,
+        "admitted": 49368,
+        "host_callback": 49328,
+        "cleared": 49376,
+        "__imp_CallEnclave": 37000,
+        "BaseLockedBody": 20832,
+        "retained_call": 49500,
+        "retained_region": 49504,
+        "retained_report": 49536,
+        "retained_operation": 49512,
+        "retained_live": 49528,
+        "__imp_VirtualAlloc": 36968,
+        "retained_guards": 24688,
+        "retained_notify": 24800,
+        "retained_free": 24592,
+        "RetainedWork": 4096,
+        "retained_output": 49520,
+        "retained_page": 24896,
+        "locked_work": 24016,
+        "handler_address": 49352,
+        "steps": 49360,
+        "__imp_VirtualQuery": 36992,
+        "__imp_VirtualFree": 36984,
+        "__security_cookie": 49152,
+        "marker_address": 49344,
+        "__imp_RaiseException": 36952,
+        "__security_check_cookie": 25632
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha2_batch/mod.rs::open_sha_ni",
+      "image_sha256": "3dc8f854c97f7371411797daf2f88cbf54473f816fcfbf93dc52954d3c8905af",
+      "object_sha256": "9fd0a64c3da00271ed7687c929e22a9f113ae7f5ca64a057075de5190488c0e5",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 18976,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 27376,
+            "symbol_rva": 27376,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 23328,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 23248,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 23568,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 23776,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 23680,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 23472,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 22896,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 24356,
+            "symbol_rva": 24356,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 63816,
+        "PublicLockedLow": 63824,
+        "active": 61716,
+        "stats": 61776,
+        "low_changed": 61880,
+        "high_changed": 61884,
+        "page_info": 23328,
+        "low_old": 61872,
+        "__imp_VirtualProtect": 45208,
+        "__imp_GetLastError": 45184,
+        "high_old": 61876,
+        "notify_host": 23248,
+        "admitted": 61752,
+        "host_callback": 61720,
+        "cleared": 61760,
+        "__imp_CallEnclave": 45232,
+        "BaseLockedBody": 18976,
+        "retained_call": 61912,
+        "retained_region": 61888,
+        "retained_report": 61920,
+        "retained_operation": 61896,
+        "retained_live": 61916,
+        "__imp_VirtualAlloc": 45200,
+        "retained_guards": 23568,
+        "retained_notify": 23680,
+        "retained_free": 23472,
+        "RetainedWork": 4096,
+        "retained_output": 61904,
+        "retained_page": 23776,
+        "locked_work": 22896,
+        "handler_address": 61736,
+        "steps": 61744,
+        "__imp_VirtualQuery": 45224,
+        "__imp_VirtualFree": 45216,
+        "__security_cookie": 61440,
+        "marker_address": 61728,
+        "__imp_RaiseException": 45176,
+        "__security_check_cookie": 24512
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha3_batch/mod.rs::open",
+      "image_sha256": "15ff86cc7baf709230411a0ce954ef5fb84ae249f132b4186b0ac186b428c4a8",
+      "object_sha256": "a299c411b1eac0719349c372f94572e7cf7c6a3b87cf91acf20613216146120f",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 44896,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 52512,
+            "symbol_rva": 52512,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 48496,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 48416,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 48736,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 48944,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 48848,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 48640,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 48064,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 49524,
+            "symbol_rva": 49524,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 75968,
+        "PublicLockedLow": 75976,
+        "active": 73896,
+        "stats": 73952,
+        "low_changed": 74052,
+        "high_changed": 74056,
+        "page_info": 48496,
+        "low_old": 73900,
+        "__imp_VirtualProtect": 61552,
+        "__imp_GetLastError": 61536,
+        "high_old": 74048,
+        "notify_host": 48416,
+        "admitted": 73928,
+        "host_callback": 73888,
+        "cleared": 73936,
+        "__imp_CallEnclave": 61576,
+        "BaseLockedBody": 44896,
+        "retained_call": 74060,
+        "retained_region": 74064,
+        "retained_report": 74096,
+        "retained_operation": 74072,
+        "retained_live": 74088,
+        "__imp_VirtualAlloc": 61544,
+        "retained_guards": 48736,
+        "retained_notify": 48848,
+        "retained_free": 48640,
+        "RetainedWork": 4096,
+        "retained_output": 74080,
+        "retained_page": 48944,
+        "locked_work": 48064,
+        "handler_address": 73912,
+        "steps": 73920,
+        "__imp_VirtualQuery": 61568,
+        "__imp_VirtualFree": 61560,
+        "__security_cookie": 73728,
+        "marker_address": 73904,
+        "__imp_RaiseException": 61528,
+        "__security_check_cookie": 49680
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha3_batch/mod.rs::open_avx2",
+      "image_sha256": "2d169d513ca393fe16f4ba25d88d5c4845dafe96532f22b8c9d47e0028a9e78c",
+      "object_sha256": "d232297bcdbaacb89692292e989600cb7948ea661d6f2db0875ef38750756eee",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 31104,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 39488,
+            "symbol_rva": 39488,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 35440,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 35360,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 35680,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 35888,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 35792,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 35584,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 35008,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 36468,
+            "symbol_rva": 36468,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 76120,
+        "PublicLockedLow": 76128,
+        "active": 74020,
+        "stats": 74080,
+        "low_changed": 74184,
+        "high_changed": 74188,
+        "page_info": 35440,
+        "low_old": 74176,
+        "__imp_VirtualProtect": 57496,
+        "__imp_GetLastError": 57472,
+        "high_old": 74180,
+        "notify_host": 35360,
+        "admitted": 74056,
+        "host_callback": 74024,
+        "cleared": 74064,
+        "__imp_CallEnclave": 57520,
+        "BaseLockedBody": 31104,
+        "retained_call": 74216,
+        "retained_region": 74192,
+        "retained_report": 74224,
+        "retained_operation": 74200,
+        "retained_live": 74220,
+        "__imp_VirtualAlloc": 57488,
+        "retained_guards": 35680,
+        "retained_notify": 35792,
+        "retained_free": 35584,
+        "RetainedWork": 4096,
+        "retained_output": 74208,
+        "retained_page": 35888,
+        "locked_work": 35008,
+        "handler_address": 74040,
+        "steps": 74048,
+        "__imp_VirtualQuery": 57512,
+        "__imp_VirtualFree": 57504,
+        "__security_cookie": 73728,
+        "marker_address": 74032,
+        "__imp_RaiseException": 57464,
+        "__security_check_cookie": 36624
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "parallelhash/mod.rs::open",
+      "image_sha256": "9fbeb3d6d940daf0ecd5172969d4160c3e6e71eb7465b279a11bbc1a77c3da13",
+      "object_sha256": "7ea6e4d43ed2d49fba7ccc2cf69be10db3f3bcb566a55845aea9408405bf245f",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 32864,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 40512,
+            "symbol_rva": 40512,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 36496,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 36416,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 36736,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 36944,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 36848,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 36640,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 36064,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 37524,
+            "symbol_rva": 37524,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 63680,
+        "PublicLockedLow": 63688,
+        "active": 61608,
+        "stats": 61664,
+        "low_changed": 61764,
+        "high_changed": 61768,
+        "page_info": 36496,
+        "low_old": 61612,
+        "__imp_VirtualProtect": 49264,
+        "__imp_GetLastError": 49248,
+        "high_old": 61760,
+        "notify_host": 36416,
+        "admitted": 61640,
+        "host_callback": 61600,
+        "cleared": 61648,
+        "__imp_CallEnclave": 49288,
+        "BaseLockedBody": 32864,
+        "retained_call": 61772,
+        "retained_region": 61776,
+        "retained_report": 61808,
+        "retained_operation": 61784,
+        "retained_live": 61800,
+        "__imp_VirtualAlloc": 49256,
+        "retained_guards": 36736,
+        "retained_notify": 36848,
+        "retained_free": 36640,
+        "RetainedWork": 4096,
+        "retained_output": 61792,
+        "retained_page": 36944,
+        "locked_work": 36064,
+        "handler_address": 61624,
+        "steps": 61632,
+        "__imp_VirtualQuery": 49280,
+        "__imp_VirtualFree": 49272,
+        "__security_cookie": 61440,
+        "marker_address": 61616,
+        "__imp_RaiseException": 49240,
+        "__security_check_cookie": 37680
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "parallelhash/mod.rs::open_avx2",
+      "image_sha256": "f6eac516db512c188abc547ff27ade796ed73a8281363b68fd3fb89ff6996e79",
+      "object_sha256": "f02eae85b3bf0ed9f16ff482bd148bf7f1cf981b154575ead80b78ee9430a1f6",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 29904,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 38320,
+            "symbol_rva": 38320,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 34272,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 34192,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 34512,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 34720,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 34624,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 34416,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 33840,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 35300,
+            "symbol_rva": 35300,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 72024,
+        "PublicLockedLow": 72032,
+        "active": 69924,
+        "stats": 69984,
+        "low_changed": 70088,
+        "high_changed": 70092,
+        "page_info": 34272,
+        "low_old": 70080,
+        "__imp_VirtualProtect": 53400,
+        "__imp_GetLastError": 53376,
+        "high_old": 70084,
+        "notify_host": 34192,
+        "admitted": 69960,
+        "host_callback": 69928,
+        "cleared": 69968,
+        "__imp_CallEnclave": 53424,
+        "BaseLockedBody": 29904,
+        "retained_call": 70120,
+        "retained_region": 70096,
+        "retained_report": 70128,
+        "retained_operation": 70104,
+        "retained_live": 70124,
+        "__imp_VirtualAlloc": 53392,
+        "retained_guards": 34512,
+        "retained_notify": 34624,
+        "retained_free": 34416,
+        "RetainedWork": 4096,
+        "retained_output": 70112,
+        "retained_page": 34720,
+        "locked_work": 33840,
+        "handler_address": 69944,
+        "steps": 69952,
+        "__imp_VirtualQuery": 53416,
+        "__imp_VirtualFree": 53408,
+        "__security_cookie": 69632,
+        "marker_address": 69936,
+        "__imp_RaiseException": 53368,
+        "__security_check_cookie": 35456
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha256_simd/mod.rs::open_avx2",
+      "image_sha256": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee",
+      "object_sha256": "fbdb1a4047ed90da3a39310fce3dcb46f5b294a0270311e193a65da4d94ddab8",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 20896,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 29376,
+            "symbol_rva": 29376,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 25328,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 25248,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 25568,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 25776,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 25680,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 25472,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 24896,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 26356,
+            "symbol_rva": 26356,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 59720,
+        "PublicLockedLow": 59728,
+        "active": 57620,
+        "stats": 57680,
+        "low_changed": 57784,
+        "high_changed": 57788,
+        "page_info": 25328,
+        "low_old": 57776,
+        "__imp_VirtualProtect": 45208,
+        "__imp_GetLastError": 45184,
+        "high_old": 57780,
+        "notify_host": 25248,
+        "admitted": 57656,
+        "host_callback": 57624,
+        "cleared": 57664,
+        "__imp_CallEnclave": 45232,
+        "BaseLockedBody": 20896,
+        "retained_call": 57816,
+        "retained_region": 57792,
+        "retained_report": 57824,
+        "retained_operation": 57800,
+        "retained_live": 57820,
+        "__imp_VirtualAlloc": 45200,
+        "retained_guards": 25568,
+        "retained_notify": 25680,
+        "retained_free": 25472,
+        "RetainedWork": 4096,
+        "retained_output": 57808,
+        "retained_page": 25776,
+        "locked_work": 24896,
+        "handler_address": 57640,
+        "steps": 57648,
+        "__imp_VirtualQuery": 45224,
+        "__imp_VirtualFree": 45216,
+        "__security_cookie": 57344,
+        "marker_address": 57632,
+        "__imp_RaiseException": 45176,
+        "__security_check_cookie": 26512
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "sha512_simd/mod.rs::open_avx2",
+      "image_sha256": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510",
+      "object_sha256": "091ab1f7f3eac1876705a481c5c3d95c27cc49be85e5d053a53610b0b79e0269",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 23120,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 31600,
+            "symbol_rva": 31600,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 27552,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 27472,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 27792,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 28000,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 27904,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 27696,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 27120,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 28580,
+            "symbol_rva": 28580,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 67912,
+        "PublicLockedLow": 67920,
+        "active": 65812,
+        "stats": 65872,
+        "low_changed": 65976,
+        "high_changed": 65980,
+        "page_info": 27552,
+        "low_old": 65968,
+        "__imp_VirtualProtect": 49304,
+        "__imp_GetLastError": 49280,
+        "high_old": 65972,
+        "notify_host": 27472,
+        "admitted": 65848,
+        "host_callback": 65816,
+        "cleared": 65856,
+        "__imp_CallEnclave": 49328,
+        "BaseLockedBody": 23120,
+        "retained_call": 66008,
+        "retained_region": 65984,
+        "retained_report": 66016,
+        "retained_operation": 65992,
+        "retained_live": 66012,
+        "__imp_VirtualAlloc": 49296,
+        "retained_guards": 27792,
+        "retained_notify": 27904,
+        "retained_free": 27696,
+        "RetainedWork": 4096,
+        "retained_output": 66000,
+        "retained_page": 28000,
+        "locked_work": 27120,
+        "handler_address": 65832,
+        "steps": 65840,
+        "__imp_VirtualQuery": 49320,
+        "__imp_VirtualFree": 49312,
+        "__security_cookie": 65536,
+        "marker_address": 65824,
+        "__imp_RaiseException": 49272,
+        "__security_check_cookie": 28736
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    },
+    {
+      "route": "keccak_simd/mod.rs::open_avx2",
+      "image_sha256": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330",
+      "object_sha256": "50d542fb017ec2375d693afd9e95e91a0a785ee9c6acb20181275c3e25137788",
+      "entries": {
+        "BaseLockedBody": {
+          "rva": 25616,
+          "bytes": 80,
+          "handler": {
+            "offset": 8,
+            "symbol": "__C_specific_handler",
+            "target_rva": 34064,
+            "symbol_rva": 34064,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        },
+        "page_info": {
+          "rva": 30016,
+          "bytes": 137,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "notify_host": {
+          "rva": 29936,
+          "bytes": 78,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_guards": {
+          "rva": 30256,
+          "bytes": 98,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_page": {
+          "rva": 30464,
+          "bytes": 122,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_notify": {
+          "rva": 30368,
+          "bytes": 93,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "retained_free": {
+          "rva": 30160,
+          "bytes": 83,
+          "handler": null,
+          "normal_local_frame_only": true
+        },
+        "locked_work": {
+          "rva": 29584,
+          "bytes": 337,
+          "handler": {
+            "offset": 16,
+            "symbol": "__GSHandlerCheck_SEH",
+            "target_rva": 31044,
+            "symbol_rva": 31044,
+            "section": 0
+          },
+          "normal_local_frame_only": true
+        }
+      },
+      "reference_targets": {
+        "PublicLockedHigh": 67944,
+        "PublicLockedLow": 67952,
+        "active": 65828,
+        "stats": 65888,
+        "low_changed": 65992,
+        "high_changed": 65996,
+        "page_info": 30016,
+        "low_old": 65984,
+        "__imp_VirtualProtect": 49304,
+        "__imp_GetLastError": 49280,
+        "high_old": 65988,
+        "notify_host": 29936,
+        "admitted": 65864,
+        "host_callback": 65832,
+        "cleared": 65872,
+        "__imp_CallEnclave": 49328,
+        "BaseLockedBody": 25616,
+        "retained_call": 66024,
+        "retained_region": 66000,
+        "retained_report": 66032,
+        "retained_operation": 66008,
+        "retained_live": 66028,
+        "__imp_VirtualAlloc": 49296,
+        "retained_guards": 30256,
+        "retained_notify": 30368,
+        "retained_free": 30160,
+        "RetainedWork": 4096,
+        "retained_output": 66016,
+        "retained_page": 30464,
+        "locked_work": 29584,
+        "handler_address": 65848,
+        "steps": 65856,
+        "__imp_VirtualQuery": 49320,
+        "__imp_VirtualFree": 49312,
+        "__security_cookie": 65536,
+        "marker_address": 65840,
+        "__imp_RaiseException": 49272,
+        "__security_check_cookie": 31200
+      },
+      "whole_image_qualified": false,
+      "sdk_semantics_qualified": false,
+      "exception_handler_semantics_qualified": false
+    }
+  ],
+  "geometry": {
+    "frames": {
+      "body": {
+        "rsp_from_high": -96,
+        "entry_from_high": -40
+      },
+      "base": {
+        "rsp_from_high": -144,
+        "entry_from_high": -104
+      },
+      "public_marker": {
+        "rsp_from_high": -480,
+        "entry_from_high": -152
+      },
+      "retained_notify": {
+        "rsp_from_high": -144,
+        "entry_from_high": -104
+      },
+      "retained_guards": {
+        "rsp_from_high": -144,
+        "entry_from_high": -104
+      },
+      "retained_page": {
+        "rsp_from_high": -240,
+        "entry_from_high": -152
+      },
+      "retained_free": {
+        "rsp_from_high": -144,
+        "entry_from_high": -104
+      }
+    },
+    "spans": [
+      {
+        "name": "saved RBP",
+        "offset_from_low": 65488,
+        "offset_from_high": -48,
+        "bytes": 8
+      },
+      {
+        "name": "saved RBX",
+        "offset_from_low": 65504,
+        "offset_from_high": -32,
+        "bytes": 8
+      },
+      {
+        "name": "saved RSI",
+        "offset_from_low": 65520,
+        "offset_from_high": -16,
+        "bytes": 8
+      },
+      {
+        "name": "saved RDI",
+        "offset_from_low": 65528,
+        "offset_from_high": -8,
+        "bytes": 8
+      },
+      {
+        "name": "public exception marker",
+        "offset_from_low": 65448,
+        "offset_from_high": -88,
+        "bytes": 1
+      },
+      {
+        "name": "public sentinel",
+        "offset_from_low": 65104,
+        "offset_from_high": -432,
+        "bytes": 256
+      },
+      {
+        "name": "cookie",
+        "offset_from_low": 65360,
+        "offset_from_high": -176,
+        "bytes": 8
+      },
+      {
+        "name": "saved RBX",
+        "offset_from_low": 65392,
+        "offset_from_high": -144,
+        "bytes": 8
+      },
+      {
+        "name": "public acknowledgement",
+        "offset_from_low": 65448,
+        "offset_from_high": -88,
+        "bytes": 8
+      },
+      {
+        "name": "page-query metadata",
+        "offset_from_low": 65328,
+        "offset_from_high": -208,
+        "bytes": 48
+      },
+      {
+        "name": "saved RBX",
+        "offset_from_low": 65392,
+        "offset_from_high": -144,
+        "bytes": 8
+      }
+    ],
+    "unknown_callees": [
+      {
+        "name": "RetainedWork entry/home",
+        "offset_from_low": 65432,
+        "offset_from_high": -104,
+        "bytes": 40,
+        "callee_frame_bytes": null,
+        "callee_spills_qualified": false
+      },
+      {
+        "name": "CallEnclave entry/home",
+        "offset_from_low": 65384,
+        "offset_from_high": -152,
+        "bytes": 40,
+        "callee_frame_bytes": null,
+        "callee_spills_qualified": false
+      },
+      {
+        "name": "VirtualQuery entry/home",
+        "offset_from_low": 65288,
+        "offset_from_high": -248,
+        "bytes": 40,
+        "callee_frame_bytes": null,
+        "callee_spills_qualified": false
+      },
+      {
+        "name": "VirtualFree entry/home",
+        "offset_from_low": 65384,
+        "offset_from_high": -152,
+        "bytes": 40,
+        "callee_frame_bytes": null,
+        "callee_spills_qualified": false
+      }
+    ],
+    "pre_post_window_callback_frames_included": false,
+    "maximum_transitive_depth_qualified": false,
+    "runtime_placement_measured": false
+  },
+  "worker_review_transferred": false,
+  "sdk_semantics_qualified": false,
+  "whole_image_qualified": false,
+  "exception_cleanup_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_sequential_helpers.py": "f0f1dce60668334d7eea713fe0d45c8d7c09cc10dff762007472cbf81a85a90a",
+    "test-windows-enclave-sequential-helpers.py": "28fd329ea31412045478c7353609a41c09f4a8ec464c2b756e8f508eb6cd6f85",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

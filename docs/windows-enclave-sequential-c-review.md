@@ -85,8 +85,10 @@ image inspection produces identical parsed JSON on both hosts: 72 bindings
 covering 1,815 distinct shared-template bytes. Synthetic mutation tests are
 inspection regressions, not cryptographic or native execution evidence.
 
-Next: reconcile the shared called helpers and the distinct retained Rust
-caller/storage paths, keeping SDK, compiler and normal-return scope explicit.
+The subsequent [shared helper review](windows-enclave-sequential-helpers.md)
+reconciles eight called C bodies, including the public-marker routine, across
+these same images. Next are the distinct retained Rust caller/storage paths,
+keeping SDK, compiler and normal-return scope explicit.
 The completed nineteen-image and scoped dump campaigns are retained unchanged;
 this review does not change production code, signed images or release gates.
 Independent retest and whole-image qualification remain outstanding.

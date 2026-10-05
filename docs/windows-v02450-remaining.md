@@ -34,8 +34,12 @@ tests and matching reports pass on both hosts, with 2,284 actual-body mutations
 rejected per host. The [owner-clearing review](windows-enclave-bounded-owner.md)
 now binds placement hashing and all eight workspace-clearing regions; seven
 focused tests and matching reports pass on both hosts, with 587 actual-body
-mutations rejected per host. Update/finalize/copy/runtime callees and the other
-Rust workers remain open; this is not whole-image qualification.
+mutations rejected per host. The [SHA-256 operation review](windows-enclave-bounded-sha256.md)
+now binds update/finalize, scalar compression and both copy helpers, including
+their linked constants and local call depth. Eight focused tests and matching
+reports pass on both hosts; 1,798 actual body-byte mutations are rejected per
+host. Enclosing C copy/observer/runtime paths and the other Rust workers remain
+open; this is not whole-image qualification.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

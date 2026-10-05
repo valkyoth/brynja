@@ -1,0 +1,625 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_BOUNDED_SHA256_OPERATION_REVIEW",
+  "records": {
+    "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state32NtNtB4_5owner17HardenedSha2Owner8update32": {
+      "entry": "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state32NtNtB4_5owner17HardenedSha2Owner8update32",
+      "rva": 11824,
+      "size": 525,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": 11632,
+        "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar": 12352,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11520
+      },
+      "references": [
+        {
+          "offset": 129,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 242,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 264,
+          "symbol": "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 12352,
+          "symbol_rva": 12352
+        },
+        {
+          "offset": 277,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 290,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 323,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 386,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 430,
+          "symbol": "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 12352,
+          "symbol_rva": 12352
+        },
+        {
+          "offset": 443,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 456,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 469,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        }
+      ],
+      "unwind": [
+        {
+          "start": 11824,
+          "end": 12349,
+          "unwind_rva": 36624,
+          "prolog_bytes": 16,
+          "frame": 0,
+          "stack_bytes": 120,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 16,
+              "opcode": 2,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 12,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 11,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 10,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 9,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 8,
+              "opcode": 0,
+              "info": 12,
+              "operand": 0
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 13,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 15,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ],
+      "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "whole_image_qualified": false,
+      "callee_semantics_qualified": false
+    },
+    "_RNvMs5_NtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened8in_placeNtB5_6Sha25615finalize_secret": {
+      "entry": "_RNvMs5_NtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened8in_placeNtB5_6Sha25615finalize_secret",
+      "rva": 12848,
+      "size": 691,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11520,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": 11632,
+        "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar": 12352,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": 11440,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 11664
+      },
+      "references": [
+        {
+          "offset": 37,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 124,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 169,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 194,
+          "symbol": "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 12352,
+          "symbol_rva": 12352
+        },
+        {
+          "offset": 207,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 220,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 281,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 309,
+          "symbol": "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 12352,
+          "symbol_rva": 12352
+        },
+        {
+          "offset": 322,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 335,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 364,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 394,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 424,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 454,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 484,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 514,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 544,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 574,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11632,
+          "symbol_rva": 11632
+        },
+        {
+          "offset": 604,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 621,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11440,
+          "symbol_rva": 11440
+        },
+        {
+          "offset": 659,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11520,
+          "symbol_rva": 11520
+        },
+        {
+          "offset": 683,
+          "symbol": "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11664,
+          "symbol_rva": 11664
+        }
+      ],
+      "unwind": [
+        {
+          "start": 12848,
+          "end": 13539,
+          "unwind_rva": 36656,
+          "prolog_bytes": 16,
+          "frame": 0,
+          "stack_bytes": 104,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 16,
+              "opcode": 2,
+              "info": 4,
+              "operand": 0
+            },
+            {
+              "code_offset": 12,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 11,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 10,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 9,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 8,
+              "opcode": 0,
+              "info": 12,
+              "operand": 0
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 13,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 15,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ],
+      "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "whole_image_qualified": false,
+      "callee_semantics_qualified": false
+    },
+    "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar": {
+      "entry": "_RNvNtNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened10compress326native6scalar",
+      "rva": 12352,
+      "size": 482,
+      "reference_targets": {
+        "anon.a99b5b83196533d8746ce7cb64084aff.7": 33028
+      },
+      "references": [
+        {
+          "offset": 14,
+          "symbol": "anon.a99b5b83196533d8746ce7cb64084aff.7",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 33028,
+          "symbol_rva": 33028
+        }
+      ],
+      "unwind": [
+        {
+          "start": 12352,
+          "end": 12834,
+          "unwind_rva": 36648,
+          "prolog_bytes": 2,
+          "frame": 0,
+          "stack_bytes": 16,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ],
+      "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "whole_image_qualified": false,
+      "callee_semantics_qualified": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+      "rva": 11632,
+      "size": 32,
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": 11440
+      },
+      "references": [
+        {
+          "offset": 21,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+          "trailing": 0,
+          "addend": 0,
+          "target_rva": 11440,
+          "symbol_rva": 11440
+        }
+      ],
+      "unwind": [
+        {
+          "start": 11632,
+          "end": 11664,
+          "unwind_rva": 35648,
+          "prolog_bytes": 4,
+          "frame": 0,
+          "stack_bytes": 40,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 4,
+              "opcode": 2,
+              "info": 4,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ],
+      "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "whole_image_qualified": false,
+      "callee_semantics_qualified": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+      "rva": 11440,
+      "size": 68,
+      "incoming": [
+        [
+          "_RNvMs5_NtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened8in_placeNtB5_6Sha25615finalize_secret",
+          11440
+        ],
+        [
+          "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          11440
+        ]
+      ],
+      "byte_candidates": 1,
+      "reference_targets": {},
+      "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+      "image_sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494",
+      "code_sha256": "820c2a4fdf11073053919c00ab6524a905846dd6347f14a23b9371c1b0fda7e4",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    }
+  },
+  "scalar_constants": {
+    "rva": 33028,
+    "bytes": 256,
+    "sha256": "74ef7306e7452d6859b6463ce496b8df30925f69e1b2969e1f3f34bbc9c6af04"
+  },
+  "geometry": {
+    "update_rsp_from_high": -3616,
+    "finalize_rsp_from_high": -3600,
+    "copy_rsp_from_high": -3664,
+    "scalar_rsp_from_high": -3640,
+    "deepest_operation_rsp_from_high": -3672,
+    "spans": [
+      {
+        "name": "update saved GPRs",
+        "offset_from_low": 61976,
+        "offset_from_high": -3560,
+        "bytes": 64
+      },
+      {
+        "name": "input pointer and complete-byte count",
+        "offset_from_low": 61960,
+        "offset_from_high": -3576,
+        "bytes": 16
+      },
+      {
+        "name": "finalize saved GPRs",
+        "offset_from_low": 61976,
+        "offset_from_high": -3560,
+        "bytes": 64
+      },
+      {
+        "name": "scalar saved pointers, return and caller home",
+        "offset_from_low": 61896,
+        "offset_from_high": -3640,
+        "bytes": 56
+      },
+      {
+        "name": "copy leaf return and caller home",
+        "offset_from_low": 61864,
+        "offset_from_high": -3672,
+        "bytes": 40
+      }
+    ],
+    "finalize_wipe_tail_reuses_entry": true,
+    "operation_chain_depth_reviewed": true,
+    "maximum_whole_image_depth_qualified": false,
+    "individual_caller_stack_copies_erased": false
+  },
+  "object_sha256": "c6fb9928677c04458d9c8ec31f55746ff97b1fec7c21ef20fa8f4e8104400445",
+  "archive_sha256": "ca26f3d5fe8f2148377ed3de9cfc7fb2e021f7482f7a09c3cd709133c4837ab5",
+  "archive_member": "retained_rehash_worker.retained_rehash_worker.5ba691928e62cbf8-cgu.0.rcgu.o",
+  "actual_body_byte_mutations_rejected": 1798,
+  "valid_initialized_owner_required": true,
+  "normal_operation_chain_reviewed": true,
+  "whole_image_qualified": false,
+  "independent_cryptographic_review": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_bounded_sha256.py": "13657b2f79684b2373259bd047481e2141b24ac711cf772bed2d9e774e059bad",
+    "test-windows-enclave-bounded-sha256.py": "bf19c41377b44c6d010d3e01b316c60c3a12640f3edb6a1934b97f7fb49e49b9",
+    "windows_enclave_bounded_owner.py": "3960351f4ebda9dd81b4f1ac431d2e0a1ada38cc6e86bbe4cbc27fee0f0307f3",
+    "windows_enclave_bounded_rehash.py": "9d8df50b4355913c5ca56b677733d64422fc59d963230a1b4892e812e03bd04a",
+    "windows_enclave_bounded_input.py": "78af4234d95ae7469aa001099d8bdd6965b9d074de27eec3e331ee76637e57b2",
+    "windows_enclave_bounded_dispatch.py": "2b06da5690425237176affbd7b1ea3492aee6563488ddea8b530614e06d67b54",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

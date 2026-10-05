@@ -522,8 +522,10 @@ work is:
    the following [rehash review](windows-enclave-bounded-rehash.md) adds its
    token/generation/commit and returning cleanup paths. The
    [owner-clearing review](windows-enclave-bounded-owner.md) binds placement hashing
-   and complete workspace erasure. Update/finalize/copy/runtime callees remain
-   separate obligations.
+   and complete workspace erasure. The [SHA-256 operation review](windows-enclave-bounded-sha256.md)
+   adds update/finalize, scalar compression, both copy helpers and linked round
+   constants, with their local normal-return depth. Enclosing C copy/observer/runtime
+   paths and other image families remain separate obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

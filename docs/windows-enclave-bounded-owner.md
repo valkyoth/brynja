@@ -95,7 +95,9 @@ incoming wipe references, image/clearer identity and fixed-frame inventories.
 The geometry is checked at three window bases.
 
 These are offline inspection regressions, not fresh native crypto tests or an
-independent retest. Next are the SHA-256 update/finalize and copy/observer/runtime
+independent retest. The subsequent [SHA-256 operation review](windows-enclave-bounded-sha256.md)
+closes update/finalize, scalar compression and both copy-helper paths for this
+saved image, including local call depth. Next are enclosing C copy/observer/runtime
 callees, followed by other distinct worker families. Whole-image qualification
 remains incomplete. No production code, signed image, native campaign or
 release-gate policy changed.

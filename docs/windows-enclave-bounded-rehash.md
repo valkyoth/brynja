@@ -98,7 +98,8 @@ These tests guard this offline inspection, not a fresh cryptographic campaign
 or independent retest.
 
 The subsequent [owner review](windows-enclave-bounded-owner.md) binds placement
-hashing and the full workspace wipe. Next: SHA-256 update/finalize and
+hashing and the full workspace wipe. The [SHA-256 operation review](windows-enclave-bounded-sha256.md)
+adds update/finalize, scalar compression and both copy helpers. Next: enclosing C
 copy/observer/runtime callees, followed by other distinct worker families. Whole-image qualification
 remains incomplete. Production code, images and release gates are unchanged;
 the completed native/dump campaigns were not rerun.

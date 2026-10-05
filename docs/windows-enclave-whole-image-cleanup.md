@@ -59,6 +59,13 @@ records and 3,226 body-pin mutation rejections. The prior native component campa
 is reused with unchanged source hashes. Inline root initialization, remaining
 session/runtime calls and outer-root/SDK reconciliation are not closed by this
 selected review.
+The subsequent [root initialization review](windows-enclave-root-setup.md) now
+traces that inline setup and its two retained destructor funclets, including
+exact linked domain/rate constants and bounded encoders. Seven inspector/model
+tests pass on both hosts, with matching records and 3,176 body-pin mutations
+rejected. Earlier moved state copies remain covered by the normal whole-window
+clear, not individual destructor writes. Runtime and cross-image reconciliation
+remain separate obligations.
 
 ## Completed wrapper boundary, 2026-10-04
 
@@ -471,12 +478,11 @@ work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
    its now-closed direct destruction chain and operation adapters: state
-   inline root prefix initialization and remaining permutation-session/runtime
-   internals, outer-root/SDK terminal
+   remaining permutation-session/runtime internals, outer-root/SDK terminal
    reconciliation, then the other image families.
    Selected publication joining, ordered reduction, explicit generation retirement
    and owner-level finish/export/destruction, selected construction and streamed
-   prefix operations are now reviewed; that does not prove
+   prefix operations and inline root initialization are now reviewed; that does not prove
    all remaining caller lifetime obligations or transitive state operations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,

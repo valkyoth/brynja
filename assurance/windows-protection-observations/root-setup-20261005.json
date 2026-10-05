@@ -1,0 +1,513 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "AUTHOR_SELECTED_ROOT_SETUP_REVIEW",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "entries": {
+    "new": {
+      "entry": "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+      "rva": 18000,
+      "size": 2390,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "__chkstk": 34128,
+        "switch.table._RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new": 59216,
+        "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial": 26624,
+        "memcpy": 46880,
+        "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128": 14528,
+        "__umodti3": 28528,
+        "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb": 22928,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": 22848,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216,
+        "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe": 13136,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits": 24848,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance": 24272,
+        "anon.5f2396cd0f73852b79ba16fa154e009e.0": 59032,
+        "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State11setup_chunk": 23584,
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves": 16448,
+        "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_setup": 26224,
+        "_RNvMNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encodingNtB2_20SecretEncodedInteger4left": 15888,
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encoding20SecretEncodedIntegerEBF_": 16048,
+        "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State6update": 27664,
+        "memset": 48608
+      },
+      "xdata_rva": 63744,
+      "xdata_bytes": 180,
+      "metadata": [
+        {
+          "offset": 28,
+          "symbol": "__CxxFrameHandler3",
+          "target_rva": 39956,
+          "symbol_rva": 39956,
+          "section": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "$cppxdata$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63828,
+          "symbol_rva": 63828,
+          "section": 127
+        },
+        {
+          "offset": 92,
+          "symbol": "$stateUnwindMap$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63868,
+          "symbol_rva": 63868,
+          "section": 127
+        },
+        {
+          "offset": 108,
+          "symbol": "$ip2state$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63884,
+          "symbol_rva": 63884,
+          "section": 127
+        },
+        {
+          "offset": 128,
+          "symbol": "?dtor$62@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA",
+          "target_rva": 20480,
+          "symbol_rva": 20480,
+          "section": 48
+        },
+        {
+          "offset": 136,
+          "symbol": "?dtor$59@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA",
+          "target_rva": 20400,
+          "symbol_rva": 20400,
+          "section": 48
+        },
+        {
+          "offset": 140,
+          "symbol": ".text",
+          "target_rva": 18000,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 148,
+          "symbol": ".text",
+          "target_rva": 19759,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 156,
+          "symbol": ".text",
+          "target_rva": 19781,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 164,
+          "symbol": ".text",
+          "target_rva": 19967,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 172,
+          "symbol": ".text",
+          "target_rva": 19988,
+          "symbol_rva": 18000,
+          "section": 48
+        }
+      ],
+      "unwind_rva": 63744,
+      "unwind_header": [
+        25,
+        33,
+        11,
+        133
+      ],
+      "handler": {
+        "offset": 28,
+        "symbol": "__CxxFrameHandler3",
+        "target_rva": 39956,
+        "symbol_rva": 39956,
+        "section": 0
+      },
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "later_drop": {
+      "entry": "?dtor$59@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA",
+      "rva": 20400,
+      "size": 74,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves": 16448
+      },
+      "xdata_rva": 63744,
+      "xdata_bytes": 180,
+      "metadata": [
+        {
+          "offset": 28,
+          "symbol": "__CxxFrameHandler3",
+          "target_rva": 39956,
+          "symbol_rva": 39956,
+          "section": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "$cppxdata$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63828,
+          "symbol_rva": 63828,
+          "section": 127
+        },
+        {
+          "offset": 92,
+          "symbol": "$stateUnwindMap$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63868,
+          "symbol_rva": 63868,
+          "section": 127
+        },
+        {
+          "offset": 108,
+          "symbol": "$ip2state$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63884,
+          "symbol_rva": 63884,
+          "section": 127
+        },
+        {
+          "offset": 128,
+          "symbol": "?dtor$62@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA",
+          "target_rva": 20480,
+          "symbol_rva": 20480,
+          "section": 48
+        },
+        {
+          "offset": 136,
+          "symbol": "?dtor$59@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA",
+          "target_rva": 20400,
+          "symbol_rva": 20400,
+          "section": 48
+        },
+        {
+          "offset": 140,
+          "symbol": ".text",
+          "target_rva": 18000,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 148,
+          "symbol": ".text",
+          "target_rva": 19759,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 156,
+          "symbol": ".text",
+          "target_rva": 19781,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 164,
+          "symbol": ".text",
+          "target_rva": 19967,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 172,
+          "symbol": ".text",
+          "target_rva": 19988,
+          "symbol_rva": 18000,
+          "section": 48
+        }
+      ],
+      "unwind_rva": 63780,
+      "unwind_header": [
+        1,
+        28,
+        9,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "name_drop": {
+      "entry": "?dtor$62@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA",
+      "rva": 20480,
+      "size": 65,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves": 16448
+      },
+      "xdata_rva": 63744,
+      "xdata_bytes": 180,
+      "metadata": [
+        {
+          "offset": 28,
+          "symbol": "__CxxFrameHandler3",
+          "target_rva": 39956,
+          "symbol_rva": 39956,
+          "section": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "$cppxdata$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63828,
+          "symbol_rva": 63828,
+          "section": 127
+        },
+        {
+          "offset": 92,
+          "symbol": "$stateUnwindMap$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63868,
+          "symbol_rva": 63868,
+          "section": 127
+        },
+        {
+          "offset": 108,
+          "symbol": "$ip2state$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+          "target_rva": 63884,
+          "symbol_rva": 63884,
+          "section": 127
+        },
+        {
+          "offset": 128,
+          "symbol": "?dtor$62@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA",
+          "target_rva": 20480,
+          "symbol_rva": 20480,
+          "section": 48
+        },
+        {
+          "offset": 136,
+          "symbol": "?dtor$59@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA",
+          "target_rva": 20400,
+          "symbol_rva": 20400,
+          "section": 48
+        },
+        {
+          "offset": 140,
+          "symbol": ".text",
+          "target_rva": 18000,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 148,
+          "symbol": ".text",
+          "target_rva": 19759,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 156,
+          "symbol": ".text",
+          "target_rva": 19781,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 164,
+          "symbol": ".text",
+          "target_rva": 19967,
+          "symbol_rva": 18000,
+          "section": 48
+        },
+        {
+          "offset": 172,
+          "symbol": ".text",
+          "target_rva": 19988,
+          "symbol_rva": 18000,
+          "section": 48
+        }
+      ],
+      "unwind_rva": 63804,
+      "unwind_header": [
+        1,
+        28,
+        9,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "encode": {
+      "entry": "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128",
+      "rva": 14528,
+      "size": 487,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "memset": 48608,
+        "memcpy": 46880
+      },
+      "xdata_rva": 63492,
+      "xdata_bytes": 16,
+      "metadata": [],
+      "unwind_rva": 63492,
+      "unwind_header": [
+        1,
+        10,
+        5,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "block_left": {
+      "entry": "_RNvMNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encodingNtB2_20SecretEncodedInteger4left",
+      "rva": 15888,
+      "size": 160,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216,
+        "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow": 49776
+      },
+      "xdata_rva": 63552,
+      "xdata_bytes": 16,
+      "metadata": [],
+      "unwind_rva": 63552,
+      "unwind_header": [
+        1,
+        9,
+        5,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    }
+  },
+  "constants": {
+    "rate_table": {
+      "rva": 59216,
+      "bytes": 32,
+      "sha256": "c5c151260bc40501874a714708d6dc4aa62cc71bbc09c4de501da1ce0bde5c34",
+      "readonly": true
+    },
+    "function_name": {
+      "rva": 59032,
+      "bytes": 12,
+      "sha256": "4a3f78520ac1888d294547877d0560c06675f789358eb296e4d264547c5fd679",
+      "readonly": true
+    }
+  },
+  "body_byte_mutations_rejected": 3176,
+  "geometry": {
+    "spans": [
+      {
+        "name": "initial working core",
+        "offset_from_low": 47168,
+        "offset_from_high": -18368,
+        "bytes": 992
+      },
+      {
+        "name": "returned initial core / later public output",
+        "offset_from_low": 49152,
+        "offset_from_high": -16384,
+        "bytes": 1024
+      },
+      {
+        "name": "pre-name state",
+        "offset_from_low": 51168,
+        "offset_from_high": -14368,
+        "bytes": 992
+      },
+      {
+        "name": "post-name state",
+        "offset_from_low": 48160,
+        "offset_from_high": -17376,
+        "bytes": 992
+      },
+      {
+        "name": "pre-name moved payload, first byte/metadata held separately",
+        "offset_from_low": 53113,
+        "offset_from_high": -12423,
+        "bytes": 943
+      },
+      {
+        "name": "post-name moved payload, first byte/metadata held separately",
+        "offset_from_low": 52170,
+        "offset_from_high": -13366,
+        "bytes": 943
+      },
+      {
+        "name": "final state before owner move",
+        "offset_from_low": 50176,
+        "offset_from_high": -15360,
+        "bytes": 992
+      },
+      {
+        "name": "uninstalled prefix",
+        "offset_from_low": 46576,
+        "offset_from_high": -18960,
+        "bytes": 80
+      },
+      {
+        "name": "prefix move temporary A",
+        "offset_from_low": 47072,
+        "offset_from_high": -18464,
+        "bytes": 80
+      },
+      {
+        "name": "prefix move temporary B",
+        "offset_from_low": 46976,
+        "offset_from_high": -18560,
+        "bytes": 80
+      },
+      {
+        "name": "block framing after initial core move",
+        "offset_from_low": 47168,
+        "offset_from_high": -18368,
+        "bytes": 18
+      }
+    ],
+    "new_rsp_from_window_high": -19136,
+    "earlier_copies_individually_erased": false,
+    "all_reachable_callee_depths_qualified": false,
+    "exception_dispatch_qualified": false
+  },
+  "unreviewed_direct_callees": [
+    "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow",
+    "__chkstk",
+    "__umodti3",
+    "memcpy",
+    "memset"
+  ],
+  "block_encoder_specialized_to_maximum_1024": true,
+  "public_prefix_lengths": true,
+  "native_run_added": false,
+  "whole_image_qualified": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_root_setup.py": "99d65c886852dfd877d7382ea60cf4c16766ca4cb01d8486815bd35822dd6eea",
+    "test-windows-enclave-root-setup.py": "355327ef4e82fc89055c3449d471162c32116131174817b80810110496633ae7",
+    "windows_enclave_construction_review.py": "7b8000c8b682705421ff05d53f91d42e74622018ecea023d3b6fa87ea53668c6",
+    "windows_enclave_engine_review.py": "585d45e2f087fe00e0f37553d6bb9a541c2e29d59deffda5ca320ea62a6ccf09",
+    "windows_enclave_state_operations.py": "748dc2e2f053035f0c296be4efc4ca1fc917e2f49dd75ec0ccadf1b08db3a64f",
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

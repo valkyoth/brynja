@@ -84,6 +84,13 @@ on both hosts; 3,226 body-pin mutations are rejected. The unchanged native
 component campaign is reused after checking all 240 source hashes. Inline root
 prefix initialization, remaining session/runtime callees and outer-root/SDK return
 handling remain open; this does not qualify every constructor or image family.
+The following [root initialization review](windows-enclave-root-setup.md) closes
+that selected inline-prefix step: bounded root inputs, exact domain name/rates,
+encoding, returned-error destruction and compiler-moved regions are now traced
+in the original image. Seven inspector/model tests and identical saved-image
+records pass on both hosts. Runtime callees, remaining permutation-session work,
+outer-root/SDK returns and cross-image reconciliation remain; whole-image cleanup
+is not yet qualified and the completed native campaigns were not repeated.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

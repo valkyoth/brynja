@@ -1,0 +1,361 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "AUTHOR_SELECTED_STATE_CLEANUP_CHAIN_REVIEW",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "entries": {
+    "state": {
+      "entry": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves",
+      "rva": 16448,
+      "size": 204,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": 22848,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216,
+        "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe": 13136
+      },
+      "xdata_rva": 63568,
+      "xdata_bytes": 12,
+      "metadata": [],
+      "unwind_rva": 63568,
+      "unwind_header": [
+        1,
+        6,
+        3,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "memory": {
+      "entry": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+      "rva": 22848,
+      "size": 74,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216
+      },
+      "xdata_rva": 63320,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 63320,
+      "unwind_header": [
+        1,
+        5,
+        2,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "scratch": {
+      "entry": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+      "rva": 13136,
+      "size": 128,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216
+      },
+      "xdata_rva": 63320,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 63320,
+      "unwind_header": [
+        1,
+        5,
+        2,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "clear": {
+      "entry": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+      "rva": 11216,
+      "size": 89,
+      "incoming": [
+        [
+          "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves",
+          11216
+        ],
+        [
+          "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          11216
+        ],
+        [
+          "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          11216
+        ]
+      ],
+      "byte_candidates": 1,
+      "reference_targets": {},
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "code_sha256": "c0bc244ea4f39b7eef6d89558938bd751d42f7cb67bdbf414c17462b44be98e2",
+      "whole_image_qualified": false,
+      "instruction_semantics_qualified": false
+    }
+  },
+  "reviewed_body_sha256": {
+    "state": "26426988297c40c744deca9b4d347716b9cde0051aeba36b494fc090749c7a93",
+    "memory": "6fa655a9c6d73f0f23856804ff8206e0443298bcf53d0368664a15fae13d4859",
+    "scratch": "a093147dfcbd9774621f07705b5bb6ca7c47d8cd15d3ca14d67311fbcc2079f7",
+    "clear": "c0bc244ea4f39b7eef6d89558938bd751d42f7cb67bdbf414c17462b44be98e2"
+  },
+  "instruction_anchors": 23,
+  "call_and_tail_sites": 16,
+  "body_byte_mutations_rejected": 495,
+  "geometry": {
+    "state_from_high": -2560,
+    "helper_from_high": -2608,
+    "direct_clear_entry_from_high": -2616,
+    "tail_clear_entry_from_high": -2568,
+    "spans": [
+      {
+        "name": "state destructor RSI/RDI saves",
+        "offset_from_low": 63016,
+        "offset_from_high": -2520,
+        "bytes": 16
+      },
+      {
+        "name": "memory or scratch RSI save",
+        "offset_from_low": 62960,
+        "offset_from_high": -2576,
+        "bytes": 8
+      },
+      {
+        "name": "direct clear return/home",
+        "offset_from_low": 62920,
+        "offset_from_high": -2616,
+        "bytes": 40
+      },
+      {
+        "name": "tail clear reused return/home",
+        "offset_from_low": 62968,
+        "offset_from_high": -2568,
+        "bytes": 40
+      }
+    ],
+    "scoped_cleanup_chain_has_external_callees": false,
+    "maximum_whole_worker_depth_qualified": false,
+    "exception_cleanup_qualified": false
+  },
+  "writes": {
+    "empty": {
+      "volatile": [],
+      "ordinary_zero": [],
+      "ordinary_marker": []
+    },
+    "live_no_prefix": {
+      "volatile": [
+        [
+          656,
+          200
+        ],
+        [
+          624,
+          16
+        ],
+        [
+          640,
+          16
+        ],
+        [
+          856,
+          2
+        ],
+        [
+          656,
+          200
+        ],
+        [
+          624,
+          16
+        ],
+        [
+          640,
+          16
+        ],
+        [
+          856,
+          2
+        ],
+        [
+          0,
+          200
+        ],
+        [
+          200,
+          40
+        ],
+        [
+          240,
+          40
+        ],
+        [
+          280,
+          200
+        ],
+        [
+          480,
+          32
+        ],
+        [
+          512,
+          32
+        ],
+        [
+          544,
+          32
+        ]
+      ],
+      "ordinary_zero": [
+        [
+          616,
+          8
+        ]
+      ],
+      "ordinary_marker": [
+        [
+          859,
+          1
+        ],
+        [
+          938,
+          1
+        ],
+        [
+          962,
+          1
+        ]
+      ]
+    },
+    "live_prefix": {
+      "volatile": [
+        [
+          656,
+          200
+        ],
+        [
+          624,
+          16
+        ],
+        [
+          640,
+          16
+        ],
+        [
+          856,
+          2
+        ],
+        [
+          936,
+          1
+        ],
+        [
+          656,
+          200
+        ],
+        [
+          624,
+          16
+        ],
+        [
+          640,
+          16
+        ],
+        [
+          856,
+          2
+        ],
+        [
+          0,
+          200
+        ],
+        [
+          200,
+          40
+        ],
+        [
+          240,
+          40
+        ],
+        [
+          280,
+          200
+        ],
+        [
+          480,
+          32
+        ],
+        [
+          512,
+          32
+        ],
+        [
+          544,
+          32
+        ]
+      ],
+      "ordinary_zero": [
+        [
+          616,
+          8
+        ],
+        [
+          937,
+          1
+        ],
+        [
+          864,
+          64
+        ]
+      ],
+      "ordinary_marker": [
+        [
+          859,
+          1
+        ],
+        [
+          938,
+          1
+        ],
+        [
+          962,
+          1
+        ]
+      ]
+    }
+  },
+  "all_992_state_bytes_individually_erased": false,
+  "prior_moved_copies_erased_by_destructor": false,
+  "native_run_added": false,
+  "whole_image_qualified": false,
+  "release_gate_changed": false,
+  "independently_verified": false,
+  "source_sha256": {
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "test-windows-enclave-state-cleanup.py": "229df7fb5aa5df0196a876b038a1bdc1433e619470db97f02b73714e959d548f",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

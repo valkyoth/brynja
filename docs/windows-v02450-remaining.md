@@ -35,6 +35,13 @@ state copies are mapped into the worker's cleared window; they are not claimed
 individually erased by the active-owner destructor. Remaining caller/state/runtime
 semantic review and independent retest are the next tasks, not another rerun of
 the completed image-refresh/dump campaigns.
+The subsequent [direct state-destruction review](windows-enclave-slot-cleanup.md#direct-state-destruction-chain)
+now closes that normal cleanup call chain in the saved scheduler image. State
+drop, memory wipe, scratch wipe and the volatile byte clearer are bound together;
+eight focused tests and 495 actual-body byte mutations pass on Linux and Windows.
+The modeled owned writes distinguish volatile secret erasure from public metadata
+stores and padding. Construction/update/finalization, root/wave/publication paths
+and cross-image/runtime reconciliation remain; no whole-image claim is added.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

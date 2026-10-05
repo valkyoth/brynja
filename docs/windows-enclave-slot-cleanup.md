@@ -61,3 +61,54 @@ and dump results remain separate. Nothing here expands the protection boundary
 to caller-created copies, arbitrary exceptions, fatal termination, privileged
 snapshots or production signing. Remaining whole-image caller/runtime review
 and independent retest are still pending.
+
+## Direct state-destruction chain
+
+The subsequent 2026-10-05 review follows `State` destruction through
+`Memory::wipe`, `KeccakScratch::wipe` and the emitted volatile byte clearer.
+All four exact bodies are present in the same saved object and signed image;
+all sixteen call/tail-call relocations resolve to these bound bodies. The slot
+callers' destructor and clearer targets agree. This closes the **direct normal
+state-destruction chain** for this image, not the other state operations or their
+transitive callees. No SDK call, allocation or callback appears in this chain.
+
+For an initialized live state, the emitted writes are:
+
+| Storage | Relative offset in the 992-byte state | Clearing behavior |
+| --- | --- | --- |
+| Seven Keccak scratch regions | 0–575 | Seven volatile clears; 576 distinct bytes |
+| Sponge lanes, message/output counters, suffix | 624–857 | Four volatile clears totaling 234 bytes; executed twice through cancel/drop |
+| Pending prefix content, if present | 936 | One volatile byte clear |
+| Position | 616–623 | Ordinary zero store |
+| Public prefix counters and used-bit count, if present | 864–927 and 937 | Ordinary zero stores |
+| Failed/phase/prefix-discriminant metadata | 859, 962 and 938 | Terminal marker stores, not zeroization |
+
+The empty-state branch skips payload access. The prefix discriminant becomes
+absent before the later cleanup, and the intervening memory/scratch wipes do not
+overlap it; therefore the retained second prefix check skips on the valid normal
+path. This is not a guarantee for fabricated enum values or concurrent corruption.
+Padding, unused fields and the entire 992-byte object are **not** claimed
+individually erased. Prior compiler-created copies still depend on the enclosing
+window wipe described above.
+
+The byte clearer first stores `length % 8` zero bytes, then performs eight byte
+stores per iteration until the end pointer. It has no calls, payload loads or
+stack stores. Its reviewed callers supply valid bounded regions; the helper
+does not validate arbitrary pointers itself. Exhaustive model checks for lengths
+0–4096, 65535 and 65536 cover each requested byte exactly once. These are model
+checks tied to reviewed instructions, not new native executions of those lengths.
+
+On the previously mapped leaf chain, the destructor and helper stack pointers
+are respectively 2560 and 2608 bytes below the worker window's upper bound.
+A direct clearer call reaches 2616 bytes; the final tail clear reuses the helper
+entry at 2568 bytes after frame restoration. Nonvolatile saves remain inside the
+window and are restored, not individually erased. This finite chain bound does
+not bound the complete worker, fault handlers or other algorithms.
+
+Eight focused tests and the real saved-image inspection pass on both Linux and
+Windows, with identical parsed records. All 495 single-byte changes to these
+four object bodies are rejected by the review pins. The
+[state-cleanup record](../assurance/windows-protection-observations/state-cleanup-20261005.json)
+binds this review and its Python source closure. The command is
+`python3 scripts/cryptography/windows_enclave_state_cleanup.py OBJECT IMAGE --mutate`.
+It is an offline author tool, not a release gate or independent qualification.

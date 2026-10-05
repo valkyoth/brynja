@@ -20,6 +20,11 @@ byte mutations. These mutations enforce review identity, not algorithm behavior.
 Normal-return window reclamation remains responsible for earlier moved copies;
 the retained destructor funclet does not establish OS-exception cleanup.
 Other caller/state/runtime bodies still need their own semantic review.
+The subsequent [direct state-destruction review](windows-enclave-slot-cleanup.md#direct-state-destruction-chain)
+closes that selected normal cleanup call chain: state drop, memory wipe, scratch
+wipe and the volatile clearer. Eight tests and exact saved-image inspection pass
+on Linux and Windows, with 495 actual-body byte mutations rejected. This maps
+owned writes and tail-call stack reuse, not all state bytes or prior moved copies.
 
 ## Completed wrapper boundary, 2026-10-04
 
@@ -423,7 +428,27 @@ relocation shapes. No production code, signed image or release gate changed.
 This does not establish all caller data-flow, maximum stack depth, arbitrary
 exception cleanup or the behavior of other archive/runtime functions.
 
-## Remaining boundary work
+## Current remaining boundary work (2026-10-05)
+
+The nineteen public-route image refreshes and scoped dump campaigns are complete
+for their recorded checkpoints. Do not rerun them merely because an offline
+review or documentation record changes. The remaining implementation-assurance
+work is:
+
+1. Finish the selected caller/state-operation review beyond slot lifecycle and
+   its now-closed direct destruction chain: construction, update/finalization,
+   root/wave and publication/join paths, then reconcile the other image families.
+2. Reconcile final-image compiler/platform and SDK boundaries into the precise
+   supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
+   caller copies and privileged snapshots are not newly promised guarantees.
+3. Prepare the independent pentest candidate, then use the existing evidence-reuse
+   and release checks. Production consumer signing remains a deployment task.
+
+The historical sequence below preserves what each earlier observation did and
+did not establish; statements about then-missing image refreshes are not the
+current task list.
+
+## Historical boundary review and image refresh sequence
 
 The subsequent [SHA-2 SIMD refresh](../assurance/windows-protection-observations/sha2-wrapper-refresh-20261004.json)
 rebuilt both SHA-224/256 and SHA-512-family AVX2 worker images with the current

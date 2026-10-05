@@ -36,6 +36,11 @@ generation retirements and native diagnostic-reader exclusion. Seven focused
 tests pass on both hosts; the real C gate baseline and fourteen compiled mutation
 rejections pass on Linux. This does not finish root finalization or other state
 operations, and adds no whole-image or arbitrary-exception claim.
+The subsequent [root owner terminal review](windows-enclave-slot-cleanup.md#root-owner-finalization-export-and-destruction)
+accounts for finish/export admission, cancellation, retained-output destruction
+and encoded-suffix clearing in six exact saved bodies. State operation internals
+and outer-root/SDK return paths remain separate obligations; the record names
+unresolved terminal callees rather than claiming the complete call graph is closed.
 
 ## Completed wrapper boundary, 2026-10-04
 
@@ -447,10 +452,11 @@ review or documentation record changes. The remaining implementation-assurance
 work is:
 
 1. Finish the selected caller/state-operation review beyond slot lifecycle and
-   its now-closed direct destruction chain: construction, update/finalization and
-   full root terminal cleanup, then reconcile the other image families. Selected
-   publication joining, ordered reduction and explicit generation retirement are
-   now reviewed; that does not prove all remaining caller lifetime obligations.
+   its now-closed direct destruction chain: state construction and operation
+   internals, outer-root/SDK terminal reconciliation, then the other image families.
+   Selected publication joining, ordered reduction, explicit generation retirement
+   and owner-level finish/export/destruction are now reviewed; that does not prove
+   all remaining caller lifetime obligations or transitive state operations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

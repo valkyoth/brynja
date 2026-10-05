@@ -1,0 +1,273 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "AUTHOR_SELECTED_ROOT_OWNER_TERMINAL_REVIEW",
+  "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+  "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+  "entries": {
+    "finish": {
+      "entry": "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish",
+      "rva": 20560,
+      "size": 982,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216,
+        "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State6update": 27664,
+        "_RNvMNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encodingNtB2_20SecretEncodedInteger5right": 16096,
+        "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State10finish_xof": 21696,
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves": 16448,
+        "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7squeeze": 27968,
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encoding20SecretEncodedIntegerEBF_": 16048,
+        "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow": 49776
+      },
+      "xdata_rva": 63924,
+      "xdata_bytes": 124,
+      "metadata": [
+        {
+          "offset": 24,
+          "symbol": "__CxxFrameHandler3",
+          "target_rva": 39956,
+          "symbol_rva": 39956,
+          "section": 0
+        },
+        {
+          "offset": 28,
+          "symbol": "$cppxdata$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish",
+          "target_rva": 63976,
+          "symbol_rva": 63976,
+          "section": 128
+        },
+        {
+          "offset": 60,
+          "symbol": "$stateUnwindMap$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish",
+          "target_rva": 64016,
+          "symbol_rva": 64016,
+          "section": 128
+        },
+        {
+          "offset": 76,
+          "symbol": "$ip2state$_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish",
+          "target_rva": 64024,
+          "symbol_rva": 64024,
+          "section": 128
+        },
+        {
+          "offset": 96,
+          "symbol": "?dtor$55@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish@4HA",
+          "target_rva": 21552,
+          "symbol_rva": 21552,
+          "section": 49
+        },
+        {
+          "offset": 100,
+          "symbol": ".text",
+          "target_rva": 20560,
+          "symbol_rva": 20560,
+          "section": 49
+        },
+        {
+          "offset": 108,
+          "symbol": ".text",
+          "target_rva": 21174,
+          "symbol_rva": 20560,
+          "section": 49
+        },
+        {
+          "offset": 116,
+          "symbol": ".text",
+          "target_rva": 21421,
+          "symbol_rva": 20560,
+          "section": 49
+        }
+      ],
+      "unwind_rva": 63924,
+      "unwind_header": [
+        25,
+        19,
+        9,
+        117
+      ],
+      "handler": {
+        "offset": 24,
+        "symbol": "__CxxFrameHandler3",
+        "target_rva": 39956,
+        "symbol_rva": 39956,
+        "section": 0
+      },
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "export": {
+      "entry": "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves13declassify_to",
+      "rva": 17728,
+      "size": 188,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "memcpy": 46880,
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves": 16448,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216
+      },
+      "xdata_rva": 63732,
+      "xdata_bytes": 12,
+      "metadata": [],
+      "unwind_rva": 63732,
+      "unwind_header": [
+        1,
+        6,
+        3,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "operation": {
+      "entry": "_RNvXNtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB2_9OperationNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+      "rva": 17920,
+      "size": 71,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves": 16448,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216
+      },
+      "xdata_rva": 63320,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 63320,
+      "unwind_header": [
+        1,
+        5,
+        2,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "destructor": {
+      "entry": "_RNvXs0_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB5_5WavesNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+      "rva": 21616,
+      "size": 66,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves": 16448,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216
+      },
+      "xdata_rva": 63320,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 63320,
+      "unwind_header": [
+        1,
+        5,
+        2,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "drop": {
+      "entry": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_waves5WavesECsk1CFy3R4N16_20parallel_wave_bridge",
+      "rva": 8992,
+      "size": 278,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs2u1vj83u0E8_14parallel_waves": 16448,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216,
+        "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": 22848,
+        "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe": 13136
+      },
+      "xdata_rva": 63328,
+      "xdata_bytes": 12,
+      "metadata": [],
+      "unwind_rva": 63328,
+      "unwind_header": [
+        1,
+        7,
+        4,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    },
+    "encoded": {
+      "entry": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encoding20SecretEncodedIntegerEBF_",
+      "rva": 16048,
+      "size": 40,
+      "byte_candidates": 1,
+      "incoming": [],
+      "reference_targets": {
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 11216
+      },
+      "xdata_rva": 63320,
+      "xdata_bytes": 8,
+      "metadata": [],
+      "unwind_rva": 63320,
+      "unwind_header": [
+        1,
+        5,
+        2,
+        0
+      ],
+      "handler": null,
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "handler_semantics_qualified": false,
+      "whole_image_qualified": false
+    }
+  },
+  "root_rva": 4544,
+  "body_byte_mutations_rejected": 1625,
+  "output_clear": {
+    "offset": 0,
+    "bytes": 1024
+  },
+  "state_offset": 1024,
+  "empty_state_tag_offset": 1968,
+  "phase_offset": 2080,
+  "dead_phase": 3,
+  "retained_phase": 2,
+  "encoded_clear_bytes": 18,
+  "unreviewed_terminal_callees": [
+    "_RNvMNtCs2u1vj83u0E8_14parallel_waves24parallel_stream_encodingNtB2_20SecretEncodedInteger5right",
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State10finish_xof",
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State6update",
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7squeeze",
+    "_RNvNtNtCs8xEFJqa6dYS_4core9panicking11panic_const24panic_const_shr_overflow",
+    "memcpy"
+  ],
+  "whole_image_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "source_sha256": {
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "test-windows-enclave-terminal-review.py": "fc728f043ab14641d0b5de5e12c9ea3382c955035fd57616fd9212a259c7db1c",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562"
+  }
+}

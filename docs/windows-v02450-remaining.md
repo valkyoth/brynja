@@ -53,6 +53,13 @@ the real C gate baseline and fourteen compiled mutants pass on Linux. State
 construction/update/finalization, full root terminal cleanup and cross-image/runtime
 reconciliation remain outstanding. These reviews do not claim payload erasure
 from metadata stores or fatal-exit cleanup.
+The subsequent [root owner terminal review](windows-enclave-slot-cleanup.md#root-owner-finalization-export-and-destruction)
+now accounts for owner-level finish/export/destruction and suffix-scratch clearing.
+It binds six saved bodies and their cleanup calls, while keeping the state
+update/finish/squeeze callees explicitly unresolved by this review. Component
+oracle, cleanup mutations and ownership tests supplement the machine-code
+inspection; no new enclave image campaign is claimed. Next are state construction
+and operation internals, outer-root/SDK terminal reconciliation and other images.
 A native public-sentinel probe identified missing wrapper register clearing;
 both wrappers now clear the volatile return boundary, with ABI-preservation and
 compiled omission tests plus two rebuilt native VBS routes. A separate instrumented

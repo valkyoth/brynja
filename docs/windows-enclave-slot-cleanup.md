@@ -223,3 +223,62 @@ The C test logs are in `release-reports/windows-local-20261005-native-retirement
 State construction/update/finalization, full root terminal cleanup and cross-image
 runtime reconciliation remain separate; this review does not close whole-image
 qualification or add production-signing, fatal-exit or privileged-snapshot claims.
+
+## Root owner finalization, export and destruction
+
+The next inspection binds six bodies from the same saved scheduler image:
+`Waves::finish`, `Waves::declassify_to`, the operation guard's destructor,
+`Waves::drop`, its outer drop glue and `SecretEncodedInteger` destruction.
+Their cleanup calls resolve to the state destructor and volatile clearer already
+reviewed above. This closes the selected **owner-level** normal terminal paths,
+not the internals of the state update/squeeze functions called by finalization.
+
+| Path | Admission and outcome | Owned cleanup |
+| --- | --- | --- |
+| Finish success | Working phase, exact consumed bits and merged leaves; authority checked before work and after squeezing | Drops state, marks it Empty, clears the suffix scratch; retains output only after the final authority check |
+| Finish returned failure | Includes incomplete input, malformed counters, backend error and revoked authority | Clears suffix scratch if initialized, drops active state, clears all 1,024 retained output bytes, sets Dead |
+| Public export success | Retained phase, healthy matching authority and exact output length before copying | Drops any active state, clears all retained output, sets Dead |
+| Public export rejection | No destination copy occurs on the reviewed admission errors | Performs the same owner cancellation and output clearing |
+| Incomplete operation / owner destruction | Completed operation guards skip cancellation; destruction always clears | Drops active state, writes Empty, clears all retained output, sets Dead |
+
+Within `Waves`, the output occupies bytes 0–1023 and the nested state starts at
+1024. The Empty tag at offset 1968 and Dead phase at 2080 are terminal metadata,
+not zeroization. The outer drop glue still contains a second state-cleanup branch,
+but on the valid normal path it observes the Empty tag just written and skips.
+The intervening 1,024-byte output wipe cannot alias that tag. No erasure of all
+owner padding or previously moved copies is inferred from these writes.
+
+Finalization appends the merged-leaf count and then either the fixed output-bit
+length or zero for XOF identities. Its local encoded integer has seventeen
+content bytes and one used-length byte; both are volatile-cleared on the reviewed
+returned error path and by its destructor on success. Output is bounded to 8,192
+bits. The emitted shift-overflow panic branch is retained in the inventory, not
+misrepresented as a normally returning cleanup path. Handler metadata is bound
+but does not establish arbitrary OS-exception or fatal-abort cleanup.
+
+Public export's compiler-generated `memcpy` runs only after admission. The inner
+component preserves a rejected destination; this does **not** imply transactional
+host output through the later Windows copy API, which can fail after a partial
+public copy. Successful declassification is intentionally one-shot. The private
+root's separate public staging buffer and SDK copy/return handling retain their
+own review obligations.
+
+Four focused inspector tests and saved-image review pass on Linux and Windows,
+with identical parsed records. All 1,625 single-byte mutations of the six saved
+bodies are rejected by their identity pins. Separately, on both Linux and Windows
+the real component suite passes 21 tests, 532 multi-wave oracle cases in two scheduling orders, fourteen
+compiled cleanup/framing mutants and eleven ownership negatives. The campaign
+checks incomplete completion, counter corruption, cancellation, callback errors,
+revocation, wrong output shape, one-shot use and recoverable Rust unwinding.
+Those process tests do not establish enclave exception support.
+The two campaigns have identical recorded source hashes; the reviewed wave,
+slot and encoding sources also match those preserved with the original image.
+
+The [terminal record](../assurance/windows-protection-observations/terminal-cleanup-20261005.json)
+records exact bodies, linked cleanup edges, unresolved terminal callees and
+inspector source hashes. Reproduce with
+`python3 scripts/cryptography/windows_enclave_terminal_review.py OBJECT IMAGE --mutate`.
+Component artifacts are preserved under `release-reports/windows-local-20261005-waves-terminal/`.
+State construction, update/finish/squeeze internals, outer-root/SDK terminal
+reconciliation and other image families remain; no production code, signed image
+or release-gate policy changed.

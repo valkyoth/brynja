@@ -24,6 +24,15 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [SHA-NI engine/session review](windows-enclave-sha-ni-engine.md) now covers
+the selected normal update/finalize/padding paths, startup self-test, session
+dispatch and opaque kernel cleanup. Ten tests pass on each host, with identical
+reports and 2,903 body-byte plus 20 dispatch-byte mutations rejected per host.
+Five existing Rust engine tests also pass on Linux. Selected startup depth
+reaches `H-13928`; length spills and saved caller registers remain dependent on
+window clearing. Complete owner/decoder semantics, other families and maximum
+whole-image depth are still open.
+
 The [SHA-NI state review](windows-enclave-sha-ni-state.md) now binds the saved
 constructor/finalizer, their owner call edges, two IV constants and private copy
 helpers. Eight tests pass on Linux and Windows with identical parsed reports;

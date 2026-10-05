@@ -80,3 +80,8 @@ component results are reused; no new enclave execution is claimed.
 Raw reports remain outside Cargo target directories at
 `release-reports/windows-worker-review-20261005/offline/sha-ni-state-*.json`.
 See the [remaining-work checklist](windows-v02450-remaining.md).
+
+The subsequent [engine/session review](windows-enclave-sha-ni-engine.md) adds
+normal update/finalize/padding, startup KAT and compression internals for the
+selected SHA-NI route. It does not turn this state-only record into a full
+owner, handler or whole-image qualification.

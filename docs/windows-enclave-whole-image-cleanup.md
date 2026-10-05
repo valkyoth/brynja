@@ -6,6 +6,12 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [SHA-NI engine/session review](windows-enclave-sha-ni-engine.md) adds the
+selected normal update/finalize/padding and KAT/compression paths, their exact
+dispatch table and constants, and byte-mask helpers. Ten tests pass on both
+hosts with identical reports; selected startup depth reaches `H-13928`.
+Whole-image, full owner/decoder and other-family obligations remain open.
+
 The [SHA-NI state review](windows-enclave-sha-ni-state.md) adds constructor and
 finalizer bodies, two IV constants, copy helpers and actual owner call edges.
 Eight tests and matching parsed reports pass on both hosts, with 2,286 actual

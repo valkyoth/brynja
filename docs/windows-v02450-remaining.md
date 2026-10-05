@@ -24,6 +24,13 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [scalar sponge-update review](windows-enclave-sha3-update.md) covers all five
+rates, counter admission, buffered/direct/tail partitioning and ten immediate
+permutation-scratch erasure sites. Eight tests and matching reports pass on both
+hosts; each rejects 3,801 body-byte mutations. Actual owner tests pass. Scalar
+finalization/squeezing, permutation internals and maximum whole-image depth
+remain open.
+
 The [scalar cSHAKE prefix review](windows-enclave-sha3-prefix.md) adds both
 rate-specific string/bit-packer chains, bulk versus partial-bit paths, checked
 flush accounting and constructor-dependent error cleanup. Eight tests and

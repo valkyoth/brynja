@@ -1,0 +1,436 @@
+{
+  "schema": 1,
+  "scope": "Saved scalar sponge update only; permutation and finalization remain separate",
+  "functions": {
+    "72": {
+      "name": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6spongeINtNtB4_5owner20HardenedFips202OwnerKj48_E6updateB6_",
+      "code_hex": "4157415641554154565755534883ec484989d6488b5908488b114c01c24883d30040b5010f82a80200004889ce0fb6890e0400004885c90f84030100004531e4b8480000004829c84c0f43e04d39e04d0f42e0498d3c0c4881ffa80000000f876e0200004d89c548895424384c8dbef80000004c01f94c89e24d89f04d89e1e8000000003cff0f85460200004088be0e0400004883ff480f85ad0100004d29e54c896c24284d01e6bf480000004d89fd498d8d38ffffffc6442420004c89ea4531c041b108e80000000049ffc548ffcf75de48895c24304c8daef0020000488dae180300004c8da640030000488d4e304c89ea4989e84d89e1e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89e1e800000000baa80000004c89f9e800000000c6860e040000004c8b442428eb0a488954243848895c243048b98fe3388ee3388ee34c89c048f7e148c1ea034883e2f8488d3cd24929f84c89442428498d043e48894424404883ff480f82960000004c8d66304c8daef0020000488dae180300004c8dbe40030000660f1f44000031db66666666662e0f1f840000000000498d0c1c498d141ec6442420004531c041b108e80000000048ffc34883fb4875df4983c6484883c7b84c89e14c89ea4989e84d89f9e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89f9e8000000004883ff477789488d8ef8000000488b7c24284889fa4c8b4424404989f9e8000000003cff40b5010f85940000004088be0e040000488b5c2430488b44243888068866014189db41c1eb1089c1c1e910884e0289d9c1e91889c2c1ea188856034889da48c1ea204989c049c1e820448846044989d849c1e8284989c149c1e92844884e054989d949c1e9304989c249c1ea30448856064989da49c1ea3848c1e838884607885e08887e0944885e0a884e0b88560c4488460d44884e0e4488560f31ed89e84883c4485b5d5f5e415c415d415e415fc3",
+      "references": [
+        {
+          "offset": 128,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 198,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 250,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 263,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 276,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 289,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 302,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 452,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 486,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 499,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 512,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 525,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 559,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 136,
+      "saved_registers": []
+    },
+    "104": {
+      "name": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6spongeINtNtB4_5owner20HardenedFips202OwnerKj68_E6updateB6_",
+      "code_hex": "4157415641554154565755534883ec484989d6488b5908488b114c01c24883d30040b5010f82a80200004889ce0fb6890e0400004885c90f84030100004531e4b8680000004829c84c0f43e04d39e04d0f42e0498d3c0c4881ffa80000000f876e0200004d89c548895424384c8dbef80000004c01f94c89e24d89f04d89e1e8000000003cff0f85460200004088be0e0400004883ff680f85ad0100004d29e54c896c24284d01e6bf680000004d89fd498d8d38ffffffc6442420004c89ea4531c041b108e80000000049ffc548ffcf75de48895c24304c8daef0020000488dae180300004c8da640030000488d4e304c89ea4989e84d89e1e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89e1e800000000baa80000004c89f9e800000000c6860e040000004c8b442428eb0a488954243848895c243048b9c54eecc44eecc44e4c89c048f7e148c1ea05486bfa684929f84c89442428498d043e48894424404883ff680f829a0000004c8d66304c8daef0020000488dae180300004c8dbe40030000662e0f1f84000000000031db66666666662e0f1f840000000000498d0c1c498d141ec6442420004531c041b108e80000000048ffc34883fb6875df4983c6684883c7984c89e14c89ea4989e84d89f9e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89f9e8000000004883ff677789488d8ef8000000488b7c24284889fa4c8b4424404989f9e8000000003cff40b5010f85940000004088be0e040000488b5c2430488b44243888068866014189db41c1eb1089c1c1e910884e0289d9c1e91889c2c1ea188856034889da48c1ea204989c049c1e820448846044989d849c1e8284989c149c1e92844884e054989d949c1e9304989c249c1ea30448856064989da49c1ea3848c1e838884607885e08887e0944885e0a884e0b88560c4488460d44884e0e4488560f31ed89e84883c4485b5d5f5e415c415d415e415fc3",
+      "references": [
+        {
+          "offset": 128,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 198,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 250,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 263,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 276,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 289,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 302,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 452,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 486,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 499,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 512,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 525,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 559,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 136,
+      "saved_registers": []
+    },
+    "136": {
+      "name": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6spongeINtNtB4_5owner20HardenedFips202OwnerKj88_E6updateB6_",
+      "code_hex": "4157415641554154565755534883ec484989d6488b5908488b114c01c24883d30040b5010f82c80200004889ce0fb6890e0400004885c90f84130100004531e4b8880000004829c84c0f43e04d39e04d0f42e0498d3c0c4881ffa80000000f878e0200004d89c548895424384c8dbef80000004c01f94c89e24d89f04d89e1e8000000003cff0f85660200004088be0e0400004881ff880000000f85ca0100004d29e54c896c24284d01e6bf880000004d89fd666666662e0f1f840000000000498d8d38ffffffc6442420004c89ea4531c041b108e80000000049ffc548ffcf75de48895c24304c8daef0020000488dae180300004c8da640030000488d4e304c89ea4989e84d89e1e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89e1e800000000baa80000004c89f9e800000000c6860e040000004c8b442428eb0a488954243848895c243048b9f1f0f0f0f0f0f0f04c89c048f7e14889d048c1e8074883e280488d3cc24929f84c89442428498d043e48894424404881ff880000000f82a00000004c8d66304c8daef0020000488dae180300004c8dbe4003000031db66666666662e0f1f840000000000498d0c1c498d141ec6442420004531c041b108e80000000048ffc34881fb8800000075dc4981c6880000004881c778ffffff4c89e14c89ea4989e84d89f9e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89f9e8000000004881ff870000000f8779ffffff488d8ef8000000488b7c24284889fa4c8b4424404989f9e8000000003cff40b5010f85940000004088be0e040000488b5c2430488b44243888068866014189db41c1eb1089c1c1e910884e0289d9c1e91889c2c1ea188856034889da48c1ea204989c049c1e820448846044989d849c1e8284989c149c1e92844884e054989d949c1e9304989c249c1ea30448856064989da49c1ea3848c1e838884607885e08887e0944885e0a884e0b88560c4488460d44884e0e4488560f31ed89e84883c4485b5d5f5e415c415d415e415fc3",
+      "references": [
+        {
+          "offset": 128,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 214,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 266,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 279,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 292,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 305,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 318,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 468,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 511,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 524,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 537,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 550,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 591,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 136,
+      "saved_registers": []
+    },
+    "144": {
+      "name": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6spongeINtNtB4_5owner20HardenedFips202OwnerKj90_E6updateB6_",
+      "code_hex": "4157415641554154565755534883ec484989d6488b5908488b114c01c24883d30040b5010f82c80200004889ce0fb6890e0400004885c90f84130100004531e4b8900000004829c84c0f43e04d39e04d0f42e0498d3c0c4881ffa80000000f878e0200004d89c548895424384c8dbef80000004c01f94c89e24d89f04d89e1e8000000003cff0f85660200004088be0e0400004881ff900000000f85ca0100004d29e54c896c24284d01e6bf900000004d89fd666666662e0f1f840000000000498d8d38ffffffc6442420004c89ea4531c041b108e80000000049ffc548ffcf75de48895c24304c8daef0020000488dae180300004c8da640030000488d4e304c89ea4989e84d89e1e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89e1e800000000baa80000004c89f9e800000000c6860e040000004c8b442428eb0a488954243848895c243048b98fe3388ee3388ee34c89c048f7e148c1ea034883e2f0488d3cd24929f84c89442428498d043e48894424404881ff900000000f82a30000004c8d66304c8daef0020000488dae180300004c8dbe400300000f1f0031db66666666662e0f1f840000000000498d0c1c498d141ec6442420004531c041b108e80000000048ffc34881fb9000000075dc4981c6900000004881c770ffffff4c89e14c89ea4989e84d89f9e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89f9e8000000004881ff8f0000000f8779ffffff488d8ef8000000488b7c24284889fa4c8b4424404989f9e8000000003cff40b5010f85940000004088be0e040000488b5c2430488b44243888068866014189db41c1eb1089c1c1e910884e0289d9c1e91889c2c1ea188856034889da48c1ea204989c049c1e820448846044989d849c1e8284989c149c1e92844884e054989d949c1e9304989c249c1ea30448856064989da49c1ea3848c1e838884607885e08887e0944885e0a884e0b88560c4488460d44884e0e4488560f31ed89e84883c4485b5d5f5e415c415d415e415fc3",
+      "references": [
+        {
+          "offset": 128,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 214,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 266,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 279,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 292,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 305,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 318,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 468,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 511,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 524,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 537,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 550,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 591,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 136,
+      "saved_registers": []
+    },
+    "168": {
+      "name": "_RNvMNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6spongeINtNtB4_5owner20HardenedFips202OwnerKja8_E6updateB6_",
+      "code_hex": "4157415641554154565755534883ec484989d6488b5908488b114c01c24883d30040b5010f82c80200004889ce0fb6890e0400004885c90f84130100004531e4b8a80000004829c84c0f43e04d39e04d0f42e0498d3c0c4881ffa80000000f878e0200004d89c548895424384c8dbef80000004c01f94c89e24d89f04d89e1e8000000003cff0f85660200004088be0e0400004881ffa80000000f85ca0100004d29e54c896c24284d01e6bfa80000004d89fd666666662e0f1f840000000000498d8d38ffffffc6442420004c89ea4531c041b108e80000000049ffc548ffcf75de48895c24304c8daef0020000488dae180300004c8da640030000488d4e304c89ea4989e84d89e1e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89e1e800000000baa80000004c89f9e800000000c6860e040000004c8b442428eb0a488954243848895c24304c89c048c1e80348b9310cc3300cc3300c48f7e14869faa80000004929f84c89442428498d043e48894424404881ffa80000000f82a40000004c8d66304c8daef0020000488dae180300004c8dbe400300000f1f400031db66666666662e0f1f840000000000498d0c1c498d141ec6442420004531c041b108e80000000048ffc34881fba800000075dc4981c6a80000004881c758ffffff4c89e14c89ea4989e84d89f9e800000000ba280000004c89e9e800000000ba280000004889e9e800000000bac80000004c89f9e8000000004881ffa70000000f8779ffffff488d8ef8000000488b7c24284889fa4c8b4424404989f9e8000000003cff40b5010f85940000004088be0e040000488b5c2430488b44243888068866014189db41c1eb1089c1c1e910884e0289d9c1e91889c2c1ea188856034889da48c1ea204989c049c1e820448846044989d849c1e8284989c149c1e92844884e054989d949c1e9304989c249c1ea30448856064989da49c1ea3848c1e838884607885e08887e0944885e0a884e0b88560c4488460d44884e0e4488560f31ed89e84883c4485b5d5f5e415c415d415e415fc3",
+      "references": [
+        {
+          "offset": 128,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 214,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 266,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 279,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 292,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 305,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 318,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 468,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 511,
+          "symbol": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 524,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 537,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 550,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 591,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "stack_bytes": 136,
+      "saved_registers": []
+    }
+  }
+}

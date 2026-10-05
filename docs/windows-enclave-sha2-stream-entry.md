@@ -1,5 +1,9 @@
 # Saved scalar SHA-2 streaming entry
 
+Follow-up: [owner lifecycle review](windows-enclave-sha2-stream-lifecycle.md)
+binds admission, quarantine, cancellation and destruction, including the moved
+state-copy and deferred full-page clearing limits described below.
+
 The [saved report](../assurance/windows-protection-observations/sha2-stream-entry-20261005.json)
 reviews the scalar `sha2/mod.rs::open` image's entry, request receiver and buffer
 destructor. It follows the bounded-image review but does not assume that the

@@ -58,6 +58,12 @@ table and complete header/payload readback. Eight tests and matching reports
 pass on both hosts, rejecting 1,217 actual body-byte and 24 table-byte mutations.
 Its transitive owners/copy adapters and the separate accelerated worker remain
 explicitly unqualified by this entry review.
+The subsequent [scalar owner lifecycle review](windows-enclave-sha2-stream-lifecycle.md)
+binds admission, quarantine, cancellation and destruction to the reviewed
+workspace wipe. Seven tests and matching reports pass on both hosts, rejecting
+714 actual body-byte mutations. It records the nonzero-sequence compiler
+precondition and the original inactive owner bytes' dependence on full-page
+teardown. Begin/update/finalize/rehash/export and their transitive callees remain.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

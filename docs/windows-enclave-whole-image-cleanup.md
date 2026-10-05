@@ -539,6 +539,11 @@ work is:
    now binds that distinct worker's admission/teardown, six-operation receiver,
    exact buffer clearing/readback and destructor tail. It does not transfer
    qualification to downstream owners or the separate SHA-NI resident worker.
+   The subsequent [scalar owner lifecycle](windows-enclave-sha2-stream-lifecycle.md)
+   binds admission, cancellation, quarantine and destruction, reconnects the
+   complete active-workspace wipe, and records the moved-copy/inactive-page and
+   nonzero-sequence preconditions. Algorithm operations and other call chains
+   remain separate obligations.
 2. Reconcile final-image compiler/platform and SDK boundaries into the precise
    supported normal-return cleanup claim. Arbitrary exceptions, fatal termination,
    caller copies and privileged snapshots are not newly promised guarantees.

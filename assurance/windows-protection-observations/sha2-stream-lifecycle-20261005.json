@@ -1,0 +1,373 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_SCALAR_SHA2_STREAM_LIFECYCLE_REVIEW",
+  "image_sha256": "bc8932575def29277263f49c1fe9b912f9a1166e6703ac1f609eef90f63beeab",
+  "object_sha256": "2c4cfe8710f30f82321e44cde3dcacbe050ea7e86e9e95b1adc63b1d874bc555",
+  "compiler_precondition": {
+    "sha256": "ae7bda220403911c8d4f4db6d5871d443b49ce5f2c2c203658efc856beaa2159",
+    "nonzero_sequence_precondition": true,
+    "precondition_enforced_at_reviewed_receiver": true,
+    "standalone_operation_zero_check_claimed": false
+  },
+  "records": {
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner10quarantine": {
+      "rva": 10032,
+      "size": 106,
+      "reference_targets": {
+        "memcpy": 28336,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 10032,
+          "end": 10138,
+          "unwind_rva": 41700,
+          "prolog_bytes": 8,
+          "frame": 0,
+          "stack_bytes": 1224,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 8,
+              "opcode": 1,
+              "info": 0,
+              "operand": 152
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner9operation": {
+      "rva": 10464,
+      "size": 257,
+      "reference_targets": {
+        "memcpy": 28336,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 10464,
+          "end": 10721,
+          "unwind_rva": 41712,
+          "prolog_bytes": 9,
+          "frame": 0,
+          "stack_bytes": 1224,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 9,
+              "opcode": 1,
+              "info": 0,
+              "operand": 151
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6cancel": {
+      "rva": 13840,
+      "size": 252,
+      "reference_targets": {
+        "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner9operation": 10464,
+        "memcpy": 28336,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 13840,
+          "end": 14092,
+          "unwind_rva": 41700,
+          "prolog_bytes": 8,
+          "frame": 0,
+          "stack_bytes": 1224,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 8,
+              "opcode": 1,
+              "info": 0,
+              "operand": 152
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvXs2_Csad7P77nok56_11sha2_streamNtB5_5OwnerNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop": {
+      "rva": 18560,
+      "size": 99,
+      "reference_targets": {
+        "memcpy": 28336,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 18560,
+          "end": 18659,
+          "unwind_rva": 41700,
+          "prolog_bytes": 8,
+          "frame": 0,
+          "stack_bytes": 1224,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 8,
+              "opcode": 1,
+              "info": 0,
+              "operand": 152
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    }
+  },
+  "workspace_wipe": {
+    "rva": 6208,
+    "bytes": 148,
+    "regions": [
+      {
+        "offset": 1024,
+        "bytes": 64
+      },
+      {
+        "offset": 0,
+        "bytes": 128
+      },
+      {
+        "offset": 1152,
+        "bytes": 16
+      },
+      {
+        "offset": 1168,
+        "bytes": 2
+      },
+      {
+        "offset": 128,
+        "bytes": 640
+      },
+      {
+        "offset": 768,
+        "bytes": 128
+      },
+      {
+        "offset": 896,
+        "bytes": 128
+      },
+      {
+        "offset": 1088,
+        "bytes": 64
+      }
+    ]
+  },
+  "geometry": {
+    "paths": {
+      "direct quarantine/drop": {
+        "rsp_from_high": -2496,
+        "spans": [
+          {
+            "name": "moved enum copy",
+            "offset_from_low": 63082,
+            "offset_from_high": -2454,
+            "bytes": 1174
+          },
+          {
+            "name": "ordinary variant workspace",
+            "offset_from_low": 63083,
+            "offset_from_high": -2453,
+            "bytes": 1170
+          },
+          {
+            "name": "general-t variant workspace",
+            "offset_from_low": 63086,
+            "offset_from_high": -2450,
+            "bytes": 1170
+          }
+        ],
+        "clearer_entry": {
+          "name": "volatile clearer entry/home",
+          "offset_from_low": 62984,
+          "offset_from_high": -2552,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        },
+        "memory_runtime_entry": {
+          "name": "memcpy entry/home",
+          "offset_from_low": 63032,
+          "offset_from_high": -2504,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      },
+      "cancel": {
+        "rsp_from_high": -2608,
+        "spans": [
+          {
+            "name": "moved enum copy",
+            "offset_from_low": 62968,
+            "offset_from_high": -2568,
+            "bytes": 1174
+          },
+          {
+            "name": "ordinary variant workspace",
+            "offset_from_low": 62969,
+            "offset_from_high": -2567,
+            "bytes": 1170
+          },
+          {
+            "name": "general-t variant workspace",
+            "offset_from_low": 62972,
+            "offset_from_high": -2564,
+            "bytes": 1170
+          }
+        ],
+        "clearer_entry": {
+          "name": "volatile clearer entry/home",
+          "offset_from_low": 62872,
+          "offset_from_high": -2664,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        },
+        "memory_runtime_entry": {
+          "name": "memcpy entry/home",
+          "offset_from_low": 62920,
+          "offset_from_high": -2616,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      },
+      "cancel operation": {
+        "rsp_from_high": -3840,
+        "spans": [
+          {
+            "name": "moved enum copy",
+            "offset_from_low": 61730,
+            "offset_from_high": -3806,
+            "bytes": 1174
+          },
+          {
+            "name": "ordinary variant workspace",
+            "offset_from_low": 61731,
+            "offset_from_high": -3805,
+            "bytes": 1170
+          },
+          {
+            "name": "general-t variant workspace",
+            "offset_from_low": 61734,
+            "offset_from_high": -3802,
+            "bytes": 1170
+          }
+        ],
+        "clearer_entry": {
+          "name": "volatile clearer entry/home",
+          "offset_from_low": 61640,
+          "offset_from_high": -3896,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        },
+        "memory_runtime_entry": {
+          "name": "memcpy entry/home",
+          "offset_from_low": 61688,
+          "offset_from_high": -3848,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      }
+    },
+    "original_inactive_owner_storage_erased": false,
+    "complete_moved_enum_individually_erased": false,
+    "outer_window_and_page_teardown_required": true,
+    "other_operation_callers_qualified": false,
+    "maximum_transitive_depth_qualified": false
+  },
+  "actual_body_byte_mutations_rejected": 714,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "independently_verified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "source_sha256": {
+    "test-windows-enclave-sha2-stream-lifecycle.py": "17811fa24395b7b35ddb8e86530bcbc90bbbb173321bfdc2db473e0d1d53ebd2",
+    "windows_enclave_bounded_dispatch.py": "2b06da5690425237176affbd7b1ea3492aee6563488ddea8b530614e06d67b54",
+    "windows_enclave_bounded_input.py": "78af4234d95ae7469aa001099d8bdd6965b9d074de27eec3e331ee76637e57b2",
+    "windows_enclave_bounded_owner.py": "3960351f4ebda9dd81b4f1ac431d2e0a1ada38cc6e86bbe4cbc27fee0f0307f3",
+    "windows_enclave_bounded_rehash.py": "9d8df50b4355913c5ca56b677733d64422fc59d963230a1b4892e812e03bd04a",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_construction_review.py": "7b8000c8b682705421ff05d53f91d42e74622018ecea023d3b6fa87ea53668c6",
+    "windows_enclave_engine_review.py": "585d45e2f087fe00e0f37553d6bb9a541c2e29d59deffda5ca320ea62a6ccf09",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_publication_review.py": "a0ef511be73e3cd74714a862e0efd1c0dce9a2477d22853ad22e4aa6e78fb61a",
+    "windows_enclave_retirement_review.py": "117a0dab27a47b90496f5f7a5fda418ba951cb058cfe29cd0a6904d169ca4808",
+    "windows_enclave_root_return.py": "7b078894de02b1f1bf77a286ad30dc65cfe4e3a94733120bba31a0c83b59a198",
+    "windows_enclave_sdk_context.py": "5dc989fb47c8ab8a203d3c1375e9128cd6c5b12772c90b4180a4f24192fee696",
+    "windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "windows_enclave_sdk_decoders.py": "f2fecab13a96c421a1a7b100459c1b68a1c801d40c930c280913cf1b4b3a3e28",
+    "windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "windows_enclave_sdk_dispatch.py": "1f3c17ade072651320a2f6cd4a752c128fffe6aeb94da3df0eb22912417746ee",
+    "windows_enclave_sdk_dispatch_helpers.py": "929c9a0fd31991c73d35eb9b4edaebf1b0b35092b8752bc16bee90c8c9d3b9f9",
+    "windows_enclave_sdk_exception.py": "7dd1c3cf0a77385ecdf52820fd9357509f7e96f99de95ded41140b5d49d6a73a",
+    "windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_sha2_stream_entry.py": "76db485857ea71e9aba19519eaacc902348be254fa098030fd7f5017f737a020",
+    "windows_enclave_sha2_stream_lifecycle.py": "8491091f7cba7bf5d5dfed4c8e5a187c0d3730f46083ef26c65f5b0ea2b103e2",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_state_operations.py": "748dc2e2f053035f0c296be4efc4ca1fc917e2f49dd75ec0ccadf1b08db3a64f",
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a"
+  }
+}

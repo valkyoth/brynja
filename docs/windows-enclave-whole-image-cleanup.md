@@ -6,6 +6,11 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [scalar cSHAKE prefix review](windows-enclave-sha3-prefix.md) binds both
+rate-specific prefix chains and their checked flush/cleanup behavior. Eight
+tests and matching reports pass on both hosts; 1,202 body-byte mutations are
+rejected per host. Sponge/permutation internals and whole-image depth remain open.
+
 The [scalar SHA-3 transfer/output review](windows-enclave-sha3-transfers.md) adds
 ten helpers, their actual call destinations, private compiler preconditions and
 selected stack slots. Nine tests and matching reports pass on both hosts,

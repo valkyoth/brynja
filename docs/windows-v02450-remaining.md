@@ -24,6 +24,13 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [scalar cSHAKE prefix review](windows-enclave-sha3-prefix.md) adds both
+rate-specific string/bit-packer chains, bulk versus partial-bit paths, checked
+flush accounting and constructor-dependent error cleanup. Eight tests and
+matching reports pass on both hosts, with 1,202 body-byte mutations rejected
+each. Actual Rust prefix tests and the worker/oracle campaign pass. Sponge and
+permutation internals and maximum whole-image depth remain open.
+
 The [scalar SHA-3 transfer/output review](windows-enclave-sha3-transfers.md)
 adds ten private helpers, exact initialization/publication, copy/bit/mask
 contracts and public-length encoding. Nine tests and matching parsed reports

@@ -63,7 +63,12 @@ binds admission, quarantine, cancellation and destruction to the reviewed
 workspace wipe. Seven tests and matching reports pass on both hosts, rejecting
 714 actual body-byte mutations. It records the nonzero-sequence compiler
 precondition and the original inactive owner bytes' dependence on full-page
-teardown. Begin/update/finalize/rehash/export and their transitive callees remain.
+teardown. The subsequent [scalar operation caller review](windows-enclave-sha2-stream-operations.md)
+binds begin/update/finish/rehash/export, their six algorithm tables and explicit
+quarantine/staging/export cleanup paths. Eight tests and identical reports pass
+on both hosts, rejecting 2,573 body-byte and 168 table-byte mutations per host.
+Transitive state construction/finalization, crypto, copy and runtime routines
+remain; these caller bindings do not qualify their implementations.
 
 The next qualification item is [final-image ABI/register/spill and dump
 cleanup](windows-enclave-whole-image-cleanup.md), followed by independent retest.

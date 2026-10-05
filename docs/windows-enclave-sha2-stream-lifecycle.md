@@ -99,3 +99,7 @@ and stack geometry. The entry, workspace-wipe, leaf-binding and frame regression
 also pass locally. These are offline author-review results, not a new native
 campaign, independent retest or whole-image qualification. Production code,
 signed images and release-gate policy are unchanged.
+
+The subsequent [operation caller review](windows-enclave-sha2-stream-operations.md)
+adds begin/update/finish/rehash/export in this same saved image. Its transitive
+state, cryptographic, copy and runtime callees remain separate obligations.

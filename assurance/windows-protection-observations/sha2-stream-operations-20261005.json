@@ -1,0 +1,560 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "status": "SAVED_SCALAR_SHA2_OWNER_OPERATION_REVIEW",
+  "image_sha256": "bc8932575def29277263f49c1fe9b912f9a1166e6703ac1f609eef90f63beeab",
+  "object_sha256": "2c4cfe8710f30f82321e44cde3dcacbe050ea7e86e9e95b1adc63b1d874bc555",
+  "compiler_ir_sha256": "ae7bda220403911c8d4f4db6d5871d443b49ce5f2c2c203658efc856beaa2159",
+  "records": {
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner5begin": {
+      "rva": 10144,
+      "size": 314,
+      "reference_targets": {
+        "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner9operation": 10464,
+        "_RNvMNtCsad7P77nok56_11sha2_stream17sha2_stream_stateNtB2_5State3new": 10736,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208,
+        "memcpy": 28336,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 10144,
+          "end": 10458,
+          "unwind_rva": 41712,
+          "prolog_bytes": 9,
+          "frame": 0,
+          "stack_bytes": 1224,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 9,
+              "opcode": 1,
+              "info": 0,
+              "operand": 151
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6update": {
+      "rva": 18288,
+      "size": 261,
+      "reference_targets": {
+        "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner9operation": 10464,
+        ".rdata": 38512,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state64NtNtB4_5owner17HardenedSha2Owner8update64": 8288,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state32NtNtB4_5owner17HardenedSha2Owner8update32": 7056,
+        "memcpy": 28336,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 18288,
+          "end": 18549,
+          "unwind_rva": 41820,
+          "prolog_bytes": 11,
+          "frame": 0,
+          "stack_bytes": 1240,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 11,
+              "opcode": 1,
+              "info": 0,
+              "operand": 151
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 3,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6finish": {
+      "rva": 14096,
+      "size": 523,
+      "reference_targets": {
+        "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner9operation": 10464,
+        "_RNvNtCscJA3KwNFXab_16brynja_hash_core23secret_memory_predicate12mask_is_zero": 6176,
+        ".rdata": 38176,
+        "memcpy": 28336,
+        "_RNvMNtCsad7P77nok56_11sha2_stream17sha2_stream_stateNtB2_5State6finish": 14624,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 14096,
+          "end": 14619,
+          "unwind_rva": 41752,
+          "prolog_bytes": 13,
+          "frame": 0,
+          "stack_bytes": 2456,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 13,
+              "opcode": 1,
+              "info": 0,
+              "operand": 302
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 5,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 3,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6rehash": {
+      "rva": 17376,
+      "size": 910,
+      "reference_targets": {
+        "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner9operation": 10464,
+        ".rdata": 38428,
+        "_RNvNtCscJA3KwNFXab_16brynja_hash_core23secret_memory_predicate12mask_is_zero": 6176,
+        "_RNvMNtCsad7P77nok56_11sha2_stream17sha2_stream_stateNtB2_5State3new": 10736,
+        "_RNvMNtCsad7P77nok56_11sha2_stream17sha2_stream_stateNtB2_5State6finish": 14624,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": 6112,
+        "memcpy": 28336,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208
+      },
+      "unwind": [
+        {
+          "start": 17376,
+          "end": 18286,
+          "unwind_rva": 41796,
+          "prolog_bytes": 17,
+          "frame": 0,
+          "stack_bytes": 1368,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 17,
+              "opcode": 1,
+              "info": 0,
+              "operand": 164
+            },
+            {
+              "code_offset": 10,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 9,
+              "opcode": 0,
+              "info": 5,
+              "operand": 0
+            },
+            {
+              "code_offset": 8,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 7,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            },
+            {
+              "code_offset": 6,
+              "opcode": 0,
+              "info": 12,
+              "operand": 0
+            },
+            {
+              "code_offset": 4,
+              "opcode": 0,
+              "info": 14,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 15,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    },
+    "_RINvMs0_Csad7P77nok56_11sha2_streamNtB6_5Owner13export_publicNCNvCsgcnLRhTPBg3_18sha2_stream_worker7receives_0EB11_": {
+      "rva": 4864,
+      "size": 565,
+      "reference_targets": {
+        "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner9operation": 10464,
+        ".rdata": 38096,
+        "PublicSha2Output": 21680,
+        "memcpy": 28336,
+        "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened5ownerNtB2_17HardenedSha2Owner4wipe": 6208,
+        "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": 5920
+      },
+      "unwind": [
+        {
+          "start": 4864,
+          "end": 5429,
+          "unwind_rva": 41560,
+          "prolog_bytes": 10,
+          "frame": 0,
+          "stack_bytes": 1240,
+          "saved_registers": [],
+          "operations": [
+            {
+              "code_offset": 10,
+              "opcode": 1,
+              "info": 0,
+              "operand": 152
+            },
+            {
+              "code_offset": 3,
+              "opcode": 0,
+              "info": 3,
+              "operand": 0
+            },
+            {
+              "code_offset": 2,
+              "opcode": 0,
+              "info": 7,
+              "operand": 0
+            },
+            {
+              "code_offset": 1,
+              "opcode": 0,
+              "info": 6,
+              "operand": 0
+            }
+          ],
+          "chain": null
+        }
+      ]
+    }
+  },
+  "tables": {
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6update": {
+      "rva": 38512,
+      "bytes": 28,
+      "destinations": [
+        109,
+        109,
+        92,
+        92,
+        92,
+        92,
+        252
+      ]
+    },
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6finish": {
+      "rva": 38176,
+      "bytes": 28,
+      "destinations": [
+        247,
+        254,
+        311,
+        268,
+        247,
+        254,
+        275
+      ]
+    },
+    "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6rehash": {
+      "rva": 38428,
+      "bytes": 84,
+      "destinations": [
+        446,
+        203,
+        441,
+        227,
+        446,
+        203,
+        237,
+        582,
+        535,
+        576,
+        543,
+        582,
+        535,
+        551,
+        666,
+        674,
+        682,
+        711,
+        666,
+        674,
+        690
+      ]
+    },
+    "_RINvMs0_Csad7P77nok56_11sha2_streamNtB6_5Owner13export_publicNCNvCsgcnLRhTPBg3_18sha2_stream_worker7receives_0EB11_": {
+      "rva": 38096,
+      "bytes": 28,
+      "destinations": [
+        90,
+        158,
+        126,
+        142,
+        110,
+        174,
+        190
+      ]
+    }
+  },
+  "geometry": {
+    "operations": {
+      "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner5begin": {
+        "rsp_from_high": -2608,
+        "admission_rsp_from_high": -3840,
+        "spans": [
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 62960,
+            "offset_from_high": -2576,
+            "bytes": 1174
+          }
+        ],
+        "callee_entry": {
+          "name": "unqualified operation callee entry/home",
+          "offset_from_low": 62920,
+          "offset_from_high": -2616,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      },
+      "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6update": {
+        "rsp_from_high": -2624,
+        "admission_rsp_from_high": -3856,
+        "spans": [
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 62944,
+            "offset_from_high": -2592,
+            "bytes": 1174
+          }
+        ],
+        "callee_entry": {
+          "name": "unqualified operation callee entry/home",
+          "offset_from_low": 62904,
+          "offset_from_high": -2632,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      },
+      "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6finish": {
+        "rsp_from_high": -3840,
+        "admission_rsp_from_high": -5072,
+        "spans": [
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 61728,
+            "offset_from_high": -3808,
+            "bytes": 25
+          },
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 61760,
+            "offset_from_high": -3776,
+            "bytes": 1174
+          },
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 62938,
+            "offset_from_high": -2598,
+            "bytes": 1174
+          }
+        ],
+        "callee_entry": {
+          "name": "unqualified operation callee entry/home",
+          "offset_from_low": 61688,
+          "offset_from_high": -3848,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      },
+      "_RNvMs0_Csad7P77nok56_11sha2_streamNtB5_5Owner6rehash": {
+        "rsp_from_high": -2752,
+        "admission_rsp_from_high": -3984,
+        "spans": [
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 62816,
+            "offset_from_high": -2720,
+            "bytes": 25
+          },
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 62848,
+            "offset_from_high": -2688,
+            "bytes": 64
+          },
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 62920,
+            "offset_from_high": -2616,
+            "bytes": 1174
+          }
+        ],
+        "callee_entry": {
+          "name": "unqualified operation callee entry/home",
+          "offset_from_low": 62776,
+          "offset_from_high": -2760,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      },
+      "_RINvMs0_Csad7P77nok56_11sha2_streamNtB6_5Owner13export_publicNCNvCsgcnLRhTPBg3_18sha2_stream_worker7receives_0EB11_": {
+        "rsp_from_high": -2624,
+        "admission_rsp_from_high": -3856,
+        "spans": [
+          {
+            "name": "state, staging or bitstring",
+            "offset_from_low": 62952,
+            "offset_from_high": -2584,
+            "bytes": 1174
+          }
+        ],
+        "callee_entry": {
+          "name": "unqualified operation callee entry/home",
+          "offset_from_low": 62904,
+          "offset_from_high": -2632,
+          "bytes": 40,
+          "callee_frame_bytes": null,
+          "callee_spills_qualified": false
+        }
+      }
+    },
+    "maximum_transitive_depth_qualified": false,
+    "inactive_owner_bytes_require_page_teardown": true,
+    "stack_copies_require_outer_window_cleanup": true
+  },
+  "unqualified_transitive_callees": [
+    "PublicSha2Output",
+    "_RNvMNtCsad7P77nok56_11sha2_stream17sha2_stream_stateNtB2_5State3new",
+    "_RNvMNtCsad7P77nok56_11sha2_stream17sha2_stream_stateNtB2_5State6finish",
+    "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state32NtNtB4_5owner17HardenedSha2Owner8update32",
+    "_RNvMNtNtCskNJ9UBpP4M4_16brynja_hash_sha28hardened7state64NtNtB4_5owner17HardenedSha2Owner8update64",
+    "_RNvNtCscJA3KwNFXab_16brynja_hash_core23secret_memory_predicate12mask_is_zero",
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+    "memcpy"
+  ],
+  "actual_body_byte_mutations_rejected": 2573,
+  "actual_table_byte_mutations_rejected": 168,
+  "whole_image_qualified": false,
+  "native_run_added": false,
+  "release_gate_changed": false,
+  "independently_verified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "host_copy_rollback_claimed": false,
+  "source_sha256": {
+    "test-windows-enclave-sha2-stream-operations.py": "cca0e935793b3e912c5e0bfd1df6fd65bb2ccdb0bbef946c2b5b8b8a34cc5cec",
+    "windows_enclave_bounded_dispatch.py": "2b06da5690425237176affbd7b1ea3492aee6563488ddea8b530614e06d67b54",
+    "windows_enclave_bounded_input.py": "78af4234d95ae7469aa001099d8bdd6965b9d074de27eec3e331ee76637e57b2",
+    "windows_enclave_bounded_owner.py": "3960351f4ebda9dd81b4f1ac431d2e0a1ada38cc6e86bbe4cbc27fee0f0307f3",
+    "windows_enclave_bounded_rehash.py": "9d8df50b4355913c5ca56b677733d64422fc59d963230a1b4892e812e03bd04a",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_construction_review.py": "7b8000c8b682705421ff05d53f91d42e74622018ecea023d3b6fa87ea53668c6",
+    "windows_enclave_engine_review.py": "585d45e2f087fe00e0f37553d6bb9a541c2e29d59deffda5ca320ea62a6ccf09",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_publication_review.py": "a0ef511be73e3cd74714a862e0efd1c0dce9a2477d22853ad22e4aa6e78fb61a",
+    "windows_enclave_retirement_review.py": "117a0dab27a47b90496f5f7a5fda418ba951cb058cfe29cd0a6904d169ca4808",
+    "windows_enclave_root_return.py": "7b078894de02b1f1bf77a286ad30dc65cfe4e3a94733120bba31a0c83b59a198",
+    "windows_enclave_sdk_context.py": "5dc989fb47c8ab8a203d3c1375e9128cd6c5b12772c90b4180a4f24192fee696",
+    "windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "windows_enclave_sdk_decoders.py": "f2fecab13a96c421a1a7b100459c1b68a1c801d40c930c280913cf1b4b3a3e28",
+    "windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "windows_enclave_sdk_dispatch.py": "1f3c17ade072651320a2f6cd4a752c128fffe6aeb94da3df0eb22912417746ee",
+    "windows_enclave_sdk_dispatch_helpers.py": "929c9a0fd31991c73d35eb9b4edaebf1b0b35092b8752bc16bee90c8c9d3b9f9",
+    "windows_enclave_sdk_exception.py": "7dd1c3cf0a77385ecdf52820fd9357509f7e96f99de95ded41140b5d49d6a73a",
+    "windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_sha2_stream_entry.py": "76db485857ea71e9aba19519eaacc902348be254fa098030fd7f5017f737a020",
+    "windows_enclave_sha2_stream_lifecycle.py": "8491091f7cba7bf5d5dfed4c8e5a187c0d3730f46083ef26c65f5b0ea2b103e2",
+    "windows_enclave_sha2_stream_operation_shapes.py": "e5206197ed0f769000199f8a30cbd95bf18bfbf97931a2a7a18cc4e3f4f40755",
+    "windows_enclave_sha2_stream_operations.py": "9b8a76fe0f37de329acd24ed04fd21e49a0ffe0c9dbfb25fbe54aed295b56a36",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_state_operations.py": "748dc2e2f053035f0c296be4efc4ca1fc917e2f49dd75ec0ccadf1b08db3a64f",
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a"
+  }
+}

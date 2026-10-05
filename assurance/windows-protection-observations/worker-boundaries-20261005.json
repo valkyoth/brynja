@@ -1,0 +1,1011 @@
+{
+  "schema": 1,
+  "scope": "entry and direct transport callers only; not transitive worker qualification",
+  "profiles": [
+    {
+      "route": "sha2/mod.rs::open",
+      "archive_sha256": "b8864c58b1944dbd44df15a2c1ffbfeb932959d62d721897fdf8fbf341e60609",
+      "member": "sha2_stream_worker.sha2_stream_worker.bcb034bc1cec98f1-cgu.0.rcgu.o",
+      "object_sha256": "2c4cfe8710f30f82321e44cde3dcacbe050ea7e86e9e95b1adc63b1d874bc555",
+      "source_sha256": {
+        "sha2_stream_worker.rs": "ebb37fbf0bbb72605014cc1fb1efa0ae97542d60d7622c5952a9fdb50b4646f0"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          704,
+          "PublicSha2Observe"
+        ],
+        [
+          "_RINvMs0_Csad7P77nok56_11sha2_streamNtB6_5Owner13export_publicNCNvCsgcnLRhTPBg3_18sha2_stream_worker7receives_0EB11_",
+          244,
+          "PublicSha2Output"
+        ],
+        [
+          "_RNvCsgcnLRhTPBg3_18sha2_stream_worker7receive",
+          25,
+          "PublicSha2Source"
+        ],
+        [
+          "_RNvCsgcnLRhTPBg3_18sha2_stream_worker7receive",
+          51,
+          "PublicSha2Input"
+        ],
+        [
+          "_RNvCsgcnLRhTPBg3_18sha2_stream_worker7receive",
+          259,
+          "PublicSha2Input"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 760,
+          "code_sha256": "58420bccf94a6bf3f41c8ea2b17158c804b8b7f5544caa46f94b7ef148e90b60",
+          "refs_sha256": "2659590653d6502a4fbad2592a5a013d4eecffa7da5890e10caec7455bff9b44",
+          "stack_bytes": [
+            1160
+          ]
+        },
+        "_RINvMs0_Csad7P77nok56_11sha2_streamNtB6_5Owner13export_publicNCNvCsgcnLRhTPBg3_18sha2_stream_worker7receives_0EB11_": {
+          "bytes": 565,
+          "code_sha256": "95170f6e5cc33f87b544824668fa73ab6ae56fc30c67ef33c28688b29a00dee0",
+          "refs_sha256": "6016cc34048cabe2cfb739a2531ab03c26328369ea16f8ee6b1543bffb2ec921",
+          "stack_bytes": [
+            1240
+          ]
+        },
+        "_RNvCsgcnLRhTPBg3_18sha2_stream_worker7receive": {
+          "bytes": 414,
+          "code_sha256": "0a749028a3c34ad46224a14067c97d950b991a2ad9ffa7c857014e5a3b9fa009",
+          "refs_sha256": "500ba08e9016a1877c8e2eecfdb8c7145d75487ad03ae34fcc6b1768612bacba",
+          "stack_bytes": [
+            104
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha2/mod.rs::open_sha_ni",
+      "archive_sha256": "dc1b415228c3a6481827e8fd801403faa5796e1f3822998586cc93acc2c881d5",
+      "member": "sha2_accelerated_worker.sha2_accelerated_worker.38b435d0161863ad-cgu.0.rcgu.o",
+      "object_sha256": "dd53ebce1a62cf2392ec6b96dc0ef1acf7ce5f435080d527fb28c8ba111310a4",
+      "source_sha256": {
+        "sha2_accelerated_worker.rs": "8353c9478ea438b7b3401ffc6c7a67d938aecac9005e321d7d9f2a45642bf6c8",
+        "sha2_accelerated_resident.rs": "9fa3b680400e367df9ce7d9aefb2b6700178c2d5ffb4b3a9e6f8ca5158aa22c2"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          716,
+          "PublicSha2Observe"
+        ],
+        [
+          "_RNvCs4RPH1Q6pgLN_23sha2_accelerated_worker7receive",
+          20,
+          "PublicSha2Source"
+        ],
+        [
+          "_RNvCs4RPH1Q6pgLN_23sha2_accelerated_worker7receive",
+          49,
+          "PublicSha2Input"
+        ],
+        [
+          "_RNvCs4RPH1Q6pgLN_23sha2_accelerated_worker7receive",
+          116,
+          "PublicSha2Input"
+        ],
+        [
+          "_RNvCs4RPH1Q6pgLN_23sha2_accelerated_worker7receive",
+          552,
+          "PublicSha2Output"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 754,
+          "code_sha256": "bab445975568f34e0658ef79604b92181c34eb2b03cbdf0b65b3a193034e6a8a",
+          "refs_sha256": "4b709ea7e23e03065e8331e42c4d4fc94cfa89ce0eff39f1a1d44a0b334d8249",
+          "stack_bytes": [
+            1208
+          ]
+        },
+        "_RNvCs4RPH1Q6pgLN_23sha2_accelerated_worker7receive": {
+          "bytes": 638,
+          "code_sha256": "1236932ab61cbe8e341dfaf29627d5d258a02b135fe113a3f5dd8a3d5af1e979",
+          "refs_sha256": "bbac21fe37359f471984e3e8e2bed15f0349bab08f34d9d1760ac81af3116d65",
+          "stack_bytes": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha3/mod.rs::open",
+      "archive_sha256": "5293e84cb38a2c4374f5003f3e400f6191284a0bc9520da383e2f8bab29ac6e9",
+      "member": "sha3_stream_worker.sha3_stream_worker.c10f83f86bbb9c4b-cgu.0.rcgu.o",
+      "object_sha256": "a5249aff095786ae667962302c0f0e41e3ca3ca4b333251f4329a71b6bd3eb9b",
+      "source_sha256": {
+        "sha3_stream_worker.rs": "4dc7691f8b35329da19ddbfa56f66f0554ce6cb6933762fcacebc43b04ecfd51"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          687,
+          "PublicSha3Observe"
+        ],
+        [
+          "_RINvMs0_Csgp9hxIs16B4_11sha3_streamNtB6_5Owner13export_publicNCNvCsgzEJPm6isiJ_18sha3_stream_worker7receive0EB11_",
+          161,
+          "PublicSha3Output"
+        ],
+        [
+          "_RNvCsgzEJPm6isiJ_18sha3_stream_worker7receive",
+          29,
+          "PublicSha3Source"
+        ],
+        [
+          "_RNvCsgzEJPm6isiJ_18sha3_stream_worker7receive",
+          54,
+          "PublicSha3Input"
+        ],
+        [
+          "_RNvCsgzEJPm6isiJ_18sha3_stream_worker7receive",
+          477,
+          "PublicSha3Input"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 743,
+          "code_sha256": "d192d731580a634bade6af1bd93106445208720b7f96d41a0696991d22c5e45e",
+          "refs_sha256": "4b51c0a03bad7cf5ef738e682fd6793007a5e3b38239e93e8d6304c99c9a3d0c",
+          "stack_bytes": [
+            1208
+          ]
+        },
+        "_RINvMs0_Csgp9hxIs16B4_11sha3_streamNtB6_5Owner13export_publicNCNvCsgzEJPm6isiJ_18sha3_stream_worker7receive0EB11_": {
+          "bytes": 400,
+          "code_sha256": "5ab8a0001b7ba3f9d5a3a652dfba4b7e3a64f610f1d983e1a41ab5158cb53a61",
+          "refs_sha256": "c0745871653a166c7fddf1bb7eba122817f4e2a575a825629653c8fcc1109bb7",
+          "stack_bytes": [
+            56
+          ]
+        },
+        "_RNvCsgzEJPm6isiJ_18sha3_stream_worker7receive": {
+          "bytes": 899,
+          "code_sha256": "62d10495bf4f42702cbd0389cf29c088fbbbbd2915a2b5ff728fe1b8b6f40d5d",
+          "refs_sha256": "cc837e2550d86a084af3e0d9b597ac93183c05f4ada47c20f4aec2feef139538",
+          "stack_bytes": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha3/mod.rs::open_avx2",
+      "archive_sha256": "1076b1bd5d5568d7f0f268866fac8cc805a68a284489419fda6c1301665bfe8a",
+      "member": "sha3_accelerated_worker.sha3_accelerated_worker.6c96ff73b6a3736f-cgu.0.rcgu.o",
+      "object_sha256": "d1020a5a19fb0c6a75e000c92a09ca6d9c6e10e80d9ae20cd189140fdbf9f37e",
+      "source_sha256": {
+        "sha3_accelerated_worker.rs": "8bce4dc003a0b7b73b95f2664d224c96b9c45fec1f7823440ca4f523eeef26d7",
+        "sha3_accelerated_resident.rs": "b7dcbeea4ead4af165cc41c6dc31b0538979a68b6a2cc354f2f5d7f850b8e0d7"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          977,
+          "PublicSha3Observe"
+        ],
+        [
+          "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker7receive",
+          26,
+          "PublicSha3Source"
+        ],
+        [
+          "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker7receive",
+          54,
+          "PublicSha3Input"
+        ],
+        [
+          "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker7receive",
+          142,
+          "PublicSha3Input"
+        ],
+        [
+          "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker7receive",
+          823,
+          "PublicSha3Output"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 1015,
+          "code_sha256": "72ddf057184c9fb1f9812f85f41d1755f05d165462d50eeae8c0809285fb2b9c",
+          "refs_sha256": "183ebf2781d23fa07bb8176c7b85459a905c74203f09129471a1d8b7c46cc7e8",
+          "stack_bytes": [
+            1256
+          ]
+        },
+        "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker7receive": {
+          "bytes": 934,
+          "code_sha256": "0791c21e9ec814581619d47f8450051d99fef9dd936ba78abfeff35bfe56623a",
+          "refs_sha256": "45cc3c1231df9771cc2dd4ea44606f07559cafde07ace51465d1031ebfd40d37",
+          "stack_bytes": [
+            280
+          ]
+        }
+      }
+    },
+    {
+      "route": "kmac/mod.rs::open",
+      "archive_sha256": "6a9d7723d392ada394eaad9287311575f04d011cd50c20afa29051f3e2367602",
+      "member": "kmac_stream_worker.kmac_stream_worker.797034f1e41bc535-cgu.0.rcgu.o",
+      "object_sha256": "c46271c6007dd9590098700f0a9d29715685fef4885515fed6f9d565ff149603",
+      "source_sha256": {
+        "kmac_stream_worker.rs": "53854cc43aa0b9c965ccfaf9f88b75876d7deb9af7241bfc39561ab70c27c41e"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          687,
+          "PublicKmacObserve"
+        ],
+        [
+          "_RNvCsaqpCAcTgG8H_18kmac_stream_worker7receive",
+          29,
+          "PublicKmacSource"
+        ],
+        [
+          "_RNvCsaqpCAcTgG8H_18kmac_stream_worker7receive",
+          55,
+          "PublicKmacInput"
+        ],
+        [
+          "_RNvCsaqpCAcTgG8H_18kmac_stream_worker7receive",
+          684,
+          "PublicKmacInput"
+        ],
+        [
+          "_RNvCsaqpCAcTgG8H_18kmac_stream_worker7receive",
+          1052,
+          "PublicKmacOutput"
+        ],
+        [
+          "_RNvCsaqpCAcTgG8H_18kmac_stream_worker7receive",
+          1499,
+          "PublicKmacOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 743,
+          "code_sha256": "b7ea2cdc33270fa06aa2a4a9dd6443e9eec332628e9f84658fc699b1b489f4d4",
+          "refs_sha256": "512e9b04230c89d2de0d460db1ce3de61636bef8d66e57143240dbe0c01125ef",
+          "stack_bytes": [
+            1208
+          ]
+        },
+        "_RNvCsaqpCAcTgG8H_18kmac_stream_worker7receive": {
+          "bytes": 1591,
+          "code_sha256": "b34a2e85db52230d8269d6cec34771ea69eb575691b0bce35b27d3f5867a068f",
+          "refs_sha256": "b7846205172cadaf1cafe0d3933ea37672cb9c412f078ebfac0eb7b76308e7f6",
+          "stack_bytes": [
+            232
+          ]
+        }
+      }
+    },
+    {
+      "route": "kmac/mod.rs::open_avx2",
+      "archive_sha256": "d7873a1ec93d26cb776068112cd0ee6c2c77e49cc79be451d1f643d00abf9c1e",
+      "member": "kmac_accelerated_worker.kmac_accelerated_worker.e3f12974ff147d1-cgu.0.rcgu.o",
+      "object_sha256": "5d7e903e401f6f212047651c603d76bee2df91b55f74357f5776fc569832c5b7",
+      "source_sha256": {
+        "kmac_accelerated_worker.rs": "c42fab2caed221fcd783513c2f724e28ee427e40a415e853d7b906a1f0759ff4",
+        "kmac_accelerated_resident.rs": "2b2f5592c2f6786de2b8b0f6d1c46bf629d0d42596ea273edad6588fc0b0fe4f"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          1010,
+          "PublicKmacObserve"
+        ],
+        [
+          "_RNvCs1dPEyRuCoVh_23kmac_accelerated_worker7receive",
+          26,
+          "PublicKmacSource"
+        ],
+        [
+          "_RNvCs1dPEyRuCoVh_23kmac_accelerated_worker7receive",
+          54,
+          "PublicKmacInput"
+        ],
+        [
+          "_RNvCs1dPEyRuCoVh_23kmac_accelerated_worker7receive",
+          145,
+          "PublicKmacInput"
+        ],
+        [
+          "_RNvCs1dPEyRuCoVh_23kmac_accelerated_worker7receive",
+          583,
+          "PublicKmacOutput"
+        ],
+        [
+          "_RNvCs1dPEyRuCoVh_23kmac_accelerated_worker7receive",
+          1123,
+          "PublicKmacOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 1048,
+          "code_sha256": "8f9259cd600ce8f8f35ad1933aeccd2033f9d6a1b9a871467a835f5d73da9303",
+          "refs_sha256": "321180d151bc0f54c8d6ee4e55c2d10ad6c957b057b76b6e43ef3fe53c3832c9",
+          "stack_bytes": [
+            1256
+          ]
+        },
+        "_RNvCs1dPEyRuCoVh_23kmac_accelerated_worker7receive": {
+          "bytes": 1231,
+          "code_sha256": "18fde52a478c7236bd08485f9f2310765eeed39f1249a3a51f73bebb4e5b6159",
+          "refs_sha256": "73300c4578c0dedc2d6026873588e9ceb9a95627d4834872fdb12d16becffc5e",
+          "stack_bytes": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "route": "tuplehash/mod.rs::open",
+      "archive_sha256": "d4dbd03eee47c645a24c8c3046311f1f77d4aad1869e95913342e00926016570",
+      "member": "tuple_stream_worker.tuple_stream_worker.d645115a7840febb-cgu.0.rcgu.o",
+      "object_sha256": "42ef5fc8777c99a993991b3777eb93bdc15123cc1d5e86bd85e6cd3a1b152f26",
+      "source_sha256": {
+        "tuple_stream_worker.rs": "151270fc2e64b372c1de58a2c285d1fa084f926b6fb5913e0249b48c204f5792"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          684,
+          "PublicTupleObserve"
+        ],
+        [
+          "_RNvCsioyi6nyfLbb_19tuple_stream_worker7receive",
+          29,
+          "PublicTupleSource"
+        ],
+        [
+          "_RNvCsioyi6nyfLbb_19tuple_stream_worker7receive",
+          54,
+          "PublicTupleInput"
+        ],
+        [
+          "_RNvCsioyi6nyfLbb_19tuple_stream_worker7receive",
+          593,
+          "PublicTupleInput"
+        ],
+        [
+          "_RNvCsioyi6nyfLbb_19tuple_stream_worker7receive",
+          1261,
+          "PublicTupleOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 740,
+          "code_sha256": "2d24d0caac1dac87e6fcafc55c09179a11adda7ca6e94402c6235741afc887f9",
+          "refs_sha256": "db7002a5d2cc39bef3d8e2447bcd805babb1be6c5606fce138b7a57e4368073e",
+          "stack_bytes": [
+            1208
+          ]
+        },
+        "_RNvCsioyi6nyfLbb_19tuple_stream_worker7receive": {
+          "bytes": 1357,
+          "code_sha256": "9b78e72a33c8989cde44d23e2d241b6271cecf278cd0478d3817b151913c01fc",
+          "refs_sha256": "522a6f062c9e252907e3ba447ebad3a6bbf54f2d428ec3b540228426786f2025",
+          "stack_bytes": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "route": "tuplehash/mod.rs::open_avx2",
+      "archive_sha256": "0c51ac8eea25291f345976c5613c9ac268ef0df4d1800155d0cb033df957e5b4",
+      "member": "tuple_accelerated_worker.tuple_accelerated_worker.4c7edf6924d95643-cgu.0.rcgu.o",
+      "object_sha256": "934b0a4f31c050d8656b19013ff40910bda56ac2f695d2e2dd69df62abb42ac7",
+      "source_sha256": {
+        "tuple_accelerated_worker.rs": "bdf8e5c8c57b3ee8cf9ada2e1ebf1a1e05996096dfe40f73f70462b69fb794b7",
+        "tuple_accelerated_resident.rs": "1171717135e34b29e7d6516a0797fa224da8550a5e083f6f16a21683017b2665"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          1165,
+          "PublicTupleObserve"
+        ],
+        [
+          "_RNvCs6zbqjwHhXa1_24tuple_accelerated_worker7receive",
+          26,
+          "PublicTupleSource"
+        ],
+        [
+          "_RNvCs6zbqjwHhXa1_24tuple_accelerated_worker7receive",
+          54,
+          "PublicTupleInput"
+        ],
+        [
+          "_RNvCs6zbqjwHhXa1_24tuple_accelerated_worker7receive",
+          145,
+          "PublicTupleInput"
+        ],
+        [
+          "_RNvCs6zbqjwHhXa1_24tuple_accelerated_worker7receive",
+          963,
+          "PublicTupleOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 1203,
+          "code_sha256": "50aa9538483960ed9e497a60f9d21b921effca88d338a58b624e83674615f793",
+          "refs_sha256": "c4048d89972b8188116c46db7319a3a59a97fc6c88530fbd7b738a206526adda",
+          "stack_bytes": [
+            1256
+          ]
+        },
+        "_RNvCs6zbqjwHhXa1_24tuple_accelerated_worker7receive": {
+          "bytes": 1071,
+          "code_sha256": "4158e17de5e86080dca848fc881cbe0dba36d4435b9b9b9a379b6dcf28f96891",
+          "refs_sha256": "6f25e4cfa712438975400375b12811c97b54de9fdb930471dfd032acfd5137fd",
+          "stack_bytes": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha2_batch/mod.rs::open",
+      "archive_sha256": "fb50308e9ef481ca1d9a49b0188df18c0c858f6478107caf116be69fee0cb728",
+      "member": "sha2_batch_worker.sha2_batch_worker.c5d3d32f2668664f-cgu.0.rcgu.o",
+      "object_sha256": "b98f626079f55b1d1df5b2a5bd05e6c06b267b3c348def258466fe0ed6971ab9",
+      "source_sha256": {
+        "sha2_batch_worker.rs": "1caddac09e94846485c6d9f558015599a3db5c1e0a91ed1ece38820a211bc50b"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          664,
+          "PublicSha2BatchObserve"
+        ],
+        [
+          "_RNvCsgZ1Uv0vZnK5_17sha2_batch_worker7receive",
+          29,
+          "PublicSha2BatchSource"
+        ],
+        [
+          "_RNvCsgZ1Uv0vZnK5_17sha2_batch_worker7receive",
+          54,
+          "PublicSha2BatchInput"
+        ],
+        [
+          "_RNvCsgZ1Uv0vZnK5_17sha2_batch_worker7receive",
+          1166,
+          "PublicSha2BatchInput"
+        ],
+        [
+          "_RNvCsgZ1Uv0vZnK5_17sha2_batch_worker7receive",
+          1452,
+          "PublicSha2BatchOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 708,
+          "code_sha256": "1dabd64a522580621d1e6aaed01737255e202aa14ec0dc4f86aa9425136775ea",
+          "refs_sha256": "c887716b85f1550f3c97649cbb07f8c00c6eae64099daf5bbe208adfdcb7c679",
+          "stack_bytes": [
+            1240
+          ]
+        },
+        "_RNvCsgZ1Uv0vZnK5_17sha2_batch_worker7receive": {
+          "bytes": 1679,
+          "code_sha256": "114b7e1cd0baff5fbc90741bfedda2b29101196f4373205705dab63459ece94d",
+          "refs_sha256": "d489a16e49e2ebf406b2ff906161c61bc02ea789ad7886fbcbbfe26e9b54025f",
+          "stack_bytes": [
+            1496
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha2_batch/mod.rs::open_sha_ni",
+      "archive_sha256": "6ffb651e1e0bfbb5bdd16945b6bc236c91cd8c86c55c9e04124c775b5ede586b",
+      "member": "sha2_batch_accelerated_worker.sha2_batch_accelerated_worker.da7fac01e51799e9-cgu.0.rcgu.o",
+      "object_sha256": "ce9a58614dd9b90d58263424033d2c2249cd0e00c4e418eae9a87687f3d13aa0",
+      "source_sha256": {
+        "sha2_batch_accelerated_worker.rs": "3b1ca2a02ecc8242c5894b87085b1372818d82ce9f0496a702676dee983ae068",
+        "sha2_accelerated_resident.rs": "9fa3b680400e367df9ce7d9aefb2b6700178c2d5ffb4b3a9e6f8ca5158aa22c2",
+        "sha2_batch_accelerated_resident.rs": "8330dd61b7bfd1092865a4b9404eda3aa73b33ee21b769a292c0409dd07dfd58"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          723,
+          "PublicSha2BatchObserve"
+        ],
+        [
+          "_RNvCsiL3WhWtPTEz_29sha2_batch_accelerated_worker7receive",
+          21,
+          "PublicSha2BatchSource"
+        ],
+        [
+          "_RNvCsiL3WhWtPTEz_29sha2_batch_accelerated_worker7receive",
+          49,
+          "PublicSha2BatchInput"
+        ],
+        [
+          "_RNvCsiL3WhWtPTEz_29sha2_batch_accelerated_worker7receive",
+          128,
+          "PublicSha2BatchInput"
+        ],
+        [
+          "_RNvCsiL3WhWtPTEz_29sha2_batch_accelerated_worker7receive",
+          620,
+          "PublicSha2BatchOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 761,
+          "code_sha256": "2eac020874ca3fb85050afc004c525c96d6d9f57647203f2157b2bc195ce2d33",
+          "refs_sha256": "80887e35127055d1dc3ed9444e284090d750fecaf381722af16223a78ca7b7ea",
+          "stack_bytes": [
+            1288
+          ]
+        },
+        "_RNvCsiL3WhWtPTEz_29sha2_batch_accelerated_worker7receive": {
+          "bytes": 689,
+          "code_sha256": "6a50ea32f02285fe2c2e03a6700fd00d1ee5fc63ea17b45d089769f101a119e3",
+          "refs_sha256": "d8b1e79e96f38c7e00b3f7da214257cb13ac3344b4111fce4e25db3ceb7f7ff5",
+          "stack_bytes": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha3_batch/mod.rs::open",
+      "archive_sha256": "3d027e8d2d98ca566c18bb9037d0806b7f260824504d56d21b30f5f205637762",
+      "member": "sha3_batch_worker.sha3_batch_worker.e3d3702950bdc986-cgu.0.rcgu.o",
+      "object_sha256": "e13077f12ac079e1ac36a704f9370ec7a8607f8c0cb412615a1da8a546a1ea9b",
+      "source_sha256": {
+        "sha3_batch_worker.rs": "4698c4ec18fc51a9e741e642e97cef2efbd18c3c34e8e33665a97c40b679b474"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          778,
+          "PublicSha3BatchObserve"
+        ],
+        [
+          "_RNvCsjyI9eIKjJRO_17sha3_batch_worker7receive",
+          29,
+          "PublicSha3BatchSource"
+        ],
+        [
+          "_RNvCsjyI9eIKjJRO_17sha3_batch_worker7receive",
+          58,
+          "PublicSha3BatchInput"
+        ],
+        [
+          "_RNvCsjyI9eIKjJRO_17sha3_batch_worker7receive",
+          1462,
+          "PublicSha3BatchInput"
+        ],
+        [
+          "_RNvCsjyI9eIKjJRO_17sha3_batch_worker7receive",
+          2795,
+          "PublicSha3BatchOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 834,
+          "code_sha256": "fb97703e78a4a7b5ee174d5080f64b280a8926dd381f225f9032bca68948bf04",
+          "refs_sha256": "72a38e802e6d3e823080291b357cb8eea40a9b80120145bbcbc0db748e71b061",
+          "stack_bytes": [
+            1400
+          ]
+        },
+        "_RNvCsjyI9eIKjJRO_17sha3_batch_worker7receive": {
+          "bytes": 2842,
+          "code_sha256": "7282a48d1494a0ab51b6eb741fde8b7261fab096ae28001fff2abe85f5d7fcf8",
+          "refs_sha256": "860a28e533113dc77e426edf5ef65d02cffc0c10ac80ed545ef9b316714d96f3",
+          "stack_bytes": [
+            984
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha3_batch/mod.rs::open_avx2",
+      "archive_sha256": "fb1f68201e1f262dc6bd8574ea35b3b935a4d16f9f55d6fca941174e42713e20",
+      "member": "sha3_batch_accelerated_worker.sha3_batch_accelerated_worker.f6d409dc809e18c6-cgu.0.rcgu.o",
+      "object_sha256": "dcd469b529f4458b4c13f5f8ea79692f0817b97b26390ef83abca0dbde7cf478",
+      "source_sha256": {
+        "sha3_batch_accelerated_worker.rs": "b8925b3f3861e538528781a121295c8a27a9ea1e696583b8bc3ea239291ab346",
+        "sha3_batch_accelerated_resident.rs": "5fdfd6e2f22376d1ada4ce6a14e7dcdec8bba4e5302f5c668fc130db1519ac4a"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          1400,
+          "PublicSha3BatchObserve"
+        ],
+        [
+          "_RNvCslbRo8ErMaqw_29sha3_batch_accelerated_worker7receive",
+          26,
+          "PublicSha3BatchSource"
+        ],
+        [
+          "_RNvCslbRo8ErMaqw_29sha3_batch_accelerated_worker7receive",
+          54,
+          "PublicSha3BatchInput"
+        ],
+        [
+          "_RNvCslbRo8ErMaqw_29sha3_batch_accelerated_worker7receive",
+          133,
+          "PublicSha3BatchInput"
+        ],
+        [
+          "_RNvCslbRo8ErMaqw_29sha3_batch_accelerated_worker7receive",
+          1966,
+          "PublicSha3BatchOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 1438,
+          "code_sha256": "40f48de3b5d7b6641f93f6c862ef04dc0f5dc53d8429e48a0d470c8b5293447f",
+          "refs_sha256": "5ce4ee4f10ed6a49700cd956f145b8a21de6ed3125f32653d19c830fa5f5b9f3",
+          "stack_bytes": [
+            1448
+          ]
+        },
+        "_RNvCslbRo8ErMaqw_29sha3_batch_accelerated_worker7receive": {
+          "bytes": 2028,
+          "code_sha256": "0afa868ff46f2966875022d122c16db110f40d8f3fe87049b529f220332fb224",
+          "refs_sha256": "b03f5e32d8263b351f11a6a43157599a7d3c41cfa52933644e0db03a1ccc8b77",
+          "stack_bytes": [
+            744
+          ]
+        }
+      }
+    },
+    {
+      "route": "parallelhash/mod.rs::open",
+      "archive_sha256": "27095366cd7c8f78d4909080158275081762060b3f4aabc96fa513d63b3f8b44",
+      "member": "parallel_stream_worker.parallel_stream_worker.879cdcda63ac99a-cgu.0.rcgu.o",
+      "object_sha256": "b30106a15c3a472b01e9ba3c6ecc794d6796059acd28e8e4c4bfaf30a5583b5b",
+      "source_sha256": {
+        "parallel_stream_worker.rs": "6b88a11dd0adb9badabda66e992b0429d241b03988ac6a230170bf250ff595bb"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          691,
+          "PublicParallelObserve"
+        ],
+        [
+          "_RNvCsJ7dH9IFLu0_22parallel_stream_worker7receive",
+          29,
+          "PublicParallelSource"
+        ],
+        [
+          "_RNvCsJ7dH9IFLu0_22parallel_stream_worker7receive",
+          54,
+          "PublicParallelInput"
+        ],
+        [
+          "_RNvCsJ7dH9IFLu0_22parallel_stream_worker7receive",
+          707,
+          "PublicParallelInput"
+        ],
+        [
+          "_RNvCsJ7dH9IFLu0_22parallel_stream_worker7receive",
+          1347,
+          "PublicParallelOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 747,
+          "code_sha256": "3f19c6dd013b4b2d91be882f9faa3607b89388b5b5151127d30fa50075b8bfa5",
+          "refs_sha256": "edd273d675c66db0e3e23669a2cdf33c4b0ef35e48f412f28af3af02641e4856",
+          "stack_bytes": [
+            1224
+          ]
+        },
+        "_RNvCsJ7dH9IFLu0_22parallel_stream_worker7receive": {
+          "bytes": 1453,
+          "code_sha256": "b62cafccf20574f8aeb8ad39876f2ac0ae4634d6e0b08a747cf9eb3a64ea1584",
+          "refs_sha256": "6b8a2690bd435840a10aefb09cbeb237cda0c5f524681675cc39a2fdc79ab625",
+          "stack_bytes": [
+            248
+          ]
+        }
+      }
+    },
+    {
+      "route": "parallelhash/mod.rs::open_avx2",
+      "archive_sha256": "d3145faee84c3f7bccd7e6053430f3225748ca2212dc1fc7826bf6255ee55dac",
+      "member": "parallel_accelerated_worker.parallel_accelerated_worker.4bdbbe977dec073d-cgu.0.rcgu.o",
+      "object_sha256": "629d1c3ef42bd818df75df445df0096c0d4396d9919ad91af7141575bcc987a9",
+      "source_sha256": {
+        "parallel_accelerated_worker.rs": "c16fe3103d6a25ec5df6e8050a3e3a0124f6a39d04f18a3d665e566d17b61dc6",
+        "parallel_accelerated_resident.rs": "660c30ebf83c9c92cc9ce91688d473ab0cff9c1aee42d1adf27099efb6a69101"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          902,
+          "PublicParallelObserve"
+        ],
+        [
+          "_RNvCs6vN7PGL8mdd_27parallel_accelerated_worker7receive",
+          26,
+          "PublicParallelSource"
+        ],
+        [
+          "_RNvCs6vN7PGL8mdd_27parallel_accelerated_worker7receive",
+          54,
+          "PublicParallelInput"
+        ],
+        [
+          "_RNvCs6vN7PGL8mdd_27parallel_accelerated_worker7receive",
+          142,
+          "PublicParallelInput"
+        ],
+        [
+          "_RNvCs6vN7PGL8mdd_27parallel_accelerated_worker7receive",
+          733,
+          "PublicParallelOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 944,
+          "code_sha256": "4f5e57467eada6b3be0b58a9fbe91cadf90842b1299eb7093eb7bd2ed02960cf",
+          "refs_sha256": "767227fd8e5e3f2673a6dc3d7c2332c94cf3ce292abd0fbe2b787c5724c71679",
+          "stack_bytes": [
+            1272
+          ]
+        },
+        "_RNvCs6vN7PGL8mdd_27parallel_accelerated_worker7receive": {
+          "bytes": 979,
+          "code_sha256": "8a89ad9519ad099c44d2da2380b971d084799ce0820bc7cfa5b83dc10e86cdaa",
+          "refs_sha256": "9cf8b8bed91c1e8e3e21ba1f92106f3bdc8ff56dd4c1832fd4bb467044cf252f",
+          "stack_bytes": [
+            344
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha256_simd/mod.rs::open_avx2",
+      "archive_sha256": "4e510dd2bab688e479f9e2e0554cc1bac21feb8caa55a4fe7513b6be60efac90",
+      "member": "sha256_simd_worker.sha256_simd_worker.134c0783facf42c7-cgu.0.rcgu.o",
+      "object_sha256": "5201fd0a5d893cc7434c131bf5749ff5deb3b06fea28badf5d7f6d25e3e0f1bf",
+      "source_sha256": {
+        "sha256_simd_worker.rs": "33546825a75cbac9581e135a68dafbb391da2f4ecaa1d3f017daf323aa64a84b",
+        "sha256_simd_resident.rs": "b12ea3aaa8ce3455eaf43fb7a56e04817174da9d38869f945cb6508a903ebaae"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          998,
+          "PublicSha256SimdObserve"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          20,
+          "PublicSha256SimdSource"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          48,
+          "PublicSha256SimdInput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          938,
+          "PublicSha256SimdOutput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          1047,
+          "PublicSha256SimdInput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          1098,
+          "PublicSha256SimdInput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          1149,
+          "PublicSha256SimdInput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          1200,
+          "PublicSha256SimdInput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          1251,
+          "PublicSha256SimdInput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          1302,
+          "PublicSha256SimdInput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          1353,
+          "PublicSha256SimdInput"
+        ],
+        [
+          "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive",
+          1407,
+          "PublicSha256SimdInput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 1087,
+          "code_sha256": "92d13a626d4de0dc5312f4118c6d1b1820c2f34b939b13de06b217a4f4285c7c",
+          "refs_sha256": "2ef1f2a01a430a7de089d0a4bb9ae4a35185fda7eefaec06991e59ad64f52d56",
+          "stack_bytes": [
+            8600
+          ]
+        },
+        "_RNvCs1EItM32dlvn_18sha256_simd_worker7receive": {
+          "bytes": 1577,
+          "code_sha256": "fe8ce8ffa60343c04c08cd8d6b5cf853251f70bbfe0c22db73be554b3752dac8",
+          "refs_sha256": "96bb948fb993f56869cc8a67929a904e0271e57dc69ac982dac107ac482d4ee2",
+          "stack_bytes": [
+            696
+          ]
+        }
+      }
+    },
+    {
+      "route": "sha512_simd/mod.rs::open_avx2",
+      "archive_sha256": "8809a65a5c36dbff85dee711a9ff4fa180e140908d8228f1fb31613cabbf3be3",
+      "member": "sha512_simd_worker.sha512_simd_worker.90c43321849f62f2-cgu.0.rcgu.o",
+      "object_sha256": "c7d72615a911ed40f12e79017205047bbdbf27f99b8d72d807da4f8f723c8beb",
+      "source_sha256": {
+        "sha512_simd_worker.rs": "d35d2285ba78cb54ab0f53e4a74e86efa7bacd08e3e99066bb652e1fb6f15c0f",
+        "sha512_simd_resident.rs": "382b060a381bb274f0b90946add0497f3fb3e55a33b6980c8d3b1eeb703e33f9"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          1069,
+          "PublicSha512SimdObserve"
+        ],
+        [
+          "_RNvCscqAsXgu2xR6_18sha512_simd_worker7receive",
+          26,
+          "PublicSha512SimdSource"
+        ],
+        [
+          "_RNvCscqAsXgu2xR6_18sha512_simd_worker7receive",
+          54,
+          "PublicSha512SimdInput"
+        ],
+        [
+          "_RNvCscqAsXgu2xR6_18sha512_simd_worker7receive",
+          903,
+          "PublicSha512SimdOutput"
+        ],
+        [
+          "_RNvCscqAsXgu2xR6_18sha512_simd_worker7receive",
+          1143,
+          "PublicSha512SimdInput"
+        ],
+        [
+          "_RNvCscqAsXgu2xR6_18sha512_simd_worker7receive",
+          1197,
+          "PublicSha512SimdInput"
+        ],
+        [
+          "_RNvCscqAsXgu2xR6_18sha512_simd_worker7receive",
+          1244,
+          "PublicSha512SimdInput"
+        ],
+        [
+          "_RNvCscqAsXgu2xR6_18sha512_simd_worker7receive",
+          1294,
+          "PublicSha512SimdInput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 1116,
+          "code_sha256": "293a7d7e4a334813bc9d72b776a6059ed54cde915727d1b6b6e22d96d29e1911",
+          "refs_sha256": "3516c61e9d9699fb568c1c5c2d3a34a96831970966d60a484af45c653bd3c540",
+          "stack_bytes": [
+            4376
+          ]
+        },
+        "_RNvCscqAsXgu2xR6_18sha512_simd_worker7receive": {
+          "bytes": 1640,
+          "code_sha256": "bcec3436f6bf3651f30132bc9cd5e32261635b87f4244558f76c21aedf9043a7",
+          "refs_sha256": "5a0a4c0d875c4e1a36613f48f535a24bbc106ae614500cffd22b8ed086ac9d49",
+          "stack_bytes": [
+            456
+          ]
+        }
+      }
+    },
+    {
+      "route": "keccak_simd/mod.rs::open_avx2",
+      "archive_sha256": "121a7ec3f53fd679adcbe6c68ec08eaa5545d5c0dc26f4735ae47773cd4759de",
+      "member": "keccak_simd_worker.keccak_simd_worker.522e4e1ec798be7f-cgu.0.rcgu.o",
+      "object_sha256": "b6246d22718d77d093481066bb9b3758180902d1a5b48dc987e5dd43c8d90256",
+      "source_sha256": {
+        "keccak_simd_worker.rs": "38fff061b40ef5fba725abeeb8800a50b6c0aab39420c6fb7c883eb7beb26220",
+        "keccak_simd_resident.rs": "6dcd7a71ed1d95e14122aa3af8c049bb1a7b04d50a7ad84323c953d4bdcdd9d8"
+      },
+      "calls": [
+        [
+          "RetainedWork",
+          1069,
+          "PublicKeccakSimdObserve"
+        ],
+        [
+          "_RNvCs73rHRbIuErz_18keccak_simd_worker7receive",
+          26,
+          "PublicKeccakSimdSource"
+        ],
+        [
+          "_RNvCs73rHRbIuErz_18keccak_simd_worker7receive",
+          54,
+          "PublicKeccakSimdInput"
+        ],
+        [
+          "_RNvCs73rHRbIuErz_18keccak_simd_worker7receive",
+          1156,
+          "PublicKeccakSimdInput"
+        ],
+        [
+          "_RNvCs73rHRbIuErz_18keccak_simd_worker7receive",
+          1351,
+          "PublicKeccakSimdOutput"
+        ]
+      ],
+      "functions": {
+        "RetainedWork": {
+          "bytes": 1108,
+          "code_sha256": "4bbcc743be2fab196abef072700fe892233f76c248401d5f974046bb327f1824",
+          "refs_sha256": "47e781da36903b2337854494b7be7a6fba0dc771b359ba305b2d984d2bde2701",
+          "stack_bytes": [
+            12792
+          ]
+        },
+        "_RNvCs73rHRbIuErz_18keccak_simd_worker7receive": {
+          "bytes": 1972,
+          "code_sha256": "af8d9ef5a5db132e20af897b929ae1edaf7f7fb60c3afa099ff6638d34cc3609",
+          "refs_sha256": "07a54654de75ca033138a1d859e17f272f62e9a0b76ac14ce87a315728d1879d",
+          "stack_bytes": [
+            1576
+          ]
+        }
+      }
+    }
+  ]
+}

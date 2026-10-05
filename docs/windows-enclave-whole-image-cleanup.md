@@ -6,6 +6,13 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The extended [worker runtime/transport reconciliation](windows-enclave-worker-reconciliation.md)
+closes the saved scalar SHA-2 runtime/export links and binds all seventeen
+family workers' entry/transport boundaries and 590 memory calls. Both hosts
+produce identical reports; ten existing native component campaigns also pass.
+Transitive worker state/owner, indirect-dispatch and stack-depth obligations
+remain explicitly open. These results do not upgrade the whole-image claim.
+
 The later [current sequential-image campaign](windows-enclave-current-image-dumps.md)
 adds 72 scoped dump observations and exact shared-wrapper bindings across all
 eighteen sequential images. Combined with the concurrent scheduler results below,

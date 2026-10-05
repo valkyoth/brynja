@@ -1,0 +1,1974 @@
+{
+  "schema": 1,
+  "profiles": [
+    {
+      "route": "sha2/mod.rs::open",
+      "prefix": "PublicSha2",
+      "global_prefix": "sha2",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "40aae1674bfc134a3b8e7840ee2329f504465123495ac29f2bf1a2a7355a2a6f",
+        "Output": "6cc18409c2867f6e5bd53ed86546c222277f022e2cf34af484d1e64cb278a1f4",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha2/mod.rs::open_sha_ni",
+      "prefix": "PublicSha2",
+      "global_prefix": "sha2",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "08b0984c3b452028547d44d36e956a8039da7c033a3e5798c83053151e37129d",
+        "Output": "2a9a621b55f9b7bb0be97ab3a7b8c73f264537ff0c8d91035772388478addb35",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha3/mod.rs::open",
+      "prefix": "PublicSha3",
+      "global_prefix": "sha3",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "874051de0bc2019c39dc2d0411d6ba7719895e207d545d49d640483553128541",
+        "Output": "d7fa76e99347d0c59d60629d9e2beda71cc71e4376d8e35080b0c1c815c7a96b",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha3/mod.rs::open_avx2",
+      "prefix": "PublicSha3",
+      "global_prefix": "sha3",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "b2a9e2153da1ecbd4d69520fbe19982d90c8126ef99c19c434b7637f7508f416",
+        "Output": "d7fa76e99347d0c59d60629d9e2beda71cc71e4376d8e35080b0c1c815c7a96b",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "kmac/mod.rs::open",
+      "prefix": "PublicKmac",
+      "global_prefix": "kmac",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "874051de0bc2019c39dc2d0411d6ba7719895e207d545d49d640483553128541",
+        "Output": "01d83c7bc4896f46fd743fe667e7a619f235b04a230d36e067a73ffb28152c89",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "kmac/mod.rs::open_avx2",
+      "prefix": "PublicKmac",
+      "global_prefix": "kmac",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "b2a9e2153da1ecbd4d69520fbe19982d90c8126ef99c19c434b7637f7508f416",
+        "Output": "01d83c7bc4896f46fd743fe667e7a619f235b04a230d36e067a73ffb28152c89",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "tuplehash/mod.rs::open",
+      "prefix": "PublicTuple",
+      "global_prefix": "tuple",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "874051de0bc2019c39dc2d0411d6ba7719895e207d545d49d640483553128541",
+        "Output": "4f1ee6e3c7ea0c5616d702142d76da12afd708b070dc42ad05489a0163826851",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "tuplehash/mod.rs::open_avx2",
+      "prefix": "PublicTuple",
+      "global_prefix": "tuple",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "b2a9e2153da1ecbd4d69520fbe19982d90c8126ef99c19c434b7637f7508f416",
+        "Output": "4f1ee6e3c7ea0c5616d702142d76da12afd708b070dc42ad05489a0163826851",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha2_batch/mod.rs::open",
+      "prefix": "PublicSha2Batch",
+      "global_prefix": "sha2_batch",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "7d29e04feb521d5a375dbb1060974a509bfd906e35a93638bc4422788ba3f874",
+        "Output": "8c780d87975ce20696f2947a6f0808e74e99c32ca99ae99da6c6c338e9e3f055",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha2_batch/mod.rs::open_sha_ni",
+      "prefix": "PublicSha2Batch",
+      "global_prefix": "sha2_batch",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "84ab38b786e8fde6fd9a542f160cc83bd36f146ee16175a4e0ff9c0d4efd294d",
+        "Output": "8c780d87975ce20696f2947a6f0808e74e99c32ca99ae99da6c6c338e9e3f055",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha3_batch/mod.rs::open",
+      "prefix": "PublicSha3Batch",
+      "global_prefix": "sha3_batch",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "952cb4b7981f51090c82999e75de3b6c73beab7eefcbe17d30ef364f43f182a7",
+        "Output": "9c76c13ee97fb770f39e1dc67d601a931a3cd3e35c62d1f8456461db7fb43767",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha3_batch/mod.rs::open_avx2",
+      "prefix": "PublicSha3Batch",
+      "global_prefix": "sha3_batch",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "deb4fb10fe7012564414039616da6cedde3a4682fc6ad79cd79e8713e55ef2c6",
+        "Output": "9c76c13ee97fb770f39e1dc67d601a931a3cd3e35c62d1f8456461db7fb43767",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "parallelhash/mod.rs::open",
+      "prefix": "PublicParallel",
+      "global_prefix": "parallel",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "b2a9e2153da1ecbd4d69520fbe19982d90c8126ef99c19c434b7637f7508f416",
+        "Output": "3644b1ce20b2b5d4c7e185c573870c057998d248f973891396192cb5552cd583",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "parallelhash/mod.rs::open_avx2",
+      "prefix": "PublicParallel",
+      "global_prefix": "parallel",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "7d29e04feb521d5a375dbb1060974a509bfd906e35a93638bc4422788ba3f874",
+        "Output": "3644b1ce20b2b5d4c7e185c573870c057998d248f973891396192cb5552cd583",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha256_simd/mod.rs::open_avx2",
+      "prefix": "PublicSha256Simd",
+      "global_prefix": "simd",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "ba1c2f35bdc790c1382e26dcd347571f6590835c5f1afaf32ffe248f38a0f44b",
+        "Output": "37895f866874196996c2c3afaf2e5bb398aadf4ebc698e88144153d4a6d5bddf",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "sha512_simd/mod.rs::open_avx2",
+      "prefix": "PublicSha512Simd",
+      "global_prefix": "simd",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "99393875f4c51be16481d9234148b6f13a681f7ee3bebbe7a667f508739ec339",
+        "Output": "f860fa55486761f7de4d7b89b7b3f2ec820ff0376436999a82607f36f3630d31",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    },
+    {
+      "route": "keccak_simd/mod.rs::open_avx2",
+      "prefix": "PublicKeccakSimd",
+      "global_prefix": "simd",
+      "bodies": {
+        "Source": "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d",
+        "Input": "fe679e5d446afacac91d97b4f491a8448bd972a8637c21f6409212236c520b8d",
+        "Output": "72556326460cef97bce3a0cd3039433f937d236f2075c9c4bf83a64c727d8f0e",
+        "Observe": "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70",
+        "InputSource": "2de5a50bf58cc9cf2e038609ec82a55251a8a25f3ae0ba9c4d60e7c06c0c8c5c",
+        "Control": "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e"
+      }
+    }
+  ],
+  "templates": {
+    "f74e88c5185fdc5c7f4d760b7cb0bef88352652f3d48f7d9466a9da284fe2b0d": {
+      "role": "Source",
+      "bytes": "8b050000000085c07411833d00000000007408488b0500000000c333c0c3",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 22,
+          "symbol": "source",
+          "trailing": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "40aae1674bfc134a3b8e7840ee2329f504465123495ac29f2bf1a2a7355a2a6f": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84ab000000833d00000000000f849e0000004883f9010f8794000000483b15000000000f8287000000488b0500000000483bd0777b482bc24c3bc877734981f900040000776a4885c9750f4983f930755f48390d18000000eb1c4883fb0175184d85c9744b48391d18000000754248833d200000000075384d8bc1498bd3498bcae80000000085c07515488d0d1800000048c704d9010000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 108,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 128,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 137,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 154,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 165,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 186,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "6cc18409c2867f6e5bd53ed86546c222277f022e2cf34af484d1e64cb278a1f4": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c0746b833d00000000007462833d0000000000745948833d000000000f754f488b0d000000004885c97443488d42ff4883f83f773948833d2800000000752f4c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 19,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 28,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 38,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 70,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 84,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 95,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 111,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "e910accaed1ec9726f05e808003720fad8437b4269eb2a520f5a68f04a18da70": {
+      "role": "Observe",
+      "bytes": "8b050000000085c07424833d0000000000741b48890d00000000b801000000488915080000004c890510000000c333c0c3",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 22,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 34,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 8
+        },
+        {
+          "offset": 41,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 16
+        }
+      ]
+    },
+    "eb3dd4edff9258882a29610828d98019235927bbd2f126e99338a156b5046d6d": {
+      "role": "InputSource",
+      "bytes": "8b050000000085c07548390500000000754033c048890d0000000048890500000000488905080000004889051000000048890518000000488905200000004889052800000048890530000000b801000000c333c0c3",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "source",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 30,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 37,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 8
+        },
+        {
+          "offset": 44,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 51,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 58,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 65,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 40
+        },
+        {
+          "offset": 72,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 48
+        }
+      ]
+    },
+    "9fb26995c26e7a53cd1d0b008e9236cc666f13af43810b1f32a4d59dd3663a5e": {
+      "role": "Control",
+      "bytes": "8b050000000085c0751f3905000000007517488d41f04883f806770d488d0500000000488b44c880c333c0c3",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 0
+        }
+      ]
+    },
+    "08b0984c3b452028547d44d36e956a8039da7c033a3e5798c83053151e37129d": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84ab000000833d00000000000f849e0000004883f9010f8794000000483b15000000000f8287000000488b0500000000483bd0777b482bc24c3bc877734981f900040000776a4885c9750f4983f940755f48390d18000000eb1c4883fb0175184d85c9744b48391d18000000754248833d200000000075384d8bc1498bd3498bcae80000000085c07515488d0d1800000048c704d9010000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 108,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 128,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 137,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 154,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 165,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 186,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "2a9a621b55f9b7bb0be97ab3a7b8c73f264537ff0c8d91035772388478addb35": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c0746b833d00000000007462833d0000000000745948833d000000000f754f488b0d000000004885c97443488d42ff4883f81f773948833d2800000000752f4c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 19,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 28,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 38,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 70,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 84,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 95,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 111,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "874051de0bc2019c39dc2d0411d6ba7719895e207d545d49d640483553128541": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84ab000000833d00000000000f849e0000004883f9010f8794000000483b15000000000f8287000000488b0500000000483bd0777b482bc24c3bc877734981f900040000776a4885c9750f4983f960755f48390d18000000eb1c4883fb0175184d85c9744b48391d18000000754248833d200000000075384d8bc1498bd3498bcae80000000085c07515488d0d1800000048c704d9010000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 108,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 128,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 137,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 154,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 165,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 186,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "d7fa76e99347d0c59d60629d9e2beda71cc71e4376d8e35080b0c1c815c7a96b": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c00f8481000000833d00000000007478833d0000000000746f48833d00000000197565488b0d000000004885c974594881fa00040000775048833d280000000075464885d2751233c048c70528000000010000004883c428c34c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 42,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 52,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 73,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 90,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 110,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 121,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 137,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "b2a9e2153da1ecbd4d69520fbe19982d90c8126ef99c19c434b7637f7508f416": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84ab000000833d00000000000f849e0000004883f9010f8794000000483b15000000000f8287000000488b0500000000483bd0777b482bc24c3bc877734981f900040000776a4885c9750f4983f970755f48390d18000000eb1c4883fb0175184d85c9744b48391d18000000754248833d200000000075384d8bc1498bd3498bcae80000000085c07515488d0d1800000048c704d9010000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 108,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 128,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 137,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 154,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 165,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 186,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "01d83c7bc4896f46fd743fe667e7a619f235b04a230d36e067a73ffb28152c89": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c00f8494000000833d00000000000f8487000000833d0000000000747e488b05000000004883f830740c4883f831756b4883fa017565488b0d000000004885c974594881fa00040000775048833d280000000075464885d2751233c048c70528000000010000004883c428c34c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 36,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 46,
+          "symbol": "retained_operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 71,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 92,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 109,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 129,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 140,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 156,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "4f1ee6e3c7ea0c5616d702142d76da12afd708b070dc42ad05489a0163826851": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c00f8481000000833d00000000007478833d0000000000746f48833d00000000447565488b0d000000004885c974594881fa00040000775048833d280000000075464885d2751233c048c70528000000010000004883c428c34c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 42,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 52,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 73,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 90,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 110,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 121,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 137,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "7d29e04feb521d5a375dbb1060974a509bfd906e35a93638bc4422788ba3f874": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84ae000000833d00000000000f84a10000004883f9010f8797000000483b15000000000f828a000000488b0500000000483bd0777e482bc24c3bc877764981f900040000776d4885c975124981f980000000755f48390d18000000eb1c4883fb0175184d85c9744b48391d18000000754248833d200000000075384d8bc1498bd3498bcae80000000085c07515488d0d1800000048c704d9010000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 111,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 131,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 140,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 157,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 168,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 189,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "8c780d87975ce20696f2947a6f0808e74e99c32ca99ae99da6c6c338e9e3f055": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c0746a833d00000000007461833d0000000000745848833d0000000055754e488b0d000000004885c974424881fa00020000753948833d2800000000752f4c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 19,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 28,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 38,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 69,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 83,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 94,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 110,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "84ab38b786e8fde6fd9a542f160cc83bd36f146ee16175a4e0ff9c0d4efd294d": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84ae000000833d00000000000f84a10000004883f9010f8797000000483b15000000000f828a000000488b0500000000483bd0777e482bc24c3bc877764981f900040000776d4885c975124981f990000000755f48390d18000000eb1c4883fb0175184d85c9744b48391d18000000754248833d200000000075384d8bc1498bd3498bcae80000000085c07515488d0d1800000048c704d9010000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 111,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 131,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 140,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 157,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 168,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 189,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "952cb4b7981f51090c82999e75de3b6c73beab7eefcbe17d30ef364f43f182a7": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84ae000000833d00000000000f84a10000004883f9010f8797000000483b15000000000f828a000000488b0500000000483bd0777e482bc24c3bc877764981f900040000776d4885c975124981f920010000755f48390d18000000eb1c4883fb0175184d85c9744b48391d18000000754248833d200000000075384d8bc1498bd3498bcae80000000085c07515488d0d1800000048c704d9010000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 111,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 131,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 140,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 157,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 168,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 189,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "9c76c13ee97fb770f39e1dc67d601a931a3cd3e35c62d1f8456461db7fb43767": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c0746a833d00000000007461833d0000000000745848833d0000000062754e488b0d000000004885c974424881fa00040000753948833d2800000000752f4c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 19,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 28,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 38,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 69,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 83,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 94,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 110,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "deb4fb10fe7012564414039616da6cedde3a4682fc6ad79cd79e8713e55ef2c6": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84ae000000833d00000000000f84a10000004883f9010f8797000000483b15000000000f828a000000488b0500000000483bd0777e482bc24c3bc877764981f900040000776d4885c975124981f930010000755f48390d18000000eb1c4883fb0175184d85c9744b48391d18000000754248833d200000000075384d8bc1498bd3498bcae80000000085c07515488d0d1800000048c704d9010000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 111,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 131,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 140,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 157,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 168,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 189,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "3644b1ce20b2b5d4c7e185c573870c057998d248f973891396192cb5552cd583": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c00f8481000000833d00000000007478833d0000000000746f48833d000000006a7565488b0d000000004885c974594881fa00040000775048833d280000000075464885d2751233c048c70528000000010000004883c428c34c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 42,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 52,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 73,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 90,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 110,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 121,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 137,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "ba1c2f35bdc790c1382e26dcd347571f6590835c5f1afaf32ffe248f38a0f44b": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84df000000833d00000000000f84d20000004883f9080f87c8000000483b15000000000f82bb000000488b0500000000483bd00f87ab000000482bc24c3bc80f879f0000004981f9000400000f87920000004885c975164981f9200100000f858000000048390d18000000eb2548833d0000000064756d4983f940726748833d1800000001755d488d41ff48390520000000755048833d300000000075464d8bc1498bd3498bcae80000000085c075234885db751148c70518000000010000004883c4205bc348891d200000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 127,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 136,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 152,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 24
+        },
+        {
+          "offset": 166,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 175,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 48
+        },
+        {
+          "offset": 192,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 208,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 24
+        },
+        {
+          "offset": 225,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 238,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "37895f866874196996c2c3afaf2e5bb398aadf4ebc698e88144153d4a6d5bddf": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c00f8488000000833d0000000000747f833d0000000000747648833d0000000065756c488b0d000000004885c974604881fa00010000755748833d1800000001754d48833d2000000000754348833d2800000000753948833d3000000000752f4c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 42,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 52,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 73,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 24
+        },
+        {
+          "offset": 83,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 93,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 103,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 48
+        },
+        {
+          "offset": 117,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 128,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 144,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "99393875f4c51be16481d9234148b6f13a681f7ee3bebbe7a667f508739ec339": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c00f84e2000000833d00000000000f84d50000004883f9040f87cb000000483b15000000000f82be000000488b0500000000483bd00f87ae000000482bc24c3bc80f87a20000004981f9000400000f87950000004885c975164981f9a00000000f858300000048390d18000000eb2848833d000000005a75704981f980000000726748833d1800000001755d488d41ff48390520000000755048833d300000000075464d8bc1498bd3498bcae80000000085c075234885db751148c70518000000010000004883c4205bc348891d200000004883c4205bc348c70530000000010000004883c4205bc3b8054000804883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 55,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 68,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 127,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 136,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 155,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 24
+        },
+        {
+          "offset": 169,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 178,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 48
+        },
+        {
+          "offset": 195,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 211,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 24
+        },
+        {
+          "offset": 228,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 241,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "f860fa55486761f7de4d7b89b7b3f2ec820ff0376436999a82607f36f3630d31": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c00f8488000000833d0000000000747f833d0000000000747648833d000000005b756c488b0d000000004885c974604881fa00010000755748833d1800000001754d48833d2000000000754348833d2800000000753948833d3000000000752f4c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 42,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 52,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 73,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 24
+        },
+        {
+          "offset": 83,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 93,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 103,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 48
+        },
+        {
+          "offset": 117,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 128,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 144,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "fe679e5d446afacac91d97b4f491a8448bd972a8637c21f6409212236c520b8d": {
+      "role": "Input",
+      "bytes": "40534883ec208b05000000004d8bd84c8bd2488bd985c07451833d000000000074484883f90c77424d85c0743d483b15000000007234488b0500000000483bd07728482bc24c3bc877204981f90004000077174885c9751d4981f980010000750948390d18000000742db8054000804883c4205bc348833d000000006475eb4d85c974e648833d180000000175dc483b1d0000000076d348833d300000000075c94d8bc1498bd3498bcae80000000085c0752a4885db751148c70518000000010000004883c4205bc348ff052000000048891d000000004883c4205bc348c70530000000010000004883c4205bc3",
+      "references": [
+        {
+          "offset": 8,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 27,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "symbol": "PublicLockedLow",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 57,
+          "symbol": "PublicLockedHigh",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 100,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 120,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 135,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 24
+        },
+        {
+          "offset": 145,
+          "symbol": "last_kind",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 154,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 48
+        },
+        {
+          "offset": 171,
+          "symbol": "EnclaveCopyIntoEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 187,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 24
+        },
+        {
+          "offset": 204,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 211,
+          "symbol": "last_kind",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 224,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "72556326460cef97bce3a0cd3039433f937d236f2075c9c4bf83a64c727d8f0e": {
+      "role": "Output",
+      "bytes": "4883ec288b05000000004c8bc985c00f8488000000833d0000000000747f833d0000000000747648833d0000000065756c488b0d000000004885c974604881fa00040000755748833d1800000001754d48833d2000000000754348833d2800000000753948833d3000000000752f4c8bc2498bd1e80000000085c0751048c70528000000010000004883c428c348c70530000000010000004883c428c3b8054000804883c428c3",
+      "references": [
+        {
+          "offset": 6,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "retained_call",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 32,
+          "symbol": "retained_live",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 42,
+          "symbol": "retained_operation",
+          "trailing": 1,
+          "addend": 0
+        },
+        {
+          "offset": 52,
+          "symbol": "retained_output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 73,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 24
+        },
+        {
+          "offset": 83,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 32
+        },
+        {
+          "offset": 93,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 40
+        },
+        {
+          "offset": 103,
+          "symbol": "report",
+          "trailing": 1,
+          "addend": 48
+        },
+        {
+          "offset": 117,
+          "symbol": "EnclaveCopyOutOfEnclave",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 128,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 40
+        },
+        {
+          "offset": 144,
+          "symbol": "report",
+          "trailing": 4,
+          "addend": 48
+        }
+      ]
+    },
+    "2de5a50bf58cc9cf2e038609ec82a55251a8a25f3ae0ba9c4d60e7c06c0c8c5c": {
+      "role": "InputSource",
+      "bytes": "8b050000000085c0754f390500000000754733c048890d000000004889050000000048890500000000488905080000004889051000000048890518000000488905200000004889052800000048890530000000b801000000c333c0c3",
+      "references": [
+        {
+          "offset": 2,
+          "symbol": "active",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 12,
+          "symbol": "retained_call",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 23,
+          "symbol": "source",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 30,
+          "symbol": "last_kind",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 37,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 44,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 8
+        },
+        {
+          "offset": 51,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 58,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 24
+        },
+        {
+          "offset": 65,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 72,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 40
+        },
+        {
+          "offset": 79,
+          "symbol": "report",
+          "trailing": 0,
+          "addend": 48
+        }
+      ]
+    }
+  }
+}

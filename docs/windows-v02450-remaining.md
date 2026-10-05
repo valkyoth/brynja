@@ -2,10 +2,12 @@
 
 ## Current completion checklist (2026-10-05)
 
-- Finish whole-image normal-return cleanup qualification for the remaining
-  distinct workers: scalar SHA-2 runtime/export connections, the separate
-  SHA-NI worker, and the remaining SHA-3/KMAC/TupleHash/batch/ParallelHash paths.
-  Reuse identical reviewed helpers only after binding their actual image edges.
+- Finish transitive normal-return cleanup qualification inside the remaining
+  distinct SHA-NI, SHA-3/KMAC/TupleHash/batch/ParallelHash workers, especially
+  indirect SIMD dispatch and deepest caller/stack paths. Scalar SHA-2 runtime/
+  export connections are now closed; all seventeen family worker entry,
+  transport and direct memory-call boundaries are bound. Those boundary reviews
+  do not yet qualify every inner owner/state path.
 - Reconcile final compiler/platform, runtime/SDK and loaded-image boundaries
   into the precise supported claim; finish documentation and support matrices.
 - Prepare the candidate and obtain independent retest; remediate and test any
@@ -21,6 +23,17 @@ project-signing prerequisite. Windows ARM64 remains unqualified and must not be
 advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
+
+The extended [worker reconciliation](windows-enclave-worker-reconciliation.md)
+closes forty scalar SHA-2 memory calls and its five transport connections,
+rebinds memory runtimes in all eighteen sequential images, and covers 102 C
+adapters, 36 Rust boundary bodies, 97 direct transport calls and 590 memory calls
+in 175 caller bindings across the seventeen family workers. Twenty-three new
+focused tests pass on both hosts with identical parsed reports. All ten existing
+accelerated/SIMD worker campaigns passed again, rejecting 233 compiled mutants;
+the SIMD campaigns passed 1,524 oracle cases. Whole-image qualification remains
+open: source lifecycle review and exact call binding do not substitute for the
+remaining transitive machine-code/stack/indirect-dispatch obligations.
 
 Current implementation status: the bounded SHA-256, scalar SHA-2/SHA-3/KMAC/TupleHash
 streaming, SHA-2/SHA-3 batches and sequential scalar ParallelHash Windows enclave

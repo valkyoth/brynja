@@ -1,5 +1,9 @@
 # Saved scalar SHA-2 primitive cleanup review
 
+Follow-up: the [runtime/export reconciliation](windows-enclave-worker-reconciliation.md)
+now closes the direct memory/transport connections left open in this report.
+Live-runtime and whole-image scope limitations remain explicit.
+
 The [saved report](../assurance/windows-protection-observations/sha2-primitives-20261005.json)
 continues the [state construction/consumption review](windows-enclave-sha2-state-review.md)
 in the same scalar streaming image. It binds twelve complete helper bodies,

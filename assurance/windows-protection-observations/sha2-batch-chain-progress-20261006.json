@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "production_baseline": "2801742be046f8fc1ecb4f40abf8e7c80f4783b3",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "review_tests_per_host": 8,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-chains-linux.json": "5d4e1df6bf71b0118085984bbb0820cf8a465aa081e834741709c4f2fdc20068",
+    "sha2-batch-chains-windows.json": "c1d374d54d6686a57a290f7edbf7266b40ac8e947a359a780a8cb59402110d37"
+  },
+  "review_test_sha256": "9602b6b82166329d285dad2487f8d761087ccae44705d7e8a6d33e0192ce4d63",
+  "component_record_sha256": {
+    "sha2-batch-scalar-component.log": "b682a4dfa7367c47f24f8e47a78018ee5d5a99210be5370503e0a3eef39dc89e",
+    "sha2-batch-sha-ni-component/sha2-batch-accelerated-results.json": "16681e3a18cc08510c702d57de30b959efeaca492cee6e6c6b52ed4fa6088599",
+    "sha256-batch-component/sha256-simd-results.json": "ef90ecbaad4d145ac8215e4a889e8453f7415ae6d294ad8efce3ba489827b702",
+    "sha512-batch-component/sha512-simd-results.json": "a25a002632ad6fa0fcea83edb2f8202676a5bdb3e027f5c38c881e19c4e36a95",
+    "sha2-batch-worker/sha2-batch-worker-results.json": "85f786d06c3986ffa51ab7f2e9cca0f41928de7d34e53eb0ccb67e8294156b03",
+    "sha256-batch-worker/sha256-simd-worker-results.json": "5cbdaaf0389bd4d126af030e6957b4cc70052a5512cf724118d30fcf9b9af373",
+    "sha512-batch-worker/sha512-simd-worker-results.json": "35d5ea1fc675b4584c70ec79db7b3216db6644ab4f5fbce3f1dc1e17bd2463d2",
+    "sha2-batch-resident/sha2-batch-resident-results.json": "deebaf7a9167daaf3a57a7f51ba6cf961c7d946ee8c671ce447595545254e51d",
+    "sha256-batch-resident/sha256-simd-resident-results.json": "8486872f522b1af85533a4e808afcb29fa3f65a91ba1b513c985680041a0d0ef",
+    "sha512-batch-resident/sha512-simd-resident-results.json": "8d217ae8c3a5ffc828f4adc68405fe389749f01485c6c29c32184863c3052a4f"
+  },
+  "routes": {
+    "scalar": {
+      "functions": 32,
+      "cleanup_funclets": 0,
+      "build_inputs": 176,
+      "body_byte_mutations_rejected": 16688,
+      "table_byte_mutations_rejected": 336,
+      "semantic_landmark_mutations_rejected": 12
+    },
+    "sha_ni": {
+      "functions": 42,
+      "cleanup_funclets": 1,
+      "build_inputs": 272,
+      "body_byte_mutations_rejected": 14878,
+      "table_byte_mutations_rejected": 48,
+      "semantic_landmark_mutations_rejected": 6
+    },
+    "simd256": {
+      "functions": 52,
+      "cleanup_funclets": 16,
+      "build_inputs": 258,
+      "body_byte_mutations_rejected": 16562,
+      "table_byte_mutations_rejected": 0,
+      "semantic_landmark_mutations_rejected": 17
+    },
+    "simd512": {
+      "functions": 52,
+      "cleanup_funclets": 16,
+      "build_inputs": 260,
+      "body_byte_mutations_rejected": 18757,
+      "table_byte_mutations_rejected": 296,
+      "semantic_landmark_mutations_rejected": 17
+    }
+  },
+  "actual_cleanup_event_mutations_rejected": 11,
+  "private_abi_mutations_rejected": 20,
+  "transitive_depth_qualified": false,
+  "remaining_private_review": [
+    "primitive reuse with complete ABI/context checks",
+    "sequential state transfers, export and page retirement composition",
+    "SIMD callback provenance, lane engines, kernels and error/funclet cleanup",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

@@ -29,6 +29,14 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [SHA-2 batch checkpoint](windows-enclave-sha2-batch-chains.md) binds all 178
+emitted functions across the sequential scalar/SHA-NI and two AVX2 SIMD routes.
+Eight review tests pass on both hosts with matching reports; component, worker
+and resident campaigns pass on native Linux. Selected admission, cleanup and
+callback-target contracts are checked. **Step 5 remains in progress**: primitive
+reuse, complete state/export/page composition, SIMD callsite/engine/funclet
+review and private frame/storage assignments remain explicit obligations.
+
 The [TupleHash chain review](windows-enclave-tuple-chains.md) binds both complete
 saved populations (52 scalar functions; 55 AVX2 main functions plus six cleanup
 funclets), kernels, constants, helper ABI reuse and wrapper/transport targets.
@@ -39,7 +47,7 @@ resident, worker, host-wire and focused Miri campaigns pass. **Step 4 is closed*
 at private-family scope, with explicit function/frame assignments and scalar
 fail-stop caller preconditions. Shared runtime/SDK and whole-window reclamation
 remain in step 8; the review does not qualify the whole image. SHA-2 batch is
-the next finite family package.
+the current finite family package.
 
 The [KMAC chain review](windows-enclave-kmac-chains.md) now binds both saved
 workers (84 scalar functions; 64 AVX2 main functions and thirteen cleanup

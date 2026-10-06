@@ -14,13 +14,14 @@ from windows_enclave_sha2_simd_commit_tests import CommitTests, CommitSavedTests
 from windows_enclave_sha2_simd_provenance_tests import ProvenanceTests, ProvenanceSavedTests
 from windows_enclave_sha2_simd_vector_tests import VectorTests, VectorSavedTests
 from windows_enclave_sha2_simd_finish_tests import FinishTests, FinishSavedTests
+from windows_enclave_sha2_simd_reuse_tests import ReuseTests, ReuseSavedTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 s=c.shapes.s
 
 
-class Tests(KernelTests, WorkerTests, ConstructorTests, DigestTests, CommitTests, ProvenanceTests, VectorTests, FinishTests, unittest.TestCase):
+class Tests(KernelTests, WorkerTests, ConstructorTests, DigestTests, CommitTests, ProvenanceTests, VectorTests, FinishTests, ReuseTests, unittest.TestCase):
     def test_saved_engine_error_discriminants(self):
         self.assertEqual([n for n in range(256) if c.shapes.simd_storage.ordinary_rejection(n)], [5,7,8,9,10])
         for bad in (-1,256,True):
@@ -154,7 +155,7 @@ class Tests(KernelTests, WorkerTests, ConstructorTests, DigestTests, CommitTests
 
 
 class SavedTests(KernelSavedTests, WorkerSavedTests, ConstructorSavedTests, DigestSavedTests,
-                 CommitSavedTests, ProvenanceSavedTests, VectorSavedTests, FinishSavedTests, unittest.TestCase):
+                 CommitSavedTests, ProvenanceSavedTests, VectorSavedTests, FinishSavedTests, ReuseSavedTests, unittest.TestCase):
     def test_simd_complete_destructors_reject_each_instruction_change(self):
         module=c.shapes.simd_storage;actual=module.exact;count=0
         for lane,_,_,_,_,_,bodies in self.routes:

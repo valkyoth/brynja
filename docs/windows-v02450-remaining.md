@@ -85,6 +85,11 @@ successful per-lane wiping. Eighty-nine tests pass on both hosts; an independent
 bit-string model matches all private input bit lengths. Primitive-helper reuse,
 enclosing compaction/preconditions and live pointer/frame composition remain;
 neither matching primitive bytes nor caller checks alone close those obligations.
+Explicit primitive replay now binds four scalar helpers per SIMD route, including
+round-table references and strictly named ABI differences. The changed zeroizer
+is reviewed separately. Ninety-four tests pass on both hosts with matching
+reports. Remaining work is caller/precondition and live-storage composition,
+not re-reviewing these unchanged helper instructions.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

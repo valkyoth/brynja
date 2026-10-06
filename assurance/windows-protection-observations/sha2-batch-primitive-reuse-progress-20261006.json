@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "7b0df2884cfa950f277792e437ea39a5ff2252b2",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 94,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-primitive-reuse-linux.json": "c1b97101de1cc14549830c4214c35939bdfb599806905be6ab8c832dea8c636f",
+    "sha2-batch-primitive-reuse-windows.json": "4d2e2202dc06d3d5e05bcab9c223450d82a7e0afe1034b215b8b45012e429aa9"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_simd_reuse.py": "ba3d28434d7b2fa0da2748c7fda6d79e3d287272f3b3701d6f06af44750dca03",
+    "windows_enclave_sha2_simd_reuse_tests.py": "48e2651336ed8c766e051a1687b6da14cfe41e26a1199c4c46cb4a18a51533ed",
+    "windows_enclave_sha2_batch_chains.py": "edb3e8060ce63e7db5a1b7c583293c0fe7c604b1323c72667d6f4958e1ed2a85",
+    "test-windows-enclave-sha2-batch-chains.py": "b71b3f5f87ec1c1abed21137c4d62a2f229ad8da7ec56694af0e126f83219176"
+  },
+  "prior_review_observation": "sha2-batch-scalar-finish-progress-20261006.json",
+  "new_reviewed_scope": [
+    "replay original scalar primitive review before explicit reuse in each SIMD image",
+    "four complete matching instruction contracts per route: scalar compression, owner wipe, checked copy and byte copy",
+    "one exact round-table relocation rename, with preserved offset/addend/trailing fields",
+    "linked compression tables equal independently derived round constants and original reviewed tables",
+    "only the exact saved target-feature and two named inferred copy-length range changes accepted",
+    "different zeroizer body separately reviewed, retaining its positive-length caller requirement",
+    "copy and clear iteration geometry including maximum permitted lengths"
+  ],
+  "primitive_binding_mutations_rejected": 70,
+  "zeroizer_instruction_and_store_mutations_rejected": 112,
+  "helper_contracts_reused_per_route": 4,
+  "unknown_helper_reuse_allowed": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "enclosing compact-index and original input/workspace alias preconditions",
+    "all caller live/disjoint storage and positive zeroizer length requirements",
+    "compose descriptor IR provenance with emitted stack-slot lifetimes and indirect memory effects",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

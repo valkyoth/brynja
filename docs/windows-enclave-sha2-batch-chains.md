@@ -487,16 +487,35 @@ mutations, twenty-one mask/helper mutations, six misplaced opaque markers and
 forty wrong variant-table targets. Production and release-gate code are unchanged;
 native worker results remain reused, not presented as fresh enclave execution.
 
+The [primitive reuse observation](../assurance/windows-protection-observations/sha2-batch-primitive-reuse-progress-20261006.json)
+replays the earlier scalar review before reusing four selected helpers per SIMD
+route: scalar compression, owner wiping, checked region copying and byte copying.
+Complete instruction bytes and extent kinds must match. Compression permits
+only the single known round-table relocation rename, with matching offset,
+addend and trailing bytes; the current linked table also matches independently
+derived SHA-2 round constants. Other helper references must match exactly.
+Resolved ABI comparison permits only the precise saved target-feature string
+change and the two named copy-length range widenings. It does not remove
+attributes generally or qualify other helpers merely because their bytes match.
+The changed zeroizer is separately reviewed in full, including its stricter
+positive-length ABI. Copy and clear interval tests cover lengths through 4,096
+bytes and the largest permitted integer boundaries. Callers must still establish
+valid nonoverlapping copy regions, live storage and positive clearing lengths.
+Ninety-four tests pass on Linux and Windows with matching parsed reports. New
+regressions reject seventy primitive body/reference/ABI/constant changes and
+112 zeroizer instruction/store changes. Production and release-gate code are
+unchanged, and no new native enclave execution is claimed.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-scalar-finish-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-primitive-reuse-linux.json
 ```
 
-Without the saved directory the test command runs forty-five self-contained tests
-and explicitly skips the forty-four saved-artifact tests.
+Without the saved directory the test command runs forty-seven self-contained tests
+and explicitly skips the forty-seven saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -526,8 +545,11 @@ and explicitly skips the forty-four saved-artifact tests.
   compaction/preconditions and live-storage composition. The scalar remainder,
   padding and output-mask caller regions now have complete checks, including
   both variant dispatch tables and the specialized mask helpers. Compose the
-  remaining scalar compression/transfer contracts with these caller regions;
-  do not infer primitive reuse merely from matching names or instruction bytes.
+  reproduced scalar compression/transfer contracts with these caller regions.
+  Their complete bytes, references, round tables and exact ABI differences now
+  have explicit checks; the changed zeroizer has a separate complete review.
+  Establish every caller's valid/disjoint regions and positive clearing lengths,
+  rather than inferring caller safety from callee identity.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

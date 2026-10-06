@@ -90,6 +90,12 @@ round-table references and strictly named ABI differences. The changed zeroizer
 is reviewed separately. Ninety-four tests pass on both hosts with matching
 reports. Remaining work is caller/precondition and live-storage composition,
 not re-reviewing these unchanged helper instructions.
+Public compact-index construction now has bounded emitted-instruction replay
+across all 6,561 narrow and 1,296 wide typed identity combinations, with exact
+active counts, narrow public IV placement and declared workspace contents.
+Ninety-nine tests pass on both hosts, including 32 new compaction mutations;
+parsed reports match. Original input/frame preconditions and subsequent index
+lifetimes still require composition; this is not a whole-frame qualification.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

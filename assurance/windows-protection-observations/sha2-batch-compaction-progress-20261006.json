@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "41d9915e42662695cbdb9627ea3ac197e7197224",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 99,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-compaction-linux.json": "9909e3075df55613e09c70de7f628a17776d276a23ac122906a6728503dd8efb",
+    "sha2-batch-compaction-windows.json": "6d049c7278efc0398399cf358ce4ff96ed1e676e81b4ca73846bc68fd218c4d8"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_index_machine.py": "3c4975f6266e522a407706055891f1a564495e602011816b1aebce847968de62",
+    "windows_enclave_sha2_simd_indices.py": "1ca1b6fc07087053224ceef5bf8bc5692abea7ca564771ef51de946705d67730",
+    "windows_enclave_sha2_simd_indices_tests.py": "42f4583e7a33f8ac98d85319df56ec2461cfb347365cf428957475f95c5170b5",
+    "windows_enclave_sha2_batch_chains.py": "a4f3787c213c54eceacd08826e06397fce7e2856c4cdf37bb2d891074cb3ed92",
+    "test-windows-enclave-sha2-batch-chains.py": "661bab7167a47c70d194f9ee3a1873c8bec99cac27751b8bdd5bf22b72d41922"
+  },
+  "prior_review_observation": "sha2-batch-primitive-reuse-progress-20261006.json",
+  "new_reviewed_scope": [
+    "bounded public lane-compaction instruction interpretation with checked register widths, flags and byte storage",
+    "all typed narrow and wide identity combinations yield exact ordered unique bounded indices and active counts",
+    "public narrow SHA-224/SHA-256 IVs placed in the original corresponding lane state",
+    "all other declared workspace bytes remain clear after the separately reviewed wipe contract",
+    "wipe invalidates volatile registers and flags; unknown state, calls, writes and excess steps reject"
+  ],
+  "public_identity_combinations": {"simd256": 6561, "simd512": 1296},
+  "maximum_interpreted_steps": {"simd256": 486, "simd512": 29},
+  "compaction_index_count_address_iv_mutations_rejected": 32,
+  "general_x86_emulation_claimed": false,
+  "alignment_padding_erasure_claimed": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "original typed input, frame setup and workspace alias preconditions",
+    "subsequent compact-index lifetimes and indirect memory effects",
+    "all caller live/disjoint storage and positive zeroizer length requirements",
+    "compose descriptor IR provenance with emitted stack-slot lifetimes",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

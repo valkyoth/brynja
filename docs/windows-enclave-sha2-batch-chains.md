@@ -506,16 +506,32 @@ regressions reject seventy primitive body/reference/ABI/constant changes and
 112 zeroizer instruction/store changes. Production and release-gate code are
 unchanged, and no new native enclave execution is claimed.
 
+The [compaction observation](../assurance/windows-protection-observations/sha2-batch-compaction-progress-20261006.json)
+executes the saved public lane-compaction instructions in a bounded integer and
+byte-memory model. All 6,561 narrow identity combinations and 1,296 wide
+combinations reproduce strictly ordered, unique, bounded indices and the exact
+active count. Narrow lanes also reproduce SHA-224/SHA-256 IV placement. Every
+other declared workspace byte remains zero after the separately reviewed wipe;
+alignment padding is not included in that clearing claim.
+Unknown instructions, calls, uninitialized reads, writes outside assigned storage
+and exhausted instruction budgets reject. The sole abstract call is the reviewed
+workspace wipe, which clears its assigned fields and invalidates volatile
+registers and flags. This is not a general x86 emulator or whole-frame proof:
+original typed inputs, frame setup and subsequent lifetimes remain caller
+obligations. Ninety-nine tests pass on Linux and Windows with matching parsed
+reports, including 32 wrong-index/count/address/IV mutations. No new native
+enclave execution or production change is claimed.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-primitive-reuse-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-compaction-linux.json
 ```
 
-Without the saved directory the test command runs forty-seven self-contained tests
-and explicitly skips the forty-seven saved-artifact tests.
+Without the saved directory the test command runs fifty self-contained tests
+and explicitly skips the forty-nine saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -541,8 +557,9 @@ and explicitly skips the forty-seven saved-artifact tests.
   lifetimes and indirect memory effects; do not promote IR checks alone to a
   complete machine-code lifetime proof.
   Complete vector-loop regions now bind lane packing, complete-block input
-  bounds, session accounting and indexed state write-back. Finish the enclosing
-  compaction/preconditions and live-storage composition. The scalar remainder,
+  bounds, session accounting and indexed state write-back. Public lane compaction
+  now has exhaustive typed-identity replay; finish its original caller
+  preconditions and subsequent live-storage composition. The scalar remainder,
   padding and output-mask caller regions now have complete checks, including
   both variant dispatch tables and the specialized mask helpers. Compose the
   reproduced scalar compression/transfer contracts with these caller regions.

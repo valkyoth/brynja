@@ -2,9 +2,10 @@
 import copy
 from unittest.mock import patch
 import windows_enclave_sha2_simd_reuse as r
+from windows_enclave_sha2_zero_calls_tests import ZeroCallTests, ZeroCallSavedTests
 
 
-class ReuseTests:
+class ReuseTests(ZeroCallTests):
     def test_simd_reuse_abi_only_allows_named_substitutions(self):
         for role in ('compress', 'wipe', 'copy', 'bytes', 'zero'):
             argument = '%2' if role == 'bytes' else '%1'
@@ -44,7 +45,7 @@ class ReuseTests:
         with self.assertRaises(ValueError): r.zero_geometry(0)
 
 
-class ReuseSavedTests:
+class ReuseSavedTests(ZeroCallSavedTests):
     def test_simd_helpers_reject_body_reference_extent_and_abi_drift(self):
         _, old_data, old_ir, _ = r.prior.prior(self.saved, 'scalar')
         previous = r.prior.c.previous.inventory(old_data); count = 0

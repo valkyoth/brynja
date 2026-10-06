@@ -96,6 +96,12 @@ active counts, narrow public IV placement and declared workspace contents.
 Ninety-nine tests pass on both hosts, including 32 new compaction mutations;
 parsed reports match. Original input/frame preconditions and subsequent index
 lifetimes still require composition; this is not a whole-frame qualification.
+All 104 direct/tail SIMD zeroizer callers now establish positive lengths:
+99 fixed literals and five full-width descriptor guards. One hundred and three
+tests pass on Linux and Windows with matching parsed reports; 730 new caller
+mutations reject. Dynamic descriptor upper bounds, live storage and pointer
+validity remain separate obligations; the broader caller-completion flag stays
+false. No production or release-gate change was made.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

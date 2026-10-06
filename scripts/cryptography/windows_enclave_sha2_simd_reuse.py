@@ -7,6 +7,7 @@ Caller alias/lifetime and positive zeroizer-length obligations remain separate.
 import windows_enclave_kmac_shapes as s
 import windows_enclave_sha2_batch_reuse as prior
 import windows_enclave_sha2_simd_kernel as kernel
+import windows_enclave_sha2_zero_calls as zero_calls
 
 FEATURES = '+cx16,+sse,+sse2,+sse3,+sahf'
 SIMD_FEATURES = FEATURES + (',+avx,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+crc32,+ssse3'
@@ -104,9 +105,10 @@ def inspect(base, lane, functions, ir, bodies, constants):
     return dict(prior_route=row['route'], prior_image_sha256=report['image_sha256'],
         prior_object_sha256=report['object_sha256'], prior_semantic_review_replayed=True,
         exact_instruction_contracts=matched, changed_zeroizer_separately_reviewed=zeroizer(bodies),
+        zeroizer_positive_length_callers=zero_calls.inspect(bodies,lane),
         round_constants_rebound_and_independently_derived=True,
         only_explicit_target_feature_and_length_range_substitutions=True,
         copy_length_scope='nonoverlapping valid regions shorter than 2**63 bytes',
         current_image_references_rebound_by_parent=True,
-        caller_alias_lifetime_and_positive_zeroizer_lengths_pending=True,
+        caller_alias_lifetime_and_dynamic_zeroizer_upper_bounds_pending=True,
         unlisted_equal_bodies_implicitly_qualified=False, whole_frame_qualified=False)

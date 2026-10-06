@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "8f183aae5c74fd4b07cb73e4f5c11a370e5e81ce",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 103,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-clear-callers-linux.json": "17636fa695ac8386d321c3dd86581cbc52eea8d3368c1b3c08b330792884e441",
+    "sha2-batch-clear-callers-windows.json": "c704a4d96e8af3965cb2800d811bebfdfc0eb10c6631d827963cee33aed7420d"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_zero_calls.py": "59baa506475f489a721102d0d6152e7579328f5e6ffedcc68b792988dd4b7bd7",
+    "windows_enclave_sha2_zero_calls_tests.py": "49ef9f1252aa961191ac5e5003f179eebb91e381d92ae3618a3e1a21f85ea361",
+    "windows_enclave_sha2_simd_reuse.py": "904f04110a47eb2891d203f1983ef1c7d6111ad5beb1fe7cd04e8a4d2b46dc6a",
+    "windows_enclave_sha2_simd_reuse_tests.py": "c3f2aaae9f25aa359826f7053402d8a6e380f2bf7ca62cc4d1794202d0e97948"
+  },
+  "prior_review_observation": "sha2-batch-compaction-progress-20261006.json",
+  "new_reviewed_scope": [
+    "every direct and tail zeroizer transfer in both saved SIMD populations requires a locally established positive length",
+    "99 fixed positive 32-bit literal lengths remain unchanged through explicitly permitted instructions",
+    "five dynamic descriptor lengths are tested at full width with zero-length rejection before the call",
+    "intervening labels, length clobbers, unreviewed calls and changed populations reject",
+    "caller positivity review is mandatory in the primitive-composition replay"
+  ],
+  "direct_and_tail_calls": {"simd256": 53, "simd512": 51},
+  "fixed_positive_lengths": {"simd256": 50, "simd512": 49},
+  "guarded_descriptor_lengths": {"simd256": 3, "simd512": 2},
+  "caller_length_guard_population_mutations_rejected": 730,
+  "parent_control_flow_and_jump_table_bindings_required": true,
+  "dynamic_descriptor_upper_bounds_qualified": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "original typed input, frame setup and workspace alias preconditions",
+    "subsequent compact-index lifetimes and indirect memory effects",
+    "all caller live/disjoint storage and dynamic descriptor upper bounds",
+    "compose descriptor IR provenance with emitted stack-slot lifetimes",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

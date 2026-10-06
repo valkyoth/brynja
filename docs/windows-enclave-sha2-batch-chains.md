@@ -522,16 +522,34 @@ obligations. Ninety-nine tests pass on Linux and Windows with matching parsed
 reports, including 32 wrong-index/count/address/IV mutations. No new native
 enclave execution or production change is claimed.
 
+The [clearing-caller review](../assurance/windows-protection-observations/sha2-batch-clear-callers-progress-20261006.json)
+now checks all 104 direct and tail transfers into
+the stricter SIMD-image zeroizer. Ninety-nine calls have a locally established,
+positive 32-bit literal length; five load descriptor lengths and test all 64
+bits before the call. Only explicitly reviewed intervening instructions that
+preserve the length register are accepted. Labels, unexpected calls, register
+clobbers, missing guards and changed call populations reject. This check composes
+with the parent control-flow and jump-table bindings; it does not replace them.
+Positive length is now checked, but dynamic descriptor upper bounds, valid
+pointers and live storage still need composition. The broader
+`all_callers_checked` field therefore remains false rather than implying those
+remaining obligations are closed.
+All 103 tests pass on Linux and Windows with identical parsed reports. The new
+tests reject 730 length, guard, clobber, alternate-entry and population mutations
+without relying on the enclosing whole-body hash to reject them. Production
+code and release gates remain unchanged; this is saved-image review, not new
+native enclave execution.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-compaction-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-clear-callers-linux.json
 ```
 
-Without the saved directory the test command runs fifty self-contained tests
-and explicitly skips the forty-nine saved-artifact tests.
+Without the saved directory the test command runs fifty-two self-contained tests
+and explicitly skips the fifty-one saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -565,8 +583,9 @@ and explicitly skips the forty-nine saved-artifact tests.
   reproduced scalar compression/transfer contracts with these caller regions.
   Their complete bytes, references, round tables and exact ABI differences now
   have explicit checks; the changed zeroizer has a separate complete review.
-  Establish every caller's valid/disjoint regions and positive clearing lengths,
-  rather than inferring caller safety from callee identity.
+  Positive clearing lengths now have exhaustive direct/tail call-site checks.
+  Establish every caller's valid/disjoint regions and dynamic descriptor upper
+  bounds, rather than inferring caller safety from callee identity.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

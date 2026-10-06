@@ -391,17 +391,37 @@ constant-byte changes, twelve constant-removal/extent changes, and every one of
 resident campaigns pass 402/602 oracle cases, four compiled resident mutants and
 eight ownership negatives per family, plus the component campaigns. Windows
 replays the saved images; this checkpoint is not a new native enclave run.
+The [digest caller observation](../assurance/windows-protection-observations/sha2-batch-digest-caller-progress-20261006.json)
+adds input admission, private descriptor construction and retained-output
+lifetime checks for both SIMD routes. Every typed lane is bounded to 1024 bytes;
+empty inputs require zero tail width, and fractional tails must have canonical
+unused bits. Early failures with an armed operation clear the retained owner
+and quarantine its authority. The saved guard cannot be disarmed in those paths.
+Plans are preserved from the typed inputs. Scratch is zeroed before digest output
+and split into eight 32-byte or four 64-byte destinations. All four SHA-512
+output-width dispatch tables are checked against the linked, byte-bound tables.
+Returned slots must be present and bounded before copying into the retained
+owner. The output owner is destroyed before final revalidation; only then may
+the plan and retained phase be published. Every checked post-result normal
+return clears output ownership, scratch and workspace, including copy failures.
+The inner engine's preservation of destination provenance is **still pending**;
+these caller checks do not make an arbitrary returned pointer trustworthy.
+Fifty-two review tests pass on both hosts, rejecting fifteen added premature
+returns, twenty-eight dispatch mutations and two saved-guard disarming changes,
+alongside the existing semantic-sequence and cleanup-event mutations. Fresh
+Linux AVX2 worker-double campaigns pass for both families. Shared OS-copy and
+window cleanup are not qualified by those tests.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-simd-constructor-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-digest-caller-linux.json
 ```
 
-Without the saved directory the test command runs twenty-one self-contained tests
-and explicitly skips the twenty-four saved-artifact tests.
+Without the saved directory the test command runs twenty-four self-contained tests
+and explicitly skips the twenty-eight saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -418,6 +438,9 @@ and explicitly skips the twenty-four saved-artifact tests.
   destruction, page retirement and selected error-return cleanup now have checks;
   complete transposes and AVX2 compression kernels are now checked. These do
   not close complete alias or lifetime composition across the digest engine.
+  The enclosing digest caller now has typed input admission, scratch/output
+  layout, plan/width and post-result lifetime checks; the inner lane engine and
+  preservation of returned destination pointers remain to be composed.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

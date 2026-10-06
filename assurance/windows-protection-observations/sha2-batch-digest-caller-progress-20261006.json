@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "29afe407e3f9c0b18679b2efd2082ad5c15430e0",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 52,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-digest-caller-linux.json": "f3f0e6e8c0a446c56a4f137380eea3f1b0a24378666dbb9fabf2b5d23c77d2ea",
+    "sha2-batch-digest-caller-windows.json": "1d6e59073af02083a9646ce8d9acdb663f9198525cb47db2077b476cf1862fbd"
+  },
+  "review_test_sha256": {
+    "test-windows-enclave-sha2-batch-chains.py": "50b1e23b2ea88d36ab262d88b74dd6d0b538cfdba4985cfc6957f238bf50e34f",
+    "windows_enclave_sha2_simd_digest_tests.py": "d79ca8ddbbb40a0f55273998598485b63b5fbeb11ac21db0a15ffc49b4641914"
+  },
+  "prior_review_observation": "sha2-batch-simd-constructor-progress-20261006.json",
+  "new_reviewed_scope": [
+    "operation admission, saved armed guard and all pre-workspace error cleanup edges",
+    "all eight/four typed input slots converted to private 40-byte input descriptors",
+    "1024-byte bound, zero-length tail rule and canonical optional low bits",
+    "typed identities preserved for retained plan; narrow output widths and four wide width dispatch tables",
+    "zeroed 256-byte scratch and disjoint per-lane destination descriptors",
+    "bounded non-null result slots copied into retained output slots",
+    "output owner destruction before final authority revalidation and phase publication",
+    "post-result normal-return cleanup of output owners, scratch and workspace",
+    "early-return and saved guard-disarming rejection regressions"
+  ],
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 121,
+    "sha_ni": 153,
+    "simd256": 161,
+    "simd512": 181
+  },
+  "required_return_event_mutations_rejected": 119,
+  "retained_output_early_return_mutations_rejected": 15,
+  "wide_output_dispatch_mutations_rejected": 28,
+  "saved_guard_disarming_mutations_rejected": 2,
+  "native_workers": {
+    "sha256": {
+      "path": "release-reports/windows-worker-review-20261006/sha256-simd-worker-digest-caller/sha256-simd-worker-results.json",
+      "sha256": "685e127a8736bce7c22d2d1bcc8eb83d9c41de219d01c6bd71525a5e9ba56b89",
+      "oracle_cases": 402,
+      "worker_mutants": 14,
+      "component_mutants": 12,
+      "component_ownership_negatives": 6
+    },
+    "sha512": {
+      "path": "release-reports/windows-worker-review-20261006/sha512-simd-worker-digest-caller/sha512-simd-worker-results.json",
+      "sha256": "1cc405393e0a5be747d49f0b110fd3e1d1cdc8171862e9b233c0e0301ab1d373",
+      "oracle_cases": 602,
+      "worker_mutants": 14,
+      "component_mutants": 12,
+      "component_ownership_negatives": 6
+    }
+  },
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles",
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "os_copy_and_reentrancy_qualified": false,
+  "remaining_private_review": [
+    "inner SIMD lane engine and preservation of result destination provenance",
+    "remaining primitive-helper and batch-specific caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments",
+    "remaining fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

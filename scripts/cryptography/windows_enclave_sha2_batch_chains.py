@@ -201,6 +201,7 @@ def inspect_route(base,root,lane,pin,mutate):
         semantics['simd_authority']['cleanup_tables']=shapes.simd_authority.cleanup_tables(asm,bodies,lane)
         semantics['simd_authority']['callback_unwind']['cleanup_state_order_review_pending']=False
         semantics['simd_authority']['callback_unwind']['enclosing_storage_lifetimes_pending']=True
+        if lane=='simd512': shapes.simd_digest.wide_widths(bodies,asm)
     semantics['public_constructor_constants']=public_constructor_constants(constants,lane)
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None

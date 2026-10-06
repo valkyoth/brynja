@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_KMAC_PRIVATE_CHAIN_REVIEW_COMPLETE",
+  "review_baseline": "572fe193d1cd97a759932d4aaf4605f61424bfe8",
+  "completion_package": 3,
+  "completion_package_closed": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "review_tests_per_host": 19,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "kmac-chains-lifecycle-linux.json": "b3c6d4722c915fd96e4b3697f2637f31afb2248cd2b9ac04c5144a0b1087e491",
+    "kmac-chains-lifecycle-windows.json": "31c1573d9fca6fcd8c11c0cfa6f7bbb103b74be37bc726bfe446a356644ce9eb",
+    "kmac-scalar-lifecycle-tests.log": "01cf47acdfd4b4ac5ac0c5ac60de3f50ab6ac0232f781476b95364b4ce0ea606",
+    "kmac-avx2-lifecycle-tests.log": "af0400ce8e4b87c7ce6a539198251086861e57bb11a560393f21d7968fb441a4"
+  },
+  "remaining_family_review": [],
+  "shared_completion_package": 8,
+  "shared_obligations": [
+    "Actual runtime callees and SDK boundary composition",
+    "Complete stack-window erasure, including moved copies and incoming register saves",
+    "Final compiler/platform and whole-image stack-depth reconciliation"
+  ],
+  "routes": {
+    "scalar": {
+      "route": "kmac/mod.rs::open",
+      "image_sha256": "bbe6218b52e86b49379597a13129604f8fc7708f4a62b4c7bbc0e387d4173e33",
+      "object_sha256": "c46271c6007dd9590098700f0a9d29715685fef4885515fed6f9d565ff149603",
+      "build_inputs": 207,
+      "functions": 84,
+      "assignment_counts": {
+        "reproduced_sha3/exact_body_reference_and_abi_reuse": 22,
+        "reproduced_sha3/explicitly_rebound_renamed_helpers": 2,
+        "reproduced_sha3/explicitly_compared_prefix_specializations": 6,
+        "entry_and_wire": 2,
+        "active_state_and_guards": 3,
+        "scalar_setup_and_transfer": 11,
+        "suffix_and_pending_bits": 4,
+        "public_bit_shape": 1,
+        "scalar_secret_readers": 6,
+        "scalar_fixed_and_xof_finalization": 4,
+        "owner_lifecycle": 14,
+        "scalar_construction_and_reader_transfer": 3,
+        "scalar_core_cleanup": 1,
+        "public_length_encoding": 2,
+        "difference_and_public_decision": 3
+      },
+      "body_byte_mutations_rejected": 40909,
+      "table_byte_mutations_rejected": 176,
+      "local_stack_bound": -21696,
+      "shared_runtime_frames_excluded": true,
+      "resident_page_clear_bytes": 4096,
+      "runtime_rvas_pending": {
+        "memset": 56944,
+        "PublicKmacObserve": 46304,
+        "PublicKmacSource": 46560,
+        "PublicKmacInput": 45984,
+        "PublicKmacOutput": 46368,
+        "__chkstk": 50400,
+        "memcpy": 55216,
+        "__umodti3": 45296
+      }
+    },
+    "avx2": {
+      "route": "kmac/mod.rs::open_avx2",
+      "image_sha256": "4c0f67100277e7750853ba7018ca73f0f68482133c3fdc6ee43ff975fe3abaae",
+      "object_sha256": "5d7e903e401f6f212047651c603d76bee2df91b55f74357f5776fc569832c5b7",
+      "build_inputs": 305,
+      "functions": 77,
+      "assignment_counts": {
+        "reproduced_sha3/exact_body_reference_and_abi_reuse": 20,
+        "reproduced_sha3/explicitly_rebound_renamed_helpers": 4,
+        "reproduced_sha3/changed_abi_checked_by_widened_xor_review": 2,
+        "reproduced_sha3/explicitly_compared_prefix_specializations": 1,
+        "invoked_cleanup_funclet": 13,
+        "entry_and_wire": 3,
+        "active_state_and_guards": 4,
+        "suffix_and_pending_bits": 3,
+        "public_bit_shape": 1,
+        "owner_lifecycle": 13,
+        "accelerated_state": 6,
+        "resident_placement_and_retirement": 3,
+        "public_length_encoding": 1,
+        "difference_and_public_decision": 3
+      },
+      "body_byte_mutations_rejected": 27572,
+      "table_byte_mutations_rejected": 64,
+      "local_stack_bound": -11230,
+      "shared_runtime_frames_excluded": true,
+      "resident_page_clear_bytes": 4096,
+      "runtime_rvas_pending": {
+        "memset": 52544,
+        "PublicKmacObserve": 33840,
+        "PublicKmacSource": 34096,
+        "PublicKmacInput": 33520,
+        "PublicKmacOutput": 33904,
+        "__umodti3": 32112,
+        "memcpy": 50816,
+        "__chkstk": 37952,
+        "memcmp": 53472
+      }
+    }
+  },
+  "additional_regressions": {
+    "semantic_landmarks": {
+      "scalar": 110,
+      "avx2": 82
+    },
+    "lifecycle_cleanup_events": 37,
+    "private_abi": {
+      "scalar": 6,
+      "avx2": 11
+    },
+    "scalar_constructor_reader_abi": 2,
+    "renamed_helper_mutations": 24,
+    "prefix_specialization_mutations": 136
+  },
+  "fresh_component_campaigns": {
+    "scalar": {
+      "tests": 13,
+      "independent_bit_cases": 256,
+      "retained_rekeys": 256,
+      "compiled_mutants": 26,
+      "placement_tests": 1
+    },
+    "avx2": {
+      "tests": 16,
+      "independent_cases": 256,
+      "retained_rekeys": 128,
+      "compiled_mutants": 22,
+      "ownership_negatives": 6
+    }
+  },
+  "review_source_sha256": {
+    "test-windows-enclave-kmac-chains.py": "303eb223ae59170fdf8ae3245145e573cd0d992d33eb789828c3eb2e71537781",
+    "windows_enclave_kmac_assignment.py": "8ad26fc72f9b4b58c84edba95e685ceb0dad11ced0206259ca222214c8fee759",
+    "windows_enclave_kmac_chains.py": "85501ebc6b7dc1c7a83b37ba3da2811033ff1e2baa086069ab0b93be4060d40e",
+    "windows_enclave_kmac_lifecycle.py": "4caef0ed31205bdcc53c8cf985ec21728004ed93e542080385ab579c41e00012",
+    "windows_enclave_kmac_readers.py": "5d9b1327ae8e6a5bc887cd48574297934e3a9a5bee1a025caccac00532b3d34b",
+    "windows_enclave_kmac_reuse.py": "7703dc88a1682eb77b3e0c3d3545fc88b6d50cb0c417212638e2ddf12f533551",
+    "windows_enclave_kmac_shapes.py": "62baae7b11f66caee6e330a9b766045c9150f6294bd59a618a290930d4d05139"
+  },
+  "limitations": [
+    "Bounded author semantic checks and source review, not a general assembly proof",
+    "Invoked-funclet checks do not qualify arbitrary exception dispatch",
+    "Active state cleanup is not full allocation erasure; inactive bytes remain protected until page retirement",
+    "All transient private frames, moved aggregate copies and incoming saves require shared window reclamation",
+    "Shared runtime frame depth and SDK/platform composition remain open",
+    "Caller buffers and explicitly exported output are outside protected ownership",
+    "No production Rust, public API, release-gate or supported-platform changes"
+  ]
+}

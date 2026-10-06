@@ -9,6 +9,9 @@ import windows_enclave_sha3_avx2_chain as previous
 import windows_enclave_sha3_chain as scalar
 import windows_enclave_kmac_shapes as shapes
 import windows_enclave_kmac_reuse as reuse
+import windows_enclave_kmac_lifecycle as lifecycle
+import windows_enclave_kmac_readers as readers
+import windows_enclave_kmac_assignment as assignment
 
 w,shared,obj=previous.w,previous.shared,previous.obj
 require,digest=previous.require,previous.digest
@@ -124,14 +127,19 @@ def inspect_route(base,root,lane,pin,mutate):
     semantics=shapes.inspect(assembly,lane)
     semantics['private_abi']=shapes.preconditions(ir,assembly,lane)
     semantics['public_integer_encoder']=reuse.encoder(assembly,lane)
+    semantics['lifecycle']=lifecycle.inspect(assembly,lane)
     if lane=='avx2': semantics['checked_xor_range']=reuse.widened_xor(assembly)
-    else: semantics['distinct_construction']=reuse.scalar_construction(assembly,ir)
+    else:
+        semantics['distinct_construction']=reuse.scalar_construction(assembly,ir)
+        semantics['readers']=readers.inspect(assembly)
     prior_helpers=reuse.inspect(base,root,lane,functions,ir,assembly)
     records=previous.bind_all(data,image,functions)
     constants,tables,runtime=data_bindings(data,image,records,functions)
     kernel=permutation(data,image,asm,assembly,records,lane)
     transport=transport_binding(base,row,data,image,records,runtime)
     sizes,edges,vectors,indirect,geometry=frames(records,assembly)
+    assignments=assignment.functions(records,prior_helpers)
+    storage=assignment.storage(records,sizes,vectors,runtime,lane)
     require(set(indirect)==set(tables),'every indirect transfer assigned to bound tables')
     require(all(len(indirect[n])==len(t['operands']) for n,t in tables.items()),'every dispatch operand accounted')
     reached=set()
@@ -167,6 +175,7 @@ def inspect_route(base,root,lane,pin,mutate):
         functions={n:dict(rva=r['rva'],bytes=r['size'],frame_bytes=sizes[n],saved_vectors=vectors[n],
             inner_calls=edges[n],references=r['reference_targets']) for n,r in sorted(records.items())},
         geometry=geometry,semantics=semantics,prior_helpers=prior_helpers,
+        author_review_assignments=assignments,storage_lifetimes=storage,
         runtime_boundaries_pending=runtime,whole_image_qualified=False,
         arbitrary_exception_cleanup_qualified=False,independent_retest=False)
 
@@ -213,10 +222,12 @@ def transport_binding(base,row,data,image,records,runtime):
 def inspect(base,root,mutate=False):
     spec=specification(SPEC.read_bytes())
     result={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()}
-    return dict(schema=1,status='AUTHOR_PARTIAL_KMAC_INNER_CHAIN_REVIEW',routes=result,
-        completion_package=3,completion_package_closed=False,
-        remaining_family_review=['Finish complete owner/state lifecycle composition across both routes',
-            'Reconcile all temporary-copy lifetimes with enclosing window obligations; invoked cleanup funclets are checked'],
+    return dict(schema=1,status='AUTHOR_KMAC_PRIVATE_CHAIN_REVIEW_COMPLETE',routes=result,
+        completion_package=3,completion_package_closed=True,remaining_family_review=[],
+        shared_completion_package=8,
+        shared_obligations=['Actual runtime callees and SDK boundary composition',
+            'Complete stack-window erasure, including moved copies and incoming register saves',
+            'Final compiler/platform and whole-image stack-depth reconciliation'],
         whole_image_qualified=False,release_gate_changed=False,native_run_added=False,
         spec_sha256=SPEC_HASH,source_sha256={p.name:digest(p.read_bytes()) for p in
             sorted({Path(m.__file__) for n,m in sys.modules.items() if n.startswith('windows_enclave_')} |

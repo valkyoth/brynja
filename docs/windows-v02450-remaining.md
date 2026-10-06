@@ -3,11 +3,12 @@
 ## Current completion checklist (2026-10-06)
 
 - Finish transitive normal-return cleanup qualification inside the remaining
-  distinct KMAC/TupleHash/batch/ParallelHash workers, especially
+  distinct TupleHash/batch/ParallelHash workers, especially
   indirect SIMD dispatch and deepest caller/stack paths. Both scalar and AVX2
   SHA-3 inner chains are now closed for their saved images (55 scalar functions;
   53 AVX2 main functions plus eight cleanup funclets). Their named shared
-  runtime/transport boundaries remain with final reconciliation. KMAC is next.
+  runtime/transport boundaries remain with final reconciliation. Both KMAC
+  private chains are also closed; TupleHash is next.
   Scalar SHA-2 runtime/
   export connections are now closed; all seventeen family worker entry,
   transport and direct memory-call boundaries are bound. Those boundary reviews
@@ -31,13 +32,17 @@ advertised as supported by this x64 development evidence.
 The [KMAC chain review](windows-enclave-kmac-chains.md) now binds both saved
 workers (84 scalar functions; 64 AVX2 main functions and thirteen cleanup
 funclets), complete kernels/constants, tag comparison, suffix/key completion,
-worker-buffer cleanup and actual wrapper/transport destinations. Fourteen
+worker-buffer cleanup and actual wrapper/transport destinations. Nineteen
 review tests pass on both hosts with matching reports, alongside the existing
 component, oracle, mutation and focused Miri campaigns. Helper ABI reuse and
 explicit prefix specializations, widened bit-XOR ranges, retained-key ordering,
 scalar constructor/reader transfers and all thirteen invoked cleanup funclets
-are now checked. KMAC is **not yet closed**: complete owner/state lifecycle
-composition and temporary-copy/window accounting remain in the same package.
+are now checked. The final lifecycle composition adds phase/sequence admission,
+setup/update/finalization error cleanup, terminal-reader wipes, full resident-page
+retirement and explicit storage assignments for every private frame. KMAC's
+**private package is closed**, with no unassigned family path. Shared runtime
+depth, SDK boundaries and complete stack-window reclamation remain in final
+reconciliation; this is not whole-image qualification.
 
 The [AVX2 SHA-3 chain completion](windows-enclave-sha3-avx2-chain.md) binds all
 emitted functions, three dispatch tables, authority/owner lifetimes and the
@@ -55,7 +60,7 @@ match the checkout. Both hosts pass 88 focused review tests and produce matching
 reports. The local frame contribution is conservatively bounded at `H-8568`,
 excluding shared runtime frames; this is not maximum whole-image depth. The
 eight remaining runtime/transport boundaries are explicitly assigned, not waived.
-KMAC, scalar and accelerated, is the next family package. The entries below
+TupleHash, scalar and accelerated, is the next family package. The entries below
 retain their historical scope and are superseded by this composition where
 they identify scalar inner functions as still pending.
 

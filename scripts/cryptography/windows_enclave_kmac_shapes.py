@@ -26,8 +26,10 @@ def sequences(body,items):
     for item in items: require(item.replace('|','\n') in text,'KMAC semantic sequence '+item)
 
 
-def normal_returns(body,start,event):
+def normal_returns(body,start,event,alternatives=()):
     """Finite direct CFG; supplied event must occur on every return from start."""
+    events=[event,*alternatives]
+    require(all(events),'nonempty required cleanup events')
     code=lines(body);labels={l[:-1]:i for i,l in enumerate(code) if l.endswith(':')}
     require(len(labels)==sum(l.endswith(':') for l in code),'unique CFG labels')
     require(start in labels,'reviewed CFG entry')
@@ -36,7 +38,7 @@ def normal_returns(body,start,event):
         at,done=pending.pop()
         if (at,done) in seen: continue
         seen.add((at,done));require(at<len(code),'no escaped normal path')
-        if code[at:at+len(event)]==event: done=True
+        if any(code[at:at+len(e)]==e for e in events): done=True
         line=code[at]
         if line=='retq':
             require(done,'normal return bypasses required cleanup')

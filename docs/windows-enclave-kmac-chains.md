@@ -1,7 +1,8 @@
 # Windows KMAC inner-chain review
 
-This is an **in-progress author review**, not completion of the Windows KMAC
-package, native qualification, independent retest or a new release gate.
+The **private KMAC review package is complete** for the two saved images.
+This is an author review, not whole-image qualification, independent retest
+or a new release gate. Shared runtime and stack-window work remains open.
 It covers the saved scalar and AVX2 images from the local Windows development
 campaign. Neither a function hash nor a successful component test establishes
 whole-image cleanup by itself.
@@ -84,15 +85,57 @@ The following semantic checks are additional to identity binding:
   pointers and call the corresponding operation/state destructor on every
   normal return. The state guard clears its pending key byte. This proves
   what an invoked funclet does, not that arbitrary exceptions invoke it.
+- Owner admission checks phase and nonwrapping sequence before use; accelerated
+  admission also checks authority health and kernel identity. Setup, key,
+  update, finish and squeeze error blocks clear active state and retained output.
+  Successful cancellation returns to empty; failed operations quarantine.
+  Streaming, squeezing and retained-final/more transitions are bound to the
+  actual emitted state writes, with component rejection/unwind tests alongside.
+- Scalar fixed/squeeze and accelerated squeeze staging clear their 1,024-byte
+  buffers before the reviewed staging exits. The distinct scalar terminal
+  readers consume the reader before output, check output counts and clear
+  their partial-byte staging. Every normal terminal exit tail-calls the full
+  owner wipe. Strength-specific wrappers differ only by explicitly compared
+  callee substitutions; a 1,041-byte moved reader remains accounted for in
+  the enclosing stack window, not silently treated as individually erased.
+- Resident retirement destroys active objects, invalidates the live identity
+  and clears all 4,096 bytes with volatile stores. Active-state destruction
+  alone is **not** full allocation erasure: inactive enum bytes and padding
+  stay inside the resident allocation until retirement. Their protection while
+  live depends on the shared page-admission contract.
+
+## Finite review and storage assignments
+
+All 84 scalar and 77 AVX2 bodies have explicit review assignments; unknown or
+ambiguous roles fail reconciliation. Thirty scalar and twenty-seven AVX2
+assignments reproduce prior helper reviews, including the enumerated ABI and
+prefix differences. The remaining assignments cover the entry/wire decoder,
+owner lifecycle, setup/framing, readers, state/guard destruction, comparison,
+resident lifetime and invoked funclets. Assignment labels record author review;
+they are not a substitute for the frozen source/image binding, semantic checks
+or compiled component campaigns.
+
+| Storage | Lifecycle accounted for | Shared completion obligation |
+|---|---|---|
+| Resident owner, authority and retained output | Active-state cleanup; complete volatile page retirement, including padding | Page admission and release |
+| Owned input/header and output staging | Bounded copies; buffer destructors and staging cleanup | SDK transport and full window reclamation |
+| Compiler aggregate moves, spills and incoming register saves | Every emitted private frame and inner edge recorded; no individual-erasure claim | Complete window erasure and full runtime depth |
+| Host input and explicit exported output | Outside protected ownership; export is intentional | No protection claim for caller buffers |
+
+The only mutable globals in these bound paths hold resident pointer identity,
+not payload storage. Actual external callees are enumerated; no allocator is
+silently admitted. AVX2 `memcmp` is used only by the public startup KAT, not tag
+verification. Each runtime edge retains its exact image address and caller list.
 
 ## Tests and reproducibility
 
-Fourteen review tests pass on Linux and Windows with identical parsed reports.
-On the actual saved assemblies, deleting 66 scalar and 64 AVX2 semantic
+Nineteen review tests pass on Linux and Windows with identical parsed reports.
+On the actual saved assemblies, deleting 110 scalar and 82 AVX2 semantic
 landmarks is rejected; removing six scalar and eleven AVX2 private-ABI
 assumptions plus two scalar constructor/reader assumptions is also rejected.
 The tests additionally reject 24 renamed-helper body/reference/kind/ABI
-mutations and 136 prefix-specialization instruction/ABI mutations. Byte
+mutations, 136 prefix-specialization instruction/ABI mutations and 37 actual
+lifecycle cleanup-event mutations. Byte
 mutations exercise evidence binding, not correctness of the cryptographic
 algorithm. These are bounded author-review checks, not a general proof that
 arbitrary assembly implements the source semantics.
@@ -110,36 +153,38 @@ The accompanying component campaigns pass:
   mutants, plus two actual key-prefix memory-model tests. Their noncryptographic
   state doubles do not establish AVX2 or enclave execution under Miri.
 
+The scalar and AVX2 component campaigns were rerun for this lifecycle
+composition. The earlier worker, resident, host-wire and focused Miri results
+are retained for their unchanged inputs; they were not rerun or relabelled as
+new native enclave executions by this follow-up.
+
 Persistent reports and fixture builds are kept locally beneath
 `release-reports/windows-worker-review-20261006/`, outside `target/`.
 The input images remain in `release-reports/windows-local-20261004/`.
 The initial [observation](../assurance/windows-protection-observations/kmac-chain-progress-20261006.json)
 is preserved. The follow-up [composition observation](../assurance/windows-protection-observations/kmac-chain-composition-20261006.json)
-records the expanded checks, report identities and still-incomplete scope.
+records its then-incomplete scope. The final
+[private-chain observation](../assurance/windows-protection-observations/kmac-chain-complete-20261006.json)
+records this composition and its explicit shared obligations.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-kmac-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_kmac_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/kmac-chains-composition-linux.json
+  --output release-reports/windows-worker-review-20261006/kmac-chains-lifecycle-linux.json
 ```
 
-Without `--saved-directory`, the test command runs eleven self-contained tests
-and explicitly skips three saved-artifact tests. It must not report those
+Without `--saved-directory`, the test command runs fifteen self-contained tests
+and explicitly skips four saved-artifact tests. It must not report those
 campaigns as executed when the local artifacts are unavailable.
 
-## Remaining package work
+## Remaining shared work
 
-Commit-plan step 3 remains open. The remaining work is to finish the complete
-owner/state lifecycle composition across both routes and account for all
-temporary-copy lifetimes against the enclosing-window obligations. The helper
-reuse, enumerated prefix specializations, widened XOR, retained-key ordering,
-constructor/reader checks and invoked-funclet checks above are no longer
-unreviewed items; they must be included in that final composition.
-
-Only after that composition can the private KMAC package be closed. Shared
+Commit-plan step 3 is closed for the frozen private KMAC populations. Shared
 `memcpy`, `memset`, `memcmp` where present, `__chkstk`, `__umodti3`, SDK transport,
 and final enclosing-window/compiler/platform reconciliation remain assigned to
-the existing shared-runtime package. No release policy or production source
+the existing shared-runtime package (step 8). Full window cleanup, including
+moved-from copies, remains a real obligation before whole-image qualification,
+not a waived limitation. No release policy or production source
 was changed by this review.

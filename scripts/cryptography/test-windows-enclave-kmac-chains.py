@@ -74,11 +74,29 @@ class Tests(unittest.TestCase):
         self.assertEqual(s.normal_returns(body,'entry',event),1)
         for line in event:
             with self.assertRaises(ValueError): s.normal_returns(body.replace(line,'nop'),'entry',event)
+        for main,alternatives in (([],()),(event,[[]])):
+            with self.assertRaises(ValueError): s.normal_returns(body,'entry',main,alternatives)
+
+    def test_cleanup_alternatives_must_cover_each_return(self):
+        body='entry:\nje other\nmovl $4, %edx\ncallq erase\nretq\nother:\nmovl $4, %edx\nmovl %eax, %ebx\ncallq erase\nretq'
+        event=['movl $4, %edx','callq erase']
+        alternate=['movl $4, %edx','movl %eax, %ebx','callq erase']
+        self.assertEqual(s.normal_returns(body,'entry',event,[alternate]),2)
+        with self.assertRaises(ValueError): s.normal_returns(body,'entry',event)
+        for bad in (body.replace('movl $4','movl $3'),body.replace('callq erase','nop')):
+            with self.assertRaises(ValueError): s.normal_returns(bad,'entry',event,[alternate])
 
     def test_semantic_roles_must_be_unique(self):
         self.assertEqual(s.one({'Owner6verify':'retq'},r'Owner6verify$'),'Owner6verify')
         for values in ({},{'aOwner6verify':'retq','bOwner6verify':'retq'}):
             with self.assertRaises(ValueError): s.one(values,r'Owner6verify$')
+
+    def test_terminal_tail_cannot_hide_a_direct_or_different_exit(self):
+        body='entry:\nje cleanup\nnop\ncleanup:\njmp wipe'
+        self.assertEqual(c.readers.terminal_cleanup(body,'entry','wipe'),1)
+        for bad in (body.replace('jmp wipe','retq'),body.replace('jmp wipe','jmp other'),
+                    body.replace('nop','retq'),body+'\njmp wipe',body.replace('je cleanup','jmp entry')):
+            with self.assertRaises(ValueError): c.readers.terminal_cleanup(bad,'entry','wipe')
 
     def test_semantic_sequences_keep_width_branch_and_order(self):
         sequence='cmpq $128, %rax|jb .B4|movq %rax, %r9|callq suffix'
@@ -104,6 +122,26 @@ class Tests(unittest.TestCase):
     def test_cycles_and_window_overflow_are_rejected(self):
         with self.assertRaises(ValueError): c.scalar.contributions({'RetainedWork':['RetainedWork']},{'RetainedWork':8})
         with self.assertRaises(ValueError): c.scalar.contributions({'RetainedWork':[]},{'RetainedWork':65536})
+
+    def test_assignment_rejects_unreviewed_or_duplicate_roles(self):
+        empty={k:{} for k in c.assignment.REUSE}
+        self.assertEqual(c.assignment.functions({'RetainedWork':{}},empty),{'RetainedWork':'entry_and_wire'})
+        with self.assertRaises(ValueError): c.assignment.functions({'unknown':{}},empty)
+        with patch.dict(c.assignment.ROLES,{'ambiguous':['^RetainedWork$']}):
+            with self.assertRaises(ValueError): c.assignment.functions({'RetainedWork':{}},empty)
+        reused=copy.deepcopy(empty)
+        for key in c.assignment.REUSE[:2]: reused[key]={'RetainedWork':{}}
+        with self.assertRaises(ValueError): c.assignment.functions({'RetainedWork':{}},reused)
+        with self.assertRaises(ValueError): c.assignment.functions({},reused)
+
+    def test_memcmp_never_inherits_a_secret_comparison_claim(self):
+        row={'memcmp':{'callers':['prefix_operations12known_answer']}}
+        check=c.assignment.storage
+        self.assertEqual(check({}, {}, {}, row, 'avx2')['transport']['export'],
+                         'explicit tag export or one-byte verification decision')
+        for lane,callers in (('scalar',row['memcmp']['callers']),('avx2',['Owner6verify']),
+                             ('avx2',[]),('avx2',row['memcmp']['callers']*2)):
+            with self.assertRaises(ValueError): check({}, {}, {}, {'memcmp':{'callers':callers}},lane)
 
     def test_every_dispatch_byte_is_binding_including_subtable_base(self):
         pin=dict(object_hex=b''.join(n.to_bytes(4,'little') for n in (24,36,48)).hex(),subtable_bytes=[8,4])
@@ -183,8 +221,11 @@ class SavedTests(unittest.TestCase):
                 actual(body,items)
             def inspect_all(values):
                 s.inspect(values,lane);c.reuse.encoder(values,lane)
+                c.lifecycle.inspect(values,lane)
                 if lane=='avx2': c.reuse.widened_xor(values)
-                else: c.reuse.scalar_construction(values,ir)
+                else:
+                    c.reuse.scalar_construction(values,ir)
+                    c.readers.inspect(values)
             with patch.object(s,'sequences',capture): inspect_all(bodies)
             for name,item in landmarks:
                 text='\n'.join(s.lines(bodies[name]))
@@ -204,6 +245,29 @@ class SavedTests(unittest.TestCase):
             totals[lane]=dict(semantic_landmarks=len(landmarks),
                              abi_tokens=sum(map(len,abi['checked_functions'].values())))
         print('Actual saved KMAC semantic mutations rejected: '+json.dumps(totals,sort_keys=True))
+
+    def test_each_lifecycle_cleanup_event_is_load_bearing(self):
+        if SAVED is None: self.skipTest('optional saved Windows artifacts not supplied')
+        count=0
+        for lane,pin in c.specification(c.SPEC.read_bytes()).items():
+            _,data,_,asm,_,_=c.load(SAVED,ROOT,lane,pin)
+            bodies=c.previous.s.bodies(asm,c.previous.inventory(data));checks=[]
+            actual=s.normal_returns
+            def capture(body,start,event,alternatives=()):
+                checks.append((body,start,event,alternatives))
+                return actual(body,start,event,alternatives)
+            with patch.object(s,'normal_returns',capture): c.lifecycle.inspect(bodies,lane)
+            self.assertTrue(checks)
+            for body,start,event,alternatives in checks:
+                # Remove every occurrence of these exact cleanup events, not
+                # unrelated function text. No event-free path may now pass.
+                changed='\n'.join(s.lines(body))
+                for item in [event,*alternatives]: changed=changed.replace('\n'.join(item),'int3')
+                self.assertNotEqual(changed,'\n'.join(s.lines(body)))
+                with self.subTest(lane=lane,start=start):
+                    with self.assertRaises(ValueError): actual(changed,start,event,alternatives)
+                count+=1
+        print('Actual lifecycle cleanup-event mutations rejected: '+str(count))
 
 
 if __name__=='__main__':

@@ -2,9 +2,10 @@
 from unittest.mock import patch
 import windows_enclave_sha2_frame_cell as f
 import windows_enclave_sha2_store_effects as e
+from windows_enclave_sha2_call_effects_tests import CallEffectTests, CallEffectSavedTests
 
 
-class FrameCellTests:
+class FrameCellTests(CallEffectTests):
     def test_indirect_effect_ranges_do_not_wrap_or_combine_pointer_objects(self):
         integer=e.Value(None,0,63);pointer=e.Value('pad',10,10)
         self.assertEqual(e.add(pointer,integer),e.Value('pad',10,73))
@@ -47,7 +48,7 @@ class FrameCellTests:
             with self.assertRaises(ValueError):f.inspect_region(good[:1]+[bad]+good[1:],bases,(184,192),init,'.B1')
 
 
-class FrameCellSavedTests:
+class FrameCellSavedTests(CallEffectSavedTests):
     def test_seven_indirect_store_footprints_reject_address_mutations(self):
         count=0
         for lane,_,_,_,_,_,bodies in self.routes:

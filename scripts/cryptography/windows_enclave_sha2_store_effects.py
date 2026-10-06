@@ -45,20 +45,23 @@ def address(text,regs):
     return result
 
 
-def evaluate(lines,registers,memory,copy):
+def evaluate(lines,registers,memory,copy,snapshots=None):
     """Interpret address-producing operations on one successful fallthrough path.
 
 Comparisons/conditional exits don't narrow intervals. The parent region review
-owns their control flow. Only the reproduced copy ABI may be called; volatile
-registers are forgotten afterward. Unassigned loads lose provenance.
+    owns their control flow. Only explicitly assigned ABIs may be called;
+    volatile registers are forgotten afterward. Optional snapshots capture
+    argument values, not callee effects. Unassigned loads lose provenance.
 """
     regs=dict(registers);stores=[]
     for line in lines:
-        if line.endswith(':'):continue
+        if line.endswith(':') or line=='vzeroupper':continue
         op,_,rest=line.partition(' ');args=rest.split(', ')
         if op in ('cmpb','cmpq','testb','testq','jne','je'):continue
         if op=='callq':
-            s.require(rest==copy,'only reviewed copy ABI in address slice')
+            allowed={copy} if isinstance(copy,str) else set(copy)
+            s.require(rest in allowed,'only assigned reviewed ABI in address slice')
+            if snapshots is not None:snapshots.append((rest,dict(regs)))
             for reg in ('rax','rcx','rdx','r8','r9','r10','r11'):regs.pop(reg,None)
             continue
         if op in ('incq','decq','bswapq'):

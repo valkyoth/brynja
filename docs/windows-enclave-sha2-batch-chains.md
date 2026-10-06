@@ -590,16 +590,31 @@ The follow-up runs 113 tests on Linux and Windows with matching parsed reports;
 The existing 41 direct-cell mutations continue to reject. No production changes,
 release-gate changes or new native enclave execution are included.
 
+Twelve scalar helper calls now have conditional caller/callee region composition:
+four owner wipes, two scalar compressions and six explicit clears. The checker
+replays the emitted argument slices, preserves only ABI-nonvolatile registers
+between calls, and composes their arguments with the reproduced primitive
+contracts. State, block and schedule/work storage must be relatively disjoint;
+both scalar kernels' full 640-byte scratch clears are included. The original
+live-object and saved-slot preconditions, callee stack/home-space placement and
+full physical alias proof remain separate obligations. The other 24 calls still
+need effect composition. Nothing promotes the complete pointer lifetime to
+qualified on the strength of these conditional regions.
+All 117 review tests pass on both hosts with matching parsed reports. Forty-seven
+new pointer/extent/call mutations reject directly through this checker, without
+relying on the earlier literal scalar-finish checks. Production and release-gate
+policy remain unchanged; saved images are replayed, not newly executed.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-store-effects-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-call-effects-linux.json
 ```
 
-Without the saved directory the test command runs fifty-seven self-contained tests
-and explicitly skips the fifty-six saved-artifact tests.
+Without the saved directory the test command runs fifty-nine self-contained tests
+and explicitly skips the fifty-eight saved-artifact tests.
 
 ## Remaining package-5 work
 

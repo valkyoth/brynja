@@ -122,6 +122,12 @@ nonwrapping arithmetic enforced. All 113 tests pass on Linux and Windows with
 matching reports, including 22 new address/mask/width mutations. Original object
 placement/non-aliasing, intervening call effects and full pointer lifetimes
 remain open; these conditional footprints do not discharge those obligations.
+Twelve of the 36 calls now compose actual argument registers with the reproduced
+wipe/compression/clear contracts. State/block/scratch disjointness and full clear
+extents are checked within the assigned objects; 24 other call effects remain.
+The twelve conditional checks still require original live-slot/object placement
+and callee stack/home-space composition. All 117 review tests pass on both hosts;
+47 additional pointer/extent/call mutations reject and parsed reports match.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

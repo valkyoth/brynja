@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "4425ecc0c9cb8bc85fed3619f6f8090559c3b852",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 117,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-call-effects-linux.json": "58645c8fc6388516e00e6b6d18aa115b38d3f49bdefd4697a7aa137c24dc3e47",
+    "sha2-batch-call-effects-windows.json": "22485c69189e8641523b314f2cbd550e9444a84e776f507da2c1706d98afacf6"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_call_effects.py": "983b1856d6ea2ad1024fa856825f2e03e17bf291c64d72b2ddc3b28a459914e9",
+    "windows_enclave_sha2_call_effects_tests.py": "6784ff2f65f0b8175deed3071ebbb2de690c112bcef847703736e250f6ca8bf1",
+    "windows_enclave_sha2_store_effects.py": "97fa54c2c9e35215c41c7da674018a97a30489d8f269cff187c3496d2c9fd9e0",
+    "windows_enclave_sha2_frame_cell_tests.py": "437fb586f4ec36dea48c6b1bf161df67cefd5891c075dfacda8fd2ea9505a32a",
+    "windows_enclave_sha2_batch_chains.py": "1f75571da678cd820f1a5d1c8f43dc65b3eef573e5eb354fc12eae9f059b53cc"
+  },
+  "prior_review_observation": "sha2-batch-store-effects-progress-20261006.json",
+  "new_reviewed_scope": [
+    "four owner wipes, two scalar compressions and six clears have conditional caller/callee argument-region composition",
+    "emitted argument slices replayed with volatile-register clobbers between calls",
+    "scalar state, input block and schedule/work regions checked for relative disjointness within one assigned object",
+    "complete owner field regions and full 640-byte scalar scratch clear extents included",
+    "unknown pointer provenance, wrapping regions, omitted/replaced/additional calls and changed clear extents reject"
+  ],
+  "conditional_primitive_call_count": {"simd256": 6, "simd512": 6},
+  "other_call_effects_pending": {"simd256": 12, "simd512": 12},
+  "pointer_extent_call_mutations_rejected": 47,
+  "effect_mutants_bypass_earlier_literal_finish_contracts": true,
+  "parent_complete_primitive_contract_replay_required": true,
+  "original_live_pointer_and_slot_preservation_preconditions_required": true,
+  "callee_stack_and_home_space_composition_pending": true,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "copy, mask, padding, callback and fail-stop effects at the other 24 call sites",
+    "original placement, non-aliasing and preservation of all conditional live store/call objects",
+    "callee stack/home-space bounds and saved-slot lifetime composition",
+    "subsequent compact-index lifetimes and remaining helper live/disjoint storage",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

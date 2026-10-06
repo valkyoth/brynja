@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "12132fbc225c3a59e7376e1daec4eae22b328070",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 81,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-vector-loop-linux.json": "36cda694fe40602dc19f3624cbffbe8fe8ad34112e4d69c826ec1fce6bb7498a",
+    "sha2-batch-vector-loop-windows.json": "d42f6e43044df0a1cf6d869992addf8423bbcdac8c4f3518092cae77512bc018"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_simd_vector.py": "3c4c46fa7d50c9848183ed40e3aa49d8adb1d4091ef5c725aa0f74d6864c693c",
+    "windows_enclave_sha2_simd_vector256.py": "b50554538549a0708e50eef51bd8153c6fbb5a819a0b5891c8db2887067d9330",
+    "windows_enclave_sha2_simd_vector512.py": "35aa51f134165bfe30937ac8052b08c37948405da5fa9ae8440a57571c8c339e",
+    "windows_enclave_sha2_simd_vector_tests.py": "db446bf2982a365334790fa6adda62e2f378b7e483b15e14559cd4bfdc7f4c0b",
+    "windows_enclave_sha2_batch_shapes.py": "cd536dfe38fe3d8fe288681d1d360a76d82e49907fe40c28def27ec837dc0f9c",
+    "test-windows-enclave-sha2-batch-chains.py": "a9047d0ed8a1c99714e357b684215768762893f0c15a9dd86400921f4f30a5a1"
+  },
+  "prior_review_observation": "sha2-batch-descriptor-provenance-progress-20261006.json",
+  "new_reviewed_scope": [
+    "complete emitted width/setup and core vector-loop regions for both saved SIMD images",
+    "bounded compact-index lookup and presence checks before state packing",
+    "complete block bounds before each input copy",
+    "checked work charge, exact session completion count and report counters",
+    "state write-back and consumed offsets use the same original compact indices",
+    "external side entries into core vector-loop regions reject",
+    "independent active-mask, reordered-index, partial-group, block-boundary and maximum-bit geometry checks",
+    "exact-maximum accounting, exhaustion, overflow and completion mismatch tests"
+  ],
+  "vector_instruction_and_control_mutations_rejected": {
+    "simd256": 687,
+    "simd512": 861
+  },
+  "semantic_sequence_mutations_rejected": {
+    "scalar": 121,
+    "sha_ni": 153,
+    "simd256": 168,
+    "simd512": 191
+  },
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "enclosing compaction and original input/workspace alias preconditions",
+    "scalar finalization and padding composition",
+    "compose descriptor IR provenance with emitted stack-slot lifetimes and indirect memory effects",
+    "remaining primitive-helper and batch-specific caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments",
+    "remaining fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

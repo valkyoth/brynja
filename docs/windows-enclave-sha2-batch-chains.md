@@ -446,16 +446,37 @@ regressions reject 300 allocation-alias writes/escapes, eight cleanup/copy-bound
 changes, eight original-scratch-pointer replacements, and sixty prepared-source
 origin/escape/copy changes. Native worker results remain reused, not rerun.
 
+The [vector-loop observation](../assurance/windows-protection-observations/sha2-batch-vector-loop-progress-20261006.json)
+adds complete emitted width/setup and inner vector-loop regions for both SIMD
+routes. Index and input-presence checks precede packing, each complete block's
+extent is checked before input copying, and state write-back uses the original
+compact index. Every compression charges the selected width, checks the actual
+session completion count and checks report counters for overflow. External
+branches into the loop's interior are rejected. The reviewed snapshots are
+machine-code contracts, not an independent compiler or general alias proof.
+Independent geometry tests cover every active-lane mask, reordered indices,
+partial groups, block boundaries and the maximum bit count. Accounting tests
+cover exact-maximum success, exhaustion, overflow and mismatched completion.
+They do not assert control rollback on rejection: charging and computation may
+already have occurred before an error.
+Eighty-one tests pass on both hosts, with matching parsed reports. New tests
+reject 1,548 instruction/control mutations across the two vector loops, as well
+as ambiguous labels and external side entries. Three additional setup sequences
+bring the existing semantic-sequence mutations to 633. Production sources and
+release gates are unchanged, and native worker results are reused. Compaction's
+uniqueness, original slice/storage aliasing, scalar finalization and emitted
+frame lifetimes still require enclosing composition; package 5 is not closed.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-descriptor-provenance-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-vector-loop-linux.json
 ```
 
-Without the saved directory the test command runs thirty-six self-contained tests
-and explicitly skips the thirty-seven saved-artifact tests.
+Without the saved directory the test command runs forty-one self-contained tests
+and explicitly skips the forty saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -480,6 +501,10 @@ and explicitly skips the thirty-seven saved-artifact tests.
   have whole-function LLVM use checks. Compose those with emitted stack-slot
   lifetimes and indirect memory effects; do not promote IR checks alone to a
   complete machine-code lifetime proof.
+  Complete vector-loop regions now bind lane packing, complete-block input
+  bounds, session accounting and indexed state write-back. Finish the enclosing
+  compaction/preconditions, scalar remainder/padding path and live-storage
+  composition; the vector-loop checks alone do not close those obligations.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

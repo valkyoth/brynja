@@ -73,6 +73,12 @@ plus byte-exact returned descriptor moves. Exhaustive saved LLVM use checks now
 establish descriptor initialization/immutability and original prepared-source
 provenance; seventy-three tests pass on both hosts. Composition with emitted
 stack-slot lifetimes and indirect memory effects remains pending.
+Complete emitted vector-loop regions now bind lane packing, input block bounds,
+checked session/report accounting and indexed write-back. Eighty-one tests pass
+on Linux and Windows, including 1,548 new instruction/control mutations and
+independent geometry/accounting boundary checks. Enclosing compaction, scalar
+finalization and live-storage composition remain pending; this is not a new
+native enclave run or a whole-frame claim.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

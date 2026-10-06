@@ -2,10 +2,11 @@
 import re
 from unittest.mock import patch
 import windows_enclave_sha2_simd_commit as c
+from windows_enclave_sha2_frame_cell_tests import FrameCellTests, FrameCellSavedTests
 import windows_enclave_sha2_simd_moves as m
 
 
-class CommitTests:
+class CommitTests(FrameCellTests):
     def test_commit_widths_exclude_zero_and_match_each_family(self):
         for width in (*range(65536),(1<<32)-1,(1<<63),(1<<64)-1):
             self.assertEqual(c.width_allowed('simd256',width),width in (28,32))
@@ -66,7 +67,7 @@ class CommitTests:
             m.trace(first+'\n'+last,first,last,('rbx',0),('rbx',16),9)
 
 
-class CommitSavedTests:
+class CommitSavedTests(FrameCellSavedTests):
     def test_saved_byte_provenance_check_is_required_with_exact_transfer_extents(self):
         for lane,_,_,_,_,_,bodies in self.routes:
             if not lane.startswith('simd'): continue

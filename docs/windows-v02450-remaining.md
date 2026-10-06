@@ -109,6 +109,13 @@ composing those cases. Exact lane pointers and widths fit disjoint slots inside
 machine lifetimes remains open; bounded origins alone do not close all consumers.
 All 106 tests pass on Linux and Windows with matching reports, including 77 new
 descriptor-origin mutations that bypass earlier literal staging checks.
+Direct emitted-frame checks now preserve the first output-pointer cell against
+overlapping stores, frame-base changes and direct address exposure, accounting
+for alternate stack/frame bases and alignment. Seven indirect stores and 36
+calls in those regions remain explicitly inventoried for effect composition;
+the complete pointer lifetime is not yet qualified.
+All 109 tests pass on Linux and Windows, with matching parsed reports and 41
+new frame-cell mutations rejected independently of earlier shape checks.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

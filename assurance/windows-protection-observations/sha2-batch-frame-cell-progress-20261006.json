@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "97523e843c3ae9a43b11f0608d0f81c07833c092",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 109,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-frame-cell-linux.json": "d9cd54db6db1cc0246606f6b16ca0fd9cacb2d77be50e157d10de60c1da2aa91",
+    "sha2-batch-frame-cell-windows.json": "947b6bf08cf26caeeaf14ecddd849e224ea49d1c8de7bcb0b3ba89f6e943a1cd"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_frame_cell.py": "2378aad94f098a277a88c48b130050336b3800f97a7f6b88c6743aeefc86f6cf",
+    "windows_enclave_sha2_frame_cell_tests.py": "3b8b76f2f14a259c0767a97ffc85b588a5c4b316a2f84539eee1b83058d62720",
+    "windows_enclave_sha2_batch_chains.py": "01109c6a32cda33911de746714ab12305e3984eab90500a4fb9777772bb0b30d",
+    "windows_enclave_sha2_simd_commit_tests.py": "660e8c74bdfc3a2b7fe6cb208eeea2ed6dddfdd2dcbd27df4fb93a78922b55eb"
+  },
+  "prior_review_observation": "sha2-batch-descriptor-bounds-progress-20261006.json",
+  "new_reviewed_scope": [
+    "first prepared output pointer has only its initial assignment and absent-output zeroing as direct overlapping writes",
+    "scalar and vector store byte ranges checked across the emitted finalization/preflight regions",
+    "RSP aliases and every possible narrow alignment delta included in frame overlap checks",
+    "frame-base changes including partial-register writes and direct saved-cell address exposure rejected",
+    "all calls and non-frame stores recorded as pending indirect effects, not silently treated as harmless"
+  ],
+  "frame_cells_half_open": {"simd256": [184, 192], "simd512": [976, 984]},
+  "direct_stores_checked": {"simd256": 53, "simd512": 29},
+  "non_frame_stores_pending": {"simd256": 2, "simd512": 5},
+  "call_effects_pending": {"simd256": 18, "simd512": 18},
+  "overlap_base_exposure_mutations_rejected": 41,
+  "mutation_tests_bypass_earlier_finish_and_commit_shapes": true,
+  "parent_control_flow_and_jump_table_bindings_required": true,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "seven named indirect stores and 36 call effects across the two saved-pointer regions",
+    "original typed input, frame setup and workspace alias preconditions",
+    "propagate bounded descriptor origins through subsequent emitted lifetimes and indirect effects",
+    "subsequent compact-index lifetimes and remaining helper live/disjoint storage",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

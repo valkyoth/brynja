@@ -558,16 +558,34 @@ disabled, so their rejection is not attributed to those earlier checks. Separate
 regressions require staging, width admission and parent integration. No production
 code, release-gate policy or native enclave execution changed in this checkpoint.
 
+The [first-output frame-cell observation](../assurance/windows-protection-observations/sha2-batch-frame-cell-progress-20261006.json)
+records direct emitted-frame checks from the prepared pointer's
+hoisted initialization through preflight: bytes 184–191 relative to the narrow
+aligned frame and bytes 976–983 relative to the wide frame pointer. The checker
+accounts for RSP aliases and all 32 possible narrow alignment deltas, rejects
+frame-base register changes (including partial-register writes), and checks the
+full byte range of scalar and vector stores. Only initial assignment and the
+named absent-output zeroing may directly overlap the saved pointer; its address
+may not be directly exposed. The record inventories calls and indirect stores
+instead of treating them as harmless. Seven indirect stores and 36 calls remain
+to be composed with these cell lifetimes; this does not close the complete
+first-pointer lifetime or whole-frame claim.
+All 109 tests pass on Linux and Windows with matching parsed reports. Forty-one
+new overlap/base/exposure mutations reject with the earlier finish/commit shape
+checks disabled, so those existing literal checks do not mask the new check's
+behavior. Production sources and release-gate policy are unchanged; no new
+native enclave execution is claimed.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-descriptor-bounds-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-frame-cell-linux.json
 ```
 
-Without the saved directory the test command runs fifty-three self-contained tests
-and explicitly skips the fifty-three saved-artifact tests.
+Without the saved directory the test command runs fifty-four self-contained tests
+and explicitly skips the fifty-five saved-artifact tests.
 
 ## Remaining package-5 work
 

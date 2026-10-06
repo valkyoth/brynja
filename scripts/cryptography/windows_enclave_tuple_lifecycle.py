@@ -1,7 +1,4 @@
-"""TupleHash operation admission and finalization landmarks in saved bodies.
-
-These checks do not yet close constructor/rehash/reader/funclet composition.
-"""
+"""TupleHash operation admission and finalization in the saved bodies."""
 import windows_enclave_tuple_shapes as t
 
 s=t.s
@@ -73,9 +70,39 @@ def suffix(bodies,lane):
             f'.B24:|movb %al, {phase}(%rdx)|movb $-1, %al'])
     return dict(right_encoding_selector=1,fixed_identities=[1,2],xof_rejects_nonzero_output_bits=True,
                 partial_byte_canonicality=True,reader_phase=5,retained_phase=6,
-                state_finalizer_and_reader_composition_pending=True)
+                state_finalizer_and_reader_composition_pending=False)
+
+
+def completion(bodies,lane):
+    custom=bodies[t.owner(bodies,'custom')];finish=bodies[t.owner(bodies,'finish')]
+    if lane=='scalar':
+        s.sequences(custom,['cmpq $1024, 8(%rdi)|ja .B10',
+            'movzbl (%rsi), %ecx|cmpl $2, %ecx|je .B6|movb $2, %al|cmpl $1, %ecx|jne .B10'])
+        for rate in ('a8','88'):
+            s.sequences(custom,['leaq 16(%rsi), %rcx|movb $1, %dl|movq %rdi, %r8|callq '+
+                s.one(bodies,rf'SetupKj{rate}_E4push')])
+        for strength in ('128','256'):
+            s.sequences(finish,['leaq 1(%rsi), %rcx|leaq 48(%rsp), %rdx|callq '+
+                s.one(bodies,'HardenedCshake'+strength+'24enter_squeezing_in_place')])
+        s.sequences(finish,['.B19:|movl %eax, %ecx|movb $6, %al|cmpb $-1, %cl|jne .B25',
+            'leaq 1152(%rsi), %rdx|movb $1, 32(%rsp)|movq %rsi, %rcx|movq %rbx, %r8|'
+            'movl %edi, %r9d|callq '+s.one(bodies,r'tuple_stream_state.*State7squeeze$')+
+            '|cmpb $-1, %al|jne .B25',
+            'callq '+s.one(bodies,r'drop_glue.*tuple_stream_state5StateE')+'|movb $0, (%rsi)|movq %rbx, 2192(%rsi)'])
+    else:
+        s.sequences(custom,['cmpq $1024, 8(%rsi)|jbe .B3',
+            'leaq 1024(%r14), %rcx|xorl %edx, %edx|movq %rsi, %r8|callq '+s.one(bodies,r'State11setup_chunk$')])
+        s.sequences(finish,['leaq 184(%rbp), %rdx|movq 248(%rbp), %rcx|callq '+s.one(bodies,r'State10finish_xof$'),
+            '.Ltmp17:|movl %eax, %ecx|movb $6, %al|cmpb $-1, %cl|jne .B28',
+            'movb $1, 32(%rsp)|movq 248(%rbp), %r14|movq %r14, %rcx|movq %rdi, %r8|'
+            'movl %esi, %r9d|callq '+s.one(bodies,r'State7squeeze$'),
+            '.Ltmp19:|movl %eax, %ecx|movb $6, %al|cmpb $-1, %cl|movzbl 271(%rbp), %ebx|jne .B29',
+            '.B23:|movq $-1, 1968(%rdx)|movq %rdi, 2048(%rdx)|movb %sil, 2066(%rdx)|movb $6, %al'])
+    return dict(customization_limit=1024,customization_selector=1 if lane=='scalar' else 0,
+                fixed_output_uses_terminal_reader=True,error_cleanup='operation guard',
+                consumed_state_disarmed_before_retained_output=True)
 
 
 def inspect(bodies,lane):
     return dict(operation_admission=operation(bodies,lane),cancellation=cancellation(bodies,lane),
-                final_suffix=suffix(bodies,lane))
+                final_suffix=suffix(bodies,lane),state_completion=completion(bodies,lane))

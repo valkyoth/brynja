@@ -3,12 +3,12 @@
 ## Current completion checklist (2026-10-06)
 
 - Finish transitive normal-return cleanup qualification inside the remaining
-  distinct TupleHash/batch/ParallelHash workers, especially
+  distinct batch/ParallelHash workers, especially
   indirect SIMD dispatch and deepest caller/stack paths. Both scalar and AVX2
   SHA-3 inner chains are now closed for their saved images (55 scalar functions;
   53 AVX2 main functions plus eight cleanup funclets). Their named shared
   runtime/transport boundaries remain with final reconciliation. Both KMAC
-  private chains are also closed; TupleHash is in progress.
+  private chains are also closed, as are both TupleHash private chains.
   Scalar SHA-2 runtime/
   export connections are now closed; all seventeen family worker entry,
   transport and direct memory-call boundaries are bound. Those boundary reviews
@@ -29,15 +29,17 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
-The [TupleHash checkpoint](windows-enclave-tuple-chains.md) binds both complete
+The [TupleHash chain review](windows-enclave-tuple-chains.md) binds both complete
 saved populations (52 scalar functions; 55 AVX2 main functions plus six cleanup
 funclets), kernels, constants, helper ABI reuse and wrapper/transport targets.
-Item framing, bit packing, phase/sequence admission, selected rejection cleanup
-and final-suffix landmarks pass nine review tests on both hosts with matching
-reports. Scalar/AVX2 component, resident, worker, host-wire and focused Miri
-campaigns pass. **Step 4 remains open** for constructor/rehash/reader composition,
-invoked funclets, page/frame storage accounting and scalar fail-stop preconditions.
-This checkpoint does not turn complete byte binding into whole-chain qualification.
+Item framing, bit packing, phase/sequence admission, setup/rehash, finalization,
+readers, export, error/funclet cleanup and full page retirement pass fourteen
+review tests on both hosts with matching reports. Scalar/AVX2 component,
+resident, worker, host-wire and focused Miri campaigns pass. **Step 4 is closed**
+at private-family scope, with explicit function/frame assignments and scalar
+fail-stop caller preconditions. Shared runtime/SDK and whole-window reclamation
+remain in step 8; the review does not qualify the whole image. SHA-2 batch is
+the next finite family package.
 
 The [KMAC chain review](windows-enclave-kmac-chains.md) now binds both saved
 workers (84 scalar functions; 64 AVX2 main functions and thirteen cleanup
@@ -70,7 +72,7 @@ match the checkout. Both hosts pass 88 focused review tests and produce matching
 reports. The local frame contribution is conservatively bounded at `H-8568`,
 excluding shared runtime frames; this is not maximum whole-image depth. The
 eight remaining runtime/transport boundaries are explicitly assigned, not waived.
-TupleHash, scalar and accelerated, is the current family package. The entries below
+SHA-2 batch is the next family package. The entries below
 retain their historical scope and are superseded by this composition where
 they identify scalar inner functions as still pending.
 

@@ -1,7 +1,8 @@
 # Windows TupleHash inner-chain review
 
-This is a **partial author review**, not whole-image qualification or an
-independent retest. Completion-plan step 4 remains open. No production source,
+This is an **author review of the complete private TupleHash chains**, not
+whole-image qualification or an independent retest. Completion-plan step 4 is
+closed for the two saved images below. No production source,
 public API, release-gate policy or supported-platform claim changed.
 
 ## Saved images and reviewed paths
@@ -10,7 +11,9 @@ The [reviewer](../scripts/cryptography/windows_enclave_tuple_chains.py) checks
 every saved source/build input against the checkout and binds the complete
 emitted inventory to the linked image. Bodies, relocations, resolved targets,
 extent kinds, immutable constants and indirect-dispatch tables are included.
-Cleanup-funclet metadata is bound; that alone does not qualify funclet behavior.
+All six AVX2 cleanup funclets also have their parent-frame reloads, destructor
+targets and returning cleanup paths checked. Metadata binding alone is not
+treated as qualification, nor is this an arbitrary OS-exception guarantee.
 The wrapper and four `PublicTuple*` transport destinations are rebound in each
 image. This replay does not build or execute a new enclave.
 
@@ -32,10 +35,11 @@ The checks currently cover:
   from item phase to tuple phase.
 - Partial-bit packing: destination offsets below eight, checked pending-bit
   advancement, pending-byte clearing after flush, and the aligned bulk path.
-- Final suffix landmarks: right encoding, fixed versus XOF identity selection,
+- Final suffix composition: right encoding, fixed versus XOF identity selection,
   rejection of nonzero XOF output lengths, canonical partial tails, and distinct
-  reader/retained phase publication. Full finalizer/reader composition remains
-  pending, rather than being inferred from these landmarks.
+  reader/retained phase publication. Both strengths enter the reviewed cSHAKE
+  squeezing state before output. Fixed output uses a terminal reader, checks its
+  result and destroys/disarms the consumed state before publishing retained output.
 - Phase admission and checked, nonwrapping exact sequences; accelerated
   admission additionally checks authority health and kernel identity. Reviewed
   rejection blocks and successful cancellation clear the pending byte,
@@ -52,16 +56,39 @@ The checks currently cover:
   XOR destination ranges and the AVX2 absorb length narrow; the bit-string byte
   range widens to 65,535 and its bounded bit-count arithmetic is reviewed.
   The public worker input limit remains 1,024 bytes.
+- Constructors/customization: actual `TupleHash` domain bytes and 72-bit name,
+  rate selection, checked prefix arithmetic and exact remaining/pending/emitted
+  completion. Setup owners are cleared before replacement; compiler-generated
+  aggregate moves are separately assigned to enclosing-window reclamation.
+- Retained rehash/export: old output survives customization, is absorbed with
+  its exact encoded bit length, then cleared. Export checks identity, width and
+  final-bit count, checks the callback result and (on AVX2) revalidates authority
+  after copying. More-output export returns to Reader; terminal export clears
+  the owner and returns to Empty.
+- Reader/error/retirement cleanup: scalar 1,024-byte staging and 168-byte partial
+  staging, accelerated reproduced scratch cleanup, all nine operation-error
+  clear blocks, typed active-state destruction, worker-buffer cleanup and full
+  4,096-byte resident-page retirement. Error-block enumeration starts at the
+  reviewed cleanup blocks; it is not a general proof of arbitrary control flow.
+- Every emitted function and frame has an explicit review/storage assignment.
+  Saved incoming vectors, compiler spills and aggregate copies are **not**
+  claimed individually erased. Their final whole-window obligation remains
+  assigned to step 8, with actual runtime callees named in each report.
 
 The scalar image contains a fail-stop panic path ending at `PublicProbeAbort`.
 It is retained in the inventory and frame graph, not treated as a normal
-cleanup return. Its caller preconditions remain a named private-review item.
+cleanup return. The increment follows `index != slice.len()` in a typed private
+slice iteration; valid Rust slice lengths are bounded by `isize::MAX`, and
+public input is additionally limited to 1,024 bytes. Thus the increment cannot
+overflow on a valid caller path. All three fail-stop wrappers retain their
+`call`/`ud2` endings; no cleanup-after-abort claim is made.
 
 ## Tests and retained evidence
 
-Nine review tests pass on both Linux and Windows with identical parsed reports.
-They reject removal of 44 scalar and 48 AVX2 semantic landmarks, eight actual
-cleanup events, changed helper ABI constraints, incomplete inventories and
+Fourteen review tests pass on both Linux and Windows with identical parsed reports.
+They reject removal of 148 scalar and 124 AVX2 semantic landmarks, 52 actual
+cleanup events, 34 domain/phase/rate mutations, twelve private ABI changes,
+missing/extra funclets, changed helper contracts, incomplete inventories and
 altered body/reference bindings. Byte mutations establish binding durability,
 not algorithm correctness or complete erasure by themselves.
 
@@ -87,28 +114,28 @@ The Linux component campaigns also pass:
 Inputs are retained locally under `release-reports/windows-local-20261004/`.
 Reports, logs and persistent test fixtures are under
 `release-reports/windows-worker-review-20261006/`, outside `target/`.
-The [checkpoint observation](../assurance/windows-protection-observations/tuple-chain-progress-20261006.json)
-records report identities and this incomplete scope.
+The historical [checkpoint observation](../assurance/windows-protection-observations/tuple-chain-progress-20261006.json)
+retains its earlier incomplete scope. The
+[composition observation](../assurance/windows-protection-observations/tuple-chain-completion-20261006.json)
+records the final private-chain reports and unchanged component receipts.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-tuple-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_tuple_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/tuple-chains-linux.json
+  --output release-reports/windows-worker-review-20261006/tuple-chains-composition-linux.json
 ```
 
-Without saved artifacts the test command runs five self-contained tests and
-explicitly skips the saved-artifact class (four additional tests). It must not
+Without saved artifacts the test command runs seven self-contained tests and
+explicitly skips the saved-artifact class (seven additional tests). It must not
 claim those tests ran when the inputs are absent.
 
-## Still required within step 4
+## Remaining shared work
 
-Finish constructor/customization transfers, retained rehash and output export,
-state finalizer/reader composition, all six invoked AVX2 cleanup funclets,
-worker/page retirement and frame-storage assignments, and the scalar fail-stop
-path preconditions. Existing behavioral tests cover these paths, but do not
-substitute for their remaining emitted-path composition.
+No private TupleHash family-review item remains unassigned. The source/lifecycle
+review, actual component/oracle/mutation campaigns and emitted-path composition
+are complementary; an inventory/hash match alone is not the closure criterion.
 
 Shared memory/runtime, SDK transport, final platform/depth reconciliation and
 full enclosing-window reclamation remain assigned to step 8. Compiler-created

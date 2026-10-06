@@ -9,6 +9,9 @@ import windows_enclave_kmac_chains as c
 import windows_enclave_tuple_reuse as reuse
 import windows_enclave_tuple_shapes as shapes
 import windows_enclave_tuple_lifecycle as lifecycle
+import windows_enclave_tuple_transfers as transfers
+import windows_enclave_tuple_retirement as retirement
+import windows_enclave_tuple_setup as setup
 
 SPEC=c.shared.CATALOG.with_name('tuple-chains-20261006.json')
 SPEC_HASH='8365f34e0f00fd7e8563341bd18a8f6680c096d64a60fb5fe2e679f94dcfe615'
@@ -33,12 +36,18 @@ def inspect_route(base,root,lane,pin,mutate,prior):
     assembly=c.previous.s.bodies(asm,functions)
     semantics=shapes.inspect(assembly,lane)
     semantics.update(lifecycle.inspect(assembly,lane))
+    semantics['transfers']=transfers.inspect(assembly,ir,lane)
+    semantics['retirement']=retirement.inspect(assembly,ir,lane)
+    semantics['setup']=setup.inspect(assembly,lane)
     reused=reuse.inspect(base,root,lane,functions,ir,assembly,prior)
     records=c.previous.bind_all(data,image,functions)
     constants,tables,runtime=c.data_bindings(data,image,records,functions,RUNTIME)
+    semantics['domain_and_phase_constants']=setup.constants(constants,digest,lane)
     kernel=permutation(data,image,asm,assembly,records,lane)
     transport=c.transport_binding(base,row,data,image,records,runtime,'PublicTuple')
     sizes,edges,vectors,indirect,geometry=c.frames(records,assembly)
+    assignments=retirement.assignments(records,reused)
+    storage=retirement.storage(records,sizes,vectors,runtime,lane)
     require(set(indirect)==set(tables),'all TupleHash indirect targets assigned')
     require(all(len(indirect[n])==len(t['operands']) for n,t in tables.items()),'complete dispatch operands')
     reached=set()
@@ -71,6 +80,7 @@ def inspect_route(base,root,lane,pin,mutate,prior):
         normal_reachable_functions=normal,total_functions=len(records),
         cleanup_funclets=sum(n.startswith('?') for n in records),kernel=kernel,transport=transport,
         constants=constants,dispatch_tables=tables,geometry=geometry,
+        author_review_assignments=assignments,storage_lifetimes=storage,
         functions={n:dict(rva=r['rva'],bytes=r['size'],frame_bytes=sizes[n],saved_vectors=vectors[n],
             inner_calls=edges[n],references=r['reference_targets']) for n,r in sorted(records.items())},
         semantics=semantics,helper_reuse=reused,runtime_boundaries_pending=runtime,whole_image_qualified=False)
@@ -97,14 +107,10 @@ def inspect(base,root,mutate=False):
     spec=specification(SPEC.read_bytes())
     prior=c.inspect(base,root)
     routes={lane:inspect_route(base,root,lane,pin,mutate,prior['routes'][lane]) for lane,pin in spec.items()}
-    return dict(schema=1,status='AUTHOR_PARTIAL_TUPLEHASH_CHAIN_REVIEW',routes=routes,
-        completion_package=4,completion_package_closed=False,whole_image_qualified=False,
+    return dict(schema=1,status='AUTHOR_TUPLEHASH_PRIVATE_CHAIN_REVIEW',routes=routes,
+        completion_package=4,completion_package_closed=True,whole_image_qualified=False,
         independent_retest=False,release_gate_changed=False,native_run_added=False,
-        remaining_private_review=['constructor and customization transfers',
-            'retained rehash and output export composition',
-            'state finalizer and reader composition', 'six AVX2 cleanup funclets',
-            'worker/page retirement and frame storage assignments',
-            'scalar fail-stop panic path preconditions'],
+        remaining_private_review=[],shared_completion_package=8,
         source_sha256={p.name:digest(p.read_bytes()) for p in sorted(
             {Path(m.__file__) for n,m in sys.modules.items() if n.startswith('windows_enclave_')} | {Path(__file__)})})
 

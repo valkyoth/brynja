@@ -77,6 +77,28 @@ class Tests(unittest.TestCase):
         with self.assertRaises(ValueError): c.reuse.abi_changes(changed|{'unknown':{}},'scalar')
         with self.assertRaises(ValueError): c.reuse.abi_changes(changed,'avx2')
 
+    def test_assignments_require_actual_unique_known_functions(self):
+        reused={k:{} for k in ('exact_body_reference_abi_reuse','explicit_abi_changes','renamed_helpers')}
+        self.assertEqual(c.retirement.assignments({'RetainedWork':{}},reused),
+                         {'RetainedWork':'worker_and_wire'})
+        with self.assertRaises(ValueError): c.retirement.assignments({'unknown':{}},reused)
+        bad=copy.deepcopy(reused);bad['renamed_helpers']['absent']={}
+        with self.assertRaises(ValueError): c.retirement.assignments({'RetainedWork':{}},bad)
+        bad=copy.deepcopy(reused)
+        for key in ('explicit_abi_changes','renamed_helpers'): bad[key]['RetainedWork']={}
+        with self.assertRaises(ValueError): c.retirement.assignments({'RetainedWork':{}},bad)
+
+    def test_storage_does_not_promote_host_runtime_or_copies(self):
+        for lane in ('scalar','avx2'):
+            result=c.retirement.storage({'worker':{}},{'worker':80},{'worker':[]},{},lane)
+            self.assertEqual(result['resident']['page_admission_and_release_package'],8)
+            self.assertEqual(result['transient']['complete_window_reclamation_package'],8)
+            self.assertFalse(result['transient']['aggregate_moves_individually_erased'])
+            self.assertFalse(result['transient']['shared_runtime_frames_included'])
+            for callers in (['secret_comparison'],[],['xoperations12known_answer','other']):
+                with self.assertRaises(ValueError):
+                    c.retirement.storage({}, {}, {}, {'memcmp':{'callers':callers}},lane)
+
 
 class SavedTests(unittest.TestCase):
     @classmethod
@@ -100,6 +122,8 @@ class SavedTests(unittest.TestCase):
             def check(values):
                 c.shapes.inspect(values,lane);c.lifecycle.inspect(values,lane)
                 c.reuse.bounded_bits(values,ir)
+                c.transfers.inspect(values,ir,lane);c.retirement.inspect(values,ir,lane)
+                c.setup.inspect(values,lane)
             with patch.object(s,'sequences',capture): check(bodies)
             for name,item in landmarks:
                 text='\n'.join(s.lines(bodies[name]));bad=text.replace(item.replace('|','\n'),'int3')
@@ -118,13 +142,15 @@ class SavedTests(unittest.TestCase):
 
     def test_each_actual_cleanup_event_is_load_bearing(self):
         count=0;actual=s.normal_returns
-        for lane,_,_,_,_,_,bodies in self.routes:
+        for lane,_,_,_,ir,_,bodies in self.routes:
             calls=[]
             def capture(body,start,event,alternatives=()):
                 calls.append((body,start,event,alternatives))
                 return actual(body,start,event,alternatives)
             with patch.object(s,'normal_returns',capture):
                 c.shapes.inspect(bodies,lane);c.lifecycle.inspect(bodies,lane)
+                c.transfers.inspect(bodies,ir,lane);c.retirement.inspect(bodies,ir,lane)
+                c.setup.inspect(bodies,lane)
             self.assertTrue(calls)
             for body,start,event,alternatives in calls:
                 text='\n'.join(s.lines(body));bad=text
@@ -148,6 +174,46 @@ class SavedTests(unittest.TestCase):
                 header=next(l for l in ir.splitlines() if l.startswith('define ') and '@'+name+'(' in l)
                 with self.assertRaises(ValueError):
                     c.reuse.inspect(SAVED,ROOT,lane,functions,ir.replace(header,header.replace('define ','define cold ',1)),bodies,prior)
+
+    def test_private_owner_and_output_abi_contracts_are_load_bearing(self):
+        count=0
+        for lane,_,_,_,ir,_,bodies in self.routes:
+            rows=c.transfers.preconditions(bodies,ir,lane)
+            for name,tokens in rows.items():
+                header=next(l for l in ir.splitlines() if l.startswith('define ') and '@'+name+'(' in l)
+                for token in tokens:
+                    with self.assertRaises(ValueError):
+                        c.transfers.preconditions(bodies,ir.replace(header,header.replace(token,'BROKEN')),lane)
+                    count+=1
+        print('Private TupleHash ABI mutations rejected: '+str(count))
+
+    def test_actual_constants_cannot_change_domain_phases_or_rates(self):
+        count=0
+        for lane,data,image,_,_,functions,_ in self.routes:
+            records=c.c.previous.bind_all(data,image,functions)
+            values,_,_=c.c.data_bindings(data,image,records,functions,c.RUNTIME)
+            c.setup.constants(values,c.digest,lane)
+            domain=s.one(values,r'^anon\.'+('6e7951ee1c35fa5c04606f5334a6e2b1' if lane=='scalar'
+                                           else 'de9b71afbadc051ece76f344c9e0d88b')+r'\.0$')
+            prefix=domain.rsplit('.',1)[0]+'.'
+            selected=[n for n in values if n.startswith((prefix,'switch.table.'))]
+            self.assertEqual(len(selected),8 if lane=='scalar' else 9)
+            for name in selected:
+                for field,value in (('sha256','0'*64),('bytes',0)):
+                    bad=copy.deepcopy(values);bad[name][field]=value
+                    with self.assertRaises(ValueError): c.setup.constants(bad,c.digest,lane)
+                    count+=1
+        print('TupleHash domain/phase/rate mutations rejected: '+str(count))
+
+    def test_funclet_population_and_reload_are_not_optional(self):
+        for lane,_,_,_,_,_,bodies in self.routes:
+            if lane!='avx2': continue
+            names=c.transfers.funclets(bodies,lane)['functions']
+            self.assertEqual(len(names),6)
+            for name in names:
+                with self.assertRaises(ValueError):
+                    c.transfers.funclets({n:b for n,b in bodies.items() if n!=name},lane)
+            with self.assertRaises(ValueError): c.transfers.funclets(bodies|{'?dtor$unknown':'retq'},lane)
 
 
 if __name__=='__main__':

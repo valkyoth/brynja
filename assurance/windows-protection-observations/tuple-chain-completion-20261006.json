@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_TUPLEHASH_PRIVATE_CHAIN_REVIEW",
+  "production_baseline": "cac71ab02ff9a2205a1efa7c32efac6c5484a46d",
+  "completion_package": 4,
+  "completion_package_closed": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "review_tests_per_host": 14,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "tuple-chains-composition-linux.json": "f7687482c014d1fbdc2037fe71916434a3130ec683d806e41b441bec0fd7d2f8",
+    "tuple-chains-composition-windows.json": "0f3b3c41baf0bf3b14d2bcef84d9ea71cf5ac8f70bacc5ad0e49591fed1febe5"
+  },
+  "review_test_sha256": "830670be2ed71bba9f78e158d8727f8c264da3c4cbd61ecd197d2c26a904d975",
+  "component_record_sha256": {
+    "tuple-scalar-component.log": "aee30ac71e13f328f06f5a1722d20a487e865365fccf6e2ce9a81ecac9dd491d",
+    "tuple-avx2-component/tuple-accelerated-results.json": "255a861f9dc8e4a46d4630c8310a165b3253a166b32da4304736f55b665da22f",
+    "tuple-resident/tuple-resident-results.json": "0386c9f886e0bc7be61e0074abb50db69cb564003c849b2b1c154bf592acf7ab",
+    "tuple-worker/tuple-worker-results.json": "3a56960fa18c8f4cdeb5474bd6138578556a007e22774ee435ff5ec213016409",
+    "tuple-host-wire/tuple-host-wire-results.json": "caa1d758f5a247189abf86feb9896046ab426a56328e39a1a4765e308e502073",
+    "tuple-packer-model-retry/tuple-packer-results.json": "2da5496d4be0b8e22a53395ebd54426de8484d4c51acee8afede4f77ef1fb106",
+    "tuple-placement-model/placement-model-results.json": "13866bc0454d56c562488d59e540885c0fd62594876f5e09813b91db106ff8a8"
+  },
+  "routes": {
+    "scalar": {
+      "functions": 52,
+      "build_inputs": 169,
+      "body_byte_mutations_rejected": 22808,
+      "table_byte_mutations_rejected": 76,
+      "semantic_landmark_mutations_rejected": 148,
+      "local_rsp_bound_from_window_high": -9712,
+      "assigned_functions": 52,
+      "assigned_frames": 52
+    },
+    "avx2": {
+      "main_functions": 55,
+      "cleanup_funclets": 6,
+      "build_inputs": 266,
+      "body_byte_mutations_rejected": 23282,
+      "table_byte_mutations_rejected": 44,
+      "semantic_landmark_mutations_rejected": 124,
+      "local_rsp_bound_from_window_high": -10926,
+      "assigned_functions": 61,
+      "assigned_frames": 61
+    }
+  },
+  "actual_cleanup_event_mutations_rejected": 52,
+  "shared_runtime_frames_excluded": true,
+  "remaining_private_review": [],
+  "shared_completion_package": 8,
+  "private_abi_mutations_rejected": 12,
+  "domain_phase_rate_mutations_rejected": 34,
+  "component_receipts_reused": "unchanged production, test and native build inputs; seven checkpoint receipts verified",
+  "shared_obligations": [
+    "runtime frame/callee reconciliation",
+    "SDK transport and exception boundaries",
+    "complete enclosing stack-window reclamation",
+    "platform/signing qualification"
+  ]
+}

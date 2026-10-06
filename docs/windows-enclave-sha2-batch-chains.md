@@ -467,16 +467,36 @@ release gates are unchanged, and native worker results are reused. Compaction's
 uniqueness, original slice/storage aliasing, scalar finalization and emitted
 frame lifetimes still require enclosing composition; package 5 is not closed.
 
+The [scalar finish observation](../assurance/windows-protection-observations/sha2-batch-scalar-finish-progress-20261006.json)
+adds both complete emitted scalar-finalization regions within the SIMD engines:
+remaining-block traversal, checked work accounting, compression scratch clearing,
+remainder/partial-byte placement, one- or two-block padding, big-endian length
+encoding, output truncation, and owner wiping around each successful lane.
+Both wide identity jump tables now have explicit variant-order checks tied into
+the saved-image replay. The narrow byte-mask helper has a specialized argument
+ABI; both helper forms, their wrappers, opaque boundaries and working-register
+erase are checked independently instead of assuming identical signatures.
+These are caller-region checks. Their primitive compression contracts and
+enclosing live-memory relationships still need composition.
+An independent bit-string padding construction matches the byte-level model for
+all 8,193 private message lengths in each family. Consumed-block geometry,
+canonical partial bytes, maximum length encoding and every supported wide
+output width/mask have boundary tests. Eighty-nine tests pass on both hosts with
+matching parsed reports, rejecting 1,350 new finalization instruction/control
+mutations, twenty-one mask/helper mutations, six misplaced opaque markers and
+forty wrong variant-table targets. Production and release-gate code are unchanged;
+native worker results remain reused, not presented as fresh enclave execution.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-vector-loop-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-scalar-finish-linux.json
 ```
 
-Without the saved directory the test command runs forty-one self-contained tests
-and explicitly skips the forty saved-artifact tests.
+Without the saved directory the test command runs forty-five self-contained tests
+and explicitly skips the forty-four saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -503,8 +523,11 @@ and explicitly skips the forty saved-artifact tests.
   complete machine-code lifetime proof.
   Complete vector-loop regions now bind lane packing, complete-block input
   bounds, session accounting and indexed state write-back. Finish the enclosing
-  compaction/preconditions, scalar remainder/padding path and live-storage
-  composition; the vector-loop checks alone do not close those obligations.
+  compaction/preconditions and live-storage composition. The scalar remainder,
+  padding and output-mask caller regions now have complete checks, including
+  both variant dispatch tables and the specialized mask helpers. Compose the
+  remaining scalar compression/transfer contracts with these caller regions;
+  do not infer primitive reuse merely from matching names or instruction bytes.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

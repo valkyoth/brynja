@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "52df917466f72794841dd8ab1e58b70dd25204c6",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 89,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-scalar-finish-linux.json": "974d52b60e9bf8691bbac2723553846e35f4002f979eb6e621d5818854f720c3",
+    "sha2-batch-scalar-finish-windows.json": "cd2c071ce0c5df585fe2530bca02b3368a09b46c4c2bc0da7ea323450ace321b"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_simd_finish.py": "ac82e954b2b87f77029c48e4e02a01b1d66ec07b9a8302c46777bc0a184714ae",
+    "windows_enclave_sha2_simd_finish256.py": "f4538ee6da8882a500a13f1516008f7adefea026382b26c2c636e791036bf97c",
+    "windows_enclave_sha2_simd_finish512.py": "b9c5a5395b41ad60c8bdcaf5a33aaf5c7f65102ddc67d4f252037c85a4ba65aa",
+    "windows_enclave_sha2_simd_finish_tests.py": "a9aa8dfeac3100016b6d9d300287a1303f131a1ff73c5fd66e2d7200f4e3fda2",
+    "windows_enclave_sha2_batch_shapes.py": "cac9b4b055f8256192a817735c144f8f6d71bafc914b049b4d9bebe4b4453477",
+    "windows_enclave_sha2_batch_chains.py": "07b08eaba291789eeebbda28c1f2eda45d5651cce2b8e6ac171499ae187b0f95",
+    "test-windows-enclave-sha2-batch-chains.py": "eb0a0fb04b4f9cafa72a9ce858b3add2847c862ce14f9ff12eb73be26a62399b"
+  },
+  "prior_review_observation": "sha2-batch-vector-loop-progress-20261006.json",
+  "new_reviewed_scope": [
+    "complete emitted scalar remainder and finalization regions in both saved SIMD engines",
+    "remaining-block bounds, checked accounting and compression scratch clearing",
+    "canonical fractional byte separator and one/two-block padding cutoffs",
+    "big-endian length stores and wide high length word clearing",
+    "both wide variant-table orders bound into saved-image replay",
+    "output truncation and generalized SHA-512/t last-byte masking",
+    "narrow specialized and wide unspecialized byte-mask helper ABIs, wrappers and register erase boundaries",
+    "per-lane owner wiping before work and after successful output staging"
+  ],
+  "independent_padding_bit_lengths_per_family": 8193,
+  "scalar_finish_instruction_and_control_mutations_rejected": {
+    "simd256": 543,
+    "simd512": 807
+  },
+  "mask_helper_mutations_rejected": 21,
+  "misplaced_opaque_markers_rejected": 6,
+  "wrong_variant_table_targets_rejected": 40,
+  "malformed_or_ambiguous_tables_rejected": 4,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "explicitly bind scalar compression/transfer primitive contracts and constant references across target-feature/ABI differences",
+    "enclosing compaction and original input/workspace alias preconditions",
+    "compose descriptor IR provenance with emitted stack-slot lifetimes and indirect memory effects",
+    "remaining batch-specific caller and fail-stop preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

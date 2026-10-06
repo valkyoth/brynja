@@ -28,6 +28,15 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [KMAC chain review](windows-enclave-kmac-chains.md) now binds both saved
+workers (84 scalar functions; 64 AVX2 main functions and thirteen cleanup
+funclets), complete kernels/constants, tag comparison, suffix/key completion,
+worker-buffer cleanup and actual wrapper/transport destinations. Ten review
+tests pass on both hosts with matching reports, alongside the scalar/AVX2
+component, oracle, mutation and focused Miri campaigns. KMAC is **not yet
+closed**: helper ABI/specialization reuse, lifecycle/rekey composition and
+temporary-copy/funclet accounting remain within the same KMAC package.
+
 The [AVX2 SHA-3 chain completion](windows-enclave-sha3-avx2-chain.md) binds all
 emitted functions, three dispatch tables, authority/owner lifetimes and the
 complete opaque kernel. Both hosts pass ten new review tests with matching

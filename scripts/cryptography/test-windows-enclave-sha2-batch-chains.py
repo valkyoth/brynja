@@ -135,7 +135,30 @@ class SavedTests(unittest.TestCase):
             if lane.startswith('simd'):
                 self.assertTrue(r['callback_callsite_review_pending'])
                 self.assertEqual(len(r['callback_tables']),1)
-            else: self.assertFalse(r['callback_callsite_review_pending'])
+            else:
+                self.assertFalse(r['callback_callsite_review_pending'])
+                lifecycle=r['semantics']['lifecycle']
+                self.assertTrue(lifecycle['primitive_and_finalizer_composition_pending'])
+                self.assertEqual(lifecycle['sealing']['slots'],8)
+                self.assertEqual(lifecycle['export']['identity_bytes_compared'],64)
+                self.assertEqual(lifecycle['retirement']['page_erasure_bytes'],4096)
+                self.assertFalse(lifecycle['operation_guard']['arbitrary_os_unwind_qualified'])
+
+    def test_sequential_cleanup_rejects_early_return_insertion(self):
+        count=0;actual=s.normal_returns
+        for lane,_,_,_,_,_,bodies in self.routes:
+            if lane not in ('scalar','sha_ni'): continue
+            checks=[]
+            def capture(body,start,event,alternatives=()):
+                checks.append((body,start,event,alternatives));return actual(body,start,event,alternatives)
+            with patch.object(s,'normal_returns',capture): c.shapes.lifecycle.inspect(bodies,lane)
+            for body,start,event,alternatives in checks:
+                lines=s.lines(body);at=lines.index(start+':')+1
+                lines.insert(at,'retq')
+                with self.assertRaises(ValueError): actual('\n'.join(lines),start,event,alternatives)
+                count+=1
+        self.assertEqual(count,12)
+        print('Sequential premature-return mutations rejected: '+str(count))
 
 
 if __name__=='__main__':

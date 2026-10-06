@@ -210,7 +210,7 @@ def inspect(base,root,mutate=False):
         release_gate_changed=False,native_run_added=False,
         routes={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()},
         remaining_private_review=['primitive reuse with complete ABI/context checks',
-            'sequential state transfers, export and page retirement composition',
+            'sequential constructors, state transfers and finalizers; terminal/retirement checks added',
             'SIMD callback provenance, lane engines, kernels and error/funclet cleanup',
             'complete reachable frame and storage assignments; fail-stop preconditions'],
         source_sha256={p.name:digest(p.read_bytes()) for p in sorted(

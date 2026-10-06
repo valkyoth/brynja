@@ -34,7 +34,25 @@ scalar active-slot and checked budget accounting, and scalar completion
 publication only after successful finalization. Private ABI checks retain the
 compiler's 1,024-byte sequential input bound and fixed SIMD lane-array sizes.
 Constructor failure loops clear all 4,096 backing-page bytes. This does not
-claim erasure of constructor stack copies or complete live-page retirement.
+claim erasure of constructor stack copies or SIMD live-page retirement.
+
+The sequential scalar and SHA-NI terminal/retirement composition additionally
+checks all eight plan entries against their completion bits before sealing.
+Export requires the Sealed phase and compares all 64 plan bytes before the
+fixed 512-byte copy-out. Copy failure reaches the operation guard; successful
+copy-out clears retained output and returns to Empty. SHA-NI rechecks authority
+after the copy. Cancellation is admitted only in Collecting, Streaming or
+Sealed; selected rejection and success return paths require output erasure.
+Incomplete operation guards quarantine the owner (and SHA-NI authority).
+
+Sequential state clearing invalidates the placed enum before destroying the
+taken state, including live SHA-NI scratch. All normal worker returns after
+buffer construction pass buffer destruction: 128/144 header bytes and 1,024
+payload bytes are cleared. Scalar retirement destroys the owner, clears LIVE
+and erases the full page; SHA-NI takes the resident out of LIVE, invokes its
+destructor and clears the separate page identity. Its destructor destroys the
+state and erases all 4,096 backing bytes. These are bounded normal-path checks,
+not guarantees for arbitrary OS unwinding, aborts or constructor-stack copies.
 
 The SHA-NI image's two panic-location descriptors bind the actual immutable
 filename, length, line and column. This records reachable diagnostic data; it
@@ -44,9 +62,9 @@ transitive depth bound is qualified while indirect-call composition is pending.
 
 ## Tests and retained evidence
 
-Eight review tests pass on Linux and Windows with matching parsed reports.
-They reject 52 semantic-landmark removals, 20 private ABI changes, eleven
-cleanup bypasses, altered callback layouts/pointers, diagnostic-data drift,
+Nine review tests pass on Linux and Windows with matching parsed reports.
+They reject 117 semantic-landmark removals, 20 private ABI changes, 23
+cleanup-event bypasses, twelve premature returns, altered callback layouts/pointers, diagnostic-data drift,
 incomplete inventories and inconsistent source closures. The byte-mutation
 counts above establish binding durability, not algorithm correctness alone.
 
@@ -72,23 +90,28 @@ previously saved native images. Inputs remain under
 `release-reports/windows-local-20261004/`; reports and component artifacts are
 under `release-reports/windows-worker-review-20261006/`, outside `target/`.
 The [checkpoint observation](../assurance/windows-protection-observations/sha2-batch-chain-progress-20261006.json)
-records their hashes and incomplete scope.
+retains its earlier scope and report hashes. The
+[sequential lifecycle observation](../assurance/windows-protection-observations/sha2-batch-lifecycle-progress-20261006.json)
+records the extended checks and fresh scalar component, SHA-NI worker and
+resident campaigns. The earlier unchanged SIMD campaigns remain applicable;
+no product source changed.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-chains-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-lifecycle-linux.json
 ```
 
 Without the saved directory the test command runs four self-contained tests
-and explicitly skips the four saved-artifact tests.
+and explicitly skips the five saved-artifact tests.
 
 ## Remaining package-5 work
 
 - Reproduce prior primitive reviews with full ABI and caller-context checks.
-- Complete sequential state transfers, finalization/export and page retirement.
+- Complete sequential constructors, state transfers and finalizers; the selected
+  terminal/export and page-retirement composition above is now checked.
 - Complete SIMD callsite provenance, lane-engine/kernel composition and all
   error/cleanup-funclet paths.
 - Assign every reachable private frame and storage region, and resolve the

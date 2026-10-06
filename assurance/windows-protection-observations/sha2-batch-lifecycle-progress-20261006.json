@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "production_baseline": "828c99d5d156d02291f762bff7e197245dee805d",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "review_tests_per_host": 9,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-lifecycle-linux.json": "b659680d8cf603607cf4a35be6a7d7f44f0c50d7ae76705f974531f2aed28463",
+    "sha2-batch-lifecycle-windows.json": "5263f516647ad657ae3de9d53ab38b7af80530f0395cfc55248d9211b3f902cc"
+  },
+  "review_test_sha256": "a328649101ea11f49e4e4a641dc9c9b64c3e50ac7ee94995f92b231f9137133b",
+  "component_record_sha256": {
+    "sha2-batch-lifecycle-scalar-component.log": "b682a4dfa7367c47f24f8e47a78018ee5d5a99210be5370503e0a3eef39dc89e",
+    "sha2-batch-lifecycle-worker/sha2-batch-worker-results.json": "8c966b4362a85b798075b82f48d0bc1629d4b0092f7ddc605eca371df0672849",
+    "sha2-batch-lifecycle-resident/sha2-batch-resident-results.json": "78e91242af225a50db5c020b5ca899f62be0cfd117c27d8e162d420eff2b4bd1"
+  },
+  "routes": {
+    "scalar": {
+      "functions": 32,
+      "cleanup_funclets": 0,
+      "build_inputs": 176,
+      "body_byte_mutations_rejected": 16688,
+      "table_byte_mutations_rejected": 336,
+      "semantic_landmark_mutations_rejected": 41
+    },
+    "sha_ni": {
+      "functions": 42,
+      "cleanup_funclets": 1,
+      "build_inputs": 272,
+      "body_byte_mutations_rejected": 14878,
+      "table_byte_mutations_rejected": 48,
+      "semantic_landmark_mutations_rejected": 42
+    },
+    "simd256": {
+      "functions": 52,
+      "cleanup_funclets": 16,
+      "build_inputs": 258,
+      "body_byte_mutations_rejected": 16562,
+      "table_byte_mutations_rejected": 0,
+      "semantic_landmark_mutations_rejected": 17
+    },
+    "simd512": {
+      "functions": 52,
+      "cleanup_funclets": 16,
+      "build_inputs": 260,
+      "body_byte_mutations_rejected": 18757,
+      "table_byte_mutations_rejected": 296,
+      "semantic_landmark_mutations_rejected": 17
+    }
+  },
+  "actual_cleanup_event_mutations_rejected": 23,
+  "premature_return_mutations_rejected": 12,
+  "private_abi_mutations_rejected": 20,
+  "transitive_depth_qualified": false,
+  "remaining_private_review": [
+    "primitive reuse with complete ABI/context checks",
+    "sequential constructors, state transfers and finalizers; terminal/retirement checks added",
+    "SIMD callback provenance, lane engines, kernels and error/funclet cleanup",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

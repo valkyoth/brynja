@@ -1,6 +1,7 @@
 """Selected SHA-2 batch admission/cleanup contracts, not full chain closure."""
 import windows_enclave_kmac_shapes as s
 import windows_enclave_kmac_reuse as reuse
+import windows_enclave_sha2_batch_lifecycle as lifecycle
 
 
 def owner(bodies,role): return s.one(bodies,r'Owner\d+'+role+'$')
@@ -107,4 +108,5 @@ def inspect(bodies,ir,lane):
     result=dict(private_abi=abi(bodies,ir,lane),
         admission=sequential(bodies,lane) if lane in ('scalar','sha_ni') else simd(bodies,lane))
     if lane.startswith('simd'): result['callback_targets']=callback_targets(bodies,lane)
+    else: result['lifecycle']=lifecycle.inspect(bodies,lane)
     return result

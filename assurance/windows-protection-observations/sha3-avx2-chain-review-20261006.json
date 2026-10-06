@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "status": "AUTHOR_SAVED_AVX2_SHA3_INNER_CHAIN_REVIEW",
+  "route": "sha3/mod.rs::open_avx2",
+  "source_checkout": "cc09d3e1eba14f656dafd5b9e76781713b01f773",
+  "compiler": "1.98.1",
+  "target": "x86_64-pc-windows-msvc",
+  "image_sha256": "28d01c3b932d22daad5cd2256aa9c31c5fb937a4846067eb991345ee7c7449fa",
+  "object_sha256": "d1020a5a19fb0c6a75e000c92a09ca6d9c6e10e80d9ae20cd189140fdbf9f37e",
+  "saved_build_manifest_sha256": "01121e3b334da6e6a8a0a8ff2be95c996fbdffe16419f1e0cb4570cd40e8fa44",
+  "specification_sha256": "ce9a558035c95fd520f85aa76029b39a80c8ca66ab7e8e65046b0b21d2317b3d",
+  "unchanged_saved_build_inputs": 254,
+  "reports": {
+    "linux": {
+      "path": "release-reports/windows-worker-review-20261006/sha3-avx2-chain-linux.json",
+      "sha256": "d30654d12a2e292baaf4b92f946107014df9f9d8332ef7d8e21d9053e6f6e970"
+    },
+    "windows": {
+      "path": "release-reports/windows-worker-review-20261006/sha3-avx2-chain-windows.json",
+      "sha256": "6679821310b08c8e8abc96ad9c15c8a3da01efcc78b8d8cf547c87dc3576cba5"
+    }
+  },
+  "parsed_reports_identical": true,
+  "review_tests_per_host": 10,
+  "reviewed_main_functions": 53,
+  "bound_cleanup_funclets": 8,
+  "reproduced_prior_same_symbol_body_reviews": 20,
+  "unassigned_inner_functions": [],
+  "body_byte_mutations_rejected_per_host": 22527,
+  "dispatch_table_byte_mutations_rejected_per_host": 92,
+  "normal_buffer_return_paths_checked": true,
+  "conservative_local_rsp_bound_from_window_high": -12380,
+  "shared_runtime_frames_excluded_from_local_bound": true,
+  "shared_boundaries_assigned_completion_package": 8,
+  "shared_boundary_rvas": {
+    "memset": 47280,
+    "memcpy": 45552,
+    "memcmp": 48208,
+    "__umodti3": 26880,
+    "PublicSha3Input": 30240,
+    "PublicSha3Output": 30624,
+    "PublicSha3Source": 30784,
+    "PublicSha3Observe": 30560
+  },
+  "linux_actual_rust_validation": {
+    "accelerated_tests": 11,
+    "accelerated_compiled_mutants": 21,
+    "accelerated_ownership_negatives": 6,
+    "resident_wire_tests": 5,
+    "resident_compiled_mutants": 25,
+    "resident_ownership_negatives": 7,
+    "serialized_worker_tests": 1,
+    "worker_rust_mutants": 9,
+    "worker_c_entry_mutants": 18,
+    "cshake_cases": 628,
+    "nist_bit_cases": 76,
+    "hashlib_cases": 96,
+    "retained_rehash_cases": 512,
+    "fractional_setup_cases": 578,
+    "component_report_sha256": "7455be75e56845688f4e393704c4e0cb2644c9acadc5967a2bd341ca048b1788",
+    "resident_report_sha256": "80c5e258335d967582ce57541ce77009c0d958c94a2d68d9afec03fa59285099",
+    "worker_report_sha256": "0edab7f4ce1f7568ea9a5da36b89d1e40b1e9f0bb3e6e97ffe5e59b3db3c5588"
+  },
+  "placement_miri": {
+    "toolchain": "nightly-2026-09-11",
+    "strict_provenance": true,
+    "tests": 1,
+    "mutants_rejected": 3,
+    "cryptographic_execution": false,
+    "report_sha256": "2cddc5af308a7095621c1359d3c61528f344fb087969d0c9c609f833269511d6"
+  },
+  "outer_window_reclamation_required": true,
+  "individual_caller_spills_erased": false,
+  "whole_image_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "production_changes": false,
+  "release_gate_changed": false,
+  "native_enclave_run_added": false,
+  "independent_retest": false
+}

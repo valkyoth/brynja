@@ -3,10 +3,11 @@
 ## Current completion checklist (2026-10-06)
 
 - Finish transitive normal-return cleanup qualification inside the remaining
-  distinct SHA-3/KMAC/TupleHash/batch/ParallelHash workers, especially
-  indirect SIMD dispatch and deepest caller/stack paths. The scalar SHA-3 inner
-  chain is now closed for its saved image (all 55 emitted functions); its eight
-  named shared runtime/transport boundaries remain with final reconciliation.
+  distinct KMAC/TupleHash/batch/ParallelHash workers, especially
+  indirect SIMD dispatch and deepest caller/stack paths. Both scalar and AVX2
+  SHA-3 inner chains are now closed for their saved images (55 scalar functions;
+  53 AVX2 main functions plus eight cleanup funclets). Their named shared
+  runtime/transport boundaries remain with final reconciliation. KMAC is next.
   Scalar SHA-2 runtime/
   export connections are now closed; all seventeen family worker entry,
   transport and direct memory-call boundaries are bound. Those boundary reviews
@@ -27,6 +28,15 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The [AVX2 SHA-3 chain completion](windows-enclave-sha3-avx2-chain.md) binds all
+emitted functions, three dispatch tables, authority/owner lifetimes and the
+complete opaque kernel. Both hosts pass ten new review tests with matching
+reports; all 254 saved build inputs match. Native Linux AVX2 component, resident,
+worker and focused placement-only Miri campaigns pass. The local bound is
+`H-12380`, excluding shared runtime frames. Incoming nonvolatile saves and
+compiler-created aggregate copies still require whole-window reclamation in
+final reconciliation. No private SHA-3 inner-path item remains unassigned.
+
 The [scalar SHA-3 chain completion](windows-enclave-sha3-chain.md) composes the
 prior reviews, adds the complete permutation and buffer destructor, and checks
 every emitted function and actual inner reference. All 158 saved build inputs
@@ -34,7 +44,7 @@ match the checkout. Both hosts pass 88 focused review tests and produce matching
 reports. The local frame contribution is conservatively bounded at `H-8568`,
 excluding shared runtime frames; this is not maximum whole-image depth. The
 eight remaining runtime/transport boundaries are explicitly assigned, not waived.
-Accelerated SHA-3/shared Keccak is the next family package. The entries below
+KMAC, scalar and accelerated, is the next family package. The entries below
 retain their historical scope and are superseded by this composition where
 they identify scalar inner functions as still pending.
 

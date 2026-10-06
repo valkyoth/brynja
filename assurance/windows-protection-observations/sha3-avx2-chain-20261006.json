@@ -1,0 +1,2452 @@
+{
+  "schema": 1,
+  "image_sha256": "28d01c3b932d22daad5cd2256aa9c31c5fb937a4846067eb991345ee7c7449fa",
+  "object_sha256": "d1020a5a19fb0c6a75e000c92a09ca6d9c6e10e80d9ae20cd189140fdbf9f37e",
+  "assembly_sha256": "42e49178091e6645d0a275694ed30a31f76469a914b97886e1446f5437cf8973",
+  "ir_sha256": "6b56c305c89a88f8340acc5a75a0fb73f0c1ad1854705267d38e293badf7b352",
+  "build_sha256": "01121e3b334da6e6a8a0a8ff2be95c996fbdffe16419f1e0cb4570cd40e8fa44",
+  "functions": {
+    "RetainedWork": {
+      "bytes": 1015,
+      "sha256": "72ddf057184c9fb1f9812f85f41d1755f05d165462d50eeae8c0809285fb2b9c",
+      "references": [
+        {
+          "offset": 104,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 129,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker9LIVE_PAGE.0",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 152,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 159,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": -4
+        },
+        {
+          "offset": 171,
+          "symbol": "_RNvXs0_Csav2wNVSWsYU_25sha3_accelerated_residentNtB5_8ResidentNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 178,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker9LIVE_PAGE.0",
+          "trailing": 0,
+          "addend": -4
+        },
+        {
+          "offset": 201,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": -1
+        },
+        {
+          "offset": 211,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 223,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 247,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 333,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 345,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 369,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 447,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 459,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 483,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 563,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 579,
+          "symbol": "_RNvMs_Csav2wNVSWsYU_25sha3_accelerated_residentNtB4_8Resident3new",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 620,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 632,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 637,
+          "symbol": "_RNvXs0_Csav2wNVSWsYU_25sha3_accelerated_residentNtB5_8ResidentNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 649,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 663,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 670,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker9LIVE_PAGE.0",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 724,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 784,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker7receive",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 797,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 802,
+          "symbol": "_RNvMs_Csav2wNVSWsYU_25sha3_accelerated_residentNtB4_8Resident10quarantine",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 812,
+          "symbol": "_RNvMCs9k1jhC7Dm7H_23sha3_accelerated_workerNtB2_7Buffers5clear",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 869,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 874,
+          "symbol": "_RNvMs_Csav2wNVSWsYU_25sha3_accelerated_residentNtB4_8Resident10quarantine",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 884,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCs9k1jhC7Dm7H_23sha3_accelerated_worker7BuffersEBD_",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 977,
+          "symbol": "PublicSha3Observe",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCs9k1jhC7Dm7H_23sha3_accelerated_worker7BuffersEBD_": {
+      "bytes": 43,
+      "sha256": "9320856de61664ab99b1dd08818f4c34c4c381a772aee2412774e937c08929a8",
+      "references": [
+        {
+          "offset": 21,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 39,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker7receive": {
+      "bytes": 934,
+      "sha256": "0791c21e9ec814581619d47f8450051d99fef9dd936ba78abfeff35bfe56623a",
+      "references": [
+        {
+          "offset": 26,
+          "symbol": "PublicSha3Source",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 54,
+          "symbol": "PublicSha3Input",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 78,
+          "symbol": "_RNvMNtCsbweaVgBOhqc_16sha3_accelerated21sha3_accelerated_wireNtB2_7Request6decode",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 142,
+          "symbol": "PublicSha3Input",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 157,
+          "symbol": "_RNvCs9k1jhC7Dm7H_23sha3_accelerated_worker4LIVE",
+          "trailing": 0,
+          "addend": 16
+        },
+        {
+          "offset": 173,
+          "symbol": "_RNvMNtCsbweaVgBOhqc_16sha3_accelerated21sha3_accelerated_wireNtB2_7Request6decode",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 311,
+          "symbol": ".rdata",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 351,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner11setup_chunk",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 375,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.5",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 391,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 434,
+          "symbol": ".rdata",
+          "trailing": 0,
+          "addend": 44
+        },
+        {
+          "offset": 477,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6finish",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 500,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6rehash",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 525,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner5setup",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 548,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner5begin",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 564,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6update",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 574,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6cancel",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 584,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner12finish_setup",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 604,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner7squeeze",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 620,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 644,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 823,
+          "symbol": "PublicSha3Output",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 842,
+          "symbol": "_RNvCsbweaVgBOhqc_16sha3_accelerated15check_authority",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 856,
+          "symbol": "_RNvXCsbweaVgBOhqc_16sha3_acceleratedNtB2_9OperationNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 881,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 914,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner5clear",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMCs9k1jhC7Dm7H_23sha3_accelerated_workerNtB2_7Buffers5clear": {
+      "bytes": 43,
+      "sha256": "9320856de61664ab99b1dd08818f4c34c4c381a772aee2412774e937c08929a8",
+      "references": [
+        {
+          "offset": 21,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 39,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core17secret_memory_xor8xor_bits": {
+      "bytes": 32,
+      "sha256": "446db9bc5866729cb70f723a3065519795e8e169af7ab99ccb3e1048b944df4d",
+      "references": [],
+      "runtime": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte": {
+      "bytes": 16,
+      "sha256": "fe10033c91418ee361524797da612bf9a4346f4a267a1dc137b4451cbc783acb",
+      "references": [],
+      "runtime": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes": {
+      "bytes": 68,
+      "sha256": "820c2a4fdf11073053919c00ab6524a905846dd6347f14a23b9371c1b0fda7e4",
+      "references": [],
+      "runtime": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile": {
+      "bytes": 89,
+      "sha256": "c0bc244ea4f39b7eef6d89558938bd751d42f7cb67bdbf414c17462b44be98e2",
+      "references": [],
+      "runtime": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core23secret_memory_predicate12mask_is_zero": {
+      "bytes": 20,
+      "sha256": "abfd6d579afbeae45b4743454f4814533f72ce0edfef7bf25665e3c5201a4d45",
+      "references": [],
+      "runtime": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region": {
+      "bytes": 32,
+      "sha256": "ee504003eb72cad384615984c9faaa1519dbdf48366caa6cfe97e77f04cd3af4",
+      "references": [
+        {
+          "offset": 21,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_transfer10copy_bytes",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits": {
+      "bytes": 81,
+      "sha256": "9ceb72d8d224e29d0ec8c649ec6c0f349aa3d834fb21c2369a6e73f7fb21ea7c",
+      "references": [
+        {
+          "offset": 69,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core17secret_memory_xor8xor_bits",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask": {
+      "bytes": 5,
+      "sha256": "e8ebd827d1f36d7cfa5e5220610aa6370284d1589989363f48ac40166362d449",
+      "references": [
+        {
+          "offset": 1,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": false
+    },
+    "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory24secret_byte_mask_is_zero": {
+      "bytes": 20,
+      "sha256": "177e04afea7392ebabcd50b99c505856b589a4d2f912a71b4063bf35b09bcf32",
+      "references": [
+        {
+          "offset": 5,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core23secret_memory_predicate12mask_is_zero",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu16static_execution10operations12known_answer": {
+      "bytes": 1610,
+      "sha256": "b8f9574190b7d196f298acad95579fbe0479e48872cfe25babeb18c616bf0516",
+      "references": [
+        {
+          "offset": 174,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.1",
+          "trailing": 0,
+          "addend": 160
+        },
+        {
+          "offset": 191,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.1",
+          "trailing": 0,
+          "addend": 128
+        },
+        {
+          "offset": 208,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.1",
+          "trailing": 0,
+          "addend": 96
+        },
+        {
+          "offset": 225,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.1",
+          "trailing": 0,
+          "addend": 64
+        },
+        {
+          "offset": 242,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.1",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 259,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.1",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 304,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.3",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 312,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.3",
+          "trailing": 0,
+          "addend": 64
+        },
+        {
+          "offset": 320,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.3",
+          "trailing": 0,
+          "addend": 96
+        },
+        {
+          "offset": 328,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.3",
+          "trailing": 0,
+          "addend": 128
+        },
+        {
+          "offset": 337,
+          "symbol": "__real@8000000000000000",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 346,
+          "symbol": "__real@8000000000000019",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 354,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.3",
+          "trailing": 0,
+          "addend": 160
+        },
+        {
+          "offset": 362,
+          "symbol": "__xmm@80000000000000008000000000000000",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 370,
+          "symbol": "__xmm@80000000000000188000000000000018",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 846,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.2",
+          "trailing": 0,
+          "addend": 64
+        },
+        {
+          "offset": 859,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.2",
+          "trailing": 0,
+          "addend": 32
+        },
+        {
+          "offset": 872,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.2",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 915,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.3",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1477,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.0",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1496,
+          "symbol": "memcmp",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe": {
+      "bytes": 128,
+      "sha256": "a093147dfcbd9774621f07705b5bb6ca7c47d8cd15d3ca14d67311fbcc2079f7",
+      "references": [
+        {
+          "offset": 14,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 65,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 82,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 99,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 124,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute": {
+      "bytes": 1142,
+      "sha256": "967732a334f2d893eb84fdeeab0d0c47dab8a73fbce4409322faca357edc01e5",
+      "references": [
+        {
+          "offset": 81,
+          "symbol": "anon.886b1edfcdffe7c13102d1d0ad2ffa3f.1",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution6keccakNtB2_13KeccakSession7permute": {
+      "bytes": 107,
+      "sha256": "6249e31d1445bc78afcee97aee5489b3712d193f5fb90acc4affd11bf3e6ae13",
+      "references": [
+        {
+          "offset": 91,
+          "symbol": "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 99,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128": {
+      "bytes": 487,
+      "sha256": "7eda2f445aad4fd95fad9d71aec12f252c05170d7b204a671a5bee7814ec5a8e",
+      "references": [
+        {
+          "offset": 326,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 342,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvCsbweaVgBOhqc_16sha3_accelerated15check_authority": {
+      "bytes": 20,
+      "sha256": "d1dd4aec6fcad45c1a56bc86fd83bc512e477e42680a5b8e44adb00dafb486ac",
+      "references": [],
+      "runtime": false
+    },
+    "_RNvMNtCsbweaVgBOhqc_16sha3_accelerated21sha3_accelerated_wireNtB2_7Request6decode": {
+      "bytes": 600,
+      "sha256": "f6ed5f54adcc71ddf6b22bdcccd1d09f72518692d86b10bbd175e2a5cedfce2c",
+      "references": [],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner11setup_chunk": {
+      "bytes": 406,
+      "sha256": "237483cc79958b8ea845bc230d42dde91ff50fb6d87590e12cbba24cd3b961db",
+      "references": [
+        {
+          "offset": 53,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.0",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 62,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 170,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory24secret_byte_mask_is_zero",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 257,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State11setup_chunk",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 297,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 322,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation": {
+      "bytes": 494,
+      "sha256": "0f17a3fe8db33d5910eb7e58d3bc14bb6d8b494022ee95ef4f3d25f355f2ff96",
+      "references": [
+        {
+          "offset": 60,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 84,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 163,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 187,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 410,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 434,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsbweaVgBOhqc_16sha3_accelerated9OperationEBD_": {
+      "bytes": 106,
+      "sha256": "8a8969b1ba4b212ceafcc90ef95eb9120400860da5c72fcb7eb16078380dce2f",
+      "references": [
+        {
+          "offset": 21,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 45,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner12finish_setup": {
+      "bytes": 490,
+      "sha256": "83eeaacef1bfb6f4613d1f0a64153fccd22dd5ba9403e1a51e7590a29cae5a9b",
+      "references": [
+        {
+          "offset": 45,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.0",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 54,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 93,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_setup",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 122,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 146,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 324,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory24secret_byte_mask_is_zero",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 405,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State10finish_xof",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 441,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner5begin": {
+      "bytes": 571,
+      "sha256": "84d98070825d3adbf7b083e9673c59c8b376820a793f1e3b2960a836df985baa",
+      "references": [
+        {
+          "offset": 74,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.1",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 86,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 216,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 240,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 354,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State3new",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 408,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 452,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 482,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner5clear": {
+      "bytes": 70,
+      "sha256": "aa9d9e65ff757d5e6b180734e57bdec2eb60ef70a812febef5a351352d9e41cd",
+      "references": [
+        {
+          "offset": 16,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 40,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner5setup": {
+      "bytes": 542,
+      "sha256": "f808a97de61a67a193de1fbc4c5a4b77397ce9e1ef507134f33bc405857e8bee",
+      "references": [
+        {
+          "offset": 74,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.2",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 86,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 198,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State5setup",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 252,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 299,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 329,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 438,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 462,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6cancel": {
+      "bytes": 127,
+      "sha256": "299572ff92e4effdfb0fae92e84bf12333851bdd59e21265a5041a062cf932f9",
+      "references": [
+        {
+          "offset": 23,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.3",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 33,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 64,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 88,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6finish": {
+      "bytes": 534,
+      "sha256": "cf7b9865ae7c561c2a89295acfcb0a68c8910cbd083f99ff128c8716edceec3c",
+      "references": [
+        {
+          "offset": 51,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.4",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 60,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 162,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory24secret_byte_mask_is_zero",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 243,
+          "symbol": ".rdata",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 298,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State10finish_xof",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 369,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_fixed",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 408,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 432,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6rehash": {
+      "bytes": 936,
+      "sha256": "e68474183d63a605960e7044bc859bc83e578263f85d54bdaa418bea5b58ffa0",
+      "references": [
+        {
+          "offset": 76,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.5",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 85,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 163,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State3new",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 208,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 377,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory24secret_byte_mask_is_zero",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 484,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 497,
+          "symbol": "switch.table._RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6rehash",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 522,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_fixed",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 541,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State10finish_xof",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 564,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 582,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 607,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 632,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 729,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 778,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 794,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 811,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 834,
+          "symbol": "switch.table._RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6rehash.215",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 857,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 875,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 924,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6update": {
+      "bytes": 415,
+      "sha256": "ac863a85c2e450b87f3d578c71712c0d22bd87aae8254662966b650ebdcf229d",
+      "references": [
+        {
+          "offset": 34,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.4",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 44,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 162,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 200,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 230,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 256,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 316,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 340,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner7squeeze": {
+      "bytes": 758,
+      "sha256": "6f6d84e1453576da065233dbd6ba3edd9ab3728aa08d06b60707dbe2baaccabd",
+      "references": [
+        {
+          "offset": 41,
+          "symbol": "anon.c28106df60482f47ece1441b2addaaaa.6",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 51,
+          "symbol": "_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner9operation",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 274,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 328,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine4read",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 351,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 381,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 407,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 473,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 497,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 610,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 629,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 649,
+          "symbol": "_RNvMs_CscBEH4D3OuJh_22sha3_accelerated_stateNtB4_4Core5clear",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 664,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 681,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 715,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state4CoreEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvXCsbweaVgBOhqc_16sha3_acceleratedNtB2_9OperationNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop": {
+      "bytes": 106,
+      "sha256": "8a8969b1ba4b212ceafcc90ef95eb9120400860da5c72fcb7eb16078380dce2f",
+      "references": [
+        {
+          "offset": 21,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 45,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_Csav2wNVSWsYU_25sha3_accelerated_residentNtB4_8Resident10quarantine": {
+      "bytes": 101,
+      "sha256": "6ca8681ba354c68d52da08fe47cf1d3d19c9761aa1b74e7c907c46f5d6cedecf",
+      "references": [
+        {
+          "offset": 16,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 40,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_Csav2wNVSWsYU_25sha3_accelerated_residentNtB4_8Resident3new": {
+      "bytes": 336,
+      "sha256": "c42752708365a330fc2ec70eeecd81faf71a0481ffbd18d53f73cfab72be4cbe",
+      "references": [
+        {
+          "offset": 21,
+          "symbol": "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu16static_execution10operations12known_answer",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 75,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 113,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 162,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvXs0_Csav2wNVSWsYU_25sha3_accelerated_residentNtB5_8ResidentNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop": {
+      "bytes": 155,
+      "sha256": "777e3de1bf4b7b3c695c3d5b377ca17e6b7d5b79a04752b143dd4ab6c1064b21",
+      "references": [
+        {
+          "offset": 24,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 48,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 76,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident": {
+      "bytes": 204,
+      "sha256": "26426988297c40c744deca9b4d347716b9cde0051aeba36b494fc090749c7a93",
+      "references": [
+        {
+          "offset": 51,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 77,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 129,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 137,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 163,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State10finish_xof": {
+      "bytes": 303,
+      "sha256": "412985881ae706f23506eb117b82535e1b73fbe2b3505b13b404233b61affbc2",
+      "references": [
+        {
+          "offset": 154,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 180,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 282,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6finish",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6finish": {
+      "bytes": 842,
+      "sha256": "8798c403651427ac4e3b8c935e5bcddafdd7dcc98dc474596b332f89d4bad86f",
+      "references": [
+        {
+          "offset": 85,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 187,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 285,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 392,
+          "symbol": "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 400,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 590,
+          "symbol": "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 598,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 651,
+          "symbol": "anon.3a19b6b51e69661c8cb0ff666193b4ce.1",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 665,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 680,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution6keccakNtB2_13KeccakSession7permute",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 719,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 777,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe": {
+      "bytes": 74,
+      "sha256": "6fa655a9c6d73f0f23856804ff8206e0443298bcf53d0368664a15fae13d4859",
+      "references": [
+        {
+          "offset": 18,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 31,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 45,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 70,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb": {
+      "bytes": 651,
+      "sha256": "4c12e2a4b1f50b7b8c3bd2c9fb3bd414ed40a3f0e184664eef555692802d8d75",
+      "references": [
+        {
+          "offset": 187,
+          "symbol": "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 195,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 274,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State11setup_chunk": {
+      "bytes": 491,
+      "sha256": "fca87df6202a020f526fe231555a8ea550795f44f5cd02a0af3aa2d48815b6e0",
+      "references": [
+        {
+          "offset": 69,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 95,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 388,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix5bytes",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 446,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 475,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix5bytes": {
+      "bytes": 187,
+      "sha256": "638e4cd88c4255378566e3908448df87e11f9d2440783f30fdb3aeb5a8e61079",
+      "references": [
+        {
+          "offset": 61,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 106,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 145,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance": {
+      "bytes": 565,
+      "sha256": "b76b5c8f2a6259e253d344a60a149fb0e69784311c75d361f7dc47f4fb30f557",
+      "references": [
+        {
+          "offset": 68,
+          "symbol": "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 125,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 179,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 318,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 339,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 413,
+          "symbol": "__umodti3",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 457,
+          "symbol": "anon.3a19b6b51e69661c8cb0ff666193b4ce.0",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 468,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 507,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits": {
+      "bytes": 312,
+      "sha256": "27fa3e4ddfceeb54976c5b2f76ffdb0104997b66b8caa970f4c502b416b986a6",
+      "references": [
+        {
+          "offset": 140,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 200,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 217,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 285,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_fixed": {
+      "bytes": 489,
+      "sha256": "88896f9abda2a2777b1e8617a4633beffb15c98206f02d5fc173e3982c965b64",
+      "references": [
+        {
+          "offset": 166,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 192,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 329,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6finish",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 360,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 374,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine4read",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 399,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 421,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 434,
+          "symbol": "_RNvMs_CscBEH4D3OuJh_22sha3_accelerated_stateNtB4_4Core5clear",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 449,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 466,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state4CoreEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine4read": {
+      "bytes": 726,
+      "sha256": "68b7139138a174c467d0afa9a6cb16e08a835e72dd181f6e0176aea6703b13be",
+      "references": [
+        {
+          "offset": 132,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 318,
+          "symbol": "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 326,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 431,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory18copy_secret_region",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs_CscBEH4D3OuJh_22sha3_accelerated_stateNtB4_4Core5clear": {
+      "bytes": 114,
+      "sha256": "62288c934acf20e0d2b336c68ea06efb2273f97ecab34f345f6813e4541ef09d",
+      "references": [
+        {
+          "offset": 34,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 60,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state4CoreEBD_": {
+      "bytes": 186,
+      "sha256": "478f021f93d5b4b1b46cb35fbd4a8aade6fe2f92f6ee4eb92a5bc10a218cb794",
+      "references": [
+        {
+          "offset": 39,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 72,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 117,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 125,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 151,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_setup": {
+      "bytes": 395,
+      "sha256": "8f50e88f0edc6882bf9a9e7cae5f786c2e36d38a6fc9eb2c885d63520ce20508",
+      "references": [
+        {
+          "offset": 59,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 85,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 354,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State3new": {
+      "bytes": 650,
+      "sha256": "9561edc55f419ae3bd583d0d28a50cacda5f090f62093b1bc40ad131fa69e322",
+      "references": [
+        {
+          "offset": 173,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State5setup",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 219,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 282,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State11setup_chunk",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 309,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State11setup_chunk",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 326,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State12finish_setup",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 397,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 423,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 475,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 484,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 514,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 570,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 641,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State5setup": {
+      "bytes": 2076,
+      "sha256": "427ddc8334abebca5220ae36a6fde75d8902f5465aaa2db8c91138e704f57781",
+      "references": [
+        {
+          "offset": 58,
+          "symbol": "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 154,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 249,
+          "symbol": "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 277,
+          "symbol": "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 313,
+          "symbol": "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 502,
+          "symbol": "__umodti3",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 721,
+          "symbol": "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 769,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 812,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 830,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 882,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 910,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 967,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB2_6Memory4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 980,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1012,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1433,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1685,
+          "symbol": "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1773,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix4bits",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1854,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1878,
+          "symbol": "_RNvMs0_NtCscBEH4D3OuJh_22sha3_accelerated_state6engineNtB5_6Engine6absorb",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 1934,
+          "symbol": "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial": {
+      "bytes": 1123,
+      "sha256": "78754ce4636264a0df16785d4adbd5fafa89f63988321eb8d261888fc844bc83",
+      "references": [
+        {
+          "offset": 104,
+          "symbol": "memset",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 309,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 368,
+          "symbol": "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu15x86_avx2_keccak6secret7permute",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 376,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 390,
+          "symbol": "__ymm@bd1547306f80494dd598261ea65aa9ee84d5ccf933c0478af1258f7940e1dde7",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 414,
+          "symbol": "__ymm@8c5bda0cd6192e7690fee5a0a44647c4ff97a42d7f8e6fd48b284e056253d057",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 438,
+          "symbol": "__ymm@a9a6e6260d712103eb5aa93f2317d63530935ab7d08ffc64ad30a6f71b19059c",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 462,
+          "symbol": "__ymm@05e5635a21d9ae6101f22f1a11a5569f43b831cd0347c82681a57c16dbcf555f",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 486,
+          "symbol": "__ymm@8c3ee88a1ccf32c8b87c5a554fd00ecb613670957bc4661164befef28cc970f2",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 547,
+          "symbol": "__ymm@75f644e97f30a13b16f53526e70465c21841f924a2c509e4940c7922ae3a2614",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 613,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 680,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 759,
+          "symbol": "switch.table._RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 827,
+          "symbol": "_RNvMNtNtCshYLbG8W7MpL_17brynja_crypto_cpu18hardened_execution14keccak_scratchNtB2_13KeccakScratch4wipe",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 901,
+          "symbol": "switch.table._RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial.216",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 966,
+          "symbol": "memcpy",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "?dtor$15@?0?_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner11setup_chunk@4HA": {
+      "bytes": 56,
+      "sha256": "66e516ca24402b88e14bc246f1ee15e0dc58fc3b665a2979bfa8a76cef0f4b00",
+      "references": [
+        {
+          "offset": 34,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsbweaVgBOhqc_16sha3_accelerated9OperationEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "?dtor$19@?0?_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner12finish_setup@4HA": {
+      "bytes": 52,
+      "sha256": "e88ca5f4dc5f21bac9c0d2f4082ddc4dc9fdd145d307127a9b72bd542b70fe33",
+      "references": [
+        {
+          "offset": 32,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsbweaVgBOhqc_16sha3_accelerated9OperationEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "?dtor$9@?0?_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner5begin@4HA": {
+      "bytes": 62,
+      "sha256": "1c6efc01a4080d0fde4a5435c18cd0b58522fafce696a74175f50f0dd3340774",
+      "references": [
+        {
+          "offset": 42,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsbweaVgBOhqc_16sha3_accelerated9OperationEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "?dtor$4@?0?_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner5setup@4HA": {
+      "bytes": 62,
+      "sha256": "43de1d68732baf3a6a70099160d86f9e680a19367cce04355930443806ff4af2",
+      "references": [
+        {
+          "offset": 42,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsbweaVgBOhqc_16sha3_accelerated9OperationEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "?dtor$27@?0?_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6finish@4HA": {
+      "bytes": 52,
+      "sha256": "e88ca5f4dc5f21bac9c0d2f4082ddc4dc9fdd145d307127a9b72bd542b70fe33",
+      "references": [
+        {
+          "offset": 32,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsbweaVgBOhqc_16sha3_accelerated9OperationEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "?dtor$4@?0?_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6rehash@4HA": {
+      "bytes": 66,
+      "sha256": "59623885fe508b3fcdd0c5d65a69485b1d604b61c21d8402aefd1c0f0ede6c13",
+      "references": [
+        {
+          "offset": 44,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsbweaVgBOhqc_16sha3_accelerated9OperationEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "?dtor$16@?0?_RNvMs_CsbweaVgBOhqc_16sha3_acceleratedNtB4_5Owner6rehash@4HA": {
+      "bytes": 79,
+      "sha256": "46eb011dc54ff49b1437b7e80844643697130cab3e33d69b77e3bfdcb69a1342",
+      "references": [
+        {
+          "offset": 45,
+          "symbol": "_RNvNtCsjNKEhcqdpKw_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+          "trailing": 0,
+          "addend": 0
+        },
+        {
+          "offset": 57,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECsav2wNVSWsYU_25sha3_accelerated_resident",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    },
+    "?dtor$27@?0?_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State3new@4HA": {
+      "bytes": 71,
+      "sha256": "9072a19800e8d9e725815d787dc91812cd089229665d74760276602e6bf6e1b9",
+      "references": [
+        {
+          "offset": 49,
+          "symbol": "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state4CoreEBD_",
+          "trailing": 0,
+          "addend": 0
+        }
+      ],
+      "runtime": true
+    }
+  }
+}

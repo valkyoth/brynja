@@ -6,6 +6,15 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [AVX2 SHA-3 inner-chain completion](windows-enclave-sha3-avx2-chain.md)
+accounts for 53 main functions and eight cleanup funclets, exact linked dispatch
+tables and the complete opaque round/erasure schedule. Ten review tests pass on
+both hosts with identical reports; 254 saved build inputs match. Native Linux
+AVX2 component and focused placement-only Miri checks also pass. The local
+bound is `H-12380`, excluding eight named shared runtime/transport boundaries.
+ABI incoming-register save slots and aggregate copies remain explicit inputs
+to whole-window reclamation, not individually erased or whole-image qualified.
+
 The [scalar SHA-3 inner-chain completion](windows-enclave-sha3-chain.md) now
 accounts for all 55 emitted functions, including the scalar permutation and
 buffer destructor. Both hosts pass 88 review tests with matching reports; 158

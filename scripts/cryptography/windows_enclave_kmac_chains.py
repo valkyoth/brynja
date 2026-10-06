@@ -29,14 +29,14 @@ def specification(raw):
     return result
 
 
-def load(base,root,lane,pin):
+def load(base,root,lane,pin,build_name='kmac-worker-build.json'):
     row=next(r for r in shared.catalog(shared.CATALOG.read_bytes()) if r['route']==pin['route'])
     profile=next(r for r in w.specification(w.SPEC.read_bytes())['profiles'] if r['route']==pin['route'])
     directory=(base/row['object']).parent
     data=w.archive.members((directory/'normal_rust.lib').read_bytes())[profile['member']]
     image=(base/row['image']).read_bytes()
     asm=(directory/'normal_rust.s').read_bytes();ir=(directory/'normal_rust.ll').read_bytes()
-    build=(directory/'kmac-worker-build.json').read_bytes()
+    build=(directory/build_name).read_bytes()
     for name,raw in [('object',data),('image',image),('assembly',asm),('ir',ir),('build',build)]:
         require(digest(raw)==pin[name+'_sha256'],'saved '+lane+' '+name)
     manifest=json.loads(build);sources={n.replace('\\','/'):h for n,h in manifest['source_sha256'].items()}
@@ -56,12 +56,12 @@ def body_check(values,pin):
             runtime==pin['runtime'],'complete references and extent kind')
 
 
-def data_bindings(data,image,records,functions):
+def data_bindings(data,image,records,functions,runtime_names=RUNTIME):
     rows,symbols=obj.tables(data);constants={};tables={};runtime={}
     for name,r in records.items():
         for target,address in r['reference_targets'].items():
             if target in records: continue
-            if target in RUNTIME:
+            if target in runtime_names:
                 require(target not in runtime or runtime[target]['rva']==address,'same runtime boundary')
                 entry=runtime.setdefault(target,dict(rva=address,callers=[],assigned_completion_package=8))
                 entry['callers'].append(name);continue
@@ -202,7 +202,7 @@ def permutation(data,image,asm,assembly,records,lane):
     return result
 
 
-def transport_binding(base,row,data,image,records,runtime):
+def transport_binding(base,row,data,image,records,runtime,prefix='PublicKmac'):
     t=w.transport;spec=t.specification(t.SPEC.read_bytes())
     profile=next(p for p in spec['profiles'] if p['route']==row['route'])
     native=(base/row['object']).read_bytes()
@@ -212,7 +212,7 @@ def transport_binding(base,row,data,image,records,runtime):
     parent=shared.inspect(native,image,wrapper)
     require(parent['retained_worker_rva']==records['RetainedWork']['rva'],'exact wrapper enters KMAC worker')
     for suffix in ('Input','Output','Source','Observe'):
-        require(runtime['PublicKmac'+suffix]['rva']==tr['records'][suffix]['rva'],
+        require(runtime[prefix+suffix]['rva']==tr['records'][suffix]['rva'],
                 'actual bound KMAC transport '+suffix)
     return dict(wrapper_worker_rva=parent['retained_worker_rva'],
                 transport_rvas={k:tr['records'][k]['rva'] for k in ('Input','Output','Source','Observe')},

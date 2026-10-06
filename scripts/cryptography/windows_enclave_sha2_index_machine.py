@@ -35,7 +35,7 @@ def compile_region(lines, entry, exit_label):
     s.require(len(labels) == sum(line.endswith(':') for line in lines), 'unique index labels')
     s.require(entry in labels and exit_label in labels, 'index entry and exit labels')
     allowed = {'movq','movl','movb','movzbl','leaq','xorl','cmpq','cmpl','cmpw',
-               'testq','testl','incq','addq','shlq','jmp','je','jne','ja','jbe','callq','vzeroupper'}
+               'testq','testl','incq','addq','shlq','shrq','andl','jmp','je','jne','ja','jbe','callq','vzeroupper'}
     code = []
     for line in lines:
         if line.endswith(':'):
@@ -111,11 +111,15 @@ def run(program, registers, memory, writable, wipe, max_steps=4096):
         if op=='xorl':
             value=0 if args[0]==args[1] else read(args[0],4)^read(args[1],4)
             write(args[1],4,value);cf,zf=False,value==0;continue
+        if op=='andl':
+            value=read(args[0],4)&read(args[1],4)
+            write(args[1],4,value);cf,zf=False,value==0;continue
         destination=args[0] if op=='incq' else args[1]
         before=read(destination,8)
-        if op=='shlq':
+        if op in ('shlq','shrq'):
             shift=read(args[0],8);s.require(0<shift<64,'assigned nonzero index shift')
-            value=before<<shift;cf=bool((before>>(64-shift))&1)
+            value=before<<shift if op=='shlq' else before>>shift
+            cf=bool((before>>(64-shift if op=='shlq' else shift-1))&1)
         else:
             value=before+(1 if op=='incq' else read(args[0],8))
             if op!='incq':cf=value>=(1<<64)

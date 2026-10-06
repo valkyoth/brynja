@@ -540,16 +540,34 @@ without relying on the enclosing whole-body hash to reject them. Production
 code and release gates remain unchanged; this is saved-image review, not new
 native enclave execution.
 
+The [destination-construction observation](../assurance/windows-protection-observations/sha2-batch-descriptor-bounds-progress-20261006.json)
+records a bounded emitted-instruction replay. All 256
+typed narrow identity combinations produce the exact original lane pointer and
+28/32-byte width. For the wide route, the emitted region must consist of eight
+independent register-to-descriptor stores: each width is then checked across
+0 through 64 in each slot (260 assignments, not a claimed 65-to-the-fourth
+runtime campaign). Zero is included as a conservative superset; the existing
+clearing guard skips it. Each descriptor fits its own 32/64-byte slot inside the
+256-byte scratch region; no source or scratch bytes may be changed by descriptor
+construction. The original typed inputs, live frame and wide dispatch-table
+bindings remain required. These origin bounds must still be composed with
+subsequent machine-code storage lifetimes before qualifying every consumer.
+All 106 tests pass on Linux and Windows with matching parsed reports. The 77 new
+origin mutations exercise this checker with the earlier literal staging checks
+disabled, so their rejection is not attributed to those earlier checks. Separate
+regressions require staging, width admission and parent integration. No production
+code, release-gate policy or native enclave execution changed in this checkpoint.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-clear-callers-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-descriptor-bounds-linux.json
 ```
 
-Without the saved directory the test command runs fifty-two self-contained tests
-and explicitly skips the fifty-one saved-artifact tests.
+Without the saved directory the test command runs fifty-three self-contained tests
+and explicitly skips the fifty-three saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -584,8 +602,11 @@ and explicitly skips the fifty-one saved-artifact tests.
   Their complete bytes, references, round tables and exact ABI differences now
   have explicit checks; the changed zeroizer has a separate complete review.
   Positive clearing lengths now have exhaustive direct/tail call-site checks.
-  Establish every caller's valid/disjoint regions and dynamic descriptor upper
-  bounds, rather than inferring caller safety from callee identity.
+  Descriptor construction now establishes exact slot pointers and bounded,
+  disjoint destination regions under the typed/live-frame preconditions.
+  Propagate those origins through subsequent machine lifetimes and establish
+  every remaining caller's valid/disjoint regions, rather than inferring caller
+  safety from callee identity or bounded construction alone.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

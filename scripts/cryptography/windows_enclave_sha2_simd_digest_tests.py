@@ -2,9 +2,10 @@
 import re
 from unittest.mock import patch
 import windows_enclave_sha2_simd_digest as d
+from windows_enclave_sha2_descriptor_bounds_tests import DescriptorBoundsTests, DescriptorBoundsSavedTests
 
 
-class DigestTests:
+class DigestTests(DescriptorBoundsTests):
     def test_digest_canonical_tail_and_length_boundaries(self):
         for length in (0,1,63,64,65,127,128,129,1023,1024,1025,(1<<64)-1):
             for last in range(10):
@@ -43,7 +44,7 @@ class DigestTests:
             self.assertEqual([n for r in destination for n in r],list(range(owner,owner+256)))
 
 
-class DigestSavedTests:
+class DigestSavedTests(DescriptorBoundsSavedTests):
     def test_digest_caller_review_is_required(self):
         import windows_enclave_sha2_batch_chains as c
         for lane,_,_,_,ir,_,bodies in self.routes:

@@ -102,6 +102,13 @@ tests pass on Linux and Windows with matching parsed reports; 730 new caller
 mutations reject. Dynamic descriptor upper bounds, live storage and pointer
 validity remain separate obligations; the broader caller-completion flag stays
 false. No production or release-gate change was made.
+Descriptor construction now replays all 256 narrow identity combinations and
+260 per-lane wide width assignments. Wide field independence is checked before
+composing those cases. Exact lane pointers and widths fit disjoint slots inside
+256-byte scratch, with other storage unchanged. Propagation through subsequent
+machine lifetimes remains open; bounded origins alone do not close all consumers.
+All 106 tests pass on Linux and Windows with matching reports, including 77 new
+descriptor-origin mutations that bypass earlier literal staging checks.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

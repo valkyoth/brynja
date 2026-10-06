@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "3fd84c626e8e2affd19329b6a1d6d34eb08b220f",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 106,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-descriptor-bounds-linux.json": "5d7e5f208c3f13a634f023226076516591ae03a5507fefaf9b3d375021d1ac52",
+    "sha2-batch-descriptor-bounds-windows.json": "122b3dc4cc6abb8c2189113d2368ccaed158756cc7b248e29bf9b68c03eaf35c"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_descriptor_bounds.py": "6984f91a37ad9850a4c7175a0473a7546b03ad195c68f9280527e1d474648131",
+    "windows_enclave_sha2_descriptor_bounds_tests.py": "c0f38afeacb476905bb588519635c56a085ad7d3d222c1253b93d5fe1f78903d",
+    "windows_enclave_sha2_index_machine.py": "12298318da9df54447ab0ca2b153c2b30bd1c28c3c8222dac9068718f93bac96",
+    "windows_enclave_sha2_batch_chains.py": "364054c6c01d3239f8eb7902cd65aec85e59e552d97e6581508eb7056d213a6b",
+    "windows_enclave_sha2_simd_digest_tests.py": "5ef43766be9c11e6cae0968115e1f44dc5c1121b05616a319364d2770d0ee494"
+  },
+  "prior_review_observation": "sha2-batch-clear-callers-progress-20261006.json",
+  "new_reviewed_scope": [
+    "actual narrow descriptor construction replayed over all 256 typed SHA-224/SHA-256 identity combinations",
+    "wide constructor restricted to independent field stores before per-lane width coverage composes",
+    "all 65 widths from zero through 64 checked separately in every wide slot, 260 assignments total",
+    "exact original lane pointers and widths fit disjoint slots in 256-byte scratch",
+    "descriptor construction cannot write source or scratch storage",
+    "staging, wide width-admission and parent integration remain mandatory",
+    "new right-shift and mask interpreter operations have width and carry regressions"
+  ],
+  "construction_cases": {"simd256": 256, "simd512": 260},
+  "wide_cartesian_product_executed": false,
+  "wide_independent_field_store_composition_checked": true,
+  "wide_zero_width_included_as_conservative_superset": true,
+  "origin_offset_width_mutations_rejected": 77,
+  "mutation_tests_bypass_earlier_literal_staging_checks": true,
+  "original_typed_inputs_and_live_frame_are_preconditions": true,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "original typed input, frame setup and workspace alias preconditions",
+    "propagate bounded descriptor origins through subsequent emitted lifetimes and indirect effects",
+    "subsequent compact-index lifetimes and remaining helper live/disjoint storage",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

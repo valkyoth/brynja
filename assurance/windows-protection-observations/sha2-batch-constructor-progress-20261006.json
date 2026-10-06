@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "production_baseline": "c1313ad59077a16a2eab44dee1c6efc38d99ce55",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 23,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-constructor-linux.json": "b0b0830ac762db139d8f20045a3ab6212ff52b4c19d41ea71b722676240e3b51",
+    "sha2-batch-constructor-windows.json": "c10eadd9b0045aee10305c59162cf8d2d90b471b8e57288f313b24d027d12215"
+  },
+  "review_test_sha256": "4b7a5778cf9ba99134b03019773d80fc2890649ac0b15241cb0a60a234dc00c6",
+  "prior_component_observation": "sha2-batch-state-progress-20261006.json",
+  "new_reviewed_scope": [
+    "initial sequential scalar and SHA-NI placement and publication",
+    "nonempty eight-slot plan admission with per-slot identity validation",
+    "begin-plan rejection state/output cleanup and SHA-NI revocation",
+    "six named scalar IVs and general-t label, padding, feedforward and placement",
+    "explicit comparison of public schedule and round loops against replayed prior review",
+    "public SHA-NI abc startup KAT and full-width result comparison",
+    "linked public constructor constants and private construction/plan ABI"
+  ],
+  "public_arithmetic_model_checks": {
+    "bitmap_pairs": 65536,
+    "wire_identities": 65539,
+    "plan_slot_lane_identity_cases": 1048624,
+    "plan_forms_per_case": 2,
+    "general_t_decimal_parameters": 510,
+    "model_is_machine_code_execution": false
+  },
+  "body_byte_mutations_rejected": 66885,
+  "table_byte_mutations_rejected": 680,
+  "scalar_dispatch_order_mutations_rejected": 21,
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 121,
+    "sha_ni": 153,
+    "simd256": 17,
+    "simd512": 17
+  },
+  "required_return_event_mutations_rejected": 35,
+  "required_return_event_breakdown": {"cleanup": 34, "kat_comparison": 1},
+  "lifecycle_premature_return_mutations_rejected": 12,
+  "finalizer_premature_return_mutations_rejected": 11,
+  "state_funclet_premature_return_mutations_rejected": 7,
+  "plan_and_kat_premature_return_mutations_rejected": 3,
+  "private_abi_mutations_rejected": 30,
+  "reused_helper_body_reference_extent_abi_mutations_rejected": 116,
+  "public_loop_instruction_mutations_rejected": 138,
+  "public_constructor_constant_mutations_rejected": 12,
+  "transitive_depth_qualified": false,
+  "arbitrary_os_unwind_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "enclosing constructor frame cleanup and batch-specific storage composition",
+    "SIMD callback provenance, lane engines, kernels and error/funclet cleanup",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

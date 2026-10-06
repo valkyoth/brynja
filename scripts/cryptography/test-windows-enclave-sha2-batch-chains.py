@@ -13,6 +13,38 @@ s=c.shapes.s
 
 
 class Tests(unittest.TestCase):
+    def test_public_kat_expected_digest_is_sha256_abc(self):
+        import hashlib
+        value=int(c.shapes.placement.kat.EXPECTED[6:],16).to_bytes(32,'little')
+        big=b''.join(value[i:i+4][::-1] for i in range(0,32,4))
+        self.assertEqual(big,hashlib.sha256(b'abc').digest())
+
+    def test_general_t_decimal_reciprocals_and_padding_bound(self):
+        for parameter in range(1,512):
+            if parameter==384: continue
+            label=c.shapes.iv.decimal_label(parameter)
+            self.assertEqual(label,b'SHA-512/'+str(parameter).encode())
+            self.assertIn(len(label),(9,10,11))
+            self.assertLess(len(label)+1,112)
+        for parameter in (0,384,512,-1,True):
+            with self.assertRaises(ValueError): c.shapes.iv.decimal_label(parameter)
+
+    def test_every_plan_slot_rejects_invalid_identity_and_empty_plan(self):
+        for lane in ('scalar','sha_ni'):
+            check=c.shapes.placement.admitted_plan
+            self.assertFalse(check([0]*8,lane))
+            for slot in range(8):
+                for identity in (*range(65536),(1<<32)-1,(1<<63),(1<<64)-1):
+                    plan=[0]*8;plan[slot]=identity
+                    allowed=(1<=identity<=6 or 4097<=identity<=4607 and identity!=4480
+                             if lane=='scalar' else 1<=identity<=2)
+                    self.assertEqual(check(plan,lane),allowed)
+                    # A separate valid slot must not hide the invalid one.
+                    plan[(slot+1)%8]=1
+                    self.assertEqual(check(plan,lane),identity==0 or allowed)
+            for bad in ([0]*7,[0]*9,[True]+[0]*7,[-1]+[0]*7,[1<<64]+[0]*7):
+                with self.assertRaises(ValueError): check(bad,lane)
+
     def test_unrolled_slot_selection_for_every_bitmap_pair(self):
         for active in range(256):
             for completed in range(256):
@@ -133,7 +165,7 @@ class SavedTests(unittest.TestCase):
             counts[lane]=len(captures)
         print('Batch semantic mutations rejected: '+json.dumps(counts,sort_keys=True))
 
-    def test_actual_cleanup_events_reject_bypass(self):
+    def test_actual_required_return_events_reject_bypass(self):
         count=0;actual=s.normal_returns
         for lane,_,_,_,ir,_,bodies in self.routes:
             events=[]
@@ -146,7 +178,7 @@ class SavedTests(unittest.TestCase):
                 self.assertNotEqual(bad,text)
                 with self.assertRaises(ValueError): actual(bad,start,event,alternatives)
                 count+=1
-        print('Batch cleanup-event mutations rejected: '+str(count))
+        print('Batch required-return-event mutations rejected: '+str(count))
 
     def test_actual_private_abi_constraints_cannot_be_removed(self):
         count=0
@@ -174,6 +206,19 @@ class SavedTests(unittest.TestCase):
                 self.assertTrue(reused['batch_specific_caller_preconditions_pending'])
                 self.assertFalse(reused['unlisted_equal_bodies_implicitly_qualified'])
                 self.assertEqual(len(reused['exact_helper_contracts']),15 if lane=='scalar' else 14)
+                admission=r['semantics']['placement_and_plan']
+                self.assertEqual(admission['plan']['slots'],8)
+                self.assertTrue(admission['plan']['nonempty_required'])
+                self.assertTrue(admission['initial_placement']['duplicate_live_rejected'])
+                if lane=='scalar':
+                    loops=reused['explicitly_substituted_public_iv_loops']
+                    self.assertEqual({n:v['instructions'] for n,v in loops.items()},{'schedule':23,'rounds':46})
+                    self.assertEqual(r['semantics']['public_iv']['named']['variants'],6)
+                else:
+                    kat=admission['initial_placement']['public_static_kat']
+                    self.assertEqual(kat['comparison_dominates_normal_returns'],1)
+                    self.assertFalse(kat['kat_is_platform_support_or_independent_review'])
+                    self.assertFalse(admission['initial_placement']['constructor_stack_cleanup_claimed'])
                 lifecycle=r['semantics']['lifecycle']
                 self.assertTrue(lifecycle['primitive_and_finalizer_composition_pending'])
                 self.assertEqual(lifecycle['sealing']['slots'],8)
@@ -211,6 +256,52 @@ class SavedTests(unittest.TestCase):
                 mutants.add(c.digest(bad.encode()))
         self.assertEqual(len(mutants),21)
 
+    def test_public_loop_comparison_rejects_instruction_changes(self):
+        lane,pin,data,_,ir,functions,bodies=next(r for r in self.routes if r[0]=='scalar')
+        result=c.reuse.inspect(SAVED,lane,data,functions,ir,bodies)
+        self.assertEqual(set(result['explicitly_substituted_public_iv_loops']),{'schedule','rounds'})
+        row,old,_,_=c.reuse.prior(SAVED,lane)
+        assembly=((SAVED/row['object']).parent/'normal_rust.s').read_text()
+        previous=c.c.previous.s.bodies(assembly,c.c.previous.inventory(old))[c.reuse.scalar.state.NEW]
+        name=s.one(bodies,r'Owner5start$');current=bodies[name];iv=c.shapes.iv
+        count=0
+        for before,after in (('.B14','.B30'),('.B16','.B32')):
+            for body,label,is_current in ((previous,before,False),(current,after,True)):
+                lines=s.lines(body);fragment=iv.loop(body,label)
+                start=lines.index(label+':')
+                for i in range(1,len(fragment)):
+                    bad=list(lines);bad[start+i]='int3';mutant='\n'.join(bad)
+                    with self.assertRaises((ValueError,IndexError)):
+                        iv.loops(previous,mutant) if is_current else iv.loops(mutant,current)
+                    count+=1
+        self.assertEqual(count,138)
+        # Pinning an old assembly file is required even after the old object review.
+        original=Path.read_bytes
+        def tampered(path):
+            raw=original(path)
+            return raw+b'changed' if path.name=='normal_rust.s' else raw
+        with patch.object(Path,'read_bytes',tampered):
+            with self.assertRaisesRegex(ValueError,'prior scalar emitted assembly identity'):
+                c.reuse.scalar_loops(SAVED,row,old,bodies)
+
+    def test_linked_public_constructor_constants_reject_drift(self):
+        count=0
+        for lane,pin,_,_,_,_,_ in self.routes:
+            if lane not in ('scalar','sha_ni'): continue
+            report=c.inspect_route(SAVED,ROOT,lane,pin,False)
+            expected=report['semantics']['public_constructor_constants']
+            constants={n:dict(bytes=size,sha256=sha) for n,(size,sha) in expected.items()}
+            c.public_constructor_constants(constants,lane)
+            for name in constants:
+                for change in (None,dict(bytes=0,sha256=constants[name]['sha256']),
+                               dict(bytes=constants[name]['bytes'],sha256='0'*64)):
+                    bad=copy.deepcopy(constants)
+                    if change is None: del bad[name]
+                    else: bad[name]=change
+                    with self.assertRaises(ValueError): c.public_constructor_constants(bad,lane)
+                    count+=1
+        self.assertEqual(count,12)
+
     def test_state_cleanup_and_funclet_reject_premature_returns(self):
         actual=s.normal_returns;count=0
         for lane,_,_,_,_,_,bodies in self.routes:
@@ -224,6 +315,20 @@ class SavedTests(unittest.TestCase):
                 with self.assertRaises(ValueError): actual('\n'.join(lines),start,event,alternatives)
                 count+=1
         self.assertEqual(count,7)
+
+    def test_plan_rejection_cleanup_rejects_premature_returns(self):
+        actual=s.normal_returns;count=0
+        for lane,_,_,_,_,_,bodies in self.routes:
+            if lane not in ('scalar','sha_ni'): continue
+            checks=[]
+            def capture(body,start,event,alternatives=()):
+                checks.append((body,start,event,alternatives));return actual(body,start,event,alternatives)
+            with patch.object(s,'normal_returns',capture): c.shapes.placement.inspect(bodies,lane)
+            for body,start,event,alternatives in checks:
+                lines=s.lines(body);lines.insert(lines.index(start+':')+1,'retq')
+                with self.assertRaises(ValueError): actual('\n'.join(lines),start,event,alternatives)
+                count+=1
+        self.assertEqual(count,3)
 
     def test_saved_reuse_rejects_each_body_reference_extent_and_abi_change(self):
         count=0

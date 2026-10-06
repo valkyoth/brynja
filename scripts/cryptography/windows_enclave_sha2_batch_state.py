@@ -110,12 +110,12 @@ def scalar_start_transfer(bodies):
         'movq 296(%rsp), %rax|movq %rax, 8(%rdi)|movb $-1, %al',
         'movb $-1, 608(%r14)|movzbl 1328(%rsp), %eax|cmpb $-1, %al|je .B41',
         'movq $0, (%rbx)|movq $0, 600(%rbx)|movw $4, 1782(%rbx)'])
-    # The inlined IV/general-t derivation is a distinct remaining public-data
-    # calculation. This verifies replacement/placement, not that calculation.
+    # The sibling IV module and explicit prior-loop replay cover the inlined
+    # public calculation. This local check covers replacement and publication.
     cleared=s.normal_returns(body,'.B41',['leaq 80(%rbx), %rcx','movl $512, %edx','callq '+s.ZERO])
     return dict(old_owner_wiped_before_replacement=True,placed_state_offset=608,
         success_phase='Streaming',rejection_cleanup_return_sites=cleared,
-        inlined_public_iv_calculation_review_pending=True)
+        inlined_public_iv_calculation_review='sibling IV checks plus explicit prior-loop replay')
 
 
 def sha_ni_start_transfer(bodies):
@@ -230,4 +230,5 @@ def inspect(bodies,lane):
         update=updates(bodies,lane),
         scalar_finish=scalar_finish(bodies) if lane=='scalar' else None,
         finish_funclet=finish_funclet(bodies) if lane=='sha_ni' else None,
-        complete_constructor_composition_pending=True)
+        complete_constructor_composition_pending=True,
+        remaining_constructor_scope='enclosing frame cleanup and batch-specific storage composition')

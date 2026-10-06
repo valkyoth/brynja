@@ -106,8 +106,10 @@ checks health/kernel identity, startup KAT failure destruction, both IV selectio
 all intermediate session/owner copies, and the copied authority pointer/epoch
 check before publication. Initialization `memset` is not credited as volatile
 erasure; compiler-created copies still require enclosing-window reclamation.
-The scalar inlined public IV/general-t calculation, initial owner placement and
-begin-plan admission still need their final composition checks.
+The additional constructor/admission checks below cover scalar IV calculation,
+initial owner placement and begin-plan validation. Enclosing frame/storage
+reclamation is still required; these checks do not close the whole constructor
+cleanup composition.
 
 The SHA-NI finish funclet reads the owner and completion flag from the actual
 parent-frame slots and invokes its bound operation destructor on every return.
@@ -115,17 +117,52 @@ That destructor destroys taken state and scratch, clears output and quarantines
 authority when incomplete. This covers the invoked compiler cleanup path, not
 arbitrary OS exceptions, aborts or a guarantee that all such failures invoke it.
 
+## Initial placement and public IV construction
+
+Both sequential begin operations require Empty-phase admission, a nonempty plan
+and validation of every one of its eight identities before copying the complete
+64-byte plan and publishing Collecting. Scalar accepts the six named identities
+and general-t values 1..511 except 384; SHA-NI accepts only SHA-224/256. Zero means
+an inactive slot. Tests cover each slot with 65,539 wire values, both alone and
+alongside a separate valid entry, so a valid neighbor cannot hide an invalid
+identity. Selected rejection paths destroy taken state and clear all output;
+SHA-NI also revokes authority on guard failure.
+
+Initial placement checks cover page alignment, nonwrapping window bounds,
+duplicate-live rejection, empty state/plan/output initialization and publication
+only after success. The SHA-NI worker also checks page/window disjointness;
+the scalar worker relies on its enclosing C admission for that property. No
+claim is made that inactive enum payload or all padding is initialized. SHA-NI
+startup failure erases the backing page. Its public `abc` KAT checks the complete
+SHA-256 schedule, SHA-NI rounds, feedforward and full-width result comparison,
+with linked IV, round table and expected digest bindings. This is not CPU
+feature detection or independent review, and its stack still requires the
+enclosing window cleanup.
+
+The scalar constructor checks all six named IVs, zero initialization and final
+placement. For general SHA-512/t it checks decimal-label generation across all
+510 admitted parameters, one-block padding, XOR-adjusted IV, feedforward,
+big-endian serialization and the three-byte layout displacement. The 23-line
+schedule loop and 46-line round loop must match the earlier replayed streaming
+review under an explicit stack displacement and register substitution. The old
+assembly is separately pinned; this is scoped comparison of two public loops,
+not a general machine-code interpreter. Mutating each instruction in either
+version rejects all 138 changes.
+
 ## Tests and retained evidence
 
-Seventeen review tests pass on Linux and Windows with matching parsed reports.
-They reject 236 semantic-landmark removals, 23 private ABI changes, 32
-cleanup-event bypasses, twelve lifecycle, eleven finalizer and seven state/funclet premature returns,
+Twenty-three review tests pass on Linux and Windows with matching parsed reports.
+They reject 308 semantic-landmark removals, 30 private ABI changes, 35
+required-return-event bypasses (34 cleanup and one KAT comparison), twelve
+lifecycle, eleven finalizer, seven state/funclet and three admission/KAT premature returns,
 116 per-helper body/reference/extent/ABI mutations, altered callback layouts/pointers, diagnostic-data drift,
 incomplete inventories and inconsistent source closures. The byte-mutation
 counts above establish binding durability, not algorithm correctness alone.
 Separate regressions reject missing prior semantic reviews, changed dispatch
 tables and changed resolved target attributes; an equal unlisted function is
 not added to the reused set. All 21 scalar dispatch-order mutations are rejected.
+Twelve linked constructor-constant mutations and 138 explicit-loop mutations
+are also rejected. The plan arithmetic checks are models, not native execution.
 
 Scoped native Linux component campaigns also pass:
 
@@ -161,23 +198,25 @@ The [state-transition observation](../assurance/windows-protection-observations/
 supersedes that partial checkpoint for the caller/funclet checks above. It also
 records fresh passing scalar and SHA-NI component/oracle/mutation runs on native
 Linux; Windows replay still inspects the saved enclave images.
+The [constructor/admission observation](../assurance/windows-protection-observations/sha2-batch-constructor-progress-20261006.json)
+records the additional scope above, retaining the unchanged component results.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-state-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-constructor-linux.json
 ```
 
-Without the saved directory the test command runs seven self-contained tests
-and explicitly skips the ten saved-artifact tests.
+Without the saved directory the test command runs ten self-contained tests
+and explicitly skips the thirteen saved-artifact tests.
 
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.
-- Complete the scalar inlined public IV calculation, initial owner placement
-  and plan-admission composition. Slot selection, selected state transfers,
+- Complete enclosing constructor frame/storage cleanup composition. Public IV
+  calculation, initial placement, plan admission, selected state transfers,
   finalizer callers and the SHA-NI finish funclet are now checked.
 - Complete SIMD callsite provenance, lane-engine/kernel composition and all
   error/cleanup-funclet paths.

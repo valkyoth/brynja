@@ -3,8 +3,10 @@ import windows_enclave_kmac_chains as c
 import windows_enclave_kmac_reuse as reuse
 import windows_enclave_sha2_primitives as scalar
 import windows_enclave_sha_ni_owner as accelerated
+import windows_enclave_sha2_batch_iv as iv
 
 require,digest=c.require,c.digest
+SCALAR_ASSEMBLY='f6dc9318b5c9fbc06e4e8883d9922e9f1f2c1677f2548b4991d51023f4243d42'
 
 
 def prior(base,lane):
@@ -52,7 +54,14 @@ def local_tables(data,name):
     return result
 
 
-def inspect(base,lane,data,functions,ir):
+def scalar_loops(base,row,old_data,bodies):
+    assembly=((base/row['object']).parent/'normal_rust.s').read_bytes()
+    require(digest(assembly)==SCALAR_ASSEMBLY,'prior scalar emitted assembly identity')
+    previous=c.previous.s.bodies(assembly.decode(),c.previous.inventory(old_data))
+    return iv.loops(previous[scalar.state.NEW],bodies[c.shapes.one(bodies,r'Owner5start$')])
+
+
+def inspect(base,lane,data,functions,ir,bodies=None):
     require(lane in ('scalar','sha_ni'),'sequential primitive reuse only')
     row,old_data,old_ir,report=prior(base,lane)
     previous=c.previous.inventory(old_data)
@@ -74,8 +83,10 @@ def inspect(base,lane,data,functions,ir):
         tables=None
     matched=exact(functions,previous,ir,old_ir,names)
     require(len(matched)==(15 if lane=='scalar' else 14),'exact explicitly reviewed reuse population')
+    loops=scalar_loops(base,row,old_data,bodies) if lane=='scalar' and bodies is not None else None
     return dict(prior_route=row['route'],prior_image_sha256=report['image_sha256'],
         prior_object_sha256=report['object_sha256'],prior_semantic_review_replayed=True,
         exact_helper_contracts=matched,renamed_scalar_finalizer_tables=tables,
+        explicitly_substituted_public_iv_loops=loops,
         current_image_references_rebound_by_parent=True,
         batch_specific_caller_preconditions_pending=True,unlisted_equal_bodies_implicitly_qualified=False)

@@ -160,6 +160,21 @@ def data_bindings(data,image,records,functions,runtime_names,lane):
     return constants,tables,runtime,vtables,locations
 
 
+def public_constructor_constants(constants,lane):
+    if lane=='scalar':
+        expected={shapes.iv.ROUND:(640,'125cf2084d7eec18dc9795be4baa221655c0eabab89e90a74fb0370378a60293')}
+    elif lane=='sha_ni':
+        kat=shapes.placement.kat
+        expected={kat.TABLE:(256,'74ef7306e7452d6859b6463ce496b8df30925f69e1b2969e1f3f34bbc9c6af04')}
+        for name in (kat.INITIAL,kat.EXPECTED):
+            expected[name]=(32,digest(int(name[6:],16).to_bytes(32,'little')))
+    else: return None
+    for name,(size,sha) in expected.items():
+        require(name in constants and constants[name]['bytes']==size and constants[name]['sha256']==sha,
+                'reviewed linked public constructor constant '+name)
+    return expected
+
+
 def inspect_route(base,root,lane,pin,mutate):
     row,data,image,asm,ir,sources=load(base,root,pin)
     functions=c.previous.inventory(data)
@@ -177,8 +192,9 @@ def inspect_route(base,root,lane,pin,mutate):
     # retained as explicit family work, not reassigned to shared runtime review.
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     semantics=shapes.inspect(bodies,ir,lane)
+    semantics['public_constructor_constants']=public_constructor_constants(constants,lane)
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
-    reused=reuse.inspect(base,lane,data,functions,ir) if lane in ('scalar','sha_ni') else None
+    reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0
     if mutate:
         for name,(code,refs,kind) in functions.items():
@@ -214,7 +230,7 @@ def inspect(base,root,mutate=False):
         release_gate_changed=False,native_run_added=False,
         routes={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()},
         remaining_private_review=['batch-specific caller preconditions for reproduced primitive contracts',
-            'inlined scalar IV calculation, initial owner placement and plan admission',
+            'enclosing constructor frame cleanup and batch-specific storage composition',
             'SIMD callback provenance, lane engines, kernels and error/funclet cleanup',
             'complete reachable frame and storage assignments; fail-stop preconditions'],
         source_sha256={p.name:digest(p.read_bytes()) for p in sorted(

@@ -4,6 +4,8 @@ import windows_enclave_kmac_reuse as reuse
 import windows_enclave_sha2_batch_lifecycle as lifecycle
 import windows_enclave_sha_ni_state as state
 import windows_enclave_sha2_batch_state as batch_state
+import windows_enclave_sha2_batch_admission as placement
+import windows_enclave_sha2_batch_iv as iv
 
 
 def owner(bodies,role): return s.one(bodies,r'Owner\d+'+role+'$')
@@ -14,9 +16,14 @@ def abi(bodies,ir,lane):
     rows={owner(bodies,'operation'):[f'align {align} dereferenceable({size}) %1',
         'range(i8 0, '+('5' if lane in ('scalar','sha_ni') else '2')+') %3']}
     if lane in ('scalar','sha_ni'):
+        rows[owner(bodies,'begin')]=[f'align {align} dereferenceable({size}) %0',
+            'readonly align 8 captures(none) dereferenceable(64) %2']
         for role in ('update','finish'):
             rows[owner(bodies,role)]=['range(i64 0, 1025) %4',f'align {align} dereferenceable({size}) %0']
         if lane=='sha_ni':
+            rows[s.one(bodies,r'static_execution.*operations12known_answer$')]=['noundef zeroext i1']
+            rows[s.one(bodies,r'Resident3new$')]=['align 8 captures(none) dereferenceable(24) %0',
+                'align 4096 dereferenceable(4096) initializes((0, 16)) %1']
             rows[s.one(bodies,r'state.*State6finish$')]=[
                 'align 16 captures(address) dereferenceable(2000) %0',
                 'readonly align 8 captures(none) dereferenceable(32) %1',
@@ -184,6 +191,8 @@ def inspect(bodies,ir,lane):
     else:
         result['lifecycle']=lifecycle.inspect(bodies,lane)
         result['state_transitions']=batch_state.inspect(bodies,lane)
+        result['placement_and_plan']=placement.inspect(bodies,lane)
+    if lane=='scalar': result['public_iv']=iv.inspect(bodies)
     if lane=='sha_ni':
         result['finalizer']=sha_ni_finalizer(bodies)
         result['finalizer_caller']=sha_ni_finish_caller(bodies)

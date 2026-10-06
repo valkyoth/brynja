@@ -9,6 +9,7 @@ import windows_enclave_sha2_batch_iv as iv
 import windows_enclave_sha2_simd_authority as simd_authority
 import windows_enclave_sha2_simd_storage as simd_storage
 import windows_enclave_sha2_simd_kernel as simd_kernel
+import windows_enclave_sha2_simd_worker as simd_worker
 
 
 def owner(bodies,role): return s.one(bodies,r'Owner\d+'+role+'$')
@@ -211,6 +212,7 @@ def inspect(bodies,ir,lane):
         result['simd_authority']=simd_authority.inspect(bodies,lane)
         result['simd_storage']=simd_storage.inspect(bodies,lane)
         result['simd_kernel']=simd_kernel.inspect(bodies,lane)
+        result['simd_worker']=simd_worker.inspect(bodies,lane)
         result['simd_authority']['authority_session']['kernel_and_transpose_semantics_pending']=False
     else:
         result['lifecycle']=lifecycle.inspect(bodies,lane)

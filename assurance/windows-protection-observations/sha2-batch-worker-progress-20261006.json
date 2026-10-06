@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "b8e4c12742acf393900086034898f5c481a4c946",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 39,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-worker-linux.json": "6123e6d491e84bd4f829a1816a23e4882bcf770d6782abbbf3348d7b75423141",
+    "sha2-batch-worker-windows.json": "f7253abdebb687649ee779eeda27599528feb41378d2801586af1e51182a263d"
+  },
+  "review_test_sha256": {
+    "test-windows-enclave-sha2-batch-chains.py": "9df8e7b259348f8d1a19da5847cb68f67c27c3e4fe2c963a0063c64a3b7abea2",
+    "windows_enclave_sha2_simd_worker_tests.py": "eef2c01542b751ef7ef91ffbd26859847aaec61ab29c20391832db4fc147437b"
+  },
+  "prior_review_observation": "sha2-batch-kernel-progress-20261006.json",
+  "new_reviewed_scope": [
+    "aligned non-null page, nonwrapping page/window separation and exact window size",
+    "private worker buffer ranges checked before receiving input",
+    "exact copied-header version, mode, sequence and command/budget admission",
+    "every lane identity, length, tail width and opaque host address bound",
+    "separate 1024-byte private lane slots and bounded OS-copy adapter calls",
+    "private input pointers passed to resident digest",
+    "narrow slice fail-stop preconditions from unchanged validated lengths",
+    "retained-phase export checks every identity and relevant general-t parameter",
+    "successful export revalidates and clears before return; armed failures quarantine",
+    "complete header/payload cleanup receipt iteration including final narrow short group"
+  ],
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 121,
+    "sha_ni": 153,
+    "simd256": 137,
+    "simd512": 131
+  },
+  "required_return_event_mutations_rejected": 105,
+  "native_workers": {
+    "sha256": {
+      "path": "release-reports/windows-worker-review-20261006/sha256-simd-worker-followup/sha256-simd-worker-results.json",
+      "sha256": "bfda43a058b238622e14500ef9d7c4ce6649286e5cf092a4170eda1e9d658996",
+      "oracle_cases": 402,
+      "worker_mutants": 14,
+      "component_mutants": 12,
+      "component_ownership_negatives": 6
+    },
+    "sha512": {
+      "path": "release-reports/windows-worker-review-20261006/sha512-simd-worker-followup/sha512-simd-worker-results.json",
+      "sha256": "4077188746238dcb7716ac0c3e361fd263a398ef3d895e8a326deb4bc344204d",
+      "oracle_cases": 602,
+      "worker_mutants": 14,
+      "component_mutants": 12,
+      "component_ownership_negatives": 6
+    }
+  },
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles",
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "os_copy_and_reentrancy_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "enclosing constructor frame cleanup and batch-specific storage composition",
+    "SIMD enclosing lane-engine, pointer/storage lifetimes and complete normal-path composition",
+    "complete reachable frame and storage assignments; remaining fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

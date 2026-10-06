@@ -171,6 +171,46 @@ also pass 402 narrow/602 wide oracle cases (3,216/2,408 lane comparisons), twelv
 compiled cleanup/control mutants and six ownership negatives per family.
 Windows replay checks the saved signed-image bindings, not a new enclave run.
 
+## SIMD worker request and export composition
+
+Both saved worker entries check non-null page identity, 4,096-byte alignment,
+nonwrapping page bounds, a 65,536-byte worker window and page/window separation.
+They initialize their buffer before use and check both header and payload ranges
+inside that window before receiving input. Page allocation lifetime, serialized
+entry and synchronous OS-copy behavior remain linked C/runtime obligations;
+numeric range checks alone do not establish those properties.
+
+The fixed 288/160-byte request copy precedes decoding. Checks retain the exact
+version, nonzero sequence, mode, command and budget rules; every lane has its
+identity, bounded message length, last-bit width and nonwrapping opaque host
+address validated. Digest requires at least one complete common block. Export
+requires zero length/tail/source fields, and cancellation requires zero lane
+records. Arithmetic models cover the full low 16-bit identity domain and u64
+edges, including general SHA-512/t exclusions and pointer overflow.
+
+Every subsequent input-copy site is bounded to a separate 1,024-byte lane slot;
+only the copy adapter consumes opaque host addresses. The digest receives
+pointers into these private slots, with their validated lengths and metadata.
+The narrow emitted array-builder's slice-failure branches cannot be reached
+with the unchanged lengths validated at these callsites. These are specific
+saved-path preconditions, not permission to call private helpers with arbitrary
+values or to bypass the serialized transport.
+
+Export requires the Retained phase and exact identities for all lanes, including
+the general-t parameters where present. It copies exactly 256 bytes, revalidates
+the authority after copying, then clears retained output before successful return
+and resets the plan/phase. Armed failure cleanup clears and quarantines. The
+surrounding worker clears buffers, checks every header/payload byte and requires
+the cleanup observer's success before reporting success. The narrow three-byte
+payload-check loop's final two-byte group is included in coverage. These checks
+do not make the public copy transactional by themselves; that remains an
+explicit transport obligation.
+
+Fresh native Linux worker-double campaigns pass all 402/602 oracle cases and
+fourteen compiled worker mutants per family. Their component campaigns also
+pass, including twelve mutants and six ownership negatives each. These tests
+exercise real AVX2 with OS-copy doubles, not native Windows VBS behavior.
+
 ## Reproduced primitives and changed finalizer
 
 The review replays the earlier streaming scalar and SHA-NI semantic checks
@@ -262,9 +302,9 @@ version rejects all 138 changes.
 
 ## Tests and retained evidence
 
-Thirty-three review tests pass on Linux and Windows with matching parsed reports.
-They reject 469 semantic-landmark removals, 48 private ABI changes, 103
-required-return-event bypasses (102 cleanup and one KAT comparison), twelve
+Thirty-nine review tests pass on Linux and Windows with matching parsed reports.
+They reject 542 semantic-landmark removals, 48 private ABI changes, 105
+required-return-event bypasses (104 cleanup and one KAT comparison), twelve
 lifecycle, eleven finalizer, seven state/funclet and three admission/KAT premature returns,
 116 per-helper body/reference/extent/ABI mutations, altered callback layouts/pointers, diagnostic-data drift,
 incomplete inventories and inconsistent source closures. The byte-mutation
@@ -329,17 +369,21 @@ adds the complete SIMD routine checks, 1,072 rejected instruction/early-return
 mutations, twelve marker removals and 896 changed constant bytes. Its fresh
 native component reports supplement the saved-image replay; previous component
 and review observations remain historical evidence.
+The [worker request/export observation](../assurance/windows-protection-observations/sha2-batch-worker-progress-20261006.json)
+records entry/buffer bounds, decoding, private input handoff and export cleanup,
+with fresh native worker-double campaigns. It keeps the full enclosing
+digest-engine and frame/lifetime review explicitly pending.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-kernel-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-worker-linux.json
 ```
 
-Without the saved directory the test command runs fourteen self-contained tests
-and explicitly skips the nineteen saved-artifact tests.
+Without the saved directory the test command runs eighteen self-contained tests
+and explicitly skips the twenty-one saved-artifact tests.
 
 ## Remaining package-5 work
 

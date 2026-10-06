@@ -7,13 +7,14 @@ from unittest.mock import patch
 
 import windows_enclave_sha2_batch_chains as c
 from windows_enclave_sha2_simd_kernel_tests import KernelTests, KernelSavedTests
+from windows_enclave_sha2_simd_worker_tests import WorkerTests, WorkerSavedTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 s=c.shapes.s
 
 
-class Tests(KernelTests, unittest.TestCase):
+class Tests(KernelTests, WorkerTests, unittest.TestCase):
     def test_saved_engine_error_discriminants(self):
         self.assertEqual([n for n in range(256) if c.shapes.simd_storage.ordinary_rejection(n)], [5,7,8,9,10])
         for bad in (-1,256,True):
@@ -146,7 +147,7 @@ class Tests(KernelTests, unittest.TestCase):
             with self.assertRaises(ValueError): c.location_check(raw,refs,symbols,rows,image,5000)
 
 
-class SavedTests(KernelSavedTests, unittest.TestCase):
+class SavedTests(KernelSavedTests, WorkerSavedTests, unittest.TestCase):
     def test_simd_complete_destructors_reject_each_instruction_change(self):
         module=c.shapes.simd_storage;actual=module.exact;count=0
         for lane,_,_,_,_,_,bodies in self.routes:

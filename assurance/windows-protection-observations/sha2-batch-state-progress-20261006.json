@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "production_baseline": "2ada98e8b0249bbf475d432268b552246efc866e",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 17,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-state-linux.json": "eddb57722321b1b87d8511f1c52e85184de8dfc25e249711295423acb17739d1",
+    "sha2-batch-state-windows.json": "78f9b27c50fc017666d1d141bd969ff2b26a0d25ce81c28e7ba9ec4b5b92181b"
+  },
+  "review_test_sha256": "8dd4f38221d7e59008a8e03cec890a97e705502f10831ced1a7da3ebd075a5ca",
+  "fresh_native_linux_component_sha256": {
+    "sha2-batch-state-scalar-component.log": "b682a4dfa7367c47f24f8e47a78018ee5d5a99210be5370503e0a3eef39dc89e",
+    "sha2-batch-state-sha-ni-component/sha2-batch-accelerated-results.json": "b9d86152e9d8af251bb32c224a0cd3ef17ec2c44d3797c05abbb6c52ce1e2997"
+  },
+  "prior_component_observation": "sha2-batch-lifecycle-progress-20261006.json",
+  "new_reviewed_scope": [
+    "first-active-unfinished slot selection on both sequential routes",
+    "scalar identity, tail, width, take-before-finalize and result-slot contracts",
+    "scalar and SHA-NI update dispatch to reproduced helpers",
+    "old state destruction before constructor replacement",
+    "both SHA-NI constructor intermediate-copy and authority-revalidation paths",
+    "SHA-NI finish cleanup funclet parent-frame slots and actual operation destructor"
+  ],
+  "public_arithmetic_model_checks": {
+    "bitmap_pairs": 65536,
+    "wire_identities": 65539,
+    "model_is_machine_code_execution": false
+  },
+  "body_byte_mutations_rejected": 66885,
+  "table_byte_mutations_rejected": 680,
+  "scalar_dispatch_order_mutations_rejected": 21,
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 81,
+    "sha_ni": 121,
+    "simd256": 17,
+    "simd512": 17
+  },
+  "actual_cleanup_event_mutations_rejected": 32,
+  "lifecycle_premature_return_mutations_rejected": 12,
+  "finalizer_premature_return_mutations_rejected": 11,
+  "state_funclet_premature_return_mutations_rejected": 7,
+  "private_abi_mutations_rejected": 23,
+  "reused_helper_body_reference_extent_abi_mutations_rejected": 116,
+  "transitive_depth_qualified": false,
+  "arbitrary_os_unwind_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "inlined scalar IV calculation, initial owner placement and plan admission",
+    "SIMD callback provenance, lane engines, kernels and error/funclet cleanup",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

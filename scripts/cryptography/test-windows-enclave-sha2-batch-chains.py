@@ -13,6 +13,25 @@ s=c.shapes.s
 
 
 class Tests(unittest.TestCase):
+    def test_unrolled_slot_selection_for_every_bitmap_pair(self):
+        for active in range(256):
+            for completed in range(256):
+                remaining=active & ~completed
+                expected=(remaining & -remaining).bit_length()-1 if remaining else None
+                self.assertEqual(c.shapes.batch_state.selected_slot(active,completed),expected)
+
+    def test_decoded_identity_and_rounded_width_domains(self):
+        for identity in (*range(65536),(1<<32)-1,(1<<63),(1<<64)-1):
+            if 1<=identity<=6: expected=(identity-1,0,(28,32,48,64,28,32)[identity-1])
+            elif 4097<=identity<=4607 and identity!=4480:
+                parameter=identity-4096;expected=(6,parameter,(parameter+7)//8)
+            else: expected=None
+            self.assertEqual(c.shapes.batch_state.decoded_width(identity),expected)
+            if expected:
+                for slot in range(8): self.assertLessEqual(64*slot+expected[2],512)
+        for identity in (-1,1<<64,True):
+            with self.assertRaises(ValueError): c.shapes.batch_state.decoded_width(identity)
+
     def test_reuse_requires_resolved_target_abi_and_explicit_names(self):
         body=(b'code',[{'symbol':'callee'}],True)
         old='define internal void @old(ptr align 8 %0) #1 {\nattributes #1 = { nounwind "target-features"="+sha" }'
@@ -163,7 +182,48 @@ class SavedTests(unittest.TestCase):
                 self.assertFalse(lifecycle['operation_guard']['arbitrary_os_unwind_qualified'])
                 if lane=='sha_ni':
                     self.assertEqual(r['semantics']['finalizer']['exact_variant_widths'],[28,32])
-                    self.assertTrue(r['semantics']['finalizer_caller']['cleanup_funclet_review_pending'])
+                    self.assertFalse(r['semantics']['finalizer_caller']['cleanup_funclet_review_pending'])
+                    funclet=r['semantics']['state_transitions']['finish_funclet']
+                    self.assertEqual(funclet['all_invoked_returns_call_guard'],1)
+                    self.assertFalse(funclet['arbitrary_os_unwind_qualified'])
+                self.assertTrue(r['semantics']['state_transitions']['complete_constructor_composition_pending'])
+
+    def test_scalar_dispatch_order_mutations(self):
+        pin=c.specification(c.SPEC.read_bytes())['scalar']
+        _,data,_,asm,_,_=c.load(SAVED,ROOT,pin)
+        bodies=c.c.previous.s.bodies(asm,c.c.previous.inventory(data))
+        checked=c.shapes.batch_state.scalar_tables(bodies,asm)
+        self.assertEqual(sum(map(len,checked.values())),21)
+        import re
+        mutants=set()
+        for role in checked:
+            body=bodies[c.shapes.owner(bodies,role)]
+            table=re.search(r'\.LJTI\d+_0',body)[0]
+            start=asm.index(table+':\n');end=asm.index('\n\n',start)
+            fragment=asm[start:end]
+            entries=fragment.splitlines(keepends=True)
+            for index,line in enumerate(entries):
+                if not line.strip().startswith(('.long ','.long\t')): continue
+                changed=list(entries);changed[index]=line.replace('.LBB','.BROKEN')
+                bad=asm[:start]+''.join(changed)+asm[end:]
+                self.assertNotEqual(bad,asm)
+                with self.assertRaises(ValueError): c.shapes.batch_state.scalar_tables(bodies,bad)
+                mutants.add(c.digest(bad.encode()))
+        self.assertEqual(len(mutants),21)
+
+    def test_state_cleanup_and_funclet_reject_premature_returns(self):
+        actual=s.normal_returns;count=0
+        for lane,_,_,_,_,_,bodies in self.routes:
+            if lane not in ('scalar','sha_ni'): continue
+            checks=[]
+            def capture(body,start,event,alternatives=()):
+                checks.append((body,start,event,alternatives));return actual(body,start,event,alternatives)
+            with patch.object(s,'normal_returns',capture): c.shapes.batch_state.inspect(bodies,lane)
+            for body,start,event,alternatives in checks:
+                lines=s.lines(body);lines.insert(lines.index(start+':')+1,'retq')
+                with self.assertRaises(ValueError): actual('\n'.join(lines),start,event,alternatives)
+                count+=1
+        self.assertEqual(count,7)
 
     def test_saved_reuse_rejects_each_body_reference_extent_and_abi_change(self):
         count=0

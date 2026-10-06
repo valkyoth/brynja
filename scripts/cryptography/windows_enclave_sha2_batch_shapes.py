@@ -3,6 +3,7 @@ import windows_enclave_kmac_shapes as s
 import windows_enclave_kmac_reuse as reuse
 import windows_enclave_sha2_batch_lifecycle as lifecycle
 import windows_enclave_sha_ni_state as state
+import windows_enclave_sha2_batch_state as batch_state
 
 
 def owner(bodies,role): return s.one(bodies,r'Owner\d+'+role+'$')
@@ -173,14 +174,16 @@ def sha_ni_finish_caller(bodies):
         'movq $0, 2000(%r13)|movb $1, 2616(%r13)|movb $-1, %dil|jmp .B31'])
     return dict(active_slot_checked=True,budget_decrement_checked=True,canonical_tail_checked=True,
         slots=8,output_slot_stride=64,selected_output_bytes=[28,32],input_bound_from_abi=1024,
-        completion_committed_only_on_success=True,cleanup_funclet_review_pending=True)
+        completion_committed_only_on_success=True,cleanup_funclet_review_pending=False)
 
 
 def inspect(bodies,ir,lane):
     result=dict(private_abi=abi(bodies,ir,lane),
         admission=sequential(bodies,lane) if lane in ('scalar','sha_ni') else simd(bodies,lane))
     if lane.startswith('simd'): result['callback_targets']=callback_targets(bodies,lane)
-    else: result['lifecycle']=lifecycle.inspect(bodies,lane)
+    else:
+        result['lifecycle']=lifecycle.inspect(bodies,lane)
+        result['state_transitions']=batch_state.inspect(bodies,lane)
     if lane=='sha_ni':
         result['finalizer']=sha_ni_finalizer(bodies)
         result['finalizer_caller']=sha_ni_finish_caller(bodies)

@@ -31,15 +31,18 @@ advertised as supported by this x64 development evidence.
 
 The [SHA-2 batch checkpoint](windows-enclave-sha2-batch-chains.md) binds all 178
 emitted functions across the sequential scalar/SHA-NI and two AVX2 SIMD routes.
-Thirteen review tests pass on both hosts with matching reports; component, worker
+Seventeen review tests pass on both hosts with matching reports; component, worker
 and resident campaigns pass on native Linux. Selected admission, cleanup and
 callback-target contracts are checked. Sequential sealing, cancellation,
 checked export, operation-guard cleanup, buffer destruction and full-page
 retirement are now composed. Fifteen scalar and fourteen SHA-NI helpers reuse
 reproduced earlier reviews with exact body/reference/ABI contracts; the changed
 SHA-NI finalizer and selected batch-caller preconditions are separately checked.
-**Step 5 remains in progress**: remaining batch caller preconditions,
-sequential construction/state/scalar-finalizer and SHA-NI funclet composition, SIMD callsite/engine/funclet
+Slot selection, scalar finalizer input/width/transfer, both update routes, SHA-NI
+constructor copies and its finish cleanup funclet are now checked, with fresh
+passing scalar/SHA-NI component campaigns. **Step 5 remains in progress**:
+inlined scalar public IV construction, initial placement/plan admission and remaining
+caller preconditions, SIMD callsite/engine/funclet
 review and private frame/storage assignments remain explicit obligations.
 
 The [TupleHash chain review](windows-enclave-tuple-chains.md) binds both complete

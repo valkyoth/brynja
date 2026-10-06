@@ -177,6 +177,7 @@ def inspect_route(base,root,lane,pin,mutate):
     # retained as explicit family work, not reassigned to shared runtime review.
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     semantics=shapes.inspect(bodies,ir,lane)
+    if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0
     if mutate:
@@ -213,7 +214,7 @@ def inspect(base,root,mutate=False):
         release_gate_changed=False,native_run_added=False,
         routes={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()},
         remaining_private_review=['batch-specific caller preconditions for reproduced primitive contracts',
-            'sequential constructors, state transfers and scalar finalizer callers; SHA-NI cleanup funclet',
+            'inlined scalar IV calculation, initial owner placement and plan admission',
             'SIMD callback provenance, lane engines, kernels and error/funclet cleanup',
             'complete reachable frame and storage assignments; fail-stop preconditions'],
         source_sha256={p.name:digest(p.read_bytes()) for p in sorted(

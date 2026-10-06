@@ -77,21 +77,55 @@ output ABI, exact SHA-224/SHA-256 width selection, engine success before output
 publication, owner/scratch destruction and 32-byte staging erasure on every
 normal return. The batch caller checks active-slot identity, budget, canonical
 partial-bit input, eight-slot bounds, 64-byte output stride and success before
-completion publication. Its cleanup funclet and the constructor/state-transfer
-composition remain open. These checks do not claim individual erasure of
+completion publication. The additional state-transition review below covers its
+cleanup funclet and constructor copies. These checks do not claim individual erasure of
 moved-from compiler copies or arbitrary OS-exception cleanup.
+
+## Sequential slot/state composition
+
+Both start-slot operations require the first active, unfinished slot. Their
+unrolled eight-slot selections are checked against every pair of activity and
+completion masks. Equality to that selected slot bounds the subsequent plan
+load, including when all planned slots are already complete. Scalar identity
+decoding and rounded output width are cross-checked over 65,539 wire identities,
+including u64 boundaries; every admitted output fits its fixed 64-byte slot.
+These arithmetic models supplement emitted-instruction checks, not native
+execution. Twenty-one scalar constructor/update/finalizer dispatch destinations
+are checked in semantic variant order as well as bound to actual image bytes.
+
+The scalar caller verifies canonical tail bits, consumes the placed state before
+finalization, passes the exact slot destination and publishes completion only
+after success. Updates dispatch to the appropriate reproduced 32/64-bit helper
+(with the distinct general-t owner offset). SHA-NI update checks the active slot,
+budget and present state before entering the reproduced engine. Selected failure
+returns require full 512-byte output clearing.
+
+Both constructors wipe an old live state before replacement and publish Streaming
+only after installing the new state and active slot. The SHA-NI constructor also
+checks health/kernel identity, startup KAT failure destruction, both IV selections,
+all intermediate session/owner copies, and the copied authority pointer/epoch
+check before publication. Initialization `memset` is not credited as volatile
+erasure; compiler-created copies still require enclosing-window reclamation.
+The scalar inlined public IV/general-t calculation, initial owner placement and
+begin-plan admission still need their final composition checks.
+
+The SHA-NI finish funclet reads the owner and completion flag from the actual
+parent-frame slots and invokes its bound operation destructor on every return.
+That destructor destroys taken state and scratch, clears output and quarantines
+authority when incomplete. This covers the invoked compiler cleanup path, not
+arbitrary OS exceptions, aborts or a guarantee that all such failures invoke it.
 
 ## Tests and retained evidence
 
-Thirteen review tests pass on Linux and Windows with matching parsed reports.
-They reject 150 semantic-landmark removals, 23 private ABI changes, 25
-cleanup-event bypasses, twelve lifecycle and eleven finalizer premature returns,
+Seventeen review tests pass on Linux and Windows with matching parsed reports.
+They reject 236 semantic-landmark removals, 23 private ABI changes, 32
+cleanup-event bypasses, twelve lifecycle, eleven finalizer and seven state/funclet premature returns,
 116 per-helper body/reference/extent/ABI mutations, altered callback layouts/pointers, diagnostic-data drift,
 incomplete inventories and inconsistent source closures. The byte-mutation
 counts above establish binding durability, not algorithm correctness alone.
 Separate regressions reject missing prior semantic reviews, changed dispatch
 tables and changed resolved target attributes; an equal unlisted function is
-not added to the reused set.
+not added to the reused set. All 21 scalar dispatch-order mutations are rejected.
 
 Scoped native Linux component campaigns also pass:
 
@@ -123,24 +157,28 @@ no product source changed.
 The [primitive/finalizer observation](../assurance/windows-protection-observations/sha2-batch-reuse-progress-20261006.json)
 records the latest replay and regression scope; it retains those unchanged
 component results rather than claiming another native enclave execution.
+The [state-transition observation](../assurance/windows-protection-observations/sha2-batch-state-progress-20261006.json)
+supersedes that partial checkpoint for the caller/funclet checks above. It also
+records fresh passing scalar and SHA-NI component/oracle/mutation runs on native
+Linux; Windows replay still inspects the saved enclave images.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-reuse-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-state-linux.json
 ```
 
-Without the saved directory the test command runs five self-contained tests
-and explicitly skips the eight saved-artifact tests.
+Without the saved directory the test command runs seven self-contained tests
+and explicitly skips the ten saved-artifact tests.
 
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.
-- Complete sequential constructors, state transfers, scalar finalizer callers
-  and SHA-NI cleanup-funclet composition; the selected finalizer,
-  terminal/export and page-retirement checks above are now in place.
+- Complete the scalar inlined public IV calculation, initial owner placement
+  and plan-admission composition. Slot selection, selected state transfers,
+  finalizer callers and the SHA-NI finish funclet are now checked.
 - Complete SIMD callsite provenance, lane-engine/kernel composition and all
   error/cleanup-funclet paths.
 - Assign every reachable private frame and storage region, and resolve the

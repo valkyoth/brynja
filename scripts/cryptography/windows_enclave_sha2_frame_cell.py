@@ -8,6 +8,7 @@ import re
 import windows_enclave_kmac_shapes as s
 import windows_enclave_sha2_simd_finish as finish
 import windows_enclave_sha2_simd_commit as commit
+import windows_enclave_sha2_store_effects as effects
 
 READ_ONLY={'cmpb','cmpw','cmpl','cmpq','testb','testw','testl','testq',
            'je','jne','ja','jae','jb','jbe','jmp','jmpq','nop','ud2','vzeroupper'}
@@ -93,6 +94,8 @@ def inspect(bodies,lane):
     s.require(lines.count(start+':')==lines.count(end+':')==1,'unique saved cell lifetime boundaries')
     a,b=lines.index(start+':'),lines.index(end+':');s.require(a<b,'ordered saved cell lifetime')
     result=inspect_region(lines[a:b],bases,cell,f'movq %rax, {cell[0]}(%{base})',clear)
+    result['conditional_indirect_store_effects']=effects.inspect(lines[a:b],lane,
+        result['non_frame_stores_pending'],s.one(bodies,r'secret_memory18copy_secret_region$'))
     return result|dict(function=name,begin=start,end=end,cell=list(cell),frame_alias_ranges=bases,
         direct_overwrite_and_direct_address_exposure_checked=True,
         all_indirect_effects_and_frame_lifetimes_qualified=False,

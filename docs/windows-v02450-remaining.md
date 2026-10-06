@@ -116,6 +116,12 @@ calls in those regions remain explicitly inventoried for effect composition;
 the complete pointer lifetime is not yet qualified.
 All 109 tests pass on Linux and Windows, with matching parsed reports and 41
 new frame-cell mutations rejected independently of earlier shape checks.
+The seven indirect stores now have conditional bounded write-footprint checks
+from their emitted address calculations, with volatile copy-call clobbers and
+nonwrapping arithmetic enforced. All 113 tests pass on Linux and Windows with
+matching reports, including 22 new address/mask/width mutations. Original object
+placement/non-aliasing, intervening call effects and full pointer lifetimes
+remain open; these conditional footprints do not discharge those obligations.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

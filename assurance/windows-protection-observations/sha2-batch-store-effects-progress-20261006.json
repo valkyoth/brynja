@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "5d76a28ddacd0ed0c0b3660b6b71c646714d9e66",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 113,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-store-effects-linux.json": "0327135462d39ffda306e0d783ebfc1273cdc961a6098d23a976bd2d4cf253e2",
+    "sha2-batch-store-effects-windows.json": "49d438909079fbec25fb24ef718783d19dd313688a7a7af2ae8223d6091d33d8"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_store_effects.py": "7a2a3b976693590496d47ac609c6fb275acc7250448da4c336d9d1a86f429d74",
+    "windows_enclave_sha2_frame_cell.py": "629033a61c92f876347fa210f833d085c746ebb4d037e665919b35172791e202",
+    "windows_enclave_sha2_frame_cell_tests.py": "2d4d560ac5c2984f291bbc92f2f18a1acafb993d7c6726f346e05026901c6e64"
+  },
+  "prior_review_observation": "sha2-batch-frame-cell-progress-20261006.json",
+  "new_reviewed_scope": [
+    "seven indirect stores have conditional bounded footprints from emitted address-producing slices",
+    "separator offsets bounded by emitted 63/127 masks; pointer plus pointer and wrapping offsets rejected",
+    "authority health byte, control counters and wide length words stay within assigned conditional object regions",
+    "copy ABI clobbers volatile registers; unknown store-address provenance rejected",
+    "all and only inventoried indirect stores must have an assigned footprint"
+  ],
+  "conditional_store_footprints": {
+    "simd256": [
+      {"object": "frame", "span": [11688, 11752]},
+      {"object": "authority", "span": [16, 17]}
+    ],
+    "simd512": [
+      {"object": "workspace", "span": [5476, 5604]},
+      {"object": "control", "span": [16, 24]},
+      {"object": "control", "span": [24, 32]},
+      {"object": "workspace", "span": [5596, 5604]},
+      {"object": "workspace", "span": [5588, 5596]}
+    ]
+  },
+  "store_address_mask_width_mutations_rejected": 22,
+  "effect_mutants_call_effect_checker_directly": true,
+  "named_live_object_preconditions_required": true,
+  "parent_control_flow_and_jump_table_bindings_required": true,
+  "call_effects_pending": {"simd256": 18, "simd512": 18},
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "original placement, non-aliasing and preservation of named live objects for the seven conditional store effects",
+    "36 call effects across the two saved-pointer regions",
+    "propagate bounded descriptor origins through subsequent emitted lifetimes and indirect effects",
+    "subsequent compact-index lifetimes and remaining helper live/disjoint storage",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

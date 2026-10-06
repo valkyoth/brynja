@@ -576,16 +576,30 @@ checks disabled, so those existing literal checks do not mask the new check's
 behavior. Production sources and release-gate policy are unchanged; no new
 native enclave execution is claimed.
 
+The seven indirect stores now also have bounded write-footprint checks using
+the emitted address-producing instructions. The two separator stores use the
+masked 0–63 and 0–127 remainder ranges. The other stores are the authority health
+byte, two control counters and the wide length words. The small interpreter
+forgets volatile registers across the reproduced copy ABI, rejects unknown
+store addresses and wrapping arithmetic, and checks the complete store inventory.
+These footprints are conditional on named live frame/workspace/control/authority
+objects: their original placement, non-aliasing and preservation across the 36
+calls are **not** proved by the footprint check. Step 5 remains incomplete.
+The follow-up runs 113 tests on Linux and Windows with matching parsed reports;
+22 new address/mask/width mutations reject through the effect checker itself.
+The existing 41 direct-cell mutations continue to reject. No production changes,
+release-gate changes or new native enclave execution are included.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-frame-cell-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-store-effects-linux.json
 ```
 
-Without the saved directory the test command runs fifty-four self-contained tests
-and explicitly skips the fifty-five saved-artifact tests.
+Without the saved directory the test command runs fifty-seven self-contained tests
+and explicitly skips the fifty-six saved-artifact tests.
 
 ## Remaining package-5 work
 

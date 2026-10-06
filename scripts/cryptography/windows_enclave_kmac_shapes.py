@@ -181,7 +181,79 @@ def scalar_key_completion(bodies):
 
 def inspect(bodies,lane):
     return dict(comparison=comparison(bodies,lane),suffix=suffixes(bodies,lane),
-                worker=worker(bodies,lane),key=key_completion(bodies,lane))
+                worker=worker(bodies,lane),key=key_completion(bodies,lane),
+                retained_key=retained_key(bodies,lane),
+                unwind_helpers=unwind_helpers(bodies,lane))
+
+
+def retained_key(bodies,lane):
+    rekey=one(bodies,r'Owner11rekey_setup$')
+    finish=one(bodies,r'Owner20finish_customization$')
+    if lane=='scalar':
+        setup=one(bodies,r'kmac_stream_setupNtNt.*State12finish_setup$')
+        sequences(bodies[rekey],[
+            'movq 3288(%rsi), %r10|movb $3, %dil|cmpq $1024, %r10|ja .B2',
+            'leaq (%rax,%r10,8), %rdx|addq $-8, %rdx',
+            'movb $-1, %dil|movb $2, %al|jmp .B16',
+            'movl $1024, %edx|movq %rsi, %rcx|callq '+ZERO+'|movq $0, 3288(%rsi)'])
+        sequences(bodies[finish],[
+            '.B54:|movb $6, %bl|cmpb $-1, %al|jne .B43',
+            'callq '+setup+'|movl %eax, %ebx|cmpb $-1, %al|jne .B43|'
+            'movl $1024, %edx|movq %rsi, %rcx|callq '+ZERO+'|movq $0, 3288(%rsi)|'
+            'movb $0, 3296(%rsi)|movb $4, %al|jmp .B44'])
+    else:
+        setup=one(bodies,r'kmac_accelerated_stateNtB4_5State12finish_setup$')
+        sequences(bodies[rekey],[
+            'movq 2152(%r15), %r8|movb $3, %al|cmpq $1024, %r8|ja .B13',
+            'leaq (%rax,%r8,8), %r9|addq $-8, %r9',
+            'movb %sil, 2170(%r13)|movb $2, 2169(%r13)|movb $-1, %al|jmp .B18'])
+        sequences(bodies[finish],[
+            'movl %eax, %edi|cmpb $-1, %al|je .B51',
+            'movl %eax, %edi|cmpb $-1, %al|jne .B50|movl $1024, %edx|'
+            'movq 688(%rbp), %rsi|movq %rsi, %rcx|callq '+ZERO+'|movq $0, 2152(%rsi)|'
+            'movb $0, 2168(%rsi)|movb $4, %al'])
+        require(('callq '+setup) in lines(bodies[finish]),'retained key exact completion call')
+    # Complete bodies are pinned separately. These are reviewed transition
+    # landmarks, not a symbolic proof of every path or external exception.
+    return dict(exact_retained_bit_shape=True,customization_retains_old_key=True,
+                completed_key_setup_precedes_successful_output_clear=True,
+                error_and_cancellation_tests_required=True,arbitrary_exception_claim=False)
+
+
+def unwind_helpers(bodies,lane):
+    names={n for n in bodies if n.startswith('?')}
+    if lane=='scalar':
+        require(not names,'saved scalar route has no emitted cleanup funclets')
+        return dict(funclets=0,arbitrary_exception_claim=False)
+    operation=one(bodies,r'drop_glueNtCsf.*kmac_accelerated9OperationE')
+    guard=one(bodies,r'drop_glueNtNtCsf.*kmac_accelerated_state5GuardE')
+    state=one(bodies,r'drop_glueNtCsc.*sha3_accelerated_state5StateE')
+    roles=[(4,'Owner11begin_setup','movq 88(%rbx), %rcx|movzbl 87(%rbx), %edx',operation),
+           (19,'Owner11rekey_setup','movq 88(%rbx), %rcx|movzbl 87(%rbx), %edx',operation),
+           (8,'Owner12finish_setup','movq -24(%rbp), %rcx|movzbl -9(%rbp), %edx',operation),
+           (17,'Owner13customization','movq -32(%rbp), %rcx|movzbl -9(%rbp), %edx',operation),
+           (18,'Owner13customization','movq -24(%rbp), %rcx',guard),
+           (44,'Owner20finish_customization','movq 688(%rbp), %rcx|movzbl 703(%rbp), %edx',operation),
+           (11,'Owner3key','movq -16(%rbp), %rcx|movzbl -1(%rbp), %edx',operation),
+           (30,'Owner6finish','movq -16(%rbp), %rcx|movzbl -1(%rbp), %edx',operation),
+           (31,'Owner6finish','movq -24(%rbp), %rcx',guard),
+           (27,'Owner7squeeze','movq -24(%rbp), %rcx|movzbl -1(%rbp), %edx',operation),
+           (28,'Owner7squeeze','movq -16(%rbp), %rcx',guard),
+           (49,'State5setup','leaq 4096(%rbx), %rcx',state),
+           (17,'State5fixed','movq -8(%rbp), %rcx',guard)]
+    result={}
+    for number,parent,args,callee in roles:
+        name=one(bodies,rf'^\?dtor\${number}@.*{parent}@')
+        sequences(bodies[name],[args+'|callq '+callee])
+        count=normal_returns(bodies[name],'"'+name+'"',['callq '+callee])
+        result[name]=dict(cleanup_callee=callee,normal_return_sites=count)
+    require(set(result)==names,'every emitted funclet has an exact cleanup role')
+    sequences(bodies[guard],[
+        'callq '+state+'|movq 1008(%rsi), %rax|orq 1016(%rsi), %rax|je .B3',
+        'leaq 1080(%rsi), %rcx|movl $1, %edx|callq '+ZERO+'|movb $0, 1081(%rsi)',
+        'movq $0, 1016(%rsi)|movq $2, 1008(%rsi)'])
+    return dict(funclets=13,roles=result,invoked_funclets_call_their_destructors=True,
+                arbitrary_exception_claim=False,dispatcher_and_window_reclamation_package=8)
 
 
 def preconditions(ir,bodies,lane):

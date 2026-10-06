@@ -8,6 +8,7 @@ import sys
 import windows_enclave_sha3_avx2_chain as previous
 import windows_enclave_sha3_chain as scalar
 import windows_enclave_kmac_shapes as shapes
+import windows_enclave_kmac_reuse as reuse
 
 w,shared,obj=previous.w,previous.shared,previous.obj
 require,digest=previous.require,previous.digest
@@ -122,6 +123,10 @@ def inspect_route(base,root,lane,pin,mutate):
     assembly=previous.s.bodies(asm,functions)
     semantics=shapes.inspect(assembly,lane)
     semantics['private_abi']=shapes.preconditions(ir,assembly,lane)
+    semantics['public_integer_encoder']=reuse.encoder(assembly,lane)
+    if lane=='avx2': semantics['checked_xor_range']=reuse.widened_xor(assembly)
+    else: semantics['distinct_construction']=reuse.scalar_construction(assembly,ir)
+    prior_helpers=reuse.inspect(base,root,lane,functions,ir,assembly)
     records=previous.bind_all(data,image,functions)
     constants,tables,runtime=data_bindings(data,image,records,functions)
     kernel=permutation(data,image,asm,assembly,records,lane)
@@ -161,7 +166,8 @@ def inspect_route(base,root,lane,pin,mutate):
         cleanup_funclets=sum(n.startswith('?') for n in records),constants=constants,dispatch_tables=tables,
         functions={n:dict(rva=r['rva'],bytes=r['size'],frame_bytes=sizes[n],saved_vectors=vectors[n],
             inner_calls=edges[n],references=r['reference_targets']) for n,r in sorted(records.items())},
-        geometry=geometry,semantics=semantics,runtime_boundaries_pending=runtime,whole_image_qualified=False,
+        geometry=geometry,semantics=semantics,prior_helpers=prior_helpers,
+        runtime_boundaries_pending=runtime,whole_image_qualified=False,
         arbitrary_exception_cleanup_qualified=False,independent_retest=False)
 
 
@@ -209,9 +215,8 @@ def inspect(base,root,mutate=False):
     result={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()}
     return dict(schema=1,status='AUTHOR_PARTIAL_KMAC_INNER_CHAIN_REVIEW',routes=result,
         completion_package=3,completion_package_closed=False,
-        remaining_family_review=['Reconcile each reused SHA-3 helper ABI and changed specialization',
-            'Complete owner/state lifecycle and retained-rekey composition across both routes',
-            'Reconcile all temporary-copy lifetimes and cleanup funclets with enclosing window obligations'],
+        remaining_family_review=['Finish complete owner/state lifecycle composition across both routes',
+            'Reconcile all temporary-copy lifetimes with enclosing window obligations; invoked cleanup funclets are checked'],
         whole_image_qualified=False,release_gate_changed=False,native_run_added=False,
         spec_sha256=SPEC_HASH,source_sha256={p.name:digest(p.read_bytes()) for p in
             sorted({Path(m.__file__) for n,m in sys.modules.items() if n.startswith('windows_enclave_')} |

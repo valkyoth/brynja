@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_KMAC_INNER_CHAIN_REVIEW",
+  "review_baseline": "a124892e11b6086c877b759e8d5bcdc8fabdd6b1",
+  "completion_package": 3,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "review_tests_per_host": 14,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "kmac-chains-composition-linux.json": "f35c1f45ee3d8a887050db10d3ac329a48cd7be77bcc4e85871a3030064d5ee3",
+    "kmac-chains-composition-windows.json": "c4147a81633ff561d592519d8e5f061b5e99d6c5d02057ce8a2ad3479736bf98"
+  },
+  "remaining_family_review": [
+    "Finish complete owner/state lifecycle composition across both routes",
+    "Reconcile all temporary-copy lifetimes with enclosing window obligations; invoked cleanup funclets are checked"
+  ],
+  "routes": {
+    "scalar": {
+      "route": "kmac/mod.rs::open",
+      "image_sha256": "bbe6218b52e86b49379597a13129604f8fc7708f4a62b4c7bbc0e387d4173e33",
+      "object_sha256": "c46271c6007dd9590098700f0a9d29715685fef4885515fed6f9d565ff149603",
+      "prior_sha3_route": "sha3/mod.rs::open",
+      "prior_sha3_image_sha256": "76bdf18e31b935535ca7a36a5d694abbe14de4a3179076a2fd452d3c5f259718",
+      "prior_review_reproduced": true,
+      "exact_body_reference_abi_helpers": 22,
+      "explicitly_renamed_helpers": 2,
+      "prefix_specializations": 6,
+      "separately_checked_xor_abi_changes": 0,
+      "invoked_cleanup_funclets": 0,
+      "body_byte_mutations_rejected": 40909,
+      "table_byte_mutations_rejected": 176,
+      "local_stack_bound": -21696,
+      "shared_runtime_frames_excluded": true
+    },
+    "avx2": {
+      "route": "kmac/mod.rs::open_avx2",
+      "image_sha256": "4c0f67100277e7750853ba7018ca73f0f68482133c3fdc6ee43ff975fe3abaae",
+      "object_sha256": "5d7e903e401f6f212047651c603d76bee2df91b55f74357f5776fc569832c5b7",
+      "prior_sha3_route": "sha3/mod.rs::open_avx2",
+      "prior_sha3_image_sha256": "28d01c3b932d22daad5cd2256aa9c31c5fb937a4846067eb991345ee7c7449fa",
+      "prior_review_reproduced": true,
+      "exact_body_reference_abi_helpers": 20,
+      "explicitly_renamed_helpers": 4,
+      "prefix_specializations": 1,
+      "separately_checked_xor_abi_changes": 2,
+      "invoked_cleanup_funclets": 13,
+      "body_byte_mutations_rejected": 27572,
+      "table_byte_mutations_rejected": 64,
+      "local_stack_bound": -11230,
+      "shared_runtime_frames_excluded": true
+    }
+  },
+  "additional_regressions": {
+    "semantic_landmarks": {
+      "scalar": 66,
+      "avx2": 64
+    },
+    "private_abi": {
+      "scalar": 6,
+      "avx2": 11
+    },
+    "scalar_constructor_reader_abi": 2,
+    "renamed_helper_mutations": 24,
+    "prefix_specialization_mutations": 136
+  },
+  "review_source_sha256": {
+    "test-windows-enclave-kmac-chains.py": "e336958d41a09d2395197879d1694ff76401fa582a125d9b66c0e590415fc908",
+    "windows_enclave_kmac_chains.py": "c19dd9ca664411cb4ba801a5cf076880e1b80c7f35d8907a2a61ff0d6afdccfa",
+    "windows_enclave_kmac_reuse.py": "7703dc88a1682eb77b3e0c3d3545fc88b6d50cb0c417212638e2ddf12f533551",
+    "windows_enclave_kmac_shapes.py": "4f7badb3e0ad8275c01e223af35e1608842e12b43326a085e8c0c210770d74c5"
+  },
+  "limitations": [
+    "Bounded author semantic checks, not a general assembly proof",
+    "Invoked-funclet checks do not qualify arbitrary exception dispatch",
+    "Constructor moved-from copies and incoming register saves require enclosing-window reclamation",
+    "No production Rust, public API, release-gate or supported-platform changes"
+  ]
+}

@@ -59,14 +59,43 @@ The following semantic checks are additional to identity binding:
 - The C wrapper's actual worker target and the four `PublicKmac*` transport
   targets are rebound in each KMAC image using the existing wrapper and
   transport reviewers.
+- Reuse of prior SHA-3 helpers replays those reviews and compares complete
+  bodies, references, extent kinds and resolved LLVM ABI attributes. Twenty-two
+  scalar and twenty AVX2 helpers match exactly. Two scalar and four AVX2 renamed
+  helpers have explicit role/layout bindings; names are not generally ignored.
+  Six scalar and one AVX2 prefix specializations permit only the enumerated
+  left-encoding selector, preserved-register initialization and wipe-callee
+  substitutions. Every other instruction difference is rejected.
+- The generic public-integer encoder is checked separately for left/right
+  encoding and full 256-byte initialization. The two AVX2 bit-XOR helpers'
+  wider inferred ranges are not silently inherited: count is bounded by eight,
+  zero count skips the leaf, both offsets are bounded by `8-count`, and the
+  leaf performs exactly one source-byte load and destination-byte XOR.
+- Retained-key setup preserves the old output during customization, consumes
+  its exact bit shape, and clears it only after successful key setup. Failure
+  and cancellation coverage remains supplied by the component campaigns.
+- The distinct scalar KMAC constructors bind positive rates 168/136 and a
+  32-bit function name, prefix carry arithmetic, pending-byte clearing and
+  failure wipes. Successful construction copies 1,040 bytes out of its frame;
+  this moved-from stack copy is assigned to enclosing-window reclamation,
+  not claimed individually erased. Reader transfer first vacates the source,
+  copies its owner, then clears the source before publishing the reader.
+- All thirteen AVX2 cleanup funclets reload their expected parent-state
+  pointers and call the corresponding operation/state destructor on every
+  normal return. The state guard clears its pending key byte. This proves
+  what an invoked funclet does, not that arbitrary exceptions invoke it.
 
 ## Tests and reproducibility
 
-Ten review tests pass on Linux and Windows with identical parsed reports.
-On the actual saved assemblies, deleting 36 scalar and 29 AVX2 semantic
-landmarks is rejected; removing six scalar and eleven AVX2 ABI assumptions is
-also rejected. Byte mutations exercise evidence binding, not correctness of
-the cryptographic algorithm.
+Fourteen review tests pass on Linux and Windows with identical parsed reports.
+On the actual saved assemblies, deleting 66 scalar and 64 AVX2 semantic
+landmarks is rejected; removing six scalar and eleven AVX2 private-ABI
+assumptions plus two scalar constructor/reader assumptions is also rejected.
+The tests additionally reject 24 renamed-helper body/reference/kind/ABI
+mutations and 136 prefix-specialization instruction/ABI mutations. Byte
+mutations exercise evidence binding, not correctness of the cryptographic
+algorithm. These are bounded author-review checks, not a general proof that
+arbitrary assembly implements the source semantics.
 
 The accompanying component campaigns pass:
 
@@ -84,31 +113,30 @@ The accompanying component campaigns pass:
 Persistent reports and fixture builds are kept locally beneath
 `release-reports/windows-worker-review-20261006/`, outside `target/`.
 The input images remain in `release-reports/windows-local-20261004/`.
-The compact [observation](../assurance/windows-protection-observations/kmac-chain-progress-20261006.json)
-records report identities and the incomplete scope.
+The initial [observation](../assurance/windows-protection-observations/kmac-chain-progress-20261006.json)
+is preserved. The follow-up [composition observation](../assurance/windows-protection-observations/kmac-chain-composition-20261006.json)
+records the expanded checks, report identities and still-incomplete scope.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-kmac-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_kmac_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/kmac-chains-linux.json
+  --output release-reports/windows-worker-review-20261006/kmac-chains-composition-linux.json
 ```
 
-Without `--saved-directory`, the test command runs nine self-contained tests
-and explicitly skips the one saved-artifact campaign. It must not report that
-campaign as executed when the local artifacts are unavailable.
+Without `--saved-directory`, the test command runs eleven self-contained tests
+and explicitly skips three saved-artifact tests. It must not report those
+campaigns as executed when the local artifacts are unavailable.
 
 ## Remaining package work
 
-Commit-plan step 3 remains open. The remaining work is to compose both
-owner/state lifecycles and retained-key reuse, account for all temporary-copy
-lifetimes and cleanup funclets, and reconcile each reused SHA-3 helper's actual
-ABI and changed specialization. Identical machine bytes do not automatically
-mean identical caller assumptions: for example, the accelerated bit-XOR
-helper's inferred range now includes an eight-bit fragment. The generic
-integer encoder also supports both left and right encoding in the KMAC build,
-unlike the prior left-only specialization.
+Commit-plan step 3 remains open. The remaining work is to finish the complete
+owner/state lifecycle composition across both routes and account for all
+temporary-copy lifetimes against the enclosing-window obligations. The helper
+reuse, enumerated prefix specializations, widened XOR, retained-key ordering,
+constructor/reader checks and invoked-funclet checks above are no longer
+unreviewed items; they must be included in that final composition.
 
 Only after that composition can the private KMAC package be closed. Shared
 `memcpy`, `memset`, `memcmp` where present, `__chkstk`, `__umodti3`, SDK transport,

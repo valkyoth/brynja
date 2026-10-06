@@ -13,6 +13,27 @@ ROOT=Path(__file__).resolve().parents[2]
 
 
 class Tests(unittest.TestCase):
+    def test_reuse_resolves_attributes_and_keeps_all_abi_constraints(self):
+        ir='define internal fastcc void @helper(ptr align 32 %0, i8 range(i8 0, 8) %1) #4 {\nattributes #4 = { nounwind "target-features"="+avx2" }'
+        renumbered=ir.replace('#4','#12')
+        values=(b'\xc3',[],False)
+        old={'helper':values}
+        reused,changed=c.reuse.exact_reuse(old,old,renumbered,ir)
+        self.assertEqual(set(reused),{'helper'});self.assertFalse(changed)
+        for before,after in (('align 32','align 8'),('0, 8','0, 9'),('nounwind',''),('+avx2','+sse2')):
+            reused,changed=c.reuse.exact_reuse(old,old,ir.replace(before,after),ir)
+            self.assertFalse(reused);self.assertEqual(set(changed),{'helper'})
+        for bad in (ir+'\n'+ir,ir.split('\n')[0],ir.replace('@helper','@other')):
+            with self.assertRaises(ValueError): c.reuse.abi(bad,'helper')
+
+    def test_reuse_does_not_accept_renames_or_reference_changes(self):
+        ir='define internal fastcc void @helper(ptr %0) {\n'
+        value=(b'\xc3',[],False);old={'helper':value}
+        for changed in ({'renamed':value},{'helper':(b'\x90',[],False)},
+                        {'helper':(b'\xc3',[{'symbol':'other'}],False)},
+                        {'helper':(b'\xc3',[],True)}):
+            self.assertEqual(c.reuse.exact_reuse(changed,old,ir,ir),({},{}))
+
     def test_frozen_both_route_populations(self):
         spec=c.specification(c.SPEC.read_bytes())
         self.assertEqual([len(spec[k]['functions']) for k in ('scalar','avx2')],[84,77])
@@ -95,6 +116,59 @@ class Tests(unittest.TestCase):
 
 
 class SavedTests(unittest.TestCase):
+    def routes(self):
+        if SAVED is None: self.skipTest('optional saved Windows artifacts not supplied')
+        for lane,pin in c.specification(c.SPEC.read_bytes()).items():
+            _,data,_,asm,ir,_=c.load(SAVED,ROOT,lane,pin)
+            route='sha3/mod.rs::open'+('_avx2' if lane=='avx2' else '')
+            row=next(r for r in c.shared.catalog(c.shared.CATALOG.read_bytes()) if r['route']==route)
+            profile=next(p for p in c.w.specification(c.w.SPEC.read_bytes())['profiles'] if p['route']==route)
+            directory=(SAVED/row['object']).parent
+            prior=c.previous.inventory(c.w.archive.members((directory/'normal_rust.lib').read_bytes())[profile['member']])
+            current=c.previous.inventory(data)
+            yield (lane,current,prior,ir,(directory/'normal_rust.ll').read_text(),
+                   c.previous.s.bodies(asm,current),
+                   c.previous.s.bodies((directory/'normal_rust.s').read_text(),prior))
+
+    def test_explicit_renames_require_full_body_references_kind_and_abi(self):
+        count=0
+        for lane,current,prior,ir,old_ir,_,_ in self.routes():
+            renamed=c.reuse.renamed_reuse(current,prior,ir,old_ir,lane)
+            for name in renamed:
+                code,refs,kind=current[name]
+                variants=[(bytes([code[0]^1])+code[1:],refs,kind),(code,refs+[{'unexpected':True}],kind),
+                          (code,refs,not kind)]
+                for bad in variants:
+                    with self.assertRaises(ValueError):
+                        c.reuse.renamed_reuse(current|{name:bad},prior,ir,old_ir,lane)
+                    count+=1
+                # A correct symbol and body cannot excuse a changed contract.
+                header=next(l for l in ir.splitlines() if l.startswith('define ') and '@'+name+'(' in l)
+                bad_ir=ir.replace(header,header.replace('define ','define cold ',1))
+                with self.assertRaises(ValueError): c.reuse.renamed_reuse(current,prior,bad_ir,old_ir,lane)
+                count+=1
+        self.assertEqual(count,24)
+
+    def test_prefix_specializations_reject_unlisted_instruction_and_abi_changes(self):
+        count=0
+        for lane,_,_,ir,old_ir,bodies,old in self.routes():
+            accepted=c.reuse.prefix_specializations(bodies,old,ir,old_ir,lane)
+            for name in accepted:
+                code='\n'.join(s.lines(bodies[name]))
+                selected=[l for l in code.splitlines() if l.startswith(('callq ','xorl ','cmp'))]
+                self.assertTrue(selected)
+                for instruction in selected:
+                    changed=code.replace(instruction,'int3',1)
+                    with self.subTest(lane=lane,function=name,instruction=instruction):
+                        with self.assertRaises(ValueError):
+                            c.reuse.prefix_specializations(bodies|{name:changed},old,ir,old_ir,lane)
+                    count+=1
+                header=next(l for l in ir.splitlines() if l.startswith('define ') and '@'+name+'(' in l)
+                with self.assertRaises(ValueError):
+                    c.reuse.prefix_specializations(bodies,old,ir.replace(header,header.replace('define ','define cold ',1)),old_ir,lane)
+                count+=1
+        print('Explicit prefix specialization mutations rejected: '+str(count))
+
     def test_actual_semantic_landmarks_and_private_abi(self):
         if SAVED is None: self.skipTest('optional saved Windows artifacts not supplied')
         totals={}
@@ -107,14 +181,22 @@ class SavedTests(unittest.TestCase):
                 self.assertEqual(len(names),1)
                 landmarks.extend((names[0],item) for item in items)
                 actual(body,items)
-            with patch.object(s,'sequences',capture): s.inspect(bodies,lane)
+            def inspect_all(values):
+                s.inspect(values,lane);c.reuse.encoder(values,lane)
+                if lane=='avx2': c.reuse.widened_xor(values)
+                else: c.reuse.scalar_construction(values,ir)
+            with patch.object(s,'sequences',capture): inspect_all(bodies)
             for name,item in landmarks:
                 text='\n'.join(s.lines(bodies[name]))
                 changed=text.replace(item.replace('|','\n'),'int3')
                 self.assertNotEqual(changed,text)
                 with self.subTest(lane=lane,function=name,landmark=item):
-                    with self.assertRaises(ValueError): s.inspect(bodies|{name:changed},lane)
+                    with self.assertRaises(ValueError): inspect_all(bodies|{name:changed})
             abi=s.preconditions(ir,bodies,lane)
+            if lane=='scalar':
+                for token in ('range(i64 136, 169)','dereferenceable(1041)'):
+                    with self.assertRaises(ValueError):
+                        c.reuse.scalar_construction(bodies,ir.replace(token,'removed'))
             for name,tokens in abi['checked_functions'].items():
                 for token in tokens:
                     with self.subTest(lane=lane,function=name,abi=token):

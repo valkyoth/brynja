@@ -2,6 +2,7 @@
 import windows_enclave_kmac_shapes as s
 import windows_enclave_kmac_reuse as reuse
 import windows_enclave_sha2_batch_lifecycle as lifecycle
+import windows_enclave_sha_ni_state as state
 
 
 def owner(bodies,role): return s.one(bodies,r'Owner\d+'+role+'$')
@@ -14,6 +15,11 @@ def abi(bodies,ir,lane):
     if lane in ('scalar','sha_ni'):
         for role in ('update','finish'):
             rows[owner(bodies,role)]=['range(i64 0, 1025) %4',f'align {align} dereferenceable({size}) %0']
+        if lane=='sha_ni':
+            rows[s.one(bodies,r'state.*State6finish$')]=[
+                'align 16 captures(address) dereferenceable(2000) %0',
+                'readonly align 8 captures(none) dereferenceable(32) %1',
+                'range(i64 28, 33) %3']
     else:
         rows[s.one(bodies,r'Resident6digest$')]=[
             f'readonly align 8 captures(none) dereferenceable({192 if lane=="simd256" else 96}) %2']
@@ -104,9 +110,78 @@ def callback_targets(bodies,lane):
         all_indirect_callsite_provenance_qualified=False)
 
 
+def sha_ni_finalizer(bodies):
+    """Review the changed 28..32-byte finalizer, not equality to streaming."""
+    name=s.one(bodies,r'state.*State6finish$');body=bodies[name]
+    wipe=state.life.wiping.WIPE;scratch=state.life.SCRATCH
+    s.sequences(body,[
+        'movq %r9, %rdi|movq %r8, %rbx|movq %rdx, %r15|movq %rcx, %rsi',
+        'vxorps %xmm0, %xmm0, %xmm0|vmovups %ymm0, 32(%rsp)',
+        'movzbl (%rcx), %ebp|leaq 16(%rcx), %rdx|leaq 64(%rsp), %rcx|'
+        'movl $1984, %r8d|testb $1, %bpl|je .B7|vzeroupper|callq memcpy',
+        '.B7:|vzeroupper|callq memcpy',
+        '.B2:|leaq 32(%rsp), %rcx|movq %rdi, %rdx|callq '+s.ZERO+'|'
+        'leaq 864(%rsp), %rcx|callq '+wipe+'|movl $8, %r14d',
+        '.B11:|callq '+s.ZERO+'|leaq 864(%rsp), %rcx|callq '+wipe+'|jmp .B12',
+        '.B12:|movb $-1, %r15b|cmpq $0, 128(%rsp)|je .B15',
+        '.B14:|leaq 144(%rsp), %rcx|callq '+scratch,
+        '.B15:|cmpb $-1, %r15b|je .B20',
+        'testq %r14, %r14|movl $1, %r8d|cmovneq %r14, %r8|movq %rdi, %r9|'
+        'cmoveq %r14, %r9|movq %rbx, %rcx|movq %rdi, %rdx|callq '+state.COPY,
+        'cmpb $-1, %al|sete %bl|negb %bl|testq %r14, %r14|je .B18|'
+        'movq %r14, %rcx|movq %rdi, %rdx|callq '+s.ZERO,
+        '.B4:|leaq 1952(%rsp), %rdx|movl $32, %r8d|jmp .B5',
+        '.B9:|leaq 1952(%rsp), %rdx|movl $28, %r8d',
+        '.B5:|movq %r14, %rcx|callq '+state.BYTES+'|movzbl 112(%rsp), %r15d|'
+        'leaq 864(%rsp), %rcx|callq '+wipe+'|cmpq $0, 128(%rsp)|jne .B14|jmp .B15',
+        'testb $1, (%rsi)|je .B22|movb $6, %bl|testb $1, %bpl|jne .B19|jmp .B23',
+        '.B22:|movb $6, %bl|testb $1, %bpl|je .B19',
+        '.B23:|leaq 816(%rsi), %rcx|callq '+wipe+'|cmpq $0, 80(%rsi)|je .B19|'
+        'addq $96, %rsi|movq %rsi, %rcx|callq '+scratch+'|jmp .B19'])
+    for width,label in ((32,4),(28,9)):
+        s.sequences(body,[f'cmpq ${width}, %rdi|jne .B2|leaq 64(%rsp), %rcx|'
+            f'movl ${width}, %r8d|movq %r15, %rdx|callq '+state.ENGINE+'|'
+            f'cmpb $-1, %al|je .B{label}|movzbl %al, %r14d|leaq 32(%rsp), %rcx|movl ${width}, %edx'])
+    cleared=s.normal_returns(body,name,['leaq 32(%rsp), %rcx','movl $32, %edx','callq '+s.ZERO])
+    owner_wiped=s.normal_returns(body,name,['leaq 864(%rsp), %rcx','callq '+wipe])
+    return dict(function=name,exact_variant_widths=[28,32],engine_copy_bytes=1984,
+        all_normal_returns_clear_staging=cleared,all_normal_returns_wipe_copied_owner=owner_wiped,
+        scratch_wiped_if_present=True,engine_success_precedes_publication=True,
+        moved_from_copies_individually_erased=False,arbitrary_os_unwind_qualified=False)
+
+
+def sha_ni_finish_caller(bodies):
+    body=bodies[owner(bodies,'finish')];finish=s.one(bodies,r'state.*State6finish$')
+    s.sequences(body,[
+        'cmpl $1, 2000(%r13)|jne .B24|cmpq %rsi, 2008(%r13)|jne .B24',
+        'movq 2064(%rbp), %r15|movq 2608(%r13), %rax|movb $3, %dil|subq %r15, %rax|jb .B24',
+        'movzbl 2072(%rbp), %r14d|movq %rax, 2608(%r13)|testq %r15, %r15|je .B10|'
+        'leal -1(%r14), %eax|movb $4, %dil|cmpb $7, %al|ja .B24|cmpb $7, %r14b|ja .B9',
+        'leaq -1(%r15), %rax|movb $-1, %dl|movl %r14d, %ecx|shrb %cl, %dl|'
+        'addq %rbx, %rax|movq %rax, %rcx|callq '+s.one(bodies,r'12mask_is_zero$')+'|cmpl $1, %eax|jne .B24',
+        '.B9:|movzbl %r14b, %eax|leaq (%rax,%r15,8), %rax|addq $-8, %rax',
+        '.B10:|movb $4, %dil|testb %r14b, %r14b|jne .B24',
+        'cmpq $7, %rsi|ja .B23|movq 2016(%r13,%rsi,8), %rax|cmpq $2, %rax|je .B17|'
+        'cmpq $1, %rax|jne .B23|movl $28, %edi|jmp .B18',
+        '.B17:|movl $32, %edi',
+        'movq $2, (%r13)|movq $0, 8(%r13)',
+        'movq %rsi, %r12|shlq $6, %r12',
+        'leaq 2080(%r13,%r12), %r8',
+        'leaq -96(%rbp), %rcx|leaq 1904(%rbp), %rdx|movq %rdi, %r9|callq '+finish,
+        'movl %eax, %edi|cmpb $-1, %al|movq 1936(%rbp), %r13|movzbl 1951(%rbp), %r12d|jne .B24',
+        'movb $1, %al|movl %esi, %ecx|shlb %cl, %al|orb %al, 2617(%r13)|'
+        'movq $0, 2000(%r13)|movb $1, 2616(%r13)|movb $-1, %dil|jmp .B31'])
+    return dict(active_slot_checked=True,budget_decrement_checked=True,canonical_tail_checked=True,
+        slots=8,output_slot_stride=64,selected_output_bytes=[28,32],input_bound_from_abi=1024,
+        completion_committed_only_on_success=True,cleanup_funclet_review_pending=True)
+
+
 def inspect(bodies,ir,lane):
     result=dict(private_abi=abi(bodies,ir,lane),
         admission=sequential(bodies,lane) if lane in ('scalar','sha_ni') else simd(bodies,lane))
     if lane.startswith('simd'): result['callback_targets']=callback_targets(bodies,lane)
     else: result['lifecycle']=lifecycle.inspect(bodies,lane)
+    if lane=='sha_ni':
+        result['finalizer']=sha_ni_finalizer(bodies)
+        result['finalizer_caller']=sha_ni_finish_caller(bodies)
     return result

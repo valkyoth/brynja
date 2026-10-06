@@ -13,6 +13,19 @@ s=c.shapes.s
 
 
 class Tests(unittest.TestCase):
+    def test_reuse_requires_resolved_target_abi_and_explicit_names(self):
+        body=(b'code',[{'symbol':'callee'}],True)
+        old='define internal void @old(ptr align 8 %0) #1 {\nattributes #1 = { nounwind "target-features"="+sha" }'
+        now=old.replace('@old(','@new(').replace('#1','#9')
+        args=({'new':body,'unreviewed':body},{'old':body},now,old,{'new':'old'})
+        self.assertEqual(set(c.reuse.exact(*args)),{'new'})
+        for bad in (now.replace('+sha','-sha'),now.replace('align 8','align 1'),
+                    now.replace('nounwind',''),now.splitlines()[0],now+'\n'+now.splitlines()[0]):
+            with self.assertRaises(ValueError): c.reuse.exact(args[0],args[1],bad,old,args[4])
+        for bad in ({}, {'new':(b'bad',body[1],True)},
+                    {'new':(body[0],[{'symbol':'different'}],True)}, {'new':(body[0],body[1],False)}):
+            with self.assertRaises(ValueError): c.reuse.exact(bad,args[1],now,old,args[4])
+
     def test_four_complete_frozen_populations(self):
         spec=c.specification(c.SPEC.read_bytes())
         for lane,pin in spec.items():
@@ -137,12 +150,70 @@ class SavedTests(unittest.TestCase):
                 self.assertEqual(len(r['callback_tables']),1)
             else:
                 self.assertFalse(r['callback_callsite_review_pending'])
+                reused=r['reproduced_primitive_contracts']
+                self.assertTrue(reused['prior_semantic_review_replayed'])
+                self.assertTrue(reused['batch_specific_caller_preconditions_pending'])
+                self.assertFalse(reused['unlisted_equal_bodies_implicitly_qualified'])
+                self.assertEqual(len(reused['exact_helper_contracts']),15 if lane=='scalar' else 14)
                 lifecycle=r['semantics']['lifecycle']
                 self.assertTrue(lifecycle['primitive_and_finalizer_composition_pending'])
                 self.assertEqual(lifecycle['sealing']['slots'],8)
                 self.assertEqual(lifecycle['export']['identity_bytes_compared'],64)
                 self.assertEqual(lifecycle['retirement']['page_erasure_bytes'],4096)
                 self.assertFalse(lifecycle['operation_guard']['arbitrary_os_unwind_qualified'])
+                if lane=='sha_ni':
+                    self.assertEqual(r['semantics']['finalizer']['exact_variant_widths'],[28,32])
+                    self.assertTrue(r['semantics']['finalizer_caller']['cleanup_funclet_review_pending'])
+
+    def test_saved_reuse_rejects_each_body_reference_extent_and_abi_change(self):
+        count=0
+        for lane,_,data,_,ir,functions,_ in self.routes:
+            if lane not in ('scalar','sha_ni'): continue
+            reviewed=c.reuse.inspect(SAVED,lane,data,functions,ir)
+            _,old,old_ir,_=c.reuse.prior(SAVED,lane)
+            previous=c.c.previous.inventory(old)
+            names={n:v['prior_name'] for n,v in reviewed['exact_helper_contracts'].items()}
+            for name in names:
+                code,refs,extent=functions[name]
+                header=next(l for l in ir.splitlines() if l.startswith('define ') and '@'+name+'(' in l)
+                bad_ir=ir.replace(header,header.replace('define ','define BROKEN ',1))
+                with self.assertRaises(ValueError): c.reuse.exact(functions,previous,bad_ir,old_ir,names)
+                for changed in ((bytes([code[0]^1])+code[1:],refs,extent),
+                                (code,refs+[{'symbol':'unreviewed'}],extent),(code,refs,not extent)):
+                    with self.assertRaises(ValueError):
+                        c.reuse.exact(functions|{name:changed},previous,ir,old_ir,names)
+                count+=4
+        self.assertEqual(count,116)
+        print('Reused helper body/reference/extent/ABI mutations rejected: '+str(count))
+
+    def test_prior_review_and_scalar_tables_cannot_be_skipped(self):
+        lane,_,data,_,ir,functions,_=self.routes[0]
+        self.assertEqual(lane,'scalar')
+        with patch.object(c.reuse.scalar,'inspect',side_effect=ValueError('prior semantic failure')) as prior:
+            with self.assertRaisesRegex(ValueError,'prior semantic failure'):
+                c.reuse.inspect(SAVED,lane,data,functions,ir)
+            prior.assert_called_once()
+        actual=c.reuse.local_tables
+        def changed(raw,name):
+            tables=actual(raw,name)
+            if raw==data: tables[0]['raw']='00'+tables[0]['raw'][2:]
+            return tables
+        with patch.object(c.reuse,'local_tables',side_effect=changed):
+            with self.assertRaisesRegex(ValueError,'dispatch tables'):
+                c.reuse.inspect(SAVED,lane,data,functions,ir)
+        for lane,_,data,_,ir,functions,_ in self.routes:
+            if lane!='sha_ni': continue
+            with patch.object(c.reuse.accelerated,'inspect',side_effect=ValueError('prior semantic failure')) as prior:
+                with self.assertRaisesRegex(ValueError,'prior semantic failure'):
+                    c.reuse.inspect(SAVED,lane,data,functions,ir)
+                prior.assert_called_once()
+
+    def test_changed_finalizer_rejects_early_return_before_wipes(self):
+        bodies=next(row[-1] for row in self.routes if row[0]=='sha_ni')
+        name=s.one(bodies,r'state.*State6finish$');lines=s.lines(bodies[name])
+        for label in (name,'.B7','.B11','.B2','.B12','.B14','.B15','.B20','.B4','.B9','.B5'):
+            bad=list(lines);bad.insert(bad.index(label+':')+1,'retq')
+            with self.assertRaises(ValueError): c.shapes.sha_ni_finalizer(bodies|{name:'\n'.join(bad)})
 
     def test_sequential_cleanup_rejects_early_return_insertion(self):
         count=0;actual=s.normal_returns

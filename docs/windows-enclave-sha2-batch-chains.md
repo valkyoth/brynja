@@ -60,13 +60,38 @@ does not resolve the fail-stop caller preconditions or promise abort cleanup.
 Frame sizes, saved vectors and direct reference graphs are recorded, but no
 transitive depth bound is qualified while indirect-call composition is pending.
 
+## Reproduced primitives and changed finalizer
+
+The review replays the earlier streaming scalar and SHA-NI semantic checks
+against their saved objects and images before permitting reuse. It explicitly
+selects fifteen scalar and fourteen SHA-NI helpers and requires complete body,
+reference, extent-kind and resolved LLVM ABI equality. Renaming is allowed only
+for the scalar `State::finish` definition; its complete local dispatch-table
+bytes and relocation offsets must also match. All actual destinations and
+constants are rebound in the current images. Other equal bodies are not
+implicitly qualified. Batch-specific caller preconditions remain open.
+
+The changed SHA-NI `State::finish` is reviewed separately, not accepted through
+body equality. Checks retain its 2,000-byte state and 28-through-32-byte private
+output ABI, exact SHA-224/SHA-256 width selection, engine success before output
+publication, owner/scratch destruction and 32-byte staging erasure on every
+normal return. The batch caller checks active-slot identity, budget, canonical
+partial-bit input, eight-slot bounds, 64-byte output stride and success before
+completion publication. Its cleanup funclet and the constructor/state-transfer
+composition remain open. These checks do not claim individual erasure of
+moved-from compiler copies or arbitrary OS-exception cleanup.
+
 ## Tests and retained evidence
 
-Nine review tests pass on Linux and Windows with matching parsed reports.
-They reject 117 semantic-landmark removals, 20 private ABI changes, 23
-cleanup-event bypasses, twelve premature returns, altered callback layouts/pointers, diagnostic-data drift,
+Thirteen review tests pass on Linux and Windows with matching parsed reports.
+They reject 150 semantic-landmark removals, 23 private ABI changes, 25
+cleanup-event bypasses, twelve lifecycle and eleven finalizer premature returns,
+116 per-helper body/reference/extent/ABI mutations, altered callback layouts/pointers, diagnostic-data drift,
 incomplete inventories and inconsistent source closures. The byte-mutation
 counts above establish binding durability, not algorithm correctness alone.
+Separate regressions reject missing prior semantic reviews, changed dispatch
+tables and changed resolved target attributes; an equal unlisted function is
+not added to the reused set.
 
 Scoped native Linux component campaigns also pass:
 
@@ -95,23 +120,27 @@ retains its earlier scope and report hashes. The
 records the extended checks and fresh scalar component, SHA-NI worker and
 resident campaigns. The earlier unchanged SIMD campaigns remain applicable;
 no product source changed.
+The [primitive/finalizer observation](../assurance/windows-protection-observations/sha2-batch-reuse-progress-20261006.json)
+records the latest replay and regression scope; it retains those unchanged
+component results rather than claiming another native enclave execution.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-lifecycle-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-reuse-linux.json
 ```
 
-Without the saved directory the test command runs four self-contained tests
-and explicitly skips the five saved-artifact tests.
+Without the saved directory the test command runs five self-contained tests
+and explicitly skips the eight saved-artifact tests.
 
 ## Remaining package-5 work
 
-- Reproduce prior primitive reviews with full ABI and caller-context checks.
-- Complete sequential constructors, state transfers and finalizers; the selected
-  terminal/export and page-retirement composition above is now checked.
+- Finish batch-specific caller preconditions for the reproduced primitive contracts.
+- Complete sequential constructors, state transfers, scalar finalizer callers
+  and SHA-NI cleanup-funclet composition; the selected finalizer,
+  terminal/export and page-retirement checks above are now in place.
 - Complete SIMD callsite provenance, lane-engine/kernel composition and all
   error/cleanup-funclet paths.
 - Assign every reachable private frame and storage region, and resolve the

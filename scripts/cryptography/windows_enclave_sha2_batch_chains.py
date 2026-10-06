@@ -7,6 +7,7 @@ import sys
 
 import windows_enclave_kmac_chains as c
 import windows_enclave_sha2_batch_shapes as shapes
+import windows_enclave_sha2_batch_reuse as reuse
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -176,6 +177,7 @@ def inspect_route(base,root,lane,pin,mutate):
     # retained as explicit family work, not reassigned to shared runtime review.
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     semantics=shapes.inspect(bodies,ir,lane)
+    reused=reuse.inspect(base,lane,data,functions,ir) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0
     if mutate:
         for name,(code,refs,kind) in functions.items():
@@ -198,6 +200,7 @@ def inspect_route(base,root,lane,pin,mutate):
         constants=constants,dispatch_tables=tables,callback_tables=vtables,panic_locations=locations,
         indirect_transfers=indirect,
         callback_callsite_review_pending=pending_calls,transport=transport,semantics=semantics,
+        reproduced_primitive_contracts=reused,
         direct_graph_geometry_only=geometry,transitive_depth_qualified=False,
         runtime_boundaries_pending=runtime,body_byte_mutations_rejected=mutations,
         table_byte_mutations_rejected=table_mutations)
@@ -209,8 +212,8 @@ def inspect(base,root,mutate=False):
         completion_package_closed=False,whole_image_qualified=False,independent_retest=False,
         release_gate_changed=False,native_run_added=False,
         routes={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()},
-        remaining_private_review=['primitive reuse with complete ABI/context checks',
-            'sequential constructors, state transfers and finalizers; terminal/retirement checks added',
+        remaining_private_review=['batch-specific caller preconditions for reproduced primitive contracts',
+            'sequential constructors, state transfers and scalar finalizer callers; SHA-NI cleanup funclet',
             'SIMD callback provenance, lane engines, kernels and error/funclet cleanup',
             'complete reachable frame and storage assignments; fail-stop preconditions'],
         source_sha256={p.name:digest(p.read_bytes()) for p in sorted(

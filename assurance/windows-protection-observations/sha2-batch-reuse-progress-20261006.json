@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "production_baseline": "6db9d6da492185fd0c2ab40b2ed4d71318ef9853",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "review_tests_per_host": 13,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-reuse-linux.json": "e43ede5d984a77ccdb5b9434007695f0c773fadb1250361f820ab8f7fb79566b",
+    "sha2-batch-reuse-windows.json": "a3938bc8fc9b2bebf3a40f20e478f7710adebf6d47423f6a8a20098d1dd6b889"
+  },
+  "review_test_sha256": "2bdfff12180df225d6eb0f2c6269aba0b203bcbfb31374f0ef9559f96efc8867",
+  "prior_component_observation": "sha2-batch-lifecycle-progress-20261006.json",
+  "production_sources_unchanged": true,
+  "exact_prior_semantic_reviews_replayed": {
+    "scalar_helpers": 15,
+    "sha_ni_helpers": 14,
+    "renamed_scalar_finalizer_dispatch_tables_compared": true,
+    "unlisted_equal_bodies_implicitly_qualified": false,
+    "batch_specific_caller_preconditions_pending": true
+  },
+  "changed_sha_ni_finalizer": {
+    "separately_reviewed_not_body_reuse": true,
+    "exact_output_widths": [28, 32],
+    "normal_return_staging_clear_bytes": 32,
+    "normal_return_copied_owner_wipe": true,
+    "scratch_wipe_if_present": true,
+    "selected_batch_caller_contracts_checked": true,
+    "cleanup_funclet_review_pending": true,
+    "arbitrary_os_unwind_qualified": false
+  },
+  "body_byte_mutations_rejected": 66885,
+  "table_byte_mutations_rejected": 680,
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 41,
+    "sha_ni": 75,
+    "simd256": 17,
+    "simd512": 17
+  },
+  "actual_cleanup_event_mutations_rejected": 25,
+  "lifecycle_premature_return_mutations_rejected": 12,
+  "finalizer_premature_return_mutations_rejected": 11,
+  "private_abi_mutations_rejected": 23,
+  "reused_helper_body_reference_extent_abi_mutations_rejected": 116,
+  "transitive_depth_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "sequential constructors, state transfers and scalar finalizer callers; SHA-NI cleanup funclet",
+    "SIMD callback provenance, lane engines, kernels and error/funclet cleanup",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

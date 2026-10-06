@@ -13,6 +13,7 @@ import windows_enclave_sha2_simd_worker as simd_worker
 import windows_enclave_sha2_simd_constructor as simd_constructor
 import windows_enclave_sha2_simd_digest as simd_digest
 import windows_enclave_sha2_simd_commit as simd_commit
+import windows_enclave_sha2_simd_provenance as simd_provenance
 
 
 def owner(bodies,role): return s.one(bodies,r'Owner\d+'+role+'$')
@@ -222,6 +223,7 @@ def inspect(bodies,ir,lane):
         result['simd_constructor']=simd_constructor.inspect(bodies,lane)
         result['simd_digest_caller']=simd_digest.inspect(bodies,lane)
         result['simd_output_commit']=simd_commit.inspect(bodies,lane)
+        result['simd_descriptor_provenance']=simd_provenance.inspect(bodies,ir,lane)
         result['simd_authority']['authority_session']['kernel_and_transpose_semantics_pending']=False
     else:
         result['lifecycle']=lifecycle.inspect(bodies,lane)

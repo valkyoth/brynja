@@ -69,8 +69,10 @@ saved guard state, private destination layout, plan/width preservation and
 post-result cleanup through retained output publication. The inner lane engine's
 preservation of returned destination pointers is not yet qualified.
 The final output-commit region now checks all width preflights and copy arguments,
-plus byte-exact returned descriptor moves. Sixty-three review tests pass on both
-hosts; inner-computation descriptor/source-pointer lifetimes remain pending.
+plus byte-exact returned descriptor moves. Exhaustive saved LLVM use checks now
+establish descriptor initialization/immutability and original prepared-source
+provenance; seventy-three tests pass on both hosts. Composition with emitted
+stack-slot lifetimes and indirect memory effects remains pending.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

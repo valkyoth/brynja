@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "297225220a394d0b16c36c58dd1b8f05639207bc",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 73,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-descriptor-provenance-linux.json": "fd6fc68475972cc254d2e369fc69c2837f3e6aae7df31d8da3af962d57196fd6",
+    "sha2-batch-descriptor-provenance-windows.json": "182707caedba1cd7ce75d3893e757651bd60f53eb8b769d23034b3c15b2738dc"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_descriptor_ir.py": "99890f0a87ac6866de4503363b4c2dccd5ba14cf7bda4ccfacf48b086ffb885d",
+    "windows_enclave_sha2_simd_provenance.py": "fc99e8a37d75e9f7ed1ec101de7ee0d15c9452b4a24bb3fa2b44664caccb619e",
+    "windows_enclave_sha2_simd_provenance_tests.py": "ca886559c73d456c3d8d6aab08e69679b9b75cf4cde73d73c9a360d9fbe1d748",
+    "test-windows-enclave-sha2-batch-chains.py": "ed7cfdf59eabe628c97b40c56c8da0d0027626f917be4f8af1f578575a2c5668",
+    "windows_enclave_sha2_batch_shapes.py": "e2d3ef93b9a41ab743397765d9bf4345489b2a8e8554438f70b8443b589e79cd"
+  },
+  "prior_review_observation": "sha2-batch-output-commit-progress-20261006.json",
+  "new_reviewed_scope": [
+    "all uses of both saved descriptor allocations and their 100 derived/root addresses",
+    "eight narrow destination pointers originate in disjoint slots of the original private scratch allocation",
+    "wide descriptor initialization is exactly one 64-byte incoming copy",
+    "descriptor pointer and length fields have no subsequent LLVM IR writes",
+    "later identity stores and clearing remain confined to the eight-byte identity tail",
+    "unknown address operations, address escapes and unreviewed consumers reject",
+    "bounded cleanup indexing and reviewed unwind destructor access",
+    "all twelve prepared output sources select only null or their original workspace slot",
+    "each prepared source is guarded and feeds the matching original destination pointer and length"
+  ],
+  "descriptor_ir_population": {
+    "simd256": {"aliases": 72, "reads": 51, "writes": 25, "prepared_sources": 8},
+    "simd512": {"aliases": 28, "reads": 26, "writes": 5, "prepared_sources": 4}
+  },
+  "descriptor_alias_write_and_escape_mutations_rejected": 300,
+  "descriptor_cleanup_and_copy_bound_mutations_rejected": 8,
+  "original_scratch_pointer_replacements_rejected": 8,
+  "prepared_source_origin_escape_and_copy_mutations_rejected": 60,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "compose the IR descriptor proof with emitted stack-slot lifetimes and indirect memory effects",
+    "algorithm and result identity composition through the inner SIMD lane engine",
+    "remaining primitive-helper and batch-specific caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments",
+    "remaining fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

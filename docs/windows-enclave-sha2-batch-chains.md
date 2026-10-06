@@ -429,17 +429,33 @@ They reject 280 returned-byte corruptions and thirteen shifted source loads,
 alongside 630 semantic-sequence mutations and the earlier regression campaigns.
 Production sources are unchanged; the preceding native worker reports are reused,
 not represented as fresh runs. This checkpoint does not close package 5.
+The [descriptor provenance observation](../assurance/windows-protection-observations/sha2-batch-descriptor-provenance-progress-20261006.json)
+adds an exhaustive use check for the saved LLVM descriptor allocations, including
+all 100 derived/root addresses. The narrow constructor supplies eight distinct
+slots of its original private scratch; the wide routine initializes descriptors
+with one exact 64-byte incoming copy. Pointer and length fields have no later
+IR writes. Later identity writes and clearing are confined to the separate
+eight-byte identity tail. Unknown address operations or consumers reject;
+the bounded cleanup loop and reviewed unwind destructor are explicit exceptions.
+All twelve prepared copy sources select only null or their original workspace
+slot, and each feeds its matching original destination pointer and length.
+This complements the byte-exact returned aggregate checks; it does not prove
+the compiler's hoisted spill slots or every emitted indirect write safe.
+Seventy-three tests pass on both hosts with matching parsed reports. New IR
+regressions reject 300 allocation-alias writes/escapes, eight cleanup/copy-bound
+changes, eight original-scratch-pointer replacements, and sixty prepared-source
+origin/escape/copy changes. Native worker results remain reused, not rerun.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-output-commit-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-descriptor-provenance-linux.json
 ```
 
-Without the saved directory the test command runs thirty-one self-contained tests
-and explicitly skips the thirty-two saved-artifact tests.
+Without the saved directory the test command runs thirty-six self-contained tests
+and explicitly skips the thirty-seven saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -460,7 +476,10 @@ and explicitly skips the thirty-two saved-artifact tests.
   layout, plan/width and post-result lifetime checks; the inner lane engine and
   preservation of destination pointers across computation remain to be composed.
   The final width preflight, copies and returned descriptor moves now have checks;
-  these do not establish descriptor integrity before that region begins.
+  descriptor initialization, immutability and prepared-source provenance now
+  have whole-function LLVM use checks. Compose those with emitted stack-slot
+  lifetimes and indirect memory effects; do not promote IR checks alone to a
+  complete machine-code lifetime proof.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

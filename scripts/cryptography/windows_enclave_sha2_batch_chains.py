@@ -172,6 +172,8 @@ def public_constructor_constants(constants,lane):
         kernel=shapes.simd_kernel
         raw=kernel.round_constants(lane)
         expected={kernel.CONSTANTS[lane]:(len(raw),digest(raw))}
+        initial,answer=shapes.simd_constructor.constants(lane)
+        expected.update({name:(len(raw),digest(raw)) for name,raw in initial+answer})
     for name,(size,sha) in expected.items():
         require(name in constants and constants[name]['bytes']==size and constants[name]['sha256']==sha,
                 'reviewed linked public constructor constant '+name)

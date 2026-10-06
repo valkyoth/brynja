@@ -31,7 +31,7 @@ advertised as supported by this x64 development evidence.
 
 The [SHA-2 batch checkpoint](windows-enclave-sha2-batch-chains.md) binds all 178
 emitted functions across the sequential scalar/SHA-NI and two AVX2 SIMD routes.
-Thirty-nine review tests pass on both hosts with matching reports; component, worker
+Forty-five review tests pass on both hosts with matching reports; component, worker
 and resident campaigns pass on native Linux. Selected admission, cleanup and
 callback-target contracts are checked. Sequential sealing, cancellation,
 checked export, operation-guard cleanup, buffer destruction and full-page
@@ -59,6 +59,11 @@ Worker entry/buffer bounds, request decoding, private input handoff, exact expor
 plan matching and successful output clearing now have saved-path checks. Fresh
 native worker-double campaigns pass 402/602 oracle cases and fourteen worker
 mutants per family. They do not qualify OS-copy behavior or whole-frame erasure.
+Both complete SIMD constructors now have checks for public KAT inputs/constants,
+all-lane comparison, authority/owner placement and failure-page clearing.
+Fresh native resident campaigns pass 402/602 oracle cases, four resident mutants
+and eight ownership negatives per family. Startup data is public; incoming
+register saves and enclosing-window reclamation remain separate obligations.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

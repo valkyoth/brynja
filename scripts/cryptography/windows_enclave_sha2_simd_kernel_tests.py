@@ -101,8 +101,10 @@ class KernelSavedTests:
                 gate.assert_called_once()
             raw=k.round_constants(lane);name=k.CONSTANTS[lane]
             constants={name:dict(bytes=len(raw),sha256=c.digest(raw))}
+            initial,answer=c.shapes.simd_constructor.constants(lane)
+            constants.update({n:dict(bytes=len(value),sha256=c.digest(value)) for n,value in initial+answer})
             c.public_constructor_constants(constants,lane)
             for at in range(len(raw)):
                 bad=bytearray(raw);bad[at]^=1
                 with self.assertRaises(ValueError):
-                    c.public_constructor_constants({name:dict(bytes=len(raw),sha256=c.digest(bad))},lane)
+                    c.public_constructor_constants(constants|{name:dict(bytes=len(raw),sha256=c.digest(bad))},lane)

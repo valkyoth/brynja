@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "eff1c7fce168f30ae1223a1539bf070caa712c34",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 45,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-simd-constructor-linux.json": "fef82c4265c468e881fd12f3cb0a5e6b057ccd51a9500880daf902f0aab9f65a",
+    "sha2-batch-simd-constructor-windows.json": "e2238012caf5155c3b6f709f2bf17a1d18d6580e7abf151531a90a21c23edc8d"
+  },
+  "review_test_sha256": {
+    "test-windows-enclave-sha2-batch-chains.py": "9289b9432b65c0a8d1f5e709bf33172585810a74e6d46902ec3647803d938c09",
+    "windows_enclave_sha2_simd_constructor_tests.py": "a5c59100a81749fa6bc0741e4c55765a30aa381daa64742312b08e8589f9a458",
+    "windows_enclave_sha2_simd_kernel_tests.py": "6f6ce6a2a87bb0f60facb0a6d03971b461e7474795b7a867a0c8ee6fa0442d87"
+  },
+  "prior_review_observation": "sha2-batch-worker-progress-20261006.json",
+  "new_reviewed_scope": [
+    "complete emitted bodies of both SIMD Resident constructors, including success and failure edges",
+    "private result/page ABI, disjoint public KAT frame regions and complete initialization",
+    "eight SHA-256 and four SHA-512 lanes containing the complete padded abc message",
+    "integer-derived initial values and hashlib-derived expected outputs rebound to linked object/image bytes",
+    "all transpose/kernel/wipe arguments and four compiled-route checks",
+    "all startup output lanes compared before owner publication",
+    "authority/owner placement, empty plan, zero output, sequence and phase initialization",
+    "full-page clearing on construction failure, authority revocation after post-placement rejection"
+  ],
+  "constructor_instruction_control_and_early_return_mutations_rejected": 1002,
+  "constructor_comparison_single_bit_mismatches_rejected": 4096,
+  "constructor_constant_byte_mutations_rejected": 192,
+  "constructor_constant_missing_or_extent_mutations_rejected": 12,
+  "private_abi_mutations_rejected": 52,
+  "native_residents": {
+    "sha256": {
+      "path": "release-reports/windows-worker-review-20261006/sha256-simd-resident-constructor/sha256-simd-resident-results.json",
+      "sha256": "ced0d5d955146849c619eb728c730ee17f822463880ecc0f9f1cbb5459563963",
+      "oracle_cases": 402,
+      "resident_mutants": 4,
+      "resident_ownership_negatives": 8,
+      "component_mutants": 12,
+      "component_ownership_negatives": 6
+    },
+    "sha512": {
+      "path": "release-reports/windows-worker-review-20261006/sha512-simd-resident-constructor/sha512-simd-resident-results.json",
+      "sha256": "5ab33b1202eed47cd877429160fbc1260a8df227af3c8eb45ffcb6fb50ee650e",
+      "oracle_cases": 602,
+      "resident_mutants": 4,
+      "resident_ownership_negatives": 8,
+      "component_mutants": 12,
+      "component_ownership_negatives": 6
+    }
+  },
+  "native_resident_platform": "x86_64-unknown-linux-gnu AVX2, not VBS enclave execution",
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "remaining enclosing frame/storage assignments and lifetime composition",
+    "SIMD enclosing lane-engine and complete normal-path composition",
+    "remaining fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

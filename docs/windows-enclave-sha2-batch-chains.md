@@ -373,24 +373,44 @@ The [worker request/export observation](../assurance/windows-protection-observat
 records entry/buffer bounds, decoding, private input handoff and export cleanup,
 with fresh native worker-double campaigns. It keeps the full enclosing
 digest-engine and frame/lifetime review explicitly pending.
+The [SIMD constructor observation](../assurance/windows-protection-observations/sha2-batch-simd-constructor-progress-20261006.json)
+adds complete emitted constructor-body checks, not just selected landmarks.
+All eight narrow and four wide startup lanes contain the padded public `abc`
+message. Integer-derived SHA-2 initial values and independently computed expected
+digests are bound to the actual linked constant bytes. The full comparison,
+four compiled-route checks, authority/owner placement, zero output and initial
+phase/sequence, and both full-page failure-clearing paths are checked.
+The constructor's input, state, schedule and CPU-workspace stack ranges are
+disjoint and initialized; startup locals contain public test data, not caller
+messages. This does not qualify incoming register saves or enclosing-window
+reclamation. These routines invoke the previously reviewed transpose, compression
+and wipe bodies. Shared `memcpy` and stack probing still belong to package 8.
+The new tests reject 1,002 instruction/control/early-return mutations, 192
+constant-byte changes, twelve constant-removal/extent changes, and every one of
+4,096 single-bit output mismatches across all startup lanes. Fresh Linux AVX2
+resident campaigns pass 402/602 oracle cases, four compiled resident mutants and
+eight ownership negatives per family, plus the component campaigns. Windows
+replays the saved images; this checkpoint is not a new native enclave run.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-worker-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-simd-constructor-linux.json
 ```
 
-Without the saved directory the test command runs eighteen self-contained tests
-and explicitly skips the twenty-one saved-artifact tests.
+Without the saved directory the test command runs twenty-one self-contained tests
+and explicitly skips the twenty-four saved-artifact tests.
 
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.
 - Complete enclosing constructor frame/storage cleanup composition. Public IV
   calculation, initial placement, plan admission, selected state transfers,
-  finalizer callers and the SHA-NI finish funclet are now checked.
+  finalizer callers and the SHA-NI finish funclet are now checked. Both complete
+  SIMD constructor bodies, public startup KATs and failure-page cleanup now have
+  checks; enclosing-window cleanup is not inferred from their public local data.
 - Complete SIMD surrounding pointer/storage lifetimes, enclosing lane-engine
   composition and normal error paths. Local callback sources, invoked funclet
   actions and compiler cleanup-state order are now checked; these need composition

@@ -72,7 +72,8 @@ authority; the resident caller's required authority remains a separate obligatio
 Both compression sessions wipe scratch before transpose, select the x86 kernel
 only for tag zero, revalidate before publication and reject counter overflow
 before committing caller output. Success wipes scratch; selected failure paths
-wipe scratch and revoke authority. Transpose and kernel composition remain open.
+wipe scratch and revoke authority. Complete local transpose and kernel checks
+are described below; enclosing digest-engine composition remains open.
 Private ABI checks bind state/block extents and the aligned scratch workspaces.
 
 All thirty-two invoked cleanup funclets are checked against their exact parent-frame
@@ -136,6 +137,39 @@ destroys its output/authority state, and uses an explicit volatile loop to clear
 all 4,096 backing-page bytes before clearing the page identity. The old-page
 replacement loop is also checked. Complete worker admission/lifetime composition
 and shared-window reclamation are still separate obligations.
+
+## Complete SIMD transpose and kernel contracts
+
+All six emitted transpose routines are checked in full, including their
+pointer-only prologues/epilogues. Their two counters produce the exact lane/word
+address mapping, public byte reversal and register erasure. Models exercise
+every public width (including zero), both word sizes and 8/16-word layouts:
+source/destination accesses are bounded, no two active words alias, inactive
+lanes remain untouched and packing/unpacking preserves each active byte.
+The session still supplies the actual disjoint arrays and admitted width;
+complete enclosing lifetime composition is not inferred from this model.
+
+Both complete AVX2 kernels now have instruction-by-instruction semantic checks:
+64/80-round schedule expansion, the SHA-2 small/big sigma rotations, Ch/Maj,
+round additions and feedforward. The linked read-only round constants match
+exact integer cube-root derivation for the first 64/80 primes. All vector
+operations are lane-local; there are no cross-lane permutations. The eight-lane
+32-bit and four-lane 64-bit states each occupy 256 bytes. Schedule/temporary
+bounds agree with the reviewed workspace layouts.
+
+Each kernel clears its initial state, expanded schedule and temporary regions,
+leaving only its 256-byte result for the session to commit and wipe. Working
+YMM0–3, RAX/RCX/RDX, flags and upper vector halves are cleared. The opaque blocks
+contain no stack access or calls. Windows ABI prologues save ten incoming XMM
+registers, and epilogues restore only those incoming values; those save slots
+remain an enclosing-window cleanup obligation, not individually erased data.
+Exact tail wrappers connect the session calls to the checked kernels.
+
+This is a scoped author review of these saved routines, not a formal proof or
+whole-program timing/cleanup qualification. Fresh native Linux AVX2 campaigns
+also pass 402 narrow/602 wide oracle cases (3,216/2,408 lane comparisons), twelve
+compiled cleanup/control mutants and six ownership negatives per family.
+Windows replay checks the saved signed-image bindings, not a new enclave run.
 
 ## Reproduced primitives and changed finalizer
 
@@ -228,7 +262,7 @@ version rejects all 138 changes.
 
 ## Tests and retained evidence
 
-Twenty-eight review tests pass on Linux and Windows with matching parsed reports.
+Thirty-three review tests pass on Linux and Windows with matching parsed reports.
 They reject 469 semantic-landmark removals, 48 private ABI changes, 103
 required-return-event bypasses (102 cleanup and one KAT comparison), twelve
 lifecycle, eleven finalizer, seven state/funclet and three admission/KAT premature returns,
@@ -290,17 +324,22 @@ adds the field coverage, complete cleanup routines, selected normal error paths
 and worker retirement checks. All 284 individual destructor instruction/control
 label replacements are rejected. It retains the unchanged native component runs;
 the Windows replay is not a new native enclave execution.
+The [kernel/transpose observation](../assurance/windows-protection-observations/sha2-batch-kernel-progress-20261006.json)
+adds the complete SIMD routine checks, 1,072 rejected instruction/early-return
+mutations, twelve marker removals and 896 changed constant bytes. Its fresh
+native component reports supplement the saved-image replay; previous component
+and review observations remain historical evidence.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-storage-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-kernel-linux.json
 ```
 
-Without the saved directory the test command runs eleven self-contained tests
-and explicitly skips the seventeen saved-artifact tests.
+Without the saved directory the test command runs fourteen self-contained tests
+and explicitly skips the nineteen saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -308,12 +347,13 @@ and explicitly skips the seventeen saved-artifact tests.
 - Complete enclosing constructor frame/storage cleanup composition. Public IV
   calculation, initial placement, plan admission, selected state transfers,
   finalizer callers and the SHA-NI finish funclet are now checked.
-- Complete SIMD surrounding pointer/storage lifetimes, lane-engine/kernel
+- Complete SIMD surrounding pointer/storage lifetimes, enclosing lane-engine
   composition and normal error paths. Local callback sources, invoked funclet
   actions and compiler cleanup-state order are now checked; these need composition
   with each caller's live storage. Declared-field erasure, output/worker buffer
   destruction, page retirement and selected error-return cleanup now have checks;
-  they do not close complete alias or lifetime composition.
+  complete transposes and AVX2 compression kernels are now checked. These do
+  not close complete alias or lifetime composition across the digest engine.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

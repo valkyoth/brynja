@@ -168,7 +168,10 @@ def public_constructor_constants(constants,lane):
         expected={kat.TABLE:(256,'74ef7306e7452d6859b6463ce496b8df30925f69e1b2969e1f3f34bbc9c6af04')}
         for name in (kat.INITIAL,kat.EXPECTED):
             expected[name]=(32,digest(int(name[6:],16).to_bytes(32,'little')))
-    else: return None
+    else:
+        kernel=shapes.simd_kernel
+        raw=kernel.round_constants(lane)
+        expected={kernel.CONSTANTS[lane]:(len(raw),digest(raw))}
     for name,(size,sha) in expected.items():
         require(name in constants and constants[name]['bytes']==size and constants[name]['sha256']==sha,
                 'reviewed linked public constructor constant '+name)

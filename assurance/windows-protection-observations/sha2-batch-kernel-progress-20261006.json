@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "739e07daabd8d776a0c5a12bde1d82c520ef2598",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 33,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-kernel-linux.json": "b37535627362e9ef2b8f8e71a660052b9e71af52bfce83d4dbad27b791fbac17",
+    "sha2-batch-kernel-windows.json": "c177ea2b97117a68c5bfcc79619b97c5df77f58d498e9fb2ee7c7f241354d14e"
+  },
+  "review_test_sha256": {
+    "test-windows-enclave-sha2-batch-chains.py": "5d9693f0b7de1e08668e3531363eca4534baead08f1c1eaf665054770592bae2",
+    "windows_enclave_sha2_simd_kernel_tests.py": "8a096caa377fa741bd47c243c15c6b88312c202bddf5d95c885fa1e7a1a45a87"
+  },
+  "prior_review_observation": "sha2-batch-storage-progress-20261006.json",
+  "new_reviewed_scope": [
+    "six complete transpose routines, including pointer-only ABI envelopes",
+    "every public transpose width, both word sizes and 8/16-word layouts",
+    "two complete AVX2 compression kernels and exact tail wrappers",
+    "schedule expansion, Ch/Maj, sigma rotations, rounds and feedforward",
+    "linked constants checked against exact fractional cube roots of primes",
+    "fixed per-lane arithmetic and workspace bounds",
+    "initial/schedule/temporary erasure and working-register cleanup",
+    "incoming nonvolatile vector saves explicitly retained as outer-window obligation"
+  ],
+  "kernel_transpose_instruction_early_return_mutations_rejected": 1072,
+  "opaque_marker_removals_rejected": 12,
+  "linked_round_constant_byte_mutations_rejected": 896,
+  "native_components": {
+    "sha256": {
+      "path": "release-reports/windows-worker-review-20261006/sha256-simd-kernel-followup/sha256-simd-results.json",
+      "sha256": "6ae986a6126f4b451af866671789b829839a28ac58984c4d93b337aeb6fecb62",
+      "cases": 402,
+      "lane_comparisons": 3216,
+      "compiled_mutants": 12,
+      "ownership_negatives": 6
+    },
+    "sha512": {
+      "path": "release-reports/windows-worker-review-20261006/sha512-simd-kernel-followup/sha512-simd-results.json",
+      "sha256": "3a628081b92f0f54931efc9e10e7269596842d2af91919483c4bad1de0db81cd",
+      "cases": 602,
+      "lane_comparisons": 2408,
+      "compiled_mutants": 12,
+      "ownership_negatives": 6
+    }
+  },
+  "native_component_platform": "x86_64-unknown-linux-gnu AVX2",
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "arbitrary_os_unwind_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "enclosing constructor frame cleanup and batch-specific storage composition",
+    "SIMD enclosing lane-engine, pointer/storage lifetimes and complete normal-path composition",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

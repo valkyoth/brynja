@@ -6,13 +6,14 @@ import unittest
 from unittest.mock import patch
 
 import windows_enclave_sha2_batch_chains as c
+from windows_enclave_sha2_simd_kernel_tests import KernelTests, KernelSavedTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 s=c.shapes.s
 
 
-class Tests(unittest.TestCase):
+class Tests(KernelTests, unittest.TestCase):
     def test_saved_engine_error_discriminants(self):
         self.assertEqual([n for n in range(256) if c.shapes.simd_storage.ordinary_rejection(n)], [5,7,8,9,10])
         for bad in (-1,256,True):
@@ -145,7 +146,7 @@ class Tests(unittest.TestCase):
             with self.assertRaises(ValueError): c.location_check(raw,refs,symbols,rows,image,5000)
 
 
-class SavedTests(unittest.TestCase):
+class SavedTests(KernelSavedTests, unittest.TestCase):
     def test_simd_complete_destructors_reject_each_instruction_change(self):
         module=c.shapes.simd_storage;actual=module.exact;count=0
         for lane,_,_,_,_,_,bodies in self.routes:
@@ -223,7 +224,7 @@ class SavedTests(unittest.TestCase):
                 self.assertEqual(len(r['callback_tables']),1)
                 authority=r['semantics']['simd_authority']
                 self.assertFalse(authority['complete_callback_provenance_qualified'])
-                self.assertTrue(authority['authority_session']['kernel_and_transpose_semantics_pending'])
+                self.assertFalse(authority['authority_session']['kernel_and_transpose_semantics_pending'])
                 self.assertFalse(authority['callback_unwind']['cleanup_state_order_review_pending'])
                 self.assertTrue(authority['callback_unwind']['enclosing_storage_lifetimes_pending'])
                 self.assertFalse(authority['callback_unwind']['arbitrary_os_unwind_qualified'])

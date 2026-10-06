@@ -60,6 +60,34 @@ does not resolve the fail-stop caller preconditions or promise abort cleanup.
 Frame sizes, saved vectors and direct reference graphs are recorded, but no
 transitive depth bound is qualified while indirect-call composition is pending.
 
+## SIMD authority, session and padding contracts
+
+The complete ordered indirect-call populations contain thirteen SHA-224/256
+sites and sixteen SHA-512-family sites. Six and seven authority sites,
+respectively, now have local checks for health, kernel identity, revalidation
+and rejection. This inventories all sites but does not establish their complete
+caller-supplied pointer provenance. The wide private executor permits absent
+authority; the resident caller's required authority remains a separate obligation.
+
+Both compression sessions wipe scratch before transpose, select the x86 kernel
+only for tag zero, revalidate before publication and reject counter overflow
+before committing caller output. Success wipes scratch; selected failure paths
+wipe scratch and revoke authority. Transpose and kernel composition remain open.
+Private ABI checks bind state/block extents and the aligned scratch workspaces.
+
+Seventeen invoked cleanup funclets are checked against their exact parent-frame
+slots. Session handlers revoke authority, with the active scratch handler also
+wiping scratch; owner-operation cleanup clears retained output and quarantines
+the owner and authority. Required cleanup dominates each invoked funclet's normal
+return. This does not yet qualify the enclosing cleanup-state ordering or arbitrary
+OS unwinding.
+
+Both padding helpers check copying and cancellation before charging their budget,
+reject exhausted budgets and counter overflow, and clear 640 scratch bytes and
+128 block bytes after scalar compression. Report accounting also rejects overflow.
+Early helper failures still depend on caller-owned workspace cleanup; callback
+object provenance and scalar-kernel composition remain pending.
+
 ## Reproduced primitives and changed finalizer
 
 The review replays the earlier streaming scalar and SHA-NI semantic checks
@@ -151,9 +179,9 @@ version rejects all 138 changes.
 
 ## Tests and retained evidence
 
-Twenty-three review tests pass on Linux and Windows with matching parsed reports.
-They reject 308 semantic-landmark removals, 30 private ABI changes, 35
-required-return-event bypasses (34 cleanup and one KAT comparison), twelve
+Twenty-five review tests pass on Linux and Windows with matching parsed reports.
+They reject 367 semantic-landmark removals, 42 private ABI changes, 54
+required-return-event bypasses (53 cleanup and one KAT comparison), twelve
 lifecycle, eleven finalizer, seven state/funclet and three admission/KAT premature returns,
 116 per-helper body/reference/extent/ABI mutations, altered callback layouts/pointers, diagnostic-data drift,
 incomplete inventories and inconsistent source closures. The byte-mutation
@@ -200,17 +228,21 @@ records fresh passing scalar and SHA-NI component/oracle/mutation runs on native
 Linux; Windows replay still inspects the saved enclave images.
 The [constructor/admission observation](../assurance/windows-protection-observations/sha2-batch-constructor-progress-20261006.json)
 records the additional scope above, retaining the unchanged component results.
+The [SIMD authority observation](../assurance/windows-protection-observations/sha2-batch-authority-progress-20261006.json)
+records the session, authority, padding and invoked-funclet contracts. It also
+records 87 indirect-call changes plus two added-function callsites rejected,
+and nineteen premature returns rejected across session failures and funclets.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-constructor-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-authority-linux.json
 ```
 
 Without the saved directory the test command runs ten self-contained tests
-and explicitly skips the thirteen saved-artifact tests.
+and explicitly skips the fifteen saved-artifact tests.
 
 ## Remaining package-5 work
 

@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "f3531f28",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 25,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-authority-linux.json": "09e86a715acbb1ca4b32f18da62fcd0712898c02e311a7f4fe72363137967660",
+    "sha2-batch-authority-windows.json": "5ff0275fba9cf1a34ff1af37ef7221628fc890a2d48ad5c7d08942a156975c7e"
+  },
+  "review_test_sha256": "6c9d0620a99f5d41c52b2101a6c93748ae7073076ed8f1e785e43664ac453578",
+  "prior_component_observation": "sha2-batch-state-progress-20261006.json",
+  "prior_review_observation": "sha2-batch-constructor-progress-20261006.json",
+  "new_reviewed_scope": [
+    "complete ordered indirect-call population: thirteen narrow and sixteen wide sites",
+    "local authority checks at six narrow and seven wide sites",
+    "session health checks, checked completion counter and commit ordering",
+    "pretranspose and postcompression scratch clearing; selected failure revocation",
+    "seventeen invoked cleanup funclets, parent slots and required cleanup before normal return",
+    "padding helper copy/cancellation/budget/report checks and postcompression clearing",
+    "private session and padding ABI extents and alignment"
+  ],
+  "body_byte_mutations_rejected": 66885,
+  "table_byte_mutations_rejected": 680,
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 121,
+    "sha_ni": 153,
+    "simd256": 45,
+    "simd512": 48
+  },
+  "private_abi_mutations_rejected": 42,
+  "required_return_event_mutations_rejected": 54,
+  "simd_indirect_call_mutations_rejected": 87,
+  "simd_extra_calling_functions_rejected": 2,
+  "simd_failure_and_funclet_premature_returns_rejected": 19,
+  "complete_callback_provenance_qualified": false,
+  "cleanup_state_order_qualified": false,
+  "transitive_depth_qualified": false,
+  "arbitrary_os_unwind_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "enclosing constructor frame cleanup and batch-specific storage composition",
+    "SIMD digest-engine callback provenance and cleanup-state ordering",
+    "SIMD lane-engine, transpose, kernel and caller error-cleanup composition",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

@@ -199,6 +199,13 @@ class SavedTests(unittest.TestCase):
             if lane.startswith('simd'):
                 self.assertTrue(r['callback_callsite_review_pending'])
                 self.assertEqual(len(r['callback_tables']),1)
+                authority=r['semantics']['simd_authority']
+                self.assertFalse(authority['complete_callback_provenance_qualified'])
+                self.assertTrue(authority['authority_session']['kernel_and_transpose_semantics_pending'])
+                self.assertTrue(authority['callback_unwind']['cleanup_state_order_review_pending'])
+                self.assertFalse(authority['callback_unwind']['arbitrary_os_unwind_qualified'])
+                self.assertTrue(authority['padding_helper']['caller_early_failure_cleanup_pending'])
+                self.assertTrue(authority['padding_helper']['callback_object_provenance_pending'])
             else:
                 self.assertFalse(r['callback_callsite_review_pending'])
                 reused=r['reproduced_primitive_contracts']
@@ -232,6 +239,39 @@ class SavedTests(unittest.TestCase):
                     self.assertEqual(funclet['all_invoked_returns_call_guard'],1)
                     self.assertFalse(funclet['arbitrary_os_unwind_qualified'])
                 self.assertTrue(r['semantics']['state_transitions']['complete_constructor_composition_pending'])
+
+    def test_simd_population_rejects_indirect_call_changes(self):
+        module=c.shapes.simd_authority;count=0
+        for lane,_,_,_,_,_,bodies in self.routes:
+            if not lane.startswith('simd'): continue
+            expected=module.population(bodies,lane)
+            self.assertEqual(sum(map(len,expected.values())),13 if lane=='simd256' else 16)
+            for name,calls in expected.items():
+                lines=s.lines(bodies[name])
+                for at,line in enumerate(lines):
+                    if not line.startswith('callq *'): continue
+                    for replacement in ('nop','callq *%r11',line+'\n'+line):
+                        bad=list(lines);bad[at]=replacement
+                        with self.assertRaises(ValueError):
+                            module.population(bodies|{name:'\n'.join(bad)},lane)
+                        count+=1
+            with self.assertRaises(ValueError):
+                module.population(bodies|{'unexpected':'callq *%rax'},lane)
+        self.assertEqual(count,87)
+
+    def test_simd_funclets_and_session_failure_reject_early_returns(self):
+        actual=s.normal_returns;count=0
+        for lane,_,_,_,_,_,bodies in self.routes:
+            if not lane.startswith('simd'): continue
+            checks=[]
+            def capture(body,start,event,alternatives=()):
+                checks.append((body,start,event,alternatives));return actual(body,start,event,alternatives)
+            with patch.object(s,'normal_returns',capture): c.shapes.simd_authority.inspect(bodies,lane)
+            for body,start,event,alternatives in checks:
+                lines=s.lines(body);lines.insert(lines.index(start+':')+1,'retq')
+                with self.assertRaises(ValueError): actual('\n'.join(lines),start,event,alternatives)
+                count+=1
+        self.assertEqual(count,19)
 
     def test_scalar_dispatch_order_mutations(self):
         pin=c.specification(c.SPEC.read_bytes())['scalar']

@@ -6,6 +6,7 @@ import windows_enclave_sha_ni_state as state
 import windows_enclave_sha2_batch_state as batch_state
 import windows_enclave_sha2_batch_admission as placement
 import windows_enclave_sha2_batch_iv as iv
+import windows_enclave_sha2_simd_authority as simd_authority
 
 
 def owner(bodies,role): return s.one(bodies,r'Owner\d+'+role+'$')
@@ -32,6 +33,14 @@ def abi(bodies,ir,lane):
         rows[s.one(bodies,r'Resident6digest$')]=[
             f'readonly align 8 captures(none) dereferenceable({192 if lane=="simd256" else 96}) %2']
         rows[s.one(bodies,r'Kernel8compiled$')]=['(i1 noundef zeroext %0)']
+        rows[s.one(bodies,r'Session14compress_bytes$')]=[
+            'nonnull dereferenceable(256) %0',
+            'readonly captures(address, read_provenance) dereferenceable(512) %1',
+            f'align 32 dereferenceable({2752 if lane=="simd256" else 3264}) %2']
+        rows[s.one(bodies,r'engine7padding$')]=[
+            f'align 32 dereferenceable({5280 if lane=="simd256" else 5760}) %0',
+            'align 8 captures(none) dereferenceable(32) %1',
+            'align 8 captures(none) dereferenceable(32) %2']
     for name,tokens in rows.items():
         text=reuse.abi(ir,name)
         for token in tokens: s.require(token in text,'batch private ABI '+token)
@@ -187,7 +196,9 @@ def sha_ni_finish_caller(bodies):
 def inspect(bodies,ir,lane):
     result=dict(private_abi=abi(bodies,ir,lane),
         admission=sequential(bodies,lane) if lane in ('scalar','sha_ni') else simd(bodies,lane))
-    if lane.startswith('simd'): result['callback_targets']=callback_targets(bodies,lane)
+    if lane.startswith('simd'):
+        result['callback_targets']=callback_targets(bodies,lane)
+        result['simd_authority']=simd_authority.inspect(bodies,lane)
     else:
         result['lifecycle']=lifecycle.inspect(bodies,lane)
         result['state_transitions']=batch_state.inspect(bodies,lane)

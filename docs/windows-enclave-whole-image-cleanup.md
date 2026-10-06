@@ -6,6 +6,16 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The [scalar SHA-3 inner-chain completion](windows-enclave-sha3-chain.md) now
+accounts for all 55 emitted functions, including the scalar permutation and
+buffer destructor. Both hosts pass 88 review tests with matching reports; 158
+saved build inputs still match the checkout. Normal buffer-return paths and
+all inner callee addresses are checked. The conservative local frame bound is
+`H-8568`, explicitly excluding shared runtime frames. Eight named external
+boundaries remain assigned to final runtime/stack reconciliation. This closes
+the scalar inner-path obligations in the historical entries below, not the
+whole-image claim or other distinct family routes.
+
 The [streamed cSHAKE setup review](windows-enclave-sha3-setup.md) binds six
 push/bit/advance bodies and their actual owner/helper connections. Eight tests
 and matching reports pass on both hosts, rejecting 2,537 body-byte mutations

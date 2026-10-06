@@ -1,10 +1,13 @@
 # v0.24.50 remaining work
 
-## Current completion checklist (2026-10-05)
+## Current completion checklist (2026-10-06)
 
 - Finish transitive normal-return cleanup qualification inside the remaining
   distinct SHA-3/KMAC/TupleHash/batch/ParallelHash workers, especially
-  indirect SIMD dispatch and deepest caller/stack paths. Scalar SHA-2 runtime/
+  indirect SIMD dispatch and deepest caller/stack paths. The scalar SHA-3 inner
+  chain is now closed for its saved image (all 55 emitted functions); its eight
+  named shared runtime/transport boundaries remain with final reconciliation.
+  Scalar SHA-2 runtime/
   export connections are now closed; all seventeen family worker entry,
   transport and direct memory-call boundaries are bound. Those boundary reviews
   do not yet qualify every inner owner/state path.
@@ -23,6 +26,17 @@ project-signing prerequisite. Windows ARM64 remains unqualified and must not be
 advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
+
+The [scalar SHA-3 chain completion](windows-enclave-sha3-chain.md) composes the
+prior reviews, adds the complete permutation and buffer destructor, and checks
+every emitted function and actual inner reference. All 158 saved build inputs
+match the checkout. Both hosts pass 88 focused review tests and produce matching
+reports. The local frame contribution is conservatively bounded at `H-8568`,
+excluding shared runtime frames; this is not maximum whole-image depth. The
+eight remaining runtime/transport boundaries are explicitly assigned, not waived.
+Accelerated SHA-3/shared Keccak is the next family package. The entries below
+retain their historical scope and are superseded by this composition where
+they identify scalar inner functions as still pending.
 
 The [streamed cSHAKE setup review](windows-enclave-sha3-setup.md) binds all six
 rate-specific push/bit/advance bodies, failure cleanup and exact completion.

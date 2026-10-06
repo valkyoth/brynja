@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "status": "AUTHOR_SAVED_SCALAR_SHA3_INNER_CHAIN_REVIEW",
+  "route": "sha3/mod.rs::open",
+  "source_checkout": "41713eb51acb34d2ab2b3b64cd0f45c4ae27f3cd",
+  "compiler": "1.98.1",
+  "target": "x86_64-pc-windows-msvc",
+  "image_sha256": "76bdf18e31b935535ca7a36a5d694abbe14de4a3179076a2fd452d3c5f259718",
+  "object_sha256": "a5249aff095786ae667962302c0f0e41e3ca3ca4b333251f4329a71b6bd3eb9b",
+  "saved_build_manifest_sha256": "a6ba837a81247354958f57ad978d192fd5369f314f3f223e6ab86d7ffbea45c2",
+  "unchanged_saved_build_inputs": 158,
+  "reviewer_sha256": {
+    "windows_enclave_sha3_chain.py": "8442c66577058bfed9a3020c6e0ef4e1927119b57c66cc2005bce59e56ef7113",
+    "windows_enclave_sha3_permutation.py": "5355fcbf96707fa944246c9f6d8e551f6888035d069588940303837b4bf660fd",
+    "test-windows-enclave-sha3-chain.py": "30e816d2130fa2c4aff0d532a3128e85344cfdc98698e4897b3cf36ffd96c0ef"
+  },
+  "reports": {
+    "linux": {
+      "path": "release-reports/windows-worker-review-20261006/sha3-chain-linux.json",
+      "sha256": "bcf16ffb956e9a02e4f4320909d6ad2ed9ba27cfbdd477b743f0a7b7c55ecb8b"
+    },
+    "windows": {
+      "path": "release-reports/windows-worker-review-20261006/sha3-chain-windows.json",
+      "sha256": "12e62070806801cbc3b7d090873af39239c70053ddb464ce3106550c51a55ce3"
+    }
+  },
+  "parsed_reports_identical": true,
+  "review_suites_per_host": 10,
+  "review_tests_per_host": 88,
+  "reviewed_emitted_functions": 55,
+  "unassigned_inner_functions": [],
+  "body_byte_mutations_rejected_per_host": 35759,
+  "new_permutation_destructor_byte_mutations_per_host": 838,
+  "dispatch_table_byte_mutations_rejected_per_host": 240,
+  "normal_buffer_return_paths_checked": true,
+  "conservative_local_rsp_bound_from_window_high": -8568,
+  "shared_runtime_frames_excluded_from_local_bound": true,
+  "shared_boundaries_assigned_completion_package": 8,
+  "shared_boundary_rvas": {
+    "__chkstk": 46112,
+    "__umodti3": 41040,
+    "memcpy": 50928,
+    "memset": 52656,
+    "PublicSha3Input": 43872,
+    "PublicSha3Output": 44256,
+    "PublicSha3Source": 44416,
+    "PublicSha3Observe": 44192
+  },
+  "linux_actual_rust_validation": {
+    "sponge_tests": 9,
+    "setup_tests": 4,
+    "worker_component_tests": 7,
+    "placement_tests": 1,
+    "compiled_behavioral_mutants_rejected": 10,
+    "cshake_cases": 628,
+    "nist_cases": 76,
+    "hashlib_cases": 96,
+    "retained_rehash_cases": 512
+  },
+  "scalar_permutation_internals_reviewed": true,
+  "outer_window_reclamation_required": true,
+  "individual_caller_spills_erased": false,
+  "whole_image_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "production_changes": false,
+  "release_gate_changed": false,
+  "native_run_added": false,
+  "independent_retest": false
+}

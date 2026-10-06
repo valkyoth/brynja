@@ -128,6 +128,13 @@ extents are checked within the assigned objects; 24 other call effects remain.
 The twelve conditional checks still require original live-slot/object placement
 and callee stack/home-space composition. All 117 review tests pass on both hosts;
 47 additional pointer/extent/call mutations reject and parsed reports match.
+Ten copy calls and three mask calls now also have conditional argument-region
+checks over 6,654 public-geometry cases. Empty copies have no byte accesses;
+same-object nonempty copies must not overlap. All 121 tests pass on both hosts,
+with matching reports, 79 transfer mutations and four call-population regressions
+rejected. Eleven other call effects remain. Original live-object/slot placement,
+physical aliasing and callee stack/home-space obligations are not discharged by
+these bounded transfer cases.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

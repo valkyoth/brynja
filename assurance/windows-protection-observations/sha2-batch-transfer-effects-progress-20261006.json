@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "1f378581c14f357d1212f11c5d58fa6dc19006aa",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 121,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-transfer-effects-linux.json": "5d55ae16c7d0f741550dfd2c822aabb89d1ce7b5c130048fc2a2e559bf5e786c",
+    "sha2-batch-transfer-effects-windows.json": "7c1f2e6b7085426cf7cefe474773253c3209f172719494f1f11cb707d5947a73"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_transfer_effects.py": "0cb49a932c9d38a4dc217cf37373262961abe10e22a54f7b6a876630b1b7c0d0",
+    "windows_enclave_sha2_transfer_effects_tests.py": "44dff247c713a1b3fa417396029b2b79c06adb08193e1f7473fba3c02ef04cb3",
+    "windows_enclave_sha2_store_effects.py": "ccd2f0b034fec8c19d8ea4ff21987f5591621752240b03291fff51e81131fdb7",
+    "windows_enclave_sha2_call_effects_tests.py": "aed651cf59470ac4f61fa3e4a1ac7b4f3a4cadcb357b2ee8dd207760fb4c3914",
+    "windows_enclave_sha2_batch_chains.py": "396181869d95752fb85b885a545ce81c8e7a60d71b53ddeb3799f5f672cd9958"
+  },
+  "prior_review_observation": "sha2-batch-call-effects-progress-20261006.json",
+  "new_reviewed_scope": [
+    "ten copies and three masks have conditional emitted argument-region checks",
+    "6654 public-geometry cases cover lane offsets, remainder and partial-byte positions, complete blocks and supported output identities/widths",
+    "zero-length copies record no byte accesses; nonempty same-object copy regions cannot overlap",
+    "precise public integer shifts, masks, pointer decrements and zero-extension checked without inventing unknown upper register bits",
+    "all copy/mask calls in the reviewed regions must be assigned; extra or missing sites reject"
+  ],
+  "public_geometry_cases": {"simd256": 2153, "simd512": 4501},
+  "conditional_transfer_call_count": {"simd256": 6, "simd512": 7},
+  "remaining_call_effects": {"simd256": 6, "simd512": 5},
+  "transfer_pointer_capacity_call_mutations_rejected": 79,
+  "missing_duplicate_call_regressions_rejected": 4,
+  "effect_mutants_bypass_earlier_literal_finish_contracts": true,
+  "parent_complete_finish_variant_and_primitive_reviews_required": true,
+  "original_live_slot_and_physical_alias_preconditions_required": true,
+  "input_available_extent_and_block_loop_bounds_are_caller_preconditions": true,
+  "callee_stack_and_home_space_composition_pending": true,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "machine_stack_slot_lifetime_composition_qualified": false,
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "test_fixture_correction": "A new population mutant initially selected a copy outside the scoped region; the fixture now selects inside the reviewed boundaries. The earlier Windows test failure is superseded only by the complete corrected rerun.",
+  "remaining_private_review": [
+    "eleven padding, callback and fail-stop call effects",
+    "original placement, non-aliasing and preservation of all conditional live store/call objects",
+    "callee stack/home-space bounds and saved-slot lifetime composition",
+    "subsequent compact-index lifetimes and remaining helper live/disjoint storage",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments"
+  ],
+  "shared_completion_package": 8
+}

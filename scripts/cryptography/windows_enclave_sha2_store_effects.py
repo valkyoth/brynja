@@ -23,6 +23,9 @@ def add(a,b):
 
 
 def register(name):
+    small={'ax':('rax',16),'dx':('rdx',16),'cx':('rcx',16),
+           'al':('rax',8),'dl':('rdx',8),'cl':('rcx',8),'bl':('rbx',8)}
+    if name in small:return small[name]
     aliases={'eax':'rax','ecx':'rcx','edx':'rdx','esi':'rsi','edi':'rdi','ebx':'rbx'}
     if name in aliases:return aliases[name],32
     if re.fullmatch(r'r\d+d',name):return name[:-1],32
@@ -32,11 +35,14 @@ def register(name):
 
 
 def address(text,regs):
-    match=re.fullmatch(r'(\d*)\(%(\w+)(?:,%(\w+)(?:,([1248]))?)?\)',text)
+    match=re.fullmatch(r'(\d*)\((?:%(\w+))?(?:,%(\w+)(?:,([1248]))?)?\)',text)
     s.require(match is not None,'assigned effect address form')
-    base,width=register(match[2]);s.require(width==64,'full-width address base')
-    result=regs.get(base);s.require(result is not None,'known effect address base')
-    result=add(result,Value(None,int(match[1] or 0),int(match[1] or 0)))
+    s.require(match[2] or match[3],'effect address has a base or index')
+    result=Value(None,int(match[1] or 0),int(match[1] or 0))
+    if match[2]:
+        base,width=register(match[2]);s.require(width==64,'full-width address base')
+        value=regs.get(base);s.require(value is not None,'known effect address base')
+        result=add(result,value)
     if match[3]:
         index,width=register(match[3]);value=regs.get(index)
         s.require(width==64 and value is not None and value.object is None,'bounded integer index')
@@ -45,7 +51,7 @@ def address(text,regs):
     return result
 
 
-def evaluate(lines,registers,memory,copy,snapshots=None):
+def evaluate(lines,registers,memory,copy,snapshots=None,precise=False):
     """Interpret address-producing operations on one successful fallthrough path.
 
 Comparisons/conditional exits don't narrow intervals. The parent region review
@@ -66,10 +72,14 @@ Comparisons/conditional exits don't narrow intervals. The parent region review
             continue
         if op in ('incq','decq','bswapq'):
             reg,width=register(rest[1:]);s.require(width==64,'full-width scalar operation')
+            if precise and op in ('incq','decq'):
+                old=regs.get(reg);s.require(old is not None,'known precise increment/decrement')
+                delta=1 if op=='incq' else -1
+                regs[reg]=add(old,Value(None,delta,delta));continue
             # These values are counter/length payloads, never address bases.
             s.require(regs.get(reg) is None or regs[reg].object is None,'no pointer arithmetic hidden in payload')
             regs.pop(reg,None);continue
-        s.require(op in ('movq','movl','movzbl','movb','leaq','andl','andq','addq'),
+        s.require(op in ('movq','movl','movzbl','movzwl','movb','leaq','andl','andq','addq','shlq','xorl'),
                   'assigned indirect effect instruction: '+op)
         src,dst=args
         if '(' in dst:
@@ -80,26 +90,51 @@ Comparisons/conditional exits don't narrow intervals. The parent region review
                                span=[target.low,target.high+width]))
             continue
         reg,width=register(dst[1:])
+        if op=='xorl':
+            s.require(src==dst and width==32,'assigned zero idiom only')
+            regs[reg]=Value(None,0,0);continue
         if op=='leaq':value=address(src,regs)
         elif src.startswith('$'):value=Value(None,int(src[1:]),int(src[1:]))
         elif src.startswith('%'):
             source,source_width=register(src[1:]);value=regs.get(source)
-            s.require(source_width==width,'matching move register widths')
+            extension={'movzbl':8,'movzwl':16}.get(op)
+            s.require((extension==source_width and width==32) if extension else source_width==width,
+                      'matching move register widths')
+            if extension and value is not None:
+                s.require(value.object is None and value.low==value.high,'concrete integer extension')
+                low=value.low & ((1<<extension)-1);value=Value(None,low,low)
         else:
             try:location=address(src,regs)
             except ValueError:location=None
             value=memory.get((location.object,location.low)) if location and location.low==location.high else None
+        if op in ('movzbl','movzwl') and value is not None:
+            s.require(value.object is None and value.low==value.high,'concrete zero-extension value')
+            mask=255 if op=='movzbl' else 65535
+            low=value.low & mask;value=Value(None,low,low)
         if op in ('andl','andq'):
             old=regs.get(reg)
             s.require(old is not None and old.object is None and src.startswith('$'),'integer mask provenance')
             mask=int(src[1:]) & ((1<<width)-1)
-            value=Value(None,0,mask)
+            value=Value(None,old.low & mask,old.low & mask) if precise and old.low==old.high else Value(None,0,mask)
+        elif op=='shlq':
+            old=regs.get(reg)
+            s.require(precise and old is not None and old.object is None and src.startswith('$')
+                      and 0<=int(src[1:])<64,'assigned precise integer shift')
+            shift=int(src[1:]);value=add(Value(None,0,0),Value(None,old.low<<shift,old.high<<shift))
         elif op=='addq':
             old=regs.get(reg)
             s.require(old is not None and value is not None,'known addition operands')
             value=add(old,value)
         if value is not None and width==32:
             s.require(value.object is None and 0<=value.high<(1<<32),'no pointer truncation')
+        if width<32 and value is not None:
+            old=regs.get(reg)
+            s.require(value.object is None and value.low==value.high,'integer partial write')
+            if old is None:value=None
+            else:
+                s.require(old.object is None and old.low==old.high,'known upper bits for partial write')
+                mask=(1<<width)-1;low=(old.low & ~mask)|(value.low & mask)
+                value=Value(None,low,low)
         if value is None:regs.pop(reg,None)
         else:regs[reg]=value
     return stores

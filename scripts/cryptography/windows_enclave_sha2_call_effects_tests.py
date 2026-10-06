@@ -2,9 +2,10 @@
 import re
 from unittest.mock import patch
 import windows_enclave_sha2_call_effects as c
+from windows_enclave_sha2_transfer_effects_tests import TransferEffectTests, TransferEffectSavedTests
 
 
-class CallEffectTests:
+class CallEffectTests(TransferEffectTests):
     def test_primitive_regions_reject_unknown_wrapping_and_aliased_pointers(self):
         value=c.e.Value
         for pointer,length in ((None,8),(value(None,0,0),8),(value('w',0,1),8),
@@ -33,7 +34,7 @@ class CallEffectTests:
         with self.assertRaises(ValueError):c.footprint('zero',lost[1][1],'simd256')
 
 
-class CallEffectSavedTests:
+class CallEffectSavedTests(TransferEffectSavedTests):
     def test_twelve_scalar_helper_calls_reject_argument_and_population_mutations(self):
         import windows_enclave_sha2_frame_cell as f
         total=0

@@ -605,16 +605,31 @@ new pointer/extent/call mutations reject directly through this checker, without
 relying on the earlier literal scalar-finish checks. Production and release-gate
 policy remain unchanged; saved images are replayed, not newly executed.
 
+The ten copy calls and three byte-mask calls now have conditional argument-region
+checks as well. A 6,654-case public-geometry replay covers lane offsets, all
+0–1024 complete-byte lengths for remainder copies, nonempty partial-byte inputs,
+complete-block positions and every supported output identity/width. Zero-length
+copies record no byte reads or writes; nonempty same-object copies must not
+overlap. Mask footprints cover each possible padding-byte and final-output-byte
+position. Complete finish/variant-table and primitive checks remain required;
+seeded input extent, live slot values and physical object placement are still
+caller obligations, not established by selecting symbolic object names.
+All 121 tests pass on both hosts with matching parsed reports. Seventy-nine new
+pointer/capacity/call mutations and four missing/duplicate-call cases reject.
+There are eleven other call effects left to compose; all enclosing lifetime,
+alias and callee stack/home-space obligations remain explicit. Step 5 is still
+in progress, with no production changes or new native enclave execution.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-call-effects-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-transfer-effects-linux.json
 ```
 
-Without the saved directory the test command runs fifty-nine self-contained tests
-and explicitly skips the fifty-eight saved-artifact tests.
+Without the saved directory the test command runs sixty-two self-contained tests
+and explicitly skips the fifty-nine saved-artifact tests.
 
 ## Remaining package-5 work
 

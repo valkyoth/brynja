@@ -41,6 +41,14 @@ def abi(bodies,ir,lane):
             f'align 32 dereferenceable({5280 if lane=="simd256" else 5760}) %0',
             'align 8 captures(none) dereferenceable(32) %1',
             'align 8 captures(none) dereferenceable(32) %2']
+        if lane=='simd512':
+            rows[s.one(bodies,r'Executor13digest_secret$')]=[
+                'writeonly align 8 captures(none) dereferenceable(104) %0',
+                'ptr noundef nonnull align 8 captures(none) %1',
+                'readonly align 8 captures(address_is_null) dereferenceable(160) %2',
+                'readonly align 8 captures(none) dereferenceable(64) %3',
+                'align 32 dereferenceable(5760) %4',
+                'align 8 captures(none) dereferenceable(32) %5']
     for name,tokens in rows.items():
         text=reuse.abi(ir,name)
         for token in tokens: s.require(token in text,'batch private ABI '+token)

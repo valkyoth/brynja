@@ -31,7 +31,7 @@ advertised as supported by this x64 development evidence.
 
 The [SHA-2 batch checkpoint](windows-enclave-sha2-batch-chains.md) binds all 178
 emitted functions across the sequential scalar/SHA-NI and two AVX2 SIMD routes.
-Twenty-five review tests pass on both hosts with matching reports; component, worker
+Twenty-six review tests pass on both hosts with matching reports; component, worker
 and resident campaigns pass on native Linux. Selected admission, cleanup and
 callback-target contracts are checked. Sequential sealing, cancellation,
 checked export, operation-guard cleanup, buffer destruction and full-page
@@ -44,12 +44,13 @@ passing scalar/SHA-NI component campaigns. Public IV construction, initial
 placement, eight-slot plan admission and the public SHA-NI startup KAT now have
 explicit checks, including replayed public-loop comparisons.
 Both SIMD sessions, local authority checks, padding helper accounting/clearing
-and seventeen invoked cleanup funclets now have semantic checks. All 29 indirect
-callsites are inventoried; this does not close larger digest-engine provenance
-or enclosing cleanup-state ordering.
+and all 32 invoked cleanup funclets now have semantic checks. All 29 indirect
+callsites are inventoried; remaining digest sites now have concrete callback
+source/transfer checks. Thirty compiler cleanup tables bind the recorded handler
+order. Enclosing storage lifetimes and general alias composition remain pending.
 **Step 5 remains in progress**: remaining caller preconditions,
-enclosing constructor cleanup, SIMD callsite/engine/funclet
-review and private frame/storage assignments remain explicit obligations.
+enclosing constructor cleanup, SIMD lane/kernel and normal error-path composition,
+and private frame/storage assignments remain explicit obligations.
 
 The [TupleHash chain review](windows-enclave-tuple-chains.md) binds both complete
 saved populations (52 scalar functions; 55 AVX2 main functions plus six cleanup

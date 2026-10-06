@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "1595f3e815f02656f0e1821c45ca99d142262540",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 26,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-digest-linux.json": "8cdbd325d7179cc21c60c2e0fa70cec88471d9a339d76c6bfad27e87c23a2738",
+    "sha2-batch-digest-windows.json": "1796f8704ad29c560e513a01da022b1c1cb588e304f5bbcd40fb6d23a54fdbaf"
+  },
+  "review_test_sha256": "0ee879e77b48b9889d7bd33ef5b9dca44aa897a59acd1f8f13720146140e6804",
+  "prior_component_observation": "sha2-batch-state-progress-20261006.json",
+  "prior_review_observation": "sha2-batch-authority-progress-20261006.json",
+  "new_reviewed_scope": [
+    "concrete callback sources/transfers at six remaining narrow and eight remaining wide digest sites",
+    "internal resident cancellation-control construction and padding/session argument transfers",
+    "wide executor private input, destination, control and workspace ABI",
+    "all thirty-two emitted SIMD funclets assigned invoked cleanup contracts",
+    "four guarded drops checked on their armed paths with exact real guard predicates",
+    "thirty complete compiler cleanup tables across ten parent functions",
+    "exact predecessor states, funclet identities and IP-state transitions"
+  ],
+  "body_byte_mutations_rejected": 66885,
+  "table_byte_mutations_rejected": 680,
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 121,
+    "sha_ni": 153,
+    "simd256": 79,
+    "simd512": 87
+  },
+  "private_abi_mutations_rejected": 48,
+  "required_return_event_mutations_rejected": 75,
+  "simd_indirect_call_mutations_rejected": 87,
+  "simd_extra_calling_functions_rejected": 2,
+  "simd_failure_and_funclet_premature_returns_rejected": 40,
+  "cleanup_table_field_mutations_rejected": 258,
+  "cleanup_table_deletion_duplication_mutations_rejected": 60,
+  "compiler_cleanup_order_checked": true,
+  "os_dispatcher_qualified": false,
+  "complete_callback_storage_composition_qualified": false,
+  "transitive_depth_qualified": false,
+  "arbitrary_os_unwind_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "enclosing constructor frame cleanup and batch-specific storage composition",
+    "SIMD surrounding pointer/storage lifetimes and normal error paths",
+    "SIMD lane-engine, transpose, kernel and caller cleanup composition",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

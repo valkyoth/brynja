@@ -75,12 +75,32 @@ before committing caller output. Success wipes scratch; selected failure paths
 wipe scratch and revoke authority. Transpose and kernel composition remain open.
 Private ABI checks bind state/block extents and the aligned scratch workspaces.
 
-Seventeen invoked cleanup funclets are checked against their exact parent-frame
+All thirty-two invoked cleanup funclets are checked against their exact parent-frame
 slots. Session handlers revoke authority, with the active scratch handler also
 wiping scratch; owner-operation cleanup clears retained output and quarantines
-the owner and authority. Required cleanup dominates each invoked funclet's normal
-return. This does not yet qualify the enclosing cleanup-state ordering or arbitrary
-OS unwinding.
+the owner and authority. Digest handlers cover workspace, output and scratch
+destruction. Four conditional handlers permit an unarmed return: their exact flag
+test is checked, and cleanup must dominate normal returns along the armed path.
+Unconditional handlers require their cleanup on all normal returns.
+
+The remaining digest-engine indirect sites now have concrete source checks:
+authority pointers come from the admitted owner; cancellation objects and their
+bound vtables are constructed inside the resident. Narrow execution uses the
+local control at frame offset 240. Wide execution passes its offset-144 control
+through the sixth executor argument, then preserves the data/function pair for
+loop polls. Session and padding calls retain the corresponding authority/control.
+The separately emitted wide executor also has explicit private ABI checks.
+These are saved-program source/transfer checks, not a general alias proof or
+closure of the surrounding storage lifetimes.
+
+All thirty compiler cleanup tables for ten parent functions are checked in full:
+headers, predecessor states, funclet identities and IP-to-state transitions.
+They specify which handlers run and in what order for the recorded call regions,
+including session scratch clearing after revalidator failure and outer owner
+quarantine after digest cleanup. Existing binding checks connect complete associated
+object metadata and actual funclet destinations to the image. OS dispatcher
+semantics, enclosing storage-lifetime composition and arbitrary OS unwinding
+are not qualified by these checks.
 
 Both padding helpers check copying and cancellation before charging their budget,
 reject exhausted budgets and counter overflow, and clear 640 scratch bytes and
@@ -179,9 +199,9 @@ version rejects all 138 changes.
 
 ## Tests and retained evidence
 
-Twenty-five review tests pass on Linux and Windows with matching parsed reports.
-They reject 367 semantic-landmark removals, 42 private ABI changes, 54
-required-return-event bypasses (53 cleanup and one KAT comparison), twelve
+Twenty-six review tests pass on Linux and Windows with matching parsed reports.
+They reject 440 semantic-landmark removals, 48 private ABI changes, 75
+required-return-event bypasses (74 cleanup and one KAT comparison), twelve
 lifecycle, eleven finalizer, seven state/funclet and three admission/KAT premature returns,
 116 per-helper body/reference/extent/ABI mutations, altered callback layouts/pointers, diagnostic-data drift,
 incomplete inventories and inconsistent source closures. The byte-mutation
@@ -232,17 +252,21 @@ The [SIMD authority observation](../assurance/windows-protection-observations/sh
 records the session, authority, padding and invoked-funclet contracts. It also
 records 87 indirect-call changes plus two added-function callsites rejected,
 and nineteen premature returns rejected across session failures and funclets.
+The [digest callback/cleanup observation](../assurance/windows-protection-observations/sha2-batch-digest-progress-20261006.json)
+extends that checkpoint to all 32 SIMD funclets, forty session/funclet premature
+return mutations, 258 cleanup-table field mutations and sixty table deletion or
+duplication mutations. Earlier observations retain their historical scope.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-authority-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-digest-linux.json
 ```
 
 Without the saved directory the test command runs ten self-contained tests
-and explicitly skips the fifteen saved-artifact tests.
+and explicitly skips the sixteen saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -250,8 +274,10 @@ and explicitly skips the fifteen saved-artifact tests.
 - Complete enclosing constructor frame/storage cleanup composition. Public IV
   calculation, initial placement, plan admission, selected state transfers,
   finalizer callers and the SHA-NI finish funclet are now checked.
-- Complete SIMD callsite provenance, lane-engine/kernel composition and all
-  error/cleanup-funclet paths.
+- Complete SIMD surrounding pointer/storage lifetimes, lane-engine/kernel
+  composition and normal error paths. Local callback sources, invoked funclet
+  actions and compiler cleanup-state order are now checked; these need composition
+  with each caller's live storage.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

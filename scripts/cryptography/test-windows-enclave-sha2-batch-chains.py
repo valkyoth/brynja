@@ -202,10 +202,14 @@ class SavedTests(unittest.TestCase):
                 authority=r['semantics']['simd_authority']
                 self.assertFalse(authority['complete_callback_provenance_qualified'])
                 self.assertTrue(authority['authority_session']['kernel_and_transpose_semantics_pending'])
-                self.assertTrue(authority['callback_unwind']['cleanup_state_order_review_pending'])
+                self.assertFalse(authority['callback_unwind']['cleanup_state_order_review_pending'])
+                self.assertTrue(authority['callback_unwind']['enclosing_storage_lifetimes_pending'])
                 self.assertFalse(authority['callback_unwind']['arbitrary_os_unwind_qualified'])
                 self.assertTrue(authority['padding_helper']['caller_early_failure_cleanup_pending'])
                 self.assertTrue(authority['padding_helper']['callback_object_provenance_pending'])
+                self.assertEqual(len(authority['callback_unwind']['invoked_funclets']),16)
+                self.assertTrue(authority['cleanup_tables']['compiler_cleanup_order_checked'])
+                self.assertFalse(authority['cleanup_tables']['os_dispatcher_qualified'])
             else:
                 self.assertFalse(r['callback_callsite_review_pending'])
                 reused=r['reproduced_primitive_contracts']
@@ -271,7 +275,27 @@ class SavedTests(unittest.TestCase):
                 lines=s.lines(body);lines.insert(lines.index(start+':')+1,'retq')
                 with self.assertRaises(ValueError): actual('\n'.join(lines),start,event,alternatives)
                 count+=1
-        self.assertEqual(count,19)
+        self.assertEqual(count,40)
+
+    def test_simd_cleanup_tables_reject_each_field_change(self):
+        import re
+        count=0
+        for lane,pin,_,_,_,_,bodies in self.routes:
+            if not lane.startswith('simd'): continue
+            _,_,_,asm,_,_=c.load(SAVED,ROOT,pin)
+            module=c.shapes.simd_authority;result=module.cleanup_tables(asm,bodies,lane)
+            for label,values in result['expected_tables'].items():
+                match=re.search(r'^'+re.escape(label)+r':\n((?:\s*\.long[^\n]*\n)+)',asm,re.M)
+                for at in range(len(values)):
+                    lines=match[1].splitlines(keepends=True)
+                    lines[at]='\t.long\tBROKEN\n'
+                    bad=asm[:match.start(1)]+''.join(lines)+asm[match.end(1):]
+                    with self.assertRaises(ValueError): module.cleanup_tables(bad,bodies,lane)
+                    count+=1
+                for bad in (asm[:match.start()]+asm[match.end():],asm+match[0]):
+                    with self.assertRaises(ValueError): module.cleanup_tables(bad,bodies,lane)
+        self.assertGreater(count,200)
+        print('SIMD cleanup-state/order field mutations rejected: '+str(count))
 
     def test_scalar_dispatch_order_mutations(self):
         pin=c.specification(c.SPEC.read_bytes())['scalar']

@@ -192,6 +192,10 @@ def inspect_route(base,root,lane,pin,mutate):
     # retained as explicit family work, not reassigned to shared runtime review.
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     semantics=shapes.inspect(bodies,ir,lane)
+    if lane.startswith('simd'):
+        semantics['simd_authority']['cleanup_tables']=shapes.simd_authority.cleanup_tables(asm,bodies,lane)
+        semantics['simd_authority']['callback_unwind']['cleanup_state_order_review_pending']=False
+        semantics['simd_authority']['callback_unwind']['enclosing_storage_lifetimes_pending']=True
     semantics['public_constructor_constants']=public_constructor_constants(constants,lane)
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
@@ -231,7 +235,7 @@ def inspect(base,root,mutate=False):
         routes={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()},
         remaining_private_review=['batch-specific caller preconditions for reproduced primitive contracts',
             'enclosing constructor frame cleanup and batch-specific storage composition',
-            'SIMD callback provenance, lane engines, kernels and error/funclet cleanup',
+            'SIMD surrounding pointer/storage lifetimes, lane engines, kernels and normal error paths',
             'complete reachable frame and storage assignments; fail-stop preconditions'],
         source_sha256={p.name:digest(p.read_bytes()) for p in sorted(
             {Path(m.__file__) for n,m in sys.modules.items() if n.startswith('windows_enclave_')}|{Path(__file__)})})

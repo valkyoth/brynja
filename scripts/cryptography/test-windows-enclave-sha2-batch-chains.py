@@ -13,6 +13,11 @@ s=c.shapes.s
 
 
 class Tests(unittest.TestCase):
+    def test_saved_engine_error_discriminants(self):
+        self.assertEqual([n for n in range(256) if c.shapes.simd_storage.ordinary_rejection(n)], [5,7,8,9,10])
+        for bad in (-1,256,True):
+            with self.assertRaises(ValueError): c.shapes.simd_storage.ordinary_rejection(bad)
+
     def test_public_kat_expected_digest_is_sha256_abc(self):
         import hashlib
         value=int(c.shapes.placement.kat.EXPECTED[6:],16).to_bytes(32,'little')
@@ -141,6 +146,23 @@ class Tests(unittest.TestCase):
 
 
 class SavedTests(unittest.TestCase):
+    def test_simd_complete_destructors_reject_each_instruction_change(self):
+        module=c.shapes.simd_storage;actual=module.exact;count=0
+        for lane,_,_,_,_,_,bodies in self.routes:
+            if not lane.startswith('simd'): continue
+            checks=[]
+            def capture(body,expected):
+                checks.append((body,expected));actual(body,expected)
+            with patch.object(module,'exact',capture): module.inspect(bodies,lane)
+            self.assertEqual(len(checks),7)
+            for body,expected in checks:
+                name=next(n for n,b in bodies.items() if b==body)
+                for at in range(len(expected)):
+                    bad=list(expected);bad[at]='retq'
+                    with self.assertRaises(ValueError): module.inspect(bodies|{name:'\n'.join(bad)},lane)
+                    count+=1
+        print('Complete SIMD destructor instruction mutations rejected: '+str(count))
+
     @classmethod
     def setUpClass(cls):
         if SAVED is None: raise unittest.SkipTest('saved Windows artifacts not supplied')

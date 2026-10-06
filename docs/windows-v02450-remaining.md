@@ -31,7 +31,7 @@ advertised as supported by this x64 development evidence.
 
 The [SHA-2 batch checkpoint](windows-enclave-sha2-batch-chains.md) binds all 178
 emitted functions across the sequential scalar/SHA-NI and two AVX2 SIMD routes.
-Twenty-six review tests pass on both hosts with matching reports; component, worker
+Twenty-eight review tests pass on both hosts with matching reports; component, worker
 and resident campaigns pass on native Linux. Selected admission, cleanup and
 callback-target contracts are checked. Sequential sealing, cancellation,
 checked export, operation-guard cleanup, buffer destruction and full-page
@@ -47,7 +47,11 @@ Both SIMD sessions, local authority checks, padding helper accounting/clearing
 and all 32 invoked cleanup funclets now have semantic checks. All 29 indirect
 callsites are inventoried; remaining digest sites now have concrete callback
 source/transfer checks. Thirty compiler cleanup tables bind the recorded handler
-order. Enclosing storage lifetimes and general alias composition remain pending.
+order. Complete SIMD cleanup routines now cover all declared workspace fields,
+including inactive lanes; trailing alignment padding is explicitly not individually
+erased. Selected error returns, output/worker-buffer destruction, cancellation
+and resident-page retirement are checked. Enclosing storage lifetimes, full
+error-entry coverage and general alias composition remain pending.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD lane/kernel and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

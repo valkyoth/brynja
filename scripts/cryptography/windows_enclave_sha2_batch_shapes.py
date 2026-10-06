@@ -7,6 +7,7 @@ import windows_enclave_sha2_batch_state as batch_state
 import windows_enclave_sha2_batch_admission as placement
 import windows_enclave_sha2_batch_iv as iv
 import windows_enclave_sha2_simd_authority as simd_authority
+import windows_enclave_sha2_simd_storage as simd_storage
 
 
 def owner(bodies,role): return s.one(bodies,r'Owner\d+'+role+'$')
@@ -207,6 +208,7 @@ def inspect(bodies,ir,lane):
     if lane.startswith('simd'):
         result['callback_targets']=callback_targets(bodies,lane)
         result['simd_authority']=simd_authority.inspect(bodies,lane)
+        result['simd_storage']=simd_storage.inspect(bodies,lane)
     else:
         result['lifecycle']=lifecycle.inspect(bodies,lane)
         result['state_transitions']=batch_state.inspect(bodies,lane)

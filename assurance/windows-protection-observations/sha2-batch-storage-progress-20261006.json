@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "5618fa71400b3b4a26a354728eba127657a7d18a",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 28,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-storage-linux.json": "8295528881a3e3e1bf401ba23c9a082e950f9004647c82b396b3baeb87a0d0bc",
+    "sha2-batch-storage-windows.json": "b50268f88e2accbf0df349a3c1effb936526010bbcfc15f496422cfa77a2deaf"
+  },
+  "review_test_sha256": "cf04038ee95bd7b9e1a47dec49c6927f1af2706ed9db6a41b5eaa5fe349401c5",
+  "prior_component_observation": "sha2-batch-state-progress-20261006.json",
+  "prior_review_observation": "sha2-batch-digest-progress-20261006.json",
+  "new_reviewed_scope": [
+    "fourteen complete SIMD cleanup functions: scratch, scalar owner, workspace, output and worker buffers",
+    "exact declared-field workspace coverage without overlap, including inactive lanes",
+    "alignment padding explicitly excluded from individual field-erasure claims",
+    "selected resident/executor normal error returns require staging and workspace clearing",
+    "saved private engine error-discriminant model checked across every byte value",
+    "all normal worker returns after buffer construction reach buffer destruction",
+    "admitted cancellation clears retained output and resets plan/phase",
+    "retirement removes live owner before destruction and clears all 4096 backing bytes",
+    "old-page replacement loop and final page-identity clearing"
+  ],
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 121,
+    "sha_ni": 153,
+    "simd256": 94,
+    "simd512": 101
+  },
+  "private_abi_mutations_rejected": 48,
+  "required_return_event_mutations_rejected": 103,
+  "complete_cleanup_instruction_label_mutations_rejected": 284,
+  "body_byte_mutations_rejected": 66885,
+  "table_byte_mutations_rejected": 680,
+  "complete_callback_storage_composition_qualified": false,
+  "individual_alignment_padding_erasure_claimed": false,
+  "whole_frame_erasure_qualified": false,
+  "arbitrary_os_unwind_qualified": false,
+  "remaining_private_review": [
+    "batch-specific caller preconditions for reproduced primitive contracts",
+    "enclosing constructor frame cleanup and batch-specific storage composition",
+    "SIMD pointer/storage lifetimes, complete error-entry and success-transfer composition",
+    "SIMD lane-engine, transpose, kernel and caller cleanup composition",
+    "complete reachable frame and storage assignments; fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

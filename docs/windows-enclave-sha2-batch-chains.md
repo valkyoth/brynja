@@ -34,7 +34,7 @@ scalar active-slot and checked budget accounting, and scalar completion
 publication only after successful finalization. Private ABI checks retain the
 compiler's 1,024-byte sequential input bound and fixed SIMD lane-array sizes.
 Constructor failure loops clear all 4,096 backing-page bytes. This does not
-claim erasure of constructor stack copies or SIMD live-page retirement.
+claim erasure of constructor stack copies. SIMD retirement is checked separately below.
 
 The sequential scalar and SHA-NI terminal/retirement composition additionally
 checks all eight plan entries against their completion bits before sealing.
@@ -107,6 +107,35 @@ reject exhausted budgets and counter overflow, and clear 640 scratch bytes and
 128 block bytes after scalar compression. Report accounting also rejects overflow.
 Early helper failures still depend on caller-owned workspace cleanup; callback
 object provenance and scalar-kernel composition remain pending.
+
+## SIMD owned storage and selected normal cleanup
+
+Complete emitted instruction sequences now cover seven cleanup routines per SIMD
+route: CPU scratch, scalar owner, hash workspace, workspace drop glue, secret
+output drop, worker buffer clear and buffer drop glue. Workspace field coverage
+is checked byte-for-byte without overlap, including inactive lanes. The narrow
+workspace clears 5,275 declared-field bytes out of its 5,280-byte allocation;
+the wide workspace clears 5,751 out of 5,760. The trailing alignment padding is
+not individually wiped. Neither this field check nor drop glue qualifies
+compiler-created copies, register saves or the enclosing frame.
+
+Secret output destruction visits all eight narrow or four wide pointer/length
+slots and clears the identity field. Null/empty slots are not dereferenced;
+validity and lifetime of caller-supplied destinations remain caller obligations.
+Selected resident and wide-executor error paths require workspace and staging
+erasure before normal return. The private engine's saved error-discriminant
+arithmetic distinguishes ordinary request rejection from integrity failures;
+this does not assert that every outer owner remains reusable after rejection.
+Complete error-entry and success-transfer composition remain pending.
+
+Every normal worker return after buffer construction reaches destruction of
+the complete 8,192-byte narrow or 4,096-byte wide payload and its 288/160-byte
+header. Admitted cancellation clears retained output and resets the plan/phase.
+Retirement checks the supplied page identity, removes the resident from LIVE,
+destroys its output/authority state, and uses an explicit volatile loop to clear
+all 4,096 backing-page bytes before clearing the page identity. The old-page
+replacement loop is also checked. Complete worker admission/lifetime composition
+and shared-window reclamation are still separate obligations.
 
 ## Reproduced primitives and changed finalizer
 
@@ -199,9 +228,9 @@ version rejects all 138 changes.
 
 ## Tests and retained evidence
 
-Twenty-six review tests pass on Linux and Windows with matching parsed reports.
-They reject 440 semantic-landmark removals, 48 private ABI changes, 75
-required-return-event bypasses (74 cleanup and one KAT comparison), twelve
+Twenty-eight review tests pass on Linux and Windows with matching parsed reports.
+They reject 469 semantic-landmark removals, 48 private ABI changes, 103
+required-return-event bypasses (102 cleanup and one KAT comparison), twelve
 lifecycle, eleven finalizer, seven state/funclet and three admission/KAT premature returns,
 116 per-helper body/reference/extent/ABI mutations, altered callback layouts/pointers, diagnostic-data drift,
 incomplete inventories and inconsistent source closures. The byte-mutation
@@ -256,17 +285,22 @@ The [digest callback/cleanup observation](../assurance/windows-protection-observ
 extends that checkpoint to all 32 SIMD funclets, forty session/funclet premature
 return mutations, 258 cleanup-table field mutations and sixty table deletion or
 duplication mutations. Earlier observations retain their historical scope.
+The [owned-storage observation](../assurance/windows-protection-observations/sha2-batch-storage-progress-20261006.json)
+adds the field coverage, complete cleanup routines, selected normal error paths
+and worker retirement checks. All 284 individual destructor instruction/control
+label replacements are rejected. It retains the unchanged native component runs;
+the Windows replay is not a new native enclave execution.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-digest-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-storage-linux.json
 ```
 
-Without the saved directory the test command runs ten self-contained tests
-and explicitly skips the sixteen saved-artifact tests.
+Without the saved directory the test command runs eleven self-contained tests
+and explicitly skips the seventeen saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -277,7 +311,9 @@ and explicitly skips the sixteen saved-artifact tests.
 - Complete SIMD surrounding pointer/storage lifetimes, lane-engine/kernel
   composition and normal error paths. Local callback sources, invoked funclet
   actions and compiler cleanup-state order are now checked; these need composition
-  with each caller's live storage.
+  with each caller's live storage. Declared-field erasure, output/worker buffer
+  destruction, page retirement and selected error-return cleanup now have checks;
+  they do not close complete alias or lifetime composition.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

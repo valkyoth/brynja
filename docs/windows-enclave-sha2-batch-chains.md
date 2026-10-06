@@ -411,17 +411,35 @@ returns, twenty-eight dispatch mutations and two saved-guard disarming changes,
 alongside the existing semantic-sequence and cleanup-event mutations. Fresh
 Linux AVX2 worker-double campaigns pass for both families. Shared OS-copy and
 window cleanup are not qualified by those tests.
+The [output commit observation](../assurance/windows-protection-observations/sha2-batch-output-commit-progress-20261006.json)
+adds every destination-width preflight before the first write, all eight/four
+copy call arguments and failures, and workspace destruction after successful
+commit. Narrow widths must be 28 or 32 bytes; wide widths must be 1 through 64.
+Selected contiguous move-only regions now have symbolic byte-provenance checks:
+136 narrow descriptor/identity bytes and two 72-byte wide transfers are preserved
+exactly. The checker handles overlapping copies, GPR subregister writes and
+VEX upper-lane clearing; unseeded origins are distinct, not assumed zero.
+It rejects address-base rewrites and unsupported operations. Its fixed frame/ABI
+assignments are not a general alias analysis or a proof of pointer integrity
+through the preceding engine. In particular, the first prepared source pointer's
+lifetime across finalization and the destination table's lifetime across inner
+computation remain pending.
+Sixty-three review tests pass on Linux and Windows with matching parsed reports.
+They reject 280 returned-byte corruptions and thirteen shifted source loads,
+alongside 630 semantic-sequence mutations and the earlier regression campaigns.
+Production sources are unchanged; the preceding native worker reports are reused,
+not represented as fresh runs. This checkpoint does not close package 5.
 
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-digest-caller-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-output-commit-linux.json
 ```
 
-Without the saved directory the test command runs twenty-four self-contained tests
-and explicitly skips the twenty-eight saved-artifact tests.
+Without the saved directory the test command runs thirty-one self-contained tests
+and explicitly skips the thirty-two saved-artifact tests.
 
 ## Remaining package-5 work
 
@@ -440,7 +458,9 @@ and explicitly skips the twenty-eight saved-artifact tests.
   not close complete alias or lifetime composition across the digest engine.
   The enclosing digest caller now has typed input admission, scratch/output
   layout, plan/width and post-result lifetime checks; the inner lane engine and
-  preservation of returned destination pointers remain to be composed.
+  preservation of destination pointers across computation remain to be composed.
+  The final width preflight, copies and returned descriptor moves now have checks;
+  these do not establish descriptor integrity before that region begins.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

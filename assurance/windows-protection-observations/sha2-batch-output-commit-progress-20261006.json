@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "b3ca0113c74e9a958f22848f9d816b6d1bd2ecf7",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 63,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-output-commit-linux.json": "028809640e20c5e4cf7a043bfd4fb65f201b164311c4540f742d819f8cce1320",
+    "sha2-batch-output-commit-windows.json": "630e323f343098e8206de1f3bee7cb4ab4e565430234a5067f900829d4d65438"
+  },
+  "review_source_sha256": {
+    "test-windows-enclave-sha2-batch-chains.py": "dd9a4fb15cd3888a962985c7ae8bb006826c38286d8def638fd4d71d11ca990b",
+    "windows_enclave_sha2_simd_commit_tests.py": "6a04e131a1833d9af9e8ff621d2873fcaaf71f83fd0b4df01955400abf6d15e8",
+    "windows_enclave_sha2_simd_moves.py": "c3eaef14fb5a33746d4ae9899b8c466e6192c3ba7e4e32332f7f2b36338dcc78",
+    "windows_enclave_sha2_simd_commit.py": "442853833ae57a177cea5df26bb36f32047fc58382448139a3d32da9c0c54ac3"
+  },
+  "prior_review_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "new_reviewed_scope": [
+    "all eight narrow and four wide output-width preflights before the first destination write",
+    "each copy binds its destination descriptor, prepared source pointer and admitted length",
+    "copy failures enter existing revocation paths; workspace destruction follows successful commit",
+    "136-byte narrow return aggregate and both 72-byte wide return aggregates retain every descriptor and identity byte",
+    "restricted symbolic move evaluator checks overlapping loads/stores, GPR aliases and VEX upper-lane clearing",
+    "unknown byte origins remain distinct; address-base rewrites and unsupported instructions reject"
+  ],
+  "symbolic_copy_scope": "Selected contiguous move-only regions under their existing ABI and frame assignments; not a general interpreter or proof of the preceding computation",
+  "semantic_landmark_mutations_rejected": {
+    "scalar": 121,
+    "sha_ni": 153,
+    "simd256": 167,
+    "simd512": 189
+  },
+  "required_return_event_mutations_rejected": 119,
+  "returned_descriptor_byte_corruptions_rejected": 280,
+  "descriptor_source_load_offset_mutations_rejected": 13,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "native_worker_report_sha256": {
+    "sha256-simd-worker-results.json": "685e127a8736bce7c22d2d1bcc8eb83d9c41de219d01c6bd71525a5e9ba56b89",
+    "sha512-simd-worker-results.json": "1cc405393e0a5be747d49f0b110fd3e1d1cdc8171862e9b233c0e0301ab1d373"
+  },
+  "native_worker_platform": "x86_64-unknown-linux-gnu AVX2, OS-copy doubles; no new runtime campaign in this review-only checkpoint",
+  "complete_digest_engine_composition_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "os_copy_and_reentrancy_qualified": false,
+  "remaining_private_review": [
+    "descriptor and first prepared source-pointer integrity across inner SIMD computation",
+    "algorithm and result identity composition through the lane engine",
+    "remaining primitive-helper and batch-specific caller preconditions",
+    "complete enclosing frame/storage and lifetime assignments",
+    "remaining fail-stop preconditions"
+  ],
+  "shared_completion_package": 8
+}

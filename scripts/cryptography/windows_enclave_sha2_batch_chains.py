@@ -36,6 +36,7 @@ import windows_enclave_sha2_wide_outputs as wide_outputs
 import windows_enclave_sha2_parent_outputs as parent_outputs
 import windows_enclave_sha2_parent_authority as parent_authority
 import windows_enclave_sha2_parent_setup as parent_setup
+import windows_enclave_sha2_parent_remaining as parent_remaining
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -290,6 +291,7 @@ def inspect_route(base,root,lane,pin,mutate):
             semantics['simd_parent_output_effects']=parent_outputs.inspect(bodies,asm,semantics)
             semantics['simd_parent_authority_effects']=parent_authority.inspect(bodies,asm,semantics)
             semantics['simd_parent_setup_effects']=parent_setup.inspect(bodies,asm,semantics)
+            semantics['simd_parent_remaining_interfaces']=parent_remaining.inspect(bodies,asm,semantics)
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0

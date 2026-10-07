@@ -1447,6 +1447,48 @@ current checker-source bindings. Exact source/report hashes, the 192 new
 mutation cases and remaining conditions are recorded in
 `assurance/windows-protection-observations/sha2-batch-parent-admission-progress-20261007.json`.
 
+## Wide parent final call interfaces (2026-10-07)
+
+`windows_enclave_sha2_parent_remaining.py` assigns the last three parent sites
+without treating their distinct obligations as interchangeable. The stack probe
+has the exact 12,984-byte allocation argument and occurs before private-frame
+alignment; its register preservation and stack-touch implementation remain in
+shared package 8. It is not assigned an empty memory-effect contract.
+
+The tail predicate reads exactly one byte from the original current input's
+`pointer + length - 1`. Its full emitted body, cleared temporary and leaf stack
+are checked. The header cursor starts at the incoming argument plus twenty,
+advances by twenty-four exactly once per published input, and selects four
+headers. Only lengths one through 1,024 and terminal bit counts one through
+seven can enter this predicate. Empty and byte-aligned inputs take separate
+paths; they are not newly rejected by the public API.
+CFG checks reject bypasses and repeated cursor advances. The broad input read
+envelope is not an assertion that the predicate reads every byte.
+
+The child call checks all six actual ABI arguments, including the two outgoing
+stack slots and the workspace pointer's reaching definition. The existing
+104-byte hidden-result contract and non-error descriptor handoff are required.
+All 36 returning child helpers and the separately unreachable overflow terminal
+are assigned exactly once. Their mapped effects exclude the parent's live input
+headers, original output descriptors and admitted-owner pointer. Child result
+stores construct a new returned object; they are not misclassified as preserving
+an already-live returned object.
+
+All 27 parent call **interfaces** are now assigned. This does not close private
+frame erasure, every direct compiler spill, or shared-runtime qualification.
+The report explicitly retains seven shared calls (the probe plus six SDK memory
+calls), final child private-frame assignment, and the existing OS/window/ABI
+conditions. The 39 narrow-route caller sites remain next. Six focused tests
+reject 76 new mutations of predicate bodies, cursor/length/mask guards, argument
+slots, inventories, effects and prerequisites. No production source, native
+image or release-gate policy changed.
+
+Both hosts passed all 282 tests (123 self-contained and 159 saved-artifact
+tests): Linux in 455.123 seconds and Windows in 475.557 seconds. The integrated
+mutation reports are identical after parsing and bind 152 current checker
+sources. Hashes, scopes and remaining conditions are recorded in
+`assurance/windows-protection-observations/sha2-batch-parent-remaining-progress-20261007.json`.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

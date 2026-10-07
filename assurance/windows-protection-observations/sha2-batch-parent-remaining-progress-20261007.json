@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "afcff67b28c6c05520083cdd8307aaa09f72f304",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "focused_validation": {"status": "PASS", "tests": 6, "seconds": 10.322},
+  "full_validation": {
+    "linux": {"status": "PASS", "tests": 282, "seconds": 455.123},
+    "windows": {"status": "PASS", "tests": 282, "seconds": 475.557}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 152,
+  "report_sha256": {
+    "sha2-batch-parent-remaining-linux.json": "d7923f7de0e2f2a671e2c1c8f709b72996b204f7a7225f8ffc731daf6ed95fa7",
+    "sha2-batch-parent-remaining-windows.json": "858eb47c93c065c022df2dcfa359a9af2f9d3d727f559f07f37a9e71f80753e5"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_parent_remaining.py": "3322b1c785f92d5d5add3d0ed8201057f2b9fb135e9570915a9fa4da6cd0b6dd",
+    "windows_enclave_sha2_parent_remaining_tests.py": "bf372ffe921c28973b87f5e167ea812141035ecd683ca8835ef627e4b2a8f7d1",
+    "windows_enclave_sha2_batch_chains.py": "3911981ead8329ee07668921b2c88920a42523429cf4122d63cc8020e492e2c3",
+    "windows_enclave_sha2_source_lifetime_tests.py": "d386cb7b970aa9840e0b22b2a4e1f00f361d088a60010236fcb97ce6b4dc3cd4"
+  },
+  "prior_review_observation": "sha2-batch-parent-admission-progress-20261007.json",
+  "new_reviewed_scope": [
+    "fixed stack-probe argument and pre-alignment call placement, not its runtime implementation",
+    "complete single-byte mask predicate body, original header cursor and final-byte bounds",
+    "all six child ABI arguments including original workspace and stack slots",
+    "existing child helper effects preserve parent inputs, original descriptors and owner slot",
+    "complete once-only child call inventory and guarded returned-object handoff"
+  ],
+  "new_saved_tests": 6,
+  "new_saved_mutations_rejected": {
+    "predicate_body_deletions_and_extra_effects": 11,
+    "header_cursor_length_mask_and_guard_bypasses": 24,
+    "child_arguments_overwrites_and_bypasses": 17,
+    "child_effects_inventory_and_result_extent": 10,
+    "prerequisites_probe_and_parent_inventory": 14
+  },
+  "remaining_callsite_interfaces": {
+    "narrow": 39,
+    "wide_child": 0,
+    "wide_parent": 0,
+    "wide_parent_assigned": 27,
+    "wide_child_returning_assigned": 36,
+    "assignment_is_not_full_memory_stack_or_erasure_qualification": true
+  },
+  "shared_runtime_calls": {
+    "instruction_offsets": [21, 183, 187, 216, 241, 245, 258],
+    "private_argument_contracts_checked": true,
+    "runtime_register_memory_and_stack_contracts_qualified": false,
+    "memset_is_volatile_erasure": false
+  },
+  "conditional_prerequisites": [
+    "live separated owner/authority page and parent/worker allocations",
+    "fresh child argument, helper, metadata and result-lifetime reviews",
+    "serialized nonreentrant transport and Win64 nonvolatile/call ABI",
+    "OS-admitted worker window and bound SDK/probe implementations"
+  ],
+  "remaining_private_review": [
+    "join the 39 narrow-route callsites using completed primitive and pointer reviews",
+    "finish finite private frame and storage assignments across all four routes, including the wide child"
+  ],
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

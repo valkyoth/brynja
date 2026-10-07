@@ -29,13 +29,25 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The parent-interface checkpoint assigns the last three wide-parent sites:
+the bounded tail-byte predicate, all six original child-executor arguments,
+and the stack-probe size/placement. All 27 parent call interfaces and all 36
+returning child calls now have assignments. The child's helper effects are
+joined to the parent's live input descriptors, original output descriptors and
+owner slot; its returned-object lifetime still starts only after result admission.
+This is not a complete memory/stack-effect qualification: seven SDK/probe calls
+remain shared-runtime obligations, and private-frame assignment/erasure is still
+open. The next caller work is the 39 narrow-route sites, followed by final private
+frame/storage composition across the four routes. Production and gate policy
+are unchanged.
+
 The parent-admission checkpoint joins twelve more wide-parent calls: operation
 admission, two compiled callbacks, two authority checks, owner-output clearing,
 and six fixed SDK copy/fill calls. Complete operation/check bodies preserve the
 phase, nonwrapping sequence, health and revalidation failures; successful admission
 returns the original owner pointer. Actual caller roots, callback/backend fields,
 bounded helper stacks and non-overlap are checked. Setup cannot re-enter after
-output descriptor construction. This leaves 39 narrow calls and three parent
+output descriptor construction. That checkpoint left 39 narrow calls and three parent
 sites (stack probing, the tail-mask predicate and child-executor composition).
 The six SDK memory-call implementations/stacks remain explicitly in shared
 runtime qualification; assigning their private arguments does not close that

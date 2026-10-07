@@ -29,6 +29,18 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The latest overflow/cleanup-order checkpoint also closes the saved wide `.B302`
+admitted-input proof and joins preceding caller-side cleanup-handler effects at
+all 21 descriptor-related protected calls. Four parent tail-byte publications,
+the child scalar index save/restore and the original input pointer are checked
+through their actual CFGs. Seven complete handler prefixes and their write
+envelopes preserve the live descriptors; wide invoke-time pointer slots are
+re-traced rather than assumed valid across phases. Normal indirect helper-effect
+composition and the finite private frame/storage assignments still remain in
+package 5. OS/ABI handler stacks and runtime guarantees remain package 8.
+These are saved-artifact author checks, not new native execution or independent
+retest; production source and release-gate policy are unchanged.
+
 The overflow-path checkpoint closes both incoming guards of the saved narrow
 SIMD resident's `.B190` panic block, conditional on the completed input/metadata/
 allocation reviews and named shared-runtime prerequisites. The iterator remains

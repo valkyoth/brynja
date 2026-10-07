@@ -118,18 +118,17 @@ class DynamicCleanupSavedTests:
         self.assertEqual(count,11)
 
     def test_actual_wide_overflow_outside_slice_is_not_reported_absent(self):
-        import windows_enclave_sha2_failstop as f
+        import windows_enclave_sha2_wide_failstop as f
         lane,_,asm,bodies=next(v for v in self.cleanup_rows() if v[0]=='simd512')
-        prior={'simd_control_call_effects':{'failstop_paths':[]}}
-        result=f.inspect(bodies,asm,lane,prior)
+        result=f.inventory(bodies,asm)
         self.assertEqual(result['whole_function_overflow_paths'],1)
         self.assertTrue(result['admitted_input_unreachability_join_pending'])
         name=result['function'];lines=p.s.lines(bodies[name]);at=result['terminal_call']
         for where,text in [(at+1,'retq'),(result['guard']-1,'cmpb $8, %bl'),(at,'callq returning')]:
             bad=lines[:];bad[where]=text
-            with self.assertRaises(ValueError):f.inspect(bodies|{name:'\n'.join(bad)},asm,lane,prior)
+            with self.assertRaises(ValueError):f.inventory(bodies|{name:'\n'.join(bad)},asm)
         bad=lines[:1]+['jne .B302']+lines[1:]
-        with self.assertRaises(ValueError):f.inspect(bodies|{name:'\n'.join(bad)},asm,lane,prior)
+        with self.assertRaises(ValueError):f.inventory(bodies|{name:'\n'.join(bad)},asm)
 
     def test_actual_dynamic_cleanup_active_handler_pointer_and_flag_mutants(self):
         count=0

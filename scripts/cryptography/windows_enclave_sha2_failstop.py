@@ -145,22 +145,8 @@ def compose(prior,name):
 
 def inspect(bodies,assembly,lane,prior):
     if lane=='simd512':
-        s.require(prior['simd_control_call_effects']['failstop_paths']==[],
-                  'wide selected slice contains no direct overflow-panic call')
-        # The selected slice branches to a terminal outside its interval. An
-        # empty local call list must not become a whole-function absence claim.
-        name=s.one(bodies,r'Executor13digest_secret$');lines=s.lines(bodies[name])
-        graph=g.graph(lines,o.source.paths.jump_tables(assembly,lines))
-        at=o.unique(lines,'.B302:');guard=o.unique(lines,'ja .B302')
-        s.require(lines[guard-1]=='cmpb $7, %bl' and
-            re.fullmatch(r'callq \S*panic_const_shr_overflow',lines[at+1]) is not None and
-            lines[at+2]=='ud2','wide out-of-slice shift overflow terminal')
-        n.straight(graph,guard-1,guard);n.straight(graph,at,at+2)
-        s.require(n.predecessors(graph,at)=={guard},'complete wide overflow terminal entries')
-        return dict(function=name,selected_slice_direct_overflow_calls=0,
-            whole_function_overflow_paths=1,guard=guard,terminal_call=at+1,
-            admitted_input_unreachability_join_pending=True,
-            returning_effects_assigned=False,whole_frame_qualified=False)
+        import windows_enclave_sha2_wide_failstop as wide
+        return wide.inspect(bodies,assembly,prior)
     s.require(lane=='simd256','assigned SIMD fail-stop route')
     name=s.one(bodies,r'Resident6digest$');lines=s.lines(bodies[name])
     states,graph,_=n.prepare(lines,assembly,name)

@@ -1171,7 +1171,9 @@ The integrated report clears the previous
 after this check passes. The standalone descriptor checker still correctly
 reports that it cannot establish that join by itself. Complete indirect helper
 effects, earlier cleanup-handler effects, the wide `.B302` admission proof and
-the final private frame/storage assignments remain open. No claim of whole-frame
+the final private frame/storage assignments remained open at that checkpoint.
+The following checkpoint closes the named overflow and handler-prefix joins.
+No claim of whole-frame
 erasure, arbitrary exception cleanup, OS residency or independent review follows.
 
 Reproduce with the commands above and output name `sha2-batch-wide-result-linux.json`.
@@ -1183,6 +1185,61 @@ reports match with 144 checker-source bindings. Linux took 363.782 seconds;
 Windows took 363.408 seconds.
 Production source, images and release-gate policy are unchanged; the saved native
 artifacts are reused, not presented as a new native enclave execution.
+
+## Wide overflow and descriptor cleanup-order composition (2026-10-07)
+
+`windows_enclave_sha2_wide_failstop.py` joins the saved wide `.B302` shift-panic
+guard to the parent admission and child scalar-lane lifetimes. The whole-function
+inventory still includes the panic call and `ud2`; an empty list of panic calls
+inside the smaller finish slice is not an absence claim.
+
+The parent publishes all four tail-byte fields with index 34, 74, 114 and 154,
+corresponding to offset 24 in the descriptors at 192, 232, 272 and 312. Every
+publication is zero or passes the unsigned one-through-eight admission guard.
+Single-entry and backedge checks establish the complete publication induction;
+the child call is reachable only through its exhausted-loop edge.
+
+The child uses original input argument R8, saved at frame offset 1040. Its scalar
+byte-offset starts at zero, advances by 40, and stops at 160. The nonempty-lane
+path saves the current index at offset 1000 and restores that exact value before
+the next increment. The absent-lane path preserves the same index. Both paths,
+all reaching definitions, computed stack-store extents and bypass/replay edges
+are checked. The field load at descriptor offset 24 therefore selects one of
+the four admitted original fields. `testb $-9, %bl` selects only values 1–7;
+the same BL survives to `cmpb $7, %bl` under the reviewed nonvolatile ABI. The
+overflow branch is unreachable for these admitted, preserved inputs. Current
+field-preservation and physical-allocation reviews remain explicit prerequisites.
+
+`windows_enclave_sha2_cleanup_order.py` joins the caller-side cleanup order to
+the previously checked dynamic descriptor lifetimes. It covers all 21 related
+protected-call boundaries: nine narrow, ten wide child and two wide parent.
+Complete prefixes of seven distinct handlers are checked, including their frame
+reconstruction, guard, pointer reloads, preceding workspace wipe and quarantine
+stores. The actual FH3 chain may not contain an unassigned earlier handler.
+
+Narrow earlier handlers use the already traced authority slot. The wide check
+re-traces the original incoming workspace, executor and the first-invoke
+authority save at each applicable call; it does not assume that repurposed
+offset 1024 always contains an authority. Handler write envelopes exclude the
+live descriptor regions and guard flag. The returned narrow and wide parent
+destructors have no earlier handler effects. Existing exact workspace-wipe
+contracts are reproduced, not inferred from a function name alone.
+
+These are conditional **caller-side** joins. Unwinding callees, normal helper
+effects, private frame assignments, OS dispatcher/handler stacks and the shared
+runtime contract are not thereby qualified. They do not establish individual
+spill erasure, arbitrary exception cleanup or whole-frame erasure. Production
+code, native images and release gates are unchanged.
+
+Reproduce with the earlier commands and output name
+`sha2-batch-overflow-cleanup-linux.json`. The new focused regressions reject 51
+saved-code overflow mutations and five weakened overflow prerequisites, plus
+37 cleanup-prefix/pointer mutations and twelve weakened cleanup prerequisites.
+The complete two-host results are recorded in
+`assurance/windows-protection-observations/sha2-batch-overflow-cleanup-progress-20261007.json`.
+All 246 tests pass on each host (119 self-contained and 127 saved-artifact).
+Parsed reports match with 146 current checker-source bindings. Linux took
+375.776 seconds; Windows took 412.420 seconds.
 
 ## Remaining package-5 work
 
@@ -1233,9 +1290,11 @@ artifacts are reused, not presented as a new native enclave execution.
   narrow normal descriptor copies/direct-write lifetimes and nineteen protected
   call boundaries. The wide descriptor/result checkpoint now also joins the
   original R9 argument, both normal parent destructors and the two protected
-  parent call boundaries. Finish indirect effect/cleanup-order composition and
-  the wide `.B302` admission proof; then close the finite private frame/storage
-  assignments. Do not repeat completed loop, direct-write or result-admission
+  parent call boundaries. The latest checkpoint also closes the wide `.B302`
+  admission proof and preceding caller-side cleanup-handler effects at all 21
+  descriptor boundaries. Finish normal indirect helper-effect composition and
+  close the finite private frame/storage assignments. Do not repeat completed
+  loop, direct-write, result-admission, overflow or handler-prefix
   checks as a substitute for those remaining joins.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.

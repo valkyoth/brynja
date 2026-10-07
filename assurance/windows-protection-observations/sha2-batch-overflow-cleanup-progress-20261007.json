@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "64c021171f72d5ae83009de3e8984bf914b41a12",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "conditional_wide_overflow_unreachability_checked": true,
+  "conditional_caller_cleanup_prefix_composition_checked": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "review_tests_per_host": 246,
+  "self_contained_tests": 119,
+  "saved_artifact_tests": 127,
+  "test_seconds": {
+    "linux": 375.776,
+    "windows": 412.420
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 146,
+  "report_sha256": {
+    "sha2-batch-overflow-cleanup-linux.json": "808603f61b2045b32c0ba2fea6cdb7207aa6e1fedcfe4dcf753eeff3457b1cfe",
+    "sha2-batch-overflow-cleanup-windows.json": "cf071fc76d668597a52762b9adeb2cdc36f48556e8a0940e30333e5a14082737"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_batch_chains.py": "78d977424ea667cb802d53317f6cd36e655d215cee2081f3de226f37e69bf5ef",
+    "windows_enclave_sha2_failstop.py": "26d1bd7bd8e095bf808b676d3bf9d85b255459cd35e15d6742b0a29f4cfb453d",
+    "windows_enclave_sha2_wide_failstop.py": "f0b81a96f28f3a06155a9e182e0f74c6929653ecdd7fb40b2f59bd6ef50e7ef8",
+    "windows_enclave_sha2_wide_failstop_tests.py": "1da0ac36b8acff02c7d01466aa6d3aac01e41cf818e0a634776465d05667aaa6",
+    "windows_enclave_sha2_cleanup_order.py": "7823f06e7ba394a2bb0cc338bcee47ea264b15be9ef742b07e2a02f251e41e7f",
+    "windows_enclave_sha2_cleanup_order_tests.py": "5bec89e2400767de1d0d17c3decf983e7cc9f1dac607983e658b68ff313d381d",
+    "windows_enclave_sha2_source_lifetime_tests.py": "fad62107068d391de302f7c77e8e9b57a6cb49053fcc8f941f0b4391b0dacac0",
+    "windows_enclave_sha2_dynamic_cleanup_tests.py": "38b39c4613f566355103fc90cb28bc7991dd054110c8a686f1c89dcdd7d6ff9d"
+  },
+  "prior_review_observation": "sha2-batch-wide-result-progress-20261007.json",
+  "new_reviewed_scope": [
+    "wide parent complete four-lane tail-byte admission and publication induction",
+    "wide scalar byte-offset induction, current-lane save/reload and original R8 input argument lifetime",
+    "partial-byte predicate selects 1 through 7, preserving BL through the copy into the .B302 overflow comparison",
+    "whole-function shift-panic block retained explicitly despite zero panic calls inside the selected finish slice",
+    "actual caller-side FH3 predecessor ordering and exact seven handler prefixes before descriptor destruction",
+    "wide workspace, executor and phase-specific authority pointer availability at all ten child protected calls",
+    "preceding workspace/quarantine writes disjoint from live descriptor regions and guard flags at all twenty-one related protected-call boundaries"
+  ],
+  "new_saved_mutations_rejected": {
+    "wide_parent_tail_publication": 20,
+    "wide_scalar_index_lifetime": 16,
+    "wide_partial_byte_origin_and_guard": 15,
+    "weakened_overflow_prerequisites": 5,
+    "cleanup_prefix_writes_calls_and_frame_changes": 28,
+    "wide_invoke_saved_pointer_changes": 9,
+    "weakened_cleanup_prerequisites": 12
+  },
+  "remaining_private_review": [
+    "compose normal indirect helper effects with concrete descriptor and workspace lifetimes, including wide parent calls",
+    "complete finite private frame/storage assignments and remaining caller prerequisites across all four routes"
+  ],
+  "shared_runtime_prerequisites": [
+    "serialized nonreentrant transport retains the resident page through the operation",
+    "live distinct physical allocations and admitted worker window containing nested frames",
+    "Win64 nonvolatile/call ABI, stack probing and helper noninterference",
+    "OS exception dispatch, handler stacks and unwinding callee effects"
+  ],
+  "descriptor_bounds_fully_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "individual_stack_erasure_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

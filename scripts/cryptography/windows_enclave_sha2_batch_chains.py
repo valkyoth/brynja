@@ -30,6 +30,7 @@ import windows_enclave_sha2_allocation_lifetimes as allocation_lifetimes
 import windows_enclave_sha2_failstop as failstop
 import windows_enclave_sha2_dynamic_cleanup as dynamic_cleanup
 import windows_enclave_sha2_wide_result as wide_result
+import windows_enclave_sha2_cleanup_order as cleanup_order
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -277,6 +278,7 @@ def inspect_route(base,root,lane,pin,mutate):
             semantics['simd_wide_descriptor_handoff']=wide_result.inspect(bodies,asm,descriptors)
             descriptors['original_R9_caller_bounds_and_wide_return_discriminant_join_pending']=False
             descriptors['conditional_direct_parent_result_and_drop_lifetimes_joined']=True
+        semantics['simd_descriptor_cleanup_order']=cleanup_order.inspect(bodies,asm,lane,semantics)
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0

@@ -64,6 +64,8 @@ def wide(bodies,assembly):
     n.straight(edges,start,end)
     tables=o.source.paths.jump_tables(assembly,lines)
     raw=o.definitions(lines,name,tables,(),bases=o.BASES)
+    s.require(all(at in raw for at,line in enumerate(lines) if not line.startswith('.')),
+              'all assigned wide child instructions have reachable definition states')
     s.require(raw[start]['r9']==raw[start+1]['r9']=={-1},'descriptor copy reads original R9 argument')
     spans=o.indexed_effects(lines,raw,tables)
     early=r.loop(lines,edges,o.unique(lines,'.B16:')+4,'.B17','.B18','.B21','rsi',

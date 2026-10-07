@@ -1136,6 +1136,54 @@ gate changed. Direct-write preservation alone is not a whole-machine alias proof
 the remaining indirect helper effects, actual cleanup order and enclosing-frame
 assignments must still be composed. Shared window/OS/SDK work remains package 8.
 
+## Wide descriptor/result handoff (2026-10-07)
+
+The subsequent `windows_enclave_sha2_wide_result.py` check closes the direct
+wide caller/result obligation left open above. It composes the fresh descriptor
+geometry, aggregate-move and direct-write lifetime checks; it does not replace
+their helper, physical-separation or ABI prerequisites.
+
+The child's hidden result pointer must originate in entry RCX and remain the
+same pointer for all eleven result-object stores. The original R9 descriptor
+argument may be consumed only by its two vector loads. Additional pointer aliases,
+escapes, partial substitutions or result stores reject. The 72-byte descriptor
+transfer and subsequent metadata writes have separate checked extents in the
+104-byte return object. Metadata cannot overwrite the returned descriptors.
+
+Every normal return must follow either the error tag at result offset 96 or the
+complete preserved-descriptor copy followed by its result tag. The finite CFG
+check includes branches and backedges; an early return, skipped copy, missing tag
+or vacuous success form rejects. This is a one-way guarantee: a non-error result
+has copied descriptors. It is not a claim that every successful computation uses
+one particular public error/status value.
+
+The parent passes its initialized descriptors at offset 352 and the result area
+at offset 4640. Only the non-error edge of the offset-4736 tag comparison creates
+the returned-descriptor fact. The error edge never initializes that fact. The
+parent's full direct-write CFG then checks the forward and reverse descriptor
+copies, both normal output destructors and its guarded unwind destructor at the
+two protected-call sites. The original descriptor fact is invalidated by partial,
+overlapping or unbounded computed writes; the result branch cannot restore a
+corrupted original source. The actual aligned parent frame bases remain fixed.
+
+The integrated report clears the previous
+`original_R9_caller_bounds_and_wide_return_discriminant_join_pending` flag only
+after this check passes. The standalone descriptor checker still correctly
+reports that it cannot establish that join by itself. Complete indirect helper
+effects, earlier cleanup-handler effects, the wide `.B302` admission proof and
+the final private frame/storage assignments remain open. No claim of whole-frame
+erasure, arbitrary exception cleanup, OS residency or independent review follows.
+
+Reproduce with the commands above and output name `sha2-batch-wide-result-linux.json`.
+Results and source/report bindings are recorded in
+`assurance/windows-protection-observations/sha2-batch-wide-result-progress-20261007.json`.
+All 235 tests pass on each host (118 self-contained and 117 saved-artifact),
+including 47 new saved-code mutations and three prerequisite mutations. Parsed
+reports match with 144 checker-source bindings. Linux took 363.782 seconds;
+Windows took 363.408 seconds.
+Production source, images and release-gate policy are unchanged; the saved native
+artifacts are reused, not presented as a new native enclave execution.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.
@@ -1183,10 +1231,12 @@ assignments must still be composed. Shared window/OS/SDK work remains package 8.
   composition above closes the narrow `.B190` prerequisites; do not repeat that
   step. The dynamic descriptor checkpoint now covers all five clearing loops,
   narrow normal descriptor copies/direct-write lifetimes and nineteen protected
-  call boundaries. Finish the wide caller/result-discriminant join, indirect
-  effect/cleanup-order composition and wide `.B302` admission proof; then close
-  the finite private frame/storage assignments. Do not repeat completed loop or
-  narrow direct-write checks as a substitute for those remaining joins.
+  call boundaries. The wide descriptor/result checkpoint now also joins the
+  original R9 argument, both normal parent destructors and the two protected
+  parent call boundaries. Finish indirect effect/cleanup-order composition and
+  the wide `.B302` admission proof; then close the finite private frame/storage
+  assignments. Do not repeat completed loop, direct-write or result-admission
+  checks as a substitute for those remaining joins.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

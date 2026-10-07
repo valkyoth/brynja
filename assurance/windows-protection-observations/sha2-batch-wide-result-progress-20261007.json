@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "b1727b7fec7d46ef49524379fa966c90001d6c84",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "conditional_direct_wide_descriptor_handoff_checked": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "review_tests_per_host": 235,
+  "self_contained_tests": 118,
+  "saved_artifact_tests": 117,
+  "test_seconds": {
+    "linux": 363.782,
+    "windows": 363.408
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 144,
+  "report_sha256": {
+    "sha2-batch-wide-result-linux.json": "a9fe5db6de4f3de05323dbaff2fe2020b8ba05ad4879a8aefcbb9b8ae099fe46",
+    "sha2-batch-wide-result-windows.json": "2368936d86f2ef3de8b95e2f07030018705cd850c7dd53dc6c1d4e686ab3cafb"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_wide_result.py": "f086faf75f09162d2015d0cba8ca75d5a8e769590cf9992c44c81508b8a65ece",
+    "windows_enclave_sha2_wide_result_tests.py": "cba9adbc4094ee768dd03d0c56c7a1efbf5bf522184f1e92a116f697877b6d6b",
+    "windows_enclave_sha2_cleanup_regions.py": "9c441a32c8e4458206152763678dc0f418347eea335accfa2919b3e41548e3c4",
+    "windows_enclave_sha2_dynamic_cleanup.py": "82bc6fc141e811ab8ec8f918799f63088ada6486538bd1054e0af587e5f7bc08",
+    "windows_enclave_sha2_batch_chains.py": "4545bfdfbf99a930bc456bebc06baf2fa8c10411eea181f0363f8bc9fc1d2f03",
+    "windows_enclave_sha2_source_lifetime_tests.py": "828d6cf34dad423fef78749eaa48bab60a15abd3180e6de90d08eac9b170355d"
+  },
+  "prior_review_observation": "sha2-batch-dynamic-cleanup-progress-20261007.json",
+  "new_reviewed_scope": [
+    "all eleven child result stores use the same original hidden result argument, with no additional pointer aliases, escapes or partial substitutions",
+    "original R9 descriptor argument explicitly consumed only by its two vector loads",
+    "72-byte descriptor copy and metadata extents checked within the 104-byte result object",
+    "every normal child return follows the error discriminant or the complete preserved-descriptor copy and result tag",
+    "parent passes original352 descriptors and result4640; only non-error edge449->450 initializes the returned descriptor fact",
+    "parent direct partial, overlapping and computed writes invalidate descriptor provenance before copy, normal drop or activated unwind drop",
+    "both normal parent drops571/590 and guarded unwind boundaries479/576 require their corresponding initialized descriptor objects",
+    "unreachable wide instructions now reject explicitly instead of raising an incidental missing-definition lookup error"
+  ],
+  "new_saved_mutations_rejected": {
+    "child_result_stores_pointer_origins_and_escapes": 22,
+    "child_early_returns_and_copy_bypasses": 9,
+    "parent_arguments_discriminant_drops_and_guard": 16,
+    "missing_fresh_descriptor_prerequisites": 3
+  },
+  "finite_analysis_states": {
+    "child_return_forms": 1750,
+    "parent_descriptor_lifetimes": 782
+  },
+  "remaining_private_review": [
+    "compose indirect helper effects and effects of preceding cleanup handlers with concrete descriptor and workspace lifetimes",
+    "wide .B302 admitted-input unreachability proof",
+    "complete finite private frame/storage assignments and remaining caller prerequisites across all four routes"
+  ],
+  "shared_runtime_prerequisites": [
+    "serialized nonreentrant transport retains the resident page through the operation",
+    "live distinct physical allocations and admitted worker window containing nested frames",
+    "Win64 nonvolatile/call ABI, stack probing and helper noninterference",
+    "OS exception dispatch and prior cleanup-handler effects"
+  ],
+  "descriptor_bounds_fully_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "individual_stack_erasure_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

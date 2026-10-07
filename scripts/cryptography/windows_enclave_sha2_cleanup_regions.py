@@ -39,16 +39,17 @@ def copy(bodies,name,first,last,source,destination,size,graph):
     return result|dict(first_line=a,last_line=b)
 
 
-def lifetime(lines,graph,bases,regions,initializers,reads,indexed=None,flags=(),guarded=None):
+def lifetime(lines,graph,bases,regions,initializers,reads,indexed=None,flags=(),guarded=None,edge_initializers=None):
     """Track initialized descriptor regions and output-drop guard flags together.
 
 Reads occur before the instruction; a final construction store establishes its
 region only after that instruction. Every other overlapping direct write kills
 the fact. A copied region is only initialized when its source is already valid.
 """
-    indexed=indexed or {};guarded=guarded or {};names=tuple(regions);positions={k:i for i,k in enumerate(names)}
+    indexed=indexed or {};guarded=guarded or {};edge_initializers=edge_initializers or {}
+    names=tuple(regions);positions={k:i for i,k in enumerate(names)}
     todo=[(0,frozenset(),tuple(None for _ in flags))];seen=set();before={}
-    writes=set();read_sites=set();guarded_sites=set()
+    writes=set();read_sites=set();guarded_sites=set();initialized_edges=set()
     while todo:
         at,valid,flag_values=todo.pop();key=(at,valid,flag_values)
         if key in seen:continue
@@ -76,8 +77,17 @@ the fact. A copied region is only initialized when its source is already valid.
             s.require(root in positions and (source is None or source in valid),
                       'descriptor copy requires its original initialized source')
             new.add(root)
-        todo.extend((dest,frozenset(new),tuple(new_flags)) for dest in graph[at])
+        for dest in graph[at]:
+            next_valid=set(new)
+            for root,source in edge_initializers.get((at,dest),()):
+                s.require(root in positions and (source is None or source in new),
+                          'conditional result requires the original initialized source')
+                next_valid.add(root);initialized_edges.add((at,dest))
+            todo.append((dest,frozenset(next_valid),tuple(new_flags)))
     s.require(set(reads)<=before.keys() and set(initializers)<=before.keys() and set(guarded)<=before.keys(),
               'all descriptor lifetime events are reachable')
-    return dict(reachable_states=len(seen),direct_write_sites=sorted(writes),
-        required_read_sites=sorted(read_sites),guarded_invoke_sites=sorted(guarded_sites)),before
+    s.require(initialized_edges==set(edge_initializers),'all conditional initialization edges are real and reachable')
+    result=dict(reachable_states=len(seen),direct_write_sites=sorted(writes),
+        required_read_sites=sorted(read_sites),guarded_invoke_sites=sorted(guarded_sites))
+    if edge_initializers:result['conditional_initialization_edges']=sorted(initialized_edges)
+    return result,before

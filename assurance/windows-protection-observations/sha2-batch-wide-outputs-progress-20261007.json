@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "33d91fea72f9b2f7a7ab79a98cb450c3e48543cb",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "wide_child_normal_call_assignment_complete": true,
+  "wide_child_returning_calls": 36,
+  "wide_child_separately_reviewed_terminal_calls": 1,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "review_tests_per_host": 262,
+  "self_contained_tests": 123,
+  "saved_artifact_tests": 139,
+  "test_seconds": {
+    "linux": 424.148,
+    "windows": 456.418
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 148,
+  "report_sha256": {
+    "sha2-batch-wide-outputs-linux.json": "5d54080b83a39baa4a9f7ee65fa33a80bc4b9419b8455fa209a2589571259ac0",
+    "sha2-batch-wide-outputs-windows.json": "b34fde0fd06456a56168d8773ae43e8eea2d319c9094bfbea4b7cc54585d22d6"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_wide_outputs.py": "8507d8f34b6835f5c22595e5204bc831b85922fee793174f0e82f19cfd39a266",
+    "windows_enclave_sha2_wide_outputs_tests.py": "871ab4bf1e0a63c7cdd48f5282a963987d1a23f0581be642eef6bdcd50fd846b",
+    "windows_enclave_sha2_batch_chains.py": "b84e972458927f1755df0903d315efa45c36c31b06f7e286c0fa58fc40d184a9",
+    "windows_enclave_sha2_source_lifetime_tests.py": "af8e1f0c50b7a4dfda271cef982727b26bff7585ef4c38e2c81722037e26860c"
+  },
+  "prior_review_observation": "sha2-batch-normal-effects-progress-20261007.json",
+  "new_reviewed_scope": [
+    "four final-copy original workspace sources and matching preserved descriptor capacities/lengths",
+    "successful unsigned width guards dominate each reached final copy; widths are one through sixty-four",
+    "only four exact preflight null edges excluded under the prior nonnull live-parent descriptor contract",
+    "bounded paired dynamic output clearing and exact eight-byte identity clearing with actual pointer lifetimes",
+    "original authority/backend and control/vtable/data roots of the two initial memory-free callbacks",
+    "five-body normal callee stack closure and copy/clear effects preserve live descriptors and later-copy slots",
+    "complete single assignment of all thirty-six wide child returning calls; admitted unreachable terminal kept separate"
+  ],
+  "new_saved_mutations_rejected": {
+    "source_length_lifetime_and_guard_bypasses": 18,
+    "copy_capacity_and_lane_substitutions": 12,
+    "clear_pointer_width_and_loop_changes": 6,
+    "callback_roots_and_memory_free_bodies": 9,
+    "weakened_prerequisites_and_missing_assignments": 15
+  },
+  "remaining_callsite_composition": {
+    "narrow": 39,
+    "wide_child": 0,
+    "wide_parent": 25,
+    "counts_do_not_mean_new_unreviewed_primitive_bodies": true
+  },
+  "remaining_private_review": [
+    "join remaining narrow and wide-parent helper arguments and effects using existing primitive and geometry reviews",
+    "complete finite private frame/storage assignments and remaining caller prerequisites across all four routes"
+  ],
+  "conditional_prerequisites": [
+    "original four nonnull descriptors constructed in live parent output storage and preserved through child use",
+    "source, destination, descriptor and nested stack allocations remain distinct and live",
+    "current parent helper contracts, original pointer lifetimes and immutable callback identities",
+    "serialized nonreentrant transport retains the resident page through the operation",
+    "Win64 nonvolatile/call ABI, stack probing and admitted worker window",
+    "OS exception dispatch, handler stacks and unwinding callee effects remain shared review"
+  ],
+  "arbitrary_descriptor_API_qualification": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "individual_stack_erasure_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

@@ -1293,6 +1293,62 @@ including 147 current checker-source bindings. The new saved regressions reject
 the exact partial scope are recorded in
 `assurance/windows-protection-observations/sha2-batch-normal-effects-progress-20261007.json`.
 
+## Wide child final outputs, clearing and callbacks (2026-10-07)
+
+`windows_enclave_sha2_wide_outputs.py` assigns the remaining eight returning
+calls in the saved wide SHA-512 child. Combined with the preceding normal-helper
+checkpoint, all 36 returning calls are assigned exactly once. The remaining
+shift-overflow panic call is listed separately, followed by `ud2`, and requires
+the existing admitted-input unreachability proof. It is not given harmless
+returning effects.
+
+For each of the four final copies, the actual RCX destination and RDX capacity
+come from that lane's preserved original descriptor. R8 traces to the original
+workspace at offsets 1024, 1088, 1152 and 1216. R9 traces through the real
+register/save/reload chain to the same descriptor length as the capacity. The
+successful unsigned decremented-width check dominates each copy: a reached
+copy has length 1–64. CFG checks reject entries that bypass argument setup or
+width admission, partial pointer/length overwrites and stale phase-specific
+slot contents.
+
+This is a **conditional private-caller proof**. The already checked parent
+constructs all four destination pointers inside its live output allocation at
+offsets 1376, 1440, 1504 and 1568. They are nonnull. The analysis therefore
+excludes exactly four corresponding preflight null edges, after checking their
+actual predicates. It retains all other branches, including width rejection,
+copy failures and later source-null checks. No arbitrary external descriptor
+array is admitted by this reasoning; the original construction, preservation,
+physical allocation and handoff contracts are mandatory prerequisites.
+
+The error-clearing loop reuses the complete paired pointer/length induction
+proof at indices 0, 16, 32 and 48. Nonempty clearing is bounded by each original
+64-byte destination slot. The separate eight-byte identity clear traces its
+pointer to frame offset 880 rather than assuming that RDI still means workspace.
+All clear effects, final-copy destinations and normal callee stacks exclude the
+live descriptors and subsequent copies' saved source/length slots. Copy sources
+and destinations are disjoint owned allocations.
+
+The first revalidator now traces to the original executor's authority field and
+backend byte. The first cancellation call traces the original control pointer,
+readonly vtable slot and callback data. Both targets are the existing bound
+private leaves; their entire bodies are checked to be memory-free. The five-body
+normal stack closure covers these two callbacks, the copy wrapper, byte-copy
+helper and zeroizer. Shared nonvolatile ABI, live parent objects and remaining
+parent-helper noninterference stay explicit conditions.
+
+The focused regressions mutate source/length lifetimes, preflight bypasses,
+capacity and lane substitutions, zeroizer pointer/count/loop behavior, callback
+roots and bodies, and every new prerequisite. Reproduce using the earlier
+commands with output name `sha2-batch-wide-outputs-linux.json`. Production
+sources, native images and release-gate policy are unchanged. Whole-frame,
+arbitrary-exception and independent qualification are not claimed.
+
+Both hosts passed all 262 tests (123 self-contained and 139 saved-artifact).
+Linux took 424.148 seconds; Windows took 456.418 seconds. Parsed reports match
+with 148 current checker-source bindings. The new saved regressions reject 60
+mutations. Exact scope and hashes are recorded in
+`assurance/windows-protection-observations/sha2-batch-wide-outputs-progress-20261007.json`.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

@@ -29,6 +29,18 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The wide-output checkpoint completes the saved wide SHA-512 child's normal
+call-effect assignments: all 36 returning calls are covered and its one terminal
+overflow call remains separately bound to the admitted-input unreachability
+proof. This joins all four final copies, dynamic output clearing, identity-only
+clearing and the two initial callbacks. Original workspace sources, matching
+descriptor capacities/lengths, checked width guards and future saved-slot
+preservation are traced through the emitted CFG. This remains conditional on
+the recorded parent allocation/descriptor contracts and shared runtime/ABI
+guarantees; it does not close whole-frame erasure. Package 5 still needs the
+39 narrow and 25 wide-parent callsite joins and final private frame/storage
+assignments. No new native execution or production/gate change is involved.
+
 The normal-helper checkpoint joins 53 returning callsites to concrete descriptor
 regions and normal callee-stack bounds: 23 narrow, 28 wide child and two wide
 parent calls. This includes all twelve workspace wipe/drop calls with actual

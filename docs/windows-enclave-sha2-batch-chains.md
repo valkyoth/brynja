@@ -871,6 +871,57 @@ python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   --output release-reports/windows-worker-review-20261006/sha2-batch-early-effects-linux.json
 ```
 
+## Narrow authority and input-pointer lifetime checkpoint (2026-10-07)
+
+All 180 review tests pass on Linux and Windows (91 self-contained and 89
+saved-artifact tests), with matching parsed reports. The new checks reject
+140 mutations: 71 pointer overwrites, 25 loop/index/reuse changes, five operation
+result substitutions, sixteen transfer-argument changes and 23 unwind-pointer
+or invoke-population changes. The retained observation is
+[`sha2-batch-narrow-lifetimes-progress-20261007.json`](../assurance/windows-protection-observations/sha2-batch-narrow-lifetimes-progress-20261007.json).
+
+The SHA-224/256 pointer-definition lifetime item is now checked across the
+complete saved normal control-flow graph, including loop backedges and error
+branches. The original owner returned by `Owner::operation` is traced through
+all six saved-owner reloads. Its authority field supplies all eleven saved
+authority reloads, twenty field/callback uses and the vector session argument.
+Partial writes, overlapping RSP/RBP aliases, conditional substitutions and
+uninitialized paths reject. The stack-probe argument-preservation and Win64
+nonvolatile-register contracts remain explicit shared-runtime prerequisites.
+
+All eight typed input pointers retain their lane pairing through the paired
+24-byte source / 40-byte internal-descriptor induction. The scalar lane loop
+traces every pointer initializer and all three input reads. Stack slot 112's
+counter, input and output lifetimes are checked independently: neither a previous
+lane's pointer nor the earlier counter may satisfy the current lane's load.
+The block-copy start/end registers retain input provenance across calls and
+loop increments. Vector gathers check a fresh bounded lane index and the actual
+descriptor-to-copy argument chain; tail and last-byte copies retain their
+original scalar input pointer. All ten indexed frame stores have bounded spans
+and cannot silently invalidate the direct saved-slot analysis.
+
+The saved LLVM invoke population is also reconciled with all eleven emitted
+protected-call regions and the bound FH3 cleanup chains. At each potentially
+unwinding call, every handler consuming slot 88 or 152 has the original saved
+pointer available. No handler reads the reused input slot 112. Nounwind cleanup
+calls are not incorrectly classified as potentially unwinding calls merely
+because they lie textually after a cleanup-state marker. OS dispatch behavior,
+indirect alias preservation and complete handler-frame cleanup are not inferred
+from this caller-side availability check.
+
+The reproducible checker is `windows_enclave_sha2_narrow_lifetimes.py`, integrated
+into the existing batch report and regression suite. This closes the narrow
+pointer-origin/definition-lifetime subtask, not package 5: input/authority field
+integrity against indirect writes, compact-index preservation, physical
+allocation validity/separation and complete cleanup composition remain separate.
+No production code, saved native image or release-gate policy changed.
+
+```sh
+python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
+  release-reports/windows-local-20261004 --mutate \
+  --output release-reports/windows-worker-review-20261006/sha2-batch-narrow-lifetimes-linux.json
+```
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.
@@ -909,6 +960,10 @@ python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   Propagate those origins through subsequent machine lifetimes and establish
   every remaining caller's valid/disjoint regions, rather than inferring caller
   safety from callee identity or bounded construction alone.
+  Narrow authority and per-lane pointer definitions now have whole-CFG and
+  invoke/cleanup-callsite checks; do not repeat that completed analysis. Next
+  compose compact-index and input/authority-field integrity against indirect
+  writes in both routes, followed by physical storage validity/separation.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

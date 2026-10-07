@@ -29,7 +29,17 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
-The latest earlier-phase checkpoint assigns all 34 wide indirect stores and
+The narrow pointer-lifetime checkpoint closes the saved SHA-224/256 authority
+and per-lane input pointer-definition tracing item. It covers six owner reloads,
+eleven authority reloads, twenty authority uses, all eight typed input lanes,
+the three distinct slot-112 lifetimes, vector/scalar copy arguments and eleven
+potentially unwinding callsites. This is saved-artifact author review, not a new
+native enclave run or independent retest. Remaining package-5 work starts with
+compact-index and input/authority-field preservation against indirect writes,
+physical lifetime/separation composition and remaining caller/frame cleanup
+obligations. Release gates are unchanged.
+
+The earlier-phase checkpoint assigns all 34 wide indirect stores and
 all six calls, composing their conditional effects with the normal stack bounds.
 The local scratch aliases, bounded state-initialization induction, vector-offset
 guard, packed-state bases and session argument origins are checked. Three copy

@@ -23,7 +23,9 @@ for reg in REGS:
 BASES={'rbp':(0,0),'rsp':(-128,-128)}
 
 
-def definitions(lines,start,tables,slots=(),indexed=None):
+def definitions(lines,start,tables,slots=(),indexed=None,*,bases=None,call_clobbers=None):
+    bases=BASES if bases is None else bases
+    call_clobbers={} if call_clobbers is None else call_clobbers
     slots=tuple(dict.fromkeys((*slots,1168,1176)))
     labels={v[:-1]:i for i,v in enumerate(lines) if v.endswith(':')}
     s.require(start in labels and len(labels)==sum(v.endswith(':') for v in lines),'unique slot-CFG labels')
@@ -32,13 +34,15 @@ def definitions(lines,start,tables,slots=(),indexed=None):
     while queue:
         at=queue.popleft();state=list(states[at]);op,args=source.instruction(lines[at])
         if op=='callq':
-            for reg in VOLATILE:state[positions[reg]]=frozenset({at})
+            clobbers=call_clobbers.get(at,VOLATILE)
+            s.require(set(clobbers)<=set(REGS),'assigned call-clobber registers')
+            for reg in clobbers:state[positions[reg]]=frozenset({at})
         elif args:
             reg=ALIASES.get(args[-1])
             if reg and op!='pushq':
                 old=state[positions[reg]]
                 state[positions[reg]]=old|{at} if op.startswith('cmov') else frozenset({at})
-            span=source.store_span(op,args,BASES)
+            span=source.store_span(op,args,bases)
             if span==source.INDEXED_FRAME and indexed is not None:
                 s.require(at in indexed,'every computed frame write has a reviewed extent')
                 span=indexed[at]

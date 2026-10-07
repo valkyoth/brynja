@@ -2,9 +2,10 @@
 from unittest.mock import patch
 import windows_enclave_sha2_source_lifetime as p
 from windows_enclave_sha2_slot_origins_tests import SlotOriginTests, SlotOriginSavedTests
+from windows_enclave_sha2_narrow_lifetimes_tests import NarrowLifetimeTests, NarrowLifetimeSavedTests
 
 
-class SourceLifetimeTests(SlotOriginTests):
+class SourceLifetimeTests(SlotOriginTests, NarrowLifetimeTests):
     def source_states(self,lines,tables=None):
         return p.analyse(lines,'entry',tables or {},(64,72),{'rbp':(0,0),'rsp':(-128,-128)},
                          lines.index('movq %rax, 64(%rbp)'),lines.index('movq $0, 64(%rbp)'))
@@ -48,7 +49,7 @@ class SourceLifetimeTests(SlotOriginTests):
             with self.assertRaises(ValueError):p.instruction(bad)
 
 
-class SourceLifetimeSavedTests(SlotOriginSavedTests):
+class SourceLifetimeSavedTests(SlotOriginSavedTests, NarrowLifetimeSavedTests):
     def source_fixture(self,row):
         import windows_enclave_sha2_batch_chains as parent
         lane,pin,_,_,_,_,bodies=row

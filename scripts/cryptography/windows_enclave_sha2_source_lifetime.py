@@ -15,7 +15,7 @@ PLAIN={'nop','vzeroupper','retq','ud2'}
 OPS={'movq','movl','movb','movw','movabsq','movzbl','movzwl','movslq','leaq','leal',
      'addq','addl','addb','adcq','subq','subl','subb','andq','andl','andb','orq','orl','orb',
      'xorq','xorl','xorb','incq','decq','decl','decb','bswapq','shll','shlq','shlb','shrl','shrq','shrb',
-     'rolq','rorq','sbbw','imulq','imull','setne','setae','cmovaeq','cmovbq','cmovel','cmovbl','cmovnel',
+     'rolq','rorq','sbbw','imulq','imull','setne','sete','setae','cmovaeq','cmovbq','cmovel','cmovbl','cmovnel',
      'vmovaps','vmovups','vxorps','pushq','popq','bsfl'}
 READ={'cmpb','cmpw','cmpl','cmpq','testb','testw','testl','testq'}
 INDEXED_FRAME=(-(1<<64),1<<64)

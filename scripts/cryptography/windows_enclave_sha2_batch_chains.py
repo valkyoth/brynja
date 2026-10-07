@@ -23,6 +23,7 @@ import windows_enclave_sha2_slot_origins as slot_origins
 import windows_enclave_sha2_vector_stack as vector_stack
 import windows_enclave_sha2_early_writes as early_writes
 import windows_enclave_sha2_early_calls as early_calls
+import windows_enclave_sha2_narrow_lifetimes as narrow_lifetimes
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -242,6 +243,8 @@ def inspect_route(base,root,lane,pin,mutate):
             semantics['simd_control_call_effects'])
         semantics['simd_first_source_cfg_origin']=source_lifetime.inspect(bodies,asm,lane,
             semantics['simd_first_output_frame_cell'])
+        if lane=='simd256':
+            semantics['simd_narrow_pointer_lifetimes']=narrow_lifetimes.inspect(bodies,asm,ir)
         if lane=='simd512':
             semantics['simd_helper_slot_origins']=slot_origins.inspect(bodies,asm,
                 semantics['simd_first_output_frame_cell'],semantics['simd_conditional_effect_placement'],

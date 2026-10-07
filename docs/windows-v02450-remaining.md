@@ -166,6 +166,14 @@ workspace argument. All 144 tests pass on both hosts, including 21 new saved
 origin/bypass/overwrite mutations. This is direct CFG provenance, still
 conditional on indirect memory effects, original allocation lifetime and ABI
 preservation; it is not a complete physical pointer-lifetime qualification.
+Six further wide helper slots now have direct CFG origins through their last
+ten helper reload sites, as do all 40 input-pointer and twelve executor-pointer
+reloads. Two computed stack-store ranges and both scalar wipe arguments are
+checked. The tracked call/store/private-stack effects exclude all eleven saved
+argument/source slots. All 151 tests pass on both hosts with matching reports;
+89 emitted mutations and fifteen effect mutations reject. Earlier vector-phase
+effects on slot 984, external separation and original physical lifetimes still
+need composition; the narrow per-lane origins remain separate work.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

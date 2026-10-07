@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "8639f29520d062d817a0818dd2a1639245567be5",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 151,
+  "self_contained_tests": 77,
+  "saved_artifact_tests": 74,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-slot-origins-linux.json": "4b12db306ca4834c369d33acd3b043944ccff6d16c2b8048c1fbd424095a3ecc",
+    "sha2-batch-slot-origins-windows.json": "00a696eee0192887ccfbe65961a6e8f241eb5a65e7b43a39c88b2f39d79e5e2d"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_batch_chains.py": "793931cbf7f624c3ef8a529eefb35d978b17d260865178d38813e352a3b873ab",
+    "windows_enclave_sha2_slot_origins.py": "df9caeadf7ee5cd2ec1082a3b444435e437bcd548f536cb1603315dff744ae43",
+    "windows_enclave_sha2_slot_origins_tests.py": "24486861eb3eec523ed1a4d125342a0740f1cb42220b43c9de2909c608ca2b54",
+    "windows_enclave_sha2_source_lifetime_tests.py": "65979968df843322d58bc5ad0ff9d1eed11b8126ce6c63576714696135253aff"
+  },
+  "prior_review_observation": "sha2-batch-source-lifetime-progress-20261007.json",
+  "new_reviewed_scope": [
+    "direct whole-function CFG origins for six wide scalar-helper pointer slots through their last ten helper reloads",
+    "both scalar-owner wipe arguments follow actual register transfers and loop reloads rather than seeded expected values",
+    "all 40 input-pointer and twelve executor-pointer normal reloads retain the original R8 and RDX argument identities",
+    "reload cycles need actual entry anchors; unknown, partial, overlapping and volatile-clobbered definitions reject",
+    "two computed RBP writes have explicit padding and 64-iteration schedule bounds; incoming workspace/control slots receive no direct writes",
+    "tracked call/store effects, outgoing home space and normal callee stacks are composed against all eleven saved slots",
+    "later legitimate slot reuse for output preflight is outside the final helper consumption"
+  ],
+  "helper_slots": {"760": 4580, "1016": 5604, "1024": 5348, "968": 4708, "928": 5476, "984": 512},
+  "helper_reload_sites": 10,
+  "owner_wipe_sites": 2,
+  "abi_reload_sites": {"inputs": 40, "executor": 12},
+  "computed_frame_write_spans": [[553, 556], [32, 544]],
+  "protected_slot_count": 11,
+  "emitted_origin_overwrite_index_mutations_rejected": 89,
+  "effect_stack_population_direction_mutations_rejected": 15,
+  "direct_cfg_origins_and_preservation_checked": true,
+  "conditional_normal_effects_disjoint": true,
+  "earlier_vector_phase_effects_for_slot984_pending": true,
+  "original_physical_lifetimes_and_external_separation_required": true,
+  "fixed_frame_and_nonvolatile_abi_required": true,
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "remaining_private_review": [
+    "earlier vector-phase indirect effects for slot984 and contextual call/stack composition",
+    "narrow authority and per-lane input origins, subsequent compact-index lifetimes",
+    "compose original physical storage lifetimes and allocation separation with the conditional effects",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing private frame/storage and cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

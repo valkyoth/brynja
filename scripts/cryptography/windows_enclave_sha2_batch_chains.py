@@ -19,6 +19,7 @@ import windows_enclave_sha2_effect_placement as effect_placement
 import windows_enclave_sha2_cleanup_paths as cleanup_paths
 import windows_enclave_sha2_callee_stack as callee_stack
 import windows_enclave_sha2_source_lifetime as source_lifetime
+import windows_enclave_sha2_slot_origins as slot_origins
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -236,6 +237,10 @@ def inspect_route(base,root,lane,pin,mutate):
             semantics['simd_transfer_call_effects'],semantics['simd_control_call_effects'])
         semantics['simd_first_source_cfg_origin']=source_lifetime.inspect(bodies,asm,lane,
             semantics['simd_first_output_frame_cell'])
+        if lane=='simd512':
+            semantics['simd_helper_slot_origins']=slot_origins.inspect(bodies,asm,
+                semantics['simd_first_output_frame_cell'],semantics['simd_conditional_effect_placement'],
+                semantics['simd_tracked_callee_stack'])
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0

@@ -731,16 +731,59 @@ mutations; synthetic regressions also cover loop backedges, conditional-register
 definitions, ABI clobbers and all indirect branch targets. No production source,
 native image or release-gate policy changed.
 
+## Wide helper-slot and ABI origins (2026-10-07)
+
+The [slot-origin checkpoint](../assurance/windows-protection-observations/sha2-batch-slot-origins-progress-20261007.json)
+checks the remaining six saved scalar-helper pointers against actual emitted
+definitions, without seeding those slots with their expected values. Every
+normal predecessor and loop backedge is included; partial stores, overlapping
+stores, volatile register clobbers and conditional definitions are retained.
+
+| Saved frame slot | Workspace offset | Helper reload sites |
+| ---: | ---: | ---: |
+| 760 | 4580 | 1 |
+| 1016 | 5604 | 3 |
+| 1024 | 5348 | 2 |
+| 968 | 4708 | 1 |
+| 928 | 5476 | 2 |
+| 984 | 512 | 1 |
+
+Both scalar-owner wipe arguments are traced through their register transfers
+and loop reloads. The input pointer at slot 1040 has 40 normal reload sites;
+all originate in incoming R8. The executor pointer at slot 1048 has twelve;
+all originate in incoming RDX. Reload cycles require a real entry argument and
+reject unknown incoming definitions. A cycle alone does not establish origin.
+
+Two earlier computed frame writes are bounded explicitly: public label padding
+touches `[553, 556)`, and the 64-iteration schedule loop touches `[32, 544)`.
+Their definitions, loop entry/backedge and complete computed-store population
+are checked. Incoming workspace/control slots receive no direct writes.
+
+The existing tracked call/store effects, outgoing home space and transitive
+normal callee stacks are also composed against all eleven saved slots: the six
+helper pointers, first prepared source, input/executor and incoming workspace/
+control arguments. These conditional effects do not overlap the slots. The
+earlier vector-phase indirect effects on slot 984, external allocation
+separation, original physical lifetimes and the fixed-frame/nonvolatile ABI
+remain separate requirements. Later legitimate reuse of a helper slot for
+output preflight is outside its last helper consumption, not misclassified as
+a pointer corruption. This still does not close the entire private chain.
+
+All 151 tests pass on Linux and Windows with matching parsed reports. The new
+campaign rejects 89 emitted origin/overwrite/index mutations and fifteen
+effect-overlap, stack, population and direction mutations. No production or
+release-gate changes, image rebuild or fresh native enclave execution occurred.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-source-lifetime-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-slot-origins-linux.json
 ```
 
-Without the saved directory the test command runs seventy-three self-contained
-tests and explicitly skips the seventy-one saved-artifact tests.
+Without the saved directory the test command runs seventy-seven self-contained
+tests and explicitly skips the seventy-four saved-artifact tests.
 
 ## Remaining package-5 work
 

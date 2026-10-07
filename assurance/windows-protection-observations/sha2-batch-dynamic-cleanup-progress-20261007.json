@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "3e2e3bd30570e34cd2627119530f7be5115107b2",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "review_tests_per_host": 226,
+  "self_contained_tests": 114,
+  "saved_artifact_tests": 112,
+  "test_seconds": {
+    "linux": 363.760,
+    "windows": 383.261
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 143,
+  "report_sha256": {
+    "sha2-batch-dynamic-cleanup-linux.json": "50558021b98b07fef05309fe5fa195fc6a820d10b14cb42fc38ca5986d025925",
+    "sha2-batch-dynamic-cleanup-windows.json": "157d348b1a54a0a998a21ad4f4b81c11d33c37ce36b2313bc7bb707d57f19b54"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_cleanup_regions.py": "0ae167953e5a7f579d32b76fd4a7c9056e73adb8e3c10011c03603661666d170",
+    "windows_enclave_sha2_dynamic_cleanup.py": "21c7d4b981511f97e3e6e03f0b3b3424b0d9d0f2b8d514ee758452e3989fd0b8",
+    "windows_enclave_sha2_cleanup_invokes.py": "0b1bc16e09cdffbe3c628f486e840fc483b82b39822d3fd8059d90b77d0c7d6a",
+    "windows_enclave_sha2_dynamic_cleanup_tests.py": "991093ec090c6cc1cbaa3c13af46575e77ead957b5b1a005a3b14d85405ab6be",
+    "windows_enclave_sha2_batch_chains.py": "bc13412a3c21b0019ac511716745c15ce74b777d291ba9c51a2b9d69996d9e1b",
+    "windows_enclave_sha2_failstop.py": "bd976f3322a9cbfb426dc60b3c62a8ce3beb59d3027e540f92f6928ab40bbab3",
+    "windows_enclave_sha2_source_lifetime_tests.py": "e388c10bf72d8143e018115ce5bd9e07cd0a9502d4e9601ed97dedd66a90e701"
+  },
+  "prior_review_observation": "sha2-batch-failstop-progress-20261007.json",
+  "prior_scope_correction": "An empty wide selected-slice panic-call list did not establish absence of an overflow path. The slice branches to .B302 outside its interval. This checkpoint records that path and leaves its admission proof pending; the previous narrow .B190 proof is unchanged.",
+  "new_reviewed_scope": [
+    "all five dynamic clearing sites assigned complete four/eight-lane loops, both advances, exact paired pointer/length loads and null/empty skips",
+    "alternate iteration entries reject; generic destructor identity-tail cleanup remains separately exact",
+    "narrow original864/returned2912 descriptor regions retain initialized provenance under direct partial, overlapping and computed writes",
+    "both narrow aggregate moves and three wide child/parent aggregate moves preserve every byte",
+    "wide child816 descriptors originate in the unchanged original R9 argument and survive direct writes until clear or transfer",
+    "nine narrow and ten wide child protected-call boundaries require initialized descriptors under saved FH3 handler states and actual drop arguments",
+    "per-path narrow availability flag controls unwind descriptor requirements without treating false flags as cleanup coverage",
+    "wide .B302 comparison, incoming edge, shift-overflow call and nonreturning terminal are explicitly inventoried"
+  ],
+  "new_saved_mutations_rejected": {
+    "dynamic_loop_bounds_pairing_advances_and_entries": 45,
+    "descriptor_write_lifetimes_and_aggregate_moves": 11,
+    "activated_handler_arguments_flags_and_annotations": 6,
+    "wide_out_of_slice_overflow_inventory": 4
+  },
+  "direct_lifetime_states": {
+    "simd256": 1819,
+    "simd512": 1736
+  },
+  "remaining_private_review": [
+    "wide parent descriptor argument and child result-discriminant bridge, including parent normal/unwind output drops",
+    "compose descriptor indirect helper effects and effects of preceding cleanup handlers with the concrete live regions",
+    "wide .B302 admitted-input unreachability proof",
+    "complete finite private frame/storage assignments and remaining caller prerequisites across all four routes"
+  ],
+  "shared_runtime_prerequisites": [
+    "serialized nonreentrant transport retains the page through the operation",
+    "Win64 nonvolatile/call ABI, stack probing and helper noninterference",
+    "OS exception dispatch and admitted worker window containing nested frames"
+  ],
+  "descriptor_bounds_fully_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "individual_stack_erasure_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

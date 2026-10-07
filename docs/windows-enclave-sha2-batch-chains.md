@@ -1070,7 +1070,9 @@ compaction geometry/termination or complete-image checks.
 This closes **these two selected overflow-path prerequisites** under the named
 shared-runtime assumptions. It does not qualify arbitrary panic/unwind behavior,
 individual caller-frame erasure, OS residency or the complete worker window.
-The wide selected scalar-finish region has no corresponding overflow-panic path.
+Correction from the subsequent whole-function inventory: the wide selected
+slice contains no direct panic call, but does branch to `.B302` outside that
+slice. The earlier absence wording was too broad; see the checkpoint below.
 Package 5 remains open for the remaining caller and private cleanup composition;
 package 8 retains shared ABI, SDK, transport and enclosing-window obligations.
 Production code, images and release-gate policy are unchanged.
@@ -1082,6 +1084,57 @@ completed Linux/Windows regression results are recorded in
 All 217 tests pass on each host (110 self-contained and 107 saved-artifact),
 including 49 new saved-code mutants and eight prerequisite-result mutations.
 The integrated parsed reports match, with all 140 review-module bindings current.
+
+## Dynamic clearing descriptor checkpoint (2026-10-07)
+
+The saved-image checker now assigns all five dynamic zeroizer call sites:
+three in the SHA-224/256 route and two in the SHA-512 route. Each complete loop
+checks both advances, the four/eight-lane termination bound, the matching
+pointer/length loads and the null/empty skips. Alternate entries into the
+iteration region reject. The complete generic output destructor, including its
+separate eight-byte identity tail clear, remains independently checked.
+
+For the narrow resident, a normal-CFG analysis tracks the initialized descriptor
+regions at offsets 864 and 2912. Partial, overlapping and computed direct writes
+invalidate their provenance. Reads before construction or after an unassigned
+overwrite reject. Both aggregate transfers are checked byte for byte, including
+the reverse transfer used by the final destructor. The constructor's existing
+exhaustive identity replay supplies exact scratch destinations and widths.
+
+For the wide child, the same analysis checks the copied descriptor region at
+offset 816 through its inline cleanup and result transfer. The initial copy must
+read the original R9 argument. The child's return transfer and both parent
+aggregate moves preserve every byte. This does **not** yet join the caller's
+original descriptor lifetime and returned-result discriminant across the call;
+the report leaves that requirement open rather than inferring it from move
+correctness alone.
+
+The analysis also checks descriptor availability at nine narrow and ten wide
+child protected-call boundaries against the saved FH3 cleanup-state chains.
+Narrow returned-output cleanup uses a per-path availability flag; it is not
+treated as unconditionally initialized. The handlers' actual descriptor arguments
+are checked. This establishes caller-side availability, conditional on the
+previously named ABI/helper assumptions. It does not prove OS exception dispatch,
+noninterference of every earlier handler or complete cleanup coverage when a
+flag is false. The wide parent's returned-output destructor still needs its join.
+
+The wide overflow inventory now explicitly records the comparison/branch to
+`.B302`, its shift-overflow panic call and `ud2`. Its admitted-input
+unreachability join remains pending. This corrects the previous report's
+selected-slice scope; no production behavior or existing panic guard changed.
+
+Reproduce with the commands above and output name
+`sha2-batch-dynamic-cleanup-linux.json`. The checkpoint's results and source/report
+bindings are in
+`assurance/windows-protection-observations/sha2-batch-dynamic-cleanup-progress-20261007.json`.
+All 226 tests pass on each host (114 self-contained and 112 saved-artifact),
+including 66 new saved-code mutations. The integrated reports match with 143
+checker-source bindings; Linux took 363.760 seconds and Windows 383.261 seconds.
+Package 5 remains open. These are saved-artifact author checks, not a new native
+enclave execution or independent retest. No production source, image or release
+gate changed. Direct-write preservation alone is not a whole-machine alias proof;
+the remaining indirect helper effects, actual cleanup order and enclosing-frame
+assignments must still be composed. Shared window/OS/SDK work remains package 8.
 
 ## Remaining package-5 work
 
@@ -1128,7 +1181,12 @@ The integrated parsed reports match, with all 140 review-module bindings current
   prerequisites. Do not repeat those completed conditional checks or promote
   them to whole-window residency or erasure. The later admitted overflow-path
   composition above closes the narrow `.B190` prerequisites; do not repeat that
-  step. Finish other caller requirements and enclosing private cleanup composition.
+  step. The dynamic descriptor checkpoint now covers all five clearing loops,
+  narrow normal descriptor copies/direct-write lifetimes and nineteen protected
+  call boundaries. Finish the wide caller/result-discriminant join, indirect
+  effect/cleanup-order composition and wide `.B302` admission proof; then close
+  the finite private frame/storage assignments. Do not repeat completed loop or
+  narrow direct-write checks as a substitute for those remaining joins.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

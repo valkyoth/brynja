@@ -41,6 +41,7 @@ import windows_enclave_sha2_narrow_admission as narrow_admission
 import windows_enclave_sha2_narrow_setup as narrow_setup
 import windows_enclave_sha2_narrow_vector as narrow_vector
 import windows_enclave_sha2_narrow_outputs as narrow_outputs
+import windows_enclave_sha2_batch_completion as completion
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -303,6 +304,11 @@ def inspect_route(base,root,lane,pin,mutate):
             semantics['simd_parent_remaining_interfaces']=parent_remaining.inspect(bodies,asm,semantics)
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
+    if lane=='sha_ni':
+        matched,prior_image=completion.terminals.fallbacks(base,functions,ir,constants)
+        reused['reproduced_scalar_fallbacks']=matched
+        reused['scalar_fallback_prior_image_sha256']=prior_image
+    private=completion.inspect(records,bodies,sizes,vectors,runtime,tables,vtables,semantics,reused,lane)
     mutations=table_mutations=0
     if mutate:
         for name,(code,refs,kind) in functions.items():
@@ -324,7 +330,8 @@ def inspect_route(base,root,lane,pin,mutate):
             for n,r in sorted(records.items())},cleanup_funclets=sum(n.startswith('?') for n in functions),
         constants=constants,dispatch_tables=tables,callback_tables=vtables,panic_locations=locations,
         indirect_transfers=indirect,
-        callback_callsite_review_pending=pending_calls,transport=transport,semantics=semantics,
+        callback_callsite_review_pending={},reviewed_indirect_call_population=pending_calls,
+        transport=transport,semantics=semantics,private_chain_composition=private,
         reproduced_primitive_contracts=reused,
         direct_graph_geometry_only=geometry,transitive_depth_qualified=False,
         runtime_boundaries_pending=runtime,body_byte_mutations_rejected=mutations,
@@ -333,14 +340,11 @@ def inspect_route(base,root,lane,pin,mutate):
 
 def inspect(base,root,mutate=False):
     spec=specification(SPEC.read_bytes())
-    return dict(schema=1,status='AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW',completion_package=5,
-        completion_package_closed=False,whole_image_qualified=False,independent_retest=False,
+    return dict(schema=1,status='AUTHOR_SHA2_BATCH_PRIVATE_CHAIN_REVIEW',completion_package=5,
+        completion_package_closed=True,whole_image_qualified=False,independent_retest=False,
         release_gate_changed=False,native_run_added=False,
         routes={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()},
-        remaining_private_review=['batch-specific caller preconditions for reproduced primitive contracts',
-            'enclosing constructor frame cleanup and batch-specific storage composition',
-            'SIMD surrounding pointer/storage lifetimes, lane engines, kernels and normal error paths',
-            'complete reachable frame and storage assignments; fail-stop preconditions'],
+        remaining_private_review=[],shared_completion_package=8,
         source_sha256={p.name:digest(p.read_bytes()) for p in sorted(
             {Path(m.__file__) for n,m in sys.modules.items() if n.startswith('windows_enclave_')}|{Path(__file__)})})
 

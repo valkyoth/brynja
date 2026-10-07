@@ -9,6 +9,10 @@
   53 AVX2 main functions plus eight cleanup funclets). Their named shared
   runtime/transport boundaries remain with final reconciliation. Both KMAC
   private chains are also closed, as are both TupleHash private chains.
+  All four SHA-2 batch private chains are now closed under their explicit shared
+  prerequisites (178 emitted functions, including 33 cleanup funclets). Next
+  are the three SHA-3 batch routes, followed by ParallelHash; shared cumulative
+  stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/
   export connections are now closed; all seventeen family worker entry,
   transport and direct memory-call boundaries are bound. Those boundary reviews
@@ -28,6 +32,16 @@ project-signing prerequisite. Windows ARM64 remains unqualified and must not be
 advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
+
+The final SHA-2 batch composition assigns every private function and frame,
+requires the preceding caller/cleanup contracts, binds all indirect transfers
+and cleanup metadata, and records distinct typed-field, backing-page and
+enclosing-window cleanup responsibilities. It explicitly reproduces both
+SHA-NI scalar fallback kernels and assigns all retained fail-stop callsites.
+This closes completion package 5's conditional private author review; it does
+not qualify the whole image, OS stack window, arbitrary exceptions or an
+independent retest. The earlier checkpoints below are historical, superseded by
+the [private composition closure](windows-enclave-sha2-batch-chains.md#private-composition-closure-2026-10-07).
 
 The narrow-output checkpoint assigns the last eighteen returning interfaces:
 eight final copies, the eight-lane owner-transfer loop, two dynamic error clears,

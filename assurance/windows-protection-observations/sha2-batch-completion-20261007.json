@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_SHA2_BATCH_PRIVATE_CHAIN_REVIEW",
+  "review_baseline": "f99d2b29846f4218beb0b02836682e5b28c504a2",
+  "completion_package": 5,
+  "completion_package_closed": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "focused_validation": {"status": "PASS", "tests": 8, "seconds": 38.179},
+  "full_validation": {
+    "linux": {"status": "PASS", "tests": 314, "seconds": 693.559},
+    "windows": {"status": "PASS", "tests": 314, "seconds": 736.169}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 160,
+  "report_sha256": {
+    "sha2-batch-completion-linux.json": "f7114243dbdc40e83b72de427ccc33450c385bcfa58d64b6430972a5b7565b08",
+    "sha2-batch-completion-windows.json": "505056080307569b7f87ee86f7832c4b7f9eb0bcf96dc6f31fbaaebd3e1f41f7"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_batch_assignment.py": "b78d836518c6719c515d84612800fbe5c37b39325ae982db3d0c42c1161611a4",
+    "windows_enclave_sha2_batch_completion.py": "db27c1767cade5fed8c2d69b5e895843ebbbf839e751106aa7edb427b3a4b302",
+    "windows_enclave_sha2_batch_completion_tests.py": "559d3666735237e437dca3c3d2d537c5241d3a730313f2928a8c136aaf89e504",
+    "windows_enclave_sha2_batch_terminals.py": "ccfdf4367ad7dd8653a21edfca992c1f45260e1fb9df081b41bc7890beaad645",
+    "windows_enclave_sha2_batch_chains.py": "17d941c6b6a1db13f3a3aebb5e314b0a173744715971956e2e531c7de8c2c798",
+    "test-windows-enclave-sha2-batch-chains.py": "5864d9b47da4a1f763c6db62b38d7b85ac45e57db41cd87058fb28d2bf559fd6"
+  },
+  "prior_review_observation": "sha2-batch-narrow-outputs-progress-20261007.json",
+  "private_populations": {
+    "scalar": {"functions": 32, "funclets": 0, "indirect_calls": 0, "bound_dispatch_sites": 12},
+    "sha_ni": {"functions": 42, "funclets": 1, "indirect_calls": 0, "bound_dispatch_sites": 2},
+    "simd256": {"functions": 52, "funclets": 16, "indirect_calls": 13, "bound_dispatch_sites": 0},
+    "simd512": {"functions": 52, "funclets": 16, "indirect_calls": 16, "bound_dispatch_sites": 15}
+  },
+  "new_reviewed_scope": [
+    "complete finite function and frame assignment across all four frozen routes",
+    "reachability through linked references, callback tables and cleanup metadata",
+    "all indirect calls and jumps reconciled with existing private reviews and bound tables",
+    "typed field, backing-page, worker-buffer and enclosing-window storage responsibilities kept distinct",
+    "two SHA-NI scalar fallback leaves reproduced with exact named table and ABI substitutions",
+    "all seven private fail-stop callsites assigned without treating abort as cleanup success"
+  ],
+  "new_self_contained_tests": 0,
+  "new_saved_tests": 8,
+  "new_saved_mutations_rejected": {
+    "missing_invalid_frame_and_vector_geometry": 1424,
+    "unassigned_roles_missing_replay_and_fallback_assignment": 10,
+    "cleanup_metadata_orphans_indirect_calls_callback_and_dispatch_tables": 50,
+    "missing_false_or_truthy_prerequisites": 147,
+    "terminal_call_population_and_returning_abort": 18,
+    "sha_ni_length_encoding_and_partial_bit_branch_changes": 34,
+    "sha_ni_scalar_fallback_body_extent_table_and_abi_changes": 14
+  },
+  "remaining_private_review": [],
+  "conditional_prerequisites": [
+    "valid typed exclusive owner/state and original caller allocations",
+    "serialized nonreentrant synchronous transport and lifetime through retirement",
+    "bound SDK/probe implementations, Win64 ABI and supported invoked-cleanup behavior",
+    "cumulative stack admission plus complete protected-window reclamation"
+  ],
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "cumulative_stack_depth_qualified": false,
+  "individual_compiler_copy_padding_and_register_erasure_claimed": false,
+  "fatal_abort_is_cleanup_success": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

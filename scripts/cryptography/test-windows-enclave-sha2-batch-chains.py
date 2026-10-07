@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 import unittest
 from unittest.mock import patch
-
 import windows_enclave_sha2_batch_chains as c
 from windows_enclave_sha2_simd_kernel_tests import KernelTests, KernelSavedTests
 from windows_enclave_sha2_simd_worker_tests import WorkerTests, WorkerSavedTests
@@ -16,10 +15,10 @@ from windows_enclave_sha2_simd_vector_tests import VectorTests, VectorSavedTests
 from windows_enclave_sha2_simd_finish_tests import FinishTests, FinishSavedTests
 from windows_enclave_sha2_simd_reuse_tests import ReuseTests, ReuseSavedTests
 from windows_enclave_sha2_simd_indices_tests import IndexTests, IndexSavedTests
+from windows_enclave_sha2_batch_completion_tests import CompletionSavedTests
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 s=c.shapes.s
-
 
 class Tests(KernelTests, WorkerTests, ConstructorTests, DigestTests, CommitTests, ProvenanceTests, VectorTests, FinishTests, ReuseTests, IndexTests, unittest.TestCase):
     def test_saved_engine_error_discriminants(self):
@@ -154,8 +153,7 @@ class Tests(KernelTests, WorkerTests, ConstructorTests, DigestTests, CommitTests
             with self.assertRaises(ValueError): c.location_check(raw,refs,symbols,rows,image,5000)
 
 
-class SavedTests(KernelSavedTests, WorkerSavedTests, ConstructorSavedTests, DigestSavedTests,
-                 CommitSavedTests, ProvenanceSavedTests, VectorSavedTests, FinishSavedTests, ReuseSavedTests, IndexSavedTests, unittest.TestCase):
+class SavedTests(CompletionSavedTests, KernelSavedTests, WorkerSavedTests, ConstructorSavedTests, DigestSavedTests, CommitSavedTests, ProvenanceSavedTests, VectorSavedTests, FinishSavedTests, ReuseSavedTests, IndexSavedTests, unittest.TestCase):
     def test_simd_complete_destructors_reject_each_instruction_change(self):
         module=c.shapes.simd_storage;actual=module.exact;count=0
         for lane,_,_,_,_,_,bodies in self.routes:
@@ -229,7 +227,8 @@ class SavedTests(KernelSavedTests, WorkerSavedTests, ConstructorSavedTests, Dige
             self.assertFalse(r['transitive_depth_qualified'])
             self.assertEqual(len(r['functions']),c.COUNTS[lane])
             if lane.startswith('simd'):
-                self.assertTrue(r['callback_callsite_review_pending'])
+                self.assertFalse(r['callback_callsite_review_pending'])
+                self.assertTrue(r['reviewed_indirect_call_population'])
                 self.assertEqual(len(r['callback_tables']),1)
                 authority=r['semantics']['simd_authority']
                 self.assertFalse(authority['complete_callback_provenance_qualified'])

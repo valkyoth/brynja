@@ -1,9 +1,11 @@
 # Windows SHA-2 batch chain review
 
-Status: **partial author review**, completion package 5. The four existing
-images are bound, but their complete private lifecycle composition is not yet
-closed. This is neither independent retest nor whole-image qualification.
-No production code, release gate or native enclave image changed in this pass.
+Status: **conditional private author review complete**, completion package 5.
+All four saved routes have complete finite function/frame/storage assignments
+joined to the preceding lifecycle, pointer, call-effect and cleanup reviews.
+Shared runtime, cumulative stack admission and enclosing-window reclamation
+remain package 8. This is neither independent retest nor whole-image
+qualification. No production code, release gate or native image changed.
 
 ## Bound populations and selected contracts
 
@@ -1623,26 +1625,55 @@ Both complete saved-artifact suites pass all 306 tests (124 self-contained and
 reports match with 157 current checker-source bindings. Scope and hashes are
 recorded in the [narrow output observation](../assurance/windows-protection-observations/sha2-batch-narrow-outputs-progress-20261007.json).
 
-## Remaining package-5 work
+## Private composition closure (2026-10-07)
 
-- Finish the finite private frame/storage assignments across scalar, SHA-NI,
-  narrow SIMD and wide SIMD routes. Include enclosing constructors, caller
-  frames and supported cleanup funclets; public startup KAT locals do not by
-  themselves establish erasure of a later secret-bearing frame.
-- Compose those assignments with the existing original-pointer, physical
-  separation, normal helper-effect, returned-object and error/unwind checks.
-  Distinguish field-level volatile clearing from compiler-created copies,
-  padding and saved registers. Resolve any still-unassigned private edge or
-  fail-stop precondition identified by that complete frame/storage population.
-- Run the focused composition regressions and reconcile the four saved routes
-  before closing package 5. Do not repeat already-completed compact-index,
-  input/authority, descriptor-construction, overflow, output-transfer or
-  normal-call-interface reviews as substitutes for the remaining assignments.
+The completion checker assigns every actual emitted private body: 32 scalar,
+42 SHA-NI, 52 narrow SIMD and 52 wide SIMD, including all 33 cleanup funclets.
+Reachability starts at `RetainedWork` and follows bound image references,
+read-only callback targets and cleanup metadata. It rejects orphan bodies,
+unassigned callbacks and indirect transfers without their existing review or
+bound local dispatch table. Every constructor, caller, helper and funclet has
+its actual frame size and incoming vector-save geometry recorded.
 
-The checkpoint sections above retain the evidence and limitations of earlier
-partial reviews. Their historical pending lists are superseded by this current
-list, not silently promoted to unconditional platform or whole-frame claims.
+Storage dispositions distinguish the owned 4,096-byte backing page, typed
+state/workspace fields, worker buffers and transient frame contents. Typed
+destructors and volatile field wipes supplement—not replace—full page retirement
+and enclosing stack-window reclamation. Compiler-created moved-from copies,
+padding and saved registers are assigned to the enclosing window; they are not
+claimed individually erased. A frame smaller than 65,536 bytes is not a proof
+of cumulative stack depth or OS admission. Those shared checks remain package 8.
 
-Shared runtime, SDK, final platform/depth reconciliation and enclosing-window
-reclamation remain package 8 obligations. Nothing here promotes moved-from
-copies, compiler spills or incoming register saves to individually erased data.
+The composition requires the completed slot/plan, lifecycle, constructor,
+finalizer, original-pointer, physical-separation, descriptor, helper-effect and
+normal-return checks. It also requires the complete narrow 62-call and wide
+27-parent/36-child returning-interface populations. The lower-level component
+reports retain their standalone preconditions and historical pending fields;
+`private_chain_composition` records their combined conditional disposition.
+It does not waive their named ABI, typed-state, nonreentrancy or SDK assumptions.
+
+Two additional SHA-NI scalar fallback leaves are explicitly reproduced from
+the prior scalar review. Complete bytes and extent kinds match; only the two
+named round-table relocations and one exact target-feature ABI substitution
+differ. Both current tables match the prior scalar constants. No implicit
+qualification of other similarly named helpers is allowed.
+
+All seven retained private fail-stop callsites are assigned: two scalar
+partial-bit shifts, the SHA-NI length-mismatch/partial-bit exits, the narrow
+worker slice and iterator-overflow exits, and the wide partial-bit shift.
+The SHA-NI length checks preserve the exact 8/16-byte encoding cases under a
+stable private boolean width flag. Existing caller admission and preserved
+typed-state contracts exclude these exits for valid operations. Arbitrary
+corrupted state is not covered; the abort chain has no successful return and
+is never counted as cleanup success.
+
+No private package-5 assignment remains. Shared runtime/SDK implementations,
+final compiler/platform and cumulative-depth reconciliation, and complete
+enclosing-window reclamation remain package 8. The earlier checkpoint sections
+are historical evidence, not additional current TODOs or unconditional claims.
+
+Eight new focused saved-artifact tests pass and reject 1,697 mutations. Both
+complete suites pass all 314 tests (124 self-contained and 190 saved): Linux
+in 693.559 seconds and Windows in 736.169 seconds. Parsed reports match with
+160 current checker-source bindings. The [completion observation](../assurance/windows-protection-observations/sha2-batch-completion-20261007.json)
+records the scope, hashes and results. This replays saved native artifacts;
+it is not a new enclave execution or independent retest.

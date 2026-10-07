@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "e7899cbdfdf424dbc015867955fcf7f186dae1ae",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "conditional_metadata_and_compact_cursor_subtask_closed": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 194,
+  "self_contained_tests": 98,
+  "saved_artifact_tests": 96,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-metadata-linux.json": "605e9811c9efe1992cc389e3fee5026a0847f4156acf6018ad5bf813e76f6a45",
+    "sha2-batch-metadata-windows.json": "22d076bca73029128d331e0ff589e6a44f6bce61bc9696959f4f2790439e9517"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_compact_lifetimes.py": "3f93021aaeba1436d9346cdbcda4e48e159f79a8589ebbdcd7baec41b8ac6272",
+    "windows_enclave_sha2_field_effects.py": "5e07fee38a8faeaf7a33885f238703707741ddfc04222b1591ca7a041c8af98e",
+    "windows_enclave_sha2_field_integrity.py": "961f0249c2b2909dce4da3efc526e7d4c8f2bc9f64b20b78f3afcdfbc2786e45",
+    "windows_enclave_sha2_field_integrity_tests.py": "c39f626f59dea11936da66b43ef59182ea5a7e6c25b9a340f606245084bb13a2",
+    "windows_enclave_sha2_field_ir.py": "93f56a8c2dae0a69aef9f1ccad3a67f3ef920d7653a488b37a905bb284739a6e",
+    "windows_enclave_sha2_batch_chains.py": "e33a4e7f074ad9ac5b0a4010ba5fe698c3224f4ccd0fbd4e24d1a1b288e14fce",
+    "windows_enclave_sha2_source_lifetime_tests.py": "21d3dcc20c8ab24be4b6fd59997f17e8ace3363d0e0e3adb62ebe7dd69412f84"
+  },
+  "prior_review_observation": "sha2-batch-narrow-lifetimes-progress-20261007.json",
+  "new_reviewed_scope": [
+    "288 derived metadata aliases and 298 accesses across both saved SIMD digest functions",
+    "82 tracked helper callsites receive explicit effects from the existing bound helper contracts, not inferred from readonly attributes",
+    "input descriptors retain their assigned fields; authority callback/backend and owner authority/minimum fields reject writes",
+    "the narrow compactor's integer pointer roundtrip includes complete temporary access and source identity checks",
+    "all 90 input reads and 16 compact-index reads require initialization since the last invalidation across branches, loops, invokes and cleanup transfers",
+    "narrow slot104 has four current-phase cursor reloads and one bounded advancement",
+    "wide slot944 has three original compact-base reloads; slot1024 has three current-phase cursor reloads and one bounded advancement",
+    "earlier status/index and later scalar/output slot roles cannot establish vector cursor validity"
+  ],
+  "new_saved_mutations_rejected": {
+    "late_input_descriptor_writes": 90,
+    "compact_read_after_wipe": 16,
+    "immutable_authority_and_owner_fields": 15,
+    "escapes_bypasses_and_whole_workspace_alias_writes": 10,
+    "narrow_integer_alias_and_initialization_drift": 8,
+    "cursor_overwrite_base_initializer_and_increment": 25
+  },
+  "machine_geometry_primitive_and_pointer_origin_reviews_required": true,
+  "physical_allocation_lifetime_and_external_separation_required": true,
+  "chkstk_and_nonvolatile_abi_required": true,
+  "arbitrary_exception_cleanup_qualified": false,
+  "individual_stack_erasure_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "remaining_private_review": [
+    "compose actual physical allocation/storage lifetimes and separation with conditional metadata, pointer and memory effects",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing private frame/storage and cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

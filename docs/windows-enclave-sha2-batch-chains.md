@@ -922,6 +922,56 @@ python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   --output release-reports/windows-worker-review-20261006/sha2-batch-narrow-lifetimes-linux.json
 ```
 
+## Metadata preservation checkpoint (2026-10-07)
+
+The next saved-image review joins the existing compaction, pointer-origin,
+vector geometry and helper-effect contracts with an exhaustive LLVM address-use
+inventory. It covers 143 aliases / 159 accesses in the narrow digest and
+145 aliases / 139 accesses in the wide digest. All 82 tracked helper callsites
+receive explicit effects; LLVM `readonly` annotations alone are not used to
+declare a callee harmless. Unknown address operations and escapes reject.
+
+Input descriptor fields have only their assigned initialization writes; the
+wide input descriptors are read-only throughout. The authority callback,
+backend identity and owner-to-authority pointer fields remain immutable, while
+the separately reviewed counter and quarantine writes remain allowed. The
+narrow iterator's pointer/integer roundtrip includes its complete temporary-slot
+use population, not just its two casts. The input and compact-array validity
+analysis follows branches, loops, invokes and cleanup transfers. All 90 input
+reads and sixteen compact-index reads require their current initialization;
+terminal workspace wipes and lifetime ends cannot establish a reusable fact.
+
+The emitted compact cursors have separate phase-specific definition checks.
+Narrow slot 104 has four reloads and one width increment rooted at workspace
+offset 4096. Wide slot 944 has three original-base reloads; slot 1024 has three
+cursor reloads and one increment rooted at workspace offset 4576. Earlier
+status/index uses and later scalar/output uses cannot satisfy the vector-phase
+proof. Complete vector-region checks supply the bounded cursor arithmetic;
+partial slot overwrites, missing initializers and altered increments reject.
+
+This closes the **conditional metadata-preservation and compact-cursor subtask**,
+not the physical allocation/separation or whole-frame review. The analysis uses
+the already reviewed machine geometry and helper contracts of these exact bound
+images. It is not a general LLVM range prover, a proof that distinct symbolic
+roots cannot alias, an independent retest or a fresh native enclave execution.
+Package 5 remains open. Production code and release-gate policy are unchanged.
+
+All 194 tests pass on both Linux and Windows (98 self-contained and 96
+saved-artifact tests), including 164 new saved-artifact rejection mutants. The
+parsed integrated reports match. The source/report bindings and explicit scope
+are recorded in
+`assurance/windows-protection-observations/sha2-batch-metadata-progress-20261007.json`.
+
+Reproduce the integrated report and its regressions with:
+
+```sh
+python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
+  release-reports/windows-local-20261004 --mutate \
+  --output release-reports/windows-worker-review-20261006/sha2-batch-metadata-linux.json
+python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
+  --saved-directory release-reports/windows-local-20261004
+```
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.
@@ -962,8 +1012,10 @@ python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   safety from callee identity or bounded construction alone.
   Narrow authority and per-lane pointer definitions now have whole-CFG and
   invoke/cleanup-callsite checks; do not repeat that completed analysis. Next
-  compose compact-index and input/authority-field integrity against indirect
-  writes in both routes, followed by physical storage validity/separation.
+  compose physical storage validity/separation with the now checked conditional
+  compact-index and input/authority-field preservation in both routes. The
+  metadata/cursor review above closes that conditional subtask; do not repeat it
+  or mistake symbolic-root separation for actual allocation disjointness.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

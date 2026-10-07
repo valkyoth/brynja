@@ -79,7 +79,7 @@ Comparisons/conditional exits don't narrow intervals. The parent region review
             # These values are counter/length payloads, never address bases.
             s.require(regs.get(reg) is None or regs[reg].object is None,'no pointer arithmetic hidden in payload')
             regs.pop(reg,None);continue
-        s.require(op in ('movq','movl','movzbl','movzwl','movb','leaq','andl','andq','addq','shlq','xorl'),
+        s.require(op in ('movq','movl','movzbl','movzwl','movb','leaq','andl','andq','addq','shlq','shll','xorl'),
                   'assigned indirect effect instruction: '+op)
         src,dst=args
         if '(' in dst:
@@ -116,10 +116,11 @@ Comparisons/conditional exits don't narrow intervals. The parent region review
             s.require(old is not None and old.object is None and src.startswith('$'),'integer mask provenance')
             mask=int(src[1:]) & ((1<<width)-1)
             value=Value(None,old.low & mask,old.low & mask) if precise and old.low==old.high else Value(None,0,mask)
-        elif op=='shlq':
+        elif op in ('shlq','shll'):
             old=regs.get(reg)
             s.require(precise and old is not None and old.object is None and src.startswith('$')
-                      and 0<=int(src[1:])<64,'assigned precise integer shift')
+                      and width==(32 if op=='shll' else 64) and 0<=int(src[1:])<width,
+                      'assigned precise integer shift')
             shift=int(src[1:]);value=add(Value(None,0,0),Value(None,old.low<<shift,old.high<<shift))
         elif op=='addq':
             old=regs.get(reg)

@@ -29,7 +29,15 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
-The latest vector-stack checkpoint adds the complete normal vector/copy/
+The latest earlier-phase checkpoint assigns all 34 wide indirect stores and
+all six calls, composing their conditional effects with the normal stack bounds.
+The local scratch aliases, bounded state-initialization induction, vector-offset
+guard, packed-state bases and session argument origins are checked. Three copy
+sites have 96 independently replayed public geometry cases. Original input,
+compact-index and authority-field lifetimes and physical allocation separation
+remain required; package 5 is not closed by conditional footprints alone.
+
+The vector-stack checkpoint adds the complete normal vector/copy/
 cancellation callee closure: twelve bodies per SIMD route, including XMM/YMM
 stack widths and nested/tail-call return slots. Those stack/home effects exclude
 the selected saved slots. Both early wide callbacks retain their original

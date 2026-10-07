@@ -21,6 +21,8 @@ import windows_enclave_sha2_callee_stack as callee_stack
 import windows_enclave_sha2_source_lifetime as source_lifetime
 import windows_enclave_sha2_slot_origins as slot_origins
 import windows_enclave_sha2_vector_stack as vector_stack
+import windows_enclave_sha2_early_writes as early_writes
+import windows_enclave_sha2_early_calls as early_calls
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -244,6 +246,18 @@ def inspect_route(base,root,lane,pin,mutate):
             semantics['simd_helper_slot_origins']=slot_origins.inspect(bodies,asm,
                 semantics['simd_first_output_frame_cell'],semantics['simd_conditional_effect_placement'],
                 semantics['simd_tracked_callee_stack'])
+            semantics['simd_earlier_indirect_stores']=early_writes.inspect(bodies,asm,
+                semantics['simd_vector_callee_stack']['early_calls'],
+                semantics['simd_conditional_effect_placement']['placements'])
+            semantics['simd_earlier_call_effects']=early_calls.inspect(bodies,asm,
+                semantics['simd_vector_callee_stack']['early_calls'],
+                semantics['simd_conditional_effect_placement']['placements'],
+                semantics['simd_vector_callee_stack'])
+            composition=semantics['simd_helper_slot_origins']['conditional_memory_composition']
+            composition['earlier_vector_phase_effects_for_slot984_pending']=False
+            composition['earlier_stores_calls_and_stacks_conditionally_composed']=True
+            composition['original_lifetimes_indices_authority_and_external_separation_still_required']=True
+            semantics['simd_earlier_indirect_stores']['callee_argument_effects_pending']=False
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0

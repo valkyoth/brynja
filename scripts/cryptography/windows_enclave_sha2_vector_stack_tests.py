@@ -1,9 +1,10 @@
 """Vector spill bounds, nested stacks and early callback-origin regressions."""
 from unittest.mock import patch
 import windows_enclave_sha2_vector_stack as p
+from windows_enclave_sha2_early_writes_tests import EarlyWriteTests, EarlyWriteSavedTests
 
 
-class VectorStackTests:
+class VectorStackTests(EarlyWriteTests):
     def test_vector_stack_width_direction_and_live_allocation(self):
         for opcode,reg,width in (('movaps','xmm6',16),('vmovups','ymm15',32),
                                  ('vmovdqa','xmm14',16),('movdqu','xmm8',16)):
@@ -31,7 +32,7 @@ class VectorStackTests:
             with self.assertRaises(ValueError):p.closure(changed,{'f'}, {})
 
 
-class VectorStackSavedTests:
+class VectorStackSavedTests(EarlyWriteSavedTests):
     def vector_stack_fixture(self,row):
         import windows_enclave_sha2_batch_chains as parent
         lane,pin,_,_,_,_,bodies=row

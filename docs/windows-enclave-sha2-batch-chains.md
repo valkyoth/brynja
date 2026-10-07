@@ -824,6 +824,53 @@ python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   --output release-reports/windows-worker-review-20261006/sha2-batch-vector-stack-linux.json
 ```
 
+## Earlier wide stores and call effects (2026-10-07)
+
+All 169 tests pass on Linux and Windows, with matching parsed reports:
+86 self-contained and 83 saved-artifact tests. The new checks reject 83
+store/origin/index/guard mutations, four hidden-write/partial-index/guard-bypass
+mutations, twenty independent copy-argument mutations and eleven call-base/
+effect/stack mutations. The retained observation is
+[`sha2-batch-early-effects-progress-20261007.json`](../assurance/windows-protection-observations/sha2-batch-early-effects-progress-20261007.json).
+
+The earlier wide region now has a complete 34-store indirect-write inventory:
+eight state-initialization words, four control-counter writes, 21 local IV
+scratch stores and one vector-offset store. Both scratch aliases trace to
+`RBP-88` through all reaching definitions. State initialization uses an anchored
+zero-origin four-lane induction, including its saved-index restore; public IV
+arithmetic in the same register is not treated as a valid index. The vector
+offset store requires the successful `index <= 3` edge on every normal path.
+Unexpected stores, partial pointer overwrites, unguarded loop entries and
+wrong address/width calculations reject.
+The induction additionally checks every increment-to-save path crosses the
+non-exhausted loop edge: a check that dominated the first iteration cannot
+justify re-entry after exhaustion. Likewise, vector-offset guard coverage
+starts from the defining index load, not an earlier iteration's successful
+check.
+
+All six earlier calls now have conditional effects: the two image-bound
+cancellation callbacks are memory-free, three copies have independently replayed
+argument geometry (96 public cases), and the vector session's original
+authority/state/block/scratch argument origins are checked. Both packed-state
+reloads and the saved CPU scratch base trace to their original workspace fields.
+The reviewed session/kernel/transpose contracts bound the packed-state, CPU
+scratch and authority writes. These effects and the normal callee stacks are
+composed with the caller/child placement, excluding the live callback and
+argument slots. The report no longer lists earlier-phase effect assignment as
+pending, but explicitly retains its conditional nature.
+
+Original input/compact-index and authority-field lifetimes, actual allocation
+separation and nonvolatile ABI assumptions are still required. In particular,
+the finite public replay does not prove provenance for arbitrary external input
+pointers. Neither individual stack erasure nor arbitrary unwind is qualified.
+No production code, release-gate policy or saved native image changed.
+
+```sh
+python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
+  release-reports/windows-local-20261004 --mutate \
+  --output release-reports/windows-worker-review-20261006/sha2-batch-early-effects-linux.json
+```
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

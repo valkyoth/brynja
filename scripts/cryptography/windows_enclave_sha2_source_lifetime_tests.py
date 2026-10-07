@@ -19,6 +19,7 @@ from windows_enclave_sha2_parent_remaining_tests import ParentRemainingSavedTest
 from windows_enclave_sha2_narrow_admission_tests import NarrowAdmissionSavedTests
 from windows_enclave_sha2_narrow_setup_tests import NarrowSetupSavedTests
 from windows_enclave_sha2_narrow_vector_tests import NarrowVectorTests, NarrowVectorSavedTests
+from windows_enclave_sha2_narrow_outputs_tests import NarrowOutputSavedTests
 
 
 class SourceLifetimeTests(SlotOriginTests, NarrowLifetimeTests, FieldIntegrityTests, AllocationTests, FailstopTests, DynamicCleanupTests, WideResultTests, CleanupOrderTests, NormalEffectsTests, WideOutputTests, NarrowVectorTests):
@@ -65,7 +66,7 @@ class SourceLifetimeTests(SlotOriginTests, NarrowLifetimeTests, FieldIntegrityTe
             with self.assertRaises(ValueError):p.instruction(bad)
 
 
-class SourceLifetimeSavedTests(SlotOriginSavedTests, NarrowLifetimeSavedTests, FieldIntegritySavedTests, AllocationSavedTests, FailstopSavedTests, DynamicCleanupSavedTests, WideResultSavedTests, WideFailstopSavedTests, CleanupOrderSavedTests, NormalEffectsSavedTests, WideOutputSavedTests, ParentOutputSavedTests, ParentAuthoritySavedTests, ParentSetupSavedTests, ParentRemainingSavedTests, NarrowAdmissionSavedTests, NarrowSetupSavedTests, NarrowVectorSavedTests):
+class SourceLifetimeSavedTests(SlotOriginSavedTests, NarrowLifetimeSavedTests, FieldIntegritySavedTests, AllocationSavedTests, FailstopSavedTests, DynamicCleanupSavedTests, WideResultSavedTests, WideFailstopSavedTests, CleanupOrderSavedTests, NormalEffectsSavedTests, WideOutputSavedTests, ParentOutputSavedTests, ParentAuthoritySavedTests, ParentSetupSavedTests, ParentRemainingSavedTests, NarrowAdmissionSavedTests, NarrowSetupSavedTests, NarrowVectorSavedTests, NarrowOutputSavedTests):
     def source_fixture(self,row):
         import windows_enclave_sha2_batch_chains as parent
         lane,pin,_,_,_,_,bodies=row

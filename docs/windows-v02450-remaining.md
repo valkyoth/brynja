@@ -29,13 +29,25 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The narrow-output checkpoint assigns the last eighteen returning interfaces:
+eight final copies, the eight-lane owner-transfer loop, two dynamic error clears,
+two identity clears, two scratch clears, scalar/CPU cleanup and the output
+destructor. All 62 narrow returning interfaces now have assignments, as do the
+previously reviewed 36 wide-child returning calls and 27 wide-parent interfaces.
+The final copies use the current source pointers and original bounded widths;
+the owner loop advances its returned-descriptor cursor and destination in
+lockstep. Descriptor validity is required at the final transfer reads, not just
+at construction. Final private-frame/storage composition across all four routes
+is still open. Shared SDK/probe implementations and platform/window guarantees
+remain package 8; exhausting the interface list is not whole-image qualification.
+
 The narrow-vector checkpoint joins all six vector-loop call interfaces: two
 linked cancellation calls, state packing, input-block packing, compression and
 state unpacking. It reuses the completed original input/authority, compact-index,
 kernel and loop reviews, and checks actual argument slices over 384 bounded
 public geometries. Normal helper writes and the twelve-body stack closure are
 disjoint from live descriptors, pointer slots, control, typed inputs and compact
-indices. This leaves eighteen narrow output/cleanup interfaces (44 of 62 now
+indices. That left eighteen narrow output/cleanup interfaces (44 of 62 then
 assigned), followed by final private-frame/storage composition across all four
 routes. SDK/probe, ABI and OS obligations remain separate; no individual spill
 erasure, new native execution or whole-image qualification is inferred.

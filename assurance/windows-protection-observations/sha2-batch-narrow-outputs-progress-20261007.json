@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "8793f4e2110ae1315197139b731af85e5c46d0ac",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "focused_validation": {"status": "PASS", "tests": 8, "seconds": 113.738},
+  "full_validation": {
+    "linux": {"status": "PASS", "tests": 306, "seconds": 668.372},
+    "windows": {"status": "PASS", "tests": 306, "seconds": 703.681}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 157,
+  "report_sha256": {
+    "sha2-batch-narrow-outputs-linux.json": "9ab63b129198d6f4c215fad4f5b9757da50bdd9c95ee79ee15c85d0ca5b9e6bd",
+    "sha2-batch-narrow-outputs-windows.json": "dbc634484d8653e265ce06c76bf4e2b27c7aef085329c7fa7262a235f728d6da"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_narrow_exports.py": "c421945f09c0a7ae92201ba821e510820895b266acb02a022df4e826aa7bb648",
+    "windows_enclave_sha2_narrow_outputs.py": "82baa717c35ccda2b3d2d71be63871083c868562040856672981837d49fbbdc6",
+    "windows_enclave_sha2_narrow_outputs_tests.py": "c098b25540e44255e7b498fe1e1d0f1f808d0b75cd2e0711daa83a00bbde93f5",
+    "windows_enclave_sha2_batch_chains.py": "40fc8b618541ed3281e3b76544230591ab89822a88bdf5e43971c66142370823",
+    "windows_enclave_sha2_source_lifetime_tests.py": "b32f3edae54f30be21c7efd8398f4b81def33a38a614df52868ad0afce988456"
+  },
+  "prior_review_observation": "sha2-batch-narrow-vector-progress-20261007.json",
+  "new_reviewed_scope": [
+    "all eighteen remaining narrow output and cleanup returning interfaces",
+    "eight final copy destination, capacity, length and prepared-source origins with individual width admission",
+    "eight-lane owner transfer with current returned-descriptor cursor and paired bounded advances",
+    "descriptor validity at final transfer reads, rejecting partial or overlapping overwrites",
+    "both dynamic error clears, identity clears, scratch clears, scalar/CPU wipes and normal output destructor",
+    "normal helper writes and six-body stack closure exclude live caller metadata"
+  ],
+  "new_self_contained_tests": 0,
+  "new_saved_tests": 8,
+  "new_saved_mutations_rejected": {
+    "independent_final_copy_arguments_roots_widths_and_entry_bypasses": 64,
+    "original_null_preflight_changes": 8,
+    "owner_transfer_loop_cursor_and_entry_changes": 28,
+    "cleanup_calls_arguments_and_preserved_roots": 41,
+    "prerequisites_geometry_and_inventory_changes": 20,
+    "live_storage_effect_overlap": 4,
+    "descriptor_read_lifetime_overwrites": 6
+  },
+  "remaining_callsite_interfaces": {
+    "narrow": 0,
+    "wide_child": 0,
+    "wide_parent": 0,
+    "narrow_assigned_returning_interfaces": 62,
+    "narrow_remaining_instruction_offsets": [],
+    "assignment_is_not_full_memory_stack_or_erasure_qualification": true
+  },
+  "shared_runtime_calls": {
+    "narrow_instruction_offsets": [21, 190, 194, 229, 252, 257, 275],
+    "private_argument_contracts_checked": true,
+    "runtime_register_memory_and_stack_contracts_qualified": false,
+    "memset_is_volatile_erasure": false
+  },
+  "remaining_private_review": [
+    "finite private frame and storage assignments across scalar, SHA-NI, narrow SIMD and wide SIMD routes",
+    "compose the complete frame/storage population with existing lifetime, separation, effects and error/unwind reviews"
+  ],
+  "conditional_prerequisites": [
+    "live separated owner/authority page and parent/worker allocations",
+    "original nonnull descriptor construction and preserved input/authority metadata",
+    "serialized nonreentrant transport, Win64 ABI and bound SDK/probe implementations",
+    "OS-admitted worker window and shared runtime/unwind qualification"
+  ],
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

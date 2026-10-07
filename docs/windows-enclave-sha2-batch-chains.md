@@ -1582,63 +1582,66 @@ tests): Linux in 556.317 seconds and Windows in 594.105 seconds. Parsed reports
 match with 155 current checker-source bindings. Source/report hashes and scope
 are recorded in the [narrow vector observation](../assurance/windows-protection-observations/sha2-batch-narrow-vector-progress-20261007.json).
 
+## Narrow final-output composition checkpoint (2026-10-07)
+
+`windows_enclave_sha2_narrow_exports.py` and
+`windows_enclave_sha2_narrow_outputs.py` join all eighteen remaining narrow
+returning interfaces. Eight final copies use the actual original destination,
+matching capacity/length fields and current per-lane prepared sources. Only the
+eight original destination-null preflight edges are excluded, conditional on
+the separately checked nonnull constructor and preserved descriptors. All width,
+health, error and copy-result branches remain; each copy must pass its own
+28-or-32-byte admission.
+
+The owner transfer uses eight destination offsets 16 through 240, stepping by
+32, paired with returned descriptors at offsets 2912 through 3024, stepping by
+16. The source cursor must have its current initializer, not an earlier work
+counter; the loop cannot replay a copy without both advances and a fresh bound
+check. Normal-CFG descriptor validity is required at the final source,
+destination and capacity reads and calls. Partial/overlapping descriptor writes
+invalidate that fact even if construction happened earlier.
+
+The cleanup interfaces reuse both complete dynamic clearing loops and exact
+destructor/zeroizer contracts. They include both eight-byte identity clears,
+both 256-byte scratch clears, all reaching scalar/CPU scratch pointer roots and
+the normal output destructor after the original descriptors are restored.
+The six-body normal helper closure has bounded stack extent `[-72,0)` relative
+to the resident frame. Mapped writes and ABI home space exclude live descriptors,
+saved pointers, control and typed-input metadata.
+
+All 62 narrow returning-call interfaces are now assigned exactly once; there
+are no unassigned narrow calls. This includes the seven explicitly shared
+SDK/probe interfaces whose implementations are still unqualified here. The
+separately proved unreachable overflow terminal is not counted as a returning
+call. Final private-frame/storage erasure remains open, as do the named shared
+runtime/platform conditions. No production source, native image or release-gate
+policy changes are part of this checkpoint.
+
+Eight focused saved-artifact tests pass and reject 171 targeted mutations.
+Both complete saved-artifact suites pass all 306 tests (124 self-contained and
+182 saved): Linux in 668.372 seconds and Windows in 703.681 seconds. Parsed
+reports match with 157 current checker-source bindings. Scope and hashes are
+recorded in the [narrow output observation](../assurance/windows-protection-observations/sha2-batch-narrow-outputs-progress-20261007.json).
+
 ## Remaining package-5 work
 
-- Finish batch-specific caller preconditions for the reproduced primitive contracts.
-- Complete enclosing constructor frame/storage cleanup composition. Public IV
-  calculation, initial placement, plan admission, selected state transfers,
-  finalizer callers and the SHA-NI finish funclet are now checked. Both complete
-  SIMD constructor bodies, public startup KATs and failure-page cleanup now have
-  checks; enclosing-window cleanup is not inferred from their public local data.
-- Complete SIMD surrounding pointer/storage lifetimes, enclosing lane-engine
-  composition and normal error paths. Local callback sources, invoked funclet
-  actions and compiler cleanup-state order are now checked; these need composition
-  with each caller's live storage. Declared-field erasure, output/worker buffer
-  destruction, page retirement and selected error-return cleanup now have checks;
-  complete transposes and AVX2 compression kernels are now checked. These do
-  not close complete alias or lifetime composition across the digest engine.
-  The enclosing digest caller now has typed input admission, scratch/output
-  layout, plan/width and post-result lifetime checks; the inner lane engine and
-  preservation of destination pointers across computation remain to be composed.
-  The final width preflight, copies and returned descriptor moves now have checks;
-  descriptor initialization, immutability and prepared-source provenance now
-  have whole-function LLVM use checks. Compose those with emitted stack-slot
-  lifetimes and indirect memory effects; do not promote IR checks alone to a
-  complete machine-code lifetime proof.
-  Complete vector-loop regions now bind lane packing, complete-block input
-  bounds, session accounting and indexed state write-back. Public lane compaction
-  now has exhaustive typed-identity replay; finish its original caller
-  preconditions and subsequent live-storage composition. The scalar remainder,
-  padding and output-mask caller regions now have complete checks, including
-  both variant dispatch tables and the specialized mask helpers. Compose the
-  reproduced scalar compression/transfer contracts with these caller regions.
-  Their complete bytes, references, round tables and exact ABI differences now
-  have explicit checks; the changed zeroizer has a separate complete review.
-  Positive clearing lengths now have exhaustive direct/tail call-site checks.
-  Descriptor construction now establishes exact slot pointers and bounded,
-  disjoint destination regions under the typed/live-frame preconditions.
-  Propagate those origins through subsequent machine lifetimes and establish
-  every remaining caller's valid/disjoint regions, rather than inferring caller
-  safety from callee identity or bounded construction alone.
-  Narrow authority and per-lane pointer definitions now have whole-CFG and
-  invoke/cleanup-callsite checks; do not repeat that completed analysis. Next
-  metadata/cursor and concrete allocation reviews above now join those private
-  lifetime/separation contracts, subject to their named shared-runtime
-  prerequisites. Do not repeat those completed conditional checks or promote
-  them to whole-window residency or erasure. The later admitted overflow-path
-  composition above closes the narrow `.B190` prerequisites; do not repeat that
-  step. The dynamic descriptor checkpoint now covers all five clearing loops,
-  narrow normal descriptor copies/direct-write lifetimes and nineteen protected
-  call boundaries. The wide descriptor/result checkpoint now also joins the
-  original R9 argument, both normal parent destructors and the two protected
-  parent call boundaries. The latest checkpoint also closes the wide `.B302`
-  admission proof and preceding caller-side cleanup-handler effects at all 21
-  descriptor boundaries. Finish normal indirect helper-effect composition and
-  close the finite private frame/storage assignments. Do not repeat completed
-  loop, direct-write, result-admission, overflow or handler-prefix
-  checks as a substitute for those remaining joins.
-- Assign every reachable private frame and storage region, and resolve the
-  remaining fail-stop caller preconditions.
+- Finish the finite private frame/storage assignments across scalar, SHA-NI,
+  narrow SIMD and wide SIMD routes. Include enclosing constructors, caller
+  frames and supported cleanup funclets; public startup KAT locals do not by
+  themselves establish erasure of a later secret-bearing frame.
+- Compose those assignments with the existing original-pointer, physical
+  separation, normal helper-effect, returned-object and error/unwind checks.
+  Distinguish field-level volatile clearing from compiler-created copies,
+  padding and saved registers. Resolve any still-unassigned private edge or
+  fail-stop precondition identified by that complete frame/storage population.
+- Run the focused composition regressions and reconcile the four saved routes
+  before closing package 5. Do not repeat already-completed compact-index,
+  input/authority, descriptor-construction, overflow, output-transfer or
+  normal-call-interface reviews as substitutes for the remaining assignments.
+
+The checkpoint sections above retain the evidence and limitations of earlier
+partial reviews. Their historical pending lists are superseded by this current
+list, not silently promoted to unconditional platform or whole-frame claims.
 
 Shared runtime, SDK, final platform/depth reconciliation and enclosing-window
 reclamation remain package 8 obligations. Nothing here promotes moved-from

@@ -29,6 +29,17 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The narrow-admission/setup checkpoint joins fifteen more sites: operation
+admission, three compiled callbacks, two authority checks, owner-output clearing,
+the tail predicate, the stack-probe interface and six SDK initialization calls.
+Original owner/authority pointers and per-lane input origins reuse the completed
+lifetime reviews. Exact helper bodies retain the narrow layout and rejection
+tags; setup cannot re-enter after output descriptor construction. This leaves
+24 narrow calls: six vector-loop helpers and eighteen output/cleanup sites.
+Final private-frame/storage composition remains open, as do the explicitly
+separate SDK/probe, ABI and OS obligations. Production and gate policy remain
+unchanged.
+
 The parent-interface checkpoint assigns the last three wide-parent sites:
 the bounded tail-byte predicate, all six original child-executor arguments,
 and the stack-probe size/placement. All 27 parent call interfaces and all 36
@@ -37,7 +48,7 @@ joined to the parent's live input descriptors, original output descriptors and
 owner slot; its returned-object lifetime still starts only after result admission.
 This is not a complete memory/stack-effect qualification: seven SDK/probe calls
 remain shared-runtime obligations, and private-frame assignment/erasure is still
-open. The next caller work is the 39 narrow-route sites, followed by final private
+open. That checkpoint left 39 narrow-route sites, followed by final private
 frame/storage composition across the four routes. Production and gate policy
 are unchanged.
 

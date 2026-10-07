@@ -37,6 +37,8 @@ import windows_enclave_sha2_parent_outputs as parent_outputs
 import windows_enclave_sha2_parent_authority as parent_authority
 import windows_enclave_sha2_parent_setup as parent_setup
 import windows_enclave_sha2_parent_remaining as parent_remaining
+import windows_enclave_sha2_narrow_admission as narrow_admission
+import windows_enclave_sha2_narrow_setup as narrow_setup
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -286,6 +288,9 @@ def inspect_route(base,root,lane,pin,mutate):
             descriptors['conditional_direct_parent_result_and_drop_lifetimes_joined']=True
         semantics['simd_descriptor_cleanup_order']=cleanup_order.inspect(bodies,asm,lane,semantics)
         semantics['simd_descriptor_normal_effects']=normal_effects.inspect(bodies,asm,lane,semantics)
+        if lane=='simd256':
+            semantics['simd_narrow_admission_interfaces']=narrow_admission.inspect(bodies,asm,semantics)
+            semantics['simd_narrow_setup_interfaces']=narrow_setup.inspect(bodies,asm,semantics)
         if lane=='simd512':
             semantics['simd_wide_output_effects']=wide_outputs.inspect(bodies,asm,semantics)
             semantics['simd_parent_output_effects']=parent_outputs.inspect(bodies,asm,semantics)

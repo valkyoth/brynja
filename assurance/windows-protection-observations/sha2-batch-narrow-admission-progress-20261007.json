@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "3b699d251353f43af41de6bc4151a7519c197745",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "admission": {"status": "PASS", "tests": 5, "seconds": 37.642},
+    "setup": {"status": "PASS", "tests": 4, "seconds": 33.262}
+  },
+  "full_validation": {
+    "linux": {"status": "PASS", "tests": 291, "seconds": 510.820},
+    "windows": {"status": "PASS", "tests": 291, "seconds": 540.799}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 154,
+  "report_sha256": {
+    "sha2-batch-narrow-admission-linux.json": "8c103cc0c29294567b2ad111fd11a9822a88b852483ce7a8c92ed739768297ec",
+    "sha2-batch-narrow-admission-windows.json": "1d6f1fa51a2c76be43320f4e046c911714fbdb2d80836ec59612b2177c29b540"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_narrow_admission.py": "9785eba86c63f4aa01b7c657a0254c28b2a66e06cba5227a2f2f9cb798f72348",
+    "windows_enclave_sha2_narrow_admission_tests.py": "7d0155544a096a2a7c5676064b1fc5c72c3a0bef19e8c83baafd4a5a71ed4c0c",
+    "windows_enclave_sha2_narrow_setup.py": "31c889ed1daee6c51c2e30f51d73bba4d9e0871acdae571dd7882bc6306bd183",
+    "windows_enclave_sha2_narrow_setup_tests.py": "c0a5add024e9c4838c6d68f69ee5f9e3b71fadc63170333ffc0488559cccc993",
+    "windows_enclave_sha2_parent_authority.py": "7281ca81fde2a8e27b5135b63e5e025db35704f0b540716862563dd164c0d699",
+    "windows_enclave_sha2_batch_chains.py": "b48c1cab8803961d21b10666681e074c862681148d0eb6217c8a381ac8be3ae1",
+    "windows_enclave_sha2_source_lifetime_tests.py": "f47d1ebac4c006de237bf9c27746204e3473b4c49f27c995a0d994eda20f60da"
+  },
+  "prior_review_observation": "sha2-batch-parent-remaining-progress-20261007.json",
+  "new_reviewed_scope": [
+    "complete narrow operation/check bodies with explicit offsets and one-byte rejection tag",
+    "original owner, sequence, phase, authority/backend and owner-clear arguments",
+    "bounded eight-header final-byte predicate and complete leaf body",
+    "five-body normal helper-stack closure, excluding live descriptors and saved pointers",
+    "fixed stack-probe argument and placement without assuming its runtime implementation",
+    "six SDK initialization arguments, extents, copy nonoverlap and zero fill values",
+    "no normal reentry to setup after output descriptor construction"
+  ],
+  "new_saved_tests": 9,
+  "new_saved_mutations_rejected": {
+    "helper_instruction_and_label_deletions": 132,
+    "wrong_or_unknown_authority_layout": 3,
+    "authority_arguments_and_bypasses": 21,
+    "predicate_cursor_bounds_and_bypasses": 24,
+    "admission_prerequisites_inventory_and_probe": 11,
+    "SDK_pointer_count_fill_and_bypass_changes": 24,
+    "late_setup_reentry": 6,
+    "setup_prerequisites_and_inventory": 8
+  },
+  "remaining_callsite_interfaces": {
+    "narrow": 24,
+    "wide_child": 0,
+    "wide_parent": 0,
+    "narrow_assigned_returning_interfaces": 38,
+    "narrow_remaining_instruction_offsets": [636, 643, 650, 654, 656, 734, 818, 865, 873, 893, 929, 1336, 1348, 1360, 1372, 1384, 1396, 1408, 1420, 1567, 1575, 1596, 1617, 1653],
+    "assignment_is_not_full_memory_stack_or_erasure_qualification": true
+  },
+  "shared_runtime_calls": {
+    "narrow_instruction_offsets": [21, 190, 194, 229, 252, 257, 275],
+    "private_argument_contracts_checked": true,
+    "runtime_register_memory_and_stack_contracts_qualified": false,
+    "memset_is_volatile_erasure": false
+  },
+  "remaining_private_review": [
+    "six narrow vector-loop helper joins",
+    "eighteen narrow output and cleanup callsite joins",
+    "finite private frame and storage assignments across all four routes"
+  ],
+  "conditional_prerequisites": [
+    "live separated owner/authority page and parent/worker allocations",
+    "remaining caller effects and original pointer/metadata preservation",
+    "serialized nonreentrant transport, Win64 ABI and bound SDK/probe implementations",
+    "OS-admitted worker window and shared runtime/unwind qualification"
+  ],
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

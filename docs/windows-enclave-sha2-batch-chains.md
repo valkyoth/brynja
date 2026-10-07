@@ -1489,6 +1489,55 @@ mutation reports are identical after parsing and bind 152 current checker
 sources. Hashes, scopes and remaining conditions are recorded in
 `assurance/windows-protection-observations/sha2-batch-parent-remaining-progress-20261007.json`.
 
+## Narrow admission and setup joins (2026-10-07)
+
+`windows_enclave_sha2_narrow_admission.py` joins nine previously unassigned
+sites to the existing original-owner, authority and input-lifetime reviews.
+The shared complete-body checker now selects an explicit narrow or wide layout:
+narrow output starts at owner byte 16, sequence at 272, phase at 280 and the
+authority pointer at 8. Narrow rejection writes its one-byte enum tag, not the
+wide two-byte tag. Both complete operation/check bodies retain phase, sequence
+wrap/mismatch, health, kernel and callback failures; the success result must
+still contain the original owner pointer.
+
+All three direct callbacks receive the backend byte from the original authority.
+Both output-boundary checks and the 256-byte owner-output clear retain original
+owner roots through their actual reaching definitions. The tail predicate reads
+one byte only on the admitted nonempty, partial-bit path; length is one through
+1,024 and the terminal bit count one through seven. Its address is formed from
+the same original input header and bounded eight-lane cursor. Empty and
+byte-aligned inputs follow their existing separate paths.
+
+The five-body normal closure (operation, check, compiled callback, zeroizer and
+predicate) is bounded to parent-relative stack bytes -104 through -1. Mapped
+effects exclude live original/returned descriptors, input headers and saved
+owner/authority pointer slots. The separate 11,992-byte stack-probe interface
+does not acquire an empty effect contract or runtime qualification.
+
+`windows_enclave_sha2_narrow_setup.py` binds all six SDK initialization calls to
+their exact original pointers, byte counts, zero-fill values and disjoint copy
+ranges. The frame regions later used for output descriptors are reusable here
+only because no normal CFG path from their construction can re-enter setup.
+Regression probes add actual late backedges while keeping staging sequences
+intact, so rejection depends on the lifetime check rather than stale offsets.
+SDK memory and stack semantics remain shared package-8 obligations; ordinary
+`memset` is not volatile secret erasure.
+
+This leaves 24 narrow interfaces, not an unbounded new review population:
+six vector-loop helpers and eighteen output/cleanup sites. Final private-frame
+assignment and erasure remain open. Nine new saved-artifact tests cover 229
+mutations: 132 helper instruction/label deletions, three wrong-layout selections,
+21 authority argument/bypass changes, 24 predicate/cursor changes, eleven
+admission prerequisite/inventory/probe changes, 24 SDK argument/bypass changes,
+six late setup re-entries and eight setup prerequisite/inventory changes.
+Production Rust, native images and release-gate policy are unchanged.
+
+Both final full suites passed all 291 tests (123 self-contained and 168 saved
+artifact tests): Linux in 510.820 seconds and Windows in 540.799 seconds. Parsed
+reports match with 154 current checker-source bindings. The observation
+`assurance/windows-protection-observations/sha2-batch-narrow-admission-progress-20261007.json`
+records the source/report hashes, focused runs and remaining conditions.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

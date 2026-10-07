@@ -11,25 +11,29 @@ p,n,o,s=output.p,output.n,output.o,output.s
 def code(text):return text.strip().split('|')
 
 
-def contracts(bodies,compiled):
+def contracts(bodies,compiled,lane='simd512'):
+    s.require(lane in ('simd256','simd512'),'exact authority contract lane')
+    narrow=lane=='simd256'
+    out,phase,sequence,pointer=(16,280,272,8) if narrow else (24,288,280,16)
     names=output.child.control.authority
     operation=names.role(bodies,'owner');check=names.role(bodies,'check')
     output.child.control.leaf(bodies,compiled,['movl %ecx, %eax','xorb $1, %al','retq'])
     output.child.reuse.zeroizer(bodies)
-    clear='leaq 24(%rbx), %rcx|movl $256, %edx|callq '+s.ZERO+'|'
-    invalidate='movw $-1, (%rbx)|movb $2, 288(%rbx)|movq 16(%rbx), %rax|movb $0, 16(%rax)|'
+    clear=f'leaq {out}(%rbx), %rcx|movl $256, %edx|callq '+s.ZERO+'|'
+    invalidate=('movb $2, (%rbx)|' if narrow else 'movw $-1, (%rbx)|')+\
+        f'movb $2, {phase}(%rbx)|movq {pointer}(%rbx), %rax|movb $0, 16(%rax)|'
     p.storage.exact(bodies[operation],code(
         'pushq %rbp|pushq %rsi|pushq %rdi|pushq %rbx|subq $56, %rsp|leaq 48(%rsp), %rbp|'
-        'movq $-2, (%rbp)|movq %rdx, %rbx|movq %rcx, %rsi|cmpb %r9b, 288(%rdx)|jne .B15|'
-        'movq %r8, %rdi|movq 280(%rbx), %rax|incq %rax|setne %cl|cmpq %r8, %rax|sete %al|'
+        f'movq $-2, (%rbp)|movq %rdx, %rbx|movq %rcx, %rsi|cmpb %r9b, {phase}(%rdx)|jne .B15|'
+        f'movq %r8, %rdi|movq {sequence}(%rbx), %rax|incq %rax|setne %cl|cmpq %r8, %rax|sete %al|'
         'testb %al, %cl|jne .B2|'+clear+invalidate+
         'movb $1, (%rsi)|movb $2, 8(%rsi)|jmp .B14|.B15:|'+clear+invalidate+
-        'movb $0, (%rsi)|movb $2, 8(%rsi)|jmp .B14|.B2:|movq 16(%rbx), %rax|'
+        f'movb $0, (%rsi)|movb $2, 8(%rsi)|jmp .B14|.B2:|movq {pointer}(%rbx), %rax|'
         'cmpb $1, 16(%rax)|jne .B9|movq %rbx, -16(%rbp)|movzbl 17(%rax), %ecx|'
         'movq %rax, -8(%rbp)|callq *8(%rax)|nop|testb %al, %al|movq -16(%rbp), %rbx|'
         'movq -8(%rbp), %rax|je .B9|cmpb $0, 17(%rax)|jne .B10|cmpb $1, 16(%rax)|jne .B9|'
         'xorl %ecx, %ecx|callq *8(%rax)|nop|testb %al, %al|movq -16(%rbp), %rbx|'
-        'movq -8(%rbp), %rax|je .B9|movq %rdi, 280(%rbx)|movq %rbx, (%rsi)|'
+        f'movq -8(%rbp), %rax|je .B9|movq %rdi, {sequence}(%rbx)|movq %rbx, (%rsi)|'
         'movb $0, 8(%rsi)|jmp .B14|.B9:|movb $0, 16(%rax)|.B10:|movb $5, (%rsi)|'
         'movb $2, 8(%rsi)|'+clear+invalidate+
         '.B14:|addq $56, %rsp|popq %rbx|popq %rdi|popq %rsi|popq %rbp|retq'))
@@ -46,7 +50,7 @@ def contracts(bodies,compiled):
     # no claim that individual compiler slots are erased is made here.
     return dict(operation=operation,check=check,compiled=compiled,
         success_returns_original_owner_pointer=True,result_error_tag=2,result_success_tag=0,
-        operation_result_bytes=9,cleared_owner_output=[24,280],authority_health_byte=16,
+        operation_result_bytes=9,cleared_owner_output=[out,out+256],authority_health_byte=16,
         independent_phase_sequence_wrap_health_kernel_and_callback_rejections=True)
 
 

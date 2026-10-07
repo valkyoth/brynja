@@ -29,6 +29,17 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The wide-parent output checkpoint joins ten additional callsites: four transfers
+into the admitted protected owner, two output-scratch clears, scalar/CPU wipes
+and two output destructors. Actual pointer definitions, same-lane lengths,
+unsigned capacity guards and descriptor-drop lifetimes are checked; bounded
+indexed initialization cannot silently overwrite the saved owner pointer. The
+six-body normal helper-stack closure and mapped writes exclude live descriptors
+and that pointer slot. This leaves 39 narrow and 15 wide-parent callsite joins,
+followed by final private frame/storage assignments. Operation-result correctness,
+remaining setup/check/child effects and the shared ABI remain explicit conditions.
+No whole-frame erasure or new native execution is claimed.
+
 The wide-output checkpoint completes the saved wide SHA-512 child's normal
 call-effect assignments: all 36 returning calls are covered and its one terminal
 overflow call remains separately bound to the admitted-input unreachability
@@ -37,9 +48,9 @@ clearing and the two initial callbacks. Original workspace sources, matching
 descriptor capacities/lengths, checked width guards and future saved-slot
 preservation are traced through the emitted CFG. This remains conditional on
 the recorded parent allocation/descriptor contracts and shared runtime/ABI
-guarantees; it does not close whole-frame erasure. Package 5 still needs the
-39 narrow and 25 wide-parent callsite joins and final private frame/storage
-assignments. No new native execution or production/gate change is involved.
+guarantees; it does not close whole-frame erasure. That checkpoint left 39 narrow
+and 25 wide-parent callsite joins; the later parent-output checkpoint above
+reduces the latter. No new native execution or production/gate change is involved.
 
 The normal-helper checkpoint joins 53 returning callsites to concrete descriptor
 regions and normal callee-stack bounds: 23 narrow, 28 wide child and two wide

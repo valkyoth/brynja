@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "f5ca1b59762cadcfccb8e259c3d9435266ca62c1",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "validation_runs": {
+    "linux_final_full": {"status": "PASS", "tests": 267, "seconds": 443.613},
+    "windows_before_final_admission_edge": {
+      "status": "PASS", "tests": 267, "seconds": 459.215,
+      "checker_sha256": "c80392417eb8c087fef89b64b5e9398c39a3b98364fb6fc75d1bd3343545df65",
+      "tests_sha256": "f3824b9a9dc81535db7e1628b65cc2cf529c4b04e44f709fbd09966b456b401d"
+    },
+    "windows_final_focused": {
+      "status": "PASS", "tests": 5, "seconds": 13.114,
+      "filter": "parent_output",
+      "includes_final_admission_edge_bypass_mutation": true
+    }
+  },
+  "final_integrated_report_with_mutations_passed_on_both_hosts": true,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 149,
+  "report_sha256": {
+    "sha2-batch-parent-outputs-linux.json": "150c80a7cafb30c90dc67d780cc00911620195a46513c8b74d8be484c301acdc",
+    "sha2-batch-parent-outputs-windows.json": "d23e2b4615feb029d1ec00f8bcb1fe372a1b7cd68aa83f295fa8305712ba0892"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_parent_outputs.py": "b014b11dbb2d15036d4d3f08f5aafc29c95f703900e3929dc3022f7d7ff6f28f",
+    "windows_enclave_sha2_parent_outputs_tests.py": "dee624392b5f7d7d7c83f8693f6b96c6d6a6578eec9a2e91e7de4c94a72c95a0",
+    "windows_enclave_sha2_batch_chains.py": "afa103e4ce914e91f18980be4e2c91cd586d64311a4f785cb02f7a985b7fc64f",
+    "windows_enclave_sha2_source_lifetime_tests.py": "4a11ea7dc658696d288a7979ed2ab0752baa79a6636f4c82bc23a758047aac06"
+  },
+  "prior_review_observation": "sha2-batch-wide-outputs-progress-20261007.json",
+  "new_reviewed_scope": [
+    "four same-lane source/capacity/length transfers into the admitted protected owner",
+    "owner result capture dominated by the non-error admission edge and original full-width pointer-slot lifetime",
+    "all sixteen computed parent writes bounded by four-lane publication and ten-iteration scratch initialization",
+    "two exact scratch clears, original scalar and CPU wipe pointers, two live descriptor destructors",
+    "six-body normal helper-stack closure at parent-relative bytes minus seventy-two through zero",
+    "mapped helper writes and stacks exclude live descriptors and owner-pointer slot"
+  ],
+  "new_saved_mutations_rejected": {
+    "copy_lane_width_owner_and_bypasses": 28,
+    "admission_pointer_slot_and_indexed_initialization": 12,
+    "cleanup_arguments_bypasses_and_callee_bodies": 17,
+    "prerequisites_inventory_and_effect_overlap": 12
+  },
+  "remaining_callsite_composition": {
+    "narrow": 39,
+    "wide_child": 0,
+    "wide_parent": 15,
+    "wide_parent_instruction_offsets": [21, 35, 121, 145, 155, 183, 187, 216, 241, 245, 258, 291, 444, 479, 576],
+    "counts_do_not_mean_new_unreviewed_primitive_bodies": true
+  },
+  "conditional_prerequisites": [
+    "operation-result correctness and remaining parent setup, checks and child call effects",
+    "original nonnull descriptor geometry, preserved result handoff and live separate allocations",
+    "serialized nonreentrant transport retains resident page through operation",
+    "Win64 nonvolatile/call ABI, stack probing and admitted worker window",
+    "OS exception dispatch, handler stacks and unwind effects remain shared review"
+  ],
+  "remaining_private_review": [
+    "join remaining narrow and wide-parent caller effects using existing primitive and geometry contracts",
+    "finish private frame and storage assignments across all four routes"
+  ],
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

@@ -1349,6 +1349,53 @@ with 148 current checker-source bindings. The new saved regressions reject 60
 mutations. Exact scope and hashes are recorded in
 `assurance/windows-protection-observations/sha2-batch-wide-outputs-progress-20261007.json`.
 
+## Wide parent output transfers and cleanup (2026-10-07)
+
+`windows_enclave_sha2_parent_outputs.py` joins ten previously unassigned normal
+parent callsites to their original live allocations. All four copies read the
+preserved lane pointer and length, use that same length for source count and
+destination capacity, and reach the call only through the unsigned at-most-64
+admission and nonnull source checks. Their destinations trace through slot 64
+to the admitted operation result, then to owner offsets 24, 88, 152 and 216.
+Correctness of the operation result remains an explicit caller prerequisite;
+this check does not substitute a symbol name for that remaining contract.
+
+All sixteen computed parent stores are bounded: eight input-descriptor stores
+use the already-checked four-iteration publication index, and eight scratch
+stores use a checked ten-iteration initialization loop. Full-width reaching
+definitions include partial writes, overlaps and all normal CFG edges. Mutated
+owner-slot bytes, loop seeds/strides/limits, and bypass entries are rejected.
+
+The two scratch-clear calls write exactly frame bytes 1376 through 1631.
+Scalar and CPU wipes trace their actual saved-register arguments back to the
+original subobjects; their complete existing wipe contracts are replayed.
+Both output destructors receive the previously proved live descriptor objects
+at offsets 4640 and 352. They read the four preserved pairs, clear the parent
+output allocation and erase the eight-byte identity tail. They do not erase
+the descriptor pointer/length bytes themselves. The separate final frame
+assignment must account for any such residuals.
+
+Writes and the complete six-body normal helper-stack closure are disjoint from
+all live descriptor regions and the saved owner-pointer slot. This adds ten
+call assignments to the previous two parent workspace wipe/drop assignments,
+leaving fifteen parent calls and thirty-nine narrow calls to compose. Remaining
+operation/setup/check/child effects, nonvolatile ABI behavior and shared runtime
+guarantees remain conditions; no whole-frame/image claim is made.
+
+Five added saved-artifact tests reject 69 mutations: 28 lane/width/owner/call
+bypasses, twelve owner-admission/pointer-slot or indexed-initialization corruptions, seventeen
+cleanup argument/body changes, and twelve prerequisite/inventory/overlap cases.
+The existing Linux/Windows suite also checks integration through the real parent
+checker. This pass changes no production source, image or release-gate policy.
+
+Final Linux validation passed all 267 tests in 443.613 seconds. Windows passed
+all 267 tests in 459.215 seconds before the last admission-edge strengthening,
+then all five affected tests on the final revision in 13.114 seconds. The final
+integrated mutation reports match on both hosts with 149 current checker-source
+bindings. These scopes are recorded separately, not reported as a final full
+Windows rerun. Exact hashes and conditions are in
+`assurance/windows-protection-observations/sha2-batch-parent-outputs-progress-20261007.json`.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

@@ -33,6 +33,7 @@ import windows_enclave_sha2_wide_result as wide_result
 import windows_enclave_sha2_cleanup_order as cleanup_order
 import windows_enclave_sha2_normal_effects as normal_effects
 import windows_enclave_sha2_wide_outputs as wide_outputs
+import windows_enclave_sha2_parent_outputs as parent_outputs
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -282,7 +283,9 @@ def inspect_route(base,root,lane,pin,mutate):
             descriptors['conditional_direct_parent_result_and_drop_lifetimes_joined']=True
         semantics['simd_descriptor_cleanup_order']=cleanup_order.inspect(bodies,asm,lane,semantics)
         semantics['simd_descriptor_normal_effects']=normal_effects.inspect(bodies,asm,lane,semantics)
-        if lane=='simd512':semantics['simd_wide_output_effects']=wide_outputs.inspect(bodies,asm,semantics)
+        if lane=='simd512':
+            semantics['simd_wide_output_effects']=wide_outputs.inspect(bodies,asm,semantics)
+            semantics['simd_parent_output_effects']=parent_outputs.inspect(bodies,asm,semantics)
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0

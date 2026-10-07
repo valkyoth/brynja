@@ -29,6 +29,16 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The overflow-path checkpoint closes both incoming guards of the saved narrow
+SIMD resident's `.B190` panic block, conditional on the completed input/metadata/
+allocation reviews and named shared-runtime prerequisites. The iterator remains
+in zero through seven at its overflow comparison; the admitted final-byte value
+remains in one through seven on the partial-byte path. Neither panic effects nor
+arbitrary unwind cleanup are assumed harmless. This is a saved-image author
+check, not a new native run or whole-frame qualification. Remaining package-5
+work is the other caller prerequisites and enclosing private frame/storage
+cleanup composition; release-gate policy is unchanged.
+
 The concrete allocation checkpoint joins both saved SIMD routes' constructor
 placement, five metadata writes, fifteen dominating admission edges, and all
 fourteen header/payload copy destinations to their live page/worker/caller
@@ -37,8 +47,9 @@ the caller descriptors/results, resident subobjects and wide child allocations
 are concretely disjoint. This closes the conditional private allocation/lifetime
 join, not OS residency or whole-window erasure. Shared nonreentrancy, page/window
 admission, Win64 ABI and runtime guarantees remain package 8. Next package-5
-work is the remaining caller/fail-stop prerequisites and complete private
-frame/storage cleanup composition. Production code and release gates are unchanged.
+work, after the later overflow-path checkpoint above, is the other caller
+prerequisites and complete private frame/storage cleanup composition. Production
+code and release gates are unchanged.
 
 The metadata checkpoint closes conditional input/authority-field preservation
 and compact-cursor lifetimes in both saved SIMD routes. It inventories 288

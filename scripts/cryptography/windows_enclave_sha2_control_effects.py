@@ -120,13 +120,13 @@ def failstop(bodies,lane,lines):
     s.require(len(incoming)==2,'complete narrow overflow-block incoming edges')
     s.require([full[i-1] for i,_ in incoming]==['cmpq $-1, %rax','cmpb $7, %dil']
               and [l.split()[0] for _,l in incoming]==['je','ja'],
-              'exact compact-count and partial-bit overflow guards')
+              'exact iterator and partial-bit overflow guards')
     at=lines.index(panic+':')
     s.require(lines[at+1].startswith('callq ') and lines[at+1].endswith('panic_const_add_overflow')
               and lines[at+2]=='ud2','nonreturning guarded overflow path')
     return [dict(line=at+1,target=lines[at+1][6:],role='failstop',
         effects='not assigned: terminal path must be unreachable for admitted input',
-        compact_count_precondition=[0,8],partial_bits_precondition=[0,7],
+        iterator_precondition=[0,7],partial_bits_precondition=[1,7],
         independent_compaction_replay_required=True,input_field_lifetime_pending=True)]
 
 

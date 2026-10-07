@@ -1035,6 +1035,54 @@ are recorded in
 The new report uses output filename `sha2-batch-allocation-linux.json` with the
 same reproduction commands above.
 
+## Admitted narrow overflow-path composition (2026-10-07)
+
+`windows_enclave_sha2_failstop.py` joins the two incoming edges of the saved
+SHA-224/256 resident's `.B190` overflow-panic block to its admitted, preserved
+inputs. The panic is still a nonreturning fail-stop: it is **not** assigned empty
+returning effects or treated as successful cleanup.
+
+The first comparison checks the iterator in RAX, not the active compact count.
+RAX and the lane counter in RDX start at zero. Full-CFG reaching definitions,
+single-entry checks and paired-update checks establish that both counters retain
+the same value. Updates occur once per iteration and require the unsigned lane
+bound of seven. Headers can therefore contain zero through eight, while the
+overflow comparison sees only zero through seven, never `u64::MAX`. The proof
+conservatively follows both sides of the exhausted iterator's pointer test; it
+does not assume that a pointer-null predicate prunes a path.
+
+The second comparison reads the final-byte count from the current scalar input
+descriptor. Each field publication originates either in a zero definition or
+in this lane's byte load through the actual unsigned admission check. Exhausting
+all 256 byte values gives admitted counts zero through eight. The emitted
+`testb $-9` excludes the aligned zero/eight cases from the partial-byte path,
+leaving one through seven. Reaching definitions establish that this same byte
+survives to the overflow comparison, including the intervening copy call under
+the separately stated Win64 nonvolatile-register contract.
+
+The parent joins these checks to the already-reviewed eight-lane input
+construction and scalar selection, metadata preservation, physical allocation
+lifetimes and exhaustive compaction replay. Added incoming panic edges, missing
+guards, stale definitions, partial register clobbers and mismatched prerequisite
+results reject. The guard proof deliberately does not replace the independent
+compaction geometry/termination or complete-image checks.
+
+This closes **these two selected overflow-path prerequisites** under the named
+shared-runtime assumptions. It does not qualify arbitrary panic/unwind behavior,
+individual caller-frame erasure, OS residency or the complete worker window.
+The wide selected scalar-finish region has no corresponding overflow-panic path.
+Package 5 remains open for the remaining caller and private cleanup composition;
+package 8 retains shared ABI, SDK, transport and enclosing-window obligations.
+Production code, images and release-gate policy are unchanged.
+
+Reproduce using the commands above with output name
+`sha2-batch-failstop-linux.json`. The checkpoint's source/report bindings and
+completed Linux/Windows regression results are recorded in
+`assurance/windows-protection-observations/sha2-batch-failstop-progress-20261007.json`.
+All 217 tests pass on each host (110 self-contained and 107 saved-artifact),
+including 49 new saved-code mutants and eight prerequisite-result mutations.
+The integrated parsed reports match, with all 140 review-module bindings current.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.
@@ -1078,8 +1126,9 @@ same reproduction commands above.
   metadata/cursor and concrete allocation reviews above now join those private
   lifetime/separation contracts, subject to their named shared-runtime
   prerequisites. Do not repeat those completed conditional checks or promote
-  them to whole-window residency or erasure. Finish remaining caller/fail-stop
-  requirements and enclosing private cleanup composition.
+  them to whole-window residency or erasure. The later admitted overflow-path
+  composition above closes the narrow `.B190` prerequisites; do not repeat that
+  step. Finish other caller requirements and enclosing private cleanup composition.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

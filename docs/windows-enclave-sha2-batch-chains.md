@@ -699,16 +699,48 @@ return and unassigned/missing-callee mutations. Original pointer/slot lifetimes
 and external allocation separation remain required before the conditional
 effects can become a complete lifetime argument. Step 5 is not closed.
 
+## First prepared-source CFG origins (2026-10-07)
+
+The [source-origin checkpoint](../assurance/windows-protection-observations/sha2-batch-source-lifetime-progress-20261007.json)
+adds whole-function reaching-definition checks for the first prepared source
+pointer, whose saved slot spans the finalization loop. Every path to its null
+check and copy read must reach either the actual workspace-address initializer
+or the explicit absent-output initializer. Unknown values from a bypass,
+partial overwrite or indexed frame store reject. A correct path cannot hide an
+incorrect incoming branch; loop backedges and all wide dispatch destinations
+participate in the fixed point. Earlier counter uses of the same stack slots
+are not mistaken for initialized pointers.
+
+For the wide caller, all three definitions reaching the address calculation
+reload the original fifth argument at frame offset 1,168. Fixed-offset writes
+to that incoming slot are rejected. The parent/child layout check binds this
+argument to the resident's workspace. RAX must reach the initializer directly
+from the exact address calculation; calls and partial/conditional register
+writes are accounted for rather than ignored.
+
+This establishes the **direct control-flow origin/preservation** component,
+conditional on the separately required indirect-memory, fixed-frame,
+nonvolatile ABI and original allocation-lifetime contracts. It does not assert
+that an incoming pointer stays physically valid merely because it was reloaded,
+nor that arbitrary indirect writes preserve it. Those are still composition
+obligations, not waived checks.
+
+All 144 tests pass on Linux and Windows with matching parsed reports. The new
+saved-body campaign rejects 21 source-origin, bypass, overwrite and wrong-argument
+mutations; synthetic regressions also cover loop backedges, conditional-register
+definitions, ABI clobbers and all indirect branch targets. No production source,
+native image or release-gate policy changed.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-callee-stack-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-source-lifetime-linux.json
 ```
 
-Without the saved directory the test command runs seventy self-contained tests
-and explicitly skips the sixty-nine saved-artifact tests.
+Without the saved directory the test command runs seventy-three self-contained
+tests and explicitly skips the seventy-one saved-artifact tests.
 
 ## Remaining package-5 work
 

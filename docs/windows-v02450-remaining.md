@@ -159,6 +159,13 @@ return slots, exclude the tracked saved pointer cells. All 139 tests pass on
 both hosts; 92 new saved-body mutations reject. This discharges the normal
 private-stack component for those 35 calls, not the argument/slot provenance,
 other private frames, arbitrary unwind or individual frame-erasure obligations.
+The first prepared source now has a whole-function reaching-definition check:
+both final reads require the actual address initializer or explicit absent
+value on every path. Three wide reaching definitions all reload the original
+workspace argument. All 144 tests pass on both hosts, including 21 new saved
+origin/bypass/overwrite mutations. This is direct CFG provenance, still
+conditional on indirect memory effects, original allocation lifetime and ABI
+preservation; it is not a complete physical pointer-lifetime qualification.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

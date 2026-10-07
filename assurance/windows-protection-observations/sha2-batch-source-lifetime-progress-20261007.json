@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "565fae43e0a6df3ce057b1b34b7dcac83c390e81",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 144,
+  "self_contained_tests": 73,
+  "saved_artifact_tests": 71,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-source-lifetime-linux.json": "5285e5ddee753bd2e63e79cac467a016494685a9e942c7b0772aacf1be0a97b0",
+    "sha2-batch-source-lifetime-windows.json": "ff6c65293fbdbae388f08f8740224d937a659b55e1365387807837a293f2c521"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_batch_chains.py": "5d12335f5baf1b2afb28cf69c44f345d8911e0c9056f5646a46a543f12495005",
+    "windows_enclave_sha2_callee_stack_tests.py": "c5ebbf6807500b2682f2e8cdc076f70e9f7030cb4d9321410a7fb264cf4eade2",
+    "windows_enclave_sha2_source_lifetime.py": "a66acb8e9c427c23f637b24250a6fcd5d457b044ffd73f0e65bbd74cdd31d1c3",
+    "windows_enclave_sha2_source_lifetime_tests.py": "9e8fc7519576a154ead94ba6f47b7c0cc135a213ec3d2a3369d743f03924d31e"
+  },
+  "prior_review_observation": "sha2-batch-callee-stack-progress-20261007.json",
+  "new_reviewed_scope": [
+    "whole-function normal CFG reaching definitions for the first prepared source pointer across finalization",
+    "all branches, loop backedges and actual wide dispatch destinations participate in the finite fixed point",
+    "both consuming reads must reach the actual address initializer or explicit absent-output value, not an old counter use of the slot",
+    "unknown bypass, partial overwrite and indexed-frame-store paths cannot be hidden by a valid incoming path",
+    "RAX must reach the initializing store from the actual address calculation; volatile and partial/conditional register writes are accounted for",
+    "all three wide source-base definitions reload incoming workspace argument 1168, whose caller placement is separately bound",
+    "fixed-offset writes to the incoming workspace argument reject; indexed and indirect effects remain separate requirements"
+  ],
+  "reachable_instructions": {"simd256": 1655, "simd512": 1736},
+  "source_read_sites_per_route": 2,
+  "wide_workspace_reload_sites": [490, 527, 944],
+  "saved_body_mutations_rejected": 21,
+  "direct_cfg_source_origin_and_preservation_checked": true,
+  "indirect_effects_and_original_argument_lifetimes_required": true,
+  "fixed_frame_and_nonvolatile_abi_required": true,
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "remaining_private_review": [
+    "compose indirect-memory preservation and original physical argument/slot lifetime requirements",
+    "other seeded pointer slots and subsequent compact-index/descriptor lifetimes",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing private frame/storage and cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

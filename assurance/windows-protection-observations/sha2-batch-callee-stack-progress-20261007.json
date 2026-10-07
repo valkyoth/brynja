@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "233494fd5bb3757bbdc8b762eb8f69c678d2d250",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 139,
+  "self_contained_tests": 70,
+  "saved_artifact_tests": 69,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-callee-stack-linux.json": "634c3434f2e7e7988d862cd78a8bef37d955966ca69becb86d488e3d3a6a48b3",
+    "sha2-batch-callee-stack-windows.json": "b49b5fc66e2b46d2e95557b8ecbdca04e3b2dcf3b2831664a720a2c07ebc48a0"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_batch_chains.py": "ecab2bc65d2e76b1909528aef4c05eb02a24978f80f45274493b9bf0346e08f5",
+    "windows_enclave_sha2_callee_stack.py": "f2308ccf7994b02e0d28047e7f38d151a3462b82ca05001a1395b796eafd156a",
+    "windows_enclave_sha2_callee_stack_tests.py": "9e6ec9a6f8df1e69e8f11547cfce2eaa04fffaf08fb7bea7517ffa4c0acf49da",
+    "windows_enclave_sha2_cleanup_paths_tests.py": "52db7b8b5b7baa5ae25de4c7f47c52c2e57fcaeb33f45952a9299d07b8fcef19"
+  },
+  "prior_review_observation": "sha2-batch-cleanup-paths-progress-20261007.json",
+  "new_reviewed_scope": [
+    "complete transitive normal callee closure for 35 returning callsites in the tracked first-output-pointer regions",
+    "actual allocations, matched save/restore order, initialized frame-base use and direct stack-access extents on normal CFG paths",
+    "explicit local accesses exclude saved registers, incoming home space and return addresses; escaping stack aliases reject",
+    "nested calls require alignment and owned home space; tail transfers and normal returns require a balanced entry stack",
+    "nested return slots are included in acyclic transitive private-stack bounds",
+    "indirect target identities and argument-reachable memory effects remain separately required contracts"
+  ],
+  "normal_callee_count": {"simd256": 10, "simd512": 11},
+  "tracked_returning_call_sites": {"simd256": 17, "simd512": 18},
+  "caller_frame_relative_stack_span": {"simd256": [-136, 0], "simd512": [-264, -128]},
+  "saved_body_mutations_rejected": 92,
+  "tracked_normal_callee_stack_effects_exclude_saved_pointer": true,
+  "original_pointer_slot_lifetimes_required": true,
+  "external_allocation_separation_required": true,
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "remaining_private_review": [
+    "original live pointer/slot provenance and preservation, including external allocation separation",
+    "other private callee/frame effects outside the tracked normal closure",
+    "subsequent compact-index and descriptor lifetimes and remaining helper live/disjoint storage",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing private frame/storage and cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

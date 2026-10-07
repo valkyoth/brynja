@@ -152,6 +152,13 @@ All 134 tests pass on both hosts with matching reports, including 40 injected
 post-helper returns, two complete-wipe removals and 22 dispatch mutations.
 Original argument/storage validity and full private-frame composition remain
 separate from this control-flow ordering check.
+The tracked normal callee stacks are now bounded across ten narrow and eleven
+wide transitive bodies: allocations, direct stack accesses, save/restore order,
+calls, tail transfers and normal exits are checked. Their extents, including
+return slots, exclude the tracked saved pointer cells. All 139 tests pass on
+both hosts; 92 new saved-body mutations reject. This discharges the normal
+private-stack component for those 35 calls, not the argument/slot provenance,
+other private frames, arbitrary unwind or individual frame-erasure obligations.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

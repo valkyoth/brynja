@@ -1,9 +1,10 @@
 """Normal-return cleanup coverage regressions, independent of body hash pins."""
 from unittest.mock import patch
 import windows_enclave_sha2_cleanup_paths as p
+from windows_enclave_sha2_callee_stack_tests import CalleeStackTests, CalleeStackSavedTests
 
 
-class CleanupPathTests:
+class CleanupPathTests(CalleeStackTests):
     def test_cleanup_must_follow_the_last_sensitive_call_on_every_return(self):
         good=['entry:','callq write','testb %al, %al','je error','callq wipe','retq',
               'error:','callq wipe','retq']
@@ -27,7 +28,7 @@ class CleanupPathTests:
                                                  'entry',{'write'},{'wipe'}, {})
 
 
-class CleanupPathSavedTests:
+class CleanupPathSavedTests(CalleeStackSavedTests):
     def test_all_sensitive_helper_sites_reject_injected_unclean_returns(self):
         import windows_enclave_sha2_batch_chains as parent
         total=0

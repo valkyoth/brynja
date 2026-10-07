@@ -673,16 +673,42 @@ normal-return **ordering check**, not original pointer/argument validity, alias
 freedom, arbitrary exception cleanup or whole-frame erasure. Those remaining
 composition obligations still prevent step 5 from being declared complete.
 
+## Tracked normal callee stack bounds (2026-10-07)
+
+The [callee-stack checkpoint](../assurance/windows-protection-observations/sha2-batch-callee-stack-progress-20261007.json)
+follows the actual transitive returning-call population in the two tracked
+first-output-pointer regions: ten narrow and eleven wide bodies, reached from
+17/18 callsites. It checks stack allocations, matched register saves/restores,
+frame-base setup, direct stack accesses, outgoing home space, nested calls and
+tail transfers on every normal CFG path. Stack aliases cannot escape, explicit
+accesses cannot reach saved registers, incoming home space or return addresses,
+and every normal exit restores the entry stack. Unknown call targets, inconsistent
+join states and recursive call graphs reject.
+
+Including each nested return slot, those private stack effects occupy
+`[-136, 0)` relative to the narrow caller's aligned frame and `[-264, -128)`
+relative to the wide executor's frame base. Both exclude the tracked saved
+pointer cell. Indirect targets and argument-reachable memory still require the
+separate target/effect contracts; the stack check does not establish those by
+itself. It also does not claim individual erasure of stack contents, arbitrary
+unwind safety or coverage of every other private frame in the four images.
+
+All 139 tests pass on Linux and Windows with matching parsed reports. The new
+saved-body campaign rejects 92 stack overwrite, escaping-alias, unbalanced
+return and unassigned/missing-callee mutations. Original pointer/slot lifetimes
+and external allocation separation remain required before the conditional
+effects can become a complete lifetime argument. Step 5 is not closed.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-cleanup-paths-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-callee-stack-linux.json
 ```
 
-Without the saved directory the test command runs sixty-seven self-contained tests
-and explicitly skips the sixty-seven saved-artifact tests.
+Without the saved directory the test command runs seventy self-contained tests
+and explicitly skips the sixty-nine saved-artifact tests.
 
 ## Remaining package-5 work
 

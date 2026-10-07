@@ -29,6 +29,17 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The concrete allocation checkpoint joins both saved SIMD routes' constructor
+placement, five metadata writes, fifteen dominating admission edges, and all
+fourteen header/payload copy destinations to their live page/worker/caller
+storage. Both Win64 modulo-32 entry alignments are checked through normal CFGs;
+the caller descriptors/results, resident subobjects and wide child allocations
+are concretely disjoint. This closes the conditional private allocation/lifetime
+join, not OS residency or whole-window erasure. Shared nonreentrancy, page/window
+admission, Win64 ABI and runtime guarantees remain package 8. Next package-5
+work is the remaining caller/fail-stop prerequisites and complete private
+frame/storage cleanup composition. Production code and release gates are unchanged.
+
 The metadata checkpoint closes conditional input/authority-field preservation
 and compact-cursor lifetimes in both saved SIMD routes. It inventories 288
 aliases and 298 accesses, assigns 82 helper callsites, and checks all 90 input
@@ -36,10 +47,10 @@ reads and sixteen compact-index reads against initialization and invalidation
 through normal/unwind control flow. The emitted cursor slots have separate
 phase-specific reaching-definition checks, including their earlier/later reuse.
 This composes the existing machine geometry and helper contracts, not a general
-LLVM proof or evidence that separate symbolic roots cannot alias. Next package-5
-work is actual physical allocation/lifetime/separation composition, then the
-remaining caller/fail-stop and private-frame cleanup obligations. Production
-code, native images and release gates are unchanged.
+LLVM proof or, by itself, evidence that separate symbolic roots cannot alias.
+The later concrete allocation checkpoint above supplies that conditional private
+join. Remaining caller/fail-stop and private-frame cleanup obligations are still
+open. Production code, native images and release gates are unchanged.
 
 The narrow pointer-lifetime checkpoint closes the saved SHA-224/256 authority
 and per-lane input pointer-definition tracing item. It covers six owner reloads,
@@ -47,9 +58,10 @@ eleven authority reloads, twenty authority uses, all eight typed input lanes,
 the three distinct slot-112 lifetimes, vector/scalar copy arguments and eleven
 potentially unwinding callsites. This is saved-artifact author review, not a new
 native enclave run or independent retest. The subsequent metadata checkpoint
-above adds conditional field preservation and compact-cursor lifetimes; physical
-lifetime/separation composition and remaining caller/frame cleanup obligations
-remain open. Release gates are unchanged.
+above adds conditional field preservation and compact-cursor lifetimes, and the
+concrete allocation checkpoint joins private storage placement/lifetimes.
+Remaining caller/frame cleanup and shared-runtime obligations stay open.
+Release gates are unchanged.
 
 The earlier-phase checkpoint assigns all 34 wide indirect stores and
 all six calls, composing their conditional effects with the normal stack bounds.

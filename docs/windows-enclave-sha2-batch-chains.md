@@ -972,6 +972,69 @@ python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 ```
 
+## Concrete allocation and lifetime checkpoint (2026-10-07)
+
+The saved SIMD review now connects the actual constructor/page placement,
+worker publication, input-copy destinations and nested caller frames. It no
+longer relies on naming `resident-page`, `worker-input` and `resident-frame`
+as different symbolic roots to establish their conditional separation.
+
+Both constructors place authority at page offset 0 and owner at offset 24.
+The allocated authority region is `[0,24)`; the narrow owner occupies
+`[24,312)`, and the wide owner `[24,320)`, within the same 4,096-byte page.
+The complete constructor contracts and the three-pointer publication bridge
+are checked together. Each image has nineteen direct resident/page metadata
+references and exactly five publication/take/retirement writes. Nested workers
+cannot take the metadata address or add another global mutation.
+
+Fifteen normal-CFG admission edges per route must dominate the worker's receive
+call: page/window checks, live identity, non-retirement operation and buffer
+bounds. Construction/publication and retirement cannot reach that call in the
+same invocation. This is conditional on the linked transport's serialized,
+nonreentrant lifetime contract; arbitrary callbacks are not assumed safe.
+
+All nine narrow and five wide host-copy destinations trace through every
+reachable register definition to the original worker payload argument plus
+the assigned slice/header offset. Partial writes, volatile-call clobbers,
+unknown pointer arithmetic, implicit/multiple-destination instructions and
+unanchored cycles reject. The existing typed descriptor construction checks
+are joined to the actual owner/result/input ABI handoff.
+
+The stack checker follows all normal branches and jump tables, verifies live
+frame anchors, home areas and matched returns, and calculates both Win64 entry
+alignments modulo 32. In coordinates relative to the worker RSP at `receive`:
+
+| Allocation | SHA-224/256 | SHA-512 family |
+| --- | --- | --- |
+| Input slices (each 1,024 bytes) | `[64,8256)`; eight disjoint slices | `[64,4160)`; four disjoint slices |
+| Header | `[8256,8544)` | `[4160,4320)` |
+| Receive RSP | `-704` | `-464` |
+| Typed input descriptors | `[-336,-144)` | `[-240,-144)` |
+| Result | `[-496,-464)` | `[-384,-352)` |
+| Aligned resident RBX | `-12784` or `-12768` | `-13520` or `-13536` |
+
+Resident inputs, output descriptors/scratch and workspaces are bounded and
+disjoint in these concrete coordinates. The wide child frame, control and
+executor placements are also joined to this parent allocation. The existing
+field-preservation, pointer-lifetime and helper-effect contracts remain required.
+
+This closes the **conditional private allocation/lifetime join**, not the OS
+residency or erasure guarantee. In particular, the admitted worker window must
+contain the nested frames and their callees; payload bounds alone do not prove
+that. Win64 nonvolatile/call behavior, `__chkstk`, serialized page retention,
+SDK/runtime behavior and final window reclamation remain package-8 obligations.
+Package 5 still needs its remaining caller/fail-stop and complete private
+frame/storage cleanup composition. No production code, native image or release
+gate changed; these are author checks of the already-bound saved images.
+
+All 206 tests pass on both Linux and Windows (105 self-contained and 101
+saved-artifact tests), including 74 new saved-code rejection mutants. The
+integrated parsed reports match. Source/report bindings and explicit prerequisites
+are recorded in
+`assurance/windows-protection-observations/sha2-batch-allocation-progress-20261007.json`.
+The new report uses output filename `sha2-batch-allocation-linux.json` with the
+same reproduction commands above.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.
@@ -1012,10 +1075,11 @@ python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   safety from callee identity or bounded construction alone.
   Narrow authority and per-lane pointer definitions now have whole-CFG and
   invoke/cleanup-callsite checks; do not repeat that completed analysis. Next
-  compose physical storage validity/separation with the now checked conditional
-  compact-index and input/authority-field preservation in both routes. The
-  metadata/cursor review above closes that conditional subtask; do not repeat it
-  or mistake symbolic-root separation for actual allocation disjointness.
+  metadata/cursor and concrete allocation reviews above now join those private
+  lifetime/separation contracts, subject to their named shared-runtime
+  prerequisites. Do not repeat those completed conditional checks or promote
+  them to whole-window residency or erasure. Finish remaining caller/fail-stop
+  requirements and enclosing private cleanup composition.
 - Assign every reachable private frame and storage region, and resolve the
   remaining fail-stop caller preconditions.
 

@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "623d3008fcbc43d15e310955609470e2bfa8a6dc",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "conditional_private_allocation_lifetime_join_complete": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "review_tests_per_host": 206,
+  "self_contained_tests": 105,
+  "saved_artifact_tests": 101,
+  "test_seconds": {
+    "linux": 296.285,
+    "windows": 310.776
+  },
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-allocation-linux.json": "0df29500124a4f2155b2f7f0bb5a9ced8606c0c6a39998cb81f40b0469de606c",
+    "sha2-batch-allocation-windows.json": "4f667af2b2b4a27b2f3dcf4b1bc6e34f4e9328a752cca4b79529939768b644d3"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_allocation_lifetimes.py": "c59986f948ef4a0ac8dcc3ddb2cac0e0dc54f2e68e455a83ab712c094eb70d03",
+    "windows_enclave_sha2_allocation_stack.py": "1e6926b6d8e08f78896d5bb04d9d62a4d73e0ff98685d0bcd2d681cc1be5d860",
+    "windows_enclave_sha2_allocation_tests.py": "2384d040c5417e8ec369967c7218ab00ffd928dc90b1b396a1f1d137f58d75ae",
+    "windows_enclave_sha2_batch_chains.py": "92e256a224dee66d1ed168a509ac8db845c6853358b7df6b8f4e902c0fec36b2",
+    "windows_enclave_sha2_source_lifetime_tests.py": "d939bef411e714abcc023a7d2598690b13de98bdf0aac80c3275b2ae4bf225c0"
+  },
+  "prior_review_observation": "sha2-batch-metadata-progress-20261007.json",
+  "new_reviewed_scope": [
+    "actual page authority offset 0 and owner offset 24; bounded nonoverlapping owner and authority regions",
+    "complete constructor-result publication bridge; nineteen direct metadata references and five metadata writes per route",
+    "fifteen normal-CFG admission edges per route dominate receive; construction/publication and retirement cannot reach digest use in the same invocation",
+    "all fourteen header/payload copy destinations trace to the original worker payload plus their assigned offsets",
+    "closed pointer-CFG effects reject partial writes, volatile clobbers, implicit/multiple-destination instructions and unknown pointer arithmetic",
+    "matched caller frames, home areas, frame anchors, probe contracts and normal returns for both modulo-32 Win64 entry alignments",
+    "concrete input slices, caller descriptors/results, resident subobjects and wide child placements are disjoint under the named shared-runtime prerequisites"
+  ],
+  "new_saved_mutations_rejected": {
+    "stack_and_frame_anchors": 30,
+    "global_publication_escape_and_retirement": 16,
+    "admission_and_lifetime_bypasses": 6,
+    "original_payload_pointer_redefinitions": 22
+  },
+  "shared_runtime_prerequisites": [
+    "serialized nonreentrant linked transport retains the resident page until operation-three retirement completes",
+    "OS-admitted worker window contains all nested frames and helper stack extents; payload bounds alone are insufficient",
+    "Win64 nonvolatile/call ABI and the actual __chkstk implementation",
+    "existing bound helper memory effects, metadata preservation and pointer-lifetime contracts"
+  ],
+  "arbitrary_exception_cleanup_qualified": false,
+  "individual_stack_erasure_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "remaining_private_review": [
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing private frame/storage and cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

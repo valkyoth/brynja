@@ -29,12 +29,23 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The narrow-vector checkpoint joins all six vector-loop call interfaces: two
+linked cancellation calls, state packing, input-block packing, compression and
+state unpacking. It reuses the completed original input/authority, compact-index,
+kernel and loop reviews, and checks actual argument slices over 384 bounded
+public geometries. Normal helper writes and the twelve-body stack closure are
+disjoint from live descriptors, pointer slots, control, typed inputs and compact
+indices. This leaves eighteen narrow output/cleanup interfaces (44 of 62 now
+assigned), followed by final private-frame/storage composition across all four
+routes. SDK/probe, ABI and OS obligations remain separate; no individual spill
+erasure, new native execution or whole-image qualification is inferred.
+
 The narrow-admission/setup checkpoint joins fifteen more sites: operation
 admission, three compiled callbacks, two authority checks, owner-output clearing,
 the tail predicate, the stack-probe interface and six SDK initialization calls.
 Original owner/authority pointers and per-lane input origins reuse the completed
 lifetime reviews. Exact helper bodies retain the narrow layout and rejection
-tags; setup cannot re-enter after output descriptor construction. This leaves
+tags; setup cannot re-enter after output descriptor construction. That left
 24 narrow calls: six vector-loop helpers and eighteen output/cleanup sites.
 Final private-frame/storage composition remains open, as do the explicitly
 separate SDK/probe, ABI and OS obligations. Production and gate policy remain

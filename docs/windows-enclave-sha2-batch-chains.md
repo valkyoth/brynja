@@ -1538,6 +1538,50 @@ reports match with 154 current checker-source bindings. The observation
 `assurance/windows-protection-observations/sha2-batch-narrow-admission-progress-20261007.json`
 records the source/report hashes, focused runs and remaining conditions.
 
+## Narrow vector-call composition checkpoint (2026-10-07)
+
+`windows_enclave_sha2_narrow_vector.py` assigns the remaining six narrow
+vector-loop interfaces at emitted instruction offsets 734, 818, 865, 873,
+893 and 929. The parent still replays the original pointer/metadata, compact
+cursor, complete vector-loop, primitive and physical allocation checks; the new
+composition does not substitute names or a successful digest for those proofs.
+
+The three actual argument slices are independently interpreted across public
+widths four/eight, every packed position, every original state index and all
+sixteen possible complete blocks of an admitted 1,024-byte input. The 384 cases
+check exact source/destination addresses, matching capacities and nonoverlap.
+The packed destination registers retain only their current initializer and
+bounded stride. Unpacking requires the new packed-state lifetime of slot 72,
+not its earlier work-counter value. Compression receives the original authority,
+packed-state array, block array and CPU scratch; both cancellation calls bind
+the actual no-read/no-write linked closure, not an arbitrary callback contract.
+
+Mapped writes exclude the live saved values, control, typed-input fields,
+original/returned descriptors and compact-index array. The separately reviewed
+twelve-body normal stack closure occupies `[-288,0)` relative to the resident
+frame, with ABI home space `[0,32)`; neither overlaps those live objects. This
+is an argument/effect and bounded-stack composition, not individual stack
+erasure or arbitrary-unwind qualification. The seven shared SDK/probe interfaces
+retain their package-8 implementation and platform obligations.
+
+Narrow returning interface assignments increase from 38 to 44. The eighteen
+remaining output/cleanup sites are 636, 643, 650, 654, 656, 1336, 1348, 1360,
+1372, 1384, 1396, 1408, 1420, 1567, 1575, 1596, 1617 and 1653. Final finite
+private-frame/storage assignments across all four routes remain package-5 work.
+Production Rust, native images and release-gate policy are unchanged.
+
+Seven focused tests passed in 44.070 seconds. The six new saved-artifact tests
+reject 62 mutations: 22 argument-instruction removals, nine base/cursor/stride
+and callback changes, seven session/cancellation/authority substitutions,
+eleven effect/stack/inventory changes and thirteen prerequisite/gather changes.
+The independent argument interpreter is exercised without relying on the
+complete-region snapshot comparison to reject its mutations.
+
+Both full suites passed all 298 tests (124 self-contained and 174 saved-artifact
+tests): Linux in 556.317 seconds and Windows in 594.105 seconds. Parsed reports
+match with 155 current checker-source bindings. Source/report hashes and scope
+are recorded in the [narrow vector observation](../assurance/windows-protection-observations/sha2-batch-narrow-vector-progress-20261007.json).
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

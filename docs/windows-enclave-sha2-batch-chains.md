@@ -620,16 +620,47 @@ There are eleven other call effects left to compose; all enclosing lifetime,
 alias and callee stack/home-space obligations remain explicit. Step 5 is still
 in progress, with no production changes or new native enclave execution.
 
+## Control calls and conditional frame placement (2026-10-07)
+
+The [control/placement checkpoint](../assurance/windows-protection-observations/sha2-batch-control-placement-progress-20261007.json)
+assigns the eleven remaining calls in the two tracked first-output-pointer
+regions. Four padding calls, four cancellation calls and two authority checks
+have conditional argument/effect contracts. The linked readonly callback slot
+and complete memory-free cancellation/detector leaves are checked. Padding
+effects include control/report accounting and all scratch/block clearing, not
+only compression writes.
+
+The remaining narrow call is a guarded fail-stop. Its two incoming guards are
+checked; it is **not** modeled as a returning call with no effects. Establishing
+the original admitted fields and their preserved lifetimes is still required
+to discharge its reachability preconditions.
+
+The composition now accounts for all 35 returning calls and seven indirect
+stores in these regions. Child-frame placement is derived from the actual
+return slot, eight saved registers, 1,192-byte allocation and frame adjustment;
+incoming arguments match caller slots 32/40. Bounded named-object effects do not
+overlap the saved pointer cells or escape their assigned objects. The outgoing
+home areas also exclude those cells. This does not prove the original seeded
+pointer values, external allocation separation, complete private callee frames
+or whole-window erasure.
+
+All 130 tests pass on Linux and Windows with identical parsed reports. Eighty
+control argument/target/population mutants, 22 effect-assignment/overlap/extent
+mutants, seven frame/callsite mutations and five fail-stop guard mutations reject.
+These are saved-artifact replays, not new native enclave execution. Step 5
+remains open for original pointer/storage lifetimes, private frame composition
+and the remaining caller/fail-stop preconditions.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-transfer-effects-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-control-placement-linux.json
 ```
 
-Without the saved directory the test command runs sixty-two self-contained tests
-and explicitly skips the fifty-nine saved-artifact tests.
+Without the saved directory the test command runs sixty-five self-contained tests
+and explicitly skips the sixty-five saved-artifact tests.
 
 ## Remaining package-5 work
 

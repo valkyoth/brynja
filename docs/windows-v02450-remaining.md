@@ -1,6 +1,6 @@
 # v0.24.50 remaining work
 
-## Current completion checklist (2026-10-06)
+## Current completion checklist (2026-10-07)
 
 - Finish transitive normal-return cleanup qualification inside the remaining
   distinct batch/ParallelHash workers, especially
@@ -135,6 +135,15 @@ with matching reports, 79 transfer mutations and four call-population regression
 rejected. Eleven other call effects remain. Original live-object/slot placement,
 physical aliasing and callee stack/home-space obligations are not discharged by
 these bounded transfer cases.
+The 2026-10-07 control/placement checkpoint assigns all 36 calls in those tracked
+regions: 35 returning calls have conditional effects; the guarded fail-stop
+retains explicit reachability preconditions. Four padding calls include all
+workspace/control/report effects, and private callback targets bind to the
+actual readonly table. All 35 returning calls and seven indirect stores now
+have bounded caller/child-relative placements that exclude the saved pointer
+cells. This does not prove original live slot values, external allocation
+separation or complete private callee frames. All 130 tests pass on both hosts
+with identical parsed reports; no production or release-gate change was made.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

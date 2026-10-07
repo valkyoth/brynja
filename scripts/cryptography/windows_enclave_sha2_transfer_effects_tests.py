@@ -2,9 +2,10 @@
 import re
 from unittest.mock import patch
 import windows_enclave_sha2_transfer_effects as t
+from windows_enclave_sha2_control_effects_tests import ControlEffectTests, ControlEffectSavedTests
 
 
-class TransferEffectTests:
+class TransferEffectTests(ControlEffectTests):
     def test_transfer_empty_capacity_overlap_and_pointer_bounds(self):
         for size in (0,1,63,128,1024):
             args={'rcx':t.val(2048,'w'),'r8':t.val(0,'w'),'rdx':t.val(size),'r9':t.val(size)}
@@ -46,7 +47,7 @@ class TransferEffectTests:
         self.assertEqual(seen[0][1]['rdx'],t.val(0x1234ff))
 
 
-class TransferEffectSavedTests:
+class TransferEffectSavedTests(ControlEffectSavedTests):
     def test_thirteen_transfers_reject_pointer_capacity_and_call_mutations(self):
         import windows_enclave_sha2_frame_cell as f
         import windows_enclave_sha2_call_effects as c

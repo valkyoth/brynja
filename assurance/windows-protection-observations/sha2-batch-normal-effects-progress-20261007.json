@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "e41cdc263cffad92f514ff7e2602917b56b784e3",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "selected_normal_helpers_conditionally_preserve_descriptors": true,
+  "workspace_wipe_original_arguments_and_normal_stacks_checked": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "review_tests_per_host": 254,
+  "self_contained_tests": 121,
+  "saved_artifact_tests": 133,
+  "test_seconds": {
+    "linux": 407.777,
+    "windows": 447.142
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 147,
+  "report_sha256": {
+    "sha2-batch-normal-effects-linux.json": "71bf6e49d327122e6613849441336039ca1aa5eb60f5e9af90065e3bfc03818d",
+    "sha2-batch-normal-effects-windows.json": "f0d027ff248baaab731a602c76690cddbb8201496682bcce07697708b4cc646a"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_normal_effects.py": "027e995781d189a5165064a501834ebec2afde0b6f7561401713d7112784871e",
+    "windows_enclave_sha2_normal_effects_tests.py": "ce8e4569badc965365670c3f8e9f3f292bd8094fdf9e32e0e1aca53a84fd9232",
+    "windows_enclave_sha2_batch_chains.py": "54f99a502f739c5284e6586cc22930637c4219cb07aa2c35ea55a94156dc4305",
+    "windows_enclave_sha2_source_lifetime_tests.py": "267b2f0cb1396b23eb42f9f235783f9abcb2824e7f321e9edb421da257e9ad5e"
+  },
+  "prior_review_observation": "sha2-batch-overflow-cleanup-progress-20261007.json",
+  "new_reviewed_scope": [
+    "slice-relative finish and whole-function early call offsets bound to actual instructions and targets",
+    "53 returning callsite effect assignments: 23 narrow, 28 wide child and two wide parent",
+    "all twelve workspace wipe/drop original-pointer arguments, complete helper bodies and five-body normal stack closure",
+    "helper writes, private normal stacks and outgoing ABI home exclude concrete live descriptor regions",
+    "narrow control-counter reuse requires absence of a CFG path from returned-descriptor construction to the earlier calls",
+    "explicit remaining call inventory, without claiming returning effects for terminal paths"
+  ],
+  "new_saved_mutations_rejected": {
+    "call_offsets_targets_duplicates_missing_and_overlapping_contracts": 30,
+    "wipe_arguments_bypasses_and_pointer_overwrites": 26,
+    "post_construction_temporal_reuse_backedge": 1,
+    "early_call_effects_and_nested_stack_extents": 8,
+    "weakened_pointer_lifetime_and_stack_prerequisites": 17
+  },
+  "remaining_callsite_composition": {
+    "narrow": 39,
+    "wide_child": 9,
+    "wide_parent": 25,
+    "counts_do_not_mean_new_unreviewed_primitive_bodies": true
+  },
+  "remaining_private_review": [
+    "join remaining normal helper arguments and effects, including final exports and dynamic output clearing, using existing primitive and geometry reviews",
+    "complete finite private frame/storage assignments and remaining caller prerequisites across all four routes"
+  ],
+  "shared_runtime_prerequisites": [
+    "serialized nonreentrant transport retains the resident page through the operation",
+    "live distinct physical allocations and admitted worker window containing nested frames",
+    "Win64 nonvolatile/call ABI, stack probing and helper noninterference",
+    "OS exception dispatch, handler stacks and unwinding callee effects"
+  ],
+  "all_normal_calls_composed": false,
+  "descriptor_bounds_fully_qualified": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "individual_stack_erasure_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

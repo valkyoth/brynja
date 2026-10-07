@@ -1241,6 +1241,58 @@ All 246 tests pass on each host (119 self-contained and 127 saved-artifact).
 Parsed reports match with 146 current checker-source bindings. Linux took
 375.776 seconds; Windows took 412.420 seconds.
 
+## Normal helper effects and descriptor lifetimes (2026-10-07)
+
+`windows_enclave_sha2_normal_effects.py` connects the existing finish and early
+vector helper contracts to the concrete descriptor regions. Slice-relative
+finish call offsets are translated to whole-function offsets and checked against
+the actual call instruction and target. Earlier wide vector offsets are already
+whole-function coordinates. Duplicate, stale and invented assignments fail.
+
+This joins 53 returning callsites: 23 narrow, 28 wide child and two wide parent.
+The selected scalar/transfer/control calls and six early wide calls retain their
+checked argument-effect contracts. All twelve workspace wipe/drop calls also
+receive explicit assignments. Each wipe uses the actual original workspace:
+an uninterrupted resident-frame address calculation, or a full normal-CFG trace
+from the child's original incoming workspace pointer. Complete wipe/drop bodies
+are rechecked, including scalar/CPU field clearing; the symbol name is not the
+proof. Their five-body normal stack closure is traversed and bounded.
+
+Mapped writes, callee stacks and outgoing ABI home areas exclude live original,
+child and returned descriptors, including the wide parent's two regions.
+Narrow padding uses bytes 2928–2936 as control counters before the returned
+descriptor is constructed there. This is valid temporal reuse, not simultaneous
+nonoverlap: a CFG reachability check requires that no path from the completed
+descriptor copy reaches those earlier helpers. Instruction ordering alone is
+insufficient. An injected post-copy backedge is rejected.
+
+Current original-pointer, descriptor, field-preservation and physical-allocation
+reviews are required inputs. Their named Win64/runtime and external-allocation
+conditions remain explicit. Normal stack bounds do not establish erasure of
+each compiler spill, arbitrary unwind cleanup or whole-window qualification.
+
+The exhaustive call inventory preserves the remaining composition work: 39
+narrow calls, nine wide child calls and 25 wide parent calls. The narrow terminal
+overflow call is listed separately, not assigned returning effects. The wide
+whole-function terminal remains in its outstanding inventory; its admitted-input
+unreachability proof is already recorded in the preceding checkpoint. Several
+remaining calls have existing primitive/geometry reviews; this list requires
+joining those reviews to the caller, not rebuilding the implementations.
+
+Reproduce using the earlier commands with output name
+`sha2-batch-normal-effects-linux.json`. The focused regressions exercise call
+offsets, duplicate/missing contracts, descriptor-overlapping effects, nested
+stack extents, pointer substitutions, bypasses, temporal-reuse backedges and
+weakened lifetime prerequisites. This is saved-artifact author review, not a new
+native enclave run. Production sources, images and release gates are unchanged.
+
+Both hosts passed all 254 tests (121 self-contained and 133 saved-artifact).
+Linux took 407.777 seconds and Windows 447.142 seconds. Parsed reports match,
+including 147 current checker-source bindings. The new saved regressions reject
+82 contract, pointer, control-flow, stack and prerequisite mutations. Hashes and
+the exact partial scope are recorded in
+`assurance/windows-protection-observations/sha2-batch-normal-effects-progress-20261007.json`.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

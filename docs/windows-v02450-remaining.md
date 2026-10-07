@@ -29,6 +29,17 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The normal-helper checkpoint joins 53 returning callsites to concrete descriptor
+regions and normal callee-stack bounds: 23 narrow, 28 wide child and two wide
+parent calls. This includes all twelve workspace wipe/drop calls with actual
+original pointer arguments. Narrow control-counter reuse in the future returned
+descriptor area is allowed only when no normal CFG path from descriptor
+construction reaches the earlier helper. The report retains explicit unassigned
+call inventories (39 narrow, nine wide child, 25 wide parent); these are remaining
+composition work, not necessarily previously unreviewed primitive bodies.
+Package 5 and whole-frame qualification remain open. Production code and
+release-gate policy are unchanged.
+
 The latest overflow/cleanup-order checkpoint also closes the saved wide `.B302`
 admitted-input proof and joins preceding caller-side cleanup-handler effects at
 all 21 descriptor-related protected calls. Four parent tail-byte publications,

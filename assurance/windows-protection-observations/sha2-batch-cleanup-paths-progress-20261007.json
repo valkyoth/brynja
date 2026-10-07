@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "cf919e2323f29b23b7b056459307844e1c02972a",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 134,
+  "self_contained_tests": 67,
+  "saved_artifact_tests": 67,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-cleanup-paths-linux.json": "049987b07e2866ce91a233339317731ef10ce7e97bc9e28dd22ab75cb589f62b",
+    "sha2-batch-cleanup-paths-windows.json": "08dd69d50d49f4b7656451b65d1ef4e673eaaa0dd293a13ac572f06b16847364"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_batch_chains.py": "0c92769e0ed1e271175eda3d63d4eda6a40096f6d6b99e03efff9a78e3334f0d",
+    "windows_enclave_sha2_cleanup_paths.py": "f5097ec0d5d5c1ca193dbd036786ddfbe6e929be22f1d73cc0f17d05b7a6e5ca",
+    "windows_enclave_sha2_cleanup_paths_tests.py": "3bb08bbba26f3a812e3044c5c615a01559dd228f69424a6d1d4ebc5e02773f4e",
+    "windows_enclave_sha2_effect_placement_tests.py": "73a246bffb7d2db1ce6afa8bb51515e4ba6fe8d3aeba9fa29d90f7ef296fe7c0"
+  },
+  "prior_review_observation": "sha2-batch-control-placement-progress-20261007.json",
+  "new_reviewed_scope": [
+    "whole-function finite CFG traversal for narrow Resident::digest and wide Executor::digest_secret",
+    "the five registered copy, mask, scalar compression, vector session and padding helper targets conservatively mark workspace data live",
+    "only the complete reviewed workspace wipe or destructor clears the tracked state; an earlier wipe cannot cover a later sensitive helper",
+    "all normal branch and loop paths are explored, including all eleven wide indirect branch tables",
+    "terminal paths are tracked separately and never counted as successful cleanup returns",
+    "helper argument validity, original allocation lifetimes and arbitrary direct-store sensitivity are not inferred from this ordering model"
+  ],
+  "normal_return_sites": {"simd256": 1, "simd512": 1},
+  "sensitive_helper_sites": {"simd256": 22, "simd512": 18},
+  "complete_workspace_cleanup_sites": {"simd256": 6, "simd512": 4},
+  "terminal_sites": {"simd256": 1, "simd512": 1},
+  "reachable_cfg_states": {"simd256": 2207, "simd512": 2179},
+  "wide_dispatch_tables": 11,
+  "injected_post_helper_returns_rejected": 40,
+  "complete_wipe_removals_rejected": 2,
+  "dispatch_target_edge_mutations_rejected": 22,
+  "normal_return_cleanup_order_checked": true,
+  "helper_argument_and_original_storage_lifetimes_required": true,
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "remaining_private_review": [
+    "original live pointer/slot provenance and preservation, including external allocation separation",
+    "complete private callee stack/frame effects, not just outgoing home-area geometry",
+    "subsequent compact-index and descriptor lifetimes and remaining helper live/disjoint storage",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing private frame/storage and cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

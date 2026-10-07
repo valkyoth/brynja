@@ -2,9 +2,10 @@
 import copy
 from unittest.mock import patch
 import windows_enclave_sha2_effect_placement as p
+from windows_enclave_sha2_cleanup_paths_tests import CleanupPathTests, CleanupPathSavedTests
 
 
-class EffectPlacementTests:
+class EffectPlacementTests(CleanupPathTests):
     def test_placement_rejects_unassigned_and_out_of_object_ranges(self):
         layout={'child':dict(root='parent',offset=-1136,bounds=[-128,1064])}
         self.assertEqual(p.place(dict(object='child',span=[976,984]),layout),
@@ -14,7 +15,7 @@ class EffectPlacementTests:
             with self.assertRaises(ValueError):p.place(dict(object=obj,span=span),layout)
 
 
-class EffectPlacementSavedTests:
+class EffectPlacementSavedTests(CleanupPathSavedTests):
     def placement_fixture(self,row):
         import windows_enclave_sha2_batch_chains as parent
         lane,_,_,_,_,_,bodies=row;frame,transfer,tables=self.control_fixture(row)

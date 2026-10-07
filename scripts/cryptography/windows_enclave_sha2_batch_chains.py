@@ -16,6 +16,7 @@ import windows_enclave_sha2_call_effects as call_effects
 import windows_enclave_sha2_transfer_effects as transfer_effects
 import windows_enclave_sha2_control_effects as control_effects
 import windows_enclave_sha2_effect_placement as effect_placement
+import windows_enclave_sha2_cleanup_paths as cleanup_paths
 
 SPEC=c.shared.CATALOG.with_name('sha2-batch-chains-20261006.json')
 SPEC_HASH='44369ff240a60f6d33d8aafb017aeb26d5b29e628d782d2ca6a47babc6ad709f'
@@ -227,6 +228,7 @@ def inspect_route(base,root,lane,pin,mutate):
         semantics['simd_conditional_effect_placement']=effect_placement.inspect(bodies,lane,
             semantics['simd_first_output_frame_cell'],semantics['simd_scalar_call_effects'],
             semantics['simd_transfer_call_effects'],semantics['simd_control_call_effects'])
+        semantics['simd_whole_function_cleanup_order']=cleanup_paths.inspect(bodies,asm,lane)
     if lane=='scalar': semantics['variant_dispatch_order']=shapes.batch_state.scalar_tables(bodies,asm)
     reused=reuse.inspect(base,lane,data,functions,ir,bodies) if lane in ('scalar','sha_ni') else None
     mutations=table_mutations=0

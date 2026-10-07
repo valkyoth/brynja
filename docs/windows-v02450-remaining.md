@@ -144,6 +144,14 @@ have bounded caller/child-relative placements that exclude the saved pointer
 cells. This does not prove original live slot values, external allocation
 separation or complete private callee frames. All 130 tests pass on both hosts
 with identical parsed reports; no production or release-gate change was made.
+Whole-function normal-return ordering now covers both SIMD digests, all eleven
+wide dispatch tables and all 40 sensitive-helper sites. Every returning path
+after one of those helpers must pass a later full workspace wipe; an earlier
+wipe does not suffice, and the two terminal paths are not cleanup successes.
+All 134 tests pass on both hosts with matching reports, including 40 injected
+post-helper returns, two complete-wipe removals and 22 dispatch mutations.
+Original argument/storage validity and full private-frame composition remain
+separate from this control-flow ordering check.
 **Step 5 remains in progress**: remaining caller preconditions,
 enclosing constructor cleanup, SIMD enclosing lane-engine and normal error-path composition,
 and private frame/storage assignments remain explicit obligations.

@@ -651,16 +651,38 @@ These are saved-artifact replays, not new native enclave execution. Step 5
 remains open for original pointer/storage lifetimes, private frame composition
 and the remaining caller/fail-stop preconditions.
 
+## Whole-function normal-return ordering (2026-10-07)
+
+The [cleanup-order checkpoint](../assurance/windows-protection-observations/sha2-batch-cleanup-paths-progress-20261007.json)
+traverses both complete SIMD digest control-flow graphs with a live/cleared
+state. Copies, masks, scalar compression, vector sessions and padding helpers
+conservatively mark workspace data live; only the reviewed full workspace wipe
+or destructor clears that state. A wipe before a later sensitive helper is not
+sufficient. Loops are explored to a finite fixed point, and every destination
+of the eleven wide dispatch tables is included. Earlier image/table binding and
+complete wipe-contract checks remain required.
+
+Both functions have one reachable normal-return site. Every normal path after
+one of the 22 narrow or 18 wide sensitive-helper sites passes a later complete
+wipe. Two terminal paths are recorded separately, not accepted as cleanup
+success. Forty injected post-helper returns and removal of every complete wipe
+from each caller are rejected, alongside 22 dispatch-target/edge mutations.
+
+All 134 tests pass on both hosts with matching parsed reports. This closes the
+normal-return **ordering check**, not original pointer/argument validity, alias
+freedom, arbitrary exception cleanup or whole-frame erasure. Those remaining
+composition obligations still prevent step 5 from being declared complete.
+
 ```sh
 python3 scripts/cryptography/test-windows-enclave-sha2-batch-chains.py \
   --saved-directory release-reports/windows-local-20261004
 python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
   release-reports/windows-local-20261004 --mutate \
-  --output release-reports/windows-worker-review-20261006/sha2-batch-control-placement-linux.json
+  --output release-reports/windows-worker-review-20261006/sha2-batch-cleanup-paths-linux.json
 ```
 
-Without the saved directory the test command runs sixty-five self-contained tests
-and explicitly skips the sixty-five saved-artifact tests.
+Without the saved directory the test command runs sixty-seven self-contained tests
+and explicitly skips the sixty-seven saved-artifact tests.
 
 ## Remaining package-5 work
 

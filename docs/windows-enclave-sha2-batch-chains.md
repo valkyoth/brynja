@@ -1396,6 +1396,57 @@ bindings. These scopes are recorded separately, not reported as a final full
 Windows rerun. Exact hashes and conditions are in
 `assurance/windows-protection-observations/sha2-batch-parent-outputs-progress-20261007.json`.
 
+## Wide parent admission and setup composition (2026-10-07)
+
+`windows_enclave_sha2_parent_authority.py` checks the complete emitted operation
+and authority-check bodies, then joins six actual parent callsites. The operation
+compares the requested phase, rejects sequence wrap/mismatch, checks authority
+health and the compiled kernel identity, and requires both callbacks to succeed
+before publishing the original owner pointer with its non-error tag. Rejection
+paths retain output clearing and quarantine. The check helper retains both
+revalidations and its health-byte write on failure. The compiled callback's
+complete body is memory-free; its source remains the image-bound constructor.
+
+The parent passes the original owner/sequence arguments, phase zero and its
+private result object. Result capture is reachable only through the non-error
+admission edge. Both direct callbacks trace the authority and backend byte back
+to that admitted owner, including the saved pointer's full-width reload. Both
+later checks and the remaining output clear likewise use original owner roots.
+The complete four-body normal closure (operation, check, compiled callback and
+zeroizer) lies in parent-relative stack bytes -104 through -1. Its writes and
+home area exclude live descriptors and the saved owner-pointer slot. Individual
+compiler spill erasure and OS unwind behavior are not inferred from this bound.
+
+`windows_enclave_sha2_parent_setup.py` additionally assigns all six parent
+`memcpy`/`memset` calls: exact destination/source roots and byte counts, zero fill
+values, allocation bounds and disjoint copy regions. Input descriptors, the
+executor object, authority slot and owner slot remain untouched. The frame areas
+later used for output descriptors may be initialization storage only because
+the emitted CFG has no path from descriptor construction back to these calls.
+Injected late re-entry edges are rejected, rather than treating instruction
+order alone as a lifetime proof.
+
+These six calls still depend on their bound SDK runtime memory semantics and
+stack/ABI contracts, explicitly retained for shared completion package 8.
+`memset` is not counted as volatile secret erasure. The private parent now has
+24 assigned sites and three remaining sites: stack probe, input-tail mask and
+child executor. Narrow caller composition and final private frame/storage
+assignments remain open. No production image or release-gate policy changed.
+
+Nine new saved-artifact tests cover this checkpoint. They reject 118 individual
+helper-instruction deletions, eleven operation argument/result changes, fifteen
+callback/check/clear corruptions, twelve authority prerequisite/effect changes,
+24 SDK pointer/count/bypass changes, six late setup re-entries and six setup
+prerequisite/inventory changes. These are author checks on saved artifacts, not
+a new native enclave run or independent retest.
+
+Both hosts passed the final 276-test suite (123 self-contained and 153 saved
+artifact tests): Linux in 447.043 seconds and Windows in 461.136 seconds. The
+31-test parent-focused run also passed. Integrated reports match with 151
+current checker-source bindings. Exact source/report hashes, the 192 new
+mutation cases and remaining conditions are recorded in
+`assurance/windows-protection-observations/sha2-batch-parent-admission-progress-20261007.json`.
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

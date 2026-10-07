@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "4cf49181bbca65115b2a0795621e547e48efcae6",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "regression_validation": "PASS",
+  "parent_focused_validation": {"status": "PASS", "tests": 31, "seconds": 164.794},
+  "full_validation": {
+    "linux": {"status": "PASS", "tests": 276, "seconds": 447.043},
+    "windows": {"status": "PASS", "tests": 276, "seconds": 461.136}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 151,
+  "report_sha256": {
+    "sha2-batch-parent-admission-linux.json": "24b33fcf1432a6f7e8188a008587310c51207fb7552d2e5da8efdd4cb95bccd7",
+    "sha2-batch-parent-admission-windows.json": "ee6491984f23bd86689a2ec9f2418de936e183fbcaffbc108c20605fd8ff45e0"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_parent_authority.py": "0258e05e72bd1e3cebd397138497d09e7facfaf30ac9ec3e889f9a8248089685",
+    "windows_enclave_sha2_parent_authority_tests.py": "abec085a7082e1127561e80f5647896b51b08bbe00d46d971171e5b584b11499",
+    "windows_enclave_sha2_parent_setup.py": "ff2ed6e898e7d2ffc2fd1204dcc569f59860bb4d34e2ad6a3f80d60e443b61d3",
+    "windows_enclave_sha2_parent_setup_tests.py": "c3990bb43f8c1dd986b5d652d61f5bb6350694296a5e508efaa2492c03ec9b5f",
+    "windows_enclave_sha2_batch_chains.py": "3c0e0297b9cf3906f3c4a8ec9501ce6d0120aba97fc4a38988cdea87b50a2bab",
+    "windows_enclave_sha2_source_lifetime_tests.py": "39abe276e22d0f34fc5eff1e2307c86cc98aa76078d156bdb28aab5023fffe65"
+  },
+  "prior_review_observation": "sha2-batch-parent-outputs-progress-20261007.json",
+  "new_reviewed_scope": [
+    "complete operation and authority-check bodies, including phase, nonwrapping sequence, health, kernel and callback rejection paths",
+    "successful operation returns original owner pointer; error tags cannot masquerade as admitted owner results",
+    "six actual operation, compiled callback, check and owner-clear argument/effect joins",
+    "four-body normal helper-stack closure at parent-relative bytes minus one hundred four through zero",
+    "all six SDK initialization call pointers, exact extents, disjoint copy ranges and zero fill values",
+    "no emitted CFG path can re-enter initialization after output descriptor construction",
+    "SDK memory implementation and stack contracts remain explicit shared review rather than empty effects"
+  ],
+  "new_saved_tests": 9,
+  "new_saved_mutations_rejected": {
+    "complete_helper_instruction_deletions": 118,
+    "operation_arguments_and_success_identity": 11,
+    "callback_check_and_clear_pointer_changes": 15,
+    "authority_prerequisites_assignments_and_effects": 12,
+    "SDK_pointer_count_and_bypass_changes": 24,
+    "late_setup_reentry": 6,
+    "setup_prerequisites_and_assignment": 6
+  },
+  "remaining_callsite_composition": {
+    "narrow": 39,
+    "wide_child": 0,
+    "wide_parent": 3,
+    "wide_parent_instruction_offsets": [21, 121, 444],
+    "wide_parent_roles": ["stack probe", "input-tail mask predicate", "child executor"],
+    "counts_do_not_mean_new_unreviewed_primitive_bodies": true
+  },
+  "shared_runtime_memory_calls": {
+    "instruction_offsets": [183, 187, 216, 241, 245, 258],
+    "private_arguments_and_temporal_noninterference_checked": true,
+    "SDK_memory_semantics_and_stack_contracts_qualified": false,
+    "memset_is_volatile_erasure": false
+  },
+  "conditional_prerequisites": [
+    "live separated owner/authority page and parent/worker allocations",
+    "image-bound compiled callback and preserved backend/authority fields",
+    "remaining caller and child effects, serialized nonreentrant transport",
+    "Win64 nonvolatile/call ABI, stack probing and admitted worker window",
+    "bound SDK memory routines, private runtime stacks and OS unwind remain shared review"
+  ],
+  "remaining_private_review": [
+    "join remaining narrow and wide-parent calls using completed primitive, lifetime and geometry reviews",
+    "finish finite private frame and storage assignments across the four routes"
+  ],
+  "arbitrary_exception_cleanup_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "shared_completion_package": 8
+}

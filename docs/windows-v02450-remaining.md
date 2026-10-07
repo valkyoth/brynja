@@ -29,15 +29,27 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The parent-admission checkpoint joins twelve more wide-parent calls: operation
+admission, two compiled callbacks, two authority checks, owner-output clearing,
+and six fixed SDK copy/fill calls. Complete operation/check bodies preserve the
+phase, nonwrapping sequence, health and revalidation failures; successful admission
+returns the original owner pointer. Actual caller roots, callback/backend fields,
+bounded helper stacks and non-overlap are checked. Setup cannot re-enter after
+output descriptor construction. This leaves 39 narrow calls and three parent
+sites (stack probing, the tail-mask predicate and child-executor composition).
+The six SDK memory-call implementations/stacks remain explicitly in shared
+runtime qualification; assigning their private arguments does not close that
+work. Final private frame/storage assignments remain open in package 5.
+
 The wide-parent output checkpoint joins ten additional callsites: four transfers
 into the admitted protected owner, two output-scratch clears, scalar/CPU wipes
 and two output destructors. Actual pointer definitions, same-lane lengths,
 unsigned capacity guards and descriptor-drop lifetimes are checked; bounded
 indexed initialization cannot silently overwrite the saved owner pointer. The
 six-body normal helper-stack closure and mapped writes exclude live descriptors
-and that pointer slot. This leaves 39 narrow and 15 wide-parent callsite joins,
-followed by final private frame/storage assignments. Operation-result correctness,
-remaining setup/check/child effects and the shared ABI remain explicit conditions.
+and that pointer slot. That checkpoint left 39 narrow and 15 wide-parent callsite
+joins; the parent-admission checkpoint above further reduces the latter.
+Remaining child effects and the shared ABI remain explicit conditions.
 No whole-frame erasure or new native execution is claimed.
 
 The wide-output checkpoint completes the saved wide SHA-512 child's normal

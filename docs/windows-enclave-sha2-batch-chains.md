@@ -785,6 +785,45 @@ python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
 Without the saved directory the test command runs seventy-seven self-contained
 tests and explicitly skips the seventy-four saved-artifact tests.
 
+## Vector-callee stacks and early saved pointers (2026-10-07)
+
+All 157 tests pass on Linux and Windows with matching parsed reports: eighty
+self-contained and seventy-seven saved-artifact tests. The new campaign rejects
+108 callee stack/alias/call/spill mutations and twenty early callback/state-slot/
+call-population mutations. The retained observation is
+[`sha2-batch-vector-stack-progress-20261007.json`](../assurance/windows-protection-observations/sha2-batch-vector-stack-progress-20261007.json).
+
+The normal vector/copy/cancellation closure now checks twelve actual callee
+bodies per SIMD route, including the nine-body vector-session closure and its
+kernel wrapper. XMM/YMM stack transfers use their real 16/32-byte widths and
+must stay within live local allocations; computed/escaping stack aliases and
+unassigned callees reject. Nested and tail transfers contribute to the bound,
+including every call's return-address store. The resulting spans are
+`[-288,0)` relative to the narrow aligned frame and `[-416,-128)` relative to
+the wide inner RBP. These and the outgoing home areas exclude the selected
+saved authority/input/source and callback/ABI slots. Bounds do not establish
+individual erasure of the saved SIMD registers or private stack bytes.
+
+The earlier wide region has exactly six calls: two cancellation polls, three
+copies and one vector session. Whole-function reaching definitions now bind
+both polls to the original control object's saved callback and data slots,
+including partial-overwrite rejection. All three earlier uses of saved slot984
+(state initialization, packing and write-back) trace to workspace+512. Later
+legitimate reuse of those slots is outside the reviewed consumption interval.
+The readonly callback and compiled-target bodies remain explicitly checked.
+
+This is conditional normal-stack and direct-definition composition, not a
+claim that earlier indirect argument writes preserve every slot. Those effects,
+original physical separation/lifetimes, revalidator-field preservation and
+arbitrary unwind remain separate obligations. No production or release-gate
+change or new native enclave execution is involved.
+
+```sh
+python3 scripts/cryptography/windows_enclave_sha2_batch_chains.py \
+  release-reports/windows-local-20261004 --mutate \
+  --output release-reports/windows-worker-review-20261006/sha2-batch-vector-stack-linux.json
+```
+
 ## Remaining package-5 work
 
 - Finish batch-specific caller preconditions for the reproduced primitive contracts.

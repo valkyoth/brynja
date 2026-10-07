@@ -29,6 +29,15 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
+The latest vector-stack checkpoint adds the complete normal vector/copy/
+cancellation callee closure: twelve bodies per SIMD route, including XMM/YMM
+stack widths and nested/tail-call return slots. Those stack/home effects exclude
+the selected saved slots. Both early wide callbacks retain their original
+control-table/data capture under direct CFG definitions; all three earlier
+state-pointer uses trace to workspace+512. Earlier indirect argument-write
+preservation, physical allocation separation/lifetimes and individual stack
+erasure are not inferred from these checks. Package 5 remains incomplete.
+
 The [SHA-2 batch checkpoint](windows-enclave-sha2-batch-chains.md) binds all 178
 emitted functions across the sequential scalar/SHA-NI and two AVX2 SIMD routes.
 Fifty-two review tests pass on both hosts with matching reports; component, worker

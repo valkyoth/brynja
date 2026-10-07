@@ -32,9 +32,19 @@ only their matched POP/RET operations may consume them. No stack alias escapes.
 """
     if not STACK_REG.search(line):return []
     op,_,rest=line.partition(' ');args=rest.split(', ')
-    s.require(op in ('movq','movl','movw','movb','cmpq','cmpl','cmpw','cmpb','testq','testb'),
-              'assigned direct stack access instruction')
-    width={'q':8,'l':4,'w':2,'b':1}[op[-1]];result=[]
+    vector=op in ('movaps','movups','movdqa','movdqu','vmovaps','vmovups','vmovdqa','vmovdqu')
+    if vector:
+        registers=[re.fullmatch(r'%(xmm|ymm)(\d+)',arg) for arg in args]
+        registers=[match for match in registers if match]
+        s.require(len(args)==2 and len(registers)==1 and int(registers[0][2])<16,
+                  'one bounded vector register in stack transfer')
+        s.require(registers[0][1]=='xmm' or op.startswith('v'),'YMM requires VEX transfer')
+        width=16 if registers[0][1]=='xmm' else 32
+    else:
+        s.require(op in ('movq','movl','movw','movb','cmpq','cmpl','cmpw','cmpb','testq','testb'),
+                  'assigned direct stack access instruction')
+        width={'q':8,'l':4,'w':2,'b':1}[op[-1]]
+    result=[]
     for i,arg in enumerate(args):
         if not STACK_REG.search(arg):continue
         match=re.fullmatch(r'(-?\d*)\(%(rsp|rbp)\)',arg)
@@ -43,7 +53,7 @@ only their matched POP/RET operations may consume them. No stack alias escapes.
         s.require(base is not None,'RBP initialized before local access')
         low=base+int(match[1] or 0);span=[low,low+width]
         s.require(local_span(chunks,span),'direct access inside live locals, not saves/return/home area')
-        result.append(dict(kind='write' if i==len(args)-1 and op.startswith('mov') else 'read',span=span))
+        result.append(dict(kind='write' if i==len(args)-1 and (vector or op.startswith('mov')) else 'read',span=span))
     return result
 
 

@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA2_BATCH_CHAIN_REVIEW",
+  "review_baseline": "3d9b5afe8e428553a3d7a07c447f30c536e04f4f",
+  "completion_package": 5,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "production_sources_unchanged": true,
+  "review_tests_per_host": 157,
+  "self_contained_tests": 80,
+  "saved_artifact_tests": 77,
+  "parsed_reports_match": true,
+  "report_sha256": {
+    "sha2-batch-vector-stack-linux.json": "c533a2e129e33c20a373bedeb8f2e4fa1d0866a9484a7b5334413f4d7c917410",
+    "sha2-batch-vector-stack-windows.json": "5daa64db3852d3774e3481774f22311e573e68fef280c4b65810f6bec0666fb6"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha2_batch_chains.py": "8c799e0a14e169fd807bec08a5c3749be4dbf3ea035292ed376344afe7515815",
+    "windows_enclave_sha2_callee_stack.py": "215cf3bd931c85b8480ce8e7ae92fcb2d409a9145adee62f5bd0291ddf160f7d",
+    "windows_enclave_sha2_callee_stack_tests.py": "ec6a13b8ab8be1013fbfe5b96794aab8e09ff94f34e7b0515281ff88c575a326",
+    "windows_enclave_sha2_vector_stack.py": "7dbcf839be1e6dc4f644a2d014e1f5542dcf65ce754710b86adcc51d350d4df9",
+    "windows_enclave_sha2_vector_stack_tests.py": "33f51dbdc56f0596a98fbcbd5fafdd5e8f780d18896ffcf3f4c7edb0bf0d47ac"
+  },
+  "prior_review_observation": "sha2-batch-slot-origins-progress-20261007.json",
+  "new_reviewed_scope": [
+    "twelve normal vector/copy/cancellation callee bodies per SIMD route, including the nine-body vector session closure",
+    "explicit 16-byte XMM and 32-byte YMM stack access extents inside live local allocations",
+    "nested and tail-call depth includes call return slots; selected saved slots and outgoing home areas remain disjoint",
+    "all six earlier wide calls are inventoried, with direct CFG origins for both saved cancellation callback target/data pairs",
+    "all three earlier saved-state-pointer uses trace to the original workspace+512 address",
+    "later legitimate slot reuse is outside the earlier consumption interval"
+  ],
+  "normal_vector_callee_count_per_route": 12,
+  "caller_frame_relative_stack_spans": {"simd256": [-288, 0], "simd512": [-416, -128]},
+  "earlier_wide_call_sites": 6,
+  "earlier_wide_callback_sites": 2,
+  "earlier_state_pointer_uses": [517, 965, 1092],
+  "vector_stack_alias_call_spill_mutations_rejected": 108,
+  "early_callback_state_slot_population_mutations_rejected": 20,
+  "normal_stack_effects_disjoint": true,
+  "earlier_indirect_argument_writes_and_slot_preservation_pending": true,
+  "original_physical_lifetimes_and_external_separation_required": true,
+  "revalidator_identity_and_nonvolatile_abi_required": true,
+  "arbitrary_exception_cleanup_qualified": false,
+  "individual_stack_erasure_qualified": false,
+  "whole_frame_erasure_qualified": false,
+  "native_worker_evidence_reused": true,
+  "native_worker_evidence_observation": "sha2-batch-digest-caller-progress-20261006.json",
+  "remaining_private_review": [
+    "earlier vector-phase indirect argument-write footprints and saved-slot preservation",
+    "narrow authority and per-lane input origins, subsequent compact-index lifetimes",
+    "compose original physical storage lifetimes and allocation separation with the conditional effects",
+    "remaining batch-specific and fail-stop caller preconditions",
+    "complete enclosing private frame/storage and cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

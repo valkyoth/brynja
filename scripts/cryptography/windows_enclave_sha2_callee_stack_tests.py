@@ -2,9 +2,10 @@
 from unittest.mock import patch
 import windows_enclave_sha2_callee_stack as c
 from windows_enclave_sha2_source_lifetime_tests import SourceLifetimeTests, SourceLifetimeSavedTests
+from windows_enclave_sha2_vector_stack_tests import VectorStackTests, VectorStackSavedTests
 
 
-class CalleeStackTests(SourceLifetimeTests):
+class CalleeStackTests(SourceLifetimeTests, VectorStackTests):
     def test_stack_bounds_exclude_return_address_saves_and_incoming_home(self):
         prefix=['f:','pushq %rbp','subq $48, %rsp','leaq 48(%rsp), %rbp']
         suffix=['addq $48, %rsp','popq %rbp','retq']
@@ -42,7 +43,7 @@ class CalleeStackTests(SourceLifetimeTests):
         self.assertEqual(c.inspect_body(code,'f',{'f','g'},{('f','*8(%rax)'):'g'})['calls'],[[2,'g',-48]])
 
 
-class CalleeStackSavedTests(SourceLifetimeSavedTests):
+class CalleeStackSavedTests(SourceLifetimeSavedTests, VectorStackSavedTests):
     def stack_fixture(self,row):
         import windows_enclave_sha2_batch_chains as parent
         lane,_,_,_,_,_,bodies=row;frame,transfer,tables=self.control_fixture(row)

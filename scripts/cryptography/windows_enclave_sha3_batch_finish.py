@@ -2,6 +2,7 @@
 import re
 import windows_enclave_sha3_batch_finish_shapes as shapes
 import windows_enclave_sha3_batch_chunks as chunks
+import windows_enclave_sha3_batch_terminal as terminal
 
 life,s,L=chunks.life,chunks.s,chunks.L
 
@@ -118,7 +119,7 @@ def inspect(bodies,assembly,ir,lane,prior,storage,transitions,receiver):
     a=life.LAYOUT[lane];state=[a['state'],a['state']+(1136 if lane=='scalar' else 992)]
     out=[a['output'],a['output']+1024]
     s.require(state[1]<=out[0] or out[1]<=state[0],'final output is disjoint from the live state allocation')
-    return dict(functions=n,instructions_and_labels={k:len(v) for k,v in expected.items()},
+    result=dict(functions=n,instructions_and_labels={k:len(v) for k,v in expected.items()},
         lower_helpers_replayed_and_exact=helpers,
         lower_finalizer_review_pending=[n[k] for k in ('finish_fixed','finish_xof','squeeze') if not (lane=='avx2' and k=='finish_xof')],
         all_lower_finalizers_composed=False,required_outer_phase=3,active_slot_must_match=True,slot_upper_bound=7,
@@ -134,3 +135,10 @@ def inspect(bodies,assembly,ir,lane,prior,storage,transitions,receiver):
         selected_unwind=unwind(assembly,bodies,n) if lane=='avx2' else None,
         valid_initialized_state_and_valid_plan_required=True,start_establishes_state_invariant_qualified=False,
         private_frame_erasure_qualified=False,all_unwind_paths_qualified=False,whole_image_qualified=False)
+    result['changed_avx2_terminal_normal_paths']=terminal.inspect(bodies,ir,prior,result) if lane=='avx2' else None
+    if lane=='avx2':
+        result['lower_finalizer_review_pending']=[]
+        result['all_lower_finalizers_normal_paths_composed']=True
+    else:result['all_lower_finalizers_normal_paths_composed']=False
+    # Normal composition is not a proof of every finalizer's exceptional frame erasure.
+    return result

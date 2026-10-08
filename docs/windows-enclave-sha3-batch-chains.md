@@ -461,3 +461,58 @@ reference comparisons, plus one-past-empty and invalid-domain cases. Prerequisit
 integration and pending-scope regressions also pass. The
 [finish-caller observation](../assurance/windows-protection-observations/sha3-batch-finish-callers-progress-20261008.json)
 records the exact scope and keeps the five changed lower helpers pending.
+
+## AVX2 terminal lower helpers (2026-10-08)
+
+The next checkpoint reviews the changed AVX2 `State::finish_fixed` and terminal
+`State::squeeze` bodies in full: 126 and 182 instructions/labels. This is not
+name-based reuse of their streaming counterparts. Their seven lower helpers
+must match the freshly replayed body/reference/extent/ABI review, while the
+broadened copy loop and wrapper are separately rechecked. The actual outer
+caller supplies a live, disjoint state/output pair and a bounded descriptor.
+
+Fixed output requires absorbing phase, healthy matching authority/epoch, the
+fixed-state tag and matching output width before forwarding the descriptor and
+suffix to `Engine::finish`. Squeeze requires squeezing phase and canonical
+output shape: zero bytes with zero terminal bits, or 1–1,024 bytes with 1–8
+terminal bits. A small model of the emitted byte predicates and wrapping
+bit-length check is compared against that independent domain. This emitted
+squeeze is specialized for terminal output; it does not qualify a continuing
+squeeze interface.
+
+Both helpers reserve 1,064 frame bytes. Their initialized staging array occupies
+`[rsp+40, rsp+1064)`, disjoint from the outgoing home area and saved incoming
+registers. Reads receive only the bounded prefix of that array. Partial output
+masking touches only its nonempty final byte, at `rsp+39+length`, and retains the
+low requested bits. The final copy uses equal bounded lengths, a live staging
+source, and the owner's disjoint retained-output destination; it does not export
+the output. Successful paths clear the core and staging before setting the state
+empty. Rejection poisons the core and composes with the outer caller's whole
+output clear and quarantine.
+
+A supplemental conservative CFG analysis explores both sides of every branch.
+It treats an `Engine::read` failure as potentially having written staging, and
+requires a full volatile clear before every normal return following that call.
+It rejects missing, shortened and shifted clears, cleanup bypasses and direct
+dirty returns. Full-body checks additionally bind call arguments, pointer
+preservation, phase/epoch predicates, mask arithmetic and state transitions.
+
+This removes these two helpers from the **normal-path** review backlog; scalar
+`finish_fixed`, `finish_xof` and `squeeze` remain pending. It does not close all
+finalizer qualification: valid state construction, exceptional exits, other
+frame bytes/copies and the shared `memset` implementation remain distinct
+obligations. The existing `all_lower_finalizers_composed` flag stays false;
+only the AVX2 normal-path flag becomes true. No production source or release
+gate changes, new native enclave execution, independent review or package-6
+closure are claimed.
+
+All 73 saved-artifact tests pass on Linux (313.172 seconds) and Windows
+(606.304 seconds). Parsed reports match with 180 current checker-source
+bindings. New regressions reject 616 instruction deletions/substitutions, 29
+targeted boundary/mask/cleanup changes, 15 missing/shortened/shifted staging
+clears, eight CFG bypass/missing-operation cases and 14 helper ABI/binding
+changes. The output-shape model passes 262,656 independent domain comparisons,
+768 oversized cases and six invalid-domain rejections. Caller prerequisites,
+exact helper replay and integrated review failures are also tested. The
+[terminal-helper observation](../assurance/windows-protection-observations/sha3-batch-terminal-progress-20261008.json)
+records these results without closing the remaining scalar or private-frame work.

@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "7f1744ea",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {"tests": 6, "seconds": 1.310, "status": "PASS"},
+  "full_validation": {
+    "linux": {"tests": 73, "seconds": 313.172, "status": "PASS"},
+    "windows": {"tests": 73, "seconds": 606.304, "status": "PASS"}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 180,
+  "report_sha256": {
+    "sha3-batch-terminal-linux.json": "1374d76bf4e2fee518abdc4c701030019dba3ca8ffb39f10e8a1c408c123c741",
+    "sha3-batch-terminal-windows.json": "54f672817debcd53858d6d8a0b730d9bcfc45c437d0730514e13280d8d118019"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_terminal.py": "89d489de4584984e8e95f752ff7adc56f7240e1aec2977b8622b4f8bf2630182",
+    "windows_enclave_sha3_batch_terminal_shapes.py": "9ed4b2418515725b3ac436b473f3263db7f9542a64b78ab680435e6037c80614",
+    "windows_enclave_sha3_batch_terminal_tests.py": "045118137921154c47583db7d57ddf56126da6e00ff5e50324bcb2ae86ede72a",
+    "windows_enclave_sha3_batch_finish.py": "38a884f756b78b0cf3bd48ff205d45a534808413ba782a227d3d008ebef552b2",
+    "windows_enclave_sha3_batch_finish_tests.py": "d2df0c8dc6eae35264a488ee8f8ff1af0934484c0c5f13b7c6b72f8c0e61e243",
+    "test-windows-enclave-sha3-batch-chains.py": "ee22efa958ce765c86a651af556e55d5baa94b3fdd9ebb46d589d2d0785cd252"
+  },
+  "new_contracts": {
+    "avx2_fixed_instructions_and_labels": 126,
+    "avx2_squeeze_instructions_and_labels": 182,
+    "replayed_exact_lower_helpers": 7,
+    "separately_replayed_broadened_copy_helpers": 2,
+    "staging_span_from_rsp": [40, 1064],
+    "frame_bytes": 1064,
+    "staging_capacity": 1024,
+    "staging_disjoint_from_home_and_saved_registers": true,
+    "actual_outer_descriptor_and_disjoint_output_joined": true,
+    "health_epoch_phase_and_fixed_width_checked": true,
+    "squeeze_shape_and_partial_mask_checked": true,
+    "only_terminal_true_squeeze_specialization_reviewed": true,
+    "normal_return_cfg_includes_partial_read_failure": true,
+    "fixed_full_staging_clear_sites": 2,
+    "squeeze_full_staging_clear_sites": 3,
+    "all_normal_post_read_returns_clear_staging": true,
+    "normal_copy_has_live_bounded_disjoint_source_and_destination": true,
+    "retained_output_not_exported_here": true,
+    "avx2_lower_normal_paths_composed": true,
+    "all_lower_finalizers_composed": false,
+    "valid_initialized_state_and_plan_required": true,
+    "shared_memset_qualification_pending": true,
+    "private_frame_erasure_qualified": false,
+    "all_unwind_paths_qualified": false
+  },
+  "new_regressions": {
+    "instruction_deletions_and_substitutions": 616,
+    "targeted_bound_pointer_mask_cleanup_mutations": 29,
+    "cfg_missing_shortened_shifted_clear_mutations": 15,
+    "cfg_dirty_return_rejection_bypass_missing_init_or_read": 8,
+    "output_shape_reference_comparisons": 262656,
+    "oversized_output_cases": 768,
+    "invalid_model_domains": 6,
+    "helper_abi_and_replay_binding_mutations": 14,
+    "caller_target_and_allocation_prerequisites": 8,
+    "missing_replayed_helpers": 7,
+    "missing_replay_copy_and_integrated_terminal_review_rejected": true,
+    "exceptional_and_whole_image_claims_remain_false": true
+  },
+  "remaining_private_review": [
+    "scalar finish_fixed, finish_xof and squeeze lower helper composition",
+    "start establishes valid initialized state and authority invariants",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and exceptional cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

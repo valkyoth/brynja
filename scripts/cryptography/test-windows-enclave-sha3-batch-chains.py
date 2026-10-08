@@ -16,12 +16,13 @@ from windows_enclave_sha3_batch_update_tests import UpdateTests
 from windows_enclave_sha3_batch_chunks_tests import ChunkTests,ChunkModelTests
 from windows_enclave_sha3_batch_setup_end_tests import SetupEndTests
 from windows_enclave_sha3_batch_scalar_setup_tests import ScalarSetupTests,ScalarSetupModelTests
+from windows_enclave_sha3_batch_finish_tests import FinishTests,FinishModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -65,7 +66,7 @@ class Tests(ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModel
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')

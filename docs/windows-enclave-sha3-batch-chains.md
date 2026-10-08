@@ -405,3 +405,59 @@ bindings verified. New regressions reject 822 instruction deletions/substitution
 plus lifetime, region, prerequisite, ABI and integration failures. The
 [scalar setup observation](../assurance/windows-protection-observations/sha3-batch-scalar-setup-progress-20261008.json)
 records the counts and explicitly retains the remaining private-frame obligations.
+
+## Final-message callers and retained output (2026-10-08)
+
+The complete scalar and AVX2 outer `finish` callers now have explicit contracts
+(221 and 239 instructions/labels). Admission requires streaming phase, the next
+sequence, matching active slot, and checked subtraction from the remaining work
+budget. Input length is bounded to 1,024 bytes by the receiver and argument ABI.
+Empty input requires zero terminal bits; nonempty input requires one through
+eight. The partial-byte mask reads only `input + len - 1`, after those bounds.
+The full 32-byte descriptor preserves the copied input pointer, split length,
+bit length and terminal-bit count; its padding is not claimed initialized or
+erased. Unlike an empty setup fragment, an empty final message still calls the
+lower finalizer.
+
+The selected slot is bounded to seven. Every preceding output-width addition
+checks carry; adding the current width checks both carry and the 1,024-byte
+output bound before forming the destination. A symbolic u64 model is compared
+with an unbounded-integer reference across all slots, boundary widths, prefix
+overflows and seeded mixed-width plans. An empty output can legally point one
+past the buffer. Fixed identities 1–4 dispatch to `finish_fixed`; identities 5–8
+dispatch through `finish_xof` and terminal `squeeze`. The output region is a
+bounded subrange of the owner output buffer, disjoint from its live state.
+
+Successful lower calls precede state destruction, the selected completion-bit
+update, active-slot reset and return to collecting. Output stays secret inside
+the owner; this operation does not export it. Rejection follows typed state
+cleanup, clears the entire output buffer, resets logical fields and quarantines
+the owner/authority. The descriptor and guard/result regions are disjoint from
+each other and the outgoing call home area. Incoming length/last-bit arguments
+are at `rsp+176/184` on scalar and `rsp+208/216` on AVX2, accounting for the
+actual prologues.
+
+For AVX2, the three lower finalizer calls share one bound FH3 unwind state. The
+header, state map, IP map, exact call intervals, 26-instruction cleanup funclet
+and 42-instruction guard drop glue are checked. The saved owner/completion fields
+are live before entering each protected call. Object/image metadata bindings
+remain prerequisites; this does not qualify the Windows exception dispatcher.
+
+This checkpoint deliberately does **not** claim every lower finalizer has been
+composed. AVX2 `finish_xof` exactly matches the freshly replayed streaming helper.
+Scalar `finish_fixed`, `finish_xof`, `squeeze`, and AVX2 `finish_fixed`, `squeeze`
+have different emitted bodies or call contracts and remain named pending work.
+Caller ABI checks do not prove those implementations correct. Valid initial
+state and plan are preconditions until `start` is reviewed. Whole private-frame
+cleanup, all unwind paths and package 6 closure remain open. These are saved
+artifact checks, not new enclave execution; no production or gate policy changed.
+
+All 67 saved-artifact tests pass on Linux (312.807 seconds) and Windows
+(601.713 seconds). Parsed reports match with 178 current checker-source bindings.
+The new checks reject 1,056 caller/funclet/guard instruction mutations, 46
+boundary/cleanup changes, 24 unwind-table and 17 protected-interval/handler
+changes, and 36 ABI changes. The output-span model passes 41,156 independent
+reference comparisons, plus one-past-empty and invalid-domain cases. Prerequisite,
+integration and pending-scope regressions also pass. The
+[finish-caller observation](../assurance/windows-protection-observations/sha3-batch-finish-callers-progress-20261008.json)
+records the exact scope and keeps the five changed lower helpers pending.

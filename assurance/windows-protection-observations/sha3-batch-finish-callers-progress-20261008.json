@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "9f453da0",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "full_validation": {
+    "linux": {"tests": 67, "seconds": 312.807, "status": "PASS"},
+    "windows": {"tests": 67, "seconds": 601.713, "status": "PASS"}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 178,
+  "report_sha256": {
+    "sha3-batch-finish-callers-linux.json": "bdb24892e1ce788f92516d91c81d629db7e463cec7042fe07f17b34acfedc82a",
+    "sha3-batch-finish-callers-windows.json": "0b0ac942c5969759cddd9411ccc9d807a6981d9c4acdab32877b751511aac3b0"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_finish.py": "e72d30f9e9483e3e28e7ba1fe61c917ec14168199fa8d7b6f3c8ec70532c21bd",
+    "windows_enclave_sha3_batch_finish_shapes.py": "1c335f91b5ede1d7461180d923b11d40810fe8523ea84a62dec6246c61b16c34",
+    "windows_enclave_sha3_batch_finish_tests.py": "cf9b19ba6ff61c0fa767ebb569349b384076945d97ffd8fbd9010109882aa25e",
+    "windows_enclave_sha3_batch_chains.py": "f47dcd79f156f0b8d5a3955bdeaf15eb612052155c1961b8a0753aca823cec31",
+    "test-windows-enclave-sha3-batch-chains.py": "49072665989c440156048e197fcd6d053964dad848e4053f4a5dfff8fd416dc5"
+  },
+  "new_contracts": {
+    "scalar_finish_instructions_and_labels": 221,
+    "avx2_finish_instructions_and_labels": 239,
+    "avx2_selected_funclet_instructions_and_labels": 26,
+    "avx2_guard_glue_instructions_and_labels": 42,
+    "phase_sequence_slot_budget_checked_before_dispatch": true,
+    "copied_input_pointer_preserved_to_descriptor": true,
+    "input_length_maximum": 1024,
+    "partial_tail_read_after_nonempty_and_shape_checks": true,
+    "output_prefix_sum_and_end_both_checked": true,
+    "output_buffer_capacity": 1024,
+    "empty_output_may_point_one_past_buffer": true,
+    "state_output_regions_disjoint": true,
+    "descriptor_result_guard_exception_regions_disjoint": true,
+    "incoming_final_arguments_match_prologue": true,
+    "completion_bit_requires_lower_success": true,
+    "output_retained_secret_not_exported_here": true,
+    "outer_rejection_clears_output_and_quarantines": true,
+    "three_avx2_calls_inside_selected_live_guard_unwind_state": true,
+    "avx2_finish_xof_exact_to_fresh_prior_review": true,
+    "changed_lower_finalizers_pending": {
+      "scalar": ["finish_fixed", "finish_xof", "squeeze"],
+      "avx2": ["finish_fixed", "squeeze"]
+    },
+    "all_lower_finalizers_composed": false,
+    "valid_initial_state_and_plan_required": true,
+    "start_establishes_state_invariant_qualified": false,
+    "descriptor_padding_initialization_or_erasure_claimed": false,
+    "private_frame_erasure_qualified": false,
+    "all_unwind_paths_qualified": false,
+    "os_exception_dispatcher_qualified": false
+  },
+  "new_regressions": {
+    "caller_funclet_guard_instruction_deletions_and_substitutions": 1056,
+    "boundary_input_output_and_cleanup_mutations": 46,
+    "unwind_table_field_missing_and_duplicate_mutations": 24,
+    "protected_call_interval_and_handler_mutations": 17,
+    "argument_alias_bounds_and_capture_mutations": 36,
+    "prerequisite_removals": 14,
+    "missing_replayed_helpers": 5,
+    "wrong_composed_targets": 4,
+    "weakened_payload_limits": 2,
+    "output_span_reference_comparisons": 41156,
+    "empty_one_past_output_case": true,
+    "invalid_output_model_slot_cases": 3,
+    "invalid_output_model_domain_cases": 5,
+    "integrated_checks_required": true,
+    "lower_helper_pending_scope_enforced": true
+  },
+  "remaining_private_review": [
+    "five changed lower finalizers and their caller composition",
+    "start establishes valid initialized state and authority invariants",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and failure cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

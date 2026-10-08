@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "af604e12",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "full_validation": {
+    "linux": {
+      "tests": 12,
+      "seconds": 11.05,
+      "status": "PASS"
+    },
+    "windows": {
+      "tests": 12,
+      "seconds": 29.106,
+      "status": "PASS"
+    }
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 162,
+  "report_sha256": {
+    "sha3-batch-inventory-linux.json": "093bdfda40e44d000bf87659b47643bc77bb05dc65d73b5e4ac8e0b9a688b2dc",
+    "sha3-batch-inventory-windows.json": "8cf3e67d08de113e033c78d19bd140b72e185a685b29edc42710caf6c8649322"
+  },
+  "review_source_sha256": {
+    "test-windows-enclave-sha3-batch-chains.py": "94ce757ce862a45d13778cbbab8b658a063b8c78b1970f3e0b4b653235f99e69",
+    "windows_enclave_sha3_batch_chains.py": "e37c9a15abf9732b9f5936e62c834f752104bc34c8abeae6163338501cd2dc1d",
+    "windows_enclave_sha3_batch_plan.py": "2623e6507e6123c0970beb40021a43ccaf7fe05752861ee9d7371b8d22fa18c0"
+  },
+  "spec_sha256": "f272ae0169c7fad30327b4a55329689462beac39a9fec40dc3ecf0819c257255",
+  "route_populations": {
+    "scalar": {
+      "functions": 54,
+      "funclets": 0,
+      "body_mutations_rejected": 40185,
+      "bound_dispatch_sites": 8,
+      "indirect_calls_pending": 0,
+      "exact_prior_helpers": 30
+    },
+    "avx2": {
+      "functions": 54,
+      "funclets": 2,
+      "body_mutations_rejected": 26696,
+      "bound_dispatch_sites": 4,
+      "indirect_calls_pending": 0,
+      "exact_prior_helpers": 23
+    },
+    "simd": {
+      "functions": 58,
+      "funclets": 17,
+      "body_mutations_rejected": 21177,
+      "bound_dispatch_sites": 4,
+      "indirect_calls_pending": 15,
+      "exact_prior_helpers": 0
+    }
+  },
+  "sequential_plan_instruction_mutations": 166,
+  "sequential_identity_table_mutations": 18,
+  "sequential_descriptor_abi_mutations": 14,
+  "remaining_private_review": [
+    "batch callers and exact state/authority lifecycle composition",
+    "distinct framing, finish/squeeze and retained-output paths",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and failure cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

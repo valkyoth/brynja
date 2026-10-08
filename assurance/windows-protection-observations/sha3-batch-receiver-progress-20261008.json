@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "2992eb9c",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "full_validation": {
+    "linux": {"tests": 40, "seconds": 232.298, "status": "PASS"},
+    "windows": {"tests": 40, "seconds": 430.375, "status": "PASS"}
+  },
+  "validation_notes": [
+    "Two initial mutation tests failed to match tab-separated assembly; corrected by normalizing whitespace before mutation. Both complete corrected suites pass.",
+    "A later padding-classification comment clarification changes no Python AST or instruction contract. Full analysis/mutation reports were regenerated on both hosts with current hashes."
+  ],
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 171,
+  "report_sha256": {
+    "sha3-batch-receiver-linux.json": "a9d657243d2d850d1ad7dfe854a3b867891e9e502b818009415ea73a3c70d037",
+    "sha3-batch-receiver-windows.json": "2c3fcb154c86573f1201fa7cccb5bd872158d81b0ab4696639ab33175ca44a84"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_chains.py": "bcd7e45cedf2e582cca94e8533736384af0d2ac4bbda2be263d015cd4070834a",
+    "windows_enclave_sha3_batch_receive.py": "421822f96db11ccffc5db0bb73fc968d491484515ea2acfe580b7798f149638b",
+    "windows_enclave_sha3_batch_receive_scalar.py": "664d0aceade827e6ac12a9b4e85520578e6e725d47dc9b52c151d45cff03ff89",
+    "windows_enclave_sha3_batch_receive_avx2.py": "24ef1e20cb88c474cf55ae46dec931638388a1041f7e5bd1323d619888000666",
+    "windows_enclave_sha3_batch_decode.py": "e091a6899854b7118c6807fadcc95e9e867e753b99dfe84f2683b377ea8260ce",
+    "windows_enclave_sha3_batch_receive_tests.py": "2b2ca930fd2f986508f72a919e0a6153bfd3402382f33328511bd43c6252c7f2",
+    "test-windows-enclave-sha3-batch-chains.py": "62c9962d488287a92bdd2a8383a1e919bffb5d4216c2cc73903681acac208912"
+  },
+  "new_contracts": {
+    "scalar_receiver_instructions_and_labels": 557,
+    "avx2_receiver_instructions_and_labels": 392,
+    "avx2_decoder_instructions_and_labels": 281,
+    "each_plan_equality_helper_instructions_and_labels": 76,
+    "avx2_authority_check_instructions_and_labels": 9,
+    "dispatch_tables": 4,
+    "dispatch_entries": 38,
+    "header_bytes": {"scalar": 288, "avx2": 304},
+    "payload_limit": 1024,
+    "source_end_overflow_rejected": true,
+    "actual_host_source_dereference_by_OS_only": true,
+    "avx2_second_decode_requires_length_equality": true,
+    "payload_pointer_from_separate_worker_buffer": true,
+    "receiver_frame_regions_bounded_and_disjoint": true,
+    "export_phase": 4,
+    "export_compares_all_semantic_plan_fields": 24,
+    "export_bytes": 1024,
+    "export_success_clears_owner": true,
+    "export_failure_guard_then_quarantine": true,
+    "avx2_export_post_copy_authority_recheck": true,
+    "export_host_bytes_rollback_claimed": false,
+    "nested_crypto_operation_bodies_and_pointer_preservation_qualified": false,
+    "decoder_copies_and_frame_padding_individually_erased": false,
+    "all_unwind_paths_qualified": false
+  },
+  "new_regressions": {
+    "receiver_decoder_equality_authority_instruction_mutations": 2782,
+    "dispatch_entry_and_missing_table_mutations": 42,
+    "export_plan_field_and_lifecycle_mutations": 56,
+    "input_copy_decoder_and_authority_mutations": 15,
+    "receiver_decoder_and_nested_argument_abi_mutations": 21,
+    "prerequisite_removal_cases": 18,
+    "integrated_receiver_check_required": true,
+    "incomplete_scope_flags_enforced": true,
+    "public_u64_operation_selector_model_cases": 1280
+  },
+  "previous_regressions_replayed": true,
+  "remaining_private_review": [
+    "nested start/setup/update/finish bodies and input/output lifetime preservation",
+    "distinct framing, squeeze and retained-output production paths",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and failure cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

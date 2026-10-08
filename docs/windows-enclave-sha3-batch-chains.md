@@ -132,12 +132,54 @@ Constructor copies contain public initial metadata; their padding and moved
 representations are not claimed to be individually erased. Cleanup funclets,
 nested call frames and final window reclamation remain separate obligations.
 
+## Request decoding, dispatch and explicit export
+
+The complete scalar receiver (557 instructions/labels), AVX2 receiver (392),
+AVX2 decoder (281), both eight-descriptor equality helpers (76 each), and AVX2
+authority check (nine) now have reviewed instruction contracts. All four
+identity/operation dispatch tables are checked entry by entry. The expected
+paths are constructed independently of the candidate bodies and are also bound
+to the original object bytes, references and linked image.
+
+The scalar receiver decodes version 11 inline. AVX2 decodes version 17, requires
+route identity 1 and its reserved word to be zero, and repeats decoding before
+dispatch with exact payload-length equality. Both validate the copied public
+header before admitting payload: operations 90–99, nonzero sequence, bounded
+slot, length at most 1,024 bytes, valid final-bit metadata, operation-specific
+zero fields, and nonwrapping source end. Only operations 92, 93, 95 and 96 accept
+payload; only 90 and 98 accept a nonempty validated plan. The source address is
+passed to the fixed OS-copy adapter, never dereferenced as a Rust input pointer.
+The actual input pointer remains the worker's distinct, bounded payload buffer.
+
+The checked dispatch passes owner, sequence, slot, lengths and input pointer to
+the expected methods with their actual LLVM argument contracts. The scalar
+receiver takes its owner directly; AVX2 retrieves the placed owner from the
+serialized worker's live pointer triple. Temporary header, plan, empty-plan
+and guard regions are bounded within their frames, with simultaneous regions
+disjoint. Reused header/plan/guard storage has sequential lifetimes. These are
+caller-side contracts: the nested `start`, setup, update and finish bodies must
+still be reviewed for pointer preservation, state transitions and cleanup.
+
+Export first admits phase 4 and the exact next sequence, then compares all 24
+semantic plan fields against the retained plan. Only equality reaches the
+fixed 1,024-byte output copy. AVX2 also checks authority after that copy. Success
+clears the owner and returns it to empty; plan mismatch, copy failure or failed
+post-copy authority check follows the operation-guard cleanup and quarantine
+path. Already copied host bytes cannot be rolled back, and no such rollback is
+claimed. Payload/header buffer destruction remains the outer worker's duty.
+
+Header and descriptor semantic fields are public metadata. This neither classifies
+padding as public nor claims that padding, all temporaries, compiler copies or
+private frames are individually erased.
+Shared transport serialization, OS copying, runtime helpers and final stack-window
+cleanup remain package 8; cleanup-funclet composition remains separate work.
+
 ## Remaining package-6 work
 
-- Complete slot selection and subsequent state/copy-helper caller arguments,
-  including retained-owner and input/output allocation lifetimes.
-- Complete distinct setup, final-bit framing, squeeze, retained-output and
-  export paths for both sequential routes.
+- Complete nested slot selection and subsequent state/copy-helper caller
+  arguments, including owner and input/output lifetime preservation by callees.
+- Complete distinct setup, final-bit framing, squeeze and retained-output
+  production paths for both sequential routes; receiver-side export is checked.
 - Review four-lane Keccak kernel/transposes, compaction, per-lane pointers,
   authority/cancellation calls and their normal/error/unwind paths.
 - Assign every private temporary and frame's cleanup responsibility, keeping
@@ -185,3 +227,14 @@ reviews, integrated execution, successful readback coverage and the explicitly
 incomplete scope. All preceding regressions pass. The
 [retained-worker observation](../assurance/windows-protection-observations/sha3-batch-retained-progress-20261008.json)
 records these results; this is saved-artifact replay, not new enclave execution.
+
+The request/receiver checkpoint passes all 40 tests on Linux (232.298 seconds)
+and Windows (430.375 seconds). Parsed reports match with 171 current checker
+bindings. New regressions reject 2,782 instruction/label mutations, 42 dispatch
+mutations, 56 export-plan/lifecycle mutations, 15 input/decoder/authority
+mutations and 21 argument-ABI mutations. Eighteen prerequisite-removal cases,
+integration tripwires, pending-scope checks and 1,280 public-selector model cases
+also pass. The
+[receiver observation](../assurance/windows-protection-observations/sha3-batch-receiver-progress-20261008.json)
+records the corrected test-formatting issue and comment-only clarification;
+neither required changing production code or the reviewed instruction contracts.

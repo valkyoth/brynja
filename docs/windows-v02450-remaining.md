@@ -13,7 +13,7 @@
   prerequisites (178 emitted functions, including 33 cleanup funclets). Next
   are the three SHA-3 batch routes, now inventoried with sequential plan,
   lifecycle, state-destructor, initial plan placement, retained-worker entry/close,
-  buffer cleanup and widened copy-helper checks,
+  buffer cleanup, request decoding/dispatch/export and widened copy-helper checks,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/
@@ -46,8 +46,11 @@ to those lifecycle methods, and complete `begin` checks bind plan validation,
 copying and disjoint owner subobjects. Sequential retained entry/close bodies,
 AVX2 resident construction/retirement and buffer cleanup now have full emitted
 contracts, conditional on serialized C entry and valid resident allocations.
-Scalar page/window non-overlap still relies on that C boundary. Nested receiver
-and subsequent caller storage lifetimes, and the four-message route's 15 indirect calls, remain
+Scalar page/window non-overlap still relies on that C boundary. Both complete
+receivers, decoding, dispatch tables, plan equality and explicit export now have
+emitted-code contracts, including AVX2's post-copy authority check. Nested
+operation bodies and their pointer/lifetime preservation, and the four-message
+route's 15 indirect calls, remain
 explicit family work. Package 6 is not closed; these method contracts do not
 establish whole-worker cleanup, unwind coverage or private-frame erasure.
 

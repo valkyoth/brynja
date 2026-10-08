@@ -3,6 +3,7 @@ import re
 import windows_enclave_sha3_batch_finish_shapes as shapes
 import windows_enclave_sha3_batch_chunks as chunks
 import windows_enclave_sha3_batch_terminal as terminal
+import windows_enclave_sha3_batch_scalar_xof as scalar_xof
 
 life,s,L=chunks.life,chunks.s,chunks.L
 
@@ -136,9 +137,12 @@ def inspect(bodies,assembly,ir,lane,prior,storage,transitions,receiver):
         valid_initialized_state_and_valid_plan_required=True,start_establishes_state_invariant_qualified=False,
         private_frame_erasure_qualified=False,all_unwind_paths_qualified=False,whole_image_qualified=False)
     result['changed_avx2_terminal_normal_paths']=terminal.inspect(bodies,ir,prior,result) if lane=='avx2' else None
+    result['scalar_xof_normal_paths']=scalar_xof.inspect(bodies,ir,prior,result) if lane=='scalar' else None
     if lane=='avx2':
         result['lower_finalizer_review_pending']=[]
         result['all_lower_finalizers_normal_paths_composed']=True
-    else:result['all_lower_finalizers_normal_paths_composed']=False
+    else:
+        result['lower_finalizer_review_pending']=[n[k] for k in ('finish_fixed','squeeze')]
+        result['all_lower_finalizers_normal_paths_composed']=False
     # Normal composition is not a proof of every finalizer's exceptional frame erasure.
     return result

@@ -131,7 +131,7 @@ class FinishTests:
                 with self.assertRaises(ValueError):c.finish.inspect(*bad)
             bad=list(args);bad[7]=copy.deepcopy(args[7]);bad[7]['payload_limit']=1025
             with self.assertRaises(ValueError):c.finish.inspect(*bad)
-            self.assertEqual(len(result['lower_finalizer_review_pending']),3 if lane=='scalar' else 0)
+            self.assertEqual(len(result['lower_finalizer_review_pending']),2 if lane=='scalar' else 0)
             self.assertEqual(result['all_lower_finalizers_normal_paths_composed'],lane=='avx2')
             for key in ('all_lower_finalizers_composed','start_establishes_state_invariant_qualified',
                         'private_frame_erasure_qualified','all_unwind_paths_qualified','whole_image_qualified'):

@@ -516,3 +516,60 @@ changes. The output-shape model passes 262,656 independent domain comparisons,
 exact helper replay and integrated review failures are also tested. The
 [terminal-helper observation](../assurance/windows-protection-observations/sha3-batch-terminal-progress-20261008.json)
 records these results without closing the remaining scalar or private-frame work.
+
+## Scalar XOF final-message transition (2026-10-08)
+
+The changed scalar `State::finish_xof` now has a complete 163-instruction/label
+contract. Tags 5 and 6 select the 168- and 136-byte-rate owners respectively;
+other states reject. The absorbing lifecycle must precede any mutation. Both
+routes preserve the same owner at state offset 2 through update and finalization.
+That owner's 1,040-byte extent is inside the 1,136-byte state and disjoint from
+the separately borrowed input descriptor and payload.
+
+The actual batch caller supplies `Some(input)`, whose slice pointer is nonnull
+even for an empty slice. The emitted null-pointer `Option` branches are bound
+by the whole-body contract but are not confused with zero-length input. The
+descriptor supplies byte length, bit length and canonical last-byte width. A
+low-word add and high-word carry check admit complete-byte growth without u128
+overflow before calling update. This is a **byte-counter** check, not a claim
+that the counter measures all message bits.
+
+For a fractional final byte, the split retains the preceding complete bytes and
+passes exactly the last input byte to padding. Empty and byte-aligned input use
+no partial-byte pointer. The 8,193 canonical bounded input shapes are compared
+against an independent bit-count-based split. Counter admission is separately
+compared against unbounded arithmetic, including low-word carry and maximum
+u128 boundaries. Update errors return before padding or the squeezing-phase
+commit; the checked outer caller then destroys the state, clears retained output
+and quarantines.
+
+The valid customization flag selects suffix/width `(4, 3)` for cSHAKE or
+`(31, 5)` for SHAKE. Width is the fifth argument, stored at caller `rsp+32`
+(callee entry `rsp+40`), outside the outgoing home area and below saved
+registers. Both padding helpers return `void`; no failure result is discarded.
+Only after padding are the cSHAKE metadata at state `[34, 50)` and mode byte
+`[1038, 1039)` cleared, followed by the squeezing lifecycle commit. The live
+sponge remains retained for the subsequent squeeze; this step emits no output.
+
+The two update helpers, two padding helpers and volatile clear helper must all
+match fresh prior semantic review, complete bodies/references/extents and the
+current resolved ABI. In particular, the nested owner needs no stronger
+alignment than its actual offset provides, and the optional partial pointer
+retains its one-byte-or-null contract. The caller checks do not qualify arbitrary
+private entry or establish initial state/customization invariants.
+
+Scalar `finish_fixed` and `squeeze` remain pending. Construction, four-lane SIMD,
+exceptional exits, other private-frame copies and whole-image cleanup remain
+separate work. This is saved-artifact author analysis, not new native execution,
+independent review, a production change, a gate change, or package-6 closure.
+
+All 79 saved-artifact tests pass on Linux (332.407 seconds) and Windows
+(651.770 seconds), with matching reports and 181 verified current checker-source
+bindings. New regressions reject 326 instruction deletions/substitutions, 30
+targeted pointer/rate/suffix/failure/cleanup changes and 22 helper ABI/binding
+changes. The input partition passes all 8,193 canonical bounded cases; the
+counter model passes 69,640 independent reference comparisons. Thirteen invalid
+model domains, eight caller prerequisite/target changes, five missing helper
+reviews and integration failures are also rejected. The
+[scalar-XOF observation](../assurance/windows-protection-observations/sha3-batch-scalar-xof-progress-20261008.json)
+records this checkpoint and keeps scalar fixed finalization and squeeze open.

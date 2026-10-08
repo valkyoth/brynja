@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "110a52e9",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {"tests": 6, "seconds": 18.474, "status": "PASS"},
+  "full_validation": {
+    "linux": {"tests": 79, "seconds": 332.407, "status": "PASS"},
+    "windows": {"tests": 79, "seconds": 651.770, "status": "PASS"}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 181,
+  "report_sha256": {
+    "sha3-batch-scalar-xof-linux.json": "de6f37632635a8a69c67355123e9524865b0ee80b2574664717d10f14c979902",
+    "sha3-batch-scalar-xof-windows.json": "21ab28ffa4fb7c809c746a20c8fd99f9caa2ee27f026e8a1fb2cb940e7efaca1"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_scalar_xof.py": "02afb527c6a8f1cdd6f93491f51dc49c64c6c4b20813b00096d50d70e5032713",
+    "windows_enclave_sha3_batch_scalar_xof_tests.py": "9f63a06b1a0527effcec71fc645abc113b4c65034b849ea4410f30804d5dd135",
+    "windows_enclave_sha3_batch_finish.py": "69e9038908cddb959a329458b204c19f75c028f8eabcab69b73351677baf735e",
+    "windows_enclave_sha3_batch_finish_tests.py": "9914b66bed71a9ce974b8c5518e1ab23d14ee94ce486a386ff5b9677e6cab132",
+    "test-windows-enclave-sha3-batch-chains.py": "6920ec83b36e4deecf452cca282c2b0d3d97077a98df37c0f4960733763cb348"
+  },
+  "new_contracts": {
+    "scalar_xof_instructions_and_labels": 163,
+    "replayed_exact_helpers": 5,
+    "state_tags_to_rate": {"5": 168, "6": 136},
+    "nested_owner_span": [2, 1042],
+    "state_extent": 1136,
+    "input_counter_span": [2, 18],
+    "cshake_metadata_clear_span": [34, 50],
+    "customization_byte_clear_span": [1038, 1039],
+    "required_lifecycle": 0,
+    "successful_lifecycle": 1,
+    "canonical_input_descriptor_and_payload_composed": true,
+    "nonnull_empty_slice_distinguished_from_option_none": true,
+    "whole_byte_growth_checked_with_u128_carry": true,
+    "prefix_and_optional_last_byte_inside_input": true,
+    "rate_and_owner_preserved_to_actual_helpers": true,
+    "suffix_and_width": {"cshake": [4, 3], "shake": [31, 5]},
+    "suffix_width_caller_stack_offset": 32,
+    "suffix_width_callee_entry_offset": 40,
+    "frame_bytes": 40,
+    "saved_register_bytes": 32,
+    "update_failure_precedes_padding_and_phase_commit": true,
+    "outer_rejection_destroys_state_clears_output_and_quarantines": true,
+    "metadata_cleared_after_padding_before_phase_commit": true,
+    "sponge_retained_for_subsequent_squeeze": true,
+    "valid_initialized_owner_and_customization_required": true,
+    "scalar_fixed_and_squeeze_review_pending": true,
+    "private_frame_erasure_qualified": false,
+    "all_unwind_paths_qualified": false
+  },
+  "new_regressions": {
+    "instruction_deletions_and_substitutions": 326,
+    "targeted_pointer_rate_suffix_carry_failure_cleanup_mutations": 30,
+    "canonical_input_split_reference_comparisons": 8193,
+    "counter_admission_reference_comparisons": 69640,
+    "invalid_split_domains": 7,
+    "invalid_counter_domains": 6,
+    "helper_abi_and_replay_binding_mutations": 22,
+    "caller_prerequisite_and_target_mutations": 8,
+    "missing_replayed_helpers": 5,
+    "missing_replay_and_integrated_inspector_rejected": true,
+    "incomplete_finalizer_and_whole_image_scope_enforced": true
+  },
+  "remaining_private_review": [
+    "scalar finish_fixed and squeeze lower helper composition",
+    "start establishes valid initialized state and authority invariants",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and exceptional cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

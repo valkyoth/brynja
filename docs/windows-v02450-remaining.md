@@ -11,7 +11,8 @@
   private chains are also closed, as are both TupleHash private chains.
   All four SHA-2 batch private chains are now closed under their explicit shared
   prerequisites (178 emitted functions, including 33 cleanup funclets). Next
-  are the three SHA-3 batch routes, now inventoried with sequential plan checks,
+  are the three SHA-3 batch routes, now inventoried with sequential plan,
+  lifecycle and widened copy-helper checks,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/
@@ -34,13 +35,15 @@ advertised as supported by this x64 development evidence.
 
 ## Detailed progress and review scope
 
-The [first SHA-3 batch checkpoint](windows-enclave-sha3-batch-chains.md) binds
+The [SHA-3 batch checkpoints](windows-enclave-sha3-batch-chains.md) bind
 all 166 emitted bodies across the three routes, including 19 cleanup funclets.
 It replays earlier SHA-3 reviews for 30 exact scalar and 23 exact AVX2 helpers,
-and checks the complete sequential plan validators and identity tables. Two
-changed copy-helper ABIs and the four-message route's 15 indirect calls remain
-explicit family work. Package 6 is not closed; identity/frame inventories alone
-do not establish batch caller lifetimes or full cleanup.
+and check the complete sequential plan validators and identity tables. The
+sequential operation/clear/seal/cancel/guard bodies and two broadened copy-helper
+ABIs now have explicit instruction contracts. Their caller storage lifetimes,
+state-destructor composition and the four-message route's 15 indirect calls
+remain explicit family work. Package 6 is not closed; these method contracts do
+not establish whole-worker cleanup, unwind coverage or private-frame erasure.
 
 The final SHA-2 batch composition assigns every private function and frame,
 requires the preceding caller/cleanup contracts, binds all indirect transfers

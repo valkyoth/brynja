@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 import windows_enclave_sha3_batch_chains as c
+from windows_enclave_sha3_batch_lifecycle_tests import LifecycleTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
@@ -57,10 +58,11 @@ class Tests(unittest.TestCase):
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(unittest.TestCase):
+class SavedTests(LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
+        cls.saved=SAVED;cls.root=ROOT
         cls.spec=c.specification(c.SPEC.read_bytes());cls.routes={}
         for lane,pin in cls.spec.items():
             row,data,image,asm,ir,sources=c.binding.load(SAVED,ROOT,pin)
@@ -85,7 +87,7 @@ class SavedTests(unittest.TestCase):
                 p=r['prior_helpers'];self.assertTrue(p['prior_semantics_replayed'])
                 self.assertFalse(p['batch_caller_composition_qualified'])
                 self.assertEqual(len(p['exact_body_reference_extent_and_abi']),30 if lane=='scalar' else 23)
-                self.assertEqual(len(p['changed_abi_pending']),0 if lane=='scalar' else 2)
+                self.assertEqual(len(p['changed_abi_requiring_explicit_review']),0 if lane=='scalar' else 2)
 
     def test_every_emitted_body_byte_is_bound(self):
         count=0

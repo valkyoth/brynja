@@ -25,7 +25,8 @@ AVX2 SHA-3 semantic review followed by exact code, relocation, extent-kind and
 resolved LLVM ABI equality. Similar names or an old PASS report are insufficient.
 The current batch callers still need their own argument/lifetime composition.
 Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
-they are explicitly pending, not included in the 23 exact matches.
+they are not included in the 23 exact matches. Their explicit widened-range
+review is described below; batch caller lifetime composition is still pending.
 
 ## Sequential plan admission
 
@@ -40,10 +41,42 @@ This is metadata admission, not a proof that later computation preserves the
 plan, frames, output pointers or authority. The full emitted validator is bound
 to the saved object/image in addition to the instruction and dispatch review.
 
+## Sequential lifecycle and widened copy review
+
+The complete emitted `operation`, `clear`, `seal`, `cancel` and operation-guard
+destructor bodies are now checked on both sequential routes: 339 scalar and
+409 AVX2 instructions/branch labels. Expected paths are constructed from the
+reviewed layouts and transitions, not extracted from the body being checked.
+The contracts cover phase admission, nonwrapping next-sequence equality,
+failure status, output clearing, logical metadata reset and quarantine.
+AVX2 admission also requires the expected Keccak kernel and healthy authority
+before committing the new sequence. Cancellation accepts phases 1–4 and clears
+before returning to empty; sealing requires every active slot's completion bit.
+An unfinished operation guard clears and quarantines. The LLVM contracts retain
+the complete exclusive owner extent, disjoint operation-result storage and
+bounded phase/completion representations.
+
+These are method-body contracts, not proof of every caller or unwind path.
+State-destructor composition, validity of retained pointers and cleanup-funclet
+reachability remain separate work. In particular, resetting the eight slots'
+logical fields does **not** individually erase their padding or moved state
+copies, and this checkpoint does not qualify complete private-frame erasure.
+
+The AVX2 `copy_bytes` and `copy_secret_region` helpers permit lengths in
+`[0, 2^63)` instead of the prior `[0, 1025)`. Their complete instruction paths
+are now separately reviewed and bound; the ABI comparison permits only that
+specific range change, preserving every other resolved attribute. The wrapper
+rejects unequal source/destination lengths. In the leaf, `offset + remaining = n`;
+each eight-byte access requires at least eight remaining bytes and each byte
+access requires a positive remainder. Zero length performs no memory access,
+and offset cannot exceed `n <= isize::MAX`. This does not prove that a caller
+supplied live, sufficiently large, nonoverlapping allocations or that the
+destination is eventually erased; those remain caller-composition obligations.
+
 ## Remaining package-6 work
 
-- Join batch-specific lifecycle, slot selection and caller arguments to the
-  earlier state/helper reviews, including both changed copy-helper ABIs.
+- Join the checked lifecycle and copy helpers, slot selection and caller
+  arguments to the earlier state reviews, including allocation lifetimes.
 - Complete distinct setup, final-bit framing, squeeze, retained-output and
   export paths for both sequential routes.
 - Review four-lane Keccak kernel/transposes, compaction, per-lane pointers,
@@ -65,3 +98,12 @@ relocation/extent changes, required prior-review replay and unbound dispatch.
 Parsed reports match, including 162 current checker-source hashes. The
 [checkpoint observation](../assurance/windows-protection-observations/sha3-batch-inventory-progress-20261008.json)
 records those results without claiming completion of package 6.
+
+The subsequent lifecycle/copy checkpoint passes all 19 tests on Linux (18.292
+seconds) and Windows (35.152 seconds), with matching parsed reports and 164
+current checker-source bindings. It adds 1,496 lifecycle instruction/label
+mutations, 56 operand/escape changes, 66 lifecycle ABI changes, 78 copy-loop
+instruction changes and 13 copy-ABI/population changes. All preceding inventory
+and plan regressions are replayed. The
+[lifecycle observation](../assurance/windows-protection-observations/sha3-batch-lifecycle-progress-20261008.json)
+records these results and the still-unqualified caller/unwind/frame boundaries.

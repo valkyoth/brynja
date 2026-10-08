@@ -6,6 +6,8 @@ import sys
 
 import windows_enclave_sha2_batch_chains as binding
 import windows_enclave_sha3_batch_plan as plan
+import windows_enclave_sha3_batch_lifecycle as lifecycle
+import windows_enclave_sha3_batch_copy as copies
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -44,7 +46,7 @@ def reused_helpers(base,root,lane,functions,ir,pin):
     require(sorted(changed)==pin['changed_prior_abi_pending'],'explicit changed ABI population')
     return dict(prior_route=report['route'],prior_image_sha256=report['image_sha256'],
         prior_semantics_replayed=True,exact_body_reference_extent_and_abi=exact,
-        changed_abi_pending=changed,batch_caller_composition_qualified=False)
+        changed_abi_requiring_explicit_review=changed,batch_caller_composition_qualified=False)
 
 
 def transfers(bodies,tables,vtables):
@@ -83,6 +85,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
+    transitions=lifecycle.inspect(bodies,ir,lane) if lane!='simd' else None
+    copy_review=copies.inspect(bodies,ir,prior['changed_abi_requiring_explicit_review']) if lane=='avx2' else None
     mutations=0
     if mutate:
         for name,(code,refs,kind) in functions.items():
@@ -98,6 +102,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
             for n,r in sorted(records.items())},cleanup_funclets=FUNCLETS[lane],
         constants=constants,dispatch_tables=tables,transfers=actual_transfers,
         transport=transport,prior_helpers=prior,sequential_plan_admission=admission,
+        sequential_lifecycle=transitions,
+        widened_copy_helpers=copy_review,
         direct_graph_geometry_only=geometry,transitive_depth_qualified=False,
         runtime_boundaries_pending=runtime,body_byte_mutations_rejected=mutations,
         private_chain_complete=False,whole_image_qualified=False)

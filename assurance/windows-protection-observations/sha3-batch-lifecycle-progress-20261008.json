@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "3243ff5c",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "full_validation": {
+    "linux": {"tests": 19, "seconds": 18.292, "status": "PASS"},
+    "windows": {"tests": 19, "seconds": 35.152, "status": "PASS"}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 164,
+  "report_sha256": {
+    "sha3-batch-lifecycle-linux.json": "ef63ed9b1217cf4d9b2aae94edbfe15b4d259c95e211b3ef8fdf7896e1a61f2b",
+    "sha3-batch-lifecycle-windows.json": "5c6f4aa50e7227ff75ac0e8e0633ddba56d2ee4bde9ae5227753b15ec3ac5349"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_chains.py": "74141f30f15b9033cae6c0efe4f7f38efc5665f8bac1b80d43333e3cd4ae050a",
+    "windows_enclave_sha3_batch_lifecycle.py": "aa5b08ca45164a5e088b341a456e48df5cc2b45f19c4e188a4c05d17c24fa156",
+    "windows_enclave_sha3_batch_copy.py": "2bf2cbb7d5718387981ab23f2021fbbe97f52fb2f2ebd6fa18b59f9b57171f19",
+    "windows_enclave_sha3_batch_lifecycle_tests.py": "24432e326bb9629eb90e41c1c7a857e2182e9298f135ba03eafac14eba7c6274",
+    "test-windows-enclave-sha3-batch-chains.py": "356b544a8e00a3acea7e13d8a5a84b9f1b0f66f2605ab2acda9c77662fb75276"
+  },
+  "sequential_lifecycle": {
+    "methods_per_route": ["operation", "clear", "seal", "cancel", "guard"],
+    "scalar_instructions_and_labels": 339,
+    "avx2_instructions_and_labels": 409,
+    "instruction_deletions_and_substitutions_rejected": 1496,
+    "operand_and_escape_mutations_rejected": 56,
+    "abi_mutations_rejected": 66,
+    "state_destructor_composition_qualified": false,
+    "plan_padding_erased": false,
+    "unwind_paths_qualified": false,
+    "caller_storage_lifetimes_qualified": false
+  },
+  "broadened_copy_helpers": {
+    "helpers": 2,
+    "length_range": "0 <= n < 2^63",
+    "complete_loop_and_wrapper_reviewed": true,
+    "instruction_mutations_rejected": 78,
+    "abi_and_population_mutations_rejected": 13,
+    "caller_allocation_lifetime_and_nonoverlap_qualified": false,
+    "destination_eventual_erasure_qualified": false
+  },
+  "previous_regressions_replayed": {
+    "complete_body_byte_mutations": 88058,
+    "sequential_plan_instruction_mutations": 166,
+    "identity_table_mutations": 18,
+    "descriptor_abi_mutations": 14
+  },
+  "remaining_private_review": [
+    "state destructors and batch caller storage/authority lifetime composition",
+    "distinct framing, finish/squeeze and retained-output paths",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and failure cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

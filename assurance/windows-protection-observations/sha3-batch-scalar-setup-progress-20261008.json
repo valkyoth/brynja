@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "7e7dd949",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "full_validation": {
+    "linux": {"tests": 61, "seconds": 293.315, "status": "PASS"},
+    "windows": {"tests": 61, "seconds": 632.576, "status": "PASS"}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 176,
+  "report_sha256": {
+    "sha3-batch-scalar-setup-linux.json": "12030f0a239aab20bb1b2aee31ae87751ca49b0e31ba8480fa6d2e5f7b45eadd",
+    "sha3-batch-scalar-setup-windows.json": "b0fa5e44edc3448caca72444bab54f97092395dd366a1f324291d8323869a7dc"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_scalar_setup.py": "37e52d4d2962ffe5713657e24dc8f46341f71f66c2d270f5cb961ee766e45e76",
+    "windows_enclave_sha3_batch_setup_moves.py": "a3af2c1091288d4aa702365ff6def419a98dd25e7ecaa1ec1745d683908fad8d",
+    "windows_enclave_sha3_batch_scalar_setup_tests.py": "0352614eb1ad515455e84e1156555061279e2dbd6bea797ec7d8081471061896",
+    "windows_enclave_sha3_batch_chains.py": "aef37e9e65dce7107994a9b6a967803e91e07029d5131ebd70ea4d5483a1d142",
+    "test-windows-enclave-sha3-batch-chains.py": "216d89c694bb759d2651d9cbd615eb89d96f18cd1940196a4233db0482d771d8"
+  },
+  "new_contracts": {
+    "scalar_finish_setup_instructions_and_labels": 411,
+    "frame_bytes": 5408,
+    "saved_register_bytes": 56,
+    "operation_result_consumed_before_old_state_storage_reuse": true,
+    "state_tombstone_does_not_erase_physical_payload": true,
+    "required_outer_phase": 2,
+    "required_prefix_phase": 2,
+    "remaining_u128_must_be_zero": true,
+    "pending_bit_count_must_be_zero": true,
+    "emitted_expected_full_u128_equality": true,
+    "inner_owner_must_be_present": true,
+    "two_symbolic_returned_owners_bytes_each": 1040,
+    "all_returned_owner_byte_origins_checked": true,
+    "overlapping_stores_carry_identical_origin_bytes": true,
+    "copy_source_destination_nonoverlap_checked": true,
+    "modeled_local_source_reads_follow_writes_and_are_bounded": true,
+    "initial_owner_bytes_are_abstract_origins_under_valid_state_precondition": true,
+    "padding_initialization_or_erasure_claimed": false,
+    "consumed_temporary_owner_clear_bytes": 1040,
+    "pending_byte_volatile_clear": true,
+    "normal_rejection_typed_cleanup_and_quarantine_composed": true,
+    "shared_copy_wipe_and_abi_contracts_assumed": true,
+    "valid_initialized_state_required": true,
+    "start_establishes_state_invariant_qualified": false,
+    "moved_copy_erasure_qualified": false,
+    "private_frame_erasure_qualified": false,
+    "all_unwind_paths_qualified": false
+  },
+  "new_regressions": {
+    "complete_instruction_deletion_and_substitution_mutations": 822,
+    "copy_lifetime_predicate_and_cleanup_mutations": 23,
+    "prerequisite_removals": 8,
+    "missing_replayed_helpers": 2,
+    "wrong_composed_targets": 2,
+    "argument_abi_mutations": 4,
+    "removed_cleanup_nounwind_contracts": 2,
+    "symbolic_copy_source_offset_mutations": 60,
+    "symbolic_lifetime_cleanup_and_invalid_region_cases": 12,
+    "invalid_symbolic_variants": 3,
+    "integrated_check_required": true,
+    "incomplete_scope_flags_enforced": true
+  },
+  "remaining_private_review": [
+    "start establishes valid initialized state and authority invariants",
+    "final-bit, squeeze and retained-output production paths",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and failure cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

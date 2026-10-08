@@ -14,7 +14,7 @@
   are the three SHA-3 batch routes, now inventoried with sequential plan,
   lifecycle, state-destructor, initial plan placement, retained-worker entry/close,
   buffer cleanup, request decoding/dispatch/export, sequential update/setup-fragment
-  callers, AVX2 setup completion and widened copy-helper checks,
+  callers, scalar/AVX2 setup completion and widened copy-helper checks,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/
@@ -55,7 +55,10 @@ exact, freshly replayed lower absorption helpers; rejection composes typed
 cleanup and quarantine. Both setup-fragment callers now check partial-byte
 shape, descriptor lifetime and rejection cleanup; the AVX2 selected call's
 unwind table/funclet/guard composition and setup-completion checks are reviewed.
-Initial state invariants, scalar setup finalization, message finalization and
+Scalar setup completion now checks the complete moved-state caller and models
+the byte origins of both returned cSHAKE owners; consumed temporary owner/pending
+cleanup is distinct from the still-open retirement of all copied stack bytes.
+Initial state invariants, message finalization and
 their pointer/lifetime preservation, and the four-message
 route's 15 indirect calls, remain
 explicit family work. Package 6 is not closed; these method contracts do not

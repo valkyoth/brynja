@@ -357,3 +357,51 @@ shape, canonical tail bytes and split length stores also have exhaustive or
 boundary-model checks. All preceding regressions pass. The
 [setup-fragment observation](../assurance/windows-protection-observations/sha3-batch-setup-fragments-progress-20261008.json)
 records the exact counts and remaining scope; it does not close package 6.
+
+## Scalar setup completion (2026-10-08)
+
+The scalar `finish_setup` caller now has a complete 411-instruction/label
+contract. The operation result at `rsp+1296` is consumed into preserved owner
+and guard registers before the same storage becomes the 1,136-byte old-state
+copy. Changing the destination state tag to `Empty` transfers logical ownership;
+it does not erase its physical payload. The following 1,120-byte setup copy and
+smaller field reads still use those live physical bytes. Valid initialized state
+is a precondition until the separate `start` caller review is complete.
+
+For both setup variants, completion requires prefix phase 2, zero remaining
+128-bit length, no pending bits, all 16 bytes of the emitted/expected counts
+equal, and a present inner owner. On success, the temporary inner owner at
+`rsp+244` is cleared across 1,040 bytes, and the setup pending byte is cleared
+through the volatile helper. The caller installs the corresponding streaming
+variant (setup 7 becomes 5; setup 8 becomes 6), its absorbing lifecycle and the
+outer streaming phase. Rejection runs the applicable typed cleanup and the
+previously reviewed output/logical-field clearing and quarantine path.
+
+A separate symbolic byte-origin model checks both moves into the returned
+1,040-byte owner. It covers the overlapping eight-byte stores at a seven-byte
+stride and vector stores at a fifteen-byte stride: their overlap contains the
+same original byte. These agreeing stores can be represented in either order
+without changing the byte mapping. The model also checks the two distinct
+988-byte payload staging regions, their common staging destination, source
+write-before-read ordering, copy non-overlap and bounds within the 5,408-byte
+frame. Initial owner bytes are abstract origins under the live, valid-state
+precondition, not proof that padding has initialized Rust values. Copying opaque
+padding does not classify it as public or qualify its erasure. The
+operation result's earlier lifetime, typed tags and exact branch predicates are
+checked by the full instruction contract rather than inferred from byte values.
+
+The original-state snapshot and other moved copies are **not** claimed erased
+by this caller. The temporary owner wipe does not erase other copies. Full
+protected-stack retirement, cumulative stack depth, `__chkstk`, `memcpy`,
+`memset` and the enclosing runtime/OS boundaries remain separate obligations.
+This is saved-image author analysis, not a new native enclave campaign, an
+independent retest or completion of package 6. Production code and release-gate
+policy are unchanged.
+
+All 61 saved-artifact tests pass on Linux (293.315 seconds) and Windows
+(632.576 seconds). Parsed analysis reports match, with 176 current checker-source
+bindings verified. New regressions reject 822 instruction deletions/substitutions,
+23 targeted predicate/copy/cleanup changes and 60 symbolic copy-source changes,
+plus lifetime, region, prerequisite, ABI and integration failures. The
+[scalar setup observation](../assurance/windows-protection-observations/sha3-batch-scalar-setup-progress-20261008.json)
+records the counts and explicitly retains the remaining private-frame obligations.

@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "65e992be",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "full_validation": {
+    "linux": {"tests": 46, "seconds": 252.579, "status": "PASS"},
+    "windows": {"tests": 46, "seconds": 479.440, "status": "PASS"}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 172,
+  "report_sha256": {
+    "sha3-batch-update-linux.json": "869e00b4b543802e5f6b95c125ef83cc6985e386ca20ca45ce5c7cd48573f2b9",
+    "sha3-batch-update-windows.json": "499939f72363c66a8bba066857f3a3bbd5ff1063dfcda52b2ba93c7d7f3ac45c"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_chains.py": "8e50b92b7d80063f2f12646513b461b4e5003a9bd720262cc5dbe4b4fa26fe58",
+    "windows_enclave_sha3_batch_update.py": "91bcf11de45fffad510bfb0cb42b449c48c60be14320b5098a623cd737752488",
+    "windows_enclave_sha3_batch_update_tests.py": "9e43179789a86d299dcc93524cc952ba123f4159b0ef2d158595f3c646accaf9",
+    "test-windows-enclave-sha3-batch-chains.py": "fb23676f89d2a37aedd785f44d86fb6445a7e52efb9e810c7b988ded0b60e49f"
+  },
+  "new_contracts": {
+    "scalar_update_instructions_and_labels": 122,
+    "avx2_update_instructions_and_labels": 124,
+    "scalar_dispatch_entries": 9,
+    "phase_required": 3,
+    "matching_active_slot_required": true,
+    "checked_budget_subtraction_before_absorption": true,
+    "copied_input_pointer_and_length_preserved": true,
+    "maximum_input_bytes": 1024,
+    "lower_absorption_and_wipe_helpers_freshly_replayed_and_exact": true,
+    "exclusive_owner_and_readonly_input_abis_checked": true,
+    "state_payload_spans_bounded": true,
+    "avx2_engine_memory_spans_intentionally_nested": true,
+    "avx2_inner_health_epoch_and_kernel_checks": true,
+    "typed_state_and_output_cleanup_on_failure_composed": true,
+    "owner_quarantine_on_failure_composed": true,
+    "operation_result_outside_callee_home_area": true,
+    "frame_bytes": {"scalar": 48, "avx2": 56},
+    "incoming_length_offset_from_adjusted_rsp": 128,
+    "initialized_state_and_valid_enum_required": true,
+    "start_establishes_state_invariant_qualified": false,
+    "caller_input_erasure_claimed": false,
+    "private_frame_erasure_qualified": false,
+    "all_unwind_paths_qualified": false
+  },
+  "new_regressions": {
+    "complete_update_instruction_and_label_mutations": 492,
+    "scalar_dispatch_entry_and_missing_table_mutations": 10,
+    "pointer_budget_authority_and_cleanup_mutations": 25,
+    "caller_and_lower_argument_abi_mutations": 32,
+    "lower_nounwind_contract_removals": 7,
+    "prerequisite_removal_cases": 14,
+    "missing_replayed_helpers": 9,
+    "wrong_composed_function_identities": 4,
+    "weakened_payload_bounds": 2,
+    "integrated_update_check_required": true,
+    "incomplete_scope_flags_enforced": true
+  },
+  "previous_regressions_replayed": true,
+  "remaining_private_review": [
+    "start establishes valid initialized state and authority invariants",
+    "setup_chunk and finish_setup descriptors, framing and cleanup composition",
+    "final-bit, squeeze and retained-output production paths",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and failure cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

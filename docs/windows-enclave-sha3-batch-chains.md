@@ -157,8 +157,9 @@ receiver takes its owner directly; AVX2 retrieves the placed owner from the
 serialized worker's live pointer triple. Temporary header, plan, empty-plan
 and guard regions are bounded within their frames, with simultaneous regions
 disjoint. Reused header/plan/guard storage has sequential lifetimes. These are
-caller-side contracts: the nested `start`, setup, update and finish bodies must
-still be reviewed for pointer preservation, state transitions and cleanup.
+caller-side contracts: nested bodies require separate reviews of pointer
+preservation, state transitions and cleanup. The subsequent update checkpoint
+appears below; `start`, setup and finish remain unfinished.
 
 Export first admits phase 4 and the exact next sequence, then compares all 24
 semantic plan fields against the retained plan. Only equality reaches the
@@ -178,6 +179,8 @@ cleanup remain package 8; cleanup-funclet composition remains separate work.
 
 - Complete nested slot selection and subsequent state/copy-helper caller
   arguments, including owner and input/output lifetime preservation by callees.
+  The sequential update caller checkpoint below covers absorption after admission;
+  it does not establish the initial state invariant supplied by `start`.
 - Complete distinct setup, final-bit framing, squeeze and retained-output
   production paths for both sequential routes; receiver-side export is checked.
 - Review four-lane Keccak kernel/transposes, compaction, per-lane pointers,
@@ -238,3 +241,53 @@ also pass. The
 [receiver observation](../assurance/windows-protection-observations/sha3-batch-receiver-progress-20261008.json)
 records the corrected test-formatting issue and comment-only clarification;
 neither required changing production code or the reviewed instruction contracts.
+
+## Sequential update caller checkpoint (2026-10-08)
+
+The scalar and AVX2 `Owner::update` bodies now have complete expected instruction
+contracts (122 and 124 instructions/labels). These are manually reviewed
+expectations, not templates extracted from the candidate. The nine scalar
+dispatch destinations are checked independently against their emitted table.
+
+Both callers preserve the receiver's copied input pointer and length through
+operation admission, active-slot equality and checked work-budget subtraction.
+Only admitted phase-3 calls with the next sequence reach absorption. Scalar
+fixed-output identities pass the owner at offset 17; SHAKE identities check
+their streaming state and pass offset 18. All five rate-specific lower update
+helpers must freshly replay their previous semantic review and match the
+current emitted body, references, extent and resolved ABI. Their 1,040-byte
+owners fit inside the placed state. The scalar dispatch requires a valid,
+initialized enum; arbitrary corrupted discriminants are not treated as valid.
+
+AVX2 checks state phase, failure/partial-bit flags, authority health, epoch and
+kernel identity before passing the engine at offset 1,216 and the unchanged
+input to absorption. Its 864-byte engine and nested 234-byte wipe region fit
+inside the placed state. These regions overlap intentionally; they are not
+claimed to be independent allocations. Its lower absorption and wipe helpers
+also require fresh semantic replay and exact current artifact/ABI identity.
+
+The fifth argument is read at `rsp+128` in both frames, accounting for each
+prologue's saves and allocation. The 16-byte operation result is outside the
+callee home area and within the local frame. Actual LLVM input/owner contracts
+require a read-only source disjoint from the exclusive live owner, with at most
+1,024 input bytes. This composes the checked caller with the lower callee's
+larger length domain; it does not assume that an arbitrary host pointer is valid.
+
+Successful absorption returns the success tag without clearing streaming state.
+Rejected admission uses the reviewed operation path; later rejection follows
+typed state destruction, output clearing, logical-field reset and quarantine.
+AVX2's inner failure cleanup and retained authority quarantine are also checked.
+The outer worker remains responsible for input-buffer cleanup. Private-frame
+erasure, initial state construction, complete unwind coverage and the four-lane
+SIMD route remain open. No production implementation or release gate changed.
+
+All 46 saved-artifact tests pass on Linux (252.579 seconds) and Windows
+(479.440 seconds). Parsed analysis reports match with 172 current checker-source
+bindings. New tests reject 492 instruction/label mutations, ten dispatch changes,
+25 pointer/budget/authority/cleanup changes, 32 argument-ABI changes and seven
+lower `nounwind` removals. Required prior helpers, caller identities, payload
+bounds, integrated execution and incomplete-scope flags are also exercised.
+All preceding regressions pass. The
+[update observation](../assurance/windows-protection-observations/sha3-batch-update-progress-20261008.json)
+records this author-review checkpoint; it is not new native enclave execution
+or completion of package 6.

@@ -11,6 +11,7 @@ import windows_enclave_sha3_batch_copy as copies
 import windows_enclave_sha3_batch_storage as storage
 import windows_enclave_sha3_batch_worker as worker
 import windows_enclave_sha3_batch_receive as receive
+import windows_enclave_sha3_batch_update as update
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -95,6 +96,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
     placement=storage.inspect(bodies,asm,ir,lane,prior) if lane!='simd' else None
     retained=worker.inspect(bodies,ir,lane,prior,placement) if lane!='simd' else None
     receiver=receive.inspect(bodies,asm,ir,lane,retained,placement,transitions,admission) if lane!='simd' else None
+    absorption=update.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
     mutations=0
     if mutate:
         for name,(code,refs,kind) in functions.items():
@@ -115,6 +117,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         sequential_state_storage=placement,
         sequential_retained_worker=retained,
         sequential_receiver=receiver,
+        sequential_update=absorption,
         direct_graph_geometry_only=geometry,transitive_depth_qualified=False,
         runtime_boundaries_pending=runtime,body_byte_mutations_rejected=mutations,
         private_chain_complete=False,whole_image_qualified=False)

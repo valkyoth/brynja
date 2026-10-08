@@ -12,6 +12,7 @@ from windows_enclave_sha3_batch_lifecycle_tests import LifecycleTests
 from windows_enclave_sha3_batch_storage_tests import StorageTests,RebindingTests
 from windows_enclave_sha3_batch_worker_tests import WorkerTests,WorkerModelTests
 from windows_enclave_sha3_batch_receive_tests import ReceiverTests,ReceiverModelTests
+from windows_enclave_sha3_batch_update_tests import UpdateTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
@@ -61,7 +62,7 @@ class Tests(ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')

@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "97b47470",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "full_validation": {
+    "linux": {"tests": 33, "seconds": 163.655, "status": "PASS"},
+    "windows": {"tests": 33, "seconds": 302.955, "status": "PASS"}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 167,
+  "report_sha256": {
+    "sha3-batch-retained-linux.json": "3cdc90074946446113f474510c647729e59a90466251d28c677b1dfa1ca06b87",
+    "sha3-batch-retained-windows.json": "2af81e72efa9f70f83db05432ddc6374d2cee197fd19a5c73b6bd999d7314d1e"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_chains.py": "4bd6691f5cecf700fe261f42bb54c701c1149438310d87daf5adf163f381867f",
+    "windows_enclave_sha3_batch_resident.py": "2558988d54a6f174d38fc69af21b3f54ad22b25a1f0d91b47979f3836ba6885c",
+    "windows_enclave_sha3_batch_worker.py": "427720ff8eef6a4ec3eeafae9f0b9ebd54fc65facedc8fb65cf035fbcfa70af9",
+    "windows_enclave_sha3_batch_worker_tests.py": "d088c6d775285fc7cca9631d26d63c9c81bcdb7d5711a92233975b070fdb7780",
+    "test-windows-enclave-sha3-batch-chains.py": "be34e13bfb1038c8c87d5d9fd0d58a2a1e7549e27cdf1711570dcb920369cc96"
+  },
+  "new_contracts": {
+    "scalar_worker_instructions_and_labels": 202,
+    "avx2_worker_instructions_and_labels": 295,
+    "scalar_quarantine_instructions_and_labels": 33,
+    "avx2_quarantine_instructions_and_labels": 39,
+    "avx2_resident_constructor_instructions_and_labels": 146,
+    "avx2_resident_destructor_instructions_and_labels": 60,
+    "each_buffer_cleanup_instructions_and_labels": 11,
+    "page_bytes": 4096,
+    "stack_window_bytes": 65536,
+    "payload_bytes": 1024,
+    "header_bytes": {"scalar": 288, "avx2": 304},
+    "initialization_before_live_publication": true,
+    "exact_page_identity_before_receive": true,
+    "normal_post_buffer_returns_require_buffer_drop": true,
+    "successful_readback_visits_every_header_and_payload_byte": true,
+    "typed_teardown_precedes_full_page_erasure": true,
+    "serialized_C_entry_and_live_resident_allocations_required": true,
+    "scalar_page_stack_nonoverlap_requires_linked_C": true,
+    "receiver_nested_call_lifetimes_qualified": false,
+    "all_unwind_paths_qualified": false,
+    "constructor_copies_individually_erased": false,
+    "whole_image_stack_residency_and_erasure_qualified": false
+  },
+  "new_regressions": {
+    "worker_resident_and_buffer_instruction_mutations": 1616,
+    "admission_pointer_identity_and_erase_extent_mutations": 16,
+    "normal_cfg_early_return_and_missing_drop_mutations": 4,
+    "worker_resident_and_buffer_abi_mutations": 11,
+    "storage_and_prior_KAT_review_required": true,
+    "integrated_worker_check_required": true,
+    "remaining_scope_flags_enforced": true,
+    "exact_successful_readback_counter_model": true
+  },
+  "previous_regressions_replayed": true,
+  "remaining_private_review": [
+    "nested receiver and subsequent batch caller input/output allocation lifetimes",
+    "distinct setup, update, finish/squeeze and retained-output/export paths",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and failure cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

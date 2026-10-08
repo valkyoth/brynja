@@ -102,6 +102,36 @@ The state spans are `[16, 1152)` inside the 2,400-byte scalar owner and
 retained owner's full lifetime, every later input/output caller, cleanup-funclet
 coverage or whole-frame erasure. Those remain explicit package-6 work.
 
+## Retained entry, resident placement and buffer retirement
+
+Both complete sequential `RetainedWork` bodies now have explicit contracts:
+202 scalar and 295 AVX2 instructions/labels. They bind page alignment, the
+65,536-byte supplied stack window, initialization before publishing a live
+owner, exact page identity on subsequent requests, and typed destruction before
+erasing all 4,096 backing-page bytes on successful close. The scalar route
+retains one owner pointer. AVX2 retains a backing/authority/owner pointer triple;
+its constructor places the authority at page offset 0 and the 2,272-byte owner
+at offset 32, retaining the authority pointer at offset 2,256. A successful KAT
+precedes publication; failed construction erases the page.
+
+These contracts require the linked C entry to serialize access and supply live,
+resident page/window allocations. AVX2 independently rejects page/window
+overlap. The scalar Rust entry does **not** perform that check and relies on the
+linked C contract; this checkpoint does not promote that dependency into a new
+whole-image or OS guarantee. The checked close paths remove the live handle
+before completing page retirement. Nested receiver/callee behavior still needs
+its own pointer-preservation and lifetime composition.
+
+The complete buffer destructors, quarantine helpers, and AVX2 resident
+constructor/destructor are checked. On normal paths after buffer construction,
+an independent control-flow walk requires buffer destruction before every
+return. Explicit clearing covers the 1,024-byte payload and the 288-byte scalar
+or 304-byte AVX2 header. The successful readback loops visit every byte of both
+regions; early error paths are not treated as successful zero receipts.
+Constructor copies contain public initial metadata; their padding and moved
+representations are not claimed to be individually erased. Cleanup funclets,
+nested call frames and final window reclamation remain separate obligations.
+
 ## Remaining package-6 work
 
 - Complete slot selection and subsequent state/copy-helper caller arguments,
@@ -145,3 +175,13 @@ changes and twelve isolated rebinding changes. Tests require lifecycle, plan
 and integrated storage checks to execute; previous regressions also pass.
 The [storage observation](../assurance/windows-protection-observations/sha3-batch-storage-progress-20261008.json)
 retains the live-owner precondition and the remaining caller/frame obligations.
+
+The retained-worker checkpoint passes all 33 tests on Linux (163.655 seconds)
+and Windows (302.955 seconds). Parsed reports match, including 167 current
+checker bindings. It adds 1,616 complete worker/resident/buffer instruction
+mutations, 16 admission/pointer/erase mutations, four independent control-flow
+mutations and eleven ABI mutations. Additional tests enforce prerequisite
+reviews, integrated execution, successful readback coverage and the explicitly
+incomplete scope. All preceding regressions pass. The
+[retained-worker observation](../assurance/windows-protection-observations/sha3-batch-retained-progress-20261008.json)
+records these results; this is saved-artifact replay, not new enclave execution.

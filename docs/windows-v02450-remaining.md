@@ -12,7 +12,8 @@
   All four SHA-2 batch private chains are now closed under their explicit shared
   prerequisites (178 emitted functions, including 33 cleanup funclets). Next
   are the three SHA-3 batch routes, now inventoried with sequential plan,
-  lifecycle, state-destructor, initial plan placement and widened copy-helper checks,
+  lifecycle, state-destructor, initial plan placement, retained-worker entry/close,
+  buffer cleanup and widened copy-helper checks,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/
@@ -42,8 +43,11 @@ and check the complete sequential plan validators and identity tables. The
 sequential operation/clear/seal/cancel/guard bodies and two broadened copy-helper
 ABIs now have explicit instruction contracts. Both state destructors are joined
 to those lifecycle methods, and complete `begin` checks bind plan validation,
-copying and disjoint owner subobjects. Retained-owner and subsequent caller
-storage lifetimes, and the four-message route's 15 indirect calls, remain
+copying and disjoint owner subobjects. Sequential retained entry/close bodies,
+AVX2 resident construction/retirement and buffer cleanup now have full emitted
+contracts, conditional on serialized C entry and valid resident allocations.
+Scalar page/window non-overlap still relies on that C boundary. Nested receiver
+and subsequent caller storage lifetimes, and the four-message route's 15 indirect calls, remain
 explicit family work. Package 6 is not closed; these method contracts do not
 establish whole-worker cleanup, unwind coverage or private-frame erasure.
 

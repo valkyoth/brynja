@@ -12,6 +12,8 @@ import windows_enclave_sha3_batch_storage as storage
 import windows_enclave_sha3_batch_worker as worker
 import windows_enclave_sha3_batch_receive as receive
 import windows_enclave_sha3_batch_update as update
+import windows_enclave_sha3_batch_chunks as chunks
+import windows_enclave_sha3_batch_setup_end as setup_end
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -97,6 +99,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
     retained=worker.inspect(bodies,ir,lane,prior,placement) if lane!='simd' else None
     receiver=receive.inspect(bodies,asm,ir,lane,retained,placement,transitions,admission) if lane!='simd' else None
     absorption=update.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
+    fragments=chunks.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
+    completion=setup_end.inspect(bodies,ir,prior,placement,transitions,receiver,fragments) if lane=='avx2' else None
     mutations=0
     if mutate:
         for name,(code,refs,kind) in functions.items():
@@ -118,6 +122,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
         sequential_retained_worker=retained,
         sequential_receiver=receiver,
         sequential_update=absorption,
+        sequential_setup_chunks=fragments,
+        avx2_setup_completion=completion,
         direct_graph_geometry_only=geometry,transitive_depth_qualified=False,
         runtime_boundaries_pending=runtime,body_byte_mutations_rejected=mutations,
         private_chain_complete=False,whole_image_qualified=False)

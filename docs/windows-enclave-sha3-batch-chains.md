@@ -159,7 +159,8 @@ and guard regions are bounded within their frames, with simultaneous regions
 disjoint. Reused header/plan/guard storage has sequential lifetimes. These are
 caller-side contracts: nested bodies require separate reviews of pointer
 preservation, state transitions and cleanup. The subsequent update checkpoint
-appears below; `start`, setup and finish remain unfinished.
+appears below, followed by setup fragments and AVX2 setup completion. `start`,
+scalar setup finalization and message finish remain unfinished.
 
 Export first admits phase 4 and the exact next sequence, then compares all 24
 semantic plan fields against the retained plan. Only equality reaches the
@@ -181,7 +182,7 @@ cleanup remain package 8; cleanup-funclet composition remains separate work.
   arguments, including owner and input/output lifetime preservation by callees.
   The sequential update caller checkpoint below covers absorption after admission;
   it does not establish the initial state invariant supplied by `start`.
-- Complete distinct setup, final-bit framing, squeeze and retained-output
+- Complete scalar setup finalization, final-bit framing, squeeze and retained-output
   production paths for both sequential routes; receiver-side export is checked.
 - Review four-lane Keccak kernel/transposes, compaction, per-lane pointers,
   authority/cancellation calls and their normal/error/unwind paths.
@@ -291,3 +292,68 @@ All preceding regressions pass. The
 [update observation](../assurance/windows-protection-observations/sha3-batch-update-progress-20261008.json)
 records this author-review checkpoint; it is not new native enclave execution
 or completion of package 6.
+
+## Setup fragments and AVX2 setup completion (2026-10-08)
+
+Both sequential setup-fragment callers now have complete emitted instruction
+contracts: 144 scalar and 158 AVX2 instructions/labels. The scalar route adds
+the complete 35-instruction state adapter; its two lower rate-specific setup
+helpers are reused only after fresh semantic replay and exact current-body,
+reference, extent and ABI comparison. The AVX2 state setup helper is likewise
+an exact replayed helper. These checks compose actual phase-2/sequence admission,
+active-slot equality, checked work subtraction, slot bounds and cSHAKE identities.
+
+An empty fragment requires a zero terminal-bit count and skips lower setup.
+Nonempty input requires one through eight valid bits in its last byte. Only a
+nonempty partial byte can reach the high-bit mask check, at `input + len - 1`.
+The admitted 1,024-byte maximum bounds the computed bit length to 8,192. The
+input pointer remains in a preserved register on scalar; AVX2 reloads it from
+the original argument slot after the mask call. Both construct the same 32-byte
+descriptor, including every byte of the unusual split length stores. Its 25
+semantic bytes contain pointer, length, bit length and terminal-bit count;
+padding is neither interpreted as public data nor claimed individually erased.
+
+The descriptor is aligned and bounded within each frame and disjoint from the
+live operation result, callee home area and saved guard/exception state. Actual
+argument offsets account for the prologue: scalar uses `rsp+192/200/208`, AVX2
+uses `rsp+208/216/224` (or `rbp+112/120/128`). The state and scalar setup-payload
+subobjects fit their exclusive owners. Lower descriptor arguments are read-only
+and nonescaping; that does not establish noncapture of all addresses contained
+inside the descriptor. Rejection composes the reviewed typed-state/output
+cleanup and quarantine. The outer worker still owns input-buffer retirement.
+
+The AVX2 setup call also has a separately checked 26-instruction cleanup funclet
+and 42-instruction operation drop glue. The expected FH3 header, unwind-state map
+and instruction-pointer map are checked in full, including the exact protected
+call interval and the parent handler selection. The funclet reloads the saved
+owner and completion byte from the parent frame before calling the checked guard.
+The enclosing image checker already binds these metadata and funclet targets to
+the object and linked image. This composes one selected compiler cleanup path;
+it does not qualify the Windows dispatcher, arbitrary exceptions or every unwind
+path in the image.
+
+AVX2 `finish_setup` now has a complete 137-instruction contract. For cSHAKE it
+requires a live setup core, healthy matching authority/epoch/kernel, prefix phase
+complete, zero remaining 128-bit count, no pending bits, and equality of the full
+128-bit emitted/expected counts. Success clears the pending byte through the
+volatile helper, resets logical prefix counts and advances the core and outer
+owner to absorbing/streaming. Failure composes engine/state/output cleanup and
+quarantine. Non-cSHAKE identities take their separate admitted transition.
+The scalar finalizer is not covered: it moves several secret-bearing state
+copies through a 5,408-byte frame and requires its own lifetime/cleanup review.
+
+These are saved-image author checks, not new native enclave execution. Initial
+state invariants, scalar setup finalization, message finish/squeeze, four-lane
+SIMD and final private-frame/cleanup composition remain package-6 work. Shared
+runtime/OS dispatch, cumulative stack depth and outer-window cleanup remain
+package 8. Production code and release-gate policy are unchanged.
+
+All 57 saved-artifact tests pass on Linux (275.772 seconds) and Windows
+(520.421 seconds). Parsed reports match with 174 current checker-source
+bindings. New checks reject 810 setup-fragment/bridge/cleanup instruction
+mutations and 274 AVX2 completion instruction mutations, alongside focused
+operand, ABI, unwind-table, call-interval and prerequisite regressions. Fragment
+shape, canonical tail bytes and split length stores also have exhaustive or
+boundary-model checks. All preceding regressions pass. The
+[setup-fragment observation](../assurance/windows-protection-observations/sha3-batch-setup-fragments-progress-20261008.json)
+records the exact counts and remaining scope; it does not close package 6.

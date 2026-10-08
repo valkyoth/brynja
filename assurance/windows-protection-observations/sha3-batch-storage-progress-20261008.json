@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "490f3649",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "full_validation": {
+    "linux": {"tests": 26, "seconds": 88.013, "status": "PASS"},
+    "windows": {"tests": 26, "seconds": 165.161, "status": "PASS"}
+  },
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 165,
+  "report_sha256": {
+    "sha3-batch-storage-linux.json": "456ebd8c0b2081134688b752e825bae80491bb6f29248a4c5f9d0c06bf2c79ae",
+    "sha3-batch-storage-windows.json": "86208de0adc4d84eb2bd52e0917b1c26c9c51ec02e91bd1d9023e765532b79b3"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_chains.py": "c6948dd62b5e46ed224086afff8a271124f5475161c94adc06eca5ff80b1f99f",
+    "windows_enclave_sha3_batch_storage.py": "4f9915fba16709fe3bad4dc73147a1cd540660f4d5ebaa7376d678acdb37b2ca",
+    "windows_enclave_sha3_batch_storage_tests.py": "7d280bfe2004e2890230e25516bcdbde09bb16cd71ce70d380a10a6b90a4f7a0",
+    "test-windows-enclave-sha3-batch-chains.py": "92b2e1c85b757af75871e5d1de4127748e287871a226eeb4e8014ae9f05149ef"
+  },
+  "new_contracts": {
+    "scalar_destructor_instructions_and_labels": 61,
+    "avx2_destructor_instructions_and_labels": 43,
+    "scalar_begin_instructions_and_labels": 70,
+    "avx2_begin_instructions_and_labels": 85,
+    "destructor_rebinding": "complete code, references, extent kind and renamed ABI; prior semantics replayed",
+    "plan_bytes_validated_before_copy": 192,
+    "owner_subobjects_disjoint": ["state", "plan", "output", "sequence", "budget"],
+    "composed_lifecycle_methods": ["operation", "clear", "seal", "cancel", "guard"],
+    "conditional_on_live_valid_owner_and_plan": true,
+    "retained_owner_lifetime_qualified": false,
+    "all_batch_callers_composed": false,
+    "entire_state_allocation_erased": false,
+    "unwind_paths_qualified": false
+  },
+  "new_regressions": {
+    "destructor_and_begin_instruction_mutations": 518,
+    "scalar_destructor_dispatch_and_missing_table_mutations": 9,
+    "state_and_plan_abi_mutations": 34,
+    "wipe_helper_and_prior_review_mutations": 9,
+    "isolated_rebinding_mutations": 12,
+    "lifecycle_and_admission_replay_required": true,
+    "integrated_storage_check_required": true
+  },
+  "previous_regressions_replayed": true,
+  "remaining_private_review": [
+    "retained-owner and subsequent batch caller input/output allocation lifetimes",
+    "distinct setup, update, finish/squeeze and retained-output/export paths",
+    "four-lane kernel, compaction and indirect callback argument lifetimes",
+    "complete private temporary, normal-return and failure cleanup assignments"
+  ],
+  "shared_completion_package": 8
+}

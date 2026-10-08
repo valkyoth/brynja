@@ -57,8 +57,9 @@ the complete exclusive owner extent, disjoint operation-result storage and
 bounded phase/completion representations.
 
 These are method-body contracts, not proof of every caller or unwind path.
-State-destructor composition, validity of retained pointers and cleanup-funclet
-reachability remain separate work. In particular, resetting the eight slots'
+The state-destructor composition below joins these particular method bodies;
+validity of retained pointers and cleanup-funclet reachability remain separate
+work. In particular, resetting the eight slots'
 logical fields does **not** individually erase their padding or moved state
 copies, and this checkpoint does not qualify complete private-frame erasure.
 
@@ -73,10 +74,38 @@ and offset cannot exceed `n <= isize::MAX`. This does not prove that a caller
 supplied live, sufficiently large, nonoverlapping allocations or that the
 destination is eventually erased; those remain caller-composition obligations.
 
+## State destruction and initial plan placement
+
+Both batch state destructors are now explicitly rebound to their previously
+reviewed counterparts using complete code, relocation, extent-kind and renamed
+LLVM ABI equality. Their current complete instruction paths are also checked:
+61 scalar instructions/labels and 43 AVX2 instructions/labels. The scalar
+dispatch table is checked for all eight entries, covering empty, fixed-output,
+XOF and setup states; the ninth valid state follows the setup branch. All wipe
+callees must belong to the exact helper population whose earlier semantic review
+was reproduced. This joins typed payload destruction to the five checked
+lifecycle methods; it does not assert that the entire state allocation,
+padding, moved copies or inactive payload bytes are individually erased.
+
+The complete `begin` methods add 70 scalar and 85 AVX2 instructions/labels.
+They admit the empty phase and sequence, validate the entire plan, then copy
+exactly 192 bytes into the owner before recording the budget and collecting
+phase. Failed validation follows the checked cleanup/quarantine path. The
+scalar copy uses the already-bound shared `memcpy` boundary (whose implementation
+remains package 8); AVX2 uses six bounded 32-byte transfers. Source and destination
+are disjoint under the checked private LLVM argument contract. The state, plan,
+output, sequence and budget subobjects are bounded and mutually disjoint.
+
+This composition assumes the caller provides a live, valid owner and plan.
+The state spans are `[16, 1152)` inside the 2,400-byte scalar owner and
+`[1216, 2208)` inside the 2,272-byte AVX2 owner. It does not yet establish the
+retained owner's full lifetime, every later input/output caller, cleanup-funclet
+coverage or whole-frame erasure. Those remain explicit package-6 work.
+
 ## Remaining package-6 work
 
-- Join the checked lifecycle and copy helpers, slot selection and caller
-  arguments to the earlier state reviews, including allocation lifetimes.
+- Complete slot selection and subsequent state/copy-helper caller arguments,
+  including retained-owner and input/output allocation lifetimes.
 - Complete distinct setup, final-bit framing, squeeze, retained-output and
   export paths for both sequential routes.
 - Review four-lane Keccak kernel/transposes, compaction, per-lane pointers,
@@ -107,3 +136,12 @@ instruction changes and 13 copy-ABI/population changes. All preceding inventory
 and plan regressions are replayed. The
 [lifecycle observation](../assurance/windows-protection-observations/sha3-batch-lifecycle-progress-20261008.json)
 records these results and the still-unqualified caller/unwind/frame boundaries.
+
+The state-storage checkpoint passes all 26 tests on Linux (88.013 seconds) and
+Windows (165.161 seconds). Parsed reports match, including 165 current checker
+bindings. New regressions reject 518 destructor/`begin` instruction mutations,
+nine dispatch-table changes, 34 ABI changes, nine missing-helper/prior-review
+changes and twelve isolated rebinding changes. Tests require lifecycle, plan
+and integrated storage checks to execute; previous regressions also pass.
+The [storage observation](../assurance/windows-protection-observations/sha3-batch-storage-progress-20261008.json)
+retains the live-owner precondition and the remaining caller/frame obligations.

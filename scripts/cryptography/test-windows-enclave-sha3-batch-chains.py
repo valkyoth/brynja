@@ -9,12 +9,13 @@ from unittest.mock import patch
 
 import windows_enclave_sha3_batch_chains as c
 from windows_enclave_sha3_batch_lifecycle_tests import LifecycleTests
+from windows_enclave_sha3_batch_storage_tests import StorageTests,RebindingTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(unittest.TestCase):
+class Tests(RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -58,7 +59,7 @@ class Tests(unittest.TestCase):
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(LifecycleTests,unittest.TestCase):
+class SavedTests(StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')

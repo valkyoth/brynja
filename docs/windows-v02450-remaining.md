@@ -16,7 +16,7 @@
   buffer cleanup, request decoding/dispatch/export, sequential update/setup-fragment
   callers, scalar/AVX2 setup completion, outer message-finalization callers,
   AVX2 terminal normal-path staging cleanup, scalar XOF final-message transition,
-  scalar terminal squeeze bounds/normal-return cleanup and widened copy-helper checks,
+  scalar terminal squeeze/fixed-output normal-path cleanup and widened copy-helper checks,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/
@@ -71,9 +71,12 @@ now checks both rate paths, final-input partition, byte-counter carry, exact
 suffix arguments, metadata clearing and squeezing transition. Scalar squeezing
 now checks both inlined rate paths, bounded cursor/chunk copies, partial-byte
 masking, staged output commit and full staging cleanup on normal returns.
-Scalar fixed finalization remains pending, rather than borrowing the earlier
-streaming review by name. Initial state invariants, remaining scalar helper semantics
-and their pointer/lifetime preservation, exceptional private-frame cleanup, and
+Scalar fixed finalization now binds all four identity/width branches, copied-owner
+lifetimes, three inlined padders, delegated SHA3-256 padding, staged output and
+normal-return cleanup. Both sequential routes' lower finalizers now have normal
+path composition; original/snapshot backing bytes are not individually erased
+by that caller. Initial state invariants, their pointer/lifetime preservation,
+exceptional private-frame cleanup, and
 the four-message route's 15 indirect calls remain explicit family work.
 Package 6 is not closed; these method contracts do not
 establish whole-worker cleanup, unwind coverage or private-frame erasure.

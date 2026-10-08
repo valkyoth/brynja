@@ -633,3 +633,77 @@ failure. The loop model passes 49,370 independent geometry comparisons and
 rejects 12 invalid domains. The
 [scalar-squeeze observation](../assurance/windows-protection-observations/sha3-batch-scalar-squeeze-progress-20261008.json)
 records this bounded author checkpoint without closing the family or image.
+
+## Scalar fixed-output finalization (2026-10-08)
+
+The complete 1,195-instruction/label scalar `State::finish_fixed` contract now
+binds all four branches and the exact four-entry jump table. Tags 1–4 select
+SHA3-224/256/384/512 with output widths 28/32/48/64 and rates 144/136/104/72.
+An oversized destination rejects before consuming the state. For accepted
+state tags, zero or wrong-width output rejects before message processing;
+complete-byte counter growth is checked with carry before absorption. The
+checked outer caller supplies canonical, bounded final-input metadata and a
+disjoint retained-output interval.
+
+The first copy snapshots the 1,136-byte state into `[rsp+2160, rsp+3296)` before
+tombstoning the original tag. The fixed owner is then copied from the original
+state's bytes `[1, 1041)` into `[rsp+96, rsp+1136)`. Setting the original tag
+to Empty does not invalidate or erase its physical payload. The working owner,
+1,024-byte output staging, result descriptor and initialization descriptor all
+occupy disjoint regions below saved registers. Non-fixed variants are handled
+by the bound snapshot destructor.
+
+All four absorption helpers and the delegated SHA3-256 finalizer must match
+fresh prior semantic review, full emitted bodies/references/extents and resolved
+ABIs. The other three padding paths are checked in full rather than classified
+as helper reuse. Their buffered prefix and masked partial byte are followed by
+the SHA-3 domain bits and padding, including rate-boundary flushes and the final
+high bit. Each of their fifteen emitted permutation sites clears the 40/40/200
+bytes of permutation scratch and the full 168-byte padding buffer before
+continuing. The padding model is compared with an independently concatenated
+bit string for 10,240 cases; it is not a new hash oracle.
+
+The padding contracts require a valid absorbing owner, a buffered length below
+the selected rate, canonical final-input bits and initially zero padding
+storage. Under those preconditions, the ignored results of one-byte/equal-length
+padding copies and fixed-width XOR helpers cannot fail: addresses are live,
+non-overlapping and bounded, and bit counts are 0/8. This does not authorize
+arbitrary private calls or qualify corrupted owner metadata.
+
+After padding, the digest is transferred through the internal squeeze buffer
+into exact-width stack staging. `finish_secret` receives a fully initialized
+descriptor; its result tag and returned pointer/length are retained across
+working-owner wiping. An error tag rejects before output access. The final copy
+targets only the checked retained-output interval; successful output is not
+exported here. Returned secret staging is cleared after use. Outer rejection
+still destroys the remaining typed state, clears retained output and quarantines.
+
+The conservative normal CFG follows both direct-branch outcomes and all four
+bound jump-table targets. It tracks four working-owner copy sites, three owner
+wipe sites, one output-commit site and one return. Every normal return must have
+cleared both the working owner (if copied) and full output staging; the owner
+must also be cleared before output commit. Removing a wipe, shortening the
+staging clear or returning early is rejected independently of the full-body
+instruction comparison.
+
+This does **not** claim that the original payload, snapshot, other stack copies
+or registers were individually erased. Original payload bytes belong to the
+retained owner's backing-page retirement scope; stack snapshots/copies belong
+to the enclosing private window's scope. Clearing one does not clear the other.
+Shared `memcpy`/`memset`, initial state construction,
+exceptional frames, four-lane SIMD and final private composition remain open.
+Both sequential routes now set `all_lower_finalizers_normal_paths_composed`,
+but `all_lower_finalizers_composed`, package-6 and whole-image closure stay false.
+No production code, release policy, native capture or independent review changes.
+Validation: seven focused tests pass (13.225 seconds); all 92 integrated tests
+pass on Linux (374.370 seconds) and Windows (738.832 seconds). The Windows suite
+was rerun after the interrupted session left no recoverable completion result.
+Parsed reports match with 185 verified current checker-source bindings.
+The new tests reject 2,390 instruction deletions/substitutions, seven dispatch
+table mutations, 39 focused pointer/padding/counter/result/cleanup mutations,
+eight normal-CFG cleanup bypasses, 39 helper replay/ABI mutations, eleven caller
+or target changes, four replay/destruction prerequisite changes and an integrated
+review failure. Alongside the 10,240 padding comparisons, input partition and
+counter models pass 32,772 reference comparisons. The
+[scalar-fixed observation](../assurance/windows-protection-observations/sha3-batch-scalar-fixed-progress-20261008.json)
+records the bounded checkpoint, not family or whole-image closure.

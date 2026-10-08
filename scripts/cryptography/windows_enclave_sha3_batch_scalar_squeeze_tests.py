@@ -119,7 +119,7 @@ class ScalarSqueezeTests:
         with self.assertRaises(ValueError):t.inspect(bodies,ir,prior,bad,storage)
         with patch.object(t,'inspect',side_effect=ValueError('scalar squeeze failed')):
             with self.assertRaisesRegex(ValueError,'scalar squeeze failed'):c.finish.inspect(*args)
-        self.assertEqual(caller['lower_finalizer_review_pending'],[caller['functions']['finish_fixed']])
+        self.assertEqual(caller['lower_finalizer_review_pending'],[])
         self.assertEqual(result['instructions_and_labels_checked'],633)
         for key in ('state_construction_qualified','private_frame_erasure_qualified','all_unwind_paths_qualified','whole_image_qualified'):
             self.assertFalse(result[key])

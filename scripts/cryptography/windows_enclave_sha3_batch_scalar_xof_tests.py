@@ -112,7 +112,7 @@ class ScalarXofTests:
             with self.assertRaises(ValueError):t.inspect(bodies,ir,bad,caller)
         with patch.object(t,'inspect',side_effect=ValueError('scalar XOF failed')):
             with self.assertRaisesRegex(ValueError,'scalar XOF failed'):c.finish.inspect(*args)
-        self.assertEqual(len(caller['lower_finalizer_review_pending']),1)
+        self.assertEqual(caller['lower_finalizer_review_pending'],[])
         for key in ('output_squeeze_qualified','state_construction_qualified','private_frame_erasure_qualified',
                     'all_unwind_paths_qualified','whole_image_qualified'):
             self.assertFalse(result[key])

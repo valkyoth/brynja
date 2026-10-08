@@ -573,3 +573,63 @@ model domains, eight caller prerequisite/target changes, five missing helper
 reviews and integration failures are also rejected. The
 [scalar-XOF observation](../assurance/windows-protection-observations/sha3-batch-scalar-xof-progress-20261008.json)
 records this checkpoint and keeps scalar fixed finalization and squeeze open.
+
+## Scalar terminal squeeze (2026-10-08)
+
+The changed scalar `State::squeeze` now has a complete, independently written
+633-instruction/label contract for both inlined rate branches. It requires the
+checked outer caller's disjoint state and bounded retained-output slice, six
+freshly replayed exact lower helpers, and the separately rebound typed state
+destructor. It does not borrow earlier streaming caller semantics by name.
+
+Only XOF tags 5/6 and squeezing lifecycle 1 enter work; the lifecycle is then
+vacated. Output length is at most 1,024 bytes, with zero terminal bits for empty
+output or 1–8 bits in a nonempty last byte. The private stack staging allocation
+is `[rsp+120, rsp+1144)`, separate from outgoing home space, metadata/pointer
+slots and saved registers. The original destination remains in a preserved
+register for the empty case and in `rsp+104` for nonempty output.
+
+Both branches admit complete-byte growth using low-word add and high-word carry
+against the owner's 128-bit output counter. Bulk output uses chunks no larger
+than the selected rate (168 or 136). The inner cursor cannot exceed that rate;
+equality triggers permutation and clearing of all three permutation scratch
+regions before resuming at zero. Copies read only the admitted lane interval
+and fill only the current internal staging prefix. The initialized stack prefix
+is checked for carry and capacity before each chunk copy. The full 168-byte
+internal staging region is cleared even for the 136-byte-rate branch.
+
+A fractional last byte consumes exactly one additional lane byte, after the
+same rate-boundary checks, and masks it to the requested low bits before copying
+it into the stack staging allocation. Metadata-only loop models are compared
+with independent unbounded stream positions; this is not a new cryptographic
+oracle. The 49,370 comparisons cover every valid cursor, rate/chunk boundaries,
+all bounded output lengths at selected cursors, and partial-byte widths.
+
+The nested owner is wiped before the final staged copy into retained output.
+Success requires the entire requested extent to be initialized and copied;
+typed destruction and the Empty tag follow the successful copy. Empty output
+uses a zero-length copy with a nonnull dangling source, not a readable byte.
+Precondition rejections and work failures are joined to the outer caller's
+typed destruction, complete retained-output clearing and quarantine.
+
+A conservative normal CFG follows both outcomes of every branch and treats
+copy failure as potentially writing data. All ten copy sites and the single
+normal return are reached; only the exact full 1,024-byte volatile clear
+discharges staging dirtiness. `memset` initialization is not accepted as secret
+erasure. This is a staging-buffer property, not whole-frame/register erasure:
+other stack copies, shared runtime implementation, exceptional exits and the
+enclosing private window remain separate obligations.
+
+Scalar fixed finalization, initial state construction, the four-lane SIMD route
+and final private composition remain open. No production Rust, release gate,
+native execution or independent-review claim changes. Package 6 remains open.
+All 85 saved-artifact tests pass on Linux (344.588 seconds) and Windows
+(668.454 seconds). Parsed reports match with 183 verified current checker-source
+bindings. The six new tests reject 1,266 instruction deletions/substitutions,
+34 focused bound/pointer/rate/mask/counter/cleanup mutations, five normal-CFG
+clear or return bypasses, 18 helper replay/ABI mutations, seven caller changes,
+four replay/typed-destruction prerequisite changes and an integrated review
+failure. The loop model passes 49,370 independent geometry comparisons and
+rejects 12 invalid domains. The
+[scalar-squeeze observation](../assurance/windows-protection-observations/sha3-batch-scalar-squeeze-progress-20261008.json)
+records this bounded author checkpoint without closing the family or image.

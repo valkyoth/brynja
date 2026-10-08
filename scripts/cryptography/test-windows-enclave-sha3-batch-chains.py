@@ -19,12 +19,13 @@ from windows_enclave_sha3_batch_scalar_setup_tests import ScalarSetupTests,Scala
 from windows_enclave_sha3_batch_finish_tests import FinishTests,FinishModelTests
 from windows_enclave_sha3_batch_terminal_tests import TerminalTests,TerminalModelTests
 from windows_enclave_sha3_batch_scalar_xof_tests import ScalarXofTests,ScalarXofModelTests
+from windows_enclave_sha3_batch_scalar_squeeze_tests import ScalarSqueezeTests,ScalarSqueezeModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -68,7 +69,7 @@ class Tests(ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupM
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')

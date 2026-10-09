@@ -1,0 +1,459 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "aab7b85a",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_source_effects_and_predecessors": {
+      "tests": 174,
+      "seconds": 340.417,
+      "status": "PASS"
+    },
+    "windows_simd_source_effects_and_predecessors": {
+      "tests": 174,
+      "seconds": 383.08,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 252,
+  "files_sha256": {
+    "sha3-batch-simd-source-effects-linux.json": "732cde2dbea3859ebdf974e20741b25f50dcff2851f395199acb827c7ad3299a",
+    "sha3-batch-simd-source-effects-windows.json": "bbaf59b79da722fa0bc7a6e307315bfae7b69c9ecdfdc7f75cfbfda138379e53",
+    "sha3-batch-simd-source-effects-20261009-exit.json": "f0875be172c55871c0610b3a72b1a9159ec2f7be856342b07f4db2046cfd869e",
+    "sha3-batch-simd-source-effects-linux.log": "cdb8b8b3046c7981da42ce2ea64f1ae321c73e299ca10541aeefc83a9c795b8a",
+    "sha3-batch-simd-source-effects-20261009.log": "cba9eb30e67b304c7aac7b0db3db293a219098a450623c1d101eb85cb71d3035"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_source_effects.py": "c79c72743cc691d6038681504897a2cadc32abf35063640b7abe48ab2db4af18",
+    "windows_enclave_sha3_simd_source_effects_tests.py": "2adc15eaf5a2daeac6eb8d87181f0efa1170aa7adcaa8a56b6a6491b6e2ba804",
+    "windows_enclave_sha3_batch_chains.py": "4ca785f0fa2636f71b131fecba76d327ebba23f5ca4b088e51121f2d1d8954f4",
+    "test-windows-enclave-sha3-batch-chains.py": "701115b15365fde858f9b46f4a46d278e779c78c3f35d6ea116b82b60936fea3"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "call_sites": [
+      827,
+      851
+    ],
+    "source_cases": [
+      {
+        "lane": 0,
+        "part": 0,
+        "read_root": "workspace",
+        "read_envelope": [
+          3688,
+          3705
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 0,
+        "part": 1,
+        "read_root": "workspace",
+        "read_envelope": [
+          3705,
+          3722
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 0,
+        "part": 2,
+        "read_root": "name",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 0,
+        "part": 3,
+        "read_root": "workspace",
+        "read_envelope": [
+          3722,
+          3739
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 0,
+        "part": 4,
+        "read_root": "custom",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 0,
+        "part": 6,
+        "read_root": "message",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 1,
+        "part": 0,
+        "read_root": "workspace",
+        "read_envelope": [
+          3844,
+          3861
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 1,
+        "part": 1,
+        "read_root": "workspace",
+        "read_envelope": [
+          3861,
+          3878
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 1,
+        "part": 2,
+        "read_root": "name",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 1,
+        "part": 3,
+        "read_root": "workspace",
+        "read_envelope": [
+          3878,
+          3895
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 1,
+        "part": 4,
+        "read_root": "custom",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 1,
+        "part": 6,
+        "read_root": "message",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 2,
+        "part": 0,
+        "read_root": "workspace",
+        "read_envelope": [
+          4000,
+          4017
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 2,
+        "part": 1,
+        "read_root": "workspace",
+        "read_envelope": [
+          4017,
+          4034
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 2,
+        "part": 2,
+        "read_root": "name",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 2,
+        "part": 3,
+        "read_root": "workspace",
+        "read_envelope": [
+          4034,
+          4051
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 2,
+        "part": 4,
+        "read_root": "custom",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 2,
+        "part": 6,
+        "read_root": "message",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 3,
+        "part": 0,
+        "read_root": "workspace",
+        "read_envelope": [
+          4156,
+          4173
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 3,
+        "part": 1,
+        "read_root": "workspace",
+        "read_envelope": [
+          4173,
+          4190
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 3,
+        "part": 2,
+        "read_root": "name",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 3,
+        "part": 3,
+        "read_root": "workspace",
+        "read_envelope": [
+          4190,
+          4207
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 3,
+        "part": 4,
+        "read_root": "custom",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      },
+      {
+        "lane": 3,
+        "part": 6,
+        "read_root": "message",
+        "read_envelope": [
+          0,
+          1024
+        ],
+        "one_byte_reads": true,
+        "guarded_by_matching_length": true,
+        "dispatches": [
+          718,
+          759
+        ]
+      }
+    ],
+    "original_input_array_root_and_lane_field_loads_checked": true,
+    "source_length_pairing_and_two_unsigned_read_guards_checked": true,
+    "full_u64_byte_index_increment_nonwrapping": true,
+    "direct_saved_source_cell_preservation_checked": true,
+    "pending_non_frame_store_sites": [],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      502,
+      563,
+      570,
+      573,
+      1059,
+      1129,
+      1266,
+      1289,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583
+    ],
+    "caller_descriptor_payload_placement_nonoverlap_and_lifetimes_required": true,
+    "other_callee_effects_and_win64_nonvolatile_preservation_required": true,
+    "allocation_lifetimes_and_private_frame_exception_cleanup_qualified": false,
+    "expanded_source_case_count": 48
+  },
+  "focused_regressions": {
+    "new_tests": 8,
+    "byte_window_comparisons": 1053700,
+    "u64_boundary_cases": 4100,
+    "prefix_instruction_mutations": 13,
+    "input_root_and_field_mutations": 21,
+    "source_length_pair_mutations": 9,
+    "read_guard_index_restore_mutations": 15,
+    "entry_and_stable_slot_mutations": 17
+  },
+  "remaining": [
+    "18 callee footprints, including output transfers, clearing, validation and callbacks",
+    "Resident descriptor-to-payload placement, non-overlap and allocation lifetimes",
+    "Authority separation, indirect pointer preservation, exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch reconciliation; package 6 remains open",
+    "Shared runtime, Win64 ABI and cumulative stack qualification remains package 8"
+  ]
+}

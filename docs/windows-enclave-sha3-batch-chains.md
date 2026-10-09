@@ -28,6 +28,39 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Payload/prefix source pairing and guarded reads (2026-10-09)
+
+The two remaining absorption XOR sites now have source-relative read footprints.
+An all-predecessor trace follows the original input-array argument through the
+initial authority call, saved slot and every later reload. Each pointer and
+length field load uses the same bounded lane in the original 448-byte array.
+The saved source/length cells survive every direct byte-loop store.
+
+Both framing dispatches are checked for each lane and source-producing part.
+Name, customization and message sources retain their own lengths; the three
+prefix fields stay in separate 17-byte regions of the original lane frame.
+The first unsigned guard bounds `bit_offset >> 3` before pointer addition. The
+split-byte path preserves that source and length across the first helper call,
+increments the same index and crosses a second unsigned guard before reading.
+The increment cannot wrap even for an arbitrary u64 bit offset: its maximum is
+2^61. Neither a mismatched length nor an entry past either guard is accepted.
+
+There are 18 remaining call-site footprints. These source-relative checks do
+not complete the resident caller's descriptor-to-payload placement, physical
+non-overlap or allocation-lifetime composition. Those obligations, other callee
+effects, Win64 preservation and private-frame/exception cleanup remain explicit.
+Package 6 is still open, with no production or release-gate changes.
+
+The [source-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-source-effects-progress-20261009.json)
+records 174 focused/predecessor tests passing on Linux (340.417 seconds) and
+Windows (383.080 seconds). Parsed reports match, all 252 checker-source hashes
+are current, and 88,058 body-byte mutations are rejected. Eight new tests cover
+1,053,700 bounded byte-window cases and 4,100 u64 boundary cases, plus 13 prefix,
+21 input-root/field, nine source/length pairing, 15 guard/index/restore and
+17 entry/stable-cell mutations. The unrelated full predecessor suite was not
+rerun. This is saved-image author review, not new native enclave execution or
+independent qualification.
+
 ## Absorption byte cursor and internal XOR footprints (2026-10-09)
 
 The four absorption XOR calls now share a checked, original-state byte-cursor

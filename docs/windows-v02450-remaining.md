@@ -72,8 +72,11 @@
   rate/final-byte guard dominance and physically disjoint read/write envelopes.
   All four absorption XOR destinations now retain the original lane's byte
   cursor through helper calls and spills, with exact bounded advancement.
-  The internal suffix/padding source bytes are bounded and disjoint; the two
-  payload/prefix source paths remain pending. The remaining 20 call-site footprints,
+  The internal suffix/padding source bytes are bounded and disjoint. The two
+  payload/prefix read sites now retain their matching original source/length
+  pairs, with bounded lane-field loads, two unsigned read guards and nonwrapping
+  byte-index advancement. Resident payload placement/non-overlap and lifetimes
+  remain prerequisites. The remaining 18 call-site footprints,
   remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,

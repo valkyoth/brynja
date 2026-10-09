@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "c82de8e5",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_constructor_and_integration": {"tests": 20, "seconds": 108.931, "status": "PASS"},
+    "windows_constructor_and_integration": {"tests": 20, "seconds": 227.827, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "windows_exit_code": 0,
+  "linux_log_sha256": "496fda8b20309454898a104e006109c249572e7f9b33033abacebc07744b4097",
+  "windows_log_sha256": "63fddf0ce4f8eeaed613ff61c4ab4e4a7c3a03fb9da995005339a6cc1accc7e2",
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 191,
+  "report_sha256": {
+    "sha3-batch-shake-start-linux.json": "eb343efab5c3c605f4e9d13d458f9c7b5f6551bd2c4c4dace091a2f36cf10169",
+    "sha3-batch-shake-start-windows.json": "bc74f1f50e6293712db13b35eaab35a94c3015c0a53432a8dba7e1f721170f0e"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_shake_start.py": "b487b90f9eb6ad8b0ece5ccf88fb8df7e97687dcc8bf17e4e1641392c0bd0afe",
+    "windows_enclave_sha3_batch_shake_start_tests.py": "3abca7ce844ded1c93143a84f7bc4c3ad0b4905bfaed09bcc6391daf8ec9fe09",
+    "windows_enclave_sha3_batch_chains.py": "3a46c3be76c97e366cb40a23179d1bcda24af5983aebd5fb3b0ca4c6b659f411",
+    "test-windows-enclave-sha3-batch-chains.py": "a200b510a055bbceccd9d5cd7afa64ed223bf8bc5efbbba58da7a35c43d4459f"
+  },
+  "new_contracts": {
+    "shake_identities": 2,
+    "instruction_positions": 194,
+    "wrapper_bytes_per_identity": 1041,
+    "underlying_owner_bytes": 1040,
+    "tag_and_payload_span": [16, 1058],
+    "inactive_storage_span": [1058, 1152],
+    "helper_result_span": [1680, 2721],
+    "active_overlap_bytes": 6,
+    "every_byte_origin_preserved": true,
+    "all_active_sources_initialized": true,
+    "source_destination_nonoverlap": true,
+    "old_state_destroyed_before_install": true,
+    "helper_error_restores_plan_pointer": true,
+    "helper_result_erased": false,
+    "inactive_storage_initialization_qualified": false,
+    "all_constructor_paths_qualified": false,
+    "private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "instruction_deletions_and_substitutions": 388,
+    "transfer_deletions": 134,
+    "origin_bounds_lifetime_and_order_mutations": 66,
+    "mode_error_plan_pointer_and_extra_byte_mutations": 9,
+    "constructor_and_placement_prerequisite_mutations": 17,
+    "integrated_failure_rejected": true
+  },
+  "remaining": [
+    "inlined nonempty cSHAKE construction and lifetime joins",
+    "remaining sequential accelerated constructor argument and lifetime joins",
+    "four-lane SIMD caller, dispatch and lifetime composition",
+    "complete private frame, copy and exceptional cleanup assignments",
+    "shared runtime and whole-image qualification in package 8"
+  ]
+}

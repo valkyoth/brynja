@@ -20,6 +20,7 @@ import windows_enclave_sha3_batch_start as start
 import windows_enclave_sha3_batch_initial as initial
 import windows_enclave_sha3_batch_empty as empty
 import windows_enclave_sha3_batch_fixed_start as fixed_start
+import windows_enclave_sha3_batch_shake_start as shake_start
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -117,6 +118,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
     construction=start.inspect(bodies,asm,ir,lane,placement,transitions,receiver) if lane!='simd' else None
     empty_construction=empty.inspect(data,bodies,asm,ir,construction) if lane=='scalar' else None
     fixed_construction=fixed_start.inspect(bodies,asm,construction,placement) if lane=='scalar' else None
+    shake_construction=shake_start.inspect(bodies,asm,empty_construction,construction,placement) if lane=='scalar' else None
     absorption=update.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
     fragments=chunks.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
     completion=setup_end.inspect(bodies,ir,prior,placement,transitions,receiver,fragments) if lane=='avx2' else None
@@ -145,6 +147,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         sequential_start_admission_and_placement=construction,
         scalar_empty_constructors=empty_construction,
         scalar_fixed_constructors=fixed_construction,
+        scalar_shake_constructors=shake_construction,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

@@ -767,6 +767,43 @@ Parsed reports match with 187 current checker-source bindings verified. The
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
 
+## Scalar SHAKE constructor result joins (2026-10-09)
+
+The two complete SHAKE result-decode blocks, common staging block and helper
+failure block now have explicit contracts covering 194 instruction/label
+positions. The previously reviewed empty-descriptor paths and helper bodies
+establish a fully initialized 1,041-byte successful result. Its first byte is
+the empty-mode discriminant, not part of the underlying 1,040-byte owner.
+The success test precedes every payload read. On error, the saved plan pointer
+is restored from `rdi` to `rbp` before status 6 enters the existing rejection
+cleanup/quarantine path. That saved pointer is not confused with the later
+byte-sized `dil` field loaded only on the successful path.
+
+The byte-origin model gives every returned byte a distinct identity, even though
+the actual empty constructor initializes zeros. It follows all 1,041 bytes from
+`[rsp+1680, rsp+2721)` through scalar/vector staging and nonvolatile registers
+into `[owner+17, owner+1058)`, after installing variant tag 5 or 6 at offset 16.
+This catches field swaps that a zero-only comparison could miss. The final byte
+at owner offset 1057 is included: using the fixed SHA-3 payload boundary here
+would omit it. Six overlapping stores preserve identical byte origins.
+
+The model requires initialized reads, nonoverlapping copy ranges and typed
+destruction before installation. It proves the original helper result remains
+intact through the transfers; it does **not** claim that result copy was erased.
+The inactive storage at `[owner+1058, owner+1152)` remains separate. Shared
+runtime and ABI preservation, enclosing-window retirement, nonempty cSHAKE
+construction, four-lane SIMD and complete private/unwind cleanup remain open.
+The [SHAKE-constructor observation](../assurance/windows-protection-observations/sha3-batch-shake-start-progress-20261009.json)
+records this saved-image author-review checkpoint without closing package 6.
+
+The 20 selected constructor/integration tests passed on Linux (108.931 seconds)
+and Windows (227.827 seconds). Both complete saved reports were regenerated
+with body mutations; parsed reports agree and all 191 checker-source bindings
+match. New regressions reject 388 instruction mutations, 134 transfer deletions,
+66 origin/bounds/lifetime/order changes, nine focused mode/error/pointer changes
+and 17 prerequisite mutations. The full predecessor suite was not rerun; no
+production code, release gate or native-execution qualification changed.
+
 ## Scalar fixed-constructor initialization (2026-10-09)
 
 The four fixed SHA-3 constructor blocks, their common metadata initialization and

@@ -767,6 +767,47 @@ Parsed reports match with 187 current checker-source bindings verified. The
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
 
+## Direct AVX2 constructor caller transfers (2026-10-09)
+
+The six non-cSHAKE identities now have an explicit saved-image caller join to
+the replayed `State::initial` helper. The checked descriptor dispatch supplies
+identities 0–5 only after rejecting nonzero function-name/customization lengths.
+The caller imports the authority **value** from owner offset 2224, supplies the
+32-byte-aligned 992-byte result at local offset 1696, and tests the returned
+discriminant at offset 2640 before reading or copying the payload. Discriminant
+2 takes status 6 directly to the already-reviewed operation-guard rejection:
+an armed guard clears and quarantines rather than publishing a new state.
+
+The authority join additionally checks the helper's incoming-pointer save,
+session construction and returned session field at result offsets `[576,584)`.
+The exact helper body, constants and resolved ABI must still pass their previous
+semantic replay and current-image rebinding. These new slices do not replace
+that prerequisite with a few matching instructions.
+
+On success, all 992 physical result bytes are traced through the 943-byte
+payload copies, first-byte/discriminant nonvolatile registers, and 32+8-byte
+tail staging. The old retained state is destroyed before installation into
+owner `[1216,2208)`. The same authority reaches `[1792,1800)` inside that state;
+the output, plan and outer authority fields remain untouched by these transfers.
+Slot/active/phase publication follows complete replacement. Local copies are
+bounded by the realigned 4888-byte frame and are nonoverlapping; Win64 register
+preservation and disjoint resident-page allocation remain explicit prerequisites.
+
+This adds 31 checked caller/failure positions, bringing AVX2 start coverage to
+228 of 597 positions. The byte model deliberately preserves opaque result
+origins without declaring inactive fields or padding initialized. It does not
+claim that copying erases the source, that the enclosing private frame has been
+retired, or that the distinct cSHAKE prefix-setup path is complete.
+
+Focused regression coverage rejects 62 instruction deletions/substitutions,
+102 transfer deletions across six identities, 300 provenance/bounds/order
+mutations, eight targeted pointer/identity/entry changes, twelve helper-offset
+and ABI changes, and ten missing prerequisite contracts. The integrated checker
+must propagate failure of this new review. Validation results are recorded in
+[the observation](../assurance/windows-protection-observations/sha3-batch-avx2-start-progress-20261009.json).
+Package 6, shared runtime qualification and whole-image cleanup remain open;
+no production implementation or release-gate policy changed.
+
 ## Scalar cSHAKE retained setup transfers (2026-10-09)
 
 The last 145 scalar `start` instruction/label positions now have explicit

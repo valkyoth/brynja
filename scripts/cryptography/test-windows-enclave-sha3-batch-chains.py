@@ -29,12 +29,13 @@ from windows_enclave_sha3_batch_shake_start_tests import ShakeStartTests,ShakeSt
 from windows_enclave_sha3_batch_cshake_init_tests import CshakeInitTests,CshakeInitModelTests
 from windows_enclave_sha3_batch_cshake_flow_tests import CshakeFlowTests,CshakeFlowModelTests
 from windows_enclave_sha3_batch_cshake_moves_tests import CshakeMovesTests,CshakeMovesModelTests
+from windows_enclave_sha3_batch_avx2_start_tests import Avx2StartTests,Avx2StartModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -78,7 +79,7 @@ class Tests(CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,Shak
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
@@ -100,6 +101,10 @@ class SavedTests(CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTest
             self.assertEqual(r['cleanup_funclets'],c.FUNCLETS[lane])
             self.assertFalse(r['private_chain_complete'])
             self.assertFalse(r['transitive_depth_qualified'])
+            if lane=='avx2':
+                self.assertTrue(r['avx2_direct_constructors']['direct_constructor_caller_transfers_qualified'])
+                self.assertFalse(r['avx2_direct_constructors']['all_constructor_paths_qualified'])
+            else:self.assertIsNone(r['avx2_direct_constructors'])
             if lane=='scalar':
                 self.assertTrue(r['scalar_empty_constructors']['empty_constructor_paths_qualified'])
                 self.assertFalse(r['scalar_empty_constructors']['inlined_cshake_constructors_qualified'])

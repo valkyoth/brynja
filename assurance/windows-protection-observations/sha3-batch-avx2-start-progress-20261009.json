@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "17eb5f84",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_direct_avx2_constructor_and_integration": {"tests": 18, "seconds": 43.831, "status": "PASS"},
+    "windows_direct_avx2_constructor_and_integration": {"tests": 18, "seconds": 88.890, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "linux_log_sha256": "33ebb92eff8f1c965ba280feef43635aa1f3671c9d83b0d5c1b54ff4b6257439",
+  "windows_log_sha256": "96c9a17d4bead0e531a55ffd829ff1ec9626b8571251aa802079a90453944540",
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 195,
+  "report_sha256": {
+    "sha3-batch-avx2-start-linux.json": "70d5df3fcd87241eadc361fc3ead638dd0ddbad0a5f4b0fd17a8a847d744c589",
+    "sha3-batch-avx2-start-windows.json": "fe594552a7f5b6a3e457e31c31d5de97a7bc6ae9ad1fd075743219e4f31a5394"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_avx2_start.py": "74e62ec83d83094f9bbcb7cb5f78f8654e99c5bf15caf540bd314f48ee106327",
+    "windows_enclave_sha3_batch_avx2_start_tests.py": "74a19c0155754382900d495dabd1b7782aa47f1ff148cd52ecf6b49b5e9cbfd4",
+    "windows_enclave_sha3_batch_chains.py": "761e5bd4131752242264ab8f172118f10e12449cde68b51d8b6eaf966f6436ec",
+    "test-windows-enclave-sha3-batch-chains.py": "7f7240b60b013b124ada7c7b85f97e9c3ef50f1bff4387a6eeb33cd75c9334a6"
+  },
+  "new_contracts": {
+    "direct_constructor_identities": [0, 1, 2, 3, 4, 5],
+    "new_instruction_positions": 31,
+    "combined_avx2_start_instruction_positions": 228,
+    "complete_avx2_start_instruction_positions": 597,
+    "result_span": [1696, 2688],
+    "retained_state_span": [1216, 2208],
+    "session_authority_result_span": [576, 584],
+    "session_authority_retained_span": [1792, 1800],
+    "same_outer_authority_preserved": true,
+    "all_physical_returned_origins_preserved": true,
+    "normal_error_discriminant": 2,
+    "normal_error_status": 6,
+    "normal_error_skips_payload_placement": true,
+    "old_state_destroyed_before_installation": true,
+    "publication_after_complete_replacement": true,
+    "runtime_copy_abi_and_disjoint_resident_allocation_required": true,
+    "padding_and_inactive_initialization_qualified": false,
+    "temporary_copy_erasure_qualified": false,
+    "cshake_constructor_lifetimes_qualified": false,
+    "private_frame_erasure_qualified": false,
+    "all_constructor_paths_qualified": false
+  },
+  "new_regressions": {
+    "instruction_deletions_and_substitutions": 62,
+    "transfer_deletions": 102,
+    "origin_bounds_order_and_publication_mutations": 300,
+    "targeted_pointer_identity_and_entry_mutations": 8,
+    "helper_authority_offset_and_abi_mutations": 12,
+    "constructor_and_destructor_prerequisite_mutations": 10,
+    "integrated_failure_rejected": true
+  },
+  "remaining": [
+    "sequential accelerated cSHAKE constructor prefix and lifetime joins",
+    "four-lane SIMD caller, dispatch and lifetime composition",
+    "complete private frame, copy and exceptional cleanup assignments",
+    "shared runtime and whole-image qualification in package 8"
+  ]
+}

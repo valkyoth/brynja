@@ -65,6 +65,44 @@ missing markers, 192 round-table byte changes, missing/wrong-size tables,
 integration negative confirms the main saved-image checker cannot skip this
 leaf review. No production implementation or release-gate policy changed.
 
+## Four-lane session cleanup composition (2026-10-09)
+
+The saved `Session::permute_bytes`, CPU scratch wipe, volatile zeroizer and
+three session cleanup funclets now have complete instruction contracts. The
+session must call the already-reviewed pack, permutation wrapper and unpack
+helpers. Exact LLVM contracts preserve the 800-byte caller state and 1,920-byte
+scratch extents, exclusive borrows, positive zeroizer lengths and feature set.
+
+An independent conservative control-flow walk checks all seven normal paths:
+four health/revalidation rejections, wrong-architecture rejection, counter
+overflow and success. Only success writes caller state. It does so after both
+health checks/revalidation calls, AVX2 dispatch and a nonoverflowing counter
+increment; the completed counter is committed after output. Every normal
+rejection wipes scratch and quarantines without writing output or the counter.
+Scratch clearing covers exactly `[0, 800)`, `[800, 960)`, `[960, 1120)` and
+`[1120, 1920)` with positive-length volatile calls, before packing and on exit.
+
+The authority layout is counter at offset 0, revalidator at 8, health at 16 and
+kernel tag at 17. Authority and scratch pointers are saved at parent-frame
+offsets -16 and -24; the state pointer stays in Win64's nonvolatile RSI. The
+two callback instruction ranges are tied to the actual FH3 state/IP tables.
+Each callback unwind invokes its health-quarantine funclet, then the shared
+scratch-wipe/quarantine funclet. The checked table's frame-state offset is 56;
+each cleanup funclet reconstructs the parent frame with an adjustment of 64.
+Other functions' cleanup tables are not implicitly qualified by this check.
+
+These claims assume valid caller allocations/authority, the callback's ABI and
+nonvolatile preservation, immutable kernel identity and no callback-driven
+invalidation of storage. Binding that callback to the resident's actual authority
+and establishing the full caller lifetime are next, not silently assumed done.
+Fatal termination, OS exception-dispatch correctness, private-frame erasure and
+whole-image qualification remain outside this checkpoint.
+
+Regressions reject 338 instruction changes, 15 broken normal-path event/order
+cases, 30 cleanup-table changes/removals/duplicates, four moved callback labels,
+21 ABI changes and eight weakened leaf prerequisites. The integrated checker
+also rejects a failed session review. Production code and gates are unchanged.
+
 ## Sequential plan admission
 
 Both complete emitted plan validators and their nine identity-table entries are

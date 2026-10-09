@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "e84b3c43",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_session_leaves_and_integration": {"tests": 13, "seconds": 12.827, "status": "PASS"},
+    "windows_simd_session_leaves_and_integration": {"tests": 13, "seconds": 24.032, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 200,
+  "linux_log_sha256": "fbbbbfdbe2f60562d20b73bb8cd5ed47e8b5b6005e038ee6c48f42b2a207f99c",
+  "windows_log_sha256": "518024f2fb40e22a6c2ae40a1129935bf6d5adb9730e420639732e7f0c7ed24a",
+  "report_sha256": {
+    "sha3-batch-simd-session-linux.json": "fb64b43b63b498ae5f535daa947c93b585662e0fa8ef124f371574aea868e1af",
+    "sha3-batch-simd-session-windows.json": "9174a841da40e7e4ae77677febc004c5a79e2048dca29a4dead446b16cd68694"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_session.py": "76a5f0d03b3848eb1fade5b5e60b430c686ab40d912eac31ef71bb4c09fe358f",
+    "windows_enclave_sha3_simd_session_tests.py": "6e9cbcac500fff3bc55aed37128e78ce841dab6f47a0cd48ba38dcfc6f4373e8",
+    "windows_enclave_sha3_batch_chains.py": "11598bc7c523b116141acf430b428162265fb69fd49e31a41c081e9464dc6ace",
+    "test-windows-enclave-sha3-batch-chains.py": "27a1b5e73efed99a0afe3fe1335e7ce42961cba58879d21abd962aed2278a0b9"
+  },
+  "new_contracts": {
+    "complete_session_scratch_zeroizer_and_funclet_bodies": 6,
+    "normal_paths": 7,
+    "session_cleanup_funclets": 3,
+    "full_scratch_wipe_ranges": [[0, 800], [800, 960], [960, 1120], [1120, 1920]],
+    "authority_fields": {"counter": 0, "revalidator": 8, "healthy": 16, "kernel": 17},
+    "authority_parent_frame_slot": -16,
+    "scratch_parent_frame_slot": -24,
+    "caller_state_pointer_nonvolatile_register": "rsi",
+    "fh3_frame_state_offset": 56,
+    "cleanup_parent_frame_adjustment": 64,
+    "callback_cleanup_chains": [[14, 15], [16, 15]],
+    "success_output_after_revalidation_and_checked_counter": true,
+    "normal_rejections_preserve_output_and_counter": true,
+    "success_error_and_callback_unwind_scratch_clearing_composed": true,
+    "caller_valid_authority_and_disjoint_allocations_required": true,
+    "callback_abi_and_immutable_kernel_identity_required": true,
+    "caller_authority_and_allocation_lifetimes_qualified": false,
+    "arbitrary_os_unwind_qualified": false,
+    "private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "instruction_changes": 338,
+    "normal_path_event_and_order_mutations": 15,
+    "cleanup_table_changes_removals_duplicates": 30,
+    "callback_label_changes": 4,
+    "argument_and_calling_convention_mutations": 21,
+    "weakened_leaf_prerequisites": 8,
+    "integrated_session_failure_rejected": true
+  },
+  "remaining": [
+    "SIMD resident/owner callback authority and caller input-pointer lifetime composition",
+    "retained worker, receiver, descriptor, digest and workspace cleanup composition",
+    "complete sequential and SIMD private frame, copy and exceptional cleanup reconciliation",
+    "shared runtime and whole-image qualification in package 8"
+  ]
+}

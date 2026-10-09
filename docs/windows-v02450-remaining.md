@@ -31,8 +31,10 @@
   normal rejection/reuse/retirement now have saved-code contracts and model
   checks. Inner-loop setup/readiness and rate-limited squeeze copies now have
   saved-code and byte-oracle checks, including staging bounds, final-byte masks,
-  post-copy counter commits and restored continuation pointers. Its remaining
-  absorption/permutation/report and input
+  post-copy counter commits and restored continuation pointers. The complete
+  one-rate absorption loop now has saved-code/bitstream-oracle checks for all
+  nine framing parts, split source-byte accesses, checked XOR helpers and
+  cursor/block/readiness transitions. Its remaining permutation/report and input
   paths, machine pointer lifetimes/non-overlap and final private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative

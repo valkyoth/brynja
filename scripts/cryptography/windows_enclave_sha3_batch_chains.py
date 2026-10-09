@@ -39,6 +39,7 @@ import windows_enclave_sha3_simd_output as simd_output
 import windows_enclave_sha3_simd_frame as simd_frame
 import windows_enclave_sha3_simd_reject as simd_reject
 import windows_enclave_sha3_simd_squeeze as simd_squeeze
+import windows_enclave_sha3_simd_absorb as simd_absorb
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -137,6 +138,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
     frame_simd=simd_frame.inspect(bodies,asm,digest_simd) if lane=='simd' else None
     reject_simd=simd_reject.inspect(bodies,ir,digest_simd,output_simd,frame_simd) if lane=='simd' else None
     squeeze_simd=simd_squeeze.inspect(bodies,asm,ir,constants,digest_simd,frame_simd,reject_simd) if lane=='simd' else None
+    absorb_simd=simd_absorb.inspect(bodies,asm,ir,constants,frame_simd,squeeze_simd) if lane=='simd' else None
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
@@ -202,6 +204,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         simd_public_framing=frame_simd,
         simd_admission_and_rejection=reject_simd,
         simd_lane_squeeze=squeeze_simd,
+        simd_lane_absorption=absorb_simd,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

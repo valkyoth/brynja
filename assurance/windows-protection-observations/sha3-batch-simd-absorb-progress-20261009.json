@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "a55887f6",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_absorption_and_predecessors": {
+      "tests": 79,
+      "seconds": 72.287,
+      "status": "PASS"
+    },
+    "windows_simd_absorption_and_predecessors": {
+      "tests": 79,
+      "seconds": 86.536,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 227,
+  "files_sha256": {
+    "sha3-batch-simd-absorb-linux.json": "bdef2445df6dfcaf4f309d3f33db41aef012544f74dc511728c3de2433be35fa",
+    "sha3-batch-simd-absorb-windows.json": "d14fe49db48a4dbfac35ca37bd57ce0259b554ed28eebed62f839085d5a79b98",
+    "sha3-batch-simd-absorb-20261009-exit.json": "707a8d49189fe80c90840b17303e72305a5dfe45c880e8532557fd8934cbc965",
+    "sha3-batch-simd-absorb-linux.log": "800fb5384e1fcf9fc578a361b30f19cd9488f19277983f2fc1f6f6e68bbae197",
+    "sha3-batch-simd-absorb-20261009.log": "8b27694dd3ad8c3300066725bc2458d8210d3c46361d614f3551a48940bf0330"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_absorb.py": "6b75b5acbc21c972572286abb001a1bbf8722ee00f2870c99081f80fb834b2c5",
+    "windows_enclave_sha3_simd_absorb_helpers.py": "79e2f516cf5dd63d994528df283525bff0d712686eddc97fa796eb185297c490",
+    "windows_enclave_sha3_simd_absorb_machine.py": "a8b2061abd29846f2ced69c8b279892e685470bcdfffd018569073036d84737f",
+    "windows_enclave_sha3_simd_absorb_model.py": "51a069f0e38b02ddd86e09617495828b7a55cf0d2b4684b1c8a9ae46c284921b",
+    "windows_enclave_sha3_simd_absorb_shape.py": "47229d69a37b801ce150e0697c8278b488159d86fdf159d8bd4de62ec3718ddf",
+    "windows_enclave_sha3_simd_absorb_tests.py": "d17cad61eec346053ad6ef07f318a883a5ea359bbf5fe95d7bdc738eac57b82b",
+    "windows_enclave_sha3_batch_chains.py": "45fa321152e71571345cc0ced7c969fe04ac2139c72326f33badf433420eeed0",
+    "test-windows-enclave-sha3-batch-chains.py": "d6901a9dabc13d6c0070deabd0acbebb1775be7adb8f6a81e1ff682191ca9f8f"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "region": [
+      648,
+      920
+    ],
+    "instruction_positions": 272,
+    "helpers": {
+      "functions": {
+        "xor": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory20xor_secret_byte_bits",
+        "xor_leaf": "_RNvNtCsjNKEhcqdpKw_11brynja_core17secret_memory_xor8xor_bits"
+      },
+      "wrapper_stack_bytes": 56,
+      "fifth_incoming_argument_from_lowered_rsp": 96,
+      "leaf_mask_argument_from_entry_rsp": 40,
+      "valid_count": [
+        1,
+        8
+      ],
+      "invalid_parameters_rejected_before_secret_read": true,
+      "erased_working_registers": [
+        "eax",
+        "ecx"
+      ],
+      "opaque_stack_accesses": 0,
+      "whole_caller_frame_and_stack_lifetimes_qualified": false
+    },
+    "part_dispatch": [
+      103,
+      103,
+      112,
+      103,
+      107,
+      118,
+      110,
+      108,
+      119
+    ],
+    "linked_rates": [
+      144,
+      136,
+      104,
+      72,
+      168,
+      136,
+      168,
+      136
+    ],
+    "saved_region_oracle_cases": 18,
+    "state_stride": 200,
+    "frame_stride": 156,
+    "readonly_bit_sources_and_two_byte_splits_checked": true,
+    "all_nine_parts_and_final_padding_bit_checked": true,
+    "cursor_block_count_and_absorbing_to_ready_transition_checked": true,
+    "proof_scope": "one block; live/disjoint caller objects; synthetic secret bytes; no permutation",
+    "all_incoming_pointer_lifetimes_and_storage_nonoverlap_qualified": false,
+    "permutation_work_accounting_and_report_qualified": false,
+    "exception_and_private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "absorption_instruction_position_changes": 816,
+    "xor_helper_instruction_changes": 129,
+    "xor_marker_changes": 5,
+    "xor_abi_changes": 4,
+    "linked_or_assembly_rate_and_dispatch_table_changes": 13,
+    "independent_bitstream_source_and_cursor_comparisons": 412,
+    "xor_metadata_and_byte_comparisons": 89088,
+    "additional_actual_saved_region_comparisons": 28,
+    "load_bearing_source_cursor_padding_mutations": 17,
+    "distinct_helper_call_sites_fault_injected": 4,
+    "corrupt_metadata_and_short_source_rejections": 6,
+    "unassigned_effect_and_budget_rejections": 6,
+    "prerequisite_mutations": 2,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "permutation grouping, later control polls/charges and final report semantics",
+    "complete incoming machine pointer-lifetime, storage non-overlap and exceptional-path composition",
+    "final private-frame erasure and shared package-8 runtime/platform reconciliation",
+    "independent retest and final native qualification"
+  ]
+}

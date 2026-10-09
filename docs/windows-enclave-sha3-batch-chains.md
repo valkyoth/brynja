@@ -28,6 +28,48 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Four-lane one-block absorption (2026-10-09)
+
+The saved executor's complete 272-position absorption region now has an exact
+emitted contract, including its nine-entry framing-part dispatch and separate
+linked rate table. Each iteration consumes one rate block from the prepared
+frame: encoded rate/name/customization lengths, name/customization bytes,
+prefix zero padding, message, domain suffix and final padding. Empty parts are
+skipped with bounded indices. Part offsets are checked before source indexing;
+unaligned fragments may use two separately bounded byte accesses. The complete
+checked XOR wrapper and opaque byte leaf, their private LLVM argument ranges,
+fifth-argument placement and EAX/ECX erasure are reviewed separately.
+
+A bounded instruction interpreter compares all workspace bytes and readonly
+inputs against an independent concatenated-bitstream oracle. Expected helper
+events additionally bind each source address, source bit offset, count,
+destination byte and destination bit offset. Caller-saved registers are poisoned
+after helper calls. The campaign covers all eight identities and four lane
+positions, zero/partial/rate-boundary messages, fractional name/customization
+lengths, and every block of maximum 8,192-bit message/name/customization cases.
+It checks part/cursor advancement, one-block count retirement, readiness and
+the transition out of absorption. No permutation is modeled or claimed.
+
+Fault injection reaches each of the four distinct helper call sites and checks
+that rejection occurs before block-count/readiness retirement. Corrupt part,
+cursor and remaining-block metadata and truncated input buffers reject. The
+shared rejection cleanup is a separate, replayed contract: these model failures
+do not claim native fault injection or cleanup of every intermediate frame.
+All incoming pointer lifetimes, storage non-overlap, permutation/control/work
+accounting, final report and private-frame/exception composition remain open.
+Live, disjoint caller objects remain explicit model assumptions.
+
+The [absorption observation](../assurance/windows-protection-observations/sha3-batch-simd-absorb-progress-20261009.json)
+records 79 focused SIMD/predecessor tests passing on Linux (72.287 seconds) and
+Windows (86.536 seconds). Complete reports regenerated with 88,058 body-byte
+mutations match after parsing; all 227 current checker-source bindings match.
+The nine new tests include 412 bitstream/source/cursor comparisons, 89,088 XOR
+metadata/byte comparisons, 816 absorption instruction mutations, 129 helper
+instruction mutations, 17 reached semantic mutations and faults at all four
+distinct helper call sites. The unrelated full predecessor suite was not rerun.
+This is saved-artifact author review, not new native enclave execution or
+package-6 completion. Production code and release gates are unchanged.
+
 ## Four-lane rate-limited squeezing (2026-10-09)
 
 The saved executor's 37-position inner-loop setup, 24-position readiness/lane

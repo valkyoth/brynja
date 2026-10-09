@@ -44,6 +44,7 @@ import windows_enclave_sha3_simd_vector as simd_vector
 import windows_enclave_sha3_simd_scalar as simd_scalar
 import windows_enclave_sha3_simd_terminal as simd_terminal
 import windows_enclave_sha3_simd_reconcile as simd_reconcile
+import windows_enclave_sha3_simd_wipe_origins as simd_wipe_origins
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -149,6 +150,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
     reconcile_simd=simd_reconcile.inspect(bodies,asm,dict(frame=frame_simd,reject=reject_simd,
         squeeze=squeeze_simd,absorb=absorb_simd,vector=vector_simd,scalar=scalar_simd,
         output=output_simd,terminal=terminal_simd)) if lane=='simd' else None
+    wipe_origins_simd=simd_wipe_origins.inspect(bodies,asm,reconcile_simd,vector_simd) if lane=='simd' else None
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
@@ -219,6 +221,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         simd_scalar_fallback=scalar_simd,
         simd_terminal=terminal_simd,
         simd_executor_reconciliation=reconcile_simd,
+        simd_wipe_pointer_origins=wipe_origins_simd,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

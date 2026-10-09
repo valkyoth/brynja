@@ -45,8 +45,11 @@
   checks, including the mixed-width vector-call counter stores. An aggregate
   check now reconciles all 1,676 executor positions across 15 regions and follows
   all three table-dispatch sites to check workspace-then-staging wipe ordering
-  before every normal return; panic is not cleanup success. Full predecessor
-  register/input provenance, machine pointer lifetimes/non-overlap and private-frame/exception
+  before every normal return; panic is not cleanup success. All seven wipe
+  receivers now have direct origin/preservation checks through every normal
+  predecessor, including fixed-frame and guarded compaction-store effects.
+  Indirect stores/callee memory effects, remaining register/input provenance,
+  machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.

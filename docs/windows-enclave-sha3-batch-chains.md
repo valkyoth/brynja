@@ -28,6 +28,37 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Original wipe receivers through all normal predecessors (2026-10-09)
+
+The saved executor now has a finite, all-predecessor direct pointer-origin
+analysis. The four workspace wipes receive the original argument from stack
+slot 1104; the three staging wipes receive the original argument from slot 1112.
+It follows register moves and branch/loop joins, including the R15-to-R12 handoff
+before final output and the reverse transfer on rejection. The operation guard's
+initial pointer captures at slots 448 and 456 are checked too.
+
+Partial-register writes, overlapping stack writes, volatile call clobbers and
+division's implicit RAX/RDX results cannot preserve a pointer fact. Unknown or
+conflicting incoming values are rejected; a cycle without an incoming root
+cannot establish provenance. The fixed RBP/RSP frame relation is checked. The
+sole indexed RBP store is bounded to offsets 176–207 by the actual unsigned
+`RCX < 4` branch, and every predecessor of the guarded store is checked against
+an entry that could bypass that bound.
+
+The [wipe-origin observation](../assurance/windows-protection-observations/sha3-batch-simd-wipe-origins-progress-20261009.json)
+records 112 tests passing on Linux (109.143 seconds) and Windows (125.742 seconds).
+Parsed reports match, all 241 checker-source hashes are current, and 88,058
+body-byte mutations are rejected. Five new tests check 28 original-root reloads,
+17 receiver/partial/root-slot mutations, 11 index/frame mutations and the
+join/cycle/clobber cases. The unrelated full predecessor test suite was not rerun.
+This closes **direct** origin and
+preservation under Win64 nonvolatile-register and memory-separation prerequisites.
+It does not silently treat calls or stores through other pointers as harmless:
+their 74 non-frame store and 57 call-site inventories remain pending for physical memory-effect
+composition. Original allocation lifetimes, indirect aliases, private frames and
+exceptional cleanup are still open. It is not a new native enclave capture or a
+release-gate change.
+
 ## Complete executor coverage and normal CFG ordering (2026-10-09)
 
 The aggregate checker now reconciles all 15 independently replayed regions

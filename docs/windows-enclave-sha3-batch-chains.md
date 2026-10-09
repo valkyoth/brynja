@@ -176,14 +176,13 @@ private frames are individually erased.
 Shared transport serialization, OS copying, runtime helpers and final stack-window
 cleanup remain package 8; cleanup-funclet composition remains separate work.
 
-## Remaining package-6 work
+## Remaining package-6 work (updated 2026-10-09)
 
-- Complete nested slot selection and subsequent state/copy-helper caller
-  arguments, including owner and input/output lifetime preservation by callees.
-  The sequential update caller checkpoint below covers absorption after admission;
-  it does not establish the initial state invariant supplied by `start`.
-- Complete scalar setup finalization, final-bit framing, squeeze and retained-output
-  production paths for both sequential routes; receiver-side export is checked.
+- Reconcile the checked sequential constructor, update, setup-completion,
+  finalization and export contracts into complete storage/copy/cleanup lifetimes.
+  Both constructor bodies now have complete instruction coverage and explicit
+  state-transfer models; that does not itself close every enclosing-frame or
+  exceptional-path obligation.
 - Review four-lane Keccak kernel/transposes, compaction, per-lane pointers,
   authority/cancellation calls and their normal/error/unwind paths.
 - Assign every private temporary and frame's cleanup responsibility, keeping
@@ -766,6 +765,68 @@ Parsed reports match with 187 current checker-source bindings verified. The
 [start-path observation](../assurance/windows-protection-observations/sha3-batch-start-progress-20261009.json)
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
+
+## AVX2 cSHAKE constructor reconciliation (2026-10-09)
+
+The remaining cSHAKE constructor blocks now have explicit instruction and
+lifetime contracts. Together with the direct-constructor checkpoint, all **597
+AVX2 `Owner::start` instruction/label positions** are checked. The scalar start
+coverage remains 1,361 positions. This is constructor-path review, not completion
+of package 6 or proof of whole-frame erasure.
+
+The two cSHAKE entries map to identity/rate pairs 6/168 and 7/136. They pass the
+retained authority into the rebound initial helper and reject its error tag
+before reading the payload. Every byte of the 992-byte result at `[1696,2688)`
+is saved into `[704,1696)` before the original result slot is reused for public
+encodings. The borrowed session authority survives at local `[1280,1288)`.
+The three encoding results are disjoint from the live local engine. Their
+lengths are consumed before name-encoding storage is reused for prefix fields.
+
+Both emitted paths use checked two-limb additions for the declared name/custom
+bit lengths, followed by ceiling division by eight and rate rounding using the
+public `__umodti3` runtime contract. Boundary/randomized comparisons against
+an independent framing calculation cover 21,202 cases, including both carry
+failures and the largest admitted total bit count. The 75 active prefix bytes
+are initialized only after arithmetic succeeds. Empty N/S bypasses absorption;
+customized paths absorb the encoded rate, encoded name length and then call the
+replayed prefix-advance helper. Pending/used fields lie outside the exclusively
+borrowed engine, so normal initial `used == 0` cannot become nonzero merely
+through the bulk absorb call. The alternate byte-loop instructions are checked
+too, without claiming that branch is reached by valid initialization.
+
+On an initial-helper error there is no local Core to destroy. Arithmetic failure
+destroys the already-created local Core without treating uninitialized prefix
+fields as live. Later absorption/advance failures clear the initialized prefix
+pending byte and destroy local engine memory and scratch before the existing
+outer guard's clear/quarantine path. The plan pointer is restored before that
+outer cleanup. Wipe-call counts distinguish explicit caller cleanup from work
+inside the separately reviewed helpers; no count is promoted into a claim that
+all frame copies or padding have been erased.
+
+The empty and customized prefix snapshots now have byte-origin models through
+the emitted overlapping moves: all 80 physical prefix bytes are accounted for,
+75 are active, and 23 overlapping store bytes have identical origins. Five
+padding bytes remain explicitly outside initialization claims. The cSHAKE
+domain/width is 4/3 when either declared length is nonzero and 31/5 for empty
+N/S. All 992 final physical state bytes reach retained `[1216,2208)` after old
+state destruction and before slot/phase publication. Active prefix bytes land
+at `[2080,2155)`, padding at `[2155,2160)`, and the original authority remains
+at `[1792,1800)` without overwriting the output, plan or outer authority fields.
+
+New regressions cover 738 instruction deletions/substitutions, 11 improper
+entries, targeted ABI/pointer/domain changes, 128 initial-snapshot deletions,
+240 snapshot bounds/order changes, 374 retained-transfer deletions and 126
+retained-transfer provenance/order changes. The byte model deliberately accepts
+58 deletions of stores superseded by identical-origin writes; the complete
+instruction contract still rejects those changes. The model is not presented
+as proving those redundant writes are semantically necessary.
+
+The [observation](../assurance/windows-protection-observations/sha3-batch-avx2-cshake-progress-20261009.json)
+records focused Linux/Windows validation and current report/source bindings.
+Remaining package-6 work is the distinct four-lane SIMD caller/dispatch/lifetime
+review and final private-frame, copy and exceptional-cleanup reconciliation.
+Shared runtime/ABI and whole-image qualification remain assigned to package 8.
+Production source and release-gate policy are unchanged.
 
 ## Direct AVX2 constructor caller transfers (2026-10-09)
 

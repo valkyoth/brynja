@@ -25,6 +25,8 @@ import windows_enclave_sha3_batch_cshake_init as cshake_init
 import windows_enclave_sha3_batch_cshake_flow as cshake_flow
 import windows_enclave_sha3_batch_cshake_moves as cshake_moves
 import windows_enclave_sha3_batch_avx2_start as avx2_start
+import windows_enclave_sha3_batch_avx2_cshake as avx2_cshake
+import windows_enclave_sha3_batch_avx2_cshake_moves as avx2_cshake_moves
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -127,6 +129,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
     cshake_prefix=cshake_flow.inspect(bodies,asm,ir,prior,construction,cshake_initialization) if lane=='scalar' else None
     cshake_transfers=cshake_moves.inspect(bodies,asm,construction,cshake_initialization,cshake_prefix,placement) if lane=='scalar' else None
     direct_avx2=avx2_start.inspect(bodies,asm,ir,prior,construction,placement) if lane=='avx2' else None
+    prefix_avx2=avx2_cshake.inspect(bodies,asm,ir,prior,construction,direct_avx2) if lane=='avx2' else None
+    moves_avx2=avx2_cshake_moves.inspect(bodies,asm,construction,prefix_avx2,placement) if lane=='avx2' else None
     absorption=update.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
     fragments=chunks.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
     completion=setup_end.inspect(bodies,ir,prior,placement,transitions,receiver,fragments) if lane=='avx2' else None
@@ -160,6 +164,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
         scalar_cshake_prefix=cshake_prefix,
         scalar_cshake_transfers=cshake_transfers,
         avx2_direct_constructors=direct_avx2,
+        avx2_cshake_prefix=prefix_avx2,
+        avx2_cshake_transfers=moves_avx2,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

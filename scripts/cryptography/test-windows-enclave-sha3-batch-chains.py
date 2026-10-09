@@ -43,12 +43,13 @@ from windows_enclave_sha3_simd_descriptors_tests import SimdDescriptorSavedTests
 from windows_enclave_sha3_simd_digest_tests import SimdDigestSavedTests,SimdDigestModelTests
 from windows_enclave_sha3_simd_output_tests import SimdOutputSavedTests,SimdOutputModelTests
 from windows_enclave_sha3_simd_frame_tests import SimdFrameSavedTests,SimdFrameModelTests
+from windows_enclave_sha3_simd_reject_tests import SimdRejectSavedTests,SimdRejectModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(SimdFrameModelTests,SimdOutputModelTests,SimdDigestModelTests,SimdDescriptorModelTests,SimdReceiveModelTests,SimdWorkerModelTests,SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(SimdRejectModelTests,SimdFrameModelTests,SimdOutputModelTests,SimdDigestModelTests,SimdDescriptorModelTests,SimdReceiveModelTests,SimdWorkerModelTests,SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -92,7 +93,7 @@ class Tests(SimdFrameModelTests,SimdOutputModelTests,SimdDigestModelTests,SimdDe
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(SimdFrameSavedTests,SimdOutputSavedTests,SimdDigestSavedTests,SimdDescriptorSavedTests,SimdReceiveSavedTests,SimdWorkerSavedTests,SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTests,SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(SimdRejectSavedTests,SimdFrameSavedTests,SimdOutputSavedTests,SimdDigestSavedTests,SimdDescriptorSavedTests,SimdReceiveSavedTests,SimdWorkerSavedTests,SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTests,SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')

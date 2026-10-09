@@ -28,6 +28,43 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Four-lane admission and normal rejection (2026-10-09)
+
+The saved executor now has exact contracts for its 69-position entry, the
+56-position post-framing eligibility/poll region, and the 78-position shared
+normal-rejection/return region. Entry binds the original output descriptors,
+operation guard fields, health/revalidation check and output validator. The
+post-framing check rejects totals above 1,024 bytes and counts only eligibility
+bytes equal to one. Required mode rejects a missing authority or too few lanes;
+the saved width computation distinguishes the four-lane and two-lane identities.
+This does not claim execution of a different architecture's kernel.
+
+The first cancellation poll is joined from the original control argument to
+vtable slot 32 and its original context, in both assembly and LLVM. The caller's
+replayed vtable resolves this to the internal, read-only false leaf; it does not
+accept a host callback. Model-injected cancellation checks the rejection path
+without pretending the actual internal leaf returned true. Later polls and
+their argument lifetimes remain separate review obligations.
+
+A bounded interpreter compares 5,248 public admission/rejection cases against
+an independent decision and retirement model. These include all 14 valid error
+tags, absent/present authorities, both width tags, three modes, all Boolean
+eligibility masks, noncanonical eligibility bytes, zero/exact/oversized staging
+totals, sparse/zero-length outputs and two caller-saved-register poison patterns.
+Routine input/destination/scratch/eligibility/length/budget/cancellation errors
+preserve executor reuse; backend, quarantine, selection and invariant errors
+revoke it and any supplied authority. Rejection wipes the 5,260-byte workspace
+and 1,024-byte staging first, then supplied nonempty outputs and output metadata.
+Only the error byte and discriminant are published in the caller result.
+
+The tests reject 609 instruction-position changes, six first-callback IR
+mutations, and 22 reached decision/classification/retirement mutants. They also
+execute the actual saved region with sparse output cases. The model assumes
+live, disjoint caller objects and the previously checked erasure helpers; it
+does not establish every incoming failure edge's pointer lifetime, exceptional
+cleanup or private-frame erasure. Those obligations and the inner engine remain
+open. This is saved-artifact review, not new native enclave execution.
+
 ## Four-lane public framing preparation (2026-10-09)
 
 The executor's complete 385-position preparation region and eight-entry identity

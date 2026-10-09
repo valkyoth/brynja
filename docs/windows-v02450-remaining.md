@@ -27,7 +27,9 @@
   source-preflight/copy regions are also checked. The complete public framing
   preparation loop now has saved-instruction/oracle checks for all eight
   identities, including cSHAKE prefix padding and per-lane staging offsets.
-  Its remaining absorption/permutation/report and input
+  Entry, required-SIMD eligibility, first internal cancellation polling and
+  normal rejection/reuse/retirement now have saved-code contracts and model
+  checks. Its remaining absorption/permutation/report and input
   paths, machine pointer lifetimes/non-overlap and final private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative

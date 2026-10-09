@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "a0c87217",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_admission_rejection_and_predecessors": {"tests": 63, "seconds": 51.571, "status": "PASS"},
+    "windows_simd_admission_rejection_and_predecessors": {"tests": 63, "seconds": 65.097, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 219,
+  "files_sha256": {
+    "sha3-batch-simd-reject-linux.json": "87b68448af84b3ef52b85ecef6dc4ce0d6ca4ad607748f34b2882326d661273c",
+    "sha3-batch-simd-reject-windows.json": "108822a5b25b92a400a53b99d41dd118e6040d298788f864f37c3831cdf8e281",
+    "sha3-batch-simd-reject-20261009-exit.json": "d6bb5b198d6468c5c26d01c53e0f4c946e04e3b5a155f97e73b71bdbbacb3a21",
+    "sha3-batch-simd-reject-linux.log": "65f6090ee2cae736c22759f573467cfe59963a35c7818fbcccc70ba22be4bce7",
+    "sha3-batch-simd-reject-20261009.log": "2d820d284e9645de3e889ba46af4661758ed0879667c93b5f9b5199b4b757f12"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_reject.py": "8b04256ab6f1bc86aef336822840ab0c6c8c13bfdf40841cf58b7651649707ec",
+    "windows_enclave_sha3_simd_reject_shape.py": "21f78876bfa9b005599dde7cfb4e89a2ba06e31eaa87600936acb4793f695370",
+    "windows_enclave_sha3_simd_reject_model.py": "2454c262988fa280220f56a1ae93baaa8283ac1df81fb8618dd31ad1c84e3e25",
+    "windows_enclave_sha3_simd_reject_tests.py": "9ce82157d2d6a2efbe6789e83aa6e38eabfdb119cb47673f9fa164ee2bd70bef",
+    "windows_enclave_sha3_batch_chains.py": "9904e5108fca8e63c4131868ee38a7005bf370e332a720da210dbce021dd4549",
+    "test-windows-enclave-sha3-batch-chains.py": "fb09368449869ff9ea313d4c02d6d1314a31b68c3c880318ed8d99c1a6d09349"
+  },
+  "new_contracts": {
+    "entry_region": [0, 69],
+    "eligibility_and_first_poll_region": [454, 510],
+    "normal_rejection_region": [510, 588],
+    "instruction_positions": 203,
+    "first_callback_slot": 32,
+    "first_callback_original_context_and_internal_false_leaf_bound": true,
+    "modeled_true_callback_is_fault_injection_not_observed_native_execution": true,
+    "routine_error_tags_preserving_reuse": [6, 8, 9, 10, 11, 12, 13],
+    "workspace_and_staging_cleared_before_destination_retirement": true,
+    "supplied_empty_and_absent_outputs_handled_separately": true,
+    "only_error_byte_and_discriminant_published_on_rejection": true,
+    "all_error_predecessor_pointer_lifetimes_qualified": false,
+    "later_callback_and_inner_engine_paths_qualified": false,
+    "exception_and_private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "instruction_position_changes": 609,
+    "callback_ir_transfer_changes": 6,
+    "public_admission_and_retirement_oracle_comparisons": 5248,
+    "additional_actual_saved_region_comparisons": 71,
+    "integrated_checker_saved_region_comparisons": 18,
+    "load_bearing_decision_classification_and_retirement_mutations": 22,
+    "unassigned_effect_and_budget_rejections": 6,
+    "prerequisite_mutations": 3,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "inner absorption/permutation, later control polls/charges and report semantics",
+    "complete machine pointer-lifetime, non-overlap and exceptional-path composition",
+    "final private-frame erasure and shared package-8 runtime/platform reconciliation",
+    "independent retest and final native qualification"
+  ]
+}

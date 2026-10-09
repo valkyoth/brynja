@@ -28,6 +28,42 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Squeeze-copy and terminal-mask footprints (2026-10-09)
+
+The inner squeeze copy and final-byte mask now have original-allocation and
+guard-dominance checks. The complete normal CFG retains the original workspace
+and staging roots. A read-only observer on the existing four-lane induction
+checks the lane at squeeze entry and at source-address multiplication, following
+all 371 loop positions per lane. The source state-array pointer must retain its
+original workspace offset on every predecessor.
+
+The emitted checked subtraction, nonempty test, rate clamp and overflow/1,024-byte
+end checks precede staging pointer addition. The bit-count ceiling uses a shift
+and remainder rather than overflowing `bits + 7`. Successful copies have equal
+lengths in 1–168, fit one 200-byte state, and stay inside staging. The final-byte
+mask must cross copy-success, nonzero remainder and final-output checks, so its
+one-byte access is at the end of a successfully copied nonempty window. External
+entries after those guards and altered rejection edges fail the checker.
+
+The physical state-read envelopes and staging allocation are disjoint and
+exclude the other caller objects and child frame. This still requires the
+receiver's validated identity and live input metadata; it is not a new generic
+out-of-range enum guard. Other call effects, allocation lifetimes, indirect
+pointer preservation and exceptional/private-frame cleanup remain open. There
+are 22 call-site footprints left, including absorption XOR, output transfers and
+callbacks. Package 6 is not complete, and production/release-gate code is unchanged.
+
+The [squeeze-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-squeeze-effects-progress-20261009.json)
+records 159 focused/predecessor tests passing on Linux (241.901 seconds) and
+Windows (275.078 seconds). Parsed reports match, all 250 checker-source hashes
+are current, and 88,058 body-byte mutations are rejected. Seven new tests cover
+597,560 admitted rate-clamped staging windows, 288 full-width metadata cases
+against saved instructions, 72 instruction mutations, 18 entry/guard bypasses
+and ten root/lane/restore mutations. Bounds, overlap, prerequisites and the
+optional observer's preservation of existing loop results are also tested.
+The unrelated full predecessor suite was not rerun. These are saved-image
+author checks, not new native execution or independent qualification.
+
 ## Scalar fallback call footprints (2026-10-09)
 
 The scalar fallback's two state-copy calls and four-buffer permutation call now

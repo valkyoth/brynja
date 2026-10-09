@@ -83,14 +83,16 @@ def transfer(line,before,span=None):
     return state
 
 
-def check_lane(code,edges,spans,lane):
+def check_lane(code,edges,spans,lane,observer=None):
     s.require(type(lane) is int and 0<=lane<4,'one of four admitted loop lanes')
     initial={k:UNKNOWN for k in (*o.REGS,*SLOTS)}
     initial.update({k:one('workspace',v) for k,v in ROOTS.items()})
     initial.update(r8=one('number',112*lane),r9=one('number',lane),rdx=one('workspace',3624+156*lane))
     states={642:initial};todo=deque([642]);backedges=set();exits=set()
     while todo:
-        at=todo.popleft();before=states[at];after=transfer(code[at],before,spans.get(at))
+        at=todo.popleft();before=states[at]
+        if observer is not None:observer(at,before)
+        after=transfer(code[at],before,spans.get(at))
         if at in STORES:
             offset,stride,width=STORES[at];op,args=o.instruction(code[at])
             actual={'movq':8,'movb':1,'setne':1}.get(op)

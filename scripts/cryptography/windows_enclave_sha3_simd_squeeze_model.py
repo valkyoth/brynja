@@ -12,7 +12,7 @@ MASK=(1<<64)-1
 
 
 def run(code,n,tag,bits,written,start,lane,poison=0xa5,copy_failure=False,max_steps=256):
-    s.require(0<=tag<8 and 0<=bits<=2048 and 0<=written<=MASK and 0<=start<=MASK and
+    s.require(0<=tag<8 and 0<=bits<=MASK and 0<=written<=MASK and 0<=start<=MASK and
               0<=lane<4,'bounded squeeze model inputs')
     regs={name:poison*0x0101010101010101 for name,_ in index.REGS.values()}
     regs.update(rbp=STACK,rbx=WORK,r14=INPUT,r15=STAGING,r8=112*lane,r9=lane,rax=tag,

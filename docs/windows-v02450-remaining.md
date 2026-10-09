@@ -67,7 +67,10 @@
   bounded nonoverlapping source/destination ranges across 96 cases. The scalar
   loop now has four-lane induction across all 82 positions, saved-index restores,
   original pointer-cell roots and bounds/non-overlap for two state copies and
-  the four-buffer scalar permutation call. The remaining 24 call-site footprints,
+  the four-buffer scalar permutation call. The squeeze copy and final-byte mask
+  now bind original state/staging roots, the live bounded lane, overflow/empty/
+  rate/final-byte guard dominance and physically disjoint read/write envelopes.
+  The remaining 22 call-site footprints,
   remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,

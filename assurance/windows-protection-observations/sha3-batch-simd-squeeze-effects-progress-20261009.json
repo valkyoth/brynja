@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "0a1699ba",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_squeeze_effects_and_predecessors": {
+      "tests": 159,
+      "seconds": 241.901,
+      "status": "PASS"
+    },
+    "windows_simd_squeeze_effects_and_predecessors": {
+      "tests": 159,
+      "seconds": 275.078,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 250,
+  "files_sha256": {
+    "sha3-batch-simd-squeeze-effects-linux.json": "5d3cde3f8f3e457238d21ae014cc0a2bddb6b2691d4ba29c931d6bfadbff60fa",
+    "sha3-batch-simd-squeeze-effects-windows.json": "cbdf90247c55058625accafd2e059091d64201298973f9924b33c5c62d8652d8",
+    "sha3-batch-simd-squeeze-effects-20261009-exit.json": "27e8f8dd8f1635e3ab9305e4642385ae02d82ff30d71cb2dd18817ef3172b81c",
+    "sha3-batch-simd-squeeze-effects-linux.log": "da027ee0d01315c97a0cd0daaafe5e3deb9047c1c168994e37b9f2579740c83e",
+    "sha3-batch-simd-squeeze-effects-20261009.log": "041b2c34e77850f44027205b543dfd03eff4244ce31f55c20746894381de44c4"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_squeeze_effects.py": "d53adc7ff12a6d3447b32c4064bded099645737da9a8ad27563b2d2ab905b85e",
+    "windows_enclave_sha3_simd_squeeze_effects_tests.py": "e9c737306d555abc946b46ad9650604dae01988922207a220228645f25ac1ff8",
+    "windows_enclave_sha3_simd_loop_effects_model.py": "526c4817ac6b042d79dfd322a8ae4f899803c1f703d6b3798b30f201068e51b8",
+    "windows_enclave_sha3_simd_squeeze_model.py": "22da45f6d8afa483babd5b530b244632112932a6999aaad0493046a383ef6071",
+    "windows_enclave_sha3_batch_chains.py": "bef1ad18451745fe20dda3075984893e92fb050e42424ede8a057d1e7dc8f45f",
+    "test-windows-enclave-sha3-batch-chains.py": "fecdb5c12d256574ac237b00b415775c77327e5d055874866d03fd71e406a53a"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "call_sites": [
+      961,
+      985
+    ],
+    "lane_provenance": [
+      {
+        "lane": 0,
+        "reachable_positions": 371,
+        "observed_sites": [
+          920,
+          954
+        ]
+      },
+      {
+        "lane": 1,
+        "reachable_positions": 371,
+        "observed_sites": [
+          920,
+          954
+        ]
+      },
+      {
+        "lane": 2,
+        "reachable_positions": 371,
+        "observed_sites": [
+          920,
+          954
+        ]
+      },
+      {
+        "lane": 3,
+        "reachable_positions": 371,
+        "observed_sites": [
+          920,
+          954
+        ]
+      }
+    ],
+    "physical_copy_envelopes": [
+      {
+        "lane": 0,
+        "source_envelope": [
+          1856,
+          2024
+        ],
+        "destination_envelope": [
+          5200,
+          6224
+        ]
+      },
+      {
+        "lane": 1,
+        "source_envelope": [
+          2056,
+          2224
+        ],
+        "destination_envelope": [
+          5200,
+          6224
+        ]
+      },
+      {
+        "lane": 2,
+        "source_envelope": [
+          2256,
+          2424
+        ],
+        "destination_envelope": [
+          5200,
+          6224
+        ]
+      },
+      {
+        "lane": 3,
+        "source_envelope": [
+          2456,
+          2624
+        ],
+        "destination_envelope": [
+          5200,
+          6224
+        ]
+      }
+    ],
+    "copy_length_range": [
+      1,
+      168
+    ],
+    "staging_capacity": 1024,
+    "mask_writes_last_byte_of_successful_nonempty_copy": true,
+    "staging_integer_bounds_checked_before_payload_pointer_addition": true,
+    "original_state_staging_roots_and_lane_induction_checked": true,
+    "overflow_empty_copy_failure_and_nonfinal_mask_guards_dominate": true,
+    "requires_receiver_validated_identity_and_live_descriptor_metadata": true,
+    "pending_non_frame_store_sites": [],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      502,
+      563,
+      570,
+      573,
+      782,
+      827,
+      851,
+      899,
+      1059,
+      1129,
+      1266,
+      1289,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583
+    ],
+    "other_callee_memory_effects_and_win64_nonvolatile_abi_required": true,
+    "allocation_lifetimes_and_private_frame_exception_cleanup_qualified": false
+  },
+  "focused_regressions": {
+    "new_tests": 7,
+    "admitted_rate_clamped_windows": 597560,
+    "full_width_metadata_saved_instruction_cases": 288,
+    "instruction_mutations": 72,
+    "entry_guard_bypasses": 18,
+    "root_lane_restore_mutations": 10,
+    "optional_observer_preserves_existing_loop_results": true,
+    "physical_bounds_overflow_nonempty_mask_and_prerequisite_integration_negatives": true
+  },
+  "remaining": [
+    "22 callee footprints, including absorption XOR, output transfers and callbacks",
+    "Allocation lifetimes, authority separation and indirect pointer preservation",
+    "Exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch reconciliation; package 6 remains open",
+    "Shared runtime, Win64 ABI and cumulative stack qualification remains package 8"
+  ]
+}

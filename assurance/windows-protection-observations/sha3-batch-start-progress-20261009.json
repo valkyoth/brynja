@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "1cf227f6",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {"tests": 7, "seconds": 30.167, "status": "PASS"},
+  "full_validation": {
+    "linux": {"tests": 99, "seconds": 396.763, "status": "PASS"},
+    "windows": {"tests": 99, "seconds": 775.898, "status": "PASS"}
+  },
+  "windows_exit_code": 0,
+  "windows_log_sha256": "0fa25bc04a3f80a9fbf540955c32696a5694b7da4e6ab8e693dbd970f4554716",
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 187,
+  "report_sha256": {
+    "sha3-batch-start-linux.json": "c107f8e354a45bd9ff4399d62ef26a51e3c5d3f465901bec93628976cbe21796",
+    "sha3-batch-start-windows.json": "73b31f2ce70b4bebd185730cac022fbf5cbafdab5322d77d324895500c3f8e21"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_start.py": "3a9b0cefc3902c9c5e2cf4125bed81cbb09e486ee859a853c0dc279ca4afcf72",
+    "windows_enclave_sha3_batch_start_shapes.py": "e1324e28dd5151a8a9de697da88cc0f1f1dfe8ffcc612f84e3c6cbc60c26e5a5",
+    "windows_enclave_sha3_batch_start_tests.py": "570ba4fb874796b451b1939a58cc1564120f981c8815cb929c3e3c7900e3f2d2",
+    "windows_enclave_sha3_batch_chains.py": "bfec96845168a401e1efd17e6be41d8aa845fca4da59f75b9c60e0ea21e3440f",
+    "test-windows-enclave-sha3-batch-chains.py": "d720969b705545a644b281b425c5290eb010ffdaf3a6c29b6bef81827463ec3a"
+  },
+  "new_contracts": {
+    "scalar_reviewed_instruction_positions": 254,
+    "avx2_reviewed_instruction_positions": 197,
+    "entire_start_bodies_qualified": false,
+    "actual_receiver_and_operation_targets_bound": true,
+    "collecting_phase": 1,
+    "successful_phase": 2,
+    "first_nonempty_unfinished_slot_before_indexed_read": true,
+    "slot_index_half_open_range": [0, 8],
+    "identity_range": [1, 8],
+    "scalar_identity_table_targets": [24, 14, 16, 17, 15, 23, 28, 18],
+    "avx2_identity_table_targets": [20, 19, 14, 15, 16, 17, 22, 18],
+    "non_cshake_requires_zero_128_bit_name_and_customization_lengths": true,
+    "later_reentry_into_admission_rejected": true,
+    "incoming_u128_halves_home_offsets": [40, 48, 56],
+    "both_win64_entry_residues_modulo_32_checked": true,
+    "scalar_frame_bytes": 7192,
+    "avx2_frame_bytes_before_alignment": 4888,
+    "scalar_state_span": [16, 1152],
+    "avx2_state_span": [1216, 2208],
+    "scalar_same_source_overlap_bytes": 8,
+    "complete_state_destination_coverage_without_output_overlap": true,
+    "previous_typed_state_destroyed_before_placement": true,
+    "active_slot_and_phase_published_after_placement": true,
+    "rejection_output_clear_bytes": 1024,
+    "rejection_owner_quarantine": true,
+    "avx2_rejection_authority_quarantine": true,
+    "constructor_internals_and_value_lifetimes_qualified": false,
+    "private_frame_erasure_qualified": false,
+    "all_unwind_paths_qualified": false,
+    "shared_runtime_and_distinct_stack_page_allocations_required": true
+  },
+  "new_regressions": {
+    "instruction_deletions_and_substitutions": 902,
+    "identity_table_mutations": 20,
+    "focused_index_home_placement_cleanup_and_reentry_mutations": 28,
+    "caller_lifecycle_and_storage_prerequisite_mutations": 16,
+    "owner_status_and_u128_abi_mutations": 18,
+    "selector_reference_comparisons": 655360,
+    "invalid_selector_domains": 9,
+    "integrated_failure_rejected": true
+  },
+  "remaining": [
+    "intervening constructor bodies and initial-value/lifetime joins",
+    "four-lane SIMD caller, dispatch and lifetime composition",
+    "complete private frame, copy and exceptional cleanup assignments",
+    "shared runtime and whole-image qualification in package 8"
+  ]
+}

@@ -21,12 +21,13 @@ from windows_enclave_sha3_batch_terminal_tests import TerminalTests,TerminalMode
 from windows_enclave_sha3_batch_scalar_xof_tests import ScalarXofTests,ScalarXofModelTests
 from windows_enclave_sha3_batch_scalar_squeeze_tests import ScalarSqueezeTests,ScalarSqueezeModelTests
 from windows_enclave_sha3_batch_scalar_fixed_tests import ScalarFixedTests,ScalarFixedModelTests
+from windows_enclave_sha3_batch_start_tests import StartTests,StartModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -70,7 +71,7 @@ class Tests(ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,Te
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
@@ -93,9 +94,11 @@ class SavedTests(ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTest
             self.assertFalse(r['private_chain_complete'])
             self.assertFalse(r['transitive_depth_qualified'])
             if lane=='simd':
+                self.assertIsNone(r['sequential_start_admission_and_placement'])
                 self.assertIsNone(r['prior_helpers'])
                 self.assertTrue(r['transfers']['indirect_calls_pending'])
             else:
+                self.assertFalse(r['sequential_start_admission_and_placement']['entire_start_body_qualified'])
                 p=r['prior_helpers'];self.assertTrue(p['prior_semantics_replayed'])
                 self.assertFalse(p['batch_caller_composition_qualified'])
                 self.assertEqual(len(p['exact_body_reference_extent_and_abi']),30 if lane=='scalar' else 23)

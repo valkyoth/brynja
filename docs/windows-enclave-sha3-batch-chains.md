@@ -707,3 +707,62 @@ review failure. Alongside the 10,240 padding comparisons, input partition and
 counter models pass 32,772 reference comparisons. The
 [scalar-fixed observation](../assurance/windows-protection-observations/sha3-batch-scalar-fixed-progress-20261008.json)
 records the bounded checkpoint, not family or whole-image closure.
+
+## Start admission and retained-state placement (2026-10-09)
+
+Both sequential `Owner::start` methods now have explicit instruction contracts
+for their entry/admission prefix, identity dispatch, non-cSHAKE length rejection,
+normal rejection cleanup, retained-state placement and epilogue. These slices
+cover 254 scalar and 197 AVX2 instruction/label positions. They deliberately do
+not qualify the intervening constructor implementations or the complete start
+methods. The existing saved-object/image binding still covers their entire
+1,361- and 597-instruction populations.
+
+The actual receiver target and exclusive owner ABI are joined to the previously
+reviewed operation helper. Phase 1 (Collecting), next-sequence validation and,
+for AVX2, authority admission precede the returned live owner. The emitted scan
+requires the first nonempty, unfinished slot. Equality with that selected index
+is checked **before** the indexed plan read, so out-of-range supplied indices
+cannot reach that read. The subsequent identity-minus-one check bounds the
+eight-entry constructor table. Every table destination is bound, and the six
+non-cSHAKE identities pass through a check that both 128-bit name/customization
+lengths are zero. Later code may not re-enter the middle of the admission prefix.
+
+The seven-argument Windows ABI is checked as emitted: the owner, sequence,
+slot and low name half arrive in registers; the remaining three 64-bit halves
+are at entry-stack offsets 40, 48 and 56. Scalar offsets are relative to its
+7,192-byte local frame. AVX2 keeps the pre-alignment frame base in `rbp` while
+aligning `rsp` to 32 bytes; both possible entry residues modulo 32 preserve the
+same incoming argument addresses. This is a local geometry check, not shared
+stack-probing or cumulative-window qualification.
+
+On successful placement, the previous typed state is destroyed before the new
+state is written. The writes cover exactly the scalar state interval
+`[owner+16, owner+1152)` or AVX2 interval `[owner+1216, owner+2208)`. All eight
+overwritten scalar bytes receive the same source byte from each overlapping
+store. No placement write reaches the retained output. Active-slot publication
+and phase 2 (Setup) follow the state transfer. These checks establish destination
+coverage, not that every constructor source byte was initialized or that all
+intervening register values remained valid; those constructor/lifetime joins
+remain the next review task. Distinct stack-window and retained-page allocations
+are still caller-boundary prerequisites.
+
+Ordinary rejection follows the live operation guard: typed state destruction,
+full 1,024-byte retained-output clearing, logical plan/active/budget reset, and
+owner quarantine. AVX2 also revokes its authority. This is not a claim that plan
+padding, all state backing bytes or private temporaries are individually erased.
+The scalar saved XMM6 restoration and AVX2 `vzeroupper` epilogue are bound, without
+claiming that restoring caller registers scrubs them. Unwind composition, complete
+constructor semantics, four-lane SIMD and final private cleanup remain open.
+
+The selector model exhausts all 65,536 availability/completion-mask combinations
+with ten candidate indices each (655,360 comparisons), including index 8 and
+`u64::MAX`. Regression tests reject 902 instruction deletions/substitutions,
+20 table changes, 28 focused pointer/index/home/cleanup/re-entry mutations,
+16 caller/lifecycle/storage prerequisite changes, 18 ABI changes and an injected
+integrated-review failure. All seven focused tests pass (30.167 seconds), as
+do all 99 integrated tests on Linux (396.763 seconds) and Windows (775.898 seconds).
+Parsed reports match with 187 current checker-source bindings verified. The
+[start-path observation](../assurance/windows-protection-observations/sha3-batch-start-progress-20261009.json)
+records these results without closing either complete constructor or package 6.
+No production implementation, release gate or native enclave capture changed.

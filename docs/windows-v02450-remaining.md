@@ -1,6 +1,6 @@
 # v0.24.50 remaining work
 
-## Current completion checklist (2026-10-08)
+## Current completion checklist (2026-10-09)
 
 - Finish transitive normal-return cleanup qualification inside the remaining
   distinct batch/ParallelHash workers, especially
@@ -16,7 +16,8 @@
   buffer cleanup, request decoding/dispatch/export, sequential update/setup-fragment
   callers, scalar/AVX2 setup completion, outer message-finalization callers,
   AVX2 terminal normal-path staging cleanup, scalar XOF final-message transition,
-  scalar terminal squeeze/fixed-output normal-path cleanup and widened copy-helper checks,
+  scalar terminal squeeze/fixed-output normal-path cleanup, start admission and
+  retained-state placement, and widened copy-helper checks,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/
@@ -75,7 +76,10 @@ Scalar fixed finalization now binds all four identity/width branches, copied-own
 lifetimes, three inlined padders, delegated SHA3-256 padding, staged output and
 normal-return cleanup. Both sequential routes' lower finalizers now have normal
 path composition; original/snapshot backing bytes are not individually erased
-by that caller. Initial state invariants, their pointer/lifetime preservation,
+by that caller. Both start callers now bind slot selection before indexed access,
+identity dispatch, incoming length homes, retained-state destination coverage,
+normal rejection cleanup and post-copy active-slot publication. Their intervening
+constructor internals remain unqualified. Initial state invariants, their pointer/lifetime preservation,
 exceptional private-frame cleanup, and
 the four-message route's 15 indirect calls remain explicit family work.
 Package 6 is not closed; these method contracts do not

@@ -16,6 +16,7 @@ import windows_enclave_sha3_batch_chunks as chunks
 import windows_enclave_sha3_batch_setup_end as setup_end
 import windows_enclave_sha3_batch_scalar_setup as scalar_setup
 import windows_enclave_sha3_batch_finish as finish
+import windows_enclave_sha3_batch_start as start
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -100,6 +101,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
     placement=storage.inspect(bodies,asm,ir,lane,prior) if lane!='simd' else None
     retained=worker.inspect(bodies,ir,lane,prior,placement) if lane!='simd' else None
     receiver=receive.inspect(bodies,asm,ir,lane,retained,placement,transitions,admission) if lane!='simd' else None
+    construction=start.inspect(bodies,asm,ir,lane,placement,transitions,receiver) if lane!='simd' else None
     absorption=update.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
     fragments=chunks.inspect(bodies,asm,ir,lane,prior,placement,transitions,receiver) if lane!='simd' else None
     completion=setup_end.inspect(bodies,ir,prior,placement,transitions,receiver,fragments) if lane=='avx2' else None
@@ -125,6 +127,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         sequential_state_storage=placement,
         sequential_retained_worker=retained,
         sequential_receiver=receiver,
+        sequential_start_admission_and_placement=construction,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

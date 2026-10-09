@@ -56,7 +56,10 @@
   allocation lifetime/separation remains a prerequisite. Nineteen per-lane
   framing stores now have all-predecessor workspace roots, unsigned lane guard
   and exact field/array extents, excluding other caller objects and the child
-  frame. The remaining 14 non-frame stores and 53 call-site footprints,
+  frame. The last 14 readiness/cursor/written-counter stores now have original
+  workspace roots, synchronized four-lane loop induction and selected-index
+  guard checks. Every direct executor store has an assigned footprint, conditional
+  on outstanding callee/alias effects. The 53 call-site footprints,
   remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,

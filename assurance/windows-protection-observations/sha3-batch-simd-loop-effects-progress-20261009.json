@@ -1,0 +1,807 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "483552af",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_loop_effects_and_predecessors": {
+      "tests": 133,
+      "seconds": 150.692,
+      "status": "PASS"
+    },
+    "windows_simd_loop_effects_and_predecessors": {
+      "tests": 133,
+      "seconds": 169.805,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 246,
+  "files_sha256": {
+    "sha3-batch-simd-loop-effects-linux.json": "ecbc33ba7d28e5ac67a1f024b76e1b9f548a6b4d469dda0baceede0cdd92b22a",
+    "sha3-batch-simd-loop-effects-windows.json": "0b44808dece4c2a7ffe19d82ef7f96dad40e5ae61d4bd11f4e385672f9fcd030",
+    "sha3-batch-simd-loop-effects-20261009-exit.json": "9d3fb4702660aa8676218e8007a4bdcaa87e329869d3838b2e31176895095202",
+    "sha3-batch-simd-loop-effects-linux.log": "33f3624a8eefd280eb292d22a1bb86d91e78bbddd135d7a711a6e7b84f8f8cbb",
+    "sha3-batch-simd-loop-effects-20261009.log": "25949454d1ff27c4721d9cb07fee68e78c36b8561aef2764c3e02739f675fb51"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_loop_effects.py": "08b4aaf919b4f90a6fcbaeec7f187318788dfb716e9bc8bd35d5c64c00c45adc",
+    "windows_enclave_sha3_simd_loop_effects_model.py": "6697988a91a77bbc2798489fac37edcfb29a90b7d0fe0840aa300f452db85601",
+    "windows_enclave_sha3_simd_loop_effects_tests.py": "e75c26ee013bbf7e105f0b644b70642e2b53129f4bf7c006c8bb823634f89a8c",
+    "windows_enclave_sha3_simd_workspace_effects.py": "d861f8e6a6082d78647af9b2b0edb6771022802ce4c680d31fb88d0410f25b19",
+    "windows_enclave_sha3_batch_chains.py": "03411628e57219547cf5dd20daf49c424c5a9c7fb3d4b088002c09e441acbe36",
+    "test-windows-enclave-sha3-batch-chains.py": "f0ec49a83e5fe77d5031a898d8f687064c213e940b8eed351791679be80153cc"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "readiness_reset": {
+      "site": 619,
+      "span": [
+        5248,
+        5252
+      ]
+    },
+    "selected_readiness_clears": [
+      {
+        "site": 1231,
+        "possible_write_spans": [
+          [
+            5248,
+            5249
+          ],
+          [
+            5249,
+            5250
+          ],
+          [
+            5250,
+            5251
+          ],
+          [
+            5251,
+            5252
+          ]
+        ]
+      },
+      {
+        "site": 1235,
+        "possible_write_spans": [
+          [
+            5248,
+            5249
+          ],
+          [
+            5249,
+            5250
+          ],
+          [
+            5250,
+            5251
+          ],
+          [
+            5251,
+            5252
+          ]
+        ]
+      },
+      {
+        "site": 1242,
+        "possible_write_spans": [
+          [
+            5248,
+            5249
+          ],
+          [
+            5249,
+            5250
+          ],
+          [
+            5250,
+            5251
+          ],
+          [
+            5251,
+            5252
+          ]
+        ]
+      },
+      {
+        "site": 1249,
+        "possible_write_spans": [
+          [
+            5248,
+            5249
+          ],
+          [
+            5249,
+            5250
+          ],
+          [
+            5250,
+            5251
+          ],
+          [
+            5251,
+            5252
+          ]
+        ]
+      }
+    ],
+    "per_lane_effects": [
+      {
+        "lane": 0,
+        "reachable_positions": 371,
+        "backedges": [
+          641
+        ],
+        "exits": [
+          [
+            653,
+            1364
+          ],
+          [
+            687,
+            1354
+          ],
+          [
+            692,
+            1354
+          ],
+          [
+            741,
+            1354
+          ],
+          [
+            748,
+            1343
+          ],
+          [
+            769,
+            1343
+          ],
+          [
+            791,
+            1343
+          ],
+          [
+            817,
+            1343
+          ],
+          [
+            829,
+            1343
+          ],
+          [
+            840,
+            1343
+          ],
+          [
+            859,
+            1345
+          ],
+          [
+            908,
+            1345
+          ],
+          [
+            931,
+            1343
+          ],
+          [
+            941,
+            1343
+          ],
+          [
+            948,
+            1343
+          ],
+          [
+            963,
+            1343
+          ],
+          [
+            1353,
+            1354
+          ]
+        ],
+        "writes": [
+          {
+            "site": 633,
+            "span": [
+              5248,
+              5249
+            ]
+          },
+          {
+            "site": 702,
+            "span": [
+              3584,
+              3592
+            ]
+          },
+          {
+            "site": 703,
+            "span": [
+              3592,
+              3600
+            ]
+          },
+          {
+            "site": 866,
+            "span": [
+              3592,
+              3600
+            ]
+          },
+          {
+            "site": 914,
+            "span": [
+              3600,
+              3608
+            ]
+          },
+          {
+            "site": 917,
+            "span": [
+              5256,
+              5257
+            ]
+          },
+          {
+            "site": 968,
+            "span": [
+              3552,
+              3560
+            ]
+          },
+          {
+            "site": 1352,
+            "span": [
+              3584,
+              3592
+            ]
+          },
+          {
+            "site": 1353,
+            "span": [
+              3592,
+              3600
+            ]
+          }
+        ]
+      },
+      {
+        "lane": 1,
+        "reachable_positions": 371,
+        "backedges": [
+          641
+        ],
+        "exits": [
+          [
+            653,
+            1364
+          ],
+          [
+            687,
+            1354
+          ],
+          [
+            692,
+            1354
+          ],
+          [
+            741,
+            1354
+          ],
+          [
+            748,
+            1343
+          ],
+          [
+            769,
+            1343
+          ],
+          [
+            791,
+            1343
+          ],
+          [
+            817,
+            1343
+          ],
+          [
+            829,
+            1343
+          ],
+          [
+            840,
+            1343
+          ],
+          [
+            859,
+            1345
+          ],
+          [
+            908,
+            1345
+          ],
+          [
+            931,
+            1343
+          ],
+          [
+            941,
+            1343
+          ],
+          [
+            948,
+            1343
+          ],
+          [
+            963,
+            1343
+          ],
+          [
+            1353,
+            1354
+          ]
+        ],
+        "writes": [
+          {
+            "site": 633,
+            "span": [
+              5249,
+              5250
+            ]
+          },
+          {
+            "site": 702,
+            "span": [
+              3740,
+              3748
+            ]
+          },
+          {
+            "site": 703,
+            "span": [
+              3748,
+              3756
+            ]
+          },
+          {
+            "site": 866,
+            "span": [
+              3748,
+              3756
+            ]
+          },
+          {
+            "site": 914,
+            "span": [
+              3756,
+              3764
+            ]
+          },
+          {
+            "site": 917,
+            "span": [
+              5257,
+              5258
+            ]
+          },
+          {
+            "site": 968,
+            "span": [
+              3560,
+              3568
+            ]
+          },
+          {
+            "site": 1352,
+            "span": [
+              3740,
+              3748
+            ]
+          },
+          {
+            "site": 1353,
+            "span": [
+              3748,
+              3756
+            ]
+          }
+        ]
+      },
+      {
+        "lane": 2,
+        "reachable_positions": 371,
+        "backedges": [
+          641
+        ],
+        "exits": [
+          [
+            653,
+            1364
+          ],
+          [
+            687,
+            1354
+          ],
+          [
+            692,
+            1354
+          ],
+          [
+            741,
+            1354
+          ],
+          [
+            748,
+            1343
+          ],
+          [
+            769,
+            1343
+          ],
+          [
+            791,
+            1343
+          ],
+          [
+            817,
+            1343
+          ],
+          [
+            829,
+            1343
+          ],
+          [
+            840,
+            1343
+          ],
+          [
+            859,
+            1345
+          ],
+          [
+            908,
+            1345
+          ],
+          [
+            931,
+            1343
+          ],
+          [
+            941,
+            1343
+          ],
+          [
+            948,
+            1343
+          ],
+          [
+            963,
+            1343
+          ],
+          [
+            1353,
+            1354
+          ]
+        ],
+        "writes": [
+          {
+            "site": 633,
+            "span": [
+              5250,
+              5251
+            ]
+          },
+          {
+            "site": 702,
+            "span": [
+              3896,
+              3904
+            ]
+          },
+          {
+            "site": 703,
+            "span": [
+              3904,
+              3912
+            ]
+          },
+          {
+            "site": 866,
+            "span": [
+              3904,
+              3912
+            ]
+          },
+          {
+            "site": 914,
+            "span": [
+              3912,
+              3920
+            ]
+          },
+          {
+            "site": 917,
+            "span": [
+              5258,
+              5259
+            ]
+          },
+          {
+            "site": 968,
+            "span": [
+              3568,
+              3576
+            ]
+          },
+          {
+            "site": 1352,
+            "span": [
+              3896,
+              3904
+            ]
+          },
+          {
+            "site": 1353,
+            "span": [
+              3904,
+              3912
+            ]
+          }
+        ]
+      },
+      {
+        "lane": 3,
+        "reachable_positions": 371,
+        "backedges": [],
+        "exits": [
+          [
+            641,
+            992
+          ],
+          [
+            653,
+            1364
+          ],
+          [
+            687,
+            1354
+          ],
+          [
+            692,
+            1354
+          ],
+          [
+            741,
+            1354
+          ],
+          [
+            748,
+            1343
+          ],
+          [
+            769,
+            1343
+          ],
+          [
+            791,
+            1343
+          ],
+          [
+            817,
+            1343
+          ],
+          [
+            829,
+            1343
+          ],
+          [
+            840,
+            1343
+          ],
+          [
+            859,
+            1345
+          ],
+          [
+            908,
+            1345
+          ],
+          [
+            931,
+            1343
+          ],
+          [
+            941,
+            1343
+          ],
+          [
+            948,
+            1343
+          ],
+          [
+            963,
+            1343
+          ],
+          [
+            1353,
+            1354
+          ]
+        ],
+        "writes": [
+          {
+            "site": 633,
+            "span": [
+              5251,
+              5252
+            ]
+          },
+          {
+            "site": 702,
+            "span": [
+              4052,
+              4060
+            ]
+          },
+          {
+            "site": 703,
+            "span": [
+              4060,
+              4068
+            ]
+          },
+          {
+            "site": 866,
+            "span": [
+              4060,
+              4068
+            ]
+          },
+          {
+            "site": 914,
+            "span": [
+              4068,
+              4076
+            ]
+          },
+          {
+            "site": 917,
+            "span": [
+              5259,
+              5260
+            ]
+          },
+          {
+            "site": 968,
+            "span": [
+              3576,
+              3584
+            ]
+          },
+          {
+            "site": 1352,
+            "span": [
+              4052,
+              4060
+            ]
+          },
+          {
+            "site": 1353,
+            "span": [
+              4060,
+              4068
+            ]
+          }
+        ]
+      }
+    ],
+    "store_sites": [
+      619,
+      633,
+      702,
+      703,
+      866,
+      914,
+      917,
+      968,
+      1231,
+      1235,
+      1242,
+      1249,
+      1352,
+      1353
+    ],
+    "single_entry_loop_and_four_lane_induction_checked": true,
+    "all_normal_predecessor_cursor_and_index_restores_checked": true,
+    "workspace_and_other_caller_child_frame_separation_checked": true,
+    "pending_non_frame_store_sites": [],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      73,
+      105,
+      110,
+      114,
+      118,
+      224,
+      301,
+      502,
+      530,
+      533,
+      563,
+      570,
+      573,
+      782,
+      827,
+      851,
+      899,
+      961,
+      985,
+      1059,
+      1075,
+      1084,
+      1095,
+      1108,
+      1121,
+      1129,
+      1147,
+      1161,
+      1185,
+      1206,
+      1266,
+      1289,
+      1303,
+      1311,
+      1314,
+      1317,
+      1320,
+      1325,
+      1329,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583,
+      1588,
+      1591,
+      1598,
+      1601
+    ],
+    "direct_executor_store_inventory_assigned": true,
+    "callee_memory_effects_and_win64_nonvolatile_abi_required": true,
+    "allocation_lifetimes_indirect_aliases_and_private_frame_exception_cleanup_qualified": false
+  },
+  "focused_regressions": {
+    "new_tests": 6,
+    "store_base_offset_width_mutations": 42,
+    "original_root_restore_stride_guard_mutations": 35,
+    "lane_entry_selected_clear_cfg_bypass_mutations": 20,
+    "abstract_value_widening_unknown_partial_clobber_and_overlapping_slot_negatives": true,
+    "geometry_prerequisite_population_and_integration_negatives": true
+  },
+  "remaining": [
+    "53 callee memory-effect footprints",
+    "Authority and input/state allocation lifetime, physical separation and indirect pointer preservation",
+    "Exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch closure; package 6 remains open",
+    "Shared runtime qualification remains package 8"
+  ]
+}

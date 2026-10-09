@@ -28,6 +28,41 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Remaining loop-store footprints (2026-10-09)
+
+The last fourteen executor store sites now have explicit write footprints.
+Whole-CFG reaching definitions bind the readiness array and saved frame pointers
+to the original workspace. The loop has one external entry, with lane/index
+zero and the original first-frame pointer; its emitted increments keep the
+112-byte input stride, lane index and 156-byte frame stride synchronized.
+
+A finite address analysis follows all 371 positions in this loop for each of
+four lanes, including every ordinary branch, helper-call clobber, pointer spill
+and restore. Unknown values, partial writes and overlapping pointer-cell writes
+cannot authorize a store. Unrelated numeric counters widen to unknown rather
+than being used as address evidence. The original pointer cells must survive
+each backedge; only lanes 0–2 continue, and lane 3 exits at the actual comparison.
+The four selected-lane readiness clears separately require the original array,
+the same loaded index, an unsigned 0–3 guard and no entry past that guard.
+
+The resulting cursor, block-count, absorbing, written-count and readiness
+stores stay in their exact lane fields. The four-byte readiness reset and all
+other checked writes also exclude other caller allocations and the child frame.
+The [loop-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-loop-effects-progress-20261009.json)
+records 133 tests passing on Linux (150.692 seconds) and Windows (169.805 seconds).
+Parsed reports match, all 246 checker-source hashes are current, and 88,058
+body-byte mutations are rejected. Six new tests reject 42 store mutations,
+35 root/restore/stride/guard mutations and 20 entry/guard-bypass mutations, plus
+abstract-value, partial-write, clobber, overlapping-slot, geometry and
+prerequisite regressions. The unrelated full predecessor test suite was not
+rerun. This completes assignment of the
+direct executor store inventory, not the whole worker review: 53 call-site
+memory effects, allocation lifetimes, indirect alias preservation and
+exception/private-frame cleanup still need composition. The address analysis
+assumes the separately tracked callee memory effects and Win64 nonvolatile ABI;
+it is not a new crypto oracle or native enclave execution. Package 6 remains
+open. Production code and release-gate policy are unchanged.
+
 ## Per-lane framing workspace footprints (2026-10-09)
 
 Nineteen more stores now trace back to the original incoming workspace pointer.

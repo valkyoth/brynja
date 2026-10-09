@@ -13,8 +13,8 @@ ARRAYS={423:(5252,1,1),424:(5256,1,1),425:(3520,8,8)}
 SITES=set(FIELDS)|set(ARRAYS)
 
 
-def definitions(code,edges,spans):
-    keys=(*origins.REGS,*SLOTS);states={0:{k:frozenset({-1}) for k in keys}};queue=deque([0])
+def definitions(code,edges,spans,slots=SLOTS):
+    keys=(*origins.REGS,*slots);states={0:{k:frozenset({-1}) for k in keys}};queue=deque([0])
     while queue:
         at=queue.popleft();state=states[at].copy();op,args=origins.instruction(code[at])
         if op=='callq':
@@ -25,7 +25,7 @@ def definitions(code,edges,spans):
             if reg:state[reg]=state[reg]|{at} if op.startswith('cmov') else frozenset({at})
             if at in spans:
                 lo,hi=spans[at]
-                for slot in SLOTS:
+                for slot in slots:
                     if lo<slot+8 and slot<hi:state[slot]=frozenset({at})
         for dest in edges[at]:
             merged=state if dest not in states else {k:states[dest][k]|state[k] for k in keys}

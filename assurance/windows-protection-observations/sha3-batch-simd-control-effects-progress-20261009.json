@@ -1,0 +1,534 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "dd9e0394",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_control_effects_and_predecessors": {
+      "tests": 122,
+      "seconds": 123.024,
+      "status": "PASS"
+    },
+    "windows_simd_control_effects_and_predecessors": {
+      "tests": 122,
+      "seconds": 141.711,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 243,
+  "files_sha256": {
+    "sha3-batch-simd-control-effects-linux.json": "7ab71fc77855f969f91039dd62c43b8a5372d91d2085a299406e9d6daaed1687",
+    "sha3-batch-simd-control-effects-windows.json": "6a1ed8f2e4db679ca10e23ae46aab5df2559a6d577c6eff01de75c682da92a57",
+    "sha3-batch-simd-control-effects-20261009-exit.json": "dfe4514e3ed1a4e110d713a18610e7d023790a94233cb4347092aa92089aed51",
+    "sha3-batch-simd-control-effects-linux.log": "849a2b1a0025448f330d816c5978286798338ea9e75e538de7fdcdb82bb541d1",
+    "sha3-batch-simd-control-effects-20261009.log": "b14ae609a1411df657900a8b49be11c98156b86b933b6692377f381ab7801b8b"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_control_effects.py": "6cc0836df6195772bea8699cfc399d3382e75e894a25eb2d0023e1834abaebd7",
+    "windows_enclave_sha3_simd_control_effects_tests.py": "2ebc2b3f204f1063dbcffc482d29fa6de606204a0aabcfd4749241384d3ba359",
+    "windows_enclave_sha3_batch_chains.py": "d63c78110b307ecd9dc6d377957199675613af0e8b51a2ce1b0dea1eedcb7a86",
+    "test-windows-enclave-sha3-batch-chains.py": "ade7ce92b2a1946604e8902a1080fbff4ddfe1e2851cba6da02da6a46cd64b29"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "reachable_positions": 1676,
+    "write_effects": [
+      {
+        "site": 65,
+        "root": "authority",
+        "write": [
+          16,
+          17
+        ]
+      },
+      {
+        "site": 537,
+        "root": "executor",
+        "write": [
+          16,
+          17
+        ]
+      },
+      {
+        "site": 541,
+        "root": "authority",
+        "write": [
+          16,
+          17
+        ]
+      },
+      {
+        "site": 1375,
+        "root": "authority",
+        "write": [
+          16,
+          17
+        ]
+      },
+      {
+        "site": 1070,
+        "root": "control",
+        "write": [
+          16,
+          24
+        ]
+      },
+      {
+        "site": 1071,
+        "root": "control",
+        "write": [
+          24,
+          32
+        ]
+      },
+      {
+        "site": 1278,
+        "root": "control",
+        "write": [
+          16,
+          24
+        ]
+      },
+      {
+        "site": 1279,
+        "root": "control",
+        "write": [
+          24,
+          32
+        ]
+      },
+      {
+        "site": 546,
+        "root": "result",
+        "write": [
+          0,
+          1
+        ]
+      },
+      {
+        "site": 547,
+        "root": "result",
+        "write": [
+          129,
+          130
+        ]
+      },
+      {
+        "site": 1646,
+        "root": "result",
+        "write": [
+          96,
+          104
+        ]
+      },
+      {
+        "site": 1650,
+        "root": "result",
+        "write": [
+          64,
+          80
+        ]
+      },
+      {
+        "site": 1652,
+        "root": "result",
+        "write": [
+          80,
+          88
+        ]
+      },
+      {
+        "site": 1654,
+        "root": "result",
+        "write": [
+          88,
+          96
+        ]
+      },
+      {
+        "site": 1655,
+        "root": "result",
+        "write": [
+          32,
+          64
+        ]
+      },
+      {
+        "site": 1656,
+        "root": "result",
+        "write": [
+          0,
+          32
+        ]
+      },
+      {
+        "site": 1657,
+        "root": "result",
+        "write": [
+          105,
+          109
+        ]
+      },
+      {
+        "site": 1660,
+        "root": "result",
+        "write": [
+          111,
+          112
+        ]
+      },
+      {
+        "site": 1662,
+        "root": "result",
+        "write": [
+          109,
+          111
+        ]
+      },
+      {
+        "site": 1664,
+        "root": "result",
+        "write": [
+          112,
+          120
+        ]
+      },
+      {
+        "site": 1666,
+        "root": "result",
+        "write": [
+          120,
+          128
+        ]
+      },
+      {
+        "site": 1668,
+        "root": "result",
+        "write": [
+          128,
+          129
+        ]
+      },
+      {
+        "site": 1669,
+        "root": "result",
+        "write": [
+          104,
+          105
+        ]
+      },
+      {
+        "site": 1671,
+        "root": "result",
+        "write": [
+          129,
+          130
+        ]
+      }
+    ],
+    "caller_relative_effects": [
+      {
+        "site": 537,
+        "root": "executor",
+        "parent_relative_span": [
+          8904,
+          8905
+        ]
+      },
+      {
+        "site": 1070,
+        "root": "control",
+        "parent_relative_span": [
+          8768,
+          8776
+        ]
+      },
+      {
+        "site": 1071,
+        "root": "control",
+        "parent_relative_span": [
+          8776,
+          8784
+        ]
+      },
+      {
+        "site": 1278,
+        "root": "control",
+        "parent_relative_span": [
+          8768,
+          8776
+        ]
+      },
+      {
+        "site": 1279,
+        "root": "control",
+        "parent_relative_span": [
+          8776,
+          8784
+        ]
+      },
+      {
+        "site": 546,
+        "root": "result",
+        "parent_relative_span": [
+          8608,
+          8609
+        ]
+      },
+      {
+        "site": 547,
+        "root": "result",
+        "parent_relative_span": [
+          8737,
+          8738
+        ]
+      },
+      {
+        "site": 1646,
+        "root": "result",
+        "parent_relative_span": [
+          8704,
+          8712
+        ]
+      },
+      {
+        "site": 1650,
+        "root": "result",
+        "parent_relative_span": [
+          8672,
+          8688
+        ]
+      },
+      {
+        "site": 1652,
+        "root": "result",
+        "parent_relative_span": [
+          8688,
+          8696
+        ]
+      },
+      {
+        "site": 1654,
+        "root": "result",
+        "parent_relative_span": [
+          8696,
+          8704
+        ]
+      },
+      {
+        "site": 1655,
+        "root": "result",
+        "parent_relative_span": [
+          8640,
+          8672
+        ]
+      },
+      {
+        "site": 1656,
+        "root": "result",
+        "parent_relative_span": [
+          8608,
+          8640
+        ]
+      },
+      {
+        "site": 1657,
+        "root": "result",
+        "parent_relative_span": [
+          8713,
+          8717
+        ]
+      },
+      {
+        "site": 1660,
+        "root": "result",
+        "parent_relative_span": [
+          8719,
+          8720
+        ]
+      },
+      {
+        "site": 1662,
+        "root": "result",
+        "parent_relative_span": [
+          8717,
+          8719
+        ]
+      },
+      {
+        "site": 1664,
+        "root": "result",
+        "parent_relative_span": [
+          8720,
+          8728
+        ]
+      },
+      {
+        "site": 1666,
+        "root": "result",
+        "parent_relative_span": [
+          8728,
+          8736
+        ]
+      },
+      {
+        "site": 1668,
+        "root": "result",
+        "parent_relative_span": [
+          8736,
+          8737
+        ]
+      },
+      {
+        "site": 1669,
+        "root": "result",
+        "parent_relative_span": [
+          8712,
+          8713
+        ]
+      },
+      {
+        "site": 1671,
+        "root": "result",
+        "parent_relative_span": [
+          8737,
+          8738
+        ]
+      }
+    ],
+    "tracked_pointer_slots": [
+      440,
+      800,
+      952,
+      960,
+      968,
+      976,
+      1120
+    ],
+    "original_control_executor_result_and_authority_pointer_roots_checked": true,
+    "caller_allocated_writes_exclude_other_objects_and_child_frame": true,
+    "authority_writes_limited_to_health_byte": true,
+    "authority_allocation_lifetime_nonnull_and_physical_separation_required": true,
+    "original_executor_authority_field_preservation_by_other_effects_required": true,
+    "pending_non_frame_store_sites": [
+      149,
+      151,
+      227,
+      231,
+      303,
+      304,
+      356,
+      364,
+      365,
+      386,
+      420,
+      421,
+      423,
+      424,
+      425,
+      442,
+      446,
+      447,
+      448,
+      619,
+      633,
+      702,
+      703,
+      866,
+      914,
+      917,
+      968,
+      1231,
+      1235,
+      1242,
+      1249,
+      1352,
+      1353
+    ],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      73,
+      105,
+      110,
+      114,
+      118,
+      224,
+      301,
+      502,
+      530,
+      533,
+      563,
+      570,
+      573,
+      782,
+      827,
+      851,
+      899,
+      961,
+      985,
+      1059,
+      1075,
+      1084,
+      1095,
+      1108,
+      1121,
+      1129,
+      1147,
+      1161,
+      1185,
+      1206,
+      1266,
+      1289,
+      1303,
+      1311,
+      1314,
+      1317,
+      1320,
+      1325,
+      1329,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583,
+      1588,
+      1591,
+      1598,
+      1601
+    ],
+    "other_callee_and_indirect_memory_effects_still_required": true,
+    "private_frame_and_exception_cleanup_qualified": false
+  },
+  "focused_regressions": {
+    "new_tests": 5,
+    "store_base_offset_width_mutations": 72,
+    "original_root_spill_restore_mutations": 13,
+    "joins_cycles_partial_slot_reuse_and_geometry_negatives": true,
+    "prerequisite_and_integration_negatives": true
+  },
+  "remaining": [
+    "33 workspace/framing/readiness store footprints",
+    "53 callee memory-effect footprints",
+    "Authority allocation lifetime, nonnull admission, physical separation and executor authority-pointer field preservation",
+    "Remaining input/state lifetimes and physical alias composition",
+    "Exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch closure; package 6 remains open",
+    "Shared runtime qualification remains package 8"
+  ]
+}

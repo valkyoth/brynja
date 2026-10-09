@@ -28,6 +28,39 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Control, quarantine and result-publication footprints (2026-10-09)
+
+Twenty-four more store sites now have original-root and width/offset checks.
+The whole normal CFG carries the original executor and result arguments, the
+incoming control pointer and saved pointer slots through branches, loops and
+spill/reload reuse. Loading executor field zero creates a distinct authority
+pointer identity, not a claim that the pointed-to allocation is live or nonnull.
+Mixed or unknown predecessors, partial writes and stale slot identities reject.
+
+Four budget/accounting writes stay within control offsets 16–31. The executor
+quarantine write touches only its byte at offset 16. Sixteen success/error
+publication writes stay within the original 136-byte result allocation. Their
+physical caller-frame ranges exclude all other simultaneous caller objects and
+the executor's child frame, saved registers and incoming argument slots. The
+three authority writes touch only authority offset 16; authority allocation
+lifetime, nonnull admission, physical separation and preservation of the
+executor's authority pointer by other effects remain prerequisites.
+
+The already-replayed rejection, vector/scalar accounting and report contracts
+still establish the values and ordering; the new check establishes store roots
+and footprints. It does not introduce a new result-padding initialization or
+erasure claim. The [control-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-control-effects-progress-20261009.json)
+records 122 tests passing on Linux (123.024 seconds) and Windows (141.711 seconds).
+Parsed reports match, all 243 checker-source hashes are current, and 88,058
+body-byte mutations are rejected. Five new tests reject 72 store base/offset/width
+mutations and 13 original-root/spill/restore mutations, with focused
+join/cycle/partial-write/slot-reuse, allocation-boundary and prerequisite checks.
+The unrelated full predecessor test suite was not rerun.
+Thirty-three other non-frame stores and
+53 call-site footprints remain to compose, along with allocation lifetimes,
+indirect effects on saved pointers, exceptional cleanup and private-frame erasure.
+No production behavior, native enclave capture or release-gate policy changed.
+
 ## Frame-alias stores and framing-helper footprints (2026-10-09)
 
 Seventeen previously unassigned register-addressed stores now have explicit

@@ -18,6 +18,10 @@
   AVX2 terminal normal-path staging cleanup, scalar XOF final-message transition,
   scalar terminal squeeze/fixed-output normal-path cleanup, start admission and
   retained-state placement, and widened copy-helper checks,
+  plus the distinct four-lane kernel/session, resident authority construction,
+  owner admission and outer retained-worker/buffer retirement. The four-lane
+  receiver, descriptor and digest lifetimes and final private-frame/exception
+  reconciliation still need completion,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/

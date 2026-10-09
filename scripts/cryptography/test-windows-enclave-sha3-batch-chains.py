@@ -37,12 +37,13 @@ from windows_enclave_sha3_simd_kernel_tests import SimdKernelSavedTests,SimdKern
 from windows_enclave_sha3_simd_session_tests import SimdSessionSavedTests,SimdSessionModelTests
 from windows_enclave_sha3_simd_resident_tests import SimdResidentSavedTests,SimdResidentModelTests
 from windows_enclave_sha3_simd_owner_tests import SimdOwnerSavedTests
+from windows_enclave_sha3_simd_worker_tests import SimdWorkerSavedTests,SimdWorkerModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(SimdWorkerModelTests,SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -86,7 +87,7 @@ class Tests(SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Av
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTests,SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(SimdWorkerSavedTests,SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTests,SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
@@ -134,6 +135,8 @@ class SavedTests(SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTest
                 self.assertIsNone(r['scalar_cshake_prefix'])
                 self.assertIsNone(r['scalar_cshake_transfers'])
             if lane=='simd':
+                self.assertTrue(r['simd_retained_worker']['return_after_buffer_drop_on_all_normal_request_paths'])
+                self.assertFalse(r['simd_retained_worker']['receiver_nested_call_lifetimes_qualified'])
                 self.assertTrue(r['simd_owner_admission']['rejected_operation_clears_output_and_quarantines'])
                 self.assertFalse(r['simd_owner_admission']['digest_and_worker_provenance_qualified'])
                 self.assertTrue(r['simd_resident_construction']['callback_is_pure_compiled_tag_check'])

@@ -144,9 +144,9 @@ the owner to empty. Already-quarantined cancellation returns an error without
 repeating a wipe. The standalone check returns a backend error for a wrong tag
 without itself quarantining; its owner caller performs the enclosing cleanup.
 These distinctions are tested rather than silently promoted into stronger
-claims. The constructor establishes pointer origin, but worker admission,
-subsequent pointer preservation, complete digest/receiver paths and final
-private-frame retirement remain open.
+claims. The constructor establishes pointer origin. The worker admission and
+retirement follow-up below composes that origin through the outer entry;
+complete digest/receiver paths and final private-frame retirement remain open.
 
 New regressions reject 402 constructor/callback instruction changes, 418
 owner/check/cancel/funclet changes, 200 startup-table byte changes, 36 ABI
@@ -155,6 +155,57 @@ weakened composition prerequisites. The constructor CFG rejects 27 event/order
 changes. It deliberately accepts removal of the first of two consecutive
 identical failure-path wipes; the exact instruction check still rejects that
 code change. No production or release-gate behavior changed.
+
+## SIMD retained-worker admission and retirement (2026-10-09)
+
+The complete 266-position `RetainedWork` body and both 11-instruction buffer
+clear/drop bodies are now checked against the saved object/image and resolved
+LLVM ABIs. The entry requires a nonnull, page-aligned 4,096-byte page and a
+nonwrapping 65,536-byte worker window. Checked page-end arithmetic and the
+half-open interval comparisons reject page/window overlap. On a request, the
+retained page identity must match before calling the receiver. Actual allocation,
+residency, serialization and exclusion of recursive entry still come from the
+linked C adapter, not from these integer comparisons.
+
+Opening zeroes the page and passes it to the reviewed constructor. The returned
+page/authority/owner triple at frame `[40, 64)` is copied through `[64, 88)`
+without rebinding its pointers before publishing `LIVE` and `LIVE_PAGE`.
+Construction failure publishes nothing. The emitted replacement branch is also
+checked: an existing owner and page would be retired before replacement, even
+though the earlier no-live check makes that branch unreachable under the
+required serialized, nonrecursive contract. Closing disarms `LIVE` first,
+clears/quarantines the owner, erases all 4,096 page bytes, then resets page
+identity before returning the close-success code. It does not free the page;
+the C owner retains that responsibility after return.
+
+Request buffers occupy `[64, 12736)` of the 12,744-byte worker frame: payload
+`[64, 12352)` and header `[12352, 12736)`. The descriptor scratch used during
+opening is reused only on the separate request path. Buffer initialization
+precedes the bounds tests; this is public zero initialization on the already
+provided worker stack, not a claim that bounds tests allocate/protect it.
+Before the receiver call, both regions are checked inside the supplied window,
+including overflow checks. The receiver receives the original operation and
+exclusive buffer address. Its obligation not to overwrite live metadata or
+retain borrowed pointers still needs composition with its inner paths.
+
+Receiver failure clears/quarantines the resident before retiring the buffers.
+The explicit clear and `Drop` both erase the 384-byte header and all 12,288
+payload bytes. Successful readback traverses each byte exactly once before the
+fixed observer receives the header/payload addresses and a clear receipt of 1.
+Bounds, readback and observer failures quarantine and reach the buffer-drop
+join; all normal request returns pass through it. The second wipe is intentional
+redundancy, not evidence that both wipes are individually necessary for every
+path. Independent direct-CFG checks enforce five cleanup obligations; exact
+instruction checks additionally bind the pointer transfers, lengths and order.
+
+Focused regressions cover every instruction/label position, admission/identity
+boundaries, early returns, removed cleanup calls, weakened ABIs and constructor/
+owner prerequisite removal. Both hosts replay the saved compiler artifacts;
+this is **not** a new enclave execution or native cryptographic campaign.
+The [worker observation](../assurance/windows-protection-observations/sha3-batch-simd-worker-progress-20261009.json)
+records the runs and remaining scope. Receiver/descriptor/digest lifetime review
+and complete private-frame/exception reconciliation remain open. Fatal abort
+cleanup is not claimed; shared stack/runtime/OS boundaries remain package 8.
 
 ## Sequential plan admission
 

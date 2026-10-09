@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "6ad267cd",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_worker_owner_resident_session_leaves_and_integration": {"tests": 27, "seconds": 15.614, "status": "PASS"},
+    "windows_simd_worker_owner_resident_session_leaves_and_integration": {"tests": 27, "seconds": 27.250, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 203,
+  "linux_log_sha256": "549febecd40156de8fc795846bd07a6c8cb4b0d465604f4bddb0d7bb131592d9",
+  "windows_log_sha256": "bde9e96c1f01de9fb7812bdda22356dcdb1a1b49b68382b9efda8ce58f8e0a84",
+  "windows_exit_receipt_sha256": "c8926df7ec09c058aa2f2c5521dc5d9247dfd86b3ace8a283ea555996a87e2ba",
+  "report_sha256": {
+    "sha3-batch-simd-worker-linux.json": "420b79114cbd9bf3c898c644e98936882e11cc41494db0191131317e2d5c4930",
+    "sha3-batch-simd-worker-windows.json": "2ce6c391b083395713661a69a3b816283660c51a3775e7985adca010d4bfc53c"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_worker.py": "c82491f8eadb151d1d625b1a345dd7aac36acbdeb1c74b199119c6f6c7162421",
+    "windows_enclave_sha3_simd_worker_tests.py": "8c5db7c1f3f101a8cce1959893c8ed46523db759a77bfff140d5ff01e498c308",
+    "windows_enclave_sha3_batch_chains.py": "e93726d091ea23861158f71029051123257f30cc721fac9369eca2b98a1b5145",
+    "test-windows-enclave-sha3-batch-chains.py": "217233e845bf7953a085871c8caef7ca53d45f5643c4a70d1103d156fd1883fd"
+  },
+  "new_contracts": {
+    "worker_instruction_positions": 266,
+    "buffer_clear_and_drop_instruction_positions_each": 11,
+    "independent_normal_cfg_cleanup_obligations": 5,
+    "worker_frame_bytes": 12744,
+    "payload_frame_span": [64, 12352],
+    "header_frame_span": [12352, 12736],
+    "successful_readback_bytes": 12672,
+    "aligned_page_and_stack_window_nonoverlap_checked": true,
+    "retained_identity_before_request_dispatch": true,
+    "constructed_pointer_triple_preserved_before_publication": true,
+    "live_disarmed_before_close_owner_and_page_retirement": true,
+    "all_normal_request_returns_pass_buffer_drop": true,
+    "receiver_failure_quarantines_and_clears_buffers": true,
+    "bounds_readback_observer_failures_quarantine_and_drop": true,
+    "serialized_nonrecursive_C_entry_and_page_residency_required": true,
+    "receiver_nested_call_lifetimes_qualified": false,
+    "fatal_abort_cleanup_claimed": false,
+    "private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "worker_and_buffer_instruction_label_changes": 864,
+    "identity_bounds_pointer_and_extent_changes": 16,
+    "early_request_returns": 8,
+    "removed_drop_check": 1,
+    "independent_cleanup_obligation_changes": 3,
+    "abi_changes": 15,
+    "composition_prerequisite_changes": 7,
+    "unsigned_admission_boundary_comparisons": 126,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "receiver wire decoding, descriptor construction and nested input-pointer lifetimes",
+    "resident and executor digest caller, workspace and failure-path composition",
+    "complete private-frame and exceptional cleanup reconciliation",
+    "shared runtime, cumulative stack, C adapter and platform boundaries in package 8",
+    "independent retest and final native qualification"
+  ]
+}

@@ -103,6 +103,59 @@ cases, 30 cleanup-table changes/removals/duplicates, four moved callback labels,
 21 ABI changes and eight weakened leaf prerequisites. The integrated checker
 also rejects a failed session review. Production code and gates are unchanged.
 
+## SIMD resident construction and owner admission (2026-10-09)
+
+All 198 constructor instruction/label positions and the three-instruction
+`Kernel::compiled` callback are checked. The constructor uses public zero-state
+input, executes the reviewed four-lane permutation and compares each 200-byte
+result against an independently computed Keccak-f[1600] zero-state answer. The
+linked answer table, all four comparison lengths and both pre/post-kernel
+compiled-tag checks are bound. Only then can the authority be initialized.
+
+Within the exclusive 4,096-byte page, authority storage occupies `[0, 24)` and
+the 1,112-byte owner `[24, 1136)`. The constructor sets the authority counter to
+zero, stores the exact `Kernel::compiled` function address at page offset 8,
+and writes healthy=1/kernel=0 at offsets 16/17. Owner offset 64 (page offset 88)
+points back to that authority. The 1,024-byte output at page `[96, 1120)` is
+initialized before sequence=0, empty phase and the returned
+backing/authority/owner pointer triple are published. Absent-plan payload and
+padding are not claimed initialized. This callback is not host supplied at
+construction; it checks a compiled tag, not live hardware/migration support.
+
+All nine conservative normal constructor paths are checked. The eight failure
+paths clear every page byte before returning an error without publishing a
+resident. The startup scratch is retired before reuse for public output
+initialization. Frame allocations `[32, 832)`, `[832, 2752)`, `[2752, 3552)` and
+`[3552, 4576)` have separate initial roles. Shared `memcpy`, `memset`, `memcmp`
+and stack-probe behavior remains a package-8 prerequisite; these public startup
+temporaries are not evidence of secret frame erasure.
+
+The complete owner `operation`, standalone authority `check`, cancellation and
+five associated cleanup funclets are also checked. `operation` compares phase
+and a nonwrapping next sequence before using the authority at owner offset 64.
+Successful guard publication follows two revalidations and an AVX2-tag check;
+all rejected operations clear retained output, invalidate the plan and
+quarantine. The exact FH3 tables bind both owner callbacks to authority
+quarantine followed by owner-output cleanup/quarantine. The standalone check's
+callbacks have their own quarantine handlers.
+
+Successful cancellation uses the admitted guard, clears output/plan and returns
+the owner to empty. Already-quarantined cancellation returns an error without
+repeating a wipe. The standalone check returns a backend error for a wrong tag
+without itself quarantining; its owner caller performs the enclosing cleanup.
+These distinctions are tested rather than silently promoted into stronger
+claims. The constructor establishes pointer origin, but worker admission,
+subsequent pointer preservation, complete digest/receiver paths and final
+private-frame retirement remain open.
+
+New regressions reject 402 constructor/callback instruction changes, 418
+owner/check/cancel/funclet changes, 200 startup-table byte changes, 36 ABI
+changes, 58 cleanup-table mutations, eight callback-label changes and 11
+weakened composition prerequisites. The constructor CFG rejects 27 event/order
+changes. It deliberately accepts removal of the first of two consecutive
+identical failure-path wipes; the exact instruction check still rejects that
+code change. No production or release-gate behavior changed.
+
 ## Sequential plan admission
 
 Both complete emitted plan validators and their nine identity-table entries are

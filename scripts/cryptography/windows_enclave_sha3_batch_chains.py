@@ -29,6 +29,8 @@ import windows_enclave_sha3_batch_avx2_cshake as avx2_cshake
 import windows_enclave_sha3_batch_avx2_cshake_moves as avx2_cshake_moves
 import windows_enclave_sha3_simd_kernel as simd_kernel
 import windows_enclave_sha3_simd_session as simd_session
+import windows_enclave_sha3_simd_resident as simd_resident
+import windows_enclave_sha3_simd_owner as simd_owner
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -117,6 +119,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
     actual_transfers=transfers(bodies,tables,vtables)
     simd_leaves=simd_kernel.inspect(bodies,ir,constants) if lane=='simd' else None
     session_simd=simd_session.inspect(bodies,asm,ir,simd_leaves) if lane=='simd' else None
+    construction_simd=simd_resident.inspect(bodies,ir,constants,session_simd) if lane=='simd' else None
+    owner_simd=simd_owner.inspect(bodies,asm,ir,construction_simd,session_simd) if lane=='simd' else None
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
@@ -172,6 +176,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
         avx2_cshake_transfers=moves_avx2,
         simd_kernel_and_transposes=simd_leaves,
         simd_session_cleanup=session_simd,
+        simd_resident_construction=construction_simd,
+        simd_owner_admission=owner_simd,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

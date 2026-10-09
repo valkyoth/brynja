@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "38d2a978",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_resident_owner_session_leaves_and_integration": {"tests": 21, "seconds": 14.452, "status": "PASS"},
+    "windows_simd_resident_owner_session_leaves_and_integration": {"tests": 21, "seconds": 27.515, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 202,
+  "linux_log_sha256": "db59ebd0b13bee5362a2cfdff45dcb46473c52ec63d5e6d85ff630cfb02c0ef0",
+  "windows_log_sha256": "3f864cc25ddcf09584400e64bb19c4976c2d2dc9185ef79024edff8f33fb3922",
+  "report_sha256": {
+    "sha3-batch-simd-resident-linux.json": "e3b012b2b082620ffbca87d9eb805a9bcba31cf092350270abb5200d3abd7c11",
+    "sha3-batch-simd-resident-windows.json": "768741769653d14ea1f6dfdac44e3f0823e30f5197c13bdc0efbc905049672f9"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_resident.py": "2beb2b89817e35f468694adb010b95a1fcc5195024033ce1b0e47b3dbf9ee1ce",
+    "windows_enclave_sha3_simd_resident_tests.py": "8b08b70a43e03d622d7bfc4d263f87523f97951d50470c9f631c23e9fb9fe4a6",
+    "windows_enclave_sha3_simd_owner.py": "cf6c7c529bb1f5615d4da40af56472a43d05ea0a0dd0b9a4234e14f9910470a0",
+    "windows_enclave_sha3_simd_owner_tests.py": "e52e3303e1f28d7eb1a6a7e1740a06e00ebeae8f1df7198d856e0dc69571f58f",
+    "windows_enclave_sha3_batch_chains.py": "923a9bb41639038788a54ee7dd9f6ddbce390be158985318691c8c7a76c60cbf",
+    "test-windows-enclave-sha3-batch-chains.py": "54fbca50e2271ba7d97108ec840ebf3a0b84fafe1e960e93b9b6b206d6ec032d"
+  },
+  "new_contracts": {
+    "constructor_instruction_positions": 198,
+    "pure_callback_instruction_positions": 3,
+    "normal_constructor_paths": 9,
+    "constructor_failure_paths_clear_page": 8,
+    "all_four_startup_results_compared": true,
+    "startup_answer_independently_derived": true,
+    "authority_page_span": [0, 24],
+    "owner_page_span": [24, 1136],
+    "owner_authority_pointer_offset": 64,
+    "owner_output_page_span": [96, 1120],
+    "callback_bound_to_compiled_tag_predicate": true,
+    "constructor_publication_after_initialization": true,
+    "owner_operation_check_and_cancel_complete_bodies": 3,
+    "owner_check_cleanup_funclets": 5,
+    "owner_failure_clears_output_and_quarantines": true,
+    "already_quarantined_cancel_does_not_rewipe": true,
+    "standalone_check_wrong_tag_does_not_itself_quarantine": true,
+    "shared_memory_runtime_semantics_required": true,
+    "worker_page_admission_and_lifetime_qualified": false,
+    "digest_and_worker_provenance_qualified": false,
+    "private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "constructor_and_compiled_callback_instruction_changes": 402,
+    "owner_check_cancel_funclet_instruction_changes": 418,
+    "constructor_cfg_event_changes": 27,
+    "redundant_first_wipe_deletion_accepted_by_semantic_model": 1,
+    "redundant_wipe_deletion_rejected_by_exact_code_check": true,
+    "startup_answer_byte_changes": 200,
+    "missing_or_wrong_size_startup_answer": 2,
+    "constructor_callback_abi_changes": 16,
+    "owner_check_cancel_abi_changes": 20,
+    "cleanup_table_changes_removals_duplicates": 58,
+    "callback_label_changes": 8,
+    "weakened_composition_prerequisites": 11,
+    "both_integrated_failures_rejected": true
+  },
+  "remaining": [
+    "retained worker and receiver page, authority and input-pointer lifetimes",
+    "lane descriptor and complete resident/digest-engine caller composition",
+    "hash-workspace cleanup and final sequential/SIMD frame and exceptional-path reconciliation",
+    "shared runtime and whole-image qualification in package 8"
+  ]
+}

@@ -36,6 +36,7 @@ import windows_enclave_sha3_simd_receive as simd_receive
 import windows_enclave_sha3_simd_descriptors as simd_descriptors
 import windows_enclave_sha3_simd_digest as simd_digest
 import windows_enclave_sha3_simd_output as simd_output
+import windows_enclave_sha3_simd_frame as simd_frame
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -131,6 +132,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
     descriptors_simd=simd_descriptors.inspect(bodies,ir,receive_simd) if lane=='simd' else None
     digest_simd=simd_digest.inspect(bodies,asm,ir,vtables,session_simd,receive_simd,descriptors_simd) if lane=='simd' else None
     output_simd=simd_output.inspect(bodies,ir,digest_simd) if lane=='simd' else None
+    frame_simd=simd_frame.inspect(bodies,asm,digest_simd) if lane=='simd' else None
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
@@ -193,6 +195,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         simd_descriptors=descriptors_simd,
         simd_digest=digest_simd,
         simd_output=output_simd,
+        simd_public_framing=frame_simd,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "057bcfd0",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_framing_and_predecessors": {"tests": 57, "seconds": 44.055, "status": "PASS"},
+    "windows_simd_framing_and_predecessors": {"tests": 57, "seconds": 58.201, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 216,
+  "files_sha256": {
+    "sha3-batch-simd-frame-v3-linux.json": "706e00783fb1765462a386e9498232310482e80565423500cbe8c7ad1b39040c",
+    "sha3-batch-simd-frame-v3-windows.json": "0e50d1a4d8fc8121d6a92985755baeeaf134b93b1ac22e25921d3533f457ec2e",
+    "sha3-batch-simd-frame-v3-20261009-exit.json": "48eb48aa40ed0dde1fadb67b7c5e9c400e69014dd3efa09f8bccc6f80c4da51c",
+    "sha3-batch-simd-frame-v3-linux.log": "bd518633e7d8b290446f057962ae6f50b4716d70e79578eec3467eea0a7fd0f4",
+    "sha3-batch-simd-frame-v3-20261009.log": "b0e75c5f332562c47763cea86a96ee0ae1ba5d8a6d51d081b112c04c3119e941"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_frame.py": "e493d7f8f8e2095756e070ae94cdb9c142b090c537e40d61d9fce278a5f12bec",
+    "windows_enclave_sha3_simd_frame_shape.py": "d7c2aa4092f05b8e7976edc112c339f62b442b2415472b8db779dddcfc917ce6",
+    "windows_enclave_sha3_simd_frame_machine.py": "7e6cb53362877df90c63a29b068758576728f6c6d764ebc665a1beaa846075aa",
+    "windows_enclave_sha3_simd_frame_model.py": "40a4fe7dd0349404e208ad00e9a45b3976c5332279a250628ffb5888dfa9afae",
+    "windows_enclave_sha3_simd_frame_tests.py": "3f4f549b8a9b45d8decec69b87a3a3ad2cbbdc2aaca970277da6b04b0d6317cd",
+    "windows_enclave_sha3_batch_chains.py": "ea37c807e634fa80b65b4320eddc2ad2b693458f0ea2feb8484257368838502c",
+    "test-windows-enclave-sha3-batch-chains.py": "4e52c6d5750bfdcbb6252280a8ae14149c2bca4783d47529317941e163dba649"
+  },
+  "new_contracts": {
+    "preparation_region": [69, 454],
+    "instruction_positions": 385,
+    "identity_jump_targets": 8,
+    "workspace_bytes_compared": 5260,
+    "physical_lane_frame_bytes": 156,
+    "rates_suffixes_integer_encodings_prefix_and_final_padding_checked": true,
+    "absorb_and_permutation_counts_and_eligibility_checked": true,
+    "absent_slots_and_original_slot_output_offsets_checked": true,
+    "secret_input_pages_mapped_in_model": false,
+    "bounded_nonoverlap_encoding_copy_preconditions_checked": true,
+    "caller_saved_registers_poisoned_across_calls": true,
+    "inner_absorption_permutation_and_report_qualified": false,
+    "machine_stack_aliasing_and_full_pointer_lifetimes_qualified": false,
+    "private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "instruction_position_changes": 1155,
+    "identity_jump_table_changes": 8,
+    "independent_oracle_comparisons_with_two_call_poison_patterns": 4934,
+    "saved_region_additional_comparisons": 32,
+    "integrated_checker_saved_region_comparisons": 9,
+    "load_bearing_arithmetic_encoding_and_offset_mutations": 17,
+    "unassigned_calls_memory_control_and_budget_rejections": 6,
+    "prerequisite_mutations": 1,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "executor eligibility, cancellation, inner absorption/permutation and report semantics",
+    "complete machine pointer-lifetime, non-overlap and exceptional-path composition",
+    "final private-frame erasure and shared package-8 runtime/platform reconciliation",
+    "independent retest and final native qualification"
+  ]
+}

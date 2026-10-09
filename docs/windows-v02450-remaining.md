@@ -24,7 +24,10 @@
   full resident digest caller, workspace/output destruction helpers and its
   five exception funclets now have emitted contracts. The inner executor's
   output-descriptor IR use closure, complete output validator and bounded
-  source-preflight/copy regions are also checked. Its remaining hashing/input
+  source-preflight/copy regions are also checked. The complete public framing
+  preparation loop now has saved-instruction/oracle checks for all eight
+  identities, including cSHAKE prefix padding and per-lane staging offsets.
+  Its remaining absorption/permutation/report and input
   paths, machine pointer lifetimes/non-overlap and final private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative

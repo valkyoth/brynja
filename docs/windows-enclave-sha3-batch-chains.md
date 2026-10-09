@@ -28,6 +28,35 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Four-lane public framing preparation (2026-10-09)
+
+The executor's complete 385-position preparation region and eight-entry identity
+table are now bound to the saved image. An independent arithmetic oracle checks
+its emitted instructions for all SHA-3, SHAKE and cSHAKE identities: rates,
+domain suffixes, encoded name/customization lengths, prefix byte-padding,
+message padding, absorb/permutation counts, eligibility flags and original-slot
+staging offsets. Absent lanes remain absent instead of compacting these fields.
+
+The bounded public-metadata interpreter maps no secret input pages, rejects
+uninitialized memory reads and unassigned writes/calls, and models the freshly
+reviewed workspace wipe plus bounded, non-overlapping integer-encoding copies.
+Caller-saved registers are poisoned across calls. Two poison patterns exercise
+2,467 cases each, including empty cSHAKE equivalence, 255/256-bit integer-width
+changes, exact rate-aligned prefixes and adjacent bits, padding and output-rate
+boundaries, mixed lanes and eligibility thresholds. The independent oracle
+compares all 5,260 workspace bytes, not only the returned counters.
+
+Regression tests reject 1,155 instruction-position changes, eight dispatch-table
+changes and 17 reached arithmetic/encoding/offset mutations. The integrated
+checker also executes the actual saved region against representative oracle
+cases; model-only tests cannot substitute for that artifact binding.
+
+This closes the scoped preparation check, not the hashing core or the entire
+executor. The model assumes the already-reviewed resident metadata limits and
+helper contracts. It does not prove unbounded inputs, arbitrary caller frames,
+whole-executor pointer lifetimes or private-frame erasure. Inner absorption,
+permutation/report paths and final cleanup composition remain open.
+
 ## Four-lane executor output ownership (2026-10-09)
 
 The executor's local 104-byte output owner now has an exhaustive LLVM address-use

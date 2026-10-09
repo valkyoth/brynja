@@ -27,6 +27,7 @@ import windows_enclave_sha3_batch_cshake_moves as cshake_moves
 import windows_enclave_sha3_batch_avx2_start as avx2_start
 import windows_enclave_sha3_batch_avx2_cshake as avx2_cshake
 import windows_enclave_sha3_batch_avx2_cshake_moves as avx2_cshake_moves
+import windows_enclave_sha3_simd_kernel as simd_kernel
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -113,6 +114,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
     require(not locations,'no unassigned diagnostic pointer object')
     sizes,edges,vectors,indirect,geometry=c.frames(records,bodies)
     actual_transfers=transfers(bodies,tables,vtables)
+    simd_leaves=simd_kernel.inspect(bodies,ir,constants) if lane=='simd' else None
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
@@ -166,6 +168,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         avx2_direct_constructors=direct_avx2,
         avx2_cshake_prefix=prefix_avx2,
         avx2_cshake_transfers=moves_avx2,
+        simd_kernel_and_transposes=simd_leaves,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

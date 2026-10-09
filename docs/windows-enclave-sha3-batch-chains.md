@@ -28,6 +28,43 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Four-lane Keccak leaf review (2026-10-09)
+
+The distinct four-message route now checks both complete transpose bodies,
+the kernel tail wrapper and the opaque AVX2 permutation, including their Win64
+envelopes and resolved LLVM ABIs. Expected instructions are generated from the
+25 Keccak coordinates: theta column parity/deltas, rho's triangular rotation
+sequence, pi's coordinate permutation, chi and 24 iota rounds. The linked
+192-byte round table must match an independently generated LFSR sequence.
+The parent also binds the actual object relocations and linked-image bytes.
+
+Each transpose maps lane-major `200 * lane + 8 * word` to word-major
+`32 * word + 8 * lane`, or reverses that mapping, with no endian swap. Model
+checks cover widths zero through four, bounds, inactive bytes and round trips;
+the saved LLVM specialization only admits widths two through four. These are
+not interchangeable claims, and callers still must supply valid disjoint
+regions and the admitted width.
+
+The permutation operates independently on four 64-bit lanes. State occupies
+`[0, 800)`, column parity `[800, 960)`, deltas `[960, 1120)` and staging
+`[1120, 1920)`. All opaque vector accesses stay within these regions. Before
+return, it clears `[800, 1920)`, RAX/RCX/RDX and YMM0–3, resets flags and executes
+`vzeroupper`. No stack access or call occurs inside the opaque block. The
+800-byte result intentionally remains for the caller; this is not a claim that
+the whole workspace is already erased.
+
+The outer Win64 envelope saves/restores incoming XMM6–15 in a 168-byte frame.
+Those incoming values and the frame require the separate outer-window cleanup
+review. Inactive-lane initialization, feature authority, session error/unwind
+paths, resident/input-pointer lifetimes and final output retirement remain
+caller obligations. Package 6 and whole-image qualification remain open.
+
+Focused regressions reject 698 instruction/label/envelope mutations, nine
+missing markers, 192 round-table byte changes, missing/wrong-size tables,
+16 argument/calling-convention changes and a target-feature change. An
+integration negative confirms the main saved-image checker cannot skip this
+leaf review. No production implementation or release-gate policy changed.
+
 ## Sequential plan admission
 
 Both complete emitted plan validators and their nine identity-table entries are

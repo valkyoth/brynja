@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "6c79a37b",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_leaves_and_integration": {"tests": 7, "seconds": 12.120, "status": "PASS"},
+    "windows_simd_leaves_and_integration": {"tests": 7, "seconds": 23.104, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 199,
+  "linux_log_sha256": "a973daaa2ca7175e8dc8b49bf59fd1ed85a8ef98cad15bfed18083c6ecacf82a",
+  "windows_log_sha256": "5354a94ca526227a590c7277e76de66e94d22fdfd7479ced12a96dd7b15f4c5c",
+  "report_sha256": {
+    "sha3-batch-simd-leaves-linux.json": "af6dae08eccb681ea4773301b139d88eca29990760ac29a6349f60e674c2d0ef",
+    "sha3-batch-simd-leaves-windows.json": "cfe9c793eec325e1a5c2f54bedbb0254fa66cebed73c4eef91d37fd2958795f6"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_kernel.py": "75aad01aed9a849da2cb67e20cf2098020fb5ebfdfe0bca75411939225f2f867",
+    "windows_enclave_sha3_simd_kernel_tests.py": "623f807941080e4b6d89cf88d67e55bd6ba6d9ab6c2992ced48c67201482e165",
+    "windows_enclave_sha3_batch_chains.py": "cece28a2c6c6b307397e67ec34f8c1f84c6506cc4715bdd4e4207cc0d36a78a7",
+    "test-windows-enclave-sha3-batch-chains.py": "693bb3baf4f58236a9b38b04b2e6e84e0b222d42ba1c4ffeb26fc525d7e0844e"
+  },
+  "new_contracts": {
+    "complete_leaf_bodies": 4,
+    "keccak_rounds": 24,
+    "independent_lanes": 4,
+    "transpose_machine_width_model": [0, 4],
+    "transpose_saved_llvm_width_half_open": [2, 5],
+    "theta_rho_pi_chi_iota_generated_from_coordinates": true,
+    "linked_round_constants_generated_by_lfsr": true,
+    "opaque_stack_accesses": 0,
+    "retained_output_region": [0, 800],
+    "erased_scratch_region": [800, 1920],
+    "working_gprs_erased": ["rax", "rcx", "rdx"],
+    "working_vectors_erased": [0, 1, 2, 3],
+    "flags_reset_and_vzeroupper": true,
+    "exact_resolved_llvm_abis": true,
+    "incoming_vector_spills_require_outer_window_erasure": true,
+    "session_and_caller_lifetimes_qualified": false,
+    "private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "instruction_label_and_envelope_mutations": 698,
+    "missing_opaque_markers": 9,
+    "linked_constant_byte_mutations": 192,
+    "missing_or_wrong_size_constant_tables": 2,
+    "argument_and_calling_convention_mutations": 16,
+    "target_feature_mutations": 1,
+    "integrated_leaf_failure_rejected": true,
+    "transpose_widths_modelled": 5
+  },
+  "remaining": [
+    "SIMD session authority, counter, scratch-wipe, failure and unwind paths",
+    "SIMD resident, worker, descriptor and digest input-pointer lifetime composition",
+    "complete sequential and SIMD private frame, copy and exceptional cleanup reconciliation",
+    "shared runtime and whole-image qualification in package 8"
+  ]
+}

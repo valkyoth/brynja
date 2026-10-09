@@ -33,11 +33,13 @@ from windows_enclave_sha3_batch_avx2_start_tests import Avx2StartTests,Avx2Start
 from windows_enclave_sha3_batch_avx2_cshake_tests import Avx2CshakeTests,Avx2CshakeModelTests
 from windows_enclave_sha3_batch_avx2_cshake_moves_tests import Avx2CshakeMovesTests,Avx2CshakeMovesModelTests
 
+from windows_enclave_sha3_simd_kernel_tests import SimdKernelSavedTests,SimdKernelModelTests
+
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -81,7 +83,7 @@ class Tests(Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,C
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
@@ -129,6 +131,8 @@ class SavedTests(Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMoves
                 self.assertIsNone(r['scalar_cshake_prefix'])
                 self.assertIsNone(r['scalar_cshake_transfers'])
             if lane=='simd':
+                self.assertTrue(r['simd_kernel_and_transposes']['linked_constants_independently_derived'])
+                self.assertFalse(r['simd_kernel_and_transposes']['private_frame_erasure_qualified'])
                 self.assertIsNone(r['sequential_start_admission_and_placement'])
                 self.assertIsNone(r['prior_helpers'])
                 self.assertTrue(r['transfers']['indirect_calls_pending'])

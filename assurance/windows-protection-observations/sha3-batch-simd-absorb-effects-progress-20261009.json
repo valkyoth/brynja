@@ -1,0 +1,540 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "89089783",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_absorb_effects_and_predecessors": {
+      "tests": 166,
+      "seconds": 273.084,
+      "status": "PASS"
+    },
+    "windows_simd_absorb_effects_and_predecessors": {
+      "tests": 166,
+      "seconds": 420.228,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 251,
+  "files_sha256": {
+    "sha3-batch-simd-absorb-effects-linux.json": "4cdb7744de13f1b69f56bae2d2994380659d47da65c2911920495c281317a112",
+    "sha3-batch-simd-absorb-effects-windows.json": "875feb02056db158be5aaef3bc690107b1f2bd03a0a56ce6a98245ee307c02b1",
+    "sha3-batch-simd-absorb-effects-20261009-exit.json": "b634f9e3fd9ee15438863b61d5621af431bdf5e225dc60ddb1795c9c8c96d59c",
+    "sha3-batch-simd-absorb-effects-linux.log": "97669420173785e79440408b56f5d01494eb6b64f036bd7bbf8f8b6df2b99c12",
+    "sha3-batch-simd-absorb-effects-20261009.log": "3934f36ef671408e9f3fbe76feb85df83c62f221856afbac444169fcfcfe67ee"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_absorb_effects.py": "a8545d4aa0feeb599789307253b0a4571c75650d9f4be7a2824348f4a0d0711b",
+    "windows_enclave_sha3_simd_absorb_effects_tests.py": "65b55af23d9905aef1d5bd1bb18ab2e9332f1a25e0b65c4825be58e6215ba6bb",
+    "windows_enclave_sha3_batch_chains.py": "ec383e9c783ffcc286946dbb8cb270704048309e6570bb806f3ecedb5e35ecfe",
+    "test-windows-enclave-sha3-batch-chains.py": "581a42cfd0ba8f25d8eb70e9398bb207076e319fac1fd5590781a5846ba07182"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "call_sites": [
+      782,
+      899
+    ],
+    "destination_sites": [
+      782,
+      827,
+      851,
+      899
+    ],
+    "byte_loop_inductions": [
+      {
+        "lane": 0,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 72
+      },
+      {
+        "lane": 0,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 104
+      },
+      {
+        "lane": 0,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 136
+      },
+      {
+        "lane": 0,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 144
+      },
+      {
+        "lane": 0,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 168
+      },
+      {
+        "lane": 1,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 72
+      },
+      {
+        "lane": 1,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 104
+      },
+      {
+        "lane": 1,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 136
+      },
+      {
+        "lane": 1,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 144
+      },
+      {
+        "lane": 1,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 168
+      },
+      {
+        "lane": 2,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 72
+      },
+      {
+        "lane": 2,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 104
+      },
+      {
+        "lane": 2,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 136
+      },
+      {
+        "lane": 2,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 144
+      },
+      {
+        "lane": 2,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 168
+      },
+      {
+        "lane": 3,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 72
+      },
+      {
+        "lane": 3,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 104
+      },
+      {
+        "lane": 3,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 136
+      },
+      {
+        "lane": 3,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 144
+      },
+      {
+        "lane": 3,
+        "reachable_positions": 231,
+        "destination_sites": [
+          782,
+          827,
+          851,
+          899
+        ],
+        "backedges": [
+          913
+        ],
+        "rate": 168
+      }
+    ],
+    "parent_relative_internal_effects": [
+      {
+        "site": 782,
+        "read": [
+          3675,
+          3676
+        ],
+        "write_envelope": [
+          1856,
+          2024
+        ],
+        "access_bytes": 1
+      },
+      {
+        "site": 899,
+        "read": [
+          -1024,
+          -1023
+        ],
+        "write_envelope": [
+          1856,
+          2024
+        ],
+        "access_bytes": 1
+      },
+      {
+        "site": 782,
+        "read": [
+          3831,
+          3832
+        ],
+        "write_envelope": [
+          2056,
+          2224
+        ],
+        "access_bytes": 1
+      },
+      {
+        "site": 899,
+        "read": [
+          -1024,
+          -1023
+        ],
+        "write_envelope": [
+          2056,
+          2224
+        ],
+        "access_bytes": 1
+      },
+      {
+        "site": 782,
+        "read": [
+          3987,
+          3988
+        ],
+        "write_envelope": [
+          2256,
+          2424
+        ],
+        "access_bytes": 1
+      },
+      {
+        "site": 899,
+        "read": [
+          -1024,
+          -1023
+        ],
+        "write_envelope": [
+          2256,
+          2424
+        ],
+        "access_bytes": 1
+      },
+      {
+        "site": 782,
+        "read": [
+          4143,
+          4144
+        ],
+        "write_envelope": [
+          2456,
+          2624
+        ],
+        "access_bytes": 1
+      },
+      {
+        "site": 899,
+        "read": [
+          -1024,
+          -1023
+        ],
+        "write_envelope": [
+          2456,
+          2624
+        ],
+        "access_bytes": 1
+      }
+    ],
+    "all_four_destinations_within_original_lane_rate": true,
+    "internal_sources_original_single_bytes": true,
+    "byte_cursor_spill_restore_and_single_increment_checked": true,
+    "external_source_sites_pending": [
+      827,
+      851
+    ],
+    "requires_receiver_validated_identity_and_live_descriptor_metadata": true,
+    "pending_non_frame_store_sites": [],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      502,
+      563,
+      570,
+      573,
+      827,
+      851,
+      1059,
+      1129,
+      1266,
+      1289,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583
+    ],
+    "other_callee_effects_and_win64_nonvolatile_preservation_required": true,
+    "allocation_lifetimes_and_private_frame_exception_cleanup_qualified": false,
+    "common_byte_loop_exits": [
+      [
+        687,
+        1354
+      ],
+      [
+        692,
+        1354
+      ],
+      [
+        696,
+        1351
+      ],
+      [
+        741,
+        1354
+      ],
+      [
+        748,
+        1343
+      ],
+      [
+        769,
+        1343
+      ],
+      [
+        791,
+        1343
+      ],
+      [
+        817,
+        1343
+      ],
+      [
+        829,
+        1343
+      ],
+      [
+        840,
+        1343
+      ],
+      [
+        859,
+        1345
+      ],
+      [
+        908,
+        1345
+      ],
+      [
+        913,
+        914
+      ]
+    ]
+  },
+  "focused_regressions": {
+    "new_tests": 7,
+    "admitted_lane_rate_destination_bytes": 2496,
+    "instruction_mutations": 272,
+    "entry_guard_bypasses": 30,
+    "root_lane_preheader_mutations": 11,
+    "cursor_internal_source_mutations": 15,
+    "partial_overlapping_spills_clobbers_physical_geometry_and_prerequisite_negatives": true
+  },
+  "remaining": [
+    "20 callee footprints, including payload/prefix XOR source paths, output transfers and callbacks",
+    "Allocation lifetimes, authority separation and indirect pointer preservation",
+    "Exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch reconciliation; package 6 remains open",
+    "Shared runtime, Win64 ABI and cumulative stack qualification remains package 8"
+  ]
+}

@@ -70,7 +70,10 @@
   the four-buffer scalar permutation call. The squeeze copy and final-byte mask
   now bind original state/staging roots, the live bounded lane, overflow/empty/
   rate/final-byte guard dominance and physically disjoint read/write envelopes.
-  The remaining 22 call-site footprints,
+  All four absorption XOR destinations now retain the original lane's byte
+  cursor through helper calls and spills, with exact bounded advancement.
+  The internal suffix/padding source bytes are bounded and disjoint; the two
+  payload/prefix source paths remain pending. The remaining 20 call-site footprints,
   remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,

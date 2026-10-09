@@ -28,6 +28,42 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Absorption byte cursor and internal XOR footprints (2026-10-09)
+
+The four absorption XOR calls now share a checked, original-state byte-cursor
+induction. The original lane, frame and state-array roots are established at the
+only absorption entry. The complete emitted setup binds the initial state byte,
+positive linked rate and end pointer. All 231 inner-loop positions are followed
+for every lane and distinct rate, including both computed framing branches,
+helper clobbers and spill/restores. Each XOR destination must remain the current
+byte. Every continuing byte path advances it exactly once and compares it with
+the unchanged end pointer before repeating. This bounds writes to that lane's
+rate bytes, not merely the larger workspace.
+
+Two complete one-byte source/destination footprints are assigned: the domain
+suffix byte in the original lane frame and the generated final-padding byte in
+the child frame. Their physical read ranges are disjoint from every possible
+destination byte. The two payload/prefix XOR calls have bounded destinations,
+but their source-provenance/lifetime composition is still pending and they remain
+in the call-site inventory. There are now 20 unassigned call-site footprints.
+
+This remains conditional on the receiver's validated identity/live metadata,
+the replayed XOR wrapper's argument contract, other callee memory effects and
+Win64 nonvolatile preservation. Allocation lifetimes, indirect alias effects,
+private-frame cleanup and exception reconciliation are not qualified by this
+checkpoint. Package 6 remains open; production and release gates are unchanged.
+
+The [absorption-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-absorb-effects-progress-20261009.json)
+records 166 focused/predecessor tests passing on Linux (273.084 seconds) and
+Windows (420.228 seconds). Parsed reports match, all 251 checker-source hashes
+are current, and 88,058 body-byte mutations are rejected. Seven new tests cover
+2,496 lane/rate destination offsets, 272 instruction mutations, 30 entry/guard
+bypasses, 11 root/lane/preheader mutations and 15 cursor/internal-source mutations.
+Partial and overlapping spills, call clobbers, physical geometry and integration
+prerequisites are also tested. The unrelated full predecessor suite was not
+rerun, and this remains saved-image author review rather than new native
+enclave execution or independent qualification.
+
 ## Squeeze-copy and terminal-mask footprints (2026-10-09)
 
 The inner squeeze copy and final-byte mask now have original-allocation and

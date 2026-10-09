@@ -767,6 +767,47 @@ Parsed reports match with 187 current checker-source bindings verified. The
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
 
+## Scalar cSHAKE retained setup transfers (2026-10-09)
+
+The last 145 scalar `start` instruction/label positions now have explicit
+contracts for empty-result extraction, both setup temporaries and common
+staging. Combined with the prior admission, fixed SHA-3, SHAKE, cSHAKE
+initialization and failure-path contracts, all 1,361 positions are accounted
+for. This is complete scalar instruction coverage, not whole-image or complete
+private-frame qualification; accelerated constructors are still separate work.
+
+The byte-origin model follows both identities, with empty and customized
+prefixes, through the 1,107-byte snapshot and the 1,120-byte setup temporary.
+It preserves all 1,109 active setup bytes at retained owner offsets
+`[32,1141)`, after replacing the old typed state and before publishing the new
+slot/phase. Tags 7/8 are installed at offset 16 and the inner setup tag 6 at
+offset 17. Eight overlapping stores must carry identical origins. The leading
+setup byte travels through stack offset 301, becoming the last byte of the
+overlapping qword store ending at owner offset 32; it is not lost in staging.
+
+The model also tracks physical copies into inactive owner offsets `[18,32)`
+and padding `[1141,1152)` without calling those bytes initialized. On the empty
+path, padding snapshots may retain earlier stack bytes; on the customized path,
+they originate in the setup's padding. Neither class may replace an active
+setup byte. Copy bounds exclude callee home space, saved registers and fields
+outside retained state, and memcpy source/destination spans do not overlap.
+Explicit source pointers are consumed before their stack slots are reused for
+payload bytes. The original setup and snapshot remain physically live and are
+not reported erased by logical ownership transfer.
+
+The [retained-transfer observation](../assurance/windows-protection-observations/sha3-batch-cshake-moves-progress-20261009.json)
+records this saved-image author checkpoint. Shared runtime/ABI assumptions,
+complete private-window retirement, accelerated caller lifetimes and four-lane
+SIMD still prevent package-6 closure. Production and release-gate policy remain
+unchanged.
+
+All 18 selected cSHAKE constructor/integration tests passed on Linux (98.866
+seconds) and Windows (207.909 seconds). Complete saved reports regenerated with
+body mutations agree; all 194 checker-source bindings match. New tests reject
+290 instruction mutations, 276 transfer deletions, 72 provenance/bounds/order
+changes, 11 pointer/tag changes, five external entries and eight prerequisite
+changes. The full predecessor suite was not rerun.
+
 ## Scalar cSHAKE prefix and normal failure joins (2026-10-09)
 
 The next 203 instruction/label positions bind both rates' prefix sequencing,

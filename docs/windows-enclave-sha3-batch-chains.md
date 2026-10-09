@@ -28,6 +28,50 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Final health, rejection bridges and report (2026-10-09)
+
+The saved executor's remaining terminal regions now have complete local
+instruction contracts: 82 positions of error bridges/final health, 57 positions
+of final output admission, and 80 positions of report publication. The distinct
+28-position `Executor::check` helper and its resolved LLVM ABI are checked too.
+The public-data interpreter executes that helper's health/revalidation sequence;
+it does not substitute a fixed successful return.
+
+With the stated incoming register and live-storage prerequisites, the error
+bridges compose into the already-reviewed normal rejection path: workspace and
+staging are cleared, integrity errors quarantine the executor/authority, present
+output destinations are cleared, and only the error/discriminant is published.
+Routine errors do not newly quarantine the owner. Final cancellation and health
+checks precede output revalidation. Output byte counts are recomputed from bit
+lengths and constrained to the 1,024-byte staging capacity before the separately
+reviewed copy region is entered.
+
+Successful report publication follows workspace/staging clearing. The model
+compares each byte of descriptors, output bit lengths, identities, vector calls,
+vector/scalar work counters, accelerated mask and kernel identity. In particular,
+it checks the vector-call counter's low byte plus the separately preserved upper
+seven bytes across the emitted mixed-width stores.
+
+This is not a claim about padding: four padding bytes copied to result offsets
+100–103 are not meaningful report fields, and result offsets 130–135 are not
+written. Neither region is claimed initialized or erased. The invalid kernel
+sentinel branches to the error return instead of publishing a successful report;
+this does not qualify arbitrary corrupted-state inputs. The explicit overflow
+panic edge remains a panic edge, not a modeled successful or ordinary-error path.
+
+The [terminal observation](../assurance/windows-protection-observations/sha3-batch-simd-terminal-progress-20261009.json)
+records all 102 focused tests passing on Linux (101.636 seconds) and Windows
+(117.501 seconds). The regenerated reports match, all 239 checker-source hashes
+are current, and 88,058 body-byte mutations were rejected. The seven new tests
+cover 306 report cases, 580 size-admission cases, 106 error-bridge cases and 64
+final-health combinations; 657 terminal-instruction and 28 helper-instruction
+mutations plus 18 reached semantic mutations are rejected. The unrelated full
+predecessor suite was not rerun. Local error-bridge composition assumes the
+incoming register roles; tracing those roles through
+all predecessors, full storage lifetimes/non-overlap, exception funclets and
+private-frame cleanup still requires reconciliation. Shared runtime work remains
+package 8. Package 6 is not closed, and no production code or release gate changed.
+
 ## Scalar fallback in the SIMD executor (2026-10-09)
 
 The complete 90-position scalar-fallback region now has a saved-instruction
@@ -53,9 +97,10 @@ pointers are restored for the absorption-loop continuation. The model uses only
 synthetic bytes for provenance, not a replacement cryptographic oracle.
 
 These checks assume live, disjoint caller objects and a revalidator that obeys
-its callback/ABI contract. Error cases stop at the shared rejection edges;
-complete rejection-edge composition, final report serialization, incoming
-pointer lifetimes/non-overlap and private-frame/exception cleanup remain open.
+its callback/ABI contract. This checkpoint's error cases stop at the shared
+rejection edges; the subsequent terminal checkpoint above checks those local
+bridges and report serialization. Incoming pointer lifetimes/non-overlap and
+private-frame/exception cleanup remain open.
 The [scalar-fallback observation](../assurance/windows-protection-observations/sha3-batch-simd-scalar-progress-20261009.json)
 records 95 focused tests passing on Linux (91.868 seconds) and Windows
 (107.605 seconds). The complete regenerated reports match, with 235 current
@@ -96,10 +141,10 @@ Injected session failures/counter mismatches do not claim observed native faults
 
 These checks assume valid live caller objects and the reviewed callee/ABI
 contracts. They stop at scalar fallback, finalization or the shared rejection
-edges. The subsequent scalar-fallback checkpoint above closes that local caller
-review. Final report serialization, complete incoming pointer lifetimes,
-rejection-edge composition and private-frame/exception cleanup remain open;
-no whole-worker qualification is claimed.
+edges. Subsequent scalar-fallback and terminal checkpoints above check those
+local caller/bridge/report regions. Complete incoming pointer lifetimes and
+private-frame/exception cleanup remain open; no whole-worker qualification is
+claimed.
 
 The [vector-caller observation](../assurance/windows-protection-observations/sha3-batch-simd-vector-progress-20261009.json)
 records 87 focused SIMD/predecessor tests passing on Linux (84.050 seconds) and

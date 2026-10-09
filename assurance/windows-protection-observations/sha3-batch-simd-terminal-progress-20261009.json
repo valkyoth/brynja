@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "8eea84a4",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_terminal_and_predecessors": {
+      "tests": 102,
+      "seconds": 101.636,
+      "status": "PASS"
+    },
+    "windows_simd_terminal_and_predecessors": {
+      "tests": 102,
+      "seconds": 117.501,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 239,
+  "files_sha256": {
+    "sha3-batch-simd-terminal-linux.json": "ae1ab5bbce7ab44e581bbe37d1e2fbcdd561dfcc8077595e479ba38aec060926",
+    "sha3-batch-simd-terminal-windows.json": "a5da1f3a3b11126e21c52b6effa9b84fe0978d0301ec87626de385d0da02ff92",
+    "sha3-batch-simd-terminal-20261009-exit.json": "435969cf03e595059aadae4fb0369219953f0fac2554dd093567fd477a527433",
+    "sha3-batch-simd-terminal-linux.log": "4038868138d67bff46be2e601c49bb5c4a2b744d17fa8c0083b4420ef799d403",
+    "sha3-batch-simd-terminal-20261009.log": "1a145a3148c2f0fa39ecc8808aabe7f5850dcc48d9b1667f920d695426a55821"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_terminal.py": "76859a7c1821a7d0adb1876c1aef733c6b20738623e93468c581681a802e032e",
+    "windows_enclave_sha3_simd_terminal_shape.py": "8a152500c075bd7c611233dedf1647953a758b10b7bf55121c603225845d2507",
+    "windows_enclave_sha3_simd_terminal_machine.py": "b906937fb70b8b7b289853c95d52fd3ee81b0d48ea4e7716a5c84da3de2125b7",
+    "windows_enclave_sha3_simd_terminal_model.py": "cc333e6021b2b2d5f69d8c1c99a45d7c8e0f4efd3d4d21cadb63be25739b3f48",
+    "windows_enclave_sha3_simd_terminal_tests.py": "647044d433666e6f75c05406964c7c264c0b8cd1c56b2b4f101ec73763878951",
+    "windows_enclave_sha3_batch_chains.py": "197dec957739135d3c926ad80298c63fa64a4c9c47d8f37123b5c3edac751f7f",
+    "test-windows-enclave-sha3-batch-chains.py": "9f913a9b59b9103b9c43c4c9d1c86de7e1b9e2891b6395d7cfdbea9ddfbbe06b"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "bridge_region": [
+      1343,
+      1425
+    ],
+    "size_admission_region": [
+      1425,
+      1482
+    ],
+    "report_region": [
+      1596,
+      1676
+    ],
+    "executor_check": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor5check",
+    "executor_check_instruction_positions": 28,
+    "final_poll_and_actual_executor_health_before_output_validation": true,
+    "ordinary_rejection_retains_reuse_and_integrity_failure_quarantines": true,
+    "shared_error_wipes_workspace_staging_and_present_destinations": true,
+    "successful_report_after_workspace_and_staging_wipe": true,
+    "final_output_bytes_recomputed_and_bounded_by_1024": true,
+    "vector_call_counter_preserved_across_mixed_width_serialization": true,
+    "result_fields": {
+      "descriptors": [
+        0,
+        64
+      ],
+      "output_bits": [
+        64,
+        96
+      ],
+      "identities": [
+        96,
+        100
+      ],
+      "vector_calls": [
+        104,
+        112
+      ],
+      "vector_blocks": [
+        112,
+        120
+      ],
+      "scalar_blocks": [
+        120,
+        128
+      ],
+      "accelerated_mask": 128,
+      "kernel": 129
+    },
+    "copied_padding_region": [
+      100,
+      104
+    ],
+    "untouched_result_padding": [
+      130,
+      136
+    ],
+    "report_padding_not_claimed_initialized_or_erased": true,
+    "bridge_predecessor_register_contracts_assumed": true,
+    "callback_must_preserve_live_authority_and_abi": true,
+    "final_copy_region_review_reused_not_interpreted_here": true,
+    "complete_machine_pointer_lifetimes_and_nonoverlap_qualified": false,
+    "private_frame_and_exception_cleanup_qualified": false
+  },
+  "new_regressions": {
+    "report_byte_oracle_cases": 306,
+    "aggregate_bit_length_cases": 580,
+    "error_bridge_cases": 106,
+    "final_health_cases": 64,
+    "terminal_instruction_mutations": 657,
+    "health_helper_instruction_mutations": 28,
+    "reached_semantic_mutations": 18,
+    "validator_failures": 4,
+    "explicit_panic_edge": 1,
+    "prerequisite_mutations": 4,
+    "health_abi_mutations": 2,
+    "invalid_pointer_homes": 3,
+    "unassigned_effect_or_instruction_budget_cases": 6,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "aggregate executor instruction-review reconciliation",
+    "complete predecessor register and input/state/authority pointer provenance",
+    "complete storage lifetime and non-overlap composition",
+    "normal-return private-frame and exception cleanup reconciliation",
+    "reconcile all three SHA-3 batch routes before closing package 6",
+    "ParallelHash distinct worker review; shared runtime remains completion package 8"
+  ]
+}

@@ -40,8 +40,10 @@
   The scalar fallback now checks per-lane cancellation and charging, executor/
   authority health, state copy provenance, its distinct scalar kernel and ABI,
   scratch/owner clearing and checked scalar accounting before continuation.
-  Its remaining final-health/rejection-edge/final-report and input
-  paths, machine pointer lifetimes/non-overlap and final private-frame/exception
+  Final health, normal rejection bridges, aggregate output-size admission and
+  byte-exact report serialization now have local emitted contracts and model
+  checks, including the mixed-width vector-call counter stores. Full predecessor
+  register/input provenance, machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.

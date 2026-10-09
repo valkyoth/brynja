@@ -42,6 +42,7 @@ import windows_enclave_sha3_simd_squeeze as simd_squeeze
 import windows_enclave_sha3_simd_absorb as simd_absorb
 import windows_enclave_sha3_simd_vector as simd_vector
 import windows_enclave_sha3_simd_scalar as simd_scalar
+import windows_enclave_sha3_simd_terminal as simd_terminal
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -143,6 +144,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
     absorb_simd=simd_absorb.inspect(bodies,asm,ir,constants,frame_simd,squeeze_simd) if lane=='simd' else None
     vector_simd=simd_vector.inspect(bodies,digest_simd,session_simd,reject_simd,absorb_simd) if lane=='simd' else None
     scalar_simd=simd_scalar.inspect(bodies,ir,constants,digest_simd,vector_simd) if lane=='simd' else None
+    terminal_simd=simd_terminal.inspect(bodies,ir,digest_simd,output_simd,reject_simd,scalar_simd) if lane=='simd' else None
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
@@ -211,6 +213,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         simd_lane_absorption=absorb_simd,
         simd_vector_caller=vector_simd,
         simd_scalar_fallback=scalar_simd,
+        simd_terminal=terminal_simd,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

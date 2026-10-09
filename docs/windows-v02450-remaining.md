@@ -19,8 +19,9 @@
   scalar terminal squeeze/fixed-output normal-path cleanup, start admission and
   retained-state placement, and widened copy-helper checks,
   plus the distinct four-lane kernel/session, resident authority construction,
-  owner admission and outer retained-worker/buffer retirement. The four-lane
-  receiver, descriptor and digest lifetimes and final private-frame/exception
+  owner admission, outer retained-worker/buffer retirement, complete receiver
+  admission/dispatch/export and bounded descriptor-construction helpers. The
+  four-lane resident/executor digest lifetimes and final private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.

@@ -203,9 +203,73 @@ boundaries, early returns, removed cleanup calls, weakened ABIs and constructor/
 owner prerequisite removal. Both hosts replay the saved compiler artifacts;
 this is **not** a new enclave execution or native cryptographic campaign.
 The [worker observation](../assurance/windows-protection-observations/sha3-batch-simd-worker-progress-20261009.json)
-records the runs and remaining scope. Receiver/descriptor/digest lifetime review
-and complete private-frame/exception reconciliation remain open. Fatal abort
+records the runs and remaining scope. Digest lifetime review and complete
+private-frame/exception reconciliation remain open; the receiver/descriptor
+follow-up is below. Fatal abort
 cleanup is not claimed; shared stack/runtime/OS boundaries remain package 8.
+
+## SIMD receiver and descriptor construction (2026-10-09)
+
+The complete 405-position receiver and its resolved LLVM ABI are now checked.
+Its 384-byte version-22 header requires a nonzero sequence, route identity 2
+and operation 100 (digest), 101 (public export) or 102 (cancel). Export/cancel
+require zero budget. All four 88-byte lane records are validated before any
+payload copy: identity 1–8, at most 2,048 output bits, exact fixed SHA-3 widths,
+and canonical empty triples. Nonempty inputs require at most 1,024 bytes,
+last-bit count 1–8, a nonzero opaque source and nonwrapping source-end
+arithmetic. Only cSHAKE identities permit nonempty name/customization inputs.
+Export requires zero input triples; cancellation requires all lane-record bytes
+zero. The linked zero-record and fixed-output-width constants are bound too.
+
+The public-predicate model is compared with a separately written wire policy
+on 27,648 field/boundary substitutions. This is metadata validation, not an
+independent cryptographic oracle. The checked byte-copy schedule transfers the
+288-byte decoded record from frame `[80, 368)` into `[368, 656)`, with a
+279-byte snapshot at `[784, 1063)` and explicit first-field copies. It preserves
+all physical bytes, including uninterpreted padding, without asserting that
+padding is initialized or erased. The raw header is no longer used when its
+frame area becomes the decoded destination.
+
+Only digest copies payload. Copy kinds 1–12 each pair one decoded length/source
+with its own 1,024-byte worker slot. Host addresses remain opaque until the
+fixed C copy adapter; descriptor inputs use the local worker slot instead.
+The three bitstrings for lane `i` occupy 32-byte fields at
+`1064 + 112*i + 32*part`. All twelve length and last-bit loads are checked
+against the corresponding copy slot. Sequence, budget and the exact retained
+owner pointer are passed to the resident digest. This establishes the caller's
+argument origins, **not** preservation inside the still-open digest bodies.
+
+Export checks the ready phase and next sequence through the reviewed owner
+operation, compares all four stored identities and output lengths, and copies
+the explicit 1,024-byte public output. It rechecks authority after the copy.
+Successful export clears output/plan and sets the owner empty; rejection returns
+false and reaches the enclosing worker's quarantine/retirement path. A failed
+post-copy check cannot roll back bytes already copied to the host. Cancellation
+calls the reviewed resident cancellation helper. These are fixed synchronous
+transport boundaries, not permission to substitute arbitrary callbacks.
+
+The 86-position four-lane initializer and 63-position bitstring constructor are
+also checked, together with the six-position mask wrapper and seven-position
+byte predicate. A byte-token model executes the actual initializer moves,
+including overlaps and padding: all twelve initial bitstring copies and all
+four nine-byte plan fields preserve their source provenance. Physical writes
+cover 441 of the 448 destination bytes; the final seven padding bytes remain
+unwritten. Descriptor helpers publish no input pointer to global or heap
+storage; returned descriptors intentionally retain their caller-owned borrow.
+Their local copies and frames are **not** thereby erased.
+
+Bitstring admission accepts last=0 only for empty input, otherwise last=1–8.
+For partial bytes it checks only the final local byte and rejects nonzero
+unused high bits. Input length is bounded to 1,024 by this callsite/ABI, so the
+bit count is at most 8,192. Successful result fields preserve pointer, length,
+bit count and last-bit count; rejection uses a null result pointer. Exhaustive
+last-byte/last-bit comparisons at four length boundaries cover 262,144 cases.
+
+The [receiver/descriptor observation](../assurance/windows-protection-observations/sha3-batch-simd-receiver-progress-20261009.json)
+records focused Linux/Windows saved-image replay and mutation checks. Remaining
+package-6 work includes the resident/executor digest bodies, workspace wipe/drop
+and full private-frame/normal/exceptional composition. No new native enclave
+execution, production change, release-gate change or whole-image claim is made.
 
 ## Sequential plan admission
 

@@ -28,6 +28,35 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Complete executor coverage and normal CFG ordering (2026-10-09)
+
+The aggregate checker now reconciles all 15 independently replayed regions
+against the same executor identity: every one of its 1,676 normalized positions
+is covered. The only overlaps are the shared setup label and six positions of
+the final workspace/staging wipe. This closes the instruction-coverage inventory,
+not the outstanding storage-lifetime proof.
+
+A whole-function finite traversal follows both sides of every conditional and
+all entries of the actual two dispatch tables at all three indirect jump sites.
+It treats both buffers as live on entry and conservatively makes them live again
+throughout the work regions. Every normal-return path passes a complete workspace
+wipe followed by the 1,024-byte staging wipe. The overflow panic/trap is a separate
+terminal, never counted as successful cleanup. The reviewed public report and
+epilogue are outside the work regions; this is not a general secret-write detector.
+
+The [reconciliation observation](../assurance/windows-protection-observations/sha3-batch-simd-reconcile-progress-20261009.json)
+records 107 tests passing on Linux (106.763 seconds) and Windows (122.989 seconds).
+Parsed reports match, all 240 checker-source bindings are current, and 88,058
+complete body-byte mutations are rejected. Five new tests include 77 coverage/
+identity mutations, 26 dispatch/CFG mutations and 1,444 cleanup-bypass/dirty-return
+mutations. The unrelated full predecessor test suite was not rerun.
+Regressions deliberately introduce coverage
+holes/overlaps, mismatched executor identities, changed table destinations,
+escaping branches, skipped wipes and direct dirty returns. Wipe argument identity
+across all predecessors, physical storage lifetimes/non-overlap, exceptional
+cleanup and private-frame retirement remain explicit prerequisites or open work.
+No new native enclave run, production change or release-gate change is claimed.
+
 ## Final health, rejection bridges and report (2026-10-09)
 
 The saved executor's remaining terminal regions now have complete local

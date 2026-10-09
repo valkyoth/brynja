@@ -1,0 +1,280 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "7508b828",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_reconciliation_and_predecessors": {
+      "tests": 107,
+      "seconds": 106.763,
+      "status": "PASS"
+    },
+    "windows_simd_reconciliation_and_predecessors": {
+      "tests": 107,
+      "seconds": 122.989,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 240,
+  "files_sha256": {
+    "sha3-batch-simd-reconcile-linux.json": "a093bae504ccb04d729c149fc7f1f8f21496b0deb1dd0bb8cbbfff9344af8d5d",
+    "sha3-batch-simd-reconcile-windows.json": "bd6b37ab2d9aefbe4a9ccbf49f3707b205d1fdf1b2f65cfa3968840c099b9b85",
+    "sha3-batch-simd-reconcile-20261009-exit.json": "322e701084f106f3ca9a4d97d514ffc0ff3cf7881475ca8d6fca06e5748ed783",
+    "sha3-batch-simd-reconcile-linux.log": "2bf1ade5696618ee70a3f044e3525eca3d3796c352ccf29fd240a1e3f0da1334",
+    "sha3-batch-simd-reconcile-20261009.log": "665bc398a5b012c25d183027f24be7fdc834deb6bf4691794422f50f0b71fe43"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_reconcile.py": "008db0956ec4c66dc609c922829bae03c4154663d0ebed478fcf967126195fe7",
+    "windows_enclave_sha3_simd_reconcile_tests.py": "5e5a9cb379a27df07b6aea6ab82015597f682d3d3d162956e9ed2ff5fa058006",
+    "windows_enclave_sha3_batch_chains.py": "32a0ea49e07b33b904695275946710ef9815b48f4f8b8290f1aeb492447577a8",
+    "test-windows-enclave-sha3-batch-chains.py": "f50f4dcb6637d7718fb67e20b94b2b84cc717ac9041abdf9e688b74d85d138f2"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "coverage": {
+      "positions": 1676,
+      "region_count": 15,
+      "regions": [
+        {
+          "review": "reject",
+          "field": "entry_region",
+          "extent": [
+            0,
+            69
+          ]
+        },
+        {
+          "review": "frame",
+          "field": "region",
+          "extent": [
+            69,
+            454
+          ]
+        },
+        {
+          "review": "reject",
+          "field": "eligibility_region",
+          "extent": [
+            454,
+            510
+          ]
+        },
+        {
+          "review": "reject",
+          "field": "normal_rejection_region",
+          "extent": [
+            510,
+            588
+          ]
+        },
+        {
+          "review": "squeeze",
+          "field": "setup_region",
+          "extent": [
+            587,
+            624
+          ]
+        },
+        {
+          "review": "squeeze",
+          "field": "ready_dispatch_region",
+          "extent": [
+            624,
+            648
+          ]
+        },
+        {
+          "review": "absorb",
+          "field": "region",
+          "extent": [
+            648,
+            920
+          ]
+        },
+        {
+          "review": "squeeze",
+          "field": "squeeze_region",
+          "extent": [
+            920,
+            992
+          ]
+        },
+        {
+          "review": "vector",
+          "field": "region",
+          "extent": [
+            992,
+            1253
+          ]
+        },
+        {
+          "review": "scalar",
+          "field": "region",
+          "extent": [
+            1253,
+            1343
+          ]
+        },
+        {
+          "review": "terminal",
+          "field": "bridge_region",
+          "extent": [
+            1343,
+            1425
+          ]
+        },
+        {
+          "review": "terminal",
+          "field": "size_admission_region",
+          "extent": [
+            1425,
+            1482
+          ]
+        },
+        {
+          "review": "output",
+          "field": "output_prepare_region",
+          "extent": [
+            1482,
+            1542
+          ]
+        },
+        {
+          "review": "output",
+          "field": "output_copy_and_cleanup_region",
+          "extent": [
+            1542,
+            1602
+          ]
+        },
+        {
+          "review": "terminal",
+          "field": "report_region",
+          "extent": [
+            1596,
+            1676
+          ]
+        }
+      ],
+      "overlaps": {
+        "587": [
+          "reject.normal_rejection_region",
+          "squeeze.setup_region"
+        ],
+        "1596": [
+          "output.output_copy_and_cleanup_region",
+          "terminal.report_region"
+        ],
+        "1597": [
+          "output.output_copy_and_cleanup_region",
+          "terminal.report_region"
+        ],
+        "1598": [
+          "output.output_copy_and_cleanup_region",
+          "terminal.report_region"
+        ],
+        "1599": [
+          "output.output_copy_and_cleanup_region",
+          "terminal.report_region"
+        ],
+        "1600": [
+          "output.output_copy_and_cleanup_region",
+          "terminal.report_region"
+        ],
+        "1601": [
+          "output.output_copy_and_cleanup_region",
+          "terminal.report_region"
+        ]
+      },
+      "uncovered_positions": []
+    },
+    "normal_ordering": {
+      "normal_returns": [
+        586
+      ],
+      "terminal_traps": [
+        1467
+      ],
+      "reachable_states": 1676,
+      "reached_work_positions": 1435,
+      "wipe_sites": [
+        73,
+        530,
+        533,
+        1588,
+        1591,
+        1598,
+        1601
+      ]
+    },
+    "dispatch_sites": {
+      "123": [
+        ".B44",
+        ".B18",
+        ".B43",
+        ".B45",
+        ".B19",
+        ".B18",
+        ".B19",
+        ".B18"
+      ],
+      "718": [
+        ".B103",
+        ".B103",
+        ".B112",
+        ".B103",
+        ".B107",
+        ".B118",
+        ".B110",
+        ".B108",
+        ".B119"
+      ],
+      "759": [
+        ".B103",
+        ".B103",
+        ".B112",
+        ".B103",
+        ".B107",
+        ".B118",
+        ".B110",
+        ".B108",
+        ".B119"
+      ]
+    },
+    "all_executor_positions_have_replayed_region_review": true,
+    "normal_cfg_workspace_then_staging_wipe_order_checked": true,
+    "conditional_edges_overapproximated": true,
+    "buffers_live_on_entry": true,
+    "wipe_argument_provenance_still_required": true,
+    "complete_machine_pointer_lifetimes_and_nonoverlap_qualified": false,
+    "private_frame_and_exception_cleanup_qualified": false,
+    "terminal_paths_are_not_cleanup_success": true
+  },
+  "focused_regressions": {
+    "new_tests": 5,
+    "coverage_and_identity_mutations": 77,
+    "dispatch_table_and_cfg_mutations": 26,
+    "cleanup_bypass_and_dirty_return_mutations": 1444,
+    "abstract_loop_ordering_negatives": true,
+    "prerequisite_wipe_length_and_integration_negatives": true
+  },
+  "remaining": [
+    "original wipe receiver pointers through every predecessor",
+    "authority/input/state lifetime and physical non-overlap composition",
+    "complete exceptional guard/funclet and private-frame cleanup",
+    "reconcile all SIMD bodies and sequential routes before closing package 6",
+    "shared runtime/stack/platform qualification remains package 8"
+  ]
+}

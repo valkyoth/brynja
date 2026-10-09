@@ -28,6 +28,46 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Four-lane rate-limited squeezing (2026-10-09)
+
+The saved executor's 37-position inner-loop setup, 24-position readiness/lane
+dispatch and 72-position squeeze region now have exact emitted contracts. The
+eight-identity rate table is checked against both assembly and the previously
+bound object/linked-image bytes. Each copy reads the selected 200-byte state
+lane, uses equal source/destination lengths bounded by that identity's rate,
+and checks the accumulated staging offset and end before touching output.
+The written-byte counter advances only after the reviewed copy succeeds.
+
+A bounded instruction interpreter compares the complete workspace and staging
+against an independent byte/counter oracle. It covers all identities, four lane
+positions, zero/exact/over-rate output, staging boundaries, excessive counters,
+u64 overflow, injected copy failure, all seven fractional-byte widths and two
+caller-saved-register poison patterns. Only a successful final chunk masks its
+last byte. The mask helper's complete opaque operation, register erasure, tail
+wrapper and resolved LLVM ABIs are checked separately. Live lane/input/control
+and frame pointers must be restored at the continuation; readiness is exactly
+whether more output remains. Synthetic bytes exercise copy/mask semantics, not
+Keccak permutation correctness.
+
+The new regressions reject changes to all 133 region positions, mutations of
+the mask body/markers/ABI, changed linked rates, missing predecessor reviews and
+17 reached copy/counter/mask/restoration mutations. Failure injection represents
+a modeled helper rejection, not an observed native failure. The model assumes
+live, disjoint caller objects; it stops on the shared rejection edge and relies
+on the separately reviewed cleanup contract. All incoming pointer lifetimes,
+the absorption/permutation/work-accounting loop, final report and private-frame/
+exception cleanup are still open. No whole-worker or whole-image qualification
+is claimed.
+
+Seventy focused SIMD/predecessor tests pass on Linux (56.291 seconds) and Windows
+(69.437 seconds). Complete saved reports regenerated with 88,058 body-byte
+mutations match after parsing; all 222 checker-source bindings match the current
+files. The unrelated full predecessor suite was not rerun. The
+[squeeze observation](../assurance/windows-protection-observations/sha3-batch-simd-squeeze-progress-20261009.json)
+records the seven new tests and their 2,280 independent oracle comparisons as
+saved-artifact review, not new native enclave execution. No production or
+release-gate behavior changed.
+
 ## Four-lane admission and normal rejection (2026-10-09)
 
 The saved executor now has exact contracts for its 69-position entry, the

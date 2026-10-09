@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "e5896cb5",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_squeeze_and_predecessors": {
+      "tests": 70,
+      "seconds": 56.291,
+      "status": "PASS"
+    },
+    "windows_simd_squeeze_and_predecessors": {
+      "tests": 70,
+      "seconds": 69.437,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 222,
+  "files_sha256": {
+    "sha3-batch-simd-squeeze-linux.json": "16aa1267c27d1dc23582caacc1583973506e080574f6f71b1c990d3797666f5d",
+    "sha3-batch-simd-squeeze-windows.json": "4dcf34fb1b37574cb20900d7505c4eaed2ec4ed8dbda21e4355f11baee7b9f8e",
+    "sha3-batch-simd-squeeze-20261009-exit.json": "aafd932b7f125c4ca4cc413546a47d0b5368b68428e9f1476108303636041515",
+    "sha3-batch-simd-squeeze-linux.log": "85bad2f1846031e7ca231843cd60f85d8929332d164992d6768ef6a76a49d635",
+    "sha3-batch-simd-squeeze-20261009.log": "7dca081152694565f1e1391db6fb243df5fccdd9cfca7e70cf8b2d937d09614b"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_squeeze.py": "72b91650dbce85481226894b29b94e0bcab5a732b13cf7af422a5c7fcf6fc39f",
+    "windows_enclave_sha3_simd_squeeze_shape.py": "74d1cbaf4d8096247ba14b7bef31c31d2cd06a480dd78bf671cd4f81e99392b0",
+    "windows_enclave_sha3_simd_squeeze_model.py": "3f0869d63d82190e37e79351ae57142d3bcc7c4be459e652a42d6828244f602c",
+    "windows_enclave_sha3_simd_squeeze_tests.py": "cfb892af3ee3de2c716b5dfaf751ce887c091b2be0ec0ed1a6d93102b4372456",
+    "windows_enclave_sha3_batch_chains.py": "9e24ffa0fe2f5862c2fd55585620f47e20d944d88def40d7df225853b103d2e1",
+    "test-windows-enclave-sha3-batch-chains.py": "04cbaf8d92094fb2e29dff974b00ea4764e987fa8da9a8e61ec2b97c833d3fcd"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "setup_region": [
+      587,
+      624
+    ],
+    "ready_dispatch_region": [
+      624,
+      648
+    ],
+    "squeeze_region": [
+      920,
+      992
+    ],
+    "instruction_positions": 133,
+    "mask": {
+      "functions": {
+        "mask": "_RNvNtCsjNKEhcqdpKw_11brynja_core13secret_memory22apply_secret_byte_mask",
+        "mask_leaf": "_RNvNtCsjNKEhcqdpKw_11brynja_core18secret_memory_mask9mask_byte"
+      },
+      "keep_mask_range": [
+        1,
+        128
+      ],
+      "added_bits": 0,
+      "working_register_erased": "eax",
+      "opaque_stack_accesses": 0
+    },
+    "linked_rates": [
+      144,
+      136,
+      104,
+      72,
+      168,
+      136,
+      168,
+      136
+    ],
+    "state_stride": 200,
+    "state_capacity": 200,
+    "staging_capacity": 1024,
+    "copy_lengths_equal_and_at_most_rate": true,
+    "final_partial_byte_uses_low_bit_mask": true,
+    "written_counter_committed_after_successful_copy": true,
+    "restored_lane_index_input_control_and_frame_pointers_checked": true,
+    "saved_region_oracle_cases": 24,
+    "all_incoming_pointer_lifetimes_and_storage_nonoverlap_qualified": false,
+    "absorption_permutation_work_accounting_and_report_qualified": false,
+    "exception_and_private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "instruction_position_changes": 399,
+    "mask_helper_instruction_changes": 24,
+    "mask_marker_changes": 5,
+    "mask_abi_changes": 2,
+    "linked_or_assembly_rate_table_changes": 4,
+    "independent_storage_mask_and_failure_comparisons": 2280,
+    "additional_actual_saved_region_comparisons": 60,
+    "load_bearing_copy_counter_mask_restoration_mutations": 17,
+    "unassigned_effect_and_budget_rejections": 6,
+    "prerequisite_mutations": 3,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "inner absorption/permutation, later control polls/charges and final report semantics",
+    "complete incoming machine pointer-lifetime, storage non-overlap and exceptional-path composition",
+    "final private-frame erasure and shared package-8 runtime/platform reconciliation",
+    "independent retest and final native qualification"
+  ]
+}

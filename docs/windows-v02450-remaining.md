@@ -29,7 +29,10 @@
   identities, including cSHAKE prefix padding and per-lane staging offsets.
   Entry, required-SIMD eligibility, first internal cancellation polling and
   normal rejection/reuse/retirement now have saved-code contracts and model
-  checks. Its remaining absorption/permutation/report and input
+  checks. Inner-loop setup/readiness and rate-limited squeeze copies now have
+  saved-code and byte-oracle checks, including staging bounds, final-byte masks,
+  post-copy counter commits and restored continuation pointers. Its remaining
+  absorption/permutation/report and input
   paths, machine pointer lifetimes/non-overlap and final private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative

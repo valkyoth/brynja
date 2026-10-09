@@ -28,6 +28,44 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Scalar fallback in the SIMD executor (2026-10-09)
+
+The complete 90-position scalar-fallback region now has a saved-instruction
+contract and an independent effect-order model. It visits physical slots whose
+ready byte equals one, polls the original internal cancellation target/context,
+then checks and commits the one-block budget/used-work charge. Executor health
+and, when present, authority health and revalidation are checked before copying
+the lane state into the separate scalar owner. A failed revalidator preserves
+the authority pointer needed by the shared rejection latch.
+
+The scalar callee is checked independently of the vector session: its complete
+opaque schedule is reconstructed from Keccak coordinates and LFSR-derived round
+constants, with this image's actual labels, immutable linked table and resolved
+four-region `noalias`/`nounwind` ABI. Its entry/return saves only pointer registers;
+working-register and scratch clearing are checked. This is a review of the saved
+compiler output, not a claim about arbitrary future code generation.
+
+The caller checks the 200-byte copy into and out of the scalar owner, explicitly
+clears the three scratch regions, and wipes the complete 1,040-byte owner before
+checking/incrementing the scalar report counter. Counter overflow does not wrap.
+Readiness and vector accounting are unchanged; the workspace, framing and ready
+pointers are restored for the absorption-loop continuation. The model uses only
+synthetic bytes for provenance, not a replacement cryptographic oracle.
+
+These checks assume live, disjoint caller objects and a revalidator that obeys
+its callback/ABI contract. Error cases stop at the shared rejection edges;
+complete rejection-edge composition, final report serialization, incoming
+pointer lifetimes/non-overlap and private-frame/exception cleanup remain open.
+The [scalar-fallback observation](../assurance/windows-protection-observations/sha3-batch-simd-scalar-progress-20261009.json)
+records 95 focused tests passing on Linux (91.868 seconds) and Windows
+(107.605 seconds). The complete regenerated reports match, with 235 current
+checker-source bindings and 88,058 rejected body-byte mutations. The eight new
+tests cover 1,024 flag/effect and 288 health/accounting cases, 16 per-lane
+poll/revocation/copy failures, 270 caller-instruction and 210 kernel-assembly
+mutations, and 19 reached semantic mutations. The unrelated full predecessor
+suite was not rerun. Package 6 remains open; production code and release-gate
+policy are unchanged.
+
 ## Vector grouping, charge and lane transfer (2026-10-09)
 
 The saved executor's 261-position vector-caller region now has a complete
@@ -58,9 +96,10 @@ Injected session failures/counter mismatches do not claim observed native faults
 
 These checks assume valid live caller objects and the reviewed callee/ABI
 contracts. They stop at scalar fallback, finalization or the shared rejection
-edges. Scalar permutation, final report serialization, complete incoming
-pointer lifetimes, rejection-edge composition and private-frame/exception
-cleanup remain open; no whole-worker qualification is claimed.
+edges. The subsequent scalar-fallback checkpoint above closes that local caller
+review. Final report serialization, complete incoming pointer lifetimes,
+rejection-edge composition and private-frame/exception cleanup remain open;
+no whole-worker qualification is claimed.
 
 The [vector-caller observation](../assurance/windows-protection-observations/sha3-batch-simd-vector-progress-20261009.json)
 records 87 focused SIMD/predecessor tests passing on Linux (84.050 seconds) and

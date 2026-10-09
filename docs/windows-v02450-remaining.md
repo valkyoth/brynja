@@ -37,7 +37,10 @@
   cursor/block/readiness transitions. The vector caller now checks stable lane
   grouping, cancellation/budget charging, gather/session/scatter provenance,
   exact authority-counter advancement and vector counter/readiness retirement.
-  Its remaining scalar-permutation/final-report and input
+  The scalar fallback now checks per-lane cancellation and charging, executor/
+  authority health, state copy provenance, its distinct scalar kernel and ABI,
+  scratch/owner clearing and checked scalar accounting before continuation.
+  Its remaining final-health/rejection-edge/final-report and input
   paths, machine pointer lifetimes/non-overlap and final private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative

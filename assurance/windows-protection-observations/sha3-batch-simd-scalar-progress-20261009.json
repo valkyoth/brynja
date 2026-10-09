@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "b5b5f315",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_scalar_and_predecessors": {
+      "tests": 95,
+      "seconds": 91.868,
+      "status": "PASS"
+    },
+    "windows_simd_scalar_and_predecessors": {
+      "tests": 95,
+      "seconds": 107.605,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 235,
+  "files_sha256": {
+    "sha3-batch-simd-scalar-linux.json": "c21aa958ec7728e829e1c1ab4ed4080c437840fb2e01bab8adfc68458de623fa",
+    "sha3-batch-simd-scalar-windows.json": "f8301aeaa3fce41fe89e60d342281acf37afe0cca49fabb8bee79b55559e9161",
+    "sha3-batch-simd-scalar-20261009-exit.json": "709a12a85fcaffb70742b956d50a5f48095a6918e2c95fcdb805f036e4897c7d",
+    "sha3-batch-simd-scalar-linux.log": "cc226c28a51702a3bfa2c82426be6013158a3be582b0ca06884ed46e49910c37",
+    "sha3-batch-simd-scalar-20261009.log": "483e2c9787dc0154eb6fffca6cc7ab53165d2eededbd709bac192c776855e30f"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_scalar.py": "978a79964c9cf9264e6a72fb3c194aa9b416eb62fecaab4ff85d188e3760fb0b",
+    "windows_enclave_sha3_simd_scalar_shape.py": "156f253162bb52fe274b2ed293911406665d4e3bf4855a622bd0ed2065d43728",
+    "windows_enclave_sha3_simd_scalar_machine.py": "1e6b3976dabb0068f7e072bda4c22621ad2db11f4ae530d3a4098e69ab8e4ae8",
+    "windows_enclave_sha3_simd_scalar_model.py": "4e9bf90816a7cac04e6f71170cb705a80b50f4f903f0be7c82e9d9243748b2b7",
+    "windows_enclave_sha3_simd_scalar_tests.py": "211bd79a554500432217b33d6a4610aabc6e054f3dc8b167f4c3a759f06d56d0",
+    "windows_enclave_sha3_batch_chains.py": "cb288ed32e05e240317bce81973e7da3dd90c8317b881adfbd268cc3f32af598",
+    "test-windows-enclave-sha3-batch-chains.py": "7ffb25fbdcea33f2da432d28377887796c2e00e47ddf00615433dbc120515709"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "region": [
+      1253,
+      1343
+    ],
+    "instruction_positions": 90,
+    "scalar_kernel": {
+      "function": "_RNvNtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened11permutation6native6scalar",
+      "rounds": 24,
+      "state_bytes": 200,
+      "scratch_bytes": [
+        40,
+        40,
+        200
+      ],
+      "linked_constants_independently_derived": true,
+      "opaque_stack_accesses": 0,
+      "working_gprs_erased": [
+        "rax",
+        "rcx",
+        "rdx",
+        "r10",
+        "r11"
+      ],
+      "caller_disjoint_live_regions_required": true,
+      "caller_frame_erasure_qualified": false
+    },
+    "ready_exactly_one_selected_in_physical_order": true,
+    "state_stride": 200,
+    "original_poll_precedes_checked_charge": true,
+    "charge_precedes_executor_and_authority_health": true,
+    "revalidator_receives_current_kernel_and_failure_retains_authority_pointer": true,
+    "scratch_regions": [
+      [
+        4960,
+        5000
+      ],
+      [
+        5000,
+        5040
+      ],
+      [
+        5040,
+        5240
+      ]
+    ],
+    "scalar_state_region": [
+      4256,
+      4456
+    ],
+    "owner_region": [
+      4208,
+      5248
+    ],
+    "scratch_wipes_before_copyback": true,
+    "whole_scalar_owner_wiped_before_checked_report_increment": true,
+    "scalar_count_overflow_never_wraps": true,
+    "readiness_and_vector_accounting_preserved": true,
+    "absorption_continuation_pointers_restored": true,
+    "saved_region_oracle_cases": 11,
+    "synthetic_permutation_is_not_crypto_evidence": true,
+    "callback_abi_and_no_mutation_of_live_authority_or_storage_required": true,
+    "common_exit_rejection_and_final_report_composed": false,
+    "all_incoming_pointer_lifetimes_and_storage_nonoverlap_qualified": false,
+    "private_frame_and_exception_cleanup_qualified": false
+  },
+  "new_regressions": {
+    "flag_and_state_effect_cases": 1024,
+    "health_and_accounting_cases": 288,
+    "poll_revocation_copy_failure_cases": 16,
+    "caller_instruction_position_mutations": 270,
+    "scalar_kernel_assembly_position_mutations": 210,
+    "reached_semantic_mutations": 19,
+    "additional_actual_saved_effect_cases": 8,
+    "prerequisite_mutations": 4,
+    "scalar_abi_mutations": 3,
+    "constant_hash_mutations": 1,
+    "invalid_pointer_callback_homes": 10,
+    "unassigned_effect_or_instruction_budget_cases": 6,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "shared rejection-edge and final-health composition",
+    "final report serialization and counter provenance",
+    "complete incoming pointer/storage lifetime and non-overlap composition",
+    "normal-return private-frame and exception cleanup reconciliation",
+    "ParallelHash distinct worker review; shared runtime remains completion package 8"
+  ]
+}

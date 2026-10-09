@@ -21,7 +21,9 @@
   plus the distinct four-lane kernel/session, resident authority construction,
   owner admission, outer retained-worker/buffer retirement, complete receiver
   admission/dispatch/export and bounded descriptor-construction helpers. The
-  four-lane resident/executor digest lifetimes and final private-frame/exception
+  full resident digest caller, workspace/output destruction helpers and its
+  five exception funclets now have emitted contracts. The four-lane inner
+  executor's pointer lifetimes/non-overlap and final private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.

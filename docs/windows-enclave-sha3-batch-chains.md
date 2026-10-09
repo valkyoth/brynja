@@ -28,6 +28,55 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Four-lane resident digest and destruction review (2026-10-09)
+
+The complete 511-position resident digest caller now has an emitted-instruction
+contract, together with its five cleanup funclets and exact FH3 state/IP maps.
+This adds caller coverage, not qualification of the inner executor's returned
+pointers. The executor's complete body, pointer lifetimes and final private-frame
+reconciliation remain open.
+
+Admission checks each lane's three bit lengths against 8,192 and its output
+against 2,048 bits. The eight-target identity table requires fixed SHA-3 widths,
+empty SHAKE name/customization and the distinct cSHAKE branch. Its out-of-range
+fallback is **not** an independent enum-validity check: the caller still relies
+on the receiver's already-bound typed identity admission. Saved plan fields,
+authority revalidation, executor arguments and all four bounded output-copy
+sites are bound to the complete caller. Independently checked executor-entry
+geometry separates workspace, staging, scratch, input/result descriptors,
+control, destinations, authority and owner homes. This does not yet establish
+their preservation across the inner executor.
+
+The returned report must select AVX2, record nonzero vector calls and identify
+all four accelerated slots. Each copy requires a nonnull source and at most
+256 bytes. Output destruction precedes the final authority check; only success
+publishes the retained plan and ready phase. These source-pointer checks alone
+do not establish allocation validity or non-overlap. Those remain obligations
+of the inner executor review, not conclusions inferred from a nonnull test.
+
+Workspace wipe/drop, scalar-owner wipe and output destruction have complete
+instruction/ABI contracts, composed with the previously checked CPU wipe and
+volatile zeroizer. Workspace subobject ranges cover all 5,260 bytes without
+gaps; retirement also clears 1,024 staging and 1,024 scratch bytes. The destructor
+repeats some subobject clears deliberately; no claim treats every repeated
+clear as independently necessary. Output destruction clears present nonempty
+destinations, lengths and last-bit metadata, but **not** descriptor pointers or
+all frame padding. Checked copy helpers retain their actual length-range ABIs.
+
+The exception mapping distinguishes pre-workspace authority checks from the
+executor call and the later output-owning interval. Those chains respectively
+quarantine; retire scratch/workspace then quarantine; or conditionally drop
+output before retirement and quarantine. The final authority call runs with the
+output-live flag cleared, avoiding a second output drop. Exception-dispatcher,
+fatal-abort and shared runtime guarantees are not established by these tables.
+The internal cancellation vtable is linked to two pure false-returning bodies;
+it is not a host-supplied callback. Its invocation inside the executor remains
+to be reviewed.
+
+The [digest checkpoint observation](../assurance/windows-protection-observations/sha3-batch-simd-digest-progress-20261009.json)
+records paired saved-image regressions and explicit pending claims. No production
+code, native enclave capture or release gate changed; package 6 remains open.
+
 ## Four-lane Keccak leaf review (2026-10-09)
 
 The distinct four-message route now checks both complete transpose bodies,

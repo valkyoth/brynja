@@ -28,6 +28,35 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Per-lane framing workspace footprints (2026-10-09)
+
+Nineteen more stores now trace back to the original incoming workspace pointer.
+The checker follows every normal predecessor through register copies, address
+arithmetic and spill/reload slots. Partial writes, overlapping slot writes,
+unknown roots, call-clobbered pointers and unanchored cycles reject. It checks
+the actual unsigned lane guard and its definition chain; removing the guard's
+success edge makes every assigned store unreachable, including through loops
+and the framing jump table.
+
+The sixteen frame stores use exactly `3584 + lane * 156 + field_offset`, with
+`lane` in 0–3. The three other stores use their exact eligible/absorbing/start
+array slots. All 76 lane-specific write spans remain inside their own fields
+and the 5,260-byte workspace. Translating these into the existing caller frame
+also excludes every other simultaneous caller allocation and the executor's
+child frame. This does not prove allocation lifetimes or that other indirect
+writes/callees preserve these roots; those remain explicit prerequisites.
+
+The [workspace-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-workspace-effects-progress-20261009.json)
+records 127 tests passing on Linux (138.989 seconds) and Windows (160.236 seconds).
+Parsed reports match, all 244 checker-source hashes are current, and 88,058
+body-byte mutations are rejected. Five new tests reject 57 store base/offset/width
+mutations, 18 root/spill/stride mutations and 14 lane-guard/CFG-bypass mutations,
+plus unknown/partial/overlapping/cyclic-root and geometry/prerequisite checks.
+The unrelated full predecessor test suite was not rerun. Fourteen non-frame stores and 53
+call-site footprints remain, along with lifetime, alias-preservation and
+exception/private-frame cleanup composition. Package 6 remains open. No
+production code, native enclave capture or release-gate policy changed.
+
 ## Control, quarantine and result-publication footprints (2026-10-09)
 
 Twenty-four more store sites now have original-root and width/offset checks.

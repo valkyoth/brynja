@@ -1,0 +1,546 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "38db8ffe",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_workspace_effects_and_predecessors": {
+      "tests": 127,
+      "seconds": 138.989,
+      "status": "PASS"
+    },
+    "windows_simd_workspace_effects_and_predecessors": {
+      "tests": 127,
+      "seconds": 160.236,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 244,
+  "files_sha256": {
+    "sha3-batch-simd-workspace-effects-linux.json": "cd0e365b99ebdeb079a1882316b993f18b5134dddaa198d68c096957b055b9c3",
+    "sha3-batch-simd-workspace-effects-windows.json": "02f3d48e37c1ab528cc3f26733c3b6a28a6fe01d933b5f55bf44d062c020910b",
+    "sha3-batch-simd-workspace-effects-20261009-exit.json": "0568e220619fd52e51ac0dfa777f3c7f0126789e49e3893a0c37fd1865a3ab1e",
+    "sha3-batch-simd-workspace-effects-linux.log": "c8c2d488f84adadadd0c4595fb1df2bd13bf655d0da299a8832824186578eb49",
+    "sha3-batch-simd-workspace-effects-20261009.log": "644fd386e3055cdb0d37289f6dda590f7906c3850acf34424a8599961413dd00"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_workspace_effects.py": "35145d1fb2feba31a63c280da88791ae792d49751ab659a418222dd0bdaf5f78",
+    "windows_enclave_sha3_simd_workspace_effects_tests.py": "732a9204a46458f4034f2839bd73ca81d84fc585a33b6f81f500b79fb74fc27e",
+    "windows_enclave_sha3_batch_chains.py": "c9a380d7a6acac54fbfecfc5cd46d2331d5befeda069104db6c12eb5b558debf",
+    "test-windows-enclave-sha3-batch-chains.py": "5e51d9fbd2eaa99702bb3349c4252b5d13d3d7645abb546a327d2d0c95cea245"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "write_effects": [
+      {
+        "site": 149,
+        "lane_write_spans": [
+          [
+            3688,
+            3690
+          ],
+          [
+            3844,
+            3846
+          ],
+          [
+            4000,
+            4002
+          ],
+          [
+            4156,
+            4158
+          ]
+        ]
+      },
+      {
+        "site": 151,
+        "lane_write_spans": [
+          [
+            3616,
+            3624
+          ],
+          [
+            3772,
+            3780
+          ],
+          [
+            3928,
+            3936
+          ],
+          [
+            4084,
+            4092
+          ]
+        ]
+      },
+      {
+        "site": 227,
+        "lane_write_spans": [
+          [
+            3624,
+            3632
+          ],
+          [
+            3780,
+            3788
+          ],
+          [
+            3936,
+            3944
+          ],
+          [
+            4092,
+            4100
+          ]
+        ]
+      },
+      {
+        "site": 231,
+        "lane_write_spans": [
+          [
+            3632,
+            3640
+          ],
+          [
+            3788,
+            3796
+          ],
+          [
+            3944,
+            3952
+          ],
+          [
+            4100,
+            4108
+          ]
+        ]
+      },
+      {
+        "site": 303,
+        "lane_write_spans": [
+          [
+            3640,
+            3648
+          ],
+          [
+            3796,
+            3804
+          ],
+          [
+            3952,
+            3960
+          ],
+          [
+            4108,
+            4116
+          ]
+        ]
+      },
+      {
+        "site": 304,
+        "lane_write_spans": [
+          [
+            3648,
+            3656
+          ],
+          [
+            3804,
+            3812
+          ],
+          [
+            3960,
+            3968
+          ],
+          [
+            4116,
+            4124
+          ]
+        ]
+      },
+      {
+        "site": 356,
+        "lane_write_spans": [
+          [
+            3664,
+            3672
+          ],
+          [
+            3820,
+            3828
+          ],
+          [
+            3976,
+            3984
+          ],
+          [
+            4132,
+            4140
+          ]
+        ]
+      },
+      {
+        "site": 364,
+        "lane_write_spans": [
+          [
+            3739,
+            3740
+          ],
+          [
+            3895,
+            3896
+          ],
+          [
+            4051,
+            4052
+          ],
+          [
+            4207,
+            4208
+          ]
+        ]
+      },
+      {
+        "site": 365,
+        "lane_write_spans": [
+          [
+            3672,
+            3680
+          ],
+          [
+            3828,
+            3836
+          ],
+          [
+            3984,
+            3992
+          ],
+          [
+            4140,
+            4148
+          ]
+        ]
+      },
+      {
+        "site": 386,
+        "lane_write_spans": [
+          [
+            3680,
+            3688
+          ],
+          [
+            3836,
+            3844
+          ],
+          [
+            3992,
+            4000
+          ],
+          [
+            4148,
+            4156
+          ]
+        ]
+      },
+      {
+        "site": 420,
+        "lane_write_spans": [
+          [
+            3600,
+            3608
+          ],
+          [
+            3756,
+            3764
+          ],
+          [
+            3912,
+            3920
+          ],
+          [
+            4068,
+            4076
+          ]
+        ]
+      },
+      {
+        "site": 421,
+        "lane_write_spans": [
+          [
+            3608,
+            3616
+          ],
+          [
+            3764,
+            3772
+          ],
+          [
+            3920,
+            3928
+          ],
+          [
+            4076,
+            4084
+          ]
+        ]
+      },
+      {
+        "site": 423,
+        "lane_write_spans": [
+          [
+            5252,
+            5253
+          ],
+          [
+            5253,
+            5254
+          ],
+          [
+            5254,
+            5255
+          ],
+          [
+            5255,
+            5256
+          ]
+        ]
+      },
+      {
+        "site": 424,
+        "lane_write_spans": [
+          [
+            5256,
+            5257
+          ],
+          [
+            5257,
+            5258
+          ],
+          [
+            5258,
+            5259
+          ],
+          [
+            5259,
+            5260
+          ]
+        ]
+      },
+      {
+        "site": 425,
+        "lane_write_spans": [
+          [
+            3520,
+            3528
+          ],
+          [
+            3528,
+            3536
+          ],
+          [
+            3536,
+            3544
+          ],
+          [
+            3544,
+            3552
+          ]
+        ]
+      },
+      {
+        "site": 442,
+        "lane_write_spans": [
+          [
+            3656,
+            3664
+          ],
+          [
+            3812,
+            3820
+          ],
+          [
+            3968,
+            3976
+          ],
+          [
+            4124,
+            4132
+          ]
+        ]
+      },
+      {
+        "site": 446,
+        "lane_write_spans": [
+          [
+            3664,
+            3672
+          ],
+          [
+            3820,
+            3828
+          ],
+          [
+            3976,
+            3984
+          ],
+          [
+            4132,
+            4140
+          ]
+        ]
+      },
+      {
+        "site": 447,
+        "lane_write_spans": [
+          [
+            3739,
+            3740
+          ],
+          [
+            3895,
+            3896
+          ],
+          [
+            4051,
+            4052
+          ],
+          [
+            4207,
+            4208
+          ]
+        ]
+      },
+      {
+        "site": 448,
+        "lane_write_spans": [
+          [
+            3672,
+            3680
+          ],
+          [
+            3828,
+            3836
+          ],
+          [
+            3984,
+            3992
+          ],
+          [
+            4140,
+            4148
+          ]
+        ]
+      }
+    ],
+    "zero_based_lane_range": [
+      0,
+      3
+    ],
+    "frame_stride": 156,
+    "workspace_bytes": 5260,
+    "original_workspace_and_guarded_lane_checked": true,
+    "per_lane_frame_and_array_separation_checked": true,
+    "caller_and_child_frame_separation_checked": true,
+    "pending_non_frame_store_sites": [
+      619,
+      633,
+      702,
+      703,
+      866,
+      914,
+      917,
+      968,
+      1231,
+      1235,
+      1242,
+      1249,
+      1352,
+      1353
+    ],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      73,
+      105,
+      110,
+      114,
+      118,
+      224,
+      301,
+      502,
+      530,
+      533,
+      563,
+      570,
+      573,
+      782,
+      827,
+      851,
+      899,
+      961,
+      985,
+      1059,
+      1075,
+      1084,
+      1095,
+      1108,
+      1121,
+      1129,
+      1147,
+      1161,
+      1185,
+      1206,
+      1266,
+      1289,
+      1303,
+      1311,
+      1314,
+      1317,
+      1320,
+      1325,
+      1329,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583,
+      1588,
+      1591,
+      1598,
+      1601
+    ],
+    "indirect_effects_and_nonvolatile_abi_preservation_required": true,
+    "allocation_lifetimes_and_private_frame_exception_cleanup_qualified": false
+  },
+  "focused_regressions": {
+    "new_tests": 5,
+    "store_base_offset_width_mutations": 57,
+    "original_root_spill_stride_mutations": 18,
+    "lane_guard_definition_and_cfg_bypass_mutations": 14,
+    "unknown_partial_overlapping_clobbered_and_cyclic_root_negatives": true,
+    "geometry_prerequisite_and_integration_negatives": true
+  },
+  "remaining": [
+    "14 readiness, absorption cursor/block and written-counter store footprints",
+    "53 callee memory-effect footprints",
+    "Authority and input/state allocation lifetime, physical separation and pointer preservation",
+    "Exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch closure; package 6 remains open",
+    "Shared runtime qualification remains package 8"
+  ]
+}

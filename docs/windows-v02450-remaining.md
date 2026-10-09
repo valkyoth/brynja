@@ -53,8 +53,11 @@
   live pointer cells/caller objects. Twenty-four control/quarantine/result stores
   now have original-root and relative extent checks, with physical caller-frame
   separation for the control, executor and result writes. The authority's
-  allocation lifetime/separation remains a prerequisite. The remaining 33
-  non-frame stores and 53 call-site footprints, remaining register/input provenance,
+  allocation lifetime/separation remains a prerequisite. Nineteen per-lane
+  framing stores now have all-predecessor workspace roots, unsigned lane guard
+  and exact field/array extents, excluding other caller objects and the child
+  frame. The remaining 14 non-frame stores and 53 call-site footprints,
+  remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative

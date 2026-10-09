@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "a5e0d33f",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_output_and_predecessors": {"tests": 52, "seconds": 31.750, "status": "PASS"},
+    "windows_simd_output_and_predecessors": {"tests": 52, "seconds": 43.472, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 212,
+  "linux_log_sha256": "384d9bc4abddb40e4ab14f0507ee82b3cf91fbfa4838d30368a220cb59893352",
+  "windows_log_sha256": "a21d9a9929dda176dccb18549f83649505fdd9eda0ccd8eaf03aab9102f8dc55",
+  "windows_exit_receipt_sha256": "7b9b06a9d7fa23262eeb999847df9d57acde923a5e98ecf817a135ed582f4e90",
+  "report_sha256": {
+    "sha3-batch-simd-output-v2-linux.json": "0770728e09ddbbb1e231f39ffd243b2c79c7c92240dea3b126822bd4bcce11fd",
+    "sha3-batch-simd-output-v2-windows.json": "69f308381ae5af944a5c3166c8d91b3744fba7f023016d2222e6975f7b1f5bb7"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_output.py": "51b23adda70c3c2621a445a648e4db328f5656ef376fee786892b04f7628f73f",
+    "windows_enclave_sha3_simd_output_ir.py": "351a7cb43667aff66027d1a75957388b83b1a8871e637e846d05944d2dd2eb38",
+    "windows_enclave_sha3_simd_output_model.py": "3fa15a1a8e3c6908c26a0224e27627d5cab403e053a9cfdc895f08b26e789222",
+    "windows_enclave_sha3_simd_output_tests.py": "2bbb4505cae1daeebb49506b2e93aab07490c5bb62d3d2aba7d50ac585d73381",
+    "windows_enclave_sha3_simd_digest_helpers.py": "748ea6c86a04ae333fa6bc19522400b7edb3ecde71894b17458fdbc2dd015646",
+    "windows_enclave_sha3_batch_chains.py": "feba4f0feb32d6032aee4621902e82d3944e7b17a81ffb7f9e3fd0d7a8b0fe69",
+    "test-windows-enclave-sha3-batch-chains.py": "a1b40ad914124b024be6b050775ce9b1c47b0a2f837905da1bf5563393e0af82"
+  },
+  "new_contracts": {
+    "output_validator_instruction_positions": 76,
+    "source_preflight_instruction_positions": 60,
+    "copy_and_retirement_instruction_positions": 60,
+    "output_owner_allocation_bytes": 104,
+    "immutable_borrowed_descriptor_bytes": 64,
+    "exhaustively_reviewed_root_and_derived_ir_addresses": 22,
+    "exact_typed_ir_reads": 14,
+    "metadata_only_ir_stores": 9,
+    "reviewed_ir_address_consumers": 10,
+    "all_source_extents_checked_before_first_copy": true,
+    "prepared_sources_equal_original_staging_prefixes": true,
+    "copy_lengths_preserve_destination_slot_identity": true,
+    "output_pointer_values_limited_to_null_check_copy_and_clear": true,
+    "unreviewed_descriptor_address_escape_rejected": true,
+    "descriptor_integer_reinterpretation_rejected": true,
+    "output_drop_metadata_description_corrected": "Clears algorithm identities and serialized output-bit counts, not borrowed slice pointer/length descriptors.",
+    "executor_hashing_core_qualified": false,
+    "machine_stack_aliasing_and_full_pointer_lifetimes_qualified": false,
+    "private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "validator_preflight_copy_instruction_changes": 588,
+    "ir_alias_typed_read_store_and_escape_changes": 117,
+    "ir_consumer_and_cleanup_loop_changes": 24,
+    "emitted_preflight_independent_oracle_comparisons": 10192,
+    "saved_region_model_comparisons": 64,
+    "load_bearing_guard_and_pointer_mutations": 7,
+    "validator_abi_mutations": 8,
+    "helper_prerequisite_mutations": 1,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "executor input, framing, permutation and report semantics",
+    "complete machine pointer-lifetime, non-overlap and exceptional-path composition",
+    "final private-frame erasure and shared package-8 runtime/platform reconciliation",
+    "independent retest and final native qualification"
+  ]
+}

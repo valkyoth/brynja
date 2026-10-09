@@ -41,12 +41,13 @@ from windows_enclave_sha3_simd_worker_tests import SimdWorkerSavedTests,SimdWork
 from windows_enclave_sha3_simd_receive_tests import SimdReceiveSavedTests,SimdReceiveModelTests
 from windows_enclave_sha3_simd_descriptors_tests import SimdDescriptorSavedTests,SimdDescriptorModelTests
 from windows_enclave_sha3_simd_digest_tests import SimdDigestSavedTests,SimdDigestModelTests
+from windows_enclave_sha3_simd_output_tests import SimdOutputSavedTests,SimdOutputModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(SimdDigestModelTests,SimdDescriptorModelTests,SimdReceiveModelTests,SimdWorkerModelTests,SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(SimdOutputModelTests,SimdDigestModelTests,SimdDescriptorModelTests,SimdReceiveModelTests,SimdWorkerModelTests,SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -90,7 +91,7 @@ class Tests(SimdDigestModelTests,SimdDescriptorModelTests,SimdReceiveModelTests,
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(SimdDigestSavedTests,SimdDescriptorSavedTests,SimdReceiveSavedTests,SimdWorkerSavedTests,SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTests,SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(SimdOutputSavedTests,SimdDigestSavedTests,SimdDescriptorSavedTests,SimdReceiveSavedTests,SimdWorkerSavedTests,SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTests,SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
@@ -143,6 +144,8 @@ class SavedTests(SimdDigestSavedTests,SimdDescriptorSavedTests,SimdReceiveSavedT
                 self.assertTrue(r['simd_digest']['retained_plan_published_only_after_final_authority_check'])
                 self.assertFalse(r['simd_digest']['executor_body_pointer_lifetimes_and_nonoverlap_qualified'])
                 self.assertFalse(r['simd_digest']['private_frame_erasure_qualified'])
+                self.assertTrue(r['simd_output']['ir_provenance']['output_descriptor_fields_immutable_after_import'])
+                self.assertFalse(r['simd_output']['remaining_executor_instructions_and_machine_aliases_qualified'])
                 self.assertTrue(r['simd_receiver']['complete_metadata_before_payload_copy'])
                 self.assertFalse(r['simd_receiver']['nested_pointer_preservation_and_nonretention_qualified'])
                 self.assertTrue(r['simd_retained_worker']['return_after_buffer_drop_on_all_normal_request_paths'])

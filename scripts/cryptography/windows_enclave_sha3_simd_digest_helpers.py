@@ -92,4 +92,4 @@ def inspect(bodies,ir,session):
         copy_caller_bounds_and_nonoverlap_required=True,
         output_drop_requires_live_executor_returned_pointers=True,
         output_drop_clears_four_present_nonempty_destinations=True,
-        output_drop_clears_lengths_and_last_bits_not_pointer_metadata=True)
+        output_drop_clears_output_bits_and_identities_not_slice_descriptors=True)

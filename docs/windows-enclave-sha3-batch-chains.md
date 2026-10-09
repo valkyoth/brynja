@@ -28,6 +28,47 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Four-lane executor output ownership (2026-10-09)
+
+The executor's local 104-byte output owner now has an exhaustive LLVM address-use
+review. Its first 64 bytes are imported exactly once from the four incoming
+pointer/length pairs, before control-flow branching or descriptor reads. No
+later scalar write or permitted call changes those fields. The checker follows
+22 root/derived addresses, inventories every typed load and metadata store, and
+rejects unreviewed calls, stores of descriptor addresses, pointer-to-integer
+escapes and reinterpretation of pointer fields as integer loads.
+
+Each loaded destination pointer is used only for its null check and a matching
+copy, or for clearing on rejection. Copy lengths must come from the same slot.
+The two shape-validator calls, exceptional destructor, metadata clearing,
+lifetime markers and successful 104-byte aggregate return are the only admitted
+address consumers. The destructor/zeroizer/copy-helper contracts are freshly
+replayed from the preceding digest checkpoint. This is a scoped IR ownership
+claim, not a proof that unrelated machine writes cannot alias its stack home.
+
+The complete 76-position output validator checks all four presence/width pairs.
+The executor's emitted 60-position source preflight and adjacent 60-position
+copy/cleanup region are now bound separately from its still-unreviewed hashing
+core. All four source extents are checked against the remaining 1,024-byte staging
+slice before the first copy. Absent slots consume nothing; present zero-width
+slots retain their nonnull pointer. Failed copies retire workspace/staging before
+reaching quarantine; they do not leave an apparently successful output owner.
+
+A bounded interpreter executes the actual public integer preflight instructions.
+Its source pointers must be null for absent slots or the exact running prefix of
+the original staging allocation, with no gaps, wraparound or excess extent.
+The independent oracle compares the sum of present lengths against 1,024.
+Tests cover 10,192 presence/width cases, including maximal unsigned lengths,
+and repeat 64 cases against the region extracted from the saved machine code.
+Targeted mutations show that the guards and pointer assignments are load-bearing;
+unknown instructions and uninitialized memory/register reads fail the model.
+
+The [output checkpoint observation](../assurance/windows-protection-observations/sha3-batch-simd-output-progress-20261009.json)
+records the paired replay and mutations. Executor input/framing/permutation
+semantics, machine-stack alias/lifetime composition, complete exception paths
+and final private-frame erasure remain open. No whole-executor or package-6
+completion is inferred from this output-only work.
+
 ## Four-lane resident digest and destruction review (2026-10-09)
 
 The complete 511-position resident digest caller now has an emitted-instruction
@@ -60,8 +101,9 @@ volatile zeroizer. Workspace subobject ranges cover all 5,260 bytes without
 gaps; retirement also clears 1,024 staging and 1,024 scratch bytes. The destructor
 repeats some subobject clears deliberately; no claim treats every repeated
 clear as independently necessary. Output destruction clears present nonempty
-destinations, lengths and last-bit metadata, but **not** descriptor pointers or
-all frame padding. Checked copy helpers retain their actual length-range ABIs.
+destinations, serialized output-bit counts and algorithm identities, but **not**
+the borrowed slice pointer/length descriptors or all frame padding. Checked copy
+helpers retain their actual length-range ABIs.
 
 The exception mapping distinguishes pre-workspace authority checks from the
 executor call and the later output-owning interval. Those chains respectively

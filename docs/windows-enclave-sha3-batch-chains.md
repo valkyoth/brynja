@@ -28,6 +28,37 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Clearing-call footprints (2026-10-09)
+
+Sixteen executor call sites now have explicit caller-visible write footprints:
+four full-workspace wipes, three full-staging wipes, four per-lane frame wipes,
+the group wipe, three scalar-scratch wipes and the scalar-owner wipe. Every
+receiver must retain its original allocation/subobject origin on every normal
+predecessor. Each explicit length must have only matching full-width constant
+definitions, and the actual callee must be the assigned clearing helper.
+
+The four frame calls are dominated by the unsigned lane guard. Together they
+partition each 156-byte frame exactly, with no padding gap or cross-lane write.
+The existing complete helper review supplies the 5,260-byte workspace and
+1,040-byte scalar-owner write ranges; this checkpoint binds the actual call-site
+receivers to those ranges. All 28 lane-specific/caller-relative write extents
+exclude other simultaneous caller allocations and the executor's child frame.
+This describes caller-visible writes, not erasure of callee private frames.
+
+The [clear-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-clear-effects-progress-20261009.json)
+records 138 tests passing on Linux (174.047 seconds) and Windows (199.336 seconds).
+Parsed reports match, all 247 checker-source hashes are current, and 88,058
+body-byte mutations are rejected. Five new tests reject 54 callee/receiver/length
+mutations, 16 subobject/root mutations and four guard bypasses, plus length-
+predecessor, partial-width, physical-boundary and prerequisite regressions.
+The unrelated full predecessor test suite was not rerun.
+Thirty-seven call-site footprints remain,
+including the three descriptor-derived output clears, copy/XOR/mask calls and
+callbacks. The volatile-clear runtime and Win64 nonvolatile ABI remain explicit
+prerequisites; allocation lifetimes, other indirect effects and exceptional/
+private-frame cleanup still need composition. Package 6 is not complete. No
+production code, native enclave execution or release-gate policy changed.
+
 ## Remaining loop-store footprints (2026-10-09)
 
 The last fourteen executor store sites now have explicit write footprints.

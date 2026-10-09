@@ -8,7 +8,7 @@ CLEARS={1231:(1224,1225,1226),1235:(1232,1233,1234),
 SITES=set(model.STORES)|{619}|set(CLEARS)
 
 
-def roots(code,states,at,key,trail=frozenset()):
+def roots(code,states,at,key,trail=frozenset(),slots=model.SLOTS):
     s.require(at in states and key in states[at] and (at,key) not in trail,'anchored full-width workspace root')
     trail=trail|{(at,key)};result=set()
     for site in states[at][key]:
@@ -21,13 +21,13 @@ def roots(code,states,at,key,trail=frozenset()):
             if src.startswith('%') and src[1:] in o.REGS:other=src[1:]
             else:
                 m=re.fullmatch(r'(\d+)\(%rbp\)',src)
-                s.require(m is not None and int(m[1]) in model.SLOTS,'tracked original pointer cell')
+                s.require(m is not None and int(m[1]) in slots,'tracked original pointer cell')
                 other=int(m[1])
-            result.update(roots(code,states,site,other,trail))
+            result.update(roots(code,states,site,other,trail,slots))
         elif op=='leaq':
             m=re.fullmatch(r'(-?\d*)\(%(\w+)\)',args[0])
             s.require(m is not None,'constant displacement from original workspace')
-            result.update(x+int(m[1] or 0) for x in roots(code,states,site,m[2],trail))
+            result.update(x+int(m[1] or 0) for x in roots(code,states,site,m[2],trail,slots))
         else:s.require(False,'unknown workspace-root producer: '+op)
     s.require(result,'nonvacuous original workspace origins');return result
 

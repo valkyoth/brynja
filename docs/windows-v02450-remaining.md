@@ -59,7 +59,10 @@
   frame. The last 14 readiness/cursor/written-counter stores now have original
   workspace roots, synchronized four-lane loop induction and selected-index
   guard checks. Every direct executor store has an assigned footprint, conditional
-  on outstanding callee/alias effects. The 53 call-site footprints,
+  on outstanding callee/alias effects. Sixteen workspace, staging, per-lane frame,
+  group and scalar scratch/owner wipe calls now have actual receiver/length/callee
+  checks and caller-visible write extents, excluding other objects and the child
+  frame. The remaining 37 call-site footprints,
   remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,

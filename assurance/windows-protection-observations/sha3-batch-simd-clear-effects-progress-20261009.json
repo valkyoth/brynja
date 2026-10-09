@@ -1,0 +1,579 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "aac4edff",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_clear_effects_and_predecessors": {
+      "tests": 138,
+      "seconds": 174.047,
+      "status": "PASS"
+    },
+    "windows_simd_clear_effects_and_predecessors": {
+      "tests": 138,
+      "seconds": 199.336,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 247,
+  "files_sha256": {
+    "sha3-batch-simd-clear-effects-linux.json": "535e42c5ab617695553aca44286e151f6a555957e4723096bf88990d65288114",
+    "sha3-batch-simd-clear-effects-windows.json": "e36448a4513fa889d0a12425e06feb62c89b160f474b39801995b867c41efc4d",
+    "sha3-batch-simd-clear-effects-20261009-exit.json": "14a2588ae0a700c51358bed8c912e95facd88f7092326ea1c78067df3525e4d5",
+    "sha3-batch-simd-clear-effects-linux.log": "4b3c5150b71cb55c6f5a9fba13c66d454702ff52ff65447282b716894b92c783",
+    "sha3-batch-simd-clear-effects-20261009.log": "ba140e7c49370201fd2382269f54dbc582946aab4c290e5969a920404ffb9146"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_clear_effects.py": "cdc0081f41e5b53cd7839150fa248393aeb6be41d6b89a33282ae3bd2fcbfbce",
+    "windows_enclave_sha3_simd_clear_effects_tests.py": "c2d410552debfc5bc6fad7203fa896c090a084dd5752642a93732c64d69ccf56",
+    "windows_enclave_sha3_simd_loop_effects.py": "de62322197baed575698ce6802e9ce70f5aef25194b33334f67dcc0a0a614bc9",
+    "windows_enclave_sha3_batch_chains.py": "4e981cb827174514a2df47e60cea28536ce010716670ddd02944a372009ab943",
+    "test-windows-enclave-sha3-batch-chains.py": "fbb1ec138d0b2d3896bf6cdf8ffb0c87b70a17e36541643286fd068141db56cc"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "call_sites": [
+      73,
+      105,
+      110,
+      114,
+      118,
+      530,
+      533,
+      1075,
+      1314,
+      1317,
+      1320,
+      1329,
+      1588,
+      1591,
+      1598,
+      1601
+    ],
+    "write_effects": [
+      {
+        "site": 73,
+        "root": "workspace",
+        "write_spans": [
+          [
+            0,
+            5260
+          ]
+        ],
+        "bytes_per_call": 5260
+      },
+      {
+        "site": 105,
+        "root": "workspace",
+        "write_spans": [
+          [
+            3616,
+            3688
+          ],
+          [
+            3772,
+            3844
+          ],
+          [
+            3928,
+            4000
+          ],
+          [
+            4084,
+            4156
+          ]
+        ],
+        "bytes_per_call": 72
+      },
+      {
+        "site": 110,
+        "root": "workspace",
+        "write_spans": [
+          [
+            3688,
+            3739
+          ],
+          [
+            3844,
+            3895
+          ],
+          [
+            4000,
+            4051
+          ],
+          [
+            4156,
+            4207
+          ]
+        ],
+        "bytes_per_call": 51
+      },
+      {
+        "site": 114,
+        "root": "workspace",
+        "write_spans": [
+          [
+            3584,
+            3616
+          ],
+          [
+            3740,
+            3772
+          ],
+          [
+            3896,
+            3928
+          ],
+          [
+            4052,
+            4084
+          ]
+        ],
+        "bytes_per_call": 32
+      },
+      {
+        "site": 118,
+        "root": "workspace",
+        "write_spans": [
+          [
+            3739,
+            3740
+          ],
+          [
+            3895,
+            3896
+          ],
+          [
+            4051,
+            4052
+          ],
+          [
+            4207,
+            4208
+          ]
+        ],
+        "bytes_per_call": 1
+      },
+      {
+        "site": 530,
+        "root": "workspace",
+        "write_spans": [
+          [
+            0,
+            5260
+          ]
+        ],
+        "bytes_per_call": 5260
+      },
+      {
+        "site": 533,
+        "root": "staging",
+        "write_spans": [
+          [
+            0,
+            1024
+          ]
+        ],
+        "bytes_per_call": 1024
+      },
+      {
+        "site": 1075,
+        "root": "workspace",
+        "write_spans": [
+          [
+            2720,
+            3520
+          ]
+        ],
+        "bytes_per_call": 800
+      },
+      {
+        "site": 1314,
+        "root": "workspace",
+        "write_spans": [
+          [
+            4960,
+            5000
+          ]
+        ],
+        "bytes_per_call": 40
+      },
+      {
+        "site": 1317,
+        "root": "workspace",
+        "write_spans": [
+          [
+            5000,
+            5040
+          ]
+        ],
+        "bytes_per_call": 40
+      },
+      {
+        "site": 1320,
+        "root": "workspace",
+        "write_spans": [
+          [
+            5040,
+            5240
+          ]
+        ],
+        "bytes_per_call": 200
+      },
+      {
+        "site": 1329,
+        "root": "workspace",
+        "write_spans": [
+          [
+            4208,
+            5248
+          ]
+        ],
+        "bytes_per_call": 1040
+      },
+      {
+        "site": 1588,
+        "root": "workspace",
+        "write_spans": [
+          [
+            0,
+            5260
+          ]
+        ],
+        "bytes_per_call": 5260
+      },
+      {
+        "site": 1591,
+        "root": "staging",
+        "write_spans": [
+          [
+            0,
+            1024
+          ]
+        ],
+        "bytes_per_call": 1024
+      },
+      {
+        "site": 1598,
+        "root": "workspace",
+        "write_spans": [
+          [
+            0,
+            5260
+          ]
+        ],
+        "bytes_per_call": 5260
+      },
+      {
+        "site": 1601,
+        "root": "staging",
+        "write_spans": [
+          [
+            0,
+            1024
+          ]
+        ],
+        "bytes_per_call": 1024
+      }
+    ],
+    "parent_relative_effects": [
+      {
+        "site": 105,
+        "root": "workspace",
+        "span": [
+          3552,
+          3624
+        ]
+      },
+      {
+        "site": 105,
+        "root": "workspace",
+        "span": [
+          3708,
+          3780
+        ]
+      },
+      {
+        "site": 105,
+        "root": "workspace",
+        "span": [
+          3864,
+          3936
+        ]
+      },
+      {
+        "site": 105,
+        "root": "workspace",
+        "span": [
+          4020,
+          4092
+        ]
+      },
+      {
+        "site": 110,
+        "root": "workspace",
+        "span": [
+          3624,
+          3675
+        ]
+      },
+      {
+        "site": 110,
+        "root": "workspace",
+        "span": [
+          3780,
+          3831
+        ]
+      },
+      {
+        "site": 110,
+        "root": "workspace",
+        "span": [
+          3936,
+          3987
+        ]
+      },
+      {
+        "site": 110,
+        "root": "workspace",
+        "span": [
+          4092,
+          4143
+        ]
+      },
+      {
+        "site": 114,
+        "root": "workspace",
+        "span": [
+          3520,
+          3552
+        ]
+      },
+      {
+        "site": 114,
+        "root": "workspace",
+        "span": [
+          3676,
+          3708
+        ]
+      },
+      {
+        "site": 114,
+        "root": "workspace",
+        "span": [
+          3832,
+          3864
+        ]
+      },
+      {
+        "site": 114,
+        "root": "workspace",
+        "span": [
+          3988,
+          4020
+        ]
+      },
+      {
+        "site": 118,
+        "root": "workspace",
+        "span": [
+          3675,
+          3676
+        ]
+      },
+      {
+        "site": 118,
+        "root": "workspace",
+        "span": [
+          3831,
+          3832
+        ]
+      },
+      {
+        "site": 118,
+        "root": "workspace",
+        "span": [
+          3987,
+          3988
+        ]
+      },
+      {
+        "site": 118,
+        "root": "workspace",
+        "span": [
+          4143,
+          4144
+        ]
+      },
+      {
+        "site": 73,
+        "root": "workspace",
+        "span": [
+          -64,
+          5196
+        ]
+      },
+      {
+        "site": 530,
+        "root": "workspace",
+        "span": [
+          -64,
+          5196
+        ]
+      },
+      {
+        "site": 1588,
+        "root": "workspace",
+        "span": [
+          -64,
+          5196
+        ]
+      },
+      {
+        "site": 1598,
+        "root": "workspace",
+        "span": [
+          -64,
+          5196
+        ]
+      },
+      {
+        "site": 533,
+        "root": "staging",
+        "span": [
+          5200,
+          6224
+        ]
+      },
+      {
+        "site": 1591,
+        "root": "staging",
+        "span": [
+          5200,
+          6224
+        ]
+      },
+      {
+        "site": 1601,
+        "root": "staging",
+        "span": [
+          5200,
+          6224
+        ]
+      },
+      {
+        "site": 1075,
+        "root": "workspace",
+        "span": [
+          2656,
+          3456
+        ]
+      },
+      {
+        "site": 1314,
+        "root": "workspace",
+        "span": [
+          4896,
+          4936
+        ]
+      },
+      {
+        "site": 1317,
+        "root": "workspace",
+        "span": [
+          4936,
+          4976
+        ]
+      },
+      {
+        "site": 1320,
+        "root": "workspace",
+        "span": [
+          4976,
+          5176
+        ]
+      },
+      {
+        "site": 1329,
+        "root": "workspace",
+        "span": [
+          4144,
+          5184
+        ]
+      }
+    ],
+    "frame_wipes_cover_each_156_byte_lane_exactly": true,
+    "original_all_predecessor_receivers_and_lengths_checked": true,
+    "writes_exclude_other_caller_allocations_and_child_frame": true,
+    "pending_non_frame_store_sites": [],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      224,
+      301,
+      502,
+      563,
+      570,
+      573,
+      782,
+      827,
+      851,
+      899,
+      961,
+      985,
+      1059,
+      1084,
+      1095,
+      1108,
+      1121,
+      1129,
+      1147,
+      1161,
+      1185,
+      1206,
+      1266,
+      1289,
+      1303,
+      1311,
+      1325,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583
+    ],
+    "volatile_clear_runtime_and_win64_nonvolatile_abi_required": true,
+    "other_callee_memory_effects_and_pointer_preservation_required": true,
+    "allocation_lifetimes_and_private_frame_exception_cleanup_qualified": false
+  },
+  "focused_regressions": {
+    "new_tests": 5,
+    "callee_receiver_length_mutations": 54,
+    "subobject_root_mutations": 16,
+    "frame_guard_bypass_mutations": 4,
+    "length_predecessor_partial_width_and_physical_bounds_overlap_negatives": true,
+    "prerequisite_population_and_integration_negatives": true
+  },
+  "remaining": [
+    "37 callee memory-effect footprints, including descriptor-derived output clearing and copies",
+    "Authority and input/state allocation lifetime, physical separation and indirect pointer preservation",
+    "Exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch closure; package 6 remains open",
+    "Volatile-clear/runtime and cumulative stack qualification remains package 8"
+  ]
+}

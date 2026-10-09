@@ -24,12 +24,13 @@ from windows_enclave_sha3_batch_scalar_fixed_tests import ScalarFixedTests,Scala
 from windows_enclave_sha3_batch_start_tests import StartTests,StartModelTests
 from windows_enclave_sha3_batch_initial_tests import InitialTests
 from windows_enclave_sha3_batch_empty_tests import EmptyTests
+from windows_enclave_sha3_batch_fixed_start_tests import FixedStartTests,FixedStartModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -73,7 +74,7 @@ class Tests(StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,Scalar
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
@@ -98,7 +99,10 @@ class SavedTests(EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSquee
             if lane=='scalar':
                 self.assertTrue(r['scalar_empty_constructors']['empty_constructor_paths_qualified'])
                 self.assertFalse(r['scalar_empty_constructors']['inlined_cshake_constructors_qualified'])
-            else:self.assertIsNone(r['scalar_empty_constructors'])
+                self.assertTrue(r['scalar_fixed_constructors']['active_fixed_constructor_initialization_qualified'])
+            else:
+                self.assertIsNone(r['scalar_empty_constructors'])
+                self.assertIsNone(r['scalar_fixed_constructors'])
             if lane=='simd':
                 self.assertIsNone(r['sequential_start_admission_and_placement'])
                 self.assertIsNone(r['prior_helpers'])

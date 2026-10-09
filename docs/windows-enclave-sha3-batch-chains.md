@@ -767,6 +767,46 @@ Parsed reports match with 187 current checker-source bindings verified. The
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
 
+## Scalar fixed-constructor initialization (2026-10-09)
+
+The four fixed SHA-3 constructor blocks, their common metadata initialization and
+their common staging block now have complete instruction contracts: 353
+instruction/label positions in total. The already reviewed two dispatch tables
+bind SHA3-224/256/384/512 to tags 1/2/3/4. Each initialization block can be entered
+only from the descriptor dispatch with zero in XMM0. SHA3-256's fallthrough into
+common metadata and the metadata-to-staging fallthrough are checked explicitly.
+
+An independent byte-transfer model follows the zeroed local regions through
+staging and into the retained state. It checks each read is initialized, copies
+do not overlap, offsets stay outside the outgoing call area and saved XMM6, and
+old typed state destruction precedes every installation write. All four variants
+install the correct tag at offset 16 and exactly 1,040 zero owner bytes at
+`[owner+17, owner+1057)`. Six overlapping active-payload writes agree. The
+previous placement contract checks the subsequent active-slot/phase publication.
+The pointer and metadata registers used across calls are nonvolatile in the
+Windows ABI; shared runtime/ABI preservation remains a package-8 prerequisite.
+
+This is deliberately an **active-payload** proof. The remaining 95 bytes of
+inactive union storage at `[owner+1057, owner+1152)` are not counted as initialized
+payload or individually erased storage. The actual broad placement copies were
+bound in the earlier checkpoint, but neither those inactive bytes nor local
+copies acquire a clearing guarantee from this constructor model. Separate stack
+and retained-page allocations and eventual private-window retirement remain
+required. Nonempty cSHAKE constructors, remaining constructor lifetime joins,
+four-lane SIMD and complete exceptional/private cleanup are still open.
+
+The [fixed-constructor observation](../assurance/windows-protection-observations/sha3-batch-fixed-start-progress-20261009.json)
+records focused regression and saved-image validation without closing package 6.
+
+All fifteen selected constructor and integration tests pass on Linux (89.539
+seconds) and Windows (185.099 seconds). Complete three-route saved reports,
+regenerated with body-byte mutations, match after parsing; 190 current checker
+source bindings were verified. New tests reject 706 instruction changes, 220
+deleted transfer steps, forty lifetime/bounds/tag/destruction mutations, nine
+alternate-entry/zero-XMM mutations, five placement/destruction prerequisite
+changes and an injected integrated failure. The unrelated full predecessor
+suite was not rerun. No production implementation, gate or native capture changed.
+
 ## Scalar empty-constructor paths (2026-10-09)
 
 The standalone `HardenedCshake128::new_bits` and `HardenedCshake256::new_bits`

@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "dc605c31",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_vector_caller_and_predecessors": {
+      "tests": 87,
+      "seconds": 84.05,
+      "status": "PASS"
+    },
+    "windows_simd_vector_caller_and_predecessors": {
+      "tests": 87,
+      "seconds": 97.091,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 231,
+  "files_sha256": {
+    "sha3-batch-simd-vector-linux.json": "0e3b95a5277dd632f8978971a691875e4707049dbba3aea7ab22dc83c7d9ea6d",
+    "sha3-batch-simd-vector-windows.json": "8e78cd6fb382940edd6180a8ab37334ec3635a3db4aad255f4fb9a99543a9723",
+    "sha3-batch-simd-vector-20261009-exit.json": "f970167b78ffe53de21c7256db7c58da923fe188f7d3e8159a373d6692d9e45a",
+    "sha3-batch-simd-vector-linux.log": "ec0d9b5e8609d6ca84d7c42655f026268afb52deecb669821d4880c75ca6f5b4",
+    "sha3-batch-simd-vector-20261009.log": "38020fd348d98006073608b897800ca6c6d88904ab566cc9d65656b996ccb879"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_vector.py": "57577088ce279c42b09e087eff24494d22d66c5a2faa55dce0d6f16704f9c02f",
+    "windows_enclave_sha3_simd_vector_machine.py": "43bbd23ea258489618081edf4be9d7033d6f7e2027817dd1145a30d75cf808f1",
+    "windows_enclave_sha3_simd_vector_model.py": "982bee9db7e7a8c6aa58746ed34eb53ce59fc27bb4fe741bcd7d8846ea24ed5c",
+    "windows_enclave_sha3_simd_vector_shape.py": "2f2d3245da2037c91d619a6bcbf55b378b3356763d985dc996e2f625445c7792",
+    "windows_enclave_sha3_simd_vector_tests.py": "e52b792159e7c12af92c2b131501c6c213a2eebe54b914ff1093dbc6b2349b75",
+    "windows_enclave_sha3_batch_chains.py": "10e05a468ff460fd1b4d4de8c9c688569ed4a0ed6bad5a27fc3c5fa6a000b22d",
+    "test-windows-enclave-sha3-batch-chains.py": "e49845f27d0c296d4dbcad43002012d4a6b98e42c7681296baa10a4f1c3d7379"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "region": [
+      992,
+      1253
+    ],
+    "instruction_positions": 261,
+    "selected_indices": "ascending ready==1 and eligible==1, complete width only",
+    "source_state_region": [
+      1920,
+      2720
+    ],
+    "group_region": [
+      2720,
+      3520
+    ],
+    "cpu_scratch_region": [
+      0,
+      1920
+    ],
+    "state_stride": 200,
+    "group_wipe_bytes": 800,
+    "checked_control_budget_offset": 16,
+    "checked_control_used_offset": 24,
+    "control_charge_committed_before_state_copy": true,
+    "session_uses_original_authority_group_and_cpu_scratch": true,
+    "session_counter_must_increment_exactly_once": true,
+    "scatter_returns_each_group_lane_to_original_slot": true,
+    "accelerated_slot_mask_and_vector_call_block_counters_checked": true,
+    "completed_group_readiness_cleared_before_rescan": true,
+    "saved_region_oracle_cases": 11,
+    "synthetic_permutation_is_not_crypto_evidence": true,
+    "two_lane_selection_tested_but_no_arm_kernel_execution_claimed": true,
+    "scalar_fallback_and_final_report_serialization_qualified": false,
+    "all_incoming_pointer_lifetimes_and_storage_nonoverlap_qualified": false,
+    "rejection_edge_and_exception_private_frame_cleanup_composed": false
+  },
+  "new_regressions": {
+    "vector_instruction_position_changes": 783,
+    "stable_compaction_comparisons": 3072,
+    "charge_transfer_counter_comparisons": 1280,
+    "additional_actual_saved_selection_comparisons": 61,
+    "additional_actual_saved_effect_comparisons": 6,
+    "load_bearing_selection_charge_transfer_counter_mutations": 20,
+    "gather_scatter_copy_failures": 8,
+    "session_failure_codes": 4,
+    "session_counter_mismatch_failures": 2,
+    "missing_authority_failure": 1,
+    "unassigned_effect_and_budget_rejections": 6,
+    "corrupt_pointer_and_callback_homes": 5,
+    "prerequisite_mutations": 6,
+    "integration_failure_propagation": true
+  },
+  "remaining": [
+    "scalar permutation fallback, final health checks and report serialization",
+    "complete incoming machine pointer-lifetime, storage non-overlap and rejection-edge composition",
+    "final private-frame and exceptional cleanup; shared package-8 runtime/platform reconciliation",
+    "independent retest and final native qualification"
+  ]
+}

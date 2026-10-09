@@ -34,7 +34,10 @@
   post-copy counter commits and restored continuation pointers. The complete
   one-rate absorption loop now has saved-code/bitstream-oracle checks for all
   nine framing parts, split source-byte accesses, checked XOR helpers and
-  cursor/block/readiness transitions. Its remaining permutation/report and input
+  cursor/block/readiness transitions. The vector caller now checks stable lane
+  grouping, cancellation/budget charging, gather/session/scatter provenance,
+  exact authority-counter advancement and vector counter/readiness retirement.
+  Its remaining scalar-permutation/final-report and input
   paths, machine pointer lifetimes/non-overlap and final private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative

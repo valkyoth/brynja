@@ -28,6 +28,50 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Vector grouping, charge and lane transfer (2026-10-09)
+
+The saved executor's 261-position vector-caller region now has a complete
+emitted contract. It scans physical lane slots in order, selecting only flags
+whose ready and eligible bytes both equal one. An incomplete group is left for
+the scalar path. The temporary four-index array is cleared on each scan, and
+every gathered/scattered state index is bounded before applying its 200-byte
+stride. The separate 800-byte group buffer is cleared before gathering.
+
+The original internal cancellation target/context is polled before a checked
+budget decrement and used-work increment; both control counters are committed
+only after both arithmetic checks pass. Each selected state is copied to its
+group slot. The already-reviewed session receives the original authority,
+group buffer and separate CPU scratch. Successful return must accompany exactly
+one authority-counter increment before any result is copied back. Scatter
+returns each group slot to its original physical state slot. Accelerated-slot
+bits, vector-call and vector-block counters, kernel identity and readiness
+retirement are checked before rescanning. Original input, control, executor and
+workspace pointers must survive to the continuation.
+
+The bounded model independently checks selection and effect ordering, including
+noncanonical flag bytes, cancellation, exhausted budgets, all checked counter
+boundaries and every gather/scatter copy failure. A synthetic callee transform
+marks byte provenance; it is not Keccak testing and does not replace the replayed
+session/transpose/kernel review. The two-lane selector is exercised, but this
+x86 image rejects the other architecture's kernel instead of executing it.
+Injected session failures/counter mismatches do not claim observed native faults.
+
+These checks assume valid live caller objects and the reviewed callee/ABI
+contracts. They stop at scalar fallback, finalization or the shared rejection
+edges. Scalar permutation, final report serialization, complete incoming
+pointer lifetimes, rejection-edge composition and private-frame/exception
+cleanup remain open; no whole-worker qualification is claimed.
+
+The [vector-caller observation](../assurance/windows-protection-observations/sha3-batch-simd-vector-progress-20261009.json)
+records 87 focused SIMD/predecessor tests passing on Linux (84.050 seconds) and
+Windows (97.091 seconds). Complete reports regenerated with 88,058 body-byte
+mutations match after parsing; all 231 checker-source bindings are current.
+The eight new tests include 3,072 compaction cases, 1,280 accounting/transfer
+cases, 783 instruction-position mutations, 20 reached semantic mutations and
+all eight gather/scatter copy failures. The unrelated full predecessor suite
+was not rerun. This is saved-image author review, not new native execution;
+production code and release gates are unchanged.
+
 ## Four-lane one-block absorption (2026-10-09)
 
 The saved executor's complete 272-position absorption region now has an exact

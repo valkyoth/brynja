@@ -767,6 +767,53 @@ Parsed reports match with 187 current checker-source bindings verified. The
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
 
+## Scalar cSHAKE prefix and normal failure joins (2026-10-09)
+
+The next 203 instruction/label positions bind both rates' prefix sequencing,
+bulk and bit-loop branches, setup-advance calls, result extraction and local
+failure paths. Incoming CFG edges must originate in these checked blocks or
+the previously checked initializer. The error path restores the operation
+guard where its register was reused, restores the plan base before outer
+rejection and returns status 6. Arithmetic overflow branches bypass local-owner
+destruction because initialization has not happened yet.
+
+The encoded rate and name are consumed from `[rsp+1390, rsp+1648)`, disjoint
+from setup storage `[rsp+1680, rsp+2800)`. The complete encoding helper initializes
+258 bytes and produces an encoded-name length from 2 through 17. Successful
+rate absorption commits an emitted count of two; successful bulk name
+absorption commits `2 + encoded_name_length` before setup advance. The pending
+bit count starts at zero at offset 1745, outside the borrowed sponge extent
+`[rsp+1748, rsp+2788)`. Replayed helper semantics and exclusive nonunwinding
+ABIs preserve it. Consequently valid construction takes the bulk branch;
+the emitted alternative bit loops are still fully instruction-checked.
+
+After a failed initialized helper call, the checked path invokes the typed
+owner wipe, clears the pending byte, removes the optional owner and resets
+setup counters, phase and customization metadata before outer rejection.
+The repeated wipe is retained exactly as emitted. This is normal-return typed
+cleanup, not proof of erasing stack padding, stale physical copies, arbitrary
+exception frames or shared runtime internals. Scalar rejection is terminal;
+there is no accelerated authority to quarantine on this scalar route.
+
+Successful advance extracts 1,107 bytes to `[rsp+6061, rsp+7168)`, immediately
+below saved XMM6, with the leading byte and customization flag in preserved
+registers. Eleven padding bytes are copied separately and remain explicitly
+unqualified as initialized secret state. The following scatter into retained
+storage is still a separate byte-origin/lifetime obligation, not closed by
+checking these prefix and error paths.
+
+The [prefix/failure observation](../assurance/windows-protection-observations/sha3-batch-cshake-flow-progress-20261009.json)
+records this partial saved-image author review. No new native execution,
+independent review, production change or release-gate change is implied.
+
+All 13 selected prefix/initialization/integration tests passed on Linux (58.843
+seconds) and Windows (123.303 seconds). Regenerated body-mutation reports agree;
+193 current checker-source bindings match. New regressions reject 406 instruction
+mutations, 16 targeted changes, four external entries, ten helper-prerequisite
+changes, seven ABI changes and five initialization/cleanup-prerequisite changes.
+The model covers 198 customized prefixes, two empty prefixes, 18 helper-failure
+cases and four arithmetic rejections. The full predecessor suite was not rerun.
+
 ## Scalar cSHAKE initial arithmetic and fields (2026-10-09)
 
 Both inlined cSHAKE setup entry blocks now have complete contracts covering

@@ -27,12 +27,13 @@ from windows_enclave_sha3_batch_empty_tests import EmptyTests
 from windows_enclave_sha3_batch_fixed_start_tests import FixedStartTests,FixedStartModelTests
 from windows_enclave_sha3_batch_shake_start_tests import ShakeStartTests,ShakeStartModelTests
 from windows_enclave_sha3_batch_cshake_init_tests import CshakeInitTests,CshakeInitModelTests
+from windows_enclave_sha3_batch_cshake_flow_tests import CshakeFlowTests,CshakeFlowModelTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -76,7 +77,7 @@ class Tests(CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,Start
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
@@ -104,11 +105,13 @@ class SavedTests(CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,Init
                 self.assertTrue(r['scalar_fixed_constructors']['active_fixed_constructor_initialization_qualified'])
                 self.assertTrue(r['scalar_shake_constructors']['scalar_shake_constructor_joins_qualified'])
                 self.assertTrue(r['scalar_cshake_initialization']['cshake_initial_arithmetic_and_fields_qualified'])
+                self.assertTrue(r['scalar_cshake_prefix']['initialized_failure_clears_pending_and_typed_owner'])
             else:
                 self.assertIsNone(r['scalar_empty_constructors'])
                 self.assertIsNone(r['scalar_fixed_constructors'])
                 self.assertIsNone(r['scalar_shake_constructors'])
                 self.assertIsNone(r['scalar_cshake_initialization'])
+                self.assertIsNone(r['scalar_cshake_prefix'])
             if lane=='simd':
                 self.assertIsNone(r['sequential_start_admission_and_placement'])
                 self.assertIsNone(r['prior_helpers'])

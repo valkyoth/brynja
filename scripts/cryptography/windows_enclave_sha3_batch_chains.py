@@ -17,6 +17,7 @@ import windows_enclave_sha3_batch_setup_end as setup_end
 import windows_enclave_sha3_batch_scalar_setup as scalar_setup
 import windows_enclave_sha3_batch_finish as finish
 import windows_enclave_sha3_batch_start as start
+import windows_enclave_sha3_batch_initial as initial
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -54,9 +55,19 @@ def reused_helpers(base,root,lane,functions,ir,pin):
     require(sorted(exact)==pin['exact_prior_helpers'],'exact enumerated prior helper population')
     require(sorted(changed)==pin['changed_prior_abi_pending'],'explicit changed ABI population')
     destructor=storage.rebind(lane,functions,prior,ir,(directory/'normal_rust.ll').read_text())
+    constructor=None
+    if lane=='avx2':
+        _,current_data,current_image,_,_,_=binding.load(base,root,pin)
+        current_records=binding.bind_all(current_data,current_image,functions)
+        constants,_,_,_,_=binding.data_bindings(current_data,current_image,current_records,
+            functions,{'memcpy','memset','memcmp','__chkstk','__umodti3','PublicProbeAbort'} |
+            {PREFIX[lane]+suffix for suffix in ('Input','Output','Source','Observe')},'scalar')
+        constructor=initial.rebind(functions,prior,ir,(directory/'normal_rust.ll').read_text(),
+            exact,report['constants'],constants)
     return dict(prior_route=report['route'],prior_image_sha256=report['image_sha256'],
         prior_semantics_replayed=True,exact_body_reference_extent_and_abi=exact,
         changed_abi_requiring_explicit_review=changed,state_destructor_rebinding=destructor,
+        initial_constructor_rebinding=constructor,
         batch_caller_composition_qualified=False)
 
 

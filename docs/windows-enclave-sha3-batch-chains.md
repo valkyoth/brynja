@@ -766,3 +766,34 @@ Parsed reports match with 187 current checker-source bindings verified. The
 [start-path observation](../assurance/windows-protection-observations/sha3-batch-start-progress-20261009.json)
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
+
+## AVX2 initial-constructor rebinding (2026-10-09)
+
+The batch image's `State::initial` now explicitly reuses the replayed streaming
+constructor review. All 1,123 machine-code bytes, the complete resolved LLVM ABI,
+extent kind and 16 relocations match, except for one enumerated compiler table
+rename: the output-width table suffix `.216` becomes `.189` at relocation offset
+901. No general suffix stripping or relaxed relocation comparison is used.
+
+Both saved images bind their constants to immutable, relocation-free object
+data and actual linked read-only bytes. All six KAT comparison constants and
+both constructor tables must agree across images. The rate table is additionally
+checked against `[144,136,104,72,168,136,168,136]`, and the output-width table
+against `[28,32,48,64]`. The called permutation and scratch-wipe helpers must
+retain their replayed exact-body/reference/ABI review. The original exact-helper
+population is unchanged; this explicit rebinding is reported separately.
+
+Four focused tests and the integrated saved-binding test pass on Linux; the
+same five tests pass on Windows (22.562 seconds). Both complete three-route
+saved-image reports were regenerated with body-byte mutations enabled and match
+after parsing, with 188 current checker-source bindings verified. This pass did
+not rerun the unrelated full 99-test predecessor suite. New tests reject every
+constructor byte mutation, 64 relocation-field mutations, extent changes, ABI
+weakening, missing helper reviews and missing/changed constant bindings. Matching
+corruption of the rate or width table in both images is also rejected.
+
+The [initial-constructor observation](../assurance/windows-protection-observations/sha3-batch-initial-progress-20261009.json)
+records this partial author-review checkpoint. It does not qualify the batch
+caller's constructor arguments, scalar constructors, moved-copy/private-frame
+erasure, four-lane SIMD or exceptional cleanup. Shared `memcpy`/`memset` review
+remains in package 8. No production code, release gate or native capture changed.

@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "54e0791c",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_constructor": {"tests": 4, "seconds": 1.809, "status": "PASS"},
+    "linux_integration": {"tests": 1, "seconds": 10.298, "status": "PASS"},
+    "windows_constructor_and_integration": {"tests": 5, "seconds": 22.562, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "windows_exit_code": 0,
+  "windows_log_sha256": "27d6dc5487fc80c75b75e78a24ff1cdd5bfe0e9599ed18146fd4e64d13ca647a",
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 188,
+  "report_sha256": {
+    "sha3-batch-initial-linux.json": "0dfb1256f6225906fc6b20b53de57705c3ab5755cbd2f0a17f7a4fb7225c5892",
+    "sha3-batch-initial-windows.json": "4b6e2a9378dcce190b887e01ab7708d6a7768f03048bb12d6e01460a187c09c5"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_initial.py": "d9f444618daa2a28bc4efc57d0cebac144274a941a986367c6c88a9d396f563d",
+    "windows_enclave_sha3_batch_initial_tests.py": "866a1c0bf5b2e7defef01b8faac18358798497edcb5ad4aac2fe5cdd9561f2a4",
+    "windows_enclave_sha3_batch_chains.py": "3c5247b57cedb432243f17e18b431345074632c93b3e3dc90fffce91a22d7c17",
+    "test-windows-enclave-sha3-batch-chains.py": "38e4fefa6b5baf7e73a928d7b3a220177a2169adf8d29a41aa35c2613e10e8d9"
+  },
+  "new_contracts": {
+    "avx2_initial_body_bytes": 1123,
+    "relocations": 16,
+    "explicit_width_table_rename_offset": 901,
+    "kat_constants": 6,
+    "independent_rate_and_width_tables": 2,
+    "complete_code_extent_resolved_abi_and_dependencies_bound": true,
+    "prior_semantics_replayed": true,
+    "batch_caller_lifetimes_qualified": false,
+    "private_frame_erasure_qualified": false
+  },
+  "remaining": [
+    "scalar constructor bodies and batch initial-value/lifetime joins",
+    "four-lane SIMD caller, dispatch and lifetime composition",
+    "complete private frame, copy and exceptional cleanup assignments",
+    "shared runtime and whole-image qualification in package 8"
+  ]
+}

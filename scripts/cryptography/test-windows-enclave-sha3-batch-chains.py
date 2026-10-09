@@ -22,6 +22,7 @@ from windows_enclave_sha3_batch_scalar_xof_tests import ScalarXofTests,ScalarXof
 from windows_enclave_sha3_batch_scalar_squeeze_tests import ScalarSqueezeTests,ScalarSqueezeModelTests
 from windows_enclave_sha3_batch_scalar_fixed_tests import ScalarFixedTests,ScalarFixedModelTests
 from windows_enclave_sha3_batch_start_tests import StartTests,StartModelTests
+from windows_enclave_sha3_batch_initial_tests import InitialTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
@@ -71,7 +72,7 @@ class Tests(StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,Scalar
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')

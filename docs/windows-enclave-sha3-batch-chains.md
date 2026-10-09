@@ -767,6 +767,54 @@ Parsed reports match with 187 current checker-source bindings verified. The
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
 
+## Scalar empty-constructor paths (2026-10-09)
+
+The standalone `HardenedCshake128::new_bits` and `HardenedCshake256::new_bits`
+helpers are used by the scalar batch image for SHAKE's empty name/customization
+case. This is now checked from their actual callers rather than inferred from
+their names. The complete object relocation scan permits one direct call to
+each helper, plus its two runtime begin/end references. Section aliases are
+included in that scan, so address-taking or an interior-entry relocation is not
+silently ignored. Runtime extents are compared with the complete helper object
+section, not with a function extent derived from the same runtime metadata.
+
+The existing start admission review is replayed. A second, six-entry dispatch
+table is bound, and a conservative control-flow graph includes both indirect
+dispatches, conditional branches and fallthrough. Backward reachability from
+each helper call stops at the empty descriptor's initialization: every path
+contains only those initialization/dispatch instructions and the exact call
+setup. Alternate entry, intervening writes and predecessor fallthrough reject.
+The shared readonly descriptor occupies `[rsp+1648, rsp+1680)` and the disjoint
+1,041-byte result occupies `[rsp+1680, rsp+2721)`. Meaningful bit-length bytes
+are zero; unspecified descriptor padding is not read on this path.
+
+Each helper's 43 reachable instruction/label positions bind the entire empty
+normal path and return. The 1,040-byte local owner is zeroed, its counter copy
+and mode byte remain zero, and the full owner is copied to `result+1` before
+success tag zero is committed. The private, non-unwinding LLVM ABI
+requires a full exclusive result and full readonly descriptors. Runtime
+`memset`/`memcpy` semantics and Windows register preservation remain explicit
+package-8 prerequisites. Neither temporary owner copies nor caller frames are
+claimed individually erased here.
+
+This does not review either helper's nonempty path as a general callable API,
+the separate inlined nonempty cSHAKE constructors, or the subsequent state
+transfer/lifetime joins. Four-lane SIMD and final private cleanup remain open.
+The [empty-constructor observation](../assurance/windows-protection-observations/sha3-batch-empty-progress-20261009.json)
+records focused regression and cross-platform saved-image validation separately
+from native enclave execution and completion of package 6.
+
+Five new constructor tests, the integrated saved-binding test and four previous
+AVX2 constructor tests pass on Linux. The same ten tests pass on Windows
+(137.006 seconds). Complete three-route saved reports regenerated with body-byte
+mutations match after parsing; 189 current checker-source bindings were checked.
+New regressions reject 172 helper instruction deletions/substitutions, 44 caller
+instruction changes, seven table mutations, eight alternate-entry/fallthrough
+changes, thirteen actual COFF relocation/extent mutations, sixteen ABI mutations,
+three admission-prerequisite changes and an injected integrated-review failure.
+The unrelated full predecessor suite was not rerun. No production implementation,
+release gate or native enclave capture changed.
+
 ## AVX2 initial-constructor rebinding (2026-10-09)
 
 The batch image's `State::initial` now explicitly reuses the replayed streaming

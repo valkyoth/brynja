@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "3088478b",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_empty_constructors": {"tests": 5, "seconds": 55.421, "status": "PASS"},
+    "linux_integration": {"tests": 1, "seconds": 10.558, "status": "PASS"},
+    "linux_previous_avx2_constructors": {"tests": 4, "seconds": 1.831, "status": "PASS"},
+    "windows_combined": {"tests": 10, "seconds": 137.006, "status": "PASS"}
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "windows_exit_code": 0,
+  "windows_log_sha256": "7a7d7c283699350bbf91d8d01c9df53b15e19a2c4b22a7f0b6326d3af1e27076",
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 189,
+  "report_sha256": {
+    "sha3-batch-empty-linux.json": "91af46a1827670c397687af5eed0dfa6eda4739ef2ded9f2f20a42224326596f",
+    "sha3-batch-empty-windows.json": "0eb274fde49016786b36c4676305bec542e06e3912a418aebada9667e166196c"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_batch_empty.py": "b22e6b7f5dd360718eed38296d99424ec146bda5bd01d68d90d7dcc6c8f3c0cc",
+    "windows_enclave_sha3_batch_empty_tests.py": "3ea6823dfff88cfe603578b2d3ae46e6df1d75ccd5279472aa545e8de2a1f8fa",
+    "windows_enclave_sha3_batch_chains.py": "97ed77cfa26c5c7f78dd5bc6f7d68d066f114d845609cbd0a6b31b5d553e7cc2",
+    "test-windows-enclave-sha3-batch-chains.py": "a546432208bda21f7a3a091fd3820ffe1adce3727dc7a1de6c6fc93431387716"
+  },
+  "new_contracts": {
+    "scalar_helpers": 2,
+    "reachable_instruction_positions_per_helper": 43,
+    "caller_instruction_positions": 22,
+    "direct_call_operand_offsets": [2495, 5173],
+    "runtime_extent_references_per_helper": 2,
+    "descriptor_span": [1648, 1680],
+    "result_span": [1680, 2721],
+    "descriptor_bit_length_span": [1664, 1672],
+    "zeroed_local_owner_span": [584, 1624],
+    "complete_empty_result_initialized": true,
+    "descriptor_construction_dominates_calls": true,
+    "runtime_extent_checked_against_full_object_section": true,
+    "inlined_nonempty_cshake_constructors_qualified": false,
+    "retained_state_lifetime_composition_qualified": false,
+    "private_frame_erasure_qualified": false
+  },
+  "new_regressions": {
+    "helper_instruction_deletions_and_substitutions": 172,
+    "caller_instruction_deletions_and_substitutions": 44,
+    "secondary_table_mutations": 7,
+    "cfg_entry_and_fallthrough_mutations": 8,
+    "actual_coff_relocation_and_extent_mutations": 13,
+    "abi_mutations": 16,
+    "admission_prerequisite_mutations": 3,
+    "integrated_failure_rejected": true
+  },
+  "remaining": [
+    "scalar fixed and inlined nonempty cSHAKE constructors and batch initial-value/lifetime joins",
+    "four-lane SIMD caller, dispatch and lifetime composition",
+    "complete private frame, copy and exceptional cleanup assignments",
+    "shared runtime and whole-image qualification in package 8"
+  ]
+}

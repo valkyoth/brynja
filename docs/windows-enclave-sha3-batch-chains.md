@@ -767,6 +767,46 @@ Parsed reports match with 187 current checker-source bindings verified. The
 records these results without closing either complete constructor or package 6.
 No production implementation, release gate or native enclave capture changed.
 
+## Scalar cSHAKE initial arithmetic and fields (2026-10-09)
+
+Both inlined cSHAKE setup entry blocks now have complete contracts covering
+248 instructions/labels. Each is entered only from the already checked identity
+dispatch, with admitted input lengths and the Win64 u128 home-slot mapping.
+The reviewed encoding and sponge-update helpers must be in the exact replayed
+helper population. This checkpoint stops at the first rate-prefix update;
+subsequent name/customization setup, retained transfers and failure cleanup
+still require composition.
+
+The arithmetic model follows both checked two-word additions, the bit-to-byte
+ceiling and rounding to rate 136 or 168. The rate-136 multiply/fold reduction is
+bound in its current register allocation and compared with independent integer
+framing calculations. Rate 168 supplies aligned u128 operands to `__umodti3`
+and decodes the Win64 XMM0 result; its mathematical remainder contract remains
+an assumption until package 8 qualifies the runtime implementation. A total
+bit count at most `u128::MAX` gives at most `2^125` rounded-up bytes, so adding
+at most 167 padding bytes cannot overflow u128. Empty N/S selects complete phase
+and expected count zero; nonempty N/S selects name phase and absorbs `[1, rate]`.
+
+The initial encoding buffers occupy `[rsp+1390, rsp+1648)` and
+`[rsp+1680, rsp+1938)`. Their length fields are read before reuse. Before the
+first update, all 1,109 active setup bytes at `[rsp+1680, rsp+2789)` are
+initialized, including counters, pending byte, phase, optional-owner tag, the
+1,040-byte zero owner and the customization flag. The public two-byte prefix
+is separate from the setup metadata and owner. The eleven trailing padding
+bytes are not claimed initialized or erased; neither are retired encoding
+copies or the enclosing private frame.
+
+The [cSHAKE-initialization observation](../assurance/windows-protection-observations/sha3-batch-cshake-init-progress-20261009.json)
+records focused saved-image author validation, not fresh enclave execution,
+independent review or package-6 completion.
+
+All 13 selected cSHAKE/SHAKE/integration tests passed on Linux (50.554 seconds)
+and Windows (103.609 seconds). Complete reports regenerated with body mutations
+agree after parsing; 192 current checker-source bindings were verified. The
+new tests cover 39,506 independent arithmetic comparisons, 496 instruction
+mutations, 16 targeted changes, two re-entry changes and seven prerequisite
+changes. The full predecessor suite was not rerun.
+
 ## Scalar SHAKE constructor result joins (2026-10-09)
 
 The two complete SHAKE result-decode blocks, common staging block and helper

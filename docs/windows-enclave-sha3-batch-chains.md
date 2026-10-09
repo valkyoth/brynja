@@ -28,6 +28,41 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Frame-alias stores and framing-helper footprints (2026-10-09)
+
+Seventeen previously unassigned register-addressed stores now have explicit
+frame footprints. Whole-CFG reaching definitions bind both sets of eight vector
+stores to the temporary at offset 177, including the final overlapping store
+that ends at offset 432. The compaction store's two predecessor-derived targets
+are exactly offsets -80 and 784, each eight bytes. Partial or unknown origins,
+call clobbers and unanchored cycles cannot supply an accepted frame address.
+
+The four framing `memset`/`memcpy` call footprints are also bounded. Every reaching
+definition of the encoding skip is either a literal 8–13 or zero plus 14 plus
+carry; the complete possible domain is 8–15. For each value, the actual emitted
+straight-line slice partitions the temporary into a copied prefix and zero fill,
+ending at offset 175, with source reads ending at offset 800. All these stores
+exclude the live guard and incoming-argument pointer cells.
+
+The bound prologues place the executor frame origin 1,200 bytes below the
+resident caller's frame origin. Translating the footprints into that physical
+coordinate system also excludes every simultaneous caller object in the
+previously reviewed layout. This is a separation result for the listed effects,
+not a claim that every indirect write or every nested callee has been qualified.
+
+The [frame-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-frame-effects-progress-20261009.json)
+records 117 tests passing on Linux (119.497 seconds) and Windows (135.986 seconds).
+Parsed reports match, all 242 checker-source hashes are current, and 88,058
+body-byte mutations are rejected. Five new tests cover 16 bounded runtime cases,
+40 slice/semantic mutations, 58 alias/domain mutations and focused
+join/cycle/clobber/overlap/prerequisite regressions. The unrelated full predecessor
+test suite was not rerun. There remain 57 non-frame store sites and
+53 other call-site footprints to compose. The four modeled runtime calls still
+depend on the bound runtime implementations and Win64 nonvolatile ABI; that
+shared runtime qualification remains package 8. Allocation lifetimes,
+exceptional cleanup and complete private-frame erasure remain open. No production
+code, native enclave capture or release gate changed.
+
 ## Original wipe receivers through all normal predecessors (2026-10-09)
 
 The saved executor now has a finite, all-predecessor direct pointer-origin

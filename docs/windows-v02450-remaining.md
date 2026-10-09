@@ -48,7 +48,10 @@
   before every normal return; panic is not cleanup success. All seven wipe
   receivers now have direct origin/preservation checks through every normal
   predecessor, including fixed-frame and guarded compaction-store effects.
-  Indirect stores/callee memory effects, remaining register/input provenance,
+  Seventeen register-addressed frame stores and four framing runtime-call
+  footprints now have predecessor-derived bounds and physical separation from
+  live pointer cells/caller objects. The remaining 57 non-frame stores and 53
+  call-site footprints, remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,
   followed by ParallelHash; shared cumulative

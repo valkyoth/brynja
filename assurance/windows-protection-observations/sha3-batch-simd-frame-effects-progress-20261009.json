@@ -1,0 +1,354 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "89ac7b23",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_frame_effects_and_predecessors": {
+      "tests": 117,
+      "seconds": 119.497,
+      "status": "PASS"
+    },
+    "windows_simd_frame_effects_and_predecessors": {
+      "tests": 117,
+      "seconds": 135.986,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 242,
+  "files_sha256": {
+    "sha3-batch-simd-frame-effects-linux.json": "5d3886739a041013c86f330d7f2602c1f5d42bc8a7884c58aab348e9c692ddb5",
+    "sha3-batch-simd-frame-effects-windows.json": "eba96c2b547f84a39ad59a8ea373ae119463c22c0140d6df7280d7cec3e3d037",
+    "sha3-batch-simd-frame-effects-20261009-exit.json": "888c77b96c7f26ef1d5e507b409eaceb88ea079cd6559ce58ce30cafc7ab027a",
+    "sha3-batch-simd-frame-effects-linux.log": "bcb742a79e6da1b773e3a71ed2ecc643175757ffa88c48097b5124681f61a434",
+    "sha3-batch-simd-frame-effects-20261009.log": "7cc4818d124e15c95791170808fb29d9e848e01d4841440fc4735dc95250979f"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_frame_effects.py": "b77c7efa1b539b0cca41c7f369b8e0a0163802f31e8e0e2f9c7431c2151a0d99",
+    "windows_enclave_sha3_simd_frame_effects_tests.py": "6e62f60900945166c23bd145b0fed254071050707b84814edd4853c3113ca628",
+    "windows_enclave_sha3_batch_chains.py": "38201846b3ce192812a3fc2ed00563cc8bec28aa208988b5e3afc6c1ab64f8df",
+    "test-windows-enclave-sha3-batch-chains.py": "9eb7fe51d2330744f3128330329a8bac850a4c2bdc79a370f6dd4aaad7e6e023"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "frame_alias_store_sites": [
+      206,
+      207,
+      208,
+      209,
+      211,
+      213,
+      215,
+      217,
+      283,
+      284,
+      285,
+      286,
+      288,
+      290,
+      292,
+      294,
+      1033
+    ],
+    "store_effects": [
+      {
+        "site": 206,
+        "write": [
+          177,
+          209
+        ]
+      },
+      {
+        "site": 207,
+        "write": [
+          209,
+          241
+        ]
+      },
+      {
+        "site": 208,
+        "write": [
+          241,
+          273
+        ]
+      },
+      {
+        "site": 209,
+        "write": [
+          273,
+          305
+        ]
+      },
+      {
+        "site": 211,
+        "write": [
+          305,
+          337
+        ]
+      },
+      {
+        "site": 213,
+        "write": [
+          337,
+          369
+        ]
+      },
+      {
+        "site": 215,
+        "write": [
+          369,
+          401
+        ]
+      },
+      {
+        "site": 217,
+        "write": [
+          400,
+          432
+        ]
+      },
+      {
+        "site": 283,
+        "write": [
+          177,
+          209
+        ]
+      },
+      {
+        "site": 284,
+        "write": [
+          209,
+          241
+        ]
+      },
+      {
+        "site": 285,
+        "write": [
+          241,
+          273
+        ]
+      },
+      {
+        "site": 286,
+        "write": [
+          273,
+          305
+        ]
+      },
+      {
+        "site": 288,
+        "write": [
+          305,
+          337
+        ]
+      },
+      {
+        "site": 290,
+        "write": [
+          337,
+          369
+        ]
+      },
+      {
+        "site": 292,
+        "write": [
+          369,
+          401
+        ]
+      },
+      {
+        "site": 294,
+        "write": [
+          400,
+          432
+        ]
+      },
+      {
+        "site": 1033,
+        "write": [
+          -80,
+          -72
+        ]
+      },
+      {
+        "site": 1033,
+        "write": [
+          784,
+          792
+        ]
+      }
+    ],
+    "runtime_frame_call_sites": [
+      195,
+      199,
+      272,
+      276
+    ],
+    "protected_pointer_cells": [
+      [
+        448,
+        456
+      ],
+      [
+        456,
+        464
+      ],
+      [
+        1104,
+        1112
+      ],
+      [
+        1112,
+        1120
+      ]
+    ],
+    "child_frame_origin_in_parent": -1200,
+    "bounded_frame_effects_exclude_live_pointer_cells_and_caller_objects": true,
+    "pending_non_frame_store_sites": [
+      65,
+      149,
+      151,
+      227,
+      231,
+      303,
+      304,
+      356,
+      364,
+      365,
+      386,
+      420,
+      421,
+      423,
+      424,
+      425,
+      442,
+      446,
+      447,
+      448,
+      537,
+      541,
+      546,
+      547,
+      619,
+      633,
+      702,
+      703,
+      866,
+      914,
+      917,
+      968,
+      1070,
+      1071,
+      1231,
+      1235,
+      1242,
+      1249,
+      1278,
+      1279,
+      1352,
+      1353,
+      1375,
+      1646,
+      1650,
+      1652,
+      1654,
+      1655,
+      1656,
+      1657,
+      1660,
+      1662,
+      1664,
+      1666,
+      1668,
+      1669,
+      1671
+    ],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      73,
+      105,
+      110,
+      114,
+      118,
+      224,
+      301,
+      502,
+      530,
+      533,
+      563,
+      570,
+      573,
+      782,
+      827,
+      851,
+      899,
+      961,
+      985,
+      1059,
+      1075,
+      1084,
+      1095,
+      1108,
+      1121,
+      1129,
+      1147,
+      1161,
+      1185,
+      1206,
+      1266,
+      1289,
+      1303,
+      1311,
+      1314,
+      1317,
+      1320,
+      1325,
+      1329,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583,
+      1588,
+      1591,
+      1598,
+      1601
+    ],
+    "runtime_implementation_and_nonvolatile_abi_required": true,
+    "other_indirect_effects_and_original_allocation_lifetimes_qualified": false,
+    "private_frame_and_exception_cleanup_qualified": false,
+    "runtime_effect_case_count": 16,
+    "runtime_effect_cases_sha256": "f17f9c87812217cb381cc235c90480a3e2b62275b93162c4ab32d7006f86d69f"
+  },
+  "focused_regressions": {
+    "new_tests": 5,
+    "bounded_runtime_cases": 16,
+    "slice_and_semantic_mutations": 40,
+    "frame_alias_and_encoding_domain_mutations": 58,
+    "cycle_join_clobber_overlap_prerequisite_and_integration_negatives": true
+  },
+  "remaining": [
+    "57 non-frame stores and 53 remaining call-site footprints",
+    "actual runtime implementation/nonvolatile ABI remains a shared prerequisite",
+    "remaining authority/input/state lifetimes and non-overlap",
+    "exceptional guard/funclet and private-frame cleanup",
+    "reconcile all SIMD bodies and sequential routes before closing package 6",
+    "shared runtime/stack/platform qualification remains package 8"
+  ]
+}

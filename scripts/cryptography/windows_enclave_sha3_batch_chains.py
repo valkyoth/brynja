@@ -51,6 +51,7 @@ import windows_enclave_sha3_simd_workspace_effects as simd_workspace_effects
 import windows_enclave_sha3_simd_loop_effects as simd_loop_effects
 import windows_enclave_sha3_simd_clear_effects as simd_clear_effects
 import windows_enclave_sha3_simd_copy_effects as simd_copy_effects
+import windows_enclave_sha3_simd_scalar_effects as simd_scalar_effects
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -168,6 +169,8 @@ def inspect_route(base,root,lane,pin,mutate=False):
         scalar_simd,loop_effects_simd) if lane=='simd' else None
     copy_effects_simd=simd_copy_effects.inspect(bodies,asm,digest_simd,frame_simd,vector_simd,
         frame_effects_simd,clear_effects_simd) if lane=='simd' else None
+    scalar_effects_simd=simd_scalar_effects.inspect(bodies,asm,digest_simd,scalar_simd,
+        frame_effects_simd,copy_effects_simd) if lane=='simd' else None
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
@@ -245,6 +248,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
         simd_loop_write_effects=loop_effects_simd,
         simd_clear_call_effects=clear_effects_simd,
         simd_copy_call_effects=copy_effects_simd,
+        simd_scalar_call_effects=scalar_effects_simd,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,

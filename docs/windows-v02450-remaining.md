@@ -64,8 +64,10 @@
   checks and caller-visible write extents, excluding other objects and the child
   frame. Two framing copies and eight vector gather/scatter copies now have
   all-predecessor pointer/length origins, unsigned guard/no-bypass checks and
-  bounded nonoverlapping source/destination ranges across 96 cases. The remaining
-  27 call-site footprints,
+  bounded nonoverlapping source/destination ranges across 96 cases. The scalar
+  loop now has four-lane induction across all 82 positions, saved-index restores,
+  original pointer-cell roots and bounds/non-overlap for two state copies and
+  the four-buffer scalar permutation call. The remaining 24 call-site footprints,
   remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,

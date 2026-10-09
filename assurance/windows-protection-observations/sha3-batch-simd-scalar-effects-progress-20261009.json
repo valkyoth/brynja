@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "6da1bd15",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_scalar_effects_and_predecessors": {
+      "tests": 152,
+      "seconds": 221.481,
+      "status": "PASS"
+    },
+    "windows_simd_scalar_effects_and_predecessors": {
+      "tests": 152,
+      "seconds": 252.34,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 249,
+  "files_sha256": {
+    "sha3-batch-simd-scalar-effects-linux.json": "18562f20798a719e08c18d38c782600fab386ae5ab70dfbc587e6ba47b594bcb",
+    "sha3-batch-simd-scalar-effects-windows.json": "eb220b01df9faeba7bb247091268cb5f57664aa011ebd0e2b0a71e9efebdc30b",
+    "sha3-batch-simd-scalar-effects-20261009-exit.json": "0ee459aa40b3eb36371d6882bcb1e93da95d16343081e19f838e6779f382dd97",
+    "sha3-batch-simd-scalar-effects-linux.log": "5f329e264491f1d730616c9e67f8b1cd4697f6e5b5d0256c977ae80f4cc0e291",
+    "sha3-batch-simd-scalar-effects-20261009.log": "59bdf3d5caf82b01a24b83df01e946ae02d8c1ec42925a5078f32a5441b39555"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_scalar_effects.py": "eabbdf65af2c174c725ecaf076a77e2378e84a6528013d36cb57ef74c061b40e",
+    "windows_enclave_sha3_simd_scalar_effects_tests.py": "f293a93feae96d553d1101c3bdff484418fbc0863c070b8af20eada7fc51f537",
+    "windows_enclave_sha3_batch_chains.py": "c5f7b9b4e3f4e917b996ba9e05d9061637bda541fcdfd83277ae6cb79285efde",
+    "test-windows-enclave-sha3-batch-chains.py": "105570bff6d3d31315acf9728db1357c4d7c9fcc217a9326ae794b1d5223194b"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "call_sites": [
+      1303,
+      1311,
+      1325
+    ],
+    "kernel_read_write_regions": [
+      [
+        4256,
+        4456
+      ],
+      [
+        4960,
+        5000
+      ],
+      [
+        5000,
+        5040
+      ],
+      [
+        5040,
+        5240
+      ]
+    ],
+    "kernel_parent_relative_effects": [
+      {
+        "site": 1311,
+        "root": "workspace",
+        "span": [
+          4192,
+          4392
+        ]
+      },
+      {
+        "site": 1311,
+        "root": "workspace",
+        "span": [
+          4896,
+          4936
+        ]
+      },
+      {
+        "site": 1311,
+        "root": "workspace",
+        "span": [
+          4936,
+          4976
+        ]
+      },
+      {
+        "site": 1311,
+        "root": "workspace",
+        "span": [
+          4976,
+          5176
+        ]
+      }
+    ],
+    "single_entry_four_lane_induction_checked": true,
+    "original_pointers_lengths_and_saved_index_restores_checked": true,
+    "scalar_copy_nonoverlap_and_kernel_noalias_regions_checked": true,
+    "pending_non_frame_store_sites": [],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      502,
+      563,
+      570,
+      573,
+      782,
+      827,
+      851,
+      899,
+      961,
+      985,
+      1059,
+      1129,
+      1266,
+      1289,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583
+    ],
+    "callback_memory_effects_and_win64_nonvolatile_abi_required": true,
+    "allocation_lifetimes_and_private_frame_exception_cleanup_qualified": false,
+    "four_lane_reachable_positions": [
+      82,
+      82,
+      82,
+      82
+    ],
+    "bounded_physical_copy_cases": 8,
+    "complete_effects_in_hash_bound_raw_reports": true
+  },
+  "focused_regressions": {
+    "new_tests": 7,
+    "callee_stride_argument_length_mutations": 23,
+    "root_induction_restore_mutations": 15,
+    "external_entry_bypasses": 11,
+    "internal_bypasses": 5,
+    "wrong_saved_index_rejected_for_each_of_four_lanes": true,
+    "numeric_spill_partial_overlap_clobber_geometry_and_prerequisite_integration_negatives": true,
+    "bounded_numeric_32bit_restore_recognized_as_valid": true
+  },
+  "remaining": [
+    "24 callee footprints, including output clearing, XOR/mask, output copies and callbacks",
+    "Allocation lifetimes, authority separation and indirect pointer preservation",
+    "Exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch reconciliation; package 6 remains open",
+    "Shared runtime, Win64 ABI and cumulative stack qualification remains package 8"
+  ]
+}

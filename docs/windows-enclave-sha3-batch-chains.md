@@ -28,6 +28,43 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Scalar fallback call footprints (2026-10-09)
+
+The scalar fallback's two state-copy calls and four-buffer permutation call now
+have caller-derived footprints. All normal predecessors must retain the original
+state array, scalar state, scratch and readiness pointer cells. The loop has one
+external entry with lane zero, an exact increment and fourth-lane exit. A finite
+address analysis follows all 82 loop positions for each lane, including both
+readiness outcomes, cancellation/revalidation branches, helper-call clobbers and
+the saved lane-index spill/restore. The readiness read stays in its four-byte
+array; both skipped and completed lanes must restore the right index before the
+next iteration. The register reused for lane, state and scratch cannot silently
+carry a pointer into the next lane calculation.
+
+Each copy transfers exactly 200 bytes between the original selected state and
+the distinct scalar-state region. The actual permutation call must receive the
+four original regions of sizes 200/40/40/200, matching the replayed kernel and
+LLVM noalias contract. Those regions are pairwise disjoint and contained in the
+scalar owner. All eight lane-specific copy cases and four kernel buffer extents
+are also checked against the physical caller/child geometry and other caller
+objects. This complements the earlier scalar algorithm, scratch-wipe and owner-
+retirement checks; it does not claim private-frame erasure or allocation-lifetime
+closure. Callback memory effects and Win64 nonvolatile preservation remain
+explicit prerequisites. Twenty-four call-site footprints remain; package 6 stays
+open. No production implementation or release-gate policy changed.
+
+The [scalar-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-scalar-effects-progress-20261009.json)
+records 152 focused/predecessor tests passing on Linux (221.481 seconds) and
+Windows (252.340 seconds). Parsed reports match, all 249 checker-source hashes
+are current, and 88,058 body-byte mutations are rejected. Seven new tests reject
+23 callee/stride/argument/length mutations, 15 root/induction/restore mutations,
+11 external-entry bypasses and five internal bypasses. All four lanes reject
+the wrong saved-index restore. Model tests cover numeric-versus-pointer spills,
+partial/overlapping writes, clobbers, buffer geometry and prerequisite failures;
+a harmless zero-extending numeric restore is explicitly accepted by the model.
+The unrelated full predecessor suite was not rerun, and this is saved-image
+review rather than new native enclave execution.
+
 ## Framing and vector copy footprints (2026-10-09)
 
 Ten additional executor call sites now have explicit read/write footprints:

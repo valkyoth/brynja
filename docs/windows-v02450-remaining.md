@@ -62,7 +62,10 @@
   on outstanding callee/alias effects. Sixteen workspace, staging, per-lane frame,
   group and scalar scratch/owner wipe calls now have actual receiver/length/callee
   checks and caller-visible write extents, excluding other objects and the child
-  frame. The remaining 37 call-site footprints,
+  frame. Two framing copies and eight vector gather/scatter copies now have
+  all-predecessor pointer/length origins, unsigned guard/no-bypass checks and
+  bounded nonoverlapping source/destination ranges across 96 cases. The remaining
+  27 call-site footprints,
   remaining register/input provenance,
   machine pointer lifetimes/non-overlap and private-frame/exception
   reconciliation still need completion,

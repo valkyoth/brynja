@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW",
+  "review_baseline": "b511d2f1",
+  "completion_package": 6,
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "focused_validation": {
+    "linux_simd_copy_effects_and_predecessors": {
+      "tests": 145,
+      "seconds": 207.391,
+      "status": "PASS"
+    },
+    "windows_simd_copy_effects_and_predecessors": {
+      "tests": 145,
+      "seconds": 236.385,
+      "status": "PASS"
+    }
+  },
+  "full_predecessor_test_suite_rerun": false,
+  "complete_saved_reports_regenerated_with_body_mutations": true,
+  "complete_body_byte_mutations_rejected": 88058,
+  "windows_exit_code": 0,
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 248,
+  "files_sha256": {
+    "sha3-batch-simd-copy-effects-linux.json": "ce22c4ed4e6831d9a25160396a9ae5a85b25ad68bcc6b25ec1dc025b203fff3a",
+    "sha3-batch-simd-copy-effects-windows.json": "e9850f69fb576ad7e53ff8c0176f416189633feee884ab4d0196e674426f525e",
+    "sha3-batch-simd-copy-effects-20261009-exit.json": "a734cc6c0ab363fc052016e78c8e9592e51aa4a09c38ae1a1a0b78f3a59834a3",
+    "sha3-batch-simd-copy-effects-linux.log": "5888995bc0a16972916dc824ce4318354249aa06bad00f778217fdb72ac1a82f",
+    "sha3-batch-simd-copy-effects-20261009.log": "729e3417e29415edcd63c5a7c67a9f57cccd8df5e6bb0658b2248590379328b4"
+  },
+  "review_source_sha256": {
+    "windows_enclave_sha3_simd_copy_effects.py": "1dbc4bae20dc8eb9e4d10404bba05d6d63397788b321fcb723af72b38c6e7f2e",
+    "windows_enclave_sha3_simd_copy_effects_tests.py": "ff074ea0cecdd57d21f5300a51a1145dd3731b0648bf29583f5baafa6474f287",
+    "windows_enclave_sha3_batch_chains.py": "ae9957ab4eaad3d546b28433f71124baccbb52d0a89a18155dce3a43ae09abc4",
+    "test-windows-enclave-sha3-batch-chains.py": "dd0c9eecc79803498f61a809e547b88f58bf2f576532986fbd66519ff80305f2"
+  },
+  "new_contracts": {
+    "function": "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha314hardened_batchNtB2_8Executor13digest_secret",
+    "call_sites": [
+      224,
+      301,
+      1084,
+      1095,
+      1108,
+      1121,
+      1147,
+      1161,
+      1185,
+      1206
+    ],
+    "framing_length_range": [
+      2,
+      9
+    ],
+    "vector_copy_bytes": 200,
+    "selected_lane_range": [
+      0,
+      3
+    ],
+    "original_source_destination_and_length_definitions_checked": true,
+    "all_copy_ranges_bounded_and_physically_nonoverlapping": true,
+    "pending_non_frame_store_sites": [],
+    "pending_callee_effect_sites": [
+      43,
+      54,
+      502,
+      563,
+      570,
+      573,
+      782,
+      827,
+      851,
+      899,
+      961,
+      985,
+      1059,
+      1129,
+      1266,
+      1289,
+      1303,
+      1311,
+      1325,
+      1393,
+      1399,
+      1430,
+      1466,
+      1547,
+      1559,
+      1571,
+      1583
+    ],
+    "runtime_memcpy_and_win64_nonvolatile_abi_required": true,
+    "other_callee_memory_effects_and_pointer_preservation_required": true,
+    "allocation_lifetimes_and_private_frame_exception_cleanup_qualified": false,
+    "bounded_physical_copy_cases": 96,
+    "complete_effects_in_hash_bound_raw_reports": true
+  },
+  "focused_regressions": {
+    "new_tests": 7,
+    "framing_copy_mutations": 18,
+    "stale_unknown_length_predecessors": 4,
+    "vector_copy_callee_guard_stride_length_mutations": 80,
+    "root_restore_mutations": 14,
+    "framing_guard_bypasses": 2,
+    "vector_guard_bypasses": 16,
+    "partial_length_physical_bounds_overlap_and_prerequisite_integration_negatives": true
+  },
+  "remaining": [
+    "27 callee footprints, including output clearing, XOR/mask, scalar/output copies and callbacks",
+    "Allocation lifetimes, authority separation and indirect pointer preservation",
+    "Exceptional funclets and private-frame cleanup",
+    "Three-route SHA-3 batch reconciliation; package 6 remains open",
+    "Shared runtime, Win64 ABI and cumulative stack qualification remains package 8"
+  ]
+}

@@ -28,6 +28,43 @@ Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
 review is described below; batch caller lifetime composition is still pending.
 
+## Framing and vector copy footprints (2026-10-09)
+
+Ten additional executor call sites now have explicit read/write footprints:
+the two public framing `memcpy` calls and four gather/four scatter calls through
+the already-reviewed checked-copy helper. Whole-CFG reaching definitions bind
+the actual source, destination and length registers, including saved pointer
+cells and partial-write/call clobbers. Other indirect memory effects and Win64
+nonvolatile-register preservation remain explicit prerequisites.
+
+The framing length comes from the emitted `16 - skip + 1` sequence, with the
+original skip in 8–15 and the zero-extending result in 2–9. Both calls must be
+dominated by the unsigned lane guard; their sources are the original child-frame
+buffer and destinations stay within the corresponding 17-byte encoding field
+of each 156-byte workspace lane. Every length and lane combination is checked.
+
+Each vector transfer requires the actual unsigned selected-index check, no
+control-flow entry past that check, the same reaching index at multiplication,
+the original state-array base, exact 200-byte lengths and the correct compacted
+group slot. The first scatter's intervening MOV must preserve comparison flags.
+The source/destination ranges for all four possible selected lanes are bounded
+and physically disjoint. These checks complement the existing stable-compaction
+and byte-provenance review; they do not independently close allocation lifetimes.
+All 96 copy cases also exclude other caller objects and the allocated child
+frame where applicable. Runtime `memcpy`, nonvolatile ABI, other call effects,
+indirect pointer preservation and exceptional/private-frame cleanup remain open
+prerequisites. Twenty-seven call-site footprints remain; package 6 is not closed.
+
+The [copy-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-copy-effects-progress-20261009.json)
+records 145 focused/predecessor tests passing on Linux (207.391 seconds) and
+Windows (236.385 seconds). Parsed reports match, all 248 checker-source hashes
+are current and 88,058 body-byte mutations are rejected. Seven new tests reject
+18 framing-copy mutations, four stale/unknown length-predecessor cases, 80 vector
+callee/guard/stride/length mutations, 14 root/restore mutations and 18 guard
+bypasses, plus partial-length, physical-boundary/overlap and prerequisite/
+integration regressions. The unrelated full predecessor suite was not rerun.
+No production code, release gate or native enclave capture changed.
+
 ## Clearing-call footprints (2026-10-09)
 
 Sixteen executor call sites now have explicit caller-visible write footprints:

@@ -9,6 +9,13 @@ closes package 7 across 198 emitted bodies and 17 cleanup funclets. Its final
 and 104 current checker-source bindings. This is not whole-image qualification
 or an independent retest; no production Rust or release-gate policy changed.
 
+Package 8 now has a three-pass execution plan. Its first
+[runtime-component pass](windows-enclave-runtime-components.md) is complete:
+nineteen image/helper/selector/startup chains, 43 passing tests on each host,
+matching reports and 58,482 guarded Windows component cases. The remaining two
+passes cover cumulative stack/ABI/runtime contexts and final loaded-import/
+outer-cleanup reconciliation. This does not close package 8 or qualify the images.
+
 Remaining, in the existing finite plan:
 
 - **Package 8:** reconcile the frozen nineteen-route matrix with shared C/OS

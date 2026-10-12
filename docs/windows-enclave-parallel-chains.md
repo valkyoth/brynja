@@ -4,8 +4,14 @@ Package 7 is **open**. This is a saved-image author review, not a release gate,
 new native enclave run, independent retest or whole-image qualification.
 Production Rust, signed images and release-gate policy are unchanged.
 
-Latest progress: the sequential request/export follow-up below is validated;
-pass 2 still needs transitive owner/state composition. Passes 3–4 remain open.
+Latest progress: **both sequential Rust-family reviews are conditionally
+complete** (pass 2 / regrouped Pass A). All 61 scalar and 73 AVX2 bodies,
+including 13 cleanup funclets, have explicit assignments and caller/lifetime
+composition. The concurrent route and combined reconciliation remain open
+(passes 3–4 / regrouped Passes B–C). Package 8 prerequisites are unchanged.
+
+The earlier progress sections below describe their historical checkpoints;
+the sequential closure section supersedes their remaining-pass-2 statements.
 
 ## Finite completion plan
 
@@ -300,6 +306,74 @@ shared whole-image qualification remains package 8. No production Rust, signed
 image or release-gate change, new enclave execution or independent retest is
 claimed by this follow-up.
 
+## Pass 2 complete: conditional sequential family closure
+
+The [combined sequential observation](../assurance/windows-protection-observations/parallel-sequential-20261012.json)
+records **193 tests passing on each host, without skips**, with matching parsed
+Linux and Windows reports and 100 current checker-source bindings. Linux took
+22.101 seconds for tests / 47.479 seconds total; Windows took 31.137 / 69.387.
+These are saved-object review runs, not new native enclave executions.
+
+The remaining 43 bodies (19 scalar / 24 AVX2, 17,271 bytes) now have complete
+actual-COFF instruction and branch contracts. Every byte is independently
+mutated without relying on the population hash; 958 branch opcode/destination
+mutations are also rejected. The preceding complete-population campaign rejects
+77,211 byte mutations across all three images, but does **not** promote the
+concurrent image to semantic closure. Earlier primitive and selected-path
+checks are executed again, not replaced by historical PASS records.
+
+The new review covers:
+
+- Root/leaf state construction, update and squeeze; owner begin, customization,
+  update and squeeze; input/state destruction; public-length encoding and exact
+  prefix completion. Identity 1/3 selects rate 168 and identity 2/4 rate 136.
+  The root uses the exact 96-bit `ParallelHash` function name; leaf N/S are empty.
+- All remaining linked dispatch tables, phase/rate/padding constants and every
+  lane of the accelerated public zero-state startup KAT. Existing primitive
+  constants must still match the prior reviewed helper image.
+- One explicitly renamed destructor and three same-body helpers with narrower
+  LLVM argument ranges. No attributes are dropped to make them match. Current
+  request limits, CV widths, suffix bounds and guarded bit offsets discharge
+  their narrower private preconditions; equal bytes alone are insufficient.
+- Five remaining accelerated cleanup funclets, bound to their actual parent
+  xdata. Parent guard/owner slots retain the original placed owner, not a moved
+  temporary. The setup funclet destroys its active temporary; it does not claim
+  to erase earlier copies in the private window.
+- Original owner/authority storage, bounded payload and retained-output
+  lifetimes, separate root/input/output regions and nonoverlapping constructor
+  copy buffers. Update's private `length * 8` is reached only through the
+  receiver's 1,024-byte bound. Original authority pointer values survive state
+  transfers and remain live until typed borrowers are destroyed.
+- Checked budget and 128-bit counters, exact prefix completion, terminal output
+  shape, full scalar scratch clearing on ordinary returning paths, and
+  quarantine on post-admission failures. Terminating panic bridges are assigned
+  explicitly; termination is not counted as successful returning cleanup.
+
+Independent finite models exercise all input/output shape boundaries, canonical
+tail-byte values, integer-encoding transitions, u128 prefix sizes, the scalar
+modulo-136 lowering, expected-count mismatches, budget/bit overflow, narrowed XOR
+shift domains and allocation overlaps. They supplement the machine-code review;
+they are not emulation of the complete Windows image or a generic compiler proof.
+
+### Meaning of conditional closure
+
+All 134 sequential bodies are assigned, all invoked Rust handlers are accounted
+for, and the family-level helper, framing, caller, failure and typed-lifetime
+obligations are reconciled. This is **author review**, not independent
+cryptographic verification, production signing or full Windows qualification.
+
+The exact pre-existing package 8 prerequisites remain: original C/OS page and
+window admission, exclusive serialized entry, the complete accelerated CPU
+bundle, runtime memory/division/stack-probe and SDK contracts, Win64 preservation,
+cumulative private-stack bounds, and whole-window/exceptional retirement.
+Earlier moved copies, padding and caller spills are not declared erased by a
+typed destructor. Post-copy authority rejection still cannot retract output;
+callers must discard output on any failure. No release-gate policy changed.
+
+Next is the concurrent route (Pass B), followed by the three-route reconciliation
+(Pass C). Package 7 therefore remains open even though both sequential routes
+have reached their conditional family exit criterion.
+
 ## Reproduce the author checks
 
 The saved development artifacts live outside `target/` and are not distributed
@@ -316,6 +390,8 @@ python3 scripts/cryptography/windows_enclave_parallel_lifecycle.py SAVED_DIRECTO
 python3 scripts/cryptography/test-windows-enclave-parallel-lifecycle.py SAVED_DIRECTORY
 python3 scripts/cryptography/windows_enclave_parallel_request.py SAVED_DIRECTORY --mutate
 python3 scripts/cryptography/test-windows-enclave-parallel-request.py --saved-directory SAVED_DIRECTORY
+python3 scripts/cryptography/windows_enclave_parallel_sequential.py SAVED_DIRECTORY --mutate
+python3 scripts/cryptography/test-windows-enclave-parallel-sequential.py --saved-directory SAVED_DIRECTORY
 ```
 
 The tests reject missing/extra bodies or handlers, modified bytes/relocations,

@@ -1,0 +1,274 @@
+"""Actual COFF instruction contracts for sequential ParallelHash avx2.
+
+Not derived from the separately emitted listing. Population pins also bind
+all references and ABI. These are conditional author-review contracts.
+"""
+
+CONTRACTS = {
+    "squeeze_handler": {
+        'name': "?dtor$11@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner7squeeze@4HA",
+        'contract': "Parent rbp-0x10 Owner/rbp-1 guard; original authority revoked, Owner cleared and marked Quarantined.",
+        'code': (
+            '488954241055415741565657534883ec28488d6a50f645ff01752f488b45f0488b80500c000080780802740bc640080248c7000300000048'
+            '8b75f04889f1e800000000c6865a0c0000074883c4285b5f5e415e415f5dc3'
+        ),
+        'branches': [
+            (0x19, '75', 0x4a), (0x2a, '74', 0x37),
+        ],
+    },
+    "setup_handler": {
+        'name': "?dtor$28@?0?_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_stateNtB2_5State5setup@4HA",
+        'contract': "Destroy moved temporary at parent aligned frame+0xa40 on invoked unwind; earlier copies remain package08.",
+        'code': (
+            '48895424105541574156415541545657534883ec28488daa800000004883e2e04889d3488d8b400a0000e800000000904883c4285b5f5e41'
+            '5c415d415e415f5dc3'
+        ),
+        'branches': [
+        ],
+    },
+    "begin_handler": {
+        'name': "?dtor$6@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner5begin@4HA",
+        'contract': "Parent aligned frame+0x38 Owner/+0x37 guard; revoke original authority, clear, Quarantined.",
+        'code': (
+            '48895424105541574156415541545657534883ec28488daa800000004883e2e04889d3f6433701752f488b4338488b80500c000080780802'
+            '740bc640080248c70003000000488b73384889f1e800000000c6865a0c0000074883c4285b5f5e415c415d415e415f5dc3'
+        ),
+        'branches': [
+            (0x27, '75', 0x58), (0x38, '74', 0x45),
+        ],
+    },
+    "custom_handler": {
+        'name': "?dtor$7@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6custom@4HA",
+        'contract': "Parent rbp-0x18 Owner/rbp-9 guard; revoke original authority, clear, Quarantined.",
+        'code': (
+            '48895424105541565657534883ec30488d6a50f645f701752f488b45e8488b80500c000080780802740bc640080248c70003000000488b75'
+            'e84889f1e800000000c6865a0c0000074883c4305b5f5e415e5dc3'
+        ),
+        'branches': [
+            (0x17, '75', 0x48), (0x28, '74', 0x35),
+        ],
+    },
+    "update_handler": {
+        'name': "?dtor$7@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6update@4HA",
+        'contract': "Same parent slot geometry as custom, independently bound to update xdata.",
+        'code': (
+            '48895424105541565657534883ec30488d6a50f645f701752f488b45e8488b80500c000080780802740bc640080248c70003000000488b75'
+            'e84889f1e800000000c6865a0c0000074883c4305b5f5e415e5dc3'
+        ),
+        'branches': [
+            (0x17, '75', 0x48), (0x28, '74', 0x35),
+        ],
+    },
+    "cshake_drop": {
+        'name': "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCscBEH4D3OuJh_22sha3_accelerated_state5StateECs22XHcxRQXBi_20parallel_accelerated",
+        'contract': "Renamed exact KMAC destructor body/reference/resolved ABI; no name-only reuse.",
+        'code': (
+            '56574883ec2883b9b0030000020f84af0000004889cec6815b0300000148c7816802000000000000488db9700200004889f9e80000000080'
+            'beaa030000ff742c488d8ea8030000ba01000000e800000000c686a903000000c5f857c0c5fc298660030000c5fc298680030000c686aa03'
+            '0000ffc686c2030000034889f9c5f877e8000000004889f1e80000000080beaa030000ff742c488d8ea8030000ba01000000e800000000c6'
+            '86a903000000c5f857c0c5fc298660030000c5fc2986800300004883c4285f5ec5f877c3'
+        ),
+        'branches': [
+            (0xd, '0f84', 0xc2), (0x3e, '74', 0x6c), (0x94, '74', 0xc2),
+        ],
+    },
+    "input_drop": {
+        'name': "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_input5InputECsfvPLeZHCkZA_29parallel_accelerated_resident",
+        'contract': "Active leaf drop before disarm; three16-byte counters erased; AVX2 authority borrow persists until resident retirement.",
+        'code': (
+            '564883ec204889ce83b9b0030000ff74084889f1e80000000048c786b0030000ffffffff488d8ee0030000ba10000000e800000000488d8e'
+            'f0030000ba10000000e800000000488d8e00040000ba10000000e800000000c5f857c0c5f81186180400004889f14883c4205ee900000000'
+        ),
+        'branches': [
+            (0xf, '74', 0x19), (0x6b, 'e9', 0x70),
+        ],
+    },
+    "state_drop": {
+        'name': "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_state5StateECsfvPLeZHCkZA_29parallel_accelerated_resident",
+        'contract': "Discriminant selects live typed payload; clears owned memory/prefix, not inactive padding or earlier moved copies.",
+        'code': (
+            '56574883ec28488b81b00300004883f8020f84b800000083f8ff0f84af0000004889cec6815b0300000148c7816802000000000000488db9'
+            '700200004889f9e80000000080beaa030000ff742c488d8ea8030000ba01000000e800000000c686a903000000c5f857c0c5fc2986600300'
+            '00c5fc298680030000c686aa030000ffc686c2030000034889f9c5f877e8000000004889f1e80000000080beaa030000ff742c488d8ea803'
+            '0000ba01000000e800000000c686a903000000c5f857c0c5fc298660030000c5fc2986800300004883c4285f5ec5f877c3'
+        ),
+        'branches': [
+            (0x11, '0f84', 0xcf), (0x1a, '0f84', 0xcf), (0x4b, '74', 0x79),
+            (0xa1, '74', 0xcf),
+        ],
+    },
+    "abort_bridge": {
+        'name': "_RNvCs1njKG4L9aB3_7___rustc17rust_begin_unwind",
+        'contract': "PublicProbeAbort and UD2, not a successful returning cleanup path.",
+        'code': (
+            '4883ec28e8000000000f0b'
+        ),
+        'branches': [
+        ],
+    },
+    "setup_state": {
+        'name': "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_stateNtB2_5State5setup",
+        'contract': "Identity1..4/rate168 or136; fixed96-bit ParallelHash name; checked u128 prefix extent; moves preserve authority; failed active temporary cleared.",
+        'code': (
+            '554157415641554154565753b8f8110000e8000000004829c4488dac24800000004883e4e04889e34889abe811000048c78570110000feff'
+            'ffff4889ce498d48ff4883f9040f83c20200004d89cf488d05000000004e8b74c0f8c1e10341b80607060741d3e8488d8b60060000e80000'
+            '0000488bbb100a00004883ff020f84850200004c8bade0110000440fb6a360060000488d9361060000488d8b8102000041b8af030000e800'
+            '000000c5fe6f83180a0000c5fe7f8338060000488b83380a0000488983580600004488a3800200004889bb300600004531e4488d4b704c89'
+            'f24531c0c5f877e8000000000fb7bb70010000488d8b600600004c89fa4d89e8e8000000008d470281ff01010000b9020000000f42c80fb7'
+            '83600700003d01010000410f43c401c88d04c5600000000fb7c04c01f84983d5000f82310100004c0face80349c1ed0331ff41f6c707400f'
+            '95c74801c74983d5004c89735048897b604c896b6848c7435800000000488d4b60488d5350e800000000c4e3f916c001c4e1f97ec14c89f2'
+            '4829cab9000000004819c1c4e27917c0490f44cc490f44d44801fa4c11e966c783b8000000000048c743780000000048c74370600000004c'
+            '89bb80000000488b85e011000048898388000000c5f9efc0c5f97f8390000000488993a000000048898ba80000004c89b3b0000000c683ba'
+            '00000000488dbb600600004889f94c89f24531c0e8000000000fb783600700003d01010000ba01000000480f42d7440f42e0488d8b800200'
+            '004d89e0e8000000003cff0f84f1000000c683db0500000148c783e804000000000000488d8bf0040000e800000000488d8bb8000000ba01'
+            '000000e800000000c683db0500000148c783e804000000000000488dbbf00400004889f9c5f877e80000000080bb2a060000ff742c488d8b'
+            '28060000ba01000000e800000000c6832906000000c5f9efc0c5fd7f83e0050000c5fd7f8300060000c6832a060000ffc683420600000348'
+            '89f9c5f877e800000000488d8b80020000e80000000080bb2a060000ff7411488d8b28060000ba01000000e800000000c60606eb03c60600'
+            '48c786b0030000feffffff488da5781100005b5f5e415c415d415e415f5dc5f877c3410fb7fc4889bb9000000048c7839800000000000000'
+            '80bbb900000000c5f9efc0c5fe7f8340070000c5fe7f8322070000c5fe7f8302070000c5fe7f83e2060000c5fe7f83c2060000c5fe7f83a2'
+            '060000c5fe7f8382060000c5fe7f836206000066c78360060000016066c783600700000200744d4531ff488d7b704c8db38002000031c066'
+            '0f1f8400000000004c8d04034981c0600600004889f94c89f241b108c5f877e8000000003cff0f857bfeffffb80100000041f6c70141b701'
+            '74ceeb3a488d8b80020000488d936006000041b802000000c5f877e8000000003cff0f8529feffff4883c7024889bb9000000048c7839800'
+            '000000000000488d4b70488d9380020000e8000000003cff0f8519feffff440fb6b3ba000000440fb67b70c5fc104371c5fc298320020000'
+            'c5fc108391000000c5fc298340020000c5fe6f839a000000c5fe7f83490200008b83bb0000008943280fb683bf00000088432c4180feff0f'
+            '84d3fdffff488dbb38060000c5fc108349020000c5fc1183e9010000c5fc288320020000c5fc288b40020000c5fc298be0010000c5fc2983'
+            'c00100008b43288943200fb6432c88432480bb2a060000ff7414488d8b28060000ba01000000c5f877e8000000004488bbe0050000c5fc28'
+            '83c0010000c5fc288be0010000c5fc1183e1050000c5fc118b01060000c5fc1083e9010000c5fc11830a0600004488b32a0600008b432089'
+            '832b0600000fb6432488832f060000c683420600000066c783400600000403440fb6b380020000488d8b390e000041b8af030000488d9381'
+            '020000c5f877e8000000004c8bbb30060000c5fe6f07c5fd7f8380010000488b4720488983a00100004983ffff0f845dfdffff488d8b410a'
+            '0000488d93390e000041b8af030000c5f877e800000000c5fd6f8380010000c5fe7f83f80d0000488b83a0010000488983180e00004488b3'
+            '400a00004c89bbf00d0000c6433f0066c7433d0000c743390000000048c7434060000000c6434808488d050000000048894330c643380c48'
+            '8d8b400a00004c8d4330b201c5f877e800000000903cff741fc6060648c786b0030000feffffff488d8b400a0000e800000000e9c3fcffff'
+            '488d93400a000041b8e00300004889f1e800000000e9a9fcffff'
+        ),
+        'branches': [
+            (0x45, '0f83', 0x30d), (0x7d, '0f84', 0x308), (0x139, '0f82', 0x270),
+            (0x23b, '0f84', 0x332), (0x29b, '74', 0x2c9), (0x2f5, '74', 0x308),
+            (0x30b, 'eb', 0x310), (0x3a5, '74', 0x3f4), (0x3de, '0f85', 0x25f),
+            (0x3f0, '74', 0x3c0), (0x3f2, 'eb', 0x42e), (0x412, '0f85', 0x241),
+            (0x440, '0f85', 0x25f), (0x497, '0f84', 0x270), (0x4e8, '74', 0x4fe),
+            (0x5a5, '0f84', 0x308), (0x637, '74', 0x658), (0x653, 'e9', 0x31b),
+            (0x66d, 'e9', 0x31b),
+        ],
+    },
+    "bit_string": {
+        'name': "_RNvMNtCs58M5yX2Qwr5_16brynja_hash_sha310bit_stringNtB2_16Fips202BitString3new",
+        'contract': "Empty iff last=0; otherwise last1..8; checked bit length and canonical low-bit tail; no empty tail read.",
+        'code': (
+            '4156565755534883ec2031c04589ca4180ea010f92c04531db4180fa08410f92c34d85c0440f44d84584db74624d85c0746a48b800000000'
+            '000000204939c077774a8d04c5f8ffffff410fb6f14801c672664180f9087346b0ff4889cf4489c9d2e04a8d0c0248ffc94889d389c24489'
+            'cd4d89c6e8000000004889da4d89f04189e94889f984c07515c6410801eb04c641080048c70100000000eb1131f64889114c894108488971'
+            '10448849184883c4205b5d5f5e415ec3c6410802ebd5'
+        ),
+        'branches': [
+            (0x2b, '74', 0x8f), (0x30, '74', 0x9c), (0x3f, '77', 0xb8),
+            (0x50, '72', 0xb8), (0x56, '73', 0x9e), (0x87, '75', 0x9e),
+            (0x8d, 'eb', 0x93), (0x9a, 'eb', 0xad), (0xbc, 'eb', 0x93),
+        ],
+    },
+    "prefix_advance": {
+        'name': "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance",
+        'contract': "Exact Name/Custom transitions, checked emitted count; pending-byte wipe; <=168 public padding zeros; expected count before Complete.",
+        'code': (
+            '4157415641545657534881ec480100004889ce488b09b0ff480b4e080f85df0100004889d70fb6564ab10184d20f85d0000000488b56104c'
+            '8b46184c8d7c24464c89f9e8000000000fb784244601000031db3d0101000041be010000004d0f42f70f42d8807e490074296685db747790'
+            '4889f14889fa4d89f041b108e8000000003cff0f857801000049ffc648ffcb75dfeb53440fb7fb4c8b66284c037e204983d4000f82880100'
+            '004889f94c89f24989d8e8000000003cff742389c3c6875b0300000148c78768020000000000004881c7700200004889f9e91c0100004c89'
+            '7e204c896628488b4610488b4e1848894e08488906c6464a014809c80f94c1b201b0ff80fa010f94c284ca0f84f0000000807e4900744c4c'
+            '8b76204c8b7e284983c6014983d7000f8204010000488d5e4841b8010000004889f94889dae8000000003cff0f8592000000ba0100000048'
+            '89d9e8000000004c897e284c897620c6464900488b5e40b0084885db0f848f0000004c8b76204c8b7e2848895c24204c897c24384c897424'
+            '3048c744242800000000488d4c2430488d542420e800000000c4e27917c07472c4e1f97ec04829c3b0074881fba800000077464901de4983'
+            'd700b008723b488d15000000004889f94989d8e8000000003cff7436c6875b0300000148c78768020000000000004881c7700200004889f9'
+            '89c3e80000000089d84881c4480100005b5f5e415c415e415fc34c8976204c897e284c3376304c337e38b0074d09f775d8c6464a02b0ffeb'
+            'd0b008ebcc'
+        ),
+        'branches': [
+            (0x1c, '0f85', 0x201), (0x2d, '0f85', 0x103), (0x68, '74', 0x93),
+            (0x6d, '74', 0xe6), (0x83, '0f85', 0x201), (0x8f, '75', 0x70),
+            (0x91, 'eb', 0xe6), (0xa3, '0f82', 0x231), (0xb9, '74', 0xde),
+            (0xd9, 'e9', 0x1fa), (0x10b, '0f84', 0x201), (0x115, '74', 0x163),
+            (0x127, '0f82', 0x231), (0x144, '0f85', 0x1dc), (0x16c, '0f84', 0x201),
+            (0x1a6, '74', 0x21a), (0x1b9, '77', 0x201), (0x1c4, '72', 0x201),
+            (0x1da, '74', 0x212), (0x227, '75', 0x201), (0x22f, 'eb', 0x201),
+            (0x233, 'eb', 0x201),
+        ],
+    },
+    "finish_xof": {
+        'name': "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State10finish_xof",
+        'contract': "Live absorbing phase, generation/health/kernel checks; complete prefix; stored suffix passed to engine finish; error wipes and terminates state.",
+        'code': (
+            '56574883ec28488b81b003000040b7074883f8020f84c80000004889ce40b70780b9c203000001755780be5b03000000754e80be5a030000'
+            '007545488b8e40020000440fb641084585c0742c4183f801752b4c8b0140b7054c3b8648020000751f0fb6490940b70141b82c000000410f'
+            'a3c8737a31ffeb0840b703eb0340b704c6865b0300000148c7866802000000000000488d8e70020000e80000000080beaa030000ff742c48'
+            '8d8ea8030000ba01000000e800000000c686a903000000c5f857c0c5fc298660030000c5fc298680030000c686aa030000ffb0038886c203'
+            '000089f84883c4285f5ec5f877c341b803000000410fa3c8728640b7074885c00f857affffff440fb686c0030000440fb68ec10300004889'
+            'f1e80000000089c73cff0f8558ffffff40b7ffb002ebad'
+        ),
+        'branches': [
+            (0x14, '0f84', 0xe2), (0x27, '75', 0x80), (0x30, '75', 0x80),
+            (0x39, '75', 0x80), (0x4a, '74', 0x78), (0x50, '75', 0x7d),
+            (0x5f, '75', 0x80), (0x72, '73', 0xee), (0x76, 'eb', 0x80),
+            (0x7b, 'eb', 0x80), (0xa5, '74', 0xd3), (0xf8, '72', 0x80),
+            (0x100, '0f85', 0x80), (0x122, '0f85', 0x80), (0x12d, 'eb', 0xdc),
+        ],
+    },
+    "state_update": {
+        'name': "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State6update",
+        'contract': "Live absorbing state only; exact original pointer/length; AVX2 generation/health and wipe on failure; narrower ABI separately checked.",
+        'code': (
+            '56574883ec2840b70783b9b0030000020f84c20000004889ce40b70780b9c203000001755280be5b03000000754980be5a03000000754048'
+            '8b86400200000fb6480885c9742983f9017529488b0840b705483b8e48020000751d0fb6400940b701b92c0000000fa3c1737931ffeb0840'
+            'b703eb0340b704c6865b0300000148c7866802000000000000488d8e70020000e80000000080beaa030000ff742c488d8ea8030000ba0100'
+            '0000e800000000c686a903000000c5f857c0c5fc298660030000c5fc298680030000c686aa030000ffc686c20300000389f84883c4285f5e'
+            'c5f877c3b9030000000fa3c172894889f1e8000000003cff742589c7c6865b0300000148c7866802000000000000488d8e70020000e80000'
+            '0000e958ffffff40b7ffebb4'
+        ),
+        'branches': [
+            (0x10, '0f84', 0xd8), (0x23, '75', 0x77), (0x2c, '75', 0x77),
+            (0x35, '75', 0x77), (0x44, '74', 0x6f), (0x49, '75', 0x74),
+            (0x58, '75', 0x77), (0x69, '73', 0xe4), (0x6d, 'eb', 0x77),
+            (0x72, 'eb', 0x77), (0x9c, '74', 0xca), (0xec, '72', 0x77),
+            (0xf8, '74', 0x11f), (0x11a, 'e9', 0x77), (0x122, 'eb', 0xd8),
+        ],
+    },
+    "initial": {
+        'name': "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+        'contract': "Original X86Keccak authority; public zero-state KAT across25 lanes; scratch wipe; private algorithm4..7 rate table; no temporary self-reference.",
+        'code': (
+            '554157415641545657534881ec40080000488dac24800000004883e4e0807a09040f85a90000000fb6420885c00f84a200000083f8010f85'
+            '9d0000004589c64889cf488b3248899424800300004889b42488030000488d8c244001000041b8400200004889d331d2e800000000c5f9ef'
+            'c0c5fd7f842400010000c5fd7f8424e0000000c5fd7f8424c0000000c5fd7f8424a0000000c5fd7f842480000000c5fd7f44246048c78424'
+            '2001000000000000488d4c246048894c2438488d4c24380fb64b0885c9741683f9027515b304eb46c6010beb56b303eb50b304eb4cb303eb'
+            '354c8dbc2488030000488b5424384889d8b305483930751e0fb64009b301b92c0000000fa3c1730431dbeb0ab9030000000fa3c17335488d'
+            '8c2440010000c5f877e8000000004889f9881948c781b003000002000000488da5c00700005b5f5e415c415e415f5dc5f877c3488db42440'
+            '0100004889f1c5f877e8000000004889f1e800000000c5fd6f442460c5fdef0500000000c4e27d17c07560c5fd6f842480000000c5fdef05'
+            '00000000c4e27d17c07548c5fd6f8424a0000000c5fdef0500000000c4e27d17c07530c5fd6f8424c0000000c5fdef0500000000c4e27d17'
+            'c07518c5fd6f8424e0000000c5fdef0500000000c4e27d17c07424488b842480030000b304807808020f8427ffffffc640080248c7000300'
+            '0000e917ffffffc5fd6f842400010000c5fdef0500000000c4e27d17c075c448b849a2ec5c7bfff1ea483984242001000075b00fb69c2440'
+            '010000488d942441010000488d8c240106000041b83f020000c5f877e8000000004c8ba42480030000c4c17a6f07c5f97f442440498b4710'
+            '48894424504d85e40f84b0feffff488db424a1030000488d94240106000041b83f0200004889f1e800000000c5f96f442440c5fa7f8424e8'
+            '050000488b44245048898424f8050000889c24a00300004c89a424e0050000410fb644240885c0740a83f802750a41b704eb4841b703eb43'
+            '410fb6c6488d0d000000004c8b74c1e0498b042441b705483b8424e80500007522410fb644240941b701b92c0000000fa3c173054531ffeb'
+            '0ab9030000000fa3c17320488d8c24a0030000e80000000044883f48c787b003000002000000e9fbfdffff418d8678ffffff83f820771048'
+            'b90101000001000000480fa3c1720f4183fe48740941b7094183fe6875b5488d4f0141b85f0200004889f2e800000000c5f9efc0c5fe7f87'
+            '70020000c5fe7f8790020000c5fe7f87b0020000c5fe7f87d0020000c5fe7f87f0020000c5fe7f8710030000c5fe7f873003000048c78750'
+            '03000000000000881f4c89b76002000048c7876802000000000000c7875803000000000000c687aa030000ff48c787b00300000000000066'
+            'c787c00300001f05c687c203000001e932fdffff'
+        ),
+        'branches': [
+            (0x21, '0f85', 0xd0), (0x2d, '0f84', 0xd5), (0x36, '0f85', 0xd9),
+            (0xc5, '74', 0xdd), (0xca, '75', 0xe1), (0xce, 'eb', 0x116),
+            (0xd3, 'eb', 0x12b), (0xd7, 'eb', 0x129), (0xdb, 'eb', 0x129),
+            (0xdf, 'eb', 0x116), (0xf6, '75', 0x116), (0x106, '73', 0x10c),
+            (0x10a, 'eb', 0x116), (0x114, '73', 0x14b), (0x179, '75', 0x1db),
+            (0x191, '75', 0x1db), (0x1a9, '75', 0x1db), (0x1c1, '75', 0x1db),
+            (0x1d9, '74', 0x1ff), (0x1e9, '0f84', 0x116), (0x1fa, 'e9', 0x116),
+            (0x215, '75', 0x1db), (0x229, '75', 0x1db), (0x270, '0f84', 0x126),
+            (0x2c7, '74', 0x2d3), (0x2cc, '75', 0x2d8), (0x2d1, 'eb', 0x31b),
+            (0x2d6, 'eb', 0x31b), (0x2f7, '75', 0x31b), (0x30a, '73', 0x311),
+            (0x30f, 'eb', 0x31b), (0x319, '73', 0x33b), (0x336, 'e9', 0x136),
+            (0x345, '77', 0x357), (0x355, '72', 0x366), (0x35b, '74', 0x366),
+            (0x364, '75', 0x31b), (0x3ff, 'e9', 0x136),
+        ],
+    },
+}

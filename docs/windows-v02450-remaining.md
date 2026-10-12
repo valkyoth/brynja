@@ -6,6 +6,13 @@ Package 6's [completion evidence](../assurance/windows-protection-observations/s
 records matching Linux/Windows saved-image reports and passing regressions.
 Its closure is conditional family author review, not whole-image qualification.
 
+Package 7 now follows a [four-pass ParallelHash plan](windows-enclave-parallel-chains.md).
+Its completed first pass binds all 198 emitted Rust functions, replays earlier reviews and
+separates 63 exact reusable helper contracts from 135 remaining body assignments.
+All 114 focused/predecessor tests pass on Linux and Windows; fresh reports match.
+Caller/lifetime composition remains explicit; package 7 is not closed. Next is
+pass 2, both sequential routes.
+
 - Finish transitive normal-return cleanup qualification inside the remaining
   distinct ParallelHash workers, especially
   indirect SIMD dispatch and deepest caller/stack paths. Both scalar and AVX2

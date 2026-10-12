@@ -170,13 +170,55 @@ call graphs and lost external boundaries. This does not qualify arbitrary
 exceptions, fatal exits, live SDK imports, final window erasure or a new enclave
 execution. Package 08 remains open.
 
+## Complete C-adapter and saved SDK-prefix join (2026-10-12)
+
+The [bridge observation](../assurance/windows-protection-observations/stack-bridge-20261012.json)
+extends the worker graph without changing production code or gates. All 54
+original named C boundaries resolve by their **incoming actual RVAs** to complete
+original COFF function sections. Only recorded relocation operands are
+normalized; every other linked byte must match. This avoids treating a possibly
+folded leaf's byte-search match as its call-site identity. Repeated references
+must agree, and the closure includes the previously internal `scheduler_complete`
+helper: **93 C body instances**, of which 81 have returning paths and twelve are
+the two named fast-fail helpers instantiated across images.
+
+The returning bodies are instruction/CFG checked at both entry residues. Direct
+CALL/tail encodings must match their original relocation and decoded target.
+The concurrent dispatch's three indirect calls must use the exact named
+`CallEnclave` IAT slot. Copy thunks must be complete nonwritable six-byte jumps to
+the correct named slot, and all three API names must resolve to the reviewed
+exports in the saved `vertdll.dll`. These are **saved-file bindings**, not an
+assertion about the currently loaded IAT or module.
+
+Twelve complete saved SDK bodies are joined: the copy and enclave-call wrappers,
+their syscall stubs, status conversion, last-error handling and diagnostic entry.
+The model retains the 312-byte `RtlCallEnclave` frame, copy-status tail transfers,
+error-status diagnostic calls and the conditional debug trap. No success-only
+path selection hides the SDK's error behavior. Existing SDK body, thread-relative
+write and helper reviews are replayed as prerequisites; this does not establish
+that thread-relative storage is erased by the private window.
+
+All **118 regressions pass on Linux and Windows**, without skips; complete parsed
+reports match and bind 279 current checker files. The latter count includes
+imported prerequisite checkers, not 279 independent proofs. Windows replays the
+same LLVM 23.1.2 disassembly, rebound to all twenty original application/SDK
+files; it is not independent decoding or fresh enclave execution.
+
+The graph now has five explicit residual boundary categories: deeper SDK
+diagnostics, copy and enclave-call OS transitions, debug traps and fast-fail
+termination. Synthetic boundary edges preserve an unknown suffix; they are not
+literal machine tail jumps or zero-depth returning leaves. The largest known
+worker/C/SDK prefix remains **25,048 bytes**, not a full protected-window bound.
+Actual outer entry geometry, deeper diagnostic/OS prerequisites and whole-window
+retirement must still be reconciled. This observation does not close package 08.
+
 ## Remaining package-08 passes
 
-1. **Finish pass 2:** join the completed worker/runtime graph at its named C
-   transport/scheduler boundaries to the existing SDK and outer-wrapper reviews.
-   Reconcile the resulting complete-window depth and caller/OS stack-limit
-   prerequisites. The worker graph, leaf accesses, alignment and indirect depths
-   above need not be restarted unless their bound implementations change.
+1. **Finish pass 2:** reconcile the remaining SDK diagnostic/OS conditions with
+   actual outer-wrapper/window entry geometry and caller/OS stack-limit
+   prerequisites. The worker, C-adapter and SDK-prefix graphs above are now joined;
+   they need not be restarted unless their bound inputs change. An unresolved
+   diagnostic or OS suffix still prevents claiming a full-window maximum.
 2. **Pass 3:** reconcile the loaded application/import contracts, complete outer
    clear/readback and register-return boundaries, and exact compiler/platform
    scope across the nineteen routes. Run targeted live observations where the

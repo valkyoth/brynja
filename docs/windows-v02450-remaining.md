@@ -22,11 +22,18 @@ subsequent stack-geometry suite passes **96 tests on each host**, with matching
 fresh reports. It composes 925 normal bodies, all 132 metadata-less leaves,
 6,085 direct call/tail sites and 44 provenance-checked indirect calls. The largest
 known worker/runtime portion is 25,048 bytes, **not a whole-window bound**.
-The remaining join is explicit: 54 named C transport/scheduler/abort boundaries
-must connect to their existing SDK/outer-wrapper reviews and caller/OS
-prerequisites. No unknown callee is counted as zero. Pass 2 and whole-image
-qualification remain open; the completed worker graph need not be repeated
-without changes to its bound inputs.
+The subsequent [C/SDK bridge observation](../assurance/windows-protection-observations/stack-bridge-20261012.json)
+now joins all **54 named C boundaries**, one additional internal scheduler helper,
+and twelve saved SDK bodies. It covers 81 returning C body instances and twelve
+fast-fail helper instances across the nineteen images. **118 tests pass on each
+host**, with no skips, identical parsed reports and 279 current checker-source
+bindings. Copy tail transfers, the three scheduler `CallEnclave` sites, status
+conversion and diagnostic entry retain their actual stack/return-slot geometry.
+The remaining suffixes are SDK diagnostics, OS copy/call transitions, debug traps
+and fatal termination—not missing C adapters. None is assigned zero depth.
+Pass 2 still needs outer-wrapper/window entry and limit reconciliation and the
+remaining SDK/OS conditions; whole-image qualification remains open. Completed
+worker and C graphs need not be restarted without changes to their bound inputs.
 
 Remaining, in the existing finite plan:
 

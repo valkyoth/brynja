@@ -61,8 +61,14 @@ SDK-free compute bound. Thirteen additional tests pass on each host, with matchi
 reports and byte/descriptor/call-target mutation checks. This does not qualify
 OS-return registers or deeper diagnostic contexts. The original 29-case canary and
 nineteen family images are preserved. Complete loaded transport payload handling,
-outer-wrapper/incoming-register qualification and final storage-lifetime
-composition remain open before family migration. SDK plaintext-copy handling
+incoming-register qualification and final transport/storage-lifetime
+composition remain open before family migration. The normal wrapper/control
+geometry is now composed for the unchanged canary image: `H-40` entry plus a
+2,544-byte chain reaches `H-2584`; every normal return requires full-window
+clear/readback, while dirty readback terminates before SDK restoration. All 24
+control objects are non-overlapping. Nine additional tests pass on both hosts
+with matching reports. This is not a whole-thread or SDK/register guarantee.
+SDK plaintext-copy handling
 is a blocking feasibility prerequisite, not assumed safe merely because the
 copy is moved outside the compute window. See the linked design for exact exit
 criteria, preserved limitations and the executable call-graph prototype.

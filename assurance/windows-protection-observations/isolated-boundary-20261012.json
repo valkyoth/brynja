@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "date": "2026-10-12",
+  "baseline": "45b07543",
+  "completion_package": "08A",
+  "status": "AUTHOR_NORMAL_COMPUTE_WINDOW_AND_CONTROL_STORAGE_CHECKPOINT",
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "independent_retest": false,
+  "new_native_execution": false,
+  "release_gate_changed": false,
+  "validation": {
+    "linux_tests": 9,
+    "windows_tests": 9,
+    "skips": 0,
+    "parsed_reports_match": true,
+    "normalized_wrapper_byte_mutants": 399,
+    "linked_wrapper_instruction_mutants": 351,
+    "helper_instruction_mutants": 1045,
+    "cleanup_branch_mutants": 4,
+    "storage_mutants": 72,
+    "aligned_page_residues": 256,
+    "decoder": "LLVM 23.1.2; same byte-bound decoding replayed"
+  },
+  "composition": {
+    "normal_compute_bytes_from_window_high": 2584,
+    "compute_entry_from_high": -40,
+    "compute_entry_residue": 24,
+    "cleared_window_bytes": 65536,
+    "clear_and_readback_words": 8192,
+    "boundary_helpers": 6,
+    "distinct_control_objects": 24,
+    "dirty_path": "terminal int29 before SDK restore",
+    "native_campaign": "33 cases and 21 identity observations from unchanged prior image"
+  },
+  "remaining": {
+    "incoming_register_payload_provenance": false,
+    "sdk_payload_handling_qualified": false,
+    "whole_thread_stack_bound": false,
+    "asynchronous_exception_cleanup_qualified": false,
+    "all_register_classes_cleared": false,
+    "complete_platform_residency_qualified": false
+  },
+  "platform_contract_review": {
+    "date": "2026-10-12",
+    "copy_api": "https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyintoenclave",
+    "copy_out_api": "https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyoutofenclave",
+    "abi": "https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170",
+    "conclusion": "copy result and volatile-register rules do not establish payload-free OS-return registers"
+  },
+  "previous_observation_sha256": "17a31689712835067786025cfd94858a49a6bf0201682ae86ad3b16d58e188c0",
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_isolated_boundary.py": "b6f80dac7080f9f8a1f1bce6a16584488e0b8a8f08a06505aa4c50bf67b824b6",
+    "scripts/cryptography/test-windows-enclave-isolated-boundary.py": "d8a0e4783d103c9f6b34b44a2362261f12aa024e1bc93670fc57fb0adf32580f"
+  },
+  "local_artifact_sha256": {
+    "release-reports/windows-isolation-08a-20261012/boundary-review-linux.json": "d36c9ca4db79356ae0f1ee9a51637a58aa17dc7b77291ea59ab8dd11920aa3b0",
+    "release-reports/windows-isolation-08a-20261012/boundary-review-windows.json": "b69e7b1b134222db820b3ed9d74f543c1917308de794ba9a679df8fd29d50a38",
+    "release-reports/windows-isolation-08a-20261012/boundary-tests-linux.log": "37ffc045d28bc685b8f22134c058f61bfe3f94790d583b84dcfdcf73db90692c",
+    "release-reports/windows-isolation-08a-20261012/boundary-tests-windows.log": "a1e2ae0684699fe8492650ce44b94fe1c308a66e06e800c77096e4ca1fa0e59a"
+  }
+}

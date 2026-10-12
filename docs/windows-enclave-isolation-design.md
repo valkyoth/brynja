@@ -1,6 +1,6 @@
 # Windows secret-execution isolation: package 08 follow-up
 
-Status: **08A resident and transport-data canaries tested; qualification incomplete** (2026-10-12). The owner chose
+Status: **08A normal compute boundary composed; SDK/register qualification incomplete** (2026-10-12). The owner chose
 to keep package 08 blocked and design stronger isolation, rather than accept a
 conditional cleanup claim. No release gate, production API or algorithm changes
 are made by this document or its executable design criterion. The separate canary
@@ -119,6 +119,38 @@ The fixed diagnostic strings contain only one numeric status conversion and no
 payload-pointer format. This narrows data provenance, not the entire formatter,
 exception or captured-register context. Whole-image qualification remains false.
 
+### Normal window and control-storage composition
+
+The [boundary observation](../assurance/windows-protection-observations/isolated-boundary-20261012.json)
+now composes the actual transport-data image's C entry, six boundary helpers and
+modified 399-byte wrapper. `PublicRustBody` enters at `H-40`, residue 24 modulo 32;
+its complete 2,544-byte normal chain therefore reaches `H-2584`. This fits inside
+the 65,536-byte clear/readback window for all 256 aligned RBP page residues.
+The entry return slot and full caller home space are included. This is a bound
+for the SDK-free **normal compute chain**, not for the whole thread or bootstrap
+SDK calls. The 81,952-byte probe is not used as an invented SDK stack-depth bound.
+
+The actual dirty-readback branch reaches terminal `int29` before either finish
+notification or SDK guard restoration. Normal return requires both complete
+8,192-word loops, volatile GPR/XMM clearing and the final clearing after restore.
+Denied admission still reclaims without calling compute. XMM6–XMM15 low halves
+are preserved for the Win64 ABI; YMM upper clearing uses the cached CPU/OS AVX
+check. This does not qualify AVX-512/extended state, arbitrary exceptions, or the
+provenance of preserved incoming registers.
+
+All 24 named controls and the full descriptor occupy distinct, writable,
+non-executable image ranges. Real call edges and shared addresses connect these
+objects across the root, wrapper and boundary helpers. Fresh staging allocation
+disjointness still relies on the trusted allocation API; staging lock/retirement
+uses the earlier pinned root and trusted-host phase checks, not a new native run.
+
+Nine new tests pass on Linux and Windows, without skips, and parsed reports match.
+They reject 399 normalized wrapper-byte mutations, 351 linked wrapper-instruction
+mutations, 1,045 helper-instruction mutations, four cleanup bypasses and 72 missing,
+out-of-range or overlapping storage mutations. Existing images and earlier native
+receipts remain unchanged. **This completes the normal wrapper/control geometry
+check, not incoming-register or SDK payload qualification.**
+
 ### Outstanding transport prerequisite
 
 Inspection of the pinned SDK confirms that its copy exports call the OS copy
@@ -134,6 +166,18 @@ remaining proof obligations, not an observed disclosure.
 Do not infer SDK erasure or a complete payload-path proof from the passing
 resident canary. The next review must resolve these obligations under the stated
 OS trust boundary, or report a concrete design blocker before migrating families.
+
+The Microsoft contracts checked on 2026-10-12 describe copy success/failure and
+continued availability under strict containing-process access, but do not specify
+payload erasure from return registers. The x64 ABI allows volatile registers to
+change across a call. Those facts do not establish that an OS transition actually
+returns payload residue; they also cannot prove it never does. A successful native
+copy, code hash or caller-side wipe after the SDK returns cannot substitute for
+that missing internal-path evidence. No undocumented syscall or SDK patch is
+introduced to work around this question.
+[Copy-in contract](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyintoenclave),
+[copy-out contract](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyoutofenclave),
+[x64 calling convention](https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170).
 
 ## What the completed reconciliation establishes
 

@@ -1,6 +1,6 @@
 # Windows secret-execution isolation: package 08 follow-up
 
-Status: **08A plaintext-transport feasibility blocked; design decision required** (2026-10-12). The owner chose
+Status: **encrypted-transport feasibility complete; implementation NO-GO with current prerequisites** (2026-10-12). The owner chose
 to keep package 08 blocked and design stronger isolation, rather than accept a
 conditional cleanup claim. No release gate, production API or algorithm changes
 are made by this document or its executable design criterion. The separate canary
@@ -224,14 +224,211 @@ premises is justified:
    correctness tests would remain reusable, but this introduces a protocol/API
    and cryptographic implementation scope beyond the approved phase split.
 
-The recommended next action is a **separately approved design-only feasibility
-pass for option 2**, with an explicit stop if secure bootstrap or suitable
-first-party primitives are unavailable. Do not implement ad-hoc encryption,
-weaken strict memory access, patch the SDK, or introduce raw syscalls. This
-document does not authorize that expansion. Conditional closure was already
-declined by the owner and is not silently substituted. Package 08 remains blocked;
-the completed compute/storage work is preserved without promotion to a supported
-secret boundary. No claim of impossibility is made.
+The owner approved the design-only feasibility pass for option 2. Its result is
+below: the current primitives and bootstrap do not support implementation within
+08A. Do not implement ad-hoc encryption, weaken strict memory access, patch the
+SDK, or introduce raw syscalls. Conditional closure was already declined and is
+not silently substituted. Package 08 remains blocked; completed compute/storage
+work is preserved without promotion to a supported secret boundary. No claim of
+impossibility is made.
+
+## Encrypted transport feasibility result
+
+**NO-GO as an immediate 08A implementation.** Ciphertext-only SDK transfers are a
+plausible future architecture, but they require three unfinished foundations:
+secret-key bootstrap without the unresolved SDK plaintext path, qualified
+first-party channel cryptography, and protection of the sending endpoint's
+implementation-owned secrets. This pass approves none of those foundations and
+changes no code, gate, roadmap ordering or existing qualification record.
+
+The intended property would be narrower than all-platform erasure: SDK transport
+receives only public handshake data, ciphertext and explicitly declassified
+output; plaintext processing and transient key operations occur within reviewed
+SDK-free windows. Keys intentionally retained between commands remain in owned
+protected pages. The SDK and OS remain trusted platform components, not malicious
+code isolated from the enclave's own address space. Privileged snapshots, arbitrary
+interruptions, fatal termination and application-created copies retain their
+existing exclusions. Encrypting transfers does not eliminate these limits.
+
+### Identity and endpoint scope
+
+Two deployment models must not be conflated:
+
+- **Existing trusted local application.** Its reviewed host build, pinned signed
+  image, loader initialization and private entry connections remain the identity
+  basis. A future ephemeral public key must be obtained from that admitted live
+  instance and bound to its session, protocol and suite. This is not remote
+  attestation. The existing [borrowed-input contract](windows-enclave-borrowed-input-design.md)
+  excludes caller-owned copies; it does not exclude new copies or keys created
+  by a Brynja encryption adapter.
+- **Sender outside an untrusted host.** This is a separate confidential-ingress
+  API and deployment model. It needs fresh attestation binding the enclave's key
+  and transcript to approved identity, imports, versions and debug policy, with
+  authenticated sender authorization where required. It cannot transparently
+  replace a local borrowed-slice API.
+
+Microsoft permits 64 bytes of application data in an enclave report, including
+a challenge and public-key hash. The report covers loaded code and policy;
+verification also needs trust in the underlying VBS platform. A fresh challenge
+and canonical transcript digest could fit this interface, but must not be
+confused with a verified channel merely because a report was generated.
+[Report contract](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavegetattestationreport).
+
+`EnclaveVerifyAttestationReport` is an **in-enclave, same-system** verifier, not
+a host-process verifier ready to drop into the Rust adapter. A remote verifier
+needs its own trust chain and policy. Azure's documented VBS attestation protocol
+binds TPM/measured-boot evidence and enclave identity keys; this project has not
+implemented that client or provisioned a service. No Azure service is required
+or purchased by this design.
+[Local verification](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclaveverifyattestationreport),
+[VBS attestation protocol](https://learn.microsoft.com/en-us/azure/attestation/virtualization-based-security-protocol).
+
+### Bootstrap is a blocking prerequisite
+
+An enclave-generated ephemeral private key avoids copying that key in from the
+host **only if its unpredictable seed also enters through a qualified route**.
+The existing `BCryptGenRandom` call produces a public instance identifier. That
+test does not qualify secret seed storage or provider scratch. The API is
+available inside VBS enclaves, but its random-output contract does not establish
+the stronger scratch/register-erasure property needed here. Calling it before
+other secrets exist does not make the new private seed public.
+[Available APIs](https://learn.microsoft.com/en-us/windows/win32/trusted-execution/enclaves-available-in-bcrypt),
+[Random-output contract](https://learn.microsoft.com/en-us/windows/win32/api/bcrypt/nf-bcrypt-bcryptgenrandom).
+
+A directly consumed hardware entropy source is a possible **separate research
+route**, not an assumed solution: availability inside the enclave, failure/retry
+bounds, entropy assumptions, conditioning, register/spill cleanup and supported
+CPU coverage all require qualification. No RDRAND/RDSEED implementation is present
+in the current crate sources. CPU feature presence alone would not close this.
+The existing [`SecureRandomEngine`](../crates/brynja-core/src/secure_random.rs)
+is a provider contract/lifecycle abstraction, not the missing entropy mechanism.
+
+These shortcuts fail the stated requirement:
+
+| Bootstrap shortcut | Why it does not close this design |
+| --- | --- |
+| Copy a host-generated seed or pre-shared key into the enclave | Reuses the unresolved plaintext transfer for the most important secret |
+| Derive the key from public IDs, clocks or public randomness | Does not establish secret unpredictable key material |
+| Embed a universal private key in the DLL | Distributes the key with the readable artifact; not secure provisioning |
+| Provision an application-specific private key in an image | Adds key distribution and at-rest exposure; no qualified provisioning path exists here |
+| Add a second enclave | Moves first-secret ingress somewhere else; does not solve that ingress |
+| Unseal a seed using the SDK | Adds an SDK plaintext-output path instead of removing it |
+
+Sealing/unsealing can serve a different platform-backed storage contract, but
+these APIs explicitly consume or produce plaintext; they cannot be treated as
+an SDK-free key bootstrap. Persistence and rollback are deliberately excluded
+from the initial candidate.
+[Seal API](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavesealdata),
+[unseal API](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclaveunsealdata).
+
+### Cryptographic and memory prerequisites
+
+The [current composition crate](../crates/brynja-crypto/src/lib.rs) implements
+hash/KMAC families but explicitly lacks AEAD, KDF and public-key implementations.
+The [existing schedule](../requirements/roadmap-schedule.json) still plans HMAC,
+HKDF, AES-GCM, X25519, DRBG mechanisms and HPKE. Their interfaces and roadmap
+entries are not implementations. No milestone is moved by this assessment.
+
+HPKE is a candidate published construction, not a complete channel selected
+for implementation here. It combines KEM, KDF and AEAD; application framing,
+identity and authorization still need review. HPKE is unidirectional, does not
+hide lengths or solve cross-session replay, and base mode does not authenticate
+the sender. Response traffic must use a separately reviewed directional key
+schedule/context, not reverse the request context. A possible future suite is
+DHKEM(X25519, HKDF-SHA256), HKDF-SHA256 and AES-GCM, subject to the required
+security-strength policy; this is not a military or post-quantum claim.
+[RFC 9180](https://www.rfc-editor.org/rfc/rfc9180.html#section-9).
+
+Existing SHAKE/KMAC must not be repurposed into an invented stream cipher or
+AEAD to avoid those prerequisites. Calling CNG encryption/ECDH would both put
+secret processing back into unqualified platform code and violate the
+[first-party cryptography rule](first-party-rust-cryptography.md). Existing OS
+image-trust services are not permission to delegate application cryptography.
+
+The sender is a separate blocking obligation. A local Brynja adapter would
+consume the caller's original bytes but own ephemeral keys, expanded schedules,
+plaintext temporaries, registers and stack spills. Those need the promised
+residency/dump/cleanup boundary too; ordinary host allocations plus a final wipe
+are not equivalent. Moving them into an enclave first would recreate the ingress
+problem. An external sender may own that responsibility under a **new explicit
+API contract**, not by silently relabeling library-owned copies as caller-owned.
+
+### Candidate lifecycle and failure rules
+
+The following is a review specification, **not a frozen wire format or executable
+protocol**. It becomes implementable only after the prerequisites above pass.
+
+```text
+Admit and preallocate -> Generate and retain private key -> Bind public identity
+ -> Establish authenticated session -> Copy bounded ciphertext -> Private compute
+ -> Clear transient state -> Publish ciphertext/public result -> Retire session
+```
+
+All OS allocation, page validation and thread setup precede private computation.
+Key generation/decapsulation/decryption share its SDK-free, cleared-window
+requirements. Before an attestation or transport call, only public values remain
+in Brynja-owned live scratch; intentionally retained keys remain in dedicated protected slots.
+Strict containing-process access stays enabled. No SDK callback receives a
+plaintext/key address, and no status/log string is derived from secret bytes.
+Incoming-register provenance and public-only SDK call boundaries still require
+their own proof; adding AEAD does not qualify those paths automatically or erase
+excluded caller-owned register state.
+
+| Boundary | Required behavior before any channel implementation can be accepted |
+| --- | --- |
+| Setup | Bind a canonical transcript to role, protocol/suite, admitted image/live instance, public keys and fresh challenge; validate peer key and identity before sending secret input; perform key confirmation |
+| Input | Cap and snapshot the complete ciphertext/header once; authenticate session, direction, operation, sequence, lengths, output policy and object/plan/lane generation; no borrowed host reference survives the copy |
+| Decryption | Keep unauthenticated plaintext private and disposable; expose nothing to the algorithm or public output until authentication succeeds; clear full scratch capacity on rejection |
+| Streaming | Commit each authenticated command once; require expected sequence and explicit finalization, reject replay/gaps/overflow; never recycle a nonce after an uncertain attempt |
+| Failure | Bad authentication or uncertain protocol state terminates the session and clears its owned state; no plaintext fallback or automatic retry with reused key/nonce; ordinary size preflight rejects before consuming input |
+| Output | Keep secrets in enclave-owned handles or encrypt for an authorized recipient; public output still needs explicit declassification and authenticated operation binding; partial copy failure must not permit a second execution |
+| Teardown | Retire all transient and retained secrets before releasing pages; fatal cleanup failure is not successful erasure; a new process/session uses new keys, never resumes a rolled-back counter |
+
+The first possible canary is one ephemeral session, one outstanding bounded
+SHA-256 request, retained result/cancel and explicit public output. Exclude
+resumption, persistent keys and rekey-in-place. Its precise key schedule,
+authentication mode, record encoding, limits and acknowledgements require an
+independent protocol review before implementation. Do not claim this table is
+that review or that AEAD alone hides request timing/length metadata.
+
+Later batch/ParallelHash work must authenticate plan, generation, lane and order
+without serializing the actual computation. CVs and keys stay in protected slots;
+the host schedules public descriptors/ciphertext, joins all workers, and cannot
+retire a slot while a worker still owns it. A transport loss with an uncertain
+commit destroys the session rather than guessing whether to replay a command.
+
+### Stop conditions and reopening plan
+
+The current result is **design complete, implementation blocked**, not a new
+security finding. Do not spend further 08A passes on the unchanged copy canary or
+start 08B/08C migration as though encryption were available. A future implementation
+proposal needs these finite deliverables, in order:
+
+1. **Bootstrap and sender feasibility:** qualify secret entropy/key creation and
+   sender-owned memory/register lifetimes under the chosen local or external
+   endpoint contract. Stop if either merely moves the unresolved SDK plaintext
+   problem to another API, process or enclave.
+2. **First-party foundations:** implement and independently review the selected
+   KEM, KDF and AEAD with complete secret ownership, portable/reference behavior,
+   applicable hardware/SIMD routes and compiler/platform evidence. This is a
+   substantial roadmap dependency, not another wrapper change in 0.24.50.
+3. **Protocol specification:** freeze identity/authorization, directional keys,
+   framing, sequencing, key confirmation, failure and shutdown behavior; review
+   it independently. Reject unsupported profiles without downgrade.
+4. **One-image qualification:** use official primitive vectors, an independent
+   interoperable peer, malformed/replayed/reordered/reflected records, wrong
+   identity/debug policy, partial copies, authentication failure, overflow,
+   cancellation/reentry and cleanup mutants. Recompute actual emitted bounds
+   for new crypto and prove that all SDK-visible buffers are public/ciphertext.
+   Then, and only then, resume 08B–08D while reusing unchanged kernel evidence.
+
+**Recommendation:** do not add encrypted transport as a rushed fix to this
+candidate. Keep 08 blocked under the owner's chosen stronger requirement. Seek
+the missing platform evidence or separately approve bringing the prerequisite
+work forward; neither has been authorized by approval of this design-only pass.
+A narrower Windows release scope would also require an explicit owner decision,
+not a documentation-only declaration of success. No new server, production
+certificate, cloud account or long verification run resolves these prerequisites.
 
 ## What the completed reconciliation establishes
 

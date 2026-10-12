@@ -79,10 +79,15 @@ continuation check covers both copy directions and both thread-pointer branches:
 new and fourteen predecessor tests pass on each host with matching reports.
 This is not an observed leak; it confirms the remaining OS-return provenance
 cannot be inferred from SDK success or ABI volatility. The next action is a
-design decision, not more family migration or an unchanged full test sweep:
-obtain the missing platform evidence, or approve a design-only investigation of
-authenticated ciphertext transport and its bootstrap. The linked design records
-scope, stop conditions and why that protocol is not yet authorized/implemented.
+design decision, not more family migration or an unchanged full test sweep.
+The owner approved the ciphertext-transport feasibility investigation; it is
+now complete with **NO-GO for immediate implementation**. Qualified secret
+bootstrap, first-party KEM/KDF/AEAD and sender-side protected key/plaintext
+handling are missing prerequisites. The linked design distinguishes trusted
+local identity from remote attestation, specifies candidate lifetime/failure
+requirements and gives four finite reopening deliverables. No crypto, protocol,
+gate or roadmap reordering was implemented. Next requires missing platform
+evidence or separate approval to bring those foundations forward; 08 stays blocked.
 
 Remaining, in the existing finite plan:
 

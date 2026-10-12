@@ -14,9 +14,15 @@ Pass 2 now binds twelve selected scalar/AVX2 leaf bodies and handlers for
 absorption progression, exact completion, right encoding and CV/counter cleanup.
 The combined 128-test suite passes on both hosts, with matching parsed reports;
 actual COFF instructions are used where the separately emitted listing differs.
-Caller/lifetime composition remains explicit; package 7 and pass 2 are not
-closed. Next: sequential state/owner composition, customization/rehash, retained
-output and original-allocation/failure/retirement paths.
+The [root-framing follow-up](../assurance/windows-protection-observations/parallel-root-framing-20261012.json)
+adds twelve root/caller/handler bodies covering setup conversion, block/output
+encoding, checked finalization and retained-output rehash order. The combined
+141-test suite passes on both hosts with matching reports; 6,852 instruction
+byte and 380 branch mutations are rejected. Earlier scalar private-frame
+copies remain explicit package-8 window-retirement obligations, not erased by
+the original setup's cleanup. Package 7 and pass 2 are not closed. Next:
+transitive state/owner composition, original allocation/authority lifetimes,
+export/cancellation and remaining failure/resident/page retirement paths.
 
 - Finish transitive normal-return cleanup qualification inside the remaining
   distinct ParallelHash workers, especially

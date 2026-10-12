@@ -117,13 +117,66 @@ executed by this component campaign. Native enclave identities and complete
 window/register retirement remain the final reconciliation's responsibility.
 No production implementation or release-gate rule changed.
 
+## Pass 2 progress: actual normal-call composition
+
+The [stack-geometry observation](../assurance/windows-protection-observations/stack-geometry-20261012.json)
+records **96 passing tests per host**, no skips, matching freshly parsed reports
+and 277 checker-source bindings. These bindings include imported prerequisites;
+they are not 277 separately completed semantic proofs. An initial Windows replay
+failed because its transfer bundle omitted a lazily imported checker. That log
+was retained, the bundle was corrected, and the full suite then passed.
+
+The original signed images—not a newly compiled surrogate—supply the instruction
+bytes. LLVM 23.1.2 disassembly is rebound instruction by instruction to those
+images and their original COFF references. Windows replays the same retained
+disassembly; this is a second-host analysis, **not an independent decoder**.
+
+The analysis covers all **925 normal function instances**, separately retaining
+the 98 exception-cleanup funclets. It checks finite control-flow joins, balanced
+normal returns and tail transfers, saved-register push/pop order, explicit stack
+adjustments, constant probes, 16-byte call alignment and both possible entry
+residues for 32-byte realignment. Local jump-table targets are read from the
+bound original tables. Existing family proofs of valid table indices and
+pointer/storage lifetimes remain prerequisites, not consequences of this scan.
+
+All **132 metadata-less leaves** now have instruction-level stack checks. The
+only explicit stack-memory access in that population reads four bytes of the
+fifth argument at entry RSP+40. Its callers must have at least 36 bytes of
+allocated outgoing space, including through tail wrappers. No leaf is assigned
+zero *transitive* depth merely because it lacks unwind metadata. For nonleaf
+bodies, stack-alias lifetimes and argument contents continue to rely on the
+completed family reviews; allocated capacity alone does not prove non-overlap.
+
+The cumulative graph includes **6,085 direct call/tail sites** and **44 indirect
+calls**. Direct edges retain exact COFF symbol identities, including folded
+aliases. The three SIMD family reviews are executed again to establish the
+indirect population and internal callback provenance. For stack depth, each site
+conservatively admits either of its two checked stack-free internal callbacks.
+No caller-provided callback or unknown function is treated as an empty leaf.
+
+Composition accounts for nested return slots, actual alignment padding, caller
+home/argument capacity, runtime saves and tail transfers without adding a second
+return slot. The largest reviewed worker/runtime portion is **25,048 bytes**.
+That is **not a complete protected-window bound**: the reports retain 54 distinct
+named C transport, scheduler and abort boundaries, with the deepest prefix and
+a witness path for each. An unresolved suffix stays unknown; it is never zero.
+These are the interfaces to the existing transport/SDK reviews, not 54 new
+cryptographic implementations to review.
+
+Regressions reject missing/truncated instructions, mid-instruction branches,
+incorrect indirect-call encodings, insufficient home or fifth-argument space,
+misalignment, unmatched saves, unknown stack writes, growing loops, recursive
+call graphs and lost external boundaries. This does not qualify arbitrary
+exceptions, fatal exits, live SDK imports, final window erasure or a new enclave
+execution. Package 08 remains open.
+
 ## Remaining package-08 passes
 
-1. **Finish pass 2:** compose the now-bound local frames and runtime helpers with
-   the actual normal-return call graph. Resolve all leaf stack accesses,
-   outgoing home space, dynamic alignment and indirect-call depths; finish
-   caller operand/OS-limit prerequisites. Do not count unassigned SDK edges as
-   zero-depth calls or confuse an individual frame size with the whole window.
+1. **Finish pass 2:** join the completed worker/runtime graph at its named C
+   transport/scheduler boundaries to the existing SDK and outer-wrapper reviews.
+   Reconcile the resulting complete-window depth and caller/OS stack-limit
+   prerequisites. The worker graph, leaf accesses, alignment and indirect depths
+   above need not be restarted unless their bound implementations change.
 2. **Pass 3:** reconcile the loaded application/import contracts, complete outer
    clear/readback and register-return boundaries, and exact compiler/platform
    scope across the nineteen routes. Run targeted live observations where the

@@ -18,8 +18,15 @@ outer-cleanup reconciliation. Pass 2 has now bound arithmetic/compare/probe help
 and reconciled 4,758 allocation instructions across 1,023 worker bodies. Its
 61-test suite passes on both hosts with matching reports; 13,302 arithmetic/
 comparison and 58,482 memory cases pass the native ABI-sentinel campaign. The
-cumulative call graph, leaf stack accesses and caller/SDK prerequisites remain
-open; local frame checks do not close pass 2 or qualify the images.
+subsequent stack-geometry suite passes **96 tests on each host**, with matching
+fresh reports. It composes 925 normal bodies, all 132 metadata-less leaves,
+6,085 direct call/tail sites and 44 provenance-checked indirect calls. The largest
+known worker/runtime portion is 25,048 bytes, **not a whole-window bound**.
+The remaining join is explicit: 54 named C transport/scheduler/abort boundaries
+must connect to their existing SDK/outer-wrapper reviews and caller/OS
+prerequisites. No unknown callee is counted as zero. Pass 2 and whole-image
+qualification remain open; the completed worker graph need not be repeated
+without changes to its bound inputs.
 
 Remaining, in the existing finite plan:
 

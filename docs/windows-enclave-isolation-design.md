@@ -1,6 +1,6 @@
 # Windows secret-execution isolation: package 08 follow-up
 
-Status: **research stopped by owner; bounded cleanup reconciliation remains open**
+Status: **research deferred; bounded cleanup author reconciliation complete**
 (2026-10-12). The owner has superseded the earlier decision to block package 08
 on stronger SDK/OS isolation. Retain the implemented hardening, tests and research
 records, document the limits honestly, and return to completing the existing
@@ -33,10 +33,12 @@ that the original families acquired an SDK-free compute boundary. Reopening the
 deferred work requires a concrete consumer need or new evidence and a separately
 approved scope; no future release date is assigned.
 
-**Package 08 is not closed by this decision.** Its next task is to reconcile the
-existing nineteen-image evidence and public claims against this bounded scope,
-identify any remaining in-scope gaps, and run only affected checks. Package 09
-then prepares the candidate for independent retest. The current pentest stays
+**The decision itself did not close package 08.** The subsequent
+[bounded reconciliation](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+now records conditional author completion for the original nineteen images,
+including fresh regression replay and the explicit claim-to-evidence map.
+It does not satisfy the stronger research criteria preserved below. Package 09
+now prepares the candidate for independent retest. The current pentest stays
 RETEST REQUIRED; the existing release gates, production-signing limits and
 platform qualification requirements remain unchanged. See the
 [current completion checklist](windows-v02450-remaining.md).

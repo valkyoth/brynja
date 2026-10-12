@@ -13,9 +13,107 @@ whole-image erasure claim. After the feasibility review, the owner explicitly
 stopped the stronger-isolation research on 2026-10-12 and accepted a bounded,
 conditional Brynja-owned cleanup scope. This supersedes the earlier decision to
 require an SDK-free redesign for this release; it does not establish SDK/OS
-erasure or close package 08 automatically. Next is reconciliation of existing
-evidence and claims under the accepted scope, followed by independent retest.
-Historical family checkpoints below retain their original scope and limitations.
+erasure or close package 08 automatically. The bounded reconciliation below
+records its separate author-review outcome. Historical observations and their
+false whole-image qualification flags retain their original meaning.
+
+## Bounded cleanup claim and evidence map
+
+Package 08 is complete at **conditional author-review scope** for the original
+nineteen saved Windows x64 development images. This closes the finite review
+task under the owner's accepted scope, not the stronger whole-image claim.
+It does not declare the candidate independently reviewed, production-qualified
+or ready to tag. The [reconciliation receipt](../assurance/windows-protection-observations/bounded-cleanup-20261012.json)
+binds the replay and reuse checks; [candidate preparation](windows-v02450-remaining.md)
+is next.
+
+The supported cleanup statement is deliberately narrow: the reviewed emitted
+paths clear their named Brynja-owned regions and kernel working registers;
+on return through the reviewed outer wrapper, all 65,536 bytes of the admitted
+window are cleared and read back. This is conditional on successful platform
+admission, valid exclusive original allocations, the reviewed CPU/ABI contracts,
+and control actually returning through that wrapper. It is **not** evidence that
+every secret-derived copy remained inside the window throughout execution.
+
+| Region or boundary | Evidence supporting the bounded claim | Condition or exclusion |
+| --- | --- | --- |
+| Named algorithm owners, scratch, temporary outputs and invoked cleanup handlers | Family reviews in the route map below bind actual COFF bodies, linked destinations, ownership and clearing events | An invoked handler is not proof that Windows invokes it on every exception; inactive/moved copies require allocation or window retirement |
+| Sequential retained pages | [Worker lifecycle reconciliation](windows-enclave-worker-reconciliation.md) and family placement/destruction checks | Typed owner destruction precedes full 4,096-byte page retirement; serialization and the original page identity are required |
+| Concurrent root, leaf slots and backing storage | [ParallelHash three-route review](windows-enclave-parallel-chains.md), publication/join and native scheduler contracts | Native workers and Rust tickets must be quiescent before reuse/retirement; scalar and concurrent evidence are not interchangeable |
+| Private call windows, frame saves and in-window compiler copies | [Outer-window inspection](../assurance/windows-protection-observations/outer-window-20261012.json) binds both wrappers and all nineteen images | Exact 8,192-word clear/readback on returning paths; no bound on all SDK/OS stack use or arbitrary interruption paths |
+| Kernel working registers and the outer volatile-register boundary | Family kernel reviews plus actual wrapper instructions and control-flow tests | The wrapper clears XMM0–5 and selected volatile GPRs and conditionally executes `vzeroupper`; it preserves required Win64 ABI state, not every incoming register or AVX-512 state |
+| Memory, division, comparison and stack-probe helpers | [Runtime review](windows-enclave-runtime-components.md), [stack composition](../assurance/windows-protection-observations/stack-geometry-20261012.json) and [C bridges](../assurance/windows-protection-observations/stack-bridge-20261012.json) | Exact saved implementations and call geometry, not universal runtime erasure or a complete transitive stack bound |
+| Application image and imported-library admission | [Image admission](windows-enclave-image-admission.md) | Reviewed main-file bytes and Windows loader/import-author enforcement; this does not pin or attest every loaded SDK byte |
+| Public export and cleanup failure | Family export/receipt checks and outer readback control flow | Discard results on failure. A failed OS copy can expose a prefix; a later revocation does not retract earlier authorized output. Fatal abort is not cleanup success |
+
+The wrapper entries are `H-104` for sequential workers and `H-216` for concurrent
+workers, where `H` is the window high address. The deepest **known prefix** is
+25,152 bytes. Unknown SDK diagnostic, metadata-dispatch and OS paths remain
+unknown, not zero-depth. Complete spill confinement, SDK copy scratch erasure,
+diagnostic/context storage and arbitrary incoming/OS-return register provenance
+are outside this conditional statement. The research did not demonstrate a secret
+disclosure; accepting this limitation does not prove those properties.
+
+### Route coverage
+
+Every row below uses the original signed image identity in the
+[nineteen-route catalog](../assurance/windows-protection-observations/current-image-routes-complete-20261004.json).
+No isolated-canary image substitutes for a family image. Each family conclusion
+remains conditional on the shared boundary conditions above.
+
+| Original routes | Count | Family evidence |
+| --- | ---: | --- |
+| Retained bounded SHA-256 | 1 | [Owner](windows-enclave-bounded-owner.md), [input](windows-enclave-bounded-input.md), [compression](windows-enclave-bounded-sha256.md), [export](windows-enclave-bounded-export.md) |
+| Streaming SHA-2 scalar and SHA-NI | 2 | [Scalar operations](windows-enclave-sha2-stream-operations.md), [runtime/export](windows-enclave-worker-reconciliation.md), [SHA-NI owner](windows-enclave-sha-ni-owner.md), [SHA-NI engine](windows-enclave-sha-ni-engine.md) |
+| SHA-3/SHAKE/cSHAKE scalar and AVX2 | 2 | [Scalar chain](windows-enclave-sha3-chain.md), [AVX2 chain](windows-enclave-sha3-avx2-chain.md) |
+| KMAC/KMACXOF scalar and AVX2 | 2 | [KMAC chains](windows-enclave-kmac-chains.md) |
+| TupleHash/TupleHashXOF scalar and AVX2 | 2 | [TupleHash chains](windows-enclave-tuple-chains.md) |
+| Sequential SHA-2 scalar/SHA-NI batches and SHA-256/SHA-512 AVX2 SIMD batches | 4 | [Four-route completion](windows-enclave-sha2-batch-chains.md) |
+| Sequential SHA-3 scalar/AVX2 batches and Keccak AVX2 SIMD batches | 3 | [Three-route completion](windows-enclave-sha3-batch-chains.md) |
+| ParallelHash scalar, sequential AVX2 and concurrent AVX2 | 3 | [Three-route completion](windows-enclave-parallel-chains.md) |
+
+### Returning and exceptional paths
+
+Successful operations, ordinary request rejection and cancellation retain their
+family-specific output, reuse and quarantine rules. Whenever the reviewed outer
+wrapper returns normally, its clear/readback path is mandatory, including denied
+worker admission. A dirty readback is rejection, not a successful cleanup receipt.
+The original wrappers must not be confused with the later experimental
+fatal-on-dirty canary.
+
+Reviewed Rust cleanup funclets describe what happens **if invoked** with their
+valid parent frame. They do not establish arbitrary Windows exception dispatch,
+cleanup after process termination or a successful return after fatal abort.
+Caller-owned buffers, by-value application copies, signal/exception snapshots,
+hibernation, privileged dumps and hypervisor capture remain outside the guarantee.
+
+### Reuse and compiler limits
+
+The replay uses the original PE/COFF artifacts and retained LLVM 23.1.2 decoding,
+not a new compiler build or an independent disassembler. The saved Rust-family
+builds use Rust 1.98.1 for `x86_64-pc-windows-msvc`; their emitted-code evidence
+does not automatically transfer to another Rust, MSVC, SDK or optimization
+configuration. The exact build commands and source manifests remain with the
+saved artifacts. Source compatibility with a newer Rust release is a separate
+claim from machine-code cleanup qualification.
+
+All 249 existing outer/runtime/stack regressions pass on fresh local replay,
+with no skips and an identical parsed report to both earlier host runs.
+All 285 checker and 30 test bindings remain current. The selected 48 build
+manifests contain 9,975 matching source entries covering 591 unique paths.
+The older KMAC checker gained defaulted parameters for TupleHash reuse; a fresh
+19-test saved-artifact campaign passes and its semantic report matches both
+earlier host reports. This is explicit revalidation, not silently refreshing
+the old checker hash. Original receipts, including unsuccessful local replay
+bookkeeping, are retained outside `target/`.
+
+No new native enclave execution, production signing, Windows ARM64 qualification
+or independent retest is claimed. No release-gate rule, product code, source
+manifest or existing qualification flag changed. Stronger isolation research
+stays deferred; package 09 must present these limits consistently to reviewers
+and consumers before the independent retest.
+
+## Historical family checkpoints
 
 The [AVX2 SHA-3 inner-chain completion](windows-enclave-sha3-avx2-chain.md)
 accounts for 53 main functions and eight cleanup funclets, exact linked dispatch

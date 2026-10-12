@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "date": "2026-10-12",
+  "baseline": "409ca88b",
+  "status": "CONDITIONAL_AUTHOR_BOUNDED_CLEANUP_RECONCILIATION_COMPLETE",
+  "completion_package": 8,
+  "conditional_author_review_complete": true,
+  "scope": "Original nineteen Windows x64 development images; evidence-covered Brynja-owned regions and working registers on reviewed returning paths, subject to platform and ABI conditions.",
+  "owner_scope_decision_commit": "409ca88b",
+  "whole_image_qualified": false,
+  "whole_window_maximum_proven": false,
+  "loaded_module_attestation": false,
+  "arbitrary_exception_cleanup_qualified": false,
+  "independent_retest": false,
+  "production_qualified": false,
+  "production_changed": false,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "existing_observation_flags_changed": false,
+  "research_canaries_substituted": false,
+  "original_images": 19,
+  "outer_window_bytes": 65536,
+  "largest_known_prefix_bytes": 25152,
+  "validation": {
+    "fresh_linux": {
+      "schema": 1,
+      "status": "BOUNDED_RECONCILIATION_REPLAY_PASS",
+      "tests": 249,
+      "skips": 0,
+      "errors": 0,
+      "failures": 0,
+      "seconds": 93.6275987625122,
+      "checker_bindings": 285,
+      "test_bindings": 30,
+      "original_images": 19,
+      "fresh_report_matches_both_prior_hosts": true,
+      "prior_stronger_scope_flags_unchanged": true,
+      "whole_image_qualified": false,
+      "new_native_enclave_run": false,
+      "independent_retest": false,
+      "release_gate_changed": false,
+      "runner_sha256": "7179d6df44fe29bd11a92da939b16958387c691f388d333412c11d5fc126fb13"
+    },
+    "windows": "Reused unchanged 249-test Windows report; parsed equality and current checker/test bindings verified.",
+    "kmac_fresh_linux_tests": 19,
+    "kmac_skips": 0,
+    "kmac_semantic_report_matches_both_prior_hosts": true,
+    "historical_kmac_checker_change": "cac71ab0 added defaulted parameters for TupleHash reuse. Fresh KMAC replay revalidates semantics without rewriting the earlier checker pin.",
+    "initial_local_replay": "All 249 tests passed; report comparison rejected Python tuples versus parsed JSON arrays. Corrected by JSON round-trip on the fresh side with every field retained; full replay passed. Failed log preserved."
+  },
+  "source_reuse": {
+    "selected_build_manifests": 48,
+    "matching_source_entries": 9975,
+    "unique_source_paths": 591,
+    "rust_family_compiler": "1.98.1",
+    "target": "x86_64-pc-windows-msvc",
+    "retained_decoder": "LLVM 23.1.2",
+    "qualification_transfers_to_other_builds": false
+  },
+  "conditions": [
+    "Successful original page/window and CPU admission; exclusive valid allocations and serialized or reviewed concurrent lifetimes.",
+    "Reviewed runtime, platform stack and Win64 ABI contracts; no assumption that unknown SDK depth is zero.",
+    "Control returns through the reviewed outer clear/readback boundary; cleanup failure is not success.",
+    "Family-specific public output policy; failed copies may expose a prefix and are not rolled back."
+  ],
+  "exclusions": [
+    "Complete SDK/OS copy scratch and diagnostic/context erasure.",
+    "Arbitrary incoming/OS-return register provenance and complete transitive spill confinement.",
+    "Arbitrary exception/interruption, fatal abort, snapshots, hibernation and caller-owned copies.",
+    "Windows ARM64 and production-signed deployment qualification."
+  ],
+  "observation_sha256": {
+    "worker-reconciliation-20261005": "9464e1fa153df642877663f294cb1a4c54bef387c9b754b79dafcd95a929e114",
+    "sha3-chain-review-20261006": "1bbcbc02c77167f4b41a2b7b450fcca487981a9caa5438d4ff11dbb9f10a132f",
+    "sha3-avx2-chain-review-20261006": "48603ca61a0d02d7f62f9a88e778be8eb4a9027ecccf558309ca9d3c4c02ac8e",
+    "kmac-chain-complete-20261006": "64314f72e1e64a382ee8a2e2e0860e06afa8969e1c8fe0374051a35b7d2df28f",
+    "tuple-chain-completion-20261006": "1dbc95e1360fb8249671dce720bcb4a17ee5c7e7591ba168cbfc9b5c6c2bd454",
+    "sha2-batch-completion-20261007": "6efc36ab153b5b0c060688c5a5816e067c94bff9eddf3a5c2b63dd8c33437d8e",
+    "sha3-batch-completion-20261012": "3bb303deaaaf397e4c6474ac786d586f5f9f67aa72d626a1e6771123eca92314",
+    "parallel-chains-20261012": "25f367439b7fcb3b3126cea7e1e4ba61cdb3f484182a3fbed6b5ac5a090f5b75",
+    "outer-window-20261012": "99e5d92bab3980735da2543d6651bc0dc88efe1718a0316207b14fa0bdfb889a"
+  },
+  "routes": [
+    {
+      "route": "mod.rs::open",
+      "image": "bounded-cleanup-admitted/signed.dll",
+      "sha256": "ec6dadd55928b7cbe7fd0eef74900981e4054247477ad46080024003637d5494"
+    },
+    {
+      "route": "sha2/mod.rs::open",
+      "image": "sha2-scalar-cleanup-admitted/signed.dll",
+      "sha256": "bc8932575def29277263f49c1fe9b912f9a1166e6703ac1f609eef90f63beeab"
+    },
+    {
+      "route": "sha2/mod.rs::open_sha_ni",
+      "image": "sha2-stream-cleanup-admitted/signed.dll",
+      "sha256": "ca5806be2e78ae43f4942b0733bb94bef1e5c75dfa2250d98408dfda74c77d0a"
+    },
+    {
+      "route": "sha3/mod.rs::open",
+      "image": "sha3-scalar-cleanup-admitted/signed.dll",
+      "sha256": "76bdf18e31b935535ca7a36a5d694abbe14de4a3179076a2fd452d3c5f259718"
+    },
+    {
+      "route": "sha3/mod.rs::open_avx2",
+      "image": "sha3-stream-cleanup-admitted/signed.dll",
+      "sha256": "28d01c3b932d22daad5cd2256aa9c31c5fb937a4846067eb991345ee7c7449fa"
+    },
+    {
+      "route": "kmac/mod.rs::open",
+      "image": "kmac-scalar-cleanup-admitted/signed.dll",
+      "sha256": "bbe6218b52e86b49379597a13129604f8fc7708f4a62b4c7bbc0e387d4173e33"
+    },
+    {
+      "route": "kmac/mod.rs::open_avx2",
+      "image": "kmac-stream-cleanup-admitted/signed.dll",
+      "sha256": "4c0f67100277e7750853ba7018ca73f0f68482133c3fdc6ee43ff975fe3abaae"
+    },
+    {
+      "route": "tuplehash/mod.rs::open",
+      "image": "tuple-scalar-cleanup-admitted/signed.dll",
+      "sha256": "43b9c988e2a622cc722311d33bfef5de67414357bc32f6c1692c7b09650cf09d"
+    },
+    {
+      "route": "tuplehash/mod.rs::open_avx2",
+      "image": "tuple-stream-cleanup-admitted/signed.dll",
+      "sha256": "c5942cba859ffdacd7e657d81ff2d3e25c5582cdb3aeb9754da511cb5f35bd38"
+    },
+    {
+      "route": "sha2_batch/mod.rs::open",
+      "image": "sha2-seq-scalar-cleanup-admitted/signed.dll",
+      "sha256": "042589239016c308226ab0a6d360d0fd7fc31b20368dd1beecc31cb1214a8e9e"
+    },
+    {
+      "route": "sha2_batch/mod.rs::open_sha_ni",
+      "image": "sha2-seq-accelerated-cleanup-admitted/signed.dll",
+      "sha256": "3dc8f854c97f7371411797daf2f88cbf54473f816fcfbf93dc52954d3c8905af"
+    },
+    {
+      "route": "sha3_batch/mod.rs::open",
+      "image": "sha3-seq-scalar-cleanup-admitted/signed.dll",
+      "sha256": "15ff86cc7baf709230411a0ce954ef5fb84ae249f132b4186b0ac186b428c4a8"
+    },
+    {
+      "route": "sha3_batch/mod.rs::open_avx2",
+      "image": "sha3-seq-accelerated-cleanup-admitted/signed.dll",
+      "sha256": "2d169d513ca393fe16f4ba25d88d5c4845dafe96532f22b8c9d47e0028a9e78c"
+    },
+    {
+      "route": "parallelhash/mod.rs::open",
+      "image": "parallel-seq-scalar-cleanup-admitted/signed.dll",
+      "sha256": "9fbeb3d6d940daf0ecd5172969d4160c3e6e71eb7465b279a11bbc1a77c3da13"
+    },
+    {
+      "route": "parallelhash/mod.rs::open_avx2",
+      "image": "parallel-seq-accelerated-cleanup-admitted/signed.dll",
+      "sha256": "f6eac516db512c188abc547ff27ade796ed73a8281363b68fd3fb89ff6996e79"
+    },
+    {
+      "route": "sha256_simd/mod.rs::open_avx2",
+      "image": "sha256-cleanup-admitted/signed.dll",
+      "sha256": "0478a4a68e5a4d49d3a3a192ad0787dbd1403f4547b68b50c2448e72c9bf30ee"
+    },
+    {
+      "route": "sha512_simd/mod.rs::open_avx2",
+      "image": "sha512-cleanup-admitted/signed.dll",
+      "sha256": "de3db80d9ed34ba99b523c9a36b7a52479cf730e47e4be1a8c14418451812510"
+    },
+    {
+      "route": "keccak_simd/mod.rs::open_avx2",
+      "image": "keccak-cleanup-admitted/signed.dll",
+      "sha256": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330"
+    },
+    {
+      "route": "parallel_concurrent/mod.rs::open_avx2",
+      "image": "scheduler-nospill-admitted/signed.dll",
+      "sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee"
+    }
+  ],
+  "local_evidence_directory": "release-reports/windows-worker-review-20261006",
+  "files_sha256": {
+    "bounded-reconciliation-20261012.json": "6b2167da68ef6eb877581d940678951d95e4c251a61b20ce69300c93b8fe9611",
+    "bounded-reconciliation-20261012.log": "13e79a816bb467cf390730254c818e76c0c5be92440e99198d6cab3937ac7e24",
+    "bounded-reconciliation-v2-20261012.log": "ec06ec895fb2bf9546c7ff54789c963e10ea3228e974e562995f6d7a2391298e",
+    "run-bounded-reconciliation.py": "7179d6df44fe29bd11a92da939b16958387c691f388d333412c11d5fc126fb13",
+    "bounded-inputs-20261012.json": "8b9f467f1d52af32be178910a4010b78dbf9c1881d81e8bfdfd2ecf4265b7cf7",
+    "reconcile-bounded-inputs.py": "2dcde4fd464f93af39a6ba5dbebc3648c17850117746325173c569963d0bd2fa",
+    "bounded-kmac-20261012.json": "98bb21265d3ee318009f742ea4fb90be75cfa31527857fc0fe364d3928a8b6e8",
+    "bounded-kmac-tests-20261012.log": "cb1fdff56fe5b0231f03e6ed93da7e9b150f1f54aebbdc79bbba9a002aec05cd"
+  },
+  "next": "Package 09: consistent consumer/support documentation, package checks and independent-pentest candidate. Existing gates remain unchanged."
+}

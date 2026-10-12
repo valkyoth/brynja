@@ -2,20 +2,29 @@
 
 ## Current completion checklist (2026-10-12)
 
-Packages 1–7 are complete at **conditional author-family review** scope.
+Packages 1–8 are complete at **conditional author-review** scope. Package 8's
+[bounded cleanup reconciliation](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+maps all nineteen original routes to their owned-memory, register and exit-path
+evidence without asserting whole-image erasure. The fresh 249-test replay passes
+and matches the earlier Linux/Windows reports; the affected KMAC checker also
+passes its 19-test replay with unchanged semantic results. Existing qualification
+flags remain false. **Next is package 9, candidate preparation**, not more
+isolation research, native recollection or an automatic full sweep.
+
 The [ParallelHash family reconciliation](windows-enclave-parallel-chains.md)
 closes package 7 across 198 emitted bodies and 17 cleanup funclets. Its final
 219-test suite passes on Linux and Windows with no skips, matching fresh reports
 and 104 current checker-source bindings. This is not whole-image qualification
 or an independent retest; no production Rust or release-gate policy changed.
 
-Package 8 now has a three-pass execution plan. Its first
+Package 8 followed a three-pass execution plan. Its first
 [runtime-component pass](windows-enclave-runtime-components.md) is complete:
 nineteen image/helper/selector/startup chains, 43 passing tests on each host,
-matching reports and 58,482 guarded Windows component cases. The remaining two
-passes cover cumulative stack/ABI/runtime contexts and final loaded-import/
-outer-cleanup reconciliation. Pass 2 has now bound arithmetic/compare/probe helpers
-and reconciled 4,758 allocation instructions across 1,023 worker bodies. Its
+matching reports and 58,482 guarded Windows component cases. The subsequent
+passes covered cumulative stack/ABI/runtime contexts and final loaded-import/
+outer-cleanup reconciliation at the bounded scope below. Pass 2 bound arithmetic,
+compare and probe helpers and reconciled 4,758 allocation instructions across
+1,023 worker bodies. Its
 61-test suite passes on both hosts with matching reports; 13,302 arithmetic/
 comparison and 58,482 memory cases pass the native ABI-sentinel campaign. The
 subsequent stack-geometry suite passes **96 tests on each host**, with matching
@@ -42,7 +51,8 @@ passes on both Linux and Windows with no skips and identical parsed reports.
 **Owner decision (2026-10-12): stop the stronger-isolation research and complete
 the existing Windows implementation under an honest, bounded cleanup scope.**
 This supersedes the earlier requirement to block this candidate until the SDK/OS
-isolation redesign is implemented. It does not close package 8 or establish
+isolation redesign is implemented. The decision alone did not close package 8;
+the subsequent bounded reconciliation above records author completion, not
 whole-image erasure. SDK diagnostic/context storage, copy scratch and arbitrary
 incoming/OS-return register contents remain unqualified; no actual secret
 disclosure was demonstrated by the copy-path investigation.
@@ -64,13 +74,6 @@ code, gate, roadmap ordering or qualification flags change with this decision.
 
 Remaining, in the existing finite plan:
 
-- **Package 8:** reconcile the existing nineteen-image evidence under the
-  accepted conditional Brynja-owned cleanup scope. Map every claimed region,
-  working-register boundary and covered exit path to its actual image/compiler
-  evidence; keep SDK/OS and caller exclusions explicit. Check current source and
-  artifact bindings, reuse valid results and run affected regressions where
-  needed. Resolve any remaining in-scope gaps before recording author completion;
-  do not promote the experimental canaries or claim whole-image erasure.
 - **Package 9:** reconcile documentation/support claims and packaging, run the
   relevant fast checks and prepare one reviewable independent-pentest candidate.
 - **Package 10:** obtain and record independent retests; fix and test any findings.

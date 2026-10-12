@@ -27,9 +27,16 @@ destruction, worker entry and buffer retirement. All 163 combined tests pass on
 both hosts, with matching reports; 4,831 instruction-byte and 264 branch mutants
 are rejected. Normal full-page erasure follows typed destruction; exceptional
 full-page/window erasure is not inferred. Scalar page/window non-overlap remains
-an external C precondition, unlike AVX2's explicit Rust check. Package 7 and pass
-2 are not closed. Next: request dispatch/export, transitive state/owner
-composition and remaining failure/lifetime prerequisites; then the concurrent
+an external C precondition, unlike AVX2's explicit Rust check.
+The [request/export follow-up](../assurance/windows-protection-observations/parallel-request-export-20261012.json)
+adds both receivers, the AVX2 decoder and its authority helper: 3,106 actual
+instruction bytes, all four operation/validation tables, exact retained-output
+identity/shape and full-output clearing. All 176 combined tests pass on both
+hosts, with matching reports and 94 current checker-source bindings. AVX2's
+post-copy authority check does not retract already copied authorized output;
+failed OS copies are not presumed atomic. Package 7 and pass 2 are not closed.
+Next: transitive state/owner composition and remaining failure/lifetime
+prerequisites; then the concurrent
 route and three-route reconciliation. Shared platform/runtime/full-window
 qualification remains package 8.
 

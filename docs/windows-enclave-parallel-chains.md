@@ -4,6 +4,9 @@ Package 7 is **open**. This is a saved-image author review, not a release gate,
 new native enclave run, independent retest or whole-image qualification.
 Production Rust, signed images and release-gate policy are unchanged.
 
+Latest progress: the sequential request/export follow-up below is validated;
+pass 2 still needs transitive owner/state composition. Passes 3–4 remain open.
+
 ## Finite completion plan
 
 1. Bind all three Rust populations, replay earlier primitive and selected
@@ -233,11 +236,69 @@ Package 8 retains shared C/OS, CPU-entry, runtime, cumulative-stack and full
 window-retirement qualification. No production Rust, saved image or release
 gate changed, and no new native enclave execution or independent retest occurred.
 
-Still required in pass 2: transitive state/owner caller composition, complete
-request dispatch/export handling, remaining failure paths and composition with
-the original allocation/authority lifetime prerequisites. The selected normal
+At this lifecycle checkpoint, request dispatch/export and transitive state/owner
+composition remained open. The follow-up below covers the selected request/export
+bodies; remaining caller/failure composition still needs the original allocation
+and authority lifetime prerequisites. The selected normal
 resident/page retirement and cancellation checks above are complete within
 their stated scope; they do not close package 7 or pass 2.
+
+## Pass 2 request admission, operation dispatch and retained export
+
+The [request/export record](../assurance/windows-protection-observations/parallel-request-export-20261012.json)
+records 176 passing tests without skips on Linux (18.593 seconds) and Windows
+(26.915 seconds), matching parsed reports and 94 current checker-source
+bindings. It includes the previous 163 tests and thirteen new regressions.
+The population, leaf, root-framing and lifecycle reviews are freshly replayed.
+
+Four additional actual bodies are checked: both sequential Rust receivers,
+AVX2 `Header::decode` and its post-copy `check_authority` helper. Their complete
+3,106 bytes have named instruction-span contracts. All instruction-byte
+mutations are rejected independently of the body-hash checker; 270 branch
+opcode/destination mutations are also rejected independently of those spans.
+
+The checks cover:
+
+- Fixed 112/128-byte header copying before any payload request; bounded payload
+  length, canonical empty/nonempty source and final-bit shapes, checked
+  source-end arithmetic, version, sequence, reserved and AVX2 route fields.
+- The nine operation identities, exact payload/output permissions, nonzero
+  begin/rehash block size, zero unused fields and full-byte update/nonterminal
+  squeeze requirements. A separate declarative validator cross-checks the
+  emitted unsigned-mask model at boundaries, pairwise shapes and 20,000 seeded
+  mixed valid/invalid headers. These models are not native execution.
+- All four indirect tables: two scalar subtables, AVX2 operation dispatch and
+  AVX2 decoder identity validation. Object section permissions, complete REL32
+  relocation populations, same-function targets, subtable bases and all 36
+  linked destinations are checked. Every one of the 144 linked table bytes is
+  individually mutated and rejected; a whole-object hash is not the only check.
+- Exact call targets and operation arguments. AVX2 reloads the original placed
+  owner from the same LIVE object as the outer entry, decodes the same local
+  copied header again and verifies its length matches the copied payload.
+  Neither receiver treats the untrusted source address as a direct Rust slice;
+  copying is delegated to the fixed transport, whose contract remains separate.
+- Export admission from exactly Retained/More, checked next sequence, exact
+  identity/width/last-bit agreement and original-owner field offsets. Successful
+  export clears all 1,024 retained bytes and shape metadata before publishing
+  Reader or Empty. The scalar width bound is supplied by header validation and
+  equality to the retained width; AVX2 also retains an explicit export bound.
+
+### Copy and private-frame limits remain explicit
+
+AVX2 checks authority **after** the authorized output copy. A subsequent
+authority failure revokes/clears/quarantines the owner but does not retract
+bytes already copied to the requested output. The model explicitly exercises
+that ordering; neither a failed OS copy nor an authority rejection is claimed
+to roll back external memory. The caller must discard output on failure.
+
+Receiver stack copies and ABI home space remain full-private-window obligations.
+These selected checks assume the original exclusive owner, serialized entry,
+fixed C/OS transport and returning callee contracts. Pass 2 still requires
+transitive state/owner and remaining failure/lifetime composition. Concurrent
+worker qualification and three-route reconciliation remain passes 3 and 4;
+shared whole-image qualification remains package 8. No production Rust, signed
+image or release-gate change, new enclave execution or independent retest is
+claimed by this follow-up.
 
 ## Reproduce the author checks
 
@@ -253,6 +314,8 @@ python3 scripts/cryptography/windows_enclave_parallel_framing.py SAVED_DIRECTORY
 python3 scripts/cryptography/test-windows-enclave-parallel-framing.py SAVED_DIRECTORY
 python3 scripts/cryptography/windows_enclave_parallel_lifecycle.py SAVED_DIRECTORY --mutate
 python3 scripts/cryptography/test-windows-enclave-parallel-lifecycle.py SAVED_DIRECTORY
+python3 scripts/cryptography/windows_enclave_parallel_request.py SAVED_DIRECTORY --mutate
+python3 scripts/cryptography/test-windows-enclave-parallel-request.py --saved-directory SAVED_DIRECTORY
 ```
 
 The tests reject missing/extra bodies or handlers, modified bytes/relocations,

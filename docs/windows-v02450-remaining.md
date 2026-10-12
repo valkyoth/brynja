@@ -39,61 +39,38 @@ workers and `H-216` for concurrent workers. The deepest known prefix is therefor
 The final [249-test suite](../assurance/windows-protection-observations/outer-window-20261012.json)
 passes on both Linux and Windows with no skips and identical parsed reports.
 
-**Package 8 remains blocked on SDK/OS isolation**, not an unnamed deeper-review
-task. On 2026-10-12 the owner chose stronger isolation instead of
-accepting conditional closure. SDK diagnostic/context paths do not have a proven
-complete bound or erasure guarantee; main-image hashing does not pin loaded SDK
-bytes. Existing evidence must not turn those unknowns into zero-depth callees.
-Completed worker and C graphs remain reusable for unchanged bound inputs.
+**Owner decision (2026-10-12): stop the stronger-isolation research and complete
+the existing Windows implementation under an honest, bounded cleanup scope.**
+This supersedes the earlier requirement to block this candidate until the SDK/OS
+isolation redesign is implemented. It does not close package 8 or establish
+whole-image erasure. SDK diagnostic/context storage, copy scratch and arbitrary
+incoming/OS-return register contents remain unqualified; no actual secret
+disclosure was demonstrated by the copy-path investigation.
 
-The proposed architecture separates transport/scheduling from a bounded,
-SDK-free secret-computation phase. The design names four completion packages:
-08A shared SHA-256 boundary and loaded-transport feasibility, 08B sequential
-family/SIMD migration, 08C concurrent scheduling, and 08D replacement-image
-qualification. **08A now also has a tested resident-staging canary**, not a
-qualified secret boundary: 33 Windows native cases, a guarded/locked staging page,
-full-page clear/readback before unlock/free, an expected fatal cleanup-omission
-control, and matching ten-node compute graphs with a 2,544-byte normal compute
-bound. Twelve focused tests pass on each host. A separate transport-data variant
-now binds the loaded SDK status tables and fixed formats (11,440 read-only bytes),
-passes 21 native identity controls and all 33 resident cases, and rebinds the same
-SDK-free compute bound. Thirteen additional tests pass on each host, with matching
-reports and byte/descriptor/call-target mutation checks. This does not qualify
-OS-return registers or deeper diagnostic contexts. The original 29-case canary and
-nineteen family images are preserved. Complete loaded transport payload handling,
-incoming-register qualification and final transport/storage-lifetime
-composition remain open before family migration. The normal wrapper/control
-geometry is now composed for the unchanged canary image: `H-40` entry plus a
-2,544-byte chain reaches `H-2584`; every normal return requires full-window
-clear/readback, while dirty readback terminates before SDK restoration. All 24
-control objects are non-overlapping. Nine additional tests pass on both hosts
-with matching reports. This is not a whole-thread or SDK/register guarantee.
-SDK plaintext-copy handling
-is a blocking feasibility prerequisite, not assumed safe merely because the
-copy is moved outside the compute window. See the linked design for exact exit
-criteria, preserved limitations and the executable call-graph prototype.
+Retain the implemented hardening and conditional family/worker evidence. Claims
+must stay specific to reviewed Brynja-owned regions, working registers and
+covered return/error paths under documented platform/ABI assumptions. Unknown
+SDK depth is not zero; the known 25,152-byte prefix is not a complete transitive
+bound. No caller-copy, privileged-snapshot, arbitrary-interruption or fatal-abort
+protection is newly claimed. In-scope defects still require fixes and tests.
 
-**08A has reached its explicit feasibility stop.** The new byte-bound success
-continuation check covers both copy directions and both thread-pointer branches:
-28–30 scalar instructions preserve any vector state returned by the OS. Eight
-new and fourteen predecessor tests pass on each host with matching reports.
-This is not an observed leak; it confirms the remaining OS-return provenance
-cannot be inferred from SDK success or ABI volatility. The next action is a
-design decision, not more family migration or an unchanged full test sweep.
-The owner approved the ciphertext-transport feasibility investigation; it is
-now complete with **NO-GO for immediate implementation**. Qualified secret
-bootstrap, first-party KEM/KDF/AEAD and sender-side protected key/plaintext
-handling are missing prerequisites. The linked design distinguishes trusted
-local identity from remote attestation, specifies candidate lifetime/failure
-requirements and gives four finite reopening deliverables. No crypto, protocol,
-gate or roadmap reordering was implemented. Next requires missing platform
-evidence or separate approval to bring those foundations forward; 08 stays blocked.
+The [research record](windows-enclave-isolation-design.md) preserves the 08A
+public-vector canaries, native controls, saved-image regressions and encrypted
+transport feasibility design. None replaces the original nineteen-image evidence.
+Proposed 08B–08D stronger-isolation migration and secret-channel foundations are
+deferred, not completed or scheduled into this release. Revisit only for a
+concrete need or new evidence with a separately approved scope. No production
+code, gate, roadmap ordering or qualification flags change with this decision.
 
 Remaining, in the existing finite plan:
 
-- **Package 8:** implement and validate 08A–08D from the stronger-isolation design.
-  Keep this package blocked until the SDK-free compute and transport prerequisites
-  are established; do not relabel the existing nineteen images as qualified.
+- **Package 8:** reconcile the existing nineteen-image evidence under the
+  accepted conditional Brynja-owned cleanup scope. Map every claimed region,
+  working-register boundary and covered exit path to its actual image/compiler
+  evidence; keep SDK/OS and caller exclusions explicit. Check current source and
+  artifact bindings, reuse valid results and run affected regressions where
+  needed. Resolve any remaining in-scope gaps before recording author completion;
+  do not promote the experimental canaries or claim whole-image erasure.
 - **Package 9:** reconcile documentation/support claims and packaging, run the
   relevant fast checks and prepare one reviewable independent-pentest candidate.
 - **Package 10:** obtain and record independent retests; fix and test any findings.

@@ -1,10 +1,53 @@
 # Windows secret-execution isolation: package 08 follow-up
 
-Status: **encrypted-transport feasibility complete; implementation NO-GO with current prerequisites** (2026-10-12). The owner chose
-to keep package 08 blocked and design stronger isolation, rather than accept a
-conditional cleanup claim. No release gate, production API or algorithm changes
-are made by this document or its executable design criterion. The separate canary
-below does not replace any of the nineteen existing family images.
+Status: **research stopped by owner; bounded cleanup reconciliation remains open**
+(2026-10-12). The owner has superseded the earlier decision to block package 08
+on stronger SDK/OS isolation. Retain the implemented hardening, tests and research
+records, document the limits honestly, and return to completing the existing
+Windows implementation. No production code or release gate changes follow from
+this scope decision.
+
+## Accepted scope and next action
+
+The accepted scope is **reviewed Brynja-owned memory and working-register cleanup
+on the paths covered by the actual evidence, conditional on the documented
+platform/ABI behavior**. It is not a guarantee that every byte touched anywhere
+in the process, SDK or OS is erased. Do not promote a known worker-stack prefix
+to a complete transitive bound, or treat SDK diagnostics as zero-depth callees.
+Claims must name the applicable image, compiler, route and exit-path conditions.
+
+In particular, the candidate does not establish complete erasure of SDK/OS copy
+scratch, diagnostic/context storage, or arbitrary incoming/OS-return register
+contents. Caller-owned copies, privileged snapshots, arbitrary interruption
+contexts and fatal-abort state retain their documented exclusions. The saved
+copy-path investigation did **not demonstrate a secret disclosure**; its missing
+erasure proof remains a limitation, not a defect now declared technically fixed.
+Actual correctness, memory-safety, ownership or cleanup defects within the
+accepted scope still require remediation and tests.
+
+The encrypted-channel/key-bootstrap research and the proposed 08B–08D
+stronger-isolation migration are deferred, not completed. The 08A public-vector
+canaries and all nineteen original family images remain distinct and unchanged.
+Do not automatically copy experimental canary changes into production or claim
+that the original families acquired an SDK-free compute boundary. Reopening the
+deferred work requires a concrete consumer need or new evidence and a separately
+approved scope; no future release date is assigned.
+
+**Package 08 is not closed by this decision.** Its next task is to reconcile the
+existing nineteen-image evidence and public claims against this bounded scope,
+identify any remaining in-scope gaps, and run only affected checks. Package 09
+then prepares the candidate for independent retest. The current pentest stays
+RETEST REQUIRED; the existing release gates, production-signing limits and
+platform qualification requirements remain unchanged. See the
+[current completion checklist](windows-v02450-remaining.md).
+
+## Preserved research record
+
+The checkpoints, proposed architectures, feasibility stop conditions and earlier
+owner decisions below describe the completed investigation. Their stronger
+qualification requirements remain valid **if that research is reopened**, but
+they are no longer the active v0.24.50 completion plan. Original observations
+and their false qualification flags are preserved rather than rewritten as PASS.
 
 ## 08A canary checkpoint
 
@@ -560,7 +603,7 @@ SDK caller's thread, not a false claim that all enclave threads are idle. Reject
 re-entry and stale results; SDK code is still trusted platform code, not a
 malicious in-enclave adversary isolated by page permissions.
 
-## Four bounded implementation packages
+## Deferred stronger-isolation packages
 
 1. **08A — prove the shared boundary on one SHA-256 image.** Implement staged
    request/compute/result transitions, exact loaded transport identity, and

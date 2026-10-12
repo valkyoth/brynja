@@ -8,11 +8,14 @@ cryptographic primitive, public host API or release-gate policy changed.
 
 The latest [package-08 reconciliation and isolation design](windows-enclave-isolation-design.md)
 binds the outer clear/readback and worker-entry boundaries across all nineteen
-original images. SDK diagnostic depth and storage still prevent whole-image
-closure. The owner explicitly chose stronger isolation on 2026-10-12; package 08
-remains blocked while the SDK-free compute/transport design is implemented and
-validated. This is not acceptance of a narrower cleanup guarantee. Historical
-family checkpoints below retain their original scope.
+original images. SDK diagnostic depth and storage still prevent a complete
+whole-image erasure claim. After the feasibility review, the owner explicitly
+stopped the stronger-isolation research on 2026-10-12 and accepted a bounded,
+conditional Brynja-owned cleanup scope. This supersedes the earlier decision to
+require an SDK-free redesign for this release; it does not establish SDK/OS
+erasure or close package 08 automatically. Next is reconciliation of existing
+evidence and claims under the accepted scope, followed by independent retest.
+Historical family checkpoints below retain their original scope and limitations.
 
 The [AVX2 SHA-3 inner-chain completion](windows-enclave-sha3-avx2-chain.md)
 accounts for 53 main functions and eight cleanup funclets, exact linked dispatch

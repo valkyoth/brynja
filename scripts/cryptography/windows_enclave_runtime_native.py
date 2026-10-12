@@ -106,7 +106,7 @@ def overlap_cases(api,copy):
     return count
 
 
-def execute_image(api,data,report):
+def execute_image(api,data,report,abi_call=None):
     rows,_=review.shared.caller.pe.linked(data)
     with Region(api,max(r['rva']+r['virtual_size'] for r in rows)) as mapped:
         for row in rows:
@@ -120,11 +120,16 @@ def execute_image(api,data,report):
         read=lambda k:C.c_uint32.from_address(mapped.address+targets[k]).value
         read64=lambda k:C.c_uint64.from_address(mapped.address+targets[k]).value
         initializer=C.WINFUNCTYPE(C.c_int)(mapped.address+init['rva'])
+        if abi_call is not None:
+            initializer=lambda:abi_call(mapped.address+init['rva'],0,0,0)[0]
         require(initializer()==0,'actual pinned selector initializer returned normally')
         initial=(read(0x11060),read(0x118bc),read64(0x11068),read64(0x11070))
         runtime=report['runtime']['frames']
         copy=C.WINFUNCTYPE(C.c_void_p,C.c_void_p,C.c_void_p,C.c_size_t)(mapped.address+runtime['copy']['rva'])
         fill=C.WINFUNCTYPE(C.c_void_p,C.c_void_p,C.c_int,C.c_size_t)(mapped.address+runtime['fill']['rva'])
+        if abi_call is not None:
+            copy=lambda dst,src,size:abi_call(mapped.address+runtime['copy']['rva'],dst,src,size)[0]
+            fill=lambda dst,value,size:abi_call(mapped.address+runtime['fill']['rva'],dst,value,size)[0]
         counts={}
         for mode in modes(initial[0]):
             values=settings(mode,initial)
@@ -143,7 +148,8 @@ def execute_image(api,data,report):
             counts[mode]=dict(copy_and_fill_cases=count,overlap_cases=overlap_cases(api,copy))
         return dict(initial_isa_level=initial[0],initial_favor=initial[1],
             initial_fill_thresholds=list(initial[2:]),modes=counts,
-            avx_executed=initial[0]>=3,guard_pages_used=True,secret_material_used=False)
+            avx_executed=initial[0]>=3,guard_pages_used=True,secret_material_used=False,
+            nonvolatile_sentinels_checked=abi_call is not None)
 
 
 def exercise(base):

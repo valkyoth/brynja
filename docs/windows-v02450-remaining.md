@@ -14,7 +14,12 @@ Package 8 now has a three-pass execution plan. Its first
 nineteen image/helper/selector/startup chains, 43 passing tests on each host,
 matching reports and 58,482 guarded Windows component cases. The remaining two
 passes cover cumulative stack/ABI/runtime contexts and final loaded-import/
-outer-cleanup reconciliation. This does not close package 8 or qualify the images.
+outer-cleanup reconciliation. Pass 2 has now bound arithmetic/compare/probe helpers
+and reconciled 4,758 allocation instructions across 1,023 worker bodies. Its
+61-test suite passes on both hosts with matching reports; 13,302 arithmetic/
+comparison and 58,482 memory cases pass the native ABI-sentinel campaign. The
+cumulative call graph, leaf stack accesses and caller/SDK prerequisites remain
+open; local frame checks do not close pass 2 or qualify the images.
 
 Remaining, in the existing finite plan:
 

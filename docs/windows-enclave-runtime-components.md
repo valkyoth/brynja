@@ -69,11 +69,61 @@ A read-only check found the same file installed on the running Windows VM.
 An installed disk-file match is not proof of the module or IAT actually loaded
 inside an application enclave.
 
+## Pass 2 progress: arithmetic, probes and actual frame allocations
+
+The [runtime-context observation](../assurance/windows-protection-observations/runtime-contexts-20261012.json)
+records 61 passing tests on each host, no skips, identical parsed reports and
+169 current checker-source bindings. This advances pass 2; it does **not** mark
+pass 2 complete. The source bindings identify imported checker dependencies,
+not 169 separately completed semantic proofs.
+
+All 1,023 route-specific worker bodies are rebound from the original Rust archive
+members to the nineteen signed images. Of those, 891 have actual PE unwind
+records; their 4,758 fixed-allocation/push instruction spans are checked against
+the metadata. Exception-handler flags and destinations remain explicit, rather
+than being removed to make a handler-free decoder accept them. The 132 remaining
+leaf bodies are recorded as requiring instruction review, **not** silently
+assigned zero stack use. The largest individual fixed allocation is 13,048 bytes;
+that is not a maximum cumulative stack bound. Dynamic alignment, caller home
+space, direct/indirect descendants and exceptional paths require separate checks.
+
+The exact linked `__chkstk`, `__umodti3`, `__udivti3` and `memcmp` bodies are now
+bound wherever the workers reference them: respectively 15, 11, 2 and 8 images.
+All 34 worker probe calls have a constant EAX request followed immediately by
+the matching RSP subtraction. The probe's 16-byte R10/R11 save area and return
+address are separate from the requested allocation. Its page-touch model keeps
+the real OS stack-limit prerequisite explicit; a limit already below the
+private window is valid and causes no new touches for an in-window request.
+The wrapper's earlier bootstrap probe is not included among these worker calls.
+This model does not attest the live TEB or qualify faults while growing a stack.
+
+An isolated Windows child executes the exact saved arithmetic/compare bytes on
+public inputs. All 13,302 cases pass independent Python integer/byte oracles,
+including 64-/128-bit division boundaries, seeded wide operands, unaligned
+comparison and guard adjacency. General-u128 differential samples are not a
+general-u128 proof or proof of each caller's operand lifetime and divisor bounds.
+`memcmp` and division remain variable-time, non-erasing runtime helpers.
+
+The child also reruns all 58,482 copy/fill/overlap cases and the nineteen selector
+initializers through a Win64 ABI harness. Each helper call checks sentinel
+preservation for RBX, RBP, RSI, RDI, R12–R15 and the ABI-preserved low 128 bits of
+XMM6–XMM15. The harness saves/restores the host's original registers on both
+success and rejection. All eighteen deliberately register-clobbering callees
+are rejected. This is sampled register-preservation evidence, not a proof for
+every possible input or a claim to erase upper vector registers and caller spills.
+
+No DLL loader, imported OS function, enclave entry, secret data or stack probe is
+executed by this component campaign. Native enclave identities and complete
+window/register retirement remain the final reconciliation's responsibility.
+No production implementation or release-gate rule changed.
+
 ## Remaining package-08 passes
 
-1. **Pass 2:** combine all family handoffs with remaining arithmetic/probe/runtime
-   caller contexts; check cumulative normal-return stack use, outgoing home
-   space, alignment, saved registers and indirect-call bounds.
+1. **Finish pass 2:** compose the now-bound local frames and runtime helpers with
+   the actual normal-return call graph. Resolve all leaf stack accesses,
+   outgoing home space, dynamic alignment and indirect-call depths; finish
+   caller operand/OS-limit prerequisites. Do not count unassigned SDK edges as
+   zero-depth calls or confuse an individual frame size with the whole window.
 2. **Pass 3:** reconcile the loaded application/import contracts, complete outer
    clear/readback and register-return boundaries, and exact compiler/platform
    scope across the nineteen routes. Run targeted live observations where the

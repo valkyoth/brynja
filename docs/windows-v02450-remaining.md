@@ -50,12 +50,14 @@ The proposed architecture separates transport/scheduling from a bounded,
 SDK-free secret-computation phase. The design names four completion packages:
 08A shared SHA-256 boundary and loaded-transport feasibility, 08B sequential
 family/SIMD migration, 08C concurrent scheduling, and 08D replacement-image
-qualification. **08A now has a separate tested public-vector canary**, not a
-qualified secret boundary: 29 Windows native cases, an expected fatal
-cleanup-omission control, and matching ten-node compute graphs with a 2,544-byte
-normal compute bound. Twelve focused tests pass on each host. Loaded transport
-payload handling, staging residency and final wrapper/phase qualification remain
-open before family migration. SDK plaintext-copy handling
+qualification. **08A now also has a tested resident-staging canary**, not a
+qualified secret boundary: 33 Windows native cases, a guarded/locked staging page,
+full-page clear/readback before unlock/free, an expected fatal cleanup-omission
+control, and matching ten-node compute graphs with a 2,544-byte normal compute
+bound. Twelve focused tests pass on each host. The original 29-case canary and
+nineteen family images are preserved. Loaded transport payload handling,
+outer-wrapper/incoming-register qualification and final storage-lifetime
+composition remain open before family migration. SDK plaintext-copy handling
 is a blocking feasibility prerequisite, not assumed safe merely because the
 copy is moved outside the compute window. See the linked design for exact exit
 criteria, preserved limitations and the executable call-graph prototype.

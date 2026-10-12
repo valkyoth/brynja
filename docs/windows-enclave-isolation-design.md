@@ -1,6 +1,6 @@
 # Windows secret-execution isolation: package 08 follow-up
 
-Status: **08A public canary implemented; qualification incomplete** (2026-10-12). The owner chose
+Status: **08A resident-staging canary tested; qualification incomplete** (2026-10-12). The owner chose
 to keep package 08 blocked and design stronger isolation, rather than accept a
 conditional cleanup claim. No release gate, production API or algorithm changes
 are made by this document or its executable design criterion. The separate canary
@@ -39,13 +39,68 @@ function-address comparison was insufficient. The corrected implementation
 checks the import slots instead. This is local identity checking, not remote
 attestation or production-signing qualification.
 
-**08A remains open:** bind the complete loaded transport/helper payload path;
-qualify staging residency, lifetime and retirement; requalify the modified
-outer wrapper/phase transitions and its incoming register context. Static
-enclave-owned staging is not yet a residency-qualified protected allocation.
-Only then can this boundary be used for the other families. Raw artifacts,
+The original canary's static staging was not residency-qualified. The separate
+resident-staging experiment below addresses that implementation gap without
+replacing or rewriting the original evidence. **08A remains open:** bind the
+complete loaded transport/helper payload path and finish outer-wrapper/phase,
+incoming-register and storage-lifetime composition before family migration. Raw artifacts,
 failed first attempt and successful/mutant images are retained outside `target/`
 under `release-reports/windows-isolation-08a-20261012/`.
+
+### Resident-staging checkpoint
+
+`isolated_resident.c` allocates a fresh three-page enclave mapping before accepting
+payload: two no-access guard pages surround one 4,096-byte staging page. The
+trusted host locks that page before input copy, observes its working-set Locked
+bit again after staging, and retains the lock through computation and retirement.
+No host callback dereferences enclave payload. The input occupies at most 1,024
+bytes; the explicitly public test digest occupies the next 32. Request metadata
+remains separate. The compute body receives only these in-enclave ranges.
+
+After the compute window has retired, a separate assembly leaf clears and reads
+back **all 4,096 bytes**, including unused capacity. Only zero readback permits
+unlock notification and mapping release. The leaf has no explicit stack access,
+vector operation or SDK call, and clears every GPR it modifies before normal
+return. Dirty readback terminates before any unlock/free notification; fatal
+termination is still not successful cleanup. Failed host acknowledgement or
+mapping release is also fatal rather than silently reusable.
+
+The [resident observation](../assurance/windows-protection-observations/resident-canary-20261012.json)
+records **33 native cases**, including twenty hashlib comparisons, denial before
+locking, rejection after locking, rejection after staging, reentry at three
+phase boundaries, and an input spanning a readable prefix and inaccessible host
+page. No atomic-copy assumption is made on failure. An omitted-staging-clear
+image fast-fails with `0xc0000409`. Temporary development signing keys were removed.
+
+Twelve focused tests pass on each host with identical parsed review reports.
+The checker binds the actual C-to-Rust connection, the 70-byte retirement leaf,
+and actual storage imports. It checks control-flow dominance of staging admission,
+post-copy observation, compute, retirement and release in the pinned C root.
+Every retirement byte, root instruction bytes outside relocation operands, one
+actual retirement-target change, and all 198 native result fields have rejection
+tests. The ten-node compute graph remains SDK-free, with 56 direct sites, no
+indirect sites, and the same 2,544-byte normal bound. Windows replays the same
+byte-bound LLVM decoding; it is not a second independent decoder.
+
+This completes the **resident-staging experiment**, not a supported secret API or
+whole-platform guarantee. Residency observations require the trusted host; they
+are not attestation against a dishonest callback. SDK effects, incoming register
+context and final composition with the outer wrapper remain unqualified.
+
+### Outstanding transport prerequisite
+
+Inspection of the pinned SDK confirms that its copy exports call the OS copy
+stub without explicit software payload loads, then tail-transfer to status
+conversion. That observation alone does not close the transport premise.
+The status lookup at RVA `0xb604` can call the diagnostic entry at `0x168a4`,
+which homes argument registers and enters deeper formatting/context paths.
+Those paths use SDK data as well as code; the current loaded-identity comparison
+checks `.text`, not every referenced status table or format object. Nor does an
+API success/failure result establish the contents of all registers after an OS
+transition. These are remaining proof obligations, not an observed disclosure.
+Do not infer SDK erasure or a complete payload-path proof from the passing
+resident canary. The next review must resolve these obligations under the stated
+OS trust boundary, or report a concrete design blocker before migrating families.
 
 ## What the completed reconciliation establishes
 

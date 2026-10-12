@@ -73,6 +73,59 @@ authoritative. Pass 1 binds its actual bytes/metadata and does not use that
 assembly listing as a semantic cleanup proof. The remaining concurrent review
 must retain this distinction.
 
+## Pass 2: selected sequential leaf paths
+
+Pass 2 is **in progress**, not closed. The
+[selected-leaf record](../assurance/windows-protection-observations/parallel-leaf-completion-20261012.json)
+records 128 tests passing without skips on Linux and Windows, matching parsed
+reports and 77 current checker-source bindings. This includes the preceding
+114 tests and 14 additional tests, not a new native enclave capture.
+
+The new checks bind twelve actual emitted bodies across scalar and AVX2:
+`Input::absorb`, `Input::finish`, `Input::flush`, `Input::clear`, encoded-integer
+destruction, and the two AVX2 leaf cleanup funclets. They check:
+
+- Positive absorption progress, `min(B-used, remaining)`, cursor preservation,
+  complete-block flushing and the bounds making the used-counter addition safe.
+- Checked total-bit addition, the full 67-bit `B*8` divisor, zero pending bytes
+  and exact `ceil(total_bits/(B*8))` leaf count before root suffix absorption.
+- The actual optimized right-encoding counter and shifts, including all sixteen
+  u128 encoding widths; bounds reject before invalid shifts or stores.
+- A 64-byte temporary chaining value (CV), strength-specific 32/64-byte terminal
+  output, root absorption before count commitment, and full CV erasure on
+  returning paths after CV creation. The bound invoked AVX2 handler clears the
+  same parent CV allocation; this does not promise arbitrary-exception cleanup.
+- Typed leaf destruction before disarming, three 16-byte counter clears, and
+  complete 17+1-byte encoded-integer destruction. The authority borrow survives
+  input clearing; inactive enum padding and earlier moved copies remain outer
+  allocation/window obligations.
+
+The tests reject 5,046 selected-body byte mutations and independently reject
+2,036 instruction-byte mutations without using the whole-body hash check.
+They also mutate branch conditions/destinations, relocation targets and
+operands, and every byte of the selected complete clearing/handler bodies.
+Seeded word-arithmetic and cursor models are compared with mathematical
+ceiling and big-endian encoding oracles; these models are not CPU execution.
+The external `__udivti3` implementation/ABI remains in package 8.
+
+### Object/listing distinction
+
+Inspection found separate-emission differences in scalar and AVX2
+`Owner::finish_custom`, `Input::finish`, and `Owner::finish_root`. Register
+allocation and encoding-loop instructions differ, not just label spelling.
+Two AVX2 handler names in the listing (`dtor$31`/`dtor$35`) also differ from
+actual COFF/xdata names (`dtor$32`/`dtor$36`). No production discrepancy or
+algorithm failure is inferred from this: the actual objects still bind to the
+saved signed images. But listing text cannot prove those object instructions.
+The selected leaf checker therefore uses actual COFF instruction bytes,
+relocations, branch destinations and PE/xdata bindings, without relabeling a
+separately emitted listing and treating it as equivalent.
+
+Still required in pass 2: state/owner caller composition, customization/rehash,
+final-output framing and retention, original allocation/non-alias lifetimes,
+remaining failure paths and full resident/page retirement. These selected
+checks do not remove the enclosing caller obligations or close package 7.
+
 ## Reproduce the author checks
 
 The saved development artifacts live outside `target/` and are not distributed
@@ -81,6 +134,8 @@ with the source. Supply their directory explicitly:
 ```sh
 python3 scripts/cryptography/windows_enclave_parallel_reuse.py SAVED_DIRECTORY --mutate
 python3 scripts/cryptography/test-windows-enclave-parallel-inventory.py SAVED_DIRECTORY
+python3 scripts/cryptography/windows_enclave_parallel_leaf.py SAVED_DIRECTORY --mutate
+python3 scripts/cryptography/test-windows-enclave-parallel-leaf.py SAVED_DIRECTORY
 ```
 
 The tests reject missing/extra bodies or handlers, modified bytes/relocations,

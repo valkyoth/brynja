@@ -10,8 +10,13 @@ Package 7 now follows a [four-pass ParallelHash plan](windows-enclave-parallel-c
 Its completed first pass binds all 198 emitted Rust functions, replays earlier reviews and
 separates 63 exact reusable helper contracts from 135 remaining body assignments.
 All 114 focused/predecessor tests pass on Linux and Windows; fresh reports match.
-Caller/lifetime composition remains explicit; package 7 is not closed. Next is
-pass 2, both sequential routes.
+Pass 2 now binds twelve selected scalar/AVX2 leaf bodies and handlers for
+absorption progression, exact completion, right encoding and CV/counter cleanup.
+The combined 128-test suite passes on both hosts, with matching parsed reports;
+actual COFF instructions are used where the separately emitted listing differs.
+Caller/lifetime composition remains explicit; package 7 and pass 2 are not
+closed. Next: sequential state/owner composition, customization/rehash, retained
+output and original-allocation/failure/retirement paths.
 
 - Finish transitive normal-return cleanup qualification inside the remaining
   distinct ParallelHash workers, especially

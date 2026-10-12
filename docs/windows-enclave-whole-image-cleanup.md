@@ -6,6 +6,14 @@ cleanup are separate claims. Shared development-image stack wrappers now have
 explicit register clearing, tested in both rebuilt wrapper families. No Rust
 cryptographic primitive, public host API or release-gate policy changed.
 
+The latest [package-08 reconciliation and isolation design](windows-enclave-isolation-design.md)
+binds the outer clear/readback and worker-entry boundaries across all nineteen
+original images. SDK diagnostic depth and storage still prevent whole-image
+closure. The owner explicitly chose stronger isolation on 2026-10-12; package 08
+remains blocked while the SDK-free compute/transport design is implemented and
+validated. This is not acceptance of a narrower cleanup guarantee. Historical
+family checkpoints below retain their original scope.
+
 The [AVX2 SHA-3 inner-chain completion](windows-enclave-sha3-avx2-chain.md)
 accounts for 53 main functions and eight cleanup funclets, exact linked dispatch
 tables and the complete opaque round/erasure schedule. Ten review tests pass on

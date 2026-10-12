@@ -1,0 +1,172 @@
+# Windows secret-execution isolation: package 08 follow-up
+
+Status: **design, not implemented or qualified** (2026-10-12). The owner chose
+to keep package 08 blocked and design stronger isolation, rather than accept a
+conditional cleanup claim. No release gate, production API or algorithm changes
+are made by this document or its executable design criterion.
+
+## What the completed reconciliation establishes
+
+All nineteen original images now have their actual outer-wrapper/C/worker entry
+connections checked. The sequential worker enters at `H-104`, with RSP residue
+24 modulo 32; concurrent root/leaf entries are at `H-216`, residue 8. The deepest
+known composed prefix reaches `H-25152`. Both wrapper layouts clear and read back
+8,192 words across the full 65,536-byte window, including denied admission and
+normal error returns, before returning through the reviewed register boundary.
+
+The [reconciled observation](../assurance/windows-protection-observations/outer-window-20261012.json)
+records **249 passing tests on Linux and Windows**, no skips, identical parsed
+review reports and current checker/test hashes. These are saved-image inspections,
+models and mutations, not fresh native enclave execution. The same byte-bound
+LLVM 23.1.2 disassembly is replayed on both hosts, not independently decoded twice.
+
+This is **not** a complete transitive stack bound. The already-bound SDK status
+conversion can enter diagnostic, dynamic-context and metadata-selected exception
+paths. In the saved `vertdll.dll`, the handler at RVA `0x1d570` calls a target
+loaded from its dispatcher record; the status raiser at `0xbeb0` has a recursive
+call at `0xbf15`. These observations do not prove those paths are exploitable,
+normally reachable for every input, or that a leak occurred. They show why the
+current evidence cannot supply an unconditional finite bound or erasure proof.
+
+The main signed-image hash binds import requirements, not the exact loaded SDK
+bytes. The installed SDK file still matches the reviewed saved file, but that
+is not per-image loaded-IAT attestation. The actual import contract is Windows
+author identity plus security-version floors, as documented in
+[image admission](windows-enclave-image-admission.md#imported-library-contract).
+
+## Chosen architecture to investigate and implement
+
+Separate **transport and scheduling** from **secret computation** on each enclave
+thread. An SDK operation must never suspend a live secret computation frame.
+Returning to the outer wrapper and wiping later is not sufficient if that frame
+was already exposed to an SDK diagnostic or exception walk.
+
+The proposed sequence is:
+
+```text
+admit image/platform -> stage bounded request -> enter private compute window
+ -> return typed result -> clear/read back window and scratch registers
+ -> publish authorized output / schedule next step / retire resources
+```
+
+Retained secret state can remain in explicitly owned enclave pages between
+commands. This is not a promise to erase intentionally retained keys after every
+command. No SDK function may receive a pointer to that state for inspection;
+transport sees only dedicated staging ranges. Host caller-owned input copies and
+already-authorized public outputs retain their existing documented boundaries.
+
+### Transport and resource phase
+
+- Reserve, validate and protect window/staging/retained pages before computation.
+  Keep containing-process access restricted. Do not replace enclave copy APIs
+  with raw host-pointer loads, undocumented syscalls or temporary relaxed access.
+  Microsoft documents that strict access rejects direct containing-process
+  accesses while the copy APIs remain available.
+  [Strict-memory contract](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclaverestrictcontainingprocessaccess).
+- Copy each bounded request into owned enclave staging, then freeze ownership
+  before decoding. Do not reread a mutable host descriptor during computation.
+  Use explicit slot capacity and checked ranges; transport lengths must follow
+  the existing public-length contract, not newly expose private counters.
+- The SDK copy boundary is a separate **feasibility prerequisite**, not solved
+  merely by moving it. Plaintext can still be in the copy buffer. Bind the actual
+  loaded copy-entry code and its reachable user-mode helper paths; establish that
+  payload bytes are transferred through the trusted OS copy primitive, not loaded
+  into SDK software scratch/formatters. If this cannot be established, this
+  design cannot close 08 as written. Do not claim staged plaintext is public.
+- Before the first secret command, perform identity checks inside the actual
+  admitted image for the loaded transport/runtime code used by that image.
+  A separate public diagnostic enclave is insufficient. Keep exact reviewed
+  fingerprints separate from Windows author/version admission. Servicing drift
+  must reject this stricter qualification until reviewed, never accept by name.
+- Enter SDK code only with public control registers and no secret-bearing caller
+  frames in that thread. Keep transport stack separate from compute storage.
+  Canonicalize error/status outputs; never report raw readback accumulators.
+
+Windows API documentation recommends enclave copy accessors for crossing the
+boundary; it does not supply a compiler-scratch erasure guarantee. The proposed
+byte/loaded-identity checks are additional Brynja obligations, not a Microsoft
+guarantee inferred from API success.
+[Development guide](https://learn.microsoft.com/en-us/windows/win32/trusted-execution/vbs-enclaves-dev-guide).
+
+### Compute phase
+
+- Refactor workers to consume a validated enclave-owned request instead of
+  calling `Public*Input`/`Public*Output` transports themselves. Produce either
+  retained secret output or an explicitly authorized output staging record.
+- The complete emitted compute call graph must contain no SDK import, host
+  callback, allocator, OS query, lazy runtime initializer or unassigned indirect
+  target. First-party memory/arithmetic/probe helpers are permitted only with
+  their existing byte, bound and register contracts. A source regex is not proof.
+- Ordinary invalid requests, cancellation and work limits use explicit errors
+  through the cleanup wrapper. Existing fatal-abort exclusions do not authorize
+  using exception dispatch as a routine compute error path.
+- Clear/read back the entire compute window and required scratch registers before
+  resuming transport. Preserve the Win64 ABI using public entry save values;
+  do not erase the caller's nonvolatile state with an unconditional `vzeroall`.
+- Recompute the finite stack bound from **new emitted bodies**, including home
+  space, alignment, indirect dispatch and runtime helpers. Retain both entry
+  residues until the new wrapper establishes the exact one. A source-level
+  refactor or the old 25,152-byte prefix is not a bound for the new images.
+
+The executable prototype
+[`windows_enclave_isolation_design.py`](../scripts/cryptography/windows_enclave_isolation_design.py)
+tests the SDK-free graph criterion only. It is not a new gate. All nineteen
+current root populations fail that criterion; the already-pure concurrent leaf
+passes it. A graph pass alone proves neither memory provenance nor stack bounds,
+and the prototype reports neither as qualified.
+
+### Family and concurrency preservation
+
+The new phase split must preserve SHA-2/SHA-3/SHAKE/cSHAKE framing and bit handling,
+KMAC key/suffix/verify semantics, TupleHash item completion, all batch lane shapes,
+and ParallelHash root/leaf ordering. Streaming becomes bounded staged commands,
+not an unbounded whole-message buffer. Preserve transactional outputs and the
+documented failure/quarantine classifications; partial transport failure must not
+silently complete an update or expose partially authorized output.
+
+For concurrent ParallelHash, return from private root computation before host
+scheduling. Keep CVs and root state in owned enclave slots, not public scheduler
+frames. Bind each job/result to plan, generation, lane and command; join all workers
+before slot retirement. Each worker uses its own compute/transport phases. Other
+threads may run concurrently: the condition is no secret-bearing frame on the
+SDK caller's thread, not a false claim that all enclave threads are idle. Reject
+re-entry and stale results; SDK code is still trusted platform code, not a
+malicious in-enclave adversary isolated by page permissions.
+
+## Four bounded implementation packages
+
+1. **08A — prove the shared boundary on one SHA-256 image.** Implement staged
+   request/compute/result transitions, exact loaded transport identity, and
+   preallocated storage. Show the compute graph is SDK-free, bounds fit, and
+   normal rejection paths clear before any SDK call. Run native success plus
+   copy failure, identity drift, re-entry and cleanup-failure controls. Stop for
+   a concrete design decision if SDK payload handling cannot satisfy the premise.
+2. **08B — migrate sequential families and SIMD adapters.** Apply the shared
+   boundary across the eighteen sequential routes without changing primitives.
+   Run differential, ownership, transactional-output and emitted-graph checks
+   for every distinct route. Do not repeat unchanged kernel proofs gratuitously.
+3. **08C — migrate concurrent ParallelHash.** Make scheduling a public phase with
+   generation-bound retained state/CV slots. Test cancellation, reordered/stale
+   results, partial launches, join failures and every worker's window retirement.
+   Preserve real parallel execution, not a silent scalar/sequential fallback.
+4. **08D — reconcile the replacement nineteen-image set.** Rebuild/sign the
+   affected development images, bind their real compiler/linker/SDK identities,
+   replay finite compute stack and cleanup checks, and run native fault controls.
+   Close 08 only if all required properties are established. Then package 09
+   prepares the independent-pentest candidate; do not mark the retest passed.
+
+These are completion units, not guaranteed one-turn timings. No new AEAD,
+ad-hoc cryptography, API downgrade or release-gate redesign is assumed. A need
+for a different secret-transport protocol would be a separate design decision.
+
+## Non-negotiable claim limits
+
+This architecture does not promise to erase privileged OS/hypervisor snapshots,
+arbitrary interruption contexts, application-created copies or fatal-abort state.
+Those existing exclusions remain; no library refactor establishes that guarantee.
+It instead aims to eliminate **synchronous SDK entry with a live Brynja secret
+compute context**, and establish complete cleanup of the resulting bounded
+Brynja-controlled compute/storage regions on normal completion and rejection.
+The SDK plaintext-transfer prerequisite remains blocking until demonstrated.
+Production signing, Windows ARM64, newer compiler output and independent review
+are not qualified by the current x64 development-image evidence.

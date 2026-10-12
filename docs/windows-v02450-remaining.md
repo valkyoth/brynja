@@ -31,17 +31,35 @@ bindings. Copy tail transfers, the three scheduler `CallEnclave` sites, status
 conversion and diagnostic entry retain their actual stack/return-slot geometry.
 The remaining suffixes are SDK diagnostics, OS copy/call transitions, debug traps
 and fatal termination—not missing C adapters. None is assigned zero depth.
-Pass 2 still needs outer-wrapper/window entry and limit reconciliation and the
-remaining SDK/OS conditions; whole-image qualification remains open. Completed
-worker and C graphs need not be restarted without changes to their bound inputs.
+The [outer-window reconciliation and stronger-isolation design](windows-enclave-isolation-design.md)
+now finish the actual wrapper/worker entry mapping and clear/readback/return
+checks across all nineteen images. The real entries are `H-104` for sequential
+workers and `H-216` for concurrent workers. The deepest known prefix is therefore
+25,152 bytes from the window high address, still **not a whole-window bound**.
+The final [249-test suite](../assurance/windows-protection-observations/outer-window-20261012.json)
+passes on both Linux and Windows with no skips and identical parsed reports.
+
+**Package 8 remains blocked on SDK/OS isolation**, not an unnamed deeper-review
+task. On 2026-10-12 the owner chose stronger isolation instead of
+accepting conditional closure. SDK diagnostic/context paths do not have a proven
+complete bound or erasure guarantee; main-image hashing does not pin loaded SDK
+bytes. Existing evidence must not turn those unknowns into zero-depth callees.
+Completed worker and C graphs remain reusable for unchanged bound inputs.
+
+The proposed architecture separates transport/scheduling from a bounded,
+SDK-free secret-computation phase. The design names four completion packages:
+08A shared SHA-256 boundary and loaded-transport feasibility, 08B sequential
+family/SIMD migration, 08C concurrent scheduling, and 08D replacement-image
+qualification. **The design is not implemented.** SDK plaintext-copy handling
+is a blocking feasibility prerequisite, not assumed safe merely because the
+copy is moved outside the compute window. See the linked design for exact exit
+criteria, preserved limitations and the executable call-graph prototype.
 
 Remaining, in the existing finite plan:
 
-- **Package 8:** reconcile the frozen nineteen-route matrix with shared C/OS
-  admission, runtime/SDK and loaded-image identities, native scheduler contracts,
-  cumulative frame/home-space bounds, Win64 preservation, complete window
-  retirement and the outer return boundary. Family-level typed cleanup does not
-  establish erasure of earlier moved copies, frame padding or caller spills.
+- **Package 8:** implement and validate 08A–08D from the stronger-isolation design.
+  Keep this package blocked until the SDK-free compute and transport prerequisites
+  are established; do not relabel the existing nineteen images as qualified.
 - **Package 9:** reconcile documentation/support claims and packaging, run the
   relevant fast checks and prepare one reviewable independent-pentest candidate.
 - **Package 10:** obtain and record independent retests; fix and test any findings.

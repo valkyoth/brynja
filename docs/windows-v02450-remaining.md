@@ -54,8 +54,13 @@ qualification. **08A now also has a tested resident-staging canary**, not a
 qualified secret boundary: 33 Windows native cases, a guarded/locked staging page,
 full-page clear/readback before unlock/free, an expected fatal cleanup-omission
 control, and matching ten-node compute graphs with a 2,544-byte normal compute
-bound. Twelve focused tests pass on each host. The original 29-case canary and
-nineteen family images are preserved. Loaded transport payload handling,
+bound. Twelve focused tests pass on each host. A separate transport-data variant
+now binds the loaded SDK status tables and fixed formats (11,440 read-only bytes),
+passes 21 native identity controls and all 33 resident cases, and rebinds the same
+SDK-free compute bound. Thirteen additional tests pass on each host, with matching
+reports and byte/descriptor/call-target mutation checks. This does not qualify
+OS-return registers or deeper diagnostic contexts. The original 29-case canary and
+nineteen family images are preserved. Complete loaded transport payload handling,
 outer-wrapper/incoming-register qualification and final storage-lifetime
 composition remain open before family migration. SDK plaintext-copy handling
 is a blocking feasibility prerequisite, not assumed safe merely because the

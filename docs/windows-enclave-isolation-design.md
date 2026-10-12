@@ -1,6 +1,6 @@
 # Windows secret-execution isolation: package 08 follow-up
 
-Status: **08A resident-staging canary tested; qualification incomplete** (2026-10-12). The owner chose
+Status: **08A resident and transport-data canaries tested; qualification incomplete** (2026-10-12). The owner chose
 to keep package 08 blocked and design stronger isolation, rather than accept a
 conditional cleanup claim. No release gate, production API or algorithm changes
 are made by this document or its executable design criterion. The separate canary
@@ -87,6 +87,38 @@ whole-platform guarantee. Residency observations require the trusted host; they
 are not attestation against a dishonest callback. SDK effects, incoming register
 context and final composition with the outer wrapper remain unqualified.
 
+### Loaded transport status-data checkpoint
+
+A separate transport-data variant now extends loaded `.text` and actual-IAT
+identity with the diagnostic formats and both status-conversion tables: 11,440
+bytes across three read-only ranges. It checks every covering page is committed
+and exactly read-only, checks range bounds, and compares every byte before
+descriptor/payload admission. The pinned SDK ranges contain no loader fixups.
+The original resident image and all nineteen family images are unchanged.
+
+The [transport observation](../assurance/windows-protection-observations/transport-data-canary-20261012.json)
+binds the new signed development image, actual COFF call edges, embedded expected
+data and complete loaded-identity instruction bodies. The root instructions are
+identical to the preceding resident canary; only its two identity-call references
+change. Its compute graph is freshly rebound and recomposed: ten SDK-free nodes,
+56 direct sites, no indirect sites and the same 2,544-byte normal compute bound.
+
+On Windows, 21 identity observations accept the genuine expectation, reject text
+drift and each data-range drift, reject an unknown control, and permit reuse.
+Negative controls change expectations, never the live signed SDK. The same image
+passes the 33 native resident cases, including twenty hashlib comparisons.
+Thirteen new tests pass on each host, alongside all twelve predecessor tests;
+parsed reports match. Regressions reject 11,440 changed data bytes, 726 identity
+instruction bytes, 661 root instruction bytes, 80 descriptor/expected-data boundary
+changes and a retargeted actual identity call. Development signing keys are removed.
+
+The status-table model checks all 344 disjoint ranges and their 4,256 output words,
+all range members/boundaries and 8,192 seeded random inputs. Binary and linear
+lookup agree; this is **not exhaustive native SDK status-function execution**.
+The fixed diagnostic strings contain only one numeric status conversion and no
+payload-pointer format. This narrows data provenance, not the entire formatter,
+exception or captured-register context. Whole-image qualification remains false.
+
 ### Outstanding transport prerequisite
 
 Inspection of the pinned SDK confirms that its copy exports call the OS copy
@@ -94,10 +126,11 @@ stub without explicit software payload loads, then tail-transfer to status
 conversion. That observation alone does not close the transport premise.
 The status lookup at RVA `0xb604` can call the diagnostic entry at `0x168a4`,
 which homes argument registers and enters deeper formatting/context paths.
-Those paths use SDK data as well as code; the current loaded-identity comparison
-checks `.text`, not every referenced status table or format object. Nor does an
-API success/failure result establish the contents of all registers after an OS
-transition. These are remaining proof obligations, not an observed disclosure.
+Those paths use SDK data as well as code. The separate transport variant now
+binds the status tables and fixed formats, but does not pin every deeper formatter,
+exception or mutable thread-context input. Nor does an API success/failure result
+establish the contents of all registers after an OS transition. These are
+remaining proof obligations, not an observed disclosure.
 Do not infer SDK erasure or a complete payload-path proof from the passing
 resident canary. The next review must resolve these obligations under the stated
 OS trust boundary, or report a concrete design blocker before migrating families.

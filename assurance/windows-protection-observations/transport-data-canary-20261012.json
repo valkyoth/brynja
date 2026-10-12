@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "date": "2026-10-12",
+  "baseline": "ba616a65",
+  "completion_package": "08A",
+  "status": "PUBLIC_LOADED_SDK_STATUS_DATA_IDENTITY_CHECKPOINT",
+  "completion_package_closed": false,
+  "whole_image_qualified": false,
+  "production_qualified": false,
+  "release_gate_changed": false,
+  "independent_retest": false,
+  "original_nineteen_images_replaced": false,
+  "environment": "local Windows x64 KVM guest, development signing, Rust 1.98.1",
+  "validation": {
+    "linux_new_tests": 13,
+    "windows_new_tests": 13,
+    "predecessor_tests_per_host": 12,
+    "skips": 0,
+    "native_cases": 33,
+    "native_digest_comparisons": 20,
+    "identity_observations": 21,
+    "data_byte_mutants": 11440,
+    "identity_instruction_byte_mutants": 726,
+    "root_instruction_byte_mutants": 661,
+    "embedded_descriptor_and_boundary_mutants": 80,
+    "retarget_mutants": 1,
+    "parsed_reports_match": true,
+    "decoder": "LLVM 23.1.2, same byte-bound decoding replayed on Windows",
+    "native_sdk_table_function_exhaustively_tested": false
+  },
+  "sdk_data": {
+    "sdk_sha256": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+    "regions": {
+      "formats": {
+        "rva": 133456,
+        "bytes": 176,
+        "expected_rva": 143024,
+        "sha256": "d6cdebe1924ffea3e2968fc7857c4e1cceceee23af05e55303ae41022424ebc1"
+      },
+      "values": {
+        "rva": 133632,
+        "bytes": 8512,
+        "expected_rva": 143200,
+        "sha256": "a21ae4db2c2d18322b4eedea5365055e093ea130dbe495603aa858bf0b96012c"
+      },
+      "ranges": {
+        "rva": 142144,
+        "bytes": 2752,
+        "expected_rva": 151712,
+        "sha256": "cea467ed4370d53f7ef1ff0eb8b4cccaf9ed6928a9bd8f5491d7734ecc0d5edf"
+      }
+    },
+    "status_ranges": 344,
+    "status_output_words": 4256,
+    "bytes": 11440,
+    "readonly_pages_checked_at_runtime": true,
+    "all_three_ranges_compared_before_payload_admission": true,
+    "no_loader_relocations_in_compared_ranges": true,
+    "negative_controls_change_expectations_only": true,
+    "status_model_scope": "all table members and boundaries plus 8192 seeded random inputs; binary versus linear lookup, not native SDK conversion execution"
+  },
+  "compute": {
+    "sdk_free": true,
+    "nodes": 10,
+    "direct_sites": 56,
+    "indirect_sites": 0,
+    "normal_depth": 2544
+  },
+  "limits": {
+    "os_return_registers_qualified": false,
+    "formatter_and_exception_payload_proof": false,
+    "full_wrapper_and_storage_lifetime_composition": false,
+    "loaded_sdk_all_data_pinned": false,
+    "public_vectors_only": true,
+    "development_signing_only": true
+  },
+  "remaining": [
+    "complete transport/helper payload proof including OS-return registers and diagnostic context",
+    "outer-wrapper/incoming-register and staging-lifetime composition",
+    "08B/08C family migrations and 08D replacement-image reconciliation"
+  ],
+  "source_sha256": {
+    "assurance/windows-enclave-probe/isolated_transport_sdk.h": "962db21350db6d04cedb71d2b24f3f5b8372c590f0ed3f615c54b99914eb0645",
+    "scripts/cryptography/windows_enclave_transport_data.py": "f20ce48aa43b3fa07f576baf5aec2d25ef3310f854507c6a5283ea734b0ed8ab",
+    "scripts/cryptography/windows_enclave_transport_build.py": "b9db78bf542bcf6a76fa29fdaf6c3b9968e09d22ef1a6e94b67b60dac8f74887",
+    "scripts/cryptography/windows_enclave_transport_probe.py": "6fd766a8995cf2c263d40a0194f5a6439255d39b175a2ad68827552e98a84ca5",
+    "scripts/cryptography/windows_enclave_transport_review.py": "06e2bfefc9721d30fa374c83b705a97d87af1ec565728f2d42f4be5ee5fe929e",
+    "scripts/cryptography/test-windows-enclave-transport-data.py": "4fec4b0d4e30db637c75d207a72accad4f532b2e6532441e54ce5c15ac667cca",
+    "scripts/cryptography/test-windows-enclave-transport-review.py": "00679acb460f0ef0c32081c9586e3f6ba8ef02ba560bc9f830d68b9577f44022"
+  },
+  "local_artifact_sha256": {
+    "release-reports/windows-isolation-08a-20261012/transport-review-tests-linux.log": "c69a046223d33aa88a8514f521592cc16bab9afcca5f079e4dfb219a03dafa93",
+    "release-reports/windows-isolation-08a-20261012/transport-data-tests-linux.log": "90e02c9957837647c9653ad3a5a43619063d4b955dcc502b3da9f91849b6d11e",
+    "release-reports/windows-isolation-08a-20261012/transport-predecessor-tests-linux.log": "eacd15439c9d7dd924ab406dc6983ee4be78c80454a8e8db537189a056f61574",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/review-tests-windows.log": "32c38605f951060c84301002d4c3b8fa9d91c9e6d272d2a8bebea9255de5b8ce",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/data-tests-windows.log": "4a64888eca8d4618f6b1f10f780e6d69b07db17e9e6fe021edfaa43d8cd22337",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/predecessor-tests-windows.log": "c12931bc029c1918af9c8dac402791a1a65a4e8ea1f3a8b547c49039c1466820",
+    "release-reports/windows-isolation-08a-20261012/transport-review-linux.json": "e566de1a118a07868b5009dad9f35c7e9613a9ba4781477a8c381459622784a9",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/review-windows.json": "1b60963dcb4cdd1ed9a05be783b6aed20a8f4ffbd619fa5b13a0ce77989d72f2",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/native-final.json": "f00107ad57a695988e71a87304793a442c4704d5532e8a16347b8a814af040fe",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/signed.dll": "d554306deaa72748e35e2e09f3f6602f1d43ab4cfe03ea8d024f89b001db3ace",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/normal.obj": "27f0b634be2bf780021a37ba0a5b8bf668196b32dbbe74001e02356fd05dcef7",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/window.obj": "6b35ee87ef1602211c4b80ff24f13b82e77c64a6e3fb16428d2e89115f5060e6",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/retire.obj": "5dc0e637d427de94020d007f2ff1dc65fcf20d9ea98bf9317fe2b877c3f5e79c",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/normal_rust.lib": "af3b1faf7fc1432fae3586c0df157a224716d320d1de3297c3c838797a3f8b87",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/normal_rust.s": "7acdef5c46357ff5ba939af0c3fb3be9f805f316cbcc691c704c696202c85931",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/normal_rust.ll": "949af54c2dcf1d931b37f9f7861113ef0fabb638ebfeba043d67fe72f28509e6",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/build.json": "6a7d769180d40180659a631d07ef5502e361b2b23b5225511a22c1c1016e0527",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/signing.json": "0e7dde43c7b4fd153c2791a4443380431faf7ccbee79126d55301cb3f9616c1d",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/sdk_data_expected.h": "04fd5396690938dca7b49d8a547fc9781b856771824818de70b2ee75508c6373",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/sdk_expected.h": "c27d19940a3e3d97932bc49bd4e5815130993ec7a28ea36db6a1560b586f6151",
+    "release-reports/windows-isolation-08a-20261012/resident-08a-transport-v2/disassembly.txt": "3df6530ee43744120a5d5fd1def71225d702859096a41fcd7243a30814223445"
+  }
+}

@@ -4,14 +4,14 @@ Package 7 is **open**. This is a saved-image author review, not a release gate,
 new native enclave run, independent retest or whole-image qualification.
 Production Rust, signed images and release-gate policy are unchanged.
 
-Latest progress: **both sequential Rust-family reviews are conditionally
-complete** (pass 2 / regrouped Pass A). All 61 scalar and 73 AVX2 bodies,
-including 13 cleanup funclets, have explicit assignments and caller/lifetime
-composition. The concurrent route and combined reconciliation remain open
-(passes 3–4 / regrouped Passes B–C). Package 8 prerequisites are unchanged.
+Latest progress: **all three Rust-family route reviews are conditionally
+complete** (regrouped Passes A–B). All 61 scalar, 73 AVX2 and 64 concurrent
+bodies, including 17 cleanup funclets, have explicit assignments and
+caller/lifetime composition. The combined reconciliation remains open
+(pass 4 / regrouped Pass C). Package 8 prerequisites are unchanged.
 
 The earlier progress sections below describe their historical checkpoints;
-the sequential closure section supersedes their remaining-pass-2 statements.
+the route closure sections supersede their earlier remaining-work statements.
 
 ## Finite completion plan
 
@@ -374,6 +374,42 @@ Next is the concurrent route (Pass B), followed by the three-route reconciliatio
 (Pass C). Package 7 therefore remains open even though both sequential routes
 have reached their conditional family exit criterion.
 
+## Pass 3 complete: conditional concurrent family closure
+
+The [concurrent observation](../assurance/windows-protection-observations/parallel-concurrent-20261012.json)
+records 209 tests on each host, without skips, matching parsed reports and 103
+current checker-source bindings. Linux took 23.625 seconds for tests / 49.761
+seconds total; Windows took 32.674 / 72.113. The complete sequential review was
+replayed before accepting helper reuse.
+
+All 64 concurrent Rust bodies and four cleanup funclets are assigned. Twenty-three
+helpers match the sequential AVX2 body, references, ABI and constants exactly.
+Six same-body ABI differences are explicitly reconciled, including bounded copy
+and wipe ranges; debug-node renumbering does not remove other ABI attributes.
+The remaining 15 bodies have full instruction contracts covering 2,561 bytes,
+with 2,561 independent byte mutants and 184 branch mutants rejected.
+
+The composition review binds all seven mutable globals to actual signed-image
+instruction operands, zero initialization, distinct aligned storage and original
+root/worker allocations. It covers per-worker authority, bounded leaf inputs,
+generation and slot provenance, join-before-reuse, ordered CV reduction, partial
+failure, cancellation, exact completion and output declassification. The actual
+COFF cleanup handler is `dtor$55`; the separately emitted listing's `dtor$54` is
+not accepted as evidence for this image. All four parent-to-handler xdata edges
+are checked.
+
+A finite model enumerates 680 linearized atomic gate states, including early
+closure, unsuccessful workers and receipt publication before live-ticket
+release. It does not prove a universal weak-memory or Windows scheduler model.
+Slot/publication clearing and native joining remain explicit retirement
+preconditions, not properties inferred from a successful receipt alone.
+
+This closes the concurrent Rust-family review conditionally on the same shared
+package 8 contracts. It does not establish native execution, production signing,
+whole-window erasure, arbitrary exception cleanup or independent qualification.
+Failed output copies may expose a prefix; callers must discard failed output.
+Pass C remains the combined three-route reconciliation, not another helper pass.
+
 ## Reproduce the author checks
 
 The saved development artifacts live outside `target/` and are not distributed
@@ -392,6 +428,8 @@ python3 scripts/cryptography/windows_enclave_parallel_request.py SAVED_DIRECTORY
 python3 scripts/cryptography/test-windows-enclave-parallel-request.py --saved-directory SAVED_DIRECTORY
 python3 scripts/cryptography/windows_enclave_parallel_sequential.py SAVED_DIRECTORY --mutate
 python3 scripts/cryptography/test-windows-enclave-parallel-sequential.py --saved-directory SAVED_DIRECTORY
+python3 scripts/cryptography/windows_enclave_parallel_concurrent.py SAVED_DIRECTORY --mutate
+python3 scripts/cryptography/test-windows-enclave-parallel-concurrent-route.py --saved-directory SAVED_DIRECTORY
 ```
 
 The tests reject missing/extra bodies or handlers, modified bytes/relocations,

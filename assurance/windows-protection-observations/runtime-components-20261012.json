@@ -19,15 +19,15 @@
       "tests": 43,
       "skips": 0,
       "exit_code": 0,
-      "test_seconds": 1.1287732124328613,
-      "total_seconds": 1.2157037258148193
+      "test_seconds": 1.154653549194336,
+      "total_seconds": 1.2657692432403564
     },
     "windows": {
       "tests": 43,
       "skips": 0,
       "exit_code": 0,
-      "test_seconds": 1.1566190719604492,
-      "total_seconds": 3.1809449195861816
+      "test_seconds": 1.179354190826416,
+      "total_seconds": 3.192870855331421
     }
   },
   "route_count": 19,
@@ -43,7 +43,7 @@
   "windows_component": {
     "cases": 58482,
     "windows_build": 26300,
-    "seconds": 1.7680718898773193,
+    "seconds": 1.7618508338928223,
     "modes": [
       "detected",
       "sse",
@@ -89,7 +89,7 @@
     "windows_enclave_route_memory.py": "97305b6dba9e758463ac6b31e09f5d51b7cf41d99b3ebae860b68a976231c3ec",
     "windows_enclave_route_transport.py": "7a9baddf0de345fa95eb4022631167786d082de839f01895da696588860b09d8",
     "windows_enclave_runtime_catalog.py": "05d5b8a1a22c095924dbaf762e169502b2a248f1aca7c816b4ea28caccf15067",
-    "windows_enclave_runtime_init_bytes.py": "e6153d5ab472edb0069ee57cfc7b6026ed45f7c6dba16df9e97647d787535d9e",
+    "windows_enclave_runtime_init_bytes.py": "68bf45857901cc81b80a01cb9e12e530b47c66d451716fdd36dddfdb500fdee7",
     "windows_enclave_runtime_native.py": "4b781520a76742b00888ac6feffb5b0acec192c885916634509eac9e0be85b73",
     "windows_enclave_runtime_startup.py": "a7cb5289f683065b3c0753a971c977e4c10353870f3fff1b7352c7ce1e2e7662",
     "windows_enclave_runtime_startup_bytes.py": "79edaa42abb9f08eb2fa0baf552fa5be88dfeebb7bea381bf129349e0e5a59e4",
@@ -146,19 +146,19 @@
     "test-windows-enclave-route-transport.py": "e1644f8bd978ebb73a954d098dee4d9ced9f79331d25e2b4e8038f8a6d7ed9dc"
   },
   "files_sha256": {
-    "runtime-components-qualified-linux-exit.json": "24d2d54d79b2907d055d5efd7669759b835f63d4567e2e8f6aaf2511b0e06df5",
-    "runtime-components-qualified-linux-tests.json": "75b4147a4fc5d6df5907acc28bcd48b6015eae7a31c7d5499086d2ab4989f00c",
-    "runtime-components-qualified-linux.json": "ecb9229aa22a5083428c63d080f82348d9179798c6a2f4bd4baf7f735172ab74",
-    "runtime-components-qualified-linux.log": "12c54e3902bffe8cde7155f868770fdba55153a30b9875ba937bf8e113c0492a",
-    "runtime-components-qualified-windows-exit.json": "b682a25698d967e661dbdf326bb7804b3516d49483a46f00dfe523f5df0a55b5",
-    "runtime-components-qualified-windows-native.json": "c51cf6ae9ab7d4b96840da055a2ba26025d2d4759aac59703d00d300ee0a1396",
-    "runtime-components-qualified-windows-native.log": "0912ad955d9a459ef6b1a0e40867af35baf0a606681205d5ee3134654459fb4e",
-    "runtime-components-qualified-windows-tests.json": "567419484ecb4be8b6fda31fa4c0094377bd8fa04acb4bd856f07b0dfc17bb6b",
-    "runtime-components-qualified-windows.json": "a71c943816ddb451a56835f8082df3a59af4042a517e8083906faf000cdaccad",
-    "runtime-components-qualified-windows.log": "6727a75caab91a60faceb8fe51bc3212c942948715a7477cd21ce53229e09146"
+    "runtime-components-complete-linux-exit.json": "72478f86a28299aa292674f5ed23b60c487d56a6268fb98a9b8a65c6dbdb80e8",
+    "runtime-components-complete-linux-tests.json": "241522b1c168c1d40021f180129edb5723ce8ac86e7ec3dda2c8f454634d3adf",
+    "runtime-components-complete-linux.json": "97cfcc24d876624127b05a4052457bae33e3fd8ef41440bae6c1a439ef036fef",
+    "runtime-components-complete-linux.log": "98de5d0cdcbd554141ab7d03fd59cd11004124f0fe59d25c9f11a855f03c1168",
+    "runtime-components-complete-windows-exit.json": "6a7a1ea22ffc4978a1537f2eb7fbdad304c9bc9a1e1fd00766391ba7df4839af",
+    "runtime-components-complete-windows-native.json": "14ce1583bf4495071b972c9461b19c8820efdfb0b789c5ec980ff66035c51316",
+    "runtime-components-complete-windows-native.log": "0912ad955d9a459ef6b1a0e40867af35baf0a606681205d5ee3134654459fb4e",
+    "runtime-components-complete-windows-tests.json": "5db41bee1800cd0d0e24b1667763e8c8fe2b3b5f16d3c39e2a1e7cbe7fd0fbae",
+    "runtime-components-complete-windows.json": "d9e5d860c4486884a74bdc6b46d43f00e6c4fddab907b2e11b15795999fe8152",
+    "runtime-components-complete-windows.log": "7edefe4bb2ba4bd02f985207614031ca833311f09c3ee72a0bcd123e4e04fd6f"
   },
-  "runner_sha256": "eeb2a5215c2a4e15d54e651e4c83df99b013ffc346e6b34e0967087bdf7d6267",
-  "reconciler_sha256": "32d3aae85f0751a3a2f3de7c50d53e8fb02602c9d59b449a12106885af9230a1",
+  "runner_sha256": "b526aed5da1d1b41c7d0ee35b5fb3f4703c782620def6192e0da1805ae9b4548",
+  "reconciler_sha256": "447078075ef4a3e803be9e2947a3ec1c67eb316091e3d6b3cd9fa0b79aedd90b",
   "remaining": [
     "Pass 2: reconcile all named runtime/arithmetic/probe caller contexts and cumulative normal-return stack/home-space/Win64 preservation bounds",
     "Pass 3: loaded application/import contracts, outer window/register cleanup and exact compiler/platform claim across all nineteen routes",

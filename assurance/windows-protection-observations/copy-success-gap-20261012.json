@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "date": "2026-10-12",
+  "baseline": "857e1318",
+  "completion_package": "08A",
+  "status": "PLAINTEXT_TRANSPORT_FEASIBILITY_BLOCKED_PENDING_DESIGN_DECISION",
+  "completion_package_closed": false,
+  "production_qualified": false,
+  "whole_image_qualified": false,
+  "independent_retest": false,
+  "new_native_execution": false,
+  "release_gate_changed": false,
+  "observed_secret_disclosure": false,
+  "validation": {
+    "new_tests_each_host": 8,
+    "predecessor_tests_each_host": 14,
+    "skips": 0,
+    "parsed_reports_match": true,
+    "normal_continuations": 4,
+    "instructions_per_path": [
+      28,
+      30
+    ],
+    "decoder": "same byte-bound LLVM decoding replayed; no independent second decoder"
+  },
+  "conclusion": "status-zero SDK continuation does not write vector state; OS-return provenance unknown",
+  "scope": "copy-in and copy-out, null/non-null thread pointer; normal return only",
+  "decision": "need platform payload-provenance evidence or separately approved transport redesign",
+  "excluded_inferences": [
+    "not proof of an actual OS/SDK leak",
+    "not proof that stronger isolation is impossible",
+    "not qualification of error/exception paths or incoming registers",
+    "not approval to implement a new encrypted channel"
+  ],
+  "source_sha256": {
+    "scripts/cryptography/windows_enclave_copy_success.py": "9671ed37d7c99fa5f47166588c666d3e0e0a23a720c079a5326ace06264e2a85",
+    "scripts/cryptography/test-windows-enclave-copy-success.py": "724497a7899112dcef3fce41506b035628200fa5722820da084254e8d3975b34",
+    "scripts/cryptography/windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "scripts/cryptography/windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "scripts/cryptography/windows_enclave_stack_decode.py": "0a9c9cb6d6225573af066e0682c0012a48fc078698d18250bf5df94d0493cdec"
+  },
+  "local_artifact_sha256": {
+    "release-reports/windows-local-20261004/sdk-system32-review/vertdll.dll": "f5bfb961d19775123c93b8cdf4318238acdf9647bb4518bf009d1969b4d2612f",
+    "release-reports/windows-worker-review-20261006/sdk-stack-disassembly-20261012.txt": "4f45bf459ef5c5082f1a62d56e1d9bcc57ee259051c86a4fb991b489d8f2a59d",
+    "release-reports/windows-isolation-08a-20261012/run-copy-success.py": "6e82dc7d4b9beb8eb3e236eee396de810cb78c396bb24866141c334bf3bf34aa",
+    "release-reports/windows-isolation-08a-20261012/reconcile-copy-success.py": "7ac48724da03b8cf9b8d6a06fb18db102858a185ec1d13304d01d391deff3957",
+    "release-reports/windows-isolation-08a-20261012/copy-success-review-linux.json": "c4e8896ffe1847859a6f9ad68078650ed179129c34e142bfc061c3b9015f270f",
+    "release-reports/windows-isolation-08a-20261012/copy-success-review-windows.json": "704e6e418edfe6547a707bd3c465ca2d97db40401af00409c68fc74af567fd59",
+    "release-reports/windows-isolation-08a-20261012/copy-success-tests-linux.log": "9878cddd297c89f5542f502ca1e18d9f76b41c059de993473a45a6a326da6805",
+    "release-reports/windows-isolation-08a-20261012/copy-success-status-tests-linux.log": "60bb849356ffbc091f601e17fc6ae0b2eb5e26d734d433da020c6e775efbf97f",
+    "release-reports/windows-isolation-08a-20261012/copy-success-frame-tests-linux.log": "62cfbeb2911bb226088bfb0918eb4b05008ea70b20bce854ee2ca8a564bd37a5",
+    "release-reports/windows-isolation-08a-20261012/copy-success-tests-windows.log": "bf657e9fab109b37586bb2a6c7a21e771f2c10da3869d64b6cd784c9307e8d8d",
+    "release-reports/windows-isolation-08a-20261012/copy-success-status-tests-windows.log": "5a5f749959c4ae7181e38c088af369be85d1a42b1b45a6b98ce7e8fe0b1f8f64",
+    "release-reports/windows-isolation-08a-20261012/copy-success-frame-tests-windows.log": "fa59defc26fd5febca5ba4add6b3520374cf9d7bec67bd8928f4b0654c070fcb"
+  }
+}

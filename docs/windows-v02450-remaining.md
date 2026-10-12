@@ -73,6 +73,17 @@ is a blocking feasibility prerequisite, not assumed safe merely because the
 copy is moved outside the compute window. See the linked design for exact exit
 criteria, preserved limitations and the executable call-graph prototype.
 
+**08A has reached its explicit feasibility stop.** The new byte-bound success
+continuation check covers both copy directions and both thread-pointer branches:
+28–30 scalar instructions preserve any vector state returned by the OS. Eight
+new and fourteen predecessor tests pass on each host with matching reports.
+This is not an observed leak; it confirms the remaining OS-return provenance
+cannot be inferred from SDK success or ABI volatility. The next action is a
+design decision, not more family migration or an unchanged full test sweep:
+obtain the missing platform evidence, or approve a design-only investigation of
+authenticated ciphertext transport and its bootstrap. The linked design records
+scope, stop conditions and why that protocol is not yet authorized/implemented.
+
 Remaining, in the existing finite plan:
 
 - **Package 8:** implement and validate 08A–08D from the stronger-isolation design.

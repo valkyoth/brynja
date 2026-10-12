@@ -1,6 +1,6 @@
 # Windows secret-execution isolation: package 08 follow-up
 
-Status: **08A normal compute boundary composed; SDK/register qualification incomplete** (2026-10-12). The owner chose
+Status: **08A plaintext-transport feasibility blocked; design decision required** (2026-10-12). The owner chose
 to keep package 08 blocked and design stronger isolation, rather than accept a
 conditional cleanup claim. No release gate, production API or algorithm changes
 are made by this document or its executable design criterion. The separate canary
@@ -178,6 +178,60 @@ introduced to work around this question.
 [Copy-in contract](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyintoenclave),
 [copy-out contract](https://learn.microsoft.com/en-us/windows/win32/api/winenclaveapi/nf-winenclaveapi-enclavecopyoutofenclave),
 [x64 calling convention](https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170).
+
+### Finite success-path result and decision point
+
+The [success-continuation observation](../assurance/windows-protection-observations/copy-success-gap-20261012.json)
+closes the narrow question of whether this saved SDK clears vector registers on
+successful copy return: **it does not**. The exact-encoding model starts immediately
+after the opaque OS copy transition, assumes returned status zero, and follows
+actual call/return and branch targets until the export returns. Both copy
+directions and both thread-pointer alternatives are covered: 28 or 30 scalar
+instructions, balanced returns, zero vector writes. The thread/home stores on
+these paths contain only the zero status. The complete selected instruction
+bodies are rebound to the pinned SDK file, not inferred from function names.
+
+Eight focused tests and fourteen predecessor tests pass on each host with equal
+parsed reports. Regressions reject missing instructions, vector/unmodeled
+operations, changed call/branch targets, unbalanced returns, an infinite loop,
+nonzero status assumptions, SDK drift and mismatched decoding. This is saved-code
+inspection and a restricted model, not execution of the syscall or a general
+x86 emulator. Windows replays the same decoding, not a second decoder.
+
+An arbitrary hypothetical vector value at syscall return survives this normal
+SDK continuation. **That is not evidence that Windows actually returns secret
+residue.** It establishes why the API result and ABI alone cannot prove the
+stronger erasure claim. Nor does it prove error-path residue: error/exception
+contexts remain separately unqualified. Clearing in Brynja after SDK return
+cannot retrospectively establish what the SDK saved before returning.
+
+This is now a concrete **08A feasibility blocker**, not a request to keep pinning
+more unrelated helper bodies. Do not begin 08B/08C migration until one of these
+premises is justified:
+
+1. **Retain plaintext transport with additional platform evidence.** Obtain a
+   suitable contract or reviewed implementation evidence for payload provenance
+   across OS return and all reachable SDK diagnostic/context storage. More
+   successful copy samples, another SDK hash, or a larger window are insufficient.
+   The contracts reviewed above do not currently supply that evidence. This is
+   an external assurance dependency, not an identified Microsoft vulnerability.
+2. **Separately design a transport that does not expose plaintext to the SDK.**
+   Authenticated ciphertext-only transfer is a candidate, not an implemented or
+   proven solution. It would require trusted endpoint/image binding, key and
+   entropy bootstrap, authentication, replay/order protection, bounded framing,
+   key retirement and complete failure-path ownership. The bootstrap must not
+   import its secret through the same unresolved plaintext path. Existing kernel
+   correctness tests would remain reusable, but this introduces a protocol/API
+   and cryptographic implementation scope beyond the approved phase split.
+
+The recommended next action is a **separately approved design-only feasibility
+pass for option 2**, with an explicit stop if secure bootstrap or suitable
+first-party primitives are unavailable. Do not implement ad-hoc encryption,
+weaken strict memory access, patch the SDK, or introduce raw syscalls. This
+document does not authorize that expansion. Conditional closure was already
+declined by the owner and is not silently substituted. Package 08 remains blocked;
+the completed compute/storage work is preserved without promotion to a supported
+secret boundary. No claim of impossibility is made.
 
 ## What the completed reconciliation establishes
 

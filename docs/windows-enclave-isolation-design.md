@@ -1,9 +1,51 @@
 # Windows secret-execution isolation: package 08 follow-up
 
-Status: **design, not implemented or qualified** (2026-10-12). The owner chose
+Status: **08A public canary implemented; qualification incomplete** (2026-10-12). The owner chose
 to keep package 08 blocked and design stronger isolation, rather than accept a
 conditional cleanup claim. No release gate, production API or algorithm changes
-are made by this document or its executable design criterion.
+are made by this document or its executable design criterion. The separate canary
+below does not replace any of the nineteen existing family images.
+
+## 08A canary checkpoint
+
+The separate `isolated_sha256` C/Rust fixture now stages a bounded, single-copy
+request before entering the guarded compute window. Its hardened in-place
+SHA-256 worker neither calls transport nor accepts a host pointer. It retires
+the entire input staging array, returns through the clear/readback/register
+wrapper, and only then publishes an explicitly public test digest. It retains
+strict containing-process access and refuses reentry. This is a **public-vector
+development experiment**, not a newly available secret API.
+
+On the local Windows x64 guest, 29 native cases pass: twenty independent hashlib
+digest comparisons plus malformed descriptor/length/control, input/output-copy
+failure, loaded-code expectation drift, denied admission, reentry and reuse.
+A separately compiled omitted-window-clear mutant terminates with `0xc0000409`
+and no success output. This is fatal rejection, **not successful cleanup**.
+The canary's dirty-readback branch cannot continue into SDK guard restoration.
+
+The actual signed PE and COFF objects bind seven Rust functions plus the thin C
+entry. With two byte-rebound in-image memory runtime summaries, its compute
+graph has ten nodes, 56 direct call/tail sites and no indirect calls or SDK
+entry. Normal compute depth is 2,544 bytes below the C/Rust entry, for both
+Win64 residues. This is not a bound on transport, OS or diagnostic paths.
+The [canary observation](../assurance/windows-protection-observations/isolated-canary-20261012.json)
+records twelve focused tests passing on Linux and Windows; Windows replays the same
+LLVM 23.1.2 disassembly, not an independent second decoding.
+
+Identity checks run inside this canary, compare the pinned loaded SDK text,
+and inspect its actual copy IAT slots. The first canary rejected correctly:
+the kit's copy declarations yield local linker-thunk addresses, so ordinary
+function-address comparison was insufficient. The corrected implementation
+checks the import slots instead. This is local identity checking, not remote
+attestation or production-signing qualification.
+
+**08A remains open:** bind the complete loaded transport/helper payload path;
+qualify staging residency, lifetime and retirement; requalify the modified
+outer wrapper/phase transitions and its incoming register context. Static
+enclave-owned staging is not yet a residency-qualified protected allocation.
+Only then can this boundary be used for the other families. Raw artifacts,
+failed first attempt and successful/mutant images are retained outside `target/`
+under `release-reports/windows-isolation-08a-20261012/`.
 
 ## What the completed reconciliation establishes
 
@@ -95,8 +137,10 @@ guarantee inferred from API success.
   retained secret output or an explicitly authorized output staging record.
 - The complete emitted compute call graph must contain no SDK import, host
   callback, allocator, OS query, lazy runtime initializer or unassigned indirect
-  target. First-party memory/arithmetic/probe helpers are permitted only with
+  target. In-image memory/arithmetic/probe helpers are permitted only with
   their existing byte, bound and register contracts. A source regex is not proof.
+  The canary rebinds the already-reviewed linked MSVC memcpy/memset bodies; it
+  does not treat their names or mere presence in the image as a qualification.
 - Ordinary invalid requests, cancellation and work limits use explicit errors
   through the cleanup wrapper. Existing fatal-abort exclusions do not authorize
   using exception dispatch as a routine compute error path.

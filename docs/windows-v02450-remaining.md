@@ -2,6 +2,34 @@
 
 ## Current completion checklist (2026-10-12)
 
+Packages 1–7 are complete at **conditional author-family review** scope.
+The [ParallelHash family reconciliation](windows-enclave-parallel-chains.md)
+closes package 7 across 198 emitted bodies and 17 cleanup funclets. Its final
+219-test suite passes on Linux and Windows with no skips, matching fresh reports
+and 104 current checker-source bindings. This is not whole-image qualification
+or an independent retest; no production Rust or release-gate policy changed.
+
+Remaining, in the existing finite plan:
+
+- **Package 8:** reconcile the frozen nineteen-route matrix with shared C/OS
+  admission, runtime/SDK and loaded-image identities, native scheduler contracts,
+  cumulative frame/home-space bounds, Win64 preservation, complete window
+  retirement and the outer return boundary. Family-level typed cleanup does not
+  establish erasure of earlier moved copies, frame padding or caller spills.
+- **Package 9:** reconcile documentation/support claims and packaging, run the
+  relevant fast checks and prepare one reviewable independent-pentest candidate.
+- **Package 10:** obtain and record independent retests; fix and test any findings.
+- **Package 11:** use existing verification/evidence-reuse rules, refresh only
+  invalidated native evidence, then require green GitHub and authorized tagging.
+
+No additional release gate is introduced. Production signing remains a consumer
+deployment responsibility. Windows ARM64 is not qualified by this x64 evidence.
+
+## Historical checkpoints (superseded by the checklist above)
+
+The following records retain their original status and sequencing. Their older
+"next", "pending" and "not closed" statements are not the current work list.
+
 Package 6's [completion evidence](../assurance/windows-protection-observations/sha3-batch-completion-20261012.json)
 records matching Linux/Windows saved-image reports and passing regressions.
 Its closure is conditional family author review, not whole-image qualification.

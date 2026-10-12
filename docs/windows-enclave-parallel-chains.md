@@ -1,14 +1,15 @@
 # Windows ParallelHash family review
 
-Package 7 is **open**. This is a saved-image author review, not a release gate,
+Package 7 is **complete at conditional author-family scope**. This is a
+saved-image author review, not a release gate,
 new native enclave run, independent retest or whole-image qualification.
 Production Rust, signed images and release-gate policy are unchanged.
 
-Latest progress: **all three Rust-family route reviews are conditionally
-complete** (regrouped Passes A–B). All 61 scalar, 73 AVX2 and 64 concurrent
-bodies, including 17 cleanup funclets, have explicit assignments and
-caller/lifetime composition. The combined reconciliation remains open
-(pass 4 / regrouped Pass C). Package 8 prerequisites are unchanged.
+All three Rust-family routes and their combined reconciliation are complete
+(regrouped Passes A–C). All 61 scalar, 73 AVX2 and 64 concurrent bodies, including
+17 cleanup funclets, have explicit assignments and caller/lifetime composition.
+The final 219-test suite passes on both hosts with matching parsed reports.
+Package 8 prerequisites remain unchanged and unsatisfied by this family review.
 
 The earlier progress sections below describe their historical checkpoints;
 the route closure sections supersede their earlier remaining-work statements.
@@ -410,6 +411,35 @@ whole-window erasure, arbitrary exception cleanup or independent qualification.
 Failed output copies may expose a prefix; callers must discard failed output.
 Pass C remains the combined three-route reconciliation, not another helper pass.
 
+## Pass 4 complete: combined family reconciliation
+
+The [final combined observation](../assurance/windows-protection-observations/parallel-chains-20261012.json)
+records **219 tests passing on both Linux and Windows, without skips**, matching
+fresh parsed reports and 104 current checker-source bindings. Linux took
+37.408 seconds for tests / 64.222 seconds total; Windows took 54.560 / 95.006.
+The complete preceding semantic reviews are executed again, not imported from
+historical PASS receipts. The final replay rejects 77,211 population byte
+mutations and 19,832 independently pinned sequential/concurrent instruction
+mutations; these are separate campaigns, not disjoint counts of source bytes.
+
+The final reconciliation checks exact body identities, not just totals; binds
+all 17 cleanup handlers to their original actual parent xdata; and reconciles
+every runtime caller and linked destination with its package 8 assignment.
+It retains the exact 173/269/305 build-source closures and three signed-image
+identities. Missing routes, invented or unnamed assignments, source/image drift,
+removed handlers, partial mutation results, erased prerequisites and broader
+cleanup claims reject. Historical partial observations above remain accurate
+for their original checkpoints; this combined report supersedes their open
+family-review status only.
+
+**Package 7 is now closed conditionally.** Next is the already planned package 8:
+shared C/OS admission and transport, runtime/SDK and native scheduler contracts,
+Win64 preservation, cumulative frame/home-space bounds, whole-window retirement,
+outer return and exceptional/platform teardown. All remain explicit prerequisites.
+Typed cleanup does not independently erase moved copies or arbitrary caller
+spills. No independent retest, new native enclave execution, production signing,
+whole-image qualification or release readiness is claimed here.
+
 ## Reproduce the author checks
 
 The saved development artifacts live outside `target/` and are not distributed
@@ -430,6 +460,8 @@ python3 scripts/cryptography/windows_enclave_parallel_sequential.py SAVED_DIRECT
 python3 scripts/cryptography/test-windows-enclave-parallel-sequential.py --saved-directory SAVED_DIRECTORY
 python3 scripts/cryptography/windows_enclave_parallel_concurrent.py SAVED_DIRECTORY --mutate
 python3 scripts/cryptography/test-windows-enclave-parallel-concurrent-route.py --saved-directory SAVED_DIRECTORY
+python3 scripts/cryptography/windows_enclave_parallel_chains.py SAVED_DIRECTORY --mutate
+python3 scripts/cryptography/test-windows-enclave-parallel-chains.py --saved-directory SAVED_DIRECTORY
 ```
 
 The tests reject missing/extra bodies or handlers, modified bytes/relocations,

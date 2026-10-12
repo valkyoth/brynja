@@ -64,7 +64,8 @@ systems, all 262 checker-source bindings match, and 88,058 body-byte mutations
 are rejected. The earlier single-process Windows run was deliberately stopped
 for the complete parallel rerun; its incomplete log is not PASS evidence.
 This validates saved-image analysis, not a new enclave execution or an
-independent review. Next is package 7, ParallelHash.
+independent review. The subsequent [ParallelHash package 7 review](windows-enclave-parallel-chains.md)
+is also conditionally complete; the current next step is shared package 8.
 
 ## Executor call effects and original allocation lifetimes (2026-10-12)
 

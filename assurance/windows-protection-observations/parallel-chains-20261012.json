@@ -1,0 +1,562 @@
+{
+  "schema": 1,
+  "date": "2026-10-12",
+  "baseline": "9f5e7212",
+  "status": "AUTHOR_CONDITIONAL_PARALLELHASH_FAMILY_COMPLETE_VALIDATED",
+  "completion_package": 7,
+  "pass_number": 4,
+  "pass_complete": true,
+  "completion_package_closed": true,
+  "closure_scope": "Conditional author review of the three frozen Rust-family populations only",
+  "whole_image_qualified": false,
+  "new_native_enclave_run": false,
+  "independent_retest": false,
+  "production_changed": false,
+  "release_gate_changed": false,
+  "parsed_linux_windows_reports_match": true,
+  "checker_source_bindings": 104,
+  "validation": {
+    "linux": {
+      "tests": 219,
+      "test_seconds": 37.408,
+      "total_seconds": 64.22188520431519,
+      "exit_code": 0,
+      "skips": 0
+    },
+    "windows": {
+      "tests": 219,
+      "test_seconds": 54.56,
+      "total_seconds": 95.00624585151672,
+      "exit_code": 0,
+      "skips": 0
+    }
+  },
+  "assigned_bodies": 198,
+  "assigned_funclets": 17,
+  "distinct_instruction_mutants_rejected": 19832,
+  "prior_population_replayed": {
+    "status": "AUTHOR_PARALLELHASH_REUSE_AND_REMAINING_MAP",
+    "body_mutants_rejected": 77211,
+    "concurrent_complete": false
+  },
+  "files_sha256": {
+    "parallel-chains-final-linux.json": "fa52abd5d593cf33ec9f00a494e4ab243f4cc87cc2adcecc71388c6530e47f48",
+    "parallel-chains-final-linux.log": "63a9e16da6c589c2cc192beb2227403cdd2171a90e67901d09fc5ce007126a53",
+    "parallel-chains-final-linux-tests.json": "47f806e209613a437dd8f81b9c529e006027d508c2d1b22e3168c522111b0e36",
+    "parallel-chains-final-linux-exit.json": "a6ae0fe644e56c88666e1f150264b938f91f4f1e5f025e93924f12f4be53b9af",
+    "parallel-chains-final-windows.json": "bcbd46bc992b135d4813a6e1281591e578ecd483c374543c9385d1defc2f5952",
+    "parallel-chains-final-windows.log": "fbc95bc236dc46771c0e9ccab31024dd5e9e812d4369e45d627e94cffe22379a",
+    "parallel-chains-final-windows-tests.json": "29cf3b830ba3079cae899eb8639dc4da77e2bf777f03ef05fdf9fec0083f2d07",
+    "parallel-chains-final-windows-exit.json": "1be58184272c8f087da2e509d251da325613667fa48e771b3bac08d3e54f0d02"
+  },
+  "runner_sha256": "eb68816b000ecef4de0872ef93fc63078ce178e4b15fb22c8fe86cf226a085da",
+  "reconciler_sha256": "91fca68f160a411778678c1bcece9cec811c8fb03d6ac3f15b14595574b11fde",
+  "checker_source_sha256": {
+    "windows_enclave_archive.py": "2a58472e43c67e5917d37880b09118d0fd59b6047d3964c8e6a1ab4cda1bd170",
+    "windows_enclave_bounded_callbacks.py": "392c7e44893cdd657628484a22820315542062e16ff606738120d73986b592d2",
+    "windows_enclave_bounded_dispatch.py": "2b06da5690425237176affbd7b1ea3492aee6563488ddea8b530614e06d67b54",
+    "windows_enclave_bounded_export.py": "5cab689e426d3d227fb88352afdd3492748b2d169089f0094e698574b4093199",
+    "windows_enclave_bounded_input.py": "78af4234d95ae7469aa001099d8bdd6965b9d074de27eec3e331ee76637e57b2",
+    "windows_enclave_bounded_memory.py": "9f38cd6123704adaaf9f22318886eefbfe56e81c7af9fe9d881eca3858d19ba2",
+    "windows_enclave_bounded_owner.py": "3960351f4ebda9dd81b4f1ac431d2e0a1ada38cc6e86bbe4cbc27fee0f0307f3",
+    "windows_enclave_bounded_rehash.py": "9d8df50b4355913c5ca56b677733d64422fc59d963230a1b4892e812e03bd04a",
+    "windows_enclave_bounded_sha256.py": "13657b2f79684b2373259bd047481e2141b24ac711cf772bed2d9e774e059bad",
+    "windows_enclave_caller_binding.py": "922cb9ad79af5f4c5e75fbb5efd279e400ff5e7b469e560cb105447727a22dcd",
+    "windows_enclave_caller_handlers.py": "b028cefe5022f26ede84e8ec0188b6b23babb201ec12f2718cad6cc441283090",
+    "windows_enclave_caller_object.py": "105a6775082ecc46dbc7cf6fc8c70712ff33962b2fb95a6fdf9abffbc2e1b0ab",
+    "windows_enclave_caller_unwind.py": "733b1c419e62ffc307cdf7fcbb7e31cedcec9bd791dfa70d1beba088a14e9d86",
+    "windows_enclave_construction_review.py": "7b8000c8b682705421ff05d53f91d42e74622018ecea023d3b6fa87ea53668c6",
+    "windows_enclave_engine_review.py": "585d45e2f087fe00e0f37553d6bb9a541c2e29d59deffda5ca320ea62a6ccf09",
+    "windows_enclave_frame_geometry.py": "e63be85cb7a1c407647ae4cc94f056d6ca8e1947553cf69292e97a0084264562",
+    "windows_enclave_kmac_assignment.py": "8ad26fc72f9b4b58c84edba95e685ceb0dad11ced0206259ca222214c8fee759",
+    "windows_enclave_kmac_chains.py": "773cd78c964a215b2c50f107e84d2ff970b6a65d5a0a8cde687c74955028ebe3",
+    "windows_enclave_kmac_lifecycle.py": "4caef0ed31205bdcc53c8cf985ec21728004ed93e542080385ab579c41e00012",
+    "windows_enclave_kmac_readers.py": "5d9b1327ae8e6a5bc887cd48574297934e3a9a5bee1a025caccac00532b3d34b",
+    "windows_enclave_kmac_reuse.py": "7703dc88a1682eb77b3e0c3d3545fc88b6d50cb0c417212638e2ddf12f533551",
+    "windows_enclave_kmac_shapes.py": "62baae7b11f66caee6e330a9b766045c9150f6294bd59a618a290930d4d05139",
+    "windows_enclave_leaf_binding.py": "8d4f5cd8d55bbabe8de782abb0b6d428ac5a54992fdf1ee054e1db76e291e8c3",
+    "windows_enclave_memory_runtime.py": "b746c52d04d52c514e17b31445a5bd192aace02e967b1a6b618a18d3e8514920",
+    "windows_enclave_parallel_avx2_lifecycle_bytes.py": "503f2fb2fd7dad2a92bc3b2a02136ad101fc5a58bdd6d8fe97ef7cc5b39c4d50",
+    "windows_enclave_parallel_avx2_owners_contracts.py": "5e6e444264f8366fc31e34fd2bbe5bd7b190ed0f8acb8d24e855cf07c487acfe",
+    "windows_enclave_parallel_avx2_request_bytes.py": "d92b302ecd330fea6e1c1c58b0cf7288258b1f30368a25227e7db9c4a6fe6290",
+    "windows_enclave_parallel_avx2_state_contracts.py": "437429bdde7b5d91ad4640bd46761a1fcfdfbb757c1bc39e5c5109546e0249ae",
+    "windows_enclave_parallel_callers_bytes.py": "0bcdcb83603befb5620056f6af8e0d7294bf2bb0a33a2fc75ccfa6145b682ad5",
+    "windows_enclave_parallel_chains.py": "a68e3f98ce06a6a2608215682203b21fbbc386743644fb40773590d5db311a1d",
+    "windows_enclave_parallel_concurrent.py": "46fc1ef27b68c95b9996fe16d37b03ce40d3d77681a2f0e46747ea535b125abb",
+    "windows_enclave_parallel_concurrent_contracts.py": "c789b63da48e9c17ab94aa019bca0ccca3ed50f176e8aefe9b1b8849f008b69e",
+    "windows_enclave_parallel_concurrent_models.py": "67521618050eca71d2141d6b4bec6221716d2be3a5c850fa0cb90f7c30298f42",
+    "windows_enclave_parallel_custom_bytes.py": "666f53a17930bedf33291ba03f29dc7932aeb364751c0e0c1935a2bfbece4a97",
+    "windows_enclave_parallel_entry.py": "d0340c34c9926adabaef227a0d419929c89779d5ec3c6b783ab71bc48ccd1d07",
+    "windows_enclave_parallel_entry_bytes.py": "36d7e601c2ca7ba3dd56ffe3a223ecc74d7bc1d8f13ea9967613d200521ffdfc",
+    "windows_enclave_parallel_entry_models.py": "d2795358b49f9115962893ad71fabd8bfa63c9104375811dccde301ad3933267",
+    "windows_enclave_parallel_framing.py": "eafbcb7d1ca476a33cb5bb2d5911b900f24b2ec7b0f33dbe0605eb1ffdcab1c6",
+    "windows_enclave_parallel_framing_models.py": "958e3a89453a8a5cbb65728db279a843711620abe7d19a567cb602967bb0b05c",
+    "windows_enclave_parallel_inventory.py": "849d3a9db785336fbf37c3a421fd21834d64ed5d84ae6f6e17f68c255e131bf4",
+    "windows_enclave_parallel_leaf.py": "776a32b641a88c3c1f7c95894e400a6f74da6a66b90bdf74ce8f32d003540338",
+    "windows_enclave_parallel_leaf_absorb.py": "9a0d55e382378d70711beda1a531688a6263aad61588e6e56e67068db80af115",
+    "windows_enclave_parallel_leaf_finish.py": "5e6e5baf06ad3b185a80e27b16a5ffff42313131c9b0b1f6fe0d6a679595215d",
+    "windows_enclave_parallel_leaf_flush.py": "ae0839376460595cac687a211322bf5633274a4bbe25da19c340594ec924a9e6",
+    "windows_enclave_parallel_lifecycle.py": "fb88f1630c92f8e3567d31ea3f78e14378ae1a35b9de208085d8b8d0d28a4b19",
+    "windows_enclave_parallel_lifecycle_models.py": "f038858249a28807c1a166d41236567bb55097a812657e2f7342bf714afee773",
+    "windows_enclave_parallel_request.py": "225540a8f9b52350f278754409a7df6e99f25b4732f026c10955d6cd439d3fa5",
+    "windows_enclave_parallel_request_models.py": "8d42b4b97ef36b351f8dc7e7034d11b4d8a78e1cd8c7a200a3d9655eb605a6f0",
+    "windows_enclave_parallel_reuse.py": "6016fe4b7b3b6673adb7050807a98049375025964955babc4623c4cdc3747436",
+    "windows_enclave_parallel_root_bytes.py": "c7c3a27db408e619b5b0486874db98b28544bb5fc673eece3943c9c36fe567c2",
+    "windows_enclave_parallel_scalar_lifecycle_bytes.py": "2fe3a9948c86620fed743a1db7b9e79102ea62dfe87d9b759f32b73d8a3c796a",
+    "windows_enclave_parallel_scalar_owners_contracts.py": "2f6a4b3defbad57ee927654e3805f62f3cff88de3ac08ada184ad2261d0c4f3a",
+    "windows_enclave_parallel_scalar_request_bytes.py": "55e109a0fcc7f4775f428c9bc1aee28399bd8e493d2428b98be4466405be25c0",
+    "windows_enclave_parallel_scalar_state_contracts.py": "3114fae0e03483d6bb2148af5a161558a3a7d7043a899abedbbaaf9244c6bf6d",
+    "windows_enclave_parallel_sequential.py": "034ab2fbdfed37577f9aa7cc3066f01595972bfc256b9bf83678a85a20bfce4a",
+    "windows_enclave_parallel_sequential_models.py": "f7f97614ab828df4a74f4b642ada5eeb2a36e39e13a7a7f1b3ea7934f4e2cf86",
+    "windows_enclave_parallel_setup_bytes.py": "91d7c936e21a0d4a6d62413b7481a073e7f5f5a161c9ed93de964174b6422870",
+    "windows_enclave_publication_review.py": "a0ef511be73e3cd74714a862e0efd1c0dce9a2477d22853ad22e4aa6e78fb61a",
+    "windows_enclave_retirement_review.py": "117a0dab27a47b90496f5f7a5fda418ba951cb058cfe29cd0a6904d169ca4808",
+    "windows_enclave_root_return.py": "7b078894de02b1f1bf77a286ad30dc65cfe4e3a94733120bba31a0c83b59a198",
+    "windows_enclave_root_setup.py": "99d65c886852dfd877d7382ea60cf4c16766ca4cb01d8486815bd35822dd6eea",
+    "windows_enclave_route_memory.py": "97305b6dba9e758463ac6b31e09f5d51b7cf41d99b3ebae860b68a976231c3ec",
+    "windows_enclave_route_transport.py": "7a9baddf0de345fa95eb4022631167786d082de839f01895da696588860b09d8",
+    "windows_enclave_sdk_context.py": "5dc989fb47c8ab8a203d3c1375e9128cd6c5b12772c90b4180a4f24192fee696",
+    "windows_enclave_sdk_conversion.py": "3d2e156eb1d5c8270e079575bfb77b4f85bbb7b7a85086ec0ce927b0af536595",
+    "windows_enclave_sdk_decoders.py": "f2fecab13a96c421a1a7b100459c1b68a1c801d40c930c280913cf1b4b3a3e28",
+    "windows_enclave_sdk_diagnostic.py": "03927cba86f2aec7748f487c65cb220d62781b03cafec2f95f02daa922d7938a",
+    "windows_enclave_sdk_directory.py": "92f3d73b7e5fee0c8d38532be47edba315762e457acad8f10612071ba792b374",
+    "windows_enclave_sdk_dispatch.py": "1f3c17ade072651320a2f6cd4a752c128fffe6aeb94da3df0eb22912417746ee",
+    "windows_enclave_sdk_dispatch_helpers.py": "929c9a0fd31991c73d35eb9b4edaebf1b0b35092b8752bc16bee90c8c9d3b9f9",
+    "windows_enclave_sdk_exception.py": "7dd1c3cf0a77385ecdf52820fd9357509f7e96f99de95ded41140b5d49d6a73a",
+    "windows_enclave_sdk_formatter.py": "a97c951ad93b707a74fa71bfea1779ae6c744d87164bb7a20d79702b16e68349",
+    "windows_enclave_sdk_frames.py": "d1a216415c7db208d8a300216eb3a18d88b69e1d4cd7a8bfe8adcfdfcb924d4d",
+    "windows_enclave_sdk_locking.py": "cae7ddef94cb1cb2c72ebe96fc0c9786f2433cca4af36580c3dd0846825913f5",
+    "windows_enclave_sdk_return.py": "828078bcb565be09255970f15e0e13757a36a1e97cb612e94805b6b6b0c0b4af",
+    "windows_enclave_sdk_runtime.py": "1f720b635672cc15a224a5c85617174f4c9a619910aa36ffc06bd3f167bbe4a4",
+    "windows_enclave_sdk_status.py": "52408375d37ff1404beb891a7fedd0f29d9ae0b6b8b4ef3360b9f2d695565e52",
+    "windows_enclave_sdk_unwind.py": "52b20b91641e689770f96e464dd6cfca412cc96bebcb9fb26f68e8e23504b9d9",
+    "windows_enclave_sequential_c.py": "46ebeecea72e1b00b6567125ee8f6af8de261919b5176384bf5757750bc93723",
+    "windows_enclave_session_runtime.py": "d6dffc31963f18f7c5325170d9d5d3424114a8cf695bc581d57bd96f42da76a7",
+    "windows_enclave_sha3_avx2_chain.py": "d8f53834025e7743dfe192318c38813e5ce41a79f7c41cfc871a1429660115ab",
+    "windows_enclave_sha3_avx2_shapes.py": "42443206f53ec4bceff5723dd2452fffa5f5d3ebf342f79e947a7a0474d8ec6b",
+    "windows_enclave_sha3_chain.py": "8442c66577058bfed9a3020c6e0ef4e1927119b57c66cc2005bce59e56ef7113",
+    "windows_enclave_sha3_finalize.py": "88a663c79017703a4bc32d3a9a8a2f4ca6a4124b73536228bbcfc55def39acf1",
+    "windows_enclave_sha3_finalize_shapes.py": "e99ee5f1a05aa5aa6c60620544adae26dc012f4d944ce10eb802344a91065376",
+    "windows_enclave_sha3_lifecycle.py": "fd92dbbd89a2e5a2c4a9ac47b7892dc6942f63cd690984630eb77590eb0ef5aa",
+    "windows_enclave_sha3_lifecycle_shapes.py": "0b2699b585b4753a5bc8f46df06187f5867fb44fbd60b56f40c9a77b737ef95b",
+    "windows_enclave_sha3_operations.py": "6bae60b30eda6cb25d088e594cd24e97c44500b6f2a82aaee7965fe1271904b7",
+    "windows_enclave_sha3_operations_shapes.py": "8d9d96bea00aa4a83fc0dbab313e36fa5fb81aa2db3c264a84b717b45241f131",
+    "windows_enclave_sha3_permutation.py": "5355fcbf96707fa944246c9f6d8e551f6888035d069588940303837b4bf660fd",
+    "windows_enclave_sha3_prefix.py": "5f936785c61b9cd5a7e25aa1982e72f3bf6c7bb5b4dadaaa1cee6bab983ac3f3",
+    "windows_enclave_sha3_setup.py": "1bb503d1f90385f24bc38ed6a7c26d1309725b4016178ce06a321afc061f8736",
+    "windows_enclave_sha3_state.py": "99d3d6388a0db9c4014aa066f6563d0a883f0110f068cfcfd798118062202fe1",
+    "windows_enclave_sha3_state_shapes.py": "4367048f81de450cf79724526a95c180a771ef649b40f171bacd5cd3a65d0ce1",
+    "windows_enclave_sha3_terminal.py": "23550be63b88b7b08eb04ca5f5c62727d4247e8f7abbdf3faa505c4b16d69502",
+    "windows_enclave_sha3_transfers.py": "aaa3854dbde85d38df7ade95b89453bc53d053cddef9d4012c4fe946a8416689",
+    "windows_enclave_sha3_update.py": "bf914185584b3ac3b9b02bedeb2e7257f2d5747ed859043bd127f2e60a6069b9",
+    "windows_enclave_slot_review.py": "a0e92703c339b2c6dc57ebed2307e5646b59d6b3a12736e527ec71cc9154dfc4",
+    "windows_enclave_state_cleanup.py": "612884e91819abb4e5e04a0cbd5c7192c82b210292ba8cff720f607fbe367df1",
+    "windows_enclave_state_operations.py": "748dc2e2f053035f0c296be4efc4ca1fc917e2f49dd75ec0ccadf1b08db3a64f",
+    "windows_enclave_terminal_review.py": "4530d0dad8c22fefc6c69dcb5898fb5c056b6efcd1676953995a250b97158acb",
+    "windows_enclave_worker_boundaries.py": "5f999bd857535f192210d6f4b36d6d109ae0048fb08cc8cf64ed1db3c5942750",
+    "windows_enclave_worker_memory.py": "c2f733c83f21616608e493e1ca416e4ee4265beb0dcfd818596a27da12b63616",
+    "windows_enclave_wrapper_binding.py": "9cb91ca69f7e8b196285353f8fb0ba1e879fecc6620be4e1fda8f35ba7c6161a"
+  },
+  "test_source_sha256": {
+    "test-windows-enclave-parallel-chains.py": "1a53403417ca3af8f43aa9b8f06f9cef0e00079129365705aa95409e916aaca8",
+    "test-windows-enclave-parallel-concurrent-route.py": "77d4d2df45d3503367fa1137b205bbdb1c56da21bde08fed3fb253a7981cdb59",
+    "test-windows-enclave-parallel-sequential.py": "b4e73ce739820ac70373505c9867f23e64e0593f915eab3944a83b6c4cb6a3f9",
+    "test-windows-enclave-parallel-request.py": "1285d68e166d6f11bb8ae87dc32a951d3f49591569a33648eb3e78f909dc0264",
+    "test-windows-enclave-parallel-lifecycle.py": "6d36883afafe16b4d22cb9c5bd3ff393f499265f800de3437e635c0990e6c3a8",
+    "test-windows-enclave-parallel-framing.py": "35013bb90ef27a245c21a10b38d8ba6bf084b2c8128bdc1e296274e421913af2",
+    "test-windows-enclave-parallel-leaf.py": "41b029a74edd4f10929ac6c22f618e1da7951e09b04049793bb9cd1fdb6cd7a7",
+    "test-windows-enclave-parallel-inventory.py": "2d68cccfabef62f17377fd6d32f8256fe3043d17bb97c32327af4863b469e06a",
+    "test-windows-enclave-slot-review.py": "0e3b62873437a9705a7fd92cc1ddfdb5fa6e0b9f7a80587ca6a49cffe9287967",
+    "test-windows-enclave-publication-review.py": "abdb27ae6af92aeaa0da6358a5ae0f72931644570720fc00cbd3132875ed047c",
+    "test-windows-enclave-retirement-review.py": "b3e18e0052b7d0a55cddac978fa444bdcfcc131c29f014890c9e512235822102",
+    "test-windows-enclave-state-cleanup.py": "229df7fb5aa5df0196a876b038a1bdc1433e619470db97f02b73714e959d548f",
+    "test-windows-enclave-engine-review.py": "f92ecb0254e3b5c17eb284025280f5e94817b2adceface7bf5018071988314d7",
+    "test-windows-enclave-construction-review.py": "d100c59c352b0659bb075e32f76d69965a44f259629ddabb9e9138abf1d33730",
+    "test-windows-enclave-root-setup.py": "355327ef4e82fc89055c3449d471162c32116131174817b80810110496633ae7",
+    "test-windows-enclave-terminal-review.py": "fc728f043ab14641d0b5de5e12c9ea3382c955035fd57616fd9212a259c7db1c",
+    "test-windows-enclave-root-return.py": "eef19c96d53f58e17ce6d985c74783ad29dead14bc016ae61eb519cc85d11923",
+    "test-windows-enclave-caller-handlers.py": "5bb82977cb2faf295b9b43eb653b620ef6a2035e464142658682293ee9b2b842",
+    "test-windows-enclave-caller-binding.py": "9a7db6395df0954d55df22c4d4d75f2394a130a6d0a09c1c4c3b91a14c930613",
+    "test-windows-enclave-leaf-binding.py": "6360e0894db1385c157fd01a6db426daeb7acbdc1cfd8e37cb7181da0092ca2b",
+    "test-windows-enclave-wrapper-binding.py": "2cf641a1b3929872b47bcc4e02bcea85c63bfd29ade1e1b42ec15d23e38f0b54"
+  },
+  "routes": {
+    "scalar": {
+      "body_count": 61,
+      "cleanup_funclets": 0,
+      "object_sha256": "b30106a15c3a472b01e9ba3c6ecc794d6796059acd28e8e4c4bfaf30a5583b5b",
+      "image_sha256": "9fbeb3d6d940daf0ecd5172969d4160c3e6e71eb7465b279a11bbc1a77c3da13",
+      "build_source_count": 173,
+      "build_sources_sha256": "bff97b3b4952525244a5a43ef9dcf11d582dae5d0edc4307bbce7bb14338f230",
+      "assignments_sha256": "33afb102732290c737f5c6e0ddeedce666c60b7b0d8bbc4c62fd9be82b9d9510",
+      "semantic_report_sha256": "a7d112e38650e370ddd349f02df6344e7083db7169073ba6040067feed96ef8c",
+      "handlers": {},
+      "runtime_boundaries": {
+        "memset": {
+          "rva": 44272,
+          "callers": [
+            "RetainedWork",
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_stateNtB2_5State4leaf",
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_stateNtB2_5State5setup",
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_stateNtB2_5State7squeeze",
+            "_RNvMs0_Csh5jde4i55II_15parallel_streamNtB5_5Owner13finish_custom",
+            "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018511encode_u128"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicParallelObserve": {
+          "rva": 34672,
+          "callers": [
+            "RetainedWork"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicProbeAbort": {
+          "rva": 34944,
+          "callers": [
+            "_RNvCs1njKG4L9aB3_7___rustc17rust_begin_unwind"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicParallelSource": {
+          "rva": 34896,
+          "callers": [
+            "_RNvCsJ7dH9IFLu0_22parallel_stream_worker7receive"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicParallelInput": {
+          "rva": 34352,
+          "callers": [
+            "_RNvCsJ7dH9IFLu0_22parallel_stream_worker7receive"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicParallelOutput": {
+          "rva": 34736,
+          "callers": [
+            "_RNvCsJ7dH9IFLu0_22parallel_stream_worker7receive"
+          ],
+          "assigned_completion_package": 8
+        },
+        "memcpy": {
+          "rva": 42544,
+          "callers": [
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_inputNtB2_5Input5flush",
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_inputNtB2_5Input6absorb",
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_stateNtB2_5State4leaf",
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_stateNtB2_5State5setup",
+            "_RNvMs0_Csh5jde4i55II_15parallel_streamNtB5_5Owner13finish_custom",
+            "_RNvMs0_Csh5jde4i55II_15parallel_streamNtB5_5Owner5begin",
+            "_RNvMs0_Csh5jde4i55II_15parallel_streamNtB5_5Owner6rehash",
+            "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018511encode_u128"
+          ],
+          "assigned_completion_package": 8
+        },
+        "__udivti3": {
+          "rva": 32656,
+          "callers": [
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_inputNtB2_5Input6finish"
+          ],
+          "assigned_completion_package": 8
+        },
+        "__chkstk": {
+          "rva": 37728,
+          "callers": [
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_stateNtB2_5State5setup"
+          ],
+          "assigned_completion_package": 8
+        },
+        "__umodti3": {
+          "rva": 32432,
+          "callers": [
+            "_RNvMNtCsh5jde4i55II_15parallel_stream21parallel_stream_stateNtB2_5State5setup",
+            "_RNvMs_NtNtNtCs58M5yX2Qwr5_16brynja_hash_sha38hardened6cshake5setupINtB4_5SetupKja8_E7advanceBa_"
+          ],
+          "assigned_completion_package": 8
+        }
+      },
+      "distinct_instruction_bytes": 10166,
+      "distinct_instruction_mutants_rejected": 10166,
+      "prerequisites": [
+        "C/OS admits exclusive original resident page and private window, serialized without reentry",
+        "complete AVX2 deployment bundle and original authority remain valid before each Rust entry",
+        "fixed transport copies, runtime memory/division/stack-probe and Windows ABI contracts",
+        "whole private-window retirement covers moved copies, frame padding and compiler spills",
+        "exception/abort/platform teardown outside invoked Rust funclets remains package 08",
+        "application discards output on error; a failed or subsequently revoked copy is not rolled back"
+      ]
+    },
+    "avx2": {
+      "body_count": 73,
+      "cleanup_funclets": 13,
+      "object_sha256": "629d1c3ef42bd818df75df445df0096c0d4396d9919ad91af7141575bcc987a9",
+      "image_sha256": "f6eac516db512c188abc547ff27ade796ed73a8281363b68fd3fb89ff6996e79",
+      "build_source_count": 269,
+      "build_sources_sha256": "1901490f3092b32cab6ab9430bebf4c74725888d7b7ae98d9f32d79958bd1f15",
+      "assignments_sha256": "a5be98ad0dbfeb9884c2ec393370a76aead7bdb525e010fc92e8835677cd6c74",
+      "semantic_report_sha256": "5457794375f05cafa76cdbd277a60fc96b3fbc1fba74c3e7f0bd1b32cd80dcd8",
+      "handlers": {
+        "?dtor$11@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner7squeeze@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner7squeeze",
+        "?dtor$18@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner13finish_custom@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner13finish_custom",
+        "?dtor$20@?0?_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_inputNtB2_5Input5flush@4HA": "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_inputNtB2_5Input5flush",
+        "?dtor$23@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6finish@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6finish",
+        "?dtor$24@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6rehash@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6rehash",
+        "?dtor$28@?0?_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_stateNtB2_5State5setup@4HA": "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_stateNtB2_5State5setup",
+        "?dtor$2@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6cancel@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6cancel",
+        "?dtor$32@?0?_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_inputNtB2_5Input6finish@4HA": "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_inputNtB2_5Input6finish",
+        "?dtor$36@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner11finish_root@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner11finish_root",
+        "?dtor$6@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner5begin@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner5begin",
+        "?dtor$7@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6custom@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6custom",
+        "?dtor$7@?0?_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6update@4HA": "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6update",
+        "?dtor$8@?0?_RNvXs0_CsfvPLeZHCkZA_29parallel_accelerated_residentNtB5_8ResidentNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop@4HA": "_RNvXs0_CsfvPLeZHCkZA_29parallel_accelerated_residentNtB5_8ResidentNtNtNtCs8xEFJqa6dYS_4core3ops4drop4Drop4drop"
+      },
+      "runtime_boundaries": {
+        "memset": {
+          "rva": 50096,
+          "callers": [
+            "RetainedWork",
+            "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+            "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7squeeze",
+            "_RNvMs_CsfvPLeZHCkZA_29parallel_accelerated_residentNtB4_8Resident3new",
+            "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicParallelObserve": {
+          "rva": 32432,
+          "callers": [
+            "RetainedWork"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicProbeAbort": {
+          "rva": 32704,
+          "callers": [
+            "_RNvCs1njKG4L9aB3_7___rustc17rust_begin_unwind"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicParallelSource": {
+          "rva": 32656,
+          "callers": [
+            "_RNvCs6vN7PGL8mdd_27parallel_accelerated_worker7receive"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicParallelInput": {
+          "rva": 32112,
+          "callers": [
+            "_RNvCs6vN7PGL8mdd_27parallel_accelerated_worker7receive"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PublicParallelOutput": {
+          "rva": 32496,
+          "callers": [
+            "_RNvCs6vN7PGL8mdd_27parallel_accelerated_worker7receive"
+          ],
+          "assigned_completion_package": 8
+        },
+        "memcpy": {
+          "rva": 48368,
+          "callers": [
+            "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_inputNtB2_5Input5flush",
+            "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_inputNtB2_5Input6absorb",
+            "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_stateNtB2_5State5setup",
+            "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+            "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner5begin",
+            "_RNvMs_Cs22XHcxRQXBi_20parallel_acceleratedNtB4_5Owner6rehash",
+            "_RNvMs_CsfvPLeZHCkZA_29parallel_accelerated_residentNtB4_8Resident3new",
+            "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128"
+          ],
+          "assigned_completion_package": 8
+        },
+        "__udivti3": {
+          "rva": 29472,
+          "callers": [
+            "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_inputNtB2_5Input6finish"
+          ],
+          "assigned_completion_package": 8
+        },
+        "__chkstk": {
+          "rva": 35504,
+          "callers": [
+            "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_stateNtB2_5State5setup",
+            "_RNvMs_CsfvPLeZHCkZA_29parallel_accelerated_residentNtB4_8Resident3new"
+          ],
+          "assigned_completion_package": 8
+        },
+        "__umodti3": {
+          "rva": 29680,
+          "callers": [
+            "_RNvMNtCs22XHcxRQXBi_20parallel_accelerated26parallel_accelerated_stateNtB2_5State5setup",
+            "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance"
+          ],
+          "assigned_completion_package": 8
+        },
+        "memcmp": {
+          "rva": 51024,
+          "callers": [
+            "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu16static_execution10operations12known_answer"
+          ],
+          "assigned_completion_package": 8
+        }
+      },
+      "distinct_instruction_bytes": 7105,
+      "distinct_instruction_mutants_rejected": 7105,
+      "prerequisites": [
+        "C/OS admits exclusive original resident page and private window, serialized without reentry",
+        "complete AVX2 deployment bundle and original authority remain valid before each Rust entry",
+        "fixed transport copies, runtime memory/division/stack-probe and Windows ABI contracts",
+        "whole private-window retirement covers moved copies, frame padding and compiler spills",
+        "exception/abort/platform teardown outside invoked Rust funclets remains package 08",
+        "application discards output on error; a failed or subsequently revoked copy is not rolled back"
+      ]
+    },
+    "concurrent": {
+      "body_count": 64,
+      "cleanup_funclets": 4,
+      "object_sha256": "54e093b8c256fee820f349d75d1758f803e26c2cc8c1d4d0e22b4f5a420a46b8",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "build_source_count": 305,
+      "build_sources_sha256": "227ed9304006788331e67af59faaaa062255801b6999897ecad69427760c051c",
+      "assignments_sha256": "fc070049e40a886e3e071a161e366ae9b0a4d1c7b5c9f6c1f4805cc2174879e2",
+      "semantic_report_sha256": "6d39b2234bc88de405f3885f302f323eedc835f1f59c304bb37996609fe02b58",
+      "handlers": {
+        "?dtor$28@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run@4HA": "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run",
+        "?dtor$55@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish@4HA": "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves6finish",
+        "?dtor$59@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA": "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+        "?dtor$62@?0?_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new@4HA": "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new"
+      },
+      "runtime_boundaries": {
+        "__chkstk": {
+          "rva": 34128,
+          "callers": [
+            "PrivateWaveRoot",
+            "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new"
+          ],
+          "assigned_completion_package": 8
+        },
+        "memset": {
+          "rva": 48608,
+          "callers": [
+            "PrivateWaveRoot",
+            "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+            "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7squeeze",
+            "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+            "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PrivateWaveRootRegion": {
+          "rva": 30352,
+          "callers": [
+            "PrivateWaveRoot",
+            "_RNCNvCsk1CFy3R4N16_20parallel_wave_bridge4root0B3_"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PrivateInputCopy": {
+          "rva": 28768,
+          "callers": [
+            "PrivateWaveRoot"
+          ],
+          "assigned_completion_package": 8
+        },
+        "memcpy": {
+          "rva": 46880,
+          "callers": [
+            "PrivateWaveRoot",
+            "_RNvMNtCs2u1vj83u0E8_14parallel_waves5stateNtB2_5State4leaf",
+            "_RNvMs2_CscBEH4D3OuJh_22sha3_accelerated_stateNtB5_5State7initial",
+            "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves24parallel_concurrent_slotNtB4_4Slot3run",
+            "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves13declassify_to",
+            "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new",
+            "_RNvNtCs58M5yX2Qwr5_16brynja_hash_sha38sp80018516left_encode_u128"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PrivateSchedulerRetire": {
+          "rva": 29280,
+          "callers": [
+            "PrivateWaveRoot"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PrivateSchedulerComplete": {
+          "rva": 29200,
+          "callers": [
+            "PrivateWaveRoot"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PrivateInputOutput": {
+          "rva": 29024,
+          "callers": [
+            "PrivateWaveRoot"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PrivateWaveAbort": {
+          "rva": 29600,
+          "callers": [
+            "PrivateWaveRoot",
+            "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueINtNtB4_6option6OptionNtCsk1CFy3R4N16_20parallel_wave_bridge11PublicationEEBZ_",
+            "_RINvNtCs8xEFJqa6dYS_4core3ptr9drop_glueNtCsk1CFy3R4N16_20parallel_wave_bridge11PublicationEBD_",
+            "_RNCNvCsk1CFy3R4N16_20parallel_wave_bridge4root0B3_",
+            "_RNvCs1njKG4L9aB3_7___rustc17rust_begin_unwind",
+            "_RNvMCsk1CFy3R4N16_20parallel_wave_bridgeNtB2_11Publication4join"
+          ],
+          "assigned_completion_package": 8
+        },
+        "PrivateWaveDispatch": {
+          "rva": 29616,
+          "callers": [
+            "_RNCNvCsk1CFy3R4N16_20parallel_wave_bridge4root0B3_"
+          ],
+          "assigned_completion_package": 8
+        },
+        "__umodti3": {
+          "rva": 28528,
+          "callers": [
+            "_RNvMNtCscBEH4D3OuJh_22sha3_accelerated_state23sha3_accelerated_prefixNtB2_6Prefix7advance",
+            "_RNvMs_NtCs2u1vj83u0E8_14parallel_waves25parallel_concurrent_wavesNtB4_5Waves3new"
+          ],
+          "assigned_completion_package": 8
+        },
+        "memcmp": {
+          "rva": 49536,
+          "callers": [
+            "_RNvNtNtCshYLbG8W7MpL_17brynja_crypto_cpu16static_execution10operations12known_answer"
+          ],
+          "assigned_completion_package": 8
+        }
+      },
+      "distinct_instruction_bytes": 2561,
+      "distinct_instruction_mutants_rejected": 2561,
+      "prerequisites": [
+        "original distinct root/worker windows and CPU deployment admitted before entry by C/OS",
+        "transport, native scheduler and OS/runtime calls honor their independently reviewed contracts",
+        "root remains live until every Rust ticket and native worker is quiescent; no fatal-return fiction",
+        "whole-window retirement covers moved values, compiler spills, scratch and stale stack copies",
+        "exception dispatch, fatal termination and cumulative transitive frame bounds remain package 08",
+        "public output is explicit declassification; failed OS copy may expose a prefix and is not transactional"
+      ]
+    }
+  },
+  "shared_completion_package": 8,
+  "shared_prerequisites": {
+    "admission": "C/OS original resident pages, private windows, exclusive entry and CPU deployment",
+    "runtime": "transport, memory/division helpers, stack probes, SDK and native scheduler contracts",
+    "abi": "Win64 register preservation, home space and cumulative transitive private-stack bounds",
+    "retirement": "whole-window retirement including moved copies, frame padding and compiler spills",
+    "exceptions": "outer return, exception dispatch, fatal termination and platform teardown",
+    "output": "explicit declassification; failed or subsequently revoked copies are not rolled back"
+  },
+  "shared_prerequisites_satisfied": false,
+  "remaining": [
+    "pre-existing shared whole-image/runtime/window obligations in package 08",
+    "independent retest, native qualification and existing release workflow"
+  ]
+}

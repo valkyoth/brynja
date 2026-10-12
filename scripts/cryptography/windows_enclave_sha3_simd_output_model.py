@@ -51,7 +51,8 @@ def evaluate(code,present,lengths):
                 if present[i]:
                     s.require(prefix+lengths[i]<=1024,'source bounded by complete staging')
                     prefix+=lengths[i]
-            return dict(accepted=True,sources=sources,used=prefix,writes=writes)
+            return dict(accepted=True,sources=sources,used=prefix,writes=writes,
+                registers=dict(regs),memory=dict(memory))
         if line.endswith(':'):continue
         op,_,args=line.partition(' ');args=args.split(', ')
         if op in ('jmp','je','ja','jb','jbe'):

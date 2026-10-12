@@ -1,6 +1,6 @@
 # Windows SHA-3 batch private-chain review
 
-This is completion package 6's partial author review, not a release gate,
+Completion package 6's finite conditional author review is complete. This is not a release gate,
 independent retest, new enclave execution or whole-image cleanup qualification.
 It replays the saved, development-signed images and their original source/build
 bindings. Production code and release-gate policy are unchanged.
@@ -11,22 +11,91 @@ bindings. Production code and release-gate policy are unchanged.
 | --- | ---: | ---: | ---: |
 | Sequential scalar | 54 | 0 | 30 |
 | Sequential single-state AVX2 | 54 | 2 | 23 |
-| Four-message Keccak AVX2 | 58 | 17 | Not yet reconciled |
+| Four-message Keccak AVX2 | 58 | 17 | Distinct contracts replayed |
 
 Function counts include cleanup funclets. The checker inventories the actual
 Rust object, rejects omitted/added bodies, and binds complete function bytes,
 relocations, linked destinations, cleanup metadata, read-only constants and
 local dispatch tables. It also replays the existing worker/transport bindings.
-The four-message route has 15 indirect calls; recording their population and
-callback table does **not** qualify their arguments or lifetime provenance.
+The four-message route has 15 indirect calls. Their actual operands and original
+authority/control arguments are joined to the internal callback contracts;
+merely recording their population or table would not establish this.
 
 The sequential helper matches require a fresh replay of the earlier scalar or
 AVX2 SHA-3 semantic review followed by exact code, relocation, extent-kind and
 resolved LLVM ABI equality. Similar names or an old PASS report are insufficient.
-The current batch callers still need their own argument/lifetime composition.
+The batch-specific caller contracts are composed separately from those matches.
 Two AVX2 copy helpers have broader LLVM length ranges than the earlier review;
 they are not included in the 23 exact matches. Their explicit widened-range
-review is described below; batch caller lifetime composition is still pending.
+review is described below.
+
+## Family closure and retained shared obligations (2026-10-12)
+
+The final checker requires the freshly replayed named semantic contracts before
+assigning any family-completion result. Every one of the 166 emitted functions
+(including 19 cleanup funclets) has one reviewed role and a storage disposition.
+Reachability starts at the actual worker entry and includes bound exception
+metadata and immutable callbacks; unknown bodies, orphan helpers, missing
+handlers and changed indirect operands reject. All 16 local dispatch-table sites
+are assigned. No private family assignment remains unnamed.
+
+Typed owner/workspace/output clearing and backing-page retirement are composed
+with normal rejection, success, invoked cleanup and fatal-terminal behavior.
+Transient frames, moved copies, alignment padding and incoming register saves
+are explicitly assigned to the existing package-8 protected-window obligation;
+they are **not** claimed individually erased. Package 8 still must establish
+cumulative stack admission, nested frame/home-space effects, runtime/SDK and
+Win64 preservation, complete window reclamation and the outer return boundary.
+This is the same conditional family-review boundary used for SHA-2, not a new
+release waiver or a whole-image qualification claim.
+
+Historical component reports below retain their original partial-scope flags.
+Only the named contracts joined by the final composition supersede them. Native
+execution, independent review and arbitrary asynchronous/fatal-exit cleanup are
+not established by this author review.
+
+The [completion observation](../assurance/windows-protection-observations/sha3-batch-completion-20261012.json)
+records the 351-test Linux suite at the executor-lifetime checkpoint passing in
+1,047.828 seconds. The final current 351-test Windows suite passed in 664.348
+seconds across four disjoint processes: every test ran exactly once, with no
+skips. Eight final composition/integration tests also passed on Linux (78.301
+seconds) and Windows (179.477 seconds). Fresh parsed reports match across both
+systems, all 262 checker-source bindings match, and 88,058 body-byte mutations
+are rejected. The earlier single-process Windows run was deliberately stopped
+for the complete parallel rerun; its incomplete log is not PASS evidence.
+This validates saved-image analysis, not a new enclave execution or an
+independent review. Next is package 7, ParallelHash.
+
+## Executor call effects and original allocation lifetimes (2026-10-12)
+
+The last 18 executor call sites now have explicit contracts: two readonly output
+validators, output copying and clearing, internal cancellation/authority callbacks,
+the four-lane session, final health check and nonreturning overflow terminal.
+All 57 actual calls are assigned exactly once. The composed write envelopes
+exclude the original input arrays, worker payloads, authority callback/tag,
+captured output pointers and live pointer/length cells. This joins the earlier
+direct-store dataflow with the independently checked indirect effects; it does
+not infer non-aliasing merely from symbolic pointer names.
+
+The receiver's 12 separate 1,024-byte payload slots are traced through the
+resident's four 112-byte descriptor moves. Actual nested stack allocations place
+the receiver descriptors, resident workspace/staging/output slots and executor
+locals in disjoint ranges. Construction/publication and retirement cannot reach
+input consumption in the same invocation. Page identity and admission guards
+dominate use. Serialized transport, an admitted window, separate resident page
+and Win64 preservation remain explicit prerequisites.
+
+The executor's three cleanup funclets and final-health cleanup funclet now have
+complete instruction and FH3 state-map checks. Actual instruction labels bind
+each synchronous throwing site to its ordered cleanup chain. Guard captures
+retain the original executor, workspace, staging and authority until that point;
+the normal disarm occurs after the last such call. Fatal exits and asynchronous
+faults are not reported as successful cleanup.
+
+The final family assignment above consumes these executor-level results. Nested
+frame/home-space effects, shared runtime implementation, cumulative stack use and
+complete window reclamation remain package 8, as already planned. No production
+code or release-gate policy changed.
 
 ## Payload/prefix source pairing and guarded reads (2026-10-09)
 
@@ -45,11 +114,13 @@ increments the same index and crosses a second unsigned guard before reading.
 The increment cannot wrap even for an arbitrary u64 bit offset: its maximum is
 2^61. Neither a mismatched length nor an entry past either guard is accepted.
 
-There are 18 remaining call-site footprints. These source-relative checks do
-not complete the resident caller's descriptor-to-payload placement, physical
-non-overlap or allocation-lifetime composition. Those obligations, other callee
-effects, Win64 preservation and private-frame/exception cleanup remain explicit.
-Package 6 is still open, with no production or release-gate changes.
+At that checkpoint there were 18 remaining call-site footprints. Those
+source-relative checks did not complete the resident caller's descriptor-to-payload
+placement, physical non-overlap or allocation-lifetime composition. Those
+obligations and private-frame/exception assignments were still open then; the
+2026-10-12 composition above records their disposition. Win64 preservation and
+whole-window qualification remain shared obligations. No production or
+release-gate code changed.
 
 The [source-effects observation](../assurance/windows-protection-observations/sha3-batch-simd-source-effects-progress-20261009.json)
 records 174 focused/predecessor tests passing on Linux (340.417 seconds) and

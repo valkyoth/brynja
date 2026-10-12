@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "status": "AUTHOR_CONDITIONAL_SHA3_BATCH_CHAIN_REVIEW_COMPLETE",
+  "review_baseline": "3195dd39",
+  "completion_package": 6,
+  "completion_package_closed": true,
+  "whole_image_qualified": false,
+  "independently_verified": false,
+  "production_sources_unchanged": true,
+  "release_gate_changed": false,
+  "new_native_enclave_run": false,
+  "regression_validation": "PASS",
+  "validation": {
+    "sha3-batch-simd-lifetime-linux": {
+      "tests": 351,
+      "seconds": 1047.828,
+      "status": "PASS"
+    },
+    "sha3-batch-completion-linux": {
+      "tests": 8,
+      "seconds": 78.301,
+      "status": "PASS"
+    },
+    "sha3-batch-completion-windows": {
+      "tests": 8,
+      "seconds": 179.477,
+      "status": "PASS"
+    },
+    "full-current-windows-four-process-suite": {
+      "tests": 351,
+      "seconds": 664.3484830856323,
+      "status": "PASS",
+      "partitions": [
+        88,
+        88,
+        88,
+        87
+      ],
+      "each_test_exactly_once": true
+    }
+  },
+  "validation_sequence": "351-case Linux suite at executor-lifetime checkpoint; current 351-case Windows suite in four exhaustive disjoint partitions; final composition delta covered by eight tests on both systems and matching fresh full reports",
+  "interrupted_single_process_windows_run": "deliberately stopped for four-process full rerun; incomplete log excluded from PASS evidence",
+  "full_predecessor_test_suite_rerun": true,
+  "final_delta_changes_to_predecessor_bindings": [
+    "test-windows-enclave-sha3-batch-chains.py",
+    "windows_enclave_sha3_batch_chains.py"
+  ],
+  "parsed_reports_match": true,
+  "integrated_checker_source_bindings": 262,
+  "complete_body_byte_mutations_rejected": 88058,
+  "files_sha256": {
+    "sha3-batch-simd-lifetime-linux.json": "3d24ba2c01b21b7685c809fb6682c18daa0fcf0e65a1612d12c22403745b124d",
+    "sha3-batch-simd-lifetime-windows.json": "098f14d482ce2021ab6b78e21371f94fd96b61d8ed80871744b1b1edb4390e2f",
+    "sha3-batch-simd-lifetime-linux.log": "d5f84bed0b8ffb5559baf1620b3a1da7e2131d8a74f81eea35f2c8dede356aa3",
+    "sha3-batch-completion-linux.json": "971c6f7760dd23d2b1ba5caf02a8333b90bf0d95c597a3939a354ea22c4dea04",
+    "sha3-batch-completion-windows.json": "075e3fa9f56a837dd2f057bcd7735e2dfcaf5717b8e05e12de082144b7d5580d",
+    "sha3-batch-completion-linux.log": "b4d080d8002298d89986a7759179b1e132d986503bc4889a66d011eb1b138a16",
+    "sha3-batch-completion-windows.log": "f6358b1b0a9326d14249ebc6cd7a2d05bc70e82dd8e2f8a84d9d6876707cf047",
+    "sha3-batch-completion-windows-exit.json": "33a8b2aebdacd0c443e0090eededdf24da2e642ba9044cb8dd109434b355e1ba",
+    "sha3-full-sharded-windows.json": "53547302ee11498f7bcff55a6cf66f07c33e905625d73b7e0d366333fc13d6b1",
+    "sha3-full-shard-0.json": "5bbe65f831b4530e12c59c7d3e46b4ff0aae41131ccb49fcefbbef94fc491ae1",
+    "sha3-full-shard-0.log": "faae0251f524169bc12820799c5d65b239ffd1d68f41324f57200b15c5d5364b",
+    "sha3-full-shard-1.json": "5de124fe9e655387b13e384f734c07fe21bb028d489c9305d1757fa0f893db2f",
+    "sha3-full-shard-1.log": "cdc2f9df365219e4b540fd8394b1644c223d639fc637730f83b138c589ebeea6",
+    "sha3-full-shard-2.json": "78990505be9c9c8361334101771007dafc5a9816a0121fd1b35181ee654d2176",
+    "sha3-full-shard-2.log": "6cfda2b4f92fa96ca2b9d5cc2594795bc33b2013dfe744bc99aee031f5abb6bc",
+    "sha3-full-shard-3.json": "3e4d5f2fcd481e8d9207c4e0d2fd4755803f918dd5db12b7c4fad2248df61794",
+    "sha3-full-shard-3.log": "0be2d449758f0677ad9f9e3d35933c6ec57b72c7cc9f296d9519c221d7df38d0"
+  },
+  "review_source_sha256": {
+    "test-windows-enclave-sha3-batch-chains.py": "5031b7177d0861894796e0e778c26901bdfe5224644d3214c5ee33fd40dcc139",
+    "test-windows-enclave-sha3-batch-completion.py": "68bce677ff090dbde1ed1de031302ff78cef6d7cb95db426132b4e04c992ac69",
+    "windows_enclave_sha3_batch_assignment.py": "9c1ab4adcae81a813966d5c7c5c623acc59899d379ef5e7d4bda29b095242f11",
+    "windows_enclave_sha3_batch_chains.py": "8562611321716a96fc6843a84ed66edc99fbe420492ba72e7c1b71e9073ed7f6",
+    "windows_enclave_sha3_batch_completion.py": "1cacba312b99510fdf7f2ec9aae63253331e85e7341bd8290abb583cdfd82019",
+    "windows_enclave_sha3_simd_allocation_lifetimes.py": "f136b3f59f78e9a7c1a77f13ba3982649596decf87887e70e7b98669ac80ce37",
+    "windows_enclave_sha3_simd_allocation_lifetimes_tests.py": "7cd32b66c44308a95c3faa6f5453411bcff21838013c69cecb64513979767185",
+    "windows_enclave_sha3_simd_descriptor_moves.py": "abe49a8bd77fc2390ba89ce6cf362566c1b1363ede99a80fae7b8acacd4552e8",
+    "windows_enclave_sha3_simd_effect_composition.py": "5ffe600c0081e9fae6ca9b2f61f15b60c9a1fdf454d5f7013d42cfdd27988dcb",
+    "windows_enclave_sha3_simd_effect_composition_tests.py": "00616fe12331447136838f371478e304fbb00ab8fdf5cabd61ea9b78fb4affaf",
+    "windows_enclave_sha3_simd_exception_effects.py": "a3ccf81f5fd43b05accfec2c1baaa4160a8bda07f09de27a86d18fc4e464dc30",
+    "windows_enclave_sha3_simd_exception_effects_tests.py": "f3d1b5ac986d0c4e57456c163845c68bc0260c59ba8b223f681b68dd7aaebd49",
+    "windows_enclave_sha3_simd_output_model.py": "610a1fb4dbb20024d6a844f6e7142904a17714e25f4c051a439a886bd75e929f",
+    "windows_enclave_sha3_simd_service_effects.py": "5f8b4a6129ace534908938ada21cb21daaacd8a9679c88e23512b623848e8af9",
+    "windows_enclave_sha3_simd_service_effects_tests.py": "5fe2b2acfb6e7e4dc37713991c5b904fb766ffee4c108e086ecc414aef9d2ed8",
+    "windows_enclave_sha3_simd_transfer_effects.py": "16f7414a4a6a0fef36a7ed591771e49bfc03136462916285597623447fe32bab",
+    "windows_enclave_sha3_simd_transfer_effects_tests.py": "9613a60d26c815dff341d5e25db206b31626b2f3caa940661934c9424cbe9f8a",
+    "windows_enclave_sha3_simd_transfer_model.py": "214bd0336123a553f56b86219ae634b8c7d5c85527207a34749372d3af6dbabd"
+  },
+  "routes": {
+    "scalar": {
+      "image_sha256": "15ff86cc7baf709230411a0ce954ef5fb84ae249f132b4186b0ac186b428c4a8",
+      "object_sha256": "e13077f12ac079e1ac36a704f9370ec7a8607f8c0cb412615a1da8a546a1ea9b",
+      "population": {
+        "functions": 54,
+        "normal_or_callback_reachable": 54,
+        "funclets": 0,
+        "entry": "RetainedWork",
+        "all_private_bodies_assigned": true,
+        "indirect_call_sites": 0,
+        "bound_dispatch_sites": 8,
+        "arbitrary_exception_dispatch_qualified": false
+      },
+      "frame_assignments": 54,
+      "joined_semantic_contracts": 45,
+      "shared_prerequisites": [
+        "valid typed exclusive owner/state and original caller allocations",
+        "serialized nonreentrant synchronous transport, live page and lifetime through retirement",
+        "bound SDK/probe/memory helpers and Win64 call, home-space and nonvolatile ABI",
+        "cumulative stack admission, nested frame effects and complete protected-window reclamation"
+      ]
+    },
+    "avx2": {
+      "image_sha256": "2d169d513ca393fe16f4ba25d88d5c4845dafe96532f22b8c9d47e0028a9e78c",
+      "object_sha256": "dcd469b529f4458b4c13f5f8ea79692f0817b97b26390ef83abca0dbde7cf478",
+      "population": {
+        "functions": 54,
+        "normal_or_callback_reachable": 51,
+        "funclets": 2,
+        "entry": "RetainedWork",
+        "all_private_bodies_assigned": true,
+        "indirect_call_sites": 0,
+        "bound_dispatch_sites": 4,
+        "arbitrary_exception_dispatch_qualified": false
+      },
+      "frame_assignments": 54,
+      "joined_semantic_contracts": 43,
+      "shared_prerequisites": [
+        "valid typed exclusive owner/state and original caller allocations",
+        "serialized nonreentrant synchronous transport, live page and lifetime through retirement",
+        "bound SDK/probe/memory helpers and Win64 call, home-space and nonvolatile ABI",
+        "cumulative stack admission, nested frame effects and complete protected-window reclamation"
+      ]
+    },
+    "simd": {
+      "image_sha256": "e035ddf337f829eac6797962f989020e441780d6c52931b7124439ef4a2ac330",
+      "object_sha256": "b6246d22718d77d093481066bb9b3758180902d1a5b48dc987e5dd43c8d90256",
+      "population": {
+        "functions": 58,
+        "normal_or_callback_reachable": 40,
+        "funclets": 17,
+        "entry": "RetainedWork",
+        "all_private_bodies_assigned": true,
+        "indirect_call_sites": 15,
+        "bound_dispatch_sites": 4,
+        "arbitrary_exception_dispatch_qualified": false
+      },
+      "frame_assignments": 58,
+      "joined_semantic_contracts": 26,
+      "shared_prerequisites": [
+        "valid typed exclusive owner/state and original caller allocations",
+        "serialized nonreentrant synchronous transport, live page and lifetime through retirement",
+        "bound SDK/probe/memory helpers and Win64 call, home-space and nonvolatile ABI",
+        "cumulative stack admission, nested frame effects and complete protected-window reclamation"
+      ]
+    }
+  },
+  "new_regressions": {
+    "executor_lifetime_tests": 26,
+    "final_composition_tests": 7,
+    "updated_full_integration_tests": 1,
+    "output_copy_shapes": 10000,
+    "first_failure_shapes": 64,
+    "individual_output_lengths": 1028,
+    "rejection_clear_shapes": 1296,
+    "descriptor_instruction_mutations": 148,
+    "executor_handler_instruction_mutations": 98,
+    "executor_FH3_field_mutations": 30,
+    "final_health_handler_and_FH3_mutations": 28,
+    "protected_range_alias_mutations": 144,
+    "final_semantic_prerequisite_mutations": 114
+  },
+  "shared_completion_package": 8,
+  "remaining_private_review": [],
+  "remaining_shared": [
+    "runtime/SDK/probe and Win64 call/home-space/nonvolatile contracts",
+    "cumulative stack admission and nested frame effects across all images",
+    "complete protected-window reclamation and outer return boundary"
+  ],
+  "next_family_completion_package": 7
+}

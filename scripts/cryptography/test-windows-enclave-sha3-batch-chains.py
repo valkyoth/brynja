@@ -61,12 +61,17 @@ from windows_enclave_sha3_simd_scalar_effects_tests import SimdScalarEffectsSave
 from windows_enclave_sha3_simd_squeeze_effects_tests import SimdSqueezeEffectsSavedTests,SimdSqueezeEffectsModelTests
 from windows_enclave_sha3_simd_absorb_effects_tests import SimdAbsorbEffectsSavedTests,SimdAbsorbEffectsModelTests
 from windows_enclave_sha3_simd_source_effects_tests import SimdSourceEffectsSavedTests,SimdSourceEffectsModelTests
+from windows_enclave_sha3_simd_transfer_effects_tests import SimdTransferEffectsSavedTests,SimdTransferEffectsModelTests
+from windows_enclave_sha3_simd_service_effects_tests import SimdServiceEffectsSavedTests
+from windows_enclave_sha3_simd_exception_effects_tests import SimdExceptionEffectsSavedTests
+from windows_enclave_sha3_simd_allocation_lifetimes_tests import SimdAllocationLifetimesSavedTests
+from windows_enclave_sha3_simd_effect_composition_tests import SimdEffectCompositionSavedTests
 
 SAVED=None
 ROOT=Path(__file__).resolve().parents[2]
 
 
-class Tests(SimdSourceEffectsModelTests,SimdAbsorbEffectsModelTests,SimdSqueezeEffectsModelTests,SimdScalarEffectsModelTests,SimdCopyEffectsModelTests,SimdClearEffectsModelTests,SimdLoopEffectsModelTests,SimdWorkspaceEffectsModelTests,SimdControlEffectsModelTests,SimdFrameEffectsModelTests,SimdWipeOriginsModelTests,SimdReconcileModelTests,SimdTerminalModelTests,SimdScalarModelTests,SimdVectorModelTests,SimdAbsorbModelTests,SimdSqueezeModelTests,SimdRejectModelTests,SimdFrameModelTests,SimdOutputModelTests,SimdDigestModelTests,SimdDescriptorModelTests,SimdReceiveModelTests,SimdWorkerModelTests,SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
+class Tests(SimdTransferEffectsModelTests,SimdSourceEffectsModelTests,SimdAbsorbEffectsModelTests,SimdSqueezeEffectsModelTests,SimdScalarEffectsModelTests,SimdCopyEffectsModelTests,SimdClearEffectsModelTests,SimdLoopEffectsModelTests,SimdWorkspaceEffectsModelTests,SimdControlEffectsModelTests,SimdFrameEffectsModelTests,SimdWipeOriginsModelTests,SimdReconcileModelTests,SimdTerminalModelTests,SimdScalarModelTests,SimdVectorModelTests,SimdAbsorbModelTests,SimdSqueezeModelTests,SimdRejectModelTests,SimdFrameModelTests,SimdOutputModelTests,SimdDigestModelTests,SimdDescriptorModelTests,SimdReceiveModelTests,SimdWorkerModelTests,SimdResidentModelTests,SimdSessionModelTests,SimdKernelModelTests,Avx2CshakeMovesModelTests,Avx2CshakeModelTests,Avx2StartModelTests,CshakeMovesModelTests,CshakeFlowModelTests,CshakeInitModelTests,ShakeStartModelTests,FixedStartModelTests,StartModelTests,ScalarFixedModelTests,ScalarSqueezeModelTests,ScalarXofModelTests,TerminalModelTests,FinishModelTests,ScalarSetupModelTests,ChunkModelTests,ReceiverModelTests,WorkerModelTests,RebindingTests,unittest.TestCase):
     def test_inventory_is_frozen_and_has_three_distinct_routes(self):
         raw=c.SPEC.read_bytes();spec=c.specification(raw)
         self.assertEqual({k:len(v['functions']) for k,v in spec.items()},c.COUNTS)
@@ -110,7 +115,7 @@ class Tests(SimdSourceEffectsModelTests,SimdAbsorbEffectsModelTests,SimdSqueezeE
             self.assertFalse(exact);self.assertFalse(changed)
 
 
-class SavedTests(SimdSourceEffectsSavedTests,SimdAbsorbEffectsSavedTests,SimdSqueezeEffectsSavedTests,SimdScalarEffectsSavedTests,SimdCopyEffectsSavedTests,SimdClearEffectsSavedTests,SimdLoopEffectsSavedTests,SimdWorkspaceEffectsSavedTests,SimdControlEffectsSavedTests,SimdFrameEffectsSavedTests,SimdWipeOriginsSavedTests,SimdReconcileSavedTests,SimdTerminalSavedTests,SimdScalarSavedTests,SimdVectorSavedTests,SimdAbsorbSavedTests,SimdSqueezeSavedTests,SimdRejectSavedTests,SimdFrameSavedTests,SimdOutputSavedTests,SimdDigestSavedTests,SimdDescriptorSavedTests,SimdReceiveSavedTests,SimdWorkerSavedTests,SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTests,SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
+class SavedTests(SimdEffectCompositionSavedTests,SimdAllocationLifetimesSavedTests,SimdExceptionEffectsSavedTests,SimdTransferEffectsSavedTests,SimdServiceEffectsSavedTests,SimdSourceEffectsSavedTests,SimdAbsorbEffectsSavedTests,SimdSqueezeEffectsSavedTests,SimdScalarEffectsSavedTests,SimdCopyEffectsSavedTests,SimdClearEffectsSavedTests,SimdLoopEffectsSavedTests,SimdWorkspaceEffectsSavedTests,SimdControlEffectsSavedTests,SimdFrameEffectsSavedTests,SimdWipeOriginsSavedTests,SimdReconcileSavedTests,SimdTerminalSavedTests,SimdScalarSavedTests,SimdVectorSavedTests,SimdAbsorbSavedTests,SimdSqueezeSavedTests,SimdRejectSavedTests,SimdFrameSavedTests,SimdOutputSavedTests,SimdDigestSavedTests,SimdDescriptorSavedTests,SimdReceiveSavedTests,SimdWorkerSavedTests,SimdOwnerSavedTests,SimdResidentSavedTests,SimdSessionSavedTests,SimdKernelSavedTests,Avx2CshakeMovesTests,Avx2CshakeTests,Avx2StartTests,CshakeMovesTests,CshakeFlowTests,CshakeInitTests,ShakeStartTests,FixedStartTests,EmptyTests,InitialTests,StartTests,ScalarFixedTests,ScalarSqueezeTests,ScalarXofTests,TerminalTests,FinishTests,ScalarSetupTests,SetupEndTests,ChunkTests,UpdateTests,ReceiverTests,WorkerTests,StorageTests,LifecycleTests,unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if SAVED is None:raise unittest.SkipTest('saved Windows artifacts not supplied')
@@ -121,16 +126,19 @@ class SavedTests(SimdSourceEffectsSavedTests,SimdAbsorbEffectsSavedTests,SimdSqu
             functions=c.c.previous.inventory(data)
             cls.routes[lane]=(data,image,asm,ir,functions,c.c.previous.s.bodies(asm,functions))
 
-    def test_full_saved_binding_preserves_incomplete_scope(self):
+    def test_full_saved_binding_preserves_conditional_scope(self):
         report=c.inspect(SAVED,ROOT)
-        self.assertFalse(report['completion_package_closed'])
+        self.assertTrue(report['completion_package_closed'])
         self.assertFalse(report['whole_image_qualified'])
         self.assertFalse(report['new_native_run'])
-        self.assertTrue(report['remaining_private_review'])
+        self.assertEqual(report['remaining_private_review'],[])
         for lane,r in report['routes'].items():
             self.assertEqual(len(r['functions']),c.COUNTS[lane])
             self.assertEqual(r['cleanup_funclets'],c.FUNCLETS[lane])
-            self.assertFalse(r['private_chain_complete'])
+            self.assertTrue(r['private_chain_complete'])
+            self.assertFalse(r['family_completion']['whole_frame_erasure_qualified'])
+            self.assertFalse(r['family_completion']['independent_retest'])
+            self.assertEqual(r['family_completion']['shared_completion_package'],8)
             self.assertFalse(r['transitive_depth_qualified'])
             if lane=='avx2':
                 self.assertTrue(r['avx2_direct_constructors']['direct_constructor_caller_transfers_qualified'])

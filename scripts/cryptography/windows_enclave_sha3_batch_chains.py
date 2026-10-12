@@ -1,4 +1,4 @@
-"""Three saved SHA-3 batch populations; partial author review, not a gate."""
+"""Three saved SHA-3 batch populations; conditional author review, not a gate."""
 import argparse
 import json
 from pathlib import Path
@@ -55,6 +55,12 @@ import windows_enclave_sha3_simd_scalar_effects as simd_scalar_effects
 import windows_enclave_sha3_simd_squeeze_effects as simd_squeeze_effects
 import windows_enclave_sha3_simd_absorb_effects as simd_absorb_effects
 import windows_enclave_sha3_simd_source_effects as simd_source_effects
+import windows_enclave_sha3_simd_transfer_effects as simd_transfer_effects
+import windows_enclave_sha3_simd_service_effects as simd_service_effects
+import windows_enclave_sha3_simd_exception_effects as simd_exception_effects
+import windows_enclave_sha3_simd_allocation_lifetimes as simd_allocation_lifetimes
+import windows_enclave_sha3_simd_effect_composition as simd_effect_composition
+import windows_enclave_sha3_batch_completion as family_completion
 
 c=binding.c
 require,digest=c.require,c.digest
@@ -180,6 +186,17 @@ def inspect_route(base,root,lane,pin,mutate=False):
         frame_effects_simd,squeeze_effects_simd) if lane=='simd' else None
     source_effects_simd=simd_source_effects.inspect(bodies,asm,digest_simd,receive_simd,
         descriptors_simd,absorb_simd,absorb_effects_simd) if lane=='simd' else None
+    transfer_effects_simd=simd_transfer_effects.inspect(bodies,asm,digest_simd,output_simd,
+        frame_effects_simd,source_effects_simd) if lane=='simd' else None
+    service_effects_simd=simd_service_effects.inspect(bodies,asm,digest_simd,construction_simd,
+        session_simd,terminal_simd,transfer_effects_simd) if lane=='simd' else None
+    exception_effects_simd=simd_exception_effects.inspect(bodies,asm,digest_simd,service_effects_simd) if lane=='simd' else None
+    allocations_simd=simd_allocation_lifetimes.inspect(bodies,asm,digest_simd,receive_simd,construction_simd,
+        service_effects_simd,exception_effects_simd) if lane=='simd' else None
+    effects_simd=simd_effect_composition.inspect(bodies,dict(frame=frame_effects_simd,clear=clear_effects_simd,
+        copy=copy_effects_simd,scalar=scalar_effects_simd,squeeze=squeeze_effects_simd,
+        absorb=absorb_effects_simd,source=source_effects_simd,transfer=transfer_effects_simd,
+        services=service_effects_simd),allocations_simd) if lane=='simd' else None
     transport=c.transport_binding(base,row,data,image,records,runtime,PREFIX[lane])
     prior=reused_helpers(base,root,lane,functions,ir,pin) if lane!='simd' else None
     admission=plan.inspect(bodies,asm,ir) if lane!='simd' else None
@@ -211,7 +228,7 @@ def inspect_route(base,root,lane,pin,mutate=False):
                 try:c.body_check((bad,refs,kind),pin['functions'][name])
                 except ValueError:mutations+=1
                 else:raise AssertionError('accepted complete body byte mutation')
-    return dict(route=row['route'],source_sha256=sources,image_sha256=digest(image),
+    result=dict(route=row['route'],source_sha256=sources,image_sha256=digest(image),
         object_sha256=digest(data),functions={n:dict(rva=r['rva'],bytes=r['size'],
             frame_bytes=sizes[n],saved_vectors=vectors[n],inner_references=edges[n],
             references=r['reference_targets'],cleanup_metadata=r.get('metadata',[]))
@@ -261,6 +278,11 @@ def inspect_route(base,root,lane,pin,mutate=False):
         simd_squeeze_call_effects=squeeze_effects_simd,
         simd_internal_absorption_call_effects=absorb_effects_simd,
         simd_source_call_effects=source_effects_simd,
+        simd_transfer_call_effects=transfer_effects_simd,
+        simd_service_call_effects=service_effects_simd,
+        simd_exception_call_effects=exception_effects_simd,
+        simd_physical_allocation_lifetimes=allocations_simd,
+        simd_executor_effect_composition=effects_simd,
         sequential_update=absorption,
         sequential_setup_chunks=fragments,
         avx2_setup_completion=completion,
@@ -269,18 +291,19 @@ def inspect_route(base,root,lane,pin,mutate=False):
         direct_graph_geometry_only=geometry,transitive_depth_qualified=False,
         runtime_boundaries_pending=runtime,body_byte_mutations_rejected=mutations,
         private_chain_complete=False,whole_image_qualified=False)
+    completed=family_completion.inspect(records,bodies,sizes,vectors,tables,vtables,result,lane)
+    return result|dict(private_chain_complete=completed['author_private_review_complete'],
+        family_completion=completed)
 
 
 def inspect(base,root,mutate=False):
     spec=specification(SPEC.read_bytes())
     routes={lane:inspect_route(base,root,lane,pin,mutate) for lane,pin in spec.items()}
-    return dict(schema=1,status='AUTHOR_PARTIAL_SHA3_BATCH_CHAIN_REVIEW',completion_package=6,
-        completion_package_closed=False,routes=routes,whole_image_qualified=False,
+    require(all(v['private_chain_complete'] for v in routes.values()),'all three finite family reviews complete')
+    return dict(schema=1,status='AUTHOR_CONDITIONAL_SHA3_BATCH_CHAIN_REVIEW_COMPLETE',completion_package=6,
+        completion_package_closed=True,routes=routes,whole_image_qualified=False,
         independently_verified=False,release_gate_changed=False,new_native_run=False,
-        remaining_private_review=['batch callers and exact state/authority lifecycle composition',
-            'distinct framing, finish/squeeze and retained-output paths',
-            'four-lane kernel, compaction and indirect callback argument lifetimes',
-            'complete private temporary, normal-return and failure cleanup assignments'],
+        remaining_private_review=[],
         shared_completion_package=8,
         source_sha256={p.name:digest(p.read_bytes()) for p in sorted(
             {Path(m.__file__) for n,m in sys.modules.items() if n.startswith('windows_enclave_')} |

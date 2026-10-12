@@ -1,17 +1,22 @@
 # v0.24.50 remaining work
 
-## Current completion checklist (2026-10-09)
+## Current completion checklist (2026-10-12)
+
+Package 6's [completion evidence](../assurance/windows-protection-observations/sha3-batch-completion-20261012.json)
+records matching Linux/Windows saved-image reports and passing regressions.
+Its closure is conditional family author review, not whole-image qualification.
 
 - Finish transitive normal-return cleanup qualification inside the remaining
-  distinct batch/ParallelHash workers, especially
+  distinct ParallelHash workers, especially
   indirect SIMD dispatch and deepest caller/stack paths. Both scalar and AVX2
   SHA-3 inner chains are now closed for their saved images (55 scalar functions;
   53 AVX2 main functions plus eight cleanup funclets). Their named shared
   runtime/transport boundaries remain with final reconciliation. Both KMAC
   private chains are also closed, as are both TupleHash private chains.
   All four SHA-2 batch private chains are now closed under their explicit shared
-  prerequisites (178 emitted functions, including 33 cleanup funclets). Next
-  are the three SHA-3 batch routes, now inventoried with sequential plan,
+  prerequisites (178 emitted functions, including 33 cleanup funclets). All
+  three SHA-3 batch routes are now conditionally closed at family level (166
+  emitted functions, including 19 cleanup funclets). Their review covers sequential plan,
   lifecycle, state-destructor, initial plan placement, retained-worker entry/close,
   buffer cleanup, request decoding/dispatch/export, sequential update/setup-fragment
   callers, scalar/AVX2 setup completion, outer message-finalization callers,
@@ -52,8 +57,8 @@
   footprints now have predecessor-derived bounds and physical separation from
   live pointer cells/caller objects. Twenty-four control/quarantine/result stores
   now have original-root and relative extent checks, with physical caller-frame
-  separation for the control, executor and result writes. The authority's
-  allocation lifetime/separation remains a prerequisite. Nineteen per-lane
+  separation for the control, executor and result writes. Authority allocation
+  lifetime/separation is joined by the final physical-allocation composition. Nineteen per-lane
   framing stores now have all-predecessor workspace roots, unsigned lane guard
   and exact field/array extents, excluding other caller objects and the child
   frame. The last 14 readiness/cursor/written-counter stores now have original
@@ -75,12 +80,17 @@
   The internal suffix/padding source bytes are bounded and disjoint. The two
   payload/prefix read sites now retain their matching original source/length
   pairs, with bounded lane-field loads, two unsigned read guards and nonwrapping
-  byte-index advancement. Resident payload placement/non-overlap and lifetimes
-  remain prerequisites. The remaining 18 call-site footprints,
-  remaining register/input provenance,
-  machine pointer lifetimes/non-overlap and private-frame/exception
-  reconciliation still need completion,
-  followed by ParallelHash; shared cumulative
+  byte-index advancement. The last 18 call sites now have checked output,
+  service, callback and terminal effects. All 57 executor calls are assigned
+  exactly once, and their composed write envelopes exclude original inputs,
+  descriptors and live pointer cells. Receiver payloads, descriptor repacking,
+  original page publication and nested frame placement are joined with explicit
+  physical non-overlap and lifetime guards. The executor's three cleanup
+  funclets and final-health handler are bound to actual instruction positions,
+  original guard captures and FH3 cleanup ordering. The final three-route
+  function, temporary and cleanup assignment accounts for all private bodies,
+  15 indirect calls and 16 local dispatch-table sites. Package 6 is closed as
+  a conditional author family review. Next is ParallelHash; shared cumulative
   stack/runtime/platform qualification remains package 8.
   Scalar SHA-2 runtime/
   export connections are now closed; all seventeen family worker entry,

@@ -20,9 +20,18 @@ encoding, checked finalization and retained-output rehash order. The combined
 141-test suite passes on both hosts with matching reports; 6,852 instruction
 byte and 380 branch mutations are rejected. Earlier scalar private-frame
 copies remain explicit package-8 window-retirement obligations, not erased by
-the original setup's cleanup. Package 7 and pass 2 are not closed. Next:
-transitive state/owner composition, original allocation/authority lifetimes,
-export/cancellation and remaining failure/resident/page retirement paths.
+the original setup's cleanup.
+The [lifecycle follow-up](../assurance/windows-protection-observations/parallel-lifecycle-20261012.json)
+adds seventeen actual bodies for admission, cancellation, resident construction/
+destruction, worker entry and buffer retirement. All 163 combined tests pass on
+both hosts, with matching reports; 4,831 instruction-byte and 264 branch mutants
+are rejected. Normal full-page erasure follows typed destruction; exceptional
+full-page/window erasure is not inferred. Scalar page/window non-overlap remains
+an external C precondition, unlike AVX2's explicit Rust check. Package 7 and pass
+2 are not closed. Next: request dispatch/export, transitive state/owner
+composition and remaining failure/lifetime prerequisites; then the concurrent
+route and three-route reconciliation. Shared platform/runtime/full-window
+qualification remains package 8.
 
 - Finish transitive normal-return cleanup qualification inside the remaining
   distinct ParallelHash workers, especially

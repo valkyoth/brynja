@@ -1,0 +1,243 @@
+"""Actual sequential worker entry and buffer retirement instruction contracts.
+
+Rust checks do not replace the serialized C allocation/CPU/platform contract.
+"""
+
+CONTRACTS = {
+    'scalar': {
+        'entry': {
+            'size': 747,
+            'regions': [
+                ('frame_null_alignment_and_exact_window_size', 0x0,
+                    '415741564154565755534881ec900400004885d2410f94c2f7c2ff0f0000410f95c3b8c80000004508d3'
+                    '0f851e0200004d89ca4d29c2410f93c34981fa00000100410f94c24520da4180fa010f85fc010000'),
+                ('load_live_identity_initialize_or_require_exact_page', 0x52,
+                    '488b35000000004885c90f84a70000004885f60f84de000000b8cb0000004839d60f85d5010000'),
+                ('close_typed_owner_before_raw_page_reuse', 0x79,
+                    '4883f9030f85d00000004889f14889d7e8000000004889f1e8000000004881c6700400004889f1e80000'
+                    '00004889f1e800000000'),
+                ('remove_live_handle_initialize_page_index', 0xad,
+                    '4889f948c705fcffffff0000000031d2b80400000066666666662e0f1f840000000000'),
+                ('erase_all_page_bytes', 0xd0,
+                    'c6041100c644110100c644110200c644110300c644110400c644110500c644110600c6441107004883c2'
+                    '084881fa0010000075cce945010000'),
+                ('reject_duplicate_initialization_or_place_empty_owner', 0x109,
+                    'b8c90000004885f60f8537010000c60200c6827004000000488d8ae008000041b8730400004889d631d2'
+                    'e800000000'),
+                ('publish_only_original_page_pointer', 0x138,
+                    '48893500000000b801000000e905010000'),
+                ('reject_absent_owner', 0x149,
+                    'b8ca000000e9fb000000'),
+                ('save_window_and_initialize_bounded_buffers', 0x153,
+                    '4d89c74889cf4c8d7424204c89f34881eb00fcffff400f92c541b8700400004c89f131d24d89cce80000'
+                    '0000'),
+                ('both_buffer_ranges_checked_without_overflow', 0x17f,
+                    '4c39e30f87ab0000004084ed0f84a20000004d39f70f879900000041becc0000004883fb8f0f878f0000'
+                    '004939df0f8786000000488d8c24900400004c39e17779'),
+                ('dispatch_with_original_owner_and_local_buffers', 0x1c0,
+                    '4c8d4424204889f14889fae800000000'),
+                ('quarantine_rejection_then_clear_header_and_payload', 0x1d0,
+                    '89c584c075084889f1e800000000ba700000004889d9e800000000488d4c2420ba00040000e800000000'),
+                ('volatile_header_clear_observation', 0x1fa,
+                    'b80304000041becd000000483d730400007453807c041d000f8584000000807c041e00757d807c041f00'
+                    '7513807c042000488d400474d4eb06'),
+                ('bounds_or_observation_failure_quarantines_and_drops_buffers', 0x233,
+                    '41becc0000004889f1e800000000488d4c2420e8000000004c89f0'),
+                ('return_frame', 0x24e,
+                    '4881c4900400005b5d5f5e415c415e415fc3'),
+                ('volatile_payload_clear_observation', 0x260,
+                    'b80400000041becd000000807c041c00752a807c041d007523807c041e00751c807c041f007515483d00'
+                    '0400007415807c042000488d400574d1eb9d'),
+                ('report_bad_cleanup', 0x29c,
+                    '41becd000000eb95'),
+                ('fixed_public_observer_receives_only_addresses_and_clear_flag', 0x2a4,
+                    '488d54242041b8010000004889d9e80000000083f8010f8579ffffff'),
+                ('success_or_dispatch_error_then_buffer_drop', 0x2c0,
+                    '48b800000000010000004809c74084edbece000000480f45f7488d4c2420e8000000004889f0e963ffff'
+                    'ff'),
+            ],
+            'branches': [
+                (0x2a, '0f85', 0x24e),
+                (0x4c, '0f85', 0x24e),
+                (0x5c, '0f84', 0x109),
+                (0x65, '0f84', 0x149),
+                (0x73, '0f85', 0x24e),
+                (0x7d, '0f85', 0x153),
+                (0x102, '75', 0xd0),
+                (0x104, 'e9', 0x24e),
+                (0x111, '0f85', 0x24e),
+                (0x144, 'e9', 0x24e),
+                (0x14e, 'e9', 0x24e),
+                (0x182, '0f87', 0x233),
+                (0x18b, '0f84', 0x233),
+                (0x194, '0f87', 0x233),
+                (0x1a4, '0f87', 0x239),
+                (0x1ad, '0f87', 0x239),
+                (0x1be, '77', 0x239),
+                (0x1d4, '75', 0x1de),
+                (0x20b, '74', 0x260),
+                (0x212, '0f85', 0x29c),
+                (0x21d, '75', 0x29c),
+                (0x224, '75', 0x239),
+                (0x22f, '74', 0x205),
+                (0x231, 'eb', 0x239),
+                (0x270, '75', 0x29c),
+                (0x277, '75', 0x29c),
+                (0x27e, '75', 0x29c),
+                (0x285, '75', 0x29c),
+                (0x28d, '74', 0x2a4),
+                (0x298, '74', 0x26b),
+                (0x29a, 'eb', 0x239),
+                (0x2a2, 'eb', 0x239),
+                (0x2ba, '0f85', 0x239),
+                (0x2e6, 'e9', 0x24e),
+            ],
+        },
+        'buffers_drop': {
+            'size': 43,
+            'regions': [
+                ('save_buffer_and_clear_exact_header', 0x0,
+                    '564883ec204889ce4881c100040000ba70000000e8000000'),
+                ('tail_clear_all_1024_payload_bytes', 0x18,
+                    '00ba000400004889f14883c4205ee900000000'),
+            ],
+            'branches': [
+                (0x26, 'e9', 0x2b),
+            ],
+        },
+    },
+    'avx2': {
+        'entry': {
+            'size': 944,
+            'regions': [
+                ('frame_null_alignment_window_overflow_and_page_disjointness', 0x0,
+                    '41574156565755534881ecc80400004885d20f95c0f7c2ff0f0000410f94c24484d00f84990000004c89'
+                    'c84c29c0410f92c24881faffefffff0f87820000004584d2757d483d000001007575488d82001000004c'
+                    '39c00f97c04939d1410f97c24484d0755c'),
+                ('load_live_and_require_exact_page_identity', 0x65,
+                    '488b05000000004885c90f849c0000004885c00f84cd000000483915000000000f85c7000000'),
+                ('take_handle_before_resident_drop_then_clear_identity', 0x8b,
+                    '4883f9030f857d010000488b151000000048c705fcffffff000000004889c1e80000000048c705fcffff'
+                    'ff00000000be04000000eb3d'),
+                ('bad_entry_quarantines_existing_owner', 0xc1,
+                    'bec800000048833dffffffff00742e488b3d10000000488b87500c000080780802740bc640080248c700'
+                    '030000004889f9e800000000c6875a0c000007'),
+                ('return_frame', 0xfe,
+                    '4889f04881c4c80400005b5d5f5e415e415fc3'),
+                ('duplicate_initialization_quarantines', 0x111,
+                    '4885c07474488b3510000000488b86500c000080780802740bc640080248c700030000004889f1e80000'
+                    '0000c6865a0c000007bec9000000ebb3'),
+                ('no_owner_rejection', 0x14b,
+                    'beca000000ebac'),
+                ('wrong_page_quarantines', 0x152,
+                    '488b3510000000488b86500c000080780802740bc640080248c700030000004889f1e800000000c6865a'
+                    '0c000007becb000000e974ffffff'),
+                ('initialize_page_then_construct_resident', 0x18a,
+                    '41b8001000004889d14889d631d2e800000000488d4c24284889f74889f2e800000000'),
+                ('reject_failed_constructor_before_publication', 0x1ad,
+                    '48837c2428000f847e010000'),
+                ('copy_public_pointer_handle_retire_old_if_present', 0x1b9,
+                    '488b4424384889442450c5f810442428c5f829442440488b0d000000004885c9740c488b1510000000e8'
+                    '00000000'),
+                ('publish_owner_authority_backing_then_original_identity', 0x1e7,
+                    '488b44245048890510000000c5f828442440c5f811050000000048893d00000000be01000000e9ecfeff'
+                    'ff'),
+                ('save_window_and_initialize_local_buffers', 0x212,
+                    '4d89c74989ce488d5c24404889df4881ef00fcffff400f92c541b8800400004889d931d24c89cee80000'
+                    '0000'),
+                ('checked_payload_header_ranges', 0x23e,
+                    '4889f0becc0000004839c70f87ab0000004084ed0f84a20000004939df0f87990000004881ff7fffffff'
+                    '0f878c0000004939ff0f8783000000488d8c24c00400004839c17776'),
+                ('dispatch_local_buffers_then_quarantine_on_rejection', 0x284,
+                    '4c89f1488d542440e80000000089c384c0752e488b3510000000488b86500c000080780802740bc64008'
+                    '0248c700030000004889f1e800000000c6865a0c000007'),
+                ('clear_buffers_then_volatile_header_observation', 0x2c5,
+                    '488d4c2440e800000000b802040000becd000000807c043e00751a807c043f007513483d800400007452'
+                    '807c044000488d400374df'),
+                ('bounds_observation_failures_quarantine_and_drop_buffers', 0x2fa,
+                    '488b3d10000000488b87500c000080780802740bc640080248c700030000004889f9e800000000c6875a'
+                    '0c000007488d4c2440e800000000e9c7fdffff'),
+                ('constructor_error', 0x337,
+                    'becf000000e9bdfdffff'),
+                ('volatile_payload_clear_observation', 0x341,
+                    'b804000000807c043c0075ad807c043d0075a6807c043e00759f807c043f007598483d00040000740d80'
+                    '7c044000488d400574d1eb83'),
+                ('fixed_public_observer', 0x377,
+                    '488d54244041b8010000004889f9e80000000083f8010f8567ffffff'),
+                ('success_or_dispatch_error_before_common_buffer_drop', 0x393,
+                    '48b800000000010000004909c684dbbece000000490f45f6e978ffffff'),
+            ],
+            'branches': [
+                (0x22, '0f84', 0xc1),
+                (0x39, '0f87', 0xc1),
+                (0x42, '75', 0xc1),
+                (0x4a, '75', 0xc1),
+                (0x63, '75', 0xc1),
+                (0x6f, '0f84', 0x111),
+                (0x78, '0f84', 0x14b),
+                (0x85, '0f85', 0x152),
+                (0x8f, '0f85', 0x212),
+                (0xbf, 'eb', 0xfe),
+                (0xce, '74', 0xfe),
+                (0xe2, '74', 0xef),
+                (0x114, '74', 0x18a),
+                (0x128, '74', 0x135),
+                (0x149, 'eb', 0xfe),
+                (0x150, 'eb', 0xfe),
+                (0x164, '74', 0x171),
+                (0x185, 'e9', 0xfe),
+                (0x1b3, '0f84', 0x337),
+                (0x1d9, '74', 0x1e7),
+                (0x20d, 'e9', 0xfe),
+                (0x249, '0f87', 0x2fa),
+                (0x252, '0f84', 0x2fa),
+                (0x25b, '0f87', 0x2fa),
+                (0x268, '0f87', 0x2fa),
+                (0x271, '0f87', 0x2fa),
+                (0x282, '77', 0x2fa),
+                (0x295, '75', 0x2c5),
+                (0x2a9, '74', 0x2b6),
+                (0x2de, '75', 0x2fa),
+                (0x2e5, '75', 0x2fa),
+                (0x2ed, '74', 0x341),
+                (0x2f8, '74', 0x2d9),
+                (0x30c, '74', 0x319),
+                (0x332, 'e9', 0xfe),
+                (0x33c, 'e9', 0xfe),
+                (0x34b, '75', 0x2fa),
+                (0x352, '75', 0x2fa),
+                (0x359, '75', 0x2fa),
+                (0x360, '75', 0x2fa),
+                (0x368, '74', 0x377),
+                (0x373, '74', 0x346),
+                (0x375, 'eb', 0x2fa),
+                (0x38d, '0f85', 0x2fa),
+                (0x3ab, 'e9', 0x328),
+            ],
+        },
+        'buffers_drop': {
+            'size': 43,
+            'regions': [
+                ('save_buffer_and_clear_exact_header', 0x0,
+                    '564883ec204889ce4881c100040000ba80000000e8000000'),
+                ('tail_clear_all_1024_payload_bytes', 0x18,
+                    '00ba000400004889f14883c4205ee900000000'),
+            ],
+            'branches': [
+                (0x26, 'e9', 0x2b),
+            ],
+        },
+        'buffers_clear': {
+            'size': 43,
+            'regions': [
+                ('save_buffer_and_clear_exact_header', 0x0,
+                    '564883ec204889ce4881c100040000ba80000000e8000000'),
+                ('tail_clear_all_1024_payload_bytes', 0x18,
+                    '00ba000400004889f14883c4205ee900000000'),
+            ],
+            'branches': [
+                (0x26, 'e9', 0x2b),
+            ],
+        },
+    },
+}

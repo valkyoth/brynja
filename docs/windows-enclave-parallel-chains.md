@@ -180,10 +180,64 @@ full private-window clearing and shared runtime/ABI behavior with package 8.
 No production Rust, saved image or release-gate policy changed, and no new
 native enclave execution or independent retest is claimed.
 
-Still required in pass 2: transitive state/owner caller composition, original
-allocation and authority lifetimes, export/cancellation and remaining
-failure/retirement paths, including full resident/page retirement. Package 7
-and pass 2 remain open.
+### Sequential lifecycle and worker placement
+
+The [lifecycle record](../assurance/windows-protection-observations/parallel-lifecycle-20261012.json)
+adds seventeen actual bodies covering scalar/AVX2 operation admission,
+cancellation and owner cleanup, the scalar armed guard/quarantine, AVX2 resident
+construction/destruction and two invoked handlers, and both retained worker
+entries with buffer cleanup. All 163 combined tests pass on Linux and Windows
+without skips; regenerated reports match, with 90 current checker bindings.
+The selected contracts reject 4,831 instruction-byte mutations independently
+of whole-body hashes, plus 264 branch opcode/destination mutations independently
+of the instruction windows. Earlier population, leaf and framing checks are
+replayed, not inferred from an older PASS record.
+
+- The specialized phase scan handles one through six allowed phases. Sequence
+  admission rejects wraparound and replay, and commits only the exact next
+  value. AVX2 additionally requires the healthy Keccak authority. Tests cover
+  error precedence, all phase/authority byte values, sequence boundaries and
+  seeded full-width values. These are models paired with actual instruction
+  contracts, not native execution of arbitrary machine states.
+- Cancellation binds the actual read-only six-phase array. Successful
+  cancellation clears before publishing Empty and preserves sequence history;
+  invalid phase/sequence/authority quarantines. Owner clearing is not a whole
+  page or padding wipe. Invoked handler destinations are bound through actual
+  parent xdata, without promising arbitrary-exception cleanup.
+- The AVX2 resident places its authority at page offset zero before borrowing
+  it. Both embedded authority pointers retain that address; the owner occupies
+  `32..3200` in a 4,096-byte page. The published handle contains only the original
+  page/authority/owner pointers. Operand checks establish disjoint constructor
+  copy ranges within its frame; these contain public initial state/KAT data,
+  not caller secrets. Original page admission remains a caller precondition.
+- Both normal retirement paths destroy the typed owner before clearing every
+  page byte. Operand-derived loop checks reject gaps, duplicate offsets, wrong
+  registers, values, strides, limits and back edges. The AVX2 retirement graph
+  checks both leaf-state paths, conditional on callee contracts. Its exception
+  handler performs typed cleanup but **does not establish full-page erasure**.
+- Worker entries bind exact page identity and handle publication/removal,
+  duplicate/missing-owner rejection and cleanup-buffer bounds. The linked LIVE
+  objects occupy disjoint, writable, nonexecutable image storage. Buffer
+  clearing and volatile observations cover exactly 1,024 payload bytes plus
+  112 scalar or 128 AVX2 header bytes before the public cleanup observation.
+  Earlier frame copies, ABI home space and the entire private window are not
+  covered by these buffer-only checks.
+
+The entry contracts are deliberately not conflated: AVX2 checks page-end
+overflow and page/window non-overlap in Rust and quarantines an existing owner
+on invalid entry. Scalar rejects invalid arguments/identity without that
+quarantine behavior and does not independently check page/window non-overlap;
+its original allocation/exclusivity obligations remain with the C adapter.
+Neither Rust entry establishes OS residency or serialization by itself.
+Package 8 retains shared C/OS, CPU-entry, runtime, cumulative-stack and full
+window-retirement qualification. No production Rust, saved image or release
+gate changed, and no new native enclave execution or independent retest occurred.
+
+Still required in pass 2: transitive state/owner caller composition, complete
+request dispatch/export handling, remaining failure paths and composition with
+the original allocation/authority lifetime prerequisites. The selected normal
+resident/page retirement and cancellation checks above are complete within
+their stated scope; they do not close package 7 or pass 2.
 
 ## Reproduce the author checks
 
@@ -197,6 +251,8 @@ python3 scripts/cryptography/windows_enclave_parallel_leaf.py SAVED_DIRECTORY --
 python3 scripts/cryptography/test-windows-enclave-parallel-leaf.py SAVED_DIRECTORY
 python3 scripts/cryptography/windows_enclave_parallel_framing.py SAVED_DIRECTORY --mutate
 python3 scripts/cryptography/test-windows-enclave-parallel-framing.py SAVED_DIRECTORY
+python3 scripts/cryptography/windows_enclave_parallel_lifecycle.py SAVED_DIRECTORY --mutate
+python3 scripts/cryptography/test-windows-enclave-parallel-lifecycle.py SAVED_DIRECTORY
 ```
 
 The tests reject missing/extra bodies or handlers, modified bytes/relocations,

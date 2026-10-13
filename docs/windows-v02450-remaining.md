@@ -13,8 +13,11 @@ Package 10 is now in pentest remediation; the current changes require a fresh
 independent retest.** This is not more isolation research or an automatic full
 sweep. The [finding dispositions](../security/pentest/v0.24.50.md#author-remediation-and-verification-2026-10-13)
 separate implemented fixes, already-enforced constraints and accepted limits.
-Changed default enclave images require rebuilt-image validation; historical
-observations remain bound to their original sources and binaries.
+The rebuilt scalar KMAC default image passes real fault-mode rejection and its
+546-case native campaign, with all 207 source bindings checked. Other changed
+images still require refresh; historical observations remain bound to their
+original sources and binaries. See the
+[focused native result](../assurance/windows-protection-observations/pentest-default-image-20261013.json).
 
 The documentation/packaging pass reconciles the current nineteen-route scope in
 the consumer guides, README tables, facade rustdoc, release notes and pending

@@ -1431,7 +1431,7 @@ sha256 = "58d54f5fe62ebaffb73bbd9d885610516246e2b49746fe65429c5726d241865b"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake/setup.rs"
-sha256 = "d9d43a4442192a60616a9f1e5bf63de724db14f7d85a5dfbb2b81cd21d1183b7"
+sha256 = "096f33751e71f33de16ff0b69138a61bf9a16891fa68a9bcbf7ec746edda8c67"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake/setup/tests.rs"
@@ -1451,4 +1451,4 @@ sha256 = "036dc52cce7799735231c14490f88bd51056b225c45d340259193990cdd9c68f"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/setup.rs"
-sha256 = "d56d46173f3ae331a3120861c8191438a2c76fbd2d5efadda7093204f82f8462"
+sha256 = "2753458ba00729f09991515926061de544a4ab3b21c0f03bf3c9d0f412c18bc5"

@@ -124,7 +124,8 @@ impl<T: Channel> Owner<T> {
     ) -> Result<(), Error> {
         let key_bits = u128::try_from(key.bit_len()).map_err(|_| Error::Bounds)?;
         if key_bits < algorithm.strength() {
-            self.state = State::Quarantined;
+            // Pure preflight: no request or secret input has crossed transport.
+            // Keep the session reusable; failures after issue() still quarantine.
             return Err(Error::Bounds);
         }
         self.issue(

@@ -38,6 +38,8 @@ jobs:
         run: scripts/ci/install-ci-tools.sh
       - name: Run repository CI checks
         run: scripts/checks.sh --ci
+      - name: Test enclave diagnostic profile separation
+        run: python3 scripts/cryptography/test-windows-enclave-guard-profile.py
       - name: Validate protected release controls
         env:
           GH_TOKEN: ${{ github.token }}
@@ -115,6 +117,11 @@ jobs:
         run: scripts/ci/ci_install_rust.sh
       - name: Test workspace
         run: cargo test --workspace --all-features
+      - name: Test Windows enclave acquisition rollback with OS faults
+        run: python scripts/cryptography/test-windows-enclave-lock-rollback.py
+      - name: Test native Windows enclave image path binding
+        if: runner.os == 'Windows'
+        run: python scripts/cryptography/test-windows-enclave-image-path.py
       - name: Test frozen portable legacy consumer
         run: cargo test --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml
       - name: Final legacy hash public acceptance

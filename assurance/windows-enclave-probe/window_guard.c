@@ -59,6 +59,8 @@ ULONG_PTR PublicLockedAdmit(void) {
     return BaseLockedAdmit();
 }
 
+#ifdef BRYNJA_DIAGNOSTIC_GUARD_FAULTS
+/* Explicit diagnostic builds only, never the default consumer image. */
 /* Accept only the exact synthetic boundary access, never an arbitrary crash. */
 static LONG boundary_filter(EXCEPTION_POINTERS* information, ULONG_PTR address, BOOL write) {
     EXCEPTION_RECORD* record = information->ExceptionRecord;
@@ -73,8 +75,11 @@ static LONG boundary_filter(EXCEPTION_POINTERS* information, ULONG_PTR address, 
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+#endif
+
 ULONG_PTR PublicLockedBody(ULONG_PTR raise) {
     ULONG_PTR result = BaseLockedBody(raise);
+#ifdef BRYNJA_DIAGNOSTIC_GUARD_FAULTS
     ULONG_PTR address;
     SIZE_T i;
     volatile unsigned char readback = 0;
@@ -94,6 +99,7 @@ ULONG_PTR PublicLockedBody(ULONG_PTR raise) {
     (void)readback;
     stats[5] = page_info(PublicLockedLow - GUARD_PAGE, PAGE_NOACCESS) &&
                page_info(PublicLockedHigh, PAGE_NOACCESS);
+#endif
     return result;
 }
 
@@ -122,7 +128,10 @@ ULONG_PTR PublicGuardRestore(void) {
 __declspec(dllexport) void* CALLBACK PublicGuardControl(void* context) {
     ULONG_PTR operation = (ULONG_PTR)context;
     if (active) { return 0; }
+    if (operation == 0) { mode = 0; return (void*)1; }
+#ifdef BRYNJA_DIAGNOSTIC_GUARD_FAULTS
     if (operation <= 4) { mode = operation; return (void*)1; }
+#endif
     if (operation >= 16 && operation < 28) { return (void*)stats[operation - 16]; }
     if (operation == 28) { return (void*)(ULONG_PTR)(low_changed || high_changed); }
     return 0;

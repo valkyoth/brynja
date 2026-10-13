@@ -7,6 +7,14 @@ records, document the limits honestly, and return to completing the existing
 Windows implementation. No production code or release gate changes follow from
 this scope decision.
 
+On 2026-10-13, after the new pentest reports and an implementation estimate, the
+owner reaffirmed this decision. Attested encrypted provisioning, fatal-path
+emergency erasure and a supervised helper process will not be added to v0.24.50.
+Their absence remains an accepted limitation, not a technical remediation or
+independent sign-off. Concrete defects within the existing contract still need
+fixes and regression tests; see the
+[current report disposition](../security/pentest/v0.24.50.md#owner-acceptance-of-stronger-isolation-limits-2026-10-13).
+
 ## Accepted scope and next action
 
 The accepted scope is **reviewed Brynja-owned memory and working-register cleanup

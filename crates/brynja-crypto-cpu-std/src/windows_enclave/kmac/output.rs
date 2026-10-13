@@ -35,6 +35,9 @@ impl<'a> Reader<'a> {
     }
 }
 /// Retained fixed tag or XOF fragment; no Clone, Debug, Send or Sync.
+/// Retention avoids exporting bytes through this Rust API; it is not a
+/// non-exportable key policy against hostile code in the containing process.
+/// The declassification marker does not authenticate enclave callers.
 #[must_use = "verify, declassify, rekey or cancel the result"]
 #[doc = "```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_crypto_cpu_std::windows_enclave::kmac::Retained<'static>>();\n```"]
 #[doc = "```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_crypto_cpu_std::windows_enclave::kmac::Retained<'static>>();\n```"]

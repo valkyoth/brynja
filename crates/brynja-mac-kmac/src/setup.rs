@@ -80,8 +80,12 @@ macro_rules! setup {
             /// Append canonical low-bit-first key fragments; exact declared length is enforced.
             pub fn key(&mut self,input:Fips202BitString<'_>)->Result<(),KmacError>{self.0.key(input)}
             /// Complete key padding and transfer into fixed-output KMAC.
+            /// Returning by value can leave compiler-created stack copies of
+            /// secret state. Clearing owned storage does not erase those copies.
             pub fn finish(mut self)->Result<$fixed,KmacError>{self.0.finish().map($fixed::from_prepared)}
             /// Complete the same setup and transfer into KMACXOF.
+            /// Returning by value can leave compiler-created stack copies of
+            /// secret state. Clearing owned storage does not erase those copies.
             pub fn finish_xof(mut self)->Result<$xof,KmacError>{self.0.finish().map($xof::from_prepared)}
             /// Explicitly cancel and erase owned storage.
             pub fn cancel(self) {}

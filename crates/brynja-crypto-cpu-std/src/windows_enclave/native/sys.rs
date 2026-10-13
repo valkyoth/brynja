@@ -67,6 +67,8 @@ struct TrustData {
 
 #[link(name = "onecore")]
 unsafe extern "system" {
+    fn GetFinalPathNameByHandleW(file: Handle, path: *mut u16, size: u32, flags: u32) -> u32;
+    fn GetFileInformationByHandle(file: Handle, info: *mut u32) -> i32;
     fn GetCurrentProcess() -> Handle;
     fn GetCurrentThreadId() -> u32;
     fn IsWow64Process2(process: Handle, process_machine: *mut u16, native: *mut u16) -> i32;
@@ -305,6 +307,35 @@ pub(super) fn close(handle: std::os::windows::io::RawHandle) {
 pub(super) fn disk(handle: std::os::windows::io::RawHandle) -> bool {
     // SAFETY: borrowed live File handle, never closed by this query.
     unsafe { GetFileType(handle) == 1 }
+}
+pub(super) fn volume_path(handle: std::os::windows::io::RawHandle) -> Result<Vec<u16>, Error> {
+    let mut path = [0u16; 1024];
+    // SAFETY: borrowed live file and initialized output of the declared width.
+    // VOLUME_NAME_GUID removes the mutable DOS drive-letter alias.
+    let count = unsafe { GetFinalPathNameByHandleW(handle, path.as_mut_ptr(), 1024, 1) };
+    if count == 0 || count >= 1024 {
+        return Err(Error::Image);
+    }
+    let count = usize::try_from(count).map_err(|_| Error::Image)?;
+    let mut result = Vec::new();
+    result
+        .try_reserve_exact(count.checked_add(1).ok_or(Error::Bounds)?)
+        .map_err(|_| Error::Platform)?;
+    result.extend_from_slice(path.get(..count).ok_or(Error::Image)?);
+    Ok(result)
+}
+pub(super) fn file_identity(handle: std::os::windows::io::RawHandle) -> Result<[u32; 3], Error> {
+    // BY_HANDLE_FILE_INFORMATION is thirteen DWORDs, including three FILETIMEs.
+    let mut info = [0u32; 13];
+    // SAFETY: borrowed live file; aligned, initialized 52-byte OS output buffer.
+    if unsafe { GetFileInformationByHandle(handle, info.as_mut_ptr()) } == 0 {
+        return Err(Error::Image);
+    }
+    Ok([
+        *info.get(7).ok_or(Error::Image)?,
+        *info.get(11).ok_or(Error::Image)?,
+        *info.get(12).ok_or(Error::Image)?,
+    ])
 }
 pub(super) fn signature(
     path: &[u16],

@@ -39,6 +39,33 @@ certification or proof of Brynja's protection guarantees.
 
 ## Responsibility boundary
 
+The containing application is trusted. Retained KMAC output and rekey chains
+avoid host copies through the supported Rust API, but are not non-exportable
+keys against injected or hostile in-process code. The public declassification
+marker records caller intent; it is not authentication at the enclave boundary.
+Protecting keys from that caller requires the separately deferred authenticated
+provisioning and authorization design.
+
+Default builds of `window_guard.c` reject deliberate boundary-fault modes 1–4
+and exclude their faulting code. The historical synthetic guard campaign needs
+the explicit `BRYNJA_DIAGNOSTIC_GUARD_FAULTS` compiler definition. Do not define
+it for consumer images or treat the old diagnostic-image captures as evidence
+for newly rebuilt images. Region-address queries remain necessary for host
+residency validation; they do not promise secrecy of layout from the trusted host.
+
+Sequential images and their loaders require exactly one enclave thread; their
+plain reentrancy guards are not a general multithreaded synchronization primitive.
+The five-thread concurrent protocol is separately admitted and must not be
+substituted for a sequential image. Raising a sequential image's thread count
+requires a new concurrency design and review, not a configuration-only change.
+
+Image trust requires both the reviewed complete-file hash and Windows signature
+verification. The latter accepts publishers trusted by the deployment; it is
+not an application-specific publisher-certificate pin. Online revocation checks
+can make construction depend on network availability. These APIs do not offer
+sealing or persistent keys; the fixed enclave OwnerID must not be interpreted
+as application-specific sealed-storage isolation.
+
 | Brynja implementation responsibility | Deployer responsibility |
 | --- | --- |
 | Document reproducible build inputs and the enclave/host protocol | Build the intended reviewed revision and retain its artifacts |

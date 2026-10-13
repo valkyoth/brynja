@@ -66,6 +66,55 @@ fn bits(input: &[u8], last: u8) -> Result<Bits<'_>, Error> {
     Bits::new(input, last).map_err(|_| Error::Bounds)
 }
 #[test]
+fn short_key_rejection_preserves_session_before_transport() -> Result<(), Error> {
+    for algorithm in [
+        Algorithm::Kmac128,
+        Algorithm::Kmac256,
+        Algorithm::KmacXof128,
+        Algorithm::KmacXof256,
+    ] {
+        let mut o = owner();
+        let key = [0; 32];
+        let strength = usize::try_from(algorithm.strength()).map_err(|_| Error::Bounds)?;
+        for length in [0, 1, strength - 1] {
+            let bytes = length.div_ceil(8);
+            let last = if length == 0 { 0 } else { (length - 1) % 8 + 1 };
+            assert_eq!(
+                o.begin(
+                    algorithm,
+                    bits(
+                        key.get(..bytes).ok_or(Error::Bounds)?,
+                        u8::try_from(last).map_err(|_| Error::Bounds)?,
+                    )?,
+                    bits(&[], 0)?,
+                ),
+                Err(Error::Bounds)
+            );
+            assert_eq!(o.state, State::Ready);
+            assert_eq!(o.sequence, 0);
+            assert!(o.transport.calls.is_empty());
+        }
+        let valid_key = bits(key.get(..strength / 8).ok_or(Error::Bounds)?, 8)?;
+        o.begin(algorithm, valid_key, bits(&[], 0)?)?;
+        assert_eq!(o.state, State::Busy);
+        assert_eq!(
+            o.transport.calls.first().ok_or(Error::Protocol)?.0.sequence,
+            1
+        );
+
+        let mut failed = owner();
+        failed.transport.fail = true;
+        assert_eq!(
+            failed.begin(algorithm, valid_key, bits(&[], 0)?),
+            Err(Error::Protocol)
+        );
+        assert_eq!(failed.state, State::Quarantined);
+        assert_eq!(failed.transport.calls.len(), 1);
+    }
+    Ok(())
+}
+
+#[test]
 fn setup_streaming_snapshots_bind_key_customization_and_sequence() -> Result<(), Error> {
     for algorithm in [
         Algorithm::Kmac128,

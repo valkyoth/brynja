@@ -44,7 +44,9 @@ extern "system" fn callback(parameter: usize) -> usize {
             let Some(call) = current.as_mut() else {
                 return 0;
             };
-            if call.error {
+            // A rejected owner acquisition must not suppress the enclosing
+            // window's normal-return cleanup. No new work is admitted.
+            if call.error && parameter & 15 != 1 {
                 return 0;
             }
             if process(call, parameter) {
@@ -78,6 +80,11 @@ fn process(call: &mut Context, parameter: usize) -> bool {
         }
         call.locked = true;
         if !sys::pages(address, 16, true) {
+            // No worker has been admitted. Roll back while this allocation is
+            // still live; retain ownership if Windows cannot confirm release.
+            if sys::lock(address, 65536, false) {
+                call.locked = false;
+            }
             return false;
         }
         call.phase = 1;
@@ -117,6 +124,11 @@ fn process(call: &mut Context, parameter: usize) -> bool {
         }
         call.slot_locked = true;
         if !sys::pages(address, 1, true) {
+            // The enclave frees a rejected owner page immediately on return.
+            // Release here, not later using a potentially recycled address.
+            if sys::lock(address, 4096, false) {
+                call.slot_locked = false;
+            }
             return false;
         }
         call.slot_phase = 1;

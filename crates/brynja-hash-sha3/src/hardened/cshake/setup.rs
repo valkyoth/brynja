@@ -305,6 +305,8 @@ macro_rules! setup {
                 self.0.push(Phase::Custom, input)
             }
             /// Consume setup; only exact complete N/S yields a usable state.
+            /// Returning by value can leave compiler-created stack copies of
+            /// secret state. Clearing owned storage does not erase those copies.
             pub fn finish(self) -> Result<$state, HardenedSha3Error> {
                 Ok($state {
                     owner: self.0.finish()?,
@@ -313,6 +315,8 @@ macro_rules! setup {
             }
             /// Transfer completed setup while clearing this exact source object.
             /// Success or error terminates setup; no incomplete state is returned.
+            /// The returned value can still create compiler-generated copies;
+            /// source erasure is not whole-stack or register erasure.
             pub fn finish_erasing_source(&mut self) -> Result<$state, HardenedSha3Error> {
                 Ok($state {
                     owner: self.0.finish_erasing_source()?,

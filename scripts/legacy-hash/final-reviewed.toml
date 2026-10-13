@@ -1,5 +1,5 @@
 [files]
-".github/workflows/ci.yml" = "cf50762871c5a7865792c2b1880b399c13e11a1a53187cc5784693c416c512df"
+".github/workflows/ci.yml" = "17c9c72cd4c03165f44901973b67a4504f2fb3801e05982f9c3577de931ed5b4"
 "assurance/legacy-hash-final/Cargo.lock" = "5eddbddc9a17b02f8df23690745037ea9b2172ab8eed380e4e4a437b6feb4551"
 "assurance/legacy-hash-final/Cargo.toml" = "dd6c74dd41d8ba8301b6dea5ea690aa380a254be1f1131b9f443df430fa2b4b9"
 "assurance/legacy-hash-final/claims.toml" = "c9b9e816c381eea1a2039009d3cde062ea57908e2439a20c44a6b5c8bc7e8faf"

@@ -8,9 +8,13 @@ maps all nineteen original routes to their owned-memory, register and exit-path
 evidence without asserting whole-image erasure. The fresh 249-test replay passes
 and matches the earlier Linux/Windows reports; the affected KMAC checker also
 passes its 19-test replay with unchanged semantic results. Existing qualification
-flags remain false. **Package 9's local candidate preparation is complete;
-publication to GitHub and checks for the candidate remain pending.** This is not
-more isolation research, native recollection or an automatic full sweep.
+flags remain false. **Package 9's candidate was pushed and GitHub passed.
+Package 10 is now in pentest remediation; the current changes require a fresh
+independent retest.** This is not more isolation research or an automatic full
+sweep. The [finding dispositions](../security/pentest/v0.24.50.md#author-remediation-and-verification-2026-10-13)
+separate implemented fixes, already-enforced constraints and accepted limits.
+Changed default enclave images require rebuilt-image validation; historical
+observations remain bound to their original sources and binaries.
 
 The documentation/packaging pass reconciles the current nineteen-route scope in
 the consumer guides, README tables, facade rustdoc, release notes and pending
@@ -32,8 +36,9 @@ API map, not the admission contract or emitted code. The
 defines the baseline, whole-delta review scope, evidence map and exclusions.
 All original image/build bindings and retained reconciliation/checker/test
 artifacts still match on final inspection. No code or saved qualification flag
-changed during this pass. GitHub must check the exact handoff commit before
-closing package 9; then package 10 is the independent retest.
+changed during that package-9 pass. Its GitHub check subsequently passed;
+the package-10 remediation above changes host code and the default C image
+profile, so it is not covered merely by that earlier green result.
 
 The [ParallelHash family reconciliation](windows-enclave-parallel-chains.md)
 closes package 7 across 198 emitted bodies and 17 cleanup funclets. Its final
@@ -98,9 +103,9 @@ code, gate, roadmap ordering or qualification flags change with this decision.
 
 Remaining, in the existing finite plan:
 
-- **Package 9:** reconcile documentation/support claims and packaging, run the
-  relevant fast checks and prepare one reviewable independent-pentest candidate.
-- **Package 10:** obtain and record independent retests; fix and test any findings.
+- **Package 9:** complete; retain its documentation/packaging handoff.
+- **Package 10:** finish remediation verification, obtain and record a fresh
+  independent retest, and retain accepted limits without labeling them fixed.
 - **Package 11:** use existing verification/evidence-reuse rules, refresh only
   invalidated native evidence, then require green GitHub and authorized tagging.
 

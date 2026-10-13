@@ -77,8 +77,40 @@ impl Pin {
         } else {
             image::admit_threads(&bytes, policy, threads)?;
         }
-        pin.location.push(0);
-        Ok(pin)
+        // The loader accepts a name, not our handle. Bind that name to the
+        // admitted file on its volume, independently of the caller's DOS alias.
+        // Keep the original guards alive until the canonical guards are held.
+        let handle = file.as_raw_handle();
+        let identity = sys::file_identity(handle)?;
+        let location = sys::volume_path(handle)?;
+        if !volume_path(&location) {
+            return Err(Error::Image);
+        }
+        let mut files = Vec::new();
+        files.try_reserve_exact(32).map_err(|_| Error::Platform)?;
+        let mut canonical = Self { files, location };
+        canonical.directory(49)?;
+        for i in 49..canonical.location.len() {
+            if canonical.location.get(i) == Some(&92) {
+                canonical.directory(i)?;
+            }
+        }
+        let file = OpenOptions::new()
+            .read(true)
+            .share_mode(1)
+            .custom_flags(0x08200000)
+            .open(PathBuf::from(OsString::from_wide(&canonical.location)))
+            .map_err(|_| Error::Image)?;
+        canonical.files.push(file);
+        let file = canonical.files.last().ok_or(Error::Image)?;
+        if sys::file_identity(file.as_raw_handle())? != identity
+            || file.metadata().map_err(|_| Error::Image)?.file_attributes() & 0x410 != 0
+            || sys::volume_path(file.as_raw_handle())? != canonical.location
+        {
+            return Err(Error::Image);
+        }
+        canonical.location.push(0);
+        Ok(canonical)
     }
     fn directory(&mut self, end: usize) -> Result<(), Error> {
         if self.files.len() >= 31 {
@@ -125,9 +157,34 @@ fn normal_path(location: &[u16]) -> bool {
     {
         return false;
     }
+    components(location.get(3..).unwrap_or_default())
+}
+fn volume_path(location: &[u16]) -> bool {
+    if !(50..1024).contains(&location.len())
+        || !location
+            .iter()
+            .take(11)
+            .copied()
+            .eq(r"\\?\Volume{".encode_utf16())
+        || location.get(47..49) != Some(&[125, 92])
+    {
+        return false;
+    }
+    for (i, c) in location.iter().skip(11).take(36).copied().enumerate() {
+        if matches!(i, 8 | 13 | 18 | 23) {
+            if c != 45 {
+                return false;
+            }
+        } else if !matches!(c, 48..=57 | 65..=70 | 97..=102) {
+            return false;
+        }
+    }
+    components(location.get(49..).unwrap_or_default())
+}
+fn components(location: &[u16]) -> bool {
     let mut component = 0usize;
     let mut previous = 0;
-    for &c in location.iter().skip(3).chain(core::iter::once(&92)) {
+    for &c in location.iter().chain(core::iter::once(&92)) {
         if c == 92 {
             if component == 0 || matches!(previous, 32 | 46) {
                 return false;
@@ -146,6 +203,47 @@ fn normal_path(location: &[u16]) -> bool {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn only_bounded_volume_guid_paths_reach_the_loader() {
+        let prefix = r"\\?\Volume{01234567-89ab-cdef-0123-456789abcdef}\";
+        for suffix in ["worker.dll", r"reviewed\worker.dll"] {
+            assert!(super::volume_path(
+                &format!("{prefix}{suffix}")
+                    .encode_utf16()
+                    .collect::<Vec<_>>()
+            ));
+        }
+        for suffix in [
+            "",
+            r"..\worker.dll",
+            r".\worker.dll",
+            "a.dll:stream",
+            "a.dll.",
+            "a.dll ",
+            "a\0.dll",
+            r"a\\b.dll",
+        ] {
+            assert!(!super::volume_path(
+                &format!("{prefix}{suffix}")
+                    .encode_utf16()
+                    .collect::<Vec<_>>()
+            ));
+        }
+        for bad in [
+            r"\\?\C:\worker.dll",
+            r"C:\worker.dll",
+            r"\\server\worker.dll",
+            r"\\?\Volume{01234567-89ab-cdef-0123-456789abcdeg}\worker.dll",
+            r"\\?\Volume{01234567_89ab-cdef-0123-456789abcdef}\worker.dll",
+        ] {
+            assert!(!super::volume_path(&bad.encode_utf16().collect::<Vec<_>>()));
+        }
+        assert!(!super::volume_path(
+            &format!("{prefix}{}", "a".repeat(1024))
+                .encode_utf16()
+                .collect::<Vec<_>>()
+        ));
+    }
     #[test]
     fn reject_ambiguous_or_unbounded_locations() {
         for good in ["C:\\worker.dll", "C:\\reviewed\\worker.dll"] {

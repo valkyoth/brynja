@@ -142,6 +142,11 @@ impl Shared {
             }
             frame.locked = true;
             if !sys::pages(low, 16, true) {
+                // Admission has not succeeded: undo this acquisition before
+                // returning. Failed release remains owned for cleanup/rejection.
+                if sys::lock(low, 65536, false) {
+                    frame.locked = false;
+                }
                 return Err(Error::Platform);
             }
             frame.admitted = true;

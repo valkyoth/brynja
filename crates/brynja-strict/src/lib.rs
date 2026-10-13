@@ -11,11 +11,15 @@
 //! glibc 2.27 or later). Other targets and verification models compile for
 //! portability checks but constructors reject: no successful weaker fallback.
 //! Native qualification and independent review remain pending.
-//! The separate [`enclave`] interface implements bounded scalar SHA-256 on
-//! Windows x64 VBS with application-signed images and trusted build policies.
-//! Its results stay enclave-private until explicit public declassification;
-//! existing Linux-style host-slice sessions remain unsupported on Windows.
-//! Development execution is tested; production-signed qualification is pending.
+//! The separate [`enclave`] interfaces implement Windows x64 VBS retained and
+//! streaming SHA-2/SHA-3, KMAC, TupleHash, batching and ParallelHash. They require
+//! application-signed images and trusted build policies. Acceleration is opt-in;
+//! concurrent ParallelHash exports public output rather than retaining results.
+//! Existing Linux-style host-slice sessions remain unsupported on Windows, and
+//! Windows ARM64 is unsupported by these enclave interfaces. Development tests
+//! are not production-signed qualification or independent review. Cleanup claims
+//! are conditional on reviewed platform/ABI behavior and returning paths; they
+//! do not establish whole-image, SDK/OS diagnostic or copy-scratch erasure.
 //!
 //! Scalar sessions stay scalar. `acceleration` exposes the separate compiled
 //! session constructors; batch execution also requires an explicit route. The

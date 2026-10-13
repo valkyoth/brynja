@@ -173,6 +173,13 @@ outputs remain the caller's responsibility. Registers, compiler-created copies,
 spills, caches, swap, dumps, aborts and forced termination remain documented
 limitations—not guarantees that portable Rust can provide.
 
+The separate [Windows enclave APIs](docs/windows-enclave-deployment.md) provide
+development-tested x64 sessions for modern hashes, MACs and batching through
+`brynja-strict`. They are not the Linux host-slice sessions. Hardware/SIMD routes
+are opt-in; Windows ARM64, production-signed deployment and independent
+qualification are not claimed. See the [conditional cleanup scope](docs/windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+before choosing this profile; SDK/OS and whole-process erasure are not guaranteed.
+
 Record framing and bounded DER/ASN.1 values are building blocks, not complete
 TLS engines or X.509 validation. Brynja must not yet secure network traffic.
 
@@ -252,8 +259,9 @@ Rust `1.99.0` is also covered by the compatibility and x86-64 emitted-code
 matrix. The pinned full-check/native-evidence compiler remains `1.98.1`;
 adding a compiler does not relabel earlier qualification artifacts.
 Release preflight checks tool freshness. Kani uses its separately pinned
-`cargo-kani 0.67.0` / Rust `1.90.0` pairing; it does not lower the production
-compiler or make a policy check a proof. See [Kani evidence](docs/KANI.md).
+`cargo-kani 0.68.0` / Rust `1.90.0` launcher pairing, with Kani's bundled
+`nightly-2026-08-21` verifier compiler. It does not lower the production compiler
+or make a policy check a proof. See [Kani evidence](docs/KANI.md).
 
 | Rust toolchain | Required evidence |
 | --- | --- |

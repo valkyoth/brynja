@@ -1,7 +1,8 @@
 # Windows enclave image admission and consumer workflow
 
-This admission component now also backs the crate's bounded
-[`brynja_strict::enclave` owner/session API](windows-enclave-owner.md). The separate
+This admission component backs the crate's
+[`brynja_strict::enclave` session families](windows-enclave-deployment.md#current-api-and-evidence-coverage),
+including the [bounded SHA-256 owner](windows-enclave-owner.md). The separate
 build/loader demonstration still accepts public test data only. Existing
 Linux-style host-slice constructors remain Unsupported on Windows. Development
 execution is tested; production-signed qualification remains pending.

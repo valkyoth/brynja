@@ -10,6 +10,10 @@ For full scalar SHA-2 streaming and general SHA-512/t, use the separate
 SHA-3/SHAKE/cSHAKE use the separate [version-seven API](windows-enclave-sha3.md).
 The [source-bound author results](windows-enclave-owner-results.md) describe
 the tests and their limits.
+Other families and batching use distinct interfaces in the
+[current API map](windows-enclave-deployment.md#current-api-and-evidence-coverage).
+All routes retain the [conditional cleanup limits](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map);
+returning-window erasure is not a whole-image or SDK/OS erasure guarantee.
 
 ## Supported operations
 

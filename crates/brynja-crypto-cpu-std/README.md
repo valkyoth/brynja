@@ -53,6 +53,9 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-2 batches | 🚧 Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS eight-message SHA-224/256 SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS four-message SHA-512-family SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | 🚧 Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
 | Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
@@ -345,6 +348,11 @@ explicitly public byte/bit inputs and preserve transactional output. They are
 not secret-erasing owners.
 
 ## Hardware and SIMD
+
+Windows enclave evidence covers [conditional Brynja-owned cleanup](../../docs/windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map),
+not complete SDK/OS or whole-process erasure. Development signing does not
+establish production deployment qualification. Windows ARM64 is unsupported by
+these enclave interfaces; Linux host-slice sessions are separate APIs.
 
 Hardened batching has three separate default-off features. None enables ordinary
 batching or relabels an ordinary authority/workspace:

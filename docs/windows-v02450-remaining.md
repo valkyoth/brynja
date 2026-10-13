@@ -1,6 +1,6 @@
 # v0.24.50 remaining work
 
-## Current completion checklist (2026-10-12)
+## Current completion checklist (2026-10-13)
 
 Packages 1–8 are complete at **conditional author-review** scope. Package 8's
 [bounded cleanup reconciliation](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
@@ -8,8 +8,26 @@ maps all nineteen original routes to their owned-memory, register and exit-path
 evidence without asserting whole-image erasure. The fresh 249-test replay passes
 and matches the earlier Linux/Windows reports; the affected KMAC checker also
 passes its 19-test replay with unchanged semantic results. Existing qualification
-flags remain false. **Next is package 9, candidate preparation**, not more
+flags remain false. **Package 9 candidate preparation is in progress**, not more
 isolation research, native recollection or an automatic full sweep.
+
+The documentation/packaging pass reconciles the current nineteen-route scope in
+the consumer guides, README tables, facade rustdoc, release notes and pending
+security report. Three missing independent-message SIMD rows are now explicit;
+30 focused mutations reject their removal, duplication, stale inventory and
+qualification overclaims. All 61 README examples pass, as do packaged strict
+debug/release consumers, 497 export/ownership negatives and the four strict
+adapter packages' tests/doctests. Archive/license, workspace feature, release
+metadata, assurance and affected source-policy checks pass. The release plan
+selects zero crates for publication. The Rust range and Kani documentation now
+match the existing tool policies; no toolchain or release rule changed.
+
+This is author verification, not a new native enclave campaign or independent
+review. Saved native observations are retained unchanged. In particular, the
+old outer-window observation's admission-document hash names its historical
+wording; the current edit updates only the introduction to point to the wider
+API map, not the admission contract or emitted code. Package 9 still requires
+the final candidate commit/evidence handoff and GitHub results for that commit.
 
 The [ParallelHash family reconciliation](windows-enclave-parallel-chains.md)
 closes package 7 across 198 emitted bodies and 17 cleanup funclets. Its final

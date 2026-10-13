@@ -1,22 +1,26 @@
 # Windows strict protected profiles
 
-Status: design and platform-contract review in progress for v0.24.50.
-Existing host-slice Windows strict constructors remain unsupported. The separate
-[retained SHA-256 owner](windows-enclave-owner.md) is now integrated and
-development-tested, with production-signed qualification pending. This document does not admit a
-backend, qualify an OS, or change release-gate policy. Existing Linux behavior
-and default-off acceleration remain unchanged.
+Status: the separate Windows x64 enclave interfaces are implemented and
+development-tested for v0.24.50; independent retest and release verification
+remain pending. Existing host-slice Windows strict constructors remain
+unsupported. The [current API/evidence map](windows-enclave-deployment.md#current-api-and-evidence-coverage)
+covers all nineteen scalar, accelerated, SIMD and concurrent routes. Their
+[bounded cleanup review](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+is conditional author evidence, not whole-image or production-signed qualification.
+Windows ARM64 remains unsupported/unqualified. Existing Linux behavior,
+default-off acceleration and release-gate policy are unchanged.
 
 The current distribution decision and development-only evidence limits are
 summarized in [consumer-managed enclave deployment](windows-enclave-deployment.md).
 Production signing belongs to the deploying application publisher; runtime
 protection checks and honest qualification claims remain Brynja's responsibility.
 
-The [enclave feasibility review](windows-enclave-design.md) records the next
-candidate architecture, its API incompatibilities and remaining worker-ownership
-proof obligations. Azure now has positive fixed-buffer enclave locking and
-local-dump exclusion observations; these do not establish full strict support.
-It is not authorization to substitute a weaker storage guarantee.
+The [enclave feasibility review](windows-enclave-design.md) and the sections
+below preserve the earlier platform investigation and implementation sequence.
+Their historical "next" and "outstanding" statements are not the current work
+list; see [remaining release work](windows-v02450-remaining.md). Azure's early
+fixed-buffer locking and local-dump observations do not themselves establish
+full strict support or authorize a weaker storage fallback.
 
 ## Platform review
 

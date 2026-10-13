@@ -80,7 +80,7 @@
     "crates/brynja-core/src/workspace.rs": "630588435be41e361ebbc17fcba68eafddaefcedf22b55e80fca399bdbc11ab6c63ef1cc27485829865e4ba5e875cebe9860e18b8ee57bd76b3cd3882d3ccad4",
     "crates/brynja-core/src/write.rs": "971815431653f89ec4aac600e195fb97a735dbb0ee01be9dc00739ec65c3b8a68de069086184c5acd9a4215e471a7426253415b4f25aa71efe2e55fee40496ed",
     "crates/brynja-crypto-cpu-std/Cargo.toml": "e8afc37dbb122691444d47d59d3540f70a71a50b19c212dc51ce5ccd045e3d948246c808a5bf95b9854a3706072c02ad410895a4b26f618536cb24cf8f8f9e59",
-    "crates/brynja-crypto-cpu-std/README.md": "25ecae9540a7e0bf42a6bc1c35c7908ee3f123c01dcf375443d1c322921c17d96200c11c33404f8fe699dbe3c3a72dee9f8ead3da46c0d4ed36880ba9e369846",
+    "crates/brynja-crypto-cpu-std/README.md": "9db9e3fedb3d362334718057246dba75957c436c8bc14f592dae25d8dbc91c0fb8c27b26127f2abec1217fc866173831c749de488193a9372831a26fe6461760",
     "crates/brynja-crypto-cpu-std/src/execution/features.rs": "efa1af8059d71c302ed9787578297b23690b7fa99337e92e9349c4fdb164ea1b7a382de67ec58de4f03b5d26fd4205ec001384a3df1509478757ec6d8f167fbc",
     "crates/brynja-crypto-cpu-std/src/execution/mod.rs": "ce48f3f50695ce36f4ff371cfd446e3f84858f91d9e8355ca48ba6c4773d1f299d65705fa056572ffa243a1615780442385b861bfed5e621f334fc4856a13c54",
     "crates/brynja-crypto-cpu-std/src/execution/platform.rs": "46595a8169ca73c0cf94d836f140b7943591e18038ba406e982a0bd89730704e5428b4c1113285a229ab34f9f72352c134082cc34d6335eebf117fd77bad279e",

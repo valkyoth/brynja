@@ -126,6 +126,45 @@ def crate_tables() -> None:
     print(f"Crate status tables reject {mutations} claim/table and 38 inventory regressions")
 
 
+def windows_simd_status_rows() -> None:
+    """The three shipped SIMD APIs must stay visible without promoting evidence."""
+    root = SCRIPT.resolve().parents[2]
+    mutations = 0
+    for crate in ('brynja-strict', 'brynja-crypto-cpu-std'):
+        path = Path('crates') / crate / 'README.md'
+        text = (root / path).read_text()
+        rows = MODULE.CRATE_ROWS[path.as_posix()]
+        for capability in ('eight-message SHA-224/256 SIMD',
+                           'four-message SHA-512-family SIMD',
+                           'four-message SHA-3/SHAKE/cSHAKE SIMD'):
+            matching = [row for row in rows if 'Windows x64 VBS ' + capability in row]
+            assert len(matching) == 1, (path, capability)
+            row, = matching
+            assert 'Opt-in AVX2; development-tested; qualification pending' in row
+            assert row.endswith('| ❌ No |')
+            for changed in (text.replace(row, ''),
+                            text.replace(row, row + '\n' + row),
+                            text.replace(row, row.replace('❌ No', '✅ Independently verified')),
+                            text.replace(row, row.replace('qualification pending', 'production qualified'))):
+                try:
+                    MODULE.validate_crate_document(path, changed)
+                except MODULE.VerificationStatusError:
+                    mutations += 1
+                else:
+                    raise AssertionError(f'Windows SIMD claim drift accepted: {path}')
+            stale = dict(MODULE.CRATE_ROWS)
+            stale[path.as_posix()] = [value for value in rows if value != row]
+            with patch.object(MODULE, 'CRATE_ROWS', stale):
+                try:
+                    MODULE.validate_crate_document(path, text)
+                except MODULE.VerificationStatusError:
+                    mutations += 1
+                else:
+                    raise AssertionError(f'stale Windows SIMD inventory accepted: {path}')
+    assert mutations == 30
+    print('Windows SIMD status rejects 30 omission, duplicate, claim and inventory regressions')
+
+
 def scoped_status_rows() -> None:
     """Review additions stay static; no qualification or verification upgrade."""
     root = SCRIPT.resolve().parents[2]
@@ -175,6 +214,7 @@ def scoped_status_rows() -> None:
 def main() -> int:
     crate_tables()
     scoped_status_rows()
+    windows_simd_status_rows()
     MODULE.validate_document(Path("fixture.md"), BASE, (ROW,))
     MODULE.validate_document(Path("README.md"), ROOT, (ROW,))
     must_fail(BASE.replace(MODULE.HEADING, "## Status"), "heading")

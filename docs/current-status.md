@@ -27,8 +27,11 @@ including scheduled, streaming and threaded ParallelHash integration, passed its
 release checks and GitHub. The v0.24.49 [dedicated x86 SHA-512 work](x86-sha512-execution.md)
 passed its retests, final verification and GitHub checks. Dedicated x86 SHA512
 execution remains emulator-qualified, not native-silicon-qualified. The current
-v0.24.50 [Windows strict-profile work](windows-strict-profile.md) starts with
-platform-contract review; Windows strict constructors remain unsupported.
+v0.24.50 [Windows enclave interfaces](windows-enclave-deployment.md) are implemented
+and development-tested across nineteen x64 routes, with conditional Brynja-owned
+cleanup author review complete. Independent retest, production-signed deployment
+qualification and final release verification remain pending. Existing host-slice
+strict constructors still reject Windows; Windows ARM64 is unsupported/unqualified.
 Existing ordinary SIMD remains public-only and non-erasing. No new crates.io
 publication, independent verification or FIPS validation is claimed.
 

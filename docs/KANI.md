@@ -9,7 +9,9 @@ compatible pairing, following the same model as `base64-ng`.
 ## Current Pairing
 
 - Active release toolchain: Rust `1.98.1`.
-- Supported crate range: Rust `1.90.0` through `1.98.1`.
+- Supported crate range: Rust `1.90.0` through `1.99.0`; the
+  [compatibility matrix](../README.md#rust-version-support) is separate from
+  the pinned release and verifier compilers.
 - Kani verifier toolchain: Rust
   `1.90.0-x86_64-unknown-linux-gnu`.
 - Pinned verifier: `cargo-kani 0.68.0`, upstream tag `kani-0.68.0`, commit

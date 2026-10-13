@@ -53,7 +53,7 @@
     "crates/brynja-tls13/Cargo.toml": "26bd902b572afcec1592f397d5a84e764b03161cea051b8047dfcbb1a3359c71",
     "crates/brynja-xtask/Cargo.toml": "d47051404a9ebc076f95068c90c6264c0f57ef9165b92c7dc0fe38decb9ed1ad",
     "crates/brynja/Cargo.toml": "fe2e1886992d4d99f9807efcf6093c63b4a29a12a0ae86e6d8898d63765c0791",
-    "docs/KANI.md": "655105b2956de70351f1dd53aa6ff7092a998d62eb792da708cee7403fd220e3",
+    "docs/KANI.md": "fd8b4a599411d666eb16cc7cbdce3a68e5d03efc2b865f3e4e9102d15714d2bf",
     "docs/focused-assurance.md": "dd390d241bf504a4588d2ded381955e29cfe10a018d4be55425fbd57a9806d1c",
     "docs/unsafe-policy.md": "814b575010bf3e3d3be321846c7e599a8074db1ac2d7e5f81c0e6bf61198144e",
     "rust-toolchain.toml": "85db324345b7937c49ea2ac8b962d741f710719f4f751cab809985cbe6afbe3c",

@@ -1,27 +1,47 @@
 # Brynja v0.24.50
 
-Status: in progress; Windows strict protected-profile design and qualification.
+Status: candidate preparation; independent retest and final verification pending.
 The previous v0.24.49 signed tag is the implementation baseline. This release
 selects no crates.io publication and changes no supporting crate versions.
 
-The scope is operational Windows x86-64 and AArch64 protected storage and
-worker stacks for the existing strict cryptographic APIs, preserving explicit
-opt-in SIMD/hardware acceleration and fail-closed resource acquisition.
-See the [platform design and open proof obligations](../docs/windows-strict-profile.md).
+## Current implementation and limits
+
+The implemented scope is a separate Windows x64 MSVC VBS enclave interface,
+preserving explicit opt-in SIMD/hardware acceleration and fail-closed resource
+acquisition. Windows ARM64 is unsupported/unqualified, not delivered by the x64
+work. See the [consumer deployment guide](../docs/windows-enclave-deployment.md).
 
 Existing Linux-style host-slice sessions remain unsupported on Windows. The new
-`brynja_strict::enclave` owner integrates bounded scalar SHA-256 construction and
-retained results with mandatory image/signature/import admission. This candidate does not
-claim implementation completion, native qualification or a passed pentest.
-The milestone requires failure/rollback and cleanup tests, packaged consumers,
-Windows ABI/register inspection and native evidence for each claimed platform,
-followed by the existing exceptional pentest/retest and release checks.
-No release-gate policy is being changed.
+`brynja_strict::enclave` APIs integrate retained SHA-256, streaming SHA-2/SHA-3,
+KMAC, TupleHash, sequential batches, independent-message AVX2 SIMD and
+sequential/concurrent ParallelHash with mandatory image/signature/import
+admission. Their [nineteen-route map](../docs/windows-enclave-whole-image-cleanup.md#route-coverage)
+links the development-tested images and completed conditional author reviews.
+Concurrent ParallelHash exports public output only; per-family size and lifetime
+limits remain part of the API. Production trust is mandatory in public
+constructors; native development tests use private test-only admission.
+
+Package 08 is complete only at the accepted [bounded cleanup scope](../docs/windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map).
+Named Brynja-owned regions and working registers are reviewed, and returning
+outer wrappers clear/read back their admitted windows. This does not establish
+complete spill confinement, a full transitive stack bound, SDK/OS diagnostic or
+copy-scratch erasure, arbitrary exception cleanup or fatal-abort cleanup.
+The stronger-isolation research is deferred by owner decision, not implemented.
+No production-signed success, independent qualification or passed pentest is
+claimed. The existing exceptional retest and release checks remain required;
+no release-gate policy is being changed.
 
 Rust 1.99.0 joins the compatibility and emitted-code matrices. Linux public-API
 acceptance, Linux/Windows workspace checks and x86-64 clearing/constant-time
 code-generation checks pass. The default full-check and existing native-evidence
 compiler stays pinned to 1.98.1; prior compiler-bound evidence is not relabeled.
+
+## Historical implementation and verification checkpoints
+
+The entries below retain the scope at each implementation step. Their older
+"pending", "not implemented" and "not qualified" statements do not supersede
+the current summary above. In particular, earlier component-only evidence is
+not silently promoted to current-image or production qualification.
 
 The private four-message SHA-512-family AVX2 component now has native Linux and
 Windows-process coverage: 602 independent cases/2408 lane comparisons, all valid

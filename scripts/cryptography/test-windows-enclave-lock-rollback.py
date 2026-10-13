@@ -188,3 +188,5 @@ def check():
 
 if __name__ == '__main__':
     check()
+    from windows_enclave_lifecycle_tests import check as check_lifecycle
+    check_lifecycle()

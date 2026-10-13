@@ -66,6 +66,21 @@ can make construction depend on network availability. These APIs do not offer
 sealing or persistent keys; the fixed enclave OwnerID must not be interpreted
 as application-specific sealed-storage isolation.
 
+The main image must be a local disk file with a bounded absolute
+`GLOBALROOT\Device\HarddiskVolume...` name obtainable from its handle. The
+loader pins that file and its ancestors without write/delete sharing and
+compares the complete volume/file identity. Drive-letter and per-logon
+volume-GUID aliases are not used for the final load. Filesystems that cannot
+provide the required device path or full file identity fail closed; network,
+redirected and arbitrary device namespaces are not supported deployment paths.
+
+A failed operation remains quarantined even if its enclave is subsequently
+destroyed. On Drop, destruction may release resources after synchronous calls
+return and host pointer revocation is confirmed, without claiming a successful
+cleanup receipt. If destruction cannot be confirmed, image guards remain held.
+Fatal revocation failures still terminate the process under the accepted
+fail-stop contract; this is not a high-availability isolation mechanism.
+
 | Brynja implementation responsibility | Deployer responsibility |
 | --- | --- |
 | Document reproducible build inputs and the enclave/host protocol | Build the intended reviewed revision and retain its artifacts |

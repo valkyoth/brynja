@@ -121,7 +121,12 @@ unsafe extern "system" {
 OS_ENCLAVE_ABI = '''#[link(name = "onecore")]
 unsafe extern "system" {
     fn GetFinalPathNameByHandleW(file: Handle, path: *mut u16, size: u32, flags: u32) -> u32;
-    fn GetFileInformationByHandle(file: Handle, info: *mut u32) -> i32;
+    fn GetFileInformationByHandleEx(
+        file: Handle,
+        class: u32,
+        info: *mut FileIdentity,
+        size: u32,
+    ) -> i32;
     fn GetCurrentProcess() -> Handle;
     fn GetCurrentThreadId() -> u32;
     fn IsWow64Process2(process: Handle, process_machine: *mut u16, native: *mut u16) -> i32;

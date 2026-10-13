@@ -78,19 +78,20 @@ impl Pin {
             image::admit_threads(&bytes, policy, threads)?;
         }
         // The loader accepts a name, not our handle. Bind that name to the
-        // admitted file on its volume, independently of the caller's DOS alias.
+        // admitted file on its NT device, independently of local DOS aliases.
         // Keep the original guards alive until the canonical guards are held.
         let handle = file.as_raw_handle();
         let identity = sys::file_identity(handle)?;
         let location = sys::volume_path(handle)?;
+        let root_end = volume_root(&location).ok_or(Error::Image)?;
         if !volume_path(&location) {
             return Err(Error::Image);
         }
         let mut files = Vec::new();
         files.try_reserve_exact(32).map_err(|_| Error::Platform)?;
         let mut canonical = Self { files, location };
-        canonical.directory(49)?;
-        for i in 49..canonical.location.len() {
+        canonical.directory(root_end)?;
+        for i in root_end..canonical.location.len() {
             if canonical.location.get(i) == Some(&92) {
                 canonical.directory(i)?;
             }
@@ -160,26 +161,25 @@ fn normal_path(location: &[u16]) -> bool {
     components(location.get(3..).unwrap_or_default())
 }
 fn volume_path(location: &[u16]) -> bool {
-    if !(50..1024).contains(&location.len())
+    volume_root(location).is_some_and(|end| components(location.get(end..).unwrap_or_default()))
+}
+fn volume_root(location: &[u16]) -> Option<usize> {
+    let prefix = r"\\?\GLOBALROOT\Device\HarddiskVolume";
+    if location.len() >= 1024
         || !location
             .iter()
-            .take(11)
+            .take(prefix.len())
             .copied()
-            .eq(r"\\?\Volume{".encode_utf16())
-        || location.get(47..49) != Some(&[125, 92])
+            .eq(prefix.encode_utf16())
     {
-        return false;
+        return None;
     }
-    for (i, c) in location.iter().skip(11).take(36).copied().enumerate() {
-        if matches!(i, 8 | 13 | 18 | 23) {
-            if c != 45 {
-                return false;
-            }
-        } else if !matches!(c, 48..=57 | 65..=70 | 97..=102) {
-            return false;
-        }
+    let tail = location.get(prefix.len()..)?;
+    let digits = tail.iter().take_while(|c| matches!(**c, 48..=57)).count();
+    if digits == 0 || digits > 10 || tail.get(digits) != Some(&92) {
+        return None;
     }
-    components(location.get(49..).unwrap_or_default())
+    prefix.len().checked_add(digits)?.checked_add(1)
 }
 fn components(location: &[u16]) -> bool {
     let mut component = 0usize;
@@ -204,8 +204,8 @@ fn components(location: &[u16]) -> bool {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn only_bounded_volume_guid_paths_reach_the_loader() {
-        let prefix = r"\\?\Volume{01234567-89ab-cdef-0123-456789abcdef}\";
+    fn only_bounded_absolute_device_paths_reach_the_loader() {
+        let prefix = r"\\?\GLOBALROOT\Device\HarddiskVolume3\";
         for suffix in ["worker.dll", r"reviewed\worker.dll"] {
             assert!(super::volume_path(
                 &format!("{prefix}{suffix}")

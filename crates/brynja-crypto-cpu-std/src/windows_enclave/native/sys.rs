@@ -41,6 +41,13 @@ struct Guid {
     c: u16,
     d: [u8; 8],
 }
+// FILE_ID_INFO: preserve the full ReFS identity and the 64-bit volume serial.
+#[repr(C)]
+#[derive(Default, PartialEq, Eq)]
+pub(super) struct FileIdentity {
+    volume: u64,
+    id: [u8; 16],
+}
 #[repr(C)]
 struct TrustFile {
     size: u32,
@@ -68,7 +75,12 @@ struct TrustData {
 #[link(name = "onecore")]
 unsafe extern "system" {
     fn GetFinalPathNameByHandleW(file: Handle, path: *mut u16, size: u32, flags: u32) -> u32;
-    fn GetFileInformationByHandle(file: Handle, info: *mut u32) -> i32;
+    fn GetFileInformationByHandleEx(
+        file: Handle,
+        class: u32,
+        info: *mut FileIdentity,
+        size: u32,
+    ) -> i32;
     fn GetCurrentProcess() -> Handle;
     fn GetCurrentThreadId() -> u32;
     fn IsWow64Process2(process: Handle, process_machine: *mut u16, native: *mut u16) -> i32;
@@ -311,31 +323,39 @@ pub(super) fn disk(handle: std::os::windows::io::RawHandle) -> bool {
 pub(super) fn volume_path(handle: std::os::windows::io::RawHandle) -> Result<Vec<u16>, Error> {
     let mut path = [0u16; 1024];
     // SAFETY: borrowed live file and initialized output of the declared width.
-    // VOLUME_NAME_GUID removes the mutable DOS drive-letter alias.
-    let count = unsafe { GetFinalPathNameByHandleW(handle, path.as_mut_ptr(), 1024, 1) };
+    // VOLUME_NAME_NT plus GLOBALROOT bypasses both drive-letter and per-logon
+    // Volume{GUID} aliases. The caller validates the absolute disk-device path.
+    let count = unsafe { GetFinalPathNameByHandleW(handle, path.as_mut_ptr(), 1024, 2) };
     if count == 0 || count >= 1024 {
         return Err(Error::Image);
     }
     let count = usize::try_from(count).map_err(|_| Error::Image)?;
+    let prefix = r"\\?\GLOBALROOT";
+    let size = count
+        .checked_add(prefix.len())
+        .and_then(|n| n.checked_add(1))
+        .ok_or(Error::Bounds)?;
+    if size > 1024 {
+        return Err(Error::Bounds);
+    }
     let mut result = Vec::new();
     result
-        .try_reserve_exact(count.checked_add(1).ok_or(Error::Bounds)?)
+        .try_reserve_exact(size)
         .map_err(|_| Error::Platform)?;
+    result.extend(prefix.encode_utf16());
     result.extend_from_slice(path.get(..count).ok_or(Error::Image)?);
     Ok(result)
 }
-pub(super) fn file_identity(handle: std::os::windows::io::RawHandle) -> Result<[u32; 3], Error> {
-    // BY_HANDLE_FILE_INFORMATION is thirteen DWORDs, including three FILETIMEs.
-    let mut info = [0u32; 13];
-    // SAFETY: borrowed live file; aligned, initialized 52-byte OS output buffer.
-    if unsafe { GetFileInformationByHandle(handle, info.as_mut_ptr()) } == 0 {
+pub(super) fn file_identity(
+    handle: std::os::windows::io::RawHandle,
+) -> Result<FileIdentity, Error> {
+    let mut info = FileIdentity::default();
+    // SAFETY: borrowed live file; repr(C), aligned, initialized 24-byte
+    // FILE_ID_INFO output. FileIdInfo (18) requests all 128 file-ID bits.
+    if unsafe { GetFileInformationByHandleEx(handle, 18, &mut info, 24) } == 0 {
         return Err(Error::Image);
     }
-    Ok([
-        *info.get(7).ok_or(Error::Image)?,
-        *info.get(11).ok_or(Error::Image)?,
-        *info.get(12).ok_or(Error::Image)?,
-    ])
+    Ok(info)
 }
 pub(super) fn signature(
     path: &[u16],
@@ -396,4 +416,34 @@ const _: () = {
     assert!(core::mem::size_of::<CreateInfo>() == 36);
     assert!(core::mem::size_of::<TrustFile>() == 32);
     assert!(core::mem::size_of::<TrustData>() == 88);
+    assert!(core::mem::size_of::<FileIdentity>() == 24);
+    assert!(core::mem::align_of::<FileIdentity>() == 8);
 };
+
+#[cfg(test)]
+mod identity_tests {
+    use super::*;
+    #[test]
+    fn complete_identity_and_abi_layout() {
+        assert_eq!(core::mem::offset_of!(FileIdentity, id), 8);
+        for bit in 0..128 {
+            let mut other = FileIdentity::default();
+            assert!(
+                other
+                    .id
+                    .get_mut(bit / 8)
+                    .map(|byte| *byte = 1 << (bit % 8))
+                    .is_some()
+            );
+            assert!(other != FileIdentity::default());
+        }
+        for bit in 0..64 {
+            let other = FileIdentity {
+                volume: 1 << bit,
+                ..FileIdentity::default()
+            };
+            assert!(other != FileIdentity::default());
+        }
+        assert!(file_identity(core::ptr::null_mut()).is_err());
+    }
+}

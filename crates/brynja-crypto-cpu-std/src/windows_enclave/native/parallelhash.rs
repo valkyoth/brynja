@@ -112,11 +112,7 @@ impl Backend {
             slot_locked: self.slot_locked,
             ..Context::default()
         })?;
-        let registration = Registration {
-            registration: self.entries.registration,
-            input: self.entries.input,
-            output: self.entries.output,
-        };
+        let registration = Registration::new(&self.entries, &self.registrations_pending);
         self.uncertain = true;
         let result = (|| {
             if sys::call(self.entries.input, input.map_or(0, |v| v.as_ptr() as usize))? != 1

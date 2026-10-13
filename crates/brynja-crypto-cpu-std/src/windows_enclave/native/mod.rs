@@ -3,6 +3,8 @@ use super::{
     engine::Driver,
     protocol::{self, Context},
 };
+use lifecycle::Registration;
+use std::cell::Cell;
 use std::path::Path;
 mod admission;
 mod callback;
@@ -10,6 +12,7 @@ mod callback;
 pub(super) mod keccak_simd;
 #[cfg(feature = "strict-kmac")]
 pub(super) mod kmac;
+mod lifecycle;
 #[cfg(feature = "strict-sha3-acceleration")]
 pub(super) mod parallel_concurrent;
 #[cfg(feature = "strict-sha3")]
@@ -83,6 +86,7 @@ pub(super) struct Backend {
     initialized: bool,
     terminated: bool,
     uncertain: bool,
+    registrations_pending: Cell<bool>,
     thread: u32,
     entries: Entries,
     slot: usize,
@@ -140,11 +144,7 @@ impl Backend {
             ..Context::default()
         };
         callback::install(context)?;
-        let registrations = Registration {
-            registration: self.entries.registration,
-            input: self.entries.input,
-            output: self.entries.output,
-        };
+        let registrations = Registration::new(&self.entries, &self.registrations_pending);
         // Any failure after registration keeps this backend quarantined. The
         // guard revokes borrowed host addresses even on recoverable unwinding.
         self.uncertain = true;
@@ -223,31 +223,6 @@ impl Backend {
         Ok(())
     }
 }
-struct Registration {
-    registration: usize,
-    input: usize,
-    output: usize,
-}
-impl Registration {
-    fn revoke(self) {
-        // Drop performs the same mandatory revocation on the success location.
-    }
-}
-impl Drop for Registration {
-    fn drop(&mut self) {
-        let a = sys::call(self.registration, 0);
-        let b = sys::call(self.output, 0);
-        let c = sys::call(self.input, 0);
-        if a != Ok(1) || b != Ok(1) || c != Ok(1) {
-            std::process::abort();
-        }
-        // Context is normally consumed by run; it contains no Rust pointers.
-        // On unwind it must not keep the thread occupied forever.
-        if std::thread::panicking() {
-            let _ = callback::take();
-        }
-    }
-}
 impl Driver for Backend {
     fn begin(&mut self, input: &[u8], sequence: u64) -> Result<(), Error> {
         if self.live || self.epoch.checked_add(1) != Some(sequence) {
@@ -284,7 +259,7 @@ impl Driver for Backend {
         if self.base == 0 {
             return Ok(());
         }
-        if self.thread != sys::thread() {
+        if self.thread != sys::thread() || self.registrations_pending.get() {
             return Err(Error::Release);
         }
         self.clear().map_err(|_| Error::Release)?;
@@ -295,17 +270,6 @@ impl Driver for Backend {
         self.base = 0;
         drop(self.pin.take());
         Ok(())
-    }
-}
-impl Drop for Backend {
-    fn drop(&mut self) {
-        if self.close().is_err() {
-            // Never release file guards while an uncertain enclave remains.
-            // No host callback borrows survive: revocation failures abort above.
-            if let Some(pin) = self.pin.take() {
-                core::mem::forget(pin);
-            }
-        }
     }
 }
 

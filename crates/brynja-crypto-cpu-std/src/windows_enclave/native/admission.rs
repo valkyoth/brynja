@@ -22,6 +22,7 @@ impl Backend {
             initialized: false,
             terminated: false,
             uncertain: false,
+            registrations_pending: core::cell::Cell::new(false),
             thread: sys::thread(),
             entries: Entries::default(),
             slot: 0,

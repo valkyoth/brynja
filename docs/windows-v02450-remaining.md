@@ -2,6 +2,12 @@
 
 ## Current completion checklist (2026-10-13)
 
+Before release, run the native lifecycle and fault-injection campaign from a
+clean committed checkout, including real post-failure enclave destruction.
+The compiled OS-mock fault tests are not that qualification. Explicitly assess
+the secure-kernel page-scrubbing assumption after `DeleteEnclave` described in
+the [deployment boundary](windows-enclave-deployment.md#responsibility-boundary).
+
 Packages 1–8 are complete at **conditional author-review** scope. Package 8's
 [bounded cleanup reconciliation](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
 maps all nineteen original routes to their owned-memory, register and exit-path
@@ -9,8 +15,10 @@ evidence without asserting whole-image erasure. The fresh 249-test replay passes
 and matches the earlier Linux/Windows reports; the affected KMAC checker also
 passes its 19-test replay with unchanged semantic results. Existing qualification
 flags remain false. **Package 9's candidate was pushed and GitHub passed.
-Package 10 is now in pentest remediation; the current changes require a fresh
-independent retest.** This is not more isolation research or an automatic full
+Package 10's host fixes have received two independent retests; the requested
+GLOBALROOT native regression passes. Clean-commit native lifecycle/fault
+qualification, including real post-failure destruction, remains pending.**
+This is not more isolation research or an automatic full
 sweep. The [finding dispositions](../security/pentest/v0.24.50.md#author-remediation-and-verification-2026-10-13)
 separate implemented fixes, already-enforced constraints and accepted limits.
 The rebuilt scalar KMAC default image passes real fault-mode rejection and its

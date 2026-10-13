@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Native DOS-alias race against the shipping Pin and Windows API wrappers.
+"""Native DOS/GUID/GLOBALROOT races against the shipping Pin and Windows APIs.
 
 Image parsing is replaced by a deterministic public-byte admission seam so the
 alias can change precisely after inspection. This is file-binding evidence, not
@@ -43,9 +43,16 @@ mod native {
         let path = std::ffi::OsString::from_wide(&pin.location[..pin.location.len()-1]);
         assert!(path.to_string_lossy().starts_with(r"\\?\GLOBALROOT\Device\HarddiskVolume"));
         let args: Vec<_> = std::env::args().collect();
-        let shadow = crate::shadow::Shadow::new(&args[3], &args[2]);
-        assert_eq!(std::fs::read(&shadow.path).unwrap(), b"guid-redirected");
+        let globalroot = args[4].starts_with("globalroot");
+        let shadow = if globalroot {
+            crate::shadow::Shadow::globalroot(&path, &args[2])
+        } else {
+            let shadow = crate::shadow::Shadow::new(&args[3], &args[2]);
+            assert_eq!(std::fs::read(&shadow.path).unwrap(), b"guid-redirected");
+            shadow
+        };
         assert_eq!(std::fs::read(&path).unwrap(), &[1; 512]);
+        if globalroot { println!("GLOBALROOT_CANONICAL_READ: original; write_guard=checked_below"); }
         assert!(std::fs::OpenOptions::new().write(true).open(&path).is_err());
         drop(pin);
         assert!(std::fs::OpenOptions::new().write(true).open(&path).is_ok());
@@ -60,8 +67,9 @@ mod shadow {
     unsafe extern "system" {
         fn GetFinalPathNameByHandleW(h: *mut core::ffi::c_void, p: *mut u16, n: u32, f: u32) -> u32;
         fn DefineDosDeviceW(flags: u32, name: *const u16, target: *const u16) -> i32;
+        fn GetLastError() -> u32;
     }
-    pub struct Shadow { name: Vec<u16>, target: Vec<u16>, pub path: String }
+    pub struct Shadow { name: Vec<u16>, target: Vec<u16>, pub path: String, active: bool }
     impl Shadow {
         pub fn new(original: &str, replacement: &str) -> Self {
             let file = std::fs::File::open(original).unwrap();
@@ -76,12 +84,30 @@ mod shadow {
             let name: Vec<u16> = path[4..48].encode_utf16().chain(Some(0)).collect();
             let target: Vec<u16> = format!(r"\??\{replacement}").encode_utf16().chain(Some(0)).collect();
             assert_ne!(unsafe { DefineDosDeviceW(9, name.as_ptr(), target.as_ptr()) }, 0);
-            Self { name, target, path }
+            Self { name, target, path, active: true }
+        }
+        pub fn globalroot(canonical: &std::ffi::OsStr, replacement: &str) -> Self {
+            let canonical = canonical.to_str().unwrap();
+            let suffix = canonical.strip_prefix(r"\\?\GLOBALROOT\").unwrap();
+            let redirected = std::path::Path::new(replacement).join(suffix);
+            std::fs::create_dir_all(redirected.parent().unwrap()).unwrap();
+            std::fs::write(&redirected, b"globalroot-redirected").unwrap();
+            let name: Vec<u16> = "GLOBALROOT".encode_utf16().chain(Some(0)).collect();
+            let target: Vec<u16> = format!(r"\??\{replacement}").encode_utf16().chain(Some(0)).collect();
+            let active = unsafe { DefineDosDeviceW(9, name.as_ptr(), target.as_ptr()) } != 0;
+            let error = if active { 0 } else { unsafe { GetLastError() } };
+            assert!(active || error != 0);
+            // Either refusal or an ineffective local alias is acceptable. The
+            // shipping canonical path must still read the original in both cases.
+            println!("GLOBALROOT_SHADOW: created={active}; error={error}");
+            Self { name, target, path: redirected.to_str().unwrap().to_owned(), active }
         }
     }
     impl Drop for Shadow {
         fn drop(&mut self) {
-            assert_ne!(unsafe { DefineDosDeviceW(15, self.name.as_ptr(), self.target.as_ptr()) }, 0);
+            if self.active {
+                assert_ne!(unsafe { DefineDosDeviceW(15, self.name.as_ptr(), self.target.as_ptr()) }, 0);
+            }
         }
     }
 }
@@ -111,7 +137,7 @@ def run():
         (root / 'main.rs').write_text(FIXTURE + SHADOW)
         original = (root / 'native/pin.rs').read_text()
         for level in ('0', '2'):
-            for mutant in ('none', 'dos', 'guid'):
+            for mutant in ('none', 'dos', 'guid', 'globalroot', 'globalroot-redirect'):
                 changed = original.replace('canonical.location.push(0);',
                     'canonical.location = pin.location.clone(); canonical.location.push(0);')
                 if changed == original:
@@ -120,7 +146,7 @@ def run():
                 # Model the old GUID load after all checks, then mutate that
                 # GUID alias in the same logon session before opening the name.
                 fixture = FIXTURE
-                if mutant == 'guid':
+                if mutant in ('guid', 'globalroot-redirect'):
                     fixture = fixture.replace('std::fs::read(&path).unwrap(), &[1; 512]',
                                               'std::fs::read(&shadow.path).unwrap(), &[1; 512]')
                 (root / 'main.rs').write_text(fixture + SHADOW)
@@ -132,15 +158,21 @@ def run():
                 subprocess.run(['subst', alias, str(root / 'original')], check=True, timeout=10)
                 try:
                     result = subprocess.run([str(binary), alias, str(root / 'replacement'),
-                                             str(root / 'original/worker.dll')],
+                                             str(root / 'original/worker.dll'), mutant],
                                             capture_output=True, text=True, timeout=30)
-                    if result.returncode != (0 if mutant == 'none' else 101):
+                    negative = mutant in ('dos', 'guid', 'globalroot-redirect')
+                    if result.returncode != (101 if negative else 0):
                         raise AssertionError(result.stdout + result.stderr)
-                    if mutant != 'none' and 'assertion' not in result.stderr:
+                    if negative and 'assertion' not in result.stderr:
                         raise AssertionError('mutant did not fail an assertion: ' + result.stderr)
+                    if mutant == 'globalroot':
+                        if ('GLOBALROOT_SHADOW:' not in result.stdout or
+                                'GLOBALROOT_CANONICAL_READ: original' not in result.stdout):
+                            raise AssertionError('GLOBALROOT experiment was not executed')
+                        print(result.stdout, end='', flush=True)
                 finally:
                     subprocess.run(['subst', alias, '/D'], check=True, timeout=10)
-    print('Native image binding: O0/O2 DOS and GUID alias redirects rejected; four mutants rejected')
+    print('Native image binding: O0/O2 DOS, GUID and GLOBALROOT alias checks PASS; six mutants rejected')
 
 
 if __name__ == '__main__':

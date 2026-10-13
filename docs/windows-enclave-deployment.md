@@ -78,6 +78,10 @@ A failed operation remains quarantined even if its enclave is subsequently
 destroyed. On Drop, destruction may release resources after synchronous calls
 return and host pointer revocation is confirmed, without claiming a successful
 cleanup receipt. If destruction cannot be confirmed, image guards remain held.
+Confidentiality after `DeleteEnclave` without an enclave erase receipt assumes
+the VBS secure kernel scrubs enclave pages before making them accessible to VTL0;
+this platform assumption requires deployment qualification and is not proved by
+Brynja's resource-release tests.
 Fatal revocation failures still terminate the process under the accepted
 fail-stop contract; this is not a high-availability isolation mechanism.
 

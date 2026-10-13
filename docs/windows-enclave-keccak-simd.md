@@ -18,6 +18,12 @@ slots in plan order, with zero padding and canonical final-bit masking.
 Lengths, identities and budgets are public metadata. There is no secret host
 output slice, generic callback, raw authority or silent scalar fallback.
 
+The [bounded cleanup review](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+covers named Brynja-owned regions and reviewed returning paths, conditional on
+the documented platform/ABI behavior. It does not establish SDK/OS erasure,
+complete spill confinement, arbitrary exception cleanup or fatal-abort cleanup.
+Development tests do not replace production deployment or independent qualification.
+
 ## Example
 
 The application supplies a reviewed image policy embedded in its trusted build

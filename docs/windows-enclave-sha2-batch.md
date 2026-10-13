@@ -14,6 +14,12 @@ VBS initialization; it never retries with an ordinary-memory implementation.
 Unsupported hosts reject. Development signing is confined to private tests.
 See [deployment responsibilities](windows-enclave-deployment.md).
 
+The [bounded cleanup review](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+covers named Brynja-owned regions and reviewed returning paths, conditional on
+the documented platform/ABI behavior. It does not establish SDK/OS erasure,
+complete spill confinement, arbitrary exception cleanup or fatal-abort cleanup.
+Development tests do not replace production deployment or independent qualification.
+
 ## Plan and ownership
 
 A `Plan` contains eight public `Option<Algorithm>` slots. At least one is active.

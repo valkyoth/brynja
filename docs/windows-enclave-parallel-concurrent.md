@@ -1,4 +1,23 @@
-# Private concurrent ParallelHash component
+# Windows enclave concurrent ParallelHash
+
+The implemented `brynja_strict::enclave::parallel_concurrent` interface uses up
+to four scoped AVX2 leaf workers on Windows x64 VBS. Enable `acceleration` and
+use the [crate API example](#crate-api-integration) with an application-reviewed,
+production-signed five-thread image. Output is explicitly public; this interface
+does not retain secret results. Development tests pass, but production-signed
+deployment and independent qualification remain pending. Windows ARM64 is not
+supported by this interface.
+
+The [bounded cleanup review](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+covers named Brynja-owned regions and reviewed returning paths, subject to its
+platform/ABI conditions. It does not establish SDK/OS erasure, complete spill
+confinement, arbitrary exception cleanup or fatal-abort cleanup.
+
+## Historical component and integration checkpoints
+
+The following experiments precede the crate API integration later in this guide.
+Their "private", "pending" and "not shipping" statements describe those stages,
+not the current API. They remain component evidence, not production qualification.
 
 Status: safe-Rust component tested in ordinary Linux and Windows processes;
 a separate private fixed-input bridge now executes inside native VBS with

@@ -18,6 +18,12 @@ missing support or failed admission never selects scalar execution. Root and
 leaf computations remain sequential single-state AVX2, not independent-message
 SIMD or multicore scheduling. `Session::open` remains scalar.
 
+The [bounded cleanup review](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+covers named Brynja-owned regions and reviewed returning paths, conditional on
+the documented platform/ABI behavior. It does not establish SDK/OS erasure,
+complete spill confinement, arbitrary exception cleanup or fatal-abort cleanup.
+Development tests do not replace production deployment or independent qualification.
+
 ## API example
 
 Create a Session using the reviewed consumer image policy and the

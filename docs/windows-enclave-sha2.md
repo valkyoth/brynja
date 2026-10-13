@@ -14,6 +14,12 @@ policy; the old worker cannot satisfy the new constructor's export requirements.
 The same production-only signature, file-identity, import and VBS admission
 rules apply. There is no public development bypass or generic transport driver.
 
+The [bounded cleanup review](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+covers named Brynja-owned regions and reviewed returning paths, conditional on
+the documented platform/ABI behavior. It does not establish SDK/OS erasure,
+complete spill confinement, arbitrary exception cleanup or fatal-abort cleanup.
+Development tests do not replace production deployment or independent qualification.
+
 ## Use the retained result API
 
 ```rust,no_run

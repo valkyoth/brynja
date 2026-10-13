@@ -15,6 +15,12 @@ version-four SHA-256 or version-six SHA-2 image is not interchangeable with it.
 Low-level `brynja-crypto-cpu-std` consumers need both `strict-sha2` and
 `strict-sha3`; `brynja-strict` already enables both.
 
+The [bounded cleanup review](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
+covers named Brynja-owned regions and reviewed returning paths, conditional on
+the documented platform/ABI behavior. It does not establish SDK/OS erasure,
+complete spill confinement, arbitrary exception cleanup or fatal-abort cleanup.
+Development tests do not replace production deployment or independent qualification.
+
 ## Explicit AVX2 selection
 
 `Session::open(image, policy)` remains scalar. Enable `brynja-strict`'s

@@ -8,8 +8,9 @@ maps all nineteen original routes to their owned-memory, register and exit-path
 evidence without asserting whole-image erasure. The fresh 249-test replay passes
 and matches the earlier Linux/Windows reports; the affected KMAC checker also
 passes its 19-test replay with unchanged semantic results. Existing qualification
-flags remain false. **Package 9 candidate preparation is in progress**, not more
-isolation research, native recollection or an automatic full sweep.
+flags remain false. **Package 9's local candidate preparation is complete;
+publication to GitHub and checks for the candidate remain pending.** This is not
+more isolation research, native recollection or an automatic full sweep.
 
 The documentation/packaging pass reconciles the current nineteen-route scope in
 the consumer guides, README tables, facade rustdoc, release notes and pending
@@ -26,8 +27,13 @@ This is author verification, not a new native enclave campaign or independent
 review. Saved native observations are retained unchanged. In particular, the
 old outer-window observation's admission-document hash names its historical
 wording; the current edit updates only the introduction to point to the wider
-API map, not the admission contract or emitted code. Package 9 still requires
-the final candidate commit/evidence handoff and GitHub results for that commit.
+API map, not the admission contract or emitted code. The
+[reviewer handoff](../security/pentest/v0.24.50.md#independent-reviewer-handoff)
+defines the baseline, whole-delta review scope, evidence map and exclusions.
+All original image/build bindings and retained reconciliation/checker/test
+artifacts still match on final inspection. No code or saved qualification flag
+changed during this pass. GitHub must check the exact handoff commit before
+closing package 9; then package 10 is the independent retest.
 
 The [ParallelHash family reconciliation](windows-enclave-parallel-chains.md)
 closes package 7 across 198 emitted bodies and 17 cleanup funclets. Its final

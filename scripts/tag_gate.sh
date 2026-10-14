@@ -11,7 +11,11 @@ fi
 
 # No expensive work starts until scope is understood or explicitly approved.
 python3 scripts/release/run-verification.py plan --check
-python3 scripts/sha2/check-sha2-hardened-native-evidence.py
+if python3 scripts/sha2/check-sha2-hardened-native-evidence.py; then
+    :
+else
+    python3 scripts/release/native_sha2_carry_forward.py
+fi
 verify() {
     python3 scripts/release/run-verification.py command -- "$@"
 }

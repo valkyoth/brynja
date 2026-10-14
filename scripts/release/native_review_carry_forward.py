@@ -48,12 +48,16 @@ def check_changes(root, review):
                        'production prefix changed: ' + name)
 
 
-def check_protected(root, review, head):
+def check_protected(root, review, head, closure=None):
     def selected(commit):
         return {n: v for n, v in io.tree(root, commit).items() if io.protected(n)}
     old, reviewed, current = map(selected, (review['capture_commit'], review['reviewed_commit'], head))
-    io.require(current == reviewed and set(old) <= set(reviewed),
-               'unreviewed implementation/build input change')
+    if closure is None:
+        io.require(current == reviewed, 'unreviewed implementation/build input change')
+    else:
+        from native_review_scope import unchanged
+        unchanged(root, review['reviewed_commit'], head, closure)
+    io.require(set(old) <= set(reviewed), 'unreviewed implementation/build input removal')
     for name, expected in reviewed.items():
         io.require(expected.startswith(('100644 blob ', '100755 blob ')), 'nonregular protected input')
         if old.get(name) != expected:
@@ -82,12 +86,13 @@ def validate(family, root=io.ROOT):
     io.git(root, 'merge-base', '--is-ancestor', review['capture_commit'], review['reviewed_commit'])
     io.git(root, 'merge-base', '--is-ancestor', review['reviewed_commit'], head)
     check_changes(root, review)
-    check_protected(root, review, head)
     adapter = Family(family, root)
+    current = adapter.sources()
+    check_protected(root, review, head, current)
     captured, count = adapter.records(review, head)
-    check_closure(root, review, adapter.sources(), captured, adapter.digest)
+    check_closure(root, review, current, captured, adapter.digest)
     from native_review_checks import validate_receipt
-    validate_receipt(root, review, review_raw, head)
+    validate_receipt(root, review, review_raw, head, historical=True)
     io.clean(root)
     io.require(io.git(root, 'rev-parse', 'HEAD').decode().strip() == head,
                'checkout changed during native validation')

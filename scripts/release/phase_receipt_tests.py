@@ -71,7 +71,7 @@ class PhaseReceiptTests(unittest.TestCase):
              patch.object(carry, 'prepare', side_effect=context), \
              patch.object(carry, 'required', side_effect=required), \
              patch.object(phases.catalog, 'PHASES', ('miri', 'kani')):
-            cache.update({r: ({}, {}, {}) for r in registry['jobs']})
+            cache.update({r: ({'commands': []}, {}, {}) for r in registry['jobs']})
             contexts, decisions = phases.prepare(Path('/tmp/registry'), Path('/tmp/root'), plan(), 'plan')
             self.assertEqual(len(contexts), 2)
             self.assertEqual([c for c, _ in decisions], [miri, kani])
@@ -133,3 +133,51 @@ class PhaseReceiptTests(unittest.TestCase):
              contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(runner.main(), 3)
             execute.assert_not_called()
+
+    def test_direct_compiler_selection_ignores_only_unselected_inventory(self):
+        host = 'x86_64-unknown-linux-gnu'
+        tools = {'compiler:1.98.1-' + host: 'host: ' + host,
+                 'compiler:nightly-' + host: 'host: ' + host,
+                 'compiler:nightly-2026-09-11-' + host: 'host: ' + host}
+        def keys(command):
+            return phases.compiler_keys({'tools': tools, 'commands': [entry(command, 'matrix')]}, Path('/tmp'))
+        self.assertEqual(keys('cargo +1.98.1 test'), {'compiler:1.98.1-' + host})
+        self.assertEqual(keys('cargo +nightly test'), {'compiler:nightly-' + host})
+        self.assertEqual(keys('cargo test'), set())  # Default identities still checked.
+        self.assertEqual(keys('scripts/unknown.sh'), set(tools))
+        self.assertEqual(keys('cargo +1.98.1 custom-alias'), set(tools))
+        self.assertEqual(keys('cargo run'), set(tools))
+        with self.assertRaisesRegex(ValueError, 'missing or ambiguous'):
+            keys('cargo +1.99.0 test')
+
+    def test_drift_requests_fresh_phase_not_successful_reuse(self):
+        check = entry('cargo +1.98.1 test', 'matrix')
+        context = {'plan': plan(), 'manifest': {'commands': [check]},
+                   'public_checkpoint': False, 'tool_drift': {'matrix': 'compiler changed'}}
+        self.assertEqual(carry.disposition(check, context), 'run: selected phase compiler/verifier changed')
+
+    def test_phase_drift_preserves_other_phase_in_same_receipt(self):
+        matrix = entry('cargo +1.98.1 test', 'matrix')
+        kani = entry('scripts/assurance/check-kani.sh --required-groups sha2', 'kani')
+        manifest = {'commands': [matrix, kani], 'phases': ['matrix', 'kani']}
+        context = {'plan': plan(), 'manifest': manifest, 'public_checkpoint': False}
+        registry = {'phases': {'matrix': 'a' * 64, 'kani': 'a' * 64},
+                    'jobs': {'a' * 64: Path('/tmp/shared')}}
+        def compatible(selected, _root):
+            self.assertEqual(len(selected['commands']), 1)
+            if selected['commands'][0]['phase'] == 'matrix':
+                raise phases.ToolDrift('matrix compiler changed')
+        with patch.object(phases, 'load', return_value=registry), \
+             patch.object(phases.history.History, 'collect'), \
+             patch.object(phases.history.History, '__init__', return_value=None), \
+             patch.object(phases.history.History, 'cache', {'a' * 64: (manifest, {}, {})}, create=True), \
+             patch.object(phases, 'compatible_tools', side_effect=compatible), \
+             patch.object(carry, 'prepare', return_value=context), \
+             patch.object(carry, 'required', side_effect=lambda ctx, phase, cmd:
+                          [e for e in manifest['commands'] if e['phase'] == phase]), \
+             patch.object(phases.catalog, 'PHASES', ('matrix', 'kani')):
+            contexts, decisions = phases.prepare(Path('/tmp/registry'), Path('/tmp/root'), plan(), 'plan')
+        self.assertEqual(len(contexts), 1)
+        self.assertTrue(decisions[0][1].startswith('run:'))
+        self.assertTrue(decisions[1][1].startswith('reuse:'))
+        self.assertEqual(set(context['tool_drift']), {'matrix'})

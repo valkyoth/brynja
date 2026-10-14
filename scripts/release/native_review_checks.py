@@ -37,7 +37,7 @@ def write_generated(root, name, raw):
     path.write_bytes(raw)
 
 
-def inputs(root, review):
+def inputs(root, review, revision=None):
     # Bind all reviewed implementation/build inputs, original test/tooling
     # exceptions, and the current check producer. No whole-HEAD coupling.
     names = {n for n in io.names(root, review['reviewed_commit']) if io.protected(n)}
@@ -48,16 +48,33 @@ def inputs(root, review):
     names.update(('scripts/release/native_review_tests.py',
                   'scripts/release/native_review_carry_forward.py',
                   'scripts/release/native_review_families.py'))
-    return io.fingerprint({name: io.sha(io.read(root, name)) for name in sorted(names)})
+    read = (lambda name: io.read(root, name)) if revision is None else (
+        lambda name: io.historical(root, revision, name))
+    return io.fingerprint({name: io.sha(read(name)) for name in sorted(names)})
 
 
-def validate_receipt(root, review, review_raw, head):
+def validate_receipt(root, review, review_raw, head, historical=False):
     io.require(review['verification'] == REPORT, 'unexpected verification path')
-    report = io.document(io.committed(root, REPORT, head))
+    revision = None
+    if historical:
+        # Verify the original execution snapshot, not today's unrelated source
+        # or today's validator implementation. Never run archived Python code.
+        additions = io.git(root, 'log', '--format=%H', '--diff-filter=A', head, '--', REPORT).decode().splitlines()
+        io.require(len(additions) == 1, 'ambiguous historical receipt introduction')
+        revision = io.revision(additions[0])
+        io.git(root, 'merge-base', '--is-ancestor', review['reviewed_commit'], revision)
+        from native_review_carry_forward import REVIEW
+        io.require(io.historical(root, revision, REVIEW) == review_raw, 'historical review changed')
+    def read(name):
+        raw = io.committed(root, name, head)
+        if revision is not None:
+            io.require(raw == io.historical(root, revision, name), 'historical receipt/log changed: ' + name)
+        return raw
+    report = io.document(read(REPORT))
     io.require(set(report) == {'schema', 'review_sha256', 'inputs', 'compiler', 'environment', 'checks'},
                'verification receipt fields')
     io.require(type(report['schema']) is int and report['schema'] == 1 and
-               report['review_sha256'] == io.sha(review_raw) and report['inputs'] == inputs(root, review),
+               report['review_sha256'] == io.sha(review_raw) and report['inputs'] == inputs(root, review, revision),
                'current verification source binding')
     io.require(report['environment'] == SELECTORS and
                'release: 1.98.1' in report['compiler'].splitlines() and
@@ -70,7 +87,7 @@ def validate_receipt(root, review, review_raw, head):
                    entry['exit_code'] == 0, 'failed/mismatched focused check')
         name = f'security/native-reuse/v0.24.49-check-{index:02d}.log'
         io.require(entry['log'] == name, 'focused log path')
-        raw = io.committed(root, name, head)
+        raw = read(name)
         io.require(raw and io.sha(raw) == entry['sha256'], 'focused log hash')
 
 

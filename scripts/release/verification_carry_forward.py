@@ -79,6 +79,8 @@ def covered(entry: dict, previous: list[dict]) -> bool:
 
 def disposition(entry: dict, context: dict) -> str:
     """Every requested command is either run now or backed by completed evidence."""
+    if entry['phase'] in context.get('tool_drift', {}):
+        return 'run: selected phase compiler/verifier changed'
     if context['public_checkpoint']:
         return 'run: new public checkpoint'
     changed = context['plan'].get('evidence', {}).get('changed_paths', [])

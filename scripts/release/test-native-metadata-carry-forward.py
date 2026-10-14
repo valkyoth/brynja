@@ -11,6 +11,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from native_review_tests import NativeReviewTests
+from native_scope_tests import ScopedNativeTests, InactiveSha2Tests
 
 import native_metadata_carry_forward as review
 

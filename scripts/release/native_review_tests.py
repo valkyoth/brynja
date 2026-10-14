@@ -240,6 +240,40 @@ class NativeReviewTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             adapter.records(doc, commit(self.root))
 
+    def test_historical_receipt_keeps_execution_inputs_and_rejects_rehashed_tampering(self):
+        # Populate the historical producer's bound inputs, not today's unrelated
+        # tree. Its source digest is still recomputed by current trusted code.
+        names = (*checks.TOOLS, 'scripts/release/native_review_tests.py',
+                 'scripts/release/native_review_carry_forward.py',
+                 'scripts/release/native_review_families.py')
+        for name in names:
+            write(self.root, name, '# original checked tool\n')
+        raw = json.dumps(self.doc).encode()
+        write(self.root, review.REVIEW, raw.decode())
+        log = 'security/native-reuse/v0.24.49-check-00.log'
+        write(self.root, log, 'original successful output\n')
+        command = ['cargo', 'test']
+        with patch.object(checks, 'COMMANDS', [command]):
+            report = {'schema': 1, 'review_sha256': io.sha(raw),
+                      'inputs': checks.inputs(self.root, self.doc),
+                      'compiler': 'release: 1.98.1\nhost: x86_64-unknown-linux-gnu',
+                      'environment': checks.SELECTORS,
+                      'checks': [{'command': command, 'exit_code': 0, 'log': log,
+                                  'sha256': io.sha(io.read(self.root, log))}]}
+            write(self.root, checks.REPORT, report)
+            commit(self.root)
+            write(self.root, 'crates/unrelated/src/lib.rs', 'pub fn added() {}')
+            write(self.root, checks.TOOLS[0], '# newer validator; not the old producer\n')
+            head = commit(self.root)
+            checks.validate_receipt(self.root, self.doc, raw, head, historical=True)
+            with self.assertRaisesRegex(ValueError, 'source binding'):
+                checks.validate_receipt(self.root, self.doc, raw, head)
+            write(self.root, log, 'fabricated replacement output\n')
+            report['checks'][0]['sha256'] = io.sha(io.read(self.root, log))
+            write(self.root, checks.REPORT, report)
+            with self.assertRaisesRegex(ValueError, 'historical receipt/log changed'):
+                checks.validate_receipt(self.root, self.doc, raw, commit(self.root), historical=True)
+
     def test_gate_cannot_pass_when_exact_and_reviewed_checks_fail(self):
         gate = (io.ROOT / 'scripts/tag_gate.sh').read_text()
         start = gate.index('if\npython3 scripts/sha1/check-sha1-hardened-native.py')

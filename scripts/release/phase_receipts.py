@@ -10,6 +10,57 @@ import detached_manifest as records
 import verification_carry_forward as carry
 
 
+class ToolDrift(ValueError):
+    """Valid historical evidence needs a fresh run with today's selected tools."""
+
+
+def compiler_keys(manifest: dict, root: Path) -> set[str]:
+    """Resolve only understood launchers; opaque scripts keep the full inventory.
+
+    Never infer compiler use from a filename or a substring scan of a script.
+    A changed script/feature/policy still goes through the source-delta planner.
+    """
+    recorded = {key for key in manifest['tools'] if key.startswith('compiler:')}
+    selected = set()
+    entries = manifest['commands']
+    if not entries:
+        return recorded
+    for entry in entries:
+        argv = entry['argv']
+        if argv[0] == 'cargo' and len(argv) > 1:
+            offset = 2 if argv[1].startswith('+') else 1
+            if (len(argv) <= offset or argv[offset] not in
+                    {'test', 'check', 'build', 'clippy', 'doc', 'fmt', 'fetch', 'metadata'}):
+                # cargo aliases, external subcommands and cargo run may launch
+                # other tools; their compiler use is not established here.
+                return recorded
+            if argv[1].startswith('+'):
+                name = argv[1][1:]
+            else:
+                # The pinned default rustc/cargo are checked separately.
+                continue
+        elif (argv[:2] == ['python3', 'scripts/zeroization/run-miri-task.py'] or
+              argv[0] in {'scripts/zeroization/check-zeroization-miri.sh',
+                          'scripts/assurance/check-kani.sh'}):
+            probes = records.verifier_commands(root, [entry])
+            if not probes:  # A policy-only check does not execute a verifier.
+                continue
+            name = next(iter(probes.values()))[2]  # rustup run <toolchain>
+        else:
+            return recorded
+        matches = set()
+        for key in recorded:
+            hosts = [line.removeprefix('host: ') for line in manifest['tools'][key].splitlines()
+                     if line.startswith('host: ')]
+            if key == 'compiler:' + name or (len(hosts) == 1 and
+                    key == 'compiler:' + name + '-' + hosts[0]):
+                matches.add(key)
+        if len(matches) != 1:
+            raise ValueError('missing or ambiguous selected compiler identity: ' + name)
+        selected.update(matches)
+    return selected
+
+
 def compatible_tools(manifest: dict, root: Path) -> None:
     """Keep compiler/verifier/platform qualification; ignore extra installations.
 
@@ -21,13 +72,13 @@ def compatible_tools(manifest: dict, root: Path) -> None:
         raise ValueError('phase receipt execution platform differs from collector')
     probes = {'rustc': ['rustc', '-vV'], 'cargo': ['cargo', '-V']}
     probes.update({key: ['rustc', '+' + key.removeprefix('compiler:'), '-vV']
-                   for key in tools if key.startswith('compiler:')})
+                   for key in compiler_keys(manifest, root)})
     probes.update(records.verifier_commands(root, manifest['commands']))
     for key, argv in probes.items():
         value = subprocess.check_output(argv, stderr=subprocess.DEVNULL, timeout=30,
                                         env={**os.environ, 'RUSTUP_AUTO_INSTALL': '0'})
         if len(value) > 65536 or value.decode().strip() != tools[key]:
-            raise ValueError('phase receipt compiler/verifier identity differs: ' + key)
+            raise ToolDrift('phase receipt compiler/verifier identity differs: ' + key)
 
 
 def load(path: Path) -> dict:
@@ -62,12 +113,19 @@ def prepare(path: Path, root: Path, plan: dict, phase: str, command: str | None 
         if receipt not in contexts:
             reader.collect(receipt)
             manifest, _, _ = reader.cache[receipt]
-            compatible_tools(manifest, registry['jobs'][receipt] / 'source')
             contexts[receipt] = carry.prepare(registry['jobs'][receipt], receipt, root, plan,
                                               historical_reader=reader)
         context = contexts[receipt]
         if name not in context['manifest']['phases']:
             raise ValueError('receipt does not cover requested phase')
+        manifest = reader.cache[receipt][0]
+        selected = [entry for entry in manifest['commands'] if entry['phase'] == name]
+        try:
+            compatible_tools({**manifest, 'commands': selected}, registry['jobs'][receipt] / 'source')
+        except ToolDrift as error:
+            # Preserve the historical pass, but never reuse it for this phase.
+            # Other phases keep their own compiler/verifier decisions.
+            context.setdefault('tool_drift', {})[name] = str(error)
         entries = carry.required(context, 'command' if phase == 'command' else name, command)
         decisions.extend((entry, carry.disposition(entry, context)) for entry in entries)
     return list(contexts.values()), decisions

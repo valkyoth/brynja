@@ -54,12 +54,17 @@ alternative; substituting ordinary-memory hashing is not permitted.
 The exact OS ABI inventory permits only enclave creation/loading/initialization/
 calls/destruction, native capability and thread queries, page residency/locking,
 file handle checks/closure and Authenticode verification through onecore, psapi
-and wintrust, plus the single `NtCreateSymbolicLinkObject` import from ntdll.
-The namespace adapter exclusively creates a temporary loader alias, rejects
-collisions, and holds its handle through file-pin retirement. It does not trust
-the mutable per-logon `GLOBALROOT` alias as a final loader name.
-No imported cryptographic primitive or new package dependency is
-allowed. The source hashes bind SDK layouts, target restrictions, all nineteen
+and wintrust, plus `NtCreateSymbolicLinkObject` from ntdll and `BCryptGenRandom`
+from bcrypt (system-preferred RNG, null provider). This narrowly permitted RNG
+supplies non-secret namespace entropy only; no imported cryptographic primitive
+is applied to application data, and no new package dependency is allowed.
+The namespace adapter creates a random, `OBJ_EXCLUSIVE` temporary loader alias,
+makes at most four fresh-name attempts on collisions without adopting an existing
+object, and holds its handle through file-pin retirement. Entropy failures and
+other creation errors fail closed. It does not trust the mutable `GLOBALROOT`
+alias as a final loader name; canonical ancestor handles must also report their
+expected native device paths.
+The source hashes bind SDK layouts, target restrictions, all twenty
 local safety proofs and both Rust-defined OS residency callbacks. Extra
 imports, link directives or relocated callbacks fail regression-tested policy.
 

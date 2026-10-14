@@ -2,7 +2,7 @@
 """Historical replay cannot rewrite or silently repin observations."""
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import subprocess
 import tempfile
 import unittest
@@ -21,12 +21,33 @@ class ReplayTests(unittest.TestCase):
         self.raw = self.path.read_bytes()
         self.digest = hashlib.sha256(self.raw).hexdigest()
 
-    def execute(self, *, code=0, stderr='', **changes):
-        data = dict(self.old, compared_source_root='/tmp/new-random')
+    def execute(self, *, source_root=None, code=0, stderr='', **changes):
+        if source_root is None:
+            source_root = Path(self.directory.name) / 'new-random'
+        data = dict(self.old, compared_source_root=str(source_root))
         data.update(changes)
         result = subprocess.CompletedProcess(['verify'], code, json.dumps(data), stderr)
-        with patch.object(replay.subprocess, 'run', return_value=result):
-            return replay.replay(Path('verify'), Path('/tmp/new-random'), self.path, self.digest)
+        with patch.object(replay.subprocess, 'run', return_value=result) as run:
+            value = replay.replay(Path('verify'), source_root, self.path, self.digest)
+            self.assertEqual(run.call_args.args[0][-2:], ['--source-root', str(source_root)])
+            return value
+
+    def test_both_path_flavours_preserve_exact_provenance(self):
+        for source_root in (PurePosixPath('/tmp/new-random'),
+                            PureWindowsPath('C:/temporary/new-random')):
+            with self.subTest(source_root=source_root):
+                self.assertEqual(self.execute(source_root=source_root)['compared_source_root'],
+                                 '<historical-85903ae0>')
+                with self.assertRaisesRegex(ValueError, 'another source root'):
+                    self.execute(source_root=source_root,
+                                 compared_source_root=str(source_root / 'different'))
+                self.assertEqual(self.path.read_bytes(), self.raw)
+
+    def test_windows_separator_mismatch_is_not_silently_normalized(self):
+        with self.assertRaisesRegex(ValueError, 'another source root'):
+            self.execute(source_root=PureWindowsPath('/tmp/new-random'),
+                         compared_source_root='/tmp/new-random')
+        self.assertEqual(self.path.read_bytes(), self.raw)
 
     def test_repeat_is_deterministic_and_read_only(self):
         first = self.execute()

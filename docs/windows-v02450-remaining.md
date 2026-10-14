@@ -24,11 +24,18 @@ post-failure destruction test now passes; evidence review remains pending.**
 This is not more isolation research or an automatic full
 sweep. The [finding dispositions](../security/pentest/v0.24.50.md#author-remediation-and-verification-2026-10-13)
 separate implemented fixes, already-enforced constraints and accepted limits.
-The rebuilt scalar KMAC default image passes real fault-mode rejection and its
-546-case native campaign, with all 207 source bindings checked. Other changed
-images still require refresh; historical observations remain bound to their
-original sources and binaries. See the
-[focused native result](../assurance/windows-protection-observations/pentest-default-image-20261013.json).
+The [current native refresh](../assurance/windows-protection-observations/pentest-native-refresh-20261014.json)
+now passes fourteen rebuilt scalar/accelerated sequential images in debug and
+release, default diagnostic-fault rejection on every image, and 66 host lifecycle
+tests per profile. Current host binaries also pass 68 concurrent ParallelHash
+cases per profile against its unchanged image. Twelve worker assembly listings
+are byte-identical; the two SHA-NI listings differ only in the exact source-path
+literal and its lengths. All fourteen fresh images bind the cleanup wrapper.
+The bounded SHA-256 owner and SHA-256/SHA-512/Keccak independent-message SIMD
+images remain to refresh. Final current-image reconciliation and review are
+still pending; historical observations retain their original bindings and
+production/whole-image qualification is not asserted. The full detached release
+sweep has not started.
 
 The documentation/packaging pass reconciles the current nineteen-route scope in
 the consumer guides, README tables, facade rustdoc, release notes and pending

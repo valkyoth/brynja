@@ -11,6 +11,12 @@ spec.loader.exec_module(module)
 
 
 class Results(unittest.TestCase):
+    def test_fixture_location(self):
+        self.assertEqual(module.FIXTURE,
+                         Path('assurance/windows-enclave-probe/native_teardown.rs'))
+        self.assertTrue((module.ROOT / module.FIXTURE).is_file())
+        self.assertFalse((module.ROOT / 'scripts/cryptography/windows_enclave_native_teardown.rs').exists())
+
     def output(self):
         rows = ['running 1 test']
         for case in ('normal', 'bad-version', 'bad-sequence', 'bad-receipt', 'unwind'):

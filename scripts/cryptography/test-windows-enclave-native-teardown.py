@@ -17,7 +17,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 NATIVE = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native')
-FIXTURE = Path('scripts/cryptography/windows_enclave_native_teardown.rs')
+FIXTURE = Path('assurance/windows-enclave-probe/native_teardown.rs')
 TEST = 'windows_enclave::native::lifecycle::native_teardown::real_post_failure_teardown'
 
 

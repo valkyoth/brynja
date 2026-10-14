@@ -52,6 +52,8 @@ def main() -> int:
     try:
         valid = fixture()
         roots.append(valid)
+        write(valid / 'assurance' / 'windows-enclave-probe' / 'native_teardown.rs',
+              '// Rust fixtures belong outside the script tree.\n')
         layout.validate(valid)
 
         unknown_root = fixture()
@@ -74,10 +76,16 @@ def main() -> int:
         first = next((duplicate / "scripts" / "sha2").iterdir())
         write(duplicate / "scripts" / "cpu" / first.name, "fixture\n")
         must_fail(duplicate, "accepted a duplicate basename")
+
+        unsupported = fixture()
+        roots.append(unsupported)
+        write(unsupported / 'scripts' / 'cryptography' / 'native_teardown.rs',
+              '// misplaced Rust fixture\n')
+        must_fail(unsupported, "accepted Rust source in the script tree")
     finally:
         for root in roots:
             shutil.rmtree(root)
-    print("script inventory rejects four classification regressions")
+    print("script inventory rejects five classification regressions")
     return 0
 
 

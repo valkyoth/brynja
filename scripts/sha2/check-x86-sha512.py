@@ -15,8 +15,17 @@ FEATURES = 'static-execution,runtime-execution,hardened-execution'
 
 def run(command, environment, markers=()):
     print('RUN: ' + ' '.join(map(str, command)), flush=True)
-    result = subprocess.run(command, cwd=ROOT, env=environment, text=True,
-                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=600)
+    try:
+        result = subprocess.run(command, cwd=ROOT, env=environment, text=True,
+                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=600)
+    except subprocess.TimeoutExpired as error:
+        # communicate() supplies bytes on timeout even with text=True. Preserve
+        # diagnostics before propagating failure; never turn a timeout into PASS.
+        output = error.output or b''
+        if isinstance(output, bytes):
+            output = output.decode('utf-8', errors='replace')
+        print('TIMEOUT: last captured output follows\n' + output[-16000:], flush=True)
+        raise
     if result.returncode or any(marker not in result.stdout for marker in markers):
         raise RuntimeError(f'failed execution or missing acceptance marker: {command}\n{result.stdout[-16000:]}')
     print(result.stdout, end='', flush=True)
@@ -30,6 +39,9 @@ def sanitizer(environment):
     env['LSAN_OPTIONS'] = 'exitcode=23'
     base = ['cargo', '+nightly-2026-09-11', 'test', '--locked', '--offline',
             '--target', TARGET, '-p', 'brynja-crypto-cpu', '--features', FEATURES, '--lib']
+    # Distinguish compiler progress/failure from execution under SDE. Both
+    # phases retain the same finite command timeout and forced leak checking.
+    run(base + ['--no-run'], env)
     run(base + ['dedicated_sha512', '--', '--nocapture'], env,
         ('DEDICATED_X86_SHA512: blocks=1024; quarantine=PASS',
          'DEDICATED_X86_SHA512_RUNTIME: KAT; exact identity; revocation=PASS'))

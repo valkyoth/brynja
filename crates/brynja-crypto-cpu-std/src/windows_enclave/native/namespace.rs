@@ -4,7 +4,6 @@
 use super::{Error, sys};
 use core::ffi::c_void;
 use core::fmt::Write;
-use core::sync::atomic::{AtomicU64, Ordering};
 
 type Handle = *mut c_void;
 #[repr(C)]
@@ -31,7 +30,10 @@ unsafe extern "system" {
         target: *const Unicode,
     ) -> i32;
 }
-static NEXT: AtomicU64 = AtomicU64::new(0);
+#[link(name = "bcrypt")]
+unsafe extern "system" {
+    fn BCryptGenRandom(algorithm: Handle, buffer: *mut u8, size: u32, flags: u32) -> i32;
+}
 
 pub(super) struct ImageName {
     handle: Handle,
@@ -52,19 +54,29 @@ impl ImageName {
         if target.first() != Some(&92) || target.contains(&0) || target.len() >= 1024 {
             return Err(Error::Image);
         }
-        let sequence = NEXT
-            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |value| {
-                value.checked_add(1)
-            })
-            .map_err(|_| Error::Bounds)?;
+        for _ in 0..4 {
+            let mut nonce = [0u8; 16];
+            // SAFETY: the system RNG writes exactly the initialized array's
+            // length. Null provider plus BCRYPT_USE_SYSTEM_PREFERRED_RNG is the
+            // documented pairing. This is namespace entropy, not key material.
+            if unsafe { BCryptGenRandom(core::ptr::null_mut(), nonce.as_mut_ptr(), 16, 2) } != 0 {
+                return Err(Error::Platform);
+            }
+            if let Some(owner) = Self::create_nonce(target, &nonce)? {
+                return Ok(owner);
+            }
+        }
+        Err(Error::Image)
+    }
+    // None means an existing name, never an adopted existing object.
+    fn create_nonce(target: &[u16], nonce: &[u8; 16]) -> Result<Option<Self>, Error> {
         let mut name = String::new();
         name.try_reserve_exact(80).map_err(|_| Error::Platform)?;
-        write!(
-            &mut name,
-            "BrynjaImage-{}-{sequence}.dll",
-            std::process::id()
-        )
-        .map_err(|_| Error::Platform)?;
+        name.push_str("BrynjaImage-");
+        for byte in nonce {
+            write!(&mut name, "{byte:02x}").map_err(|_| Error::Platform)?;
+        }
+        name.push_str(".dll");
         let mut native = Vec::new();
         native.try_reserve_exact(84).map_err(|_| Error::Platform)?;
         native.extend(r"\??\".encode_utf16());
@@ -82,23 +94,27 @@ impl ImageName {
             length: 48,
             root: core::ptr::null_mut(),
             name: &name,
-            // Case-insensitive only: no OPENIF, PERMANENT or inheritable handle.
-            flags: 0x40,
+            // OBJ_EXCLUSIVE | OBJ_CASE_INSENSITIVE. Other processes cannot
+            // retain the object. No OPENIF, PERMANENT or inheritable handle.
+            flags: 0x60,
             security: core::ptr::null(),
             quality: core::ptr::null(),
         };
         let mut handle = core::ptr::null_mut();
         // SAFETY: fixed x64 NT ABI layouts; all counted UTF-16 buffers and output
         // storage live through the synchronous call. QUERY access only. A name
-        // collision rejects rather than opening an attacker-created object.
+        // collision retries rather than opening an attacker-created object.
         let status = unsafe { NtCreateSymbolicLinkObject(&mut handle, 1, &attributes, &target) };
         if status != 0 || handle.is_null() {
             if !handle.is_null() {
                 sys::close(handle);
             }
+            if status.cast_unsigned() == 0xc0000035 {
+                return Ok(None);
+            }
             return Err(Error::Image);
         }
-        Ok(Self { handle, location })
+        Ok(Some(Self { handle, location }))
     }
     pub(super) fn location(&self) -> &[u16] {
         &self.location

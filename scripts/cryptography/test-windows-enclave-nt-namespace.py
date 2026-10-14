@@ -28,7 +28,10 @@ def configure():
         for invalid in [r"C:\worker.dll", r"\\?\GLOBALROOT", "\\\\?\\GLOBALROOT\\Device\\bad\0"] {
             assert!(matches!(namespace::ImageName::create(&invalid.encode_utf16().collect::<Vec<_>>()), Err(Error::Image)));
         }
-        crate::nt_shadow::preclaimed(|| matches!(namespace::ImageName::create(&target), Err(Error::Image)));
+        let first = namespace::ImageName::create(&target).unwrap();
+        let second = namespace::ImageName::create(&target).unwrap();
+        assert_ne!(first.location(), second.location(), "OS namespace nonces repeated");
+        drop((first, second));
         drop(source);
 ''' + anchor)
     before = 'crate::shadow::Shadow::globalroot(&canonical, &args[2])'

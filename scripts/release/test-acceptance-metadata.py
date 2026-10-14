@@ -79,6 +79,26 @@ def main():
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
+        original_read = Path.read_text
+        hosted = metadata.hosted_acceptance
+        for missing in (False, True):
+            record = json.loads(original_read(hosted.REVIEW))
+            source = 'crates/brynja-crypto-cpu-std/src/windows_enclave/native/namespace.rs'
+            if missing:
+                del record['sha256'][source]
+            else:
+                record['sha256'][source] = '0' * 64
+
+            def stale_hosted_read(path, *args, **kwargs):
+                return json.dumps(record) if path == hosted.REVIEW else original_read(path, *args, **kwargs)
+
+            with patch.object(Path, 'read_text', stale_hosted_read):
+                try:
+                    metadata.check_all()
+                except ValueError as error:
+                    assert str(error) == 'hosted authority changed; reopen review'
+                else:
+                    raise AssertionError('stale or absent hosted namespace review accepted')
         # Reproduce the compiler-matrix/workflow review drift seen after adding
         # Rust 1.99. Test the actual host validators without starting Cargo.
         for module in (metadata.sha256_public_api, metadata.sha2_public_api, metadata.sha3_public_api):

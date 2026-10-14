@@ -323,8 +323,9 @@ pub(super) fn disk(handle: std::os::windows::io::RawHandle) -> bool {
 pub(super) fn volume_path(handle: std::os::windows::io::RawHandle) -> Result<Vec<u16>, Error> {
     let mut path = [0u16; 1024];
     // SAFETY: borrowed live file and initialized output of the declared width.
-    // VOLUME_NAME_NT plus GLOBALROOT bypasses both drive-letter and per-logon
-    // Volume{GUID} aliases. The caller validates the absolute disk-device path.
+    // VOLUME_NAME_NT obtains the native path from the held handle. GLOBALROOT
+    // is only a spelling prefix: opening it can be shadowed, so the caller
+    // checks every acquired handle's path and uses a private final loader name.
     let count = unsafe { GetFinalPathNameByHandleW(handle, path.as_mut_ptr(), 1024, 2) };
     if count == 0 || count >= 1024 {
         return Err(Error::Image);

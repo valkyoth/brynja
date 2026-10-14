@@ -14,10 +14,29 @@ def load():
 
 
 class FixtureTests(unittest.TestCase):
+    def test_new_native_fixture_injection_is_exact(self):
+        for name in ('namespace-admission', 'ancestor-identity'):
+            spec = importlib.util.spec_from_file_location(name, Path(__file__).with_name(
+                'test-windows-enclave-' + name + '.py'))
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            if name == 'namespace-admission':
+                source = module.SOURCE.read_text()
+                transform = module.fixture
+                anchor = 'unsafe { BCryptGenRandom(core::ptr::null_mut(), nonce.as_mut_ptr(), 16, 2) }'
+            else:
+                source = (module.SOURCE / 'pin.rs').read_text()
+                transform = module.instrument
+                anchor = module.BEFORE
+            self.assertNotEqual(transform(source), source)
+            for broken in (source.replace(anchor, ''), source + anchor):
+                with self.subTest(name=name), self.assertRaises(ValueError):
+                    transform(broken)
+
     def test_complete_lifetime_probe(self):
         probe = load()
         probe.configure()
-        for token in ('nt_shadow::preclaimed', 'nt_shadow::Shadow::globalroot',
+        for token in ('OS namespace nonces repeated', 'nt_shadow::Shadow::globalroot',
                       'nt_shadow::held_alias', 'nt_shadow::released_alias',
                       'struct Redirect', 'drop(_shadow);'):
             self.assertEqual(probe.base.FIXTURE.count(token), 1)

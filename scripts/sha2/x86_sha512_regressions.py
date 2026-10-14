@@ -50,26 +50,32 @@ def regressions():
                 else:
                     assert (code, output) == (0, positive) and actual == positive
                 assert execute.call_args.kwargs['timeout'] == 600
-        with patch.object(driver.subprocess, 'run',
-                          side_effect=subprocess.TimeoutExpired(['probe'], 600)):
-            try:
-                driver.run(['probe'], {}, markers)
-            except subprocess.TimeoutExpired:
-                pass
-            else:
-                raise AssertionError('timeout was silently accepted')
+        for output in (None, b'compiler progress\xff', 'running sanitizer'):
+            log = io.StringIO()
+            with contextlib.redirect_stdout(log), patch.object(driver.subprocess, 'run',
+                    side_effect=subprocess.TimeoutExpired(['probe'], 600, output=output)):
+                try:
+                    driver.run(['probe'], {}, markers)
+                except subprocess.TimeoutExpired:
+                    pass
+                else:
+                    raise AssertionError('timeout was silently accepted')
+            expected = output.decode('utf-8', errors='replace') if isinstance(output, bytes) else output or ''
+            assert 'TIMEOUT:' in log.getvalue() and expected in log.getvalue()
         hostile = {'ASAN_OPTIONS': 'detect_leaks=0:exitcode=0', 'LSAN_OPTIONS': 'exitcode=0',
                    'RUSTFLAGS': '-C target-feature=-sha512'}
         with patch.object(driver, 'run') as execute:
             driver.sanitizer(hostile)
-            assert execute.call_count == 2
+            assert execute.call_count == 3
+            assert execute.call_args_list[0].args[0][-1] == '--no-run'
             for call in execute.call_args_list:
-                command, env, expected = call.args
+                command, env, *expected = call.args
                 assert '+nightly-2026-09-11' in command
                 assert env['ASAN_OPTIONS'] == 'detect_leaks=1:halt_on_error=1:exitcode=1'
                 assert env['LSAN_OPTIONS'] == 'exitcode=23'
                 assert env['RUSTFLAGS'] == '-Zsanitizer=address -C target-feature=+sha512,+avx2,+avx'
-                assert any('X86Sha512' in marker or 'DEDICATED_X86_SHA512' in marker for marker in expected)
+                if expected:
+                    assert any('X86Sha512' in marker or 'DEDICATED_X86_SHA512' in marker for marker in expected[0])
         assert hostile['LSAN_OPTIONS'] == 'exitcode=0'
     print('Dedicated SHA512 driver rejects seven exit/coverage/route regressions and timeout')
     print('Dedicated SHA512 sanitizer overrides hostile ambient disable/exit settings')

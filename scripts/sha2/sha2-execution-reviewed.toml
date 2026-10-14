@@ -1,9 +1,9 @@
 [files]
 "crates/brynja-crypto-cpu/src/x86_sha512.rs" = "9530acc46f67ba8f50f009bb2e837c2732b3f88cb80ba7847acf7229fce5d12c"
 "crates/brynja-crypto-cpu/src/static_execution/x86_sha512_tests.rs" = "4d92dca161bdd021ad9e24c79edf6c22f276fab3d586b4cf1cdfe02141cc50c0"
-"scripts/sha2/check-x86-sha512.py" = "c1e752e235965e3508f0d0061625cbde225ee35781531660e98c2b2126ae2523"
+"scripts/sha2/check-x86-sha512.py" = "8629ef3d6c14afa34eb55b7667720a2d7ca1a5d8b18724f6ff8a4e69dc2601be"
 "scripts/sha2/x86_sha512_package.py" = "9aaedd8512a1345cf289aff28b1edeb4576f4373b732831d8d713b96d6bfc4b9"
-"scripts/sha2/x86_sha512_regressions.py" = "e03453ef9c42eb6bb863cb385bc76a6b8dc4224eb40bbea80f3654fc53b0d8de"
+"scripts/sha2/x86_sha512_regressions.py" = "16b237051d74ab6eb17da6e7e3cb45e99a765c170a50e7325debc68c8f7b1cc1"
 "docs/x86-sha512-execution.md" = "5d38f31ba53533a83a50496a5eea48d2b9f6501b560b396d62ce60e6e5a94d1d"
 "scripts/sha2/sha2_execution_faults.py" = "02a72f743c91694b06191ed11654f2f13eb1c6082d6b54eeef34bab4d7836205"
 "docs/sha2-ordinary-execution.md" = "84cd03753ffc20af5f3bba5fe2750e64a37e9d2eabbcfb2ee942d5c11612f334"

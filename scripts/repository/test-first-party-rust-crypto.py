@@ -183,6 +183,7 @@ def os_enclave_imports() -> None:
     repository = Path(__file__).resolve().parents[2]
     for relative, needle, expected in (
         (first_party_rust_crypto.OS_ENCLAVE_NAMESPACE, 'fn NtCreateSymbolicLinkObject(', 'OS enclave namespace ABI'),
+        (first_party_rust_crypto.OS_ENCLAVE_NAMESPACE, 'fn BCryptGenRandom(', 'OS enclave namespace ABI'),
         (first_party_rust_crypto.OS_ENCLAVE_ADAPTER, 'fn CallEnclave(', 'OS enclave ABI'),
         (first_party_rust_crypto.OS_ENCLAVE_CALLBACK, 'fn callback(', 'OS enclave callback'),
         (first_party_rust_crypto.OS_ENCLAVE_CONCURRENT_CALLBACK, 'fn callback(', 'OS enclave callback'),
@@ -222,4 +223,4 @@ if __name__ == "__main__":
     print(f"local Rust ABI definitions reject {len(first_party_rust_crypto.LOCAL_C_ABI) * 5} foreign import/link/relocation regressions")
     print('OS memory adapter rejects eight import/signature/link/relocation regressions')
     print('OS thread adapter rejects nine import/signature/link/relocation regressions')
-    print('Windows enclave adapters reject thirty-six ABI/test-only/link/relocation regressions')
+    print('Windows enclave adapters reject forty-two ABI/test-only/link/relocation regressions')

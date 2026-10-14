@@ -3,6 +3,7 @@
 from pathlib import Path
 import ast
 import hashlib
+import importlib.util
 import json
 import sys
 import tomllib
@@ -26,6 +27,11 @@ import md5_execution_policy
 import md5_hardened_policy
 import acceleration_availability
 import parallelhash_policy
+
+_hosted_spec = importlib.util.spec_from_file_location(
+    'hosted_acceptance', ROOT / 'scripts/cpu/check-hosted-execution.py')
+hosted_acceptance = importlib.util.module_from_spec(_hosted_spec)
+_hosted_spec.loader.exec_module(hosted_acceptance)
 
 
 VERIFIER_REVIEWS = (
@@ -80,6 +86,9 @@ def check_api_metadata():
 def check_all():
     check_verifier_bindings()
     check_api_metadata()
+    # Same metadata-only validator used in CI, including newly added native
+    # source modules. This does not execute the hosted package/test campaigns.
+    hosted_acceptance.validate()
     # Reuse the exact host-CI validators, including their complete hash checks.
     # Do not call execute_acceptance/run_fixture/package_roots here.
     sha256_public_api.validate_repository(ROOT)

@@ -96,10 +96,10 @@ impl Pin {
             location,
             namespace: None,
         };
-        canonical.directory(root_end)?;
+        canonical.canonical_directory(root_end)?;
         for i in root_end..canonical.location.len() {
             if canonical.location.get(i) == Some(&92) {
-                canonical.directory(i)?;
+                canonical.canonical_directory(i)?;
             }
         }
         let file = OpenOptions::new()
@@ -125,6 +125,21 @@ impl Pin {
         canonical.location = location;
         canonical.namespace = Some(namespace);
         Ok(canonical)
+    }
+    fn canonical_directory(&mut self, end: usize) -> Result<(), Error> {
+        self.directory(end)?;
+        let file = self.files.last().ok_or(Error::Image)?;
+        let actual = sys::volume_path(file.as_raw_handle())?;
+        let expected = self.location.get(..end).ok_or(Error::Bounds)?;
+        // Compare the native name obtained from the held handle, not a second
+        // name lookup. GLOBALROOT can be shadowed while acquiring any ancestor.
+        // A volume-root handle may omit its one trailing separator.
+        if actual.strip_suffix(&[92]).unwrap_or(&actual)
+            != expected.strip_suffix(&[92]).unwrap_or(expected)
+        {
+            return Err(Error::Image);
+        }
+        Ok(())
     }
     fn directory(&mut self, end: usize) -> Result<(), Error> {
         if self.files.len() >= 31 {

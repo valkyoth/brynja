@@ -69,16 +69,26 @@ as application-specific sealed-storage isolation.
 The main image must be a local disk file with a bounded absolute
 `GLOBALROOT\Device\HarddiskVolume...` name obtainable from its handle. The
 loader pins that file and its ancestors without write/delete sharing and
-compares the complete volume/file identity. Drive-letter and per-logon
+compares the complete volume/file identity. Every canonical ancestor handle is
+also checked against its expected native device path, so a temporarily shadowed
+`GLOBALROOT` cannot substitute an unverified directory guard. Drive-letter and per-logon
 volume-GUID aliases are not used for the final load. Neither is `GLOBALROOT`:
 direct NT calls can shadow that name even when `DefineDosDeviceW` refuses it.
 After acquiring and comparing the file guards, the loader exclusively creates
-a temporary NT symbolic link to the admitted native device/file path. Its handle
-stays owned by the image pin until retirement. An existing name rejects
-construction; it is never opened or adopted. The final loader path uses this
+a temporary NT symbolic link to the admitted native device/file path. Each name
+contains 128 bits from the Windows system RNG; entropy failure rejects construction.
+`OBJ_EXCLUSIVE` prevents other processes from opening and retaining the link.
+Its handle stays owned by the image pin until retirement. An existing name is
+never opened or adopted: at most four independently generated names are tried,
+then construction fails. The final loader path uses this
 held alias. The containing process and its device-map/impersonation context must
 remain trusted and stable; this is not protection against hostile in-process
-code or a privileged actor changing the OS namespace itself.
+code or a privileged actor changing the OS namespace itself. Ordinary user logons
+have local DOS-device contexts; LocalSystem uses the global context. The random,
+process-exclusive object and stable-context requirement apply in either case.
+The OS RNG import supplies namespace entropy only, not cryptographic processing
+of application data. See Microsoft's [object attributes](https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_object_attributes)
+and [system RNG](https://learn.microsoft.com/en-us/windows/win32/api/bcrypt/nf-bcrypt-bcryptgenrandom) contracts.
 Filesystems that cannot
 provide the required device path or full file identity fail closed; network,
 redirected and arbitrary device namespaces are not supported deployment paths.

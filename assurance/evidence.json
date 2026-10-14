@@ -6,7 +6,7 @@
   ],
   "harness_protocol": "brynja-stdin-json-v1",
   "inputs": {
-    ".github/workflows/ci.yml": "781ac6accc995a48d7bdfe3cdac1c2156eb93fd88bd8a3f606a016ec40049c81",
+    ".github/workflows/ci.yml": "496166415a65805f20cb26bb924885f1b48430b1a500c5ccf600565b3aeb9443",
     "Cargo.toml": "465d7ae73d6e31e392664ae576428f286c21defefee9c388340b1a4214e553ca",
     "assurance/policy.toml": "709d30a39cb15545811506797de887c044cea2a8008d4b7bc3c8a79f6e39241f",
     "assurance/zeroization-matrix.toml": "2451e4d0e727e9b6ae8f83ba8572685a45790300d30b36c8fcdafa1c4a9ff411",
@@ -81,7 +81,7 @@
     "scripts/release/verification_plan.py": "314556bae50821882b0c08520dea51c8b61bfd1790cb5ec8ad770429a3f9c20d",
     "scripts/repository/check-unsafe-policy.py": "d6ff8b4e21ccfd902495a68dd009845abdadf861e6e64646bff853eba44a1448",
     "scripts/repository/test-unsafe-policy.py": "181851d95d35b70414d223f89aca343d41d8e3f2a48ca5f6cd60e8ccc8463b9a",
-    "scripts/repository/unsafe_policy.py": "d260d0c2bf61db027423f63d649086a767eedb557e2f89cd56c40e2b31346c81",
+    "scripts/repository/unsafe_policy.py": "508277ed413cb903eb4af34ecdf1adc890a758fda056f6edf578ce2d607acc68",
     "scripts/tag_gate.sh": "4119e62723bd444b91ca67c45adc7d436f6d88df23940c89e414e46c57d022cf",
     "scripts/zeroization/check-tag-miri.sh": "6ef10aa1775e5b31e8c610cd11ee412a622cbc7e7b6e1283a82ed2c1fe317e65",
     "scripts/zeroization/check-zeroization-codegen.sh": "aa1310d6366c248b2fad069d674aef2ac8a9ed297a16e2c40ca332d4c6acc8d9",

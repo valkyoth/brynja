@@ -58,17 +58,6 @@ mod nt_shadow {
         (status, owned)
     }
     pub struct Shadow { pub path: String, _link: Option<Owned>, _directory: Owned }
-    pub fn preclaimed(rejected: impl FnOnce() -> bool) {
-        let name = format!(r"\??\BrynjaImage-{}-0.dll", std::process::id());
-        let (status, owner) = create(core::ptr::null_mut(), &name, r"\");
-        assert_eq!(status, 0);
-        assert!(rejected(), "preclaimed loader alias was accepted");
-        let (status, duplicate) = create(core::ptr::null_mut(), &name, r"\");
-        assert_eq!(status as u32, 0xc0000035, "rejection disturbed preexisting alias");
-        assert!(duplicate.is_none());
-        drop(owner);
-        println!("NT_ALIAS: preclaimed-name rejected; preexisting object retained");
-    }
     pub fn held_alias(path: &std::ffi::OsStr) {
         let alias = path.to_str().unwrap().strip_prefix(r"\\?\").unwrap();
         assert!(alias.starts_with("BrynjaImage-"));

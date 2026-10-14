@@ -115,6 +115,10 @@ unsafe extern "system" {
         attributes: *const Attributes,
         target: *const Unicode,
     ) -> i32;
+}
+#[link(name = "bcrypt")]
+unsafe extern "system" {
+    fn BCryptGenRandom(algorithm: Handle, buffer: *mut u8, size: u32, flags: u32) -> i32;
 }'''
 OS_ENCLAVE_CALLBACK = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs')
 OS_ENCLAVE_ENTRY = 'extern "system" fn callback(parameter: usize) -> usize {'

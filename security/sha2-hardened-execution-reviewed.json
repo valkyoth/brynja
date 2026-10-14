@@ -227,7 +227,7 @@
     "scripts/sha2/check-sha2-hardened-execution-codegen.py": "36a1705dae3c05fe54c15dbdde51e46cd553f0c5bcbbf5247a7d1cedcf290c38",
     "scripts/sha2/check-sha2-hardened-execution.py": "2d314cb548fdf38cf39fdd101346507171c24d25f3fdd2f7dc0632a320f91427",
     "scripts/sha2/check-sha2-hardened-native-evidence.py": "a6b10e31865dbf4b0f3e318512fe0c8400a1e7baf3e8a3cf5892bfbe4fc1b493",
-    "scripts/sha2/check-x86-sha512.py": "c1e752e235965e3508f0d0061625cbde225ee35781531660e98c2b2126ae2523",
+    "scripts/sha2/check-x86-sha512.py": "8629ef3d6c14afa34eb55b7667720a2d7ca1a5d8b18724f6ff8a4e69dc2601be",
     "scripts/sha2/hardened_native_evidence.py": "ecfdbe798266b8ac41ebdfb7577f0db549fd8f1e9d671c81c1c5e6434c918f1a",
     "scripts/sha2/hardened_native_host.py": "9173ebdd66648e310b8d140d3d69145f3f04ef1ac08fa7d32366f552394edb95",
     "scripts/sha2/sha2_hardened_cleanup_mutants.py": "c2280f06412809d314231f8f608533397866adf45d9c41f2547c7ee9cff992a1",
@@ -237,7 +237,7 @@
     "scripts/sha2/x86_sha512_ci.py": "793c40b2558eeb013583d30bd7d265eb7a7e390d93c3d68d10b8a75415ffac53",
     "scripts/sha2/x86_sha512_faults.py": "3560d7554b9b99ce44913628b6843992fbb95a77bd8bf62ea5303f3dbeedffb3",
     "scripts/sha2/x86_sha512_package.py": "9aaedd8512a1345cf289aff28b1edeb4576f4373b732831d8d713b96d6bfc4b9",
-    "scripts/sha2/x86_sha512_regressions.py": "e03453ef9c42eb6bb863cb385bc76a6b8dc4224eb40bbea80f3654fc53b0d8de",
+    "scripts/sha2/x86_sha512_regressions.py": "16b237051d74ab6eb17da6e7e3cb45e99a765c170a50e7325debc68c8f7b1cc1",
     "scripts/tag_gate.sh": "4119e62723bd444b91ca67c45adc7d436f6d88df23940c89e414e46c57d022cf",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"

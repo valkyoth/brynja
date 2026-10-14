@@ -12,6 +12,7 @@ import unittest
 from unittest.mock import patch
 from native_review_tests import NativeReviewTests
 from native_scope_tests import ScopedNativeTests, InactiveSha2Tests
+from native_setup_tests import SetupReviewTests
 
 import native_metadata_carry_forward as review
 

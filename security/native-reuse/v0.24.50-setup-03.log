@@ -1,0 +1,45 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+   Doc-tests brynja_hash_sha3
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+
+
+running 10 tests
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake128Setup (line 289) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake128Setup (line 285) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake256Setup (line 285) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake128Setup (line 281) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake256Setup (line 289) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake256Setup (line 293) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake256Setup (line 297) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake128Setup (line 293) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake256Setup (line 281) - compile fail ... ok
+test crates/brynja-hash-sha3/src/hardened/cshake/setup.rs - hardened::cshake::setup::HardenedCshake128Setup (line 297) - compile fail ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 270 filtered out; finished in 0.03s
+
+all doctests ran in 0.16s; merged doctests compilation took 0.13s
+   Doc-tests brynja_mac_kmac
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+
+running 10 tests
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac256Setup (line 67) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac128Setup (line 67) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac256Setup (line 83) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac128Setup (line 83) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac128Setup (line 79) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac256Setup (line 79) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac256Setup (line 71) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac128Setup (line 71) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac256Setup (line 75) - compile fail ... ok
+test crates/brynja-mac-kmac/src/setup.rs - setup::Kmac128Setup (line 75) - compile fail ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 145 filtered out; finished in 0.03s
+
+all doctests ran in 0.14s; merged doctests compilation took 0.11s

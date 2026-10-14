@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Exact owner-reviewed test/tooling delta; never a filename-based exemption."""
 import argparse
+import subprocess
 import sys
 
 import native_review_io as io
@@ -88,17 +89,25 @@ def validate(family, root=io.ROOT):
     check_changes(root, review)
     adapter = Family(family, root)
     current = adapter.sources()
-    check_protected(root, review, head, current)
     captured, count = adapter.records(review, head)
-    check_closure(root, review, current, captured, adapter.digest)
+    import native_setup_review as setup
+    supplemented = family in setup.FAMILIES and setup.REVIEW in io.names(root, head)
+    if supplemented:
+        setup.validate(root, family, review, adapter, current, captured, head)
+    else:
+        check_protected(root, review, head, current)
+        check_closure(root, review, current, captured, adapter.digest)
     from native_review_checks import validate_receipt
     validate_receipt(root, review, review_raw, head, historical=True)
     io.clean(root)
     io.require(io.git(root, 'rev-parse', 'HEAD').decode().strip() == head,
                'checkout changed during native validation')
-    print(f'{family} native evidence: PASS via exact reviewed test/tooling carry-forward; '
+    scope = ('unchanged captured paths; additive setup APIs have separate Linux x86 tests, '
+             'not fresh Apple/Arm setup qualification' if supplemented else
+             'implementation unchanged through the test/tooling review and current checked inputs')
+    print(f'{family} native evidence: PASS via exact reviewed carry-forward; '
           f'{count} original records at {review["capture_commit"]}; '
-          f'implementation unchanged through {review["reviewed_commit"]} and current checked inputs. '
+          f'{scope}. '
           'Not a fresh native capture, independent review, or certification.')
 
 
@@ -107,6 +116,6 @@ if __name__ == '__main__':
     parser.add_argument('--family', choices=tuple(FAMILIES), required=True)
     try:
         validate(parser.parse_args().family)
-    except (ValueError, KeyError, TypeError, OSError) as error:
+    except (ValueError, KeyError, TypeError, OSError, subprocess.SubprocessError) as error:
         print(str(error), file=sys.stderr)
         raise SystemExit(1)

@@ -1,0 +1,650 @@
+{
+  "schema": 1,
+  "base_commit": "b31075ee038714a6ef2a4bd304324a74e74d635c",
+  "source_commit": "e4db2751d43dbf1130b5717a00bb8b050caadce5",
+  "disposition": "accepted-unchanged-paths-with-separate-setup-tests",
+  "families": {
+    "keccak-hardened": "sha3-execution",
+    "kmac-execution": "kmac-execution",
+    "tuplehash-execution": "tuplehash-execution",
+    "parallelhash-execution": "parallelhash-differential"
+  },
+  "changes": {
+    "crates/brynja-crypto-cpu-std/src/lib.rs": {
+      "before": "c238e7211ad3456aa2fe8dfe649061c5e51a0651a76149520ddd4d0cb5c8d18e",
+      "after": "a13b34f523a51917307cf2f4864af98d78748ae526879926a5bd874376bdfc74"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/engine.rs": {
+      "before": null,
+      "after": "5b4ca117c68522d03b860a2b7ecc3033e3c853df638d4073b2b7664808b0e076"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/image.rs": {
+      "before": null,
+      "after": "26afd67295d17ad7435bb6d42037e4b5f9e884d6ff6b90b82b483d83f56a10d4"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/image/tests.rs": {
+      "before": null,
+      "after": "9b84101dac10f0adf0b4aba02d9b8110c71fcd5134c066268c10b6d2e9a03550"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/keccak_simd/mod.rs": {
+      "before": null,
+      "after": "bdd30a9a2db83180a441214d9ec58b276d5ee273b77cc5aaed5791e9d51cc28b"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/keccak_simd/tests.rs": {
+      "before": null,
+      "after": "e38dc7acbcf73a8196e19f89f15a86a4eaa1b6b7f92b6538e9290fcd98d1e9b5"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/keccak_simd/tests/native.rs": {
+      "before": null,
+      "after": "9ecb1840857b16a9d0df04a540ecda178e1b54e5ff3925874522a643008c5081"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/keccak_simd/transport.rs": {
+      "before": null,
+      "after": "182fa9a2d0d1def2350147ab598f2f30ff2714c4e54307e8ae5b48c0ff3ebe3f"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/keccak_simd/wire.rs": {
+      "before": null,
+      "after": "3c6c9deae925a781e985c6e3eae699daf9f5f824a43821975b5d8b61b50c6288"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac/mod.rs": {
+      "before": null,
+      "after": "d7a3361b720b495eff0f9840b6423d631fde2bf2ca239222371c91510772e5c7"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac/output.rs": {
+      "before": null,
+      "after": "b4aa2b017df418e82fea8f9bb8919ebb3dd0c3e380b0b77808bd283542de11cb"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac/tests.rs": {
+      "before": null,
+      "after": "04a57a0ba9dacbce678cc07e9b49b847d807697cc0bf73bae74af43c8940c26c"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac/tests/avx2.rs": {
+      "before": null,
+      "after": "595aeaed3892fc634fd1ec8ad0cbc4e8905e12c0bd39b760254967aa88a8bbe3"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac/tests/native.rs": {
+      "before": null,
+      "after": "cc462c6b2e5fbdf261f2993cfcc9dd3a7973f3cadde20c74e6d86bc6a770c3a8"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac/tests/native_avx2.rs": {
+      "before": null,
+      "after": "c6d72c2d9a49f82288b5aa39fea9727068b662b79fa7b26eb5b9ba3dac30047f"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac/transport.rs": {
+      "before": null,
+      "after": "4f55720e6ab1e2e10f0aa8b1c7788df2d60b8bedab9efdc777ac203103b06ab8"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac_avx2_wire.rs": {
+      "before": null,
+      "after": "8ad23ed3f125496be04533846fd7c5932da745ae740e8ae828839727ec8020be"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/kmac_wire.rs": {
+      "before": null,
+      "after": "6adb4ed18c49a9ef480bcb7d49ee896125344d5815ecf55fd51e5835b40882ef"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/mod.rs": {
+      "before": null,
+      "after": "47e4a3f3af2b38081f0878c6eba59c8b2d726401f79e6537d3ce15269ede5769"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/admission.rs": {
+      "before": null,
+      "after": "70683baab98eec72b42f756922ac5757837bbd18306a459ef6f230e071c04043"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs": {
+      "before": null,
+      "after": "89db81947dc7619675feec15fddb6e53d17cb9d8a131263730d64552d0e5564d"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/keccak_simd.rs": {
+      "before": null,
+      "after": "fd7d7cad42b34405c2e03cd46aee739645f9794551c04e221be019c9608cc298"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/kmac.rs": {
+      "before": null,
+      "after": "ac60c0b03412061e0634ca17d349d85d23b17d9c8129d80ac0caf41d286e5b4e"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/lifecycle.rs": {
+      "before": null,
+      "after": "d305a78ed78e3f0653c13468b4c464488b880d66ca31d549b643f1f80392d582"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/mod.rs": {
+      "before": null,
+      "after": "717fe5b38638fe69e4ed82f8547103b837a31113de2158ac92596a82d92b3f07"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/namespace.rs": {
+      "before": null,
+      "after": "2d0bcf8f51513bfbe8a0878fd3462acf08fce0f92f1dbdbfdddf5df4c5aa8e51"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/callbacks.rs": {
+      "before": null,
+      "after": "dfb7e29e4b5ad92bf9eb165e1e883ff1ed1e282d97fe33cbc29bc760594ea894"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/mod.rs": {
+      "before": null,
+      "after": "8288ba2aa530dc75b1dfb613428888852d1f01791d14e92a6f7c24bedd7c7dd5"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/scheduler.rs": {
+      "before": null,
+      "after": "6344bf0bd51415b0c309a7fed3dab38c254691afa80476e6e1b984437b267bbc"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallelhash.rs": {
+      "before": null,
+      "after": "5a4eb29c84d11e906abbfcaefca4ccccd0612fc9f34f37a88ecacbb6266506bd"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/pin.rs": {
+      "before": null,
+      "after": "b2461790cfc2fb8b766305ed2b631df786bfac2a4741603873042b4f158a5a01"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha2.rs": {
+      "before": null,
+      "after": "b990c998e87376ae54382548f4e46882a75163313301c93cfdc61d46b94065bc"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha256_simd.rs": {
+      "before": null,
+      "after": "b4e34ddd091d03ce3850662c0de4dd6b12567f92e2afd13025f6df35424aea38"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha2_batch.rs": {
+      "before": null,
+      "after": "6a2cabfbfab5e847cdaa5d2cccebc2a6c0b34eb9973de37f85d01aa7df40ccda"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha3.rs": {
+      "before": null,
+      "after": "afcdc1103d9a8f96d91b5560e99fa9303a493f33dc991eab1f3fc5c610ab1b22"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha3_batch.rs": {
+      "before": null,
+      "after": "af7f5a956821d5e6cfe591f802c513ca10e6c27aa9a4cb477e37858bcd898f12"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sha512_simd.rs": {
+      "before": null,
+      "after": "2e83f513f728b016ceba85a7c30052f2e281d1cdbd917913dbd9f59f1b52adc4"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs": {
+      "before": null,
+      "after": "e7602798e350bc00512dd7aa921319e2f43ddffd7dff66b9f49db0f48df5aff0"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/tests.rs": {
+      "before": null,
+      "after": "e3a04457ff86555688a9f66b3236302b15a1f6ce576d7d76b6adc84b1da3ffb7"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/native/tuplehash.rs": {
+      "before": null,
+      "after": "440d6ff3942b47577595195be9329ccaa2725f730f8c3b33c6fd9c6894de1dcc"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_avx2_wire.rs": {
+      "before": null,
+      "after": "1bd7eed2301353edab561e16d5e4b40aa1569b1f2154d4eccbe116f1076e9637"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_concurrent/mod.rs": {
+      "before": null,
+      "after": "0cce887cfd479ed0985360b90db3c9bf40a3f481b0299885f591dc437409e92a"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_concurrent/tests.rs": {
+      "before": null,
+      "after": "b0dbb55d3d955bd6d65cba96198d4a2ba42d578cc033549dc16542fd76eae2e7"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_concurrent/tests/native.rs": {
+      "before": null,
+      "after": "1ca60fea6718903370f83934da4a067c322d088766f8952ae962d0fa3a1376fb"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_concurrent/transport.rs": {
+      "before": null,
+      "after": "62104787aa54ea51645f0ec7ce64ec21720acef0429cdc0db20fec4f10fbe333"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_receipt.rs": {
+      "before": null,
+      "after": "3bd313f9976415d3fe8bc0e1cfffcd645df843586a6ec7e2d86df6f7b309c23a"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallel_wire.rs": {
+      "before": null,
+      "after": "da681750bf56111cd58a32d1543e75ce2482796f676b66f16fd94625339bfc5e"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/mod.rs": {
+      "before": null,
+      "after": "331c4c4e6d0db821a0cb52f2e00c80e8389c1c27ec33ffca56e3fbead2057244"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/output.rs": {
+      "before": null,
+      "after": "a2e9867087d336798f1c1d36b268024ba6efa80fc80892801112bc80f1cd016d"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/stream.rs": {
+      "before": null,
+      "after": "97467f94d13bf04d34c0645d0fa2f2ae9f3c3a3a31d69317425d4a50727d6b7e"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/tests.rs": {
+      "before": null,
+      "after": "68ae1e9954262e0139860fa3d05922201173cd8a35cad1590685ccca7fab01d5"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/tests/avx2.rs": {
+      "before": null,
+      "after": "8c96ec995ee133a93af193e36a1cee12e3bb7e37c97461d00dd1163e2f137dc0"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/tests/lifecycle.rs": {
+      "before": null,
+      "after": "35dd5a77ceecd74b009ab9c0e54741b30d83c31405ead0e7e2b9198f1a71a483"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/tests/native.rs": {
+      "before": null,
+      "after": "461a8257d1cd7f61f04ed9d11b403f8791b63edfc51b40d4d658a12e69edec98"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/tests/native_avx2.rs": {
+      "before": null,
+      "after": "86a7e1439f49464b910f064ec59c08e603c13c400899c3edb1149107fdcbbf83"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/parallelhash/transport.rs": {
+      "before": null,
+      "after": "8d29d5a03f2b7e6ad20841f9188dc40013784afa33f592175709fd094794bd55"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/policy.rs": {
+      "before": null,
+      "after": "e95d486ea6cd82c35a097a626993cfa16bf7b7d30cb1d1adecd8f4fbc69e7281"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/protocol.rs": {
+      "before": null,
+      "after": "772c8d7dacd940da66a8d986d4122aa3dc716e866e8137bd04925e41b33c8483"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2/algorithm.rs": {
+      "before": null,
+      "after": "18dbd61d91b2d0d8dd406adfe2ff4536a278e59bde01155e173063f4e335d872"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2/mod.rs": {
+      "before": null,
+      "after": "6a186890d593393098f40fe68f12f3ba7c822e4e3ca286b28fcc6ee53b90038c"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2/tests.rs": {
+      "before": null,
+      "after": "b9704b05c52521e2550ba6a12d4873f34cb1cbf5e7edaf202d931b778e34625a"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2/tests/native.rs": {
+      "before": null,
+      "after": "f36b3a70fe784ed99d12e7a8833ffe28249c8101733d776e13ddbff2f325a085"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2/tests/native_sha_ni.rs": {
+      "before": null,
+      "after": "002ee3206ef638ac2b6c22a08c053eb8fdd33b960aa8ba846f9621bed0b73fe5"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2/transport.rs": {
+      "before": null,
+      "after": "05664c33448a2c506bfd6269d903d8ef5857b5ce9c193e88299a72afd75da715"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha256_simd/mod.rs": {
+      "before": null,
+      "after": "fff132fd274427cc2ce0261b5ddc1875966310012f6ee5803de7ccc5882056ce"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha256_simd/tests.rs": {
+      "before": null,
+      "after": "f75554da1a91d2908f80f7949558b29207be2e136565c9d3df92fdbdc4a289f6"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha256_simd/tests/native.rs": {
+      "before": null,
+      "after": "e81870b0147b35d7bfdcde3e4a3677f4b58d11831307e2ab3a5913db7444b62d"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha256_simd/transport.rs": {
+      "before": null,
+      "after": "83bf230225f015e7e47e6ea0552961e7e49f76b5f4293504eab0f25cb3820094"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha256_simd/wire.rs": {
+      "before": null,
+      "after": "a1aba334bd8b6fb5c97f1c2e2d3c90121bb1e37737d3d4b223b47486be1bdec5"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/item.rs": {
+      "before": null,
+      "after": "ea33d8f55fbada351509c25ed9ba1043c8ef40179d36a7b44615993759993d3e"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/mod.rs": {
+      "before": null,
+      "after": "0af2d4245df9906e90731a090e43020a57d5cb03fda4ba060159115db89df4ca"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/tests.rs": {
+      "before": null,
+      "after": "59842afa60087027a5c3079a1f6f3fdc5e02d0b3e6f623f7c5c997b7ad9c951c"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/tests/lifecycle.rs": {
+      "before": null,
+      "after": "cb7f2fda9e582bfb6bc93ddc15869f18ccbb9f0e209798bf4447988df919bd00"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/tests/native.rs": {
+      "before": null,
+      "after": "f4c9f4dc658fa368c813d9ee4a0a9e5ac7fe929e4e1b6debf0f1f74030c96d28"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/tests/native_sha_ni.rs": {
+      "before": null,
+      "after": "273effb043b113e3476177a1d7f5b315e85d475b9ec2b87597a8dbcd34451851"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/tests/sha_ni.rs": {
+      "before": null,
+      "after": "f02ebcbb5af6a4093510b89e5d15c43c1770660add9fe918c3c0ad6a1bef8070"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch/transport.rs": {
+      "before": null,
+      "after": "2ba26abed35d33840604c1c02df135bcbd57f7eb00dc14bf2774726ad6c01696"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch_receipt.rs": {
+      "before": null,
+      "after": "925793d01f626a91c154be4acb188ac4c02a5792279416d68960782e594e3a3a"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch_sha_ni_wire.rs": {
+      "before": null,
+      "after": "f8ff7fdff64f9654c0fb2f0ef816942e5102b17e1f6fe7f046a6b7a4e2aeb787"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_batch_wire.rs": {
+      "before": null,
+      "after": "7818d5c86403859e8fbea408d413c5b371234cc9a22d86d2bcd2e22a17fe090a"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha2_wire.rs": {
+      "before": null,
+      "after": "a66fa2976ecca5aad7437777fbc42b03a1a762ddc168b30151864800a456f11d"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/mod.rs": {
+      "before": null,
+      "after": "057427bdbe464aac13f27c17599f6903e161b200948cbacdab0731f1ed392b06"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/output.rs": {
+      "before": null,
+      "after": "6f3220bf3e46f97c409edcfc4b503b4531780afb3b2ab0bbd91cfc3fddb44d1c"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/tests.rs": {
+      "before": null,
+      "after": "0fd42d89045c47b4ad3640d19e727a730cdeda571b1e0edcf938e4547084c54e"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/tests/avx2.rs": {
+      "before": null,
+      "after": "ea04ec9568652ee565ac330950ee8c89b25e22f168b627df4a3cc2d1f2781615"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/tests/native.rs": {
+      "before": null,
+      "after": "a064ac86e616d3fd57c8d2941614ee11f42dea3b2e0ee3b862c18222f6369d49"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/tests/native_avx2.rs": {
+      "before": null,
+      "after": "9120d7be78c205582d847eb12703fa854b0bb024f5b07da6806ba9a6cb38946b"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3/transport.rs": {
+      "before": null,
+      "after": "c540abac932dd6013eb7ab3199cbb64e0aa12e06f4f831a8e0de1c338eca374b"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_avx2_wire.rs": {
+      "before": null,
+      "after": "305b88de4ff8226eab69786ce541878e559101eb03bd9c7cfcfb50cd0c413629"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/item.rs": {
+      "before": null,
+      "after": "84816cc32a7ef276973d9c7487cf73825492e28052929f87917c5932b6990c84"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/mod.rs": {
+      "before": null,
+      "after": "e3bfb0da7e1c8bf54e19ff8137555f18804f33233c1c70a359dd6a4c9defce00"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/plan.rs": {
+      "before": null,
+      "after": "71c8c7a1c66d8861ac4d9cdf752aceb8709cb3ba97b16a282754db8898361e96"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests.rs": {
+      "before": null,
+      "after": "e9608733f5dd63237ff1245606826876bece882f22baed8fd50814a7be1851b3"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests/avx2.rs": {
+      "before": null,
+      "after": "0a79201cd9b4f52e2d3d87b956e4e1d53719ac5f0a9e01be17eff13d2572b126"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests/lifecycle.rs": {
+      "before": null,
+      "after": "29df86a4cb8f484a2c91060df8e4025037ee9a933c572490d480c0ff651387a9"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests/native.rs": {
+      "before": null,
+      "after": "eca579858fa29dcfec95ad6c0063b0af99dbeb141b52fa6a1feaf96b4a9dcd67"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests/native_avx2.rs": {
+      "before": null,
+      "after": "40e5902778bc34fd11674cd685140ff20e11f1504eeeb3714230443e242f9888"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/tests/reference.rs": {
+      "before": null,
+      "after": "fd6225d92ab4aa5925db4185be11992f56b7ca31c8fa5ba043cb2b47a26fa3b4"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch/transport.rs": {
+      "before": null,
+      "after": "fe36d0119408b36d510c6bbf09594c69a6fe45547f999cffe165a3ab9b0d0544"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch_avx2_wire.rs": {
+      "before": null,
+      "after": "56ff3487a6fd57663340f9f2a751707a49f0aad0d4dd3c628ff48e54df5e687e"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch_receipt.rs": {
+      "before": null,
+      "after": "f64c70f94f40ba37f6f0a0c648ca11f92c5b19b84cb4aa7559fc0a96784465f0"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_batch_wire.rs": {
+      "before": null,
+      "after": "86878b0d929e1840909731220baa2667e2ab7fc304ae388f8adec9c239003626"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha3_wire.rs": {
+      "before": null,
+      "after": "304d1574c79f0e13a2746551e97804b686b2773d9755bce7c4ff401977df34f7"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha512_simd/mod.rs": {
+      "before": null,
+      "after": "faa5a5e3cc9cb299343c292da4d0ede8c1a66108b2ba896af4ead6b01eb1d986"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha512_simd/tests.rs": {
+      "before": null,
+      "after": "a9868b6f7ac244fb039289fbae09af8335ab3b9f69341e84349b5d6120ace02b"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha512_simd/tests/native.rs": {
+      "before": null,
+      "after": "82ee9630a63ea73a4583c26d1dc15ac11a6a40f464e2ecd0dea4c8f8e52e58f6"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha512_simd/transport.rs": {
+      "before": null,
+      "after": "ebb4db6699bb615faca2324726053b613240d56d26d70d1775ab21e8aa7dbce4"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/sha512_simd/wire.rs": {
+      "before": null,
+      "after": "f306767b0b6760e20bbc79c7d5b0e56cfc1c130aca8326bf19c926bad415b03b"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tests.rs": {
+      "before": null,
+      "after": "ddc8af1d0dc9a269e7aab080b2cfef5eaae4f8d12040cc31808f9bbb1cb1d2b7"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuple_avx2_wire.rs": {
+      "before": null,
+      "after": "62c1b5e2e986bc80e55ee39b65155f6fead4f7deb797474036b0ccac35b37d13"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuple_receipt.rs": {
+      "before": null,
+      "after": "32d82b0c01fe49120f2c505b91edcba5b6bcb5674e42c1ed40486f67da36b05c"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuple_wire.rs": {
+      "before": null,
+      "after": "6d822cb07c041158f40d1fe38c2a1b0dede5732545617164e8d4b5e3480e7277"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/mod.rs": {
+      "before": null,
+      "after": "256710ef667acc6d4fb08a5ba58703fc823309598e5aca88274f000ae3b6f6f1"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/output.rs": {
+      "before": null,
+      "after": "529f3eb91e8c413c5158bc1ab06ab3ce73a1ea5e9e539070441f6bdd5d81e111"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/tests.rs": {
+      "before": null,
+      "after": "584355fe2add524dba3b3462040988b958f67c1faf39d60a0ae14f536788c4ae"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/tests/avx2.rs": {
+      "before": null,
+      "after": "85fd90422e57c369e5fceb0052ce00289ed1e79f9942fe7cf54bc7571879ed44"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/tests/lifecycle.rs": {
+      "before": null,
+      "after": "8276d03947007c99c436529bb553d2f9d391b6abe27ab645fbf33cfab75281f2"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/tests/native.rs": {
+      "before": null,
+      "after": "4dda14bd28b98f267e33959adef3fd009beda07d8a079678d305fe2a569dd1a4"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/tests/native_avx2.rs": {
+      "before": null,
+      "after": "b9771364ce6de168ebfa56271e53d0e2e7ea5917e98377c569baa2da6a909f04"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/tuplehash/transport.rs": {
+      "before": null,
+      "after": "2c678492401ed5754830422e73ed3a743f677ed85b2992eaec78ce3af29b8c43"
+    },
+    "crates/brynja-crypto-cpu-std/src/windows_enclave/unsupported.rs": {
+      "before": null,
+      "after": "f71e2db60272e673ce83d9e2782f309dd984f0cc4fb162c10d9d57d13e5411e7"
+    },
+    "crates/brynja-hash-sha3/src/hardened/cshake.rs": {
+      "before": "830d8799fcc32b83c3b871ff5a9e76c563de914c3283173eb81138ead49b218f",
+      "after": "fd7be780e4f7887ff3400a4eedcc7983279668cce7976058faec549e56ccd975"
+    },
+    "crates/brynja-hash-sha3/src/hardened/cshake/setup.rs": {
+      "before": null,
+      "after": "096f33751e71f33de16ff0b69138a61bf9a16891fa68a9bcbf7ec746edda8c67"
+    },
+    "crates/brynja-hash-sha3/src/hardened/cshake/setup/tests.rs": {
+      "before": null,
+      "after": "069b0270336b2aac344e70d0f212fcf7ed09a40d8c1cc9ca8f6bb0c4b190e5bf"
+    },
+    "crates/brynja-hash-sha3/src/hardened/mod.rs": {
+      "before": "83aa4e10f13f14e08844f9d5428bc5b1cc9f37132fb2093ed802b8dd8afb815d",
+      "after": "49520e48c9790d409482f6b1d71a61d707fb254cc49fe5981ec4830c472c602a"
+    },
+    "crates/brynja-hash-sha3/src/lib.rs": {
+      "before": "d2f5ebce2345775ae6f8a7b3a065adf26a117f9438ea2622cd52c352a99cc088",
+      "after": "1608be107cfb881fd76ea57cdb44df14bd4bacf73122229676e18cb16d99821e"
+    },
+    "crates/brynja-mac-kmac/src/core_state.rs": {
+      "before": "846e8faf8aff60286f0903fc26420e397aa48883313df3bef9226ee4aa6b6f18",
+      "after": "40d724df9a1ecf421935df9f48340d0ef8940764515544d5461c0da85cbc1aed"
+    },
+    "crates/brynja-mac-kmac/src/fixed.rs": {
+      "before": "424e0be6b9b05b57ce582d286cbacba4e369c8309f2b57a4aae427571167b8a6",
+      "after": "8d7c92d14470431ed2d29e608bc8cd8f3d5d5b0048dd548b994660f5efa504cc"
+    },
+    "crates/brynja-mac-kmac/src/lib.rs": {
+      "before": "df60454cee363e5d17b9ae025e31520208b1ac4b4c17774c72239b11dcc44240",
+      "after": "f0b1bdcac8a371d78abb0e3125e7753aea6a453c2ebfbaa8b7863b196759cad4"
+    },
+    "crates/brynja-mac-kmac/src/setup.rs": {
+      "before": null,
+      "after": "2753458ba00729f09991515926061de544a4ab3b21c0f03bf3c9d0f412c18bc5"
+    },
+    "crates/brynja-mac-kmac/src/setup/engine.rs": {
+      "before": null,
+      "after": "3c3547253b3c82a6b82cf720360a9fd289985420e6eaa3fcecbe8bcac9cfa100"
+    },
+    "crates/brynja-mac-kmac/src/setup/engine/tests.rs": {
+      "before": null,
+      "after": "3d246bdedac9cc385cf8cc115e33f71e58a0925785e4ca53b8229a9b31eaadb0"
+    },
+    "crates/brynja-mac-kmac/src/setup/tests.rs": {
+      "before": null,
+      "after": "036dc52cce7799735231c14490f88bd51056b225c45d340259193990cdd9c68f"
+    },
+    "crates/brynja-mac-kmac/src/xof.rs": {
+      "before": "0ea4b24c170c36109b237aa91d1807b1efc7deef0a9e05b6ba6352342c971ede",
+      "after": "5ef8a371414c028698979981db61741d8d2d278c1ddf79b1805a79d66bc1fe80"
+    },
+    "scripts/kmac/kmac_policy.py": {
+      "before": "f20cddd1e677c0a19959d9b86a9a823ba608c935e772408b6a17f851f80b8f69",
+      "after": "c03faa3d02a289b96f3bf51eaba2f681011d1fed49051c20704a3ae4b115f72d"
+    },
+    "scripts/kmac/kmac_reviewed_hashes.py": {
+      "before": "b022a13b2283337f09d7a5c07b22b55e4e488bc0a2f0577e81324c7372d3e3b4",
+      "after": "f9d9e68e199058daacd8c266ac9f6060191eb82e05565b3b97db6fd7f8a73b3d"
+    },
+    "scripts/kmac/test-kmac.py": {
+      "before": "7534e6301a7dfd7d24007958a3d811757b0291654539453cc4d20a656f08e53b",
+      "after": "a0e04695db4174c7a5805ce1c265751e4205047fbe8d4e166ad674f31a367d98"
+    },
+    "scripts/parallelhash/parallelhash_reviewed_hashes.py": {
+      "before": "99efcba8f84a633fac97108edacdbfe781ff8992a10949a500d91d1a415c7f12",
+      "after": "fb472f597fafc41a1c88e8cc69724c7567d1a0a434af79e09b6f53ea50811507"
+    },
+    "scripts/tuplehash/tuplehash_reviewed_hashes.py": {
+      "before": "f137bb0a90d38a74399baea6a79adf14e6f5725ecd7153c9190c0ddb8ac98713",
+      "after": "3c7e5087809a53c46f65f2fd270dca1614cfa3e4a8ef4734a6cac00eec76ac5f"
+    }
+  },
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "checks": [
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-hash-sha3",
+        "-p",
+        "brynja-mac-kmac",
+        "--all-features",
+        "--lib",
+        "setup"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.50-setup-00.log",
+      "sha256": "2446ca331c5cde3eb6d5969a9ac2df550af9954033cedfc4ad1c18ceb385681d"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "--release",
+        "-p",
+        "brynja-hash-sha3",
+        "-p",
+        "brynja-mac-kmac",
+        "--all-features",
+        "--lib",
+        "setup"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.50-setup-01.log",
+      "sha256": "09cf239129a462b52eadf30554cade27ed8fb0254566297d1baa9d9942fe59e9"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-hash-sha3",
+        "-p",
+        "brynja-mac-kmac",
+        "--no-default-features",
+        "--lib",
+        "setup"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.50-setup-02.log",
+      "sha256": "915cd5fab229f4806484e839a723d5de7ea83bd68a3e36769a1b44d4d0f45ab9"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "brynja-hash-sha3",
+        "-p",
+        "brynja-mac-kmac",
+        "--all-features",
+        "--doc",
+        "setup"
+      ],
+      "exit_code": 0,
+      "log": "security/native-reuse/v0.24.50-setup-03.log",
+      "sha256": "1aee5953cca6ae26f778ef544b6ec524c6faf05ca17a1081486e238f85bc63dc"
+    }
+  ]
+}

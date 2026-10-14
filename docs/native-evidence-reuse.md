@@ -76,7 +76,8 @@ The fallback is `python3 scripts/release/native_review_carry_forward.py --family
 Its PASS output identifies the original capture and explicitly labels reuse.
 Future source deltas need another explicit reviewed record and corresponding
 focused verification; this approval does not automatically authorize new test
-changes or production changes. A production change requires new native evidence.
+changes or production changes. Changed execution paths require new evidence;
+an additive API does not retroactively qualify through an old capture.
 
 ## Feature-inactive Windows module
 
@@ -91,8 +92,48 @@ rejects reuse. This is not a general exemption for Windows-labelled files and
 does not qualify Windows execution.
 
 The new cross-platform cSHAKE/KMAC setup APIs are not covered by this exception.
-Their changed implementation/dependency closures still require fresh evidence
-or a separately reviewed, source-bound equivalence decision.
+Their separately reviewed supplement is described below.
+
+## Exact v0.24.50 setup supplement
+
+The owner-approved [setup review](../security/native-reuse/v0.24.50-setup-review.json)
+extends the earlier test/tooling review through source commit
+`e4db2751d43dbf1130b5717a00bb8b050caadce5` for hardened Keccak, KMAC, TupleHash
+and ParallelHash only. The validator pins that complete review's SHA-256; it is
+not an automatic exemption for additive APIs or Windows filenames.
+
+The 139 bound differences comprise 120 feature-inactive Windows module files,
+their exact guarded declaration, thirteen additive setup/re-export/test files,
+and five review-policy/hash-binding files. Existing scalar and accelerated
+kernel bodies, old constructors and framing paths are unchanged. The new setup
+types are not called by the captured native acceptance fixtures. They use the
+existing hardened scalar owner (including its native scalar assembly on x86-64
+and little-endian AArch64), not a new SIMD or hardware-instruction route.
+
+The original twelve platform records remain byte-for-byte intact, with their
+actual capture commit, compiler, CPU and outputs. The earlier test/tooling
+review and its historical receipt are still validated. Current family source,
+build and native-check inventories must match the supplemental review exactly;
+only the existing corroborated facade lock-version projection is retained.
+Locked/offline fixture metadata must show the Windows module inactive; the
+ParallelHash differential fixture must not acquire a hosted-crate dependency.
+
+Four separate author-operated Linux x86-64 checks at the reviewed source
+revision are recorded in the supplement: setup library tests in debug and
+release with all features, without default features, and twenty compile-fail
+ownership doctests. They cover fragmented/partial-bit framing, both cSHAKE
+strengths, all four KMAC identities, exact completion, terminal errors and
+owned-storage cleanup. Fixed command identities, compiler/host, successful
+exits, exact test populations and committed output hashes are checked. Their
+logs live outside Cargo output. No native artifact is relabelled.
+
+This accepts reuse **only for unchanged captured paths**. It does not claim
+fresh Apple/Arm execution of the new setup APIs, byte-identical newly linked
+binaries, a full verification sweep, or new independent/native qualification.
+The separate Windows observations and the remaining selected release checks
+retain their own scope. Later setup, kernel, feature, dependency, fixture or
+review-tool changes require another explicit decision; this supplement rejects
+them rather than silently expanding its scope.
 
 ## Detached compiler identities
 

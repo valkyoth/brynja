@@ -19,6 +19,16 @@ false whole-image qualification flags retain their original meaning.
 
 ## Bounded cleanup claim and evidence map
 
+The [2026-10-14 current-image reconciliation](../assurance/windows-protection-observations/pentest-current-cleanup-20261014.json)
+now binds the existing conditional reviews to the eighteen refreshed sequential
+images; the concurrent image remains unchanged. Complete worker bytes,
+references, cleanup metadata and call destinations are rebound, as are the
+shared scaffold and reviewed C transport bodies. Default diagnostic-path removal
+is the only emitted C change. All nineteen routes also have current-host native
+debug/release results. This is author verification; independent review of the
+new evidence remains pending. The historical counts and image identities below
+remain the original review baseline, not overwritten receipts.
+
 Package 08 is complete at **conditional author-review scope** for the original
 nineteen saved Windows x64 development images. This closes the finite review
 task under the owner's accepted scope, not the stronger whole-image claim.

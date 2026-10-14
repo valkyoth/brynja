@@ -39,8 +39,15 @@ are reused with explicit source/artifact checks; the rebuilt bounded worker's
 assembly is byte-identical. Current C wrappers are rebuilt, default fault controls
 are rejected, and all four fresh images bind the complete cleanup wrapper.
 The bounded native fixture changes only its test image pin in a separate checkout;
-production admission is unchanged. Final current-image cleanup evidence
-reconciliation and independent evidence review are still pending;
+production admission is unchanged. The
+[current-image cleanup reconciliation](../assurance/windows-protection-observations/pentest-current-cleanup-20261014.json)
+is now complete at the accepted conditional author-review scope: 959 worker
+bodies (including 94 cleanup funclets), 85 reviewed C transport bodies and the
+shared wrappers/runtime checks bind to the refreshed images. All 663 unchanged
+C functions retain their original bytes and references; the only C changes
+remove diagnostic fault paths and restrict their control entry. Four new
+reconciliation tests reject 110 mutations; 23 existing focused tests also pass.
+Independent review of the new evidence is still pending;
 historical observations retain their original bindings and
 production/whole-image qualification is not asserted. The full detached release
 sweep has not started.
@@ -133,8 +140,9 @@ code, gate, roadmap ordering or qualification flags change with this decision.
 Remaining, in the existing finite plan:
 
 - **Package 9:** complete; retain its documentation/packaging handoff.
-- **Package 10:** finish remediation verification, obtain and record a fresh
-  independent retest, and retain accepted limits without labeling them fixed.
+- **Package 10:** author remediation verification and current-image reconciliation
+  are complete; obtain independent review of the new native evidence and retain
+  accepted limits without labeling them fixed.
 - **Package 11:** use existing verification/evidence-reuse rules, refresh only
   invalidated native evidence, then require green GitHub and authorized tagging.
 

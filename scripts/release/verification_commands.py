@@ -29,6 +29,8 @@ BASE_COMMANDS = {
     "python3 scripts/cryptography/test-api-profiles.py",
     "python3 scripts/zeroization/check-zeroization-evidence.py",
     "python3 scripts/zeroization/test-zeroization-evidence.py",
+    "python3 scripts/constant-time/check-constant-time-evidence.py",
+    "python3 scripts/constant-time/test-constant-time-evidence.py",
     "python3 scripts/sha2/check-sha2-hardened-execution.py --policy-only",
     "python3 scripts/cpu/check-static-execution.py --policy-only",
     "python3 scripts/cpu/check-hosted-execution.py --policy-only",
@@ -97,6 +99,8 @@ def owners(command: str) -> set[str]:
     if len(parts) != 3 or parts[0] != "scripts":
         raise ValueError(f"unclassified script command: {command}")
     directory = parts[1]
+    if scope.windows_or_facade_driver(path):
+        return set(scope.closure({'static_cpu'}))
     if directory in BASE_DIRECTORIES:
         return set()
     if directory == "zeroization":

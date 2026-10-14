@@ -122,6 +122,18 @@ def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = F
     if miri_full:
         full_phases.add('miri')
     full = full or miri_full
+    for matrix in ('assurance/zeroization-matrix.toml', 'assurance/constant-time-matrix.toml'):
+        if matrix not in paths:
+            continue
+        before, after = inputs.snapshot(root, base, matrix)
+        try:
+            compiler_only = inputs.matrix_compilers_only(before, after)
+        except (ValueError, KeyError, TypeError):
+            compiler_only = False  # The scope reader already retains full coverage.
+        if compiler_only:
+            full_phases.add('matrix')
+            full = True
+            issues.append(matrix + ': compiler coverage list changed; full compatibility matrix requires approval; verifier pins unchanged')
     reasons = []
     reasons.append('Miri profile: ' + ('extended (all registered matrix combinations)' if stage == 'public'
                    else 'routine (bounded registered matrix sample; full native tests retained)'))

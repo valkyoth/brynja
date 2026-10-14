@@ -94,6 +94,17 @@ def main() -> int:
     expect(["assurance/legacy-hash-final/src/lib.rs"], full=False, groups=("legacy",))
     expect(["assurance/acceleration-contract/src/lib.rs"], full=False, groups=("acceleration",))
     cpu_groups = ("sha2", "sha3", "kmac", "tuplehash", "parallelhash", "static_cpu")
+    for path in ('assurance/windows-enclave-probe/worker.c',
+                 'assurance/windows-enclave-probe/window_x64.asm',
+                 'assurance/windows-enclave-probe/new_worker.rs',
+                 'crates/brynja-strict/src/lib.rs',
+                 'scripts/cryptography/windows_enclave_worker.py',
+                 'scripts/cryptography/test-windows-enclave-lifecycle.py',
+                 'scripts/cryptography/strict_facade_package.py'):
+        expect([path], full=False, groups=cpu_groups)
+    expect(['assurance/windows-unknown/worker.c'], full=True, groups=miri_scope.GROUPS)
+    expect(['scripts/cryptography/shared_helper.py'], full=False,
+           groups=tuple(g for g in miri_scope.GROUPS if g not in ('acceleration', 'static_cpu')))
     expect(["assurance/static-cpu-execution/src/lib.rs"], full=False, groups=cpu_groups)
     expect(["crates/brynja-crypto-cpu/src/static_execution/mod.rs"], full=False, groups=cpu_groups)
     expect(["crates/brynja-crypto-cpu/src/x86_sha.rs"], full=False, groups=cpu_groups)

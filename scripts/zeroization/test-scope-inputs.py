@@ -437,6 +437,29 @@ def oracle_lock_tests():
     print('Oracle lock scope retains owner checks and rejects 11 pin/identity/missing-graph regressions')
 
 
+def compiler_matrix_tests():
+    old = b'[coverage]\ncompilers=["1.98.1"]\ntarget_compiler="1.98.1"\n[dynamic]\ntoolchain="pinned"\n'
+    new = old.replace(b'["1.98.1"]', b'["1.98.1","1.99.0"]')
+    assert inputs.matrix_compilers_only(old, new)
+    assert inputs.matrix_compilers_only(new, old)
+    for raw in (b'[]', b'false', b'["nightly"]', b'["1.98.1","1.98.1"]', b'[42]'):
+        rejected(lambda: inputs.matrix_compilers_only(old, old.replace(b'["1.98.1"]', raw)))
+    assert not inputs.matrix_compilers_only(old, new.replace(b'"pinned"', b'"changed"'))
+    assert not inputs.matrix_compilers_only(old, new.replace(b'target_compiler="1.98.1"', b'target_compiler="1.99.0"'))
+    matrix = 'assurance/zeroization-matrix.toml'
+    def select(data, extra=()):
+        def git(_root, *args):
+            return '\0'.join([matrix, *extra]).encode() if args[0] == 'diff' else b''
+        with patch.object(inputs, 'git', side_effect=git), patch.object(inputs, 'snapshot',
+                side_effect=lambda r, b, p: (old, data) if p == matrix else (None, None)):
+            return scope.select_repository('v0.24.49')
+    assert select(new) == (False, ())
+    assert select(new, ('crates/brynja-legacy-md5/src/lib.rs',)) == (False, ('md5', 'legacy'))
+    assert select(new.replace(b'"pinned"', b'"changed"'))[0]
+    assert select(new.replace(b'["1.98.1","1.99.0"]', b'[]'))[0]
+    print('Compiler list changes retain matrix ownership; targets, verifiers and malformed lists reject narrowing')
+
+
 if __name__ == '__main__':
     semantic_tests()
     git_tests()
@@ -446,4 +469,5 @@ if __name__ == '__main__':
     readme_wrapper_tests()
     oracle_lock_tests()
     deterministic_diagnostics_tests()
+    compiler_matrix_tests()
     print('Semantic Miri scope: versions, closures, removals, malformed inputs, dirty/untracked code and baseline failures PASS')

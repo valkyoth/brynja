@@ -28,6 +28,7 @@ GROUP_PREFIXES = {
     "static_cpu": ("assurance/static-cpu-execution/", "assurance/hosted-cpu-execution/",
                    "assurance/cpu-admission-fixture/", "scripts/cpu/",
                    "security/cpu-", "security/acceleration-availability.toml",
+                   "assurance/windows-enclave-probe/", "crates/brynja-strict/",
                    "crates/brynja-crypto-cpu/", "crates/brynja-crypto-cpu-std/"),
     "acceleration": ("assurance/acceleration-contract/",),
     "core": ("crates/brynja-core/", "scripts/foundations/", "scripts/constant-time/", "scripts/cryptography/"),
@@ -95,6 +96,16 @@ DOWNSTREAM = {
 }
 
 
+def windows_or_facade_driver(path: str) -> bool:
+    # Assign an owner, never exempt execution. Generic cryptography helpers
+    # retain their shared/core scope; unknown directories remain fail-closed.
+    return (path.startswith(('scripts/cryptography/windows_',
+                             'scripts/cryptography/test-windows-',
+                             'scripts/cryptography/check-windows-')) or
+            path in {'scripts/cryptography/strict_facade_package.py',
+                     'scripts/cryptography/test-strict-facade-examples.py'})
+
+
 class MiriScopeError(RuntimeError):
     """The focused Miri boundary cannot be selected safely."""
 
@@ -114,6 +125,9 @@ def select(paths: list[str], *, downstream=None) -> tuple[bool, tuple[str, ...]]
             return True, GROUPS
         if path in FULL_EXACT or path.startswith(FULL_PREFIXES):
             return True, GROUPS
+        if windows_or_facade_driver(path):
+            selected.add('static_cpu')
+            continue
         for group, prefixes in GROUP_PREFIXES.items():
             if path.startswith(prefixes):
                 selected.add(group)
@@ -187,7 +201,11 @@ def select_repository(
             # These inspect evidence configuration, not the executed memory
             # checker or its command catalog. Repository regressions always run.
             'scripts/zeroization/zeroization_evidence.py',
+            'scripts/zeroization/check-zeroization-evidence.py',
             'scripts/zeroization/test-zeroization-evidence.py',
+            'scripts/constant-time/constant_time_evidence.py',
+            'scripts/constant-time/check-constant-time-evidence.py',
+            'scripts/constant-time/test-constant-time-evidence.py',
         }
         # Diagnostics are part of the approved detached plan. Stable traversal
         # must select the same first failure in every Python process, including
@@ -210,8 +228,11 @@ def select_repository(
                 # release planner retains the conservative full fallback.
                 # Never exempt the directory, shared driver, or Rust tests.
                 continue
-            if path == 'scripts/cryptography/api_profile_contracts.py' and scope_inputs.mir_spans_only(before, after):
-                continue
+            if path == 'scripts/cryptography/api_profile_contracts.py':
+                if scope_inputs.mir_spans_only(before, after):
+                    continue
+                added = scope_inputs.added_review_sources(before, after)
+                retained.extend([path] if added is None else sorted(added))
             elif path in {'scripts/sha2/sha2_public_api.py', 'scripts/sha3/sha3_public_api.py',
                         'scripts/sp800185/portable_acceptance.py'}:
                 manifests = scope_inputs.snapshot(root, base, 'crates/brynja/Cargo.toml')
@@ -267,6 +288,8 @@ def select_repository(
                 continue
             elif path == 'assurance/zeroization-matrix.toml' and scope_inputs.matrix_verifier_only(before, after):
                 continue
+            elif path in {'assurance/zeroization-matrix.toml', 'assurance/constant-time-matrix.toml'} and scope_inputs.matrix_compilers_only(before, after):
+                continue  # Release planner retains the full compiler-matrix phase.
             elif (path.endswith(('-reviewed.toml', '-hashes.toml')) or path == 'scripts/sha1/reviewed.toml') and before is not None and after is not None and scope_inputs.hash_binding_only(before, after):
                 continue
             elif path.endswith('-reviewed.json') and before is not None and after is not None and scope_inputs.json_hash_binding_only(before, after):

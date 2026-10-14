@@ -21,6 +21,7 @@ PACKAGES = {
     'brynja-sha2-hardened-execution-fixture': 'sha2',
     'brynja-crypto-cpu': 'static_cpu',
     'brynja-crypto-cpu-std': 'static_cpu',
+    'brynja-strict': 'static_cpu',
     'brynja-hosted-cpu-execution-fixture': 'static_cpu',
     'brynja-static-cpu-execution-fixture': 'static_cpu',
     'brynja-acceleration-contract-fixture': 'acceleration',
@@ -270,6 +271,41 @@ def matrix_verifier_only(before: bytes | None, after: bytes | None) -> bool:
     for parsed in (left, right):
         parsed.get('dynamic', {}).pop('toolchain', None)
     return left == right
+
+
+def matrix_compilers_only(before: bytes | None, after: bytes | None) -> bool:
+    """Only a well-formed compiler list changed; no target/verifier/claim waiver."""
+    left, right = document(before), document(after)
+    for parsed in (left, right):
+        versions = parsed['coverage'].pop('compilers')
+        if (not isinstance(versions, list) or not versions or
+                any(not isinstance(v, str) or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', v)
+                    for v in versions) or len(versions) != len(set(versions))):
+            raise ValueError('invalid compiler matrix versions')
+    return left == right
+
+
+def added_review_sources(before: bytes | None, after: bytes | None) -> set[str] | None:
+    """Only additive reviewed-source inventory edits; never execute policy code."""
+    trees, inventories = [], []
+    for raw in (before, after):
+        tree = ast.parse(raw)
+        found = [n for n in tree.body if isinstance(n, ast.Assign) and len(n.targets) == 1
+                 and isinstance(n.targets[0], ast.Name) and n.targets[0].id == 'REVIEWED_SOURCE_PATHS']
+        if len(found) != 1 or not isinstance(found[0].value, ast.Set):
+            return None
+        items = found[0].value.elts
+        if any(not isinstance(n, ast.Constant) or not isinstance(n.value, str) for n in items):
+            return None
+        values = {n.value for n in items}
+        if len(values) != len(items):
+            return None
+        inventories.append(values)
+        found[0].value = ast.Constant(value='reviewed-source-inventory')
+        trees.append(ast.dump(tree))
+    if trees[0] != trees[1] or not inventories[0] <= inventories[1]:
+        return None
+    return inventories[1] - inventories[0]
 
 
 def hash_binding_only(before: bytes | None, after: bytes | None) -> bool:

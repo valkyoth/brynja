@@ -102,6 +102,11 @@ def selection_tests() -> None:
     assert "sha3" in plans.scope.select(["scripts/hash/final-acceptance.py"])[1]
     assert plans.scope.select(["assurance/unregistered/oracle.py"])[0]
     assert plans.scope.select(["scripts/unregistered/check.py"])[0]
+    for name in ('check-constant-time-evidence.py', 'test-constant-time-evidence.py'):
+        assert 'python3 scripts/constant-time/' + name in commands.selected(catalog, [])
+    for command in ('python3 scripts/cryptography/check-windows-enclave-lifecycle.py',
+                    'cargo test -p brynja-strict'):
+        assert commands.owners(command) == set(plans.scope.closure({'static_cpu'}))
 
 
 def miri_dependency_tests():
@@ -364,7 +369,58 @@ def main() -> None:
     entrypoint_tests()
     fingerprint_tests()
     kani_dispatch_tests()
+    compiler_matrix_scope_tests()
+    additive_review_scope_tests()
     print("Incremental verification: ownership, checkpoint, nested-fixture, approval and no-launch regressions PASS")
+
+
+def additive_review_scope_tests():
+    old = b'REVIEWED_SOURCE_PATHS = {"crates/brynja-hash-sha3/src/lib.rs"}\nX = 1\n'
+    name = 'crates/brynja-hash-sha3/src/hardened/cshake/setup.rs'
+    new = old.replace(b'}', (', "' + name + '"}').encode())
+    assert plans.inputs.added_review_sources(old, new) == {name}
+    assert plans.inputs.added_review_sources(new, old) is None
+    assert plans.inputs.added_review_sources(old, new.replace(b'X = 1', b'X = 2')) is None
+    assert plans.inputs.added_review_sources(old, new.replace(b'X = 1', b'REVIEWED_SOURCE_PATHS = set()')) is None
+    assert plans.inputs.added_review_sources(old, old.replace(b'}', b', 42}')) is None
+    assert plans.inputs.added_review_sources(old, old.replace(b'}', b', "crates/brynja-hash-sha3/src/lib.rs"}')) is None
+    def selected(raw):
+        path = 'scripts/cryptography/api_profile_contracts.py'
+        with patch.object(plans.inputs, 'git', side_effect=lambda root,*args:
+                          path.encode() if args[0] == 'diff' else b''), \
+             patch.object(plans.inputs, 'snapshot', side_effect=lambda r,b,p:
+                          (old,raw) if p == path else (None,None)):
+            return plans.scope.select_repository('v0.24.49')
+    assert selected(new) == (False, ('sha3', 'kmac', 'tuplehash', 'parallelhash'))
+    assert selected(new.replace(name.encode(), b'crates/unknown/src/lib.rs'))[0]
+    assert 'core' in selected(new.replace(b'X = 1', b'X = 2'))[1]
+
+
+def compiler_matrix_scope_tests():
+    old = b'[coverage]\ncompilers=["1.98.1"]\n[dynamic]\ntoolchain="pinned"\n'
+    new = old.replace(b'["1.98.1"]', b'["1.98.1","1.99.0"]')
+    matrix = 'assurance/zeroization-matrix.toml'
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        (root / 'release-crates.toml').write_text('[release]\nversion="0.24.50"\nstage="internal"\n')
+        (root / 'rust-toolchain.toml').write_text('[toolchain]\nchannel="1.98.1"\n')
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(plans.scope, 'select_repository', return_value=(False, ('sha3', 'kmac'))), \
+             patch.object(plans.miri_dependencies, 'select', return_value=(False, ('sha3', 'kmac'))), \
+             patch.object(plans, 'changed_paths', return_value=[matrix]), \
+             patch.object(plans.inputs, 'snapshot', side_effect=lambda r,b,p:
+                          (old,new) if p == matrix else (None,None)), \
+             patch.object(plans.inputs, 'git', return_value=b'a' * 40), \
+             patch.object(plans, 'fingerprint', return_value='f' * 64):
+            plan = plans.build(root, 'v0.24.49')
+        assert plan['approval_required']
+        assert plan['full_phases'] == ['matrix']
+        assert all(g == ['sha3', 'kmac'] for g in plan['verifiers'].values())
+        rejects(plans.authorize, plan, None)
+        plans.authorize(plan, 'f' * 64)
+        assert not plans.requires_full(plan, 'miri')
+        assert not plans.requires_full(plan, 'asan')
+        assert not plans.requires_full(plan, 'kani')
 
 
 if __name__ == "__main__":

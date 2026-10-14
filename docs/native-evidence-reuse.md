@@ -105,6 +105,26 @@ Actual tool drift requests fresh execution of the affected phase, not successful
 reuse and not invalidation of unrelated phases. Source-delta, historical-seal,
 platform and approval checks remain in force.
 
+## Implementation ownership versus compiler coverage
+
+Windows enclave probes/drivers and the strict facade belong to the existing
+CPU-execution family and its SHA-2/SHA-3, KMAC, TupleHash and ParallelHash
+consumers. They are not unclassified inputs and are not exempted from checks.
+Generic cryptography helpers retain shared ownership, and unknown source trees
+still trigger the approval-required conservative fallback.
+
+A well-formed compiler-list-only edit to either compiler coverage matrix selects
+the full compatibility-matrix phase, with approval still required. It does not
+change the independently pinned Miri/Kani/ASan tools. Target, verifier, claim or
+malformed-list changes are not covered by that narrowing. Constant-time and
+zeroization metadata validators remain mandatory baseline checks.
+
+An additive `REVIEWED_SOURCE_PATHS` inventory edit is assigned to the added
+sources' families only when its parsed Python structure is otherwise unchanged.
+Removals, duplicate entries or accompanying logic changes retain shared scope;
+unclassified added sources retain the full fallback. This does not waive any
+changed source's tests or permit executing historical policy code.
+
 This mechanism does not change publication scope, waive Kani/ASan/Miri, approve a
 full sweep, import the cancelled schema-1 receipt, grant certification, or alter
 the existing release requirements outside this approved native reuse path.
